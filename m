@@ -1,102 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC0D3C02188
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jan 2025 22:17:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 317A0C02192
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jan 2025 23:26:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 94D43810A5;
-	Mon, 27 Jan 2025 22:17:05 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AH6968Ii0YeS; Mon, 27 Jan 2025 22:17:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F5A1810A8
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F5A1810A8;
-	Mon, 27 Jan 2025 22:17:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4415694A
- for <buildroot@buildroot.org>; Mon, 27 Jan 2025 22:17:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A24CF6068A
- for <buildroot@buildroot.org>; Mon, 27 Jan 2025 22:17:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE7B5605A8;
+	Mon, 27 Jan 2025 23:26:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SRDmHBybYhP2 for <buildroot@buildroot.org>;
- Mon, 27 Jan 2025 22:16:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::630; helo=mail-pl1-x630.google.com;
- envelope-from=patrick.oppenlander@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C96CB6069A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C96CB6069A
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com
- [IPv6:2607:f8b0:4864:20::630])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C96CB6069A
- for <buildroot@buildroot.org>; Mon, 27 Jan 2025 22:16:59 +0000 (UTC)
-Received: by mail-pl1-x630.google.com with SMTP id
- d9443c01a7336-21631789fcdso79524425ad.1
- for <buildroot@buildroot.org>; Mon, 27 Jan 2025 14:16:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738016219; x=1738621019;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=EoUTZLwwPZEqEnreGdvqhSXiJEIyTt1DJXAG2ToFuYA=;
- b=bvK/6SDPJJhrWwvEaRau75P7jgcwOfgW5Ze1s7iEi1AhUgeFQ583jt8t4fng3wzrhZ
- 8sGQwNzHJFEFSkStoyXjFkMAx+Afkak8YaReRyXObs4Jjw2ITHcaVautgJW1d3CLbzWN
- oeCXPakTXV9hpAxsnnsef6j8BZlnymNlepNMkJkPRnYx3i4iIdh3KpXSA0g/TIdzn2CG
- CAf1a1T/r1G3QnimZPeUkBhj5WMbqDKweOCammWTVpKq0Crj9TqHk1vCtVhZLPX44EgC
- 8rPPnyucTdhEmV6Y8lu8k6xfluR9O48kTVOthvjoLP1zrX8KPVJmwMgsNpIQbYrZlnle
- UDFA==
-X-Gm-Message-State: AOJu0YzGaHUbgGv2y3U0gdwUiEeYAOY3xx2h+Cnk3hl+3O3UWdJ/lgwR
- uJ2RlPdU+m2msmhRHvvqUwb6i8cidwzVFsUrL+dxSRB3RHUuvfATKJrhJQ==
-X-Gm-Gg: ASbGnctHuA1krJ7B3TY954109UGS7bPoFURGQIARyDaEB9G9mc218DUU+XpdyAmJlix
- PQm7P7nNPNRR6zBVlKTz/FLOs4T9HkgG2IkURgTcWsv0QOp4mkvGNHwpmHrOmk/IfO7fQFEwiq0
- 54UdrgawlWZezTyPkloUnEizVZ+x3omozKZ9gyQ3+i+Wb6mjCi1/ZNDhr8iPY9cSnHi8d9aKTIs
- RqvhrCgCmfb82wwLV8++9CVoflZ/SOARCZ6qCoKjJy/A5sLzxpgI89CjWklutUqeSmtTCHyOk7k
- zO1gADdIsiVRxlFcgVJJ4vngZ7ehoA==
-X-Google-Smtp-Source: AGHT+IH189SpC6HF7oZ+E/72bBrKNcb3WlkSYkj4YBcu4SgrTxEqa0MWHpCiU88on4jfInw9aWFfWg==
-X-Received: by 2002:a05:6a20:a107:b0:1e1:b1b4:59b0 with SMTP id
- adf61e73a8af0-1ed6e7672b3mr1670124637.18.1738016218640; 
- Mon, 27 Jan 2025 14:16:58 -0800 (PST)
-Received: from pox13.. (2403-5800-b00a--dc1.ip6.aussiebb.net.
- [2403:5800:b00a::dc1]) by smtp.gmail.com with ESMTPSA id
- 41be03b00d2f7-ac4970880c7sm6986528a12.76.2025.01.27.14.16.56
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 27 Jan 2025 14:16:58 -0800 (PST)
-From: patrick.oppenlander@gmail.com
+ id IbYduYrFtXUB; Mon, 27 Jan 2025 23:26:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66365605D9
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 66365605D9;
+	Mon, 27 Jan 2025 23:26:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 39AE1AF7
+ for <buildroot@buildroot.org>; Mon, 27 Jan 2025 23:26:43 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 27CA680B1D
+ for <buildroot@buildroot.org>; Mon, 27 Jan 2025 23:26:43 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rXQ3pe_W5Hr4 for <buildroot@buildroot.org>;
+ Mon, 27 Jan 2025 23:26:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC3B580AF0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC3B580AF0
+ for <buildroot@buildroot.org>; Mon, 27 Jan 2025 23:26:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A11AE865B8; Mon, 27 Jan 2025 23:26:41 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: Patrick Oppenlander <patrick.oppenlander@gmail.com>
-Date: Tue, 28 Jan 2025 09:15:35 +1100
-Message-ID: <20250127221636.5746-1-patrick.oppenlander@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <CAEg67GmDfqCn5w=XoNyTm7EDFgUOr0kZjgtnbk0A5ZtPHd7HXg@mail.gmail.com>
-References: <CAEg67GmDfqCn5w=XoNyTm7EDFgUOr0kZjgtnbk0A5ZtPHd7HXg@mail.gmail.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1738016219; x=1738621019; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=EoUTZLwwPZEqEnreGdvqhSXiJEIyTt1DJXAG2ToFuYA=;
- b=Y9V03WCayLq7L62ph/XPAkIQeKgYgfViV+zPLX6HhB+bFVEBDPVapm4f2jM+BR0vbI
- uwwkzogQmwLzPXf2iQcuS8ZehTKQo1aFR/lCBxDjyymzcnNY8viHjaLL1i47E11lsNws
- w6k81Ow5HRUNwS/McYq7NVSwwlvnlshr5CBQJl6fr26UqJXYwBx2eyl5zHfvUkZnjIPV
- Rl3qfDjbXVwXMhrUSUE/A04SXR/UcI7J4E0EctVP3KWyu37CdFieiXlyfkFAGNPaRFVH
- TlwGHnxn3BEzRNI/tB39CtTicPd1fMpZDvjHZzJxkPH+w6p7EZ9KW378wsdB1fbuG2fn
- Fn3w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Y9V03WCa
-Subject: [Buildroot] [PATCH v2] package/minisign: bump to version 0.12
+Date: Tue, 28 Jan 2025 00:11:17 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3bfa5ebcbf34800367a89b63aa548643e51297b4
+X-Git-Newrev: cd0ffd598cf94b9d15c489f2429602825a18753c
+X-Patchwork-Hint: ignore
+Message-Id: <20250127232641.A11AE865B8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: test_xen: repair and
+ leverage xen tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,49 +59,311 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============3077292344992960853=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Patrick Oppenlander <patrick.oppenlander@gmail.com>
+--===============3077292344992960853==
+Content-Type: text/plain
 
-Upstream license changed to include 2025 in copyright years.
+commit: https://git.buildroot.net/buildroot/commit/?id=cd0ffd598cf94b9d15c489f2429602825a18753c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://github.com/jedisct1/minisign/releases/tag/0.12
-Signed-off-by: Patrick Oppenlander <patrick.oppenlander@gmail.com>
+Current test runs a Xen hypervisor and a Linux dom0, from which we can
+detect that we run under Xen but not much more. Indeed, with current
+test's setup the Xen tools are not functional.
+
+We add back networking to our stripped-down kernel config to repair Xen
+tools.
+
+With Xen tools functionals, we can enhance the test with the creation of
+a VM. To be able to use the rootfs that we build in both the dom0 and in
+this new dom1, we switch to an initramfs; no more rootfs partition in
+the image. After stripping the ramdisk a bit we can even reduce Qemu's
+memory to 1 GB.
+
+Suggested-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/minisign/minisign.hash | 4 ++--
- package/minisign/minisign.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/testing/tests/package/test_xen.py          | 64 +++++++++++++++++++---
+ .../testing/tests/package/test_xen/genimage.cfg    |  8 +--
+ .../testing/tests/package/test_xen/linux.config    |  3 +
+ .../package/test_xen/overlay/etc/init.d/S99custom  | 61 +++++++++++++++++++++
+ .../package/test_xen/overlay/etc/xen/dom1.cfg      |  5 ++
+ .../testing/tests/package/test_xen/post-build.sh   |  7 +++
+ support/testing/tests/package/test_xen/xen.cfg     |  5 +-
+ 7 files changed, 138 insertions(+), 15 deletions(-)
 
-diff --git a/package/minisign/minisign.hash b/package/minisign/minisign.hash
-index 12cde42a43..e918891aa8 100644
---- a/package/minisign/minisign.hash
-+++ b/package/minisign/minisign.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  74c2c78a1cd51a43a6c98f46a4eabefbc8668074ca9aa14115544276b663fc55  minisign-0.11.tar.gz
--sha256  d775d155cbf31638714c31c6f990f9fdc5f07998d91e42d1bf15483bd2d1706b  LICENSE
-+sha256  796dce1376f9bcb1a19ece729c075c47054364355fe0c0c1ebe5104d508c7db0  minisign-0.12.tar.gz
-+sha256  01aa50818d6609e85a9610b7d04da037e8b28bcf3bb5b5b4963c0c3f7abdabbd  LICENSE
-diff --git a/package/minisign/minisign.mk b/package/minisign/minisign.mk
-index 7cdce597f7..5cc8e14cba 100644
---- a/package/minisign/minisign.mk
-+++ b/package/minisign/minisign.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/testing/tests/package/test_xen.py b/support/testing/tests/package/test_xen.py
+index 875ba19e70..f680187db0 100644
+--- a/support/testing/tests/package/test_xen.py
++++ b/support/testing/tests/package/test_xen.py
+@@ -1,15 +1,20 @@
+ import os
++import pexpect
+ import infra.basetest
  
--MINISIGN_VERSION = 0.11
-+MINISIGN_VERSION = 0.12
- MINISIGN_SITE = $(call github,jedisct1,minisign,$(MINISIGN_VERSION))
- MINISIGN_LICENSE = ISC
- MINISIGN_LICENSE_FILES = LICENSE
--- 
-2.48.1
+ 
+ class TestXen(infra.basetest.BRTest):
+     # We have a custom kernel config to reduce build time.
+     # Our genimage.cfg is inspired from qemu_aarch64_ebbr_defconfig as we boot
+-    # Xen with UEFI.
++    # Xen with UEFI. We run only in the initramfs; this allows to use a single
++    # ramdisk image for both the host and the guest.
++    # The Xen startup scripts need bash.
+     config = \
+         """
+         BR2_aarch64=y
+         BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_ROOTFS_OVERLAY="support/testing/tests/package/test_xen/overlay"
++        BR2_ROOTFS_POST_BUILD_SCRIPT="support/testing/tests/package/test_xen/post-build.sh"
+         BR2_ROOTFS_POST_IMAGE_SCRIPT="support/testing/tests/package/test_xen/post-image.sh support/scripts/genimage.sh"
+         BR2_ROOTFS_POST_SCRIPT_ARGS="-c support/testing/tests/package/test_xen/genimage.cfg"
+         BR2_LINUX_KERNEL=y
+@@ -21,9 +26,7 @@ class TestXen(infra.basetest.BRTest):
+         BR2_PACKAGE_XEN=y
+         BR2_PACKAGE_XEN_HYPERVISOR=y
+         BR2_PACKAGE_XEN_TOOLS=y
+-        BR2_TARGET_ROOTFS_EXT2=y
+-        BR2_TARGET_ROOTFS_EXT2_4=y
+-        BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
++        BR2_TARGET_ROOTFS_CPIO=y
+         # BR2_TARGET_ROOTFS_TAR is not set
+         BR2_TARGET_UBOOT=y
+         BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+@@ -37,24 +40,37 @@ class TestXen(infra.basetest.BRTest):
+         BR2_PACKAGE_HOST_MTOOLS=y
+         """
+ 
++    def get_dom_uuid(self) -> str:
++        out, rc = self.emulator.run("cat /sys/hypervisor/uuid")
++        self.assertEqual(rc, 0, "Failed to get domain UUID")
++        return out[0]
++
++    def assertNumVM(self, x: int) -> None:
++        out, rc = self.emulator.run("xl vm-list")
++        self.assertEqual(rc, 0, "Failed to get VM list")
++        num_vm = len(out) - 1
++        self.assertEqual(num_vm, x, f"Expected {x} VM(s) but found {num_vm}")
++
+     def test_run(self):
+         uboot_bin = os.path.join(self.builddir, "images", "u-boot.bin")
+         disk_img = os.path.join(self.builddir, "images", "disk.img")
+ 
++        # We need to run Qemu with virtualization to run Xen.
+         qemu_opts = [
+             "-bios", uboot_bin,
+             "-cpu", "cortex-a53",
+             "-device", "virtio-blk-device,drive=hd0",
+             "-drive", f"file={disk_img},if=none,format=raw,id=hd0",
+-            "-m", "2G",
++            "-m", "1G",
+             "-machine", "virt,gic-version=3,virtualization=on,acpi=off",
+             "-smp", "2"
+         ]
+ 
+         # Boot the emulator:
+         # Qemu Devicetree -> U-Boot -> Xen UEFI -> Linux
+-        self.emulator.boot(arch="aarch64",
+-                           options=qemu_opts)
++        # We need to boot Xen in UEFI to read xen.cfg; we use U-Boot as our
++        # UEFI firmware.
++        self.emulator.boot(arch="aarch64", options=qemu_opts)
+         self.emulator.login()
+ 
+         # Avoid double-cooking the terminal, otherwise the test infrastructure
+@@ -63,3 +79,37 @@ class TestXen(infra.basetest.BRTest):
+ 
+         # Verify that we are indeed running under Xen.
+         self.assertRunOk("xl info")
++
++        # Check that we are dom0.
++        uuid = self.get_dom_uuid()
++        dom0_uuid = "00000000-0000-0000-0000-000000000000"
++        self.assertEqual(uuid, dom0_uuid, f"Unexpected dom UUID {uuid}")
++
++        # Check that we have one VM running.
++        self.assertNumVM(1)
++
++        # Create dom1 with console attached and login.
++        self.emulator.qemu.sendline("xl create -c /etc/xen/dom1.cfg")
++        self.emulator.login()
++
++        # Avoid double-cooking the terminal for dom1, too.
++        self.assertRunOk("stty raw")
++
++        # Check that we are not talking to dom0 anymore.
++        uuid = self.get_dom_uuid()
++        self.assertNotEqual(uuid, dom0_uuid, "Unexpected dom0 UUID")
++
++        # Detach from dom1's console with CTRL-].
++        # dom1 is still running in the background after that.
++        self.emulator.qemu.send(chr(0x1d))
++        mult = self.emulator.timeout_multiplier
++        index = self.emulator.qemu.expect(["#", pexpect.TIMEOUT],
++                                          timeout=2 * mult)
++        self.assertEqual(index, 0, "Timeout exiting guest")
++
++        # Check that we are talking to dom0 again.
++        uuid = self.get_dom_uuid()
++        self.assertEqual(uuid, dom0_uuid, f"Unexpected dom UUID {uuid}")
++
++        # Check that we have two VMs running.
++        self.assertNumVM(2)
+diff --git a/support/testing/tests/package/test_xen/genimage.cfg b/support/testing/tests/package/test_xen/genimage.cfg
+index 6d8ec8ad8e..7d7a83d6b6 100644
+--- a/support/testing/tests/package/test_xen/genimage.cfg
++++ b/support/testing/tests/package/test_xen/genimage.cfg
+@@ -10,10 +10,11 @@ image efi-part.vfat {
+ 
+ 		files = {
+ 			"Image",
++			"rootfs.cpio"
+ 		}
+ 	}
+ 
+-	size = 16M
++	size = 128M
+ }
+ 
+ image disk.img {
+@@ -27,9 +28,4 @@ image disk.img {
+ 		offset = 32K
+ 		bootable = true
+ 	}
+-
+-	partition root {
+-		partition-type-uuid = root-arm64
+-		image = "rootfs.ext2"
+-	}
+ }
+diff --git a/support/testing/tests/package/test_xen/linux.config b/support/testing/tests/package/test_xen/linux.config
+index e0323d0325..4afab3c171 100644
+--- a/support/testing/tests/package/test_xen/linux.config
++++ b/support/testing/tests/package/test_xen/linux.config
+@@ -71,6 +71,9 @@ CONFIG_IOSCHED_BFQ=y
+ # CONFIG_SWAP is not set
+ # CONFIG_COMPAT_BRK is not set
+ CONFIG_KSM=y
++CONFIG_NET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
+ CONFIG_DEVTMPFS=y
+ CONFIG_DEVTMPFS_MOUNT=y
+ CONFIG_FW_LOADER_USER_HELPER=y
+diff --git a/support/testing/tests/package/test_xen/overlay/etc/init.d/S99custom b/support/testing/tests/package/test_xen/overlay/etc/init.d/S99custom
+new file mode 100755
+index 0000000000..889350725e
+--- /dev/null
++++ b/support/testing/tests/package/test_xen/overlay/etc/init.d/S99custom
+@@ -0,0 +1,61 @@
++#!/bin/sh
++#
++# Custom script for test_xen.py
++# This will run both in dom0 and in dom1.
++# When we detect that we are in dom0 we mount the boot partition under /mnt,
++# to see the kernel image and the initramfs.
++#
++
++DAEMON="custom"
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	case $(cat /sys/hypervisor/uuid) in
++		00000000-0000-0000-0000-000000000000)
++			printf "dom0 "
++			mount /dev/vda1 /mnt -o ro
++			;;
++		*) printf "domU " ;;
++	esac
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	case $(cat /sys/hypervisor/uuid) in
++		00000000-0000-0000-0000-000000000000)
++			printf "dom0 "
++			umount /mnt
++			;;
++		*) printf "domU " ;;
++	esac
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/support/testing/tests/package/test_xen/overlay/etc/xen/dom1.cfg b/support/testing/tests/package/test_xen/overlay/etc/xen/dom1.cfg
+new file mode 100644
+index 0000000000..869c12beb8
+--- /dev/null
++++ b/support/testing/tests/package/test_xen/overlay/etc/xen/dom1.cfg
+@@ -0,0 +1,5 @@
++name="dom1"
++kernel="/mnt/Image"
++ramdisk="/mnt/rootfs.cpio"
++memory=256
++cmdline="console=hvc0"
+diff --git a/support/testing/tests/package/test_xen/post-build.sh b/support/testing/tests/package/test_xen/post-build.sh
+new file mode 100755
+index 0000000000..67b726cf3a
+--- /dev/null
++++ b/support/testing/tests/package/test_xen/post-build.sh
+@@ -0,0 +1,7 @@
++#!/bin/sh
++set -eu
++
++# Remove unnecessary Xen binaries to spare ramdisk size.
++for ext in bin fd rom; do
++	rm -vf "${TARGET_DIR}/usr/share/qemu-xen/qemu/"*."$ext"
++done
+diff --git a/support/testing/tests/package/test_xen/xen.cfg b/support/testing/tests/package/test_xen/xen.cfg
+index 41b3ed3ee5..8007ba725c 100644
+--- a/support/testing/tests/package/test_xen/xen.cfg
++++ b/support/testing/tests/package/test_xen/xen.cfg
+@@ -1,2 +1,3 @@
+-options=dom0_mem=128M loglvl=all guest_loglvl=all
+-kernel=\Image root=PARTLABEL=root rootwait console=hvc0
++options=dom0_mem=256M loglvl=all guest_loglvl=all
++kernel=\Image console=hvc0
++ramdisk=\rootfs.cpio
+
+--===============3077292344992960853==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3077292344992960853==--
