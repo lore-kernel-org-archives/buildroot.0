@@ -1,79 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41787C02188
-	for <buildroot@archiver.kernel.org>; Mon, 27 Jan 2025 20:43:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CE00C02188
+	for <buildroot@archiver.kernel.org>; Mon, 27 Jan 2025 20:51:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E89E481148;
-	Mon, 27 Jan 2025 20:43:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6FC3606D7;
+	Mon, 27 Jan 2025 20:51:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zg7IB_ItzT_o; Mon, 27 Jan 2025 20:43:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q1IFL9F6x0aB; Mon, 27 Jan 2025 20:51:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E965B81149
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCB67606E9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E965B81149;
-	Mon, 27 Jan 2025 20:43:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3B1FEAF7
- for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:43:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCB67606E9;
+	Mon, 27 Jan 2025 20:51:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8CD7394A
+ for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:51:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1C83481148
- for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:43:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7945D606D7
+ for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:51:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RPkZPLY0lb9B for <buildroot@buildroot.org>;
- Mon, 27 Jan 2025 20:43:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 21C1381145
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21C1381145
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 21C1381145
- for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:43:28 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GABtu6U93evF for <buildroot@buildroot.org>;
+ Mon, 27 Jan 2025 20:51:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B5CAA60600
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5CAA60600
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B5CAA60600
+ for <buildroot@buildroot.org>; Mon, 27 Jan 2025 20:51:00 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 4338CB00563;
- Mon, 27 Jan 2025 21:43:19 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:43264])
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 20E4213F86E;
+ Mon, 27 Jan 2025 21:50:52 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:51268])
  via 82-64-214-120.subs.proxad.net ([82.64.214.120])
  by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 27 Jan 2025 21:43:19 +0100
+ with HTTP (HTTP/1.0 POST); Mon, 27 Jan 2025 21:50:52 +0100
 MIME-Version: 1.0
-Date: Mon, 27 Jan 2025 21:43:19 +0100
+Date: Mon, 27 Jan 2025 21:50:52 +0100
 From: Julien Olivain <ju.o@free.fr>
 To: Bernd Kuhls <bernd@kuhls.net>
 Cc: buildroot@buildroot.org, Adam Duskett
  <adam.duskett@amarulasolutions.com>, Daniel Lang <dalang@gmx.at>, Eric Le
  Bihan <eric.le.bihan.dev@free.fr>, Romain Naour <romain.naour@gmail.com>,
  Valentin Korenblit <valentinkorenblit@gmail.com>
-In-Reply-To: <20250118083837.2883279-1-bernd@kuhls.net>
+In-Reply-To: <20250118083837.2883279-5-bernd@kuhls.net>
 References: <20250118083837.2883279-1-bernd@kuhls.net>
+ <20250118083837.2883279-5-bernd@kuhls.net>
 User-Agent: Webmail Free/1.6.9
-Message-ID: <65280a0983bcded1d95cb52d3ac3d827@free.fr>
+Message-ID: <b91859d9482544da56b21180e00a3d19@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1738010605;
- bh=meRW/vSPBLOTP29JEvV8+1n6mTC3pDzmceRLEc1W7KA=;
+ d=free.fr; s=smtp-20201208; t=1738011058;
+ bh=hCenml9niqIi6KjuaQOOtKoYHaIbYdhR4uzblpf/BoI=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Wq9fI3dONj9ZnAw3Vyf5bpzQFdAUHWjr+eXlvvtH1e7WG5QJQaeANsmN9uGxx/tle
- PYV1iw9d6N5W5/LrXuIH+PLiRioEik6fqWfVs+Gwp6UrvfjvF8Vpn2T68cAbcEzf/Z
- MDq6QwIKV+RyP0lPT5jWNu7QTfSpLMCzbmYSk/VSP+8tRTvQGCLYpFzF9mu/xDimKJ
- YvDN/1N1rLDCDR2mO5XzuPWpflsuGQ06ShWmtDBTJ5TX86OTM/535P4eQZvufetjN3
- MchzpNLchMEqPWOKveAlF4zlXu12AxKvMyACw0MldoDiIV9rasIEJJwkzsGVlfxjA6
- G13KsQaIr0kmQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=jZmFvh/4tEcM7W04aEhQ0SKHbIUmu2TYmxoD7gTkVCquGJgp6DWASL6kOXhJHd1g6
+ qNygatai/OP8r9PmV9zvys6NDAabUeGNn1zC9rCiOu6S77kHRtZGBQGdYIKR6pET2X
+ ZiX3OXJq8PDRgcaEIIYwCoProi1Atl8EkNqFwrkuWIz11kIMgxwhkXlgYXKEKWmmMM
+ 8sUoL+WhUgRmfteNikhS7gpc6T+Ugr1N2skHYDEPpDeiZe3+8D3WaNIXCqMAQEv0oA
+ REfO+nWSeoeSnU7e1zIazwBAk1wIL1tQ9Qo0ZPyBuYjI8WHamVeQ7Lf+HcWcPVZGy/
+ ieYfWboSLQKSA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Wq9fI3dO
-Subject: Re: [Buildroot] [PATCH 1/6] package/libdrm: add host variant
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=jZmFvh/4
+Subject: Re: [Buildroot] [PATCH v4 5/6] package/{mesa3d,
+ mesa3d-headers}: bump version to 24.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,61 +97,47 @@ Hi Bernd,
 Thank you for the patch.
 
 On 18/01/2025 09:38, Bernd Kuhls wrote:
-> Needed for mesa3d bump to 24.1.0.
-
-Could you elaborate a bit more in the commit log, on the reason why
-host-libdrm is needed?
-
-My understanding is that:
-host-libdrm is needed by host-mesa3d, which is needed by (target)
-mesa3d, when enabling the Gallium Iris driver.
-
-It seems very specific, for now, to this Iris driver.
-It could be helpful to record this information in the commit log
-for future debug or maintenance.
-
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/libdrm/libdrm.mk | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
-> 
-> diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
-> index 9d463ca01e..a8a912859e 100644
-> --- a/package/libdrm/libdrm.mk
-> +++ b/package/libdrm/libdrm.mk
-> @@ -116,4 +116,25 @@ else
->  LIBDRM_CONF_OPTS += -Dtests=false
+[...]
+> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+> index ce460c4475..bd46d4b893 100644
+> --- a/package/mesa3d/mesa3d.mk
+> +++ b/package/mesa3d/mesa3d.mk
+[...]
+> @@ -251,12 +261,32 @@ endif
+>  ifeq ($(BR2_PACKAGE_LIBGLVND),y)
+>  ifneq 
+> ($(BR2_PACKAGE_MESA3D_OPENGL_GLX)$(BR2_PACKAGE_MESA3D_OPENGL_EGL),)
+>  MESA3D_DEPENDENCIES += libglvnd
+> -MESA3D_CONF_OPTS += -Dglvnd=true
+> +MESA3D_CONF_OPTS += -Dglvnd=enabled
+>  else
+> -MESA3D_CONF_OPTS += -Dglvnd=false
+> +MESA3D_CONF_OPTS += -Dglvnd=disabled
+>  endif
+>  else
+> -MESA3D_CONF_OPTS += -Dglvnd=false
+> +MESA3D_CONF_OPTS += -Dglvnd=disabled
 >  endif
 > 
-> +HOST_LIBDRM_CONF_OPTS = \
-> +	-Damdgpu=disabled \
-> +	-Dcairo-tests=disabled \
-> +	-Detnaviv=disabled \
-> +	-Dexynos=disabled \
-> +	-Dfreedreno=disabled \
-> +	-Dfreedreno-kgsl=false \
-> +	-Dinstall-test-programs=false \
-> +	-Dintel=disabled \
-> +	-Dman-pages=disabled \
-> +	-Dnouveau=disabled \
-> +	-Domap=disabled \
-> +	-Dradeon=disabled \
-> +	-Dtegra=disabled \
-> +	-Dvc4=disabled \
-> +	-Dvmwgfx=disabled \
-> +	-Dtests=false \
-> +	-Dudev=false \
-> +	-Dvalgrind=disabled
+
+Could you add a comment here, that host-mesa3d is needed by mesa3d
+only when the Iris Gallium driver is enabled, please?
+This will give a more info on the choice of config options here.
+
+> +HOST_MESA3D_CONF_OPTS = \
+> +	-Dglvnd=disabled \
+> +	-Dgallium-drivers=iris \
+> +	-Dgallium-vdpau=disabled \
+> +	-Dplatforms= \
+> +	-Dglx=disabled \
+> +	-Dvulkan-drivers=""
 > +
->  $(eval $(meson-package))
-> +$(eval $(host-meson-package))
-> --
-> 2.39.5
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> +HOST_MESA3D_DEPENDENCIES = \
+> +	host-libclc \
+> +	host-libdrm \
+> +	host-python-mako \
+> +	host-python-pyyaml \
+> +	host-spirv-tools
 
 Best regards,
 
