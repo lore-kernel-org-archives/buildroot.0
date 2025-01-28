@@ -1,78 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F9C6C02192
-	for <buildroot@archiver.kernel.org>; Tue, 28 Jan 2025 18:09:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDE62C0218A
+	for <buildroot@archiver.kernel.org>; Tue, 28 Jan 2025 18:12:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACE3F412FE;
-	Tue, 28 Jan 2025 18:09:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93F7A60FA8;
+	Tue, 28 Jan 2025 18:12:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TpGFTzXF7m8v; Tue, 28 Jan 2025 18:08:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OgBjO-kK0qN2; Tue, 28 Jan 2025 18:12:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2725412FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F16660FC6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A2725412FA;
-	Tue, 28 Jan 2025 18:08:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F16660FC6;
+	Tue, 28 Jan 2025 18:12:08 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B55D9AF7
- for <buildroot@buildroot.org>; Tue, 28 Jan 2025 18:08:58 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E839BAF7
+ for <buildroot@buildroot.org>; Tue, 28 Jan 2025 18:12:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A16C0811BC
- for <buildroot@buildroot.org>; Tue, 28 Jan 2025 18:08:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C72E381138
+ for <buildroot@buildroot.org>; Tue, 28 Jan 2025 18:12:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XHH9tsklPfxn for <buildroot@buildroot.org>;
- Tue, 28 Jan 2025 18:08:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CDBAD81138
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDBAD81138
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CDBAD81138
- for <buildroot@buildroot.org>; Tue, 28 Jan 2025 18:08:57 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id B56C6B0057C;
- Tue, 28 Jan 2025 19:08:52 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:41390])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 28 Jan 2025 19:08:52 +0100
-MIME-Version: 1.0
-Date: Tue, 28 Jan 2025 19:08:52 +0100
+ id SujsUBEIKkyU for <buildroot@buildroot.org>;
+ Tue, 28 Jan 2025 18:12:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11DED80CA7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 11DED80CA7
+ for <buildroot@buildroot.org>; Tue, 28 Jan 2025 18:12:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id ED8E686582; Tue, 28 Jan 2025 18:12:05 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <Z447tvu5eNQC9iBB@waldemar-brodkorb.de>
-References: <Z447tvu5eNQC9iBB@waldemar-brodkorb.de>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <aff367d0ff342f227904142790ec2386@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1738087735;
- bh=DeAkp6gcSSZpTj2dK/L7AlzWPNV5jo2SEfk4yII6Yho=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=NgIkozTyk4yfkat+V0eLyy/qPuNGDsunOicMRkhIzp/TXXwKg5XbpoHBhFGHVzsYj
- 1pgOeh7YePQCikFcvW9/wBQrNWoNZiDh1Y4Rn1izjw2loFpSck7jA03erxWtdlrxkw
- eVvKDg/q33KCJzyxf/vFfChdbob8mODvW8cM/JKfuOZPXrDsOdbAufpjorO+hjpOfw
- ASbyI1f98UxkI8Z4jmYjquIjBtr9BayTJEpKIvpXE9FqJ0TeaUmeLn7xcq8Q0S6QV+
- rQWn5Oi4uyT4Bcopq+8a+j/gWGZEpXlIiRZ0yiF4Jz9B1hGIbW7C5MvWXUIiDY4/0c
- 5oBka4g/godBg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=NgIkozTy
-Subject: Re: [Buildroot] [PATCH] package/uclibc: deactivate time64 support
- for older kernel's
+To: buildroot@buildroot.org
+Date: Tue, 28 Jan 2025 19:09:28 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6a630519312f39faceb0039e7cf3ef2635a00101
+X-Git-Newrev: 294d13bb85929cbef3f921e2f4b399f6216cc1a1
+X-Patchwork-Hint: ignore
+Message-Id: <20250128181205.ED8E686582@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/genimage.sh: add shell
+ option -e
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,28 +59,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============7421347553300001789=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 20/01/2025 13:04, Waldemar Brodkorb wrote:
-> For Linux systems older then 5.1.0 we need to disable time64 support
-> in uClibc-ng to avoid compilation failure.
-> 
-> Fixes Buildroot's arcturus_ucp1020_defconfig.
-> 
-> Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+--===============7421347553300001789==
+Content-Type: text/plain
 
-Applied to master, thanks.
-For info, I fixed check-package errors.
+commit: https://git.buildroot.net/buildroot/commit/?id=294d13bb85929cbef3f921e2f4b399f6216cc1a1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Best regards,
+The commit 6889056f1e (support/scripts/genimage.sh) adds support for
+creating bmap images.
 
-Julien.
+Since then, the script genimage.sh looses the error returned by the
+genimage command.
+
+As a consequence, the target-finalize target looses the error as well,
+and so on up to make.
+
+This adds the shell option -e to exit immediately if a command ends with
+an error, so the error is not ignored.
+
+Fixes:
+
+	gportay@archlinux ~/src/rtone-br2-external $ make
+	(...)
+	>>>   Executing post-image script support/scripts/genimage.sh
+	INFO: cmd: "mkdir -p "/home/gportay/src/rtone-br2-external/output/build/genimage.tmp"" (stderr):
+	INFO: cmd: "rm -rf "/home/gportay/src/rtone-br2-external/output/build/genimage.tmp"/*" (stderr):
+	INFO: cmd: "mkdir -p "/home/gportay/src/rtone-br2-external/output/build/genimage.tmp"" (stderr):
+	INFO: cmd: "cp -a "/tmp/tmp.EclKGwtA4R" "/home/gportay/src/rtone-br2-external/output/build/genimage.tmp/root"" (stderr):
+	INFO: cmd: "mkdir -p "/home/gportay/src/rtone-br2-external/output/images"" (stderr):
+	INFO: vfat(efi-part.vfat): cmd: "mkdosfs   '/home/gportay/src/rtone-br2-external/output/images/efi-part.vfat'" (stderr):
+	INFO: vfat(efi-part.vfat): adding file 'efi-part/EFI' as 'EFI' ...
+	INFO: vfat(efi-part.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -sp -i '/home/gportay/src/rtone-br2-external/output/images/efi-part.vfat' '/home/gportay/src/rtone-br2-external/output/images/efi-part/EFI' '::EFI'" (stderr):
+	Disk full
+	INFO: vfat(efi-part.vfat): cmd: "rm -f "/home/gportay/src/rtone-br2-external/output/images/efi-part.vfat"" (stderr):
+	ERROR: vfat(efi-part.vfat): failed to generate efi-part.vfat
+	INFO: cmd: "rm -rf "/home/gportay/src/rtone-br2-external/output/build/genimage.tmp/"" (stderr):
+	make[1]: Leaving directory '/home/gportay/src/rtone-br2-external/buildroot'
+	gportay@archlinux ~/src/rtone-br2-external $ echo $?
+	0
+
+Signed-off-by: Gaël PORTAY <gael.portay+rtone@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ support/scripts/genimage.sh | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
+index df224241ab..8657940be5 100755
+--- a/support/scripts/genimage.sh
++++ b/support/scripts/genimage.sh
+@@ -1,5 +1,7 @@
+ #!/usr/bin/env bash
+ 
++set -e
++
+ die() {
+   cat <<EOF >&2
+ Error: $@
+
+--===============7421347553300001789==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7421347553300001789==--
