@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C93D3C0218A
-	for <buildroot@archiver.kernel.org>; Tue, 28 Jan 2025 22:36:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 975DEC0218A
+	for <buildroot@archiver.kernel.org>; Tue, 28 Jan 2025 22:36:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 912C5413A0;
-	Tue, 28 Jan 2025 22:36:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 56CA041384;
+	Tue, 28 Jan 2025 22:36:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gzB5hvr0Qatl; Tue, 28 Jan 2025 22:36:22 +0000 (UTC)
+ id vRV7MsN_iR_f; Tue, 28 Jan 2025 22:36:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 634E64139C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17F65413C5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 634E64139C;
-	Tue, 28 Jan 2025 22:36:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9BA751D4B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17F65413C5;
+	Tue, 28 Jan 2025 22:36:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DFA6631
  for <buildroot@buildroot.org>; Tue, 28 Jan 2025 22:36:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7C36D83880
+ by smtp4.osuosl.org (Postfix) with ESMTP id BE37C41384
  for <buildroot@buildroot.org>; Tue, 28 Jan 2025 22:36:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zbMH53BgduR2 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uwd6ZtA2cO8K for <buildroot@buildroot.org>;
  Tue, 28 Jan 2025 22:36:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8A7380502
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC3A441392
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D8A7380502
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC3A441392
  for <buildroot@buildroot.org>; Tue, 28 Jan 2025 22:36:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3B498657F; Tue, 28 Jan 2025 22:36:07 +0000 (UTC)
+ id B426E866D6; Tue, 28 Jan 2025 22:36:07 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 28 Jan 2025 21:52:37 +0100
+Date: Tue, 28 Jan 2025 21:52:32 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ea1cc1af55dbc681e44c512d9b01dc4f7f19ee59
-X-Git-Newrev: c655ed35f6667e2c6801c299ebaa3b524820ee5a
+X-Git-Oldrev: 294d13bb85929cbef3f921e2f4b399f6216cc1a1
+X-Git-Newrev: ea1cc1af55dbc681e44c512d9b01dc4f7f19ee59
 X-Patchwork-Hint: ignore
-Message-Id: <20250128223607.C3B498657F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ruy: new package
+Message-Id: <20250128223607.B426E866D6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cpuinfo: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,7 +64,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c655ed35f6667e2c6801c299ebaa3b524820ee5a
+commit: https://git.buildroot.net/buildroot/commit/?id=ea1cc1af55dbc681e44c512d9b01dc4f7f19ee59
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This package is required by tensorflow-lite.
@@ -74,97 +74,93 @@ Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS            |  1 +
- package/Config.in     |  1 +
- package/ruy/Config.in | 22 ++++++++++++++++++++++
- package/ruy/ruy.hash  |  4 ++++
- package/ruy/ruy.mk    | 18 ++++++++++++++++++
- 5 files changed, 46 insertions(+)
+ DEVELOPERS                   |  3 +++
+ package/Config.in            |  1 +
+ package/cpuinfo/Config.in    | 17 +++++++++++++++++
+ package/cpuinfo/cpuinfo.hash |  4 ++++
+ package/cpuinfo/cpuinfo.mk   | 17 +++++++++++++++++
+ 5 files changed, 42 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 8e33b20bba..e9e106e250 100644
+index fde9360ad6..8e33b20bba 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -3034,6 +3034,7 @@ F:	package/ti-gfx/
+@@ -3032,6 +3032,9 @@ F:	package/libvpx/
+ F:	package/mesa3d-demos/
+ F:	package/ti-gfx/
  
- N:	Stefan Hager <stefan.hager@ginzinger.com>
- F:	package/cpuinfo/
-+F:	package/ruy/
- 
++N:	Stefan Hager <stefan.hager@ginzinger.com>
++F:	package/cpuinfo/
++
  N:	Stefan Nickl <Stefan.Nickl@gmail.com>
  F:	board/freescale/imx8dxlevk/
+ F:	configs/freescale_imx8dxlevk_defconfig
 diff --git a/package/Config.in b/package/Config.in
-index 70ad2af568..f982b7332a 100644
+index 3f4dd42cbe..70ad2af568 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2300,6 +2300,7 @@ endif
- 	source "package/qlibc/Config.in"
- 	source "package/reproc/Config.in"
- 	source "package/riemann-c-client/Config.in"
-+	source "package/ruy/Config.in"
- 	source "package/shapelib/Config.in"
- 	source "package/skalibs/Config.in"
- 	source "package/sphinxbase/Config.in"
-diff --git a/package/ruy/Config.in b/package/ruy/Config.in
+@@ -1801,6 +1801,7 @@ menu "Hardware handling"
+ 	source "package/bcm2835/Config.in"
+ 	source "package/c-periphery/Config.in"
+ 	source "package/ccid/Config.in"
++	source "package/cpuinfo/Config.in"
+ 	source "package/dtc/Config.in"
+ 	source "package/gnu-efi/Config.in"
+ 	source "package/hackrf/Config.in"
+diff --git a/package/cpuinfo/Config.in b/package/cpuinfo/Config.in
 new file mode 100644
-index 0000000000..cc137a403c
+index 0000000000..257480f068
 --- /dev/null
-+++ b/package/ruy/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_RUY_ARCH_SUPPORTS
++++ b/package/cpuinfo/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_CPUINFO_ARCH_SUPPORTS
 +	bool
-+	default y if BR2_PACKAGE_CPUINFO_ARCH_SUPPORTS
++	default y if BR2_aarch64
++	default y if BR2_arm
++	default y if BR2_i386
++	default y if BR2_x86_64
 +
-+config BR2_PACKAGE_RUY
-+	bool "ruy"
++config BR2_PACKAGE_CPUINFO
++	bool "cpuinfo"
 +	depends on BR2_PACKAGE_CPUINFO_ARCH_SUPPORTS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # cpuinfo
-+	select BR2_PACKAGE_CPUINFO
++	depends on BR2_TOOLCHAIN_HAS_THREADS
 +	help
-+	  Ruy is a matrix multiplication library. Its focus is to cover
-+	  the matrix multiplication needs of neural network inference
-+	  engines. Its initial user has been TensorFlow Lite, where it
-+	  is used by default on the ARM CPU architecture.
++	  CPU INFOrmation library, cpuinfo is a library to detect
++	  essential for performance optimization information about
++	  host CPU.
 +
-+	  https://github.com/google/ruy
-+
-+comment "ruy needs a toolchain w/ C++14, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/ruy/ruy.hash b/package/ruy/ruy.hash
++	  https://github.com/pytorch/cpuinfo
+diff --git a/package/cpuinfo/cpuinfo.hash b/package/cpuinfo/cpuinfo.hash
 new file mode 100644
-index 0000000000..159687bf04
+index 0000000000..499363cd09
 --- /dev/null
-+++ b/package/ruy/ruy.hash
++++ b/package/cpuinfo/cpuinfo.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated
-+sha256  0bd02bef7675d3edd8168e6e4ce22e162516947fcc07bb79809be4cda8f27a0c  ruy-83fd40d730feb0804fafbc2d8814bcc19a17b2e5.tar.gz
++sha256  37bb2fd2d1e87102baea8d131a0c550c4ceff5a12fba61faeb1bff63868155f1  cpuinfo-8a1772a0c5c447df2d18edf33ec4603a8c9c04a6.tar.gz
 +# License files, locally calculated
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/ruy/ruy.mk b/package/ruy/ruy.mk
++sha256  8e7e60636c3aa0cb03571a1a841ce5697f9551ff92b3c426c2561613d15ade70  LICENSE
+diff --git a/package/cpuinfo/cpuinfo.mk b/package/cpuinfo/cpuinfo.mk
 new file mode 100644
-index 0000000000..3e83553f19
+index 0000000000..0aafb1b4dd
 --- /dev/null
-+++ b/package/ruy/ruy.mk
-@@ -0,0 +1,18 @@
++++ b/package/cpuinfo/cpuinfo.mk
+@@ -0,0 +1,17 @@
 +################################################################################
 +#
-+# ruy
++# cpuinfo
 +#
 +################################################################################
 +
-+RUY_VERSION = 83fd40d730feb0804fafbc2d8814bcc19a17b2e5
-+RUY_SITE = $(call github,google,ruy,$(RUY_VERSION))
-+RUY_LICENSE = Apache-2.0
-+RUY_LICENSE_FILES = LICENSE
-+RUY_INSTALL_STAGING = YES
-+RUY_DEPENDENCIES = cpuinfo
-+RUY_CONF_OPTS = \
-+	-DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-+	-DRUY_FIND_CPUINFO=ON \
-+	-DRUY_MINIMAL_BUILD=ON
++CPUINFO_VERSION = 8a1772a0c5c447df2d18edf33ec4603a8c9c04a6
++CPUINFO_SITE = $(call github,pytorch,cpuinfo,$(CPUINFO_VERSION))
++CPUINFO_LICENSE = BSD-2-Clause
++CPUINFO_LICENSE_FILES = LICENSE
++CPUINFO_INSTALL_STAGING = YES
++CPUINFO_CONF_OPTS = \
++	-DCPUINFO_BUILD_UNIT_TESTS=OFF \
++	-DCPUINFO_BUILD_MOCK_TESTS=OFF \
++	-DCPUINFO_BUILD_BENCHMARKS=OFF
 +
 +$(eval $(cmake-package))
 _______________________________________________
