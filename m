@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 325BCC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:06:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEDEEC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:06:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03AE570745;
-	Fri, 28 Feb 2025 17:06:32 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vfcMhOUsBg5V; Fri, 28 Feb 2025 17:06:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD7AA70972
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD7AA70972;
-	Fri, 28 Feb 2025 17:06:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0EBC01DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F103B42ED9
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 327FD40845;
+	Fri, 28 Feb 2025 17:06:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZzA_inwP9YvJ for <buildroot@buildroot.org>;
+ id WOBlTUD5vZKc; Fri, 28 Feb 2025 17:06:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB26440779
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB26440779;
+	Fri, 28 Feb 2025 17:06:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 07BE268
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2022B4250A
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:16 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 229S9jx879sG for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:31:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84A5842931
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8F4542EE1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 84A5842931
+ by smtp4.osuosl.org (Postfix) with ESMTP id A8F4542EE1
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 79D6487A09; Fri, 28 Feb 2025 16:30:22 +0000 (UTC)
+ id 9912D87635; Fri, 28 Feb 2025 16:30:22 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 28 Jan 2025 21:52:44 +0100
+Date: Tue, 28 Jan 2025 21:52:51 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1cb85a5cb1f005543e3ddec896afa96296e7d0fb
-X-Git-Newrev: f2486a6cf962669e4088421cf68fe862665d5477
+X-Git-Oldrev: 6732f4df7cc495f7971bc508c1aafe1c395a47b4
+X-Git-Newrev: f110a78825def7a3496e797d41186371be430e77
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163022.79D6487A09@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pthreadpool: new
- package
+Message-Id: <20250228163022.9912D87635@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/fp16: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,7 +64,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2486a6cf962669e4088421cf68fe862665d5477
+commit: https://git.buildroot.net/buildroot/commit/?id=f110a78825def7a3496e797d41186371be430e77
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 This package is required by tensorflow-lite.
@@ -73,98 +72,85 @@ This package is required by tensorflow-lite.
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/pthreadpool/Config.in        |  8 ++++++++
- package/pthreadpool/pthreadpool.hash |  4 ++++
- package/pthreadpool/pthreadpool.mk   | 33 +++++++++++++++++++++++++++++++++
- 5 files changed, 47 insertions(+)
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/fp16/Config.in |  8 ++++++++
+ package/fp16/fp16.hash |  4 ++++
+ package/fp16/fp16.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 34 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index f5abea5a16..b7d4958aec 100644
+index f56d2eb38b..a5d0b2ddb3 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -3035,6 +3035,7 @@ F:	package/ti-gfx/
+@@ -3034,6 +3034,7 @@ F:	package/ti-gfx/
+ 
  N:	Stefan Hager <stefan.hager@ginzinger.com>
  F:	package/cpuinfo/
++F:	package/fp16/
  F:	package/gemmlowp/
-+F:	package/pthreadpool/
- F:	package/ruy/
- 
- N:	Stefan Nickl <Stefan.Nickl@gmail.com>
+ F:	package/psimd/
+ F:	package/pthreadpool/
 diff --git a/package/Config.in b/package/Config.in
-index 594ee41d06..13caddec34 100644
+index beb6f08064..cccb95b869 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2297,6 +2297,7 @@ endif
- 	source "package/protobuf/Config.in"
- 	source "package/protobuf-c/Config.in"
- 	source "package/protozero/Config.in"
-+	source "package/pthreadpool/Config.in"
- 	source "package/qhull/Config.in"
- 	source "package/qlibc/Config.in"
- 	source "package/reproc/Config.in"
-diff --git a/package/pthreadpool/Config.in b/package/pthreadpool/Config.in
+@@ -2187,6 +2187,7 @@ menu "Other"
+ 	source "package/flann/Config.in"
+ 	source "package/flatbuffers/Config.in"
+ 	source "package/flatcc/Config.in"
++	source "package/fp16/Config.in"
+ 	source "package/fxdiv/Config.in"
+ 	source "package/gconf/Config.in"
+ 	source "package/gdal/Config.in"
+diff --git a/package/fp16/Config.in b/package/fp16/Config.in
 new file mode 100644
-index 0000000000..194ae33f85
+index 0000000000..e07c6ebb8a
 --- /dev/null
-+++ b/package/pthreadpool/Config.in
++++ b/package/fp16/Config.in
 @@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PTHREADPOOL
-+	bool "pthreadpool"
-+	select BR2_PACKAGE_FXDIV
++config BR2_PACKAGE_FP16
++	bool "fp16"
++	select BR2_PACKAGE_PSIMD
 +	help
-+	  Pthreadpool is a portable and efficient thread pool
-+	  implementation.
++	  Header-only library for conversion to/from half-precision
++	  floating point formats.
 +
-+	  https://github.com/Maratyszcza/pthreadpool
-diff --git a/package/pthreadpool/pthreadpool.hash b/package/pthreadpool/pthreadpool.hash
++	  https://github.com/Maratyszcza/FP16
+diff --git a/package/fp16/fp16.hash b/package/fp16/fp16.hash
 new file mode 100644
-index 0000000000..4adc1507f9
+index 0000000000..a2b7d83c41
 --- /dev/null
-+++ b/package/pthreadpool/pthreadpool.hash
++++ b/package/fp16/fp16.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated
-+sha256  8d8ebab96df6aa12922643060e72c43bfdca9fd80cf5aacaf7391bc6850560a3  pthreadpool-560c60d342a76076f0557a3946924c6478470044.tar.gz
++sha256  e7b509c76a2ea162ebdda77fb6b6f51f2f37dedee0866077d428e214516f0c2b  fp16-98b0a46bce017382a6351a19577ec43a715b6835.tar.gz
 +# License files, locally calculated
-+sha256  57814a606b4d0fb087d9a534919084b6c11b58a4174cb5a4aef200187780dc3a  LICENSE
-diff --git a/package/pthreadpool/pthreadpool.mk b/package/pthreadpool/pthreadpool.mk
++sha256  17e4f539024be2749ee729d1e2f01d24cef12ece8c9bf18e91a4349be29c80bf  LICENSE
+diff --git a/package/fp16/fp16.mk b/package/fp16/fp16.mk
 new file mode 100644
-index 0000000000..6a05256461
+index 0000000000..d50d84366d
 --- /dev/null
-+++ b/package/pthreadpool/pthreadpool.mk
-@@ -0,0 +1,33 @@
++++ b/package/fp16/fp16.mk
+@@ -0,0 +1,20 @@
 +################################################################################
 +#
-+# pthreadpool
++# fp16
 +#
 +################################################################################
 +
-+PTHREADPOOL_VERSION = 560c60d342a76076f0557a3946924c6478470044
-+PTHREADPOOL_SITE = $(call github,Maratyszcza,pthreadpool,$(PTHREADPOOL_VERSION))
-+PTHREADPOOL_LICENSE = BSD-2-Clause
-+PTHREADPOOL_LICENSE_FILES = LICENSE
-+PTHREADPOOL_INSTALL_STAGING = YES
-+PTHREADPOOL_DEPENDENCIES = fxdiv
-+
-+PTHREADPOOL_CFLAGS = $(TARGET_CFLAGS)
-+PTHREADPOOL_CXXFLAGS = $(TARGET_CXXFLAGS)
-+
-+ifeq ($(BR2_PACKAGE_CPUINFO),y)
-+PTHREADPOOL_DEPENDENCIES += cpuinfo
-+PTHREADPOOL_CFLAGS += -DPTHREADPOOL_USE_CPUINFO=1
-+PTHREADPOOL_CXXFLAGS += -DPTHREADPOOL_USE_CPUINFO=1
-+else
-+PTHREADPOOL_CFLAGS += -DPTHREADPOOL_USE_CPUINFO=0
-+PTHREADPOOL_CXXFLAGS += -DPTHREADPOOL_USE_CPUINFO=0
-+endif
-+
-+PTHREADPOOL_CONF_OPTS = \
-+	-DCMAKE_C_FLAGS="$(PTHREADPOOL_CFLAGS)" \
-+	-DCMAKE_CXX_FLAGS="$(PTHREADPOOL_CXXFLAGS)" \
-+	-DFXDIV_SOURCE_DIR="$(FXDIV_DIR)" \
-+	-DPTHREADPOOL_BUILD_TESTS=OFF \
-+	-DPTHREADPOOL_BUILD_BENCHMARKS=OFF
++FP16_VERSION = 98b0a46bce017382a6351a19577ec43a715b6835
++FP16_SITE = $(call github,Maratyszcza,FP16,$(FP16_VERSION))
++FP16_LICENSE = MIT
++FP16_LICENSE_FILES = LICENSE
++FP16_INSTALL_STAGING = YES
++# Only installs a header
++FP16_INSTALL_TARGET = NO
++FP16_DEPENDENCIES = psimd
++FP16_CONF_OPTS = \
++	-DFP16_BUILD_TESTS=OFF \
++	-DFP16_BUILD_BENCHMARKS=OFF \
++	-DPSIMD_SOURCE_DIR="$(PSIMD_DIR)"
 +
 +$(eval $(cmake-package))
 _______________________________________________
