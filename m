@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 755D3C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:06:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE1A1C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:06:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4476D708FA;
-	Fri, 28 Feb 2025 17:06:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CB7E4048C;
+	Fri, 28 Feb 2025 17:06:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8q8glnd6waPP; Fri, 28 Feb 2025 17:06:40 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4b1-jZZD49fq; Fri, 28 Feb 2025 17:06:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E257F7096F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0A2C417D5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E257F7096F;
-	Fri, 28 Feb 2025 17:06:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0A2C417D5;
+	Fri, 28 Feb 2025 17:06:42 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1615D68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:50 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 066E81DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 81ACE42EDF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B28942EE1
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SyI-Rn6R5Dlp for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:15 +0000 (UTC)
+ id j5-hPUJRmguh for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3E7C42EE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D64642EDB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C3E7C42EE4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D64642EDB
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BBEB7867B4; Fri, 28 Feb 2025 16:30:22 +0000 (UTC)
+ id 29D3887A09; Fri, 28 Feb 2025 16:30:22 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 28 Jan 2025 21:52:59 +0100
+Date: Tue, 28 Jan 2025 19:09:28 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1bfc85a688d4a86bc3767fc2b746c9585ecdc7b7
-X-Git-Newrev: 7d7530af3a5d6c473efad1cd70c3a0258fe52b3d
+X-Git-Oldrev: 6a630519312f39faceb0039e7cf3ef2635a00101
+X-Git-Newrev: 294d13bb85929cbef3f921e2f4b399f6216cc1a1
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163022.BBEB7867B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fft2d: new package
+Message-Id: <20250228163022.29D3887A09@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/scripts/genimage.sh:
+ add shell option -e
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,108 +60,77 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0494045363872500576=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d7530af3a5d6c473efad1cd70c3a0258fe52b3d
+--===============0494045363872500576==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=294d13bb85929cbef3f921e2f4b399f6216cc1a1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This package is required by tensorflow-lite.
+The commit 6889056f1e (support/scripts/genimage.sh) adds support for
+creating bmap images.
 
-This package doesn't provide a conventional install mechanism so
-we need to install it manually.
+Since then, the script genimage.sh looses the error returned by the
+genimage command.
 
-Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
-Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+As a consequence, the target-finalize target looses the error as well,
+and so on up to make.
+
+This adds the shell option -e to exit immediately if a command ends with
+an error, so the error is not ignored.
+
+Fixes:
+
+	gportay@archlinux ~/src/rtone-br2-external $ make
+	(...)
+	>>>   Executing post-image script support/scripts/genimage.sh
+	INFO: cmd: "mkdir -p "/home/gportay/src/rtone-br2-external/output/build/genimage.tmp"" (stderr):
+	INFO: cmd: "rm -rf "/home/gportay/src/rtone-br2-external/output/build/genimage.tmp"/*" (stderr):
+	INFO: cmd: "mkdir -p "/home/gportay/src/rtone-br2-external/output/build/genimage.tmp"" (stderr):
+	INFO: cmd: "cp -a "/tmp/tmp.EclKGwtA4R" "/home/gportay/src/rtone-br2-external/output/build/genimage.tmp/root"" (stderr):
+	INFO: cmd: "mkdir -p "/home/gportay/src/rtone-br2-external/output/images"" (stderr):
+	INFO: vfat(efi-part.vfat): cmd: "mkdosfs   '/home/gportay/src/rtone-br2-external/output/images/efi-part.vfat'" (stderr):
+	INFO: vfat(efi-part.vfat): adding file 'efi-part/EFI' as 'EFI' ...
+	INFO: vfat(efi-part.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -sp -i '/home/gportay/src/rtone-br2-external/output/images/efi-part.vfat' '/home/gportay/src/rtone-br2-external/output/images/efi-part/EFI' '::EFI'" (stderr):
+	Disk full
+	INFO: vfat(efi-part.vfat): cmd: "rm -f "/home/gportay/src/rtone-br2-external/output/images/efi-part.vfat"" (stderr):
+	ERROR: vfat(efi-part.vfat): failed to generate efi-part.vfat
+	INFO: cmd: "rm -rf "/home/gportay/src/rtone-br2-external/output/build/genimage.tmp/"" (stderr):
+	make[1]: Leaving directory '/home/gportay/src/rtone-br2-external/buildroot'
+	gportay@archlinux ~/src/rtone-br2-external $ echo $?
+	0
+
+Signed-off-by: Gaël PORTAY <gael.portay+rtone@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS               |  1 +
- package/Config.in        |  1 +
- package/fft2d/Config.in  |  7 +++++++
- package/fft2d/fft2d.hash |  4 ++++
- package/fft2d/fft2d.mk   | 23 +++++++++++++++++++++++
- 5 files changed, 36 insertions(+)
+ support/scripts/genimage.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2be4990676..5182df571c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3035,6 +3035,7 @@ F:	package/ti-gfx/
- N:	Stefan Hager <stefan.hager@ginzinger.com>
- F:	package/cpuinfo/
- F:	package/fp16/
-+F:	package/fft2d/
- F:	package/gemmlowp/
- F:	package/psimd/
- F:	package/pthreadpool/
-diff --git a/package/Config.in b/package/Config.in
-index 74cd3e9815..0f35409720 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2183,6 +2183,7 @@ menu "Other"
- 	source "package/elfutils/Config.in"
- 	source "package/ell/Config.in"
- 	source "package/falcosecurity-libs/Config.in"
-+	source "package/fft2d/Config.in"
- 	source "package/fftw/Config.in"
- 	source "package/flann/Config.in"
- 	source "package/flatbuffers/Config.in"
-diff --git a/package/fft2d/Config.in b/package/fft2d/Config.in
-new file mode 100644
-index 0000000000..38394f6170
---- /dev/null
-+++ b/package/fft2d/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_FFT2D
-+	bool "fft2d"
-+	help
-+	  This is a package to calculate Discrete Fourier/Cosine/Sine
-+	  Transforms of 2,3-dimensional sequences of length 2^N.
+diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
+index df224241ab..8657940be5 100755
+--- a/support/scripts/genimage.sh
++++ b/support/scripts/genimage.sh
+@@ -1,5 +1,7 @@
+ #!/usr/bin/env bash
+ 
++set -e
 +
-+	  http://www.kurims.kyoto-u.ac.jp/~ooura/fft.html
-diff --git a/package/fft2d/fft2d.hash b/package/fft2d/fft2d.hash
-new file mode 100644
-index 0000000000..a1b1a326ae
---- /dev/null
-+++ b/package/fft2d/fft2d.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256  ada7e99087c4ed477bfdf11413f2ba8db8a840ba9bbf8ac94f4f3972e2a7cec9  fft2d.tgz
-+# License files, locally calculated
-+sha256  0b2a2082537735a2a576dbec2e8f9c1a09812eac6df6a389502a6ba860072906  readme2d.txt
-diff --git a/package/fft2d/fft2d.mk b/package/fft2d/fft2d.mk
-new file mode 100644
-index 0000000000..781b545e2e
---- /dev/null
-+++ b/package/fft2d/fft2d.mk
-@@ -0,0 +1,23 @@
-+################################################################################
-+#
-+# fft2d
-+#
-+################################################################################
-+
-+FFT2D_VERSION = 2006.12.28
-+FFT2D_SITE = https://www.kurims.kyoto-u.ac.jp/~ooura
-+FFT2D_SOURCE = fft2d.tgz
-+FFT2D_LICENSE = MIT-like
-+FFT2D_LICENSE_FILES = readme2d.txt
-+FFT2D_INSTALL_STAGING = YES
-+# Only installs headers/sources
-+FFT2D_INSTALL_TARGET = NO
-+
-+define FFT2D_INSTALL_STAGING_CMDS
-+	mkdir -p $(STAGING_DIR)/usr/include/fft2d
-+	$(INSTALL) -m 0644 $(@D)/*.c $(STAGING_DIR)/usr/include/fft2d
-+	$(INSTALL) -m 0644 $(@D)/*.f $(STAGING_DIR)/usr/include/fft2d
-+	$(INSTALL) -m 0644 $(@D)/*.h $(STAGING_DIR)/usr/include/fft2d
-+endef
-+
-+$(eval $(generic-package))
+ die() {
+   cat <<EOF >&2
+ Error: $@
+
+--===============0494045363872500576==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0494045363872500576==--
