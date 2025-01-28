@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B479EC0218D
-	for <buildroot@archiver.kernel.org>; Tue, 28 Jan 2025 22:36:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18DDAC0218A
+	for <buildroot@archiver.kernel.org>; Tue, 28 Jan 2025 22:36:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6097D413AC;
-	Tue, 28 Jan 2025 22:36:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DAEF94138A;
+	Tue, 28 Jan 2025 22:36:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GlUk-TzXpzom; Tue, 28 Jan 2025 22:36:30 +0000 (UTC)
+ id 5lhuNo760R6B; Tue, 28 Jan 2025 22:36:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36944413EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5BED441413
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 36944413EA;
-	Tue, 28 Jan 2025 22:36:30 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8FBE431
- for <buildroot@buildroot.org>; Tue, 28 Jan 2025 22:36:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5BED441413;
+	Tue, 28 Jan 2025 22:36:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4ACA031
+ for <buildroot@buildroot.org>; Tue, 28 Jan 2025 22:36:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 79FEC413B8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1929983880
  for <buildroot@buildroot.org>; Tue, 28 Jan 2025 22:36:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UHwjLJk0rjRo for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ijJwr94_9YYN for <buildroot@buildroot.org>;
  Tue, 28 Jan 2025 22:36:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B7F3413C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 103EB8387D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B7F3413C9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 103EB8387D
  for <buildroot@buildroot.org>; Tue, 28 Jan 2025 22:36:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 382DC866D7; Tue, 28 Jan 2025 22:36:08 +0000 (UTC)
+ id 0CBBE866D6; Tue, 28 Jan 2025 22:36:08 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 28 Jan 2025 21:53:03 +0100
+Date: Tue, 28 Jan 2025 21:52:51 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7d7530af3a5d6c473efad1cd70c3a0258fe52b3d
-X-Git-Newrev: d6b615fda369d7431138c71fbee051869ac745e1
+X-Git-Oldrev: 6732f4df7cc495f7971bc508c1aafe1c395a47b4
+X-Git-Newrev: f110a78825def7a3496e797d41186371be430e77
 X-Patchwork-Hint: ignore
-Message-Id: <20250128223608.382DC866D7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/farmhash: new package
+Message-Id: <20250128223608.0CBBE866D6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fp16: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,95 +64,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6b615fda369d7431138c71fbee051869ac745e1
+commit: https://git.buildroot.net/buildroot/commit/?id=f110a78825def7a3496e797d41186371be430e77
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This package is required by tensorflow-lite.
 
-Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
-Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                     |  1 +
- package/Config.in              |  1 +
- package/farmhash/Config.in     | 12 ++++++++++++
- package/farmhash/farmhash.hash |  4 ++++
- package/farmhash/farmhash.mk   | 14 ++++++++++++++
- 5 files changed, 32 insertions(+)
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/fp16/Config.in |  8 ++++++++
+ package/fp16/fp16.hash |  4 ++++
+ package/fp16/fp16.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 34 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 5182df571c..926a4c0a37 100644
+index f56d2eb38b..a5d0b2ddb3 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -3034,6 +3034,7 @@ F:	package/ti-gfx/
  
  N:	Stefan Hager <stefan.hager@ginzinger.com>
  F:	package/cpuinfo/
-+F:	package/farmhash/
- F:	package/fp16/
- F:	package/fft2d/
++F:	package/fp16/
  F:	package/gemmlowp/
+ F:	package/psimd/
+ F:	package/pthreadpool/
 diff --git a/package/Config.in b/package/Config.in
-index 0f35409720..e8e07d37c6 100644
+index beb6f08064..cccb95b869 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2183,6 +2183,7 @@ menu "Other"
- 	source "package/elfutils/Config.in"
- 	source "package/ell/Config.in"
- 	source "package/falcosecurity-libs/Config.in"
-+	source "package/farmhash/Config.in"
- 	source "package/fft2d/Config.in"
- 	source "package/fftw/Config.in"
+@@ -2187,6 +2187,7 @@ menu "Other"
  	source "package/flann/Config.in"
-diff --git a/package/farmhash/Config.in b/package/farmhash/Config.in
+ 	source "package/flatbuffers/Config.in"
+ 	source "package/flatcc/Config.in"
++	source "package/fp16/Config.in"
+ 	source "package/fxdiv/Config.in"
+ 	source "package/gconf/Config.in"
+ 	source "package/gdal/Config.in"
+diff --git a/package/fp16/Config.in b/package/fp16/Config.in
 new file mode 100644
-index 0000000000..ef22898774
+index 0000000000..e07c6ebb8a
 --- /dev/null
-+++ b/package/farmhash/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_FARMHASH
-+	bool "farmhash"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++++ b/package/fp16/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_FP16
++	bool "fp16"
++	select BR2_PACKAGE_PSIMD
 +	help
-+	  FarmHash, a family of hash functions.
++	  Header-only library for conversion to/from half-precision
++	  floating point formats.
 +
-+	  https://github.com/google/farmhash
-+
-+comment "farmhash needs a toolchain w/ C++11"
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-diff --git a/package/farmhash/farmhash.hash b/package/farmhash/farmhash.hash
++	  https://github.com/Maratyszcza/FP16
+diff --git a/package/fp16/fp16.hash b/package/fp16/fp16.hash
 new file mode 100644
-index 0000000000..afdfc0f994
+index 0000000000..a2b7d83c41
 --- /dev/null
-+++ b/package/farmhash/farmhash.hash
++++ b/package/fp16/fp16.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated
-+sha256  18392cf0736e1d62ecbb8d695c31496b6507859e8c75541d7ad0ba092dc52115  farmhash-0d859a811870d10f53a594927d0d0b97573ad06d.tar.gz
++sha256  e7b509c76a2ea162ebdda77fb6b6f51f2f37dedee0866077d428e214516f0c2b  fp16-98b0a46bce017382a6351a19577ec43a715b6835.tar.gz
 +# License files, locally calculated
-+sha256  4162dd091caae234f72d3b57e138174f733e736b2430a4c51b098b17d866fcb6  COPYING
-diff --git a/package/farmhash/farmhash.mk b/package/farmhash/farmhash.mk
++sha256  17e4f539024be2749ee729d1e2f01d24cef12ece8c9bf18e91a4349be29c80bf  LICENSE
+diff --git a/package/fp16/fp16.mk b/package/fp16/fp16.mk
 new file mode 100644
-index 0000000000..6ab7d1a88b
+index 0000000000..d50d84366d
 --- /dev/null
-+++ b/package/farmhash/farmhash.mk
-@@ -0,0 +1,14 @@
++++ b/package/fp16/fp16.mk
+@@ -0,0 +1,20 @@
 +################################################################################
 +#
-+# farmhash
++# fp16
 +#
 +################################################################################
 +
-+FARMHASH_VERSION = 0d859a811870d10f53a594927d0d0b97573ad06d
-+FARMHASH_SITE = $(call github,google,farmhash,$(FARMHASH_VERSION))
-+FARMHASH_LICENSE = MIT
-+FARMHASH_LICENSE_FILES = COPYING
-+FARMHASH_INSTALL_STAGING = YES
-+FARMHASH_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++FP16_VERSION = 98b0a46bce017382a6351a19577ec43a715b6835
++FP16_SITE = $(call github,Maratyszcza,FP16,$(FP16_VERSION))
++FP16_LICENSE = MIT
++FP16_LICENSE_FILES = LICENSE
++FP16_INSTALL_STAGING = YES
++# Only installs a header
++FP16_INSTALL_TARGET = NO
++FP16_DEPENDENCIES = psimd
++FP16_CONF_OPTS = \
++	-DFP16_BUILD_TESTS=OFF \
++	-DFP16_BUILD_BENCHMARKS=OFF \
++	-DPSIMD_SOURCE_DIR="$(PSIMD_DIR)"
 +
-+$(eval $(autotools-package))
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
