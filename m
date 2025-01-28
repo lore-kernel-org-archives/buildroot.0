@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4028C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:06:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37D98C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:06:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F6F570448;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A3C750688;
 	Fri, 28 Feb 2025 17:06:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AfrZijAKjlwr; Fri, 28 Feb 2025 17:06:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cGkX9i9xaen0; Fri, 28 Feb 2025 17:06:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 056D76FC2E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C1E24F43A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 056D76FC2E;
-	Fri, 28 Feb 2025 17:06:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C1E24F43A;
+	Fri, 28 Feb 2025 17:06:25 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 21F621DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 114BB68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:41:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A0E5F42DA6
+ by smtp4.osuosl.org (Postfix) with ESMTP id BA74B42DE9
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oo6R2mUvvPTA for <buildroot@buildroot.org>;
+ id rp8IJws9bpWc for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:31:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DB8CC42ED3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5931242EDF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB8CC42ED3
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5931242EDF
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D6107867B4; Fri, 28 Feb 2025 16:30:21 +0000 (UTC)
+ id 531A2867B4; Fri, 28 Feb 2025 16:30:22 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 27 Jan 2025 21:16:13 +0100
+Date: Tue, 28 Jan 2025 21:52:37 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 71a7d6ff201522a216910eacc2f40467c8e7ab06
-X-Git-Newrev: cef7358addc867c8847b6fc5efb235a57d454a88
+X-Git-Oldrev: ea1cc1af55dbc681e44c512d9b01dc4f7f19ee59
+X-Git-Newrev: c655ed35f6667e2c6801c299ebaa3b524820ee5a
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163021.D6107867B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fontconfig: fix
- compilation on targets without pthread support
+Message-Id: <20250228163022.531A2867B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ruy: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,64 +64,109 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cef7358addc867c8847b6fc5efb235a57d454a88
+commit: https://git.buildroot.net/buildroot/commit/?id=c655ed35f6667e2c6801c299ebaa3b524820ee5a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The br-arm-full-nothread fails because meson (wrongly) assumes thread
-support when cross-compiling. So add an explicit check on pthread support.
+This package is required by tensorflow-lite.
 
-Fixes:
- - https://autobuild.buildroot.org/results/5b0/5b0ae4c858e9debddf9bd9bd86cfacb6951b4c3f/build-end.log
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
+Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...uild-explicitly-check-for-pthread-support.patch | 37 ++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ DEVELOPERS            |  1 +
+ package/Config.in     |  1 +
+ package/ruy/Config.in | 22 ++++++++++++++++++++++
+ package/ruy/ruy.hash  |  4 ++++
+ package/ruy/ruy.mk    | 18 ++++++++++++++++++
+ 5 files changed, 46 insertions(+)
 
-diff --git a/package/fontconfig/0001-meson.build-explicitly-check-for-pthread-support.patch b/package/fontconfig/0001-meson.build-explicitly-check-for-pthread-support.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8e33b20bba..e9e106e250 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3034,6 +3034,7 @@ F:	package/ti-gfx/
+ 
+ N:	Stefan Hager <stefan.hager@ginzinger.com>
+ F:	package/cpuinfo/
++F:	package/ruy/
+ 
+ N:	Stefan Nickl <Stefan.Nickl@gmail.com>
+ F:	board/freescale/imx8dxlevk/
+diff --git a/package/Config.in b/package/Config.in
+index 70ad2af568..f982b7332a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2300,6 +2300,7 @@ endif
+ 	source "package/qlibc/Config.in"
+ 	source "package/reproc/Config.in"
+ 	source "package/riemann-c-client/Config.in"
++	source "package/ruy/Config.in"
+ 	source "package/shapelib/Config.in"
+ 	source "package/skalibs/Config.in"
+ 	source "package/sphinxbase/Config.in"
+diff --git a/package/ruy/Config.in b/package/ruy/Config.in
 new file mode 100644
-index 0000000000..ca394ab7d5
+index 0000000000..cc137a403c
 --- /dev/null
-+++ b/package/fontconfig/0001-meson.build-explicitly-check-for-pthread-support.patch
-@@ -0,0 +1,37 @@
-+From 3c9de31dda1a1d44fade7a61e66c989178d6c2a4 Mon Sep 17 00:00:00 2001
-+From: Thomas Devoogdt <thomas@devoogdt.com>
-+Date: Sun, 26 Jan 2025 10:15:39 +0100
-+Subject: [PATCH] meson.build: explicitly check for pthread support
++++ b/package/ruy/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_RUY_ARCH_SUPPORTS
++	bool
++	default y if BR2_PACKAGE_CPUINFO_ARCH_SUPPORTS
 +
-+Tested using buildroot. The br-arm-full-nothread fails
-+because meson assumes thread support when cross-compiling.
++config BR2_PACKAGE_RUY
++	bool "ruy"
++	depends on BR2_PACKAGE_CPUINFO_ARCH_SUPPORTS
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
++	depends on BR2_TOOLCHAIN_HAS_THREADS # cpuinfo
++	select BR2_PACKAGE_CPUINFO
++	help
++	  Ruy is a matrix multiplication library. Its focus is to cover
++	  the matrix multiplication needs of neural network inference
++	  engines. Its initial user has been TensorFlow Lite, where it
++	  is used by default on the ARM CPU architecture.
 +
-+Dependency threads found: YES unknown (cached)
-+Has header "pthread.h" : NO
++	  https://github.com/google/ruy
 +
-+Upstream: https://gitlab.freedesktop.org/fontconfig/fontconfig/-/commit/aad470dad519b6fe3459023b82941b4414b71313
-+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-+---
-+ meson.build | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
++comment "ruy needs a toolchain w/ C++14, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/ruy/ruy.hash b/package/ruy/ruy.hash
+new file mode 100644
+index 0000000000..159687bf04
+--- /dev/null
++++ b/package/ruy/ruy.hash
+@@ -0,0 +1,4 @@
++# Locally calculated
++sha256  0bd02bef7675d3edd8168e6e4ce22e162516947fcc07bb79809be4cda8f27a0c  ruy-83fd40d730feb0804fafbc2d8814bcc19a17b2e5.tar.gz
++# License files, locally calculated
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/ruy/ruy.mk b/package/ruy/ruy.mk
+new file mode 100644
+index 0000000000..3e83553f19
+--- /dev/null
++++ b/package/ruy/ruy.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# ruy
++#
++################################################################################
 +
-+diff --git a/meson.build b/meson.build
-+index 4439758..07e242b 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -383,8 +383,10 @@ endif
-+ 
-+ if host_machine.system() != 'windows'
-+   thread_dep = dependency('threads')
-+-  conf.set('HAVE_PTHREAD', 1)
-+-  deps += [thread_dep]
-++  if thread_dep.found() and cc.has_header('pthread.h')
-++    conf.set('HAVE_PTHREAD', 1)
-++    deps += [thread_dep]
-++  endif
-+ endif
-+ 
-+ fc_templatedir = get_option('template-dir')
-+-- 
-+2.43.0
++RUY_VERSION = 83fd40d730feb0804fafbc2d8814bcc19a17b2e5
++RUY_SITE = $(call github,google,ruy,$(RUY_VERSION))
++RUY_LICENSE = Apache-2.0
++RUY_LICENSE_FILES = LICENSE
++RUY_INSTALL_STAGING = YES
++RUY_DEPENDENCIES = cpuinfo
++RUY_CONF_OPTS = \
++	-DCMAKE_POSITION_INDEPENDENT_CODE=ON \
++	-DRUY_FIND_CPUINFO=ON \
++	-DRUY_MINIMAL_BUILD=ON
 +
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
