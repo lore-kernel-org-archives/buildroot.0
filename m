@@ -1,100 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE5B8C0218A
-	for <buildroot@archiver.kernel.org>; Tue, 28 Jan 2025 23:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67C84C0218A
+	for <buildroot@archiver.kernel.org>; Tue, 28 Jan 2025 23:23:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 619BD80EC8;
-	Tue, 28 Jan 2025 23:00:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D3D0A40656;
+	Tue, 28 Jan 2025 23:23:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8_ZqitYetbzO; Tue, 28 Jan 2025 23:00:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Eg57HJVumVeC; Tue, 28 Jan 2025 23:23:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 739C280EDC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37A08405E8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 739C280EDC;
-	Tue, 28 Jan 2025 23:00:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 45B4C20
- for <buildroot@buildroot.org>; Tue, 28 Jan 2025 23:00:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37A08405E8;
+	Tue, 28 Jan 2025 23:23:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 62AD1942
+ for <buildroot@buildroot.org>; Tue, 28 Jan 2025 23:23:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4073080EC8
- for <buildroot@buildroot.org>; Tue, 28 Jan 2025 23:00:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5057F8107F
+ for <buildroot@buildroot.org>; Tue, 28 Jan 2025 23:23:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lKNnZGnwduoM for <buildroot@buildroot.org>;
- Tue, 28 Jan 2025 23:00:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::e31; helo=mail-vs1-xe31.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1748D80EDC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1748D80EDC
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com
- [IPv6:2607:f8b0:4864:20::e31])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1748D80EDC
- for <buildroot@buildroot.org>; Tue, 28 Jan 2025 23:00:19 +0000 (UTC)
-Received: by mail-vs1-xe31.google.com with SMTP id
- ada2fe7eead31-4affbc4dc74so3701074137.0
- for <buildroot@buildroot.org>; Tue, 28 Jan 2025 15:00:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738105219; x=1738710019;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=OmS60G1LTPAJn9ILyzo2s5lIDsWU22HHEh2gFT5IM6I=;
- b=QD5kNrfbemIRhf9wugzOaGn0rT4mqe826kpI4IwuJsA+960pSfmBjXM5G/tTiBC/Lx
- LtWcieEzYrToHhtynJvOJQ1RT2ggMj08CLJSFowKJpvu/hSFKkPOMlFyr+4ha4JTYgnd
- pxMhKULrQIBcnJnI8OVLrpV3rX8o38ZMkoulTUATD7Hx8AIJ+7HtQtF1od1p8p4Pzrs1
- iUWfHyXe/gYddh8CljDRWGnfPqllgH9o18NUYC5Z5CM46BdyfCmjRCZ8eOBrrZ8IjK0L
- gFaRLuFqKScESZcATnAJrpR5DrCk7j0BLQVxSsWUXn67PwiCKm3z3JUv8kde3kKXHGeR
- ZOoQ==
-X-Gm-Message-State: AOJu0YwmO4BQ2zv/f39RmkBGOjm6JfCD0gVSJCZ0cv6FUsoUmdIPUJ0E
- PbDvqPDV+hIsvrKH8968jHE/UpcbnSWxuSlYdTzn0f/vNIWAqSs94Ym8asLmzhE6gzzuGL0BVbg
- xTP8PNKRLG0SCzAMvs0WCKe2xqNTMgEa+
-X-Gm-Gg: ASbGnctb5PBaoRMD5+i+SR121vpCelRihZ/EJCxDkMnllHGFEADMcyM3539uVCvTM8H
- igm5C0pSCjEneuMna+tNpwwcRn6Jd6yYSGipD9zdri7RyJtlUKxWVbT5o9+5QxCOyo+hl1CBW
-X-Google-Smtp-Source: AGHT+IHFwe84zPR80ChNRtQBm+n6icgaNc46guiwY/8GOAbKvLavSxQn/orh4e5OrMTyDzbNB+/ED0Bf39/2Fc2vVYk=
-X-Received: by 2002:a05:6102:3709:b0:4b1:1b67:6a5c with SMTP id
- ada2fe7eead31-4b9a52719e7mr783639137.18.1738105218753; Tue, 28 Jan 2025
- 15:00:18 -0800 (PST)
-MIME-Version: 1.0
-References: <20250128170153.2298242-1-james.hilliard1@gmail.com>
- <20250128170153.2298242-10-james.hilliard1@gmail.com>
- <42a394596365512b8bf4d523042534ae@free.fr>
-In-Reply-To: <42a394596365512b8bf4d523042534ae@free.fr>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 29 Jan 2025 01:00:07 +0200
-X-Gm-Features: AWEUYZnWyBEfK9MWS5QmJN-DkPd5206XBvpeKXdeJeqIHEfrpwcwuXjm7A_fST4
-Message-ID: <CADvTj4o+t64=vn46+jEy7JBy51vpVaYHVxC3T7rfjr47QuzeeA@mail.gmail.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org, Stefan Hager <stefan.hager@ginzinger.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1738105219; x=1738710019; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=OmS60G1LTPAJn9ILyzo2s5lIDsWU22HHEh2gFT5IM6I=;
- b=Mzw+uC6ncAa/hfxYSDEElBM1EiEIsS+pR6dg5kL1Wp0LCEEYYpjCTVrSONl3l0z4NU
- uWGoqjPqeGzLivsurS4LMdsl9X75IAiQEJxZbqcIqiF7nuGL6ks9h3TVqrdHLsLddNGb
- mmtpKqmiRE0YKUCvzhTQ7bqTZ0ch2eeEs6/saeYu0zHRN3t8xix74qCybkWYjTx7Rnl1
- x3wVZfSc2kTlY7xf1j/3Fa92GVtFy2pvwRlYxZi0LpBiYBRLIAIgB+mSpVYyIb6lZ0mo
- +81bvFdfvz4D8PaN/Zo16dD8PxRp8C8kfakYKlOS8T5cTyCmNJGE5uoYgt8w481iyQN+
- To4A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=Mzw+uC6n
-Subject: Re: [Buildroot] [PATCH v8 10/10] package/tensorflow-lite: new
- package
+ id hJxiqQn9j5dF for <buildroot@buildroot.org>;
+ Tue, 28 Jan 2025 23:23:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7402980FF3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7402980FF3
+ for <buildroot@buildroot.org>; Tue, 28 Jan 2025 23:23:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5B54F865B7; Tue, 28 Jan 2025 23:23:13 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Wed, 29 Jan 2025 00:22:29 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fd29fee3a3ac0ce45404ed256d2059836c352728
+X-Git-Newrev: 15891236dbfb20ea971877918e9579b246f7c43c
+X-Patchwork-Hint: ignore
+Message-Id: <20250128232313.5B54F865B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nodejs: security bump to version
+ 22.13.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,48 +59,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gV2VkLCBKYW4gMjksIDIwMjUgYXQgMTI6NDDigK9BTSBKdWxpZW4gT2xpdmFpbiA8anUub0Bm
-cmVlLmZyPiB3cm90ZToKPgo+IEhpIEphbWVzLCBTdGVmYW4sCj4KPiBPbiAyOC8wMS8yMDI1IDE4
-OjAxLCBKYW1lcyBIaWxsaWFyZCB3cm90ZToKPiA+IEZyb206IFN0ZWZhbiBIYWdlciA8c3RlZmFu
-LmhhZ2VyQGdpbnppbmdlci5jb20+Cj4gPgo+ID4gVGhpcyBwYWNrYWdlIGFkZHMgdGhlIHRlbnNv
-cmZsb3cgbGl0ZSBydW50aW1lIHRvIGJ1aWxkcm9vdC4KPiA+Cj4gPiBUZXN0ZWQtYnk6IFN0ZWZh
-biBIYWdlciA8c3RlZmFuLmhhZ2VyQGdpbnppbmdlci5jb20+Cj4gPiBTaWduZWQtb2ZmLWJ5OiBT
-dGVmYW4gSGFnZXIgPHN0ZWZhbi5oYWdlckBnaW56aW5nZXIuY29tPgo+ID4gU2lnbmVkLW9mZi1i
-eTogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+Cj4KPiBbLi4uXQo+
-Cj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS90ZW5zb3JmbG93LWxpdGUvdGVuc29yZmxvdy1saXRl
-Lm1rCj4gPiBiL3BhY2thZ2UvdGVuc29yZmxvdy1saXRlL3RlbnNvcmZsb3ctbGl0ZS5tawo+ID4g
-bmV3IGZpbGUgbW9kZSAxMDA2NDQKPiA+IGluZGV4IDAwMDAwMDAwMDAuLjQzM2VmZjMyNDIKPiA+
-IC0tLSAvZGV2L251bGwKPiA+ICsrKyBiL3BhY2thZ2UvdGVuc29yZmxvdy1saXRlL3RlbnNvcmZs
-b3ctbGl0ZS5tawo+ID4gQEAgLTAsMCArMSw1OSBAQAo+ID4gKyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjCj4gPiArIwo+ID4gKyMgdGVuc29yZmxvdy1saXRlCj4gPiArIwo+ID4gKyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjCj4gPiArCj4gPiArVEVOU09SRkxPV19MSVRFX1ZFUlNJT04gPSAyLjExLjAK
-Pgo+IFNvIEkgZmluYWxseSBtZXJnZWQgdGhpcyBsb25nc3RhbmRpbmcgdGVuc29yZmxvdy1saXRl
-IHNlcmllcy4KPiBUaGFua3MgYWdhaW4hCj4KPiBUaGUgdmVyc2lvbiBtZXJnZWQgaGVyZSBpcyBh
-IGJpdCBvdXRkYXRlZCBhbHJlYWR5LiBTZWU6Cj4gaHR0cHM6Ly9naXRodWIuY29tL3RlbnNvcmZs
-b3cvdGVuc29yZmxvdy9yZWxlYXNlcy90YWcvdjIuMTEuMAo+IGZyb20gTm92ZW1iZXIgMjAyMi4K
-Pgo+IEZvciByZWZlcmVuY2UsIHRoZSBsYXRlc3QgdmVyc2lvbiwgYXMgb2YgdG9kYXkgaXMgdjIu
-MTguMDoKPiBodHRwczovL2dpdGh1Yi5jb20vdGVuc29yZmxvdy90ZW5zb3JmbG93L3JlbGVhc2Vz
-L3RhZy92Mi4xOC4wCj4gZnJvbSBPY3RvYmVyIDIwMjQuCj4KPiBTbyBpdCB3b3VsZCBiZSByZWFs
-bHkgbmljZSB0byBzZWUgdXBkYXRlcyB0b3dhcmRzIHRoaXMgbmV3ZXIgdmVyc2lvbi4KPiBUaGlz
-IHdpbGwgcHJvYmFibHkgYnJpbmcgbmV3IGRlcGVuZGVuY2llcyB0b28uCgpZZWFoLCBub3cgdGhh
-dCBpdCdzIG1lcmdlZCBpdCBzaG91bGQgYmUgYSBiaXQgZWFzaWVyIHRvIGJyaW5nIHVwIHRvCmRh
-dGUsIHdpdGggc28gbWFueSBuZXcgZGVwZW5kZW5jaWVzIGV2ZW4gZm9yIHRoZSBvbGRlciB2ZXJz
-aW9uCkkgd2FudGVkIHRvIHRyeSBhbmQga2VlcCB0aGUgc2VyaWVzIGFzIHNtYWxsIGFzIHBvc3Np
-YmxlLgoKPgo+IEFsc28sIGZvciBpbmZvcm1hdGlvbiwgdGVuc29yZmxvdy1saXRlIGlzIGluIGEg
-cHJvY2VzcyB0byBiZQo+IHJlbmFtZWQgdG8gTGl0ZVJULiBTZWU6Cj4gaHR0cHM6Ly9kZXZlbG9w
-ZXJzLmdvb2dsZWJsb2cuY29tL2VuL3RlbnNvcmZsb3ctbGl0ZS1pcy1ub3ctbGl0ZXJ0Lwo+IGh0
-dHBzOi8vZ2l0aHViLmNvbS9nb29nbGUtYWktZWRnZS9saXRlcnQKPgo+IEl0IHNlZW1zIHRoaXMg
-cHJvY2VzcyB3aWxsIHRha2Ugc29tZSB0aW1lLCBzbyBJIG1lcmdlZCB0aGlzCj4gcGFja2FnZSB3
-aXRoIGl0cyAib2xkIiBuYW1lIGFueXdheS4KClllYWgsIGl0IHNlZW1zIGNoYW5nZXMgYXJlIGdl
-dHRpbmcgcHVzaGVkIHRvIHRoZSBvbGQgYW5kIG5ldwpsb2NhdGlvbnMgc3RpbGwuCgo+Cj4gQmVz
-dCByZWdhcmRzLAo+Cj4gSnVsaWVuLgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
-b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
-dAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=15891236dbfb20ea971877918e9579b246f7c43c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes the following security vulnerabilities:
+
+Worker permission bypass via InternalWorker leak in diagnostics
+(CVE-2025-23083) - (high)
+
+With the aid of the diagnostics_channel utility, an event can be hooked into
+whenever a worker thread is created.  This is not limited only to workers
+but also exposes internal workers, where an instance of them can be fetched,
+and its constructor can be grabbed and reinstated for malicious usage.
+
+This vulnerability affects Permission Model users (--permission) on Node.js
+v20, v22, and v23.
+
+GOAWAY HTTP/2 frames cause memory leak outside heap (CVE-2025-23085) - (medium)
+
+A memory leak could occur when a remote peer abruptly closes the socket
+without sending a GOAWAY notification.  Additionally, if an invalid header
+was detected by nghttp2, causing the connection to be terminated by the
+peer, the same leak was triggered.  This flaw could lead to increased memory
+consumption and potential denial of service under certain conditions.
+
+This vulnerability affects HTTP/2 Server users on Node.js v18.x, v20.x, v22.x and v23.x.
+
+For more details, see the announcement:
+https://nodejs.org/en/blog/vulnerability/january-2025-security-releases
+
+Update the LICENSE hash for a an addition of the (MIT licensed) nlohmann
+JSON library:
+
+https://github.com/nodejs/node/commit/27bcd103e775e00eb8d03ac37052bbd4ccb6d239
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/nodejs/nodejs.hash | 14 +++++++-------
+ package/nodejs/nodejs.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index aaa9e4619a..6d2bdfb704 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,8 +1,8 @@
+-# From https://nodejs.org/dist/v20.15.1/SHASUMS256.txt.asc
+-sha256  6031d04b98f59ff0f7cb98566f65b115ecd893d3b7870821171708cdbaf7ae6e  node-v22.11.0-linux-arm64.tar.xz
+-sha256  9de0fdcfb1cccbe03f72f939e4e6f03867aef3da8223f90606cd93757704dae0  node-v22.11.0-linux-armv7l.tar.xz
+-sha256  d1d49d7d611b104b6d616e18ac439479d8296aa20e3741432de0e85f4735a81e  node-v22.11.0-linux-ppc64le.tar.xz
+-sha256  83bf07dd343002a26211cf1fcd46a9d9534219aad42ee02847816940bf610a72  node-v22.11.0-linux-x64.tar.xz
+-sha256  bbf0297761d53aefda9d7855c57c7d2c272b83a7b5bad4fea9cb29006d8e1d35  node-v22.11.0.tar.xz
++# From https://nodejs.org/dist/v22.13.1/SHASUMS256.txt.asc
++sha256  0a237c413ccbab920640438bf6e1a32edb19845bdc21f0e1cd5b91545ce1c126  node-v22.13.1-linux-arm64.tar.xz
++sha256  f2be8dca2a7a518f6d187aa4b18abbeeafd71096a6d95f73f4d8bc0f8d2394ea  node-v22.13.1-linux-armv7l.tar.xz
++sha256  377a7a1ea66f39251e1657f419e9404d526fcca9910620d0ecf0a870c6308f6b  node-v22.13.1-linux-ppc64le.tar.xz
++sha256  0d2a5af33c7deab5555c8309cd3f373446fe1526c1b95833935ab3f019733b3b  node-v22.13.1-linux-x64.tar.xz
++sha256  cfce282119390f7e0c2220410924428e90dadcb2df1744c0c4a0e7baae387cc2  node-v22.13.1.tar.xz
+ # Locally calculated
+-sha256  f0cb1ad806ba5d681f378a8cc2e539fe4b54839290eda3c814ec8994af2b8422  LICENSE
++sha256  9d72cce9b104ecb67feb8af38618511685190ae5a119cc0488ecae66b221000d  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index bf0764136e..6dc0e501b4 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # _VERSION, _SOURCE and _SITE must be kept empty to avoid downloading anything
+-NODEJS_COMMON_VERSION = 22.11.0
++NODEJS_COMMON_VERSION = 22.13.1
+ NODEJS_COMMON_SOURCE = node-v$(NODEJS_COMMON_VERSION).tar.xz
+ NODEJS_COMMON_SITE = http://nodejs.org/dist/v$(NODEJS_COMMON_VERSION)
+ 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
