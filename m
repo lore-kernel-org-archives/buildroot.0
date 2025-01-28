@@ -4,76 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C54B3C0218A
-	for <buildroot@archiver.kernel.org>; Tue, 28 Jan 2025 21:09:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D687FC0218A
+	for <buildroot@archiver.kernel.org>; Tue, 28 Jan 2025 21:15:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67082412BD;
-	Tue, 28 Jan 2025 21:09:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BA764139E;
+	Tue, 28 Jan 2025 21:15:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AoIGT-zcVfXs; Tue, 28 Jan 2025 21:09:27 +0000 (UTC)
+ id Y8KQ9nVo2OVh; Tue, 28 Jan 2025 21:15:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20976412C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DC4F413A5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 20976412C5;
-	Tue, 28 Jan 2025 21:09:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B560120
- for <buildroot@buildroot.org>; Tue, 28 Jan 2025 21:09:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DC4F413A5;
+	Tue, 28 Jan 2025 21:15:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5092320
+ for <buildroot@buildroot.org>; Tue, 28 Jan 2025 21:15:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A24DE60FA8
- for <buildroot@buildroot.org>; Tue, 28 Jan 2025 21:09:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 31D3A413A5
+ for <buildroot@buildroot.org>; Tue, 28 Jan 2025 21:15:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hAiQRVmcvvOd for <buildroot@buildroot.org>;
- Tue, 28 Jan 2025 21:09:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x0zz_JROFY2v for <buildroot@buildroot.org>;
+ Tue, 28 Jan 2025 21:15:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8AB1D607C2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8AB1D607C2
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8AB1D607C2
- for <buildroot@buildroot.org>; Tue, 28 Jan 2025 21:09:24 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1966B42E76;
- Tue, 28 Jan 2025 21:09:20 +0000 (UTC)
-Date: Tue, 28 Jan 2025 22:09:20 +0100
-To: Markus Mayer via buildroot <buildroot@buildroot.org>
-Cc: Markus Mayer <mmayer@broadcom.com>
-Message-ID: <20250128220920.535ecc14@windsurf>
-In-Reply-To: <20250127215356.3175741-1-mmayer@broadcom.com>
-References: <20250127215356.3175741-1-mmayer@broadcom.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0DFF04139E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0DFF04139E
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0DFF04139E
+ for <buildroot@buildroot.org>; Tue, 28 Jan 2025 21:14:59 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DF6A520008
+ for <buildroot@buildroot.org>; Tue, 28 Jan 2025 21:14:56 +0000 (UTC)
+Date: Tue, 28 Jan 2025 22:14:55 +0100
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Message-ID: <20250128221455.5a625b99@windsurf>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduudefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudelmeekleegsgemheehtddtmedvudgtvgemsggvheeimegrsgefvdemtggrrggvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgduleemkeelgegsmeehhedttdemvddutggvmegsvgehieemrggsfedvmegtrggrvgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepmhhmrgihvghrsegsrhhorggutghomhdrtghomh
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1738098561;
+ d=bootlin.com; s=gm1; t=1738098897;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=oKx5K6NQbkh3lGEsxtYw2iNdP23yGUqWhC30ITuwIkg=;
- b=Qwc8TunZQ5X9O6eDKbigWgaGcH6F9v9Kr86OiuHNUTb9LGI8e3zb1OVDO818sDGas+RQSB
- c6YSS1OUCWa3F9eumD5jdSuVgkNOFyg2f22u0TmcehM1nIaelO2qi29UsF1eiGvkc6prEL
- fISEbxj+I/HQ4oAqIRAvt2tLjvDNyTA/uXR5DYRoSUX4kRx84upMDNMBBWc8mjET6topsk
- FkC1pXb3jtJt+u98UHbj4NGLANOg8xE8/R1j9/GJwF3Ava/Kml4CY4dtsvrfdRQJfjmLW3
- GU9O+piCYbkpJ2OSqipGto6YxNoZ93R+lV8GPSISu5DRbCeMnsjFdbw0ZJYq+w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ to:to:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=At2UwtWMvh39f9AB0QoSWRO0ZfL51bPbci760DvE2k0=;
+ b=O/ES/VTNuTm/yJgYBto+Wo5t3K3szRohEyi6QAxPt0Qa23Zng+UjUgIM8EPP4r5+eRfHX+
+ 4wZIQfvikL/LC9nvHY3LP9syoCd/iqwnXktKnyOTBm84NBQ2ONtQ2hCqjU+JXsGp9ZKvZu
+ +ySSaMGeDWVzwj3ic9rneMLvXyQAOWe5hFACu6/mxRX+5ClA7ah/eTGBfscuz1QhX6qhe9
+ VgpZIw1ocZm6HIbSUeGtkTI96Hdy1e3h3tedJqnrzhOnYtdZw4GYTLKHTDj3nfxC4olTMD
+ +wPt9C2cG3ayyI7qIJwidV/R8iiYzM9eflqR/PRLgJfXJ4nvck43B00cwprDPA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Qwc8TunZ
-Subject: Re: [Buildroot] [PATCH] support/scripts/apply-patches.sh: introduce
- envvar BR_PATCH_ARGS
+ header.s=gm1 header.b=O/ES/VTN
+Subject: [Buildroot] Buildroot Association General Assembly: Feb 3,
+ 2025 in Brussels
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,26 +85,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Markus,
+Hello,
 
-On Mon, 27 Jan 2025 13:53:54 -0800
-Markus Mayer via buildroot <buildroot@buildroot.org> wrote:
+The Buildroot project is supported by a legal entity called the
+Buildroot Association, which is incorporated as a non-profit French
+"Association Loi 1901". See some details at:
 
-> Introduce the environment variable BR_PATCH_ARGS as a means for the
-> caller to pass additional arguments to the patch(1) command. These
-> arguments can be new arguments not originally used -- or they can
-> override one of the default arguments.
-> 
-> In addition, provide a mechanism to add patch parameters on a
-> per-package basis using the <PACKAGENAME>_PATCH_ARGS makefile variable,
-> for example "PROCPS_NG_PATCH_ARGS". This allows individual packages to
-> specify extra arguments or override defaults while not affecting any
-> other part of the build environment.
+  https://buildroot.org/association.html
 
-Thanks for the proposed patch. Do you have some details on the actual
-(not theoretical) use-case(s) ?
+Practically speaking, this legal entity allows us to receive funding
+from members and sponsors, and to pay a few expenses such as the
+buildroot.org server or travel/meeting room rental expenses to organize
+our Buildroot Developer meetings.
 
-Thanks a lot!
+As is required by French regulation, we will be organizing our yearly
+General Assembly on Feb 3, 2025 at 4 PM UTC+1 in Brussels, Belgium,
+during the first day of the Buildroot Developers meeting.
+
+This General Assembly will have the following agenda:
+ - Review and vote on the 2024 moral report
+ - Review and vote on the 2024 financial report
+ - Vote for the new board
+ - Discussions and questions
+
+People who can vote during this General Assembly are members whose
+membership for 2025 is up-to-date.
+
+Best regards,
 
 Thomas
 -- 
