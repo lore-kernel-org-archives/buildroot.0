@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DACE8C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:07:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59664C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:07:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACA6B70390;
-	Fri, 28 Feb 2025 17:07:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DrEw5qrTl-ZK; Fri, 28 Feb 2025 17:07:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA64C706AE
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA64C706AE;
-	Fri, 28 Feb 2025 17:07:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 239801DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:42:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F1E0046399
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A8FB4FA8E;
+	Fri, 28 Feb 2025 17:07:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bXOCCNdaDTal for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:12 +0000 (UTC)
+ id Avq3tdAVRv6l; Fri, 28 Feb 2025 17:07:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BA0D4FB10
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6BA0D4FB10;
+	Fri, 28 Feb 2025 17:07:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 04E041DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:42:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1084F42DE8
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IJ1uhzeP_t1y for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C8FC42DE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40785426A8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3C8FC42DE8
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 40785426A8
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 39BAE87A0C; Fri, 28 Feb 2025 16:30:21 +0000 (UTC)
+ id 3B35487635; Fri, 28 Feb 2025 16:30:22 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 26 Jan 2025 18:04:53 +0100
+Date: Tue, 28 Jan 2025 21:52:32 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e3d74c76eef1155d4040dae2d51662bfc0e3e0fc
-X-Git-Newrev: 84e96fd61ec0a6c62158530a64270fcd2167af56
+X-Git-Oldrev: 294d13bb85929cbef3f921e2f4b399f6216cc1a1
+X-Git-Newrev: ea1cc1af55dbc681e44c512d9b01dc4f7f19ee59
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163021.39BAE87A0C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/cloudflared: bump to
- version 2025.1.0
+Message-Id: <20250228163022.3B35487635@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/cpuinfo: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,41 +64,105 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84e96fd61ec0a6c62158530a64270fcd2167af56
+commit: https://git.buildroot.net/buildroot/commit/?id=ea1cc1af55dbc681e44c512d9b01dc4f7f19ee59
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog: https://github.com/cloudflare/cloudflared/blob/2025.1.0/RELEASE_NOTES
+This package is required by tensorflow-lite.
 
+Tested-by: Stefan Hager <stefan.hager@ginzinger.com>
+Signed-off-by: Stefan Hager <stefan.hager@ginzinger.com>
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Julien: add link to change log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/cloudflared/cloudflared.hash | 2 +-
- package/cloudflared/cloudflared.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                   |  3 +++
+ package/Config.in            |  1 +
+ package/cpuinfo/Config.in    | 17 +++++++++++++++++
+ package/cpuinfo/cpuinfo.hash |  4 ++++
+ package/cpuinfo/cpuinfo.mk   | 17 +++++++++++++++++
+ 5 files changed, 42 insertions(+)
 
-diff --git a/package/cloudflared/cloudflared.hash b/package/cloudflared/cloudflared.hash
-index 3d02b78b6f..f199160a94 100644
---- a/package/cloudflared/cloudflared.hash
-+++ b/package/cloudflared/cloudflared.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  48b9c54d79419d0489baadb8cb54d5196e0ff17650fb9eff81de02989fa8b009  cloudflared-2024.12.2-go2.tar.gz
-+sha256  f9223cdefaa4b75aa1c49638936af9d5007b6c7bd943ab70203bb75bf32467da  cloudflared-2025.1.0-go2.tar.gz
- sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
-diff --git a/package/cloudflared/cloudflared.mk b/package/cloudflared/cloudflared.mk
-index 78b46f9d0e..bf341b6b62 100644
---- a/package/cloudflared/cloudflared.mk
-+++ b/package/cloudflared/cloudflared.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index fde9360ad6..8e33b20bba 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3032,6 +3032,9 @@ F:	package/libvpx/
+ F:	package/mesa3d-demos/
+ F:	package/ti-gfx/
  
--CLOUDFLARED_VERSION = 2024.12.2
-+CLOUDFLARED_VERSION = 2025.1.0
- CLOUDFLARED_SITE = $(call github,cloudflare,cloudflared,$(CLOUDFLARED_VERSION))
- CLOUDFLARED_LICENSE = Apache-2.0
- CLOUDFLARED_LICENSE_FILES = LICENSE
++N:	Stefan Hager <stefan.hager@ginzinger.com>
++F:	package/cpuinfo/
++
+ N:	Stefan Nickl <Stefan.Nickl@gmail.com>
+ F:	board/freescale/imx8dxlevk/
+ F:	configs/freescale_imx8dxlevk_defconfig
+diff --git a/package/Config.in b/package/Config.in
+index 3f4dd42cbe..70ad2af568 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1801,6 +1801,7 @@ menu "Hardware handling"
+ 	source "package/bcm2835/Config.in"
+ 	source "package/c-periphery/Config.in"
+ 	source "package/ccid/Config.in"
++	source "package/cpuinfo/Config.in"
+ 	source "package/dtc/Config.in"
+ 	source "package/gnu-efi/Config.in"
+ 	source "package/hackrf/Config.in"
+diff --git a/package/cpuinfo/Config.in b/package/cpuinfo/Config.in
+new file mode 100644
+index 0000000000..257480f068
+--- /dev/null
++++ b/package/cpuinfo/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_CPUINFO_ARCH_SUPPORTS
++	bool
++	default y if BR2_aarch64
++	default y if BR2_arm
++	default y if BR2_i386
++	default y if BR2_x86_64
++
++config BR2_PACKAGE_CPUINFO
++	bool "cpuinfo"
++	depends on BR2_PACKAGE_CPUINFO_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  CPU INFOrmation library, cpuinfo is a library to detect
++	  essential for performance optimization information about
++	  host CPU.
++
++	  https://github.com/pytorch/cpuinfo
+diff --git a/package/cpuinfo/cpuinfo.hash b/package/cpuinfo/cpuinfo.hash
+new file mode 100644
+index 0000000000..499363cd09
+--- /dev/null
++++ b/package/cpuinfo/cpuinfo.hash
+@@ -0,0 +1,4 @@
++# Locally calculated
++sha256  37bb2fd2d1e87102baea8d131a0c550c4ceff5a12fba61faeb1bff63868155f1  cpuinfo-8a1772a0c5c447df2d18edf33ec4603a8c9c04a6.tar.gz
++# License files, locally calculated
++sha256  8e7e60636c3aa0cb03571a1a841ce5697f9551ff92b3c426c2561613d15ade70  LICENSE
+diff --git a/package/cpuinfo/cpuinfo.mk b/package/cpuinfo/cpuinfo.mk
+new file mode 100644
+index 0000000000..0aafb1b4dd
+--- /dev/null
++++ b/package/cpuinfo/cpuinfo.mk
+@@ -0,0 +1,17 @@
++################################################################################
++#
++# cpuinfo
++#
++################################################################################
++
++CPUINFO_VERSION = 8a1772a0c5c447df2d18edf33ec4603a8c9c04a6
++CPUINFO_SITE = $(call github,pytorch,cpuinfo,$(CPUINFO_VERSION))
++CPUINFO_LICENSE = BSD-2-Clause
++CPUINFO_LICENSE_FILES = LICENSE
++CPUINFO_INSTALL_STAGING = YES
++CPUINFO_CONF_OPTS = \
++	-DCPUINFO_BUILD_UNIT_TESTS=OFF \
++	-DCPUINFO_BUILD_MOCK_TESTS=OFF \
++	-DCPUINFO_BUILD_BENCHMARKS=OFF
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
