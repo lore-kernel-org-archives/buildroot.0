@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDE62C0218A
-	for <buildroot@archiver.kernel.org>; Tue, 28 Jan 2025 18:12:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3570DC0218A
+	for <buildroot@archiver.kernel.org>; Tue, 28 Jan 2025 18:12:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 93F7A60FA8;
-	Tue, 28 Jan 2025 18:12:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0545412FA;
+	Tue, 28 Jan 2025 18:12:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OgBjO-kK0qN2; Tue, 28 Jan 2025 18:12:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P3WpPaFFklrR; Tue, 28 Jan 2025 18:12:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F16660FC6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF423412FC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F16660FC6;
-	Tue, 28 Jan 2025 18:12:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E839BAF7
- for <buildroot@buildroot.org>; Tue, 28 Jan 2025 18:12:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF423412FC;
+	Tue, 28 Jan 2025 18:12:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3C90C20
+ for <buildroot@buildroot.org>; Tue, 28 Jan 2025 18:12:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C72E381138
- for <buildroot@buildroot.org>; Tue, 28 Jan 2025 18:12:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1BFD340108
+ for <buildroot@buildroot.org>; Tue, 28 Jan 2025 18:12:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SujsUBEIKkyU for <buildroot@buildroot.org>;
- Tue, 28 Jan 2025 18:12:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11DED80CA7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 11DED80CA7
- for <buildroot@buildroot.org>; Tue, 28 Jan 2025 18:12:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ED8E686582; Tue, 28 Jan 2025 18:12:05 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cY-KPmEezAVB for <buildroot@buildroot.org>;
+ Tue, 28 Jan 2025 18:12:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0C787404C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C787404C2
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0C787404C2
+ for <buildroot@buildroot.org>; Tue, 28 Jan 2025 18:12:33 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 53360780504;
+ Tue, 28 Jan 2025 19:12:31 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:34840])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 28 Jan 2025 19:12:31 +0100
+MIME-Version: 1.0
+Date: Tue, 28 Jan 2025 19:12:31 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 28 Jan 2025 19:09:28 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6a630519312f39faceb0039e7cf3ef2635a00101
-X-Git-Newrev: 294d13bb85929cbef3f921e2f4b399f6216cc1a1
-X-Patchwork-Hint: ignore
-Message-Id: <20250128181205.ED8E686582@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/genimage.sh: add shell
+To: =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay+rtone@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250128100151.2132875-1-gael.portay+rtone@gmail.com>
+References: <20250128100151.2132875-1-gael.portay+rtone@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <1af532cd97b1452cad8d343dfc8d9a2f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1738087952;
+ bh=sGnWhzxolaxEdT95oMqIRFKNMetAk9fe5AQ9FXyX6OY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=rKj9gpo/8Ftk17DKtVaskUptWecWzk7qWrlc9auxN2jbaAuJXpb2yVwgBwW8vYZT/
+ 0VjH6yZOCGces0n1algYylYbEP+ghkzOGy5+cqpvjeawASRex9PiEfvfAx0QUYUYmm
+ 9vLwC347rhLKarAe1o5fHggh2QHcYh/dwFNG6Ayizu18RcZaScjSLykhNbnMib2ohI
+ aXoll1ayIkmwsPteW6GFPDUyJHMSx2e21xAXXzWQ5I25LHfX2PZq+vPPPRI6qbzons
+ Ie0UYm60ZYzZmGb4XGT+eRwtqMupFcyEsEeHx60AAemBphmXwKMXV3v/UtwQSUW1/9
+ ubYclvTwNiD8Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=rKj9gpo/
+Subject: Re: [Buildroot] [PATCH 1/1] support/scripts/genimage.sh: add shell
  option -e
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,78 +83,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7421347553300001789=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7421347553300001789==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=294d13bb85929cbef3f921e2f4b399f6216cc1a1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The commit 6889056f1e (support/scripts/genimage.sh) adds support for
-creating bmap images.
-
-Since then, the script genimage.sh looses the error returned by the
-genimage command.
-
-As a consequence, the target-finalize target looses the error as well,
-and so on up to make.
-
-This adds the shell option -e to exit immediately if a command ends with
-an error, so the error is not ignored.
-
-Fixes:
-
-	gportay@archlinux ~/src/rtone-br2-external $ make
-	(...)
-	>>>   Executing post-image script support/scripts/genimage.sh
-	INFO: cmd: "mkdir -p "/home/gportay/src/rtone-br2-external/output/build/genimage.tmp"" (stderr):
-	INFO: cmd: "rm -rf "/home/gportay/src/rtone-br2-external/output/build/genimage.tmp"/*" (stderr):
-	INFO: cmd: "mkdir -p "/home/gportay/src/rtone-br2-external/output/build/genimage.tmp"" (stderr):
-	INFO: cmd: "cp -a "/tmp/tmp.EclKGwtA4R" "/home/gportay/src/rtone-br2-external/output/build/genimage.tmp/root"" (stderr):
-	INFO: cmd: "mkdir -p "/home/gportay/src/rtone-br2-external/output/images"" (stderr):
-	INFO: vfat(efi-part.vfat): cmd: "mkdosfs   '/home/gportay/src/rtone-br2-external/output/images/efi-part.vfat'" (stderr):
-	INFO: vfat(efi-part.vfat): adding file 'efi-part/EFI' as 'EFI' ...
-	INFO: vfat(efi-part.vfat): cmd: "MTOOLS_SKIP_CHECK=1 mcopy -sp -i '/home/gportay/src/rtone-br2-external/output/images/efi-part.vfat' '/home/gportay/src/rtone-br2-external/output/images/efi-part/EFI' '::EFI'" (stderr):
-	Disk full
-	INFO: vfat(efi-part.vfat): cmd: "rm -f "/home/gportay/src/rtone-br2-external/output/images/efi-part.vfat"" (stderr):
-	ERROR: vfat(efi-part.vfat): failed to generate efi-part.vfat
-	INFO: cmd: "rm -rf "/home/gportay/src/rtone-br2-external/output/build/genimage.tmp/"" (stderr):
-	make[1]: Leaving directory '/home/gportay/src/rtone-br2-external/buildroot'
-	gportay@archlinux ~/src/rtone-br2-external $ echo $?
-	0
-
-Signed-off-by: Gaël PORTAY <gael.portay+rtone@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- support/scripts/genimage.sh | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/support/scripts/genimage.sh b/support/scripts/genimage.sh
-index df224241ab..8657940be5 100755
---- a/support/scripts/genimage.sh
-+++ b/support/scripts/genimage.sh
-@@ -1,5 +1,7 @@
- #!/usr/bin/env bash
- 
-+set -e
-+
- die() {
-   cat <<EOF >&2
- Error: $@
-
---===============7421347553300001789==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7421347553300001789==--
+T24gMjgvMDEvMjAyNSAxMTowMSwgR2HDq2wgUE9SVEFZIHdyb3RlOgo+IFRoZSBjb21taXQgNjg4
+OTA1NmYxZSAoc3VwcG9ydC9zY3JpcHRzL2dlbmltYWdlLnNoKSBhZGRzIHN1cHBvcnQgZm9yCj4g
+Y3JlYXRpbmcgYm1hcCBpbWFnZXMuCj4gCj4gU2luY2UgdGhlbiwgdGhlIHNjcmlwdCBnZW5pbWFn
+ZS5zaCBsb29zZXMgdGhlIGVycm9yIHJldHVybmVkIGJ5IHRoZQo+IGdlbmltYWdlIGNvbW1hbmQu
+Cj4gCj4gQXMgYSBjb25zZXF1ZW5jZSwgdGhlIHRhcmdldC1maW5hbGl6ZSB0YXJnZXQgbG9vc2Vz
+IHRoZSBlcnJvciBhcyB3ZWxsLAo+IGFuZCBzbyBvbiB1cCB0byBtYWtlLgo+IAo+IFRoaXMgYWRk
+cyB0aGUgc2hlbGwgb3B0aW9uIC1lIHRvIGV4aXQgaW1tZWRpYXRlbHkgaWYgYSBjb21tYW5kIGVu
+ZHMgCj4gd2l0aAo+IGFuIGVycm9yLCBzbyB0aGUgZXJyb3IgaXMgbm90IGlnbm9yZWQuCj4gCj4g
+Rml4ZXM6Cj4gCj4gCWdwb3J0YXlAYXJjaGxpbnV4IH4vc3JjL3J0b25lLWJyMi1leHRlcm5hbCAk
+IG1ha2UKPiAJKC4uLikKPiAJPj4+ICAgRXhlY3V0aW5nIHBvc3QtaW1hZ2Ugc2NyaXB0IHN1cHBv
+cnQvc2NyaXB0cy9nZW5pbWFnZS5zaAo+IAlJTkZPOiBjbWQ6ICJta2RpciAtcCAKPiAiL2hvbWUv
+Z3BvcnRheS9zcmMvcnRvbmUtYnIyLWV4dGVybmFsL291dHB1dC9idWlsZC9nZW5pbWFnZS50bXAi
+IiAKPiAoc3RkZXJyKToKPiAJSU5GTzogY21kOiAicm0gLXJmIAo+ICIvaG9tZS9ncG9ydGF5L3Ny
+Yy9ydG9uZS1icjItZXh0ZXJuYWwvb3V0cHV0L2J1aWxkL2dlbmltYWdlLnRtcCIvKiIgCj4gKHN0
+ZGVycik6Cj4gCUlORk86IGNtZDogIm1rZGlyIC1wIAo+ICIvaG9tZS9ncG9ydGF5L3NyYy9ydG9u
+ZS1icjItZXh0ZXJuYWwvb3V0cHV0L2J1aWxkL2dlbmltYWdlLnRtcCIiIAo+IChzdGRlcnIpOgo+
+IAlJTkZPOiBjbWQ6ICJjcCAtYSAiL3RtcC90bXAuRWNsS0d3dEE0UiIgCj4gIi9ob21lL2dwb3J0
+YXkvc3JjL3J0b25lLWJyMi1leHRlcm5hbC9vdXRwdXQvYnVpbGQvZ2VuaW1hZ2UudG1wL3Jvb3Qi
+IiAKPiAoc3RkZXJyKToKPiAJSU5GTzogY21kOiAibWtkaXIgLXAgCj4gIi9ob21lL2dwb3J0YXkv
+c3JjL3J0b25lLWJyMi1leHRlcm5hbC9vdXRwdXQvaW1hZ2VzIiIgKHN0ZGVycik6Cj4gCUlORk86
+IHZmYXQoZWZpLXBhcnQudmZhdCk6IGNtZDogIm1rZG9zZnMgICAKPiAnL2hvbWUvZ3BvcnRheS9z
+cmMvcnRvbmUtYnIyLWV4dGVybmFsL291dHB1dC9pbWFnZXMvZWZpLXBhcnQudmZhdCciIAo+IChz
+dGRlcnIpOgo+IAlJTkZPOiB2ZmF0KGVmaS1wYXJ0LnZmYXQpOiBhZGRpbmcgZmlsZSAnZWZpLXBh
+cnQvRUZJJyBhcyAnRUZJJyAuLi4KPiAJSU5GTzogdmZhdChlZmktcGFydC52ZmF0KTogY21kOiAi
+TVRPT0xTX1NLSVBfQ0hFQ0s9MSBtY29weSAtc3AgLWkgCj4gJy9ob21lL2dwb3J0YXkvc3JjL3J0
+b25lLWJyMi1leHRlcm5hbC9vdXRwdXQvaW1hZ2VzL2VmaS1wYXJ0LnZmYXQnIAo+ICcvaG9tZS9n
+cG9ydGF5L3NyYy9ydG9uZS1icjItZXh0ZXJuYWwvb3V0cHV0L2ltYWdlcy9lZmktcGFydC9FRkkn
+IAo+ICc6OkVGSSciIChzdGRlcnIpOgo+IAlEaXNrIGZ1bGwKPiAJSU5GTzogdmZhdChlZmktcGFy
+dC52ZmF0KTogY21kOiAicm0gLWYgCj4gIi9ob21lL2dwb3J0YXkvc3JjL3J0b25lLWJyMi1leHRl
+cm5hbC9vdXRwdXQvaW1hZ2VzL2VmaS1wYXJ0LnZmYXQiIiAKPiAoc3RkZXJyKToKPiAJRVJST1I6
+IHZmYXQoZWZpLXBhcnQudmZhdCk6IGZhaWxlZCB0byBnZW5lcmF0ZSBlZmktcGFydC52ZmF0Cj4g
+CUlORk86IGNtZDogInJtIC1yZiAKPiAiL2hvbWUvZ3BvcnRheS9zcmMvcnRvbmUtYnIyLWV4dGVy
+bmFsL291dHB1dC9idWlsZC9nZW5pbWFnZS50bXAvIiIgCj4gKHN0ZGVycik6Cj4gCW1ha2VbMV06
+IExlYXZpbmcgZGlyZWN0b3J5IAo+ICcvaG9tZS9ncG9ydGF5L3NyYy9ydG9uZS1icjItZXh0ZXJu
+YWwvYnVpbGRyb290Jwo+IAlncG9ydGF5QGFyY2hsaW51eCB+L3NyYy9ydG9uZS1icjItZXh0ZXJu
+YWwgJCBlY2hvICQ/Cj4gCTAKPiAKPiBTaWduZWQtb2ZmLWJ5OiBHYcOrbCBQT1JUQVkgPGdhZWwu
+cG9ydGF5K3J0b25lQGdtYWlsLmNvbT4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCl9fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
+aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
+b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
