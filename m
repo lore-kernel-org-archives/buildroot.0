@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CD70C02193
-	for <buildroot@archiver.kernel.org>; Tue, 28 Jan 2025 22:36:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F042C0218D
+	for <buildroot@archiver.kernel.org>; Tue, 28 Jan 2025 22:36:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC5204139A;
-	Tue, 28 Jan 2025 22:36:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E1DB80502;
+	Tue, 28 Jan 2025 22:36:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GPCcKk-nQP07; Tue, 28 Jan 2025 22:36:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ni9E8jcuNTB4; Tue, 28 Jan 2025 22:36:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CF4341388
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06E4A838AF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6CF4341388;
-	Tue, 28 Jan 2025 22:36:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E17F131
- for <buildroot@buildroot.org>; Tue, 28 Jan 2025 22:36:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 06E4A838AF;
+	Tue, 28 Jan 2025 22:36:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7AAB920
+ for <buildroot@buildroot.org>; Tue, 28 Jan 2025 22:36:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C75FA413B8
- for <buildroot@buildroot.org>; Tue, 28 Jan 2025 22:36:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 59909413B8
+ for <buildroot@buildroot.org>; Tue, 28 Jan 2025 22:36:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cguVUkjGq5Ml for <buildroot@buildroot.org>;
+ id dDqIdH6Z-JHC for <buildroot@buildroot.org>;
  Tue, 28 Jan 2025 22:36:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F75D413C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05846413BD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1F75D413C4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 05846413BD
  for <buildroot@buildroot.org>; Tue, 28 Jan 2025 22:36:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1A900866D8; Tue, 28 Jan 2025 22:36:08 +0000 (UTC)
+ id F2C1B8657F; Tue, 28 Jan 2025 22:36:07 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 28 Jan 2025 21:52:55 +0100
+Date: Tue, 28 Jan 2025 21:52:48 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f110a78825def7a3496e797d41186371be430e77
-X-Git-Newrev: 1bfc85a688d4a86bc3767fc2b746c9585ecdc7b7
+X-Git-Oldrev: f2486a6cf962669e4088421cf68fe862665d5477
+X-Git-Newrev: 6732f4df7cc495f7971bc508c1aafe1c395a47b4
 X-Patchwork-Hint: ignore
-Message-Id: <20250128223608.1A900866D8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/xnnpack: new package
+Message-Id: <20250128223607.F2C1B8657F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/psimd: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,7 +64,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1bfc85a688d4a86bc3767fc2b746c9585ecdc7b7
+commit: https://git.buildroot.net/buildroot/commit/?id=6732f4df7cc495f7971bc508c1aafe1c395a47b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This package is required by tensorflow-lite.
@@ -72,103 +72,78 @@ This package is required by tensorflow-lite.
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/xnnpack/Config.in    | 25 +++++++++++++++++++++++++
- package/xnnpack/xnnpack.hash |  4 ++++
- package/xnnpack/xnnpack.mk   | 21 +++++++++++++++++++++
- 5 files changed, 52 insertions(+)
+ DEVELOPERS               |  1 +
+ package/Config.in        |  1 +
+ package/psimd/Config.in  |  6 ++++++
+ package/psimd/psimd.hash |  4 ++++
+ package/psimd/psimd.mk   | 15 +++++++++++++++
+ 5 files changed, 27 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index a5d0b2ddb3..2be4990676 100644
+index b7d4958aec..f56d2eb38b 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -3039,6 +3039,7 @@ F:	package/gemmlowp/
- F:	package/psimd/
+@@ -3035,6 +3035,7 @@ F:	package/ti-gfx/
+ N:	Stefan Hager <stefan.hager@ginzinger.com>
+ F:	package/cpuinfo/
+ F:	package/gemmlowp/
++F:	package/psimd/
  F:	package/pthreadpool/
  F:	package/ruy/
-+F:	package/xnnpack/
  
- N:	Stefan Nickl <Stefan.Nickl@gmail.com>
- F:	board/freescale/imx8dxlevk/
 diff --git a/package/Config.in b/package/Config.in
-index cccb95b869..74cd3e9815 100644
+index 13caddec34..beb6f08064 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2318,6 +2318,7 @@ endif
- 	source "package/uvw/Config.in"
- 	source "package/volk/Config.in"
- 	source "package/xapian/Config.in"
-+	source "package/xnnpack/Config.in"
- endmenu
- 
- menu "Security"
-diff --git a/package/xnnpack/Config.in b/package/xnnpack/Config.in
+@@ -2297,6 +2297,7 @@ endif
+ 	source "package/protobuf/Config.in"
+ 	source "package/protobuf-c/Config.in"
+ 	source "package/protozero/Config.in"
++	source "package/psimd/Config.in"
+ 	source "package/pthreadpool/Config.in"
+ 	source "package/qhull/Config.in"
+ 	source "package/qlibc/Config.in"
+diff --git a/package/psimd/Config.in b/package/psimd/Config.in
 new file mode 100644
-index 0000000000..e4b92f61e8
+index 0000000000..c5c51ca2ef
 --- /dev/null
-+++ b/package/xnnpack/Config.in
-@@ -0,0 +1,25 @@
-+config BR2_PACKAGE_XNNPACK_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_i386
-+	default y if BR2_x86_64
-+	depends on BR2_PACKAGE_CPUINFO_ARCH_SUPPORTS
-+
-+config BR2_PACKAGE_XNNPACK
-+	bool "xnnpack"
-+	depends on BR2_PACKAGE_XNNPACK_ARCH_SUPPORTS
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # cpuinfo
-+	select BR2_PACKAGE_CPUINFO
-+	select BR2_PACKAGE_FP16
-+	select BR2_PACKAGE_FXDIV
-+	select BR2_PACKAGE_PTHREADPOOL
++++ b/package/psimd/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PSIMD
++	bool "psimd"
 +	help
-+	  XNNPACK is a highly optimized solution for neural network
-+	  inference on ARM, x86, WebAssembly, and RISC-V platforms.
++	  Portable 128-bit SIMD intrinsics.
 +
-+	  https://github.com/google/XNNPACK
-+
-+comment "xnnpack needs a toolchain w/ C++14, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/xnnpack/xnnpack.hash b/package/xnnpack/xnnpack.hash
++	  https://github.com/Maratyszcza/psimd
+diff --git a/package/psimd/psimd.hash b/package/psimd/psimd.hash
 new file mode 100644
-index 0000000000..576b73aec0
+index 0000000000..5692e79bd6
 --- /dev/null
-+++ b/package/xnnpack/xnnpack.hash
++++ b/package/psimd/psimd.hash
 @@ -0,0 +1,4 @@
 +# Locally calculated
-+sha256  0ed35a104a697abbae72b02b967e057883ff57b388178649c453b68cffb81f72  xnnpack-d7f398ee5e135ef4f7045802eea973cc6cb26c6c.tar.gz
++sha256  f6c4dab91ae9a03b3019e7cab0572743afd0e1b6e75b97fcca50259c737c924e  psimd-072586a71b55b7f8c584153d223e95687148a900.tar.gz
 +# License files, locally calculated
-+sha256  63f519e15726f4c4f830bd958f694c84fecb4e0a4cacc527d2696bb71ef95ada  LICENSE
-diff --git a/package/xnnpack/xnnpack.mk b/package/xnnpack/xnnpack.mk
++sha256  984ce1e0b8ee89d234e28b960381f240e03a07a8031f35012f9c3256f56964e2  LICENSE
+diff --git a/package/psimd/psimd.mk b/package/psimd/psimd.mk
 new file mode 100644
-index 0000000000..bb53188f9e
+index 0000000000..be0090a32f
 --- /dev/null
-+++ b/package/xnnpack/xnnpack.mk
-@@ -0,0 +1,21 @@
++++ b/package/psimd/psimd.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# xnnpack
++# psimd
 +#
 +################################################################################
 +
-+XNNPACK_VERSION = d7f398ee5e135ef4f7045802eea973cc6cb26c6c
-+XNNPACK_SITE = $(call github,google,XNNPACK,$(XNNPACK_VERSION))
-+XNNPACK_LICENSE = BSD-3-Clause
-+XNNPACK_LICENSE_FILES = LICENSE
-+XNNPACK_INSTALL_STAGING = YES
-+XNNPACK_DEPENDENCIES = cpuinfo fp16 fxdiv pthreadpool
-+XNNPACK_CONF_OPTS = \
-+	-DCPUINFO_SOURCE_DIR=$(STAGING_DIR)/usr \
-+	-DCMAKE_POSITION_INDEPENDENT_CODE=ON \
-+	-DXNNPACK_BUILD_TESTS=OFF \
-+	-DXNNPACK_BUILD_BENCHMARKS=OFF \
-+	-DXNNPACK_ENABLE_KLEIDIAI=OFF \
-+	-DXNNPACK_USE_SYSTEM_LIBS=ON
++PSIMD_VERSION = 072586a71b55b7f8c584153d223e95687148a900
++PSIMD_SITE = $(call github,Maratyszcza,psimd,$(PSIMD_VERSION))
++PSIMD_LICENSE = MIT
++PSIMD_LICENSE_FILES = LICENSE
++PSIMD_INSTALL_STAGING = YES
++# Only installs a header
++PSIMD_INSTALL_TARGET = NO
 +
 +$(eval $(cmake-package))
 _______________________________________________
