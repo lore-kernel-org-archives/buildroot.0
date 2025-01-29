@@ -1,80 +1,122 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13CFBC0218D
-	for <buildroot@archiver.kernel.org>; Wed, 29 Jan 2025 16:51:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52632C0218D
+	for <buildroot@archiver.kernel.org>; Wed, 29 Jan 2025 18:34:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2C9A61073;
-	Wed, 29 Jan 2025 16:51:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2525F80F90;
+	Wed, 29 Jan 2025 18:34:22 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pY3tSqb4IB0E; Wed, 29 Jan 2025 18:34:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4374581BD4
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4374581BD4;
+	Wed, 29 Jan 2025 18:33:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BEDF21DAA
+ for <buildroot@buildroot.org>; Wed, 29 Jan 2025 18:33:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A495F61126
+ for <buildroot@buildroot.org>; Wed, 29 Jan 2025 18:33:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z4vEMN-98_fb; Wed, 29 Jan 2025 16:51:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0DD561002
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0DD561002;
-	Wed, 29 Jan 2025 16:51:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 310DE20
- for <buildroot@buildroot.org>; Wed, 29 Jan 2025 16:51:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1E82B405F0
- for <buildroot@buildroot.org>; Wed, 29 Jan 2025 16:51:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oasvFMDzoLlg for <buildroot@buildroot.org>;
- Wed, 29 Jan 2025 16:51:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
- helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9CA7B40590
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CA7B40590
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [147.173.1.68])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9CA7B40590
- for <buildroot@buildroot.org>; Wed, 29 Jan 2025 16:51:09 +0000 (UTC)
-Received: from [IPV6:2a01:e0a:12:eba0:3b95:eac2:3cf9:9a25] (unknown
- [IPv6:2a01:e0a:12:eba0:3b95:eac2:3cf9:9a25])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits))
- (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id CD79AC0247;
- Wed, 29 Jan 2025 17:51:07 +0100 (CET)
-Message-ID: <e68817f0-312c-4980-837c-7264656457ca@grenoble.cnrs.fr>
-Date: Wed, 29 Jan 2025 17:51:07 +0100
+ id 70IXC3vp8R_Q for <buildroot@buildroot.org>;
+ Wed, 29 Jan 2025 18:33:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
+ envelope-from=rgallaispou@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3980B61110
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3980B61110
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3980B61110
+ for <buildroot@buildroot.org>; Wed, 29 Jan 2025 18:33:54 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-385ddcfc97bso6042398f8f.1
+ for <buildroot@buildroot.org>; Wed, 29 Jan 2025 10:33:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1738175632; x=1738780432;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=frDgitFHS2Nl+2uSJvZ8apH/bXGkG/DabL27W90W5WM=;
+ b=sSCxTxS9Y2ct6DvUQbu3GOycv0vz4qecQGCrINVOCae9y4KCzy0JVS1Dou/Sdd6UHw
+ iAQ6dGKXT2chT0VsWNPleiHv2k0shA3Vou61fV4Ix8kBNSeQ2Vd4r5E7yZrrmqU8H/4g
+ s1k6J/gmZh9yrlIYVZKtlrBeJo/E6luvcQqfh0MAE9h2uuJEVpZJw6CY81NAlyfCj68d
+ 6ljAGXNVaC3ZfQxYAfljRCMLc+8NuqeUvdcza30tYuv86IBykrBc11dV7h0ptdbKZXSQ
+ I9fThqrtoqWRcp8Zz+RD1M+IrUImV3vnKrYkwv7rB/ZKZLoxrb3nz5JlfFaeW4LlwbDQ
+ kRjw==
+X-Gm-Message-State: AOJu0Yx233Qwsm4STrxDGIgrUocyOvboHxnne6s4QrC+N9OYUe8w0yUB
+ GrGHhUt0w/K5o+tZr6JTJqV/5KZg91Qphgclwwr/zvE4uoFw3Dkf
+X-Gm-Gg: ASbGncvE0UpARehgZUAk/dKs8LsT9+OJa49GJZGVU7lfcUU5c1v+jvIEJivUSWL5hhK
+ 82CADEZMBahvqsvxywZOb2JyRsNYMc26qF0h5aBwG/pA8ipIasQffQAQjWki8czhB5HEv4Hd8as
+ f1izmjloVuEn/F0oeGomj7fy4yWXki6JizsBl+j5KFtJ4WqKwtC2qkWmk10LDjlTmYTEiMZGL7K
+ YrdgP9lgBsw3xR/EH14sdS+V702TWaWkLRVwWKtFQIwPyz0bA5SMZbnKQC4da4GygEpS9yiLO6z
+ 7/Nt7L5OrxIu9j0=
+X-Google-Smtp-Source: AGHT+IGJ5n3cx8ihRxfRnhskHeSjNd2OpOR815GfPGUh24sZ99riGs64PqXpce5tPNSspVMcdjjuyA==
+X-Received: by 2002:a05:6000:2a3:b0:385:ed16:c97 with SMTP id
+ ffacd0b85a97d-38c520af4f4mr4306472f8f.49.1738175631636; 
+ Wed, 29 Jan 2025 10:33:51 -0800 (PST)
+Received: from localhost ([2001:861:3385:e20:6384:4cf:52c5:3194])
+ by smtp.gmail.com with UTF8SMTPSA id
+ ffacd0b85a97d-38c2a188bf5sm18095560f8f.50.2025.01.29.10.33.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 29 Jan 2025 10:33:51 -0800 (PST)
+From: Raphael Gallais-Pou <rgallaispou@gmail.com>
+Date: Wed, 29 Jan 2025 19:32:29 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
-References: <20250129095716.2511434-1-romain.naour@smile.fr>
- <20250129095716.2511434-2-romain.naour@smile.fr>
-Content-Language: en-US, fr
-From: Edgar Bonet <bonet@grenoble.cnrs.fr>
-In-Reply-To: <20250129095716.2511434-2-romain.naour@smile.fr>
+Message-Id: <20250129-master-v5-1-e8079d25a276@gmail.com>
+X-B4-Tracking: v=1; b=H4sIADx0mmcC/12OQW7DIBBFrxKxLtUMYANd9R5VFnjADlIdVxBZi
+ SLfPdhKbDfLP/rv/bmzHFIMmX0d7iyFMeY4nEuoPg6MTu7cBR59yUyAUKCF5b3Ll5C4dJosNZZ
+ s3bBS/kuhjddF9HMs+RTzZUi3xTvifH0qJLwUI3LgkpwxllAFp7673sXfTxr62bjUDap/dW2ka
+ qUP3lOzq8+Lo1hXEFCvmODINbXGK+Erb/AdkxuGuzVZsPJZ5StXg4P2HVMbJrBeMVUwKPvzDwK
+ k3mPTND0Ax1iZ8HABAAA=
+X-Change-ID: 20240729-master-3a7c9cb9c96b
+To: buildroot@buildroot.org
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=13605;
+ i=rgallaispou@gmail.com; h=from:subject:message-id;
+ bh=lFc7boIs8hR0iUZ9vcc2C2/EnCO1Vpyk8LiVhcelbZc=;
+ b=owEBbQKS/ZANAwAIAechimjUEsK1AcsmYgBnmnSOXE2tU/vdvJKHyNuihUh2qOJ4M2wzpZ9/c
+ FhyUCSzBlSJAjMEAAEIAB0WIQQgmXv2E+fvbV/9ui/nIYpo1BLCtQUCZ5p0jgAKCRDnIYpo1BLC
+ tedUD/9rrDBXukJcPzSNZpQbOGxWvGM+Xo6SLxuKVBVAp4O/OllNLpNJYFtELzrH3EoYBqd/pwT
+ dJDLQQOt4AdAiATmEqukZXtdSLWHUHeitMANgu9LTfAuMazosG/Err6o4OLkkpD0J8lMS6UjnjB
+ tjJCKcK+cR7zTaQbjh3k2Mc8SPeQosymsAQXEy/qD87FAMelnXou7R+9DmYz39hB3OLF3ZbVkAP
+ i9Iw364SAuaDkyAOKxpf3c/XkvDNWhT+twBHtOxfo+RSbT0iHR5r0matrgzfwD3DjSovuc9Rdox
+ G1tYszG8/ct+nifICGQEgQ+SY22YFFY7S562kux/YNTCjOEm7q2EWjIfX8YN/2lG+EPOABbBgle
+ fJbgKSPEqzjMOgUEHL5d7Qv1fRSas668xAMg1k+HZuCFB0lB3AxWUezP7txmuWecTQhGKVjcckQ
+ Wbi0HhHHOQ8AB3CMBfWxMrQKiq4Sci6CxDcrtsn3fcnY8VpJld/VGqSwRBkMYswM/CQ2PfymDQ+
+ +lNRFdVflGqGhBL3Q++cNtYiJwhUASqXoTQ34B0EH+W1veC+RvYUQg7YXesmJZX+hMmE9JkjT13
+ VGo/dXvoNa0YNh5Osu7Mv2gYW3q/Bu2FpMHjMg1CMgfabyB9tPtN3mm4o3R3T/a2BcxL5mXdpiY
+ 2bvONQP2WpWnOjg==
+X-Developer-Key: i=rgallaispou@gmail.com; a=openpgp;
+ fpr=20997BF613E7EF6D5FFDBA2FE7218A68D412C2B5
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1738169467;
- bh=zWxuuxLUiwAt3X+LSJA9mEaYfxy7QQpj+7+zg2RI+2I=;
- h=Date:Subject:To:References:From:In-Reply-To:From;
- b=fQl87wQrUDF3BLIEglmw+lfY41gAtOEhpqrEylfhRkgCqEvY2X8OXmHXVUWbP+W6k
- RAs7gUNrkvctG9q2zPcqPbdmY5qcY/Tj2qe3uZLphY6sKY+x/6c/f7dbWasE6ZTxhF
- FXyYxqs0HvV9aejPh7lD4Gh/f3TktSR3fUtXblrYM04UDLfTCwi0xrcEWB7aYoVnQh
- XxF7MscsscyghKuapaZSThX3/pSUG8LHyoOhPolIopwjiO01h2CBsOJ/Oh3FG9y4JS
- ql7mKYaC9T/S/PjVfr1MiS/Mvl3kULsPuLpgjpRZtDPaBwuAE8/8Srj+QSetktqKIw
- sd0B5ok6SA5uw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=grenoble.cnrs.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1738175632; x=1738780432; darn=buildroot.org;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=frDgitFHS2Nl+2uSJvZ8apH/bXGkG/DabL27W90W5WM=;
+ b=IG4SzlcnYwdqUo6JwszF5sHK3WUz76VvJgMPnVcGsegdXSBzEQjX7tFuYnV/Cx6vzc
+ XNp91OPvFEtM9o7JBD8XvM33+tV+5xIoqKVIs5fd8+3uqjWxyyj/4fNKjkVRKG232m/u
+ XDofxjcoyrSay3KsYAIMxgjDaPwJ6zr+20D+tSTMQmQLAMp4xVd9SQaUt5vmwTKe6lKN
+ OQhkamYuW76ig9dRhjQCEb8cyalu5Bz0fitopTv3dWJ6YibFHNtVDr+QttyIzb0JCKIR
+ h1Uf3Ca/NRuT5KhZxhfitghgV2i8WKc+lIhjyznOtKVD5LjQcBwk5AKnQq61bukYZA14
+ C77Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=fQl87wQr
-Subject: Re: [Buildroot] [PATCHv4 2/2] configs/acmesystems_acqua_a5_*: bump
- to Linux 6.12.9
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=IG4Szlcn
+Subject: [Buildroot] [PATCH v5] configs/stm32mp135f-dk: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,142 +128,408 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Marleen Vos <marleen.vos@mind.be>, Bartosz Bilas <b.bilas@grinn-global.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi!
+Add new defconfig for STMicroelectronics board STM32MP135F-DK.
 
-On 2025-01-29, 10:57, Romain Naour wrote:
-> Use the newly introduced BR2_LINUX_KERNEL_CUSTOM_DTS_OVERLAY
-> option to provide the Out-of-tree Device Tree Source file with
-> its vendor subdirectory that is needed since kernel 6.12 [1].
-> 
-> Revert the sama5d31.dtsi include path update added by the previous
-> kernel version bump 6.6.12 [2].
-> 
-> As noticed by Michael Walle, newer OOT device trees should use the
-> same #include directives as the in-tree device trees to ease
-> sharing the files between u-boot, linux and OOT external trees [3].
-> 
-> [1] https://lists.buildroot.org/pipermail/buildroot/2024-October/765463.html
-> [2] 8fb5209885 ("configs/acmesystems_acqua_a5_*: bump to Linux 6.6.12")
-> [3] https://lore.kernel.org/buildroot/D6UG5Z1HUN9N.GWVHB4L823ZC@kernel.org/
-> 
-> Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+STM32MP135F-DK features can be found here:
+  https://www.st.com/en/evaluation-tools/stm32mp135f-dk.html
 
-Acked-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Tested-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
+---
+This commit series is a first attempt to improve the organization and
+functionality of the STM32 platform in Buildroot. It comes with two
+patches:
 
-After build-testing the previous patch in the series, I added this one
-on top and build-tested again:
+1. Reorder common ST folder:
+   - Rename the common ST folder from stm32mp157 to stm32mp1xx.
+   - Update references and paths in related configuration files.
+   - Prepare to receive new stm32mp13 board.
 
-    # Test the regular, no-OVERRIDE_SRCDIR case.
-    make linux-dirclean
-    git am 0002-configs-acmesystems_acqua_a5_-bump-to-Linux-6.12.9.patch
-    make acmesystems_acqua_a5_512mb_defconfig
-    make linux
+2. Add new defconfig for STM32MP13:
+   - Introduce a new defconfig file (stm32mp13_dk).
+   - Boot following the TF-A/OP-TEE/U-Boot/Linux chain.
+   v1:
+   - Include generic "multi_v7" defconfig for Linux configuration.
+   v2:
+   - Include a minimalistic defconfig for Linux configuration.
+---
+Changes in v5:
+- Rebase on latest buildroot/master...
+- ... in order to use BR2_TARGET_OPTEE_OS_CUSTOM_VERSION
+  introduced in 0f3791f25f - boot/optee-os: add custom version option.
+- Link to v4: https://lore.kernel.org/r/20241216-master-v4-1-010141012037@gmail.com
 
-    # Test the OVERRIDE_SRCDIR case.
-    make linux-dirclean
-    git -C $HOME/src/linux checkout v6.12.9
-    echo "LINUX_OVERRIDE_SRCDIR = $HOME/src/linux" > local.mk
-    make acmesystems_acqua_a5_512mb_defconfig
-    make linux
+Changes in v4:
+- Rebase on latest buildroot/next branch.
+- Add BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11 option to fix build
+- Link to v3: https://lore.kernel.org/r/20241114-master-v3-1-8895d5a60a0f@gmail.com
 
-I then built a complete system, and run-tested it on an actual Acqua
-board. I also tested with the latest point release (6.12.11).
+Changes in v3:
+- Change Linux config as per discussed here
+https://lists.busybox.net/pipermail/buildroot/2024-November/767651.html
+- As introduced in edc0a6b1a4, remove comments in defconfig.
+- Use Linux stable v6.11.6 version instead of mainline.
+- Use BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION
+- Remove 'E=0' option in TF-A build command line.
+- Use GIT URL and tag version method instead of tarball for OP-TEE
+- Change Linux & OP-TEE hashes accordingly
+- Link to v2: https://lore.kernel.org/r/20241017-master-v2-1-7cf8d42d5d81@gmail.com
+
+Changes in v2:
+- Removed merged patch:
+https://gitlab.com/buildroot.org/buildroot/-/commit/f21db2bd83bf3073a50b8bcd79af6e7aed6fb000
+- Include a minimalistic defconfig for Linux configuration
+- Removed BR2_PACKAGE_HOST_BMAP_TOOLS option.
+- Move BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL to the according section.
+- Hardcode OP-TEE version using tarball link.
+- Use BR2_GLOBAL_PATCH_DIR and add OP-TEE hash to common folder.
+- Link to v1: https://lore.kernel.org/r/20240814-master-v1-0-7834f3deddcb@gmail.com
+---
+ .../common/stm32mp1xx/patches/linux/linux.hash     |   2 +-
+ .../stm32mp1xx/patches/optee-os/optee-os.hash      |   2 +
+ .../stmicroelectronics/stm32mp135f-dk/linux.config | 190 +++++++++++++++++++++
+ .../overlay/boot/extlinux/extlinux.conf            |   4 +
+ board/stmicroelectronics/stm32mp135f-dk/readme.txt |  38 +++++
+ configs/stm32mp135f_dk_defconfig                   |  50 ++++++
+ 6 files changed, 285 insertions(+), 1 deletion(-)
+
+diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
+index 95bd23c8d022ab5d49b4979b5da47bbdaf105798..42d02c9f7836ccaacf82acfcbc524402cea9c9a3 100644
+--- a/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
++++ b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  f048267b7b88316c9ca708c68d15a9ae802dcfc943c3188c1273eb958c433281  linux-6.9.8.tar.xz
++sha256  c954f60197008f1e1f32a1e77293903cf3801d2543ec4bf521f5651eb7f133ce  linux-6.11.6.tar.xz
+diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/optee-os/optee-os.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/optee-os/optee-os.hash
+new file mode 100644
+index 0000000000000000000000000000000000000000..73d4e2c4dafb1a4a94fa26d61017e92faa7d101e
+--- /dev/null
++++ b/board/stmicroelectronics/common/stm32mp1xx/patches/optee-os/optee-os.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  03b91fd7dfdf890e3966f931f07634a2b6a2911bbee2a02ecc48d4a40cf6a9b8  optee-os-4.3.0-git4.tar.gz
+diff --git a/board/stmicroelectronics/stm32mp135f-dk/linux.config b/board/stmicroelectronics/stm32mp135f-dk/linux.config
+new file mode 100644
+index 0000000000000000000000000000000000000000..25f570846af19baf87caa69c0cfb6fb415f00537
+--- /dev/null
++++ b/board/stmicroelectronics/stm32mp135f-dk/linux.config
+@@ -0,0 +1,190 @@
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_USELIB=y
++CONFIG_NO_HZ=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_PREEMPT=y
++CONFIG_IKCONFIG=y
++CONFIG_IKCONFIG_PROC=y
++CONFIG_LOG_BUF_SHIFT=16
++CONFIG_BLK_DEV_INITRD=y
++CONFIG_ARCH_STM32=y
++CONFIG_ARM_THUMBEE=y
++# CONFIG_CACHE_L2X0 is not set
++CONFIG_ARM_ERRATA_430973=y
++CONFIG_ARM_ERRATA_720789=y
++CONFIG_ARM_ERRATA_754322=y
++CONFIG_ARM_ERRATA_754327=y
++CONFIG_ARM_ERRATA_764369=y
++CONFIG_ARM_ERRATA_775420=y
++CONFIG_ARM_ERRATA_798181=y
++CONFIG_SMP=y
++CONFIG_MCPM=y
++CONFIG_HIGHMEM=y
++CONFIG_FORCE_MAX_ZONEORDER=12
++CONFIG_SECCOMP=y
++# CONFIG_ATAGS is not set
++CONFIG_ZBOOT_ROM_TEXT=0x0
++CONFIG_ZBOOT_ROM_BSS=0x0
++CONFIG_ARM_APPENDED_DTB=y
++CONFIG_ARM_ATAG_DTB_COMPAT=y
++CONFIG_VFP=y
++CONFIG_NEON=y
++CONFIG_KERNEL_MODE_NEON=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_PARTITION_ADVANCED=y
++CONFIG_CMDLINE_PARTITION=y
++CONFIG_CMA=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_UNIX=y
++CONFIG_INET=y
++CONFIG_CAN=y
++CONFIG_CAN_M_CAN=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_DMA_CMA=y
++CONFIG_CMA_SIZE_MBYTES=128
++CONFIG_SIMPLE_PM_BUS=y
++CONFIG_ARM_SCMI_PROTOCOL=y
++CONFIG_MTD=y
++CONFIG_MTD_CMDLINE_PARTS=y
++CONFIG_MTD_BLOCK=y
++CONFIG_MTD_M25P80=y
++CONFIG_MTD_NAND=y
++CONFIG_MTD_NAND_STM32_FMC2=y
++CONFIG_MTD_SPI_NOR=y
++# CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
++CONFIG_MTD_UBI=y
++CONFIG_BLK_DEV_LOOP=y
++CONFIG_BLK_DEV_RAM=y
++CONFIG_BLK_DEV_RAM_SIZE=65536
++CONFIG_SRAM=y
++CONFIG_EEPROM_AT24=y
++CONFIG_NETDEVICES=y
++CONFIG_VIRTIO_NET=y
++CONFIG_KS8851=y
++CONFIG_SMSC911X=y
++CONFIG_STMMAC_ETH=y
++CONFIG_DWMAC_DWC_QOS_ETH=y
++CONFIG_MDIO_BITBANG=y
++CONFIG_INPUT_JOYDEV=y
++CONFIG_INPUT_EVDEV=y
++CONFIG_INPUT_TOUCHSCREEN=y
++CONFIG_TOUCHSCREEN_EDT_FT5X06=y
++CONFIG_INPUT_MISC=y
++CONFIG_INPUT_STPMIC1_ONKEY=y
++CONFIG_SERIAL_STM32=y
++CONFIG_SERIAL_STM32_CONSOLE=y
++CONFIG_SERIAL_DEV_BUS=y
++CONFIG_HW_RANDOM=y
++CONFIG_I2C_CHARDEV=y
++CONFIG_I2C_MUX=y
++CONFIG_I2C_STM32F7=y
++CONFIG_SPI=y
++CONFIG_SPI_STM32=y
++CONFIG_SPI_STM32_QSPI=y
++CONFIG_PINCTRL_MCP23S08=y
++CONFIG_PINCTRL_SINGLE=y
++CONFIG_PINCTRL_STMFX=y
++CONFIG_POWER_RESET=y
++CONFIG_POWER_RESET_GPIO=y
++CONFIG_POWER_RESET_GPIO_RESTART=y
++CONFIG_POWER_RESET_SYSCON=y
++CONFIG_POWER_RESET_SYSCON_POWEROFF=y
++CONFIG_SYSCON_REBOOT_MODE=y
++CONFIG_WATCHDOG=y
++CONFIG_STPMIC1_WATCHDOG=y
++CONFIG_MFD_STM32_LPTIMER=y
++CONFIG_MFD_STPMIC1=y
++CONFIG_REGULATOR=y
++CONFIG_REGULATOR_FIXED_VOLTAGE=y
++CONFIG_REGULATOR_ARM_SCMI=y
++CONFIG_REGULATOR_STM32_BOOSTER=y
++CONFIG_REGULATOR_STM32_VREFBUF=y
++CONFIG_REGULATOR_STM32_PWR=y
++CONFIG_REGULATOR_STPMIC1=y
++CONFIG_DRM=y
++CONFIG_DRM_STM=y
++CONFIG_DRM_STM_DSI=y
++CONFIG_DRM_PANEL_ORISETECH_OTM8009A=y
++CONFIG_DRM_SII902X=y
++CONFIG_BACKLIGHT_LCD_SUPPORT=y
++# CONFIG_LCD_CLASS_DEVICE is not set
++CONFIG_BACKLIGHT_CLASS_DEVICE=y
++# CONFIG_BACKLIGHT_GENERIC is not set
++CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
++CONFIG_SOUND=y
++CONFIG_SND=y
++CONFIG_SND_DYNAMIC_MINORS=y
++CONFIG_USB=m
++CONFIG_USB_OTG=y
++CONFIG_USB_XHCI_HCD=m
++CONFIG_USB_XHCI_PLATFORM=m
++CONFIG_USB_EHCI_HCD=m
++CONFIG_USB_EHCI_HCD_PLATFORM=m
++CONFIG_USB_OHCI_HCD=m
++CONFIG_USB_OHCI_HCD_PLATFORM=m
++CONFIG_USB_DWC2=m
++CONFIG_USB_CHIPIDEA=m
++CONFIG_USB_CHIPIDEA_HOST=y
++CONFIG_USB_ISP1760=m
++CONFIG_USB_HSIC_USB3503=m
++CONFIG_USB_GPIO_VBUS=y
++CONFIG_USB_ISP1301=m
++CONFIG_USB_ULPI=y
++CONFIG_TYPEC=y
++CONFIG_TYPEC_STUSB=y
++CONFIG_MMC=y
++CONFIG_MMC_BLOCK_MINORS=16
++CONFIG_MMC_ARMMMCI=y
++CONFIG_MMC_SDHCI=y
++CONFIG_MMC_SDHCI_PLTFM=y
++CONFIG_MMC_DW=y
++CONFIG_NEW_LEDS=y
++CONFIG_LEDS_CLASS=y
++CONFIG_LEDS_GPIO=y
++CONFIG_LEDS_PWM=y
++CONFIG_RTC_CLASS=y
++CONFIG_RTC_DRV_STM32=y
++CONFIG_DMADEVICES=y
++CONFIG_STM32_DMA=y
++CONFIG_STM32_DMAMUX=y
++CONFIG_STM32_MDMA=y
++CONFIG_COMMON_CLK_SCMI=y
++CONFIG_HWSPINLOCK=y
++CONFIG_HWSPINLOCK_STM32=y
++CONFIG_STM32_IPCC=y
++CONFIG_REMOTEPROC=y
++CONFIG_STM32_RPROC=y
++CONFIG_RPMSG_VIRTIO=y
++CONFIG_RPMSG_TTY=y
++CONFIG_IIO=y
++CONFIG_IIO_SW_TRIGGER=y
++CONFIG_SD_ADC_MODULATOR=y
++CONFIG_STM32_ADC_CORE=y
++CONFIG_STM32_ADC=y
++CONFIG_STM32_ADC_TEMP=y
++CONFIG_STM32_DFSDM_ADC=y
++CONFIG_STM32_LPTIMER_CNT=y
++CONFIG_STM32_DAC=y
++CONFIG_IIO_HRTIMER_TRIGGER=y
++CONFIG_IIO_STM32_LPTIMER_TRIGGER=y
++CONFIG_PWM=y
++CONFIG_PWM_STM32=y
++CONFIG_PWM_STM32_LP=y
++CONFIG_RESET_SCMI=y
++CONFIG_PHY_STM32_USBPHYC=y
++CONFIG_NVMEM_STM32_ROMEM=y
++CONFIG_TEE=y
++CONFIG_OPTEE=y
++CONFIG_COUNTER=y
++CONFIG_STM32_LPTIMER_CNT=y
++CONFIG_STM32_TIMER_CNT=y
++CONFIG_EXT4_FS=y
++CONFIG_MSDOS_FS=y
++CONFIG_VFAT_FS=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
++CONFIG_PRINTK_TIME=y
+diff --git a/board/stmicroelectronics/stm32mp135f-dk/overlay/boot/extlinux/extlinux.conf b/board/stmicroelectronics/stm32mp135f-dk/overlay/boot/extlinux/extlinux.conf
+new file mode 100644
+index 0000000000000000000000000000000000000000..0cc49d6a560a90846ead993ff02d38cc7cadc7e7
+--- /dev/null
++++ b/board/stmicroelectronics/stm32mp135f-dk/overlay/boot/extlinux/extlinux.conf
+@@ -0,0 +1,4 @@
++label stm32mp135f-dk-buildroot
++  kernel /boot/zImage
++  devicetree /boot/stm32mp135f-dk.dtb
++  append root=/dev/mmcblk0p4 rootwait
+diff --git a/board/stmicroelectronics/stm32mp135f-dk/readme.txt b/board/stmicroelectronics/stm32mp135f-dk/readme.txt
+new file mode 100644
+index 0000000000000000000000000000000000000000..46879f88cf00d501966181624ca9a318d2ce94d2
+--- /dev/null
++++ b/board/stmicroelectronics/stm32mp135f-dk/readme.txt
+@@ -0,0 +1,38 @@
++STM32MP135F Discovery Kit
++
++Intro
++=====
++
++This configuration supports the STM32MP135F Discovery Kit (DK)
++platform:
++
++  https://www.st.com/en/evaluation-tools/stm32mp135f-dk.html
++
++How to build
++============
++
++ $ make stm32mp135f_dk_defconfig
++ $ make
++
++How to write the microSD card
++=============================
++
++Once the build process is finished you will have an image called
++"sdcard.img" in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an microSD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++
++Boot the board
++==============
++
++ (1) Insert the microSD card in connector CN15
++
++ (2) Plug a micro-USB cable in connector CN11 and run your serial
++     communication program on /dev/ttyACM0.
++
++ (3) Plug a USB-C cable in CN6 to power-up the board.
++
++ (4) The system will start, with the console on UART, but also visible
++     on the screen.
+diff --git a/configs/stm32mp135f_dk_defconfig b/configs/stm32mp135f_dk_defconfig
+new file mode 100644
+index 0000000000000000000000000000000000000000..387fe3a4143235dfca12a97d1ccbd7e34e4fe149
+--- /dev/null
++++ b/configs/stm32mp135f_dk_defconfig
+@@ -0,0 +1,50 @@
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
++BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/common/stm32mp1xx/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
++BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp135f-dk/overlay"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.6"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp135f-dk/linux.config"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="st/stm32mp135f-dk"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_OPTEE_CLIENT=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE="u-boot-nodtb.bin"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 DTB_FILE_NAME=stm32mp135f-dk.dtb BL33_CFG=$(BINARIES_DIR)/u-boot.dtb"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin *.stm32"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
++BR2_TARGET_OPTEE_OS=y
++BR2_TARGET_OPTEE_OS_CUSTOM_VERSION=y
++BR2_TARGET_OPTEE_OS_CUSTOM_VERSION_VALUE="4.3.0"
++BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY=y
++BR2_TARGET_OPTEE_OS_PLATFORM="stm32mp1"
++BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR="135F_DK"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp13"
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++# BR2_TARGET_UBOOT_FORMAT_BIN is not set
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin u-boot.dtb"
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp135f-dk"
++BR2_PACKAGE_HOST_GENIMAGE=y
+
+---
+base-commit: 15891236dbfb20ea971877918e9579b246f7c43c
+change-id: 20240729-master-3a7c9cb9c96b
 
 Best regards,
-
-Edgar Bonet.
-
-> ---
->  .../acqua-a5/{ => dts/microchip}/at91-sama5d3_acqua.dts     | 2 +-
->  board/acmesystems/acqua-a5/patches/linux/linux.hash         | 2 +-
->  configs/acmesystems_acqua_a5_256mb_defconfig                | 6 +++---
->  configs/acmesystems_acqua_a5_512mb_defconfig                | 6 +++---
->  4 files changed, 8 insertions(+), 8 deletions(-)
->  rename board/acmesystems/acqua-a5/{ => dts/microchip}/at91-sama5d3_acqua.dts (99%)
-> 
-> diff --git a/board/acmesystems/acqua-a5/at91-sama5d3_acqua.dts b/board/acmesystems/acqua-a5/dts/microchip/at91-sama5d3_acqua.dts
-> similarity index 99%
-> rename from board/acmesystems/acqua-a5/at91-sama5d3_acqua.dts
-> rename to board/acmesystems/acqua-a5/dts/microchip/at91-sama5d3_acqua.dts
-> index 411d1942f5..60be8a67cd 100644
-> --- a/board/acmesystems/acqua-a5/at91-sama5d3_acqua.dts
-> +++ b/board/acmesystems/acqua-a5/dts/microchip/at91-sama5d3_acqua.dts
-> @@ -9,7 +9,7 @@
->   * Licensed under GPLv2 or later.
->   */
->  /dts-v1/;
-> -#include "microchip/sama5d31.dtsi"
-> +#include "sama5d31.dtsi"
->  
->  / {
->  	model = "Acme Systems Acqua SOM";
-> diff --git a/board/acmesystems/acqua-a5/patches/linux/linux.hash b/board/acmesystems/acqua-a5/patches/linux/linux.hash
-> index 4b20a009a7..7a4c4e57c9 100644
-> --- a/board/acmesystems/acqua-a5/patches/linux/linux.hash
-> +++ b/board/acmesystems/acqua-a5/patches/linux/linux.hash
-> @@ -1,2 +1,2 @@
->  # Locally calculated
-> -sha256  b66a5b863b0f8669448b74ca83bd641a856f164b29956e539bbcb5fdeeab9cc6  linux-6.6.30.tar.xz
-> +sha256  87be0360df0931b340d2bac35161a548070fbc3a8c352c49e21e96666c26aeb4  linux-6.12.9.tar.xz
-> diff --git a/configs/acmesystems_acqua_a5_256mb_defconfig b/configs/acmesystems_acqua_a5_256mb_defconfig
-> index b102dde0ba..8a1f6328a0 100644
-> --- a/configs/acmesystems_acqua_a5_256mb_defconfig
-> +++ b/configs/acmesystems_acqua_a5_256mb_defconfig
-> @@ -2,7 +2,7 @@ BR2_arm=y
->  BR2_cortex_a5=y
->  BR2_ARM_ENABLE_VFP=y
->  BR2_ARM_INSTRUCTIONS_THUMB2=y
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
->  BR2_GLOBAL_PATCH_DIR="board/acmesystems/acqua-a5/patches"
->  BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
->  BR2_SYSTEM_DHCP="eth0"
-> @@ -10,10 +10,10 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
->  BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.30"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
->  BR2_LINUX_KERNEL_DEFCONFIG="sama5"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> -BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/acmesystems/acqua-a5/at91-sama5d3_acqua.dts"
-> +BR2_LINUX_KERNEL_CUSTOM_DTS_OVERLAY="board/acmesystems/acqua-a5/dts"
->  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->  BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
-> diff --git a/configs/acmesystems_acqua_a5_512mb_defconfig b/configs/acmesystems_acqua_a5_512mb_defconfig
-> index da54eaf620..b47daa15f9 100644
-> --- a/configs/acmesystems_acqua_a5_512mb_defconfig
-> +++ b/configs/acmesystems_acqua_a5_512mb_defconfig
-> @@ -2,7 +2,7 @@ BR2_arm=y
->  BR2_cortex_a5=y
->  BR2_ARM_ENABLE_VFP=y
->  BR2_ARM_INSTRUCTIONS_THUMB2=y
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
->  BR2_GLOBAL_PATCH_DIR="board/acmesystems/acqua-a5/patches"
->  BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
->  BR2_SYSTEM_DHCP="eth0"
-> @@ -10,10 +10,10 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
->  BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.30"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
->  BR2_LINUX_KERNEL_DEFCONFIG="sama5"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> -BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/acmesystems/acqua-a5/at91-sama5d3_acqua.dts"
-> +BR2_LINUX_KERNEL_CUSTOM_DTS_OVERLAY="board/acmesystems/acqua-a5/dts"
->  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->  BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
+-- 
+Raphael Gallais-Pou <rgallaispou@gmail.com>
 
 _______________________________________________
 buildroot mailing list
