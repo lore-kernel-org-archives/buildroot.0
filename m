@@ -1,122 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52632C0218D
-	for <buildroot@archiver.kernel.org>; Wed, 29 Jan 2025 18:34:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A84E3C0218D
+	for <buildroot@archiver.kernel.org>; Wed, 29 Jan 2025 19:40:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2525F80F90;
-	Wed, 29 Jan 2025 18:34:22 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pY3tSqb4IB0E; Wed, 29 Jan 2025 18:34:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4374581BD4
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4374581BD4;
-	Wed, 29 Jan 2025 18:33:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id BEDF21DAA
- for <buildroot@buildroot.org>; Wed, 29 Jan 2025 18:33:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A495F61126
- for <buildroot@buildroot.org>; Wed, 29 Jan 2025 18:33:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11C5F610E1;
+	Wed, 29 Jan 2025 19:40:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 70IXC3vp8R_Q for <buildroot@buildroot.org>;
- Wed, 29 Jan 2025 18:33:55 +0000 (UTC)
+ id zwT1ri0uFqAP; Wed, 29 Jan 2025 19:40:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10DBE610DA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 10DBE610DA;
+	Wed, 29 Jan 2025 19:40:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 56EC8712
+ for <buildroot@buildroot.org>; Wed, 29 Jan 2025 19:40:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 44949405F5
+ for <buildroot@buildroot.org>; Wed, 29 Jan 2025 19:40:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S53DrtYXrrUA for <buildroot@buildroot.org>;
+ Wed, 29 Jan 2025 19:40:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
- envelope-from=rgallaispou@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3980B61110
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3980B61110
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3980B61110
- for <buildroot@buildroot.org>; Wed, 29 Jan 2025 18:33:54 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-385ddcfc97bso6042398f8f.1
- for <buildroot@buildroot.org>; Wed, 29 Jan 2025 10:33:54 -0800 (PST)
+ client-ip=2607:f8b0:4864:20::629; helo=mail-pl1-x629.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E52A3401B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E52A3401B1
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com
+ [IPv6:2607:f8b0:4864:20::629])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E52A3401B1
+ for <buildroot@buildroot.org>; Wed, 29 Jan 2025 19:40:24 +0000 (UTC)
+Received: by mail-pl1-x629.google.com with SMTP id
+ d9443c01a7336-216395e151bso15833525ad.0
+ for <buildroot@buildroot.org>; Wed, 29 Jan 2025 11:40:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738175632; x=1738780432;
- h=cc:to:message-id:content-transfer-encoding:mime-version:subject
- :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1738179624; x=1738784424;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=frDgitFHS2Nl+2uSJvZ8apH/bXGkG/DabL27W90W5WM=;
- b=sSCxTxS9Y2ct6DvUQbu3GOycv0vz4qecQGCrINVOCae9y4KCzy0JVS1Dou/Sdd6UHw
- iAQ6dGKXT2chT0VsWNPleiHv2k0shA3Vou61fV4Ix8kBNSeQ2Vd4r5E7yZrrmqU8H/4g
- s1k6J/gmZh9yrlIYVZKtlrBeJo/E6luvcQqfh0MAE9h2uuJEVpZJw6CY81NAlyfCj68d
- 6ljAGXNVaC3ZfQxYAfljRCMLc+8NuqeUvdcza30tYuv86IBykrBc11dV7h0ptdbKZXSQ
- I9fThqrtoqWRcp8Zz+RD1M+IrUImV3vnKrYkwv7rB/ZKZLoxrb3nz5JlfFaeW4LlwbDQ
- kRjw==
-X-Gm-Message-State: AOJu0Yx233Qwsm4STrxDGIgrUocyOvboHxnne6s4QrC+N9OYUe8w0yUB
- GrGHhUt0w/K5o+tZr6JTJqV/5KZg91Qphgclwwr/zvE4uoFw3Dkf
-X-Gm-Gg: ASbGncvE0UpARehgZUAk/dKs8LsT9+OJa49GJZGVU7lfcUU5c1v+jvIEJivUSWL5hhK
- 82CADEZMBahvqsvxywZOb2JyRsNYMc26qF0h5aBwG/pA8ipIasQffQAQjWki8czhB5HEv4Hd8as
- f1izmjloVuEn/F0oeGomj7fy4yWXki6JizsBl+j5KFtJ4WqKwtC2qkWmk10LDjlTmYTEiMZGL7K
- YrdgP9lgBsw3xR/EH14sdS+V702TWaWkLRVwWKtFQIwPyz0bA5SMZbnKQC4da4GygEpS9yiLO6z
- 7/Nt7L5OrxIu9j0=
-X-Google-Smtp-Source: AGHT+IGJ5n3cx8ihRxfRnhskHeSjNd2OpOR815GfPGUh24sZ99riGs64PqXpce5tPNSspVMcdjjuyA==
-X-Received: by 2002:a05:6000:2a3:b0:385:ed16:c97 with SMTP id
- ffacd0b85a97d-38c520af4f4mr4306472f8f.49.1738175631636; 
- Wed, 29 Jan 2025 10:33:51 -0800 (PST)
-Received: from localhost ([2001:861:3385:e20:6384:4cf:52c5:3194])
- by smtp.gmail.com with UTF8SMTPSA id
- ffacd0b85a97d-38c2a188bf5sm18095560f8f.50.2025.01.29.10.33.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 29 Jan 2025 10:33:51 -0800 (PST)
-From: Raphael Gallais-Pou <rgallaispou@gmail.com>
-Date: Wed, 29 Jan 2025 19:32:29 +0100
-MIME-Version: 1.0
-Message-Id: <20250129-master-v5-1-e8079d25a276@gmail.com>
-X-B4-Tracking: v=1; b=H4sIADx0mmcC/12OQW7DIBBFrxKxLtUMYANd9R5VFnjADlIdVxBZi
- SLfPdhKbDfLP/rv/bmzHFIMmX0d7iyFMeY4nEuoPg6MTu7cBR59yUyAUKCF5b3Ll5C4dJosNZZ
- s3bBS/kuhjddF9HMs+RTzZUi3xTvifH0qJLwUI3LgkpwxllAFp7673sXfTxr62bjUDap/dW2ka
- qUP3lOzq8+Lo1hXEFCvmODINbXGK+Erb/AdkxuGuzVZsPJZ5StXg4P2HVMbJrBeMVUwKPvzDwK
- k3mPTND0Ax1iZ8HABAAA=
-X-Change-ID: 20240729-master-3a7c9cb9c96b
+ bh=lWkA6m3tlieRMZdqJUhmOq0RWSwIrxk96y1cRFW4fTM=;
+ b=XThZ3Lu7Km8z8L9vrYqDdPRiRDXcRXiG3cs0c1XBMATAa5sZtf1iMOIL63hrJVunfz
+ QHN2KJYi8VpNe2pEl+U2xU0zN/q+ax81ZK63/OYgDFE3v1YXL0oGBW8yGgslYXsqZRLR
+ tpLnBcPnHsJSkBjbCgoRtLT4/rkv3/XSfSCApe64o6Du/ve+POGaRJEfMR30hFoHOo5Z
+ +erFvT/Ih3537BnoQre4qT3bUn6X9bpFBgjKgW6TyWaYFO0RYMJ5RDN2rePq6WYzdXF8
+ rBh3iqEmUbs4y57xgyz5YMQZNGBdXAaqBiDqahP4jY8fIcL8jcTqF9m+TBJw4uUCAztp
+ S+Nw==
+X-Gm-Message-State: AOJu0YwuB9WiA71tmFgWQp1jh9KjnjXNhwLWr55PaG+aulprX2RlS6Tq
+ 2enLmOiqUQxkD8NJYfNIhvwbYUS2j4HrpohIRWG5yaWWvWAL3tTppS0cHqJfd7uzRK7HjaY3sib
+ uvpk=
+X-Gm-Gg: ASbGncsy6QeamT02x5ECpKJzC4I1qd8Ozr6gNcAgIr2sz0g8vUbuo0kjL/0ef3+w6rf
+ Yc9zMyEMgiWuBKMcaqAKk4jVeimnnglEiI8A/+y6wXTgnyUHB9dg0IAoo9LkL4W0gBPi55bG/Hs
+ DZkDus3/H9kaTujvwoijOoWCcEtON3aMUx62BicZBX5SPHTOvcO/5But0cwu5MJtRf3mk6Gwm6Z
+ vBLwplANpt/gLgpsbyNB0v/hNHJSK3WfyIJJEka9W+Nz5ud5XS6On8UHgDE7ENuNZAQgDud/Q7E
+ D+xBMpqnj2Uf/d8PfU926D8c6HamJr3d4CUZQYe0gQ==
+X-Google-Smtp-Source: AGHT+IFm+hH8SwQDzVjcRNbx0kfIIlw7UO4hC2s92/KDtYVg5GplXGXXld1dNy4FSu1Ip6zfus3kSw==
+X-Received: by 2002:a17:902:f646:b0:216:6284:8a00 with SMTP id
+ d9443c01a7336-21de18cf4efmr8700285ad.2.1738179623944; 
+ Wed, 29 Jan 2025 11:40:23 -0800 (PST)
+Received: from localhost.localdomain ([94.156.149.104])
+ by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-21da4141c4esm102378955ad.110.2025.01.29.11.40.23
+ (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+ Wed, 29 Jan 2025 11:40:23 -0800 (PST)
 To: buildroot@buildroot.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13605;
- i=rgallaispou@gmail.com; h=from:subject:message-id;
- bh=lFc7boIs8hR0iUZ9vcc2C2/EnCO1Vpyk8LiVhcelbZc=;
- b=owEBbQKS/ZANAwAIAechimjUEsK1AcsmYgBnmnSOXE2tU/vdvJKHyNuihUh2qOJ4M2wzpZ9/c
- FhyUCSzBlSJAjMEAAEIAB0WIQQgmXv2E+fvbV/9ui/nIYpo1BLCtQUCZ5p0jgAKCRDnIYpo1BLC
- tedUD/9rrDBXukJcPzSNZpQbOGxWvGM+Xo6SLxuKVBVAp4O/OllNLpNJYFtELzrH3EoYBqd/pwT
- dJDLQQOt4AdAiATmEqukZXtdSLWHUHeitMANgu9LTfAuMazosG/Err6o4OLkkpD0J8lMS6UjnjB
- tjJCKcK+cR7zTaQbjh3k2Mc8SPeQosymsAQXEy/qD87FAMelnXou7R+9DmYz39hB3OLF3ZbVkAP
- i9Iw364SAuaDkyAOKxpf3c/XkvDNWhT+twBHtOxfo+RSbT0iHR5r0matrgzfwD3DjSovuc9Rdox
- G1tYszG8/ct+nifICGQEgQ+SY22YFFY7S562kux/YNTCjOEm7q2EWjIfX8YN/2lG+EPOABbBgle
- fJbgKSPEqzjMOgUEHL5d7Qv1fRSas668xAMg1k+HZuCFB0lB3AxWUezP7txmuWecTQhGKVjcckQ
- Wbi0HhHHOQ8AB3CMBfWxMrQKiq4Sci6CxDcrtsn3fcnY8VpJld/VGqSwRBkMYswM/CQ2PfymDQ+
- +lNRFdVflGqGhBL3Q++cNtYiJwhUASqXoTQ34B0EH+W1veC+RvYUQg7YXesmJZX+hMmE9JkjT13
- VGo/dXvoNa0YNh5Osu7Mv2gYW3q/Bu2FpMHjMg1CMgfabyB9tPtN3mm4o3R3T/a2BcxL5mXdpiY
- 2bvONQP2WpWnOjg==
-X-Developer-Key: i=rgallaispou@gmail.com; a=openpgp;
- fpr=20997BF613E7EF6D5FFDBA2FE7218A68D412C2B5
+Date: Wed, 29 Jan 2025 11:40:07 -0800
+Message-ID: <20250129194007.60839-1-christian@aperture.us>
+X-Mailer: git-send-email 2.48.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1738175632; x=1738780432; darn=buildroot.org;
- h=cc:to:message-id:content-transfer-encoding:mime-version:subject
- :date:from:from:to:cc:subject:date:message-id:reply-to;
- bh=frDgitFHS2Nl+2uSJvZ8apH/bXGkG/DabL27W90W5WM=;
- b=IG4SzlcnYwdqUo6JwszF5sHK3WUz76VvJgMPnVcGsegdXSBzEQjX7tFuYnV/Cx6vzc
- XNp91OPvFEtM9o7JBD8XvM33+tV+5xIoqKVIs5fd8+3uqjWxyyj/4fNKjkVRKG232m/u
- XDofxjcoyrSay3KsYAIMxgjDaPwJ6zr+20D+tSTMQmQLAMp4xVd9SQaUt5vmwTKe6lKN
- OQhkamYuW76ig9dRhjQCEb8cyalu5Bz0fitopTv3dWJ6YibFHNtVDr+QttyIzb0JCKIR
- h1Uf3Ca/NRuT5KhZxhfitghgV2i8WKc+lIhjyznOtKVD5LjQcBwk5AKnQq61bukYZA14
- C77Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=aperture.us; s=google; t=1738179624; x=1738784424; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=lWkA6m3tlieRMZdqJUhmOq0RWSwIrxk96y1cRFW4fTM=;
+ b=rShe/qp36QF1/52EKtHla114W7GbfrROV3cJMsORZCd8emIODNIhF5DZIFvOJMGLMW
+ m/o4ExtjeiLHy749p2UJQ4I9nZSJ0Ldmh9XPLCVub28XdRx/YsWHaagmoEomDDfJhXlv
+ /fGWp+DiWUBap25uOaWZzY3jY98EJONF/WTyMjgpb79k+JtxBZRVUkUHUtg6PEPI/Obe
+ RCK3aMD1yidnyxH9Xo0TWJsr46deZ4FXurSbS6cw17K8juVS0V0xZE27gmTVHr/PmMF3
+ xxWpVX3vBgcUhJ0W+bOfCcNJvJ3V7nP4E9H+ee3Tx82YRK2u0ClRRg1gyikOVGsFz11O
+ O4Cw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=aperture.us
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=IG4Szlcn
-Subject: [Buildroot] [PATCH v5] configs/stm32mp135f-dk: new defconfig
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=rShe/qp3
+Subject: [Buildroot] [PATCH v1 1/1] package/go: bump to version 1.23.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,408 +105,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marleen Vos <marleen.vos@mind.be>, Bartosz Bilas <b.bilas@grinn-global.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: Christian Stewart <christian@aperture.us>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add new defconfig for STMicroelectronics board STM32MP135F-DK.
+go1.23.5 (released 2025-01-16) includes security fixes to the crypto/x509 and
+net/http packages, as well as bug fixes to the compiler, the runtime, and the
+net package.
 
-STM32MP135F-DK features can be found here:
-  https://www.st.com/en/evaluation-tools/stm32mp135f-dk.html
+https://go.dev/doc/devel/release#go1.23.5
+https://github.com/golang/go/issues?q=milestone%3AGo1.23.5+label%3ACherryPickApproved
 
-Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
+Signed-off-by: Christian Stewart <christian@aperture.us>
 ---
-This commit series is a first attempt to improve the organization and
-functionality of the STM32 platform in Buildroot. It comes with two
-patches:
+ package/go/go-bin/go-bin.hash | 14 +++++++-------
+ package/go/go-src/go-src.hash |  2 +-
+ package/go/go.mk              |  2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-1. Reorder common ST folder:
-   - Rename the common ST folder from stm32mp157 to stm32mp1xx.
-   - Update references and paths in related configuration files.
-   - Prepare to receive new stm32mp13 board.
-
-2. Add new defconfig for STM32MP13:
-   - Introduce a new defconfig file (stm32mp13_dk).
-   - Boot following the TF-A/OP-TEE/U-Boot/Linux chain.
-   v1:
-   - Include generic "multi_v7" defconfig for Linux configuration.
-   v2:
-   - Include a minimalistic defconfig for Linux configuration.
----
-Changes in v5:
-- Rebase on latest buildroot/master...
-- ... in order to use BR2_TARGET_OPTEE_OS_CUSTOM_VERSION
-  introduced in 0f3791f25f - boot/optee-os: add custom version option.
-- Link to v4: https://lore.kernel.org/r/20241216-master-v4-1-010141012037@gmail.com
-
-Changes in v4:
-- Rebase on latest buildroot/next branch.
-- Add BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11 option to fix build
-- Link to v3: https://lore.kernel.org/r/20241114-master-v3-1-8895d5a60a0f@gmail.com
-
-Changes in v3:
-- Change Linux config as per discussed here
-https://lists.busybox.net/pipermail/buildroot/2024-November/767651.html
-- As introduced in edc0a6b1a4, remove comments in defconfig.
-- Use Linux stable v6.11.6 version instead of mainline.
-- Use BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION
-- Remove 'E=0' option in TF-A build command line.
-- Use GIT URL and tag version method instead of tarball for OP-TEE
-- Change Linux & OP-TEE hashes accordingly
-- Link to v2: https://lore.kernel.org/r/20241017-master-v2-1-7cf8d42d5d81@gmail.com
-
-Changes in v2:
-- Removed merged patch:
-https://gitlab.com/buildroot.org/buildroot/-/commit/f21db2bd83bf3073a50b8bcd79af6e7aed6fb000
-- Include a minimalistic defconfig for Linux configuration
-- Removed BR2_PACKAGE_HOST_BMAP_TOOLS option.
-- Move BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL to the according section.
-- Hardcode OP-TEE version using tarball link.
-- Use BR2_GLOBAL_PATCH_DIR and add OP-TEE hash to common folder.
-- Link to v1: https://lore.kernel.org/r/20240814-master-v1-0-7834f3deddcb@gmail.com
----
- .../common/stm32mp1xx/patches/linux/linux.hash     |   2 +-
- .../stm32mp1xx/patches/optee-os/optee-os.hash      |   2 +
- .../stmicroelectronics/stm32mp135f-dk/linux.config | 190 +++++++++++++++++++++
- .../overlay/boot/extlinux/extlinux.conf            |   4 +
- board/stmicroelectronics/stm32mp135f-dk/readme.txt |  38 +++++
- configs/stm32mp135f_dk_defconfig                   |  50 ++++++
- 6 files changed, 285 insertions(+), 1 deletion(-)
-
-diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-index 95bd23c8d022ab5d49b4979b5da47bbdaf105798..42d02c9f7836ccaacf82acfcbc524402cea9c9a3 100644
---- a/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  f048267b7b88316c9ca708c68d15a9ae802dcfc943c3188c1273eb958c433281  linux-6.9.8.tar.xz
-+sha256  c954f60197008f1e1f32a1e77293903cf3801d2543ec4bf521f5651eb7f133ce  linux-6.11.6.tar.xz
-diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/optee-os/optee-os.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/optee-os/optee-os.hash
-new file mode 100644
-index 0000000000000000000000000000000000000000..73d4e2c4dafb1a4a94fa26d61017e92faa7d101e
---- /dev/null
-+++ b/board/stmicroelectronics/common/stm32mp1xx/patches/optee-os/optee-os.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  03b91fd7dfdf890e3966f931f07634a2b6a2911bbee2a02ecc48d4a40cf6a9b8  optee-os-4.3.0-git4.tar.gz
-diff --git a/board/stmicroelectronics/stm32mp135f-dk/linux.config b/board/stmicroelectronics/stm32mp135f-dk/linux.config
-new file mode 100644
-index 0000000000000000000000000000000000000000..25f570846af19baf87caa69c0cfb6fb415f00537
---- /dev/null
-+++ b/board/stmicroelectronics/stm32mp135f-dk/linux.config
-@@ -0,0 +1,190 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_USELIB=y
-+CONFIG_NO_HZ=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_PREEMPT=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_LOG_BUF_SHIFT=16
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_ARCH_STM32=y
-+CONFIG_ARM_THUMBEE=y
-+# CONFIG_CACHE_L2X0 is not set
-+CONFIG_ARM_ERRATA_430973=y
-+CONFIG_ARM_ERRATA_720789=y
-+CONFIG_ARM_ERRATA_754322=y
-+CONFIG_ARM_ERRATA_754327=y
-+CONFIG_ARM_ERRATA_764369=y
-+CONFIG_ARM_ERRATA_775420=y
-+CONFIG_ARM_ERRATA_798181=y
-+CONFIG_SMP=y
-+CONFIG_MCPM=y
-+CONFIG_HIGHMEM=y
-+CONFIG_FORCE_MAX_ZONEORDER=12
-+CONFIG_SECCOMP=y
-+# CONFIG_ATAGS is not set
-+CONFIG_ZBOOT_ROM_TEXT=0x0
-+CONFIG_ZBOOT_ROM_BSS=0x0
-+CONFIG_ARM_APPENDED_DTB=y
-+CONFIG_ARM_ATAG_DTB_COMPAT=y
-+CONFIG_VFP=y
-+CONFIG_NEON=y
-+CONFIG_KERNEL_MODE_NEON=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_PARTITION_ADVANCED=y
-+CONFIG_CMDLINE_PARTITION=y
-+CONFIG_CMA=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_INET=y
-+CONFIG_CAN=y
-+CONFIG_CAN_M_CAN=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_DMA_CMA=y
-+CONFIG_CMA_SIZE_MBYTES=128
-+CONFIG_SIMPLE_PM_BUS=y
-+CONFIG_ARM_SCMI_PROTOCOL=y
-+CONFIG_MTD=y
-+CONFIG_MTD_CMDLINE_PARTS=y
-+CONFIG_MTD_BLOCK=y
-+CONFIG_MTD_M25P80=y
-+CONFIG_MTD_NAND=y
-+CONFIG_MTD_NAND_STM32_FMC2=y
-+CONFIG_MTD_SPI_NOR=y
-+# CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
-+CONFIG_MTD_UBI=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_BLK_DEV_RAM=y
-+CONFIG_BLK_DEV_RAM_SIZE=65536
-+CONFIG_SRAM=y
-+CONFIG_EEPROM_AT24=y
-+CONFIG_NETDEVICES=y
-+CONFIG_VIRTIO_NET=y
-+CONFIG_KS8851=y
-+CONFIG_SMSC911X=y
-+CONFIG_STMMAC_ETH=y
-+CONFIG_DWMAC_DWC_QOS_ETH=y
-+CONFIG_MDIO_BITBANG=y
-+CONFIG_INPUT_JOYDEV=y
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_INPUT_TOUCHSCREEN=y
-+CONFIG_TOUCHSCREEN_EDT_FT5X06=y
-+CONFIG_INPUT_MISC=y
-+CONFIG_INPUT_STPMIC1_ONKEY=y
-+CONFIG_SERIAL_STM32=y
-+CONFIG_SERIAL_STM32_CONSOLE=y
-+CONFIG_SERIAL_DEV_BUS=y
-+CONFIG_HW_RANDOM=y
-+CONFIG_I2C_CHARDEV=y
-+CONFIG_I2C_MUX=y
-+CONFIG_I2C_STM32F7=y
-+CONFIG_SPI=y
-+CONFIG_SPI_STM32=y
-+CONFIG_SPI_STM32_QSPI=y
-+CONFIG_PINCTRL_MCP23S08=y
-+CONFIG_PINCTRL_SINGLE=y
-+CONFIG_PINCTRL_STMFX=y
-+CONFIG_POWER_RESET=y
-+CONFIG_POWER_RESET_GPIO=y
-+CONFIG_POWER_RESET_GPIO_RESTART=y
-+CONFIG_POWER_RESET_SYSCON=y
-+CONFIG_POWER_RESET_SYSCON_POWEROFF=y
-+CONFIG_SYSCON_REBOOT_MODE=y
-+CONFIG_WATCHDOG=y
-+CONFIG_STPMIC1_WATCHDOG=y
-+CONFIG_MFD_STM32_LPTIMER=y
-+CONFIG_MFD_STPMIC1=y
-+CONFIG_REGULATOR=y
-+CONFIG_REGULATOR_FIXED_VOLTAGE=y
-+CONFIG_REGULATOR_ARM_SCMI=y
-+CONFIG_REGULATOR_STM32_BOOSTER=y
-+CONFIG_REGULATOR_STM32_VREFBUF=y
-+CONFIG_REGULATOR_STM32_PWR=y
-+CONFIG_REGULATOR_STPMIC1=y
-+CONFIG_DRM=y
-+CONFIG_DRM_STM=y
-+CONFIG_DRM_STM_DSI=y
-+CONFIG_DRM_PANEL_ORISETECH_OTM8009A=y
-+CONFIG_DRM_SII902X=y
-+CONFIG_BACKLIGHT_LCD_SUPPORT=y
-+# CONFIG_LCD_CLASS_DEVICE is not set
-+CONFIG_BACKLIGHT_CLASS_DEVICE=y
-+# CONFIG_BACKLIGHT_GENERIC is not set
-+CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
-+CONFIG_SOUND=y
-+CONFIG_SND=y
-+CONFIG_SND_DYNAMIC_MINORS=y
-+CONFIG_USB=m
-+CONFIG_USB_OTG=y
-+CONFIG_USB_XHCI_HCD=m
-+CONFIG_USB_XHCI_PLATFORM=m
-+CONFIG_USB_EHCI_HCD=m
-+CONFIG_USB_EHCI_HCD_PLATFORM=m
-+CONFIG_USB_OHCI_HCD=m
-+CONFIG_USB_OHCI_HCD_PLATFORM=m
-+CONFIG_USB_DWC2=m
-+CONFIG_USB_CHIPIDEA=m
-+CONFIG_USB_CHIPIDEA_HOST=y
-+CONFIG_USB_ISP1760=m
-+CONFIG_USB_HSIC_USB3503=m
-+CONFIG_USB_GPIO_VBUS=y
-+CONFIG_USB_ISP1301=m
-+CONFIG_USB_ULPI=y
-+CONFIG_TYPEC=y
-+CONFIG_TYPEC_STUSB=y
-+CONFIG_MMC=y
-+CONFIG_MMC_BLOCK_MINORS=16
-+CONFIG_MMC_ARMMMCI=y
-+CONFIG_MMC_SDHCI=y
-+CONFIG_MMC_SDHCI_PLTFM=y
-+CONFIG_MMC_DW=y
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_GPIO=y
-+CONFIG_LEDS_PWM=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_STM32=y
-+CONFIG_DMADEVICES=y
-+CONFIG_STM32_DMA=y
-+CONFIG_STM32_DMAMUX=y
-+CONFIG_STM32_MDMA=y
-+CONFIG_COMMON_CLK_SCMI=y
-+CONFIG_HWSPINLOCK=y
-+CONFIG_HWSPINLOCK_STM32=y
-+CONFIG_STM32_IPCC=y
-+CONFIG_REMOTEPROC=y
-+CONFIG_STM32_RPROC=y
-+CONFIG_RPMSG_VIRTIO=y
-+CONFIG_RPMSG_TTY=y
-+CONFIG_IIO=y
-+CONFIG_IIO_SW_TRIGGER=y
-+CONFIG_SD_ADC_MODULATOR=y
-+CONFIG_STM32_ADC_CORE=y
-+CONFIG_STM32_ADC=y
-+CONFIG_STM32_ADC_TEMP=y
-+CONFIG_STM32_DFSDM_ADC=y
-+CONFIG_STM32_LPTIMER_CNT=y
-+CONFIG_STM32_DAC=y
-+CONFIG_IIO_HRTIMER_TRIGGER=y
-+CONFIG_IIO_STM32_LPTIMER_TRIGGER=y
-+CONFIG_PWM=y
-+CONFIG_PWM_STM32=y
-+CONFIG_PWM_STM32_LP=y
-+CONFIG_RESET_SCMI=y
-+CONFIG_PHY_STM32_USBPHYC=y
-+CONFIG_NVMEM_STM32_ROMEM=y
-+CONFIG_TEE=y
-+CONFIG_OPTEE=y
-+CONFIG_COUNTER=y
-+CONFIG_STM32_LPTIMER_CNT=y
-+CONFIG_STM32_TIMER_CNT=y
-+CONFIG_EXT4_FS=y
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_PRINTK_TIME=y
-diff --git a/board/stmicroelectronics/stm32mp135f-dk/overlay/boot/extlinux/extlinux.conf b/board/stmicroelectronics/stm32mp135f-dk/overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000000000000000000000000000000000000..0cc49d6a560a90846ead993ff02d38cc7cadc7e7
---- /dev/null
-+++ b/board/stmicroelectronics/stm32mp135f-dk/overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+label stm32mp135f-dk-buildroot
-+  kernel /boot/zImage
-+  devicetree /boot/stm32mp135f-dk.dtb
-+  append root=/dev/mmcblk0p4 rootwait
-diff --git a/board/stmicroelectronics/stm32mp135f-dk/readme.txt b/board/stmicroelectronics/stm32mp135f-dk/readme.txt
-new file mode 100644
-index 0000000000000000000000000000000000000000..46879f88cf00d501966181624ca9a318d2ce94d2
---- /dev/null
-+++ b/board/stmicroelectronics/stm32mp135f-dk/readme.txt
-@@ -0,0 +1,38 @@
-+STM32MP135F Discovery Kit
-+
-+Intro
-+=====
-+
-+This configuration supports the STM32MP135F Discovery Kit (DK)
-+platform:
-+
-+  https://www.st.com/en/evaluation-tools/stm32mp135f-dk.html
-+
-+How to build
-+============
-+
-+ $ make stm32mp135f_dk_defconfig
-+ $ make
-+
-+How to write the microSD card
-+=============================
-+
-+Once the build process is finished you will have an image called
-+"sdcard.img" in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an microSD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Boot the board
-+==============
-+
-+ (1) Insert the microSD card in connector CN15
-+
-+ (2) Plug a micro-USB cable in connector CN11 and run your serial
-+     communication program on /dev/ttyACM0.
-+
-+ (3) Plug a USB-C cable in CN6 to power-up the board.
-+
-+ (4) The system will start, with the console on UART, but also visible
-+     on the screen.
-diff --git a/configs/stm32mp135f_dk_defconfig b/configs/stm32mp135f_dk_defconfig
-new file mode 100644
-index 0000000000000000000000000000000000000000..387fe3a4143235dfca12a97d1ccbd7e34e4fe149
---- /dev/null
-+++ b/configs/stm32mp135f_dk_defconfig
-@@ -0,0 +1,50 @@
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
-+BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/common/stm32mp1xx/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp135f-dk/overlay"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.6"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp135f-dk/linux.config"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="st/stm32mp135f-dk"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_OPTEE_CLIENT=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_BL33_IMAGE="u-boot-nodtb.bin"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="STM32MP_SDMMC=1 DTB_FILE_NAME=stm32mp135f-dk.dtb BL33_CFG=$(BINARIES_DIR)/u-boot.dtb"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin *.stm32"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
-+BR2_TARGET_OPTEE_OS=y
-+BR2_TARGET_OPTEE_OS_CUSTOM_VERSION=y
-+BR2_TARGET_OPTEE_OS_CUSTOM_VERSION_VALUE="4.3.0"
-+BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY=y
-+BR2_TARGET_OPTEE_OS_PLATFORM="stm32mp1"
-+BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR="135F_DK"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp13"
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin u-boot.dtb"
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=stm32mp135f-dk"
-+BR2_PACKAGE_HOST_GENIMAGE=y
-
----
-base-commit: 15891236dbfb20ea971877918e9579b246f7c43c
-change-id: 20240729-master-3a7c9cb9c96b
-
-Best regards,
+diff --git a/package/go/go-bin/go-bin.hash b/package/go/go-bin/go-bin.hash
+index 37e1db20a9..39e6491376 100644
+--- a/package/go/go-bin/go-bin.hash
++++ b/package/go/go-bin/go-bin.hash
+@@ -1,9 +1,9 @@
+ # sha256 checksum from https://go.dev/dl/
+-sha256  ad345ac421e90814293a9699cca19dd5238251c3f687980bbcae28495b263531  go1.23.4.src.tar.gz
+-sha256  4a4a0e7587ef8c8a326439b957027f2791795e2d29d4ae3885b4091a48f843bc  go1.23.4.linux-386.tar.gz
+-sha256  6924efde5de86fe277676e929dc9917d466efa02fb934197bc2eba35d5680971  go1.23.4.linux-amd64.tar.gz
+-sha256  16e5017863a7f6071363782b1b8042eb12c6ca4f4cd71528b2123f0a1275b13e  go1.23.4.linux-arm64.tar.gz
+-sha256  1f1dda0dc7ce0b2295f57258ec5ef0803fd31b9ed0aa20e2e9222334e5755de1  go1.23.4.linux-armv6l.tar.gz
+-sha256  65a303ef51e48ff77e004a6a5b4db6ce59495cd59c6af51b54bf4f786c01a1b9  go1.23.4.linux-ppc64le.tar.gz
+-sha256  74aab82bf4eca7c26c830a5b0e2a31d193a4d5ba47045526b92473cc7188d7d7  go1.23.4.linux-s390x.tar.gz
++sha256  a6f3f4bbd3e6bdd626f79b668f212fbb5649daf75084fb79b678a0ae4d97423b  go1.23.5.src.tar.gz
++sha256  6ecf6a41d0925358905fa2641db0e1c9037aa5b5bcd26ca6734caf50d9196417  go1.23.5.linux-386.tar.gz
++sha256  cbcad4a6482107c7c7926df1608106c189417163428200ce357695cc7e01d091  go1.23.5.linux-amd64.tar.gz
++sha256  47c84d332123883653b70da2db7dd57d2a865921ba4724efcdf56b5da7021db0  go1.23.5.linux-arm64.tar.gz
++sha256  04e0b5cf5c216f0aa1bf8204d49312ad0845800ab0702dfe4357c0b1241027a3  go1.23.5.linux-armv6l.tar.gz
++sha256  db268bf5710b5b1b82ab38722ba6e4427d9e4942aed78c7d09195a9dff329613  go1.23.5.linux-ppc64le.tar.gz
++sha256  14924b917d35311eb130e263f34931043d4f9dc65f20684301bf8f60a72edcdf  go1.23.5.linux-s390x.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go-src/go-src.hash b/package/go/go-src/go-src.hash
+index 0b11d8d392..4c8ae3ca5e 100644
+--- a/package/go/go-src/go-src.hash
++++ b/package/go/go-src/go-src.hash
+@@ -1,3 +1,3 @@
+ # From https://go.dev/dl
+-sha256  ad345ac421e90814293a9699cca19dd5238251c3f687980bbcae28495b263531  go1.23.4.src.tar.gz
++sha256  a6f3f4bbd3e6bdd626f79b668f212fbb5649daf75084fb79b678a0ae4d97423b  go1.23.5.src.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 91d9f8d1c1..3d1b42ee0e 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.23.4
++GO_VERSION = 1.23.5
+ 
+ HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
+ HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
 -- 
-Raphael Gallais-Pou <rgallaispou@gmail.com>
+2.39.5
 
 _______________________________________________
 buildroot mailing list
