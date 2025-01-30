@@ -1,70 +1,92 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D9AFC0218F
-	for <buildroot@archiver.kernel.org>; Thu, 30 Jan 2025 13:45:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0E59C0218A
+	for <buildroot@archiver.kernel.org>; Thu, 30 Jan 2025 13:52:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05D0442532;
-	Thu, 30 Jan 2025 13:45:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 965EF81BA9;
+	Thu, 30 Jan 2025 13:52:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id usZGx1I4n0K5; Thu, 30 Jan 2025 13:45:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i-Onw7ZhAs7e; Thu, 30 Jan 2025 13:52:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C478F4253F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 97D9980CCF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C478F4253F;
-	Thu, 30 Jan 2025 13:45:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id DEEED129
- for <buildroot@buildroot.org>; Thu, 30 Jan 2025 13:45:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 97D9980CCF;
+	Thu, 30 Jan 2025 13:52:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4465B12C
+ for <buildroot@buildroot.org>; Thu, 30 Jan 2025 13:52:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BF6A842532
- for <buildroot@buildroot.org>; Thu, 30 Jan 2025 13:45:33 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 23BF1607A5
+ for <buildroot@buildroot.org>; Thu, 30 Jan 2025 13:52:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ImVheerOWTLe for <buildroot@buildroot.org>;
- Thu, 30 Jan 2025 13:45:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 97F9D42544
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97F9D42544
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 97F9D42544
- for <buildroot@buildroot.org>; Thu, 30 Jan 2025 13:45:31 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 850F135355BA; Thu, 30 Jan 2025 14:45:25 +0100 (CET)
-Date: Thu, 30 Jan 2025 14:45:25 +0100
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <Z5uCdWxT1daQ80gR@waldemar-brodkorb.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5SfHSmkQA91m for <buildroot@buildroot.org>;
+ Thu, 30 Jan 2025 13:52:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 028386073C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 028386073C
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 028386073C
+ for <buildroot@buildroot.org>; Thu, 30 Jan 2025 13:52:48 +0000 (UTC)
+X-CSE-ConnectionGUID: TusmWMJITKe7ZZNukjmNEg==
+X-CSE-MsgGUID: X8T9DVHAS76d2+dTE1oXaw==
+Received: from unknown (HELO opfedv3rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 30 Jan 2025 14:52:46 +0100
+Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv3rlp0d.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jan 2025 14:52:46 +0100
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
+ Thu, 30 Jan 2025 14:52:44 +0100
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Thu, 30 Jan 2025 14:52:44 +0100
+From: yann.morin@orange.com
+X-CSE-ConnectionGUID: oZEIoAAYQy2lKdRGqhVwLg==
+X-CSE-MsgGUID: QSHclnfFS52t7kn7pgmPmg==
+X-IronPort-AV: E=Sophos;i="6.13,245,1732575600"; d="scan'208";a="250785007"
+Date: Thu, 30 Jan 2025 14:52:44 +0100
+To: <buildroot@buildroot.org>
+Message-ID: <Z5uELGjqLGpMrPNT@yd-6wlzhs3>
+References: <7468355a4fc6ef9c9a9fa70efa9c4bdac89cfd3c.1738218734.git.yann.morin@orange.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-32-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1738244727; bh=h7I/203pBE8aUCKjNxFCCHP8YPPKI0XNko3ahE4hJOo=;
- h=Date:From:To:Subject:From;
- b=Oj8zvyO5AiNePs9so/lN7CQiHsFBTCsC9xRW4Hej5ptfZgEExNWrBBR8sFlfQYi73
- LW7CGMHR3QgGO9Y0tG3OOIMFnZ4pqlpHtbqUs7Hbg3G78eyS+kDCvrRz2qf07lV7rC
- 74WzC2cKLEU4hHxxlP5x3zT0dbJs947/bp+8JTjoTVDeqoVVT1xMXlg/GvEpJOkeUW
- MP6PYaZFbbtWfPvePOx9VSNlyuxlIuYzxb6yCLEm93BlprybxN/lGpQq53Kf1mwfAJ
- Rh4tgss+Z3WBnM2MJmG/ZCM531OzZK+CQ8tVc+6KmJwXIHQdTeDiCT9+oaHfxwq/zy
- bRaygnmkiZToA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=Oj8zvyO5
-Subject: [Buildroot] [PATCH] package/bind: security update to 9.18.33
+In-Reply-To: <7468355a4fc6ef9c9a9fa70efa9c4bdac89cfd3c.1738218734.git.yann.morin@orange.com>
+X-Originating-IP: [10.115.27.51]
+X-ClientProxiedBy: OPE16NORMBX101.corporate.adroot.infra.ftgroup (10.115.26.2)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1738245169; x=1769781169;
+ h=date:to:subject:message-id:references:mime-version:
+ in-reply-to:content-transfer-encoding:from;
+ bh=4Um1r+Q2fq/qDZHKf6/NhxVF9jRIPpTaDPoZdS6BMjw=;
+ b=QLOwG6uxH1pQXamutpzfIEdf/UY3cZkwCW4yPCzp2THVZD8ey3IgOdjE
+ jCOPO2A2nPYSKQzUWhD5jUm11QWMrslw7Og0jnnlKe4OxsH11EjGe0yGv
+ lIvHKi8YL50/JSzYKQiTsWzIY7grqa74tswJT2PLxbBcY1BYbbVIlRgqF
+ yd+ugZP3aHxFGoNrD4VO7voyvPUh9vSebOKjLsCaSxQAfevwZqhZoCzVw
+ XtM1sIb/reC/5JIb0/9jZUJ+dMrF5g+R8bWCXV/cp+BsJ3XS15b+yncKs
+ 5/CJjwEUqrirnsIOX1Ea5q19Pvg3RL4DfO4oxW777p4XR4SFPfhENbDj0
+ g==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=orange.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
+ header.a=rsa-sha256 header.s=orange002 header.b=QLOwG6ux
+Subject: Re: [Buildroot] [PATCH] package/autoconf: fix parallel builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,42 +103,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See here for a changelog:
-https://downloads.isc.org/isc/bind9/9.18.33/doc/arm/html/notes.html#notes-for-bind-9-18-33
+All,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On 2025-01-30 07:32 +0100, yann.morin@orange.com spake thusly:
+> Backport two patches from upstream, to fix highly parallel builds on
+> very loaded machines.
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index fd83196e5a..50247bcf37 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.18.32/bind-9.18.32.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.18.33/bind-9.18.33.tar.xz.asc
- # with key D99CCEAF879747014F038D63182E23579462EFAA
--sha256  dc840cdf9d54578d98400f2edf7008b1b33a1721be6e490eb1e42d0d11d9cff4  bind-9.18.32.tar.xz
-+sha256  fb373fac5ebbc41c645160afd5a9fb451918f6c0e69ab1d9474154e2b515de40  bind-9.18.33.tar.xz
- sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index aa3c3222f5..350f6c6fbe 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.18.32
-+BIND_VERSION = 9.18.33
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
+I'm withdrawing those patches, as they are triggering automake to run.
+I did not notice initially, as I tested in a context where automake
+was installed, but of course it fails immediately when built in the
+reference docker image. Sorry for the mess.
+
+Running automake would indeed be required, because the patched files
+are included from Makefile.am, but in Buildroot we can't have automake
+before we have autoconf. Sigh...
+
+There are two options, then;
+  - consider the case sufficiently improbable that we do not want to
+    address it;
+  - build autoconf with MAKE1.
+
+For perspective: in three year's time, with about 20 builds a day in
+a CI, the issue occured only once, so that is relatively infrequent
+enough that we could decide to ignore it.
+
+On the other hand, autoconf is small enough that MAKE1 should not
+cause much delay, and be largely dominated by running ./configure:
+the whole takes about 2 seconds here...
+
+Thoughts?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.30.2
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
 
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
