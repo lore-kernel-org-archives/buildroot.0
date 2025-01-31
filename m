@@ -1,103 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14BF4C02190
-	for <buildroot@archiver.kernel.org>; Fri, 31 Jan 2025 05:40:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7417C0218D
+	for <buildroot@archiver.kernel.org>; Fri, 31 Jan 2025 09:42:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5A4E60B07;
-	Fri, 31 Jan 2025 05:40:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 771E183B4E;
+	Fri, 31 Jan 2025 09:42:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1Zs7CjK1MoFA; Fri, 31 Jan 2025 05:40:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4xVkVEmD-CFb; Fri, 31 Jan 2025 09:42:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E16D960B0C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75F4983B4B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E16D960B0C;
-	Fri, 31 Jan 2025 05:40:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0ECD816E
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 05:40:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 75F4983B4B;
+	Fri, 31 Jan 2025 09:42:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10E2416C
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 09:42:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F128360A65
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 05:40:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EF4F840B0A
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 09:42:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OQqCz3FTDzB9 for <buildroot@buildroot.org>;
- Fri, 31 Jan 2025 05:40:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1036; helo=mail-pj1-x1036.google.com;
- envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3033060740
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3033060740
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com
- [IPv6:2607:f8b0:4864:20::1036])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3033060740
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 05:40:48 +0000 (UTC)
-Received: by mail-pj1-x1036.google.com with SMTP id
- 98e67ed59e1d1-2f13acbe29bso4236248a91.1
- for <buildroot@buildroot.org>; Thu, 30 Jan 2025 21:40:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738302047; x=1738906847;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=fdh4QJ+wEYQd/lxHlKo7CvWmH1lYRfro3O8v/AwWBMc=;
- b=kTnuKuxcqGEEJa7QvL45lCb5wo8bArkW+UWd5F8mRRB/hGRRF3yzH1ywU55KB1KUbI
- IRw5TWbZwKIxeNQ55/4660EPUKO8nUe+6iZaAVbnkMaolE2HoydZO9xrVKrcvNHkDFyV
- Z3HicL8lVnc4DCdc4rlXR/NUYatatiNrpvig7Kh7kzE8i7SU1/25TB8yexbxKkwRdNMQ
- Kac0+QzBm9AER0uGVgSP+fHX4uvh+nFQb4QB193gxTUX22uHphpjfskeukzgJF8Jwbjq
- 47gQJFkgl3kejGwrAtaEPybnMz4ZLaw7bdlVR0dy8MN/dSsCTlhl0R9wkc8JGgHFYVY7
- YF1A==
-X-Gm-Message-State: AOJu0Yz+CODC1egRodEZ+9TgDJ+LY/o56WzjHGvtSij4JKpuZ9grbvMi
- 7esAL704S3ZwXPKgyKYm0NnIwGvBmujWvdMVHoYzf2GyDm6CTOJDeBkNGFvTbobtTS/CkmKGB7j
- p
-X-Gm-Gg: ASbGncsHulq0kdVuGU1UiwnsOBKhZeBeWIwY+dveKA0oXMz4lApL402dnYhTpgeFASh
- RvOYv3VVat6vtBwEREvTFDofFuLQSHDRBiwhduYn3SWBEEmNSpz/UZayw314a0jTDgYQRJRQB9o
- gYsmBGKH1Vnzocd2Sd/mbhC4VRZ/R9weC1IcORk9HHsZMsa++eW0rMX5xO5VIhkj70gL4jR4bfB
- w8EWTgqPkz+ZAwwX4063V2q7CKDlhvFZbGQvhoEFNsWqLGfeVi5GxIsGwYMgFHPtL2JOOK9WTg4
- 2+p5beBiRmtAt1aecVFzilR/YcnNt44WIfRWU+BiOBRNtlcsM5KuZoPAfEuGYTe+U7Rrx37T5Mg
- Uz+Y=
-X-Google-Smtp-Source: AGHT+IG1jhqUn1k3gKGI4Imd3sAz12Rq04nMRjTylKX/IwVF7AynhetPYSmZmBB+OAqR4+KlzEGm7A==
-X-Received: by 2002:a17:90b:1f8e:b0:2ef:ad48:7175 with SMTP id
- 98e67ed59e1d1-2f994f638ebmr3512442a91.15.1738302047321; 
- Thu, 30 Jan 2025 21:40:47 -0800 (PST)
-Received: from localhost.localdomain (c-73-35-224-251.hsd1.wa.comcast.net.
- [73.35.224.251]) by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-2f83bf93c23sm4986372a91.39.2025.01.30.21.40.45
- (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
- Thu, 30 Jan 2025 21:40:47 -0800 (PST)
-To: buildroot@buildroot.org
-Date: Thu, 30 Jan 2025 21:40:36 -0800
-Message-ID: <20250131054036.74707-2-christian@aperture.us>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250131054036.74707-1-christian@aperture.us>
-References: <20250131054036.74707-1-christian@aperture.us>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rrvQwADYLDBV for <buildroot@buildroot.org>;
+ Fri, 31 Jan 2025 09:42:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
+ helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 67DE9400BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 67DE9400BB
+Received: from mail.tkos.co.il (golan.tkos.co.il [84.110.109.230])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 67DE9400BB
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 09:42:01 +0000 (UTC)
+Received: from localhost (unknown [10.0.8.3])
+ by mail.tkos.co.il (Postfix) with ESMTP id 26F7E440F80;
+ Fri, 31 Jan 2025 11:36:49 +0200 (IST)
+To: Christian Stewart via buildroot <buildroot@buildroot.org>
+Cc: Christian Stewart <christian@aperture.us>,  Joachim Wiberg
+ <troglobit@gmail.com>,  Tian Yuanhao <tianyuanhao3@163.com>,  Thomas
+ Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250131054001.74407-1-christian@aperture.us> (Christian Stewart
+ via buildroot's message of "Thu, 30 Jan 2025 21:40:01 -0800")
+References: <20250131054001.74407-1-christian@aperture.us>
+User-Agent: mu4e 1.12.8; emacs 29.4
+Date: Fri, 31 Jan 2025 11:41:56 +0200
+Message-ID: <87zfj7721n.fsf@tarshish>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1738302047; x=1738906847; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=fdh4QJ+wEYQd/lxHlKo7CvWmH1lYRfro3O8v/AwWBMc=;
- b=AMEzB4IST/86Sk6vq+dU/50YZgCwlOKlqbKZ1uS0uBwCVEjzZ4o6hS9kRvIgd2Vp6E
- Du+VkXV/VlaMroMj+peH9Vl6xXwVsgbf4EPxCNpzOkGR/wGjLUpfFf7Kt/DkCY4L+pXd
- JJmfkvEYKd7oOAq25C039xbxxBQoukogskIHZVjOAmpYMAFUFP58+tkU3+caJyc9dXmx
- 9E7Hn8lcHLxd6YT//5EYyOWlsHmxM8BfybdDRmBFsMgCnahvJ5ANaaASwBeIm7Rbei4S
- SJQiuGtdBGdP4M7hJI/ItV8rlU7ApSFX9DhlweiL/X/PD31Ehm0hRGXXC9aDvGF2S+7a
- stqw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=aperture.us
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=aperture.us header.i=@aperture.us
- header.a=rsa-sha256 header.s=google header.b=AMEzB4IS
-Subject: [Buildroot] [PATCH v1 2/2] package/docker-cli: bump version to
- v27.5.1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=tkos.co.il; s=default; t=1738316209;
+ bh=VUtH5a+wLroaUS88AiUq2sucwfDtYGypeFhvdWYsz3w=;
+ h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+ b=k8HU/ysALGU6+19KGMO5pt+vBIsPLVJJiq9x5CyFNNM0BC1rUAlYYTs5sBy7JyS0D
+ W8upnLIJVSUzTxCT7KutG3AOoLjm8yqhAOx7epARRoN38u/S3qlUEIjJOINaVs2+Qq
+ e7b6PAVEa5NugRjebh7oLfMEjUiJBCY3QpgSnX5t4v5nKJge2zVsVZKMU6wHYyhnSo
+ IJe3d543D+3/W89rw6wElGp0yrclzAUOglHYBOJnbaa4ZEZMB6EKIbXkMegsz8lUnS
+ OIeaMVDd7n4iGt6JA81ZDxo4N+Mc8q9VvVYrhKupQcKa/cmLpgpAdmc6Q+smNp5pIA
+ 5kc2t3Zoyplsg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=tkos.co.il
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
+ header.s=default header.b=k8HU/ysA
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/containerd: bump to version
+ v2.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,49 +80,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: Joachim Wiberg <troglobit@gmail.com>, Tian Yuanhao <tianyuanhao3@163.com>,
- Christian Stewart <christian@aperture.us>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/moby/moby/releases/tag/v27.5.1
+Hi Christian,
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
----
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Thu, Jan 30 2025, Christian Stewart via buildroot wrote:
+> Major release v1 -> v2.
+>
+> Dropped patch as it is no longer necessary:
+> https://github.com/containerd/containerd/pull/8924
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index c70d274f96..154063d89a 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  df7d44387166d90954e290dfbe0a278649bf71d0e89933615bdc0757580b68e4  docker-cli-27.3.1-go2.tar.gz
-+sha256  abd16e3911bc7bbd00596ebe4f58baf3d577160d99eefd749a908507ddfc587b  docker-cli-27.5.1-go2.tar.gz
- sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 39e1367908..e118481838 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_CLI_VERSION = 27.3.1
-+DOCKER_CLI_VERSION = 27.5.1
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
- 
- DOCKER_CLI_LICENSE = Apache-2.0
+Which patch is dropped? I don't see any below.
+
+baruch
+
+> containerd-shim and containerd-shim-runc-v1 were removed.
+>
+> https://github.com/containerd/containerd/releases/tag/v2.0.2
+>
+> Signed-off-by: Christian Stewart <christian@aperture.us>
+> ---
+>  package/containerd/containerd.hash | 2 +-
+>  package/containerd/containerd.mk   | 6 ++----
+>  2 files changed, 3 insertions(+), 5 deletions(-)
+>
+> diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
+> index e3f8434192..4ec78897d9 100644
+> --- a/package/containerd/containerd.hash
+> +++ b/package/containerd/containerd.hash
+> @@ -1,3 +1,3 @@
+>  # Computed locally
+> -sha256  393bfde8ca1766a0bca3441e18eddc3f5a5c8d97ef676bde0d6c9903e1b0ec0c  containerd-1.7.23-go2.tar.gz
+> +sha256  472747a7a6b360a0864bab0ee00a8a6f51da5795171e6a60ab17aa80cbd850a2  containerd-2.0.2-go2.tar.gz
+>  sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
+> diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+> index 88b53caf51..ee07c22495 100644
+> --- a/package/containerd/containerd.mk
+> +++ b/package/containerd/containerd.mk
+> @@ -4,21 +4,19 @@
+>  #
+>  ################################################################################
+>  
+> -CONTAINERD_VERSION = 1.7.23
+> +CONTAINERD_VERSION = 2.0.2
+>  CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
+>  CONTAINERD_LICENSE = Apache-2.0
+>  CONTAINERD_LICENSE_FILES = LICENSE
+>  CONTAINERD_CPE_ID_VENDOR = linuxfoundation
+>  
+> -CONTAINERD_GOMOD = github.com/containerd/containerd
+> +CONTAINERD_GOMOD = github.com/containerd/containerd/v2
+>  
+>  CONTAINERD_LDFLAGS = \
+>  	-X $(CONTAINERD_GOMOD)/version.Version=$(CONTAINERD_VERSION)
+>  
+>  CONTAINERD_BUILD_TARGETS = \
+>  	cmd/containerd \
+> -	cmd/containerd-shim \
+> -	cmd/containerd-shim-runc-v1 \
+>  	cmd/containerd-shim-runc-v2 \
+>  	cmd/ctr
+
 -- 
-2.39.5
-
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
