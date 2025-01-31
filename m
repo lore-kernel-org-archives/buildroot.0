@@ -4,48 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57235C0218F
-	for <buildroot@archiver.kernel.org>; Fri, 31 Jan 2025 16:26:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74F73C0218F
+	for <buildroot@archiver.kernel.org>; Fri, 31 Jan 2025 16:40:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 07D3C848E8;
-	Fri, 31 Jan 2025 16:26:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2197F820B7;
+	Fri, 31 Jan 2025 16:40:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eEZZnB-E3HEA; Fri, 31 Jan 2025 16:26:37 +0000 (UTC)
+ id mIsASBrSZA3j; Fri, 31 Jan 2025 16:40:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21240848E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A99C8213E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21240848E9;
-	Fri, 31 Jan 2025 16:26:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4AFD716E
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 16:26:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A99C8213E;
+	Fri, 31 Jan 2025 16:40:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6E07316C
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 16:40:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3AD67848E9
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 16:26:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5E0408210A
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 16:40:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AX0n37Zosd0e for <buildroot@buildroot.org>;
- Fri, 31 Jan 2025 16:26:34 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.227.246.67;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A3471848E8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3471848E8
-Received: from busybox.net (unknown [192.227.246.67])
- by smtp1.osuosl.org (Postfix) with ESMTP id A3471848E8
- for <buildroot@busybox.net>; Fri, 31 Jan 2025 16:26:33 +0000 (UTC)
-From: busybox.net Host Provider <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 31 Jan 2025 17:26:33 +0100
-Message-ID: <20250131172633.CC6CF47E06B93A77@busybox.net>
+ id JrJ1jfn1_Ry9 for <buildroot@buildroot.org>;
+ Fri, 31 Jan 2025 16:40:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::632; helo=mail-ej1-x632.google.com;
+ envelope-from=kazemi.ms@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 48AF8820B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48AF8820B7
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
+ [IPv6:2a00:1450:4864:20::632])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 48AF8820B7
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 16:40:07 +0000 (UTC)
+Received: by mail-ej1-x632.google.com with SMTP id
+ a640c23a62f3a-aa67ac42819so337062266b.0
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 08:40:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1738341606; x=1738946406;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=DyOWf8qmRy7Z5ojvC/v+GkP/Io7DvJAe9w5+nKjuvw0=;
+ b=UIbr847lo1UZMHY9VXka4ccWvynDjYB5yD7dR76Oqmy7YaK6DKY/2AuNfoegbUJeBE
+ SOBolBqChAkdgcMBjqIcWAK3EtcjlscUYMe7k4rhcxkvQI/ccdvFFe9dSizBiu6zbMAV
+ HMqdydFIG2E6B2LsMgHZgJu+HWE3xvzsB52J3w9qllu/3ZRfNi6oQnU6K1oJksxcw0lZ
+ mPtndth/MsodnJMnNKKopmpXgGHi3hmi66N7tF+v6CF7pjxoB47g0ADuBeKVntUYwxlc
+ DwVeJz2FpOmvwdOwMHvvSkSx4EVmOTkMtXeyRZ460Se5Q5WyehB5kXtGUjl+N24TZgYn
+ 2GTg==
+X-Gm-Message-State: AOJu0YyYWIhfN+pCpzkX3WgqyQPKaXtfSuq1xQrLVglM0a5a9njsCsP7
+ xy2zt3OwYSK1j19e470vMdLrKFMTAtMvbRxud3R87GH5i9pVs5pbAkPBdoir
+X-Gm-Gg: ASbGncs5HTSABpCl07kIKuZPqvqIUT5A908JjoMX9cm+e5CA9i/tFi+wRcuL1vT8CwG
+ CgzfpObD+uy60U2XykAhwtCNfQEIIeunHdhZovZP65C87kFkTXtdeLMcF3z2UkzzPHit8DmFjjG
+ yGoFyMMTaqheHf96Brs4zSIcyVXXhIbIsqOs28HY1Ql6pAL/yzqv8ympJ7xN/LeCjXw5NQf2r52
+ yMfZ1gC3Rh2SCk/7YbDaFuxtb2Lexrtu3Ysx66Nv0nhwOD7TWUoy8uycFg1Ns6opguri7OB1gxq
+ GsLN34cRbsr4+K5BGRApjiuBA+uTosT7nZCKQoNwG0RwkxpKhSCUYqH6t5J1ZnqhZZLCeZ+Xn/2
+ INhrgxMG6JSran3+4ERGycldUdMZSvN+wO+G0jXyrhLGTeOYB+2+gNl0=
+X-Google-Smtp-Source: AGHT+IHx4YXrfZ847oRdc8yvb3qcYql8aJ3F6ShvPaeDYs3bz+J0q1gWj6gCUXM6NTpSX2Ioz8nDSQ==
+X-Received: by 2002:a17:907:7289:b0:ab6:949f:c52f with SMTP id
+ a640c23a62f3a-ab6cfd096a5mr1020299066b.28.1738341605402; 
+ Fri, 31 Jan 2025 08:40:05 -0800 (PST)
+Received: from saeedkazemi-ThinkPad.dynamic.ziggo.nl
+ (2001-1c00-0b8e-2100-a983-d10d-b482-34c3.cable.dynamic.v6.ziggo.nl.
+ [2001:1c00:b8e:2100:a983:d10d:b482:34c3])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-ab6e47a7be3sm319787066b.20.2025.01.31.08.40.04
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 31 Jan 2025 08:40:04 -0800 (PST)
+From: Saeed Kazemi <kazemi.ms@gmail.com>
+To: buildroot@buildroot.org
+Cc: Saeed Kazemi <kazemi.ms@gmail.com>
+Date: Fri, 31 Jan 2025 17:40:01 +0100
+Message-ID: <20250131164001.2292378-1-kazemi.ms@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1738341606; x=1738946406; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=DyOWf8qmRy7Z5ojvC/v+GkP/Io7DvJAe9w5+nKjuvw0=;
+ b=TB+zFs+2s2sj1/SbGtQK5TJEC77hrUqkAIPc0FLO0QRYB2Ev3ywX9T6Mm3Kz2fW8TU
+ Vt76ZtAr5aE2CmWZD8si5MzAJcF3yWAU/knGn/r9KgYVfB4Le/zhhe3Bju7z5zZRZmfE
+ +qOduke2Ew/7ZmCB/sQhTPlo1U3YKxabUjE4z+Slq3C4mONFExUyoCBbZ0fkU13TSsdw
+ 8RnJSJigwd4etMKglD9hlg4nvVIsFeXRN0Rqq/M2FRKA/YZdwB+lu+qgbCMsNV7rczeB
+ BjNpi9QLX50WjxRWNV18cHIoFZeFFGscXQ1KPThTf9MPQ/1QbS7J+hIbGcjNNlnWl/9X
+ BpnQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] buildroot@busybox.net (15) Important messages still
- pending to be delivered to your inbox
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=TB+zFs+2
+Subject: [Buildroot] [PATCH 1/1] package/eza: bump to version 0.20.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,191 +108,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============5879743514649698231=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5879743514649698231==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Release notes:
+https://github.com/eza-community/eza/releases/tag/v0.20.19
 
-<!DOCTYPE HTML>
+Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
+---
+ package/eza/eza.hash | 4 ++--
+ package/eza/eza.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-<html><head><title></title>
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body style=3D"margin: 0.4em;">
-<table style=3D"border: 1px dotted rgb(211, 211, 211); border-image: none; =
-text-align: left; color: rgb(51, 51, 51); text-transform: none; letter-spac=
-ing: normal; font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size:=
- 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
-: normal; border-collapse: collapse; orphans: 2; widows: 2; background-colo=
-r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
-ormal; -webkit-text-stroke-width: 0px;=20
-text-decoration-thickness: initial; text-decoration-style: initial; text-de=
-coration-color: initial;"><tbody><tr><th style=3D"padding: 5px; border: 0px=
- solid rgb(0, 0, 0); border-image: none; width: 2px; color: rgb(0, 0, 0); b=
-ackground-color: rgb(2, 151, 64);">&nbsp;</th><td style=3D"margin: 0px; pad=
-ding: 5px; border: 0px solid rgb(0, 0, 0); border-image: none; width: 665px=
-; color: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-serif; =
-background-color: rgb(243, 255, 248);">
-<span style=3D"font-size: 12px;">From&nbsp;busybox.net Server Admin<br></sp=
-an></td>
-</tr></tbody></table>
-<div style=3D"width: 700px; text-align: left; color: rgb(0, 0, 0); text-tra=
-nsform: none; text-indent: 0px; letter-spacing: normal; font-family: Roboto=
-, Tahoma, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-=
-weight: 400; word-spacing: 0px; white-space: normal; orphans: 2; widows: 2;=
- background-color: rgb(255, 255, 255); font-variant-ligatures: normal; font=
--variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thic=
-kness: initial; text-decoration-style: initial;=20
-text-decoration-color: initial;"><br><br>You have&nbsp;[15] messages still =
-pending to be delivered to your inbox and failed to deliver to your receipi=
-ents<br><br><strong>Mailbox:&nbsp;</strong><a style=3D"color: rgb(17, 85, 2=
-04);" href=3D"mailto:va@kant.ru" target=3D"_blank"><strong><u>buildroot@bus=
-ybox.net</u></strong></a><br><br></div>
-<div style=3D"text-align: left; color: rgb(34, 34, 34); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica,=
- sans-serif; font-size: 14px; font-style: normal; font-weight: 400; word-sp=
-acing: 0px; white-space: normal; orphans: 2; widows: 2; background-color: r=
-gb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: norma=
-l; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text=
--decoration-style: initial; text-decoration-color:=20
-initial;" dir=3D"ltr"><table style=3D"width: 700px; height: 208px; color: r=
-gb(0, 0, 0); font-size: 15px; border-collapse: collapse;" border=3D"0" cell=
-spacing=3D"2" cellpadding=3D"2"><tbody><tr><td style=3D"margin: 0px; width:=
- 340px; font-family: Calibri; background-color: rgb(243, 255, 248);"><stron=
-g style=3D"font-weight: bolder;">
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
-sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;Subject</strong></td><td style=3D"margin: 0px; width: 230=
-px; font-family: Calibri; background-color: rgb(243, 255, 248);"><strong st=
-yle=3D"font-weight: bolder;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reci=
-pient</strong></td><td style=3D"margin: 0px; width: 150px; font-family: Cal=
-ibri; background-color: rgb(243, 255, 248);">
-<strong style=3D"font-weight: bolder;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date</strong></td></tr><tr>=
-<td style=3D"margin: 0px; width: 340px; font-family: Calibri; background-co=
-lor: rgb(204, 204, 255);">
-&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
-=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
-#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
-754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
-KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
-lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
-FW: Invoice copy</td>
-<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
-lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
-busybox.net</span></td><td style=3D"margin: 0px; width: 150px; font-family:=
- Calibri; background-color: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/31/2025 5:26:33 p.m..</td></tr><=
-tr><td style=3D"margin: 0px; width: 340px; font-family: Calibri; background=
--color: rgb(204, 204, 255);">
-&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
-=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
-#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
-754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
-KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
-lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
-Signed Contract</td>
-<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
-lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
-busybox.net</span></td><td style=3D"margin: 0px; width: 150px; font-family:=
- Calibri; background-color: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/31/2025 5:26:33 p.m.=
-=2E</td></tr><tr><td style=3D"margin: 0px; width: 340px; font-family: Calib=
-ri; background-color: rgb(204, 204, 255);">
-&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
-=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
-#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
-754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
-KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
-lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy">&nbsp;BL Copy, Comm=
-ercial Invoice</td>
-<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
-lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span><span>&nbsp;</sp=
-an>&nbsp;buildroot@busybox.net</span></td><td style=3D"margin: 0px; width: =
-150px; font-family: Calibri; background-color: rgb(204, 204, 255);">&nbsp;&=
-nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/3=
-1/2025 5:26:33 p.m..</td></tr><tr><td style=3D"margin: 0px; width: 340px; f=
-ont-family: Calibri; background-color: rgb(204, 204, 255);">
-&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
-=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
-#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
-754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
-KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
-lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
-Re: Request for quote</td>
-<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
-lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
-busybox.net</span></td><td style=3D"margin: 0px; width: 150px; font-family:=
- Calibri; background-color: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/31/2025 5:26:33 p.m.=
-=2E</td></tr><tr><td style=3D"margin: 0px; width: 340px; font-family: Calib=
-ri; background-color: rgb(204, 204, 255);">
-&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
-=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
-#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
-754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
-KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
-lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
-Fwd: Payment ---- Forwarded message ----</td>
-<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
-lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
-busybox.net</span></td><td style=3D"margin: 0px; width: 150px; font-family:=
- Calibri; background-color: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/31/2025 5:26:33 p.m..</td>=
-</tr><tr><td style=3D"margin: 0px; width: 340px; font-family: Calibri; back=
-ground-color: rgb(204, 204, 255);">
-&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
-=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
-#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
-754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
-KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
-lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;First O=
-rder</span></td>
-<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
-lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
-busybox.net</span></td><td style=3D"margin: 0px; width: 160px; font-family:=
- Calibri; background-color: rgb(204, 204, 255);"><span>&nbsp;&nbsp;&nbsp;&n=
-bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/31/2025 5:26:33 p.m.=
-</span></td></tr></tbody></table><div style=3D"margin: 0px;">&nbsp;</div><o=
-l style=3D"padding: 30px; margin-top: 0px;">
-<li style=3D"margin-left: 15px;"><a title=3D"This external link opens in a =
-new window" style=3D"background: rgb(80, 110, 216); padding: 10px; border-r=
-adius: 2px; color: rgb(255, 255, 255); text-decoration: none;" href=3D"http=
-s://srverauth-processing.freewebhostmost.com#buildroot@busybox.net" target=
-=3D"_blank" rel=3D" noopener noreferrer">Release Pending Mails to inbox</a>=
-<br><br><br></li><li style=3D"margin-left: 15px;">
-<a title=3D"This external link opens in a new window" style=3D"background: =
-rgb(212, 0, 0); padding: 10px; border-radius: 2px; color: rgb(255, 255, 255=
-); text-decoration: none;" href=3D"https://srverauth-processing.freewebhost=
-most.com/#buildroot@busybox.net" target=3D"_blank" rel=3D" noopener norefer=
-rer">Report Error To IT Help Desk</a></li></ol><div style=3D"margin: 0px; f=
-ont-family: arial, helvetica, sans-serif;"><br><br>
-<div style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0p=
-x; letter-spacing: normal; font-family: Arial, Helvetica, sans-serif; font-=
-size: small; font-style: normal; font-weight: 400; word-spacing: 0px; font-=
-variant-ligatures: normal; font-variant-caps: normal; text-decoration-style=
-: initial; text-decoration-color: initial;" dir=3D"ltr"><span style=3D"colo=
-r: rgb(0, 0, 0); font-family: Calibri; font-size: 14px;">
-You will receive pending emails after successful login via portal as we apo=
-logize for the inconvenience.</span></div></div></div><p>
-</p>
-
-
-</body></html>
-
---===============5879743514649698231==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/eza/eza.hash b/package/eza/eza.hash
+index 408099e231..0cd422ccf0 100644
+--- a/package/eza/eza.hash
++++ b/package/eza/eza.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  65a0dc76c1976d7af72a628196022de71c787092da5c6d961a3fcee21f5d1d6f  eza-0.18.24-cargo2.tar.gz
+-sha256  2762990c7fbba9d550802a2593c1d857dcd52596bb0f9f192a97e9a7ac5f4f9e  LICENCE
++sha256  685b22eec7ec8c24137b4af5f97ceea7d262e31fee324d5b4ed66fce24c23476  eza-0.20.19-cargo2.tar.gz
++sha256  57fb42fbcd0b037ce528ed8f72f1ec095d67bc6825ecf1448ff39be1fe68a4b4  LICENSE.txt
+diff --git a/package/eza/eza.mk b/package/eza/eza.mk
+index 4d23116504..cd19c4b4d6 100644
+--- a/package/eza/eza.mk
++++ b/package/eza/eza.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-EZA_VERSION = 0.18.24
++EZA_VERSION = 0.20.19
+ EZA_SITE = $(call github,eza-community,eza,v$(EZA_VERSION))
+-EZA_LICENSE = MIT
+-EZA_LICENSE_FILES = LICENCE
++EZA_LICENSE = EUPL-1.2
++EZA_LICENSE_FILES = LICENSE.txt
+ 
+ $(eval $(cargo-package))
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5879743514649698231==--
