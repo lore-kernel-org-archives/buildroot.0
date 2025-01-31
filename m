@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A0D1C02194
-	for <buildroot@archiver.kernel.org>; Fri, 31 Jan 2025 21:24:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25D01C02192
+	for <buildroot@archiver.kernel.org>; Fri, 31 Jan 2025 21:24:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 273488493C;
-	Fri, 31 Jan 2025 21:24:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C253942931;
+	Fri, 31 Jan 2025 21:24:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nfVc6ivTqc1D; Fri, 31 Jan 2025 21:24:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 48uROhyE9Rr4; Fri, 31 Jan 2025 21:24:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CBAB84946
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 635D24292A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2CBAB84946;
-	Fri, 31 Jan 2025 21:24:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 64BEE17E
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 21:24:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 635D24292A;
+	Fri, 31 Jan 2025 21:24:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3265016E
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 21:24:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 439E884935
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 21:24:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 576754291E
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 21:24:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v6G7nBbTH8bg for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x9YaLWRcs8dW for <buildroot@buildroot.org>;
  Fri, 31 Jan 2025 21:24:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B8CA84930
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E14B4291A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B8CA84930
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E14B4291A
  for <buildroot@buildroot.org>; Fri, 31 Jan 2025 21:24:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5956C8678A; Fri, 31 Jan 2025 21:24:20 +0000 (UTC)
+ id 390D586780; Fri, 31 Jan 2025 21:24:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 31 Jan 2025 22:19:33 +0100
+Date: Fri, 31 Jan 2025 22:17:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8bbea605973cee2ef5c16b4865d9c745a775afe1
-X-Git-Newrev: 9c2e146ca9a21f0de3c97981113a57c58c3a5bd5
+X-Git-Oldrev: bec79ce8bbf0165463869dff5769eeddb6d7196a
+X-Git-Newrev: 002a67c2443e8c4c3c18529ca14a7841b9a0ef71
 X-Patchwork-Hint: ignore
-Message-Id: <20250131212420.5956C8678A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/containerd: bump to version v2.0.2
+Message-Id: <20250131212420.390D586780@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libpng: bump version to 1.6.46
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,62 +64,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c2e146ca9a21f0de3c97981113a57c58c3a5bd5
+commit: https://git.buildroot.net/buildroot/commit/?id=002a67c2443e8c4c3c18529ca14a7841b9a0ef71
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Major release v1 -> v2.
+Release notes:
+https://raw.githubusercontent.com/pnggroup/libpng/v1.6.45/ANNOUNCE
+https://raw.githubusercontent.com/pnggroup/libpng/v1.6.46/ANNOUNCE
 
-Dropped patch as it is no longer necessary:
-https://github.com/containerd/containerd/pull/8924
+Use sha1 hash from sourceforge.net and locally compute sha256 hash due to
+missing release announcement:
+https://sourceforge.net/p/png-mng/mailman/png-mng-announce/
 
-containerd-shim and containerd-shim-runc-v1 were removed.
+Updated license hash due to copyright year bump:
+https://github.com/pnggroup/libpng/commit/6f786ff0f6bf4b971a7159d2b4a95e8a0770892f
 
-https://github.com/containerd/containerd/releases/tag/v2.0.2
-
-Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/containerd/containerd.hash | 2 +-
- package/containerd/containerd.mk   | 6 ++----
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ package/libpng/libpng.hash | 7 ++++---
+ package/libpng/libpng.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/containerd/containerd.hash b/package/containerd/containerd.hash
-index e3f8434192..4ec78897d9 100644
---- a/package/containerd/containerd.hash
-+++ b/package/containerd/containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256  393bfde8ca1766a0bca3441e18eddc3f5a5c8d97ef676bde0d6c9903e1b0ec0c  containerd-1.7.23-go2.tar.gz
-+sha256  472747a7a6b360a0864bab0ee00a8a6f51da5795171e6a60ab17aa80cbd850a2  containerd-2.0.2-go2.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4  LICENSE
-diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
-index 88b53caf51..ee07c22495 100644
---- a/package/containerd/containerd.mk
-+++ b/package/containerd/containerd.mk
-@@ -4,21 +4,19 @@
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index 3fd4033f83..3fae82b5e7 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,4 +1,5 @@
+-# From https://sourceforge.net/p/png-mng/mailman/message/58815959/
+-sha256  60c4da1d5b7f0aa8d158da48e8f8afa9773c1c8baa5d21974df61f1886b8ce8e  libpng-1.6.44.tar.xz
++# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.46/
++sha1  11423f5ea270e7bb42dd2d519696adcd016d5df3  libpng-1.6.46.tar.xz
+ # Locally computed:
+-sha256  7317e078e2d3b5d7ba5a6159e650945153262b44b76f6700f8e9edb261c5143e  LICENSE
++sha256  f3aa8b7003998ab92a4e9906c18d19853e999f9d3bca9bd1668f54fa81707cb1  libpng-1.6.46.tar.xz
++sha256  16d9daaafbf63a31a5bdc91d4600972548fef5aaa1244202393288dbd079c49a  LICENSE
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index c0b3ad24d5..e73e0bb686 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CONTAINERD_VERSION = 1.7.23
-+CONTAINERD_VERSION = 2.0.2
- CONTAINERD_SITE = $(call github,containerd,containerd,v$(CONTAINERD_VERSION))
- CONTAINERD_LICENSE = Apache-2.0
- CONTAINERD_LICENSE_FILES = LICENSE
- CONTAINERD_CPE_ID_VENDOR = linuxfoundation
- 
--CONTAINERD_GOMOD = github.com/containerd/containerd
-+CONTAINERD_GOMOD = github.com/containerd/containerd/v2
- 
- CONTAINERD_LDFLAGS = \
- 	-X $(CONTAINERD_GOMOD)/version.Version=$(CONTAINERD_VERSION)
- 
- CONTAINERD_BUILD_TARGETS = \
- 	cmd/containerd \
--	cmd/containerd-shim \
--	cmd/containerd-shim-runc-v1 \
- 	cmd/containerd-shim-runc-v2 \
- 	cmd/ctr
- 
+-LIBPNG_VERSION = 1.6.44
++LIBPNG_VERSION = 1.6.46
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
