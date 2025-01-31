@@ -1,68 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD974C02190
-	for <buildroot@archiver.kernel.org>; Fri, 31 Jan 2025 16:53:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 107A9C0218F
+	for <buildroot@archiver.kernel.org>; Fri, 31 Jan 2025 16:53:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C30440913;
-	Fri, 31 Jan 2025 16:53:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C79418392B;
+	Fri, 31 Jan 2025 16:53:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tLcn1jOW8uFr; Fri, 31 Jan 2025 16:53:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96B4F8392C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 96B4F8392C;
+	Fri, 31 Jan 2025 16:53:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E77312C
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 16:53:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C8D240DB3
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 16:53:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id twQlZ5KeHanK; Fri, 31 Jan 2025 16:53:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 493034092C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 493034092C;
-	Fri, 31 Jan 2025 16:53:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4248A12C
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 16:53:08 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2F2BA60BE5
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 16:53:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8UtgKYfp4lsR for <buildroot@buildroot.org>;
- Fri, 31 Jan 2025 16:53:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1C38760BAD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C38760BAD
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1C38760BAD
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 16:53:06 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8F69E441D6;
- Fri, 31 Jan 2025 16:53:03 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tduGM-008SdG-31;
- Fri, 31 Jan 2025 17:53:02 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: <yann.morin@orange.com>
-Cc: <buildroot@buildroot.org>,  Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>,  Luca Ceresoli <luca.ceresoli@bootlin.com>
-References: <b345d4f8d7c4dcb795ec6fcb9e4aaa5c5cd4553b.1737528518.git.yann.morin@orange.com>
-Date: Fri, 31 Jan 2025 17:53:02 +0100
-In-Reply-To: <b345d4f8d7c4dcb795ec6fcb9e4aaa5c5cd4553b.1737528518.git.yann.morin@orange.com>
- (yann morin's message of "Wed, 22 Jan 2025 07:48:38 +0100")
-Message-ID: <87h65f3oy9.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+ id yOuEB5J2-lZe for <buildroot@buildroot.org>;
+ Fri, 31 Jan 2025 16:53:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
+ envelope-from=kazemi.ms@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 03B7D40913
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03B7D40913
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 03B7D40913
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 16:53:34 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id
+ a640c23a62f3a-aaeec07b705so363254366b.2
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 08:53:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1738342413; x=1738947213;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=wSkDhgSJUjirHT+hnD1bQBVNo5VklBe9ea5y/CWtDco=;
+ b=Ovo/FO3iB2EFBJGgdabqsAB+JjqC+VLh9Xq3YbEg7FOa+D3ryA6NArIhVP5ZSEjVVk
+ blJGx00Hnn83xJlfZPqR9cFKu1OFikXCOSZDHAHoGplWa5VwFwUzcVXVThdJsT4tXTW8
+ 2UyCDcZ5RfMC9PQeD5tJ9GuVhBT8WHD49FklXnmae6/3MSlJd3JcKL52+VC8Bqhi2zsw
+ LwfoZkN/AAzXQgkvS7lTWhn0lopa4wPjcyxNRHWz3XLrAKRGdzmOPmzOnXdqzrHmXxqi
+ Mw6eCJ+ds+9/YZj6MupLHwZ1+8MfHOE8Mk49KevNPndgEMRUIDQws57x5YfCUPwUUceV
+ I4Fg==
+X-Gm-Message-State: AOJu0YzOX1+nBGt0hQArGP0HyGj1GBIihFeILpyhOFzfS3kW11YudqQn
+ CJiv7bYOVwDac25LKh6YeFJrCTzvx9ekUGfXeHGemFc0BqtBJh/5Q6YJX+sM
+X-Gm-Gg: ASbGncsq8ypZ56TH22QrTxDublDc1iZt3llWNxI/f08LXw1xgX1Iyv3CXrP6OQmGjzD
+ s9MIFi01gE/z6iYPlPQm9KYpMeFJv9fTMeQvQEeEmKjoXcAtMimvO7H3nzuUpHBUa/KyfZx9tPV
+ +N+FiYNpi/j1UjQ+26UP/Gow3LubrXMttRlLQTJQ4IYHIR+GW5N2p8kQgQamJX6Xrnv9WQwtCjQ
+ flm7Yi1xtoNLGtt3fDR4/ihQdi9GbkgIy/2g0GdeT0h1kHmFij+cknN0xmUH+JwEOryluRbetjr
+ GrYXCQ2W6A8p4Miivk9VZRwe8FEaXqrEXYXHzXy5cckfgsNnm0WTeyP4qzn0yLEsR5ATJRT636z
+ Ndy0OgHmhGnkIuAJY7xnduTmM6/ufunnECevHQSYm1e/ZLfCTSpJUW5c=
+X-Google-Smtp-Source: AGHT+IFhjJvcGSD0W5JS11ad8HWQ1rSk+zDxD4c8JfAdUyNAO2QZDoXl1phr+Scb5fKCQ74L7ITB4g==
+X-Received: by 2002:a17:906:f58c:b0:aaf:86a2:651f with SMTP id
+ a640c23a62f3a-ab6cfdbd07emr1148533766b.38.1738342412459; 
+ Fri, 31 Jan 2025 08:53:32 -0800 (PST)
+Received: from saeedkazemi-ThinkPad.dynamic.ziggo.nl
+ (2001-1c00-0b8e-2100-a983-d10d-b482-34c3.cable.dynamic.v6.ziggo.nl.
+ [2001:1c00:b8e:2100:a983:d10d:b482:34c3])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-5dc72404acdsm3130835a12.39.2025.01.31.08.53.32
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 31 Jan 2025 08:53:32 -0800 (PST)
+From: Saeed Kazemi <kazemi.ms@gmail.com>
+To: buildroot@buildroot.org
+Cc: Saeed Kazemi <kazemi.ms@gmail.com>
+Date: Fri, 31 Jan 2025 17:53:29 +0100
+Message-ID: <20250131165329.2362130-1-kazemi.ms@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdelfeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepkeegffdtieevkeejheevteeludetveeffedutedvkeefjeehiedtvdfhkeffueetnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopeihrghnnhdrmhhorhhinhesohhrrghnghgvrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhm
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2] package/pkg-generic: store real version
- in legal manifest
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1738342413; x=1738947213; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=wSkDhgSJUjirHT+hnD1bQBVNo5VklBe9ea5y/CWtDco=;
+ b=YLte83ws+/vyx/8wlDL5+fReHx0DqHWC01EV+kLmLGPymCeWKLG7p/2BEZ0T2IJXKA
+ SPOPPnFMtoR20mWcWhCvwkL+Z0HU20ipS9Vb05YbOios8hzyvkqnGvejEBmXxu91SxmI
+ yUSXLJLSoQnbnesRe+hQiI6yzU6LXEYmzm7TtwZJK0swN08bmwetPvvC/m8kJG49kyRO
+ aqfKb6XJrlcLE1qc8uQPZYq2zsttRxNGlA+heB1oCzN7+UW081myXynYUZIfG5ouUWox
+ xapQBeZN8XqpYOjc6w/6Tgw6OTwbayfTy1ovPsdFiYSBAUXlNXfQTxO+J/rkEc04r7pE
+ KT8A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=YLte83ws
+Subject: [Buildroot] [PATCH 1/1] package/fd: bump to version 10.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,50 +114,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>>   <yann.morin@orange.com> writes:
+Release notes:
+https://github.com/sharkdp/fd/releases/tag/v10.2.0
 
- > From: "Yann E. MORIN" <yann.morin@orange.com>
- > The legal manifest currently stores the $(PKG)_VERSION variable.
- > However, that variable undergoes a set of changes so that it is
- > suitable for creating files and Makefile rules; that new value
- > is purely a technical, internal detail of how Buildroot handles
- > things.
+Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
+---
+ package/fd/fd.hash | 2 +-
+ package/fd/fd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > In the legal manifest, we need access to the real value for the
- > version, as this is what will allow actual references to the
- > upstream package. If the version string is mangled, like slashes
- > replaced with underscores, this introduces ambiguities as to what
- > exactly the version is.
-
- > In Buildroot, there is no package, with a constant version, that
- > exhibits that issue; for those packages where it is possible to
- > set a custom git tree and version, like linux or uboot, such a
- > custom tree can have tags with a slash (not a colon or a space,
- > forbidden by git); packages in a br2-external can also use such
- > version strings as well.
-
- > The packages that do have such versions are not legion, but they
- > do exist. For example, Apache's ant buildsystem does use a slash
- > in their reelase tags, like rel/1.10.15:
- >     https://github.com/apache/ant/tags
-
- > Change the legal manifest to include the actual, original value
- > as was set in the .mk file.
-
- > Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
- > Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
- > Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-
- > ---
- > Changes v1 -> v2:
- >   - add example where that could happen  (Luca)
-
-Committed to 2024.02.x and 2024.11.x, thanks.
-
+diff --git a/package/fd/fd.hash b/package/fd/fd.hash
+index 90d2c38694..04345b8884 100644
+--- a/package/fd/fd.hash
++++ b/package/fd/fd.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  91da5cc2b99d4754fa5096cda1eeac98f312f712bfca6a41f9972b2287a4c4f9  fd-9.0.0-cargo2.tar.gz
++sha256  6d177b06123419edf2abe2daa82b29fec667a4e775cf877094ca5f6ae759dc34  fd-10.2.0-cargo2.tar.gz
+ sha256  73c83c60d817e7df1943cb3f0af81e4939a8352c9a96c2fd00451b1116fa635c  LICENSE-APACHE
+ sha256  322cfc7aa0c774d0eca3b2610f1d414de3ddbd7d8dd4b9dea941a13a6eb07455  LICENSE-MIT
+diff --git a/package/fd/fd.mk b/package/fd/fd.mk
+index 316da418ea..9b6b305e77 100644
+--- a/package/fd/fd.mk
++++ b/package/fd/fd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FD_VERSION = 9.0.0
++FD_VERSION = 10.2.0
+ FD_SITE = $(call github,sharkdp,fd,v$(FD_VERSION))
+ FD_LICENSE = Apache-2.0 or MIT
+ FD_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
 -- 
-Bye, Peter Korsgaard
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
