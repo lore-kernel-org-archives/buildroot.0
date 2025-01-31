@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA5B0C02194
-	for <buildroot@archiver.kernel.org>; Fri, 31 Jan 2025 18:39:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98C3AC0218F
+	for <buildroot@archiver.kernel.org>; Fri, 31 Jan 2025 18:39:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5480C83FC3;
-	Fri, 31 Jan 2025 18:39:04 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8KuwGsme9XCA; Fri, 31 Jan 2025 18:39:03 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 50A0F83FBA
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 50A0F83FBA;
-	Fri, 31 Jan 2025 18:39:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5383B17E
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 18:38:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 365AE6080A
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 18:38:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 52F6360667;
+	Fri, 31 Jan 2025 18:39:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4aU7YG-zKe6I for <buildroot@buildroot.org>;
+ id 8t4eTT5kh671; Fri, 31 Jan 2025 18:39:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5956A6080A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5956A6080A;
+	Fri, 31 Jan 2025 18:39:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6780817F
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 18:38:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4ACF9426A3
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 18:38:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rFDe27IQj86p for <buildroot@buildroot.org>;
  Fri, 31 Jan 2025 18:38:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36FAA608EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 310AD426A0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 36FAA608EB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 310AD426A0
  for <buildroot@buildroot.org>; Fri, 31 Jan 2025 18:38:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 270ED866E6; Fri, 31 Jan 2025 18:38:57 +0000 (UTC)
+ id 19FAB866DD; Fri, 31 Jan 2025 18:38:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 31 Jan 2025 17:51:08 +0100
+Date: Fri, 31 Jan 2025 17:47:28 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: fdcfa918c639dfb84700523f74bc6890cd406ca4
-X-Git-Newrev: 4ad263555e11842c7188572fc92be31682e11a20
+X-Git-Oldrev: bc7e3a7abbbd108e67d5071656b9a8552309ff26
+X-Git-Newrev: fdcfa918c639dfb84700523f74bc6890cd406ca4
 X-Patchwork-Hint: ignore
-Message-Id: <20250131183857.270ED866E6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/pkg-generic:
- store real version in legal manifest
+Message-Id: <20250131183857.19FAB866DD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] support/testing/utils:
+ check patch on stdin to get-developers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,61 +65,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ad263555e11842c7188572fc92be31682e11a20
+commit: https://git.buildroot.net/buildroot/commit/?id=fdcfa918c639dfb84700523f74bc6890cd406ca4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-The legal manifest currently stores the $(PKG)_VERSION variable.
-However, that variable undergoes a set of changes so that it is
-suitable for creating files and Makefile rules; that new value
-is purely a technical, internal detail of how Buildroot handles
-things.
+Since commit d10d22221f93 (utils/get-developers: read patch from stdin
+when it's not a tty), get-developers accepts to read a patch fromn its
+stdin when it is not a tty.
 
-In the legal manifest, we need access to the real value for the
-version, as this is what will allow actual references to the
-upstream package. If the version string is mangled, like slashes
-replaced with underscores, this introduces ambiguities as to what
-exactly the version is.
+Add a test for this.
 
-In Buildroot, there is no package, with a constant version, that
-exhibits that issue; for those packages where it is possible to
-set a custom git tree and version, like linux or uboot, such a
-custom tree can have tags with a slash (not a colon or a space,
-forbidden by git); packages in a br2-external can also use such
-version strings as well.
-
-The packages that do have such versions are not legion, but they
-do exist. For example, Apache's ant buildsystem does use a slash
-in their reelase tags, like rel/1.10.15:
-    https://github.com/apache/ant/tags
-
-Change the legal manifest to include the actual, original value
-as was set in the .mk file.
-
+Reported-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 686694792b06b11b2cef0acf28d81e25a280cb72)
+(cherry picked from commit 29e1af84308b80d83a8f45ba934fbb3e92d55bf6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/testing/tests/utils/test_get_developers.py | 28 +++++++++++++++-------
+ 1 file changed, 20 insertions(+), 8 deletions(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index fe0a7bef38..fb9d9996c8 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1193,7 +1193,7 @@ else
- endif # other packages
+diff --git a/support/testing/tests/utils/test_get_developers.py b/support/testing/tests/utils/test_get_developers.py
+index 701c3acb1a..195e421332 100644
+--- a/support/testing/tests/utils/test_get_developers.py
++++ b/support/testing/tests/utils/test_get_developers.py
+@@ -13,26 +13,32 @@ import unittest
+ import infra
  
- endif # redistribute
--	@$$(call legal-manifest,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_VERSION),$$(subst $$(space)$$(comma),$$(comma),$$($(2)_LICENSE)),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call legal-deps,$(1)))
-+	@$$(call legal-manifest,$$(call UPPERCASE,$(4)),$$($(2)_RAWNAME),$$($(2)_DL_VERSION),$$(subst $$(space)$$(comma),$$(comma),$$($(2)_LICENSE)),$$($(2)_MANIFEST_LICENSE_FILES),$$($(2)_ACTUAL_SOURCE_TARBALL),$$($(2)_ACTUAL_SOURCE_SITE),$$(call legal-deps,$(1)))
- endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
- 	$$(foreach hook,$$($(2)_POST_LEGAL_INFO_HOOKS),$$(call $$(hook))$$(sep))
  
+-def call_script(args, env, cwd):
++def call_script(args, env, cwd, stdin_data=None):
+     """Call a script and return stdout and stderr as lists and the exit code."""
+-    # We need stdin to be a tty, not just a pipe or whatever
+-    m_tty, s_tty = os.openpty()
++    if stdin_data is None:
++        # We need stdin to be a tty, not just a pipe or whatever
++        m_tty, s_tty = os.openpty()
++        com_opts = dict()
++    else:
++        s_tty = subprocess.PIPE
++        com_opts = dict([("input", stdin_data)])
+     proc = subprocess.Popen(args, cwd=cwd,
+                             stdin=s_tty,
+                             stdout=subprocess.PIPE,
+                             stderr=subprocess.PIPE, env=env,
+                             universal_newlines=True)
+-    out, err = proc.communicate()
+-    os.close(s_tty)
+-    os.close(m_tty)
++    out, err = proc.communicate(**com_opts)
++    if stdin_data is None:
++        os.close(s_tty)
++        os.close(m_tty)
+     return out.splitlines(), err.splitlines(), proc.returncode
+ 
+ 
+-def call_get_developers(cmd, args, env, cwd, developers_content):
++def call_get_developers(cmd, args, env, cwd, developers_content, stdin_data=None):
+     """Call get-developers overrinding the default DEVELOPERS file."""
+     with tempfile.NamedTemporaryFile(buffering=0) as developers_file:
+         developers_file.write(developers_content)
+-        return call_script([cmd, "-d", developers_file.name] + args, env, cwd)
++        return call_script([cmd, "-d", developers_file.name] + args, env, cwd, stdin_data)
+ 
+ 
+ class TestGetDevelopers(unittest.TestCase):
+@@ -174,3 +180,9 @@ class TestGetDevelopers(unittest.TestCase):
+         self.assertIn('git send-email --to buildroot@buildroot.org --cc "dev1"', out)
+         self.assertEqual(rc, 0)
+         self.assertEqual(len(err), 0)
++        with open(abs_file, "r") as fd:
++            patch_data = fd.read()
++        out, err, rc = call_get_developers("./utils/get-developers", [], self.WITH_EMPTY_PATH, topdir, developers, patch_data)
++        self.assertIn('git send-email --to buildroot@buildroot.org --cc "dev1"', out)
++        self.assertEqual(rc, 0)
++        self.assertEqual(len(err), 0)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
