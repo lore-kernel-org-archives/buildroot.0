@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B0A2C02193
-	for <buildroot@archiver.kernel.org>; Fri, 31 Jan 2025 18:39:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80F97C0218F
+	for <buildroot@archiver.kernel.org>; Fri, 31 Jan 2025 18:40:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D949360B50;
-	Fri, 31 Jan 2025 18:39:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uwUCauwMQgzg; Fri, 31 Jan 2025 18:39:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC67060C30
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC67060C30;
-	Fri, 31 Jan 2025 18:39:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2147517E
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 18:39:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 678CC4265F
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 18:38:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3965B4274F;
+	Fri, 31 Jan 2025 18:40:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jJ-phpQLi45Z for <buildroot@buildroot.org>;
- Fri, 31 Jan 2025 18:38:57 +0000 (UTC)
+ id WAejXLIVOa5K; Fri, 31 Jan 2025 18:40:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E26124269C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E26124269C;
+	Fri, 31 Jan 2025 18:40:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4EE3E17D
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 18:40:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3029541000
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 18:40:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sZK7gNchVRlv for <buildroot@buildroot.org>;
+ Fri, 31 Jan 2025 18:40:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22D074269C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA82540F50
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 22D074269C
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 18:38:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EA82540F50
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 18:40:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0F975866E3; Fri, 31 Jan 2025 18:38:57 +0000 (UTC)
+ id E4D7B85F84; Fri, 31 Jan 2025 18:40:13 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 31 Jan 2025 17:46:11 +0100
-X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 279673a33780296a72ade3655ae9e07af8cf8c78
-X-Git-Newrev: bc7e3a7abbbd108e67d5071656b9a8552309ff26
+Date: Fri, 31 Jan 2025 17:46:34 +0100
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: ae0ec1dacb287f85ce91a13ece6c216e25fcc9f0
+X-Git-Newrev: f022e05a26ad0b484a900e85f2ea5079596e6864
 X-Patchwork-Hint: ignore
-Message-Id: <20250131183857.0F975866E3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] support/testing/utils:
+Message-Id: <20250131184013.E4D7B85F84@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] support/testing/utils:
  fix get-developers test without a tty
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc7e3a7abbbd108e67d5071656b9a8552309ff26
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f022e05a26ad0b484a900e85f2ea5079596e6864
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 get-developers will check its stdin to decide whether it is a tty or
 not, and behave differently whether it is or not. So, when we run the
