@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA9C9C02194
-	for <buildroot@archiver.kernel.org>; Fri, 31 Jan 2025 21:24:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94216C0218F
+	for <buildroot@archiver.kernel.org>; Fri, 31 Jan 2025 21:24:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8AD418493A;
-	Fri, 31 Jan 2025 21:24:25 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tcyTs462HwSq; Fri, 31 Jan 2025 21:24:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A49B8493C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9A49B8493C;
-	Fri, 31 Jan 2025 21:24:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 557EA17E
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 21:24:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 420894291E
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 21:24:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5EE5642925;
+	Fri, 31 Jan 2025 21:24:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LyaAcAMdu6mV for <buildroot@buildroot.org>;
+ id G7qSHC0NxL73; Fri, 31 Jan 2025 21:24:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2971142919
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2971142919;
+	Fri, 31 Jan 2025 21:24:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5F31912C
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 21:24:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 426D260F56
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 21:24:21 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k7BxoXX3irmk for <buildroot@buildroot.org>;
  Fri, 31 Jan 2025 21:24:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61C8942919
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72DC660F48
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 61C8942919
+ by smtp3.osuosl.org (Postfix) with ESMTP id 72DC660F48
  for <buildroot@buildroot.org>; Fri, 31 Jan 2025 21:24:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4EEB786785; Fri, 31 Jan 2025 21:24:20 +0000 (UTC)
+ id 6E46F86783; Fri, 31 Jan 2025 21:24:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 31 Jan 2025 22:18:07 +0100
+Date: Fri, 31 Jan 2025 22:21:05 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d2b35f97f8d43263c4b156b6d65e8ab4348cf4f7
-X-Git-Newrev: 8bbea605973cee2ef5c16b4865d9c745a775afe1
+X-Git-Oldrev: 2c690755606954a9d50b0741528734f1e932765f
+X-Git-Newrev: 65137580ca9ed060c59544b9859fc648e902c694
 X-Patchwork-Hint: ignore
-Message-Id: <20250131212420.4EEB786785@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/runc: bump version to v1.2.4
+Message-Id: <20250131212420.6E46F86783@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-cli: bump version to v27.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,40 +64,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bbea605973cee2ef5c16b4865d9c745a775afe1
+commit: https://git.buildroot.net/buildroot/commit/?id=65137580ca9ed060c59544b9859fc648e902c694
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/opencontainers/runc/releases/tag/v1.2.4
+https://github.com/moby/moby/releases/tag/v27.5.1
 
 Signed-off-by: Christian Stewart <christian@aperture.us>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index 711d7c61a2..d25d8facfd 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index c70d274f96..154063d89a 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  25072beb84f4adae316a968241dc74ac30982d38e4459635074aa9e9d87d3de7  runc-1.2.0-go2.tar.gz
-+sha256  9785c144c97974b52b6091b7a79168b73681ff574bc8438b44f3f5f8c112f171  runc-1.2.4-go2.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 94b7b15900..51ac32de26 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
+ # Locally calculated
+-sha256  df7d44387166d90954e290dfbe0a278649bf71d0e89933615bdc0757580b68e4  docker-cli-27.3.1-go2.tar.gz
++sha256  abd16e3911bc7bbd00596ebe4f58baf3d577160d99eefd749a908507ddfc587b  docker-cli-27.5.1-go2.tar.gz
+ sha256  2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 39e1367908..e118481838 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUNC_VERSION = 1.2.0
-+RUNC_VERSION = 1.2.4
- RUNC_SITE = $(call github,opencontainers,runc,v$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0, LGPL-2.1 (libseccomp)
- RUNC_LICENSE_FILES = LICENSE
+-DOCKER_CLI_VERSION = 27.3.1
++DOCKER_CLI_VERSION = 27.5.1
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ 
+ DOCKER_CLI_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
