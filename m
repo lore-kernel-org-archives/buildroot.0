@@ -1,69 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81A4CC0218F
-	for <buildroot@archiver.kernel.org>; Fri, 31 Jan 2025 21:24:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE38CC0218F
+	for <buildroot@archiver.kernel.org>; Fri, 31 Jan 2025 21:24:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35F2E4291C;
-	Fri, 31 Jan 2025 21:24:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D10460F48;
+	Fri, 31 Jan 2025 21:24:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MFxn2ngy-r9J; Fri, 31 Jan 2025 21:23:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pZ_nDR9pqewL; Fri, 31 Jan 2025 21:24:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E2514291D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DF4060F56
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E2514291D;
-	Fri, 31 Jan 2025 21:23:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A56D712C
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 21:23:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7DF4060F56;
+	Fri, 31 Jan 2025 21:24:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 227FB12C
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 21:24:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A0F48848EE
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 21:23:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1274F84935
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 21:24:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xecn-KY-b4R5 for <buildroot@buildroot.org>;
- Fri, 31 Jan 2025 21:23:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id 3vkyUBSP6ihi for <buildroot@buildroot.org>;
+ Fri, 31 Jan 2025 21:24:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9BF0E84930
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BF0E84930
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9BF0E84930
- for <buildroot@buildroot.org>; Fri, 31 Jan 2025 21:23:56 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 425A143281;
- Fri, 31 Jan 2025 21:23:53 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tdyUS-009RC5-1E;
- Fri, 31 Jan 2025 22:23:52 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 556CC84934
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 556CC84934
+ for <buildroot@buildroot.org>; Fri, 31 Jan 2025 21:24:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 43C1A86783; Fri, 31 Jan 2025 21:24:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org
-References: <20250123201858.111999-1-giulio.benetti@benettiengineering.com>
- <877c6a4sri.fsf@dell.be.48ers.dk>
- <e7cc9e98-e41c-4fe9-9acd-62e284ce8d81@benettiengineering.com>
-Date: Fri, 31 Jan 2025 22:23:52 +0100
-In-Reply-To: <e7cc9e98-e41c-4fe9-9acd-62e284ce8d81@benettiengineering.com>
- (Giulio Benetti's message of "Fri, 31 Jan 2025 22:09:10 +0100")
-Message-ID: <878qqq3cev.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdelkeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepkeegffdtieevkeejheevteeludetveeffedutedvkeefjeehiedtvdfhkeffueetnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopehgihhulhhiohdrsggvnhgvthhtihessggvnhgvthhtihgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/swupdate: bump to securoty version
- 2024.12.1
+To: buildroot@buildroot.org
+Date: Fri, 31 Jan 2025 22:17:57 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 002a67c2443e8c4c3c18529ca14a7841b9a0ef71
+X-Git-Newrev: d2b35f97f8d43263c4b156b6d65e8ab4348cf4f7
+X-Patchwork-Hint: ignore
+Message-Id: <20250131212420.43C1A86783@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cmake: bump version to 3.31.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,42 +58,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d2b35f97f8d43263c4b156b6d65e8ab4348cf4f7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi Peter,
- > On 1/31/25 21:45, Peter Korsgaard wrote:
- >>>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
- >> > Fix a high severity bug with the raw handler
- >> > For release note, see:
- >> > https://github.com/sbabic/swupdate/releases/tag/2024.12.1
- >> Can you confirm that this was a new issue introduced in 2024.12 and
- >> E.G. that 2024.11.x / 2024.02.x aren't affected?
+Release notes:
+https://www.kitware.com/cmake-3-31-5-available-for-download/
 
- > I confirm those versions are not affected. Here you can see the only
- > commit for version 2024.12.1:
- > https://github.com/sbabic/swupdate/commits/2024.12.1/
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cmake/cmake.hash | 4 ++--
+ package/cmake/cmake.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > that is:
- > https://github.com/sbabic/swupdate/commit/434815b94d73c20b5461b954c4e62144ca29aa8f
-
- > and in order it Fixes:
- > https://github.com/sbabic/swupdate/commit/5d57a9c05ec2a4ae422bdb35247a75402f8e0aeb
- > and:
- > https://github.com/sbabic/swupdate/commit/aff67cdb2c62003a3be194036b68c62e3064d660
- > and both have been committed to master and 2024.12 branches
- > after 2024.05 tag and not in 2024.05.x tags.
-
- > So yes I confirm
-
-Ok, thanks!
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index 88ffc5412b..a41f0a5c8e 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,5 +1,5 @@
+-# From https://cmake.org/files/v3.31/cmake-3.31.3-SHA-256.txt
+-sha256  fac45bc6d410b49b3113ab866074888d6c9e9dc81a141874446eb239ac38cb87  cmake-3.31.3.tar.gz
++# From https://cmake.org/files/v3.31/cmake-3.31.5-SHA-256.txt
++sha256  66fb53a145648be56b46fa9e8ccade3a4d0dfc92e401e52ce76bdad1fea43d27  cmake-3.31.5.tar.gz
+ 
+ # Locally calculated
+ sha256  0676e30827684487aa0ea8f72f01e9460a6320fa34a2888df0ad1dd3e8a06eb8  Copyright.txt
+diff --git a/package/cmake/cmake.mk b/package/cmake/cmake.mk
+index 288039589d..6a1b6ae7ea 100644
+--- a/package/cmake/cmake.mk
++++ b/package/cmake/cmake.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update BR2_HOST_CMAKE_AT_LEAST_X_Y
+ CMAKE_VERSION_MAJOR = 3.31
+-CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).3
++CMAKE_VERSION = $(CMAKE_VERSION_MAJOR).5
+ CMAKE_SITE = https://cmake.org/files/v$(CMAKE_VERSION_MAJOR)
+ CMAKE_LICENSE = BSD-3-Clause
+ CMAKE_LICENSE_FILES = Copyright.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
