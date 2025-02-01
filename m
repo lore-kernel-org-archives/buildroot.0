@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16246C0218A
-	for <buildroot@archiver.kernel.org>; Sat,  1 Feb 2025 11:55:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48B10C02190
+	for <buildroot@archiver.kernel.org>; Sat,  1 Feb 2025 11:55:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D555E431C6;
-	Sat,  1 Feb 2025 11:55:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 12D9E6FB6D;
+	Sat,  1 Feb 2025 11:55:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bqHbr-pSf1ag; Sat,  1 Feb 2025 11:55:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9upo2n5ww446; Sat,  1 Feb 2025 11:55:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 01AE643488
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E8246FB86
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01AE643488;
-	Sat,  1 Feb 2025 11:55:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9A37616E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E8246FB86;
+	Sat,  1 Feb 2025 11:55:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4522183
  for <buildroot@buildroot.org>; Sat,  1 Feb 2025 11:55:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E350402D1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86AF64027D
  for <buildroot@buildroot.org>; Sat,  1 Feb 2025 11:55:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xvRcjeViyyUl for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UrqwV6At3j80 for <buildroot@buildroot.org>;
  Sat,  1 Feb 2025 11:55:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5564C4012D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6ECE24024F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5564C4012D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6ECE24024F
  for <buildroot@buildroot.org>; Sat,  1 Feb 2025 11:55:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4FB1886600; Sat,  1 Feb 2025 11:55:46 +0000 (UTC)
+ id 5D93086603; Sat,  1 Feb 2025 11:55:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 1 Feb 2025 12:47:44 +0100
+Date: Sat, 1 Feb 2025 12:50:14 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: d57bb0b6dbb775359677d5efc48bf07788124deb
-X-Git-Newrev: ea9b75f8c2945346ed224e493ab31afc73af1508
+X-Git-Oldrev: ea9b75f8c2945346ed224e493ab31afc73af1508
+X-Git-Newrev: c4d2c13286ccc8c1c5f8f77fb204ef59b7a910ef
 X-Patchwork-Hint: ignore
-Message-Id: <20250201115546.4FB1886600@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x]
- support/testing/tests/toolchain/test_external_synopsys.py: drop tests
+Message-Id: <20250201115546.5D93086603@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/acpica: security
+ bump to version 20241212
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,142 +65,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea9b75f8c2945346ed224e493ab31afc73af1508
+commit: https://git.buildroot.net/buildroot/commit/?id=c4d2c13286ccc8c1c5f8f77fb204ef59b7a910ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-The Synopsys external toolchain has been disabled in commit
-11a8cdd2bbbd0ef4adf600e4792d75f6f2122ec8, causing the test cases
-testing this toolchain to fail. Let's drop those tests for now, they
-can always be re-added later on.
+For change log since 20240927, see:
+https://github.com/user-attachments/files/18117996/changes.txt
 
-Fixes:
+Note: the change log mention "Fix 2 critical CVE addressing memory
+leaks" without providing actual CVE numbers. For reference, the
+upstream commits for those security fixes are [1] and [2]. From the log
+of those commits, it seems those memory leaks can only happen in old
+Kernels <= 4.9 (which is end-of-life since January 2023). Technically
+those leaks could happen in any program embedding the apcica code
+files. The impact seems very low, if any, on the acpica standalone
+tools.
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697531
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697528
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697524
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697519
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697517
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/8892697516
+[1] https://github.com/acpica/acpica/commit/987a3b5cf7175916e2a4b6ea5b8e70f830dfe732
+[2] https://github.com/acpica/acpica/commit/8829e70e1360c81e7a5a901b5d4f48330e021ea5
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Julien: remove the DEVELOPERS entry]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit e3d74c76eef1155d4040dae2d51662bfc0e3e0fc)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 892e1608f55c6528c16562f347cb2ec7c7eb6430)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                         |  1 -
- .../tests/toolchain/test_external_synopsys.py      | 91 ----------------------
- 2 files changed, 92 deletions(-)
+ package/acpica/acpica.hash | 2 +-
+ package/acpica/acpica.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 20c5dbf8eb..847b3645eb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3213,7 +3213,6 @@ F:	support/testing/tests/package/test_python_flask_expects_json.py
- F:	support/testing/tests/package/test_python_git.py
- F:	support/testing/tests/package/test_python_unittest_xml_reporting.py
- F:	support/testing/tests/toolchain/test_external_arm.py
--F:	support/testing/tests/toolchain/test_external_synopsys.py
- F:	toolchain/
+diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
+index c3e7fda340..9972e34b3b 100644
+--- a/package/acpica/acpica.hash
++++ b/package/acpica/acpica.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256  57988fb55541e694dfa3323bd19db74b65d37e942bebef559ed51e8cd9348b43  acpica-unix-20240927.tar.gz
++sha256  9dca83cfee390b710485fbdf787048370049c05723b10cc220cfef6e13c31961  acpica-unix-20241212.tar.gz
+ sha256  b28f54dc421531bbe269afd8c28bf6fdfd6affbe50c2831464f777ec1766d4a5  source/include/acpi.h
+diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
+index a2abcf7558..2c97c04367 100644
+--- a/package/acpica/acpica.mk
++++ b/package/acpica/acpica.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- N:	Timo Ketola <timo.ketola@exertus.fi>
-diff --git a/support/testing/tests/toolchain/test_external_synopsys.py b/support/testing/tests/toolchain/test_external_synopsys.py
-deleted file mode 100644
-index 19ed9f67b0..0000000000
---- a/support/testing/tests/toolchain/test_external_synopsys.py
-+++ /dev/null
-@@ -1,91 +0,0 @@
--from tests.toolchain.test_external import TestExternalToolchain
--
--
--class TestExternalToolchainSynopsysArc700LE(TestExternalToolchain):
--    config = """
--        BR2_arcle=y
--        BR2_arc770d=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC700=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arc-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--
--class TestExternalToolchainSynopsysArc700BE(TestExternalToolchain):
--    config = """
--        BR2_arceb=y
--        BR2_arc770d=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC700=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arceb-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--
--class TestExternalToolchainSynopsysArcHSGlibcLE(TestExternalToolchain):
--    config = """
--        BR2_arcle=y
--        BR2_archs38_full=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_GLIBC=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arc-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--
--class TestExternalToolchainSynopsysArcHSGlibcBE(TestExternalToolchain):
--    config = """
--        BR2_arceb=y
--        BR2_archs38_full=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_GLIBC=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arceb-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--
--class TestExternalToolchainSynopsysArcHSuClibcLE(TestExternalToolchain):
--    config = """
--        BR2_arcle=y
--        BR2_archs38_full=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_UCLIBC=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arc-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
--
--
--class TestExternalToolchainSynopsysArcHSuClibcBE(TestExternalToolchain):
--    config = """
--        BR2_arceb=y
--        BR2_archs38_full=y
--        BR2_TOOLCHAIN_EXTERNAL=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC=y
--        BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_UCLIBC=y
--        # BR2_TARGET_ROOTFS_TAR is not set
--        """
--    toolchain_prefix = "arceb-linux"
--
--    def test_run(self):
--        TestExternalToolchain.common_check(self)
+-ACPICA_VERSION = 20240927
++ACPICA_VERSION = 20241212
+ ACPICA_SOURCE = acpica-unix-$(ACPICA_VERSION).tar.gz
+-ACPICA_SITE = https://github.com/user-attachments/files/17171019
++ACPICA_SITE = https://github.com/user-attachments/files/18117992
+ ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+ ACPICA_LICENSE_FILES = source/include/acpi.h
+ ACPICA_DEPENDENCIES = host-bison host-flex
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
