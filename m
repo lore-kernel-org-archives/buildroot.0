@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6DCBC02190
-	for <buildroot@archiver.kernel.org>; Sat,  1 Feb 2025 11:54:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01842C0218A
+	for <buildroot@archiver.kernel.org>; Sat,  1 Feb 2025 11:54:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A19ED704AD;
-	Sat,  1 Feb 2025 11:54:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BF1B84012D;
+	Sat,  1 Feb 2025 11:54:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u-yWEQw--gUQ; Sat,  1 Feb 2025 11:54:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9iQA-WJM78al; Sat,  1 Feb 2025 11:54:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2B0D6FB8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D44A343958
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2B0D6FB8E;
-	Sat,  1 Feb 2025 11:54:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2286D183
- for <buildroot@buildroot.org>; Sat,  1 Feb 2025 11:54:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D44A343958;
+	Sat,  1 Feb 2025 11:54:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C31AA16E
+ for <buildroot@buildroot.org>; Sat,  1 Feb 2025 11:54:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 034BB4026C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 190824024F
  for <buildroot@buildroot.org>; Sat,  1 Feb 2025 11:54:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QZJIdp-oTnDR for <buildroot@buildroot.org>;
+ id pJDqKi1tH4HT for <buildroot@buildroot.org>;
  Sat,  1 Feb 2025 11:54:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E24374024F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DB8F4027D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E24374024F
- for <buildroot@buildroot.org>; Sat,  1 Feb 2025 11:54:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0DB8F4027D
+ for <buildroot@buildroot.org>; Sat,  1 Feb 2025 11:54:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DB23F8655F; Sat,  1 Feb 2025 11:54:38 +0000 (UTC)
+ id ED5CE86580; Sat,  1 Feb 2025 11:54:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 1 Feb 2025 12:52:30 +0100
+Date: Sat, 1 Feb 2025 12:52:40 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: f612645ae52a2aa52aea1a3934b5b9a3198236d6
-X-Git-Newrev: 0602a5392a82ba4e7998ebfb63f59b76d310b4fd
+X-Git-Oldrev: 0602a5392a82ba4e7998ebfb63f59b76d310b4fd
+X-Git-Newrev: c06e05409fe97be52d61dd00370609694b20cd61
 X-Patchwork-Hint: ignore
-Message-Id: <20250201115438.DB23F8655F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/acpica: bump to
- version 20240927
+Message-Id: <20250201115438.ED5CE86580@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/acpica: security
+ bump to version 20241212
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0602a5392a82ba4e7998ebfb63f59b76d310b4fd
+commit: https://git.buildroot.net/buildroot/commit/?id=c06e05409fe97be52d61dd00370609694b20cd61
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-For change log since 20240321, see:
-https://github.com/user-attachments/files/17171011/changes.txt
+For change log since 20240927, see:
+https://github.com/user-attachments/files/18117996/changes.txt
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4915d6001d283d8bc325697a160385bd831bd2c5)
+Note: the change log mention "Fix 2 critical CVE addressing memory
+leaks" without providing actual CVE numbers. For reference, the
+upstream commits for those security fixes are [1] and [2]. From the log
+of those commits, it seems those memory leaks can only happen in old
+Kernels <= 4.9 (which is end-of-life since January 2023). Technically
+those leaks could happen in any program embedding the apcica code
+files. The impact seems very low, if any, on the acpica standalone
+tools.
+
+[1] https://github.com/acpica/acpica/commit/987a3b5cf7175916e2a4b6ea5b8e70f830dfe732
+[2] https://github.com/acpica/acpica/commit/8829e70e1360c81e7a5a901b5d4f48330e021ea5
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 892e1608f55c6528c16562f347cb2ec7c7eb6430)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/acpica/acpica.hash | 3 +--
+ package/acpica/acpica.hash | 2 +-
  package/acpica/acpica.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-index 4170587f3a..c3e7fda340 100644
+index c3e7fda340..9972e34b3b 100644
 --- a/package/acpica/acpica.hash
 +++ b/package/acpica/acpica.hash
-@@ -1,4 +1,3 @@
--# From: https://www.intel.com/content/www/us/en/download/776303/acpi-component-architecture-downloads-unix-format-source-code-and-build-environment-with-an-intel-license.html
--sha256  54a299487925fd3e0551c95f9d5cee4f4984930273983eff67aa5cd46f8f338b  acpica-unix-20240321.tar.gz
+@@ -1,3 +1,3 @@
  # locally computed hash
-+sha256  57988fb55541e694dfa3323bd19db74b65d37e942bebef559ed51e8cd9348b43  acpica-unix-20240927.tar.gz
+-sha256  57988fb55541e694dfa3323bd19db74b65d37e942bebef559ed51e8cd9348b43  acpica-unix-20240927.tar.gz
++sha256  9dca83cfee390b710485fbdf787048370049c05723b10cc220cfef6e13c31961  acpica-unix-20241212.tar.gz
  sha256  b28f54dc421531bbe269afd8c28bf6fdfd6affbe50c2831464f777ec1766d4a5  source/include/acpi.h
 diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-index 5b1dfbbba2..a2abcf7558 100644
+index a2abcf7558..2c97c04367 100644
 --- a/package/acpica/acpica.mk
 +++ b/package/acpica/acpica.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--ACPICA_VERSION = 20240321
-+ACPICA_VERSION = 20240927
+-ACPICA_VERSION = 20240927
++ACPICA_VERSION = 20241212
  ACPICA_SOURCE = acpica-unix-$(ACPICA_VERSION).tar.gz
--ACPICA_SITE = https://github.com/acpica/acpica/files/14718333
-+ACPICA_SITE = https://github.com/user-attachments/files/17171019
+-ACPICA_SITE = https://github.com/user-attachments/files/17171019
++ACPICA_SITE = https://github.com/user-attachments/files/18117992
  ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
  ACPICA_LICENSE_FILES = source/include/acpi.h
  ACPICA_DEPENDENCIES = host-bison host-flex
