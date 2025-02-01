@@ -4,64 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58261C0218A
-	for <buildroot@archiver.kernel.org>; Sat,  1 Feb 2025 12:33:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C79BC0218A
+	for <buildroot@archiver.kernel.org>; Sat,  1 Feb 2025 12:37:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 20B4E61044;
-	Sat,  1 Feb 2025 12:33:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A20961044;
+	Sat,  1 Feb 2025 12:37:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SFjiZqfMAq-H; Sat,  1 Feb 2025 12:33:35 +0000 (UTC)
+ id 173tZBhJWbyw; Sat,  1 Feb 2025 12:37:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A28E7049C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 326B06071E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A28E7049C;
-	Sat,  1 Feb 2025 12:33:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8E6B917D
- for <buildroot@buildroot.org>; Sat,  1 Feb 2025 12:33:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 326B06071E;
+	Sat,  1 Feb 2025 12:37:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EF3C012A
+ for <buildroot@buildroot.org>; Sat,  1 Feb 2025 12:37:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7376984C41
- for <buildroot@buildroot.org>; Sat,  1 Feb 2025 12:33:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DE710400F1
+ for <buildroot@buildroot.org>; Sat,  1 Feb 2025 12:37:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PcsGAwDCT8bW for <buildroot@buildroot.org>;
- Sat,  1 Feb 2025 12:33:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H-tgdyXVZNZ0 for <buildroot@buildroot.org>;
+ Sat,  1 Feb 2025 12:37:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 36FEA84C43
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36FEA84C43
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 36FEA84C43
- for <buildroot@buildroot.org>; Sat,  1 Feb 2025 12:33:31 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E74D5440DA;
- Sat,  1 Feb 2025 12:33:29 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1teCgj-009xNH-17;
- Sat, 01 Feb 2025 13:33:29 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F07624031A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id F07624031A
+ for <buildroot@buildroot.org>; Sat,  1 Feb 2025 12:37:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D9AE4860FF; Sat,  1 Feb 2025 12:37:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-References: <20250127205847.EEACF86592@busybox.osuosl.org>
-Date: Sat, 01 Feb 2025 13:33:29 +0100
-In-Reply-To: <20250127205847.EEACF86592@busybox.osuosl.org> (Julien Olivain's
- message of "Mon, 27 Jan 2025 21:52:41 +0100")
-Message-ID: <87v7ttzvxi.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduudejfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepueevhfeliedtveeludeuheehheduledvledtfedvheeiudduhfdukedtuddvhefhnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhnvghtpdhrvgguhhgrthdrtghomhdpghhithhhuhgsrdgtohhmpdhnvgifshdrmhgunecukfhppedujeekrdduudelrddurddufeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudejkedrudduledruddrudefjedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhrpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [git commit] package/openjpeg: security bump to
- version 2.5.3
+To: buildroot@buildroot.org
+Date: Sat, 1 Feb 2025 13:18:02 +0100
+X-Git-Refname: refs/heads/2024.11.x
+X-Git-Oldrev: c4d2c13286ccc8c1c5f8f77fb204ef59b7a910ef
+X-Git-Newrev: 31d2e35cd6d63c4421eb93a40e88caa140bc6397
+X-Patchwork-Hint: ignore
+Message-Id: <20250201123733.D9AE4860FF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/xen: xen tools
+ needs bash at runtime
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -73,42 +59,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============4621600278825022449=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+--===============4621600278825022449==
+Content-Type: text/plain
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=3bfa5ebcbf34800367a89b63aa548643e51297b4
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=31d2e35cd6d63c4421eb93a40e88caa140bc6397
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
- > Fixes the following security issues:
+When the Xen tools are built, a number of init scripts are installed to
+the target.
 
- > - CVE-2024-56826: A flaw was found in the OpenJPEG project.  A heap buffer
- >   overflow condition may be triggered when certain options are specified
- >   while using the opj_decompress utility.  This can lead to an application
- >   crash or other undefined behavior.
+Some of those Xen scripts require bash to run:
+- /etc/init.d/S50xencommons
+- /etc/init.d/S50xen-watchdog
+- /etc/init.d/S60xendomains
+- /etc/xen/scripts/launch-xenstore
+- /usr/lib/xen/bin/xendomains
 
- >   https://access.redhat.com/security/cve/CVE-2024-56826
+Make sure to select bash when the Xen tools are selected (we need to
+select "busybox show others" for that, too).
 
- > - CVE-2024-56827: A flaw was found in the OpenJPEG project.  A heap buffer
- >   overflow condition may be triggered when certain options are specified
- >   while using the opj_decompress utility.  This can lead to an application
- >   crash or other undefined behavior.
+Suggested-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Vincent Stehlé <vincent.stehle@laposte.net>
+Cc: Alistair Francis <alistair@alistair23.me>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit bf18fd4cd183eab2e91b91d275fc62e2707b9182)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/xen/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
- >   https://access.redhat.com/security/cve/CVE-2024-56827
+diff --git a/package/xen/Config.in b/package/xen/Config.in
+index 577066666d..70a06f3cbf 100644
+--- a/package/xen/Config.in
++++ b/package/xen/Config.in
+@@ -33,6 +33,8 @@ config BR2_PACKAGE_XEN_TOOLS
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_YAJL
+ 	select BR2_PACKAGE_ARGP_STANDALONE if !BR2_TOOLCHAIN_USES_GLIBC
++	select BR2_PACKAGE_BASH # runtime (scripts)
++	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS if BR2_PACKAGE_BUSYBOX # bash
+ 	help
+ 	  The Xen tools can be accessed by the xl command.
+ 
 
- > Release notes: https://github.com/uclouvain/openjpeg/blob/v2.5.3/NEWS.md
+--===============4621600278825022449==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- > Signed-off-by: Julien Olivain <ju.o@free.fr>
-
-Committed to 2024.02.x and 2024.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4621600278825022449==--
