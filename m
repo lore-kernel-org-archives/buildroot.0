@@ -1,66 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F271BC0218A
-	for <buildroot@archiver.kernel.org>; Sat,  1 Feb 2025 16:11:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51B92C0218A
+	for <buildroot@archiver.kernel.org>; Sat,  1 Feb 2025 16:12:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B64E98580E;
-	Sat,  1 Feb 2025 16:11:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04CA7406EA;
+	Sat,  1 Feb 2025 16:12:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kQAs2kN0DHJ3; Sat,  1 Feb 2025 16:11:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WIxUrozfJ3yv; Sat,  1 Feb 2025 16:12:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4728A85805
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED3E140720
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4728A85805;
-	Sat,  1 Feb 2025 16:11:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3A6C217D
- for <buildroot@buildroot.org>; Sat,  1 Feb 2025 16:11:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED3E140720;
+	Sat,  1 Feb 2025 16:12:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A5BE917D
+ for <buildroot@buildroot.org>; Sat,  1 Feb 2025 16:12:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 29BFD8580B
- for <buildroot@buildroot.org>; Sat,  1 Feb 2025 16:11:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A04A34060F
+ for <buildroot@buildroot.org>; Sat,  1 Feb 2025 16:12:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x90Cm7eGzb9v for <buildroot@buildroot.org>;
- Sat,  1 Feb 2025 16:11:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
- helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F0B9784D80
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0B9784D80
-Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F0B9784D80
- for <buildroot@buildroot.org>; Sat,  1 Feb 2025 16:11:44 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 2F4E01814B9; Sat,  1 Feb 2025 17:11:39 +0100 (CET)
-To: buildroot@buildroot.org
-Date: Sat,  1 Feb 2025 17:11:25 +0100
-Message-Id: <20250201161126.32326-1-buildroot@heine.tech>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Xf8q9jRnVXJa for <buildroot@buildroot.org>;
+ Sat,  1 Feb 2025 16:12:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6A552405C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A552405C5
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6A552405C5
+ for <buildroot@buildroot.org>; Sat,  1 Feb 2025 16:12:48 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5D158204A9;
+ Sat,  1 Feb 2025 16:12:45 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1teG6u-00A8J7-1e;
+ Sat, 01 Feb 2025 17:12:44 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org,  Louis Aussedat <aussedat.louis@gmail.com>,
+ Sergey Matyukevich <geomatsi@gmail.com>
+References: <20250131134936.113567-1-giulio.benetti@benettiengineering.com>
+ <20250131134936.113567-2-giulio.benetti@benettiengineering.com>
+Date: Sat, 01 Feb 2025 17:12:44 +0100
+In-Reply-To: <20250131134936.113567-2-giulio.benetti@benettiengineering.com>
+ (Giulio Benetti's message of "Fri, 31 Jan 2025 14:49:36 +0100")
+Message-ID: <87bjvlwsn7.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; t=1738426301;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=H6dELNz++jMI3FKZOXY7pT7/VZISj/1BcceG97nqCzI=;
- b=n6yghB0iUW005e6JOlOo5PUJXXuvPpDZ+/MBr0+fAqFfO2CpzTeJvXgCYbYrR0/5bHYg8u
- UiqsnefKzDUN8pb1Ih1p7iRqarlSiqdTIspAmRveTqQv/OqKF9vvV8fM6Y/wSWTznVleSd
- 7Swv8LMeLGLaEqnJ5B/FPwbDDdZO9ZA=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=heine.tech
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
- header.s=dkim header.b=n6yghB0i
-Subject: [Buildroot] [PATCH] package/spdlog: bump to version 1.15.1
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufhffjgfkfgggtgesthdttddttdertdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeetgfelveffveehtdevgeefjeeiudduledtffehgefgleekteektedutdfhleeiueenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopehgihhulhhiohdrsggvnhgvthhtihessggvnhgvthhtihgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegruhhsshgvuggrthdrlhhouhhishesghhmrghilhdrtghomhdprhgtphhtthhopehgvghomhgrthhsihesghhmrghilhdrtghomh
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/rtl8189fs: bump to version
+ 2025-01-13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,48 +75,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes compatibility with fmt 11.1.x
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@benettiengineering.com> writes:
 
-Release Notes: https://github.com/gabime/spdlog/releases/tag/v1.15.1
+ > With this version we can build with Linux 6.13.
+ > Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/spdlog/spdlog.hash | 2 +-
- package/spdlog/spdlog.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Committed, thanks.
 
-diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
-index 69e569a548..8c6838160b 100644
---- a/package/spdlog/spdlog.hash
-+++ b/package/spdlog/spdlog.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9962648c9b4f1a7bbc76fd8d9172555bad1871fdb14ff4f842ef87949682caa5  spdlog-1.15.0.tar.gz
-+sha256  25c843860f039a1600f232c6eb9e01e6627f7d030a2ae5e232bdd3c9205d26cc  spdlog-1.15.1.tar.gz
- sha256  4ccecab18d1ff0b61174fe3d6c430541625d3ddb865b0d5887db296f883c76e7  LICENSE
-diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
-index 3f69f9a6d3..09d432defe 100644
---- a/package/spdlog/spdlog.mk
-+++ b/package/spdlog/spdlog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SPDLOG_VERSION = 1.15.0
-+SPDLOG_VERSION = 1.15.1
- SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
- SPDLOG_LICENSE = MIT
- SPDLOG_LICENSE_FILES = LICENSE
 -- 
-2.39.5 (Apple Git-154)
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
