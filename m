@@ -1,53 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 071E9C0218A
-	for <buildroot@archiver.kernel.org>; Sat,  1 Feb 2025 15:07:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72B28C0218A
+	for <buildroot@archiver.kernel.org>; Sat,  1 Feb 2025 15:15:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B09096FBC2;
-	Sat,  1 Feb 2025 15:07:37 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wi8ZRC1AD3pD; Sat,  1 Feb 2025 15:07:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7F646FB56
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B7F646FB56;
-	Sat,  1 Feb 2025 15:07:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 14F8B12A
- for <buildroot@buildroot.org>; Sat,  1 Feb 2025 15:07:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0E883487DC
- for <buildroot@buildroot.org>; Sat,  1 Feb 2025 15:07:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3251D45203;
+	Sat,  1 Feb 2025 15:15:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7a9p6QsP9P4H for <buildroot@buildroot.org>;
- Sat,  1 Feb 2025 15:07:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id ktDQHWHXDohX; Sat,  1 Feb 2025 15:15:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02B3E488C8
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02B3E488C8;
+	Sat,  1 Feb 2025 15:15:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 199EC12A
+ for <buildroot@buildroot.org>; Sat,  1 Feb 2025 15:15:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0872F6FB49
+ for <buildroot@buildroot.org>; Sat,  1 Feb 2025 15:15:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8bsKOIoELMSN for <buildroot@buildroot.org>;
+ Sat,  1 Feb 2025 15:15:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B19A5485AB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B19A5485AB
- for <buildroot@buildroot.org>; Sat,  1 Feb 2025 15:07:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9CF8586595; Sat,  1 Feb 2025 15:07:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EA2146FB41
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA2146FB41
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EA2146FB41
+ for <buildroot@buildroot.org>; Sat,  1 Feb 2025 15:15:11 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5C8754327F;
+ Sat,  1 Feb 2025 15:15:08 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1teFD9-00A6hL-25;
+ Sat, 01 Feb 2025 16:15:07 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 1 Feb 2025 16:05:10 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 5b5ee3de7127a8a21516ba60b263df471de26285
-X-Git-Newrev: a34ad4d8304fd457f2609017c2a1f8d2e6297719
-X-Patchwork-Hint: ignore
-Message-Id: <20250201150733.9CF8586595@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/nodejs: security
- bump to version 20.18.2
+To: Christian Stewart <christian@aperture.us>
+Cc: buildroot@buildroot.org,  James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20250129194007.60839-1-christian@aperture.us>
+ <19377a96-ee6b-4cea-b72b-e40a5f8bc3a1@korsgaard.com>
+Date: Sat, 01 Feb 2025 16:15:07 +0100
+In-Reply-To: <19377a96-ee6b-4cea-b72b-e40a5f8bc3a1@korsgaard.com> (Peter
+ Korsgaard's message of "Wed, 29 Jan 2025 21:54:50 +0100")
+Message-ID: <87o6zlwvb8.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvddtiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufhffjgfkfgggtgesthdttddttdertdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeetgeegtddtudduudeileeiuddvtdeiiedtkeeihfegvdetleetjeefheegleefvdenucffohhmrghinhepghhordguvghvpdhgihhthhhusgdrtghomhenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopegthhhrihhsthhirghnsegrphgvrhhtuhhrvgdruhhspdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehjrghmvghsrdhhihhllhhirghrugdusehgmhgrihhlrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhm
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/go: bump to version 1.23.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,88 +74,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a34ad4d8304fd457f2609017c2a1f8d2e6297719
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Fixes the following security vulnerabilities:
+ > On 1/29/25 20:40, Christian Stewart wrote:
+ >> go1.23.5 (released 2025-01-16) includes security fixes to the crypto/x509 and
+ >> net/http packages, as well as bug fixes to the compiler, the runtime, and the
+ >> net package.
+ >> https://go.dev/doc/devel/release#go1.23.5
+ >> https://github.com/golang/go/issues?q=milestone%3AGo1.23.5+label%3ACherryPickApproved
+ >> Signed-off-by: Christian Stewart <christian@aperture.us>
 
-Worker permission bypass via InternalWorker leak in diagnostics
-(CVE-2025-23083) - (high)
+ > Committed to master after marking it as a security bump, thanks.
 
-With the aid of the diagnostics_channel utility, an event can be hooked into
-whenever a worker thread is created.  This is not limited only to workers
-but also exposes internal workers, where an instance of them can be fetched,
-and its constructor can be grabbed and reinstated for malicious usage.
+Committed to 2024.11.x, thanks. For 2024.02.x I have instead bumed to
+1.22.11 which contains the same fixes.
 
-This vulnerability affects Permission Model users (--permission) on Node.js
-v20, v22, and v23.
-
-GOAWAY HTTP/2 frames cause memory leak outside heap (CVE-2025-23085) - (medium)
-
-A memory leak could occur when a remote peer abruptly closes the socket
-without sending a GOAWAY notification.  Additionally, if an invalid header
-was detected by nghttp2, causing the connection to be terminated by the
-peer, the same leak was triggered.  This flaw could lead to increased memory
-consumption and potential denial of service under certain conditions.
-
-This vulnerability affects HTTP/2 Server users on Node.js v18.x, v20.x, v22.x and v23.x.
-
-For more details, see the announcement:
-https://nodejs.org/en/blog/vulnerability/january-2025-security-releases
-
-Update the LICENSE hash for a reformatting and removal of the highlight.js license:
-
-https://github.com/nodejs/node/commit/6ca0cfc6026aee0788132476215ec48d035ad633
-https://github.com/nodejs/node/commit/1dfd238781bc7ac0f8e0be14bf88a9c61abeb0e9
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/nodejs/nodejs.hash | 16 +++++++++-------
- package/nodejs/nodejs.mk   |  2 +-
- 2 files changed, 10 insertions(+), 8 deletions(-)
-
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 61bda55098..486e5fce9a 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,8 +1,10 @@
--# From https://nodejs.org/dist/v20.15.1/SHASUMS256.txt.asc
--sha256  10d47a46ef208b3e4b226e4d595a82659123b22397ed77b7975d989114ec317e  node-v20.15.1-linux-arm64.tar.xz
--sha256  7bc120efdd8018f6915471b963d9b80adf4ed406d6dc9edb4ae944b85f505c4c  node-v20.15.1-linux-armv7l.tar.xz
--sha256  b33e684802251397ad62ad3f8a1836267ee8b7723f87f669470018ad0035287b  node-v20.15.1-linux-ppc64le.tar.xz
--sha256  26700f8d3e78112ad4a2618a9c8e2816e38a49ecf0213ece80e54c38cb02563f  node-v20.15.1-linux-x64.tar.xz
--sha256  fdd53a5729d936691a2a1151046fb4897721cb8b0fca2af957823a9b40fe0c34  node-v20.15.1.tar.xz
-+# From https://nodejs.org/dist/v20.18.2/SHASUMS256.txt.asc
-+sha256  05819d72dcc0aa788baab1066e18ede5f1ab6730a1925cd6b15c131b55fd4272  node-v20.18.2-headers.tar.xz
-+sha256  5c1437aa16e7e6a2e0687a42c4d3f0a8f8a2039cda8880cb3be8cd983aeefb44  node-v20.18.2-linux-arm64.tar.xz
-+sha256  63d4df56fb2e34a5077345f78941094204d2223ce03b8ebc9c1500e6e2aae68d  node-v20.18.2-linux-armv7l.tar.xz
-+sha256  828a2635261ca225cd4a8a4b1a914003cdc7b30656c2e9092ac7aab02ac361db  node-v20.18.2-linux-ppc64le.tar.xz
-+sha256  4e50f727ae09bdafecf2322c72faf7cd82bf3b8851a16b8bb63974e0d8d6eceb  node-v20.18.2-linux-x64.tar.xz
-+sha256  69bf81b70f3a95ae0763459f02860c282d7e3a47567c8afaf126cc778176a882  node-v20.18.2.tar.xz
-+
- # Locally calculated
--sha256  49cd410e0fe6a8879a40d0764092d1e6114cc85fe41d4efed990d028eec25582  LICENSE
-+sha256  4f0e8660d7fe2f8f7759a54c53907300c555992b580e846b30b75121c53ad180  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 104d2cf258..2bdebcd853 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # _VERSION, _SOURCE and _SITE must be kept empty to avoid downloading anything
--NODEJS_COMMON_VERSION = 20.15.1
-+NODEJS_COMMON_VERSION = 20.18.2
- NODEJS_COMMON_SOURCE = node-v$(NODEJS_COMMON_VERSION).tar.xz
- NODEJS_COMMON_SITE = http://nodejs.org/dist/v$(NODEJS_COMMON_VERSION)
- 
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
