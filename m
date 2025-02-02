@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C447C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:10:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92BFEC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:10:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 787AB83022;
-	Fri, 28 Feb 2025 17:10:14 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M_5Cyh7adnVE; Fri, 28 Feb 2025 17:10:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8349984B15
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8349984B15;
-	Fri, 28 Feb 2025 17:10:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 066861DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:43:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 027614064A
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 059114EEDF;
+	Fri, 28 Feb 2025 17:10:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4qNQE_zxp4-H for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:27 +0000 (UTC)
+ id 5bREdSPetvpw; Fri, 28 Feb 2025 17:10:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D59554F5CF
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D59554F5CF;
+	Fri, 28 Feb 2025 17:10:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 146AB1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:43:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D7C7840627
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:28 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BJKgxPPkdp6X for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21B134240C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5670042504
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 21B134240C
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5670042504
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1482085E25; Fri, 28 Feb 2025 16:30:28 +0000 (UTC)
+ id 518B687A92; Fri, 28 Feb 2025 16:30:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 09:07:06 +0100
+Date: Sun, 2 Feb 2025 23:22:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 998e8ccb1ffa77fcc5e70f361322682714db4f7c
-X-Git-Newrev: b4853d8428d3795446a40fdc8a642f8b174e7132
+X-Git-Oldrev: a56865ed093a1bb0f10ac0418796d4fae01e1d10
+X-Git-Newrev: edb26c6adf4e030c2267fb1cbc296d8228f7d975
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163028.1482085E25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/radvd: bump version to
- 2.20
+Message-Id: <20250228163024.518B687A92@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ustreamer: bump
+ version to 6.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,78 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4853d8428d3795446a40fdc8a642f8b174e7132
+commit: https://git.buildroot.net/buildroot/commit/?id=edb26c6adf4e030c2267fb1cbc296d8228f7d975
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Radvd now uses libbsd.
-
-Changelog:
-https://github.com/radvd-project/radvd/blob/v2.20/CHANGES
+Changelog - https://github.com/pikvm/ustreamer/compare/v6.27...v6.28
 
 Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-[Peter: add and propagate remaining libbsd dependencies]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libvirt/Config.in | 1 +
- package/radvd/Config.in   | 5 +++++
- package/radvd/radvd.hash  | 4 ++--
- package/radvd/radvd.mk    | 4 ++--
- 4 files changed, 10 insertions(+), 4 deletions(-)
+ package/ustreamer/ustreamer.hash | 2 +-
+ package/ustreamer/ustreamer.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libvirt/Config.in b/package/libvirt/Config.in
-index 6e4de43f73..c55ab429eb 100644
---- a/package/libvirt/Config.in
-+++ b/package/libvirt/Config.in
-@@ -46,6 +46,7 @@ config BR2_PACKAGE_LIBVIRT_DAEMON
- 	default y
- 	depends on BR2_INSTALL_LIBSTDCPP # nmap
- 	depends on !BR2_KERNEL_64_USERLAND_32 # ebtables
-+	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS # radvd -> libbsd
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	select BR2_PACKAGE_DNSMASQ
- 	select BR2_PACKAGE_EBTABLES
-diff --git a/package/radvd/Config.in b/package/radvd/Config.in
-index f1df0c3cb8..374e184b74 100644
---- a/package/radvd/Config.in
-+++ b/package/radvd/Config.in
-@@ -1,6 +1,11 @@
- config BR2_PACKAGE_RADVD
- 	bool "radvd"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS # libbsd
-+	depends on !BR2_STATIC_LIBS  # libbsd
-+	depends on BR2_TOOLCHAIN_HAS_THREADS  # libbsd
-+	depends on BR2_USE_WCHAR # libbsd
-+	select BR2_PACKAGE_LIBBSD
- 	help
- 	  IPv6 Router Advertisement Daemon.
- 
-diff --git a/package/radvd/radvd.hash b/package/radvd/radvd.hash
-index a624db24ba..8415b8d854 100644
---- a/package/radvd/radvd.hash
-+++ b/package/radvd/radvd.hash
+diff --git a/package/ustreamer/ustreamer.hash b/package/ustreamer/ustreamer.hash
+index e46411b5cd..d0f07475fc 100644
+--- a/package/ustreamer/ustreamer.hash
++++ b/package/ustreamer/ustreamer.hash
 @@ -1,3 +1,3 @@
--# From http://www.litech.org/radvd/dist/radvd-2.19.tar.gz.sha512
--sha512  caa621fd77e34ff6858d60a41b0ee02aff967ac14f2b84c402359744f4bece5c1563419860431c328adc0385e9893ed1f2421d652247a3aa0dfc0aaad1e01233  radvd-2.19.tar.gz
-+# From http://www.litech.org/radvd/dist/radvd-2.20.tar.gz.sha512
-+sha512  798d8476ab5ff43083b181d6d6ec43c47d06e4067d30c71e038cfd890bcf1ca23e809f9e184c4363458bfa25a916625dd2d7553290fb3e5459034d477b80ebaa  radvd-2.20.tar.gz
- sha256  40a6db00cf0b97f031eaa6c6e87157788f40ced1b88e3ea6d78779bd2a39dc80  COPYRIGHT
-diff --git a/package/radvd/radvd.mk b/package/radvd/radvd.mk
-index 7a3b0a36ac..89d8f55d51 100644
---- a/package/radvd/radvd.mk
-+++ b/package/radvd/radvd.mk
-@@ -4,9 +4,9 @@
+ # Locally computed
+-sha256  6089137576520e3162fa6574853a15da1a7605f7e9a550c2570b33cfe8a39046  ustreamer-6.27.tar.gz
++sha256  7b1f184e72d30e803ca928bc6e31f9e0fbbd17480a2fae78ed2ae10ccc0062a2  ustreamer-6.28.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/ustreamer/ustreamer.mk b/package/ustreamer/ustreamer.mk
+index eb707cad00..112b29be8c 100644
+--- a/package/ustreamer/ustreamer.mk
++++ b/package/ustreamer/ustreamer.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RADVD_VERSION = 2.19
-+RADVD_VERSION = 2.20
- RADVD_SITE = http://www.litech.org/radvd/dist
--RADVD_DEPENDENCIES = host-bison host-flex host-pkgconf
-+RADVD_DEPENDENCIES = host-bison host-flex host-pkgconf libbsd
- # We need to ignore <linux/if_arp.h>, because radvd already includes
- # <net/if_arp.h>, which conflicts with <linux/if_arp.h>.
- RADVD_CONF_ENV = \
+-USTREAMER_VERSION = 6.27
++USTREAMER_VERSION = 6.28
+ USTREAMER_SITE = $(call github,pikvm,ustreamer,v$(USTREAMER_VERSION))
+ USTREAMER_LICENSE = GPL-3.0+
+ USTREAMER_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
