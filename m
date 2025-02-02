@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95BF6C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:07:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDCB4C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:07:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 630B970786;
-	Fri, 28 Feb 2025 17:07:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 43003506C1;
+	Fri, 28 Feb 2025 17:07:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r6J1FMOB_0Cy; Fri, 28 Feb 2025 17:07:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q9quGhV4HD61; Fri, 28 Feb 2025 17:07:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 608DE70699
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1679C50130
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 608DE70699;
-	Fri, 28 Feb 2025 17:07:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1679C50130;
+	Fri, 28 Feb 2025 17:07:45 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 12AC11DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:42:15 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1011268
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:42:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 15AB141970
+ by smtp4.osuosl.org (Postfix) with ESMTP id 49EA842EFD
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i9KGyE6AUkzN for <buildroot@buildroot.org>;
+ id A8vXz79n2XTW for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:31:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27D4A42EFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BFF0424F9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 27D4A42EFD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3BFF0424F9
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1D93B867B4; Fri, 28 Feb 2025 16:30:24 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 374A48616F; Fri, 28 Feb 2025 16:30:24 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 2 Feb 2025 12:35:15 +0100
+Date: Sun, 2 Feb 2025 23:17:36 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1bc34cded87ea5565f692ee5e79ae05fb82cc8f9
-X-Git-Newrev: dfa0e723cdc252120d438862b7e682efcfc8b98e
+X-Git-Oldrev: 2bbcda7c0ed6bd88adf3811b5cb5eaa9b2e21063
+X-Git-Newrev: a4c3f9e509b147f8acef2ef5525894736a33009a
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163024.1D93B867B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libbroadvoice: bump
- version
+Message-Id: <20250228163024.374A48616F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/frr: Bump version to
+ 9.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,44 +60,57 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6136558967052074624=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dfa0e723cdc252120d438862b7e682efcfc8b98e
+--===============6136558967052074624==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=a4c3f9e509b147f8acef2ef5525894736a33009a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Mattias Walström <lazzer@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libbroadvoice/libbroadvoice.hash | 2 +-
- package/libbroadvoice/libbroadvoice.mk   | 2 +-
+ package/frr/frr.hash | 2 +-
+ package/frr/frr.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libbroadvoice/libbroadvoice.hash b/package/libbroadvoice/libbroadvoice.hash
-index 9115a38e07..b07bcce0c9 100644
---- a/package/libbroadvoice/libbroadvoice.hash
-+++ b/package/libbroadvoice/libbroadvoice.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  39fd8a5f76598f2cb23b759bcd458a45a99e6ff830471576a2485c98b2ab1e48  libbroadvoice-f65b0f50c8c767229fbf1758370880abc0d78564.tar.gz
-+sha256  28a97b96ceb5e290184d8b6169fddc15fe37df34c75a87c2b0d03076e475e353  libbroadvoice-03dd05df52f093bbf7820e68707f3a3668e73507.tar.gz
- sha256  2550586c993ce4a8c23c8b11968ea36192116a896a2504799cc65307d769c094  COPYING
-diff --git a/package/libbroadvoice/libbroadvoice.mk b/package/libbroadvoice/libbroadvoice.mk
-index 69e235e84e..77bc85786c 100644
---- a/package/libbroadvoice/libbroadvoice.mk
-+++ b/package/libbroadvoice/libbroadvoice.mk
+diff --git a/package/frr/frr.hash b/package/frr/frr.hash
+index ea88fcef9b..aa13ed5625 100644
+--- a/package/frr/frr.hash
++++ b/package/frr/frr.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  a23ab9aba5c45d919f9c6d14febfad8a797b7f63272bde4009c70ff77aac3a77  frr-9.1.2.tar.gz
++sha256  5323e5ec236346860301e57f6845443855e8f2508d7ccd87ead395a9991c01c2  frr-9.1.3.tar.gz
+ sha256  7bf053957d6c38e39a06a112c60ff35b228d3bd03edbe8c9a03508b051128d16  COPYING
+ sha256  f9e0c21faf738da586281c0beaad3cd56204c19085a10fe05e4d3d7f8b5863d2  doc/licenses/BSD-2-Clause
+ sha256  aca297b8fd3a43e3bb200f1e2e043c0db6c897325f5ff7f23f7530302a6bf713  doc/licenses/BSD-3-Clause
+diff --git a/package/frr/frr.mk b/package/frr/frr.mk
+index 921ef99665..5391bcb265 100644
+--- a/package/frr/frr.mk
++++ b/package/frr/frr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBBROADVOICE_VERSION = f65b0f50c8c767229fbf1758370880abc0d78564
-+LIBBROADVOICE_VERSION = 03dd05df52f093bbf7820e68707f3a3668e73507
- # we use the FreeSwitch fork because (quoting README):
- # "This library is based on the Broadcom reference code, but has been
- # heavily modified so that it builds into a proper library, with a clean
+-FRR_VERSION = 9.1.2
++FRR_VERSION = 9.1.3
+ FRR_SITE = $(call github,FRRouting,frr,frr-$(FRR_VERSION))
+ FRR_LICENSE = GPL-2.0+
+ FRR_LICENSE_FILES = \
+
+--===============6136558967052074624==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6136558967052074624==--
