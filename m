@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F844C02194
-	for <buildroot@archiver.kernel.org>; Sun,  2 Feb 2025 11:42:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D80CFC0218F
+	for <buildroot@archiver.kernel.org>; Sun,  2 Feb 2025 11:42:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 37675606C6;
-	Sun,  2 Feb 2025 11:42:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A296B820AB;
+	Sun,  2 Feb 2025 11:42:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ghedBDIwaiMP; Sun,  2 Feb 2025 11:42:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UhOQ2_EDU2CN; Sun,  2 Feb 2025 11:42:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F990606D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EE6581EC4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F990606D5;
-	Sun,  2 Feb 2025 11:42:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 518AC185
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6EE6581EC4;
+	Sun,  2 Feb 2025 11:42:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 59AA412A
  for <buildroot@buildroot.org>; Sun,  2 Feb 2025 11:42:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 36664606C6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 394A840921
  for <buildroot@buildroot.org>; Sun,  2 Feb 2025 11:42:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h1m4oGtqpxtj for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QbtgdLj-bwWf for <buildroot@buildroot.org>;
  Sun,  2 Feb 2025 11:42:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D1CF60659
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BF3F40423
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5D1CF60659
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1BF3F40423
  for <buildroot@buildroot.org>; Sun,  2 Feb 2025 11:42:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4D332867AF; Sun,  2 Feb 2025 11:42:40 +0000 (UTC)
+ id 0435C867AC; Sun,  2 Feb 2025 11:42:40 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 2 Feb 2025 12:35:12 +0100
+Date: Sun, 2 Feb 2025 12:34:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2d9ccb307a5fddf476ed03c6add76238f9aac08d
-X-Git-Newrev: 1bc34cded87ea5565f692ee5e79ae05fb82cc8f9
+X-Git-Oldrev: d70df3ab44159f297d562af47e164d00c724ba28
+X-Git-Newrev: d012c7ed4110b9b2394d4cdf11d39c27eb957176
 X-Patchwork-Hint: ignore
-Message-Id: <20250202114240.4D332867AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libbroadvoice: switch to github
+Message-Id: <20250202114240.0435C867AC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libsilk: switch to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,7 +64,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1bc34cded87ea5565f692ee5e79ae05fb82cc8f9
+commit: https://git.buildroot.net/buildroot/commit/?id=d012c7ed4110b9b2394d4cdf11d39c27eb957176
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 https://developer.signalwire.com/freeswitch/FreeSWITCH-Explained/Installation/Linux/Deprecated-Installation-Instructions/25460805/
@@ -73,38 +73,38 @@ https://developer.signalwire.com/freeswitch/FreeSWITCH-Explained/Installation/Li
 Updated hash due to switch to github.
 
 Fixes:
-https://autobuild.buildroot.org/results/b4ea75a8bf113409b6c890d422b99c2bb49c3ecf/
+https://autobuild.buildroot.org/results/4a18ee5fce77d0429a00a151cbd5ad1e48d35405/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libbroadvoice/libbroadvoice.hash | 2 +-
- package/libbroadvoice/libbroadvoice.mk   | 3 +--
+ package/libsilk/libsilk.hash | 2 +-
+ package/libsilk/libsilk.mk   | 3 +--
  2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/libbroadvoice/libbroadvoice.hash b/package/libbroadvoice/libbroadvoice.hash
-index 1644fb4ba1..9115a38e07 100644
---- a/package/libbroadvoice/libbroadvoice.hash
-+++ b/package/libbroadvoice/libbroadvoice.hash
+diff --git a/package/libsilk/libsilk.hash b/package/libsilk/libsilk.hash
+index 3ed7eac46c..2118036ffd 100644
+--- a/package/libsilk/libsilk.hash
++++ b/package/libsilk/libsilk.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  74b7c9bbf90d2d8d8ec9befe73066f5c0d734498f586f6c870eb24dff2edcad7  libbroadvoice-f65b0f50c8c767229fbf1758370880abc0d78564-git4.tar.gz
-+sha256  39fd8a5f76598f2cb23b759bcd458a45a99e6ff830471576a2485c98b2ab1e48  libbroadvoice-f65b0f50c8c767229fbf1758370880abc0d78564.tar.gz
- sha256  2550586c993ce4a8c23c8b11968ea36192116a896a2504799cc65307d769c094  COPYING
-diff --git a/package/libbroadvoice/libbroadvoice.mk b/package/libbroadvoice/libbroadvoice.mk
-index 9c6b4e292d..69e235e84e 100644
---- a/package/libbroadvoice/libbroadvoice.mk
-+++ b/package/libbroadvoice/libbroadvoice.mk
-@@ -9,8 +9,7 @@ LIBBROADVOICE_VERSION = f65b0f50c8c767229fbf1758370880abc0d78564
- # "This library is based on the Broadcom reference code, but has been
- # heavily modified so that it builds into a proper library, with a clean
- # usable interface, on a range of platforms."
--LIBBROADVOICE_SITE = https://freeswitch.org/stash/scm/sd/libbroadvoice.git
--LIBBROADVOICE_SITE_METHOD = git
-+LIBBROADVOICE_SITE = $(call github,freeswitch,libbroadvoice,$(LIBBROADVOICE_VERSION))
- LIBBROADVOICE_LICENSE = LGPL-2.1
- LIBBROADVOICE_LICENSE_FILES = COPYING
- LIBBROADVOICE_AUTORECONF = YES
+-sha256  1b2d44790e841f0707b06fa10af798fa97a326ad4a6a3395b12be1231ed6f9a3  libsilk-4268a02240c35c6055b0f237c46b09b2dcf79e45-git4.tar.gz
++sha256  816e9d4482a3a6df9c6e16b87e88155d5f38b46def20ec0e9e35ae0f6aa704f3  libsilk-4268a02240c35c6055b0f237c46b09b2dcf79e45.tar.gz
+ sha256  62a5963f034024665641f4a9888b208f1e39aa7e29e87c9634fdcf07d3073baf  COPYING
+diff --git a/package/libsilk/libsilk.mk b/package/libsilk/libsilk.mk
+index eba7085261..af9a7005a0 100644
+--- a/package/libsilk/libsilk.mk
++++ b/package/libsilk/libsilk.mk
+@@ -6,8 +6,7 @@
+ 
+ LIBSILK_VERSION = 4268a02240c35c6055b0f237c46b09b2dcf79e45
+ # we use the FreeSwitch fork because it contains pkgconf support
+-LIBSILK_SITE = https://freeswitch.org/stash/scm/sd/libsilk.git
+-LIBSILK_SITE_METHOD = git
++LIBSILK_SITE = $(call github,freeswitch,libsilk,$(LIBSILK_VERSION))
+ LIBSILK_LICENSE = BSD-3-Clause
+ LIBSILK_LICENSE_FILES = COPYING
+ LIBSILK_AUTORECONF = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
