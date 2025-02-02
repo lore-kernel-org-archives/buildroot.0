@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C5E3C0218F
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F844C02194
 	for <buildroot@archiver.kernel.org>; Sun,  2 Feb 2025 11:42:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9ABF182043;
-	Sun,  2 Feb 2025 11:42:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37675606C6;
+	Sun,  2 Feb 2025 11:42:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9-Vg8W6sjSmG; Sun,  2 Feb 2025 11:42:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ghedBDIwaiMP; Sun,  2 Feb 2025 11:42:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E19908203B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F990606D5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E19908203B;
-	Sun,  2 Feb 2025 11:42:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 207811A0
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F990606D5;
+	Sun,  2 Feb 2025 11:42:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 518AC185
  for <buildroot@buildroot.org>; Sun,  2 Feb 2025 11:42:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0370B81EAB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 36664606C6
  for <buildroot@buildroot.org>; Sun,  2 Feb 2025 11:42:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yxnWvlOprsV4 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h1m4oGtqpxtj for <buildroot@buildroot.org>;
  Sun,  2 Feb 2025 11:42:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F57C81DA3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5D1CF60659
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4F57C81DA3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5D1CF60659
  for <buildroot@buildroot.org>; Sun,  2 Feb 2025 11:42:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3B3A7867AC; Sun,  2 Feb 2025 11:42:40 +0000 (UTC)
+ id 4D332867AF; Sun,  2 Feb 2025 11:42:40 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 2 Feb 2025 12:35:09 +0100
+Date: Sun, 2 Feb 2025 12:35:12 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e68eeacef9d3653bd374f48b08809c2239353a0d
-X-Git-Newrev: 2d9ccb307a5fddf476ed03c6add76238f9aac08d
+X-Git-Oldrev: 2d9ccb307a5fddf476ed03c6add76238f9aac08d
+X-Git-Newrev: 1bc34cded87ea5565f692ee5e79ae05fb82cc8f9
 X-Patchwork-Hint: ignore
-Message-Id: <20250202114240.3B3A7867AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libg7221: bump version
+Message-Id: <20250202114240.4D332867AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libbroadvoice: switch to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,38 +64,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d9ccb307a5fddf476ed03c6add76238f9aac08d
+commit: https://git.buildroot.net/buildroot/commit/?id=1bc34cded87ea5565f692ee5e79ae05fb82cc8f9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+https://developer.signalwire.com/freeswitch/FreeSWITCH-Explained/Installation/Linux/Deprecated-Installation-Instructions/25460805/
+"FreeSWITCH project has been moved to GitHub"
+
+Updated hash due to switch to github.
+
+Fixes:
+https://autobuild.buildroot.org/results/b4ea75a8bf113409b6c890d422b99c2bb49c3ecf/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libg7221/libg7221.hash | 2 +-
- package/libg7221/libg7221.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libbroadvoice/libbroadvoice.hash | 2 +-
+ package/libbroadvoice/libbroadvoice.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/libg7221/libg7221.hash b/package/libg7221/libg7221.hash
-index b467438bae..1d3bcc2b77 100644
---- a/package/libg7221/libg7221.hash
-+++ b/package/libg7221/libg7221.hash
+diff --git a/package/libbroadvoice/libbroadvoice.hash b/package/libbroadvoice/libbroadvoice.hash
+index 1644fb4ba1..9115a38e07 100644
+--- a/package/libbroadvoice/libbroadvoice.hash
++++ b/package/libbroadvoice/libbroadvoice.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  c0162993e0af557e05b9000e082f6a755e54a6c20a88e2ab725ed5068b4c4ff6  libg7221-dbfc29d4806ecdace50379a2f4d68a992a6fec34.tar.gz
-+sha256  44ebe717888f1c4d65dd0f6abecbccd96b642c49f2e472e6436ec530582f6103  libg7221-97d7ff5cf508fb6584a43b9e0c09220f8765cb3b.tar.gz
- sha256  26cc5f718279b45dbe34e25a2d29b2c8ca487bd9ab11b2d68c9318ff59d5c645  COPYING
-diff --git a/package/libg7221/libg7221.mk b/package/libg7221/libg7221.mk
-index b62a3b8b84..0e62a9b1f4 100644
---- a/package/libg7221/libg7221.mk
-+++ b/package/libg7221/libg7221.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBG7221_VERSION = dbfc29d4806ecdace50379a2f4d68a992a6fec34
-+LIBG7221_VERSION = 97d7ff5cf508fb6584a43b9e0c09220f8765cb3b
- # we use the FreeSwitch fork because it contains pkgconf support
- LIBG7221_SITE = $(call github,freeswitch,libg7221,$(LIBG7221_VERSION))
- LIBG7221_LICENSE = Polycom
+-sha256  74b7c9bbf90d2d8d8ec9befe73066f5c0d734498f586f6c870eb24dff2edcad7  libbroadvoice-f65b0f50c8c767229fbf1758370880abc0d78564-git4.tar.gz
++sha256  39fd8a5f76598f2cb23b759bcd458a45a99e6ff830471576a2485c98b2ab1e48  libbroadvoice-f65b0f50c8c767229fbf1758370880abc0d78564.tar.gz
+ sha256  2550586c993ce4a8c23c8b11968ea36192116a896a2504799cc65307d769c094  COPYING
+diff --git a/package/libbroadvoice/libbroadvoice.mk b/package/libbroadvoice/libbroadvoice.mk
+index 9c6b4e292d..69e235e84e 100644
+--- a/package/libbroadvoice/libbroadvoice.mk
++++ b/package/libbroadvoice/libbroadvoice.mk
+@@ -9,8 +9,7 @@ LIBBROADVOICE_VERSION = f65b0f50c8c767229fbf1758370880abc0d78564
+ # "This library is based on the Broadcom reference code, but has been
+ # heavily modified so that it builds into a proper library, with a clean
+ # usable interface, on a range of platforms."
+-LIBBROADVOICE_SITE = https://freeswitch.org/stash/scm/sd/libbroadvoice.git
+-LIBBROADVOICE_SITE_METHOD = git
++LIBBROADVOICE_SITE = $(call github,freeswitch,libbroadvoice,$(LIBBROADVOICE_VERSION))
+ LIBBROADVOICE_LICENSE = LGPL-2.1
+ LIBBROADVOICE_LICENSE_FILES = COPYING
+ LIBBROADVOICE_AUTORECONF = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
