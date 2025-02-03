@@ -4,71 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAAF5C02193
-	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 21:52:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D710C02193
+	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 21:52:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46CEC607B9;
-	Mon,  3 Feb 2025 21:52:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF04F6087A;
+	Mon,  3 Feb 2025 21:52:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id InAKol6TzyzQ; Mon,  3 Feb 2025 21:52:11 +0000 (UTC)
+ id 0ic0hMk82vY1; Mon,  3 Feb 2025 21:52:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 376F460742
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E72D760A48
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 376F460742;
-	Mon,  3 Feb 2025 21:52:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D06B712F
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 21:52:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E72D760A48;
+	Mon,  3 Feb 2025 21:52:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1ECD3185
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 21:52:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CC4F98106A
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 21:52:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6779740159
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 21:52:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bvuuavq2FoX3 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6rBYPF9kl8VS for <buildroot@buildroot.org>;
  Mon,  3 Feb 2025 21:52:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
  helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E7625810D1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7625810D1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 77AA640119
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77AA640119
 Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E7625810D1
+ [217.70.183.194])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 77AA640119
  for <buildroot@buildroot.org>; Mon,  3 Feb 2025 21:52:00 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 1105C4419B;
- Mon,  3 Feb 2025 21:51:56 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 27789441AB;
+ Mon,  3 Feb 2025 21:51:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  3 Feb 2025 22:51:50 +0100
-Message-ID: <20250203215155.1175999-1-thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>
+Date: Mon,  3 Feb 2025 22:51:52 +0100
+Message-ID: <20250203215155.1175999-3-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250203215155.1175999-1-thomas.petazzoni@bootlin.com>
+References: <20250203215155.1175999-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeejgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepvdefiedvhfevieetgfethffgiefhjeevfefftdfhtddvffeuieeludehfeeguefgnecukfhppeduleegrdejkedrvdduuddrvddvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleegrdejkedrvdduuddrvddvtddphhgvlhhopeifihhnughsuhhrfhdrfihifhhighhuvghsthdrlhhotggrlhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhm
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeejgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegleejgffgvdetuddtuedtgeeiffevjeefuddvtdffjeethfdvvedtheduuddvjeenucffohhmrghinhepghhnuhdrohhrghdpshhouhhrtggvfigrrhgvrdhorhhgnecukfhppeduleegrdejkedrvdduuddrvddvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleegrdejkedrvdduuddrvddvtddphhgvlhhopeifihhnughsuhhrfhdrfihifhhighhuvghsthdrlhhotggrlhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehgmhgrihhlrdgto
+ hhm
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1738619517;
+ d=bootlin.com; s=gm1; t=1738619519;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=1YEnvZhWohTVw2NLm7xuhwCbT3tG63s1RjKIOpBJA8s=;
- b=CGyy36ITq42wgkrgM/ctL3tb6jPZ9xaLIh+5of4QbycmSG4peNSxdcolzunzArzhJKdNoR
- 4dORufEXUSarWBlATZHkODX2apf95Ywe/frRsTBCaYeDhigDaHSTigYw7gOVpGDMYIZWOY
- i3p6Hpqk20/LAwOdPw9KKwAj5b/HR+wy2i7y7kfSmAfIK2owGqukz1zJxD5S4Red2e3st9
- jUE3K8/dhSvxAyQn9qxgBOHBHEO9iAvLuOMswX09J2NtZ7bCqV/vB8Q9MeH+nXslOFu1+j
- eK5al33IsyeOwsUzkmsBz5HBsqO99Sdws/sQYcruNDnfCgHFH1d7jS6s4j660Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=aq36RBm1fQGt878K0kibP8yflmVwiXO0Gbz6XKKrN2c=;
+ b=htWUrcHM5D+o26M68uWXEsdjLarZv3jQNJoAiN+Ck53mi3pcGz96uETGq8mfAy77Uy/Gmw
+ O5MeVcVuF2ygRQJ8A/X7J2YHdAvDzba7breTTrTuxwSxDSK5zIcvI0P4KCP6eybCOhAv3o
+ vvQLCH9Psx1K0hEdPbi0NQQrdLbSVnSshSQbxj5lWjoSEIIGRuwdCqtJDfVTqQakekSnDN
+ zXhrnI7KxjTRdxxflyTybWY3dKC9l34VJdhIyUODccakb5pKLHEtJGTiJqYXlcCVEOO1o+
+ UGrVnJFQ5QKCRRQcUhxcB4ewRQ3NjBNxfSMiKtI31DnvX5AdDki7IUsAWoDcbw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CGyy36IT
-Subject: [Buildroot] [PATCH 0/2] Bump glibc to 2.41
+ header.s=gm1 header.b=htWUrcHM
+Subject: [Buildroot] [PATCH 2/2] package/{glibc,
+ localedef}: bump to version 2.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,36 +93,179 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Release notes:
+https://lists.gnu.org/archive/html/info-gnu/2025-01/msg00014.html
 
-glibc 2.41 was released recently, and we want to give a try to have it
-in 2025.02, so now is the good time to do the version bump.
+The only thing that required a small change is our
+0003-HACK-keep-_ISOC23_SOURCE-undefined-to-build-localede.patch to
+continue to fix the build issue it aims at fixing, by taking into
+account changes in glibc 2.41.
 
-While doing the bump, we noticed that a few IGNORE_CVES entries had
-become irrelevant, which is solved by PATCH 1/2.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/glibc/glibc.hash                           |  2 +-
+ package/glibc/glibc.mk                             |  3 ++-
+ ...001-HACK-only-build-and-install-localedef.patch | 10 +++++-----
+ ...ndency-on-GCC-to-4.8-and-binutils-to-2.24.patch | 10 +++++-----
+ ...ISOC23_SOURCE-undefined-to-build-localede.patch | 14 ++++++++------
+ package/localedef/localedef.mk                     |  2 +-
+ 6 files changed, 22 insertions(+), 19 deletions(-)
 
-The bump itself is mostly boring, with just a minor tweak to a patch
-against localedef.
-
-A quick read of the glibc 2.41 release notes doesn't really show
-anything that would cause major breakage, but of course the devil is
-in the details, and only an autobuilder pass on this stuff will tell
-us.
-
-Thomas
-
-Thomas Petazzoni (2):
-  package/glibc: drop bogus IGNORE_CVES entries
-  package/{glibc,localedef}: bump to version 2.41
-
- package/glibc/glibc.hash                          |  2 +-
- package/glibc/glibc.mk                            | 15 ++-------------
- ...01-HACK-only-build-and-install-localedef.patch | 10 +++++-----
- ...dency-on-GCC-to-4.8-and-binutils-to-2.24.patch | 10 +++++-----
- ...SOC23_SOURCE-undefined-to-build-localede.patch | 14 ++++++++------
- package/localedef/localedef.mk                    |  2 +-
- 6 files changed, 22 insertions(+), 31 deletions(-)
-
+diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+index bfb2942abb..f6d3ce6f2b 100644
+--- a/package/glibc/glibc.hash
++++ b/package/glibc/glibc.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated (fetched from Github)
+-sha256  6426766187d177412e7f3daed793dec93fce417db5ae99296c0d880aa808091e  glibc-2.40-18-g5641780762723156b0d20a0b9f7df1d76831bab0.tar.gz
++sha256  ed2cd1f058f22f682e700c5be408975db62025a14863a5a6700ee93d5927504e  glibc-2.41-5-gcb7f20653724029be89224ed3a35d627cc5b4163.tar.gz
+ 
+ # Hashes for license files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 25e28c7cf6..29617b9756 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -7,7 +7,8 @@
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+ # When updating the version, please also update localedef
+-GLIBC_VERSION = 2.40-18-g5641780762723156b0d20a0b9f7df1d76831bab0
++GLIBC_VERSION = 2.41-5-gcb7f20653724029be89224ed3a35d627cc5b4163
++
+ # Upstream doesn't officially provide an https download link.
+ # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
+ # sometimes the connection times out. So use an unofficial github mirror.
+diff --git a/package/localedef/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/0001-HACK-only-build-and-install-localedef.patch
+index ef126c6bd3..bcec4067c2 100644
+--- a/package/localedef/0001-HACK-only-build-and-install-localedef.patch
++++ b/package/localedef/0001-HACK-only-build-and-install-localedef.patch
+@@ -1,4 +1,4 @@
+-From 03b1573ca341f1852ac05a884a68ed375cceccc0 Mon Sep 17 00:00:00 2001
++From b90ae9abee7e5cc3a92b053f00db959c853a745e Mon Sep 17 00:00:00 2001
+ From: Michael Olbrich <m.olbrich@pengutronix.de>
+ Date: Mon, 21 May 2018 16:45:02 +0200
+ Subject: [PATCH] HACK: only build and install localedef
+@@ -17,10 +17,10 @@ Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+  2 files changed, 10 insertions(+), 7 deletions(-)
+ 
+ diff --git a/Rules b/Rules
+-index 9010c5d5b2..f5e5525061 100644
++index c8adc00008..4acf69790f 100644
+ --- a/Rules
+ +++ b/Rules
+-@@ -223,10 +223,16 @@ binaries-shared-notests = $(filter-out $(binaries-pie) $(binaries-static), \
++@@ -234,10 +234,16 @@ binaries-shared-notests = $(filter-out $(binaries-pie) $(binaries-static), \
+  				       $(binaries-all-notests))
+  
+  ifneq "$(strip $(binaries-shared-notests))" ""
+@@ -42,7 +42,7 @@ index 9010c5d5b2..f5e5525061 100644
+  
+  ifneq "$(strip $(binaries-shared-tests))" ""
+ diff --git a/locale/Makefile b/locale/Makefile
+-index 2810f28605..6b4cc9e831 100644
++index 9d9c1a7691..4d26032c15 100644
+ --- a/locale/Makefile
+ +++ b/locale/Makefile
+ @@ -76,7 +76,6 @@ aux = \
+@@ -70,5 +70,5 @@ index 2810f28605..6b4cc9e831 100644
+  
+  libBrokenLocale-routines = broken_cur_max
+ -- 
+-2.45.2
++2.48.1
+ 
+diff --git a/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+index b8e53a23a6..af352eee5f 100644
+--- a/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
++++ b/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
+@@ -1,4 +1,4 @@
+-From 1ddee6fdcde6b12df22619380d51b47e6c8f2c08 Mon Sep 17 00:00:00 2001
++From df211e396f3a2183eed33dc3ac05ecea6bc16f0a Mon Sep 17 00:00:00 2001
+ From: Matt Weber <matthew.weber@rockwellcollins.com>
+ Date: Thu, 6 Feb 2020 14:36:21 -0600
+ Subject: [PATCH] relax dependency on GCC to 4.8 and binutils to 2.24
+@@ -35,10 +35,10 @@ Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+  1 file changed, 2 insertions(+), 2 deletions(-)
+ 
+ diff --git a/configure b/configure
+-index 1d543548cd..3e13c46b2e 100755
++index eb8abd0054..24abd55594 100755
+ --- a/configure
+ +++ b/configure
+-@@ -5302,7 +5302,7 @@ printf %s "checking version of $LD... " >&6; }
++@@ -5329,7 +5329,7 @@ printf %s "checking version of $LD... " >&6; }
+    ac_prog_version=`$LD --version 2>&1 | sed -n 's/^.*GNU ld.* \([0-9][0-9]*\.[0-9.]*\).*$/\1/p'`
+    case $ac_prog_version in
+      '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
+@@ -47,7 +47,7 @@ index 1d543548cd..3e13c46b2e 100755
+         ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
+      *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
+  
+-@@ -5750,7 +5750,7 @@ int
++@@ -5777,7 +5777,7 @@ int
+  main (void)
+  {
+  
+@@ -57,5 +57,5 @@ index 1d543548cd..3e13c46b2e 100755
+  #endif
+    ;
+ -- 
+-2.45.2
++2.48.1
+ 
+diff --git a/package/localedef/0003-HACK-keep-_ISOC23_SOURCE-undefined-to-build-localede.patch b/package/localedef/0003-HACK-keep-_ISOC23_SOURCE-undefined-to-build-localede.patch
+index 57a8f8e35c..64dbdefed2 100644
+--- a/package/localedef/0003-HACK-keep-_ISOC23_SOURCE-undefined-to-build-localede.patch
++++ b/package/localedef/0003-HACK-keep-_ISOC23_SOURCE-undefined-to-build-localede.patch
+@@ -1,4 +1,4 @@
+-From efc989e7e5dcbc38ccc32634e49cfc2881c5a318 Mon Sep 17 00:00:00 2001
++From 7f52329793c88260260631593c9bc558b7eb01f8 Mon Sep 17 00:00:00 2001
+ From: Romain Naour <romain.naour@gmail.com>
+ Date: Sat, 9 Sep 2023 23:58:50 +0200
+ Subject: [PATCH] HACK: keep _ISOC23_SOURCE undefined to build localedef with
+@@ -15,21 +15,23 @@ Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ to _ISOC23_SOURCE]
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ ---
+- include/features.h | 1 -
+- 1 file changed, 1 deletion(-)
++ include/features.h | 2 --
++ 1 file changed, 2 deletions(-)
+ 
+ diff --git a/include/features.h b/include/features.h
+-index 093de6f44c..8d9ca6e402 100644
++index 44bc4bbc85..c856368a71 100644
+ --- a/include/features.h
+ +++ b/include/features.h
+-@@ -215,7 +215,6 @@
++@@ -217,9 +217,7 @@
+  # undef  _ISOC11_SOURCE
+  # define _ISOC11_SOURCE	1
+  # undef  _ISOC23_SOURCE
+ -# define _ISOC23_SOURCE	1
++ # undef  _ISOC2Y_SOURCE
++-# define _ISOC2Y_SOURCE	1
+  # undef  _POSIX_SOURCE
+  # define _POSIX_SOURCE	1
+  # undef  _POSIX_C_SOURCE
+ -- 
+-2.45.2
++2.48.1
+ 
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index b3e8ab5a1b..7a6c94bd2f 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -7,7 +7,7 @@
+ # Use the same VERSION and SITE as target glibc
+ # As in glibc.mk, generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+-LOCALEDEF_VERSION = 2.40-18-g5641780762723156b0d20a0b9f7df1d76831bab0
++LOCALEDEF_VERSION = 2.41-5-gcb7f20653724029be89224ed3a35d627cc5b4163
+ LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
+ LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
+ HOST_LOCALEDEF_DL_SUBDIR = glibc
 -- 
 2.48.1
 
