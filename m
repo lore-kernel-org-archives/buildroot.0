@@ -1,102 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ED30C02192
-	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 09:34:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 030A6C02192
+	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 10:09:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA75B81F72;
-	Mon,  3 Feb 2025 09:34:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9492941358;
+	Mon,  3 Feb 2025 10:09:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7e16kwBe-TZZ; Mon,  3 Feb 2025 09:34:22 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C5AYbqrAGftL; Mon,  3 Feb 2025 10:09:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E33BC81F0D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57E2B41370
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E33BC81F0D;
-	Mon,  3 Feb 2025 09:34:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B73EA1A2
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 09:34:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57E2B41370;
+	Mon,  3 Feb 2025 10:09:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A18A712A
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 10:09:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9C16681DE9
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 09:34:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8FAF541370
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 10:09:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sqG9G2VpIXLW for <buildroot@buildroot.org>;
- Mon,  3 Feb 2025 09:34:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
- envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A042B817B3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A042B817B3
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A042B817B3
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 09:34:12 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-4361dc6322fso27831555e9.3
- for <buildroot@buildroot.org>; Mon, 03 Feb 2025 01:34:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738575250; x=1739180050;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=mx8Qk4S81/BaQ7bB4V5pfltnYjHhCc/BKcvWzghZzTs=;
- b=njpa1N8VQqb6VkvRUR805NlnkV3JdfY/Mx6KhfOx9umLgBeOpLW/9x+VJJKtBKZykp
- QWIke1mJRaXzuPfo+CyqDXwj9dCCcAoLOAVzGyMnepAZjBF4f/5IQvXnow8zZD4Dr6Ae
- Jws+oxWG3+Usf7xgPrOpXTT8eThrWnNM9qJ5+y16uT5b3japAj8FKoRbxInR4D/FwgRr
- P4yaWhv+79h2r6Q0aKh+w9+MMPpZRHfKhuCszxigq+9wIQozk4qsFjVBGEpp57cVMTB4
- fH1q0AYzPXRVrdyUjcH+f/u61p26vYXcxqqvuxXVqdmaV7rB9fsgtMt7nWVzbEXYIvb0
- expA==
-X-Gm-Message-State: AOJu0YxG8GbYD4nZdJEIB4Fe7uQMuPI3Wj3XmymWwveZnLVIhIiIlrUU
- jS93Z0tchVrPNdHvFFjMQGcsgNz2coVAA9o4VmXxmL9GuwJ5HLZ8iYO6EOWJLyc=
-X-Gm-Gg: ASbGncv8qHyzTnek3pQY+4MtrFqGLjed5FfmUlJqjPbQLOkrdRmpIXrTVCSj751gKzU
- hc3d2Z3VzTll5KbolaN0BFuDmdY/c350CzTTc6RL0oOy30L1Hr0suCqS1uNki460esOBJD6nILm
- 91jKA0lVwMxGrR6hM/Rj3inYr2wxEFJb/iUp2dGGFmk2ogh1w5MKsNMju8Rq9URHklaAtouZKFx
- wxPDrMn17EcdN/HALz+KXus29IHkE/EIFv2MglReJMQ4SGwir6omubXEs3DUlqClMk97xhQS2KW
- FTqsdz78CcF+bvbTKdHYhLUEEbxUlabE3MECRr17v6KpOMSn1a4N
-X-Google-Smtp-Source: AGHT+IHDqqkVUuCj40X3V0lY9vS2Ja3n3+XokyIlo+oJKgv/m5oS7vdSLwTUYPbQxKhxDsDuK9i1zw==
-X-Received: by 2002:adf:ee8b:0:b0:38c:4a5f:bf82 with SMTP id
- ffacd0b85a97d-38c520bf3b8mr13488204f8f.50.1738575250425; 
- Mon, 03 Feb 2025 01:34:10 -0800 (PST)
-Received: from landeda.. (host-109-89-232-55.dynamic.voo.be. [109.89.232.55])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-38c5c12193asm12147327f8f.49.2025.02.03.01.34.10
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 03 Feb 2025 01:34:10 -0800 (PST)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3cNFLhh8Za_d for <buildroot@buildroot.org>;
+ Mon,  3 Feb 2025 10:09:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A51B41358
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A51B41358
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 10:09:23 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1F9E18688B; Mon,  3 Feb 2025 10:09:23 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Date: Mon,  3 Feb 2025 10:34:08 +0100
-Message-ID: <d4b47bd24bbd978c95ff78d9f84d44ebe0214dfa.1738575233.git.yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <cover.1738575233.git.yann.morin.1998@free.fr>
-References: <cover.1738575233.git.yann.morin.1998@free.fr>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1738575250; x=1739180050; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=mx8Qk4S81/BaQ7bB4V5pfltnYjHhCc/BKcvWzghZzTs=;
- b=g2Qwak4WXwIX7AmM6fYP4uAt37jdzDy0wLrVndzXC9lG7QET0aNrtQdhb3TCd2NTbh
- A1M1XE2L5M91PLo3ddheTT9DoJaf0zS8JONpS8yaVrE+lfKtH0SYTRvX8nvyhgt3jHmN
- Y0xGSoVjC6NhZiu84a4AsDztKSL6pXc4RdRjUcRM73Aw1cv0LSq9ZzO0nRRPLm47B3sU
- JmfPhPV4zqqSjctbkHMkwcb4G+z4jinM4ZuQQMuDYbKC+N2nuLEbzEoZSW0pKWIWqzts
- AIrZ0gwaKcBMgKV6tb2Xf26cvctpKGeuPrqiOcF0BJiJUn0J2XislJrwwen0vF+Laaej
- gucg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=g2Qwak4W
-Subject: [Buildroot] [PATCH 3/3] package/libsigrok: install udev rules
+Date: Mon, 3 Feb 2025 11:07:48 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 777aa5ede03c4f993c72d9e3846720536be4d1ea
+X-Git-Newrev: 85376a71814eefb00212caa6b2d526fcddfbb084
+X-Patchwork-Hint: ignore
+Message-Id: <20250203100923.1F9E18688B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/scripts/fix-rpath: Reduce overhead
+ of parallelization
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,63 +59,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Some devices that libsigrok can talk to, need a firmware to be uploaded.
-libsigrok comes with a set of rules to allow non-root users to upload
-those firmware blobs.
+commit: https://git.buildroot.net/buildroot/commit/?id=85376a71814eefb00212caa6b2d526fcddfbb084
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Depending on how the system is configured, different set of rules are
-needed [0] (yes, it's documented on the fx2lafw page, not on the
-libsigrok one [1]). Basically:
+Rather than fork+exec:ing a whole bash process for every file of
+interest, split up the work into ${PARALLEL_JOBS} separate file lists,
+and then fork off a single worker per list.
 
-  - 60-libsigrok.rules is always used;
-  - 61-libsigrok-uaccess.rules is used when systemd-logind is used;
-  - 61-libsigrok-plugdev.rules is used when systemd-logind is not used.
+Since workers now run in a fork, we also don't have to re-parse the
+arguments on every call to patch_file().
 
-For systems without udev, it is the responsibility of the user to
-implement proper access management if they need non-root to upload
-firmware files.
+In the worker, we also add a low-overhead check for the ELF magic,
+which allows us to skip all non-ELFs without having to fork off
+additional processes. In the event that we encounter an invalid ELF,
+that is still taken care of by the existing exitcode-test in
+patch_file().
 
-[0] https://sigrok.org/wiki/Fx2lafw#Install_the_udev_rules_file
-[1] https://sigrok.org/wiki/Libsigrok
+On a 4-core/8-thread box, this cuts down the time it takes to fix the
+RPATHS in the host directory from around 25s to 1.5s.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Tobias Waldekranz <tobias@waldekranz.com>
+[Peter: fix shellcheck issues]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsigrok/libsigrok.mk | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ support/scripts/fix-rpath | 44 ++++++++++++++++++++++++++++----------------
+ 1 file changed, 28 insertions(+), 16 deletions(-)
 
-diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
-index 639ee4dc25..22524dd4f6 100644
---- a/package/libsigrok/libsigrok.mk
-+++ b/package/libsigrok/libsigrok.mk
-@@ -65,4 +65,20 @@ else
- LIBSIGROK_CONF_OPTS += --disable-cxx
- endif
+diff --git a/support/scripts/fix-rpath b/support/scripts/fix-rpath
+index d3421504a5..afca7074c8 100755
+--- a/support/scripts/fix-rpath
++++ b/support/scripts/fix-rpath
+@@ -60,15 +60,11 @@ HOST_EXCLUDEPATHS="/share/terminfo"
+ STAGING_EXCLUDEPATHS="/usr/include /usr/share/terminfo"
+ TARGET_EXCLUDEPATHS="/lib/firmware"
  
-+ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-+LIBSIGROK_UDEV_RULES = \
-+	60-libsigrok.rules \
-+	$(if $(BR2_PACKAGE_SYSTEMD_LOGIND), \
-+		61-libsigrok-uaccess.rules, \
-+		61-libsigrok-plugdev.rules \
-+	)
-+define LIBSIGROK_INSTALL_UDEV_RULES
-+	$(foreach rule, $(LIBSIGROK_UDEV_RULES), \
-+		$(INSTALL) -D -m 0644 $(@D)/contrib/$(rule) \
-+			$(TARGET_DIR)/usr/lib/udev/rules.d/$(rule)$(sep) \
-+	)
-+endef
-+LIBSIGROK_POST_INSTALL_TARGET_HOOKS += LIBSIGROK_INSTALL_UDEV_RULES
-+endif
+-patch_file() {
+-    local PATCHELF rootdir file
+-    local -a sanitize_extra_args
++declare -a sanitize_extra_args
++rootdir=
+ 
+-    PATCHELF="${1}"
+-    rootdir="${2}"
+-    file="${3}"
+-    shift 3
+-    sanitize_extra_args=("${@}")
++patch_file() {
++    local file="${1}"
+ 
+     # check if it's an ELF file
+     rpath="$("${PATCHELF}" --print-rpath "${file}" 2>&1)"
+@@ -97,9 +93,21 @@ patch_file() {
+     test "${changed}" != "" && chmod u-w "${file}"
+ }
+ 
++patch_files() {
++    while read -r -d $'\0' file; do
++	# for performance reasons, we want to do as little work as
++	# possible on non-ELF files. therefore, make sure that the
++	# file at least starts with the ELF magic before handing it of
++	# to patchelf, which will then perform the proper validation.
++	read -r -n4 magic <"${file}" && test "${magic}" != $'\x7fELF' && continue
 +
- $(eval $(autotools-package))
--- 
-2.47.0
-
++	patch_file "${file}"
++    done
++}
++
+ main() {
+-    local rootdir tree
+-    local -a find_args sanitize_extra_args
++    local tree
++    local -a find_args
+ 
+     tree="${1}"
+ 
+@@ -162,14 +170,18 @@ main() {
+             ;;
+     esac
+ 
+-    find_args+=( "-type" "f" "-print0" )
++    work=$(mktemp --tmpdir -d fix-rpath.XXXXXXXX)
+ 
+-    export -f patch_file
+-    # Limit the number of cores used
+-    # shellcheck disable=SC2016  # ${@} has to be expanded in the sub-shell.
++    find_args+=( "-type" "f" "-print0" )
+     find "${rootdir}" "${find_args[@]}" \
+-    | xargs -0 -r -P "${PARALLEL_JOBS:-1}" -I {} \
+-            bash -c 'patch_file "${@}"' _ "${PATCHELF}" "${rootdir}" {} "${sanitize_extra_args[@]}"
++    | split -t '\0' -a4 -d -n "r/${PARALLEL_JOBS:-1}" "-" "${work}/part"
++
++    for part in "${work}/part"*; do
++	patch_files <"${part}" &
++    done
++    wait
++
++    rm -rf "${work}"
+ 
+     # Restore patched patchelf utility
+     test "${tree}" = "host" && mv "${PATCHELF}.__to_be_patched" "${PATCHELF}"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
