@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1815DC02192
-	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 22:14:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20688C02192
+	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 22:18:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D82A260E51;
-	Mon,  3 Feb 2025 22:14:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DEC9B60EC1;
+	Mon,  3 Feb 2025 22:18:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G-u9k8iwXGSg; Mon,  3 Feb 2025 22:13:59 +0000 (UTC)
+ id WdQK4BZPbVpS; Mon,  3 Feb 2025 22:18:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3371B60B38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9E1760EC4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3371B60B38;
-	Mon,  3 Feb 2025 22:13:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8B85B185
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 22:13:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C9E1760EC4;
+	Mon,  3 Feb 2025 22:18:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BB8B8185
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 22:18:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7B04140399
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 22:13:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9F36560EC4
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 22:18:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id moklSUrO4TP2 for <buildroot@buildroot.org>;
- Mon,  3 Feb 2025 22:13:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pkcNl8YkCN9N for <buildroot@buildroot.org>;
+ Mon,  3 Feb 2025 22:18:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C05140102
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CBFCA60ECD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5C05140102
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 22:13:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CBFCA60ECD
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 22:18:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4989586A50; Mon,  3 Feb 2025 22:13:54 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id B8DF186A8E; Mon,  3 Feb 2025 22:18:44 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Mon, 3 Feb 2025 23:13:41 +0100
+Date: Mon, 3 Feb 2025 23:18:30 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 03fcf6034012c069e975330e831ef79b4bdb70d4
-X-Git-Newrev: da66b838e4792338bd066d78261d70c80ea029a5
+X-Git-Oldrev: da66b838e4792338bd066d78261d70c80ea029a5
+X-Git-Newrev: d364d188a074214577b364fd4b3b6ac39b55794c
 X-Patchwork-Hint: ignore
-Message-Id: <20250203221354.4989586A50@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: new gstreamer1 runtime
- test
+Message-Id: <20250203221844.B8DF186A8E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/meson: bump version to 1.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,116 +64,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da66b838e4792338bd066d78261d70c80ea029a5
+commit: https://git.buildroot.net/buildroot/commit/?id=d364d188a074214577b364fd4b3b6ac39b55794c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- DEVELOPERS                                       |  1 +
- support/testing/tests/package/test_gstreamer1.py | 82 ++++++++++++++++++++++++
- 2 files changed, 83 insertions(+)
+Rebased patch 0001.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3992a82351..2da5d178b2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1897,6 +1897,7 @@ F:	support/testing/tests/package/test_gnuradio.py
- F:	support/testing/tests/package/test_gnuradio/
- F:	support/testing/tests/package/test_gpsd.py
- F:	support/testing/tests/package/test_gpsd/
-+F:	support/testing/tests/package/test_gstreamer1.py
- F:	support/testing/tests/package/test_gzip.py
- F:	support/testing/tests/package/test_highway.py
- F:	support/testing/tests/package/test_hwloc.py
-diff --git a/support/testing/tests/package/test_gstreamer1.py b/support/testing/tests/package/test_gstreamer1.py
-new file mode 100644
-index 0000000000..aa4b67d1a6
---- /dev/null
-+++ b/support/testing/tests/package/test_gstreamer1.py
-@@ -0,0 +1,82 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestGstreamer1(infra.basetest.BRTest):
-+    # This test creates a full, yet simple, Gstreamer pipeline which
-+    # encodes/decodes a video, using only plugins from Base and Good
-+    # packages. It will use Tesseract OCR to validate the final
-+    # output. The DejaVu font package is also installed, in order to
-+    # have few fonts for the Pango plugin.
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_PACKAGE_DEJAVU=y
-+        BR2_PACKAGE_GSTREAMER1=y
-+        BR2_PACKAGE_GST1_PLUGINS_BASE=y
-+        BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OGG=y
-+        BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO=y
-+        BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_THEORA=y
-+        BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VIDEOTESTSRC=y
-+        BR2_PACKAGE_GST1_PLUGINS_GOOD=y
-+        BR2_PACKAGE_GST1_PLUGINS_GOOD_PNG=y
-+        BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_MULTIFILE=y
-+        BR2_PACKAGE_TESSERACT_OCR=y
-+        BR2_PACKAGE_TESSERACT_OCR_LANG_ENG=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        video_file = "videotest.ogg"
-+        num_frames = 10
-+        msg_prefix = "Hello Buildroot:"
-+
-+        # We check the main program can execute.
-+        self.assertRunOk("gst-launch-1.0 --version")
-+
-+        # We check we can list installed plugins.
-+        self.assertRunOk("gst-inspect-1.0")
-+
-+        # We check we can query one of the plugin we requested.
-+        self.assertRunOk("gst-inspect-1.0 theoraenc")
-+
-+        # We create a Ogg/Theora video file. We use the "videotestsrc"
-+        # with the ball animation which will create a small file. We
-+        # add a time overlay with a message. We encode with the Theora
-+        # codec and store everything in an Ogg container file.
-+        enc_pipeline = \
-+            f"videotestsrc num-buffers={num_frames} pattern=ball ! " \
-+            f"timeoverlay text=\"{msg_prefix}\" font-desc=\"Sans, 24\" ! " \
-+            f"theoraenc ! oggmux ! filesink location={video_file}"
-+        cmd = f"gst-launch-1.0 -v {enc_pipeline}"
-+        self.assertRunOk(cmd)
-+
-+        # We decode our previous video file and store each frame in a
-+        # PNG image file.
-+        dec_pipeline = \
-+            f"filesrc location={video_file} ! " \
-+            "decodebin ! videoconvert ! pngenc ! " \
-+            "multifilesink index=1 location=frame%02d.png"
-+        cmd = f"gst-launch-1.0 -v {dec_pipeline}"
-+        self.assertRunOk(cmd)
-+
-+        # We extract the text from our last image.
-+        img_file = f"frame{num_frames}.png"
-+        cmd = f"tesseract {img_file} output"
-+        self.assertRunOk(cmd)
-+
-+        # We check we have our initial message.
-+        out, ret = self.emulator.run("cat output.txt")
-+        self.assertEqual(ret, 0)
-+        self.assertTrue(out[0].startswith(msg_prefix))
+Release notes:
+https://mesonbuild.com/Release-notes-for-1-7-0.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-Prefer-ext-static-libs-when-default-library-static.patch   | 6 +++---
+ package/meson/meson.hash                                            | 4 ++--
+ package/meson/meson.mk                                              | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch b/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
+index 55f7512e2e..e56db1be07 100644
+--- a/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
++++ b/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
+@@ -24,7 +24,7 @@ http://autobuild.buildroot.net/results/c17/c17bbb12d9deadd64a441b36e324cfbbe8aba
+ Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+ [Updated for 0.57.1 - get_builtin_option() vs. get_option(OptionKey())]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+-[Bernd: rebased for 1.6.0]
++[Bernd: rebased for 1.6.0 & 1.7.0]
+ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  mesonbuild/compilers/mixins/clike.py | 3 +++
+@@ -42,8 +42,8 @@ index 09ad837b1..b7f6b9f22 100644
+  from .. import compilers
+  from ..compilers import CompileCheckMode
+  from .visualstudio import VisualStudioLikeCompiler
+-@@ -1038,6 +1038,9 @@ class CLikeCompiler(Compiler):
+-             # TI C6000 compiler can use both extensions for static or dynamic libs.
++@@ -1053,6 +1053,9 @@ class CLikeCompiler(Compiler):
++             # TI C28x compilers can use both extensions for static or dynamic libs.
+              stlibext = ['a', 'lib']
+              shlibext = ['dll', 'so']
+ +        elif env.coredata.get_option(OptionKey('default_library')) == 'static':
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index e02d878d79..881c35d250 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/1.6.0/meson-1.6.0.tar.gz.asc
+-sha256  999b65f21c03541cf11365489c1fad22e2418bb0c3d50ca61139f2eec09d5496  meson-1.6.0.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/1.7.0/meson-1.7.0.tar.gz.asc
++sha256  08efbe84803eed07f863b05092d653a9d348f7038761d900412fddf56deb0284  meson-1.7.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index f36091e584..292f81b690 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESON_VERSION = 1.6.0
++MESON_VERSION = 1.7.0
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
