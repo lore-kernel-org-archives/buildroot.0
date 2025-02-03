@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FCF7C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:09:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E579C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:10:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9DABE4F651;
-	Fri, 28 Feb 2025 17:09:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6E18819D1;
+	Fri, 28 Feb 2025 17:09:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gjgV6BSQpkJL; Fri, 28 Feb 2025 17:09:55 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WsRLxoTe43JN; Fri, 28 Feb 2025 17:09:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A5E14F770
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A61A18176A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A5E14F770;
-	Fri, 28 Feb 2025 17:09:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A61A18176A;
+	Fri, 28 Feb 2025 17:09:57 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0BDE9711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:43:07 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 15ACF68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:43:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DAA1740247
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0CEE8402B5
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YvJeBdVXT33h for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:26 +0000 (UTC)
+ id yIYHQuBTefku for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBA4842F3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C060419AD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DBA4842F3B
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C060419AD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D460685E25; Fri, 28 Feb 2025 16:30:27 +0000 (UTC)
+ id 0384487A92; Fri, 28 Feb 2025 16:30:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 3 Feb 2025 23:18:30 +0100
+Date: Mon, 3 Feb 2025 23:41:42 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: da66b838e4792338bd066d78261d70c80ea029a5
-X-Git-Newrev: d364d188a074214577b364fd4b3b6ac39b55794c
+X-Git-Oldrev: 648456ac096d6a7b21f9372a43db08ce8376c91c
+X-Git-Newrev: 998e8ccb1ffa77fcc5e70f361322682714db4f7c
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163027.D460685E25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/meson: bump version to
- 1.7.0
+Message-Id: <20250228163028.0384487A92@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/netopeer2: fix
+ shellcheck warnings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,70 +66,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d364d188a074214577b364fd4b3b6ac39b55794c
+commit: https://git.buildroot.net/buildroot/commit/?id=998e8ccb1ffa77fcc5e70f361322682714db4f7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Rebased patch 0001.
+The init script S52netopeer2 has to be renamed to S52netopeer2-server to
+match the daemon name. The step to install the init script now uses the
+NETOPEER2_PKGDIR variable to reference the directory instead of
+explicitly using the "package/netopeer2/" path.
 
-Release notes:
-https://mesonbuild.com/Release-notes-for-1-7-0.html
+The init script now is removed from the .checkpackageignore file.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Prefer-ext-static-libs-when-default-library-static.patch   | 6 +++---
- package/meson/meson.hash                                            | 4 ++--
- package/meson/meson.mk                                              | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ .checkpackageignore                                     | 1 -
+ package/netopeer2/{S52netopeer2 => S52netopeer2-server} | 2 +-
+ package/netopeer2/netopeer2.mk                          | 4 ++--
+ 3 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch b/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
-index 55f7512e2e..e56db1be07 100644
---- a/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
-+++ b/package/meson/0001-Prefer-ext-static-libs-when-default-library-static.patch
-@@ -24,7 +24,7 @@ http://autobuild.buildroot.net/results/c17/c17bbb12d9deadd64a441b36e324cfbbe8aba
- Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
- [Updated for 0.57.1 - get_builtin_option() vs. get_option(OptionKey())]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
--[Bernd: rebased for 1.6.0]
-+[Bernd: rebased for 1.6.0 & 1.7.0]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  mesonbuild/compilers/mixins/clike.py | 3 +++
-@@ -42,8 +42,8 @@ index 09ad837b1..b7f6b9f22 100644
-  from .. import compilers
-  from ..compilers import CompileCheckMode
-  from .visualstudio import VisualStudioLikeCompiler
--@@ -1038,6 +1038,9 @@ class CLikeCompiler(Compiler):
--             # TI C6000 compiler can use both extensions for static or dynamic libs.
-+@@ -1053,6 +1053,9 @@ class CLikeCompiler(Compiler):
-+             # TI C28x compilers can use both extensions for static or dynamic libs.
-              stlibext = ['a', 'lib']
-              shlibext = ['dll', 'so']
- +        elif env.coredata.get_option(OptionKey('default_library')) == 'static':
-diff --git a/package/meson/meson.hash b/package/meson/meson.hash
-index e02d878d79..881c35d250 100644
---- a/package/meson/meson.hash
-+++ b/package/meson/meson.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://github.com/mesonbuild/meson/releases/download/1.6.0/meson-1.6.0.tar.gz.asc
--sha256  999b65f21c03541cf11365489c1fad22e2418bb0c3d50ca61139f2eec09d5496  meson-1.6.0.tar.gz
-+# https://github.com/mesonbuild/meson/releases/download/1.7.0/meson-1.7.0.tar.gz.asc
-+sha256  08efbe84803eed07f863b05092d653a9d348f7038761d900412fddf56deb0284  meson-1.7.0.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  COPYING
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index f36091e584..292f81b690 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 68ad366d79..7ebfdd0499 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -861,7 +861,6 @@ package/neard/S53neard Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/neardal/0001-lib-neardal.h-fix-build-with-gcc-10.patch lib_patch.Upstream
+ package/netatalk/S50netatalk lib_sysv.EmptyLastLine lib_sysv.Indent lib_sysv.Variables
+ package/netcat/0001-signed-bit-counting.patch lib_patch.Sob lib_patch.Upstream
+-package/netopeer2/S52netopeer2 Shellcheck lib_sysv.Variables
+ package/netperf/0001-src-nettest_omni.c-fix-compilation-with-GCC10.patch lib_patch.Upstream
+ package/netplug/0001-makefile-flags.patch lib_patch.Sob lib_patch.Upstream
+ package/netplug/0002-add-missing-time-include.patch lib_patch.Upstream
+diff --git a/package/netopeer2/S52netopeer2 b/package/netopeer2/S52netopeer2-server
+similarity index 92%
+rename from package/netopeer2/S52netopeer2
+rename to package/netopeer2/S52netopeer2-server
+index cadd6b9feb..3fd993b578 100644
+--- a/package/netopeer2/S52netopeer2
++++ b/package/netopeer2/S52netopeer2-server
+@@ -7,7 +7,7 @@ NETOPEER2_SERVER_ARGS=""
  
--MESON_VERSION = 1.6.0
-+MESON_VERSION = 1.7.0
- MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
- MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
+-
++	# shellcheck disable=SC2086 # we need the word splitting
+ 	start-stop-daemon -S -q -p $PIDFILE -x "/usr/sbin/$DAEMON" \
+ 		-- $NETOPEER2_SERVER_ARGS
+ 	status=$?
+diff --git a/package/netopeer2/netopeer2.mk b/package/netopeer2/netopeer2.mk
+index 47fcd31acd..4853e5d176 100644
+--- a/package/netopeer2/netopeer2.mk
++++ b/package/netopeer2/netopeer2.mk
+@@ -29,8 +29,8 @@ NETOPEER2_MAKE_ENV = \
+ 	SYSREPO_SHM_PREFIX=$(NETOPEER2_SYSREPO_SHM_PREFIX)
+ 
+ define NETOPEER2_INSTALL_INIT_SYSV
+-	$(INSTALL) -m 755 -D package/netopeer2/S52netopeer2 \
+-		$(TARGET_DIR)/etc/init.d/S52netopeer2
++	$(INSTALL) -m 755 -D $(NETOPEER2_PKGDIR)/S52netopeer2-server \
++		$(TARGET_DIR)/etc/init.d/S52netopeer2-server
+ endef
+ 
+ # The host sysrepo used to install the netopeer2 modules will leave
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
