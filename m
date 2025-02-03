@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D5BFC282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:08:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E103BC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:08:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D78BF859A6;
-	Fri, 28 Feb 2025 17:08:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8601D70A01;
+	Fri, 28 Feb 2025 17:08:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V40bPQeWVq2N; Fri, 28 Feb 2025 17:08:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8inUiVMhRDhI; Fri, 28 Feb 2025 17:08:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB559859A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49713707CB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB559859A7;
-	Fri, 28 Feb 2025 17:08:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 49713707CB;
+	Fri, 28 Feb 2025 17:08:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 10AEC1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:42:38 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 12D7C1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:42:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B0DD42E6D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5FD6742EC9
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cTH1apeNOUeE for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:22 +0000 (UTC)
+ id NuR4O8ZKEF5F for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7252342EC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E02A942F11
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7252342EC9
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E02A942F11
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6BF7D8408F; Fri, 28 Feb 2025 16:30:25 +0000 (UTC)
+ id DB67E84767; Fri, 28 Feb 2025 16:30:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 3 Feb 2025 14:35:53 +0100
+Date: Mon, 3 Feb 2025 14:10:46 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3a9a06832baa27875647deeadfb4d234608ddb79
-X-Git-Newrev: b2ae9d0acd4f3f9dae1baf31c1d1cd00fe3daf11
+X-Git-Oldrev: 4e67d0730ffe1dc0729cad82669ff8abcdbccef3
+X-Git-Newrev: 29088086b5144fb37dd4c88da2de5e07605b7781
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163025.6BF7D8408F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/jitterentropy-library:
- bump version to 3.6.1
+Message-Id: <20250228163024.DB67E84767@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sysvinit: bump to
+ version 3.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,56 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2ae9d0acd4f3f9dae1baf31c1d1cd00fe3daf11
+commit: https://git.buildroot.net/buildroot/commit/?id=29088086b5144fb37dd4c88da2de5e07605b7781
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- License hash changed due to year update.
-- Updated site to new location.
+- Move URL to slicer69. This is where any releases past 3.04 are.
+  - Continue to use the tar.xz archives.
 
-Release notes:
-https://github.com/smuellerDD/jitterentropy-library/releases/tag/v3.6.1
-https://github.com/smuellerDD/jitterentropy-library/releases/tag/v3.6.0
-https://github.com/smuellerDD/jitterentropy-library/releases/tag/v3.5.0
+See doc/Changelog for details.
 
-Changelog file:
-https://github.com/smuellerDD/jitterentropy-library/blob/v3.6.1/CHANGES.md
-
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jitterentropy-library/jitterentropy-library.hash | 4 ++--
- package/jitterentropy-library/jitterentropy-library.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/sysvinit/sysvinit.hash | 2 +-
+ package/sysvinit/sysvinit.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/jitterentropy-library/jitterentropy-library.hash b/package/jitterentropy-library/jitterentropy-library.hash
-index c7833f1428..feb15f0fca 100644
---- a/package/jitterentropy-library/jitterentropy-library.hash
-+++ b/package/jitterentropy-library/jitterentropy-library.hash
+diff --git a/package/sysvinit/sysvinit.hash b/package/sysvinit/sysvinit.hash
+index 67b0ab38f0..e806ad3786 100644
+--- a/package/sysvinit/sysvinit.hash
++++ b/package/sysvinit/sysvinit.hash
 @@ -1,5 +1,5 @@
- # Locally computed
--sha256  802f025f766c38abf663fd5a21482b8313b6d6e2c68c36a4ffd6bc105fe975ab  jitterentropy-library-3.4.1.tar.xz
--sha256  7a89069066f6c0b8767d3256e5ec5d765b2c7f3354a5a06fc8d5bd7b8103d8a3  LICENSE
-+sha256  ddd23429cb6bdabbfeafd2b6aaabfbf1959dd7288887334dfec5ff099a2e9f3e  jitterentropy-library-3.6.1.tar.xz
-+sha256  adbfea86223ce2c1f410353054fbbe8d7936dd900ff0d373301c959300c2214c  LICENSE
- sha256  13aa749a5b0a454917a944ed8fffc530b784f5ead522b1aacaf4ec8aa55a6239  LICENSE.bsd
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  LICENSE.gplv2
-diff --git a/package/jitterentropy-library/jitterentropy-library.mk b/package/jitterentropy-library/jitterentropy-library.mk
-index f405082d08..28a0f7da61 100644
---- a/package/jitterentropy-library/jitterentropy-library.mk
-+++ b/package/jitterentropy-library/jitterentropy-library.mk
-@@ -4,10 +4,10 @@
+ # Locally computed:
+-sha256  2a621fe6e4528bc91308b74867ddaaebbdf7753f02395c0c5bae817bd2b7e3a5  sysvinit-3.04.tar.xz
++sha256  cbaeabddc35a6511b87c87452ee5e87c678a26329c7d7d17fb69a2b42a314d86  sysvinit-3.13.tar.xz
+ 
+ # Hash for license files:
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index e05a6dee38..e0eabc933c 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--JITTERENTROPY_LIBRARY_VERSION = 3.4.1
-+JITTERENTROPY_LIBRARY_VERSION = 3.6.1
- JITTERENTROPY_LIBRARY_SOURCE = \
- 	jitterentropy-library-$(JITTERENTROPY_LIBRARY_VERSION).tar.xz
--JITTERENTROPY_LIBRARY_SITE = http://www.chronox.de/jent
-+JITTERENTROPY_LIBRARY_SITE = http://www.chronox.de/jent/releases/$(JITTERENTROPY_LIBRARY_VERSION)
- JITTERENTROPY_LIBRARY_LICENSE = GPL-2.0 or BSD-3-Clause
- JITTERENTROPY_LIBRARY_LICENSE_FILES = LICENSE LICENSE.bsd LICENSE.gplv2
- JITTERENTROPY_LIBRARY_INSTALL_STAGING = YES
+-SYSVINIT_VERSION = 3.04
++SYSVINIT_VERSION = 3.13
+ SYSVINIT_SOURCE = sysvinit-$(SYSVINIT_VERSION).tar.xz
+-SYSVINIT_SITE = http://download.savannah.nongnu.org/releases/sysvinit
++SYSVINIT_SITE = https://github.com/slicer69/sysvinit/releases/download/$(SYSVINIT_VERSION)
+ SYSVINIT_LICENSE = GPL-2.0+
+ SYSVINIT_LICENSE_FILES = COPYING
+ SYSVINIT_CPE_ID_VALID = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
