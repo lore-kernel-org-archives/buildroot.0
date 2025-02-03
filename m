@@ -4,63 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9958CC02196
-	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 16:51:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3B48C02192
+	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 16:52:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 455BA82165;
-	Mon,  3 Feb 2025 16:51:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 89B2C80DF2;
+	Mon,  3 Feb 2025 16:52:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MREckaC4iKpr; Mon,  3 Feb 2025 16:51:18 +0000 (UTC)
+ id W23iJj2d3MGG; Mon,  3 Feb 2025 16:52:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6343182168
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FF4E80E5B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6343182168;
-	Mon,  3 Feb 2025 16:51:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 578C81A1
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 16:51:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9FF4E80E5B;
+	Mon,  3 Feb 2025 16:52:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0AB331A1
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 16:52:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3AC6540919
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 16:51:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EEFF380DF2
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 16:52:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZR54PR1fM__Z for <buildroot@buildroot.org>;
- Mon,  3 Feb 2025 16:51:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7cI1PwhOa41j for <buildroot@buildroot.org>;
+ Mon,  3 Feb 2025 16:52:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A11C44057B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A11C44057B
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A11C44057B
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 16:51:14 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 25DE9443DD;
- Mon,  3 Feb 2025 16:51:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tezfC-00CwyL-1t;
- Mon, 03 Feb 2025 17:51:10 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 347D680DE1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 347D680DE1
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 16:52:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 20DC38698E; Mon,  3 Feb 2025 16:52:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Akhilesh Nema <nemaakhilesh@gmail.com>
-Cc: buildroot@buildroot.org
-References: <20250125052624.86290-1-nemaakhilesh@gmail.com>
-Date: Mon, 03 Feb 2025 17:51:10 +0100
-In-Reply-To: <20250125052624.86290-1-nemaakhilesh@gmail.com> (Akhilesh Nema's
- message of "Fri, 24 Jan 2025 21:26:24 -0800")
-Message-ID: <87bjvjrmyp.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukedufecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufhffjgfkfgggtgesthdttddttdertdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeekgefftdeiveekjeehveetleduteevfeefudetvdekfeejheeitddvhfekffeuteenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppeduleegrdejkedrvdduuddrvddvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleegrdejkedrvdduuddrvddvtddphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepnhgvmhgrrghkhhhilhgvshhhsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/xz: bump to version 5.6.4
+To: buildroot@buildroot.org
+Date: Mon, 3 Feb 2025 17:50:53 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a141b117e0c02a6742ce2df3e28d00df2e364be3
+X-Git-Newrev: 8feca04f04789f7e6840a35e1b9298c36569371a
+X-Patchwork-Hint: ignore
+Message-Id: <20250203165249.20DC38698E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xz: bump to version 5.6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,22 +58,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Akhilesh" == Akhilesh Nema <nemaakhilesh@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8feca04f04789f7e6840a35e1b9298c36569371a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Release notes:
- > https://github.com/tukaani-project/xz/releases/tag/v5.6.4
+Release notes:
+https://github.com/tukaani-project/xz/releases/tag/v5.6.4
 
- > Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/xz/xz.hash | 4 ++--
+ package/xz/xz.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/xz/xz.hash b/package/xz/xz.hash
+index c403ea2be4..5ed714273f 100644
+--- a/package/xz/xz.hash
++++ b/package/xz/xz.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/tukaani-project/xz/releases/download/v5.6.3/xz-5.6.3.tar.bz2.sig
++# https://github.com/tukaani-project/xz/releases/download/v5.6.4/xz-5.6.4.tar.bz2.sig
+ # using key 3690C240CE51B4670D30AD1C38EE757D69184620 Lasse Collin <lasse.collin@tukaani.org>
+-sha256  a95a49147b2dbb5487517acc0adcd77f9c2032cf00664eeae352405357d14a6c  xz-5.6.3.tar.bz2
++sha256  176d510c30d80a23b8050bbc048f2ecaacb823ae48b6821727ed6591f0df9200  xz-5.6.4.tar.bz2
+ 
+ # Hash for license files
+ sha256  ee3b35b82f7bb0ba5fd9f13ca34ebbe757a59c05bfde5ab9d50ff4188ed33396  COPYING
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index b3f8c30026..4a54f93a76 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XZ_VERSION = 5.6.3
++XZ_VERSION = 5.6.4
+ XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
+ XZ_SITE = https://github.com/tukaani-project/xz/releases/download/v$(XZ_VERSION)
+ XZ_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
