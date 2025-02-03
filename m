@@ -4,70 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98A68C02192
-	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 14:44:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85750C02192
+	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 14:51:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9FCF460677;
-	Mon,  3 Feb 2025 14:44:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 064D96082B;
+	Mon,  3 Feb 2025 14:51:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T2fV7Gkv7X1Z; Mon,  3 Feb 2025 14:44:33 +0000 (UTC)
+ id TwS_uBb26mmI; Mon,  3 Feb 2025 14:51:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 657E5608EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1876060852
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 657E5608EE;
-	Mon,  3 Feb 2025 14:44:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 65A4F1A1
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 14:44:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1876060852;
+	Mon,  3 Feb 2025 14:51:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0C45512A
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 14:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 48EE240578
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 14:44:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E39F86082B
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 14:51:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gwntYfA1Fcqr for <buildroot@buildroot.org>;
- Mon,  3 Feb 2025 14:44:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0379740193
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0379740193
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0379740193
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 14:44:29 +0000 (UTC)
-Received: from localhost.localdomain (unknown [109.89.232.55])
- (Authenticated sender: vjardin@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id CEC8B19F5C2;
- Mon,  3 Feb 2025 15:44:25 +0100 (CET)
-From: Vincent Jardin <vjardin@free.fr>
-To: buildroot@buildroot.org
-Cc: vjardin@free.fr
-Date: Mon,  3 Feb 2025 15:44:20 +0100
-Message-ID: <20250203144420.50351-2-vjardin@free.fr>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250203144420.50351-1-vjardin@free.fr>
-References: <20241110184324.50580-2-vjardin@free.fr>
- <20250203144420.50351-1-vjardin@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y-uUHohdo8B7 for <buildroot@buildroot.org>;
+ Mon,  3 Feb 2025 14:51:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0298C606EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0298C606EA
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0298C606EA
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 14:51:30 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 87685442EF;
+ Mon,  3 Feb 2025 14:51:27 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1texnK-00BMgM-2e;
+ Mon, 03 Feb 2025 15:51:26 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
+References: <20250113200224.64363-1-ju.o@free.fr>
+Date: Mon, 03 Feb 2025 15:51:26 +0100
+In-Reply-To: <20250113200224.64363-1-ju.o@free.fr> (Julien Olivain's message
+ of "Mon, 13 Jan 2025 21:02:24 +0100")
+Message-ID: <87pljzrsi9.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1738593868;
- bh=oTZOCEhDUf/wDqEYL7HVn1E0laWHJ+7VKEXwcjrGwDQ=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=pEk8cZ7FQGAdncxMXgQ+cKeDK1nxRQ7MdSQK0LjuXL8ocwTwhkaghXkI90MUae/Eg
- SiHOEqUq9tHvtMPu0EacRtaW09YWf505os3zxq0bGvH5DPBReBOlTZu2nglrGZLEGj
- ejU8//gYIWEtvMQ28vCEeJXUD7q+byXxq97zfPeajICxpJmLrqazCtu5Z++tHzDZ6v
- rI4IZ2se4BmIHqFsF/XqlWGDALEpn2aCK7ldMA7tYE6vano9BceGOJ2l3ejiKBiS6U
- IFXD2KwL/Fngaj6zJlY8ED4p4wA/TW/YdYjtWLkQP7IyxJr9guZpO17lyyJ8tFLNtD
- uJXRRLjl8BKsQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=pEk8cZ7F
-Subject: [Buildroot] [PATCH v2 1/1] board/nvidia/bf3: set eth names
- according to doc
+X-GND-State: clean
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddujeekkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepueeijefhjeefgefgheehjedvleettedvkeevleetheeggeeihedugefhhffhgeelnecuffhomhgrihhnpehgihhtlhgrsgdrtghomhdpsghuihhlughrohhothdrohhrghdpkhgvrhhnvghlrdhorhhgnecukfhppedutdelrdekledrvdefvddrheehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddtledrkeelrddvfedvrdehhedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhrpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] fs/ext2: fixes for ext2r0 with
+ host-e2fsprogs >= 1.47.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,121 +78,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Set the names of the Ethernet interfaces that are exposed from a first
-boot so they are aligned with those described by Mellanox/NVIDIA
-documentation for the BF3.
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
-Those tmfifo and oob interface names are describeded at:
-  https://docs.nvidia.com/networking/display/bluefielddpuosv460/host-side+interface+configuration
+ > Since Buildroot commit [1] "package/e2fsprogs: bump version to
+ > 1.47.2", running the runtime test tests.fs.test_ext.TestExt2 with the
+ > command:
 
-When running the native Ubuntu on the BF3 board, the following udev
-rules are set:
-$ cat /etc/udev/rules.d/91-tmfifo_net.rules
-SUBSYSTEM=="net", ACTION=="add", DEVPATH=="/devices/platform/MLNXBF01:00/virtio1/net/eth[0-9]", NAME="tmfifo_net0"
+ >     utils/docker-run support/testing/run-tests \
+ >         -d dl -o output_folder \
+ >         tests.fs.test_ext.TestExt2
+ >     tail output_folder/TestExt2-build.log
 
-$ cat /etc/udev/rules.d/92-oob_net.rules
-SUBSYSTEM=="net", ACTION=="add", DEVPATH=="/devices/platform/MLNXBF17:00/net/e*", NAME="oob_net0", RUN+="/sbin/sysctl -w net.ipv4.conf.oob_net0.arp_notify=1"
+ > Fails with error in the log:
 
-The default CX ports of the BF3 are:
-ubuntu@bf$ ip link show p0
-4: p0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode
-   DEFAULT group default qlen 1000
-    link/ether a0:88:c2:xx:xx:xx brd ff:ff:ff:ff:ff:ff
-    altname enp3s0f0np0
-ubuntu@bf$ ip link show p1
-5: p1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP mode
-   DEFAULT group default qlen 1000
-    link/ether a0:88:c2:xx:xx:xx brd ff:ff:ff:ff:ff:ff
-    altname enp3s0f1np1
+ >     mkfs.ext2: the -r option has been removed.
 
-Signed-off-by: Vincent Jardin <vjardin@free.fr>
----
- .../bf3/rootfs_overlay/etc/init.d/S04ifnames  | 61 +++++++++++++++++++
- configs/nvidia_bf3_defconfig                  |  3 +
- 2 files changed, 64 insertions(+)
- create mode 100755 board/nvidia/bf3/rootfs_overlay/etc/init.d/S04ifnames
+ >     If you really need compatibility with pre-1995 Linux systems, use the
+ >     command-line option "-E revision=0".
 
-diff --git a/board/nvidia/bf3/rootfs_overlay/etc/init.d/S04ifnames b/board/nvidia/bf3/rootfs_overlay/etc/init.d/S04ifnames
-new file mode 100755
-index 0000000000..adb43f1e2c
---- /dev/null
-+++ b/board/nvidia/bf3/rootfs_overlay/etc/init.d/S04ifnames
-@@ -0,0 +1,61 @@
-+#!/bin/sh
-+# Rename the board's interfaces according to Mellanox/NVIDIA's documentation
-+
-+rename_interface() {
-+    bus_info=$1
-+    new_name=$2
-+    alt_name=$3
-+
-+    # Find the current interface name based on bus-info
-+    iface=$(find /sys/class/net -type l -exec sh -c '
-+        for i; do
-+            [ "$(basename "$(readlink -f "$i"/device)")" = "$0" ] && basename "$i"
-+        done
-+    ' "$bus_info" {} +)
-+
-+    # Rename the interface if found
-+    if [ -n "$iface" ]; then
-+        ip link set "$iface" name "$new_name"
-+        printf "%s to %s" "$iface" "$new_name"
-+
-+        # Set altname if provided
-+        if [ -n "$alt_name" ]; then
-+            ip link property add dev "$new_name" altname "$alt_name"
-+            printf "/%s" "$alt_name"
-+        fi
-+        printf "; "
-+    else
-+        echo "$bus_info not found"
-+    fi
-+}
-+
-+case "$1" in
-+    start)
-+        printf "Starting interface renaming:"
-+        # Initialize success flag
-+        rename_allok=0
-+        rename_interface "0000:03:00.0" "p0" "enp3s0f0np0" || rename_allok=1
-+        rename_interface "0000:03:00.1" "p1" "enp3s0f1np1" || rename_allok=1
-+        rename_interface "MLNXBF17:00" "oob_net0" "enamlnxbf17i0" || rename_allok=1
-+        rename_interface "virtio1" "tmfifo_net0" || rename_allok=1
-+
-+	if [ "$rename_allok" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+        ;;
-+    stop)
-+        ;;
-+    restart)
-+        # Optional: Handle restart by calling start after stop
-+        $0 stop
-+        $0 start
-+        ;;
-+    *)
-+        echo "Usage: $0 {start|stop|restart}"
-+        exit 1
-+        ;;
-+esac
-+
-+exit 0
-diff --git a/configs/nvidia_bf3_defconfig b/configs/nvidia_bf3_defconfig
-index 3f958c0062..c5b00aae83 100644
---- a/configs/nvidia_bf3_defconfig
-+++ b/configs/nvidia_bf3_defconfig
-@@ -10,3 +10,6 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/nvidia/bf3/linux.config"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_TARGET_ROOTFS_INITRAMFS=y
- # BR2_TARGET_ROOTFS_TAR is not set
-+BR2_ROOTFS_OVERLAY="board/nvidia/bf3/rootfs_overlay"
-+BR2_PACKAGE_LIBMNL=y
-+BR2_PACKAGE_IPROUTE2=y
+ > Upstream commit [2] "tune2fs: replace the -r option with -E
+ > revision=<fs-rev>" removed this option.
+
+ > This commit fixes the issue by using the new form with -E. Also,
+ > BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS has a default value to "-O
+ > ^64bit". Passing a "-O ..." option now generates an error when a
+ > ext2r0 filesystem is created (because this revision does not support
+ > ext2 filesystem feature options). This commit sets this default value
+ > only if BR2_TARGET_ROOTFS_EXT2_2r0 is not set.
+
+ > Fixes: [3]
+
+ > [1] https://gitlab.com/buildroot.org/buildroot/-/commit/db459859fa3c8fb7a2c0c8b8616637644d9c12bf
+ > [2] https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git/commit/?id=3fffe9dd6be5a5ed77755cf23c267b4afd1e7651
+ > [3] https://gitlab.com/buildroot.org/buildroot/-/jobs/8830670170
+
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
+
+Committed, thanks.
+
+Maybe we should consider dropping r0 support?
+
 -- 
-2.34.1
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
