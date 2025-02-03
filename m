@@ -1,76 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED081C02192
-	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 17:53:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F721C02197
+	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 17:53:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B55B403D9;
-	Mon,  3 Feb 2025 17:53:45 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oQV7h5Y3Ugtl; Mon,  3 Feb 2025 17:53:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABECC404EF
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ABECC404EF;
-	Mon,  3 Feb 2025 17:53:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A99A112A
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 17:53:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 97FAD605AD
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 17:53:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 386F9605AD;
+	Mon,  3 Feb 2025 17:53:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QdDlumoQy2v5 for <buildroot@buildroot.org>;
- Mon,  3 Feb 2025 17:53:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 141CB605D1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 141CB605D1
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 141CB605D1
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 17:53:39 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 1ACB219F5AF;
+ id QTumYR4veTYr; Mon,  3 Feb 2025 17:53:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D41C607B1
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D41C607B1;
+	Mon,  3 Feb 2025 17:53:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D53CE12A
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 17:53:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B7F7E4025E
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 17:53:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SNxmYNWKaEWt for <buildroot@buildroot.org>;
+ Mon,  3 Feb 2025 17:53:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=188.165.44.123;
+ helo=mail1.insia.net; envelope-from=guillaume.chaye@zeetim.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8A5CF40260
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8A5CF40260
+Received: from mail1.insia.net (mail1.insia.net [188.165.44.123])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8A5CF40260
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 17:53:43 +0000 (UTC)
+Received: from smtp.insia.net (unknown [192.168.1.24])
+ by mail1.insia.net (Postfix) with ESMTP id C1BB33F9D0;
  Mon,  3 Feb 2025 18:53:36 +0100 (CET)
-Received: from 94.105.106.182.dyn.edpnet.net ([94.105.106.182:56118])
- via 94.105.106.182.dyn.edpnet.net ([94.105.106.182])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 03 Feb 2025 18:53:36 +0100
+Received: from UDERZO.MYINSIA.INT (unknown [192.168.1.35])
+ by smtp.insia.net (Postfix) with ESMTP id 2B96F5F497;
+ Mon,  3 Feb 2025 18:53:58 +0100 (CET)
+From: Guillaume Chaye <guillaume.chaye@zeetim.com>
+To: buildroot@buildroot.org
+Date: Mon,  3 Feb 2025 12:53:16 -0500
+Message-Id: <20250203175316.1658490-1-guillaume.chaye@zeetim.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-Date: Mon, 03 Feb 2025 18:53:36 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Akhilesh Nema <nemaakhilesh@gmail.com>
-Cc: buildroot@buildroot.org, Brandon Maier <brandon.maier@collins.com>
-In-Reply-To: <20250130103003.15795-1-nemaakhilesh@gmail.com>
-References: <20250130103003.15795-1-nemaakhilesh@gmail.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <48aee5b49bb3172631abd80d20800bb1@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1738605218;
- bh=ws/096vKwuFj1zrAKTWDRpG+Fb8jCA1SphQM0+xXrwQ=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=CmDwMxQPlfhHZyM5ikaIaOD1MOXtuH/62bndbDMx/qeAXRE+F2O/+G/EqBwxpmu6H
- ozOwB0lnWJN/EBhJAghI51lc6v6pli6Cv3TCITQ4MjLNo3uog5kQpzC0tzmhjq+EtH
- WetBZu70hiCc1rasB7km4t/BGhJZ4lX1N9KNwFr6UImLJPGY2EX97Ak4hcmnanU89I
- hkyNQVZ2+yJrmNl2TS2sRiBpyqRsqZIb1+hMP2vceNNWBXajJI2igKeYafbtwfmfBI
- yI+UhRmrzxuJ0BD1w/2vnpHYK9NM889bUZyHzIx1YgxouJZmOajfoqjKH6guMzwREO
- znU3QOG0BcDcw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=CmDwMxQP
-Subject: Re: [Buildroot] [PATCH 1/1] configs/ls1043a-rdb: new defconfig
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=zeetim.com; s=mail1; t=1738605216;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=Vr+q9fjVECULQIQFJcvSrH43y/gs3yZdips0sbuOQSY=;
+ b=JS8a8jPIWSNmjZTYSssBxcwlp0wR95lXvzo9TGUeeBfDe0BlRYZd83Ia1JBgMr1OHyHHvU
+ 70cSMrP8InV8kKZpQKYBElAslUvvXVoS8B54njzaJKoZn9jACBKkkw5hYDc6MaT8P51vEa
+ n3NJpviKxRTa+qHR4WmasBhrJDHs1Habd9X0mmMbwNFmvfIgD2wKm9ZeS6kUiBUzrx9DSR
+ D4asjgcEUyfdEH+gIq3K6edZ04nbcm0C5b6jBeuG7A4OVdMsKEOwtaIKAbRaZBSiAy0Dxv
+ lgWTLI3LQ/njir2Ij+2ZCSswelN4m56RGzRGdqUwlHYaGdaB0vsr+B/iXqdB/A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=zeetim.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=zeetim.com header.i=@zeetim.com header.a=rsa-sha256
+ header.s=mail1 header.b=JS8a8jPI
+Subject: [Buildroot] [PATCH 1/1] support/download/cargo-post-process: add
+ support for hook scripts before and after cargo vendoring.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,22 +80,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Guillaume Chaye <guillaume.chaye@zeetim.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 30/01/2025 11:30, Akhilesh Nema wrote:
-> This is a reference design board for the NXP LS1043A SoC.
-> 
-> The config is heavily based on the ls1046a-frwy_defconfig.
-> 
-> see 
-> https://www.nxp.com/design/design-center/development-boards-and-designs/LS1043A-RDB
-> 
-> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
+---
+ support/download/cargo-post-process | 31 ++++++++++++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
 
-Applied to master, thanks.
+diff --git a/support/download/cargo-post-process b/support/download/cargo-post-process
+index 12198051a4..4f75349541 100755
+--- a/support/download/cargo-post-process
++++ b/support/download/cargo-post-process
+@@ -5,17 +5,42 @@ set -e
+ # shellcheck source=helpers source-path=SCRIPTDIR
+ . "${0%/*}/helpers"
+ 
++run_scripts() {
++    local scripts_errors=0  # Initialize error counter
++
++    for script in "$@"; do
++        # Ensure script exists and is executable before running
++        if [[ ! -x "$script" ]]; then
++            echo "Error: Script '$script' not found or not executable."
++            scripts_errors=$((scripts_errors + 1))
++            continue
++        fi
++
++		echo "Running script '$script' ..."
++        if ! "$script"; then
++			echo "Error: Script '$script' exit status is non zero."
++           scripts_errors=$((scripts_errors + 1))
++        fi
++    done
++
++    # Return the number of errors encountered
++    return $scripts_errors
++}
++
+ if [ "${BR_CARGO_MANIFEST_PATH}" ]; then
+     printf 'Setting BR_CARGO_MANIFEST_PATH is no longer supported; use post-process options.\n' >&2
+     exit 1
+ fi
+ 
+ manifest=Cargo.toml
+-while getopts "n:o:m:" OPT; do
++declare -a pre_vendoring_scripts post_vendoring_scripts
++while getopts "n:o:m:v:V" OPT; do
+     case "${OPT}" in
+     o)  output="${OPTARG}";;
+     n)  base_name="${OPTARG}";;
+     m)  manifest="${OPTARG}";;
++	v) pre_vendoring_scripts+=( "${OPTARG}" );;
++	V) post_vendoring_scripts+=( "${OPTARG}" );;
+     :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
+     \?) error "unknown option '%s'\n" "${OPTARG}";;
+     esac
+@@ -31,6 +56,8 @@ post_process_unpack "${base_name}" "${output}"
+ # Do the Cargo vendoring
+ pushd "${base_name}" > /dev/null
+ 
++run_scripts "${pre_vendoring_scripts[@]}" || exit 1
++
+ # Create the local .cargo/config with vendor info
+ mkdir -p .cargo/
+ mkdir -p "${CARGO_HOME}"
+@@ -46,6 +73,8 @@ cargo vendor \
+ # gets confusing, so instruct the user that it's been handled.
+ printf '(note: .cargo/config.toml automatically updated by Buildroot)\n\n'
+ 
++run_scripts "${post_vendoring_scripts[@]}" || exit 1
++
+ popd > /dev/null
+ 
+ post_process_repack "$(pwd)" "${base_name}" "${output}"
+-- 
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
