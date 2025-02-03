@@ -4,48 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34D00C02192
-	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 22:09:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7F4AC02192
+	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 22:09:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0370F60008;
-	Mon,  3 Feb 2025 22:09:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 87BDF60590;
+	Mon,  3 Feb 2025 22:09:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cddwp5idMbN2; Mon,  3 Feb 2025 22:09:18 +0000 (UTC)
+ id jWuqz1GiYoRI; Mon,  3 Feb 2025 22:09:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10A1460011
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9663E60595
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 10A1460011;
-	Mon,  3 Feb 2025 22:09:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A38DA12F
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 22:09:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9663E60595;
+	Mon,  3 Feb 2025 22:09:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D35D1185
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 22:09:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8830840159
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 22:09:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C165640159
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 22:09:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D9udgeOtfhvH for <buildroot@buildroot.org>;
- Mon,  3 Feb 2025 22:09:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id TyMVL6ma0QjW for <buildroot@buildroot.org>;
+ Mon,  3 Feb 2025 22:09:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 907A740102
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 907A740102
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 22:09:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 772A186A05; Mon,  3 Feb 2025 22:09:15 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 3 Feb 2025 23:07:45 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 41bceec4e80264b0de2a0c01a0c107bdec09eff2
-X-Git-Newrev: 33fbe2bbdc94a03d4ce3ee0e1a7df75d1e083439
-X-Patchwork-Hint: ignore
-Message-Id: <20250203220915.772A186A05@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-pvr-waipu: bump version to
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 81BB1401B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81BB1401B1
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 81BB1401B1
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 22:09:20 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7D24344440;
+ Mon,  3 Feb 2025 22:09:17 +0000 (UTC)
+Date: Mon, 3 Feb 2025 23:09:16 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+Message-ID: <20250203230916.4f0a261a@windsurf>
+In-Reply-To: <20250130182627.194122-1-bernd@kuhls.net>
+References: <20250130182627.194122-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeejjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeltdegvdejheegtefgueffgfelhfekvdefudevieeileetleeitdefgfeugffghfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepudelgedrjeekrddvuddurddvvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelgedrjeekrddvuddurddvvddtpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsggvrhhnugeskhhuhhhlshdrnhgvthdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1738620557;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=R2Z3XVQvTSd3RFAt/apwb32z5xjPlXwUDC2J8anIOb4=;
+ b=ZHYR/zQCzgxVzmgkp9whLXz0iWIWxaR4UnMiCRZEAdDB1zuUiwFMMLcrD16xLNa3XjkPbQ
+ PgF16VVhQL1csS4vwdv+IAkBYYYQSjRtcLEta+uMBKh+emkX3hjBzAuKi4+BBBVMcEeqCJ
+ oRWjvZgdZDG6XMqO080HKI5VoNlz7rxkUPEc5ajh2a8QPC0Oh8inlt8VBjojBesPVUMZSd
+ F+2pkVSnc9pJ8JmEqMz+/EUCNPf/7s6ZPkclyoqSh6CoZ3chdBg4cMR1DmG9WYyARH3P29
+ 3EMhS7dI2R2YfXzRgJryX3ej6IkeyrUtvi/jaL87YEe8UicLJg52qSIk64yznQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ZHYR/zQC
+Subject: Re: [Buildroot] [PATCH 1/1] package/kodi-pvr-waipu: bump version to
  21.9.0-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -58,46 +86,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33fbe2bbdc94a03d4ce3ee0e1a7df75d1e083439
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 30 Jan 2025 19:26:27 +0100
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
- package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
+>  package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-index 90b599e452..593bae1cdb 100644
---- a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-+++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  200c78d7ccde19046274549c1a59d1f1dc0763b73bb38f50f714e7a0627cb8d3  kodi-pvr-waipu-21.8.8-Omega.tar.gz
-+sha256  b314155b643eca1936931fe6c010b2f9d50b07a2e0786e8cd8db41ea6f8c1f87  kodi-pvr-waipu-21.9.0-Omega.tar.gz
- sha256  4202d4fb329f58c83ba921b56d7071e37f7df3f15b3820a3a04ef8eee49f54d2  pvr.waipu/LICENSE.txt
-diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-index edf7892dfa..47bef06966 100644
---- a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-+++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_WAIPU_VERSION = 21.8.8-Omega
-+KODI_PVR_WAIPU_VERSION = 21.9.0-Omega
- KODI_PVR_WAIPU_SITE = $(call github,flubshi,pvr.waipu,$(KODI_PVR_WAIPU_VERSION))
- KODI_PVR_WAIPU_LICENSE = GPL-2.0+
- KODI_PVR_WAIPU_LICENSE_FILES = pvr.waipu/LICENSE.txt
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
