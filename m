@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0BE5C02192
-	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 17:51:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7A49C02192
+	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 17:52:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB1BF41488;
-	Mon,  3 Feb 2025 17:51:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B9E1605D2;
+	Mon,  3 Feb 2025 17:52:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YHqUHB27SG79; Mon,  3 Feb 2025 17:51:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qMoX5B0FPfkF; Mon,  3 Feb 2025 17:52:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E61DB41452
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9C10605F9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E61DB41452;
-	Mon,  3 Feb 2025 17:51:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E6793185
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 17:51:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9C10605F9;
+	Mon,  3 Feb 2025 17:52:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0718412A
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 17:52:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D44B8404B6
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 17:51:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EAA9480D57
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 17:52:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r7ZxOENbVC53 for <buildroot@buildroot.org>;
- Mon,  3 Feb 2025 17:51:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C7284025E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C7284025E
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 17:51:31 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4469686A02; Mon,  3 Feb 2025 17:51:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EIysWPev2REg for <buildroot@buildroot.org>;
+ Mon,  3 Feb 2025 17:52:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4F0DB80D4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F0DB80D4F
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4F0DB80D4F
+ for <buildroot@buildroot.org>; Mon,  3 Feb 2025 17:52:35 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 3A80F7803A2;
+ Mon,  3 Feb 2025 18:52:32 +0100 (CET)
+Received: from 94.105.106.182.dyn.edpnet.net ([94.105.106.182:56118])
+ via 94.105.106.182.dyn.edpnet.net ([94.105.106.182])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 03 Feb 2025 18:52:32 +0100
+MIME-Version: 1.0
+Date: Mon, 03 Feb 2025 18:52:32 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 3 Feb 2025 18:50:30 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ba38576aa6e8b965fddda0858e520cbd87db006e
-X-Git-Newrev: 774035189fc211fccedb856b1718c8836be94387
-X-Patchwork-Hint: ignore
-Message-Id: <20250203175131.4469686A02@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/ls1046a-rdb: new defconfig
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250203152952.3079934-1-peter@korsgaard.com>
+References: <20250203152952.3079934-1-peter@korsgaard.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <54fb9d3e48528848ce3f1ae41389927f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1738605153;
+ bh=dkdUO4Gc+tLIT4k9tEFrFc6inPr3qPgSp5N2vAPi6as=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=lYNL+eV+PiXp1ykLzwVzMmv6Hf8UzaLq5uaWtrTuxGGjQIbnXuPsXqbCfvxoyKu2b
+ yOrPvotvlJE15fYtSuZpDgKjvJUng4erRKGC2Y6u8pKLx4urh/t3l1bJFyFDsDn3g1
+ FZ86QTuiQLQcfYk+096VL9QAmDh697mhpldAx/6XfxVxt2h1sCJXPu0P+YBevJGFIh
+ 1/NxZADMNqubzsWU6kSHrYRFZgGA02KxWpkZA4eXm8Y/MaIrpj+zYD9t1KhwKFbW/g
+ b68mjE8iRoeIYLEzQG66gfKQJSZEgrsnRHWjMzXTGOlQaJwZPyIp+vzzOMKtS/KpqR
+ KHPfA9fJFYltg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=lYNL+eV+
+Subject: Re: [Buildroot] [PATCH] fs/ext2: remove ext2 revision 0 support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,279 +82,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3773130945357056359=="
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3773130945357056359==
-Content-Type: text/plain
+On 03/02/2025 16:29, Peter Korsgaard wrote:
+> Revision 0 is very old and misses a number of features.  From man 
+> mkfs.ext2:
+> 
+> Set  the  file system revision for the new file system.  Note that 1.2
+> kernels only support revision 0 file systems.  The default is to create
+> revision 1 file systems.
+> 
+> We are unlikely to have a lot of Linux 1.2.x users, so drop support for 
+> it.
+> 
+> As revision 1 is the default, drop the -E revision argument to 
+> mkfs.ext2 for
+> simplicity.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=774035189fc211fccedb856b1718c8836be94387
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This is a reference design board for the NXP LS1046A SoC.
-
-The config is heavily based on the ls1046a-frwy_defconfig.
-
-see https://www.nxp.com/design/design-center/development-boards-and-designs/LS1046A-RDB
-
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-[Julien: remove extra white space in readme.txt]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                         |  4 ++
- board/freescale/ls1046a-rdb/genimage.cfg           | 29 ++++++++
- .../arm-trusted-firmware/arm-trusted-firmware.hash |  2 +
- .../patches/linux-headers/linux-headers.hash       |  1 +
- .../freescale/ls1046a-rdb/patches/linux/linux.hash |  2 +
- .../freescale/ls1046a-rdb/patches/uboot/uboot.hash |  2 +
- board/freescale/ls1046a-rdb/readme.txt             | 84 ++++++++++++++++++++++
- .../rootfs_overlay/boot/extlinux/extlinux.conf     |  4 ++
- configs/ls1046a-rdb_defconfig                      | 43 +++++++++++
- 9 files changed, 171 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 746eaf5e1d..f8b24e7602 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -72,6 +72,10 @@ N:	Adrien Gallouët <adrien@gallouet.fr>
- F:	package/bird/
- F:	package/glorytun/
- 
-+N:	Akhilesh Nema <nemaakhilesh@gmail.com>
-+F:	board/freescale/ls1046a-rdb/
-+F:	configs/ls1046a-rdb_defconfig
-+
- N:	Alejandro González <alejandro.gonzalez.correo@gmail.com>
- F:	package/qprint/
- F:	package/watchdog/
-diff --git a/board/freescale/ls1046a-rdb/genimage.cfg b/board/freescale/ls1046a-rdb/genimage.cfg
-new file mode 100644
-index 0000000000..63cca042b2
---- /dev/null
-+++ b/board/freescale/ls1046a-rdb/genimage.cfg
-@@ -0,0 +1,29 @@
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition fsbl {
-+		offset = 4K
-+		in-partition-table = "no"
-+		image = "bl2_sd.pbl"
-+	}
-+
-+	partition ssbl {
-+		offset = 1M
-+		in-partition-table = "no"
-+		image = "fip.bin"
-+	}
-+
-+	partition fman {
-+		offset = 9M
-+		in-partition-table = "no"
-+		image = "fsl_fman_ucode_ls1046_r1.0_106_4_18.bin"
-+	}
-+
-+	partition rootfs {
-+		offset = 16M
-+		partition-type = 0x83
-+		bootable = "true"
-+		image = "rootfs.ext4"
-+	}
-+}
-diff --git a/board/freescale/ls1046a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/ls1046a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-new file mode 100644
-index 0000000000..344a6299d8
---- /dev/null
-+++ b/board/freescale/ls1046a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  f03dad74e5c3df8059554def03e9298b6fbd4ffdd3e940a18b7e84a60b12a37a  atf-lf-6.6.52-2.2.0.tar.gz
-diff --git a/board/freescale/ls1046a-rdb/patches/linux-headers/linux-headers.hash b/board/freescale/ls1046a-rdb/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/freescale/ls1046a-rdb/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/freescale/ls1046a-rdb/patches/linux/linux.hash b/board/freescale/ls1046a-rdb/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..fa38fb1f75
---- /dev/null
-+++ b/board/freescale/ls1046a-rdb/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  5665b927616a7e27e69f3f8fface6dd693b01f35d42ae4f9a0f0a10be3621487  linux-lf-6.6.52-2.2.0.tar.gz
-diff --git a/board/freescale/ls1046a-rdb/patches/uboot/uboot.hash b/board/freescale/ls1046a-rdb/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..a1e3b69376
---- /dev/null
-+++ b/board/freescale/ls1046a-rdb/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  00fc7bd053de19d02c990b3aa214a27c6103f4306e756f3f6d4afb12314556e4  u-boot-lf-6.6.52-2.2.0.tar.gz
-diff --git a/board/freescale/ls1046a-rdb/readme.txt b/board/freescale/ls1046a-rdb/readme.txt
-new file mode 100644
-index 0000000000..1dc419d3b1
---- /dev/null
-+++ b/board/freescale/ls1046a-rdb/readme.txt
-@@ -0,0 +1,84 @@
-+***************
-+NXP LS1046A-RDB
-+***************
-+
-+This file documents the Buildroot support for the LS1046A Reference Design Board.
-+
-+for more details about the board and the QorIQ Layerscape SoC, see the following pages:
-+  - https://www.nxp.com/design/design-center/development-boards-and-designs/LS1046A-RDB
-+  - https://www.nxp.com/products/LS1046A
-+
-+for the NXP LDP (Linux Distribution POC), see
-+  - https://www.nxp.com/design/design-center/software/embedded-software/linux-software-and-development-tools/layerscape-linux-distribution-poc:LAYERSCAPE-SDK
-+
-+the components provided by NXP are:
-+  - rcw, lf-6.6.52-2.2.0
-+  - atf (fork), lf-6.6.52-2.2.0
-+  - uboot (fork), lf-6.6.52-2.2.0
-+  - qoriq-fm-ucode (blob), lf-6.6.52-2.2.0
-+  - linux (fork), lf-6.6.52-2.2.0
-+
-+Build
-+=====
-+
-+First, configure Buildroot for the LS1046A-RDB board:
-+
-+  make ls1046a-rdb_defconfig
-+
-+Build all components:
-+
-+  make
-+
-+You will find in output/images/ the following files:
-+  - bl2_sd.pbl
-+  - fip.bin
-+  - fsl_fman_ucode_ls1046_r1.0_106_4_18.bin
-+  - fsl_fman_ucode_ls1046_r1.0_108_4_9.bin
-+  - fsl-ls1046a-rdb.dtb
-+  - fsl-ls1046a-rdb-sdk.dtb
-+  - Image
-+  - PBL.bin
-+  - rootfs.ext2
-+  - rootfs.ext4
-+  - sdcard.img
-+  - u-boot.bin
-+
-+Create a bootable SD card
-+=========================
-+
-+To determine the device associated to the SD card have a look in the
-+/proc/partitions file:
-+
-+  cat /proc/partitions
-+
-+Buildroot prepares a bootable "sdcard.img" image in the output/images/
-+directory, ready to be dumped on a SD card. Launch the following
-+command as root:
-+
-+  dd if=output/images/sdcard.img of=/dev/sdX
-+
-+*** WARNING! This will destroy all the card content. Use with care! ***
-+
-+For details about the medium image layout, see the definition in
-+board/freescale/ls1046a-rdb/genimage.cfg.
-+
-+Boot the LS1046A-ARDB board
-+===========================
-+
-+To boot your newly created system:
-+- insert the SD card in the SD slot of the board;
-+- Configure the DIP switches
-+  SW3[1:8] = 01000110
-+  SW4[1:8] = 00111011
-+  SW5[1:8] = 00100000 (select SD Card boot option)
-+- put a Micro-USB cable into the console port and connect using a terminal emulator
-+  at 115200 bps, 8n1.
-+- power on the board.
-+
-+Alternatively, SD card boot can also be selected from the uboot command prompt:
-+- insert the SD card in the SD slot of the board;
-+- put a Micro-USB cable into console Port and connect using a terminal emulator
-+- power on the board.
-+- press any key to stop at the uboot command prompt.
-+- run the following uboot command
-+  => cpld reset sd
-diff --git a/board/freescale/ls1046a-rdb/rootfs_overlay/boot/extlinux/extlinux.conf b/board/freescale/ls1046a-rdb/rootfs_overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000000..bbf26e2e4f
---- /dev/null
-+++ b/board/freescale/ls1046a-rdb/rootfs_overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+label ls1046ardb-buildroot
-+  kernel /boot/Image
-+  devicetree /boot/fsl-ls1046a-rdb-sdk.dtb
-+  append console=ttyS0,115200 root=/dev/mmcblk0p1 earlycon=uart8250,mmio,0x21c0500 rootwait
-diff --git a/configs/ls1046a-rdb_defconfig b/configs/ls1046a-rdb_defconfig
-new file mode 100644
-index 0000000000..441d461298
---- /dev/null
-+++ b/configs/ls1046a-rdb_defconfig
-@@ -0,0 +1,43 @@
-+BR2_aarch64=y
-+BR2_cortex_a72=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_GLOBAL_PATCH_DIR="board/freescale/ls1046a-rdb/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_TARGET_GENERIC_HOSTNAME="ls1046ardb"
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_OVERLAY="board/freescale/ls1046a-rdb/rootfs_overlay"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/ls1046a-rdb/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.6.52-2.2.0)/linux-lf-6.6.52-2.2.0.tar.gz"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.config"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1046a-rdb freescale/fsl-ls1046a-rdb-sdk"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_PACKAGE_QORIQ_FM_UCODE=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.6.52-2.2.0)/atf-lf-6.6.52-2.2.0.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1046ardb"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_RCW=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="BOOT_MODE=sd"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.6.52-2.2.0)/u-boot-lf-6.6.52-2.2.0.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ls1046ardb_tfa"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_QORIQ_RCW=y
-+BR2_PACKAGE_HOST_QORIQ_RCW_INTREE="ls1046ardb/RR_FFSSPPPH_1133_5559/rcw_1800_sdboot.rcw"
-
---===============3773130945357056359==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3773130945357056359==--
