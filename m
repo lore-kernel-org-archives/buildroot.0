@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F65BC282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:10:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74D91C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:10:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62F4C70A76;
-	Fri, 28 Feb 2025 17:10:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D241783BB7;
+	Fri, 28 Feb 2025 17:10:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5LwVM_MC-kl7; Fri, 28 Feb 2025 17:10:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tiEH1SPU_IoK; Fri, 28 Feb 2025 17:10:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F4F470841
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B30A8126E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F4F470841;
-	Fri, 28 Feb 2025 17:10:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B30A8126E;
+	Fri, 28 Feb 2025 17:10:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 043CE68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:43:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1722A711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:43:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BEE57405C9
+ by smtp4.osuosl.org (Postfix) with ESMTP id B067C40558
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XMYJUM-RR9Y1 for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:27 +0000 (UTC)
+ id q-H5XRQw-yLF for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8DAFC42F4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E2EA42F33
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8DAFC42F4A
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E2EA42F33
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8710C87A92; Fri, 28 Feb 2025 16:30:28 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 68DC285E25; Fri, 28 Feb 2025 16:30:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 10:13:45 +0100
+Date: Mon, 3 Feb 2025 23:06:33 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a42041575e5c7959e3820710c62f0d4a61e9e04f
-X-Git-Newrev: 360fd01de20eb42aa0e6b5e9f7b37eaa104c6fc9
+X-Git-Oldrev: fefe7024a38f11bf0d62e7435aaec9847ede4976
+X-Git-Newrev: 41bceec4e80264b0de2a0c01a0c107bdec09eff2
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163028.8710C87A92@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/binutils: make 2.43
- the default version
+Message-Id: <20250228163027.68DC285E25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/testing: new patch
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,51 +58,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=360fd01de20eb42aa0e6b5e9f7b37eaa104c6fc9
+commit: https://git.buildroot.net/buildroot/commit/?id=41bceec4e80264b0de2a0c01a0c107bdec09eff2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Now that we've added support for binutils 2.44, follow our usual
-process of masking the previous release, 2.43, the default one.
-
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/binutils/Config.in.host | 2 +-
- package/binutils/binutils.mk    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                                         |  2 +
+ support/testing/tests/package/test_patch.py        | 44 ++++++++++++++++++++++
+ .../test_patch/rootfs-overlay/root/file.diff       |  8 ++++
+ .../test_patch/rootfs-overlay/root/file.txt        |  3 ++
+ 4 files changed, 57 insertions(+)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index e2485fc6b5..717d178a9e 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
- 
- choice
- 	prompt "Binutils Version"
--	default BR2_BINUTILS_VERSION_2_42_X if !BR2_arc
-+	default BR2_BINUTILS_VERSION_2_43_X if !BR2_arc
- 	default BR2_BINUTILS_VERSION_ARC if BR2_arc
- 	help
- 	  Select the version of binutils you wish to use.
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 3d1f77c8c4..227eeefc4f 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -11,7 +11,7 @@ ifeq ($(BINUTILS_VERSION),)
- ifeq ($(BR2_arc),y)
- BINUTILS_VERSION = arc-2023.09-release
- else
--BINUTILS_VERSION = 2.42
-+BINUTILS_VERSION = 2.43
- endif
- endif # BINUTILS_VERSION
- 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5a1d9fda7e..3992a82351 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1962,6 +1962,8 @@ F:	support/testing/tests/package/test_ola.py
+ F:	support/testing/tests/package/test_ola/
+ F:	support/testing/tests/package/test_openblas.py
+ F:	support/testing/tests/package/test_parted.py
++F:	support/testing/tests/package/test_patch.py
++F:	support/testing/tests/package/test_patch/
+ F:	support/testing/tests/package/test_pciutils.py
+ F:	support/testing/tests/package/test_perftest.py
+ F:	support/testing/tests/package/test_pigz.py
+diff --git a/support/testing/tests/package/test_patch.py b/support/testing/tests/package/test_patch.py
+new file mode 100644
+index 0000000000..67ecb0497a
+--- /dev/null
++++ b/support/testing/tests/package/test_patch.py
+@@ -0,0 +1,44 @@
++import os
++
++import infra.basetest
++
++
++class TestPatch(infra.basetest.BRTest):
++    rootfs_overlay = \
++        infra.filepath("tests/package/test_patch/rootfs-overlay")
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        f"""
++        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++        BR2_PACKAGE_PATCH=y
++        BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check the program can execute. This also checks that we are
++        # not using the patch applet from BusyBox (as it does not
++        # recognize the --version option).
++        self.assertRunOk("patch --version")
++
++        # We check the test file contains our expected string before
++        # the patch.
++        sed_cmd = "sed -n '2p' file.txt"
++        out, ret = self.emulator.run(sed_cmd)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], "Hello World!")
++
++        # We apply our test patch...
++        self.assertRunOk("patch -p1 < file.diff")
++
++        # We check the test file contains our expected string after
++        # applying the patch.
++        out, ret = self.emulator.run(sed_cmd)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], "Hello Buildroot!")
+diff --git a/support/testing/tests/package/test_patch/rootfs-overlay/root/file.diff b/support/testing/tests/package/test_patch/rootfs-overlay/root/file.diff
+new file mode 100644
+index 0000000000..d53324d84b
+--- /dev/null
++++ b/support/testing/tests/package/test_patch/rootfs-overlay/root/file.diff
+@@ -0,0 +1,8 @@
++diff -Naur a/file.txt b/file.txt
++--- a/file.txt	2024-12-18 23:11:50.863359248 +0100
+++++ b/file.txt	2024-12-18 23:12:26.464561146 +0100
++@@ -1,3 +1,3 @@
++ This is some context...
++-Hello World!
+++Hello Buildroot!
++ ...and this is some more context.
+diff --git a/support/testing/tests/package/test_patch/rootfs-overlay/root/file.txt b/support/testing/tests/package/test_patch/rootfs-overlay/root/file.txt
+new file mode 100644
+index 0000000000..b506c73d9f
+--- /dev/null
++++ b/support/testing/tests/package/test_patch/rootfs-overlay/root/file.txt
+@@ -0,0 +1,3 @@
++This is some context...
++Hello World!
++...and this is some more context.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
