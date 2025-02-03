@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F601C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:09:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B640C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:09:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D35A4859D9;
-	Fri, 28 Feb 2025 17:09:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B82F708F4;
+	Fri, 28 Feb 2025 17:09:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i9RpA8vTgq8K; Fri, 28 Feb 2025 17:09:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5dOCYwhy4thF; Fri, 28 Feb 2025 17:09:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0E31859DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 676E070A15
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0E31859DD;
-	Fri, 28 Feb 2025 17:08:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 676E070A15;
+	Fri, 28 Feb 2025 17:09:02 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B1711DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:42:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0AC1F1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:42:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C5E1142ACF
+ by smtp4.osuosl.org (Postfix) with ESMTP id E849642F21
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yDcRnhzHQHUo for <buildroot@buildroot.org>;
+ id 9izZ_Y8C6Htr for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:31:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BD8742F21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 993BD42F23
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7BD8742F21
+ by smtp4.osuosl.org (Postfix) with ESMTP id 993BD42F23
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7477A85E25; Fri, 28 Feb 2025 16:30:26 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 8D9E586A52; Fri, 28 Feb 2025 16:30:26 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 3 Feb 2025 17:55:05 +0100
+Date: Mon, 3 Feb 2025 18:41:59 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8feca04f04789f7e6840a35e1b9298c36569371a
-X-Git-Newrev: b03098645f7473389f878fdf610def79e371cf45
+X-Git-Oldrev: 30066345aa29bbd773f984448597d40143f7ff80
+X-Git-Newrev: 843cf79ff1687021b3a4fb508e546ad80a22779a
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163026.7477A85E25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/proftpd: add option to
- enable mod_lang
+Message-Id: <20250228163026.8D9E586A52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/optee-examples: add
+ option to use same version as optee-os
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,62 +60,67 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3362724484812174714=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b03098645f7473389f878fdf610def79e371cf45
+--===============3362724484812174714==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=843cf79ff1687021b3a4fb508e546ad80a22779a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-ProFTPD's mod_lang module handles RFC 2640 LANG and OPTS UTF8 commands
-allowing localization of greetings and command responses and the use of
-character sets beyond 7 bit ASCII for directory and file names.
+We can select a custom official version for the optee-os package; add an
+option to select the same version for optee-examples, to easily keep them
+synchronized.
 
-Signed-off-by: Mattia Narducci <mattianarducci1@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Étienne Carrière <etienne.carriere@foss.st.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/proftpd/Config.in  | 7 +++++++
- package/proftpd/proftpd.mk | 7 +++++++
- 2 files changed, 14 insertions(+)
+ package/optee-examples/Config.in | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
-index 9d99ff70c4..1f8f2bd305 100644
---- a/package/proftpd/Config.in
-+++ b/package/proftpd/Config.in
-@@ -16,6 +16,13 @@ config BR2_PACKAGE_PROFTPD_MOD_CAP
- 	help
- 	  Compile ProFTPD with mod_cap support
+diff --git a/package/optee-examples/Config.in b/package/optee-examples/Config.in
+index 52ef268ac4..5c5b0ce5ba 100644
+--- a/package/optee-examples/Config.in
++++ b/package/optee-examples/Config.in
+@@ -31,10 +31,16 @@ if BR2_PACKAGE_OPTEE_EXAMPLES
  
-+config BR2_PACKAGE_PROFTPD_MOD_LANG
-+	bool "mod_lang support"
-+	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-+	help
-+	  The mod_lang module enables ProFTPD support for RFC 2640 LANG
-+	  and OPTS UTF8 commands.
-+
- config BR2_PACKAGE_PROFTPD_MOD_REWRITE
- 	bool "mod_rewrite support"
+ choice
+ 	prompt "optee-examples version"
++	default BR2_PACKAGE_OPTEE_EXAMPLES_AS_OS \
++				if BR2_TARGET_OPTEE_OS_CUSTOM_VERSION
+ 	default BR2_PACKAGE_OPTEE_EXAMPLES_LATEST
  	help
-diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
-index 72a0fe9354..025fc46e45 100644
---- a/package/proftpd/proftpd.mk
-+++ b/package/proftpd/proftpd.mk
-@@ -49,6 +49,13 @@ else
- PROFTPD_CONF_OPTS += --disable-cap
- endif
+ 	  Select the version of optee-examples you want to use
  
-+ifeq ($(BR2_PACKAGE_PROFTPD_MOD_LANG),y)
-+PROFTPD_CONF_OPTS += --enable-nls
-+ifneq ($(BR2_ENABLE_LOCALE),y)
-+PROFTPD_DEPENDENCIES += libiconv
-+endif
-+endif
++config BR2_PACKAGE_OPTEE_EXAMPLES_AS_OS
++	bool "Same as optee-os being built"
++	depends on BR2_TARGET_OPTEE_OS_CUSTOM_VERSION
 +
- ifeq ($(BR2_PACKAGE_PROFTPD_MOD_REWRITE),y)
- PROFTPD_MODULES += mod_rewrite
- endif
+ config BR2_PACKAGE_OPTEE_EXAMPLES_LATEST
+ 	bool "4.3.0"
+ 	help
+@@ -64,6 +70,8 @@ endif
+ 
+ config BR2_PACKAGE_OPTEE_EXAMPLES_VERSION
+ 	string
++	default BR2_TARGET_OPTEE_OS_CUSTOM_VERSION_VALUE \
++				if BR2_PACKAGE_OPTEE_EXAMPLES_AS_OS
+ 	default "4.3.0"		if BR2_PACKAGE_OPTEE_EXAMPLES_LATEST
+ 	default "custom"	if BR2_PACKAGE_OPTEE_EXAMPLES_CUSTOM_TARBALL
+ 
+
+--===============3362724484812174714==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3362724484812174714==--
