@@ -4,58 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61542C02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 18:28:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6106FC02193
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 18:36:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 10182801DA;
-	Tue,  4 Feb 2025 18:28:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CCD5804E7;
+	Tue,  4 Feb 2025 18:36:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U3NciE7OSSYK; Tue,  4 Feb 2025 18:28:18 +0000 (UTC)
+ id HDgOCVkeFfS8; Tue,  4 Feb 2025 18:36:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1BAFC80B84
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35FEA80B66
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1BAFC80B84;
-	Tue,  4 Feb 2025 18:28:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1887B12A
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 18:28:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 35FEA80B66;
+	Tue,  4 Feb 2025 18:36:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D43C8185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 18:36:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 05DE24017A
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 18:28:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C25AE40DBF
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 18:36:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s0rvD-PX8Mp9 for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 18:28:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zV6i4qKUpN3m for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 18:36:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 47DC640190
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47DC640190
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 47DC640190
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 18:28:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 156AD40D9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 156AD40D9F
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 156AD40D9F
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 18:36:15 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.7.2] ([85.22.121.123]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MYvY8-1tsWoV26gy-00NQgh; Tue, 04
- Feb 2025 19:27:55 +0100
-Message-ID: <2aa26a7d-04ba-4428-87df-a01397a996be@gmx.de>
-Date: Tue, 4 Feb 2025 19:27:49 +0100
+Received: from [192.168.7.2] ([85.22.121.123]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N4hvb-1tFuLk067T-010NkM; Tue, 04
+ Feb 2025 19:36:11 +0100
+Message-ID: <d8942b7b-a7f2-49ef-b9c2-f0c3d46c6b17@gmx.de>
+Date: Tue, 4 Feb 2025 19:36:10 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Bryce Johnson <bryce@redpinelabs.com>
-Cc: Romain Naour <romain.naour@smile.fr>, Edgar Bonet
- <bonet@grenoble.cnrs.fr>, Buildroot development <buildroot@buildroot.org>,
- Michael Walle <mwalle@kernel.org>, Chris Packham <judge.packham@gmail.com>,
- Sergey Matyukevich <geomatsi@gmail.com>
-References: <035d6d78-0a31-4083-8fa1-65f5be5f74b5@grenoble.cnrs.fr>
- <3ea35c40-07d1-41d3-b4f9-08bbb0336d24@smile.fr>
- <4e691513-04a1-4f6f-ad3a-df18f653a6b7@grenoble.cnrs.fr>
- <f6d14b70-cf74-4a03-80fd-5e4fc4325a47@gmx.de>
- <d01683ed-cc7e-4c0d-a807-7a76ce7129ba@smile.fr>
- <1c7e531a-e549-4893-b8fd-d7e9cb01f319@gmx.de>
- <CADXxVSJ-0GtrywPpHwy_naA2Jx=aj31c=qLbNtt+bQ6YVqujnQ@mail.gmail.com>
+To: yann.morin@orange.com
+References: <20250204143227.1233163-1-fiona.klute@gmx.de>
+ <Z6IodGr39h7X02e1@yd-6wlzhs3>
 Content-Language: en-US, de-DE-1901, de-DE
 Autocrypt: addr=fiona.klute@gmx.de; keydata=
  xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
@@ -100,56 +91,55 @@ Autocrypt: addr=fiona.klute@gmx.de; keydata=
  MCTaUC2HWAAsiG90beT7JkkKKgMLS9DxmX9BN5Cm18Azckexy+vMg79LCcfw/gocQ4+lQn4/
  3BjqSuHfj+dXG+qcQ9pgB5+4/812hHog78dKT2r8l3ax3mHZCDTAC9Ks3LQU9/pMBm6K6nnL
  a4ASpGZSg2zLGIT0gnzi5h8EcIu9J1BFq6zRPZIjxBlhswF6J0BXjlDVe/3JzmeTTts=
-In-Reply-To: <CADXxVSJ-0GtrywPpHwy_naA2Jx=aj31c=qLbNtt+bQ6YVqujnQ@mail.gmail.com>
-X-Provags-ID: V03:K1:1qH6j6CczTCOXo6rtHDSNOqabpfZnJwxqO7XugzwgeMNd075UIw
- 54J7118cN/5wRXktUTlnUJmzjqsV2NYo4UPeK+1M1kuCGf6VeAJv6iHVUnkc4p9zQsG3snR
- EjlulnBsc5PLgzOACdnn4uXvr6DPMJHFTafFl0a/T53VjhF6A9LO1Dwzuf0kWdKa/5dMm7m
- f2HWrGvzmGCXmE9/HTrdw==
-UI-OutboundReport: notjunk:1;M01:P0:fDpQIKg6gTI=;ZFBgSa7Gfo8Zs0CKORZ9X8K729r
- LjATbOz4s7Nw7+XlfpGSJzJq+rmcBYMeIUoK3jzWxsoahfGR4fbyl5/QZ98Yo/IPdsiBmuD3Q
- OZLYqtk8oLz1UOPBCaVtw95MV3KbqJaKNBh1/SIt8Cv0rL2Walgu7bdmyhsn1WXz0bi7WRwZf
- cIqmcbezIg40nj3nVHRJNKjVNPMO9DtXslwkHH/SqlLsR04FdAgZ8MZGFoSHBohAxBWNPjc66
- yuidB36YQGbEFiT66z/GYfZGi6UYF0jRvAsf8QpReZRirhgtVMgAMTXKdapVyOvadB+4d0POz
- yavGspvtwjoRoAbf6E83sAVhjMOgcKPyoGtu+dHAO3kokyXdYcjS6JlO2le+rZ5YoRM1/PYG6
- eOyEpw3xz0+Ok4KVWzlL+9efmCSLY6U/eDSQUQcoOv+7TvqLZbOaBZVzL25Peua1TLBZW2yiq
- dES6RkrARVxx8u5DlYAuoC6CFq5I75f1SaEHrn3pPj4dbLxXx7eBl2Prm+3bm/X3seo+cIW9A
- M7DdKf+3QFx6ENvdE+z9rh+ithz8BB9QtZIc2R/QYaOC3wFaNXTb/2eaDTlfLK7V1/JqhxjnT
- c5/BZjiTzpxynpShXSIsjc65BFxGnz93RQJ7QysCGHF1WGUsrTAWDlKccu6jHhQC8sg7LI86p
- qWVvSgYCsaOsj7D1VpSWpjz2xWtKiKGejmh5YcHVfL4BKBBdJOkzZv2LB7Awb5pPWPoCF3xF9
- CHYsQVu7dapwtCWd2TVOcVKcQcf1ZWSQfmy2pAPhnOuHip509aZWEKIpqMJPnWIaSmxZ8HJkr
- 7Miex0xAXmVsmhrmX3KNeONclK4F5Y6qOAu0JIhoATeHAAIGQcGYG2/V2hHgmYK2G9ON99/Rd
- 6kFszIsv/tHioaTQbwToTcXuhZ+S9+Dmo6KcqKLB4EYUA61bjjde6gHqM6J/RJGWqehy1mcE7
- NAPrgXm4Rmc90Xy0pulKAvdiwRWyLecq1jeRN9RBQzjfim5NP51BuO8Pebj3xiupBI4v56qcD
- YfR5ZQ2qVR9a3pzBNHcUWKB3zAb1q7TpGNprUK+ZJkXs9DkW0/gUXzTWF7ttjOPW/LQvTiLkR
- cneizekyZaucO/6WsW+/mnTj1g7qOMVaJVz+H2yNBdV27PIspM51FJknUsDaZZyGTynDQXGqN
- FlKe3zYqg7GAiWYFFdelyTUJdyGBiLds1eHsMF4f/UksSh4aiXTCrhCUNVbKigMEgYV9BhW+K
- z0Q8LWAQRv3xQgqptLhMRinLtmDojSAyybldSbQP9eQWsm/xWOlPnjiQjSFLXRUNZj4n9SjHl
- r8zsJrpFuOat/BVKFyjuG1EgMZQ7UVcI7qVnwpJssR5s88WjWLBsrhea6HwKOtha+w7TARI+w
- yK8GLgVfJPpBkNBseldz67YLOScD4Ws+Avxo2DrIa8TI9E/pGBjSJtTpkqEGpXO7dp7IrRqqC
- oq9ZiEw==
+In-Reply-To: <Z6IodGr39h7X02e1@yd-6wlzhs3>
+X-Provags-ID: V03:K1:fTxdIWsu+Nlwgm0c3g/K+nfx6wiSV1ds/W1rQFSLxJI1Elp/wrt
+ vauQEryxwknrojk0bG4X25biSYWI9SoIgtsI8TtdKjdrr1RSw9T9qtqbTYPagF1/ysIluGa
+ TPuf1x082M0LZirDPS5QqF1emFaz2VEhCMWukjAvnsbk+GE5JqTEaP0eXQ4D+gM8Tj6iU+5
+ M394i97K8TvEcYDFZFjhA==
+UI-OutboundReport: notjunk:1;M01:P0:uq5SHvzyguA=;+ahmsOSuaAu2YF0nbVmJUdIjyiR
+ /QTu1LlTTcs8mHCbMpU5SOx5XKGNdtv4qS4myc7Y4zRji/ZPqkTVLLMu+MMcSxMscqJ1ZGqZM
+ J/spCSVK3RfTat+Evn/zL+71En2FwI/vtg5AdUKIHD6nxD/5SQPkH4EYPMWJMFCCz54QGxuz8
+ xd7LYLaPN1FEwDiY3m8tIxYABQXxIm/rSAqt7iCux7SpZW+qU6F8NKmIoOpdxvow1ywFaX/Nd
+ xC60rEmcbeKsVb4W2CbSNpiM9ia2nCM5q/AkpojQmpHq58EOox300twoYvoeAf3LfprPoj6Il
+ OL4/42ldHOKMfFZ086kDcaMvhfq1LJxHQKg+7naT5Jj+DXd2Dt8fuQeh8QU15pL2Dn504pUZs
+ vGb2VAkci2s4KT+KyYwAhQSPAKGkZtwHpIhyD9EAQnfjiZIrST1uvfHFqFGjRgbCmAzLnKiCO
+ 7KcKE6ZvZqXeSg5NHThIyEyZwHK23NNkJAimL3OLWeFruU8fQPBxI29YNCIKty0mnxlVQLmqC
+ 76REQA3/NpfD7AsethN3stt2yTwgJZSI4m4OYtJMnzwfdV6e44Mv9xQ26EzfygaMqmZibEaxt
+ SE62FO850UZ5pSvxH6Mm7+p363AZrylCObHMpWp4SpB0k55xCUKi2zl34s1t2SbTOMgKIvTIH
+ eCF7+yaWmwQCKAt7vM5J/Wbjlk13f1997oBs6JiRXsq4vVS5MocH7hPN26+ZMck3uFGR0ygwl
+ NaTsr85U4ucOK2n65VCVVLW2+QsH3OmWKxGmEdlvymbjuQ4ooKxt3dfticSkezhlO2Uj42iif
+ 67FNBQsvS98PmA5rzhFzFsbZmDqETsDkI9FhuIt/ZFiHXgurojuRstUWk2xTvmQrTUMC9sbRc
+ M/n4tpdfI2XKB6csViNC4It0rOoCNBEUoioK1a2j7s7HlkhtJAWMUzsxnQwyP1EcFqKvK28Df
+ xDKa3jWlNxsWEk00duW9kZcOtu80IPqP8oMAmEoZvENeI6toJ02Z07S4vTb/Ho+x1bUQYSHak
+ yw+B7RPikqm0Ik1r3hF8a9wci5RtjRsYO8DrNqn75R/QsuYQ6esUpp1kXPnVpOCzLfZjKB5G2
+ ZCqE5zLfJVv3c3AsKgFMdbgYh3LSye27Dq6iqBVYSbpj5QK//15sCYaij5wD8sTke+QAXQ50p
+ fkYt3l0H//Z4c2OLQbLMa6COjV638geKlVek7ITimbNldGQYQyjzTAETbN/+aLluIe5scWv2m
+ 79ZRPzm8R705/vi+H0gcWNIQixZ30QHXpx8X4Uz2CLXj6Hh0v1oGJWMcSIKHFxjuPA8wo1XOM
+ Kg09zZGuduSodeR4w6WLhuU1rJ/o0jXwtZ8+b9zWSBygPQbVysrgtSCk0S6phfcequkKC+E7l
+ /TK7CVAI9k8f7yeLV1pMUN9Ai0CNOFlieBzUg=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1738693675; x=1739298475; i=fiona.klute@gmx.de;
- bh=edi1SxwmgUeuePkylN0tCHkYIqF8YAghTFLZ/fMiCCQ=;
+ s=s31663417; t=1738694171; x=1739298971; i=fiona.klute@gmx.de;
+ bh=v9coycS5syLez5uR0ADqvHt11G0pqimn09zq9eBxOrA=;
  h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
  References:From:In-Reply-To:Content-Type:
  Content-Transfer-Encoding:cc:content-transfer-encoding:
  content-type:date:from:message-id:mime-version:reply-to:subject:
  to;
- b=lwtpZJ5uqmfMKV+YUzUBztujodM6Fw0WHNXVGJ2neELU6balF6Gdc99c//0PrZx6
- Da0yizABIi+g0PQQOE9Hx0KBDowIuoSQtoBU8crEVJ3PQ73VoO2RHhl7WR62xMfAw
- Ms9zIkG4JEgJLV8uU7Wussn5YO68yuEEEqCtK46JBcgPKuQvexv5A9AVCZIOYshQ1
- j162qdITHo7ty2Em5C6IdzsCe+bXNRkbJUIM9TF3H8cPNO+AYYY1i0heXEeJq+8+6
- 8xHzFsOUsx2YgXeT2TWH2gfeRTuhkmTFtyktILgL1SypIgXZt4+9tb7x2jhJYegcr
- Oc97Yi8drEFgF9Ce9g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=RX/CONT2T5S9HmFv9/dJsrB2leuBcc0uBgei5MCTRB/VXxgfWKQ5ShYNKOcD3eJY
+ pjNYmmAKjXbymyJ6d2fDrCXzOkPecRhksX2QEkEZ59nO3fByTfW/M1DMW6Z34rlD6
+ O7cL849mzenDMUUL+Kfp2HN4i4cdd1RvvWaTl7ed1fzX8DOdDzpC2F+Uy7zdv4LyE
+ SFOMJdaKAp5nH0cMEQOREvoW8j0/ZgGG9mSA+Gdmr477X9God4o1DErNoDO04ZfC+
+ qhsKU87/tNwmrxh4ef5dmBhwqsiYwD9IUg+sPetihzELKb7Z2FMb1coSbG9h3PNns
+ tsagLpggKzO/VTbxVQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=lwtpZJ5u
-Subject: Re: [Buildroot] [PATCH v2 1/1] linux: make out-of-tree DTS work
- with newest kernels
+ header.a=rsa-sha256 header.s=s31663417 header.b=RX/CONT2
+Subject: Re: [Buildroot] [PATCH 1/1] package/containerd: fix build with
+ toolchain without Gold linker
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -163,44 +153,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Fiona Klute via buildroot <buildroot@buildroot.org>
 Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+ Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Bryce!
+Hi Yann!
 
-Am 04.02.25 um 15:47 schrieb Bryce Johnson:
-> Hi Fiona,
-> I tried the patch and it looks interesting, was there a way to still
-> include some dtsi included in the kernel?  For example, I have a
-> custom board with TI AM62X.  I might have a myboard.dts that wants to
-> include from the kernel, k3-am625.dtsi which includes k3-am62.dtsi,
-> which include k3-am62-main.dtsi,k3-am62-mcu.dtsi, k3-am62-wakeup.dtsi,
-> etc.
+Am 04.02.25 um 15:47 schrieb yann.morin@orange.com:
+> Fiona, All,
+>
+> On 2025-02-04 15:32 +0100, Fiona Klute spake thusly:
+>> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+> [--SNIP--]
+>> Additionally disable PIE on musl to fix "read-only segment has dynamic
+>> relocations" errors during linking [2].
+> [--SNIP--]
+>> +ifeq ($(BR2_aarch64),y)
+>> +# Go forces use of the Gold linker on aarch64 due to a bug in BFD that
+>> +# is fixed in Binutils >= 2.41 (so all versions provided by
+>> +# Buildroot). Forcing Gold will break with toolchains that don't
+>> +# provide it, so override the flag and use BFD.
+>> +# See: https://github.com/golang/go/issues/22040
+>> +CONTAINERD_EXTLDFLAGS += -fuse-ld=bfd
+>> +ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+>> +# Go exe build with PIE doesn't work with musl.
+>> +# See: https://github.com/golang/go/issues/17847
+>> +CONTAINERD_EXTLDFLAGS += -Wl,--no-pie
+>> +endif
+>> +endif
+>
+> Is the PIE issue really only hapenning on Aarch64? The upstream issue
+> 17847 does not make it that obvious, but at least mips64 is said to have
+> the issue as well, and someone even mentioned amd64 (aka x86_64).
+>
+> I.e. don't we need the musl workaround out of the aarch64 condition?
+I'm not sure. The Go code has a check if PIE works with the given
+compiler & linker and disables it otherwise [1], and I didn't run into
+this problem when patching the forced --fuse-ld=gold out of Go, so I
+*assume* the --fuse-ld=bfd override breaks that check in some way and we
+don't need --no-pie it if we don't override the linker.
 
-Yes, I actually do that in my setups. E.g. I have a WIP (not posted
-publicly yet, but planned) DTS for a certain RPi CM4 based device [1]. I
-just have
-
-#include "arm/broadcom/bcm2711-rpi-cm4-io.dts"
-
-in there to start from the mainline CM4 IO-Board DTS. I should probably
-switch to bcm2711-rpi-cm4.dtsi instead before sending a kernel patch,
-but it works. :-)
-
-Making that work is why $(LINUX_DIR)/scripts/dtc/include-prefixes/ is
-added to the include paths for dtc in custom-dtbs.mk. What doesn't work
-yet is using extra .dtsi files (as in ones you provide, not from kernel
-source), but that should be easy to add.
+It definitely would be good to actually test that. I'll see if I can fit
+a build in, though I'd appreciate if someone who can actually test the
+result gives it a try. Note that the bug will only show with a toolchain
+that builds PIE by default.
 
 Best regards,
 Fiona
 
-(Patch link for reference)
->> See:
->> https://patchwork.ozlabs.org/project/buildroot/patch/20250203154651.2790784-1-fiona.klute@gmx.de/
-[1] https://revolutionpi.com/documentation/revpi-connect-4/
+[1]
+https://github.com/golang/go/blob/46fd6b4e37f043b57a2d426a633f61ffd4c40931/src/cmd/link/internal/ld/lib.go#L1879-L1894
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
