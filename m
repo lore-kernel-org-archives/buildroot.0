@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F11E2C02198
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 15:16:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A97BC02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 15:16:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B711341269;
-	Tue,  4 Feb 2025 15:16:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A3AA412B9;
+	Tue,  4 Feb 2025 15:16:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AFfuuh30UB-Y; Tue,  4 Feb 2025 15:16:41 +0000 (UTC)
+ id a30C9m9MyIvl; Tue,  4 Feb 2025 15:16:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E0F1412B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C09941310
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E0F1412B9;
-	Tue,  4 Feb 2025 15:16:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 62CC112A
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:16:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C09941310;
+	Tue,  4 Feb 2025 15:16:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 061F1185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:16:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 470D54112A
+ by smtp1.osuosl.org (Postfix) with ESMTP id DF62D80F91
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:16:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LExHNzv0v-Hy for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H6LqILKIv2gd for <buildroot@buildroot.org>;
  Tue,  4 Feb 2025 15:16:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C4C340AE5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03BA2810B3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C4C340AE5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 03BA2810B3
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:16:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3A00286E11; Tue,  4 Feb 2025 15:16:31 +0000 (UTC)
+ id F207186E0F; Tue,  4 Feb 2025 15:16:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 16:16:15 +0100
+Date: Tue, 4 Feb 2025 16:16:10 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8d9681032921cdfe2a529725041d9b9e9685bfe5
-X-Git-Newrev: 03df6d1a261613366deaa8ebb335d4fbcb73bad4
+X-Git-Oldrev: 91e51e267906f41cad530b93879ff3c157f3200d
+X-Git-Newrev: 7f6d8881050558b768bce014f6b313e17f587f7e
 X-Patchwork-Hint: ignore
-Message-Id: <20250204151631.3A00286E11@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/network-manager: add optional
- dependency on gobject-introspection
+Message-Id: <20250204151630.F207186E0F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/json-glib: bump to version 1.10.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,43 +65,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03df6d1a261613366deaa8ebb335d4fbcb73bad4
+commit: https://git.buildroot.net/buildroot/commit/?id=7f6d8881050558b768bce014f6b313e17f587f7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Introspection gets enabled if gobject-introspection is.
+Required to build with gobject-introspection >= 1.82.0, to be bumped
+in a later commit.
+
+License information has been restructured according to REUSE
+guidelines, see [1]. Update hashes and license information
+accordingly.
+
+[1] https://gitlab.gnome.org/GNOME/json-glib/-/commit/a06d43db36545aff10eb384d62548d96a7cf6020
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Tested-by: Marcus Hoffmann <buildroot@bubu1.eu>
+[Thomas: do not list .reuse/dep5 in license files]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/network-manager/network-manager.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/json-glib/json-glib.hash | 12 ++++++++----
+ package/json-glib/json-glib.mk   | 11 +++++++----
+ 2 files changed, 15 insertions(+), 8 deletions(-)
 
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index ec1119137d..1a0adacfa0 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -26,7 +26,6 @@ NETWORK_MANAGER_DEPENDENCIES = \
- 	util-linux
+diff --git a/package/json-glib/json-glib.hash b/package/json-glib/json-glib.hash
+index b78d708391..c4381fc0d7 100644
+--- a/package/json-glib/json-glib.hash
++++ b/package/json-glib/json-glib.hash
+@@ -1,5 +1,9 @@
+-# From https://download.gnome.org/sources/json-glib/1.8/json-glib-1.8.0.sha256sum
+-sha256  97ef5eb92ca811039ad50a65f06633f1aae64792789307be7170795d8b319454  json-glib-1.8.0.tar.xz
++# From https://download.gnome.org/sources/json-glib/1.10/json-glib-1.10.6.sha256sum
++sha256  77f4bcbf9339528f166b8073458693f0a20b77b7059dbc2db61746a1928b0293  json-glib-1.10.6.tar.xz
  
- NETWORK_MANAGER_CONF_OPTS = \
--	-Dintrospection=false \
- 	-Ddocs=false \
- 	-Dtests=no \
- 	-Dqt=false \
-@@ -50,6 +49,12 @@ ifeq ($(BR2_PACKAGE_DHCPCD),y)
- NETWORK_MANAGER_CONF_OPTS += -Ddhcpcd=/sbin/dhcpcd
- endif
+-# Hash for license file:
+-sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
++# Hashes for license files
++sha256  a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499  LICENSES/CC0-1.0.txt
++sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  LICENSES/LGPL-2.1-or-later.txt
++sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
++# symlink to LICENSES/LGPL-2.1-or-later.txt
++sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  COPYING
+diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
+index e216af20b1..9595c17274 100644
+--- a/package/json-glib/json-glib.mk
++++ b/package/json-glib/json-glib.mk
+@@ -4,12 +4,15 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+NETWORK_MANAGER_CONF_OPTS += -Dintrospection=true
-+else
-+NETWORK_MANAGER_CONF_OPTS += -Dintrospection=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_IWD),y)
- NETWORK_MANAGER_DEPENDENCIES += iwd
- NETWORK_MANAGER_CONF_OPTS += -Diwd=true
+-JSON_GLIB_VERSION_MAJOR = 1.8
+-JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).0
++JSON_GLIB_VERSION_MAJOR = 1.10
++JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).6
+ JSON_GLIB_SITE = https://download.gnome.org/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
+ JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
+-JSON_GLIB_LICENSE = LGPL-2.1+
+-JSON_GLIB_LICENSE_FILES = COPYING
++JSON_GLIB_LICENSE = LGPL-2.1+, MIT (conformance test data), CC0-1.0 (parts of build system, metadata, translations)
++JSON_GLIB_LICENSE_FILES = LICENSES/CC0-1.0.txt \
++	LICENSES/LGPL-2.1-or-later.txt \
++	LICENSES/MIT.txt \
++	COPYING
+ JSON_GLIB_INSTALL_STAGING = YES
+ JSON_GLIB_CONF_OPTS = -Dgtk_doc=disabled -Dtests=false
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
