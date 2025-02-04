@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CA80C02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 13:31:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C714C02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 13:31:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14EA760FDB;
-	Tue,  4 Feb 2025 13:31:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB7CF60FCC;
+	Tue,  4 Feb 2025 13:31:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7eswPe-0qVw2; Tue,  4 Feb 2025 13:31:13 +0000 (UTC)
+ id vOMHv8ecwQBI; Tue,  4 Feb 2025 13:31:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D42A60FDF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 33ACF6101E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D42A60FDF;
-	Tue,  4 Feb 2025 13:31:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9F73012F
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:31:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 33ACF6101E;
+	Tue,  4 Feb 2025 13:31:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 34912185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:31:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BFF9560FB1
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:31:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6005C4116A
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:31:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cMgUq7oHfkgX for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gHBMdTsRjVId for <buildroot@buildroot.org>;
  Tue,  4 Feb 2025 13:30:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D838360FB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C348341177
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D838360FB4
+ by smtp2.osuosl.org (Postfix) with ESMTP id C348341177
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:30:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D420B86C91; Tue,  4 Feb 2025 13:30:59 +0000 (UTC)
+ id BB1BF86C90; Tue,  4 Feb 2025 13:30:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 14:25:32 +0100
+Date: Tue, 4 Feb 2025 14:23:05 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3b4038e3d70375cd4b16d790fb90508b4f902f99
-X-Git-Newrev: ddc348d46f6f990a1feb5e806d9bd71d8fb99d35
+X-Git-Oldrev: a016341718bc9d9de4596725180900d50a4a2cf5
+X-Git-Newrev: 031e02f1d80ed8381c5a2fe36c5c513bf3f7ea2c
 X-Patchwork-Hint: ignore
-Message-Id: <20250204133059.D420B86C91@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/zynqmp/kria: update readme.txt with
- info about qspi.bin
+Message-Id: <20250204133059.BB1BF86C90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/zynqmp_*: migrate to binman
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,87 +64,242 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddc348d46f6f990a1feb5e806d9bd71d8fb99d35
+commit: https://git.buildroot.net/buildroot/commit/?id=031e02f1d80ed8381c5a2fe36c5c513bf3f7ea2c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This patch updates the documentation for Kria SOMs for reflashing
-the new qspi.bin binary file.
+This patch migrates the zynqmp defconfigs to binman applying the necessary
+upstream uboot patches.
 
-The qspi.bin is a unified binary containing both the boot.bin and
-u-boot.itb files for simplifying the reflashing process and also
-enabling the BIRT for reflashing the qspi.bin image as either
-"ImageA" or "ImageB".
+With binman, u-boot can now build the correct u-boot.itb files for kria
+natively.  So the post-build fixup scripts are no longer needed and can
+be removed.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/zynqmp/kria/readme.txt | 32 +++++++++++---------------------
- 1 file changed, 11 insertions(+), 21 deletions(-)
+ board/zynqmp/kria/kd240/kd240.sh    | 16 ----------------
+ board/zynqmp/kria/kr260/kr260.sh    | 16 ----------------
+ board/zynqmp/kria/kv260/kv260.sh    | 16 ----------------
+ configs/zynqmp_kria_kd240_defconfig |  7 ++++---
+ configs/zynqmp_kria_kr260_defconfig |  7 ++++---
+ configs/zynqmp_kria_kv260_defconfig |  7 ++++---
+ configs/zynqmp_zcu102_defconfig     |  3 ++-
+ configs/zynqmp_zcu104_defconfig     |  3 ++-
+ configs/zynqmp_zcu106_defconfig     |  3 ++-
+ 9 files changed, 18 insertions(+), 60 deletions(-)
 
-diff --git a/board/zynqmp/kria/readme.txt b/board/zynqmp/kria/readme.txt
-index 7d3a520fde..6fd7ca61ca 100644
---- a/board/zynqmp/kria/readme.txt
-+++ b/board/zynqmp/kria/readme.txt
-@@ -42,6 +42,7 @@ After building, you should get a tree like this:
-     +-- boot.bin
-     +-- boot.vfat
-     +-- Image
-+    +-- qspi.bin
-     +-- rootfs.ext2
-     +-- rootfs.ext4 -> rootfs.ext2
-     +-- sdcard.img
-@@ -80,39 +81,28 @@ easier.
- Instructions for using these utilities to update the files
- in QSPI flash can be found on the wiki link below.
- 
--https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+K26+SOM#Boot-Firmware-Updates
-+Please note that since the BIRT utility requires a single file
-+for flashing, the qspi.bin should be used as either ImageA or
-+ImageB.  The qspi.bin is a unified binary containing both the
-+boot.bin and u-boot.itb files in a single binary.
-+
-+https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+SOMs+Starter+Kits#Boot-FW-Update-Process
- 
- Additionally, it is possible to use u-boot for updating the
--QSPI with new boot.bin and u-boot.itb images with the u-boot
--commands below.
-+QSPI with new qspi.bin image with the u-boot commands below.
- 
- KV260 Flashing Instructions:
--Flashing u-boot.itb:
--    $ sf probe
--    $ fatload mmc 1 0x1000000 u-boot.itb
--    $ sf erase 0x280000 +$filesize
--    $ sf write 0x1000000 0x280000 $filesize
+diff --git a/board/zynqmp/kria/kd240/kd240.sh b/board/zynqmp/kria/kd240/kd240.sh
+deleted file mode 100755
+index 2203536a52..0000000000
+--- a/board/zynqmp/kria/kd240/kd240.sh
++++ /dev/null
+@@ -1,16 +0,0 @@
+-#!/bin/sh
 -
--Flashing boot.bin:
-     $ sf probe
--    $ fatload mmc 1 0x1000000 boot.bin
-+    $ fatload mmc 1 0x1000000 qspi.bin
-     $ sf erase 0x200000 +$filesize
-     $ sf write 0x1000000 0x200000 $filesize
- 
- KD240 / KR260 Flashing Instructions:
--Flashing u-boot.itb:
--    $ usb start
--    $ sf probe
--    $ fatload usb 0 0x1000000 u-boot.itb
--    $ sf erase 0x280000 +$filesize
--    $ sf write 0x1000000 0x280000 $filesize
+-# This is a temporary work around for generating kd240 u-boot.itb.
+-# The problem is there is no way to currently configure u-boot to apply
+-# the carrier board dtb overlay during build, so all kd240 carrier board
+-# drivers are missing.
+-# This will be removed when u-boot can build the kd240 u-boot.itb natively.
 -
--Flashing boot.bin:
-     $ usb start
-     $ sf probe
--    $ fatload usb 0 0x1000000 boot.bin
-+    $ fatload usb 0 0x1000000 qspi.bin
-     $ sf erase 0x200000 +$filesize
-     $ sf write 0x1000000 0x200000 $filesize
- 
- It is possible to boot the Buildroot generated SD card image without
--updating the QSPI boot.bin image, so this is an optional step.
-+updating the QSPI qspi.bin image, so this is an optional step.
+-UBOOT_DIR="$4"
+-
+-fdtoverlay -o "${UBOOT_DIR}/fit-dtb.blob" \
+-	   -i "${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k24-revA.dtb" \
+-	   "${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kd-g-revA.dtbo"
+-
+-"${UBOOT_DIR}/tools/mkimage" -E -f "${UBOOT_DIR}/u-boot.its" \
+-			     -B 0x8 "${BINARIES_DIR}/u-boot.itb"
+diff --git a/board/zynqmp/kria/kr260/kr260.sh b/board/zynqmp/kria/kr260/kr260.sh
+deleted file mode 100755
+index ac49fa5ee4..0000000000
+--- a/board/zynqmp/kria/kr260/kr260.sh
++++ /dev/null
+@@ -1,16 +0,0 @@
+-#!/bin/sh
+-
+-# This is a temporary work around for generating kr260 u-boot.itb.
+-# The problem is there is no way to currently configure u-boot to apply
+-# the carrier board dtb overlay during build, so all kr260 carrier board
+-# drivers are missing.
+-# This will be removed when u-boot can build the kr260 u-boot.itb natively.
+-
+-UBOOT_DIR="$4"
+-
+-fdtoverlay -o "${UBOOT_DIR}/fit-dtb.blob" \
+-	   -i "${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb" \
+-	   "${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kr-g-revB.dtbo"
+-
+-"${UBOOT_DIR}/tools/mkimage" -E -f "${UBOOT_DIR}/u-boot.its" \
+-			     -B 0x8 "${BINARIES_DIR}/u-boot.itb"
+diff --git a/board/zynqmp/kria/kv260/kv260.sh b/board/zynqmp/kria/kv260/kv260.sh
+deleted file mode 100755
+index dc92c51d43..0000000000
+--- a/board/zynqmp/kria/kv260/kv260.sh
++++ /dev/null
+@@ -1,16 +0,0 @@
+-#!/bin/sh
+-
+-# This is a temporary work around for generating kv260 u-boot.itb.
+-# The problem is there is no way to currently configure u-boot to apply
+-# the carrier board dtb overlay during build, so all kv260 carrier board
+-# drivers are missing.
+-# This will be removed when u-boot can build the kv260 u-boot.itb natively.
+-
+-UBOOT_DIR="$4"
+-
+-fdtoverlay -o "${UBOOT_DIR}/fit-dtb.blob" \
+-	   -i "${UBOOT_DIR}/arch/arm/dts/zynqmp-smk-k26-revA.dtb" \
+-	   "${UBOOT_DIR}/arch/arm/dts/zynqmp-sck-kv-g-revB.dtbo"
+-
+-"${UBOOT_DIR}/tools/mkimage" -E -f "${UBOOT_DIR}/u-boot.its" \
+-			     -B 0x8 "${BINARIES_DIR}/u-boot.itb"
+diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
+index 6a6ed87dff..139ad7157e 100644
+--- a/configs/zynqmp_kria_kd240_defconfig
++++ b/configs/zynqmp_kria_kd240_defconfig
+@@ -2,11 +2,11 @@ BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
+-BR2_GLOBAL_PATCH_DIR="board/zynqmp/kria/patches board/xilinx/patches"
++BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches board/zynqmp/kria/patches board/xilinx/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh board/zynqmp/kria/kd240/kd240.sh"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 sda2 ${UBOOT_DIR}"
++BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 sda2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.60)/xlnx_rebase_v6.6_LTS_merge_6.6.60.tar.gz"
+@@ -33,6 +33,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
+index e679010d8a..700b378bd2 100644
+--- a/configs/zynqmp_kria_kr260_defconfig
++++ b/configs/zynqmp_kria_kr260_defconfig
+@@ -2,11 +2,11 @@ BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
+-BR2_GLOBAL_PATCH_DIR="board/zynqmp/kria/patches board/xilinx/patches"
++BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches board/zynqmp/kria/patches board/xilinx/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh board/zynqmp/kria/kr260/kr260.sh"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 sda2 ${UBOOT_DIR}"
++BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 sda2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.60)/xlnx_rebase_v6.6_LTS_merge_6.6.60.tar.gz"
+@@ -33,6 +33,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index 353ec165d3..4dd0226c33 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -2,11 +2,11 @@ BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
+-BR2_GLOBAL_PATCH_DIR="board/zynqmp/kria/patches board/xilinx/patches"
++BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches board/zynqmp/kria/patches board/xilinx/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh board/zynqmp/kria/kv260/kv260.sh"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 mmcblk1p2 ${UBOOT_DIR}"
++BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 mmcblk1p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.60)/xlnx_rebase_v6.6_LTS_merge_6.6.60.tar.gz"
+@@ -33,6 +33,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+index 5be8947ba3..2a316958f2 100644
+--- a/configs/zynqmp_zcu102_defconfig
++++ b/configs/zynqmp_zcu102_defconfig
+@@ -2,7 +2,7 @@ BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
+-BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
++BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches board/xilinx/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+@@ -32,6 +32,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
+index 64d177b8d1..4574898d72 100644
+--- a/configs/zynqmp_zcu104_defconfig
++++ b/configs/zynqmp_zcu104_defconfig
+@@ -2,7 +2,7 @@ BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
+-BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
++BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches board/xilinx/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+@@ -32,6 +32,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index 6fa078a84f..d6e2617552 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -2,7 +2,7 @@ BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT=y
+ BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
+-BR2_GLOBAL_PATCH_DIR="board/xilinx/patches"
++BR2_GLOBAL_PATCH_DIR="board/zynqmp/patches board/xilinx/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynqmp/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+@@ -32,6 +32,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
