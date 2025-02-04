@@ -4,80 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4003C02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 13:08:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6726C02196
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 13:14:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6988B60BA6;
-	Tue,  4 Feb 2025 13:08:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A4D126006A;
+	Tue,  4 Feb 2025 13:14:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zMSfpWsvEAbK; Tue,  4 Feb 2025 13:08:16 +0000 (UTC)
+ id FJRc8d1aHbuz; Tue,  4 Feb 2025 13:14:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67AFE60E73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1E056089A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 67AFE60E73;
-	Tue,  4 Feb 2025 13:08:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1E056089A;
+	Tue,  4 Feb 2025 13:14:41 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 70EB8185
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:08:14 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E3305185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:14:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5314360F05
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:08:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C524B60AE8
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:14:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qfC_FqbuFjx7 for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 13:08:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id I43iPo5jcTLF for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 13:14:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 07FBC60BA6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07FBC60BA6
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 07FBC60BA6
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:08:12 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D571E442EA;
- Tue,  4 Feb 2025 13:08:09 +0000 (UTC)
-Date: Tue, 4 Feb 2025 14:08:08 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-Cc: buildroot@buildroot.org, =?UTF-8?B?TWlxdcOobA==?= Raynal
- <miquel.raynal@bootlin.com>, Adam Duskett
- <adam.duskett@amarulasolutions.com>
-Message-ID: <20250204140808.5c6fe0fa@windsurf>
-In-Reply-To: <20250204-repair_foot-v1-1-498406d0a384@bootlin.com>
-References: <20250204-repair_foot-v1-1-498406d0a384@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3A3536089A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A3536089A
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3A3536089A
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:14:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A4FA24426B;
+ Tue,  4 Feb 2025 13:14:34 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1tfIl8-00FoW6-0C;
+ Tue, 04 Feb 2025 14:14:34 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
+References: <20250128202823.1905913-1-ju.o@free.fr>
+Date: Tue, 04 Feb 2025 14:14:33 +0100
+In-Reply-To: <20250128202823.1905913-1-ju.o@free.fr> (Julien Olivain's message
+ of "Tue, 28 Jan 2025 21:28:23 +0100")
+Message-ID: <87ed0donra.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdeiudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeekudffgeettedtfeeuheekjedthfelgefhffdtfeeujefgvdefveetudffhefgleenucffohhmrghinhepshhouhhrtggvfigrrhgvrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedutdelrdekledrvdefvddrheehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddtledrkeelrddvfedvrdehhedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopehthhhomhgrshdrsghonhhnvghfihhllhgvsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmpdhrtghpthhto
- heprggurghmrdguuhhskhgvthhtsegrmhgrrhhulhgrshholhhuthhiohhnshdrtghomh
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1738674490;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=fPgkA48N6RGJzzug9afRxctjWkhbSyuwpP/D6kZy7mM=;
- b=Hxl1BJJl3uSZEZK5O5Fd2A5OySCUjPSgnC9bPgwW2d1f6PTnzsl0YZork3BwJZJf//A/NO
- w9g/krngJM/kOpX0AHkqO4UkgQZZQUI/th3Ws6bA2XeWVGGPfEt6eDYCQdZAO/CSg8AvAZ
- Mrj97IhZfPGW4zZFVcSrh+nRV7QluW1NiuseKM3Yaljwk+4G19xL4BtbzTpyH+RJPKEXse
- OBSwI8tHqY+j4Ibh4TU64TDQxHrs2bE+NNjlYH0iY1En73GEGR2axzzW+MAzX6K+glk3aE
- rlvxQOnNNUMI5DZxoNQXIkAIZsudAG231/0sWQ0paaaP3aeg4Ykf/M/NHaWS1A==
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdeivdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepgefhfedtvdfhheehtedvhfdufefhheekkefftedtudejudehfffhffevgeejieegnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhorhhgpdhgihhtlhgrsgdrtghomhdpghhithhhuhgsrdgtohhmnecukfhppedutdelrdekledrvdefvddrheehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddtledrkeelrddvfedvrdehhedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhrpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
+X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Hxl1BJJl
-Subject: Re: [Buildroot] [PATCH] package/foot: support soft-float
- architecture
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/util-linux: fix libuuid
+ build without pthread
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,69 +78,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
-On Tue, 04 Feb 2025 12:27:31 +0100
-Thomas Bonnefille <thomas.bonnefille@bootlin.com> wrote:
+ > Since Buildroot commit [1], util-linux libuuid is failing to build
+ > with uclibc toolchains, when there is no thread support
+ > (that is, when BR2_PTHREADS_NONE=y).
 
-> Architecture using soft float don't support the math FE_* exceptions.
-> This commit adds a patch to conditionnally build the FE_* exception
-> handling.
+ > Builds are failing with error:
 
-Are you sure it's related to soft-float? For example, ARC has floating
-point, but does support some of those FE exceptions.
+ >     libuuid/src/gen_uuid.c:83:10: fatal error: pthread.h: No such file or directory
+ >        83 | #include <pthread.h>
+ >           |          ^~~~~~~~~~~
 
-See for example:
+ > This failure is due to the upstream commit [2], which introduced the
+ > pthread dependency.
 
-# z3 supports arch for which libc fenv.h provides all four macros:
-# FE_DOWNWARD, FE_TONEAREST, FE_TOWARDZERO, FE_UPWARD
-# See for example in glibc https://sourceware.org/git/glibc.git
-# git grep -E '^[[:space:]]*#[[:space:]]*define[[:space:]]+FE_(TONEAREST|UPWARD|DOWNWARD|TOWARDZERO)' sysdeps/
-config BR2_PACKAGE_Z3_ARCH_SUPPORTS
-        bool
-        default y if BR2_aarch64 || BR2_aarch64_be
-        default y if BR2_arceb || BR2_arcle
-        default y if BR2_arm || BR2_armeb
-        default y if BR2_i386
-        default y if BR2_m68k
-        # BR2_microblaze has only FE_TONEAREST
-        default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-        default y if BR2_or1k
-        default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
-        default y if BR2_riscv
-        default y if BR2_s390x
-        # BR2_sh has only FE_{TONEAREST,TOWARDZERO}
-        default y if BR2_sparc || BR2_sparc64
-        default y if BR2_x86_64
-        # BR2_xtensa supports only uclibc which does not have fenv.h
+ > This commit fixes the issue by adding package patches, disabling
+ > the uuidd cache in case the libptread (or the pthread_atfork function)
+ > is not available.
 
-We have this sort of stuff in a few places. Maybe we need to factorize
-that?
+ > Fixes:
+ > https://autobuild.buildroot.org/results/e5856cf6f3b8512ededa17d20db2b330a478dd8e/
 
+ > [1] https://gitlab.com/buildroot.org/buildroot/-/commit/f14929c657a7b1794dcd39ac469d2ad826465d98
+ > [2] https://github.com/util-linux/util-linux/commit/25bd5396ab700623134b491f42a3280556cb674c
 
-> +diff --git a/box-drawing.c b/box-drawing.c
-> +index 1c613051..e5f67ca7 100644
-> +--- a/box-drawing.c
-> ++++ b/box-drawing.c
-> +@@ -1468,8 +1468,11 @@ draw_box_drawings_light_arc(struct buf *buf, char32_t wc)
-> +         double x = circle_hemisphere * sqrt(c_r2 - (y - c_y) * (y - c_y)) + c_x;
-> + 
-> +         /* See math_error(7) */
-> +-        if (errno != 0 ||
-> +-            fetestexcept(FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW | FE_UNDERFLOW))
-> ++        if (errno != 0
-> ++        #if defined (FE_INVALID) && defined (FE_DIVBYZERO) && defined (FE_OVERFLOW) && defined (FE_UNDERFLOW)
-> ++            || fetestexcept(FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW | FE_UNDERFLOW)
-> ++        #endif
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
+ > ---
+ > Changes v1 -> v2:
+ > changed package patches:
+ > v1 was using https://github.com/util-linux/util-linux/pull/3375
+ > v2 is using https://github.com/util-linux/util-linux/pull/3383
+ > ---
+ > Patch tested in:
+ > https://gitlab.com/jolivain/buildroot/-/pipelines/1645583168
 
-Is it OK to just compile out this code? I mean yes it fixes the build
-issues, but is that correct from a runtime perspective?
+ > Note: there is two build failures, unrelated to this patch.
+ > ---
+ >  .../0002-c.h-consolidate-THREAD_LOCAL.patch   | 65 +++++++++++++++
+ >  ...ine-HAVE_LIBPTHREAD-and-PTHREAD_LIBS.patch | 47 +++++++++++
+ >  .../0004-meson-add-HAVE_LIBPTHREAD.patch      | 27 ++++++
 
-Thomas
+I guess the meson patch is not strictly needed, but OK - Maybe makes
+more sense to use the entire patch series and it will go away anyway
+once we move to the next release.
+
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
