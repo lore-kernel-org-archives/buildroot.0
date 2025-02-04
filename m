@@ -1,107 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DA4AC02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 10:44:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5A56C02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 10:46:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2EDFC4042E;
-	Tue,  4 Feb 2025 10:44:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 98ACE6006A;
+	Tue,  4 Feb 2025 10:46:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LuoVYwfvW3W7; Tue,  4 Feb 2025 10:44:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Re4Hk40daSlY; Tue,  4 Feb 2025 10:46:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBEF140687
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A398560608
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CBEF140687;
-	Tue,  4 Feb 2025 10:44:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A398560608;
+	Tue,  4 Feb 2025 10:46:52 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3575712A
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:44:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 802F8185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:46:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 25063400F2
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:44:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6271C40112
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:46:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v7sQ6NakHjiq for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 10:44:40 +0000 (UTC)
+ id Zk2oX-0t1Orr for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 10:46:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B568E400AC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B568E400AC
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B568E400AC
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:44:39 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4363dc916ceso39727435e9.0
- for <buildroot@buildroot.org>; Tue, 04 Feb 2025 02:44:39 -0800 (PST)
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9B929400F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B929400F2
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9B929400F2
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:46:49 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-4361c705434so39939805e9.3
+ for <buildroot@buildroot.org>; Tue, 04 Feb 2025 02:46:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738665877; x=1739270677;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
+ d=1e100.net; s=20230601; t=1738666007; x=1739270807;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=wChCfFQ6FIy+ikPRk3ZIovssEAYfd5u01gIBJkEcelM=;
- b=BY/d3DpIN7KAFmhepyuXsGxAvH6EAG9E6YtEDzhs7vobFVYXK30ZEEc9qFfU4qka2Y
- LbWdlQouPsV8Ep6XbCFNjJtBcdKaKXvCzZ3u9SJrizLhAdzSI0GIM/dHkTPzIAwIVbqY
- 8Mqb19J5huFcpYjBXtdHyXecvzIAvgW8gWXJy0M4r1EitgnKuk1EfQdohmyCDldOHsCo
- ThTPvcXoJnpBntNPlOBa3+rMc95+qC1tqsWICWwRnfICp5o950ArNBWTv6U9D/fkyFUh
- ZiaOzQzc0GVN+3apKiqy22gkaQb9MtZbfzcQEENE94G5Lie2m2th/jOy8sJpX2qNmkLn
- bayQ==
-X-Gm-Message-State: AOJu0YyRAHu3LUhv1/vBC7bjy1aw/leQCVIt6/aHrn50KtEdI8nMgFTz
- S0/jXUjxWuGPDUgyicu8MINKPaqaspxkLSLOpqirfWCWKLKkJQP9XyxAODw3lVw9VhPDDcCCZGq
- SNjk=
-X-Gm-Gg: ASbGncsxL7x2iQB97Wld6SCw261MgS789V1n4+62iF4nwd9zXn97e5HePJVPOAWxHSN
- 7aGd2drZHTSHTT1hDHAgh8n2ataZAHWM2MCq1w8tUrjkiPPGV8NiWJkS/pYbfDBJuweaxc5xiUT
- ZcYH7YPsyeqCRjM5lbz962XwUZrjlHCIoDfujlYLpDqn6j3jNESnhdU5jw9xy7xImLdjmLy5PI3
- sgMWaR2VxQBqbXyGITFo1bQsKVo8S3IXCRCo5++Df9s9Ywd4ino/E4FaPHmgxt1gIYncVi7qsXb
- UHpd1/AfgjXbtwwRkHkpHLcOw6UfJptuqPotJdo22HPeBCY1019TQCVo
-X-Google-Smtp-Source: AGHT+IHYiEV3cy0w1l5mQZgdTd3ytp2RVYhSERg9093ixD8PcJyKgCoOg4eWz174R+Q6PKOiqfh3BQ==
-X-Received: by 2002:a5d:47ab:0:b0:38d:af98:c1a8 with SMTP id
- ffacd0b85a97d-38daf98c33amr764436f8f.17.1738665877597; 
- Tue, 04 Feb 2025 02:44:37 -0800 (PST)
-Received: from [172.16.2.119] (host-109-89-232-55.dynamic.voo.be.
+ bh=EBoF6j55W0qiA4drIf7937sxHpTWG2ppr/GmdONw1nw=;
+ b=qIBtMg0t0WXafrcAmpaOrJP3OY7CUBBaDz0sxZuuiJvE+eZQR90N7UrP4Pnp8W7AMU
+ XIWb13oewl3Cj6/Gnv1bwtIIRt+YrwVsaMSZvKPIOCM1Rz8VPUIc2MHTLiLp1vcbAkjG
+ V4w/UzV2pQQ+YdIp+lYPfdQvdpxyrkgorNySlCRP+VDr1lwkL5CRvEpTs8+BgVJyWUib
+ 0Q8T79limqyvfS/uzW7xaZJfSZbc9z8nEqhMrptm9rHKA/TUAaz5YrjsbFzP/7NzytQ5
+ Vw6ByEX6bfI4sAE3OCAbrLuqJwkST90pa0G9OsL7r2HAw2EvS9I3+tDV4h1AdmjseHr9
+ KhNQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXl/z7ABYkFvVoRzHh4xDlY/raMgxqh1Dwgxidh07C+l6Z/tjzHggbJ3lGBne/l/YgkO2CwDB3hgA0=@buildroot.org
+X-Gm-Message-State: AOJu0YwJF/gqh16qM3mESGBOZ1FMQ0YaQtL3y6UaWqZAJc458gaAg5kg
+ Js5Ed+dKlPr7twiNbuj3BC6yORXJqbyt7rygox2HDNnXldMOL6ZbuyWwhEISxMg=
+X-Gm-Gg: ASbGncuwToIi+L+q3+SqzRlfV9WuoRNbNj+zE6eVisr9HcDcxrR7nYxv8kz5mp2kBwD
+ OQYcs9QX6iLirgo0pQDvPn3Dpat5cNEwjI/injLxT2+/RdP5ZbnELKFVZqPASs0UWdAnKae+c8w
+ shdBXc6SxRhjnQQItA8fpfUW3a8E0U2V6hzDGvmX39tolMiAF2IPX9UqMOTJTEUEwHTKHRQnugm
+ KLOWofsogCpzNPgfHjqsnRy4K3G7x0wfudZQopzG4AwAFG5tzISRALnMfJn5+2mwsaP+9iBM9DY
+ z3bRZXOJtG+3WQJbpKlBqh1t0/y3qbDFufGxn4cs1SijYDM=
+X-Google-Smtp-Source: AGHT+IHuMiTU+GQyQBwVoDJ506tNPt6XL20MJYswEkMfvNO4ggJuKpBv4/kXHhFRy9SCp4HExQUghw==
+X-Received: by 2002:a05:600c:154f:b0:434:a367:2bd9 with SMTP id
+ 5b1f17b1804b1-438dc3ca79fmr246570645e9.14.1738666007135; 
+ Tue, 04 Feb 2025 02:46:47 -0800 (PST)
+Received: from [172.16.2.111] (host-109-89-232-55.dynamic.voo.be.
  [109.89.232.55]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-38c5c102d2esm15661850f8f.33.2025.02.04.02.44.37
+ ffacd0b85a97d-38c5c1cf853sm15232033f8f.84.2025.02.04.02.46.46
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 04 Feb 2025 02:44:37 -0800 (PST)
-Message-ID: <37c874cf-ed54-4384-8a39-63399e5f8911@smile.fr>
-Date: Tue, 4 Feb 2025 11:44:36 +0100
+ Tue, 04 Feb 2025 02:46:46 -0800 (PST)
+Message-ID: <097abee3-9e7a-4f27-af91-a1ddcf017596@mind.be>
+Date: Tue, 4 Feb 2025 11:46:45 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Niklas Cassel <Niklas.Cassel@wdc.com>, Michael Walle <michael@walle.cc>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>,
- =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Martin Bark <martin@barkynet.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>,
- Damien Le Moal <dlemoal@kernel.org>
-References: <20240902112735.728574-1-michael@walle.cc>
- <ZtWx2nqI0YTpwb-P@ryzen.lan> <ZxkCUCUw5bVSlgRo@ryzen>
-Content-Language: en-US
-In-Reply-To: <ZxkCUCUw5bVSlgRo@ryzen>
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20250128170954.2441486-1-james.hilliard1@gmail.com>
+Content-Language: en-GB
+In-Reply-To: <20250128170954.2441486-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1738665877; x=1739270677; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=wChCfFQ6FIy+ikPRk3ZIovssEAYfd5u01gIBJkEcelM=;
- b=EzRfEbcnTmhlJ+KPXcM7RJO6mvHn1Spj7fqic2CNmOBiQpCgMmxWohkrnQXKWfz6xD
- uVOcH4v7EPwosqnEUZGJhfSV6l71TF+WbuMUWB8sP/SoUf+Qd9rITD24dph5ZtInr2R1
- S1fbAuokGJkPPVXQYjK35LTB5ml/F04S1bFiY=
+ d=mind.be; s=google; t=1738666007; x=1739270807; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=EBoF6j55W0qiA4drIf7937sxHpTWG2ppr/GmdONw1nw=;
+ b=Znay/TWaztX7FtR9Wd/fftm9VAyxZN80XGyXGRzE5HLaVfYDJnOKFLjR8kpPc5vTwx
+ cGDEGj5yMmqSooSx+PvC4pcxD4xmHBdNwLlNcg2xi6Uq4HWybsCRtUnm0cGklfAvfaz4
+ TKP43iGyyBE7ttwo8MWrjq0TyNmGg95ELD30ALsRCAtvU/m70uV2zL0Dv685aU4Wbn+r
+ xIKgNsrFvK5jpMdFqFuso+/oRYkvrz+C1NKvW/1O7zMgA3FSuqVtg6rwtXc1K3Vl3Lu2
+ 3lJFTqhTnqdtPU1KYOwQWanYJIWPOS3Rd+kAtGKmGBQF2334+iEQ57eZ4Phazazo/DLn
+ owrQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=EzRfEbcn
-Subject: Re: [Buildroot] [PATCH v2] linux: add support for device tree
- overlays
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=Znay/TWa
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-google-api-core: bump to
+ version 2.24.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,42 +111,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQWxsLAoKTGUgMjMvMTAvMjAyNCDDoCAxNjowNCwgTmlrbGFzIENhc3NlbCB2aWEgYnVpbGRy
-b290IGEgw6ljcml0wqA6Cj4gT24gTW9uLCBTZXAgMDIsIDIwMjQgYXQgMDI6Mzg6NTBQTSArMDIw
-MCwgTmlrbGFzIENhc3NlbCB3cm90ZToKPj4gT24gTW9uLCBTZXAgMDIsIDIwMjQgYXQgMDE6Mjc6
-MzVQTSArMDIwMCwgTWljaGFlbCBXYWxsZSB3cm90ZToKPj4+IFRoZSBsaW51eCBrZXJuZWwgY2Fu
-IGJ1aWxkIGRldmljZSB0cmVlIG92ZXJsYXlzICguZHRibykgaXRzZWxmLiBBZGQKPj4+IHN1cHBv
-cnQgdG8gYnVpbGQgYW5kIGNvcHkgdGhlbSBhbG9uZyB3aXRoIHRoZSBhY3R1YWwgZGV2aWNlIHRy
-ZWVzLgo+Pj4gVGhlc2UgY2FuIGVpdGhlciBiZSBpbi10cmVlIGRldmljZSB0cmVlIG92ZXJsYXlz
-Cj4+PiAoQlIyX0xJTlVYX0tFUk5FTF9JTlRSRUVfRFRTT19OQU1FUykgb3IgdGhleSBjYW4gYmUg
-cHJvdmlkZWQgb3V0c2lkZSBvZgo+Pj4gdGhlIGtlcm5lbCAoQlIyX0xJTlVYX0tFUk5FTF9DVVNU
-T01fRFRTX1BBVEgpLiBJbiB0aGUgbGF0dGVyIGNhc2UsIHRoZQo+Pj4gb3ZlcmxheSBzb3VyY2Ug
-ZmlsZXMgd2lsbCBiZSBjb3BpZWQgaW50byB0aGUga2VybmVsIHRyZWUgZmlyc3QuCj4+Pgo+Pj4g
-U2lnbmVkLW9mZi1ieTogTWljaGFlbCBXYWxsZSA8bWljaGFlbEB3YWxsZS5jYz4KPj4+IC0tLQo+
-IAo+IEhlbGxvIE1pY2hhZWwsCj4gCj4gQ29uc2lkZXJpbmcgdGhhdCB0aGlzIHBhdGNoIHN1cHBv
-cnRzIGJvdGggaW4tdHJlZSBhbmQgb3V0LW9mLXRyZWUgZGV2aWNlCj4gdHJlZSBvdmVybGF5cy4K
-PiAKPiBJIGp1c3Qgc2F3IHRoaXM6Cj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYnVpbGRyb290
-L0NBRk9ZSFpEUW1NUnVLNzZUcE9TQU9GUGRxQWI0Z3B3PUxOS2ZtcHU9c3FBRDFFTWhGZ0BtYWls
-LmdtYWlsLmNvbS9ULyN1Cj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsL0NBSzdMTkFSNGg2
-TlorRDBCSytxNFZRQmVIV3BqelJCUUZROW92QnJmdE09NmRIUmNVZ0BtYWlsLmdtYWlsLmNvbS8K
-PiAKPiBJdCBhcHBlYXJzIHRoYXQgaXQgd2lsbCBubyBsb25nZXIgd29yayB0byBjb3B5IG91dC1v
-Zi10cmVlIHNvdXJjZSBmaWxlcwo+IGludG8gdGhlIGtlcm5lbCBkaXJlY3RvcnkgKHdoaWNoIHRo
-aXMgcGF0Y2ggZG9lcykuCj4gCj4gRG9lcyBwZXJoYXBzIHRoaXMgcGF0Y2ggbmVlZCBhIFYzIHRo
-YXQgZHJvcHMgc3VwcG9ydCBmb3Igb3V0LW9mLXRyZWUKPiBkZXZpY2UgdHJlZSBvdmVybGF5cz8K
-CkknbGwgbWFyayB0aGlzIHBhdGNoIGFzIHN1cGVyc2VkZWQgaW4gdGhlIHBhdGNod29yayAoZHVl
-IHRvIHYzIGZyb20gTmlrbGFzKS4KCkluZGVlZCwgd2UgbmVlZCB0byBmaXggZmlyc3QgdGhlIEJS
-Ml9MSU5VWF9LRVJORUxfQ1VTVE9NX0RUU19QQVRIIGlzc3VlIGZvcgpsYXRlc3QgNi4xMisga2Vy
-bmVscy4KCkJlc3QgcmVnYXJkcywKUm9tYWluCgoKPiAKPiAKPiBLaW5kIHJlZ2FyZHMsCj4gTmlr
-bGFzCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KPiBi
-dWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczov
-L2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QKCl9fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
-IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
-L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+
+
+On 28/01/2025 18:09, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/python-google-api-core/python-google-api-core.hash | 4 ++--
+>   package/python-google-api-core/python-google-api-core.mk   | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/python-google-api-core/python-google-api-core.hash b/package/python-google-api-core/python-google-api-core.hash
+> index 43bf50a5f2..0e85aaba63 100644
+> --- a/package/python-google-api-core/python-google-api-core.hash
+> +++ b/package/python-google-api-core/python-google-api-core.hash
+> @@ -1,5 +1,5 @@
+>   # md5, sha256 from https://pypi.org/pypi/google-api-core/json
+> -md5  5e5fbe5e5e6b14b9243b74055b8a50b4  google_api_core-2.24.0.tar.gz
+> -sha256  e255640547a597a4da010876d333208ddac417d60add22b6851a0c66a831fcaf  google_api_core-2.24.0.tar.gz
+> +md5  f7cd117d2933fb5874fd5162f60cd720  google_api_core-2.24.1.tar.gz
+> +sha256  f8b36f5456ab0dd99a1b693a40a31d1e7757beea380ad1b38faaf8941eae9d8a  google_api_core-2.24.1.tar.gz
+>   # Locally computed sha256 checksums
+>   sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+> diff --git a/package/python-google-api-core/python-google-api-core.mk b/package/python-google-api-core/python-google-api-core.mk
+> index d79d0eb749..f772dbf46d 100644
+> --- a/package/python-google-api-core/python-google-api-core.mk
+> +++ b/package/python-google-api-core/python-google-api-core.mk
+> @@ -4,9 +4,9 @@
+>   #
+>   ################################################################################
+>   
+> -PYTHON_GOOGLE_API_CORE_VERSION = 2.24.0
+> +PYTHON_GOOGLE_API_CORE_VERSION = 2.24.1
+>   PYTHON_GOOGLE_API_CORE_SOURCE = google_api_core-$(PYTHON_GOOGLE_API_CORE_VERSION).tar.gz
+> -PYTHON_GOOGLE_API_CORE_SITE = https://files.pythonhosted.org/packages/81/56/d70d66ed1b5ab5f6c27bf80ec889585ad8f865ff32acbafd3b2ef0bfb5d0
+> +PYTHON_GOOGLE_API_CORE_SITE = https://files.pythonhosted.org/packages/b8/b7/481c83223d7b4f02c7651713fceca648fa3336e1571b9804713f66bca2d8
+>   PYTHON_GOOGLE_API_CORE_SETUP_TYPE = setuptools
+>   PYTHON_GOOGLE_API_CORE_LICENSE = Apache-2.0
+>   PYTHON_GOOGLE_API_CORE_LICENSE_FILES = LICENSE
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
