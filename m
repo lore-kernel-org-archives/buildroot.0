@@ -4,62 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9BD6C02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 13:15:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FE09C02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 13:16:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9BC7060C21;
-	Tue,  4 Feb 2025 13:15:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 511E360035;
+	Tue,  4 Feb 2025 13:16:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jjwHl2zuS85m; Tue,  4 Feb 2025 13:15:43 +0000 (UTC)
+ id gb8Sa-BXB_Za; Tue,  4 Feb 2025 13:16:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2141D6089A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFCC060AE8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2141D6089A;
-	Tue,  4 Feb 2025 13:15:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFCC060AE8;
+	Tue,  4 Feb 2025 13:16:55 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3CE3012A
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:15:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C14C112A
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:16:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2BB2740695
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:15:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC9B0406C4
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:16:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZD4dA3GP0JrF for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 13:15:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id 5RiEnAOZv92G for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 13:16:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F1CFC406C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1CFC406C4
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F1CFC406C4
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:15:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 045AC443CF;
- Tue,  4 Feb 2025 13:15:37 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tfIm9-00Foj1-1h;
- Tue, 04 Feb 2025 14:15:37 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4A1C40695
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4A1C40695
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:16:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A00D78680E; Tue,  4 Feb 2025 13:16:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-References: <20250201161126.32326-1-buildroot@heine.tech>
-Date: Tue, 04 Feb 2025 14:15:37 +0100
-In-Reply-To: <20250201161126.32326-1-buildroot@heine.tech> (Michael Nosthoff
- via buildroot's message of "Sat, 1 Feb 2025 17:11:25 +0100")
-Message-ID: <87a5b1onpi.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdeiudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufhffjgfkfgggtgesthdttddttdertdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeekgefftdeiveekjeehveetleduteevfeefudetvdekfeejheeitddvhfekffeuteenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedutdelrdekledrvdefvddrheehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddtledrkeelrddvfedvrdehhedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegsuhhilhgurhhoohhtsehhvghinhgvrdhtvggthh
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/spdlog: bump to version 1.15.1
+To: buildroot@buildroot.org
+Date: Tue, 4 Feb 2025 14:15:30 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8489cb0932b6ca00104dab3bd54e76d1bcf6c65c
+X-Git-Newrev: a2a7668bb207b92fae994c102b8f29ad5ce6ac10
+X-Patchwork-Hint: ignore
+Message-Id: <20250204131653.A00D78680E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/spdlog: bump to version 1.15.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,22 +58,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Michael" == Michael Nosthoff via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a2a7668bb207b92fae994c102b8f29ad5ce6ac10
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes compatibility with fmt 11.1.x
- > Release Notes: https://github.com/gabime/spdlog/releases/tag/v1.15.1
+Fixes compatibility with fmt 11.1.x
 
- > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Release Notes: https://github.com/gabime/spdlog/releases/tag/v1.15.1
 
-Committed, thanks.
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/spdlog/spdlog.hash | 2 +-
+ package/spdlog/spdlog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
+index 69e569a548..8c6838160b 100644
+--- a/package/spdlog/spdlog.hash
++++ b/package/spdlog/spdlog.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9962648c9b4f1a7bbc76fd8d9172555bad1871fdb14ff4f842ef87949682caa5  spdlog-1.15.0.tar.gz
++sha256  25c843860f039a1600f232c6eb9e01e6627f7d030a2ae5e232bdd3c9205d26cc  spdlog-1.15.1.tar.gz
+ sha256  4ccecab18d1ff0b61174fe3d6c430541625d3ddb865b0d5887db296f883c76e7  LICENSE
+diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
+index 3f69f9a6d3..09d432defe 100644
+--- a/package/spdlog/spdlog.mk
++++ b/package/spdlog/spdlog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SPDLOG_VERSION = 1.15.0
++SPDLOG_VERSION = 1.15.1
+ SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
+ SPDLOG_LICENSE = MIT
+ SPDLOG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
