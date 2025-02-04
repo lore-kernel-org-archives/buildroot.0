@@ -4,48 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20FB1C02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 13:07:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4003C02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 13:08:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E269360EA1;
-	Tue,  4 Feb 2025 13:07:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6988B60BA6;
+	Tue,  4 Feb 2025 13:08:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AKTu3-9au-NB; Tue,  4 Feb 2025 13:07:56 +0000 (UTC)
+ id zMSfpWsvEAbK; Tue,  4 Feb 2025 13:08:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3AFA60F77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 67AFE60E73
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3AFA60F77;
-	Tue,  4 Feb 2025 13:07:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B3BF185
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:07:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 67AFE60E73;
+	Tue,  4 Feb 2025 13:08:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 70EB8185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:08:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2F6D581111
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:07:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5314360F05
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:08:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1P20dNOAJFrg for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 13:07:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qfC_FqbuFjx7 for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 13:08:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FCD081117
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8FCD081117
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:07:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 89AE786D0A; Tue,  4 Feb 2025 13:07:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 14:01:09 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c4772ecef6c44ade30f4befb38e32d6dc293aad3
-X-Git-Newrev: 7dbd1c334d6a9f512b35721c8af6a8f2e74dc335
-X-Patchwork-Hint: ignore
-Message-Id: <20250204130738.89AE786D0A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mender/readme.txt: update readme
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 07FBC60BA6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07FBC60BA6
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 07FBC60BA6
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:08:12 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D571E442EA;
+ Tue,  4 Feb 2025 13:08:09 +0000 (UTC)
+Date: Tue, 4 Feb 2025 14:08:08 +0100
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Cc: buildroot@buildroot.org, =?UTF-8?B?TWlxdcOobA==?= Raynal
+ <miquel.raynal@bootlin.com>, Adam Duskett
+ <adam.duskett@amarulasolutions.com>
+Message-ID: <20250204140808.5c6fe0fa@windsurf>
+In-Reply-To: <20250204-repair_foot-v1-1-498406d0a384@bootlin.com>
+References: <20250204-repair_foot-v1-1-498406d0a384@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdeiudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeekudffgeettedtfeeuheekjedthfelgefhffdtfeeujefgvdefveetudffhefgleenucffohhmrghinhepshhouhhrtggvfigrrhgvrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedutdelrdekledrvdefvddrheehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddtledrkeelrddvfedvrdehhedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopehthhhomhgrshdrsghonhhnvghfihhllhgvsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmpdhrtghpthhto
+ heprggurghmrdguuhhskhgvthhtsegrmhgrrhhulhgrshholhhuthhiohhnshdrtghomh
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1738674490;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=fPgkA48N6RGJzzug9afRxctjWkhbSyuwpP/D6kZy7mM=;
+ b=Hxl1BJJl3uSZEZK5O5Fd2A5OySCUjPSgnC9bPgwW2d1f6PTnzsl0YZork3BwJZJf//A/NO
+ w9g/krngJM/kOpX0AHkqO4UkgQZZQUI/th3Ws6bA2XeWVGGPfEt6eDYCQdZAO/CSg8AvAZ
+ Mrj97IhZfPGW4zZFVcSrh+nRV7QluW1NiuseKM3Yaljwk+4G19xL4BtbzTpyH+RJPKEXse
+ OBSwI8tHqY+j4Ibh4TU64TDQxHrs2bE+NNjlYH0iY1En73GEGR2axzzW+MAzX6K+glk3aE
+ rlvxQOnNNUMI5DZxoNQXIkAIZsudAG231/0sWQ0paaaP3aeg4Ykf/M/NHaWS1A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Hxl1BJJl
+Subject: Re: [Buildroot] [PATCH] package/foot: support soft-float
+ architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,115 +89,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7dbd1c334d6a9f512b35721c8af6a8f2e74dc335
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Thomas,
 
-- Add missing packages to the mender package list.
- - Update broken URL links.
- - Remove the example mender artifact post-image script in favor of directing
-   the user to the board/mender/x86_64/post-image-efi.sh script.
+On Tue, 04 Feb 2025 12:27:31 +0100
+Thomas Bonnefille <thomas.bonnefille@bootlin.com> wrote:
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/mender/readme.txt | 56 +++++++++++++----------------------------------
- 1 file changed, 15 insertions(+), 41 deletions(-)
+> Architecture using soft float don't support the math FE_* exceptions.
+> This commit adds a patch to conditionnally build the FE_* exception
+> handling.
 
-diff --git a/package/mender/readme.txt b/package/mender/readme.txt
-index c884524a1b..d78623aec9 100644
---- a/package/mender/readme.txt
-+++ b/package/mender/readme.txt
-@@ -28,13 +28,23 @@ In Buildroot the following packages are provided:
-     - This will install the client on target rootfs
- - BR2_PACKAGE_HOST_MENDER_ARTIFACT
-     - This will install the 'mender-artifact' tool in host rootfs.
-+- BR2_PACKAGE_MENDER_CONNECT
-+    - This installs a client that allows for remote terminal access
-+      to mender clients registered on a mender server.
-+- BR2_PACKAGE_MENDER_GRUBENV
-+    - This package provides boot scripts to integrate mender into grub.
-+      Mender recommends every client to use this package, including boards
-+      using uboot as the primary bootloader.
- 
- To fully utilize atomic image-based deployments using the A/B update
- strategy, additional integration is required in the bootloader. This
- integration is board specific.
- 
--Currently supported bootloaders are GRUB and U-boot, and for reference
--integrations please visit:
-+Currently supported bootloaders are GRUB and U-boot. Buildroot provides
-+a reference integration at board/mender/x86_64/ using the
-+mender_x86_64_efi_defconfig file.
-+
-+Additional support and integrations are found at:
- 
-     https://github.com/mendersoftware/buildroot-mender
- 
-@@ -46,12 +56,7 @@ files that need your attention:
- 
- - /etc/mender/mender.conf
-     - main configuration file for the Mender client
--    - https://docs.mender.io/client-configuration/configuration-file/configuration-options
--
--- /etc/mender/artifact_info
--    - The name of the image or update that will be built. This is what the
--      device will report that it is running, and different updates must have
--      different names
-+    - https://docs.mender.io/client-installation/configuration/configuration-options
- 
- - /var/lib/mender/device_type
-     - A string that defines the type of device
-@@ -110,40 +115,9 @@ Creating Mender Artifacts
- To create Mender Artifacts based on Buildroot build output you must
- include BR2_PACKAGE_HOST_MENDER_ARTIFACT in your configuration, and
- then you would typically create the Mender Artifact in a post image
--script (BR2_ROOTFS_POST_IMAGE_SCRIPT). Below is an example of such a
--script:
--
--    #!/bin/sh
--
--    set -e
--    set -x
--
--    device_type=$(cat ${TARGET_DIR}/var/lib/mender/device_type | sed 's/[^=]*=//')
--    artifact_name=$(cat ${TARGET_DIR}/etc/mender/artifact_info | sed 's/[^=]*=//')
--
--    if [ -z "${device_type}" ] || [ -z "${artifact_name}" ]; then
--        echo "missing files required by Mender"
--        exit 1
--    fi
--
--    ${HOST_DIR}/usr/bin/mender-artifact write rootfs-image \
--        --update ${BINARIES_DIR}/rootfs.ext4 \
--        --output-path ${BINARIES_DIR}/${artifact_name}.mender \
--        --artifact-name ${artifact_name} \
--        --device-type ${device_type}
--
--As you can see some properties are extracted from target rootfs, and
--this is because these values are used for compatibility checks,
--meaning that the information must be present in both rootfs and in
--Mender Artifact meta data.
--
--- device_type - must be an exact match between rootfs and Mender
--                Artifact meta-data to apply update. You can set an
--                array of devices here as well, e.g if your image is
--                compatible with multiple hardware revisions
-+script (BR2_ROOTFS_POST_IMAGE_SCRIPT). See the generate_mender_image
-+method in board/mender/x86_64/post-image-efi.sh for a working example.
- 
--- artifact_name - must be an exact match between rootfs and Mender
--                  Artifact meta-data to apply update.
- 
- Configuring Mender with certificates
- ------------------------------------
+Are you sure it's related to soft-float? For example, ARC has floating
+point, but does support some of those FE exceptions.
+
+See for example:
+
+# z3 supports arch for which libc fenv.h provides all four macros:
+# FE_DOWNWARD, FE_TONEAREST, FE_TOWARDZERO, FE_UPWARD
+# See for example in glibc https://sourceware.org/git/glibc.git
+# git grep -E '^[[:space:]]*#[[:space:]]*define[[:space:]]+FE_(TONEAREST|UPWARD|DOWNWARD|TOWARDZERO)' sysdeps/
+config BR2_PACKAGE_Z3_ARCH_SUPPORTS
+        bool
+        default y if BR2_aarch64 || BR2_aarch64_be
+        default y if BR2_arceb || BR2_arcle
+        default y if BR2_arm || BR2_armeb
+        default y if BR2_i386
+        default y if BR2_m68k
+        # BR2_microblaze has only FE_TONEAREST
+        default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+        default y if BR2_or1k
+        default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+        default y if BR2_riscv
+        default y if BR2_s390x
+        # BR2_sh has only FE_{TONEAREST,TOWARDZERO}
+        default y if BR2_sparc || BR2_sparc64
+        default y if BR2_x86_64
+        # BR2_xtensa supports only uclibc which does not have fenv.h
+
+We have this sort of stuff in a few places. Maybe we need to factorize
+that?
+
+
+> +diff --git a/box-drawing.c b/box-drawing.c
+> +index 1c613051..e5f67ca7 100644
+> +--- a/box-drawing.c
+> ++++ b/box-drawing.c
+> +@@ -1468,8 +1468,11 @@ draw_box_drawings_light_arc(struct buf *buf, char32_t wc)
+> +         double x = circle_hemisphere * sqrt(c_r2 - (y - c_y) * (y - c_y)) + c_x;
+> + 
+> +         /* See math_error(7) */
+> +-        if (errno != 0 ||
+> +-            fetestexcept(FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW | FE_UNDERFLOW))
+> ++        if (errno != 0
+> ++        #if defined (FE_INVALID) && defined (FE_DIVBYZERO) && defined (FE_OVERFLOW) && defined (FE_UNDERFLOW)
+> ++            || fetestexcept(FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW | FE_UNDERFLOW)
+> ++        #endif
+
+Is it OK to just compile out this code? I mean yes it fixes the build
+issues, but is that correct from a runtime perspective?
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
