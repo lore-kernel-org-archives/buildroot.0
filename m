@@ -1,51 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7C03C02193
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 15:47:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75FD3C02193
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 15:49:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B346660C25;
-	Tue,  4 Feb 2025 15:47:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3ACE940669;
+	Tue,  4 Feb 2025 15:49:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pQ8-_zo1qXnT; Tue,  4 Feb 2025 15:47:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B4lhtjVD5VIP; Tue,  4 Feb 2025 15:49:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AB3660C21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8FBD406EA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6AB3660C21;
-	Tue,  4 Feb 2025 15:47:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 53E5D12F
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:47:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8FBD406EA;
+	Tue,  4 Feb 2025 15:49:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A3EEA12A
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:49:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 41537400E0
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:47:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 885A880ADA
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:49:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TrdreIsNzKIn for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 15:47:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB3E140965
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BB3E140965
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:47:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A3B1D86EB5; Tue,  4 Feb 2025 15:47:46 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 16:45:57 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 917495a2acb870af6f4cde39cc672b136fb89304
-X-Git-Newrev: 99ea9422592798f7840dd46d28f208f75df1b456
-X-Patchwork-Hint: ignore
-Message-Id: <20250204154746.A3B1D86EB5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {fs/,package/gen}romfs: remove
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VGdlm_Be2xid for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 15:49:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AC5E380EC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC5E380EC4
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AC5E380EC4
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:49:17 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-385f06d0c8eso3159700f8f.0
+ for <buildroot@buildroot.org>; Tue, 04 Feb 2025 07:49:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1738684155; x=1739288955;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=T/rT3Gym90pJOcJVrgZk5q5SNfAtbyYg9GUMqcuw7u4=;
+ b=YPWSReBFfIWYpLSZqrP/xV0Iw3G3YsdWnJynum4zZZv5pj5kbjavT5Kjr2jRYc2JW4
+ UU8zQXe6CGXNXIb+hA0OVP2bCQXDxPT6wHT26LBoKBENy32qJLHRqvyHPM737/B+JUjS
+ CYXU0ROwK/S4Vg6cg4FsbE9f6P8k8jPFvBrrGMSLJy/wT+cqiSshMXq/yQtnLdcG+S6L
+ nhtXBcAoOkmrNuaNper/olz3MxOl8vms/DFBB+gaoIvT2smxWtxRLN9B+mJ9l1j1rNDc
+ Jb5+9QWRP1dd2ifLqandgC5XTRt3TvOYpwjaZKsX+iJv3uR13PYXU8DhLuN9FSsbo8pm
+ W4hQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUUsqVMFDgtWPvu00CMCj08fmilKt2M7LLj7Gj/Iu3GquKNQe73H/P+O3qlAtky+9bwte8M2xzPawE=@buildroot.org
+X-Gm-Message-State: AOJu0Yw1hHyRBNa4bAjU+kn0rE0sBE8ogZHOcpB0iqP5A5ARHefc0thL
+ xd1dZZZVUPce3xBJo+905XG+YerPEveuvUpT0V6sla0o11u9FcWP81D10HHZDBRM31I65qig9J+
+ 5C1s=
+X-Gm-Gg: ASbGncsKxAwxJfvSHpbYlsi31Ec1UOTEmCsYKS/oor69g5Y/n6vqo042Qs/TWl6dSpm
+ QYrJwBLn1oKFEZdfEiKgRgaeW64jFVbd17gc0zYqI8lVTjOLfOIDhBJk4vu0wWqL0Hi7mk3zJnL
+ gnqczm8EwGRN0/EDv8HOs5YsVyMOzgBWayIVMk0YC4bpbS4iVrDzWp1QC7PTF3/E0VhnqDW2KRL
+ SiCY1eznaZiZNuK45Pdo22e6Y3Wz2hhfmPbpjSGN3JrDVfs76LwbMWvZOtvsxfzvs+4HpfpYW7m
+ 4niB/BOwrzfL0X8uOZil4eoWp8+a9N2N8Buq8uuuK4wrZ2rX4/X13f5i
+X-Google-Smtp-Source: AGHT+IHKHW4KaeuF5QTPteDPRZiclNrLH9nVjbx5KroNYo38jGER5M3b/but3d+L+159z8mbnSrfOQ==
+X-Received: by 2002:a5d:6da7:0:b0:385:de67:2269 with SMTP id
+ ffacd0b85a97d-38c520a3857mr21480974f8f.36.1738684155384; 
+ Tue, 04 Feb 2025 07:49:15 -0800 (PST)
+Received: from [172.16.2.119] (host-109-89-232-55.dynamic.voo.be.
+ [109.89.232.55]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-38c5c12191dsm16443956f8f.51.2025.02.04.07.49.14
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 04 Feb 2025 07:49:15 -0800 (PST)
+Message-ID: <5a1c0775-ff19-4aef-aea6-5b6613d6e406@smile.fr>
+Date: Tue, 4 Feb 2025 16:49:14 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Graeme Smecher <gsmecher@threespeedlogic.com>, buildroot@buildroot.org
+Cc: alexander.sverdlin@gmail.com, thomas.petazzoni@bootlin.com
+References: <f63378d9f3ed51f3740b15d02e66f8831905cc8b.camel@gmail.com>
+ <20240229165310.1453209-1-gsmecher@threespeedlogic.com>
+Content-Language: en-US
+In-Reply-To: <20240229165310.1453209-1-gsmecher@threespeedlogic.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1738684155; x=1739288955; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=T/rT3Gym90pJOcJVrgZk5q5SNfAtbyYg9GUMqcuw7u4=;
+ b=mUsXycjvTiDPwUBhR9CXzGIRAD2mO99rgYILPVSaFhNbxn+qHdiJ9tvlSb7ivHj+f3
+ XVZYrZ8lUyUuyaaFAxW7XEyCtXIO9/jpi5FPFu7SnBdynKYunWhesrMrMbU0mkdYyh1J
+ d7DAgX2XHp+qOhuyB7aYO4Qn3bmXelaT0mBXk=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=mUsXycjv
+Subject: Re: [Buildroot] [PATCH v2] linux.mk: Allow wildcards in
+ BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,236 +111,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99ea9422592798f7840dd46d28f208f75df1b456
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-http://autobuild.buildroot.net/results/9b0/9b09c8681e1003580b766aa0d244889f3b0be0c8/
-
-Romfs is very old and limited, the fs logic and package has not really
-changed since it was added 17 years ago with Commit 4b01dfced944 ("Add romfs
-target support, courtesy Josh <buildroot@digitalpeer.com>") and genromfs
-crashes in some situations, so drop it.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Arnout: also remove from DEVELOPERS]
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- .checkpackageignore                      |  1 -
- Config.in.legacy                         | 12 +++++++++++
- DEVELOPERS                               |  1 -
- fs/Config.in                             |  1 -
- fs/romfs/Config.in                       |  4 ----
- fs/romfs/romfs.mk                        | 13 ------------
- package/Config.in                        |  1 -
- package/genromfs/0001-build-system.patch | 26 ------------------------
- package/genromfs/Config.in               |  6 ------
- package/genromfs/genromfs.hash           |  3 ---
- package/genromfs/genromfs.mk             | 34 --------------------------------
- 11 files changed, 12 insertions(+), 90 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 8fd03b0dd6..194a2d1c72 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -518,7 +518,6 @@ package/gdb/16.1/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
- package/gdb/16.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
- package/gdb/16.1/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
- package/genpart/0001-fix-return-code.patch lib_patch.Upstream
--package/genromfs/0001-build-system.patch lib_patch.Sob lib_patch.Upstream
- package/gensio/0001-Fix-missing-EVP_PKEY_ED25519-build-error-on-libressl.patch lib_patch.Upstream
- package/gerbera/S99gerbera lib_sysv.Indent
- package/git-crypt/0001-fix-build-with-libressl-3.5.0.patch lib_patch.Upstream
-diff --git a/Config.in.legacy b/Config.in.legacy
-index a8baecad58..674299470f 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,18 @@ endif
- 
- comment "Legacy options removed in 2025.02"
- 
-+config BR2_PACKAGE_GENROMFS
-+	bool "genromfs"
-+	select BR2_LEGACY
-+	help
-+	  Romfs root filesystem support has been removed.
-+
-+config BR2_TARGET_ROOTFS_ROMFS
-+	bool "romfs root filesystem has been removed"
-+	select BR2_LEGACY
-+	help
-+	  Romfs root filesystem support has been removed.
-+
- config BR2_BINUTILS_VERSION_2_41_X
- 	bool "binutils 2.41 has been removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index af605b388e..10b8031ad3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3188,7 +3188,6 @@ F:	package/double-conversion/
- F:	package/flashrom/
- F:	package/gcc/
- F:	package/genext2fs/
--F:	package/genromfs/
- F:	package/getent/
- F:	package/gnu-efi/
- F:	package/heirloom-mailx/
-diff --git a/fs/Config.in b/fs/Config.in
-index eee5e26bb2..6b338f8ec8 100644
---- a/fs/Config.in
-+++ b/fs/Config.in
-@@ -12,7 +12,6 @@ source "fs/initramfs/Config.in"
- source "fs/iso9660/Config.in"
- source "fs/jffs2/Config.in"
- source "fs/oci/Config.in"
--source "fs/romfs/Config.in"
- source "fs/squashfs/Config.in"
- source "fs/tar/Config.in"
- source "fs/ubi/Config.in"
-diff --git a/fs/romfs/Config.in b/fs/romfs/Config.in
-deleted file mode 100644
-index 84944a0fc0..0000000000
---- a/fs/romfs/Config.in
-+++ /dev/null
-@@ -1,4 +0,0 @@
--config BR2_TARGET_ROOTFS_ROMFS
--	bool "romfs root filesystem"
--	help
--	  Build a romfs image of the root filesystem.
-diff --git a/fs/romfs/romfs.mk b/fs/romfs/romfs.mk
-deleted file mode 100644
-index 163751b4e2..0000000000
---- a/fs/romfs/romfs.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
--################################################################################
--#
--# Build the romfs root filesystem image
--#
--################################################################################
--
--ROOTFS_ROMFS_DEPENDENCIES = host-genromfs
--
--define ROOTFS_ROMFS_CMD
--	$(HOST_DIR)/bin/genromfs -d $(TARGET_DIR) -f $@
--endef
--
--$(eval $(rootfs))
-diff --git a/package/Config.in b/package/Config.in
-index e9c789cff2..44b285d348 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -238,7 +238,6 @@ menu "Filesystem and flash utilities"
- 	source "package/fwup/Config.in"
- 	source "package/genext2fs/Config.in"
- 	source "package/genpart/Config.in"
--	source "package/genromfs/Config.in"
- 	source "package/gocryptfs/Config.in"
- 	source "package/imx-usb-loader/Config.in"
- 	source "package/mmc-utils/Config.in"
-diff --git a/package/genromfs/0001-build-system.patch b/package/genromfs/0001-build-system.patch
-deleted file mode 100644
-index 827fe75bd2..0000000000
---- a/package/genromfs/0001-build-system.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
-----
-- Makefile |    4 +---
-- 1 file changed, 1 insertion(+), 3 deletions(-)
--
--Index: genromfs-0.5.2/Makefile
--===================================================================
----- genromfs-0.5.2.orig/Makefile
--+++ genromfs-0.5.2/Makefile
--@@ -6,8 +6,6 @@
-- PACKAGE = genromfs
-- VERSION = 0.5.2
-- CC = gcc
---CFLAGS = -O2 -Wall -DVERSION=\"$(VERSION)\"#-g#
---LDFLAGS = -s#-g
-- 
-- DISTDIR = $(PACKAGE)-$(VERSION)
-- 
--@@ -24,7 +22,7 @@
-- 	$(CC) $(LDFLAGS) genromfs.o -o genromfs
-- 
-- .c.o:
---	$(CC) $(CFLAGS) $< -c -o $@
--+	$(CC) $(CFLAGS) -DVERSION=\"$(VERSION)\" $< -c -o $@
-- 
-- clean:
-- 	rm -f genromfs *.o
-diff --git a/package/genromfs/Config.in b/package/genromfs/Config.in
-deleted file mode 100644
-index e4eba9f16a..0000000000
---- a/package/genromfs/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_GENROMFS
--	bool "genromfs"
--	help
--	  Tool to generate a ROMFS filesystem.
--
--	  http://romfs.sourceforge.net/
-diff --git a/package/genromfs/genromfs.hash b/package/genromfs/genromfs.hash
-deleted file mode 100644
-index 0be88ee1b4..0000000000
---- a/package/genromfs/genromfs.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed:
--sha256  30f37fc734572c1dbaa2504585bc23ba6b8fd7df767ae7155995b2ca0ebed960  genromfs-0.5.2.tar.gz
--sha256  cc2a6651c315b233ebc110b49ea3c6452eff9a28f8bc051ffd2bb92a8dcfa3d2  COPYING
-diff --git a/package/genromfs/genromfs.mk b/package/genromfs/genromfs.mk
-deleted file mode 100644
-index fd696b45b2..0000000000
---- a/package/genromfs/genromfs.mk
-+++ /dev/null
-@@ -1,34 +0,0 @@
--################################################################################
--#
--# genromfs
--#
--################################################################################
--
--GENROMFS_VERSION = 0.5.2
--GENROMFS_SITE = http://downloads.sourceforge.net/project/romfs/genromfs/$(GENROMFS_VERSION)
--GENROMFS_LICENSE = GPL-2.0+
--GENROMFS_LICENSE_FILES = COPYING
--
--define GENROMFS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
--		CC="$(TARGET_CC)" \
--		CFLAGS="$(TARGET_CFLAGS)" \
--		LDFLAGS="$(TARGET_LDFLAGS)"
--endef
--
--# "PREFIX" is the equivalent of DESTDIR in autotools, "prefix" is the
--# traditional prefix. "prefix" defaults to /usr so no need to set it.
--define GENROMFS_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) PREFIX=$(TARGET_DIR) install
--endef
--
--define HOST_GENROMFS_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
--endef
--
--define HOST_GENROMFS_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) prefix=$(HOST_DIR) install
--endef
--
--$(eval $(generic-package))
--$(eval $(host-generic-package))
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gR3JhZW1lLCBBbGwsCgpMZSAyOS8wMi8yMDI0IMOgIDE3OjUzLCBHcmFlbWUgU21lY2hl
+ciBhIMOpY3JpdMKgOgo+IFRoZXJlIGFyZSBhIGZldyBjb25maWcvIGVudHJpZXMgd2hlcmUgd2ls
+ZGNhcmRzIGFyZSBhbHJlYWR5IHByZXNlbnQ6Cj4gCj4gICAgICAkIGdyZXAgLXJsZSAnQlIyX0xJ
+TlVYX0tFUk5FTF9DVVNUT01fRFRTX1BBVEg9LipcKicgY29uZmlncy8KPiAgICAgIGNvbmZpZ3Mv
+b2N0YXZvX29zZDMybXAxX2Jya19kZWZjb25maWcKPiAgICAgIGNvbmZpZ3Mvb2N0YXZvX29zZDMy
+bXAxX3JlZF9kZWZjb25maWcKPiAKPiAuLi5ob3dldmVyLCB3aGlsZSB0aGUgY29weS1pbiBzdGVw
+IG9mIGRldmljZSB0cmVlIGNvbXBpbGF0aW9uIHdvcmtzCj4gY29ycmVjdGx5LCB0aGVzZSB3aWxk
+Y2FyZHMgYXJlIG5vdCBjb252ZXJ0ZWQgdG8gRFRDIGJ1aWxkIHRhcmdldHMgaW4gdGhlCj4ga2Vy
+bmVsIGJ1aWxkLiBBcyBhIHJlc3VsdCwgdGhpcyBjb25maWd1cmF0aW9uIGxpbmUgYWxvbmUgaXMg
+bm90IGVub3VnaAo+IHRvIGdlbmVyYXRlIERUQ3MuIEl0IHNob3VsZCBiZS4KPiAKPiBUaGlzIHBh
+dGNoIGFkZHMgYSAkKHdpbGRjYXJkKSBleHBhbnNpb24gc3RlcCBpbnRvIGdlbmVyYXRpb24gb2Yg
+RFRCCj4gY29tcGlsYXRpb24gdGFyZ2V0cyAodGhlIExJTlVYX0RUQl9OQU1FIHZhcmlhYmxlKS4g
+QXMgYSByZXN1bHQsCj4gd2lsZGNhcmRzIGJlaGF2ZSBjb3JyZWN0bHkuCgpBY3R1YWxseSwgdGhl
+IEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0RUU19QQVRIIGhlbHAgdGV4dCBzdGF0ZSB0aGF0IG9u
+bHkgYSBsaXN0Cm9mIGZpbGVzIGlzIGV4cGVjdGVkIGhlcmUgWzFdLgoKSSBzdWdnZXN0IHRvIGV4
+cGxpY2l0bHkgbGlzdCBhbGwgZHRzIGZpbGVzIHRoYXQgc2hvdWxkIGJlIHVzZWQgYnkgdGhpcyBj
+b25maWcgZmlsZS4KCk5vdGU6IEFuIGlzc3VlIHdhcyByZXBvcnRlZCByZWNlbnRseSB3aXRoIEJS
+Ml9MSU5VWF9LRVJORUxfQ1VTVE9NX0RUU19QQVRILCB3ZQpwbGFuIHRvIHJld29yayBob3cgdGhl
+IGV4dGVybmFsIGRldmljZXRyZWUgZmlsZXMgYXJlIGltcG9ydGVkIGludG8gdGhlIGtlcm5lbApz
+b3VyY2VzLgoKV2hpbGUgdHJ5aW5nIHRvIHJlcHJvZHVjZSBkdWUgdG8gYSBrZXJuZWwgYnVpbGQg
+aXNzdWUgd2l0aCBsYXRlc3QgcHJlYnVpbHQKdG9vbGNoYWlucy4KClsxXQpodHRwczovL2dpdGxh
+Yi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9ibG9iL21hc3Rlci9saW51eC9Db25maWcu
+aW4/cmVmX3R5cGU9aGVhZHMjTDQyOQoKWzJdIGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qu
+b3JnL2J1aWxkcm9vdC8tL2pvYnMvODk5MDI2MjY3Nwoob2N0YXZvX29zZDMybXAxX2Jya19kZWZj
+b25maWcpClszXSBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9q
+b2JzLzg5OTAyNjI2NzkKKG9jdGF2b19vc2QzMm1wMV9yZWRfZGVmY29uZmlnKQoKQmVzdCByZWdh
+cmRzLApSb21haW4KCj4gCj4gU2lnbmVkLW9mZi1ieTogR3JhZW1lIFNtZWNoZXIgPGdzbWVjaGVy
+QHRocmVlc3BlZWRsb2dpYy5jb20+Cj4gUmV2aWV3ZWQtYnk6IEFsZXhhbmRlciBTdmVyZGxpbiA8
+YWxleGFuZGVyLnN2ZXJkbGluQGdtYWlsLmNvbT4KPiAtLS0KPiAgbGludXgvbGludXgubWsgfCAy
+ICstCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxldGlvbigtKQo+IAo+
+IGRpZmYgLS1naXQgYS9saW51eC9saW51eC5tayBiL2xpbnV4L2xpbnV4Lm1rCj4gaW5kZXggMWRi
+NWM2MDQ2ZC4uODA4ODE1OTdhZCAxMDA2NDQKPiAtLS0gYS9saW51eC9saW51eC5tawo+ICsrKyBi
+L2xpbnV4L2xpbnV4Lm1rCj4gQEAgLTE5NSw3ICsxOTUsNyBAQCBMSU5VWF9EVFNfTkFNRSArPSAk
+KGNhbGwgcXN0cmlwLCQoQlIyX0xJTlVYX0tFUk5FTF9JTlRSRUVfRFRTX05BTUUpKQo+ICAjIGFu
+ZCAuZHRzaSBmaWxlcyBpbiBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9EVFNfUEFUSC4gQm90aCB3
+aWxsIGJlCj4gICMgY29waWVkIHRvIGFyY2gvPGFyY2g+L2Jvb3QvZHRzLCBidXQgb25seSB0aGUg
+LmR0cyBmaWxlcyB3aWxsCj4gICMgYWN0dWFsbHkgYmUgZ2VuZXJhdGVkIGFzIC5kdGIuCj4gLUxJ
+TlVYX0RUU19OQU1FICs9ICQoYmFzZW5hbWUgJChmaWx0ZXIgJS5kdHMsJChub3RkaXIgJChjYWxs
+IHFzdHJpcCwkKEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0RUU19QQVRIKSkpKSkKPiArTElOVVhf
+RFRTX05BTUUgKz0gJChiYXNlbmFtZSAkKGZpbHRlciAlLmR0cywkKG5vdGRpciAkKHdpbGRjYXJk
+ICQoY2FsbCBxc3RyaXAsICQoQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fRFRTX1BBVEgpKSkpKSkK
+PiAgCj4gIExJTlVYX0RUQlMgPSAkKGFkZHN1ZmZpeCAuZHRiLCQoTElOVVhfRFRTX05BTUUpKQo+
+ICAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxk
+cm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5i
+dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
