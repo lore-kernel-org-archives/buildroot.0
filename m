@@ -4,78 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B05BC02193
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 16:38:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9950CC02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 16:46:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C837B829FD;
-	Tue,  4 Feb 2025 16:38:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 67DE080AB8;
+	Tue,  4 Feb 2025 16:46:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Au24kGVfsWtK; Tue,  4 Feb 2025 16:38:06 +0000 (UTC)
+ id DwFamkpiLBbs; Tue,  4 Feb 2025 16:46:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2571F82B2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FCA081EA5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2571F82B2F;
-	Tue,  4 Feb 2025 16:38:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9807612A
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:37:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5FCA081EA5;
+	Tue,  4 Feb 2025 16:46:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 11125185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:46:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 75EB740744
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:37:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E9CDA80A5F
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:46:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y4gDvX4rLGwn for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 16:37:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6feX-VrGSZx4 for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 16:46:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3A8794070E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A8794070E
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3A8794070E
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:37:56 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CCC6E4429C;
- Tue,  4 Feb 2025 16:37:52 +0000 (UTC)
-Date: Tue, 4 Feb 2025 17:37:52 +0100
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, Christophe Priouzeau
- <christophe.priouzeau@foss.st.com>, linux-amarula@amarulasolutions.com
-Message-ID: <20250204173752.566db53d@windsurf>
-In-Reply-To: <20250120183958.3344525-1-dario.binacchi@amarulasolutions.com>
-References: <20250120183958.3344525-1-dario.binacchi@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvuddtvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeltdegvdejheegtefgueffgfelhfekvdefudevieeileetleeitdefgfeugffghfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepuddtledrkeelrddvfedvrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutdelrdekledrvdefvddrheehpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegpdhrtghpthhtohepuggrrhhiohdrsghinhgrtggthhhisegrmhgrrhhulhgrshholhhuthhiohhnshdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtoheptghhrhhishhtohhphhgvrdhprhhiohhuiigvrghusehfohhsshdrshhtrdgtohhmpdhrtghpthhtohepl
- hhinhhugidqrghmrghruhhlrgesrghmrghruhhlrghsohhluhhtihhonhhsrdgtohhm
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1738687073;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=me3HIEfso9B0U+uQrlJrFdNignTZ60cpMaRJxS1XKsw=;
- b=AcXYYoE9xisVMg7GLn9UgUuLX9oFreWjJp5QLwGYNTjhivEnc1G9vA/ypcC/GJ3dcU0GBI
- lu3E/amJYdZwUG8+kPCIeVlGqT1J5VvK09vEM4RQnyzIBzpuIQnuA+APM7VgQT+A45oD0w
- XWjjgVKIo8rsPMIfLJ1L4ux9+8ZeL0Eb9cCrI2vV1aw1EW6YtpxLXii00eRAQWNOwQTWFT
- /Y4vlAFq3G9A5ThssfUgZFTP31eqrxEKVaVzYaEdisI693meJw+zLZkMkeQP4E4rbZp8W8
- VkgrVGjDbZAmlyawlcq7wqqyQGizXtV4At5nmM9FesVDSVJW4CUaxurGwzCiHA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=AcXYYoE9
-Subject: Re: [Buildroot] [PATCH 1/1] configs/stm32f429_disco_xip: bump Linux
- to 6.1.126
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1777C80AB8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1777C80AB8
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:46:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 11E8786EF4; Tue,  4 Feb 2025 16:46:16 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Tue, 4 Feb 2025 17:43:33 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dc55e7eb518e1c0d81d1ed1cb9b0f0ae6f75a454
+X-Git-Newrev: 9cd3464afa13fd0190fb3e94fd850cc8063cf297
+X-Patchwork-Hint: ignore
+Message-Id: <20250204164616.11E8786EF4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/taglib: bump version to 2.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,33 +58,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 20 Jan 2025 19:39:58 +0100
-Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=9cd3464afa13fd0190fb3e94fd850cc8063cf297
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The patch bumps the Linux kernel to version 6.1.126. The size of xipImage
-> has increased by only 284 bytes (1670242 bytes compared to 1670242 in
-> version 6.1.112).
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
->  .../stmicroelectronics/stm32f429-disco/patches/linux/linux.hash | 2 +-
->  configs/stm32f429_disco_xip_defconfig                           | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Changelog: https://github.com/taglib/taglib/blob/master/CHANGELOG.md
 
-Applied to master, thanks.
+Needs utfcpp:
+https://github.com/taglib/taglib/commit/6ed0ca28db0d12a75572c0f5dcefdc5ebb34cc21
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Switched _SITE to https.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/taglib/Config.in   | 1 +
+ package/taglib/taglib.hash | 2 +-
+ package/taglib/taglib.mk   | 5 +++--
+ 3 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/package/taglib/Config.in b/package/taglib/Config.in
+index 6a87a13215..5b641a9653 100644
+--- a/package/taglib/Config.in
++++ b/package/taglib/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_TAGLIB
+ 	bool "taglib"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_UTFCPP
+ 	help
+ 	  TagLib is a library for reading and editing the meta-data of
+ 	  several popular audio formats. Currently it supports both
+diff --git a/package/taglib/taglib.hash b/package/taglib/taglib.hash
+index e83aa451f3..bbf5dd26d5 100644
+--- a/package/taglib/taglib.hash
++++ b/package/taglib/taglib.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  c8da2b10f1bfec2cd7dbfcd33f4a2338db0765d851a50583d410bacf055cfd0b  taglib-1.13.1.tar.gz
++sha256  0de288d7fe34ba133199fd8512f19cc1100196826eafcb67a33b224ec3a59737  taglib-2.0.2.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256  53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING.MPL
+diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
+index 9bdf05b85d..4ac51cf162 100644
+--- a/package/taglib/taglib.mk
++++ b/package/taglib/taglib.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-TAGLIB_VERSION = 1.13.1
+-TAGLIB_SITE = http://taglib.github.io/releases
++TAGLIB_VERSION = 2.0.2
++TAGLIB_SITE = https://taglib.org/releases
+ TAGLIB_INSTALL_STAGING = YES
++TAGLIB_DEPENDENCIES = utfcpp
+ TAGLIB_LICENSE = LGPL-2.1 or MPL-1.1
+ TAGLIB_LICENSE_FILES = COPYING.LGPL COPYING.MPL
+ TAGLIB_CPE_ID_VENDOR = taglib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
