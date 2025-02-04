@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9950CC02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 16:46:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 002A1C02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 16:46:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 67DE080AB8;
-	Tue,  4 Feb 2025 16:46:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C88E80AD3;
+	Tue,  4 Feb 2025 16:46:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DwFamkpiLBbs; Tue,  4 Feb 2025 16:46:18 +0000 (UTC)
+ id I0iMAppAwXdr; Tue,  4 Feb 2025 16:46:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FCA081EA5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA8EE81F53
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5FCA081EA5;
-	Tue,  4 Feb 2025 16:46:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 11125185
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA8EE81F53;
+	Tue,  4 Feb 2025 16:46:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6506012A
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:46:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E9CDA80A5F
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:46:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 49BAE40AF6
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:46:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6feX-VrGSZx4 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RtMo3UzNAhAB for <buildroot@buildroot.org>;
  Tue,  4 Feb 2025 16:46:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1777C80AB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C7CE40965
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1777C80AB8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C7CE40965
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:46:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 11E8786EF4; Tue,  4 Feb 2025 16:46:16 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ id 0726E86E6C; Tue,  4 Feb 2025 16:46:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 17:43:33 +0100
+Date: Tue, 4 Feb 2025 17:43:11 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dc55e7eb518e1c0d81d1ed1cb9b0f0ae6f75a454
-X-Git-Newrev: 9cd3464afa13fd0190fb3e94fd850cc8063cf297
+X-Git-Oldrev: d5471a2316dec1f29c5566d5c16deaf0f1dcc193
+X-Git-Newrev: dc55e7eb518e1c0d81d1ed1cb9b0f0ae6f75a454
 X-Patchwork-Hint: ignore
-Message-Id: <20250204164616.11E8786EF4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/taglib: bump version to 2.0.2
+Message-Id: <20250204164616.0726E86E6C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/utfcpp: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,69 +57,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9cd3464afa13fd0190fb3e94fd850cc8063cf297
+commit: https://git.buildroot.net/buildroot/commit/?id=dc55e7eb518e1c0d81d1ed1cb9b0f0ae6f75a454
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://github.com/taglib/taglib/blob/master/CHANGELOG.md
-
-Needs utfcpp:
+Needed for taglib 2.x:
 https://github.com/taglib/taglib/commit/6ed0ca28db0d12a75572c0f5dcefdc5ebb34cc21
 
-Switched _SITE to https.
+Upstream discourages the use of CMakeList.txt to install the package:
+https://github.com/nemtrif/utfcpp/commit/4965d378fb141a21c8afa7c283a8af4725e6a57e
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/taglib/Config.in   | 1 +
- package/taglib/taglib.hash | 2 +-
- package/taglib/taglib.mk   | 5 +++--
- 3 files changed, 5 insertions(+), 3 deletions(-)
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/utfcpp/Config.in   | 10 ++++++++++
+ package/utfcpp/utfcpp.hash |  3 +++
+ package/utfcpp/utfcpp.mk   | 23 +++++++++++++++++++++++
+ 5 files changed, 38 insertions(+)
 
-diff --git a/package/taglib/Config.in b/package/taglib/Config.in
-index 6a87a13215..5b641a9653 100644
---- a/package/taglib/Config.in
-+++ b/package/taglib/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_TAGLIB
- 	bool "taglib"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_USE_WCHAR
-+	select BR2_PACKAGE_UTFCPP
- 	help
- 	  TagLib is a library for reading and editing the meta-data of
- 	  several popular audio formats. Currently it supports both
-diff --git a/package/taglib/taglib.hash b/package/taglib/taglib.hash
-index e83aa451f3..bbf5dd26d5 100644
---- a/package/taglib/taglib.hash
-+++ b/package/taglib/taglib.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  c8da2b10f1bfec2cd7dbfcd33f4a2338db0765d851a50583d410bacf055cfd0b  taglib-1.13.1.tar.gz
-+sha256  0de288d7fe34ba133199fd8512f19cc1100196826eafcb67a33b224ec3a59737  taglib-2.0.2.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256  53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING.MPL
-diff --git a/package/taglib/taglib.mk b/package/taglib/taglib.mk
-index 9bdf05b85d..4ac51cf162 100644
---- a/package/taglib/taglib.mk
-+++ b/package/taglib/taglib.mk
-@@ -4,9 +4,10 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d48b4c5500..0c9f2126a4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -509,6 +509,7 @@ F:	package/tor/
+ F:	package/transmission/
+ F:	package/tvheadend/
+ F:	package/unixodbc/
++F:	package/utfcpp/
+ F:	package/vlc/
+ F:	package/wget/
+ F:	package/wireless-regdb/
+diff --git a/package/Config.in b/package/Config.in
+index a4a8bd394f..b76d37e4a0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2364,6 +2364,7 @@ menu "Text and terminal handling"
+ 	source "package/tclap/Config.in"
+ 	source "package/termcolor/Config.in"
+ 	source "package/utf8proc/Config.in"
++	source "package/utfcpp/Config.in"
+ endmenu
  
--TAGLIB_VERSION = 1.13.1
--TAGLIB_SITE = http://taglib.github.io/releases
-+TAGLIB_VERSION = 2.0.2
-+TAGLIB_SITE = https://taglib.org/releases
- TAGLIB_INSTALL_STAGING = YES
-+TAGLIB_DEPENDENCIES = utfcpp
- TAGLIB_LICENSE = LGPL-2.1 or MPL-1.1
- TAGLIB_LICENSE_FILES = COPYING.LGPL COPYING.MPL
- TAGLIB_CPE_ID_VENDOR = taglib
+ endmenu
+diff --git a/package/utfcpp/Config.in b/package/utfcpp/Config.in
+new file mode 100644
+index 0000000000..19e1f21688
+--- /dev/null
++++ b/package/utfcpp/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_UTFCPP
++	bool "utfcpp"
++	depends on BR2_INSTALL_LIBSTDCPP
++	help
++	  UTF-8 with C++ in a Portable Way
++
++	  https://github.com/nemtrif/utfcpp
++
++comment "taglib needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/utfcpp/utfcpp.hash b/package/utfcpp/utfcpp.hash
+new file mode 100644
+index 0000000000..65b3ad2a88
+--- /dev/null
++++ b/package/utfcpp/utfcpp.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  6920a6a5d6a04b9a89b2a89af7132f8acefd46e0c2a7b190350539e9213816c0  utfcpp-4.0.6.tar.gz
++sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE
+diff --git a/package/utfcpp/utfcpp.mk b/package/utfcpp/utfcpp.mk
+new file mode 100644
+index 0000000000..3a4613841e
+--- /dev/null
++++ b/package/utfcpp/utfcpp.mk
+@@ -0,0 +1,23 @@
++################################################################################
++#
++# taglib
++#
++################################################################################
++
++UTFCPP_VERSION = 4.0.6
++UTFCPP_SITE = $(call github,nemtrif,utfcpp,v$(UTFCPP_VERSION))
++UTFCPP_LICENSE = BSL-1.0
++UTFCPP_LICENSE_FILES = LICENSE
++
++# utfcpp is a header-only library, it only makes sense
++# to have it installed into the staging directory.
++UTFCPP_INSTALL_STAGING = YES
++UTFCPP_INSTALL_TARGET = NO
++
++define UTFCPP_INSTALL_STAGING_CMDS
++	mkdir -p $(STAGING_DIR)/usr/include/utf8/
++	$(INSTALL) -m 0644 $(@D)/source/utf8.h $(STAGING_DIR)/usr/include/utf8.h
++	$(INSTALL) -m 0644 $(@D)/source/utf8/* $(STAGING_DIR)/usr/include/utf8/
++endef
++
++$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
