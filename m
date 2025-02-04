@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02F45C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:12:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C28F8C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:12:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BBFC64F101;
-	Fri, 28 Feb 2025 17:12:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 95BBC6F7F8;
+	Fri, 28 Feb 2025 17:12:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OW0shkuxfl6L; Fri, 28 Feb 2025 17:12:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X9hrLXFw9jEX; Fri, 28 Feb 2025 17:12:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8744D4F0C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C40770AD9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8744D4F0C0;
-	Fri, 28 Feb 2025 17:12:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C40770AD9;
+	Fri, 28 Feb 2025 17:12:08 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0CDCA68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:43:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1EE8A1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:43:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AFB4E42527
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05D4442531
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gFSe370p1mgO for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:32 +0000 (UTC)
+ id ZBFMAGtu2GfB for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C18242F77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA64642CFA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C18242F77
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA64642CFA
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7475385FAE; Fri, 28 Feb 2025 16:30:30 +0000 (UTC)
+ id D4F4786A4C; Fri, 28 Feb 2025 16:30:29 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 15:38:16 +0100
+Date: Tue, 4 Feb 2025 14:18:29 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d892350f644e67340091498bd2ab677f19608d85
-X-Git-Newrev: 261d33eff8963319aa1c660e4e6bfb59d037175e
+X-Git-Oldrev: 00039d7059faa3489e91ddb692b703aedb8f9b13
+X-Git-Newrev: 9f52cc8c0a7d285a4c6e34c5daa40719d3266e5b
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163030.7475385FAE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] board/mender: sync with
- board/pc
+Message-Id: <20250228163029.D4F4786A4C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] boot/uboot: add qspi.bin file
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,87 +59,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=261d33eff8963319aa1c660e4e6bfb59d037175e
+commit: https://git.buildroot.net/buildroot/commit/?id=9f52cc8c0a7d285a4c6e34c5daa40719d3266e5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-and fix dd of=sdc because it is very dangerous to have exiting drive in example
+u-boot has introduced a new file called qspi.bin for users who boot from a
+qspi flash device.  It combines the spl/boot.bin and u-boot.itb files into a
+single binary that can be written to the qspi flash.
 
-Signed-off-by: Cherniaev Andrei <dungeonlords789@naver.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Here is an example of how binman generates the qspi.bin:
+https://source.denx.de/u-boot/u-boot/-/commit/a4c98119109a60b9b236996f47065aa8fc0de9ca
+
+At the moment, the qspi.bin is only used for the zynqmp platform, but other
+platforms may adopt it, so the buildroot support has been made in a generic
+way.
+
+This patch adds the necessary support for buildroot to install this binary.
+
+[Tested on Kria KV260 starter kit]
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/mender/x86_64/readme.txt |  8 ++++----
- board/pc/readme.txt            | 10 ++++++----
- 2 files changed, 10 insertions(+), 8 deletions(-)
+ boot/uboot/Config.in | 8 ++++++++
+ boot/uboot/uboot.mk  | 4 ++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/board/mender/x86_64/readme.txt b/board/mender/x86_64/readme.txt
-index a9755ec58b..01a0254511 100644
---- a/board/mender/x86_64/readme.txt
-+++ b/board/mender/x86_64/readme.txt
-@@ -11,14 +11,14 @@ Mender UEFI PC sample config
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 13d45140eb..f17f932c9e 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -470,6 +470,14 @@ config BR2_TARGET_UBOOT_FORMAT_SD
  
-   $ make
+ 	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
  
--2. Write the Pendrive
-+2. Write the image
- 
--  The build process will create a Pendrive image called disk.img in
-+  The build process will create a all-in-one image called disk.img in
-   output/images.
- 
-   Write the image to a pendrive:
- 
--  $ dd if=output/images/disk.img of=/dev/${pendrive}; sync
-+  $ dd if=output/images/disk.img of=/dev/sdX; sync
- 
-   Once the process is complete, insert it into the target PC and boot.
- 
-@@ -66,4 +66,4 @@ particular needs, as this option changes the mender artifact name.
- Using mender
- ========================
- Please read the mender documentation at:
--https://docs.mender.io/2.2/getting-started
-+https://docs.mender.io
-diff --git a/board/pc/readme.txt b/board/pc/readme.txt
-index 99e8f442ea..18b1e3dcf0 100644
---- a/board/pc/readme.txt
-+++ b/board/pc/readme.txt
-@@ -17,14 +17,14 @@ Bare PC sample config
- 
-   $ make
- 
--2. Write the pendrive
-+2. Write the image
- 
--  The build process will create a pendrive image called sdcard.img in
-+  The build process will create a all-in-one image called disk.img in
-   output/images.
- 
-   Write the image to a pendrive:
- 
--  $ dd if=output/images/disk.img of=/dev/sdc; sync
-+  $ dd if=output/images/disk.img of=/dev/sdX; sync
- 
-   Once it's done insert it into the target PC and boot.
- 
-@@ -43,7 +43,9 @@ Emulation in qemu (BIOS)
- 
-   Since the driver will show up in the virtual machine as /dev/vda,
-   change board/pc/grub-bios.cfg to use root=/dev/vda1 instead of
--  root=/dev/sda1. Then rebuild grub2 and the image.
-+  root=/dev/sda1. Then rebuild grub2 and the image:
++config BR2_TARGET_UBOOT_FORMAT_QSPI_BIN
++	bool "qspi.bin"
++	depends on BR2_TARGET_UBOOT_ZYNQMP
++	help
++	  When booting from qspi flash, u-boot can generate a single
++	  file for flashing by combining the spl/boot.bin and
++	  u-boot.itb files into a unified binary.
 +
-+    make grub2-rebuild && make
+ config BR2_TARGET_UBOOT_FORMAT_STM32
+ 	bool "u-boot.stm32"
+ 	depends on BR2_arm
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index efecf2ca47..2796b0a310 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -108,6 +108,10 @@ UBOOT_MAKE_TARGET += u-boot.itb
+ endif
+ endif
  
- 2. Run the emulation with:
- 
++ifeq ($(BR2_TARGET_UBOOT_FORMAT_QSPI_BIN),y)
++UBOOT_BINS += qspi.bin
++endif
++
+ ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMX),y)
+ UBOOT_BINS += u-boot.imx
+ UBOOT_MAKE_TARGET += u-boot.imx
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
