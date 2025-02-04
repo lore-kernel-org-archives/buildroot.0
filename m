@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0407C02196
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 14:07:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCF03C02197
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 14:07:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A082080362;
-	Tue,  4 Feb 2025 14:07:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB668607FC;
+	Tue,  4 Feb 2025 14:07:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O-ym9mm4dmuv; Tue,  4 Feb 2025 14:07:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GMd7Zv-YcnMK; Tue,  4 Feb 2025 14:07:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 945DC80568
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A52376067E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 945DC80568;
-	Tue,  4 Feb 2025 14:07:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3CB4212F
+	by smtp3.osuosl.org (Postfix) with ESMTP id A52376067E;
+	Tue,  4 Feb 2025 14:07:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F4C51A6
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 14:07:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2BD43808A4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2E0CA60634
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 14:07:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e1gwbJaAXjXn for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QqUPsitEpkWG for <buildroot@buildroot.org>;
  Tue,  4 Feb 2025 14:07:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 736EA80519
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69689605D0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 736EA80519
+ by smtp3.osuosl.org (Postfix) with ESMTP id 69689605D0
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 14:07:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6A1B986ABA; Tue,  4 Feb 2025 14:07:17 +0000 (UTC)
+ id 585A286D17; Tue,  4 Feb 2025 14:07:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 15:07:01 +0100
+Date: Tue, 4 Feb 2025 15:07:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e2484f8bda26f72053e5deb5c09f4e157938eed1
-X-Git-Newrev: d892350f644e67340091498bd2ab677f19608d85
+X-Git-Oldrev: ffac0cf5108a832dd8bc005bab4ee770288a34bb
+X-Git-Newrev: e2484f8bda26f72053e5deb5c09f4e157938eed1
 X-Patchwork-Hint: ignore
-Message-Id: <20250204140717.6A1B986ABA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/eza: bump to version 0.20.19
+Message-Id: <20250204140717.585A286D17@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fd: bump to version 10.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,50 +64,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d892350f644e67340091498bd2ab677f19608d85
+commit: https://git.buildroot.net/buildroot/commit/?id=e2484f8bda26f72053e5deb5c09f4e157938eed1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://github.com/eza-community/eza/releases/tag/v0.20.19
-
-Now licensed under the EUPL-1.2 license, so adjust _LICENSE to match:
-https://github.com/eza-community/eza/releases/tag/v0.20.0
+https://github.com/sharkdp/fd/releases/tag/v10.2.0
 
 Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
-[Peter: add note about license change]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/eza/eza.hash | 4 ++--
- package/eza/eza.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/fd/fd.hash | 2 +-
+ package/fd/fd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/eza/eza.hash b/package/eza/eza.hash
-index 408099e231..0cd422ccf0 100644
---- a/package/eza/eza.hash
-+++ b/package/eza/eza.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/fd/fd.hash b/package/fd/fd.hash
+index 90d2c38694..04345b8884 100644
+--- a/package/fd/fd.hash
++++ b/package/fd/fd.hash
+@@ -1,4 +1,4 @@
  # Locally computed
--sha256  65a0dc76c1976d7af72a628196022de71c787092da5c6d961a3fcee21f5d1d6f  eza-0.18.24-cargo2.tar.gz
--sha256  2762990c7fbba9d550802a2593c1d857dcd52596bb0f9f192a97e9a7ac5f4f9e  LICENCE
-+sha256  685b22eec7ec8c24137b4af5f97ceea7d262e31fee324d5b4ed66fce24c23476  eza-0.20.19-cargo2.tar.gz
-+sha256  57fb42fbcd0b037ce528ed8f72f1ec095d67bc6825ecf1448ff39be1fe68a4b4  LICENSE.txt
-diff --git a/package/eza/eza.mk b/package/eza/eza.mk
-index 4d23116504..cd19c4b4d6 100644
---- a/package/eza/eza.mk
-+++ b/package/eza/eza.mk
-@@ -4,9 +4,9 @@
+-sha256  91da5cc2b99d4754fa5096cda1eeac98f312f712bfca6a41f9972b2287a4c4f9  fd-9.0.0-cargo2.tar.gz
++sha256  6d177b06123419edf2abe2daa82b29fec667a4e775cf877094ca5f6ae759dc34  fd-10.2.0-cargo2.tar.gz
+ sha256  73c83c60d817e7df1943cb3f0af81e4939a8352c9a96c2fd00451b1116fa635c  LICENSE-APACHE
+ sha256  322cfc7aa0c774d0eca3b2610f1d414de3ddbd7d8dd4b9dea941a13a6eb07455  LICENSE-MIT
+diff --git a/package/fd/fd.mk b/package/fd/fd.mk
+index 316da418ea..9b6b305e77 100644
+--- a/package/fd/fd.mk
++++ b/package/fd/fd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EZA_VERSION = 0.18.24
-+EZA_VERSION = 0.20.19
- EZA_SITE = $(call github,eza-community,eza,v$(EZA_VERSION))
--EZA_LICENSE = MIT
--EZA_LICENSE_FILES = LICENCE
-+EZA_LICENSE = EUPL-1.2
-+EZA_LICENSE_FILES = LICENSE.txt
- 
- $(eval $(cargo-package))
+-FD_VERSION = 9.0.0
++FD_VERSION = 10.2.0
+ FD_SITE = $(call github,sharkdp,fd,v$(FD_VERSION))
+ FD_LICENSE = Apache-2.0 or MIT
+ FD_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
