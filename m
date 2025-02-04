@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3D01C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:11:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E052C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:11:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC51A50309;
-	Fri, 28 Feb 2025 17:11:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 85ADB85A8D;
+	Fri, 28 Feb 2025 17:11:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CzoVNf6DDuAw; Fri, 28 Feb 2025 17:11:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f6H2EkuWm84g; Fri, 28 Feb 2025 17:11:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D59B50815
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F9A185A83
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D59B50815;
-	Fri, 28 Feb 2025 17:11:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F9A185A83;
+	Fri, 28 Feb 2025 17:11:15 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 032EE1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:43:38 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1C14C68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:43:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5335941489
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8347C4156C
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bdg4CvCqGern for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:30 +0000 (UTC)
+ id 2ewcx3ea0a13 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97D5342F64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50FFB42F5B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 97D5342F64
+ by smtp4.osuosl.org (Postfix) with ESMTP id 50FFB42F5B
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 92A9E85FAE; Fri, 28 Feb 2025 16:30:29 +0000 (UTC)
+ id 4BE3286A4C; Fri, 28 Feb 2025 16:30:29 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 13:57:11 +0100
+Date: Tue, 4 Feb 2025 12:27:48 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5389f9b1a2deb8bcbb0475a6ef853011208c00b0
-X-Git-Newrev: c4772ecef6c44ade30f4befb38e32d6dc293aad3
+X-Git-Oldrev: aadac609aa49e9b0c809c6a912097eaa4bbf9c3b
+X-Git-Newrev: 4b133efbd30ef2116b8f76663ef0bf1fcd1dbc42
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163029.92A9E85FAE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- support/testing/tests/package/test_mender.py: Add a systemd test
+Message-Id: <20250228163029.4BE3286A4C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/glibc: drop bogus
+ IGNORE_CVES entries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,75 +59,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4772ecef6c44ade30f4befb38e32d6dc293aad3
+commit: https://git.buildroot.net/buildroot/commit/?id=4b133efbd30ef2116b8f76663ef0bf1fcd1dbc42
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Move the check for /var/run/mender.pid to before self.run_mender_test()
-    for the two tests using sysvinit.
+When glibc was bumped from 2.39 to 2.40 in commit
+74cb378aff231c4f4605d7f479b9ae1a7a4e1fb6 ("package/{glibc, localdef}:
+bump to version 2.40"), the IGNORE_CVES entries should have been
+dropped, as they were applicable to the 2.39 branch. Drop them now.
 
-  - Instead of checking for /var/run/mender.pid during the systemd test,
-    check to ensure "systemctl is-active mender-client" returns "active"
+We did verify the pkg-stats output, and those CVEs don't show up as
+affecting glibc even after this change, as expected.
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-[Arnout: fix flake8 issue]
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_mender.py | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
+ package/glibc/glibc.mk | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-diff --git a/support/testing/tests/package/test_mender.py b/support/testing/tests/package/test_mender.py
-index 0938cb77e1..976d03b172 100644
---- a/support/testing/tests/package/test_mender.py
-+++ b/support/testing/tests/package/test_mender.py
-@@ -20,8 +20,6 @@ class TestMenderInfra(infra.basetest.BRTest):
-         self.emulator.login()
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index e026c18762..25e28c7cf6 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -24,18 +24,6 @@ GLIBC_CPE_ID_VENDOR = gnu
+ # allow proper matching with the CPE database.
+ GLIBC_CPE_ID_VERSION = $(word 1, $(subst -,$(space),$(GLIBC_VERSION)))
  
-     def run_mender_test(self):
--        # Check if the Daemon is running
--        self.assertRunOk("ls /var/run/mender.pid")
-         self.assertRunOk("ps aux | egrep [m]ender")
- 
-         # Check if a simple Mender command is correctly executed
-@@ -35,6 +33,9 @@ class TestMenderInfra(infra.basetest.BRTest):
- class TestMenderRW(TestMenderInfra):
-     def test_run(self):
-         TestMenderInfra.base_test_run(self)
-+
-+        # Check if the Daemon is running
-+        self.assertRunOk("ls /var/run/mender.pid")
-         self.run_mender_test()
- 
- 
-@@ -47,4 +48,21 @@ class TestMenderRO(TestMenderInfra):
- 
-     def test_run(self):
-         TestMenderInfra.base_test_run(self)
-+
-+        # Check if the Daemon is running
-+        self.assertRunOk("ls /var/run/mender.pid")
-+        self.run_mender_test()
-+
-+
-+class TestMenderSystemd(TestMenderInfra):
-+    config = \
-+        """
-+        {}
-+        BR2_INIT_SYSTEMD=y
-+        """.format(TestMenderInfra.config)
-+
-+    def test_run(self):
-+        TestMenderInfra.base_test_run(self)
-+        output, _ = self.emulator.run("systemctl is-active mender-client")
-+        self.assertEqual(output[0], "active")
-         self.run_mender_test()
+-# Fixed by glibc-2.39-31-g31da30f23cddd36db29d5b6a1c7619361b271fb4
+-GLIBC_IGNORE_CVES += CVE-2024-2961
+-
+-# Fixed by glibc-2.39-35-g1263d583d2e28afb8be53f8d6922f0842036f35d
+-GLIBC_IGNORE_CVES += CVE-2024-33599
+-
+-# Fixed by glibc-2.39-37-gc99f886de54446cd4447db6b44be93dabbdc2f8b
+-GLIBC_IGNORE_CVES += CVE-2024-33600
+-
+-# Fixed by glibc-2.39-38-ga9a8d3eebb145779a18d90e3966009a1daa63cd
+-GLIBC_IGNORE_CVES += CVE-2024-33601 CVE-2024-33602
+-
+ # All these CVEs are considered as not being security issues by
+ # upstream glibc:
+ #  https://security-tracker.debian.org/tracker/CVE-2010-4756
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
