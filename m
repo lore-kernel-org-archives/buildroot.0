@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57C40C02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 17:45:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B83D6C02193
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 17:45:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 089F580B7B;
-	Tue,  4 Feb 2025 17:45:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7790B40876;
+	Tue,  4 Feb 2025 17:45:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8VAFA9nfVtkj; Tue,  4 Feb 2025 17:45:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 828u8Q9O6MFn; Tue,  4 Feb 2025 17:45:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15A7180B6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3923B408AB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 15A7180B6C;
-	Tue,  4 Feb 2025 17:45:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B2D1E12F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3923B408AB;
+	Tue,  4 Feb 2025 17:45:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C68371A6
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:45:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A1B066067E
+ by smtp4.osuosl.org (Postfix) with ESMTP id B63B7408AB
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:45:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y67TqaN-1c5Z for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fINr_ecd-DAG for <buildroot@buildroot.org>;
  Tue,  4 Feb 2025 17:45:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E482605BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8748540876
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9E482605BB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8748540876
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:45:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 94D2586E53; Tue,  4 Feb 2025 17:45:13 +0000 (UTC)
+ id 74B3886FA8; Tue,  4 Feb 2025 17:45:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 18:44:39 +0100
+Date: Tue, 4 Feb 2025 18:44:35 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 80d26f091fdf2ab6bda956d91dc93a6c63d83797
-X-Git-Newrev: 747c3ae005cf8e12eb23025db7362426f5ab595d
+X-Git-Oldrev: 2852a26899e8fbd5da3ea1a1e7fc5bf46b68db99
+X-Git-Newrev: 80d26f091fdf2ab6bda956d91dc93a6c63d83797
 X-Patchwork-Hint: ignore
-Message-Id: <20250204174513.94D2586E53@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] .b4-config: check patches with
- ./utils/check-package
+Message-Id: <20250204174513.74B3886FA8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/check-package: support finding files
+ from patches
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,38 +66,98 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=747c3ae005cf8e12eb23025db7362426f5ab595d
+commit: https://git.buildroot.net/buildroot/commit/?id=80d26f091fdf2ab6bda956d91dc93a6c63d83797
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-NOTE: This requires `b4` version 0.14.2 or later as earlier versions had
-a bug that broke custom prep-perpatch-check-cmd[1].
+For the `b4` tool to support check-package, check-package must support
+reading patch files from stdin.
 
-If a check-cmd is declared, `b4` will warn developers to run the patch
-checker before sending a patch series[2][3]. Developers can then run `b4 prep
---check` to automatically run ./utils/check-package on only files
-modified in the patch series.
-
-[1] https://github.com/mricon/b4/commit/0741bc9a5b45578e4d3804588dd3f63fe4848059
-[2] https://b4.docs.kernel.org/en/latest/contributor/send.html#passing-pre-flight-checks-v0-14
-[3] https://b4.docs.kernel.org/en/latest/config.html#contributor-oriented-settings
+It would be complicated to make check-package actually run checks on
+patch files. So instead we search the patch files to figure out what
+files are modified in the repo, then run check-package on the modified
+files directly.
 
 Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+[Arnout: rename variable "files" to "files_to_check"]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- .b4-config | 1 +
- 1 file changed, 1 insertion(+)
+ utils/check-package | 37 ++++++++++++++++++++++++++++++++++---
+ 1 file changed, 34 insertions(+), 3 deletions(-)
 
-diff --git a/.b4-config b/.b4-config
-index 1943458f2f..d568669864 100644
---- a/.b4-config
-+++ b/.b4-config
-@@ -3,5 +3,6 @@
- [b4]
-     send-series-to = buildroot@buildroot.org
-     send-auto-cc-cmd = "./utils/get-developers -e -"
-+    prep-perpatch-check-cmd = "./utils/check-package -q -p -"
+diff --git a/utils/check-package b/utils/check-package
+index 6a5e89daa3..a5ecc2eed8 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -10,6 +10,7 @@
  
- # vim: set filetype=gitconfig:
+ import argparse
+ import inspect
++import fileinput
+ import magic
+ import os
+ import re
+@@ -91,6 +92,9 @@ def parse_args():
+                         "functions that would be called for each file (debug)")
+     parser.add_argument("--failed-only", action="store_true", help="print only"
+                         " the name of the functions that failed (debug)")
++    parser.add_argument("--patch", "-p", action="store_true",
++                        help="The 'files' are patch files to be sent to the"
++                        " Buildroot mailing list")
+ 
+     parser.add_argument("--test-suite", action="store_true", help="Run the"
+                         " test-suite")
+@@ -294,6 +298,30 @@ def check_file_using_lib(fname):
+     return nwarnings, nlines
+ 
+ 
++def patch_modified_files(patches):
++    """
++    Find files modified in a patch file
++
++    :param patches: Patch files to read, as a list of paths or '-' for stdin
++    :returns: List of modified filenames
++    """
++
++    files = []
++    with fileinput.input(files=patches) as fp:
++        # Search for unified-diff to-file lines
++        for line in fp:
++            if line.startswith('+++'):
++                line = line.removeprefix('+++').strip()
++
++                # Remove the prefix git adds to filenames
++                if line.startswith('b/'):
++                    line = line.removeprefix('b/')
++
++                files.append(line)
++    files.sort()
++    return files
++
++
+ def __main__():
+     global flags
+     flags = parse_args()
+@@ -301,14 +329,17 @@ def __main__():
+     if flags.test_suite:
+         return checkpackagelib.base.run_test_suite()
+ 
++    if flags.patch:
++        files_to_check = patch_modified_files(flags.files)
++    else:
++        files_to_check = flags.files
++
+     if flags.intree_only:
+         # change all paths received to be relative to the base dir
+         base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+-        files_to_check = [os.path.relpath(os.path.abspath(f), base_dir) for f in flags.files]
++        files_to_check = [os.path.relpath(os.path.abspath(f), base_dir) for f in files_to_check]
+         # move current dir so the script find the files
+         os.chdir(base_dir)
+-    else:
+-        files_to_check = flags.files
+ 
+     if len(files_to_check) == 0:
+         print("No files to check style")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
