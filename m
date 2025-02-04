@@ -4,49 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC9DFC02193
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 09:18:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60128C02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 09:29:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BE7441525;
-	Tue,  4 Feb 2025 09:18:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 980604177F;
+	Tue,  4 Feb 2025 09:29:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CFsB5TeC_m5U; Tue,  4 Feb 2025 09:18:20 +0000 (UTC)
+ id W4oKQ4lSz7df; Tue,  4 Feb 2025 09:29:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2AAA41755
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 118FD41774
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2AAA41755;
-	Tue,  4 Feb 2025 09:18:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 21D2812A
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 09:18:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 118FD41774;
+	Tue,  4 Feb 2025 09:29:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F0C1E12F
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 09:29:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0EF4C40278
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 09:18:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D4E0941774
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 09:29:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5Z7-IOpyjAQo for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 09:18:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 935D24058E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 935D24058E
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 09:18:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8164886BE7; Tue,  4 Feb 2025 09:18:15 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gNmNXO4SOqaj for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 09:29:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ envelope-from=gael.portay+rtone@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 549DC41769
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 549DC41769
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 549DC41769
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 09:29:21 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-436230de7a3so6818755e9.0
+ for <buildroot@buildroot.org>; Tue, 04 Feb 2025 01:29:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1738661359; x=1739266159;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=IJortucuXeYjUTNKo0swgw2tVutY8vZU8hEhpFcqr74=;
+ b=lk57xcDgvbrBcPNhLtUX2rFhJZxgM+Uyra0iWXkAqxtgbUOoZ4etEeZCkYF4+GcFNw
+ h6X1l922izEMKOK86Er2S2rFb4BPxJLnetbj3YOE5A/EkiFhpARFt+3CeHUPerrKLfrE
+ QBmUeLwb7uTWpyWRY47deBYJ57WysaaI1bxmNRnT9+fMHTwxZC05AObHuDIxjSlW2NN4
+ gQscs8ql6Dj6KGAk4CESlcEtPlZp6O3quo+kO7xNgLXu00nmcmg1ag5QWwBaOTem5D9O
+ GsXd1fQ0KqmTx3eq0iroS7i3ZiqPpKBldiUhIcNyYGLVXRlUpPmXJTrEB5rYzwKyUMgP
+ SPog==
+X-Gm-Message-State: AOJu0YxPnCz30D8tp0knLHF/5sBtngdciJebU7Ft5KXtjV8YFeMOcY7S
+ 6c6wfUHRn4tAibjYi6Q4BK+5OyGV/zZVqcrCAK3+rCdjr1P/uLX9nnwSijNJtsM=
+X-Gm-Gg: ASbGncsE1tfzWpGfR13TYicsejpos4EZ6HmAX/HdUkUE0W4yXZZXlC0q5wt8+nBNas2
+ 6+LvhfgybBh2A4hUysaS12/yxEXqIzkHMp2L5A6Df0uFsGDQjMMSUrFnYecaIKIzv7Z2wL8SMy0
+ AKS/vsCbpAWuH4JKpsu6u80tb+KhLNfbdh3V3irJ3shAogLZtcQlmFBE1w6qhZJ7BWa+qthLY1c
+ xdLqUCKWUjNefnK8+nHDBWOE/xM5ltwn9E6/G8oAKccYmiq7MqXjkbSxD6j89aNx7TG+4ewKtVZ
+ E78iOyNjfCqxPUCBq9DY6fSxszMe34PPnUPb9FISAc4Fp/ffipPrT8quAYV5
+X-Google-Smtp-Source: AGHT+IE0tN7Ved+CRalgG0nenpB4xEI72uyMauXp58vvwQH9iJnsVHsDqYHIQlUrCkP2RJB2ac2b1w==
+X-Received: by 2002:a05:600c:350d:b0:434:f1d5:144a with SMTP id
+ 5b1f17b1804b1-43905a44be7mr9144415e9.0.1738661358629; 
+ Tue, 04 Feb 2025 01:29:18 -0800 (PST)
+Received: from archlinux.. (host-109-89-232-55.dynamic.voo.be. [109.89.232.55])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-438dcc6df51sm223070575e9.30.2025.02.04.01.29.17
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 04 Feb 2025 01:29:18 -0800 (PST)
+From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay+rtone@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 10:16:44 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 360fd01de20eb42aa0e6b5e9f7b37eaa104c6fc9
-X-Git-Newrev: 32829d0d131ec3cd16d2622b741f8b24bcac594a
-X-Patchwork-Hint: ignore
-Message-Id: <20250204091815.8164886BE7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/binutils: drop binutils 2.41
+Cc: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay+rtone@gmail.com>
+Date: Tue,  4 Feb 2025 10:29:15 +0100
+Message-ID: <20250204092915.66776-1-gael.portay+rtone@gmail.com>
+X-Mailer: git-send-email 2.48.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1738661359; x=1739266159; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=IJortucuXeYjUTNKo0swgw2tVutY8vZU8hEhpFcqr74=;
+ b=j9rCzf95NTKwONHFqjb5Dpih7XTg+E6B5fqJuH6w07sUaZyaSn1aC9QeRDur++vBO6
+ fd7EWfIo0Tyr5HnOCuj0XEUYVzgRtYoNNsuohRDNc3zecuDM4HvxQByjQZ7kfLksrWHv
+ ugjkeTH5WqZEj74jVpdy3e6NYX3YgzdNKTQJUiahKyuGaPgUqUHXikDKScXr0AVPzImu
+ 4LThdW08MnUTD/emQgdNF+S2u9GbbzQIuYu8MbkjoKYaysSFhboOLF0GUPKIJOFmPXEJ
+ s1BS+gTa6fHm9zWVaPD8+HtRyCHkdlm4gRkQ8+iXodFtczaJbFdvBFQxrPRZE/aSVhXd
+ FP7A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=j9rCzf95
+Subject: [Buildroot] [RFC 1/1] package/skeleton-init-systemd: ignore
+ credential services
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,582 +106,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32829d0d131ec3cd16d2622b741f8b24bcac594a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Now that we have added binutils 2.44, made binutils 2.43 the default,
-let's continue to follow our usual policy and drop support for
-binutils 2.41.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in.legacy                                   |   6 +
- package/binutils/2.41/0001-sh-conf.patch           |  50 ----
- .../2.41/0002-poison-system-directories.patch      | 309 ---------------------
- ...s-assertion-fail-in-nios2_elf32_install_i.patch | 125 ---------
- package/binutils/Config.in.host                    |   4 -
- package/binutils/binutils.hash                     |   1 -
- 6 files changed, 6 insertions(+), 489 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index edca3eef47..a8baecad58 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2025.02"
- 
-+config BR2_BINUTILS_VERSION_2_41_X
-+	bool "binutils 2.41 has been removed"
-+	select BR2_LEGACY
-+	help
-+	  binutils 2.41 has been removed, use a newer version.
-+
- config BR2_TARGET_ROOTFS_EXT2_2r0
- 	bool "ext2 rev0 support been removed"
- 	select BR2_LEGACY
-diff --git a/package/binutils/2.41/0001-sh-conf.patch b/package/binutils/2.41/0001-sh-conf.patch
-deleted file mode 100644
-index ffa23a88a7..0000000000
---- a/package/binutils/2.41/0001-sh-conf.patch
-+++ /dev/null
-@@ -1,50 +0,0 @@
--From 87551ade276aa0db86c4567b3ac219c4f979b538 Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Fri, 25 Dec 2015 11:38:13 +0100
--Subject: [PATCH] sh-conf
--
--Likewise, binutils has no idea about any of these new targets either, so we
--fix that up too.. now we're able to actually build a real toolchain for
--sh2a_nofpu- and other more ineptly named toolchains (and yes, there are more
--inept targets than that one, really. Go look, I promise).
--
--Upstream: N/A [Buildroot specific]
--
--[Romain: rebase on top of 2.32]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
--[Thomas: rebase on top of 2.29, in which sh64 support was removed.]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- configure    | 2 +-
-- configure.ac | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/configure b/configure
--index 417fc5a970c..fa8ba331796 100755
----- a/configure
--+++ b/configure
--@@ -4067,7 +4067,7 @@ case "${target}" in
--   nvptx*-*-*)
--     noconfigdirs="$noconfigdirs target-libssp target-libstdc++-v3 target-libobjc"
--     ;;
---  sh-*-*)
--+  sh*-*-*)
--     case "${target}" in
--       sh*-*-elf)
--          ;;
--diff --git a/configure.ac b/configure.ac
--index 3a1eb0357e5..d700c14ddf5 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -1300,7 +1300,7 @@ case "${target}" in
--   nvptx*-*-*)
--     noconfigdirs="$noconfigdirs target-libssp target-libstdc++-v3 target-libobjc"
--     ;;
---  sh-*-*)
--+  sh*-*-*)
--     case "${target}" in
--       sh*-*-elf)
--          ;;
---- 
--2.40.1
--
-diff --git a/package/binutils/2.41/0002-poison-system-directories.patch b/package/binutils/2.41/0002-poison-system-directories.patch
-deleted file mode 100644
-index 4b927b630e..0000000000
---- a/package/binutils/2.41/0002-poison-system-directories.patch
-+++ /dev/null
-@@ -1,309 +0,0 @@
--From a6d90a842e349545ceb27f022317618dd99378ce Mon Sep 17 00:00:00 2001
--From: Romain Naour <romain.naour@gmail.com>
--Date: Fri, 25 Dec 2015 11:45:38 +0100
--Subject: [PATCH] poison-system-directories
--
--Patch adapted to binutils 2.23.2 and extended to use
--BR_COMPILER_PARANOID_UNSAFE_PATH by Thomas Petazzoni.
--
--[Waldemar: rebase on top of 2.39]
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--[Romain: rebase on top of 2.33.1]
--Signed-off-by: Romain Naour <romain.naour@gmail.com>
--[Gustavo: adapt to binutils 2.25]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
--Upstream-Status: Inappropriate [distribution: codesourcery]
--Upstream: N/A [Buildroot specific]
--
--Patch originally created by Mark Hatle, forward-ported to
--binutils 2.21 by Scott Garman.
--
--purpose:  warn for uses of system directories when cross linking
--
--Code Merged from Sourcery G++ binutils 2.19 - 4.4-277
--
--2008-07-02  Joseph Myers  <joseph@codesourcery.com>
--
--    ld/
--    * ld.h (args_type): Add error_poison_system_directories.
--    * ld.texinfo (--error-poison-system-directories): Document.
--    * ldfile.c (ldfile_add_library_path): Check
--    command_line.error_poison_system_directories.
--    * ldmain.c (main): Initialize
--    command_line.error_poison_system_directories.
--    * lexsup.c (enum option_values): Add
--    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES.
--    (ld_options): Add --error-poison-system-directories.
--    (parse_args): Handle new option.
--
--2007-06-13  Joseph Myers  <joseph@codesourcery.com>
--
--    ld/
--    * config.in: Regenerate.
--    * ld.h (args_type): Add poison_system_directories.
--    * ld.texinfo (--no-poison-system-directories): Document.
--    * ldfile.c (ldfile_add_library_path): Check
--    command_line.poison_system_directories.
--    * ldmain.c (main): Initialize
--    command_line.poison_system_directories.
--    * lexsup.c (enum option_values): Add
--    OPTION_NO_POISON_SYSTEM_DIRECTORIES.
--    (ld_options): Add --no-poison-system-directories.
--    (parse_args): Handle new option.
--
--2007-04-20  Joseph Myers  <joseph@codesourcery.com>
--
--    Merge from Sourcery G++ binutils 2.17:
--
--    2007-03-20  Joseph Myers  <joseph@codesourcery.com>
--    Based on patch by Mark Hatle <mark.hatle@windriver.com>.
--    ld/
--    * configure.ac (--enable-poison-system-directories): New option.
--    * configure, config.in: Regenerate.
--    * ldfile.c (ldfile_add_library_path): If
--    ENABLE_POISON_SYSTEM_DIRECTORIES defined, warn for use of /lib,
--    /usr/lib, /usr/local/lib or /usr/X11R6/lib.
--
--Signed-off-by: Mark Hatle <mark.hatle@windriver.com>
--Signed-off-by: Scott Garman <scott.a.garman@intel.com>
-----
-- ld/config.in    |  3 +++
-- ld/configure    | 14 ++++++++++++++
-- ld/configure.ac | 10 ++++++++++
-- ld/ld.h         |  8 ++++++++
-- ld/ld.texi      | 12 ++++++++++++
-- ld/ldfile.c     | 17 +++++++++++++++++
-- ld/ldlex.h      |  2 ++
-- ld/ldmain.c     |  2 ++
-- ld/lexsup.c     | 21 +++++++++++++++++++++
-- 9 files changed, 89 insertions(+)
--
--diff --git a/ld/config.in b/ld/config.in
--index ad0dc6a106c..d21edaddce7 100644
----- a/ld/config.in
--+++ b/ld/config.in
--@@ -58,6 +58,9 @@
--    language is requested. */
-- #undef ENABLE_NLS
-- 
--+/* Define to warn for use of native system library directories */
--+#undef ENABLE_POISON_SYSTEM_DIRECTORIES
--+
-- /* Additional extension a shared object might have. */
-- #undef EXTRA_SHLIB_EXTENSION
-- 
--diff --git a/ld/configure b/ld/configure
--index 43b44be1dc6..28f054ea3f8 100755
----- a/ld/configure
--+++ b/ld/configure
--@@ -839,6 +839,7 @@ with_lib_path
-- enable_targets
-- enable_64_bit_bfd
-- with_sysroot
--+enable_poison_system_directories
-- enable_gold
-- enable_got
-- enable_compressed_debug_sections
--@@ -1521,6 +1522,8 @@ Optional Features:
--   --enable-checking       enable run-time checks
--   --enable-targets        alternative target configurations
--   --enable-64-bit-bfd     64-bit support (on hosts with narrower word sizes)
--+  --enable-poison-system-directories
--+                          warn for use of native system library directories
--   --enable-gold[=ARG]     build gold [ARG={default,yes,no}]
--   --enable-got=<type>     GOT handling scheme (target, single, negative,
--                           multigot)
--@@ -15504,7 +15507,18 @@ else
-- fi
-- 
-- 
--+# Check whether --enable-poison-system-directories was given.
--+if test "${enable_poison_system_directories+set}" = set; then :
--+  enableval=$enable_poison_system_directories;
--+else
--+  enable_poison_system_directories=no
--+fi
--+
--+if test "x${enable_poison_system_directories}" = "xyes"; then
-- 
--+$as_echo "#define ENABLE_POISON_SYSTEM_DIRECTORIES 1" >>confdefs.h
--+
--+fi
-- 
-- # Check whether --enable-got was given.
-- if test "${enable_got+set}" = set; then :
--diff --git a/ld/configure.ac b/ld/configure.ac
--index 77edac3258c..a74dac63038 100644
----- a/ld/configure.ac
--+++ b/ld/configure.ac
--@@ -103,6 +103,16 @@ AC_SUBST(use_sysroot)
-- AC_SUBST(TARGET_SYSTEM_ROOT)
-- AC_SUBST(TARGET_SYSTEM_ROOT_DEFINE)
-- 
--+AC_ARG_ENABLE([poison-system-directories],
--+         AS_HELP_STRING([--enable-poison-system-directories],
--+                [warn for use of native system library directories]),,
--+         [enable_poison_system_directories=no])
--+if test "x${enable_poison_system_directories}" = "xyes"; then
--+  AC_DEFINE([ENABLE_POISON_SYSTEM_DIRECTORIES],
--+       [1],
--+       [Define to warn for use of native system library directories])
--+fi
--+
-- dnl Use --enable-gold to decide if this linker should be the default.
-- dnl "install_as_default" is set to false if gold is the default linker.
-- dnl "installed_linker" is the installed BFD linker name.
--diff --git a/ld/ld.h b/ld/ld.h
--index 05649ff61b8..1818c227473 100644
----- a/ld/ld.h
--+++ b/ld/ld.h
--@@ -163,6 +163,14 @@ typedef struct
--      in the linker script.  */
--   bool force_group_allocation;
-- 
--+  /* If TRUE (the default) warn for uses of system directories when
--+     cross linking.  */
--+  bool poison_system_directories;
--+
--+  /* If TRUE (default FALSE) give an error for uses of system
--+     directories when cross linking instead of a warning.  */
--+  bool error_poison_system_directories;
--+
--   /* Big or little endian as set on command line.  */
--   enum endian_enum endian;
-- 
--diff --git a/ld/ld.texi b/ld/ld.texi
--index db3a9f09b45..9dacc934f80 100644
----- a/ld/ld.texi
--+++ b/ld/ld.texi
--@@ -2949,6 +2949,18 @@ string identifying the original linked file does not change.
-- Passing @code{none} for @var{style} disables the setting from any
-- @code{--build-id} options earlier on the command line.
-- 
--+@kindex --no-poison-system-directories
--+@item --no-poison-system-directories
--+Do not warn for @option{-L} options using system directories such as
--+@file{/usr/lib} when cross linking.  This option is intended for use
--+in chroot environments when such directories contain the correct
--+libraries for the target system rather than the host.
--+
--+@kindex --error-poison-system-directories
--+@item --error-poison-system-directories
--+Give an error instead of a warning for @option{-L} options using
--+system directories when cross linking.
--+
-- @kindex --package-metadata=@var{JSON}
-- @item --package-metadata=@var{JSON}
-- Request the creation of a @code{.note.package} ELF note section.  The
--diff --git a/ld/ldfile.c b/ld/ldfile.c
--index b8fd4e5d8e0..1f1d8e23bc9 100644
----- a/ld/ldfile.c
--+++ b/ld/ldfile.c
--@@ -117,6 +117,23 @@ ldfile_add_library_path (const char *name, bool cmdline)
--     new_dirs->name = concat (ld_sysroot, name + strlen ("$SYSROOT"), (const char *) NULL);
--   else
--     new_dirs->name = xstrdup (name);
--+
--+#ifdef ENABLE_POISON_SYSTEM_DIRECTORIES
--+  if (command_line.poison_system_directories
--+  && ((!strncmp (name, "/lib", 4))
--+      || (!strncmp (name, "/usr/lib", 8))
--+      || (!strncmp (name, "/usr/local/lib", 14))
--+      || (!strncmp (name, "/usr/X11R6/lib", 14))))
--+   {
--+     if (command_line.error_poison_system_directories)
--+       einfo (_("%X%P: error: library search path \"%s\" is unsafe for "
--+            "cross-compilation\n"), name);
--+     else
--+       einfo (_("%P: warning: library search path \"%s\" is unsafe for "
--+            "cross-compilation\n"), name);
--+   }
--+#endif
--+
-- }
-- 
-- /* Try to open a BFD for a lang_input_statement.  */
--diff --git a/ld/ldlex.h b/ld/ldlex.h
--index 0538f0a06a1..d1de3aec23d 100644
----- a/ld/ldlex.h
--+++ b/ld/ldlex.h
--@@ -166,6 +166,8 @@ enum option_values
--   OPTION_CTF_VARIABLES,
--   OPTION_NO_CTF_VARIABLES,
--   OPTION_CTF_SHARE_TYPES,
--+  OPTION_NO_POISON_SYSTEM_DIRECTORIES,
--+  OPTION_ERROR_POISON_SYSTEM_DIRECTORIES,
--   OPTION_WARN_EXECSTACK,
--   OPTION_NO_WARN_EXECSTACK,
--   OPTION_WARN_RWX_SEGMENTS,
--diff --git a/ld/ldmain.c b/ld/ldmain.c
--index 9290a189b0d..e2e3074e872 100644
----- a/ld/ldmain.c
--+++ b/ld/ldmain.c
--@@ -321,6 +321,8 @@ main (int argc, char **argv)
--   command_line.warn_mismatch = true;
--   command_line.warn_search_mismatch = true;
--   command_line.check_section_addresses = -1;
--+  command_line.poison_system_directories = true;
--+  command_line.error_poison_system_directories = false;
-- 
--   /* We initialize DEMANGLING based on the environment variable
--      COLLECT_NO_DEMANGLE.  The gcc collect2 program will demangle the
--diff --git a/ld/lexsup.c b/ld/lexsup.c
--index c5960385572..da0a7829914 100644
----- a/ld/lexsup.c
--+++ b/ld/lexsup.c
--@@ -613,6 +613,14 @@ static const struct ld_option ld_options[] =
-- 		   "                                <method> is: share-unconflicted (default),\n"
-- 		   "                                             share-duplicated"),
--     TWO_DASHES },
--+  { {"no-poison-system-directories", no_argument, NULL,
--+    OPTION_NO_POISON_SYSTEM_DIRECTORIES},
--+    '\0', NULL, N_("Do not warn for -L options using system directories"),
--+    TWO_DASHES },
--+  { {"error-poison-system-directories", no_argument, NULL,
--+    OPTION_ERROR_POISON_SYSTEM_DIRECTORIES},
--+    '\0', NULL, N_("Give an error for -L options using system directories"),
--+    TWO_DASHES },
-- };
-- 
-- #define OPTION_COUNT ARRAY_SIZE (ld_options)
--@@ -625,6 +633,7 @@ parse_args (unsigned argc, char **argv)
--   int ingroup = 0;
--   char *default_dirlist = NULL;
--   char *shortopts;
--+  char *BR_paranoid_env;
--   struct option *longopts;
--   struct option *really_longopts;
--   int last_optind;
--@@ -1692,6 +1701,14 @@ parse_args (unsigned argc, char **argv)
-- 	  }
-- 	  break;
-- 
--+	case OPTION_NO_POISON_SYSTEM_DIRECTORIES:
--+	  command_line.poison_system_directories = false;
--+	  break;
--+
--+	case OPTION_ERROR_POISON_SYSTEM_DIRECTORIES:
--+	  command_line.error_poison_system_directories = true;
--+	  break;
--+
-- 	case OPTION_PUSH_STATE:
-- 	  input_flags.pushed = xmemdup (&input_flags,
-- 					sizeof (input_flags),
--@@ -1837,6 +1854,10 @@ parse_args (unsigned argc, char **argv)
--       command_line.soname = NULL;
--     }
-- 
--+  BR_paranoid_env = getenv("BR_COMPILER_PARANOID_UNSAFE_PATH");
--+  if (BR_paranoid_env && strlen(BR_paranoid_env) > 0)
--+    command_line.error_poison_system_directories = true;
--+
--   while (ingroup)
--     {
--       einfo (_("%P: missing --end-group; added as last command line option\n"));
---- 
--2.40.1
--
-diff --git a/package/binutils/2.41/0003-PR27597-nios-assertion-fail-in-nios2_elf32_install_i.patch b/package/binutils/2.41/0003-PR27597-nios-assertion-fail-in-nios2_elf32_install_i.patch
-deleted file mode 100644
-index 4753ae13c4..0000000000
---- a/package/binutils/2.41/0003-PR27597-nios-assertion-fail-in-nios2_elf32_install_i.patch
-+++ /dev/null
-@@ -1,125 +0,0 @@
--From 900c0f0aa3d78cd9e67ccd26fbc86224cef4c5b1 Mon Sep 17 00:00:00 2001
--From: Alan Modra <amodra@gmail.com>
--Date: Fri, 16 Feb 2024 22:33:29 +1030
--Subject: [PATCH] PR27597, nios: assertion fail in nios2_elf32_install_imm16
--
--The assertion in nios2_elf32_install_imm16 triggers when the PLT is
--twice the maximum allowable size for a branch from PLTn to reach
--.PLTresolve, and on no other call to nios2_elf32_install_imm16.  That
--makes the assertion completely useless.  We can handle a PIC PLT
--exceeding 0x8000 in size by bouncing branches that won't reach through
--previous branches.
--
--	PR 27597
--	* elf32-nios2.c (nios2_elf32_install_imm16): Delete BFD_ASSERT.
--	(nios2_build_one_stub): Don't bother masking value passed to
--	nios2_elf32_install_imm16.
--	(nios2_elf32_finish_dynamic_symbol): Likewise.  Handle overflow
--	of PLTn branch to .PLTresolve by bouncing through prior branches.
--
--Upstream: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=900c0f0aa3d78cd9e67ccd26fbc86224cef4c5b1
--
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- bfd/elf32-nios2.c | 40 ++++++++++++++++++++++++----------------
-- 1 file changed, 24 insertions(+), 16 deletions(-)
--
--diff --git a/bfd/elf32-nios2.c b/bfd/elf32-nios2.c
--index bebf4239958..7f61e2f8507 100644
----- a/bfd/elf32-nios2.c
--+++ b/bfd/elf32-nios2.c
--@@ -1878,8 +1878,6 @@ nios2_elf32_install_imm16 (asection *sec, bfd_vma offset, bfd_vma value)
-- {
--   bfd_vma word = bfd_get_32 (sec->owner, sec->contents + offset);
-- 
---  BFD_ASSERT (value <= 0xffff || ((bfd_signed_vma) value) >= -0xffff);
---
--   bfd_put_32 (sec->owner, word | ((value & 0xffff) << 6),
-- 	      sec->contents + offset);
-- }
--@@ -2518,7 +2516,7 @@ nios2_build_one_stub (struct bfd_hash_entry *gen_entry, void *in_arg ATTRIBUTE_U
--       nios2_elf32_install_imm16 (stub_sec, hsh->stub_offset,
-- 				 hiadj (sym_value));
--       nios2_elf32_install_imm16 (stub_sec, hsh->stub_offset + 4,
---				 (sym_value & 0xffff));
--+				 sym_value);
--       stub_sec->size += 12;
--       break;
--     default:
--@@ -4986,16 +4984,28 @@ nios2_elf32_finish_dynamic_symbol (bfd *output_bfd,
--       /* Emit the PLT entry.  */
--       if (bfd_link_pic (info))
-- 	{
--+	  bfd_vma br_offset;
--+
-- 	  nios2_elf32_install_data (splt, nios2_so_plt_entry, h->plt.offset,
-- 				    3);
-- 	  plt_index = (h->plt.offset - 24) / 12;
-- 	  got_offset = (plt_index + 3) * 4;
-- 	  nios2_elf32_install_imm16 (splt, h->plt.offset,
---				     hiadj(plt_index * 4));
--+				     hiadj (plt_index * 4));
-- 	  nios2_elf32_install_imm16 (splt, h->plt.offset + 4,
---				     (plt_index * 4) & 0xffff);
---	  nios2_elf32_install_imm16 (splt, h->plt.offset + 8,
---				     0xfff4 - h->plt.offset);
--+				     plt_index * 4);
--+	  br_offset = -(h->plt.offset + 12);
--+	  /* If this plt entry is too far away from the start of .plt
--+	     for the "br" to reach .PLTresolve, bounce through one or
--+	     more of the previous "br" instructions.  */
--+	  if (br_offset < (bfd_vma) -32768)
--+	    {
--+	      br_offset += 32768 / 12 * 12 - 4;
--+	      while (br_offset < (bfd_vma) -32768)
--+		br_offset += 32768 / 12 * 12;
--+	    }
--+	  nios2_elf32_install_imm16 (splt, h->plt.offset + 8, br_offset);
--+
-- 	  got_address = (sgotplt->output_section->vma + sgotplt->output_offset
-- 			 + got_offset);
-- 
--@@ -5014,9 +5024,8 @@ nios2_elf32_finish_dynamic_symbol (bfd *output_bfd,
-- 	  nios2_elf32_install_data (splt, nios2_plt_entry, h->plt.offset, 3);
-- 	  got_address = (sgotplt->output_section->vma + sgotplt->output_offset
-- 			 + got_offset);
---	  nios2_elf32_install_imm16 (splt, h->plt.offset, hiadj(got_address));
---	  nios2_elf32_install_imm16 (splt, h->plt.offset + 4,
---				     got_address & 0xffff);
--+	  nios2_elf32_install_imm16 (splt, h->plt.offset, hiadj (got_address));
--+	  nios2_elf32_install_imm16 (splt, h->plt.offset + 4, got_address);
-- 
-- 	  /* Fill in the entry in the global offset table.  */
-- 	  bfd_put_32 (output_bfd,
--@@ -5217,8 +5226,8 @@ nios2_elf32_finish_dynamic_sections (bfd *output_bfd,
-- 	      BFD_ASSERT ((got_pcrel & 0xf) == 0);
-- 	      nios2_elf32_install_data (splt, nios2_so_plt0_entry, 0, 6);
-- 	      nios2_elf32_install_imm16 (splt, 4, hiadj (got_pcrel));
---	      nios2_elf32_install_imm16 (splt, 12, got_pcrel & 0xffff);
---	      nios2_elf32_install_imm16 (splt, 16, (got_pcrel + 4) & 0xffff);
--+	      nios2_elf32_install_imm16 (splt, 12, got_pcrel);
--+	      nios2_elf32_install_imm16 (splt, 16, got_pcrel + 4);
-- 	    }
-- 	  else
-- 	    {
--@@ -5240,14 +5249,13 @@ nios2_elf32_finish_dynamic_sections (bfd *output_bfd,
-- 
-- 	      nios2_elf32_install_data (splt, nios2_plt0_entry, res_size, 7);
-- 	      nios2_elf32_install_imm16 (splt, res_size, hiadj (res_start));
---	      nios2_elf32_install_imm16 (splt, res_size + 4,
---					 res_start & 0xffff);
--+	      nios2_elf32_install_imm16 (splt, res_size + 4, res_start);
-- 	      nios2_elf32_install_imm16 (splt, res_size + 12,
-- 					 hiadj (got_address));
-- 	      nios2_elf32_install_imm16 (splt, res_size + 16,
---					 (got_address + 4) & 0xffff);
--+					 got_address + 4);
-- 	      nios2_elf32_install_imm16 (splt, res_size + 20,
---					 (got_address + 8) & 0xffff);
--+					 got_address + 8);
-- 	    }
-- 	}
--     }
---- 
--2.34.1
--
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 717d178a9e..8e0c21bae0 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -12,9 +12,6 @@ choice
- 	help
- 	  Select the version of binutils you wish to use.
- 
--config BR2_BINUTILS_VERSION_2_41_X
--	bool "binutils 2.41"
--
- config BR2_BINUTILS_VERSION_ARC
- 	bool "binutils arc (2.41)"
- 	depends on BR2_arc
-@@ -33,7 +30,6 @@ endchoice
- config BR2_BINUTILS_VERSION
- 	string
- 	default "arc-2023.09-release"	if BR2_BINUTILS_VERSION_ARC
--	default "2.41"		if BR2_BINUTILS_VERSION_2_41_X
- 	default "2.42"		if BR2_BINUTILS_VERSION_2_42_X
- 	default "2.43.1"	if BR2_BINUTILS_VERSION_2_43_X
- 	default "2.44"		if BR2_BINUTILS_VERSION_2_44_X
-diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-index 2485693a86..ec0a382501 100644
---- a/package/binutils/binutils.hash
-+++ b/package/binutils/binutils.hash
-@@ -1,5 +1,4 @@
- # From https://gcc.gnu.org/pub/binutils/releases/sha512.sum
--sha512  5df45d0bd6ddabdce4f35878c041e46a92deef01e7dea5facc97fd65cc06b59abc6fba0eb454b68e571c7e14038dc823fe7f2263843e6e627b7444eaf0fe9374  binutils-2.41.tar.xz
- sha512  155f3ba14cd220102f4f29a4f1e5cfee3c48aa03b74603460d05afb73c70d6657a9d87eee6eb88bf13203fe6f31177a5c9addc04384e956e7da8069c8ecd20a6  binutils-2.42.tar.xz
- sha512  20977ad17729141a2c26d358628f44a0944b84dcfefdec2ba029c2d02f40dfc41cc91c0631044560d2bd6f9a51e1f15846b4b311befbe14f1239f14ff7d57824  binutils-2.43.1.tar.xz
- sha512  b85d3bbc0e334cf67a96219d3c7c65fbf3e832b2c98a7417bf131f3645a0307057ec81cd2b29ff2563cec53e3d42f73e2c60cc5708e80d4a730efdcc6ae14ad7  binutils-2.44.tar.xz
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VEw7RFI7IFRoaXMgaWdub3JlcyB0aGUgdG1wZmlsZXMuZCBjcmVkZW50aWFsIHNlcnZpY2VzIHNp
+bmNlIHRoZXNlIGxpbmVzCmltcG9ydCBjcmVkZW50aWFsIGNvbnRlbnRzIGZyb20gdGhlIGhvc3Qu
+IEl0IGludGVuZHMgdG8gc2h1dGRvd24gdGhlCmVycm9yIGF0dGFjaGVkIGluIHRoZSBlbmQgb2Yg
+dGhlIGNvbW1pdCBtZXNzYWdlLgoKTm90ZTogVGhlIGlzc3VlIGhhcHBlbnMgaWYgdGhlIGhvc3Qg
+c3lzdGVtIGhhcyBjcmVkZW50aWFsIHNlcnZpY2VzIChpLmUuCkNSRURFTlRJQUxTX0RJUkVDVE9S
+WSBvciBFTkNSWVBURURfQ1JFREVOVElBTFNfRElSRUNUT1JZIHNldCBpbiBpdHMgaG9zdAplbnZp
+cm9ubWVudCkgYW5kIGlmIHRoZSB0YXJnZXQgaXMgc2V0dXAgdG8gcnVuIHN5c3RlbWQgb24gYSBy
+ZWFkLW9ubHkKZmlsZXN5c3RlbToKCglCUjJfSU5JVF9TWVNURU1EPXkKCUJSMl9JTklUX1NZU1RF
+TURfUE9QVUxBVEVfVE1QRklMRVM9eQoKTGV0J3Mgc3RlcCBiYWNrIGEgYml0Li4KClRoZSBzY3Jp
+cHQgcGFja2FnZS9za2VsZXRvbi1pbml0LXN5c3RlbWQvZmFrZXJvb3RfdG1wZmlsZXMuc2ggaGFz
+IGJlZW4KaW50cm9kdWNlZCBieSB0aGUgY29tbWl0IGQxODE3NjM5NmEgKHBhY2thZ2Uvc2tlbGV0
+b24tc3lzdGVtZDogaG9zdCB0aGUKdG1wZmlsZXMgcHJlcGFyYXRpb24gc2NyaXB0KSB0byBhZGRy
+ZXNzIGF0IGJ1aWxkdGltZSB0aGUgY3JlYXRpb24gb2YgdGhlCnJ1bnRpbWUgdG1wZmlsZXMgZm9y
+IHRoZSB0YXJnZXRzIHVzaW5nIHJlYWQtb25seSBmaWxlc3lzdGVtLiBJdCB1c2VzCnRtcGZpbGVz
+LmQgdW5kZXJuZWF0aC4KCnN5c3RlbWQgaGFzIGludHJvZHVjZWQgQ3JlZGVudGlhbHMgaW4gdG1w
+ZmlsZXMuZCBzaW5jZSBhIHYyNTJbM10uIFRoZQpsaW5lcyBzdGFydGluZyBieSBhIGNoYXJldFs0
+XSwgcmVhZHMgZGF0YSBmcm9tIHRoZSBjcmVkZW50aWFsIGhvc3QKc2VydmljZSBkZWZpbmVkIGJ5
+IHRoZSBuYW1lIHNldCBpbiB0aGUgNnRoIGFyZ3VtZW50LgoKU2VlIHRtcGZpbGVzLmQoNSlbMV06
+CgogICAgICAgIElmIHRoZSBjYXJldCBjaGFyYWN0ZXIgKCJeIikgaXMgdXNlZCwgdGhlIGFyZ3Vt
+ZW50IChpLmUuIDZ0aCkKICAgICAgICBjb2x1bW4gdGFrZXMgYSBzZXJ2aWNlIGNyZWRlbnRpYWwg
+bmFtZSB0byByZWFkIHRoZSBhcmd1bWVudCBkYXRhCiAgICAgICAgZnJvbS4gU2VlIFN5c3RlbSBh
+bmQgU2VydmljZSBDcmVkZW50aWFsc1syXSBmb3IgZGV0YWlscyBhYm91dAogICAgICAgIHRoZSBj
+cmVkZW50aWFscyBjb25jZXB0LiBUaGlzIG1vZGlmaWVyIGlzIG9ubHkgc3VwcG9ydGVkIG9uIGxp
+bmUKICAgICAgICB0eXBlcyB0aGF0IGNhbiB3cml0ZSBmaWxlIGNvbnRlbnRzLCBpLmUuIGYsIGYr
+LCB3LCB3Ky4gVGhpcyBpcwogICAgICAgIHVzZWZ1bCBmb3Igd3JpdGluZyBhcmJpdHJhcnkgZmls
+ZXMgd2l0aCBjb250ZW50cyBzb3VyY2VkIGZyb20KICAgICAgICBlbHNld2hlcmUsIGluY2x1ZGlu
+ZyBmcm9tIFZNIG9yIGNvbnRhaW5lciBtYW5hZ2VycyBmdXJ0aGVyIHVwLgogICAgICAgIElmIHRo
+ZSBzcGVjaWZpZWQgY3JlZGVudGlhbCBpcyBub3Qgc2V0IGZvciB0aGUgc3lzdGVtZC10bXBmaWxl
+cwogICAgICAgIHNlcnZpY2UsIHRoZSBsaW5lIGlzIHNpbGVudGx5IHNraXBwZWQuIElmICJeIiBh
+bmQgIn4iIGFyZQogICAgICAgIGNvbWJpbmVkIEJhc2U2NCBkZWNvZGluZyBpcyBhcHBsaWVkIHRv
+IHRoZSBjcmVkZW50aWFsIGNvbnRlbnRzLgoKVGhlIGNyZWRlbnRpYWxzIGRhdGEgYXJlIHB1bGxl
+ZCBieSB0aGUgdG1wZmlsZXMuZCBwcm92aXNpb24uY29uZls1XSBpZgp0aGUgZWl0aGVyIENSRURF
+TlRJQUxTX0RJUkVDVE9SWSBvciBFTkNSWVBURURfQ1JFREVOVElBTFNfRElSRUNUT1JZIGFyZQpz
+ZXQgaW4gdGhlIHVzZXIgZW52aXJvbm1lbnQ7IHRoZSBmaWxlcyBsb2NhdGVkIGluIHRoZXNlIGRp
+cmVjdG9yaWVzCmJlbG9uZyB0byByb290IGFuZCB0aHVzIGNhdXNlIHRtcGZpbGVzLmQgdG8gZW5k
+IHdpdGggYSBQZXJtaXNzaW9uCmRlbmllZC4KCglncG9ydGF5QGFyY2hsaW51eCB+ICQgZWNobyAk
+Q1JFREVOVElBTFNfRElSRUNUT1JZCgkvcnVuL2NyZWRlbnRpYWxzL2dldHR5QHR0eTEuc2Vydmlj
+ZQoKVGhpcyBmaXhlcyB0aGUgZXJyb3IgYmVsb3cgYXR0YWNoZWQgYmVsb3cgYnkgaWdub3Jpbmcg
+YW55IGNyZWRlbnRpYWwKc2VydmljZXMgYnkgdW5zZXR0aW5nIHRoZSB0d28gY3JlZGVudGlhbCBl
+bnZpcm9ubWVudCB2YXJpYWJsZXMKQ1JFREVOVElBTFNfRElSRUNUT1JZIGFuZCBFTkNSWVBURURf
+Q1JFREVOVElBTFNfRElSRUNUT1JZIGJlZm9yZSBydW5uaW5nCnRtcGZpbGVzLmQuCgpGaXhlczoK
+Cgk+Pj4gICBHZW5lcmF0aW5nIGZpbGVzeXN0ZW0gaW1hZ2Ugcm9vdGZzLmV4dDIKCSguLi4gVE1Q
+RElSPSBURU1QPSBUTVA9IC9ob21lL2dwb3J0YXkvc3JjL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9i
+aW4vc3lzdGVtZC10bXBmaWxlcyAtLWNyZWF0ZSAtLWJvb3QgLS1yb290PS9ob21lL2dwb3J0YXkv
+c3JjL2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQvYnVpbGRyb290LWZzL2V4dDIvdGFyZ2V0IC0tZXhj
+bHVkZS1wcmVmaXg9L2RldiAtLWV4Y2x1ZGUtcHJlZml4PS9wcm9jIC0tZXhjbHVkZS1wcmVmaXg9
+L3J1biAtLWV4Y2x1ZGUtcHJlZml4PS9zeXMgLS1leGNsdWRlLXByZWZpeD0vdG1wIC0tZXhjbHVk
+ZS1wcmVmaXg9L21udCAtKQoJaWdub3JlZCBzcGVjOiBoIC92YXIvbG9nL2pvdXJuYWwvJW0gLSAt
+IC0gLSArQwoJRmFpbGVkIHRvIHJlYWQgY3JlZGVudGlhbCAnbG9naW4ubW90ZCc6IFBlcm1pc3Np
+b24gZGVuaWVkCglGYWlsZWQgdG8gcmVhZCBjcmVkZW50aWFsICdsb2dpbi5pc3N1ZSc6IFBlcm1p
+c3Npb24gZGVuaWVkCglGYWlsZWQgdG8gcmVhZCBjcmVkZW50aWFsICduZXR3b3JrLmhvc3RzJzog
+UGVybWlzc2lvbiBkZW5pZWQKCUZhaWxlZCB0byByZWFkIGNyZWRlbnRpYWwgJ3NzaC5hdXRob3Jp
+emVkX2tleXMucm9vdCc6IFBlcm1pc3Npb24gZGVuaWVkCglpZ25vcmVkIHNwZWM6IHggL3Zhci90
+bXAvc3lzdGVtZC1wcml2YXRlLSViLSoKCWlnbm9yZWQgc3BlYzogWCAvdmFyL3RtcC9zeXN0ZW1k
+LXByaXZhdGUtJWItKi90bXAKCWlnbm9yZWQgc3BlYzogeCAgL3Zhci9saWIvc3lzdGVtZC9jb3Jl
+ZHVtcC8uI2NvcmUqLiViKgoJaWdub3JlZCBzcGVjOiB6IC92YXIvbG9nL2pvdXJuYWwvJW0gMjc1
+NSByb290IHN5c3RlbWQtam91cm5hbCAtIC0KCWlnbm9yZWQgc3BlYzogeiAvdmFyL2xvZy9qb3Vy
+bmFsLyVtL3N5c3RlbS5qb3VybmFsIDA2NDAgcm9vdCBzeXN0ZW1kLWpvdXJuYWwgLSAtCgoJZ3Bv
+cnRheUBhcmNobGludXggfiAkIHN5c3RlbWN0bCAtLXZlcnNpb24KCXN5c3RlbWQgMjU2ICgyNTYu
+OC0xLWFyY2gpCgkrUEFNICtBVURJVCAtU0VMSU5VWCAtQVBQQVJNT1IgLUlNQSArU01BQ0sgK1NF
+Q0NPTVAgK0dDUllQVCArR05VVExTICtPUEVOU1NMICtBQ0wgK0JMS0lEICtDVVJMICtFTEZVVElM
+UyArRklETzIgK0lETjIgLUlETiArSVBUQyArS01PRCArTElCQ1JZUFRTRVRVUCArTElCQ1JZUFRT
+RVRVUF9QTFVHSU5TICtMSUJGRElTSyArUENSRTIgK1BXUVVBTElUWSArUDExS0lUICtRUkVOQ09E
+RSArVFBNMiArQlpJUDIgK0xaNCArWFogK1pMSUIgK1pTVEQgK0JQRl9GUkFNRVdPUksgK1hLQkNP
+TU1PTiArVVRNUCAtU1lTVklOSVQgK0xJQkFSQ0hJVkUKCglncG9ydGF5QGFyY2hsaW51eCB+ICQg
+ZWNobyAkQ1JFREVOVElBTFNfRElSRUNUT1JZCgkvcnVuL2NyZWRlbnRpYWxzL2dldHR5QHR0eTEu
+c2VydmljZQoKSW1wb3J0YW50OiBUaGUgaXNzdWUgaGFwcGVuZWQgb24gbXkgc2V0dXAgZm9yIGEg
+d2hpbGUgKDI1Ni44KSBhbmQgaXQgaGFzCnNpbGVudGx5IGRpc2FwcGVhcmVkIHdpdGhvdXQgc2F5
+aW5nIGdvb2RieWUgKDI1Ny4yIGFzIG9mIHRvZGF5KS4KVGhlcmVmb3JlLCBJIGNhbm5vdCByZXBy
+b2R1Y2UgaXQgaW4gYSB0cnVlIHNpdHVhdGlvbiBhcyB0aGUgZW52aXJvbm1lbnQKQ1JFREVOVElB
+TFNfRElSRUNUT1JZIGlzIG5vdCBzZXQgYW55bW9yZS4gSSBoYXZlIG5vIGlkZWEgaWYgaXQgd2Fz
+IGFuCmhvc3QgcGFja2FnZSBtaXNjb25maWd1cmF0aW9uLCB3aG8ga25vd3MuIEhvd2V2ZXIsIG9u
+ZSBjYW4gZmFrZSBpdCB1c2luZwp0aGUgY29tbWFuZCBiZWxvdzoKCglDUkVERU5USUFMU19ESVJF
+Q1RPUlk9L3J1bi9jcmVkZW50aWFscy9nZXR0eUB0dHkxLnNlcnZpY2UgbWFrZQoKWzFdOiBodHRw
+czovL3d3dy5mcmVlZGVza3RvcC5vcmcvc29mdHdhcmUvc3lzdGVtZC9tYW4vbGF0ZXN0L3RtcGZp
+bGVzLmQuaHRtbCNUeXBlJTIwTW9kaWZpZXJzClsyXTogaHR0cHM6Ly9zeXN0ZW1kLmlvL0NSRURF
+TlRJQUxTLwpbM106IGh0dHBzOi8vZ2l0aHViLmNvbS9zeXN0ZW1kL3N5c3RlbWQvY29tbWl0LzFk
+Nzc3MjFmMzBhODIxNDY0Y2Q3MTVhNjNiODllZjE4NDE5ZGU3YjAKWzRdOiBodHRwczovL2dpdGh1
+Yi5jb20vc3lzdGVtZC9zeXN0ZW1kL2NvbW1pdC9lNTJmNmY2MzU4ZTUxNWY1NWMyNmM1YWVkMWVi
+MmRjMWZiYzhlZmVjCls1XTogaHR0cHM6Ly9naXRodWIuY29tL3N5c3RlbWQvc3lzdGVtZC9ibG9i
+L3YyNTYvdG1wZmlsZXMuZC9wcm92aXNpb24uY29uZgoKU2lnbmVkLW9mZi1ieTogR2HDq2wgUE9S
+VEFZIDxnYWVsLnBvcnRheStydG9uZUBnbWFpbC5jb20+Ci0tLQpIZWxsbywKCkRlc3Bpc3RlIHRo
+ZSBmYWN0IHRoZSBpc3N1ZSBoYXMgZ29uZSwgSSBkbyB0aGluayB0aGUgc2NyaXB0cyBzaG91bGQK
+c2FuaXRpemUgdGhlIGVudmlyb25tZW50IGJlZm9yZSBydW5uaW5nIHRtcGZpbGVzLmQuCgpOb3Rl
+OiBJIGhhdmUgbm90IGZvdW5kIGEgd2F5IHRvIGRpc2FibGUgdGhlIGNyZWRlbnRpYWwgd2l0aCB0
+aGUgQ0xJLAp0aGVyZWZvcmUsIEkgY2FtZSB0byB0aGUgY29uY2x1c2lvbiB0aGF0IHVuc2V0IHRo
+ZSB2YXJpYWJsZXMgaXMgdGhlIG9ubHkKd2F5IHRvIGZpeCB0aGF0IGlzc3VlLgoKUmVnYXJkcywK
+R2HDq2wKIHBhY2thZ2Uvc2tlbGV0b24taW5pdC1zeXN0ZW1kL2Zha2Vyb290X3RtcGZpbGVzLnNo
+IHwgNCArKysrCiAxIGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEv
+cGFja2FnZS9za2VsZXRvbi1pbml0LXN5c3RlbWQvZmFrZXJvb3RfdG1wZmlsZXMuc2ggYi9wYWNr
+YWdlL3NrZWxldG9uLWluaXQtc3lzdGVtZC9mYWtlcm9vdF90bXBmaWxlcy5zaAppbmRleCA4YzI4
+Y2NmYTE0Li44OGRkMjdhMDA2IDEwMDc1NQotLS0gYS9wYWNrYWdlL3NrZWxldG9uLWluaXQtc3lz
+dGVtZC9mYWtlcm9vdF90bXBmaWxlcy5zaAorKysgYi9wYWNrYWdlL3NrZWxldG9uLWluaXQtc3lz
+dGVtZC9mYWtlcm9vdF90bXBmaWxlcy5zaApAQCAtMzAsNiArMzAsMTAgQEAKIFsgLW4gIiR7MS19
+IiAtYSAtZCAiJHsxLX0iL3Vzci9saWIvdG1wZmlsZXMuZCBdIHx8CiAgICAgeyBlY2hvIDE+JjIg
+IiQwOiBuZWVkIFJPT1RGUyBhcmd1bWVudCI7IGV4aXQgMTsgfQogCisjIGRpc2FibGUgY3JlZGVu
+dGlhbCBob3N0IHNlcnZpY2VzIChzaW5jZSB2MjUyKQordW5zZXQgQ1JFREVOVElBTFNfRElSRUNU
+T1JZCit1bnNldCBFTkNSWVBURURfQ1JFREVOVElBTFNfRElSRUNUT1JZCisKICR7SE9TVF9TWVNU
+RU1EX1RNUEZJTEVTfSAtLW5vLXBhZ2VyIC0tY2F0LWNvbmZpZyAtLXJvb3Q9IiQxIiB8CiAgICAg
+c2VkIC1lICcvXltbOnNwYWNlOl1dKiMvZCcgLWUgJ3MsXltbOnNwYWNlOl1dKiwsJyAtZSAnL14k
+L2QnIHwKICAgICB3aGlsZSByZWFkIC1yIGxpbmU7IGRvCi0tIAoyLjQ4LjEKCl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
+aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
