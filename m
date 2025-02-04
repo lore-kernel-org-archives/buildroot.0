@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A216C02196
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 14:07:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49658C02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 14:07:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44F1C60D51;
-	Tue,  4 Feb 2025 14:07:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 15A1780519;
+	Tue,  4 Feb 2025 14:07:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hVBaBeddiaXL; Tue,  4 Feb 2025 14:07:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CU7LLQNp-rpU; Tue,  4 Feb 2025 14:07:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6E2B60A8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2153380568
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C6E2B60A8C;
-	Tue,  4 Feb 2025 14:07:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B8E81A7
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 14:07:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2153380568;
+	Tue,  4 Feb 2025 14:07:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A2480185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 14:07:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 30BBE40190
+ by smtp1.osuosl.org (Postfix) with ESMTP id EA48680519
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 14:07:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nd-ZA1O_Zk8G for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oXGSYOoEIRMW for <buildroot@buildroot.org>;
  Tue,  4 Feb 2025 14:07:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41239405CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A96280362
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 41239405CA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5A96280362
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 14:07:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 318A186D17; Tue,  4 Feb 2025 14:07:17 +0000 (UTC)
+ id 46CE5843EA; Tue,  4 Feb 2025 14:07:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 15:06:59 +0100
+Date: Tue, 4 Feb 2025 15:07:00 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 67c6d1b12c430313c492dc66b2280d447917feb5
-X-Git-Newrev: 914bd041a5cec16bef1a69c9e7509f744940c13c
+X-Git-Oldrev: 914bd041a5cec16bef1a69c9e7509f744940c13c
+X-Git-Newrev: ffac0cf5108a832dd8bc005bab4ee770288a34bb
 X-Patchwork-Hint: ignore
-Message-Id: <20250204140717.318A186D17@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/procs: bump to version 0.14.9
+Message-Id: <20250204140717.46CE5843EA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zoxide: bump to version 0.9.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,41 +64,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=914bd041a5cec16bef1a69c9e7509f744940c13c
+commit: https://git.buildroot.net/buildroot/commit/?id=ffac0cf5108a832dd8bc005bab4ee770288a34bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://github.com/dalance/procs/releases/tag/v0.14.9
+https://github.com/ajeetdsouza/zoxide/releases/tag/v0.9.6
 
 Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/procs/procs.hash | 2 +-
- package/procs/procs.mk   | 2 +-
+ package/zoxide/zoxide.hash | 2 +-
+ package/zoxide/zoxide.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/procs/procs.hash b/package/procs/procs.hash
-index da6b4377e2..e795834358 100644
---- a/package/procs/procs.hash
-+++ b/package/procs/procs.hash
+diff --git a/package/zoxide/zoxide.hash b/package/zoxide/zoxide.hash
+index 1a3a066af9..53d4130f22 100644
+--- a/package/zoxide/zoxide.hash
++++ b/package/zoxide/zoxide.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  86715967bd378a4c0330708e11714bda2c8ce9f757fb3006073238d77e83e6e1  procs-0.14.5-cargo2.tar.gz
-+sha256  ac3306ea16d3def828b085678da114d49f2272bcc1362755c98b0958514910fe  procs-0.14.9-cargo2.tar.gz
- sha256  feb87a2e0c305de3464cc44077da5393c52d8ca6362d37427157d04ec6f4510d  LICENSE
-diff --git a/package/procs/procs.mk b/package/procs/procs.mk
-index 019e69a1de..b6ada48115 100644
---- a/package/procs/procs.mk
-+++ b/package/procs/procs.mk
+-sha256  f2d9b9448516919f6d5cf32a5f154c2dc3a90d9fdf0addab9cd6a7824020befc  zoxide-0.9.4-cargo2.tar.gz
++sha256  6a9d7bbde2acbd63bdd0f73715314500322d58cfb845559259c4edb111ab161a  zoxide-0.9.6-cargo2.tar.gz
+ sha256  23aa3b08366e4ed6050f3d9950070201802aadbe5675fa1c19f24f4de91cf294  LICENSE
+diff --git a/package/zoxide/zoxide.mk b/package/zoxide/zoxide.mk
+index 92b4395a87..bd9a7e2acd 100644
+--- a/package/zoxide/zoxide.mk
++++ b/package/zoxide/zoxide.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PROCS_VERSION = 0.14.5
-+PROCS_VERSION = 0.14.9
- PROCS_SITE = $(call github,dalance,procs,v$(PROCS_VERSION))
- PROCS_LICENSE = MIT
- PROCS_LICENSE_FILES = LICENSE
+-ZOXIDE_VERSION = 0.9.4
++ZOXIDE_VERSION = 0.9.6
+ ZOXIDE_SITE = $(call github,ajeetdsouza,zoxide,v$(ZOXIDE_VERSION))
+ ZOXIDE_LICENSE = MIT
+ ZOXIDE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
