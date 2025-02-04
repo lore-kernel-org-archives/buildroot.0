@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4D29C282C6
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4CF4C282C1
 	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:12:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61F178571B;
-	Fri, 28 Feb 2025 17:12:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B704A4FB2E;
+	Fri, 28 Feb 2025 17:12:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h8I7QXRn5qJO; Fri, 28 Feb 2025 17:12:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gPT3IMjeCM1R; Fri, 28 Feb 2025 17:12:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 70B5385708
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B85FD4F656
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 70B5385708;
-	Fri, 28 Feb 2025 17:12:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B85FD4F656;
+	Fri, 28 Feb 2025 17:12:35 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D70094F
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:44:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A0F268
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:44:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ACDCF42503
+ by smtp4.osuosl.org (Postfix) with ESMTP id 82C4242CF5
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T-oGf9vPWsz5 for <buildroot@buildroot.org>;
+ id voAdqhUPQxWH for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:31:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4354741802
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E99A42503
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4354741802
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1E99A42503
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 37F4785E25; Fri, 28 Feb 2025 16:30:31 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 1A68385FAE; Fri, 28 Feb 2025 16:30:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 16:20:51 +0100
+Date: Tue, 4 Feb 2025 16:16:16 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 674b190cc3cda26e487312e3507ff60adceb17b3
-X-Git-Newrev: 99140408b490f8450af368b2837a61ff2c9871ca
+X-Git-Oldrev: 03df6d1a261613366deaa8ebb335d4fbcb73bad4
+X-Git-Newrev: 3ea79058c077961c8f3b7c8c25f4545400622313
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163031.37F4785E25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libbsd: make available
- for arc
+Message-Id: <20250228163031.1A68385FAE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/testing/tests: new
+ NetworkManager/GOI test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,37 +58,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2520040462375455209=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99140408b490f8450af368b2837a61ff2c9871ca
+--===============2520040462375455209==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=3ea79058c077961c8f3b7c8c25f4545400622313
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-ARC support was added in 0.10.0 by
-https://gitlab.freedesktop.org/libbsd/libbsd/-/commit/4997efa59a607a2b4aa2519a50f9e51017b667d2
-so drop the architecture dependency on !BR2_arc.
+This test is inspired from the details provided by Fiona Klute's cover
+letter for a GOI/glib bump series at:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+  https://lore.kernel.org/buildroot/20250120211707.2381182-1-fiona.klute@gmx.de/
+
+Which itself uses the example code at:
+
+  https://networkmanager.dev/docs/developers/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libbsd/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ DEVELOPERS                                         |  2 ++
+ .../package/sample_python_networkmanager_goi.py    | 26 ++++++++++++++++++++++
+ .../package/test_python_networkmanager_goi.py      | 24 ++++++++++++++++++++
+ 3 files changed, 52 insertions(+)
 
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index 9f4b30f68c..fd05a2a208 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
- 	default y
- 	# libbsd does not support those architectures (see src/local-elf.h)
- 	depends on !BR2_microblaze
--	depends on !BR2_arc
- 	depends on !BR2_xtensa
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2da5d178b2..af605b388e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1103,6 +1103,8 @@ F:	package/python-dunamai/
+ F:	package/python-poetry-dynamic-versioning/
+ F:	package/python-pyasynchat/
+ F:	package/python-pyasyncore/
++F:	support/testing/tests/package/sample_python_networkmanager_goi.py
++F:	support/testing/tests/package/test_python_networkmanager_goi.py
  
- config BR2_PACKAGE_LIBBSD
+ N:	Flávio Tapajós <flavio.tapajos@newtesc.com.br>
+ F:	configs/asus_tinker-s_rk3288_defconfig
+diff --git a/support/testing/tests/package/sample_python_networkmanager_goi.py b/support/testing/tests/package/sample_python_networkmanager_goi.py
+new file mode 100644
+index 0000000000..240e8437fd
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_networkmanager_goi.py
+@@ -0,0 +1,26 @@
++#!/usr/bin/env python3
++
++# This script is from https://networkmanager.dev/docs/developers/
++
++import gi
++gi.require_version("NM", "1.0")
++from gi.repository import NM  # noqa: E402
++
++
++def print_values(setting, key, value, flags, data):
++    print("     {}.{}: {}".format(setting.get_name(), key, value))
++
++
++# Create the client object. This automatically loads all the D-Bus
++# tree and creates in-memory objects for connections, devices, access
++# points, etc.
++client = NM.Client.new(None)
++
++# Obtain a list of connection profiles ...
++connections = client.get_connections()
++
++# ... and print their properties
++for c in connections:
++    print("{}:".format(c.get_id()))
++    c.for_each_setting_value(print_values, None)
++    print("\n")
+diff --git a/support/testing/tests/package/test_python_networkmanager_goi.py b/support/testing/tests/package/test_python_networkmanager_goi.py
+new file mode 100644
+index 0000000000..e755569fc1
+--- /dev/null
++++ b/support/testing/tests/package/test_python_networkmanager_goi.py
+@@ -0,0 +1,24 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3NetworkmanagerGoi(TestPythonPackageBase):
++    __test__ = True
++    # Can't use TestPythonPackageBase.config because we need headers
++    # >= 4.20 for network-manager, so we have to use the bleeding-edge
++    # toolchain.
++    config = \
++        """
++        BR2_arm=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_BLEEDING_EDGE=y
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_GOBJECT=y
++        BR2_INIT_SYSTEMD=y
++        BR2_PACKAGE_NETWORK_MANAGER=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    sample_scripts = ["tests/package/sample_python_networkmanager_goi.py"]
++
++    timeout = 30
+
+--===============2520040462375455209==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2520040462375455209==--
