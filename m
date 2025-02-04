@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5917C02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 13:31:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CF16C02197
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 13:31:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABB9A60FE4;
-	Tue,  4 Feb 2025 13:31:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7AA260FFA;
+	Tue,  4 Feb 2025 13:31:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UFlNcGhXMf3v; Tue,  4 Feb 2025 13:31:05 +0000 (UTC)
+ id L6OVKN7KFwmr; Tue,  4 Feb 2025 13:31:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1966A60FDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 645F560FDF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1966A60FDD;
-	Tue,  4 Feb 2025 13:31:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id A4A2A1A6
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:31:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 645F560FDF;
+	Tue,  4 Feb 2025 13:31:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 33C7E12F
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:31:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 88D4560FBC
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:31:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 16A3C4116A
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:31:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BqAT3BWqqjdU for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 13:30:59 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TCLLrCA_fHBg for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 13:31:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B615460FB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC57B41183
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B615460FB1
+ by smtp2.osuosl.org (Postfix) with ESMTP id DC57B41183
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:30:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A00C586C91; Tue,  4 Feb 2025 13:30:59 +0000 (UTC)
+ id C84D486C94; Tue,  4 Feb 2025 13:30:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 14:18:29 +0100
+Date: Tue, 4 Feb 2025 14:24:29 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 00039d7059faa3489e91ddb692b703aedb8f9b13
-X-Git-Newrev: 9f52cc8c0a7d285a4c6e34c5daa40719d3266e5b
+X-Git-Oldrev: 031e02f1d80ed8381c5a2fe36c5c513bf3f7ea2c
+X-Git-Newrev: 3b4038e3d70375cd4b16d790fb90508b4f902f99
 X-Patchwork-Hint: ignore
-Message-Id: <20250204133059.A00C586C91@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/uboot: add qspi.bin file support
+Message-Id: <20250204133059.C84D486C94@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/zynqmp: add new qspi.bin binary to
+ images
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,66 +65,118 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f52cc8c0a7d285a4c6e34c5daa40719d3266e5b
+commit: https://git.buildroot.net/buildroot/commit/?id=3b4038e3d70375cd4b16d790fb90508b4f902f99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-u-boot has introduced a new file called qspi.bin for users who boot from a
-qspi flash device.  It combines the spl/boot.bin and u-boot.itb files into a
-single binary that can be written to the qspi flash.
+This patch adds the new qspi.bin file to the zynqmp sdcard.img.
 
-Here is an example of how binman generates the qspi.bin:
-https://source.denx.de/u-boot/u-boot/-/commit/a4c98119109a60b9b236996f47065aa8fc0de9ca
+For SD card booting, the qspi.bin file is unnecessary and can just be ignored.
+For QSPI booting, only the qspi.bin file needs to be written to the flash.
 
-At the moment, the qspi.bin is only used for the zynqmp platform, but other
-platforms may adopt it, so the buildroot support has been made in a generic
-way.
+This patch enables the Kria BIRT tool for Kria SOM reflashing using qspi.bin
+as either "ImageA" or "ImageB".
 
-This patch adds the necessary support for buildroot to install this binary.
+Kria BIRT (Boot Image Recovery Tool):
+https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+SOMs+Starter+Kits#Boot-FW-Update-Process
 
-[Tested on Kria KV260 starter kit]
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/Config.in | 8 ++++++++
- boot/uboot/uboot.mk  | 4 ++++
- 2 files changed, 12 insertions(+)
+ board/zynqmp/genimage.cfg           | 1 +
+ configs/zynqmp_kria_kd240_defconfig | 1 +
+ configs/zynqmp_kria_kr260_defconfig | 1 +
+ configs/zynqmp_kria_kv260_defconfig | 1 +
+ configs/zynqmp_zcu102_defconfig     | 1 +
+ configs/zynqmp_zcu104_defconfig     | 1 +
+ configs/zynqmp_zcu106_defconfig     | 1 +
+ 7 files changed, 7 insertions(+)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 13d45140eb..f17f932c9e 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -470,6 +470,14 @@ config BR2_TARGET_UBOOT_FORMAT_SD
- 
- 	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
- 
-+config BR2_TARGET_UBOOT_FORMAT_QSPI_BIN
-+	bool "qspi.bin"
-+	depends on BR2_TARGET_UBOOT_ZYNQMP
-+	help
-+	  When booting from qspi flash, u-boot can generate a single
-+	  file for flashing by combining the spl/boot.bin and
-+	  u-boot.itb files into a unified binary.
-+
- config BR2_TARGET_UBOOT_FORMAT_STM32
- 	bool "u-boot.stm32"
- 	depends on BR2_arm
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index efecf2ca47..2796b0a310 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -108,6 +108,10 @@ UBOOT_MAKE_TARGET += u-boot.itb
- endif
- endif
- 
-+ifeq ($(BR2_TARGET_UBOOT_FORMAT_QSPI_BIN),y)
-+UBOOT_BINS += qspi.bin
-+endif
-+
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMX),y)
- UBOOT_BINS += u-boot.imx
- UBOOT_MAKE_TARGET += u-boot.imx
+diff --git a/board/zynqmp/genimage.cfg b/board/zynqmp/genimage.cfg
+index 20d8352c08..0a6aea7a29 100644
+--- a/board/zynqmp/genimage.cfg
++++ b/board/zynqmp/genimage.cfg
+@@ -3,6 +3,7 @@ image boot.vfat {
+ 		files = {
+ 			"boot.bin",
+ 			"u-boot.itb",
++			"qspi.bin",
+ 			"system.dtb",
+ 			"Image"
+ 		}
+diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
+index 139ad7157e..85ef7d5aa2 100644
+--- a/configs/zynqmp_kria_kd240_defconfig
++++ b/configs/zynqmp_kria_kd240_defconfig
+@@ -35,6 +35,7 @@ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
++BR2_TARGET_UBOOT_FORMAT_QSPI_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
+index 700b378bd2..c5cfe2fe86 100644
+--- a/configs/zynqmp_kria_kr260_defconfig
++++ b/configs/zynqmp_kria_kr260_defconfig
+@@ -35,6 +35,7 @@ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
++BR2_TARGET_UBOOT_FORMAT_QSPI_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index 4dd0226c33..288606fc02 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -35,6 +35,7 @@ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
++BR2_TARGET_UBOOT_FORMAT_QSPI_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+index 2a316958f2..1e453adeb0 100644
+--- a/configs/zynqmp_zcu102_defconfig
++++ b/configs/zynqmp_zcu102_defconfig
+@@ -34,6 +34,7 @@ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
++BR2_TARGET_UBOOT_FORMAT_QSPI_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
+index 4574898d72..13ee5ff5dc 100644
+--- a/configs/zynqmp_zcu104_defconfig
++++ b/configs/zynqmp_zcu104_defconfig
+@@ -34,6 +34,7 @@ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
++BR2_TARGET_UBOOT_FORMAT_QSPI_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index d6e2617552..2669afe1f6 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -34,6 +34,7 @@ BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+ BR2_TARGET_UBOOT_USE_BINMAN=y
+ BR2_TARGET_UBOOT_FORMAT_ITB=y
++BR2_TARGET_UBOOT_FORMAT_QSPI_BIN=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
