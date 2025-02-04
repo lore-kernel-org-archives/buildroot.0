@@ -1,80 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9DA8C02193
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 17:09:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E758C02193
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 17:10:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 60CD04078C;
-	Tue,  4 Feb 2025 17:09:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D007480ABB;
+	Tue,  4 Feb 2025 17:10:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2lKNi47TG9p0; Tue,  4 Feb 2025 17:10:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAFC880A5C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id BAFC880A5C;
+	Tue,  4 Feb 2025 17:10:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 948A612A
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:10:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 827F44054E
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:10:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ghtF9rqSGoUE; Tue,  4 Feb 2025 17:09:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56A12407A9
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56A12407A9;
-	Tue,  4 Feb 2025 17:09:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 96CF2185
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:09:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9112A40B57
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:09:14 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zLIfiGUzsWuw for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 17:09:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id QkwfIOUTYIMj for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 17:10:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5DD524119B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5DD524119B
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5DD524119B
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:09:13 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 377B9204A5;
- Tue,  4 Feb 2025 17:09:11 +0000 (UTC)
-Date: Tue, 4 Feb 2025 18:09:10 +0100
-To: =?UTF-8?B?U8OpYmFzdGllbg==?= Szymanski <sebastien.szymanski@armadeus.com>
-Cc: buildroot@buildroot.org, Gilles Talis <gilles.talis@gmail.com>, Julien
- Olivain <ju.o@free.fr>, Fabio Estevam <festevam@gmail.com>
-Message-ID: <20250204180910.27fd582b@windsurf>
-In-Reply-To: <20250109-nxp-mwifiex-firmware-driver-v1-0-b2ec8b34643c@armadeus.com>
-References: <20250109-nxp-mwifiex-firmware-driver-v1-0-b2ec8b34643c@armadeus.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvuddtlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthhqredtredtjeenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeehudetueefkeeiveeigeeugeeigfdvveehgffguddtieeuvddtgfelvdegveelieenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepuddtledrkeelrddvfedvrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutdelrdekledrvdefvddrheehpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeehpdhrtghpthhtohepshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehgihhllhgvshdrthgrlhhishesghhmrghilhdrtghomhdprhgtphhtthhopehjuhdrohesfhhrvggvrdhfrhdpr
- hgtphhtthhopehfvghsthgvvhgrmhesghhmrghilhdrtghomh
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1738688951;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ILPoX/q7ZeLhYNi6UnVB//Rw25YPLvo7DzNTCvuJoRc=;
- b=TNS1iSKPCW5jBv56jXFHJK7JZxgY6WZ8IuK/kkiln6uHuKHIbQ21VVn+579E2ZGypb9ItY
- UfBARnhdBihMRu/3fqQrgfxLopZbiPa1awylGy0VyBEhS+y2fcV0SPXIhLhMxk9F0B+WhQ
- refwFSktZmhekx05YQotyNYThH95m8gNSPEJDoXadXeNHy++FC3QQgnb6iQaW04Mg81YgO
- 18swT9EIrm0pa3iD5HCqVknL86+e/EF26SbQX1CqT1JHSdPNVdJD9htILhp42aTnRZMtv8
- fVJ/dKAuZsa+H08PO5IKFlMuA928X/HnjLT63JA3deCmsUSGKlYxZUP/9FIRMQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=TNS1iSKP
-Subject: Re: [Buildroot] [PATCH 0/2] Add NXP WiFi chipsets support
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5142040765
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5142040765
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:10:01 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3AB6886E7B; Tue,  4 Feb 2025 17:10:01 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Tue, 4 Feb 2025 18:09:49 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 668b21db586dd131db9c342a9ffe6e2c90413bd6
+X-Git-Newrev: ceb4cc30da8e143f9c3d25dfe4456237f8ab1274
+X-Patchwork-Hint: ignore
+Message-Id: <20250204171001.3AB6886E7B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nxp-bt-wifi-firmware: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,20 +58,194 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============6830763510851339772=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1LCAwOSBKYW4gMjAyNSAxNzozNjoyNSArMDEwMApTw6liYXN0aWVuIFN6eW1hbnNraSA8
-c2ViYXN0aWVuLnN6eW1hbnNraUBhcm1hZGV1cy5jb20+IHdyb3RlOgoKPiBTw6liYXN0aWVuIFN6
-eW1hbnNraSAoMik6Cj4gICAgICAgcGFja2FnZS9ueHAtYnQtd2lmaS1maXJtd2FyZTogbmV3IHBh
-Y2thZ2UKPiAgICAgICBwYWNrYWdlL254cC1td2lmaWV4OiBuZXcgcGFja2FnZQoKQm90aCBhcHBs
-aWVkLiBUaGFua3MgYSBsb3QhCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIGNvLW93bmVy
-IGFuZCBDRU8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZyBh
-bmQgdHJhaW5pbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
-dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
-L2J1aWxkcm9vdAo=
+--===============6830763510851339772==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=ceb4cc30da8e143f9c3d25dfe4456237f8ab1274
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This package provides firmwares for NXP WiFi + Bluetooth chipsets.
+It is named "nxp-bt-wifi-firmware" so that it is not confused with the
+package firmware-imx.
+
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/nxp-bt-wifi-firmware/Config.in             | 75 ++++++++++++++++++++++
+ .../nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash |  3 +
+ .../nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk   | 33 ++++++++++
+ 5 files changed, 113 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 731f2a5d17..909de4a871 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2947,6 +2947,7 @@ F:	package/ripgrep/
+ N:	Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+ F:	board/armadeus/
+ F:	configs/armadeus*
++F:	package/nxp-bt-wifi-firmware/
+ F:	package/mmc-utils/
+ F:	package/python-flask-jsonrpc/
+ F:	package/python-flask-login/
+diff --git a/package/Config.in b/package/Config.in
+index bc77878b08..c2d1693b46 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -446,6 +446,7 @@ menu "Firmware"
+ 	source "package/brcmfmac_sdio-firmware-rpi/Config.in"
+ 	source "package/linux-firmware/Config.in"
+ 	source "package/murata-cyw-fw/Config.in"
++	source "package/nxp-bt-wifi-firmware/Config.in"
+ 	source "package/odroidc2-firmware/Config.in"
+ 	source "package/panel-mipi-dbi-firmware/Config.in"
+ 	source "package/qcom-db410c-firmware/Config.in"
+diff --git a/package/nxp-bt-wifi-firmware/Config.in b/package/nxp-bt-wifi-firmware/Config.in
+new file mode 100644
+index 0000000000..c707cd05cd
+--- /dev/null
++++ b/package/nxp-bt-wifi-firmware/Config.in
+@@ -0,0 +1,75 @@
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE
++	bool "nxp-bt-wifi-firmware"
++	help
++	  Firmwares for NXP Bluetooth / WiFi chipsets based modules
++
++	  https://github.com/nxp-imx/imx-firmware
++
++if BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE
++
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8801
++	bool "8801 (SD)"
++	help
++	  NXP 8801 module firmware files.
++
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8987
++	bool "8987 (SD)"
++	help
++	  NXP 8987 module firmware files.
++
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997
++	bool "8997"
++	help
++	  NXP 8997 module firmware files.
++
++if BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997
++
++choice
++	prompt "8997 WiFi interface"
++
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_SD
++	bool "SD"
++
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_PCIE
++	bool "PCIe"
++
++endchoice
++
++endif
++
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_9098
++	bool "9098"
++	help
++	  NXP 9098 module firmware files.
++
++if BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_9098
++
++choice
++	prompt "9098 WiFi interface"
++
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_9098_SD
++	bool "SD"
++
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_9098_PCIE
++	bool "PCIe"
++
++endchoice
++
++endif
++
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW416
++	bool "IW416 (SD)"
++	help
++	  NXP IW416 module firmware files.
++
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610
++	bool "IW610 (SD)"
++	help
++	  NXP IW610 module firmware files.
++
++config BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW612
++	bool "IW612 (SD)"
++	help
++	  NXP IW612 module firmware files.
++
++endif
+diff --git a/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash b/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash
+new file mode 100644
+index 0000000000..60e1be03da
+--- /dev/null
++++ b/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  444351eba2669772a0f62aadbff92b46adb370dcd5228f12e4f5ae2b58554951  nxp-bt-wifi-firmware-lf-6.6.52_2.2.0.tar.gz
++sha256  601fa790c5b4d03579bd182fb4d65a6f329a32faf49db22f98e4608221e861f7  LICENSE.txt
+diff --git a/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk b/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk
+new file mode 100644
+index 0000000000..f0440ce32a
+--- /dev/null
++++ b/package/nxp-bt-wifi-firmware/nxp-bt-wifi-firmware.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# nxp-bt-wifi-firmware
++#
++################################################################################
++
++NXP_BT_WIFI_FIRMWARE_VERSION = lf-6.6.52_2.2.0
++NXP_BT_WIFI_FIRMWARE_SITE = $(call github,nxp-imx,imx-firmware,$(NXP_BT_WIFI_FIRMWARE_VERSION))
++NXP_BT_WIFI_FIRMWARE_LICENSE = NXP Software License Agreement
++NXP_BT_WIFI_FIRMWARE_LICENSE_FILES = LICENSE.txt
++NXP_BT_WIFI_FIRMWARE_REDISTRIBUTE = NO
++
++NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8801) += FwImage_8801_SD
++NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8987) += FwImage_8987
++NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_SD) += FwImage_8997_SD
++NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_8997_PCIE) += FwImage_8997
++NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_9098_SD) += FwImage_9098_SD
++NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_9098_PCIE) += FwImage_9098_PCIE
++NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW416) += FwImage_IW416_SD
++NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW610) += FwImage_IW610_SD
++NXP_BT_WIFI_FIRMWARE_FILES_$(BR2_PACKAGE_NXP_BT_WIFI_FIRMWARE_IW612) += FwImage_IW612_SD
++
++define NXP_BT_WIFI_FIRMWARE_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0644 -D $(@D)/nxp/wifi_mod_para.conf \
++		$(TARGET_DIR)/lib/firmware/nxp/wifi_mod_para.conf
++	$(INSTALL) -m 0644 -D $(@D)/nxp/mfguart/helper_uart_3000000.bin \
++		$(TARGET_DIR)/lib/firmware/nxp/helper_uart_3000000.bin
++	$(foreach f,$(NXP_BT_WIFI_FIRMWARE_FILES_y), \
++		$(INSTALL) -m 0644 -D $(@D)/nxp/$(f)/* $(TARGET_DIR)/lib/firmware/nxp/
++	)
++endef
++
++$(eval $(generic-package))
+
+--===============6830763510851339772==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6830763510851339772==--
