@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74697C02197
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 15:16:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E78B7C02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 15:16:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4211580F91;
-	Tue,  4 Feb 2025 15:16:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B1CE4413D1;
+	Tue,  4 Feb 2025 15:16:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LnOZjT9mgi_a; Tue,  4 Feb 2025 15:16:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2inIxcHjxPKO; Tue,  4 Feb 2025 15:16:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3819A81EF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F029413C4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3819A81EF9;
-	Tue,  4 Feb 2025 15:16:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3EAA3185
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F029413C4;
+	Tue,  4 Feb 2025 15:16:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C46C112A
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:16:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2B4BC6089A
+ by smtp2.osuosl.org (Postfix) with ESMTP id B10C140AE5
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:16:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2S1OHryBTv42 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x1Zdrtn3wAdU for <buildroot@buildroot.org>;
  Tue,  4 Feb 2025 15:16:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A50A60BE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A9184111D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4A50A60BE2
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A9184111D
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:16:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4797E86E14; Tue,  4 Feb 2025 15:16:31 +0000 (UTC)
+ id 1895286E0A; Tue,  4 Feb 2025 15:16:31 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 16:16:16 +0100
+Date: Tue, 4 Feb 2025 16:16:12 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 03df6d1a261613366deaa8ebb335d4fbcb73bad4
-X-Git-Newrev: 3ea79058c077961c8f3b7c8c25f4545400622313
+X-Git-Oldrev: 11aa1cfa5af9a77a0a9f726bd38f1b7db659c0bf
+X-Git-Newrev: 39949b201954a37efc345acebf49187ad89c982b
 X-Patchwork-Hint: ignore
-Message-Id: <20250204151631.4797E86E14@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing/tests: new
- NetworkManager/GOI test
+Message-Id: <20250204151631.1895286E0A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gobject-introspection: works with
+ musl now
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,120 +59,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6135536027537970285=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6135536027537970285==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=3ea79058c077961c8f3b7c8c25f4545400622313
+commit: https://git.buildroot.net/buildroot/commit/?id=39949b201954a37efc345acebf49187ad89c982b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This test is inspired from the details provided by Fiona Klute's cover
-letter for a GOI/glib bump series at:
+Current versions of gobject-introspection build with musl (Alpine
+dropped the last compatibility patch with the update to 1.80.1 [0]), so
+relax the dependency on glibc.
 
-  https://lore.kernel.org/buildroot/20250120211707.2381182-1-fiona.klute@gmx.de/
+[0] https://gitlab.alpinelinux.org/alpine/aports/-/commit/528c4ee63970fe6ee733b6ea99ef7a59a8f108ff
 
-Which itself uses the example code at:
-
-  https://networkmanager.dev/docs/developers/
-
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+[yann.morin.1998@free.fr: split off to its own patch]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                         |  2 ++
- .../package/sample_python_networkmanager_goi.py    | 26 ++++++++++++++++++++++
- .../package/test_python_networkmanager_goi.py      | 24 ++++++++++++++++++++
- 3 files changed, 52 insertions(+)
+ package/gobject-introspection/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2da5d178b2..af605b388e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1103,6 +1103,8 @@ F:	package/python-dunamai/
- F:	package/python-poetry-dynamic-versioning/
- F:	package/python-pyasynchat/
- F:	package/python-pyasyncore/
-+F:	support/testing/tests/package/sample_python_networkmanager_goi.py
-+F:	support/testing/tests/package/test_python_networkmanager_goi.py
+diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
+index 7b47c9561e..54a33d8666 100644
+--- a/package/gobject-introspection/Config.in
++++ b/package/gobject-introspection/Config.in
+@@ -19,7 +19,7 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
+ 	# can be verified.
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_HOST_GCC_AT_LEAST_8 # host-qemu
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	# gobject-introspection does not require python3 to run on the
+ 	# target; however, because the tools run in a qemu wrapper, a
+ 	# cross-compiled python3 must be installed to staging. As there
+@@ -48,9 +48,9 @@ comment "gobject-introspection needs python3"
+ 	depends on !BR2_PACKAGE_PYTHON3
+ 	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
  
- N:	Flávio Tapajós <flavio.tapajos@newtesc.com.br>
- F:	configs/asus_tinker-s_rk3288_defconfig
-diff --git a/support/testing/tests/package/sample_python_networkmanager_goi.py b/support/testing/tests/package/sample_python_networkmanager_goi.py
-new file mode 100644
-index 0000000000..240e8437fd
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_networkmanager_goi.py
-@@ -0,0 +1,26 @@
-+#!/usr/bin/env python3
-+
-+# This script is from https://networkmanager.dev/docs/developers/
-+
-+import gi
-+gi.require_version("NM", "1.0")
-+from gi.repository import NM  # noqa: E402
-+
-+
-+def print_values(setting, key, value, flags, data):
-+    print("     {}.{}: {}".format(setting.get_name(), key, value))
-+
-+
-+# Create the client object. This automatically loads all the D-Bus
-+# tree and creates in-memory objects for connections, devices, access
-+# points, etc.
-+client = NM.Client.new(None)
-+
-+# Obtain a list of connection profiles ...
-+connections = client.get_connections()
-+
-+# ... and print their properties
-+for c in connections:
-+    print("{}:".format(c.get_id()))
-+    c.for_each_setting_value(print_values, None)
-+    print("\n")
-diff --git a/support/testing/tests/package/test_python_networkmanager_goi.py b/support/testing/tests/package/test_python_networkmanager_goi.py
-new file mode 100644
-index 0000000000..e755569fc1
---- /dev/null
-+++ b/support/testing/tests/package/test_python_networkmanager_goi.py
-@@ -0,0 +1,24 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3NetworkmanagerGoi(TestPythonPackageBase):
-+    __test__ = True
-+    # Can't use TestPythonPackageBase.config because we need headers
-+    # >= 4.20 for network-manager, so we have to use the bleeding-edge
-+    # toolchain.
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_BLEEDING_EDGE=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_GOBJECT=y
-+        BR2_INIT_SYSTEMD=y
-+        BR2_PACKAGE_NETWORK_MANAGER=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+    sample_scripts = ["tests/package/sample_python_networkmanager_goi.py"]
-+
-+    timeout = 30
-
---===============6135536027537970285==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-comment "gobject-introspection needs a glibc toolchain, gcc >= 4.9, host gcc >= 8"
++comment "gobject-introspection needs a glibc or musl toolchain, gcc >= 4.9, host gcc >= 8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_HOST_GCC_AT_LEAST_8
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6135536027537970285==--
