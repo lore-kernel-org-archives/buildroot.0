@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 640ECC02197
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 14:36:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 539DCC02196
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 14:36:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 30CA080AB3;
-	Tue,  4 Feb 2025 14:36:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E6958416AA;
+	Tue,  4 Feb 2025 14:36:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4OzFRPmbS_9F; Tue,  4 Feb 2025 14:36:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hl5aEUbzjmkl; Tue,  4 Feb 2025 14:36:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35821818D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AECE416BC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 35821818D0;
-	Tue,  4 Feb 2025 14:36:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7AECE416BC;
+	Tue,  4 Feb 2025 14:36:54 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 802CE185
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 14:36:45 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 18E29185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 14:36:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 56D5060FE3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6A2DA60FE6
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 14:36:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lnwC8bHIJxF9 for <buildroot@buildroot.org>;
+ id nCP42IC16XsV for <buildroot@buildroot.org>;
  Tue,  4 Feb 2025 14:36:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6844160FE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75B1B60FEF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6844160FE6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 75B1B60FEF
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 14:36:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 596B286D69; Tue,  4 Feb 2025 14:36:42 +0000 (UTC)
+ id 65B1386D6B; Tue,  4 Feb 2025 14:36:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 15:21:16 +0100
+Date: Tue, 4 Feb 2025 15:26:25 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: c4a75ea14d4c8a8566404ca3b9dfc12782f3ed3e
-X-Git-Newrev: 96e238c7066b99ddf966682e4f9c973a423bf4d8
+X-Git-Oldrev: 96e238c7066b99ddf966682e4f9c973a423bf4d8
+X-Git-Newrev: 8e62aeb3feab0c369dd5623d682d8568a4b31bca
 X-Patchwork-Hint: ignore
-Message-Id: <20250204143642.596B286D69@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add
- libcurl runtime test
+Message-Id: <20250204143642.65B1386D6B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: new wget
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,46 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96e238c7066b99ddf966682e4f9c973a423bf4d8
+commit: https://git.buildroot.net/buildroot/commit/?id=8e62aeb3feab0c369dd5623d682d8568a4b31bca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 292631cd090fb3453c02926b77d6361dd965c112)
+(cherry picked from commit fefe7024a38f11bf0d62e7435aaec9847ede4976)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                    |  1 +
- support/testing/tests/package/test_libcurl.py | 55 +++++++++++++++++++++++++++
- 2 files changed, 56 insertions(+)
+ DEVELOPERS                                 |  1 +
+ support/testing/tests/package/test_wget.py | 57 ++++++++++++++++++++++++++++++
+ 2 files changed, 58 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9498e9898b..96d009e5a5 100644
+index 96d009e5a5..4852ef92f2 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1799,6 +1799,7 @@ F:	support/testing/tests/package/test_kmscube/
- F:	support/testing/tests/package/test_less.py
- F:	support/testing/tests/package/test_libcamera.py
- F:	support/testing/tests/package/test_libcamera/
-+F:	support/testing/tests/package/test_libcurl.py
- F:	support/testing/tests/package/test_libgpgme.py
- F:	support/testing/tests/package/test_libjxl.py
- F:	support/testing/tests/package/test_links.py
-diff --git a/support/testing/tests/package/test_libcurl.py b/support/testing/tests/package/test_libcurl.py
+@@ -1878,6 +1878,7 @@ F:	support/testing/tests/package/test_usbutils.py
+ F:	support/testing/tests/package/test_usbutils/
+ F:	support/testing/tests/package/test_weston.py
+ F:	support/testing/tests/package/test_weston/
++F:	support/testing/tests/package/test_wget.py
+ F:	support/testing/tests/package/test_xfsprogs.py
+ F:	support/testing/tests/package/test_xfsprogs/
+ F:	support/testing/tests/package/test_xvisor.py
+diff --git a/support/testing/tests/package/test_wget.py b/support/testing/tests/package/test_wget.py
 new file mode 100644
-index 0000000000..b326f9308f
+index 0000000000..c121cbd21c
 --- /dev/null
-+++ b/support/testing/tests/package/test_libcurl.py
-@@ -0,0 +1,55 @@
++++ b/support/testing/tests/package/test_wget.py
+@@ -0,0 +1,57 @@
 +import os
 +
 +import infra.basetest
 +
 +
-+class TestLibCurl(infra.basetest.BRTest):
++class TestWget(infra.basetest.BRTest):
 +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
 +        """
-+        BR2_PACKAGE_LIBCURL=y
-+        BR2_PACKAGE_LIBCURL_CURL=y
++        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++        BR2_PACKAGE_WGET=y
 +        BR2_PACKAGE_THTTPD=y
 +        BR2_TARGET_ROOTFS_CPIO=y
 +        # BR2_TARGET_ROOTFS_TAR is not set
@@ -121,14 +121,16 @@ index 0000000000..b326f9308f
 +        fname = "file.txt"
 +        url = f"http://localhost/{fname}"
 +
-+        # We check the program can execute.
-+        self.assertRunOk("curl --version")
++        # We check the program can execute. This also checks we have
++        # the GNU wget version, rather than the BusyBox version which
++        # does not know the --version option.
++        self.assertRunOk("wget --version")
 +
 +        # We create a simple file to serve.
 +        self.assertRunOk(f"echo '{msg}' > /var/www/data/{fname}")
 +
 +        # We try to download that file, using our local httpd server.
-+        self.assertRunOk(f"curl -o {fname} {url}")
++        self.assertRunOk(f"wget --progress=dot {url}")
 +
 +        # We check the downloaded file contains our initial message.
 +        out, ret = self.emulator.run(f"cat {fname}")
@@ -137,14 +139,14 @@ index 0000000000..b326f9308f
 +
 +        # We download again the file without saving it, but printing
 +        # it on stdout this time.
-+        out, ret = self.emulator.run(f"curl -q {url}")
++        out, ret = self.emulator.run(f"wget -q -O - {url}")
 +        self.assertEqual(ret, 0)
 +        self.assertEqual(out[0], msg)
 +
 +        # We download one last time, showing the server response. We
 +        # check we can see the OK status and our thttpd server
 +        # identification.
-+        cmd = f"curl --no-progress-meter --dump-header - -o /dev/null {url}"
++        cmd = f"wget --no-verbose --server-response -O /dev/null {url}"
 +        out, ret = self.emulator.run(cmd)
 +        self.assertEqual(ret, 0)
 +        out_str = "\n".join(out)
