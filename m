@@ -4,63 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D338C02198
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 08:47:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82106C0218F
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 08:48:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3385D408AF;
-	Tue,  4 Feb 2025 08:47:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47121408E5;
+	Tue,  4 Feb 2025 08:48:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OB5PchNBifHN; Tue,  4 Feb 2025 08:47:54 +0000 (UTC)
+ id TKli-CqWyGqb; Tue,  4 Feb 2025 08:48:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D0EE408EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D30D408EB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D0EE408EB;
-	Tue,  4 Feb 2025 08:47:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5610A12A
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 08:47:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0D30D408EB;
+	Tue,  4 Feb 2025 08:48:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4440F12A
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 08:48:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 38BC860B56
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 08:47:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D5C7408EB
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 08:48:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RPYiPVMuDRsY for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 08:47:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 31dDmNnXrGb7 for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 08:48:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2EBBE60895
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EBBE60895
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2EBBE60895
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 08:47:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5E93044401;
- Tue,  4 Feb 2025 08:47:44 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tfEat-00FE4f-2k;
- Tue, 04 Feb 2025 09:47:43 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28BD4408AE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 28BD4408AE
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 08:48:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 207B486A98; Tue,  4 Feb 2025 08:48:40 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Marcin Niestroj <m.niestroj@grinn-global.com>
-Cc: buildroot@buildroot.org,  James Hilliard <james.hilliard1@gmail.com>
-References: <20250203064241.4008752-1-m.niestroj@grinn-global.com>
-Date: Tue, 04 Feb 2025 09:47:43 +0100
-In-Reply-To: <20250203064241.4008752-1-m.niestroj@grinn-global.com> (Marcin
- Niestroj's message of "Mon, 3 Feb 2025 07:42:40 +0100")
-Message-ID: <87h65aqeog.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtddtiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufhffjgfkfgggtgesthdttddttdertdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeekudehueegkeekveetheeiieeglefgjefhueetgeekgfdvudeiheehudelhffhieenucffohhmrghinheprhgvrgguthhhvgguohgtshdrihhonecukfhppedutdelrdekledrvdefvddrheehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddtledrkeelrddvfedvrdehhedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopeefpdhrtghpthhtohepmhdrnhhivghsthhrohhjsehgrhhinhhnqdhglhhosggrlhdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepjhgrmhgvshdrhhhilhhlihgrrhguudesghhmrghilhdrtghomh
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/python-pytest-asyncio: bump to
+To: buildroot@buildroot.org
+Date: Tue, 4 Feb 2025 09:46:47 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b4853d8428d3795446a40fdc8a642f8b174e7132
+X-Git-Newrev: 16943849e090fbaca75817ba3563dd2d66bfd51d
+X-Patchwork-Hint: ignore
+Message-Id: <20250204084840.207B486A98@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pytest-asyncio: bump to
  0.25.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -73,22 +59,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Marcin" == Marcin Niestroj <m.niestroj@grinn-global.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=16943849e090fbaca75817ba3563dd2d66bfd51d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > See [1] for changelog.
- > [1] https://pytest-asyncio.readthedocs.io/en/latest/reference/changelog.html
+See [1] for changelog.
 
- > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+[1] https://pytest-asyncio.readthedocs.io/en/latest/reference/changelog.html
 
-Committed, thanks.
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-pytest-asyncio/python-pytest-asyncio.hash | 4 ++--
+ package/python-pytest-asyncio/python-pytest-asyncio.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.hash b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+index accff0557b..1a1aaac839 100644
+--- a/package/python-pytest-asyncio/python-pytest-asyncio.hash
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pytest-asyncio/json
+-md5  c00782dd936f55366c536a41184ef04a  pytest_asyncio-0.25.2.tar.gz
+-sha256  3f8ef9a98f45948ea91a0ed3dc4268b5326c0e7bce73892acc654df4262ad45f  pytest_asyncio-0.25.2.tar.gz
++md5  307961c0f1ad9510aa1cb72715db0bd5  pytest_asyncio-0.25.3.tar.gz
++sha256  fc1da2cf9f125ada7e710b4ddad05518d4cee187ae9412e9ac9271003497f07a  pytest_asyncio-0.25.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a8ad31b1c3f40dca5a84119351b8fa8ddc868edd77fad8a8ebf6d8f2d16fa4ae  LICENSE
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.mk b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+index c21892d18c..e2bb3565b1 100644
+--- a/package/python-pytest-asyncio/python-pytest-asyncio.mk
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYTEST_ASYNCIO_VERSION = 0.25.2
++PYTHON_PYTEST_ASYNCIO_VERSION = 0.25.3
+ PYTHON_PYTEST_ASYNCIO_SOURCE = pytest_asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
+-PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/72/df/adcc0d60f1053d74717d21d58c0048479e9cab51464ce0d2965b086bd0e2
++PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/f2/a8/ecbc8ede70921dd2f544ab1cadd3ff3bf842af27f87bbdea774c7baa1d38
+ PYTHON_PYTEST_ASYNCIO_SETUP_TYPE = setuptools
+ PYTHON_PYTEST_ASYNCIO_LICENSE = Apache-2.0
+ PYTHON_PYTEST_ASYNCIO_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
