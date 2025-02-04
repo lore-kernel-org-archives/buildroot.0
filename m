@@ -1,52 +1,98 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BE4BC02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 10:57:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C7B6C02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 11:13:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6AB5A40295;
-	Tue,  4 Feb 2025 10:57:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 107E560FB2;
+	Tue,  4 Feb 2025 11:13:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3pRe9jY8ULgV; Tue,  4 Feb 2025 10:57:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4X0efhz-yK0y; Tue,  4 Feb 2025 11:13:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7B02402E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0160260FAF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D7B02402E4;
-	Tue,  4 Feb 2025 10:57:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7CD19185
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:57:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0160260FAF;
+	Tue,  4 Feb 2025 11:13:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 643D1185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 11:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E28681222
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:57:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4805D827B5
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 11:13:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GZ-FTZYGYMZw for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 10:57:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id HYQyOt8Bay5F for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 11:13:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.124;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A26080A58
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A26080A58
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:57:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6459E86B88; Tue,  4 Feb 2025 10:57:25 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 11:56:52 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4def253882ff2b16ddaff9bcaf75c15c82a7dd9f
-X-Git-Newrev: 8af6f2eaf99c3c808742bf5154e57752b20b234a
-X-Patchwork-Hint: ignore
-Message-Id: <20250204105725.6459E86B88@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libserialport: update to 0.1.2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7B591826B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B591826B4
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.124])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7B591826B4
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 11:13:37 +0000 (UTC)
+X-CSE-ConnectionGUID: J8TS+/bFQqe8XtsGw6NKeQ==
+X-CSE-MsgGUID: A3BZItb+Tke9UkTi9RLiYw==
+Received: from unknown (HELO opfedv1rlp0h.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 04 Feb 2025 12:13:35 +0100
+Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0h.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Feb 2025 12:13:35 +0100
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
+ Tue, 4 Feb 2025 12:13:33 +0100
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Tue, 04 Feb 2025 12:13:31 +0100
+From: yann.morin@orange.com
+X-CSE-ConnectionGUID: N+bZRP75TRe3I47yFTPLWQ==
+X-CSE-MsgGUID: +FHEwuTvQwivsjvft2p44w==
+X-IronPort-AV: E=Sophos;i="6.13,258,1732575600"; d="scan'208";a="247291308"
+Date: Tue, 4 Feb 2025 12:13:31 +0100
+To: Fiona Klute <fiona.klute@gmx.de>
+CC: <buildroot@buildroot.org>, Thomas Perale <thomas.perale@mind.be>,
+ Christian Stewart <christian@aperture.us>
+Message-ID: <Z6H2W96MX4oQFoOx@yd-6wlzhs3>
+References: <20250203120130.2332720-1-fiona.klute@gmx.de>
+ <Z6GzCbcs9k0Rul1a@yd-6wlzhs3>
+ <c3a16cbe-ae5b-4b68-9713-0fe3bf5888d4@gmx.de>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <c3a16cbe-ae5b-4b68-9713-0fe3bf5888d4@gmx.de>
+X-Originating-IP: [10.115.27.51]
+X-ClientProxiedBy: OPE16NORMBX306.corporate.adroot.infra.ftgroup
+ (10.115.27.11) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1738667619; x=1770203619;
+ h=date:to:cc:subject:message-id:references:mime-version:
+ in-reply-to:content-transfer-encoding:from;
+ bh=ptXjtr2Lnq0JhOR3OfK6R3TUniaNIkFYMnvpV24vk2c=;
+ b=YcMPJt9KC22tdoqoSxKNutS5voxYE8msh6cOdbQrdvLTqIHiDsoKfREm
+ 8DxJfgmQx23fEzwxv3D26R1WaN8KVrw/KP+pIdGLDI3eYk43H1Hc2M+HU
+ 9p5dzjPCENF+rv4ezl00AxRlHl6k8SkFlMPMV9FpFY94jFy7wQtu0DXYp
+ 40KTHOkBazyrBjWQBigfDIJU2vNRex9edEC1qI8lWSj4XxlRT3XDg+im8
+ oRt2KW6ReqOvWCSlU57wFqjMoL23pi9eDgclUiMNxB1KgL/AjTG8kiyBP
+ Z8UtsroHEc5EaL3JeH7ICNsy4T6kk3Rkf7aokNTjqmDSmj+r6p5BNr/n7
+ Q==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=orange.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=YcMPJt9K
+Subject: Re: [Buildroot] [PATCH 1/1] package/go/go-src: stop forcing
+ binutils-gold dependency on aarch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,101 +104,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8af6f2eaf99c3c808742bf5154e57752b20b234a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fiona, All,
 
-Drop the patch, that has been upstreamed as b2359c5c994c (libserialport:
-Fix Linux files not compiled in with a toolchain for ucLinux).
+On 2025-02-04 11:52 +0100, Fiona Klute spake thusly:
+> Am 04.02.25 um 07:26 schrieb yann.morin@orange.com:
+> > > Go forces the GOLD linker when dynamically linking Go code, because
+> > > old versions of BFD caused errors. The issue has been fixed in
+> > > Binutils since at least 2.41 according to the upstream description of
+> > > the patch added with this commit [1], and now forcing GOLD causes
+> > > linking failure if ld.gold is not available. The associated Golang
+> > > issue [2] is still open.
+> > I have send a patch back a while ago, that allowed to at least work
+> > around the issue for affected packages:
+> > https://patchwork.ozlabs.org/project/buildroot/patch/876f3a7bb6a2375193fc8f06ab856d2449f83727.1699547993.git.yann.morin@orange.com/
+[--SNIP--]
+> One question though: Is there an existing way to check the Binutils
+> version of an external toolchain? For people with Binutils < 2.41 with
+> ld.gold forcing BFD might actually break things, so ideally I'd want to
+> make the flag conditional on Binutils >= 2.41 (all Buildroot-built
+> toolchains meet that anyway). Or would it be acceptable to simply say
+> that people with old external toolchains are on their own?
 
-Accordingly, drop the now superfluous autoreconf.
+As noted in my filebeat package patch [0], the ld.bfd issue is
+supposedly fixed since binutils 2.36, AFAIUI.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .checkpackageignore                                |  1 -
- package/libserialport/0001-uclinux-detection.patch | 26 ----------------------
- package/libserialport/libserialport.hash           |  2 +-
- package/libserialport/libserialport.mk             |  3 +--
- 4 files changed, 2 insertions(+), 30 deletions(-)
+There, I took the approach that the workaround would not be conditional
+on the binutils version. First, because there is no way in Buildroot to
+get that information, especially for external toolchains. Second,
+because using ld.bfd should always work, using ld.gold only being an
+optimnisation at build time.
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 7ebfdd0499..8fd03b0dd6 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -711,7 +711,6 @@ package/libselinux/0001-Do-not-use-PYCEXT-and-rely-on-the-installed-file-nam.pat
- package/libsepol/0001-support-static-only.patch lib_patch.Upstream
- package/libserial/0001-SerialPort.cpp-fix-build-when-size_t-is-an-unsigned-.patch lib_patch.Upstream
- package/libserial/0002-SerialPort.cpp-don-t-use-high-baudrates-when-not-ava.patch lib_patch.Upstream
--package/libserialport/0001-uclinux-detection.patch lib_patch.Upstream
- package/libshdata/0001-backend-Add-missing-include-files.patch lib_patch.Upstream
- package/libshdata/0002-examples-stress_test-Fix-build-with-musl-libc.patch lib_patch.Upstream
- package/libsidplay2/0001-sidplay2-libs-2.1.1.patch lib_patch.Upstream
-diff --git a/package/libserialport/0001-uclinux-detection.patch b/package/libserialport/0001-uclinux-detection.patch
-deleted file mode 100644
-index 7d7199c1f0..0000000000
---- a/package/libserialport/0001-uclinux-detection.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From faab9aa5879fab93556b7a3a6f24070eeb3cbf15 Mon Sep 17 00:00:00 2001
--From: Paul Cercueil <paul.cercueil@analog.com>
--Date: Mon, 29 Aug 2016 11:11:01 +0200
--Subject: [PATCH] Fix Linux files not compiled in with a toolchain for ucLinux
--
--Signed-off-by: Paul Cercueil <paul.cercueil@analog.com>
-----
-- configure.ac | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/configure.ac b/configure.ac
--index f6b66e8..de6f5b9 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -74,7 +74,7 @@ AC_DEFINE_UNQUOTED([SP_LIB_VERSION_REVISION], [$SP_LIB_VERSION_REVISION], [.])
-- AC_DEFINE_UNQUOTED([SP_LIB_VERSION_AGE], [$SP_LIB_VERSION_AGE], [.])
-- AC_DEFINE_UNQUOTED([SP_LIB_VERSION_STRING], ["$SP_LIB_VERSION"], [.])
-- 
---AM_CONDITIONAL([LINUX], [test -z "${host_os##linux*}"])
--+AM_CONDITIONAL([LINUX], [test -z "${host_os##linux*}" || test -z "${host_os##uclinux*}"])
-- AM_CONDITIONAL([WIN32], [test -z "${host_os##mingw*}" || test -z "${host_os##cygwin*}"])
-- AM_CONDITIONAL([MACOSX], [test -z "${host_os##darwin*}"])
-- AM_CONDITIONAL([FREEBSD], [test -z "${host_os##freebsd*}"])
---- 
--2.8.1
--
-diff --git a/package/libserialport/libserialport.hash b/package/libserialport/libserialport.hash
-index 39f0c8f1f0..5bf7823d63 100644
---- a/package/libserialport/libserialport.hash
-+++ b/package/libserialport/libserialport.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4a2af9d9c3ff488e92fb75b4ba38b35bcf9b8a66df04773eba2a7bbf1fa7529d  libserialport-0.1.1.tar.gz
-+sha256  5deb92b5ca72c0347b07b786848350deca2dcfd975ce613b8e0e1d947a4b4ca9  libserialport-0.1.2.tar.gz
- sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  COPYING
-diff --git a/package/libserialport/libserialport.mk b/package/libserialport/libserialport.mk
-index 84d7a5315b..f3331db074 100644
---- a/package/libserialport/libserialport.mk
-+++ b/package/libserialport/libserialport.mk
-@@ -4,12 +4,11 @@
- #
- ################################################################################
- 
--LIBSERIALPORT_VERSION = 0.1.1
-+LIBSERIALPORT_VERSION = 0.1.2
- LIBSERIALPORT_SITE = http://sigrok.org/download/source/libserialport
- LIBSERIALPORT_LICENSE = LGPL-3.0+
- LIBSERIALPORT_LICENSE_FILES = COPYING
- LIBSERIALPORT_INSTALL_STAGING = YES
- LIBSERIALPORT_DEPENDENCIES = host-pkgconf
--LIBSERIALPORT_AUTORECONF = YES
- 
- $(eval $(autotools-package))
+I also considered that toolchains too old to even have ld.bfd would just
+be ignored anyway. ld.bfd was introduced with ld.gold, which was "quite
+a long time ago" (at least 2011 I believe), so we can assume any rdecent
+toolchain would be recent enough to have it.
+
+So, packages that need to specify "-fuse-ld=bfd" would do so
+unconditionaly, just maybe for the AArch64 case, which is the only one I
+know can cause the build failure (not all packages have the issue, as
+can be explamplified by the fact that we have no such failures in the
+autobuilders).
+
+[0] https://patchwork.ozlabs.org/project/buildroot/patch/46f20e86fa6c17ada33ede672ffe4229d8bf26a3.1699547993.git.yann.morin@orange.com/
+
+Regards,
+Yann E. MORIN.
+
+-- 
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
