@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04A60C02196
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 13:31:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5917C02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 13:31:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C697660FC0;
-	Tue,  4 Feb 2025 13:31:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABB9A60FE4;
+	Tue,  4 Feb 2025 13:31:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N6ZHGbq4D6VO; Tue,  4 Feb 2025 13:31:02 +0000 (UTC)
+ id UFlNcGhXMf3v; Tue,  4 Feb 2025 13:31:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA04360FBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1966A60FDD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA04360FBC;
-	Tue,  4 Feb 2025 13:31:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9E37612F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1966A60FDD;
+	Tue,  4 Feb 2025 13:31:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4A2A1A6
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:31:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8E289414EA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 88D4560FBC
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:31:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jzPTa_gi70l9 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BqAT3BWqqjdU for <buildroot@buildroot.org>;
  Tue,  4 Feb 2025 13:30:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DFE4414E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B615460FB1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9DFE4414E7
+ by smtp3.osuosl.org (Postfix) with ESMTP id B615460FB1
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:30:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 929C486C90; Tue,  4 Feb 2025 13:30:59 +0000 (UTC)
+ id A00C586C91; Tue,  4 Feb 2025 13:30:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 14:17:09 +0100
+Date: Tue, 4 Feb 2025 14:18:29 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a2a7668bb207b92fae994c102b8f29ad5ce6ac10
-X-Git-Newrev: 00039d7059faa3489e91ddb692b703aedb8f9b13
+X-Git-Oldrev: 00039d7059faa3489e91ddb692b703aedb8f9b13
+X-Git-Newrev: 9f52cc8c0a7d285a4c6e34c5daa40719d3266e5b
 X-Patchwork-Hint: ignore
-Message-Id: <20250204133059.929C486C90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/uboot: support binman generated
- u-boot.itb
+Message-Id: <20250204133059.A00C586C91@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/uboot: add qspi.bin file support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,18 +64,21 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00039d7059faa3489e91ddb692b703aedb8f9b13
+commit: https://git.buildroot.net/buildroot/commit/?id=9f52cc8c0a7d285a4c6e34c5daa40719d3266e5b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When using binman to generate u-boot images, there will no longer be a make
-rule for generating files produced by binman.  However, these files will still
-need to be installed to the output/images directory.
+u-boot has introduced a new file called qspi.bin for users who boot from a
+qspi flash device.  It combines the spl/boot.bin and u-boot.itb files into a
+single binary that can be written to the qspi flash.
 
-One such file is the u-boot.itb.  If the u-boot.itb is generated by binman,
-then the file still needs to be copied, but without the make rule.
-
-Here is an example of how binman generates the u-boot.itb:
+Here is an example of how binman generates the qspi.bin:
 https://source.denx.de/u-boot/u-boot/-/commit/a4c98119109a60b9b236996f47065aa8fc0de9ca
+
+At the moment, the qspi.bin is only used for the zynqmp platform, but other
+platforms may adopt it, so the buildroot support has been made in a generic
+way.
+
+This patch adds the necessary support for buildroot to install this binary.
 
 [Tested on Kria KV260 starter kit]
 Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
@@ -84,24 +86,44 @@ Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/uboot/uboot.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ boot/uboot/Config.in | 8 ++++++++
+ boot/uboot/uboot.mk  | 4 ++++
+ 2 files changed, 12 insertions(+)
 
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 13d45140eb..f17f932c9e 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -470,6 +470,14 @@ config BR2_TARGET_UBOOT_FORMAT_SD
+ 
+ 	  See doc/README.mxs (or doc/README.mx28_common before 2013.07)
+ 
++config BR2_TARGET_UBOOT_FORMAT_QSPI_BIN
++	bool "qspi.bin"
++	depends on BR2_TARGET_UBOOT_ZYNQMP
++	help
++	  When booting from qspi flash, u-boot can generate a single
++	  file for flashing by combining the spl/boot.bin and
++	  u-boot.itb files into a unified binary.
++
+ config BR2_TARGET_UBOOT_FORMAT_STM32
+ 	bool "u-boot.stm32"
+ 	depends on BR2_arm
 diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index cb745413e4..efecf2ca47 100644
+index efecf2ca47..2796b0a310 100644
 --- a/boot/uboot/uboot.mk
 +++ b/boot/uboot/uboot.mk
-@@ -103,8 +103,10 @@ endif
- 
- ifeq ($(BR2_TARGET_UBOOT_FORMAT_ITB),y)
- UBOOT_BINS += u-boot.itb
-+ifneq ($(BR2_TARGET_UBOOT_USE_BINMAN),y)
- UBOOT_MAKE_TARGET += u-boot.itb
+@@ -108,6 +108,10 @@ UBOOT_MAKE_TARGET += u-boot.itb
  endif
-+endif
+ endif
  
++ifeq ($(BR2_TARGET_UBOOT_FORMAT_QSPI_BIN),y)
++UBOOT_BINS += qspi.bin
++endif
++
  ifeq ($(BR2_TARGET_UBOOT_FORMAT_IMX),y)
  UBOOT_BINS += u-boot.imx
+ UBOOT_MAKE_TARGET += u-boot.imx
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
