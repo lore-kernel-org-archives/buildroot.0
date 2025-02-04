@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9075EC282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:12:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55EECC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:12:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 82EBB85B09;
-	Fri, 28 Feb 2025 17:12:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29FD470A27;
+	Fri, 28 Feb 2025 17:12:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1CsrFjGB42aI; Fri, 28 Feb 2025 17:12:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6jbu1NhuNlyI; Fri, 28 Feb 2025 17:12:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7589D85AFF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B2EF703CA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7589D85AFF;
-	Fri, 28 Feb 2025 17:12:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B2EF703CA;
+	Fri, 28 Feb 2025 17:12:25 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0912C1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:44:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1BFD568
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:44:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C560D42526
+ by smtp4.osuosl.org (Postfix) with ESMTP id D2E4F42644
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ghbu5yXn1OtK for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:34 +0000 (UTC)
+ id qWX_i2q__uMA for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10C4F4249B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A390D42D08
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 10C4F4249B
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A390D42D08
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C00F85E25; Fri, 28 Feb 2025 16:30:31 +0000 (UTC)
+ id 9FFC185FAE; Fri, 28 Feb 2025 16:30:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 16:16:15 +0100
+Date: Tue, 4 Feb 2025 16:16:08 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8d9681032921cdfe2a529725041d9b9e9685bfe5
-X-Git-Newrev: 03df6d1a261613366deaa8ebb335d4fbcb73bad4
+X-Git-Oldrev: 9d456c47e0b0432b617e5894a776e8b22ea88286
+X-Git-Newrev: 097faead4a46e0faee98684ce128472774fe9933
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163031.0C00F85E25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/network-manager: add
- optional dependency on gobject-introspection
+Message-Id: <20250228163030.9FFC185FAE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/network-manager: needs
+ headers >= 4.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,43 +66,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03df6d1a261613366deaa8ebb335d4fbcb73bad4
+commit: https://git.buildroot.net/buildroot/commit/?id=097faead4a46e0faee98684ce128472774fe9933
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Introspection gets enabled if gobject-introspection is.
+Since the bump of NetworkManager to version 1.50 in Buildroot commit
+489d1f924979f7a94008e887393702e3c3663705, it uses the
+NETLINK_GET_STRICT_CHK netlink macro, which only appeared in Linux
+4.20, so let's add a dependency on headers >= 4.20.
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+This has been detected by our
+tests.package.test_python_sdbus_networkmanager.TestPythonPy3SdbusNetworkmanager
+at:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/9019173666
+
+NetworkManager is not selected by any package, so only fixing
+package/network-manager/Config.in is necessary.
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/network-manager/network-manager.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/network-manager/Config.in | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index ec1119137d..1a0adacfa0 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -26,7 +26,6 @@ NETWORK_MANAGER_DEPENDENCIES = \
- 	util-linux
- 
- NETWORK_MANAGER_CONF_OPTS = \
--	-Dintrospection=false \
- 	-Ddocs=false \
- 	-Dtests=no \
- 	-Dqt=false \
-@@ -50,6 +49,12 @@ ifeq ($(BR2_PACKAGE_DHCPCD),y)
- NETWORK_MANAGER_CONF_OPTS += -Ddhcpcd=/sbin/dhcpcd
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index 1d9a02c1d3..de7989a9c5 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -4,7 +4,8 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	depends on BR2_USE_MMU # dbus
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6
++	# We need NETLINK_GET_STRICT_CHK
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_WCHAR # libglib2
+@@ -59,10 +60,10 @@ config BR2_PACKAGE_NETWORK_MANAGER_OVS
+ 	  This option enables support for OpenVSwitch
  endif
  
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+NETWORK_MANAGER_CONF_OPTS += -Dintrospection=true
-+else
-+NETWORK_MANAGER_CONF_OPTS += -Dintrospection=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_IWD),y)
- NETWORK_MANAGER_DEPENDENCIES += iwd
- NETWORK_MANAGER_CONF_OPTS += -Diwd=true
+-comment "NetworkManager needs udev /dev management and a glibc or musl toolchain w/ headers >= 4.6, dynamic library, wchar, threads, gcc >= 4.9"
++comment "NetworkManager needs udev /dev management and a glibc or musl toolchain w/ headers >= 4.20, dynamic library, wchar, threads, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_PACKAGE_HAS_UDEV || \
+-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_6 || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20 || \
+ 		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
+ 		BR2_STATIC_LIBS || \
+ 		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
