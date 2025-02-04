@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09923C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:11:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4105C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:11:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C1A540293;
-	Fri, 28 Feb 2025 17:11:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7446E85A92;
+	Fri, 28 Feb 2025 17:11:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UwnCKfaKgSMh; Fri, 28 Feb 2025 17:11:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id udeV5W_rgfdV; Fri, 28 Feb 2025 17:11:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D93514F108
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7686685A9F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D93514F108;
-	Fri, 28 Feb 2025 17:11:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7686685A9F;
+	Fri, 28 Feb 2025 17:11:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0EFFD1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:43:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FC1D711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:43:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E80194143A
+ by smtp4.osuosl.org (Postfix) with ESMTP id F308C41601
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tFyHp6b5T-9f for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:31 +0000 (UTC)
+ id QIGM1tM-ubcX for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2761641992
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E868A4250F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2761641992
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E868A4250F
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1CEF080042; Fri, 28 Feb 2025 16:30:30 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id E491F80042; Fri, 28 Feb 2025 16:30:28 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 14:25:32 +0100
+Date: Tue, 4 Feb 2025 11:52:32 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3b4038e3d70375cd4b16d790fb90508b4f902f99
-X-Git-Newrev: ddc348d46f6f990a1feb5e806d9bd71d8fb99d35
+X-Git-Oldrev: e3811f53024fcb5b8ba997cd87981a35817d795e
+X-Git-Newrev: 4def253882ff2b16ddaff9bcaf75c15c82a7dd9f
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163030.1CEF080042@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] board/zynqmp/kria: update
- readme.txt with info about qspi.bin
+Message-Id: <20250228163028.E491F80042@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/binutils-bare-metal:
+ bump to version 2.44
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,87 +65,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ddc348d46f6f990a1feb5e806d9bd71d8fb99d35
+commit: https://git.buildroot.net/buildroot/commit/?id=4def253882ff2b16ddaff9bcaf75c15c82a7dd9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch updates the documentation for Kria SOMs for reflashing
-the new qspi.bin binary file.
+Bump binutils-bare-metal to version 2.44.
 
-The qspi.bin is a unified binary containing both the boot.bin and
-u-boot.itb files for simplifying the reflashing process and also
-enabling the BIRT for reflashing the qspi.bin image as either
-"ImageA" or "ImageB".
+Release notes:
+https://sourceware.org/pipermail/binutils/2025-February/139195.html
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
-Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/zynqmp/kria/readme.txt | 32 +++++++++++---------------------
- 1 file changed, 11 insertions(+), 21 deletions(-)
+ package/binutils-bare-metal/2.43.1                 | 1 -
+ package/binutils-bare-metal/2.44                   | 1 +
+ package/binutils-bare-metal/binutils-bare-metal.mk | 2 +-
+ 3 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/zynqmp/kria/readme.txt b/board/zynqmp/kria/readme.txt
-index 7d3a520fde..6fd7ca61ca 100644
---- a/board/zynqmp/kria/readme.txt
-+++ b/board/zynqmp/kria/readme.txt
-@@ -42,6 +42,7 @@ After building, you should get a tree like this:
-     +-- boot.bin
-     +-- boot.vfat
-     +-- Image
-+    +-- qspi.bin
-     +-- rootfs.ext2
-     +-- rootfs.ext4 -> rootfs.ext2
-     +-- sdcard.img
-@@ -80,39 +81,28 @@ easier.
- Instructions for using these utilities to update the files
- in QSPI flash can be found on the wiki link below.
+diff --git a/package/binutils-bare-metal/2.43.1 b/package/binutils-bare-metal/2.43.1
+deleted file mode 120000
+index f605915e35..0000000000
+--- a/package/binutils-bare-metal/2.43.1
++++ /dev/null
+@@ -1 +0,0 @@
+-../binutils/2.43.1/
+\ No newline at end of file
+diff --git a/package/binutils-bare-metal/2.44 b/package/binutils-bare-metal/2.44
+new file mode 120000
+index 0000000000..b8164295cf
+--- /dev/null
++++ b/package/binutils-bare-metal/2.44
+@@ -0,0 +1 @@
++../binutils/2.44
+\ No newline at end of file
+diff --git a/package/binutils-bare-metal/binutils-bare-metal.mk b/package/binutils-bare-metal/binutils-bare-metal.mk
+index 97a242a6f2..3525e9fdf2 100644
+--- a/package/binutils-bare-metal/binutils-bare-metal.mk
++++ b/package/binutils-bare-metal/binutils-bare-metal.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+K26+SOM#Boot-Firmware-Updates
-+Please note that since the BIRT utility requires a single file
-+for flashing, the qspi.bin should be used as either ImageA or
-+ImageB.  The qspi.bin is a unified binary containing both the
-+boot.bin and u-boot.itb files in a single binary.
-+
-+https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+SOMs+Starter+Kits#Boot-FW-Update-Process
+-BINUTILS_BARE_METAL_VERSION = 2.43.1
++BINUTILS_BARE_METAL_VERSION = 2.44
+ BINUTILS_BARE_METAL_SITE = $(BR2_GNU_MIRROR)/binutils
+ BINUTILS_BARE_METAL_SOURCE = binutils-$(BINUTILS_BARE_METAL_VERSION).tar.xz
  
- Additionally, it is possible to use u-boot for updating the
--QSPI with new boot.bin and u-boot.itb images with the u-boot
--commands below.
-+QSPI with new qspi.bin image with the u-boot commands below.
- 
- KV260 Flashing Instructions:
--Flashing u-boot.itb:
--    $ sf probe
--    $ fatload mmc 1 0x1000000 u-boot.itb
--    $ sf erase 0x280000 +$filesize
--    $ sf write 0x1000000 0x280000 $filesize
--
--Flashing boot.bin:
-     $ sf probe
--    $ fatload mmc 1 0x1000000 boot.bin
-+    $ fatload mmc 1 0x1000000 qspi.bin
-     $ sf erase 0x200000 +$filesize
-     $ sf write 0x1000000 0x200000 $filesize
- 
- KD240 / KR260 Flashing Instructions:
--Flashing u-boot.itb:
--    $ usb start
--    $ sf probe
--    $ fatload usb 0 0x1000000 u-boot.itb
--    $ sf erase 0x280000 +$filesize
--    $ sf write 0x1000000 0x280000 $filesize
--
--Flashing boot.bin:
-     $ usb start
-     $ sf probe
--    $ fatload usb 0 0x1000000 boot.bin
-+    $ fatload usb 0 0x1000000 qspi.bin
-     $ sf erase 0x200000 +$filesize
-     $ sf write 0x1000000 0x200000 $filesize
- 
- It is possible to boot the Buildroot generated SD card image without
--updating the QSPI boot.bin image, so this is an optional step.
-+updating the QSPI qspi.bin image, so this is an optional step.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
