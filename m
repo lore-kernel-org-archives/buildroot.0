@@ -4,73 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF864C02198
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 10:53:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87194C02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 10:56:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 941DB410B2;
-	Tue,  4 Feb 2025 10:53:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24CB74029A;
+	Tue,  4 Feb 2025 10:56:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Df7wlpApLIhg; Tue,  4 Feb 2025 10:53:58 +0000 (UTC)
+ id aWWShMQFpOyT; Tue,  4 Feb 2025 10:56:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63C634072B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7C52402AE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63C634072B;
-	Tue,  4 Feb 2025 10:53:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id A2E7412A
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:53:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7C52402AE;
+	Tue,  4 Feb 2025 10:56:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 871D2185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:56:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8418D607D8
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:53:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6AD7E402AE
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:56:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6VLeV2n3TSXX for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 10:53:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7CBD160067
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CBD160067
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7CBD160067
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:53:55 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id CC776780368;
- Tue,  4 Feb 2025 11:53:43 +0100 (CET)
-Received: from host-109-89-232-55.dynamic.voo.be ([109.89.232.55:47716])
- via host-109-89-232-55.dynamic.voo.be ([109.89.232.55])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 04 Feb 2025 11:53:43 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xbVZZQe_6tUF for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 10:56:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 82A074029A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82A074029A
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 82A074029A
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:56:41 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 41AE6433EC;
+ Tue,  4 Feb 2025 10:56:38 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1tfGbd-00FeQu-2G;
+ Tue, 04 Feb 2025 11:56:37 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: buildroot@buildroot.org
+References: <cover.1738575233.git.yann.morin.1998@free.fr>
+ <fcd979d6868b3f34a4392bad6e7c3bdb100ce83f.1738575233.git.yann.morin.1998@free.fr>
+Date: Tue, 04 Feb 2025 11:56:37 +0100
+In-Reply-To: <fcd979d6868b3f34a4392bad6e7c3bdb100ce83f.1738575233.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 3 Feb 2025 10:34:06 +0100")
+Message-ID: <8734guou56.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Date: Tue, 04 Feb 2025 11:53:43 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Neal Frager <neal.frager@amd.com>
-In-Reply-To: <20250204085901.767542-1-neal.frager@amd.com>
-References: <20250204085901.767542-1-neal.frager@amd.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <963fd038cf9583d3e7a0e8ef3f0f9303@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1738666432;
- bh=yzcAAEn5tZwGz+AwDVCvLJAXER39IKSUnK6NuC/iAb0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=lY96P+JG07tYHNiJjcnZHtmMr16qcOMItulm1GEww+Nn3FnEhdTEvgp5CnyRZXHum
- ZCwJzyYis3llv3GYCGGUQpvYsIWiDf/c60rsWOW860GBBwjiCJe2TlwQqce5B8rkaH
- PFvMqV/NoA2tYaSX+Q2KZYxlAdygjJdNISf1XQ2Iu5rTZRryOxuA73cT4lOSCc3I8F
- AIRhTSoo4V5QD5BbZmUvvenXibBwiqwbAGetdCapIBwStzvHdHTmEODBOS/drZAC4N
- OLxyly4Bk2mXvS+Zc5B7mKLO46YSoWkVxKpMdFwQamvj/tplXQRaKJADMyYbdEHZ9j
- Ie/U9frYCMr2g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=lY96P+JG
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/binutils-bare-metal: bump to
- version 2.44
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufhffjgfkfgggtgesthdttddttdertdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeehgedtkeeiheelieetveejheeuleefhfehhfdutefgffegledvteejkefhjeetgfenucffohhmrghinhephhhtthhprhgvqhhuvghsthhsihhnshgvtghonhgushdrihhnpdhsihhgrhhokhdrohhrghdpudhhohhsthhsihhgrhhokhdrohhrghenucfkphepuddtledrkeelrddvfedvrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutdelrdekledrvdefvddrheehpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopeihrghnnhdrmhhorhhinhdrudelleeksehfrhgvvgdrfhhrpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/3] Config.in: timeout earlier when
+ connecting to download servers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,23 +74,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
- brandon.maier@collins.com, thomas.petazzoni@bootlin.com,
- buildroot@buildroot.org, romain.naour@smile.fr, michal.simek@amd.com
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 04/02/2025 09:59, Neal Frager wrote:
-> Bump binutils-bare-metal to version 2.44.
-> 
-> Release notes:
-> https://sourceware.org/pipermail/binutils/2025-February/139195.html
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Applied to master, thanks.
+ > Some sites have broken DNS entries where some A or AAAA records point
+ > to a nonexistent machine. This causes a long delay (~135sec here) before
+ > a fallback to another IP is attempted. This is the case for example for
+ > sigrok.org, which IPv6 entry is not reachable (at least from the few
+ > locations I have access to, while other IPv6 servers are reachable).
+
+ > Add a relatively small timeout on connect for the few download backends
+ > where we can easily drive that setting:
+
+ >   - for curl and wget, that timeout only applies when establishing the
+ >     TCP connection, i.e. the three-way handshake;
+ >   - for scp and sftp, that timeout also include the ssh handshake;
+ >   - for svn, it is not explicit what the timeout is about, but the
+ >     documentation states "Timeout for HTTP requests in seconds".
+
+ > In modern times, we expect that we can indeed establish those handshakes
+ > in less than 10s; anything taking longer is in practice an unreachable
+ > site...
+
+ > For other download mechanism (bzr, cvs, git, hg), as well as
+ > post-processing helpers (cargo, go), it does not seem possible to set
+ > such a timeout.
+
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > ---
+ >  Config.in | 10 +++++-----
+ >  1 file changed, 5 insertions(+), 5 deletions(-)
+
+ > diff --git a/Config.in b/Config.in
+ > index c0c1a6079d..a543091d4f 100644
+ > --- a/Config.in
+ > +++ b/Config.in
+ > @@ -114,15 +114,15 @@ menu "Commands"
+ 
+ >  config BR2_CURL
+ >  	string "Curl command"
+ > -	default "curl -q --ftp-pasv --retry 3"
+ > +	default "curl -q --ftp-pasv --retry 3 --connect-timeout 10"
+
+It doesn't seem to be strictly needed for curl as it seems to use the
+happy eyeballs algorithm, but OK:
+time curl -v http://sigrok.org
+*   Trying [2a05:bec0:20:c01::8c96:bda6]:80...
+*   Trying 134.255.237.124:80...
+* Connected to sigrok.org (134.255.237.124) port 80 (#0)
+> GET / HTTP/1.1
+> Host: sigrok.org
+> User-Agent: curl/7.88.1
+> Accept: */*
+>
+< HTTP/1.1 301 Moved Permanently
+< Date: Tue, 04 Feb 2025 10:56:28 GMT
+< Server: Apache/2.4.56
+< X-Content-Type-Options: nosniff
+< Vary: Accept-Encoding,Cookie
+< Expires: Tue, 04 Feb 2025 10:56:28 GMT
+< Cache-Control: private, must-revalidate, max-age=0
+< Last-Modified: Tue, 04 Feb 2025 10:56:28 GMT
+< Location: https://sigrok.org/wiki/Main_Page
+< X-Request-Id: e50b7132460e1a6484be9312
+< Transfer-Encoding: chunked
+< Content-Type: text/html; charset=utf-8
+<
+* Connection #0 to host sigrok.org left intact
+
+real    0m0.249s
+user    0m0.007s
+sys     0m0.011s
+
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
