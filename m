@@ -1,106 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 283E6C02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 17:07:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 293CEC02193
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 17:07:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0500401BF;
-	Tue,  4 Feb 2025 17:07:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0F5C813C3;
+	Tue,  4 Feb 2025 17:07:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2eH80c-zPPTp; Tue,  4 Feb 2025 17:07:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UODPi2__dpCK; Tue,  4 Feb 2025 17:07:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96EA5401DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC9F082149
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96EA5401DF;
-	Tue,  4 Feb 2025 17:07:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 81BD012A
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:07:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC9F082149;
+	Tue,  4 Feb 2025 17:07:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DB196185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:07:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 65E27607A4
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:07:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BFA5D60D91
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:07:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tzHRqS9orCIZ for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 17:07:15 +0000 (UTC)
+ id 3sqcxZI8jL1e for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 17:07:42 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9260360663
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9260360663
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9260360663
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:07:15 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-38daf14018eso554166f8f.1
- for <buildroot@buildroot.org>; Tue, 04 Feb 2025 09:07:15 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C107560D72
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C107560D72
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C107560D72
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:07:41 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-43622267b2eso58580185e9.0
+ for <buildroot@buildroot.org>; Tue, 04 Feb 2025 09:07:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738688833; x=1739293633;
+ d=1e100.net; s=20230601; t=1738688860; x=1739293660;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :references:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=1sQAVlaA93ilH2c4VVzj14e9TF9429WYvU6jj2yKGVA=;
- b=ZVjKwEOC3XZvCTUo6Av5CmY99dgxSjxdwmxww4j64hWePPF7hlA1iEx1Trfu965HDQ
- xAp+4QaWpgfUy1ITkfT2RV5w8vQX1CXiZK6BmH3hs9EYJfayUHk+girw3++EF8VdXU9O
- fXi1qCMe6Kbf2hqEQPZ7dtvE1T8uuIvETCna5cGVFbJhKk9er6y67TluFAqWFOwC4oZr
- 8Ktu/4B1mepoRzXFcbUW9e2h7MbGV01OnbwoNs565Pyozk1+B/+simAeyRZrCgukpdq8
- e/f7aFlJOfnVQToTpUgCcXbFCb8AnGS4bnm8vmnlQPJ1GfK4IgemOU1Xywd/R35BCybY
- SFKw==
+ bh=qRmu/8SNbJSaZlmYpVMSRO8ynTCF4Tg4TYnkqADYsxQ=;
+ b=Pfvo5h4L/hXWzLaAECt3s1TTt2aokIl/4krcOF9vMCT22Ox1yBOUjSTDi9sNEO51mQ
+ YghJ/9YJtMeY1lPaerYX6dVAxh24H7bD40vCk8svXD5+wzE0lshkyRrHlrJIL6Jtv46b
+ UiN17grg1JOkEMV6Q1h0rBbMFxR5TUymAbYXUqseFyt27xFKSs8GrYGQdamUPsZG0fkb
+ 98SFGRRAnFU5z9i4YVJFgjxGwUifl4cbE493jSXkjxrYAAqiyaoFaWHyif7FGRKJ91y+
+ pun25kmnMgGbeQ3ei4FaBrN7blkw3Q/C15eFqtlvjYXJmGs/O5MbFghab/7YawA9ZgOe
+ n7jw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCVQTE5hVMfTzck75zk9vLqDnT88FMcp8YZphYH7uLpQgOQ5u7Phq6UeI1x/r5KPFihR/vmaEzJJPG4=@buildroot.org
-X-Gm-Message-State: AOJu0YxFGsYj3/ZFDj4Vvc70cCkm748mzqjwRuC6Ekms1G53ZDoDs4DE
- 0/Dg7SXr1/qGFt1Tp7/eegbS3wTaCrNs1XF1cFskMv15kaTFtX5H2geTW3GYOVY=
-X-Gm-Gg: ASbGnctJUcAZxWmojtJRDJz8dGm3OQ5LVH8uQ3C7CRrh5hbNjOB/v190zRBS/5Iu71p
- +ZdZUfRN6UTHSLY13Y11Yb+Ok94hFcCtV1uqz0ccQ93D5wG6N/M98TM8iSJAn/fZJI4tGBhHnfv
- FI4YQVm6ScFC5w/igR0rz81CuGAnLd7PMp3bR0Vd7LFVzNtWPl1uYL7XXm4FkfsZLK7yL+/1KLy
- QPxh+6fejvONzmrV+JAGSrdDTrwUplJKeVn6SQo2Nx62npm3O16QghxboKBM8c5qBZcxO2YI/m8
- 0QaadNRROErY9wz0YRZJXRjeLzG9lovdl7RHRtkE03VH8H4=
-X-Google-Smtp-Source: AGHT+IEUX48IcVDbb8lu/AmyD100lxE8jRqzKMOjQ4bDrF1GZsZt2R7BlhxjUD9XaWA/p6LJyKDTwQ==
-X-Received: by 2002:a05:6000:1564:b0:385:f44a:a53 with SMTP id
- ffacd0b85a97d-38c5192f4bamr20631939f8f.4.1738688833321; 
- Tue, 04 Feb 2025 09:07:13 -0800 (PST)
+ AJvYcCWbAJkKO8Va/3LXF08n1k6ngS2B495/7EcWKpULs+1bgLXiTVeq/x1s3pZAR0ICChYF+36mzesYJ6Q=@buildroot.org
+X-Gm-Message-State: AOJu0YzyPRXIFHIQQ4bJuLK8FWpYjbP1vE2yY6BqQzLhOpJSnX8hXE1T
+ KNI15wBWZHHGkhxqYjT0mhHMiITSNdTjGorYWajHThYZIy77Q/O7iUjfb7KpoBo=
+X-Gm-Gg: ASbGncu0EZHp8lFhO1wMG6onILlt8T14cLtiStJ+R/PFD1nS3HxpqxMhulpX0TeQPrS
+ 57+DKQ5ijxGurrpcPpLpGLgvVtCRI9KR4t6YNUubUnu+lT5vknqGz3ub5Rjc6ORqY9ypqbFZP+R
+ jkT0oKFVKNbcxXLcHyTCuI9DALVN+NY9jLHTdNLMhKVp7JpcbeMlwAJNyC21gy8qEYEZxLDF4CK
+ xkvFPbXMltoOaA61JLAbNURGUq44+2+fOPLIBzSZMRjyne9Z2KRFYm3u2Fog9RAgaGw4DoxQMG+
+ YXyO+cZMSn6uPsdzCd/xCcfiKvixfv8s15iGkSIln3FO1ng=
+X-Google-Smtp-Source: AGHT+IE4JRS9c8Xu93C2M/Pzo5JjYk6haEqhHHlX3FVGhIP6jDjDGzBolARJtIs41l+HJ6d58oL0+g==
+X-Received: by 2002:a05:600c:46cb:b0:438:a20b:6a2a with SMTP id
+ 5b1f17b1804b1-438dc3c8676mr254936515e9.14.1738688859720; 
+ Tue, 04 Feb 2025 09:07:39 -0800 (PST)
 Received: from [172.16.2.111] (host-109-89-232-55.dynamic.voo.be.
  [109.89.232.55]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-38da676457bsm2772535f8f.101.2025.02.04.09.07.12
+ ffacd0b85a97d-38c5c125f77sm16531325f8f.56.2025.02.04.09.07.39
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 04 Feb 2025 09:07:12 -0800 (PST)
-Message-ID: <05b5558f-a882-4110-ad95-840221b0b239@mind.be>
-Date: Tue, 4 Feb 2025 18:07:10 +0100
+ Tue, 04 Feb 2025 09:07:39 -0800 (PST)
+Message-ID: <a7f695c3-118a-4648-995a-36bfbb78dd97@mind.be>
+Date: Tue, 4 Feb 2025 18:07:37 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>, buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
- Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-References: <20250204-repair_mimic-v1-1-c8e8f29b6c1e@bootlin.com>
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20250204163132.1575544-1-ju.o@free.fr>
 Content-Language: en-GB
-In-Reply-To: <20250204-repair_mimic-v1-1-c8e8f29b6c1e@bootlin.com>
+In-Reply-To: <20250204163132.1575544-1-ju.o@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1738688833; x=1739293633; darn=buildroot.org;
+ d=mind.be; s=google; t=1738688860; x=1739293660; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=1sQAVlaA93ilH2c4VVzj14e9TF9429WYvU6jj2yKGVA=;
- b=DIIxCxfuiY6SnB1Mn0zbXxjQztlOUNF8jocFc+Z08/vu16fJyDXhfyNkpQflH2qgdA
- mpiJChKJY2OVQP2/n+MRz1rWpEmh3bkZm2kGOGYG+OrYYDyAH4qElyoN4IqUHN0NkBnx
- XdAERoLfj0Z3qW/rKgmaKGGXLJ5vY+FWK27OV9mKyoDXpplShTFDv9UTRAPepeOGi38w
- rH1mtwGLVqD4QuHKKvZXPipHmYnkL7zCdluTa3CH4zUl2MXDVR2mbVR5sod0Chbnc/8V
- Yb8RYznoXsofNg5SQhJWhwn5mByQ6ofsESHnMwOkZUJ4r33O5DqsFAr1b1sHsYqrgqgy
- xIqA==
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=qRmu/8SNbJSaZlmYpVMSRO8ynTCF4Tg4TYnkqADYsxQ=;
+ b=BTeubU0fDMjWOjJcKx6CpkAfN948BdCPygOfar5GOO7cp0Xa9bYKoN005eMMBqLgAF
+ CUB3/KrsQ7QPLAkhuGe6qM1nMtAoDeSG6rVoQnNkLrNQpsO70ws1aFGdNng030csSLaz
+ BlrnkKkUXScd4JLjiVOZV94r7rYC/ZSF68Yb2SuP5kUPb12qt93uwgXkq+xpTdJN7VIn
+ lHb8SBqfbRvd9RBNZpZK5wreU+xaEPLqTUiiGkEsHvk2cN1oDAFvlwx7lL7R//ZVa5Ae
+ ySgDo60QcUp+AZiwGaGCmNA8IwkDogc2ToCs+cVMxFooc4MPzc3x1yMSIvR6AF4w7paV
+ Zayg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=DIIxCxfu
-Subject: Re: [Buildroot] [PATCH] package/mimic: update url
+ header.a=rsa-sha256 header.s=google header.b=BTeubU0f
+Subject: Re: [Buildroot] [PATCH 1/1] package/rdma-core: bump to version v55.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,63 +118,49 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 04/02/2025 17:16, Thomas Bonnefille via buildroot wrote:
-> MycroftAI just moved mimic to "mimic1" on Github as multiple versions of
-> it have been released, this cause the sha256 of the package to be
-> modified.
-> This commit modify the URL of the package to avoid this issue.
+On 04/02/2025 17:31, Julien Olivain wrote:
+> For change log since v54.0, see:
+> https://github.com/linux-rdma/rdma-core/releases/tag/v55.0
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-  Changing the URL doesn't actually fix the issue: the contents of the tarball 
-still have mimic1 in there. We have to change the hash.
-
-  But we can't change the hash without breaking existing downloads and 
-sources.buildroot.org. So we also have to change the file name. The easiest way 
-to do that is to also bump the package version.
-
-  Or we could drop the package :-)
-
-  BTW I improved the commit message a bit:
-
-     MycroftAI moved mimic to "mimic1" on Github as multiple versions of it have
-     been released. Even though the old URL still works, the directory name
-     inside the tarball has changed, so the sha256 changes as well.
-     We can't change the hash without changing the file name. The easiest way to
-     do that is to bump the version to 1.3.0.1 which is already 5 years old.
-
-     Bump mimic to 1.3.0.1 and change the URL to mimic1
-
-  But I actually think removing the package is better.
+  Applied to master, thanks.
 
   Regards,
   Arnout
 
-> Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 > ---
-> This package hasn't been updated since 2021 so the issue also affects
-> all versions since then.
+> Patch tested in:
+> https://gitlab.com/jolivain/buildroot/-/jobs/9039225967
 > ---
->   package/mimic/mimic.mk | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>   package/rdma-core/rdma-core.hash | 2 +-
+>   package/rdma-core/rdma-core.mk   | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/mimic/mimic.mk b/package/mimic/mimic.mk
-> index 2d246561c96696ae80e97d69a577d8f25180fc06..48ebc479c8cf6d47819aa19ce95197ef08a970ad 100644
-> --- a/package/mimic/mimic.mk
-> +++ b/package/mimic/mimic.mk
-> @@ -5,7 +5,7 @@
+> diff --git a/package/rdma-core/rdma-core.hash b/package/rdma-core/rdma-core.hash
+> index 82d0ee784c..9e6844e1df 100644
+> --- a/package/rdma-core/rdma-core.hash
+> +++ b/package/rdma-core/rdma-core.hash
+> @@ -1,5 +1,5 @@
+>   # Locally calculated
+> -sha256  2c842d80964e6c24994cef33508f26bcb06042b70643115a9d28619dc2b96f42  rdma-core-54.0.tar.gz
+> +sha256  a02d128974055ffa92577e4d3889213ac180a79f05b077aeb884bafb6b46e957  rdma-core-55.0.tar.gz
+>   sha256  99e0df1d009a21d0dfb031600c550fd8f4efc0c6b2a4ef8b34a995aa6f79c9f4  COPYING.BSD_MIT
+>   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL2
+>   sha256  c46a557f25b8ef9bec76526c4e593fc13e6cba27e7ba30d73b6497a689cf06f6  COPYING.md
+> diff --git a/package/rdma-core/rdma-core.mk b/package/rdma-core/rdma-core.mk
+> index 20b89abedf..4d427103b9 100644
+> --- a/package/rdma-core/rdma-core.mk
+> +++ b/package/rdma-core/rdma-core.mk
+> @@ -4,7 +4,7 @@
+>   #
 >   ################################################################################
 >   
->   MIMIC_VERSION = 1.1.0
-> -MIMIC_SITE = $(call github,MycroftAI,mimic,$(MIMIC_VERSION))
-> +MIMIC_SITE = $(call github,MycroftAI,mimic1,$(MIMIC_VERSION))
->   MIMIC_LICENSE = MIT
->   MIMIC_LICENSE_FILES = COPYING
->   
-> 
-> ---
-> base-commit: d5b3795e92727c6565901cddf0c0f17c7854df56
-> change-id: 20250204-repair_mimic-2299861f585b
-> 
-> Best regards,
+> -RDMA_CORE_VERSION = 54.0
+> +RDMA_CORE_VERSION = 55.0
+>   RDMA_CORE_SITE = $(call github,linux-rdma,rdma-core,v$(RDMA_CORE_VERSION))
+>   RDMA_CORE_LICENSE = GPL-2.0 or BSD-2-Clause
+>   RDMA_CORE_LICENSE_FILES = COPYING.GPL2 COPYING.BSD_MIT COPYING.md
 
 _______________________________________________
 buildroot mailing list
