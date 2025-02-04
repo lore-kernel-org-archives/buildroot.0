@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 815E9C02197
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 10:57:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C19D1C02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 10:57:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EF12605EE;
-	Tue,  4 Feb 2025 10:57:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77421401EB;
+	Tue,  4 Feb 2025 10:57:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P6TVOhKmRJDX; Tue,  4 Feb 2025 10:57:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PEWM2rAI_yAo; Tue,  4 Feb 2025 10:57:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 406266077D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E2D840285
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 406266077D;
-	Tue,  4 Feb 2025 10:57:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6787312A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2E2D840285;
+	Tue,  4 Feb 2025 10:57:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C1B51A6
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:57:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 57CE981229
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7CAB4400F2
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:57:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ljS8oBNgKW3e for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 28M2W1gWLzLr for <buildroot@buildroot.org>;
  Tue,  4 Feb 2025 10:57:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D98481222
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 812DC400AC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7D98481222
+ by smtp2.osuosl.org (Postfix) with ESMTP id 812DC400AC
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 10:57:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 77E8D86B8A; Tue,  4 Feb 2025 10:57:25 +0000 (UTC)
+ id 6DD8286B5C; Tue,  4 Feb 2025 10:57:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 11:56:54 +0100
+Date: Tue, 4 Feb 2025 11:56:53 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dad34a1a22a3b52d3ef2f014640e5155f84db0ad
-X-Git-Newrev: 4bce3270d68074d397b1ac9726f5c970eb517fcb
+X-Git-Oldrev: 8af6f2eaf99c3c808742bf5154e57752b20b234a
+X-Git-Newrev: dad34a1a22a3b52d3ef2f014640e5155f84db0ad
 X-Patchwork-Hint: ignore
-Message-Id: <20250204105725.77E8D86B8A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Config.in: timeout earlier when connecting
- to download servers
+Message-Id: <20250204105725.6DD8286B5C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libsigrok: install udev rules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,75 +64,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bce3270d68074d397b1ac9726f5c970eb517fcb
+commit: https://git.buildroot.net/buildroot/commit/?id=dad34a1a22a3b52d3ef2f014640e5155f84db0ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some sites have broken DNS entries where some A or AAAA records point
-to a nonexistent machine. This causes a long delay (~135sec here) before
-a fallback to another IP is attempted. This is the case for example for
-sigrok.org, which IPv6 entry is not reachable (at least from the few
-locations I have access to, while other IPv6 servers are reachable).
+Some devices that libsigrok can talk to, need a firmware to be uploaded.
+libsigrok comes with a set of rules to allow non-root users to upload
+those firmware blobs.
 
-Add a relatively small timeout on connect for the few download backends
-where we can easily drive that setting:
+Depending on how the system is configured, different set of rules are
+needed [0] (yes, it's documented on the fx2lafw page, not on the
+libsigrok one [1]). Basically:
 
-  - for curl and wget, that timeout only applies when establishing the
-    TCP connection, i.e. the three-way handshake;
-  - for scp and sftp, that timeout also include the ssh handshake;
-  - for svn, it is not explicit what the timeout is about, but the
-    documentation states "Timeout for HTTP requests in seconds".
+  - 60-libsigrok.rules is always used;
+  - 61-libsigrok-uaccess.rules is used when systemd-logind is used;
+  - 61-libsigrok-plugdev.rules is used when systemd-logind is not used.
 
-In modern times, we expect that we can indeed establish those handshakes
-in less than 10s; anything taking longer is in practice an unreachable
-site...
+For systems without udev, it is the responsibility of the user to
+implement proper access management if they need non-root to upload
+firmware files.
 
-For other download mechanism (bzr, cvs, git, hg), as well as
-post-processing helpers (cargo, go), it does not seem possible to set
-such a timeout.
+[0] https://sigrok.org/wiki/Fx2lafw#Install_the_udev_rules_file
+[1] https://sigrok.org/wiki/Libsigrok
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/libsigrok/libsigrok.mk | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/Config.in b/Config.in
-index c0c1a6079d..a543091d4f 100644
---- a/Config.in
-+++ b/Config.in
-@@ -114,15 +114,15 @@ menu "Commands"
+diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
+index 639ee4dc25..22524dd4f6 100644
+--- a/package/libsigrok/libsigrok.mk
++++ b/package/libsigrok/libsigrok.mk
+@@ -65,4 +65,20 @@ else
+ LIBSIGROK_CONF_OPTS += --disable-cxx
+ endif
  
- config BR2_CURL
- 	string "Curl command"
--	default "curl -q --ftp-pasv --retry 3"
-+	default "curl -q --ftp-pasv --retry 3 --connect-timeout 10"
- 
- config BR2_WGET
- 	string "Wget command"
--	default "wget -nd -t 3"
-+	default "wget -nd -t 3 --connect-timeout=10"
- 
- config BR2_SVN
- 	string "Subversion (svn) command"
--	default "svn --non-interactive"
-+	default "svn --non-interactive --config-option servers:global:http-timeout=10"
- 
- config BR2_BZR
- 	string "Bazaar (bzr) command"
-@@ -142,11 +142,11 @@ config BR2_LOCALFILES
- 
- config BR2_SCP
- 	string "Secure copy (scp) command"
--	default "scp"
-+	default "scp -o ConnectTimeout=10"
- 
- config BR2_SFTP
- 	string "Secure file transfer (sftp) command"
--	default "sftp"
-+	default "sftp -o ConnectTimeout=10"
- 
- config BR2_HG
- 	string "Mercurial (hg) command"
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++LIBSIGROK_UDEV_RULES = \
++	60-libsigrok.rules \
++	$(if $(BR2_PACKAGE_SYSTEMD_LOGIND), \
++		61-libsigrok-uaccess.rules, \
++		61-libsigrok-plugdev.rules \
++	)
++define LIBSIGROK_INSTALL_UDEV_RULES
++	$(foreach rule, $(LIBSIGROK_UDEV_RULES), \
++		$(INSTALL) -D -m 0644 $(@D)/contrib/$(rule) \
++			$(TARGET_DIR)/usr/lib/udev/rules.d/$(rule)$(sep) \
++	)
++endef
++LIBSIGROK_POST_INSTALL_TARGET_HOOKS += LIBSIGROK_INSTALL_UDEV_RULES
++endif
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
