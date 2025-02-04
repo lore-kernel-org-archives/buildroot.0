@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D26FC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:10:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9067C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:10:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD26B849EC;
-	Fri, 28 Feb 2025 17:10:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 80DC47085B;
+	Fri, 28 Feb 2025 17:10:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jOFSjPWAlJ7o; Fri, 28 Feb 2025 17:10:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p71ET7mLD9NB; Fri, 28 Feb 2025 17:10:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF929856DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80E3870A9A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF929856DF;
-	Fri, 28 Feb 2025 17:10:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 80E3870A9A;
+	Fri, 28 Feb 2025 17:10:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 11F9468
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:43:24 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 117DF1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:43:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6876B4078C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7A3084079C
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9lr19kdBmBbu for <buildroot@buildroot.org>;
+ id mzGmfltmq6qc for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:31:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36F8342DFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13AFD42525
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 36F8342DFD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 13AFD42525
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2FAEC879BF; Fri, 28 Feb 2025 16:30:29 +0000 (UTC)
+ id 0D62C80042; Fri, 28 Feb 2025 16:30:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 12:24:40 +0100
+Date: Tue, 4 Feb 2025 11:56:53 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4bce3270d68074d397b1ac9726f5c970eb517fcb
-X-Git-Newrev: 4f5444245e32a49777f7ebe079d84b78846213bb
+X-Git-Oldrev: 8af6f2eaf99c3c808742bf5154e57752b20b234a
+X-Git-Newrev: dad34a1a22a3b52d3ef2f014640e5155f84db0ad
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163029.2FAEC879BF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fluidsynth: bump to
- version 2.4.2
+Message-Id: <20250228163029.0D62C80042@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libsigrok: install
+ udev rules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,42 +65,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f5444245e32a49777f7ebe079d84b78846213bb
+commit: https://git.buildroot.net/buildroot/commit/?id=dad34a1a22a3b52d3ef2f014640e5155f84db0ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For change log since v2.4.0, see:
-https://github.com/FluidSynth/fluidsynth/releases/tag/v2.4.1
-https://github.com/FluidSynth/fluidsynth/releases/tag/v2.4.2
+Some devices that libsigrok can talk to, need a firmware to be uploaded.
+libsigrok comes with a set of rules to allow non-root users to upload
+those firmware blobs.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Depending on how the system is configured, different set of rules are
+needed [0] (yes, it's documented on the fx2lafw page, not on the
+libsigrok one [1]). Basically:
+
+  - 60-libsigrok.rules is always used;
+  - 61-libsigrok-uaccess.rules is used when systemd-logind is used;
+  - 61-libsigrok-plugdev.rules is used when systemd-logind is not used.
+
+For systems without udev, it is the responsibility of the user to
+implement proper access management if they need non-root to upload
+firmware files.
+
+[0] https://sigrok.org/wiki/Fx2lafw#Install_the_udev_rules_file
+[1] https://sigrok.org/wiki/Libsigrok
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fluidsynth/fluidsynth.hash | 2 +-
- package/fluidsynth/fluidsynth.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libsigrok/libsigrok.mk | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
-index 49ca85994c..ffb392ba56 100644
---- a/package/fluidsynth/fluidsynth.hash
-+++ b/package/fluidsynth/fluidsynth.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  fd4d216a3030abc56a339985ab0506328660cd77b2d71dd98c240c58c03d8f7f  fluidsynth-2.4.0.tar.gz
-+sha256  22797942575e10347dab52ec43ebb9d3ace1d9b8569b271f434e2e1b1a4fe897  fluidsynth-2.4.2.tar.gz
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
-diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
-index 87e34ca9fe..fed6e54035 100644
---- a/package/fluidsynth/fluidsynth.mk
-+++ b/package/fluidsynth/fluidsynth.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libsigrok/libsigrok.mk b/package/libsigrok/libsigrok.mk
+index 639ee4dc25..22524dd4f6 100644
+--- a/package/libsigrok/libsigrok.mk
++++ b/package/libsigrok/libsigrok.mk
+@@ -65,4 +65,20 @@ else
+ LIBSIGROK_CONF_OPTS += --disable-cxx
+ endif
  
--FLUIDSYNTH_VERSION = 2.4.0
-+FLUIDSYNTH_VERSION = 2.4.2
- FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
- FLUIDSYNTH_LICENSE = LGPL-2.1+
- FLUIDSYNTH_LICENSE_FILES = LICENSE
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++LIBSIGROK_UDEV_RULES = \
++	60-libsigrok.rules \
++	$(if $(BR2_PACKAGE_SYSTEMD_LOGIND), \
++		61-libsigrok-uaccess.rules, \
++		61-libsigrok-plugdev.rules \
++	)
++define LIBSIGROK_INSTALL_UDEV_RULES
++	$(foreach rule, $(LIBSIGROK_UDEV_RULES), \
++		$(INSTALL) -D -m 0644 $(@D)/contrib/$(rule) \
++			$(TARGET_DIR)/usr/lib/udev/rules.d/$(rule)$(sep) \
++	)
++endef
++LIBSIGROK_POST_INSTALL_TARGET_HOOKS += LIBSIGROK_INSTALL_UDEV_RULES
++endif
++
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
