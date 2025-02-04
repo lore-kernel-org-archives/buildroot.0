@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCF03C02197
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 14:07:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A216C02196
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 14:07:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB668607FC;
-	Tue,  4 Feb 2025 14:07:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 44F1C60D51;
+	Tue,  4 Feb 2025 14:07:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GMd7Zv-YcnMK; Tue,  4 Feb 2025 14:07:21 +0000 (UTC)
+ id hVBaBeddiaXL; Tue,  4 Feb 2025 14:07:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A52376067E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6E2B60A8C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A52376067E;
-	Tue,  4 Feb 2025 14:07:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F4C51A6
+	by smtp3.osuosl.org (Postfix) with ESMTP id C6E2B60A8C;
+	Tue,  4 Feb 2025 14:07:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4B8E81A7
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 14:07:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2E0CA60634
+ by smtp2.osuosl.org (Postfix) with ESMTP id 30BBE40190
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 14:07:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QqUPsitEpkWG for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nd-ZA1O_Zk8G for <buildroot@buildroot.org>;
  Tue,  4 Feb 2025 14:07:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69689605D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41239405CA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 69689605D0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 41239405CA
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 14:07:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 585A286D17; Tue,  4 Feb 2025 14:07:17 +0000 (UTC)
+ id 318A186D17; Tue,  4 Feb 2025 14:07:17 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 15:07:00 +0100
+Date: Tue, 4 Feb 2025 15:06:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ffac0cf5108a832dd8bc005bab4ee770288a34bb
-X-Git-Newrev: e2484f8bda26f72053e5deb5c09f4e157938eed1
+X-Git-Oldrev: 67c6d1b12c430313c492dc66b2280d447917feb5
+X-Git-Newrev: 914bd041a5cec16bef1a69c9e7509f744940c13c
 X-Patchwork-Hint: ignore
-Message-Id: <20250204140717.585A286D17@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fd: bump to version 10.2.0
+Message-Id: <20250204140717.318A186D17@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/procs: bump to version 0.14.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,42 +64,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e2484f8bda26f72053e5deb5c09f4e157938eed1
+commit: https://git.buildroot.net/buildroot/commit/?id=914bd041a5cec16bef1a69c9e7509f744940c13c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Release notes:
-https://github.com/sharkdp/fd/releases/tag/v10.2.0
+https://github.com/dalance/procs/releases/tag/v0.14.9
 
 Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fd/fd.hash | 2 +-
- package/fd/fd.mk   | 2 +-
+ package/procs/procs.hash | 2 +-
+ package/procs/procs.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fd/fd.hash b/package/fd/fd.hash
-index 90d2c38694..04345b8884 100644
---- a/package/fd/fd.hash
-+++ b/package/fd/fd.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/procs/procs.hash b/package/procs/procs.hash
+index da6b4377e2..e795834358 100644
+--- a/package/procs/procs.hash
++++ b/package/procs/procs.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  91da5cc2b99d4754fa5096cda1eeac98f312f712bfca6a41f9972b2287a4c4f9  fd-9.0.0-cargo2.tar.gz
-+sha256  6d177b06123419edf2abe2daa82b29fec667a4e775cf877094ca5f6ae759dc34  fd-10.2.0-cargo2.tar.gz
- sha256  73c83c60d817e7df1943cb3f0af81e4939a8352c9a96c2fd00451b1116fa635c  LICENSE-APACHE
- sha256  322cfc7aa0c774d0eca3b2610f1d414de3ddbd7d8dd4b9dea941a13a6eb07455  LICENSE-MIT
-diff --git a/package/fd/fd.mk b/package/fd/fd.mk
-index 316da418ea..9b6b305e77 100644
---- a/package/fd/fd.mk
-+++ b/package/fd/fd.mk
+-sha256  86715967bd378a4c0330708e11714bda2c8ce9f757fb3006073238d77e83e6e1  procs-0.14.5-cargo2.tar.gz
++sha256  ac3306ea16d3def828b085678da114d49f2272bcc1362755c98b0958514910fe  procs-0.14.9-cargo2.tar.gz
+ sha256  feb87a2e0c305de3464cc44077da5393c52d8ca6362d37427157d04ec6f4510d  LICENSE
+diff --git a/package/procs/procs.mk b/package/procs/procs.mk
+index 019e69a1de..b6ada48115 100644
+--- a/package/procs/procs.mk
++++ b/package/procs/procs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FD_VERSION = 9.0.0
-+FD_VERSION = 10.2.0
- FD_SITE = $(call github,sharkdp,fd,v$(FD_VERSION))
- FD_LICENSE = Apache-2.0 or MIT
- FD_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+-PROCS_VERSION = 0.14.5
++PROCS_VERSION = 0.14.9
+ PROCS_SITE = $(call github,dalance,procs,v$(PROCS_VERSION))
+ PROCS_LICENSE = MIT
+ PROCS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
