@@ -1,52 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE474C02197
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 16:34:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89666C02193
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 16:36:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8774860604;
-	Tue,  4 Feb 2025 16:34:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C4EE80CE7;
+	Tue,  4 Feb 2025 16:36:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GhbkOew8T7nN; Tue,  4 Feb 2025 16:34:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BBbIYoiuNZ2p; Tue,  4 Feb 2025 16:36:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76CAD60C07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B8FB80D0E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76CAD60C07;
-	Tue,  4 Feb 2025 16:34:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7DFD41A6
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:33:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2B8FB80D0E;
+	Tue,  4 Feb 2025 16:36:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A27B3185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:36:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DD0E41161
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:33:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8F497410A8
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:36:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3YUlZUCGxk6s for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 16:33:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 435A740965
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 435A740965
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:33:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3B26B86E4A; Tue,  4 Feb 2025 16:33:55 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k4LudcE4rymp for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 16:36:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A84BE405E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A84BE405E7
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A84BE405E7
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:36:26 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id
+ ffacd0b85a97d-38be3bfb045so4520137f8f.0
+ for <buildroot@buildroot.org>; Tue, 04 Feb 2025 08:36:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1738686984; x=1739291784;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Y9MW3mYf/QRMX/G03KlkCX8rUDfBU7JE/eBAG2/+NVc=;
+ b=MKjpLtsRR56hGwFLnYuOOuOzUyCSuZHKGDu0DrdjbvgCw6Ohv3y4vg50O70QOslo/n
+ H5UlpYpxc7bWaaFjAp/Bit5TV78P/f7TX+kkNoruCXCtryffDHIxF1NBfG9i7gn8gr6L
+ eZy8ODhyqCSrrtos6pIHuqsEUavr4or51wx83YM7bcx/vQFbBBANCDvLr+ziBx4vL/OQ
+ sHQwvT7J27ZKywsDI0WXGMV3mbM0VXN+pT14GQEM87tFUgPp0RFlBc/qF+NwZCFCQR6X
+ GXmnM1JQV83kEmpJikW3G+m8RIWv6sgQIRyHDKo/j7+FrtDbXj+a/bNfrsKxLntP8GT9
+ h1oA==
+X-Gm-Message-State: AOJu0YzOebKm8bycuSaEbR1BRg6BUyU5GmhXeSdDWJ3A5eKR3Mrt8Dar
+ 47CX5NLSth+pRLatH9dzOy4yJfeutfsiwU8d1q7o656PViF1CYfMI3wv8mXvJ28z2RAQEBTmNzi
+ xFQI=
+X-Gm-Gg: ASbGncvCEIdbuAbhEtjqXaZo4ZLLjDUrzgWNL9Ntf64hHrcinLmrS8q8zag22dJDsdY
+ UhdBj83RGG8Amtaq+eIArC95nb2kZc+zavj9sk3lLn43fljI8fINcupPG7LzLkm+hdwm0ZjtgbA
+ bdzS+Z7kSv5/5UihJ9eBOxfZj9eIkLvWLOmBGtk8wGEtXAL7jTfhpfeTuva2+U54hLaB+EHyGAu
+ 5GzJ8d+MaL7u0oV28A2bWo6DwkSa8aTGkHl+/HA1/rHXCHKz0d+B4it1zidlW+DT41sU6tn3PZ0
+ dB6cBS+aPTtTJ9+AnbiZu60q7nwwqQ8epjBbg0jpzDTJQQqhvFZpChY=
+X-Google-Smtp-Source: AGHT+IGShln6v9GLB4gNhidslbpfZ5C3elNc7TN7SroildJdIADvww5xsALdv8WX73zLnGCeVaLGDQ==
+X-Received: by 2002:adf:e7c6:0:b0:38b:ee9f:52d5 with SMTP id
+ ffacd0b85a97d-38da53b66b3mr2571040f8f.16.1738686984560; 
+ Tue, 04 Feb 2025 08:36:24 -0800 (PST)
+Received: from P-NTS-Evian.. (host-109-89-232-55.dynamic.voo.be.
+ [109.89.232.55]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-38c5c1cf560sm16032693f8f.89.2025.02.04.08.36.24
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 04 Feb 2025 08:36:24 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 17:33:36 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3ef139386dae7cb82dfe9187cde18275999cf0b9
-X-Git-Newrev: 48bce6ad8f7fdb52dc0a17c9ccf150a900b422f4
-X-Patchwork-Hint: ignore
-Message-Id: <20250204163355.3B26B86E4A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lynis: new package
+Cc: Michael Walle <michael@walle.cc>, Niklas Cassel <niklas.cassel@wdc.com>,
+ Romain Naour <romain.naour@smile.fr>
+Date: Tue,  4 Feb 2025 17:36:16 +0100
+Message-ID: <20250204163622.192932-1-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.48.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1738686984; x=1739291784; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Y9MW3mYf/QRMX/G03KlkCX8rUDfBU7JE/eBAG2/+NVc=;
+ b=LQDcZLS9zAPNB9QGtKs9b89TOUWXAUkxco23rfZMr8yodXJ4lAkVB1yTLjS8pzBCBO
+ J6GceVB/taxNtgQ+iZUUUzC9xqeS1qBo8asGjPzPgWheibHdwKZYzRf1DcLyLMc+SwUm
+ FD14cwgAzvfWnHHAYKesPO23/9B6s9C0CPIZs=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=LQDcZLS9
+Subject: [Buildroot] [PATCH v5 1/6] linux: add support for device tree
+ overlays
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,169 +105,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=48bce6ad8f7fdb52dc0a17c9ccf150a900b422f4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Michael Walle <michael@walle.cc>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+The linux kernel can build device tree overlays (.dtbo) itself. Add
+support to build and copy them along with the actual device trees.
+These can either be in-tree device tree overlays
+(BR2_LINUX_KERNEL_INTREE_DTSO_NAMES) or they can be provided outside of
+the kernel (BR2_LINUX_KERNEL_CUSTOM_DTS_PATH). In the latter case, the
+overlay source files will be copied into the kernel tree first.
+
+Signed-off-by: Michael Walle <michael@walle.cc>
+Reviewed-by: Niklas Cassel <niklas.cassel@wdc.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- DEVELOPERS                                  |  2 ++
- package/Config.in                           |  1 +
- package/lynis/Config.in                     | 10 ++++++
- package/lynis/lynis.hash                    |  3 ++
- package/lynis/lynis.mk                      | 48 +++++++++++++++++++++++++++++
- support/testing/tests/package/test_lynis.py | 26 ++++++++++++++++
- 6 files changed, 90 insertions(+)
+v2: https://lore.kernel.org/buildroot/20240902112735.728574-1-michael@walle.cc/
+---
+ linux/Config.in | 14 +++++++++++---
+ linux/linux.mk  |  7 +++++--
+ 2 files changed, 16 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 10b8031ad3..d48b4c5500 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1168,6 +1168,7 @@ F:	package/lpty/
- F:	package/lrandom/
- F:	package/lsqlite3/
- F:	package/lua*
-+F:	package/lynis/
- F:	package/lzlib/
- F:	package/moarvm/
- F:	package/mstpd/
-@@ -1185,6 +1186,7 @@ F:	package/wsapi-fcgi/
- F:	package/wsapi-xavante/
- F:	package/xavante/
- F:	support/testing/tests/package/test_lua*
-+F:	support/testing/tests/package/test_lynis.py
- F:	utils/scancpan
+diff --git a/linux/Config.in b/linux/Config.in
+index 63e64c5d65..90aed24775 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -426,12 +426,20 @@ config BR2_LINUX_KERNEL_INTREE_DTS_NAME
+ 	  the trailing .dts. You can provide a list of
+ 	  dts files to build, separated by spaces.
  
- N:	Frank Hunleth <fhunleth@troodon-software.com>
-diff --git a/package/Config.in b/package/Config.in
-index 44b285d348..a4a8bd394f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2737,6 +2737,7 @@ menu "Security"
- 	source "package/apparmor/Config.in"
- 	source "package/checkpolicy/Config.in"
- 	source "package/ima-evm-utils/Config.in"
-+	source "package/lynis/Config.in"
- 	source "package/optee-client/Config.in"
- 	source "package/optee-examples/Config.in"
- 	source "package/optee-test/Config.in"
-diff --git a/package/lynis/Config.in b/package/lynis/Config.in
-new file mode 100644
-index 0000000000..2757e86a2d
---- /dev/null
-+++ b/package/lynis/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_LYNIS
-+	bool "lynis"
-+	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	select BR2_PACKAGE_GZIP  # runtime (zgrep /proc/config.gz)
++config BR2_LINUX_KERNEL_INTREE_DTSO_NAMES
++	string "In-tree Device Tree Overlay file names"
 +	help
-+	  Lynis is an auditing tool which tests and gathers (security)
-+	  information from Unix based systems.
-+	  Written in shell and running on system itself.
++	  Names of in-tree device tree overlay, without the trailing
++	  .dtso which should be built and installed into the target
++	  system, separated by spaces.
 +
-+	  https://cisofy.com/lynis/
-diff --git a/package/lynis/lynis.hash b/package/lynis/lynis.hash
-new file mode 100644
-index 0000000000..1027fb21aa
---- /dev/null
-+++ b/package/lynis/lynis.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  9932147acafb1c5e13289a8bd46e8d330d4a97473da30ec04650ad019e497cd0  lynis-3.1.3.tar.gz
-+sha256  57151f0fa287550534af08facb1c6693ca803ffa65b512da38b55c3130810bcf  LICENSE
-diff --git a/package/lynis/lynis.mk b/package/lynis/lynis.mk
-new file mode 100644
-index 0000000000..13a883bd55
---- /dev/null
-+++ b/package/lynis/lynis.mk
-@@ -0,0 +1,48 @@
-+################################################################################
-+#
-+# lynis
-+#
-+################################################################################
-+
-+LYNIS_VERSION = 3.1.3
-+LYNIS_SITE = $(call github,CISOfy,lynis,$(LYNIS_VERSION))
-+LYNIS_LICENSE = GPL-3.0
-+LYNIS_LICENSE_FILES = LICENSE
-+
-+define LYNIS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 $(@D)/lynis \
-+		$(TARGET_DIR)/usr/sbin/lynis
-+	$(INSTALL) -D -m 0644 $(@D)/default.prf \
-+		$(TARGET_DIR)/etc/lynis/default.prf
-+	$(INSTALL) -D -m 0644 $(@D)/developer.prf \
-+		$(TARGET_DIR)/etc/lynis/developer.prf
-+	$(INSTALL) -D -m 0644 $(@D)/plugins/* \
-+		-t $(TARGET_DIR)/etc/lynis/plugins
-+	$(INSTALL) -D -m 0644 $(@D)/include/* \
-+		-t $(TARGET_DIR)/usr/share/lynis/include
-+	$(INSTALL) -D -m 0644 $(@D)/db/*.db \
-+		-t $(TARGET_DIR)/usr/share/lynis/db
-+	$(INSTALL) -D -m 0644 $(@D)/db/languages/en \
-+		$(TARGET_DIR)/usr/share/lynis/db/languages/en
-+endef
-+
-+ifneq ($(BR2_PACKAGE_GAWK),y)
-+define LYNIS_AWK_BUSYBOX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_AWK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_AWK_LIBM)
-+endef
-+endif
-+
-+ifneq ($(BR2_PACKAGE_COREUTILS),y)
-+define LYNIS_STAT_BUSYBOX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_STAT)
-+endef
-+endif
-+
-+define LYNIS_BUSYBOX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PGREP)
-+	$(LYNIS_AWK_BUSYBOX_CONFIG_FIXUPS)
-+	$(LYNIS_STAT_BUSYBOX_CONFIG_FIXUPS)
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/support/testing/tests/package/test_lynis.py b/support/testing/tests/package/test_lynis.py
-new file mode 100644
-index 0000000000..bed4023e64
---- /dev/null
-+++ b/support/testing/tests/package/test_lynis.py
-@@ -0,0 +1,26 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestLynis(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        BR2_PACKAGE_LYNIS=y
-+        """
-+
-+    def login(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+    def test_run(self):
-+        self.login()
-+        self.assertRunOk("which awk")
-+        self.assertRunOk("which stat")
-+        self.assertRunOk("which zgrep")
-+        self.assertRunOk("lynis show version", timeout=90)
+ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+ 	string "Out-of-tree Device Tree Source file paths"
+ 	help
+-	  Paths to out-of-tree Device Tree Source (.dts) and Device Tree
+-	  Source Include (.dtsi) files, separated by spaces. These files
+-	  will be copied to the kernel sources and the .dts files will
++	  Paths to out-of-tree Device Tree Source (.dts), Device Tree
++	  Source Include (.dtsi) and Device Tree Overlay Source (.dtso)
++	  files, separated by spaces. These files will be copied to the
++	  kernel sources and the .dts files will
+ 	  be compiled from there.
+ 
+ config BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 12699b8ee4..9c621c18d5 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -203,14 +203,17 @@ endif
+ LINUX_VERSION_PROBED = `MAKEFLAGS='$(filter-out w,$(MAKEFLAGS))' $(BR2_MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelrelease 2>/dev/null`
+ 
+ LINUX_DTS_NAME += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
++LINUX_DTSO_NAMES += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTSO_NAMES))
+ 
+ # We keep only the .dts files, so that the user can specify both .dts
+ # and .dtsi files in BR2_LINUX_KERNEL_CUSTOM_DTS_PATH. Both will be
+ # copied to arch/<arch>/boot/dts, but only the .dts files will
+ # actually be generated as .dtb.
+-LINUX_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
++LINUX_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH))
++LINUX_DTS_NAME += $(basename $(filter %.dts,$(notdir $(LINUX_CUSTOM_DTS_PATH))))
++LINUX_DTSO_NAMES += $(basename $(filter %.dtso,$(notdir $(LINUX_CUSTOM_DTS_PATH))))
+ 
+-LINUX_DTBS = $(addsuffix .dtb,$(LINUX_DTS_NAME))
++LINUX_DTBS = $(addsuffix .dtb,$(LINUX_DTS_NAME)) $(addsuffix .dtbo,$(LINUX_DTSO_NAMES))
+ 
+ ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
+ LINUX_IMAGE_NAME = $(call qstrip,$(BR2_LINUX_KERNEL_IMAGE_NAME))
+-- 
+2.48.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
