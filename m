@@ -4,48 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56536C02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 16:54:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1FE0C02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 17:03:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0257D60D6F;
-	Tue,  4 Feb 2025 16:54:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AEDC160C1C;
+	Tue,  4 Feb 2025 17:03:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5TGBSWEm2U0d; Tue,  4 Feb 2025 16:54:09 +0000 (UTC)
+ id Lxe4d-kxgM0D; Tue,  4 Feb 2025 17:03:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B833060D5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6061860AD9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B833060D5B;
-	Tue,  4 Feb 2025 16:54:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6061860AD9;
+	Tue,  4 Feb 2025 17:03:52 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A4B012A
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:54:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 93051185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:03:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F30C781F4F
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:54:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7859082132
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:03:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kUUxLesUEgzO for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 16:54:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id jtohFdEdlUEs for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 17:03:50 +0000 (UTC)
+X-Greylist: delayed 1523 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 04 Feb 2025 17:03:50 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 65BA48040A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65BA48040A
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.249;
+ helo=mslow3.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE2E582021
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DE2E582021
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:54:07 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D50CE86E15; Tue,  4 Feb 2025 16:54:07 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 17:53:25 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9cd3464afa13fd0190fb3e94fd850cc8063cf297
-X-Git-Newrev: 0951e3fc24492267675f2bb81f65cd0ff5bb758e
-X-Patchwork-Hint: ignore
-Message-Id: <20250204165407.D50CE86E15@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ramsmp: drop package
+Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 65BA48040A
+ for <buildroot@busybox.net>; Tue,  4 Feb 2025 17:03:50 +0000 (UTC)
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by mslow3.mail.gandi.net (Postfix) with ESMTP id C85B2581F21
+ for <buildroot@busybox.net>; Tue,  4 Feb 2025 16:36:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 23B39204AA;
+ Tue,  4 Feb 2025 16:36:31 +0000 (UTC)
+Date: Tue, 4 Feb 2025 17:36:30 +0100
+To: Francois Perrad <francois.perrad@gadz.org>
+Cc: buildroot@busybox.net
+Message-ID: <20250204173630.4e1e9063@windsurf>
+In-Reply-To: <20250106182018.2006380-1-francois.perrad@gadz.org>
+References: <20250106182018.2006380-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvuddtvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeltdegvdejheegtefgueffgfelhfekvdefudevieeileetleeitdefgfeugffghfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepuddtledrkeelrddvfedvrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutdelrdekledrvdefvddrheehpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepfhhrrghntghoihhsrdhpvghrrhgrugesghgrugiirdhorhhgpdhrtghpthhtohepsghuihhlughrohhothessghushihsghogidrnhgvth
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1738686991;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=MBejSovXQsH9++kUscR6LDNrCo0bkvCU3Ldr0HWO5ck=;
+ b=LpMx/d3KLfvXSe6wYEEN+HLgycswmlCLF0seub6OtjL3wdRjiW6QQullDi3z9s20Au24CL
+ GjrfZUl8z1BV/8yqUtm6gjjDGnc36TLTwDtX/Ht0S+1wM3AQbAtuyQU5ZBnHAUth+O2bv+
+ k1FD0p5DWajKhsqBT5Hr1SMhFHPyWpNOwCqC91WgYuPrUeHULkVPy/jIy146EN+wEXctdW
+ 7eixjCadgBTiPSzDrLQ0AtOWazpA82VxZlB6TzHmyrfgyv6jS5jz8iyBSfFlWCUweN/PGN
+ HOzCSgzt6Y1fG3OBcU23gvqbtaNChRO80oCJyb3/FUDeg09jSaMIoDiwg5dwQQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=LpMx/d3K
+Subject: Re: [Buildroot] [PATCH v4 0/2] lynis
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,161 +89,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6614170810534542467=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6614170810534542467==
-Content-Type: text/plain
+On Mon,  6 Jan 2025 19:20:15 +0100
+Francois Perrad <francois.perrad@gadz.org> wrote:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0951e3fc24492267675f2bb81f65cd0ff5bb758e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+> Francois Perrad (2):
+>   package/busybox: handle LIBFOO_BUSYBOX_CONFIG_FIXUPS
+>   package/lynis: new package
 
-The download location is gone and even though the package is available
-on a Github repository [0], it has not been updated for 7 years now.
-Drop the package.
+Thanks, both applied. On the second patch, I also added you as the
+maintainer for the test, not just for the package.
 
-[0] https://github.com/cruvolo/ramspeed-smp
-
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- Config.in.legacy           |  7 +++++++
- DEVELOPERS                 |  1 -
- package/Config.in          |  1 -
- package/ramsmp/Config.in   |  9 ---------
- package/ramsmp/Makefile    | 14 --------------
- package/ramsmp/ramsmp.hash |  3 ---
- package/ramsmp/ramsmp.mk   | 22 ----------------------
- 7 files changed, 7 insertions(+), 50 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 674299470f..2e5bd3153f 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -317,6 +317,13 @@ config BR2_PACKAGE_QUAGGA
- 	  The quagga package was removed as it is not maintained
- 	  anymore and the upstream repo is gone.
- 
-+config BR2_PACKAGE_RAMSMP
-+	bool "ramsmp has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The ramsmp package was removed as it is not maintained
-+	  anymore and the upstream repo is gone.
-+
- comment "Legacy options removed in 2024.11"
- 
- config BR2_PACKAGE_BSDIFF
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0c9f2126a4..731f2a5d17 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2057,7 +2057,6 @@ F:	package/openvmtools/
- N:	Kelvin Cheung <keguang.zhang@gmail.com>
- F:	package/cpuload/
- F:	package/bwm-ng/
--F:	package/ramsmp/
- 
- N:	Kieran Bingham <kieran.bingham@ideasonboard.com>
- F:	package/libcamera/
-diff --git a/package/Config.in b/package/Config.in
-index b76d37e4a0..bc77878b08 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -144,7 +144,6 @@ menu "Debugging, profiling and benchmark"
- 	source "package/ptm2human/Config.in"
- 	source "package/pv/Config.in"
- 	source "package/racehound/Config.in"
--	source "package/ramsmp/Config.in"
- 	source "package/ramspeed/Config.in"
- 	source "package/rt-tests/Config.in"
- 	source "package/rwmem/Config.in"
-diff --git a/package/ramsmp/Config.in b/package/ramsmp/Config.in
-deleted file mode 100644
-index 411e7de911..0000000000
---- a/package/ramsmp/Config.in
-+++ /dev/null
-@@ -1,9 +0,0 @@
--config BR2_PACKAGE_RAMSMP
--	bool "ramspeed/smp"
--	depends on BR2_USE_MMU # fork()
--	help
--	  RAMspeed/SMP is a free open source command line utility to
--	  measure cache and memory performance of multiprocessor
--	  machines.
--
--	  http://alasir.com/software/ramspeed/
-diff --git a/package/ramsmp/Makefile b/package/ramsmp/Makefile
-deleted file mode 100644
-index 5cd76e09d9..0000000000
---- a/package/ramsmp/Makefile
-+++ /dev/null
-@@ -1,14 +0,0 @@
--
--all: generic
--
--generic: ramsmp.c fltmem.c fltmark.c intmem.c intmark.c
--	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o ramsmp
--
--i386: ramsmp.c i386/*.s i386/cpuinfo/*.s
--	$(CC) $(CFLAGS) -DI386_ASM $(LDFLAGS) $^ -o ramsmp
--
--x86_64: ramsmp.c amd64/*.s
--	$(CC) $(CFLAGS) -DAMD64_ASM $(LDFLAGS) $^ -o ramsmp
--
--clean:
--	rm -f *.o ramsmp
-diff --git a/package/ramsmp/ramsmp.hash b/package/ramsmp/ramsmp.hash
-deleted file mode 100644
-index c5e29a3900..0000000000
---- a/package/ramsmp/ramsmp.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed
--sha256  39fb15493fb3c293575746d56f6ab9faaa1d876d8b1f0d8e5a4042d2ace95839  ramsmp-3.5.0.tar.gz
--sha256  2c308cffbab01762f8f6b11725725a227080746ef865f2756c9c9e1591dddaad  LICENCE
-diff --git a/package/ramsmp/ramsmp.mk b/package/ramsmp/ramsmp.mk
-deleted file mode 100644
-index 6098376da5..0000000000
---- a/package/ramsmp/ramsmp.mk
-+++ /dev/null
-@@ -1,22 +0,0 @@
--################################################################################
--#
--# ramsmp
--#
--################################################################################
--
--RAMSMP_VERSION = 3.5.0
--RAMSMP_SITE = http://www.alasir.com/software/ramspeed
--RAMSMP_ARCH = $(if $(BR2_i386),i386)$(if $(BR2_x86_64),x86_64)
--RAMSMP_LICENSE = Alasir License
--RAMSMP_LICENSE_FILES = LICENCE
--
--define RAMSMP_BUILD_CMDS
--	cp -f package/ramsmp/Makefile $(@D)
--	$(TARGET_CONFIGURE_OPTS) make -C $(@D) $(RAMSMP_ARCH)
--endef
--
--define RAMSMP_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0755 -D $(@D)/ramsmp $(TARGET_DIR)/usr/bin/ramsmp
--endef
--
--$(eval $(generic-package))
-
---===============6614170810534542467==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6614170810534542467==--
