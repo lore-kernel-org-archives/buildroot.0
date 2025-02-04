@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B83D6C02193
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 17:45:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B754CC02193
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 17:45:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7790B40876;
-	Tue,  4 Feb 2025 17:45:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58EDE4148C;
+	Tue,  4 Feb 2025 17:45:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 828u8Q9O6MFn; Tue,  4 Feb 2025 17:45:18 +0000 (UTC)
+ id K_PVwx1s2yxc; Tue,  4 Feb 2025 17:45:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3923B408AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4B5041457
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3923B408AB;
-	Tue,  4 Feb 2025 17:45:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C68371A6
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:45:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A4B5041457;
+	Tue,  4 Feb 2025 17:45:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5713412A
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:45:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B63B7408AB
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:45:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 471246067E
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:45:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fINr_ecd-DAG for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 17:45:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jNhrXLijCs5a for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 17:45:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8748540876
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5A69A605BB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8748540876
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:45:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A69A605BB
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:45:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 74B3886FA8; Tue,  4 Feb 2025 17:45:13 +0000 (UTC)
+ id 3BBF286E53; Tue,  4 Feb 2025 17:45:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 18:44:35 +0100
+Date: Tue, 4 Feb 2025 18:44:41 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2852a26899e8fbd5da3ea1a1e7fc5bf46b68db99
-X-Git-Newrev: 80d26f091fdf2ab6bda956d91dc93a6c63d83797
+X-Git-Oldrev: 747c3ae005cf8e12eb23025db7362426f5ab595d
+X-Git-Newrev: fc503c2c47a94281f007ee66284075b039fa75e6
 X-Patchwork-Hint: ignore
-Message-Id: <20250204174513.74B3886FA8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] utils/check-package: support finding files
- from patches
+Message-Id: <20250204174516.3BBF286E53@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aiomqtt: use poetry setup
+ type
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,98 +66,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80d26f091fdf2ab6bda956d91dc93a6c63d83797
+commit: https://git.buildroot.net/buildroot/commit/?id=fc503c2c47a94281f007ee66284075b039fa75e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For the `b4` tool to support check-package, check-package must support
-reading patch files from stdin.
+Aiomqtt uses Poetry. The only difference between poetry and generic
+pep517 is the host-python-poetry-core dependency, and this got pulled in
+as an indirect dependency of host-python-poetry-dynamic-versioning so
+far. So the build was not actually failing, but it's better to be
+correct.
 
-It would be complicated to make check-package actually run checks on
-patch files. So instead we search the patch files to figure out what
-files are modified in the repo, then run check-package on the modified
-files directly.
-
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-[Arnout: rename variable "files" to "files_to_check"]
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- utils/check-package | 37 ++++++++++++++++++++++++++++++++++---
- 1 file changed, 34 insertions(+), 3 deletions(-)
+ package/python-aiomqtt/python-aiomqtt.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/utils/check-package b/utils/check-package
-index 6a5e89daa3..a5ecc2eed8 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -10,6 +10,7 @@
- 
- import argparse
- import inspect
-+import fileinput
- import magic
- import os
- import re
-@@ -91,6 +92,9 @@ def parse_args():
-                         "functions that would be called for each file (debug)")
-     parser.add_argument("--failed-only", action="store_true", help="print only"
-                         " the name of the functions that failed (debug)")
-+    parser.add_argument("--patch", "-p", action="store_true",
-+                        help="The 'files' are patch files to be sent to the"
-+                        " Buildroot mailing list")
- 
-     parser.add_argument("--test-suite", action="store_true", help="Run the"
-                         " test-suite")
-@@ -294,6 +298,30 @@ def check_file_using_lib(fname):
-     return nwarnings, nlines
- 
- 
-+def patch_modified_files(patches):
-+    """
-+    Find files modified in a patch file
-+
-+    :param patches: Patch files to read, as a list of paths or '-' for stdin
-+    :returns: List of modified filenames
-+    """
-+
-+    files = []
-+    with fileinput.input(files=patches) as fp:
-+        # Search for unified-diff to-file lines
-+        for line in fp:
-+            if line.startswith('+++'):
-+                line = line.removeprefix('+++').strip()
-+
-+                # Remove the prefix git adds to filenames
-+                if line.startswith('b/'):
-+                    line = line.removeprefix('b/')
-+
-+                files.append(line)
-+    files.sort()
-+    return files
-+
-+
- def __main__():
-     global flags
-     flags = parse_args()
-@@ -301,14 +329,17 @@ def __main__():
-     if flags.test_suite:
-         return checkpackagelib.base.run_test_suite()
- 
-+    if flags.patch:
-+        files_to_check = patch_modified_files(flags.files)
-+    else:
-+        files_to_check = flags.files
-+
-     if flags.intree_only:
-         # change all paths received to be relative to the base dir
-         base_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
--        files_to_check = [os.path.relpath(os.path.abspath(f), base_dir) for f in flags.files]
-+        files_to_check = [os.path.relpath(os.path.abspath(f), base_dir) for f in files_to_check]
-         # move current dir so the script find the files
-         os.chdir(base_dir)
--    else:
--        files_to_check = flags.files
- 
-     if len(files_to_check) == 0:
-         print("No files to check style")
+diff --git a/package/python-aiomqtt/python-aiomqtt.mk b/package/python-aiomqtt/python-aiomqtt.mk
+index 291547f11f..80cecea9e8 100644
+--- a/package/python-aiomqtt/python-aiomqtt.mk
++++ b/package/python-aiomqtt/python-aiomqtt.mk
+@@ -7,7 +7,7 @@
+ PYTHON_AIOMQTT_VERSION = 2.3.0
+ PYTHON_AIOMQTT_SOURCE = aiomqtt-$(PYTHON_AIOMQTT_VERSION).tar.gz
+ PYTHON_AIOMQTT_SITE = https://files.pythonhosted.org/packages/db/c9/168e78bd35b21d9bdbb26178db33a8f265e4a69bb4193e72434e7cb3d1cd
+-PYTHON_AIOMQTT_SETUP_TYPE = pep517
++PYTHON_AIOMQTT_SETUP_TYPE = poetry
+ PYTHON_AIOMQTT_LICENSE = BSD-3-Clause
+ PYTHON_AIOMQTT_LICENSE_FILES = LICENSE
+ PYTHON_AIOMQTT_DEPENDENCIES = host-python-poetry-dynamic-versioning
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
