@@ -4,172 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5280C02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 13:33:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3F4EC02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 13:34:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74D6E60FF8;
-	Tue,  4 Feb 2025 13:33:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2110360FE6;
+	Tue,  4 Feb 2025 13:34:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id opS4wIfWYQjk; Tue,  4 Feb 2025 13:33:11 +0000 (UTC)
+ id 7MqgF0ozyGNZ; Tue,  4 Feb 2025 13:34:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C29760FDC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC20060FE7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C29760FDC;
-	Tue,  4 Feb 2025 13:33:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id BF38E12F
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:33:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC20060FE7;
+	Tue,  4 Feb 2025 13:34:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D815912F
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:34:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A36A8411D9
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:33:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BC76082A5D
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:34:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fKySNw0wEik8 for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 13:33:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cAg_0PnyOiPq for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 13:34:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2406::60d;
- helo=nam02-sn1-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D580640F0F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D580640F0F
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com
- (mail-sn1nam02on2060d.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2406::60d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D580640F0F
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:33:07 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=R2hInx4GZDquXbRnZnl2sHtxcun+w1MJcfx4ZWjl2GwGEYmKHVE8LGahTq/SiYUaqEa3JqYbvcXL/xS0Bw/pAUiPwquw9yy+oGnbyzlEa1l8cEkEaY2iPh/4LbwipS4KjUoHtntSDQ2c0pxRQh8fkL3npI7SPEnnWTqXh13pwQQ5hayqmnXRv6XhCvAyB1LGyujib0bmMBTgfa2esQ6i3pp5UU02WeAa728LLNGuB1ZhPYJ6vau9xgdHEj1J417OLlnhrAAK0EtN1llP5GQj+v4wmHP3Q+HxcQuexCr55d2dxScQl6FpSqcf6asaqRZ3aYhUthY781UEgOBBI6AIag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eFnMoMsmqhRVPD/tQ0+fUdTAnIgVUmtVIokyy46PW3M=;
- b=gPO7aQXlepFi/h1ekPB7fVZaGbBVyZNIuuYC89Sa+3JM9GvQrOzkaNfG6wxx4pr8j4JG9QwkDkFYqEqpfx04zx/jlootIGQ25RBAtIxh9DZrbCqnDEwYp75Aqmr+7yNSlmQTAKjYsK1DdjbGqA3nT31TSQDq9y3muH6UK+s18REgKy11VoaiH2B8WEz3dZ1d8lTCrGa1YB7V4aNhvCTXHjjBI3BTFvYU8ZYBzHtTcjW2Mc9dNDs5404GfQEQfVvbtzk8i6mVcEwvGRk1LmOnpV6MzfGiRZjoNl5f0KtpZG9lt6hjwWYufv7YtEhQejpRz+cSIwj3vm4/GlzdsGOgcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from SA1PR12MB5615.namprd12.prod.outlook.com (2603:10b6:806:229::17)
- by SN7PR12MB8002.namprd12.prod.outlook.com (2603:10b6:806:34b::10)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.24; Tue, 4 Feb
- 2025 13:33:04 +0000
-Received: from SA1PR12MB5615.namprd12.prod.outlook.com
- ([fe80::7557:587c:4ec:1913]) by SA1PR12MB5615.namprd12.prod.outlook.com
- ([fe80::7557:587c:4ec:1913%6]) with mapi id 15.20.8422.009; Tue, 4 Feb 2025
- 13:33:04 +0000
-To: Peter Korsgaard <peter@korsgaard.com>
-CC: "buildroot@buildroot.org" <buildroot@buildroot.org>,
- "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>, "Simek,
- Michal" <michal.simek@amd.com>, "ju.o@free.fr" <ju.o@free.fr>,
- "brandon.maier@collins.com" <brandon.maier@collins.com>,
- "romain.naour@smile.fr" <romain.naour@smile.fr>, "Erkiaga Elorza, Ibai"
- <ibai.erkiaga-elorza@amd.com>
-Thread-Topic: [PATCH v6 5/6] board/zynqmp: add new qspi.bin binary to images
-Thread-Index: AQHbb3txfSGI+3n+ukW5sdLQmEDkqLM3MujjgAAAj9A=
-Date: Tue, 4 Feb 2025 13:33:04 +0000
-Message-ID: <SA1PR12MB5615877C836AFEADE3A79E7BF0F42@SA1PR12MB5615.namprd12.prod.outlook.com>
-References: <20250125224930.3639111-1-neal.frager@amd.com>
- <20250125224930.3639111-5-neal.frager@amd.com>
- <87o6zhn8gt.fsf@dell.be.48ers.dk>
-In-Reply-To: <87o6zhn8gt.fsf@dell.be.48ers.dk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR12MB5615:EE_|SN7PR12MB8002:EE_
-x-ms-office365-filtering-correlation-id: 828c4ade-cbd8-4da5-bb46-08dd452073d9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230040|366016|1800799024|376014|38070700018|41080700001; 
-x-microsoft-antispam-message-info: =?us-ascii?Q?zyAWhb0QXxuor+rqJTXkdz0QVRqMqxgEZWqKyGhYWmArz+jdb7dYI7JeieiE?=
- =?us-ascii?Q?PDJBsofS4ElGHBusIicuxlzcRZYdv8RY+vLjMOz4o/pl7wEe9DohXTE5cRvv?=
- =?us-ascii?Q?54hTgHB2lmkH4ONwhkY92QncLyd1WjIIO3GLctUcxuE9WNeO78x2dyVfHbKV?=
- =?us-ascii?Q?lISuSaWaaoSFY7kvGb0WwdKh1DVKvsQef0OVGh7Zus9Nz8ywbkZM/vGkHaiK?=
- =?us-ascii?Q?292wRx2mDm70Yq9Zq3G/iEUn8vYowsm+Em6GLRj3YNCn2Z8zA2sOx+2UAMW5?=
- =?us-ascii?Q?pWBfx0WGggqja8QZMsjziKYMXcCVR1te4MKjbLaxokS04giQ3noM8iDdSVsj?=
- =?us-ascii?Q?iJyf+lA4Mi0ldY/Bz0cJ5F5Q74bo8WJafB56wUX7+zIuzC8/IyIeQPYryMYM?=
- =?us-ascii?Q?rwU9KTmcUlhdHxxNZtdexj75CWgJTTZty38uqldzt+EH508qIIWPU4uH/HEO?=
- =?us-ascii?Q?vpCUt+qWMN/NsLRd9M5/ESodiVQF2SR6Yir3iLI4512EJSpXqu1Gp+t4pA8J?=
- =?us-ascii?Q?uHI1sGmd5D5Y3nut4GnQslFS/pd2XBHQeDA1c0YhZE+hno4Nx3S5W2Dc7OiB?=
- =?us-ascii?Q?5BHjEFF0rd0h2wue87TqXWQP8L4ApkOONIRrNYkU5degyrwZ5yA/5D5dubEV?=
- =?us-ascii?Q?qy81s4qoXBevnPgovgcbABmK5qwb68cD363oI2LpsUKXVnBx+DgBVL97x4oM?=
- =?us-ascii?Q?AyO3NoKiSzjN84h8dr/aJ+eYP0jGJaCuCHVyLTfqkZ6aJ5IrhR2S7Eyy6Bjg?=
- =?us-ascii?Q?ozJjBtVLwaZ0peDQCU+v1lgjUFgqyBM72VMIEkCGgZTQpNCvbjy1NCiTsxZP?=
- =?us-ascii?Q?XqDkp3jvJRQdSHmL9+qkIRv65Kj5NITAEJnpLRJQk0PRl6m+jjJxlGGi8ErB?=
- =?us-ascii?Q?yHX3I1pXvP75oggjCDgkdqM0jWpVG32vW4Vp/rCRek42YpsCJPlK5UB0466S?=
- =?us-ascii?Q?RRzEY2H+BNPqLxoWUP/Z7nJ6xeTEFwCJ1ydniFtoRoteLx4R7n7HKDSLfbPM?=
- =?us-ascii?Q?5B67j8em7xgOpXH9MpkMfDRF0VPn4AVqvlfpXNr1yQZukmtFMFuZkIh/QEdJ?=
- =?us-ascii?Q?fR2xtcy/tlMH8Xmd4Zrhv1uD/Hn8pmXz0WSgwdiRXfbFgWbA6hk0kq73mY6Q?=
- =?us-ascii?Q?ZJfLjSu/o2p98tcFZgxPcYxbC1KfGRl4FaofVmojkAgLXpeW+NtkDG7dJSA3?=
- =?us-ascii?Q?WHLB6uiaHDAjsE5XqSOhDd64BdP1htEXex9I2b/VHEAiuKADPqF86E10z2Y4?=
- =?us-ascii?Q?fQa46A3nDOZIAHfDc5hrRr+iRWP9J0OI9kmddOO7yZWfBwC1oscw0DWy8+8f?=
- =?us-ascii?Q?vzrQhXp9czlxhrNmwS8vADDHh5o6lO4QFVFweO8wSXqpFBuR6V0DcTwXQbMT?=
- =?us-ascii?Q?RA8JWXxEKbnCIsCFdbeKJS2ZydIAbmQad8P1eQ5E50dwvol2XcBVyTByiP/7?=
- =?us-ascii?Q?m96t9aMV5bQ=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SA1PR12MB5615.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(366016)(1800799024)(376014)(38070700018)(41080700001); DIR:OUT;
- SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?brSzjwJvlJ05sGvgokF9hs3u/3D9dJj4t1aoIU/S+AvReIMXgD1jEs9HBvt3?=
- =?us-ascii?Q?ufXGNH+LTy8FTmtos7fxQWtRcFVwzDaKt/xUMun5EJWQxv+1PM6itD1njxp2?=
- =?us-ascii?Q?rb8FkRmraez1oKl2HsE8Pp0WdmcK2ile9GTdnzxJWV3QGaNiT6FFTDXwpB5w?=
- =?us-ascii?Q?VWYgDieiTBsj9ACi6i5ZahORgdYpfingGQEbac3pm5rk/Fe10MpYbjU0FOZp?=
- =?us-ascii?Q?e3vJ6uT8Fjo9uSlPa/xWSSgZdwmZSeOahyEuGU2gSegK6FaNTfpZfIH59UDg?=
- =?us-ascii?Q?c2JLiLNH2znLskFFGtqV04QT6uHQ6oK0k/dJIVvTrqneDbkZa6PQAAquKl7U?=
- =?us-ascii?Q?bZzUy4ZZnkJ0kevFoAHcTV4Re+ZFYRd1wiTbw1AvVtoKnOWELpCyPkCiiKEB?=
- =?us-ascii?Q?9B1qZsgrlKqZnG76GWBAkNWDBIKFX4m/1AWLzzp5uVIOZh1pRbTXlP9VMGzh?=
- =?us-ascii?Q?/NScRZgxeebBO52JL15z2hFq+27lMHeKoHzYsQTjWKnXNqTP3rRlA/PHI9Gt?=
- =?us-ascii?Q?CTh4bEJEUPg80hFrlKkuHSQXwmqVx94u2LzikQ8eV8cF6Lq1d7xbIEn7nwsL?=
- =?us-ascii?Q?x5bEi6pale3848HhF1w8tZdMY9qVgkrLU0x7GpmDxO2f84RgcIpSafTEio4k?=
- =?us-ascii?Q?sVwSySoXu5iQ4NrMBUGtfU/PVUWwW7/aGLup5EV9twJ0JmRLpimMgGIIgGTT?=
- =?us-ascii?Q?XccVnkpmMtwEzevHYNEvfQ1JY7IL2tID+eXC6H5apTht3LSoQfvVdgQUdE0V?=
- =?us-ascii?Q?jdwxLtvarbJ6uy6f504h+GXajcJDkaXTmv2JyUBnlnW7fqm08zSVKRa0zDl/?=
- =?us-ascii?Q?hyjKd7WwrD6yS6p4FZy5jk0V107F0d2OYb/ofz4EzFir+cJ8AJ2n+bZY4wZI?=
- =?us-ascii?Q?QqI1wjJ4UJEpiWSUoNXkUKRcSuHNlyXUaYqQggg0y//JFjvM8ypKBOjHWyge?=
- =?us-ascii?Q?5rzzfJb5uHBUaLWAmzI0DBUIhrM+nNXkF9sG4mAFQmYAKwVQcy5b6zvDtpBb?=
- =?us-ascii?Q?W3GWAYGOkdfD/cbvTmd8OV0cNcbfv9ubyV5rhqpd2gSX3jfx+L+kfD0dnJTR?=
- =?us-ascii?Q?WpGZVzFxM0Nl6ARJEHZ1fwsh50k61HkRiD6Xec6BxYSQU1IIb5tpt19zUe3X?=
- =?us-ascii?Q?hqLrgzIKj7wz0UWK3OxEwMrsh8ph5Sfgib//rEDSxOxbC+pEtljcCQQmxgtT?=
- =?us-ascii?Q?ZgCTrIrySemxAWsYBtTvGukjHGmTLYGwAmDRq8DdUuIhFSSA2lgLiGxUw3yY?=
- =?us-ascii?Q?4Ipr5i4QPLOVysEZEoKrtPPt3VvycNMcVucyxJwMh6SdCcrfZv9NtL+nVfb7?=
- =?us-ascii?Q?teGwPeci4yM6EYuiwO4AvDQ++rcSoh4h88Xi0gVNc3GqHYODBw6U+Bk7GXGr?=
- =?us-ascii?Q?bbOmZ49Y0DYr+eyVk/oY9dAguxSY8Cc2ZY24tMz1Esd6WLxu3wAWd7Lih2AO?=
- =?us-ascii?Q?tQsPUoSOCXA4CWkJxxzciSNN+gINUmt5QCfU4peSBsldYDvDrjTqJANPdFHt?=
- =?us-ascii?Q?v0FrrS32SARGtZHrNld3IShFI1rPXfmZNLnco/BVNdx+hQUuhsEybUYwlSTb?=
- =?us-ascii?Q?XsvJd5z7g/tOtgnmPcc=3D?=
+ client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
+ envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5E18A82A2D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5E18A82A2D
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5E18A82A2D
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:34:53 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id
+ a640c23a62f3a-aa67773ffd4so76532166b.2
+ for <buildroot@buildroot.org>; Tue, 04 Feb 2025 05:34:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1738676092; x=1739280892;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=zXIZK8dY+WE+02MqdJc96JbdW/4zakMjIG5s4MFf/ho=;
+ b=LYFktUQZZIteNWm+05gJll/SguC9MTCUEAXzbOtVBfE0UNGe7Jq6OJvSrw6uVbu0oO
+ 6bsE0yzvNVCecP+KXbt8+kl0Nc4Uva9uL9DEgvtKjbADu/eY3BBSgul6pW6PsmERFCUp
+ BcWCMobvwXBRS3gr3WnZuD/+wRrw5RXXZu15+ISDcMjwLM4HQRdcOIwr9u7FAzYGB8FE
+ HmAFGn/myHGzrFPyGeTJEAtc0QIxgJFaJMjHDntJ3cghOpiQjVomHiVZT3mp5vpkpD//
+ Gfntsn8xUq1jxu18rXfCZ+0fUlwBDXtS4h3cw5cf59pQSCw42zftwWmy36BSGh/Oex34
+ Lc2Q==
+X-Gm-Message-State: AOJu0YypCbUpTFvNPB9QfcUD5iV8PA7vYpb9n3pdsPAk2eX1AIukhbGf
+ GY5zxQE5KiVjkFFttI+vqUScA0t13VOvbgBlWya63iL4VoViP6X4knf9qoXe1Xc0vIO6UWEOFIG
+ ZYWuHU8mDTtH2DSxjKJK4XjSIumtde6Y8ooXC/+ImvioANXHU
+X-Gm-Gg: ASbGncu1hZ37k8n8kHR35zByHIgjdl1Lp4ElOjz/Zyj3TmX4ej/Z//vD3QOBYHJycS7
+ MhqSCbmq++GclT0PPfUeqkJYqzdAUBPJt25I2QHRpxRZYAw/XrYVV4qArAYMnD2zra9+v26rYcH
+ /3IKwU7kGK7hDVGxn1FvCZnIyEm43H3BE=
+X-Google-Smtp-Source: AGHT+IEkI3bMl2hC7vnbEariLKRcKyAGeghme36WVfHlHogyBpdqMhBmS7455AV2cI6wEofgAVqK2ZnVgChZFAhL4FE=
+X-Received: by 2002:a17:907:7faa:b0:aa6:9407:34e4 with SMTP id
+ a640c23a62f3a-ab747bf4cf8mr124866866b.12.1738676090874; Tue, 04 Feb 2025
+ 05:34:50 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR12MB5615.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 828c4ade-cbd8-4da5-bb46-08dd452073d9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Feb 2025 13:33:04.1088 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ez3xIQSdBQrlJTqyNwV3ry8/vouJ7iY/6ZaHNDuqK/3jpLamw1GtEML6Xe16A5e+
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8002
+References: <20241014102123.3727883-1-adam.duskett@amarulasolutions.com>
+ <287b51b1-5c1a-4048-99e5-42a53cd949cc@mind.be>
+ <513ab9a4-3fc9-47cd-9387-5d8b66895127@mind.be>
+In-Reply-To: <513ab9a4-3fc9-47cd-9387-5d8b66895127@mind.be>
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Tue, 4 Feb 2025 14:34:40 +0100
+X-Gm-Features: AWEUYZkPv-efVGvKcNIjb2xhqRTIdEo4nDuG_PFP3EYDxQhCdR0dbWbs5kwV9aE
+Message-ID: <CAHDQB6PT63vOuzXCr83=rhJM_Pz0=oP2CKjGUuw0272zvofcVA@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Cc: buildroot@buildroot.org, Angelo Compagnucci <angelo.compagnucci@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eFnMoMsmqhRVPD/tQ0+fUdTAnIgVUmtVIokyy46PW3M=;
- b=K4lzSFuMljkiqueSxHWUiwfLGXSJ94PcI823Qt9uu4odpfWW62s9O9BdSsI8rpWah+E+jeBNtYMUXayDzjz5zkMyWneXPUNfuAM+aNHS2fqdHObTgsuOUq5kIm/Rlv95tRie3liz5Rv+mYjLh432/s8gDuEGFZLa9u9jRRt54fo=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=amarulasolutions.com; s=google; t=1738676092; x=1739280892;
+ darn=buildroot.org; 
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=zXIZK8dY+WE+02MqdJc96JbdW/4zakMjIG5s4MFf/ho=;
+ b=RQIWQ5iBHZfOytectGhNZ8esYjjpxaAsDGmKuTgns5DnFxgVVDZsCmBVBfVa2ONNtc
+ Z06xsuiDEI9b6dRRh9I8ePfH5TIArH4pLUM/FwSB52loX8OyCOjkhvVolGnZVjaLc3DB
+ GLC7GrlAqusnY1p+Cn1iORZ7a7yqS1wgFy39g=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=K4lzSFuM
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v6 5/6] board/zynqmp: add new qspi.bin
- binary to images
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=RQIWQ5iB
+Subject: Re: [Buildroot] [PATCH 0/6] mender cleanup and intermittent update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -181,69 +102,235 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0247484829263825395=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Neal" == Neal Frager <neal.frager@amd.com> writes:
+--===============0247484829263825395==
+Content-Type: multipart/alternative; boundary="000000000000c6cb09062d5112de"
 
- > This patch adds the new qspi.bin file to the zynqmp sdcard.img.
- > For SD card booting, the qspi.bin file is unnecessary and can just be ignored.
- > For QSPI booting, only the qspi.bin file needs to be written to the flash.
+--000000000000c6cb09062d5112de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
- > This patch enables the Kria BIRT tool for Kria SOM reflashing using qspi.bin
- > as either "ImageA" or "ImageB".
+I would suggest applying the 3.5.3 bump to make the transition to 4.x or
+5.x easier. But it's up to you.
 
- > Kria BIRT (Boot Image Recovery Tool):
- > https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1641152513/Kria+SOMs+Starter+Kits#Boot-FW-Update-Process
 
- > Signed-off-by: Neal Frager <neal.frager@amd.com>
- > ---
- V1-> V2:
- >  - new to patch series
- V2-> V3:
- >  - corrected commit message to use BIRT instead of SBIRT
- V3-> V4:
- >  - changed config to BR2_TARGET_UBOOT_FORMAT_QSPI_BIN
- V4-> V6:
- >  - no changes
- > ---
- >  board/zynqmp/genimage.cfg           | 1 +
- >  configs/zynqmp_kria_kd240_defconfig | 1 +
- >  configs/zynqmp_kria_kr260_defconfig | 1 +
- >  configs/zynqmp_kria_kv260_defconfig | 1 +
- >  configs/zynqmp_zcu102_defconfig     | 1 +
- >  configs/zynqmp_zcu104_defconfig     | 1 +
- >  configs/zynqmp_zcu106_defconfig     | 1 +
- >  7 files changed, 7 insertions(+)
 
- > diff --git a/board/zynqmp/genimage.cfg b/board/zynqmp/genimage.cfg
- > index 20d8352c08..0a6aea7a29 100644
- > --- a/board/zynqmp/genimage.cfg
- > +++ b/board/zynqmp/genimage.cfg
- > @@ -3,6 +3,7 @@ image boot.vfat {
- >  		files = {
- >  			"boot.bin",
- >  			"u-boot.itb",
- > +			"qspi.bin",
 
-> I guess you are adding it to the vfat to be able to easily write it from
-> the SD card to QSPI from U-Boot / Linux?
+On Tue, Feb 4, 2025 at 2:17=E2=80=AFPM Arnout Vandecappelle <arnout@mind.be=
+> wrote:
 
-> Committed, thanks.
+>
+> On 04/02/2025 14:02, Arnout Vandecappelle wrote:
+> >
+> >
+> > On 14/10/2024 12:21, Adam Duskett wrote:
+> >> Instead of updating mender directly to 4.x, which is far too large
+> >> of a change, update it to 3.5.3 which is the last of the GO version.
+> >>
+> >> This not only provides security and bug fixes, but it makes the
+> >> transition to 4.x when someone picks that up much easier. This is base=
+d
+> >> off of previous work found here:
+> >>
+> >>
+> https://patchwork.ozlabs.org/project/buildroot/patch/20231219172446.49840=
+9-6-adam.duskett@amarulasolutions.com/
+> >>
+> >>
+> >> With the addition of more tests, cleaning up documentation, and adding
+> some
+> >> information in the migrating.adoc file.
+> >>
+> >> Adam Duskett (6):
+> >>    board/mender/x86_64/post-image-efi.sh: re-arrange write rootfs-imag=
+e
+> >>      args
+> >>    package/mender: remove /var/lib/mender symlinking
+> >>    support/testing/tests/package/test_mender.py: Add RO fs test
+> >>    support/testing/tests/package/test_mender.py: Add a systemd test
+> >>    package/mender/readme.txt: update readme
+> >
+> >  Patches 1-5 applied to master, thanks. There was a flake8 error in one
+> of the
+> > patches, but otherwise it looked great!
+> >
+> >  Thanks for continuing to work on mender integration in Buildroot! And
+> as
+> > usual, sorry that it takes so long before things get applied.
+> >
+> >>    package/mender: bump version to 3.5.3
+> >
+> >  I haven't applied this one because you have sent the bump to 4.0.0.
+>
+>
+>   Oops, I got confused between mender and mender-artifact. I'll apply thi=
+s
+> one
+> as well.
+>
+>
+>   Regards,
+>   Arnout
+>
+>
+> >
+> >  Regards,
+> >  Arnout
+> >
+> >>
+> >>   board/mender/x86_64/post-build.sh             | 12 +---
+> >>   board/mender/x86_64/post-image-efi.sh         | 25 +++++++-
+> >>   docs/manual/migrating.adoc                    | 15 +++++
+> >>   package/mender/S42mender                      | 16 -----
+> >>   package/mender/artifact_info                  |  1 -
+> >>   package/mender/mender-client.service          | 11 ----
+> >>   package/mender/mender.conf                    |  1 +
+> >>   package/mender/mender.hash                    | 10 +--
+> >>   package/mender/mender.mk                      | 10 ++-
+> >>   package/mender/readme.txt                     | 60 ++++++-----------
+> >>   support/testing/tests/package/test_mender.py  | 64 +++++++++++++++--=
+--
+> >>   .../tests/package/test_mender/post-build.sh   | 25 ++++++++
+> >>   12 files changed, 148 insertions(+), 102 deletions(-)
+> >>   delete mode 100644 package/mender/artifact_info
+> >>   create mode 100755
+> support/testing/tests/package/test_mender/post-build.sh
+> >>
+> >
+>
 
-Yes, exactly.  Thanks!
+--000000000000c6cb09062d5112de
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> -- 
-> Bye, Peter Korsgaard
+<div dir=3D"ltr"><div>I would suggest applying the 3.5.3 bump to make the t=
+ransition to 4.x or 5.x easier. But it&#39;s up to you.</div><div><div dir=
+=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"gmail_signature"><div =
+dir=3D"ltr"><span><p dir=3D"ltr" style=3D"line-height:1.7999999999999998;ma=
+rgin-top:0pt;margin-bottom:0pt"><br></p></span></div></div></div><br></div>=
+<br><div class=3D"gmail_quote gmail_quote_container"><div dir=3D"ltr" class=
+=3D"gmail_attr">On Tue, Feb 4, 2025 at 2:17=E2=80=AFPM Arnout Vandecappelle=
+ &lt;<a href=3D"mailto:arnout@mind.be">arnout@mind.be</a>&gt; wrote:<br></d=
+iv><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;bord=
+er-left:1px solid rgb(204,204,204);padding-left:1ex"><br>
+On 04/02/2025 14:02, Arnout Vandecappelle wrote:<br>
+&gt;<br>
+&gt;<br>
+&gt; On 14/10/2024 12:21, Adam Duskett wrote:<br>
+&gt;&gt; Instead of updating mender directly to 4.x, which is far too large=
+<br>
+&gt;&gt; of a change, update it to 3.5.3 which is the last of the GO versio=
+n.<br>
+&gt;&gt;<br>
+&gt;&gt; This not only provides security and bug fixes, but it makes the<br=
+>
+&gt;&gt; transition to 4.x when someone picks that up much easier. This is =
+based<br>
+&gt;&gt; off of previous work found here:<br>
+&gt;&gt;<br>
+&gt;&gt; <a href=3D"https://patchwork.ozlabs.org/project/buildroot/patch/20=
+231219172446.498409-6-adam.duskett@amarulasolutions.com/" rel=3D"noreferrer=
+" target=3D"_blank">https://patchwork.ozlabs.org/project/buildroot/patch/20=
+231219172446.498409-6-adam.duskett@amarulasolutions.com/</a> <br>
+&gt;&gt;<br>
+&gt;&gt;<br>
+&gt;&gt; With the addition of more tests, cleaning up documentation, and ad=
+ding some<br>
+&gt;&gt; information in the migrating.adoc file.<br>
+&gt;&gt;<br>
+&gt;&gt; Adam Duskett (6):<br>
+&gt;&gt; =C2=A0=C2=A0 board/mender/x86_64/post-image-efi.sh: re-arrange wri=
+te rootfs-image<br>
+&gt;&gt; =C2=A0=C2=A0=C2=A0=C2=A0 args<br>
+&gt;&gt; =C2=A0=C2=A0 package/mender: remove /var/lib/mender symlinking<br>
+&gt;&gt; =C2=A0=C2=A0 support/testing/tests/package/test_mender.py: Add RO =
+fs test<br>
+&gt;&gt; =C2=A0=C2=A0 support/testing/tests/package/test_mender.py: Add a s=
+ystemd test<br>
+&gt;&gt; =C2=A0=C2=A0 package/mender/readme.txt: update readme<br>
+&gt;<br>
+&gt; =C2=A0Patches 1-5 applied to master, thanks. There was a flake8 error =
+in one of the <br>
+&gt; patches, but otherwise it looked great!<br>
+&gt;<br>
+&gt; =C2=A0Thanks for continuing to work on mender integration in Buildroot=
+! And as <br>
+&gt; usual, sorry that it takes so long before things get applied.<br>
+&gt;<br>
+&gt;&gt; =C2=A0=C2=A0 package/mender: bump version to 3.5.3<br>
+&gt;<br>
+&gt; =C2=A0I haven&#39;t applied this one because you have sent the bump to=
+ 4.0.0.<br>
+<br>
+<br>
+=C2=A0=C2=A0Oops, I got confused between mender and mender-artifact. I&#39;=
+ll apply this one <br>
+as well.<br>
+<br>
+<br>
+=C2=A0=C2=A0Regards,<br>
+=C2=A0=C2=A0Arnout<br>
+<br>
+<br>
+&gt;<br>
+&gt; =C2=A0Regards,<br>
+&gt; =C2=A0Arnout<br>
+&gt;<br>
+&gt;&gt;<br>
+&gt;&gt; =C2=A0 board/mender/x86_64/post-build.sh=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 12 +---<br>
+&gt;&gt; =C2=A0 board/mender/x86_64/post-image-efi.sh=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 25 +++++++-<br>
+&gt;&gt; =C2=A0 docs/manual/migrating.adoc=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 | 15 +++++<br>
+&gt;&gt; =C2=A0 package/mender/S42mender=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 | 16 -----<br>
+&gt;&gt; =C2=A0 package/mender/artifact_info=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=
+=C2=A0 1 -<br>
+&gt;&gt; =C2=A0 package/mender/mender-client.service=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 11 ----<br>
+&gt;&gt; =C2=A0 package/mender/mender.conf=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 |=C2=A0 1 +<br>
+&gt;&gt; =C2=A0 package/mender/mender.hash=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 | 10 +--<br>
+&gt;&gt; =C2=A0 package/mender/<a href=3D"http://mender.mk" rel=3D"noreferr=
+er" target=3D"_blank">mender.mk</a>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 | 10 ++-<br>
+&gt;&gt; =C2=A0 package/mender/readme.txt=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 | 60 ++++++-----------<br>
+&gt;&gt; =C2=A0 support/testing/tests/package/test_mender.py=C2=A0 | 64 +++=
+++++++++++++----<br>
+&gt;&gt; =C2=A0 .../tests/package/test_mender/post-build.sh=C2=A0=C2=A0 | 2=
+5 ++++++++<br>
+&gt;&gt; =C2=A0 12 files changed, 148 insertions(+), 102 deletions(-)<br>
+&gt;&gt; =C2=A0 delete mode 100644 package/mender/artifact_info<br>
+&gt;&gt; =C2=A0 create mode 100755 support/testing/tests/package/test_mende=
+r/post-build.sh<br>
+&gt;&gt;<br>
+&gt;<br>
+</blockquote></div>
 
-Best regards,
-Neal Frager
-AMD
+--000000000000c6cb09062d5112de--
+
+--===============0247484829263825395==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0247484829263825395==--
