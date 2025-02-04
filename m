@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7074EC02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 13:07:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20FB1C02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 13:07:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EED660F71;
-	Tue,  4 Feb 2025 13:07:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E269360EA1;
+	Tue,  4 Feb 2025 13:07:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gyS7E37PQ3UA; Tue,  4 Feb 2025 13:07:53 +0000 (UTC)
+ id AKTu3-9au-NB; Tue,  4 Feb 2025 13:07:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F2A960F35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3AFA60F77
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F2A960F35;
-	Tue,  4 Feb 2025 13:07:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3AFA60F77;
+	Tue,  4 Feb 2025 13:07:55 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F340185
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:07:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2B3BF185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:07:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F386881111
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:07:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2F6D581111
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:07:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3z-HqONTUXDN for <buildroot@buildroot.org>;
+ id 1P20dNOAJFrg for <buildroot@buildroot.org>;
  Tue,  4 Feb 2025 13:07:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DAFB81114
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FCD081117
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7DAFB81114
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8FCD081117
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 13:07:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7679886D07; Tue,  4 Feb 2025 13:07:38 +0000 (UTC)
+ id 89AE786D0A; Tue,  4 Feb 2025 13:07:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 13:57:11 +0100
+Date: Tue, 4 Feb 2025 14:01:09 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5389f9b1a2deb8bcbb0475a6ef853011208c00b0
-X-Git-Newrev: c4772ecef6c44ade30f4befb38e32d6dc293aad3
+X-Git-Oldrev: c4772ecef6c44ade30f4befb38e32d6dc293aad3
+X-Git-Newrev: 7dbd1c334d6a9f512b35721c8af6a8f2e74dc335
 X-Patchwork-Hint: ignore
-Message-Id: <20250204130738.7679886D07@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- support/testing/tests/package/test_mender.py: Add a systemd test
+Message-Id: <20250204130738.89AE786D0A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mender/readme.txt: update readme
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,67 +65,107 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4772ecef6c44ade30f4befb38e32d6dc293aad3
+commit: https://git.buildroot.net/buildroot/commit/?id=7dbd1c334d6a9f512b35721c8af6a8f2e74dc335
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Move the check for /var/run/mender.pid to before self.run_mender_test()
-    for the two tests using sysvinit.
-
-  - Instead of checking for /var/run/mender.pid during the systemd test,
-    check to ensure "systemctl is-active mender-client" returns "active"
+- Add missing packages to the mender package list.
+ - Update broken URL links.
+ - Remove the example mender artifact post-image script in favor of directing
+   the user to the board/mender/x86_64/post-image-efi.sh script.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-[Arnout: fix flake8 issue]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- support/testing/tests/package/test_mender.py | 22 ++++++++++++++++++++--
- 1 file changed, 20 insertions(+), 2 deletions(-)
+ package/mender/readme.txt | 56 +++++++++++++----------------------------------
+ 1 file changed, 15 insertions(+), 41 deletions(-)
 
-diff --git a/support/testing/tests/package/test_mender.py b/support/testing/tests/package/test_mender.py
-index 0938cb77e1..976d03b172 100644
---- a/support/testing/tests/package/test_mender.py
-+++ b/support/testing/tests/package/test_mender.py
-@@ -20,8 +20,6 @@ class TestMenderInfra(infra.basetest.BRTest):
-         self.emulator.login()
+diff --git a/package/mender/readme.txt b/package/mender/readme.txt
+index c884524a1b..d78623aec9 100644
+--- a/package/mender/readme.txt
++++ b/package/mender/readme.txt
+@@ -28,13 +28,23 @@ In Buildroot the following packages are provided:
+     - This will install the client on target rootfs
+ - BR2_PACKAGE_HOST_MENDER_ARTIFACT
+     - This will install the 'mender-artifact' tool in host rootfs.
++- BR2_PACKAGE_MENDER_CONNECT
++    - This installs a client that allows for remote terminal access
++      to mender clients registered on a mender server.
++- BR2_PACKAGE_MENDER_GRUBENV
++    - This package provides boot scripts to integrate mender into grub.
++      Mender recommends every client to use this package, including boards
++      using uboot as the primary bootloader.
  
-     def run_mender_test(self):
--        # Check if the Daemon is running
--        self.assertRunOk("ls /var/run/mender.pid")
-         self.assertRunOk("ps aux | egrep [m]ender")
+ To fully utilize atomic image-based deployments using the A/B update
+ strategy, additional integration is required in the bootloader. This
+ integration is board specific.
  
-         # Check if a simple Mender command is correctly executed
-@@ -35,6 +33,9 @@ class TestMenderInfra(infra.basetest.BRTest):
- class TestMenderRW(TestMenderInfra):
-     def test_run(self):
-         TestMenderInfra.base_test_run(self)
+-Currently supported bootloaders are GRUB and U-boot, and for reference
+-integrations please visit:
++Currently supported bootloaders are GRUB and U-boot. Buildroot provides
++a reference integration at board/mender/x86_64/ using the
++mender_x86_64_efi_defconfig file.
 +
-+        # Check if the Daemon is running
-+        self.assertRunOk("ls /var/run/mender.pid")
-         self.run_mender_test()
++Additional support and integrations are found at:
  
+     https://github.com/mendersoftware/buildroot-mender
  
-@@ -47,4 +48,21 @@ class TestMenderRO(TestMenderInfra):
+@@ -46,12 +56,7 @@ files that need your attention:
  
-     def test_run(self):
-         TestMenderInfra.base_test_run(self)
-+
-+        # Check if the Daemon is running
-+        self.assertRunOk("ls /var/run/mender.pid")
-+        self.run_mender_test()
-+
-+
-+class TestMenderSystemd(TestMenderInfra):
-+    config = \
-+        """
-+        {}
-+        BR2_INIT_SYSTEMD=y
-+        """.format(TestMenderInfra.config)
-+
-+    def test_run(self):
-+        TestMenderInfra.base_test_run(self)
-+        output, _ = self.emulator.run("systemctl is-active mender-client")
-+        self.assertEqual(output[0], "active")
-         self.run_mender_test()
+ - /etc/mender/mender.conf
+     - main configuration file for the Mender client
+-    - https://docs.mender.io/client-configuration/configuration-file/configuration-options
+-
+-- /etc/mender/artifact_info
+-    - The name of the image or update that will be built. This is what the
+-      device will report that it is running, and different updates must have
+-      different names
++    - https://docs.mender.io/client-installation/configuration/configuration-options
+ 
+ - /var/lib/mender/device_type
+     - A string that defines the type of device
+@@ -110,40 +115,9 @@ Creating Mender Artifacts
+ To create Mender Artifacts based on Buildroot build output you must
+ include BR2_PACKAGE_HOST_MENDER_ARTIFACT in your configuration, and
+ then you would typically create the Mender Artifact in a post image
+-script (BR2_ROOTFS_POST_IMAGE_SCRIPT). Below is an example of such a
+-script:
+-
+-    #!/bin/sh
+-
+-    set -e
+-    set -x
+-
+-    device_type=$(cat ${TARGET_DIR}/var/lib/mender/device_type | sed 's/[^=]*=//')
+-    artifact_name=$(cat ${TARGET_DIR}/etc/mender/artifact_info | sed 's/[^=]*=//')
+-
+-    if [ -z "${device_type}" ] || [ -z "${artifact_name}" ]; then
+-        echo "missing files required by Mender"
+-        exit 1
+-    fi
+-
+-    ${HOST_DIR}/usr/bin/mender-artifact write rootfs-image \
+-        --update ${BINARIES_DIR}/rootfs.ext4 \
+-        --output-path ${BINARIES_DIR}/${artifact_name}.mender \
+-        --artifact-name ${artifact_name} \
+-        --device-type ${device_type}
+-
+-As you can see some properties are extracted from target rootfs, and
+-this is because these values are used for compatibility checks,
+-meaning that the information must be present in both rootfs and in
+-Mender Artifact meta data.
+-
+-- device_type - must be an exact match between rootfs and Mender
+-                Artifact meta-data to apply update. You can set an
+-                array of devices here as well, e.g if your image is
+-                compatible with multiple hardware revisions
++script (BR2_ROOTFS_POST_IMAGE_SCRIPT). See the generate_mender_image
++method in board/mender/x86_64/post-image-efi.sh for a working example.
+ 
+-- artifact_name - must be an exact match between rootfs and Mender
+-                  Artifact meta-data to apply update.
+ 
+ Configuring Mender with certificates
+ ------------------------------------
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
