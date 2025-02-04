@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A97BC02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 15:16:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74697C02197
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 15:16:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0A3AA412B9;
-	Tue,  4 Feb 2025 15:16:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a30C9m9MyIvl; Tue,  4 Feb 2025 15:16:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C09941310
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C09941310;
-	Tue,  4 Feb 2025 15:16:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 061F1185
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:16:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DF62D80F91
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:16:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4211580F91;
+	Tue,  4 Feb 2025 15:16:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H6LqILKIv2gd for <buildroot@buildroot.org>;
+ id LnOZjT9mgi_a; Tue,  4 Feb 2025 15:16:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3819A81EF9
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3819A81EF9;
+	Tue,  4 Feb 2025 15:16:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3EAA3185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:16:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2B4BC6089A
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:16:32 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2S1OHryBTv42 for <buildroot@buildroot.org>;
  Tue,  4 Feb 2025 15:16:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03BA2810B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A50A60BE2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 03BA2810B3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4A50A60BE2
  for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:16:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F207186E0F; Tue,  4 Feb 2025 15:16:30 +0000 (UTC)
+ id 4797E86E14; Tue,  4 Feb 2025 15:16:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 16:16:10 +0100
+Date: Tue, 4 Feb 2025 16:16:16 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 91e51e267906f41cad530b93879ff3c157f3200d
-X-Git-Newrev: 7f6d8881050558b768bce014f6b313e17f587f7e
+X-Git-Oldrev: 03df6d1a261613366deaa8ebb335d4fbcb73bad4
+X-Git-Newrev: 3ea79058c077961c8f3b7c8c25f4545400622313
 X-Patchwork-Hint: ignore
-Message-Id: <20250204151630.F207186E0F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/json-glib: bump to version 1.10.6
+Message-Id: <20250204151631.4797E86E14@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing/tests: new
+ NetworkManager/GOI test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,75 +61,117 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6135536027537970285=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f6d8881050558b768bce014f6b313e17f587f7e
+--===============6135536027537970285==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=3ea79058c077961c8f3b7c8c25f4545400622313
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Required to build with gobject-introspection >= 1.82.0, to be bumped
-in a later commit.
+This test is inspired from the details provided by Fiona Klute's cover
+letter for a GOI/glib bump series at:
 
-License information has been restructured according to REUSE
-guidelines, see [1]. Update hashes and license information
-accordingly.
+  https://lore.kernel.org/buildroot/20250120211707.2381182-1-fiona.klute@gmx.de/
 
-[1] https://gitlab.gnome.org/GNOME/json-glib/-/commit/a06d43db36545aff10eb384d62548d96a7cf6020
+Which itself uses the example code at:
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Tested-by: Marcus Hoffmann <buildroot@bubu1.eu>
-[Thomas: do not list .reuse/dep5 in license files]
+  https://networkmanager.dev/docs/developers/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/json-glib/json-glib.hash | 12 ++++++++----
- package/json-glib/json-glib.mk   | 11 +++++++----
- 2 files changed, 15 insertions(+), 8 deletions(-)
+ DEVELOPERS                                         |  2 ++
+ .../package/sample_python_networkmanager_goi.py    | 26 ++++++++++++++++++++++
+ .../package/test_python_networkmanager_goi.py      | 24 ++++++++++++++++++++
+ 3 files changed, 52 insertions(+)
 
-diff --git a/package/json-glib/json-glib.hash b/package/json-glib/json-glib.hash
-index b78d708391..c4381fc0d7 100644
---- a/package/json-glib/json-glib.hash
-+++ b/package/json-glib/json-glib.hash
-@@ -1,5 +1,9 @@
--# From https://download.gnome.org/sources/json-glib/1.8/json-glib-1.8.0.sha256sum
--sha256  97ef5eb92ca811039ad50a65f06633f1aae64792789307be7170795d8b319454  json-glib-1.8.0.tar.xz
-+# From https://download.gnome.org/sources/json-glib/1.10/json-glib-1.10.6.sha256sum
-+sha256  77f4bcbf9339528f166b8073458693f0a20b77b7059dbc2db61746a1928b0293  json-glib-1.10.6.tar.xz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2da5d178b2..af605b388e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1103,6 +1103,8 @@ F:	package/python-dunamai/
+ F:	package/python-poetry-dynamic-versioning/
+ F:	package/python-pyasynchat/
+ F:	package/python-pyasyncore/
++F:	support/testing/tests/package/sample_python_networkmanager_goi.py
++F:	support/testing/tests/package/test_python_networkmanager_goi.py
  
--# Hash for license file:
--sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
-+# Hashes for license files
-+sha256  a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499  LICENSES/CC0-1.0.txt
-+sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  LICENSES/LGPL-2.1-or-later.txt
-+sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
-+# symlink to LICENSES/LGPL-2.1-or-later.txt
-+sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  COPYING
-diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
-index e216af20b1..9595c17274 100644
---- a/package/json-glib/json-glib.mk
-+++ b/package/json-glib/json-glib.mk
-@@ -4,12 +4,15 @@
- #
- ################################################################################
- 
--JSON_GLIB_VERSION_MAJOR = 1.8
--JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).0
-+JSON_GLIB_VERSION_MAJOR = 1.10
-+JSON_GLIB_VERSION = $(JSON_GLIB_VERSION_MAJOR).6
- JSON_GLIB_SITE = https://download.gnome.org/sources/json-glib/$(JSON_GLIB_VERSION_MAJOR)
- JSON_GLIB_SOURCE = json-glib-$(JSON_GLIB_VERSION).tar.xz
--JSON_GLIB_LICENSE = LGPL-2.1+
--JSON_GLIB_LICENSE_FILES = COPYING
-+JSON_GLIB_LICENSE = LGPL-2.1+, MIT (conformance test data), CC0-1.0 (parts of build system, metadata, translations)
-+JSON_GLIB_LICENSE_FILES = LICENSES/CC0-1.0.txt \
-+	LICENSES/LGPL-2.1-or-later.txt \
-+	LICENSES/MIT.txt \
-+	COPYING
- JSON_GLIB_INSTALL_STAGING = YES
- JSON_GLIB_CONF_OPTS = -Dgtk_doc=disabled -Dtests=false
- 
+ N:	Flávio Tapajós <flavio.tapajos@newtesc.com.br>
+ F:	configs/asus_tinker-s_rk3288_defconfig
+diff --git a/support/testing/tests/package/sample_python_networkmanager_goi.py b/support/testing/tests/package/sample_python_networkmanager_goi.py
+new file mode 100644
+index 0000000000..240e8437fd
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_networkmanager_goi.py
+@@ -0,0 +1,26 @@
++#!/usr/bin/env python3
++
++# This script is from https://networkmanager.dev/docs/developers/
++
++import gi
++gi.require_version("NM", "1.0")
++from gi.repository import NM  # noqa: E402
++
++
++def print_values(setting, key, value, flags, data):
++    print("     {}.{}: {}".format(setting.get_name(), key, value))
++
++
++# Create the client object. This automatically loads all the D-Bus
++# tree and creates in-memory objects for connections, devices, access
++# points, etc.
++client = NM.Client.new(None)
++
++# Obtain a list of connection profiles ...
++connections = client.get_connections()
++
++# ... and print their properties
++for c in connections:
++    print("{}:".format(c.get_id()))
++    c.for_each_setting_value(print_values, None)
++    print("\n")
+diff --git a/support/testing/tests/package/test_python_networkmanager_goi.py b/support/testing/tests/package/test_python_networkmanager_goi.py
+new file mode 100644
+index 0000000000..e755569fc1
+--- /dev/null
++++ b/support/testing/tests/package/test_python_networkmanager_goi.py
+@@ -0,0 +1,24 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3NetworkmanagerGoi(TestPythonPackageBase):
++    __test__ = True
++    # Can't use TestPythonPackageBase.config because we need headers
++    # >= 4.20 for network-manager, so we have to use the bleeding-edge
++    # toolchain.
++    config = \
++        """
++        BR2_arm=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_BLEEDING_EDGE=y
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_GOBJECT=y
++        BR2_INIT_SYSTEMD=y
++        BR2_PACKAGE_NETWORK_MANAGER=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    sample_scripts = ["tests/package/sample_python_networkmanager_goi.py"]
++
++    timeout = 30
+
+--===============6135536027537970285==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6135536027537970285==--
