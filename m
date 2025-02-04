@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7CDEC02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 17:10:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 655A8C02193
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 17:18:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 51F4260D89;
-	Tue,  4 Feb 2025 17:10:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 16F8660D91;
+	Tue,  4 Feb 2025 17:18:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A9t4qXSJyi4C; Tue,  4 Feb 2025 17:10:07 +0000 (UTC)
+ id Nd7U8THLL8jm; Tue,  4 Feb 2025 17:18:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E88160D8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 063D060D5B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4E88160D8C;
-	Tue,  4 Feb 2025 17:10:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id CEC2E1A6
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:10:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 063D060D5B;
+	Tue,  4 Feb 2025 17:18:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 38C9312A
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:18:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4209411B4
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:10:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2183560B6B
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:18:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T77TTTQUmNPP for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 17:10:01 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OKHYY8TgT-q8 for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 17:18:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A0F0411AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EB7360D65
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5A0F0411AA
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:10:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3EB7360D65
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:18:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4AC4686E7C; Tue,  4 Feb 2025 17:10:01 +0000 (UTC)
+ id 279EA86E86; Tue,  4 Feb 2025 17:18:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 18:09:50 +0100
+Date: Tue, 4 Feb 2025 18:13:19 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ceb4cc30da8e143f9c3d25dfe4456237f8ab1274
-X-Git-Newrev: 1c386996012b46205b096617474719c03633550d
+X-Git-Oldrev: 1c386996012b46205b096617474719c03633550d
+X-Git-Newrev: 689aff3df426d234abb7b4608ae65124bbffe72f
 X-Patchwork-Hint: ignore
-Message-Id: <20250204171001.4AC4686E7C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nxp-mwifiex: new package
+Message-Id: <20250204171832.279EA86E86@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pcre2: bump version to 10.44
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,110 +60,67 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0393693193874875313=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0393693193874875313==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=1c386996012b46205b096617474719c03633550d
+commit: https://git.buildroot.net/buildroot/commit/?id=689aff3df426d234abb7b4608ae65124bbffe72f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Linux kernel driver from NXP for WiFi chipsets IW416 / IW610 / IW612 /
-W8801 / W8987 / W8997 / W9098.
+- enable PCRE2_AUTORECONF to fix the following buildi/relink failure:
 
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+    x86_64-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used
+    in cross-compilation: '-L/usr/lib'
+
+For details see [1].
+
+[1] https://github.com/PCRE2Project/pcre2/blob/master/ChangeLog
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Tested-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/nxp-mwifiex/Config.in        | 11 +++++++++++
- package/nxp-mwifiex/nxp-mwifiex.hash |  3 +++
- package/nxp-mwifiex/nxp-mwifiex.mk   | 15 +++++++++++++++
- 5 files changed, 31 insertions(+)
+ package/pcre2/pcre2.hash | 4 ++--
+ package/pcre2/pcre2.mk   | 5 ++++-
+ 2 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 909de4a871..24fb3e07e0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2948,6 +2948,7 @@ N:	Sébastien Szymanski <sebastien.szymanski@armadeus.com>
- F:	board/armadeus/
- F:	configs/armadeus*
- F:	package/nxp-bt-wifi-firmware/
-+F:	package/nxp-mwifiex/
- F:	package/mmc-utils/
- F:	package/python-flask-jsonrpc/
- F:	package/python-flask-login/
-diff --git a/package/Config.in b/package/Config.in
-index c2d1693b46..83f69f9004 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -571,6 +571,7 @@ endmenu
- 	source "package/nvidia-modprobe/Config.in"
- 	source "package/nvidia-persistenced/Config.in"
- 	source "package/nvme/Config.in"
-+	source "package/nxp-mwifiex/Config.in"
- 	source "package/ofono/Config.in"
- 	source "package/ola/Config.in"
- 	source "package/open2300/Config.in"
-diff --git a/package/nxp-mwifiex/Config.in b/package/nxp-mwifiex/Config.in
-new file mode 100644
-index 0000000000..7399705b28
---- /dev/null
-+++ b/package/nxp-mwifiex/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_NXP_MWIFIEX
-+	bool "nxp-mwifiex"
-+	depends on BR2_LINUX_KERNEL
-+	help
-+	  Linux kernel driver from NXP for WiFi chipsets
-+	  IW416 / IW610 / IW612 / W8801 / W8987 / W8997 / W9098.
-+
-+	  https://github.com/nxp-imx/mwifiex
-+
-+comment "nxp-mwifiex needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-diff --git a/package/nxp-mwifiex/nxp-mwifiex.hash b/package/nxp-mwifiex/nxp-mwifiex.hash
-new file mode 100644
-index 0000000000..559e89cb37
---- /dev/null
-+++ b/package/nxp-mwifiex/nxp-mwifiex.hash
-@@ -0,0 +1,3 @@
-+# locally computed
-+sha256  dcffe6c48babf7db82aac4704b056cffc06a1f80008cd9c23ab0479fc890ba99  nxp-mwifiex-lf-6.6.52_2.2.0.tar.gz
-+sha256  67d461bc478d220fcdf99c59d8ea17fffbd1881718281aa4947eb608fcd568bb  LICENSE
-diff --git a/package/nxp-mwifiex/nxp-mwifiex.mk b/package/nxp-mwifiex/nxp-mwifiex.mk
-new file mode 100644
-index 0000000000..faacaad289
---- /dev/null
-+++ b/package/nxp-mwifiex/nxp-mwifiex.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# nxp-mwifiex
-+#
-+################################################################################
-+
-+NXP_MWIFIEX_VERSION = lf-6.6.52_2.2.0
-+NXP_MWIFIEX_SITE = $(call github,nxp-imx,mwifiex,$(NXP_MWIFIEX_VERSION))
-+NXP_MWIFIEX_LICENSE = GPL-2.0
-+NXP_MWIFIEX_LICENSE_FILES = LICENSE
-+
-+NXP_MWIFIEX_MAKE_OPTS = KERNELDIR=$(LINUX_DIR)
-+
-+$(eval $(kernel-module))
-+$(eval $(generic-package))
-
---===============0393693193874875313==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
+index f2e17df753..8b22040ba7 100644
+--- a/package/pcre2/pcre2.hash
++++ b/package/pcre2/pcre2.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature:
+-# https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.43/pcre2-10.43.tar.bz2.sig
+-sha256  e2a53984ff0b07dfdb5ae4486bbb9b21cca8e7df2434096cc9bf1b728c350bcb  pcre2-10.43.tar.bz2
++# https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.44/pcre2-10.44.tar.bz2.sig
++sha256  d34f02e113cf7193a1ebf2770d3ac527088d485d4e047ed10e5d217c6ef5de96  pcre2-10.44.tar.bz2
+ # Locally computed
+ sha256  030087e2e8dd7c1bdd26057d25d4ded8f45bbf01ad458d68665ad04b8b0fbedf  LICENCE
+diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
+index 9641f22e81..191596181a 100644
+--- a/package/pcre2/pcre2.mk
++++ b/package/pcre2/pcre2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PCRE2_VERSION = 10.43
++PCRE2_VERSION = 10.44
+ PCRE2_SITE = https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$(PCRE2_VERSION)
+ PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
+ PCRE2_LICENSE = BSD-3-Clause
+@@ -12,6 +12,9 @@ PCRE2_LICENSE_FILES = LICENCE
+ PCRE2_CPE_ID_VENDOR = pcre
+ PCRE2_INSTALL_STAGING = YES
+ PCRE2_CONFIG_SCRIPTS = pcre2-config
++# Fixes build/relink failure ("ERROR: unsafe header/library path used in
++# cross-compilation: '-L/usr/lib'")
++PCRE2_AUTORECONF = YES
+ 
+ PCRE2_CONF_OPTS += --enable-pcre2-8
+ PCRE2_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE2_16),--enable-pcre2-16,--disable-pcre2-16)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0393693193874875313==--
