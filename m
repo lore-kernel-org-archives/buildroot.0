@@ -4,98 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77A27C0218F
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 06:27:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D576DC0218F
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 08:07:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11E96403D2;
-	Tue,  4 Feb 2025 06:27:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E69541347;
+	Tue,  4 Feb 2025 08:07:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id glOqoInvEUPB; Tue,  4 Feb 2025 06:27:40 +0000 (UTC)
+ id hopYeHKm5t1N; Tue,  4 Feb 2025 08:07:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 256DB40348
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 193CA4133C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 256DB40348;
-	Tue,  4 Feb 2025 06:27:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8D1EC185
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 06:27:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 193CA4133C;
+	Tue,  4 Feb 2025 08:07:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9E92512A
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 08:07:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7CC7740331
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 06:27:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 81B754114D
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 08:07:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4JdP7y1CYMbu for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 06:27:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.239;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mRjQ1NuoZqKd for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 08:07:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 00F43402ED
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00F43402ED
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 00F43402ED
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 06:27:34 +0000 (UTC)
-X-CSE-ConnectionGUID: lMDytsrPSHW53QAf830MRw==
-X-CSE-MsgGUID: CerTjVGuSimd49+q+eZYAQ==
-Received: from unknown (HELO opfedv1rlp0e.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 04 Feb 2025 07:27:32 +0100
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0e.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 04 Feb 2025 07:27:32 +0100
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Tue, 4 Feb 2025 07:27:30 +0100
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Tue, 04 Feb 2025 07:27:29 +0100
-From: yann.morin@orange.com
-X-CSE-ConnectionGUID: zUASimevSsSGCsytckCjbA==
-X-CSE-MsgGUID: fWlUCkX+R766PMgFigmAKA==
-X-IronPort-AV: E=Sophos;i="6.13,258,1732575600"; d="scan'208";a="247291267"
-Date: Tue, 4 Feb 2025 07:27:29 +0100
-To: Christian Stewart <christian@aperture.us>
-CC: Fiona Klute <fiona.klute@gmx.de>, Thomas Perale <thomas.perale@mind.be>,
- <buildroot@buildroot.org>
-Message-ID: <Z6GzURTwV7ecNYx0@yd-6wlzhs3>
-References: <20250203120130.2332720-1-fiona.klute@gmx.de>
- <3dfa6faa-9307-4091-9a8b-f327a0be19be@mind.be>
- <434ed0ef-17b5-48af-9c93-1c7bb75c857f@gmx.de>
- <087a8c52-81f6-4031-b0ce-712fc8857034@mind.be>
- <bf504c35-cbe4-40dd-b56d-bfa3b62e552c@gmx.de>
- <CA+h8R2qSoHp-YPNDAtNiCMrsEEULhYZGZa_EveNnUuPHkeucMQ@mail.gmail.com>
- <CA+h8R2qfjy2PWktigLvq96Tg-GHvVk=uxicdkgW_pp84OvZBCg@mail.gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 358F040C22
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 358F040C22
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 358F040C22
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 08:07:01 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5E7E944362;
+ Tue,  4 Feb 2025 08:06:58 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1tfDxR-00E1f5-1o;
+ Tue, 04 Feb 2025 09:06:57 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Akhilesh Nema <nemaakhilesh@gmail.com>
+Cc: buildroot@buildroot.org
+References: <20250109080130.759117-1-nemaakhilesh@gmail.com>
+Date: Tue, 04 Feb 2025 09:06:57 +0100
+In-Reply-To: <20250109080130.759117-1-nemaakhilesh@gmail.com> (Akhilesh Nema's
+ message of "Thu, 9 Jan 2025 00:01:30 -0800")
+Message-ID: <87r04eqgke.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CA+h8R2qfjy2PWktigLvq96Tg-GHvVk=uxicdkgW_pp84OvZBCg@mail.gmail.com>
-X-Originating-IP: [10.115.27.51]
-X-ClientProxiedBy: OPE16NORMBX101.corporate.adroot.infra.ftgroup (10.115.26.2)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1738650455; x=1770186455;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=/fl2oxKYYaXqaT7pHRkMon8VkP3B0i6sjH1JjrY6kno=;
- b=Q/rRY8F0rlZn7QiIOskMQaosw/2tXHJ/eB1ok8mruQbKdON1UZeL2ooE
- e+ZXCiRzMGhiF6aMQmbOoxFp7nOXPn5FEuoCVOUzTBq7+XJk9QJ72/4sS
- 6ZaYcibAvgotMk3pAfdFDE02st+S3oNxXk3zjMMFnQjFmPbYrH6SDUfhk
- gCPitPxUCJeuNFNwQJKAtPI7XB8tsKalJbGygkxYqeJCO+JrQaa9hUjjS
- Yy3pVspvWyse3WF+VNLg16BngIPzFu+Mn65dzfJuqj0OYKTDxer1KzE3F
- oGEAunzxURqGAbjmDmqXYwr2i5L25z+beP1Ynvg8aQcTpIGHydC0M6rnn
- g==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=Q/rRY8F0
-Subject: Re: [Buildroot] [PATCH 1/1] package/go/go-src: stop forcing
- binutils-gold dependency on aarch64
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduleeljecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufhffjgfkfgggtgesthdttddttdertdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeekgefftdeiveekjeehveetleduteevfeefudetvdekfeejheeitddvhfekffeuteenucffohhmrghinhepghhithhhuhgsrdgtohhmnecukfhppedutdelrdekledrvdefvddrheehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddtledrkeelrddvfedvrdehhedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepnhgvmhgrrghkhhhilhgvshhhsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/radvd: bump version to 2.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,38 +77,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Christian, All,
+>>>>> "Akhilesh" == Akhilesh Nema <nemaakhilesh@gmail.com> writes:
 
-On 2025-02-03 19:41 -0800, Christian Stewart via buildroot spake thusly:
-> Does this PR more correctly address the situation?
-> https://github.com/golang/go/pull/49748
+ > - Updated radvd dependencies.
+ > Changelog:
+ > https://github.com/radvd-project/radvd/blob/v2.20/CHANGES
 
-That would still not solve the issue with go-bin, as Arnout mentioned
-earlier.
+ > Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+ > ---
+ >  package/radvd/Config.in  | 3 +++
+ >  package/radvd/radvd.hash | 4 ++--
+ >  package/radvd/radvd.mk   | 4 ++--
+ >  3 files changed, 7 insertions(+), 4 deletions(-)
 
-Regards,
-Yann E. MORIN.
+ > diff --git a/package/radvd/Config.in b/package/radvd/Config.in
+ > index f1df0c3cb8..4149683fc9 100644
+ > --- a/package/radvd/Config.in
+ > +++ b/package/radvd/Config.in
+ > @@ -1,6 +1,9 @@
+ >  config BR2_PACKAGE_RADVD
+ >  	bool "radvd"
+ >  	depends on BR2_USE_MMU # fork()
+ > +	depends on !BR2_STATIC_LIBS  # libbsd
+ > +	depends on BR2_TOOLCHAIN_HAS_THREADS  # libbsd
+ > +	select BR2_PACKAGE_LIBBSD
+
+libbsd also depends on wchar and BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS,
+so I added that and propagated to libvirt which selects radvd and
+committed, thanks.
 
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
