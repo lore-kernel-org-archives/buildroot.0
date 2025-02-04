@@ -1,69 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B865C02197
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 11:29:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78C1DC02197
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 11:29:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3481C6077D;
-	Tue,  4 Feb 2025 11:29:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B59F40B42;
+	Tue,  4 Feb 2025 11:29:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uwzhjiNRqTDM; Tue,  4 Feb 2025 11:29:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZEh56FUtMmAm; Tue,  4 Feb 2025 11:29:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89B65607CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EECA240B4B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89B65607CC;
-	Tue,  4 Feb 2025 11:29:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id EEF2E185
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 11:29:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EECA240B4B;
+	Tue,  4 Feb 2025 11:29:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1FF45185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 11:29:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CF3B341368
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 11:29:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0515982138
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 11:29:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id km3ejKm40pHL for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 11:29:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VmbVj_uuMCvh for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 11:29:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 99FFA40124
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99FFA40124
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 99FFA40124
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 11:29:30 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4EB1F42CCD;
- Tue,  4 Feb 2025 11:29:27 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tfH7O-00Fh41-1F;
- Tue, 04 Feb 2025 12:29:26 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2669C82139
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2669C82139
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 11:29:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 120B086C20; Tue,  4 Feb 2025 11:29:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,  Romain Naour
- <romain.naour@gmail.com>
-References: <20250203215155.1175999-1-thomas.petazzoni@bootlin.com>
- <20250203215155.1175999-3-thomas.petazzoni@bootlin.com>
-Date: Tue, 04 Feb 2025 12:29:26 +0100
-In-Reply-To: <20250203215155.1175999-3-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Mon, 3 Feb 2025 22:51:52 +0100")
-Message-ID: <87jza6ne21.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdegtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufhffjgfkfgggtgesthdttddttdertdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeelvdegudelueejffelkeejvdetvddvkeetfeevleeuueeltdeutdeitefggfeifeenucffohhmrghinhepghhnuhdrohhrghenucfkphepuddtledrkeelrddvfedvrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutdelrdekledrvdefvddrheehpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehgmhgrihhlrdgtohhm
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 2/2] package/{glibc,
- localedef}: bump to version 2.41
+To: buildroot@buildroot.org
+Date: Tue, 4 Feb 2025 12:27:48 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: aadac609aa49e9b0c809c6a912097eaa4bbf9c3b
+X-Git-Newrev: 4b133efbd30ef2116b8f76663ef0bf1fcd1dbc42
+X-Patchwork-Hint: ignore
+Message-Id: <20250204112942.120B086C20@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/glibc: drop bogus IGNORE_CVES
+ entries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,27 +59,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4b133efbd30ef2116b8f76663ef0bf1fcd1dbc42
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Release notes:
- > https://lists.gnu.org/archive/html/info-gnu/2025-01/msg00014.html
+When glibc was bumped from 2.39 to 2.40 in commit
+74cb378aff231c4f4605d7f479b9ae1a7a4e1fb6 ("package/{glibc, localdef}:
+bump to version 2.40"), the IGNORE_CVES entries should have been
+dropped, as they were applicable to the 2.39 branch. Drop them now.
 
- > The only thing that required a small change is our
- > 0003-HACK-keep-_ISOC23_SOURCE-undefined-to-build-localede.patch to
- > continue to fix the build issue it aims at fixing, by taking into
- > account changes in glibc 2.41.
+We did verify the pkg-stats output, and those CVEs don't show up as
+affecting glibc even after this change, as expected.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/glibc/glibc.mk | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index e026c18762..25e28c7cf6 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -24,18 +24,6 @@ GLIBC_CPE_ID_VENDOR = gnu
+ # allow proper matching with the CPE database.
+ GLIBC_CPE_ID_VERSION = $(word 1, $(subst -,$(space),$(GLIBC_VERSION)))
+ 
+-# Fixed by glibc-2.39-31-g31da30f23cddd36db29d5b6a1c7619361b271fb4
+-GLIBC_IGNORE_CVES += CVE-2024-2961
+-
+-# Fixed by glibc-2.39-35-g1263d583d2e28afb8be53f8d6922f0842036f35d
+-GLIBC_IGNORE_CVES += CVE-2024-33599
+-
+-# Fixed by glibc-2.39-37-gc99f886de54446cd4447db6b44be93dabbdc2f8b
+-GLIBC_IGNORE_CVES += CVE-2024-33600
+-
+-# Fixed by glibc-2.39-38-ga9a8d3eebb145779a18d90e3966009a1daa63cd
+-GLIBC_IGNORE_CVES += CVE-2024-33601 CVE-2024-33602
+-
+ # All these CVEs are considered as not being security issues by
+ # upstream glibc:
+ #  https://security-tracker.debian.org/tracker/CVE-2010-4756
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
