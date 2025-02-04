@@ -1,69 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79709C02197
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 16:31:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70C7AC02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 16:33:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A3D160BA0;
-	Tue,  4 Feb 2025 16:31:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 19E5E82090;
+	Tue,  4 Feb 2025 16:33:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OOeT_FgAYRkd; Tue,  4 Feb 2025 16:31:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 32CIQLluXikk; Tue,  4 Feb 2025 16:33:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29EFF60BA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1840A81F64
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 29EFF60BA4;
-	Tue,  4 Feb 2025 16:31:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C7DCE12F
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:31:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1840A81F64;
+	Tue,  4 Feb 2025 16:33:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 75D8F12A
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:33:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC3BD60BA4
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:31:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6566840BB7
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:33:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ex0EWYuW_0XF for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 16:31:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 583ED60BA0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 583ED60BA0
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 583ED60BA0
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:31:42 +0000 (UTC)
-Received: from home.juju.sh (unknown [109.89.232.55])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id EE5D219F740;
- Tue,  4 Feb 2025 17:31:38 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id beyDQB6ZZUUV for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 16:33:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30157405E7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 30157405E7
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 16:33:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 21D2E86E49; Tue,  4 Feb 2025 16:33:55 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>
-Date: Tue,  4 Feb 2025 17:31:32 +0100
-Message-ID: <20250204163132.1575544-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.48.1
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1738686700;
- bh=6GzVqmUJTZ0kxq6Gb3rrfb+qo9LofHd1WmpMgdfs0PA=;
- h=From:To:Cc:Subject:Date:From;
- b=mtlY5ghmX0PmyDSYdaQOcRXXdJnjllaxouZN0CfZO99I1nJU2aCyTiwoKx2PYJNHj
- f6pP2EKd7G94xfVZjHNZxbZBNGHdoe6E2tjlj6Rz0vN9N4h8WHPXH+APLOoSgHRYDZ
- 6J4EddrfQqxZLqNozRcx/RE9YopOuGekhcrPz6D51N2av2yUVw+L0TA6IoXJaouYfO
- W1fnwN5yIE9ck+XsR5Z4/OBeZDcg/CVKqVxigsGr2bxxfKWzDoPdaEwYfxLm7MnMEr
- 5OspitAgnFrE4SRrkiXEUyBANhVT7Ftur5bi6mJqvHBgs9CI6RNMWQJKYrIFz79o1B
- YKOfq+KAXDtqw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=mtlY5ghm
-Subject: [Buildroot] [PATCH 1/1] package/rdma-core: bump to version v55.0
+Date: Tue, 4 Feb 2025 17:33:35 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e8a90a5efb65d78706940a57d5aad72770f84788
+X-Git-Newrev: 3ef139386dae7cb82dfe9187cde18275999cf0b9
+X-Patchwork-Hint: ignore
+Message-Id: <20250204163355.21D2E86E49@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package: add support for
+ <pkg>_BUSYBOX_CONFIG_FIXUPS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,50 +59,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since v54.0, see:
-https://github.com/linux-rdma/rdma-core/releases/tag/v55.0
+commit: https://git.buildroot.net/buildroot/commit/?id=3ef139386dae7cb82dfe9187cde18275999cf0b9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/9039225967
----
- package/rdma-core/rdma-core.hash | 2 +-
- package/rdma-core/rdma-core.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This will allow individual packages to define extra Busybox options
+that they need.
 
-diff --git a/package/rdma-core/rdma-core.hash b/package/rdma-core/rdma-core.hash
-index 82d0ee784c..9e6844e1df 100644
---- a/package/rdma-core/rdma-core.hash
-+++ b/package/rdma-core/rdma-core.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  2c842d80964e6c24994cef33508f26bcb06042b70643115a9d28619dc2b96f42  rdma-core-54.0.tar.gz
-+sha256  a02d128974055ffa92577e4d3889213ac180a79f05b077aeb884bafb6b46e957  rdma-core-55.0.tar.gz
- sha256  99e0df1d009a21d0dfb031600c550fd8f4efc0c6b2a4ef8b34a995aa6f79c9f4  COPYING.BSD_MIT
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL2
- sha256  c46a557f25b8ef9bec76526c4e593fc13e6cba27e7ba30d73b6497a689cf06f6  COPYING.md
-diff --git a/package/rdma-core/rdma-core.mk b/package/rdma-core/rdma-core.mk
-index 20b89abedf..4d427103b9 100644
---- a/package/rdma-core/rdma-core.mk
-+++ b/package/rdma-core/rdma-core.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/manual/adding-packages-generic.adoc | 6 ++++++
+ package/busybox/busybox.mk               | 1 +
+ package/pkg-generic.mk                   | 3 +++
+ 3 files changed, 10 insertions(+)
+
+diff --git a/docs/manual/adding-packages-generic.adoc b/docs/manual/adding-packages-generic.adoc
+index 89fc700452..f0b0508f53 100644
+--- a/docs/manual/adding-packages-generic.adoc
++++ b/docs/manual/adding-packages-generic.adoc
+@@ -631,6 +631,12 @@ different steps of the build process.
+   This is seldom used, as package usually have no strict requirements on
+   the kernel options.
  
--RDMA_CORE_VERSION = 54.0
-+RDMA_CORE_VERSION = 55.0
- RDMA_CORE_SITE = $(call github,linux-rdma,rdma-core,v$(RDMA_CORE_VERSION))
- RDMA_CORE_LICENSE = GPL-2.0 or BSD-2-Clause
- RDMA_CORE_LICENSE_FILES = COPYING.GPL2 COPYING.BSD_MIT COPYING.md
--- 
-2.48.1
-
++* +LIBFOO_BUSYBOX_CONFIG_FIXUPS+ lists the Busybox configuration
++  options that are needed to use this package especially in some scripts,
++  or at contrario the useless options. This shall be a set of
++  calls to one of the kconfig tweaking option: `KCONFIG_ENABLE_OPT`,
++  `KCONFIG_DISABLE_OPT`, or `KCONFIG_SET_OPT`.
++
+ The preferred way to define these variables is:
+ 
+ ----
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index 900e5e7877..b7f1439fbc 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -422,6 +422,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_SELINUX)
+ 	$(BUSYBOX_SET_LESS_FLAGS)
+ 	$(BUSYBOX_SET_INDIVIDUAL_BINARIES)
++	$(PACKAGES_BUSYBOX_CONFIG_FIXUPS)
+ endef
+ 
+ define BUSYBOX_BUILD_CMDS
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index fb9d9996c8..8fb6f97be8 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1242,6 +1242,9 @@ endif
+ ifneq ($$($(2)_USERS),)
+ PACKAGES_USERS += $$($(2)_USERS)$$(sep)
+ endif
++ifneq ($$($(2)_BUSYBOX_CONFIG_FIXUPS),)
++PACKAGES_BUSYBOX_CONFIG_FIXUPS += $$($(2)_BUSYBOX_CONFIG_FIXUPS)$$(sep)
++endif
+ ifneq ($$($(2)_LINUX_CONFIG_FIXUPS),)
+ PACKAGES_LINUX_CONFIG_FIXUPS += $$($(2)_LINUX_CONFIG_FIXUPS)$$(sep)
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
