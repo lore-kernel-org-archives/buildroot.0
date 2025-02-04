@@ -1,51 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 655A8C02193
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 17:18:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A900EC02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 17:18:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 16F8660D91;
-	Tue,  4 Feb 2025 17:18:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5812240892;
+	Tue,  4 Feb 2025 17:18:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nd7U8THLL8jm; Tue,  4 Feb 2025 17:18:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d-qxPrdS7wD1; Tue,  4 Feb 2025 17:18:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 063D060D5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21496408A0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 063D060D5B;
-	Tue,  4 Feb 2025 17:18:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 38C9312A
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:18:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 21496408A0;
+	Tue,  4 Feb 2025 17:18:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EBFFB12A
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:18:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2183560B6B
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:18:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E3999821FC
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:18:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OKHYY8TgT-q8 for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 17:18:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5dpZ--_kwp_M for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 17:18:39 +0000 (UTC)
+X-Greylist: delayed 2522 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 04 Feb 2025 17:18:38 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D8A3882186
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8A3882186
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EB7360D65
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3EB7360D65
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 17:18:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 279EA86E86; Tue,  4 Feb 2025 17:18:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 18:13:19 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1c386996012b46205b096617474719c03633550d
-X-Git-Newrev: 689aff3df426d234abb7b4608ae65124bbffe72f
-X-Patchwork-Hint: ignore
-Message-Id: <20250204171832.279EA86E86@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pcre2: bump version to 10.44
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D8A3882186
+ for <buildroot@busybox.net>; Tue,  4 Feb 2025 17:18:38 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7D4D4440DF;
+ Tue,  4 Feb 2025 17:18:35 +0000 (UTC)
+Date: Tue, 4 Feb 2025 18:18:34 +0100
+To: Peter Seiderer via buildroot <buildroot@buildroot.org>
+Cc: Peter Seiderer <ps.report@gmx.net>, buildroot@busybox.net
+Message-ID: <20250204181834.740182a9@windsurf>
+In-Reply-To: <20240626090026.31083-1-ps.report@gmx.net>
+References: <20240626090026.31083-1-ps.report@gmx.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvuddutdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeejvdejvdfgffevteeiffdugeeiveeliefgffetfeehhfethfeuleefkeejgfefvdenucffohhmrghinhepghhithhhuhgsrdgtohhmpdgsohhothhlihhnrdgtohhmnecukfhppedutdelrdekledrvdefvddrheehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddtledrkeelrddvfedvrdehhedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepphhsrdhrvghpohhrthesghhmgidrnhgvthdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhshigsohigrdhnvght
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1738689515;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=S7CsP/ay5aRTXG70MSgPmIMZjKmv3xJjusQEoKE7lLo=;
+ b=SAVSVENgpK0qHJxw1EzlokjAksUikYszbYO3ph1rV3IGcwvdSbkGlRou4Pk16mClMnByr4
+ qLVTsAu5D46xYwhBIsclJ4xH4O6HxvujW7yG7STuHw4OjgzrGQPw7w/r5HXvZJeUfb/Jgr
+ HVr88/tULmFPoa1697Nas0LbgFcFRcuATzyCD6iC/1toD3U+8X7Kxfe33oI6cYFpg9rCcS
+ w0b3lMYRRW9DGZkF88EjNOjyZg7+j73HIlgSU/JYxYLo4CVD3f7GLyOxw6NVCFCxfXs5ve
+ mQlTfhIX7hW1Suan0f/SHdImMyzu49KsSUQgwILVP3FE9dc61KCmAgcMYEzZPA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=SAVSVENg
+Subject: Re: [Buildroot] [PATCH v1] package/pcre2: bump version to 10.44
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,67 +88,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=689aff3df426d234abb7b4608ae65124bbffe72f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 26 Jun 2024 11:00:26 +0200
+Peter Seiderer via buildroot <buildroot@buildroot.org> wrote:
 
-- enable PCRE2_AUTORECONF to fix the following buildi/relink failure:
+> - enable PCRE2_AUTORECONF to fix the following buildi/relink failure:
+> 
+>     x86_64-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used
+>     in cross-compilation: '-L/usr/lib'
+> 
+> For details see [1].
+> 
+> [1] https://github.com/PCRE2Project/pcre2/blob/master/ChangeLog
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  package/pcre2/pcre2.hash | 4 ++--
+>  package/pcre2/pcre2.mk   | 5 ++++-
+>  2 files changed, 6 insertions(+), 3 deletions(-)
 
-    x86_64-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used
-    in cross-compilation: '-L/usr/lib'
+Applied to master, thanks.
 
-For details see [1].
-
-[1] https://github.com/PCRE2Project/pcre2/blob/master/ChangeLog
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Tested-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/pcre2/pcre2.hash | 4 ++--
- package/pcre2/pcre2.mk   | 5 ++++-
- 2 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
-index f2e17df753..8b22040ba7 100644
---- a/package/pcre2/pcre2.hash
-+++ b/package/pcre2/pcre2.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature:
--# https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.43/pcre2-10.43.tar.bz2.sig
--sha256  e2a53984ff0b07dfdb5ae4486bbb9b21cca8e7df2434096cc9bf1b728c350bcb  pcre2-10.43.tar.bz2
-+# https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.44/pcre2-10.44.tar.bz2.sig
-+sha256  d34f02e113cf7193a1ebf2770d3ac527088d485d4e047ed10e5d217c6ef5de96  pcre2-10.44.tar.bz2
- # Locally computed
- sha256  030087e2e8dd7c1bdd26057d25d4ded8f45bbf01ad458d68665ad04b8b0fbedf  LICENCE
-diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
-index 9641f22e81..191596181a 100644
---- a/package/pcre2/pcre2.mk
-+++ b/package/pcre2/pcre2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PCRE2_VERSION = 10.43
-+PCRE2_VERSION = 10.44
- PCRE2_SITE = https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$(PCRE2_VERSION)
- PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
- PCRE2_LICENSE = BSD-3-Clause
-@@ -12,6 +12,9 @@ PCRE2_LICENSE_FILES = LICENCE
- PCRE2_CPE_ID_VENDOR = pcre
- PCRE2_INSTALL_STAGING = YES
- PCRE2_CONFIG_SCRIPTS = pcre2-config
-+# Fixes build/relink failure ("ERROR: unsafe header/library path used in
-+# cross-compilation: '-L/usr/lib'")
-+PCRE2_AUTORECONF = YES
- 
- PCRE2_CONF_OPTS += --enable-pcre2-8
- PCRE2_CONF_OPTS += $(if $(BR2_PACKAGE_PCRE2_16),--enable-pcre2-16,--disable-pcre2-16)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
