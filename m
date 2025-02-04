@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82A03C282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:11:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 607BDC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:12:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3195342D22;
-	Fri, 28 Feb 2025 17:11:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7173E847D8;
+	Fri, 28 Feb 2025 17:11:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3Z3tVrjybZxU; Fri, 28 Feb 2025 17:11:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cdjQFScO2iwA; Fri, 28 Feb 2025 17:11:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C94B42E42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8892C85AE2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C94B42E42;
-	Fri, 28 Feb 2025 17:11:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8892C85AE2;
+	Fri, 28 Feb 2025 17:11:55 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 12AE01DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:43:52 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 13A471DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:43:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 26BC84240C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5D829424B2
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o4WdfgodI6Qn for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:32 +0000 (UTC)
+ id Vzt8x_Lk4PWA for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BF5742D01
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBFC642CFE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6BF5742D01
+ by smtp4.osuosl.org (Postfix) with ESMTP id DBFC642CFE
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 65EBD7FCE7; Fri, 28 Feb 2025 16:30:30 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id D853280042; Fri, 28 Feb 2025 16:30:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 15:07:01 +0100
+Date: Tue, 4 Feb 2025 16:16:12 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e2484f8bda26f72053e5deb5c09f4e157938eed1
-X-Git-Newrev: d892350f644e67340091498bd2ab677f19608d85
+X-Git-Oldrev: 11aa1cfa5af9a77a0a9f726bd38f1b7db659c0bf
+X-Git-Newrev: 39949b201954a37efc345acebf49187ad89c982b
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163030.65EBD7FCE7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/eza: bump to version
- 0.20.19
+Message-Id: <20250228163030.D853280042@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gobject-introspection:
+ works with musl now
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,56 +58,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d892350f644e67340091498bd2ab677f19608d85
+commit: https://git.buildroot.net/buildroot/commit/?id=39949b201954a37efc345acebf49187ad89c982b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://github.com/eza-community/eza/releases/tag/v0.20.19
+Current versions of gobject-introspection build with musl (Alpine
+dropped the last compatibility patch with the update to 1.80.1 [0]), so
+relax the dependency on glibc.
 
-Now licensed under the EUPL-1.2 license, so adjust _LICENSE to match:
-https://github.com/eza-community/eza/releases/tag/v0.20.0
+[0] https://gitlab.alpinelinux.org/alpine/aports/-/commit/528c4ee63970fe6ee733b6ea99ef7a59a8f108ff
 
-Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
-[Peter: add note about license change]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+[yann.morin.1998@free.fr: split off to its own patch]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/eza/eza.hash | 4 ++--
- package/eza/eza.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/gobject-introspection/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/eza/eza.hash b/package/eza/eza.hash
-index 408099e231..0cd422ccf0 100644
---- a/package/eza/eza.hash
-+++ b/package/eza/eza.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  65a0dc76c1976d7af72a628196022de71c787092da5c6d961a3fcee21f5d1d6f  eza-0.18.24-cargo2.tar.gz
--sha256  2762990c7fbba9d550802a2593c1d857dcd52596bb0f9f192a97e9a7ac5f4f9e  LICENCE
-+sha256  685b22eec7ec8c24137b4af5f97ceea7d262e31fee324d5b4ed66fce24c23476  eza-0.20.19-cargo2.tar.gz
-+sha256  57fb42fbcd0b037ce528ed8f72f1ec095d67bc6825ecf1448ff39be1fe68a4b4  LICENSE.txt
-diff --git a/package/eza/eza.mk b/package/eza/eza.mk
-index 4d23116504..cd19c4b4d6 100644
---- a/package/eza/eza.mk
-+++ b/package/eza/eza.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/gobject-introspection/Config.in b/package/gobject-introspection/Config.in
+index 7b47c9561e..54a33d8666 100644
+--- a/package/gobject-introspection/Config.in
++++ b/package/gobject-introspection/Config.in
+@@ -19,7 +19,7 @@ config BR2_PACKAGE_GOBJECT_INTROSPECTION
+ 	# can be verified.
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	depends on BR2_HOST_GCC_AT_LEAST_8 # host-qemu
+-	depends on BR2_TOOLCHAIN_USES_GLIBC
++	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	# gobject-introspection does not require python3 to run on the
+ 	# target; however, because the tools run in a qemu wrapper, a
+ 	# cross-compiled python3 must be installed to staging. As there
+@@ -48,9 +48,9 @@ comment "gobject-introspection needs python3"
+ 	depends on !BR2_PACKAGE_PYTHON3
+ 	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
  
--EZA_VERSION = 0.18.24
-+EZA_VERSION = 0.20.19
- EZA_SITE = $(call github,eza-community,eza,v$(EZA_VERSION))
--EZA_LICENSE = MIT
--EZA_LICENSE_FILES = LICENCE
-+EZA_LICENSE = EUPL-1.2
-+EZA_LICENSE_FILES = LICENSE.txt
- 
- $(eval $(cargo-package))
+-comment "gobject-introspection needs a glibc toolchain, gcc >= 4.9, host gcc >= 8"
++comment "gobject-introspection needs a glibc or musl toolchain, gcc >= 4.9, host gcc >= 8"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_HOST_GCC_AT_LEAST_8
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
