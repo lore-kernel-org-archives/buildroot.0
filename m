@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C3D4C02194
-	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 15:09:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA429C02194
+	for <buildroot@archiver.kernel.org>; Tue,  4 Feb 2025 15:10:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 27AB74048E;
-	Tue,  4 Feb 2025 15:09:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87DF04048E;
+	Tue,  4 Feb 2025 15:10:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2dp7_gD5oHax; Tue,  4 Feb 2025 15:09:56 +0000 (UTC)
+ id Kp3wQsMjiUEd; Tue,  4 Feb 2025 15:10:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06FEA40894
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EDEB40871
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 06FEA40894;
-	Tue,  4 Feb 2025 15:09:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3B539185
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:09:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6EDEB40871;
+	Tue,  4 Feb 2025 15:10:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9F428185
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:10:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1FD0E6089A
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:09:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 83D0F605D9
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:10:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6tjk167nnM-r for <buildroot@buildroot.org>;
- Tue,  4 Feb 2025 15:09:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97441605A3
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 97441605A3
- for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:09:52 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 834E886CF4; Tue,  4 Feb 2025 15:09:52 +0000 (UTC)
+ id abuogJmNOKwD for <buildroot@buildroot.org>;
+ Tue,  4 Feb 2025 15:10:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 78754605A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78754605A3
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 78754605A3
+ for <buildroot@buildroot.org>; Tue,  4 Feb 2025 15:10:17 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 1720F780371;
+ Tue,  4 Feb 2025 16:10:11 +0100 (CET)
+Received: from host-109-89-232-55.dynamic.voo.be ([109.89.232.55:57226])
+ via host-109-89-232-55.dynamic.voo.be ([109.89.232.55])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 04 Feb 2025 16:10:11 +0100
+MIME-Version: 1.0
+Date: Tue, 04 Feb 2025 16:10:11 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 4 Feb 2025 16:08:56 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f6bcbefad8f7b8f9302e060b521a523e4d567ae4
-X-Git-Newrev: 9d456c47e0b0432b617e5894a776e8b22ea88286
-X-Patchwork-Hint: ignore
-Message-Id: <20250204150952.834E886CF4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libbpf: bump to version 1.5.0
+To: Vincent Jardin <vjardin@free.fr>
+Cc: buildroot@buildroot.org, romain.naour@gmail.com
+In-Reply-To: <20250203141425.48418-1-vjardin@free.fr>
+References: <20250203141425.48418-1-vjardin@free.fr>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <4126e709763b47f9e182f83f6221bdbd@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1738681814;
+ bh=qx65zoG9WrkjU+DQRVXOyysBW4CNPXnRhLMqzLATj+4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=VqMWoeax3psJrCxhkTtmV5ho7CpuJGHUHNE6dcV6bX8XKje5w/17kWgZ4ePTEg7AY
+ WQgLGN99kp4ncPI1BN+Yq3gyCKdcq/w0VjGZ+SHahVcE/mEuAGgsS7uHl9/Pv0ZQH5
+ BFJwSOWJJf6rRGwkgSTJNsXw4qGkYPdkL0S0AI++QsbZRG+MdEO4JzcmSujTAmruCl
+ MRW00eUGOP6LcNDK9R/A6C+WkiQu1nJNMjjfHK4e8eLIUj/JukQVdVkzP4dvlPe2y/
+ 12SqQWPvlXcyd7N6lK9EauYSspMDCev8YGWa6JkKqzMhJcw5Hagczy7ejmHcIHXe59
+ qcx3zOaC+3meA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=VqMWoeax
+Subject: Re: [Buildroot] [PATCH v1 1/1] package/libbpf: bump to version 1.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,48 +82,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9d456c47e0b0432b617e5894a776e8b22ea88286
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 03/02/2025 15:14, Vincent Jardin wrote:
+> Changelog: https://github.com/libbpf/libbpf/releases/tag/v1.5.0
+> 
+> Signed-off-by: Vincent Jardin <vjardin@free.fr>
+> Signed-off-by: Vincent Jardin <vjardin@vjardin@free.fr>
 
-Changelog: https://github.com/libbpf/libbpf/releases/tag/v1.5.0
-
-Signed-off-by: Vincent Jardin <vjardin@free.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libbpf/libbpf.hash | 2 +-
- package/libbpf/libbpf.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libbpf/libbpf.hash b/package/libbpf/libbpf.hash
-index 75f2b1695c..f5ecc59cd8 100644
---- a/package/libbpf/libbpf.hash
-+++ b/package/libbpf/libbpf.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  5da826c968fdb8a2f714701cfef7a4b7078be030cf58b56143b245816301cbb8  libbpf-1.1.0.tar.gz
-+sha256  53492aff6dd47e4da04ef5e672d753b9743848bdb38e9d90eafbe190b7983c44  libbpf-1.5.0.tar.gz
- sha256  847f4addbd56e2d5be20c4ea0845e972672fc07b755fadaae5f7abd35d71e349  LICENSE
- sha256  e1638b9a0c68ca90fad3df1d6b4e430804d2fbdc15e58d02cffddfae38953bbf  LICENSE.BSD-2-Clause
- sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSE.LGPL-2.1
-diff --git a/package/libbpf/libbpf.mk b/package/libbpf/libbpf.mk
-index ef33542f2d..7fa541ad24 100644
---- a/package/libbpf/libbpf.mk
-+++ b/package/libbpf/libbpf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBBPF_VERSION = 1.1.0
-+LIBBPF_VERSION = 1.5.0
- LIBBPF_SITE = $(call github,libbpf,libbpf,v$(LIBBPF_VERSION))
- LIBBPF_LICENSE = GPL-2.0, LGPL-2.1, BSD-2-Clause
- LIBBPF_LICENSE_FILES = LICENSE LICENSE.BSD-2-Clause LICENSE.LGPL-2.1
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
