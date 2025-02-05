@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17E05C02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 11:42:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5A70C02196
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 11:42:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9EF7F40749;
-	Wed,  5 Feb 2025 11:42:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78F8540D4B;
+	Wed,  5 Feb 2025 11:42:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9YPzfGDaR_oN; Wed,  5 Feb 2025 11:42:37 +0000 (UTC)
+ id 69pRrwVBF6r5; Wed,  5 Feb 2025 11:42:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3793540682
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9ADC240902
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3793540682;
-	Wed,  5 Feb 2025 11:42:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B90A12A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9ADC240902;
+	Wed,  5 Feb 2025 11:42:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 83ACF12A
  for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:42:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3BEBA80E96
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6871E60B53
  for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:42:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fenk6mAe8lt3 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TEsvC2RhQJw0 for <buildroot@buildroot.org>;
  Wed,  5 Feb 2025 11:42:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E2A480A64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 343E260B9E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4E2A480A64
+ by smtp3.osuosl.org (Postfix) with ESMTP id 343E260B9E
  for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:42:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 458E487031; Wed,  5 Feb 2025 11:42:35 +0000 (UTC)
+ id 1EDC88702E; Wed,  5 Feb 2025 11:42:35 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 12:38:11 +0100
+Date: Wed, 5 Feb 2025 12:36:41 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b4006287f86ad52b0f5bf929f4a7f34c1a5720b4
-X-Git-Newrev: e602ea0d608b1fe15607ed37f12c88d92b55a4da
+X-Git-Oldrev: c39f677e6a7142394bb2713181bca69b768e9f9e
+X-Git-Newrev: 5e5241e1cfc05b3521e663c30365cc7afe9bb9e5
 X-Patchwork-Hint: ignore
-Message-Id: <20250205114235.458E487031@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/obsidian-cursors: drop package
+Message-Id: <20250205114235.1EDC88702E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/w_scan: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,109 +58,210 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e602ea0d608b1fe15607ed37f12c88d92b55a4da
+commit: https://git.buildroot.net/buildroot/commit/?id=5e5241e1cfc05b3521e663c30365cc7afe9bb9e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes http://autobuild.buildroot.net/results/97ac940d6e279cfa493c6b5d9b4d318d8dda10da/
+Fixes http://autobuild.buildroot.net/results/da054694f0056027e83e77a1cedff5659885f2ca/
 
-The tarball is no longer available for direct download as kde-look.org has
-hidden the downloads behind a nag screen, there are no reverse dependencies
-or DEVELOPERS entry for it and the package has not been updated since it was
-added in 2015 by commit ae2faeffb17d ("obsidian-cursors: new package"), so
-drop it.
+The upstream location is gone (taken over by a domain squatter), there are
+no reverse dependencies, it is not listed in DEVELOPERS and hasn't been
+updated since 2017 with commit 0762015f144f ("package/w_scan: bump version
+to 20170107"), so drop it.
+
+It looks to be superseded by a C++ version at
+https://www.gen2vdr.de/wirbel/w_scan_cpp/index2.html, which can be added if
+there is interest.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                               |  7 +++++++
- package/Config.in                              |  1 -
- package/obsidian-cursors/Config.in             |  6 ------
- package/obsidian-cursors/obsidian-cursors.hash |  2 --
- package/obsidian-cursors/obsidian-cursors.mk   | 18 ------------------
- 5 files changed, 7 insertions(+), 27 deletions(-)
+ .checkpackageignore                                |  2 --
+ Config.in.legacy                                   |  7 ++++
+ package/Config.in                                  |  1 -
+ package/w_scan/0001-musl.patch                     | 26 ---------------
+ .../0002-si_types-h-fix-build-with-gcc-10.patch    | 37 ----------------------
+ package/w_scan/Config.in                           | 14 --------
+ package/w_scan/w_scan.hash                         |  3 --
+ package/w_scan/w_scan.mk                           | 18 -----------
+ 8 files changed, 7 insertions(+), 101 deletions(-)
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 194a2d1c72..6b45fb9e94 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1261,8 +1261,6 @@ package/vte/0002-build-Fix-check-for-fstack-protector-compiler-support.patch lib
+ package/vtun/0001-fix-installation.patch lib_patch.Upstream
+ package/vtun/0002-fix-ssl-headers-checks.patch lib_patch.Upstream
+ package/vtun/0003-openssl11.patch lib_patch.Upstream
+-package/w_scan/0001-musl.patch lib_patch.Upstream
+-package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch lib_patch.Upstream
+ package/waffle/0001-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch lib_patch.Upstream
+ package/waffle/0002-wayland-fix-build-against-version-1-20.patch lib_patch.Upstream
+ package/waffle/0003-drop-C-dependency.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 2cb7cbd51f..3e3be95004 100644
+index fbabe784ba..2cb7cbd51f 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,13 @@ endif
  
  comment "Legacy options removed in 2025.02"
  
-+config BR2_PACKAGE_OBSIDIAN_CURSORS
-+	bool "obsidian-cursors has been removed"
++config BR2_PACKAGE_W_SCAN
++	bool "w_scan has been removed"
 +	select BR2_LEGACY
 +	help
-+	  The obsidian cursors package is no longer available for
-+	  direct download.
++	  The w_scan package was removed as it is not maintained
++	  anymore and the upstream URL is gone.
 +
- config BR2_PACKAGE_W_SCAN
- 	bool "w_scan has been removed"
+ config BR2_PACKAGE_GENROMFS
+ 	bool "genromfs"
  	select BR2_LEGACY
 diff --git a/package/Config.in b/package/Config.in
-index 0759a9df47..7da8e10c36 100644
+index da88832d37..0759a9df47 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -261,7 +261,6 @@ menu "Fonts, cursors, icons, sounds and themes"
- 
- comment "Cursors"
- 	source "package/comix-cursors/Config.in"
--	source "package/obsidian-cursors/Config.in"
- 
- comment "Fonts"
- 	source "package/bitstream-vera/Config.in"
-diff --git a/package/obsidian-cursors/Config.in b/package/obsidian-cursors/Config.in
+@@ -656,7 +656,6 @@ endmenu
+ 	source "package/usbip/Config.in"
+ 	source "package/usbmount/Config.in"
+ 	source "package/usbutils/Config.in"
+-	source "package/w_scan/Config.in"
+ 	source "package/wf111/Config.in"
+ 	source "package/wilc-driver/Config.in"
+ 	source "package/wipe/Config.in"
+diff --git a/package/w_scan/0001-musl.patch b/package/w_scan/0001-musl.patch
 deleted file mode 100644
-index 49ec310170..0000000000
---- a/package/obsidian-cursors/Config.in
+index 46d67677a8..0000000000
+--- a/package/w_scan/0001-musl.patch
 +++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_OBSIDIAN_CURSORS
--	bool "obsidian-cursors"
--	help
--	  Obsidian Cursors is a shiny and clean cursor set.
+@@ -1,26 +0,0 @@
+-Fix musl build
 -
--	  http://kde-look.org/content/show.php/Obsidian+Cursors?content=73135
-diff --git a/package/obsidian-cursors/obsidian-cursors.hash b/package/obsidian-cursors/obsidian-cursors.hash
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr w_scan-20141122.org/descriptors.h w_scan-20141122/descriptors.h
+---- w_scan-20141122.org/descriptors.h	2014-11-22 09:49:26.000000000 +0100
+-+++ w_scan-20141122/descriptors.h	2016-01-24 14:05:21.000000000 +0100
+-@@ -28,6 +28,7 @@
+- #ifndef __DESCRIPTORS_H__
+- #define __DESCRIPTORS_H__
+- 
+-+#include <time.h>
+- #include "extended_frontend.h"
+- 
+- /******************************************************************************
+-diff -uNr w_scan-20141122.org/version.h w_scan-20141122/version.h
+---- w_scan-20141122.org/version.h	2014-11-22 11:59:56.000000000 +0100
+-+++ w_scan-20141122/version.h	2016-01-24 14:06:33.000000000 +0100
+-@@ -1,6 +1,6 @@
+- /* AUTOMATICALLY GENERATED - DO NOT EDIT MANUALLY */
+- #ifndef W_SCAN_VERSION_H
+- #define W_SCAN_VERSION_H
+--uint version=20170107;
+-+unsigned int version=20170107;
+- #endif
+- 
+diff --git a/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch b/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch
 deleted file mode 100644
-index a476a0ba05..0000000000
---- a/package/obsidian-cursors/obsidian-cursors.hash
+index 50d2488190..0000000000
+--- a/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch
 +++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally calculated
--sha256  3d38fe875f6feae8b7772e02cfda530fcf669479807915cd2c12c149da17cfb9  73135-Obsidian.tar.bz2
-diff --git a/package/obsidian-cursors/obsidian-cursors.mk b/package/obsidian-cursors/obsidian-cursors.mk
+@@ -1,37 +0,0 @@
+-si_types.h: fix build with gcc 10
+-
+-Drop service_t, p_service_t, transponder_t and p_transponder_t to avoid
+-the following build failure with gcc 10 (which defaults to -fno-common):
+-
+-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -Wall -Wextra -Wno-comment -Wswitch-default -Wno-unused-parameter -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -lrt  -o w_scan atsc_psip_section.o countries.o descriptors.o diseqc.o dump-dvbscan.o dump-vdr.o dump-xine.o dump-mplayer.o dump-vlc-m3u.o dvbscan.o lnb.o parse-dvbscan.o satellites.o scan.o section.o tools.o emulate.o dump-xml.o iconv_codes.o char-coding.o  
+-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x404): multiple definition of `p_transponder_t'; countries.o:(.bss+0x0): first defined here
+-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x408): multiple definition of `transponder_t'; countries.o:(.bss+0x4): first defined here
+-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x480): multiple definition of `p_service_t'; countries.o:(.bss+0x7c): first defined here
+-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x484): multiple definition of `service_t'; countries.o:(.bss+0x80): first defined here
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/5640442cb4ba06bcbcf31540a64f5665862d39f7
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-
+-diff -Nura w_scan-20170107.orig/si_types.h w_scan-20170107/si_types.h
+---- w_scan-20170107.orig/si_types.h	2020-09-20 11:09:56.776963441 +0200
+-+++ w_scan-20170107/si_types.h	2020-09-20 11:13:13.149232478 +0200
+-@@ -114,7 +114,7 @@
+-   uint32_t logical_channel_number;
+-   uint8_t  running;
+-   void   * priv;
+--} service_t, * p_service_t;
+-+};
+- 
+- /*******************************************************************************
+- /* transponder type.
+-@@ -201,7 +201,7 @@
+-   /*----------------------------*/
+-   char * network_name;
+-   network_change_t network_change;
+--} __attribute__((packed))  transponder_t, * p_transponder_t;
+-+} __attribute__((packed));
+- 
+- /*******************************************************************************
+- /* satellite channel routing type.
+diff --git a/package/w_scan/Config.in b/package/w_scan/Config.in
 deleted file mode 100644
-index 87a8d62f3e..0000000000
---- a/package/obsidian-cursors/obsidian-cursors.mk
+index d5471200ad..0000000000
+--- a/package/w_scan/Config.in
++++ /dev/null
+@@ -1,14 +0,0 @@
+-comment "w_scan needs a toolchain w/ headers >= 3.7"
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+-
+-config BR2_PACKAGE_W_SCAN
+-	bool "w_scan"
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+-	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+-	help
+-	  w_scan is a small command line utility used to perform
+-	  frequency scans for DVB and ATSC transmissions. It is
+-	  capable of creating channels.conf files (in different output
+-	  formats !) as well as initial tuning data for scan.
+-
+-	  https://www.gen2vdr.de/wirbel/w_scan/index2.html
+diff --git a/package/w_scan/w_scan.hash b/package/w_scan/w_scan.hash
+deleted file mode 100644
+index fcb0e611bc..0000000000
+--- a/package/w_scan/w_scan.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  38e0f38a7bf06cff6d6ea01652ad4ee60da2cb0e937360468f936da785b46ffe  w_scan-20170107.tar.bz2
+-sha256  ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7  COPYING
+diff --git a/package/w_scan/w_scan.mk b/package/w_scan/w_scan.mk
+deleted file mode 100644
+index c63f20cc9e..0000000000
+--- a/package/w_scan/w_scan.mk
 +++ /dev/null
 @@ -1,18 +0,0 @@
 -################################################################################
 -#
--# obsidian-cursors
+-# w_scan
 -#
 -################################################################################
 -
--OBSIDIAN_CURSORS_VERSION = 1.0
--OBSIDIAN_CURSORS_SITE = http://kde-look.org/CONTENT/content-files
--OBSIDIAN_CURSORS_SOURCE = 73135-Obsidian.tar.bz2
--OBSIDIAN_CURSORS_LICENSE = GPL
+-W_SCAN_VERSION = 20170107
+-W_SCAN_SOURCE = w_scan-$(W_SCAN_VERSION).tar.bz2
+-W_SCAN_SITE = http://wirbel.htpc-forum.de/w_scan
+-W_SCAN_LICENSE = GPL-2.0+
+-W_SCAN_LICENSE_FILES = COPYING
 -
--define OBSIDIAN_CURSORS_INSTALL_TARGET_CMDS
--	mkdir -p $(TARGET_DIR)/usr/share/cursors/xorg-x11/Obsidian
--	cp -a $(@D)/cursors \
--		$(TARGET_DIR)/usr/share/cursors/xorg-x11/Obsidian
--endef
+-ifeq ($(BR2_PACKAGE_LIBICONV),y)
+-W_SCAN_DEPENDENCIES += libiconv
+-W_SCAN_CONF_ENV += LIBS=-liconv
+-endif
 -
--$(eval $(generic-package))
+-$(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
