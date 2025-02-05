@@ -4,75 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF35CC02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 10:13:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A32FC02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 10:15:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91BDB405D7;
-	Wed,  5 Feb 2025 10:13:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C6DE40611;
+	Wed,  5 Feb 2025 10:15:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gfu0_mt84Epm; Wed,  5 Feb 2025 10:13:06 +0000 (UTC)
+ id Qlvxk_NsbYTl; Wed,  5 Feb 2025 10:15:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EE25405F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E744D40612
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EE25405F3;
-	Wed,  5 Feb 2025 10:13:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E744D40612;
+	Wed,  5 Feb 2025 10:15:47 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B38C312A
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:13:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 8BEE912F
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:15:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 97D26405BB
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:13:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E85040612
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:15:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NxKHDG-4Wieh for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 10:13:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id j4GK3lM8jBD6 for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 10:15:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E48E7405D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E48E7405D7
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E48E7405D7
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:13:02 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 16B1D43419;
- Wed,  5 Feb 2025 10:12:58 +0000 (UTC)
-Date: Wed, 5 Feb 2025 11:12:58 +0100
-To: Ayoub Zaki <ayoub.zaki@embetrix.com>
-Cc: buildroot@buildroot.org
-Message-ID: <20250205111258.46556bcd@windsurf>
-In-Reply-To: <20250102133358.226719-1-ayoub.zaki@embetrix.com>
-References: <20250102133358.226719-1-ayoub.zaki@embetrix.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfedukecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeejvdejvdfgffevteeiffdugeeiveeliefgffetfeehhfethfeuleefkeejgfefvdenucffohhmrghinhepghhithhhuhgsrdgtohhmpdgsohhothhlihhnrdgtohhmnecukfhppedutdelrdekledrvdefvddrheehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddtledrkeelrddvfedvrdehhedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegrhihouhgsrdiirghkihesvghmsggvthhrihigrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1738750379;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=x1M6SrsTzgF8qX+82EVnL1J+M+EP0BhzBdOmOBTv+Qg=;
- b=Eeyuyi62HvicvaV7jpMajczw51jmiMcWx6Ci9BGFni9s5q+R8d+fn+TLfyoxI8WnCq94lT
- Pwq0Xe00OxnHANgEJYyMI33fYq7QepS6NMLO8hwu96Q4MaRSmYrVh6KpYNJYt6m/bTl6FM
- IGKUhfclmExhX0gRUktW0tGoia8UuNZaP3GAn7qizzGesZkJVlVz+SwnHzQgqznpGUIhl0
- MZ2YxpFAw8T4PK4Z5JxtbCc+YcJX4d/jjX+WK6k+/upOelu5QmrvDjy5JnYEguTz9Ci2Zb
- 6UxGD3ZDykkvTK9ekajdM8xjbw5pXKz81nKIRgRYU883ZPsTRUdCfvbSdcmNFQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Eeyuyi62
-Subject: Re: [Buildroot] [PATCH v2] package/bmap-writer: add initial package
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1ED9E40606
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1ED9E40606
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:15:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 16908811E8; Wed,  5 Feb 2025 10:15:45 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Wed, 5 Feb 2025 11:14:30 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 02c765af35f9e09ef5cd8ace07d555fd90fd176f
+X-Git-Newrev: 1d4a61247d704c3bc9dda4ccbef80caa447fa6f3
+X-Patchwork-Hint: ignore
+Message-Id: <20250205101545.16908811E8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-waitress: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,122 +58,144 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1d4a61247d704c3bc9dda4ccbef80caa447fa6f3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  2 Jan 2025 14:33:58 +0100
-Ayoub Zaki <ayoub.zaki@embetrix.com> wrote:
+The test runs the flask sample app through the waitress wsgi server
+instead of the flask development server.
 
-> Signed-off-by: Ayoub Zaki <ayoub.zaki@embetrix.com>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                         |  2 ++
+ package/Config.in                                  |  1 +
+ package/python-waitress/Config.in                  | 11 +++++++
+ package/python-waitress/python-waitress.hash       |  5 ++++
+ package/python-waitress/python-waitress.mk         | 14 +++++++++
+ .../testing/tests/package/test_python_waitress.py  | 34 ++++++++++++++++++++++
+ 6 files changed, 67 insertions(+)
 
-Thanks for your patch. I applied it, but I had to fix a number of
-things. See below my different comments.
-
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 381bc9f490..2e66e3d8a7 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -3447,3 +3447,6 @@ F:	package/quazip/
->  F:	package/shapelib/
->  F:	package/simple-mail/
->  F:	package/tinc/
-> +
-> +N:	Ayoub Zaki <ayoub.zaki@embetrix.com>
-> +F:	package/bmap-writer/
-
-This file is alphabetically sorted, but you had added this entry at the
-end of the file, which isn't good.
-
-> diff --git a/package/bmap-writer/Config.in b/package/bmap-writer/Config.in
-> new file mode 100644
-> index 0000000000..d65eda918c
-> --- /dev/null
-> +++ b/package/bmap-writer/Config.in
-> @@ -0,0 +1,17 @@
-> +config BR2_PACKAGE_BMAP_WRITER
-> +	bool "bmap-writer"
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_USE_WCHAR
-> +	select BR2_PACKAGE_LIBARCHIVE
-> +	select BR2_PACKAGE_LIBXML2
-> +	help
-> +	  bmap-writer is a command-line utility designed to efficiently write
-> +	  disk images to storage devices using block mapping (BMAP). It serves
-> +	  as a lightweight alternative to the Yocto BMAP tool, specifically for
-> +	  embedded systems. Unlike the Yocto BMAP tool, bmap-writer is C++ based,
-> +	  does not require Python, and focuses solely on writing an image.
-
-These lines were too long. This is reported by "make check-package", so
-I rewrapped them.
-
-> +	  https://github.com/embetrix/bmap-writer
-> +
-> +comment "bmap-writer needs a toolchain w/ C++, wchar"
-> +	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/bmap-writer/Config.in.host b/package/bmap-writer/Config.in.host
-> new file mode 100644
-> index 0000000000..d5bfd62f0a
-> --- /dev/null
-> +++ b/package/bmap-writer/Config.in.host
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_HOST_BMAP_WRITER
-> +	bool "host bmap-writer"
-> +	help
-> +	  bmap-writer is a command-line utility designed to efficiently write
-> +	  disk images to storage devices using block mapping (BMAP). It serves
-> +	  as a lightweight alternative to the Yocto BMAP tool, specifically for
-> +	  embedded systems. Unlike the Yocto BMAP tool, bmap-writer is C++ based,
-> +	  does not require Python, and focuses solely on writing an image.
-
-Same: lines too long.
-
-Also, this file was not included anywhere, so it was useless. I added
-the necessary include logic in package/Config.in.host.
-
-> diff --git a/package/bmap-writer/bmap-writer.mk b/package/bmap-writer/bmap-writer.mk
-> new file mode 100644
-> index 0000000000..bbe4eb1078
-> --- /dev/null
-> +++ b/package/bmap-writer/bmap-writer.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# bmap-writer
-> +#
-> +################################################################################
-> +
-> +BMAP_WRITER_VERSION = 0.0.3
-> +BMAP_WRITER_SITE = $(call github,embetrix,bmap-writer,$(BMAP_WRITER_VERSION))
-> +BMAP_WRITER_LICENSE = GPL-3.0
-> +BMAP_WRITER_LICENSE_FILES = LICENSE
-> +BMAP_WRITER_DEPENDENCIES = host-pkgconf libarchive libxml2
-
-Missing
-
-HOST_BMAP_WRITER_DEPENDENCIES
-
-> +
-> +$(eval $(cmake-package))
-
-Missing
-
-$(eval $(host-cmake-package))
-
-(which means you really didn't test the host version of the package).
-
-I've applied after fixing those different issues. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6254f2e1db..f20bd5ce3f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2259,8 +2259,10 @@ F:	package/picotool/
+ F:	package/python-immutabledict/
+ F:	package/python-jc/
+ F:	package/python-ruamel-yaml-clib/
++F:	package/python-waitress/
+ F:	support/testing/tests/package/test_python_fastapi.py
+ F:	support/testing/tests/package/test_python_ruamel_yaml.py
++F:	support/testing/tests/package/test_python_waitress.py
+ F:	support/testing/tests/package/sample_python_fastapi.py
+ F:	support/testing/tests/package/sample_python_ruamel_yaml.py
+ 
+diff --git a/package/Config.in b/package/Config.in
+index e501bca3aa..da88832d37 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1466,6 +1466,7 @@ menu "External python modules"
+ 	source "package/python-validators/Config.in"
+ 	source "package/python-versiontools/Config.in"
+ 	source "package/python-visitor/Config.in"
++	source "package/python-waitress/Config.in"
+ 	source "package/python-watchdog/Config.in"
+ 	source "package/python-wcwidth/Config.in"
+ 	source "package/python-weasyprint/Config.in"
+diff --git a/package/python-waitress/Config.in b/package/python-waitress/Config.in
+new file mode 100644
+index 0000000000..7d8c73a650
+--- /dev/null
++++ b/package/python-waitress/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_WAITRESS
++	bool "python-waitress"
++	help
++	  Waitress WSGI server.
++
++	  Waitress is a production-quality pure-Python WSGI server
++	  with very acceptable performance. It has no dependencies
++	  except ones which live in the Python standard library.
++	  It supports HTTP/1.0 and HTTP/1.1.
++
++	  https://github.com/Pylons/waitress
+diff --git a/package/python-waitress/python-waitress.hash b/package/python-waitress/python-waitress.hash
+new file mode 100644
+index 0000000000..c1663a351a
+--- /dev/null
++++ b/package/python-waitress/python-waitress.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/waitress/json
++md5  b8c671ed131b84a0099493f445c98014  waitress-3.0.0.tar.gz
++sha256  005da479b04134cdd9dd602d1ee7c49d79de0537610d653674cc6cbde222b8a1  waitress-3.0.0.tar.gz
++# Locally computed sha256 checksums
++sha256  3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
+diff --git a/package/python-waitress/python-waitress.mk b/package/python-waitress/python-waitress.mk
+new file mode 100644
+index 0000000000..c1618817dc
+--- /dev/null
++++ b/package/python-waitress/python-waitress.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-waitress
++#
++################################################################################
++
++PYTHON_WAITRESS_VERSION = 3.0.0
++PYTHON_WAITRESS_SOURCE = waitress-$(PYTHON_WAITRESS_VERSION).tar.gz
++PYTHON_WAITRESS_SITE = https://files.pythonhosted.org/packages/70/34/cb77e5249c433eb177a11ab7425056b32d3b57855377fa1e38b397412859
++PYTHON_WAITRESS_SETUP_TYPE = setuptools
++PYTHON_WAITRESS_LICENSE = ZPL-2.1
++PYTHON_WAITRESS_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/test_python_waitress.py b/support/testing/tests/package/test_python_waitress.py
+new file mode 100644
+index 0000000000..46f04109c0
+--- /dev/null
++++ b/support/testing/tests/package/test_python_waitress.py
+@@ -0,0 +1,34 @@
++import time
++
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonWaitress(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_FLASK=y
++        BR2_PACKAGE_PYTHON_WAITRESS=y
++        """
++
++    sample_scripts = ["tests/package/sample_python_flask.py"]
++
++    def test_run(self):
++        self.login()
++        self.check_sample_scripts_exist()
++        cmd = self.interpreter + " -m waitress sample_python_flask:app > /dev/null 2>&1 &"
++        # give some time to setup the server
++        _, exit = self.emulator.run(cmd, timeout=self.timeout)
++
++        # Give enough time for the uvicorn server to start up
++        for attempt in range(30):
++            time.sleep(1)
++
++            cmd = "wget -q -O - http://127.0.0.1:8080/"
++            output, exit_code = self.emulator.run(cmd, timeout=self.timeout)
++            if exit_code == 0:
++                self.assertEqual(output[0], 'Hello, World!')
++                break
++        else:
++            self.assertTrue(False, "Timeout while waiting for waitress server")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
