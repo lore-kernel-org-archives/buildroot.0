@@ -4,121 +4,146 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80E1BC02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 12:51:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 026EAC02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 12:59:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EAFC44054A;
-	Wed,  5 Feb 2025 12:51:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89B8841868;
+	Wed,  5 Feb 2025 12:59:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BmeU8suND9xr; Wed,  5 Feb 2025 12:51:49 +0000 (UTC)
+ id pBhgLhW-Q07L; Wed,  5 Feb 2025 12:59:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF3DE4175D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FA23417C1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF3DE4175D;
-	Wed,  5 Feb 2025 12:51:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9FD28CD
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:51:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1FA23417C1;
+	Wed,  5 Feb 2025 12:59:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DFE7212A
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:59:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8DD01410E8
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:51:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C171C40CA4
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:59:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A49GSGa3U0Lh for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 12:51:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:4860:4864:20::2c; helo=mail-oa1-x2c.google.com;
- envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AB6BA40A70
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB6BA40A70
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com
- [IPv6:2001:4860:4864:20::2c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AB6BA40A70
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:51:45 +0000 (UTC)
-Received: by mail-oa1-x2c.google.com with SMTP id
- 586e51a60fabf-29fe83208a4so447802fac.0
- for <buildroot@buildroot.org>; Wed, 05 Feb 2025 04:51:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738759904; x=1739364704;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=j04A+VUcS/Gryau9nvR3r0TMmiWvrsO3Xqt5kiVt4zU=;
- b=jmurI59eZOcLqRKQOixuORdyZhJWQK+tTDZXsqmA6z8rrKGDmL1vfaxEtj76piK+i5
- qb7LnXsrCSxjzcm0EpILNy9DA3vwx/B3NuOBFAT5iCGlg1TGzpN6ZiR1kFnO/SEgu6GC
- cwMt3ei9Pv7XpOJnwExjmf2piUZBT0VYQqmhRNC/L0+ykBiNMNEDSkzKtAE6LoE/ybuG
- 9POwflQII4b4m5gJ+wze3xKCKuMsZ0jIo1fnQc/PdFXifHpMgJTo9E8+spmCdqmUtd3X
- Z3TmnTG+Jy9YyH0V21oW5sQzNnwfTR9IkeNLQRQijpyFC2Lkf0j1sCZrAZiYBdqQ0KN+
- WhpQ==
-X-Forwarded-Encrypted: i=1;
- AJvYcCW77VRMQwTb4FG2i9VoeqFYJa+uwm4ENu0KWQpB4ro/3kw0p6KVbfJBuJQJcxUk0I4YOe+hj6uRVCU=@buildroot.org
-X-Gm-Message-State: AOJu0YySv96zhOb1gKGyAz3aiMV++XuO1NOLIMU/omaCGRxI8NDfbwJ1
- Pe9zgjHxF7sSP4zQcWu0CxytMKG55LzXlJ6BeaWsT7ix5d0DeE2hfWqu0lr3hfa8aqBxvVok1kG
- y
-X-Gm-Gg: ASbGnctWF2sCIwPRGdnIxp68JPJSMrONd3KB3yYVuRMHB4UobqCgtGGGM31mhXz+iw0
- QEPcgd4XnF4yEXlOCz+vOpI0GqSpMHaYcqaS58y2NiUBxyUwgeAut098DTQzeRoVGus+K2J5qFB
- pTiq09JsXJS5CWUoK4r21/Cwf99Z+mZLeJgTNWQv/Crs0/v/jIqmsMyvJW22XtYHb24Wx7GDUJE
- tR8mK741RKMCD8GjY6+bKnL06V5iWo2XK4DCsp1sts4Be9aVwh17NDSwHdXPxFAwhskOMNHb9eK
- 5DGunUjWplKcNqMnPCXrHoM9dmYEgvL46F3s3w3WenUTT1K6Gqv66kg=
-X-Google-Smtp-Source: AGHT+IGAnE0PxWY3VPlGFtqGVDQF7Vc1T/QsMNDsxwT1HRYsPcG+Juqgt+zqFtIAL6rRbmxPbLcgVQ==
-X-Received: by 2002:a05:6870:ec8a:b0:29e:1962:7a23 with SMTP id
- 586e51a60fabf-2b8047d12fcmr1861989fac.4.1738759904389; 
- Wed, 05 Feb 2025 04:51:44 -0800 (PST)
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com.
- [209.85.160.49]) by smtp.gmail.com with ESMTPSA id
- 586e51a60fabf-2b356112c01sm4651542fac.6.2025.02.05.04.51.43
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 05 Feb 2025 04:51:43 -0800 (PST)
-Received: by mail-oa1-f49.google.com with SMTP id
- 586e51a60fabf-29fae583cc8so454623fac.1
- for <buildroot@buildroot.org>; Wed, 05 Feb 2025 04:51:43 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCUPjaRfg2v+DMQbbu33R5iYdEAy8/lga22wEsVGBh3I1N5jP6zns1G+U/RXwg3k+9CmGp/F6Ghj/1M=@buildroot.org
-X-Received: by 2002:a05:6870:9690:b0:29d:c9f6:efdc with SMTP id
- 586e51a60fabf-2b804a75d61mr1837497fac.17.1738759903384; Wed, 05 Feb 2025
- 04:51:43 -0800 (PST)
+ id BoGKGbAM9jUI for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 12:59:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E25E340BA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E25E340BA4
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E25E340BA4
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:59:17 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.7.2] ([85.22.119.32]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mel7v-1t7Qhy0wVR-00dhHS; Wed, 05
+ Feb 2025 13:59:15 +0100
+Message-ID: <f70aa72c-8c8f-4cc1-b7e1-96ed51997596@gmx.de>
+Date: Wed, 5 Feb 2025 13:59:14 +0100
 MIME-Version: 1.0
-References: <20240805163133.4126564-1-james.hilliard1@gmail.com>
- <CA+h8R2oQGKFFH-vMX27WUO1uEAGyt4cz9MCwn9Cofwyujx1xDA@mail.gmail.com>
- <20240805223152.09ed915b@windsurf>
- <CADvTj4o_CnzCth+QqoxhVovBRinvYfbMf7r+SWnnY0tfVbKgbw@mail.gmail.com>
- <CA+h8R2obsR-CzMhWDpQ-A0oeEPaG-P=aCwF7BS4J-3eShmHJgg@mail.gmail.com>
- <20240806165050.234235b4@windsurf>
- <CADvTj4pOK8-2YXy0POUg1qOKa1MrjsxbnS-r1F7YMk_YXFmEAQ@mail.gmail.com>
- <CA+h8R2reErtSWPO1hGpX7tT5Xejb_SNqiuSCnXvJZKHwhzdcZg@mail.gmail.com>
-In-Reply-To: <CA+h8R2reErtSWPO1hGpX7tT5Xejb_SNqiuSCnXvJZKHwhzdcZg@mail.gmail.com>
-Date: Wed, 5 Feb 2025 04:51:34 -0800
-X-Gmail-Original-Message-ID: <CA+h8R2oJWZw_S08XXhjE--_So0UJohVLWSoj30PpR9z66x8U1A@mail.gmail.com>
-X-Gm-Features: AWEUYZkB6dmREUwUht98o3E1knYMYggWhbqJdDZRMYG-ojEBL1CdwQkty6-1eCE
-Message-ID: <CA+h8R2oJWZw_S08XXhjE--_So0UJohVLWSoj30PpR9z66x8U1A@mail.gmail.com>
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Christian Stewart via buildroot <buildroot@buildroot.org>,
- Anisse Astier <anisse@astier.eu>
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Fiona Klute via buildroot <buildroot@buildroot.org>
+Cc: Spenser Gilliland <spenser@gillilanding.com>
+References: <20250124124710.2838253-1-fiona.klute@gmx.de>
+ <20250205102036.77588f14@windsurf>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <20250205102036.77588f14@windsurf>
+X-Provags-ID: V03:K1:By/cEbHn4FmXNKCpSu4XuhOcrUNGBfQjiVNItoeXXzG76XFjzRu
+ ELxNWHycP6w4UfHZ2WNloZMnhEywT08V5jQ3kDOdJ2e6XbMv/FPpl0isSSWnNEXHGwtaGRt
+ TH/57cMUcmEKSZH9gEUd9swjFyEIOrGVl50guoMMIaVVzKkAMoLjBqo+0fh2MFnIle40bam
+ ZiuvhOiAGYmw+7ECfMhWQ==
+UI-OutboundReport: notjunk:1;M01:P0:8QkWnvq09Ik=;UIAUKHGSXRetKMUo/1EaJ/EQrT4
+ /5+/O3Q7FUBozkri5GgW0WSCIzgDKNH/EkLOrDRrQj2wCJN4qrVXxFOb6WAicODCuzAe9RIvs
+ kzRj0XwD2nLKBBginC9mUagnPmsz5ULMufmvCgRTsHhuA8RDyjCVUtO20tsQoORfg1PC5QSnu
+ XHmwmDYh9ISkP6rhgg2vO/TwzdOSsAZjel1+JAgmCISksbkHfQu7kcSWECo0jgXw0X6ORgp+g
+ ecZNNEBVY3JHP7LUIMEgGJH718Z2klCtDcmVhgLQDV1Uzg8qpcD/iLzO/EwkuR7Hf+N/kKgST
+ CqvZZU4dOzmhK8hZLQghltD+BxTEwGLbcW7oJpWRFjkjHzRoJSAeMhLhYXtXwKTUFL9pIz6Ma
+ OiJDHL+Eyzlv4hX/ALJU/TCF+qmArrFUFoOxYH9MckQ0LQcSn+D2LnmbPE0t/2Zjf6/njgF+4
+ 5x6SMQnzSYVV214LxMzeuGjs6MQPC0P72u0gp9TPLNWcaMkGmLZcAqsfGJ1X6AIy/HAoMI+bE
+ BnmZFwGoVI0lg7RwrdfeT1Nyv/OIpQ1ob+mVmeByLjf6S3GE+MS2axOe4QWHdtr+q+tnM6NDC
+ pTZSSWW8y0jbHSWxVrikaEb7lefM0niMUiWP1HHDEaf04Dl1dCGHFw2exAIfOlUxlH8+YzDjS
+ GnQUKJgs2lMpetQWY7QMmz3hQyOwo9SOUiBFQdNaPrfmU9zcp925+IM/Wx+SoSnoXLdMZ3eTW
+ h6WKEawd7DQuKCO6TAwEXry9LbgcVxMDCyWZBdbH5so7dC6OsSmB3fyB2EJNhsgyUEPko4fFi
+ O9ArD0mq7JfJ+HbRBKlDxBnSmcuCTj293cnWaQriT9vldotvgHdN+9CRqoj+ScBaxeN9PyBBm
+ RNF85pD4cqf0sm4imKWHV3MUYqM5Xi/0o+68r0jv0mGwRfuh++qtoE8lbK/VbL/v+8eXnCT5q
+ 3cnKCUph9KHr1xua8xUskP0EZ/dnbu9UhAczwQQ2Vlmb2xx/D7SM8a1TesNEgqSRMHxTaTmPC
+ wl1bU3G4AJcUYunVBqWp5WJ03cu2vVCnKThjoRhG8mUc7exzbRYs1+iqdbvKRv5kAgWO1soDN
+ DBsZm29yHsfuFV5mAvifVy+9akpgbDJXnHhF4ZFDt133Z1JaxuLyodyBICjylyxv43cHaGLfP
+ ycbjweAXvIfMNAGrL5caCyMPhVqZHILGNFvtKIJxlcfIk8dV4zhNjXNxFhoZAyAoJBOK/rMlm
+ C0e/CGiFdYntCPVezpJOIvlovk3jKqhXlKVgYar+eUwgTvSHP2jL7aHeK4hH5+cwzgK+XZt+v
+ m2hYKF2ES+IKdFE2FK648H1GDBoQT6d+/OKfOxo1VxOR0dnmxqpf8RZ/LgGnyYqke/dUR3sRb
+ dk7t76Uh8gkgKdxnBN0pWHNl8+FCDgRaPU/vfCjhhgDf9MuUtHYuHx0E9WkpzbqTCgKMwVDx8
+ 3fn7ehA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1738759904; x=1739364704; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=j04A+VUcS/Gryau9nvR3r0TMmiWvrsO3Xqt5kiVt4zU=;
- b=cwGXMVHSu1FtoUe0lNjRtTUt4jE2y/kywPgLxDvGWVJ0q8MAkzkE1mIYQVycAV756l
- m6IcxtrXs6EkZtR7JcB8PIEh/tKi5zrw5PEvDViJbMXy1scGEDP6AHj5q4Wf0YM20R0f
- o7vfbyEvLwRucGEOPuaNF6nCpWhy8oPi7NqwJvJSNNlEJ7lBTJitQmt/AV+tpqS4zDjC
- kayW0iwoknnGwdQHnyXingLsS2Py/zRFWrl8OTQwpPqOfoPMM0vahplFGiZgHmAxVq+c
- 1ZBztXoEdWdfmqCvnuiDFAsr8GzmduvXKGKRgKMGE/XXjyca57HMTGLvhV2CaU90GBkI
- kQAQ==
+ d=gmx.de; 
+ s=s31663417; t=1738760355; x=1739365155; i=fiona.klute@gmx.de;
+ bh=VbMGJWvmATqjJmNymkjideNQlHBEmWS90CwH2kvuoCI=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+ References:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:cc:content-transfer-encoding:
+ content-type:date:from:message-id:mime-version:reply-to:subject:
+ to;
+ b=KmPFZa73KyurIbtAM8mP8H5jjT+wk8EbC4XxP4H+21luQPKGi0+wWhmmiNHahZ5n
+ 9fHjzaX8Gd6YA6vamo7QIyawE+EYr4IRHuo9XFEsEkTmdbiHB/M3LVAAF/t1zLQaP
+ La63/2ondQmM0m3n4xumBKLO6dUQ0uRpDnsV+Sb/qnNH9YiH3t+X8IiMpvhqWLnzE
+ ENcpfFR3XzwM0pxmm1AYybKMEwfsMdYPwcHu/scbuvVJPkAtVgDq/DhYR0PlAhpv3
+ aRAv5wZ+gGi1r1qBCP60z5i/PJ/kd1i86PZqF/gWpEUGrx60T5VmmYYyUzehkY3+O
+ yDPkYgXD7vrE5n/DOg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=aperture.us
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=cwGXMVHS
-Subject: Re: [Buildroot] [PATCH v4 1/2] package/pkg-golang.mk: allow
- packages to override download GOPROXY
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=KmPFZa73
+Subject: Re: [Buildroot] [PATCH 1/1] package/mesa3d-demos: fix build failure
+ on musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,260 +155,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Content-Type: multipart/mixed; boundary="===============2987432468699542675=="
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2987432468699542675==
-Content-Type: multipart/alternative; boundary="00000000000064246d062d649653"
+Hi Thomas!
 
---00000000000064246d062d649653
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-I wanted to follow up on this old topic of GOPROXY.
-
-Below I mention a potential security issue where someone uploads a
-malicious package version to the proxy and then changes the git tag to
-remove the malware. In this attack mode the maintainers might check the git
-tag, see no malware, and add a package with that tag.
-
-The problem is that Go fetches from GOPROXY and silently ignores the
-mismatch.
-
-This was the reason why I have always lobbied to keep the default as
-GOPROXY=3Ddirect in buildroot, as this avoids the case where the git repo
-mismatches the proxy without visibility at the git level.
-
-This attack has been used in the wild now:
-
-https://socket.dev/blog/malicious-package-exploits-go-module-proxy-caching-=
-for-persistence
-
-See below for my reasoning
-
-On Tue, Aug 6, 2024, 9:13=E2=80=AFAM Christian Stewart <christian@aperture.=
-us>
-wrote:
-
-> Thomas, James,
+Am 05.02.25 um 10:20 schrieb Thomas Petazzoni:
+> Hello Fiona,
 >
-> On Tue, Aug 6, 2024, 8:49=E2=80=AFAM James Hilliard <james.hilliard1@gmai=
-l.com>
-> wrote:
+> On Fri, 24 Jan 2025 13:47:10 +0100
+> Fiona Klute via buildroot <buildroot@buildroot.org> wrote:
 >
->> On Tue, Aug 6, 2024 at 8:50=E2=80=AFAM Thomas Petazzoni
->> <thomas.petazzoni@bootlin.com> wrote:
->> >
->> > On Mon, 5 Aug 2024 18:07:37 -0700
->> > Christian Stewart <christian@aperture.us> wrote:
->> >
->> > > My suggestion is to either set GOPROXY=3Ddirect for all packages, or=
- for
->> > > none of them.
->> > >
->> > > We could default to setting GOPROXY to empty, which uses the default
->> > > Google proxy.
+>> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 >>
->> Why weren't we just using the default settings in the first place? I mea=
-n
->> if upstreams basically only test with default settings here then using
->> something different seems problematic in general.
+>> Patch has been on upstream main for close to 2 years.
 >>
+>> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 >
->> There's reports that GOPROXY=3Ddirect is kinda broken:
->> https://drewdevault.com/2021/08/06/goproxy-breaks-go.html
->>
->> >
->> > Could you explain to a Go ignorant like me how is this proxy thing
->> > helping in solving this issue? Should a proxy just "speed up" the
->> > download? Why does it exhibit a different behavior between a
->> > GOPROXY=3Ddirect build and a GOPROXY=3Dsomethingelse ?
->>
->> Presumably the proxy acts as a cache which prevents breakage if
->> the dependency direct source changes or something like that.
->>
+> Thanks for the fix. Since I don't see any autobuilder failure, do you
+> have a defconfig that exhibits the issue?
 >
-> The reasoning for using GOPROXY=3Ddirect is as follows:
+> I tried:
 >
-> When we enable the proxy, the Go tool will download the sources for the
-> dependencies from Google.
+> BR2_arm=y
+> BR2_cortex_a9=y
+> BR2_ARM_ENABLE_VFP=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_BLEEDING_EDGE=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_MESA3D_DEMOS=y
+> BR2_PACKAGE_MESA3D=y
+> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+> BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM=y
+> BR2_PACKAGE_MESA3D_OPENGL_EGL=y
+> BR2_PACKAGE_MESA3D_OPENGL_ES=y
+> # BR2_TARGET_ROOTFS_TAR is not set
 >
-> This is OK in general, but in the context of buildroot we typically
-> download sources from their upstream releases or Git repositories.
->
-> GOPROXY is not broken.
->
-> That said, a lot of dependencies cause problems when they change what tag
-> a git release points to retroactively (rare but happens), or delete a old=
-er
-> commit from their repository (which happens extremely rarely).
->
-> The proxy smooths this over by always serving the same thing for a git ta=
-g
-> or commit hash.
->
-> The problem with this is, now we have something different being returned
-> for a dependency than what it says in go.mod.
->
-> The go.mod might say we are fetching foo at version 1.0.0, but in fact, i=
-f
-> you go to the repository for foo, and go to version 1.0.0, it could be a
-> completely different source tree from the one we get in the proxied
-> download.
->
-> This opens up the opportunity for bad actors to hide code in the proxied
-> version and then retroactively change the git tag to hide that bad code.
->
-> For this reason the default was set to always use Git to fetch the
-> dependencies for Buildroot as we would prefer to detect the mismatch and
-> deal with it up front, possibly falling back to fetching the .tar.gz from
-> our own mirror, rather than depend on this behavior from the Google proxy
-> to always be there and save us.
->
-> As you can see we have never had an issue with this setting until now,
-> when we have an actual broken dependency somewhere, and its when we are
-> adding the package, not retroactively, that the issue is found and solved=
-.
->
-> This is my pitch for keeping GOPROXY=3Ddirect. If we want to use the Goog=
-le
-> proxy with all the cavets I mentioned above, we could add the option
-> HOST_GO_GOPROXY and default it to the Google proxy. But personally I will
-> still always override this value to direct in my projects.
->
+> which has a vulkan driver, but it doesn't build the problematic code.
 
+As far as I remember you need need to build full OpenGL GLX, not just
+EGL. This is the related part of my defconfig:
+
+BR2_PACKAGE_CAGE=y
+BR2_PACKAGE_MESA3D_DEMOS=y
+BR2_PACKAGE_LIBGLVND=y
+BR2_PACKAGE_MESA3D=y
+BR2_PACKAGE_MESA3D_LLVM=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D=y
+BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ZINK=y
+BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM=y
+BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST=y
+BR2_PACKAGE_MESA3D_OSMESA_GALLIUM=y
+BR2_PACKAGE_MESA3D_OPENGL_GLX=y
+BR2_PACKAGE_MESA3D_OPENGL_ES=y
+BR2_PACKAGE_XORG7=y
+BR2_PACKAGE_XKEYBOARD_CONFIG=y
+BR2_PACKAGE_LIBDECOR=y
+BR2_PACKAGE_LIBFREEGLUT=y
+
+Note that the X stuff is for libraries required for GLX, it's still a
+pure Wayland setup.
+
+> Also, we need to understand since when the problem has been happening
+> (i.e when the problematic code was added in mesa3d-demos), in order to
+> be able to backport the fix if needed.
+>
+> Basically, when fixing an issue, we should never just fix it. We should
+> always explain since when the problem has started happening.
+The "uint" use was introduced here:
+
+https://gitlab.freedesktop.org/mesa/demos/-/commit/813ebef7671f0e54d1b55be9e15ae5586b2b9eb1
+https://gitlab.freedesktop.org/mesa/demos/-/commit/5aaa7faeb4de9497535738830e6ebb8f10071877
+
+The first and so far only mesa3d-demos release that contains those
+commits is 9.0.0 from March 2023. Considering that was added to
+Buildroot in early July 2023 (commit
+80304d9911f34f8a0173a4f37d52f93177478cc7) it's probably safe to assume
+it's in all still supported releases.
+
+That said, making "since when" a strict requirement for accepting a fix
+seems problematic to me, because it might discourage people from
+participating. In my situation (getting paid to make things work,
+including upstreaming) it's a perfectly reasonable request. But people
+who send a patch here and there from hobby coding might feel their
+contributions aren't valued, and someone who has a manager breathing
+down their neck and complaining about time wasted might decide it's not
+worth the trouble. In case of doubt having a fix on the development
+branch (and backporting if someone bumps into the problem on a release)
+seems preferable over not having it at all. ;-)
 
 Best regards,
-Christian Stewart
-
->
-
---00000000000064246d062d649653
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto"><div>Hi all,</div><div dir=3D"auto"><br></div><div dir=3D=
-"auto">I wanted to follow up on this old topic of GOPROXY.</div><div dir=3D=
-"auto"><br></div><div dir=3D"auto">Below I mention a potential security iss=
-ue where someone uploads a malicious package version to the proxy and then =
-changes the git tag to remove the malware. In this attack mode the maintain=
-ers might check the git tag, see no malware, and add a package with that ta=
-g.</div><div dir=3D"auto"><br></div><div dir=3D"auto">The problem is that G=
-o fetches from GOPROXY and silently ignores the mismatch.</div><div dir=3D"=
-auto"><br></div><div dir=3D"auto">This was the reason why I have always lob=
-bied to keep the default as GOPROXY=3Ddirect in buildroot, as this avoids t=
-he case where the git repo mismatches the proxy without visibility at the g=
-it level.</div><div dir=3D"auto"><br></div><div dir=3D"auto">This attack ha=
-s been used in the wild now:</div><div dir=3D"auto"><br></div><div dir=3D"a=
-uto"><a href=3D"https://socket.dev/blog/malicious-package-exploits-go-modul=
-e-proxy-caching-for-persistence">https://socket.dev/blog/malicious-package-=
-exploits-go-module-proxy-caching-for-persistence</a></div><div dir=3D"auto"=
-><br></div><div dir=3D"auto">See below for my reasoning<br><br><div class=
-=3D"gmail_quote gmail_quote_container" dir=3D"auto"><div dir=3D"ltr" class=
-=3D"gmail_attr">On Tue, Aug 6, 2024, 9:13=E2=80=AFAM Christian Stewart &lt;=
-<a href=3D"mailto:christian@aperture.us">christian@aperture.us</a>&gt; wrot=
-e:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;bo=
-rder-left:1px #ccc solid;padding-left:1ex"><div dir=3D"auto"><div>Thomas, J=
-ames,<br><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_att=
-r">On Tue, Aug 6, 2024, 8:49=E2=80=AFAM James Hilliard &lt;<a href=3D"mailt=
-o:james.hilliard1@gmail.com" target=3D"_blank" rel=3D"noreferrer">james.hil=
-liard1@gmail.com</a>&gt; wrote:<br></div><blockquote class=3D"gmail_quote" =
-style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">On =
-Tue, Aug 6, 2024 at 8:50=E2=80=AFAM Thomas Petazzoni<br>
-&lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com" rel=3D"noreferrer noref=
-errer" target=3D"_blank">thomas.petazzoni@bootlin.com</a>&gt; wrote:<br>
-&gt;<br>
-&gt; On Mon, 5 Aug 2024 18:07:37 -0700<br>
-&gt; Christian Stewart &lt;<a href=3D"mailto:christian@aperture.us" rel=3D"=
-noreferrer noreferrer" target=3D"_blank">christian@aperture.us</a>&gt; wrot=
-e:<br>
-&gt;<br>
-&gt; &gt; My suggestion is to either set GOPROXY=3Ddirect for all packages,=
- or for<br>
-&gt; &gt; none of them.<br>
-&gt; &gt;<br>
-&gt; &gt; We could default to setting GOPROXY to empty, which uses the defa=
-ult<br>
-&gt; &gt; Google proxy.<br>
-<br>
-Why weren&#39;t we just using the default settings in the first place? I me=
-an<br>
-if upstreams basically only test with default settings here then using<br>
-something different seems problematic in general.<br></blockquote></div></d=
-iv><div dir=3D"auto"><div class=3D"gmail_quote"><blockquote class=3D"gmail_=
-quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1=
-ex"><br>
-There&#39;s reports that GOPROXY=3Ddirect is kinda broken:<br>
-<a href=3D"https://drewdevault.com/2021/08/06/goproxy-breaks-go.html" rel=
-=3D"noreferrer noreferrer noreferrer" target=3D"_blank">https://drewdevault=
-.com/2021/08/06/goproxy-breaks-go.html</a><br>
-<br>
-&gt;<br>
-&gt; Could you explain to a Go ignorant like me how is this proxy thing<br>
-&gt; helping in solving this issue? Should a proxy just &quot;speed up&quot=
-; the<br>
-&gt; download? Why does it exhibit a different behavior between a<br>
-&gt; GOPROXY=3Ddirect build and a GOPROXY=3Dsomethingelse ?<br>
-<br>
-Presumably the proxy acts as a cache which prevents breakage if<br>
-the dependency direct source changes or something like that.<br></blockquot=
-e></div></div><div dir=3D"auto"><br></div><div dir=3D"auto">The reasoning f=
-or using GOPROXY=3Ddirect is as follows:</div><div dir=3D"auto"><br></div><=
-div dir=3D"auto">When we enable the proxy, the Go tool will download the so=
-urces for the dependencies from Google.</div><div dir=3D"auto"><br></div><d=
-iv dir=3D"auto">This is OK in general, but in the context of buildroot we t=
-ypically download sources from their upstream releases or Git repositories.=
-</div><div dir=3D"auto"><br></div><div dir=3D"auto">GOPROXY is not broken.<=
-/div><div dir=3D"auto"><br></div><div dir=3D"auto">That said, a lot of depe=
-ndencies cause problems when they change what tag a git release points to r=
-etroactively (rare but happens), or delete a older commit from their reposi=
-tory (which happens extremely rarely).</div><div dir=3D"auto"><br></div><di=
-v dir=3D"auto">The proxy smooths this over by always serving the same thing=
- for a git tag or commit hash.</div><div dir=3D"auto"><br></div><div dir=3D=
-"auto">The problem with this is, now we have something different being retu=
-rned for a dependency than what it says in go.mod.</div><div dir=3D"auto"><=
-br></div><div dir=3D"auto">The go.mod might say we are fetching foo at vers=
-ion 1.0.0, but in fact, if you go to the repository for foo, and go to vers=
-ion 1.0.0, it could be a completely different source tree from the one we g=
-et in the proxied download.</div><div dir=3D"auto"><br></div><div dir=3D"au=
-to">This opens up the opportunity for bad actors to hide code in the proxie=
-d version and then retroactively change the git tag to hide that bad code.<=
-/div><div dir=3D"auto"><br></div><div dir=3D"auto">For this reason the defa=
-ult was set to always use Git to fetch the dependencies for Buildroot as we=
- would prefer to detect the mismatch and deal with it up front, possibly fa=
-lling back to fetching the .tar.gz from our own mirror, rather than depend =
-on this behavior from the Google proxy to always be there and save us.</div=
-><div dir=3D"auto"><br></div><div dir=3D"auto">As you can see we have never=
- had an issue with this setting until now, when we have an actual broken de=
-pendency somewhere, and its when we are adding the package, not retroactive=
-ly, that the issue is found and solved.</div><div dir=3D"auto"><br></div><d=
-iv dir=3D"auto">This is my pitch for keeping GOPROXY=3Ddirect. If we want t=
-o use the Google proxy with all the cavets I mentioned above, we could add =
-the option HOST_GO_GOPROXY and default it to the Google proxy. But personal=
-ly I will still always override this value to direct in my projects.</div><=
-/div></blockquote></div></div><div dir=3D"auto"><br></div><div dir=3D"auto"=
-><br></div><div dir=3D"auto">Best regards,</div><div dir=3D"auto">Christian=
- Stewart</div><div dir=3D"auto"><div class=3D"gmail_quote gmail_quote_conta=
-iner" dir=3D"auto"><blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 =
-.8ex;border-left:1px #ccc solid;padding-left:1ex">
-</blockquote></div></div></div>
-
---00000000000064246d062d649653--
-
---===============2987432468699542675==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Fiona
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2987432468699542675==--
