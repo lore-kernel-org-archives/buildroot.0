@@ -4,96 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F172BC02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 13:58:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 844F6C02198
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 13:58:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B9C02417AD;
-	Wed,  5 Feb 2025 13:58:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 20632419BC;
+	Wed,  5 Feb 2025 13:58:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5Ve982cN4TPB; Wed,  5 Feb 2025 13:58:53 +0000 (UTC)
+ id kq5ho-Qms3vK; Wed,  5 Feb 2025 13:58:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8475A417B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFAF6417B7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8475A417B6;
-	Wed,  5 Feb 2025 13:58:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B59EACD
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:58:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFAF6417B7;
+	Wed,  5 Feb 2025 13:58:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 30C1CCD
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:58:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A43D240BA4
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:58:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2C44460A65
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:58:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pFzP9pIHUtmT for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 13:58:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Yg4Bd8dYQ6Wj for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 13:58:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1A0E0411F6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A0E0411F6
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1A0E0411F6
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:58:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C724860017
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C724860017
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C724860017
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:58:50 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.lan ([85.22.119.32]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MD9X9-1tWZFp0mDx-00EYZW; Wed, 05
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MMGN2-1txkVa2WFq-00MzAb; Wed, 05
  Feb 2025 14:58:40 +0100
 To: buildroot@buildroot.org
-Date: Wed,  5 Feb 2025 14:58:24 +0100
-Message-ID: <20250205135825.2310972-2-fiona.klute@gmx.de>
+Date: Wed,  5 Feb 2025 14:58:25 +0100
+Message-ID: <20250205135825.2310972-3-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250205135825.2310972-1-fiona.klute@gmx.de>
 References: <20250205135825.2310972-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:MSRLzv7pus4GRvu2p8WQpgm+jIC2G/7zz088aX0i7CvS6YSp3Px
- kkjoY33CwjSY0zUcbFp2KJ0Z97h1JfsnLWzqYTprrUsDV9Q7+rgaqB1rJ4Ajlw1gWqLGTup
- 0iNaBhYDD+quPXazftz9+PFWN4+1OHDs9zWJ6az8k6p0Hn1o7bQ6rbc6/Lh0NRSrT+Jja9F
- Mpz+tVrd2ce9gsfXS7a4g==
-UI-OutboundReport: notjunk:1;M01:P0:rb0eTtUjg9I=;WKSqyxAAJCBGanN4f6fP0NJlaVm
- QBDzu5mi2rtVZRYiLUC4hCeDuq76+MKLgpfO4Vh86wii856AxEkjMlTpOcDYWpWGnQ606aIli
- m9JCIMJaLcRj9zLXpdoLc/X5fJ7QG5jYgrqxTLRvXMi4H3xaX8A3dvbF68/Wi8kXonIkmQhTj
- iWpuyhV7TZjNU/FBY41f7HmiOuM18kxUsLUAYTyiqnyY1QmTzGy/RSdg7XBFQKCXtZGu3dnH3
- nyehppNtyoQOIELQc9Ut+yelgpkTrptuSRZzv5gHp2V++6Sil7Xozj+DqnP5xfvBzQcO+fkbJ
- kwGtoiND853wiIS+ZTT3H+WhasvMsLjTF1Gs8jRxFjkvTclEFsFo9roviSZ9jjPnymzsa+jfj
- Op5V7Le2IJaL6xSJmS2XXwdTguMC+Xc/qmUkR17MRFfKW68A1JscGOdNg6c7fh5Vv8P86QcQq
- HyJuzC8OIfYP2See8nOaQcLQMn8E6hCd0KqOoMQD1f7r4fwrET4m2I+47nfOXpF8EXcj/GCoI
- kja+e0NeUVXEsE+IXRUKIXdEsaLd4Omvpw7GIILuIL3IoiXWe+WASqUZPSiMi0J+oCQuabczB
- ZJopn0UxjQ2vmGBOtPE96Ti6JDE2GwkyKWtnFvY7cHqHDPfP7o/q8aOdjIjYzpNbXKkTEQYh1
- cO3uhfONhOLm9kFEL/VhN4bTmlBDiUPpqGg+Y6Ueb7KZr8ECzQOa8GYrTL6u5XRRmKLLISrTi
- I54aEt5NfghXPjzG8mt9wLmgfyoMYykU5fI5MlEqmnsYVjxZ596Qf4WZVjpT3uU0JMv0d/vur
- 0Plrw5nbAg7j/UJBqHHq8PkCNuI7skDqeExFqFLtoYDdZ4CUdJKqJYhPZt7XCK0MNNNonkdkn
- 2rLy8TIkWGUqwvi8y6d7uj196+Tju2xhNJjOIfVZgOaH6nEbRygg8E+oHa/v74dhcbhjApjwe
- RIne/af8foeZ93FNj1PsWBevkRyy5AIZFobhJhE+mKC4CNJSLV0ktZkGDwtYdCO3x0ESfTlQA
- CJPv5d3kVxIkLVJmxTAl8E6SB/6uwWqDvvot3yrUrlZlz4ruZPN2GbieytTGCTcPbIykLtzBM
- Ov7x0eR3a7fRUEQURUJekNAWNr6IsGey6dvkp3Fq3bhUFp/kAfc7B1cNMIwUXHgU9uyxYMlHt
- jiNN2Wkv8IZ97YJokwaoDsjsrRj6i6GdzV66yUtlqriE6+b+SD7GMqI7IV1vs9Bmnv92CSiDq
- wY/XBIeFtE0THstHmg907/pEE1/i9lXni469ki6ZlMISt0lgOd4QB8n3dIpiq7eI4OXj07yYE
- Bn9nxz6Ia5RUOkw9/+GK65no91qSZnkZaZuL6Sy9PPZ+BE6AToCfxpxH8X1dDknhFYndJsEw7
- kjlyLPJbQtXgTkcVfglavKbEDMxvElEEMVxk0=
+X-Provags-ID: V03:K1:0j1J9RGKV0B+wKJv79811b4+7BPQSS3pd1WMF9SxRK2AGtAumWA
+ Kf/s7AWZMaK3LK5w3wQQBxSCVKGtNR7yraY53YBNvf05trvSNLCwnoOz14ay8sxPlcPnHzN
+ jqE8IlY6uTMByrwoFN1WXooI9TxCuQo93XgP3gVxonJL5SzHkwewmUOy7x+uQ6+HoNmoIGx
+ xddewSNbBm8xBExwO9bbQ==
+UI-OutboundReport: notjunk:1;M01:P0:vlZTD6oAq3o=;fPKHypVjau49huNDfrAQHIeLeiT
+ o1LO77chtoFJ+DK8ts1zTF5e3KFk7IjS0F5t46CjX2G0wiXwPCvGy/HkgZmnXm/GeN7Qw1TQT
+ tf9lC8kD053qgct4UYe6V0Y8/iKkoLAdjovTiYol9g1edZpUQHI8ejOaKIvIreYFTNbTpI4Wy
+ D1DaUUPOA4d1K52kmse07gGCPWp3n6rV7C6xRYZvckNqK8EtIsI7dlDlj7K+Pa5gOAg0X/PLb
+ jiGDlCb1YQjaIoYtfjVziClRzDGaOD/6ejIiWMfeCQ4X3HFeBImkp1Fkqg5UvWi45FHeaBRag
+ yw/G6v4cwXil48SiMz6qv06jAk0heH06LvYr4qJQnjo84F0nDUICsauQ1njtyZGNbaJ8ZeZZl
+ bvEaQRQlUbFiHhrmrtNsgQU6kZzneehbtAWOJjNcq2I/42DaRjfGdX/mK5cNzu0QjMsUQbiFf
+ r4ntsgQSbPgoVIcIf6dwn/UvW7hGRgo/WFeju8JOC0QVoPP8V/nn78miyAgWcJtB9o3ydFaDv
+ 4rtxZU7xXGgfzXqj/ZxnQMn9VpFNaXNY4Z5Wwtlzcgy+JitrRs9DYdZrAutUYc14xsY/thI8e
+ h6JSodRx+k9MXILg0tQW+wos8JJTQE1w+aiqEQK6lFiL80Ao8zWxSI4fQljq3Hs1008alFHMc
+ +q0+cyXXOUKwNcVlw/8Anu1Lf+Qa4giHjVQiesoLum+1aPybacYGIwHc7rFvmIIfixueDV1Bv
+ 6JqjB0mXm/EuvGOUjGRoXLI6jSgHUMK/zKqbFOrFIVuaDauKr8AkIxtB9XYSwfcnbc7pIXe+v
+ fKDhxQNNRmsQmh1uawY1nm3t1sYSpLyTo31HsD1+m9VAAnPeyGT78J4i+11k5g/j4i0N1GbMV
+ Bn+UNBOW+e/yF3AIhIDK0m+nGvvkg2+IDAcYLuG3XXToo5gQxT1su39AuR+aIq5TuZ/waNJZo
+ ugFMe4NL9HHtNCJdVuk5clFsomN37ZF1DZ3PkK8wLkCrcGCYT2spwJWxtnQO/57l+uZKg+WMS
+ FJVjbm9FsJ4g4cimnwQf30EMTF8jExvcRxhZNzdMuGKtmaINIkxPqp/kA2wHR2y0lR08PWKKw
+ sDsBhDPURgct1R5mJYkuP+eSzYscmJt2nPQNnvK58J64T8Jb8fiXv3UJ+PwkK++pjhSeTVjOJ
+ lC54Fti+NEzK9WWnljcKz9pkQWI73L9E0Lzu7kdkJLDj16fNIfaJhcRqVDTr4356KaW1ia71b
+ uRBz/FxwBVAsQrsAnYZEJZvbPblAHWmvfoSOm1am4BCmrgBNOYoM3GlLnAJEFWe6OafqUMI0n
+ OoPiZ2XridPEh7MZSM+FtYZl0Q6YtnIW22guCnwewIniRFwJPekDvvtJmThQHizYsbxTov02A
+ /3uGZ8ngExUZJjATfdaDS63x7UJEDGTImnyO+HeRezPOPGNT8Rvffp66qWexJ4l1KikdHZoEn
+ 4ePj9I1ZN+Bmufonz/ybOobM7oI9VW2H7gcizZQQyu2cHFN/d
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
  s=s31663417; t=1738763920; x=1739368720; i=fiona.klute@gmx.de;
- bh=La77xq3ZSBT/NlyjIk4bdeYUKcXx4nrAdiDOv/LR9hs=;
+ bh=olvOpJM8S0cS2vv5cHBD7WoN4ABVKpjZzHYiixzNyoo=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
  References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=O3JnMGw5pdqy902d7zDjdYy72r8vYRQWGbQPkr2ZssxOlp2XnPrYLozVaL25NF3R
- g43N7eGAg2VCjfsrKa+XAUaIZTY9oDmloph+bQyVXZ/kU6+XCdaMvStObP0ohkNQs
- iSDeJR/g5PiqQpywvY9cL2drVl1R7E5tGsQ12oXGh2SXx9jzzxGpEoLr1f0+yufYC
- /NWnRtXWrSkY/aNvIFT4Qz+M4V17QIq+8fuqNgQun4FSrIjV3SfXL66TV7QGBoXID
- Ns5sFMFx5l5h55+k8spGgrg/5FHsbfZbFNNvlYKthrPbpxU3OUWqqdaYVyCiHn+fa
- OkuwaXD1mU5J1BpNWw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=D601t0QW/a3O4tEOByvTfTd3Zt/cTpVa9aFRVdhESEh76/7PwK1VQtZGQ5foOX7C
+ 9MWu97tlETPjItvzyNnjQxHtpAjdY5oA79sTXVCK7rMQUVXtIhHaDZztuTRLZNM5X
+ 7E6FLOBtR+ZsnW3ENz0MuLO5c5k2dgrZnJSb2DwKIfXShk52xRErXZEYoG/co3f+a
+ FNAQWjC7ljAMede8x7FUxH6++BmR5Ppc+uxdobfvekHa3fdX6XV//d4ngB0yeZdee
+ q14fULXe9KOeNpLoIjayWyFmrd295lf8Hgwtgc57slCSzaz0QBmPHL7UIoBDty2By
+ u3gq5Byslzx9O6VGDQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=O3JnMGw5
-Subject: [Buildroot] [PATCH v3 2/3] package/pkg-golang: use ld.bfd instead
- of ld.gold on aarch64
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=D601t0QW
+Subject: [Buildroot] [PATCH v3 3/3] package/containerd: use --no-pie on musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,47 +119,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-Go forces use of the Gold linker on aarch64 due to a bug in BFD that
-is fixed in Binutils >= 2.41 (that includes all versions provided by
-Buildroot). Forcing Gold will break with toolchains that don't provide
-it (like the Buildroot toolchains), so override the flag and use BFD.
+Disable PIE on musl to fix "read-only segment has dynamic relocations"
+errors during linking [1] that appeared after major version bump to v2.
 
-This override should be removed if Go stops forcing Gold, and may have
-to be adapted if the set of available linkers changes (e.g. with a
-future Binutils update).
+[1] https://github.com/golang/go/issues/17847
 
-See: https://github.com/golang/go/issues/22040
-
+Fixes: 9c2e146ca9a21f0de3c97981113a57c58c3a5bd5
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
-Changes v2 -> v3:
-* Note in commit message that changes to the override may be required
-  with Go or Binutils updates
+ package/containerd/containerd.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- package/pkg-golang.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index a3421af288..bdf8de4d66 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -118,6 +118,16 @@ $(2)_EXTLDFLAGS += -static
- $(2)_TAGS += osusergo netgo
+diff --git a/package/containerd/containerd.mk b/package/containerd/containerd.mk
+index ee07c22495..1f70a26ebf 100644
+--- a/package/containerd/containerd.mk
++++ b/package/containerd/containerd.mk
+@@ -49,6 +49,12 @@ ifneq ($(BR2_PACKAGE_CONTAINERD_CRI),y)
+ CONTAINERD_TAGS += no_cri
  endif
  
-+ifeq ($(BR2_aarch64),y)
-+# Go forces use of the Gold linker on aarch64 due to a bug in BFD that
-+# is fixed in Binutils >= 2.41 (that includes all versions provided by
-+# Buildroot). Forcing Gold will break with toolchains that don't
-+# provide it (like the Buildroot toolchains), so override the flag and
-+# use BFD.
-+# See: https://github.com/golang/go/issues/22040
-+$(2)_EXTLDFLAGS += -fuse-ld=bfd
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++# Go exe build with PIE doesn't work with musl.
++# See: https://github.com/golang/go/issues/17847
++CONTAINERD_EXTLDFLAGS += -Wl,--no-pie
 +endif
 +
- ifneq ($$($(2)_EXTLDFLAGS),)
- $(2)_LDFLAGS += -extldflags '$$($(2)_EXTLDFLAGS)'
- endif
+ define CONTAINERD_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 0644 $(@D)/containerd.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/containerd.service
 -- 
 2.47.2
 
