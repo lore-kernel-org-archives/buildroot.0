@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 447B7C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:14:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67028C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:14:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC654708B3;
-	Fri, 28 Feb 2025 17:14:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C2E6508BE;
+	Fri, 28 Feb 2025 17:14:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x7KFVFCZw5E8; Fri, 28 Feb 2025 17:14:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ngFsCUMSSOyq; Fri, 28 Feb 2025 17:14:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 847AE708C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C2844FDB4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 847AE708C7;
-	Fri, 28 Feb 2025 17:14:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C2844FDB4;
+	Fri, 28 Feb 2025 17:14:42 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1872668
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1747B68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AFB5A42F71
+ by smtp4.osuosl.org (Postfix) with ESMTP id E994A42F74
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rYxWWhVA9qHh for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:42 +0000 (UTC)
+ id FzGCH5fmyfsz for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B7754336C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57C2F42D0B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4B7754336C
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 57C2F42D0B
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 43C34867E5; Fri, 28 Feb 2025 16:30:34 +0000 (UTC)
+ id 5159287A92; Fri, 28 Feb 2025 16:30:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 12:58:56 +0100
+Date: Wed, 5 Feb 2025 11:06:08 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f2a862fe603b1d0c52249f58b8eacf85a0d37b8a
-X-Git-Newrev: 38090cdbb610e60015c288e80b1aaedc3d052af4
+X-Git-Oldrev: 65503c219defc8151de3f39d1350aed93cfa1898
+X-Git-Newrev: 75ab6cf93a3ba505897ae99b5ff4bffda55d3c7b
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163034.43C34867E5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/python-aiohttp-sse-client: new package
+Message-Id: <20250228163033.5159287A92@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/{python-}protobuf:
+ bump to version 28.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,149 +58,423 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38090cdbb610e60015c288e80b1aaedc3d052af4
+commit: https://git.buildroot.net/buildroot/commit/?id=75ab6cf93a3ba505897ae99b5ff4bffda55d3c7b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch adds the python-aiohttp-sse-client package to buildroot.
-This package adds SSE client support to the aiohttp library, as
-opposed to the already exising python-aiohttp-sse package, which
-only adds sse server support.
+Migrate protobuf build from autotools to cmake.
 
-Signed-off-by: Arno Messiaen <arnomessiaen@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Migrate protobuf-python to use pypi sources which are now required
+for setup.py builds:
+https://github.com/protocolbuffers/protobuf/tree/v28.1/python#building-from-setuppy
+
+The BR2_or1k workaround is removed, as protobuf depends on
+libabseil-cpp, which isn't available on OpenRISC.
+
+The BR2_TOOLCHAIN_HAS_GCC_BUG_85180 workaround is removed, as this
+workaround is for Microblaze, and protobuf depends on libabseil-cpp,
+which isn't avialable on Microblaze.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Arnout: remove netbird whch was accidentally added]
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- DEVELOPERS                                         |  3 ++
- package/Config.in                                  |  1 +
- ...setup.py-remove-pytest-runner-requirement.patch | 37 ++++++++++++++++++++++
- package/python-aiohttp-sse-client/Config.in        | 10 ++++++
- .../python-aiohttp-sse-client.hash                 |  5 +++
- .../python-aiohttp-sse-client.mk                   | 14 ++++++++
- 6 files changed, 70 insertions(+)
+ package/criu/Config.in                       |  2 +-
+ package/kismet/Config.in                     | 12 ++++--
+ package/mosh/Config.in                       |  6 +--
+ package/netdata/Config.in                    |  6 +--
+ package/ola/Config.in                        |  5 ++-
+ package/opencv3/Config.in                    |  6 +--
+ package/opencv4/Config.in                    |  9 ++++-
+ package/protobuf/Config.in                   |  8 ++--
+ package/protobuf/protobuf.hash               |  2 +-
+ package/protobuf/protobuf.mk                 | 60 ++++++++++++++++------------
+ package/python-protobuf/python-protobuf.hash |  6 ++-
+ package/python-protobuf/python-protobuf.mk   |  5 +--
+ package/usbguard/Config.in                   |  2 +-
+ 13 files changed, 75 insertions(+), 54 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f20bd5ce3f..1264c26fbd 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -275,6 +275,9 @@ F:	configs/snps_archs38_hsdk_defconfig
- N:	Arnaud Aujon <arnaud@intelibre.fr>
- F:	package/espeak/
+diff --git a/package/criu/Config.in b/package/criu/Config.in
+index 63ab926f56..04a2080041 100644
+--- a/package/criu/Config.in
++++ b/package/criu/Config.in
+@@ -19,7 +19,7 @@ config BR2_PACKAGE_CRIU
+ 	bool "criu"
+ 	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+ 	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # -march=armv7-a+fp
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # -march=armv7-a+fp, protobuf
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 # rseq.h
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no aio.h
+ 	depends on !BR2_STATIC_LIBS # protobuf, libbsd
+diff --git a/package/kismet/Config.in b/package/kismet/Config.in
+index aa05e045d5..65c17baeaf 100644
+--- a/package/kismet/Config.in
++++ b/package/kismet/Config.in
+@@ -35,6 +35,7 @@ config BR2_PACKAGE_KISMET_PYTHON_TOOLS
+ 	bool "Install python tools"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	depends on !BR2_STATIC_LIBS # protobuf
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
+@@ -51,26 +52,29 @@ comment "python tools needs python3"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
  
-+N:	Arno Messiaen <arnomessiaen@gmail.com>
-+F:	package/python-aiohttp-sse-client/
+-comment "python tools needs a glibc or musl toolchain w/ dynamic library"
++comment "python tools needs a glibc or musl toolchain w/ dynamic library, gcc >= 8"
+ 	depends on BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+-	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ config BR2_PACKAGE_KISMET_SERVER
+ 	bool "Install server"
+ 	default y
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_PROTOBUF
+ 
+-comment "server needs a toolchain w/ dynamic library, wchar"
++comment "server needs a toolchain w/ dynamic library, wchar, gcc >= 8"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+-	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
++	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ comment "server needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/mosh/Config.in b/package/mosh/Config.in
+index 5b90358cac..7ca5259ecb 100644
+--- a/package/mosh/Config.in
++++ b/package/mosh/Config.in
+@@ -1,7 +1,7 @@
+-comment "mosh needs a toolchain w/ C++, threads, dynamic library, wchar, gcc >= 4.8"
++comment "mosh needs a toolchain w/ C++, threads, dynamic library, wchar, gcc >= 8"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
+ 		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_MOSH
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_MOSH
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	depends on !BR2_STATIC_LIBS # protobuf
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_PROTOBUF
+diff --git a/package/netdata/Config.in b/package/netdata/Config.in
+index d17b5e89aa..3603eb071c 100644
+--- a/package/netdata/Config.in
++++ b/package/netdata/Config.in
+@@ -23,15 +23,15 @@ config BR2_PACKAGE_NETDATA_PROMETHEUS
+ 	bool "prometheus remote write backend"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf, snappy
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	select BR2_PACKAGE_PROTOBUF
+ 	select BR2_PACKAGE_SNAPPY
+ 	help
+ 	  Enable prometheus remote write backend
+ 
+-comment "prometheus remote write backend needs a toolchain w/ C++, gcc >= 4.8"
++comment "prometheus remote write backend needs a toolchain w/ C++, gcc >= 8"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 
+ endif
+diff --git a/package/ola/Config.in b/package/ola/Config.in
+index dd0be6f35e..1766f5bd76 100644
+--- a/package/ola/Config.in
++++ b/package/ola/Config.in
+@@ -1,7 +1,7 @@
+ comment "ola needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| BR2_STATIC_LIBS \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 
+ menuconfig BR2_PACKAGE_OLA
+@@ -10,7 +10,7 @@ menuconfig BR2_PACKAGE_OLA
+ 	depends on !BR2_STATIC_LIBS # protobuf
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	select BR2_PACKAGE_PROTOBUF
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+@@ -35,6 +35,7 @@ config BR2_PACKAGE_OLA_WEB
+ config BR2_PACKAGE_OLA_PYTHON_BINDINGS
+ 	bool "python bindings"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_PROTOBUF
+ 	help
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index 2ce548f095..a672497108 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
+@@ -290,14 +290,14 @@ config BR2_PACKAGE_OPENCV3_WITH_PNG
+ config BR2_PACKAGE_OPENCV3_WITH_PROTOBUF
+ 	bool "protobuf support"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	select BR2_PACKAGE_PROTOBUF
+ 	help
+ 	  Use shared protobuf from the target system.
+ 
+-comment "protobuf support needs a toolchain w/ gcc >= 4.8"
++comment "protobuf support needs a toolchain w/ gcc >= 8"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ config BR2_PACKAGE_OPENCV3_WITH_TIFF
+ 	bool "tiff support"
+diff --git a/package/opencv4/Config.in b/package/opencv4/Config.in
+index f6976d8fb5..f71ceba2c5 100644
+--- a/package/opencv4/Config.in
++++ b/package/opencv4/Config.in
+@@ -35,14 +35,16 @@ config BR2_PACKAGE_OPENCV4_LIB_DNN
+ 	# dnn needs fenv.h which is not provided by uclibc
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	select BR2_PACKAGE_OPENCV4_WITH_PROTOBUF
+ 	help
+ 	  Include opencv_dnn (Deep Neural Networks) module into the
+ 	  OpenCV build.
+ 
+-comment "dnn needs a glibc or musl toolchain"
++comment "dnn needs a glibc or musl toolchain, gcc >= 8"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
++		!BR2_HOST_GCC_AT_LEAST_8
+ 
+ config BR2_PACKAGE_OPENCV4_LIB_FEATURES2D
+ 	bool "features2d"
+@@ -155,6 +157,7 @@ config BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
+ 	bool "objdetect"
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # dnn support
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # dnn support
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # dnn support
+ 	# opencv_core dependency is already enabled
+ 	select BR2_PACKAGE_OPENCV4_LIB_CALIB3D
+ 	select BR2_PACKAGE_OPENCV4_LIB_DNN
+@@ -204,6 +207,7 @@ config BR2_PACKAGE_OPENCV4_LIB_SHAPE
+ config BR2_PACKAGE_OPENCV4_LIB_STITCHING
+ 	bool "stitching"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # objdetect
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # objdetect
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # objdetect
+ 	select BR2_PACKAGE_OPENCV4_LIB_CALIB3D
+ 	select BR2_PACKAGE_OPENCV4_LIB_FEATURES2D
+@@ -333,6 +337,7 @@ config BR2_PACKAGE_OPENCV4_WITH_PNG
+ config BR2_PACKAGE_OPENCV4_WITH_PROTOBUF
+ 	bool "protobuf support"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	select BR2_PACKAGE_PROTOBUF
+ 	help
+ 	  Use shared protobuf from the target system.
+diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
+index 47e987fa2b..633201b38c 100644
+--- a/package/protobuf/Config.in
++++ b/package/protobuf/Config.in
+@@ -37,6 +37,7 @@ config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	default y if BR2_sparc64
+ 	default y if BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU # fork()
+ 
+ config BR2_PACKAGE_PROTOBUF
+@@ -44,8 +45,9 @@ config BR2_PACKAGE_PROTOBUF
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp
+ 	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBABSEIL_CPP
+ 	help
+ 	  Protocol buffers are Google's language-neutral,
+ 	  platform-neutral, extensible mechanism for serializing
+@@ -53,7 +55,7 @@ config BR2_PACKAGE_PROTOBUF
+ 
+ 	  https://developers.google.com/protocol-buffers
+ 
+-comment "protobuf needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
++comment "protobuf needs a toolchain w/ C++, threads, dynamic library, gcc >= 8"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index b092c9303f..06f4924394 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-sha256  4eab9b524aa5913c6fffb20b2a8abf5ef7f95a80bc0701f3a6dbb4c607f73460  protobuf-cpp-3.21.12.tar.gz
++sha256  3b8bf6e96499a744bd014c60b58f797715a758093abf859f1d902194b8e1f8c9  protobuf-28.1.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 8cd4e99e06..ffed3166c7 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,45 +7,53 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works and to update its hash,
+ # as they share the same version/site variables.
+-PROTOBUF_VERSION = 21.12
+-PROTOBUF_SOURCE = protobuf-cpp-3.$(PROTOBUF_VERSION).tar.gz
++PROTOBUF_VERSION = 28.1
+ PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+ PROTOBUF_LICENSE_FILES = LICENSE
+ PROTOBUF_CPE_ID_VENDOR = google
+ 
+ # N.B. Need to use host protoc during cross compilation.
+-PROTOBUF_DEPENDENCIES = host-protobuf
+-PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/bin/protoc
+-
+-PROTOBUF_CXXFLAGS = $(TARGET_CXXFLAGS)
+-
+-ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+-PROTOBUF_CXXFLAGS += -O0
+-endif
+-
+-ifeq ($(BR2_or1k),y)
+-PROTOBUF_CXXFLAGS += -mcmodel=large
+-endif
+-
+-PROTOBUF_CONF_ENV = CXXFLAGS="$(PROTOBUF_CXXFLAGS)"
++PROTOBUF_DEPENDENCIES = host-protobuf libabseil-cpp
++PROTOBUF_CONF_OPTS = \
++	-Dprotobuf_ABSL_PROVIDER=package \
++	-Dprotobuf_ALLOW_CCACHE=ON \
++	-Dprotobuf_BUILD_CONFORMANCE=OFF \
++	-Dprotobuf_BUILD_LIBPROTOC=OFF \
++	-Dprotobuf_BUILD_LIBUPB=ON \
++	-Dprotobuf_BUILD_PROTOBUF_BINARIES=ON \
++	-Dprotobuf_BUILD_PROTOC_BINARIES=OFF \
++	-Dprotobuf_BUILD_TESTS=OFF \
++	-Dprotobuf_DISABLE_RTTI=OFF \
++	-Dprotobuf_INSTALL=ON \
++	-DWITH_PROTOC=$(HOST_DIR)/bin/protoc
 +
- N:	Arnout Vandecappelle <arnout@mind.be>
- F:	package/arp-scan/
- F:	package/dehydrated/
-diff --git a/package/Config.in b/package/Config.in
-index 7da8e10c36..4896e6db76 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -982,6 +982,7 @@ menu "External python modules"
- 	source "package/python-aiohttp-security/Config.in"
- 	source "package/python-aiohttp-session/Config.in"
- 	source "package/python-aiohttp-sse/Config.in"
-+	source "package/python-aiohttp-sse-client/Config.in"
- 	source "package/python-aiojobs/Config.in"
- 	source "package/python-aiologstash/Config.in"
- 	source "package/python-aiomonitor/Config.in"
-diff --git a/package/python-aiohttp-sse-client/0001-setup.py-remove-pytest-runner-requirement.patch b/package/python-aiohttp-sse-client/0001-setup.py-remove-pytest-runner-requirement.patch
-new file mode 100644
-index 0000000000..59fc775f0f
---- /dev/null
-+++ b/package/python-aiohttp-sse-client/0001-setup.py-remove-pytest-runner-requirement.patch
-@@ -0,0 +1,37 @@
-+From fdba1f12843d0fdbd5094144a8081244b71b2cf0 Mon Sep 17 00:00:00 2001
-+From: Arno Messiaen <arnomessiaen@gmail.com>
-+Date: Wed, 22 Nov 2023 08:12:08 +0100
-+Subject: [PATCH] setup.py: remove pytest-runner requirement
-+
-+setup.py: pytest-runner is not required to install the package
-+
-+Upstream: N/A, Buildroot packaging related
-+Signed-off-by: Arno Messiaen <arnomessiaen@gmail.com>
-+---
-+ setup.py | 3 ---
-+ 1 file changed, 3 deletions(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 062bb08..f19bc0a 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -13,8 +13,6 @@ with open('HISTORY.rst') as history_file:
-+ 
-+ requirements = ['aiohttp>=3', 'attrs', 'multidict', 'yarl', ]
-+ 
-+-setup_requirements = ['pytest-runner', ]
-+-
-+ test_requirements = ['pytest', ]
-+ 
-+ setup(
-+@@ -41,7 +39,6 @@ setup(
-+     keywords='aiohttp_sse_client',
-+     name='aiohttp-sse-client',
-+     packages=find_packages(include=['aiohttp_sse_client']),
-+-    setup_requires=setup_requirements,
-+     test_suite='tests',
-+     tests_require=test_requirements,
-+     url='https://github.com/rtfol/aiohttp-sse-client',
-+-- 
-+2.40.1
-+
-diff --git a/package/python-aiohttp-sse-client/Config.in b/package/python-aiohttp-sse-client/Config.in
-new file mode 100644
-index 0000000000..2a89791b99
---- /dev/null
-+++ b/package/python-aiohttp-sse-client/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_AIOHTTP_SSE_CLIENT
-+	bool "python-aiohttp-sse-client"
-+	select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
-+	select BR2_PACKAGE_PYTHON_ATTRS # runtime
-+	select BR2_PACKAGE_PYTHON_MULTIDICT # runtime
-+	select BR2_PACKAGE_PYTHON_YARL # runtime
-+	help
-+	  Server-sent events client support for aiohttp.
-+
-+	  https://github.com/rtfol/aiohttp-sse-client
-diff --git a/package/python-aiohttp-sse-client/python-aiohttp-sse-client.hash b/package/python-aiohttp-sse-client/python-aiohttp-sse-client.hash
-new file mode 100644
-index 0000000000..5a1d240777
---- /dev/null
-+++ b/package/python-aiohttp-sse-client/python-aiohttp-sse-client.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/aiohttp-sse-client/json
-+md5  d9065bf151fbb485a175ae453a9a5f9f  aiohttp-sse-client-0.2.1.tar.gz
-+sha256  5004e29271624af586158dc7166cb0687a7a5997aab5b808f4b53400e1b72e3b  aiohttp-sse-client-0.2.1.tar.gz
++HOST_PROTOBUF_DEPENDENCIES = host-libabseil-cpp
++HOST_PROTOBUF_CONF_OPTS = \
++	-Dprotobuf_ABSL_PROVIDER=package \
++	-Dprotobuf_ALLOW_CCACHE=ON \
++	-Dprotobuf_BUILD_CONFORMANCE=OFF \
++	-Dprotobuf_BUILD_LIBPROTOC=ON \
++	-Dprotobuf_BUILD_LIBUPB=OFF \
++	-Dprotobuf_BUILD_PROTOBUF_BINARIES=ON \
++	-Dprotobuf_BUILD_PROTOC_BINARIES=ON \
++	-Dprotobuf_BUILD_TESTS=OFF \
++	-Dprotobuf_DISABLE_RTTI=OFF \
++	-Dprotobuf_INSTALL=ON \
++	-Dprotobuf_WITH_ZLIB=OFF
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-PROTOBUF_CONF_ENV += LIBS=-latomic
++PROTOBUF_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+ endif
+ 
+ PROTOBUF_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ PROTOBUF_DEPENDENCIES += zlib
++PROTOBUF_CONF_OPTS += -Dprotobuf_WITH_ZLIB=ON
++else
++PROTOBUF_CONF_OPTS += -Dprotobuf_WITH_ZLIB=OFF
+ endif
+ 
+-define PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
+-	rm -rf $(TARGET_DIR)/usr/bin/protoc
+-	rm -rf $(TARGET_DIR)/usr/lib/libprotoc.so*
+-endef
+-
+-PROTOBUF_POST_INSTALL_TARGET_HOOKS += PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index e7af678b97..8ce6039449 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,3 +1,5 @@
+-# Locally calculated
+-sha256  e2b976e67d6fcf7078f799143a73f2a4d9cf3126ca68a1a6f1bda30fe5f3585c  protobuf-python-4.21.12.tar.gz
++# md5, sha256 from https://pypi.org/pypi/protobuf/json
++md5  44b076f3564d3561067bcc2c455e008a  protobuf-5.28.1.tar.gz
++sha256  42597e938f83bb7f3e4b35f03aa45208d49ae8d5bcb4bc10b9fc825e0ab5e423  protobuf-5.28.1.tar.gz
 +# Locally computed sha256 checksums
-+sha256  44c346abc42b39f1390e4747adfd60a3ca349e01462965e5750ae531299b8ff1  LICENSE
-diff --git a/package/python-aiohttp-sse-client/python-aiohttp-sse-client.mk b/package/python-aiohttp-sse-client/python-aiohttp-sse-client.mk
-new file mode 100644
-index 0000000000..4feae517ae
---- /dev/null
-+++ b/package/python-aiohttp-sse-client/python-aiohttp-sse-client.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-aiohttp-sse-client
-+#
-+################################################################################
-+
-+PYTHON_AIOHTTP_SSE_CLIENT_VERSION = 0.2.1
-+PYTHON_AIOHTTP_SSE_CLIENT_SOURCE = aiohttp-sse-client-$(PYTHON_AIOHTTP_SSE_CLIENT_VERSION).tar.gz
-+PYTHON_AIOHTTP_SSE_CLIENT_SITE = https://files.pythonhosted.org/packages/71/c3/4825c5f37909a70c8018924b3d521847dd7acf1fce7e1054574bafed2271
-+PYTHON_AIOHTTP_SSE_CLIENT_SETUP_TYPE = setuptools
-+PYTHON_AIOHTTP_SSE_CLIENT_LICENSE = Apache-2.0
-+PYTHON_AIOHTTP_SSE_CLIENT_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
+index df90254670..02bf2a1d70 100644
+--- a/package/python-protobuf/python-protobuf.mk
++++ b/package/python-protobuf/python-protobuf.mk
+@@ -5,12 +5,11 @@
+ ################################################################################
+ 
+ PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
+-PYTHON_PROTOBUF_SOURCE = protobuf-python-4.$(PYTHON_PROTOBUF_VERSION).tar.gz
+-PYTHON_PROTOBUF_SITE = $(PROTOBUF_SITE)
++PYTHON_PROTOBUF_SOURCE = protobuf-5.$(PYTHON_PROTOBUF_VERSION).tar.gz
++PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/3c/0b/7a997c8939f698d72bdea14d57116e43d3051fffb3b2964c30938c4a08e6
+ PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
+ PYTHON_PROTOBUF_LICENSE_FILES = LICENSE
+ PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
+ PYTHON_PROTOBUF_SETUP_TYPE = setuptools
+-PYTHON_PROTOBUF_SUBDIR = python
+ 
+ $(eval $(python-package))
+diff --git a/package/usbguard/Config.in b/package/usbguard/Config.in
+index f207fa6826..254209ff64 100644
+--- a/package/usbguard/Config.in
++++ b/package/usbguard/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_USBGUARD
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libqb, protobuf
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf, C++17 filesystem
+ 	depends on !BR2_STATIC_LIBS # libqb, protobuf
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	select BR2_PACKAGE_PROTOBUF
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
