@@ -1,109 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19303C02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 16:17:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E24F0C02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 16:59:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D92CF610D9;
-	Wed,  5 Feb 2025 16:17:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A4A0831F2;
+	Wed,  5 Feb 2025 16:59:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 31jFr9aC6JMB; Wed,  5 Feb 2025 16:17:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0t8iPDx0Yoj7; Wed,  5 Feb 2025 16:59:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7097610FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CB6E8399E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7097610FB;
-	Wed,  5 Feb 2025 16:17:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 84AC512F
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 16:17:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8CB6E8399E;
+	Wed,  5 Feb 2025 16:59:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2F6E112F
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 16:59:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5E87D40078
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 16:17:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1FDD5831F2
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 16:59:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LeetNON9SL7n for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 16:17:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZbhvD7ps-aWM for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 16:59:08 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
- envelope-from=alex.bennee@linaro.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3566540001
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3566540001
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3566540001
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 16:17:18 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-38da940e689so1090725f8f.2
- for <buildroot@buildroot.org>; Wed, 05 Feb 2025 08:17:17 -0800 (PST)
+ client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
+ envelope-from=markus.mayer@broadcom.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0719D8399E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0719D8399E
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0719D8399E
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 16:59:07 +0000 (UTC)
+Received: by mail-ej1-x634.google.com with SMTP id
+ a640c23a62f3a-aaf60d85238so7651666b.0
+ for <buildroot@buildroot.org>; Wed, 05 Feb 2025 08:59:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738772236; x=1739377036;
- h=content-transfer-encoding:mime-version:message-id:date:user-agent
- :references:in-reply-to:subject:cc:to:from:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=EOqM1YlrHan6A5nbSPetFoyuT2meRufRY8saB3ZTJBI=;
- b=dgSNrKH2FpHvlpWLRX3NOZ/CVpgrlpi4gqDvoypgcrv82tBQtGjgieN+WG4HealdeE
- G+QlPm5aH5lewyiL8GdXlnhUu7OhZty2Ofa6JJ+CYjk13TQKs5gsElux4jzRqv82O3Wy
- a8E1B2CJTv+JAeAas9qtPSFimjKs/xVH6gZW2l20RQU6+ralsAcezqieyQw5HvqRBdDW
- 7KEccIyvKRPPEwSpjVyadNkKOqO7d3xmtpVfFf9bTzB6XCeUb415BAyf/+ZD8dnheqcp
- I0dKGzwuAAMo6t/3a8aiBW8TRb+5RBhlIz6nqTqf14HJ0+alE4/53PHgExAgEEY8zWd4
- HmLw==
-X-Gm-Message-State: AOJu0YzY3fA4iCY7NRajdEb1cUmdynoy9YkQb5tehipclgJRVyHb2By4
- yay6uF2BPYuA4UQZ3369UGQEUWoW4gG//JhP+s185gBPWDyMRKeh8e/nYqecnQfbybRfCso+17n
- w59g=
-X-Gm-Gg: ASbGncshLmyd0YXMgbOrxgL7wn+VdYq0yJWSiJQuPVQ2aDCB9gurk5YEFuPvNDSPvis
- RXCahaI0gBtEVfxk6Iag1tawUET8xI6wLD31kNCSMn0DsUYEg8ccjm0jWwdKFPMSKQLqs9TqSDJ
- 9tY5AmPtO3/c1ZKcAcb5pVMh9c+9J5M3wHk7Vdv8rNpZjqsZyilzCMXIGpvOy2osm4+pMWHpcfe
- 8JFCNm3eMH3hnwXHmAaY4YG2gODpBlXomEaVuogUZiqCYYW35kl6qsh+SPo/Exo6l1pbhwWs6jt
- ispHApcQ+WfUaGLCDg==
-X-Google-Smtp-Source: AGHT+IHNXJTHbg4NJMbF/kmA0VmLQjxtoIxKb2vaHsL2UJUn5yCfzOR1WMKDgdv3Z7Mz83aC7WEagA==
-X-Received: by 2002:a05:6000:1569:b0:38b:da6a:8a02 with SMTP id
- ffacd0b85a97d-38db4920925mr2754105f8f.47.1738772235757; 
- Wed, 05 Feb 2025 08:17:15 -0800 (PST)
-Received: from draig.lan ([185.126.160.109]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4390d896d70sm26437495e9.0.2025.02.05.08.17.14
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 05 Feb 2025 08:17:14 -0800 (PST)
-Received: from draig (localhost [IPv6:::1])
- by draig.lan (Postfix) with ESMTP id AB94E5F90B;
- Wed,  5 Feb 2025 16:17:13 +0000 (GMT)
-From: =?utf-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250205160743.3bc05438@windsurf> (Thomas Petazzoni's message of
- "Wed, 5 Feb 2025 16:07:43 +0100")
-References: <20241205173643.2334343-1-alex.bennee@linaro.org>
- <20250205160743.3bc05438@windsurf>
-User-Agent: mu4e 1.12.8; emacs 29.4
-Date: Wed, 05 Feb 2025 16:17:13 +0000
-Message-ID: <87bjvg8iye.fsf@draig.linaro.org>
+ d=1e100.net; s=20230601; t=1738774746; x=1739379546;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=aGB3wp5tCgzAja0K9YsUCWLX3zv3hkMUmxxTmmx9vEg=;
+ b=mVF06zbnqCXeU5byGpP9cejiylYxQD1TR9H+9AYseCSlsdRhWeU+C9pOSlm6kIcG96
+ gRustJSioQO00JRQUrThoyT+y+MdxvoXXrerZ6FSVMXUqbPiw8ckZVJHZ8+kSGVwAdVD
+ S84mKHQsJRfKq4loCsQe5BCnoQLmdFU3+HZl9Di1jYrsOMGWp8IiDgXhBklH82vTT7BY
+ mLY038sezQ7T0w+PgBFYJbwE3URfAP16BepU7bvh/UkpTHmwCq+DigDkmIfHy2Kds6EC
+ tRc7yVUOPiw0Y69NeT/5SDDPN6iPOU/m5PMq42SLsSgu1DftZ9MuQYpe3IQ23vobrf49
+ TDeQ==
+X-Gm-Message-State: AOJu0Yym63ozRJpMy7lxJvx3zoex0Shr/bg3k0FQKXz9JParc1Oc0kux
+ TWi+8seEH8AsSg20Iruothg8S+uK+S9AvWtbAe8YuXq020tZ+vrsNe5kwLnWwIRg/HFnf6EhPHo
+ GiV+S4ldxTHJjQ8EvqhDTb4HuBMz577m5dury
+X-Gm-Gg: ASbGncuNUbth68eMh8RlwiX350+yLyJvdpNfthLyIeqSe+df5O7QmzijEB1isOY6UYl
+ aG+IOZ5QU4xi5otqQk3tAusLv0icTmuEi9Xz/OYFoNuwvn0T1iCB2OiBK5ixAwxYrJxlKU9E=
+X-Google-Smtp-Source: AGHT+IGTd+96kv+urcC8WXV3jHOMaw3Ki8btNWl5tDoWj9TLQ/c4PCK7c22ZK2FWwOfetlManhAxU2fIZULExgej524=
+X-Received: by 2002:a17:907:d14:b0:ab6:d400:354b with SMTP id
+ a640c23a62f3a-ab75e379d79mr376949666b.53.1738774745797; Wed, 05 Feb 2025
+ 08:59:05 -0800 (PST)
 MIME-Version: 1.0
+References: <20250127215356.3175741-1-mmayer@broadcom.com>
+ <20250128220920.535ecc14@windsurf>
+In-Reply-To: <20250128220920.535ecc14@windsurf>
+Date: Wed, 5 Feb 2025 08:58:53 -0800
+X-Gm-Features: AWEUYZlHlaGvGDsbph1pQHf5X8LjCX1EqD0I8S2VnHH63nPcaiIdL1D6_MIFg7g
+Message-ID: <CAGt4E5sXA0fiKwYyRummys2Mi+p1sQDG9RQzJNM7g5zSBJcyCQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Markus Mayer via buildroot <buildroot@buildroot.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=linaro.org; s=google; t=1738772236; x=1739377036; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:user-agent
- :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=EOqM1YlrHan6A5nbSPetFoyuT2meRufRY8saB3ZTJBI=;
- b=EBQzRWfWBjia0KmZ2Qwex8jmwRv9n4kSvkAgcPMG1yZ8YiXZYOBqdXfK+NRLtF6R0F
- 9Oj7v9e0FcY5xn7KcDPE7uxVyy0j6f/rmOT5E1WUkjr/ZRHZSC6EZ2waDRXbADDg91fu
- dB1ynlsK6LzS1NCBLE76Iwl0mQ2jzh9vGAd4A5LKqLs8SIY7bbfwgN5Ig2E7vdti18vc
- R3jCBHDYxd7QIcA0NJcT3LrYA75uRGXfFKxlQVnhCMErPsrJpoOfdInqTK2BFZ8+ERiq
- 4HQIUuEqm4V/zVEwRf+JCuTStsHz/LjQQIOcZdrw3fyfRMDev/gFuhmcLjeiJoVXBDDQ
- fDCQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=linaro.org
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256
- header.s=google header.b=EBQzRWfW
-Subject: Re: [Buildroot] [PATCH v2 0/4] Enable venus vulkan encapsulation
- and add vkmark
+ d=broadcom.com; s=google; t=1738774746; x=1739379546; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=aGB3wp5tCgzAja0K9YsUCWLX3zv3hkMUmxxTmmx9vEg=;
+ b=BsHxR6WP9Enw0oaNHUjuoqt8w4EPIbcxu7WNw67bSHSUiDQQitPq8juy77LXCHpASz
+ TcnIayIDaG6XXlF8q6kHl8akdTvr6XGQ31M77jsedw786LZFhc5uBmdM3FF1HlxyOKJV
+ nyUKzG0o7yhrUu/QnqIk5kiJktEnbouExuZnM=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=broadcom.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256
+ header.s=google header.b=BsHxR6WP
+Subject: Re: [Buildroot] [PATCH] support/scripts/apply-patches.sh: introduce
+ envvar BR_PATCH_ARGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,31 +99,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Markus Mayer via buildroot <buildroot@buildroot.org>
+Reply-To: Markus Mayer <mmayer@broadcom.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4gd3JpdGVzOgoK
-PiBIZWxsbyBBbGV4LAo+Cj4gT24gVGh1LCAgNSBEZWMgMjAyNCAxNzozNjozOSArMDAwMAo+IEFs
-ZXggQmVubsOpZSA8YWxleC5iZW5uZWVAbGluYXJvLm9yZz4gd3JvdGU6Cj4KPj4gVGhpcyBpcyBh
-IHJlc3BpbiBvZiBhIHNlcmllcyBJIHNlbnQgb3V0IGluIEF1Z3VzdC4gVGhpcyB0aW1lIGl0Cj4+
-IGFwcGxpZXMgb24gdG9wIG9mIHRoZSBzZXJpZXMgQmVybmQgaGFzIGp1c3Qgc2VudCBvdXQ6Cj4+
-IAo+PiAgIFN1YmplY3Q6IFtCdWlsZHJvb3RdIFtQQVRDSCAxLzddIHBhY2thZ2UvbGliZHJtOiBh
-ZGQgaG9zdCB2YXJpYW50Cj4+ICAgTWVzc2FnZS1JZDogPDIwMjQxMjAyMTc0MDA4LjExMzQ2Njct
-MS1iZXJuZEBrdWhscy5uZXQ+Cj4+ICAgRGF0ZTogTW9uLCAgMiBEZWMgMjAyNCAxODo0MDowMiAr
-MDEwMAo+PiAgIEZyb206IEJlcm5kIEt1aGxzIDxiZXJuZEBrdWhscy5uZXQ+Cj4KPiBCZXJuZCBo
-YXMgc2VudCBhIG5ldyBzZXJpZXMgYXQ6Cj4KPiAgIGh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5v
-cmcvcHJvamVjdC9idWlsZHJvb3QvbGlzdC8/c2VyaWVzPTQ0MDg5Mgo+Cj4gc28gSSdtIGNvbmZ1
-c2VkIGhvdyB0aGlzIHNlcmllcyBvZiB5b3UgZml0cyB3aXRoIGl0Lgo+Cj4gSW4gd2hpY2ggY29t
-bWl0IHNob3VsZCAic3VwcG9ydC90ZXN0aW5nOiB1cGRhdGUgdGVzdHMgZm9yIFNPRlRQSVBFIiBi
-ZQo+IHNxdWFzaGVkPwoKVGhlIHBhdGNoIHRoYXQgYnVtcHMgbWVzYSB3aGVyZSBCUjJfUEFDS0FH
-RV9NRVNBM0RfR0FMTElVTV9EUklWRVJfU1dSQVNUCmlzIGRlcHJlY2F0ZWQgZm9yIFNPRlRQSVBF
-LiBUaGlzIHdhcyByZXBvcnRlZCBhcyBjYXVzaW5nIGEgbnVtYmVyIG9mIHRoZQpidWlsZHJvb3Qg
-dGVzdCBjYXNlcyB0byBoYXZlIGZhaWxlZCBidXQgSSB3YXNuJ3QgYWJsZSB0byBmaWd1cmUgb3V0
-IHdoeQp0aGV5IHdlcmUuCgpJZiB5b3UgaGF2ZSBtZXJnZWQgQmVybmQncyBzZXJpZXMgSSBjYW4g
-cmUtYmFzZSBhbmQgc2VlIHdoYXQgaXMgbGVmdC4KCj4KPiBUaG9tYXMKCi0tIApBbGV4IEJlbm7D
-qWUKVmlydHVhbGlzYXRpb24gVGVjaCBMZWFkIEAgTGluYXJvCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+Hi Thomas,
+
+Re-sending, because I just realized the original response (sent on
+January 29) didn't go to the mailing list. That was not intentional.
+
+Here goes...
+
+On Tue, 28 Jan 2025 at 13:09, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Markus,
+>
+> On Mon, 27 Jan 2025 13:53:54 -0800
+> Markus Mayer via buildroot <buildroot@buildroot.org> wrote:
+>
+> > Introduce the environment variable BR_PATCH_ARGS as a means for the
+> > caller to pass additional arguments to the patch(1) command. These
+> > arguments can be new arguments not originally used -- or they can
+> > override one of the default arguments.
+> >
+> > In addition, provide a mechanism to add patch parameters on a
+> > per-package basis using the <PACKAGENAME>_PATCH_ARGS makefile variable,
+> > for example "PROCPS_NG_PATCH_ARGS". This allows individual packages to
+> > specify extra arguments or override defaults while not affecting any
+> > other part of the build environment.
+>
+> Thanks for the proposed patch. Do you have some details on the actual
+> (not theoretical) use-case(s) ?
+>
+> Thanks a lot!
+
+When we are building our root file systems, we sometimes have to
+bundle older versions of certain packages or we want to apply patches
+that are being reviewed upstream without having been accepted and we
+want to use the same patch for different versions of a package, say
+procps-ng or xfsprogs. Under such circumstances, life becomes a lot
+easier if you can tell "patch" to use more fuzz when applying a patch
+as it'll apply over a wider range of versions while allowing you to
+only track a single patch file.
+
+So I can say
+    PROCPS_NG_PATCH_ARGS = -F2
+and then it'll use "-F2" while applying these patches, but it is
+limited to procps-ng and won't cause any side-effects elsewhere.
+
+This is a fairly specific application of this feature that others may
+not need quite in this manner, but it can be used in a very generic
+way to address different issues. I figured a facility like this might
+be helpful to other users as well for this reason.
+
+It can also come in handy for Buildroot as a whole if a version
+upgrade or the introduction of a new patch for one of the existing
+packages were to suddenly require more fine-tuned parameters for
+applying patches.
+
+Regards,
+-Markus
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
