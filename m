@@ -4,112 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2108CC02199
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 22:56:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0974BC02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 23:28:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3D9C7048E;
-	Wed,  5 Feb 2025 22:56:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAEA360F46;
+	Wed,  5 Feb 2025 23:28:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DILGMvXWXTvJ; Wed,  5 Feb 2025 22:56:34 +0000 (UTC)
+ id CDA6dMCFyVNg; Wed,  5 Feb 2025 23:28:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BEC970493
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8690460F49
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BEC970493;
-	Wed,  5 Feb 2025 22:56:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E0284CF
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 22:56:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8690460F49;
+	Wed,  5 Feb 2025 23:28:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 299CF12F
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 23:28:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C33EA4022A
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 22:56:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2446F415F2
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 23:28:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CsM3WaaWm3xk for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 22:56:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y9h9CnJkZgeL for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 23:28:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::a35; helo=mail-vk1-xa35.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 01AF8403EB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01AF8403EB
-Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com
- [IPv6:2607:f8b0:4864:20::a35])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 01AF8403EB
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 22:56:30 +0000 (UTC)
-Received: by mail-vk1-xa35.google.com with SMTP id
- 71dfb90a1353d-51c7b5f3b8bso57855e0c.2
- for <buildroot@buildroot.org>; Wed, 05 Feb 2025 14:56:30 -0800 (PST)
+ client-ip=2607:f8b0:4864:20::62a; helo=mail-pl1-x62a.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DD2C7415E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD2C7415E4
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com
+ [IPv6:2607:f8b0:4864:20::62a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DD2C7415E4
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 23:28:50 +0000 (UTC)
+Received: by mail-pl1-x62a.google.com with SMTP id
+ d9443c01a7336-21670dce0a7so8082485ad.1
+ for <buildroot@buildroot.org>; Wed, 05 Feb 2025 15:28:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738796189; x=1739400989;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=o4NZ6mlCgVgd9nK2YRDLweHZDdjxe30N1a7kXJriN54=;
- b=Xy0HpU001SKWTaeMxSZQjhE+i3gvD3a7/ZucM1bKirVrr5olAjlzJliwt0h4riI41T
- KjALDAg5CjBhPJm4rVhcQFOnuVQc92SAQ1WwEEqXQFOgUGFbjV2ZzGo8CubVM4oGJgsR
- pyVeUZUBDkQpDf93lNRCgOyKTKYZOsFoVxfeqgLXnQXY7bgbB/IUBnd/199oa+0FqfBz
- /AXau7BZ2wyq9xzV71YoI6ZrLkOOHOvxp7xbh8t2LEh48+EupzCXhvxx5e63jxghIF61
- ZhBD7aFji8rGDIeZLfjaQyz6lnvEiJj0bkfzA2xxNVg3Ve/n3kKTId6rYU+CQHtq2r4a
- lpdA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCX6I0+TlfvCjsxbC7faHt22dNQcRISsvqpoWxsi5+5Ac/NCuZgXwAar9v+FLJ0xXXhMYafePqC+5Bc=@buildroot.org
-X-Gm-Message-State: AOJu0YxmkVk1PQUnVlCTPwFOe0VzQT2iW6kpIHvT6mueHG+RmGWfM6ED
- qc3zbqkjOx3zRyH0rplyRnjKZse4/97wNtxe2fwf9E7413ksjgsF2taJ8zwKm7dGiaTSAkthgEA
- WMtJeQ0yiOc7aGd/wHoJb6ax36Nc=
-X-Gm-Gg: ASbGncua2qhUmJd0r8+E/DtscQ1KCm4XhC2vbCAcjFG2017YgvGunUGKgnkGM6ptsls
- lVUHCHaRFWaSDXg0Tr1l/6HrRq3KIPKsUpKrnCpUMAxkti6rKdm27sSSisJfEWpsG2xa48qyyNQ
- ==
-X-Google-Smtp-Source: AGHT+IHixY1q6MhCWS5P+61XDQPSGGbsc5WsBDKkuCNqMc+tGlY7s2SKI+Uwlnlc5cWn7VdoFuXKda4M1BVsOFz65dk=
-X-Received: by 2002:a05:6122:6601:b0:518:778b:70a1 with SMTP id
- 71dfb90a1353d-51f0c4d06fdmr3199720e0c.7.1738796189577; Wed, 05 Feb 2025
- 14:56:29 -0800 (PST)
+ d=1e100.net; s=20230601; t=1738798130; x=1739402930;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Yhp6yjklqMu5ornjWccr9LWxQ1X2mmkIAQ9OUv5j1O4=;
+ b=Wtykk96sssaTD/Bn1GcKRc0VTP1c6+4oQlwkol5yj0wXLS0z2vn1NhUCKhpEMOAAiG
+ 0VDT+8pqKVEqAC7j4U9xBoemyaLKfKLf+xXiyIz8A9OEOI0gaYBFjDqnF18cLzniT9ln
+ LM/UPI1gNk8k9QngGX/1g4YkXn24UPspDceH40f1OtuuuHY3+4CLH8kMpG9pObEqH4/h
+ wgCz6bnkZtWVwUn9jwQfP7iEs2xifcg0q54eunAMzJNGEAtqUm2UjkkLWGcoXPjQS74R
+ ox8muS/7BfUnBBgwJxhxcr58fH88JrXvY4YmSNj3PS2DGYGcnk3NdJNJhTvwQP6bjp4W
+ gk8g==
+X-Gm-Message-State: AOJu0YyMAJOy0SDonrVcYPn1kgg62eyeFOGIbHh12U6sazB+Pw8wBeDo
+ yIuAa7en67Kk9Ych1fcvsTcNMKLp2ORLsRdrdqWP5HTMINvwI/Hvptg43f+N1zPoWX9IfebWjUz
+ tO9mFEw==
+X-Gm-Gg: ASbGncuXyEilTp+UlA1PDgsjECtB79M2qlrYAJjAlgGwau7oTwqjA/Iery74Ysle8Rg
+ NIBXtx050fgZ9nZnU3i96/GMj6GC/2EGFM5th/6hTPrymvLkgbDuu9zb1+4bmqxdyW2KcBpcT58
+ rT1u0xna2bggoJP6Nil62/kfqJ1auXV2hi3Km3cw5oleGxCArE/UAQvSfky7a7nazysNDC1srth
+ 0qItKaRGwr7M1u3hyy00uEmEBEqVT180isItDoK9YfZSEBbfOfEZylnq8FVdQdPV3hfuOf9n1ck
+ CpicVobm3N2ZmUYPzSip7C7v98J5sdSqd9O6d93ODA==
+X-Google-Smtp-Source: AGHT+IHH8zfwxBzU8eJ14jZ9QIWFrNrsKWI1t58hzqKg9T7spv9OXTixNImJf0shpwq1NNFGcowjgw==
+X-Received: by 2002:a05:6a20:43a0:b0:1ed:e2bc:5c9 with SMTP id
+ adf61e73a8af0-1ede88b1343mr7241712637.38.1738798129973; 
+ Wed, 05 Feb 2025 15:28:49 -0800 (PST)
+Received: from localhost.localdomain ([94.156.149.162])
+ by smtp.gmail.com with ESMTPSA id
+ d2e1a72fcca58-73048a9d1bbsm17268b3a.9.2025.02.05.15.28.49
+ (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+ Wed, 05 Feb 2025 15:28:49 -0800 (PST)
+To: buildroot@buildroot.org
+Date: Wed,  5 Feb 2025 15:28:37 -0800
+Message-ID: <20250205232837.70303-1-christian@aperture.us>
+X-Mailer: git-send-email 2.48.1
 MIME-Version: 1.0
-References: <20240805163133.4126564-1-james.hilliard1@gmail.com>
- <CA+h8R2oQGKFFH-vMX27WUO1uEAGyt4cz9MCwn9Cofwyujx1xDA@mail.gmail.com>
- <20240805223152.09ed915b@windsurf>
- <CADvTj4o_CnzCth+QqoxhVovBRinvYfbMf7r+SWnnY0tfVbKgbw@mail.gmail.com>
- <CA+h8R2obsR-CzMhWDpQ-A0oeEPaG-P=aCwF7BS4J-3eShmHJgg@mail.gmail.com>
- <20240806165050.234235b4@windsurf>
- <CADvTj4pOK8-2YXy0POUg1qOKa1MrjsxbnS-r1F7YMk_YXFmEAQ@mail.gmail.com>
- <CA+h8R2reErtSWPO1hGpX7tT5Xejb_SNqiuSCnXvJZKHwhzdcZg@mail.gmail.com>
- <CA+h8R2oJWZw_S08XXhjE--_So0UJohVLWSoj30PpR9z66x8U1A@mail.gmail.com>
- <CADvTj4r5ZAFkyqMctj4fV=vnkqDn2g+oG3g2PjTHJKSkVLQNVQ@mail.gmail.com>
- <edd5e025-798f-4e5b-9d31-baed883a65bf@mind.be>
- <CADvTj4rQsmOq_+AcZU8yQNfod_=kyKtO3HP+F4VZ_PMuYXmd6w@mail.gmail.com>
- <CA+h8R2oU_CHcTw6aCdyTXGH9F-eEd+nxwzjfcZPhb99ZJvHe0Q@mail.gmail.com>
- <CADvTj4onhc2rTzFa7F5bDFXSNQJ2CKuyU-TD-fwhpQUXNHZTcw@mail.gmail.com>
- <CA+h8R2ofCEUxWBVU5S9_vx5YtsE-Mjq95WL6DzTM5YF38A-izA@mail.gmail.com>
- <CADvTj4r1z1Y8cLZ45i1kJKgULiJMehBjR_OZ8oeWHw5jaj4+aA@mail.gmail.com>
- <CA+h8R2qWgHUg3qG6wn+Ox9pcn6y9NMWrbaQyYkdpgvv_FNweXw@mail.gmail.com>
-In-Reply-To: <CA+h8R2qWgHUg3qG6wn+Ox9pcn6y9NMWrbaQyYkdpgvv_FNweXw@mail.gmail.com>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Thu, 6 Feb 2025 00:56:18 +0200
-X-Gm-Features: AWEUYZlo_Ivtp4XcrLpj_hpfLHFnsAZIwZQ1PsLD8Q7ZTPpDKgkAErrya5YKujU
-Message-ID: <CADvTj4pXO2rwJ8oCzzGNY+OxLuo3uJnDT2PAxbyquw0L6dhfiA@mail.gmail.com>
-To: Christian Stewart <christian@aperture.us>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1738796189; x=1739400989; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=o4NZ6mlCgVgd9nK2YRDLweHZDdjxe30N1a7kXJriN54=;
- b=bhJXdCqvf+MRbpbGp9J1ukaHkMeEtWlXrjg1bC3+T7BBS9HkTNoD0oYLEs4x8Om7oZ
- e/m3AkbTFaikJVIS6a54Y8id/fsJqeyRvQ3CA20fqMYFYqMlddOF4kcnmwF71HRA9DAB
- wSPAe20zevmx538xFPTc8m+AxAmlg6SsTX8dUe/uKPwrU2jFqxAMOzuVn3Ui/YqcvynJ
- eOKrFWerL0PIvmj+sv1+YihCBBZIA2iTu6mxuYyaqJkzFLxWX0Gq/8MS6qabZDhH8iZm
- +NoeuWTWlAZqh7JTIyxY07SLFHEJHO34dJJ1MyWcMIsudQRm3uZAZ2+8OkdwYs3PlO+5
- KQLg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=aperture.us; s=google; t=1738798130; x=1739402930; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Yhp6yjklqMu5ornjWccr9LWxQ1X2mmkIAQ9OUv5j1O4=;
+ b=VMG0iYMnS4jaHePZLyTW327B9qWe+CYZy5l6fhapjwBqPbP0I+6nkBWRAPwtDRzuwG
+ k/z+e+kb2DRgRCIR5i3IRxDWcRpbvp8MUpAPcofYYXugti04sTDQnzRj4MU4+z4/eyNT
+ vpPP7tsuo2oRyGW5twvP+n116y8uaEiOHCfdX+8QvpL2gDg87nCIFIE0wZ5Hijud/fOt
+ eldmGW8CO2id+4pc8+cDIOOqfpm2A7avpHWqABXhpSMAzPJWueUn0wQUool+G2dLgULT
+ ox4/VE55s5dk09u2kPQQtbzY4E/FjFg1sMwds3dq34aEePDnRa5gnXDN4IcT/cR+DDD0
+ APCA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=aperture.us
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=bhJXdCqv
-Subject: Re: [Buildroot] [PATCH v4 1/2] package/pkg-golang.mk: allow
- packages to override download GOPROXY
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=VMG0iYMn
+Subject: [Buildroot] [PATCH v3 1/1] package/pkg-golang.mk: make GOPROXY
+ configurable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,133 +106,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Anisse Astier <anisse@astier.eu>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Christian Stewart via buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: Christian Stewart <christian@aperture.us>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1LCBGZWIgNiwgMjAyNSBhdCAxMjoxOOKAr0FNIENocmlzdGlhbiBTdGV3YXJ0IDxjaHJp
-c3RpYW5AYXBlcnR1cmUudXM+IHdyb3RlOgo+Cj4gSGkgSmFtZXMsCj4KPiBPbiBXZWQsIEZlYiA1
-LCAyMDI1IGF0IDE6NTXigK9QTSBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQxQGdtYWls
-LmNvbT4gd3JvdGU6Cj4gPiA+ID4gV2VsbCB0aGF0IGFuZCB0aGUgZmFjdCB0aGF0IEdPUFJPWFk9
-ZGlyZWN0IHdhcyBicm9rZW4gaW4gdGhlIGZpcnN0IHBsYWNlCj4gPiA+ID4gaXMgYSBwcmV0dHkg
-c3Ryb25nIGluZGljYXRvciB1cHN0cmVhbSBwcm9qZWN0cyBkb24ndCBjYXJlIGFib3V0IGl0IG11
-Y2guCj4gPiA+Cj4gPiA+IFRoZXkgaGF2ZSByZXBsaWVkIHRvIHlvdXIgUFIgcmVxdWVzdGluZyBh
-biBhbHRlcm5hdGl2ZSBzdHJhdGVneSB0bwo+ID4gPiBmaXhpbmcgdGhlIGlzc3VlOgo+ID4gPgo+
-ID4gPiBodHRwczovL2dpdGh1Yi5jb20vbmV0YmlyZGlvL25ldGJpcmQvcHVsbC8zMjQwI2lzc3Vl
-Y29tbWVudC0yNjM3OTU2NTM3Cj4gPiA+Cj4gPiA+IEhlcmUgYXJlIHRoZSBuZXcgUFJzIGltcGxl
-bWVudGluZyB3aGF0IHRoZXkgcmVxdWVzdGVkOgo+ID4gPgo+ID4gPiAtIGh0dHBzOi8vZ2l0aHVi
-LmNvbS9uZXRiaXJkaW8vbmV0YmlyZC9wdWxsLzMyODcKPiA+ID4gLSBodHRwczovL2dpdGh1Yi5j
-b20vbmV0YmlyZGlvL25ldGJpcmQvcHVsbC8zMjg4Cj4KPiBPbmUgb2YgdGhlc2UgaXMgYWxyZWFk
-eSBtZXJnZWQsIGFuZCB0aGUgb3RoZXIgaXMgYmVpbmcgbG9va2VkIGF0IHJpZ2h0IG5vdy4KPgo+
-IEl0IGlzIG5vdCBhcyBoYXJkIGFzIHlvdSBtYWtlIGl0IHNlZW0gdG8gZml4IHVwc3RyZWFtLgoK
-U3VyZSwgbWF5YmUgZm9yIHNvbWVvbmUgdGhhdCByZWd1bGFybHkgZGV2ZWxvcHMgZ29sYW5nIHBy
-b2plY3RzCml0IHNob3VsZCBiZSBlYXN5LCBidXQgSSBkb24ndCByZWFsbHkgd3JpdGUgYW55IGdv
-IGNvZGUsIHNvIGRlYnVnZ2luZwpjb25mdXNpbmcgR09QUk9YWT1kaXJlY3QgcmVsYXRlZCBicmVh
-a2FnZSBpcyBub3QgYWx3YXlzIHRoYXQgZWFzeS4KCj4gPiA+IFlvdSBtYXkgbm90ZSB0aGF0IHRo
-ZSBkZWZhdWx0IG9mIEdPUFJPWFkgaXM6Cj4gPiA+Cj4gPiA+IG5ldGJpcmQgJSBnbyBlbnYgR09Q
-Uk9YWQo+ID4gPiBodHRwczovL3Byb3h5LmdvbGFuZy5vcmcsZGlyZWN0Cj4gPiA+Cj4gPiA+IE5v
-dGUgdGhhdCAiZGlyZWN0IiBpcyB0aGUgc2Vjb25kIGluIHRoZSBsaXN0LCB0aGUgZmFsbGJhY2sg
-aWYgdGhlCj4gPiA+IHByb3h5IGRvZXMgbm90IHdvcmsuCj4gPgo+ID4gSSdtIGF3YXJlIG9mIHRo
-ZSBkZWZhdWx0IGZhbGxiYWNrLCBBRkFJVSBpdCBpcyB0eXBpY2FsbHkgb25seSB1c2VkIGlmCj4g
-PiBodHRwczovL3Byb3h5LmdvbGFuZy5vcmcgaXMgYnJva2VuL2Rvd24uIElNTyB3ZSBzaG91bGQg
-dXNlIHRoZQo+ID4gc2FtZSBkZWZhdWx0IGZvciBHT1BST1hZIGJlY2F1c2UgdGhlcmUgaXMgbm8g
-Z29vZCByZWFzb24KPiA+IG5vdCB0byBkbyBzby4KPgo+IEkgaGF2ZSBsaXN0ZWQgdGhlIGdvb2Qg
-cmVhc29ucyBlYXJsaWVyIGluIHRoaXMgdGhyZWFkLgo+Cj4gU2VlIGxhdGVyIGluIHRoaXMgbWFp
-bC4uLgo+Cj4gPiA+IElmIHRoZSBkZWZhdWx0IHdlcmUgdGhlIHByb3h5IHdpdGhvdXQgdGhlICJk
-aXJlY3QiIHBhcnQgaXQgd291bGQgYmUKPiA+ID4gdHJ1ZSB0aGF0ICJ0aGUgcmVzdCBvZiB0aGUg
-Z29sYW5nIGVjb3N5c3RlbSIgZG9lcyBub3QgdXNlCj4gPiA+IEdPUFJPWFk9ZGlyZWN0Lgo+ID4K
-PiA+IFdoZW4gSSdtIHNheWluZyB0aGUgZWNvc3lzdGVtIGRvZXMgbm90IHVzZSBHT1BST1hZPWRp
-cmVjdCwKPiA+IEknbSByZWZlcnJpbmcgc3BlY2lmaWNhbGx5IHRvIGRpc2FibGluZyB0aGUgY2Fj
-aGluZyBwcm94eSBzcGVjaWZpY2FsbHkuCj4KPiBQbGVhc2UgcHJvdmlkZSBldmlkZW5jZSBmb3Ig
-dGhpcyBjbGFpbS4KCkkgbWVhbiwgaXQncyBub3QgdGhlIGRlZmF1bHQsIGFuZCBJIHNpbXBseSBk
-b24ndCBzZWUgbXVjaCBldmlkZW5jZSBvZiB1c2UKd2hlbiBzZWFyY2hpbmcgZ2l0aHViLgoKPiA+
-ID4gRG8geW91IGhhdmUgYW55IGV4YW1wbGVzIG9mIHRoZXNlIGJyZWFrYWdlcyBzbyBmYXI/IFdl
-IHVzZSBhIG51bWJlciBvZgo+ID4gPiBHbyBwYWNrYWdlcyBpbiBCdWlsZHJvb3QgZXh0ZW5zaXZl
-bHkgYWxyZWFkeSB0b2RheSwgbGlrZSBkb2NrZXItZW5naW5lCj4gPiA+IGFuZCBkb2NrZXItY2xp
-Lgo+ID4KPiA+IEkgaGF2ZW4ndCBzZWVuIGFueSBzcGVjaWZpY2FsbHksIGJ1dCBiYXNlZCBvbiB0
-aGUgYnVpbGQgZmFpbHVyZXMKPiA+IEkndmUgc2VlbiB3aGVuIGF0dGVtcHRpbmcgdG8gdXNlIEdP
-UFJPWFk9ZGlyZWN0IGl0J3MgY2xlYXJseQo+ID4gYW4gaXNzdWUgd2Ugd291bGQgZXZlbnR1YWxs
-eSBzdGFydCBydW5uaW5nIGludG8uCj4KPiBJdCBoYXNuJ3QgaGFwcGVuZWQgYXQgYWxsIHlldCBh
-ZnRlciBhIHBhY2thZ2Ugd2FzIG1lcmdlZCwgdGhlbi4KClN1cmUsIEknbSBqdXN0IHNheWluZyBp
-dCBhbG1vc3QgY2VydGFpbmx5IHdpbGwgaGFwcGVuIGV2ZW50dWFsbHkuCgo+ID4gPiBHaXZlbiB0
-aGUgdHJhZGVvZmZzIHdlIGhhdmUgZGlzY3Vzc2VkIGJldHdlZW46Cj4gPiA+Cj4gPiA+IC0gImFs
-d2F5cyByZXF1aXJlIHRoZSBHb29nbGUgcHJveHkiIGFuZAo+ID4gPiAtICJmaXggbWlzbWF0Y2hl
-cyBhdCBwYWNrYWdlIGFkZC91cGRhdGUgdGltZSwgbWlycm9yIGlmIGRlcGVuZGVuY2llcwo+ID4g
-PiBhcmUgdW5hdmFpbGFibGUgbG9uZy10ZXJtIgo+ID4gPgo+ID4gPiBUaGVyZSBpcyBpbnN1ZmZp
-Y2llbnQgZXZpZGVuY2UgdGhhdCB0aGUgbWlycm9yaW5nIHBhcnQgaXMgc3VjaCBhCj4gPiA+IG1h
-aW50ZW5hbmNlIGJ1cmRlbiB0aGF0IHdlIG11c3QgZ28gd2l0aCBvcHRpb24gMSBoZXJlLgo+ID4g
-Pgo+ID4gPiA+IFRoZXJlJ3Mgb25seSBkb3duc2lkZXMgdG8gdXNpbmcgR09QUk9YWT1kaXJlY3Qg
-aW4gYnVpbGRyb290IGZyb20KPiA+ID4gPiB3aGF0IEkgY2FuIHRlbGwsIEkgY2FuJ3QgZXZlbiB0
-aGluayBvZiBhIHNpbmdsZSByZWFsIHdvcmxkIGJlbmVmaXQuCj4gPiA+Cj4gPiA+IFVwc2lkZXM6
-Cj4gPiA+Cj4gPiA+IC0gTm8gZGVwZW5kZW5jeSBvbiBhIHRoaXJkLXBhcnR5IHByb3h5IHNlcnZp
-Y2UKPiA+Cj4gPiBBcyB5b3UgbWVudGlvbmVkIGFib3ZlLCByZW1vdmluZyB0aGUgR09QUk9YWT1k
-aXJlY3Qgb3ZlcnJpZGUKPiA+IHdvdWxkIG5vdCBtYWtlIHRoZSBwcm94eSBzZXJ2ZXIgYSBoYXJk
-IGRlcGVuZGVuY3ksIGJ1dCB3b3VsZAo+ID4gc2ltcGx5IG1hZGUgZGlyZWN0IGRvd25sb2FkcyBh
-IGZhbGxiYWNrLCBzbyB0aGlzIGlzbid0IGFuIHVwc2lkZQo+ID4gaW4gdGhlIHJlYWwgd29ybGQu
-Cj4KPiBJIGRvIG5vdCB1bmRlcnN0YW5kIHdoYXQgeW91IG1lYW4gYnkgdGhpcyBzZW50ZW5jZS4K
-CkkgbWVhbiB5b3UgbWVudGlvbiB0aGF0IGF2b2lkaW5nIGEgdGhpcmQtcGFydHkgcHJveHkgc2Vy
-dmljZSBhcyBhCmRlcGVuZGVuY3kgaXMgYW4gdXBzaWRlLCBidXQgaXQncyBub3QgY2xlYXIgd2hh
-dCBzb3J0IG9mIGFkdmFudGFnZQp0aGF0IHdvdWxkIHByb3ZpZGUgdXMgaW4gcHJhY3RpY2UgZm9y
-IGJ1aWxkcm9vdC4KCj4KPiA+IE9uZSBjYW4gc3RpbGwgZml4IEdPUFJPWFk9ZGlyZWN0IGluIHVw
-c3RyZWFtIHByb2plY3RzIGVpdGhlciB3YXksCj4gPiBidXQgSSBzZWUgbm8gcmVhc29uIGZvciBp
-dCB0byBiZSBhIGhhcmQgcmVxdWlyZW1lbnQgaW4gYnVpbGRyb290Lgo+ID4KPiA+IEVpdGhlciB3
-YXkgdXNpbmcgdGhlIHByb3h5IGNhY2hlIGRyYXN0aWNhbGx5IHJlZHVjZXMgdGhlIG51bWJlciBv
-Zgo+ID4gc2VydmljZXMgdGhhdCBtdXN0IGJlIGF2YWlsYWJsZSBmb3IgYSBwYWNrYWdlIHRvIGRv
-d25sb2FkIHN1Y2Nlc3NmdWxseS4KPiA+Cj4gPiBXaGF0IHVwc2lkZSBpcyB0aGVyZSB0byBhdm9p
-ZGluZyB0aGlzIGRlcGVuZGVuY3kgd2hlbiB0aGUgYWx0ZXJuYXRpdmUKPiA+IGlzIHdheSB3YXkg
-d29yc2U/Cj4KPiBJIHVuZGVyc3RhbmQgeW91ciB0aGlua2luZyBvbiBpdCBidXQgZml4aW5nIHRo
-aW5ncyBhdCBtZXJnZSB0aW1lIHNvCj4gdGhhdCB3ZSBjYW4gYnVpbGQgd2l0aG91dCB0aGUgR29v
-Z2xlIHByb3h5IGlzIG5vdCBpbXBvc3NpYmxlIG5vciBhcwo+IGRpZmZpY3VsdCBhcyB5b3UgbWFr
-ZSBpdCBzZWVtLgoKSSdtIG5vdCBzYXlpbmcgaXQncyBpbXBvc3NpYmxlIGJ1dCBpdCdzIGFubm95
-aW5nIGFuZCBkb2Vzbid0IHByZXZlbnQKZGVwZW5kZW5jaWVzIGZyb20gYnJlYWtpbmcgaW4gdGhl
-IGZ1dHVyZS4gU28gSU1PIHRoZXJlJ3MgdmVyeSBsaXR0bGUKcmVhc29uIHRvIHJlcXVpcmUgZ29s
-YW5nIHBhY2thZ2VzIHRvIGJ1aWxkIHdpdGggR09QUk9YWT1kaXJlY3QKaW4gdGhlIGZpcnN0IHBs
-YWNlLgoKPiA+ID4gLSBBYmlsaXR5IHRvIGJ1aWxkIHdpdGggR09QUk9YWT1kaXJlY3QgZm9yIHRo
-b3NlIHRoYXQgcmVxdWlyZSBpdAo+ID4gPiAob3RoZXJ3aXNlIEJ1aWxkcm9vdCBicmVha3MgZm9y
-IHRoZW0gb24gZGVmYXVsdCkKPiA+Cj4gPiBXaG8gYWN0dWFsbHkgcmVxdWlyZXMgaXQ/IEkgdGhp
-bmsgcmVxdWlyaW5nIEdPUFJPWFk9ZGlyZWN0IGlzIGFuCj4gPiBleHRyZW1lbHkgbmljaGUgdXNl
-IGNhc2UgdGhhdCdzIG5vdCByZWFsbHkgZXZlbiBhIHByYWN0aWNhbCByZXF1aXJlbWVudC4KPgo+
-IElmIEkgc2V0ICJHT1BST1hZPWRpcmVjdCIgYW5kIHJ1biBhIEJ1aWxkcm9vdCBidWlsZCBJIHdv
-dWxkIGV4cGVjdCBpdCB0byBwYXNzLgoKV2h5PyBUaGUgcmVzdCBvZiB0aGUgZ29sYW5nIGVjb3N5
-c3RlbSBjZXJ0YWlubHkgZG9lc24ndCBzZWVtIHRvIGNhcmUKbXVjaCBhYm91dCBHT1BST1hZPWRp
-cmVjdC4gV2hhdCBtYWtlcyBidWlsZHJvb3Qgc3BlY2lhbCBoZXJlPwoKPiBLbm93aW5nbHkgbWVy
-Z2luZyBwYWNrYWdlcyB0aGF0IGhhdmUgbWlzbWF0Y2hlcyBiZXR3ZWVuIEdpdCBhbmQKPiBHT1BS
-T1hZIHNlZW1zIGxpa2UgYSBtaXN0YWtlLgoKSSBtZWFuLCB3ZSBvbmx5IGNhcmUgYWJvdXQgdGhl
-IGRvd25sb2FkIG1hdGNoaW5nIHRoZSBjaGVja3N1bXMsIHNvCkkgcmVhbGx5IHNlZSBubyByZWFz
-b24gd2Ugd291bGQgY2FyZSBhYm91dCB0aGlzLiBJZiB1cHN0cmVhbSBwcm9qZWN0cwp3YW50IHRv
-IGRvIHRoaXMsIEknbSBzdXJlIG9uZSBjb3VsZCBtYWtlIGEgZ2l0aHViIGFjdGlvbiBvciBzb21l
-dGhpbmcKZmFpcmx5IGVhc2lseSB0byBhdWRpdCBkZXBlbmRlbmNpZXMgYXV0b21hdGljYWxseSB0
-aGVyZS4KCj4gPiA+IC0gSWYgZ28ubW9kIHNheXMgImZvby9iYXIgYXQgdmVyc2lvbiB2MS4wLjAi
-IHRoZW4gd2UgY2FuIGJlIHN1cmUgdGhlCj4gPiA+IEdpdCB0YWcgdjEuMC4wIG1hdGNoZXMgdGhl
-IGdvLnN1bS4KPiA+Cj4gPiBJZiB0aGUgaGFzaCBtYXRjaGVzIHdlIGtub3cgd2UgaGF2ZSB0aGUg
-cmlnaHQgZGVwZW5kZW5jeSwgdGhhdCdzCj4gPiBhbGwgdGhhdCB3ZSByZWFsbHkgY2FyZSBhYm91
-dCBoZXJlIG90aGVyIHRoYW4gYmVpbmcgYWJsZSB0byBkb3dubG9hZAo+ID4gdGhlIGRlcGVuZGVu
-Y2llcyByZWxpYWJseS4KPgo+IFllcyBhbmQgbm8uIFRoYXQgbWF5IGJlIGFsbCB5b3UgY2FyZSBh
-Ym91dCBhcyBzb21lb25lIHdhbnRpbmcgdG8gc2hpcCBwYWNrYWdlcy4KCkJ1aWxkcm9vdCBpcyBh
-IGRvd25zdHJlYW0gaW50ZWdyYXRpb24gb2YgbWFueSB1cHN0cmVhbSBwcm9qZWN0cywKd2UgZG9u
-J3QgZGV2ZWxvcCB0aGUgdXBzdHJlYW0gZ29sYW5nIHBhY2thZ2UgY29kZSBoZXJlLCB3ZSBpbnRl
-Z3JhdGUKZXhpc3RpbmcgcHJvamVjdHMgbGFyZ2VseSBhcy1pcyB3aXRob3V0IG1vZGlmeWluZyB0
-aGVpciBjb2RlLiBVc2luZyB0aGUKR09QUk9YWSBkZWZhdWx0cyBzaW1wbGlmaWVzIHRoaXMgaW50
-ZWdyYXRpb24uCgo+ID4gPiBEb3duc2lkZXM6Cj4gPiA+Cj4gPiA+IC0gU2xvd2VyIGZldGNoIChn
-aXQgcHVsbCBpbnN0ZWFkIG9mIHByb3h5LmdvbGFuZy5vcmcpCj4gPiA+IC0gV2UgbmVlZCB0byBt
-aXJyb3IgcGFja2FnZXMgaWYgdGhlaXIgZGVwZW5kZW5jaWVzIGdvIGF3YXkgKG1vc3QgYXJlCj4g
-PiA+IG9uIEdpdEh1YiwgdGhvdWdoKQo+ID4gPgo+ID4gPiBXaGVuIHJlcXVlc3RpbmcgdGhhdCB1
-cHN0cmVhbSBwcm9qZWN0cyBmaXggdGhlIGJ1aWxkIHdpdGgKPiA+ID4gR09QUk9YWT1kaXJlY3Qg
-aXQgaGVscHMgdG8gbWVudGlvbiB3aHkgaW4gdGhlIFBSIGRlc2NyaXB0aW9uLgo+ID4KPiA+IEkg
-Z3Vlc3MgSSBzaG91bGQgbWVudGlvbiBzb21ldGhpbmcgbGlrZSB3ZSBuZWVkIHRvIGZpeCB0aGlz
-IGJlY2F1c2UKPiA+IGJ1aWxkcm9vdCB1c2VzIGJhZCBHT1BST1hZIGRlZmF1bHRzIHNpbmNlIHdl
-IGxpa2UgZG9pbmcgbG90cyBvZgo+ID4gZXh0cmEgd29yayBmb3Igbm8gcHJhY3RpY2FsIHJlYXNv
-bj8KPgo+IFlvdSBrZWVwIHNheWluZyAibm8gcHJhY3RpY2FsIHJlYXNvbiIgYnV0IHdlIGNsZWFy
-bHkgaGF2ZSB1cHNpZGVzIGFuZAo+IGRvd25zaWRlcyBoZXJlLgoKVGhlIHVwc2lkZXMgeW91IG1l
-bnRpb24gYXJlbid0IHByYWN0aWNhbCB1cHNpZGVzIGZvciBidWlsZHJvb3QgaG93ZXZlciwKdGhl
-eSBtYXkgYmUgcHJhY3RpY2FsIGZvciBhdWRpdGluZyBwcm9qZWN0IGRlcGVuZGVuY2llcywgYnV0
-IHdlIGRvbid0CmRvIHRoYXQgaGVyZSBhcyBwYXJ0IG9mIGJ1aWxkcm9vdCBwcm9qZWN0IGluIHBy
-YWN0aWNlLCBoZW5jZSB0aGUKIm5vIHByYWN0aWNhbCByZWFzb24iIGFzIG5vIHVwc2lkZXMgZm9y
-IGJ1aWxkcm9vdCBleGlzdCBJTU8uCgo+Cj4gVGhhbmtzLAo+IENocmlzdGlhbiBTdGV3YXJ0Cl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+From: James Hilliard <james.hilliard1@gmail.com>
+
+BR2_GOPROXY now configures the Go module proxy URL used to download Go modules
+specified in project go.mod and go.sum files. By default, it uses Google's
+official Go module mirror at proxy.golang.org, falling back to direct downloads
+if the module is not found in the mirror.
+
+This change sets the default GOPROXY value to match Go's built-in default of
+"https://proxy.golang.org,direct" which provides several benefits:
+
+- Avoid package breakages due to missing module sources
+- Better alignment with upstream Go toolchain defaults
+- Faster downloads via the proxy compared to direct Git clones
+- Maintains reproducible builds through Go's module checksum validation
+
+The default value from the toolchain can be read with "go env GOPROXY"
+
+We rely on package developers to audit their dependencies in go.mod and go.sum.
+
+The value can be configured to:
+- A comma-separated list of proxy URLs
+- "off" to disable all downloads
+- "direct" to download directly from source repositories
+
+For more details on Go module proxies:
+https://go.dev/ref/mod#module-proxy
+
+Discussion:
+https://lore.kernel.org/all/CADvTj4pXO2rwJ8oCzzGNY+OxLuo3uJnDT2PAxbyquw0L6dhfiA@mail.gmail.com/T/#t
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Christian Stewart <christian@aperture.us>
+
+---
+
+v1 -> v2:
+
+ - added more context and links
+ - renamed to GOPROXY instead of GOPROXY_LIST
+ - moved into the !BR2_PRIMARY_SITE_ONLY section
+
+Signed-off-by: Christian Stewart <christian@aperture.us>
+---
+ Config.in             | 16 ++++++++++++++++
+ package/pkg-golang.mk |  2 +-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/Config.in b/Config.in
+index a543091d4f..4015cb5094 100644
+--- a/Config.in
++++ b/Config.in
+@@ -307,6 +307,22 @@ config BR2_GNU_MIRROR
+ 	     http://ftp.gnu.org/pub/gnu
+ 	     http://mirror.aarnet.edu.au/pub/gnu
+ 
++config BR2_GOPROXY
++	string "Go module proxy"
++	default "https://proxy.golang.org,direct"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	help
++	  The Go module proxy URL used to download Go modules. By default,
++	  it uses the official Go module mirror, falling back to direct
++	  downloads if the module is not found in the mirror.
++
++	  The value can be one of:
++	    - Comma-separated list of proxy URLs
++	    - "off" to disable all downloads
++	    - "direct" to download directly from source repositories
++
++	  See https://go.dev/ref/mod#module-proxy
++
+ config BR2_LUAROCKS_MIRROR
+ 	string "LuaRocks mirror"
+ 	default "http://rocks.moonscript.org"
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index 33cf9bfb1a..9b70e9553d 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -88,7 +88,7 @@ $(2)_POST_PATCH_HOOKS += $(2)_GEN_GOMOD
+ $(2)_DOWNLOAD_POST_PROCESS = go
+ $(2)_DL_ENV += \
+ 	$$(HOST_GO_COMMON_ENV) \
+-	GOPROXY=direct \
++	GOPROXY=$$(call qstrip,$$(BR2_GOPROXY)) \
+ 	$$($(2)_GO_ENV)
+ 
+ # Because we append vendored info, we can't rely on the values being empty
+-- 
+2.39.5
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
