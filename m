@@ -4,49 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E7CAC02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 10:44:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7F72C02194
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 10:49:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4415F81D5F;
-	Wed,  5 Feb 2025 10:44:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8193A8218B;
+	Wed,  5 Feb 2025 10:49:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p2Em04yRuO26; Wed,  5 Feb 2025 10:44:25 +0000 (UTC)
+ id WEc5RqrGEJkp; Wed,  5 Feb 2025 10:49:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CBE48381F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 808A3836F0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CBE48381F;
-	Wed,  5 Feb 2025 10:44:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 808A3836F0;
+	Wed,  5 Feb 2025 10:49:16 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 897C512F
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:44:21 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7F49812A
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:49:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6CBCC60663
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:44:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E78460663
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:49:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id blKyUZIobIK5 for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 10:44:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 9k8xeJo2zsp7 for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 10:49:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3DEA60598
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F3DEA60598
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:44:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E202D86E1B; Wed,  5 Feb 2025 10:44:18 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 11:43:43 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9845bd4541cb03e97e577281f3c64f00c6ead881
-X-Git-Newrev: c39f677e6a7142394bb2713181bca69b768e9f9e
-X-Patchwork-Hint: ignore
-Message-Id: <20250205104418.E202D86E1B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] arch/arm: add the Cortex-A710 core
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 58BDE60598
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58BDE60598
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 58BDE60598
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:49:12 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 55E5C43299;
+ Wed,  5 Feb 2025 10:49:10 +0000 (UTC)
+Date: Wed, 5 Feb 2025 11:49:09 +0100
+To: Brian Cain <brian.cain@oss.qualcomm.com>
+Cc: buildroot@buildroot.org
+Message-ID: <20250205114909.18e5f9dd@windsurf>
+In-Reply-To: <20241219053053.2389046-1-brian.cain@oss.qualcomm.com>
+References: <20241025140714.2395033-1-bcain@quicinc.com>
+ <20241219053053.2389046-1-brian.cain@oss.qualcomm.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfedvhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeltdegvdejheegtefgueffgfelhfekvdefudevieeileetleeitdefgfeugffghfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepuddtledrkeelrddvfedvrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutdelrdekledrvdefvddrheehpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghrihgrnhdrtggrihhnsehoshhsrdhquhgrlhgtohhmmhdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1738752550;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=gEU/TJgB04eluekbEVuvolRKh32byIzQsxKJ8FrrKAo=;
+ b=ZepV2UMTKupa1aSqGu6r5WBgJe1saJAuApiRlpWJHPklWwf/to51TFrEvN00SJppL1zOIc
+ 5CJzKME71uA32KkqYeVPfPFLJI93N2jOyLHga0YNDdKY+KKC7Xegm3hhzJbfLaEmGw8syw
+ XjCDyXLVi0sHZIeo9JWHeR+VTMvMFIiyflxdqb+l2r/9WbXSPyEg7ML6Rwt2pCKU2rDUfO
+ UP0EZtuYnooC3sZ1JFLV22Wzgz/UkpNU7ZBreUzZ8RCjf8IaHW2/Ugd27Mt8J4O3gc+ogK
+ 1hRPUlRIhkSG6E5nx4SETOsA0iWyEFyDZhlukArudoTLwr4nuyMPDCphfrLxAA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ZepV2UMT
+Subject: Re: [Buildroot] [RFC v2 00/14] add hexagon architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,66 +85,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c39f677e6a7142394bb2713181bca69b768e9f9e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Brian,
 
-This commit adds the Cortex-A710 core, which is an implementation of
-the armv9.0a ISA. See: [1] [2].
+On Wed, 18 Dec 2024 21:30:39 -0800
+Brian Cain <brian.cain@oss.qualcomm.com> wrote:
 
-This CPU support was added in GCC 12. See [3] [4].
+> I'm sharing this series with the list for the sake of discussion about
+> how the approach taken could improve.  It's likely not quite ready for
+> upstreaming yet.
 
-Cortex-A710 support has been added in QEmu in commit [5], first
-included in v8.2.0.
+Thanks for this series. Could you share some more details about the
+Hexagon architecture, what is its current usage and use cases, roadmap?
+Indeed, adding support for a new architecture in Buildroot means that
+our autobuilders will try building all packages for this architecture,
+which will certainly raise a large number of issues, which you will
+have to address as a maintainer of this CPU architecture. How committed
+are you to this effort?
 
-This CPU supports Aarch32 only in EL0 (user-space). This means it's
-technically possible to compile Aarch32 code targeting. GCC has the
-support to do so. Since Buildroot recompiles a full system (ATF,
-Kernel, user-space) this support has limited value. This is why this
-CPU is limited  to 64bit builds only.
+This is even more significant as your proposal is to support this
+architecture with Clang as a compiler, which will certainly break a LOT
+of packages, causing even more troubles.
 
-[1] https://developer.arm.com/Processors/Cortex-A710
-[2] https://developer.arm.com/documentation/101800/0201/The-Cortex-A710--core/Cortex-A710--core-features
-[3] https://gcc.gnu.org/gcc-12/changes.html
-[4] https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/aarch64/aarch64-cores.def;hb=releases/gcc-12.1.0#l163
-[5] https://gitlab.com/qemu-project/qemu/-/commit/e3d45c0a895764203f489184d361fe4c74b2cd57
+So what you're proposing here is certainly very interesting, but it's a
+really large endeavor, and we need to understand whether you'll still
+be around in 6 or 12 months to support this and address issues.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- arch/Config.in.arm | 7 +++++++
- 1 file changed, 7 insertions(+)
+I'm going to reply to the individual patches with some more comments,
+but I think this top-level discussion is the most important.
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 68b4dfea26..546ba8070e 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -506,6 +506,12 @@ config BR2_saphira
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
- 
- comment "armv9.0a cores"
-+config BR2_cortex_a710
-+	bool "Cortex-A710 (aka matterhorn)"
-+	depends on BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV9A
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_12
- config BR2_neoverse_n2
- 	bool "neoverse-N2 (aka perseus)"
- 	depends on BR2_ARCH_IS_64
-@@ -906,6 +912,7 @@ config BR2_GCC_TARGET_CPU
- 	# armv8.4a
- 	default "saphira"	if BR2_saphira
- 	# armv9.0a
-+	default "cortex-a710"	if BR2_cortex_a710
- 	default "neoverse-n2"	if BR2_neoverse_n2
- 
- config BR2_GCC_TARGET_ABI
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
