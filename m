@@ -4,48 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88FE9C02196
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 13:15:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5DBDC02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 13:15:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8E2140B67;
-	Wed,  5 Feb 2025 13:15:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B93254177D;
+	Wed,  5 Feb 2025 13:15:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iSPma5IcSe47; Wed,  5 Feb 2025 13:15:45 +0000 (UTC)
+ id l143AT_f_ZTZ; Wed,  5 Feb 2025 13:15:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 179C741753
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 390E641787
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 179C741753;
-	Wed,  5 Feb 2025 13:15:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B0E7312A
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:15:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 390E641787;
+	Wed,  5 Feb 2025 13:15:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 951C312F
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:15:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96E17410F1
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:15:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7602E40D80
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:15:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hOcXcCcG8eth for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 13:15:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 836694022B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 836694022B
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:15:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 664A2857B1; Wed,  5 Feb 2025 13:15:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 14:14:10 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 490711a6e09cb2207a401ea72f831e9132a89778
-X-Git-Newrev: cf273fb01f4d2c30ecf0903c8d27619e3e1a8bb6
-X-Patchwork-Hint: ignore
-Message-Id: <20250205131540.664A2857B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/latencytop: drop package
+ id uvf7wsKTsaI6 for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 13:15:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C74DF4022B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C74DF4022B
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C74DF4022B
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:15:42 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-43625c4a50dso46495425e9.0
+ for <buildroot@buildroot.org>; Wed, 05 Feb 2025 05:15:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1738761340; x=1739366140;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=DiXOg8GwSQCsFnQ6tQxz8VgPyA/UAtFG5WaNUaLZXls=;
+ b=aN7HSX8rT8sSfCrE3LuhUZcHwAoRLytWauUxaDeqxR2ZWiVDF5x2SzGIRKZQr1vjos
+ n03OpkiEzBWGPu4WW2E8VFNq4SB2JyAIgbRfdesPkpcrdhmk39Nke5TPIVlEC7bVRUAL
+ wFamYAv7eAD74Zk05MmSxyI9j1N30wYdriyylcr4RrbYiM+1yfPOky7rzokff1c57FHm
+ q06pi8BaOmsNzO5TKv5rTdKEYJ66igHpACGU8LFCL0SIlsXRXSHkeqInkx9jd4QN2pkC
+ GG9sJeAzYxbtYoYTOsQnuaLYrUJN6ZYWuF3GCWgas6Xq8SymCf4/PqUatSRr65OkQhdN
+ ZC9Q==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXx8VNvLdYl9PzZN99+A2nG5yL+ouImeMn1j2HTg725xgDgjsaRLTq+Dyvv2GQobqYVWjR7aQo3tM4=@buildroot.org
+X-Gm-Message-State: AOJu0YzQKe/D9jPAcUO9GApuT+LT7jBaOeBj98UkWMMjkprFEqfo75lw
+ fIhAxVJn11GwhDCaX3qaSHRniXbCmp7g4l++4ySzWwToP5syz5MkH+HzA3xkYViUCgFdWQxL1Yg
+ fVMM=
+X-Gm-Gg: ASbGncvLsokm6Y1hjhNAWxa4ugJPUfyhlhtKKqR46xizSRHQo/ej5cRSUvC7ZVo9W9R
+ 20EUKD1Vq+QPSh5xOwD6tjqG/1Dt3+d6YXF3qxt4DryZFzXx2Nsbfzwp+S7WqDiaDNuV931LM6+
+ ENIzBJufz+LeITVPm95tOE6oLaNBEkBMYjwdBCL5QvEA7i3+oawlQXnIAhfLYVo0H+YZ6yunPvb
+ uCBNod+USa55fYHuAy76TT/YF/vodlsyyTUb7rHrH6XA9v0DyfCUwxRWo3L/8ipnXS55BiZK4ZD
+ wmLBpNBKTiKhDD47MJsrLu/oocgJkt4MORm7gyCn9sVGCfoMjhaAeEU4
+X-Google-Smtp-Source: AGHT+IHiKciKXbOeXgUJ2NyHST4e0ctL66txIoPM5p1GRZZfLM2sdmL5qqpt3CWm0i/mGzqxhO1CEA==
+X-Received: by 2002:a05:600c:1393:b0:434:fd01:2e5f with SMTP id
+ 5b1f17b1804b1-4390d56f60amr21306885e9.29.1738761340497; 
+ Wed, 05 Feb 2025 05:15:40 -0800 (PST)
+Received: from [172.16.2.119] (host-109-89-232-55.dynamic.voo.be.
+ [109.89.232.55]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-38db26fab50sm2783863f8f.52.2025.02.05.05.15.40
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 05 Feb 2025 05:15:40 -0800 (PST)
+Message-ID: <e2f582d3-d646-4756-9318-184bdb600b52@smile.fr>
+Date: Wed, 5 Feb 2025 14:15:39 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
+References: <20250205121100.40121-1-peter@korsgaard.com>
+Content-Language: fr
+In-Reply-To: <20250205121100.40121-1-peter@korsgaard.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1738761340; x=1739366140; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=DiXOg8GwSQCsFnQ6tQxz8VgPyA/UAtFG5WaNUaLZXls=;
+ b=qwK3Wz5X4Z8wWHxkWoOJqruJ9G0iXUenL5dF5wWCs4rA7G6ABmuucWUwS2gLq9/5Fa
+ WdU712kJHVg7A8mg1VOnGGI8rbph+wBiXGka79nO+chnWwvjKq2EC+mK3DG1LXvt+rgD
+ O3jN5vZyCc953wHnYpPGjPbsVILVQWQ7LctgQ=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=qwK3Wz5X
+Subject: Re: [Buildroot] [PATCH] package/latencytop: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,180 +109,135 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Romain Naour via buildroot <buildroot@buildroot.org>
 Reply-To: Romain Naour <romain.naour@smile.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf273fb01f4d2c30ecf0903c8d27619e3e1a8bb6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes http://autobuild.buildroot.net/results/5b7921d1b2d347995b0088ac58b29e2f01dec39a/
-
-The tarball is no longer available for download and the git repo on
-infradead.org is also gone, there are no reverse dependencies or DEVELOPERS
-entry for it and the package has not been updated since it was added in 2012
-by commit cd2f78b1c5af ("New Package: latencytop"), so drop it.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
----
- .checkpackageignore                    |  1 -
- Config.in.legacy                       |  6 ++++++
- package/Config.in                      |  1 -
- package/latencytop/0001-makefile.patch | 28 ----------------------------
- package/latencytop/Config.in           | 26 --------------------------
- package/latencytop/latencytop.hash     |  3 ---
- package/latencytop/latencytop.mk       | 23 -----------------------
- 7 files changed, 6 insertions(+), 82 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 6b45fb9e94..f66bc3d86b 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -606,7 +606,6 @@ package/keyutils/0001-fix-install-rule.patch lib_patch.Upstream
- package/keyutils/0002-cifs.patch lib_patch.Sob lib_patch.Upstream
- package/kmod/0001-fix-O_CLOEXEC.patch lib_patch.Upstream
- package/kodi/S50kodi Shellcheck lib_sysv.Variables
--package/latencytop/0001-makefile.patch lib_patch.Upstream
- package/lbase64/0001-retro-compatible-with-Lua-5.1.patch lib_patch.Upstream
- package/lcdproc/0001-LCDd.conf.patch lib_patch.Upstream
- package/lcdproc/0002-Add-missing-ioctl-header.patch lib_patch.Upstream
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 3e3be95004..214d351e4a 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2025.02"
- 
-+config BR2_PACKAGE_LATENCYTOP
-+	bool "latencytop has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The latencytop package is no longer available for download.
-+
- config BR2_PACKAGE_OBSIDIAN_CURSORS
- 	bool "obsidian-cursors has been removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 4896e6db76..3ec6d0d879 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -116,7 +116,6 @@ menu "Debugging, profiling and benchmark"
- 	source "package/kmemd/Config.in"
- 	source "package/kvm-unit-tests/Config.in"
- 	source "package/kyua/Config.in"
--	source "package/latencytop/Config.in"
- 	source "package/libbpf/Config.in"
- 	source "package/libtraceevent/Config.in"
- 	source "package/libtracefs/Config.in"
-diff --git a/package/latencytop/0001-makefile.patch b/package/latencytop/0001-makefile.patch
-deleted file mode 100644
-index fa8c51cfd0..0000000000
---- a/package/latencytop/0001-makefile.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--Usee $(CC) to enable cross compiling and link to the right ncurses library.
--
--Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
--
----- latencytop-0.5/Makefile.old	2012-04-18 11:59:39.748084334 +0100
--+++ latencytop-0.5/Makefile	2012-04-18 12:00:08.659112340 +0100
--@@ -4,7 +4,7 @@
-- DESTDIR =
-- SBINDIR = /usr/sbin
-- XCFLAGS = -W  -g `pkg-config --cflags glib-2.0` -D_FORTIFY_SOURCE=2 -Wno-sign-compare
---LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncursesw 
--+LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncurses 
-- 
-- OBJS= latencytop.o text_display.o translate.o fsync.o
-- 
--@@ -26,10 +26,10 @@
-- 
-- # We write explicity this "implicit rule"
-- %.o : %.c
---	gcc -c $(CFLAGS) $(XCFLAGS) $< -o $@
--+	$(CC) -c $(CFLAGS) $(XCFLAGS) $< -o $@
-- 
-- latencytop:  $(OBJS) latencytop.h Makefile
---	gcc $(CFLAGS) $(OBJS) $(LDF) -o latencytop 
--+	$(CC) $(CFLAGS) $(OBJS) $(LDF) -o latencytop 
-- 
-- clean:
-- 	rm -f *~ latencytop DEADJOE *.o
-diff --git a/package/latencytop/Config.in b/package/latencytop/Config.in
-deleted file mode 100644
-index b54ef052b4..0000000000
---- a/package/latencytop/Config.in
-+++ /dev/null
-@@ -1,26 +0,0 @@
--config BR2_PACKAGE_LATENCYTOP
--	bool "latencytop"
--	depends on BR2_USE_WCHAR # libglib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
--	depends on BR2_USE_MMU # libglib2
--	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_LIBGLIB2
--	help
--	  There are many types and causes of latency. LatencyTOP
--	  focuses on the type of latency that causes skips in audio,
--	  stutters in your desktop experience or that overloads your
--	  server (while you have plenty of CPU power left).
--
--	  LatencyTOP focuses on the cases where the applications want
--	  to run and execute useful code, but there's some resource
--	  that's not currently available (and the kernel then blocks
--	  the process). This is done both on a system level and on a
--	  per process level, so that you can see what's happening to
--	  the system, and which process is suffering and/or causing
--	  the delays.
--
--	  http://www.latencytop.org
--
--comment "latencytop needs a toolchain w/ wchar, threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/latencytop/latencytop.hash b/package/latencytop/latencytop.hash
-deleted file mode 100644
-index 74b8a03a23..0000000000
---- a/package/latencytop/latencytop.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# locally computed
--sha256  9e7f72fbea7bd918e71212a1eabaad8488d2c602205d2e3c95d62cd57e9203ef  latencytop-0.5.tar.gz
--sha256  34d1db30ab21eaedb2c191b2787632a960090a0c63da9f5b481d84b23b98c438  latencytop.c
-diff --git a/package/latencytop/latencytop.mk b/package/latencytop/latencytop.mk
-deleted file mode 100644
-index 56afe86062..0000000000
---- a/package/latencytop/latencytop.mk
-+++ /dev/null
-@@ -1,23 +0,0 @@
--################################################################################
--#
--# latencytop
--#
--################################################################################
--
--LATENCYTOP_VERSION = 0.5
--LATENCYTOP_SITE = http://www.latencytop.org/download
--LATENCYTOP_DEPENDENCIES = libglib2 ncurses
--LATENCYTOP_LICENSE = GPL-2.0
--LATENCYTOP_LICENSE_FILES = latencytop.c
--
--# NOTE: GTK is heavy weight, we intentionally build the text (ncurses)
--# version only
--define LATENCYTOP_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) HAS_GTK_GUI=
--endef
--
--define LATENCYTOP_INSTALL_TARGET_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) install -C $(@D) DESTDIR=$(TARGET_DIR) HAS_GTK_GUI=
--endef
--
--$(eval $(generic-package))
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gUGV0ZXIsIEFsbCwKCkxlIDA1LzAyLzIwMjUgw6AgMTM6MTEsIFBldGVyIEtvcnNnYWFy
+ZCBhIMOpY3JpdMKgOgo+IEZpeGVzIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1
+bHRzLzViNzkyMWQxYjJkMzQ3OTk1YjAwODhhYzU4YjI5ZTJmMDFkZWMzOWEvCj4gCj4gVGhlIHRh
+cmJhbGwgaXMgbm8gbG9uZ2VyIGF2YWlsYWJsZSBmb3IgZG93bmxvYWQgYW5kIHRoZSBnaXQgcmVw
+byBvbgo+IGluZnJhZGVhZC5vcmcgaXMgYWxzbyBnb25lLCB0aGVyZSBhcmUgbm8gcmV2ZXJzZSBk
+ZXBlbmRlbmNpZXMgb3IgREVWRUxPUEVSUwo+IGVudHJ5IGZvciBpdCBhbmQgdGhlIHBhY2thZ2Ug
+aGFzIG5vdCBiZWVuIHVwZGF0ZWQgc2luY2UgaXQgd2FzIGFkZGVkIGluIDIwMTIKPiBieSBjb21t
+aXQgY2QyZjc4YjFjNWFmICgiTmV3IFBhY2thZ2U6IGxhdGVuY3l0b3AiKSwgc28gZHJvcCBpdC4K
+CllvY3RvIHByb2plY3QgcmVtb3ZlZCB0aGlzIHBhY2thZ2UgYSB3aGlsZSBhZ286CgpodHRwczov
+L2dpdGh1Yi5jb20vb3BlbmVtYmVkZGVkL29wZW5lbWJlZGRlZC1jb3JlL2NvbW1pdC8zNmFhZTU2
+ZTdmODZhNGQ1Y2U5M2U0NTI4ZTdkY2M0MmY2MGM3MDVlCgpBcHBsaWVkIHRvIG1hc3RlciwgdGhh
+bmtzLgoKQmVzdCByZWdhcmRzLApSb21haW4KCgo+IAo+IFNpZ25lZC1vZmYtYnk6IFBldGVyIEtv
+cnNnYWFyZCA8cGV0ZXJAa29yc2dhYXJkLmNvbT4KPiAtLS0KPiAgLmNoZWNrcGFja2FnZWlnbm9y
+ZSAgICAgICAgICAgICAgICAgICAgfCAgMSAtCj4gIENvbmZpZy5pbi5sZWdhY3kgICAgICAgICAg
+ICAgICAgICAgICAgIHwgIDYgKysrKysrCj4gIHBhY2thZ2UvQ29uZmlnLmluICAgICAgICAgICAg
+ICAgICAgICAgIHwgIDEgLQo+ICBwYWNrYWdlL2xhdGVuY3l0b3AvMDAwMS1tYWtlZmlsZS5wYXRj
+aCB8IDI4IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4gIHBhY2thZ2UvbGF0ZW5jeXRvcC9D
+b25maWcuaW4gICAgICAgICAgIHwgMjYgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4gIHBhY2th
+Z2UvbGF0ZW5jeXRvcC9sYXRlbmN5dG9wLmhhc2ggICAgIHwgIDMgLS0tCj4gIHBhY2thZ2UvbGF0
+ZW5jeXRvcC9sYXRlbmN5dG9wLm1rICAgICAgIHwgMjMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4g
+IDcgZmlsZXMgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCA4MiBkZWxldGlvbnMoLSkKPiAgZGVs
+ZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGF0ZW5jeXRvcC8wMDAxLW1ha2VmaWxlLnBhdGNoCj4g
+IGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xhdGVuY3l0b3AvQ29uZmlnLmluCj4gIGRlbGV0
+ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xhdGVuY3l0b3AvbGF0ZW5jeXRvcC5oYXNoCj4gIGRlbGV0
+ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2xhdGVuY3l0b3AvbGF0ZW5jeXRvcC5tawo+IAo+IGRpZmYg
+LS1naXQgYS8uY2hlY2twYWNrYWdlaWdub3JlIGIvLmNoZWNrcGFja2FnZWlnbm9yZQo+IGluZGV4
+IDZiNDVmYjllOTQuLmY2NmJjM2Q4NmIgMTAwNjQ0Cj4gLS0tIGEvLmNoZWNrcGFja2FnZWlnbm9y
+ZQo+ICsrKyBiLy5jaGVja3BhY2thZ2VpZ25vcmUKPiBAQCAtNjA2LDcgKzYwNiw2IEBAIHBhY2th
+Z2Uva2V5dXRpbHMvMDAwMS1maXgtaW5zdGFsbC1ydWxlLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVh
+bQo+ICBwYWNrYWdlL2tleXV0aWxzLzAwMDItY2lmcy5wYXRjaCBsaWJfcGF0Y2guU29iIGxpYl9w
+YXRjaC5VcHN0cmVhbQo+ICBwYWNrYWdlL2ttb2QvMDAwMS1maXgtT19DTE9FWEVDLnBhdGNoIGxp
+Yl9wYXRjaC5VcHN0cmVhbQo+ICBwYWNrYWdlL2tvZGkvUzUwa29kaSBTaGVsbGNoZWNrIGxpYl9z
+eXN2LlZhcmlhYmxlcwo+IC1wYWNrYWdlL2xhdGVuY3l0b3AvMDAwMS1tYWtlZmlsZS5wYXRjaCBs
+aWJfcGF0Y2guVXBzdHJlYW0KPiAgcGFja2FnZS9sYmFzZTY0LzAwMDEtcmV0cm8tY29tcGF0aWJs
+ZS13aXRoLUx1YS01LjEucGF0Y2ggbGliX3BhdGNoLlVwc3RyZWFtCj4gIHBhY2thZ2UvbGNkcHJv
+Yy8wMDAxLUxDRGQuY29uZi5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KPiAgcGFja2FnZS9sY2Rw
+cm9jLzAwMDItQWRkLW1pc3NpbmctaW9jdGwtaGVhZGVyLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVh
+bQo+IGRpZmYgLS1naXQgYS9Db25maWcuaW4ubGVnYWN5IGIvQ29uZmlnLmluLmxlZ2FjeQo+IGlu
+ZGV4IDNlM2JlOTUwMDQuLjIxNGQzNTFlNGEgMTAwNjQ0Cj4gLS0tIGEvQ29uZmlnLmluLmxlZ2Fj
+eQo+ICsrKyBiL0NvbmZpZy5pbi5sZWdhY3kKPiBAQCAtMTQ2LDYgKzE0NiwxMiBAQCBlbmRpZgo+
+ICAKPiAgY29tbWVudCAiTGVnYWN5IG9wdGlvbnMgcmVtb3ZlZCBpbiAyMDI1LjAyIgo+ICAKPiAr
+Y29uZmlnIEJSMl9QQUNLQUdFX0xBVEVOQ1lUT1AKPiArCWJvb2wgImxhdGVuY3l0b3AgaGFzIGJl
+ZW4gcmVtb3ZlZCIKPiArCXNlbGVjdCBCUjJfTEVHQUNZCj4gKwloZWxwCj4gKwkgIFRoZSBsYXRl
+bmN5dG9wIHBhY2thZ2UgaXMgbm8gbG9uZ2VyIGF2YWlsYWJsZSBmb3IgZG93bmxvYWQuCj4gKwo+
+ICBjb25maWcgQlIyX1BBQ0tBR0VfT0JTSURJQU5fQ1VSU09SUwo+ICAJYm9vbCAib2JzaWRpYW4t
+Y3Vyc29ycyBoYXMgYmVlbiByZW1vdmVkIgo+ICAJc2VsZWN0IEJSMl9MRUdBQ1kKPiBkaWZmIC0t
+Z2l0IGEvcGFja2FnZS9Db25maWcuaW4gYi9wYWNrYWdlL0NvbmZpZy5pbgo+IGluZGV4IDQ4OTZl
+NmRiNzYuLjNlYzZkMGQ4NzkgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9Db25maWcuaW4KPiArKysg
+Yi9wYWNrYWdlL0NvbmZpZy5pbgo+IEBAIC0xMTYsNyArMTE2LDYgQEAgbWVudSAiRGVidWdnaW5n
+LCBwcm9maWxpbmcgYW5kIGJlbmNobWFyayIKPiAgCXNvdXJjZSAicGFja2FnZS9rbWVtZC9Db25m
+aWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2Uva3ZtLXVuaXQtdGVzdHMvQ29uZmlnLmluIgo+ICAJ
+c291cmNlICJwYWNrYWdlL2t5dWEvQ29uZmlnLmluIgo+IC0Jc291cmNlICJwYWNrYWdlL2xhdGVu
+Y3l0b3AvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdlL2xpYmJwZi9Db25maWcuaW4iCj4g
+IAlzb3VyY2UgInBhY2thZ2UvbGlidHJhY2VldmVudC9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBh
+Y2thZ2UvbGlidHJhY2Vmcy9Db25maWcuaW4iCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGF0ZW5j
+eXRvcC8wMDAxLW1ha2VmaWxlLnBhdGNoIGIvcGFja2FnZS9sYXRlbmN5dG9wLzAwMDEtbWFrZWZp
+bGUucGF0Y2gKPiBkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCBmYThjNTFjZmQwLi4w
+MDAwMDAwMDAwCj4gLS0tIGEvcGFja2FnZS9sYXRlbmN5dG9wLzAwMDEtbWFrZWZpbGUucGF0Y2gK
+PiArKysgL2Rldi9udWxsCj4gQEAgLTEsMjggKzAsMCBAQAo+IC1Vc2VlICQoQ0MpIHRvIGVuYWJs
+ZSBjcm9zcyBjb21waWxpbmcgYW5kIGxpbmsgdG8gdGhlIHJpZ2h0IG5jdXJzZXMgbGlicmFyeS4K
+PiAtCj4gLVNpZ25lZC1vZmYtYnk6IFFhaXMgWW91c2VmIDxxYWlzLnlvdXNlZkBpbWd0ZWMuY29t
+Pgo+IC0KPiAtLS0tIGxhdGVuY3l0b3AtMC41L01ha2VmaWxlLm9sZAkyMDEyLTA0LTE4IDExOjU5
+OjM5Ljc0ODA4NDMzNCArMDEwMAo+IC0rKysgbGF0ZW5jeXRvcC0wLjUvTWFrZWZpbGUJMjAxMi0w
+NC0xOCAxMjowMDowOC42NTkxMTIzNDAgKzAxMDAKPiAtQEAgLTQsNyArNCw3IEBACj4gLSBERVNU
+RElSID0KPiAtIFNCSU5ESVIgPSAvdXNyL3NiaW4KPiAtIFhDRkxBR1MgPSAtVyAgLWcgYHBrZy1j
+b25maWcgLS1jZmxhZ3MgZ2xpYi0yLjBgIC1EX0ZPUlRJRllfU09VUkNFPTIgLVduby1zaWduLWNv
+bXBhcmUKPiAtLUxERiA9IC1XbCwtLWFzLW5lZWRlZCBgcGtnLWNvbmZpZyAtLWxpYnMgZ2xpYi0y
+LjBgICAgLWxuY3Vyc2VzdyAKPiAtK0xERiA9IC1XbCwtLWFzLW5lZWRlZCBgcGtnLWNvbmZpZyAt
+LWxpYnMgZ2xpYi0yLjBgICAgLWxuY3Vyc2VzIAo+IC0gCj4gLSBPQkpTPSBsYXRlbmN5dG9wLm8g
+dGV4dF9kaXNwbGF5Lm8gdHJhbnNsYXRlLm8gZnN5bmMubwo+IC0gCj4gLUBAIC0yNiwxMCArMjYs
+MTAgQEAKPiAtIAo+IC0gIyBXZSB3cml0ZSBleHBsaWNpdHkgdGhpcyAiaW1wbGljaXQgcnVsZSIK
+PiAtICUubyA6ICUuYwo+IC0tCWdjYyAtYyAkKENGTEFHUykgJChYQ0ZMQUdTKSAkPCAtbyAkQAo+
+IC0rCSQoQ0MpIC1jICQoQ0ZMQUdTKSAkKFhDRkxBR1MpICQ8IC1vICRACj4gLSAKPiAtIGxhdGVu
+Y3l0b3A6ICAkKE9CSlMpIGxhdGVuY3l0b3AuaCBNYWtlZmlsZQo+IC0tCWdjYyAkKENGTEFHUykg
+JChPQkpTKSAkKExERikgLW8gbGF0ZW5jeXRvcCAKPiAtKwkkKENDKSAkKENGTEFHUykgJChPQkpT
+KSAkKExERikgLW8gbGF0ZW5jeXRvcCAKPiAtIAo+IC0gY2xlYW46Cj4gLSAJcm0gLWYgKn4gbGF0
+ZW5jeXRvcCBERUFESk9FICoubwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xhdGVuY3l0b3AvQ29u
+ZmlnLmluIGIvcGFja2FnZS9sYXRlbmN5dG9wL0NvbmZpZy5pbgo+IGRlbGV0ZWQgZmlsZSBtb2Rl
+IDEwMDY0NAo+IGluZGV4IGI1NGVmMDUyYjQuLjAwMDAwMDAwMDAKPiAtLS0gYS9wYWNrYWdlL2xh
+dGVuY3l0b3AvQ29uZmlnLmluCj4gKysrIC9kZXYvbnVsbAo+IEBAIC0xLDI2ICswLDAgQEAKPiAt
+Y29uZmlnIEJSMl9QQUNLQUdFX0xBVEVOQ1lUT1AKPiAtCWJvb2wgImxhdGVuY3l0b3AiCj4gLQlk
+ZXBlbmRzIG9uIEJSMl9VU0VfV0NIQVIgIyBsaWJnbGliMgo+IC0JZGVwZW5kcyBvbiBCUjJfVE9P
+TENIQUlOX0hBU19USFJFQURTICMgbGliZ2xpYjIKPiAtCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUg
+IyBsaWJnbGliMgo+IC0Jc2VsZWN0IEJSMl9QQUNLQUdFX05DVVJTRVMKPiAtCXNlbGVjdCBCUjJf
+UEFDS0FHRV9MSUJHTElCMgo+IC0JaGVscAo+IC0JICBUaGVyZSBhcmUgbWFueSB0eXBlcyBhbmQg
+Y2F1c2VzIG9mIGxhdGVuY3kuIExhdGVuY3lUT1AKPiAtCSAgZm9jdXNlcyBvbiB0aGUgdHlwZSBv
+ZiBsYXRlbmN5IHRoYXQgY2F1c2VzIHNraXBzIGluIGF1ZGlvLAo+IC0JICBzdHV0dGVycyBpbiB5
+b3VyIGRlc2t0b3AgZXhwZXJpZW5jZSBvciB0aGF0IG92ZXJsb2FkcyB5b3VyCj4gLQkgIHNlcnZl
+ciAod2hpbGUgeW91IGhhdmUgcGxlbnR5IG9mIENQVSBwb3dlciBsZWZ0KS4KPiAtCj4gLQkgIExh
+dGVuY3lUT1AgZm9jdXNlcyBvbiB0aGUgY2FzZXMgd2hlcmUgdGhlIGFwcGxpY2F0aW9ucyB3YW50
+Cj4gLQkgIHRvIHJ1biBhbmQgZXhlY3V0ZSB1c2VmdWwgY29kZSwgYnV0IHRoZXJlJ3Mgc29tZSBy
+ZXNvdXJjZQo+IC0JICB0aGF0J3Mgbm90IGN1cnJlbnRseSBhdmFpbGFibGUgKGFuZCB0aGUga2Vy
+bmVsIHRoZW4gYmxvY2tzCj4gLQkgIHRoZSBwcm9jZXNzKS4gVGhpcyBpcyBkb25lIGJvdGggb24g
+YSBzeXN0ZW0gbGV2ZWwgYW5kIG9uIGEKPiAtCSAgcGVyIHByb2Nlc3MgbGV2ZWwsIHNvIHRoYXQg
+eW91IGNhbiBzZWUgd2hhdCdzIGhhcHBlbmluZyB0bwo+IC0JICB0aGUgc3lzdGVtLCBhbmQgd2hp
+Y2ggcHJvY2VzcyBpcyBzdWZmZXJpbmcgYW5kL29yIGNhdXNpbmcKPiAtCSAgdGhlIGRlbGF5cy4K
+PiAtCj4gLQkgIGh0dHA6Ly93d3cubGF0ZW5jeXRvcC5vcmcKPiAtCj4gLWNvbW1lbnQgImxhdGVu
+Y3l0b3AgbmVlZHMgYSB0b29sY2hhaW4gdy8gd2NoYXIsIHRocmVhZHMiCj4gLQlkZXBlbmRzIG9u
+IEJSMl9VU0VfTU1VCj4gLQlkZXBlbmRzIG9uICFCUjJfVVNFX1dDSEFSIHx8ICFCUjJfVE9PTENI
+QUlOX0hBU19USFJFQURTCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGF0ZW5jeXRvcC9sYXRlbmN5
+dG9wLmhhc2ggYi9wYWNrYWdlL2xhdGVuY3l0b3AvbGF0ZW5jeXRvcC5oYXNoCj4gZGVsZXRlZCBm
+aWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggNzRiOGEwM2EyMy4uMDAwMDAwMDAwMAo+IC0tLSBhL3Bh
+Y2thZ2UvbGF0ZW5jeXRvcC9sYXRlbmN5dG9wLmhhc2gKPiArKysgL2Rldi9udWxsCj4gQEAgLTEs
+MyArMCwwIEBACj4gLSMgbG9jYWxseSBjb21wdXRlZAo+IC1zaGEyNTYgIDllN2Y3MmZiZWE3YmQ5
+MThlNzEyMTJhMWVhYmFhZDg0ODhkMmM2MDIyMDVkMmUzYzk1ZDYyY2Q1N2U5MjAzZWYgIGxhdGVu
+Y3l0b3AtMC41LnRhci5nego+IC1zaGEyNTYgIDM0ZDFkYjMwYWIyMWVhZWRiMmMxOTFiMjc4NzYz
+MmE5NjAwOTBhMGM2M2RhOWY1YjQ4MWQ4NGIyM2I5OGM0MzggIGxhdGVuY3l0b3AuYwo+IGRpZmYg
+LS1naXQgYS9wYWNrYWdlL2xhdGVuY3l0b3AvbGF0ZW5jeXRvcC5tayBiL3BhY2thZ2UvbGF0ZW5j
+eXRvcC9sYXRlbmN5dG9wLm1rCj4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggNTZh
+ZmU4NjA2Mi4uMDAwMDAwMDAwMAo+IC0tLSBhL3BhY2thZ2UvbGF0ZW5jeXRvcC9sYXRlbmN5dG9w
+Lm1rCj4gKysrIC9kZXYvbnVsbAo+IEBAIC0xLDIzICswLDAgQEAKPiAtIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMKPiAtIwo+IC0jIGxhdGVuY3l0b3AKPiAtIwo+IC0jIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIwo+IC0KPiAtTEFURU5DWVRPUF9WRVJTSU9OID0gMC41Cj4gLUxBVEVOQ1lUT1BfU0lURSA9
+IGh0dHA6Ly93d3cubGF0ZW5jeXRvcC5vcmcvZG93bmxvYWQKPiAtTEFURU5DWVRPUF9ERVBFTkRF
+TkNJRVMgPSBsaWJnbGliMiBuY3Vyc2VzCj4gLUxBVEVOQ1lUT1BfTElDRU5TRSA9IEdQTC0yLjAK
+PiAtTEFURU5DWVRPUF9MSUNFTlNFX0ZJTEVTID0gbGF0ZW5jeXRvcC5jCj4gLQo+IC0jIE5PVEU6
+IEdUSyBpcyBoZWF2eSB3ZWlnaHQsIHdlIGludGVudGlvbmFsbHkgYnVpbGQgdGhlIHRleHQgKG5j
+dXJzZXMpCj4gLSMgdmVyc2lvbiBvbmx5Cj4gLWRlZmluZSBMQVRFTkNZVE9QX0JVSUxEX0NNRFMK
+PiAtCSQoVEFSR0VUX0NPTkZJR1VSRV9PUFRTKSAkKE1BS0UpIC1DICQoQEQpIEhBU19HVEtfR1VJ
+PQo+IC1lbmRlZgo+IC0KPiAtZGVmaW5lIExBVEVOQ1lUT1BfSU5TVEFMTF9UQVJHRVRfQ01EUwo+
+IC0JJChUQVJHRVRfQ09ORklHVVJFX09QVFMpICQoTUFLRSkgaW5zdGFsbCAtQyAkKEBEKSBERVNU
+RElSPSQoVEFSR0VUX0RJUikgSEFTX0dUS19HVUk9Cj4gLWVuZGVmCj4gLQo+IC0kKGV2YWwgJChn
+ZW5lcmljLXBhY2thZ2UpKQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
