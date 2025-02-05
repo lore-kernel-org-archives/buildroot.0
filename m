@@ -1,165 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C1D8DC02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 15:29:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DEB1C02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 15:32:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F8FA40790;
-	Wed,  5 Feb 2025 15:29:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C315A80E2A;
+	Wed,  5 Feb 2025 15:32:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w9jzYH7B3FHu; Wed,  5 Feb 2025 15:29:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QYsesyYxK-QX; Wed,  5 Feb 2025 15:31:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 488334134B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D6A380BDE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 488334134B;
-	Wed,  5 Feb 2025 15:29:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4D99A12A
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 15:29:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D6A380BDE;
+	Wed,  5 Feb 2025 15:31:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 096D312A
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 15:31:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3A68540E87
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 15:29:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E229580BDE
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 15:31:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6rY7xkiYWaIo for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 15:29:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0JeCoE7SbmLn for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 15:31:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:200a::60e;
- helo=nam12-mw2-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CF33C405C2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF33C405C2
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam12on2060e.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:200a::60e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CF33C405C2
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 15:29:37 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CfGUa14Rcm5liEaXEKn5raOOISL3R4k9YDB4AOujsSaZvmyUYr771kT9awgfYSBMRMljXuJT+GE3Y46tjiErRpwAtnOP4jyQTX/2Wx8URZVzZpXNUXqqhDOuek1oorTsCdXqLriPUxEg3T6vVtlPanY/LPKJ0X9kVRZaYQ8Whwcx6LCr5U8EkuwJTER/fe1LxEi6e5EUq5P6+ICrHUP9lOIAW6JgEoOAHZWRXKWr8bBlvutMwOJVHc4jqO2PaG5bd9ruMvkV0WEmJRAeo/z7OiGLywdv38wwL54w0lCDiizKzuhD5EN6q1TktHPpgplAnTsR1hN/t2hLrtARJy+f+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lpTVB50aDtAbJnJuqXJpEnnlufdwwLFLIywe2zBJQZY=;
- b=Liqg6CU23NXNvnI/5Qqb/NXXswvl6j14mT/FxEnntMP+1dImIKHwuZmspKiRny4lcXfZjA/JKClJr4UjroUBeKlC/wWJv3avVvVTBOlTn29bHM0xX9WGnRoa796TOrp1lzEC4vG1fm/ru3UJkj9fe0XisVcydVaXz5K35QRVYv3kmPRGpaLWiLQM8ZuJVRM+itUyxbKWRb3uaeWw05NUGwVMK7KV5v0I4bZWLPrazxh6mYwUJiagqiTFBWXlwEWZmIrPpeVrNusbeudJS6J65DwRbDYefHxqEhFJt7HDrfXOrXRI+g7e7ewLNQBsayT32m5NG0CXukj3YmauHHLdnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from SA1PR12MB5615.namprd12.prod.outlook.com (2603:10b6:806:229::17)
- by IA1PR12MB6356.namprd12.prod.outlook.com (2603:10b6:208:3e0::5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.26; Wed, 5 Feb
- 2025 15:29:34 +0000
-Received: from SA1PR12MB5615.namprd12.prod.outlook.com
- ([fe80::7557:587c:4ec:1913]) by SA1PR12MB5615.namprd12.prod.outlook.com
- ([fe80::7557:587c:4ec:1913%6]) with mapi id 15.20.8422.009; Wed, 5 Feb 2025
- 15:29:34 +0000
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>, "vjardin@free.fr"
- <vjardin@free.fr>
-Thread-Topic: re: [Buildroot] [PATCH 1/1] package/libnss-ato: new package
-Thread-Index: Adt34ZiNhvJddnqwRLypTpgoUCF3FQ==
-Date: Wed, 5 Feb 2025 15:29:34 +0000
-Message-ID: <SA1PR12MB561540DCD3999E5BB8508D23F0F72@SA1PR12MB5615.namprd12.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR12MB5615:EE_|IA1PR12MB6356:EE_
-x-ms-office365-filtering-correlation-id: 272ee3a4-7db3-47fd-8508-08dd45f9e4d8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230040|376014|1800799024|366016|38070700018|41080700001|15866825006; 
-x-microsoft-antispam-message-info: =?us-ascii?Q?lgzBJJ6FdB5JYUo+hgqKfZILS4OpWhTrm6nGlM/SA3XAlEI66+/KFEZcQ2mH?=
- =?us-ascii?Q?wKvAK1vfUvNjEcODDPOh17tM5g+5hsvvfQgB92lCTeq1K4jmAnL1ZpDqYWVN?=
- =?us-ascii?Q?9olrh+Q51lH+S5pOlY2/8XjshA7MF/hW+CAXDp07P2i/BGoGzzDaY/przrRo?=
- =?us-ascii?Q?YASrXr9m+KKDBlrZNsqMw7+4j7MjQXIgU6VVUBAQFYdOtA9OpmolCCAuR3kR?=
- =?us-ascii?Q?O0Cz8v3D5NNDmdH7YWipSnUp3f9HvFHxhcV17n2AfSd1/hiYZyTbWli4jEa+?=
- =?us-ascii?Q?rbwzgMXHd5lHXccohRaiKljT1y9sLZFrH2CFMSgGRpLhIqddO2kaLzPkSKJ4?=
- =?us-ascii?Q?dHmMu4xBr64mNgMRJwI+NE4PMtUg/e7UIWxlRkHbNw44H6chCcMHkh4Jzny/?=
- =?us-ascii?Q?JNtwhh4kOl49Z7XgQ9fH3GEw+gF4TtpTLUj02nCWr5G5wJb+AqWU5cswv11I?=
- =?us-ascii?Q?HQth2WxcjNcJuOgtq1nARrfLlqssMPqFgza9uibXnxEV7deIueoS5inEbyHS?=
- =?us-ascii?Q?wnVFdFMTRak2HzJ6LwAiIE80GFUbvXchHellnctHlx6b5+FNlvZARqcID6kE?=
- =?us-ascii?Q?nIJgdiIq05UKybP7J5iHgjdBuOA2h4tmBmoqvo1+f0+CtHP06/eEW9/0UCH4?=
- =?us-ascii?Q?jzP/ywZb3nVT0ldENp6BjZl2/5SeYDyglFm3n+bM0KwdcSnlkUF2R7JjxTSL?=
- =?us-ascii?Q?3dyhBUIsf9OUNKtLLghNg7+WSkx2JkcpOcKD8gXhOz4L98b/HmDDtezEot9f?=
- =?us-ascii?Q?gZnAhGZi9TpMqVD6sRhiOFehsodp8HqbTMhVejCY+TO41kBfsjfgF4omtdUM?=
- =?us-ascii?Q?ZBnqEDx/zqA6RyN/WLx1p5CxYGPzYwWTAXHDMQLCU7sT4mukeoTEAU7DTc6t?=
- =?us-ascii?Q?1M9D06lvNAu+VUXCwMtjfm4AqZWzCnVXy+ygLXJCYN0g47PKjyk8A034/Nei?=
- =?us-ascii?Q?NY9iSutyyc8ODhhFc7VZbSE+zaLseK8VpACl8R+rjKX06m8yDwwTB8e4ea5V?=
- =?us-ascii?Q?R9EBD58fgO2WqF8Ir9uGdyfkOo3SzFRbt6P8MxRdD3HTipSYx/riYFbMA0wl?=
- =?us-ascii?Q?aUouhmWERDU07WVO2a8QqJmtUfW5aEhQJPlh6/wBPW8QCEzNuW7uYK5uki+t?=
- =?us-ascii?Q?2RX/ud7hybh4oEqaBS0N+U3EEVNznMYuMIa+qqu3EqssG8mw6SRowgUArAym?=
- =?us-ascii?Q?FPAGAgkPcM9/xoavzOjlZXqa+nCJSwF57aP+gwuB2Bi5OqXExxU9CgZu+sQj?=
- =?us-ascii?Q?FZKHoAZVPlmIF19W5FMK1mkIOeObz78jdRwl5lDrqg98FM8CsHXvENKphjfi?=
- =?us-ascii?Q?izHLpN7W/eFL5rLLwOfQu/nBwHKTzOpmjz1eHguiEvQ0ZP4FaZb2exvxF22Z?=
- =?us-ascii?Q?T9vea8dUTTsz4OI3D86qnAdpjhSNk8tfLvsa9Zqqdg1J4Q04AeG+zpqCA3rJ?=
- =?us-ascii?Q?8pettj83r60W7DP8Zw9AdRMu78B6Glat00J+NB2lN7a5TMH2eWfSdv0da/s9?=
- =?us-ascii?Q?783mQ+tIk0vT5+VjLgQ4CrU1So3pZrQpGA99?=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SA1PR12MB5615.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(1800799024)(366016)(38070700018)(41080700001)(15866825006);
- DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?2byL0wqXV4O4C6lX1a1+M3f9r3Sinash+MP7SfsU91RMHFHcVDFEDjaLgGkK?=
- =?us-ascii?Q?0RMpsvDHzlbSEP0Qy5LF9jXDRpnaGEqZGy6Grvgd037K0W//4BsljLAeGCUf?=
- =?us-ascii?Q?VNxdcMsj7k6fZMi68pKZytiyo6wZT6VA3Cf+gJpqCeQSc8pVCkU3NflIGKOc?=
- =?us-ascii?Q?GIy7HrAUzICxbgty1fHne+XBgpEPrdRlAlGkslSvl2xYgL7nc1nCKLC4TDng?=
- =?us-ascii?Q?s5BoYjqFIX0RGyJWQOakJ2LiYlKwh1hoL2diAQPiDc+J1o9KfinANc0pv+LW?=
- =?us-ascii?Q?RAxvMdYQAvI1lDA6l00zh9CVoyYmsM2D2vWTFWW9NONp8OVDckOk9jyLB7R5?=
- =?us-ascii?Q?h64fsqVf15VDEsLGsFl6C+/3BckBqJSpSePZfjH+jOQWwl3ANhOJrArPNOGq?=
- =?us-ascii?Q?herv0tO06I5c5Vz2zFrUSJWl7NmmGuUJlhkARx5T/tI6r2U7XtDbxyFC4d0P?=
- =?us-ascii?Q?4pg+WNAqWFNPmfV0pgS4vTkYQoKiD3QpW3NcZj1MBsGds8Sbsu1FUx4uNL+Z?=
- =?us-ascii?Q?tFF8jleyuXDmkyjZsgWaYMhRyWw7D+bzykYTObiFkm7y1FKwM6Mr1Tk9xgFY?=
- =?us-ascii?Q?FlGeTdyi2l53QlCdXuXElyJfeoK2EBukpGac1ykN6gyXLrS31wy+wSNFNire?=
- =?us-ascii?Q?gNeE2V4VbL5f1UvOLrqKmps3b1+McbBIZAfgzRTFAqVaXJPzq1bFNUKhvoBL?=
- =?us-ascii?Q?8jI3ySZ3xg9KaB/E4PuT94N+C+LUP2I62eOAxuiH2tBSFDw73cYY6GfIDs0A?=
- =?us-ascii?Q?yp/6Xpd2OAeXNysPMqbOSrad3w4dYhEgGe/dONt4/t3dZSxvvs5rfxg2aTLb?=
- =?us-ascii?Q?E+lRp3eYSvBdEacIepyN9pQz9dJW5rcRpzka6fTDYizJabIwHlXJSOiVtXc/?=
- =?us-ascii?Q?ILH6KR4EsJLl72aVYsuVGAGEnaRdQpnfL1+DjAmMRS/lhQUaTGQT6ZKI9EXj?=
- =?us-ascii?Q?Z6z1hO7ckzKW8ON2R7/tIC8cb8Kstu90clKWLVDyUtHKCE9iXD8loVZoMeXA?=
- =?us-ascii?Q?Q1tfQ9TYR3TK0WqfUkKIxyjUmMdO9aa/yxBmvhQ4W//DwQ5rdyas0mSh7qR5?=
- =?us-ascii?Q?EIHsiO7IwyNV5s05kwFqnip8CfC0TTprgLt7+HL8/+KbZgjaDzGFINwoLnuZ?=
- =?us-ascii?Q?Rr9eZqC23D0OZIIcN4E7HvHoQuhJXLaE0fR0w7pzV6K4+79FErgvhpKlJNLF?=
- =?us-ascii?Q?WfxCF+QlgU6pDZ2HSHY1NldED61R4NksZSi4lRg3OO80tbw7a8mFLfbcRzzy?=
- =?us-ascii?Q?lAb88hdJV8BDWyudEp2O6CqH6U6ApleMatHspOPuDQCJ5Lh7KYluSpXwejSa?=
- =?us-ascii?Q?j18qjJdtMwNBZMdXlijj37UdbWFueLYRJGhnce2ajrEzf+7PGUaN57bFbiEo?=
- =?us-ascii?Q?nePlTNQcPtEFxDIDYn3AnhUgtrUFwC++M81rfUjl6FglvSd3fkoZMxuZOrT1?=
- =?us-ascii?Q?NhehxL4Wmmw/5vYKuzWOLYv1QKkSmkHw5m2/HbbIXoUbPunsDEGSWHNEgUJ2?=
- =?us-ascii?Q?heDgiBNMc9O9+LZzTCEUcpwYVsWmkprKxe8EIT2y4UCLZW9nkELDIzIZe1uv?=
- =?us-ascii?Q?yqGdy7Ky1lt7LsP8vJg=3D?=
+ client-ip=2607:f8b0:4864:20::129; helo=mail-il1-x129.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8AAF880A74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AAF880A74
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com
+ [IPv6:2607:f8b0:4864:20::129])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8AAF880A74
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 15:31:56 +0000 (UTC)
+Received: by mail-il1-x129.google.com with SMTP id
+ e9e14a558f8ab-3d051dca3b6so2459095ab.1
+ for <buildroot@buildroot.org>; Wed, 05 Feb 2025 07:31:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1738769515; x=1739374315;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=luBd1NHBiKyVLak2QjSXaIH+Blt5XP9crTbX84MXVHc=;
+ b=B9ltPEYiaO/8pNPDmow35BGsPe0zZwzfD9VTlAtN0cbKA4bi0FeY4yB29CxHXG8Xhh
+ hLBBQ5V9rX/nRYVpDOERwM+lM2X7rPzIOUvJ0PTpEC5RyEm/8YNLvnIwTcWboO5PP6Pq
+ Gs6zsrilqFtSKDA+TcSE5v0SB/HY5InC+nbryH/hyHs0oGbJuRzy9BVLVt2NzkezMjBy
+ Phn5J9QucnuYM2lmc+LkUFDRKOg4am0CvKwMndHBYFLp4xeWayawzaPEj5IyUgCg1vBi
+ EB0+icJpT3txbwbsMUv7bNO4Mr9xsBKZcy4s5pcuCzGXVZblvUFrd7N9UqMLTkwdNmcG
+ av0A==
+X-Gm-Message-State: AOJu0YxNURScRIVsOEoeyC40TPFYS2YTWtXENm8siYTGtGddgCcEvmxr
+ PwVxOqNJePGM4W60jhHciLL+2mPSAtCnYIORrU5ZE0u6QLw1QFLR7/0GXA==
+X-Gm-Gg: ASbGncvc+gM1a1Hx88wOiStN6E9ORKFgvys2LFPZQ26+zc+vLWGDVM0niLG2DRuaXlp
+ +LwPhcdXHyd0IBRjDObSfCC2jAWTu7Z4u5oG2isxcvnE4qy3G5BHltvGwW5620TCW8j2qT24MiK
+ J9aKu1FVLkKnN0B6hWPMWjUMPYAkIDpkF0v4754e/9Y5BSfbdlEiMWMDIGPRUxMgQ6ENhqL1oR5
+ lP7mw8WwQerk9sR2P2S9vpmVrwOR5wA467WVaVY3Rs8rQ0z3ySOPl3OfBjzs02SQTY/IcK7vGbZ
+ lVvX2B68MztDndeqFDwMFxdoOaTse/Zo0eKVCuAQRw39hzIpw7hY8RXe6UGI16Azpw==
+X-Google-Smtp-Source: AGHT+IGyxrhEpuTEETqEZZ4PrHatDI2CJsZeeJ1rmJD/hrghMFH49tFPwYImF3Y92iNHkIMiDXUkhA==
+X-Received: by 2002:a05:6e02:1fe1:b0:3d0:4a82:3f40 with SMTP id
+ e9e14a558f8ab-3d04f427d4fmr32430605ab.7.1738769515073; 
+ Wed, 05 Feb 2025 07:31:55 -0800 (PST)
+Received: from james-x399.localdomain (71-218-115-58.hlrn.qwest.net.
+ [71.218.115.58]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4ec746c2db5sm3274755173.123.2025.02.05.07.31.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 05 Feb 2025 07:31:54 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Date: Wed,  5 Feb 2025 08:31:53 -0700
+Message-Id: <20250205153153.3283650-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR12MB5615.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 272ee3a4-7db3-47fd-8508-08dd45f9e4d8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Feb 2025 15:29:34.4882 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SfHn2Po2NcxB3CT4WX0DRyjuBfoleX22lnBaDExIo6M00/ZxKjvSTVnX82dwPU8s
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6356
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lpTVB50aDtAbJnJuqXJpEnnlufdwwLFLIywe2zBJQZY=;
- b=uMOm66+PTWCoTVJpL/yeVBNa87rKVdSdkR7CY1HEra6qgIdzzMlaJtNYmgRuWpPFHC1Xdod3zECE6d0pb+eg3onUFQPpB112Xc9nsI/NbHNaY9hUIyF0kR5tY5kZtrpFuMLesPnfpVvAoa/w6O8NR+vbzk5+P9pc4rR2pPtGYX4=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=uMOm66+P
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH 1/1] package/libnss-ato: new package
+ d=gmail.com; s=20230601; t=1738769515; x=1739374315; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=luBd1NHBiKyVLak2QjSXaIH+Blt5XP9crTbX84MXVHc=;
+ b=jd/LXF6YPUFThOFYmIecOai+1Ej+sS0zR+tMCTDvhwenpywGfi+BgLXGdIZLlUp/gi
+ lXjqQRMtMn3pSHQqTgNzfkdH6JIlPnANJzHH0NXtY96y5huigSbU/knw3I6NYdHRbH/U
+ pdkNbDQpgepnzr/MKsecutOcyy+LU+bgF14BAzXsKfgnKCp34iVYrdYthhcVBbO2ctFX
+ B72Xg56LFj5YRmFS9sk5qUgltplgm82e6vLiM5oA3EFXf32s1PE0i0BPYB4TpQBLGRyH
+ YY9i+LUSFJYBrg8IQiF/ZfaS/STcIjjsqY1E1QyQv8KZ1xpbcgFquo7sJhaubTr3fG+B
+ GlHg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=jd/LXF6Y
+Subject: [Buildroot] [PATCH 1/1] package/protobuf-c: bump to version 1.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -171,96 +105,257 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Vincent,
+License hash changed due to year update:
+https://github.com/protobuf-c/protobuf-c/commit/53e0b201db240694f8c8aabf0d0b579de33bf24d
 
-> The libnss_ato module is a set of C library extensions which allows to
-> map every nss request for unknown user to a single predefined user.
+Drop patches which are now upstream.
 
-> Signed-off-by: Vincent Jardin <vjardin@free.fr>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ ...ct-against-being-invoked-against-edi.patch | 57 -------------
+ ...dSyntax-to-maximize-compatibility-ac.patch | 84 -------------------
+ ...nerateHeader-Set-min_header_version-.patch | 44 ----------
+ package/protobuf-c/protobuf-c.hash            |  4 +-
+ package/protobuf-c/protobuf-c.mk              |  2 +-
+ 5 files changed, 3 insertions(+), 188 deletions(-)
+ delete mode 100644 package/protobuf-c/0001-CGenerator-Protect-against-being-invoked-against-edi.patch
+ delete mode 100644 package/protobuf-c/0002-Reimplement-FieldSyntax-to-maximize-compatibility-ac.patch
+ delete mode 100644 package/protobuf-c/0003-FileGenerator-GenerateHeader-Set-min_header_version-.patch
 
-Thank you for the new package.
+diff --git a/package/protobuf-c/0001-CGenerator-Protect-against-being-invoked-against-edi.patch b/package/protobuf-c/0001-CGenerator-Protect-against-being-invoked-against-edi.patch
+deleted file mode 100644
+index c674ca2ee1..0000000000
+--- a/package/protobuf-c/0001-CGenerator-Protect-against-being-invoked-against-edi.patch
++++ /dev/null
+@@ -1,57 +0,0 @@
+-From 2480f4d9d2fa97e5511ed0914ee529a344e969a7 Mon Sep 17 00:00:00 2001
+-From: Robert Edmonds <edmonds@users.noreply.github.com>
+-Date: Wed, 20 Mar 2024 22:43:30 -0400
+-Subject: [PATCH] CGenerator: Protect against being invoked against "edition"
+- syntax .proto files
+-
+-The Google protobuf project is currently experimenting with a new syntax
+-for .proto files called "editions". Since protobuf-c is a proto2/proto3
+-compiler, after the previous commit reimplementing `FieldSyntax()`, the
+-protobuf compiler will abort like this if presented with an "editions"
+-syntax .proto file due to the safety check in `FieldSyntax()`:
+-
+-    $ protoc --experimental_editions --c_out=. test.proto
+-    protoc-gen-c: ./protoc-c/c_helpers.h:178: int google::protobuf::compiler::c::FieldSyntax(const google::protobuf::FieldDescriptor*): Assertion `syntax == "proto2" || syntax == "proto3"' failed.
+-    --c_out: protoc-gen-c: Plugin killed by signal 6.
+-
+-On protobuf 26, our `CodeGenerator` can implement certain methods to
+-declare that we "support" editions, and then reject any other edition
+-except proto2 and proto3, which have apparently been retroactively
+-declared to be "editions". Of course this needs to be wrapped in a
+-version guard.
+-
+-With this protection in place, the protobuf compiler cleanly exits with
+-a nice error message like this:
+-
+-    $ protoc --experimental_editions --c_out=. test.proto
+-    WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+-    E0000 00:00:1710988958.296200   20022 descriptor.cc:4620] Invalid proto descriptor for file "test.proto":
+-    E0000 00:00:1710988958.296239   20022 descriptor.cc:4623]   test.proto: Edition 2023 is later than the maximum supported edition PROTO3
+-    --c_out: protoc-gen-c: Plugin failed with status code 1.
+-
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-Upstream: https://github.com/protobuf-c/protobuf-c/pull/711
+----
+- protoc-c/c_generator.h | 6 ++++++
+- 1 file changed, 6 insertions(+)
+-
+-diff --git a/protoc-c/c_generator.h b/protoc-c/c_generator.h
+-index b8b44aa..4aeb579 100644
+---- a/protoc-c/c_generator.h
+-+++ b/protoc-c/c_generator.h
+-@@ -93,6 +93,12 @@ class PROTOC_C_EXPORT CGenerator : public CodeGenerator {
+-                 const std::string& parameter,
+-                 OutputDirectory* output_directory,
+-                 std::string* error) const;
+-+
+-+#if GOOGLE_PROTOBUF_VERSION >= 5026000
+-+  uint64_t GetSupportedFeatures() const { return CodeGenerator::FEATURE_SUPPORTS_EDITIONS; }
+-+  Edition GetMinimumEdition() const { return Edition::EDITION_PROTO2; }
+-+  Edition GetMaximumEdition() const { return Edition::EDITION_PROTO3; }
+-+#endif
+- };
+- 
+- }  // namespace c
+--- 
+-2.34.1
+-
+diff --git a/package/protobuf-c/0002-Reimplement-FieldSyntax-to-maximize-compatibility-ac.patch b/package/protobuf-c/0002-Reimplement-FieldSyntax-to-maximize-compatibility-ac.patch
+deleted file mode 100644
+index e14a9fbc75..0000000000
+--- a/package/protobuf-c/0002-Reimplement-FieldSyntax-to-maximize-compatibility-ac.patch
++++ /dev/null
+@@ -1,84 +0,0 @@
+-From ee3d9e5423c93ee6b828fdda8e7fef13a77634eb Mon Sep 17 00:00:00 2001
+-From: Robert Edmonds <edmonds@users.noreply.github.com>
+-Date: Wed, 20 Mar 2024 22:25:54 -0400
+-Subject: [PATCH] Reimplement FieldSyntax() to maximize compatibility across
+- protobuf versions
+-
+-Recent versions of Google protobuf have broken the interfaces for
+-determining the syntax version of a .proto file. The current protobuf-c
+-1.5.0 release does not compile with Google protobuf 26.0 due to the most
+-recentage breakage. There is a possible workaround involving the Google
+-protobuf `FileDescriptorLegacy` class, which is documented as:
+-
+-// TODO Remove this deprecated API entirely.
+-
+-So we probably shouldn't rely on it.
+-
+-Instead, this commit obtains the `FileDescriptorProto` corresponding
+-to the passed in `FieldDescriptor` and interrogates the `syntax` field
+-directly. This is a single implementation with no version-specific
+-workarounds. Hopefully this won't break in the next Google protobuf
+-release.
+-
+-I tested the `FieldSyntax()` implementation in this commit across a
+-number of different Google protobuf releases and found that it worked
+-(`make && make check`) on all of them:
+-
+-- Google protobuf 3.6.1.3 (Ubuntu 20.04)
+-- Google protobuf 3.12.4 (Ubuntu 22.04)
+-- Google protobuf 3.21.12 (Debian 12 + Debian unstable)
+-- Google protobuf 3.25.2 (Debian experimental)
+-- Google protobuf 26.1-dev
+-
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-Upstream: https://github.com/protobuf-c/protobuf-c/pull/711
+----
+- protoc-c/c_helpers.h | 24 ++++++++++++++----------
+- 1 file changed, 14 insertions(+), 10 deletions(-)
+-
+-diff --git a/protoc-c/c_helpers.h b/protoc-c/c_helpers.h
+-index 062d330..be28b60 100644
+---- a/protoc-c/c_helpers.h
+-+++ b/protoc-c/c_helpers.h
+-@@ -70,10 +70,6 @@
+- #include <protobuf-c/protobuf-c.pb.h>
+- #include <google/protobuf/io/printer.h>
+- 
+--#if GOOGLE_PROTOBUF_VERSION >= 4023000
+--# include <google/protobuf/descriptor_legacy.h>
+--#endif
+--
+- namespace google {
+- namespace protobuf {
+- namespace compiler {
+-@@ -173,13 +169,21 @@ struct NameIndex
+- int compare_name_indices_by_name(const void*, const void*);
+- 
+- // Return the syntax version of the file containing the field.
+--// This wrapper is needed to be able to compile against protobuf2.
+- inline int FieldSyntax(const FieldDescriptor* field) {
+--#if GOOGLE_PROTOBUF_VERSION >= 4023000
+--  return FileDescriptorLegacy(field->file()).syntax() == FileDescriptorLegacy::SYNTAX_PROTO3 ? 3 : 2;
+--#else
+--  return field->file()->syntax() == FileDescriptor::SYNTAX_PROTO3 ? 3 : 2;
+--#endif
+-+  auto proto = FileDescriptorProto();
+-+  field->file()->CopyTo(&proto);
+-+
+-+  if (proto.has_syntax()) {
+-+    auto syntax = proto.syntax();
+-+    assert(syntax == "proto2" || syntax == "proto3");
+-+    if (syntax == "proto2") {
+-+      return 2;
+-+    } else if (syntax == "proto3") {
+-+      return 3;
+-+    }
+-+  }
+-+
+-+  return 2;
+- }
+- 
+- // Work around changes in protobuf >= 22.x without breaking compilation against
+--- 
+-2.34.1
+-
+diff --git a/package/protobuf-c/0003-FileGenerator-GenerateHeader-Set-min_header_version-.patch b/package/protobuf-c/0003-FileGenerator-GenerateHeader-Set-min_header_version-.patch
+deleted file mode 100644
+index d7d9cdf845..0000000000
+--- a/package/protobuf-c/0003-FileGenerator-GenerateHeader-Set-min_header_version-.patch
++++ /dev/null
+@@ -1,44 +0,0 @@
+-From a6cf1aa386067e26d582cc1d1e327787595c9f13 Mon Sep 17 00:00:00 2001
+-From: Robert Edmonds <edmonds@users.noreply.github.com>
+-Date: Wed, 20 Mar 2024 21:48:10 -0400
+-Subject: [PATCH] FileGenerator::GenerateHeader(): Set `min_header_version`
+- unconditionally
+-
+-Previously, we were conditionally trying to set `min_header_version` to
+-the lowest possible value, and relying on a "legacy" Google interface to
+-determine the file descriptor's syntax version as part of that
+-determination.
+-
+-Instead, simply bump the minimum version to 1003000 (1.3.0). This
+-release was almost 7 years ago. In practice protobuf-c users should not
+-be shipping pre-compiled .pb-c.c/.pb-c.h files, anyway.
+-
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-Upstream: https://github.com/protobuf-c/protobuf-c/pull/711
+----
+- protoc-c/c_file.cc | 9 +--------
+- 1 file changed, 1 insertion(+), 8 deletions(-)
+-
+-diff --git a/protoc-c/c_file.cc b/protoc-c/c_file.cc
+-index ca0ad34..c6d8a24 100644
+---- a/protoc-c/c_file.cc
+-+++ b/protoc-c/c_file.cc
+-@@ -117,14 +117,7 @@ FileGenerator::~FileGenerator() {}
+- void FileGenerator::GenerateHeader(io::Printer* printer) {
+-   std::string filename_identifier = FilenameIdentifier(file_->name());
+- 
+--  int min_header_version = 1000000;
+--#if GOOGLE_PROTOBUF_VERSION >= 4023000
+--  if (FileDescriptorLegacy(file_).syntax() == FileDescriptorLegacy::SYNTAX_PROTO3) {
+--#else
+--  if (file_->syntax() == FileDescriptor::SYNTAX_PROTO3) {
+--#endif
+--    min_header_version = 1003000;
+--  }
+-+  const int min_header_version = 1003000;
+- 
+-   // Generate top of header.
+-   printer->Print(
+--- 
+-2.34.1
+-
+diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
+index aafd98416a..ea7262028c 100644
+--- a/package/protobuf-c/protobuf-c.hash
++++ b/package/protobuf-c/protobuf-c.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7b404c63361ed35b3667aec75cc37b54298d56dd2bcf369de3373212cc06fd98  protobuf-c-1.5.0.tar.gz
+-sha256  ad28bbf89340b86d15aad1ff62c4f4590025d836415307dc66cf0338235cc2f4  LICENSE
++sha256  20d1dc257da96f8ddff8be4dd9779215bbd0a6069ed53bbe9de38fa7629be06b  protobuf-c-1.5.1.tar.gz
++sha256  2d1d028bd27f8c85bc970d720519d2069ca6213fcb26b9dea444a7c39d24bbb3  LICENSE
+diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
+index 2b3e86a1bc..b1e8c25496 100644
+--- a/package/protobuf-c/protobuf-c.mk
++++ b/package/protobuf-c/protobuf-c.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PROTOBUF_C_VERSION = 1.5.0
++PROTOBUF_C_VERSION = 1.5.1
+ PROTOBUF_C_SITE = https://github.com/protobuf-c/protobuf-c/releases/download/v$(PROTOBUF_C_VERSION)
+ PROTOBUF_C_DEPENDENCIES = host-protobuf-c
+ HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
+-- 
+2.34.1
 
-> ---
-> DEVELOPERS                         |  1 +
-> package/Config.in                  |  1 +
-> package/libnss-ato/Config.in       | 11 +++++++++++
-> package/libnss-ato/libnss-ato.hash |  4 ++++
-> package/libnss-ato/libnss-ato.mk   | 26 ++++++++++++++++++++++++++
-> 5 files changed, 43 insertions(+)
-> create mode 100644 package/libnss-ato/Config.in
-> create mode 100644 package/libnss-ato/libnss-ato.hash
-> create mode 100644 package/libnss-ato/libnss-ato.mk
-
---- SNIP ---
-
-> diff --git a/package/libnss-ato/libnss-ato.hash b/package/libnss-ato/libnss-ato.hash
-> new file mode 100644
-> index 0000000000..5e828f1be6
-> --- /dev/null
-> +++ b/package/libnss-ato/libnss-ato.hash
-> @@ -0,0 +1,4 @@
-> +# Locally computed
-> +sha256  3de3161d298c48e55d7416ad89130e13dd72263b93563f3fb79c899fa8450ce2  copyright
-> +sha256  e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118  lgpl-3.0.txt
-> +sha256  87e17468eec71254e7848cb7c9dae5603ab376a719b05e2f5e69038ffed8beef  libnss-ato-4a29c8410cdac590a210dab2dec41d5f4b40d282.tar.gz
-
-Do you think you could ask the repo owner to create a release tag with a nice
-version number?  Using the commit sha is probably not the best for users who
-need to create an SBOM.  What do you think?
-
-> diff --git a/package/libnss-ato/libnss-ato.mk b/package/libnss-ato/libnss-ato.mk
-> new file mode 100644
-> index 0000000000..46b8a7963b
-> --- /dev/null
-> +++ b/package/libnss-ato/libnss-ato.mk
-> @@ -0,0 +1,26 @@
-> +################################################################################
-> +#
-> +# libnss-ato
-> +#
-> +################################################################################
-> +
-> +LIBNSS_ATO_VERSION = 4a29c8410cdac590a210dab2dec41d5f4b40d282
-
-Same comment as above.
-
-> +LIBNSS_ATO_SITE = $(call github,donapieppo,libnss-ato,$(LIBNSS_ATO_VERSION))
-> +LIBNSS_ATO_LICENSE = LGPL-3.0+
-> +LIBNSS_ATO_LICENSE_FILES = copyright lgpl-3.0.txt
-> +
-> +# Skip the default build system (avoid patching Makefile for 1 .c)
-> +define LIBNSS_ATO_BUILD_CMDS
-> +	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) \
-> +		-fPIC -Wall -shared -o $(@D)/libnss_ato.so.2 \
-> +		-Wl,-soname,libnss_ato.so.2 \
-> +		$(@D)/libnss_ato.c
-> +endef
-
-If you are going to contact the package owner about making a release tag, you
-might as well send him a pull request to fix his Makefile, so you can use make
-for building the package.
-
-It is only a single c file after all...
-
-> +
-> +define LIBNSS_ATO_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/libnss_ato.so.2 $(TARGET_DIR)/lib/libnss_ato.so.2
-> +	ln -sf libnss_ato.so.2 $(TARGET_DIR)/lib/libnss_ato.so
-> +	$(INSTALL) -D -m 0644 $(@D)/libnss-ato.conf $(TARGET_DIR)/etc/libnss-ato.conf
-> +endef
-> +
-> +$(eval $(generic-package))
-
-Best regards,
-Neal Frager
-AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
