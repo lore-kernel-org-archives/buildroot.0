@@ -4,59 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD494C02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 12:01:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A3E0C02196
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 12:02:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 769A6407D5;
-	Wed,  5 Feb 2025 12:01:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8F781404A8;
+	Wed,  5 Feb 2025 12:02:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xxfoEmP_X_MM; Wed,  5 Feb 2025 12:01:12 +0000 (UTC)
+ id Mag7bz20TUDu; Wed,  5 Feb 2025 12:02:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 555154097D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E707640337
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 555154097D;
-	Wed,  5 Feb 2025 12:01:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4A5C7CD
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:01:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E707640337;
+	Wed,  5 Feb 2025 12:02:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CFA52CD
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:02:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 38F5C4123D
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:01:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF98C405A5
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:02:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MfqAy7ryvxyq for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 12:01:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id io74-mM6GzQW for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 12:02:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DD71F407C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD71F407C9
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DD71F407C9
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:01:08 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E4B524438F;
- Wed,  5 Feb 2025 12:01:06 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1tfe5a-0009Ru-0k;
- Wed, 05 Feb 2025 13:01:06 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CF1B4022B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3CF1B4022B
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:02:18 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3406F86F5B; Wed,  5 Feb 2025 12:02:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed,  5 Feb 2025 13:00:58 +0100
-Message-Id: <20250205120058.36299-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeegtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepjedvudefudfhledtkedvffehffeuheeitddutedtgefhhefhgfffgfetuefhudejnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhnvghtnecukfhppedutdelrdekledrvdefvddrheehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddtledrkeelrddvfedvrdehhedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghkoheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdprhgtphhtthhopehjuhdrohesfhhrvggvrdhfrh
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH v2] package/swipl: fix build without C++ compiler
+Date: Wed, 5 Feb 2025 12:58:56 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f2a862fe603b1d0c52249f58b8eacf85a0d37b8a
+X-Git-Newrev: 38090cdbb610e60015c288e80b1aaedc3d052af4
+X-Patchwork-Hint: ignore
+Message-Id: <20250205120218.3406F86F5B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aiohttp-sse-client: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,50 +58,149 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes http://autobuild.buildroot.net/results/b24a96b999676990995a466686fe1eacf6cddfef
+commit: https://git.buildroot.net/buildroot/commit/?id=38090cdbb610e60015c288e80b1aaedc3d052af4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some of the optional packages in swipl are written in C++, so CMake thinks a
-C++ compiler is needed even though we build with -DSWIPL_PACKAGES=OFF since
-the bump to 9.2.6 in commit 33d45b9c672df0 ("package/swipl: bump version to
-9.2.6").
+This patch adds the python-aiohttp-sse-client package to buildroot.
+This package adds SSE client support to the aiohttp library, as
+opposed to the already exising python-aiohttp-sse package, which
+only adds sse server support.
 
-Add -DCMAKE_CXX_COMPILER=true to satisfy this check even in setups without
-C++:
-
--- Check for working CXX compiler: /usr/bin/true
--- Check for working CXX compiler: /usr/bin/true - works
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arno Messiaen <arnomessiaen@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Changes since v1:
-- Add info about since when the issue occurs.
+ DEVELOPERS                                         |  3 ++
+ package/Config.in                                  |  1 +
+ ...setup.py-remove-pytest-runner-requirement.patch | 37 ++++++++++++++++++++++
+ package/python-aiohttp-sse-client/Config.in        | 10 ++++++
+ .../python-aiohttp-sse-client.hash                 |  5 +++
+ .../python-aiohttp-sse-client.mk                   | 14 ++++++++
+ 6 files changed, 70 insertions(+)
 
- package/swipl/swipl.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/swipl/swipl.mk b/package/swipl/swipl.mk
-index ef9aedcd2d..e29b8d8f46 100644
---- a/package/swipl/swipl.mk
-+++ b/package/swipl/swipl.mk
-@@ -36,7 +36,8 @@ SWIPL_CONF_OPTS = \
- 	-DQSORT_R_GNU=1 \
- 	-DSWIPL_NATIVE_FRIEND=$(HOST_SWIPL_SRCDIR) \
- 	-DSWIPL_PACKAGES=OFF \
--	-DUSE_TCMALLOC=OFF
-+	-DUSE_TCMALLOC=OFF \
-+	-DCMAKE_CXX_COMPILER=true
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f20bd5ce3f..1264c26fbd 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -275,6 +275,9 @@ F:	configs/snps_archs38_hsdk_defconfig
+ N:	Arnaud Aujon <arnaud@intelibre.fr>
+ F:	package/espeak/
  
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- SWIPL_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
--- 
-2.39.5
-
++N:	Arno Messiaen <arnomessiaen@gmail.com>
++F:	package/python-aiohttp-sse-client/
++
+ N:	Arnout Vandecappelle <arnout@mind.be>
+ F:	package/arp-scan/
+ F:	package/dehydrated/
+diff --git a/package/Config.in b/package/Config.in
+index 7da8e10c36..4896e6db76 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -982,6 +982,7 @@ menu "External python modules"
+ 	source "package/python-aiohttp-security/Config.in"
+ 	source "package/python-aiohttp-session/Config.in"
+ 	source "package/python-aiohttp-sse/Config.in"
++	source "package/python-aiohttp-sse-client/Config.in"
+ 	source "package/python-aiojobs/Config.in"
+ 	source "package/python-aiologstash/Config.in"
+ 	source "package/python-aiomonitor/Config.in"
+diff --git a/package/python-aiohttp-sse-client/0001-setup.py-remove-pytest-runner-requirement.patch b/package/python-aiohttp-sse-client/0001-setup.py-remove-pytest-runner-requirement.patch
+new file mode 100644
+index 0000000000..59fc775f0f
+--- /dev/null
++++ b/package/python-aiohttp-sse-client/0001-setup.py-remove-pytest-runner-requirement.patch
+@@ -0,0 +1,37 @@
++From fdba1f12843d0fdbd5094144a8081244b71b2cf0 Mon Sep 17 00:00:00 2001
++From: Arno Messiaen <arnomessiaen@gmail.com>
++Date: Wed, 22 Nov 2023 08:12:08 +0100
++Subject: [PATCH] setup.py: remove pytest-runner requirement
++
++setup.py: pytest-runner is not required to install the package
++
++Upstream: N/A, Buildroot packaging related
++Signed-off-by: Arno Messiaen <arnomessiaen@gmail.com>
++---
++ setup.py | 3 ---
++ 1 file changed, 3 deletions(-)
++
++diff --git a/setup.py b/setup.py
++index 062bb08..f19bc0a 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -13,8 +13,6 @@ with open('HISTORY.rst') as history_file:
++ 
++ requirements = ['aiohttp>=3', 'attrs', 'multidict', 'yarl', ]
++ 
++-setup_requirements = ['pytest-runner', ]
++-
++ test_requirements = ['pytest', ]
++ 
++ setup(
++@@ -41,7 +39,6 @@ setup(
++     keywords='aiohttp_sse_client',
++     name='aiohttp-sse-client',
++     packages=find_packages(include=['aiohttp_sse_client']),
++-    setup_requires=setup_requirements,
++     test_suite='tests',
++     tests_require=test_requirements,
++     url='https://github.com/rtfol/aiohttp-sse-client',
++-- 
++2.40.1
++
+diff --git a/package/python-aiohttp-sse-client/Config.in b/package/python-aiohttp-sse-client/Config.in
+new file mode 100644
+index 0000000000..2a89791b99
+--- /dev/null
++++ b/package/python-aiohttp-sse-client/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_PYTHON_AIOHTTP_SSE_CLIENT
++	bool "python-aiohttp-sse-client"
++	select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
++	select BR2_PACKAGE_PYTHON_ATTRS # runtime
++	select BR2_PACKAGE_PYTHON_MULTIDICT # runtime
++	select BR2_PACKAGE_PYTHON_YARL # runtime
++	help
++	  Server-sent events client support for aiohttp.
++
++	  https://github.com/rtfol/aiohttp-sse-client
+diff --git a/package/python-aiohttp-sse-client/python-aiohttp-sse-client.hash b/package/python-aiohttp-sse-client/python-aiohttp-sse-client.hash
+new file mode 100644
+index 0000000000..5a1d240777
+--- /dev/null
++++ b/package/python-aiohttp-sse-client/python-aiohttp-sse-client.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/aiohttp-sse-client/json
++md5  d9065bf151fbb485a175ae453a9a5f9f  aiohttp-sse-client-0.2.1.tar.gz
++sha256  5004e29271624af586158dc7166cb0687a7a5997aab5b808f4b53400e1b72e3b  aiohttp-sse-client-0.2.1.tar.gz
++# Locally computed sha256 checksums
++sha256  44c346abc42b39f1390e4747adfd60a3ca349e01462965e5750ae531299b8ff1  LICENSE
+diff --git a/package/python-aiohttp-sse-client/python-aiohttp-sse-client.mk b/package/python-aiohttp-sse-client/python-aiohttp-sse-client.mk
+new file mode 100644
+index 0000000000..4feae517ae
+--- /dev/null
++++ b/package/python-aiohttp-sse-client/python-aiohttp-sse-client.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-aiohttp-sse-client
++#
++################################################################################
++
++PYTHON_AIOHTTP_SSE_CLIENT_VERSION = 0.2.1
++PYTHON_AIOHTTP_SSE_CLIENT_SOURCE = aiohttp-sse-client-$(PYTHON_AIOHTTP_SSE_CLIENT_VERSION).tar.gz
++PYTHON_AIOHTTP_SSE_CLIENT_SITE = https://files.pythonhosted.org/packages/71/c3/4825c5f37909a70c8018924b3d521847dd7acf1fce7e1054574bafed2271
++PYTHON_AIOHTTP_SSE_CLIENT_SETUP_TYPE = setuptools
++PYTHON_AIOHTTP_SSE_CLIENT_LICENSE = Apache-2.0
++PYTHON_AIOHTTP_SSE_CLIENT_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
