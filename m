@@ -1,52 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91528C02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 09:35:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3838C02196
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 09:35:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 454294097D;
-	Wed,  5 Feb 2025 09:35:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5915B60D9D;
+	Wed,  5 Feb 2025 09:35:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id faTdMMDl21N6; Wed,  5 Feb 2025 09:35:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EJMNmcBpd0s6; Wed,  5 Feb 2025 09:35:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2A66409F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 70DB360F94
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2A66409F2;
-	Wed,  5 Feb 2025 09:35:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A0BCC12A
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:35:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 70DB360F94;
+	Wed,  5 Feb 2025 09:35:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 32BF612A
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:35:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 902914097D
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:35:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2248D60D9D
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:35:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RDcJmaQ20uFX for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 09:35:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IJhIK8vMpye5 for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 09:35:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87C3440945
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 87C3440945
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:35:08 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F9AB86EB4; Wed,  5 Feb 2025 09:35:08 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 10:28:46 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5eb734766b24de5fce6e586897cd4827f8855442
-X-Git-Newrev: ebe1efd0a1cb31684ff259fd2cf4823f2bfb8de6
-X-Patchwork-Hint: ignore
-Message-Id: <20250205093508.7F9AB86EB4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mesa3d: add option to build kmsro
- and zink Gallium drivers
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1C1DF60F4D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C1DF60F4D
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1C1DF60F4D
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:35:11 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 34DB143317;
+ Wed,  5 Feb 2025 09:35:10 +0000 (UTC)
+Date: Wed, 5 Feb 2025 10:35:09 +0100
+To: Fiona Klute via buildroot <buildroot@buildroot.org>
+Cc: Fiona Klute <fiona.klute@gmx.de>, Bernd Kuhls <bernd@kuhls.net>, Romain
+ Naour <romain.naour@gmail.com>
+Message-ID: <20250205103509.41ca1f6c@windsurf>
+In-Reply-To: <20250124101900.99783-1-fiona.klute@gmx.de>
+References: <20250124101900.99783-1-fiona.klute@gmx.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfedutdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeltdegvdejheegtefgueffgfelhfekvdefudevieeileetleeitdefgfeugffghfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepuddtledrkeelrddvfedvrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutdelrdekledrvdefvddrheehpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehfihhonhgrrdhklhhuthgvsehgmhigrdguvgdprhgtphhtthhopegsvghrnhgusehkuhhhlhhsrdhnvghtpdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehgmhgrihhlrdgtohhm
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1738748110;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=oiq/mvE+B6OVC7II1wIYP7Ho5bZ/0nbk+CuvxoQOjZI=;
+ b=phHBH74fe6EmVSVbPtns8saXA3VrIPEZTolXkG6b9v4FreFk64mdeg/q3LfYIm/aN+wqVn
+ eCrbeeOFOWwdgyvlUZqVKD0qe3IencGDqol6RucNAMQoWEcc8Cs1MzO3lHOeJJy420q87f
+ gb5S6telf6CsyyFeelYgkY7EtlrNSA/j/HBvZAKQSgUzlIwxKr+/sziNphMLRjkP7i+Sl9
+ Zw0Gsx9d0QGnmUqdXtEx+V/KJb6AWrMCh/+CZjO+OTPZqrYUpJWLmCSPRkBafa2KpwWXoX
+ fSFsY74CmC4mUmKOWgDAKeYp/tLzFrQhpRZgOkJp7zP8ZpI0hrtwVgxE1SWuaQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=phHBH74f
+Subject: Re: [Buildroot] [PATCH 1/1] package/mesa3d: add option to build
+ kmsro and zink Gallium drivers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,85 +88,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ebe1efd0a1cb31684ff259fd2cf4823f2bfb8de6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 24 Jan 2025 11:19:00 +0100
+Fiona Klute via buildroot <buildroot@buildroot.org> wrote:
 
-This allows using simple displays not directly connected to the GPU,
-and platforms supported only via Vulkan.
+> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+> 
+> This allows using simple displays not directly connected to the GPU,
+> and platforms supported only via Vulkan.
+> 
+> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+> ---
+>  package/mesa3d/Config.in | 22 ++++++++++++++++++++++
+>  package/mesa3d/mesa3d.mk |  2 ++
+>  2 files changed, 24 insertions(+)
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mesa3d/Config.in | 22 ++++++++++++++++++++++
- package/mesa3d/mesa3d.mk |  2 ++
- 2 files changed, 24 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 7761b0a650..1a446cac49 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -140,6 +140,18 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
- 	help
- 	  Mesa driver for ARM Mali Utgard GPUs.
- 
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO
-+	bool "Gallium kmsro drivers"
-+	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV \
-+		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO \
-+		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA \
-+		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST \
-+		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D \
-+		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	help
-+	  Mesa drivers for kernel mode-setting render-only devices
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- 	bool "Gallium nouveau driver"
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-@@ -262,6 +274,16 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL
- 	  virgl is the 3D acceleration backend for the virtio-gpu
- 	  shipping with qemu.
- 
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ZINK
-+	bool "Gallium zink driver"
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
-+	select BR2_PACKAGE_VULKAN_LOADER
-+	help
-+	  Zink is a Gallium driver that emits Vulkan API calls,
-+	  providing OpenGL support on devices that only support
-+	  Vulkan.
-+
- config BR2_PACKAGE_MESA3D_VDPAU
- 	bool "Gallium VDPAU state tracker"
- 	depends on BR2_PACKAGE_XORG7
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index ce460c4475..2a0b3aefe6 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -99,6 +99,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO) += freedre
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915)     += i915
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS)     += iris
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA)     += lima
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO)    += kmsro
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST) += panfrost
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300)     += r300
-@@ -110,6 +111,7 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA)    += tegra
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D)      += v3d
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL)    += virgl
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ZINK)     += zink
- # Vulkan Drivers
- MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM) += broadcom
- MESA3D_VULKAN_DRIVERS-$(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL)   += intel
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
