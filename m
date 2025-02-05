@@ -4,46 +4,46 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E595FC02196
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 09:48:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C2CFC02196
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 09:48:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A2567417F6;
-	Wed,  5 Feb 2025 09:48:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D72BB41A10;
+	Wed,  5 Feb 2025 09:48:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y_yDn-8Ymjne; Wed,  5 Feb 2025 09:48:12 +0000 (UTC)
+ id pnktp0lkuJSi; Wed,  5 Feb 2025 09:48:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46325417CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E2A8419E1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46325417CB;
-	Wed,  5 Feb 2025 09:48:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E2A8419E1;
+	Wed,  5 Feb 2025 09:48:18 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F25DCD
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:47:50 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 51103CD
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:47:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5FEF140B2F
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:47:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AC3B240254
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:47:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6xfUJh2IKzd9 for <buildroot@buildroot.org>;
+ id FjldKwFVcr1o for <buildroot@buildroot.org>;
  Wed,  5 Feb 2025 09:47:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
  helo=relay7-d.mail.gandi.net; envelope-from=thomas.bonnefille@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 124C340F36
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 124C340F36
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 76F8940A60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76F8940A60
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 124C340F36
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 76F8940A60
  for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:47:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2E6D64320D;
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 846094321E;
  Wed,  5 Feb 2025 09:47:43 +0000 (UTC)
 From: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-Date: Wed, 05 Feb 2025 10:47:42 +0100
+Date: Wed, 05 Feb 2025 10:47:43 +0100
 MIME-Version: 1.0
-Message-Id: <20250205-fix_zxing-v1-4-c3e4c2adfdab@bootlin.com>
+Message-Id: <20250205-fix_zxing-v1-5-c3e4c2adfdab@bootlin.com>
 References: <20250205-fix_zxing-v1-0-c3e4c2adfdab@bootlin.com>
 In-Reply-To: <20250205-fix_zxing-v1-0-c3e4c2adfdab@bootlin.com>
 To: buildroot@buildroot.org
@@ -59,20 +59,20 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=7r4nJJyXzzvIjpBvoVk0F95G7hDtIjvb8cEggXLyQow=;
- b=KRsPuleSZihgc74nYih5dYLabfKqq+fUx8CeDfwx9shxiPKIoVBeMbU1qPSnGhoRkzI2f9
- +NbVQf/iGQ9paq6ISVGpzM5TVJaeyH8Ed3I3ggwuYHkBU7Wp9ic3rBVJtjVUduBIXgD4fa
- FllwluwViXSGhjBdT2FHi8Y7WbWd6VKVT3a5+7zF2THizjAvEV0eH28cB78dNQ2ukdE3FJ
- cTRs1DA9rPWicEHueQ2iB1ikQfElvYcT7GPVKvOZ2enB81MJrUBzkGNTU5tTTuMM9yZA6V
- P8fjwIbpu1Ijmg4mUf9lsxtS3w9cd3li7J+tShTxYtgwrkZIGi6rES9pRhDhBQ==
+ bh=BZk8kCFMtFSgHyrNFYLaiiQO992IwNbbIUNH3hxXA/I=;
+ b=mfbaBY+THUodH/WzNQvoSrLvjkx/1TBt7NivcmhsuiMc5PZuVq6ZrD0njxfs1xHLFDSRCJ
+ 4Ea1Xom/8qOCEP1kXWyDRGYdRobuNTjG+QmBQP9DNN19Wggaj88O7LkzkXrWahwXZXByyt
+ DX5OQWpXkdjLHV7dkRCOOQEg1bQ+78Zg8zBV9OEhBiZc7BGoOoDsN7UOa7lygaxfKQZ/rH
+ y0jTH/AM9j3YOrCn+ptuSNXtWSer4Hm5lWOvxO605V55evp7zqvhUCjVMB4e2OwmoOEJl2
+ KdrdksjseR06/sxWsQu4Dyml3FOXoLtOeDZ92uMsnV0/nh2/jdtX/Zpa5ZLnLQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=KRsPuleS
-Subject: [Buildroot] [PATCH 04/12] package/gstreamer1/gst-python: bump
+ header.s=gm1 header.b=mfbaBY+T
+Subject: [Buildroot] [PATCH 05/12] package/gstreamer1/gst1-libav: bump
  version to 1.24.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -100,33 +100,33 @@ release notes:
 
 Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 ---
- package/gstreamer1/gst1-python/gst1-python.hash | 4 ++--
- package/gstreamer1/gst1-python/gst1-python.mk   | 2 +-
+ package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
+ package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-python/gst1-python.hash b/package/gstreamer1/gst1-python/gst1-python.hash
-index b28ad5975f95881dc24828f27dceb3abe8937953..44bf778fd7756276c1ad402109a359ddfe17b06f 100644
---- a/package/gstreamer1/gst1-python/gst1-python.hash
-+++ b/package/gstreamer1/gst1-python/gst1-python.hash
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
+index b6130ac146aa4c9478a18ae6ff89d0635dfeea47..cc11ab55f818fdd407580c0d8efad8b589702aa0 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.hash
++++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.22.12.tar.xz.sha256sum
--sha256  d98d3226efea20d5c440a28988a20319a953f7c594895df2bba4538633108e9f  gst-python-1.22.12.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.24.11.tar.xz.sha256sum
-+sha256  f4c8761bfee98508f57e2efd738ef36a99e2f7644860877d54d235a7092cf056  gst-python-1.24.11.tar.xz
- sha256  ea3ad127610e5ded2210b3a86a46314f2b3b28e438eccffdae19a4d6fbcdb0c2  COPYING
-diff --git a/package/gstreamer1/gst1-python/gst1-python.mk b/package/gstreamer1/gst1-python/gst1-python.mk
-index f5f4d713a2650ccd8af343f276afd474e6c320b6..18e03d4b06de723f4ff5a469b0e618ac1af03384 100644
---- a/package/gstreamer1/gst1-python/gst1-python.mk
-+++ b/package/gstreamer1/gst1-python/gst1-python.mk
+-# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.22.12.tar.xz.sha256sum
+-sha256  3b60d4cac2fbcd085a93e9389ca23e0443bee1ca75574d31d4f12bb1bbecab48  gst-libav-1.22.12.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.24.11.tar.xz.sha256sum
++sha256  13776fc16f7ce587d437d56d83e08c9224768dddc897dd3c88208d970a6aa422  gst-libav-1.24.11.tar.xz
+ sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
+diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
+index 142ea7ed9592afce8be99974ea0765b59777e1a4..42b0b568b87499a65125289e26237e67b6e8c566 100644
+--- a/package/gstreamer1/gst1-libav/gst1-libav.mk
++++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PYTHON_VERSION = 1.22.12
-+GST1_PYTHON_VERSION = 1.24.11
- GST1_PYTHON_SOURCE = gst-python-$(GST1_PYTHON_VERSION).tar.xz
- GST1_PYTHON_SITE = https://gstreamer.freedesktop.org/src/gst-python
- GST1_PYTHON_INSTALL_STAGING = YES
+-GST1_LIBAV_VERSION = 1.22.12
++GST1_LIBAV_VERSION = 1.24.11
+ GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
+ GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
+ GST1_LIBAV_LICENSE = LGPL-2.1+
 
 -- 
 2.48.1
