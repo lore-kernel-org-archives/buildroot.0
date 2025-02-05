@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47CC5C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:14:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 913ABC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:15:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF1116FCD2;
-	Fri, 28 Feb 2025 17:14:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 695B382107;
+	Fri, 28 Feb 2025 17:14:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 94nwi9IaOb4I; Fri, 28 Feb 2025 17:14:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PgwZbkr6t1sM; Fri, 28 Feb 2025 17:14:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 905DC70706
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76A07820EF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 905DC70706;
-	Fri, 28 Feb 2025 17:14:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 76A07820EF;
+	Fri, 28 Feb 2025 17:14:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 085CA68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 18971711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 704FE42F7E
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C28F42F8C
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VO9anWvYHgJS for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:43 +0000 (UTC)
+ id L-GLlUkNwYG9 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F8E042D1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 867F7438B8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9F8E042D1C
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 867F7438B8
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9991F85E25; Fri, 28 Feb 2025 16:30:34 +0000 (UTC)
+ id 7993D86780; Fri, 28 Feb 2025 16:30:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 14:14:10 +0100
+Date: Wed, 5 Feb 2025 16:13:46 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 490711a6e09cb2207a401ea72f831e9132a89778
-X-Git-Newrev: cf273fb01f4d2c30ecf0903c8d27619e3e1a8bb6
+X-Git-Oldrev: ef354264cdb86169f019ca618ab542d3d8fe75cf
+X-Git-Newrev: ebb65fcf2c96bddc17e82fa5128b73c18909ef13
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163034.9991F85E25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/latencytop: drop
- package
+Message-Id: <20250228163035.7993D86780@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/bmap-writer: bump to
+ version 1.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,181 +58,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf273fb01f4d2c30ecf0903c8d27619e3e1a8bb6
+commit: https://git.buildroot.net/buildroot/commit/?id=ebb65fcf2c96bddc17e82fa5128b73c18909ef13
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes http://autobuild.buildroot.net/results/5b7921d1b2d347995b0088ac58b29e2f01dec39a/
+Switch from libxml2 to tinyxml2
 
-The tarball is no longer available for download and the git repo on
-infradead.org is also gone, there are no reverse dependencies or DEVELOPERS
-entry for it and the package has not been updated since it was added in 2012
-by commit cd2f78b1c5af ("New Package: latencytop"), so drop it.
+Add http(s)/ftp stream wrapper script
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Ayoub Zaki <ayoub.zaki@embetrix.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                    |  1 -
- Config.in.legacy                       |  6 ++++++
- package/Config.in                      |  1 -
- package/latencytop/0001-makefile.patch | 28 ----------------------------
- package/latencytop/Config.in           | 26 --------------------------
- package/latencytop/latencytop.hash     |  3 ---
- package/latencytop/latencytop.mk       | 23 -----------------------
- 7 files changed, 6 insertions(+), 82 deletions(-)
+ package/bmap-writer/Config.in        | 2 +-
+ package/bmap-writer/bmap-writer.hash | 2 +-
+ package/bmap-writer/bmap-writer.mk   | 6 +++---
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 6b45fb9e94..f66bc3d86b 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -606,7 +606,6 @@ package/keyutils/0001-fix-install-rule.patch lib_patch.Upstream
- package/keyutils/0002-cifs.patch lib_patch.Sob lib_patch.Upstream
- package/kmod/0001-fix-O_CLOEXEC.patch lib_patch.Upstream
- package/kodi/S50kodi Shellcheck lib_sysv.Variables
--package/latencytop/0001-makefile.patch lib_patch.Upstream
- package/lbase64/0001-retro-compatible-with-Lua-5.1.patch lib_patch.Upstream
- package/lcdproc/0001-LCDd.conf.patch lib_patch.Upstream
- package/lcdproc/0002-Add-missing-ioctl-header.patch lib_patch.Upstream
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 3e3be95004..214d351e4a 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
+diff --git a/package/bmap-writer/Config.in b/package/bmap-writer/Config.in
+index b2e63c8381..5876a85927 100644
+--- a/package/bmap-writer/Config.in
++++ b/package/bmap-writer/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_BMAP_WRITER
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR # libarchive
+ 	select BR2_PACKAGE_LIBARCHIVE
+-	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_TINYXML2
+ 	help
+ 	  bmap-writer is a command-line utility designed to
+ 	  efficiently write disk images to storage devices using block
+diff --git a/package/bmap-writer/bmap-writer.hash b/package/bmap-writer/bmap-writer.hash
+index c59c7a91cb..0b0e8de46a 100644
+--- a/package/bmap-writer/bmap-writer.hash
++++ b/package/bmap-writer/bmap-writer.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  94fda8420fa82256bfd01a76dff18ae23c6be9be03cb641f9845164e9326de60  bmap-writer-0.0.3.tar.gz
++sha256  a86ade2c70304574f200c048bd8a728ed27b04b7ece62cf0f696366e37fed6e7  bmap-writer-1.0.2.tar.gz
+ sha256  8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b  LICENSE
+diff --git a/package/bmap-writer/bmap-writer.mk b/package/bmap-writer/bmap-writer.mk
+index dc049c2b9b..19ccd3afbc 100644
+--- a/package/bmap-writer/bmap-writer.mk
++++ b/package/bmap-writer/bmap-writer.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
  
- comment "Legacy options removed in 2025.02"
+-BMAP_WRITER_VERSION = 0.0.3
++BMAP_WRITER_VERSION = 1.0.2
+ BMAP_WRITER_SITE = $(call github,embetrix,bmap-writer,$(BMAP_WRITER_VERSION))
+ BMAP_WRITER_LICENSE = GPL-3.0
+ BMAP_WRITER_LICENSE_FILES = LICENSE
+-BMAP_WRITER_DEPENDENCIES = host-pkgconf libarchive libxml2
+-HOST_BMAP_WRITER_DEPENDENCIES = host-pkgconf host-libarchive host-libxml2
++BMAP_WRITER_DEPENDENCIES = host-pkgconf libarchive tinyxml2
++HOST_BMAP_WRITER_DEPENDENCIES = host-pkgconf host-libarchive host-tinyxml2
  
-+config BR2_PACKAGE_LATENCYTOP
-+	bool "latencytop has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The latencytop package is no longer available for download.
-+
- config BR2_PACKAGE_OBSIDIAN_CURSORS
- 	bool "obsidian-cursors has been removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 4896e6db76..3ec6d0d879 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -116,7 +116,6 @@ menu "Debugging, profiling and benchmark"
- 	source "package/kmemd/Config.in"
- 	source "package/kvm-unit-tests/Config.in"
- 	source "package/kyua/Config.in"
--	source "package/latencytop/Config.in"
- 	source "package/libbpf/Config.in"
- 	source "package/libtraceevent/Config.in"
- 	source "package/libtracefs/Config.in"
-diff --git a/package/latencytop/0001-makefile.patch b/package/latencytop/0001-makefile.patch
-deleted file mode 100644
-index fa8c51cfd0..0000000000
---- a/package/latencytop/0001-makefile.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--Usee $(CC) to enable cross compiling and link to the right ncurses library.
--
--Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
--
----- latencytop-0.5/Makefile.old	2012-04-18 11:59:39.748084334 +0100
--+++ latencytop-0.5/Makefile	2012-04-18 12:00:08.659112340 +0100
--@@ -4,7 +4,7 @@
-- DESTDIR =
-- SBINDIR = /usr/sbin
-- XCFLAGS = -W  -g `pkg-config --cflags glib-2.0` -D_FORTIFY_SOURCE=2 -Wno-sign-compare
---LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncursesw 
--+LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncurses 
-- 
-- OBJS= latencytop.o text_display.o translate.o fsync.o
-- 
--@@ -26,10 +26,10 @@
-- 
-- # We write explicity this "implicit rule"
-- %.o : %.c
---	gcc -c $(CFLAGS) $(XCFLAGS) $< -o $@
--+	$(CC) -c $(CFLAGS) $(XCFLAGS) $< -o $@
-- 
-- latencytop:  $(OBJS) latencytop.h Makefile
---	gcc $(CFLAGS) $(OBJS) $(LDF) -o latencytop 
--+	$(CC) $(CFLAGS) $(OBJS) $(LDF) -o latencytop 
-- 
-- clean:
-- 	rm -f *~ latencytop DEADJOE *.o
-diff --git a/package/latencytop/Config.in b/package/latencytop/Config.in
-deleted file mode 100644
-index b54ef052b4..0000000000
---- a/package/latencytop/Config.in
-+++ /dev/null
-@@ -1,26 +0,0 @@
--config BR2_PACKAGE_LATENCYTOP
--	bool "latencytop"
--	depends on BR2_USE_WCHAR # libglib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
--	depends on BR2_USE_MMU # libglib2
--	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_LIBGLIB2
--	help
--	  There are many types and causes of latency. LatencyTOP
--	  focuses on the type of latency that causes skips in audio,
--	  stutters in your desktop experience or that overloads your
--	  server (while you have plenty of CPU power left).
--
--	  LatencyTOP focuses on the cases where the applications want
--	  to run and execute useful code, but there's some resource
--	  that's not currently available (and the kernel then blocks
--	  the process). This is done both on a system level and on a
--	  per process level, so that you can see what's happening to
--	  the system, and which process is suffering and/or causing
--	  the delays.
--
--	  http://www.latencytop.org
--
--comment "latencytop needs a toolchain w/ wchar, threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/latencytop/latencytop.hash b/package/latencytop/latencytop.hash
-deleted file mode 100644
-index 74b8a03a23..0000000000
---- a/package/latencytop/latencytop.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# locally computed
--sha256  9e7f72fbea7bd918e71212a1eabaad8488d2c602205d2e3c95d62cd57e9203ef  latencytop-0.5.tar.gz
--sha256  34d1db30ab21eaedb2c191b2787632a960090a0c63da9f5b481d84b23b98c438  latencytop.c
-diff --git a/package/latencytop/latencytop.mk b/package/latencytop/latencytop.mk
-deleted file mode 100644
-index 56afe86062..0000000000
---- a/package/latencytop/latencytop.mk
-+++ /dev/null
-@@ -1,23 +0,0 @@
--################################################################################
--#
--# latencytop
--#
--################################################################################
--
--LATENCYTOP_VERSION = 0.5
--LATENCYTOP_SITE = http://www.latencytop.org/download
--LATENCYTOP_DEPENDENCIES = libglib2 ncurses
--LATENCYTOP_LICENSE = GPL-2.0
--LATENCYTOP_LICENSE_FILES = latencytop.c
--
--# NOTE: GTK is heavy weight, we intentionally build the text (ncurses)
--# version only
--define LATENCYTOP_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) HAS_GTK_GUI=
--endef
--
--define LATENCYTOP_INSTALL_TARGET_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) install -C $(@D) DESTDIR=$(TARGET_DIR) HAS_GTK_GUI=
--endef
--
--$(eval $(generic-package))
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
