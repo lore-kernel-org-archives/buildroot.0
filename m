@@ -1,62 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59EECC02194
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 10:41:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31799C02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 10:41:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F87583168;
-	Wed,  5 Feb 2025 10:41:14 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w6yQSFVzv0lg; Wed,  5 Feb 2025 10:41:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08F618316F
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 08F618316F;
-	Wed,  5 Feb 2025 10:41:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id DE85912A
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:41:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C1AFE4161A
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:41:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D043541674;
+	Wed,  5 Feb 2025 10:41:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nhwFEdu4R4Sn for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 10:41:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+ id I-B-99xkd4JX; Wed,  5 Feb 2025 10:41:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3DF6741603
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3DF6741603;
+	Wed,  5 Feb 2025 10:41:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4973512F
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:41:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B10F4071B
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:41:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZjNmTPcqVPpR for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 10:41:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7225240C93
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7225240C93
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7225240C93
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:41:09 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7F25843152;
- Wed,  5 Feb 2025 10:41:06 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1tfcq9-0004Ba-2E;
- Wed, 05 Feb 2025 11:41:05 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed,  5 Feb 2025 11:41:03 +0100
-Message-Id: <20250205104104.16072-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 68C8040181
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68C8040181
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 68C8040181
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:41:24 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C8562442E6;
+ Wed,  5 Feb 2025 10:41:20 +0000 (UTC)
+Date: Wed, 5 Feb 2025 11:41:20 +0100
+To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Cc: Marcus Hoffmann <buildroot@bubu1.eu>, James Hilliard
+ <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Message-ID: <20250205114120.758c9da7@windsurf>
+In-Reply-To: <20240216131815.318315-2-buildroot@bubu1.eu>
+References: <20240216131815.318315-1-buildroot@bubu1.eu>
+ <20240216131815.318315-2-buildroot@bubu1.eu>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-State: clean
-X-GND-Score: 49
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfedvvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucgoufhushhpvggtthffohhmrghinhculdegledmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeffgfeltdelteduueetudegfeefgfelfeduffeuieduudfgffetuedugeehkeevudenucffohhmrghinhepsghuihhlughrohhothdrnhgvthdpghhithhhuhgsrdgtohhmpdguihhllhhordhorhhgpdhgihhthhhusgdrihhonecukfhppedutdelrdekledrvdefvddrheehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddtledrkeelrddvfedvrdehhedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghkoheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepphgvthgvrheskhhorhhsghgrrghrugdrtghomh
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/dillo: move to github
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfedvvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeehhefgledtgeeuuefhgeeliedufeejvdegkeeukeehteejvdevhfelueehvddutdenucffohhmrghinheprhgvrgguthhhvgguohgtshdrihhopdgvmhhulhgrthhorhdrrhhunhdpmhhiuggulhgvfigrrhgvrdhsvggtuhhrihhthidpuddvjedrtddrtddruddpsghoohhtlhhinhdrtghomhenucfkphepuddtledrkeelrddvfedvrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutdelrdekledrvdefvddrheehpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhgsuhdurdgvuhdprhgtphhtthhop
+ ehjrghmvghsrdhhihhllhhirghrugdusehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghsrghfkhgrjeesghhmrghilhdrtghomh
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1738752081;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Wt5uh3ZaMO04bGYDpxUeHmtouBcuK0+6IhanegHjBBI=;
+ b=LivVDOmh0GX0rNYbjtd1I1gblWHBElVgsDQ8FfB7dA5yDWuAzwrhmurVbE5CAn8H/1U/Oh
+ tyZHGk/V0L+b5ajYBnGIafK9EbWH7wZnPozfH5KI48bAWf1miMxyqRrdUtLQHV1KThqy6B
+ znsQ78/SDRtEFN5QPf3pMd7eymqqPMHVSRMuNOnAvtY62RIYHtRejGCGvZ8NdJ3W4oPIzK
+ Ec4TSTCc1A70UQM9axQyp9Uyno0c8pptiJg/xSR6zm2XAJfuC54e3OBSaW3XaLVRdBHVgK
+ ZRTj3OxB02eEcDh5zKuRpL3b45IjR+6YiA+qvfX/QIeFCn80Ku/TSERaXALJzA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=LivVDOmh
+Subject: Re: [Buildroot] [PATCH 2/2] package/python-whitenoise: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,57 +87,129 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes http://autobuild.buildroot.net/results/9c33099772398ab592bf38c2f4c56c2594594695/
+Hello Marcus,
 
-The tarball is no longer available on dillo.org, but has been uploaded to
-github so use that instead:
+Sorry for the huge delay in getting back to you.
 
-https://github.com/dillo-browser/dillo/releases/tag/v3.0.5
+On Fri, 16 Feb 2024 14:18:14 +0100
+Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
 
-Also adjust the URL in the help text to the new location, which states:
+> The test is using the django integration of whitenoise as it's the most
+> common setup and allows to model the test case after the django one as
+> well.
+> 
+> The setup we need to do is a bit more complicated though and follows
+> the whitenoise getting started documentation [1].
+> 
+> We then request a .css file from the django admin app that is enabled
+> by default in template project. Due to running django's development
+> server with --nostatic we ensure that static file handling is taken over
+> by whitenoise.
+> 
+> [1] https://whitenoise.readthedocs.io/en/stable/django.html
+> 
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
-"The domain dillo.org is no longer under control of Dillo developers."
+This causes some flake8 warnings, which I'm not sure how to fix. See
+below.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dillo/Config.in | 2 +-
- package/dillo/dillo.mk  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> diff --git a/support/testing/tests/package/test_python_django.py b/support/testing/tests/package/test_python_django.py
+> index 0973467a2a..ac1dc81359 100644
+> --- a/support/testing/tests/package/test_python_django.py
+> +++ b/support/testing/tests/package/test_python_django.py
+> @@ -36,6 +36,7 @@ class TestPythonPy3Django(TestPythonDjango):
+>      config = TestPythonDjango.config + \
+>          """
+>          BR2_PACKAGE_PYTHON3=y
+> +        BR2_PACKAGE_PYTHON3_PY_PYC=y
+>          BR2_PACKAGE_PYTHON_DJANGO=y
+>          BR2_PACKAGE_PYTHON3_SQLITE=y
+>          """
 
-diff --git a/package/dillo/Config.in b/package/dillo/Config.in
-index d06f2d1f51..1ebab8ab3f 100644
---- a/package/dillo/Config.in
-+++ b/package/dillo/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_DILLO
- 
- 	  Enable openssl package to gain https support.
- 
--	  http://www.dillo.org
-+	  https://dillo-browser.github.io/
- 
- comment "dillo needs a toolchain w/ C++"
- 	depends on BR2_PACKAGE_XORG7 && BR2_USE_MMU
-diff --git a/package/dillo/dillo.mk b/package/dillo/dillo.mk
-index a6885f5c14..5a823aa4a3 100644
---- a/package/dillo/dillo.mk
-+++ b/package/dillo/dillo.mk
-@@ -6,7 +6,7 @@
- 
- DILLO_VERSION = 3.0.5
- DILLO_SOURCE = dillo-$(DILLO_VERSION).tar.bz2
--DILLO_SITE = http://www.dillo.org/download
-+DILLO_SITE = https://github.com/dillo-browser/dillo/releases/download/v$(DILLO_VERSION)/
- DILLO_LICENSE = GPL-3.0+
- DILLO_LICENSE_FILES = COPYING
- # configure.ac gets patched, so autoreconf is necessary
+When resending, please drop this chunk.
+
+> diff --git a/support/testing/tests/package/test_python_whitenoise.py b/support/testing/tests/package/test_python_whitenoise.py
+> new file mode 100644
+> index 0000000000..ff9bcf5ee7
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_python_whitenoise.py
+> @@ -0,0 +1,41 @@
+> +import time
+> +
+> +from tests.package.test_python import TestPythonPackageBase
+> +
+> +
+> +class TestPythonPy3Whitenoise(TestPythonPackageBase):
+> +    __test__ = True
+> +    config = TestPythonPackageBase.config + \
+> +        """
+> +        BR2_PACKAGE_PYTHON3=y
+> +        BR2_PACKAGE_PYTHON_DJANGO=y
+> +        BR2_PACKAGE_PYTHON_WHITENOISE=y
+> +        BR2_PACKAGE_PYTHON3_SQLITE=y
+> +        """
+> +
+> +    def test_run(self):
+> +        self.login()
+> +        timeout = 35
+> +
+> +        cmd = "cd /opt && /usr/bin/django-admin startproject testsite"
+> +        self.assertRunOk(cmd, timeout=timeout)
+> +        # STATIC_ROOT needs to be set for 'collectstatic' to work.
+> +        self.emulator.run("echo 'STATIC_ROOT = BASE_DIR / \"staticfiles\"' >> /opt/testsite/testsite/settings.py")
+> +        cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py collectstatic"
+> +        self.assertRunOk(cmd, timeout=timeout)
+> +        # whitenoise docs say it needs to be added directly after SecurityMiddleware, so we do this here with sed.
+> +        cmd = """sed -i -e /django.middleware.security.SecurityMiddleware/a\ \\"whitenoise.middleware.WhiteNoiseMiddleware\\", /opt/testsite/testsite/settings.py"""
+
+flake8 doesn't like this:
+
+support/testing/tests/package/test_python_whitenoise.py:27:76: W605 invalid escape sequence '\ '
+support/testing/tests/package/test_python_whitenoise.py:27:133: E501 line too long (164 > 132 characters)
+
+I tried to use the "r" prefix for the string, which gets rid of the
+first warning, but then it doesn't do the right thing on the target.
+
+> +        self.assertRunOk(cmd, timeout=timeout)
+> +        # --nostatic ensures the builtin django server doesn't serve the static files,
+> +        # so we can test that whitenoise serves them
+> +        cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py runserver --nostatic 0.0.0.0:1234 > /dev/null 2>&1 & "
+> +        self.assertRunOk(cmd, timeout=timeout)
+> +        # give some time to setup the server
+> +        for attempt in range(30 * self.emulator.timeout_multiplier):
+> +            time.sleep(1)
+> +            cmd = "wget http://127.0.0.1:1234/static/admin/css/base.css"
+> +            _, exit_code = self.emulator.run(cmd)
+> +            if exit_code == 0:
+> +                break
+> +        else:
+> +            self.assertTrue(False, "Timeout while waiting for django server")
+
+Could you replace self.assertTrue(False, "Timeout while waiting for
+django server") with the logic that used in test_python_django.py, ie:
+
+        for attempt in range(30 * self.emulator.timeout_multiplier):
+            time.sleep(1)
+            cmd = "netstat -ltn 2>/dev/null | grep 0.0.0.0:1234"
+            _, exit_code = self.emulator.run(cmd)
+            if exit_code == 0:
+                break
+        self.assertEqual(exit_code, 0, "Timeout while waiting for django server")
+
+Thanks a lot!
+
+Thomas
 -- 
-2.39.5
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
