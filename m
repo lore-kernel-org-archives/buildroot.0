@@ -4,59 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D00CC02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 12:11:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B67E3C02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 12:14:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9CA4940E5A;
-	Wed,  5 Feb 2025 12:11:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5FA2C416FF;
+	Wed,  5 Feb 2025 12:14:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BdHYtIQL6lYM; Wed,  5 Feb 2025 12:11:08 +0000 (UTC)
+ id 4am0rtjGFjSW; Wed,  5 Feb 2025 12:14:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1177C41553
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA883416B4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1177C41553;
-	Wed,  5 Feb 2025 12:11:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1297E12F
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:11:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA883416B4;
+	Wed,  5 Feb 2025 12:14:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 453CBCD
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:14:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 02B4C80DE4
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:11:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4079560B3A
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:14:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mox5f3W4q_aw for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 12:11:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B85yKRyvbd9g for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 12:14:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.bonnefille@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 579CB83563
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 579CB83563
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C6C0260B7C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6C0260B7C
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 579CB83563
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:11:05 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6EF47442D7;
- Wed,  5 Feb 2025 12:11:02 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1tfeFB-000ARN-2t;
- Wed, 05 Feb 2025 13:11:01 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed,  5 Feb 2025 13:11:00 +0100
-Message-Id: <20250205121100.40121-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C6C0260B7C
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:14:03 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D3F39442DF;
+ Wed,  5 Feb 2025 12:14:01 +0000 (UTC)
+Date: Wed, 05 Feb 2025 13:13:52 +0100
 MIME-Version: 1.0
+Message-Id: <20250205-remove_mimic-v2-1-ee516f64825d@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAP9Vo2cC/3XMzQoCIRSG4VsZzjrDn0xo1X3EEOqcmgOpgw5SD
+ N57NvuW7wffs0HBTFjgMmyQsVKhFHvIwwB+tvGJjKbeILnUXHLNMoZU8R4okGeTQuucsk6eHfT
+ LkvFB7527jb1nKmvKn12v4rf+gapggmklNJqT8Ua4q0tpfVE8+hRgbK19Ac/qZJOqAAAA
+X-Change-ID: 20250205-remove_mimic-d3eabb3ab26b
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ =?utf-8?q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>, 
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, 
+ Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+X-Mailer: b4 0.14.2
 X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeegvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepfeeijeeuudeuhfevudfgheekgfefvedvheeugeehheehfffhlefgheffteetieetnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhnvghtpdhlrghtvghntgihthhophdrohhrghenucfkphepuddtledrkeelrddvfedvrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutdelrdekledrvdefvddrheehpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvkhhosehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhm
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/latencytop: drop package
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeegvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkffvvefosehtjeertdertdejnecuhfhrohhmpefvhhhomhgrshcuuehonhhnvghfihhllhgvuceothhhohhmrghsrdgsohhnnhgvfhhilhhlvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepueehgedufffgveejvdefleeikeevvdektdeiveevleevheffieehvdffiedtjeetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuhgsrdgtohhmnecukfhppedutdelrdekledrvdefvddrheehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddtledrkeelrddvfedvrdehhedphhgvlhhopegludejvddrudeirddvrddutdelngdpmhgrihhlfhhrohhmpehthhhomhgrshdrsghonhhnvghfihhllhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeehpdhrtghpthhtohepvgiivghquhhivghlsehvrghnghhurghrughirghsuhhrrdgtohhmrdgrrhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrt
+ ghpthhtohepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdprhgtphhtthhopehthhhomhgrshdrsghonhhnvghfihhllhgvsegsohhothhlihhnrdgtohhm
+X-GND-Sasl: thomas.bonnefille@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1738757642;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=NnuXYr5dcXcICQ+gU1RVBqR8Y8bIJzIdWAa0hZvsf+g=;
+ b=RnWh8E2HunvVhaxe4Ln/1ekeTY6Vit7Toh3HoSLodI5ayDqPWbkZzYhTgLYVfnrSF6qTZh
+ byliQzPOqkgPvOuj5c+MXlgwwTetUlLuQjuhnny3hmEbpRPWuEvEINAVntfIOezUXYyyOb
+ 6fjV7kuqSuxrWpyb99Kwq5yzc0i3hIpTLhCIh52JxMTD8p2sIW1W7+4Cyzks5aL86Xa44t
+ acvQE31f+NiIXCz54vpE6S2umh3kIwtB25V0DCXJb8kWVvMFCyg3/f29idF4LGlcKQgCeI
+ EQC11FcnbPoHI2+2wac4nGApgpUz6mcn2H5do/urL4LqpVTYofaCQC2D2umqLg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RnWh8E2H
+Subject: [Buildroot] [PATCH v2] package/mimic: remove the mimic package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,180 +88,218 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Bonnefille via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes http://autobuild.buildroot.net/results/5b7921d1b2d347995b0088ac58b29e2f01dec39a/
+The mimic package hasn't been updated in recent years and
+downloading this package is now broken.
+This commit removes the mimic package.
 
-The tarball is no longer available for download and the git repo on
-infradead.org is also gone, there are no reverse dependencies or DEVELOPERS
-entry for it and the package has not been updated since it was added in 2012
-by commit cd2f78b1c5af ("New Package: latencytop"), so drop it.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 ---
- .checkpackageignore                    |  1 -
- Config.in.legacy                       |  6 ++++++
- package/Config.in                      |  1 -
- package/latencytop/0001-makefile.patch | 28 --------------------------
- package/latencytop/Config.in           | 26 ------------------------
- package/latencytop/latencytop.hash     |  3 ---
- package/latencytop/latencytop.mk       | 23 ---------------------
- 7 files changed, 6 insertions(+), 82 deletions(-)
- delete mode 100644 package/latencytop/0001-makefile.patch
- delete mode 100644 package/latencytop/Config.in
- delete mode 100644 package/latencytop/latencytop.hash
- delete mode 100644 package/latencytop/latencytop.mk
+Changes in v2:
+- Removed the mimic patch from checkpackageignore
+- Link to v1: https://lore.kernel.org/r/20250205-remove_mimic-v1-1-5315e747c71b@bootlin.com
+---
+ .checkpackageignore                                |  1 -
+ Config.in.legacy                                   |  6 ++++
+ DEVELOPERS                                         |  1 -
+ package/Config.in                                  |  1 -
+ .../0001-Fix-linking-on-gcc-10.2.0-or-newer.patch  | 27 --------------
+ package/mimic/Config.in                            | 41 ----------------------
+ package/mimic/mimic.hash                           |  3 --
+ package/mimic/mimic.mk                             | 29 ---------------
+ 8 files changed, 6 insertions(+), 103 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 6b45fb9e94..f66bc3d86b 100644
+index 24cbc3253c1c076cfd3face1e264430ae4b45c48..b4e039207eae4766d87586d0270eb582aac60f0c 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -606,7 +606,6 @@ package/keyutils/0001-fix-install-rule.patch lib_patch.Upstream
- package/keyutils/0002-cifs.patch lib_patch.Sob lib_patch.Upstream
- package/kmod/0001-fix-O_CLOEXEC.patch lib_patch.Upstream
- package/kodi/S50kodi Shellcheck lib_sysv.Variables
--package/latencytop/0001-makefile.patch lib_patch.Upstream
- package/lbase64/0001-retro-compatible-with-Lua-5.1.patch lib_patch.Upstream
- package/lcdproc/0001-LCDd.conf.patch lib_patch.Upstream
- package/lcdproc/0002-Add-missing-ioctl-header.patch lib_patch.Upstream
+@@ -825,7 +825,6 @@ package/metacity/0002-gconf.patch lib_patch.Upstream
+ package/metacity/0003-mag-add-libm-reference.patch lib_patch.Upstream
+ package/mfgtools/0001-lnx_def.h-fix-conflicting-declaration-of-__time64_t.patch lib_patch.Upstream
+ package/mii-diag/0001-strchr.patch lib_patch.Sob lib_patch.Upstream
+-package/mimic/0001-Fix-linking-on-gcc-10.2.0-or-newer.patch lib_patch.Upstream
+ package/mini-snmpd/0001-linux.c-fix-musl-build.patch lib_patch.Upstream
+ package/minidlna/S60minidlnad Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/minissdpd/S50minissdpd Shellcheck lib_sysv.Indent lib_sysv.Variables
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 3e3be95004..214d351e4a 100644
+index e091fd8c0a972c3043e9664652e3d40e6d83af8b..41f9876edfbd64cf504739f9e61e9fb39a463f36 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
+@@ -172,6 +172,12 @@ config BR2_PACKAGE_DIRECTFB
+ 	  This package was no longer maintained upstream, so it was
+ 	  dropped from Buildroot.
  
- comment "Legacy options removed in 2025.02"
- 
-+config BR2_PACKAGE_LATENCYTOP
-+	bool "latencytop has been removed"
++config BR2_PACKAGE_MIMIC
++	bool "mimic has been removed"
 +	select BR2_LEGACY
 +	help
-+	  The latencytop package is no longer available for download.
++	  The mimic package has been removed from Buildroot.
 +
- config BR2_PACKAGE_OBSIDIAN_CURSORS
- 	bool "obsidian-cursors has been removed"
+ config BR2_PACKAGE_SDL2_DIRECTFB
+ 	bool "sdl2 directfb support removed"
  	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5ca66b2f2841bec4d6fe0c39a373dc6d3d7fcb94..c131c9bf47ad87f5f8caaa37cde619de361baf45 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -953,7 +953,6 @@ F:	configs/ci20_defconfig
+ F:	package/fio/
+ F:	package/iptraf-ng/
+ F:	package/jimtcl/
+-F:	package/mimic/
+ F:	package/nodm/
+ F:	package/openbox/
+ F:	package/supertuxkart/
 diff --git a/package/Config.in b/package/Config.in
-index 4896e6db76..3ec6d0d879 100644
+index 3f4dd42cbe481de470e3e818d9692640950cc76b..71f5a9d81455049fee01251b271a18bac2c53630 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -116,7 +116,6 @@ menu "Debugging, profiling and benchmark"
- 	source "package/kmemd/Config.in"
- 	source "package/kvm-unit-tests/Config.in"
- 	source "package/kyua/Config.in"
--	source "package/latencytop/Config.in"
- 	source "package/libbpf/Config.in"
- 	source "package/libtraceevent/Config.in"
- 	source "package/libtracefs/Config.in"
-diff --git a/package/latencytop/0001-makefile.patch b/package/latencytop/0001-makefile.patch
+@@ -31,7 +31,6 @@ menu "Audio and video applications"
+ 	source "package/kodi/Config.in"
+ 	source "package/lame/Config.in"
+ 	source "package/madplay/Config.in"
+-	source "package/mimic/Config.in"
+ 	source "package/minimodem/Config.in"
+ 	source "package/miraclecast/Config.in"
+ 	source "package/mjpegtools/Config.in"
+diff --git a/package/mimic/0001-Fix-linking-on-gcc-10.2.0-or-newer.patch b/package/mimic/0001-Fix-linking-on-gcc-10.2.0-or-newer.patch
 deleted file mode 100644
-index fa8c51cfd0..0000000000
---- a/package/latencytop/0001-makefile.patch
+index ea02bf587e033aab8f408ea48a20ce5798095c3c..0000000000000000000000000000000000000000
+--- a/package/mimic/0001-Fix-linking-on-gcc-10.2.0-or-newer.patch
 +++ /dev/null
-@@ -1,28 +0,0 @@
--Usee $(CC) to enable cross compiling and link to the right ncurses library.
+@@ -1,27 +0,0 @@
+-From 77b36eaeb2c38eba571b8db7e9bb0fd507774e6d Mon Sep 17 00:00:00 2001
+-From: Kris Gesling <kris.gesling@mycroft.ai>
+-Date: Tue, 11 May 2021 09:15:22 +0930
+-Subject: [PATCH] Fix linking on gcc 10.2.0 or newer
 -
--Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
+-Co-authored-by: MichaelSabal <michaelsabal@users.noreply.github.com>
 -
----- latencytop-0.5/Makefile.old	2012-04-18 11:59:39.748084334 +0100
--+++ latencytop-0.5/Makefile	2012-04-18 12:00:08.659112340 +0100
--@@ -4,7 +4,7 @@
-- DESTDIR =
-- SBINDIR = /usr/sbin
-- XCFLAGS = -W  -g `pkg-config --cflags glib-2.0` -D_FORTIFY_SOURCE=2 -Wno-sign-compare
---LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncursesw 
--+LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncurses 
+-[Retrieved from:
+-https://github.com/MycroftAI/mimic1/commit/77b36eaeb2c38eba571b8db7e9bb0fd507774e6d]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- lang/cmu_indic_lang/cmu_indic_lang.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/lang/cmu_indic_lang/cmu_indic_lang.h b/lang/cmu_indic_lang/cmu_indic_lang.h
+-index 75ee46c..83e2afa 100644
+---- a/lang/cmu_indic_lang/cmu_indic_lang.h
+-+++ b/lang/cmu_indic_lang/cmu_indic_lang.h
+-@@ -51,7 +51,7 @@ void cmu_indic_lang_init(cst_voice *v);
+- extern const cst_phoneset cmu_indic_phoneset;
+- extern const cst_cart cmu_indic_phrasing_cart; 
 - 
-- OBJS= latencytop.o text_display.o translate.o fsync.o
+--const cst_regex * const cst_rx_not_indic;
+-+extern const cst_regex * const cst_rx_not_indic;
 - 
--@@ -26,10 +26,10 @@
-- 
-- # We write explicity this "implicit rule"
-- %.o : %.c
---	gcc -c $(CFLAGS) $(XCFLAGS) $< -o $@
--+	$(CC) -c $(CFLAGS) $(XCFLAGS) $< -o $@
-- 
-- latencytop:  $(OBJS) latencytop.h Makefile
---	gcc $(CFLAGS) $(OBJS) $(LDF) -o latencytop 
--+	$(CC) $(CFLAGS) $(OBJS) $(LDF) -o latencytop 
-- 
-- clean:
-- 	rm -f *~ latencytop DEADJOE *.o
-diff --git a/package/latencytop/Config.in b/package/latencytop/Config.in
+- #ifdef __cplusplus
+- } /* extern "C" */
+diff --git a/package/mimic/Config.in b/package/mimic/Config.in
 deleted file mode 100644
-index b54ef052b4..0000000000
---- a/package/latencytop/Config.in
+index 79641d37902e6456bee9e9d93004390214fd0fec..0000000000000000000000000000000000000000
+--- a/package/mimic/Config.in
 +++ /dev/null
-@@ -1,26 +0,0 @@
--config BR2_PACKAGE_LATENCYTOP
--	bool "latencytop"
--	depends on BR2_USE_WCHAR # libglib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
--	depends on BR2_USE_MMU # libglib2
--	select BR2_PACKAGE_NCURSES
--	select BR2_PACKAGE_LIBGLIB2
+@@ -1,41 +0,0 @@
+-comment "mimic needs a toolchain w/ wchar"
+-	depends on !BR2_USE_WCHAR
+-
+-config BR2_PACKAGE_MIMIC
+-	bool "mimic"
+-	depends on BR2_USE_WCHAR
 -	help
--	  There are many types and causes of latency. LatencyTOP
--	  focuses on the type of latency that causes skips in audio,
--	  stutters in your desktop experience or that overloads your
--	  server (while you have plenty of CPU power left).
+-	  Mimic is a fast, lightweight Text-to-speech engine developed
+-	  by Mycroft A.I. and VocaliD, based on Carnegie Mellon
+-	  University's Flite (Festival-Lite) software. Mimic takes in
+-	  text and reads it out loud to create a high quality voice.
 -
--	  LatencyTOP focuses on the cases where the applications want
--	  to run and execute useful code, but there's some resource
--	  that's not currently available (and the kernel then blocks
--	  the process). This is done both on a system level and on a
--	  per process level, so that you can see what's happening to
--	  the system, and which process is suffering and/or causing
--	  the delays.
+-	  https://github.com/MycroftAI/mimic
 -
--	  http://www.latencytop.org
+-if BR2_PACKAGE_MIMIC
 -
--comment "latencytop needs a toolchain w/ wchar, threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/latencytop/latencytop.hash b/package/latencytop/latencytop.hash
+-choice
+-	prompt "audio backend"
+-	default BR2_PACKAGE_MIMIC_AUDIO_BACKEND_NONE
+-
+-config BR2_PACKAGE_MIMIC_AUDIO_BACKEND_NONE
+-	bool "none"
+-	help
+-	  With no backend, mimic will only be able to produce .wav
+-	  files.
+-
+-config BR2_PACKAGE_MIMIC_AUDIO_BACKEND_ALSA
+-	bool "alsa"
+-	depends on BR2_PACKAGE_ALSA_LIB
+-
+-config BR2_PACKAGE_MIMIC_AUDIO_BACKEND_PORTAUDIO
+-	bool "alsa via portaudio"
+-	depends on BR2_PACKAGE_PORTAUDIO
+-
+-config BR2_PACKAGE_MIMIC_AUDIO_BACKEND_PULSEAUDIO
+-	bool "pulseaudio"
+-	depends on BR2_PACKAGE_PULSEAUDIO
+-
+-endchoice
+-
+-endif # BR2_PACKAGE_MIMIC
+diff --git a/package/mimic/mimic.hash b/package/mimic/mimic.hash
 deleted file mode 100644
-index 74b8a03a23..0000000000
---- a/package/latencytop/latencytop.hash
+index 10780d415d427c1455cbb4d83e91790b02908cd9..0000000000000000000000000000000000000000
+--- a/package/mimic/mimic.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# locally computed
--sha256  9e7f72fbea7bd918e71212a1eabaad8488d2c602205d2e3c95d62cd57e9203ef  latencytop-0.5.tar.gz
--sha256  34d1db30ab21eaedb2c191b2787632a960090a0c63da9f5b481d84b23b98c438  latencytop.c
-diff --git a/package/latencytop/latencytop.mk b/package/latencytop/latencytop.mk
+-# Locally calculated
+-sha256  725003c9972d5b67c49d5ea6a89cb26b63414ff2c7adbbaf9200cf9eb55f80eb  mimic-1.1.0.tar.gz
+-sha256  c423c1c6d260091d80ee4c00f386a10fea39963a3f1530f2c245f15dd20324ee  COPYING
+diff --git a/package/mimic/mimic.mk b/package/mimic/mimic.mk
 deleted file mode 100644
-index 56afe86062..0000000000
---- a/package/latencytop/latencytop.mk
+index 2d246561c96696ae80e97d69a577d8f25180fc06..0000000000000000000000000000000000000000
+--- a/package/mimic/mimic.mk
 +++ /dev/null
-@@ -1,23 +0,0 @@
+@@ -1,29 +0,0 @@
 -################################################################################
 -#
--# latencytop
+-# mimic
 -#
 -################################################################################
 -
--LATENCYTOP_VERSION = 0.5
--LATENCYTOP_SITE = http://www.latencytop.org/download
--LATENCYTOP_DEPENDENCIES = libglib2 ncurses
--LATENCYTOP_LICENSE = GPL-2.0
--LATENCYTOP_LICENSE_FILES = latencytop.c
+-MIMIC_VERSION = 1.1.0
+-MIMIC_SITE = $(call github,MycroftAI,mimic,$(MIMIC_VERSION))
+-MIMIC_LICENSE = MIT
+-MIMIC_LICENSE_FILES = COPYING
 -
--# NOTE: GTK is heavy weight, we intentionally build the text (ncurses)
--# version only
--define LATENCYTOP_BUILD_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) HAS_GTK_GUI=
--endef
+-MIMIC_DEPENDENCIES = host-pkgconf
 -
--define LATENCYTOP_INSTALL_TARGET_CMDS
--	$(TARGET_CONFIGURE_OPTS) $(MAKE) install -C $(@D) DESTDIR=$(TARGET_DIR) HAS_GTK_GUI=
--endef
+-ifeq ($(BR2_PACKAGE_MIMIC_AUDIO_BACKEND_ALSA),y)
+-MIMIC_AUDIO_BACKEND = alsa
+-MIMIC_DEPENDENCIES += alsa-lib
+-else ifeq ($(BR2_PACKAGE_MIMIC_AUDIO_BACKEND_PORTAUDIO),y)
+-MIMIC_AUDIO_BACKEND = portaudio
+-MIMIC_DEPENDENCIES += portaudio
+-else ifeq ($(BR2_PACKAGE_MIMIC_AUDIO_BACKEND_PULSEAUDIO),y)
+-MIMIC_AUDIO_BACKEND = pulseaudio
+-MIMIC_DEPENDENCIES += pulseaudio
+-else ifeq ($(BR2_PACKAGE_MIMIC_AUDIO_BACKEND_NONE),y)
+-MIMIC_AUDIO_BACKEND = none
+-endif
 -
--$(eval $(generic-package))
+-MIMIC_CONF_OPTS += --with-audio=$(MIMIC_AUDIO_BACKEND)
+-
+-$(eval $(autotools-package))
+
+---
+base-commit: d5b3795e92727c6565901cddf0c0f17c7854df56
+change-id: 20250205-remove_mimic-d3eabb3ab26b
+
+Best regards,
 -- 
-2.39.5
+Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 
 _______________________________________________
 buildroot mailing list
