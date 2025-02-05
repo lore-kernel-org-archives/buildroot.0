@@ -4,103 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B988DC02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 08:48:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A191C02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 08:50:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 83BC6832BF;
-	Wed,  5 Feb 2025 08:48:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6C3B80534;
+	Wed,  5 Feb 2025 08:50:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id saaZazyvX0wC; Wed,  5 Feb 2025 08:48:48 +0000 (UTC)
+ id PXCJuOMtG8i2; Wed,  5 Feb 2025 08:50:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 78E3D83330
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 122BE8349A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 78E3D83330;
-	Wed,  5 Feb 2025 08:48:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 73A0ACD
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 08:48:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 122BE8349A;
+	Wed,  5 Feb 2025 08:50:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B1BAA12F
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 08:49:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 61DF14056C
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 08:48:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 92ED660B3E
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 08:49:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id isDOdsmpHSHE for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 08:48:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0F8D54055E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F8D54055E
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0F8D54055E
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 08:48:45 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-43675b1155bso74307175e9.2
- for <buildroot@buildroot.org>; Wed, 05 Feb 2025 00:48:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738745324; x=1739350124;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=xvDn2zOgBks/EVrojkShjbnk5qFhApD/4KHpZPBkVCI=;
- b=DBgXBrKjtjA3JiNPS5Cy+oVQwIfcGWq3DwFHS2x9O08+rjL7dcHnYTajE9feTykJzf
- D5eTng8VJQZzmUh8sOjavdWf/W8/pC0B709dlI5nDSE+CE6r384n/MJZVlUFw0c3FA3Q
- TcUWlkTShnJaLElELtowedXT8QRPUFEEa66GJJkW26SEx38VNyVsEcmjQPpP5wHj36bb
- fqz2lSB8Ye44xIvKbyvHTJn0mKzUIGXknzxn5o8oa8uF3r8Ny2BJwU0G10mf1pcl/JxX
- fF/Hh4ndXq7gy+29bJCJHr4knaNE2Ig23kmfdRrm53Sd9dJywmMpCvbWv37ca4/oXh3z
- 4CLw==
-X-Gm-Message-State: AOJu0YyasYpKcDuXuePyFHWYpkLbpdIHAuY/gez13/c+ekqLtwhMnjSz
- bbk0FlGw+IlQdkaRBLNsvGDOyS5GoYbFlBia21YHyWqhgfAIDHTArzYVvYJ4Cns=
-X-Gm-Gg: ASbGncsvqZ8TtZ1wQDtJXOxCdkVvo3VsDuCP8jMZKQhjbXXyQ4gI7WbOCiXqkgeFN86
- CRKrwcp9/8uNXeHJnERYsEYwqW6OGAiz3HYdmof5HyFxpr8al0l8Y/0rMERZhTefjpnVVhkqiIi
- kf+XGp68RIdOUOxTQPOyU2pfThuj1nqXXP361yj4TeZ48kL+L4Sne4ZEOHY//ZPOu1Rqqa8Sg0d
- N13TanaamcT+MCHA7MIJKolYb+25DPKntvCYAV6dx8kTCk7a9fRcUDwm+dzaxg+YCDC7qVmTycR
- wKF9937GmTtkob7SBOCVeKBoXmxlSafKsunjlHyfm2r5g38=
-X-Google-Smtp-Source: AGHT+IGD07ONpB2RQAoWDJP2S/tMplWTlEbK38vrIs8H9lpVsGeQscXXClJsSR5Nq8OJP4hjOe0Ing==
-X-Received: by 2002:a05:6000:4020:b0:385:d852:29ed with SMTP id
- ffacd0b85a97d-38db48d5c38mr1328903f8f.36.1738745324041; 
- Wed, 05 Feb 2025 00:48:44 -0800 (PST)
-Received: from [172.16.2.111] (host-109-89-232-55.dynamic.voo.be.
- [109.89.232.55]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-38c5c11b71asm18318024f8f.39.2025.02.05.00.48.43
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 05 Feb 2025 00:48:43 -0800 (PST)
-Message-ID: <655518d0-dbe0-4655-9b24-726a2de1a784@mind.be>
-Date: Wed, 5 Feb 2025 09:48:41 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Joachim Wiberg <troglobit@gmail.com>, Vincent Jardin <vjardin@free.fr>
-Cc: buildroot@buildroot.org, Vadim Kochan <vadim4j@gmail.com>,
- thomas.petazzoni@bootlin.com
-References: <20250106203459.2875914-1-troglobit@gmail.com>
- <dq3i7hbdwatnngs4zix4pe3bwnv64fjca4i3krbjr3yccy3b4v@wjik7jr5er7z>
- <f07db2bf9668c00e911ffbc161551d875ffdb96f.camel@gmail.com>
-Content-Language: en-GB
-In-Reply-To: <f07db2bf9668c00e911ffbc161551d875ffdb96f.camel@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1738745324; x=1739350124; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=xvDn2zOgBks/EVrojkShjbnk5qFhApD/4KHpZPBkVCI=;
- b=RfoNGppF+Ca4+sFcJB9/CSdv9DX74bWeQ11Pi0wymBp1qyHn/wzgZWbMhVAwhiXo/f
- TpZ7zPbJ0qj6a93zCHgaH8SnK5yhf05UcAvuGu8tMlmF/N2ZlRi6ENFsrCULGPoS46Jy
- li/EHYJ13sEbodcv2VmpCTMiUNLvsGSbFWhmjmR5PogmCqgXhq90JxWWO83Aa5uFOkWD
- QZbMim/MRXh0ZdWN2Nt6MZY0jslD+RkCba+y/MVwvptm97JPGu2O2Z/qCb/PZzUd09Vj
- wOY1YJ0wP7y/6iiY2o09MnHsx3ZUWzFFgJtnxkiNXdH2ayRrqgoEWi52EC7f73fbfUZi
- o1KA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=RfoNGppF
-Subject: Re: [Buildroot] [PATCH 1/1] package/frr: make vtysh group
- configurable
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LNVSP4JcKgMG for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 08:49:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA80660BA2
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id EA80660BA2
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 08:49:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E0F0886F53; Wed,  5 Feb 2025 08:49:57 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Wed, 5 Feb 2025 09:47:20 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 382f24a89f785ceb1776294c5be4f973e5eb6653
+X-Git-Newrev: 5eb734766b24de5fce6e586897cd4827f8855442
+X-Patchwork-Hint: ignore
+Message-Id: <20250205084957.E0F0886F53@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/elfutils: bump to version 0.192
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,60 +58,480 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAwNS8wMi8yMDI1IDA1OjE0LCBKb2FjaGltIFdpYmVyZyB3cm90ZToKPiBIaSBWaW5jZW50
-IQo+IAo+IE9uIFdlZCwgMjAyNS0wMi0wNSBhdCAwMjoyOCArMDEwMCwgVmluY2VudCBKYXJkaW4g
-d3JvdGU6Cj4gCj4+IFdoeSB3b3VsZCB5b3UgZW5mb3JjZSBhIGZycnZ0eSB1c2VyIHRvIGFueSBv
-dGhlciB2YWx1ZSA/IENhbiB5b3UKPj4gZXhwbGFpbiB0aGUgcmF0aW9uYWwgb2Ygbm90IHVzaW5n
-IHRoZSBCdWlsZHJvb3QncyBkZWZhdWx0IHZhbHVlID8KPiAKPiBDdXJyZW50bHksIG5vbi1yb290
-IHVzZXJzIG9mIGEgQnVpbGRyb290IHN5c3RlbSwgdGhhdCB5b3Ugd2FudCB0byBnaXZlCj4gYWRt
-aW5pc3RyYXRvciBwcml2aWxlZ2VzIHRvIG1hbmFnZSB0aGUgc3lzdGVtLCBpLmUuLCBlZGl0IHN5
-c3RlbSBmaWxlcwo+IGFuZCBjb25maWd1cmUgRnJyIGRhZW1vbnMgdXNpbmcgdnR5c2gsIG5lZWQg
-dG8gYmUgbWVtYmVyIG9mIHR3byBncm91cHM6Cj4gd2hlZWwgYW5kIGZycnZ0eS4KCiAgVGhhdCBp
-cyBjb3JyZWN0LCBidXQgSSBzdGlsbCBkb24ndCBzZWUgd2hhdCB0aGUgcHJvYmxlbSBpcyB3aXRo
-IHRoYXQuIEl0J3MgCnByZXR0eSBzdGFuZGFyZCBVTklYIHN5c2FkbWluIHByYWN0aWNlIHRvIHVz
-ZSBhIHVuaXF1ZSBncm91cCBmb3IgZWFjaCBzZXJ2aWNlIAphbmQgdG8gYWRkIHRoZSB1c2VycyB3
-aG8gbmVlZCB0byBhY2Nlc3MgdGhhdCBzZXJ2aWNlIHRvIHRoZSBjb3JyZXNwb25kaW5nIGdyb3Vw
-LgoKCj4gSSBwcm9wb3NlIG9wZW5pbmcgdXAgdGhhdCBzbyBpdCBpcyB1cCB0byB0aGUgQnVpbGRy
-b290IHVzZXIgKGRldmVsb3BlcikKPiBob3cgdGhleSBtb2RlbCB0aGVpciBlbmQgc3lzdGVtLgoK
-ICBXZSBkb24ndCB3YW50IHRvIGdpdmUgY29tcGxldGUgZnJlZWRvbSB0aG91Z2guCgoKPj4gRXZl
-biBpZiBGUlIgaGFzIHN1Y2ggY2FwYWJpbGl0eSwgaXQgZG9lcyBub3QgbWVhbiB3ZSBzaG91bGQg
-ZXhwb3NlIGl0Lgo+IAo+IFRoaXMgRnJyIGJ1aWxkLXRpbWUgc2V0dGluZyBjb250cm9scyB0aGUg
-Z3JvdXAgd2hpY2ggYW4gYWRtaW5pc3RyYXRvcgo+IHVzZXIgaW4gYSBzeXN0ZW0gbXVzdCBiZSBt
-ZW1iZXIgb2YgdG8gYmUgYWJsZSB0byBhY2Nlc3MgdnR5c2ggb3ZlciBpdHMKPiBVTklYIHNvY2tl
-dCwgaXQgY2Fubm90IGJlIHNldCBzZXQgb3IgY2hhbmdlZCBpbiBhbm90aGVyIHdheSBhZnRlciBi
-dWlsZC4KPiAKPiBBIHZhcmlhbnQgb2YgdGhlIHNhbWUgcGF0Y2ggdGhhdCB3b3VsZCB3b3JrIGZv
-ciBteSBvd24gdXNlLWNhc2UsIGFuZCBpbgo+IHNvbWUgd2F5IGFsaWduIHdpdGggQnVpbGRyb290
-IGRlZmF1bHRzLCB3b3VsZCBiZSB0byBjaGFuZ2Ugd2hhdCB3ZSBoYXJkLQo+IGNvZGUgaXQgdG86
-Cj4gCj4gICAgIC0tZW5hYmxlLXZ0eS1ncm91cD13aGVlbAoKICBCdXQgdGhhdCB3b3VsZCBnaXZl
-IGFjY2VzcyB0byBmcnIgdG8gZXZlcnkgdXNlciBpbiB0aGUgd2hlZWwgZ3JvdXAsIHdpdGggbm8g
-CndheSBhdCBhbGwgdG8gcmVkdWNlIHRoYXQgYWNjZXNzLiBDb252ZXJzZWx5LCBhIHNlcGFyYXRl
-IGZycnZ0eSBncm91cCBhbGxvd3MgeW91IAp0byBhZGQgd2hhdGV2ZXIgdXNlciBpcyBuZWVkZWQg
-dG8gdGhhdCBncm91cC4KCiAgUmVnYXJkcywKICBBcm5vdXQKCj4gCj4gSSBkaWQgbm90IHRoaW5r
-IHN1Y2ggYSBwYXRjaCB3b3VsZCBmbHkgYXQgYWxsLCBpbiBwYXJ0aWN1bGFyIHNpbmNlIGl0IGlz
-Cj4gbm90IGJhY2t3YXJkcyBjb21wYXRpYmxlLiAgV2hpY2ggaXMgd2h5IEkgd2VudCB3aXRoIHRo
-aXMgYXBwcm9hY2ggd2hlcmUKPiB0aGUgZGV2ZWxvcGVyIGNhbiBhdCBsZWFzdCBkZWNpZGUgdGhl
-IGdyb3VwIG9mIHVzZXJzIHNob3VsZCBiZSBhYmxlIHRvCj4gbWFuYWdlIEZyciBub3cgdGhhdCBp
-dCBoYXMgc2hpZnRlZCB0byBldmVyeXRoaW5nLXZpYS12dHlzaCBmcm9tIHBlci0KPiBkYWVtb24g
-LmNvbmYgZmlsZXMgYXMgdGhlaXIgZGVmYXVsdC4KPiAKPj4gWW91ciBzdWdnZXN0aW9uIHN0YXJ0
-cyBhZGRpbmcgc29tZSBjb21wbGV4aXRpZXMuIEJhc2VkIG9uIHRoZSBzYW1lCj4+IG1vZGVsLCBp
-ZiB3ZQo+PiBmb2xsb3cgaXQsIHdlIHNob3VsZCBkbyB0aGUgc2FtZSBmb3I6Cj4+ICDCoAktLWVu
-YWJsZS11c2VyPWZycgo+PiAgwqAJLS1lbmFibGUtZ3JvdXA9ZnJyCj4+IHRvby4gVGhhdCdzIHdo
-eSBJIHdvdWxkIGJlIHN0cm9uZ2x5IGludGVyZXN0ZWQgaW4gcmVhZGluZyB5b3VyCj4+IHJhdGlv
-bmFscyBmb3Igc3VjaCBjYXBhYmlsaXR5Lgo+IAo+IEkgc2VlLCB3ZWxsIHRoYXQgd2FzIG5vdCBt
-eSBpbnRlbnRpb24gYXQgYWxsIHRvIGltcGx5LiAgVGhlIGxhdHRlciBpcwo+IGZvciBwcml2aWxl
-Z2Ugc2VwYXJhdGlvbiBvZiB0aGUgZGFlbW9ucyB0aGVtc2VsdmVzLCBJIGRvbid0IHNlZSBhbnkK
-PiB2YWx1ZSB0byBhIHVzZXIgb2YgQnVpbGRyb290IHRvIGJlIGFibGUgdG8gY2hhbmdlIHRoYXQg
-Zm9yIGFueSBwYWNrYWdlLgo+IAo+IAo+IEFsbCB0aGUgYmVzdAo+ICAgL0pvYWNoaW0KPiAgIAo+
-IAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCj4g
-YnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6
-Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgpfX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
-ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
-Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=5eb734766b24de5fce6e586897cd4827f8855442
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Patch 0001 is refreshed.
+
+Patch 0003 is removed as it's upstream.
+
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...d-a-enable-disable-progs-configure-option.patch |  22 +-
+ .../0003-Add-helper-function-for-basename.patch    | 358 ---------------------
+ package/elfutils/elfutils.hash                     |   2 +-
+ package/elfutils/elfutils.mk                       |   2 +-
+ 4 files changed, 14 insertions(+), 370 deletions(-)
+
+diff --git a/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch b/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
+index bac9bc1245..7f6dff94f0 100644
+--- a/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
++++ b/package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch
+@@ -1,4 +1,4 @@
+-From 73e4da5ca780196d23db8029dcd28f87a0402711 Mon Sep 17 00:00:00 2001
++From 571445ec4643865566d2c5a9e27d9b78b8b00107 Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Date: Mon, 29 May 2017 23:03:48 +0300
+ Subject: [PATCH] Add a --{enable,disable}-progs configure option
+@@ -22,13 +22,15 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ [Fabrice: don't error out if obstack is not found]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Rebased on 0.192]
++Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+ ---
+  Makefile.am  | 6 +++++-
+- configure.ac | 6 ++++++
+- 2 files changed, 11 insertions(+), 1 deletion(-)
++ configure.ac | 8 +++++++-
++ 2 files changed, 12 insertions(+), 2 deletions(-)
+ 
+ diff --git a/Makefile.am b/Makefile.am
+-index 9c47afa..edf8dfc 100644
++index 92130b57..00f5176b 100644
+ --- a/Makefile.am
+ +++ b/Makefile.am
+ @@ -26,8 +26,12 @@ AM_MAKEFLAGS = --no-print-directory
+@@ -43,13 +45,13 @@ index 9c47afa..edf8dfc 100644
+ -	  libasm debuginfod src po doc tests
+ +	  libasm debuginfod $(PROGS_SUBDIR) po doc tests
+  
+- EXTRA_DIST = elfutils.spec GPG-KEY NOTES CONTRIBUTING \
+- 	     COPYING COPYING-GPLV2 COPYING-LGPLV3
++ EXTRA_DIST = elfutils.spec GPG-KEY NOTES CONTRIBUTING SECURITY \
++ 	     COPYING COPYING-GPLV2 COPYING-LGPLV3 CONDUCT
+ diff --git a/configure.ac b/configure.ac
+-index d345495..0dd4b1e 100644
++index f191488f..87d91f8f 100644
+ --- a/configure.ac
+ +++ b/configure.ac
+-@@ -393,6 +393,12 @@ AS_HELP_STRING([--enable-tests-rpath],[build $ORIGIN-using rpath into tests]),
++@@ -426,6 +426,12 @@ AS_HELP_STRING([--enable-tests-rpath],[build $ORIGIN-using rpath into tests]),
+  	       [tests_use_rpath=$enableval], [tests_use_rpath=no])
+  AM_CONDITIONAL(TESTS_RPATH, test "$tests_use_rpath" = yes)
+  
+@@ -62,7 +64,7 @@ index d345495..0dd4b1e 100644
+  dnl zlib is mandatory.
+  save_LIBS="$LIBS"
+  LIBS=
+-@@ -579,7 +585,7 @@ saved_LIBS="$LIBS"
++@@ -670,7 +676,7 @@ saved_LIBS="$LIBS"
+  AC_SEARCH_LIBS([_obstack_free], [obstack])
+  LIBS="$saved_LIBS"
+  case "$ac_cv_search__obstack_free" in
+@@ -72,5 +74,5 @@ index d345495..0dd4b1e 100644
+          *) obstack_LIBS= ;;
+  esac
+ -- 
+-2.30.1
++2.47.1
+ 
+diff --git a/package/elfutils/0003-Add-helper-function-for-basename.patch b/package/elfutils/0003-Add-helper-function-for-basename.patch
+deleted file mode 100644
+index 1f47546ba8..0000000000
+--- a/package/elfutils/0003-Add-helper-function-for-basename.patch
++++ /dev/null
+@@ -1,358 +0,0 @@
+-From 2296679efa547104ea52bf60cdda19e07c8d1e26 Mon Sep 17 00:00:00 2001
+-From: Khem Raj <raj.khem@gmail.com>
+-Date: Sun, 10 Dec 2023 12:20:33 -0800
+-Subject: [PATCH] Add helper function for basename
+-
+-musl does not provide GNU version of basename and lately have removed
+-the definiton from string.h [1] which exposes this problem. It can be
+-made to work by providing a local implementation of basename which
+-implements the GNU basename behavior, this makes it work across C
+-libraries which have POSIX implementation only.
+-
+-[1] https://git.musl-libc.org/cgit/musl/commit/?id=725e17ed6dff4d0cd22487bb64470881e86a92e7
+-
+-    * lib/system.h (xbasename): New static inline functions.
+-    Poison basename.
+-    * libdw/dwarf_getsrc_file.c (dwarf_getsrc_file): Use xbasename.
+-    * libdwfl/core-file.c (dwfl_core_file_report): Likewise.
+-    * libdwfl/dwfl_module_getsrc_file.c (dwfl_module_getsrc_file):
+-    Likewise.
+-    * libdwfl/dwfl_segment_report_module.c (dwfl_segment_report_module):
+-    Likewise.
+-    * libdwfl/find-debuginfo.c (find_debuginfo_in_path): Likewise.
+-    * libdwfl/link_map.c (report_r_debug): Likewise.
+-    * libdwfl/linux-kernel-modules.c (try_kernel_name): Likewise.
+-    * src/addr2line.c (print_dwarf_function): Likewise.
+-    (print_src): Likewise.
+-    * src/ar.c (do_oper_insert): Likewise.
+-    And cast away const in entry.key assignment.
+-    * src/nm.c (show_symbols): Use xbasename.
+-    * src/stack.c (module_callback): Likewise.
+-    * src/strip.c (handle_elf): Likewise.
+-    * tests/show-die-info.c: Include system.h.
+-    (dwarf_tag_string): Use xbasename.
+-    * tests/varlocs.c: Likewise.
+-    * debuginfod/debuginfod.cxx: Move include system.h to the end.
+-    (register_file_name): Rename basename to filename.
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Signed-off-by: Mark Wielaard <mark@klomp.org>
+-Upstream: https://sourceware.org/git/?p=elfutils.git;a=commit;h=a2194f6b305bf0d0b9dd49dccd0a5c21994c8eea
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- debuginfod/debuginfod.cxx            | 10 ++++++++--
+- lib/system.h                         | 14 ++++++++++++++
+- libdw/dwarf_getsrc_file.c            |  2 +-
+- libdwfl/core-file.c                  |  2 +-
+- libdwfl/dwfl_module_getsrc_file.c    |  2 +-
+- libdwfl/dwfl_segment_report_module.c |  2 +-
+- libdwfl/find-debuginfo.c             |  6 +++---
+- libdwfl/link_map.c                   |  2 +-
+- libdwfl/linux-kernel-modules.c       |  2 +-
+- src/addr2line.c                      |  4 ++--
+- src/ar.c                             |  4 ++--
+- src/nm.c                             |  4 ++--
+- src/stack.c                          |  2 +-
+- src/strip.c                          |  2 +-
+- tests/show-die-info.c                |  3 ++-
+- tests/varlocs.c                      |  2 +-
+- 16 files changed, 42 insertions(+), 21 deletions(-)
+-
+-diff --git a/debuginfod/debuginfod.cxx b/debuginfod/debuginfod.cxx
+-index 99b1f2b9..3b69a621 100644
+---- a/debuginfod/debuginfod.cxx
+-+++ b/debuginfod/debuginfod.cxx
+-@@ -44,10 +44,11 @@ extern "C" {
+- }
+- #endif
+- 
+-+#ifdef HAVE_EXECINFO_H
+- extern "C" {
+--#include "printversion.h"
+--#include "system.h"
+-+#include <execinfo.h>
+- }
+-+#endif
+- 
+- #include "debuginfod.h"
+- #include <dwarf.h>
+-@@ -127,6 +128,11 @@ using namespace std;
+- #define tid() pthread_self()
+- #endif
+- 
+-+extern "C" {
+-+#include "printversion.h"
+-+#include "system.h"
+-+}
+-+
+- 
+- inline bool
+- string_endswith(const string& haystack, const string& needle)
+-diff --git a/lib/system.h b/lib/system.h
+-index 1c914efc..0db12d99 100644
+---- a/lib/system.h
+-+++ b/lib/system.h
+-@@ -1,6 +1,7 @@
+- /* Declarations for common convenience functions.
+-    Copyright (C) 2006-2011 Red Hat, Inc.
+-    Copyright (C) 2022 Mark J. Wielaard <mark@klomp.org>
+-+   Copyright (C) 2023 Khem Raj.
+-    This file is part of elfutils.
+- 
+-    This file is free software; you can redistribute it and/or modify
+-@@ -211,4 +212,17 @@ extern char *__cxa_demangle (const char *mangled_name, char *output_buffer,
+-   extern int never_defined_just_used_for_checking[(expr) ? 1 : -1]	\
+-     __attribute__ ((unused))
+- 
+-+/* We really want a basename implementation that doesn't modify the
+-+   input argument.  Normally you get that from string.h with _GNU_SOURCE
+-+   define.  But some libc implementations don't define it and other
+-+   define it, but provide an implementation that still modifies the
+-+   argument.  So define our own and poison a bare basename symbol.  */
+-+static inline const char *
+-+xbasename(const char *s)
+-+{
+-+  const char *p = strrchr(s, '/');
+-+  return p ? p+1 : s;
+-+}
+-+#pragma GCC poison basename
+-+
+- #endif /* system.h */
+-diff --git a/libdw/dwarf_getsrc_file.c b/libdw/dwarf_getsrc_file.c
+-index 5289c7da..03da431c 100644
+---- a/libdw/dwarf_getsrc_file.c
+-+++ b/libdw/dwarf_getsrc_file.c
+-@@ -98,7 +98,7 @@ dwarf_getsrc_file (Dwarf *dbg, const char *fname, int lineno, int column,
+- 	      /* Match the name with the name the user provided.  */
+- 	      const char *fname2 = line->files->info[lastfile].name;
+- 	      if (is_basename)
+--		lastmatch = strcmp (basename (fname2), fname) == 0;
+-+		lastmatch = strcmp (xbasename (fname2), fname) == 0;
+- 	      else
+- 		lastmatch = strcmp (fname2, fname) == 0;
+- 	    }
+-diff --git a/libdwfl/core-file.c b/libdwfl/core-file.c
+-index 87c940cb..89527d23 100644
+---- a/libdwfl/core-file.c
+-+++ b/libdwfl/core-file.c
+-@@ -595,7 +595,7 @@ dwfl_core_file_report (Dwfl *dwfl, Elf *elf, const char *executable)
+-       if (! __libdwfl_dynamic_vaddr_get (module->elf, &file_dynamic_vaddr))
+- 	continue;
+-       Dwfl_Module *mod;
+--      mod = __libdwfl_report_elf (dwfl, basename (module->name), module->name,
+-+      mod = __libdwfl_report_elf (dwfl, xbasename (module->name), module->name,
+- 				  module->fd, module->elf,
+- 				  module->l_ld - file_dynamic_vaddr,
+- 				  true, true);
+-diff --git a/libdwfl/dwfl_module_getsrc_file.c b/libdwfl/dwfl_module_getsrc_file.c
+-index 513af6b8..fc144225 100644
+---- a/libdwfl/dwfl_module_getsrc_file.c
+-+++ b/libdwfl/dwfl_module_getsrc_file.c
+-@@ -103,7 +103,7 @@ dwfl_module_getsrc_file (Dwfl_Module *mod,
+- 		{
+- 		  /* Match the name with the name the user provided.  */
+- 		  lastfile = file;
+--		  lastmatch = !strcmp (is_basename ? basename (file) : file,
+-+		  lastmatch = !strcmp (is_basename ? xbasename (file) : file,
+- 				       fname);
+- 		}
+- 	    }
+-diff --git a/libdwfl/dwfl_segment_report_module.c b/libdwfl/dwfl_segment_report_module.c
+-index 3ef62a7d..d0df7100 100644
+---- a/libdwfl/dwfl_segment_report_module.c
+-+++ b/libdwfl/dwfl_segment_report_module.c
+-@@ -718,7 +718,7 @@ dwfl_segment_report_module (Dwfl *dwfl, int ndx, const char *name,
+- 	      bias += fixup;
+- 	      if (module->name[0] != '\0')
+- 		{
+--		  name = basename (module->name);
+-+		  name = xbasename (module->name);
+- 		  name_is_final = true;
+- 		}
+- 	      break;
+-diff --git a/libdwfl/find-debuginfo.c b/libdwfl/find-debuginfo.c
+-index 7f7ab632..b358c774 100644
+---- a/libdwfl/find-debuginfo.c
+-+++ b/libdwfl/find-debuginfo.c
+-@@ -164,7 +164,7 @@ find_debuginfo_in_path (Dwfl_Module *mod, const char *file_name,
+- {
+-   bool cancheck = debuglink_crc != (GElf_Word) 0;
+- 
+--  const char *file_basename = file_name == NULL ? NULL : basename (file_name);
+-+  const char *file_basename = file_name == NULL ? NULL : xbasename (file_name);
+-   char *localname = NULL;
+- 
+-   /* We invent a debuglink .debug name if NULL, but then want to try the
+-@@ -278,7 +278,7 @@ find_debuginfo_in_path (Dwfl_Module *mod, const char *file_name,
+- 	  else
+- 	    {
+- 	      subdir = NULL;
+--	      file = basename (debuglink_file);
+-+	      file = xbasename (debuglink_file);
+- 	    }
+- 	  try_file_basename = debuglink_null;
+- 	  break;
+-@@ -306,7 +306,7 @@ find_debuginfo_in_path (Dwfl_Module *mod, const char *file_name,
+- 	    if (mod->dw != NULL && (p[0] == '\0' || p[0] == '/'))
+- 	      {
+- 		fd = try_open (&main_stat, dir, ".dwz",
+--			       basename (file), &fname);
+-+			       xbasename (file), &fname);
+- 		if (fd < 0)
+- 		  {
+- 		    if (errno != ENOENT && errno != ENOTDIR)
+-diff --git a/libdwfl/link_map.c b/libdwfl/link_map.c
+-index 06d85eb6..9d6b68c1 100644
+---- a/libdwfl/link_map.c
+-+++ b/libdwfl/link_map.c
+-@@ -469,7 +469,7 @@ report_r_debug (uint_fast8_t elfclass, uint_fast8_t elfdata,
+- 		      if (r_debug_info_module == NULL)
+- 			{
+- 			  // XXX hook for sysroot
+--			  mod = __libdwfl_report_elf (dwfl, basename (name),
+-+			  mod = __libdwfl_report_elf (dwfl, xbasename (name),
+- 						      name, fd, elf, base,
+- 						      true, true);
+- 			  if (mod != NULL)
+-diff --git a/libdwfl/linux-kernel-modules.c b/libdwfl/linux-kernel-modules.c
+-index 58c0c417..e9faba26 100644
+---- a/libdwfl/linux-kernel-modules.c
+-+++ b/libdwfl/linux-kernel-modules.c
+-@@ -116,7 +116,7 @@ try_kernel_name (Dwfl *dwfl, char **fname, bool try_debug)
+- 	/* Try the file's unadorned basename as DEBUGLINK_FILE,
+- 	   to look only for "vmlinux" files.  */
+- 	fd = INTUSE(dwfl_standard_find_debuginfo) (&fakemod, NULL, NULL, 0,
+--						   *fname, basename (*fname),
+-+						   *fname, xbasename (*fname),
+- 						   0, &fakemod.debug.name);
+- 
+-       if (fakemod.debug.name != NULL)
+-diff --git a/src/addr2line.c b/src/addr2line.c
+-index d902d791..d87e5b45 100644
+---- a/src/addr2line.c
+-+++ b/src/addr2line.c
+-@@ -385,7 +385,7 @@ print_dwarf_function (Dwfl_Module *mod, Dwarf_Addr addr)
+- 		  if (file == NULL)
+- 		    file = "???";
+- 		  else if (only_basenames)
+--		    file = basename (file);
+-+		    file = xbasename (file);
+- 		  else if (use_comp_dir && file[0] != '/')
+- 		    {
+- 		      const char *const *dirs;
+-@@ -568,7 +568,7 @@ print_src (const char *src, int lineno, int linecol, Dwarf_Die *cu)
+-   const char *comp_dir_sep = "";
+- 
+-   if (only_basenames)
+--    src = basename (src);
+-+    src = xbasename (src);
+-   else if (use_comp_dir && src[0] != '/')
+-     {
+-       Dwarf_Attribute attr;
+-diff --git a/src/ar.c b/src/ar.c
+-index 3bcb18fe..e6d6d58f 100644
+---- a/src/ar.c
+-+++ b/src/ar.c
+-@@ -1133,7 +1133,7 @@ do_oper_insert (int oper, const char *arfname, char **argv, int argc,
+-       for (int cnt = 0; cnt < argc; ++cnt)
+- 	{
+- 	  ENTRY entry;
+--	  entry.key = full_path ? argv[cnt] : basename (argv[cnt]);
+-+	  entry.key = full_path ? argv[cnt] : (char*)xbasename (argv[cnt]);
+- 	  entry.data = &argv[cnt];
+- 	  if (hsearch (entry, ENTER) == NULL)
+- 	    error_exit (errno, _("cannot insert into hash table"));
+-@@ -1242,7 +1242,7 @@ do_oper_insert (int oper, const char *arfname, char **argv, int argc,
+-       /* Open all the new files, get their sizes and add all symbols.  */
+-       for (int cnt = 0; cnt < argc; ++cnt)
+- 	{
+--	  const char *bname = basename (argv[cnt]);
+-+	  const char *bname = xbasename (argv[cnt]);
+- 	  size_t bnamelen = strlen (bname);
+- 	  if (found[cnt] == NULL)
+- 	    {
+-diff --git a/src/nm.c b/src/nm.c
+-index fbdee8e1..3675f59b 100644
+---- a/src/nm.c
+-+++ b/src/nm.c
+-@@ -1417,7 +1417,7 @@ show_symbols (int fd, Ebl *ebl, GElf_Ehdr *ehdr,
+- 			  int lineno;
+- 			  (void) dwarf_lineno (line, &lineno);
+- 			  const char *file = dwarf_linesrc (line, NULL, NULL);
+--			  file = (file != NULL) ? basename (file) : "???";
+-+			  file = (file != NULL) ? xbasename (file) : "???";
+- 			  int n;
+- 			  n = obstack_printf (&whereob, "%s:%d%c", file,
+- 					      lineno, '\0');
+-@@ -1448,7 +1448,7 @@ show_symbols (int fd, Ebl *ebl, GElf_Ehdr *ehdr,
+- 		{
+- 		  /* We found the line.  */
+- 		  int n = obstack_printf (&whereob, "%s:%" PRIu64 "%c",
+--					  basename ((*found)->file),
+-+					  xbasename ((*found)->file),
+- 					  (*found)->lineno,
+- 					  '\0');
+- 		  sym_mem[nentries_used].where = obstack_finish (&whereob);
+-diff --git a/src/stack.c b/src/stack.c
+-index 534aa93c..f4c5ba8c 100644
+---- a/src/stack.c
+-+++ b/src/stack.c
+-@@ -152,7 +152,7 @@ module_callback (Dwfl_Module *mod, void **userdata __attribute__((unused)),
+- 
+-   int width = get_addr_width (mod);
+-   printf ("0x%0*" PRIx64 "-0x%0*" PRIx64 " %s\n",
+--	  width, start, width, end, basename (name));
+-+	  width, start, width, end, xbasename (name));
+- 
+-   const unsigned char *id;
+-   GElf_Addr id_vaddr;
+-diff --git a/src/strip.c b/src/strip.c
+-index 2a2cc801..88977a5c 100644
+---- a/src/strip.c
+-+++ b/src/strip.c
+-@@ -1800,7 +1800,7 @@ handle_elf (int fd, Elf *elf, const char *prefix, const char *fname,
+- 		      elf_errmsg (-1));
+- 	}
+- 
+--      char *debug_basename = basename (debug_fname_embed ?: debug_fname);
+-+      const char *debug_basename = xbasename (debug_fname_embed ?: debug_fname);
+-       off_t crc_offset = strlen (debug_basename) + 1;
+-       /* Align to 4 byte boundary */
+-       crc_offset = ((crc_offset - 1) & ~3) + 4;
+-diff --git a/tests/show-die-info.c b/tests/show-die-info.c
+-index 1a3191cd..bda459a5 100644
+---- a/tests/show-die-info.c
+-+++ b/tests/show-die-info.c
+-@@ -27,6 +27,7 @@
+- #include <unistd.h>
+- 
+- #include "../libdw/known-dwarf.h"
+-+#include "../lib/system.h"
+- 
+- static const char *
+- dwarf_tag_string (unsigned int tag)
+-@@ -318,7 +319,7 @@ main (int argc, char *argv[])
+-       int fd = open (argv[cnt], O_RDONLY);
+-       Dwarf *dbg;
+- 
+--      printf ("file: %s\n", basename (argv[cnt]));
+-+      printf ("file: %s\n", xbasename (argv[cnt]));
+- 
+-       dbg = dwarf_begin (fd, DWARF_C_READ);
+-       if (dbg == NULL)
+-diff --git a/tests/varlocs.c b/tests/varlocs.c
+-index 8e563fd3..1004f969 100644
+---- a/tests/varlocs.c
+-+++ b/tests/varlocs.c
+-@@ -1120,7 +1120,7 @@ main (int argc, char *argv[])
+- 
+- 	  const char *name = (modname[0] != '\0'
+- 			      ? modname
+--			      :  basename (mainfile));
+-+			      :  xbasename (mainfile));
+- 	  printf ("module '%s'\n", name);
+- 	  print_die (&cudie, "CU", 0);
+- 
+--- 
+-2.48.1
+-
+diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
+index e3cc67dc0e..19f628de46 100644
+--- a/package/elfutils/elfutils.hash
++++ b/package/elfutils/elfutils.hash
+@@ -1,5 +1,5 @@
+ # From https://sourceware.org/elfutils/ftp/0.189/sha512.sum
+-sha512  93a877e34db93e5498581d0ab2d702b08c0d87e4cafd9cec9d6636dfa85a168095c305c11583a5b0fb79374dd93bc8d0e9ce6016e6c172764bcea12861605b71  elfutils-0.189.tar.bz2
++sha512  543188f5f2cfe5bc7955a878416c5f252edff9926754e5de0c6c57b132f21d9285c9b29e41281e93baad11d4ae7efbbf93580c114579c182103565fe99bd3909  elfutils-0.192.tar.bz2
+ # Locally calculated
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING-GPLV2
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index 8738af7751..e7c2efe867 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ELFUTILS_VERSION = 0.189
++ELFUTILS_VERSION = 0.192
+ ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
+ ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
+ ELFUTILS_INSTALL_STAGING = YES
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
