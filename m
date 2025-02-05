@@ -4,95 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E25E8C02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 09:44:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CD9AC02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 09:45:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 852D7415EB;
-	Wed,  5 Feb 2025 09:44:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE8E741746;
+	Wed,  5 Feb 2025 09:45:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WErB-mL2jXYH; Wed,  5 Feb 2025 09:44:04 +0000 (UTC)
+ id rrJ2yvwSxmYZ; Wed,  5 Feb 2025 09:45:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A6EF41609
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 440C6416FA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A6EF41609;
-	Wed,  5 Feb 2025 09:44:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 440C6416FA;
+	Wed,  5 Feb 2025 09:45:14 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C66D1CD
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:44:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E8829CD
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:45:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE90A4130A
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:44:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D802141625
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:45:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ro8PPsKfuntq for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 09:44:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ id x0DH95Bcq1Zr for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 09:45:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B97EC41681
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B97EC41681
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B97EC41681
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:41:36 +0000 (UTC)
-X-CSE-ConnectionGUID: r25N+mPHTs+aA642/KOscA==
-X-CSE-MsgGUID: Zee04Tg7Sgexa+zD8Hv2lg==
-Received: from unknown (HELO opfedv3rlp0b.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 05 Feb 2025 10:41:34 +0100
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0b.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Feb 2025 10:41:34 +0100
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Wed, 5 Feb 2025 10:41:32 +0100
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Wed, 05 Feb 2025 10:41:31 +0100
-From: yann.morin@orange.com
-X-CSE-ConnectionGUID: nBM+y863QPSJBBb0NA/pTg==
-X-CSE-MsgGUID: G3yKWba1T5iFf20w4voDkQ==
-X-IronPort-AV: E=Sophos;i="6.13,261,1732575600"; d="scan'208";a="253031600"
-Date: Wed, 5 Feb 2025 10:41:31 +0100
-To: Christian Stewart <christian@aperture.us>
-Message-ID: <Z6MyS48IVKJ8vhsC@yd-6wlzhs3>
-References: <20250204143227.1233163-1-fiona.klute@gmx.de>
- <CA+h8R2odWOyS=7=9LGGkBGHYENiLHtkj76_L2Zvq_PHOFYs9sA@mail.gmail.com>
- <527da78c-270f-4ec6-8a6e-1210456517a5@mind.be>
- <Z6MhhfrgmRrtMhrB@yd-6wlzhs3>
- <CA+h8R2qR95DDHn45tqUG57rSCRWpfWkVU2sd2GxpCDhkkzrr_w@mail.gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8BEFF416FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BEFF416FA
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8BEFF416FA
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:45:09 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3CBB84327E;
+ Wed,  5 Feb 2025 09:45:07 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1tfbxy-0000Ko-26;
+ Wed, 05 Feb 2025 10:45:06 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed,  5 Feb 2025 10:45:05 +0100
+Message-Id: <20250205094505.1274-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CA+h8R2qR95DDHn45tqUG57rSCRWpfWkVU2sd2GxpCDhkkzrr_w@mail.gmail.com>
-X-Originating-IP: [10.115.26.52]
-X-ClientProxiedBy: OPE16NORMBX102.corporate.adroot.infra.ftgroup (10.115.26.3)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1738748498; x=1770284498;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=9/5dHQqtDJbNPneFGrypV9n+ogKkLt0XoMOmSsm2xvc=;
- b=jGIZvaZYLyqEhv8dmzvwYAVjUM12iwEWug7pIwg37EB2MOg5duUnYwS5
- BdDwQ9vm+wX217jG4FxsPA160elDjSWFOdVLpwCYUOqz/kATa/RoEbz7i
- cWfKytkqBeHAo5AoEzw9imNirV/+Q3NzsJ0dHo9eKzemJXs50c6ZfBtu5
- URsVPFNTRhqRhWa93qnH0wP0MlMnF0dctnWRZHnYR26wyEQs14S6N1SjZ
- aVs95q2Hp1jwWLiFZBsgwvfreby62aa6I9LJMU+Wa/s9bzH8qqEp5IZ2/
- 7xqCdZ50icnqD66xpqIdOjtUkRAHwstcwPMnv7kWhaFgWx+eCke7qgNXQ
- w==;
+X-GND-State: clean
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeduvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnheptdehteehiefhueeuuddvkeduheevgefgvddvkeevhfejgfeiieffuefgleevffegnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhnvghtpdhgvghnvdhvughrrdguvgdpfigpshgtrghnqddvtddugeduuddvvddrohhrghdpsghuihhlughrohhothdrohhrghdphhhtphgtqdhfohhruhhmrdguvgenucfkphepuddtledrkeelrddvfedvrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutdelrdekledrvdefvddrheehpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvkhhosehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhm
+X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=jGIZvaZY
-Subject: Re: [Buildroot] [PATCH 1/1] package/containerd: fix build with
- toolchain without Gold linker
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH] package/w_scan: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,77 +68,214 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Perale <thomas.perale@mind.be>, Fiona Klute <fiona.klute@gmx.de>,
- Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Q2hyaXN0aWFuLCBBbGwsCgpPbiAyMDI1LTAyLTA1IDAxOjIwIC0wODAwLCBDaHJpc3RpYW4gU3Rl
-d2FydCBzcGFrZSB0aHVzbHk6Cj4gT24gV2VkLCBGZWIgNSwgMjAyNSwgMTI6MjnigK9BTSA8IFsx
-XXlhbm4ubW9yaW5Ab3JhbmdlLmNvbT4gd3JvdGU6Cj4gICBTbywgSSBndWVzcyB5b3Ugb25seSBh
-Y3R1YWxseSBzdWdnZXN0ZWQgbW92aW5nIHNldHRpbmcgLWZ1c2UtbGQ9YmZkIGFuZAo+ICAgLVds
-LC0tbm8tcGllIGZsYWdzIGludG8gcGtnLWdvbGFuZywgcmlnaHQ/Cj4gTXkgdGhpbmtpbmcgaXMg
-dGhhdCB3ZSBhbHdheXMgd2FudCBHbyB0byBoYXZlIGZ1c2UtbGQgc2V0IHRvIHRoZSBjb3JyZWN0
-ICJsZCIgd2UgYXJlIHVzaW5nLiBTbyBpdCBtYWtlcyBzZW5zZSB0byBzZXQgdGhpcyBpbgo+IHBr
-Zy1nb2xhbmcuCj4gVGhpcyB3YXkgYW55IG5ldyBwYWNrYWdlcyB0aGF0IGhhdmUgZHluYW1pYyBs
-aW5raW5nIChjZ28pIHdpbGwgYWxzbyBwaWNrIHVwIHRoZSBmaXggYXMgbmVlZGVkLgoKT0ssIHRo
-YXQgaXMgZm9yIC1mdXNlLWxkPWJmZC4gVGhhdCBtYWtlcyBzZW5zZS4KCldoYXQgYWJvdXQgLVds
-LC0tbm8tcGllLCB0aGVuPyBEb2VzIGl0IGFsc28gbWFrZSBzZW5zZSB0byBoYXZlIGluIHRoZQpp
-bmZyYSBhcyB3ZWxsPwoKPiAgIFdoZW4gSSBpbml0aWFsbHkgbmVlZGVkIC1mdXNlLWxkPWJmZCBm
-b3IgZmlsZWJlYXQsIEkgZGlkIG5vdCBmZWVsIHZlcnkKPiAgIGNvbmZpZGVudCB0aGF0IHdlIHNo
-b3VsZCBkbyBpdCB1bmNvbmRpdGlvbmFsbHkuIEluZGVlZCwgbm9uZSBvZiB0aGUKPiAgIHtob3N0
-LSx9Z29sYW5nLXBhY2thZ2UgcGFja2FnZXMgd2UgaGFkIGF0IHRoYXQgdGltZSBuZWVkZWQgaXQg
-YXQgYWxsLiBTbwo+ICAgSSBjb25jbHVkZWQgdGhhdCBmaWxlYmVhdCB3YXMgc3BlY2lhbCAoaXQg
-d2FzIGFscmVhZHkgc3BlY2lhbCBpbiBhIGZldwo+ICAgb3RoZXIgcmVzcGVjdHMsIHNvIG1laCku
-Cj4gSXQgaXMganVzdCBiZWNhdXNlIGl0IHVzZXMgY2dvLCBvciBhbSBJIHdyb25nPwoKVEJILCBJ
-IGp1c3QgYmFuZ2VkIG9uIGl0IHVudGlsIGl0IGJ1aWxkIGFuZCBydW4uIElmIGNnbyBpcyB0aGUg
-cmVhc29uIHdlCm5lZWQgdG8gcGFzcyAtZnVzZS1sZD1iZmQsIHRoZW4gdGhhdCBzaG91bGQgYmUg
-cGFydCBvZiB0aGUgY29uZGl0aW9uLApubz8gaS5lLiwgc29tZXRoaW5nIGxpa2UgKGluIHBrZy1n
-b2xhbmcubWspOgoKICAgIGlmZXEgKCQkKEJSMl9QQUNLQUdFX0hPU1RfR09fVEFSR0VUX0NHT19M
-SU5LSU5HX1NVUFBPUlRTKSx5KQogICAgaWZlcSAoJCQoQlIyX2FhcmNoNjQpLHkpCiAgICAkKDIp
-X0VYVExERkxBR1MgKz0gLWZ1c2UtbGQ9YmZkCiAgICBlbmRpZiAgIyBBQXJjaDY0CiAgICBlbmRp
-ZiAgIyBDR08gbGlua2luZwoKT3IgY2FuIHdlIGp1c3QgcGFzcyBpdCB1bmNvbmRpdGlvbmFsbHks
-IGV2ZW4gaWYgaXQgaXMgYWN0dWFsbHkgbm90IGdvaW5nCnRvIGJlIHVzZWQ/IEkuZS4gZG8gd2Ug
-bmVlZCBhbnkgY29uZGl0aW9uIGF0IGFsbCwgZXZlbSB0aGUgQUFyY2g2NCBvbmU/CgpJZiB3ZSB3
-YW50IHRvIGludHJvZHVjZSB0aGF0IGFzc2lnbm1lbnQgaW4gdGhlIGluZnJhLCB3ZSBuZWVkIHRv
-IGdldCBhcwptdWNoIGluc2lnaHRzIGFzIHBvc3NpYmxlIHRvIGV4cGxhaW4gaXQsIGFuZCB3ZSBu
-ZWVkIHRvIGdldCBhZmZpcm1hdGl2ZQpzdGF0ZW1lbnRzIGFzIHRvIGhvdyB3ZSBzaG91bGQgc2V0
-IGl0LgoKSSBndWVzcyBteSBwYXRjaCBhZGRpbmcgRk9PX0VYVExERkxBR1Mgd291bGQgbm90IGNo
-YW5nZSwgYnV0IEZpb25hIHdpbGwKbmVlZCB0aGF0IGluZm8gaWYgc2hlIGlzIHRvIHJlc3BpbiBh
-IGZpeCBmb3IgY29udGFpbmVyZCdzIGJ1aWxkIGZhaWx1cmUuCgpbLS1TTklQLS1dCj4gICBTdGls
-bCwgSSBiZWxpZXZlIHRoZXJlIHNob3VsZCBiZSBhIHdheSBmb3IgcGFja2FnZXMgdG8gYmUgYWJs
-ZSB0byBwYXNzCj4gICBhcmJpdHJhcnkgZXh0bGRmbGFncywgYW5kIHRodXMgdGhlIHZhcmlhYmxl
-IHNob3VsZCBiZSBleHBvc2VkLgo+IFllcywgdGhhdCB2YXJpYWJsZSBzaG91bGQgYmUgZXhwb3Nl
-ZCwgSSBhZ3JlZS4gSXQncyB1c2VmdWwgdG8gYmUgYWJsZSB0byBwYXNzIGV4dHJhIGxkIGZsYWdz
-IGFzIG5lZWRlZC4KCkFDSywgdGhhbmtzIGZvciB0aGUgZmVlYmFjayEKClJlZ2FyZHMsCllhbm4g
-RS4gTU9SSU4uCgotLSAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF9f
-X19fX19fX19fXwouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS06ICAgICAg
-IF8gICAgOi0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUg
-RW1iZWRkZWQgfCAgICBfXy8gKSAgIHwgLyJcIEFTQ0lJIFJJQkJPTiB8CnwgICAgICAgICAgICAg
-ICAgIHwgU29mdHdhcmUgIERlc2lnbmVyIHwgIF8vIC0gLycgICB8IFwgLyBDQU1QQUlHTiAgICAg
-fAp8ICszMyA2MzguNDExLjI0NSAnLS0tLS0tLS0tLS0tLS0tLS0tLS06IChfICAgIGAtLSwgfCAg
-WCAgQUdBSU5TVCAgICAgIHwKfCB5YW5uLm1vcmluIChhdCkgb3JhbmdlLmNvbSAgICAgICAgICAg
-fF89IiAgICAsLS0nIHwgLyBcIEhUTUwgTUFJTCAgICB8CictLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLTpfX19fX18vX19fX186LS0tLS0tLS0tLS0tLS0tLS0tJwoKX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQpDZSBtZXNzYWdl
-IGV0IHNlcyBwaWVjZXMgam9pbnRlcyBwZXV2ZW50IGNvbnRlbmlyIGRlcyBpbmZvcm1hdGlvbnMg
-Y29uZmlkZW50aWVsbGVzIG91IHByaXZpbGVnaWVlcyBldCBuZSBkb2l2ZW50IGRvbmMNCnBhcyBl
-dHJlIGRpZmZ1c2VzLCBleHBsb2l0ZXMgb3UgY29waWVzIHNhbnMgYXV0b3Jpc2F0aW9uLiBTaSB2
-b3VzIGF2ZXogcmVjdSBjZSBtZXNzYWdlIHBhciBlcnJldXIsIHZldWlsbGV6IGxlIHNpZ25hbGVy
-DQphIGwnZXhwZWRpdGV1ciBldCBsZSBkZXRydWlyZSBhaW5zaSBxdWUgbGVzIHBpZWNlcyBqb2lu
-dGVzLiBMZXMgbWVzc2FnZXMgZWxlY3Ryb25pcXVlcyBldGFudCBzdXNjZXB0aWJsZXMgZCdhbHRl
-cmF0aW9uLA0KT3JhbmdlIGRlY2xpbmUgdG91dGUgcmVzcG9uc2FiaWxpdGUgc2kgY2UgbWVzc2Fn
-ZSBhIGV0ZSBhbHRlcmUsIGRlZm9ybWUgb3UgZmFsc2lmaWUuIE1lcmNpLg0KDQpUaGlzIG1lc3Nh
-Z2UgYW5kIGl0cyBhdHRhY2htZW50cyBtYXkgY29udGFpbiBjb25maWRlbnRpYWwgb3IgcHJpdmls
-ZWdlZCBpbmZvcm1hdGlvbiB0aGF0IG1heSBiZSBwcm90ZWN0ZWQgYnkgbGF3Ow0KdGhleSBzaG91
-bGQgbm90IGJlIGRpc3RyaWJ1dGVkLCB1c2VkIG9yIGNvcGllZCB3aXRob3V0IGF1dGhvcmlzYXRp
-b24uDQpJZiB5b3UgaGF2ZSByZWNlaXZlZCB0aGlzIGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90
-aWZ5IHRoZSBzZW5kZXIgYW5kIGRlbGV0ZSB0aGlzIG1lc3NhZ2UgYW5kIGl0cyBhdHRhY2htZW50
-cy4NCkFzIGVtYWlscyBtYXkgYmUgYWx0ZXJlZCwgT3JhbmdlIGlzIG5vdCBsaWFibGUgZm9yIG1l
-c3NhZ2VzIHRoYXQgaGF2ZSBiZWVuIG1vZGlmaWVkLCBjaGFuZ2VkIG9yIGZhbHNpZmllZC4NClRo
-YW5rIHlvdS4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Fixes http://autobuild.buildroot.net/results/da054694f0056027e83e77a1cedff5659885f2ca/
+
+The upstream location is gone (taken over by a domain squatter), there are
+no reverse dependencies, it is not listed in DEVELOPERS and hasn't been
+updated since 2017 with commit 0762015f144f ("package/w_scan: bump version
+to 20170107"), so drop it.
+
+It looks to be superseded by a C++ version at
+https://www.gen2vdr.de/wirbel/w_scan_cpp/index2.html, which can be added if
+there is interest.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .checkpackageignore                           |  2 -
+ Config.in.legacy                              |  7 ++++
+ package/Config.in                             |  1 -
+ package/w_scan/0001-musl.patch                | 26 -------------
+ ...002-si_types-h-fix-build-with-gcc-10.patch | 37 -------------------
+ package/w_scan/Config.in                      | 14 -------
+ package/w_scan/w_scan.hash                    |  3 --
+ package/w_scan/w_scan.mk                      | 18 ---------
+ 8 files changed, 7 insertions(+), 101 deletions(-)
+ delete mode 100644 package/w_scan/0001-musl.patch
+ delete mode 100644 package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch
+ delete mode 100644 package/w_scan/Config.in
+ delete mode 100644 package/w_scan/w_scan.hash
+ delete mode 100644 package/w_scan/w_scan.mk
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 194a2d1c72..6b45fb9e94 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1261,8 +1261,6 @@ package/vte/0002-build-Fix-check-for-fstack-protector-compiler-support.patch lib
+ package/vtun/0001-fix-installation.patch lib_patch.Upstream
+ package/vtun/0002-fix-ssl-headers-checks.patch lib_patch.Upstream
+ package/vtun/0003-openssl11.patch lib_patch.Upstream
+-package/w_scan/0001-musl.patch lib_patch.Upstream
+-package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch lib_patch.Upstream
+ package/waffle/0001-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch lib_patch.Upstream
+ package/waffle/0002-wayland-fix-build-against-version-1-20.patch lib_patch.Upstream
+ package/waffle/0003-drop-C-dependency.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 2e5bd3153f..b5ea4866fe 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2025.02"
+ 
++config BR2_PACKAGE_W_SCAN
++	bool "w_scan has been removed"
++	select BR2_LEGACY
++	help
++	  The w_scan package was removed as it is not maintained
++	  anymore and the upstream URL is gone.
++
+ config BR2_PACKAGE_GENROMFS
+ 	bool "genromfs"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 83f69f9004..ab69ce0293 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -655,7 +655,6 @@ endmenu
+ 	source "package/usbip/Config.in"
+ 	source "package/usbmount/Config.in"
+ 	source "package/usbutils/Config.in"
+-	source "package/w_scan/Config.in"
+ 	source "package/wf111/Config.in"
+ 	source "package/wilc-driver/Config.in"
+ 	source "package/wipe/Config.in"
+diff --git a/package/w_scan/0001-musl.patch b/package/w_scan/0001-musl.patch
+deleted file mode 100644
+index 46d67677a8..0000000000
+--- a/package/w_scan/0001-musl.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-Fix musl build
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -uNr w_scan-20141122.org/descriptors.h w_scan-20141122/descriptors.h
+---- w_scan-20141122.org/descriptors.h	2014-11-22 09:49:26.000000000 +0100
+-+++ w_scan-20141122/descriptors.h	2016-01-24 14:05:21.000000000 +0100
+-@@ -28,6 +28,7 @@
+- #ifndef __DESCRIPTORS_H__
+- #define __DESCRIPTORS_H__
+- 
+-+#include <time.h>
+- #include "extended_frontend.h"
+- 
+- /******************************************************************************
+-diff -uNr w_scan-20141122.org/version.h w_scan-20141122/version.h
+---- w_scan-20141122.org/version.h	2014-11-22 11:59:56.000000000 +0100
+-+++ w_scan-20141122/version.h	2016-01-24 14:06:33.000000000 +0100
+-@@ -1,6 +1,6 @@
+- /* AUTOMATICALLY GENERATED - DO NOT EDIT MANUALLY */
+- #ifndef W_SCAN_VERSION_H
+- #define W_SCAN_VERSION_H
+--uint version=20170107;
+-+unsigned int version=20170107;
+- #endif
+- 
+diff --git a/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch b/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch
+deleted file mode 100644
+index 50d2488190..0000000000
+--- a/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-si_types.h: fix build with gcc 10
+-
+-Drop service_t, p_service_t, transponder_t and p_transponder_t to avoid
+-the following build failure with gcc 10 (which defaults to -fno-common):
+-
+-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -Wall -Wextra -Wno-comment -Wswitch-default -Wno-unused-parameter -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -lrt  -o w_scan atsc_psip_section.o countries.o descriptors.o diseqc.o dump-dvbscan.o dump-vdr.o dump-xine.o dump-mplayer.o dump-vlc-m3u.o dvbscan.o lnb.o parse-dvbscan.o satellites.o scan.o section.o tools.o emulate.o dump-xml.o iconv_codes.o char-coding.o  
+-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x404): multiple definition of `p_transponder_t'; countries.o:(.bss+0x0): first defined here
+-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x408): multiple definition of `transponder_t'; countries.o:(.bss+0x4): first defined here
+-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x480): multiple definition of `p_service_t'; countries.o:(.bss+0x7c): first defined here
+-/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x484): multiple definition of `service_t'; countries.o:(.bss+0x80): first defined here
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/5640442cb4ba06bcbcf31540a64f5665862d39f7
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-
+-diff -Nura w_scan-20170107.orig/si_types.h w_scan-20170107/si_types.h
+---- w_scan-20170107.orig/si_types.h	2020-09-20 11:09:56.776963441 +0200
+-+++ w_scan-20170107/si_types.h	2020-09-20 11:13:13.149232478 +0200
+-@@ -114,7 +114,7 @@
+-   uint32_t logical_channel_number;
+-   uint8_t  running;
+-   void   * priv;
+--} service_t, * p_service_t;
+-+};
+- 
+- /*******************************************************************************
+- /* transponder type.
+-@@ -201,7 +201,7 @@
+-   /*----------------------------*/
+-   char * network_name;
+-   network_change_t network_change;
+--} __attribute__((packed))  transponder_t, * p_transponder_t;
+-+} __attribute__((packed));
+- 
+- /*******************************************************************************
+- /* satellite channel routing type.
+diff --git a/package/w_scan/Config.in b/package/w_scan/Config.in
+deleted file mode 100644
+index d5471200ad..0000000000
+--- a/package/w_scan/Config.in
++++ /dev/null
+@@ -1,14 +0,0 @@
+-comment "w_scan needs a toolchain w/ headers >= 3.7"
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+-
+-config BR2_PACKAGE_W_SCAN
+-	bool "w_scan"
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
+-	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+-	help
+-	  w_scan is a small command line utility used to perform
+-	  frequency scans for DVB and ATSC transmissions. It is
+-	  capable of creating channels.conf files (in different output
+-	  formats !) as well as initial tuning data for scan.
+-
+-	  https://www.gen2vdr.de/wirbel/w_scan/index2.html
+diff --git a/package/w_scan/w_scan.hash b/package/w_scan/w_scan.hash
+deleted file mode 100644
+index fcb0e611bc..0000000000
+--- a/package/w_scan/w_scan.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  38e0f38a7bf06cff6d6ea01652ad4ee60da2cb0e937360468f936da785b46ffe  w_scan-20170107.tar.bz2
+-sha256  ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7  COPYING
+diff --git a/package/w_scan/w_scan.mk b/package/w_scan/w_scan.mk
+deleted file mode 100644
+index c63f20cc9e..0000000000
+--- a/package/w_scan/w_scan.mk
++++ /dev/null
+@@ -1,18 +0,0 @@
+-################################################################################
+-#
+-# w_scan
+-#
+-################################################################################
+-
+-W_SCAN_VERSION = 20170107
+-W_SCAN_SOURCE = w_scan-$(W_SCAN_VERSION).tar.bz2
+-W_SCAN_SITE = http://wirbel.htpc-forum.de/w_scan
+-W_SCAN_LICENSE = GPL-2.0+
+-W_SCAN_LICENSE_FILES = COPYING
+-
+-ifeq ($(BR2_PACKAGE_LIBICONV),y)
+-W_SCAN_DEPENDENCIES += libiconv
+-W_SCAN_CONF_ENV += LIBS=-liconv
+-endif
+-
+-$(eval $(autotools-package))
+-- 
+2.39.5
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
