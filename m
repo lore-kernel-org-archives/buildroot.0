@@ -1,52 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE6CFC02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 10:09:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CAD0C02196
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 10:09:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0330341624;
-	Wed,  5 Feb 2025 10:09:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 12E2560FA9;
+	Wed,  5 Feb 2025 10:09:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EmOoBb0n5fGX; Wed,  5 Feb 2025 10:09:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LXzjhxc2IANK; Wed,  5 Feb 2025 10:09:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B70641681
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6D58606B4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B70641681;
-	Wed,  5 Feb 2025 10:09:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2FE9D12A
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:09:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6D58606B4;
+	Wed,  5 Feb 2025 10:09:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 52EC912F
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:09:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 136D180DA0
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:09:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 338B560631
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:09:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8LZTzi6dJ0k0 for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 10:09:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83E3180D9C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 83E3180D9C
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:09:19 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 706FD86FB8; Wed,  5 Feb 2025 10:09:19 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 11:06:08 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 65503c219defc8151de3f39d1350aed93cfa1898
-X-Git-Newrev: 75ab6cf93a3ba505897ae99b5ff4bffda55d3c7b
-X-Patchwork-Hint: ignore
-Message-Id: <20250205100919.706FD86FB8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{python-}protobuf: bump to version
- 28.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GCB9HlkGEyf8 for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 10:09:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D76CE60B21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D76CE60B21
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D76CE60B21
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:09:24 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-4363ae65100so76769905e9.0
+ for <buildroot@buildroot.org>; Wed, 05 Feb 2025 02:09:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1738750162; x=1739354962;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=yVyXQG7K3VdcPjAeIIwjuv9mgiFdRyiNkAVW+bxpiDg=;
+ b=To+OC50CWMYjNYH60HMw0cQie8RS/FGkulMeTiZqtJSWv3X4/iFLkSJrWwHYULLzkb
+ zCn7Pgzlansldgh+TUoHule6T03gC8r9EiXqSCjtwD1tfzic/jwFI55qKPjqfAog8rU3
+ eP+Kc6FL+3oY8TieWzmMpFofPS4NkPcNCOeD2/WVsdE0O7hpmBeVd1/MCP1FQV4LAwgI
+ XrAKeQZjjpb6PV7BmrrQtLGsxEs53V1irN59JqfiNj5AS4q98TJFp7YMNcZMCrV8XB4R
+ bYXCKeHBVWjrCl8cXo3sQ3xzU3d7HvXaJ/+qbaJ5rdOBRuLg0VBXUyTkX2cJmSF/4yo8
+ BExg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCX3KCkqRKpmARMGDuOCeDk+bDTziC7rVwm6tX7/LhSVFQ3PG7VSPCuGYsXzM90Qa2c/yV7n3Qt/9jc=@buildroot.org
+X-Gm-Message-State: AOJu0Yy9AuWpzQc6DlJWcoKZmDebyVtV4GkjXNhlm2TgBwdLtEhb03sb
+ F8cFe9NekDcDJ5pHTy3exgrlCj64YaMQpvjiluFFrBck/tcp6czQl2uplDY6keU=
+X-Gm-Gg: ASbGncu2Ob4aArjEzkYsrAQkfAe+lCEpeRYVrbiC6P3xgbA4nsPzmRps1v18ZNqKPB+
+ tw9H3vBR5Cu9IkoimbhqIt34PT0nnvDWmDANelOKEPtsBEnDLqXZqv6JbNnKzu9Fbskg7+qnJ+Z
+ AshH6IF1ukQm+09WwPb5VaNW14v0D8kg+lFNUANEyYOKO8+8U9DjjhaEzXxlTJNOwe0CY2i5X85
+ HKuFy5HGrS6xzoLLaXIwIe6jKaw7e00Dy91QYIeDVbpFF0kmpvLEYpv06weopXLA8eZ6RY3u9cD
+ dCgrG34GfPcN85GPFc32Ysnqw/iC6gIISrkfqxA0spZd3uk=
+X-Google-Smtp-Source: AGHT+IH6NXK1TUf4je+QC7VQ0pPw3L+Aq9aaB6D3VlbWdrLWBjuQOMEeV5GHYJgnph9krYVHz/yApQ==
+X-Received: by 2002:a05:600c:1f85:b0:434:a1d3:a321 with SMTP id
+ 5b1f17b1804b1-4390d42f6b4mr17537395e9.3.1738750162587; 
+ Wed, 05 Feb 2025 02:09:22 -0800 (PST)
+Received: from [172.16.2.111] (host-109-89-232-55.dynamic.voo.be.
+ [109.89.232.55]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4390d94d40csm16135395e9.9.2025.02.05.02.09.21
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 05 Feb 2025 02:09:22 -0800 (PST)
+Message-ID: <03d5d181-0593-4d1f-8175-f4a8968eb805@mind.be>
+Date: Wed, 5 Feb 2025 11:09:20 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>, buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>
+References: <20250205-fix_zxing-v1-0-c3e4c2adfdab@bootlin.com>
+ <20250205-fix_zxing-v1-1-c3e4c2adfdab@bootlin.com>
+Content-Language: en-GB
+In-Reply-To: <20250205-fix_zxing-v1-1-c3e4c2adfdab@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1738750162; x=1739354962; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=yVyXQG7K3VdcPjAeIIwjuv9mgiFdRyiNkAVW+bxpiDg=;
+ b=ae4ECR8kySl4cmNMLQy12Gh+Z/LVFVQrHyc4hCHzthXcDqWJ9Ftmj7cDeBlu2bnLZy
+ BW+JMnW4TbD3+3j7KFfthGNYAscq/47+sRNxJltqghohzEOf7khzOQ6vuO68bD0hl4TD
+ F+kNROfdj/IcHaJ1d0pDc+l8NVUI1OObvVfbfwuHdbq/sBM6oryBNv+0T6lfR6OhtPwN
+ zq2mA7TdZ1CIB1OnNXv2DP+D7S8VDB9ev6MpV0tNr5z2iPW+A0pU3Itnjgo3cg1JvkCp
+ h2i7bRFUGjrVY01MpXYI5eABOrs90NE7B+c1OTsgUdPaSTo44XtzbwxZfgj02M7tPUIZ
+ XpBQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=ae4ECR8k
+Subject: Re: [Buildroot] [PATCH 01/12] package/gstreamer1/gst-omx: remove
+ gst-omx
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,421 +115,138 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75ab6cf93a3ba505897ae99b5ff4bffda55d3c7b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Migrate protobuf build from autotools to cmake.
 
-Migrate protobuf-python to use pypi sources which are now required
-for setup.py builds:
-https://github.com/protocolbuffers/protobuf/tree/v28.1/python#building-from-setuppy
+On 05/02/2025 10:47, Thomas Bonnefille wrote:
+> The OMX plugin has been removed from gstreamer as the OpenMAX standard
+> is long dead and even the Raspberry Pi OS no longer supports it.
+> 
+> See release notes for more details:
+>      https://gstreamer.freedesktop.org/releases/1.24/
+> 
+> Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 
-The BR2_or1k workaround is removed, as protobuf depends on
-libabseil-cpp, which isn't available on OpenRISC.
+  Applied to master, thanks.
 
-The BR2_TOOLCHAIN_HAS_GCC_BUG_85180 workaround is removed, as this
-workaround is for Microblaze, and protobuf depends on libabseil-cpp,
-which isn't avialable on Microblaze.
+  Regards,
+  Arnout
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Arnout: remove netbird whch was accidentally added]
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/criu/Config.in                       |  2 +-
- package/kismet/Config.in                     | 12 ++++--
- package/mosh/Config.in                       |  6 +--
- package/netdata/Config.in                    |  6 +--
- package/ola/Config.in                        |  5 ++-
- package/opencv3/Config.in                    |  6 +--
- package/opencv4/Config.in                    |  9 ++++-
- package/protobuf/Config.in                   |  8 ++--
- package/protobuf/protobuf.hash               |  2 +-
- package/protobuf/protobuf.mk                 | 60 ++++++++++++++++------------
- package/python-protobuf/python-protobuf.hash |  6 ++-
- package/python-protobuf/python-protobuf.mk   |  5 +--
- package/usbguard/Config.in                   |  2 +-
- 13 files changed, 75 insertions(+), 54 deletions(-)
+> ---
+>   Config.in.legacy                        |  7 ++++++
+>   package/gstreamer1/Config.in            |  1 -
+>   package/gstreamer1/gst-omx/Config.in    | 11 ----------
+>   package/gstreamer1/gst-omx/gst-omx.hash |  3 ---
+>   package/gstreamer1/gst-omx/gst-omx.mk   | 39 ---------------------------------
+>   5 files changed, 7 insertions(+), 54 deletions(-)
+> 
+> diff --git a/Config.in.legacy b/Config.in.legacy
+> index e091fd8c0a972c3043e9664652e3d40e6d83af8b..4f0b78d9589a65e8f69bca406cec49cdc2d5294c 100644
+> --- a/Config.in.legacy
+> +++ b/Config.in.legacy
+> @@ -172,6 +172,13 @@ config BR2_PACKAGE_DIRECTFB
+>   	  This package was no longer maintained upstream, so it was
+>   	  dropped from Buildroot.
+>   
+> +config BR2_PACKAGE_GST_OMX
+> +	bool "gst-omx has been removed"
+> +	select BR2_LEGACY
+> +	help
+> +	  The gst-omx module has been removed from Gstreamer in
+> +	  release 1.24 in favor of Video4Linux-based video encoders.
+> +
+>   config BR2_PACKAGE_SDL2_DIRECTFB
+>   	bool "sdl2 directfb support removed"
+>   	select BR2_LEGACY
+> diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
+> index 8fe8a343950334caff2954231ae55465473b39f0..67c33e5d4e518d85290a73fdbef484d55f35b617 100644
+> --- a/package/gstreamer1/Config.in
+> +++ b/package/gstreamer1/Config.in
+> @@ -15,7 +15,6 @@ source "package/gstreamer1/gst1-python/Config.in"
+>   source "package/gstreamer1/gst1-rtsp-server/Config.in"
+>   source "package/gstreamer1/gst1-shark/Config.in"
+>   source "package/gstreamer1/gst1-vaapi/Config.in"
+> -source "package/gstreamer1/gst-omx/Config.in"
+>   source "package/gstreamer1/gstd/Config.in"
+>   source "package/gstreamer1/gstreamer1-editing-services/Config.in"
+>   endif
+> diff --git a/package/gstreamer1/gst-omx/Config.in b/package/gstreamer1/gst-omx/Config.in
+> deleted file mode 100644
+> index efe3d211d6d1489400ace233daaa67b5dc326a0b..0000000000000000000000000000000000000000
+> --- a/package/gstreamer1/gst-omx/Config.in
+> +++ /dev/null
+> @@ -1,11 +0,0 @@
+> -config BR2_PACKAGE_GST_OMX
+> -	bool "gst-omx"
+> -	depends on BR2_PACKAGE_HAS_LIBOPENMAX
+> -	select BR2_PACKAGE_GST1_PLUGINS_BASE
+> -	help
+> -	  GStreamer plug-in to use OpenMAX API.
+> -
+> -	  https://cgit.freedesktop.org/gstreamer/gst-omx
+> -
+> -comment "gst-omx requires a OpenMAX implementation"
+> -	depends on !BR2_PACKAGE_HAS_LIBOPENMAX
+> diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
+> deleted file mode 100644
+> index a84ffa7b6b3e35c3b788cf5a4899980fcb7eac02..0000000000000000000000000000000000000000
+> --- a/package/gstreamer1/gst-omx/gst-omx.hash
+> +++ /dev/null
+> @@ -1,3 +0,0 @@
+> -# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.22.12.tar.xz.sha256sum
+> -sha256  6b0685b92ac735032d7987d1028afaeab0a98ab726e0c51e5b9bfc8f2da7c8b1  gst-omx-1.22.12.tar.xz
+> -sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+> diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
+> deleted file mode 100644
+> index c1ab2b19c08c69522065af914e30554f20782c02..0000000000000000000000000000000000000000
+> --- a/package/gstreamer1/gst-omx/gst-omx.mk
+> +++ /dev/null
+> @@ -1,39 +0,0 @@
+> -################################################################################
+> -#
+> -# gst-omx
+> -#
+> -################################################################################
+> -
+> -GST_OMX_VERSION = 1.22.12
+> -GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
+> -GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
+> -
+> -GST_OMX_LICENSE = LGPL-2.1
+> -GST_OMX_LICENSE_FILES = COPYING
+> -
+> -GST_OMX_CONF_OPTS = \
+> -	-Dexamples=disabled \
+> -	-Dtests=disabled \
+> -	-Dtools=disabled \
+> -	-Ddoc=disabled
+> -
+> -ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+> -GST_OMX_VARIANT = rpi
+> -GST_OMX_CONF_OPTS += -Dheader_path=$(STAGING_DIR)/usr/include/IL
+> -else
+> -GST_OMX_VARIANT = generic
+> -endif
+> -
+> -GST_OMX_CONF_OPTS += -Dtarget=$(GST_OMX_VARIANT)
+> -
+> -GST_OMX_DEPENDENCIES = gstreamer1 gst1-plugins-base libopenmax
+> -
+> -# adjust library paths to where buildroot installs them
+> -define GST_OMX_FIXUP_CONFIG_PATHS
+> -	find $(@D)/config -name gstomx.conf | \
+> -		xargs $(SED) 's|/usr/local|/usr|g' -e 's|/opt/vc|/usr|g'
+> -endef
+> -
+> -GST_OMX_POST_PATCH_HOOKS += GST_OMX_FIXUP_CONFIG_PATHS
+> -
+> -$(eval $(meson-package))
+> 
 
-diff --git a/package/criu/Config.in b/package/criu/Config.in
-index 63ab926f56..04a2080041 100644
---- a/package/criu/Config.in
-+++ b/package/criu/Config.in
-@@ -19,7 +19,7 @@ config BR2_PACKAGE_CRIU
- 	bool "criu"
- 	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
- 	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # -march=armv7-a+fp
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # -march=armv7-a+fp, protobuf
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 # rseq.h
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no aio.h
- 	depends on !BR2_STATIC_LIBS # protobuf, libbsd
-diff --git a/package/kismet/Config.in b/package/kismet/Config.in
-index aa05e045d5..65c17baeaf 100644
---- a/package/kismet/Config.in
-+++ b/package/kismet/Config.in
-@@ -35,6 +35,7 @@ config BR2_PACKAGE_KISMET_PYTHON_TOOLS
- 	bool "Install python tools"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	depends on BR2_PACKAGE_PYTHON3
- 	depends on !BR2_STATIC_LIBS # protobuf
- 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
-@@ -51,26 +52,29 @@ comment "python tools needs python3"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 
--comment "python tools needs a glibc or musl toolchain w/ dynamic library"
-+comment "python tools needs a glibc or musl toolchain w/ dynamic library, gcc >= 8"
- 	depends on BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
--	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
-+	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 
- config BR2_PACKAGE_KISMET_SERVER
- 	bool "Install server"
- 	default y
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	depends on !BR2_STATIC_LIBS # dlfcn.h
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_PROTOBUF
- 
--comment "server needs a toolchain w/ dynamic library, wchar"
-+comment "server needs a toolchain w/ dynamic library, wchar, gcc >= 8"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
--	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 
- comment "server needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/mosh/Config.in b/package/mosh/Config.in
-index 5b90358cac..7ca5259ecb 100644
---- a/package/mosh/Config.in
-+++ b/package/mosh/Config.in
-@@ -1,7 +1,7 @@
--comment "mosh needs a toolchain w/ C++, threads, dynamic library, wchar, gcc >= 4.8"
-+comment "mosh needs a toolchain w/ C++, threads, dynamic library, wchar, gcc >= 8"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
- 		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_MOSH
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_MOSH
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	depends on !BR2_STATIC_LIBS # protobuf
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_PROTOBUF
-diff --git a/package/netdata/Config.in b/package/netdata/Config.in
-index d17b5e89aa..3603eb071c 100644
---- a/package/netdata/Config.in
-+++ b/package/netdata/Config.in
-@@ -23,15 +23,15 @@ config BR2_PACKAGE_NETDATA_PROMETHEUS
- 	bool "prometheus remote write backend"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf, snappy
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	select BR2_PACKAGE_PROTOBUF
- 	select BR2_PACKAGE_SNAPPY
- 	help
- 	  Enable prometheus remote write backend
- 
--comment "prometheus remote write backend needs a toolchain w/ C++, gcc >= 4.8"
-+comment "prometheus remote write backend needs a toolchain w/ C++, gcc >= 8"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 
- endif
-diff --git a/package/ola/Config.in b/package/ola/Config.in
-index dd0be6f35e..1766f5bd76 100644
---- a/package/ola/Config.in
-+++ b/package/ola/Config.in
-@@ -1,7 +1,7 @@
- comment "ola needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
- 		|| BR2_STATIC_LIBS \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 
- menuconfig BR2_PACKAGE_OLA
-@@ -10,7 +10,7 @@ menuconfig BR2_PACKAGE_OLA
- 	depends on !BR2_STATIC_LIBS # protobuf
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	select BR2_PACKAGE_PROTOBUF
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
-@@ -35,6 +35,7 @@ config BR2_PACKAGE_OLA_WEB
- config BR2_PACKAGE_OLA_PYTHON_BINDINGS
- 	bool "python bindings"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	depends on BR2_PACKAGE_PYTHON3
- 	select BR2_PACKAGE_PYTHON_PROTOBUF
- 	help
-diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
-index 2ce548f095..a672497108 100644
---- a/package/opencv3/Config.in
-+++ b/package/opencv3/Config.in
-@@ -290,14 +290,14 @@ config BR2_PACKAGE_OPENCV3_WITH_PNG
- config BR2_PACKAGE_OPENCV3_WITH_PROTOBUF
- 	bool "protobuf support"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	select BR2_PACKAGE_PROTOBUF
- 	help
- 	  Use shared protobuf from the target system.
- 
--comment "protobuf support needs a toolchain w/ gcc >= 4.8"
-+comment "protobuf support needs a toolchain w/ gcc >= 8"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 
- config BR2_PACKAGE_OPENCV3_WITH_TIFF
- 	bool "tiff support"
-diff --git a/package/opencv4/Config.in b/package/opencv4/Config.in
-index f6976d8fb5..f71ceba2c5 100644
---- a/package/opencv4/Config.in
-+++ b/package/opencv4/Config.in
-@@ -35,14 +35,16 @@ config BR2_PACKAGE_OPENCV4_LIB_DNN
- 	# dnn needs fenv.h which is not provided by uclibc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	select BR2_PACKAGE_OPENCV4_WITH_PROTOBUF
- 	help
- 	  Include opencv_dnn (Deep Neural Networks) module into the
- 	  OpenCV build.
- 
--comment "dnn needs a glibc or musl toolchain"
-+comment "dnn needs a glibc or musl toolchain, gcc >= 8"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
-+		!BR2_HOST_GCC_AT_LEAST_8
- 
- config BR2_PACKAGE_OPENCV4_LIB_FEATURES2D
- 	bool "features2d"
-@@ -155,6 +157,7 @@ config BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
- 	bool "objdetect"
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # dnn support
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # dnn support
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # dnn support
- 	# opencv_core dependency is already enabled
- 	select BR2_PACKAGE_OPENCV4_LIB_CALIB3D
- 	select BR2_PACKAGE_OPENCV4_LIB_DNN
-@@ -204,6 +207,7 @@ config BR2_PACKAGE_OPENCV4_LIB_SHAPE
- config BR2_PACKAGE_OPENCV4_LIB_STITCHING
- 	bool "stitching"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # objdetect
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # objdetect
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # objdetect
- 	select BR2_PACKAGE_OPENCV4_LIB_CALIB3D
- 	select BR2_PACKAGE_OPENCV4_LIB_FEATURES2D
-@@ -333,6 +337,7 @@ config BR2_PACKAGE_OPENCV4_WITH_PNG
- config BR2_PACKAGE_OPENCV4_WITH_PROTOBUF
- 	bool "protobuf support"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	select BR2_PACKAGE_PROTOBUF
- 	help
- 	  Use shared protobuf from the target system.
-diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-index 47e987fa2b..633201b38c 100644
---- a/package/protobuf/Config.in
-+++ b/package/protobuf/Config.in
-@@ -37,6 +37,7 @@ config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	default y if BR2_sparc64
- 	default y if BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU # fork()
- 
- config BR2_PACKAGE_PROTOBUF
-@@ -44,8 +45,9 @@ config BR2_PACKAGE_PROTOBUF
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp
- 	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_LIBABSEIL_CPP
- 	help
- 	  Protocol buffers are Google's language-neutral,
- 	  platform-neutral, extensible mechanism for serializing
-@@ -53,7 +55,7 @@ config BR2_PACKAGE_PROTOBUF
- 
- 	  https://developers.google.com/protocol-buffers
- 
--comment "protobuf needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
-+comment "protobuf needs a toolchain w/ C++, threads, dynamic library, gcc >= 8"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index b092c9303f..06f4924394 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  4eab9b524aa5913c6fffb20b2a8abf5ef7f95a80bc0701f3a6dbb4c607f73460  protobuf-cpp-3.21.12.tar.gz
-+sha256  3b8bf6e96499a744bd014c60b58f797715a758093abf859f1d902194b8e1f8c9  protobuf-28.1.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index 8cd4e99e06..ffed3166c7 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,45 +7,53 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 21.12
--PROTOBUF_SOURCE = protobuf-cpp-3.$(PROTOBUF_VERSION).tar.gz
-+PROTOBUF_VERSION = 28.1
- PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
- PROTOBUF_LICENSE_FILES = LICENSE
- PROTOBUF_CPE_ID_VENDOR = google
- 
- # N.B. Need to use host protoc during cross compilation.
--PROTOBUF_DEPENDENCIES = host-protobuf
--PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/bin/protoc
--
--PROTOBUF_CXXFLAGS = $(TARGET_CXXFLAGS)
--
--ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
--PROTOBUF_CXXFLAGS += -O0
--endif
--
--ifeq ($(BR2_or1k),y)
--PROTOBUF_CXXFLAGS += -mcmodel=large
--endif
--
--PROTOBUF_CONF_ENV = CXXFLAGS="$(PROTOBUF_CXXFLAGS)"
-+PROTOBUF_DEPENDENCIES = host-protobuf libabseil-cpp
-+PROTOBUF_CONF_OPTS = \
-+	-Dprotobuf_ABSL_PROVIDER=package \
-+	-Dprotobuf_ALLOW_CCACHE=ON \
-+	-Dprotobuf_BUILD_CONFORMANCE=OFF \
-+	-Dprotobuf_BUILD_LIBPROTOC=OFF \
-+	-Dprotobuf_BUILD_LIBUPB=ON \
-+	-Dprotobuf_BUILD_PROTOBUF_BINARIES=ON \
-+	-Dprotobuf_BUILD_PROTOC_BINARIES=OFF \
-+	-Dprotobuf_BUILD_TESTS=OFF \
-+	-Dprotobuf_DISABLE_RTTI=OFF \
-+	-Dprotobuf_INSTALL=ON \
-+	-DWITH_PROTOC=$(HOST_DIR)/bin/protoc
-+
-+HOST_PROTOBUF_DEPENDENCIES = host-libabseil-cpp
-+HOST_PROTOBUF_CONF_OPTS = \
-+	-Dprotobuf_ABSL_PROVIDER=package \
-+	-Dprotobuf_ALLOW_CCACHE=ON \
-+	-Dprotobuf_BUILD_CONFORMANCE=OFF \
-+	-Dprotobuf_BUILD_LIBPROTOC=ON \
-+	-Dprotobuf_BUILD_LIBUPB=OFF \
-+	-Dprotobuf_BUILD_PROTOBUF_BINARIES=ON \
-+	-Dprotobuf_BUILD_PROTOC_BINARIES=ON \
-+	-Dprotobuf_BUILD_TESTS=OFF \
-+	-Dprotobuf_DISABLE_RTTI=OFF \
-+	-Dprotobuf_INSTALL=ON \
-+	-Dprotobuf_WITH_ZLIB=OFF
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--PROTOBUF_CONF_ENV += LIBS=-latomic
-+PROTOBUF_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
- endif
- 
- PROTOBUF_INSTALL_STAGING = YES
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- PROTOBUF_DEPENDENCIES += zlib
-+PROTOBUF_CONF_OPTS += -Dprotobuf_WITH_ZLIB=ON
-+else
-+PROTOBUF_CONF_OPTS += -Dprotobuf_WITH_ZLIB=OFF
- endif
- 
--define PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
--	rm -rf $(TARGET_DIR)/usr/bin/protoc
--	rm -rf $(TARGET_DIR)/usr/lib/libprotoc.so*
--endef
--
--PROTOBUF_POST_INSTALL_TARGET_HOOKS += PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
--
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index e7af678b97..8ce6039449 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,3 +1,5 @@
--# Locally calculated
--sha256  e2b976e67d6fcf7078f799143a73f2a4d9cf3126ca68a1a6f1bda30fe5f3585c  protobuf-python-4.21.12.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/protobuf/json
-+md5  44b076f3564d3561067bcc2c455e008a  protobuf-5.28.1.tar.gz
-+sha256  42597e938f83bb7f3e4b35f03aa45208d49ae8d5bcb4bc10b9fc825e0ab5e423  protobuf-5.28.1.tar.gz
-+# Locally computed sha256 checksums
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
-index df90254670..02bf2a1d70 100644
---- a/package/python-protobuf/python-protobuf.mk
-+++ b/package/python-protobuf/python-protobuf.mk
-@@ -5,12 +5,11 @@
- ################################################################################
- 
- PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
--PYTHON_PROTOBUF_SOURCE = protobuf-python-4.$(PYTHON_PROTOBUF_VERSION).tar.gz
--PYTHON_PROTOBUF_SITE = $(PROTOBUF_SITE)
-+PYTHON_PROTOBUF_SOURCE = protobuf-5.$(PYTHON_PROTOBUF_VERSION).tar.gz
-+PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/3c/0b/7a997c8939f698d72bdea14d57116e43d3051fffb3b2964c30938c4a08e6
- PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
- PYTHON_PROTOBUF_LICENSE_FILES = LICENSE
- PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
- PYTHON_PROTOBUF_SETUP_TYPE = setuptools
--PYTHON_PROTOBUF_SUBDIR = python
- 
- $(eval $(python-package))
-diff --git a/package/usbguard/Config.in b/package/usbguard/Config.in
-index f207fa6826..254209ff64 100644
---- a/package/usbguard/Config.in
-+++ b/package/usbguard/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_USBGUARD
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libqb, protobuf
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf, C++17 filesystem
- 	depends on !BR2_STATIC_LIBS # libqb, protobuf
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
- 	select BR2_PACKAGE_PROTOBUF
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
