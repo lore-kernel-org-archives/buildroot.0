@@ -4,78 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4C1CC02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 11:33:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59E9CC02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 11:35:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 515D483BB8;
-	Wed,  5 Feb 2025 11:33:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 26FA181191;
+	Wed,  5 Feb 2025 11:35:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zaazQ9P9v6-l; Wed,  5 Feb 2025 11:33:12 +0000 (UTC)
+ id Mvhxfty_rony; Wed,  5 Feb 2025 11:35:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5275E83BA3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2CE728118F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5275E83BA3;
-	Wed,  5 Feb 2025 11:33:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2CE728118F;
+	Wed,  5 Feb 2025 11:35:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2A239CD
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:33:11 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2F113CD
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:35:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 005DC83B7B
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:33:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 12EDE81184
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:35:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iHSA8RgxL7me for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 11:33:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8F63A83BC8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F63A83BC8
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8F63A83BC8
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:33:09 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C0735433F8;
- Wed,  5 Feb 2025 11:33:07 +0000 (UTC)
-Date: Wed, 5 Feb 2025 12:33:07 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Brian Cain via buildroot <buildroot@buildroot.org>
-Cc: Brian Cain <brian.cain@oss.qualcomm.com>
-Message-ID: <20250205123307.7b663b91@windsurf>
-In-Reply-To: <20241219053053.2389046-15-brian.cain@oss.qualcomm.com>
-References: <20241025140714.2395033-1-bcain@quicinc.com>
- <20241219053053.2389046-1-brian.cain@oss.qualcomm.com>
- <20241219053053.2389046-15-brian.cain@oss.qualcomm.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+ id y7Nk8xt8d-9J for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 11:35:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3A98A81180
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A98A81180
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3A98A81180
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:35:44 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.lan ([85.22.119.32]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M1psI-1thpY61hQO-004fFw; Wed, 05
+ Feb 2025 12:35:42 +0100
+To: buildroot@buildroot.org
+Date: Wed,  5 Feb 2025 12:35:30 +0100
+Message-ID: <20250205113531.4161633-2-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250205113531.4161633-1-fiona.klute@gmx.de>
+References: <20250205113531.4161633-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeefgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeltdegvdejheegtefgueffgfelhfekvdefudevieeileetleeitdefgfeugffghfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepuddtledrkeelrddvfedvrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutdelrdekledrvdefvddrheehpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegsrhhirghnrdgtrghinhesohhsshdrqhhurghltghomhhmrdgtohhm
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Provags-ID: V03:K1:QenpFMbusF2gXffJYwTGNIvqPVYYbXy4Chbjo1tXo2qNYXABTHK
+ u+PlzXpYQUB0eiHNM133Tbiccv99nlH8i1nyW+hWt6RMGIHLsnHxS3CdjFanY9p6rNJCw9F
+ UGTutvU5W4lcR6Wj2NhzFJSlxbnoHik59vMa/RIVPFxHOzpbOi/7BsdA1Jp4AeHcwtcdusg
+ Q/n4Hjf4aU7BqWzy838gg==
+UI-OutboundReport: notjunk:1;M01:P0:3Gc7DcpB12g=;Xj+jWBsa7fCdyDQE+p0MAhq9WEL
+ Bu9kNzgMVpSsMyqfx8UQNxK+WIPuBihnxtArylq7fHwuvPREEIZO8CbXS8pTezqFQUJg3WyO7
+ /L7Qdkcj7uot5fP4tqtylt6iv3gTQqj6KqsaQq7pYYKMUAy4+lzFcOUZZn4rZHT5nkBK0PnDm
+ dyUTsYlW1ou0N5uugPs+GBNu3KIZmyCBs1BNzEHChuHE+3aUtJppAep99XWd2d+1jAxVuKc8/
+ VjCIwnAcecHydyhRfOAFCbtzvqkwkg3u712bVT0A1hmeJPCAfI08xRX8HWAWdAfTlfsMn8fb1
+ Y4Aza5qbyvh753I/VJLkHqYp59wt3h0H114zxvWjPpSv+puNcRa+659JKcf9C2dU4z7JG78GO
+ A+JAcy3ZuTptrFVtFj/XVZ1XPHehicCnBJHxMAtv3PPNuC6NO2ogvA+52Z1p+AAISh9bPIk8W
+ sfEKXRTYhWV43fL68stV16ZG2D4umkSMiwA+ffpIEAMmo63UDpJDFgLnQU1UgTxGGhyaZhDbM
+ 7GLa49OvSkvD0UZUTf4tdEemDJsfLmYJUoYfMo0dJaNG8jJqOhWpLAd6ezSCo4YvPaHBQd1L4
+ l606HpVKkZbgUG8tAHuw6EC5qNhsPvYb5ZTY5GAsVRPV6ddJrqgzM8tWq07a6E5394M83srcD
+ ey/38JX62QbRbIm/Bsu+U9GKH+y5vNJ+aO4DCN6cPcyERlK1FeIb9FUb/i890QJbOD+ssXL7F
+ JHLoIjaG9AKWMzcpXHXKPmhWs5K9Y8rQWVgg2NE2mP07eXz44+YnlHJuEGODdkHArI68D4Hoe
+ qdHRimoEDee840CrzXg6d2zbIGb0eCNCrhaydHlHDJ/mR6Q8BK9jHEQaSVrlZnPL/JJ+Y19Ir
+ MHFmUrYJHS6hT4jwlitq8vu4TfWIWrOenAeT03g87gHaoyPPeNYZ1JHKcEVyVf/2VWzRqL5j0
+ kMtp8Sb21KAEct3mcUzcGeozWznHKyJWFHkIVNV+qXXW+u4O/MkrN1sEVXNXur6oDv1IUZR/A
+ FVZF/br3goTB/xY99cv0sBAP+7N4XG1b+9+3J7C26o6JPT+3R+nhd1i8Cut6u+1Eg1z98WJG/
+ 8bswBf3Nw/GFiNfwG4ghOkYzl0+M0JeysF6r0qeb3NKp2WOGTnrmdpyx8CP5/UArzlhJn5Crw
+ wgQo/QHZ0cwPDvRsCTysNqkZTmMj2b2XrwCe1kKD4enMOTmCx9JMZ/mc1Brosy+HmdxLvuV9s
+ Sn6VXQknf7uaiwZrnnnsNel9TGL7KFrBs0FZjAr1j1IY5O7IfMXQ8f80z9Z1Rr1MkGZJuQb+X
+ 1stTzqP4RfeGAX3kdmO7AogFUsDJMxDAPUarAPoj15io9FvNr5Ztn7cKeWx/WuHOehyWwRJ6P
+ wWgaYH9JRdkolVt6A6SHHErR1Glm+W/DSz5yHM9/L28zdFF8+82Zmi01xpT5ha0+eHfv2Fg9J
+ BxBUt47mG5FTwmfNT0hAL3zdVdpGrVgrz7sb8DNkwhcRTj/5F
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1738755187;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=vqqDQZqFiD/DTyWt5FvtaAe0u8Yg29hHjxKs9120aKM=;
- b=KpDvQ6PXqToXKo15dRt3gRfsBsALE/K8HIrKx3zg4BcRV1Zwfm3fcDq7hmEZoUhetdtYho
- M5LKeA1zZlQnfCqpd2/H7raJZpBheRr+RJfftgehQwQ+S5bqiDTi7FDIRaqsKVzqXWVhJn
- UhPVJvvH8nLPyNU0xo1qlKpMtSTDwqcEXWZXRdhzXzFN+DeeWZNcCDaF8UpQBz0ae967h3
- fwscLknIPdniJt4/BmPNX9Hdl2/DWWGAExARLoMIF1yUWJzYQxUBHR1oGPPKS435rjAepF
- 23/hfh3AiE0cIQt/rVqUg1urMmhXdxi+WJPQPrYAmUgGH0fguByMVTG+xRiv5Q==
+ d=gmx.de; 
+ s=s31663417; t=1738755342; x=1739360142; i=fiona.klute@gmx.de;
+ bh=Fv7TH4JAlOSQdvSQRRV2JeJP3pWmVEidWYkpPX2oimk=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+ References:MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=lNVtO3Uc+8Nw3z3PxRvCjvMuYd55+lqYQXgQ+xTQYahEWpcQE0MSygNVZQDz4yMf
+ pDN+ZlYUSIRi6/F/8TkkObHrEPUgOnLAKFiV9qVh27wk3AhN2pDmzbIPEquKVHE8V
+ fgl1g7nW0ONIo9hU0tibFROZgmAe5QAqs6BRe9rUq2yS76Wyp4hYQzmtDdx67DJAF
+ l5AbmqE85hv347tTlPXTBkTSj90Enmn9hlb/KBmduwG5HSfrYvsETHccip8ZF4Qt1
+ 6mJPvKV6coiau5lFbHFVhKa4IxHXD0NcdP1/Rgm6r38C0+R891Tad6xdQIZgcK2fX
+ W+LCmTp5U1DwwYFoiA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=KpDvQ6PX
-Subject: Re: [Buildroot] [RFC v2 14/14] package: disable -ztext
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=lNVtO3Uc
+Subject: [Buildroot] [PATCH v2 2/3] package/pkg-golang: do not force ld.gold
+ on aarch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,48 +106,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: yann.morin@orange.com, Thomas Perale <thomas.perale@mind.be>,
+ Christian Stewart <christian@aperture.us>,
+ "Fiona Klute \(WIWA\)" <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 18 Dec 2024 21:30:53 -0800
-Brian Cain via buildroot <buildroot@buildroot.org> wrote:
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-> Signed-off-by: Brian Cain <brian.cain@oss.qualcomm.com>
-> ---
->  package/Makefile.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index 0d60e76bff..e4da9d2ff6 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -171,8 +171,12 @@ TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
->  # "-z" to be passed and the "text" keyword to be dropped otherwise. Both
->  # gcc and ld supports that, so it probably won't cause us problems.
->  ifeq ($(BR2_TOOLCHAIN_USES_MUSL):$(BR2_STATIC_LIBS),y:)
-> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_CLANG),y)
-> +TARGET_LDFLAGS += -Wl,-ztext
-> +else
->  TARGET_LDFLAGS += -ztext
+Go forces use of the Gold linker on aarch64 due to a bug in BFD that
+is fixed in Binutils >= 2.41 (that includes all versions provided by
+Buildroot). Forcing Gold will break with toolchains that don't provide
+it (like the Buildroot toolchains), so override the flag and use BFD.
 
-The problem with -Wl,-ztext, at least with gcc toolchains is that sometimes
-the $(TARGET_LDFLAGS) get passed to the linker directly, and the linker
-(at least from binutils) doesn't understand -Wl,-ztext, it only
-understand -ztext. See Buildroot commit
-bd035872be9948515ee50ae034bda4a2e044ff22.
+See: https://github.com/golang/go/issues/22040
 
-Of course, perhaps things are different with the linker used in Clang
-toolchains, I don't know.
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+---
+ package/pkg-golang.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Thanks!
-
-Thomas
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index a3421af288..bdf8de4d66 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -118,6 +118,16 @@ $(2)_EXTLDFLAGS += -static
+ $(2)_TAGS += osusergo netgo
+ endif
+ 
++ifeq ($(BR2_aarch64),y)
++# Go forces use of the Gold linker on aarch64 due to a bug in BFD that
++# is fixed in Binutils >= 2.41 (that includes all versions provided by
++# Buildroot). Forcing Gold will break with toolchains that don't
++# provide it (like the Buildroot toolchains), so override the flag and
++# use BFD.
++# See: https://github.com/golang/go/issues/22040
++$(2)_EXTLDFLAGS += -fuse-ld=bfd
++endif
++
+ ifneq ($$($(2)_EXTLDFLAGS),)
+ $(2)_LDFLAGS += -extldflags '$$($(2)_EXTLDFLAGS)'
+ endif
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.47.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
