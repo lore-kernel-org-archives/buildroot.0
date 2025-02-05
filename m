@@ -4,98 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB5C8C02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 11:00:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83DACC02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 11:02:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 86B5D415E3;
-	Wed,  5 Feb 2025 11:00:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 255D840891;
+	Wed,  5 Feb 2025 11:02:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4oMFXp5FJUzT; Wed,  5 Feb 2025 11:00:57 +0000 (UTC)
+ id LQJfoxlLnmQk; Wed,  5 Feb 2025 11:02:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 258254161A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C999040E0B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 258254161A;
-	Wed,  5 Feb 2025 11:00:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E0BA312A
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:00:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C999040E0B;
+	Wed,  5 Feb 2025 11:02:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7862812A
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:02:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DBC8240649
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:00:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 538DE60AB3
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:02:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qp6stEuUjpsz for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 11:00:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2C1B840181
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C1B840181
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2C1B840181
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:00:54 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-438a39e659cso45297315e9.2
- for <buildroot@buildroot.org>; Wed, 05 Feb 2025 03:00:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738753252; x=1739358052;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=1UVldrLJhUh7EzIg5P0M30NRa+fEkhJdiXOBNf+y7uU=;
- b=WypMNNtPhUzNVWkjo8Z9/+1v8QtJnVIpCXFUbuE89G6L87vmaR8bNqO5OTyKiFNryS
- 6Ib7BFF/ehz8q2v/+0QLy9tQQ0NET0ONPGu3BhJzarNUiSuxHJOftp/ybipoNvjrALvm
- mb5zJJMmrGrrSxvB/Uiz7Mft/uw1YWC1KFO9kWSYyJWpIfyKgk75JbX2569di2Pn7LZo
- PvGFAR7NAgUmhG3AB15poAAOhiEB77oUvPd4cmnwhB6jEwQ1h3+lrbYxSPvVPET4H8at
- 6GiXgrNwE0O0+YW3guP3jFuTZmAD4cl70RfQ1u002OuVgIw2HOiB80WZ2CM7aKX6HfgE
- bUGg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCV1ASunboe0YX9DeAvBmEmjDWpVt/k22JZt4nDsyVS1AcKph/5L8tRko7JAslBFHvgHXSVYdz9gwdY=@buildroot.org
-X-Gm-Message-State: AOJu0YyQwCmhK1HGhIVzRNJqdAuPAG3cwjLGbc21eTQg74LgiH9BPzur
- 2iIWpPLoeOIgFX7FI+F7JXnD1xNwzsUm/UBgMeRKfm2kow5sfW3sPUZBKgEjm/vc/H/sCWzbmQW
- jmQg=
-X-Gm-Gg: ASbGncubPJMdT02T1ik9uROA97Bh5tf62n/sKk5TpIM8fufFnnJHyJCr7qY7ORHv2g7
- l1BXfQbQKrpE4OC1Y4eUbGmEiiz+OV4CVJi0ng0W1X6jMu61IdqRx2JO7ZwLWGeii6G2vYgmjxv
- 3ool2c40aaJ9LAXNEaJ1sq+N8LIRrzW7hM9U2M9n5Ff7GgSqisYD+Kh8X3iqaGtwN4LV9EDrSlN
- pju8eEFOj+X88y6fPV8osjuqt0hw693fIqvfJqyNo9J6gnnvUeUK0D5H4vAxrExouK0598Nv5Ny
- nkQGyXboooI3MY6wP1S7YKfpFV0muEh9xGKzlKvCpeyReRCXwgFIhzLT
-X-Google-Smtp-Source: AGHT+IEUztNY+BB8Mf5DsZqjdBVNTdxaTe625vkIcYKwulMDzgDF7+6rsKNJozuFxcWzkRaOLG1MvQ==
-X-Received: by 2002:a05:600c:a01:b0:434:a802:e99a with SMTP id
- 5b1f17b1804b1-4390d430732mr16662275e9.4.1738753251016; 
- Wed, 05 Feb 2025 03:00:51 -0800 (PST)
-Received: from [172.16.2.119] (host-109-89-232-55.dynamic.voo.be.
- [109.89.232.55]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4390d933523sm17707825e9.1.2025.02.05.03.00.50
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 05 Feb 2025 03:00:50 -0800 (PST)
-Message-ID: <86a392f8-3376-4dec-a2a9-eb013589710e@smile.fr>
-Date: Wed, 5 Feb 2025 12:00:50 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h3OSzDb3Frg4 for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 11:01:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0673860AC6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0673860AC6
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0673860AC6
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:01:57 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4FE5243299;
+ Wed,  5 Feb 2025 11:01:56 +0000 (UTC)
+Date: Wed, 5 Feb 2025 12:01:55 +0100
+To: Brian Cain via buildroot <buildroot@buildroot.org>
+Cc: Brian Cain <brian.cain@oss.qualcomm.com>
+Message-ID: <20250205120155.01899b0f@windsurf>
+In-Reply-To: <20241219053053.2389046-4-brian.cain@oss.qualcomm.com>
+References: <20241025140714.2395033-1-bcain@quicinc.com>
+ <20241219053053.2389046-1-brian.cain@oss.qualcomm.com>
+ <20241219053053.2389046-4-brian.cain@oss.qualcomm.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Alexander Shirokov <shirokovalexs@gmail.com>, buildroot@buildroot.org
-References: <20241208134004.143901-1-shirokovalexs@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20241208134004.143901-1-shirokovalexs@gmail.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfedvjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeujeffjedviedvtefhhfevudeikefhhfffvdfffedthfejfedvgeeghfelvdehheenucffohhmrghinhepsghuihhlthhinhhsqdhhvgigrghgohhnrdhsohdpshhordhsohdpsghoohhtlhhinhdrtghomhenucfkphepuddtledrkeelrddvfedvrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutdelrdekledrvdefvddrheehpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegsrhhirghnrdgtrghinhesohhsshdrqhhurghltghomhhmrdgtohhm
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1738753252; x=1739358052; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=1UVldrLJhUh7EzIg5P0M30NRa+fEkhJdiXOBNf+y7uU=;
- b=XyeHEzpVW85l3vWmwAZ6qdhPv1p7WSfXl3LpKWaHIw27fCMSGdkjsAQHf2Qd4BinGl
- YgQ8HoA1rnBciZpKBYT2mQBOEIXhLNwpXJnONy6mWcLC/fIv1qEvm5Ub/HQ79PG2Xo1E
- kgJyNgT69NFDHtu+W2zCs20ECVmWGJNl4DVuE=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=bootlin.com; s=gm1; t=1738753316;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=8VrItoJvfHFUO1XQu48aCcMXZCJhLWCZmHU/4wonW4s=;
+ b=cUKS6+xpgklUTvPms8YHm3eATFq8hnO91PLBIAqhSFG/Cj8yYVNvdFRB7F5MMyZdHTB0xC
+ fqCVCrUIWtHHIHvvw9nSbUD/NRI4yxpG/lBeFYgSC2IGSJtp2gogMC/C8c5mdwK4jkhuRD
+ +DEzGCRVin2YQLHrJYPMPc3WbCHTeJVwNdQ9BqtE+5vDfaTEtVmh8UWCrpGGegPLnQOwjp
+ AM+5WNtnYBasGcUswyyeh8liRXgRAhriQ98YZU02QX6p0gB96yoI2Y95lMn8JqPwQ2QWKT
+ uDsrsi/pbTb8g1h0EjRLGkwjmcmI0MrRO92CjMRh0a/gYrZ2zbDiokxK1CEM6g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=XyeHEzpV
-Subject: Re: [Buildroot] [PATCH 1/1] package/rust-coreutils:new package
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=cUKS6+xp
+Subject: Re: [Buildroot] [RFC v2 03/14] toolchain/toolchain-external: add
+ hexagon support for toolchain-wrapper
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,84 +87,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQWxleGFuZGVyLAoKTGUgMDgvMTIvMjAyNCDDoCAxNDo0MCwgQWxleGFuZGVyIFNoaXJv
-a292IGEgw6ljcml0wqA6Cj4gVGhlIFJ1c3QgdmVyc2lvbiBhaW1zIHRvIGJlIGEgZHJvcC1pbiBy
-ZXBsYWNlbWVudCBmb3IgR05VIGNvcmV1dGlscywKPiBkZXNpZ25lZCB0byB3b3JrIGFjcm9zcyBh
-IHdpZGUgcmFuZ2Ugb2YgcGxhdGZvcm1zLiBBZGRpbmcgaXQgdG8KPiBCdWlsZHJvb3QgY2FuIGhl
-bHAgbWFrZSBpdCBhdmFpbGFibGUgb24gZW1iZWRkZWQgZGV2aWNlcy4KPiAKPiBUaGlzIGlzIHRo
-ZSBpbml0aWFsIHZlcnNpb24gb2YgdGhlIHBhY2thZ2UsIHN1cHBvcnRpbmcgb25seSB0aGUKPiBt
-dWx0aWNhbGwgdmVyc2lvbiAoc2luZ2xlIGJpbmFyeSkuIEl0IGFsbG93cyBzdGFydGluZyB0byB3
-b3JrIHdpdGggdGhlCj4gdXRpbGl0aWVzIHdoaWxlIGF2b2lkaW5nIGNvbXBsZXggY29uZmlndXJh
-dGlvbnMgYW5kIGNvbmZsaWN0cyB3aXRoCj4gZXhpc3RpbmcgdG9vbHMuCgpUaGVyZSB3YXMgYSBw
-cmV2aW91cyBhdHRlbXB0IGxhc3QgeWVhciB0byBpbnRyb2R1Y2UgdXV0aWxzLWNvcmV1dGlscyBw
-YWNrYWdlIGJ1dApUaG9tYXMgcmVwb3J0ZWQgc29tZSBpc3N1ZXMgb24gQVJNIHRhcmdldHMgWzFd
-LiBDYW4geW91IGNoZWNrIGlmIHRoZXkgd2VyZSBmaXhlZApzaW5jZSB0aGVuPwoKVW5saWtlbHkg
-U2ViYXN0aWFuIChteSBmb3JtZXIgaW50ZXJuKSB3YXMgbm90IGFibGUgdG8gcmVzZW5kIGFuIHVw
-ZGF0ZWQgdmVyc2lvbi4KCk5vdGU6IFdlIHRyeSB0byBrZWVwIHRoZSB1cHN0cmVhbSBwcm9qZWN0
-IG5hbWUgdG8gbmFtZSB0aGUgQnVpbGRyb290IHBhY2thZ2UuIEluCnRoaXMgY2FzZSBpdCBzaG91
-bGQgYmUgdXV0aWxzLWNvcmV1dGlscyBub3QgcnVzdC1jb3JldXRpbHMuCgpBbHNvIHdlIHNob3Vs
-ZCB0YWtlIGNhcmUgd2hlbiBzZXZlcmFsICJjb3JldXRpbHMiIHByb3ZpZGVyIGlzIHNlbGVjdGVk
-IHRvIGF2b2lkCmFueSBiaW5hcmllcyBvdmVycmlkZS4KCkNhbiB5b3UgYWRvcHQgdGhlIHBhdGNo
-IFsxXSBhbmQgYWRkcmVzcyB0aGUgcmVtYWluaW5nIGlzc3Vlcz8KQWxzbyBoYXZpbmcgYSBydW50
-aW1lIHRlc3Qgd291bGQgYmUgZ3JlYXQuCgpUaGFua3MhCgpbMV0gaHR0cHM6Ly9sb3JlLmtlcm5l
-bC5vcmcvYnVpbGRyb290LzIwMjMwOTMwMjE1OTQwLjc2NDRlOTNjQHdpbmRzdXJmLwoKQmVzdCBy
-ZWdhcmRzLApSb21haW4KCgo+IAo+IFNpZ25lZC1vZmYtYnk6IEFsZXhhbmRlciBTaGlyb2tvdiA8
-c2hpcm9rb3ZhbGV4c0BnbWFpbC5jb20+Cj4gLS0tCj4gIHBhY2thZ2UvQ29uZmlnLmluICAgICAg
-ICAgICAgICAgICAgICAgICAgICB8ICAxICsKPiAgcGFja2FnZS9ydXN0LWNvcmV1dGlscy9Db25m
-aWcuaW4gICAgICAgICAgIHwgMTIgKysrKysrKysrKysrCj4gIHBhY2thZ2UvcnVzdC1jb3JldXRp
-bHMvcnVzdC1jb3JldXRpbHMuaGFzaCB8ICAzICsrKwo+ICBwYWNrYWdlL3J1c3QtY29yZXV0aWxz
-L3J1c3QtY29yZXV0aWxzLm1rICAgfCAxMyArKysrKysrKysrKysrCj4gIDQgZmlsZXMgY2hhbmdl
-ZCwgMjkgaW5zZXJ0aW9ucygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9ydXN0LWNv
-cmV1dGlscy9Db25maWcuaW4KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcnVzdC1jb3Jl
-dXRpbHMvcnVzdC1jb3JldXRpbHMuaGFzaAo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9y
-dXN0LWNvcmV1dGlscy9ydXN0LWNvcmV1dGlscy5tawo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdl
-L0NvbmZpZy5pbiBiL3BhY2thZ2UvQ29uZmlnLmluCj4gaW5kZXggNjBjZGIxNzlhMy4uNDhiMWQ5
-NmI0ZSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2UvQ29u
-ZmlnLmluCj4gQEAgLTI4NzQsNiArMjg3NCw3IEBAIG1lbnUgIlN5c3RlbSB0b29scyIKPiAgCXNv
-dXJjZSAicGFja2FnZS9yYXVjLWhhd2tiaXQtdXBkYXRlci9Db25maWcuaW4iCj4gIAlzb3VyY2Ug
-InBhY2thZ2UvcnN5c2xvZy9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2UvcnVuYy9Db25m
-aWcuaW4iCj4gKwlzb3VyY2UgInBhY2thZ2UvcnVzdC1jb3JldXRpbHMvQ29uZmlnLmluIgo+ICAJ
-c291cmNlICJwYWNrYWdlL3MzOTAtdG9vbHMvQ29uZmlnLmluIgo+ICAJc291cmNlICJwYWNrYWdl
-L3M2L0NvbmZpZy5pbiIKPiAgCXNvdXJjZSAicGFja2FnZS9zNi1saW51eC1pbml0L0NvbmZpZy5p
-biIKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9ydXN0LWNvcmV1dGlscy9Db25maWcuaW4gYi9wYWNr
-YWdlL3J1c3QtY29yZXV0aWxzL0NvbmZpZy5pbgo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5k
-ZXggMDAwMDAwMDAwMC4uMDM3MTgwNTkyNQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdl
-L3J1c3QtY29yZXV0aWxzL0NvbmZpZy5pbgo+IEBAIC0wLDAgKzEsMTIgQEAKPiArY29uZmlnIEJS
-Ml9QQUNLQUdFX1JVU1RfQ09SRVVUSUxTCj4gKwlib29sICJydXN0LWNvcmV1dGlscyIKPiArCWRl
-cGVuZHMgb24gQlIyX1BBQ0tBR0VfSE9TVF9SVVNUQ19UQVJHRVRfQVJDSF9TVVBQT1JUUwo+ICsJ
-c2VsZWN0IEJSMl9QQUNLQUdFX0hPU1RfUlVTVEMKPiArCWhlbHAKPiArCSAgUnVzdCBjb3JldXRp
-bHMgaXMgYSBjcm9zcy1wbGF0Zm9ybSByZWltcGxlbWVudGF0aW9uIG9mIHRoZSBHTlUKPiArCSAg
-Y29yZXV0aWxzLCBhaW1pbmcgdG8gYmUgYSBkcm9wLWluIHJlcGxhY2VtZW50Lgo+ICsKPiArCSAg
-U2VsZWN0IHRoaXMgb3B0aW9uIHRvIGJ1aWxkIGEgbXVsdGljYWxsIGJpbmFyeSwgbmFtZWQKPiAr
-CSAgJ2NvcmV1dGlscycuCj4gKwo+ICsJICBodHRwczovL2dpdGh1Yi5jb20vdXV0aWxzL2NvcmV1
-dGlscwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3J1c3QtY29yZXV0aWxzL3J1c3QtY29yZXV0aWxz
-Lmhhc2ggYi9wYWNrYWdlL3J1c3QtY29yZXV0aWxzL3J1c3QtY29yZXV0aWxzLmhhc2gKPiBuZXcg
-ZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLmJiOGU0YWM2Y2EKPiAtLS0gL2Rl
-di9udWxsCj4gKysrIGIvcGFja2FnZS9ydXN0LWNvcmV1dGlscy9ydXN0LWNvcmV1dGlscy5oYXNo
-Cj4gQEAgLTAsMCArMSwzIEBACj4gKyMgTG9jYWxseSBjYWxjdWxhdGVkCj4gK3NoYTI1NiAgMjhl
-N2M3OWU2MDg5ODlhZjMzMWZmYWNlMjA0ZmQ5MjJlZWMyYTIyYzRhYTJjNDNhOTFkY2VkODg0YjZk
-ZThkMiAgcnVzdC1jb3JldXRpbHMtMC4wLjI4LWNhcmdvMi50YXIuZ3oKPiArc2hhMjU2ICAyOTk1
-MzQwNWVhYTNkY2M0MWMzN2QxNjIxZDU1YjZhNDdlZWU5M2UwNTYxM2U0MzllNzMyOTUwMjk3NDBi
-MTBjICBMSUNFTlNFCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcnVzdC1jb3JldXRpbHMvcnVzdC1j
-b3JldXRpbHMubWsgYi9wYWNrYWdlL3J1c3QtY29yZXV0aWxzL3J1c3QtY29yZXV0aWxzLm1rCj4g
-bmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi5jYTQxZjcxMDFhCj4gLS0t
-IC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2UvcnVzdC1jb3JldXRpbHMvcnVzdC1jb3JldXRpbHMu
-bWsKPiBAQCAtMCwwICsxLDEzIEBACj4gKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gKyMKPiAr
-IyBydXN0LWNvcmV1dGlscwo+ICsjCj4gKyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gKwo+ICtS
-VVNUX0NPUkVVVElMU19WRVJTSU9OID0gMC4wLjI4Cj4gK1JVU1RfQ09SRVVUSUxTX1NJVEUgPSAk
-KGNhbGwgZ2l0aHViLHV1dGlscyxjb3JldXRpbHMsJChSVVNUX0NPUkVVVElMU19WRVJTSU9OKSkK
-PiArUlVTVF9DT1JFVVRJTFNfTElDRU5TRSA9IE1JVAo+ICtSVVNUX0NPUkVVVElMU19MSUNFTlNF
-X0ZJTEVTID0gTElDRU5TRQo+ICtSVVNUX0NPUkVVVElMU19DUEVfSURfVkFMSUQgPSBZRVMKPiAr
-Cj4gKyQoZXZhbCAkKGNhcmdvLXBhY2thZ2UpKQoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
-bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
-dWlsZHJvb3QK
+Hello,
+
+On Wed, 18 Dec 2024 21:30:42 -0800
+Brian Cain via buildroot <buildroot@buildroot.org> wrote:
+
+> Signed-off-by: Brian Cain <brian.cain@oss.qualcomm.com>
+
+This commit needs a non-empty commit message. Also, I don't think this
+commit is really hexagon related, but more Clang related.
+
+> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> index c08bf0a653..d45f2c54de 100644
+> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
+> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+> @@ -150,8 +150,14 @@ endef
+>  endif
+>  
+>  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
+> +ifeq ($(BR2_hexagon),y)
+> +TOOLCHAIN_EXTERNAL_LIBS += libc.so libclang_rt.builtins-hexagon.so*
+> +TOOLCHAIN_EXTERNAL_LIBS += libc++.so* libc++abi.so* libunwind.so*
+> +TOOLCHAIN_EXTERNAL_LIBS += ld-musl-*.so*
+
+None of this is hexagon related, to this exception of
+libclang_rt.builtins-hexagon.so*. So this should be organized properly,
+with I guess libc++.so* libc++abi.so* being added when
+BR2_TOOLCHAIN_EXTERNAL_CLANG=y. Perhaps
+libclang_rt.builtins-$(BR2_ARCH).so* as well.
+
+I'm not sure about libunwind.so*. Also unclear why ld-musl-*.so* is
+needed here, and not for other musl toolchains. To be clarified.
+
+> +else
+>  TOOLCHAIN_EXTERNAL_LIBS += libc.so
+>  endif
+> +endif
+>  
+>  ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
+>  TOOLCHAIN_EXTERNAL_LIBS += libstdc++.so.*
+> @@ -283,7 +289,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
+>  		*-ar|*-ranlib|*-nm) \
+>  			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
+>  			;; \
+> -		*cc|*cc-*|*++|*++-*|*cpp|*-gfortran|*-gdc) \
+> +		*cc|*cc-*|*++|*++-*|*cpp|*-gfortran|*-gdc|*clang) \
+
+Related to clang support.
+
+>  			ln -sf toolchain-wrapper $$base; \
+>  			;; \
+>  		*gdb|*gdbtui) \
+> @@ -465,6 +471,9 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
+>  	else \
+>  		ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
+>  	fi ; \
+> +	if test "$(BR2_hexagon)" = "y"; then \
+> +		SUPPORT_LIB_DIR=$(TOOLCHAIN_EXTERNAL_BIN)/../target/$(TOOLCHAIN_EXTERNAL_PREFIX); \
+> +	fi ; \
+
+Is this really hexagon specific? Or specific to Clang? Or specific to
+the particular external toolchain? I'm pretty sure the BR2_hexagon
+condition is incorrect here.
+
+Are there other Clang external toolchains, for other CPU architectures,
+that we could use to test what is generic Clang stuff vs. what is
+perhaps Hexagon-specific?
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
