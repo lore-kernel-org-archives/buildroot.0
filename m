@@ -4,107 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87B79C02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 14:02:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32AE7C02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 14:08:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 221E1405F9;
-	Wed,  5 Feb 2025 14:02:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6193141457;
+	Wed,  5 Feb 2025 14:08:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wPS1ugeMb0PF; Wed,  5 Feb 2025 14:02:43 +0000 (UTC)
+ id zi52BKlnNuLK; Wed,  5 Feb 2025 14:08:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 741D540576
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAF5A4134B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 741D540576;
-	Wed,  5 Feb 2025 14:02:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4AFEACD
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 14:02:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAF5A4134B;
+	Wed,  5 Feb 2025 14:08:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E6D98CD
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 14:08:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2E07C4053D
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 14:02:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB4D24134B
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 14:08:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dS2pCSbnjc98 for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 14:02:39 +0000 (UTC)
+ id OR8yBKob-ddR for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 14:08:01 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::82b; helo=mail-qt1-x82b.google.com;
+ client-ip=2607:f8b0:4864:20::134; helo=mail-il1-x134.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 771F8403EC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 771F8403EC
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com
- [IPv6:2607:f8b0:4864:20::82b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 771F8403EC
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 14:02:39 +0000 (UTC)
-Received: by mail-qt1-x82b.google.com with SMTP id
- d75a77b69052e-467a37a2a53so78392151cf.2
- for <buildroot@buildroot.org>; Wed, 05 Feb 2025 06:02:39 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 810394131A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 810394131A
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 810394131A
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 14:08:01 +0000 (UTC)
+Received: by mail-il1-x134.google.com with SMTP id
+ e9e14a558f8ab-3d01dc5a7f6so11533275ab.0
+ for <buildroot@buildroot.org>; Wed, 05 Feb 2025 06:08:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738764158; x=1739368958;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Z7o9r/5FgOZ6tH5IEs+8/FchvvTmRxuzgoqWfTQpCz4=;
- b=nz4c+Y6kYsHSLg0cn/A4xVrU+VF4tqfzPSKV/iOiZCZfpMXg7+Tl9Uk33LIK2cW/X1
- eMsHI1I12Y9n1bXI4NU/lMbmPHeSSkwEJqnsa4FY1sp7LeTebERHllYAl2GqG0IlQ+b9
- mdZkY1ll2lKfBijcDrzWGVgA7SjCSw2GpCYTDCSYfHDXxezgMk2uG8zsQFVs7g7wz0DQ
- +zS3iYg/Bj+mk3FH9N8p+ZEGJ1dHwG1CMRJVag9MsCY24BWOWsmBd7I2sewWa1sd8Azx
- 0XLBSDz4e30+j6LHjM4QxGr0X6sGjo/zjTrsTRayyh1qZW+Z/q8zqjlZH7R0g4bO8DaU
- mmnA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCWA9tc5h7sqLrIwbT80W1m3GVPZxfWBwKgvZ7sY9waBnoDnnH7zbVGF3QeJYP5fWy+hCc+rlfYQIe0=@buildroot.org
-X-Gm-Message-State: AOJu0YxjdoAww5rUOXkBQLXo2IK4Iziv8Yb76vRCzRyv+XBT49FMhK4X
- WaZoNDhoalw+Vw7ZOeV2hJ3x7HVCB1zAWzKnIit7YJsaqh0Y3iB2D0daDY+56kkU+zazafyWwiC
- W7PWxV1u/rOcZO7GLHr75AVbWFvQ4TUawgGU=
-X-Gm-Gg: ASbGncvN4804E/2U8HGKBximKCkywqCukPmNn1hx1tlozGSzX00c3OTpqT/J140XJBI
- ZXwy+qzHmwHVfWE3dYCQaweqmd30QlewZp4I5t7FxWLmf3VgYrT6Dt4+CEF8hwdOutmd/kNdr2Q
- ==
-X-Google-Smtp-Source: AGHT+IFM2VmefyE1y603bxZI310+/ruKmcUFHFvHulgMNx6sxCuLnPgk116d9gcDHzsZhKL9ajuFX15A2iy9Pg1tsH0=
-X-Received: by 2002:a05:620a:4451:b0:7bf:fffb:5818 with SMTP id
- af79cd13be357-7c03a02f275mr438987885a.57.1738764158044; Wed, 05 Feb 2025
- 06:02:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20240805163133.4126564-1-james.hilliard1@gmail.com>
- <CA+h8R2oQGKFFH-vMX27WUO1uEAGyt4cz9MCwn9Cofwyujx1xDA@mail.gmail.com>
- <20240805223152.09ed915b@windsurf>
- <CADvTj4o_CnzCth+QqoxhVovBRinvYfbMf7r+SWnnY0tfVbKgbw@mail.gmail.com>
- <CA+h8R2obsR-CzMhWDpQ-A0oeEPaG-P=aCwF7BS4J-3eShmHJgg@mail.gmail.com>
- <20240806165050.234235b4@windsurf>
- <CADvTj4pOK8-2YXy0POUg1qOKa1MrjsxbnS-r1F7YMk_YXFmEAQ@mail.gmail.com>
- <CA+h8R2reErtSWPO1hGpX7tT5Xejb_SNqiuSCnXvJZKHwhzdcZg@mail.gmail.com>
- <CA+h8R2oJWZw_S08XXhjE--_So0UJohVLWSoj30PpR9z66x8U1A@mail.gmail.com>
-In-Reply-To: <CA+h8R2oJWZw_S08XXhjE--_So0UJohVLWSoj30PpR9z66x8U1A@mail.gmail.com>
+ d=1e100.net; s=20230601; t=1738764480; x=1739369280;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=kSCzvFQpXcTgXKAylM7gwbQXsDIBzhx9R95oGGCQHps=;
+ b=JvE8bSV4Ob47PTomNCwc4g5x5wCWifDpXn1C8VK0BnY3L93xRMKIOlazh2bn3KeTov
+ ui9SLFYLrqa0RN9RB6MymekgrBdacWyL5TphwvNEmqhACqbVfVDMESTz2J9xEzS/mAfS
+ Qhhw2u7latdmduJOwd5CUUzo/IWgw539HNirraXdqvPzhZq1x6OF1uwYNcUebgmEzRCu
+ Oy33hEOu97hKzho2SrjJ9P/K9ahCRNcl/vJn2F2QA6TI7BLANQ27D5zWDkKf9DNThvqs
+ YondTKSILN3zF9rB/IZjS4+xwAYAg/bDjGDItgI1XNZY0SnYbhLyy+piPhSP8pDdSadT
+ uhdQ==
+X-Gm-Message-State: AOJu0YxNonB/KEAVmw6C4zNL/OEdWitN6Xgpogr/AObkYqyDOvEaSuBK
+ Yc9Ksqk3e6ZdoXdZVHAsdruV3oBZZPyHYPHIpazebyeNEdlobNBwLp5lzKrN
+X-Gm-Gg: ASbGncta416f3OK7IDOZsgeU/ZPC8rXC6Tb8Bx5s5BxkUQfQZEu85/tvWIgOCkDRMga
+ 86qPzgAmVScIbc6dUQfrm0by50/p8/gJsRFCNfqji4n3elMrFi7H7JBNX7zIEfmhkkqAwhBRbMT
+ UA6k4MDFcjcQXf85EVwAg6OMgbR7Qq/PME+x0MQUBB6St42W3zlrQS3L+EdCBM6XakZeSUrVg6+
+ Dhv4r9vLoOwTwbtLRWvpsstbTUlTz3pOzG9PvBXrDyJSYMLOr0F1vsJVrkcIHKY0AkU4xAXyNG4
+ fu8W0ciHhkQ5vMwXBDk1fulhk+/tsv/VRIIG00naysNg5cbwsLnUN8RWdj4gB0dpFA==
+X-Google-Smtp-Source: AGHT+IGA1OnXAmy38YiYCrHHjrGK79gsR9WIo6Txtyeboc7g8JyDK2WG6+MqTbLj+3N0YezaaJ55AA==
+X-Received: by 2002:a05:6e02:2163:b0:3d0:4700:db0f with SMTP id
+ e9e14a558f8ab-3d04f45ca01mr30677545ab.12.1738764480133; 
+ Wed, 05 Feb 2025 06:08:00 -0800 (PST)
+Received: from james-x399.localdomain (71-218-115-58.hlrn.qwest.net.
+ [71.218.115.58]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4ec746c0f5fsm3196856173.113.2025.02.05.06.07.59
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 05 Feb 2025 06:07:59 -0800 (PST)
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 5 Feb 2025 16:02:26 +0200
-X-Gm-Features: AWEUYZnMMLhc59hS2aMa18X5PASfbPFxhHvH5dVOt-8sj1jfhJq_ikk_Uem3ldg
-Message-ID: <CADvTj4r5ZAFkyqMctj4fV=vnkqDn2g+oG3g2PjTHJKSkVLQNVQ@mail.gmail.com>
-To: Christian Stewart <christian@aperture.us>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Christian Stewart via buildroot <buildroot@buildroot.org>,
- Anisse Astier <anisse@astier.eu>
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>, James Hilliard <james.hilliard1@gmail.com>
+Date: Wed,  5 Feb 2025 07:07:40 -0700
+Message-Id: <20250205140740.3085885-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1738764158; x=1739368958; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Z7o9r/5FgOZ6tH5IEs+8/FchvvTmRxuzgoqWfTQpCz4=;
- b=JoyHezfWymSGTM18+mqxdNg3wZdAbb1EuOrIrbpSCbI1b8zWGmWeoSXGkImoc0TPY6
- VP5jpYNBF+S8RLC0My72QsaejFUcxYafls23OwLZFhniu/9gOxMRtrvggLGb9sbctMIH
- F7z3u7R8GjWWPXp/RdNEOWTWMSkBWpz7BFfeAUmpdoXPoo+SKUDNNDApvsPO+DNzBKW7
- xbpsvj2FfGQ7kdyYdd+VOJYMOadOsoLkDIElgw7XzCxR+H/3SrpaTOcwFwm2L46zM85K
- bUdfHoNmbBZHGoxBSn+P0rihDXL/VOEu0Ksz4IkNmtrMJj4G2Kb7kyzZnf4ApWWIiSwC
- 6DGA==
+ d=gmail.com; s=20230601; t=1738764480; x=1739369280; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=kSCzvFQpXcTgXKAylM7gwbQXsDIBzhx9R95oGGCQHps=;
+ b=SrZd2wSsIK6VgB57Mfl39eyCNqX/hDn9/19kZqTDnPIqB1uyVO7XyOylP89FOWyPOY
+ OG0EbB9QkH82t5KzqBeknCHr+xULC/y1eskTlMDKFaKMrhtaovMR8YaYwnVWP46XA1OQ
+ 51eK9nZYszjbWSUznMcWV4sdtV4HMnDsT/SEO0CF+p0Oxzl7X//Cx9DBriGiLLjMLt/T
+ smXClWqOgTSNu4VZUTiPATeetLmYakVYgyPKz2ugyhGl5f4oc6B44OELptl9vh9IEV1h
+ tNuSfkjHETSb6b/EOz1yRQVmdMFJ4/KCvpNv8rZcgUjbW/azZuBkNhb2oIhFzVdLeWoT
+ WZJg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=JoyHezfW
-Subject: Re: [Buildroot] [PATCH v4 1/2] package/pkg-golang.mk: allow
- packages to override download GOPROXY
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=SrZd2wSs
+Subject: [Buildroot] [PATCH 1/1] package/ola: fix protoc version checking
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,116 +105,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gV2VkLCBGZWIgNSwgMjAyNSBhdCAyOjUx4oCvUE0gQ2hyaXN0aWFuIFN0ZXdhcnQgPGNocmlz
-dGlhbkBhcGVydHVyZS51cz4gd3JvdGU6Cj4KPiBIaSBhbGwsCj4KPiBJIHdhbnRlZCB0byBmb2xs
-b3cgdXAgb24gdGhpcyBvbGQgdG9waWMgb2YgR09QUk9YWS4KPgo+IEJlbG93IEkgbWVudGlvbiBh
-IHBvdGVudGlhbCBzZWN1cml0eSBpc3N1ZSB3aGVyZSBzb21lb25lIHVwbG9hZHMgYSBtYWxpY2lv
-dXMgcGFja2FnZSB2ZXJzaW9uIHRvIHRoZSBwcm94eSBhbmQgdGhlbiBjaGFuZ2VzIHRoZSBnaXQg
-dGFnIHRvIHJlbW92ZSB0aGUgbWFsd2FyZS4gSW4gdGhpcyBhdHRhY2sgbW9kZSB0aGUgbWFpbnRh
-aW5lcnMgbWlnaHQgY2hlY2sgdGhlIGdpdCB0YWcsIHNlZSBubyBtYWx3YXJlLCBhbmQgYWRkIGEg
-cGFja2FnZSB3aXRoIHRoYXQgdGFnLgo+Cj4gVGhlIHByb2JsZW0gaXMgdGhhdCBHbyBmZXRjaGVz
-IGZyb20gR09QUk9YWSBhbmQgc2lsZW50bHkgaWdub3JlcyB0aGUgbWlzbWF0Y2guCgpBcyBpdCBz
-YXlzIGluIHRoZSBhcnRpY2xlIHRoaXMgaXMgaG93IGl0J3MgZGVzaWduZWQgdG8gd29yazoKCiJH
-byBtb2R1bGVzIGFyZSBpbnRlbnRpb25hbGx5IGltbXV0YWJsZSBvbmNlIHB1Ymxpc2hlZCBhbmQg
-ZmV0Y2hlZCBieQp0aGUgcHJveHksIGVuc3VyaW5nIHRoYXQgZXZlcnkgdXNlciBwdWxsaW5nIGEg
-dGFnZ2VkIHZlcnNpb24gKGUuZy4sCnYxLjIuMykgcmVjZWl2ZXMgdGhlIGV4YWN0IHNhbWUgYml0
-cyBldmVyeSB0aW1lLCBhbmQgcHJldmVudGluZyBzaWxlbnQKY2hhbmdlcyBvciBvdmVyd3JpdGVz
-IGFmdGVyIHB1YmxpY2F0aW9uLiBUaGlzIGltbXV0YWJpbGl0eSB1bmRlcnBpbnMKR2/igJlzIHJl
-cHJvZHVjaWJsZSBidWlsZHMsIGhlbHBpbmcgZ3VhcmFudGVlIHRoYXQgYnVpbGQgb3V0cHV0cyBh
-bHdheXMKbWF0Y2ggdGhlIGFzc29jaWF0ZWQgc291cmNlIGNvZGUuIgoKPgo+IFRoaXMgd2FzIHRo
-ZSByZWFzb24gd2h5IEkgaGF2ZSBhbHdheXMgbG9iYmllZCB0byBrZWVwIHRoZSBkZWZhdWx0IGFz
-IEdPUFJPWFk9ZGlyZWN0IGluIGJ1aWxkcm9vdCwgYXMgdGhpcyBhdm9pZHMgdGhlIGNhc2Ugd2hl
-cmUgdGhlIGdpdCByZXBvIG1pc21hdGNoZXMgdGhlIHByb3h5IHdpdGhvdXQgdmlzaWJpbGl0eSBh
-dCB0aGUgZ2l0IGxldmVsLgoKQXMgaXQgc2F5cyBpbiB0aGUgYXJ0aWNsZToKCiJXaGlsZSBpbW11
-dGFiaWxpdHkgY2FuIGJlIGFidXNlZCBieSBtYWxpY2lvdXMgYWN0b3JzIOKAlCBhbGxvd2luZwpo
-YXJtZnVsIGNvZGUgdG8gcGVyc2lzdCBvbmNlIGNhY2hlZCDigJQgaXQgcmVtYWlucyBhIG5ldCBz
-ZWN1cml0eQpiZW5lZml0LiBTaW5jZSB0aGUgR28gbW9kdWxlIHN5c3RlbSBpcyBmdW5jdGlvbmlu
-ZyBhcyBpbnRlbmRlZCwgYW5kCnRoaXMgaXMgbm90IGEgc2VjdXJpdHkgdnVsbmVyYWJpbGl0eSwg
-dGhlcmUgaXMgbm8gcGF0Y2ggb3Igc3dpdGNoIHRvCnR1cm4gb2ZmIGltbXV0YWJpbGl0eTsgaW5z
-dGVhZCwgZGV2ZWxvcGVycyBtdXN0IHJlY29nbml6ZSB0aGF0IG9uY2UgYQptYWxpY2lvdXMgdmVy
-c2lvbiBpcyBwdWJsaXNoZWQsIGl0IHdpbGwgcmVtYWluIG1hbGljaW91cyBpbiB0aGUKY2FjaGUu
-IgoKU28gaXQncyBlZmZlY3RpdmVseSBleHBlY3RlZCB0aGF0IGdvIHBhY2thZ2VzIHVzZSB0aGUg
-Y2FjaGUgYXMKR09QUk9YWT1kaXJlY3QgaXMgYW4gdW51c3VhbCBub24tZGVmYXVsdCBjb25maWd1
-cmF0aW9uIHRoYXQgc2ltcGx5CmJyZWFrcyBidWlsZHMgZm9yIG1hbnkgbm9uLW1hbGljaW91cyBy
-ZWFzb25zKGRlYWQgdXJscyBmb3IgZXhhbXBsZSkuCkRpc3RyaWJ1dGlvbnMgbGlrZSBidWlsZHJv
-b3QgYXJlIG5vdCB0eXBpY2FsbHkgYXVkaXRpbmcgcGFja2FnZQpkZXBlbmRlbmNpZXMgaW4gYSB3
-YXkgdGhhdCB3b3VsZCBjYXRjaCB0aGVzZSBzb3J0IG9mIGF0dGFja3MgZWl0aGVyCndheSwgYXVk
-aXRpbmcgZGVwZW5kZW5jaWVzIHdvdWxkIHBvdGVudGlhbGx5IGJlIHNvbWV0aGluZyB0aGF0CnVw
-c3RyZWFtIHBhY2thZ2UgbWFpbnRhaW5lcnMgd291bGQgd2FudCB0byBkbyBidXQgd2UgbW9zdGx5
-IGNhcmUgdGhhdAp3ZSBhcmUgYnVpbGRpbmcgdGhlIHBhY2thZ2Ugd2l0aCB0aGUgY29ycmVjdCBk
-ZXBlbmRlbmNpZXMgc3BlY2lmaWVkIGJ5CnRoZSB1cHN0cmVhbSwgdXNpbmcgdGhlIEdPUFJPWFkg
-Y2FjaGUgaXMgdGhlcmVmb3JlIGNvcnJlY3QgZm9yIG91ciB1c2UKY2FzZS4gSWYgd2UgaGF2ZSBh
-IGdvIHBhY2thZ2UgaW4gYnVpbGRyb290IHRoYXQgd2Uga25vdyB3b24ndCBidWlsZAp3aXRoIEdP
-UFJPWFk9ZGlyZWN0IHRoZW4gSSBkb24ndCBzZWUgaG93IHdlIGNhbiBwb3NzaWJseSBkZWZhdWx0
-IHRvCnVzaW5nIEdPUFJPWFk9ZGlyZWN0IGFzIHRoYXQgd291bGQgb2J2aW91c2x5IHJlc3VsdCBp
-biBmYWlsZWQgYnVpbGRzLgoKPgo+IFRoaXMgYXR0YWNrIGhhcyBiZWVuIHVzZWQgaW4gdGhlIHdp
-bGQgbm93Ogo+Cj4gaHR0cHM6Ly9zb2NrZXQuZGV2L2Jsb2cvbWFsaWNpb3VzLXBhY2thZ2UtZXhw
-bG9pdHMtZ28tbW9kdWxlLXByb3h5LWNhY2hpbmctZm9yLXBlcnNpc3RlbmNlCj4KPiBTZWUgYmVs
-b3cgZm9yIG15IHJlYXNvbmluZwo+Cj4gT24gVHVlLCBBdWcgNiwgMjAyNCwgOToxM+KAr0FNIENo
-cmlzdGlhbiBTdGV3YXJ0IDxjaHJpc3RpYW5AYXBlcnR1cmUudXM+IHdyb3RlOgo+Pgo+PiBUaG9t
-YXMsIEphbWVzLAo+Pgo+PiBPbiBUdWUsIEF1ZyA2LCAyMDI0LCA4OjQ54oCvQU0gSmFtZXMgSGls
-bGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5jb20+IHdyb3RlOgo+Pj4KPj4+IE9uIFR1ZSwg
-QXVnIDYsIDIwMjQgYXQgODo1MOKAr0FNIFRob21hcyBQZXRhenpvbmkKPj4+IDx0aG9tYXMucGV0
-YXp6b25pQGJvb3RsaW4uY29tPiB3cm90ZToKPj4+ID4KPj4+ID4gT24gTW9uLCA1IEF1ZyAyMDI0
-IDE4OjA3OjM3IC0wNzAwCj4+PiA+IENocmlzdGlhbiBTdGV3YXJ0IDxjaHJpc3RpYW5AYXBlcnR1
-cmUudXM+IHdyb3RlOgo+Pj4gPgo+Pj4gPiA+IE15IHN1Z2dlc3Rpb24gaXMgdG8gZWl0aGVyIHNl
-dCBHT1BST1hZPWRpcmVjdCBmb3IgYWxsIHBhY2thZ2VzLCBvciBmb3IKPj4+ID4gPiBub25lIG9m
-IHRoZW0uCj4+PiA+ID4KPj4+ID4gPiBXZSBjb3VsZCBkZWZhdWx0IHRvIHNldHRpbmcgR09QUk9Y
-WSB0byBlbXB0eSwgd2hpY2ggdXNlcyB0aGUgZGVmYXVsdAo+Pj4gPiA+IEdvb2dsZSBwcm94eS4K
-Pj4+Cj4+PiBXaHkgd2VyZW4ndCB3ZSBqdXN0IHVzaW5nIHRoZSBkZWZhdWx0IHNldHRpbmdzIGlu
-IHRoZSBmaXJzdCBwbGFjZT8gSSBtZWFuCj4+PiBpZiB1cHN0cmVhbXMgYmFzaWNhbGx5IG9ubHkg
-dGVzdCB3aXRoIGRlZmF1bHQgc2V0dGluZ3MgaGVyZSB0aGVuIHVzaW5nCj4+PiBzb21ldGhpbmcg
-ZGlmZmVyZW50IHNlZW1zIHByb2JsZW1hdGljIGluIGdlbmVyYWwuCj4+Pgo+Pj4KPj4+IFRoZXJl
-J3MgcmVwb3J0cyB0aGF0IEdPUFJPWFk9ZGlyZWN0IGlzIGtpbmRhIGJyb2tlbjoKPj4+IGh0dHBz
-Oi8vZHJld2RldmF1bHQuY29tLzIwMjEvMDgvMDYvZ29wcm94eS1icmVha3MtZ28uaHRtbAo+Pj4K
-Pj4+ID4KPj4+ID4gQ291bGQgeW91IGV4cGxhaW4gdG8gYSBHbyBpZ25vcmFudCBsaWtlIG1lIGhv
-dyBpcyB0aGlzIHByb3h5IHRoaW5nCj4+PiA+IGhlbHBpbmcgaW4gc29sdmluZyB0aGlzIGlzc3Vl
-PyBTaG91bGQgYSBwcm94eSBqdXN0ICJzcGVlZCB1cCIgdGhlCj4+PiA+IGRvd25sb2FkPyBXaHkg
-ZG9lcyBpdCBleGhpYml0IGEgZGlmZmVyZW50IGJlaGF2aW9yIGJldHdlZW4gYQo+Pj4gPiBHT1BS
-T1hZPWRpcmVjdCBidWlsZCBhbmQgYSBHT1BST1hZPXNvbWV0aGluZ2Vsc2UgPwo+Pj4KPj4+IFBy
-ZXN1bWFibHkgdGhlIHByb3h5IGFjdHMgYXMgYSBjYWNoZSB3aGljaCBwcmV2ZW50cyBicmVha2Fn
-ZSBpZgo+Pj4gdGhlIGRlcGVuZGVuY3kgZGlyZWN0IHNvdXJjZSBjaGFuZ2VzIG9yIHNvbWV0aGlu
-ZyBsaWtlIHRoYXQuCj4+Cj4+Cj4+IFRoZSByZWFzb25pbmcgZm9yIHVzaW5nIEdPUFJPWFk9ZGly
-ZWN0IGlzIGFzIGZvbGxvd3M6Cj4+Cj4+IFdoZW4gd2UgZW5hYmxlIHRoZSBwcm94eSwgdGhlIEdv
-IHRvb2wgd2lsbCBkb3dubG9hZCB0aGUgc291cmNlcyBmb3IgdGhlIGRlcGVuZGVuY2llcyBmcm9t
-IEdvb2dsZS4KPj4KPj4gVGhpcyBpcyBPSyBpbiBnZW5lcmFsLCBidXQgaW4gdGhlIGNvbnRleHQg
-b2YgYnVpbGRyb290IHdlIHR5cGljYWxseSBkb3dubG9hZCBzb3VyY2VzIGZyb20gdGhlaXIgdXBz
-dHJlYW0gcmVsZWFzZXMgb3IgR2l0IHJlcG9zaXRvcmllcy4KPj4KPj4gR09QUk9YWSBpcyBub3Qg
-YnJva2VuLgo+Pgo+PiBUaGF0IHNhaWQsIGEgbG90IG9mIGRlcGVuZGVuY2llcyBjYXVzZSBwcm9i
-bGVtcyB3aGVuIHRoZXkgY2hhbmdlIHdoYXQgdGFnIGEgZ2l0IHJlbGVhc2UgcG9pbnRzIHRvIHJl
-dHJvYWN0aXZlbHkgKHJhcmUgYnV0IGhhcHBlbnMpLCBvciBkZWxldGUgYSBvbGRlciBjb21taXQg
-ZnJvbSB0aGVpciByZXBvc2l0b3J5ICh3aGljaCBoYXBwZW5zIGV4dHJlbWVseSByYXJlbHkpLgo+
-Pgo+PiBUaGUgcHJveHkgc21vb3RocyB0aGlzIG92ZXIgYnkgYWx3YXlzIHNlcnZpbmcgdGhlIHNh
-bWUgdGhpbmcgZm9yIGEgZ2l0IHRhZyBvciBjb21taXQgaGFzaC4KPj4KPj4gVGhlIHByb2JsZW0g
-d2l0aCB0aGlzIGlzLCBub3cgd2UgaGF2ZSBzb21ldGhpbmcgZGlmZmVyZW50IGJlaW5nIHJldHVy
-bmVkIGZvciBhIGRlcGVuZGVuY3kgdGhhbiB3aGF0IGl0IHNheXMgaW4gZ28ubW9kLgo+Pgo+PiBU
-aGUgZ28ubW9kIG1pZ2h0IHNheSB3ZSBhcmUgZmV0Y2hpbmcgZm9vIGF0IHZlcnNpb24gMS4wLjAs
-IGJ1dCBpbiBmYWN0LCBpZiB5b3UgZ28gdG8gdGhlIHJlcG9zaXRvcnkgZm9yIGZvbywgYW5kIGdv
-IHRvIHZlcnNpb24gMS4wLjAsIGl0IGNvdWxkIGJlIGEgY29tcGxldGVseSBkaWZmZXJlbnQgc291
-cmNlIHRyZWUgZnJvbSB0aGUgb25lIHdlIGdldCBpbiB0aGUgcHJveGllZCBkb3dubG9hZC4KPj4K
-Pj4gVGhpcyBvcGVucyB1cCB0aGUgb3Bwb3J0dW5pdHkgZm9yIGJhZCBhY3RvcnMgdG8gaGlkZSBj
-b2RlIGluIHRoZSBwcm94aWVkIHZlcnNpb24gYW5kIHRoZW4gcmV0cm9hY3RpdmVseSBjaGFuZ2Ug
-dGhlIGdpdCB0YWcgdG8gaGlkZSB0aGF0IGJhZCBjb2RlLgo+Pgo+PiBGb3IgdGhpcyByZWFzb24g
-dGhlIGRlZmF1bHQgd2FzIHNldCB0byBhbHdheXMgdXNlIEdpdCB0byBmZXRjaCB0aGUgZGVwZW5k
-ZW5jaWVzIGZvciBCdWlsZHJvb3QgYXMgd2Ugd291bGQgcHJlZmVyIHRvIGRldGVjdCB0aGUgbWlz
-bWF0Y2ggYW5kIGRlYWwgd2l0aCBpdCB1cCBmcm9udCwgcG9zc2libHkgZmFsbGluZyBiYWNrIHRv
-IGZldGNoaW5nIHRoZSAudGFyLmd6IGZyb20gb3VyIG93biBtaXJyb3IsIHJhdGhlciB0aGFuIGRl
-cGVuZCBvbiB0aGlzIGJlaGF2aW9yIGZyb20gdGhlIEdvb2dsZSBwcm94eSB0byBhbHdheXMgYmUg
-dGhlcmUgYW5kIHNhdmUgdXMuCj4+Cj4+IEFzIHlvdSBjYW4gc2VlIHdlIGhhdmUgbmV2ZXIgaGFk
-IGFuIGlzc3VlIHdpdGggdGhpcyBzZXR0aW5nIHVudGlsIG5vdywgd2hlbiB3ZSBoYXZlIGFuIGFj
-dHVhbCBicm9rZW4gZGVwZW5kZW5jeSBzb21ld2hlcmUsIGFuZCBpdHMgd2hlbiB3ZSBhcmUgYWRk
-aW5nIHRoZSBwYWNrYWdlLCBub3QgcmV0cm9hY3RpdmVseSwgdGhhdCB0aGUgaXNzdWUgaXMgZm91
-bmQgYW5kIHNvbHZlZC4KPj4KPj4gVGhpcyBpcyBteSBwaXRjaCBmb3Iga2VlcGluZyBHT1BST1hZ
-PWRpcmVjdC4gSWYgd2Ugd2FudCB0byB1c2UgdGhlIEdvb2dsZSBwcm94eSB3aXRoIGFsbCB0aGUg
-Y2F2ZXRzIEkgbWVudGlvbmVkIGFib3ZlLCB3ZSBjb3VsZCBhZGQgdGhlIG9wdGlvbiBIT1NUX0dP
-X0dPUFJPWFkgYW5kIGRlZmF1bHQgaXQgdG8gdGhlIEdvb2dsZSBwcm94eS4gQnV0IHBlcnNvbmFs
-bHkgSSB3aWxsIHN0aWxsIGFsd2F5cyBvdmVycmlkZSB0aGlzIHZhbHVlIHRvIGRpcmVjdCBpbiBt
-eSBwcm9qZWN0cy4KPgo+Cj4KPiBCZXN0IHJlZ2FyZHMsCj4gQ2hyaXN0aWFuIFN0ZXdhcnQKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
-aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Backport patches fixing protoc version checking.
+
+Fixes:
+checking protoc version... expr: syntax error: unexpected argument '2'
+configure: error: protoc version too old libprotoc 28.1 < 2.3.0
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ ...-protoc-version-checking-since-v20.x.patch | 35 +++++++++++++++++++
+ ...rectly-match-multi-digit-major-versi.patch | 28 +++++++++++++++
+ 2 files changed, 63 insertions(+)
+ create mode 100644 package/ola/0002-Fix-protoc-version-checking-since-v20.x.patch
+ create mode 100644 package/ola/0003-Protoc-check-correctly-match-multi-digit-major-versi.patch
+
+diff --git a/package/ola/0002-Fix-protoc-version-checking-since-v20.x.patch b/package/ola/0002-Fix-protoc-version-checking-since-v20.x.patch
+new file mode 100644
+index 0000000000..ee98c5569d
+--- /dev/null
++++ b/package/ola/0002-Fix-protoc-version-checking-since-v20.x.patch
+@@ -0,0 +1,35 @@
++From d4414feefd95adf9c91d7eaf1e94380296c35f7a Mon Sep 17 00:00:00 2001
++From: Peter Newman <peternewman@users.noreply.github.com>
++Date: Fri, 7 Jul 2023 15:57:35 +0100
++Subject: [PATCH] Fix protoc version checking, since v20.x (cherry picked from
++ commit 2e55aa88756718d8ab4a4c8fde97d620542c2c98)
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://github.com/OpenLightingProject/ola/commit/d4414feefd95adf9c91d7eaf1e94380296c35f7a
++---
++ config/ola.m4 | 9 ++++++++-
++ 1 file changed, 8 insertions(+), 1 deletion(-)
++
++diff --git a/config/ola.m4 b/config/ola.m4
++index f838ab70a..51b6c825c 100644
++--- a/config/ola.m4
+++++ b/config/ola.m4
++@@ -44,7 +44,14 @@ if test -z "$PROTOC" ; then
++   AC_MSG_ERROR([cannot find 'protoc' program]);
++ elif test -n "$1" ; then
++   AC_MSG_CHECKING([protoc version])
++-  [protoc_version=`$PROTOC --version 2>&1 | grep 'libprotoc' | sed 's/.*\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\).*/\1/g'`]
+++  # Since v20.x we only get effectively the minor and patch versions out of protoc.
+++  # Treat them as major and minor and everything should keep working indefinitely.
+++  # See https://protobuf.dev/support/version-support/
+++  # So we've got either of these:
+++  # libprotoc 2.4.1
+++  # libprotoc 23.3
+++  # The first sed ensures all versions have major, minor, patch, by adding a .0 on the end of ones missing it
+++  [protoc_version=`$PROTOC --version 2>&1 | grep 'libprotoc' | sed 's/\([^\.0-9][0-9][0-9]*\.[0-9][0-9]*\)$/\1\.0/g' | sed 's/.*\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\).*/\1/g'`]
++   [required=$1]
++   [required_major=`echo $required | sed 's/[^0-9].*//'`]
++   [required_minor=`echo $required | sed 's/[0-9][0-9]*\.\([0-9][0-9]*\)\.[0-9][0-9]*/\1/'`]
++-- 
++2.34.1
++
+diff --git a/package/ola/0003-Protoc-check-correctly-match-multi-digit-major-versi.patch b/package/ola/0003-Protoc-check-correctly-match-multi-digit-major-versi.patch
+new file mode 100644
+index 0000000000..cee2c7eb43
+--- /dev/null
++++ b/package/ola/0003-Protoc-check-correctly-match-multi-digit-major-versi.patch
+@@ -0,0 +1,28 @@
++From 546d9ee8d970c4e5b33d9d28b4acf6eb34f27a5d Mon Sep 17 00:00:00 2001
++From: Peter Newman <peternewman@users.noreply.github.com>
++Date: Fri, 7 Jul 2023 16:14:21 +0100
++Subject: [PATCH] Protoc check - correctly match multi-digit major versions
++ (cherry picked from commit 69a2946622cdfce54cb6ed7f2210df2be0ec5576)
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://github.com/OpenLightingProject/ola/commit/546d9ee8d970c4e5b33d9d28b4acf6eb34f27a5d
++---
++ config/ola.m4 | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/config/ola.m4 b/config/ola.m4
++index 51b6c825c..eacee5d94 100644
++--- a/config/ola.m4
+++++ b/config/ola.m4
++@@ -51,7 +51,7 @@ elif test -n "$1" ; then
++   # libprotoc 2.4.1
++   # libprotoc 23.3
++   # The first sed ensures all versions have major, minor, patch, by adding a .0 on the end of ones missing it
++-  [protoc_version=`$PROTOC --version 2>&1 | grep 'libprotoc' | sed 's/\([^\.0-9][0-9][0-9]*\.[0-9][0-9]*\)$/\1\.0/g' | sed 's/.*\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\).*/\1/g'`]
+++  [protoc_version=`$PROTOC --version 2>&1 | grep 'libprotoc' | sed 's/\([^\.0-9][0-9][0-9]*\.[0-9][0-9]*\)$/\1\.0/g' | sed 's/[^0-9]*\([0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\).*/\1/g'`]
++   [required=$1]
++   [required_major=`echo $required | sed 's/[^0-9].*//'`]
++   [required_minor=`echo $required | sed 's/[0-9][0-9]*\.\([0-9][0-9]*\)\.[0-9][0-9]*/\1/'`]
++-- 
++2.34.1
++
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
