@@ -1,51 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95F0EC02196
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 21:13:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60B2CC02196
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 21:13:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF97D41727;
-	Wed,  5 Feb 2025 21:13:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E89D7831D5;
+	Wed,  5 Feb 2025 21:13:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4UukjBKdDnlR; Wed,  5 Feb 2025 21:13:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Az2BMOwzh574; Wed,  5 Feb 2025 21:13:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 17EA2416D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 420E483231
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17EA2416D2;
-	Wed,  5 Feb 2025 21:13:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3B85712A
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 21:13:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 420E483231;
+	Wed,  5 Feb 2025 21:13:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A7AFE12A
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 21:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1BC314129A
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 21:13:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 97B29831D5
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 21:13:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DYEeE7PqHsyp for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 21:13:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28CE8412A1
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 28CE8412A1
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 21:13:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 146D987108; Wed,  5 Feb 2025 21:13:25 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 21:04:46 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 91f3e387fdb53c7b48044b53a11acf4954630d6c
-X-Git-Newrev: 03c498f1bc1ab9ee1ca305b9fce02a088e514a32
-X-Patchwork-Hint: ignore
-Message-Id: <20250205211325.146D987108@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/protobuf-c: bump to version 1.5.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1N5d1h6uGI02 for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 21:13:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 738CC831F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 738CC831F5
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 738CC831F5
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 21:13:39 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-43618283d48so1382405e9.1
+ for <buildroot@buildroot.org>; Wed, 05 Feb 2025 13:13:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1738790017; x=1739394817;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=g34Hwo1CtrluMct/CLxDzCWDtkE75S6Jtb/Fq3Ey5BY=;
+ b=VPobFON5Zot/bwt9ah2ZYPCR5QJTKSK91rn3Mc/cdY2xSBA+zq2kF/x2T16sW4E1m9
+ vB40VB0zJGhv0CzzQn01yJjcSugTSdJWGDTIySUJbF+0O8PAjtkq3Pjzl1wblSIsfmi8
+ AP00TzRHj0vg8Sw3fD7BELnEYTPbMv2/oT0rVV9Ruh2nXHhI3nE8aJcGlMZpZ8eJ3HIA
+ kveR4/+jxFflTy4H5ucU2Qo3TkyLUa1zqSdLk4QT4VW/tF81wGGXz+A3p4ZwON8/X7uu
+ uA7jtms9Zf1qsdVZVd266cSHW5iqr0/xdQEr/i1vQ74j5g0/4OaxUht/gTCIHyvpoeg8
+ rFYg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVP+e8d+/Lz95xrqrQDKiXaYeHZ4ioP/91bWDmhr74n3bsxNSTGlBLalUk+cy3DAk8pt8/CHejxa7o=@buildroot.org
+X-Gm-Message-State: AOJu0YzcHWfdXqxQU4hZXhu4g3/Y+miDeuoAY7nm7aN6g/0VV6hz3NM7
+ GpWyQ0Mt04IADyNDx3YVjVYMaC25JEOB73cv5q8V0PJu06w+0m3WhxGq2CAfo0E=
+X-Gm-Gg: ASbGncvLGZMia9XmfLnX6L4TY+EGfEFdHOQb3lbfsiTidYV5EdhrhOgWhORcbLj/UvV
+ UqJstNNjrnflaAiUcHAM/0jNANaegj442/pZESS40uy8inmBHe9V4Z/fEmV5ceRIe6FZN/mVzkw
+ P1vRbGb5g5hr85ya5cOyT0+AWnRFZ72gT9nDtCutgngnt4T9keId2nf2ntFKDwCo2CyuMRBQIS/
+ sPcVQ7FIFrt/1xCWGiMnkEU9VP1KhnPF7pkMUIzsL0qIO8S4pVKI1mMSAvM6muToA3BCWjy9Xd7
+ OxsGbaEMi84rVlbgHW3PyEYAfmxcaI/3P/wdsqqOjJPHSalE4N5jh2VmCFO5yfmeY+ZllohsgWT
+ vbrr4IJmkN5bM438sBLnPS/+kNfqankiN/1IGUSeHA0T/iw==
+X-Google-Smtp-Source: AGHT+IFaR59ar+FVtt6OJvj0pKL4SX2ewzQVroWBcN1xsHFyFdGegZaJmtIH0vpI9h3pSDNyU94FpA==
+X-Received: by 2002:a05:600c:1c29:b0:434:a4b3:5ebe with SMTP id
+ 5b1f17b1804b1-4390d55fcdbmr33716975e9.24.1738790017189; 
+ Wed, 05 Feb 2025 13:13:37 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4391400b9f4sm638105e9.31.2025.02.05.13.13.36
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 05 Feb 2025 13:13:36 -0800 (PST)
+Message-ID: <a459225c-d626-4d1b-8b5b-681e7d5faeda@mind.be>
+Date: Wed, 5 Feb 2025 22:13:34 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20250205154301.3302035-1-james.hilliard1@gmail.com>
+Content-Language: en-GB
+In-Reply-To: <20250205154301.3302035-1-james.hilliard1@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1738790017; x=1739394817; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=g34Hwo1CtrluMct/CLxDzCWDtkE75S6Jtb/Fq3Ey5BY=;
+ b=EzCn/Ce18vWOhMxGrCAqEqoleQETEPaH9vOiIvqD1TUXDijoAI8edDwsKMmaRDDO6k
+ h2MebAexcNfDJIfKzP6fl/4dyxKW22frSlb0Boyph9esTrUpb2BXhzlWEgxzmuNRnsDV
+ e5ZGEdxgDibPJ2JDEqPr6BCGOWqKbRgSTtyOGf/W8hvkiV/5ux5v0ybjCB7KkQXS4sJe
+ lckHKhEcMj2w8XIqdpnsecaMM6zITK+yiGptN2zcejwcXtjC3EMkU0I8uoljCFvUCpwm
+ TCWdWPHIikEAC+JxBw898xg6zMLXq4FR95Znj5kVJy+EJV+wf+lmj1SfWbjAxug9swdu
+ cUFw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=EzCn/Ce1
+Subject: Re: [Buildroot] [PATCH 1/1] package/{python-}protobuf: bump to
+ version 29.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,256 +115,83 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03c498f1bc1ab9ee1ca305b9fce02a088e514a32
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License hash changed due to year update:
-https://github.com/protobuf-c/protobuf-c/commit/53e0b201db240694f8c8aabf0d0b579de33bf24d
 
-Drop patches which are now upstream.
+On 05/02/2025 16:43, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- ...Protect-against-being-invoked-against-edi.patch | 57 ---------------
- ...-FieldSyntax-to-maximize-compatibility-ac.patch | 84 ----------------------
- ...or-GenerateHeader-Set-min_header_version-.patch | 44 ------------
- package/protobuf-c/protobuf-c.hash                 |  4 +-
- package/protobuf-c/protobuf-c.mk                   |  2 +-
- 5 files changed, 3 insertions(+), 188 deletions(-)
+  Applied to master, thanks.
 
-diff --git a/package/protobuf-c/0001-CGenerator-Protect-against-being-invoked-against-edi.patch b/package/protobuf-c/0001-CGenerator-Protect-against-being-invoked-against-edi.patch
-deleted file mode 100644
-index c674ca2ee1..0000000000
---- a/package/protobuf-c/0001-CGenerator-Protect-against-being-invoked-against-edi.patch
-+++ /dev/null
-@@ -1,57 +0,0 @@
--From 2480f4d9d2fa97e5511ed0914ee529a344e969a7 Mon Sep 17 00:00:00 2001
--From: Robert Edmonds <edmonds@users.noreply.github.com>
--Date: Wed, 20 Mar 2024 22:43:30 -0400
--Subject: [PATCH] CGenerator: Protect against being invoked against "edition"
-- syntax .proto files
--
--The Google protobuf project is currently experimenting with a new syntax
--for .proto files called "editions". Since protobuf-c is a proto2/proto3
--compiler, after the previous commit reimplementing `FieldSyntax()`, the
--protobuf compiler will abort like this if presented with an "editions"
--syntax .proto file due to the safety check in `FieldSyntax()`:
--
--    $ protoc --experimental_editions --c_out=. test.proto
--    protoc-gen-c: ./protoc-c/c_helpers.h:178: int google::protobuf::compiler::c::FieldSyntax(const google::protobuf::FieldDescriptor*): Assertion `syntax == "proto2" || syntax == "proto3"' failed.
--    --c_out: protoc-gen-c: Plugin killed by signal 6.
--
--On protobuf 26, our `CodeGenerator` can implement certain methods to
--declare that we "support" editions, and then reject any other edition
--except proto2 and proto3, which have apparently been retroactively
--declared to be "editions". Of course this needs to be wrapped in a
--version guard.
--
--With this protection in place, the protobuf compiler cleanly exits with
--a nice error message like this:
--
--    $ protoc --experimental_editions --c_out=. test.proto
--    WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
--    E0000 00:00:1710988958.296200   20022 descriptor.cc:4620] Invalid proto descriptor for file "test.proto":
--    E0000 00:00:1710988958.296239   20022 descriptor.cc:4623]   test.proto: Edition 2023 is later than the maximum supported edition PROTO3
--    --c_out: protoc-gen-c: Plugin failed with status code 1.
--
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--Upstream: https://github.com/protobuf-c/protobuf-c/pull/711
-----
-- protoc-c/c_generator.h | 6 ++++++
-- 1 file changed, 6 insertions(+)
--
--diff --git a/protoc-c/c_generator.h b/protoc-c/c_generator.h
--index b8b44aa..4aeb579 100644
----- a/protoc-c/c_generator.h
--+++ b/protoc-c/c_generator.h
--@@ -93,6 +93,12 @@ class PROTOC_C_EXPORT CGenerator : public CodeGenerator {
--                 const std::string& parameter,
--                 OutputDirectory* output_directory,
--                 std::string* error) const;
--+
--+#if GOOGLE_PROTOBUF_VERSION >= 5026000
--+  uint64_t GetSupportedFeatures() const { return CodeGenerator::FEATURE_SUPPORTS_EDITIONS; }
--+  Edition GetMinimumEdition() const { return Edition::EDITION_PROTO2; }
--+  Edition GetMaximumEdition() const { return Edition::EDITION_PROTO3; }
--+#endif
-- };
-- 
-- }  // namespace c
---- 
--2.34.1
--
-diff --git a/package/protobuf-c/0002-Reimplement-FieldSyntax-to-maximize-compatibility-ac.patch b/package/protobuf-c/0002-Reimplement-FieldSyntax-to-maximize-compatibility-ac.patch
-deleted file mode 100644
-index e14a9fbc75..0000000000
---- a/package/protobuf-c/0002-Reimplement-FieldSyntax-to-maximize-compatibility-ac.patch
-+++ /dev/null
-@@ -1,84 +0,0 @@
--From ee3d9e5423c93ee6b828fdda8e7fef13a77634eb Mon Sep 17 00:00:00 2001
--From: Robert Edmonds <edmonds@users.noreply.github.com>
--Date: Wed, 20 Mar 2024 22:25:54 -0400
--Subject: [PATCH] Reimplement FieldSyntax() to maximize compatibility across
-- protobuf versions
--
--Recent versions of Google protobuf have broken the interfaces for
--determining the syntax version of a .proto file. The current protobuf-c
--1.5.0 release does not compile with Google protobuf 26.0 due to the most
--recentage breakage. There is a possible workaround involving the Google
--protobuf `FileDescriptorLegacy` class, which is documented as:
--
--// TODO Remove this deprecated API entirely.
--
--So we probably shouldn't rely on it.
--
--Instead, this commit obtains the `FileDescriptorProto` corresponding
--to the passed in `FieldDescriptor` and interrogates the `syntax` field
--directly. This is a single implementation with no version-specific
--workarounds. Hopefully this won't break in the next Google protobuf
--release.
--
--I tested the `FieldSyntax()` implementation in this commit across a
--number of different Google protobuf releases and found that it worked
--(`make && make check`) on all of them:
--
--- Google protobuf 3.6.1.3 (Ubuntu 20.04)
--- Google protobuf 3.12.4 (Ubuntu 22.04)
--- Google protobuf 3.21.12 (Debian 12 + Debian unstable)
--- Google protobuf 3.25.2 (Debian experimental)
--- Google protobuf 26.1-dev
--
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--Upstream: https://github.com/protobuf-c/protobuf-c/pull/711
-----
-- protoc-c/c_helpers.h | 24 ++++++++++++++----------
-- 1 file changed, 14 insertions(+), 10 deletions(-)
--
--diff --git a/protoc-c/c_helpers.h b/protoc-c/c_helpers.h
--index 062d330..be28b60 100644
----- a/protoc-c/c_helpers.h
--+++ b/protoc-c/c_helpers.h
--@@ -70,10 +70,6 @@
-- #include <protobuf-c/protobuf-c.pb.h>
-- #include <google/protobuf/io/printer.h>
-- 
---#if GOOGLE_PROTOBUF_VERSION >= 4023000
---# include <google/protobuf/descriptor_legacy.h>
---#endif
---
-- namespace google {
-- namespace protobuf {
-- namespace compiler {
--@@ -173,13 +169,21 @@ struct NameIndex
-- int compare_name_indices_by_name(const void*, const void*);
-- 
-- // Return the syntax version of the file containing the field.
---// This wrapper is needed to be able to compile against protobuf2.
-- inline int FieldSyntax(const FieldDescriptor* field) {
---#if GOOGLE_PROTOBUF_VERSION >= 4023000
---  return FileDescriptorLegacy(field->file()).syntax() == FileDescriptorLegacy::SYNTAX_PROTO3 ? 3 : 2;
---#else
---  return field->file()->syntax() == FileDescriptor::SYNTAX_PROTO3 ? 3 : 2;
---#endif
--+  auto proto = FileDescriptorProto();
--+  field->file()->CopyTo(&proto);
--+
--+  if (proto.has_syntax()) {
--+    auto syntax = proto.syntax();
--+    assert(syntax == "proto2" || syntax == "proto3");
--+    if (syntax == "proto2") {
--+      return 2;
--+    } else if (syntax == "proto3") {
--+      return 3;
--+    }
--+  }
--+
--+  return 2;
-- }
-- 
-- // Work around changes in protobuf >= 22.x without breaking compilation against
---- 
--2.34.1
--
-diff --git a/package/protobuf-c/0003-FileGenerator-GenerateHeader-Set-min_header_version-.patch b/package/protobuf-c/0003-FileGenerator-GenerateHeader-Set-min_header_version-.patch
-deleted file mode 100644
-index d7d9cdf845..0000000000
---- a/package/protobuf-c/0003-FileGenerator-GenerateHeader-Set-min_header_version-.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From a6cf1aa386067e26d582cc1d1e327787595c9f13 Mon Sep 17 00:00:00 2001
--From: Robert Edmonds <edmonds@users.noreply.github.com>
--Date: Wed, 20 Mar 2024 21:48:10 -0400
--Subject: [PATCH] FileGenerator::GenerateHeader(): Set `min_header_version`
-- unconditionally
--
--Previously, we were conditionally trying to set `min_header_version` to
--the lowest possible value, and relying on a "legacy" Google interface to
--determine the file descriptor's syntax version as part of that
--determination.
--
--Instead, simply bump the minimum version to 1003000 (1.3.0). This
--release was almost 7 years ago. In practice protobuf-c users should not
--be shipping pre-compiled .pb-c.c/.pb-c.h files, anyway.
--
--Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
--Upstream: https://github.com/protobuf-c/protobuf-c/pull/711
-----
-- protoc-c/c_file.cc | 9 +--------
-- 1 file changed, 1 insertion(+), 8 deletions(-)
--
--diff --git a/protoc-c/c_file.cc b/protoc-c/c_file.cc
--index ca0ad34..c6d8a24 100644
----- a/protoc-c/c_file.cc
--+++ b/protoc-c/c_file.cc
--@@ -117,14 +117,7 @@ FileGenerator::~FileGenerator() {}
-- void FileGenerator::GenerateHeader(io::Printer* printer) {
--   std::string filename_identifier = FilenameIdentifier(file_->name());
-- 
---  int min_header_version = 1000000;
---#if GOOGLE_PROTOBUF_VERSION >= 4023000
---  if (FileDescriptorLegacy(file_).syntax() == FileDescriptorLegacy::SYNTAX_PROTO3) {
---#else
---  if (file_->syntax() == FileDescriptor::SYNTAX_PROTO3) {
---#endif
---    min_header_version = 1003000;
---  }
--+  const int min_header_version = 1003000;
-- 
--   // Generate top of header.
--   printer->Print(
---- 
--2.34.1
--
-diff --git a/package/protobuf-c/protobuf-c.hash b/package/protobuf-c/protobuf-c.hash
-index aafd98416a..ea7262028c 100644
---- a/package/protobuf-c/protobuf-c.hash
-+++ b/package/protobuf-c/protobuf-c.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7b404c63361ed35b3667aec75cc37b54298d56dd2bcf369de3373212cc06fd98  protobuf-c-1.5.0.tar.gz
--sha256  ad28bbf89340b86d15aad1ff62c4f4590025d836415307dc66cf0338235cc2f4  LICENSE
-+sha256  20d1dc257da96f8ddff8be4dd9779215bbd0a6069ed53bbe9de38fa7629be06b  protobuf-c-1.5.1.tar.gz
-+sha256  2d1d028bd27f8c85bc970d720519d2069ca6213fcb26b9dea444a7c39d24bbb3  LICENSE
-diff --git a/package/protobuf-c/protobuf-c.mk b/package/protobuf-c/protobuf-c.mk
-index 2b3e86a1bc..b1e8c25496 100644
---- a/package/protobuf-c/protobuf-c.mk
-+++ b/package/protobuf-c/protobuf-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PROTOBUF_C_VERSION = 1.5.0
-+PROTOBUF_C_VERSION = 1.5.1
- PROTOBUF_C_SITE = https://github.com/protobuf-c/protobuf-c/releases/download/v$(PROTOBUF_C_VERSION)
- PROTOBUF_C_DEPENDENCIES = host-protobuf-c
- HOST_PROTOBUF_C_DEPENDENCIES = host-protobuf host-pkgconf
+  It fixes the build of riemann-c-client and postgis. ola is still broken as I 
+mentioned elsewhere. criu is also still broken but I don't think it's related to 
+protobuf:
+
+AttributeError: module 'pycriu' has no attribute '__version__'
+
+
+  Regards,
+  Arnout
+
+> ---
+>   package/protobuf/protobuf.hash               | 2 +-
+>   package/protobuf/protobuf.mk                 | 2 +-
+>   package/python-protobuf/python-protobuf.hash | 4 ++--
+>   package/python-protobuf/python-protobuf.mk   | 2 +-
+>   4 files changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+> index 06f4924394..98159ad897 100644
+> --- a/package/protobuf/protobuf.hash
+> +++ b/package/protobuf/protobuf.hash
+> @@ -1,3 +1,3 @@
+>   # Locally calculated
+>   sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+> -sha256  3b8bf6e96499a744bd014c60b58f797715a758093abf859f1d902194b8e1f8c9  protobuf-28.1.tar.gz
+> +sha256  008a11cc56f9b96679b4c285fd05f46d317d685be3ab524b2a310be0fbad987e  protobuf-29.3.tar.gz
+> diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+> index ffed3166c7..4540443702 100644
+> --- a/package/protobuf/protobuf.mk
+> +++ b/package/protobuf/protobuf.mk
+> @@ -7,7 +7,7 @@
+>   # When bumping this package, make sure to also verify if the
+>   # python-protobuf package still works and to update its hash,
+>   # as they share the same version/site variables.
+> -PROTOBUF_VERSION = 28.1
+> +PROTOBUF_VERSION = 29.3
+>   PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
+>   PROTOBUF_LICENSE = BSD-3-Clause
+>   PROTOBUF_LICENSE_FILES = LICENSE
+> diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+> index 8ce6039449..1e1833980c 100644
+> --- a/package/python-protobuf/python-protobuf.hash
+> +++ b/package/python-protobuf/python-protobuf.hash
+> @@ -1,5 +1,5 @@
+>   # md5, sha256 from https://pypi.org/pypi/protobuf/json
+> -md5  44b076f3564d3561067bcc2c455e008a  protobuf-5.28.1.tar.gz
+> -sha256  42597e938f83bb7f3e4b35f03aa45208d49ae8d5bcb4bc10b9fc825e0ab5e423  protobuf-5.28.1.tar.gz
+> +md5  26ee22a630b0dbfce4de03adc5600fbc  protobuf-5.29.3.tar.gz
+> +sha256  5da0f41edaf117bde316404bad1a486cb4ededf8e4a54891296f648e8e076620  protobuf-5.29.3.tar.gz
+>   # Locally computed sha256 checksums
+>   sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+> diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
+> index 02bf2a1d70..898a133d37 100644
+> --- a/package/python-protobuf/python-protobuf.mk
+> +++ b/package/python-protobuf/python-protobuf.mk
+> @@ -6,7 +6,7 @@
+>   
+>   PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
+>   PYTHON_PROTOBUF_SOURCE = protobuf-5.$(PYTHON_PROTOBUF_VERSION).tar.gz
+> -PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/3c/0b/7a997c8939f698d72bdea14d57116e43d3051fffb3b2964c30938c4a08e6
+> +PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/f7/d1/e0a911544ca9993e0f17ce6d3cc0932752356c1b0a834397f28e63479344
+>   PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
+>   PYTHON_PROTOBUF_LICENSE_FILES = LICENSE
+>   PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
