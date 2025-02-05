@@ -4,100 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4276C02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 11:08:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB3FBC02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 11:08:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F0E7838AF;
-	Wed,  5 Feb 2025 11:08:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 836AD838F7;
+	Wed,  5 Feb 2025 11:08:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bUaLWXf72dL6; Wed,  5 Feb 2025 11:08:01 +0000 (UTC)
+ id 8mATxhMpfGiR; Wed,  5 Feb 2025 11:08:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF6EB838CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 752C7838FB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF6EB838CC;
-	Wed,  5 Feb 2025 11:08:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 50170CD
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:07:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 752C7838FB;
+	Wed,  5 Feb 2025 11:08:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AB1E712A
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:08:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3353A60ADF
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:07:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8F9C2838FB
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:08:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KWynAOnM3856 for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 11:07:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 979DF60606
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 979DF60606
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 979DF60606
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:07:57 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-38daf09d37fso996394f8f.1
- for <buildroot@buildroot.org>; Wed, 05 Feb 2025 03:07:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738753675; x=1739358475;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=TxiV0nhE1wE/Bn+7eJ4CK37YsmwKJQ7SKY6murHTce4=;
- b=jUvF1+/Wqy8cO4dOc2KVQvBGmGdhr12E+sWopwPHTzzMTmhmTmLHe3tEeHk4dGbyzM
- Qal1xkTiQx9HOljlmT6Nwn+x/TX7gmJZP9CE25wp+gov/7DvEYNW/+aL2khzsJ1bCj2B
- YvF5pc4W8pHsXrbvPzVUkRqHZ/C5sNR3qQWLTlPXYTO6zmG9l2EXgtI0B9JBnYsUhZ9I
- VnUQ9NRc6i+tfb0AptpXRI3aENilb9EiqtsLAED+ar8dZIQc89G0i63AdfZfuFgwUHm6
- 0Frc5cjoLsmcqXyDmBN1QzMFSqF/zLTtHJbPxG9XwLvCsU9SA1C25O3vYyaXoI7Ne1uS
- 8B8w==
-X-Forwarded-Encrypted: i=1;
- AJvYcCW5FXKpXgF/l9tuAAWKjGNXn18dpjryLUk/EXt7TgCZnRaXRHREs/BD9aMcbEZxUwhCzJWknZWafw8=@buildroot.org
-X-Gm-Message-State: AOJu0YzOC87vaxoihyQkyB7UfgzcCOwKgmtPGORR4UvgxaJtIz2zZsJ4
- P7k6VX+XAqwYRjCkvF++0yUJCfKLyB6rzraCc6Ip6zNtMrEKtdKCxbFnIHFAnLNL3BzVQXlBxmb
- bMb8=
-X-Gm-Gg: ASbGncuH4JzCNwM4Z67qXDl+TvrGneH4tzjNzkKlzA13Hiu4b6BOQlAK78rsLmJErc/
- pyJsVKg6LanBj6aXgAjHo19fUxpmc2i1kXyxbI7IQUQFZ3VDmDa8i+PHfvhSxOCXFcbD+nL0NnQ
- NG8QLZOXYjr3rzEdfGgl1bismHXWSHc7/FSRMZdXkJ56iTznzxQyIOynfdqjWeN5cAHZr7TkEzT
- 27MHwPJkQHJrgySqrNGwLJU+bd0euyiBS4WzWlin5nYnxn5kphp/WETPKFUDYcqjNVR4NqsAYX7
- La9E7fdOVogtrt9R0j+HN0ik63pIu1QKVSdQ5s0cWKjhUo1FBoD9OvMT
-X-Google-Smtp-Source: AGHT+IGakgBlWybFu/gU/j5paJavNdTU03GCCCBRFyCUAnPcZHOV+QsV86xDLyr2Ouwuj432IHugLw==
-X-Received: by 2002:a05:6000:402b:b0:38b:eb7b:316 with SMTP id
- ffacd0b85a97d-38db4947bc9mr1495851f8f.47.1738753675498; 
- Wed, 05 Feb 2025 03:07:55 -0800 (PST)
-Received: from [172.16.2.119] (host-109-89-232-55.dynamic.voo.be.
- [109.89.232.55]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4390d94db6asm17201745e9.15.2025.02.05.03.07.55
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 05 Feb 2025 03:07:55 -0800 (PST)
-Message-ID: <42be998e-669d-4e1b-9295-5057aaa05434@smile.fr>
-Date: Wed, 5 Feb 2025 12:07:54 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id toI4XbgyB-0A for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 11:08:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4F104838ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F104838ED
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4F104838ED
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:08:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4AED04428A;
+ Wed,  5 Feb 2025 11:08:12 +0000 (UTC)
+Date: Wed, 5 Feb 2025 12:08:11 +0100
+To: Brian Cain via buildroot <buildroot@buildroot.org>
+Cc: Brian Cain <brian.cain@oss.qualcomm.com>
+Message-ID: <20250205120811.6ba24984@windsurf>
+In-Reply-To: <20241219053053.2389046-9-brian.cain@oss.qualcomm.com>
+References: <20241025140714.2395033-1-bcain@quicinc.com>
+ <20241219053053.2389046-1-brian.cain@oss.qualcomm.com>
+ <20241219053053.2389046-9-brian.cain@oss.qualcomm.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Kory Maincent <kory.maincent@bootlin.com>, buildroot@buildroot.org
-Cc: thomas.petazzoni@bootlin.com
-References: <20250106142001.622-1-kory.maincent@bootlin.com>
-Content-Language: fr
-In-Reply-To: <20250106142001.622-1-kory.maincent@bootlin.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfedvlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeejvdejvdfgffevteeiffdugeeiveeliefgffetfeehhfethfeuleefkeejgfefvdenucffohhmrghinhepghhithhhuhgsrdgtohhmpdgsohhothhlihhnrdgtohhmnecukfhppedutdelrdekledrvdefvddrheehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddtledrkeelrddvfedvrdehhedphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepsghrihgrnhdrtggrihhnsehoshhsrdhquhgrlhgtohhmmhdrtghomh
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1738753675; x=1739358475; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=TxiV0nhE1wE/Bn+7eJ4CK37YsmwKJQ7SKY6murHTce4=;
- b=k/4GI0IDKhZYL5Al5L4eEiw5eLjyS7sBwr8yyY9pps4ULucbYdHePfWQhsQ6/0Ncor
- LXmjHXSLSOYVyn/3/4gr0SE2BBHv9PrRq0d8XHF//8cm7QQ6foHUzD+tUXeO9buU9ZLv
- O1p8SVR7Jq4tkCfUXmkgoU5uXcgOx6zR76VEA=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=bootlin.com; s=gm1; t=1738753692;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ET+7VynvHIvMg1bjY7j7XFz3FQZKbcv06n0+q4ZK3Gw=;
+ b=cmSZ3sDraNXiQXjXrTxEz2Xp8CE1RsFDwUDLwCjW2cp8o3Oqen+9w+a7M+z7i8j3OrrYwr
+ BsjT7EzRbZ+uHZdz0lQK748Jp1DPjwrgtUumjtgCLXmQfmADS4e1Iux+JqEVEhZQgzh5Th
+ B5+JCJZ89vcE+lMgRLFtzH38Oo+SR/NeRQsmmn4h4YMjMYjVDFpimdtGiflY0k5bU+zafm
+ KaTtO4tL1YdbBvHM5bw1Ekxywqw2eiowCUbf4bWcCmvP/0HqE/O27BiyMYhExCvmu6HdKq
+ yVO4wdft1ygzTuCFNb9MkjB3YAhYfYotyZs+pNEUpUWyN8ANFr8lc9CxJMnz1Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=k/4GI0ID
-Subject: Re: [Buildroot] [PATCH] board/octavo/osd32mp1: Fix TF-A build error
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=cmSZ3sDr
+Subject: Re: [Buildroot] [RFC v2 08/14] package/hexagonMVM: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,154 +86,127 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gS29yeSwgQWxsLAoKTGUgMDYvMDEvMjAyNSDDoCAxNToyMCwgS29yeSBNYWluY2VudCB2
-aWEgYnVpbGRyb290IGEgw6ljcml0wqA6Cj4gVGhlIE9jdGF2byBkZWZjb25maWcgY3VycmVudGx5
-IHVzZXMgVEYtQSB2ZXJzaW9uIDIuNCBmcm9tIFNULCB3aGljaCBsZWFkcwo+IHRvIGJ1aWxkIGVy
-cm9ycyBkdWUgdG8gbWlzc2luZyBwYXRjaGVzLiBUaGlzIHVwZGF0ZSBpbXBvcnRzIHRoZSBuZWNl
-c3NhcnkKPiBURi1BIDIuNCBwYXRjaGVzIHRvIGVuc3VyZSBjb21wYXRpYmlsaXR5IGFuZCByZXNv
-bHZlIHRoZSBidWlsZCBpc3N1ZXMgZm9yCj4gdGhlc2UgYm9hcmRzLgo+IAo+IEZpeGVzOgo+IGh0
-dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvODc1MTk4MzMy
-NAo+IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvODc1
-MTk4MzMyNgoKSXQgc2VlbXMgdGhlIGtlcm5lbCA1LjEwIGRvZXNuJ3QgYnVpbGQgd2l0aCB0aGUg
-bGF0ZXN0IHByZWJ1aWx0IHRvb2xjaGFpbiBhbmQKdGhlIGN1cnJlbnQgZ2NjIGRlZmF1bHQgdmVy
-c2lvbiBbMV06Cgpkcml2ZXJzL2F0YS9saWJhaGNpLmM6IEluIGZ1bmN0aW9uIOKAmGFoY2lfbGVk
-X3N0b3Jl4oCZOgouLy4vaW5jbHVkZS9saW51eC9jb21waWxlcl90eXBlcy5oOjMxNTo0NTogZXJy
-b3I6IGNhbGwgdG8K4oCYX19jb21waWxldGltZV9hc3NlcnRfMzI24oCZIGRlY2xhcmVkIHdpdGgg
-YXR0cmlidXRlIGVycm9yOiBCVUlMRF9CVUdfT04gZmFpbGVkOgpzaXplb2YoX3MpID4gc2l6ZW9m
-KGxvbmcpCiAgMzE1IHwgICAgICAgICBfY29tcGlsZXRpbWVfYXNzZXJ0KGNvbmRpdGlvbiwgbXNn
-LCBfX2NvbXBpbGV0aW1lX2Fzc2VydF8sCl9fQ09VTlRFUl9fKQoKV2hpbGUgYXQgaXQsIGNhbiB5
-b3Ugc3dpdGNoIHRvIHVzZSB0aGUgQm9vdGxpbiBwcmVidWlsdCBleHRlcm5hbCB0b29sY2hhaW4/
-ClNlZSB0aGUgQnVpbGRyb290IG1lZXRpbmcgcmVwb3J0IGZyb20gRUxDRSAyMDI0IFsyXQoKQ2Fu
-IHlvdSBoYXZlIGEgbG9vaz8KClsxXSBodHRwczovL2xvcmUua2VybmVsLm9yZy9idWlsZHJvb3Qv
-NWExYzA3NzUtZmYxOS00YWVmLWFlYTYtNWI2NjEzZDZlNDA2QHNtaWxlLmZyLwpbMl0gaHR0cHM6
-Ly9lbGludXgub3JnL0J1aWxkcm9vdDpEZXZlbG9wZXJEYXlzRUxDRTIwMjQKCkJlc3QgcmVnYXJk
-cywKUm9tYWluCgoKPiAKPiBTaWduZWQtb2ZmLWJ5OiBLb3J5IE1haW5jZW50IDxrb3J5Lm1haW5j
-ZW50QGJvb3RsaW4uY29tPgo+IC0tLQo+ICAuLi5kZC1zdXBwb3J0LWZvci1uZXctYmludXRpbHMt
-dmVyc2lvbnMucGF0Y2ggfCA2MSArKysrKysrKysrKysrKysrKysrCj4gIC4uLmRkLXN1cHBvcnQt
-Zm9yLW5ldy1iaW51dGlscy12ZXJzaW9ucy5wYXRjaCB8IDYxICsrKysrKysrKysrKysrKysrKysK
-PiAgMiBmaWxlcyBjaGFuZ2VkLCAxMjIgaW5zZXJ0aW9ucygrKQo+ICBjcmVhdGUgbW9kZSAxMDA2
-NDQgYm9hcmQvb2N0YXZvL29zZDMybXAxLWJyay9wYXRjaGVzL2FybS10cnVzdGVkLWZpcm13YXJl
-LzAwMDEtZmVhdC1idWlsZC1hZGQtc3VwcG9ydC1mb3ItbmV3LWJpbnV0aWxzLXZlcnNpb25zLnBh
-dGNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9vY3Rhdm8vb3NkMzJtcDEtcmVkL3BhdGNo
-ZXMvYXJtLXRydXN0ZWQtZmlybXdhcmUvMDAwMS1mZWF0LWJ1aWxkLWFkZC1zdXBwb3J0LWZvci1u
-ZXctYmludXRpbHMtdmVyc2lvbnMucGF0Y2gKPiAKPiBkaWZmIC0tZ2l0IGEvYm9hcmQvb2N0YXZv
-L29zZDMybXAxLWJyay9wYXRjaGVzL2FybS10cnVzdGVkLWZpcm13YXJlLzAwMDEtZmVhdC1idWls
-ZC1hZGQtc3VwcG9ydC1mb3ItbmV3LWJpbnV0aWxzLXZlcnNpb25zLnBhdGNoIGIvYm9hcmQvb2N0
-YXZvL29zZDMybXAxLWJyay9wYXRjaGVzL2FybS10cnVzdGVkLWZpcm13YXJlLzAwMDEtZmVhdC1i
-dWlsZC1hZGQtc3VwcG9ydC1mb3ItbmV3LWJpbnV0aWxzLXZlcnNpb25zLnBhdGNoCj4gbmV3IGZp
-bGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi4zMzVjMTg1NTNhCj4gLS0tIC9kZXYv
-bnVsbAo+ICsrKyBiL2JvYXJkL29jdGF2by9vc2QzMm1wMS1icmsvcGF0Y2hlcy9hcm0tdHJ1c3Rl
-ZC1maXJtd2FyZS8wMDAxLWZlYXQtYnVpbGQtYWRkLXN1cHBvcnQtZm9yLW5ldy1iaW51dGlscy12
-ZXJzaW9ucy5wYXRjaAo+IEBAIC0wLDAgKzEsNjEgQEAKPiArRnJvbSAwZjc1YjAzYzAwOGVhY2I5
-ODE4YWYzYTU2ZGMwODhlNzJhNjIzZDE3IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQo+ICtGcm9t
-OiBNYXJjbyBGZWxzY2ggPG0uZmVsc2NoQHBlbmd1dHJvbml4LmRlPgo+ICtEYXRlOiBXZWQsIDkg
-Tm92IDIwMjIgMTI6NTk6MDkgKzAxMDAKPiArU3ViamVjdDogW1BBVENIXSBmZWF0KGJ1aWxkKTog
-YWRkIHN1cHBvcnQgZm9yIG5ldyBiaW51dGlscyB2ZXJzaW9ucwo+ICsKPiArVXNlcnMgb2YgR05V
-IGxkIChCUEYpIGZyb20gYmludXRpbHMgMi4zOSsgd2lsbCBvYnNlcnZlIG11bHRpcGxlIGluc3Rh
-Y2VzCj4gK29mIGEgbmV3IHdhcm5pbmcgd2hlbiBsaW5raW5nIHRoZSBibCouZWxmIGluIHRoZSBm
-b3JtOgo+ICsKPiArICBsZC5iZmQ6IHdhcm5pbmc6IHN0bTMybXAxX2hlbHBlci5vOiBtaXNzaW5n
-IC5ub3RlLkdOVS1zdGFjayBzZWN0aW9uIGltcGxpZXMgZXhlY3V0YWJsZSBzdGFjawo+ICsgIGxk
-LmJmZDogTk9URTogVGhpcyBiZWhhdmlvdXIgaXMgZGVwcmVjYXRlZCBhbmQgd2lsbCBiZSByZW1v
-dmVkIGluIGEgZnV0dXJlIHZlcnNpb24gb2YgdGhlIGxpbmtlcgo+ICsgIGxkLmJmZDogd2Fybmlu
-ZzogYmwyLmVsZiBoYXMgYSBMT0FEIHNlZ21lbnQgd2l0aCBSV1ggcGVybWlzc2lvbnMKPiArICBs
-ZC5iZmQ6IHdhcm5pbmc6IGJsMzIuZWxmIGhhcyBhIExPQUQgc2VnbWVudCB3aXRoIFJXWCBwZXJt
-aXNzaW9ucwo+ICsKPiArVGhlc2UgbmV3IHdhcm5pbmdzIGFyZSBlbmJhbGVkIGJ5IGRlZmF1bHQg
-dG8gc2VjdXJlIGVsZiBiaW5hcmllczoKPiArIC0gaHR0cHM6Ly9zb3VyY2V3YXJlLm9yZy9naXQv
-P3A9YmludXRpbHMtZ2RiLmdpdDthPWNvbW1pdDtoPWJhOTUxYWZiOTk5MTJkYTAxYTZlODQzNDEy
-NmI4ZmFjN2FhNzUxMDcKPiArIC0gaHR0cHM6Ly9zb3VyY2V3YXJlLm9yZy9naXQvP3A9YmludXRp
-bHMtZ2RiLmdpdDthPWNvbW1pdDtoPTBkMzg1NzZhMzRlYzY0YTFiNDUwMGM5Mjc3YThlOWQwZjA3
-ZTY3NzQKPiArCj4gK0ZpeCBpdCBpbiBhIHNpbWlsYXIgd2F5IHRvIHdoYXQgdGhlIExpbnV4IGtl
-cm5lbCBkb2VzLCBzZWU6Cj4gK2h0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2FsbC8yMDIyMDgxMDIy
-MjQ0Mi4yMjk2NjUxLTEtbmRlc2F1bG5pZXJzQGdvb2dsZS5jb20vCj4gKwo+ICtGb2xsb3dpbmcg
-dGhlIHJlYXNvbmluZyB0aGVyZSwgd2Ugc2V0ICIteiBub2V4ZWNzdGFjayIgZm9yIGFsbCBsaW5r
-ZXJzCj4gKyhhbHRob3VnaCBMTFZNJ3MgTExEIGRlZmF1bHRzIHRvIGl0KSBhbmQgb3B0aW9uYWwg
-YWRkCj4gKy0tbm8td2Fybi1yd3gtc2VnbWVudHMgc2luY2UgdGhpcyBhIGxkLmJmZCByZWxhdGVk
-Lgo+ICsKPiArU2lnbmVkLW9mZi1ieTogTWFyY28gRmVsc2NoIDxtLmZlbHNjaEBwZW5ndXRyb25p
-eC5kZT4KPiArU2lnbmVkLW9mZi1ieTogUm9iZXJ0IFNjaHdlYmVsIDxyLnNjaHdlYmVsQHBlbmd1
-dHJvbml4LmRlPgo+ICtDaGFuZ2UtSWQ6IEk5NDMwZjVmYTUwMzZjYTg4ZGE0NmNkM2I5NDU3NTRk
-NjI2MTZiNjE3Cj4gK1NpZ25lZC1vZmYtYnk6IEhlaWtvIFRoaWVyeSA8aGVpa28udGhpZXJ5QGdt
-YWlsLmNvbT4KPiArVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS9BUk0tc29mdHdhcmUvYXJt
-LXRydXN0ZWQtZmlybXdhcmUvY29tbWl0LzFmNDlkYjVmMjVjZGQ0ZTQzODI1YzliY2MwNTc1MDcw
-YjgwZjYyOGMKPiArLS0tCj4gKyBNYWtlZmlsZSB8IDcgKysrKysrLQo+ICsgMSBmaWxlIGNoYW5n
-ZWQsIDYgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQo+ICsKPiArZGlmZiAtLWdpdCBhL01h
-a2VmaWxlIGIvTWFrZWZpbGUKPiAraW5kZXggMWRkYjdiODQ0Li40NzA5NTZiMTkgMTAwNjQ0Cj4g
-Ky0tLSBhL01ha2VmaWxlCj4gKysrKyBiL01ha2VmaWxlCj4gK0BAIC00MTYsNiArNDE2LDggQEAg
-ZW5kaWYKPiArIAo+ICsgR0NDX1ZfT1VUUFVUCQk6PQkkKHNoZWxsICQoQ0MpIC12IDI+JjEpCj4g
-KyAKPiArK1RGX0xERkxBR1MJCSs9CS16IG5vZXhlY3N0YWNrCj4gKysKPiArICMgTEQgPSBhcm1s
-aW5rCj4gKyBpZm5lcSAoJChmaW5kc3RyaW5nIGFybWxpbmssJChub3RkaXIgJChMRCkpKSwpCj4g
-KyBURl9MREZMQUdTCQkrPQktLWRpYWdfZXJyb3I9d2FybmluZyAtLWx0b19sZXZlbD1PMQo+ICtA
-QCAtNDQyLDcgKzQ0NCwxMCBAQCBURl9MREZMQUdTCQkrPQkkKHN1YnN0IC0tLC1YbGlua2VyIC0t
-LCQoVEZfTERGTEFHU18kKEFSQ0gpKSkKPiArIAo+ICsgIyBMRCA9IGdjYy1sZCAobGQpIG9yIGxs
-dm0tbGQgKGxkLmxsZCkgb3Igb3RoZXIKPiArIGVsc2UKPiArLVRGX0xERkxBR1MJCSs9CS0tZmF0
-YWwtd2FybmluZ3MgLU8xCj4gKysjIFdpdGggbGQuYmZkIHZlcnNpb24gMi4zOSBhbmQgbmV3ZXIg
-bmV3IHdhcm5pbmdzIGFyZSBhZGRlZC4gU2tpcCB0aG9zZSBzaW5jZSB3ZQo+ICsrIyBhcmUgbm90
-IGxvYWRlZCBieSBhIGVsZiBsb2FkZXIuCj4gKytURl9MREZMQUdTCQkrPQkkKGNhbGwgbGRfb3B0
-aW9uLCAtLW5vLXdhcm4tcnd4LXNlZ21lbnRzKQo+ICsrVEZfTERGTEFHUwkJKz0JLU8xCj4gKyBU
-Rl9MREZMQUdTCQkrPQktLWdjLXNlY3Rpb25zCj4gKyAjIGxkLmxsZCBkb2Vzbid0IHJlY29nbml6
-ZSB0aGUgZXJyYXRhIGZsYWdzLAo+ICsgIyB0aGVyZWZvcmUgZG9uJ3QgYWRkIHRob3NlIGluIHRo
-YXQgY2FzZQo+ICstLSAKPiArMi4zMC4yCj4gKwo+IGRpZmYgLS1naXQgYS9ib2FyZC9vY3Rhdm8v
-b3NkMzJtcDEtcmVkL3BhdGNoZXMvYXJtLXRydXN0ZWQtZmlybXdhcmUvMDAwMS1mZWF0LWJ1aWxk
-LWFkZC1zdXBwb3J0LWZvci1uZXctYmludXRpbHMtdmVyc2lvbnMucGF0Y2ggYi9ib2FyZC9vY3Rh
-dm8vb3NkMzJtcDEtcmVkL3BhdGNoZXMvYXJtLXRydXN0ZWQtZmlybXdhcmUvMDAwMS1mZWF0LWJ1
-aWxkLWFkZC1zdXBwb3J0LWZvci1uZXctYmludXRpbHMtdmVyc2lvbnMucGF0Y2gKPiBuZXcgZmls
-ZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjMzNWMxODU1M2EKPiAtLS0gL2Rldi9u
-dWxsCj4gKysrIGIvYm9hcmQvb2N0YXZvL29zZDMybXAxLXJlZC9wYXRjaGVzL2FybS10cnVzdGVk
-LWZpcm13YXJlLzAwMDEtZmVhdC1idWlsZC1hZGQtc3VwcG9ydC1mb3ItbmV3LWJpbnV0aWxzLXZl
-cnNpb25zLnBhdGNoCj4gQEAgLTAsMCArMSw2MSBAQAo+ICtGcm9tIDBmNzViMDNjMDA4ZWFjYjk4
-MThhZjNhNTZkYzA4OGU3MmE2MjNkMTcgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb206
-IE1hcmNvIEZlbHNjaCA8bS5mZWxzY2hAcGVuZ3V0cm9uaXguZGU+Cj4gK0RhdGU6IFdlZCwgOSBO
-b3YgMjAyMiAxMjo1OTowOSArMDEwMAo+ICtTdWJqZWN0OiBbUEFUQ0hdIGZlYXQoYnVpbGQpOiBh
-ZGQgc3VwcG9ydCBmb3IgbmV3IGJpbnV0aWxzIHZlcnNpb25zCj4gKwo+ICtVc2VycyBvZiBHTlUg
-bGQgKEJQRikgZnJvbSBiaW51dGlscyAyLjM5KyB3aWxsIG9ic2VydmUgbXVsdGlwbGUgaW5zdGFj
-ZXMKPiArb2YgYSBuZXcgd2FybmluZyB3aGVuIGxpbmtpbmcgdGhlIGJsKi5lbGYgaW4gdGhlIGZv
-cm06Cj4gKwo+ICsgIGxkLmJmZDogd2FybmluZzogc3RtMzJtcDFfaGVscGVyLm86IG1pc3Npbmcg
-Lm5vdGUuR05VLXN0YWNrIHNlY3Rpb24gaW1wbGllcyBleGVjdXRhYmxlIHN0YWNrCj4gKyAgbGQu
-YmZkOiBOT1RFOiBUaGlzIGJlaGF2aW91ciBpcyBkZXByZWNhdGVkIGFuZCB3aWxsIGJlIHJlbW92
-ZWQgaW4gYSBmdXR1cmUgdmVyc2lvbiBvZiB0aGUgbGlua2VyCj4gKyAgbGQuYmZkOiB3YXJuaW5n
-OiBibDIuZWxmIGhhcyBhIExPQUQgc2VnbWVudCB3aXRoIFJXWCBwZXJtaXNzaW9ucwo+ICsgIGxk
-LmJmZDogd2FybmluZzogYmwzMi5lbGYgaGFzIGEgTE9BRCBzZWdtZW50IHdpdGggUldYIHBlcm1p
-c3Npb25zCj4gKwo+ICtUaGVzZSBuZXcgd2FybmluZ3MgYXJlIGVuYmFsZWQgYnkgZGVmYXVsdCB0
-byBzZWN1cmUgZWxmIGJpbmFyaWVzOgo+ICsgLSBodHRwczovL3NvdXJjZXdhcmUub3JnL2dpdC8/
-cD1iaW51dGlscy1nZGIuZ2l0O2E9Y29tbWl0O2g9YmE5NTFhZmI5OTkxMmRhMDFhNmU4NDM0MTI2
-YjhmYWM3YWE3NTEwNwo+ICsgLSBodHRwczovL3NvdXJjZXdhcmUub3JnL2dpdC8/cD1iaW51dGls
-cy1nZGIuZ2l0O2E9Y29tbWl0O2g9MGQzODU3NmEzNGVjNjRhMWI0NTAwYzkyNzdhOGU5ZDBmMDdl
-Njc3NAo+ICsKPiArRml4IGl0IGluIGEgc2ltaWxhciB3YXkgdG8gd2hhdCB0aGUgTGludXgga2Vy
-bmVsIGRvZXMsIHNlZToKPiAraHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxsLzIwMjIwODEwMjIy
-NDQyLjIyOTY2NTEtMS1uZGVzYXVsbmllcnNAZ29vZ2xlLmNvbS8KPiArCj4gK0ZvbGxvd2luZyB0
-aGUgcmVhc29uaW5nIHRoZXJlLCB3ZSBzZXQgIi16IG5vZXhlY3N0YWNrIiBmb3IgYWxsIGxpbmtl
-cnMKPiArKGFsdGhvdWdoIExMVk0ncyBMTEQgZGVmYXVsdHMgdG8gaXQpIGFuZCBvcHRpb25hbCBh
-ZGQKPiArLS1uby13YXJuLXJ3eC1zZWdtZW50cyBzaW5jZSB0aGlzIGEgbGQuYmZkIHJlbGF0ZWQu
-Cj4gKwo+ICtTaWduZWQtb2ZmLWJ5OiBNYXJjbyBGZWxzY2ggPG0uZmVsc2NoQHBlbmd1dHJvbml4
-LmRlPgo+ICtTaWduZWQtb2ZmLWJ5OiBSb2JlcnQgU2Nod2ViZWwgPHIuc2Nod2ViZWxAcGVuZ3V0
-cm9uaXguZGU+Cj4gK0NoYW5nZS1JZDogSTk0MzBmNWZhNTAzNmNhODhkYTQ2Y2QzYjk0NTc1NGQ2
-MjYxNmI2MTcKPiArU2lnbmVkLW9mZi1ieTogSGVpa28gVGhpZXJ5IDxoZWlrby50aGllcnlAZ21h
-aWwuY29tPgo+ICtVcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL0FSTS1zb2Z0d2FyZS9hcm0t
-dHJ1c3RlZC1maXJtd2FyZS9jb21taXQvMWY0OWRiNWYyNWNkZDRlNDM4MjVjOWJjYzA1NzUwNzBi
-ODBmNjI4Ywo+ICstLS0KPiArIE1ha2VmaWxlIHwgNyArKysrKystCj4gKyAxIGZpbGUgY2hhbmdl
-ZCwgNiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pCj4gKwo+ICtkaWZmIC0tZ2l0IGEvTWFr
-ZWZpbGUgYi9NYWtlZmlsZQo+ICtpbmRleCAxZGRiN2I4NDQuLjQ3MDk1NmIxOSAxMDA2NDQKPiAr
-LS0tIGEvTWFrZWZpbGUKPiArKysrIGIvTWFrZWZpbGUKPiArQEAgLTQxNiw2ICs0MTYsOCBAQCBl
-bmRpZgo+ICsgCj4gKyBHQ0NfVl9PVVRQVVQJCTo9CSQoc2hlbGwgJChDQykgLXYgMj4mMSkKPiAr
-IAo+ICsrVEZfTERGTEFHUwkJKz0JLXogbm9leGVjc3RhY2sKPiArKwo+ICsgIyBMRCA9IGFybWxp
-bmsKPiArIGlmbmVxICgkKGZpbmRzdHJpbmcgYXJtbGluaywkKG5vdGRpciAkKExEKSkpLCkKPiAr
-IFRGX0xERkxBR1MJCSs9CS0tZGlhZ19lcnJvcj13YXJuaW5nIC0tbHRvX2xldmVsPU8xCj4gK0BA
-IC00NDIsNyArNDQ0LDEwIEBAIFRGX0xERkxBR1MJCSs9CSQoc3Vic3QgLS0sLVhsaW5rZXIgLS0s
-JChURl9MREZMQUdTXyQoQVJDSCkpKQo+ICsgCj4gKyAjIExEID0gZ2NjLWxkIChsZCkgb3IgbGx2
-bS1sZCAobGQubGxkKSBvciBvdGhlcgo+ICsgZWxzZQo+ICstVEZfTERGTEFHUwkJKz0JLS1mYXRh
-bC13YXJuaW5ncyAtTzEKPiArKyMgV2l0aCBsZC5iZmQgdmVyc2lvbiAyLjM5IGFuZCBuZXdlciBu
-ZXcgd2FybmluZ3MgYXJlIGFkZGVkLiBTa2lwIHRob3NlIHNpbmNlIHdlCj4gKysjIGFyZSBub3Qg
-bG9hZGVkIGJ5IGEgZWxmIGxvYWRlci4KPiArK1RGX0xERkxBR1MJCSs9CSQoY2FsbCBsZF9vcHRp
-b24sIC0tbm8td2Fybi1yd3gtc2VnbWVudHMpCj4gKytURl9MREZMQUdTCQkrPQktTzEKPiArIFRG
-X0xERkxBR1MJCSs9CS0tZ2Mtc2VjdGlvbnMKPiArICMgbGQubGxkIGRvZXNuJ3QgcmVjb2duaXpl
-IHRoZSBlcnJhdGEgZmxhZ3MsCj4gKyAjIHRoZXJlZm9yZSBkb24ndCBhZGQgdGhvc2UgaW4gdGhh
-dCBjYXNlCj4gKy0tIAo+ICsyLjMwLjIKPiArCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
-ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
-aWxkcm9vdAo=
+Hello,
+
+On Wed, 18 Dec 2024 21:30:47 -0800
+Brian Cain via buildroot <buildroot@buildroot.org> wrote:
+
+> MiniVM is a virtual machine used by the Linux kernel for
+> the hexagon architecture.
+
+Is it "MiniVM" or hexagonMVM ? Also, with your definition, I'm really
+unclear about what hexagonMVM really is. Is it a VM that runs under
+Linux? Or the VM under which Linux runs? Or?
+
+> Signed-off-by: Brian Cain <brian.cain@oss.qualcomm.com>
+> ---
+>  package/Config.in                  |  1 +
+>  package/hexagonMVM/Config.in       |  8 ++++++++
+>  package/hexagonMVM/hexagonMVM.hash |  5 +++++
+>  package/hexagonMVM/hexagonMVM.mk   | 27 +++++++++++++++++++++++++++
+>  4 files changed, 41 insertions(+)
+
+Package name should be lower-case. Maybe hexagon-mvm.
+
+Please update the DEVELOPERS file in this file.
+
+> diff --git a/package/hexagonMVM/Config.in b/package/hexagonMVM/Config.in
+> new file mode 100644
+> index 0000000000..b00666188b
+> --- /dev/null
+> +++ b/package/hexagonMVM/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_HEXAGONMVM
+> +	bool "Hexagon MiniVM"
+> +	depends on BR2_hexagon && BR2_TOOLCHAIN_CLANG_AT_LEAST_19_0
+
+BR2_TOOLCHAIN_CLANG_AT_LEAST_19_0 doesn't exist as of this commit, so
+you have a patch ordering issue.
+
+> +	help
+> +	  Hexagon VM implementation.  This virtual machine can be used
+> +	  to boot linux or other operating systems / programs.
+
+Ah so its the VM under which Linux runs?
+
+> +
+> +	  https://github.com/quic/hexagonMVM
+> diff --git a/package/hexagonMVM/hexagonMVM.hash b/package/hexagonMVM/hexagonMVM.hash
+> new file mode 100644
+> index 0000000000..3e1ae8e2b4
+> --- /dev/null
+> +++ b/package/hexagonMVM/hexagonMVM.hash
+> @@ -0,0 +1,5 @@
+> +
+> +#
+
+Minor: drop those two lines.
+
+> +# Locally computed
+> +sha256  e5e3ba941af491cab37ece5db85eb7422db9dd0d13464ea528dbf2c01c24b5f0  LICENSE
+> +sha256  5345cd83b18b6b8f44d06a54bd1a518d447c311dc1c3ba7b45ffa16785e66e1b  0.2.0.tar.gz
+
+Tarball first, license file afterwards. The tarball name is not good,
+but I'll comment on that later.
+
+> diff --git a/package/hexagonMVM/hexagonMVM.mk b/package/hexagonMVM/hexagonMVM.mk
+> new file mode 100644
+> index 0000000000..7b3529c14c
+> --- /dev/null
+> +++ b/package/hexagonMVM/hexagonMVM.mk
+> @@ -0,0 +1,27 @@
+> +################################################################################
+> +#
+> +# Hexagon MiniVM
+> +#
+> +################################################################################
+> +
+> +HEXAGONMVM_VERSION = 0.2.0
+> +HEXAGONMVM_SOURCE = $(HEXAGONMVM_VERSION).tar.gz
+
+Drop this line, it will give the tarball a proper name.
+
+> +HEXAGONMVM_SITE = $(call github,quic,hexagonMVM,v$(HEXAGONMVM_VERSION))
+> +
+> +HEXAGONMVM_LICENSE = BSD-3-Clause
+> +HEXAGONMVM_LICENSE_FILES = LICENSE
+> +
+> +HEXAGONMVM_DEPENDENCIES =
+
+If there are no dependencies, just keep it empty.
+
+> +HEXAGONMVM_INSTALL_IMAGES = YES
+> +
+> +HEXAGONMVM_CFLAGS=-fno-pie -fno-pic
+
+Spaces around = sign. Why aren't those flags in the package
+makefile/build-system already?
+
+> +define HEXAGONMVM_BUILD_CMDS
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(HEXAGONMVM_CFLAGS)" -C $(@D) minivm
+> +endef
+> +
+> +define HEXAGONMVM_INSTALL_IMAGES_CMDS
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(HEXAGONMVM_CFLAGS)" bindir=$(BINARIES_DIR) -C $(@D) install
+> +endef
+> +
+> +$(eval $(generic-package))
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
