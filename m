@@ -4,104 +4,109 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CAD0C02196
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 10:09:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D26A1C02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 10:10:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 12E2560FA9;
-	Wed,  5 Feb 2025 10:09:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A1C6B60740;
+	Wed,  5 Feb 2025 10:10:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LXzjhxc2IANK; Wed,  5 Feb 2025 10:09:31 +0000 (UTC)
+ id y3tLSPw0gmU7; Wed,  5 Feb 2025 10:09:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6D58606B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DA6C60AC6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6D58606B4;
-	Wed,  5 Feb 2025 10:09:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 52EC912F
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:09:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8DA6C60AC6;
+	Wed,  5 Feb 2025 10:09:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B3C0812A
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:09:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 338B560631
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:09:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 984AB80DA8
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:09:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GCB9HlkGEyf8 for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 10:09:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jIYVQUvgHpdO for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 10:09:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D76CE60B21
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D76CE60B21
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D76CE60B21
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:09:24 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-4363ae65100so76769905e9.0
- for <buildroot@buildroot.org>; Wed, 05 Feb 2025 02:09:24 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 790DB80CB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 790DB80CB3
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 790DB80CB3
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:09:57 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-38da713b9daso1633228f8f.3
+ for <buildroot@buildroot.org>; Wed, 05 Feb 2025 02:09:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738750162; x=1739354962;
+ d=1e100.net; s=20230601; t=1738750195; x=1739354995;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=yVyXQG7K3VdcPjAeIIwjuv9mgiFdRyiNkAVW+bxpiDg=;
- b=To+OC50CWMYjNYH60HMw0cQie8RS/FGkulMeTiZqtJSWv3X4/iFLkSJrWwHYULLzkb
- zCn7Pgzlansldgh+TUoHule6T03gC8r9EiXqSCjtwD1tfzic/jwFI55qKPjqfAog8rU3
- eP+Kc6FL+3oY8TieWzmMpFofPS4NkPcNCOeD2/WVsdE0O7hpmBeVd1/MCP1FQV4LAwgI
- XrAKeQZjjpb6PV7BmrrQtLGsxEs53V1irN59JqfiNj5AS4q98TJFp7YMNcZMCrV8XB4R
- bYXCKeHBVWjrCl8cXo3sQ3xzU3d7HvXaJ/+qbaJ5rdOBRuLg0VBXUyTkX2cJmSF/4yo8
- BExg==
+ bh=LtX7esXg3yT5y/WwoAHl1G7Uj34EVqKQZJ407sibHok=;
+ b=HjFLRy22L5X1hulsPFXqaHpH1EReDLQpeVEObYt5KelMLWxKjr0C5p1Eqt14N/quuY
+ 9xpC9ztPIP/NgaYh+NpqiKn4XJBYCPN5OUAYXf9USCVUlY0cpC3/t5/ctYATykOrOoYr
+ DgyEIJbKyxZC3r+oD4Fqdh0lXeievHeeQGwzCPBq+vC21K/+uR6mzQD8ZmQ0WPgJ6xkY
+ 9vJ6CTqua2zjef83CyZev83hxyelwNv1XrNuZ69UEmD2q82k4g4fFbZqtTtxguhDEF5G
+ 8iH7Pq+gZ8p0j4rN1vLUl7wBw9orfWlpRr4VfXvzKI54mSyNQg5RSd+Run/eXE1ImJKc
+ 97ow==
 X-Forwarded-Encrypted: i=1;
- AJvYcCX3KCkqRKpmARMGDuOCeDk+bDTziC7rVwm6tX7/LhSVFQ3PG7VSPCuGYsXzM90Qa2c/yV7n3Qt/9jc=@buildroot.org
-X-Gm-Message-State: AOJu0Yy9AuWpzQc6DlJWcoKZmDebyVtV4GkjXNhlm2TgBwdLtEhb03sb
- F8cFe9NekDcDJ5pHTy3exgrlCj64YaMQpvjiluFFrBck/tcp6czQl2uplDY6keU=
-X-Gm-Gg: ASbGncu2Ob4aArjEzkYsrAQkfAe+lCEpeRYVrbiC6P3xgbA4nsPzmRps1v18ZNqKPB+
- tw9H3vBR5Cu9IkoimbhqIt34PT0nnvDWmDANelOKEPtsBEnDLqXZqv6JbNnKzu9Fbskg7+qnJ+Z
- AshH6IF1ukQm+09WwPb5VaNW14v0D8kg+lFNUANEyYOKO8+8U9DjjhaEzXxlTJNOwe0CY2i5X85
- HKuFy5HGrS6xzoLLaXIwIe6jKaw7e00Dy91QYIeDVbpFF0kmpvLEYpv06weopXLA8eZ6RY3u9cD
- dCgrG34GfPcN85GPFc32Ysnqw/iC6gIISrkfqxA0spZd3uk=
-X-Google-Smtp-Source: AGHT+IH6NXK1TUf4je+QC7VQ0pPw3L+Aq9aaB6D3VlbWdrLWBjuQOMEeV5GHYJgnph9krYVHz/yApQ==
-X-Received: by 2002:a05:600c:1f85:b0:434:a1d3:a321 with SMTP id
- 5b1f17b1804b1-4390d42f6b4mr17537395e9.3.1738750162587; 
- Wed, 05 Feb 2025 02:09:22 -0800 (PST)
+ AJvYcCWH8yeVEelgD4MJWLxaFgixaTKfqMecdLvDT6aqFhQCr8QpOpaJRdp7B89WwZBCcry1ZZrXAM8kvDI=@buildroot.org
+X-Gm-Message-State: AOJu0Yxd9do4F91vyKGYOPtcReehx+uwAmA55xgDG74qJfoeJ9Pvv2j6
+ oBuITJh6J8tyE7jhKtN3eRiQ/SDXGfjN8zw17eEwjof8v/XJyfRkLt4kcPOfj2Q=
+X-Gm-Gg: ASbGncufGMrwCY74SdwK+zzrGfy9T40SzyydbsjE77ckm545fJy3QimpgmXuNEq402X
+ 1/FQE8/hXgkuVJCz//yS8mUD9E9xVTvD7eGY2LbL9S/2Ky3IKNAY1tEGPTjw4YHA71tMQNHktPv
+ qDVaURPlzKzlmffZSxlGflp8HSmatQFV+zHqalsT95ecjgwtAuwVpfxVfTnAIGQ+iOMjJVpgA6T
+ 4xsnOUiJhZ1BsEtTjUvtw/jCS4dK2uDouY8v9JtACBELpZBYBWyg8TxLxHedcPTfPx1YRO4cNMa
+ MSOnvZMUIgrz592uZ+kzB9rP6clxIIdboVtMJeM2POi+UQw=
+X-Google-Smtp-Source: AGHT+IGNEsw1Kf78uNEIWWbC1wfM9p34UYGqg1nAndM7krxmcWZYFEp2Ef5+2iHMNlkP5kOVgO6KmQ==
+X-Received: by 2002:adf:ef89:0:b0:38d:a883:b95b with SMTP id
+ ffacd0b85a97d-38db48a42f8mr1671199f8f.28.1738750195420; 
+ Wed, 05 Feb 2025 02:09:55 -0800 (PST)
 Received: from [172.16.2.111] (host-109-89-232-55.dynamic.voo.be.
  [109.89.232.55]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4390d94d40csm16135395e9.9.2025.02.05.02.09.21
+ ffacd0b85a97d-38c5c1b5780sm18493918f8f.67.2025.02.05.02.09.54
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 05 Feb 2025 02:09:22 -0800 (PST)
-Message-ID: <03d5d181-0593-4d1f-8175-f4a8968eb805@mind.be>
-Date: Wed, 5 Feb 2025 11:09:20 +0100
+ Wed, 05 Feb 2025 02:09:54 -0800 (PST)
+Message-ID: <753764bd-5d57-4176-bba3-80d2803f67e9@mind.be>
+Date: Wed, 5 Feb 2025 11:09:53 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>, buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>
-References: <20250205-fix_zxing-v1-0-c3e4c2adfdab@bootlin.com>
- <20250205-fix_zxing-v1-1-c3e4c2adfdab@bootlin.com>
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Kamel Bouhara <kamel.bouhara@gmail.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>, Julien Olivain
+ <ju.o@free.fr>, Asaf Kahlon <asafka7@gmail.com>,
+ Woodrow Douglass <wdouglass@carnegierobotics.com>,
+ Christian Stewart <christian@aperture.us>,
+ Robert Rose <robertroyrose@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20241107191634.378670-1-james.hilliard1@gmail.com>
 Content-Language: en-GB
-In-Reply-To: <20250205-fix_zxing-v1-1-c3e4c2adfdab@bootlin.com>
+In-Reply-To: <20241107191634.378670-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1738750162; x=1739354962; darn=buildroot.org;
+ d=mind.be; s=google; t=1738750195; x=1739354995; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=yVyXQG7K3VdcPjAeIIwjuv9mgiFdRyiNkAVW+bxpiDg=;
- b=ae4ECR8kySl4cmNMLQy12Gh+Z/LVFVQrHyc4hCHzthXcDqWJ9Ftmj7cDeBlu2bnLZy
- BW+JMnW4TbD3+3j7KFfthGNYAscq/47+sRNxJltqghohzEOf7khzOQ6vuO68bD0hl4TD
- F+kNROfdj/IcHaJ1d0pDc+l8NVUI1OObvVfbfwuHdbq/sBM6oryBNv+0T6lfR6OhtPwN
- zq2mA7TdZ1CIB1OnNXv2DP+D7S8VDB9ev6MpV0tNr5z2iPW+A0pU3Itnjgo3cg1JvkCp
- h2i7bRFUGjrVY01MpXYI5eABOrs90NE7B+c1OTsgUdPaSTo44XtzbwxZfgj02M7tPUIZ
- XpBQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=LtX7esXg3yT5y/WwoAHl1G7Uj34EVqKQZJ407sibHok=;
+ b=a8CwLT5YzoSjGm1zv60XZaDNo7XYiW9zTzqn8cyZSf40bcoP6N7I+sBFlgwZ4PpHeN
+ E/o+wYLYSiyHd53dKcTAHQztFWNT4kUyjlKHNpA4pz0fgYw6pkaBM5X3WnFScPxxcR+C
+ DsSxik9gPPIlbmt+8WCLZPQ6X0VMvgQK/wFBzyHWnoAzbOx+b69p33NdiKENRiUUHbtM
+ AvjkrYuAHF4yL4t6znbKs+ltsqNM68eG8x+RUESfDHQwS7L2K53GSPfBzlEqQKeoyYz0
+ FAnnzPRCWkrFznkcsq5jp7y4cdzN7edKTqCx0yFmZv3M8GfO4rUtSg+xpw28ybVIuuPo
+ eePw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=ae4ECR8k
-Subject: Re: [Buildroot] [PATCH 01/12] package/gstreamer1/gst-omx: remove
- gst-omx
+ header.a=rsa-sha256 header.s=google header.b=a8CwLT5Y
+Subject: Re: [Buildroot] [PATCH v5 1/4] package/kismet: bump to version
+ 52bcb902e36b2df1562cfbe644b113362248d029
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,14 +127,18 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 05/02/2025 10:47, Thomas Bonnefille wrote:
-> The OMX plugin has been removed from gstreamer as the OpenMAX standard
-> is long dead and even the Raspberry Pi OS no longer supports it.
+On 07/11/2024 20:16, James Hilliard wrote:
+> We need to use the latest git commit as the last release does not
+> support compiling with the newer protobuf releases.
 > 
-> See release notes for more details:
->      https://gstreamer.freedesktop.org/releases/1.24/
+> Add optional mosquito support.
 > 
-> Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+> Add librtlsdr mosquito support.
+> 
+> Fix python-setuptools dependency which should be
+> host-python-setuptools.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied to master, thanks.
 
@@ -137,115 +146,85 @@ On 05/02/2025 10:47, Thomas Bonnefille wrote:
   Arnout
 
 > ---
->   Config.in.legacy                        |  7 ++++++
->   package/gstreamer1/Config.in            |  1 -
->   package/gstreamer1/gst-omx/Config.in    | 11 ----------
->   package/gstreamer1/gst-omx/gst-omx.hash |  3 ---
->   package/gstreamer1/gst-omx/gst-omx.mk   | 39 ---------------------------------
->   5 files changed, 7 insertions(+), 54 deletions(-)
+>   package/kismet/Config.in   |  1 -
+>   package/kismet/kismet.hash |  2 +-
+>   package/kismet/kismet.mk   | 21 +++++++++++++++++----
+>   3 files changed, 18 insertions(+), 6 deletions(-)
 > 
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index e091fd8c0a972c3043e9664652e3d40e6d83af8b..4f0b78d9589a65e8f69bca406cec49cdc2d5294c 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -172,6 +172,13 @@ config BR2_PACKAGE_DIRECTFB
->   	  This package was no longer maintained upstream, so it was
->   	  dropped from Buildroot.
+> diff --git a/package/kismet/Config.in b/package/kismet/Config.in
+> index 2e1e0cfbd0..aa05e045d5 100644
+> --- a/package/kismet/Config.in
+> +++ b/package/kismet/Config.in
+> @@ -42,7 +42,6 @@ config BR2_PACKAGE_KISMET_PYTHON_TOOLS
+>   	select BR2_PACKAGE_PYTHON_NUMPY # runtime for RTLAMR and RTLADSB
+>   	select BR2_PACKAGE_PYTHON_PROTOBUF # runtime
+>   	select BR2_PACKAGE_PYTHON_SERIAL # runtime for Freaklabs Zigbee
+> -	select BR2_PACKAGE_PYTHON_SETUPTOOLS
+>   	help
+>   	  Enable Python and Python-related tools (RTL_433, RTLAMR,
+>   	  RTLADSB and Freaklabs Zigbee)
+> diff --git a/package/kismet/kismet.hash b/package/kismet/kismet.hash
+> index 543515858e..2d05a6791b 100644
+> --- a/package/kismet/kismet.hash
+> +++ b/package/kismet/kismet.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  f08548e26ca65fa1e567b1debbea1ca4d0e7206bddb96a4f639c90171873e8f7  kismet-2023-07-R1.tar.xz
+> +sha256  2dccf9b5bbf5f4e6b04a44bf8cfecf80db8dcfa52a8183dd1166396c3ca04660  kismet-52bcb902e36b2df1562cfbe644b113362248d029.tar.gz
+>   sha256  93c7f0d7e356b0abfb6f494ff3ea37f96abc84e9a5619b25d4e43f7553a55739  LICENSE
+> diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
+> index c448233d60..f182fbe328 100644
+> --- a/package/kismet/kismet.mk
+> +++ b/package/kismet/kismet.mk
+> @@ -4,9 +4,8 @@
+>   #
+>   ################################################################################
 >   
-> +config BR2_PACKAGE_GST_OMX
-> +	bool "gst-omx has been removed"
-> +	select BR2_LEGACY
-> +	help
-> +	  The gst-omx module has been removed from Gstreamer in
-> +	  release 1.24 in favor of Video4Linux-based video encoders.
-> +
->   config BR2_PACKAGE_SDL2_DIRECTFB
->   	bool "sdl2 directfb support removed"
->   	select BR2_LEGACY
-> diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
-> index 8fe8a343950334caff2954231ae55465473b39f0..67c33e5d4e518d85290a73fdbef484d55f35b617 100644
-> --- a/package/gstreamer1/Config.in
-> +++ b/package/gstreamer1/Config.in
-> @@ -15,7 +15,6 @@ source "package/gstreamer1/gst1-python/Config.in"
->   source "package/gstreamer1/gst1-rtsp-server/Config.in"
->   source "package/gstreamer1/gst1-shark/Config.in"
->   source "package/gstreamer1/gst1-vaapi/Config.in"
-> -source "package/gstreamer1/gst-omx/Config.in"
->   source "package/gstreamer1/gstd/Config.in"
->   source "package/gstreamer1/gstreamer1-editing-services/Config.in"
+> -KISMET_VERSION = 2023-07-R1
+> -KISMET_SOURCE = kismet-$(KISMET_VERSION).tar.xz
+> -KISMET_SITE = http://www.kismetwireless.net/code
+> +KISMET_VERSION = 52bcb902e36b2df1562cfbe644b113362248d029
+> +KISMET_SITE = $(call github,kismetwireless,kismet,$(KISMET_VERSION))
+>   KISMET_DEPENDENCIES = \
+>   	host-pkgconf \
+>   	libpcap \
+> @@ -37,6 +36,13 @@ else
+>   KISMET_CONF_OPTS += --disable-libcap
 >   endif
-> diff --git a/package/gstreamer1/gst-omx/Config.in b/package/gstreamer1/gst-omx/Config.in
-> deleted file mode 100644
-> index efe3d211d6d1489400ace233daaa67b5dc326a0b..0000000000000000000000000000000000000000
-> --- a/package/gstreamer1/gst-omx/Config.in
-> +++ /dev/null
-> @@ -1,11 +0,0 @@
-> -config BR2_PACKAGE_GST_OMX
-> -	bool "gst-omx"
-> -	depends on BR2_PACKAGE_HAS_LIBOPENMAX
-> -	select BR2_PACKAGE_GST1_PLUGINS_BASE
-> -	help
-> -	  GStreamer plug-in to use OpenMAX API.
-> -
-> -	  https://cgit.freedesktop.org/gstreamer/gst-omx
-> -
-> -comment "gst-omx requires a OpenMAX implementation"
-> -	depends on !BR2_PACKAGE_HAS_LIBOPENMAX
-> diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
-> deleted file mode 100644
-> index a84ffa7b6b3e35c3b788cf5a4899980fcb7eac02..0000000000000000000000000000000000000000
-> --- a/package/gstreamer1/gst-omx/gst-omx.hash
-> +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.22.12.tar.xz.sha256sum
-> -sha256  6b0685b92ac735032d7987d1028afaeab0a98ab726e0c51e5b9bfc8f2da7c8b1  gst-omx-1.22.12.tar.xz
-> -sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-> diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
-> deleted file mode 100644
-> index c1ab2b19c08c69522065af914e30554f20782c02..0000000000000000000000000000000000000000
-> --- a/package/gstreamer1/gst-omx/gst-omx.mk
-> +++ /dev/null
-> @@ -1,39 +0,0 @@
-> -################################################################################
-> -#
-> -# gst-omx
-> -#
-> -################################################################################
-> -
-> -GST_OMX_VERSION = 1.22.12
-> -GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
-> -GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
-> -
-> -GST_OMX_LICENSE = LGPL-2.1
-> -GST_OMX_LICENSE_FILES = COPYING
-> -
-> -GST_OMX_CONF_OPTS = \
-> -	-Dexamples=disabled \
-> -	-Dtests=disabled \
-> -	-Dtools=disabled \
-> -	-Ddoc=disabled
-> -
-> -ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-> -GST_OMX_VARIANT = rpi
-> -GST_OMX_CONF_OPTS += -Dheader_path=$(STAGING_DIR)/usr/include/IL
-> -else
-> -GST_OMX_VARIANT = generic
-> -endif
-> -
-> -GST_OMX_CONF_OPTS += -Dtarget=$(GST_OMX_VARIANT)
-> -
-> -GST_OMX_DEPENDENCIES = gstreamer1 gst1-plugins-base libopenmax
-> -
-> -# adjust library paths to where buildroot installs them
-> -define GST_OMX_FIXUP_CONFIG_PATHS
-> -	find $(@D)/config -name gstomx.conf | \
-> -		xargs $(SED) 's|/usr/local|/usr|g' -e 's|/opt/vc|/usr|g'
-> -endef
-> -
-> -GST_OMX_POST_PATCH_HOOKS += GST_OMX_FIXUP_CONFIG_PATHS
-> -
-> -$(eval $(meson-package))
-> 
+>   
+> +ifeq ($(BR2_PACKAGE_LIBRTLSDR),y)
+> +KISMET_DEPENDENCIES += librtlsdr
+> +KISMET_CONF_OPTS += --enable-librtlsdr
+> +else
+> +KISMET_CONF_OPTS += --disable-librtlsdr
+> +endif
+> +
+>   ifeq ($(BR2_PACKAGE_LIBUSB),y)
+>   KISMET_DEPENDENCIES += libusb
+>   KISMET_CONF_OPTS += --enable-libusb
+> @@ -58,6 +64,13 @@ else
+>   KISMET_CONF_OPTS += --disable-lmsensors
+>   endif
+>   
+> +ifeq ($(BR2_PACKAGE_MOSQUITTO),y)
+> +KISMET_DEPENDENCIES += mosquitto
+> +KISMET_CONF_OPTS += --enable-mosquitto
+> +else
+> +KISMET_CONF_OPTS += --disable-mosquitto
+> +endif
+> +
+>   ifeq ($(BR2_PACKAGE_PCRE2),y)
+>   KISMET_DEPENDENCIES += pcre2
+>   KISMET_CONF_OPTS += --enable-pcre --enable-require-pcre2
+> @@ -69,7 +82,7 @@ KISMET_CONF_OPTS += --disable-pcre
+>   endif
+>   
+>   ifeq ($(BR2_PACKAGE_KISMET_PYTHON_TOOLS),y)
+> -KISMET_DEPENDENCIES += python3 python-setuptools
+> +KISMET_DEPENDENCIES += python3 host-python-setuptools
+>   KISMET_CONF_OPTS += \
+>   	--enable-python-tools \
+>   	--with-python-interpreter=$(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR)
 
 _______________________________________________
 buildroot mailing list
