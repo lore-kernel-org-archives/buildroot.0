@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74C60C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:13:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 073A4C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:14:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F27154FCB4;
-	Fri, 28 Feb 2025 17:13:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A98785BB2;
+	Fri, 28 Feb 2025 17:14:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uj98sNvg_0XY; Fri, 28 Feb 2025 17:13:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1KFweHlC_yL4; Fri, 28 Feb 2025 17:13:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BECC250498
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30B7A8599B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BECC250498;
-	Fri, 28 Feb 2025 17:13:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30B7A8599B;
+	Fri, 28 Feb 2025 17:13:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0EBE81DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:44:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 13CCA1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:44:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 30A3B41E69
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4D2A542F5F
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LJZXSOl_s9La for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:40 +0000 (UTC)
+ id TD1KELZN5812 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65E6742FDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D88F41957
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 65E6742FDD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7D88F41957
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 619C685E25; Fri, 28 Feb 2025 16:30:33 +0000 (UTC)
+ id 72D9B85FAE; Fri, 28 Feb 2025 16:30:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 11:06:16 +0100
+Date: Wed, 5 Feb 2025 11:10:12 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 75ab6cf93a3ba505897ae99b5ff4bffda55d3c7b
-X-Git-Newrev: 51e292cf67587f0e8ce666306d07309766595b9f
+X-Git-Oldrev: 51e292cf67587f0e8ce666306d07309766595b9f
+X-Git-Newrev: 02c765af35f9e09ef5cd8ace07d555fd90fd176f
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163033.619C685E25@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gstreamer1/gst-omx:
- remove gst-omx
+Message-Id: <20250228163033.72D9B85FAE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/bmap-writer: add
+ initial package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,134 +58,140 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51e292cf67587f0e8ce666306d07309766595b9f
+commit: https://git.buildroot.net/buildroot/commit/?id=02c765af35f9e09ef5cd8ace07d555fd90fd176f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The OMX plugin has been removed from gstreamer as the OpenMAX standard
-is long dead and even the Raspberry Pi OS no longer supports it.
-
-See release notes for more details:
-    https://gstreamer.freedesktop.org/releases/1.24/
-
-Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Ayoub Zaki <ayoub.zaki@embetrix.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                        |  7 ++++++
- package/gstreamer1/Config.in            |  1 -
- package/gstreamer1/gst-omx/Config.in    | 11 ----------
- package/gstreamer1/gst-omx/gst-omx.hash |  3 ---
- package/gstreamer1/gst-omx/gst-omx.mk   | 39 ---------------------------------
- 5 files changed, 7 insertions(+), 54 deletions(-)
+ DEVELOPERS                           |  3 +++
+ package/Config.in                    |  1 +
+ package/Config.in.host               |  1 +
+ package/bmap-writer/Config.in        | 19 +++++++++++++++++++
+ package/bmap-writer/Config.in.host   | 12 ++++++++++++
+ package/bmap-writer/bmap-writer.hash |  3 +++
+ package/bmap-writer/bmap-writer.mk   | 15 +++++++++++++++
+ 7 files changed, 54 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 2e5bd3153f..fbabe784ba 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -204,6 +204,13 @@ config BR2_PACKAGE_DIRECTFB
- 	  This package was no longer maintained upstream, so it was
- 	  dropped from Buildroot.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 24fb3e07e0..6254f2e1db 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -304,6 +304,9 @@ F:	package/orbit/
+ N:	Attila Wagner <attila.wagner@onyxinsight.com>
+ F:	package/python-canopen/
  
-+config BR2_PACKAGE_GST_OMX
-+	bool "gst-omx has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The gst-omx module has been removed from Gstreamer in
-+	  release 1.24 in favor of Video4Linux-based video encoders.
++N:	Ayoub Zaki <ayoub.zaki@embetrix.com>
++F:	package/bmap-writer/
 +
- config BR2_PACKAGE_SDL2_DIRECTFB
- 	bool "sdl2 directfb support removed"
- 	select BR2_LEGACY
-diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
-index 8fe8a34395..67c33e5d4e 100644
---- a/package/gstreamer1/Config.in
-+++ b/package/gstreamer1/Config.in
-@@ -15,7 +15,6 @@ source "package/gstreamer1/gst1-python/Config.in"
- source "package/gstreamer1/gst1-rtsp-server/Config.in"
- source "package/gstreamer1/gst1-shark/Config.in"
- source "package/gstreamer1/gst1-vaapi/Config.in"
--source "package/gstreamer1/gst-omx/Config.in"
- source "package/gstreamer1/gstd/Config.in"
- source "package/gstreamer1/gstreamer1-editing-services/Config.in"
- endif
-diff --git a/package/gstreamer1/gst-omx/Config.in b/package/gstreamer1/gst-omx/Config.in
-deleted file mode 100644
-index efe3d211d6..0000000000
---- a/package/gstreamer1/gst-omx/Config.in
-+++ /dev/null
-@@ -1,11 +0,0 @@
--config BR2_PACKAGE_GST_OMX
--	bool "gst-omx"
--	depends on BR2_PACKAGE_HAS_LIBOPENMAX
--	select BR2_PACKAGE_GST1_PLUGINS_BASE
--	help
--	  GStreamer plug-in to use OpenMAX API.
--
--	  https://cgit.freedesktop.org/gstreamer/gst-omx
--
--comment "gst-omx requires a OpenMAX implementation"
--	depends on !BR2_PACKAGE_HAS_LIBOPENMAX
-diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
-deleted file mode 100644
-index a84ffa7b6b..0000000000
---- a/package/gstreamer1/gst-omx/gst-omx.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.22.12.tar.xz.sha256sum
--sha256  6b0685b92ac735032d7987d1028afaeab0a98ab726e0c51e5b9bfc8f2da7c8b1  gst-omx-1.22.12.tar.xz
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
-deleted file mode 100644
-index c1ab2b19c0..0000000000
---- a/package/gstreamer1/gst-omx/gst-omx.mk
-+++ /dev/null
-@@ -1,39 +0,0 @@
--################################################################################
--#
--# gst-omx
--#
--################################################################################
--
--GST_OMX_VERSION = 1.22.12
--GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
--GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
--
--GST_OMX_LICENSE = LGPL-2.1
--GST_OMX_LICENSE_FILES = COPYING
--
--GST_OMX_CONF_OPTS = \
--	-Dexamples=disabled \
--	-Dtests=disabled \
--	-Dtools=disabled \
--	-Ddoc=disabled
--
--ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
--GST_OMX_VARIANT = rpi
--GST_OMX_CONF_OPTS += -Dheader_path=$(STAGING_DIR)/usr/include/IL
--else
--GST_OMX_VARIANT = generic
--endif
--
--GST_OMX_CONF_OPTS += -Dtarget=$(GST_OMX_VARIANT)
--
--GST_OMX_DEPENDENCIES = gstreamer1 gst1-plugins-base libopenmax
--
--# adjust library paths to where buildroot installs them
--define GST_OMX_FIXUP_CONFIG_PATHS
--	find $(@D)/config -name gstomx.conf | \
--		xargs $(SED) 's|/usr/local|/usr|g' -e 's|/opt/vc|/usr|g'
--endef
--
--GST_OMX_POST_PATCH_HOOKS += GST_OMX_FIXUP_CONFIG_PATHS
--
--$(eval $(meson-package))
+ N:	Bagas Sanjaya <bagasdotme@gmail.com>
+ F:	package/git/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 83f69f9004..e501bca3aa 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -214,6 +214,7 @@ menu "Filesystem and flash utilities"
+ 	source "package/aufs-util/Config.in"
+ 	source "package/autofs/Config.in"
+ 	source "package/bmap-tools/Config.in"
++	source "package/bmap-writer/Config.in"
+ 	source "package/btrfs-progs/Config.in"
+ 	source "package/cifs-utils/Config.in"
+ 	source "package/cpio/Config.in"
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 90b161eeab..bf04f5fa97 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -10,6 +10,7 @@ menu "Host utilities"
+ 	source "package/asn1c/Config.in.host"
+ 	source "package/babeltrace2/Config.in.host"
+ 	source "package/bmap-tools/Config.in.host"
++	source "package/bmap-writer/Config.in.host"
+ 	source "package/bootgen/Config.in.host"
+ 	source "package/btrfs-progs/Config.in.host"
+ 	source "package/cbootimage/Config.in.host"
+diff --git a/package/bmap-writer/Config.in b/package/bmap-writer/Config.in
+new file mode 100644
+index 0000000000..b2e63c8381
+--- /dev/null
++++ b/package/bmap-writer/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_BMAP_WRITER
++	bool "bmap-writer"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR # libarchive
++	select BR2_PACKAGE_LIBARCHIVE
++	select BR2_PACKAGE_LIBXML2
++	help
++	  bmap-writer is a command-line utility designed to
++	  efficiently write disk images to storage devices using block
++	  mapping (BMAP). It serves as a lightweight alternative to
++	  the Yocto BMAP tool, specifically for embedded
++	  systems. Unlike the Yocto BMAP tool, bmap-writer is C++
++	  based, does not require Python, and focuses solely on
++	  writing an image.
++
++	  https://github.com/embetrix/bmap-writer
++
++comment "bmap-writer needs a toolchain w/ C++, wchar"
++	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/bmap-writer/Config.in.host b/package/bmap-writer/Config.in.host
+new file mode 100644
+index 0000000000..a5365f47cf
+--- /dev/null
++++ b/package/bmap-writer/Config.in.host
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_HOST_BMAP_WRITER
++	bool "host bmap-writer"
++	help
++	  bmap-writer is a command-line utility designed to
++	  efficiently write disk images to storage devices using block
++	  mapping (BMAP). It serves as a lightweight alternative to
++	  the Yocto BMAP tool, specifically for embedded
++	  systems. Unlike the Yocto BMAP tool, bmap-writer is C++
++	  based, does not require Python, and focuses solely on
++	  writing an image.
++
++	  https://github.com/embetrix/bmap-writer
+diff --git a/package/bmap-writer/bmap-writer.hash b/package/bmap-writer/bmap-writer.hash
+new file mode 100644
+index 0000000000..c59c7a91cb
+--- /dev/null
++++ b/package/bmap-writer/bmap-writer.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  94fda8420fa82256bfd01a76dff18ae23c6be9be03cb641f9845164e9326de60  bmap-writer-0.0.3.tar.gz
++sha256  8b1ba204bb69a0ade2bfcf65ef294a920f6bb361b317dba43c7ef29d96332b9b  LICENSE
+diff --git a/package/bmap-writer/bmap-writer.mk b/package/bmap-writer/bmap-writer.mk
+new file mode 100644
+index 0000000000..dc049c2b9b
+--- /dev/null
++++ b/package/bmap-writer/bmap-writer.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# bmap-writer
++#
++################################################################################
++
++BMAP_WRITER_VERSION = 0.0.3
++BMAP_WRITER_SITE = $(call github,embetrix,bmap-writer,$(BMAP_WRITER_VERSION))
++BMAP_WRITER_LICENSE = GPL-3.0
++BMAP_WRITER_LICENSE_FILES = LICENSE
++BMAP_WRITER_DEPENDENCIES = host-pkgconf libarchive libxml2
++HOST_BMAP_WRITER_DEPENDENCIES = host-pkgconf host-libarchive host-libxml2
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
