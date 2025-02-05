@@ -1,81 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83DACC02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 11:02:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80FDEC02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 11:03:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 255D840891;
-	Wed,  5 Feb 2025 11:02:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3C67280F29;
+	Wed,  5 Feb 2025 11:03:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LQJfoxlLnmQk; Wed,  5 Feb 2025 11:02:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u73Yy9kqiNvb; Wed,  5 Feb 2025 11:03:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C999040E0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45461812E7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C999040E0B;
-	Wed,  5 Feb 2025 11:02:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7862812A
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:02:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45461812E7;
+	Wed,  5 Feb 2025 11:03:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 83178CD
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:03:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 538DE60AB3
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:02:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7BA0E812E7
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:03:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h3OSzDb3Frg4 for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 11:01:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JWMVMZiPn5yQ for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 11:03:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0673860AC6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0673860AC6
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0673860AC6
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:01:57 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4FE5243299;
- Wed,  5 Feb 2025 11:01:56 +0000 (UTC)
-Date: Wed, 5 Feb 2025 12:01:55 +0100
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 629D980F29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 629D980F29
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 629D980F29
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 11:03:07 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id ABD2A44280;
+ Wed,  5 Feb 2025 11:03:03 +0000 (UTC)
+Date: Wed, 5 Feb 2025 12:03:02 +0100
 To: Brian Cain via buildroot <buildroot@buildroot.org>
 Cc: Brian Cain <brian.cain@oss.qualcomm.com>
-Message-ID: <20250205120155.01899b0f@windsurf>
-In-Reply-To: <20241219053053.2389046-4-brian.cain@oss.qualcomm.com>
+Message-ID: <20250205120302.51583465@windsurf>
+In-Reply-To: <20241219053053.2389046-6-brian.cain@oss.qualcomm.com>
 References: <20241025140714.2395033-1-bcain@quicinc.com>
  <20241219053053.2389046-1-brian.cain@oss.qualcomm.com>
- <20241219053053.2389046-4-brian.cain@oss.qualcomm.com>
+ <20241219053053.2389046-6-brian.cain@oss.qualcomm.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfedvjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeujeffjedviedvtefhhfevudeikefhhfffvdfffedthfejfedvgeeghfelvdehheenucffohhmrghinhepsghuihhlthhinhhsqdhhvgigrghgohhnrdhsohdpshhordhsohdpsghoohhtlhhinhdrtghomhenucfkphepuddtledrkeelrddvfedvrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutdelrdekledrvdefvddrheehpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegsrhhirghnrdgtrghinhesohhsshdrqhhurghltghomhhmrdgtohhm
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfedvjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejfedtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeuhfffhefhfefgffevtdfgteejleduteevleeludehhfdvjeelueeiheevffffheenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepuddtledrkeelrddvfedvrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutdelrdekledrvdefvddrheehpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegsrhhirghnrdgtrghinhesohhsshdrqhhurghltghomhhmrdgtohhm
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1738753316;
+ d=bootlin.com; s=gm1; t=1738753383;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=8VrItoJvfHFUO1XQu48aCcMXZCJhLWCZmHU/4wonW4s=;
- b=cUKS6+xpgklUTvPms8YHm3eATFq8hnO91PLBIAqhSFG/Cj8yYVNvdFRB7F5MMyZdHTB0xC
- fqCVCrUIWtHHIHvvw9nSbUD/NRI4yxpG/lBeFYgSC2IGSJtp2gogMC/C8c5mdwK4jkhuRD
- +DEzGCRVin2YQLHrJYPMPc3WbCHTeJVwNdQ9BqtE+5vDfaTEtVmh8UWCrpGGegPLnQOwjp
- AM+5WNtnYBasGcUswyyeh8liRXgRAhriQ98YZU02QX6p0gB96yoI2Y95lMn8JqPwQ2QWKT
- uDsrsi/pbTb8g1h0EjRLGkwjmcmI0MrRO92CjMRh0a/gYrZ2zbDiokxK1CEM6g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=A9PVIpMBcsiYNj62k5rFqLv5DGA8+dlkt0Z7t04z0ZA=;
+ b=fTUwnE1SqC00p4wpuwwFA0zGMPnffjTlGYdbsy7xEemjp5f5yJC5sNOmKxCT0rxb08qxKk
+ rKltHRKBuBsVUCWoPPyd7CJ+1LMSXjV858l9R9zfxKFtRhZTQJzkGNZusFLs+UOPLCSIva
+ WDA2rJAg4POTxZMUMAQBLU4OpoqNTJrqtjlJWtLBGAD/fWgfRriM66GOcyXwEAFFSoBCCa
+ 8MuXxXUVC0xfFR/PDzLKN1WL5/QVW4XiW9zc5v/IM+Kbjf+Gq2B5zZSAVSR+N2Six4LxNx
+ PZrEhNbY29HGZcED9/O5cJJo9LOXsHqQaXyIQNisPQq+qfqZ06zYkZNmo7kMQQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=cUKS6+xp
-Subject: Re: [Buildroot] [RFC v2 03/14] toolchain/toolchain-external: add
- hexagon support for toolchain-wrapper
+ header.s=gm1 header.b=fTUwnE1S
+Subject: Re: [Buildroot] [RFC v2 05/14] toolchain/toolchain-external: skip
+ "-march=" for hexagon
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,72 +94,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
-
-On Wed, 18 Dec 2024 21:30:42 -0800
+On Wed, 18 Dec 2024 21:30:44 -0800
 Brian Cain via buildroot <buildroot@buildroot.org> wrote:
 
-> Signed-off-by: Brian Cain <brian.cain@oss.qualcomm.com>
-
-This commit needs a non-empty commit message. Also, I don't think this
-commit is really hexagon related, but more Clang related.
-
 > diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> index c08bf0a653..d45f2c54de 100644
+> index cc36b0bcfd..44891e638f 100644
 > --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
 > +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> @@ -150,8 +150,14 @@ endef
+> @@ -210,9 +210,11 @@ TOOLCHAIN_EXTERNAL_CFLAGS += -m64
+>  TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_64
 >  endif
->  
->  ifeq ($(BR2_TOOLCHAIN_EXTERNAL_MUSL),y)
-> +ifeq ($(BR2_hexagon),y)
-> +TOOLCHAIN_EXTERNAL_LIBS += libc.so libclang_rt.builtins-hexagon.so*
-> +TOOLCHAIN_EXTERNAL_LIBS += libc++.so* libc++abi.so* libunwind.so*
-> +TOOLCHAIN_EXTERNAL_LIBS += ld-musl-*.so*
-
-None of this is hexagon related, to this exception of
-libclang_rt.builtins-hexagon.so*. So this should be organized properly,
-with I guess libc++.so* libc++abi.so* being added when
-BR2_TOOLCHAIN_EXTERNAL_CLANG=y. Perhaps
-libclang_rt.builtins-$(BR2_ARCH).so* as well.
-
-I'm not sure about libunwind.so*. Also unclear why ld-musl-*.so* is
-needed here, and not for other musl toolchains. To be clarified.
-
-> +else
->  TOOLCHAIN_EXTERNAL_LIBS += libc.so
+>  ifneq ($(GCC_TARGET_ARCH),)
+> +ifneq ($(BR2_hexagon),y)
+>  TOOLCHAIN_EXTERNAL_CFLAGS += -march=$(GCC_TARGET_ARCH)
+>  TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS += -DBR_ARCH='"$(GCC_TARGET_ARCH)"'
 >  endif
-> +endif
->  
->  ifeq ($(BR2_INSTALL_LIBSTDCPP),y)
->  TOOLCHAIN_EXTERNAL_LIBS += libstdc++.so.*
-> @@ -283,7 +289,7 @@ define TOOLCHAIN_EXTERNAL_INSTALL_WRAPPER
->  		*-ar|*-ranlib|*-nm) \
->  			ln -sf $$(echo $$i | sed 's%^$(HOST_DIR)%..%') .; \
->  			;; \
-> -		*cc|*cc-*|*++|*++-*|*cpp|*-gfortran|*-gdc) \
-> +		*cc|*cc-*|*++|*++-*|*cpp|*-gfortran|*-gdc|*clang) \
 
-Related to clang support.
+Why is this needed? You don't set BR2_GCC_TARGET_ARCH in
+arch/Config.in.hexagon, so GCC_TARGET_ARCH should I believe be empty,
+and therefore this code should not kick-in.
 
->  			ln -sf toolchain-wrapper $$base; \
->  			;; \
->  		*gdb|*gdbtui) \
-> @@ -465,6 +471,9 @@ define TOOLCHAIN_EXTERNAL_INSTALL_SYSROOT_LIBS
->  	else \
->  		ARCH_SUBDIR=`echo $${ARCH_SYSROOT_DIR} | sed -r -e "s:^$${SYSROOT_DIR}(.*)/$$:\1:"` ; \
->  	fi ; \
-> +	if test "$(BR2_hexagon)" = "y"; then \
-> +		SUPPORT_LIB_DIR=$(TOOLCHAIN_EXTERNAL_BIN)/../target/$(TOOLCHAIN_EXTERNAL_PREFIX); \
-> +	fi ; \
+If not, please clarify, and please have a non-empty commit log.
 
-Is this really hexagon specific? Or specific to Clang? Or specific to
-the particular external toolchain? I'm pretty sure the BR2_hexagon
-condition is incorrect here.
-
-Are there other Clang external toolchains, for other CPU architectures,
-that we could use to test what is generic Clang stuff vs. what is
-perhaps Hexagon-specific?
+Thanks!
 
 Thomas
 -- 
