@@ -4,108 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C702DC02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 19:28:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74AA6C02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 19:37:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 55AD641735;
-	Wed,  5 Feb 2025 19:28:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1EED14007F;
+	Wed,  5 Feb 2025 19:37:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M8JvZr2P_PEY; Wed,  5 Feb 2025 19:28:40 +0000 (UTC)
+ id 7HOVgNVlAHGz; Wed,  5 Feb 2025 19:37:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7DB0416E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E34F641356
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E7DB0416E0;
-	Wed,  5 Feb 2025 19:28:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7714212F
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 19:28:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E34F641356;
+	Wed,  5 Feb 2025 19:37:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6165E12F
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 19:37:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 66F0B8387D
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 19:28:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 503C341356
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 19:37:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UrovZsdSkCOi for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 19:28:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0VJp14_9sGtu for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 19:37:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E338E8386F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E338E8386F
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E338E8386F
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 19:28:36 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-4363ae65100so1668935e9.0
- for <buildroot@buildroot.org>; Wed, 05 Feb 2025 11:28:36 -0800 (PST)
+ client-ip=2607:f8b0:4864:20::132; helo=mail-il1-x132.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4587A40955
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4587A40955
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com
+ [IPv6:2607:f8b0:4864:20::132])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4587A40955
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 19:37:14 +0000 (UTC)
+Received: by mail-il1-x132.google.com with SMTP id
+ e9e14a558f8ab-3cfae81ab24so246745ab.3
+ for <buildroot@buildroot.org>; Wed, 05 Feb 2025 11:37:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738783714; x=1739388514;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=aKZgaBmb1xmZqhnsnUdD6da5m/om1OCtlsnzjHlo5NI=;
- b=OvyjNieC/hy8Krh3jhwUd4Piujf0pSqLpK+2k/Q2KHBQKqT7o7+QylXEuS2DMoPxMb
- IH7yiHYKF0Gjcw21RHBVSbnv+8t+ooPWfBraCA8kztdyEG5B/tX0TpRuD0PECshGGDlN
- 9Hfs14JjRpDvB78NYgCaF5sNmb5el2JiiiL6OirGjFKzHl6ISpwmpQYjyQ/YCqkZAlzV
- GFZg4hT55YLp5VDbkTBbHKx9dyXRWqiwAQG1z+WKh2TOMHAJIRFIOsCgFxg5fvRruIlH
- RNbvKfNyLpgmMPvEZYi9XzzaCdyzOM1yIyxeAI9SyskM1zXhcXxabJ0vhje6IUCpzM17
- ymfw==
-X-Gm-Message-State: AOJu0Ywo5FcXWtlcxM/OUbBWpmXW1ETebvlLXK3azMe3DgP2j6eszjoq
- pxB3ASTxeFWr1ajAhedBFCploTPiXSbm3TbyZneC2e9ZuRl24jH2zHggkMHcuWDm+AfZbt8PqmI
- u
-X-Gm-Gg: ASbGnct8Aq7qA8+16IidjLjXM8l8epQYlOWgvhix9mt5hje1hxEBXqBrJOOsU+MyeRz
- GEY1N4PRctRG0OGU9mCRx3lYKYUHrmjshN8Gx8syZ+nni7soz5FRwJscDixoc0JXOrUymyTOSyW
- URxOGwI32odPWE7+jdU9vqhN7zzh/ANOFTb7Ao1uwxCXGwdZnetVfMxMvLmXPKu8Oe81CTcOTDO
- xWq2Iy4kIu4d1a5zSBAsf/LtxAGnhyDosjrxjKpeGJ4NLfv3i8VOjJaSCYZuu6yssVsRHwJmj0b
- uPIZjxmXJ5EOLsg/Ay4EHzFGxMEJR/v0Na9jLQN66iBCd/ERKsVDHXH0hpubs1nJQxs8Dq9YKVZ
- KbxdwiJF+5kK9GZ8UTbQ/QCvNdIXcPwKUiN9XdDmCQ2SzhQ==
-X-Google-Smtp-Source: AGHT+IGN6pqwcq1arJrPT+euSZmtTrC56RvONxqDVX5BI2jjal6FnJdoy+MLC+txrun7jgUAE0JbHQ==
-X-Received: by 2002:adf:e789:0:b0:382:4b9a:f51f with SMTP id
- ffacd0b85a97d-38db4912c55mr3119198f8f.47.1738783713932; 
- Wed, 05 Feb 2025 11:28:33 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-38db4a84dc3sm3002365f8f.50.2025.02.05.11.28.32
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 05 Feb 2025 11:28:33 -0800 (PST)
-Message-ID: <90fb464d-759f-429c-a84d-aade53c898a8@mind.be>
-Date: Wed, 5 Feb 2025 20:28:31 +0100
+ d=1e100.net; s=20230601; t=1738784233; x=1739389033;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=PJ6AHaWFOQWk9iMwTRu3PF6saIVcUQumrlpdmDesyiM=;
+ b=LFqQhim9ibHskwaLIc4YaGuPpH7/v+2sL8i6EJfBc7mkBdpNOcki1BUWviZtATWXDL
+ ddAHlXxsdui3gQbMljzJaxUNyhYfDD874v0JvTTs4v3RigUg+8NEsaBT053h/eataTr5
+ 542ZaP9Qp/X6HC9+x2U5jvgn6gz+zz0SnZi/hf6UapFt6Cv8XMJP8RUTtqW3KcpDh9+a
+ t10rn7TE2HAsdNlOFWz9nIPmrrVxiKF8vhwmFYTFthLL+D8wkcY+LdsmoM6abVIdTAJ8
+ rf61hlsYe+RGgolcJT61aZNx4cvufOM3V23ydyEN24vN6Bo8zhp+6Yk0Bh4LxARHOs8S
+ Zmbg==
+X-Gm-Message-State: AOJu0YwbwQgU1loJAuAdp97sGnr6YJO5XYaCntd58RbpEorcs9oqgrrs
+ cMIBVPYrU0Uqvruov0N/3g4Jjsu8pAmhFJVxOw7+jgV8IlE5B4jx4qFWwQ==
+X-Gm-Gg: ASbGncsBEG/IYa4nQOoG/4vQ7vW17LlQozd/+XvbIzAhYxf+0wchVlIxj/AtG63hSzG
+ 8eB9i+KwhHSEkezaq0kCCeDU8kVve04FoZMp/pZFBPt19Pjh6IMVmgJsmY4jKi7RwY/ElA3QSoP
+ eXrnPBGTfRs17Sh3R8wfWBzXglsQCOBjAPX4AqF+fTnnsFCjl3WUND2FgyzhK6pAfa/IKCoWeXt
+ AvNq3Vhjq3KMQDk65CyasGp2kPOijF5kMAZ6Fv4gPueIhclkhu1D6X4GgQzAQGAAPNqAnDWCF66
+ iqjvcej4vC/9sgQC5NKc7IXjIrJmXrvUQR3oIqtlrhRlUI4R3QpbIH8Ah5GajKIliw==
+X-Google-Smtp-Source: AGHT+IGmzg+HICvdJk2Ld4NanKItyc3i/bqkn+hCFwy5TYoc6lb1Nea3615Elp1VFrc2qcgxMP5Y1w==
+X-Received: by 2002:a05:6e02:1546:b0:3d0:d0d:db8e with SMTP id
+ e9e14a558f8ab-3d04f40204cmr38750045ab.1.1738784232936; 
+ Wed, 05 Feb 2025 11:37:12 -0800 (PST)
+Received: from james-x399.localdomain (71-218-115-58.hlrn.qwest.net.
+ [71.218.115.58]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4ec746e2efesm3351262173.134.2025.02.05.11.37.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 05 Feb 2025 11:37:12 -0800 (PST)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed,  5 Feb 2025 12:37:11 -0700
+Message-Id: <20250205193711.3373936-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Markus Mayer <mmayer@broadcom.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Markus Mayer via buildroot <buildroot@buildroot.org>
-References: <20250127215356.3175741-1-mmayer@broadcom.com>
- <20250128220920.535ecc14@windsurf>
- <CAGt4E5sXA0fiKwYyRummys2Mi+p1sQDG9RQzJNM7g5zSBJcyCQ@mail.gmail.com>
-Content-Language: en-GB
-In-Reply-To: <CAGt4E5sXA0fiKwYyRummys2Mi+p1sQDG9RQzJNM7g5zSBJcyCQ@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1738783714; x=1739388514; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=aKZgaBmb1xmZqhnsnUdD6da5m/om1OCtlsnzjHlo5NI=;
- b=YTJIHGOOAdQRop+wmz3qV7TgVJjnekQr4/fdQxA6x/p7ZUUaMM28ffKsRznMXcgDDr
- cSSIsyJlOZ0+GZNjx4DVsjQB/vmRnjnIOSLNOxJG0+SoYLpTPbzvZXhiyDkGxu4m8LTb
- 2arFlNJGexM928pxKoqHi0GZN2AZgUPubDnLToDIF5RclPCkjrN4Thi59h9pfHC56W+5
- eRealMjN+QrbO8nXgX9JxsRFPfYFQBSa1HoBOu5VdFmNaU+z58UIHYS6qY0eMAxzziDp
- PIisYLo7B1WCFMEFEAElDfEFDYtdpxmL+D83p5uAU0TY3Hou2DaEfFl0uZHg9n2XFmA4
- yJTg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1738784233; x=1739389033; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=PJ6AHaWFOQWk9iMwTRu3PF6saIVcUQumrlpdmDesyiM=;
+ b=D8+lFvOsteonr0KWpj+pd+whHmuO0NW29kjfVCah7dWewZgXi/wVUa3PzVnRBN4Ek0
+ mO4fNx6tONT5Jt79xZsKFSKXP1HF8FBEVzGSymZmIAnm2D8tqaAemFMf6Z13eKPaqovv
+ ZEM+k9idLxD8uNyiVuvFYR/KaHzQIvr13L7+JlCdYeCYjl0xpUS8Q0XGtLwcx3V4LnWR
+ DLdm8IKIptInh7z6axlpr0gl2NxNUWsgk4ZsHFz7e/SJfRvhCIjMECw2umdiGIsNmYsv
+ m4lDNlXIq0jKg/q1GhXKyyG7KiLH1jGIUpzI4uhUmxnKhSge35VTCUFAswNmi/bgCHfT
+ mtGg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=YTJIHGOO
-Subject: Re: [Buildroot] [PATCH] support/scripts/apply-patches.sh: introduce
- envvar BR_PATCH_ARGS
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=D8+lFvOs
+Subject: [Buildroot] [PATCH 1/1] package/libabseil-cpp: bump to version
+ 20250127.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,92 +106,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/libabseil-cpp/libabseil-cpp.hash | 2 +-
+ package/libabseil-cpp/libabseil-cpp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-On 05/02/2025 17:58, Markus Mayer via buildroot wrote:
-> Hi Thomas,
-> 
-> Re-sending, because I just realized the original response (sent on
-> January 29) didn't go to the mailing list. That was not intentional.
-> 
-> Here goes...
-> 
-> On Tue, 28 Jan 2025 at 13:09, Thomas Petazzoni
-> <thomas.petazzoni@bootlin.com> wrote:
->>
->> Hello Markus,
->>
->> On Mon, 27 Jan 2025 13:53:54 -0800
->> Markus Mayer via buildroot <buildroot@buildroot.org> wrote:
->>
->>> Introduce the environment variable BR_PATCH_ARGS as a means for the
->>> caller to pass additional arguments to the patch(1) command. These
->>> arguments can be new arguments not originally used -- or they can
->>> override one of the default arguments.
->>>
->>> In addition, provide a mechanism to add patch parameters on a
->>> per-package basis using the <PACKAGENAME>_PATCH_ARGS makefile variable,
->>> for example "PROCPS_NG_PATCH_ARGS". This allows individual packages to
->>> specify extra arguments or override defaults while not affecting any
->>> other part of the build environment.
->>
->> Thanks for the proposed patch. Do you have some details on the actual
->> (not theoretical) use-case(s) ?
->>
->> Thanks a lot!
-> 
-> When we are building our root file systems, we sometimes have to
-> bundle older versions of certain packages or we want to apply patches
-> that are being reviewed upstream without having been accepted and we
-> want to use the same patch for different versions of a package, say
-> procps-ng or xfsprogs. Under such circumstances, life becomes a lot
-> easier if you can tell "patch" to use more fuzz when applying a patch
-> as it'll apply over a wider range of versions while allowing you to
-> only track a single patch file.
-
-  That's exactly what you *don't* want. With fuzz, the risk is too great that 
-the patch _seems_ to apply while it actually doesn't.
-
-  The proper way is to put patches in version directories for each specific 
-version you want to support. Yes, it means you have to "manually" rebase the 
-patches for each version (but you can script that). But you're anyway _somehow_ 
-going to have to check that the patches really apply to that version.
-
-
-> So I can say
->      PROCPS_NG_PATCH_ARGS = -F2
-> and then it'll use "-F2" while applying these patches, but it is
-> limited to procps-ng and won't cause any side-effects elsewhere.
-
-  Why would you want to support multiple versions of procps-ng?
-
-  Regards,
-  Arnout
-
-> 
-> This is a fairly specific application of this feature that others may
-> not need quite in this manner, but it can be used in a very generic
-> way to address different issues. I figured a facility like this might
-> be helpful to other users as well for this reason.
-> 
-> It can also come in handy for Buildroot as a whole if a version
-> upgrade or the introduction of a new patch for one of the existing
-> packages were to suddenly require more fine-tuned parameters for
-> applying patches.
-> 
-> Regards,
-> -Markus
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+diff --git a/package/libabseil-cpp/libabseil-cpp.hash b/package/libabseil-cpp/libabseil-cpp.hash
+index 76f1bd0f32..701801a7c4 100644
+--- a/package/libabseil-cpp/libabseil-cpp.hash
++++ b/package/libabseil-cpp/libabseil-cpp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f50e5ac311a81382da7fa75b97310e4b9006474f9560ac46f54a9967f07d4ae3  libabseil-cpp-20240722.0.tar.gz
++sha256  16242f394245627e508ec6bb296b433c90f8d914f73b9c026fddb905e27276e8  libabseil-cpp-20250127.0.tar.gz
+ sha256  c79a7fea0e3cac04cd43f20e7b648e5a0ff8fa5344e644b0ee09ca1162b62747  LICENSE
+diff --git a/package/libabseil-cpp/libabseil-cpp.mk b/package/libabseil-cpp/libabseil-cpp.mk
+index a27d013476..34d62c4dd1 100644
+--- a/package/libabseil-cpp/libabseil-cpp.mk
++++ b/package/libabseil-cpp/libabseil-cpp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBABSEIL_CPP_VERSION = 20240722.0
++LIBABSEIL_CPP_VERSION = 20250127.0
+ LIBABSEIL_CPP_SITE = $(call github,abseil,abseil-cpp,$(LIBABSEIL_CPP_VERSION))
+ LIBABSEIL_CPP_LICENSE = Apache-2.0
+ LIBABSEIL_CPP_LICENSE_FILES = LICENSE
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
