@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2006C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:14:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39DEEC282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:14:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A2024FCB9;
-	Fri, 28 Feb 2025 17:14:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0EBA26FC32;
+	Fri, 28 Feb 2025 17:14:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2_wgeMWnYOZm; Fri, 28 Feb 2025 17:14:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YsOhTpkMtjRy; Fri, 28 Feb 2025 17:14:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 176784EFFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4410708B3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 176784EFFD;
-	Fri, 28 Feb 2025 17:14:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D4410708B3;
+	Fri, 28 Feb 2025 17:14:23 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F2DB68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:44:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0BB4868
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:44:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7948742F61
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F2634250B
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oZeH8FOWzoip for <buildroot@buildroot.org>;
+ id bZ7DI3oZkyB4 for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:31:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2C2743124
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 995AE42D1D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B2C2743124
+ by smtp4.osuosl.org (Postfix) with ESMTP id 995AE42D1D
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A9D9B85FAE; Fri, 28 Feb 2025 16:30:33 +0000 (UTC)
+ id 87F657FEAC; Fri, 28 Feb 2025 16:30:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 11:43:30 +0100
+Date: Wed, 5 Feb 2025 11:14:30 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 824c660c7540bdfd969dbb260c094bdc0508e2fa
-X-Git-Newrev: 9845bd4541cb03e97e577281f3c64f00c6ead881
+X-Git-Oldrev: 02c765af35f9e09ef5cd8ace07d555fd90fd176f
+X-Git-Newrev: 1d4a61247d704c3bc9dda4ccbef80caa447fa6f3
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163033.A9D9B85FAE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] arch/arm: add Armv9-A and the
- Neoverse N2 core
+Message-Id: <20250228163033.87F657FEAC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-waitress: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,87 +66,138 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9845bd4541cb03e97e577281f3c64f00c6ead881
+commit: https://git.buildroot.net/buildroot/commit/?id=1d4a61247d704c3bc9dda4ccbef80caa447fa6f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit adds the Neoverse N2 core, which is an implementation of
-the armv9.0a ISA. See: [1] [2].
+The test runs the flask sample app through the waitress wsgi server
+instead of the flask development server.
 
-This CPU support was added in GCC 11. See [3].
-
-The Neoverse N2 CPU is included in the Arm sbsa-ref platform in Qemu.
-The Armv9.0-A Buildroot support will be needed to update those SBSA
-related components. See the note in commit log [4].
-
-This commit introduces the BR2_ARM_CPU_ARMV9A Kconfig symbol, which just
-selects BR2_ARM_CPU_ARMV8A. This is because Armv9.0-A is a superset of
-Armv8.5-A. This symbol can help package recipes to detect this new base
-architecture.
-
-Neoverse-N2 support has been added in QEmu in commit [5], first
-included in v8.2.0.
-
-This CPU supports Aarch32 only in EL0 (user-space). This means it's
-technically possible to compile Aarch32 code targeting it. GCC has
-the support to do so. Since Buildroot recompiles a full system (ATF,
-Kernel, user-space) this support has limited value. This is why this
-CPU is limited to 64bit builds only.
-
-[1] https://developer.arm.com/Processors/Neoverse%20N2
-[2] https://developer.arm.com/documentation/102099/0003/The-Neoverse-N2--core/Neoverse-N2--core-features
-[3] https://gcc.gnu.org/gcc-11/changes.html
-[4] https://gitlab.com/buildroot.org/buildroot/-/commit/c58a2a9687c045379c0f768c8c6c1c1a41842a85
-[5] https://gitlab.com/qemu-project/qemu/-/commit/dfff1000fef24f6686e0be5e6472613985a363dc
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- arch/Config.in.arm | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ DEVELOPERS                                         |  2 ++
+ package/Config.in                                  |  1 +
+ package/python-waitress/Config.in                  | 11 +++++++
+ package/python-waitress/python-waitress.hash       |  5 ++++
+ package/python-waitress/python-waitress.mk         | 14 +++++++++
+ .../testing/tests/package/test_python_waitress.py  | 34 ++++++++++++++++++++++
+ 6 files changed, 67 insertions(+)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index a11d581c43..68b4dfea26 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -95,6 +95,14 @@ config BR2_ARM_CPU_ARMV8A
- 	bool
- 	select BR2_USE_MMU
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 6254f2e1db..f20bd5ce3f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2259,8 +2259,10 @@ F:	package/picotool/
+ F:	package/python-immutabledict/
+ F:	package/python-jc/
+ F:	package/python-ruamel-yaml-clib/
++F:	package/python-waitress/
+ F:	support/testing/tests/package/test_python_fastapi.py
+ F:	support/testing/tests/package/test_python_ruamel_yaml.py
++F:	support/testing/tests/package/test_python_waitress.py
+ F:	support/testing/tests/package/sample_python_fastapi.py
+ F:	support/testing/tests/package/sample_python_ruamel_yaml.py
  
-+# Armv9.0-A base specification is a super-set of Armv8.5-A. It is
-+# fully compatible with Armv8. This symbol is defined to allow checks
-+# for doing Armv9 optimization. Armv8 is also selected for
-+# compatibility.
-+config BR2_ARM_CPU_ARMV9A
-+	bool
-+	select BR2_ARM_CPU_ARMV8A
+diff --git a/package/Config.in b/package/Config.in
+index e501bca3aa..da88832d37 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1466,6 +1466,7 @@ menu "External python modules"
+ 	source "package/python-validators/Config.in"
+ 	source "package/python-versiontools/Config.in"
+ 	source "package/python-visitor/Config.in"
++	source "package/python-waitress/Config.in"
+ 	source "package/python-watchdog/Config.in"
+ 	source "package/python-wcwidth/Config.in"
+ 	source "package/python-weasyprint/Config.in"
+diff --git a/package/python-waitress/Config.in b/package/python-waitress/Config.in
+new file mode 100644
+index 0000000000..7d8c73a650
+--- /dev/null
++++ b/package/python-waitress/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_PYTHON_WAITRESS
++	bool "python-waitress"
++	help
++	  Waitress WSGI server.
 +
- choice
- 	prompt "Target Architecture Variant"
- 	default BR2_cortex_a53 if BR2_ARCH_IS_64
-@@ -496,6 +504,14 @@ config BR2_saphira
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
++	  Waitress is a production-quality pure-Python WSGI server
++	  with very acceptable performance. It has no dependencies
++	  except ones which live in the Python standard library.
++	  It supports HTTP/1.0 and HTTP/1.1.
 +
-+comment "armv9.0a cores"
-+config BR2_neoverse_n2
-+	bool "neoverse-N2 (aka perseus)"
-+	depends on BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV9A
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_11
- endchoice
- 
- config BR2_ARM_ENABLE_NEON
-@@ -889,6 +905,8 @@ config BR2_GCC_TARGET_CPU
- 	default "tsv110"	if BR2_tsv110
- 	# armv8.4a
- 	default "saphira"	if BR2_saphira
-+	# armv9.0a
-+	default "neoverse-n2"	if BR2_neoverse_n2
- 
- config BR2_GCC_TARGET_ABI
- 	default "aapcs-linux"	if BR2_arm || BR2_armeb
++	  https://github.com/Pylons/waitress
+diff --git a/package/python-waitress/python-waitress.hash b/package/python-waitress/python-waitress.hash
+new file mode 100644
+index 0000000000..c1663a351a
+--- /dev/null
++++ b/package/python-waitress/python-waitress.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/waitress/json
++md5  b8c671ed131b84a0099493f445c98014  waitress-3.0.0.tar.gz
++sha256  005da479b04134cdd9dd602d1ee7c49d79de0537610d653674cc6cbde222b8a1  waitress-3.0.0.tar.gz
++# Locally computed sha256 checksums
++sha256  3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
+diff --git a/package/python-waitress/python-waitress.mk b/package/python-waitress/python-waitress.mk
+new file mode 100644
+index 0000000000..c1618817dc
+--- /dev/null
++++ b/package/python-waitress/python-waitress.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-waitress
++#
++################################################################################
++
++PYTHON_WAITRESS_VERSION = 3.0.0
++PYTHON_WAITRESS_SOURCE = waitress-$(PYTHON_WAITRESS_VERSION).tar.gz
++PYTHON_WAITRESS_SITE = https://files.pythonhosted.org/packages/70/34/cb77e5249c433eb177a11ab7425056b32d3b57855377fa1e38b397412859
++PYTHON_WAITRESS_SETUP_TYPE = setuptools
++PYTHON_WAITRESS_LICENSE = ZPL-2.1
++PYTHON_WAITRESS_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/test_python_waitress.py b/support/testing/tests/package/test_python_waitress.py
+new file mode 100644
+index 0000000000..46f04109c0
+--- /dev/null
++++ b/support/testing/tests/package/test_python_waitress.py
+@@ -0,0 +1,34 @@
++import time
++
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonWaitress(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_FLASK=y
++        BR2_PACKAGE_PYTHON_WAITRESS=y
++        """
++
++    sample_scripts = ["tests/package/sample_python_flask.py"]
++
++    def test_run(self):
++        self.login()
++        self.check_sample_scripts_exist()
++        cmd = self.interpreter + " -m waitress sample_python_flask:app > /dev/null 2>&1 &"
++        # give some time to setup the server
++        _, exit = self.emulator.run(cmd, timeout=self.timeout)
++
++        # Give enough time for the uvicorn server to start up
++        for attempt in range(30):
++            time.sleep(1)
++
++            cmd = "wget -q -O - http://127.0.0.1:8080/"
++            output, exit_code = self.emulator.run(cmd, timeout=self.timeout)
++            if exit_code == 0:
++                self.assertEqual(output[0], 'Hello, World!')
++                break
++        else:
++            self.assertTrue(False, "Timeout while waiting for waitress server")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
