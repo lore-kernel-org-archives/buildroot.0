@@ -4,94 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0BCAC02194
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 13:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88FE9C02196
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 13:15:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1DEB415DF;
-	Wed,  5 Feb 2025 13:02:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A8E2140B67;
+	Wed,  5 Feb 2025 13:15:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pqei9rIpPDlJ; Wed,  5 Feb 2025 13:02:50 +0000 (UTC)
+ id iSPma5IcSe47; Wed,  5 Feb 2025 13:15:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3E8354155C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 179C741753
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E8354155C;
-	Wed,  5 Feb 2025 13:02:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 34EFF12A
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:02:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 179C741753;
+	Wed,  5 Feb 2025 13:15:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B0E7312A
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:15:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 249C282323
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:02:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 96E17410F1
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:15:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iTvTgwt89bJd for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 13:02:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.236;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hOcXcCcG8eth for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 13:15:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F3880822F6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3880822F6
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.236])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F3880822F6
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:02:46 +0000 (UTC)
-X-CSE-ConnectionGUID: 9RqBe5HhS8q92pRLqV3Wcw==
-X-CSE-MsgGUID: Uy7k3hq7SpOesgK70anPuw==
-Received: from unknown (HELO opfedv1rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 05 Feb 2025 14:02:44 +0100
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0c.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Feb 2025 14:02:44 +0100
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Wed, 5 Feb 2025 14:02:42 +0100
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Wed, 05 Feb 2025 14:02:41 +0100
-From: yann.morin@orange.com
-X-CSE-ConnectionGUID: IB0iaxipRkeD9aUpq58RYA==
-X-CSE-MsgGUID: 616z0qg1RlWdWX4xT9FeNg==
-X-IronPort-AV: E=Sophos;i="6.13,261,1732575600"; d="scan'208";a="251571397"
-Date: Wed, 5 Feb 2025 14:02:41 +0100
-To: Fiona Klute <fiona.klute@gmx.de>
-Message-ID: <Z6NhcW6N6p4R5oSd@yd-6wlzhs3>
-References: <20250205113531.4161633-1-fiona.klute@gmx.de>
- <20250205113531.4161633-2-fiona.klute@gmx.de>
- <Z6NTRZe6pNcyMvRn@yd-6wlzhs3>
- <51e532ed-9c27-4bbd-9ed2-58044082c4c1@gmx.de>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <51e532ed-9c27-4bbd-9ed2-58044082c4c1@gmx.de>
-X-Originating-IP: [10.115.26.50]
-X-ClientProxiedBy: OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1738760567; x=1770296567;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=4C+TBui2r/PSmdiddwYVl+kFSFyWoQcI/a7b920lQdE=;
- b=Unc0oXszgbIxSwOaZiBOSvqKYWKZJ43fSU6RhnL7yh5RvlKg8pB+LgDV
- 4cyur2k80O5ZGX1Yq5zHUV5Tx62ChdA8Idykk2idWhMX6/ETrYfdakZGL
- Tj+cVXGEKQEsxPehyRjAjDeYS0IB5vAXZhGdASieDCTb6b7V6/QLCELaG
- AEHgcxVxWxkjoI3YWUh5vyEg6Urf/mOaoePoy6V8qRnKzVP83uJdeLhLZ
- tt16UbcAqKLLtuMd3sN2mxZ3nS84Bdaw5H1+gxYiebQ4Ss+oc4zP9yUWN
- Zcp64gBNpx2cEt3YO3QN59yeBpd406ilP9wNutBITLCUPFsQQK/lYla/q
- w==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=Unc0oXsz
-Subject: Re: [Buildroot] [PATCH v2 2/3] package/pkg-golang: do not force
- ld.gold on aarch64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 836694022B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 836694022B
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 13:15:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 664A2857B1; Wed,  5 Feb 2025 13:15:40 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 5 Feb 2025 14:14:10 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 490711a6e09cb2207a401ea72f831e9132a89778
+X-Git-Newrev: cf273fb01f4d2c30ecf0903c8d27619e3e1a8bb6
+X-Patchwork-Hint: ignore
+Message-Id: <20250205131540.664A2857B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/latencytop: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,59 +57,181 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Perale <thomas.perale@mind.be>,
- Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fiona, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=cf273fb01f4d2c30ecf0903c8d27619e3e1a8bb6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2025-02-05 13:14 +0100, Fiona Klute spake thusly:
-[--SNIP--]
-> I wouldn't expect the ld.bfd name to go away if/when Binutils drops
-> ld.gold, because there still are other linkers people might want to use
-> and switch between, e.g. ld.lld from LLVM. But I agree we can handle
-> that if it happens,
+Fixes http://autobuild.buildroot.net/results/5b7921d1b2d347995b0088ac58b29e2f01dec39a/
 
-Ah, that makes sense. Anfd that will open yet another can of worms then.
+The tarball is no longer available for download and the git repo on
+infradead.org is also gone, there are no reverse dependencies or DEVELOPERS
+entry for it and the package has not been updated since it was added in 2012
+by commit cd2f78b1c5af ("New Package: latencytop"), so drop it.
 
-> ideally Go would stop forcing ld.gold soon enough so
-> we can just drop the override. :-)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ .checkpackageignore                    |  1 -
+ Config.in.legacy                       |  6 ++++++
+ package/Config.in                      |  1 -
+ package/latencytop/0001-makefile.patch | 28 ----------------------------
+ package/latencytop/Config.in           | 26 --------------------------
+ package/latencytop/latencytop.hash     |  3 ---
+ package/latencytop/latencytop.mk       | 23 -----------------------
+ 7 files changed, 6 insertions(+), 82 deletions(-)
 
-Indeed, that will probably happen before gold gets dropped.
-
-Still, neither is already the case, so a little note in the commit log
-about the current state would be nice, if at least for when we revisit
-that in the future so that we can understand our lack of foresight back
-in these times! ;-)
-
-Thanks for the feedback.
-
-Regards,
-Yann E. MORIN.
-
--- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 6b45fb9e94..f66bc3d86b 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -606,7 +606,6 @@ package/keyutils/0001-fix-install-rule.patch lib_patch.Upstream
+ package/keyutils/0002-cifs.patch lib_patch.Sob lib_patch.Upstream
+ package/kmod/0001-fix-O_CLOEXEC.patch lib_patch.Upstream
+ package/kodi/S50kodi Shellcheck lib_sysv.Variables
+-package/latencytop/0001-makefile.patch lib_patch.Upstream
+ package/lbase64/0001-retro-compatible-with-Lua-5.1.patch lib_patch.Upstream
+ package/lcdproc/0001-LCDd.conf.patch lib_patch.Upstream
+ package/lcdproc/0002-Add-missing-ioctl-header.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 3e3be95004..214d351e4a 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
+ 
+ comment "Legacy options removed in 2025.02"
+ 
++config BR2_PACKAGE_LATENCYTOP
++	bool "latencytop has been removed"
++	select BR2_LEGACY
++	help
++	  The latencytop package is no longer available for download.
++
+ config BR2_PACKAGE_OBSIDIAN_CURSORS
+ 	bool "obsidian-cursors has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 4896e6db76..3ec6d0d879 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -116,7 +116,6 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/kmemd/Config.in"
+ 	source "package/kvm-unit-tests/Config.in"
+ 	source "package/kyua/Config.in"
+-	source "package/latencytop/Config.in"
+ 	source "package/libbpf/Config.in"
+ 	source "package/libtraceevent/Config.in"
+ 	source "package/libtracefs/Config.in"
+diff --git a/package/latencytop/0001-makefile.patch b/package/latencytop/0001-makefile.patch
+deleted file mode 100644
+index fa8c51cfd0..0000000000
+--- a/package/latencytop/0001-makefile.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-Usee $(CC) to enable cross compiling and link to the right ncurses library.
+-
+-Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
+-
+---- latencytop-0.5/Makefile.old	2012-04-18 11:59:39.748084334 +0100
+-+++ latencytop-0.5/Makefile	2012-04-18 12:00:08.659112340 +0100
+-@@ -4,7 +4,7 @@
+- DESTDIR =
+- SBINDIR = /usr/sbin
+- XCFLAGS = -W  -g `pkg-config --cflags glib-2.0` -D_FORTIFY_SOURCE=2 -Wno-sign-compare
+--LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncursesw 
+-+LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncurses 
+- 
+- OBJS= latencytop.o text_display.o translate.o fsync.o
+- 
+-@@ -26,10 +26,10 @@
+- 
+- # We write explicity this "implicit rule"
+- %.o : %.c
+--	gcc -c $(CFLAGS) $(XCFLAGS) $< -o $@
+-+	$(CC) -c $(CFLAGS) $(XCFLAGS) $< -o $@
+- 
+- latencytop:  $(OBJS) latencytop.h Makefile
+--	gcc $(CFLAGS) $(OBJS) $(LDF) -o latencytop 
+-+	$(CC) $(CFLAGS) $(OBJS) $(LDF) -o latencytop 
+- 
+- clean:
+- 	rm -f *~ latencytop DEADJOE *.o
+diff --git a/package/latencytop/Config.in b/package/latencytop/Config.in
+deleted file mode 100644
+index b54ef052b4..0000000000
+--- a/package/latencytop/Config.in
++++ /dev/null
+@@ -1,26 +0,0 @@
+-config BR2_PACKAGE_LATENCYTOP
+-	bool "latencytop"
+-	depends on BR2_USE_WCHAR # libglib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+-	depends on BR2_USE_MMU # libglib2
+-	select BR2_PACKAGE_NCURSES
+-	select BR2_PACKAGE_LIBGLIB2
+-	help
+-	  There are many types and causes of latency. LatencyTOP
+-	  focuses on the type of latency that causes skips in audio,
+-	  stutters in your desktop experience or that overloads your
+-	  server (while you have plenty of CPU power left).
+-
+-	  LatencyTOP focuses on the cases where the applications want
+-	  to run and execute useful code, but there's some resource
+-	  that's not currently available (and the kernel then blocks
+-	  the process). This is done both on a system level and on a
+-	  per process level, so that you can see what's happening to
+-	  the system, and which process is suffering and/or causing
+-	  the delays.
+-
+-	  http://www.latencytop.org
+-
+-comment "latencytop needs a toolchain w/ wchar, threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/latencytop/latencytop.hash b/package/latencytop/latencytop.hash
+deleted file mode 100644
+index 74b8a03a23..0000000000
+--- a/package/latencytop/latencytop.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# locally computed
+-sha256  9e7f72fbea7bd918e71212a1eabaad8488d2c602205d2e3c95d62cd57e9203ef  latencytop-0.5.tar.gz
+-sha256  34d1db30ab21eaedb2c191b2787632a960090a0c63da9f5b481d84b23b98c438  latencytop.c
+diff --git a/package/latencytop/latencytop.mk b/package/latencytop/latencytop.mk
+deleted file mode 100644
+index 56afe86062..0000000000
+--- a/package/latencytop/latencytop.mk
++++ /dev/null
+@@ -1,23 +0,0 @@
+-################################################################################
+-#
+-# latencytop
+-#
+-################################################################################
+-
+-LATENCYTOP_VERSION = 0.5
+-LATENCYTOP_SITE = http://www.latencytop.org/download
+-LATENCYTOP_DEPENDENCIES = libglib2 ncurses
+-LATENCYTOP_LICENSE = GPL-2.0
+-LATENCYTOP_LICENSE_FILES = latencytop.c
+-
+-# NOTE: GTK is heavy weight, we intentionally build the text (ncurses)
+-# version only
+-define LATENCYTOP_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) HAS_GTK_GUI=
+-endef
+-
+-define LATENCYTOP_INSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) install -C $(@D) DESTDIR=$(TARGET_DIR) HAS_GTK_GUI=
+-endef
+-
+-$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
