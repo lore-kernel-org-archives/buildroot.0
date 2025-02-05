@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 066A1C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:15:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C62EAC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:15:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A396708F9;
-	Fri, 28 Feb 2025 17:15:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 63C244F314;
+	Fri, 28 Feb 2025 17:15:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JCvLFN7SF856; Fri, 28 Feb 2025 17:15:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eoe4_5CSuVgK; Fri, 28 Feb 2025 17:15:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A167B70C15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0438350504
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A167B70C15;
-	Fri, 28 Feb 2025 17:15:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0438350504;
+	Fri, 28 Feb 2025 17:15:36 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 15C25711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:27 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1135368
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2792F42567
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4218242FD4
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oi3mzexWup8O for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:48 +0000 (UTC)
+ id eMDdXoW4h0UY for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76A8643BA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD2EE42D2A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 76A8643BA8
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DD2EE42D2A
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7246287AD6; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id D8A217FDF9; Fri, 28 Feb 2025 16:30:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 7 Feb 2025 22:15:31 +0100
+Date: Wed, 5 Feb 2025 20:53:38 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 01e049cea6ee36ae6f89a13d1249cbb482043964
-X-Git-Newrev: 9bfa39dca2a9098c244cab5f3cbffa67df2d94f3
+X-Git-Oldrev: 3c17ddc28169f2ca2104437892b808df5136efe4
+X-Git-Newrev: c04f4b27c6ed93c52f2cd5e2df0c4fb8ae1ea9fc
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163036.7246287AD6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ustreamer: bump
- version to 6.29
+Message-Id: <20250228163035.D8A217FDF9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/{python-}protobuf:
+ bump to version 29.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,46 +58,73 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bfa39dca2a9098c244cab5f3cbffa67df2d94f3
+commit: https://git.buildroot.net/buildroot/commit/?id=c04f4b27c6ed93c52f2cd5e2df0c4fb8ae1ea9fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog - https://github.com/pikvm/ustreamer/compare/v6.28...v6.29
-
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/ustreamer/ustreamer.hash | 2 +-
- package/ustreamer/ustreamer.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/protobuf/protobuf.hash               | 2 +-
+ package/protobuf/protobuf.mk                 | 2 +-
+ package/python-protobuf/python-protobuf.hash | 4 ++--
+ package/python-protobuf/python-protobuf.mk   | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/ustreamer/ustreamer.hash b/package/ustreamer/ustreamer.hash
-index d0f07475fc..02b317bc33 100644
---- a/package/ustreamer/ustreamer.hash
-+++ b/package/ustreamer/ustreamer.hash
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index 06f4924394..98159ad897 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  7b1f184e72d30e803ca928bc6e31f9e0fbbd17480a2fae78ed2ae10ccc0062a2  ustreamer-6.28.tar.gz
-+sha256  34572c241f65866caf458fa1526eaf9510656412f34d41a54bcd7aae0ba55630  ustreamer-6.29.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/ustreamer/ustreamer.mk b/package/ustreamer/ustreamer.mk
-index 112b29be8c..107f647f47 100644
---- a/package/ustreamer/ustreamer.mk
-+++ b/package/ustreamer/ustreamer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ # Locally calculated
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-sha256  3b8bf6e96499a744bd014c60b58f797715a758093abf859f1d902194b8e1f8c9  protobuf-28.1.tar.gz
++sha256  008a11cc56f9b96679b4c285fd05f46d317d685be3ab524b2a310be0fbad987e  protobuf-29.3.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index ffed3166c7..4540443702 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,7 +7,7 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works and to update its hash,
+ # as they share the same version/site variables.
+-PROTOBUF_VERSION = 28.1
++PROTOBUF_VERSION = 29.3
+ PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+ PROTOBUF_LICENSE_FILES = LICENSE
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index 8ce6039449..1e1833980c 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/protobuf/json
+-md5  44b076f3564d3561067bcc2c455e008a  protobuf-5.28.1.tar.gz
+-sha256  42597e938f83bb7f3e4b35f03aa45208d49ae8d5bcb4bc10b9fc825e0ab5e423  protobuf-5.28.1.tar.gz
++md5  26ee22a630b0dbfce4de03adc5600fbc  protobuf-5.29.3.tar.gz
++sha256  5da0f41edaf117bde316404bad1a486cb4ededf8e4a54891296f648e8e076620  protobuf-5.29.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
+index 02bf2a1d70..898a133d37 100644
+--- a/package/python-protobuf/python-protobuf.mk
++++ b/package/python-protobuf/python-protobuf.mk
+@@ -6,7 +6,7 @@
  
--USTREAMER_VERSION = 6.28
-+USTREAMER_VERSION = 6.29
- USTREAMER_SITE = $(call github,pikvm,ustreamer,v$(USTREAMER_VERSION))
- USTREAMER_LICENSE = GPL-3.0+
- USTREAMER_LICENSE_FILES = LICENSE
+ PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
+ PYTHON_PROTOBUF_SOURCE = protobuf-5.$(PYTHON_PROTOBUF_VERSION).tar.gz
+-PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/3c/0b/7a997c8939f698d72bdea14d57116e43d3051fffb3b2964c30938c4a08e6
++PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/f7/d1/e0a911544ca9993e0f17ce6d3cc0932752356c1b0a834397f28e63479344
+ PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
+ PYTHON_PROTOBUF_LICENSE_FILES = LICENSE
+ PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
