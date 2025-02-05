@@ -4,77 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EA0DC02194
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 10:41:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB989C02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 10:42:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EBA0940C93;
-	Wed,  5 Feb 2025 10:41:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE54040509;
+	Wed,  5 Feb 2025 10:42:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FB0CSUSQOVXT; Wed,  5 Feb 2025 10:41:58 +0000 (UTC)
+ id RMInTLSp-ut4; Wed,  5 Feb 2025 10:42:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB07241674
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 844EE40575
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB07241674;
-	Wed,  5 Feb 2025 10:41:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E7E1212A
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:41:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 844EE40575;
+	Wed,  5 Feb 2025 10:42:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 318F612A
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:42:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C99A840181
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:41:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 151F640510
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:42:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4yUgIwvKFfqX for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 10:41:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hbpfy0wkfKBs for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 10:42:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9C39A40245
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C39A40245
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9C39A40245
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:41:54 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B9393433F8;
- Wed,  5 Feb 2025 10:41:52 +0000 (UTC)
-Date: Wed, 5 Feb 2025 11:41:52 +0100
-To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Cc: Marcus Hoffmann <buildroot@bubu1.eu>, James Hilliard
- <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
-Message-ID: <20250205114152.30aeadab@windsurf>
-In-Reply-To: <20240216131815.318315-2-buildroot@bubu1.eu>
-References: <20240216131815.318315-1-buildroot@bubu1.eu>
- <20240216131815.318315-2-buildroot@bubu1.eu>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfedvvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeltdegvdejheegtefgueffgfelhfekvdefudevieeileetleeitdefgfeugffghfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepuddtledrkeelrddvfedvrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutdelrdekledrvdefvddrheehpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhgsuhdurdgvuhdprhgtphhtthhopehjrghmvghsrdhhihhllhhirghrugdusehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghsrghfkhgrjeesghhmrghilhdrtghomh
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1738752113;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=aET4ZIhcvqohtWju7mjgPZnkM9VhkFRnjJTijQxfwts=;
- b=iR7KR0G9bv76rS2gBEMEWZlnUqOLAdnFnJee6EM3wz/8ojWh0LntB672XVb/o3JBloEJfg
- aFZCPcsnTW61miLPlqTnHdJ1rB/4KJj1P9zP/JLU4UvhJtcdaz4LGtT1QunJryvkmtb+u7
- 8Or2egYrauPT9Z5u/4ihtqMnmOAM0tYR0UMUTL/eByz23a74fDRMrPJUa6EPDrjWKUaZvB
- +vujfA1Cx6IK2HKxrj17bSSfr5k6+cyrC738CkpU7Czp8T32oM2/mIIj/EZb2DENBgwT2U
- /flTo6scH3NNFmEghQ8uu8wc35q6qcp/sgG/F9WqjAFN7UDSwAY7wByEYFAbrw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=iR7KR0G9
-Subject: Re: [Buildroot] [PATCH 2/2] package/python-whitenoise: new package
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 266EA403C4
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 266EA403C4
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 10:42:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0DBDF8709A; Wed,  5 Feb 2025 10:42:20 +0000 (UTC)
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+To: buildroot@buildroot.org
+Date: Wed, 5 Feb 2025 11:19:27 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1d4a61247d704c3bc9dda4ccbef80caa447fa6f3
+X-Git-Newrev: 824c660c7540bdfd969dbb260c094bdc0508e2fa
+X-Patchwork-Hint: ignore
+Message-Id: <20250205104220.0DBDF8709A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ support/testing/tests/package/test_python_waitress: rework assertion
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,32 +59,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 16 Feb 2024 14:18:14 +0100
-Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=824c660c7540bdfd969dbb260c094bdc0508e2fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->  package/Config.in                             |  1 +
->  package/python-whitenoise/Config.in           |  7 ++++
->  .../python-whitenoise/python-whitenoise.hash  |  5 +++
->  .../python-whitenoise/python-whitenoise.mk    | 14 +++++++
->  .../tests/package/test_python_django.py       |  1 +
->  .../tests/package/test_python_whitenoise.py   | 41 +++++++++++++++++++
->  6 files changed, 69 insertions(+)
+Like Yann E. Morin did for
+support/testing/tests/package/test_python_django.py, adjust the logic
+to avoid the weird "self.assertTrue(False, ...)" construct, and
+instead test exit_code after the loop.
 
-Also: entry in the DEVELOPERS file is missing, for the package and the
-test. Thanks!
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/tests/package/test_python_waitress.py | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/support/testing/tests/package/test_python_waitress.py b/support/testing/tests/package/test_python_waitress.py
+index 46f04109c0..8024aaacfd 100644
+--- a/support/testing/tests/package/test_python_waitress.py
++++ b/support/testing/tests/package/test_python_waitress.py
+@@ -30,5 +30,4 @@ class TestPythonWaitress(TestPythonPackageBase):
+             if exit_code == 0:
+                 self.assertEqual(output[0], 'Hello, World!')
+                 break
+-        else:
+-            self.assertTrue(False, "Timeout while waiting for waitress server")
++        self.assertEqual(exit_code, 0, "Timeout while waiting for django server")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
