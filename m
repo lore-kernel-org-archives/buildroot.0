@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45DCAC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:14:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47CC5C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:14:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F12C4FD4F;
-	Fri, 28 Feb 2025 17:14:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF1116FCD2;
+	Fri, 28 Feb 2025 17:14:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HxdziJQ4lWki; Fri, 28 Feb 2025 17:14:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 94nwi9IaOb4I; Fri, 28 Feb 2025 17:14:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A705F508BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 905DC70706
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A705F508BA;
-	Fri, 28 Feb 2025 17:14:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 905DC70706;
+	Fri, 28 Feb 2025 17:14:53 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 11CB968
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 085CA68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2939C4255E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 704FE42F7E
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mUCLJ9xvccxk for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:44 +0000 (UTC)
+ id VO9anWvYHgJS for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBF4542F5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F8E042D1C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DBF4542F5E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F8E042D1C
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B3C9D80584; Fri, 28 Feb 2025 16:30:34 +0000 (UTC)
+ id 9991F85E25; Fri, 28 Feb 2025 16:30:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 14:45:39 +0100
+Date: Wed, 5 Feb 2025 14:14:10 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cf273fb01f4d2c30ecf0903c8d27619e3e1a8bb6
-X-Git-Newrev: 91d1207de0b3cda9b9722f7ca09131cde7c14bd9
+X-Git-Oldrev: 490711a6e09cb2207a401ea72f831e9132a89778
+X-Git-Newrev: cf273fb01f4d2c30ecf0903c8d27619e3e1a8bb6
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163034.B3C9D80584@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/grpc: bump to version
- 1.66.1
+Message-Id: <20250228163034.9991F85E25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/latencytop: drop
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,475 +58,181 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91d1207de0b3cda9b9722f7ca09131cde7c14bd9
+commit: https://git.buildroot.net/buildroot/commit/?id=cf273fb01f4d2c30ecf0903c8d27619e3e1a8bb6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add new -DgRPC_BUILD_CODEGEN=OFF config option which is required if
-no plugins are enabled.
+Fixes http://autobuild.buildroot.net/results/5b7921d1b2d347995b0088ac58b29e2f01dec39a/
 
-Drop "add GPR_DISABLE_WRAPPED_MEMCPY" patch which is upstream.
+The tarball is no longer available for download and the git repo on
+infradead.org is also gone, there are no reverse dependencies or DEVELOPERS
+entry for it and the package has not been updated since it was added in 2012
+by commit cd2f78b1c5af ("New Package: latencytop"), so drop it.
 
-Rebase remaining patches.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- .checkpackageignore                                |  3 +-
- ...tect-the-availability-of-pthread_setname_.patch | 26 +++---
- ...o-restrict-building-of-host-grpc-to-grpc.patch} | 98 +++++++++-------------
- ..._memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch | 34 --------
- ...le-unconditionally-downloading-api-repos.patch} | 21 +++--
- package/grpc/grpc.hash                             |  2 +-
- package/grpc/grpc.mk                               |  3 +-
- 7 files changed, 68 insertions(+), 119 deletions(-)
+ .checkpackageignore                    |  1 -
+ Config.in.legacy                       |  6 ++++++
+ package/Config.in                      |  1 -
+ package/latencytop/0001-makefile.patch | 28 ----------------------------
+ package/latencytop/Config.in           | 26 --------------------------
+ package/latencytop/latencytop.hash     |  3 ---
+ package/latencytop/latencytop.mk       | 23 -----------------------
+ 7 files changed, 6 insertions(+), 82 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index f66bc3d86b..ba07cb94f9 100644
+index 6b45fb9e94..f66bc3d86b 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -533,8 +533,7 @@ package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch lib_patch.
- package/gpsd/S50gpsd Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch lib_patch.Upstream
- package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch lib_patch.Upstream
--package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch lib_patch.Upstream
--package/grpc/0004-disable-unconditionally-downloading-api-repos.patch lib_patch.Upstream
-+package/grpc/0003-disable-unconditionally-downloading-api-repos.patch lib_patch.Upstream
- package/gstreamer1/gstd/0001-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch lib_patch.Upstream
- package/guile/0001-calculate-csqrt_manually.patch lib_patch.Upstream
- package/guile/0002-Makefile.am-fix-build-without-makeinfo.patch lib_patch.Upstream
-diff --git a/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch b/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
-index 92dc5a6c45..e8e211758a 100644
---- a/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
-+++ b/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
-@@ -1,4 +1,4 @@
--From 0dfb289a3b362b082ac3608d887e42f09dadc0d2 Mon Sep 17 00:00:00 2001
-+From dfec50b899c449bc964514f16e94869de7a68896 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Date: Mon, 31 Dec 2018 16:22:07 +0100
- Subject: [PATCH] Properly detect the availability of pthread_setname_np()
-@@ -20,15 +20,15 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- ]
- Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
- ---
-- CMakeLists.txt                            | 6 ++++++
-- include/grpc/impl/codegen/port_platform.h | 2 ++
-+ CMakeLists.txt                       | 6 ++++++
-+ include/grpc/support/port_platform.h | 2 ++
-  2 files changed, 8 insertions(+)
+@@ -606,7 +606,6 @@ package/keyutils/0001-fix-install-rule.patch lib_patch.Upstream
+ package/keyutils/0002-cifs.patch lib_patch.Sob lib_patch.Upstream
+ package/kmod/0001-fix-O_CLOEXEC.patch lib_patch.Upstream
+ package/kodi/S50kodi Shellcheck lib_sysv.Variables
+-package/latencytop/0001-makefile.patch lib_patch.Upstream
+ package/lbase64/0001-retro-compatible-with-Lua-5.1.patch lib_patch.Upstream
+ package/lcdproc/0001-LCDd.conf.patch lib_patch.Upstream
+ package/lcdproc/0002-Add-missing-ioctl-header.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 3e3be95004..214d351e4a 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 45c2fcb..0b2be4f 100644
-+index 053b9e3784..2565dc5c84 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -208,6 +208,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
-+@@ -291,6 +291,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
-  endif()
-  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
-  
-@@ -41,11 +41,11 @@ index 45c2fcb..0b2be4f 100644
-  if(MSVC)
-    include(cmake/msvc_static_runtime.cmake)
-    add_definitions(-D_WIN32_WINNT=0x600 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS)
--diff --git a/include/grpc/impl/codegen/port_platform.h b/include/grpc/impl/codegen/port_platform.h
--index 4f213ff..55ecd9d 100644
----- a/include/grpc/impl/codegen/port_platform.h
--+++ b/include/grpc/impl/codegen/port_platform.h
--@@ -186,6 +186,7 @@
-+diff --git a/include/grpc/support/port_platform.h b/include/grpc/support/port_platform.h
-+index 5fb7426af2..24d438d702 100644
-+--- a/include/grpc/support/port_platform.h
-++++ b/include/grpc/support/port_platform.h
-+@@ -228,6 +228,7 @@
-  #endif /* _LP64 */
-  #ifdef __GLIBC__
-  #define GPR_POSIX_CRASH_HANDLER 1
-@@ -53,7 +53,7 @@ index 4f213ff..55ecd9d 100644
-  #ifdef __GLIBC_PREREQ
-  #if __GLIBC_PREREQ(2, 12)
-  #define GPR_LINUX_PTHREAD_NAME 1
--@@ -194,6 +195,7 @@
-+@@ -236,6 +237,7 @@
-  // musl libc & others
-  #define GPR_LINUX_PTHREAD_NAME 1
-  #endif
-@@ -61,6 +61,6 @@ index 4f213ff..55ecd9d 100644
-  #include <linux/version.h>
-  #else /* musl libc */
-  #define GPR_MUSL_LIBC_COMPAT 1
--
- -- 
--2.26.63
-+2.34.1
+ comment "Legacy options removed in 2025.02"
+ 
++config BR2_PACKAGE_LATENCYTOP
++	bool "latencytop has been removed"
++	select BR2_LEGACY
++	help
++	  The latencytop package is no longer available for download.
 +
-diff --git a/package/grpc/0003-host-grpc-only-cpp-plugin.patch b/package/grpc/0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch
-similarity index 63%
-rename from package/grpc/0003-host-grpc-only-cpp-plugin.patch
-rename to package/grpc/0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch
-index bfb8713053..82705d8a1e 100644
---- a/package/grpc/0003-host-grpc-only-cpp-plugin.patch
-+++ b/package/grpc/0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch
-@@ -1,4 +1,4 @@
--From 0f2c73b62bdc612f9d5cdd8e0c765995470d4f8b Mon Sep 17 00:00:00 2001
-+From 6aab068a6bd92e215b61eaab61062bf1d97bc065 Mon Sep 17 00:00:00 2001
- From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- Date: Tue, 25 May 2021 14:55:23 +0200
- Subject: [PATCH] Add option to restrict building of (host-)grpc to
-@@ -15,17 +15,17 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Updated for 1.48.0:
- Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
- ---
-- CMakeLists.txt | 39 +++++++++++++++++++++++++++++++++++----
-- 1 file changed, 35 insertions(+), 4 deletions(-)
-+ CMakeLists.txt | 36 +++++++++++++++++++++++++++++++-----
-+ 1 file changed, 31 insertions(+), 5 deletions(-)
- 
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 0dcae6b1aee5..57b3963a43b0 100644
-+index 2565dc5c84..94f8fd3e93 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -49,12 +49,16 @@ option(gRPC_BUILD_TESTS "Build tests" OFF)
-+@@ -50,12 +50,16 @@ set(gRPC_BUILD_MSVC_MP_COUNT 0 CACHE STRING "The maximum number of processes for
-+ option(gRPC_BUILD_TESTS "Build tests" OFF)
-  option(gRPC_BUILD_CODEGEN "Build codegen" ON)
-- option(gRPC_BUILD_CSHARP_EXT "Build C# extensions" ON)
-- option(gRPC_BACKWARDS_COMPATIBILITY_MODE "Build libraries that are binary compatible across a larger number of OS and libc versions" OFF)
-+ option(gRPC_DOWNLOAD_ARCHIVES "Download archives for empty 3rd party directories" ON)
- +option(gRPC_BUILD_PLUGIN_SUPPORT_ONLY "Build plugin support only" OFF)
-  
-  set(gRPC_INSTALL_default ON)
-@@ -39,7 +39,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  set(gRPC_INSTALL ${gRPC_INSTALL_default} CACHE BOOL
-      "Generate installation target")
-  
--@@ -563,6 +567,8 @@ add_custom_target(plugins
-+@@ -662,6 +666,8 @@ add_custom_target(plugins
-    DEPENDS ${_gRPC_PLUGIN_LIST}
-  )
-  
-@@ -48,7 +48,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  add_custom_target(tools_c
-    DEPENDS
-  )
--@@ -574,6 +580,8 @@ add_custom_target(tools_cxx
-+@@ -673,6 +679,8 @@ add_custom_target(tools_cxx
-  add_custom_target(tools
-    DEPENDS tools_c tools_cxx)
-  
-@@ -57,15 +57,16 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  protobuf_generate_grpc_cpp_with_import_path_correction(
-    src/proto/grpc/channelz/channelz.proto src/proto/grpc/channelz/channelz.proto
-  )
--@@ -1307,6 +1315,7 @@ if(gRPC_BUILD_TESTS)
-+@@ -1660,7 +1668,7 @@ if(gRPC_BUILD_TESTS)
-      DEPENDS buildtests_c buildtests_cxx)
-  endif()
-  
-+-
- +if (NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
-  
-  add_library(address_sorting
-    third_party/address_sorting/address_sorting.c
--@@ -1359,6 +1368,8 @@ if(gRPC_INSTALL)
-+@@ -2855,6 +2863,8 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
-@@ -73,17 +74,17 @@ index 0dcae6b1aee5..57b3963a43b0 100644
- +
-  if(gRPC_BUILD_TESTS)
-  
-- add_library(end2end_tests
--@@ -1512,6 +1523,8 @@ target_link_libraries(end2end_tests
-+ add_library(grpc_test_util
-+@@ -2987,6 +2997,8 @@ endif()
-  
-  endif()
-  
- +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
- +
-- add_library(gpr
--   src/core/lib/gpr/alloc.cc
--   src/core/lib/gpr/atm.cc
--@@ -2504,6 +2517,8 @@ if(gRPC_INSTALL)
-+ add_library(grpc_unsecure
-+   src/core/channelz/channel_trace.cc
-+   src/core/channelz/channelz.cc
-+@@ -3547,6 +3559,8 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
-@@ -91,17 +92,17 @@ index 0dcae6b1aee5..57b3963a43b0 100644
- +
-  if(gRPC_BUILD_TESTS)
-  
-- add_library(grpc_test_util
--@@ -2618,6 +2633,8 @@ endif()
-+ add_library(gtest
-+@@ -3621,6 +3635,8 @@ target_link_libraries(gtest
-  
-  endif()
-  
- +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
- +
-- add_library(grpc_unsecure
--   src/core/ext/filters/census/grpc_context.cc
--   src/core/ext/filters/channel_idle/channel_idle_filter.cc
--@@ -3102,6 +3119,8 @@ if(gRPC_INSTALL)
-+ add_library(upb_base_lib
-+   third_party/upb/upb/base/status.c
-+ )
-+@@ -4108,6 +4124,8 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
-@@ -110,7 +111,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  if(gRPC_BUILD_TESTS)
-  
-  if(gRPC_BUILD_CODEGEN)
--@@ -3185,6 +3204,8 @@ endif()
-+@@ -4193,6 +4211,8 @@ endif()
-  
-  endif()
-  
-@@ -119,24 +120,24 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  add_library(grpc++
-    src/core/ext/transport/binder/client/binder_connector.cc
-    src/core/ext/transport/binder/client/channel_create.cc
--@@ -3635,6 +3656,7 @@ if(gRPC_INSTALL)
-+@@ -4684,6 +4704,7 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
- +endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
-  
-  if(gRPC_BUILD_CODEGEN)
-- add_library(grpc++_reflection
--@@ -3889,6 +3911,8 @@ target_link_libraries(grpc++_test_util
-+ add_library(grpc++_reflection ${_gRPC_STATIC_WIN32}
-+@@ -4967,6 +4988,8 @@ target_link_libraries(grpc++_test_util
-  
-  endif()
-  
- +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
- +
-  add_library(grpc++_unsecure
-+   src/cpp/client/call_credentials.cc
-    src/cpp/client/channel_cc.cc
--   src/cpp/client/client_callback.cc
--@@ -4181,6 +4205,7 @@ if(gRPC_INSTALL)
-+@@ -5707,6 +5730,7 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
-@@ -144,7 +145,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  
-  add_library(grpc_plugin_support
-    src/compiler/cpp_generator.cc
--@@ -4240,7 +4265,7 @@ foreach(_hdr
-+@@ -5769,7 +5793,7 @@ foreach(_hdr
-  endforeach()
-  
-  
-@@ -153,25 +154,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-    install(TARGETS grpc_plugin_support EXPORT gRPCTargets
-      RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
-      BUNDLE DESTINATION  ${gRPC_INSTALL_BINDIR}
--@@ -4324,6 +4349,8 @@ endif()
-- 
-- endif()
-- 
--+if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
--+
-- add_library(upb
--   third_party/upb/third_party/utf8_range/naive.c
--   third_party/upb/third_party/utf8_range/range2-neon.c
--@@ -4393,6 +4420,8 @@ if(gRPC_INSTALL)
--   )
-- endif()
-- 
--+endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
--+
-- 
-- if(gRPC_BUILD_TESTS)
-- 
--@@ -11085,7 +11114,7 @@ target_link_libraries(grpc_completion_queue_test
-+@@ -16520,7 +16544,7 @@ target_link_libraries(grpc_completion_queue_test
-  
-  
-  endif()
-@@ -180,16 +163,16 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  
-  add_executable(grpc_cpp_plugin
-    src/compiler/cpp_plugin.cc
--@@ -11115,7 +11144,7 @@ target_link_libraries(grpc_cpp_plugin
-+@@ -16548,7 +16572,7 @@ target_link_libraries(grpc_cpp_plugin
-  
-  
-  
- -if(gRPC_INSTALL)
- +if(gRPC_INSTALL OR gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
--   install(TARGETS grpc_cpp_plugin EXPORT gRPCTargets
-+   install(TARGETS grpc_cpp_plugin EXPORT gRPCPluginTargets
-      RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
-      BUNDLE DESTINATION  ${gRPC_INSTALL_BINDIR}
--@@ -23128,7 +23157,7 @@ endif()
-+@@ -37968,7 +37992,7 @@ endif()
-  
-  
-  
-@@ -198,12 +181,13 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  
-  if(gRPC_INSTALL)
-    install(EXPORT gRPCTargets
--@@ -23225,3 +23254,5 @@ generate_pkgconfig(
--   "-lgrpc++_unsecure"
--   ""
--   "grpc++_unsecure.pc")
-+@@ -38089,3 +38113,5 @@ generate_pkgconfig(
-+   "-lgrpcpp_otel_plugin"
-+   "-laddress_sorting -lupb_textformat_lib -lupb_json_lib -lupb_wire_lib -lupb_message_lib -lutf8_range_lib -lupb_mini_descriptor_lib -lupb_mem_lib -lupb_base_lib"
-+   "grpcpp_otel_plugin.pc")
- +
- +endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
-+\ No newline at end of file
- -- 
--2.43.0
-+2.34.1
- 
-diff --git a/package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch b/package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch
+ config BR2_PACKAGE_OBSIDIAN_CURSORS
+ 	bool "obsidian-cursors has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 4896e6db76..3ec6d0d879 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -116,7 +116,6 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/kmemd/Config.in"
+ 	source "package/kvm-unit-tests/Config.in"
+ 	source "package/kyua/Config.in"
+-	source "package/latencytop/Config.in"
+ 	source "package/libbpf/Config.in"
+ 	source "package/libtraceevent/Config.in"
+ 	source "package/libtracefs/Config.in"
+diff --git a/package/latencytop/0001-makefile.patch b/package/latencytop/0001-makefile.patch
 deleted file mode 100644
-index aac92bab13..0000000000
---- a/package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch
+index fa8c51cfd0..0000000000
+--- a/package/latencytop/0001-makefile.patch
 +++ /dev/null
-@@ -1,34 +0,0 @@
--From be030314805137cd63b46ea6eaa702b608669910 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 2 Jun 2019 17:45:47 +0200
--Subject: [PATCH] wrap_memcpy.cc: add GPR_DISABLE_WRAPPED_MEMCPY
+@@ -1,28 +0,0 @@
+-Usee $(CC) to enable cross compiling and link to the right ncurses library.
 -
--Add GPR_DISABLE_WRAPPED_MEMCPY to allow the user to disable wrapped
--memcpy. This will fix build on x86_64 on musl/uclibc without changing
--the cpu behavior.
+-Signed-off-by: Qais Yousef <qais.yousef@imgtec.com>
 -
--Fixes:
-- - http://autobuild.buildroot.org/results/20d6f2489a4e291a53bd514da66105eb607e1014
+---- latencytop-0.5/Makefile.old	2012-04-18 11:59:39.748084334 +0100
+-+++ latencytop-0.5/Makefile	2012-04-18 12:00:08.659112340 +0100
+-@@ -4,7 +4,7 @@
+- DESTDIR =
+- SBINDIR = /usr/sbin
+- XCFLAGS = -W  -g `pkg-config --cflags glib-2.0` -D_FORTIFY_SOURCE=2 -Wno-sign-compare
+--LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncursesw 
+-+LDF = -Wl,--as-needed `pkg-config --libs glib-2.0`   -lncurses 
+- 
+- OBJS= latencytop.o text_display.o translate.o fsync.o
+- 
+-@@ -26,10 +26,10 @@
+- 
+- # We write explicity this "implicit rule"
+- %.o : %.c
+--	gcc -c $(CFLAGS) $(XCFLAGS) $< -o $@
+-+	$(CC) -c $(CFLAGS) $(XCFLAGS) $< -o $@
+- 
+- latencytop:  $(OBJS) latencytop.h Makefile
+--	gcc $(CFLAGS) $(OBJS) $(LDF) -o latencytop 
+-+	$(CC) $(CFLAGS) $(OBJS) $(LDF) -o latencytop 
+- 
+- clean:
+- 	rm -f *~ latencytop DEADJOE *.o
+diff --git a/package/latencytop/Config.in b/package/latencytop/Config.in
+deleted file mode 100644
+index b54ef052b4..0000000000
+--- a/package/latencytop/Config.in
++++ /dev/null
+@@ -1,26 +0,0 @@
+-config BR2_PACKAGE_LATENCYTOP
+-	bool "latencytop"
+-	depends on BR2_USE_WCHAR # libglib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+-	depends on BR2_USE_MMU # libglib2
+-	select BR2_PACKAGE_NCURSES
+-	select BR2_PACKAGE_LIBGLIB2
+-	help
+-	  There are many types and causes of latency. LatencyTOP
+-	  focuses on the type of latency that causes skips in audio,
+-	  stutters in your desktop experience or that overloads your
+-	  server (while you have plenty of CPU power left).
 -
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/grpc/grpc/pull/19207]
-----
-- src/core/lib/gpr/wrap_memcpy.cc | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+-	  LatencyTOP focuses on the cases where the applications want
+-	  to run and execute useful code, but there's some resource
+-	  that's not currently available (and the kernel then blocks
+-	  the process). This is done both on a system level and on a
+-	  per process level, so that you can see what's happening to
+-	  the system, and which process is suffering and/or causing
+-	  the delays.
 -
--diff --git a/src/core/lib/gpr/wrap_memcpy.cc b/src/core/lib/gpr/wrap_memcpy.cc
--index 9b8608e056..38b76acf95 100644
----- a/src/core/lib/gpr/wrap_memcpy.cc
--+++ b/src/core/lib/gpr/wrap_memcpy.cc
--@@ -29,7 +29,7 @@
-- extern "C" {
-- #ifdef __linux__
-- #if defined(__x86_64__) && !defined(GPR_MUSL_LIBC_COMPAT) && \
---    !defined(__ANDROID__)
--+    !defined(__ANDROID__) && !defined(GPR_DISABLE_WRAPPED_MEMCPY)
-- __asm__(".symver memcpy,memcpy@GLIBC_2.2.5");
-- void* __wrap_memcpy(void* destination, const void* source, size_t num) {
--   return memcpy(destination, source, num);
---- 
--2.20.1
+-	  http://www.latencytop.org
 -
-diff --git a/package/grpc/0004-disable-unconditionally-downloading-api-repos.patch b/package/grpc/0003-disable-unconditionally-downloading-api-repos.patch
-similarity index 62%
-rename from package/grpc/0004-disable-unconditionally-downloading-api-repos.patch
-rename to package/grpc/0003-disable-unconditionally-downloading-api-repos.patch
-index 967bbf6247..0cd5012b26 100644
---- a/package/grpc/0004-disable-unconditionally-downloading-api-repos.patch
-+++ b/package/grpc/0003-disable-unconditionally-downloading-api-repos.patch
-@@ -1,4 +1,4 @@
--From b0599c3d1b52818c79ea8fa5dfdc40a4ce01e454 Mon Sep 17 00:00:00 2001
-+From 2a73f6439b6d745b2cbfff120dc7adc555400247 Mon Sep 17 00:00:00 2001
- From: Michael Nosthoff <buildroot@heine.tech>
- Date: Fri, 22 Jul 2022 08:49:48 +0200
- Subject: [PATCH] disable unconditionally downloading api repos
-@@ -9,31 +9,30 @@ for now.
- See https://github.com/grpc/grpc/issues/30385
- 
- Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+-comment "latencytop needs a toolchain w/ wchar, threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/latencytop/latencytop.hash b/package/latencytop/latencytop.hash
+deleted file mode 100644
+index 74b8a03a23..0000000000
+--- a/package/latencytop/latencytop.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# locally computed
+-sha256  9e7f72fbea7bd918e71212a1eabaad8488d2c602205d2e3c95d62cd57e9203ef  latencytop-0.5.tar.gz
+-sha256  34d1db30ab21eaedb2c191b2787632a960090a0c63da9f5b481d84b23b98c438  latencytop.c
+diff --git a/package/latencytop/latencytop.mk b/package/latencytop/latencytop.mk
+deleted file mode 100644
+index 56afe86062..0000000000
+--- a/package/latencytop/latencytop.mk
++++ /dev/null
+@@ -1,23 +0,0 @@
+-################################################################################
+-#
+-# latencytop
+-#
+-################################################################################
 -
- ---
-  CMakeLists.txt | 2 ++
-  1 file changed, 2 insertions(+)
- 
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 11e7ae2b67..a9062fa6ef 100644
-+index 94f8fd3e93..df43d2e193 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -327,6 +327,7 @@ include(cmake/xxhash.cmake)
-- include(cmake/zlib.cmake)
-- include(cmake/download_archive.cmake)
-+@@ -402,6 +402,7 @@ if(gRPC_BUILD_GRPCPP_OTEL_PLUGIN)
-+   include(cmake/opentelemetry-cpp.cmake)
-+ endif()
-  
- +if(FALSE)
-  # Setup external proto library at third_party/envoy-api with 2 download URLs
-- if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/envoy-api)
-+ if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/envoy-api AND gRPC_DOWNLOAD_ARCHIVES)
-    # Download the archive via HTTP, validate the checksum, and extract to third_party/envoy-api.
--@@ -403,6 +404,7 @@ if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xds)
--     xds-cb28da3451f158a947dfc45090fe92b07b243bc1
-+@@ -478,6 +479,7 @@ if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xds AND gRPC_DOWNLOAD_ARC
-+     xds-3a472e524827f72d1ad621c4983dd5af54c46776
-    )
-  endif()
- +endif()
-  
-  if(WIN32)
--   set(_gRPC_BASELIB_LIBRARIES ws2_32 crypt32)
-+   set(_gRPC_ALLTARGETS_LIBRARIES ${_gRPC_ALLTARGETS_LIBRARIES} ws2_32 crypt32)
- -- 
--2.25.1
-+2.34.1
- 
-diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-index e6b76dcb5e..08aada1454 100644
---- a/package/grpc/grpc.hash
-+++ b/package/grpc/grpc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b55696fb249669744de3e71acc54a9382bea0dce7cd5ba379b356b12b82d4229  grpc-1.51.1.tar.gz
-+sha256  79ed4ab72fa9589b20f8b0b76c16e353e4cfec1d773d33afad605d97b5682c61  grpc-1.66.1.tar.gz
- sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 9125b1f9f6..47ebf1997c 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GRPC_VERSION = 1.51.1
-+GRPC_VERSION = 1.66.1
- GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
- GRPC_LICENSE = Apache-2.0, BSD-3-Clause (third_party code), MPL-2.0 (etc/roots.pem)
- GRPC_LICENSE_FILES = LICENSE
-@@ -29,6 +29,7 @@ GRPC_CONF_OPTS = \
- 	-DgRPC_RE2_PROVIDER=package \
- 	-DgRPC_SSL_PROVIDER=package \
- 	-DgRPC_ZLIB_PROVIDER=package \
-+	-DgRPC_BUILD_CODEGEN=OFF \
- 	-DgRPC_BUILD_GRPC_CPP_PLUGIN=OFF \
- 	-DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF \
- 	-DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF \
+-LATENCYTOP_VERSION = 0.5
+-LATENCYTOP_SITE = http://www.latencytop.org/download
+-LATENCYTOP_DEPENDENCIES = libglib2 ncurses
+-LATENCYTOP_LICENSE = GPL-2.0
+-LATENCYTOP_LICENSE_FILES = latencytop.c
+-
+-# NOTE: GTK is heavy weight, we intentionally build the text (ncurses)
+-# version only
+-define LATENCYTOP_BUILD_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) HAS_GTK_GUI=
+-endef
+-
+-define LATENCYTOP_INSTALL_TARGET_CMDS
+-	$(TARGET_CONFIGURE_OPTS) $(MAKE) install -C $(@D) DESTDIR=$(TARGET_DIR) HAS_GTK_GUI=
+-endef
+-
+-$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
