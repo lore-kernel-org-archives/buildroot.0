@@ -4,50 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1937DC02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 08:50:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8E5DC02192
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 08:51:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B7AE180A78;
-	Wed,  5 Feb 2025 08:50:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 726278374F;
+	Wed,  5 Feb 2025 08:51:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 66HYBQsN8XjF; Wed,  5 Feb 2025 08:50:05 +0000 (UTC)
+ id zy5bbukwj9TT; Wed,  5 Feb 2025 08:51:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7180380D3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 663FF80E08
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7180380D3A;
-	Wed,  5 Feb 2025 08:50:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id CBA98185
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 08:49:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 663FF80E08;
+	Wed,  5 Feb 2025 08:51:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4518612F
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 08:51:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BB2EC40B39
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 08:49:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2897B4168C
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 08:51:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id scO56bYPwWot for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 08:49:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E9F5B4067B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E9F5B4067B
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 08:49:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D204C86F52; Wed,  5 Feb 2025 08:49:57 +0000 (UTC)
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 09:47:19 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b233e712073296cabfb088f02e46b4d3a4cdd436
-X-Git-Newrev: 382f24a89f785ceb1776294c5be4f973e5eb6653
-X-Patchwork-Hint: ignore
-Message-Id: <20250205084957.D204C86F52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/elfutils: backport patch fixing
- musl/GCC 14.x issue
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LcNjE2YsSd1j for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 08:51:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0004341690
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0004341690
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0004341690
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 08:51:50 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-43635796b48so3498085e9.0
+ for <buildroot@buildroot.org>; Wed, 05 Feb 2025 00:51:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1738745509; x=1739350309;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=/n9Fh5179gYNCfKSw2rA4TgSdXm2wEJWs1bbmGjWPCc=;
+ b=uJzsVWwuylfSgl6cHKMUNB62dvLOTMIkiPsWOhYyjHaEzPzT/LQz5odOsmf18d+CJX
+ h5Km/qgbZqJLQoUMoiXDgI6BOSsNYOVUHDLr9vK3o998Lyz7q4WB3QzqUaXNFdhpV3FO
+ aMmPDt+psGnt318T0LoBzHFioGDWm7AYu9V1UnVfumCDKtUB4LFI6ifUyJ7KcjdDvyM6
+ Smu3SeLoe3p98Z4KrXae9DdkJAQwhJ0r/C/+irefREMiNx+VGFqpnh9m6afM7gNKD08e
+ tWIDY3MJU3pKp6lElpTQa39u2wwMpegnw/ZZ+QYS2OLI97fQ+PueUvb6ERj0VEB40J3X
+ KDew==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUIf9gov2V9DFlGCzW+Ei+C9diV20MKp//R9YzhWrHm/Uf+GBQTlXzkJVs9bQUT5P2Iu8Rha9EFOtY=@buildroot.org
+X-Gm-Message-State: AOJu0YxSBowClI4yZuWQ0DIK6mdU90gr9bOpvL1gBgcM7jvEmV8Yy/7o
+ iKpbrQbPSSX2BCsHkJtue88z+fUPsyvWSwdveF+MiQHpSfQYXixnr+F/iE/t5o0=
+X-Gm-Gg: ASbGncvaehzpTzGSopcUKGVr3UGB3bNMjWYCksOjTttiIP8Rz1iP8XqhPKLjbGUsGNw
+ 5zYRj0PTRdkZlsNyP1sz0v+1dbKIOOo7CmL5hm074j47IQsl7t8R0l1hBrci0IQm5eKHyE3t9Qq
+ PpQ9sC1WPlJ2vXK7fYTb5tHjrX/YoQcFU+gnKreRJ6TxBH42llv4g/gzEUm7JfTjtWKljpRIBl4
+ 9OPvYlg44595hpGFBFnHcTRkoPA5mYPafNvlV8KV88iVyEsphp4kTNCR4rfFRg/Mh2Rq5qL+0e7
+ 8dRh2tk5Tigd5FQMtMugQO7ANvMydxRHTwhYeaywOcLRZsY=
+X-Google-Smtp-Source: AGHT+IGfybTkXY5QRTYNSGKq6dMvh7q8r5MMBXkUvWKhK3emBTMk6YXYceb55SwTZviR4qLrV7dsxw==
+X-Received: by 2002:a05:600c:4513:b0:436:1b86:f05 with SMTP id
+ 5b1f17b1804b1-4390cfabc7fmr14071035e9.11.1738745508559; 
+ Wed, 05 Feb 2025 00:51:48 -0800 (PST)
+Received: from [172.16.2.111] (host-109-89-232-55.dynamic.voo.be.
+ [109.89.232.55]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-38c5c0ec7aasm18042777f8f.5.2025.02.05.00.51.47
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 05 Feb 2025 00:51:48 -0800 (PST)
+Message-ID: <54979566-2f3c-44e4-bc5d-9b343e7729fe@mind.be>
+Date: Wed, 5 Feb 2025 09:51:46 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Joachim Wiberg <troglobit@gmail.com>, buildroot@buildroot.org
+Cc: Vadim Kochan <vadim4j@gmail.com>
+References: <20250106203459.2875914-1-troglobit@gmail.com>
+Content-Language: en-GB
+In-Reply-To: <20250106203459.2875914-1-troglobit@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1738745509; x=1739350309; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=/n9Fh5179gYNCfKSw2rA4TgSdXm2wEJWs1bbmGjWPCc=;
+ b=gRS+rIMQWaHtGWUvoP5y/LnNffj0iHY6iLWbqsVFpniCuNnYhL6mXn5a5QY3Kzz/zM
+ obfZ8s1Kz2UULRKJdtcbPPb4oeacrBVCeNjPv18zrUqVTDPQPKphvPvZJPXFkO6T/pB3
+ zBz7l4NFX9xLd7VUvX/bzBAY2cdHNMQHqE++UItps8Wa/mroUKhdBJZmOh7Tfuir0nWe
+ f2ppn+u/PsE8GPa53w9by+cYmTpgYGkRcEa05J2G93KreLvhXgOoESl5rtV94mOH8Yal
+ gsf/CcLjPCLel6Bc7XfNeH6H6OPXZY/hCe6Tp1iDt0n/3no4OH8KMUHo8kPb+jl6KLBF
+ itow==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=gRS+rIMQ
+Subject: Re: [Buildroot] [PATCH 1/1] package/frr: make vtysh group
+ configurable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,391 +111,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=382f24a89f785ceb1776294c5be4f973e5eb6653
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This issue has been occuring since GCC 14.x support has been
-introduced in Buildroot.
 
-Fixes:
+On 06/01/2025 21:34, Joachim Wiberg wrote:
+> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 
-  http://autobuild.buildroot.net/results/2a914c3a93cca686434fb18ce13aa5add3ec8464/
+  After some back-and-forth we didn't reach find the use case compelling enough, 
+so I've marked this patch as Rejected.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0003-Add-helper-function-for-basename.patch    | 358 +++++++++++++++++++++
- 1 file changed, 358 insertions(+)
+  BTW in the future, please make sure to include in the commit message an 
+explanation _why_ this patch is needed (unless it's obvious, like for version 
+bumps, new packages, or fixes).
 
-diff --git a/package/elfutils/0003-Add-helper-function-for-basename.patch b/package/elfutils/0003-Add-helper-function-for-basename.patch
-new file mode 100644
-index 0000000000..1f47546ba8
---- /dev/null
-+++ b/package/elfutils/0003-Add-helper-function-for-basename.patch
-@@ -0,0 +1,358 @@
-+From 2296679efa547104ea52bf60cdda19e07c8d1e26 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Sun, 10 Dec 2023 12:20:33 -0800
-+Subject: [PATCH] Add helper function for basename
-+
-+musl does not provide GNU version of basename and lately have removed
-+the definiton from string.h [1] which exposes this problem. It can be
-+made to work by providing a local implementation of basename which
-+implements the GNU basename behavior, this makes it work across C
-+libraries which have POSIX implementation only.
-+
-+[1] https://git.musl-libc.org/cgit/musl/commit/?id=725e17ed6dff4d0cd22487bb64470881e86a92e7
-+
-+    * lib/system.h (xbasename): New static inline functions.
-+    Poison basename.
-+    * libdw/dwarf_getsrc_file.c (dwarf_getsrc_file): Use xbasename.
-+    * libdwfl/core-file.c (dwfl_core_file_report): Likewise.
-+    * libdwfl/dwfl_module_getsrc_file.c (dwfl_module_getsrc_file):
-+    Likewise.
-+    * libdwfl/dwfl_segment_report_module.c (dwfl_segment_report_module):
-+    Likewise.
-+    * libdwfl/find-debuginfo.c (find_debuginfo_in_path): Likewise.
-+    * libdwfl/link_map.c (report_r_debug): Likewise.
-+    * libdwfl/linux-kernel-modules.c (try_kernel_name): Likewise.
-+    * src/addr2line.c (print_dwarf_function): Likewise.
-+    (print_src): Likewise.
-+    * src/ar.c (do_oper_insert): Likewise.
-+    And cast away const in entry.key assignment.
-+    * src/nm.c (show_symbols): Use xbasename.
-+    * src/stack.c (module_callback): Likewise.
-+    * src/strip.c (handle_elf): Likewise.
-+    * tests/show-die-info.c: Include system.h.
-+    (dwarf_tag_string): Use xbasename.
-+    * tests/varlocs.c: Likewise.
-+    * debuginfod/debuginfod.cxx: Move include system.h to the end.
-+    (register_file_name): Rename basename to filename.
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+Signed-off-by: Mark Wielaard <mark@klomp.org>
-+Upstream: https://sourceware.org/git/?p=elfutils.git;a=commit;h=a2194f6b305bf0d0b9dd49dccd0a5c21994c8eea
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ debuginfod/debuginfod.cxx            | 10 ++++++++--
-+ lib/system.h                         | 14 ++++++++++++++
-+ libdw/dwarf_getsrc_file.c            |  2 +-
-+ libdwfl/core-file.c                  |  2 +-
-+ libdwfl/dwfl_module_getsrc_file.c    |  2 +-
-+ libdwfl/dwfl_segment_report_module.c |  2 +-
-+ libdwfl/find-debuginfo.c             |  6 +++---
-+ libdwfl/link_map.c                   |  2 +-
-+ libdwfl/linux-kernel-modules.c       |  2 +-
-+ src/addr2line.c                      |  4 ++--
-+ src/ar.c                             |  4 ++--
-+ src/nm.c                             |  4 ++--
-+ src/stack.c                          |  2 +-
-+ src/strip.c                          |  2 +-
-+ tests/show-die-info.c                |  3 ++-
-+ tests/varlocs.c                      |  2 +-
-+ 16 files changed, 42 insertions(+), 21 deletions(-)
-+
-+diff --git a/debuginfod/debuginfod.cxx b/debuginfod/debuginfod.cxx
-+index 99b1f2b9..3b69a621 100644
-+--- a/debuginfod/debuginfod.cxx
-++++ b/debuginfod/debuginfod.cxx
-+@@ -44,10 +44,11 @@ extern "C" {
-+ }
-+ #endif
-+ 
-++#ifdef HAVE_EXECINFO_H
-+ extern "C" {
-+-#include "printversion.h"
-+-#include "system.h"
-++#include <execinfo.h>
-+ }
-++#endif
-+ 
-+ #include "debuginfod.h"
-+ #include <dwarf.h>
-+@@ -127,6 +128,11 @@ using namespace std;
-+ #define tid() pthread_self()
-+ #endif
-+ 
-++extern "C" {
-++#include "printversion.h"
-++#include "system.h"
-++}
-++
-+ 
-+ inline bool
-+ string_endswith(const string& haystack, const string& needle)
-+diff --git a/lib/system.h b/lib/system.h
-+index 1c914efc..0db12d99 100644
-+--- a/lib/system.h
-++++ b/lib/system.h
-+@@ -1,6 +1,7 @@
-+ /* Declarations for common convenience functions.
-+    Copyright (C) 2006-2011 Red Hat, Inc.
-+    Copyright (C) 2022 Mark J. Wielaard <mark@klomp.org>
-++   Copyright (C) 2023 Khem Raj.
-+    This file is part of elfutils.
-+ 
-+    This file is free software; you can redistribute it and/or modify
-+@@ -211,4 +212,17 @@ extern char *__cxa_demangle (const char *mangled_name, char *output_buffer,
-+   extern int never_defined_just_used_for_checking[(expr) ? 1 : -1]	\
-+     __attribute__ ((unused))
-+ 
-++/* We really want a basename implementation that doesn't modify the
-++   input argument.  Normally you get that from string.h with _GNU_SOURCE
-++   define.  But some libc implementations don't define it and other
-++   define it, but provide an implementation that still modifies the
-++   argument.  So define our own and poison a bare basename symbol.  */
-++static inline const char *
-++xbasename(const char *s)
-++{
-++  const char *p = strrchr(s, '/');
-++  return p ? p+1 : s;
-++}
-++#pragma GCC poison basename
-++
-+ #endif /* system.h */
-+diff --git a/libdw/dwarf_getsrc_file.c b/libdw/dwarf_getsrc_file.c
-+index 5289c7da..03da431c 100644
-+--- a/libdw/dwarf_getsrc_file.c
-++++ b/libdw/dwarf_getsrc_file.c
-+@@ -98,7 +98,7 @@ dwarf_getsrc_file (Dwarf *dbg, const char *fname, int lineno, int column,
-+ 	      /* Match the name with the name the user provided.  */
-+ 	      const char *fname2 = line->files->info[lastfile].name;
-+ 	      if (is_basename)
-+-		lastmatch = strcmp (basename (fname2), fname) == 0;
-++		lastmatch = strcmp (xbasename (fname2), fname) == 0;
-+ 	      else
-+ 		lastmatch = strcmp (fname2, fname) == 0;
-+ 	    }
-+diff --git a/libdwfl/core-file.c b/libdwfl/core-file.c
-+index 87c940cb..89527d23 100644
-+--- a/libdwfl/core-file.c
-++++ b/libdwfl/core-file.c
-+@@ -595,7 +595,7 @@ dwfl_core_file_report (Dwfl *dwfl, Elf *elf, const char *executable)
-+       if (! __libdwfl_dynamic_vaddr_get (module->elf, &file_dynamic_vaddr))
-+ 	continue;
-+       Dwfl_Module *mod;
-+-      mod = __libdwfl_report_elf (dwfl, basename (module->name), module->name,
-++      mod = __libdwfl_report_elf (dwfl, xbasename (module->name), module->name,
-+ 				  module->fd, module->elf,
-+ 				  module->l_ld - file_dynamic_vaddr,
-+ 				  true, true);
-+diff --git a/libdwfl/dwfl_module_getsrc_file.c b/libdwfl/dwfl_module_getsrc_file.c
-+index 513af6b8..fc144225 100644
-+--- a/libdwfl/dwfl_module_getsrc_file.c
-++++ b/libdwfl/dwfl_module_getsrc_file.c
-+@@ -103,7 +103,7 @@ dwfl_module_getsrc_file (Dwfl_Module *mod,
-+ 		{
-+ 		  /* Match the name with the name the user provided.  */
-+ 		  lastfile = file;
-+-		  lastmatch = !strcmp (is_basename ? basename (file) : file,
-++		  lastmatch = !strcmp (is_basename ? xbasename (file) : file,
-+ 				       fname);
-+ 		}
-+ 	    }
-+diff --git a/libdwfl/dwfl_segment_report_module.c b/libdwfl/dwfl_segment_report_module.c
-+index 3ef62a7d..d0df7100 100644
-+--- a/libdwfl/dwfl_segment_report_module.c
-++++ b/libdwfl/dwfl_segment_report_module.c
-+@@ -718,7 +718,7 @@ dwfl_segment_report_module (Dwfl *dwfl, int ndx, const char *name,
-+ 	      bias += fixup;
-+ 	      if (module->name[0] != '\0')
-+ 		{
-+-		  name = basename (module->name);
-++		  name = xbasename (module->name);
-+ 		  name_is_final = true;
-+ 		}
-+ 	      break;
-+diff --git a/libdwfl/find-debuginfo.c b/libdwfl/find-debuginfo.c
-+index 7f7ab632..b358c774 100644
-+--- a/libdwfl/find-debuginfo.c
-++++ b/libdwfl/find-debuginfo.c
-+@@ -164,7 +164,7 @@ find_debuginfo_in_path (Dwfl_Module *mod, const char *file_name,
-+ {
-+   bool cancheck = debuglink_crc != (GElf_Word) 0;
-+ 
-+-  const char *file_basename = file_name == NULL ? NULL : basename (file_name);
-++  const char *file_basename = file_name == NULL ? NULL : xbasename (file_name);
-+   char *localname = NULL;
-+ 
-+   /* We invent a debuglink .debug name if NULL, but then want to try the
-+@@ -278,7 +278,7 @@ find_debuginfo_in_path (Dwfl_Module *mod, const char *file_name,
-+ 	  else
-+ 	    {
-+ 	      subdir = NULL;
-+-	      file = basename (debuglink_file);
-++	      file = xbasename (debuglink_file);
-+ 	    }
-+ 	  try_file_basename = debuglink_null;
-+ 	  break;
-+@@ -306,7 +306,7 @@ find_debuginfo_in_path (Dwfl_Module *mod, const char *file_name,
-+ 	    if (mod->dw != NULL && (p[0] == '\0' || p[0] == '/'))
-+ 	      {
-+ 		fd = try_open (&main_stat, dir, ".dwz",
-+-			       basename (file), &fname);
-++			       xbasename (file), &fname);
-+ 		if (fd < 0)
-+ 		  {
-+ 		    if (errno != ENOENT && errno != ENOTDIR)
-+diff --git a/libdwfl/link_map.c b/libdwfl/link_map.c
-+index 06d85eb6..9d6b68c1 100644
-+--- a/libdwfl/link_map.c
-++++ b/libdwfl/link_map.c
-+@@ -469,7 +469,7 @@ report_r_debug (uint_fast8_t elfclass, uint_fast8_t elfdata,
-+ 		      if (r_debug_info_module == NULL)
-+ 			{
-+ 			  // XXX hook for sysroot
-+-			  mod = __libdwfl_report_elf (dwfl, basename (name),
-++			  mod = __libdwfl_report_elf (dwfl, xbasename (name),
-+ 						      name, fd, elf, base,
-+ 						      true, true);
-+ 			  if (mod != NULL)
-+diff --git a/libdwfl/linux-kernel-modules.c b/libdwfl/linux-kernel-modules.c
-+index 58c0c417..e9faba26 100644
-+--- a/libdwfl/linux-kernel-modules.c
-++++ b/libdwfl/linux-kernel-modules.c
-+@@ -116,7 +116,7 @@ try_kernel_name (Dwfl *dwfl, char **fname, bool try_debug)
-+ 	/* Try the file's unadorned basename as DEBUGLINK_FILE,
-+ 	   to look only for "vmlinux" files.  */
-+ 	fd = INTUSE(dwfl_standard_find_debuginfo) (&fakemod, NULL, NULL, 0,
-+-						   *fname, basename (*fname),
-++						   *fname, xbasename (*fname),
-+ 						   0, &fakemod.debug.name);
-+ 
-+       if (fakemod.debug.name != NULL)
-+diff --git a/src/addr2line.c b/src/addr2line.c
-+index d902d791..d87e5b45 100644
-+--- a/src/addr2line.c
-++++ b/src/addr2line.c
-+@@ -385,7 +385,7 @@ print_dwarf_function (Dwfl_Module *mod, Dwarf_Addr addr)
-+ 		  if (file == NULL)
-+ 		    file = "???";
-+ 		  else if (only_basenames)
-+-		    file = basename (file);
-++		    file = xbasename (file);
-+ 		  else if (use_comp_dir && file[0] != '/')
-+ 		    {
-+ 		      const char *const *dirs;
-+@@ -568,7 +568,7 @@ print_src (const char *src, int lineno, int linecol, Dwarf_Die *cu)
-+   const char *comp_dir_sep = "";
-+ 
-+   if (only_basenames)
-+-    src = basename (src);
-++    src = xbasename (src);
-+   else if (use_comp_dir && src[0] != '/')
-+     {
-+       Dwarf_Attribute attr;
-+diff --git a/src/ar.c b/src/ar.c
-+index 3bcb18fe..e6d6d58f 100644
-+--- a/src/ar.c
-++++ b/src/ar.c
-+@@ -1133,7 +1133,7 @@ do_oper_insert (int oper, const char *arfname, char **argv, int argc,
-+       for (int cnt = 0; cnt < argc; ++cnt)
-+ 	{
-+ 	  ENTRY entry;
-+-	  entry.key = full_path ? argv[cnt] : basename (argv[cnt]);
-++	  entry.key = full_path ? argv[cnt] : (char*)xbasename (argv[cnt]);
-+ 	  entry.data = &argv[cnt];
-+ 	  if (hsearch (entry, ENTER) == NULL)
-+ 	    error_exit (errno, _("cannot insert into hash table"));
-+@@ -1242,7 +1242,7 @@ do_oper_insert (int oper, const char *arfname, char **argv, int argc,
-+       /* Open all the new files, get their sizes and add all symbols.  */
-+       for (int cnt = 0; cnt < argc; ++cnt)
-+ 	{
-+-	  const char *bname = basename (argv[cnt]);
-++	  const char *bname = xbasename (argv[cnt]);
-+ 	  size_t bnamelen = strlen (bname);
-+ 	  if (found[cnt] == NULL)
-+ 	    {
-+diff --git a/src/nm.c b/src/nm.c
-+index fbdee8e1..3675f59b 100644
-+--- a/src/nm.c
-++++ b/src/nm.c
-+@@ -1417,7 +1417,7 @@ show_symbols (int fd, Ebl *ebl, GElf_Ehdr *ehdr,
-+ 			  int lineno;
-+ 			  (void) dwarf_lineno (line, &lineno);
-+ 			  const char *file = dwarf_linesrc (line, NULL, NULL);
-+-			  file = (file != NULL) ? basename (file) : "???";
-++			  file = (file != NULL) ? xbasename (file) : "???";
-+ 			  int n;
-+ 			  n = obstack_printf (&whereob, "%s:%d%c", file,
-+ 					      lineno, '\0');
-+@@ -1448,7 +1448,7 @@ show_symbols (int fd, Ebl *ebl, GElf_Ehdr *ehdr,
-+ 		{
-+ 		  /* We found the line.  */
-+ 		  int n = obstack_printf (&whereob, "%s:%" PRIu64 "%c",
-+-					  basename ((*found)->file),
-++					  xbasename ((*found)->file),
-+ 					  (*found)->lineno,
-+ 					  '\0');
-+ 		  sym_mem[nentries_used].where = obstack_finish (&whereob);
-+diff --git a/src/stack.c b/src/stack.c
-+index 534aa93c..f4c5ba8c 100644
-+--- a/src/stack.c
-++++ b/src/stack.c
-+@@ -152,7 +152,7 @@ module_callback (Dwfl_Module *mod, void **userdata __attribute__((unused)),
-+ 
-+   int width = get_addr_width (mod);
-+   printf ("0x%0*" PRIx64 "-0x%0*" PRIx64 " %s\n",
-+-	  width, start, width, end, basename (name));
-++	  width, start, width, end, xbasename (name));
-+ 
-+   const unsigned char *id;
-+   GElf_Addr id_vaddr;
-+diff --git a/src/strip.c b/src/strip.c
-+index 2a2cc801..88977a5c 100644
-+--- a/src/strip.c
-++++ b/src/strip.c
-+@@ -1800,7 +1800,7 @@ handle_elf (int fd, Elf *elf, const char *prefix, const char *fname,
-+ 		      elf_errmsg (-1));
-+ 	}
-+ 
-+-      char *debug_basename = basename (debug_fname_embed ?: debug_fname);
-++      const char *debug_basename = xbasename (debug_fname_embed ?: debug_fname);
-+       off_t crc_offset = strlen (debug_basename) + 1;
-+       /* Align to 4 byte boundary */
-+       crc_offset = ((crc_offset - 1) & ~3) + 4;
-+diff --git a/tests/show-die-info.c b/tests/show-die-info.c
-+index 1a3191cd..bda459a5 100644
-+--- a/tests/show-die-info.c
-++++ b/tests/show-die-info.c
-+@@ -27,6 +27,7 @@
-+ #include <unistd.h>
-+ 
-+ #include "../libdw/known-dwarf.h"
-++#include "../lib/system.h"
-+ 
-+ static const char *
-+ dwarf_tag_string (unsigned int tag)
-+@@ -318,7 +319,7 @@ main (int argc, char *argv[])
-+       int fd = open (argv[cnt], O_RDONLY);
-+       Dwarf *dbg;
-+ 
-+-      printf ("file: %s\n", basename (argv[cnt]));
-++      printf ("file: %s\n", xbasename (argv[cnt]));
-+ 
-+       dbg = dwarf_begin (fd, DWARF_C_READ);
-+       if (dbg == NULL)
-+diff --git a/tests/varlocs.c b/tests/varlocs.c
-+index 8e563fd3..1004f969 100644
-+--- a/tests/varlocs.c
-++++ b/tests/varlocs.c
-+@@ -1120,7 +1120,7 @@ main (int argc, char *argv[])
-+ 
-+ 	  const char *name = (modname[0] != '\0'
-+ 			      ? modname
-+-			      :  basename (mainfile));
-++			      :  xbasename (mainfile));
-+ 	  printf ("module '%s'\n", name);
-+ 	  print_die (&cudie, "CU", 0);
-+ 
-+-- 
-+2.48.1
-+
+  Regards,
+  Arnout
+
+> ---
+>   package/frr/Config.in | 8 ++++++++
+>   package/frr/frr.mk    | 7 ++++---
+>   2 files changed, 12 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/frr/Config.in b/package/frr/Config.in
+> index c26b160b2a..9b9ad6f331 100644
+> --- a/package/frr/Config.in
+> +++ b/package/frr/Config.in
+> @@ -24,6 +24,14 @@ config BR2_PACKAGE_FRR
+>   
+>   if BR2_PACKAGE_FRR
+>   
+> +config BR2_PACKAGE_FRR_VTYSH_GROUP
+> +	string "FRR vtysh group, default: frrvty"
+> +	default "frrvty"
+> +	help
+> +	  This setting controls the group a user must be member of to connect
+> +	  to vtysh.  E.g., on systems with an admin user, which may be member
+> +	  of the 'wheel' group, it may make more sense to use 'wheel' here.
+> +
+>   config BR2_PACKAGE_FRR_BMP
+>   	bool "BMP protocol"
+>   	select BR2_PACKAGE_C_ARES
+> diff --git a/package/frr/frr.mk b/package/frr/frr.mk
+> index 921ef99665..9ec4d3af4f 100644
+> --- a/package/frr/frr.mk
+> +++ b/package/frr/frr.mk
+> @@ -37,6 +37,7 @@ FRR_CONF_ENV = \
+>   
+>   # Do not enable -fplugin=frr-format for production, see doc/developer/workflow.rst,
+>   # it is only intended for FRR's developments
+> +FRR_VTYSH_GROUP=$(call qstrip,$(BR2_PACKAGE_FRR_VTYSH_GROUP))
+>   FRR_CONF_OPTS = --with-clippy=$(HOST_DIR)/bin/clippy \
+>   	--sysconfdir=/etc/frr \
+>   	--localstatedir=/var/run/frr \
+> @@ -48,7 +49,7 @@ FRR_CONF_OPTS = --with-clippy=$(HOST_DIR)/bin/clippy \
+>   	--enable-shell-access \
+>   	--enable-user=frr \
+>   	--enable-group=frr \
+> -	--enable-vty-group=frrvty \
+> +	--enable-vty-group=$(FRR_VTYSH_GROUP) \
+>   	--enable-fpm
+>   
+>   HOST_FRR_CONF_OPTS = --enable-clippy-only
+> @@ -107,12 +108,12 @@ define FRR_PERMISSIONS
+>   	/etc/frr/daemons f 640 frr frr - - - - -
+>   	/etc/frr/daemons.conf f 640 frr frr - - - - -
+>   	/etc/frr/frr.conf f 640 frr frr - - - - -
+> -	/etc/frr/vtysh.conf f 640 frr frrvty - - - - -
+> +	/etc/frr/vtysh.conf f 640 frr $(FRR_VTYSH_GROUP) - - - - -
+>   	/etc/frr/support_bundle_commands.conf f 640 frr frr
+>   endef
+>   
+>   define FRR_USERS
+> -	frr -1 frr -1 * /var/run/frr - frrvty FRR user priv
+> +	frr -1 frr -1 * /var/run/frr - $(FRR_VTYSH_GROUP) FRR user priv
+>   endef
+>   
+>   define FRR_INSTALL_INIT_SYSV
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
