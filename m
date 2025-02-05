@@ -4,59 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CD9AC02192
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 09:45:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63959C02194
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 09:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE8E741746;
-	Wed,  5 Feb 2025 09:45:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2262D41231;
+	Wed,  5 Feb 2025 09:47:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rrJ2yvwSxmYZ; Wed,  5 Feb 2025 09:45:14 +0000 (UTC)
+ id o8vLd-bsATl5; Wed,  5 Feb 2025 09:47:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 440C6416FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD34940890
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 440C6416FA;
-	Wed,  5 Feb 2025 09:45:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E8829CD
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:45:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD34940890;
+	Wed,  5 Feb 2025 09:47:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6793BCD
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:47:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D802141625
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:45:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 55F0640892
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:47:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x0DH95Bcq1Zr for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 09:45:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+ id yh9iO4Nwwuna for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 09:47:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.bonnefille@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8BEFF416FA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BEFF416FA
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8BEFF416FA
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:45:09 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3CBB84327E;
- Wed,  5 Feb 2025 09:45:07 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1tfbxy-0000Ko-26;
- Wed, 05 Feb 2025 10:45:06 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed,  5 Feb 2025 10:45:05 +0100
-Message-Id: <20250205094505.1274-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 91669407E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91669407E9
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 91669407E9
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 09:47:44 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0AB8643210;
+ Wed,  5 Feb 2025 09:47:41 +0000 (UTC)
+From: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Date: Wed, 05 Feb 2025 10:47:39 +0100
 MIME-Version: 1.0
+Message-Id: <20250205-fix_zxing-v1-1-c3e4c2adfdab@bootlin.com>
+References: <20250205-fix_zxing-v1-0-c3e4c2adfdab@bootlin.com>
+In-Reply-To: <20250205-fix_zxing-v1-0-c3e4c2adfdab@bootlin.com>
+To: buildroot@buildroot.org
+X-Mailer: b4 0.14.2
 X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeduvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnheptdehteehiefhueeuuddvkeduheevgefgvddvkeevhfejgfeiieffuefgleevffegnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhnvghtpdhgvghnvdhvughrrdguvgdpfigpshgtrghnqddvtddugeduuddvvddrohhrghdpsghuihhlughrohhothdrohhrghdphhhtphgtqdhfohhruhhmrdguvgenucfkphepuddtledrkeelrddvfedvrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedutdelrdekledrvdefvddrheehpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvkhhosehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhm
-X-GND-Sasl: peter@korsgaard.com
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeduvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpefvhhhomhgrshcuuehonhhnvghfihhllhgvuceothhhohhmrghsrdgsohhnnhgvfhhilhhlvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepkefftdefffevfffhjeevveevuddtfeffiedtleejueelffeugfevtdelhfetjeffnecuffhomhgrihhnpehfrhgvvgguvghskhhtohhprdhorhhgnecukfhppedutdelrdekledrvdefvddrheehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddtledrkeelrddvfedvrdehhedphhgvlhhopegludejvddrudeirddvrddutdelngdpmhgrihhlfhhrohhmpehthhhomhgrshdrsghonhhnvghfihhllhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeehpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdgsohhnnhgvfhhilhhlvgessghoohhtlhhinhdrtghomhdprhgtphhtthhopehfhhhunhhlvghthhesthhrohhoughonhdqshhofhhtfigrrhgvrdgtohhmp
+ dhrtghpthhtohepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
+X-GND-Sasl: thomas.bonnefille@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1738748862;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=z4TXw3RPquTmm1Wyz5GLoCkOj1RFoYYvKQbySY3P48o=;
+ b=pEzrL/mhmfrOFLEa0oxaWM/f2zQ4l/RyHTl2hSW8EhimgUtIWnjqKa3MwsCeF6Tst/Rt0c
+ lVCkJkWCub7GYM53zj7G8MQx/Et82vKEj1thQBm3bMNbPuulUgVJJSp0LONrkn+L48739/
+ n+BKOZxNaAXdlEBGrzuYvYFSD79nT1vXAOEXbjasuDhb4/pcVJ2lgomjRAQDHxGGF109jS
+ o5muJtAHIHQ4vFKqtBSScsxwZviMRA5vcoND0Fra82ygGK1qsygImHMmCg82kQiwsHEUBO
+ LKQ448xW1+F0Y2XYRdJCo8+NkYUyjj6UVwGNHSE9Fiu7C0PqMeMXtQfe5Lk14Q==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/w_scan: drop package
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=pEzrL/mh
+Subject: [Buildroot] [PATCH 01/12] package/gstreamer1/gst-omx: remove gst-omx
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,212 +84,133 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Thomas Bonnefille <thomas.bonnefille@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ =?utf-8?q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes http://autobuild.buildroot.net/results/da054694f0056027e83e77a1cedff5659885f2ca/
+The OMX plugin has been removed from gstreamer as the OpenMAX standard
+is long dead and even the Raspberry Pi OS no longer supports it.
 
-The upstream location is gone (taken over by a domain squatter), there are
-no reverse dependencies, it is not listed in DEVELOPERS and hasn't been
-updated since 2017 with commit 0762015f144f ("package/w_scan: bump version
-to 20170107"), so drop it.
+See release notes for more details:
+    https://gstreamer.freedesktop.org/releases/1.24/
 
-It looks to be superseded by a C++ version at
-https://www.gen2vdr.de/wirbel/w_scan_cpp/index2.html, which can be added if
-there is interest.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 ---
- .checkpackageignore                           |  2 -
- Config.in.legacy                              |  7 ++++
- package/Config.in                             |  1 -
- package/w_scan/0001-musl.patch                | 26 -------------
- ...002-si_types-h-fix-build-with-gcc-10.patch | 37 -------------------
- package/w_scan/Config.in                      | 14 -------
- package/w_scan/w_scan.hash                    |  3 --
- package/w_scan/w_scan.mk                      | 18 ---------
- 8 files changed, 7 insertions(+), 101 deletions(-)
- delete mode 100644 package/w_scan/0001-musl.patch
- delete mode 100644 package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch
- delete mode 100644 package/w_scan/Config.in
- delete mode 100644 package/w_scan/w_scan.hash
- delete mode 100644 package/w_scan/w_scan.mk
+ Config.in.legacy                        |  7 ++++++
+ package/gstreamer1/Config.in            |  1 -
+ package/gstreamer1/gst-omx/Config.in    | 11 ----------
+ package/gstreamer1/gst-omx/gst-omx.hash |  3 ---
+ package/gstreamer1/gst-omx/gst-omx.mk   | 39 ---------------------------------
+ 5 files changed, 7 insertions(+), 54 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 194a2d1c72..6b45fb9e94 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1261,8 +1261,6 @@ package/vte/0002-build-Fix-check-for-fstack-protector-compiler-support.patch lib
- package/vtun/0001-fix-installation.patch lib_patch.Upstream
- package/vtun/0002-fix-ssl-headers-checks.patch lib_patch.Upstream
- package/vtun/0003-openssl11.patch lib_patch.Upstream
--package/w_scan/0001-musl.patch lib_patch.Upstream
--package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch lib_patch.Upstream
- package/waffle/0001-cmake-forward-cflags-from-.pc-files-to-waffle-cflags.patch lib_patch.Upstream
- package/waffle/0002-wayland-fix-build-against-version-1-20.patch lib_patch.Upstream
- package/waffle/0003-drop-C-dependency.patch lib_patch.Upstream
 diff --git a/Config.in.legacy b/Config.in.legacy
-index 2e5bd3153f..b5ea4866fe 100644
+index e091fd8c0a972c3043e9664652e3d40e6d83af8b..4f0b78d9589a65e8f69bca406cec49cdc2d5294c 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+@@ -172,6 +172,13 @@ config BR2_PACKAGE_DIRECTFB
+ 	  This package was no longer maintained upstream, so it was
+ 	  dropped from Buildroot.
  
- comment "Legacy options removed in 2025.02"
- 
-+config BR2_PACKAGE_W_SCAN
-+	bool "w_scan has been removed"
++config BR2_PACKAGE_GST_OMX
++	bool "gst-omx has been removed"
 +	select BR2_LEGACY
 +	help
-+	  The w_scan package was removed as it is not maintained
-+	  anymore and the upstream URL is gone.
++	  The gst-omx module has been removed from Gstreamer in
++	  release 1.24 in favor of Video4Linux-based video encoders.
 +
- config BR2_PACKAGE_GENROMFS
- 	bool "genromfs"
+ config BR2_PACKAGE_SDL2_DIRECTFB
+ 	bool "sdl2 directfb support removed"
  	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 83f69f9004..ab69ce0293 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -655,7 +655,6 @@ endmenu
- 	source "package/usbip/Config.in"
- 	source "package/usbmount/Config.in"
- 	source "package/usbutils/Config.in"
--	source "package/w_scan/Config.in"
- 	source "package/wf111/Config.in"
- 	source "package/wilc-driver/Config.in"
- 	source "package/wipe/Config.in"
-diff --git a/package/w_scan/0001-musl.patch b/package/w_scan/0001-musl.patch
+diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
+index 8fe8a343950334caff2954231ae55465473b39f0..67c33e5d4e518d85290a73fdbef484d55f35b617 100644
+--- a/package/gstreamer1/Config.in
++++ b/package/gstreamer1/Config.in
+@@ -15,7 +15,6 @@ source "package/gstreamer1/gst1-python/Config.in"
+ source "package/gstreamer1/gst1-rtsp-server/Config.in"
+ source "package/gstreamer1/gst1-shark/Config.in"
+ source "package/gstreamer1/gst1-vaapi/Config.in"
+-source "package/gstreamer1/gst-omx/Config.in"
+ source "package/gstreamer1/gstd/Config.in"
+ source "package/gstreamer1/gstreamer1-editing-services/Config.in"
+ endif
+diff --git a/package/gstreamer1/gst-omx/Config.in b/package/gstreamer1/gst-omx/Config.in
 deleted file mode 100644
-index 46d67677a8..0000000000
---- a/package/w_scan/0001-musl.patch
+index efe3d211d6d1489400ace233daaa67b5dc326a0b..0000000000000000000000000000000000000000
+--- a/package/gstreamer1/gst-omx/Config.in
 +++ /dev/null
-@@ -1,26 +0,0 @@
--Fix musl build
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr w_scan-20141122.org/descriptors.h w_scan-20141122/descriptors.h
----- w_scan-20141122.org/descriptors.h	2014-11-22 09:49:26.000000000 +0100
--+++ w_scan-20141122/descriptors.h	2016-01-24 14:05:21.000000000 +0100
--@@ -28,6 +28,7 @@
-- #ifndef __DESCRIPTORS_H__
-- #define __DESCRIPTORS_H__
-- 
--+#include <time.h>
-- #include "extended_frontend.h"
-- 
-- /******************************************************************************
--diff -uNr w_scan-20141122.org/version.h w_scan-20141122/version.h
----- w_scan-20141122.org/version.h	2014-11-22 11:59:56.000000000 +0100
--+++ w_scan-20141122/version.h	2016-01-24 14:06:33.000000000 +0100
--@@ -1,6 +1,6 @@
-- /* AUTOMATICALLY GENERATED - DO NOT EDIT MANUALLY */
-- #ifndef W_SCAN_VERSION_H
-- #define W_SCAN_VERSION_H
---uint version=20170107;
--+unsigned int version=20170107;
-- #endif
-- 
-diff --git a/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch b/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch
-deleted file mode 100644
-index 50d2488190..0000000000
---- a/package/w_scan/0002-si_types-h-fix-build-with-gcc-10.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--si_types.h: fix build with gcc 10
--
--Drop service_t, p_service_t, transponder_t and p_transponder_t to avoid
--the following build failure with gcc 10 (which defaults to -fno-common):
--
--/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/arm-buildroot-linux-gnueabihf-gcc -Wall -Wextra -Wno-comment -Wswitch-default -Wno-unused-parameter -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -lrt  -o w_scan atsc_psip_section.o countries.o descriptors.o diseqc.o dump-dvbscan.o dump-vdr.o dump-xine.o dump-mplayer.o dump-vlc-m3u.o dvbscan.o lnb.o parse-dvbscan.o satellites.o scan.o section.o tools.o emulate.o dump-xml.o iconv_codes.o char-coding.o  
--/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x404): multiple definition of `p_transponder_t'; countries.o:(.bss+0x0): first defined here
--/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x408): multiple definition of `transponder_t'; countries.o:(.bss+0x4): first defined here
--/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x480): multiple definition of `p_service_t'; countries.o:(.bss+0x7c): first defined here
--/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/arm-buildroot-linux-gnueabihf/10.2.0/../../../../arm-buildroot-linux-gnueabihf/bin/ld: descriptors.o:(.bss+0x484): multiple definition of `service_t'; countries.o:(.bss+0x80): first defined here
--
--Fixes:
-- - http://autobuild.buildroot.org/results/5640442cb4ba06bcbcf31540a64f5665862d39f7
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--
--diff -Nura w_scan-20170107.orig/si_types.h w_scan-20170107/si_types.h
----- w_scan-20170107.orig/si_types.h	2020-09-20 11:09:56.776963441 +0200
--+++ w_scan-20170107/si_types.h	2020-09-20 11:13:13.149232478 +0200
--@@ -114,7 +114,7 @@
--   uint32_t logical_channel_number;
--   uint8_t  running;
--   void   * priv;
---} service_t, * p_service_t;
--+};
-- 
-- /*******************************************************************************
-- /* transponder type.
--@@ -201,7 +201,7 @@
--   /*----------------------------*/
--   char * network_name;
--   network_change_t network_change;
---} __attribute__((packed))  transponder_t, * p_transponder_t;
--+} __attribute__((packed));
-- 
-- /*******************************************************************************
-- /* satellite channel routing type.
-diff --git a/package/w_scan/Config.in b/package/w_scan/Config.in
-deleted file mode 100644
-index d5471200ad..0000000000
---- a/package/w_scan/Config.in
-+++ /dev/null
-@@ -1,14 +0,0 @@
--comment "w_scan needs a toolchain w/ headers >= 3.7"
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
--
--config BR2_PACKAGE_W_SCAN
--	bool "w_scan"
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_7
--	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_GST_OMX
+-	bool "gst-omx"
+-	depends on BR2_PACKAGE_HAS_LIBOPENMAX
+-	select BR2_PACKAGE_GST1_PLUGINS_BASE
 -	help
--	  w_scan is a small command line utility used to perform
--	  frequency scans for DVB and ATSC transmissions. It is
--	  capable of creating channels.conf files (in different output
--	  formats !) as well as initial tuning data for scan.
+-	  GStreamer plug-in to use OpenMAX API.
 -
--	  https://www.gen2vdr.de/wirbel/w_scan/index2.html
-diff --git a/package/w_scan/w_scan.hash b/package/w_scan/w_scan.hash
+-	  https://cgit.freedesktop.org/gstreamer/gst-omx
+-
+-comment "gst-omx requires a OpenMAX implementation"
+-	depends on !BR2_PACKAGE_HAS_LIBOPENMAX
+diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
 deleted file mode 100644
-index fcb0e611bc..0000000000
---- a/package/w_scan/w_scan.hash
+index a84ffa7b6b3e35c3b788cf5a4899980fcb7eac02..0000000000000000000000000000000000000000
+--- a/package/gstreamer1/gst-omx/gst-omx.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# Locally calculated
--sha256  38e0f38a7bf06cff6d6ea01652ad4ee60da2cb0e937360468f936da785b46ffe  w_scan-20170107.tar.bz2
--sha256  ddb9db7630752f8fdc6898f7c99a99eaeeac5213627ecb093df9c82f56175dc7  COPYING
-diff --git a/package/w_scan/w_scan.mk b/package/w_scan/w_scan.mk
+-# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.22.12.tar.xz.sha256sum
+-sha256  6b0685b92ac735032d7987d1028afaeab0a98ab726e0c51e5b9bfc8f2da7c8b1  gst-omx-1.22.12.tar.xz
+-sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
 deleted file mode 100644
-index c63f20cc9e..0000000000
---- a/package/w_scan/w_scan.mk
+index c1ab2b19c08c69522065af914e30554f20782c02..0000000000000000000000000000000000000000
+--- a/package/gstreamer1/gst-omx/gst-omx.mk
 +++ /dev/null
-@@ -1,18 +0,0 @@
+@@ -1,39 +0,0 @@
 -################################################################################
 -#
--# w_scan
+-# gst-omx
 -#
 -################################################################################
 -
--W_SCAN_VERSION = 20170107
--W_SCAN_SOURCE = w_scan-$(W_SCAN_VERSION).tar.bz2
--W_SCAN_SITE = http://wirbel.htpc-forum.de/w_scan
--W_SCAN_LICENSE = GPL-2.0+
--W_SCAN_LICENSE_FILES = COPYING
+-GST_OMX_VERSION = 1.22.12
+-GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
+-GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
 -
--ifeq ($(BR2_PACKAGE_LIBICONV),y)
--W_SCAN_DEPENDENCIES += libiconv
--W_SCAN_CONF_ENV += LIBS=-liconv
+-GST_OMX_LICENSE = LGPL-2.1
+-GST_OMX_LICENSE_FILES = COPYING
+-
+-GST_OMX_CONF_OPTS = \
+-	-Dexamples=disabled \
+-	-Dtests=disabled \
+-	-Dtools=disabled \
+-	-Ddoc=disabled
+-
+-ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+-GST_OMX_VARIANT = rpi
+-GST_OMX_CONF_OPTS += -Dheader_path=$(STAGING_DIR)/usr/include/IL
+-else
+-GST_OMX_VARIANT = generic
 -endif
 -
--$(eval $(autotools-package))
+-GST_OMX_CONF_OPTS += -Dtarget=$(GST_OMX_VARIANT)
+-
+-GST_OMX_DEPENDENCIES = gstreamer1 gst1-plugins-base libopenmax
+-
+-# adjust library paths to where buildroot installs them
+-define GST_OMX_FIXUP_CONFIG_PATHS
+-	find $(@D)/config -name gstomx.conf | \
+-		xargs $(SED) 's|/usr/local|/usr|g' -e 's|/opt/vc|/usr|g'
+-endef
+-
+-GST_OMX_POST_PATCH_HOOKS += GST_OMX_FIXUP_CONFIG_PATHS
+-
+-$(eval $(meson-package))
+
 -- 
-2.39.5
+2.48.1
 
 _______________________________________________
 buildroot mailing list
