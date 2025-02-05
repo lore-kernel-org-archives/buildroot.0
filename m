@@ -4,49 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A3E0C02196
-	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 12:02:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF910C02194
+	for <buildroot@archiver.kernel.org>; Wed,  5 Feb 2025 12:02:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F781404A8;
-	Wed,  5 Feb 2025 12:02:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88A4940715;
+	Wed,  5 Feb 2025 12:02:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mag7bz20TUDu; Wed,  5 Feb 2025 12:02:22 +0000 (UTC)
+ id CX_nCWH6X4l8; Wed,  5 Feb 2025 12:02:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E707640337
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8A484066E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E707640337;
-	Wed,  5 Feb 2025 12:02:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id CFA52CD
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:02:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8A484066E;
+	Wed,  5 Feb 2025 12:02:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4336812F
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:02:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BF98C405A5
- for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:02:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2783B60FB5
+ for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:02:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id io74-mM6GzQW for <buildroot@buildroot.org>;
- Wed,  5 Feb 2025 12:02:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id puFpX44N8Q1U for <buildroot@buildroot.org>;
+ Wed,  5 Feb 2025 12:02:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CF1B4022B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3CF1B4022B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C2AE860BCC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2AE860BCC
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C2AE860BCC
  for <buildroot@buildroot.org>; Wed,  5 Feb 2025 12:02:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3406F86F5B; Wed,  5 Feb 2025 12:02:18 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 12:58:56 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f2a862fe603b1d0c52249f58b8eacf85a0d37b8a
-X-Git-Newrev: 38090cdbb610e60015c288e80b1aaedc3d052af4
-X-Patchwork-Hint: ignore
-Message-Id: <20250205120218.3406F86F5B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-aiohttp-sse-client: new
- package
+X-CSE-ConnectionGUID: UTo0nVKZSoq5zvYCPfgSeA==
+X-CSE-MsgGUID: UgTXz9oPTimhyzoFu/5Bgw==
+Received: from unknown (HELO opfedv1rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 05 Feb 2025 13:02:16 +0100
+Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv1rlp0d.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Feb 2025 13:02:15 +0100
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
+ Wed, 5 Feb 2025 13:02:14 +0100
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Wed, 05 Feb 2025 13:02:13 +0100
+From: yann.morin@orange.com
+X-CSE-ConnectionGUID: buz+p/8QQeGcPSeL03X/dQ==
+X-CSE-MsgGUID: AVAIDVAaQEieMBMlPy0iog==
+X-IronPort-AV: E=Sophos;i="6.13,261,1732575600"; d="scan'208";a="251681923"
+Date: Wed, 5 Feb 2025 13:02:13 +0100
+To: Fiona Klute <fiona.klute@gmx.de>
+Message-ID: <Z6NTRZe6pNcyMvRn@yd-6wlzhs3>
+References: <20250205113531.4161633-1-fiona.klute@gmx.de>
+ <20250205113531.4161633-2-fiona.klute@gmx.de>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20250205113531.4161633-2-fiona.klute@gmx.de>
+X-Originating-IP: [10.115.26.50]
+X-ClientProxiedBy: OPE16NORMBX306.corporate.adroot.infra.ftgroup
+ (10.115.27.11) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1738756939; x=1770292939;
+ h=date:to:cc:subject:message-id:references:mime-version:
+ in-reply-to:content-transfer-encoding:from;
+ bh=PcLKkvR2P5ozhB2rl1//7tZxXn12UOZz2aIilvsTq1U=;
+ b=j9e/uX9wOG0p57LS+S1dkSU+nYOpXI3wT7reE4ff66wspF6RFFevyCFU
+ hNEgV+VBGfWx5QBFXW5nJe1AhI4lxt/Uhug1qcVBjbvytOL5XSz+eXGtM
+ oHUpoQ5FeKo6WyTpQaxWkmaP/E6lcQ56IlhBrc6i3RodpPClS937Ozkov
+ vE2Atm2D/tNO+eNaUftkGZ1C5UUgWdnmm4lQc8s/e4Qy4+YCw5AsbbCFE
+ eHtcpeaQsCsW6EnWf7ZmQdTrt2Pzwz9xzhE3mtoQ103ZlpzBG62hM4zYH
+ GIuZ3txs7ZQP8sn+gZh0m7UjKDiLbTL0e6yEXRZiVdcbRJPhJ2kLT1D07
+ Q==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=orange.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=j9e/uX9w
+Subject: Re: [Buildroot] [PATCH v2 2/3] package/pkg-golang: do not force
+ ld.gold on aarch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,149 +101,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Thomas Perale <thomas.perale@mind.be>,
+ Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38090cdbb610e60015c288e80b1aaedc3d052af4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fiona, All,
 
-This patch adds the python-aiohttp-sse-client package to buildroot.
-This package adds SSE client support to the aiohttp library, as
-opposed to the already exising python-aiohttp-sse package, which
-only adds sse server support.
+On 2025-02-05 12:35 +0100, Fiona Klute spake thusly:
+> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+> 
+> Go forces use of the Gold linker on aarch64 due to a bug in BFD that
+> is fixed in Binutils >= 2.41 (that includes all versions provided by
+> Buildroot). Forcing Gold will break with toolchains that don't provide
+> it (like the Buildroot toolchains), so override the flag and use BFD.
 
-Signed-off-by: Arno Messiaen <arnomessiaen@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                         |  3 ++
- package/Config.in                                  |  1 +
- ...setup.py-remove-pytest-runner-requirement.patch | 37 ++++++++++++++++++++++
- package/python-aiohttp-sse-client/Config.in        | 10 ++++++
- .../python-aiohttp-sse-client.hash                 |  5 +++
- .../python-aiohttp-sse-client.mk                   | 14 ++++++++
- 6 files changed, 70 insertions(+)
+It is worth mentionning that toolchains using a binutils version where
+gold does not even exist (e.g. old versions of binutils, or future ones
+where it got dropped) would lack 'ld.bfd' as well, and would only have
+'ld'. That change would break for those toolchains; for the old
+versions, that would not be an issue in practice, as they would be
+broken because binutils had an issue anyway; for future versions, we'll
+handle that at times, as usual! ;-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f20bd5ce3f..1264c26fbd 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -275,6 +275,9 @@ F:	configs/snps_archs38_hsdk_defconfig
- N:	Arnaud Aujon <arnaud@intelibre.fr>
- F:	package/espeak/
- 
-+N:	Arno Messiaen <arnomessiaen@gmail.com>
-+F:	package/python-aiohttp-sse-client/
-+
- N:	Arnout Vandecappelle <arnout@mind.be>
- F:	package/arp-scan/
- F:	package/dehydrated/
-diff --git a/package/Config.in b/package/Config.in
-index 7da8e10c36..4896e6db76 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -982,6 +982,7 @@ menu "External python modules"
- 	source "package/python-aiohttp-security/Config.in"
- 	source "package/python-aiohttp-session/Config.in"
- 	source "package/python-aiohttp-sse/Config.in"
-+	source "package/python-aiohttp-sse-client/Config.in"
- 	source "package/python-aiojobs/Config.in"
- 	source "package/python-aiologstash/Config.in"
- 	source "package/python-aiomonitor/Config.in"
-diff --git a/package/python-aiohttp-sse-client/0001-setup.py-remove-pytest-runner-requirement.patch b/package/python-aiohttp-sse-client/0001-setup.py-remove-pytest-runner-requirement.patch
-new file mode 100644
-index 0000000000..59fc775f0f
---- /dev/null
-+++ b/package/python-aiohttp-sse-client/0001-setup.py-remove-pytest-runner-requirement.patch
-@@ -0,0 +1,37 @@
-+From fdba1f12843d0fdbd5094144a8081244b71b2cf0 Mon Sep 17 00:00:00 2001
-+From: Arno Messiaen <arnomessiaen@gmail.com>
-+Date: Wed, 22 Nov 2023 08:12:08 +0100
-+Subject: [PATCH] setup.py: remove pytest-runner requirement
-+
-+setup.py: pytest-runner is not required to install the package
-+
-+Upstream: N/A, Buildroot packaging related
-+Signed-off-by: Arno Messiaen <arnomessiaen@gmail.com>
-+---
-+ setup.py | 3 ---
-+ 1 file changed, 3 deletions(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 062bb08..f19bc0a 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -13,8 +13,6 @@ with open('HISTORY.rst') as history_file:
-+ 
-+ requirements = ['aiohttp>=3', 'attrs', 'multidict', 'yarl', ]
-+ 
-+-setup_requirements = ['pytest-runner', ]
-+-
-+ test_requirements = ['pytest', ]
-+ 
-+ setup(
-+@@ -41,7 +39,6 @@ setup(
-+     keywords='aiohttp_sse_client',
-+     name='aiohttp-sse-client',
-+     packages=find_packages(include=['aiohttp_sse_client']),
-+-    setup_requires=setup_requirements,
-+     test_suite='tests',
-+     tests_require=test_requirements,
-+     url='https://github.com/rtfol/aiohttp-sse-client',
-+-- 
-+2.40.1
-+
-diff --git a/package/python-aiohttp-sse-client/Config.in b/package/python-aiohttp-sse-client/Config.in
-new file mode 100644
-index 0000000000..2a89791b99
---- /dev/null
-+++ b/package/python-aiohttp-sse-client/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_AIOHTTP_SSE_CLIENT
-+	bool "python-aiohttp-sse-client"
-+	select BR2_PACKAGE_PYTHON_AIOHTTP # runtime
-+	select BR2_PACKAGE_PYTHON_ATTRS # runtime
-+	select BR2_PACKAGE_PYTHON_MULTIDICT # runtime
-+	select BR2_PACKAGE_PYTHON_YARL # runtime
-+	help
-+	  Server-sent events client support for aiohttp.
-+
-+	  https://github.com/rtfol/aiohttp-sse-client
-diff --git a/package/python-aiohttp-sse-client/python-aiohttp-sse-client.hash b/package/python-aiohttp-sse-client/python-aiohttp-sse-client.hash
-new file mode 100644
-index 0000000000..5a1d240777
---- /dev/null
-+++ b/package/python-aiohttp-sse-client/python-aiohttp-sse-client.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/aiohttp-sse-client/json
-+md5  d9065bf151fbb485a175ae453a9a5f9f  aiohttp-sse-client-0.2.1.tar.gz
-+sha256  5004e29271624af586158dc7166cb0687a7a5997aab5b808f4b53400e1b72e3b  aiohttp-sse-client-0.2.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  44c346abc42b39f1390e4747adfd60a3ca349e01462965e5750ae531299b8ff1  LICENSE
-diff --git a/package/python-aiohttp-sse-client/python-aiohttp-sse-client.mk b/package/python-aiohttp-sse-client/python-aiohttp-sse-client.mk
-new file mode 100644
-index 0000000000..4feae517ae
---- /dev/null
-+++ b/package/python-aiohttp-sse-client/python-aiohttp-sse-client.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-aiohttp-sse-client
-+#
-+################################################################################
-+
-+PYTHON_AIOHTTP_SSE_CLIENT_VERSION = 0.2.1
-+PYTHON_AIOHTTP_SSE_CLIENT_SOURCE = aiohttp-sse-client-$(PYTHON_AIOHTTP_SSE_CLIENT_VERSION).tar.gz
-+PYTHON_AIOHTTP_SSE_CLIENT_SITE = https://files.pythonhosted.org/packages/71/c3/4825c5f37909a70c8018924b3d521847dd7acf1fce7e1054574bafed2271
-+PYTHON_AIOHTTP_SSE_CLIENT_SETUP_TYPE = setuptools
-+PYTHON_AIOHTTP_SSE_CLIENT_LICENSE = Apache-2.0
-+PYTHON_AIOHTTP_SSE_CLIENT_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+Regards,
+Yann E. MORIN.
+
+> See: https://github.com/golang/go/issues/22040
+> 
+> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+> ---
+>  package/pkg-golang.mk | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+> index a3421af288..bdf8de4d66 100644
+> --- a/package/pkg-golang.mk
+> +++ b/package/pkg-golang.mk
+> @@ -118,6 +118,16 @@ $(2)_EXTLDFLAGS += -static
+>  $(2)_TAGS += osusergo netgo
+>  endif
+>  
+> +ifeq ($(BR2_aarch64),y)
+> +# Go forces use of the Gold linker on aarch64 due to a bug in BFD that
+> +# is fixed in Binutils >= 2.41 (that includes all versions provided by
+> +# Buildroot). Forcing Gold will break with toolchains that don't
+> +# provide it (like the Buildroot toolchains), so override the flag and
+> +# use BFD.
+> +# See: https://github.com/golang/go/issues/22040
+> +$(2)_EXTLDFLAGS += -fuse-ld=bfd
+> +endif
+> +
+>  ifneq ($$($(2)_EXTLDFLAGS),)
+>  $(2)_LDFLAGS += -extldflags '$$($(2)_EXTLDFLAGS)'
+>  endif
+> -- 
+> 2.47.2
+> 
+
+-- 
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
