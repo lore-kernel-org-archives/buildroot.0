@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42B27C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:13:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74C60C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:13:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EAD5608B6;
-	Fri, 28 Feb 2025 17:13:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F27154FCB4;
+	Fri, 28 Feb 2025 17:13:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2RPYXTAT2q9W; Fri, 28 Feb 2025 17:13:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uj98sNvg_0XY; Fri, 28 Feb 2025 17:13:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 829B6703BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BECC250498
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 829B6703BC;
-	Fri, 28 Feb 2025 17:13:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BECC250498;
+	Fri, 28 Feb 2025 17:13:56 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1462168
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:44:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EBE81DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:44:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 14A39424B7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 30A3B41E69
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LhO25k8mWqlH for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:39 +0000 (UTC)
+ id LJZXSOl_s9La for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 015AE41E69
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65E6742FDD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 015AE41E69
+ by smtp4.osuosl.org (Postfix) with ESMTP id 65E6742FDD
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE43986780; Fri, 28 Feb 2025 16:30:32 +0000 (UTC)
+ id 619C685E25; Fri, 28 Feb 2025 16:30:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 09:47:19 +0100
+Date: Wed, 5 Feb 2025 11:06:16 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b233e712073296cabfb088f02e46b4d3a4cdd436
-X-Git-Newrev: 382f24a89f785ceb1776294c5be4f973e5eb6653
+X-Git-Oldrev: 75ab6cf93a3ba505897ae99b5ff4bffda55d3c7b
+X-Git-Newrev: 51e292cf67587f0e8ce666306d07309766595b9f
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163032.EE43986780@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/elfutils: backport
- patch fixing musl/GCC 14.x issue
+Message-Id: <20250228163033.619C685E25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gstreamer1/gst-omx:
+ remove gst-omx
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,393 +58,134 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=382f24a89f785ceb1776294c5be4f973e5eb6653
+commit: https://git.buildroot.net/buildroot/commit/?id=51e292cf67587f0e8ce666306d07309766595b9f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This issue has been occuring since GCC 14.x support has been
-introduced in Buildroot.
+The OMX plugin has been removed from gstreamer as the OpenMAX standard
+is long dead and even the Raspberry Pi OS no longer supports it.
 
-Fixes:
+See release notes for more details:
+    https://gstreamer.freedesktop.org/releases/1.24/
 
-  http://autobuild.buildroot.net/results/2a914c3a93cca686434fb18ce13aa5add3ec8464/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- .../0003-Add-helper-function-for-basename.patch    | 358 +++++++++++++++++++++
- 1 file changed, 358 insertions(+)
+ Config.in.legacy                        |  7 ++++++
+ package/gstreamer1/Config.in            |  1 -
+ package/gstreamer1/gst-omx/Config.in    | 11 ----------
+ package/gstreamer1/gst-omx/gst-omx.hash |  3 ---
+ package/gstreamer1/gst-omx/gst-omx.mk   | 39 ---------------------------------
+ 5 files changed, 7 insertions(+), 54 deletions(-)
 
-diff --git a/package/elfutils/0003-Add-helper-function-for-basename.patch b/package/elfutils/0003-Add-helper-function-for-basename.patch
-new file mode 100644
-index 0000000000..1f47546ba8
---- /dev/null
-+++ b/package/elfutils/0003-Add-helper-function-for-basename.patch
-@@ -0,0 +1,358 @@
-+From 2296679efa547104ea52bf60cdda19e07c8d1e26 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Sun, 10 Dec 2023 12:20:33 -0800
-+Subject: [PATCH] Add helper function for basename
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 2e5bd3153f..fbabe784ba 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -204,6 +204,13 @@ config BR2_PACKAGE_DIRECTFB
+ 	  This package was no longer maintained upstream, so it was
+ 	  dropped from Buildroot.
+ 
++config BR2_PACKAGE_GST_OMX
++	bool "gst-omx has been removed"
++	select BR2_LEGACY
++	help
++	  The gst-omx module has been removed from Gstreamer in
++	  release 1.24 in favor of Video4Linux-based video encoders.
 +
-+musl does not provide GNU version of basename and lately have removed
-+the definiton from string.h [1] which exposes this problem. It can be
-+made to work by providing a local implementation of basename which
-+implements the GNU basename behavior, this makes it work across C
-+libraries which have POSIX implementation only.
-+
-+[1] https://git.musl-libc.org/cgit/musl/commit/?id=725e17ed6dff4d0cd22487bb64470881e86a92e7
-+
-+    * lib/system.h (xbasename): New static inline functions.
-+    Poison basename.
-+    * libdw/dwarf_getsrc_file.c (dwarf_getsrc_file): Use xbasename.
-+    * libdwfl/core-file.c (dwfl_core_file_report): Likewise.
-+    * libdwfl/dwfl_module_getsrc_file.c (dwfl_module_getsrc_file):
-+    Likewise.
-+    * libdwfl/dwfl_segment_report_module.c (dwfl_segment_report_module):
-+    Likewise.
-+    * libdwfl/find-debuginfo.c (find_debuginfo_in_path): Likewise.
-+    * libdwfl/link_map.c (report_r_debug): Likewise.
-+    * libdwfl/linux-kernel-modules.c (try_kernel_name): Likewise.
-+    * src/addr2line.c (print_dwarf_function): Likewise.
-+    (print_src): Likewise.
-+    * src/ar.c (do_oper_insert): Likewise.
-+    And cast away const in entry.key assignment.
-+    * src/nm.c (show_symbols): Use xbasename.
-+    * src/stack.c (module_callback): Likewise.
-+    * src/strip.c (handle_elf): Likewise.
-+    * tests/show-die-info.c: Include system.h.
-+    (dwarf_tag_string): Use xbasename.
-+    * tests/varlocs.c: Likewise.
-+    * debuginfod/debuginfod.cxx: Move include system.h to the end.
-+    (register_file_name): Rename basename to filename.
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+Signed-off-by: Mark Wielaard <mark@klomp.org>
-+Upstream: https://sourceware.org/git/?p=elfutils.git;a=commit;h=a2194f6b305bf0d0b9dd49dccd0a5c21994c8eea
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ debuginfod/debuginfod.cxx            | 10 ++++++++--
-+ lib/system.h                         | 14 ++++++++++++++
-+ libdw/dwarf_getsrc_file.c            |  2 +-
-+ libdwfl/core-file.c                  |  2 +-
-+ libdwfl/dwfl_module_getsrc_file.c    |  2 +-
-+ libdwfl/dwfl_segment_report_module.c |  2 +-
-+ libdwfl/find-debuginfo.c             |  6 +++---
-+ libdwfl/link_map.c                   |  2 +-
-+ libdwfl/linux-kernel-modules.c       |  2 +-
-+ src/addr2line.c                      |  4 ++--
-+ src/ar.c                             |  4 ++--
-+ src/nm.c                             |  4 ++--
-+ src/stack.c                          |  2 +-
-+ src/strip.c                          |  2 +-
-+ tests/show-die-info.c                |  3 ++-
-+ tests/varlocs.c                      |  2 +-
-+ 16 files changed, 42 insertions(+), 21 deletions(-)
-+
-+diff --git a/debuginfod/debuginfod.cxx b/debuginfod/debuginfod.cxx
-+index 99b1f2b9..3b69a621 100644
-+--- a/debuginfod/debuginfod.cxx
-++++ b/debuginfod/debuginfod.cxx
-+@@ -44,10 +44,11 @@ extern "C" {
-+ }
-+ #endif
-+ 
-++#ifdef HAVE_EXECINFO_H
-+ extern "C" {
-+-#include "printversion.h"
-+-#include "system.h"
-++#include <execinfo.h>
-+ }
-++#endif
-+ 
-+ #include "debuginfod.h"
-+ #include <dwarf.h>
-+@@ -127,6 +128,11 @@ using namespace std;
-+ #define tid() pthread_self()
-+ #endif
-+ 
-++extern "C" {
-++#include "printversion.h"
-++#include "system.h"
-++}
-++
-+ 
-+ inline bool
-+ string_endswith(const string& haystack, const string& needle)
-+diff --git a/lib/system.h b/lib/system.h
-+index 1c914efc..0db12d99 100644
-+--- a/lib/system.h
-++++ b/lib/system.h
-+@@ -1,6 +1,7 @@
-+ /* Declarations for common convenience functions.
-+    Copyright (C) 2006-2011 Red Hat, Inc.
-+    Copyright (C) 2022 Mark J. Wielaard <mark@klomp.org>
-++   Copyright (C) 2023 Khem Raj.
-+    This file is part of elfutils.
-+ 
-+    This file is free software; you can redistribute it and/or modify
-+@@ -211,4 +212,17 @@ extern char *__cxa_demangle (const char *mangled_name, char *output_buffer,
-+   extern int never_defined_just_used_for_checking[(expr) ? 1 : -1]	\
-+     __attribute__ ((unused))
-+ 
-++/* We really want a basename implementation that doesn't modify the
-++   input argument.  Normally you get that from string.h with _GNU_SOURCE
-++   define.  But some libc implementations don't define it and other
-++   define it, but provide an implementation that still modifies the
-++   argument.  So define our own and poison a bare basename symbol.  */
-++static inline const char *
-++xbasename(const char *s)
-++{
-++  const char *p = strrchr(s, '/');
-++  return p ? p+1 : s;
-++}
-++#pragma GCC poison basename
-++
-+ #endif /* system.h */
-+diff --git a/libdw/dwarf_getsrc_file.c b/libdw/dwarf_getsrc_file.c
-+index 5289c7da..03da431c 100644
-+--- a/libdw/dwarf_getsrc_file.c
-++++ b/libdw/dwarf_getsrc_file.c
-+@@ -98,7 +98,7 @@ dwarf_getsrc_file (Dwarf *dbg, const char *fname, int lineno, int column,
-+ 	      /* Match the name with the name the user provided.  */
-+ 	      const char *fname2 = line->files->info[lastfile].name;
-+ 	      if (is_basename)
-+-		lastmatch = strcmp (basename (fname2), fname) == 0;
-++		lastmatch = strcmp (xbasename (fname2), fname) == 0;
-+ 	      else
-+ 		lastmatch = strcmp (fname2, fname) == 0;
-+ 	    }
-+diff --git a/libdwfl/core-file.c b/libdwfl/core-file.c
-+index 87c940cb..89527d23 100644
-+--- a/libdwfl/core-file.c
-++++ b/libdwfl/core-file.c
-+@@ -595,7 +595,7 @@ dwfl_core_file_report (Dwfl *dwfl, Elf *elf, const char *executable)
-+       if (! __libdwfl_dynamic_vaddr_get (module->elf, &file_dynamic_vaddr))
-+ 	continue;
-+       Dwfl_Module *mod;
-+-      mod = __libdwfl_report_elf (dwfl, basename (module->name), module->name,
-++      mod = __libdwfl_report_elf (dwfl, xbasename (module->name), module->name,
-+ 				  module->fd, module->elf,
-+ 				  module->l_ld - file_dynamic_vaddr,
-+ 				  true, true);
-+diff --git a/libdwfl/dwfl_module_getsrc_file.c b/libdwfl/dwfl_module_getsrc_file.c
-+index 513af6b8..fc144225 100644
-+--- a/libdwfl/dwfl_module_getsrc_file.c
-++++ b/libdwfl/dwfl_module_getsrc_file.c
-+@@ -103,7 +103,7 @@ dwfl_module_getsrc_file (Dwfl_Module *mod,
-+ 		{
-+ 		  /* Match the name with the name the user provided.  */
-+ 		  lastfile = file;
-+-		  lastmatch = !strcmp (is_basename ? basename (file) : file,
-++		  lastmatch = !strcmp (is_basename ? xbasename (file) : file,
-+ 				       fname);
-+ 		}
-+ 	    }
-+diff --git a/libdwfl/dwfl_segment_report_module.c b/libdwfl/dwfl_segment_report_module.c
-+index 3ef62a7d..d0df7100 100644
-+--- a/libdwfl/dwfl_segment_report_module.c
-++++ b/libdwfl/dwfl_segment_report_module.c
-+@@ -718,7 +718,7 @@ dwfl_segment_report_module (Dwfl *dwfl, int ndx, const char *name,
-+ 	      bias += fixup;
-+ 	      if (module->name[0] != '\0')
-+ 		{
-+-		  name = basename (module->name);
-++		  name = xbasename (module->name);
-+ 		  name_is_final = true;
-+ 		}
-+ 	      break;
-+diff --git a/libdwfl/find-debuginfo.c b/libdwfl/find-debuginfo.c
-+index 7f7ab632..b358c774 100644
-+--- a/libdwfl/find-debuginfo.c
-++++ b/libdwfl/find-debuginfo.c
-+@@ -164,7 +164,7 @@ find_debuginfo_in_path (Dwfl_Module *mod, const char *file_name,
-+ {
-+   bool cancheck = debuglink_crc != (GElf_Word) 0;
-+ 
-+-  const char *file_basename = file_name == NULL ? NULL : basename (file_name);
-++  const char *file_basename = file_name == NULL ? NULL : xbasename (file_name);
-+   char *localname = NULL;
-+ 
-+   /* We invent a debuglink .debug name if NULL, but then want to try the
-+@@ -278,7 +278,7 @@ find_debuginfo_in_path (Dwfl_Module *mod, const char *file_name,
-+ 	  else
-+ 	    {
-+ 	      subdir = NULL;
-+-	      file = basename (debuglink_file);
-++	      file = xbasename (debuglink_file);
-+ 	    }
-+ 	  try_file_basename = debuglink_null;
-+ 	  break;
-+@@ -306,7 +306,7 @@ find_debuginfo_in_path (Dwfl_Module *mod, const char *file_name,
-+ 	    if (mod->dw != NULL && (p[0] == '\0' || p[0] == '/'))
-+ 	      {
-+ 		fd = try_open (&main_stat, dir, ".dwz",
-+-			       basename (file), &fname);
-++			       xbasename (file), &fname);
-+ 		if (fd < 0)
-+ 		  {
-+ 		    if (errno != ENOENT && errno != ENOTDIR)
-+diff --git a/libdwfl/link_map.c b/libdwfl/link_map.c
-+index 06d85eb6..9d6b68c1 100644
-+--- a/libdwfl/link_map.c
-++++ b/libdwfl/link_map.c
-+@@ -469,7 +469,7 @@ report_r_debug (uint_fast8_t elfclass, uint_fast8_t elfdata,
-+ 		      if (r_debug_info_module == NULL)
-+ 			{
-+ 			  // XXX hook for sysroot
-+-			  mod = __libdwfl_report_elf (dwfl, basename (name),
-++			  mod = __libdwfl_report_elf (dwfl, xbasename (name),
-+ 						      name, fd, elf, base,
-+ 						      true, true);
-+ 			  if (mod != NULL)
-+diff --git a/libdwfl/linux-kernel-modules.c b/libdwfl/linux-kernel-modules.c
-+index 58c0c417..e9faba26 100644
-+--- a/libdwfl/linux-kernel-modules.c
-++++ b/libdwfl/linux-kernel-modules.c
-+@@ -116,7 +116,7 @@ try_kernel_name (Dwfl *dwfl, char **fname, bool try_debug)
-+ 	/* Try the file's unadorned basename as DEBUGLINK_FILE,
-+ 	   to look only for "vmlinux" files.  */
-+ 	fd = INTUSE(dwfl_standard_find_debuginfo) (&fakemod, NULL, NULL, 0,
-+-						   *fname, basename (*fname),
-++						   *fname, xbasename (*fname),
-+ 						   0, &fakemod.debug.name);
-+ 
-+       if (fakemod.debug.name != NULL)
-+diff --git a/src/addr2line.c b/src/addr2line.c
-+index d902d791..d87e5b45 100644
-+--- a/src/addr2line.c
-++++ b/src/addr2line.c
-+@@ -385,7 +385,7 @@ print_dwarf_function (Dwfl_Module *mod, Dwarf_Addr addr)
-+ 		  if (file == NULL)
-+ 		    file = "???";
-+ 		  else if (only_basenames)
-+-		    file = basename (file);
-++		    file = xbasename (file);
-+ 		  else if (use_comp_dir && file[0] != '/')
-+ 		    {
-+ 		      const char *const *dirs;
-+@@ -568,7 +568,7 @@ print_src (const char *src, int lineno, int linecol, Dwarf_Die *cu)
-+   const char *comp_dir_sep = "";
-+ 
-+   if (only_basenames)
-+-    src = basename (src);
-++    src = xbasename (src);
-+   else if (use_comp_dir && src[0] != '/')
-+     {
-+       Dwarf_Attribute attr;
-+diff --git a/src/ar.c b/src/ar.c
-+index 3bcb18fe..e6d6d58f 100644
-+--- a/src/ar.c
-++++ b/src/ar.c
-+@@ -1133,7 +1133,7 @@ do_oper_insert (int oper, const char *arfname, char **argv, int argc,
-+       for (int cnt = 0; cnt < argc; ++cnt)
-+ 	{
-+ 	  ENTRY entry;
-+-	  entry.key = full_path ? argv[cnt] : basename (argv[cnt]);
-++	  entry.key = full_path ? argv[cnt] : (char*)xbasename (argv[cnt]);
-+ 	  entry.data = &argv[cnt];
-+ 	  if (hsearch (entry, ENTER) == NULL)
-+ 	    error_exit (errno, _("cannot insert into hash table"));
-+@@ -1242,7 +1242,7 @@ do_oper_insert (int oper, const char *arfname, char **argv, int argc,
-+       /* Open all the new files, get their sizes and add all symbols.  */
-+       for (int cnt = 0; cnt < argc; ++cnt)
-+ 	{
-+-	  const char *bname = basename (argv[cnt]);
-++	  const char *bname = xbasename (argv[cnt]);
-+ 	  size_t bnamelen = strlen (bname);
-+ 	  if (found[cnt] == NULL)
-+ 	    {
-+diff --git a/src/nm.c b/src/nm.c
-+index fbdee8e1..3675f59b 100644
-+--- a/src/nm.c
-++++ b/src/nm.c
-+@@ -1417,7 +1417,7 @@ show_symbols (int fd, Ebl *ebl, GElf_Ehdr *ehdr,
-+ 			  int lineno;
-+ 			  (void) dwarf_lineno (line, &lineno);
-+ 			  const char *file = dwarf_linesrc (line, NULL, NULL);
-+-			  file = (file != NULL) ? basename (file) : "???";
-++			  file = (file != NULL) ? xbasename (file) : "???";
-+ 			  int n;
-+ 			  n = obstack_printf (&whereob, "%s:%d%c", file,
-+ 					      lineno, '\0');
-+@@ -1448,7 +1448,7 @@ show_symbols (int fd, Ebl *ebl, GElf_Ehdr *ehdr,
-+ 		{
-+ 		  /* We found the line.  */
-+ 		  int n = obstack_printf (&whereob, "%s:%" PRIu64 "%c",
-+-					  basename ((*found)->file),
-++					  xbasename ((*found)->file),
-+ 					  (*found)->lineno,
-+ 					  '\0');
-+ 		  sym_mem[nentries_used].where = obstack_finish (&whereob);
-+diff --git a/src/stack.c b/src/stack.c
-+index 534aa93c..f4c5ba8c 100644
-+--- a/src/stack.c
-++++ b/src/stack.c
-+@@ -152,7 +152,7 @@ module_callback (Dwfl_Module *mod, void **userdata __attribute__((unused)),
-+ 
-+   int width = get_addr_width (mod);
-+   printf ("0x%0*" PRIx64 "-0x%0*" PRIx64 " %s\n",
-+-	  width, start, width, end, basename (name));
-++	  width, start, width, end, xbasename (name));
-+ 
-+   const unsigned char *id;
-+   GElf_Addr id_vaddr;
-+diff --git a/src/strip.c b/src/strip.c
-+index 2a2cc801..88977a5c 100644
-+--- a/src/strip.c
-++++ b/src/strip.c
-+@@ -1800,7 +1800,7 @@ handle_elf (int fd, Elf *elf, const char *prefix, const char *fname,
-+ 		      elf_errmsg (-1));
-+ 	}
-+ 
-+-      char *debug_basename = basename (debug_fname_embed ?: debug_fname);
-++      const char *debug_basename = xbasename (debug_fname_embed ?: debug_fname);
-+       off_t crc_offset = strlen (debug_basename) + 1;
-+       /* Align to 4 byte boundary */
-+       crc_offset = ((crc_offset - 1) & ~3) + 4;
-+diff --git a/tests/show-die-info.c b/tests/show-die-info.c
-+index 1a3191cd..bda459a5 100644
-+--- a/tests/show-die-info.c
-++++ b/tests/show-die-info.c
-+@@ -27,6 +27,7 @@
-+ #include <unistd.h>
-+ 
-+ #include "../libdw/known-dwarf.h"
-++#include "../lib/system.h"
-+ 
-+ static const char *
-+ dwarf_tag_string (unsigned int tag)
-+@@ -318,7 +319,7 @@ main (int argc, char *argv[])
-+       int fd = open (argv[cnt], O_RDONLY);
-+       Dwarf *dbg;
-+ 
-+-      printf ("file: %s\n", basename (argv[cnt]));
-++      printf ("file: %s\n", xbasename (argv[cnt]));
-+ 
-+       dbg = dwarf_begin (fd, DWARF_C_READ);
-+       if (dbg == NULL)
-+diff --git a/tests/varlocs.c b/tests/varlocs.c
-+index 8e563fd3..1004f969 100644
-+--- a/tests/varlocs.c
-++++ b/tests/varlocs.c
-+@@ -1120,7 +1120,7 @@ main (int argc, char *argv[])
-+ 
-+ 	  const char *name = (modname[0] != '\0'
-+ 			      ? modname
-+-			      :  basename (mainfile));
-++			      :  xbasename (mainfile));
-+ 	  printf ("module '%s'\n", name);
-+ 	  print_die (&cudie, "CU", 0);
-+ 
-+-- 
-+2.48.1
-+
+ config BR2_PACKAGE_SDL2_DIRECTFB
+ 	bool "sdl2 directfb support removed"
+ 	select BR2_LEGACY
+diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
+index 8fe8a34395..67c33e5d4e 100644
+--- a/package/gstreamer1/Config.in
++++ b/package/gstreamer1/Config.in
+@@ -15,7 +15,6 @@ source "package/gstreamer1/gst1-python/Config.in"
+ source "package/gstreamer1/gst1-rtsp-server/Config.in"
+ source "package/gstreamer1/gst1-shark/Config.in"
+ source "package/gstreamer1/gst1-vaapi/Config.in"
+-source "package/gstreamer1/gst-omx/Config.in"
+ source "package/gstreamer1/gstd/Config.in"
+ source "package/gstreamer1/gstreamer1-editing-services/Config.in"
+ endif
+diff --git a/package/gstreamer1/gst-omx/Config.in b/package/gstreamer1/gst-omx/Config.in
+deleted file mode 100644
+index efe3d211d6..0000000000
+--- a/package/gstreamer1/gst-omx/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_GST_OMX
+-	bool "gst-omx"
+-	depends on BR2_PACKAGE_HAS_LIBOPENMAX
+-	select BR2_PACKAGE_GST1_PLUGINS_BASE
+-	help
+-	  GStreamer plug-in to use OpenMAX API.
+-
+-	  https://cgit.freedesktop.org/gstreamer/gst-omx
+-
+-comment "gst-omx requires a OpenMAX implementation"
+-	depends on !BR2_PACKAGE_HAS_LIBOPENMAX
+diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
+deleted file mode 100644
+index a84ffa7b6b..0000000000
+--- a/package/gstreamer1/gst-omx/gst-omx.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.22.12.tar.xz.sha256sum
+-sha256  6b0685b92ac735032d7987d1028afaeab0a98ab726e0c51e5b9bfc8f2da7c8b1  gst-omx-1.22.12.tar.xz
+-sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
+deleted file mode 100644
+index c1ab2b19c0..0000000000
+--- a/package/gstreamer1/gst-omx/gst-omx.mk
++++ /dev/null
+@@ -1,39 +0,0 @@
+-################################################################################
+-#
+-# gst-omx
+-#
+-################################################################################
+-
+-GST_OMX_VERSION = 1.22.12
+-GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
+-GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
+-
+-GST_OMX_LICENSE = LGPL-2.1
+-GST_OMX_LICENSE_FILES = COPYING
+-
+-GST_OMX_CONF_OPTS = \
+-	-Dexamples=disabled \
+-	-Dtests=disabled \
+-	-Dtools=disabled \
+-	-Ddoc=disabled
+-
+-ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
+-GST_OMX_VARIANT = rpi
+-GST_OMX_CONF_OPTS += -Dheader_path=$(STAGING_DIR)/usr/include/IL
+-else
+-GST_OMX_VARIANT = generic
+-endif
+-
+-GST_OMX_CONF_OPTS += -Dtarget=$(GST_OMX_VARIANT)
+-
+-GST_OMX_DEPENDENCIES = gstreamer1 gst1-plugins-base libopenmax
+-
+-# adjust library paths to where buildroot installs them
+-define GST_OMX_FIXUP_CONFIG_PATHS
+-	find $(@D)/config -name gstomx.conf | \
+-		xargs $(SED) 's|/usr/local|/usr|g' -e 's|/opt/vc|/usr|g'
+-endef
+-
+-GST_OMX_POST_PATCH_HOOKS += GST_OMX_FIXUP_CONFIG_PATHS
+-
+-$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
