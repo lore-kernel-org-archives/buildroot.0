@@ -1,75 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0840C02194
-	for <buildroot@archiver.kernel.org>; Thu,  6 Feb 2025 15:45:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFCB2C02194
+	for <buildroot@archiver.kernel.org>; Thu,  6 Feb 2025 16:18:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6BE2680F66;
-	Thu,  6 Feb 2025 15:45:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1851F427D6;
+	Thu,  6 Feb 2025 16:18:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5na3ge1v-AXd; Thu,  6 Feb 2025 15:45:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9MXc5_1lCa9D; Thu,  6 Feb 2025 16:18:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5141E80F6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94E99427CF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5141E80F6C;
-	Thu,  6 Feb 2025 15:45:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94E99427CF;
+	Thu,  6 Feb 2025 16:18:13 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 10A3BE2
- for <buildroot@buildroot.org>; Thu,  6 Feb 2025 15:45:22 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CB17CF
+ for <buildroot@buildroot.org>; Thu,  6 Feb 2025 16:18:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 08BB140E21
- for <buildroot@buildroot.org>; Thu,  6 Feb 2025 15:45:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E1B55415D3
+ for <buildroot@buildroot.org>; Thu,  6 Feb 2025 16:18:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mj28Ud5lWcNS for <buildroot@buildroot.org>;
- Thu,  6 Feb 2025 15:45:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=188.165.44.123;
- helo=mail1.insia.net; envelope-from=guillaume.chaye@zeetim.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C5D1F4040E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C5D1F4040E
-Received: from mail1.insia.net (mail1.insia.net [188.165.44.123])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C5D1F4040E
- for <buildroot@buildroot.org>; Thu,  6 Feb 2025 15:45:20 +0000 (UTC)
-Received: from smtp.insia.net (unknown [192.168.1.24])
- by mail1.insia.net (Postfix) with ESMTP id CE7AE3F83B;
- Thu,  6 Feb 2025 16:45:13 +0100 (CET)
-Received: from UDERZO.MYINSIA.INT (unknown [192.168.1.35])
- by smtp.insia.net (Postfix) with ESMTP id CE8195F497;
- Thu,  6 Feb 2025 16:45:38 +0100 (CET)
-From: Guillaume Chaye <guillaume.chaye@zeetim.com>
+ id g6Swv2AsVoFg for <buildroot@buildroot.org>;
+ Thu,  6 Feb 2025 16:18:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2FFEE415A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FFEE415A5
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2FFEE415A5
+ for <buildroot@buildroot.org>; Thu,  6 Feb 2025 16:18:10 +0000 (UTC)
+Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 6A3142C80169;
+ Thu, 06 Feb 2025 17:18:07 +0100 (CET)
 To: buildroot@buildroot.org
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, Guillaume, Chaye,
- Guillaume Chaye <guillaume.chaye@zeetim.com>
-Date: Thu,  6 Feb 2025 10:45:00 -0500
-Message-Id: <20250206154500.2638319-1-guillaume.chaye@zeetim.com>
-X-Mailer: git-send-email 2.39.5
+Date: Thu,  6 Feb 2025 17:18:05 +0100
+Message-ID: <20250206161806.312159-1-buildroot@bubu1.eu>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=zeetim.com; s=mail1; t=1738856713;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=3ESwMC+fXsw5f4xpKKJMDocqUtF5RqHSpYQ7dvFRLwo=;
- b=NNkI02r8qVi0/Ni5D2VHuWFf+3YE51JmEfhyDWLM2yMPYO4N6sUDIMm9U3AsUvbCVIUa7L
- nAKR2RgaR/AIAvzO/Ms+YZjO8YGc4dwJg8pC5kbpDE/qlT4BU90w9vR10zOQHk/NaopYPq
- D9kMi/ZEJPdIviqDACZFD4qUcrySrwSqVz7+gIEAYsBqb8umxtky9+9sxOQLi9mLyBvIdV
- jjKWTRYa/42eH32TvlmfwOqAEtdINDYkRZkrDqrJdGEq5DXG19AHG/xKuJlywFHpYmmgot
- RyQ5vrqkwbiEeF19uXmZq6tU3+TyQQWjcRf1SWDpmSbWAu9jgXXe4edsGaN1Bg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1738858687; bh=C+a1Ecb+a6aTCnqUN+0vFp/gwtr/K/1B7ftuITVnVDE=;
+ h=From:To:Cc:Subject:Date;
+ b=AaOmJKc/5uds6nrHK20HWx697qNnVk1VmDPhNnRHfnnLjVbx/46FpKCRjtrzH/+Xr
+ HUtKChUN88lKoLF5PfdrX9nYOB9VT7PPZ7tt/tOyGflajdHsFbaFEaPDWO265vJDIC
+ N4H6nf18PO9/TLuqbNfHEQxpwyC4o0oLzSKh/H+c4eoTaAEDxWmwt2VxYHCqmXU/OB
+ haJVFemQyra0gVPoSPyuMrqJkB3ZgacALjgJsfuNEdY9bJWbmBPfEfZ3VgwLEGilgk
+ 8Qb4NC3KnYWxGYcAyXPUKCei3En/AisNgmdvk3tDCzOuIAQlUmHi4LE6KwSTGxGTge
+ 7V9Q/0cOFgieA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=zeetim.com
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=zeetim.com header.i=@zeetim.com header.a=rsa-sha256
- header.s=mail1 header.b=NNkI02r8
-Subject: [Buildroot] [PATCHv3 1/1] package/sane-airscan: add new package.
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=AaOmJKc/
+Subject: [Buildroot] [PATCH 1/1] package/python-whitenoise: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,105 +76,153 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
----
- DEVELOPERS                             |  3 +++
- package/Config.in                      |  1 +
- package/sane-airscan/Config.in         | 20 ++++++++++++++++++++
- package/sane-airscan/sane-airscan.hash |  3 +++
- package/sane-airscan/sane-airscan.mk   | 13 +++++++++++++
- 5 files changed, 40 insertions(+)
- create mode 100644 package/sane-airscan/Config.in
- create mode 100644 package/sane-airscan/sane-airscan.hash
- create mode 100644 package/sane-airscan/sane-airscan.mk
+The test is using the django integration of whitenoise as it's the most
+common setup and allows to model the test case after the django one as
+well.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 059383d364..6879d868f2 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1330,6 +1330,9 @@ F:	package/python-rpi-ws281x/
- F:	package/python-wtforms/
- F:	package/rpi-rgb-led-matrix/
- 
-+N:	Guillaume Chaye
-+F:	package/sane-airscan/
-+
- N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
- F:	package/libnids/
- F:	package/libxcrypt/
+The setup we need to do is a bit more complicated though and follows
+the whitenoise getting started documentation [1].
+
+We then request a .css file from the django admin app that is enabled
+by default in template project. Due to running django's development
+server with --nostatic we ensure that static file handling is taken over
+by whitenoise.
+
+[1] https://whitenoise.readthedocs.io/en/stable/django.html
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+---
+
+Changes v1 -> v2:
+  - update to latest version
+  - drop change to unrelated test
+  - fix lint errors in test
+
+ package/Config.in                             |  1 +
+ package/python-whitenoise/Config.in           |  7 ++++
+ .../python-whitenoise/python-whitenoise.hash  |  5 +++
+ .../python-whitenoise/python-whitenoise.mk    | 14 +++++++
+ .../tests/package/test_python_whitenoise.py   | 41 +++++++++++++++++++
+ 5 files changed, 68 insertions(+)
+ create mode 100644 package/python-whitenoise/Config.in
+ create mode 100644 package/python-whitenoise/python-whitenoise.hash
+ create mode 100644 package/python-whitenoise/python-whitenoise.mk
+ create mode 100644 support/testing/tests/package/test_python_whitenoise.py
+
 diff --git a/package/Config.in b/package/Config.in
-index 400183516e..0ce6dfe420 100644
+index 3153fd6afa..10365b6b16 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -611,6 +611,7 @@ endmenu
- 	source "package/rtl8821au/Config.in"
- 	source "package/rtl8821cu/Config.in"
- 	source "package/rtl8822cs/Config.in"
-+	source "package/sane-airscan/Config.in"
- 	source "package/sane-backends/Config.in"
- 	source "package/sdparm/Config.in"
- 	source "package/sedutil/Config.in"
-diff --git a/package/sane-airscan/Config.in b/package/sane-airscan/Config.in
+@@ -1476,6 +1476,7 @@ menu "External python modules"
+ 	source "package/python-websocket-client/Config.in"
+ 	source "package/python-websockets/Config.in"
+ 	source "package/python-werkzeug/Config.in"
++	source "package/python-whitenoise/Config.in"
+ 	source "package/python-whoosh/Config.in"
+ 	source "package/python-wrapt/Config.in"
+ 	source "package/python-ws4py/Config.in"
+diff --git a/package/python-whitenoise/Config.in b/package/python-whitenoise/Config.in
 new file mode 100644
-index 0000000000..d5d02f9948
+index 0000000000..47df3ad5bf
 --- /dev/null
-+++ b/package/sane-airscan/Config.in
-@@ -0,0 +1,20 @@
-+config BR2_PACKAGE_SANE_AIRSCAN
-+	bool "sane-airscan"
-+	select BR2_PACKAGE_DBUS
-+	select BR2_PACKAGE_SANE_BACKENDS
-+	select BR2_PACKAGE_AVAHI
-+	select BR2_PACKAGE_GNUTLS
-+	select BR2_PACKAGE_LIBXML2
-+	select BR2_PACKAGE_JPEG
-+	select BR2_PACKAGE_LIBPNG
-+	select BR2_PACKAGE_TIFF
-+
++++ b/package/python-whitenoise/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_WHITENOISE
++	bool "python-whitenoise"
 +	help
-+	  SANE backend for AirScan (eSCL) and WSD document scanners
++	  Radically simplified static file serving for WSGI
++	  applications.
 +
-+	  https://github.com/alexpevzner/sane-airscan
-+
-+	  Similar to how most modern network printers support
-+	  "driverless" printing, using the universal vendor-neutral
-+	  printing protocol, many modern network scanners and MFPs
-+	  support "driverless" scanning.
-diff --git a/package/sane-airscan/sane-airscan.hash b/package/sane-airscan/sane-airscan.hash
++	  https://github.com/evansd/whitenoise
+diff --git a/package/python-whitenoise/python-whitenoise.hash b/package/python-whitenoise/python-whitenoise.hash
 new file mode 100644
-index 0000000000..6600cab3b8
+index 0000000000..4c37a65cc8
 --- /dev/null
-+++ b/package/sane-airscan/sane-airscan.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  67782be6a4fd36e753fc4766b8989d75f806bc6d1d2e92f617ea686be2924c14  sane-airscan-0.99.31.tar.gz
-+sha256  a2631c1b81992bd6f66db6be8b009ed7e3e998d1e2db4de497fa82d65011d373  LICENSE
-diff --git a/package/sane-airscan/sane-airscan.mk b/package/sane-airscan/sane-airscan.mk
++++ b/package/python-whitenoise/python-whitenoise.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/whitenoise/json
++md5  3dafb52a896b1826bbe23ebc18a83819  whitenoise-6.8.2.tar.gz
++sha256  486bd7267a375fa9650b136daaec156ac572971acc8bf99add90817a530dd1d4  whitenoise-6.8.2.tar.gz
++# Locally computed sha256 checksums
++sha256  ebfd469b4fb6b5adada547747e1e8da725ecf20595d54aced043275d4f4a3600  LICENSE
+diff --git a/package/python-whitenoise/python-whitenoise.mk b/package/python-whitenoise/python-whitenoise.mk
 new file mode 100644
-index 0000000000..d19dde232c
+index 0000000000..2d198e2921
 --- /dev/null
-+++ b/package/sane-airscan/sane-airscan.mk
-@@ -0,0 +1,13 @@
++++ b/package/python-whitenoise/python-whitenoise.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# sane-airscan
++# python-whitenoise
 +#
 +################################################################################
 +
-+SANE_AIRSCAN_VERSION = 0.99.31
-+SANE_AIRSCAN_SITE = $(call github,alexpevzner,sane-airscan,$(SANE_AIRSCAN_VERSION))
-+SANE_AIRSCAN_DEPENDENCIES=  dbus sane-backends avahi gnutls libxml2 jpeg libpng tiff
-+SANE_AIRSCAN_LICENSE = GPLv2
-+SANE_AIRSCAN_LICENSE_FILES = LICENSE
++PYTHON_WHITENOISE_VERSION = 6.8.2
++PYTHON_WHITENOISE_SOURCE = whitenoise-$(PYTHON_WHITENOISE_VERSION).tar.gz
++PYTHON_WHITENOISE_SITE = https://files.pythonhosted.org/packages/68/49/c21ebb5b911888c349a849ec7d1ead2dffbbcc4e2be0f6af2a7dbac03393
++PYTHON_WHITENOISE_SETUP_TYPE = setuptools
++PYTHON_WHITENOISE_LICENSE = MIT
++PYTHON_WHITENOISE_LICENSE_FILES = LICENSE
 +
-+$(eval $(meson-package))
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/test_python_whitenoise.py b/support/testing/tests/package/test_python_whitenoise.py
+new file mode 100644
+index 0000000000..5a76b6d5be
+--- /dev/null
++++ b/support/testing/tests/package/test_python_whitenoise.py
+@@ -0,0 +1,41 @@
++import time
++
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3Whitenoise(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_DJANGO=y
++        BR2_PACKAGE_PYTHON_WHITENOISE=y
++        BR2_PACKAGE_PYTHON3_SQLITE=y
++        """
++
++    def test_run(self):
++        self.login()
++        timeout = 35
++
++        cmd = "cd /opt && /usr/bin/django-admin startproject testsite"
++        self.assertRunOk(cmd, timeout=timeout)
++        # STATIC_ROOT needs to be set for 'collectstatic' to work.
++        self.emulator.run("echo 'STATIC_ROOT = BASE_DIR / \"staticfiles\"' >> /opt/testsite/testsite/settings.py")
++        cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py collectstatic"
++        self.assertRunOk(cmd, timeout=timeout)
++        # whitenoise docs say it needs to be added directly after SecurityMiddleware, so we do this here with sed.
++        cmd = """sed -i -e /django.middleware.security.SecurityMiddleware/a\\ \\"whitenoise.middleware.WhiteNoiseMiddleware\\",\
++        /opt/testsite/testsite/settings.py"""
++        self.assertRunOk(cmd, timeout=timeout)
++        # --nostatic ensures the builtin django server doesn't serve the static files,
++        # so we can test that whitenoise serves them
++        cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py runserver --nostatic 0.0.0.0:1234 > /dev/null 2>&1 & "
++        self.assertRunOk(cmd, timeout=timeout)
++        # give some time to setup the server
++        for attempt in range(30 * self.emulator.timeout_multiplier):
++            time.sleep(1)
++            cmd = "wget http://127.0.0.1:1234/static/admin/css/base.css"
++            _, exit_code = self.emulator.run(cmd)
++            if exit_code == 0:
++                break
++        self.assertEqual(exit_code, 0, "Timeout while waiting for django server")
 -- 
-2.39.5
+2.43.0
 
 _______________________________________________
 buildroot mailing list
