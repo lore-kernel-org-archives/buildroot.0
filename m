@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFEB5C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:16:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6925EC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:16:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 549F54FDC8;
-	Fri, 28 Feb 2025 17:16:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A2BA285C08;
+	Fri, 28 Feb 2025 17:16:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PY-lwJFoDDIg; Fri, 28 Feb 2025 17:16:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9mf0ikfmVBWF; Fri, 28 Feb 2025 17:16:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1BE050942
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A284385C0A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1BE050942;
-	Fri, 28 Feb 2025 17:16:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A284385C0A;
+	Fri, 28 Feb 2025 17:16:08 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0525A68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:40 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0914F1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 96B9C436C3
+ by smtp4.osuosl.org (Postfix) with ESMTP id A6EAF4383D
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wRkvZxaiNid5 for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:49 +0000 (UTC)
+ id lODHBCbna8ss for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22E9944563
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BD2E43DC7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 22E9944563
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9BD2E43DC7
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1D0F486780; Fri, 28 Feb 2025 16:30:37 +0000 (UTC)
+ id 8FB2F86780; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 8 Feb 2025 19:34:33 +0100
+Date: Fri, 7 Feb 2025 22:19:18 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3d60c1f109fbbc5afab1a079cfdd057460283248
-X-Git-Newrev: 52162f01299ab5170f9b9c5482c459271f1fd981
+X-Git-Oldrev: 87d4cffa53bf02388d2a0e811196ed9a86c2df59
+X-Git-Newrev: fc9d397fd6344010ee86141b07d5e685a3f9721f
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163037.1D0F486780@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/freetype: bump to
- 2.13.3
+Message-Id: <20250228163036.8FB2F86780@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/intel-vpl-gpu-rt: bump
+ version to 25.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,49 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52162f01299ab5170f9b9c5482c459271f1fd981
+commit: https://git.buildroot.net/buildroot/commit/?id=fc9d397fd6344010ee86141b07d5e685a3f9721f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For release note, see:
-https://sourceforge.net/projects/freetype/files/freetype2/2.13.3/
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Tested-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: add link to release note]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/freetype/freetype.hash | 6 +++---
- package/freetype/freetype.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash | 2 +-
+ package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index e7331d5ba0..fcd99319cd 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/freetype/files/freetype2/2.13.2/
--sha1  2d8d5917a1983ebd04921f2993a88858d6f72dec  freetype-2.13.2.tar.xz
--sha256  12991c4e55c506dd7f9b765933e62fd2be2e06d421505d7950a132e4f1bb484d  freetype-2.13.2.tar.xz
-+# From https://sourceforge.net/projects/freetype/files/freetype2/2.13.3/
-+sha1  2437819d11c1205e81141735dcb0a36c0d541e96  freetype-2.13.3.tar.xz
-+sha256  0550350666d427c74daeb85d5ac7bb353acba5f76956395995311a9c6f063289  freetype-2.13.3.tar.xz
- 
- # Locally calculated
- sha256  2e3bbb7d7c5c396368dd0853a790ec29ce5b8647163dde42a0493fb0d6556b2b  LICENSE.TXT
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 5032414d63..ad8cd00ec8 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
+diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
+index f75307a552..c3c59d957d 100644
+--- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
++++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f2f2fba823c885cdd847af646e5639d657e411e0afeff4667b73eb6e524b0dc4  intel-vpl-gpu-rt-25.1.0.tar.gz
++sha256  4ba550244827d554c8b36032f1535290c816021242153c2b503dfc45219b95f1  intel-vpl-gpu-rt-25.1.1.tar.gz
+ sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
+diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
+index 94c81679c8..ebed6a1081 100644
+--- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
++++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREETYPE_VERSION = 2.13.2
-+FREETYPE_VERSION = 2.13.3
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
- FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
+-INTEL_VPL_GPU_RT_VERSION = 25.1.0
++INTEL_VPL_GPU_RT_VERSION = 25.1.1
+ INTEL_VPL_GPU_RT_SITE = $(call github,intel,vpl-gpu-rt,intel-onevpl-$(INTEL_VPL_GPU_RT_VERSION))
+ INTEL_VPL_GPU_RT_LICENSE = MIT
+ INTEL_VPL_GPU_RT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
