@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DBF3C0219D
-	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 19:33:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07409C02196
+	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 19:33:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBD7E84786;
-	Fri,  7 Feb 2025 19:33:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C5C1342CCF;
+	Fri,  7 Feb 2025 19:33:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E9APgO3fS-kW; Fri,  7 Feb 2025 19:33:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A099242CD1
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A099242CD1;
+	Fri,  7 Feb 2025 19:33:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 510EDE4
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 19:33:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9A4C484BB6
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 19:33:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id URk8rHQbgGxi; Fri,  7 Feb 2025 19:33:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8E2F84BAB
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B8E2F84BAB;
-	Fri,  7 Feb 2025 19:33:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 403931B7
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 19:33:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2F0E840A20
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 19:33:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RpUIO8Z50LDV for <buildroot@buildroot.org>;
+ id pNLYTc8ZSWji for <buildroot@buildroot.org>;
  Fri,  7 Feb 2025 19:33:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D58040A99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2BD9284786
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1D58040A99
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2BD9284786
  for <buildroot@buildroot.org>; Fri,  7 Feb 2025 19:33:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 005F987163; Fri,  7 Feb 2025 19:33:42 +0000 (UTC)
+ id 1520387166; Fri,  7 Feb 2025 19:33:43 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 7 Feb 2025 20:28:28 +0100
+Date: Fri, 7 Feb 2025 20:29:26 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 267a6fe44f2dc9d1565566976d530e9d01756be1
-X-Git-Newrev: 43c11e80a2961b5c66bde6fc3b13d590eaf0c5d6
+X-Git-Oldrev: 43c11e80a2961b5c66bde6fc3b13d590eaf0c5d6
+X-Git-Newrev: 3fb7ff3dc6c252c4f82f3c65c43c2b89469e8843
 X-Patchwork-Hint: ignore
-Message-Id: <20250207193343.005F987163@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 5.{4, 10,
- 15}.x / 6.{1, 6, 12}.x series
+Message-Id: <20250207193343.1520387166@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tor: bump version to 0.4.8.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,75 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43c11e80a2961b5c66bde6fc3b13d590eaf0c5d6
+commit: https://git.buildroot.net/buildroot/commit/?id=3fb7ff3dc6c252c4f82f3c65c43c2b89469e8843
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release notes:
+https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
+https://forum.torproject.org/t/stable-release-0-4-8-14/17242
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+ package/tor/tor.hash | 4 ++--
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 63e64c5d65..1e6842c44e 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -137,7 +137,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.12.11" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.12.12" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 50c2ecf5ab..ebd39c2bc7 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,11 +1,11 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  475172fdbd87a153f123a57952672e773bdb6daf5b58a417d1a5e419fcfeec49  linux-6.12.11.tar.xz
--sha256  f15e2b1a8bab0eba494b07858a5abc88d8f788e25f6fe4a572a77840bbd5494d  linux-6.6.74.tar.xz
--sha256  18b0d41d1a7fbad56045cde0d7fc176bfb18361d29c9f07e57109bbf21bf7876  linux-6.1.127.tar.xz
-+sha256  e98942d17ef7063b3f2d6d7692bf24899e2e021cf832d19b55308ec8e8e08eff  linux-6.12.12.tar.xz
-+sha256  f7dfb1fa9716ba139d0b4c8161535816d400dea21d5943f513448429b1790290  linux-6.6.75.tar.xz
-+sha256  874d67d3181570e69ac6b33853f0448f05fc90d4cf3e4baaadc4a9cede7c50f3  linux-6.1.128.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  ea9eb8088d4231f8a01b191ceef5f4d92238f6c7519f6fbcb57e448ee9e0a6e0  linux-5.15.177.tar.xz
--sha256  239e57280f8c9159187e383d7b730d29f5cc8e1b30be218f004e0c90d1137f52  linux-5.10.233.tar.xz
--sha256  1e3e5fc052c8e15f8eaa37d30bf4f0b3eef7430dd234d9fed0d0005852a06d10  linux-5.4.289.tar.xz
-+sha256  efe9f7eb5ea4d26cec6290689343e1804eb3b4a88ff5a60497a696fc08157c42  linux-5.15.178.tar.xz
-+sha256  9597c4fee2f1ce452acfec516f4325ad342155872052fd5f0d9ce2ddcc26ebe5  linux-5.10.234.tar.xz
-+sha256  6cc73cf2a7f50580f7d8c7e99d2f2e8ada8b7d2f4e76f5896f0daf691cc2a456  linux-5.4.290.tar.xz
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index eb0ab728d2..def488d516 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,4 +1,4 @@
+-# From https://dist.torproject.org/tor-0.4.8.13.tar.gz.sha256sum
+-sha256  9baf26c387a2820b3942da572146e6eb77c2bc66862af6297cd02a074e6fba28  tor-0.4.8.13.tar.gz
++# From https://dist.torproject.org/tor-0.4.8.14.tar.gz.sha256sum
++sha256  5047e1ded12d9aac4eb858f7634a627714dd58ce99053d517691a4b304a66d10  tor-0.4.8.14.tar.gz
  # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 9a0db19b29..a0cb484bd0 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -428,12 +428,12 @@ endchoice
+ sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 042ed75a7b..f4e1efb051 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "5.4.289"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.233"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.177"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.127"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.74"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.11"	if BR2_KERNEL_HEADERS_6_12
-+	default "5.4.290"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.234"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.178"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.128"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.75"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.12"	if BR2_KERNEL_HEADERS_6_12
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-TOR_VERSION = 0.4.8.13
++TOR_VERSION = 0.4.8.14
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
