@@ -1,68 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CC86C02194
-	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 20:05:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1133DC02194
+	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 20:15:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 16B7280F75;
-	Fri,  7 Feb 2025 20:05:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE84E606E8;
+	Fri,  7 Feb 2025 20:15:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id upF7ZdsCMIup; Fri,  7 Feb 2025 20:05:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L2XQqXrbYC5L; Fri,  7 Feb 2025 20:15:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A96080F83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7160606E9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A96080F83;
-	Fri,  7 Feb 2025 20:05:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 414091B5
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 20:05:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7160606E9;
+	Fri,  7 Feb 2025 20:15:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BC0DF1B5
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 20:14:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 25CA180F75
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 20:05:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A95C44144F
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 20:14:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vokubNJmf3l8 for <buildroot@buildroot.org>;
- Fri,  7 Feb 2025 20:05:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c_bZDNcjBWSG for <buildroot@buildroot.org>;
+ Fri,  7 Feb 2025 20:14:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1F7A880F5F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F7A880F5F
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1F7A880F5F
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 20:05:34 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5DF0644194;
- Fri,  7 Feb 2025 20:05:32 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tgUbT-000GUu-1q;
- Fri, 07 Feb 2025 21:05:31 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A70F640BD3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A70F640BD3
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 20:14:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9ABCA87279; Fri,  7 Feb 2025 20:14:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: =?utf-8?Q?S=C3=A9bastien?= Szymanski <sebastien.szymanski@armadeus.com>
-Cc: buildroot@buildroot.org,  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20250204-usbutils-libiconv-v2-1-245e490da092@armadeus.com>
-Date: Fri, 07 Feb 2025 21:05:31 +0100
-In-Reply-To: <20250204-usbutils-libiconv-v2-1-245e490da092@armadeus.com>
- (=?utf-8?Q?=22S=C3=A9bastien?= Szymanski"'s message of "Tue, 04 Feb 2025
- 16:55:44 +0100")
-Message-ID: <87frkpcygk.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeftddulecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufhffjgfkfgggtgfgsehtqhdttddtreejnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepieefuddvteelveefuedtffdujefgueehtdeihffhveejgeekveevuedvgfdugeeinecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhnvghtpdhkvghrnhgvlhdrohhrghenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopehsvggsrghsthhivghnrdhsiiihmhgrnhhskhhisegrrhhmrgguvghushdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhm
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v2] package/usbutils: select libiconv if
- needed
+To: buildroot@buildroot.org
+Date: Fri, 7 Feb 2025 21:05:01 +0100
+X-Git-Refname: refs/heads/2024.11.x
+X-Git-Oldrev: f81379d65f71d89cf91569accc8437f7c235986d
+X-Git-Newrev: 373e2c22e2e1b0abde19de0a0642a128ea6d67fe
+X-Patchwork-Hint: ignore
+Message-Id: <20250207201458.9ABCA87279@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/usbutils: select
+ libiconv if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,33 +59,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1021538405528301282=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIlPDqWJhc3RpZW4iID09IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5
-bWFuc2tpQGFybWFkZXVzLmNvbT4gd3JpdGVzOgoKID4gU2luY2UgdXBzdHJlYW0gY29tbWl0IDdj
-N2ZlZDMwZjc1NTNiNTUxZmNlMzE1MWZlMzE1Y2Y2OWU2MDIwNjUsIHdoaWNoCiA+IGZpcnN0IGFw
-cGVhcmVkIGluIHVzYnV0aWxzIHZlcnNpb24gMDA3LCBpY29udiBpcyB1c2VkIHdoZW4gYXZhaWxh
-YmxlLgogPiBTaW5jZSB0aGVuLCB0aGUgcGFja2FnZSBoYXMgYmVlbiBmYWlsaW5nIHRvIGJ1aWxk
-IHdoZW4gbGliaWNvbnYgbmVlZHMgdG8KID4gYmUgcHJvdmlkZWQgYnkgYSBsaWJyYXJ5IGV4dGVy
-bmFsIHRvIHRoZSBDIGxpYnJhcnkuIFRoaXMgY29tbWl0IGZpeGVzCiA+IHRoYXQgYnkgc2VsZWN0
-aW5nIEJSMl9QQUNLQUdFX0xJQklDT05WIHdoZW4gbGliaWNvbnYgaXMgbm90IHByb3ZpZGVkIGJ5
-CiA+IHRoZSB0b29sY2hhaW4uCgogPiBGaXhlczoKID4gIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRy
-b290Lm5ldC9yZXN1bHRzL2Q3ZC9kN2RlZGI3NTQ4MDQyNDJkMDIwZDFhMGQzNGRkOTVjN2MxMDc0
-NzEwLy8KID4gIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzL2JjYS9iY2Ex
-NGNlNGZlMDVmMDg3ZTFkODgyMTY3MGJhMzE2NWU5ODIwYTdmLy8KID4gIGh0dHA6Ly9hdXRvYnVp
-bGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzLzY2NS82NjVjMDY0YmYyOGEzMjVhOGJjNGQ5ZmUxNmY0
-NTNiZTQ4NDcyZTU3Ly8KID4gIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRz
-L2I1NC9iNTQzYTM3MTM5NDk1NzFiMDRkYmQ5Yzk0ZjA2M2ZhMGExODY3NjViLy8KID4gIGh0dHA6
-Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzLzZlYS82ZWE2Y2RlOTFjMmM2YzQ5ZjU2
-YTA4ZjM3ZmVmMGMxMzRlZGE0MGEwLy8KCiA+IFNpZ25lZC1vZmYtYnk6IFPDqWJhc3RpZW4gU3p5
-bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFybWFkZXVzLmNvbT4KID4gLS0tCiA+IENoYW5n
-ZXMgaW4gdjI6CiA+IC0gUmV3b3JrIHRoZSBjb21taXQgbWVzc2FnZSBhcyBzdWdnZXN0ZWQgYnkg
-VGhvbWFzIFBldGF6em9uaQogPiAtIExpbmsgdG8gdjE6IGh0dHBzOi8vbG9yZS5rZXJuZWwub3Jn
-L3IvMjAyNTAyMDQtdXNidXRpbHMtbGliaWNvbnYtdjEtMS0yMzFmZTI3ZGI0OGNAYXJtYWRldXMu
-Y29tCgpDb21taXR0ZWQgdG8gMjAyNC4wMi54IGFuZCAyMDI0LjExLngsIHRoYW5rcy4KCi0tIApC
-eWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
-Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============1021538405528301282==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=373e2c22e2e1b0abde19de0a0642a128ea6d67fe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
+
+Since upstream commit 7c7fed30f7553b551fce3151fe315cf69e602065, which
+first appeared in usbutils version 007, iconv is used when available.
+Since then, the package has been failing to build when libiconv needs to
+be provided by a library external to the C library. This commit fixes
+that by selecting BR2_PACKAGE_LIBICONV when libiconv is not provided by
+the toolchain.
+
+Fixes:
+ http://autobuild.buildroot.net/results/d7d/d7dedb754804242d020d1a0d34dd95c7c1074710//
+ http://autobuild.buildroot.net/results/bca/bca14ce4fe05f087e1d8821670ba3165e9820a7f//
+ http://autobuild.buildroot.net/results/665/665c064bf28a325a8bc4d9fe16f453be48472e57//
+ http://autobuild.buildroot.net/results/b54/b543a3713949571b04dbd9c94f063fa0a186765b//
+ http://autobuild.buildroot.net/results/6ea/6ea6cde91c2c6c49f56a08f37fef0c134eda40a0//
+
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 9fb56e0367022c2d18531fd2d9882dedfc68f31d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/usbutils/Config.in   | 1 +
+ package/usbutils/usbutils.mk | 5 +++++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/package/usbutils/Config.in b/package/usbutils/Config.in
+index a38eb2f2e5..7e7029bbfe 100644
+--- a/package/usbutils/Config.in
++++ b/package/usbutils/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_USBUTILS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+ 	depends on BR2_PACKAGE_HAS_UDEV # needs hwdb
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	select BR2_PACKAGE_LIBUSB
+ 	help
+ 	  USB enumeration utilities
+diff --git a/package/usbutils/usbutils.mk b/package/usbutils/usbutils.mk
+index 48301fbb9f..1093981360 100644
+--- a/package/usbutils/usbutils.mk
++++ b/package/usbutils/usbutils.mk
+@@ -11,6 +11,11 @@ USBUTILS_DEPENDENCIES = host-pkgconf libusb udev
+ USBUTILS_LICENSE = GPL-2.0+ (utils) GPL-2.0 or GPL-3.0 (lsusb.py)
+ USBUTILS_LICENSE_FILES = LICENSES/GPL-2.0-only.txt LICENSES/GPL-3.0-only.txt
+ 
++ifeq ($(BR2_PACKAGE_LIBICONV),y)
++USBUTILS_DEPENDENCIES += libiconv
++USBUTILS_LDFLAGS += -liconv
++endif
++
+ # Nice lsusb.py script only if there's python 3.x
+ ifeq ($(BR2_PACKAGE_PYTHON3),)
+ define USBUTILS_REMOVE_PYTHON
+
+--===============1021538405528301282==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1021538405528301282==--
