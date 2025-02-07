@@ -1,99 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA853C02192
-	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 04:14:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A866C0219C
+	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 09:37:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA65E42919;
-	Fri,  7 Feb 2025 04:14:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6342D83A93;
+	Fri,  7 Feb 2025 09:37:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8SXDExCqd1fB; Fri,  7 Feb 2025 04:14:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TWmg7lu4coSy; Fri,  7 Feb 2025 09:37:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E328F42857
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11E7B83AAC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E328F42857;
-	Fri,  7 Feb 2025 04:14:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7AE4FC0
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 04:14:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11E7B83AAC;
+	Fri,  7 Feb 2025 09:37:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8FC4BE4
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 09:37:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6B29B42857
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 04:14:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 72F654011F
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 09:37:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0ZHE5sblnSMg for <buildroot@buildroot.org>;
- Fri,  7 Feb 2025 04:14:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MSCoXFZOQG_e for <buildroot@buildroot.org>;
+ Fri,  7 Feb 2025 09:37:08 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52b; helo=mail-ed1-x52b.google.com;
- envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3B315427A9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B315427A9
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
- [IPv6:2a00:1450:4864:20::52b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3B315427A9
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 04:14:42 +0000 (UTC)
-Received: by mail-ed1-x52b.google.com with SMTP id
- 4fb4d7f45d1cf-5d9837f201aso5271521a12.0
- for <buildroot@buildroot.org>; Thu, 06 Feb 2025 20:14:42 -0800 (PST)
+ client-ip=2607:f8b0:4864:20::62d; helo=mail-pl1-x62d.google.com;
+ envelope-from=meena.murthy@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0BF12408C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BF12408C0
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com
+ [IPv6:2607:f8b0:4864:20::62d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0BF12408C0
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 09:37:07 +0000 (UTC)
+Received: by mail-pl1-x62d.google.com with SMTP id
+ d9443c01a7336-21634338cfdso45157825ad.2
+ for <buildroot@buildroot.org>; Fri, 07 Feb 2025 01:37:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738901680; x=1739506480;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1738921027; x=1739525827;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=DFm10xrXy35j1HdCvxU3Zcq56WcfpdWBetkaFslaVmk=;
- b=fdu2mFV0SxASPMedeoSjbdH818XLypPPU9PRATpYTQoe03XzGN/dy0CCjf73bWhb87
- c0gxJbaG7pG8cEN+CU0zvRVwNQ9Acjq7CvWNqcn1y8kVHsgX8nxDvZ9k0mzAXJj1WOZJ
- EI0vHj+/7mBc8pYnxV4E/N5OXipvFOsmeh8OOW7hGV1JhHSr2Av6JAo9frkLRe+BRvYS
- qmmxe3HY/ylcwBUsVa6soHrj3rLDqBng3yVHypC/8QMrC9z60RXd8ISP+FKyEhWmj5FJ
- AuRscgy7YQcN8hZuwlx/eJMz/1dJIWIBaQ9z+FL2bV7oNyyb7QKzAoWTlTWqt0u3x63R
- RQIA==
-X-Gm-Message-State: AOJu0YyXqepWZA6Sb/xPP20tZ1bkWLJZKm/j1UbGeHVjYU9OMkJicWbR
- P+NuJKwlrCvDSQlmVZnfzo0TjMolX7Q6KslAkAN8NhMpxNGhaLVnyndepA==
-X-Gm-Gg: ASbGnctYoisutx6iWcHrq+JWXT56fCNhqO7OnVdR19zNov+/iprtIMj2uW82TbLDLxY
- R/wzxm40Jn2ljR6wU1leVzZbHF85BtKLsh3EEbFlhl6DL60efH71NBb3UdrR+nVMJyiOr/ofZqO
- yE3acWqwBj0gcQkrik2NIDRyST/28pVwzF62NMZUZ0WrW3PR7VYheySpKPS5mNT+Ls/M/OVxYpa
- rvj4lLb9j0ypi6LsM9uGYgkX0LHXdfldWaPTpB/xAmHEvwfI2QtZWnEW4S5+kwHjply1itb2fF5
- l/2mz/skyXn/49VBKh0=
-X-Google-Smtp-Source: AGHT+IGsHoA1fYN+aTW6TKMHsox4wHlq8v/VZ4igNDSMOq1rO1QR9owKl+PC8t4ncNLANEKP2/yr5w==
-X-Received: by 2002:a17:907:97d3:b0:ab3:992d:d98d with SMTP id
- a640c23a62f3a-ab76e6150ccmr619174466b.0.1738901679894; 
- Thu, 06 Feb 2025 20:14:39 -0800 (PST)
-Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
+ bh=/JjcMQsK0sF1jW6oe0/0c7EEtqK9wtcM4xIy2nZ/PUc=;
+ b=COdB+ly2B0aCoFg7w1hhKvJtR5YRxRJJYAHgUW0e/WNzyEbWRtYI1BsrmXrjHNhmuN
+ dDoyay+banuchLLD9LYS1H9bFxLiIm1siIf7srm04bq6CZgstTxTK9qRZBsDX6FuScVw
+ HdKM87zjmYky6RozG569iOynmdKPo8Em0gm57jXcB3tE/KGZf3JmNVWYrIOAGnfpcH0f
+ p2/PpQNG17X4SwwLagyDbzgbC+1VUgh0XDAY135qbNvpGJta7MVRY+lcwxrwnVbyOsD0
+ PR4MoR57t7c5az91czvQpBSvFzKCkLgDmFdC1ldoU7EhigpEYYg0weavMSla5ZoKeyRL
+ ckxQ==
+X-Gm-Message-State: AOJu0YwQcsKIzhFa8naxtjVf+MdKAN4tedfKSMZuvLRwkcUne6Mh3Tp5
+ Od8Mf/1N+kRVTUN8fb3fnnbvDnXSczPO02sowIrko7KZS1bgJM97FQAldO9J3g==
+X-Gm-Gg: ASbGncubiDSgy8m5xKsL4Tcdqmua3i3L5SSGpGoOglwIMbOI/3ofum3K0qK+wblpuIh
+ dg2bD/FcDQNI60Ei5wJXi8Gi5Ecw/avuljrcWu4GUGfxDgDY8prpnVndS9zhbFAhno9OyGX92Cv
+ +vJgBLKtvfOdwFiuTYPwu3XjtBi6/qcbp4GblSOKO0H49wAtectZ1oJ0ZudJRbXvkj78lZNsIZG
+ X/PDII0zzrWlN6bcffSMS2yqYYcAdFgOmuLSBpHqqT+OvcejnAs1QOL7Kdq4ksV/fy+0SkvN9HT
+ b4T9Dqr55ZeTusifelkyM8zBujiPFYJbQFAJwKDV78s/4/+70gpLzppIQymgfF8gYwg1GzxXOdG
+ R
+X-Google-Smtp-Source: AGHT+IHn8mKWZmDUjHeSdohp4Tu+TntdG+8aB+1QNvQb7mGtubFsBqizkmIav7TAl4Xh1WFScxomJA==
+X-Received: by 2002:a05:6a00:4097:b0:725:ef4d:c1bd with SMTP id
+ d2e1a72fcca58-7305d4f0d6amr4233922b3a.19.1738921026794; 
+ Fri, 07 Feb 2025 01:37:06 -0800 (PST)
+Received: from meena-ThinkPad-E14-Gen-3.amarulasolutions.com ([49.207.50.235])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-ab7732e71a3sm196800466b.103.2025.02.06.20.14.39
- for <buildroot@buildroot.org>
+ d2e1a72fcca58-73048ad2630sm2699944b3a.55.2025.02.07.01.37.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 06 Feb 2025 20:14:39 -0800 (PST)
-Message-ID: <67a588af.170a0220.3d5bcd.641c@mx.google.com>
+ Fri, 07 Feb 2025 01:37:06 -0800 (PST)
+From: Meena Murthy <meena.murthy@amarulasolutions.com>
+To: Meena Murthy <meena.murthy@amarulasolutions.com>
+Cc: buildroot@buildroot.org, linux-amarula@amarulasolutions.com,
+ Michael Trimarchi <michael@amarulasolutions.com>
+Date: Fri,  7 Feb 2025 15:06:07 +0530
+Message-ID: <20250207093612.2822003-2-meena.murthy@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-From: Buildroot Notifications <buildroot.notifications@gmail.com>
-Date: Fri, 07 Feb 2025 04:14:39 -0000
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1738901680; x=1739506480; darn=buildroot.org;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:from:to:cc:subject:date:message-id:reply-to;
- bh=DFm10xrXy35j1HdCvxU3Zcq56WcfpdWBetkaFslaVmk=;
- b=GVqc4A965YIUIlp7swdplFraEZEmGVrE81yPxa1MMV4OHF8IPU7mrDDfKKSaBOI6a7
- lychWl7jxRnQEivm5t9KmXWAIEeLwE6wG/yblcvNifLKtCUoV8EawAXoI6yHoW3qwDsx
- XHTF15FIpKlunKfmIr8HoOHpBmXugmRbGbW/L6/PI7GkakWrkOtIjYYPNNvkcBR2atQF
- CAYwVi5JszsUH/2+cRCAA2H3XjnquRcxOoVUB96uYD7Ly1LhBsTiVbXmr7NuthFPBjl1
- P7BBuEmxwsJkV7ON0URplOeky5BbVgfNhsllj8mnAQ3lY87ocUsaHpFbS0ZdiUEyB6CJ
- y5Ug==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=amarulasolutions.com; s=google; t=1738921027; x=1739525827;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=/JjcMQsK0sF1jW6oe0/0c7EEtqK9wtcM4xIy2nZ/PUc=;
+ b=LjOGYxDEGD0pCgj5YAeqolvn2qCoZFqtmNvGAQYZIx9yoqjI/c/e1+xC+ycrbHDQvG
+ eSc0+DfBMj5ajW8mVEPiYORDqBwVdkr2VAIkntxegZpWj1htrxZSYK192xhE0Oy3WtPT
+ NaOOl0czfupxzKys7RybTS/Bt1R1vXY0avDeY=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=GVqc4A96
-Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2025-02-06
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=LjOGYxDE
+Subject: [Buildroot] [PATCH] board: Add support for Engicam PX30 SOM board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,193 +106,277 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7155952274487635087=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+--===============7155952274487635087==
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
 
-Autobuild statistics for 2025-02-06
-===================================
+Add initial support for Engicam PX30 SOM board
+with below features:
+- U-Boot 2024.01
+- Linux 6.4.16
+- Default packages from buildroot
 
-      branch |  OK | NOK | TIM | TOT |
-  2024.02.x  |  7  |  2  |  0  |  9  |
-  2024.11.x  |  2  |  4  |  0  |  6  |
-    master   |  7  | 69  |  0  | 76  |
+px30 ctouch2 with 10 inches display
 
-Classification of failures by reason for master
------------------------------------------------
+https://www.engicam.com/vis-prod/C-Touch-2-0-Carrier-Board/ \
+	General-purpose-carrier-board-with-capacitive-touch-interface-EDIMM-20-compliant
 
-                   host-go-bin | 5 
-              host-rust-1.82.0 | 4 
-                elfutils-0.192 | 3 
-                   linux-tools | 3 
-                 openssh-9.9p1 | 3 
-  gobject-introspection-1.82.0 | 2 
-                 libcdio-2.2.0 | 2 
-              libopenssl-3.4.0 | 2 
-           libzenoh-pico-1.1.0 | 2 
-               mariadb-10.11.6 | 2 
-           at-spi2-core-2.50.0 | 1 
-     bandwidthd-2.0.1-auto-r11 | 1 
-             bluez5_utils-5.79 | 1 
-                    brltty-6.6 | 1 
-                  brotli-1.1.0 | 1 
-                 c-icap-0.5.10 | 1 
-               collectd-5.12.0 | 1 
-             dahdi-linux-3.3.0 | 1 
-                 dc3dd-7.2.641 | 1 
-               ebtables-2.0.11 | 1 
-                  ffmpeg-6.1.2 | 1 
-firmware-utils-86739f2b3ae9... | 1 
-                   foot-1.16.2 | 1 
-fs/axfs/axfs.mk:32: /home/a... | 1 
-                   fwupd-2.0.4 | 1 
-host-heimdal-f4faaeaba371ff... | 1 
-    host-python-greenlet-3.1.1 | 1 
-jailhouse-e57d1eff6d55aeed5... | 1 
-               libglib2-2.82.4 | 1 
-                libglvnd-1.4.0 | 1 
-        liblog4c-localtime-1.0 | 1 
-          linux-5.10.162-cip24 | 1 
-                 linux-6.12.11 | 1 
-               linux-pam-1.6.1 | 1 
-                memtest86-7.20 | 1 
-                    mpir-3.0.0 | 1 
-            netstat-nat-1.4.10 | 1 
-           oath-toolkit-2.6.12 | 1 
-               openblas-0.3.29 | 1 
-                    polkit-125 | 1 
-               postgresql-17.2 | 1 
-               pulseaudio-17.0 | 1 
-                ramspeed-2.6.0 | 1 
-                  rt-tests-2.8 | 1 
-        s6-linux-utils-2.6.2.0 | 1 
-          sphinxbase-5prealpha | 1 
-                 systemd-256.7 | 1 
-                       unknown | 1 
-             util-linux-2.40.2 | 1 
-                     wine-10.0 | 1 
-                 wolfssl-5.7.2 | 1 
+---
+Changes v1 -> v2:
+Based on code review comments
+- Added more details in readme.txt for Engicam board
+- Corrected board name
+- Removed android-sparse image from genimage.cfg
+- Changes to configuration file
 
+Signed-off-by: Meena Murthy <meena.murthy@amarulasolutions.com>
+Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+---
+ DEVELOPERS                                    |  4 ++
+ board/engicam/px30core/extlinux.conf          |  4 ++
+ board/engicam/px30core/genimage.cfg           | 22 +++++++
+ .../patches/linux-headers/linux-headers.hash  |  1 +
+ .../engicam/px30core/patches/linux/linux.hash |  2 +
+ .../engicam/px30core/patches/uboot/uboot.hash |  2 +
+ board/engicam/px30core/post-build.sh          |  5 ++
+ board/engicam/px30core/readme.txt             | 60 +++++++++++++++++++
+ configs/engicam_px30_core_defconfig           | 49 +++++++++++++++
+ 9 files changed, 149 insertions(+)
+ create mode 100644 board/engicam/px30core/extlinux.conf
+ create mode 100644 board/engicam/px30core/genimage.cfg
+ create mode 120000 board/engicam/px30core/patches/linux-headers/linux-headers.hash
+ create mode 100644 board/engicam/px30core/patches/linux/linux.hash
+ create mode 100644 board/engicam/px30core/patches/uboot/uboot.hash
+ create mode 100755 board/engicam/px30core/post-build.sh
+ create mode 100644 board/engicam/px30core/readme.txt
+ create mode 100644 configs/engicam_px30_core_defconfig
 
-Detail of failures for master
------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
- microblaze  |      at-spi2-core-2.50.0       | NOK | https://autobuild.buildroot.org/results/c04bb4892875e6a4608ae0e6800c1158f01b2d37 |     
-    mips     |   bandwidthd-2.0.1-auto-r11    | NOK | https://autobuild.buildroot.org/results/fc3eaf166ffaaf42fa9ba86e56fc9533fb8659b9 |     
- powerpc64   |       bluez5_utils-5.79        | NOK | https://autobuild.buildroot.org/results/acfb79f40b3255c487656c8d6858937521b39352 |     
-powerpc64le  |           brltty-6.6           | NOK | https://autobuild.buildroot.org/results/2d490129fa228d2d3f4729a32b15d5200e41165a |     
-   arceb     |          brotli-1.1.0          | NOK | https://autobuild.buildroot.org/results/31796f55f3e788e3d033c0631aeeb97fe278a3ba |     
-   mipsel    |         c-icap-0.5.10          | NOK | https://autobuild.buildroot.org/results/63e284904ae8576f6b8cd2899b311f4e71d374ec | ORPH
-  powerpc    |        collectd-5.12.0         | NOK | https://autobuild.buildroot.org/results/9fbeda787df70c7f29c72a132b99ee355a1242a0 | ORPH
-   s390x     |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/ca1cdcf5fbf16fb8cc78e212f04ad41f404a2729 | ORPH
- microblaze  |         dc3dd-7.2.641          | NOK | https://autobuild.buildroot.org/results/d45ab3166b13eb099c8697b0bf07f26e078176d2 | ORPH
-  sparc64    |        ebtables-2.0.11         | NOK | https://autobuild.buildroot.org/results/53febd589b7e0c5e7e78715f70acc1849f13a381 |     
-    arm      |         elfutils-0.192         | NOK | https://autobuild.buildroot.org/results/eb8ff47754a1403796563f9f7b143fdb2724c006 | ORPH
-    mips     |         elfutils-0.192         | NOK | https://autobuild.buildroot.org/results/755527409107ff4c20632a81cb898e4660ff16a9 | ORPH
- aarch64_be  |         elfutils-0.192         | NOK | https://autobuild.buildroot.org/results/ec4686b267356f49257ccb1a5d05dd89cbc57b2d | ORPH
-   arceb     |          ffmpeg-6.1.2          | NOK | https://autobuild.buildroot.org/results/543b36b1f67151f77ba3899ae1bad96a49b5ad5f |     
-   s390x     | firmware-utils-86739f2b3ae9... | NOK | https://autobuild.buildroot.org/results/bf9b1944a6f4f53f50c4e84ed91664e7967d0f5a |     
- microblaze  |          foot-1.16.2           | NOK | https://autobuild.buildroot.org/results/b93f1ce54c55a512499fb01f04f1fddcb7a45778 |     
- powerpc64   | fs/axfs/axfs.mk:32: /home/a... | NOK | https://autobuild.buildroot.org/results/132ed56fa05bcbfa421b1ed0c9687288d38ae9cc |     
-powerpc64le  |          fwupd-2.0.4           | NOK | https://autobuild.buildroot.org/results/4fa9a9c3b205283b5b56e8133c905da914a0da16 |     
-  sparc64    |  gobject-introspection-1.82.0  | NOK | https://autobuild.buildroot.org/results/b6c16246310f099c14f527eb9a98956873a62de4 | ORPH
-  powerpc    |  gobject-introspection-1.82.0  | NOK | https://autobuild.buildroot.org/results/fae131527f592226396730737b5863b23a124270 | ORPH
-    mips     |          host-go-bin           | NOK | https://autobuild.buildroot.org/results/d3e534529ac32fbaeaaa60eb11fbe214e69fa043 |     
- powerpc64   |          host-go-bin           | NOK | https://autobuild.buildroot.org/results/afd147bfdabd71139ded504eb4d6834c562a3249 |     
-microblazeel |          host-go-bin           | NOK | https://autobuild.buildroot.org/results/365bbf726a00b465b834a9d7fc41c932775e1e35 |     
-    arm      |          host-go-bin           | NOK | https://autobuild.buildroot.org/results/8942540c0bd4cec83b716e0b975609216f0dec06 |     
-    arm      |          host-go-bin           | NOK | https://autobuild.buildroot.org/results/ff405c392916423bab7a5f4e277e21542971f962 |     
-   mipsel    | host-heimdal-f4faaeaba371ff... | NOK | https://autobuild.buildroot.org/results/beee16c2714e9acf005acf2a1e94532e6d74abcb | ORPH
-   armeb     |   host-python-greenlet-3.1.1   | NOK | https://autobuild.buildroot.org/results/7d94e25560d35524e7f53dea6e9b7586f509da92 |     
-    arm      |        host-rust-1.82.0        | NOK | https://autobuild.buildroot.org/results/d7b765e545f69a60cb049d88e5d661437949adb7 |     
-   x86_64    |        host-rust-1.82.0        | NOK | https://autobuild.buildroot.org/results/8ca5b2d2057c906182109add08c3ca180974ee9c |     
-   armeb     |        host-rust-1.82.0        | NOK | https://autobuild.buildroot.org/results/487e648de2018010ccacd3d883b878fcc3690992 |     
-    i686     |        host-rust-1.82.0        | NOK | https://autobuild.buildroot.org/results/773af79514c1658ba4bc6bffe10cf979dda6c160 |     
-   x86_64    | jailhouse-e57d1eff6d55aeed5... | NOK | https://autobuild.buildroot.org/results/24758c80723e58f8768142a795d4a4f156410a8f |     
-   armeb     |         libcdio-2.2.0          | NOK | https://autobuild.buildroot.org/results/82f0c1ce7a946dc024710aa5c567bb7d4b495fe8 |     
-    or1k     |         libcdio-2.2.0          | NOK | https://autobuild.buildroot.org/results/85d8ccbaa03ff8841068d10f867ed3702f92dd03 |     
-    i586     |        libglib2-2.82.4         | NOK | https://autobuild.buildroot.org/results/4db3e0d3ad5a57e92198d05d37036d163f3165fd |     
-  powerpc    |         libglvnd-1.4.0         | NOK | https://autobuild.buildroot.org/results/9e99898d61b68616966a55263b728d948816e8c5 | ORPH
- powerpc64   |     liblog4c-localtime-1.0     | NOK | https://autobuild.buildroot.org/results/16a705ffd705551d59e4c9e77b056a0dacd40979 |     
-  riscv32    |        libopenssl-3.4.0        | NOK | https://autobuild.buildroot.org/results/3e22b34bbbff4b302edc647f1d5fb9cc5727431f | ORPH
- microblaze  |        libopenssl-3.4.0        | NOK | https://autobuild.buildroot.org/results/d9d86443a3402067aa84cff7bb6c82ecd78aee8c | ORPH
-  mips64el   |      libzenoh-pico-1.1.0       | NOK | https://autobuild.buildroot.org/results/cd8ef638e5f0e12e9d27403a225a274e68348a1f |     
- aarch64_be  |      libzenoh-pico-1.1.0       | NOK | https://autobuild.buildroot.org/results/59ff7a7dbb8c4a20aa2e65b4c5a263efec92c752 |     
-   sh4aeb    |      linux-5.10.162-cip24      | NOK | https://autobuild.buildroot.org/results/38754d12939b52bdf9e612225e4bb54098960522 | ORPH
-  powerpc    |         linux-6.12.11          | NOK | https://autobuild.buildroot.org/results/d2f0d8c4eeeb7193a9b314b4c6a5c0904a595c78 | ORPH
-microblazeel |        linux-pam-1.6.1         | NOK | https://autobuild.buildroot.org/results/a4c75485d860952386aa2797027da46d31bc4684 | ORPH
-  sparc64    |          linux-tools           | NOK | https://autobuild.buildroot.org/results/af573525b3b935cb55ce292cb759a9923d9614d3 | ORPH
-   x86_64    |          linux-tools           | NOK | https://autobuild.buildroot.org/results/4acb89ed2f3e5472eac12c44632e815184a4a960 | ORPH
-  mips64el   |          linux-tools           | NOK | https://autobuild.buildroot.org/results/56250dec60ddd2079a90d763b6fb6fa7782ada22 | ORPH
-   sparc     |        mariadb-10.11.6         | NOK | https://autobuild.buildroot.org/results/87c9d02bde33d3540ff17956a36ea153caeb3da8 | ORPH
-  mips64el   |        mariadb-10.11.6         | NOK | https://autobuild.buildroot.org/results/8cdd2f2ad06137f4d7f42b9aacf9ad17a8687859 | ORPH
-   x86_64    |         memtest86-7.20         | NOK | https://autobuild.buildroot.org/results/0f4a531b53878f4d7dd424f65fcec512b0d165f9 |     
-   armeb     |           mpir-3.0.0           | NOK | https://autobuild.buildroot.org/results/8e97a3fb63a0d257b037c162a59d8aa25005f6f6 |     
-   s390x     |       netstat-nat-1.4.10       | NOK | https://autobuild.buildroot.org/results/79153b3c88e8199be85f7468590215196df953ae | ORPH
- powerpc64   |      oath-toolkit-2.6.12       | NOK | https://autobuild.buildroot.org/results/b72e5b033f90da7da92915396d78a0d1450561a5 |     
-  mips64el   |        openblas-0.3.29         | NOK | https://autobuild.buildroot.org/results/3fd850a803eedf9be3c0598c3f9a1820929be1b1 |     
-   armeb     |         openssh-9.9p1          | NOK | https://autobuild.buildroot.org/results/860e777403d5218681fae559035905ebb3a827d6 | ORPH
-   mips64    |         openssh-9.9p1          | NOK | https://autobuild.buildroot.org/results/8ed3c9a9f01d84c9051aac7db7a34e1b41605761 | ORPH
-   mips64    |         openssh-9.9p1          | NOK | https://autobuild.buildroot.org/results/c3bc2b27f4812f9932bafd545713337fa11720d8 | ORPH
-   sh4aeb    |           polkit-125           | NOK | https://autobuild.buildroot.org/results/6a2d54bec8eafe09326ac5bef1331c463f92a3aa |     
-   x86_64    |        postgresql-17.2         | NOK | https://autobuild.buildroot.org/results/22f4255f2855748235c48f5ad5c615a7a1cb387d |     
-   sparc     |        pulseaudio-17.0         | NOK | https://autobuild.buildroot.org/results/9925150161d1305a075127842579c5fc61247b44 | ORPH
-  mips64el   |         ramspeed-2.6.0         | NOK | https://autobuild.buildroot.org/results/8e737de7950ee91f22069522b75180fe98d0cd03 | ORPH
-powerpc64le  |          rt-tests-2.8          | NOK | https://autobuild.buildroot.org/results/62545ff5763a397eddd87ac3c7107680e6b09fcf |     
-   sparc     |     s6-linux-utils-2.6.2.0     | NOK | https://autobuild.buildroot.org/results/c163d67635def179147ab7f01feb3c94893d2998 |     
- microblaze  |      sphinxbase-5prealpha      | NOK | https://autobuild.buildroot.org/results/af87cf0339f42e81191bff4e9750a26e2ee1d599 |     
-   s390x     |         systemd-256.7          | NOK | https://autobuild.buildroot.org/results/9e477c48641a6340a4724b306f484c33df091b82 |     
-microblazeel |            unknown             | NOK | https://autobuild.buildroot.org/results/96e02a1a5fb92f6c4406c06ace51549cd5eb2ad6 |     
-  riscv64    |       util-linux-2.40.2        | NOK | https://autobuild.buildroot.org/results/b89e0a90a186579757694039a021c416f629254e | ORPH
-    i686     |           wine-10.0            | NOK | https://autobuild.buildroot.org/results/e08dc89f911d1a9cfbf1fe4a7b773152e25b3815 |     
-   mips64    |         wolfssl-5.7.2          | NOK | https://autobuild.buildroot.org/results/68c75cd6de9cfddf688bff949999b4a9f92bb3fd |     
-
-
-Classification of failures by reason for 2024.02.x
---------------------------------------------------
-
-  gobject-introspection-1.76.1 | 1 
-          host-sdbus-cpp-1.4.0 | 1 
-
-
-Detail of failures for 2024.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    or1k     |  gobject-introspection-1.76.1  | NOK | https://autobuild.buildroot.org/results/486e23a89762d174d50ffb1a4454c8af88016485 | ORPH
- powerpc64   |      host-sdbus-cpp-1.4.0      | NOK | https://autobuild.buildroot.org/results/bd0a9fe123956f01336462a31c3375a036744234 |     
-
-
-Classification of failures by reason for 2024.11.x
---------------------------------------------------
-
-                   cvs-1.12.13 | 1 
-  gobject-introspection-1.76.1 | 1 
-                   perl-5.40.0 | 1 
-          python-tinyrpc-1.1.7 | 1 
-
-
-Detail of failures for 2024.11.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   mips64    |          cvs-1.12.13           | NOK | https://autobuild.buildroot.org/results/2a8d140e8cb3276a8cb5ccf542b95ef9471bea77 | ORPH
-  sparc64    |  gobject-introspection-1.76.1  | NOK | https://autobuild.buildroot.org/results/77c6e771ecd4dead2cd1925d10982576c5cbb3b5 | ORPH
-microblazeel |          perl-5.40.0           | NOK | https://autobuild.buildroot.org/results/9feb9e6428e4343414a3c44fad7df17999521edb |     
-  sparc64    |      python-tinyrpc-1.1.7      | NOK | https://autobuild.buildroot.org/results/c089f076c1a26878613cffc1e5872dcad2998877 |     
-
-
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2d8ae8289b..4f351364ce 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2345,6 +2345,10 @@ F:	package/libtraceevent/
+ F:	package/libtracefs
+ F:	package/linux-tools/linux-tool-rtla.mk.in
+ 
++N:	Meena Murthy <meena.murthy@amarulasolutions.com>
++F:	board/engicam/px30core/
++F:	configs/engicam_px30_core_defconfig
++
+ N:	Michael Durrant <mdurrant@arcturusnetworks.com>
+ F:	board/arcturus/
+ F:	configs/arcturus_ucp1020_defconfig
+diff --git a/board/engicam/px30core/extlinux.conf b/board/engicam/px30core/extlinux.conf
+new file mode 100644
+index 0000000000..6d5a845cb0
+--- /dev/null
++++ b/board/engicam/px30core/extlinux.conf
+@@ -0,0 +1,4 @@
++label Engicam-EDIMM linux
++  kernel /boot/Image
++  devicetree /boot/px30-engicam-px30-core-ctouch2-of10.dtb
++  append earlycon=uart8250,mmio32,0xff160000 root=/dev/mmcblk1p1 rootwait
+diff --git a/board/engicam/px30core/genimage.cfg b/board/engicam/px30core/genimage.cfg
+new file mode 100644
+index 0000000000..966c869273
+--- /dev/null
++++ b/board/engicam/px30core/genimage.cfg
+@@ -0,0 +1,22 @@
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot-tpl-spl-dtb {
++		in-partition-table = "no"
++		image = "idbloader.img"
++		offset = 32K
++	}
++
++	partition u-boot-dtb {
++		in-partition-table = "no"
++		image = "u-boot.itb"
++		offset = 8M
++		size = 30M
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/engicam/px30core/patches/linux-headers/linux-headers.hash b/board/engicam/px30core/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/engicam/px30core/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/engicam/px30core/patches/linux/linux.hash b/board/engicam/px30core/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..db84a5e56b
+--- /dev/null
++++ b/board/engicam/px30core/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  9626ec84a39ecb009bf11a271dd520941159c165d4e62f82e3a77b79d20ff27d  linux-6.4.16.tar.xz
+diff --git a/board/engicam/px30core/patches/uboot/uboot.hash b/board/engicam/px30core/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..bc999536af
+--- /dev/null
++++ b/board/engicam/px30core/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
+diff --git a/board/engicam/px30core/post-build.sh b/board/engicam/px30core/post-build.sh
+new file mode 100755
+index 0000000000..d84a5da0b0
+--- /dev/null
++++ b/board/engicam/px30core/post-build.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname "$0")"
++
++install -m 0644 -D "$BOARD_DIR"/extlinux.conf "$TARGET_DIR"/boot/extlinux/extlinux.conf
+diff --git a/board/engicam/px30core/readme.txt b/board/engicam/px30core/readme.txt
+new file mode 100644
+index 0000000000..0693792d56
+--- /dev/null
++++ b/board/engicam/px30core/readme.txt
+@@ -0,0 +1,60 @@
++ENGICAM PX30-EDIMM2.2 carrier board
++===================================
++
++Build:
++
++  $ make engicam_px30_core_defconfig
++  $ make
++
++Files created in output directory
++---------------------------------
++
++output/images
++
++├── bl31.elf
++├── idbloader.img
++├── Image
++├── px30-engicam-px30-core-ctouch2-of10.dtb
++├── rootfs.ext2
++├── rootfs.ext4 -> rootfs.ext2
++├── rootfs.tar
++├── sdcard.img
++├── u-boot.bin
++└── u-boot.itb
++
++How to connect the board and get started:
++-----------------------------------------
++Ensure that the power supply is stable and provides enough current to handle
++the board's needs, especially when peripherals are connected.
++
++Insert micro SD card on the board micro SD slot J17
++
++Creating bootable SD card:
++--------------------------
++sudo dd if=output/images/sdcard.img of=/dev/sdX && sync
++
++/dev/sdX is the path in host via which SD card is detected
++Where X is your SD card device
++
++Connect UART port on the board J26
++
++Serial console
++--------------
++Launch minicom at host with 1152008N1
++
++Power on the kit using J4
++
++Refer link on checking board booting
++
++Program eMMC
++------------
++Connect USB otg cable A-type to host pc, Micro USB end to board.
++
++Close Jumper JM5.
++
++Boot the Kit with SD boot.
++
++Program eMMC in U-Boot. (Refer link for the steps)
++
++Wiki link:
++https://wiki.amarulasolutions.com/bsp/rockchip/px30/engicam-px30-edimm2.2.html
+diff --git a/configs/engicam_px30_core_defconfig b/configs/engicam_px30_core_defconfig
+new file mode 100644
+index 0000000000..f9f8908690
+--- /dev/null
++++ b/configs/engicam_px30_core_defconfig
+@@ -0,0 +1,49 @@
++BR2_aarch64=y
++BR2_cortex_a72_a53=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_4=y
++BR2_GNU_MIRROR="http://ftpmirror.gnu.org"
++BR2_GLOBAL_PATCH_DIR="board/engicam/px30core/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_TARGET_GENERIC_HOSTNAME=""
++BR2_TARGET_GENERIC_ISSUE=""
++BR2_ROOTFS_MERGED_USR=y
++BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/engicam/px30core/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/engicam/px30core/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.4.16"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/px30-engicam-px30-core-ctouch2-of10"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="150M"
++BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS="-O 64bit"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.9"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="px30"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="px30-core-ctouch2-of10-px30"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
++BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
++BR2_TARGET_UBOOT_USE_BINMAN=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="idbloader.img"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
-https://autobuild.buildroot.org
+2.43.0
+
+
+--===============7155952274487635087==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7155952274487635087==--
