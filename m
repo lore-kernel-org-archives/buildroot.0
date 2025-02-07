@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73A95C02194
-	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 19:58:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B584EC0219C
+	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 19:58:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 22B2070516;
-	Fri,  7 Feb 2025 19:58:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KGZ3F1gXFEEn; Fri,  7 Feb 2025 19:58:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 298B860A93
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 298B860A93;
-	Fri,  7 Feb 2025 19:58:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id DFAB0E4
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 19:58:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C0CFD84A5E
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 19:58:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 67DC9804DC;
+	Fri,  7 Feb 2025 19:58:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mt3qcz2gcoVG for <buildroot@buildroot.org>;
+ id XJ8nv1lQ6dxQ; Fri,  7 Feb 2025 19:58:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 881CA83F69
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 881CA83F69;
+	Fri,  7 Feb 2025 19:58:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 109811B7
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 19:58:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E8DB8428F4
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 19:58:35 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 47QzrfQk0VP0 for <buildroot@buildroot.org>;
  Fri,  7 Feb 2025 19:58:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0025384A3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 181384280F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0025384A3C
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 19:58:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 181384280F
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 19:58:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EC4628714E; Fri,  7 Feb 2025 19:58:34 +0000 (UTC)
+ id 0747A8715A; Fri,  7 Feb 2025 19:58:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 7 Feb 2025 20:49:11 +0100
+Date: Fri, 7 Feb 2025 20:49:57 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 2fdd00da65e2042b8f56c8e30131eafe2fad3297
-X-Git-Newrev: da5979cc87fd73df5827e9d1135e7787f3f9cc87
+X-Git-Oldrev: da5979cc87fd73df5827e9d1135e7787f3f9cc87
+X-Git-Newrev: d4254e03d2029887e83240b72bb329a227b6b0d3
 X-Patchwork-Hint: ignore
-Message-Id: <20250207195834.EC4628714E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libbsd: make
- available for arc
+Message-Id: <20250207195835.0747A8715A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/zlog: security
+ bump to version 1.2.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,32 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da5979cc87fd73df5827e9d1135e7787f3f9cc87
+commit: https://git.buildroot.net/buildroot/commit/?id=d4254e03d2029887e83240b72bb329a227b6b0d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-ARC support was added in 0.10.0 by
-https://gitlab.freedesktop.org/libbsd/libbsd/-/commit/4997efa59a607a2b4aa2519a50f9e51017b667d2
-so drop the architecture dependency on !BR2_arc.
+Fixes the following security issue:
+
+CVE-2024-22857: Heap based buffer flow in zlog v1.1.0 to v1.2.17 in
+zlog_rule_new()
+
+https://github.com/advisories/GHSA-6q5p-rp5c-wmph
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 99140408b490f8450af368b2837a61ff2c9871ca)
+(cherry picked from commit 750dca24e6e8cff7ad1b00b737b2a26d083c3e9a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libbsd/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/zlog/zlog.hash | 2 +-
+ package/zlog/zlog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index 9f4b30f68c..fd05a2a208 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
- 	default y
- 	# libbsd does not support those architectures (see src/local-elf.h)
- 	depends on !BR2_microblaze
--	depends on !BR2_arc
- 	depends on !BR2_xtensa
+diff --git a/package/zlog/zlog.hash b/package/zlog/zlog.hash
+index 19881183e9..f000b08f37 100644
+--- a/package/zlog/zlog.hash
++++ b/package/zlog/zlog.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7fe412130abbb75a0779df89ae407db5d8f594435cc4ff6b068d924e13fd5c68  zlog-1.2.17.tar.gz
++sha256  3977dc8ea0069139816ec4025b320d9a7fc2035398775ea91429e83cb0d1ce4e  zlog-1.2.18.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/zlog/zlog.mk b/package/zlog/zlog.mk
+index e5bbf6ff3b..0d56471559 100644
+--- a/package/zlog/zlog.mk
++++ b/package/zlog/zlog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_LIBBSD
+-ZLOG_VERSION = 1.2.17
++ZLOG_VERSION = 1.2.18
+ ZLOG_SITE = $(call github,HardySimpson,zlog,$(ZLOG_VERSION))
+ ZLOG_LICENSE = Apache-2.0
+ ZLOG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
