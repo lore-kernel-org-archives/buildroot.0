@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C62EAC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:15:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4093CC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:15:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63C244F314;
-	Fri, 28 Feb 2025 17:15:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BFCA684A8F;
+	Fri, 28 Feb 2025 17:15:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eoe4_5CSuVgK; Fri, 28 Feb 2025 17:15:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aAe5JRvaUiuB; Fri, 28 Feb 2025 17:15:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0438350504
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6A368572D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0438350504;
-	Fri, 28 Feb 2025 17:15:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D6A368572D;
+	Fri, 28 Feb 2025 17:15:38 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1135368
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:28 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1BD2468
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4218242FD4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 696B342FD5
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eMDdXoW4h0UY for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:46 +0000 (UTC)
+ id HI2kKZ6EESZp for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD2EE42D2A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B695143FF2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DD2EE42D2A
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B695143FF2
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8A217FDF9; Fri, 28 Feb 2025 16:30:35 +0000 (UTC)
+ id AE0E482B38; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 20:53:38 +0100
+Date: Fri, 7 Feb 2025 22:45:30 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3c17ddc28169f2ca2104437892b808df5136efe4
-X-Git-Newrev: c04f4b27c6ed93c52f2cd5e2df0c4fb8ae1ea9fc
+X-Git-Oldrev: b28ec6f4313cc805dfb152e06408f1e7137c2ea6
+X-Git-Newrev: c2f65f3a2b0201be14a740eccb189a503125b080
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163035.D8A217FDF9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/{python-}protobuf:
- bump to version 29.3
+Message-Id: <20250228163036.AE0E482B38@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nxp-mwifiex: fix build
+ failure on s390x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,74 +59,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7633532002367280417=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c04f4b27c6ed93c52f2cd5e2df0c4fb8ae1ea9fc
+--===============7633532002367280417==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=c2f65f3a2b0201be14a740eccb189a503125b080
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/protobuf/protobuf.hash               | 2 +-
- package/protobuf/protobuf.mk                 | 2 +-
- package/python-protobuf/python-protobuf.hash | 4 ++--
- package/python-protobuf/python-protobuf.mk   | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
+s390x doesn't support Wi-Fi on Linux. See [1]. So let's disable the
+package for this architecture.
 
-diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
-index 06f4924394..98159ad897 100644
---- a/package/protobuf/protobuf.hash
-+++ b/package/protobuf/protobuf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
--sha256  3b8bf6e96499a744bd014c60b58f797715a758093abf859f1d902194b8e1f8c9  protobuf-28.1.tar.gz
-+sha256  008a11cc56f9b96679b4c285fd05f46d317d685be3ab524b2a310be0fbad987e  protobuf-29.3.tar.gz
-diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
-index ffed3166c7..4540443702 100644
---- a/package/protobuf/protobuf.mk
-+++ b/package/protobuf/protobuf.mk
-@@ -7,7 +7,7 @@
- # When bumping this package, make sure to also verify if the
- # python-protobuf package still works and to update its hash,
- # as they share the same version/site variables.
--PROTOBUF_VERSION = 28.1
-+PROTOBUF_VERSION = 29.3
- PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
- PROTOBUF_LICENSE = BSD-3-Clause
- PROTOBUF_LICENSE_FILES = LICENSE
-diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
-index 8ce6039449..1e1833980c 100644
---- a/package/python-protobuf/python-protobuf.hash
-+++ b/package/python-protobuf/python-protobuf.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/protobuf/json
--md5  44b076f3564d3561067bcc2c455e008a  protobuf-5.28.1.tar.gz
--sha256  42597e938f83bb7f3e4b35f03aa45208d49ae8d5bcb4bc10b9fc825e0ab5e423  protobuf-5.28.1.tar.gz
-+md5  26ee22a630b0dbfce4de03adc5600fbc  protobuf-5.29.3.tar.gz
-+sha256  5da0f41edaf117bde316404bad1a486cb4ededf8e4a54891296f648e8e076620  protobuf-5.29.3.tar.gz
- # Locally computed sha256 checksums
- sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
-diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
-index 02bf2a1d70..898a133d37 100644
---- a/package/python-protobuf/python-protobuf.mk
-+++ b/package/python-protobuf/python-protobuf.mk
-@@ -6,7 +6,7 @@
- 
- PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
- PYTHON_PROTOBUF_SOURCE = protobuf-5.$(PYTHON_PROTOBUF_VERSION).tar.gz
--PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/3c/0b/7a997c8939f698d72bdea14d57116e43d3051fffb3b2964c30938c4a08e6
-+PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/f7/d1/e0a911544ca9993e0f17ce6d3cc0932752356c1b0a834397f28e63479344
- PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
- PYTHON_PROTOBUF_LICENSE_FILES = LICENSE
- PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
+Fixes: https://autobuild.buildroot.org/results/44aef9d74857d93d90cefb1d59110e857ff4dfaf
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=f54bfc0e34dbd15e9df099a8e36a346c6c583f3c
+
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+[Julien: add link to kernel commit hiding wireless for s390]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/nxp-mwifiex/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/nxp-mwifiex/Config.in b/package/nxp-mwifiex/Config.in
+index 7399705b28..7d55a1cc21 100644
+--- a/package/nxp-mwifiex/Config.in
++++ b/package/nxp-mwifiex/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_NXP_MWIFIEX
+ 	bool "nxp-mwifiex"
++	depends on !BR2_s390x
+ 	depends on BR2_LINUX_KERNEL
+ 	help
+ 	  Linux kernel driver from NXP for WiFi chipsets
+
+--===============7633532002367280417==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7633532002367280417==--
