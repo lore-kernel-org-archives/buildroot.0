@@ -4,50 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28352C0219D
-	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 22:22:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7E16C0219D
+	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 22:22:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD53B84B52;
-	Fri,  7 Feb 2025 22:22:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B48E284AD3;
+	Fri,  7 Feb 2025 22:22:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uqnpUoKJ9LSX; Fri,  7 Feb 2025 22:22:14 +0000 (UTC)
+ id UyvSoYVs--UL; Fri,  7 Feb 2025 22:22:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9777E84AF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC40881EB2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9777E84AF2;
-	Fri,  7 Feb 2025 22:22:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 48DB61B7
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 22:22:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC40881EB2;
+	Fri,  7 Feb 2025 22:22:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 858071B5
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 22:22:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2DA9184AD0
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 22:22:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7617E70515
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 22:22:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fp-SU-8e1c6z for <buildroot@buildroot.org>;
- Fri,  7 Feb 2025 22:22:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D9DD84AC1
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7D9DD84AC1
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 22:22:08 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5AF0A8716C; Fri,  7 Feb 2025 22:22:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CcL4dc9J0Ob7 for <buildroot@buildroot.org>;
+ Fri,  7 Feb 2025 22:22:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CF3B570510
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF3B570510
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CF3B570510
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 22:22:47 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 68F90B0053D;
+ Fri,  7 Feb 2025 23:22:43 +0100 (CET)
+Received: from 94.105.106.182.dyn.edpnet.net ([94.105.106.182:42182])
+ via 94.105.106.182.dyn.edpnet.net ([94.105.106.182])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 07 Feb 2025 23:22:43 +0100
+MIME-Version: 1.0
+Date: Fri, 07 Feb 2025 23:22:43 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 7 Feb 2025 22:50:50 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 707839bbaff6a2993d46161d0aaf5ff5cadd7f88
-X-Git-Newrev: 93550cb7712255b1f842b15a8ed668c29ebcc70f
-X-Patchwork-Hint: ignore
-Message-Id: <20250207222208.5AF0A8716C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-pvr-waipu: bump version to
- 21.9.1-Omega
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250207160241.10112-1-bernd@kuhls.net>
+References: <20250207160241.10112-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <a630dbad23183fa523d5668d6d447318@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1738966964;
+ bh=tTzUBbVcMWrT0s3oPbnlDjB4awN+38iWty034RqKxvk=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Cul6rjmprQrvTv1EqaSVgrKFum1uLSQ2N0iY616tvNeFl08mYWEBLlOGM9stdm5Bf
+ j7VCiMB2WAhK3XmzEV0f0l+VB7GEgtzAFDwMR6tRE3huKa8M8tdjQnnmKzJ1asrMb2
+ N10sN+/8vZmp46qvlgsC9zZQtnbKhEKd66asY2N1ESOsXhx9syeQh3KjdiXQc1I0RD
+ 4Ctj5CBuJrnnw5Y3S7SWPSe1pFsvdzUxRNt+tzjSntv+FqSWR/saCHLfNRWvV1dvkI
+ lbR5siXeNsMKDldkx6l7rI1B7h5jhxmsPPvNjQfe7qdFFEfnkHGrPhor2/LLn/Pp4z
+ bZFelqf7j/frA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Cul6rjmp
+Subject: Re: [Buildroot] [PATCH 1/2] package/kodi-pvr-nextpvr: bump version
+ to 21.3.2-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,44 +83,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93550cb7712255b1f842b15a8ed668c29ebcc70f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 07/02/2025 17:02, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/kodi-pvr-waipu/kodi-pvr-waipu.hash | 2 +-
- package/kodi-pvr-waipu/kodi-pvr-waipu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-index 593bae1cdb..9112fa16f7 100644
---- a/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-+++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b314155b643eca1936931fe6c010b2f9d50b07a2e0786e8cd8db41ea6f8c1f87  kodi-pvr-waipu-21.9.0-Omega.tar.gz
-+sha256  9604bf46ef5502306c59d93cd7f9a7ec298e30a17197dd2d8d49300c6ee51a9c  kodi-pvr-waipu-21.9.1-Omega.tar.gz
- sha256  4202d4fb329f58c83ba921b56d7071e37f7df3f15b3820a3a04ef8eee49f54d2  pvr.waipu/LICENSE.txt
-diff --git a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-index 47bef06966..d830c9d114 100644
---- a/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-+++ b/package/kodi-pvr-waipu/kodi-pvr-waipu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_WAIPU_VERSION = 21.9.0-Omega
-+KODI_PVR_WAIPU_VERSION = 21.9.1-Omega
- KODI_PVR_WAIPU_SITE = $(call github,flubshi,pvr.waipu,$(KODI_PVR_WAIPU_VERSION))
- KODI_PVR_WAIPU_LICENSE = GPL-2.0+
- KODI_PVR_WAIPU_LICENSE_FILES = pvr.waipu/LICENSE.txt
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
