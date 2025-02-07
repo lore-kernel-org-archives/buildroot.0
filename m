@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B71EC282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:15:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92628C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:15:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7973284126;
-	Fri, 28 Feb 2025 17:15:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C721C6FCA2;
+	Fri, 28 Feb 2025 17:15:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jfNYZXBH4Mvs; Fri, 28 Feb 2025 17:15:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PH81UJizoON8; Fri, 28 Feb 2025 17:15:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 430768446A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C084670BF5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 430768446A;
-	Fri, 28 Feb 2025 17:15:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C084670BF5;
+	Fri, 28 Feb 2025 17:15:17 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 13EB668
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3124D1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 14ED1419B7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5192F42E78
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fvJlyXHpRnZB for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:45 +0000 (UTC)
+ id IE80HRZjCbKy for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60B204383D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2B939424AD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 60B204383D
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2B939424AD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58DDF865FC; Fri, 28 Feb 2025 16:30:35 +0000 (UTC)
+ id 1EC9587AD6; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 5 Feb 2025 16:00:23 +0100
+Date: Fri, 7 Feb 2025 20:28:28 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1155290904be0f0fab4bc964a099884e7fcb77f5
-X-Git-Newrev: 1503580dcd8b677d71b79ea834ff2f72cd605186
+X-Git-Oldrev: 267a6fe44f2dc9d1565566976d530e9d01756be1
+X-Git-Newrev: 43c11e80a2961b5c66bde6fc3b13d590eaf0c5d6
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163035.58DDF865FC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/snooze: new package
+Message-Id: <20250228163036.1EC9587AD6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] {linux,
+ linux-headers}: bump 5.{4, 10, 15}.x / 6.{1, 6, 12}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,166 +60,81 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2418663023871165930=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2418663023871165930==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=1503580dcd8b677d71b79ea834ff2f72cd605186
+commit: https://git.buildroot.net/buildroot/commit/?id=43c11e80a2961b5c66bde6fc3b13d590eaf0c5d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
-[Peter: add to DEVELOPERS, add s-o-b to patch, add TARGET_CFLAGS/LDFLAGS,
-	use /usr PREFIX]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- .../snooze/0001-fix-snooze-n-format-string.patch   | 40 ++++++++++++++++++++++
- package/snooze/Config.in                           |  8 +++++
- package/snooze/snooze.hash                         |  3 ++
- package/snooze/snooze.mk                           | 28 +++++++++++++++
- 6 files changed, 81 insertions(+)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f4dd8df9e0..837fa93f4d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1473,6 +1473,7 @@ F:	package/s6-networking/
- F:	package/s6-portable-utils/
- F:	package/s6-rc/
- F:	package/skalibs/
-+F:	package/snooze/
- F:	package/tipidee/
+diff --git a/linux/Config.in b/linux/Config.in
+index 63e64c5d65..1e6842c44e 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -137,7 +137,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
  
- N:	Jagan Teki <jagan@amarulasolutions.com>
-diff --git a/package/Config.in b/package/Config.in
-index 3ec6d0d879..3153fd6afa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2406,6 +2406,7 @@ menu "Miscellaneous"
- 	source "package/qpdf/Config.in"
- 	source "package/rtl_433/Config.in"
- 	source "package/shared-mime-info/Config.in"
-+	source "package/snooze/Config.in"
- 	source "package/sunwait/Config.in"
- 	source "package/taskd/Config.in"
- 	source "package/wine/Config.in"
-diff --git a/package/snooze/0001-fix-snooze-n-format-string.patch b/package/snooze/0001-fix-snooze-n-format-string.patch
-new file mode 100644
-index 0000000000..293777166f
---- /dev/null
-+++ b/package/snooze/0001-fix-snooze-n-format-string.patch
-@@ -0,0 +1,40 @@
-+From 5f9e616b29fe272fffbb31e4b7ea8ff61f781601 Mon Sep 17 00:00:00 2001
-+From: Leah Neukirchen <leah@vuxu.org>
-+Date: Wed, 29 May 2024 19:42:27 +0200
-+Subject: [PATCH] fix "snooze -n" format string
-+
-+Fixes #22.
-+
-+Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
-+
-+Upstream: https://github.com/leahneukirchen/snooze/commit/5f9e616b29fe272fffbb31e4b7ea8ff61f781601
-+---
-+ snooze.c | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/snooze.c b/snooze.c
-+index 06f0d07..e47ad11 100644
-+--- a/snooze.c
-++++ b/snooze.c
-+@@ -329,13 +329,13 @@ main(int argc, char *argv[])
-+ 			char weekstr[4];
-+ 			struct tm *tm = localtime(&t);
-+ 			strftime(weekstr, sizeof weekstr, "%a", tm);
-+-			printf("%s %s %2ldd%3ldh%3ldm%3lds ",
-++			printf("%s %s %2dd%3dh%3dm%3ds ",
-+ 			    isotime(tm),
-+ 			    weekstr,
-+-			    ((t - now) / (60*60*24)),
-+-			    ((t - now) / (60*60)) % 24,
-+-			    ((t - now) / 60) % 60,
-+-			    (t - now) % 60);
-++			    ((int)(t - now) / (60*60*24)),
-++			    ((int)(t - now) / (60*60)) % 24,
-++			    ((int)(t - now) / 60) % 60,
-++			    (int)(t - now) % 60);
-+ 			if(jitter) {
-+ 				printf("(plus up to %ds for jitter)\n", jitter);
-+ 			} else {
-+--
-+2.43.0
-+
-diff --git a/package/snooze/Config.in b/package/snooze/Config.in
-new file mode 100644
-index 0000000000..0e068cb607
---- /dev/null
-+++ b/package/snooze/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_SNOOZE
-+	bool "snooze"
-+	help
-+	  snooze is a tool for waiting until a particular time and then
-+	  running a command. Together with a service supervision system
-+	  such as runit, this can be used to replace cron(8).
-+
-+	  https://github.com/leahneukirchen/snooze
-diff --git a/package/snooze/snooze.hash b/package/snooze/snooze.hash
-new file mode 100644
-index 0000000000..c1710d857f
---- /dev/null
-+++ b/package/snooze/snooze.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  d63fde85d9333188bed5996baabd833eaa00842ce117443ffbf8719c094be414  snooze-0.5.tar.gz
-+sha256  2cea433f84afcfd9d55515908d3ea69ed1df00ffbf90cc48cd68d72a2b464544  README.md
-diff --git a/package/snooze/snooze.mk b/package/snooze/snooze.mk
-new file mode 100644
-index 0000000000..9c5f7a3830
---- /dev/null
-+++ b/package/snooze/snooze.mk
-@@ -0,0 +1,28 @@
-+################################################################################
-+#
-+# snooze
-+#
-+################################################################################
-+
-+SNOOZE_VERSION = 0.5
-+SNOOZE_SITE = $(call github,leahneukirchen,snooze,v$(SNOOZE_VERSION))
-+SNOOZE_LICENSE = CC0-1.0
-+
-+# Unfortunately, snooze doesn't have a dedicated file for the license, but it
-+# is mentioned in the README and in the manpage.
-+SNOOZE_LICENSE_FILES = README.md
-+
-+SNOOZE_MAKE_OPTS = \
-+	PREFIX=/usr \
-+	CC=$(TARGET_CC) \
-+	CFLAGS="$(TARGET_CFLAGS) $(TARGET_LDFLAGS)"
-+
-+define SNOOZE_BUILD_CMDS
-+	$(MAKE) -C $(@D)/ $(SNOOZE_MAKE_OPTS)
-+endef
-+
-+define SNOOZE_INSTALL_TARGET_CMDS
-+	$(MAKE) -C $(@D)/ $(SNOOZE_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
-+endef
-+
-+$(eval $(generic-package))
-
---===============2418663023871165930==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.12.11" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.12.12" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 50c2ecf5ab..ebd39c2bc7 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,11 +1,11 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  475172fdbd87a153f123a57952672e773bdb6daf5b58a417d1a5e419fcfeec49  linux-6.12.11.tar.xz
+-sha256  f15e2b1a8bab0eba494b07858a5abc88d8f788e25f6fe4a572a77840bbd5494d  linux-6.6.74.tar.xz
+-sha256  18b0d41d1a7fbad56045cde0d7fc176bfb18361d29c9f07e57109bbf21bf7876  linux-6.1.127.tar.xz
++sha256  e98942d17ef7063b3f2d6d7692bf24899e2e021cf832d19b55308ec8e8e08eff  linux-6.12.12.tar.xz
++sha256  f7dfb1fa9716ba139d0b4c8161535816d400dea21d5943f513448429b1790290  linux-6.6.75.tar.xz
++sha256  874d67d3181570e69ac6b33853f0448f05fc90d4cf3e4baaadc4a9cede7c50f3  linux-6.1.128.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  ea9eb8088d4231f8a01b191ceef5f4d92238f6c7519f6fbcb57e448ee9e0a6e0  linux-5.15.177.tar.xz
+-sha256  239e57280f8c9159187e383d7b730d29f5cc8e1b30be218f004e0c90d1137f52  linux-5.10.233.tar.xz
+-sha256  1e3e5fc052c8e15f8eaa37d30bf4f0b3eef7430dd234d9fed0d0005852a06d10  linux-5.4.289.tar.xz
++sha256  efe9f7eb5ea4d26cec6290689343e1804eb3b4a88ff5a60497a696fc08157c42  linux-5.15.178.tar.xz
++sha256  9597c4fee2f1ce452acfec516f4325ad342155872052fd5f0d9ce2ddcc26ebe5  linux-5.10.234.tar.xz
++sha256  6cc73cf2a7f50580f7d8c7e99d2f2e8ada8b7d2f4e76f5896f0daf691cc2a456  linux-5.4.290.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 9a0db19b29..a0cb484bd0 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -428,12 +428,12 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "5.4.289"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.233"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.177"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.127"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.74"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.12.11"	if BR2_KERNEL_HEADERS_6_12
++	default "5.4.290"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.234"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.178"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.128"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.75"	if BR2_KERNEL_HEADERS_6_6
++	default "6.12.12"	if BR2_KERNEL_HEADERS_6_12
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2418663023871165930==--
