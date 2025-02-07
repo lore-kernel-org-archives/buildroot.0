@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60002C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:15:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F4BFC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:15:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CCD765041F;
-	Fri, 28 Feb 2025 17:15:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09B3984F68;
+	Fri, 28 Feb 2025 17:15:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U6DanH8LmDad; Fri, 28 Feb 2025 17:15:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LEPJIJ4Oy56v; Fri, 28 Feb 2025 17:15:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7DC44F5D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCC3E85729
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A7DC44F5D8;
-	Fri, 28 Feb 2025 17:15:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DCC3E85729;
+	Fri, 28 Feb 2025 17:15:30 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D17F1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:25 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1394568
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0644242D35
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C3C742FD0
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lCQXAtPFmOeH for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:48 +0000 (UTC)
+ id 9Pfq85z6uY6A for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A8C643C4C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6302E43A93
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8A8C643C4C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6302E43A93
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 812AA82B38; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 5548B87611; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 7 Feb 2025 22:19:14 +0100
+Date: Fri, 7 Feb 2025 20:33:44 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9bfa39dca2a9098c244cab5f3cbffa67df2d94f3
-X-Git-Newrev: 87d4cffa53bf02388d2a0e811196ed9a86c2df59
+X-Git-Oldrev: a85c15e31906aca1e1a290808c0539a84e628294
+X-Git-Newrev: d9d76e035164b0e781a826999fa293f126134a17
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163036.812AA82B38@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/intel-mediadriver:
- bump version to 25.1.1
+Message-Id: <20250228163036.5548B87611@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-waitress:
+ security bump to 3.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,38 +65,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=87d4cffa53bf02388d2a0e811196ed9a86c2df59
+commit: https://git.buildroot.net/buildroot/commit/?id=d9d76e035164b0e781a826999fa293f126134a17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/intel-mediadriver/intel-mediadriver.hash | 2 +-
- package/intel-mediadriver/intel-mediadriver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Both 3.0.1 and 3.0.2 fix security issues.
 
-diff --git a/package/intel-mediadriver/intel-mediadriver.hash b/package/intel-mediadriver/intel-mediadriver.hash
-index 5e78e8b404..f3f1e29933 100644
---- a/package/intel-mediadriver/intel-mediadriver.hash
-+++ b/package/intel-mediadriver/intel-mediadriver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  94178add6dd545bd14747c063863d87d7b4f3cbcaab5d660d2ae5310cbfe4553  intel-media-25.1.0.tar.gz
-+sha256  db5788341789099cbfce212f64f428eb79739f578eabfcc6056f03f3029d3708  intel-media-25.1.1.tar.gz
- sha256  74979d5aaee78b8da82e3aafd415a216b6131dfff6d95d6930927c8a4e3bded3  LICENSE.md
-diff --git a/package/intel-mediadriver/intel-mediadriver.mk b/package/intel-mediadriver/intel-mediadriver.mk
-index 41ce987a05..d94d65dd76 100644
---- a/package/intel-mediadriver/intel-mediadriver.mk
-+++ b/package/intel-mediadriver/intel-mediadriver.mk
-@@ -6,7 +6,7 @@
+In 3.0.1:
+
+* Fix a bug that would lead to Waitress busy looping on select() on a
+  half-open socket due to a race condition that existed when creating a
+  new HTTPChannel. See https://github.com/Pylons/waitress/pull/435,
+  https://github.com/Pylons/waitress/issues/418 and
+  https://github.com/Pylons/waitress/security/advisories/GHSA-3f84-rpwh-47g6
+
+* With thanks to Dylan Jay and Dieter Maurer for their extensive
+  debugging and helping track this down.
+
+* No longer strip the header values before passing them to the WSGI
+  environ. See https://github.com/Pylons/waitress/pull/434 and
+  https://github.com/Pylons/waitress/issues/432
+
+* Fix a race condition in Waitress when channel_request_lookahead is
+  enabled that could lead to HTTP request smuggling.
+  See https://github.com/Pylons/waitress/security/advisories/GHSA-9298-4cf8-g4wj
+
+In 3.0.2:
+
+* When using Waitress to process trusted proxy headers, Waitress will
+  now update the headers to drop any untrusted values, thereby making sure
+  that WSGI apps only get trusted and validated values that Waitress
+  itself used to update the environ. See
+  https://github.com/Pylons/waitress/pull/452 and
+  https://github.com/Pylons/waitress/issues/451
+
+Full Changelog:
+https://docs.pylonsproject.org/projects/waitress/en/latest/#change-history
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-waitress/python-waitress.hash | 4 ++--
+ package/python-waitress/python-waitress.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-waitress/python-waitress.hash b/package/python-waitress/python-waitress.hash
+index c1663a351a..40564457dd 100644
+--- a/package/python-waitress/python-waitress.hash
++++ b/package/python-waitress/python-waitress.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/waitress/json
+-md5  b8c671ed131b84a0099493f445c98014  waitress-3.0.0.tar.gz
+-sha256  005da479b04134cdd9dd602d1ee7c49d79de0537610d653674cc6cbde222b8a1  waitress-3.0.0.tar.gz
++md5  da30daf4544fafe0f43e1ba4a1830bf5  waitress-3.0.2.tar.gz
++sha256  682aaaf2af0c44ada4abfb70ded36393f0e307f4ab9456a215ce0020baefc31f  waitress-3.0.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c  LICENSE.txt
+diff --git a/package/python-waitress/python-waitress.mk b/package/python-waitress/python-waitress.mk
+index c1618817dc..660f839a4d 100644
+--- a/package/python-waitress/python-waitress.mk
++++ b/package/python-waitress/python-waitress.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # based on https://software.intel.com/en-us/articles/build-and-debug-open-source-media-stack
- 
--INTEL_MEDIADRIVER_VERSION = 25.1.0
-+INTEL_MEDIADRIVER_VERSION = 25.1.1
- INTEL_MEDIADRIVER_SITE = https://github.com/intel/media-driver/archive
- INTEL_MEDIADRIVER_SOURCE= intel-media-$(INTEL_MEDIADRIVER_VERSION).tar.gz
- INTEL_MEDIADRIVER_LICENSE = MIT, BSD-3-Clause
+-PYTHON_WAITRESS_VERSION = 3.0.0
++PYTHON_WAITRESS_VERSION = 3.0.2
+ PYTHON_WAITRESS_SOURCE = waitress-$(PYTHON_WAITRESS_VERSION).tar.gz
+-PYTHON_WAITRESS_SITE = https://files.pythonhosted.org/packages/70/34/cb77e5249c433eb177a11ab7425056b32d3b57855377fa1e38b397412859
++PYTHON_WAITRESS_SITE = https://files.pythonhosted.org/packages/bf/cb/04ddb054f45faa306a230769e868c28b8065ea196891f09004ebace5b184
+ PYTHON_WAITRESS_SETUP_TYPE = setuptools
+ PYTHON_WAITRESS_LICENSE = ZPL-2.1
+ PYTHON_WAITRESS_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
