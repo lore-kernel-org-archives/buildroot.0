@@ -4,67 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A138C02194
-	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 17:36:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42235C02194
+	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 17:50:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 79508428F4;
-	Fri,  7 Feb 2025 17:36:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D0B4F42C19;
+	Fri,  7 Feb 2025 17:50:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IOeDQJwoaCGf; Fri,  7 Feb 2025 17:36:13 +0000 (UTC)
+ id eiGXRASqWgDO; Fri,  7 Feb 2025 17:50:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 774F94099B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F2F342C28
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 774F94099B;
-	Fri,  7 Feb 2025 17:36:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 579A9E4
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 17:36:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F2F342C28;
+	Fri,  7 Feb 2025 17:50:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 749691B5
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 17:50:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4708A61058
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 17:36:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 63CD260819
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 17:50:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D_ay84TxxhRf for <buildroot@buildroot.org>;
- Fri,  7 Feb 2025 17:36:11 +0000 (UTC)
+ id H381KroDHMEj for <buildroot@buildroot.org>;
+ Fri,  7 Feb 2025 17:50:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::a2c; helo=mail-vk1-xa2c.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 16A9060F08
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16A9060F08
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com
- [IPv6:2607:f8b0:4864:20::a2c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 16A9060F08
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 17:36:10 +0000 (UTC)
-Received: by mail-vk1-xa2c.google.com with SMTP id
- 71dfb90a1353d-51f2a8fd349so444752e0c.1
- for <buildroot@buildroot.org>; Fri, 07 Feb 2025 09:36:10 -0800 (PST)
+ client-ip=2607:f8b0:4864:20::232; helo=mail-oi1-x232.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7E83C60758
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E83C60758
+Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com
+ [IPv6:2607:f8b0:4864:20::232])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7E83C60758
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 17:50:21 +0000 (UTC)
+Received: by mail-oi1-x232.google.com with SMTP id
+ 5614622812f47-3eb9bbcc936so1457951b6e.0
+ for <buildroot@buildroot.org>; Fri, 07 Feb 2025 09:50:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1738949770; x=1739554570;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=ieLQ+LYOwy0w3EVJI1Y+t1G4pBBQdG0VZSKfBDRxu/I=;
- b=Q9XBoaRh2j+CN84Fb6MSJGokbHPCwGAypbBu4W2ibsivJFtITfBesoV9V8ilEbvXnH
- 8K6BGsFd8OjVKsNHXwXMz/5t4TR6zOefNMMAnqJvD10BDZ7w/LiC+FX4/AD8SOVVoxq/
- 3QFWnmOMthPE3RTU5Z/Tdig/iY/E0yO3bnXj3iw2RiEaxFD8qt2Ky2wY/hb0yqAbAUIm
- DjzVQg1lstBp+dF8sL77dJiJ6pSHkYWTuo1jw7h/R3+s8mpi2+PIZPxj5IQ4fSJoJsXD
- pqUsxk4idF3B7w1e5SeUm1gDxuXH7vxxCYcn85rXY6w1qXCUoTMMSWSCl+LUipvrbkkN
- VGHA==
+ d=1e100.net; s=20230601; t=1738950620; x=1739555420;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=/hmQP5lrVnIZQEO5vRYLPzSVT6Bxawh1hZWkrbWS0wQ=;
+ b=Uhdatbhg9HbG/nYQv+FzTdmZrSsry2hRQ3OjahOWxy2eT7nVIRAOlA4xjdK1c5geK1
+ npAZhZ2C4YV4gkfRO7YHy6OG4EeayrPllNTJuSq+MNOhVmlPaVZAqrVqF/kaFKCCNRVi
+ Z3v4ucJ1HPMfHG3qC+/4Te5Ti9Q5v3VCRwHVGirlDRYgXtXYl6BYe23ipfqySZ8aj/jz
+ ahRrkM4KjZ4D+ACCffabL0NpfuMY832bXBBCHPA6f7blFvqLpYcCGjcQZlQq5F2u1qwf
+ s9jupK7v1HbU4iMBOX8yTanctaZQuGc57DG0PkWw8hR3BEGqFnN/CAfXHTSI6cfJF+pa
+ NXWQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCU2+MD5kbphCd55rtE5EeW+qStcBWbMrgirdk78gPUXCs51oh6iUzhrFa8SV1T+Rbgi/T08fzxXwDg=@buildroot.org
-X-Gm-Message-State: AOJu0YxyWekb7c8VET+X/XGJjyo0+yRN9PdJvyB/pJQl8rfSzP8QOEqK
- GwIS+ZBzZr3FRSC7AbGfJ2CZHS8LwZaInBeayS1vEsGJ+3fueGveStMYG1WF7MB3Gt/NqJ7izQT
- C5drCtkAv9gYi4e1EhVhqBo7egiR08lJajuZ+Uw==
-X-Gm-Gg: ASbGncuRIUOTtkNXQ9M0pX1Mw0dW66u8rZpTr/G4f7law76eIXqoL8/Q/LsuLLoz8Ez
- hELWLX7s4EpEFsxK4rMIajLGLBs2phKr1bFxEe1KJCaE8wc2RIOY4EPMeHrzKl/WRG9TJhEGiVQ
- ==
-X-Google-Smtp-Source: AGHT+IH5m6ebi+9FlsGHyDL6t+/bnajjVkJ1SZk1KQJCXHn8srOSDdNyxxo+BGoDjm1eTPCwKdwRoi7pgj81RfV/an8=
-X-Received: by 2002:a05:6122:3126:b0:516:157d:c5fb with SMTP id
- 71dfb90a1353d-51f2e28c24fmr3417371e0c.10.1738949769602; Fri, 07 Feb 2025
- 09:36:09 -0800 (PST)
+ AJvYcCVIkFQoRoWqtNAi69Rm3Z4653sR90ISAWwCj1ncrkh9O+MdcXLRBt4pyf20TbXubAWl38bkNtFGZQA=@buildroot.org
+X-Gm-Message-State: AOJu0YygI+r9ha6HSCH2a+Celi89vz5V3adRrQWnfv1RNwpp73wG9nud
+ a7Zlj9qTsL1FYt2EmHlo+Dg9wtkUPjRjhzoEzKNlLIGYcKPA+tUMb9DEYmMDO4veeOOx12isZSt
+ H
+X-Gm-Gg: ASbGncvZMNauLAg8WjItqT62H05kPCBgVJQSqAR+VxHQcGeIsg3C7RZ2/RWEB/mOMzL
+ 2cgWCBgY+TKC8Crf9Q0zvnWKKRd6ejsj8A1UQBnBjzZOBQmUfVLIT07l6UTgGikiVHo7OCKZ+Do
+ njwaKR9Xerjn37pEKMi6VH4zYxhyfSI3/3mrrjz7G1n3uDknb3hjLnWrvO8aTMvFOev+KGWmMqf
+ WNG1DfVC9T9Yjb9ZeyW0wG86wF4vLhmjfwGSMhHovE+rt3wzMMCJ3p+tN9W6hhnkdkxcJ3peK9W
+ ufMUI7x0ObM7WWuN2X03pFlB5i2LqhDJPffntriIpfMdXje1D1VvnLOyIkY=
+X-Google-Smtp-Source: AGHT+IGyO5jh4oDG5ZcEueK25HOCuda3XrVAUj4s7Pa6ihU8qByK7Z9iG37s0VCx434kMqkxaN8Faw==
+X-Received: by 2002:a05:6808:1706:b0:3f1:b153:3112 with SMTP id
+ 5614622812f47-3f39225c2famr3013593b6e.13.1738950620120; 
+ Fri, 07 Feb 2025 09:50:20 -0800 (PST)
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com.
+ [209.85.167.175]) by smtp.gmail.com with ESMTPSA id
+ 46e09a7af769-726afa37515sm885224a34.50.2025.02.07.09.50.19
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 07 Feb 2025 09:50:19 -0800 (PST)
+Received: by mail-oi1-f175.google.com with SMTP id
+ 5614622812f47-3eb9bbcc936so1457936b6e.0
+ for <buildroot@buildroot.org>; Fri, 07 Feb 2025 09:50:19 -0800 (PST)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUnmUq+sj+I+HgMI2iYopNg1NFEFp9MZ0FV+VQIRj0oULGNIRa/gN3+LLquzxdcwCFwfy/De3+zrnE=@buildroot.org
+X-Received: by 2002:a05:6871:ea86:b0:29d:cc2e:8493 with SMTP id
+ 586e51a60fabf-2b83ef1ad87mr2836568fac.26.1738950619241; Fri, 07 Feb 2025
+ 09:50:19 -0800 (PST)
 MIME-Version: 1.0
 References: <20240805163133.4126564-1-james.hilliard1@gmail.com>
  <CA+h8R2oQGKFFH-vMX27WUO1uEAGyt4cz9MCwn9Cofwyujx1xDA@mail.gmail.com>
@@ -78,35 +94,35 @@ References: <20240805163133.4126564-1-james.hilliard1@gmail.com>
  <CADvTj4r5ZAFkyqMctj4fV=vnkqDn2g+oG3g2PjTHJKSkVLQNVQ@mail.gmail.com>
  <CA+h8R2pup4sse2R-6oMV0=uKL6WyV3o6fyerQeYopv57ZJWCVA@mail.gmail.com>
  <9524fc48-d637-42f9-bce1-29f0df5099a4@gmx.de>
-In-Reply-To: <9524fc48-d637-42f9-bce1-29f0df5099a4@gmx.de>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 7 Feb 2025 19:35:58 +0200
-X-Gm-Features: AWEUYZmwrWTgkwjfrkvMfnx7ioJyE4muchsuoE_5Sa5rLoVh7ul3opOTuv2_QME
-Message-ID: <CADvTj4qtBka_AVPh1rgGHkib9rxSfE7kAWBUMsz2nvYSWZvEhQ@mail.gmail.com>
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: Christian Stewart <christian@aperture.us>,
+ <CADvTj4qtBka_AVPh1rgGHkib9rxSfE7kAWBUMsz2nvYSWZvEhQ@mail.gmail.com>
+In-Reply-To: <CADvTj4qtBka_AVPh1rgGHkib9rxSfE7kAWBUMsz2nvYSWZvEhQ@mail.gmail.com>
+Date: Fri, 7 Feb 2025 09:50:09 -0800
+X-Gmail-Original-Message-ID: <CA+h8R2pNjKWK3nQ9sYmYQJLUD=goGEWOa6OWy36MGG=0fqh3Ww@mail.gmail.com>
+X-Gm-Features: AWEUYZkO4wRquilfmhxP1Llkp35ep6-2rg4q2J1Bx5Z3xzZD--bHXJMNNSOu15E
+Message-ID: <CA+h8R2pNjKWK3nQ9sYmYQJLUD=goGEWOa6OWy36MGG=0fqh3Ww@mail.gmail.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: Fiona Klute <fiona.klute@gmx.de>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
  Christian Stewart via buildroot <buildroot@buildroot.org>,
  Anisse Astier <anisse@astier.eu>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1738949770; x=1739554570; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=ieLQ+LYOwy0w3EVJI1Y+t1G4pBBQdG0VZSKfBDRxu/I=;
- b=WEAPxajUNLkKCtbX3ISuikNOxPahxM428dxhvCHZK8yAONj5mID0XZZdnLUg9wXBES
- Rbf7u9CPysinw8+hIFZV/t5lk638Qcn+sU4vnkJw1BqSe40PeBRkzNtgTN1DGXG7lUu1
- v3nNQJJgVHxK884bx9dkW1vl5Uwhwlp+VxHksuVtih4QYOEfKxsIIwvrsbA4v8vZm+m3
- vWzzLNTyZzfWkmIZeQjlgIEp4r9Vv2fEr56DPC7iVHGDOei0yL4ox9LAMLvyNfOTlR1g
- z/T8/mpMt60tysVkZIwMAyU9IBasWUbMpaqex2u1KN5fepFl1ZJDF4UAagzsVP50cmtf
- 0rmw==
+ d=aperture.us; s=google; t=1738950620; x=1739555420; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=/hmQP5lrVnIZQEO5vRYLPzSVT6Bxawh1hZWkrbWS0wQ=;
+ b=qMusZzPeBQ28Voh+PVIA37oal1FvPNKonzYXpuuH0tD6y++Xy+quxCFQGC/7aMBzUy
+ elFLKP3na8OPcl0Fvlqf6xaHq2KPM4jclAJcnWbbGnO7Jk+O8N8QwD6vb8OATY4ro0wk
+ Q5bARV3wt3z6A0cBjbxitdYqImkibomOPs49k8dWoOkWi7AbVaYJauJIs3S2H/LzK686
+ xTbE7wGiuxXW/D/X//766w62ISgFx7SjA72OCtiW/CL76PAbUl7Bpy67r6PwISp0N7ea
+ KlcZIGqxUN54C1cw2pcgs6Hu86P2VtI6kTCHQgLHQJThiJJO1jzGKdKtw2nbmtfbVA00
+ NMJw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=reject dis=none)
+ header.from=aperture.us
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=WEAPxajU
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=qMusZzPe
 Subject: Re: [Buildroot] Fwd: [PATCH v4 1/2] package/pkg-golang.mk: allow
  packages to override download GOPROXY
 X-BeenThere: buildroot@buildroot.org
@@ -120,83 +136,112 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Content-Type: multipart/mixed; boundary="===============4576099443604421312=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVGh1LCBGZWIgNiwgMjAyNSBhdCA5OjMx4oCvUE0gRmlvbmEgS2x1dGUgdmlhIGJ1aWxkcm9v
-dAo8YnVpbGRyb290QGJ1aWxkcm9vdC5vcmc+IHdyb3RlOgo+Cj4gSGkgZXZlcnlvbmUhCj4KPiBB
-bSAwNS4wMi4yNSB1bSAxODo1NiBzY2hyaWViIENocmlzdGlhbiBTdGV3YXJ0IHZpYSBidWlsZHJv
-b3Q6Cj4gPiBIaSBKYW1lcywgQXJub3V0LAo+ID4KPiA+IEkgd291bGQgbGlrZSB0byBhZGQgdGhh
-dCB0aGVyZSBpcyBhbiBvcGVuIGlzc3VlIHdoZXJlIHRoZSBnb2RvY3MKPiA+IHdlYnNpdGUgaXMg
-ZGlzcGxheWluZyB0aGUgY2FjaGVkIHByb3h5IHZlcnNpb24gYW5kIG5vdCB0aGUgR2l0SHViCj4g
-PiB2ZXJzaW9uLCB3aGljaCBpcyBjb25zaWRlcmVkIGFub3RoZXIgcG90ZW50aWFsIG1hbHdhcmUg
-dmVjdG9yLgo+ID4KPiA+IE9wZW4gaXNzdWUgd2l0aCBhY3Rpdml0eSBpbiB0aGUgbGFzdCBjb3Vw
-bGUgZGF5czoKPiA+Cj4gPiBodHRwczovL2dpdGh1Yi5jb20vZ29sYW5nL2dvL2lzc3Vlcy82NjY1
-MyNpc3N1ZWNvbW1lbnQtMjYzNjM1ODQwMQo+ID4KPiA+IE9uIFdlZCwgRmViIDUsIDIwMjUgYXQg
-NjowMuKAr0FNIEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29tPiB3cm90
-ZToKPiA+PiBPbiBXZWQsIEZlYiA1LCAyMDI1IGF0IDI6NTHigK9QTSBDaHJpc3RpYW4gU3Rld2Fy
-dCA8Y2hyaXN0aWFuQGFwZXJ0dXJlLnVzPiB3cm90ZToKPiA+Pj4gQmVsb3cgSSBtZW50aW9uIGEg
-cG90ZW50aWFsIHNlY3VyaXR5IGlzc3VlIHdoZXJlIHNvbWVvbmUgdXBsb2FkcyBhIG1hbGljaW91
-cyBwYWNrYWdlIHZlcnNpb24gdG8gdGhlIHByb3h5IGFuZCB0aGVuIGNoYW5nZXMgdGhlIGdpdCB0
-YWcgdG8gcmVtb3ZlIHRoZSBtYWx3YXJlLiBJbiB0aGlzIGF0dGFjayBtb2RlIHRoZSBtYWludGFp
-bmVycyBtaWdodCBjaGVjayB0aGUgZ2l0IHRhZywgc2VlIG5vIG1hbHdhcmUsIGFuZCBhZGQgYSBw
-YWNrYWdlIHdpdGggdGhhdCB0YWcuCj4gPj4+Cj4gPj4+IFRoZSBwcm9ibGVtIGlzIHRoYXQgR28g
-ZmV0Y2hlcyBmcm9tIEdPUFJPWFkgYW5kIHNpbGVudGx5IGlnbm9yZXMgdGhlIG1pc21hdGNoLgo+
-ID4+Cj4gPj4gQXMgaXQgc2F5cyBpbiB0aGUgYXJ0aWNsZSB0aGlzIGlzIGhvdyBpdCdzIGRlc2ln
-bmVkIHRvIHdvcms6Cj4gPj4KPiA+PiAiR28gbW9kdWxlcyBhcmUgaW50ZW50aW9uYWxseSBpbW11
-dGFibGUgb25jZSBwdWJsaXNoZWQgYW5kIGZldGNoZWQgYnkKPiA+PiB0aGUgcHJveHkgW3NuaXBd
-Cj4gPgo+ID4gQ29ycmVjdCwgYnV0IHRoaXMgY2FuIGxlYWQgdG8gYSBzZWN1cml0eSBpc3N1ZSB3
-aGVuIHRoZSBjb2RlIGluIHRoZQo+ID4gcHJveHkgaXMgbWFsaWNpb3VzLgo+ID4KPiA+Pj4gVGhp
-cyB3YXMgdGhlIHJlYXNvbiB3aHkgSSBoYXZlIGFsd2F5cyBsb2JiaWVkIHRvIGtlZXAgdGhlIGRl
-ZmF1bHQgYXMgR09QUk9YWT1kaXJlY3QgaW4gYnVpbGRyb290LCBhcyB0aGlzIGF2b2lkcyB0aGUg
-Y2FzZSB3aGVyZSB0aGUgZ2l0IHJlcG8gbWlzbWF0Y2hlcyB0aGUgcHJveHkgd2l0aG91dCB2aXNp
-YmlsaXR5IGF0IHRoZSBnaXQgbGV2ZWwuCj4gPj4KPiA+PiBBcyBpdCBzYXlzIGluIHRoZSBhcnRp
-Y2xlOgo+ID4+Cj4gPj4gIldoaWxlIGltbXV0YWJpbGl0eSBjYW4gYmUgYWJ1c2VkIGJ5IG1hbGlj
-aW91cyBhY3RvcnMg4oCUIGFsbG93aW5nCj4gPj4gaGFybWZ1bCBjb2RlIHRvIHBlcnNpc3Qgb25j
-ZSBjYWNoZWQg4oCUIGl0IHJlbWFpbnMgYSBuZXQgc2VjdXJpdHkKPiA+PiBiZW5lZml0LiBTaW5j
-ZSB0aGUgR28gbW9kdWxlIHN5c3RlbSBpcyBmdW5jdGlvbmluZyBhcyBpbnRlbmRlZCwgYW5kCj4g
-Pj4gdGhpcyBpcyBub3QgYSBzZWN1cml0eSB2dWxuZXJhYmlsaXR5LCB0aGVyZSBpcyBubyBwYXRj
-aCBvciBzd2l0Y2ggdG8KPiA+PiB0dXJuIG9mZiBpbW11dGFiaWxpdHk7IGluc3RlYWQsIGRldmVs
-b3BlcnMgbXVzdCByZWNvZ25pemUgdGhhdCBvbmNlIGEKPiA+PiBtYWxpY2lvdXMgdmVyc2lvbiBp
-cyBwdWJsaXNoZWQsIGl0IHdpbGwgcmVtYWluIG1hbGljaW91cyBpbiB0aGUKPiA+PiBjYWNoZS4i
-Cj4gPgo+ID4gWWVzLiBCdXQgaXQgaXMgbm90IGFjY2VwdGFibGUgZm9yIHVzIHRvIHNoaXAgbWFs
-aWNpb3VzIGNvZGUuCj4gPgo+ID4gQ29kZSBpbiB0aGUgcHJveHkgbWlzbWF0Y2hpbmcgdGhlIGNv
-ZGUgZG93bmxvYWRlZCB3aXRoIEdPUFJPWFk9ZGlyZWN0Cj4gPiBpcyBhIGdvb2QgaW5kaWNhdG9y
-IHRoYXQgc29tZXRoaW5nIHN1c3BpY2lvdXMgaXMgZ29pbmcgb24gYW5kIHdvcnRoCj4gPiBmdXJ0
-aGVyIGludmVzdGlnYXRpb24uCj4gVGhpcyBpcyB0aGUgY3JpdGljYWwgcGFydCBpbiBteSBvcGlu
-aW9uOiBmYWlsaW5nIHNhZmUuIEFzIGFubm95aW5nIGFzCj4gc2VlbWluZ2x5IHJhbmRvbWx5IGZh
-aWxpbmcgYnVpbGRzIGFyZSwgdGhleSdyZSBub3QgZ29pbmcgdG8gZG8gZGFtYWdlCj4gYmV5b25k
-IHRpbWUgc3BlbnQgdG8gaW52ZXN0aWdhdGUgYW5kIGZpeCB3aGF0ZXZlciB0aGUgY2F1c2UgaXMs
-IHdoZXRoZXIKPiBpdCdzIGEgbWlzdGFrZSBvciAocmFyZWx5KSBtYWxpY2lvdXMgYWN0aW9uLiBP
-bmNlIHdlIGhhdmUgYSB0cnVzdGVkCj4gdmFsdWUgaW4gcGFja2FnZS5oYXNoIHRoZSBkb3dubG9h
-ZCBzb3VyY2UgZG9lc24ndCBtYXR0ZXIgbXVjaCwgYnV0IEkKPiBhZ3JlZSB0aGF0IHJlcXVpcmlu
-ZyBkb3dubG9hZHMgdG8gbWF0Y2ggd2hlbiBpbnRyb2R1Y2luZy91cGRhdGluZyBhCj4gcGFja2Fn
-ZSBpcyBhIHNlY3VyaXR5IGZlYXR1cmUuCgpKdXN0IHRvIGNsYXJpZnkgdGhlcmUgYXJlIDIgZGlm
-ZmVyZW50IGhhc2ggY2hlY2tzIGdvaW5nIG9uIGhlcmUgZXNzZW50aWFsbHksCnRoZXJlJ3MgdGhl
-IGhhc2hlcyBpbiB0aGUgZ28uc3VtIGZpbGUgYW5kIHRoZSBwYWNrYWdlIGhhc2hlcyBpbiBidWls
-ZHJvb3QuCgpXaGVuIHdlIHZlbmRvciB0aGUgZGVwZW5kZW5jaWVzIHRoZXkgYXJlIGJlaW5nIHZh
-bGlkYXRlZCBhZ2FpbnN0IHRoZQpnby5zdW0gZmlsZSB0aGF0J3MgcGFydCBvZiB0aGUgcGFja2Fn
-ZSBzb3VyY2UsIGFzIGxvbmcgYXMgdGhpcyB2YWxpZGF0ZXMgd2UKa25vdyB0aGUgY29ycmVjdCBk
-ZXBlbmRlbmNpZXMgYXMgc3BlY2lmaWVkIGJ5IHRoZSB1cHN0cmVhbSBwYWNrYWdlCndlcmUgZG93
-bmxvYWRlZCBjb3JyZWN0bHksIHRoZSBpc3N1ZSBpcyB0aGF0IEdPUFJPWFk9ZGlyZWN0IGRpc2Fi
-bGVzCnRoZSBjYWNoaW5nIHByb3h5IHdoaWNoIGlzIGRlc2lnbmVkIHRvIGVuc3VyZSB0aGF0IG9u
-ZSBjYW4gZG93bmxvYWQKdGhlIGRlcGVuZGVuY2llcyBtYXRjaGluZyB0aGUgaGFzaGVzIGluIHRo
-ZSBnby5zdW0gZmlsZSBpbiB0aGUgZXZlbnQKdGhlIG9yaWdpbmFsIGRvd25sb2FkIHNvdXJjZSBi
-cm9rZS9jaGFuZ2VkIGZvciB3aGF0ZXZlciByZWFzb24uCgpBIGRpcmVjdCBkb3dubG9hZCBmYWls
-aW5nIGRvZXMgbm90IG5lY2Vzc2FyaWx5IGluZGljYXRlIGEgbWlzdGFrZSBvcgptYWxpY2lvdXMg
-YWN0aW9uLCBpdCBtYXkgc2ltcGx5IGJlIHRoYXQgdGhlIGRlcGVuZGVuY3kgZG93bmxvYWQKbG9j
-YXRpb24gbm8gbG9uZ2VyIGV4aXN0cy4gQXMgd2UgaGF2ZSB0aGUgY2FjaGluZyBwcm94eSB3ZSBz
-aG91bGQKc2ltcGx5IGJlIHVzaW5nIHRoYXQgYnkgZGVmYXVsdCBhcyB0aGF0J3MgdGhlIGV4cGVj
-dGVkIHdheSBmb3IKZ29sYW5nIHRvIGRvd25sb2FkIGRlcGVuZGVuY2llcyBhcyBpdCBwcmV2ZW50
-cyBkb3dubG9hZCBmYWlsdXJlcwp0aGF0IGNhbiBoYXBwZW4gd2hlbiBhIGRpcmVjdCBkb3dubG9h
-ZCBsb2NhdGlvbiBkaXNhcHBlYXJzIG9yCmNoYW5nZXMuIFVzaW5nIHRoZSBwcm94eSBpbnN0ZWFk
-IG9mIGRpcmVjdCBkb3dubG9hZHMgZG9lcyBub3QKbWVhbmluZ2Z1bGx5IHJlZHVjZSBzZWN1cml0
-eSBkdWUgdG8gZ28uc3VtIGJlaW5nIHZhbGlkYXRlZCBlaXRoZXIKd2F5LgoKPgo+IEJlc3QgcmVn
-YXJkcywKPiBGaW9uYQo+Cj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVpbGRyb290QGJ1aWxkcm9vdC5v
-cmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============4576099443604421312==
+Content-Type: multipart/alternative; boundary="000000000000f12ce0062d90fdd8"
+
+--000000000000f12ce0062d90fdd8
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+James,
+
+On Fri, Feb 7, 2025, 9:35=E2=80=AFAM James Hilliard <james.hilliard1@gmail.=
+com>
+wrote:
+
+> Just to clarify there are 2 different hash checks going on here
+> essentially,
+> there's the hashes in the go.sum file and the package hashes in buildroot=
+.
+>
+> When we vendor the dependencies they are being validated against the
+> go.sum file that's part of the package source, as long as this validates =
+we
+> know the correct dependencies as specified by the upstream package
+> were downloaded correctly, the issue is that GOPROXY=3Ddirect disables
+> the caching proxy which is designed to ensure that one can download
+> the dependencies matching the hashes in the go.sum file in the event
+> the original download source broke/changed for whatever reason.
+>
+> A direct download failing does not necessarily indicate a mistake or
+> malicious action, it may simply be that the dependency download
+> location no longer exists. As we have the caching proxy we should
+> simply be using that by default as that's the expected way for
+> golang to download dependencies as it prevents download failures
+> that can happen when a direct download location disappears or
+> changes. Using the proxy instead of direct downloads does not
+> meaningfully reduce security due to go.sum being validated either
+> way.
+>
+
+This is true but as you have identified many upstream developers are also
+not checking dependencies carefully either.
+
+If we look for build failures with GOPROXY=3Ddirect and notify upstream we
+can help catch dependencies that may have malicious mismatches between the
+git tag and the GOPROXY version.
+
+Thanks,
+Christian
+
+--000000000000f12ce0062d90fdd8
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto"><div>James,<br><br><div class=3D"gmail_quote gmail_quote_=
+container"><div dir=3D"ltr" class=3D"gmail_attr">On Fri, Feb 7, 2025, 9:35=
+=E2=80=AFAM James Hilliard &lt;<a href=3D"mailto:james.hilliard1@gmail.com"=
+>james.hilliard1@gmail.com</a>&gt; wrote:</div><blockquote class=3D"gmail_q=
+uote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1e=
+x">
+Just to clarify there are 2 different hash checks going on here essentially=
+,<br>
+there&#39;s the hashes in the go.sum file and the package hashes in buildro=
+ot.<br>
+<br>
+When we vendor the dependencies they are being validated against the<br>
+go.sum file that&#39;s part of the package source, as long as this validate=
+s we<br>
+know the correct dependencies as specified by the upstream package<br>
+were downloaded correctly, the issue is that GOPROXY=3Ddirect disables<br>
+the caching proxy which is designed to ensure that one can download<br>
+the dependencies matching the hashes in the go.sum file in the event<br>
+the original download source broke/changed for whatever reason.<br>
+<br>
+A direct download failing does not necessarily indicate a mistake or<br>
+malicious action, it may simply be that the dependency download<br>
+location no longer exists. As we have the caching proxy we should<br>
+simply be using that by default as that&#39;s the expected way for<br>
+golang to download dependencies as it prevents download failures<br>
+that can happen when a direct download location disappears or<br>
+changes. Using the proxy instead of direct downloads does not<br>
+meaningfully reduce security due to go.sum being validated either<br>
+way.<br></blockquote></div></div><div dir=3D"auto"><br></div><div dir=3D"au=
+to">This is true but as you have identified many upstream developers are al=
+so not checking dependencies carefully either.</div><div dir=3D"auto"><br><=
+/div><div dir=3D"auto">If we look for build failures with GOPROXY=3Ddirect =
+and notify upstream we can help catch dependencies that may have malicious =
+mismatches between the git tag and the GOPROXY version.</div><div dir=3D"au=
+to"><br></div><div dir=3D"auto">Thanks,</div><div dir=3D"auto">Christian</d=
+iv></div>
+
+--000000000000f12ce0062d90fdd8--
+
+--===============4576099443604421312==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4576099443604421312==--
