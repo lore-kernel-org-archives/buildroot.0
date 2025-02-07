@@ -4,41 +4,41 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8DF0C02194
-	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 17:15:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1B9DC0219B
+	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 17:15:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6399B4297C;
-	Fri,  7 Feb 2025 17:15:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D022A42C33;
+	Fri,  7 Feb 2025 17:15:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cUrD_WqvzYby; Fri,  7 Feb 2025 17:15:22 +0000 (UTC)
+ id RZpvNhq--nbu; Fri,  7 Feb 2025 17:15:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62F3D42BEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EA7442BEC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 62F3D42BEB;
-	Fri,  7 Feb 2025 17:15:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 68CFDE4
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 17:15:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3EA7442BEC;
+	Fri,  7 Feb 2025 17:15:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3007B1B5
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 17:15:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4CFDF812C2
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 17:15:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1534741831
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 17:15:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5qv9U_KuQmwC for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CVz2RljN-rCT for <buildroot@buildroot.org>;
  Fri,  7 Feb 2025 17:15:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 31C6E812E8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31C6E812E8
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 31C6E812E8
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 22A1341824
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22A1341824
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 22A1341824
  for <buildroot@buildroot.org>; Fri,  7 Feb 2025 17:15:16 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.lan ([85.22.112.179]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MeU0q-1t6HiO0vm0-00iTtZ; Fri, 07
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N2mBQ-1tHJHQ2x4O-00tSHB; Fri, 07
  Feb 2025 18:15:12 +0100
 To: buildroot@buildroot.org
 Cc: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay+rtone@gmail.com>,
@@ -47,59 +47,60 @@ Cc: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay+rtone@gmail.com>,
  "Yann E . MORIN" <yann.morin.1998@free.fr>,
  =?UTF-8?q?Jos=C3=A9=20Mendes?= <jp.baltazar.mendes@gmail.com>,
  "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-Date: Fri,  7 Feb 2025 18:14:57 +0100
-Message-ID: <20250207171458.1127620-3-fiona.klute@gmx.de>
+Date: Fri,  7 Feb 2025 18:14:58 +0100
+Message-ID: <20250207171458.1127620-4-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250207171458.1127620-1-fiona.klute@gmx.de>
 References: <20250207171458.1127620-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:HlG/xktGZY5OO4RA0pt1XCg5Pl3+CW8t5kfrLGYM+r8R8H5/DBE
- r20PvY1Gh+RYYf4ExSQbwzHkPaR9H2CzWbQC4rv64hHNTXdQcYb+27gVnPmgjGZ2NqAXWfv
- EvAEiagdTO3NuslFfK2Y+228xghtlH2Q97w3vXdm9gffk/nyLI5+ou9QawJ5Q06TIJxVvbv
- 7zS0cRKIfZtvTiuQy5WXg==
-UI-OutboundReport: notjunk:1;M01:P0:DRzRWw5jHgU=;3KcPP5Xa8xP3iljtwAUQxTzeJIG
- nqNL9pXPxlnIJo2T64UPeWbjFuXsBoiwmay2eijF0L4SKbkTdvdycbE0FBr1zws7jAEzQYKR7
- 2RKZ/nmc6iRK3rl/1ENFvK1h2At6Ge9RZSQZrL5yyVCtCiBhyzy95JGDA0IozP/Ndk4cl9vS+
- LBYOqXgNwEY3Z3P78E57kSOa5nA5H+1qSn+2dtavzatpeDYVsMDj4BKyihvtO6iYBHiXms1Ol
- u2mYMIasOkVUSaHa+mfVEsGL23Rt2medHjGqMLk/Q8xTnt8YoIG1Glb167jGpTOtdStr3PPsE
- xu9Kmxq0sNwaOZ/0xkynDvAlvy2wZJsl9UCk2BdnSrFQjcAoefXK3AZ0bfY+RAPlMq3ARHZXy
- Y18DuHyl1Frsoytogfa1HgJ4Rj5VMlDS/WkppveJYRuNJEbsq8xZe/Q/Px/IeXdFBxqQ1TX5c
- uJ8x9vMx2V4N7CA0cr2GlzXUHiG0ERWeSXpNc5jrmX3bniowsiYIBrx58v93IE5CE6iTXplVb
- nPNQ2+SYVbR/N55b2jXvd808eLibr1eaPtHMI56UUzYtZcgx0JeL7Mbo15Vb6O2PYM5OkB+zh
- wXKKS8zPNrHNn5BgKvwiFtLw0P3W56BZpsPhycqykt4YiTfi9abf5jgq+rSShZw+AecPaeKG2
- hJYYGdT8zGJrW06L64kPuk0rbzo+SQP9Ka6EtiMONTcrYwtlGB7ppe1OIx1LjGKFQ9JdIkVgf
- LmlvrVvzC+V9tnMXBAjKTJTZtLU4I2jA5j3Bmtc7efMbiUPXdTl4FYPU0/wLSLpV9GR4vpBpi
- MCHq/dUXdgn9SW/kHHWII6WqTzAsl+MF5OtE+5ejJ7gYNV0XHnBBHCnR8MsuwCaurjn3PH/Y4
- /s+qH6ApGta798OPsXGV5/aNolUZBIw/QlX9C0veul8bjgnERxo4nqmXP0A1tGtUTGcrH72OD
- q4bGbU37Yz18HEXrnB69DqBgYa6GSjC/UexF6zgVredhQ7Cz/n59IvK9JjWSkPv8pNk+4o8mX
- RqchA0+MKoi1h47aRAYwWxib9GYKB0+taOidjMtY++vArIxyIhzbbZ5Bt04YoufYFg7UHHq8D
- oA93NUPzMVkuFjj5jVcpBAUhYNgamr2ykSxymIUBJCxEpmCiKujOLZQPP2iSpy4xC7VJAV/MQ
- 1aPV2QJS/1OdrQm0DeZvKqhYx9vsYPCzoVSo730oolWuFJBB94GavD38mgHiAC/APAAubd3Fl
- FrgqdlZBElIii9u4NY/VPC2MR7+t1RrQYEEk8CsQ1sMAJRgdghfX61Ti8EQB4/p/ZIZSl3t25
- YlsxfheDAlLpFm3ywg26YlFkTyH7MbaZIMs9XkYBXISC3uFoSsAhHDZAD1Bcb7woKCa5pMcAV
- poJKsxCiktOWzJyonyAS2Uu8MBdLp/3xLDtmt4EHCefzJU8U3L23Jw8yHo
+X-Provags-ID: V03:K1:9GCae1wu5ywwtp1uTH3POLpFCgl6DNyxAm6EKqOnDysFOIM00bp
+ 1OcbUP1hTNO+STp/0Rdg+DSDwDwGAPM0h85wdy59maI/MsNn/UmvuCaAq3qk0Hy2VVN9Oe1
+ eyeNqyfMQXRWOnj6hFssItOaYRw3+FElwjL2Z2m4AC21Y3Vg7020kVa2nzzOsdfxI8Ksovm
+ s8fJHmivu+8zpN0h/n4jA==
+UI-OutboundReport: notjunk:1;M01:P0:GsLPfqW7Xzs=;f7sKsfUIzTPV3CcF37Mr81p+0aw
+ B+fRjkmUDW93K3/N5kvjuS2P7qwGj4VFgUGFuwJzQ7NgdLFWza5hfMneHoSHAF3kbovFlX5+G
+ F7wOxLGfhyX0M6M6jqApof76FnRd47nVn9bkSk+gLEDoyuP3XU0+GAprH/4pgcRqKslvgXhcd
+ 3BiI5X6O65vc6fCwKb1HeV88sndFzNqrd+Yu/UBff+n8sgPfrVmfmE8RVvElZ1pUx8YGTDoQ4
+ XX8leDDyuVOP22CP4RgYpguhHYWU/1GDY0jd4sWp4HLc+npGq99WBaCrHrCN1UwJKPQLlkqpn
+ yqC0luwMWCL95DaKoXu6alg/jeWDHUK7fVQjsUFwoo6ZZhnrGbTQg0nstL9HBb8C1I/In7jxm
+ ylqGvL9XQ4ydryTPMZMBKdODUNOMi2NKVOZXW8bqwdaU/L274t+yp4k+qgvhF/6s5dxx4h9ey
+ UFJSC6OLwEQJH6ECu50dobTJ+TGu/sG9HpJbUcwmYVInHsMUwULIp0mPb9U4x5jC5955xUnPx
+ xRPzLp++vbxrBhX6qG4ymb44Et/WczOr9S3Sdg0KVMcXpr19Ng1qIE18r2GMEU1dLwjFqppGH
+ EpZcvUcHBD6QxqBeFSjpxex51JfY3rGPkdiGJ5MaEhx51Sb/VzfmXbXvmYhVftVN+gQouSp3Y
+ SZSDcMWBAA1NeyJbFSjNzhh+LM4KZBIGeTmnP0qMVec0zf60mwuQthmgRL4ETfFGjWa1uPDjg
+ sg++KBBbMtiN9VbxCRrSU5eIdyIsvcfLPPZyg25p8Qz77CZh69T329O7UewL01FOqnCtENQis
+ tudRPInQsJYjQV9lXLSCSY48UTHnmwhwa6EXEJtskd/HArFBUfs1EplwdZqMPEujbsAI/nWjN
+ 3qy+CcXbu04lE3ibZgG+3wnh30zCicdAxVrD48jw5rhPEXLSZ3RYcziIuEQdj9Av2sltqdUtE
+ o88BA7ve28GB6TllWRw+CRhyN6El18mp4Y7pI/+p6DtUPflohdgTk09i+bX0ySh0q+1+SubS1
+ 4JOm1swJdKpqziSMHtPW6CB7vQzGnptHljNZFVJA6mF2hDrFJuZsc/BCVw96f8SM4/fKXdSUd
+ 6t8Fb5D6MRG7zfDJYiRct6oENIO9cEtQrt+m0esCH6Y64/zdOeBPNuIjWSHuAvyrHHdS2Zix/
+ 8U9TdrBwYPwHv1aKrTlHRUP6T0T2pzMPy+beg48RNKFHJtJdU5GVpXJr/QKVymgztfbQaGL2r
+ cimwt/X51/vGLlmyuBFuE6rr8U9BG/c5X/oCGv6GV1GE9bTJRqqkYCfCzfIuqmndMeVKP4LcC
+ //gHjw3huW2TRBBDQG6C95E+ybJAJXolmXnExI0wXIzEn/dOa6FMVWqofcb0t2R46cpUwt9Rs
+ 4RiOMWf47l1FOsgBeXPMU8UauTITz6jyAkRp/9liwpPMhJ82Hc9NKjBww1C8IjOIrSx4NCLSN
+ sjdnQcw==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1738948512; x=1739553312; i=fiona.klute@gmx.de;
- bh=fhtZL4Xl9E9bGNDH2s0x00laI9YhjKJxQUAk/botyic=;
+ s=s31663417; t=1738948513; x=1739553313; i=fiona.klute@gmx.de;
+ bh=2rMBcvRLegg2hwwgmujDda9t0yEfKoNfU63jsJJjt1g=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
- References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+ References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=CBdhUP4Db74CTomK3zahFTR9x8i68TsQjY1rhqnc1Xa9XKnmVCrCSGpYcHZ+Fxj9
- 1AQ5xeMXesB64xu5gA/LX6lQGZGlh6OVS55DMCadc/wKAlVftx+uaXTgNalwl2kdK
- k91E0oUZ8CcZYKlGc5gn0wjnkFi+8cXoeXbyRgdVgbUVRZrRmhblXLafPPE6SsSi7
- gtX99l7bK17KNcG+XgBulai1ZFJ8EBZOgKdpdunQB0VoEYeYSogl/PTwNpbyuQ0mc
- ko8yGPozHZ6RPvRHi3cDnDvnWvvseMFYtvQ2A8xTJkn+cq5h5zY2q8xRSMZ8QlIjd
- /vUnZ3SHMWHZpwo0Dg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=YlQzxubab/B7cDTUd6mjExr/P8lys4vAyRDf67tOaucPDYGYGwmE+B8SgdvQZgSq
+ SoSCRPH4pIUPEFnC2RpGLvWAyPmOLxlpsM31fr+H9M+2xHlMt/HW8TXySZs46O0BY
+ 2XjkvAXWnPmBhO+pm2CwarWw1OJIYnWirhxRFdDszvBvGCFeczlUUyxkBX6Koajfn
+ JpaKmBkdHbOLe5b/H9iSoahR/8lDkx+XXchBGtn2abpAomm2wg0Bk+R+5cwl5WnNK
+ uzy08WpoURJDXk5zTdagLcFcYXMYebVkPxrXd3avvx2JWPxAIoB2obyrqnepCVZgs
+ NJZ9kuhpAFD2Ze+W9g==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=CBdhUP4D
-Subject: [Buildroot] [PATCH v3 2/3] board/raspberrypi: allow non-matching
- globs for DTBs
+ header.a=rsa-sha256 header.s=s31663417 header.b=YlQzxuba
+Subject: [Buildroot] [PATCH v3 3/3]
+ configs/raspberrypicm4io_64_uboot_defconfig: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,33 +114,158 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Fiona Klute via buildroot <buildroot@buildroot.org>
 Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-RnJvbTogIkZpb25hIEtsdXRlIChXSVdBKSIgPGZpb25hLmtsdXRlQGdteC5kZT4KCldoZW4gaW5z
-dGFsbGluZyBEVEJzIGZyb20gdGhlIHJwaS1maXJtd2FyZSBwYWNrYWdlCihCUjJfUEFDS0FHRV9S
-UElfRklSTVdBUkVfSU5TVEFMTF9EVEJTPXkpLCB0aGVyZSdzIG5vIERUQiBkaXJlY3RseSBpbgp0
-aGUgaW1hZ2VzIGRpcmVjdG9yeSBiZWNhdXNlIHRoZSBrZXJuZWwgYnVpbGQgZG9lc24ndCBwcm92
-aWRlIG9uZS4KClVzaW5nIHByZS1jb21waWxlZCBEVEJzIGlzIGRpc2NvdXJhZ2VkLCBidXQgdXNl
-ZnVsIGZvciB1c2luZyBtYWlubGluZQprZXJuZWxzIHVudGlsIHN1aXRhYmxlIERUUyBjYW4gYmUg
-bWVyZ2VkLCBvciB0byBwcm92aWRlIFUtQm9vdCB3aXRoIGEKRFRCICh2aWEgdGhlIGZpcm13YXJl
-IGJvb3Rsb2FkZXIpIGluZGVwZW5kZW50IG9mIHdoYXRldmVyIGtlcm5lbCBEVEIKaXMgaW4gdXNl
-LgoKU2lnbmVkLW9mZi1ieTogRmlvbmEgS2x1dGUgKFdJV0EpIDxmaW9uYS5rbHV0ZUBnbXguZGU+
-ClJldmlld2VkLWJ5OiBHYcOrbCBQT1JUQVkgPGdhZWwucG9ydGF5K3J0b25lQGdtYWlsLmNvbT4K
-LS0tCkNoYW5nZXMgdjEgLT4gdjI6CiogQ2hlY2sgZm9yIGV4aXN0YW5jZSBvZiBwYXRocyByZXR1
-cm5lZCBieSB0aGUgRFRCIGdsb2IgZXhwcmVzc2lvbnMKICBpbnN0ZWFkIG9mIGNoYW5naW5nIHNo
-ZWxsIGdsb2IgYmVoYXZpb3IKCiBib2FyZC9yYXNwYmVycnlwaS9wb3N0LWltYWdlLnNoIHwgMiAr
-KwogMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL2JvYXJkL3Jh
-c3BiZXJyeXBpL3Bvc3QtaW1hZ2Uuc2ggYi9ib2FyZC9yYXNwYmVycnlwaS9wb3N0LWltYWdlLnNo
-CmluZGV4IGU0NjExZDA1ZGQuLmEzYTJkOGQ2MjAgMTAwNzU1Ci0tLSBhL2JvYXJkL3Jhc3BiZXJy
-eXBpL3Bvc3QtaW1hZ2Uuc2gKKysrIGIvYm9hcmQvcmFzcGJlcnJ5cGkvcG9zdC1pbWFnZS5zaApA
-QCAtMTMsNiArMTMsOCBAQCBpZiBbICEgLWUgIiR7R0VOSU1BR0VfQ0ZHfSIgXTsgdGhlbgogCUZJ
-TEVTPSgpCiAKIAlmb3IgaSBpbiAiJHtCSU5BUklFU19ESVJ9Ii8qLmR0YiAiJHtCSU5BUklFU19E
-SVJ9Ii9ycGktZmlybXdhcmUvKjsgZG8KKwkJIyBpZ25vcmUgbGl0ZXJhbCBnbG9icyB0aGF0IGRp
-ZG4ndCBtYXRjaCBhbnl0aGluZworCQlbIC1lICIke2l9IiBdIHx8IGNvbnRpbnVlCiAJCUZJTEVT
-Kz0oICIke2kjJHtCSU5BUklFU19ESVJ9L30iICkKIAlkb25lCiAKLS0gCjIuNDcuMgoKX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
-bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
-cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+
+The new config deviates from the existing
+configs/raspberrypicm4io_64_defconfig only as far as necessary to
+demonstrate booting through U-Boot instead of having the firmware load
+the kernel directly. The sample boot script loads the kernel from the
+rootfs and uses the device tree provided by the firmware, and should
+be compatible with any RPi device that runs U-Boot.
+
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+---
+The config I'm usually using is a bit different, including using a
+mainline kernel (which seems strongly preferable to me), but for
+defconfig maintenance staying close to the other RPi defconfigs is
+probably easiest.
+
+Changes v2 -> v3:
+* Regenerate defconfig according to current standards
+* Modify boot.scr.in so the script should work on any RPi device
+
+ board/raspberrypi/boot.scr.in                 | 18 +++++++++
+ .../raspberrypi/config_cm4io_64bit_uboot.txt  | 23 +++++++++++
+ board/raspberrypi/readme.txt                  |  4 ++
+ configs/raspberrypicm4io_64_uboot_defconfig   | 40 +++++++++++++++++++
+ 4 files changed, 85 insertions(+)
+ create mode 100644 board/raspberrypi/boot.scr.in
+ create mode 100644 board/raspberrypi/config_cm4io_64bit_uboot.txt
+ create mode 100644 configs/raspberrypicm4io_64_uboot_defconfig
+
+diff --git a/board/raspberrypi/boot.scr.in b/board/raspberrypi/boot.scr.in
+new file mode 100644
+index 0000000000..1ba733ceaa
+--- /dev/null
++++ b/board/raspberrypi/boot.scr.in
+@@ -0,0 +1,18 @@
++# Please note that this is only a sample, we recommend you to change
++# it to fit your needs. You should override this file using
++# BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE.
++
++# On most Raspberry Pi boards UART0 is ttyAMA0, Raspberry Pi 5 is
++# different.
++if test "$board_name" = "5 Model B"; then
++    env set serial_uart "ttyAMA10,115200"
++else
++    env set serial_uart "ttyAMA0,115200"
++fi
++env set bootargs "root=/dev/mmcblk0p2 rootwait console=tty1 console=${serial_uart}"
++
++# load kernel from the root partition
++load mmc 0:2 ${kernel_addr_r} boot/Image
++
++# boot using the FDT provided by firmware
++booti ${kernel_addr_r} - ${fdt_addr}
+diff --git a/board/raspberrypi/config_cm4io_64bit_uboot.txt b/board/raspberrypi/config_cm4io_64bit_uboot.txt
+new file mode 100644
+index 0000000000..eef929186c
+--- /dev/null
++++ b/board/raspberrypi/config_cm4io_64bit_uboot.txt
+@@ -0,0 +1,23 @@
++# Please note that this is only a sample, we recommend you to change it to fit
++# your needs.
++# You should override this file using BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE.
++# See http://buildroot.org/manual.html#rootfs-custom
++# and http://elinux.org/RPiconfig for a description of config.txt syntax
++
++start_file=start4.elf
++fixup_file=fixup4.dat
++
++kernel=u-boot.bin
++
++# Enable UART0 for serial console on ttyAMA0
++dtoverlay=miniuart-bt
++
++# enable RTC
++dtparam=i2c_vc=on
++dtoverlay=i2c-rtc,pcf85063a,i2c_csi_dsi
++
++# enable dwc2 USB controller (USB 2.0)
++dtoverlay=dwc2,dr_mode=host
++
++# enable 64bits support
++arm_64bit=1
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index 64f0e2a26f..6bf76df2ef 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -69,6 +69,10 @@ or for CM4 (on IO Board - 64 bit):
+ 
+   $ make raspberrypicm4io_64_defconfig
+ 
++or to boot CM4 (on IO Board - 64 bit) using U-Boot:
++
++  $ make raspberrypicm4io_64_uboot_defconfig
++
+ For model 5 B:
+ 
+   $ make raspberrypi5_defconfig
+diff --git a/configs/raspberrypicm4io_64_uboot_defconfig b/configs/raspberrypicm4io_64_uboot_defconfig
+new file mode 100644
+index 0000000000..056c9051b6
+--- /dev/null
++++ b/configs/raspberrypicm4io_64_uboot_defconfig
+@@ -0,0 +1,40 @@
++BR2_aarch64=y
++BR2_cortex_a72=y
++BR2_ARM_FPU_VFPV4=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
++BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_SYSTEM_DHCP="eth0"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypicm4io-64/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypicm4io-64/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,576cc10e1ed50a9eacffc7a05c796051d7343ea4)/linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-cm4"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_XZ=y
++BR2_PACKAGE_RPI_FIRMWARE=y
++BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
++BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypicm4io-64/config_cm4io_64bit_uboot.txt"
++BR2_PACKAGE_KMOD=y
++BR2_PACKAGE_KMOD_TOOLS=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rpi_arm64"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_KMOD_XZ=y
++BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_RASPBERRYPI_USBBOOT=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/raspberrypicm4io-64/boot.scr.in"
+-- 
+2.47.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
