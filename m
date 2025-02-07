@@ -4,97 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 048DCC02199
-	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 13:31:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D11E3C02194
+	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 13:39:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A214C605FC;
-	Fri,  7 Feb 2025 13:31:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CD37605C0;
+	Fri,  7 Feb 2025 13:39:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DRucG8wiFypy; Fri,  7 Feb 2025 13:31:38 +0000 (UTC)
+ id RU_-ZR8o92AC; Fri,  7 Feb 2025 13:39:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EE6860669
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A52AD6069A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5EE6860669;
-	Fri,  7 Feb 2025 13:31:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E0979C0
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 13:31:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A52AD6069A;
+	Fri,  7 Feb 2025 13:39:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7670FC0
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 13:39:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DAB0F40424
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 13:31:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 58CA940424
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 13:39:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id siF_TjjxUj6j for <buildroot@buildroot.org>;
- Fri,  7 Feb 2025 13:31:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5726A40407
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5726A40407
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5726A40407
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 13:31:34 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.lan ([85.22.112.179]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MWAOQ-1tvLtR2M0o-00QBs6; Fri, 07
- Feb 2025 14:31:31 +0100
+ id y6nT3Ld9GW6h for <buildroot@buildroot.org>;
+ Fri,  7 Feb 2025 13:39:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=188.165.44.123;
+ helo=mail1.insia.net; envelope-from=guillaume.chaye@zeetim.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 10A6D40DD2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10A6D40DD2
+Received: from mail1.insia.net (mail1.insia.net [188.165.44.123])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 10A6D40DD2
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 13:39:43 +0000 (UTC)
+Received: from smtp.insia.net (unknown [192.168.1.24])
+ by mail1.insia.net (Postfix) with ESMTP id 28BE23FB58;
+ Fri,  7 Feb 2025 14:39:37 +0100 (CET)
+Received: from UDERZO.MYINSIA.INT (unknown [192.168.1.35])
+ by smtp.insia.net (Postfix) with ESMTP id 59DDB5F497;
+ Fri,  7 Feb 2025 14:40:03 +0100 (CET)
+From: Guillaume Chaye <guillaume.chaye@zeetim.com>
 To: buildroot@buildroot.org
-Cc: Fiona Klute <fiona.klute@gmx.de>
-Date: Fri,  7 Feb 2025 14:31:28 +0100
-Message-ID: <20250207133128.3646294-1-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.47.2
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Guillaume Chaye <guillaume.chaye@zeetim.com>
+Date: Fri,  7 Feb 2025 08:38:52 -0500
+Message-Id: <20250207133852.2858510-2-guillaume.chaye@zeetim.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250207133852.2858510-1-guillaume.chaye@zeetim.com>
+References: <20250207133852.2858510-1-guillaume.chaye@zeetim.com>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:UwaYqyVU+sCgRNMjhkMr8rPY3YXmJLEg+aZfDj4b0Mn+ZyLuUcZ
- csA+P1RrDDqqTXUCFPkuw/NZRY9GB8L3H7hGJogc3NLHNnIiDnLUr2pFSvYrGxT/1lKbPdg
- ZbQc+bJgzflbCTiI2u+cvgooXybkxrn06DaY5wUmCVf25EwN18bb4fVXEonhzEUQw+jklTn
- Yq1i/20zkvahOz8GfcY7g==
-UI-OutboundReport: notjunk:1;M01:P0:9Mkzhfmd9QI=;9KHO8EfeaWPMrS/KrOI84OH9z33
- 4AGgZtvPCHPDXIm/n7fFKLAj8FXr7IIbKfnWXsnXga1tPdAlhiiDfw1PNdnRsttZckazTLIWZ
- k9ouHRsg7c4Zj5HfIA5w7+8doo2SxIjcMFHEycZC/0uZj3A3meKAboXhR0FIOY2Z5zyo9WYVr
- tK/2z2NnYCIwptKB6Tf6fgzffaN8WGWlLggpYLFvFOrbjYlcVGq4GtzllnWdNXWrlFC7x4Y7p
- G7v3+buMIYZWGuonX+WRi6hnPZeDZcF/k0pjwODuJ8rMxZn6wLrEaqxBG1b2CrxOy1g8aePS7
- +Lh9IToqD4/xkezelZgXVZmi29Is5/sOzaMjDNNFG9iOvKRP5tZUxYaUwL3DNrnd8Y14B1uXA
- ua/vTzII4tLnicjtyKTHuHcJvqKI/2ZF+bE2jsaGm0IcVxL2B1GZuIl4zo7M2ObM56m8g8cmM
- 2trnrl6rYfj9kmoNHMHn5rXtoTgiN2IMTTsdxrX+oTVGMTG+oGSX0MaIv/OU3doXO/g7Gbrru
- MJbtDzgPym38X3KsHaghtBf7mGMIOVCxTjX7jwe3gNDuYUxHGFIzodHCINJhsFgC913VFuV4i
- niNWqZAo9uSSWkXUMSFVqXtZpaUlqOzk3S06TD3OmTDv2aXgVabnXdcSTmYyKk9V5+h3nbMZW
- +L8PbbPlyD4Um2NCHE+9zFHtlGqMHrdZFUwikIwSCJLI/Uol8Fo0n1YOmTdL9+eWg2ksUhRDr
- aMSXKCjcSn7TBv4evq8ApT53ZrRXK3S5eclNoQzdS91Zffg6HV+xvYc1ta7s7kVQ/0ovmgzP/
- DuHJcBP8JVyirTkW5nXN4pGfyfF7SUMKEkaBlR0b01zvGD33+GJj/M5bMiKxMoV1BoCbJfwIP
- K6NWyjKXIBOK0oZIqIOfZaJ/CoKHyCpvKMBxkAp2HTjW5Vsin/ZCR1Lh7YVjH1pf1sEC8LPwo
- HJoHQDz62eE3Wb9WzLF0PZXqUQL8rP6dAwhl0wLAk17H+v342b6VOwhVKxLHTKbaX3kAtuPrp
- 6NO8GXSWyrhYBfJfzBSUucsSYWDA1fa1+Xdq8s5ki93vj12eGzO8wQL9Ishf1QUCK9hkzJn4D
- ctRyENck+O0p0oKqpctiSFktrpeTSerVpliXcydqFS/CzI67jBxwHvmCNPSR6fauqroc7BnhO
- /ru8quIFv5uGTHxt4VmZpexYtGE7+ATTdDBeE8IPJty26fK4zMGahFgBFQgXOEtl7ze0bRPKk
- VAprRndcAo0PcKuQwjfLBG5kfR7BZAtHU692PF0AtOyQErsulUNNQxZQ79AYBbETDkOUI3PRB
- ptLC4mbnzgQLPnjuEmjy33xrQS2QFwNbKhxXN0dpzXd+e8MlbEj+0Zkj096wg9TXOqpNsA4pP
- jxaAEyAvukp0rksSDh3yrXf6YuWO0z9/GvIkcvVKLL3fH9wfZIrgXsxs0ZRKSEjQUij9khp7S
- xus4iwQ==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1738935091; x=1739539891; i=fiona.klute@gmx.de;
- bh=ANfBHSRxbAapN9I2VvbqVVmuGXRMi0HiTQXHKActBF0=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=YmSYSiL5U4ycvQlt56blRCMqJ89dco0xHbxROOqRhu1JLtcxVwoBbnV52OxjlzI6
- rDt9XGUZPKlgu5F3xW3LDViIyWtRbEufQbX6/rNXBS3vt1OOUJs0xU1glCWXvj9i+
- 2Uy3DpV4NmiK4ZdWNRXU+7GZC89rboarT0E8xdhWEph4O55dBpTa6ZeloPprbNkRZ
- RF3YzU0oAf/yW8ytYeyKPqBG/KLJzUIG4BC9+SmEtg0jz/PtqoJaG4LFrqJhNcO8B
- Hvzkcb+xPxlJs1mBij6o8wjHSlhhIcUMoNV9LC3rvmUKvoCovv22njuVSwJ9gwWkF
- yQk5kRdpl7I7ZKA+dg==
+ d=zeetim.com; s=mail1; t=1738935577;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=6jxM2ZAkVtVSYjg4gKyl4gZ7H2qcp17gV3GedZK3mp4=;
+ b=m5ZKWtdDYNJX6kGPdTeRv3IXiGP3SB3LQQig2Eu4xQdUSNgnzruO96pn2AbvVE9DPqqWNi
+ UKTUVd+nG5DiV1v1suEnGoF0M58eGgK5+dwVZKA/2Rs1pgJjuLOD0JoL1uWGJq1JcRTw7q
+ 2Pn92VDiBEgdOYOTEkiHD/KA/QR04gb+bxAQneqdYIrWd1sOZcgy8pJH98PvtVQ1zbe4bf
+ 2oI+MikfhXx9spP9lVmfh7nxcf0dc6E1EmpKvFxcJywQw0aTWQB7+IGD0TMGtiCQ3MrdVC
+ Pkf3b2dmMbfIsgMfHbEGw18/GJew0wWKU4+h4POGVOpc++hUcJV1RTWFvA27BQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
+ dmarc=none (p=none dis=none)
+ header.from=zeetim.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=YmSYSiL5
-Subject: [Buildroot] [PATCH 1/1] package/chrony: optional NetworkManager
- DHCP integration
+ unprotected) header.d=zeetim.com header.i=@zeetim.com header.a=rsa-sha256
+ header.s=mail1 header.b=m5ZKWtdD
+Subject: [Buildroot] [PATCH 2/2] package/cargo-c: cargo-c is a cargo applet
+ to build and install C-ABI compatible dynamic and static libraries.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,75 +85,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-If the new BR2_PACKAGE_CHRONY_NM_DHCP option is enabled, chrony will
-automatically add NTP servers received over DHCP to its sources. This
-is particularly useful for devices without a battery-backed RTC, if
-the local DHCP (including DHCPv6) server announces nearby NTP servers.
-
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
 ---
- package/chrony/Config.in | 14 ++++++++++++++
- package/chrony/chrony.mk |  8 ++++++++
- 2 files changed, 22 insertions(+)
+ DEVELOPERS                     |  3 +++
+ package/cargo-c/add-cargo-lock |  9 +++++++++
+ package/cargo-c/cargo-c.hash   |  3 +++
+ package/cargo-c/cargo-c.mk     | 22 ++++++++++++++++++++++
+ 4 files changed, 37 insertions(+)
+ create mode 100755 package/cargo-c/add-cargo-lock
+ create mode 100644 package/cargo-c/cargo-c.hash
+ create mode 100644 package/cargo-c/cargo-c.mk
 
-diff --git a/package/chrony/Config.in b/package/chrony/Config.in
-index 453e4f6c3f..7b3515e5af 100644
---- a/package/chrony/Config.in
-+++ b/package/chrony/Config.in
-@@ -17,4 +17,18 @@ config BR2_PACKAGE_CHRONY_DEBUG_LOGGING
- 	  enabled at runtime. If disabled, code for debug logging will
- 	  not be compiled in.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ff069b9c40..1750ee415d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1331,6 +1331,9 @@ F:	package/python-rpi-ws281x/
+ F:	package/python-wtforms/
+ F:	package/rpi-rgb-led-matrix/
  
-+config BR2_PACKAGE_CHRONY_NM_DHCP
-+	bool "receive NTP sources from NetworkManager DHCP client"
-+	depends on BR2_PACKAGE_NETWORK_MANAGER
-+	help
-+	  Install a NetworkManager dispatcher script that writes NTP
-+	  servers received over DHCP to a per-interface sources file
-+	  and reloads sources, and add a "sourcedir" directive to use
-+	  those files to the default config.
++N:	Guillaume Chaye	<guillaume.chaye@zeetim.com>
++F:	package/cargo-c/
 +
-+	  Note that if you enable this option and override the default
-+	  chrony config (e.g. in an overlay) you need to make sure
-+	  that the "sourcedir /var/run/chrony-dhcp" directive remains
-+	  in effect.
+ N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
+ F:	package/libnids/
+ F:	package/libxcrypt/
+diff --git a/package/cargo-c/add-cargo-lock b/package/cargo-c/add-cargo-lock
+new file mode 100755
+index 0000000000..7b4c96b3bd
+--- /dev/null
++++ b/package/cargo-c/add-cargo-lock
+@@ -0,0 +1,9 @@
++#!/usr/bin/env bash
 +
- endif
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index 642e1d8fd6..0685211b75 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
-@@ -65,6 +65,13 @@ else
- CHRONY_CONF_OPTS += --without-nettle
- endif
- 
-+ifeq ($(BR2_PACKAGE_CHRONY_NM_DHCP),y)
-+define CHRONY_INSTALL_NM_DHCP_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/examples/chrony.nm-dispatcher.dhcp $(TARGET_DIR)/etc/NetworkManager/dispatcher.d/chrony.dhcp
-+	echo "sourcedir /var/run/chrony-dhcp" >>$(TARGET_DIR)/etc/chrony.conf
++if [ -f "${CARGO_C_LOCKFILE}" ]; then
++    echo "Adding Cargo.lock inside package..."
++	cp "${CARGO_C_LOCKFILE}" .
++else
++	echo "Error: Cargo.lock file not found!"
++	exit 1
++fi
+diff --git a/package/cargo-c/cargo-c.hash b/package/cargo-c/cargo-c.hash
+new file mode 100644
+index 0000000000..21e0654608
+--- /dev/null
++++ b/package/cargo-c/cargo-c.hash
+@@ -0,0 +1,3 @@
++# locally computed
++sha256  387e25aa120f945c5455557ca7815b8085090b825d2d4fd0b46cc9fdce0c34bc  Cargo.lock
++sha256  99d27284f1c1a832d41c8e3fcea7dc29020d5458e3864c9c7cab18847e4c4899  vv0.10.9.tar.gz
+diff --git a/package/cargo-c/cargo-c.mk b/package/cargo-c/cargo-c.mk
+new file mode 100644
+index 0000000000..00ce805d35
+--- /dev/null
++++ b/package/cargo-c/cargo-c.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# cargo-c
++#
++################################################################################
++
++CARGO_C_VERSION = v0.10.9
++CARGO_C_CARGO_LOCK_URL = https://github.com/lu-zero/cargo-c/releases/download/$(CARGO_C_VERSION)/Cargo.lock
++CARGO_C_SITE= $(call github,lu-zero,cargo-c,$(CARGO_C_VERSION))
++CARGO_C_SOURCE=v$(CARGO_C_VERSION).tar.gz
++HOST_CARGO_C_DEPENDENCIES+= host-libopenssl host-tar
++
++define HOST_CARGO_C_DOWNLOAD_CARGO_LOCK
++	@$(call MESSAGE, "Downloading Cargo.lock")
++	$(call DOWNLOAD, $(CARGO_C_CARGO_LOCK_URL))
 +endef
-+endif
 +
- define CHRONY_CONFIGURE_CMDS
- 	cd $(@D) && $(TARGET_CONFIGURE_OPTS) ./configure $(CHRONY_CONF_OPTS)
- endef
-@@ -76,6 +83,7 @@ endef
- define CHRONY_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
- 	$(INSTALL) -D -m 644 $(@D)/examples/chrony.conf.example2 $(TARGET_DIR)/etc/chrony.conf
-+	$(CHRONY_INSTALL_NM_DHCP_CMDS)
- endef
- 
- define CHRONY_INSTALL_INIT_SYSV
++HOST_CARGO_C_PRE_DOWNLOAD_HOOKS+= HOST_CARGO_C_DOWNLOAD_CARGO_LOCK
++HOST_CARGO_C_DL_ENV+= CARGO_C_LOCKFILE=$(HOST_CARGO_C_DL_DIR)/Cargo.lock
++HOST_CARGO_C_DOWNLOAD_POST_PROCESS_OPTS+= -v$(HOST_CARGO_C_PKGDIR)/add-cargo-lock
++
++$(eval $(host-cargo-package))
 -- 
-2.47.2
+2.39.5
 
 _______________________________________________
 buildroot mailing list
