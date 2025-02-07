@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06980C282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:16:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B120C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:16:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86E5E84CC0;
-	Fri, 28 Feb 2025 17:16:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5EC396FA38;
+	Fri, 28 Feb 2025 17:16:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cxt29-Med0gb; Fri, 28 Feb 2025 17:16:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qb3S4MdqLv5L; Fri, 28 Feb 2025 17:16:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7387E8574D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1B5A70C44
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7387E8574D;
-	Fri, 28 Feb 2025 17:16:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1B5A70C44;
+	Fri, 28 Feb 2025 17:16:02 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0770068
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:38 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1CF351DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 369BE42D34
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A9A54336C
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QZt-RMWeAsnR for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:49 +0000 (UTC)
+ id N-9HNUthviOR for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13E4D44438
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A96F843DF8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 13E4D44438
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A96F843DF8
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0E0A887611; Fri, 28 Feb 2025 16:30:37 +0000 (UTC)
+ id 9EBFB87611; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 8 Feb 2025 19:14:54 +0100
+Date: Fri, 7 Feb 2025 22:37:17 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 71b170d098119feb332d0e4ce180d132d482bf17
-X-Git-Newrev: 3d60c1f109fbbc5afab1a079cfdd057460283248
+X-Git-Oldrev: fc9d397fd6344010ee86141b07d5e685a3f9721f
+X-Git-Newrev: b28ec6f4313cc805dfb152e06408f1e7137c2ea6
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163037.0E0A887611@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/x11r7/xlib_libxshmfence: bump version to 1.3.3
+Message-Id: <20250228163036.9EBFB87611@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/cutekeyboard: bump
+ version to 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,101 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d60c1f109fbbc5afab1a079cfdd057460283248
+commit: https://git.buildroot.net/buildroot/commit/?id=b28ec6f4313cc805dfb152e06408f1e7137c2ea6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Announcement:
-https://lists.x.org/archives/xorg-announce/2024-December/003572.html
-
-Removed 0001-src-xshmfence_futex.h-fix-build-on-32-bit-architectu.patch,
-which is accepted upstream.
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Andrea Ricchi <andrea.ricchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...ce_futex.h-fix-build-on-32-bit-architectu.patch | 46 ----------------------
- .../x11r7/xlib_libxshmfence/xlib_libxshmfence.hash |  6 +--
- .../x11r7/xlib_libxshmfence/xlib_libxshmfence.mk   |  2 +-
- 3 files changed, 4 insertions(+), 50 deletions(-)
+ package/cutekeyboard/cutekeyboard.hash | 2 +-
+ package/cutekeyboard/cutekeyboard.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xlib_libxshmfence/0001-src-xshmfence_futex.h-fix-build-on-32-bit-architectu.patch b/package/x11r7/xlib_libxshmfence/0001-src-xshmfence_futex.h-fix-build-on-32-bit-architectu.patch
-deleted file mode 100644
-index 40a796c4f2..0000000000
---- a/package/x11r7/xlib_libxshmfence/0001-src-xshmfence_futex.h-fix-build-on-32-bit-architectu.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 4fca45a71f08a5bebd12d39c85f49e0b0e4426bf Mon Sep 17 00:00:00 2001
--From: Thomas Devoogdt <thomas@devoogdt.com>
--Date: Fri, 5 Apr 2024 10:45:15 +0200
--Subject: [PATCH] src/xshmfence_futex.h: fix build on 32-bit architectures
-- using 64-bit time_t
--
--Fix the following build failure on 32-bit architectures using 64-bit
--time_t (e.g. riscv32):
--
--xshmfence_futex.h: In function 'sys_futex':
--xshmfence_futex.h:58:24: error: 'SYS_futex' undeclared (first use in this function); did you mean 'sys_futex'?
--   58 |         return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
--      |                        ^~~~~~~~~
--      |                        sys_futex
--
--Similar to:
--https://gitlab.freedesktop.org/mesa/mesa/-/commit/7d87478124061915582412ba410759afe863d679
--
--Fixes:
--https://gitlab.com/buildroot.org/buildroot/-/commit/e39ad96136a8c340b3aea6b036024e28f14584f3
--
--Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
--Part-of: <https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/merge_requests/8>
--Upstream: https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/commit/4fca45a71f08a5bebd12d39c85f49e0b0e4426bf
-----
-- src/xshmfence_futex.h | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/src/xshmfence_futex.h b/src/xshmfence_futex.h
--index 673ac0e..4476038 100644
----- a/src/xshmfence_futex.h
--+++ b/src/xshmfence_futex.h
--@@ -53,6 +53,10 @@ static inline int futex_wait(int32_t *addr, int32_t value) {
-- #include <sys/time.h>
-- #include <sys/syscall.h>
-- 
--+#if defined(SYS_futex_time64) && !defined(SYS_futex)
--+#define SYS_futex SYS_futex_time64
--+#endif
--+
-- static inline long sys_futex(void *addr1, int op, int val1, struct timespec *timeout, void *addr2, int val3)
-- {
-- 	return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
---- 
--2.34.1
--
-diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash
-index e8f83d427f..a9549ead30 100644
---- a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash
-+++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-December/003287.html
--sha256  870df257bc40b126d91b5a8f1da6ca8a524555268c50b59c0acd1a27f361606f  libxshmfence-1.3.2.tar.xz
--sha512  e20a6827e370726cf50489a69f4a52b897f1c44e3eba8c72a4e626b08724e877d090770b8016765736d887d5d5eaba1fda9c29066e62d259b4d1e2064bc1626c  libxshmfence-1.3.2.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2024-December/003572.html
-+sha256  d4a4df096aba96fea02c029ee3a44e11a47eb7f7213c1a729be83e85ec3fde10  libxshmfence-1.3.3.tar.xz
-+sha512  2261b840ea621cf4ce31961ec9df17aa2e253b268afe289dfb97c240aee27b9f443fe36de5de52a2e1210b69092efde21871e20556bac9b4f1d8a3ead1b4c498  libxshmfence-1.3.3.tar.xz
+diff --git a/package/cutekeyboard/cutekeyboard.hash b/package/cutekeyboard/cutekeyboard.hash
+index 3d3ec2f858..53b438cc1f 100644
+--- a/package/cutekeyboard/cutekeyboard.hash
++++ b/package/cutekeyboard/cutekeyboard.hash
+@@ -1,3 +1,3 @@
  # Locally computed
- sha256  64a579d1a0b3347301d87c94698a58ea7933d0ae6ca7e8fdd702fde2ea376301  COPYING
-diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
-index 4241102855..b8c9ebfe97 100644
---- a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
-+++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
+-sha256  8cbaddc5fbf479d5e20fc88228e9af5928fa5e588052ee496c2f2efbe2afc510  cutekeyboard-afacc3210b75d7e0de27dcc4c0f2bed0212cc4c7.tar.gz
++sha256  0f0af01ec99ad07607d2e58c2feee1fba37c9cb7118e8af309fa021f599aec86  cutekeyboard-v1.3.0.tar.gz
+ sha256  bdde6ec2ae2686623c0bb414bfb8bd731b314beff2264c602116ea60dd65964d  LICENSE
+diff --git a/package/cutekeyboard/cutekeyboard.mk b/package/cutekeyboard/cutekeyboard.mk
+index a7b3ba7a1d..775bed0fe9 100644
+--- a/package/cutekeyboard/cutekeyboard.mk
++++ b/package/cutekeyboard/cutekeyboard.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXSHMFENCE_VERSION = 1.3.2
-+XLIB_LIBXSHMFENCE_VERSION = 1.3.3
- XLIB_LIBXSHMFENCE_SOURCE = libxshmfence-$(XLIB_LIBXSHMFENCE_VERSION).tar.xz
- XLIB_LIBXSHMFENCE_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXSHMFENCE_LICENSE = MIT
+-CUTEKEYBOARD_VERSION = afacc3210b75d7e0de27dcc4c0f2bed0212cc4c7
++CUTEKEYBOARD_VERSION = v1.3.0
+ CUTEKEYBOARD_SITE = $(call github,amarula,cutekeyboard,$(CUTEKEYBOARD_VERSION))
+ CUTEKEYBOARD_DEPENDENCIES = qt5declarative qt5quickcontrols2
+ CUTEKEYBOARD_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
