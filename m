@@ -4,73 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3ADBCC0219E
-	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 22:25:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7162C021A0
+	for <buildroot@archiver.kernel.org>; Fri,  7 Feb 2025 22:37:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F353370524;
-	Fri,  7 Feb 2025 22:25:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 727AE60799;
+	Fri,  7 Feb 2025 22:37:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BjAkwBxGWcvt; Fri,  7 Feb 2025 22:25:45 +0000 (UTC)
+ id dXdOO5AJpI4n; Fri,  7 Feb 2025 22:37:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 001F370538
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 829106079A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 001F370538;
-	Fri,  7 Feb 2025 22:25:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7242BE4
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 22:25:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 829106079A;
+	Fri,  7 Feb 2025 22:37:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7B4CFE4
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 22:37:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 618F642C4F
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 22:25:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6041380C1D
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 22:37:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IlpUs_X6JueX for <buildroot@buildroot.org>;
- Fri,  7 Feb 2025 22:25:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4A472429A7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A472429A7
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4A472429A7
- for <buildroot@buildroot.org>; Fri,  7 Feb 2025 22:25:42 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 9A5475FFB1;
- Fri,  7 Feb 2025 23:25:39 +0100 (CET)
-Received: from 94.105.106.182.dyn.edpnet.net ([94.105.106.182:34518])
- via 94.105.106.182.dyn.edpnet.net ([94.105.106.182])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 07 Feb 2025 23:25:39 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OgieYu822RCi for <buildroot@buildroot.org>;
+ Fri,  7 Feb 2025 22:37:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::b2e; helo=mail-yb1-xb2e.google.com;
+ envelope-from=bryce.schober@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9E50E80BE0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E50E80BE0
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com
+ [IPv6:2607:f8b0:4864:20::b2e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9E50E80BE0
+ for <buildroot@buildroot.org>; Fri,  7 Feb 2025 22:37:20 +0000 (UTC)
+Received: by mail-yb1-xb2e.google.com with SMTP id
+ 3f1490d57ef6-e573136107bso2286421276.3
+ for <buildroot@buildroot.org>; Fri, 07 Feb 2025 14:37:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1738967839; x=1739572639;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=K4KFOIKHcTYm7CAGgm5n9OKGzcdPlFh7psjabgKI1ZA=;
+ b=QLEHXK7EOu5orDENxqr8/dabynXbgSrgY44zUD1mA6SPjhqxETatZouHG9YK5lmHol
+ aUMo/ImMmM4v1e4iwcFTYMz9WsLEJxnpIJpf6t00MDFkhLInOuROc059Emkh9ZjXjjBU
+ lUvVm8+8hfMPxtrqpCfM7K1XoBxn75IoCmdIREzBO75ft+fkduPzZSzxsWzXmCTm2PVu
+ nF1wWu19eNkmXypcaN/GzSPFTb/3FpAX97zJ19tG8B2u/w25IiB4vMO1oAIjhk0JRe2F
+ htj6hgfyl9OoP6UMnu02bmuNlMXW+Oe03oHiYNc0dbNbT4dWo5QPbWbb32/qJeLkFnM0
+ XdIA==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVfKCAO1h48spG92ojLnL8J1X3yFQar4UmeRrh6/aksPD0TUox3jcRf37oA0XDtPGQT1zYDpMrg5NQ=@buildroot.org
+X-Gm-Message-State: AOJu0Yz5gmgEYi1mrihEYaMdVd9edM8U7t8qAVme69QnWCcQTYmqev9W
+ jVcQzgzEnOThBDa1k1iurg4npoBmEw153U+VTHqwWW+p0ei/IejiZUPgfDycX99ZuDqDqj3r3zL
+ JFyRUmQhBkX6XbEFGSuIJKD4tTmc=
+X-Gm-Gg: ASbGncsxhslMXOAQhoenD7PqN5inSm9WNrteAVUxLQdxi249Bfn8Y/ZBgueVKFYXsP7
+ 8JHU6Oy/LgHlpE6Bd1cpmRPmFSwg3bh0x+7QtoMEhBFWLDVSYxor8GYgs9xG6BPwUHWS/eg==
+X-Google-Smtp-Source: AGHT+IErBl6HpLH4MX74alJR46U7q+ubRkqiaA4SK1gwELTb443Xr7D5RFxEPwBJzepzliTMCvpbIM5UMxRaWMpj3jc=
+X-Received: by 2002:a05:6902:2682:b0:e4d:25c6:c398 with SMTP id
+ 3f1490d57ef6-e5b4616c88bmr4816891276.1.1738967839398; Fri, 07 Feb 2025
+ 14:37:19 -0800 (PST)
 MIME-Version: 1.0
-Date: Fri, 07 Feb 2025 23:25:39 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250207215341.2268859-1-thomas.perale@mind.be>
-References: <20250207215341.2268859-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <a27b0b9ad88eb49e045bda8ac2e2feb0@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1738967140;
- bh=BTSu1n9oIDZg7Ctbman4PcxuKlyZ7h608UnfDw/2cOo=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=kFJicRhAcH8UU/ffBntGJ22wXxN79DiSzR6cyqLT4oxYk0OxA3O4ZAut2bvOLvOzm
- RX3CkTFHDHV5RI/89B35h4vc61xNC+lu0eklcOasSZOokevQkG6AVPfHIilV/aFohN
- lnX1W0QX2Sw2YCQFjir5TpkZOen1sBUp6JxqH0uiIyeSbtXwx9f3Y/XkpgV4x77Pse
- pHX/msHuRwm8MiQTUA6tH9cFw7nNF97OyOTZBSaUpRUbWD4jfC3rz2WrOlPlUNjy95
- tTYxHhSsZVBXGzFCzKIzxMsrbAqVyy4/vBmBhB6wweCAlf9jajdNJH2uyjTylS5e63
- s8e0TI36kBYVA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+References: <20250207171458.1127620-1-fiona.klute@gmx.de>
+ <20250207171458.1127620-4-fiona.klute@gmx.de>
+ <da600884-960d-4deb-b776-cc78c49acce2@mind.be>
+In-Reply-To: <da600884-960d-4deb-b776-cc78c49acce2@mind.be>
+From: bryce.schober@gmail.com
+Date: Fri, 7 Feb 2025 14:36:43 -0800
+X-Gm-Features: AWEUYZk2q_8ZP5hMEQKwxvFHYX_ocWaFdnU7AihAzxcjf4_5q0uWygmH1rYyEFg
+Message-ID: <CAJpxd046ZwnSh77pxciqCi8tdRhQwiKSb3AjdMkB7+qMvqQcFA@mail.gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org, 
+ =?UTF-8?B?R2HDq2wgUE9SVEFZ?= <gael.portay+rtone@gmail.com>, 
+ Julien Grossholtz <julien.grossholtz@openest.io>,
+ Martin Bark <martin@barkynet.com>, 
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ =?UTF-8?B?Sm9zw6kgTWVuZGVz?= <jp.baltazar.mendes@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1738967839; x=1739572639; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=K4KFOIKHcTYm7CAGgm5n9OKGzcdPlFh7psjabgKI1ZA=;
+ b=gwVGF4WbgTgbopiUPfcAusEze4DuuibDAn/7PO0/ZQohGFTGOqYTkAlhDdTrZxB5Cl
+ N/TygRZ2ETzvCbycfvCLjOYNKNkCCJ4eGV4ZXe+Btdg7lfdEoUJkIme79HeqMuLZs/nN
+ 2cp5S2QUG2wVwxUFdxgjD0huXmvPVsDUtea0kutXNQQsTWiPWa06trK/UAO2Jnm15cuE
+ zoN7rj4KDlYxnHU1CvKaVf0mpnEDNsc9DQGLFRnyPM73JOinjhNrqJ9SLp6N2/Zn5NVt
+ iUnN4Kg56jL/gZr9n0r43HBN6JpK9QhL1y5BrXRH5UTGRU7OifCHpfbbQDOV6SvRCVTg
+ iN5A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=kFJicRhA
-Subject: Re: [Buildroot] [PATCH 1/1] package/lynis: add wchar dependency
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=gwVGF4Wb
+Subject: Re: [Buildroot] [PATCH v3 3/3]
+ configs/raspberrypicm4io_64_uboot_defconfig: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,35 +110,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Type: multipart/mixed; boundary="===============3705235285944876542=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 07/02/2025 22:53, Thomas Perale via buildroot wrote:
-> Since the introduction of the package lynis in 48bce6ad8f autobuild
-> failure for the gzip package started appearing on configuration
-> without wchar support with the following error message:
-> 
-> vasnprintf.c:355:38: warning: implicit declaration of function 'wctomb' 
-> [-Wimplicit-function-declaration]
->   355 | #   define local_wcrtomb(S, WC, PS)  wctomb ((S), (WC))
->       |                                      ^~~~~~
-> 
-> This error happens when building gzip without BR2_USE_WCHAR dependency.
-> The gzip package already depends on BR2_USE_WCHAR, this patch also 
-> apply
-> this dependency to the lynis package.
-> 
-> Fixes:
-> https://autobuild.buildroot.org/results/fbf/fbf31c8c09496cd3fe02e8ed55939dad5c1cbaec
-> https://autobuild.buildroot.org/results/560/56083310acedba31dccc1f6594f814347bf21caf
-> https://autobuild.buildroot.org/results/1d9/1d97e3f0c626421fdae45e794f02c560d1b9080c
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+--===============3705235285944876542==
+Content-Type: multipart/alternative; boundary="00000000000057e324062d950022"
 
-Applied to master, thanks.
+--00000000000057e324062d950022
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi Arnout,
+
+On Fri, Feb 7, 2025 at 1:37=E2=80=AFPM Arnout Vandecappelle via buildroot <
+buildroot@buildroot.org> wrote:
+
+>   Looks good at first sight. I'm thinking though: wouldn't it be easier i=
+f
+> we
+> convert all RPi configs (gradually) to U-Boot, and mention in the readme
+> (and
+> config.txt comments) how to boot without U-Boot?
+>
+
+FYI, U-Boot doesn't support the RPi PCI/NVMe interface because of a current
+lack of support in the upstream kernel. So we are actually moving away from
+U-Boot in a previous project toward using the rpi firmware support for
+integrating with A/B update systems. I'm not saying that it has to be easy
+for people like us, I'm just chiming in with the fact that U-Boot isn't
+always the best answer for all use cases.
+
+--00000000000057e324062d950022
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><div><br clear=3D"all"></div><div><div di=
+r=3D"ltr" class=3D"gmail_signature"><div dir=3D"ltr"><div>Hi Arnout,</div><=
+/div></div></div></div><br><div class=3D"gmail_quote gmail_quote_container"=
+><div dir=3D"ltr" class=3D"gmail_attr">On Fri, Feb 7, 2025 at 1:37=E2=80=AF=
+PM Arnout Vandecappelle via buildroot &lt;<a href=3D"mailto:buildroot@build=
+root.org">buildroot@buildroot.org</a>&gt; wrote:<br></div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex">=C2=A0 Looks good at first sight. I&#39;m =
+thinking though: wouldn&#39;t it be easier if we <br>
+convert all RPi configs (gradually) to U-Boot, and mention in the readme (a=
+nd <br>
+config.txt comments) how to boot without U-Boot?<br></blockquote><div><br><=
+/div><div>FYI, U-Boot doesn&#39;t support the RPi PCI/NVMe interface becaus=
+e=C2=A0of a current lack of support in the upstream kernel. So we are actua=
+lly moving away from U-Boot=C2=A0in a previous project toward using the rpi=
+ firmware support for integrating with A/B update systems. I&#39;m not sayi=
+ng that it has to be easy for people like us, I&#39;m just chiming in with =
+the fact that U-Boot=C2=A0isn&#39;t always the=C2=A0best answer for all use=
+ cases.</div></div></div>
+
+--00000000000057e324062d950022--
+
+--===============3705235285944876542==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3705235285944876542==--
