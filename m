@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39B7BC282C6
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C849FC282C1
 	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:16:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD7FF7090A;
-	Fri, 28 Feb 2025 17:15:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40E825092E;
+	Fri, 28 Feb 2025 17:15:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N6UD8yMwMNn5; Fri, 28 Feb 2025 17:15:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 25qDoUUHwP_v; Fri, 28 Feb 2025 17:15:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA77570C42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16ACE4EF24
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA77570C42;
-	Fri, 28 Feb 2025 17:15:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16ACE4EF24;
+	Fri, 28 Feb 2025 17:15:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1356868
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F4171DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F0FC42568
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2F15842D2E
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UvStekDrACli for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:49 +0000 (UTC)
+ id JPAd7vM13cGx for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDE8042D34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6861C43AB1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EDE8042D34
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6861C43AB1
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E289882B38; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
+ id 6235686780; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 7 Feb 2025 23:24:30 +0100
+Date: Fri, 7 Feb 2025 21:53:09 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 93550cb7712255b1f842b15a8ed668c29ebcc70f
-X-Git-Newrev: 4bf27608a77143650fa94994363b444d57db7842
+X-Git-Oldrev: d9d76e035164b0e781a826999fa293f126134a17
+X-Git-Newrev: 01e049cea6ee36ae6f89a13d1249cbb482043964
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163036.E289882B38@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lynis: add wchar
- dependency
+Message-Id: <20250228163036.6235686780@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python3: bump to
+ version 3.12.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bf27608a77143650fa94994363b444d57db7842
+commit: https://git.buildroot.net/buildroot/commit/?id=01e049cea6ee36ae6f89a13d1249cbb482043964
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since the introduction of the package lynis in 48bce6ad8f autobuild
-failure for the gzip package started appearing on configuration
-without wchar support with the following error message:
+Brings a number of bugfixes:
+https://docs.python.org/release/3.12.9/whatsnew/changelog.html#python-3-12-9
 
-vasnprintf.c:355:38: warning: implicit declaration of function 'wctomb' [-Wimplicit-function-declaration]
-  355 | #   define local_wcrtomb(S, WC, PS)  wctomb ((S), (WC))
-      |                                      ^~~~~~
-
-This error happens when building gzip without BR2_USE_WCHAR dependency.
-The gzip package already depends on BR2_USE_WCHAR, this patch also apply
-this dependency to the lynis package.
-
-Fixes:
-https://autobuild.buildroot.org/results/fbf/fbf31c8c09496cd3fe02e8ed55939dad5c1cbaec
-https://autobuild.buildroot.org/results/560/56083310acedba31dccc1f6594f814347bf21caf
-https://autobuild.buildroot.org/results/1d9/1d97e3f0c626421fdae45e794f02c560d1b9080c
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+[Julien: update hash file comment URL]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/lynis/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/python3/python3.hash | 6 +++---
+ package/python3/python3.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lynis/Config.in b/package/lynis/Config.in
-index 2757e86a2d..e97cb0bf91 100644
---- a/package/lynis/Config.in
-+++ b/package/lynis/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_LYNIS
- 	bool "lynis"
-+	depends on BR2_USE_WCHAR # gzip
- 	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	select BR2_PACKAGE_GZIP  # runtime (zgrep /proc/config.gz)
- 	help
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index ea026376fd..34e795b704 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,5 +1,5 @@
+-# From https://www.python.org/downloads/release/python-3128/
+-md5  d46e5bf9f2e596a3ba45fc0b3c053dd2  Python-3.12.8.tar.xz
++# From https://www.python.org/downloads/release/python-3129/
++md5  880942124f7d5c01e7b65cbad62dc873  Python-3.12.9.tar.xz
+ # Locally computed
+-sha256  c909157bb25ec114e5869124cc2a9c4a4d4c1e957ca4ff553f1edc692101154e  Python-3.12.8.tar.xz
++sha256  7220835d9f90b37c006e9842a8dff4580aaca4318674f947302b8d28f3f81112  Python-3.12.9.tar.xz
+ sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 2be6bb7004..b15c27053f 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PYTHON3_VERSION_MAJOR = 3.12
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).8
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).9
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
