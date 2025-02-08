@@ -1,52 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A7BBC02198
-	for <buildroot@archiver.kernel.org>; Sat,  8 Feb 2025 20:36:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36435C02198
+	for <buildroot@archiver.kernel.org>; Sat,  8 Feb 2025 20:36:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27B8760861;
-	Sat,  8 Feb 2025 20:36:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C832B41417;
+	Sat,  8 Feb 2025 20:36:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KlA0DGjPC_12; Sat,  8 Feb 2025 20:36:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D1CC414BC
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D1CC414BC;
+	Sat,  8 Feb 2025 20:36:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 929F912B
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 20:36:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B5AB607A7
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 20:36:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K0gwV3hAUEyr; Sat,  8 Feb 2025 20:36:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75FC96083F
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 75FC96083F;
-	Sat,  8 Feb 2025 20:36:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B56A01BA
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 20:36:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96655404D7
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 20:36:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PhgoFFiNrBTz for <buildroot@buildroot.org>;
- Sat,  8 Feb 2025 20:36:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8ED404025E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8ED404025E
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 20:36:10 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EE54686FE4; Sat,  8 Feb 2025 20:36:09 +0000 (UTC)
+ id xK9x9AHOYmaj for <buildroot@buildroot.org>;
+ Sat,  8 Feb 2025 20:36:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A3DC760732
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3DC760732
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A3DC760732
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 20:36:40 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id A7D7EB00585;
+ Sat,  8 Feb 2025 21:36:37 +0100 (CET)
+Received: from 94.105.106.182.dyn.edpnet.net ([94.105.106.182:46670])
+ via 94.105.106.182.dyn.edpnet.net ([94.105.106.182])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 08 Feb 2025 21:36:37 +0100
+MIME-Version: 1.0
+Date: Sat, 08 Feb 2025 21:36:37 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 8 Feb 2025 20:58:49 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3af192d21b5507994bc2e410499487ae107e87b2
-X-Git-Newrev: a05bed5aace0ed48f75255b34e54288fe4193ffc
-X-Patchwork-Hint: ignore
-Message-Id: <20250208203609.EE54686FE4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/heimdal: host package needs
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250208150332.172207-1-thomas.petazzoni@bootlin.com>
+References: <20250208150332.172207-1-thomas.petazzoni@bootlin.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <7e6a41204b7ccb0aaf2e784ca535544f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1739046998;
+ bh=HxPiPt39H7MmwnPCxkufqKNDaPt3vSNkIaklaIQ4kp8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=NwmYpVU3+bWDE6Lgz+vQ2eH+Mp0iaSNIZZDpaYclTR86+mEhC/RjxHtOQG4kRiXHl
+ 8SzYbuVYeEwsMb+hNY2xJ+mpu1dwEIh2ibBGDYeyXt+/esniJQkGaIEQzE0Qbg++8D
+ QhdDz89JRNVCOYR0OKIn0v6B6J5OK44kGg5HRJC2+tMNAQz842ddNtiVoUhszQPR2M
+ D5LDAkQjlbW5BT/uQdvCQRo0JFBa0BrX3BSa1rdwx5JyxS5rCMKjkQ7UifWbeF4lP7
+ MyauPmESmr6FWdxbJJVTY/iKGMTuCY1jriqUT3fLzl40rpaahybTwMCiiTmC76IfdU
+ gbUZU0TF8UBdA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=NwmYpVU3
+Subject: Re: [Buildroot] [PATCH 1/2] package/heimdal: host package needs
  host-libxcrypt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,54 +84,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a05bed5aace0ed48f75255b34e54288fe4193ffc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 08/02/2025 16:03, Thomas Petazzoni wrote:
+> The host-heimdal package has always needed a crypt library, but now
+> that libcrypt is no longer part of glibc, we're seeing build failures
+> on machines with recent host glibc versions. To fix this, we add
+> host-libxcrypt to the dependencies, and ensure host-heimdal links with
+> it.
+> 
+> Fixes:
+> 
+>   
+> http://autobuild.buildroot.net/results/864003e1005fcd847b4ec3bd94316638f8f56553/
+>   https://gitlab.com/buildroot.org/buildroot/-/issues/86
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-The host-heimdal package has always needed a crypt library, but now
-that libcrypt is no longer part of glibc, we're seeing build failures
-on machines with recent host glibc versions. To fix this, we add
-host-libxcrypt to the dependencies, and ensure host-heimdal links with
-it.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/864003e1005fcd847b4ec3bd94316638f8f56553/
-  https://gitlab.com/buildroot.org/buildroot/-/issues/86
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/heimdal/heimdal.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
-index 786d94a1aa..155cb66e1f 100644
---- a/package/heimdal/heimdal.mk
-+++ b/package/heimdal/heimdal.mk
-@@ -6,7 +6,7 @@
- 
- HEIMDAL_VERSION = f4faaeaba371fff3f8d1bc14389f5e6d70ca8e17
- HEIMDAL_SITE = $(call github,heimdal,heimdal,$(HEIMDAL_VERSION))
--HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
-+HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf host-libxcrypt
- HOST_HEIMDAL_AUTORECONF = YES
- HEIMDAL_INSTALL_STAGING = YES
- # static because of -fPIC issues with e2fsprogs on x86_64 host
-@@ -29,7 +29,7 @@ HOST_HEIMDAL_CONF_OPTS = \
- 	--disable-heimdal-documentation
- 
- # Don't use compile_et from e2fsprogs as it raises a build failure with samba4
--HOST_HEIMDAL_CONF_ENV = ac_cv_prog_COMPILE_ET=no MAKEINFO=true
-+HOST_HEIMDAL_CONF_ENV = ac_cv_prog_COMPILE_ET=no MAKEINFO=true LIBS=-lcrypt
- HEIMDAL_LICENSE = BSD-3-Clause
- HEIMDAL_LICENSE_FILES = LICENSE
- HEIMDAL_CPE_ID_VALID = YES
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
