@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 786D1C02198
-	for <buildroot@archiver.kernel.org>; Sat,  8 Feb 2025 14:43:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F798C02198
+	for <buildroot@archiver.kernel.org>; Sat,  8 Feb 2025 14:44:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F1D242855;
-	Sat,  8 Feb 2025 14:43:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5410A427C9;
+	Sat,  8 Feb 2025 14:44:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3k5UzZ9Mf3XZ; Sat,  8 Feb 2025 14:43:38 +0000 (UTC)
+ id 7wAkL1o1jFYg; Sat,  8 Feb 2025 14:44:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 008BD42877
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 488EC427CE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 008BD42877;
-	Sat,  8 Feb 2025 14:43:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 488EC427CE;
+	Sat,  8 Feb 2025 14:44:48 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 008206C
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:43:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 8420FCF
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:44:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E46D360764
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:43:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 67B65606CA
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:44:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tkdnMn-cixEQ for <buildroot@buildroot.org>;
- Sat,  8 Feb 2025 14:43:36 +0000 (UTC)
+ id bERJ8wzFNGN2 for <buildroot@buildroot.org>;
+ Sat,  8 Feb 2025 14:44:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A1E4606CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A1B9260704
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0A1E4606CA
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:43:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A1B9260704
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:44:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E666B87112; Sat,  8 Feb 2025 14:43:35 +0000 (UTC)
+ id 923E68716D; Sat,  8 Feb 2025 14:44:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Feb 2025 14:00:47 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: a25b6f62f0af481e9a111ad02cc0274309414323
-X-Git-Newrev: 01cbdc4e31365adefc616d556fcbe116e5352379
+Date: Sat, 8 Feb 2025 08:31:12 +0100
+X-Git-Refname: refs/heads/2024.11.x
+X-Git-Oldrev: 373e2c22e2e1b0abde19de0a0642a128ea6d67fe
+X-Git-Newrev: c482333df082bab427fd1bcfcff2dd8e3935f5e6
 X-Patchwork-Hint: ignore
-Message-Id: <20250208144335.E666B87112@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/go: security bump
- to version 1.22.12
+Message-Id: <20250208144446.923E68716D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x]
+ configs/ti_am62ax_sk_defconfig: Fix kernel configuration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,41 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01cbdc4e31365adefc616d556fcbe116e5352379
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=c482333df082bab427fd1bcfcff2dd8e3935f5e6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-go1.22.12 (released 2025-02-04) includes security fixes to the
-crypto/elliptic package, as well as bug fixes to the compiler and the go
-command.
+The k3-am62a7-sk.dts describes an I2C PMIC TPS659312 which features a
+number of regulators. One of them, ldo1, is used as power supply for the
+SD card host controller regulator. When the rootfs is on the SD
+card (like with this configuration), we need support for these three
+components (Regulator driver, I2C PMIC glue and PMIC MFD driver) to be
+built-in in order to avoid boot failures.
 
+Tested on an AM62A LP SK.
+
+Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+Reviewed-by: Bryan Brattlof <bb@ti.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+(cherry picked from commit 8ba6459ac1413afa72124bc6387a4f3ac4306914)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/ti/am62ax-sk/linux.config | 3 +++
+ configs/ti_am62ax_sk_defconfig  | 1 +
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 3daa25c790..f97acba0d1 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  a60c23dec95d10a2576265ce580f57869d5ac2471c4f4aca805addc9ea0fc9fe  go1.22.11.src.tar.gz
-+sha256  012a7e1f37f362c0918c1dfa3334458ac2da1628c4b9cf4d9ca02db986e17d71  go1.22.12.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index cb61c8f946..4f11ab349a 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.22.11
-+GO_VERSION = 1.22.12
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+diff --git a/board/ti/am62ax-sk/linux.config b/board/ti/am62ax-sk/linux.config
+new file mode 100644
+index 0000000000..b0f9d1b737
+--- /dev/null
++++ b/board/ti/am62ax-sk/linux.config
+@@ -0,0 +1,3 @@
++CONFIG_MFD_TPS6594=y
++CONFIG_MFD_TPS6594_I2C=y
++CONFIG_REGULATOR_TPS6594=y
+diff --git a/configs/ti_am62ax_sk_defconfig b/configs/ti_am62ax_sk_defconfig
+index 1144577942..68a0e0fb9d 100644
+--- a/configs/ti_am62ax_sk_defconfig
++++ b/configs/ti_am62ax_sk_defconfig
+@@ -10,6 +10,7 @@ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/ti/am62ax-sk/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/k3-am62a7-sk"
+ BR2_TARGET_ROOTFS_EXT2=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
