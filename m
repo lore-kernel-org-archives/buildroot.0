@@ -4,100 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47B2EC02198
-	for <buildroot@archiver.kernel.org>; Sat,  8 Feb 2025 14:23:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 426D5C02198
+	for <buildroot@archiver.kernel.org>; Sat,  8 Feb 2025 14:24:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1756F429FE;
-	Sat,  8 Feb 2025 14:23:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 00D24429D7;
+	Sat,  8 Feb 2025 14:24:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iUShf3v-URQV; Sat,  8 Feb 2025 14:23:58 +0000 (UTC)
+ id y6-1u_D895bZ; Sat,  8 Feb 2025 14:24:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFC01429BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C84642A12
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFC01429BB;
-	Sat,  8 Feb 2025 14:23:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 73736CF
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:23:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C84642A12;
+	Sat,  8 Feb 2025 14:24:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 04529CF
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:23:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 759A5607C0
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:23:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E6E66417F4
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:23:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ih8ktLzdpT8z for <buildroot@buildroot.org>;
- Sat,  8 Feb 2025 14:23:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W-OSaXPDv_kF for <buildroot@buildroot.org>;
+ Sat,  8 Feb 2025 14:23:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B0779607CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0779607CA
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B0779607CA
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:23:36 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-38dd14c99d3so755982f8f.3
- for <buildroot@buildroot.org>; Sat, 08 Feb 2025 06:23:36 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B4F1F41807
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4F1F41807
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B4F1F41807
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:23:37 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-38dd006a4e1so858762f8f.1
+ for <buildroot@buildroot.org>; Sat, 08 Feb 2025 06:23:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1739024615; x=1739629415;
+ d=1e100.net; s=20230601; t=1739024616; x=1739629416;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=MIZHj/RNDERDQd6/QvNZFAHtNWwb3KzAdCtzRMm5GDQ=;
- b=LWLzTvq6rTmo6jA667fHNvxXK82O25Pdpsb2gk+fSezHMmBKb7EgfE9y6crXYQ++HY
- aTnAcxo9smUuKMmvKlJhyUSwUawiSm3/HB6C33Og8xh5BRmjwRx02lrz/pJ5Fvvs1MCr
- uWKPCaPBwHxFUPKVtfHhV/FzrHtSTD1bv3DAAjDI7S1fCfeii2sVXKf7aSNOb+axF+Gl
- 2o0sefMS3IJm+3gHzZYYeA50tZOW9/A/bBlquDrvjcjbAsjuGz09XRDIG3VE56K2mBxf
- WHf6BEtWNRZOs8pQ0yW4vq4Ln9MZsQWyqu38yDOglzjm8BhM0+v8ewKkvJk0G9VwHq72
- QJOw==
-X-Gm-Message-State: AOJu0Ywm2mHv9QhJQ1PBcAN9fA6/QN+jHy9DaaSRvolTS6fOsoqYvmYW
- YoI8hZhui9x9GN1TXaSYg1p9c1pujUfTL8iI4nj3qMzlK4jUYpqqlidk4HT2DPWHePrIwCPhGWA
- 7
-X-Gm-Gg: ASbGnctgkv8+GGrjoh/xqjV/WM/heYeKOiNchrefFkq5nVy2uA55mzV67qZ/EEBjVVW
- VnCYSsn09DT/psSfTOdSC91RLydn+u5htlJZc+XZ6vuOPfG1iwmPMq244pxjnNucflkS/ljk3Qv
- StI9q2f0XCWfwKg4HuwjYxmNkvjgokbfmZ8rCbFldWl3zH6fOJY+In63HRfMCcPryO3f1859wa5
- s6hpogGATCvwnsKkE1iM9X8hm+f/d9V9/LxzmWce9ibfGqpnptsIpsH0xvcVem34HuAMQT51VIs
- VxLieUzSfd0AgZZBjjIne40c9JRkpdMxyGOstPa3SbFkXUFVRbxgdhxjbxO0ZMQ/cVkgwT/z4WF
- XzXWZktGRiBA4
-X-Google-Smtp-Source: AGHT+IFHFAoXmN2dRnTFO9YoW49tTJL9/58ay/LCTPgxSp/uq++0wxG40Vzr5CnpbMDNmFHz3QN9KA==
-X-Received: by 2002:a5d:6d0d:0:b0:38d:c087:98d5 with SMTP id
- ffacd0b85a97d-38dc8da6713mr5904845f8f.8.1739024614636; 
- Sat, 08 Feb 2025 06:23:34 -0800 (PST)
+ bh=INAF4arBwnIwCCJnwBeBsmYCgpU824l25YyuY2bZNRg=;
+ b=FI6xEQoQuxo6f78GNjNgEh6+P7AN3EGg4HEfknRcVAP5qwOZTIYHhrkS2kt4UGaL5b
+ wRvddEPFN6JhpajGb32K/ELKfUDLQGeRCeTAk+baF4kREAoGkRustD+3jnuF9Z4MMitC
+ RU1juYWLj2foJ1nfkjR5uRz+pIMq81N2g8mAlsGx35IeXP4p2WRPHAQ+oFzNySrd6sOa
+ Jpmrg3u+rftyZwWtnCT7Qdvi7NkR7+ZF6ss+jGLje8loCWqlIFS/KcDNmIDkqzohbbYS
+ CgbAQcfGFq5xW76zH9J7tiLxWf2nsoiCGxylc5G0Y9swCsEMAYEq2fuiV/DVGME7W2Xe
+ dx2A==
+X-Gm-Message-State: AOJu0YxmqN81QES3iOK0ULj1KpoFs6jnAd6ObyGwFfEyIwfNj5+cABxG
+ sIYvEDx3qzJ0j4NIqdTjoHENMmiNpRVkzVXHIF7yEXtaJCukXWbT6BX6pgWBFA8Aft0witOxzVY
+ 5
+X-Gm-Gg: ASbGncvlrFo/ilRga4ZRLRhRAsnhFmGRK6a2hhp4R4Ua0B+B1LzOMsG7jQ5tTA2fnR5
+ bM4FURw71lj9QH3C1y+wtJzM6LgMH0vLA0YcxicJ+5I+TNZ/pQH33eWPit9bkgeBnbYC+hojj9V
+ 2Y8jAopXzM5aw76nhS/gae3b8m3q1Dr/BK/Zwo5V9YDcx1NGVIDU8y7XxkoPmclPZOGSdAqCutS
+ J13KHuS7UDTkoDNC7YKtlAMKNpAcPSya07Wwrwukt2gky0LYo7zLPjlQ4+IyFSmBkmAMrjdzoaK
+ fXWC2t5WGN3cqj8lLA+7ftjBC91lyKIAMM7k1KBf+E2rojk6Nx+UbhugbcGo+7aiTCggMHfG/7o
+ ikkLlhNrRgf3f
+X-Google-Smtp-Source: AGHT+IFt5lluq7KYCBZVg+QYzVt3Wv+t4DzOkDWOrVauRrvVWaWcWcyPnFtsm8AJ8G8zmGnsNIih6Q==
+X-Received: by 2002:a05:6000:1ac6:b0:385:fae7:fe50 with SMTP id
+ ffacd0b85a97d-38dc9346e4emr4541591f8f.42.1739024615734; 
+ Sat, 08 Feb 2025 06:23:35 -0800 (PST)
 Received: from P-NTS-Evian.home
  (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
  [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4390daf7dbcsm124290665e9.30.2025.02.08.06.23.34
+ 5b1f17b1804b1-4390daf7dbcsm124290665e9.30.2025.02.08.06.23.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 08 Feb 2025 06:23:34 -0800 (PST)
+ Sat, 08 Feb 2025 06:23:35 -0800 (PST)
 To: buildroot@buildroot.org
 Cc: Romain Naour <romain.naour@smile.fr>
-Date: Sat,  8 Feb 2025 15:23:24 +0100
-Message-ID: <20250208142327.418271-9-romain.naour@smile.fr>
+Date: Sat,  8 Feb 2025 15:23:26 +0100
+Message-ID: <20250208142327.418271-11-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250208142327.418271-1-romain.naour@smile.fr>
 References: <20250208142327.418271-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1739024615; x=1739629415; darn=buildroot.org;
+ d=smile.fr; s=google; t=1739024616; x=1739629416; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=MIZHj/RNDERDQd6/QvNZFAHtNWwb3KzAdCtzRMm5GDQ=;
- b=w9+TNvg5dSKaiN8hlAeof3aIkej/SBAEFpyx7o6GhaZfkoeFWnOv8JW60AHeKN6G4l
- 9E98RSISKvWp6KLcD6quDmQotWjcA6htTAKuhjiVhjeE7ygs1qqehb7kYk+S3gmBefOe
- qKSVJ81nNgNdYqXys/gPXbgwaa/yD8iPuL5X0=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=INAF4arBwnIwCCJnwBeBsmYCgpU824l25YyuY2bZNRg=;
+ b=ytY30swJBjE2yQzePpaAmmk1xmJEy2UBGjPfPhdTSMW/19EZ0SWJVZXiH8jOdYH/0W
+ r7LB98UT0rMeMRsYbeyJdA8WuEzbY9fZPdQcWTSwGTDfNAFBnf+HrWVhDRZhZL0fqBQO
+ D88z0739n9skIX1qaf0SZGnvElt5KXRLT/pwo=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=w9+TNvg5
-Subject: [Buildroot] [PATCH 08/11] support/scripts/mkusers: fix shellcheck
- errors
+ header.a=rsa-sha256 header.s=google header.b=ytY30swJ
+Subject: [Buildroot] [PATCH 10/11] package/mdnsd: disable shellcheck SC2317
+ for S50mdnsd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,29 +116,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Integer variables need not be quoted (SC2086). In any case, should
-there be an actual issue and they be set empty, that would cause a
-runtime issue, wether they be quoted or not.
+shellcheck 0.9.0 throw an error due to SC2317 check on
+sysv init scripts.
 
-SC2086 is now reported for auto_id since shellcheck 0.9.0.
+Indeed, start/stop/restart/reload function can't be
+reached in one execution.
+
+See:
+https://www.shellcheck.net/wiki/SC2317
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- support/scripts/mkusers | 1 +
+ package/mdnsd/S50mdnsd | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/support/scripts/mkusers b/support/scripts/mkusers
-index 08f3344518..1400ea1b36 100755
---- a/support/scripts/mkusers
-+++ b/support/scripts/mkusers
-@@ -449,6 +449,7 @@ main() {
-             else
-                 auto_id=${AUTO_USER_ID}
-             fi
-+            # shellcheck disable=SC2086  # auto_id is a non-empty int
-             for g in ${groups//,/ }; do
-                 add_one_group "${g}" ${auto_id}
-             done
+diff --git a/package/mdnsd/S50mdnsd b/package/mdnsd/S50mdnsd
+index 1c2b71802c..13b65d0c69 100644
+--- a/package/mdnsd/S50mdnsd
++++ b/package/mdnsd/S50mdnsd
+@@ -1,4 +1,5 @@
+ #!/bin/sh
++# shellcheck disable=SC2317  # Don't warn about unreachable commands in this file
+ 
+ DAEMON=mdnsd
+ MDNSD=/usr/sbin/$DAEMON
 -- 
 2.48.1
 
