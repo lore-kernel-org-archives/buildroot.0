@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CA35C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:16:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5091C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:16:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E19FD7091A;
-	Fri, 28 Feb 2025 17:16:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA6924052A;
+	Fri, 28 Feb 2025 17:16:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UAKje92YTLoz; Fri, 28 Feb 2025 17:16:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QfWpriPVhzMD; Fri, 28 Feb 2025 17:16:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACE3370929
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84D0F402D6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACE3370929;
-	Fri, 28 Feb 2025 17:16:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84D0F402D6;
+	Fri, 28 Feb 2025 17:16:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1710A1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:48 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 11A6C711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9CB7542D17
+ by smtp4.osuosl.org (Postfix) with ESMTP id A2D9D43A93
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 61DIFqGoad1P for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:50 +0000 (UTC)
+ id Sx3EKxR3_rZy for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8E9C42D2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 309D644625
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A8E9C42D2F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 309D644625
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9E9EA826DB; Fri, 28 Feb 2025 16:30:37 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 2BF02876DB; Fri, 28 Feb 2025 16:30:37 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 9 Feb 2025 11:10:21 +0100
+Date: Sat, 8 Feb 2025 20:07:06 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f26dfdc842c7f95102f13f4bc863a404821f57f3
-X-Git-Newrev: ef15efdd2c422a8c0df074f46978045e7e8deeb8
+X-Git-Oldrev: 52162f01299ab5170f9b9c5482c459271f1fd981
+X-Git-Newrev: 3af192d21b5507994bc2e410499487ae107e87b2
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163037.9E9EA826DB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/testing/tests/package:
- sample_python_*: fix flake8 errors
+Message-Id: <20250228163037.2BF02876DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/docker-compose: bump
+ version to v2.32.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,105 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef15efdd2c422a8c0df074f46978045e7e8deeb8
+commit: https://git.buildroot.net/buildroot/commit/?id=3af192d21b5507994bc2e410499487ae107e87b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-flake8 5.0.4 provided by Debian 12 (bookworm) now detect a missing
-whitespace after 'assert' keyword:
+https://github.com/docker/compose/releases/tag/v2.32.4
 
-  E275 missing whitespace after keyword
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-[Peter: fix subject, drop extra paranthesises]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- support/testing/tests/package/sample_python_attrs.py      | 8 ++++----
- support/testing/tests/package/sample_python_colorzero.py  | 6 +++---
- support/testing/tests/package/sample_python_constantly.py | 6 +++---
- support/testing/tests/package/sample_python_gpiozero.py   | 2 +-
- support/testing/tests/package/sample_python_passlib.py    | 4 ++--
- support/testing/tests/package/sample_python_rpi_gpio.py   | 2 +-
- 6 files changed, 14 insertions(+), 14 deletions(-)
+ package/docker-compose/docker-compose.hash | 2 +-
+ package/docker-compose/docker-compose.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/tests/package/sample_python_attrs.py b/support/testing/tests/package/sample_python_attrs.py
-index f224944914..8199cc666b 100644
---- a/support/testing/tests/package/sample_python_attrs.py
-+++ b/support/testing/tests/package/sample_python_attrs.py
-@@ -8,8 +8,8 @@ class Obj(object):
+diff --git a/package/docker-compose/docker-compose.hash b/package/docker-compose/docker-compose.hash
+index 0fb9767305..e36011e7a9 100644
+--- a/package/docker-compose/docker-compose.hash
++++ b/package/docker-compose/docker-compose.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  100a1c1522fc58658ce08ed4a6213ffb22f0bf5a728718e6e2b1181a127d321f  docker-compose-2.29.7-go2.tar.gz
++sha256  481fe93cc6bb76f62b9d2a10c0db67c662d0efad38c3a307b65dd250d8d6599a  docker-compose-2.32.4-go2.tar.gz
+ sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
+diff --git a/package/docker-compose/docker-compose.mk b/package/docker-compose/docker-compose.mk
+index 26d90d303f..cc98e24133 100644
+--- a/package/docker-compose/docker-compose.mk
++++ b/package/docker-compose/docker-compose.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 
- obj1 = Obj(2)
--assert(obj1.x == 2)
--assert(obj1.y == 1)
-+assert obj1.x == 2
-+assert obj1.y == 1
- obj2 = Obj(3, 4)
--assert(obj2.x == 3)
--assert(obj2.y == 4)
-+assert obj2.x == 3
-+assert obj2.y == 4
-diff --git a/support/testing/tests/package/sample_python_colorzero.py b/support/testing/tests/package/sample_python_colorzero.py
-index 23862a816d..8d4daa560d 100644
---- a/support/testing/tests/package/sample_python_colorzero.py
-+++ b/support/testing/tests/package/sample_python_colorzero.py
-@@ -3,6 +3,6 @@ from colorzero import Color
- red = Color('red')
- green = Color('lime')
- blue = Color('blue')
--assert(red.rgb == (1.0, 0.0, 0.0))
--assert(green.rgb == (0.0, 1.0, 0.0))
--assert(blue.rgb == (0.0, 0.0, 1.0))
-+assert red.rgb == (1.0, 0.0, 0.0)
-+assert green.rgb == (0.0, 1.0, 0.0)
-+assert blue.rgb == (0.0, 0.0, 1.0)
-diff --git a/support/testing/tests/package/sample_python_constantly.py b/support/testing/tests/package/sample_python_constantly.py
-index 570cf85b23..b826dd4b71 100644
---- a/support/testing/tests/package/sample_python_constantly.py
-+++ b/support/testing/tests/package/sample_python_constantly.py
-@@ -14,6 +14,6 @@ class RESULT(Values):
- 
- 
- print(list(RESULT.iterconstants()))
--assert(RESULT.OK < RESULT.FAIL)
--assert(RESULT.OK.value > RESULT.FAIL.value)
--assert(RESULT.get(-5) == RESULT.FAIL)
-+assert RESULT.OK < RESULT.FAIL
-+assert RESULT.OK.value > RESULT.FAIL.value
-+assert RESULT.get(-5) == RESULT.FAIL
-diff --git a/support/testing/tests/package/sample_python_gpiozero.py b/support/testing/tests/package/sample_python_gpiozero.py
-index b95df07fe7..e20a9c8d34 100644
---- a/support/testing/tests/package/sample_python_gpiozero.py
-+++ b/support/testing/tests/package/sample_python_gpiozero.py
-@@ -2,4 +2,4 @@ from gpiozero import pi_info
- 
- piBoardInfo = pi_info('a020d3')  # 3B+
- 
--assert(piBoardInfo.model == '3B+')
-+assert piBoardInfo.model == '3B+'
-diff --git a/support/testing/tests/package/sample_python_passlib.py b/support/testing/tests/package/sample_python_passlib.py
-index 3ab348b9e4..80afbf18d0 100644
---- a/support/testing/tests/package/sample_python_passlib.py
-+++ b/support/testing/tests/package/sample_python_passlib.py
-@@ -1,5 +1,5 @@
- from passlib.hash import pbkdf2_sha256
- 
- hash = pbkdf2_sha256.hash("password")
--assert(pbkdf2_sha256.verify("passWord", hash) is False)
--assert(pbkdf2_sha256.verify("password", hash) is True)
-+assert pbkdf2_sha256.verify("passWord", hash) is False
-+assert pbkdf2_sha256.verify("password", hash) is True
-diff --git a/support/testing/tests/package/sample_python_rpi_gpio.py b/support/testing/tests/package/sample_python_rpi_gpio.py
-index 5f0d884e07..e0bd96f631 100644
---- a/support/testing/tests/package/sample_python_rpi_gpio.py
-+++ b/support/testing/tests/package/sample_python_rpi_gpio.py
-@@ -1,6 +1,6 @@
- try:
-     import RPi.GPIO  # noqa
- except RuntimeError as e:
--    assert(str(e) == 'This module can only be run on a Raspberry Pi!')
-+    assert str(e) == 'This module can only be run on a Raspberry Pi!'
- else:
-     raise RuntimeError('Import succeeded when it should not have!')
+-DOCKER_COMPOSE_VERSION = 2.29.7
++DOCKER_COMPOSE_VERSION = 2.32.4
+ DOCKER_COMPOSE_SITE = $(call github,docker,compose,v$(DOCKER_COMPOSE_VERSION))
+ DOCKER_COMPOSE_LICENSE = Apache-2.0
+ DOCKER_COMPOSE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
