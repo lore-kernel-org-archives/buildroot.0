@@ -1,80 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 959C1C02198
-	for <buildroot@archiver.kernel.org>; Sat,  8 Feb 2025 20:47:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6651AC02198
+	for <buildroot@archiver.kernel.org>; Sat,  8 Feb 2025 21:41:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62385600D4;
-	Sat,  8 Feb 2025 20:47:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b67fIOSzQ-g9; Sat,  8 Feb 2025 20:47:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F191605E9
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F191605E9;
-	Sat,  8 Feb 2025 20:47:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 691AB1B5
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 20:47:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4E03D83B1D
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 20:47:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DAE9A821E7;
+	Sat,  8 Feb 2025 21:41:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K5FR6wex0Y3K for <buildroot@buildroot.org>;
- Sat,  8 Feb 2025 20:47:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F1CC283B1A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1CC283B1A
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F1CC283B1A
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 20:47:03 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 43D1CB00571;
- Sat,  8 Feb 2025 21:46:57 +0100 (CET)
-Received: from 94.105.106.182.dyn.edpnet.net ([94.105.106.182:40214])
- via 94.105.106.182.dyn.edpnet.net ([94.105.106.182])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 08 Feb 2025 21:46:57 +0100
-MIME-Version: 1.0
-Date: Sat, 08 Feb 2025 21:46:57 +0100
+ id vO2R9P108F9a; Sat,  8 Feb 2025 21:41:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C287A8208B
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C287A8208B;
+	Sat,  8 Feb 2025 21:41:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F302912B
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 21:41:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D73A941497
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 21:41:00 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uYaCuulDxbjY for <buildroot@buildroot.org>;
+ Sat,  8 Feb 2025 21:40:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83B9541354
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83B9541354
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 21:40:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6EA758707E; Sat,  8 Feb 2025 21:40:59 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, Giulio Benetti
- <giulio.benetti@benettiengineering.com>, Romain Naour
- <romain.naour@gmail.com>
-In-Reply-To: <20250208150413.172911-1-thomas.petazzoni@bootlin.com>
-References: <20250208150413.172911-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <6a3bf489c4d92e7693837ca5ad9b0e5f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1739047620;
- bh=QJ2n6BHJjnd+Co83X950g28GkVfyNXo/ULG3Y4GousU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=g0gx3pGW0R9t6te41jnO6S5ZLbQbEZy76PTDx1PmQPcxtGLKXIpjHfBe22FPA18s4
- A5le5PIZlHC/jYWjf8BduUvDC79pXXgD05gKJyPocCMRB40VPxvSaAda5bgsJYPSw5
- +ZnwG0npPidCZVt7DsHntbrpMhFBaGd1GQc4tn+zWCidRq+D8oGj625bwAjh5L63Kq
- +SGBRChAMO78ux5nfW+gjWSp3DMPAPqKnWqshwbB72nxwBVc9gydGAFe31Ow0c4tuI
- qK5OsHX2+awWt+zWNIeHgZt5O/xIPQ1tZHDq7PEq+8/WPLW3VLhiGL7inFO5o2RV80
- 96OnVCKC6/YDw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=g0gx3pGW
-Subject: Re: [Buildroot] [PATCH 1/2]
- toolchain/toolchain-external/toolchain-external-bootlin: drop
- Microblaze/bleeding-edge
+To: buildroot@buildroot.org
+Date: Sat, 8 Feb 2025 22:36:48 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5f5e35104322e72a2d683248e86b157c9d0f2819
+X-Git-Newrev: 912a8458a96a7ee3fb391a507244a9084b03fb72
+X-Patchwork-Hint: ignore
+Message-Id: <20250208214059.6EA758707E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qemu: fix build with glibc >= 2.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,29 +58,122 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============4843061197131769266=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 08/02/2025 16:04, Thomas Petazzoni via buildroot wrote:
-> GCC 14.x has a significant bug where libatomic lacks some important
-> functions, causing the toolchain to be pretty much
-> unusable. Therefore, let's drop this toolchain entirely from our
-> listing for now.
-> 
-> See: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=118280 for more
-> details.
-> 
-> Fixes:
-> 
->   
-> http://autobuild.buildroot.net/results/dd081ca3c5746b980b0bcdf1f12b1a26c6b7ef86/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+--===============4843061197131769266==
+Content-Type: text/plain
 
-Series applied to master, thanks.
+commit: https://git.buildroot.net/buildroot/commit/?id=912a8458a96a7ee3fb391a507244a9084b03fb72
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+When host or target qemu is built with glibc >= 2.41 and Linux
+user-land emulation (BR2_PACKAGE_QEMU_LINUX_USER=y or
+BR2_PACKAGE_HOST_QEMU_LINUX_USER_MODE=y), compilation fails with
+output:
+
+    ../linux-user/syscall.c:362:8: error: redefinition of ‘struct sched_attr’
+      362 | struct sched_attr {
+          |        ^~~~~~~~~~
+    In file included from /usr/include/bits/sched.h:63,
+                     from /usr/include/sched.h:43,
+                     from /usr/include/pthread.h:22,
+                     from /home/buildroot/buildroot/output/per-package/host-qemu/host/include/glib-2.0/glib/deprecated/gthread.h:126,
+                     from /home/buildroot/buildroot/output/per-package/host-qemu/host/include/glib-2.0/glib.h:115,
+                     from /home/buildroot/buildroot/output/build/host-qemu-9.2.0/include/glib-compat.h:32,
+                     from /home/buildroot/buildroot/output/build/host-qemu-9.2.0/include/qemu/osdep.h:161,
+                     from ../linux-user/syscall.c:20:
+    /usr/include/linux/sched/types.h:98:8: note: originally defined here
+       98 | struct sched_attr {
+          |        ^~~~~~~~~~
+
+For information, the Buildroot glibc package has been bumped in
+commit [1]. Also, major distributions are starting to publish updates
+to glibc 2.41. See for example Arch Linux update [2].
+
+This commit adds a package patch to solve this issue.
+
+Fixes:
+- https://autobuild.buildroot.org/results/e8733bdf78d8e9448988c3d300c43a47f62375d8/
+- and many others...
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/6ecab31fad12a494ec0d2a3767c736a55c80a769
+[2] https://gitlab.archlinux.org/archlinux/packaging/packages/glibc/-/commit/7cebc144906a0fb68a5f6e75985b386c722ffbd9
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Julien: reworded the commit log]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...3-sched_attr-Do-not-define-for-glibc-2.41.patch | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+
+diff --git a/package/qemu/0003-sched_attr-Do-not-define-for-glibc-2.41.patch b/package/qemu/0003-sched_attr-Do-not-define-for-glibc-2.41.patch
+new file mode 100644
+index 0000000000..11edc27c2f
+--- /dev/null
++++ b/package/qemu/0003-sched_attr-Do-not-define-for-glibc-2.41.patch
+@@ -0,0 +1,49 @@
++From 66b1926d72ef51d4d59d0f97061f26a75651e265 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Fri, 11 Oct 2024 12:31:40 -0700
++Subject: [PATCH] sched_attr: Do not define for glibc >= 2.41
++
++glibc 2.41+ has added [1] definitions for sched_setattr and sched_getattr functions
++and struct sched_attr. Therefore, it needs to be checked for here as well before
++defining sched_attr
++
++Define sched_attr conditionally on SCHED_ATTR_SIZE_VER0
++
++Fixes builds with glibc/trunk
++
++[1] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=21571ca0d70302909cf72707b2a7736cf12190a0;hp=298bc488fdc047da37482f4003023cb9adef78f8
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Cc: Laurent Vivier <laurent@vivier.eu>
++Cc: Paolo Bonzini <pbonzini@redhat.com>
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://patchwork.kernel.org/project/qemu-devel/patch/20241011193140.1047648-1-raj.khem@gmail.com/
++---
++ linux-user/syscall.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/linux-user/syscall.c b/linux-user/syscall.c
++index 1ce4c79784..a407d4a023 100644
++--- a/linux-user/syscall.c
+++++ b/linux-user/syscall.c
++@@ -358,7 +358,8 @@ _syscall3(int, sys_sched_getaffinity, pid_t, pid, unsigned int, len,
++ #define __NR_sys_sched_setaffinity __NR_sched_setaffinity
++ _syscall3(int, sys_sched_setaffinity, pid_t, pid, unsigned int, len,
++           unsigned long *, user_mask_ptr);
++-/* sched_attr is not defined in glibc */
+++/* sched_attr is not defined in glibc < 2.41 */
+++#ifndef SCHED_ATTR_SIZE_VER0
++ struct sched_attr {
++     uint32_t size;
++     uint32_t sched_policy;
++@@ -371,6 +372,7 @@ struct sched_attr {
++     uint32_t sched_util_min;
++     uint32_t sched_util_max;
++ };
+++#endif
++ #define __NR_sys_sched_getattr __NR_sched_getattr
++ _syscall4(int, sys_sched_getattr, pid_t, pid, struct sched_attr *, attr,
++           unsigned int, size, unsigned int, flags);
++-- 
++2.34.1
++
+
+--===============4843061197131769266==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4843061197131769266==--
