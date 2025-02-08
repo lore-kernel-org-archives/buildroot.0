@@ -1,103 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AF3EC0219E
-	for <buildroot@archiver.kernel.org>; Sat,  8 Feb 2025 14:23:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8987C021A0
+	for <buildroot@archiver.kernel.org>; Sat,  8 Feb 2025 14:23:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2AC69835ED;
-	Sat,  8 Feb 2025 14:23:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9FC884198C;
+	Sat,  8 Feb 2025 14:23:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MVOs5sKnUQpM; Sat,  8 Feb 2025 14:23:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P5Em2tZWUkkZ; Sat,  8 Feb 2025 14:23:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1869983A6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A62142869
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1869983A6E;
-	Sat,  8 Feb 2025 14:23:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id BE334CF
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:23:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A62142869;
+	Sat,  8 Feb 2025 14:23:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 185F51B5
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:23:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9E937404D4
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:23:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 562E7607C0
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:23:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZGdml1adl_Nw for <buildroot@buildroot.org>;
- Sat,  8 Feb 2025 14:23:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XF0UDdGaqu6q for <buildroot@buildroot.org>;
+ Sat,  8 Feb 2025 14:23:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 229DE404F0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 229DE404F0
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 229DE404F0
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:23:33 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-38dc33931d3so1155552f8f.1
- for <buildroot@buildroot.org>; Sat, 08 Feb 2025 06:23:33 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9160B607CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9160B607CA
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9160B607CA
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:23:35 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-4361e89b6daso19596015e9.3
+ for <buildroot@buildroot.org>; Sat, 08 Feb 2025 06:23:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1739024611; x=1739629411;
+ d=1e100.net; s=20230601; t=1739024613; x=1739629413;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=OanTpJCTJ002DeQf9VdbIpvFhrgmNW529glzbBfU2ak=;
- b=cMmDD0WDNTGXg6BVHRYSGXr5NL04CL2OvGrsGLCfk5rAisH/agrJLXAmFqyDLFUCcQ
- 3cIVvvZpGP6evUVEIyBFaGt/iHPAvqkLfQvwmxAx3Ki0/kEybqu4ke5RIA4A8n7VdFKq
- bwb49UzWSTLupOFR5UJnD0C6KuXuolLrCn83ucryzEjf1S1WEJiOiXVHL1E8GnHXX2Su
- gPKFoxyO5+E7m0TFMN44Pg4lV8oxRAwv1Do1AWfbskzLKAN7J2nJK0HnumJldGCeFELG
- WpXxtqaICkvzFpldctotp34aEnq2S6pO+IvVQ3R2HeaEJwCIWisxoJB5YaZWUK3gP+J2
- c1Zw==
-X-Gm-Message-State: AOJu0Ywu030uDWusAXtPRqimr4bv8TN7vbBZWCTTDverGS5TXwH/VaTj
- lFmOInWF7L71hNGnpxA1ogtzEIsFjbVpxwdBUPK1NFaFsvQGSm59YwzwVtAqKamai5VZ1BBe2fV
- o
-X-Gm-Gg: ASbGnctISEgzIg7i84vcVYQu1BvdfGf4XvST7E1VCSwGUK6Wi+Hhhc+rh77YWVhqsNh
- bvp8tV2PTldku0VKRmXBAF9GPoMzLVTrc/3iH/Zbs/cjCdbhocsx0mic9ssMOsqQK1E7gHi6LQj
- wh3uUy5I0qRd+uDs4RaJI8hCgVtBvi7KHWB4a/llSx3032FPgbw0GzBa27HnQQ6mQtOX8Qc2Vn7
- uFY0z5VgOI2a06sYqiwP3QljMLA4qVFWYkXD01hSISPBB2nRcpdsNZ4hWzW5lqjadpKDPC2YbAk
- zcUXd63nCkRdyHIYwezz8YI2gxKlRqwsIdt1zXYK3LiLFqbWdFLLSGQ7cjtRwVIU0M6CSi2dMsF
- GVkrZBt4ZvxIz
-X-Google-Smtp-Source: AGHT+IH5o1O4cOcnROtqZyJe10aQlzgk6e2z6p+He6LWBlCTh6H0+wfZLfs85YyN1M93/om9NbeAdg==
-X-Received: by 2002:a05:6000:1a8d:b0:38d:b5e8:310a with SMTP id
- ffacd0b85a97d-38dc8fe5357mr4667359f8f.28.1739024611636; 
- Sat, 08 Feb 2025 06:23:31 -0800 (PST)
+ bh=jpzH2x8auNpbLWQKpHHZSfWELCBl0ss6OUX4KCVy5zs=;
+ b=dmitRm4slpsCDq3Vyzzuvmv5ADJuN1pbDdcKRnTCHqbp69KRk5hOXIVXnOyhJD+Zhb
+ 4t2TIkwhn24CdFGGygGjm3EMIYrRj0d0n9Txlfz91R2+00oIGfC1SPKkta8EzDxGjfPd
+ PlxEX3D44gPrbbHXK7I3CKrSIyOHdcwAhJuRcGIfIHqiTPyUNen08b7mdwl76/lSzaux
+ GVtqlzPk+6A9bgbdww+ntJzJy60MeoWaDUz7msrlOxvBczK1eeL9mbV1DmLfIS2NwS16
+ WrP4UGgeGkTzNaQCjeCH5P9v7G5kwxulTkqJA9SqNP3mHZpTLCqj7AFh1IAPU0LY5/3B
+ qTeA==
+X-Gm-Message-State: AOJu0YwIxJvyK1J7svlQr5413bT5DithT0a3fb0lQqEWkZKcIYSaqiMk
+ jaeHzs6+rcy2q4wV8fC1QvzSJGWHh9xfQ9yfejH9gDOM37Fce8h6HtKuk1BknsTJyi8UisoLnJi
+ a
+X-Gm-Gg: ASbGncucLkFbhQOYHK+zTC2GN58egYg3d7Qc+Ii2HVdoZJsX0ukDbmYUfXpdqfpT8K3
+ Kf8INsZrPy+i6whYCq1R9YqUx3Xy7gwGC/zP+fNGSha8S/STnNcCCmxusgaM5A1o1+Ni2ZST8CM
+ XEKa2snvjE6lx8ffQJ0GojnSyHOZ4iY4+st/MpjJd3E38z7O56NKli4Bry/j5bvJYnAT2Cin8Dp
+ +M0L3NA75/4dJR+zupXdo3WsNzR8UCMUL+NPfizeZODNex+kk0TYkLbhVBeX05rrP63L8Q4+bpD
+ +hnTO31fu3w0VeFbn9J+2bcGeEm2nILGn/8EGA8a9e25MDVmHgiJXFmoTb1wDxhVD0mCTmV5YmH
+ 9or2iY6i8yJFM
+X-Google-Smtp-Source: AGHT+IFGuenpLIPlZpkBpAtL+WW/wtIwzjr0gQ+rrPFpS4bzVVM2oa5pmUgLE8d0c/H3l4mRKTrNWg==
+X-Received: by 2002:a05:600c:1ca9:b0:434:f7e3:bfbd with SMTP id
+ 5b1f17b1804b1-439249a4058mr55928755e9.23.1739024613653; 
+ Sat, 08 Feb 2025 06:23:33 -0800 (PST)
 Received: from P-NTS-Evian.home
  (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
  [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4390daf7dbcsm124290665e9.30.2025.02.08.06.23.31
+ 5b1f17b1804b1-4390daf7dbcsm124290665e9.30.2025.02.08.06.23.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 08 Feb 2025 06:23:31 -0800 (PST)
+ Sat, 08 Feb 2025 06:23:33 -0800 (PST)
 To: buildroot@buildroot.org
 Cc: Romain Naour <romain.naour@smile.fr>
-Date: Sat,  8 Feb 2025 15:23:18 +0100
-Message-ID: <20250208142327.418271-3-romain.naour@smile.fr>
+Date: Sat,  8 Feb 2025 15:23:22 +0100
+Message-ID: <20250208142327.418271-7-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250208142327.418271-1-romain.naour@smile.fr>
 References: <20250208142327.418271-1-romain.naour@smile.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1739024611; x=1739629411; darn=buildroot.org;
+ d=smile.fr; s=google; t=1739024613; x=1739629413; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=OanTpJCTJ002DeQf9VdbIpvFhrgmNW529glzbBfU2ak=;
- b=cDt+svkEp/juKfEMPuOySPBICRRbY/pXaVZrbJQOyjIzCReQj408D0rDHlUezFH2Ap
- BswOf3/6NdfAd7zsyeXsjZjyoGE2IIQjlC2evcMsQhTZXvTQeADeB0j/F6jqiraJybL8
- xFlP/4k1TwwRpCl6ukpH8R1gBVY7OkBOSMEic=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=jpzH2x8auNpbLWQKpHHZSfWELCBl0ss6OUX4KCVy5zs=;
+ b=Mu+7kTIEdELBrKpcA6qC0fYro+3I8PD6Suaxyd8QjwSKmSxdDcv7+YtGxM24f6XlC0
+ YmBaVIBqC2Xw9TigOZFV7DE72LXFJs8T9YfwwGB3n80oqXP+UlZG+6Gs7908/n50QcfL
+ DOiHUWhY/P8wFrQFmb4aLQymsDNeclFth50N4=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
- header.a=rsa-sha256 header.s=google header.b=cDt+svkE
-Subject: [Buildroot] [PATCH 02/11] support/testing/tests/package:
- sample_python_*
+ header.a=rsa-sha256 header.s=google header.b=Mu+7kTIE
+Subject: [Buildroot] [PATCH 06/11] package/kodi/br-kodi: fix shellcheck
+ SC2086
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,100 +116,23 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-flake8 5.0.4 provided by Debian 12 (bookworm) now detect a missing
-whitespace after 'assert' keyword:
-
-  E275 missing whitespace after keyword
+Shellcheck 0.9.0 now report SC2086
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- support/testing/tests/package/sample_python_attrs.py      | 8 ++++----
- support/testing/tests/package/sample_python_colorzero.py  | 6 +++---
- support/testing/tests/package/sample_python_constantly.py | 6 +++---
- support/testing/tests/package/sample_python_gpiozero.py   | 2 +-
- support/testing/tests/package/sample_python_passlib.py    | 4 ++--
- support/testing/tests/package/sample_python_rpi_gpio.py   | 2 +-
- 6 files changed, 14 insertions(+), 14 deletions(-)
+ package/kodi/br-kodi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/sample_python_attrs.py b/support/testing/tests/package/sample_python_attrs.py
-index f224944914..a5f63f9e40 100644
---- a/support/testing/tests/package/sample_python_attrs.py
-+++ b/support/testing/tests/package/sample_python_attrs.py
-@@ -8,8 +8,8 @@ class Obj(object):
- 
- 
- obj1 = Obj(2)
--assert(obj1.x == 2)
--assert(obj1.y == 1)
-+assert (obj1.x == 2)
-+assert (obj1.y == 1)
- obj2 = Obj(3, 4)
--assert(obj2.x == 3)
--assert(obj2.y == 4)
-+assert (obj2.x == 3)
-+assert (obj2.y == 4)
-diff --git a/support/testing/tests/package/sample_python_colorzero.py b/support/testing/tests/package/sample_python_colorzero.py
-index 23862a816d..2c03ceb15c 100644
---- a/support/testing/tests/package/sample_python_colorzero.py
-+++ b/support/testing/tests/package/sample_python_colorzero.py
-@@ -3,6 +3,6 @@ from colorzero import Color
- red = Color('red')
- green = Color('lime')
- blue = Color('blue')
--assert(red.rgb == (1.0, 0.0, 0.0))
--assert(green.rgb == (0.0, 1.0, 0.0))
--assert(blue.rgb == (0.0, 0.0, 1.0))
-+assert (red.rgb == (1.0, 0.0, 0.0))
-+assert (green.rgb == (0.0, 1.0, 0.0))
-+assert (blue.rgb == (0.0, 0.0, 1.0))
-diff --git a/support/testing/tests/package/sample_python_constantly.py b/support/testing/tests/package/sample_python_constantly.py
-index 570cf85b23..b40d71dd9a 100644
---- a/support/testing/tests/package/sample_python_constantly.py
-+++ b/support/testing/tests/package/sample_python_constantly.py
-@@ -14,6 +14,6 @@ class RESULT(Values):
- 
- 
- print(list(RESULT.iterconstants()))
--assert(RESULT.OK < RESULT.FAIL)
--assert(RESULT.OK.value > RESULT.FAIL.value)
--assert(RESULT.get(-5) == RESULT.FAIL)
-+assert (RESULT.OK < RESULT.FAIL)
-+assert (RESULT.OK.value > RESULT.FAIL.value)
-+assert (RESULT.get(-5) == RESULT.FAIL)
-diff --git a/support/testing/tests/package/sample_python_gpiozero.py b/support/testing/tests/package/sample_python_gpiozero.py
-index b95df07fe7..67965542b0 100644
---- a/support/testing/tests/package/sample_python_gpiozero.py
-+++ b/support/testing/tests/package/sample_python_gpiozero.py
-@@ -2,4 +2,4 @@ from gpiozero import pi_info
- 
- piBoardInfo = pi_info('a020d3')  # 3B+
- 
--assert(piBoardInfo.model == '3B+')
-+assert (piBoardInfo.model == '3B+')
-diff --git a/support/testing/tests/package/sample_python_passlib.py b/support/testing/tests/package/sample_python_passlib.py
-index 3ab348b9e4..5d22bba262 100644
---- a/support/testing/tests/package/sample_python_passlib.py
-+++ b/support/testing/tests/package/sample_python_passlib.py
-@@ -1,5 +1,5 @@
- from passlib.hash import pbkdf2_sha256
- 
- hash = pbkdf2_sha256.hash("password")
--assert(pbkdf2_sha256.verify("passWord", hash) is False)
--assert(pbkdf2_sha256.verify("password", hash) is True)
-+assert (pbkdf2_sha256.verify("passWord", hash) is False)
-+assert (pbkdf2_sha256.verify("password", hash) is True)
-diff --git a/support/testing/tests/package/sample_python_rpi_gpio.py b/support/testing/tests/package/sample_python_rpi_gpio.py
-index 5f0d884e07..de8d776d04 100644
---- a/support/testing/tests/package/sample_python_rpi_gpio.py
-+++ b/support/testing/tests/package/sample_python_rpi_gpio.py
-@@ -1,6 +1,6 @@
- try:
-     import RPi.GPIO  # noqa
- except RuntimeError as e:
--    assert(str(e) == 'This module can only be run on a Raspberry Pi!')
-+    assert (str(e) == 'This module can only be run on a Raspberry Pi!')
- else:
-     raise RuntimeError('Import succeeded when it should not have!')
+diff --git a/package/kodi/br-kodi b/package/kodi/br-kodi
+index b776b5d96c..2467afed30 100755
+--- a/package/kodi/br-kodi
++++ b/package/kodi/br-kodi
+@@ -35,4 +35,4 @@ while [ ${LOOP} -eq 1 ]; do
+             ;;
+     esac
+ done
+-exit ${ret}
++exit "${ret}"
 -- 
 2.48.1
 
