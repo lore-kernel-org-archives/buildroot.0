@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44E55C021A0
-	for <buildroot@archiver.kernel.org>; Sat,  8 Feb 2025 17:05:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D5A1C02198
+	for <buildroot@archiver.kernel.org>; Sat,  8 Feb 2025 17:06:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 06ECE41286;
-	Sat,  8 Feb 2025 17:05:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 51DF14142F;
+	Sat,  8 Feb 2025 17:06:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NSr_gz85biYK; Sat,  8 Feb 2025 17:05:39 +0000 (UTC)
+ id aKAWrhXH8VV4; Sat,  8 Feb 2025 17:06:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8511412AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3556941286
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8511412AE;
-	Sat,  8 Feb 2025 17:05:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 255E86C
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 17:05:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3556941286;
+	Sat,  8 Feb 2025 17:06:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4111912B
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 17:06:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 73C80605EF
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 17:05:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 25C2383918
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 17:06:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BhN2kavt_I-H for <buildroot@buildroot.org>;
- Sat,  8 Feb 2025 17:05:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fVKiIiLKyWX3 for <buildroot@buildroot.org>;
+ Sat,  8 Feb 2025 17:06:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 757CC600D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B8CC82075
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 757CC600D4
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 17:05:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5B8CC82075
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 17:06:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 49D5987172; Sat,  8 Feb 2025 17:05:28 +0000 (UTC)
+ id 4B7BF87300; Sat,  8 Feb 2025 17:06:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 8 Feb 2025 18:03:47 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: ed17c2d17f666cb268b13ba8337a6902c77e2675
-X-Git-Newrev: 4e1f339a6b885dfff408fb1419822a9ae3f5f649
+Date: Sat, 8 Feb 2025 18:00:01 +0100
+X-Git-Refname: refs/heads/2024.11.x
+X-Git-Oldrev: 6a1cc89d898195bd9eb37dea864efea942a5e50c
+X-Git-Newrev: 25d4223194bfdee26e3216c6f5c9763d3df0774e
 X-Patchwork-Hint: ignore
-Message-Id: <20250208170528.49D5987172@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] DEVELOPERS: remove Chris
- Dimich
+Message-Id: <20250208170649.4B7BF87300@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/swipl: fix build
+ without C++ compiler
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,63 +60,50 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0983900263394453011=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0983900263394453011==
-Content-Type: text/plain
+commit: https://git.buildroot.net/buildroot/commit/?id=25d4223194bfdee26e3216c6f5c9763d3df0774e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e1f339a6b885dfff408fb1419822a9ae3f5f649
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+Fixes http://autobuild.buildroot.net/results/b24a96b999676990995a466686fe1eacf6cddfef
 
-Chris email address at boundarydevices is bouncing:
+Some of the optional packages in swipl are written in C++, so CMake thinks a
+C++ compiler is needed even though we build with -DSWIPL_PACKAGES=OFF since
+the bump to 9.2.6 in commit 33d45b9c672df0 ("package/swipl: bump version to
+9.2.6").
 
-Chris Dimich is no longer with Ezurio. Please contact Gary Bisson by
-email at Gary.Bisson@ezurio.com. Thank you!"
+Add -DCMAKE_CXX_COMPILER=true to satisfy this check even in setups without
+C++:
 
-Move his package to Gary Bisson as suggested.
+-- Check for working CXX compiler: /usr/bin/true
+-- Check for working CXX compiler: /usr/bin/true - works
 
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-(cherry picked from commit 892d1ae27fa394eb8b7a4e455c26a6efcc00457b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 868f2dd1832bd601556108def162c089e19cd5f7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/swipl/swipl.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fd17cc34b7..09082e905d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -544,9 +544,6 @@ F:	package/alsa-plugins/
- N:	Changming Huang <jerry.huang@nxp.com>
- F:	package/qoriq-cadence-dp-firmware/
+diff --git a/package/swipl/swipl.mk b/package/swipl/swipl.mk
+index ef9aedcd2d..e29b8d8f46 100644
+--- a/package/swipl/swipl.mk
++++ b/package/swipl/swipl.mk
+@@ -36,7 +36,8 @@ SWIPL_CONF_OPTS = \
+ 	-DQSORT_R_GNU=1 \
+ 	-DSWIPL_NATIVE_FRIEND=$(HOST_SWIPL_SRCDIR) \
+ 	-DSWIPL_PACKAGES=OFF \
+-	-DUSE_TCMALLOC=OFF
++	-DUSE_TCMALLOC=OFF \
++	-DCMAKE_CXX_COMPILER=true
  
--N:	Chris Dimich <chris.dimich@boundarydevices.com>
--F:	package/freescale-imx/imx-vpu-hantro-daemon/
--
- N:	Chris Packham <judge.packham@gmail.com>
- F:	package/coremark/
- F:	package/coremark-pro/
-@@ -1139,6 +1136,7 @@ N:	Gary Bisson <bisson.gary@gmail.com>
- F:	board/boundarydevices/
- F:	configs/nitrogen*
- F:	package/freescale-imx/
-+F:	package/freescale-imx/imx-vpu-hantro-daemon/
- F:	package/gstreamer1/gst1-imx/
- F:	package/libimxvpuapi/
- F:	package/mfgtools/
-
---===============0983900263394453011==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ SWIPL_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0983900263394453011==--
