@@ -4,49 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4F7CC02198
-	for <buildroot@archiver.kernel.org>; Sat,  8 Feb 2025 18:19:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C315FC0219D
+	for <buildroot@archiver.kernel.org>; Sat,  8 Feb 2025 18:26:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5797F83F9C;
-	Sat,  8 Feb 2025 18:19:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6CED98111C;
+	Sat,  8 Feb 2025 18:26:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vtL5YPlerg1c; Sat,  8 Feb 2025 18:19:50 +0000 (UTC)
+ id 8BpMYtmEee6K; Sat,  8 Feb 2025 18:25:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CDA083F9E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 687F3810E4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4CDA083F9E;
-	Sat,  8 Feb 2025 18:19:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6D7A112B
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 18:19:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 687F3810E4;
+	Sat,  8 Feb 2025 18:25:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 313D01B5
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 18:25:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5B01160771
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 18:19:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 22583405D4
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 18:25:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QC4yH541MyhD for <buildroot@buildroot.org>;
- Sat,  8 Feb 2025 18:19:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A3F560766
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6A3F560766
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 18:19:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 56EA68732A; Sat,  8 Feb 2025 18:19:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8qlqMACyTCy3 for <buildroot@buildroot.org>;
+ Sat,  8 Feb 2025 18:25:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8AA6840578
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8AA6840578
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8AA6840578
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 18:25:49 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 02E20780503;
+ Sat,  8 Feb 2025 19:25:43 +0100 (CET)
+Received: from 94.105.106.182.dyn.edpnet.net ([94.105.106.182:44586])
+ via 94.105.106.182.dyn.edpnet.net ([94.105.106.182])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 08 Feb 2025 19:25:43 +0100
+MIME-Version: 1.0
+Date: Sat, 08 Feb 2025 19:25:43 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 8 Feb 2025 19:14:54 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 71b170d098119feb332d0e4ce180d132d482bf17
-X-Git-Newrev: 3d60c1f109fbbc5afab1a079cfdd057460283248
-X-Patchwork-Hint: ignore
-Message-Id: <20250208181946.56EA68732A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libxshmfence: bump
+To: Thomas Devoogdt <thomas@devoogdt.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250207221814.842326-1-thomas@devoogdt.com>
+References: <20250207221420.839802-1-thomas@devoogdt.com>
+ <20250207221814.842326-1-thomas@devoogdt.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <3a6ec146c346933fc397989371d80c9f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1739039145;
+ bh=trsimDEBLSf3u/KbPQyPdgeBE/JyYfmqETfIJ66cM3Y=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=StFkAKLONhCS53Fw+ycK2Uwct6FujB5gIEB9zvWeAI1zX2qDs+tvuVrSz3XwV3kbI
+ ORZnqNijD21x7RuqgkA4r+FxJAt6dlBf+UI972fYtYel86aFdOwHx0f402KXM5VBJO
+ 6CWEqDIOHGK+bikMuWM4nRyjgdxpuDr+icNmQxi7/irhCTPfBHIrEcJT13Q1dAuXP9
+ NjshTqnLYTXRemKUWehi9soAR67MtjLJH5Y0lTv8rbJv/6erokB2epFgLdCqZTKmXh
+ lzfNw1yCciBmh7N+GwO8vAGU64xTLa6WaLPc/u8fpquyMRbNm8HvLijxFegFlqRvUg
+ O7kUfgJfdKj8Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=StFkAKLO
+Subject: Re: [Buildroot] [PATCH v2] package/x11r7/xlib_libxshmfence: bump
  version to 1.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,107 +85,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d60c1f109fbbc5afab1a079cfdd057460283248
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 07/02/2025 23:18, Thomas Devoogdt wrote:
+> Announcement:
+> https://lists.x.org/archives/xorg-announce/2024-December/003572.html
+> 
+> Removed 
+> 0001-src-xshmfence_futex.h-fix-build-on-32-bit-architectu.patch,
+> which is accepted upstream.
+> 
+> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 
-Announcement:
-https://lists.x.org/archives/xorg-announce/2024-December/003572.html
-
-Removed 0001-src-xshmfence_futex.h-fix-build-on-32-bit-architectu.patch,
-which is accepted upstream.
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...ce_futex.h-fix-build-on-32-bit-architectu.patch | 46 ----------------------
- .../x11r7/xlib_libxshmfence/xlib_libxshmfence.hash |  6 +--
- .../x11r7/xlib_libxshmfence/xlib_libxshmfence.mk   |  2 +-
- 3 files changed, 4 insertions(+), 50 deletions(-)
-
-diff --git a/package/x11r7/xlib_libxshmfence/0001-src-xshmfence_futex.h-fix-build-on-32-bit-architectu.patch b/package/x11r7/xlib_libxshmfence/0001-src-xshmfence_futex.h-fix-build-on-32-bit-architectu.patch
-deleted file mode 100644
-index 40a796c4f2..0000000000
---- a/package/x11r7/xlib_libxshmfence/0001-src-xshmfence_futex.h-fix-build-on-32-bit-architectu.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 4fca45a71f08a5bebd12d39c85f49e0b0e4426bf Mon Sep 17 00:00:00 2001
--From: Thomas Devoogdt <thomas@devoogdt.com>
--Date: Fri, 5 Apr 2024 10:45:15 +0200
--Subject: [PATCH] src/xshmfence_futex.h: fix build on 32-bit architectures
-- using 64-bit time_t
--
--Fix the following build failure on 32-bit architectures using 64-bit
--time_t (e.g. riscv32):
--
--xshmfence_futex.h: In function 'sys_futex':
--xshmfence_futex.h:58:24: error: 'SYS_futex' undeclared (first use in this function); did you mean 'sys_futex'?
--   58 |         return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
--      |                        ^~~~~~~~~
--      |                        sys_futex
--
--Similar to:
--https://gitlab.freedesktop.org/mesa/mesa/-/commit/7d87478124061915582412ba410759afe863d679
--
--Fixes:
--https://gitlab.com/buildroot.org/buildroot/-/commit/e39ad96136a8c340b3aea6b036024e28f14584f3
--
--Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
--Part-of: <https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/merge_requests/8>
--Upstream: https://gitlab.freedesktop.org/xorg/lib/libxshmfence/-/commit/4fca45a71f08a5bebd12d39c85f49e0b0e4426bf
-----
-- src/xshmfence_futex.h | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/src/xshmfence_futex.h b/src/xshmfence_futex.h
--index 673ac0e..4476038 100644
----- a/src/xshmfence_futex.h
--+++ b/src/xshmfence_futex.h
--@@ -53,6 +53,10 @@ static inline int futex_wait(int32_t *addr, int32_t value) {
-- #include <sys/time.h>
-- #include <sys/syscall.h>
-- 
--+#if defined(SYS_futex_time64) && !defined(SYS_futex)
--+#define SYS_futex SYS_futex_time64
--+#endif
--+
-- static inline long sys_futex(void *addr1, int op, int val1, struct timespec *timeout, void *addr2, int val3)
-- {
-- 	return syscall(SYS_futex, addr1, op, val1, timeout, addr2, val3);
---- 
--2.34.1
--
-diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash
-index e8f83d427f..a9549ead30 100644
---- a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash
-+++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2022-December/003287.html
--sha256  870df257bc40b126d91b5a8f1da6ca8a524555268c50b59c0acd1a27f361606f  libxshmfence-1.3.2.tar.xz
--sha512  e20a6827e370726cf50489a69f4a52b897f1c44e3eba8c72a4e626b08724e877d090770b8016765736d887d5d5eaba1fda9c29066e62d259b4d1e2064bc1626c  libxshmfence-1.3.2.tar.xz
-+# From https://lists.x.org/archives/xorg-announce/2024-December/003572.html
-+sha256  d4a4df096aba96fea02c029ee3a44e11a47eb7f7213c1a729be83e85ec3fde10  libxshmfence-1.3.3.tar.xz
-+sha512  2261b840ea621cf4ce31961ec9df17aa2e253b268afe289dfb97c240aee27b9f443fe36de5de52a2e1210b69092efde21871e20556bac9b4f1d8a3ead1b4c498  libxshmfence-1.3.3.tar.xz
- # Locally computed
- sha256  64a579d1a0b3347301d87c94698a58ea7933d0ae6ca7e8fdd702fde2ea376301  COPYING
-diff --git a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
-index 4241102855..b8c9ebfe97 100644
---- a/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
-+++ b/package/x11r7/xlib_libxshmfence/xlib_libxshmfence.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XLIB_LIBXSHMFENCE_VERSION = 1.3.2
-+XLIB_LIBXSHMFENCE_VERSION = 1.3.3
- XLIB_LIBXSHMFENCE_SOURCE = libxshmfence-$(XLIB_LIBXSHMFENCE_VERSION).tar.xz
- XLIB_LIBXSHMFENCE_SITE = http://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXSHMFENCE_LICENSE = MIT
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
