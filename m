@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43B1FC282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:16:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2D8CC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:16:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8455D70C5D;
-	Fri, 28 Feb 2025 17:16:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 240434F6D0;
+	Fri, 28 Feb 2025 17:16:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uM7l7P2ksXLU; Fri, 28 Feb 2025 17:16:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Gw8dRBDzpwAZ; Fri, 28 Feb 2025 17:16:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7476170C67
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2C674FC20
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7476170C67;
-	Fri, 28 Feb 2025 17:16:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2C674FC20;
+	Fri, 28 Feb 2025 17:16:20 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 068D71DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:45 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 07C5A68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C1BB4256A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 35D6F439EC
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xdPjrF1pmys7 for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:50 +0000 (UTC)
+ id PD04Wfx4Sqtf for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86D4744731
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0405B42516
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 86D4744731
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0405B42516
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 80F1287AD6; Fri, 28 Feb 2025 16:30:37 +0000 (UTC)
+ id F11A286780; Fri, 28 Feb 2025 16:30:36 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 8 Feb 2025 22:48:27 +0100
+Date: Sat, 8 Feb 2025 18:39:27 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 912a8458a96a7ee3fb391a507244a9084b03fb72
-X-Git-Newrev: 170642b68d00014a69ea88451303e264a37e85c2
+X-Git-Oldrev: 4bf27608a77143650fa94994363b444d57db7842
+X-Git-Newrev: 71b170d098119feb332d0e4ce180d132d482bf17
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163037.80F1287AD6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/perl: bump to version
- 5.40.1
+Message-Id: <20250228163036.F11A286780@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/busybox: disable
+ CONFIG_FEATURE_IP_LINK_CAN if headers < 4.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,70 +65,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=170642b68d00014a69ea88451303e264a37e85c2
+commit: https://git.buildroot.net/buildroot/commit/?id=71b170d098119feb332d0e4ce180d132d482bf17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For release note, see:
-https://perldoc.perl.org/5.40.1/perldelta
+Since the recent bump of Busybox to 1.37.0 in commit
+ed84e971c36b43f564df881d86ac459bb5b7dad0, the build fails on
+configurations with old kernel headers. Indeed, the new
+CONFIG_FEATURE_IP_LINK_CAN Busybox option uses IFLA_CAN_TERMINATION,
+which was only introduced in Linux 4.11.
 
-diff README:
-    -Perl is Copyright (C) 1993 - 2024 by Larry Wall and others.
-    +Perl is Copyright (C) 1993 - 2025 by Larry Wall and others.
+This commit addresses this issue by disabling
+CONFIG_FEATURE_IP_LINK_CAN if the headers are not old enough.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-[Julien: add link to release note]
+Fixes:
+
+  https://gitlab.com/kubu93/buildroot/-/jobs/9059854451
+
+Fixes: ed84e971c36b43f564df881d86ac459bb5b7dad0 ("package/busybox bump version to 1.37.0")
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/perl/perl.hash | 14 +++++++-------
- package/perl/perl.mk   |  4 ++--
- 2 files changed, 9 insertions(+), 9 deletions(-)
+ package/busybox/busybox.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/perl/perl.hash b/package/perl/perl.hash
-index aba2844036..04ebf83b33 100644
---- a/package/perl/perl.hash
-+++ b/package/perl/perl.hash
-@@ -1,12 +1,12 @@
--# Hashes from: https://www.cpan.org/src/5.0/perl-5.40.0.tar.xz.{md5,sha1,sha256}.txt
--md5  cfe14ef0709b9687f9c514042e8e1e82  perl-5.40.0.tar.xz
--sha1  4a3af1f62afc611aa1552adc6c7ec389e9723bce  perl-5.40.0.tar.xz
--sha256  d5325300ad267624cb0b7d512cfdfcd74fa7fe00c455c5b51a6bd53e5e199ef9  perl-5.40.0.tar.xz
-+# Hashes from: https://www.cpan.org/src/5.0/perl-5.40.1.tar.xz.{md5,sha1,sha256}.txt
-+md5  bab3547a5cdf2302ee0396419d74a42e  perl-5.40.1.tar.xz
-+sha1  4ffe5246c791df884363aed05ba81ba41cb02084  perl-5.40.1.tar.xz
-+sha256  dfa20c2eef2b4af133525610bbb65dd13777ecf998c9c5b1ccf0d308e732ee3f  perl-5.40.1.tar.xz
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index b7f1439fbc..d3074d2218 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -410,6 +410,13 @@ define BUSYBOX_INSTALL_ADD_TO_SHELLS
+ endef
+ BUSYBOX_TARGET_FINALIZE_HOOKS += BUSYBOX_INSTALL_ADD_TO_SHELLS
  
--# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6/perl-cross-1.6.hash
--sha256  5abf198ee50ce9e69eb68fede68c87f65241caa744e4203e97490fa59b45ed69  perl-cross-1.6.tar.gz
-+# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.1/perl-cross-1.6.1.hash
-+sha256  b5f4b4457bbd7be37adac8ee423beedbcdba8963a85f79770f5e701dabc5550f  perl-cross-1.6.1.tar.gz
++ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_11),)
++# IFLA_CAN_TERMINATION was introduced in Linux 4.11
++define BUSYBOX_DISABLE_IP_LINK_CAN
++	$(call KCONFIG_DISABLE_OPT,CONFIG_FEATURE_IP_LINK_CAN)
++endef
++endif
++
+ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_MUSL_DISABLE_SHA_HWACCEL)
+ 	$(BUSYBOX_SET_MMU)
+@@ -422,6 +429,7 @@ define BUSYBOX_KCONFIG_FIXUP_CMDS
+ 	$(BUSYBOX_SET_SELINUX)
+ 	$(BUSYBOX_SET_LESS_FLAGS)
+ 	$(BUSYBOX_SET_INDIVIDUAL_BINARIES)
++	$(BUSYBOX_DISABLE_IP_LINK_CAN)
+ 	$(PACKAGES_BUSYBOX_CONFIG_FIXUPS)
+ endef
  
- # Locally calculated
- sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
- sha256  d77d235e41d54594865151f4751e835c5a82322b0e87ace266567c3391a4b912  Copying
--sha256  05fcf86432bd78754c7e325d4be44a5968344c01cc08c004b685172ea508ec23  README
-+sha256  af805523b88a8ebb60afc009caaf247a498208502f7b8b3d9d3e329fcfb1dc3b  README
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index dc7c0b8d42..37b9fe185d 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version here, also update utils/scancpan
- PERL_VERSION_MAJOR = 40
--PERL_VERSION = 5.$(PERL_VERSION_MAJOR).0
-+PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
- PERL_SITE = https://www.cpan.org/src/5.0
- PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
- PERL_LICENSE = Artistic or GPL-1.0+
-@@ -15,7 +15,7 @@ PERL_CPE_ID_VENDOR = perl
- PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- PERL_INSTALL_STAGING = YES
- 
--PERL_CROSS_VERSION = 1.6
-+PERL_CROSS_VERSION = 1.6.1
- # DO NOT refactor with the github helper (the result is not the same)
- PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
- PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
