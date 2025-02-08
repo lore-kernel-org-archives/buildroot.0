@@ -4,68 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 752EBC02198
-	for <buildroot@archiver.kernel.org>; Sat,  8 Feb 2025 14:23:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6B35C021A0
+	for <buildroot@archiver.kernel.org>; Sat,  8 Feb 2025 14:23:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F53D41E69;
-	Sat,  8 Feb 2025 14:23:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 76A4442839;
+	Sat,  8 Feb 2025 14:23:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lPHllJr3etBG; Sat,  8 Feb 2025 14:23:42 +0000 (UTC)
+ id GOFuU_8enc1D; Sat,  8 Feb 2025 14:23:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8569F427C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F03A4285C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8569F427C4;
-	Sat,  8 Feb 2025 14:23:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 394961BA
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F03A4285C;
+	Sat,  8 Feb 2025 14:23:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3DA8B1BC
  for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:23:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 356FB83626
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1DB456081A
  for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:23:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1kidadEjYq3d for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ngPwovl8Nzec for <buildroot@buildroot.org>;
  Sat,  8 Feb 2025 14:23:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
  envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 177908322E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 177908322E
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 177908322E
- for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:23:34 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-438a3216fc2so29546085e9.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 26600607C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26600607C0
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 26600607C0
+ for <buildroot@buildroot.org>; Sat,  8 Feb 2025 14:23:35 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id
+ ffacd0b85a97d-38dc627eba6so1573057f8f.2
  for <buildroot@buildroot.org>; Sat, 08 Feb 2025 06:23:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1739024613; x=1739629413;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=sPT97qY6TEN6Z/kloAjlZhOPyPZF5R1p3qhTFnBh9tc=;
- b=Cse98wgvYV1P2y/sA27VmTUeU6QMK0rOaZ1bRQiwdheifELV4Ea2TYpcdoH2NRyTT/
- lGXnTnm5UNDw56xqax31dVjC8xdTo6GDRnLrM2wGt2+jEb/T/Vshh1N8JkxJ7W9/clEF
- Fg5jlY2jeQQh4X7H3mp0OZPww/CUdZBxjXa3Az5CflyK2ZM2Ls9d++GRgd1Jke1uVIk7
- j8fPgxv4PQZ6zuFIZMVdSG9zGkBkXHKdDHoLfVIEVxKFBHz/gsrAx12YdhHeOJ34AzJd
- QUDtIfXy9dx3Ogx06L+GZ9vEe6qNsDjgBOV5kgNKt/7vkSAjGndKINWrbPnILoWlIIJ5
- r7VQ==
-X-Gm-Message-State: AOJu0YwwXA+LkdQRBCKNt78kQw6mNyv6BKystWwMxxCHsx0+8BJfpEYi
- Y0Pm/daxp4wZrI6ZWRIuJ6S3Cdticx2ElLB8GWrByjFzBLzYZR8A+rW2MqYeBLD/JpmkzecH/lH
- r
-X-Gm-Gg: ASbGncsKn8umXoMXNvsKDTfpFyGvR2N8ngL2Lh57gOYwnrPqMg1Oi47e5kE1ypqiBaR
- wEt34rpwiyXyKvehw7aHnAkMsA1QYn21iFJUqpI944CIjXTML4qlfM593pzSVwDFRHMEJFWOsb9
- 1Sh9C3Q9rh61tpoY/DzYlsZgHSVCfpMx07xOePr8J4ATXM4PS1JwJME7F6OtmAnJcxFFFECAQBm
- 1Uanev8aTdRY4IPaSzMqBgzi5I097w8SNAb1foK/Wayn3EmWG0rLkiqNn9q47onOU8lc4LBCZUJ
- KFxeRH2/NGxFZrDEPdNTBBgmXeMhQZBhZx+Rj7KBwahHJxQFrnB4Ibxn9YsgfbDkENWAz98CMAS
- rWa24BmjZKYQT
-X-Google-Smtp-Source: AGHT+IG9Ht0kl9x3t82+zdEviaAjjsAgngDYC2kiYIKUIFD/Tim3UGdWrvXdWA1T8Hj8y5pD4E7xYw==
-X-Received: by 2002:a05:600c:1d0d:b0:431:5632:448b with SMTP id
- 5b1f17b1804b1-439249c658cmr46393405e9.25.1739024612633; 
- Sat, 08 Feb 2025 06:23:32 -0800 (PST)
+ bh=gNLpZWRxHqBcrzGipUT6lI//aJr4wxUPSA2/FeWV6HI=;
+ b=GUcWrybDZd1GtkoD4N2IwvRTcW/sKvF2s2/pYWRE1uWKMMJKyFbpZvYr2RuVeSjGgq
+ PjtCf/IrCz7pCf+cyjmYchaj8nvbh3bPp50ilXFQ4GtVkY3ifon/TwZQMfGc9lX8Z1B1
+ eyK2julUNGx4Ep712kI9NEmUwNBUfv/qaIZHfGhB+zIAfWtdLd8oDhMEuSXsUjyuBkv5
+ rzB0D88WyGWr0+oV8DriJLqEx+VrTkgrFIzBL+94pG/bGNb0ZK6tetbg8DZdPluuBofy
+ HAyjxchKMtcutqTK5MfHSdRkjqaira4T3NjyZ7UTvHF1QSEUAliLCm01zDiaAIo7o0vu
+ 2vHg==
+X-Gm-Message-State: AOJu0YzQAJ9jZ+5aHUrqj2BIGxC/ifmP5Uqtq8rhU4E8hDf/KZBMFW7E
+ pKZ2KP2g2jtYr5xBAgrZ0X1f4+eemEoRpQ05OLX9DjohLkwNWSFLVHZckpCQOkgoONHRqGypL5l
+ G
+X-Gm-Gg: ASbGncscNpot84DbYLpP+OSLIAL6PfZgnlgBQQUAL/hO5prgoJTgZEvoyNdHvTox41k
+ VdpsXXeU2UnUhdE8vJvxZYkVZp5a+aHOvz6CONcbykdfxIcFiT+v+i7qUoChY9dbpBkkZpTauSW
+ wFwuw4bD95g234Nsa/39MMjacyM6Fq51wesWw0BDHPQ8amcs0ek5bNT9Nh6quBXcfGsCC0T3IKJ
+ gcoN8pZZDnxQ31ONfHLOJGOs/Qj10Y/BC4NayC99VTg/wLuJ4WfLBbUT0X3849UYPFln4nnnZi6
+ BEtLrrI6H7pDx5qItTTIwmz+4vOIOKjP6GNZiKC6yE4aGUyL7Z9QIXVaAR5GJ9oCB8P6QKnoPY8
+ nayt5S8NQjS/S
+X-Google-Smtp-Source: AGHT+IHUerczMcalqocbSQhbYb6BF3GB1jHkpug8IixgmGzCrbDI3Fa1960mfKf6TOqFAoC1E58oCg==
+X-Received: by 2002:a05:6000:1848:b0:38d:d3f7:74b0 with SMTP id
+ ffacd0b85a97d-38dd3f777acmr1591519f8f.20.1739024613154; 
+ Sat, 08 Feb 2025 06:23:33 -0800 (PST)
 Received: from P-NTS-Evian.home
  (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
  [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
@@ -75,8 +75,8 @@ Received: from P-NTS-Evian.home
  Sat, 08 Feb 2025 06:23:32 -0800 (PST)
 To: buildroot@buildroot.org
 Cc: Romain Naour <romain.naour@smile.fr>
-Date: Sat,  8 Feb 2025 15:23:20 +0100
-Message-ID: <20250208142327.418271-5-romain.naour@smile.fr>
+Date: Sat,  8 Feb 2025 15:23:21 +0100
+Message-ID: <20250208142327.418271-6-romain.naour@smile.fr>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250208142327.418271-1-romain.naour@smile.fr>
 References: <20250208142327.418271-1-romain.naour@smile.fr>
@@ -86,19 +86,19 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=sPT97qY6TEN6Z/kloAjlZhOPyPZF5R1p3qhTFnBh9tc=;
- b=kW/Wd9+jRZ5ln+pzW4EHKx6hZMgejqwBdUEXkgMl0rqgGTzKHjMyj03rIZPV/NNHzu
- MaqU0zjGmDOty6Z9nU9Gkd/91eZHsqQhXeTU3SYcp+PMh1NsMcbIT2hNao0rGXVqXKDS
- eakvXufJQRkHsSMzkn3Z9iGs1RPPWrHZaHuXI=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=gNLpZWRxHqBcrzGipUT6lI//aJr4wxUPSA2/FeWV6HI=;
+ b=Vd5q1guEB7Z68eX78WVwAyhqsjaj0yYqcrFmNQjhFtKBsV6X7yTn2MM+ru5OyTOYQW
+ jVrdiggW2c63IQ1TRWd8hebnQ7a9EthoBmiGjnTK39CXPwpMnodjUbIxVHao7FQCeH+a
+ A9cDvtrAxyvzhF0HAwyo5bsXiQCDZvBUrX3MM=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=kW/Wd9+j
-Subject: [Buildroot] [PATCH 04/11] board/terasic/de10nano_cyclone5: disable
- shellcheck SC2276
+ header.s=google header.b=Vd5q1guE
+Subject: [Buildroot] [PATCH 05/11] package/kodi/br-kodi: fix shellcheck
+ SC2317 & SC2329
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,27 +117,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Disable shellcheck SC2276 warning introduced in v0.7.2 [1]
-for barebox environment file.
+As stated in shellcheck wiki about SC2329 [1]
 
-[1] https://github.com/koalaman/shellcheck/commit/fbb14d6b384a65ee16781966d9d240db9ed7b644
+  "ShellCheck is currently bad at figuring out functions that are invoked via trap.
+   In such cases, please ignore the message with a directive."
+
+While adding SC2329 check after shellcheck v0.10.0 release, it also
+reduced the amount of false result returned by shellcheck v0.9.0.
+
+So disable SC2317 and SC2329.
+
+[1] https://www.shellcheck.net/wiki/SC2329
+[2] https://github.com/koalaman/shellcheck/commit/4f81dbe839091a06a5cfaea695cf1c451ff07565
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- board/terasic/de10nano_cyclone5/barebox-env/boot/mmc | 1 +
- 1 file changed, 1 insertion(+)
+ package/kodi/br-kodi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/board/terasic/de10nano_cyclone5/barebox-env/boot/mmc b/board/terasic/de10nano_cyclone5/barebox-env/boot/mmc
-index fed2b0b45d..6cf307b80b 100644
---- a/board/terasic/de10nano_cyclone5/barebox-env/boot/mmc
-+++ b/board/terasic/de10nano_cyclone5/barebox-env/boot/mmc
-@@ -1,5 +1,6 @@
- #!/bin/sh
+diff --git a/package/kodi/br-kodi b/package/kodi/br-kodi
+index 83d4d4e5ac..b776b5d96c 100755
+--- a/package/kodi/br-kodi
++++ b/package/kodi/br-kodi
+@@ -5,6 +5,8 @@
+ KODI="${1}"
+ shift
  
-+# shellcheck disable=SC2276
- global.bootm.oftree="/boot/socfpga_cyclone5_de0_nano_soc.dtb"
- global.bootm.image="/boot/zImage"
- 
++# shellcheck disable=SC2329 # https://www.shellcheck.net/wiki/SC2329
++# shellcheck disable=SC2317 # shellcheck 0.9.0 "spammy"
+ # In case someone asked we terminate, just kill
+ # the Kodi process
+ trap_kill() {
 -- 
 2.48.1
 
