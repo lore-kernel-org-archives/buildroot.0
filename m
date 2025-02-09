@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE2A2C02199
-	for <buildroot@archiver.kernel.org>; Sun,  9 Feb 2025 08:59:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D33FC02199
+	for <buildroot@archiver.kernel.org>; Sun,  9 Feb 2025 09:00:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9465382F31;
-	Sun,  9 Feb 2025 08:59:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A859608D3;
+	Sun,  9 Feb 2025 09:00:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mS1ZVHGTqCRu; Sun,  9 Feb 2025 08:59:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WR6pMabyZDRH; Sun,  9 Feb 2025 09:00:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A03D082F39
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40119608CD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A03D082F39;
-	Sun,  9 Feb 2025 08:59:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7DB861B5
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 08:59:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 40119608CD;
+	Sun,  9 Feb 2025 09:00:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3CFC9C2
+ for <buildroot@buildroot.org>; Sun,  9 Feb 2025 09:00:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 69750417C9
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 08:59:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2A739405D9
+ for <buildroot@buildroot.org>; Sun,  9 Feb 2025 09:00:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v-XgpoFbDa7a for <buildroot@buildroot.org>;
- Sun,  9 Feb 2025 08:59:26 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2vv-fYI7iCZS for <buildroot@buildroot.org>;
+ Sun,  9 Feb 2025 09:00:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A89E417A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27CCB408BF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7A89E417A2
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 08:59:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 27CCB408BF
+ for <buildroot@buildroot.org>; Sun,  9 Feb 2025 09:00:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 70F1886F10; Sun,  9 Feb 2025 08:59:26 +0000 (UTC)
+ id 21425873C3; Sun,  9 Feb 2025 09:00:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 9 Feb 2025 09:55:41 +0100
-X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 40746d26e9f828c1530b36ea11d2ad5526eb7060
-X-Git-Newrev: e4f86df5f40a7eea047d130c158c14795d166417
+Date: Sun, 9 Feb 2025 09:57:19 +0100
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 26044d86c30bca60677bccba73a77bd034168a54
+X-Git-Newrev: 738e02a473cf9432863da22e3d8df77254838a1e
 X-Patchwork-Hint: ignore
-Message-Id: <20250209085926.70F1886F10@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/heimdal: host
- package needs host-libxcrypt
+Message-Id: <20250209090032.21425873C3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/heimdal: add
+ missing dependencies on flex/bison
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,50 +65,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4f86df5f40a7eea047d130c158c14795d166417
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=738e02a473cf9432863da22e3d8df77254838a1e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-The host-heimdal package has always needed a crypt library, but now
-that libcrypt is no longer part of glibc, we're seeing build failures
-on machines with recent host glibc versions. To fix this, we add
-host-libxcrypt to the dependencies, and ensure host-heimdal links with
-it.
+As host-heimdal is only used by samba4, and samba4 already depends on
+host-flex and host-bison, the build issue fixed by this commit is not
+directly visible, but can be reproduced by doing "make host-heimdal"
+for example in our official Buildroot Docker container:
 
-Fixes:
+/home/thomas/projets/buildroot/outputs/foo/build/host-heimdal-f4faaeaba371fff3f8d1bc14389f5e6d70ca8e17/missing: line 81: flex: command not found
+WARNING: 'flex' is missing on your system.
+         You should only need it if you modified a '.l' file.
+         You may want to install the Fast Lexical Analyzer package:
+         <https://github.com/westes/flex>
+make[4]: *** [Makefile:753: lex.c] Error 127
 
-  http://autobuild.buildroot.net/results/864003e1005fcd847b4ec3bd94316638f8f56553/
-  https://gitlab.com/buildroot.org/buildroot/-/issues/86
+[...]
+
+updating lex.yylex.c
+../../ylwrap: line 176: -d: command not found
+make[4]: *** [Makefile:756: parse.c] Error 127
+
+Fix this by adding the missing dependencies.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit a05bed5aace0ed48f75255b34e54288fe4193ffc)
+(cherry picked from commit 44e739d031c8c5ed70a8ea513ff95dc8780a2a0f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/heimdal/heimdal.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/heimdal/heimdal.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/heimdal/heimdal.mk b/package/heimdal/heimdal.mk
-index 786d94a1aa..155cb66e1f 100644
+index 155cb66e1f..f6c52f63aa 100644
 --- a/package/heimdal/heimdal.mk
 +++ b/package/heimdal/heimdal.mk
 @@ -6,7 +6,7 @@
  
  HEIMDAL_VERSION = f4faaeaba371fff3f8d1bc14389f5e6d70ca8e17
  HEIMDAL_SITE = $(call github,heimdal,heimdal,$(HEIMDAL_VERSION))
--HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf
-+HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf host-libxcrypt
+-HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf host-libxcrypt
++HOST_HEIMDAL_DEPENDENCIES = host-e2fsprogs host-ncurses host-pkgconf host-libxcrypt host-flex host-bison
  HOST_HEIMDAL_AUTORECONF = YES
  HEIMDAL_INSTALL_STAGING = YES
  # static because of -fPIC issues with e2fsprogs on x86_64 host
-@@ -29,7 +29,7 @@ HOST_HEIMDAL_CONF_OPTS = \
- 	--disable-heimdal-documentation
- 
- # Don't use compile_et from e2fsprogs as it raises a build failure with samba4
--HOST_HEIMDAL_CONF_ENV = ac_cv_prog_COMPILE_ET=no MAKEINFO=true
-+HOST_HEIMDAL_CONF_ENV = ac_cv_prog_COMPILE_ET=no MAKEINFO=true LIBS=-lcrypt
- HEIMDAL_LICENSE = BSD-3-Clause
- HEIMDAL_LICENSE_FILES = LICENSE
- HEIMDAL_CPE_ID_VALID = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
