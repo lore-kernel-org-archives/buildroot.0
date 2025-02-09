@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C23CC282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:16:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4202AC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:17:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 01ECC706A0;
-	Fri, 28 Feb 2025 17:16:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D50924F266;
+	Fri, 28 Feb 2025 17:17:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r3w2Px1anX7q; Fri, 28 Feb 2025 17:16:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VsNFoZgi3rCl; Fri, 28 Feb 2025 17:16:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EAD2F70948
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BBD540539
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EAD2F70948;
-	Fri, 28 Feb 2025 17:16:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BBD540539;
+	Fri, 28 Feb 2025 17:16:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1085D68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0559668
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BC91743DF8
+ by smtp4.osuosl.org (Postfix) with ESMTP id F3932424B0
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YlN4nWdzKMO2 for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:50 +0000 (UTC)
+ id vgdB6HL9cvYK for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B034F44805
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C30544BF1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B034F44805
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6C30544BF1
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ABBC18749E; Fri, 28 Feb 2025 16:30:37 +0000 (UTC)
+ id 69328826DB; Fri, 28 Feb 2025 16:30:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 9 Feb 2025 12:53:35 +0100
+Date: Sun, 9 Feb 2025 22:18:28 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ef15efdd2c422a8c0df074f46978045e7e8deeb8
-X-Git-Newrev: 4f78d362aa907ee019b9f43c56c8f4322d242f3c
+X-Git-Oldrev: e85cd58fc5af453335645b85b73e387284fc10e2
+X-Git-Newrev: c95d5b8e1eb9ee04e3e9218c63e9e7bc489e0846
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163037.ABBC18749E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] utils/checkpackagelib: fix
- shellcheck tests after update to shellcheck 0.9.0
+Message-Id: <20250228163038.69328826DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/docker: move to
+ current bookworm (Debian 12) snapshot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,55 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f78d362aa907ee019b9f43c56c8f4322d242f3c
+commit: https://git.buildroot.net/buildroot/commit/?id=c95d5b8e1eb9ee04e3e9218c63e9e7bc489e0846
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-shellcheck tests needs to be updated after shellcheck 0.9.0 update due
-to changes in errors/warning reporting:
+Debian 11 is out of security support since 15 August 2024, so move to
+current Debian 12 instead.
 
-  utils/checkpackagelib/test_tool.py::test_Shellcheck[missing shebang-empty.sh--expected0] FAILED [ 98%]
-  utils/checkpackagelib/test_tool.py::test_Shellcheck[2 warnings-unused.sh-unused=""-expected3] FAILED [ 99%]
-  utils/checkpackagelib/test_tool.py::test_Shellcheck[tab-tab.sh-\t#!/bin/sh-expected4] FAILED [100%]
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/checkpackagelib/test_tool.py | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ support/docker/Dockerfile       | 2 +-
+ support/docker/apt-sources.list | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/utils/checkpackagelib/test_tool.py b/utils/checkpackagelib/test_tool.py
-index cfa826f57c..56326398d3 100644
---- a/utils/checkpackagelib/test_tool.py
-+++ b/utils/checkpackagelib/test_tool.py
-@@ -100,7 +100,7 @@ Shellcheck = [
-      '',
-      ["dir/empty.sh:0: run 'shellcheck' and fix the warnings",
-       "In dir/empty.sh line 1:\n"
--      "^-- SC2148: Tips depend on target shell and yours is unknown. Add a shebang or a 'shell' directive.\n"
-+      "^-- SC2148 (error): Tips depend on target shell and yours is unknown. Add a shebang or a 'shell' directive.\n"
-       "For more information:\n"
-       "  https://www.shellcheck.net/wiki/SC2148 -- Tips depend on target shell and y..."]),
-     ('sh shebang',
-@@ -117,8 +117,8 @@ Shellcheck = [
-      ["dir/unused.sh:0: run 'shellcheck' and fix the warnings",
-       "In dir/unused.sh line 1:\n"
-       'unused=""\n'
--      "^-- SC2148: Tips depend on target shell and yours is unknown. Add a shebang or a 'shell' directive.\n"
--      "^----^ SC2034: unused appears unused. Verify use (or export if used externally).\n"
-+      "^-- SC2148 (error): Tips depend on target shell and yours is unknown. Add a shebang or a 'shell' directive.\n"
-+      "^----^ SC2034 (warning): unused appears unused. Verify use (or export if used externally).\n"
-       "For more information:\n"
-       "  https://www.shellcheck.net/wiki/SC2148 -- Tips depend on target shell and y...\n"
-       "  https://www.shellcheck.net/wiki/SC2034 -- unused appears unused. Verify use..."]),
-@@ -128,7 +128,7 @@ Shellcheck = [
-      ["dir/tab.sh:0: run 'shellcheck' and fix the warnings",
-       "In dir/tab.sh line 1:\n"
-       '\t#!/bin/sh\n'
--      "^-- SC1114: Remove leading spaces before the shebang.\n"
-+      "^-- SC1114 (error): Remove leading spaces before the shebang.\n"
-       "For more information:\n"
-       "  https://www.shellcheck.net/wiki/SC1114 -- Remove leading spaces before the ..."]),
-     ]
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index 6f76cd5114..baab3cadbc 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -6,7 +6,7 @@
+ # We use a specific tag for the base image *and* the corresponding date
+ # for the repository., so do not forget to update the apt-sources.list
+ # file that is shipped next to this Dockerfile.
+-FROM debian:bullseye-20230202
++FROM debian:bookworm-20250203
+ 
+ LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
+       vendor="Buildroot" \
+diff --git a/support/docker/apt-sources.list b/support/docker/apt-sources.list
+index 849996d9f7..ddbe15eed8 100644
+--- a/support/docker/apt-sources.list
++++ b/support/docker/apt-sources.list
+@@ -1,4 +1,4 @@
+-# Latest just before 20230207T102800Z:
+-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20230206T092119Z/ bullseye main
+-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20230206T092119Z/ bullseye-security main
+-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20230206T092119Z/ bullseye-updates main
++# Latest just before 20250205151400Z:
++deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20250205T145632Z/ bookworm main
++deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20250205T145632Z/ bookworm-security main
++deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20250205T145632Z/ bookworm-updates main
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
