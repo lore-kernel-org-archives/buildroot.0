@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4EFAC282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:17:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DFB5C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:17:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AECBB85CAA;
-	Fri, 28 Feb 2025 17:17:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0C63E70955;
+	Fri, 28 Feb 2025 17:17:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SWodEWPfU_i2; Fri, 28 Feb 2025 17:17:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CH7dz4bjnXQg; Fri, 28 Feb 2025 17:17:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B929685CA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1569D70C9A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B929685CA8;
-	Fri, 28 Feb 2025 17:17:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1569D70C9A;
+	Fri, 28 Feb 2025 17:17:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1998E711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:06 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 10EEC68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 73E2A441C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A2F742D47
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lWMqCaWvBA4F for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:51 +0000 (UTC)
+ id 9iNW8kOS4Lfk for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EF1642D47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D5CC447DA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5EF1642D47
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D5CC447DA
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 502E087C10; Fri, 28 Feb 2025 16:30:38 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 90BAE87C10; Fri, 28 Feb 2025 16:30:37 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 9 Feb 2025 21:56:48 +0100
+Date: Sun, 9 Feb 2025 11:07:03 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 670c9786512655f62ca50833917a8616a1bd5829
-X-Git-Newrev: ad25dd6159217e6c9eb77f827fe2824a210a6c38
+X-Git-Oldrev: 170642b68d00014a69ea88451303e264a37e85c2
+X-Git-Newrev: f26dfdc842c7f95102f13f4bc863a404821f57f3
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163038.502E087C10@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/zstd: drop useless
- check-package disable
+Message-Id: <20250228163037.90BAE87C10@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/docker: add flake8
+ command
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,41 +65,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad25dd6159217e6c9eb77f827fe2824a210a6c38
+commit: https://git.buildroot.net/buildroot/commit/?id=f26dfdc842c7f95102f13f4bc863a404821f57f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 52154e52069d (package/zstd: build multithreaded library if
-supported) added an override of a previously defined variable, so an
-explicit check-package exception was added in 0f0e913f10ca
-(package/zstd: rework build and install). Eventually, in 253a951c4fe7
-(package/zstd: fix build without threads) the variable override was
-removed.
+When check-package fail due to flake8 coding style checks, it suggest
+to use flake8 command line:
 
-However, the check-package exception was left out during the rework in
-253a951c4fe7, so it now excludes nothing.
+  run 'flake8' and fix the warnings
 
-Drop this exception now.
+But flake8 is actually missing from the container used by
+utils/docker-run, so add it to the container as well.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/zstd/zstd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/docker/Dockerfile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index 575bb2c838..bf04b4793c 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
-@@ -72,7 +72,7 @@ else
- ZSTD_OPTS += HAVE_THREAD=0
- ZSTD_BUILD_LIBS_THREAD_SUFFIX = -nomt
- endif
--# check-package disable OverriddenVariable - override intended
-+
- ZSTD_BUILD_LIBS = \
- 	$(addsuffix -release, \
- 		$(addsuffix $(ZSTD_BUILD_LIBS_THREAD_SUFFIX), \
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index 8c6e2add60..6f76cd5114 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -30,6 +30,7 @@ RUN apt-get -o APT::Retries=3 install -y --no-install-recommends \
+         cpio \
+         cvs \
+         file \
++        flake8 \
+         g++-multilib \
+         git \
+         libc6:i386 \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
