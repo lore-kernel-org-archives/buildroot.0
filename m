@@ -4,64 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CFE1C02199
-	for <buildroot@archiver.kernel.org>; Sun,  9 Feb 2025 08:03:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B055C02199
+	for <buildroot@archiver.kernel.org>; Sun,  9 Feb 2025 08:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BCFA4156C;
-	Sun,  9 Feb 2025 08:03:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C65AA40571;
+	Sun,  9 Feb 2025 08:05:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4q272G5oc96u; Sun,  9 Feb 2025 08:03:17 +0000 (UTC)
+ id 6Z-k95zS8Pli; Sun,  9 Feb 2025 08:05:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5927D411FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B272640582
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5927D411FC;
-	Sun,  9 Feb 2025 08:03:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2F3E2199
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 08:03:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B272640582;
+	Sun,  9 Feb 2025 08:05:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 34389199
+ for <buildroot@buildroot.org>; Sun,  9 Feb 2025 08:05:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1316241553
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 08:03:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 239224057D
+ for <buildroot@buildroot.org>; Sun,  9 Feb 2025 08:05:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 67yMTPUfeN-N for <buildroot@buildroot.org>;
- Sun,  9 Feb 2025 08:03:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id K4KwUWh7-NZm for <buildroot@buildroot.org>;
+ Sun,  9 Feb 2025 08:05:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DE13141596
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE13141596
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DE13141596
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 08:03:13 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 619624327F;
- Sun,  9 Feb 2025 08:03:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org ED97440571
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED97440571
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id ED97440571
+ for <buildroot@buildroot.org>; Sun,  9 Feb 2025 08:05:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8C247432E9;
+ Sun,  9 Feb 2025 08:05:01 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1th2HV-003kIG-2U;
- Sun, 09 Feb 2025 09:03:09 +0100
+ (envelope-from <peter@korsgaard.com>) id 1th2JI-003kSG-0w;
+ Sun, 09 Feb 2025 09:05:00 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Akhilesh Nema <nemaakhilesh@gmail.com>
-Cc: buildroot@buildroot.org
-References: <20250206191613.8492-1-nemaakhilesh@gmail.com>
-Date: Sun, 09 Feb 2025 09:03:09 +0100
-In-Reply-To: <20250206191613.8492-1-nemaakhilesh@gmail.com> (Akhilesh Nema's
- message of "Thu, 6 Feb 2025 11:16:13 -0800")
-Message-ID: <87o6zb8s02.fsf@dell.be.48ers.dk>
+To: Vincent Fazio <vfazio@xes-inc.com>
+Cc: buildroot@buildroot.org,  James Hilliard <james.hilliard1@gmail.com>,
+ Vincent Fazio <vfazio@gmail.com>,  Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+References: <20250207192312.4058639-1-vfazio@xes-inc.com>
+Date: Sun, 09 Feb 2025 09:05:00 +0100
+In-Reply-To: <20250207192312.4058639-1-vfazio@xes-inc.com> (Vincent Fazio's
+ message of "Fri, 7 Feb 2025 13:23:12 -0600")
+Message-ID: <87jz9z8rwz.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefgeeitdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufhffjgfkfgggtgesthdttddttdertdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeekveegkeduuefgvefhffekgfdutddthfettedvudfgtdeitdekjeefteevleffteenucffohhmrghinheptghurhhlrdhsvgdpghhithhhuhgsrdgtohhmnecukfhppedujeekrdduudelrddurddufeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudejkedrudduledruddrudefjedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepnhgvmhgrrghkhhhilhgvshhhsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefgeeitdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufhffjgfkfgggtgesthdttddttdertdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeeffeeludeihefhteeglefhgfettddukeethfffgfffkeduvdeuveeiteevleeiieenucffohhmrghinhepphihthhhohhnrdhorhhgnecukfhppedujeekrdduudelrddurddufeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudejkedrudduledruddrudefjedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopeehpdhrtghpthhtohepvhhfrgiiihhoseigvghsqdhinhgtrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehjrghmvghsrdhhihhllhhirghrugdusehgmhgrihhlrdgtohhmpdhrtghpthhtohepvhhfrgiiihhosehgmhgrihhlrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihon
+ hhisegsohhothhlihhnrdgtohhm
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/libcurl: security bump to
- version 8.12.0
+Subject: Re: [Buildroot] [PATCH] package/python3: bump to version 3.12.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,27 +80,14 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Akhilesh" == Akhilesh Nema <nemaakhilesh@gmail.com> writes:
+>>>>> "Vincent" == Vincent Fazio <vfazio@xes-inc.com> writes:
 
- > Changelog:
- > https://curl.se/ch/8.12.0.html
+ > Brings a number of bugfixes:
+ > https://docs.python.org/release/3.12.9/whatsnew/changelog.html#python-3-12-9
 
- > Fixes the following security issues:
- > - CVE-2025-0167: netrc and default credential leak.
- >   https://curl.se/docs/CVE-2025-0167.html
- > - CVE-2025-0665: eventfd double close.
- >   https://curl.se/docs/CVE-2025-0665.html
- > - CVE-2025-0725: gzip integer overflow.
- >   https://curl.se/docs/CVE-2025-0725.html
+ > Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
 
- > Drop upstream patch - 0001-curl_trc-fix-build-with-verbose-messages-disabled.patch
- > see https://github.com/curl/curl/commit/80257779179ce994b647daca60d7b1c4980b130b
-
- > Updated hash of the COPYING file (copyright year bump)
-
- > Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-
-Committed to 2024.02.x and 2024.11.x, thanks.
+Committed to 2024.11.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
