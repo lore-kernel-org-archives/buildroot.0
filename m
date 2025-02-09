@@ -1,107 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED0BBC0219B
-	for <buildroot@archiver.kernel.org>; Sun,  9 Feb 2025 20:42:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2741DC0219B
+	for <buildroot@archiver.kernel.org>; Sun,  9 Feb 2025 20:55:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B60BF60656;
-	Sun,  9 Feb 2025 20:42:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pX9RmFHUr5AQ; Sun,  9 Feb 2025 20:42:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7533607C1
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7533607C1;
-	Sun,  9 Feb 2025 20:42:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 153BD199
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 20:42:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0369B405DE
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 20:42:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B0AC4403CF;
+	Sun,  9 Feb 2025 20:55:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RqBAlMdC2UFg for <buildroot@buildroot.org>;
- Sun,  9 Feb 2025 20:42:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
- envelope-from=gael.portay+rtone@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F0C474060E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F0C474060E
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F0C474060E
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 20:42:48 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-436284cdbe0so5500125e9.3
- for <buildroot@buildroot.org>; Sun, 09 Feb 2025 12:42:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1739133767; x=1739738567;
- h=in-reply-to:references:from:subject:cc:to:message-id:date
- :content-transfer-encoding:mime-version:sender:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=FD5CFeviGjuEdcvQWVxXY80uQR+Y/svHe4G2iJtQYeA=;
- b=B6GrEKXUpAeucUc2TOgPQ3riWUshfyhIpDAfQ+TeXho4q25aB9YMBoVdFVDMaXthS/
- BFzbgCiYTOMAljHSnlt8qf3DT4Co8i7TvaEP8nzo9da7GgmjK24yu9L9wia3vya4pztn
- yFwWxqsNaKPwD6GM6BS5t2aIASskhl9hkaMnZWGBfM+xVymd05Menqts1KAZA9/ZIKvN
- lxxGE0P8/sQlGFsZFCgt5FPnfniMLo6QOgHCyEYSoMS7jDK/UZvG3y2fsh3rEC+WsdfV
- 8JQRnICyeMds9AZy1IRfliM3nP96DsDf8UKT+q2iI7iNsWq4opetSjZWSjILNnykyLaO
- HXlw==
-X-Forwarded-Encrypted: i=1;
- AJvYcCXh75r3XvJBcONV/cJ1CwidhtG22obZAxFCba5/iBK68RuIXUuhf3fWbFHAHeSe1LVkyEmgI67JwEY=@buildroot.org
-X-Gm-Message-State: AOJu0Yz3nPG3eSmeGi0FNJkUtF3ld9d0m1x4/XZtJuDdEquc69W0bcsi
- tsHr89m5B04pN+MGvRAcsOh77jWJNEQWAZf3tFRH/1rTWnf7+DRV
-X-Gm-Gg: ASbGncs32nFTZJimbipEwkAFmkuGn25T2WhyPUNqSrnXu39cSL9IW5AhZoE9UmrmJvF
- tJMSC4REd+P1e8Gl40ik9uIoV8YTEIcSil48a8JYsu2BBJBOmW4IjHGrlcR2xdg6TYX78Xs4kYR
- zUcS3L5l+jf1pAj/hv8Wd6zF7YLn/KtUXONYyLY1l5PCdCdxO3gPWcC3CDHcOV8R37FCRj04U45
- qIUOZaDcUEmcxwt2Dud5nAMGMQuukXawL5Ntb56xR0qZNsakgUYDxJlTFaT2RWeQqo9qw5aVUYq
- 1S/dqqBENDKtO99vdu2lTis=
-X-Google-Smtp-Source: AGHT+IFTnWW/sjJAUk5UsZ95PRY8/L2f85QMkXEH6+AWGAXhrQ7QsUgrWcwe6MLN6HPgZ0I+1OOV2g==
-X-Received: by 2002:a05:600c:3502:b0:436:1b94:2deb with SMTP id
- 5b1f17b1804b1-439249d17fdmr37323725e9.5.1739133766510; 
- Sun, 09 Feb 2025 12:42:46 -0800 (PST)
-Received: from localhost ([2a01:e0a:ce:f2f0:2a6b:35ff:feb8:77d9])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4394328fcb8sm15126915e9.32.2025.02.09.12.42.45
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 09 Feb 2025 12:42:45 -0800 (PST)
-Mime-Version: 1.0
-Date: Sun, 09 Feb 2025 21:42:45 +0100
-Message-Id: <D7O7GU8R97TT.2XO33MP52YU46@gmail.com>
-To: "Romain Naour" <romain.naour@smile.fr>, <buildroot@buildroot.org>
-Cc: "Mahyar Koshkouei" <mahyar.koshkouei@gmail.com>
-From: =?utf-8?q?Ga=C3=ABl_PORTAY?= <gael.portay+rtone@gmail.com>
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a
-References: <20250204173456.201056-1-gael.portay+rtone@gmail.com>
- <20250204173456.201056-3-gael.portay+rtone@gmail.com>
- <1d789bef-093d-402f-99be-5fda01b2f80c@smile.fr>
-In-Reply-To: <1d789bef-093d-402f-99be-5fda01b2f80c@smile.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1739133767; x=1739738567; darn=buildroot.org;
- h=in-reply-to:references:from:subject:cc:to:message-id:date
- :content-transfer-encoding:mime-version:sender:from:to:cc:subject
- :date:message-id:reply-to;
- bh=FD5CFeviGjuEdcvQWVxXY80uQR+Y/svHe4G2iJtQYeA=;
- b=OpJQuiWtnNVEBn6QmQB+06ofyZ/HymgiG4hCyc0U2TI3UP2Rzf6aNUgHAX+/4EOZEF
- ZKuvaKTd0tLbECvETeeWcBqhQmV6tApY3eQ1819BVUDvn0S88V8p04gew5Hqvpg4hsRn
- 4byOA+WUI62XqKxjoXdkdSWc3kBOAC1OaC0iv0cL91VWV9ZMVPgmFzhFoWXwuvub5Ss5
- mCWk306RD+38iaD4uN8dNJHLCA6J80sQyk5VtVOPlVnOOyu+cVnHBG0G1v8JCfa7pD5i
- RlC2WBHoHsVyE6B0csZCf4TzDwJ3U9VblO7fY//Jmyl3b7TyOin2RhmcFC1WDrg6c2Eb
- MYGA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=OpJQuiWt
-Subject: Re: [Buildroot] [PATCH v4 2/2] package/rpi-userland: package is
- deprecated
+ id lR4Vb-BOMtu0; Sun,  9 Feb 2025 20:55:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C06B403F3
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3C06B403F3;
+	Sun,  9 Feb 2025 20:55:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1DA766C
+ for <buildroot@buildroot.org>; Sun,  9 Feb 2025 20:55:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0DA3C80CE9
+ for <buildroot@buildroot.org>; Sun,  9 Feb 2025 20:55:16 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Co8nQj-OyQVw for <buildroot@buildroot.org>;
+ Sun,  9 Feb 2025 20:55:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D5FE80CEA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2D5FE80CEA
+ for <buildroot@buildroot.org>; Sun,  9 Feb 2025 20:55:15 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 15F4387469; Sun,  9 Feb 2025 20:55:15 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 9 Feb 2025 21:40:49 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 756012d25740b36f24ed1e6dde91de357ed4f010
+X-Git-Newrev: 670c9786512655f62ca50833917a8616a1bd5829
+X-Patchwork-Hint: ignore
+Message-Id: <20250209205515.15F4387469@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ffmpeg: fix armv5te build with
+ binutils 2.43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,27 +59,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============2472292310548803887=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gV2VkIEZlYiA1LCAyMDI1IGF0IDk6NDcgQU0gQ0VULCBSb21haW4gTmFvdXIgd3JvdGU6Cj4g
-SGVsbG8gR2HDq2wsIEFsbCwKPgo+IExlIDA0LzAyLzIwMjUgw6AgMTg6MzQsIEdhw6tsIFBPUlRB
-WSBhIMOpY3JpdMKgOgo+PiBUaGUgcGFja2FnZSBycGktdXNlcmxhbmQgaGFzIGJlZW4gbWFya2Vk
-IGFzIGFuY2llbnQgYW5kIGRlcHJlY2F0ZWRbMV0uCj4+IAo+PiBUaGlzIGFkZHMgdGhlIG1lc3Nh
-Z2UgaW4gaXRzIGhlbHAuCj4+IAo+PiBbMV06IGh0dHBzOi8vZ2l0aHViLmNvbS9yYXNwYmVycnlw
-aS91c2VybGFuZC9jb21taXQvOTZhNzMzNGFlOWQ1ZmM5ZGI3YWM5MmU1OTg1MjM3N2RmNjNmMTg0
-OAo+PiAKPgo+IFdpdGggcnBpLXV0aWxzIHBhY2thZ2UgZW5hYmxlZCwgd2Ugc2hvdWxkIGF2b2lk
-IGFueSBjb25mbGljdCB3aXRoIHRoaXMgcGFja2FnZS4KPiBUaGV5IHNob3VsZCBub3QgYmUgZW5h
-YmxlZCBhdCB0aGUgc2FtZSB0aW1lIGlmIHRoZXkgcHJvdmlkZSB0aGUgc2FtZSBiaW5hcmllcyBl
-dGMuCj4KPiBNYXliZSBpdCB3b3VsZCBiZSBlYXNpZXIgaWYgcnBpLXVzZXJsYW5kIGNhbiBiZSBy
-ZW1vdmVkPwo+CgpJbmRlZWQuIElmIEkgY2FuIHJlcGxhY2UgaXQgZW50aXJlbGx5LCBJIHdpbGwg
-cmVtb3ZlIHRoYXQgcGFja2FnZS4KCkkgc3RpbGwgaGF2ZSBzb21lIHdvcmsgdG8gZG8gZm9yIHRo
-ZSBHTCBwYXJ0IChjaGVjayBpZiBJIGNhbiBydW4KbWVzYTNkL3ZjNCBvbiBSYXNwYmVycnkgUGkg
-MS9aZXJvL1plcm8gVywgd2l0aCB0aGUgbGFjayBvZiBuZW9uKS4KCkJ5IHRoZSB3YXksIHdoYXQg
-c2hvdWxkIEkgZG8gdG8gZHJvcCB0aGUgcGFja2FnZT8KIC0gZHJvcCB0aGUgcGFja2FnZT8KIC0g
-bW92ZSBpdCB0byBsZWdhY3k/CgpUaGFua3MuCgo+IEJlc3QgcmVnYXJkcywKPiBSb21haW4KPgoK
-UmVnYXJkcywKR2HDq2wKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
-czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+--===============2472292310548803887==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=670c9786512655f62ca50833917a8616a1bd5829
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The build error occurs since binutils 2.43 was added to buildroot with
+commit 800a033f7818a7799d4997aba28b9f8f5999871b
+
+Fixes:
+https://autobuild.buildroot.org/results/b5a/b5a782db574dfab7ae61e25291c05b1537c44c91/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...arm-mlpdsp_armv5te-fix-label-format-to-wo.patch | 63 ++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+
+diff --git a/package/ffmpeg/0008-libavcodec-arm-mlpdsp_armv5te-fix-label-format-to-wo.patch b/package/ffmpeg/0008-libavcodec-arm-mlpdsp_armv5te-fix-label-format-to-wo.patch
+new file mode 100644
+index 0000000000..178ffbc33b
+--- /dev/null
++++ b/package/ffmpeg/0008-libavcodec-arm-mlpdsp_armv5te-fix-label-format-to-wo.patch
+@@ -0,0 +1,63 @@
++From 4c688845a50f7dce3af9afebe60f0f7a493c4f07 Mon Sep 17 00:00:00 2001
++From: Ross Burton <ross.burton@arm.com>
++Date: Fri, 9 Aug 2024 11:32:00 +0100
++Subject: [PATCH] libavcodec/arm/mlpdsp_armv5te: fix label format to work with
++ binutils 2.43
++MIME-Version: 1.0
++Content-Type: text/plain; charset=utf8
++Content-Transfer-Encoding: 8bit
++
++binutils 2.43 has stricter validation for labels[1] and results in errors
++when building ffmpeg for armv5:
++
++src/libavcodec/arm/mlpdsp_armv5te.S:232: Error: junk at end of line, first unrecognized character is `0'
++
++Remove the leading zero in the "01" label to resolve this error.
++
++[1] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=226749d5a6ff0d5c607d6428d6c81e1e7e7a994b
++
++Signed-off-by: Ross Burton <ross.burton@arm.com>
++Signed-off-by: Martin StorsjÃ¶ <martin@martin.st>
++(cherry picked from commit 654bd47716c4f36719fb0f3f7fd8386d5ed0b916)
++
++Upstream: http://git.videolan.org/?p=ffmpeg.git;a=commit;h=4c688845a50f7dce3af9afebe60f0f7a493c4f07
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ libavcodec/arm/mlpdsp_armv5te.S | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/libavcodec/arm/mlpdsp_armv5te.S b/libavcodec/arm/mlpdsp_armv5te.S
++index 4f9aa485fd..d31568611c 100644
++--- a/libavcodec/arm/mlpdsp_armv5te.S
+++++ b/libavcodec/arm/mlpdsp_armv5te.S
++@@ -229,7 +229,7 @@ A .endif
++   .endif
++ 
++         // Begin loop
++-01:
+++1:
++   .if TOTAL_TAPS == 0
++         // Things simplify a lot in this case
++         // In fact this could be pipelined further if it's worth it...
++@@ -241,7 +241,7 @@ A .endif
++         str     ST0, [PST, #-4]!
++         str     ST0, [PST, #4 * (MAX_BLOCKSIZE + MAX_FIR_ORDER)]
++         str     ST0, [PSAMP], #4 * MAX_CHANNELS
++-        bne     01b
+++        bne     1b
++   .else
++     .if \fir_taps & 1
++       .set LOAD_REG, 1
++@@ -333,7 +333,7 @@ T       orr     AC0, AC0, AC1
++         str     ST3, [PST, #-4]!
++         str     ST2, [PST, #4 * (MAX_BLOCKSIZE + MAX_FIR_ORDER)]
++         str     ST3, [PSAMP], #4 * MAX_CHANNELS
++-        bne     01b
+++        bne     1b
++   .endif
++         b       99f
++ 
++-- 
++2.30.2
++
+
+--===============2472292310548803887==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2472292310548803887==--
