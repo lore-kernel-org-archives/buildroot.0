@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 510CBC282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:16:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56A24C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:16:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7861B85C54;
-	Fri, 28 Feb 2025 17:16:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D30070944;
+	Fri, 28 Feb 2025 17:16:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xQL7_vodD4GL; Fri, 28 Feb 2025 17:16:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LvDXcM79GfX4; Fri, 28 Feb 2025 17:16:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C0B885C5A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C7EF70946
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C0B885C5A;
-	Fri, 28 Feb 2025 17:16:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4C7EF70946;
+	Fri, 28 Feb 2025 17:16:50 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 03A7B711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:57 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 112331DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:45:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4417342666
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6E4E1439BF
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 89H6UqBN-nkV for <buildroot@buildroot.org>;
+ id 0E0bYa3QLo1j for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:31:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E95FE44913
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 307A444A33
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E95FE44913
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 307A444A33
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E3D7987611; Fri, 28 Feb 2025 16:30:37 +0000 (UTC)
+ id 1A5DB8749E; Fri, 28 Feb 2025 16:30:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 9 Feb 2025 15:17:46 +0100
+Date: Sun, 9 Feb 2025 15:40:58 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 402b1afcdff446b335cc249d00e661e81b6b4759
-X-Git-Newrev: 13deac1e39855cc8df1433299a6741a085afca46
+X-Git-Oldrev: ef80b710f214fe76dca1aa666eb5e7cea9702ca0
+X-Git-Newrev: 236a890d80d24d9a43091846e693588c47b4d249
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163037.E3D7987611@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/download/{curl, cvs,
- git, svn}: disable new shellcheck 0.9.0 errors
+Message-Id: <20250228163038.1A5DB8749E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mdnsd: disable
+ shellcheck SC2317 for S50mdnsd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,91 +65,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=13deac1e39855cc8df1433299a6741a085afca46
+commit: https://git.buildroot.net/buildroot/commit/?id=236a890d80d24d9a43091846e693588c47b4d249
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-As for SC1090 and SC2016 [1], disable SC1091 and SC2294 too since they
-are now reported by shellcheck 0.9.0:
+shellcheck 0.9.0 throw an error due to SC2317 check on
+sysv init scripts.
 
-In support/download/curl line 42:
-    eval ${CURL} "${@}"
-                  ^--^ SC2294 (warning): eval negates the benefit of arrays. Drop eval to preserve whitespace/symbols (or eval as string).
+Indeed, start/stop/restart/reload function can't be
+reached in one execution.
 
-[1] bcee3ca6d66d30de4b0cd8186ce4c72020705df8
+See:
+https://www.shellcheck.net/wiki/SC2317
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/download/curl | 1 +
- support/download/cvs  | 1 +
- support/download/git  | 2 ++
- support/download/svn  | 2 ++
- 4 files changed, 6 insertions(+)
+ package/mdnsd/S50mdnsd | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/support/download/curl b/support/download/curl
-index bea4485a6c..2124fe7cad 100755
---- a/support/download/curl
-+++ b/support/download/curl
-@@ -39,6 +39,7 @@ _curl() {
- # Note: please keep command below aligned with what is printed above
- _plain_curl() {
-     # shellcheck disable=SC2086  # We want splitting
-+    # shellcheck disable=SC2294
-     eval ${CURL} "${@}"
- }
+diff --git a/package/mdnsd/S50mdnsd b/package/mdnsd/S50mdnsd
+index 1c2b71802c..13b65d0c69 100644
+--- a/package/mdnsd/S50mdnsd
++++ b/package/mdnsd/S50mdnsd
+@@ -1,4 +1,5 @@
+ #!/bin/sh
++# shellcheck disable=SC2317  # Don't warn about unreachable commands in this file
  
-diff --git a/support/download/cvs b/support/download/cvs
-index a6840fea7b..a52e543e44 100755
---- a/support/download/cvs
-+++ b/support/download/cvs
-@@ -47,6 +47,7 @@ _cvs() {
- # Note: please keep command below aligned with what is printed above
- _plain_cvs() {
-     # shellcheck disable=SC2086  # We really want word splitting in CVS
-+    # shellcheck disable=SC2294
-     eval timeout 10m ${CVS} "${@}"
- }
- 
-diff --git a/support/download/git b/support/download/git
-index d49016e90c..8123bc3153 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -22,6 +22,7 @@ set -e
- #   GIT      : the git command to call
- 
- # shellcheck disable=SC1090 # Only provides mk_tar_gz()
-+# shellcheck disable=SC1091
- . "${0%/*}/helpers"
- 
- # Save our path and options in case we need to call ourselves again
-@@ -91,6 +92,7 @@ _git() {
- # Note: please keep command below aligned with what is printed above
- _plain_git() {
-     # shellcheck disable=SC2086 # We want word-splitting for GIT
-+    # shellcheck disable=SC2294
-     eval GIT_DIR="${git_cache}/.git" ${GIT} "${@}"
- }
- 
-diff --git a/support/download/svn b/support/download/svn
-index 1decb2310b..ff33f1fa39 100755
---- a/support/download/svn
-+++ b/support/download/svn
-@@ -22,6 +22,7 @@ set -e
- #   SVN      : the svn command to call
- 
- # shellcheck disable=SC1090 # Only provides mk_tar_gz()
-+# shellcheck disable=SC1091
- . "${0%/*}/helpers"
- 
- quiet=
-@@ -52,6 +53,7 @@ _svn() {
- # Note: please keep command below aligned with what is printed above
- _plain_svn() {
-     # shellcheck disable=SC2086 # We want word-splitting for SVN
-+    # shellcheck disable=SC2294
-     eval ${SVN} "${@}"
- }
- 
+ DAEMON=mdnsd
+ MDNSD=/usr/sbin/$DAEMON
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
