@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70E29C0219B
-	for <buildroot@archiver.kernel.org>; Sun,  9 Feb 2025 20:59:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57A55C0219B
+	for <buildroot@archiver.kernel.org>; Sun,  9 Feb 2025 21:00:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3437D404E3;
-	Sun,  9 Feb 2025 20:59:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1382D404E7;
+	Sun,  9 Feb 2025 21:00:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0wnEkoZfI7c0; Sun,  9 Feb 2025 20:59:44 +0000 (UTC)
+ id Ep2G6VDzACcb; Sun,  9 Feb 2025 21:00:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06B7D404E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07BB6407A7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 06B7D404E9;
-	Sun,  9 Feb 2025 20:59:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 07BB6407A7;
+	Sun,  9 Feb 2025 21:00:13 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B701199
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 20:59:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5B441199
+ for <buildroot@buildroot.org>; Sun,  9 Feb 2025 21:00:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2EC20608F0
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 20:59:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3F61B608F0
+ for <buildroot@buildroot.org>; Sun,  9 Feb 2025 21:00:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3yp9oTVuGqpW for <buildroot@buildroot.org>;
- Sun,  9 Feb 2025 20:59:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66ABE608E8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 66ABE608E8
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 20:59:41 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 52EBE8745E; Sun,  9 Feb 2025 20:59:41 +0000 (UTC)
+ id k83UIQGjttWp for <buildroot@buildroot.org>;
+ Sun,  9 Feb 2025 21:00:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6EC7A608E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EC7A608E8
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6EC7A608E8
+ for <buildroot@buildroot.org>; Sun,  9 Feb 2025 21:00:10 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 888C6780372;
+ Sun,  9 Feb 2025 22:00:06 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 09 Feb 2025 22:00:06 +0100
+MIME-Version: 1.0
+Date: Sun, 09 Feb 2025 22:00:06 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 9 Feb 2025 21:56:48 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 670c9786512655f62ca50833917a8616a1bd5829
-X-Git-Newrev: ad25dd6159217e6c9eb77f827fe2824a210a6c38
-X-Patchwork-Hint: ignore
-Message-Id: <20250209205941.52EBE8745E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zstd: drop useless check-package
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: buildroot@buildroot.org, Andrey Smirnov <andrew.smirnov@gmail.com>
+In-Reply-To: <20250209113743.3528243-1-yann.morin.1998@free.fr>
+References: <20250209113743.3528243-1-yann.morin.1998@free.fr>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <05184bd8c333fed081966b20a227ff95@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1739134808;
+ bh=s9JqbjGMkx3JFUygobWfiZeRDqYWlhXQ1+MRgVgIOu0=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=DR33txNkenu6LEex1OMyitMAxiHc7A0TxeivuthmyLVosnF351ucvz8ALbGlt75kB
+ nMIsfl/TaNfkCYpPk1URYxCsexG23ld6VkGmx+K2K617lSSTckBAcIXZK0RZWMmkXu
+ ox3gFMZLiN4YbARhmKcelsyyMC7J5rxaNIo2GCIHH2SO8gw3sMW1+j39OSJaOb7TK7
+ mKIZgqELQWs6IKmhHvGn7QwJ5eRu3qx57n19t7DqaEsdBphoBt4erz5KDhpdCS3hNj
+ RQXihCWcg6c7XQoQ71F17KOXIesZvkXdUPsy0SEayfZbF7brVz6MEnqDjFEpvvQD//
+ tvTWi4j2yDOeA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DR33txNk
+Subject: Re: [Buildroot] [PATCH] package/zstd: drop sueless check-package
  disable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,47 +82,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad25dd6159217e6c9eb77f827fe2824a210a6c38
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 09/02/2025 12:37, Yann E. MORIN wrote:
+> Commit 52154e52069d (package/zstd: build multithreaded library if
+> supported) added an override of a ppreviously defined variable, so an
+> explicit check-package exception was added in 0f0e913f10ca
+> (package/zstd: rework build and install). Eventually, in 253a951c4fe7
+> (package/zstd: fix build without threads) the variable override was
+> removed.
+> 
+> However, the check-package exception was left out during the rework in
+> 253a951c4fe7, so it now excludes nothing.
+> 
+> Drop this exception now.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
 
-Commit 52154e52069d (package/zstd: build multithreaded library if
-supported) added an override of a previously defined variable, so an
-explicit check-package exception was added in 0f0e913f10ca
-(package/zstd: rework build and install). Eventually, in 253a951c4fe7
-(package/zstd: fix build without threads) the variable override was
-removed.
-
-However, the check-package exception was left out during the rework in
-253a951c4fe7, so it now excludes nothing.
-
-Drop this exception now.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/zstd/zstd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
-index 575bb2c838..bf04b4793c 100644
---- a/package/zstd/zstd.mk
-+++ b/package/zstd/zstd.mk
-@@ -72,7 +72,7 @@ else
- ZSTD_OPTS += HAVE_THREAD=0
- ZSTD_BUILD_LIBS_THREAD_SUFFIX = -nomt
- endif
--# check-package disable OverriddenVariable - override intended
-+
- ZSTD_BUILD_LIBS = \
- 	$(addsuffix -release, \
- 		$(addsuffix $(ZSTD_BUILD_LIBS_THREAD_SUFFIX), \
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
