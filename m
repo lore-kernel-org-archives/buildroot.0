@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D861EC0219D
-	for <buildroot@archiver.kernel.org>; Sun,  9 Feb 2025 21:22:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94E78C0219D
+	for <buildroot@archiver.kernel.org>; Sun,  9 Feb 2025 21:22:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84E5141246;
-	Sun,  9 Feb 2025 21:22:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 62FD741270;
+	Sun,  9 Feb 2025 21:22:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SEUAHsZyYVNo; Sun,  9 Feb 2025 21:22:50 +0000 (UTC)
+ id nfdtxRgIxM70; Sun,  9 Feb 2025 21:22:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4ACFA4124F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39AA7411F8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4ACFA4124F;
-	Sun,  9 Feb 2025 21:22:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B520DC2
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 21:22:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39AA7411F8;
+	Sun,  9 Feb 2025 21:22:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 823AFC2
+ for <buildroot@buildroot.org>; Sun,  9 Feb 2025 21:22:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DD656608FD
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 21:22:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 66AB66087D
+ for <buildroot@buildroot.org>; Sun,  9 Feb 2025 21:22:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CfQ5aNejnTpv for <buildroot@buildroot.org>;
+ id aR_yPImeFlPA for <buildroot@buildroot.org>;
  Sun,  9 Feb 2025 21:22:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E83A760904
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E900D6090A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E83A760904
+ by smtp3.osuosl.org (Postfix) with ESMTP id E900D6090A
  for <buildroot@buildroot.org>; Sun,  9 Feb 2025 21:22:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D295286A57; Sun,  9 Feb 2025 21:22:42 +0000 (UTC)
+ id DC92087495; Sun,  9 Feb 2025 21:22:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 9 Feb 2025 22:18:29 +0100
+Date: Sun, 9 Feb 2025 22:18:30 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f3e7e28979b407b7b9a3742977fbdaa164d12fa1
-X-Git-Newrev: 12e9fc1da5d4bc62a74dc24d24f3100e54f8cc61
+X-Git-Oldrev: 12e9fc1da5d4bc62a74dc24d24f3100e54f8cc61
+X-Git-Newrev: e5bbe020ca60789bdb0a16e27bc1a4208d8f6a5a
 X-Patchwork-Hint: ignore
-Message-Id: <20250209212242.D295286A57@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/docker: add tar 1.35
+Message-Id: <20250209212242.DC92087495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] .gitlab-ci.yml: use Debian 12-based
+ container image with curl / tar 1.35
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,57 +65,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12e9fc1da5d4bc62a74dc24d24f3100e54f8cc61
+commit: https://git.buildroot.net/buildroot/commit/?id=e5bbe020ca60789bdb0a16e27bc1a4208d8f6a5a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Since commit b11956fb6690 ("support/dependencies: require tar >= 1.35"),
-Buildroot will build host-tar if the host does not have >= 1.35 available,
-so add it to the container to save build time.
-
-Debian 12 only provides tar 1.34.  Tar 1.35 is available in testing - But
-that then depends on a newer glibc, so instead build it from source using
-the --disable-year2038 flag like we do for host-tar and install it into
-/usr/local/bin so it shadows the Debian one.
-
-This step runs as root (and needs to for make install), so add
-FORCE_UNSAFE_CONFIGURE=1 as otherwise the configure script errors out.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/docker/Dockerfile | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ .gitlab-ci.yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index d10d0beb27..8b8a478f66 100644
---- a/support/docker/Dockerfile
-+++ b/support/docker/Dockerfile
-@@ -12,6 +12,9 @@ LABEL maintainer="Buildroot mailing list <buildroot@buildroot.org>" \
-       vendor="Buildroot" \
- description="Container with everything needed to run Buildroot"
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 3d7719568f..7eba876a54 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -1,7 +1,7 @@
+ # Configuration for Gitlab-CI.
+ # Builds appear on https://gitlab.com/buildroot.org/buildroot/pipelines
  
-+# We need tar >= 1.35
-+ARG TAR_VERSION="1.35"
-+
- # Setup environment
- ENV DEBIAN_FRONTEND noninteractive
+-image: $CI_REGISTRY/buildroot.org/buildroot/base:20230207.1123
++image: $CI_REGISTRY/buildroot.org/buildroot/base:20250205.1514
  
-@@ -57,6 +60,16 @@ RUN apt-get -o APT::Retries=3 install -y --no-install-recommends \
-     apt-get -y autoremove && \
-     apt-get -y clean
- 
-+# Build host-tar
-+RUN curl -sfL https://ftpmirror.gnu.org/tar/tar-${TAR_VERSION}.tar.xz | \
-+    tar -Jx -C /tmp && \
-+    cd /tmp/tar-${TAR_VERSION} && \
-+    FORCE_UNSAFE_CONFIGURE=1 ./configure \
-+        --disable-year2028 && \
-+    make && \
-+    make install && \
-+    rm -rf /tmp/tar-${TAR_VERSION}
-+
- # To be able to generate a toolchain with locales, enable one UTF-8 locale
- RUN sed -i 's/# \(en_US.UTF-8\)/\1/' /etc/locale.gen && \
-     /usr/sbin/locale-gen
+ stages:
+   - generate-gitlab-ci
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
