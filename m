@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12071C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:17:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49458C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:17:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE13E85CBA;
-	Fri, 28 Feb 2025 17:17:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B07585CCF;
+	Fri, 28 Feb 2025 17:17:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jhEFNdwqvrT1; Fri, 28 Feb 2025 17:17:15 +0000 (UTC)
+ id BxiNWavN-0bC; Fri, 28 Feb 2025 17:17:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBDBE84ED9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6370685CD0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BBDBE84ED9;
-	Fri, 28 Feb 2025 17:17:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6370685CD0;
+	Fri, 28 Feb 2025 17:17:20 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 144AA68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EB0568
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C09EC44438
+ by smtp4.osuosl.org (Postfix) with ESMTP id D283644563
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Io1r51hHaVUp for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:52 +0000 (UTC)
+ id ufzbeJ0Aaj-T for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C955044E48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3724844AFC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C955044E48
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3724844AFC
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C4B3C82AA8; Fri, 28 Feb 2025 16:30:38 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 27DC587611; Fri, 28 Feb 2025 16:30:38 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 10 Feb 2025 21:54:43 +0100
+Date: Sun, 9 Feb 2025 16:05:13 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1142a04985f45b6c733befabb97c254e387b002c
-X-Git-Newrev: d5570b6a174800455e0737e66b687100057d9ef6
+X-Git-Oldrev: 236a890d80d24d9a43091846e693588c47b4d249
+X-Git-Newrev: be20c12e157c0e67875d8031de17df41a9c55679
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163038.C4B3C82AA8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/timescaledb: bump
- version to 2.18.0
+Message-Id: <20250228163038.27DC587611@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mdnsd/S50mdnsd: do not
+ clobber exit code
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,41 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5570b6a174800455e0737e66b687100057d9ef6
+commit: https://git.buildroot.net/buildroot/commit/?id=be20c12e157c0e67875d8031de17df41a9c55679
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes: https://github.com/timescale/timescaledb/blob/2.18.0/CHANGELOG.md
+As pointed out by shellcheck, the exit code of the start/stop/restart/reload
+command is clobbered by the 'echo "FAIL'" statement:
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+In package/mdnsd/S50mdnsd line 52:
+exit $?
+     ^-- SC2320 (warning): This $? refers to echo/printf, not a previous command. Assign to variable to avoid it being overwritten.
+
+So introduce a $status variable to keep track of it, similar to how it is
+done in S40iwd.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/mdnsd/S50mdnsd | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index 08d981661e..f799b0c7f8 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b2fcc29e9975b88c5323aefb062346326694c391d52af46186f5a5ad09136d47  timescaledb-2.17.2.tar.gz
-+sha256  86248970971ad075e0b5ed64dbba5b190eb8794d6e36b508427a5cc42b20a420  timescaledb-2.18.0.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index c9dda67282..99756cb0b8 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mdnsd/S50mdnsd b/package/mdnsd/S50mdnsd
+index 13b65d0c69..803ac12a8e 100644
+--- a/package/mdnsd/S50mdnsd
++++ b/package/mdnsd/S50mdnsd
+@@ -37,7 +37,9 @@ reload() {
  
--TIMESCALEDB_VERSION = 2.17.2
-+TIMESCALEDB_VERSION = 2.18.0
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
+ case "$1" in
+ 	start|stop|restart|reload)
+-		if "$1"; then
++		"$1"
++		status=$?
++		if [ "$status" -eq 0 ]; then
+ 			echo "OK"
+ 		else
+ 			echo "FAIL"
+@@ -49,4 +51,4 @@ case "$1" in
+ 		;;
+ esac
+ 
+-exit $?
++exit "$status"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
