@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5776CC0219B
-	for <buildroot@archiver.kernel.org>; Sun,  9 Feb 2025 15:09:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF262C0219B
+	for <buildroot@archiver.kernel.org>; Sun,  9 Feb 2025 15:09:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1339581AF3;
-	Sun,  9 Feb 2025 15:09:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7466640314;
+	Sun,  9 Feb 2025 15:09:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fAO9n0_ESuV9; Sun,  9 Feb 2025 15:09:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 564F3405DD
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 564F3405DD;
+	Sun,  9 Feb 2025 15:09:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4BC14C2
+ for <buildroot@buildroot.org>; Sun,  9 Feb 2025 15:09:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3C06B81ABA
+ for <buildroot@buildroot.org>; Sun,  9 Feb 2025 15:09:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8iN-8GcObWkW; Sun,  9 Feb 2025 15:09:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CB5781AF6
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CB5781AF6;
-	Sun,  9 Feb 2025 15:09:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0C5A01B5
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 15:09:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F04CA60777
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 15:09:51 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e5GvQ73AgSUE for <buildroot@buildroot.org>;
+ id BEbzppWEhDQE for <buildroot@buildroot.org>;
  Sun,  9 Feb 2025 15:09:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4639160726
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B5E081AF3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4639160726
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6B5E081AF3
  for <buildroot@buildroot.org>; Sun,  9 Feb 2025 15:09:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 351A487457; Sun,  9 Feb 2025 15:09:51 +0000 (UTC)
+ id 1DC268745B; Sun,  9 Feb 2025 15:09:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 9 Feb 2025 14:50:28 +0100
+Date: Sun, 9 Feb 2025 13:13:01 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 48ccb7d1d7a12567c79fa296336c3086108f144c
-X-Git-Newrev: 402b1afcdff446b335cc249d00e661e81b6b4759
+X-Git-Oldrev: 4f78d362aa907ee019b9f43c56c8f4322d242f3c
+X-Git-Newrev: aebbf57354d76ce22fd51718e07dc0a3cd3db116
 X-Patchwork-Hint: ignore
-Message-Id: <20250209150951.351A487457@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi/br-kodi: fix shellcheck SC2086
+Message-Id: <20250209150951.1DC268745B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/terasic/de10nano_cyclone5: disable
+ shellcheck SC2276
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,31 +65,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=402b1afcdff446b335cc249d00e661e81b6b4759
+commit: https://git.buildroot.net/buildroot/commit/?id=aebbf57354d76ce22fd51718e07dc0a3cd3db116
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Shellcheck 0.9.0 now report SC2086:
+Disable shellcheck SC2276 warning introduced in v0.7.2 [1]
+for barebox environment file.
 
-In package/kodi/br-kodi line 38:
-exit ${ret}
-     ^----^ SC2086 (info): Double quote to prevent globbing and word splitting.
+[1] https://github.com/koalaman/shellcheck/commit/fbb14d6b384a65ee16781966d9d240db9ed7b644
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kodi/br-kodi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ board/terasic/de10nano_cyclone5/barebox-env/boot/mmc | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/kodi/br-kodi b/package/kodi/br-kodi
-index b776b5d96c..2467afed30 100755
---- a/package/kodi/br-kodi
-+++ b/package/kodi/br-kodi
-@@ -35,4 +35,4 @@ while [ ${LOOP} -eq 1 ]; do
-             ;;
-     esac
- done
--exit ${ret}
-+exit "${ret}"
+diff --git a/board/terasic/de10nano_cyclone5/barebox-env/boot/mmc b/board/terasic/de10nano_cyclone5/barebox-env/boot/mmc
+index fed2b0b45d..6cf307b80b 100644
+--- a/board/terasic/de10nano_cyclone5/barebox-env/boot/mmc
++++ b/board/terasic/de10nano_cyclone5/barebox-env/boot/mmc
+@@ -1,5 +1,6 @@
+ #!/bin/sh
+ 
++# shellcheck disable=SC2276
+ global.bootm.oftree="/boot/socfpga_cyclone5_de0_nano_soc.dtb"
+ global.bootm.image="/boot/zImage"
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
