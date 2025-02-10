@@ -4,73 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 574E2C02198
-	for <buildroot@archiver.kernel.org>; Mon, 10 Feb 2025 19:34:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C4A0C02198
+	for <buildroot@archiver.kernel.org>; Mon, 10 Feb 2025 20:05:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8B2141301;
-	Mon, 10 Feb 2025 19:34:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B136C41347;
+	Mon, 10 Feb 2025 20:05:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lAdGFtte7jcL; Mon, 10 Feb 2025 19:34:06 +0000 (UTC)
+ id PIwFqUkob-G7; Mon, 10 Feb 2025 20:05:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41F0B41303
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A24864135B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 41F0B41303;
-	Mon, 10 Feb 2025 19:34:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 349246C
- for <buildroot@buildroot.org>; Mon, 10 Feb 2025 19:34:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A24864135B;
+	Mon, 10 Feb 2025 20:05:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E38986C
+ for <buildroot@buildroot.org>; Mon, 10 Feb 2025 20:05:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 245C060B4B
- for <buildroot@buildroot.org>; Mon, 10 Feb 2025 19:34:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C731B80D93
+ for <buildroot@buildroot.org>; Mon, 10 Feb 2025 20:05:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xWIc5nzPKn8i for <buildroot@buildroot.org>;
- Mon, 10 Feb 2025 19:34:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DECDC60B4A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DECDC60B4A
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DECDC60B4A
- for <buildroot@buildroot.org>; Mon, 10 Feb 2025 19:34:02 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DFE_Ks6fEis0 for <buildroot@buildroot.org>;
+ Mon, 10 Feb 2025 20:05:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DF97F80D86
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF97F80D86
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DF97F80D86
+ for <buildroot@buildroot.org>; Mon, 10 Feb 2025 20:05:25 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
  (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id AAE2E780316;
- Mon, 10 Feb 2025 20:33:55 +0100 (CET)
-Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
- via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 10 Feb 2025 20:33:55 +0100
-MIME-Version: 1.0
-Date: Mon, 10 Feb 2025 20:33:55 +0100
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id A8772B0056A;
+ Mon, 10 Feb 2025 21:05:21 +0100 (CET)
 From: Julien Olivain <ju.o@free.fr>
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, "Yann E . MORIN" <yann.morin.1998@free.fr>,
- linux-amarula@amarulasolutions.com
-In-Reply-To: <20250207231203.3952765-1-dario.binacchi@amarulasolutions.com>
-References: <20250207231203.3952765-1-dario.binacchi@amarulasolutions.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <96b69abb843dc7292777c64f6787f134@free.fr>
-X-Sender: ju.o@free.fr
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Mon, 10 Feb 2025 21:05:16 +0100
+Message-ID: <20250210200516.25615-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.48.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1739216039;
- bh=v4UmDTI1ezIVacOO6DN2mReEedrYwDjMWHm4QD5OX2M=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=hhet1WzwRFc/B22JboY6GvcVmLgiuLY80uwkccDPXAWWTFTSQPr5fyA0SN8j4eb/f
- atBMYnxYAxyVQXBAV8U42MCTs/rpwtmK8UIpMCTbhTnZQwWV/MHJQcVGLUCqZeT7Tr
- AtBbmudFkmJ4K9udJbQdVwdYBGixw7hsBCr/ixa/ol6rq+cmfWj2RJ59no1othf86L
- kFLD6R+/fhlyFnrClx9ThipQGBPcjB4lRadlFCTJZL30Y3i8/hbavg8DqRe8JSUIWT
- voAXUIxf7Yacu0Jmvlukv8FwBQaN91tbOrQer570m8lJ52L2OjW8C+b5v9NmkhId9r
- iiqnHsQJRPhuw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1739217922;
+ bh=CsUZfZJaNesugys7ot4YuWCaIgN7U1N1HWoB8n/hXN0=;
+ h=From:To:Cc:Subject:Date:From;
+ b=ZD+M/xeEMVvH8KG90Bs7D9UyRNybW072e9QV+AJBoLZFiHgBGPOxSnhFNp4RphJuG
+ p6QxBW/bf7fZaWdve3W0nmNNKN2XLJ//axis5m66HyENXwrGifsjFt5eoiwgsjQIfy
+ /AHhMImcUtypt56xDoUXyL0ipX3GPahks5kRYglLZmWVRHaVXz6iWnkLUmu92XGFPM
+ nJLjmvT9GfYzPxKwjw4CSj5HVicBGom35pygoflZ/h9ndnJGFYpo8eoC1Rm666ifaz
+ lhQpfQUJp7GcTwBI+zk65zRr7Vd3hoOFoH4fTP22fFbnn7hy9DWT8m03EqQs6XSN1t
+ cCrbJ0GdrfX1w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=hhet1Wzw
-Subject: Re: [Buildroot] [PATCH 1/1] boot/uboot: fix binman failure
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ZD+M/xeE
+Subject: [Buildroot] [PATCH 1/1] package/fwts: bump to version 25.01.00
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,126 +76,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Dario,
+See release announce:
+https://lists.ubuntu.com/archives/fwts-devel/2025-January/013954.html
 
-Thanks for the patch.
+This commit also updates the license hash, due to year update in:
+https://github.com/fwts/fwts/commit/b6bd85fc8da14c1279de186eb12b7e58ecf7812d
 
-On 08/02/2025 00:12, Dario Binacchi wrote:
-> The commit 4bce3270d680 ("Config.in: timeout earlier when connecting to
-> download servers"), among other things, adds the connection timeout
-> parameter to the default scp command:
-> 
-> config BR2_SCP
->        string "Secure copy (scp) command"
->        default "scp -o ConnectTimeout=10"
-> 
-> Since the package/pkg-download.mk file exports this command using the
-> SCP variable:
-> 
-> export SCP := $(call qstrip,$(BR2_SCP))
-> 
-> and the U-Boot Makefile uses this variable as the path for the scp
-> command (rather than the command itself):
-> 
-> cmd_binman = $(srctree)/tools/binman/binman $(if $(BINMAN_DEBUG),-D) \
-> 		$(foreach f,$(BINMAN_TOOLPATHS),--toolpath $(f)) \
->                 --toolpath $(objtree)/tools \
-> 		$(if $(BINMAN_VERBOSE),-v$(BINMAN_VERBOSE)) \
-> 		build -u -d $(binman_dtb) -O . -m \
-> 		--allow-missing --fake-ext-blobs \
-> 		$(if $(BINMAN_ALLOW_MISSING),--ignore-missing) \
-> 		-I . -I $(srctree) -I $(srctree)/board/$(BOARDDIR) \
-> 		$(foreach f,$(of_list_dirs),-I $(f)) -a of-list=$(of_list) \
-> 		$(foreach f,$(BINMAN_INDIRS),-I $(f)) \
-> 		-a atf-bl31-path=${BL31} \
-> 		-a tee-os-path=${TEE} \
-> 		-a ti-dm-path=${TI_DM} \
-> 		-a opensbi-path=${OPENSBI} \
-> 		-a default-dt=$(default_dt) \
-> 		-a scp-path=$(SCP) \
-> 
-> the following error occurs:
-> 
->   BINMAN  .binman_stamp
-> usage: binman [-h] [-B BUILD_DIR] [-D] [-H] [--tooldir TOOLDIR] 
-> [--toolpath TOOLPATH] [-T THREADS] [--test-section-timeout] [-v 
-> VERBOSITY] [-V]
->               
-> {build,bintool-docs,entry-docs,ls,extract,replace,sign,test,tool} ...
-> binman: error: unrecognized arguments: -o ConnectTimeout=10
-> make[2]: *** [Makefile:1126: .binman_stamp] Error 2
-> 
-> The patch fixes the SCP setting passed to U-Boot to ensure that its
-> parameters are not included.
-> 
-> Fixes: 4bce3270d680 ("Config.in: timeout earlier when connecting to 
-> download servers")
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
->  boot/uboot/uboot.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 2796b0a31010..6bbdc4151fac 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -176,7 +176,8 @@ UBOOT_MAKE_OPTS += \
->  	ARCH=$(UBOOT_ARCH) \
->  	HOSTCC="$(HOSTCC) $(subst -I/,-isystem /,$(subst -I /,-isystem 
-> /,$(HOST_CFLAGS)))" \
->  	HOSTLDFLAGS="$(HOST_LDFLAGS)" \
-> -	$(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS))
-> +	$(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS)) \
-> +	SCP=$(word 1, $(SCP))
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch runtime tested in:
+https://gitlab.com/jolivain/buildroot/-/jobs/9085579766
+---
+ package/fwts/fwts.hash | 4 ++--
+ package/fwts/fwts.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I don't think this is the right fix for this issue.
+diff --git a/package/fwts/fwts.hash b/package/fwts/fwts.hash
+index 0e913b3ae8..97b13b3db0 100644
+--- a/package/fwts/fwts.hash
++++ b/package/fwts/fwts.hash
+@@ -1,5 +1,5 @@
+ # Hash from: https://fwts.ubuntu.com/release/SHA256SUMS
+-sha256  09dde69c6cd8e33177c37e06a9763f7d78271ad40e92f266157b739cfac8d185  fwts-V24.11.00.tar.gz
++sha256  c8bbf62f4bd80f17bb768bab3863ee93e195b2047d10637a3d03fe2086291bd7  fwts-V25.01.00.tar.gz
+ 
+ # Hash for license file
+-sha256  3cd2c5d12f024ff2aa203e37d7e972c4d5ab7bf1a65e3e09aebccf71e64b525b  debian/copyright
++sha256  77a5f0ea48e53ee8d67aecc7759cf468bcd340c1caca711ed4307b477a93fb47  debian/copyright
+diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
+index fded1e696b..410ce063aa 100644
+--- a/package/fwts/fwts.mk
++++ b/package/fwts/fwts.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FWTS_VERSION = 24.11.00
++FWTS_VERSION = 25.01.00
+ FWTS_SOURCE = fwts-V$(FWTS_VERSION).tar.gz
+ FWTS_SITE = https://fwts.ubuntu.com/release
+ FWTS_STRIP_COMPONENTS = 0
+-- 
+2.48.1
 
-U-Boot Makefile is using the "SCP" variable here:
-https://source.denx.de/u-boot/u-boot/-/blob/v2025.01/Makefile#L1411
-
-According the the "binman" documentation:
-https://source.denx.de/u-boot/u-boot/-/blob/v2025.01/tools/binman/entries.rst#L1727
-
-This SCP is the "System Control Processor firmware blob".
-
-Buildroot exports a SCP variable here:
-https://gitlab.com/buildroot.org/buildroot/-/blob/2024.11.1/package/pkg-download.mk#L18
-
-The value is set here:
-https://gitlab.com/buildroot.org/buildroot/-/blob/2024.11.1/Config.in#L134
-
-BR2_SCP corresponds to the SSH Secure File Copy command:
-https://man.openbsd.org/scp
-
-which has nothing to do with the System Control Processor firmware
-binman is expecting. So this is an unfortunate name clash.
-
-There is few defconfigs using BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS to
-workaround this. See for example:
-https://gitlab.com/buildroot.org/buildroot/-/blob/2024.11.1/configs/orangepi_zero_plus2_defconfig#L45
-
-There is no defconfig in Buildroot setting an actual file for u-boot 
-SCP.
-
-Maybe we could introduce a new u-boot Kconfig option string such as:
-BR2_TARGET_UBOOT_SCP_FIRMWARE and properly set the u-boot SCP
-variable to this value (and set it to /dev/null if empty).
-
-What do you think?
-
->  # Disable FDPIC if enabled by default in toolchain
->  ifeq ($(BR2_BINFMT_FDPIC),y)
-> --
-> 2.43.0
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
