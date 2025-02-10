@@ -1,106 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C6E0C0219B
-	for <buildroot@archiver.kernel.org>; Sun,  9 Feb 2025 22:17:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D833C0219B
+	for <buildroot@archiver.kernel.org>; Mon, 10 Feb 2025 02:27:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF1EC60A61;
-	Sun,  9 Feb 2025 22:17:00 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TgqTmQ2HjRhI; Sun,  9 Feb 2025 22:16:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A72DE60A5B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A72DE60A5B;
-	Sun,  9 Feb 2025 22:16:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id DE2E56C
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 22:16:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C2B6081FFE
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 22:16:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5B5F811C5;
+	Mon, 10 Feb 2025 02:27:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sy7naUON_DjH for <buildroot@buildroot.org>;
- Sun,  9 Feb 2025 22:16:56 +0000 (UTC)
+ id WnEHw3WhKVhc; Mon, 10 Feb 2025 02:27:17 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F46181E17
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F46181E17;
+	Mon, 10 Feb 2025 02:27:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id ABEF2C2
+ for <buildroot@buildroot.org>; Mon, 10 Feb 2025 02:27:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9AC52410DF
+ for <buildroot@buildroot.org>; Mon, 10 Feb 2025 02:27:16 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zSc8ko1HqxOF for <buildroot@buildroot.org>;
+ Mon, 10 Feb 2025 02:27:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5CC3D81FF9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CC3D81FF9
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5CC3D81FF9
- for <buildroot@buildroot.org>; Sun,  9 Feb 2025 22:16:55 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-436326dcb1cso24717675e9.0
- for <buildroot@buildroot.org>; Sun, 09 Feb 2025 14:16:55 -0800 (PST)
+ client-ip=2607:f8b0:4864:20::b2d; helo=mail-yb1-xb2d.google.com;
+ envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 53314410DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53314410DE
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com
+ [IPv6:2607:f8b0:4864:20::b2d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 53314410DE
+ for <buildroot@buildroot.org>; Mon, 10 Feb 2025 02:27:15 +0000 (UTC)
+Received: by mail-yb1-xb2d.google.com with SMTP id
+ 3f1490d57ef6-e545c1e8a15so3322853276.1
+ for <buildroot@buildroot.org>; Sun, 09 Feb 2025 18:27:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1739139414; x=1739744214;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=PlI97utnqFL2VxVHG4ac9Uqcbz1DTAu2EQWoIyB/6G4=;
- b=m4NekdVTD7CSQGzC+LpHrl6WQ0sBNjfGz9/f941vOE8pYVoDW0dfNbpo4j2L7n7+Gx
- 7pvEDIaiYk3/SlAyQb3wxZtKNAk5c6kMpyNxfDsaCMYMwgHe9UPMqA9H98K6Al6Oxw9b
- QlActwVzQ9ij/N2uCtG8UguvgheSBBT14Wc8J7lk4u/csRNg5FBafzplvz9xSeQBKne+
- v/3+WLJ1YzL7VmoJ1VM+WzyeTC+m9PTTp47bROdWhvpe091Q7bLCJPmshwtclFHbDZ+F
- emtVtK+SVct5e06DFpOE1ZBPMlsD1QN8zJV3VLu7XLlgDNpcmjPLTgvHvFjtz/ddz5xs
- cqyw==
-X-Forwarded-Encrypted: i=1;
- AJvYcCXVffbem9sKOQDy2sg9mNJEYnI6rcF/Xad0QIJ+6bDMpGZ/z2alkSyWORNNsc5MJi5WjljgcIvijlU=@buildroot.org
-X-Gm-Message-State: AOJu0YxKrKyQ3Ktn3yJtbuI4gk0U8iA7VtoRX8u3IPhXO/z6+ZmSaHrL
- Y++pxO/9tul91Rs0peCmEF1uqfg7+tZhPZJgbKv/bP9c3E0xvbK9N2sAa6RdmRjfebhjFc8N9FQ
- W
-X-Gm-Gg: ASbGncvG0kBTuiRgMoKskmR9tEN1zuGcsT+UCnb1vcX0WMfJQyjMH0lKREwAeMdXPCi
- hBBSll4AnmeG1J9HrtNJK8NsiksmZFHKF89KTOzP4uFKAUsZrqOYU39WRDTk0y09ZKTjzYUAhs7
- l/IVUR3qi8ucSOrvTjKMMlsj5Q9Z+jlGGvTzyec+QyEw34jipy5yMZw7MmOfx9ctE6Q8cL8Rf/t
- BkcGYy2eQa9C9mp9oIAJprgye5XGMUMs/GOxNS+qlCS5X6E0S3XXbw4kgJlx/WhKB+biboE4L6L
- xI65KjbZB1PIu1ch9GyIQDEbwsRAgGs57fbcrUypG6cvC63e+GlisFc62/U/Wi7rtWV861ZXAfy
- lhKtKimmm8v/hnjGZlAv2oQGXwNN6cUPegv0szBWMzqGtN1sEf1M=
-X-Google-Smtp-Source: AGHT+IEffJWGk0rLyrwNkLNaj8Ej+FnQ1nRorpFNxYTVFm3Bw8ZO7D3jOyizvm1k2KHdQeWoK6nEYQ==
-X-Received: by 2002:a05:600c:500d:b0:439:3dc0:29b6 with SMTP id
- 5b1f17b1804b1-4393dc02be1mr24671665e9.2.1739139414031; 
- Sun, 09 Feb 2025 14:16:54 -0800 (PST)
-Received: from ?IPV6:2a01:cb05:949d:5800:e3ef:2d7a:4131:71f?
- (2a01cb05949d5800e3ef2d7a4131071f.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:e3ef:2d7a:4131:71f])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-38dc88989b5sm8363090f8f.65.2025.02.09.14.16.53
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 09 Feb 2025 14:16:53 -0800 (PST)
-Message-ID: <0be3003c-7320-438d-9ee8-13b33d605c95@smile.fr>
-Date: Sun, 9 Feb 2025 23:16:53 +0100
+ d=1e100.net; s=20230601; t=1739154434; x=1739759234;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=EOXcK8eJB1mMFDSxSYMTDPH+pukbaOHlrEZysXn2huc=;
+ b=o4/Rt7HwGxdnQw/FAvxNWJMm2dezrdmLn+4esHPJNVZWsY0DdMYAMiZyYC9+7fkukN
+ qgiUts5UQrT06LZyyDN1baadmc47m28jneTKqgV2PA+osrrOaGgsh2Mp0bY/GCWTSg8H
+ F3kZAYuVDwZupzuULowXBC0t3AN68PPKma7/v7Fn5wOOAHAi1uvT1usk51tUTVviI0OE
+ +JENIpGtWjrlrZIjH0u38RYXB+PxSBLRmx+uSkqjGBxGP8xQgGNbnKnJ21CjgN/bwhWD
+ hGydgzij2LdoSxSjsXMTbyfMIla7jn5hEeLCpSWrcFKGMhj3u/YkMVBI9IN6lrq1yOPt
+ 4uEw==
+X-Gm-Message-State: AOJu0YxEu5je+UAlKrv6oEVvjlZn+v6rIzu9SVASsWfTUy3a5I1q5Dgp
+ IAf77hiJp9jv6wLFqPOb1N+u0Ox/lown5p+cM3U8omfrX0HkUfkyk+lLXQ==
+X-Gm-Gg: ASbGncu0Vdfox6X2VHY+Y4rtXigPNDPFMxtCYv0+1QTav6cQB/PzmeW13y5vxRU/MHl
+ 1hoOvRdlxwJC425CwM56PguJnAJVM6Ln71gjOP1bphCxADMvZxyG/b7lor+hjz8KOhDBnFdPSmt
+ WIUYonEMUCWtaOSscidpCU+FOsK3nH1Tw1lnAe0tTrxBpsEJIaecgFOU4bPU4mLmNsG3cPMLMSl
+ nABvnjbrqmnLSCwXa+P1uZyMYSju3HbkXD/CDxPExufrJ27DAVN+HhrD1PecsHrRy1nkPrC4kBg
+ Et4L7NMzBJyG
+X-Google-Smtp-Source: AGHT+IEElFh6ShS6XjHK6N+gMHAsw7v+5TDk0jO8LYrrTBJQps/OvWGzp4fTD27nEsRWKMhOA6Yb6w==
+X-Received: by 2002:a05:6902:2513:b0:e5b:453f:390b with SMTP id
+ 3f1490d57ef6-e5b461c3443mr9849367276.21.1739154433741; 
+ Sun, 09 Feb 2025 18:27:13 -0800 (PST)
+Received: from localhost ([66.112.214.180]) by smtp.gmail.com with ESMTPSA id
+ 3f1490d57ef6-e5b3a1f0294sm2234407276.1.2025.02.09.18.27.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 09 Feb 2025 18:27:12 -0800 (PST)
+From: Scott Fan <fancp2007@gmail.com>
+To: buildroot@buildroot.org
+Cc: Scott Fan <fancp2007@gmail.com>,
+	Bernd Kuhls <bernd@kuhls.net>
+Date: Mon, 10 Feb 2025 10:26:38 +0800
+Message-ID: <20250210022648.1634973-1-fancp2007@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-References: <20241128235949.2204076-1-ju.o@free.fr>
-Content-Language: fr
-In-Reply-To: <20241128235949.2204076-1-ju.o@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1739139414; x=1739744214; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=PlI97utnqFL2VxVHG4ac9Uqcbz1DTAu2EQWoIyB/6G4=;
- b=WOiR4M0oRyl6eAqOksm3RScYVUhl5QGsSAgiV88BM3qKS5bkIoHurXXOB8dOvnycx/
- U3N0BGeNHarmCbAjkWnPz2eUBdN6Fitfb/yqblQ+sKEM/WoqvlA/maRSWR6Uf4k34bfp
- 4RWeT7PSETYA50wSF4tRLsg1IS1SjqG8Is0Cc=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=WOiR4M0o
-Subject: Re: [Buildroot] [PATCH next 1/1] package/fwts: bump to version
- 24.11.00
+ d=gmail.com; s=20230601; t=1739154434; x=1739759234; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=EOXcK8eJB1mMFDSxSYMTDPH+pukbaOHlrEZysXn2huc=;
+ b=BmZTSv8j8qsM8DW+R3kT8e/XPNw1ITVqmD8ibBksRGl8IQMhDX+vaZTokxw9J5DZ1+
+ JKvmLN4QqlYiMay48VQYdtsxaaMdco0R2ThAddb8I1YCN/71M57+HzKD71TZ3R3EFIm/
+ LXSrHemNbq+P3+YBdRGciLR4a8RPEHIoyvmGgLFxFKIEimVgxAQKkVKlse0gFAw3BJKx
+ a6saqWDfc2I1VU+ZgeRmp4L/VVXLjcxjBR4DDr59vxRYju5S1l04FpGlFwmMWxpBVie/
+ WFPy7WCX+Qy2JlkAWMdPpR+VLJ/q0lw78HCqt59gpFjQULhTyX2MasBENL61PvglMraf
+ Jq3g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=BmZTSv8j
+Subject: [Buildroot] [PATCH] package/sqlite: bump version to 3.49.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,39 +106,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSnVsaWVuLAoKTGUgMjkvMTEvMjAyNCDDoCAwMDo1OSwgSnVsaWVuIE9saXZhaW4gYSDD
-qWNyaXTCoDoKPiBTZWUgcmVsZWFzZSBhbm5vdW5jZToKPiBodHRwczovL2xpc3RzLnVidW50dS5j
-b20vYXJjaGl2ZXMvZnd0cy1kZXZlbC8yMDI0LU5vdmVtYmVyLzAxMzkzNC5odG1sCj4gCj4gU2ln
-bmVkLW9mZi1ieTogSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4KPiAtLS0KPiBQYXRjaCB0
-ZXN0ZWQgaW46Cj4gaHR0cHM6Ly9naXRsYWIuY29tL2pvbGl2YWluL2J1aWxkcm9vdC8tL2pvYnMv
-ODQ5OTMyMTQxMwoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KCkJlc3QgcmVnYXJkcywKUm9t
-YWluCgoKPiAtLS0KPiAgcGFja2FnZS9md3RzL2Z3dHMuaGFzaCB8IDIgKy0KPiAgcGFja2FnZS9m
-d3RzL2Z3dHMubWsgICB8IDIgKy0KPiAgMiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyks
-IDIgZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvZnd0cy9md3RzLmhhc2gg
-Yi9wYWNrYWdlL2Z3dHMvZnd0cy5oYXNoCj4gaW5kZXggNmM5ZjlkYzc2Yi4uMGU5MTNiM2FlOCAx
-MDA2NDQKPiAtLS0gYS9wYWNrYWdlL2Z3dHMvZnd0cy5oYXNoCj4gKysrIGIvcGFja2FnZS9md3Rz
-L2Z3dHMuaGFzaAo+IEBAIC0xLDUgKzEsNSBAQAo+ICAjIEhhc2ggZnJvbTogaHR0cHM6Ly9md3Rz
-LnVidW50dS5jb20vcmVsZWFzZS9TSEEyNTZTVU1TCj4gLXNoYTI1NiAgNGYzNTJkZWRkNjMwMjE3
-YTM1NTFiYjRmNmU4ZDYxZjg1MTRiZTQ1N2QzN2I5MGM5MzZjM2I2Y2ZiNmE2ZmE3ZSAgZnd0cy1W
-MjQuMDkuMDAudGFyLmd6Cj4gK3NoYTI1NiAgMDlkZGU2OWM2Y2Q4ZTMzMTc3YzM3ZTA2YTk3NjNm
-N2Q3ODI3MWFkNDBlOTJmMjY2MTU3YjczOWNmYWM4ZDE4NSAgZnd0cy1WMjQuMTEuMDAudGFyLmd6
-Cj4gIAo+ICAjIEhhc2ggZm9yIGxpY2Vuc2UgZmlsZQo+ICBzaGEyNTYgIDNjZDJjNWQxMmYwMjRm
-ZjJhYTIwM2UzN2Q3ZTk3MmM0ZDVhYjdiZjFhNjVlM2UwOWFlYmNjZjcxZTY0YjUyNWIgIGRlYmlh
-bi9jb3B5cmlnaHQKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9md3RzL2Z3dHMubWsgYi9wYWNrYWdl
-L2Z3dHMvZnd0cy5tawo+IGluZGV4IDkxYjVlNjEzZGMuLmZkZWQxZTY5NmIgMTAwNjQ0Cj4gLS0t
-IGEvcGFja2FnZS9md3RzL2Z3dHMubWsKPiArKysgYi9wYWNrYWdlL2Z3dHMvZnd0cy5tawo+IEBA
-IC00LDcgKzQsNyBAQAo+ICAjCj4gICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gIAo+IC1GV1RT
-X1ZFUlNJT04gPSAyNC4wOS4wMAo+ICtGV1RTX1ZFUlNJT04gPSAyNC4xMS4wMAo+ICBGV1RTX1NP
-VVJDRSA9IGZ3dHMtViQoRldUU19WRVJTSU9OKS50YXIuZ3oKPiAgRldUU19TSVRFID0gaHR0cHM6
-Ly9md3RzLnVidW50dS5jb20vcmVsZWFzZQo+ICBGV1RTX1NUUklQX0NPTVBPTkVOVFMgPSAwCgpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Release notes: https://www.sqlite.org/releaselog/3_49_0.html
+
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+---
+ package/sqlite/sqlite.hash | 2 +-
+ package/sqlite/sqlite.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 5b933fba8f..ddec2637b8 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ac992f7fca3989de7ed1fe99c16363f848794c8c32a158dafd4eb927a2e02fd5  sqlite-autoconf-3480000.tar.gz
++sha256  4d8bfa0b55e36951f6e5a9fb8c99f3b58990ab785c57b4f84f37d163a0672759  sqlite-autoconf-3490000.tar.gz
+ sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index c8f12a427a..a23f6e1d66 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3.48.0
+-SQLITE_TAR_VERSION = 3480000
++SQLITE_VERSION = 3.49.0
++SQLITE_TAR_VERSION = 3490000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2025
+ SQLITE_LICENSE = blessing
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
