@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5915C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:18:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFCF4C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:18:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A863585D5F;
-	Fri, 28 Feb 2025 17:18:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4DAB46FBE5;
+	Fri, 28 Feb 2025 17:18:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zDQKD3mxtQ7C; Fri, 28 Feb 2025 17:18:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Vzqowakftg70; Fri, 28 Feb 2025 17:18:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71B8385D5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11232709A0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 71B8385D5E;
-	Fri, 28 Feb 2025 17:18:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11232709A0;
+	Fri, 28 Feb 2025 17:18:15 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 132BB1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:27 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EE6E68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D0E6842560
+ by smtp4.osuosl.org (Postfix) with ESMTP id ED2B944885
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ow4MV_MFJ4q8 for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:55 +0000 (UTC)
+ id 9V4kyS72utUJ for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 125B3455DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3724442D3B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 125B3455DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3724442D3B
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0F3DC80500; Fri, 28 Feb 2025 16:30:40 +0000 (UTC)
+ id 2EEB2826DB; Fri, 28 Feb 2025 16:30:39 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Feb 2025 09:31:48 +0100
+Date: Tue, 11 Feb 2025 18:13:00 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f6770cc13e2a1fe01b4244e3a0a67b281dc510f9
-X-Git-Newrev: 9189b8afb80571e7efcdd53607443a88a8297f82
+X-Git-Oldrev: 915ee667ae7d448b6a5d3145b43404d7ce5faecf
+X-Git-Newrev: db85638cea3414ca0293cbbb2352e5b0b63a2579
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163040.0F3DC80500@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/postgresql: security
- bump version to 17.3
+Message-Id: <20250228163039.2EEB2826DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sqlite: bump version
+ to 3.49.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,52 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9189b8afb80571e7efcdd53607443a88a8297f82
+commit: https://git.buildroot.net/buildroot/commit/?id=db85638cea3414ca0293cbbb2352e5b0b63a2579
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://www.postgresql.org/docs/release/17.3/
-https://www.postgresql.org/about/news/postgresql-173-167-1511-1416-and-1319-released-3015/
+Release notes: https://www.sqlite.org/releaselog/3_49_0.html
 
-Fixes CVE-2025-1094:
-https://www.postgresql.org/support/security/CVE-2025-1094/
-
-Updated license hash due to copyright year bump:
-https://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=759620716adb347c1d8c8b2e6f7d88b947a54c98
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 6 +++---
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/sqlite/sqlite.hash | 2 +-
+ package/sqlite/sqlite.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 98246ca9b6..e582510832 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.postgresql.org/pub/source/v17.2/postgresql-17.2.tar.bz2.sha256
--sha256  82ef27c0af3751695d7f64e2d963583005fbb6a0c3df63d0e4b42211d7021164  postgresql-17.2.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v17.3/postgresql-17.3.tar.bz2.sha256
-+sha256  13c18b35bf67a97bd639925fc581db7fd2aae4d3548eac39fcdb8da74ace2bea  postgresql-17.3.tar.bz2
- # License file, Locally calculated
--sha256  9bf20ee493926a7e17a74bc7f05089fbc014269667b1540bc35a6b194a40c9de  COPYRIGHT
-+sha256  e3822c4797fadcab31a3fc73f75c28ac20c73d72b565da91e9974cf9398ef4d2  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 8e0ed45c22..a9ca9f4ee1 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 5b933fba8f..ddec2637b8 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ac992f7fca3989de7ed1fe99c16363f848794c8c32a158dafd4eb927a2e02fd5  sqlite-autoconf-3480000.tar.gz
++sha256  4d8bfa0b55e36951f6e5a9fb8c99f3b58990ab785c57b4f84f37d163a0672759  sqlite-autoconf-3490000.tar.gz
+ sha256  66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index c8f12a427a..a23f6e1d66 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--POSTGRESQL_VERSION = 17.2
-+POSTGRESQL_VERSION = 17.3
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+-SQLITE_VERSION = 3.48.0
+-SQLITE_TAR_VERSION = 3480000
++SQLITE_VERSION = 3.49.0
++SQLITE_TAR_VERSION = 3490000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_TAR_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2025
+ SQLITE_LICENSE = blessing
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
