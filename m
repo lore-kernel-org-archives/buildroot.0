@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 739FAC0219E
-	for <buildroot@archiver.kernel.org>; Tue, 11 Feb 2025 17:01:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6D0AC021A1
+	for <buildroot@archiver.kernel.org>; Tue, 11 Feb 2025 17:01:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19F9160F7C;
-	Tue, 11 Feb 2025 17:01:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 59D1B829B1;
+	Tue, 11 Feb 2025 17:01:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mz4rHIKdvrfK; Tue, 11 Feb 2025 17:01:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rIXfpAket9Se; Tue, 11 Feb 2025 17:01:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C72A060F75
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E8AE82542
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C72A060F75;
-	Tue, 11 Feb 2025 17:01:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E8AE82542;
+	Tue, 11 Feb 2025 17:01:55 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E3E3194
- for <buildroot@buildroot.org>; Tue, 11 Feb 2025 17:01:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 166616C
+ for <buildroot@buildroot.org>; Tue, 11 Feb 2025 17:01:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 267B240FF5
+ by smtp2.osuosl.org (Postfix) with ESMTP id F33634116B
  for <buildroot@buildroot.org>; Tue, 11 Feb 2025 17:01:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h7a9npKjhfhL for <buildroot@buildroot.org>;
- Tue, 11 Feb 2025 17:01:32 +0000 (UTC)
+ id 286zka4M-AGn for <buildroot@buildroot.org>;
+ Tue, 11 Feb 2025 17:01:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6674241198
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 57C5D411AF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6674241198
- for <buildroot@buildroot.org>; Tue, 11 Feb 2025 17:01:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 57C5D411AF
+ for <buildroot@buildroot.org>; Tue, 11 Feb 2025 17:01:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 53C098752E; Tue, 11 Feb 2025 17:01:32 +0000 (UTC)
+ id 338258752D; Tue, 11 Feb 2025 17:01:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 11 Feb 2025 17:59:39 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: a102446634d94bab4b6f1f59be818f4c4454415b
-X-Git-Newrev: 6330d1e3aea824db945c6c9d821a293efaf9e2aa
+Date: Tue, 11 Feb 2025 17:56:22 +0100
+X-Git-Refname: refs/heads/2024.11.x
+X-Git-Oldrev: be7d47d223dbb11c1cd7dc2faa3722d0b94c86b0
+X-Git-Newrev: 7fa6645187bfd93fb585f088837c9b5552a4081a
 X-Patchwork-Hint: ignore
-Message-Id: <20250211170132.53C098752E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libcurl: add
- upstream patch to fix Kodi segfault
+Message-Id: <20250211170133.338258752D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/ffmpeg: fix
+ armv5te build with binutils 2.43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,179 +60,109 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2764075803275947764=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6330d1e3aea824db945c6c9d821a293efaf9e2aa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+--===============2764075803275947764==
+Content-Type: text/plain
 
-The error was introduced by the libcurl bump to 8.12.0 with buildroot
-commit 2da031c2e54cb19efae41fb666064551cfccb59e.
+commit: https://git.buildroot.net/buildroot/commit/?id=7fa6645187bfd93fb585f088837c9b5552a4081a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
+
+The build error occurs since binutils 2.43 was added to buildroot with
+commit 800a033f7818a7799d4997aba28b9f8f5999871b
+
+Fixes:
+https://autobuild.buildroot.org/results/b5a/b5a782db574dfab7ae61e25291c05b1537c44c91/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit e85cd58fc5af453335645b85b73e387284fc10e2)
+(cherry picked from commit 670c9786512655f62ca50833917a8616a1bd5829)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0001-vtsl-eliminate-data-state-ssl_scache.patch | 147 +++++++++++++++++++++
- 1 file changed, 147 insertions(+)
+ ...arm-mlpdsp_armv5te-fix-label-format-to-wo.patch | 63 ++++++++++++++++++++++
+ 1 file changed, 63 insertions(+)
 
-diff --git a/package/libcurl/0001-vtsl-eliminate-data-state-ssl_scache.patch b/package/libcurl/0001-vtsl-eliminate-data-state-ssl_scache.patch
+diff --git a/package/ffmpeg/0008-libavcodec-arm-mlpdsp_armv5te-fix-label-format-to-wo.patch b/package/ffmpeg/0008-libavcodec-arm-mlpdsp_armv5te-fix-label-format-to-wo.patch
 new file mode 100644
-index 0000000000..775aaa667f
+index 0000000000..178ffbc33b
 --- /dev/null
-+++ b/package/libcurl/0001-vtsl-eliminate-data-state-ssl_scache.patch
-@@ -0,0 +1,147 @@
-+https://github.com/curl/curl/issues/16236#issuecomment-2645385845
-+https://github.com/curl/curl/commit/242a1439e7d8cdb72ae6a2fa2e705e2d9a2b7501
++++ b/package/ffmpeg/0008-libavcodec-arm-mlpdsp_armv5te-fix-label-format-to-wo.patch
+@@ -0,0 +1,63 @@
++From 4c688845a50f7dce3af9afebe60f0f7a493c4f07 Mon Sep 17 00:00:00 2001
++From: Ross Burton <ross.burton@arm.com>
++Date: Fri, 9 Aug 2024 11:32:00 +0100
++Subject: [PATCH] libavcodec/arm/mlpdsp_armv5te: fix label format to work with
++ binutils 2.43
++MIME-Version: 1.0
++Content-Type: text/plain; charset=utf8
++Content-Transfer-Encoding: 8bit
 +
-+Fixes curl bug https://github.com/curl/curl/issues/16236 "that caused
-+a segfault in kodi".
++binutils 2.43 has stricter validation for labels[1] and results in errors
++when building ffmpeg for armv5:
 +
-+Instead of adding upstream commit
-+https://github.com/curl/curl/commit/242a1439e7d8cdb72ae6a2fa2e705e2d9a2b7501
-+which does not apply cleanly on libcurl 8.12.0 we use the Gentoo version:
-+https://github.com/gentoo/gentoo/blob/master/net-misc/curl/files/curl-8.12.0-multi.patch
++src/libavcodec/arm/mlpdsp_armv5te.S:232: Error: junk at end of line, first unrecognized character is `0'
 +
-+Upstream: https://github.com/curl/curl/commit/242a1439e7d8cdb72ae6a2fa2e705e2d9a2b7501
++Remove the leading zero in the "01" label to resolve this error.
++
++[1] https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=226749d5a6ff0d5c607d6428d6c81e1e7e7a994b
++
++Signed-off-by: Ross Burton <ross.burton@arm.com>
++Signed-off-by: Martin StorsjÃ¶ <martin@martin.st>
++(cherry picked from commit 654bd47716c4f36719fb0f3f7fd8386d5ed0b916)
++
++Upstream: http://git.videolan.org/?p=ffmpeg.git;a=commit;h=4c688845a50f7dce3af9afebe60f0f7a493c4f07
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ libavcodec/arm/mlpdsp_armv5te.S | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
 +
-+--- a/lib/setopt.c
-++++ b/lib/setopt.c
-+@@ -1584,10 +1584,6 @@ static CURLcode setopt_pointers(struct Curl_easy *data, CURLoption option,
-+       if(data->share->hsts == data->hsts)
-+         data->hsts = NULL;
-+ #endif
-+-#ifdef USE_SSL
-+-      if(data->share->ssl_scache == data->state.ssl_scache)
-+-        data->state.ssl_scache = data->multi ? data->multi->ssl_scache : NULL;
-+-#endif
-+ #ifdef USE_LIBPSL
-+       if(data->psl == &data->share->psl)
-+         data->psl = data->multi ? &data->multi->psl : NULL;
-+@@ -1628,10 +1624,6 @@ static CURLcode setopt_pointers(struct Curl_easy *data, CURLoption option,
-+         data->hsts = data->share->hsts;
-+       }
-+ #endif
-+-#ifdef USE_SSL
-+-      if(data->share->ssl_scache)
-+-        data->state.ssl_scache = data->share->ssl_scache;
-+-#endif
-+ #ifdef USE_LIBPSL
-+       if(data->share->specifier & (1 << CURL_LOCK_DATA_PSL))
-+         data->psl = &data->share->psl;
-+--- a/lib/transfer.c
-++++ b/lib/transfer.c
-+@@ -567,12 +567,6 @@ CURLcode Curl_pretransfer(struct Curl_easy *data)
-+ #endif
-+   data->state.httpreq = data->set.method;
++diff --git a/libavcodec/arm/mlpdsp_armv5te.S b/libavcodec/arm/mlpdsp_armv5te.S
++index 4f9aa485fd..d31568611c 100644
++--- a/libavcodec/arm/mlpdsp_armv5te.S
+++++ b/libavcodec/arm/mlpdsp_armv5te.S
++@@ -229,7 +229,7 @@ A .endif
++   .endif
 + 
-+-#ifdef USE_SSL
-+-  if(!data->state.ssl_scache)
-+-    /* There was no ssl session cache set via a share, use the multi one */
-+-    data->state.ssl_scache = data->multi->ssl_scache;
-+-#endif
-+-
-+   data->state.requests = 0;
-+   data->state.followlocation = 0; /* reset the location-follow counter */
-+   data->state.this_is_a_follow = FALSE; /* reset this */
-+--- a/lib/urldata.h
-++++ b/lib/urldata.h
-+@@ -1199,7 +1199,6 @@ struct UrlState {
-+   curl_prot_t first_remote_protocol;
++         // Begin loop
++-01:
+++1:
++   .if TOTAL_TAPS == 0
++         // Things simplify a lot in this case
++         // In fact this could be pipelined further if it's worth it...
++@@ -241,7 +241,7 @@ A .endif
++         str     ST0, [PST, #-4]!
++         str     ST0, [PST, #4 * (MAX_BLOCKSIZE + MAX_FIR_ORDER)]
++         str     ST0, [PSAMP], #4 * MAX_CHANNELS
++-        bne     01b
+++        bne     1b
++   .else
++     .if \fir_taps & 1
++       .set LOAD_REG, 1
++@@ -333,7 +333,7 @@ T       orr     AC0, AC0, AC1
++         str     ST3, [PST, #-4]!
++         str     ST2, [PST, #4 * (MAX_BLOCKSIZE + MAX_FIR_ORDER)]
++         str     ST3, [PSAMP], #4 * MAX_CHANNELS
++-        bne     01b
+++        bne     1b
++   .endif
++         b       99f
 + 
-+   int retrycount; /* number of retries on a new connection */
-+-  struct Curl_ssl_scache *ssl_scache; /* TLS session pool */
-+   int os_errno;  /* filled in with errno whenever an error occurs */
-+   long followlocation; /* redirect counter */
-+   int requests; /* request counter: redirects + authentication retakes */
-+--- a/lib/vtls/vtls_scache.c
-++++ b/lib/vtls/vtls_scache.c
-+@@ -82,6 +82,17 @@ struct Curl_ssl_scache {
-+   long age;
-+ };
-+ 
-++static struct Curl_ssl_scache *cf_ssl_scache_get(struct Curl_easy *data)
-++{
-++  struct Curl_ssl_scache *scache = NULL;
-++  /* If a share is present, its ssl_scache has preference over the multi */
-++  if(data->share && data->share->ssl_scache)
-++    scache = data->share->ssl_scache;
-++  else if(data->multi && data->multi->ssl_scache)
-++    scache = data->multi->ssl_scache;
-++  return scache;
-++}
-++
-+ static void cf_ssl_scache_clear_session(struct Curl_ssl_session *s)
-+ {
-+   if(s->sdata) {
-+@@ -792,7 +803,7 @@ CURLcode Curl_ssl_scache_put(struct Curl_cfilter *cf,
-+                              const char *ssl_peer_key,
-+                              struct Curl_ssl_session *s)
-+ {
-+-  struct Curl_ssl_scache *scache = data->state.ssl_scache;
-++  struct Curl_ssl_scache *scache = cf_ssl_scache_get(data);
-+   struct ssl_config_data *ssl_config = Curl_ssl_cf_get_config(cf, data);
-+   CURLcode result;
-+   DEBUGASSERT(ssl_config);
-+@@ -826,7 +837,7 @@ CURLcode Curl_ssl_scache_take(struct Curl_cfilter *cf,
-+                               const char *ssl_peer_key,
-+                               struct Curl_ssl_session **ps)
-+ {
-+-  struct Curl_ssl_scache *scache = data->state.ssl_scache;
-++  struct Curl_ssl_scache *scache = cf_ssl_scache_get(data);
-+   struct ssl_primary_config *conn_config = Curl_ssl_cf_get_primary_config(cf);
-+   struct Curl_ssl_scache_peer *peer = NULL;
-+   struct Curl_llist_node *n;
-+@@ -870,7 +881,7 @@ CURLcode Curl_ssl_scache_add_obj(struct Curl_cfilter *cf,
-+                                  void *sobj,
-+                                  Curl_ssl_scache_obj_dtor *sobj_free)
-+ {
-+-  struct Curl_ssl_scache *scache = data->state.ssl_scache;
-++  struct Curl_ssl_scache *scache = cf_ssl_scache_get(data);
-+   struct ssl_primary_config *conn_config = Curl_ssl_cf_get_primary_config(cf);
-+   struct Curl_ssl_scache_peer *peer = NULL;
-+   CURLcode result;
-+@@ -898,7 +909,7 @@ bool Curl_ssl_scache_get_obj(struct Curl_cfilter *cf,
-+                              const char *ssl_peer_key,
-+                              void **sobj)
-+ {
-+-  struct Curl_ssl_scache *scache = data->state.ssl_scache;
-++  struct Curl_ssl_scache *scache = cf_ssl_scache_get(data);
-+   struct ssl_primary_config *conn_config = Curl_ssl_cf_get_primary_config(cf);
-+   struct Curl_ssl_scache_peer *peer = NULL;
-+   CURLcode result;
-+@@ -924,7 +935,7 @@ void Curl_ssl_scache_remove_all(struct Curl_cfilter *cf,
-+                                 struct Curl_easy *data,
-+                                 const char *ssl_peer_key)
-+ {
-+-  struct Curl_ssl_scache *scache = data->state.ssl_scache;
-++  struct Curl_ssl_scache *scache = cf_ssl_scache_get(data);
-+   struct ssl_primary_config *conn_config = Curl_ssl_cf_get_primary_config(cf);
-+   struct Curl_ssl_scache_peer *peer = NULL;
-+   CURLcode result;
-+@@ -1021,7 +1032,7 @@ CURLcode Curl_ssl_session_import(struct Curl_easy *data,
-+                                  const unsigned char *shmac, size_t shmac_len,
-+                                  const unsigned char *sdata, size_t sdata_len)
-+ {
-+-  struct Curl_ssl_scache *scache = data->state.ssl_scache;
-++  struct Curl_ssl_scache *scache = cf_ssl_scache_get(data);
-+   struct Curl_ssl_scache_peer *peer = NULL;
-+   struct Curl_ssl_session *s = NULL;
-+   bool locked = FALSE;
-+@@ -1092,7 +1103,7 @@ CURLcode Curl_ssl_session_export(struct Curl_easy *data,
-+                                  curl_ssls_export_cb *export_fn,
-+                                  void *userptr)
-+ {
-+-  struct Curl_ssl_scache *scache = data->state.ssl_scache;
-++  struct Curl_ssl_scache *scache = cf_ssl_scache_get(data);
-+   struct Curl_ssl_scache_peer *peer;
-+   struct dynbuf sbuf, hbuf;
-+   struct Curl_llist_node *n;
++-- 
++2.30.2
++
+
+--===============2764075803275947764==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2764075803275947764==--
