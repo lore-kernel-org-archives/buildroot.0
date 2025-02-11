@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C670CC0219E
-	for <buildroot@archiver.kernel.org>; Tue, 11 Feb 2025 17:01:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 739FAC0219E
+	for <buildroot@archiver.kernel.org>; Tue, 11 Feb 2025 17:01:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8EDDD829B6;
-	Tue, 11 Feb 2025 17:01:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19F9160F7C;
+	Tue, 11 Feb 2025 17:01:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IoFPXnaccA3I; Tue, 11 Feb 2025 17:01:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mz4rHIKdvrfK; Tue, 11 Feb 2025 17:01:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41BD7827B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C72A060F75
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 41BD7827B5;
-	Tue, 11 Feb 2025 17:01:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C72A060F75;
+	Tue, 11 Feb 2025 17:01:52 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2CD8B194
- for <buildroot@buildroot.org>; Tue, 11 Feb 2025 17:01:35 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E3E3194
+ for <buildroot@buildroot.org>; Tue, 11 Feb 2025 17:01:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D2D5B4116B
- for <buildroot@buildroot.org>; Tue, 11 Feb 2025 17:01:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 267B240FF5
+ for <buildroot@buildroot.org>; Tue, 11 Feb 2025 17:01:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YX07ACRQFQqD for <buildroot@buildroot.org>;
- Tue, 11 Feb 2025 17:01:33 +0000 (UTC)
+ id h7a9npKjhfhL for <buildroot@buildroot.org>;
+ Tue, 11 Feb 2025 17:01:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 547214119F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6674241198
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 547214119F
- for <buildroot@buildroot.org>; Tue, 11 Feb 2025 17:01:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6674241198
+ for <buildroot@buildroot.org>; Tue, 11 Feb 2025 17:01:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4C10B8752C; Tue, 11 Feb 2025 17:01:33 +0000 (UTC)
+ id 53C098752E; Tue, 11 Feb 2025 17:01:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 11 Feb 2025 17:59:44 +0100
-X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: f2e006cc48e5f9b7d244e35ba08125e0f87bc198
-X-Git-Newrev: 025be41ed3dc3ac79c419577bdd1f74a967fa6bb
+Date: Tue, 11 Feb 2025 17:59:39 +0100
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: a102446634d94bab4b6f1f59be818f4c4454415b
+X-Git-Newrev: 6330d1e3aea824db945c6c9d821a293efaf9e2aa
 X-Patchwork-Hint: ignore
-Message-Id: <20250211170133.4C10B8752C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/libcurl: add
+Message-Id: <20250211170132.53C098752E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libcurl: add
  upstream patch to fix Kodi segfault
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=025be41ed3dc3ac79c419577bdd1f74a967fa6bb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6330d1e3aea824db945c6c9d821a293efaf9e2aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 The error was introduced by the libcurl bump to 8.12.0 with buildroot
 commit 2da031c2e54cb19efae41fb666064551cfccb59e.
