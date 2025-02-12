@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44F8EC02198
-	for <buildroot@archiver.kernel.org>; Wed, 12 Feb 2025 21:23:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C647C02198
+	for <buildroot@archiver.kernel.org>; Wed, 12 Feb 2025 21:24:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D704E417DA;
-	Wed, 12 Feb 2025 21:23:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C033F417E3;
+	Wed, 12 Feb 2025 21:24:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hNN5Wv-eSuN1; Wed, 12 Feb 2025 21:23:29 +0000 (UTC)
+ id amaeeDQaZrei; Wed, 12 Feb 2025 21:24:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EDB0424D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81FBE417EA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9EDB0424D9;
-	Wed, 12 Feb 2025 21:23:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D872F1C9
- for <buildroot@buildroot.org>; Wed, 12 Feb 2025 21:23:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 81FBE417EA;
+	Wed, 12 Feb 2025 21:24:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DDED31C9
+ for <buildroot@buildroot.org>; Wed, 12 Feb 2025 21:24:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C7AF1846E6;
- Wed, 12 Feb 2025 21:23:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF7FC403F5
+ for <buildroot@buildroot.org>; Wed, 12 Feb 2025 21:24:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X-3pfu9khsNv; Wed, 12 Feb 2025 21:23:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.214.170;
- helo=mail-pl1-f170.google.com; envelope-from=kidovate@gmail.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E3D18846D8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3D18846D8
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com
- [209.85.214.170])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E3D18846D8
- for <buildroot@buildroot.org>; Wed, 12 Feb 2025 21:23:26 +0000 (UTC)
-Received: by mail-pl1-f170.google.com with SMTP id
- d9443c01a7336-220c92c857aso2916675ad.0
- for <buildroot@buildroot.org>; Wed, 12 Feb 2025 13:23:26 -0800 (PST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qRZ7C_GdFjB8 for <buildroot@buildroot.org>;
+ Wed, 12 Feb 2025 21:24:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::62a; helo=mail-pl1-x62a.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8DAC3403CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DAC3403CA
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com
+ [IPv6:2607:f8b0:4864:20::62a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8DAC3403CA
+ for <buildroot@buildroot.org>; Wed, 12 Feb 2025 21:24:47 +0000 (UTC)
+Received: by mail-pl1-x62a.google.com with SMTP id
+ d9443c01a7336-220ca204d04so1929185ad.0
+ for <buildroot@buildroot.org>; Wed, 12 Feb 2025 13:24:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1739395406; x=1740000206;
+ d=1e100.net; s=20230601; t=1739395487; x=1740000287;
  h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
  :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
  bh=qzimFIFNZhkFcHcMNH5hlVwYbzPSi9oOqmi7feMVQuw=;
- b=ofTbBIA7A4fgg4wXTitqzBJRucpmAzR5dR4qvWTDtCtI9bGnW4O2tADuFRe7QjbR/b
- UjL9WyrcTvlZAoxLAVjAaIWxghvmmb5UN7oMPcQXjO6Gpcz0BfDFpkOKrXP4El8LlbTx
- lJ1KheVn7+fxGKirrTYKcC9d3nFWT5Gohe6K0s2ATbG6vBYuy2p7fHRzZK6RGEQlhhgT
- 97JYqc8tLu1EbSctWEsZojzNGSYDVWRQT54m7YeogIiv9ixziq6bboCVUEtJAGvN0z/o
- 7a2qWRGoSPve8qThZ9+15Kidxzxx6jqi4S8JTvigA+PjMqEQYQ++xGXXGnoeysp0Kuit
- upXQ==
+ b=qm6ovGoGq3wgVt0Jc/s57/xMuyBmvn/6NJHtv2tEBm7gYZF8Q9LJWiNkqE3UvLMiK+
+ Qr9IOpx0L83Vr1IPTc5jJn5LB9xw6o8qSPNB6YpRgbx/UxtDSMIJpSQp0ghjMJubT1QG
+ wKsaR4yuVi9OhaQPcCA9mXpb9HbeFTrWkFGGe4mpRErpfpgihXb9B8TUYb+TO7S44GmM
+ 7XvCAuGqdS8K0vYl18oN5ZFK21+VjOBn+cBAacYN8gCT1N6GH5/fx4rBl9/e6pewhHqf
+ zD9ZhecmibUCsVxBK/IXTkMuAErcA5qSWEBLQRBrDq0hYIFPPj4aGWLGLNmoUVnGeusk
+ a9ew==
 X-Forwarded-Encrypted: i=1;
- AJvYcCXkIeg7p07q+QKUROxtp6NOoconRAnLM0wgxIqTFwkEW0tR0JihQ9UuilsHT0cPt1ZxBZgcjS0aCzA=@buildroot.org
-X-Gm-Message-State: AOJu0YxVuj/HpAwHL2GIownce8DKXZaHrGsv+QnLlDocyLcLOscj03Fr
- Od5PQVRT288gHwM8tPypaocuQiZ1XKqfFDnyLFaGaXSNX4U1QPlqI8AbIg==
-X-Gm-Gg: ASbGncv5rmalmunwHDVdCl0o5g7vtFUutFcZhbsgIKliMYRvK9/MXD4ebDiKhY8JB2j
- YNwWdJxIiOi57AZPzvC1QVveaBwKgXE+D3GNqKYVlvsYAxFKtDetebmYWcziO545Bbm1wH9SoJz
- M6ZAqls96Em+2NOw/gosFbklq3qnRCtyDswjpEeg9nidTOBFg8I/tDX+3hPRhCai79dl5sECYlI
- yOR7mYqr03wf8kGzeWZHPlo8ddrHCX/+MuztxwS3oghCTdlEJrz4eoup+g183p3Wg5LFeXJYw8s
- y6QbeZ4gevYCOLX+lP6CtAP7D0D/dQ==
-X-Google-Smtp-Source: AGHT+IGgIZVCsn2fo7m+cWv+17CVO32s+Jkpl6AOeiPk/eAjIoYW6PGzFo36MfNWkdYZT9Vzbm3zqQ==
-X-Received: by 2002:a17:902:d4c5:b0:215:a56f:1e50 with SMTP id
- d9443c01a7336-220d36d40a8mr5363185ad.8.1739395406066; 
- Wed, 12 Feb 2025 13:23:26 -0800 (PST)
+ AJvYcCWO6KeVWgBLZC+cH3xoooVLbqK555cUe1xha0d1ACzwV/uHGY7wu+QIpGLCIl0+B78cjV+7K+xH5w8=@buildroot.org
+X-Gm-Message-State: AOJu0YzCsHFMTwpCFBfkA95gCd6kLY3G2lT2Mg7nM0yyzqsrxk/gPcgx
+ KEYpTMnmSKDaIZaVkLB0X5XDOAehIsFbj5GaZi3CYHda7TT9AuKWo+wC3vMwW+c=
+X-Gm-Gg: ASbGncuhNxIR8jMGPy/Yaj7vsq592tIhGFHibFgECk1zZXh+RuU55/A71h7iiE2eb5C
+ BivrElf00uxTmZ8QwsUZHwHMf5J1A8Hb//AZlh7tiP7PO9BMx6kr0iYcTDO9zFNWEyhPkFna6Xw
+ 8rLEXPQnnNor1MJ3KFZBbS1i6DBGbiJhWA6k1DaPW2YL1YXwaBGLDr0Ct+UhoYJT77g8dmSY55A
+ 0xumlk2ZNfQ2VWNAWntj+abUmJd+OqUhIxbDHEMAC2auHpDzbWxrh8lkX/0yC0u5DPYMn304hWB
+ qiVXVnlzAHx/LckJeBP8JZlA7UrpAw==
+X-Google-Smtp-Source: AGHT+IESXBnVw5Ul8JseeEWiRll49lnqefGYWPnc+Kvibq2nLOJVh5lo9Nr08hMdMm67smO/IBkrew==
+X-Received: by 2002:a05:6a00:348c:b0:728:9d19:d2ea with SMTP id
+ d2e1a72fcca58-7322c39d1c2mr7952807b3a.13.1739395486879; 
+ Wed, 12 Feb 2025 13:24:46 -0800 (PST)
 Received: from flame.local ([192.145.118.235])
  by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-220d556d6d2sm19995ad.177.2025.02.12.13.23.24
+ d2e1a72fcca58-7308d31fe8dsm6105438b3a.169.2025.02.12.13.24.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 12 Feb 2025 13:23:25 -0800 (PST)
+ Wed, 12 Feb 2025 13:24:46 -0800 (PST)
 To: Julien Olivain <ju.o@free.fr>
 Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
  buildroot@buildroot.org,  "Yann E . MORIN" <yann.morin.1998@free.fr>,
@@ -77,12 +78,27 @@ In-Reply-To: <96b69abb843dc7292777c64f6787f134@free.fr> (Julien Olivain's
  message of "Mon, 10 Feb 2025 20:33:55 +0100")
 References: <20250207231203.3952765-1-dario.binacchi@amarulasolutions.com>
  <96b69abb843dc7292777c64f6787f134@free.fr>
-Date: Wed, 12 Feb 2025 13:23:19 -0800
-Message-ID: <m24j0yuabc.fsf@aperture.us>
+Date: Wed, 12 Feb 2025 13:24:32 -0800
+Message-ID: <m234giua9b.fsf@aperture.us>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=fail (p=reject dis=none)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=aperture.us; s=google; t=1739395487; x=1740000287; darn=buildroot.org;
+ h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+ :from:from:to:cc:subject:date:message-id:reply-to;
+ bh=qzimFIFNZhkFcHcMNH5hlVwYbzPSi9oOqmi7feMVQuw=;
+ b=vhYpmIIVo90d+o4dD6sn8/jaR10XllWdd9eVyBImru5LL21X84BFR8Vvc7mESB0E7P
+ bpV4BQ8KWfoMSjBuhK1ANtyWMIqzX5MiU2hKyK1LqzxosHiicy0z1uoOl4VEJhYhrAbi
+ ZRjc6LC23pwjO8lL+9IVJs/f+3o6MoZh6KB22yS39hjo60JCfYIeBJpX9Y2Ap3qKkaI1
+ QCYjZACRRk0t57M3fj5/Ls/FgJJfkuqEy37v1bW+cJ+3ZLqYa/JaVyBL4tegj+lTDVfg
+ ucmeeg8G80uZ9hpPNXXygcA0FCqqE5GBEqYI7jkwkXbr+odpqnfgJvhauNywaoypFhfG
+ j9MQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
  header.from=aperture.us
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=vhYpmIIV
 Subject: Re: [Buildroot] [PATCH 1/1] boot/uboot: fix binman failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
