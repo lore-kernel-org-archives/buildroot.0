@@ -1,92 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90A2FC021A1
-	for <buildroot@archiver.kernel.org>; Wed, 12 Feb 2025 09:26:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB48DC02198
+	for <buildroot@archiver.kernel.org>; Wed, 12 Feb 2025 09:45:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5818861024;
-	Wed, 12 Feb 2025 09:26:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C03C80C93;
+	Wed, 12 Feb 2025 09:45:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JQmlsNurE_kF; Wed, 12 Feb 2025 09:26:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5OGhcvktKgAA; Wed, 12 Feb 2025 09:45:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F72361042
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B20180C53
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F72361042;
-	Wed, 12 Feb 2025 09:26:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B20180C53;
+	Wed, 12 Feb 2025 09:45:24 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A9778194
- for <buildroot@buildroot.org>; Wed, 12 Feb 2025 09:26:18 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F3766C
+ for <buildroot@buildroot.org>; Wed, 12 Feb 2025 09:45:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9644640134
- for <buildroot@buildroot.org>; Wed, 12 Feb 2025 09:26:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 209B1400B5
+ for <buildroot@buildroot.org>; Wed, 12 Feb 2025 09:45:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id if68XmZX3-nz for <buildroot@buildroot.org>;
- Wed, 12 Feb 2025 09:26:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=68.232.153.233;
- helo=esa.microchip.iphmx.com;
- envelope-from=prvs=131dbbb23=jamie.gibbons@microchip.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4655240096
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4655240096
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
- [68.232.153.233])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4655240096
- for <buildroot@buildroot.org>; Wed, 12 Feb 2025 09:26:16 +0000 (UTC)
-X-CSE-ConnectionGUID: th+SQfK3R+OfGp09Yw7kyg==
-X-CSE-MsgGUID: 0KC+BZHzSUi2fu950LQPIw==
-X-IronPort-AV: E=Sophos;i="6.13,279,1732604400"; d="scan'208";a="37584600"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
- by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 12 Feb 2025 02:19:10 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 12 Feb 2025 02:18:20 -0700
-Received: from jamie-dev.microchip.com (10.10.85.11) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Wed, 12 Feb 2025 02:18:18 -0700
-To: <buildroot@buildroot.org>
-CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Ludovic Desroches
- <ludovic.desroches@microchip.com>, Nicolas Ferre
- <nicolas.ferre@microchip.com>, Conor Dooley <Conor.Dooley@microchip.com>,
- Valentina Fernandez Alanis <Valentina.FernandezAlanis@microchip.com>, "Jamie
- Gibbons" <jamie.gibbons@microchip.com>, Conor Dooley
- <conor.dooley@microchip.com>
-Date: Wed, 12 Feb 2025 09:21:21 +0000
-Message-ID: <20250212092121.11699-4-jamie.gibbons@microchip.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250212092121.11699-1-jamie.gibbons@microchip.com>
-References: <20250212092121.11699-1-jamie.gibbons@microchip.com>
+ id JUSBjDv7MhuU for <buildroot@buildroot.org>;
+ Wed, 12 Feb 2025 09:45:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 06E4740096
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06E4740096
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 06E4740096
+ for <buildroot@buildroot.org>; Wed, 12 Feb 2025 09:45:19 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 41DFB431ED;
+ Wed, 12 Feb 2025 09:45:16 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1ti9Ix-00A71S-1R;
+ Wed, 12 Feb 2025 10:45:15 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed, 12 Feb 2025 10:45:13 +0100
+Message-Id: <20250212094513.2410216-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
- t=1739352377; x=1770888377;
- h=from:to:cc:subject:date:message-id:in-reply-to:
- references:mime-version:content-transfer-encoding;
- bh=kBGVf31aqOAcCYzSPmbszuIJUhtLcvsGFgJkByIryd0=;
- b=A97DXQcxbOicMrAcMmOV+1fCf3GVw3gl5uLoPfkbtphV3ThXIfI00yIO
- tgSQfOzSAxLyzuTnjQp1XRaXGzDSToP4w0WyX7qi7uIFaKFbJs6m8E/Lo
- my9/928qO1upIvs2AuB3gRTAPLZXAwDEC/DTgOkPR1/B4Pi9lPE5CoPow
- qExMWiv3aMxsk+gbXdYhN5mkkc+LyG8nlJsQmy9I1HnKtVRKmuSZU6dFE
- Tx43X81tIF1xzXUrR7JNaOWvc2R/4f30lSSyltkEAuc/5NLpngBoIVHMf
- VioCzH33S5V3GKdRVA10pvOEF6X1hDyiL4hFpZT0i7FuVQJuRHK9NK1zB
- w==;
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegfeehhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpedthfeiueduieejkeduveetudeugfdvvedvieekuedtuedvveduhfefgeevhfeihfenucffohhmrghinhepsghuihhlughrohhothdrnhgvthdpghhtkhhmmhdrohhrghdpghhnohhmvgdrohhrghenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvkhhosehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopeehpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhrtghpthhtohepuggrlhgrnhhgsehgmhigrdgrthdprhgtphhtthhopehfohhnthgrihhnvgdrfhgrsghrihgtvgesghhmrghilhdrtghomhdprhgtp
+ hhtthhopehjrghmvghsrdhknhhighhhthestgholhhlihhnshdrtghomh
+X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=microchip.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=microchip.com header.i=@microchip.com
- header.a=rsa-sha256 header.s=mchp header.b=A97DXQcx
-Subject: [Buildroot] [PATCH v3 3/3] board/beagleboard/beaglev_fire: cleanup
- gatewate update
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH] package/at-spi2-core: propagate !static
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,99 +70,149 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Jamie Gibbons via buildroot <buildroot@buildroot.org>
-Reply-To: Jamie Gibbons <jamie.gibbons@microchip.com>
+Cc: Daniel Lang <dalang@gmx.at>, Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ James Knight <james.knight@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update the README following the update gateware fix and optimise the
-script, making it easier for the user to use.
+Fixes http://autobuild.buildroot.net/results/06fb1275a6c67d0bb6e8e6c0ab31cce2587d5a0f/
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
+Commit d1757fdfb001 ("package/at-spi2-core: bump to version 2.48.0") added a
+dependency on !static but forgot to propagate it to the reverse
+dependencies.  Fix that.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/beagleboard/beaglev_fire/README.txt     | 15 ++++--------
- .../usr/share/microchip/update-gateware.sh    | 24 ++++++++++++-------
- 2 files changed, 20 insertions(+), 19 deletions(-)
+ package/atkmm/Config.in     | 6 ++++--
+ package/atkmm2_28/Config.in | 6 ++++--
+ package/libglade/Config.in  | 6 ++++--
+ package/libgtk2/Config.in   | 5 +++--
+ package/libgtk3/Config.in   | 5 +++--
+ 5 files changed, 18 insertions(+), 10 deletions(-)
 
-diff --git a/board/beagleboard/beaglev_fire/README.txt b/board/beagleboard/beaglev_fire/README.txt
-index c9a824b67f..18b6e761ea 100644
---- a/board/beagleboard/beaglev_fire/README.txt
-+++ b/board/beagleboard/beaglev_fire/README.txt
-@@ -108,12 +108,12 @@ https://docs.beagleboard.org/latest/boards/beaglev/fire/demos-and-tutorials/gate
-   Unzip the downloaded artifacts.zip file.
+diff --git a/package/atkmm/Config.in b/package/atkmm/Config.in
+index 571d7e69ad..e7ac0606f0 100644
+--- a/package/atkmm/Config.in
++++ b/package/atkmm/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_ATKMM
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # at-spi2-core/glibmm -> libglib2
+ 	depends on BR2_USE_MMU # at-spi2-core/glibmm -> libglib2
+ 	depends on BR2_USE_WCHAR # at-spi2-core/glibmm -> libglib2
++	depends on !BR2_STATIC_LIBS # at-spi2-core
+ 	select BR2_PACKAGE_AT_SPI2_CORE
+ 	select BR2_PACKAGE_GLIBMM
+ 	select BR2_PACKAGE_LIBSIGC
+@@ -14,7 +15,8 @@ config BR2_PACKAGE_ATKMM
  
-   Go to the custom FPGA design directory:
--    'cd artifacts/bitstreams/my_custom_fpga_design'
-+    'cd artifacts/bitstreams/my_custom_fpga_design/LinuxProgramming/'
+ 	  http://www.gtkmm.org/
  
-   On your Linux host development computer, copy the bitstream to BeagleV-Fire
-   board, replacing </path/to/your/> with the path to your BeagleV-Fire root file
-   system.
--    'cp -r ./LinuxProgramming /path/to/your/buildroot/board/beagleboard/beaglev_fire/rootfs-overlay/etc/'
-+    'cp ./* /path/to/your/buildroot/board/beagleboard/beaglev_fire/rootfs-overlay/lib/firmware/'
+-comment "atkmm needs a toolchain w/ C++, wchar, threads, gcc >= 7"
++comment "atkmm needs a toolchain w/ dynamic library, C++, wchar, threads, gcc >= 7"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_USE_WCHAR \
+-		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| BR2_STATIC_LIBS
+diff --git a/package/atkmm2_28/Config.in b/package/atkmm2_28/Config.in
+index e88073b87a..e62a8e729b 100644
+--- a/package/atkmm2_28/Config.in
++++ b/package/atkmm2_28/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_ATKMM2_28
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # at-spi2-core/glibmm -> libglib2
+ 	depends on BR2_USE_MMU # at-spi2-core/glibmm -> libglib2
+ 	depends on BR2_USE_WCHAR # at-spi2-core/glibmm -> libglib2
++	depends on !BR2_STATIC_LIBS # at-spi2-core
+ 	select BR2_PACKAGE_AT_SPI2_CORE
+ 	select BR2_PACKAGE_GLIBMM2_66
+ 	select BR2_PACKAGE_LIBSIGC2
+@@ -17,7 +18,8 @@ config BR2_PACKAGE_ATKMM2_28
  
-   To apply these changes to your image, make sure to re-build it with:
-     `make`
-@@ -121,14 +121,7 @@ https://docs.beagleboard.org/latest/boards/beaglev/fire/demos-and-tutorials/gate
-   Then, re-flash your image - to ensure you have the necessary firmware files - by
-   following the above section "Flashing the image to your eMMC".
+ 	  http://www.gtkmm.org/
  
--  On BeagleV-Fire,
--    1. Make your update gateware script executable
--      'chmod +x /usr/share/microchip/update-gateware.sh'
--    2. Create a firmware directory
--      'mkdir /lib/firmware'
--    3. Change to the directory of your gateware script
--      `cd /usr/share/microchip/`
--    3. initiate the reprogramming of the FPGA with your gateware bitstream:
--      './update-gateware.sh /etc/LinuxProgramming/'
-+  On BeagleV-Fire initiate the reprogramming of the FPGA with your gateware bitstream:
-+    `/usr/share/microchip/update-gateware.sh`
+-comment "atkmm (2.28.x) needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
++comment "atkmm (2.28.x) needs a toolchain w/ dynamic library, C++, wchar, threads, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_USE_WCHAR \
+-		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
++		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| BR2_STATIC_LIBS
+diff --git a/package/libglade/Config.in b/package/libglade/Config.in
+index 8d0d26f159..419b2717be 100644
+--- a/package/libglade/Config.in
++++ b/package/libglade/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBGLADE
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
++	depends on !BR2_STATIC_LIBS # at-spi2-core
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_AT_SPI2_CORE
+ 	select BR2_PACKAGE_LIBXML2
+@@ -14,7 +15,8 @@ config BR2_PACKAGE_LIBGLADE
  
-   Wait for a couple of minutes for the BeagleV-Fire to reprogram itself.
-diff --git a/board/beagleboard/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh b/board/beagleboard/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
-index 249c5bd260..7e05d4b7eb 100755
---- a/board/beagleboard/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
-+++ b/board/beagleboard/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
-@@ -1,17 +1,25 @@
- #!/bin/sh
+ 	  https://download.gnome.org/sources/libglade/
  
--if [ ! -e "$1"/mpfs_bitstream.spi ]; then
-+if [ $# -eq 0 ]; then
-+    echo "No gateware location provided. Checking default location."
-+    if [ ! -e /lib/firmware/mpfs_bitstream.spi ]; then
-         echo "No gateware file found."
-         exit 1
-+    fi
-+else
-+    echo "Gateware location provided: $1"
-+    if [ ! -e "$1"/mpfs_bitstream.spi ]; then
-+        echo "No gateware file found."
-+        exit 1
-+    else
-+        if [ ! -d /lib/firmware ]; then
-+            mkdir /lib/firmware
-+        fi
-+        cp "$1"/mpfs_dtbo.spi /lib/firmware/mpfs_dtbo.spi
-+        cp "$1"/mpfs_bitstream.spi /lib/firmware/mpfs_bitstream.spi
-+    fi
- fi
+-comment "libglade needs a toolchain w/ wchar, threads"
++comment "libglade needs a toolchain w/ dynamic library, wchar, threads"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_LIBGTK2
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
++		|| BR2_STATIC_LIBS
+diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
+index f8821ba246..6a2145ebed 100644
+--- a/package/libgtk2/Config.in
++++ b/package/libgtk2/Config.in
+@@ -7,6 +7,7 @@ config BR2_PACKAGE_LIBGTK2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
++	depends on !BR2_STATIC_LIBS # at-spi2-core
+ 	select BR2_PACKAGE_AT_SPI2_CORE
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PNG
+@@ -33,10 +34,10 @@ config BR2_PACKAGE_LIBGTK2_DEMO
  
--if [ ! -d /lib/firmware ]
--then
--    mkdir /lib/firmware
--fi
--
--cp "$1"/mpfs_dtbo.spi /lib/firmware/mpfs_dtbo.spi
--cp "$1"/mpfs_bitstream.spi /lib/firmware/mpfs_bitstream.spi
+ endif
  
- # Trash existing device tree overlay in case the rest of the process fails:
- flash_erase /dev/mtd0 0 16
+-comment "libgtk2 needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
++comment "libgtk2 needs a toolchain w/ dynamic library, wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_XORG7
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+-		!BR2_TOOLCHAIN_HAS_THREADS
++		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
+index 52ee50db49..ab2ab57c35 100644
+--- a/package/libgtk3/Config.in
++++ b/package/libgtk3/Config.in
+@@ -1,10 +1,10 @@
+-comment "libgtk3 needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
++comment "libgtk3 needs a toolchain w/ dynamic library, wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+-		!BR2_TOOLCHAIN_HAS_THREADS
++		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
+ comment "libgtk3 needs an OpenGL or an OpenGL-EGL backend"
+ 	depends on BR2_USE_MMU
+@@ -21,6 +21,7 @@ config BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
++	depends on !BR2_STATIC_LIBS # at-spi2-core
+ 	depends on BR2_PACKAGE_HAS_LIBEGL || \
+ 		BR2_PACKAGE_HAS_LIBGL
+ 	select BR2_PACKAGE_AT_SPI2_CORE
 -- 
-2.43.0
+2.39.5
 
 _______________________________________________
 buildroot mailing list
