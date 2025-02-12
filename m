@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBC98C02198
-	for <buildroot@archiver.kernel.org>; Wed, 12 Feb 2025 22:27:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3274C021A0
+	for <buildroot@archiver.kernel.org>; Wed, 12 Feb 2025 22:27:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5DF2940663;
-	Wed, 12 Feb 2025 22:27:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 775B541767;
+	Wed, 12 Feb 2025 22:27:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FOTlRj1NsDPn; Wed, 12 Feb 2025 22:27:52 +0000 (UTC)
+ id Nd0bSWZjW4NU; Wed, 12 Feb 2025 22:27:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 081DE415EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C95D541764
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 081DE415EF;
-	Wed, 12 Feb 2025 22:27:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id ECFE41C9
+	by smtp4.osuosl.org (Postfix) with ESMTP id C95D541764;
+	Wed, 12 Feb 2025 22:27:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0152AE06
  for <buildroot@buildroot.org>; Wed, 12 Feb 2025 22:27:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D0732840CB
+ by smtp3.osuosl.org (Postfix) with ESMTP id D1BF461094
  for <buildroot@buildroot.org>; Wed, 12 Feb 2025 22:27:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tD7NoN5J2pji for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TEVbNdf6Ld6G for <buildroot@buildroot.org>;
  Wed, 12 Feb 2025 22:27:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A44B484035
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF46861058
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A44B484035
+ by smtp3.osuosl.org (Postfix) with ESMTP id AF46861058
  for <buildroot@buildroot.org>; Wed, 12 Feb 2025 22:27:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C85C875BB; Wed, 12 Feb 2025 22:27:46 +0000 (UTC)
+ id A86B7875BD; Wed, 12 Feb 2025 22:27:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 12 Feb 2025 23:25:00 +0100
+Date: Wed, 12 Feb 2025 23:25:41 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 452cb98323f4aadf8ada8c9bacf1238f7b3b3e89
-X-Git-Newrev: 3fb075afad96a8d6f1877c0c2b202f61cb5993aa
+X-Git-Oldrev: 3fb075afad96a8d6f1877c0c2b202f61cb5993aa
+X-Git-Newrev: 9ee7374098ca517c7d6e759121cfd4e225e64053
 X-Patchwork-Hint: ignore
-Message-Id: <20250212222746.9C85C875BB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/beagleboard/beaglev_fire: fix update
- gateware feature
+Message-Id: <20250212222746.A86B7875BD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/beagleboard/beaglev_fire: cleanup
+ gatewate update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,103 +66,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fb075afad96a8d6f1877c0c2b202f61cb5993aa
+commit: https://git.buildroot.net/buildroot/commit/?id=9ee7374098ca517c7d6e759121cfd4e225e64053
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Following the addition of the firmware upload API in linux v6.6, using
-debugfs for firmware updating has been removed. Update the
-update-gateware script to use the firmware upload API with sysfs and
-enable applying the overlays during boot.
-The fw_upload interface can detect when there is an overlay file and
-will write it correctly. Use this functionality to write the overlay
-file and remove dd command related code.
-
-Fixes: 8ce97fd550d6 ("configs/beaglev_fire: bump Linux and U-Boot")
+Update the README following the update gateware fix and optimise the
+script, making it easier for the user to use.
 
 Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- board/beagleboard/beaglev_fire/boot.cmd            |  1 +
- .../usr/share/microchip/update-gateware.sh         | 51 +++++++++++++++++-----
- 2 files changed, 40 insertions(+), 12 deletions(-)
+ board/beagleboard/beaglev_fire/README.txt          | 15 ++++---------
+ .../usr/share/microchip/update-gateware.sh         | 25 ++++++++++++++--------
+ 2 files changed, 20 insertions(+), 20 deletions(-)
 
-diff --git a/board/beagleboard/beaglev_fire/boot.cmd b/board/beagleboard/beaglev_fire/boot.cmd
-index 05f4858bac..1402458d8b 100644
---- a/board/beagleboard/beaglev_fire/boot.cmd
-+++ b/board/beagleboard/beaglev_fire/boot.cmd
-@@ -12,4 +12,5 @@ bootm loados ${scriptaddr};
- bootm ramdisk;
- bootm prep;
- fdt set /soc/ethernet@20110000 mac-address ${beaglevfire_mac_addr0};
-+run design_overlays;
- bootm go;
+diff --git a/board/beagleboard/beaglev_fire/README.txt b/board/beagleboard/beaglev_fire/README.txt
+index c9a824b67f..18b6e761ea 100644
+--- a/board/beagleboard/beaglev_fire/README.txt
++++ b/board/beagleboard/beaglev_fire/README.txt
+@@ -108,12 +108,12 @@ https://docs.beagleboard.org/latest/boards/beaglev/fire/demos-and-tutorials/gate
+   Unzip the downloaded artifacts.zip file.
+ 
+   Go to the custom FPGA design directory:
+-    'cd artifacts/bitstreams/my_custom_fpga_design'
++    'cd artifacts/bitstreams/my_custom_fpga_design/LinuxProgramming/'
+ 
+   On your Linux host development computer, copy the bitstream to BeagleV-Fire
+   board, replacing </path/to/your/> with the path to your BeagleV-Fire root file
+   system.
+-    'cp -r ./LinuxProgramming /path/to/your/buildroot/board/beagleboard/beaglev_fire/rootfs-overlay/etc/'
++    'cp ./* /path/to/your/buildroot/board/beagleboard/beaglev_fire/rootfs-overlay/lib/firmware/'
+ 
+   To apply these changes to your image, make sure to re-build it with:
+     `make`
+@@ -121,14 +121,7 @@ https://docs.beagleboard.org/latest/boards/beaglev/fire/demos-and-tutorials/gate
+   Then, re-flash your image - to ensure you have the necessary firmware files - by
+   following the above section "Flashing the image to your eMMC".
+ 
+-  On BeagleV-Fire,
+-    1. Make your update gateware script executable
+-      'chmod +x /usr/share/microchip/update-gateware.sh'
+-    2. Create a firmware directory
+-      'mkdir /lib/firmware'
+-    3. Change to the directory of your gateware script
+-      `cd /usr/share/microchip/`
+-    3. initiate the reprogramming of the FPGA with your gateware bitstream:
+-      './update-gateware.sh /etc/LinuxProgramming/'
++  On BeagleV-Fire initiate the reprogramming of the FPGA with your gateware bitstream:
++    `/usr/share/microchip/update-gateware.sh`
+ 
+   Wait for a couple of minutes for the BeagleV-Fire to reprogram itself.
 diff --git a/board/beagleboard/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh b/board/beagleboard/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
-old mode 100644
-new mode 100755
-index f455037b60..249c5bd260
+index 249c5bd260..6d92dec012 100755
 --- a/board/beagleboard/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
 +++ b/board/beagleboard/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
-@@ -13,20 +13,47 @@ fi
- cp "$1"/mpfs_dtbo.spi /lib/firmware/mpfs_dtbo.spi
- cp "$1"/mpfs_bitstream.spi /lib/firmware/mpfs_bitstream.spi
+@@ -1,18 +1,25 @@
+ #!/bin/sh
  
--mount -t debugfs none /sys/kernel/debug
+-if [ ! -e "$1"/mpfs_bitstream.spi ]; then
++if [ $# -eq 0 ]; then
++    echo "No gateware location provided. Checking default location."
++    if [ ! -e /lib/firmware/mpfs_bitstream.spi ]; then
+         echo "No gateware file found."
+         exit 1
++    fi
++else
++    echo "Gateware location provided: $1"
++    if [ ! -e "$1"/mpfs_bitstream.spi ]; then
++        echo "No gateware file found."
++        exit 1
++    else
++        if [ ! -d /lib/firmware ]; then
++            mkdir /lib/firmware
++        fi
++        cp "$1"/mpfs_dtbo.spi /lib/firmware/mpfs_dtbo.spi
++        cp "$1"/mpfs_bitstream.spi /lib/firmware/mpfs_bitstream.spi
++    fi
+ fi
+ 
+-if [ ! -d /lib/firmware ]
+-then
+-    mkdir /lib/firmware
+-fi
+-
+-cp "$1"/mpfs_dtbo.spi /lib/firmware/mpfs_dtbo.spi
+-cp "$1"/mpfs_bitstream.spi /lib/firmware/mpfs_bitstream.spi
 -
  # Trash existing device tree overlay in case the rest of the process fails:
--flash_erase /dev/mtd0 0 1024
-+flash_erase /dev/mtd0 0 16
+ flash_erase /dev/mtd0 0 16
  
--# # Write device tree overlay
--dd if=/lib/firmware/mpfs_dtbo.spi of=/dev/mtd0 seek=1024
-+# Initiate FPGA update for dtbo
-+echo 1 > /sys/class/firmware/mpfs-auto-update/loading
- 
--# Fake the presence of a golden image for now.
--dd if=/dev/zero of=/dev/mtd0 count=4 bs=1
-+# Write device tree overlay
-+cat /lib/firmware/mpfs_dtbo.spi > /sys/class/firmware/mpfs-auto-update/data
-+
-+# Signal completion for dtbo load
-+echo 0 > /sys/class/firmware/mpfs-auto-update/loading
- 
--# Initiate FPGA update.
--echo 1 > /sys/kernel/debug/fpga/microchip_exec_update
-+while [ "$(cat /sys/class/firmware/mpfs-auto-update/status)" != "idle" ]; do
-+    # Do nothing, just keep checking
-+    sleep 1
-+done
- 
--# Reboot Linux for the gateware update to take effect.
--# FPGA reprogramming takes places between Linux shut-down and HSS restarting the board.
--reboot
-+# Fake the presence of a golden image for now.
-+dd if=/dev/zero of=/dev/mtd0 count=1 bs=4
-+
-+# Initiate FPGA update for bitstream
-+echo 1 > /sys/class/firmware/mpfs-auto-update/loading
-+
-+# Write the firmware image to the data sysfs file
-+cat /lib/firmware/mpfs_bitstream.spi > /sys/class/firmware/mpfs-auto-update/data
-+
-+# Signal completion for bitstream load
-+echo 0 > /sys/class/firmware/mpfs-auto-update/loading
-+
-+while [ "$(cat /sys/class/firmware/mpfs-auto-update/status)" != "idle" ]; do
-+    # Do nothing, just keep checking
-+    sleep 1
-+done
-+
-+# When the status is 'idle' and no error has occured, reboot the system for
-+# the gateware update to take effect. FPGA reprogramming takes places between
-+# Linux shut-down and HSS restarting the board.
-+if [ "$(cat /sys/class/firmware/mpfs-auto-update/error)" = "" ]; then
-+    echo "FPGA update ready. Rebooting."
-+    reboot
-+else
-+    echo "FPGA update failed with status: $(cat /sys/class/firmware/mpfs-auto-update/error)"
-+    exit 1
-+fi
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
