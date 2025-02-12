@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64C64C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:18:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AF1EC282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:18:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 105BA85D20;
-	Fri, 28 Feb 2025 17:17:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jFREULcjV6wV; Fri, 28 Feb 2025 17:17:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 185DF85D3A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 185DF85D3A;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 66B775071C;
 	Fri, 28 Feb 2025 17:17:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LQU2R0jv40P5; Fri, 28 Feb 2025 17:17:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46D425002D
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 46D425002D;
+	Fri, 28 Feb 2025 17:17:55 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 161D568
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:23 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 20BA81DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C037446CF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37B3642D44
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bx5JlkR8KSk3 for <buildroot@buildroot.org>;
+ id vorDuJrBIOy3 for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:31:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDFF84542E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6D4645315
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BDFF84542E
+ by smtp4.osuosl.org (Postfix) with ESMTP id A6D4645315
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B4E4A87C6F; Fri, 28 Feb 2025 16:30:39 +0000 (UTC)
+ id A39D587AD6; Fri, 28 Feb 2025 16:30:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 12 Feb 2025 23:54:57 +0100
+Date: Wed, 12 Feb 2025 23:25:41 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9ee7374098ca517c7d6e759121cfd4e225e64053
-X-Git-Newrev: 6648d7046d760c2fc13ccf4fdbb2376151ac1c59
+X-Git-Oldrev: 3fb075afad96a8d6f1877c0c2b202f61cb5993aa
+X-Git-Newrev: 9ee7374098ca517c7d6e759121cfd4e225e64053
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163039.B4E4A87C6F@busybox.osuosl.org>
+Message-Id: <20250228163039.A39D587AD6@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/next]
- board/stmicroelectronics/common/stm32mp157: restore linux hash
+ board/beagleboard/beaglev_fire: cleanup gatewate update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,32 +66,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6648d7046d760c2fc13ccf4fdbb2376151ac1c59
+commit: https://git.buildroot.net/buildroot/commit/?id=9ee7374098ca517c7d6e759121cfd4e225e64053
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The commit 9802fa0b5baa ("configs/stm32mp135f-dk: new defconfig") removed
-the hash for the stm32mp157a_dk1 and stm32mp157c_dk2 configurations,
-breaking the build. The patch restores this value.
+Update the README following the update gateware fix and optimise the
+script, making it easier for the user to use.
 
-Fixes: 9802fa0b5baa ("configs/stm32mp135f-dk: new defconfig")
-https://gitlab.com/buildroot.org/buildroot/-/jobs/9054933048 (stm32mp157a_dk1_defconfig)
-https://gitlab.com/buildroot.org/buildroot/-/jobs/9054933050 (stm32mp157c_dk2_defconfig)
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-[Romain: add gitlab-ci links]
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash | 1 +
- 1 file changed, 1 insertion(+)
+ board/beagleboard/beaglev_fire/README.txt          | 15 ++++---------
+ .../usr/share/microchip/update-gateware.sh         | 25 ++++++++++++++--------
+ 2 files changed, 20 insertions(+), 20 deletions(-)
 
-diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-index 42d02c9f78..f6a5f5e1c9 100644
---- a/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
-+sha256  f048267b7b88316c9ca708c68d15a9ae802dcfc943c3188c1273eb958c433281  linux-6.9.8.tar.xz
- sha256  c954f60197008f1e1f32a1e77293903cf3801d2543ec4bf521f5651eb7f133ce  linux-6.11.6.tar.xz
+diff --git a/board/beagleboard/beaglev_fire/README.txt b/board/beagleboard/beaglev_fire/README.txt
+index c9a824b67f..18b6e761ea 100644
+--- a/board/beagleboard/beaglev_fire/README.txt
++++ b/board/beagleboard/beaglev_fire/README.txt
+@@ -108,12 +108,12 @@ https://docs.beagleboard.org/latest/boards/beaglev/fire/demos-and-tutorials/gate
+   Unzip the downloaded artifacts.zip file.
+ 
+   Go to the custom FPGA design directory:
+-    'cd artifacts/bitstreams/my_custom_fpga_design'
++    'cd artifacts/bitstreams/my_custom_fpga_design/LinuxProgramming/'
+ 
+   On your Linux host development computer, copy the bitstream to BeagleV-Fire
+   board, replacing </path/to/your/> with the path to your BeagleV-Fire root file
+   system.
+-    'cp -r ./LinuxProgramming /path/to/your/buildroot/board/beagleboard/beaglev_fire/rootfs-overlay/etc/'
++    'cp ./* /path/to/your/buildroot/board/beagleboard/beaglev_fire/rootfs-overlay/lib/firmware/'
+ 
+   To apply these changes to your image, make sure to re-build it with:
+     `make`
+@@ -121,14 +121,7 @@ https://docs.beagleboard.org/latest/boards/beaglev/fire/demos-and-tutorials/gate
+   Then, re-flash your image - to ensure you have the necessary firmware files - by
+   following the above section "Flashing the image to your eMMC".
+ 
+-  On BeagleV-Fire,
+-    1. Make your update gateware script executable
+-      'chmod +x /usr/share/microchip/update-gateware.sh'
+-    2. Create a firmware directory
+-      'mkdir /lib/firmware'
+-    3. Change to the directory of your gateware script
+-      `cd /usr/share/microchip/`
+-    3. initiate the reprogramming of the FPGA with your gateware bitstream:
+-      './update-gateware.sh /etc/LinuxProgramming/'
++  On BeagleV-Fire initiate the reprogramming of the FPGA with your gateware bitstream:
++    `/usr/share/microchip/update-gateware.sh`
+ 
+   Wait for a couple of minutes for the BeagleV-Fire to reprogram itself.
+diff --git a/board/beagleboard/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh b/board/beagleboard/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
+index 249c5bd260..6d92dec012 100755
+--- a/board/beagleboard/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
++++ b/board/beagleboard/beaglev_fire/rootfs-overlay/usr/share/microchip/update-gateware.sh
+@@ -1,18 +1,25 @@
+ #!/bin/sh
+ 
+-if [ ! -e "$1"/mpfs_bitstream.spi ]; then
++if [ $# -eq 0 ]; then
++    echo "No gateware location provided. Checking default location."
++    if [ ! -e /lib/firmware/mpfs_bitstream.spi ]; then
+         echo "No gateware file found."
+         exit 1
++    fi
++else
++    echo "Gateware location provided: $1"
++    if [ ! -e "$1"/mpfs_bitstream.spi ]; then
++        echo "No gateware file found."
++        exit 1
++    else
++        if [ ! -d /lib/firmware ]; then
++            mkdir /lib/firmware
++        fi
++        cp "$1"/mpfs_dtbo.spi /lib/firmware/mpfs_dtbo.spi
++        cp "$1"/mpfs_bitstream.spi /lib/firmware/mpfs_bitstream.spi
++    fi
+ fi
+ 
+-if [ ! -d /lib/firmware ]
+-then
+-    mkdir /lib/firmware
+-fi
+-
+-cp "$1"/mpfs_dtbo.spi /lib/firmware/mpfs_dtbo.spi
+-cp "$1"/mpfs_bitstream.spi /lib/firmware/mpfs_bitstream.spi
+-
+ # Trash existing device tree overlay in case the rest of the process fails:
+ flash_erase /dev/mtd0 0 16
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
