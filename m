@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F88DC282D0
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDC73C282C1
 	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:18:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7750750996;
-	Fri, 28 Feb 2025 17:18:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B71D70965;
+	Fri, 28 Feb 2025 17:18:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fEDfGavWLfRj; Fri, 28 Feb 2025 17:18:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cVIC3u3H9gCX; Fri, 28 Feb 2025 17:18:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD02C4FA28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A42B6709B2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD02C4FA28;
-	Fri, 28 Feb 2025 17:18:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A42B6709B2;
+	Fri, 28 Feb 2025 17:18:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0363D1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:35 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 09774711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6FB5740696
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA5F64542E
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dHUjS4oxiRMk for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:56 +0000 (UTC)
+ id fQHEE8h4EHUA for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6378F45854
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 850DE45203
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6378F45854
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 850DE45203
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5A57B80079; Fri, 28 Feb 2025 16:30:40 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 7A72787611; Fri, 28 Feb 2025 16:30:39 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 15 Feb 2025 20:43:15 +0100
+Date: Wed, 12 Feb 2025 17:38:58 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3dc8a793b646d1a91ce99baf534b19b3d214b883
-X-Git-Newrev: 2867f4be4248ed9ec6432168b7b75bd42f972be6
+X-Git-Oldrev: 03b0379426518d50650bbcfaeaff6836ec8e3d8d
+X-Git-Newrev: a7a18c2ef8d654a34d31eb5cc146acdcc4b2029f
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163040.5A57B80079@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libtasn1: security
- bump to version 4.20.0
+Message-Id: <20250228163039.7A72787611@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nginx: security update
+ to 1.26.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,63 +65,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2867f4be4248ed9ec6432168b7b75bd42f972be6
+commit: https://git.buildroot.net/buildroot/commit/?id=a7a18c2ef8d654a34d31eb5cc146acdcc4b2029f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following security vulnerability:
+See here for a changelog:
+http://nginx.org/en/CHANGES-1.26
 
-CVE-2024-12133: Potential DoS in handling of numerous SEQUENCE OF or SET
+Fixes the following security issue:
 
-https://lists.gnu.org/archive/html/help-libtasn1/2025-02/msg00001.html
+CVE-2025-23419: Security: insufficient check in virtual servers handling
+with TLSv1.3 SNI allowed to reuse SSL sessions in a different virtual
+server, to bypass client SSL certificates verification
 
-Adjust the license files after upstream moved the license clarification to
-README.md and moved the COPYING* files top the top level directory /
-slightly updated the COPYING* files (http->https) with:
+https://www.cve.org/CVERecord?id=CVE-2025-23419
 
-https://gitlab.com/gnutls/libtasn1/-/commit/73cc886c3ff29c326a5f1a10b3127d521574a1ad
-
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libtasn1/libtasn1.hash | 10 +++++-----
- package/libtasn1/libtasn1.mk   |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/nginx/nginx.hash | 2 +-
+ package/nginx/nginx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libtasn1/libtasn1.hash b/package/libtasn1/libtasn1.hash
-index 4bcb6a3feb..b9c9dad131 100644
---- a/package/libtasn1/libtasn1.hash
-+++ b/package/libtasn1/libtasn1.hash
-@@ -1,7 +1,7 @@
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index 4cf859dadc..77220665f3 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
+@@ -1,4 +1,4 @@
  # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.19.0.tar.gz.sig
--sha256  1613f0ac1cf484d6ec0ce3b8c06d56263cc7242f1c23b30d82d23de345a63f7a  libtasn1-4.19.0.tar.gz
-+# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.20.0.tar.gz.sig
-+sha256  92e0e3bd4c02d4aeee76036b2ddd83f0c732ba4cda5cb71d583272b23587a76c  libtasn1-4.20.0.tar.gz
- # Locally calculated
--sha256  7446831f659f7ebfd8d497acc7f05dfa8e31c6cb6ba1b45df33d4895ab80f5a6  COPYING
--sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  doc/COPYING
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  doc/COPYING.LESSER
-+sha256  990ef6a87f29a9d3db33698b94ea026a5d0f81bbf9806333d73699a250b7e5d6  README.md
-+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-+sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING.LESSERv2
-diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
-index 3af1bcdcbb..3154e500f1 100644
---- a/package/libtasn1/libtasn1.mk
-+++ b/package/libtasn1/libtasn1.mk
-@@ -4,11 +4,11 @@
+-sha256  627fe086209bba80a2853a0add9d958d7ebbdffa1a8467a5784c9a6b4f03d738  nginx-1.26.2.tar.gz
++sha256  69ee2b237744036e61d24b836668aad3040dda461fe6f570f1787eab570c75aa  nginx-1.26.3.tar.gz
+ # License files, locally calculated
+ sha256  f19c4caea60247490199c5a6d0134281e3fb20b3d7577e6873c628597f5381d9  LICENSE
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 7a5455def7..6ca1ac2075 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBTASN1_VERSION = 4.19.0
-+LIBTASN1_VERSION = 4.20.0
- LIBTASN1_SITE = $(BR2_GNU_MIRROR)/libtasn1
- LIBTASN1_DEPENDENCIES = host-bison host-pkgconf
- LIBTASN1_LICENSE = GPL-3.0+ (tests, tools), LGPL-2.1+ (library)
--LIBTASN1_LICENSE_FILES = COPYING doc/COPYING doc/COPYING.LESSER
-+LIBTASN1_LICENSE_FILES = README.md COPYING COPYING.LESSERv2
- LIBTASN1_CPE_ID_VENDOR = gnu
- LIBTASN1_INSTALL_STAGING = YES
- 
+-NGINX_VERSION = 1.26.2
++NGINX_VERSION = 1.26.3
+ NGINX_SITE = https://nginx.org/download
+ NGINX_LICENSE = BSD-2-Clause
+ NGINX_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
