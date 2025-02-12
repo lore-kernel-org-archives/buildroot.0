@@ -1,64 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB48DC02198
-	for <buildroot@archiver.kernel.org>; Wed, 12 Feb 2025 09:45:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F363CC021A0
+	for <buildroot@archiver.kernel.org>; Wed, 12 Feb 2025 10:54:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C03C80C93;
-	Wed, 12 Feb 2025 09:45:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3FB03415E7;
+	Wed, 12 Feb 2025 10:54:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5OGhcvktKgAA; Wed, 12 Feb 2025 09:45:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3RmWkZOWdO4g; Wed, 12 Feb 2025 10:54:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B20180C53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7167D415D7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B20180C53;
-	Wed, 12 Feb 2025 09:45:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7167D415D7;
+	Wed, 12 Feb 2025 10:54:13 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F3766C
- for <buildroot@buildroot.org>; Wed, 12 Feb 2025 09:45:22 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 583B26C
+ for <buildroot@buildroot.org>; Wed, 12 Feb 2025 10:54:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 209B1400B5
- for <buildroot@buildroot.org>; Wed, 12 Feb 2025 09:45:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 35BDA40120
+ for <buildroot@buildroot.org>; Wed, 12 Feb 2025 10:54:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JUSBjDv7MhuU for <buildroot@buildroot.org>;
- Wed, 12 Feb 2025 09:45:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+ id r_OHm7IXdvX9 for <buildroot@buildroot.org>;
+ Wed, 12 Feb 2025 10:54:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=163.172.193.142;
+ helo=mail0.insia.net; envelope-from=guillaume.chaye@zeetim.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 06E4740096
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06E4740096
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 06E4740096
- for <buildroot@buildroot.org>; Wed, 12 Feb 2025 09:45:19 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 41DFB431ED;
- Wed, 12 Feb 2025 09:45:16 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1ti9Ix-00A71S-1R;
- Wed, 12 Feb 2025 10:45:15 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 283C740096
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 283C740096
+Received: from mail0.insia.net (mail0.insia.net [163.172.193.142])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 283C740096
+ for <buildroot@buildroot.org>; Wed, 12 Feb 2025 10:54:10 +0000 (UTC)
+Received: from smtp.insia.net (unknown [192.168.1.24])
+ by mail0.insia.net (Postfix) with ESMTP id EA8111FD29;
+ Wed, 12 Feb 2025 11:54:03 +0100 (CET)
+Received: from UDERZO.MYINSIA.INT (unknown [192.168.1.35])
+ by smtp.insia.net (Postfix) with ESMTP id 3D4DF5F497;
+ Wed, 12 Feb 2025 11:54:36 +0100 (CET)
+From: Guillaume Chaye <guillaume.chaye@zeetim.com>
 To: buildroot@buildroot.org
-Date: Wed, 12 Feb 2025 10:45:13 +0100
-Message-Id: <20250212094513.2410216-1-peter@korsgaard.com>
+Date: Wed, 12 Feb 2025 05:53:41 -0500
+Message-Id: <20250212105342.591220-1-guillaume.chaye@zeetim.com>
 X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegfeehhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpedthfeiueduieejkeduveetudeugfdvvedvieekuedtuedvveduhfefgeevhfeihfenucffohhmrghinhepsghuihhlughrohhothdrnhgvthdpghhtkhhmmhdrohhrghdpghhnohhmvgdrohhrghenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvkhhosehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopeehpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhrtghpthhtohepuggrlhgrnhhgsehgmhigrdgrthdprhgtphhtthhopehfohhnthgrihhnvgdrfhgrsghrihgtvgesghhmrghilhdrtghomhdprhgtp
- hhtthhopehjrghmvghsrdhknhhighhhthestgholhhlihhnshdrtghomh
-X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=zeetim.com; s=mail0; t=1739357644;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=Vr+q9fjVECULQIQFJcvSrH43y/gs3yZdips0sbuOQSY=;
+ b=jWgfYEqz7/3sQ7idqacMos/e/R7aiK6Uxzmup11Lhfo73YoLQi5doTPcLVydBsZLL2RE/E
+ 51tawI8q+CE1c/5D7hpjXT1WtEVvNCRsyq8Q6nspR+prYaly3cOenALxyxA1Y1qM8qVVgI
+ 9gdA3WNxDtdGOdanlTr3rnlHWkUAs1CqsF9m04i5Bd980patNvr2mL8vxaSgO0EJAHp094
+ vbnMEr0dpfWpRMfWt2avo5Y14QGSNsR0pmgoVVvA+EVDNorMlCQsZiFQcqQtC8uuvS/7YY
+ bhfGhU3KHo4PQ1d9kmcUTvrKBZuBYNE+/1NT/qg0yIo+S7+x9r4f/Y+ZsWfpNg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/at-spi2-core: propagate !static
- dependency
+ header.from=zeetim.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=zeetim.com header.i=@zeetim.com header.a=rsa-sha256
+ header.s=mail0 header.b=jWgfYEqz
+Subject: [Buildroot] [PATCH 1/2] support/download/cargo-post-process: add
+ support for hook scripts before and after cargo vendoring.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,147 +80,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Daniel Lang <dalang@gmx.at>, Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- James Knight <james.knight@collins.com>
+Cc: Guillaume Chaye <guillaume.chaye@zeetim.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes http://autobuild.buildroot.net/results/06fb1275a6c67d0bb6e8e6c0ab31cce2587d5a0f/
-
-Commit d1757fdfb001 ("package/at-spi2-core: bump to version 2.48.0") added a
-dependency on !static but forgot to propagate it to the reverse
-dependencies.  Fix that.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
 ---
- package/atkmm/Config.in     | 6 ++++--
- package/atkmm2_28/Config.in | 6 ++++--
- package/libglade/Config.in  | 6 ++++--
- package/libgtk2/Config.in   | 5 +++--
- package/libgtk3/Config.in   | 5 +++--
- 5 files changed, 18 insertions(+), 10 deletions(-)
+ support/download/cargo-post-process | 31 ++++++++++++++++++++++++++++-
+ 1 file changed, 30 insertions(+), 1 deletion(-)
 
-diff --git a/package/atkmm/Config.in b/package/atkmm/Config.in
-index 571d7e69ad..e7ac0606f0 100644
---- a/package/atkmm/Config.in
-+++ b/package/atkmm/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_ATKMM
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # at-spi2-core/glibmm -> libglib2
- 	depends on BR2_USE_MMU # at-spi2-core/glibmm -> libglib2
- 	depends on BR2_USE_WCHAR # at-spi2-core/glibmm -> libglib2
-+	depends on !BR2_STATIC_LIBS # at-spi2-core
- 	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_GLIBMM
- 	select BR2_PACKAGE_LIBSIGC
-@@ -14,7 +15,8 @@ config BR2_PACKAGE_ATKMM
+diff --git a/support/download/cargo-post-process b/support/download/cargo-post-process
+index 12198051a4..4f75349541 100755
+--- a/support/download/cargo-post-process
++++ b/support/download/cargo-post-process
+@@ -5,17 +5,42 @@ set -e
+ # shellcheck source=helpers source-path=SCRIPTDIR
+ . "${0%/*}/helpers"
  
- 	  http://www.gtkmm.org/
++run_scripts() {
++    local scripts_errors=0  # Initialize error counter
++
++    for script in "$@"; do
++        # Ensure script exists and is executable before running
++        if [[ ! -x "$script" ]]; then
++            echo "Error: Script '$script' not found or not executable."
++            scripts_errors=$((scripts_errors + 1))
++            continue
++        fi
++
++		echo "Running script '$script' ..."
++        if ! "$script"; then
++			echo "Error: Script '$script' exit status is non zero."
++           scripts_errors=$((scripts_errors + 1))
++        fi
++    done
++
++    # Return the number of errors encountered
++    return $scripts_errors
++}
++
+ if [ "${BR_CARGO_MANIFEST_PATH}" ]; then
+     printf 'Setting BR_CARGO_MANIFEST_PATH is no longer supported; use post-process options.\n' >&2
+     exit 1
+ fi
  
--comment "atkmm needs a toolchain w/ C++, wchar, threads, gcc >= 7"
-+comment "atkmm needs a toolchain w/ dynamic library, C++, wchar, threads, gcc >= 7"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_USE_WCHAR \
--		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| BR2_STATIC_LIBS
-diff --git a/package/atkmm2_28/Config.in b/package/atkmm2_28/Config.in
-index e88073b87a..e62a8e729b 100644
---- a/package/atkmm2_28/Config.in
-+++ b/package/atkmm2_28/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_ATKMM2_28
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # at-spi2-core/glibmm -> libglib2
- 	depends on BR2_USE_MMU # at-spi2-core/glibmm -> libglib2
- 	depends on BR2_USE_WCHAR # at-spi2-core/glibmm -> libglib2
-+	depends on !BR2_STATIC_LIBS # at-spi2-core
- 	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_GLIBMM2_66
- 	select BR2_PACKAGE_LIBSIGC2
-@@ -17,7 +18,8 @@ config BR2_PACKAGE_ATKMM2_28
+ manifest=Cargo.toml
+-while getopts "n:o:m:" OPT; do
++declare -a pre_vendoring_scripts post_vendoring_scripts
++while getopts "n:o:m:v:V" OPT; do
+     case "${OPT}" in
+     o)  output="${OPTARG}";;
+     n)  base_name="${OPTARG}";;
+     m)  manifest="${OPTARG}";;
++	v) pre_vendoring_scripts+=( "${OPTARG}" );;
++	V) post_vendoring_scripts+=( "${OPTARG}" );;
+     :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
+     \?) error "unknown option '%s'\n" "${OPTARG}";;
+     esac
+@@ -31,6 +56,8 @@ post_process_unpack "${base_name}" "${output}"
+ # Do the Cargo vendoring
+ pushd "${base_name}" > /dev/null
  
- 	  http://www.gtkmm.org/
++run_scripts "${pre_vendoring_scripts[@]}" || exit 1
++
+ # Create the local .cargo/config with vendor info
+ mkdir -p .cargo/
+ mkdir -p "${CARGO_HOME}"
+@@ -46,6 +73,8 @@ cargo vendor \
+ # gets confusing, so instruct the user that it's been handled.
+ printf '(note: .cargo/config.toml automatically updated by Buildroot)\n\n'
  
--comment "atkmm (2.28.x) needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
-+comment "atkmm (2.28.x) needs a toolchain w/ dynamic library, C++, wchar, threads, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_USE_WCHAR \
--		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| BR2_STATIC_LIBS
-diff --git a/package/libglade/Config.in b/package/libglade/Config.in
-index 8d0d26f159..419b2717be 100644
---- a/package/libglade/Config.in
-+++ b/package/libglade/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_LIBGLADE
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
-+	depends on !BR2_STATIC_LIBS # at-spi2-core
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_LIBXML2
-@@ -14,7 +15,8 @@ config BR2_PACKAGE_LIBGLADE
++run_scripts "${post_vendoring_scripts[@]}" || exit 1
++
+ popd > /dev/null
  
- 	  https://download.gnome.org/sources/libglade/
- 
--comment "libglade needs a toolchain w/ wchar, threads"
-+comment "libglade needs a toolchain w/ dynamic library, wchar, threads"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_LIBGTK2
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| BR2_STATIC_LIBS
-diff --git a/package/libgtk2/Config.in b/package/libgtk2/Config.in
-index f8821ba246..6a2145ebed 100644
---- a/package/libgtk2/Config.in
-+++ b/package/libgtk2/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_LIBGTK2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
-+	depends on !BR2_STATIC_LIBS # at-spi2-core
- 	select BR2_PACKAGE_AT_SPI2_CORE
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
-@@ -33,10 +34,10 @@ config BR2_PACKAGE_LIBGTK2_DEMO
- 
- endif
- 
--comment "libgtk2 needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
-+comment "libgtk2 needs a toolchain w/ dynamic library, wchar, threads, C++, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_XORG7
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
-index 52ee50db49..ab2ab57c35 100644
---- a/package/libgtk3/Config.in
-+++ b/package/libgtk3/Config.in
-@@ -1,10 +1,10 @@
--comment "libgtk3 needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
-+comment "libgtk3 needs a toolchain w/ dynamic library, wchar, threads, C++, gcc >= 4.9"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
--		!BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 
- comment "libgtk3 needs an OpenGL or an OpenGL-EGL backend"
- 	depends on BR2_USE_MMU
-@@ -21,6 +21,7 @@ config BR2_PACKAGE_LIBGTK3
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
-+	depends on !BR2_STATIC_LIBS # at-spi2-core
- 	depends on BR2_PACKAGE_HAS_LIBEGL || \
- 		BR2_PACKAGE_HAS_LIBGL
- 	select BR2_PACKAGE_AT_SPI2_CORE
+ post_process_repack "$(pwd)" "${base_name}" "${output}"
 -- 
 2.39.5
 
