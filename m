@@ -1,107 +1,147 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41141C0219D
-	for <buildroot@archiver.kernel.org>; Thu, 13 Feb 2025 14:58:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9856CC021A0
+	for <buildroot@archiver.kernel.org>; Thu, 13 Feb 2025 17:03:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8AD440BFE;
-	Thu, 13 Feb 2025 14:58:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 441BE84099;
+	Thu, 13 Feb 2025 17:03:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dfXZi-Z_6U_y; Thu, 13 Feb 2025 14:58:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G2dtT7imrvvo; Thu, 13 Feb 2025 17:03:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F4D940C12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46A47840EB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F4D940C12;
-	Thu, 13 Feb 2025 14:58:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 06625C2
- for <buildroot@buildroot.org>; Thu, 13 Feb 2025 14:58:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46A47840EB;
+	Thu, 13 Feb 2025 17:03:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4DD4C2
+ for <buildroot@buildroot.org>; Thu, 13 Feb 2025 17:03:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA45740C20
- for <buildroot@buildroot.org>; Thu, 13 Feb 2025 14:58:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 880E3840EB
+ for <buildroot@buildroot.org>; Thu, 13 Feb 2025 17:03:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n8U9b66bqfjF for <buildroot@buildroot.org>;
- Thu, 13 Feb 2025 14:58:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::230; helo=mail-lj1-x230.google.com;
- envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 86E2940BA5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 86E2940BA5
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com
- [IPv6:2a00:1450:4864:20::230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 86E2940BA5
- for <buildroot@buildroot.org>; Thu, 13 Feb 2025 14:58:13 +0000 (UTC)
-Received: by mail-lj1-x230.google.com with SMTP id
- 38308e7fff4ca-308dfea77e4so11042341fa.1
- for <buildroot@buildroot.org>; Thu, 13 Feb 2025 06:58:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1739458691; x=1740063491;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=nXt7/6IPvwtMpSwz1155eKZfpSOi+L/kazlTaK+Sveg=;
- b=ezh7cV9v5G0AE9tNR1kE747kjNaquZib1cUqzqQpo/I+V/C2QI7LIjuFDz4bNgvug/
- fSiFWpdvVEy0SpSz7gqrIZeiTceS2KfBL0Qn0IKiNoeFtl5ykNMl1vBP7Q4DIMd09kNH
- RQcyX5mkrphPKUkpuhQ8ORBMEOH7G/O37IPRRutE9oMaq3K2raH78kau2uXqNpw8kkIa
- dz8oxGLCtxuBd39bEowiCbS/ideGUxDjJPoBFQHXb3zkQFFmcXwafSWsVq28BWDGbL8v
- R3WIflpxyBlppYr9/oV9evOfwOzCXPH1dw8R9zp66oOFEDyzy65fUqFD4hokrCcxz4sI
- eItg==
-X-Gm-Message-State: AOJu0YyEpiL393lKXuzR+uaQCd2wII0D2hEFRsWLoMyPH1NMgyiATb1O
- j6l7fEJ8ru8rNigPI8Pq2dmNLJ2YDU0O8UH3TnpOp+uC9aYrwJ/0V5EQ+Apb
-X-Gm-Gg: ASbGncsP9lelzHu/ilObXATUk5M23ecfTZuEqC+Af09ve9750S6GNnLq8fGOMBfx+V7
- 45zeNAqbvyP3pYYTUeFQG5bpnl00a0Iqrnbj2IUCXqzFuFng2rat9iK//YBb/IS0I3fRRS0y1Ih
- GrpzrPLK8T4Zbhhsm3JeKeaVUYlmvECzhlEhFtj0CV3DEsEb+slK1/lR/yvidNDPQ3LNOt4ukqw
- kD3m3Xcgb8TyvsH5NTi4Aat9mEgQl2T+1XVd3cp4fkYfgDODBzap01ETMNh9OZXQ+HmPtFKtI5f
- p4P6F3y9mziKtNAQUFqtKRIfGvj87cS+2T+CgohzWCXzVQ==
-X-Google-Smtp-Source: AGHT+IFeZ4TF1mFFehnSDklVpD//WH1V6jhuOQunhZHUiHuG1zruivVLGudq3lAAVoIhNsYcQuEZNw==
-X-Received: by 2002:a2e:984a:0:b0:2fa:d086:bca0 with SMTP id
- 38308e7fff4ca-3090f185ed4mr9645291fa.10.1739458691145; 
- Thu, 13 Feb 2025 06:58:11 -0800 (PST)
-Received: from precision7530-arch-roy.lan ([79.161.254.156])
- by smtp.gmail.com with ESMTPSA id
- 38308e7fff4ca-3091029be88sm2094681fa.96.2025.02.13.06.58.08
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 13 Feb 2025 06:58:09 -0800 (PST)
-From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-To: buildroot@buildroot.org
-Cc: Andreas Naumann <ANaumann@ultratronik.de>, Baxiche Su <baxiche@gmail.com>,
- Christian Hitz <christian@klarinett.li>,
- Jesse Van Gavere <jesseevg@gmail.com>,
- Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Date: Thu, 13 Feb 2025 15:57:44 +0100
-Message-ID: <20250213145747.639358-5-roykollensvendsen@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250213145747.639358-1-roykollensvendsen@gmail.com>
-References: <20250213145747.639358-1-roykollensvendsen@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 93IU6Oe-Q36Q for <buildroot@buildroot.org>;
+ Thu, 13 Feb 2025 17:03:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D36EB84099
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D36EB84099
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D36EB84099
+ for <buildroot@buildroot.org>; Thu, 13 Feb 2025 17:03:25 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.7.2] ([85.22.117.255]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MgvrB-1tAxM616VB-00lbwG; Thu, 13
+ Feb 2025 18:03:23 +0100
+Message-ID: <0804bdd2-df22-4a8a-9a2d-1638db25901f@gmx.de>
+Date: Thu, 13 Feb 2025 18:03:22 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Buildroot Notifications <buildroot.notifications@gmail.com>,
+ buildroot@buildroot.org
+References: <67aace92.170a0220.17b7b.ae2e@mx.google.com>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <67aace92.170a0220.17b7b.ae2e@mx.google.com>
+X-Provags-ID: V03:K1:4BlrOPRcU8WrjFYmJJyOHnGzeIgibIPIig4l7K/4CH3pUjeUWdL
+ 78Zc2UmkpEYtApmtXybMF86jon7p49qQ27a0bKyZ098N5FLXKfXaYEOdwXjbZBJKtHGs8DA
+ 1UjdKjjHHUi4Rmc06nP/kXTPjbL/tM13WCuD94OjoXLBaJjhfWRAzodTqqc/i93tpzEqd/z
+ rJzeQDPQT/FC/CmKcF8TA==
+UI-OutboundReport: notjunk:1;M01:P0:+R1Dzv7rNO4=;3VPwrLpsiBkeCKBkByRp3rZOlb0
+ 8vbVcS5kK1E/heIo08cF8u168Hf7MQ23kxZga43rEDxU588nntUsZC42/6EfcWQrTn/XjEHUl
+ c8MBvOLpmuonzGHlh08jTgAwsZFOXVn4/zVqBTzFkKlLFUfIuzgDOruGaQ+9WCRGw7cV25vTZ
+ s1Eq6hVnU+izYRL4woUFZ0JkS+G1aWAUzzwItVqwB8Z2n89f08sgH7vJxfFw/B9sVZMqzEhba
+ E9128BEGjXkuVYwKFBQKkZ1eLuFjlzh0YfUlw9OkLinsF/d1aqs9raCZYcRL8oRo33bSAP1l6
+ Zt3RzFNV3omM/r3ppJVVuIG5Zd+J8OPDIjqTkX1JrPdHdycKcIAz6c39zNYziW4VX0jXcp3Wj
+ Za1kUMFKuFd0MsDM0/agqvzcFP5wpwz0cj9AdBEtKYIRWV0JZvbrsb8YSVebQ7nKXiMGj5dhd
+ nI+3X+egD0pS9gVgeaa/ubb8HA4Ay6p2LOkAVkC0j+/VU4DjKGIqVGSrQU1cWPTYaS33C47U7
+ v1FDNOW4jgtDYC7gOxCDDlMgnkBDPsiqzLhYW63chx/kqe2vvoC1Lhm5U821hb4xvtd8EmD0v
+ oU20/u/hmLfZ2b0IiI2nuea6pwMEO6Br2pdUZThyGMtyBbDL2EHVK3dbp9ubbcE4lsvIHtt/P
+ +yD0L0rutAAwYM1wjFUzTeGmSNF+vqVO1JqF1f0n9vFrqv9jN/H0LBMuMCSIocFnSW7ZNjIm4
+ JbsjtywERzfhxUUias2bFt7iY5+EjIFYeqRDRo9nLgmRryt74SxkvsCtyoGvBw7L2JEWuETDm
+ LtJkv535wUMXrf687KBRDMDH+mh5pNskrIHVLcwKJJ2x7rDJad5AfdTA+yICtv1USYVKRZIo6
+ tr4TB3SHHT7DkkWjYyf0gsqxGdL2sKZnKhsuXyAm6Vr5OFic90pTLq+ZgU5q/t95QwzBkc1xx
+ NKb8f889zQTsDB/eXDuoP5Yrui/I4qMRnMTyWhhZgmjkdfpJLjDJw1EMgNVopuYl8kZV7O6JL
+ qfSePDZOj8s1I5jPD7o3CnU9vTbzOpWoEQTCGSi1tDepbNW2O0jEIR7EeCENIsXQbn0KGQEpH
+ Ew4/51qvGg488v4s6yzJ+zI4Xhc1BRLULXtVGLhHSZGP0NSA9aoQ9z8wJlr2AlJ/Ai8OqLXXT
+ vnkkdX2TMHcuWyLfHwdTh7zuqbgwCyQY9HF/z/x33jGQ1SkIoICi+wvgQiDsi0mlPSubufPwx
+ ZD2J3WOQuEF6RVQO3wFhkDX44uZJu3l4uCMRm3p7qMIqL51KhuDY+B1V5i+5qzWvZu3g2vfSj
+ wqGY1KGpRqF0ruKRNZA8CP4rNrgT0PVUVF4msN3PQiBhLbWRjByMkQL3di+X9l4fe5BgI3rsJ
+ jDNLua5Q7ytFQzCVU+hgQCTrIi0UIAjRfghh2VzI4tGzkNBExEyM8WWosBndnxEZwpiOpQ5+4
+ pOLNyow==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1739458691; x=1740063491; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=nXt7/6IPvwtMpSwz1155eKZfpSOi+L/kazlTaK+Sveg=;
- b=EtOtGF1oyeriWz3E5MKJuB12XGUPIiN8Fx3Ot8kCrEGDDVLNcke+M3/VSwzuPbMLsB
- 2zz5lxEltEMHYGSIHdKYpfTUUJA4ZIidN6NMj87JHMcAbnKP5F1Z1aEepR5kPUOri+HG
- cZWwm66FFFd690HkGjUZSIpvzvElKyB5r9olniZE7h0w0R5gnPJvoBNAGwjnvZ2FpcA3
- wMSyN+O45a+Atj4L1MXiM0fnnO6Y5aYzW3PMFc+1nisRffv3Rk/obJA+BD5qKNRXap7v
- O2CiRrZDxGD6NhUulgVRGXF4OYU0vKZfmjKZOBjL/+5UilNlLkQSn/89oN38+GrK2Ufq
- ikgA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=EtOtGF1o
-Subject: [Buildroot] [PATCH 4/4] package/qt6/qt6tools: WIP
+ d=gmx.de; 
+ s=s31663417; t=1739466203; x=1740071003; i=fiona.klute@gmx.de;
+ bh=LzDnMpZMPtysys82Z8JcVf7BWD96YVvAp5n/K4Advi4=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:
+ References:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:cc:content-transfer-encoding:
+ content-type:date:from:message-id:mime-version:reply-to:subject:
+ to;
+ b=CwKpCPTHLHJYu9Xm0oHavUtpj15eFvcVO0wIuxWbQdmuzOl9s1Kp+cTrOzDKb36u
+ +B5jSCKah2c+Yj20k2FlFyFDR4E2Tzj86riCPJ38eCYw4ukNW8dePQqt5PRT8DZDm
+ dp1vO3O9O1THxr6uWpLbkj5Y59T39aMSeuUbqzLIpYDDlrlmQnyzwO2JDeuACDu0b
+ 7dl1s0NC5uieCMY8OnFmKSNxLBI1gQB8DUUeF5y5gq65Tk2WPUaQUdx/y9UbhJ7w5
+ t0ygGqlX5y8Yy/eVzghuKwkTNiC0Ytli8qr3tzcvVJPInSRZrT7CZ9z3cG5d6JWlw
+ krhSSE7I6M+pivMHEA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=CwKpCPTH
+Subject: Re: [Buildroot] [autobuild.buildroot.org] Daily results for
+ 2025-02-10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,164 +153,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
----
- package/qt6/qt6base/Config.in.host  |  7 +++++++
- package/qt6/qt6base/qt6base.mk      | 16 ++++++++++++++--
- package/qt6/qt6tools/Config.in      | 21 +++++++++++++++++++++
- package/qt6/qt6tools/Config.in.host | 12 +++++++++---
- package/qt6/qt6tools/qt6tools.mk    | 12 ++++++++++++
- 5 files changed, 63 insertions(+), 5 deletions(-)
-
-diff --git a/package/qt6/qt6base/Config.in.host b/package/qt6/qt6base/Config.in.host
-index e38e99fbaf..5d4476aca2 100644
---- a/package/qt6/qt6base/Config.in.host
-+++ b/package/qt6/qt6base/Config.in.host
-@@ -11,6 +11,13 @@ config BR2_PACKAGE_HOST_QT6BASE_GUI
- config BR2_PACKAGE_HOST_QT6BASE_NETWORK
- 	bool
- 
-+config BR2_PACKAGE_HOST_QT6BASE_PNG
-+	bool
-+	select BR2_PACKAGE_HOST_LIBPNG
-+
-+config BR2_PACKAGE_HOST_QT6BASE_PRINTSUPPORT
-+	bool
-+
- # Select this if you need host qt6 tools that require the Qt::Test module
- # (e.g. qmltestrunner).
- config BR2_PACKAGE_HOST_QT6BASE_TEST
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index a4c56da601..12848513ee 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -112,10 +112,8 @@ HOST_QT6BASE_CONF_OPTS += \
- 	-DFEATURE_xcb=OFF \
- 	-DFEATURE_opengl=OFF -DINPUT_opengl=no \
- 	-DFEATURE_harfbuzz=OFF \
--	-DFEATURE_png=OFF \
- 	-DFEATURE_gif=OFF \
- 	-DFEATURE_jpeg=OFF \
--	-DFEATURE_printsupport=OFF \
- 	-DFEATURE_kms=OFF \
- 	-DFEATURE_fontconfig=OFF \
- 	-DFEATURE_libinput=OFF \
-@@ -139,6 +137,20 @@ else
- HOST_QT6BASE_CONF_OPTS += -DFEATURE_network=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_HOST_QT6BASE_PNG),y)
-+HOST_QT6BASE_CONF_OPTS += -DFEATURE_png=ON -DFEATURE_system_png=ON
-+HOST_QT6BASE_DEPENDENCIES += libpng
-+else
-+HOST_QT6BASE_CONF_OPTS += -DFEATURE_png=OFF
-+endif
-+
-+# Needed for building the qhelpgenerator host tool (Part of qt6tools).
-+ifeq ($(BR2_PACKAGE_HOST_QT6BASE_PRINTSUPPORT),y)
-+HOST_QT6BASE_CONF_OPTS += -DFEATURE_printsupport=ON
-+else
-+HOST_QT6BASE_CONF_OPTS += -DFEATURE_printsupport=OFF
-+endif
-+
- # We need host qt6base with Sql support for host-qt6tools to generate the
- # qhelpgenerator host tool. qt6tools will fail to build if qhelpgenerator is not
- # available.
-diff --git a/package/qt6/qt6tools/Config.in b/package/qt6/qt6tools/Config.in
-index 1828e5f043..1a9cda1ef9 100644
---- a/package/qt6/qt6tools/Config.in
-+++ b/package/qt6/qt6tools/Config.in
-@@ -11,3 +11,24 @@ config BR2_PACKAGE_QT6TOOLS
- 	  and design of applications.
- 
- 	  https://github.com/qt/qttools
-+
-+if BR2_PACKAGE_QT6TOOLS
-+
-+config BR2_PACKAGE_QT6TOOLS_ASSISTANT
-+	bool "assistant"
-+	select BR2_PACKAGE_HOST_QT6TOOLS_QHELPGENERATOR
-+	select BR2_PACKAGE_QT6BASE_GUI
-+	select BR2_PACKAGE_QT6BASE_PNG
-+	select BR2_PACKAGE_QT6BASE_SQL
-+	select BR2_PACKAGE_QT6BASE_WIDGETS
-+	help
-+	  Qt Assistant is a tool for viewing on-line documentation in
-+	  Qt help file format.
-+
-+config BR2_PACKAGE_QT6TOOLS_LINGUIST_TOOLS
-+	bool "linguist tools"
-+	help
-+	  Translate Qt C++ and Qt Quick applications into local
-+	  languages.
-+
-+endif
-diff --git a/package/qt6/qt6tools/Config.in.host b/package/qt6/qt6tools/Config.in.host
-index 7a6f8a5176..3037261fd3 100644
---- a/package/qt6/qt6tools/Config.in.host
-+++ b/package/qt6/qt6tools/Config.in.host
-@@ -2,9 +2,6 @@ config BR2_PACKAGE_HOST_QT6TOOLS
- 	bool "host qt6tools"
- 	# The Qt Qt Network module is required
- 	select BR2_PACKAGE_HOST_QT6BASE_NETWORK
--	# Requires the Qt Sql module to build the qhelpgenerator
--	# tool, if target support for Sql is present
--	select BR2_PACKAGE_HOST_QT6BASE_SQL if BR2_PACKAGE_QT6BASE_SQL
- 	help
- 	  Qt is a cross-platform application and UI framework for
- 	  developers using C++.
-@@ -22,4 +19,13 @@ config BR2_PACKAGE_HOST_QT6TOOLS_LINGUIST_TOOLS
- 	  Translate Qt C++ and Qt Quick applications into local
- 	  languages.
- 
-+config BR2_PACKAGE_HOST_QT6TOOLS_QHELPGENERATOR
-+	bool "host qhelpgenerator"
-+	select BR2_PACKAGE_HOST_QT6BASE_GUI
-+	select BR2_PACKAGE_HOST_QT6BASE_PNG
-+	select BR2_PACKAGE_HOST_QT6BASE_PRINTSUPPORT
-+	select BR2_PACKAGE_HOST_QT6BASE_SQL
-+	help
-+	  Qt Compressed Help File Generator.
-+
- endif
-diff --git a/package/qt6/qt6tools/qt6tools.mk b/package/qt6/qt6tools/qt6tools.mk
-index b063f08887..996acd19db 100644
---- a/package/qt6/qt6tools/qt6tools.mk
-+++ b/package/qt6/qt6tools/qt6tools.mk
-@@ -41,6 +41,12 @@ ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
- QT6TOOLS_DEPENDENCIES += qt6declarative
- endif
- 
-+ifeq ($(BR2_PACKAGE_QT6TOOLS_ASSISTANT),y)
-+QT6TOOLS_CONF_OPTS += -DFEATURE_assistant=ON
-+else
-+QT6TOOLS_CONF_OPTS += -DFEATURE_assistant=OFF
-+endif
-+
- HOST_QT6TOOLS_CONF_OPTS = \
- 	-DQT_BUILD_EXAMPLES=OFF \
- 	-DQT_BUILD_TESTS=OFF
-@@ -59,5 +65,11 @@ else
- HOST_QT6TOOLS_CONF_OPTS += -DFEATURE_linguist=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_HOST_QT6TOOLS_QHELPGENERATOR),y)
-+HOST_QT6TOOLS_CONF_OPTS += -DFEATURE_assistant=ON
-+else
-+HOST_QT6TOOLS_CONF_OPTS += -DFEATURE_assistant=OFF
-+endif
-+
- $(eval $(cmake-package))
- $(eval $(host-cmake-package))
--- 
-2.48.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgZXZlcnlvbmUhCgpBbSAxMS4wMi4yNSB1bSAwNToxNCBzY2hyaWViIEJ1aWxkcm9vdCBOb3Rp
+ZmljYXRpb25zOgo+IEhlbGxvLAo+Cj4gQXV0b2J1aWxkIHN0YXRpc3RpY3MgZm9yIDIwMjUtMDIt
+MTAKPiA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQo+Cj4gICAgICAgIGJyYW5j
+aCB8ICBPSyB8IE5PSyB8IFRJTSB8IFRPVCB8Cj4gICAgMjAyNC4wMi54ICB8ICAyICB8ICA0ICB8
+ICAwICB8ICA2ICB8Cj4gICAgMjAyNC4xMS54ICB8ICAzICB8ICA0ICB8ICAwICB8ICA3ICB8Cj4g
+ICAgICBtYXN0ZXIgICB8IDE5ICB8IDIyNSB8ICAwICB8IDI0NCB8Cj4KPiBDbGFzc2lmaWNhdGlv
+biBvZiBmYWlsdXJlcyBieSByZWFzb24gZm9yIG1hc3Rlcgo+IC0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4KPiAgICAgICAgICAgICAgICAgIGVsZnV0aWxz
+LTAuMTkyIHwgMjAKPiAgICBnb2JqZWN0LWludHJvc3BlY3Rpb24tMS44Mi4wIHwgMTAKClvigKZd
+Cgo+ICAgIHBvd2VycGMgICAgfCAgZ29iamVjdC1pbnRyb3NwZWN0aW9uLTEuODIuMCAgfCBOT0sg
+fCBodHRwczovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvNDZhMzY1NDVmZTBjMWM0
+YzVmZmJhODkyNWVmYzEzODY4YzNjNGI2YSB8IE9SUEgKPiAgICAgc2g0YWViICAgIHwgIGdvYmpl
+Y3QtaW50cm9zcGVjdGlvbi0xLjgyLjAgIHwgTk9LIHwgaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRy
+b290Lm9yZy9yZXN1bHRzLzg0Mjg0NDBmZThmOGJkYzliMTcxZTUxNTI0YTIyMzhiNzNhYWI0MDEg
+fCBPUlBICj4gICAgc3BhcmM2NCAgICB8ICBnb2JqZWN0LWludHJvc3BlY3Rpb24tMS44Mi4wICB8
+IE5PSyB8IGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy8xZTZiMzQ0NzU3
+Y2E5ZjdjYTc2ZDQ4MzRkMmVhMTYzMzYzYWU3MjI4IHwgT1JQSAo+ICAgIGFhcmNoNjQgICAgfCAg
+Z29iamVjdC1pbnRyb3NwZWN0aW9uLTEuODIuMCAgfCBOT0sgfCBodHRwczovL2F1dG9idWlsZC5i
+dWlsZHJvb3Qub3JnL3Jlc3VsdHMvYmJiNzliMGFiYjc1YTRhMTNiY2MzYTc2MDFkZWQzOTI4OWJl
+ZTk1YyB8IE9SUEgKPiAgICBzcGFyYzY0ICAgIHwgIGdvYmplY3QtaW50cm9zcGVjdGlvbi0xLjgy
+LjAgIHwgTk9LIHwgaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzFhMDUx
+OTIyYTkwNjUwZTkzOWUzYzRiNjlhOGU2NmU2NTEwYjEyMjMgfCBPUlBICj4gICAgc3BhcmM2NCAg
+ICB8ICBnb2JqZWN0LWludHJvc3BlY3Rpb24tMS44Mi4wICB8IE5PSyB8IGh0dHBzOi8vYXV0b2J1
+aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy8yNmY3NzUzNGQ0OGJmOTY4OGI2NDZmODBlYWQ5NWIw
+MDNmNjhlMDZjIHwgT1JQSAo+ICAgIHBvd2VycGMgICAgfCAgZ29iamVjdC1pbnRyb3NwZWN0aW9u
+LTEuODIuMCAgfCBOT0sgfCBodHRwczovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMv
+NGI0OGQ3NjJiZGViYWExMjI5ZGFmMDAzMDcwMzlkYjlkNDg2ZTA5MSB8IE9SUEgKPiAgICBzcGFy
+YzY0ICAgIHwgIGdvYmplY3QtaW50cm9zcGVjdGlvbi0xLjgyLjAgIHwgTk9LIHwgaHR0cHM6Ly9h
+dXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzczOGYwNjgwNTNmODUwNmEzMTgwZjViZjFl
+ZWE1ODZlMGMyMjVhNTMgfCBPUlBICj4gICAgc3BhcmM2NCAgICB8ICBnb2JqZWN0LWludHJvc3Bl
+Y3Rpb24tMS44Mi4wICB8IE5PSyB8IGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVz
+dWx0cy84YTQ4NWM3MTY5YmEyYmY3M2QwNjkzYWFkZWFhMmQ1MWQyZWYwNzg3IHwgT1JQSAo+ICAg
+ICAgaTY4NiAgICAgfCAgZ29iamVjdC1pbnRyb3NwZWN0aW9uLTEuODIuMCAgfCBOT0sgfCBodHRw
+czovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvZjIwZDYwNGFiYTJiN2ZiY2ZjZmY0
+MTlmNDdiNzdlM2NhMjQ5YTE3OSB8IE9SUEgKQWxtb3N0IGFsbCBvZiB0aGVzZSAob25lIEknbSBu
+b3Qgc3VyZSkgYXJlIFFlbXUgYnJlYWtpbmcsIHdpdGgKU2VnZmF1bHQvSWxsZWdhbCBJbnN0cnVj
+dGlvbi9BYm9ydCBpbiBnLWlyLXNjYW5uZXItcWVtdXdyYXBwZXIuIEl0J3Mgbm90Cm9idmlvdXMg
+dG8gbWUgKndoeSosIGJ1dCAiaWxsZWdhbCBpbnN0cnVjdGlvbiIgbG9va3MgbGlrZSBhdCBsZWFz
+dCBwYXJ0Cm9mIHRoZSBpc3N1ZSBpcyBhIG1pc21hdGNoIGJldHdlZW4gdGFyZ2V0IENQVSB2ZXJz
+aW9uIGFuZCB0aGUgQ1BVCmVtdWxhdGVkIGJ5IFFFTVUuCgpCUjJfUEFDS0FHRV9IT1NUX1FFTVVf
+VVNFUl9NT0RFX0FSR1Mgd2FzIG9yaWdpbmFsbHkgYWRkZWQgdG8gc29sdmUgc3VjaAppc3N1ZXMg
+KHNlZSA3MGJhZDYxYjUzYzUwODAxZmM5MTZmNzgxOTRjMGM0ZGVkMWJiNmI2ICJwYWNrYWdlL3Fl
+bXU6IGFkZApCUjJfUEFDS0FHRV9IT1NUX1FFTVVfVVNFUl9NT0RFX0FSR1Mgc3RyaW5nIikuIEJ1
+dCBleHBlcmltZW50aW5nIHdpdGgKZWFjaCBmYWlsaW5nIGNvbmZpZyB0byBzZWUgd2hhdCBDUFUg
+bWlnaHQgd29yayBzZWVtcyBsaWtlIGEgbG90IG9mCnRyb3VibGUsIEkgd29uZGVyIGlmIHRoZXJl
+J3MgYSBiZXR0ZXIgd2F5IHRvIGRlcml2ZSB0aGUgUUVNVSBDUFUgZnJvbQp0aGUgdGFyZ2V0LgoK
+QmVzdCByZWdhcmRzLApGaW9uYQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
+ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
