@@ -4,96 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB8B3C0219D
-	for <buildroot@archiver.kernel.org>; Thu, 13 Feb 2025 14:41:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 288A4C021A0
+	for <buildroot@archiver.kernel.org>; Thu, 13 Feb 2025 14:58:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4CDEC40B88;
-	Thu, 13 Feb 2025 14:41:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C8DB640B61;
+	Thu, 13 Feb 2025 14:58:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1fXMlDW0blEr; Thu, 13 Feb 2025 14:41:55 +0000 (UTC)
+ id 1hxhBA5zRL_o; Thu, 13 Feb 2025 14:58:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05204407FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8511F40B86
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05204407FE;
-	Thu, 13 Feb 2025 14:41:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B35F12D
- for <buildroot@buildroot.org>; Thu, 13 Feb 2025 14:41:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8511F40B86;
+	Thu, 13 Feb 2025 14:58:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E654912D
+ for <buildroot@buildroot.org>; Thu, 13 Feb 2025 14:58:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EDB3F407FE
- for <buildroot@buildroot.org>; Thu, 13 Feb 2025 14:41:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D59B661766
+ for <buildroot@buildroot.org>; Thu, 13 Feb 2025 14:58:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vt6MAHcFhwW2 for <buildroot@buildroot.org>;
- Thu, 13 Feb 2025 14:41:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0N4U-D6jbXPn for <buildroot@buildroot.org>;
+ Thu, 13 Feb 2025 14:58:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::b2a; helo=mail-yb1-xb2a.google.com;
- envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 938D040999
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 938D040999
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com
- [IPv6:2607:f8b0:4864:20::b2a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 938D040999
- for <buildroot@buildroot.org>; Thu, 13 Feb 2025 14:41:51 +0000 (UTC)
-Received: by mail-yb1-xb2a.google.com with SMTP id
- 3f1490d57ef6-e545c1e8a15so993139276.1
- for <buildroot@buildroot.org>; Thu, 13 Feb 2025 06:41:51 -0800 (PST)
+ client-ip=2a00:1450:4864:20::229; helo=mail-lj1-x229.google.com;
+ envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F164261485
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F164261485
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com
+ [IPv6:2a00:1450:4864:20::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F164261485
+ for <buildroot@buildroot.org>; Thu, 13 Feb 2025 14:57:59 +0000 (UTC)
+Received: by mail-lj1-x229.google.com with SMTP id
+ 38308e7fff4ca-308e9ff235bso8734331fa.2
+ for <buildroot@buildroot.org>; Thu, 13 Feb 2025 06:57:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1739457710; x=1740062510;
+ d=1e100.net; s=20230601; t=1739458678; x=1740063478;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=M3HwkxxvVOfUH9sIe8rYixvCrhWtbfNM19ClOXpPLpM=;
- b=u4Vhxyc0mUOyDAl12og6ZwwIBeELxaPQxcDYguMieNVWF2pFqWOCEA+e4rmA7du84C
- 4IAIvMOzdzOMzx9tA741MHMnL24l7ppKYco+iEUiw04mWDbTYy77yyaNdimCx8tiwDGR
- BvktxZ5lPP1VfkoAQvygQ6+sYmobsC+K7qxLPPDH0Q/iXeH33nfjTMmNKkbCuG/cyk0l
- XC7vBzXPwb3pzmJy0COXLodCAVjJbFgR4vR91bgCtt5fckLNQgeUKyNl7j5rQmgSGumj
- bUeRRu6Uh4cfGaqVFf0kyOxX9DgD31sZ+ATDdAg5Rmr3BKAbQ0dJA1kErEprAGJfInAp
- MJmQ==
-X-Gm-Message-State: AOJu0Yycs2iUSJYP6fLvUhQBCkjbF/UolERSyrBhrxkqMAS0IPWLCSNN
- TRBI842XwWUd2oYu2a6uvpAUP0gtsoYQXIDSAI26tdwRkZaG+6bBO4DFXA==
-X-Gm-Gg: ASbGncuZPbKrkykH3btqzfufveBxekcSu8KdAdDHzK2xsUwPPaZu/5mzf0kLZvwX/dH
- CsvDD4ipvaGdldGvIkF903qV7wdBovdMSb9+J2WCQacHZCVuPp2Kd8LUMxpQtO9U5LIuTH+xNg+
- iM6xSF3G6k+oqFtscF4m/5X25kZjzwjT/qV2eLxoMLvHwMXr0lXPoJY7xT66hsH2oo6qmdUbZyp
- zOYF01IjdlQ+/KVXn+L+21pus5q7+GHNZswvwSv2tjMP2f203XMq47sPnwQgdsRGU6den8k8ooO
- Sw3/xsQRCTpp
-X-Google-Smtp-Source: AGHT+IGFHpeni1f8VmGKO81DW8zM7VmaS9Io4NjMlOG5OM4nlySsg8JPPnps9NUlhRMCXal0nOc75A==
-X-Received: by 2002:a05:6902:843:b0:e58:1556:2c18 with SMTP id
- 3f1490d57ef6-e5da820c6c0mr3405707276.41.1739457709946; 
- Thu, 13 Feb 2025 06:41:49 -0800 (PST)
-Received: from localhost ([66.112.214.180]) by smtp.gmail.com with ESMTPSA id
- 3f1490d57ef6-e5dae0da314sm418128276.45.2025.02.13.06.41.48
+ bh=OvCne0A9SGiDrM83MaPf5uu9hHjIP3BXrATYXyXcBy8=;
+ b=pZVCmz+9EOG1Feopdpd55Mu3xFpBLIYSJpHn3YHifAg4fXa8DsbeikeipSCj9fcBxr
+ 3Jcel7rSntAQaePhoc6MhCOTdCSkfUg1E+z0k3+BxavPZV6xNSwb+qzLAnP8+QY0BmJj
+ BLT5rcQ6/G5e65cSdi1d7hlFgXpgnvgQMZmWz3kNAVfe6CSvCG1F+kZJjAml1my+V8KW
+ Nkd+mw6IGRQdvWrkoq9YGYT6CfsB68NIqEmEOsljmXEobdIENETpteSJoXcbdCqoENzS
+ wFNVtOgEnfn30G3ZSq8Fbd+lHRxtcxwVN8GOPyMMmoT2KjhPEcmk1xzI3mBL6LJCgTlO
+ Oe8A==
+X-Gm-Message-State: AOJu0Yw/JDA6x1zTkl4jI74ZAPe8EUZDEuGztQU9yg5dszax7UWwXfQb
+ ZyJ3Ix7nPBG+lmpiWQ/7JSoqNtDjxk6p7+BOsTqYjJTNZEi2Sdajq8w3OuDI
+X-Gm-Gg: ASbGnctlEGcrLDJr3BO8+SSiOIQb7RhmSQsM2/O4D28gvVUoI8EAUkCbn/2AKgXCJyb
+ MhxHD6wxEYX/0E6z48UCUQBBdb8I9ojdFmZhW6CS71mf4XIiDioRiyRkBbsP34A/WKTlX1eG4Bi
+ +zEH3gfqilA1hq6OMkq4AA/EAg6skNN7pmAp1n80F716P4C2Kif2ZfnfuvdqI8iL4HwcTTR+JOn
+ N6Dj2I+sxc4Q6zIp6jHE1q9Ji74Zleuy8uZhP4TzxLo3AdmIGvddblaSFnSfenc8MPtSWeVCfGw
+ t8WThPZ/adpeWgxlPp5klva01oCJilWrUf545W97iBYHEQ==
+X-Google-Smtp-Source: AGHT+IE6NLw8wQv++xvVovnr3IHdSYwA4PYqL4UUGl2642EUvzahWNsRd1jNgFcpleYGLEm8ycetXA==
+X-Received: by 2002:a2e:a80e:0:b0:308:ec6f:7022 with SMTP id
+ 38308e7fff4ca-3090366a994mr32610931fa.17.1739458677421; 
+ Thu, 13 Feb 2025 06:57:57 -0800 (PST)
+Received: from precision7530-arch-roy.lan ([79.161.254.156])
+ by smtp.gmail.com with ESMTPSA id
+ 38308e7fff4ca-3091029be88sm2094681fa.96.2025.02.13.06.57.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 13 Feb 2025 06:41:49 -0800 (PST)
-From: Scott Fan <fancp2007@gmail.com>
+ Thu, 13 Feb 2025 06:57:55 -0800 (PST)
+From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 13 Feb 2025 22:41:33 +0800
-Message-ID: <20250213144135.1969776-1-fancp2007@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Cc: Andreas Naumann <ANaumann@ultratronik.de>, Baxiche Su <baxiche@gmail.com>,
+ Christian Hitz <christian@klarinett.li>,
+ Jesse Van Gavere <jesseevg@gmail.com>,
+ Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Date: Thu, 13 Feb 2025 15:57:40 +0100
+Message-ID: <20250213145747.639358-1-roykollensvendsen@gmail.com>
+X-Mailer: git-send-email 2.48.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1739457710; x=1740062510; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1739458678; x=1740063478; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=M3HwkxxvVOfUH9sIe8rYixvCrhWtbfNM19ClOXpPLpM=;
- b=WDwRMBaoj92L6rplyKi7Ao89v2NZwjCM6+BuMRS5Zn/Yj82UWzL2fUnxZkGoUup2GS
- c8wkmDlevFRpt3oSoUpfGaNNQzoW8U4xKYz1gGw3gP+ySsqot15j3KRsmG0ayBJz0kSc
- U7R/3KiuQWjhIRzhJ+KxgcEbmP8rq9OThXDC0eEt3dJH+594ilSFAJuTNNyBbtKV9b3p
- g2vTuM9+gRJoIm9cDdbxGG0hnmSLW1+FegRCQGyFme+06nJELkgUdVzO11lQmcj1aIj2
- 1uo3ZJkGGJaVUJQAppWNhalPI+ta0SfBQVYgl1g446afslICTY1O6xvx9h1ABy4m9uMh
- 97/g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=OvCne0A9SGiDrM83MaPf5uu9hHjIP3BXrATYXyXcBy8=;
+ b=nZZ4foUbww0KyKQlvF1yQuTtyE+UBwYk2CE9xn2zIr3xG8wjiYCKmBva4l7oYfduuG
+ v1cJh270oGKnSEVUxv126oOURyyk9mjArDjP6KoBFdlX98hJpTRIeNw+Sj3tm7oUnKvB
+ piwaz/o6kWoxidfg96jdD03NL324m+gipn3Fo1Mxy3eqvMtUcbJsj4ilp/EWz80eoQGv
+ m62xS+eGk97pcMpYal1VZtfTDiGQCsz6bgQBwB5rmQ3TdYsLz9wPpixma8bZHUdhXjLj
+ BuF+ogJkM7Jodxuv5UHsvBIFkGp571r/Y3djYRCthwIgPmnrKS1sUO2yMrAmxwTBLnHX
+ rhuQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=WDwRMBao
-Subject: [Buildroot] [PATCH] configs/beaglebone: bump Linux to
- 6.6.58-ti-arm32-r10 and U-Boot to 2025.01
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=nZZ4foUb
+Subject: [Buildroot] [RFC PATCH 0/4] bump, fix and add qt6 packages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,66 +110,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Lothar Felten <lothar.felten@gmail.com>, Scott Fan <fancp2007@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch bumps the Linux kernel to version 6.6.58-ti-arm32-r10 and
-U-Boot to version 2025.01.
+Here I'm bumping Qt6 to 6.8.2. This is probably good to do before the upcomming buildroot 2025.02 release.
 
-Tested on beaglebone black.
+I also had a patch that adds Qt6 Sensor laying around on patchwork, so I bumped that as well.
 
-Link: https://github.com/beagleboard/linux/releases/tag/6.6.58-ti-arm32-r10
+Some files were removed from Qt6 Multimedia's LICENSES-folder, so i removed those, to fix legal-info.
+I should probably squash that commit into the version bump commit.
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
----
- board/beagleboard/beaglebone/patches/linux/linux.hash | 2 +-
- board/beagleboard/beaglebone/patches/uboot/uboot.hash | 2 +-
- configs/beaglebone_defconfig                          | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+I encounterd some bugs when trying to build qt6tools. I'm still working on fixing these.
 
-diff --git a/board/beagleboard/beaglebone/patches/linux/linux.hash b/board/beagleboard/beaglebone/patches/linux/linux.hash
-index 4a7384d036..b7d4412941 100644
---- a/board/beagleboard/beaglebone/patches/linux/linux.hash
-+++ b/board/beagleboard/beaglebone/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  f1ae7325c6c146e0f852866a3bfd3f90ae1b5f46e414bc99a38384ed677e3721  linux-6.6.32-ti-arm32-r7.tar.gz
-+sha256  c6ee813cc48fe7e308c149798100d621514e832da507e34d1dfd8247ef9ae39f  linux-6.6.58-ti-arm32-r10.tar.gz
-diff --git a/board/beagleboard/beaglebone/patches/uboot/uboot.hash b/board/beagleboard/beaglebone/patches/uboot/uboot.hash
-index 904fa56c02..50674352d7 100644
---- a/board/beagleboard/beaglebone/patches/uboot/uboot.hash
-+++ b/board/beagleboard/beaglebone/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
-+sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index cad32e90b1..ddeb221e86 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beagleboard/beaglebone/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.6.32-ti-arm32-r7)/linux-6.6.32-ti-arm32-r7.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.6.58-ti-arm32-r10)/linux-6.6.58-ti-arm32-r10.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/omap/am335x-evm ti/omap/am335x-bone ti/omap/am335x-boneblack ti/omap/am335x-bonegreen ti/omap/am335x-evmsk ti/omap/am335x-boneblue ti/omap/am335x-boneblack-wireless ti/omap/am335x-bonegreen-wireless"
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+I don't think the bump to Qt 6.8.2 introduced the qt6tools problems, so I think it's safe to bump
+the version without these last changes. But I'm not sure.
+
+Please test and comment. It takes a lot of time to test Qt6 stuff, so help is appreciated.
+
+Roy Kollen Svendsen (4):
+  package/qt6: bump version to 6.8.2
+  package/qt6/qt6multimedia: fix legal-info
+  package/qt6/qt6sensors: new package
+  package/qt6/qt6tools: WIP
+
+ package/qt6/Config.in                         |  1 +
+ package/qt6/qt6.mk                            |  2 +-
+ package/qt6/qt6base/Config.in.host            |  7 ++++
+ package/qt6/qt6base/qt6base.hash              |  4 +--
+ package/qt6/qt6base/qt6base.mk                | 16 ++++++++--
+ package/qt6/qt6charts/qt6charts.hash          |  4 +--
+ .../qt6/qt6core5compat/qt6core5compat.hash    |  4 +--
+ .../qt6/qt6declarative/qt6declarative.hash    |  4 +--
+ package/qt6/qt6graphs/qt6graphs.hash          |  4 +--
+ .../qt6languageserver/qt6languageserver.hash  |  4 +--
+ package/qt6/qt6mqtt/qt6mqtt.hash              |  2 +-
+ package/qt6/qt6multimedia/qt6multimedia.hash  | 12 ++-----
+ package/qt6/qt6multimedia/qt6multimedia.mk    |  8 -----
+ package/qt6/qt6opcua/qt6opcua.hash            |  2 +-
+ package/qt6/qt6quick3d/qt6quick3d.hash        |  4 +--
+ .../qt6quicktimeline/qt6quicktimeline.hash    |  4 +--
+ package/qt6/qt6scxml/qt6scxml.hash            |  4 +--
+ package/qt6/qt6sensors/Config.in              |  6 ++++
+ package/qt6/qt6sensors/qt6sensors.hash        |  7 ++++
+ package/qt6/qt6sensors/qt6sensors.mk          | 32 +++++++++++++++++++
+ package/qt6/qt6serialbus/qt6serialbus.hash    |  4 +--
+ package/qt6/qt6serialport/qt6serialport.hash  |  4 +--
+ .../qt6/qt6shadertools/qt6shadertools.hash    |  4 +--
+ package/qt6/qt6svg/qt6svg.hash                |  4 +--
+ package/qt6/qt6tools/Config.in                | 21 ++++++++++++
+ package/qt6/qt6tools/Config.in.host           | 12 +++++--
+ package/qt6/qt6tools/qt6tools.hash            |  4 +--
+ package/qt6/qt6tools/qt6tools.mk              | 12 +++++++
+ .../qt6virtualkeyboard.hash                   |  4 +--
+ package/qt6/qt6wayland/qt6wayland.hash        |  4 +--
+ package/qt6/qt6websockets/qt6websockets.hash  |  4 +--
+ 31 files changed, 148 insertions(+), 60 deletions(-)
+ create mode 100644 package/qt6/qt6sensors/Config.in
+ create mode 100644 package/qt6/qt6sensors/qt6sensors.hash
+ create mode 100644 package/qt6/qt6sensors/qt6sensors.mk
+
 -- 
-2.43.0
+2.48.1
 
 _______________________________________________
 buildroot mailing list
