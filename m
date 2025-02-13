@@ -1,52 +1,54 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9856CC021A0
-	for <buildroot@archiver.kernel.org>; Thu, 13 Feb 2025 17:03:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E052FC021A0
+	for <buildroot@archiver.kernel.org>; Thu, 13 Feb 2025 17:42:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 441BE84099;
-	Thu, 13 Feb 2025 17:03:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 82EF56126C;
+	Thu, 13 Feb 2025 17:42:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G2dtT7imrvvo; Thu, 13 Feb 2025 17:03:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qNlsOH326Vpg; Thu, 13 Feb 2025 17:42:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46A47840EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86F2661410
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 46A47840EB;
-	Thu, 13 Feb 2025 17:03:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A4DD4C2
- for <buildroot@buildroot.org>; Thu, 13 Feb 2025 17:03:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 86F2661410;
+	Thu, 13 Feb 2025 17:42:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 334EA12D
+ for <buildroot@buildroot.org>; Thu, 13 Feb 2025 17:42:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 880E3840EB
- for <buildroot@buildroot.org>; Thu, 13 Feb 2025 17:03:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2DB6783F03
+ for <buildroot@buildroot.org>; Thu, 13 Feb 2025 17:42:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 93IU6Oe-Q36Q for <buildroot@buildroot.org>;
- Thu, 13 Feb 2025 17:03:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+ id 0eRaipg38HAe for <buildroot@buildroot.org>;
+ Thu, 13 Feb 2025 17:42:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D36EB84099
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D36EB84099
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D36EB84099
- for <buildroot@buildroot.org>; Thu, 13 Feb 2025 17:03:25 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5A49883EE0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A49883EE0
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5A49883EE0
+ for <buildroot@buildroot.org>; Thu, 13 Feb 2025 17:42:39 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from [192.168.7.2] ([85.22.117.255]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MgvrB-1tAxM616VB-00lbwG; Thu, 13
- Feb 2025 18:03:23 +0100
-Message-ID: <0804bdd2-df22-4a8a-9a2d-1638db25901f@gmx.de>
-Date: Thu, 13 Feb 2025 18:03:22 +0100
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MMofc-1tzCB73vlM-00WAZc; Thu, 13
+ Feb 2025 18:42:38 +0100
+Message-ID: <7535a7d7-74f3-4498-a752-6aee611b8743@gmx.de>
+Date: Thu, 13 Feb 2025 18:42:36 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Buildroot Notifications <buildroot.notifications@gmail.com>,
- buildroot@buildroot.org
-References: <67aace92.170a0220.17b7b.ae2e@mx.google.com>
+To: Scott Fan <fancp2007@gmail.com>, buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20250212135027.759121-1-fancp2007@gmail.com>
+ <20250213045050.816782-1-fancp2007@gmail.com>
 Content-Language: en-US, de-DE-1901, de-DE
 Autocrypt: addr=fiona.klute@gmx.de; keydata=
  xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
@@ -91,57 +93,56 @@ Autocrypt: addr=fiona.klute@gmx.de; keydata=
  MCTaUC2HWAAsiG90beT7JkkKKgMLS9DxmX9BN5Cm18Azckexy+vMg79LCcfw/gocQ4+lQn4/
  3BjqSuHfj+dXG+qcQ9pgB5+4/812hHog78dKT2r8l3ax3mHZCDTAC9Ks3LQU9/pMBm6K6nnL
  a4ASpGZSg2zLGIT0gnzi5h8EcIu9J1BFq6zRPZIjxBlhswF6J0BXjlDVe/3JzmeTTts=
-In-Reply-To: <67aace92.170a0220.17b7b.ae2e@mx.google.com>
-X-Provags-ID: V03:K1:4BlrOPRcU8WrjFYmJJyOHnGzeIgibIPIig4l7K/4CH3pUjeUWdL
- 78Zc2UmkpEYtApmtXybMF86jon7p49qQ27a0bKyZ098N5FLXKfXaYEOdwXjbZBJKtHGs8DA
- 1UjdKjjHHUi4Rmc06nP/kXTPjbL/tM13WCuD94OjoXLBaJjhfWRAzodTqqc/i93tpzEqd/z
- rJzeQDPQT/FC/CmKcF8TA==
-UI-OutboundReport: notjunk:1;M01:P0:+R1Dzv7rNO4=;3VPwrLpsiBkeCKBkByRp3rZOlb0
- 8vbVcS5kK1E/heIo08cF8u168Hf7MQ23kxZga43rEDxU588nntUsZC42/6EfcWQrTn/XjEHUl
- c8MBvOLpmuonzGHlh08jTgAwsZFOXVn4/zVqBTzFkKlLFUfIuzgDOruGaQ+9WCRGw7cV25vTZ
- s1Eq6hVnU+izYRL4woUFZ0JkS+G1aWAUzzwItVqwB8Z2n89f08sgH7vJxfFw/B9sVZMqzEhba
- E9128BEGjXkuVYwKFBQKkZ1eLuFjlzh0YfUlw9OkLinsF/d1aqs9raCZYcRL8oRo33bSAP1l6
- Zt3RzFNV3omM/r3ppJVVuIG5Zd+J8OPDIjqTkX1JrPdHdycKcIAz6c39zNYziW4VX0jXcp3Wj
- Za1kUMFKuFd0MsDM0/agqvzcFP5wpwz0cj9AdBEtKYIRWV0JZvbrsb8YSVebQ7nKXiMGj5dhd
- nI+3X+egD0pS9gVgeaa/ubb8HA4Ay6p2LOkAVkC0j+/VU4DjKGIqVGSrQU1cWPTYaS33C47U7
- v1FDNOW4jgtDYC7gOxCDDlMgnkBDPsiqzLhYW63chx/kqe2vvoC1Lhm5U821hb4xvtd8EmD0v
- oU20/u/hmLfZ2b0IiI2nuea6pwMEO6Br2pdUZThyGMtyBbDL2EHVK3dbp9ubbcE4lsvIHtt/P
- +yD0L0rutAAwYM1wjFUzTeGmSNF+vqVO1JqF1f0n9vFrqv9jN/H0LBMuMCSIocFnSW7ZNjIm4
- JbsjtywERzfhxUUias2bFt7iY5+EjIFYeqRDRo9nLgmRryt74SxkvsCtyoGvBw7L2JEWuETDm
- LtJkv535wUMXrf687KBRDMDH+mh5pNskrIHVLcwKJJ2x7rDJad5AfdTA+yICtv1USYVKRZIo6
- tr4TB3SHHT7DkkWjYyf0gsqxGdL2sKZnKhsuXyAm6Vr5OFic90pTLq+ZgU5q/t95QwzBkc1xx
- NKb8f889zQTsDB/eXDuoP5Yrui/I4qMRnMTyWhhZgmjkdfpJLjDJw1EMgNVopuYl8kZV7O6JL
- qfSePDZOj8s1I5jPD7o3CnU9vTbzOpWoEQTCGSi1tDepbNW2O0jEIR7EeCENIsXQbn0KGQEpH
- Ew4/51qvGg488v4s6yzJ+zI4Xhc1BRLULXtVGLhHSZGP0NSA9aoQ9z8wJlr2AlJ/Ai8OqLXXT
- vnkkdX2TMHcuWyLfHwdTh7zuqbgwCyQY9HF/z/x33jGQ1SkIoICi+wvgQiDsi0mlPSubufPwx
- ZD2J3WOQuEF6RVQO3wFhkDX44uZJu3l4uCMRm3p7qMIqL51KhuDY+B1V5i+5qzWvZu3g2vfSj
- wqGY1KGpRqF0ruKRNZA8CP4rNrgT0PVUVF4msN3PQiBhLbWRjByMkQL3di+X9l4fe5BgI3rsJ
- jDNLua5Q7ytFQzCVU+hgQCTrIi0UIAjRfghh2VzI4tGzkNBExEyM8WWosBndnxEZwpiOpQ5+4
- pOLNyow==
+In-Reply-To: <20250213045050.816782-1-fancp2007@gmail.com>
+X-Provags-ID: V03:K1:My9QepuAvyXe32MQYuFz4kVEznGxV8M+rf0UKB+gSTVtb1qK4de
+ R8+6ZUz8qdKPQMMVXhm9Nu2a9Zs1U5+bSi7WtjUVpvS3Ng8LihW924+nVXUIE+RtCSABSJh
+ 8N1Zp/OI0k5ylAMNZyijiGBw8eHQ8D1z1/zmoFcpL2NnQMN7SVAHQI9NQJnQBsLp+kqfEtP
+ qz1BIQ5cV1Z5U27tCwMTA==
+UI-OutboundReport: notjunk:1;M01:P0:jsVHhCWhCrM=;wEMaOrZ1mTDO540hT5S3f5AqYKK
+ 0LhPCP8T3FsI6QzwedjSYuTzthux7a7RZ0iOJ8ss8/lTnEv4kcghysOgk3m1s/+xEIt62dRmG
+ ifkJpsOPbG7LgoIDTOPTM9Y4icMjNsq5oYd7YZsXfryPuo56eqUW8lxVlfx7m0Mq9klgjDBVH
+ ogPZKiWMSc2Si1b6fB9mFTn6Wth4SnetmK+iYqhLVC9ZSNM/Hpcxy+vOcdfPNQetDW7U00DLo
+ VqKnOA8/8HPDTTpscNqeREdtkaA7DOUIifA75zXMCvYo2o8RVCZIMyKwFLjzarCnWSN8iAPi9
+ oXDp9IOBbp8D319yWXoHjrUZIgrrx2Wf5BB7lMiak5itgj8kwNwho0uSg2/H0uy709Pg2YND+
+ gGK6ln+wtKt3dK9ALf/LsgOnvp6GAei9yIwleaH1vk5DKjgLfO/8/NwB6sU87nMNDn9P6aMH2
+ 9WUj2kHcKD1AT3rLyNBO4RRo6NJ9Y8j2O1zyNe9Yayo01HqWUsNcYEvMZX898qmBt+RK+HphX
+ OK/czbWtaIOTMvQ+Jts3g8FYLf1KQppLRi3TV8cbycAgHSIEeucIdCZr5cBegltFsXXQ17flr
+ ALZa4soYl4/L7Q+FPAflckkIqeXHiTCB5MUICHD4VcbHpijLrRTQDKWAuQRhG1JWHeRpzRmFo
+ BDdKrikuk4/hHEvrNS8aR13ngUG6VGB6/aYtyFLQ1Z0DTGTQi+VdjgsS+QvRGKVHY7+8yE/Rs
+ 5/M2LPD+g1rDZnVTCP4JJGGUgVjSf6EBapO7AvToPfGJVqRSGq7mAchOii/Els7m1QSBKqDMr
+ eo6pnLNYg0zaMzrs7UYJXmLgui/gU/Y7tRhoNQCDPIc5xNp6u/cAbbBhB3h8NGBMk/ZNWvESL
+ R511HcANfaKjsdGyULD1ZVZGL5Oob/xPWqH6NCaQO60ttjKhwkhNNXvCoUwNZH9NPCn2z4bPj
+ zBV9ynxK+dKF7cms59W7pVFTwIv3jawAHvB+Co2fDkVDVy1L1nQkQKLcUCZhOZBHUffOVeS5I
+ X5FMU8Nx8deL8sT3OA7EW2Jy8beWg0mN9wzg4THq8wMyx4yrvx0oeMmRUVcgwDZrHf/6c9bK+
+ Gn6JwdtkYzCvMjwWG9Ihi93hvmgU9v61tcTq33txdTJ0jigJksdpXHTgfSp4ljKkXtjqtOiDV
+ 7PZ/dwcLlhglWF3NvfUGJKDM8tYxs1FH9sXoaZBYQGjeBFeaFU0jGpf67NhSfq8jIDAPIWfBv
+ AlpN80yGWjdCt3dptksxTrjosPjpAKNAoYhfMWRn7+OTwIuGgclcQhF4kgArw4Ifxd0mFJ4wP
+ SDYKRGT7B3R2R2Fjg9UaEH+OG8NdI9USbOzIHNiwQxcYqEz6fGm9Ng86sRLzpY+jtA8+lrRvr
+ xdNVe9CFskC5iXFdfMrwDHOFiNf/M47BHJp5hGXqqq0l81NGKAEb9WVfz9zMfr6YsBy91Gs4e
+ cY3pclQ==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1739466203; x=1740071003; i=fiona.klute@gmx.de;
- bh=LzDnMpZMPtysys82Z8JcVf7BWD96YVvAp5n/K4Advi4=;
- h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:
+ s=s31663417; t=1739468558; x=1740073358; i=fiona.klute@gmx.de;
+ bh=cr5pPCavvuYu2coiDug+9pnkkZluiF/z+XnqlqHdql8=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
  References:From:In-Reply-To:Content-Type:
  Content-Transfer-Encoding:cc:content-transfer-encoding:
  content-type:date:from:message-id:mime-version:reply-to:subject:
  to;
- b=CwKpCPTHLHJYu9Xm0oHavUtpj15eFvcVO0wIuxWbQdmuzOl9s1Kp+cTrOzDKb36u
- +B5jSCKah2c+Yj20k2FlFyFDR4E2Tzj86riCPJ38eCYw4ukNW8dePQqt5PRT8DZDm
- dp1vO3O9O1THxr6uWpLbkj5Y59T39aMSeuUbqzLIpYDDlrlmQnyzwO2JDeuACDu0b
- 7dl1s0NC5uieCMY8OnFmKSNxLBI1gQB8DUUeF5y5gq65Tk2WPUaQUdx/y9UbhJ7w5
- t0ygGqlX5y8Yy/eVzghuKwkTNiC0Ytli8qr3tzcvVJPInSRZrT7CZ9z3cG5d6JWlw
- krhSSE7I6M+pivMHEA==
+ b=Wj/eKp1GCavJOr4UqcoiNSwlIe5CP4MriLGEpkSorv3KAu4Tws6Lgl7MDNHpMHUK
+ LUaPgYlng75LNmh4z4HVeVAnOZDAILlH3TgDZKEsy6E1l92k+AjvUSsb1kgz3fRXm
+ OAL7uqv6R+iry1mxs1CYAghOvQjpGRuERg+WbkyWdJAiVZwK9Ph9MU9p/PjDAPxSK
+ ZcTBVxNc+LDxwg8b36n34cjivVYMNFr59rdMohAanXiyFhWwrGf25ZnMXvg+8+tkK
+ Jpk822YvqqXvVhvNDddx8dSt1kZVaZ7mMzhWFCekUzJPSvdIksfmAA2+AbNYBVLwy
+ Q8kMOud89F7RVXFIPg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=CwKpCPTH
-Subject: Re: [Buildroot] [autobuild.buildroot.org] Daily results for
- 2025-02-10
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=Wj/eKp1G
+Subject: Re: [Buildroot] [PATCH v2] package/sqlite: fix build issue since
+ bump to 3.49.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -155,57 +156,152 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Fiona Klute via buildroot <buildroot@buildroot.org>
 Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgZXZlcnlvbmUhCgpBbSAxMS4wMi4yNSB1bSAwNToxNCBzY2hyaWViIEJ1aWxkcm9vdCBOb3Rp
-ZmljYXRpb25zOgo+IEhlbGxvLAo+Cj4gQXV0b2J1aWxkIHN0YXRpc3RpY3MgZm9yIDIwMjUtMDIt
-MTAKPiA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQo+Cj4gICAgICAgIGJyYW5j
-aCB8ICBPSyB8IE5PSyB8IFRJTSB8IFRPVCB8Cj4gICAgMjAyNC4wMi54ICB8ICAyICB8ICA0ICB8
-ICAwICB8ICA2ICB8Cj4gICAgMjAyNC4xMS54ICB8ICAzICB8ICA0ICB8ICAwICB8ICA3ICB8Cj4g
-ICAgICBtYXN0ZXIgICB8IDE5ICB8IDIyNSB8ICAwICB8IDI0NCB8Cj4KPiBDbGFzc2lmaWNhdGlv
-biBvZiBmYWlsdXJlcyBieSByZWFzb24gZm9yIG1hc3Rlcgo+IC0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4KPiAgICAgICAgICAgICAgICAgIGVsZnV0aWxz
-LTAuMTkyIHwgMjAKPiAgICBnb2JqZWN0LWludHJvc3BlY3Rpb24tMS44Mi4wIHwgMTAKClvigKZd
-Cgo+ICAgIHBvd2VycGMgICAgfCAgZ29iamVjdC1pbnRyb3NwZWN0aW9uLTEuODIuMCAgfCBOT0sg
-fCBodHRwczovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvNDZhMzY1NDVmZTBjMWM0
-YzVmZmJhODkyNWVmYzEzODY4YzNjNGI2YSB8IE9SUEgKPiAgICAgc2g0YWViICAgIHwgIGdvYmpl
-Y3QtaW50cm9zcGVjdGlvbi0xLjgyLjAgIHwgTk9LIHwgaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRy
-b290Lm9yZy9yZXN1bHRzLzg0Mjg0NDBmZThmOGJkYzliMTcxZTUxNTI0YTIyMzhiNzNhYWI0MDEg
-fCBPUlBICj4gICAgc3BhcmM2NCAgICB8ICBnb2JqZWN0LWludHJvc3BlY3Rpb24tMS44Mi4wICB8
-IE5PSyB8IGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy8xZTZiMzQ0NzU3
-Y2E5ZjdjYTc2ZDQ4MzRkMmVhMTYzMzYzYWU3MjI4IHwgT1JQSAo+ICAgIGFhcmNoNjQgICAgfCAg
-Z29iamVjdC1pbnRyb3NwZWN0aW9uLTEuODIuMCAgfCBOT0sgfCBodHRwczovL2F1dG9idWlsZC5i
-dWlsZHJvb3Qub3JnL3Jlc3VsdHMvYmJiNzliMGFiYjc1YTRhMTNiY2MzYTc2MDFkZWQzOTI4OWJl
-ZTk1YyB8IE9SUEgKPiAgICBzcGFyYzY0ICAgIHwgIGdvYmplY3QtaW50cm9zcGVjdGlvbi0xLjgy
-LjAgIHwgTk9LIHwgaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzFhMDUx
-OTIyYTkwNjUwZTkzOWUzYzRiNjlhOGU2NmU2NTEwYjEyMjMgfCBPUlBICj4gICAgc3BhcmM2NCAg
-ICB8ICBnb2JqZWN0LWludHJvc3BlY3Rpb24tMS44Mi4wICB8IE5PSyB8IGh0dHBzOi8vYXV0b2J1
-aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy8yNmY3NzUzNGQ0OGJmOTY4OGI2NDZmODBlYWQ5NWIw
-MDNmNjhlMDZjIHwgT1JQSAo+ICAgIHBvd2VycGMgICAgfCAgZ29iamVjdC1pbnRyb3NwZWN0aW9u
-LTEuODIuMCAgfCBOT0sgfCBodHRwczovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMv
-NGI0OGQ3NjJiZGViYWExMjI5ZGFmMDAzMDcwMzlkYjlkNDg2ZTA5MSB8IE9SUEgKPiAgICBzcGFy
-YzY0ICAgIHwgIGdvYmplY3QtaW50cm9zcGVjdGlvbi0xLjgyLjAgIHwgTk9LIHwgaHR0cHM6Ly9h
-dXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzLzczOGYwNjgwNTNmODUwNmEzMTgwZjViZjFl
-ZWE1ODZlMGMyMjVhNTMgfCBPUlBICj4gICAgc3BhcmM2NCAgICB8ICBnb2JqZWN0LWludHJvc3Bl
-Y3Rpb24tMS44Mi4wICB8IE5PSyB8IGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVz
-dWx0cy84YTQ4NWM3MTY5YmEyYmY3M2QwNjkzYWFkZWFhMmQ1MWQyZWYwNzg3IHwgT1JQSAo+ICAg
-ICAgaTY4NiAgICAgfCAgZ29iamVjdC1pbnRyb3NwZWN0aW9uLTEuODIuMCAgfCBOT0sgfCBodHRw
-czovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jlc3VsdHMvZjIwZDYwNGFiYTJiN2ZiY2ZjZmY0
-MTlmNDdiNzdlM2NhMjQ5YTE3OSB8IE9SUEgKQWxtb3N0IGFsbCBvZiB0aGVzZSAob25lIEknbSBu
-b3Qgc3VyZSkgYXJlIFFlbXUgYnJlYWtpbmcsIHdpdGgKU2VnZmF1bHQvSWxsZWdhbCBJbnN0cnVj
-dGlvbi9BYm9ydCBpbiBnLWlyLXNjYW5uZXItcWVtdXdyYXBwZXIuIEl0J3Mgbm90Cm9idmlvdXMg
-dG8gbWUgKndoeSosIGJ1dCAiaWxsZWdhbCBpbnN0cnVjdGlvbiIgbG9va3MgbGlrZSBhdCBsZWFz
-dCBwYXJ0Cm9mIHRoZSBpc3N1ZSBpcyBhIG1pc21hdGNoIGJldHdlZW4gdGFyZ2V0IENQVSB2ZXJz
-aW9uIGFuZCB0aGUgQ1BVCmVtdWxhdGVkIGJ5IFFFTVUuCgpCUjJfUEFDS0FHRV9IT1NUX1FFTVVf
-VVNFUl9NT0RFX0FSR1Mgd2FzIG9yaWdpbmFsbHkgYWRkZWQgdG8gc29sdmUgc3VjaAppc3N1ZXMg
-KHNlZSA3MGJhZDYxYjUzYzUwODAxZmM5MTZmNzgxOTRjMGM0ZGVkMWJiNmI2ICJwYWNrYWdlL3Fl
-bXU6IGFkZApCUjJfUEFDS0FHRV9IT1NUX1FFTVVfVVNFUl9NT0RFX0FSR1Mgc3RyaW5nIikuIEJ1
-dCBleHBlcmltZW50aW5nIHdpdGgKZWFjaCBmYWlsaW5nIGNvbmZpZyB0byBzZWUgd2hhdCBDUFUg
-bWlnaHQgd29yayBzZWVtcyBsaWtlIGEgbG90IG9mCnRyb3VibGUsIEkgd29uZGVyIGlmIHRoZXJl
-J3MgYSBiZXR0ZXIgd2F5IHRvIGRlcml2ZSB0aGUgUUVNVSBDUFUgZnJvbQp0aGUgdGFyZ2V0LgoK
-QmVzdCByZWdhcmRzLApGaW9uYQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
-ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Am 13.02.25 um 05:50 schrieb Scott Fan:
+> As of release 3.49.0, the author has replaced the configure script used in
+> the precompiled amalgamation tarball with Autosetup instead of Autotools.
+>
+> The "autotools-package" and "host-autotools-package" lines are no longer
+> available, so those have to be replaced by the "generic-package" and
+> "host-generic-package" lines in the .mk file.
+>
+> The Autosetup configuration script does not support the
+> "enable-dynamic-extensions" and "disable-static-shell" options,
+> so the relevant lines in the .mk file are removed.
+>
+> The Autosetup configuration script can automatically detect whether
+> threads are supported and set the relevant SQLITE_THREADSAFE flag,
+> so the relevant lines in the .mk file are removed.
+>
+> Fixes:
+>    https://autobuild.buildroot.org/?reason=sqlite-3.49.0
+>
+> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+
+Tested-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+
+Target package works fine, thank you!
+Fiona
+
+> ---
+> Changes v1 -> v2:
+>    - add the 'host-generic-package' configurations in the .mk file
+>    - remove the thread-safe related configurations in the .mk file
+>    - update commit message
+> ---
+>   package/sqlite/sqlite.mk | 82 ++++++++++++++++++++++++++--------------
+>   1 file changed, 54 insertions(+), 28 deletions(-)
+>
+> diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+> index a23f6e1d66..5a8b033ce0 100644
+> --- a/package/sqlite/sqlite.mk
+> +++ b/package/sqlite/sqlite.mk
+> @@ -21,14 +21,6 @@ ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_COLUMN_METADATA),y)
+>   SQLITE_CFLAGS += -DSQLITE_ENABLE_COLUMN_METADATA
+>   endif
+>
+> -ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_FTS3),y)
+> -SQLITE_CFLAGS += -DSQLITE_ENABLE_FTS3
+> -endif
+> -
+> -ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_JSON1),y)
+> -SQLITE_CFLAGS += -DSQLITE_ENABLE_JSON1
+> -endif
+> -
+>   ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_UNLOCK_NOTIFY),y)
+>   SQLITE_CFLAGS += -DSQLITE_ENABLE_UNLOCK_NOTIFY
+>   endif
+> @@ -50,30 +42,64 @@ else
+>   SQLITE_CFLAGS += $(subst -Ofast,-O3,$(TARGET_CFLAGS))
+>   endif
+>
+> -SQLITE_CONF_ENV = CFLAGS="$(SQLITE_CFLAGS)"
+> -
+> -ifeq ($(BR2_STATIC_LIBS),y)
+> -SQLITE_CONF_OPTS += --enable-dynamic-extensions=no
+> -else
+> -SQLITE_CONF_OPTS += --disable-static-shell
+> -endif
+> -
+> -ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+> -SQLITE_CONF_OPTS += --enable-threadsafe
+> -else
+> -SQLITE_CONF_OPTS += --disable-threadsafe
+> -SQLITE_CFLAGS += -DSQLITE_THREADSAFE=0
+> -endif
+> -
+>   ifeq ($(BR2_PACKAGE_NCURSES)$(BR2_PACKAGE_READLINE),yy)
+>   SQLITE_DEPENDENCIES += ncurses readline
+> -SQLITE_CONF_OPTS += --disable-editline --enable-readline
+>   else ifeq ($(BR2_PACKAGE_LIBEDIT),y)
+>   SQLITE_DEPENDENCIES += libedit
+> -SQLITE_CONF_OPTS += --enable-editline --disable-readline
+> +SQLITE_CONF_OPTS += --disable-readline --editline
+>   else
+> -SQLITE_CONF_OPTS += --disable-editline --disable-readline
+> +SQLITE_CONF_OPTS += --disable-readline
+>   endif
+>
+> -$(eval $(autotools-package))
+> -$(eval $(host-autotools-package))
+> +ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_FTS3),y)
+> +SQLITE_CONF_OPTS += --fts3
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_JSON1),)
+> +SQLITE_CONF_OPTS += --disable-json
+> +endif
+> +
+> +SQLITE_CONF_ENV = CFLAGS="$(SQLITE_CFLAGS)"
+> +
+> +define SQLITE_CONFIGURE_CMDS
+> +	(cd $(@D); $(TARGET_CONFIGURE_OPTS) $(SQLITE_CONF_ENV) ./configure \
+> +		--prefix=/usr \
+> +		--host="$(GNU_TARGET_NAME)" \
+> +		--build="$(GNU_HOST_NAME)" \
+> +		--sysroot="$(STAGING_DIR)" \
+> +		$(SQLITE_CONF_OPTS) \
+> +	)
+> +endef
+> +
+> +define SQLITE_BUILD_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define SQLITE_INSTALL_STAGING_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(STAGING_DIR)" -C $(@D) install
+> +endef
+> +
+> +define SQLITE_INSTALL_TARGET_CMDS
+> +	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D) install
+> +endef
+> +
+> +define HOST_SQLITE_CONFIGURE_CMDS
+> +	(cd $(@D); $(HOST_CONFIGURE_OPTS) $(SQLITE_CONF_ENV) ./configure \
+> +		--prefix=/usr \
+> +		--host="$(GNU_HOST_NAME)" \
+> +		--build="$(GNU_HOST_NAME)" \
+> +		--sysroot="$(HOST_DIR)" \
+> +		$(SQLITE_CONF_OPTS) \
+> +	)
+> +endef
+> +
+> +define HOST_SQLITE_BUILD_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define HOST_SQLITE_INSTALL_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) DESTDIR="$(HOST_DIR)" -C $(@D) install
+> +endef
+> +
+> +$(eval $(generic-package))
+> +$(eval $(host-generic-package))
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
