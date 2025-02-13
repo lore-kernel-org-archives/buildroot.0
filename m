@@ -4,98 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DEC6BC021A7
-	for <buildroot@archiver.kernel.org>; Thu, 13 Feb 2025 04:38:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B25F8C021A8
+	for <buildroot@archiver.kernel.org>; Thu, 13 Feb 2025 04:38:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F1CF4247B;
-	Thu, 13 Feb 2025 04:38:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 587054247F;
+	Thu, 13 Feb 2025 04:38:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id agqJpy79gkb7; Thu, 13 Feb 2025 04:38:14 +0000 (UTC)
+ id EIEestaMgd3F; Thu, 13 Feb 2025 04:38:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73005423D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 472E5424D4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73005423D8;
-	Thu, 13 Feb 2025 04:38:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A9BA41A2
- for <buildroot@buildroot.org>; Thu, 13 Feb 2025 04:38:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 472E5424D4;
+	Thu, 13 Feb 2025 04:38:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id F11411A2
+ for <buildroot@buildroot.org>; Thu, 13 Feb 2025 04:38:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8440841E6B
- for <buildroot@buildroot.org>; Thu, 13 Feb 2025 04:38:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB8F340167
+ for <buildroot@buildroot.org>; Thu, 13 Feb 2025 04:38:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WmQvYjYMwGaE for <buildroot@buildroot.org>;
- Thu, 13 Feb 2025 04:38:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s1IQgE3xyjE6 for <buildroot@buildroot.org>;
+ Thu, 13 Feb 2025 04:38:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1032; helo=mail-pj1-x1032.google.com;
+ client-ip=2607:f8b0:4864:20::62c; helo=mail-pl1-x62c.google.com;
  envelope-from=peter.macleod.thompson@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5A39541688
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A39541688
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com
- [IPv6:2607:f8b0:4864:20::1032])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5A39541688
- for <buildroot@buildroot.org>; Thu, 13 Feb 2025 04:38:11 +0000 (UTC)
-Received: by mail-pj1-x1032.google.com with SMTP id
- 98e67ed59e1d1-2fa44590eebso1047885a91.3
- for <buildroot@buildroot.org>; Wed, 12 Feb 2025 20:38:11 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 03C55400AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03C55400AB
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com
+ [IPv6:2607:f8b0:4864:20::62c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 03C55400AB
+ for <buildroot@buildroot.org>; Thu, 13 Feb 2025 04:38:16 +0000 (UTC)
+Received: by mail-pl1-x62c.google.com with SMTP id
+ d9443c01a7336-21f48ebaadfso7562055ad.2
+ for <buildroot@buildroot.org>; Wed, 12 Feb 2025 20:38:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1739421489; x=1740026289;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=1iFvu9i6VoqwG0mG21xZdM861GgzzviHOYlZS4JuBAk=;
- b=sNM9DxdTv+VUo2zz7FgUGsnNnMmZtDFJwoN6PQxbJeFY+ioJktg4PRvQ65PWtsfkmk
- TG5W70Vs9AFACQxWzk5KKula5t3DZZS10v/EekJ9JE7wIHi1W7bx7dpALbI0Wk2F55+B
- eFubcUP5dwoE4ftCpAZMxGcuPQKTK0MpAzhcvhZHIAAvxJOKl7n5XqPLZW3y+mbcIfJb
- k5W+geB5CFtPfW8bZ4B7hmR3zRgyvgVb86VDqLhKwzWf1SyZ9lcPgPeia9kfS6duuug0
- 3Os0TybUhXaNYQ/BxZgrHdbMuPAeKJX7CnZZR4X/4X0ABwlVlsJDmt94F86RX0fWohKO
- 9hgg==
-X-Gm-Message-State: AOJu0YwY+a2o773jij/dYKL+H9rAT7EZft7IsBWjZJs+/z/LI8OPIZqu
- Y+v7sBi+BKZgroEmocRV0s8kN9JUmD9NC5NTKFYMoOpEOf6rRMWQDnbO/w==
-X-Gm-Gg: ASbGnct5hQSOmYXOybDF1J0mN/X53ndH7HGcWfjL++ve310NOh56HtPYvFcu4CW7Hgg
- 3oUJII+9+t+AhBNaYbpRzIMf11tmg0UeQiu3Xmaz+FYSfO2JtXIJ7YyhZx3QQShDdlyLfwuyeTK
- s7so0pPWex+6Gs+bk+4Um32MQU7cUcUVS6Huk7INxC+zcKDdELC5AO4wH6j61DtGiZ08/CZG/GU
- 8dVAAdPhGvQd2EKDem7/dXxQUpLwQDcTsScPPg0JSr3ycehr2PE9KWx+3KvkuslM6YkyaZL2tYh
- 6kCUjiX+KJ64AhQi3VBY2gsSViOL6UNaUhNOzJfujqWk3s9AitRJpoY=
-X-Google-Smtp-Source: AGHT+IE7JjA9Bhdl1hVlgXi8Wn7UmDbRXKCXm35na24BP4qo/vOYcJ/pHu00I3EnfYmDQ88S1MF8aQ==
-X-Received: by 2002:a05:6a00:1404:b0:730:74f8:25c8 with SMTP id
- d2e1a72fcca58-7323c144064mr2876778b3a.11.1739421488933; 
- Wed, 12 Feb 2025 20:38:08 -0800 (PST)
+ d=1e100.net; s=20230601; t=1739421496; x=1740026296;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=KWYLCYwQ1naEN53xmjSCZt8H/PJnUnsZ2Yvbbwkm3r0=;
+ b=ckx8dTZ63XLd7KxR6Rs5mEKTPkEKjQeYagZCo1L6gGU6zzENcAKS2HxeARRzc43Pyj
+ XW+MTn1sEKsmVZZQCQEzi6v+E90NuTI3QenKQpoXdFCSYByyzXumxLjAMH8FkyJhTH0D
+ itCosE12ZL3gtwLuA8UVWbO/CONs0unhBAJTyKjplVypSetQg/UCR6wXj533xF6sN8+o
+ E939MlUDGAHlmpAbqVcmyvIQR5nNN0YQiGGKBlhNHMa714THEg9JdEkMF+VwDcBRCK00
+ gieVNGHtaTsAyOja//FKe/grEOv0L4fyTM7BhHYGjLQjblur3fjsQo3tkgMFa5zJqK64
+ b/dQ==
+X-Gm-Message-State: AOJu0YzSyppJVDJwXe/Agsr90BPfzHma5nPV3JD9s1K2LFfmvbeVCWEK
+ qpjbJtEswcO3XP7hlXDKAiHWUU3alQ92lANcVgPIA0mih/BwDtLDlba5Rg==
+X-Gm-Gg: ASbGncv42G3rOyBN+Rf63dLURVAaGNlLNsTa1EoMu31OuuNSLnzkIdTvDPNs+tC4UqF
+ MBYZ1M5A01i5UbqO83NJcpHleLeoTwSL5eKda9dh90x5J+XH+vtTEzYuSdC3QAa5fql6lp1MP32
+ Ay+YIKN0cLWKvxjdyI9wlQb4mOEim+2xFNM0q2CczVU8wF3wbuB4phQZwHW2ktEmcbw/el7r1FR
+ Uawr8wXFruRNYNBfR/BKsBCl2cO+kTY8mOrlIn436GcTsJVLOwo4fHstxMJ/bjja8T2DcNsMthV
+ JsIKVMfRtxbBu62uSmxcyd5jZgF1C/o3VBqB/7MTm79Gu3et4oSe1hc=
+X-Google-Smtp-Source: AGHT+IGNSBN3BX0jLxWLHXYbhBf5kzLmFkGN1rJuDfVTWwTLr5AE+9DC03XhdSEMcgmrmYpfEafacQ==
+X-Received: by 2002:a05:6300:7114:b0:1ee:5dee:d22e with SMTP id
+ adf61e73a8af0-1ee5deef393mr6753824637.0.1739421495843; 
+ Wed, 12 Feb 2025 20:38:15 -0800 (PST)
 Received: from blastoff3.cg.shawcable.net
  ([2604:3d09:c74:2000:7c9c:d673:9b41:c416])
  by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-7324254a1aasm316300b3a.10.2025.02.12.20.38.07
+ d2e1a72fcca58-7324254a1aasm316300b3a.10.2025.02.12.20.38.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 12 Feb 2025 20:38:08 -0800 (PST)
+ Wed, 12 Feb 2025 20:38:15 -0800 (PST)
 From: Peter Thompson <peter.macleod.thompson@gmail.com>
 To: buildroot@buildroot.org
 Cc: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
-Date: Wed, 12 Feb 2025 21:38:01 -0700
-Message-Id: <20250213043802.16357-1-peter.macleod.thompson@gmail.com>
+Date: Wed, 12 Feb 2025 21:38:02 -0700
+Message-Id: <20250213043802.16357-2-peter.macleod.thompson@gmail.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20250213043802.16357-1-peter.macleod.thompson@gmail.com>
+References: <20250213043802.16357-1-peter.macleod.thompson@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1739421489; x=1740026289; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=1iFvu9i6VoqwG0mG21xZdM861GgzzviHOYlZS4JuBAk=;
- b=krULKHZNrrDHBBUBEMx7MuP1Dr4BGZt9gRwbqgxOPYyYL9LXCdYQNMC9rLprZimsYy
- 555WZMVIjtZK8y3eZCh6Q94ZDfkRjmcnm32zHnqz3gXHJxj8+5XUowdgHxuK6Z8cBzU3
- v/KtmYS2QQqqA1pUHJ9dj+b9NRnQLiJmnAOfuTz+/nBcIGowwFRyHFupSTiwhKN1s3be
- chBY9FW3t3xM9PtTCx1HPgPqMCqY17Zcr9P+tNBhosCpVW2OY8wSdO7/W9QSJYkbqu9T
- z3KTGnQBi9mflIwWLGzyvm9lZyj+PPmfapa+PoQvvRz8DqMAuV9Mut9vAT0YK6v2m6lq
- RRbw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1739421496; x=1740026296; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=KWYLCYwQ1naEN53xmjSCZt8H/PJnUnsZ2Yvbbwkm3r0=;
+ b=W/aVjG4ia1yOEmPF6vEHl6x+aFntwknXO4uB6+ewrGx5VXmll2WIPsDKTQvGVkriZe
+ ov58pIGUcVlgJBL/1h0j4GH6NW1+/6SiwBNE1WsnPNyMJZTqJnUke348F2vT1vN1xirl
+ qMHL+hYODhvs+A3nTaVCFg5AmBG9jVbRGuGYWAFlyKYedN1HCP0eOAh3pJkze6yp3bBg
+ VGZ7hbA2nbyuTffbbUsU+zUOU6oh0SO4nABIE47sYSjvsLARGjSDdn1fLc/UivS8JSgE
+ FeiQrCJG74brffu2zRW0R0M633M0Y7fAKIQmJFr9CHE9Qm4R9+sBcQKVhAoyUcEA3KRH
+ e81A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=krULKHZN
-Subject: [Buildroot] [PATCH 1/2] package/sdl2_ttf: bump version to 2.24.0
+ header.s=20230601 header.b=W/aVjG4i
+Subject: [Buildroot] [PATCH 2/2] package/sdl2_image: bump version to 2.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,33 +119,33 @@ From: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
 
 Signed-off-by: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
 ---
- package/sdl2_ttf/sdl2_ttf.hash | 4 ++--
- package/sdl2_ttf/sdl2_ttf.mk   | 2 +-
+ package/sdl2_image/sdl2_image.hash | 4 ++--
+ package/sdl2_image/sdl2_image.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sdl2_ttf/sdl2_ttf.hash b/package/sdl2_ttf/sdl2_ttf.hash
-index 7693aeba6b..9e6a92164f 100644
---- a/package/sdl2_ttf/sdl2_ttf.hash
-+++ b/package/sdl2_ttf/sdl2_ttf.hash
+diff --git a/package/sdl2_image/sdl2_image.hash b/package/sdl2_image/sdl2_image.hash
+index 53a887c6f9..339082d61e 100644
+--- a/package/sdl2_image/sdl2_image.hash
++++ b/package/sdl2_image/sdl2_image.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  d48cbd1ce475b9e178206bf3b72d56b66d84d44f64ac05803328396234d67723  SDL2_ttf-2.22.0.tar.gz
+-sha256  8f486bbfbcf8464dd58c9e5d93394ab0255ce68b51c5a966a918244820a76ddc  SDL2_image-2.8.2.tar.gz
 -sha256  a0e8ce06504966e45088ee1cc7583cc8af9aac615d4cf56d47d847da9cb15139  LICENSE.txt
-+sha256  0b2bf1e7b6568adbdbc9bb924643f79d9dedafe061fa1ed687d1d9ac4e453bfd  SDL2_ttf-2.24.0.tar.gz
-+sha256  7826eca0a0f7e591f38dd844e207a200aac81a59b20d8a30c3af8c6282af13e6  SDL2_ttf-2.24.0/LICENSE.txt
-diff --git a/package/sdl2_ttf/sdl2_ttf.mk b/package/sdl2_ttf/sdl2_ttf.mk
-index f4f293cec1..3f53dd1e79 100644
---- a/package/sdl2_ttf/sdl2_ttf.mk
-+++ b/package/sdl2_ttf/sdl2_ttf.mk
++sha256  f7c06a8783952cfe960adccdd3d8472b63ab31475b4390d10cfdcc1aea61238f  SDL2_image-2.8.4.tar.gz
++sha256  a0e8ce06504966e45088ee1cc7583cc8af9aac615d4cf56d47d847da9cb15139  SDL2_image-2.8.4/LICENSE.txt
+diff --git a/package/sdl2_image/sdl2_image.mk b/package/sdl2_image/sdl2_image.mk
+index 40b9e3c915..e058cd9f74 100644
+--- a/package/sdl2_image/sdl2_image.mk
++++ b/package/sdl2_image/sdl2_image.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SDL2_TTF_VERSION = 2.22.0
-+SDL2_TTF_VERSION = 2.24.0
- SDL2_TTF_SOURCE = SDL2_ttf-$(SDL2_TTF_VERSION).tar.gz
- SDL2_TTF_SITE = http://www.libsdl.org/projects/SDL_ttf/release
- SDL2_TTF_LICENSE = Zlib
+-SDL2_IMAGE_VERSION = 2.8.2
++SDL2_IMAGE_VERSION = 2.8.4
+ SDL2_IMAGE_SOURCE = SDL2_image-$(SDL2_IMAGE_VERSION).tar.gz
+ SDL2_IMAGE_SITE = http://www.libsdl.org/projects/SDL_image/release
+ SDL2_IMAGE_INSTALL_STAGING = YES
 -- 
 2.20.1
 
