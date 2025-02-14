@@ -4,100 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4424C021A4
-	for <buildroot@archiver.kernel.org>; Fri, 14 Feb 2025 11:22:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BE03C02198
+	for <buildroot@archiver.kernel.org>; Fri, 14 Feb 2025 11:32:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B3BD848F3;
-	Fri, 14 Feb 2025 11:22:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 181E284188;
+	Fri, 14 Feb 2025 11:32:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BzzI7UHC7Rgv; Fri, 14 Feb 2025 11:22:01 +0000 (UTC)
+ id v0WUuiIh6UaS; Fri, 14 Feb 2025 11:32:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76A2684912
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 440CB8403F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 76A2684912;
-	Fri, 14 Feb 2025 11:22:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 440CB8403F;
+	Fri, 14 Feb 2025 11:32:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E54BC2
- for <buildroot@buildroot.org>; Fri, 14 Feb 2025 11:21:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CCE0EC2
+ for <buildroot@buildroot.org>; Fri, 14 Feb 2025 11:32:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A352340B86
- for <buildroot@buildroot.org>; Fri, 14 Feb 2025 11:21:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BB9EA40768
+ for <buildroot@buildroot.org>; Fri, 14 Feb 2025 11:32:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5uvELIFgv2iH for <buildroot@buildroot.org>;
- Fri, 14 Feb 2025 11:21:57 +0000 (UTC)
+ id 35dHlqSWb9hl for <buildroot@buildroot.org>;
+ Fri, 14 Feb 2025 11:32:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
- envelope-from=sairon@sairon.cz; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 747524064E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 747524064E
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 747524064E
- for <buildroot@buildroot.org>; Fri, 14 Feb 2025 11:21:57 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id
- 4fb4d7f45d1cf-5de3c29ebaeso2429046a12.3
- for <buildroot@buildroot.org>; Fri, 14 Feb 2025 03:21:57 -0800 (PST)
+ client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 546D54071D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 546D54071D
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 546D54071D
+ for <buildroot@buildroot.org>; Fri, 14 Feb 2025 11:32:04 +0000 (UTC)
+Received: by mail-ej1-x634.google.com with SMTP id
+ a640c23a62f3a-ab7e1286126so345715966b.0
+ for <buildroot@buildroot.org>; Fri, 14 Feb 2025 03:32:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1739532115; x=1740136915;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=zaMqx80y+iG7zqIxFLdYPg5Jb5M3mBZIfe9En4eVAaQ=;
- b=MlsfjnKngBQlZLJ0NExYolNbT8j44e+w2YELhRxump8oEllnIkGZQhRQagvqUN1MTN
- uu/DAjs1UY3KbzPvRiLDQxyCmqptzjHOG5nanVpyBY7S7xJYBHoYShkHmLeY7b/TR36v
- e2avPlbfvsvtWMhO2sg8nETz7lVSvWJ55iUN1kR+jddPrOll/omMjQY9+WvuOXzYtDhe
- QwWKDEQTWAPW9nbvIMvwibdAA/K95t8ZBYHZch4TgpJ2+0FIhTPkFaYeiEldR5TwNssj
- RyZ5MU7N7j7HaWDLh0sA5cZrkypCrHYbGC54JVlMlc34zsFCfoeKihQdmi/cmp3zGNAJ
- RGkg==
-X-Gm-Message-State: AOJu0YxZAinEqOm10SPAuUz6NOHjy4UBe3NMjkIH2Jbll0uvUwYtLrJ2
- dogEyyJfxnFqzkLLq76wg1BPJHG/W5Tg64UiWLfQlBid4Dhfsj59WSTArU+nHesWNHU9/wHgmf8
- y
-X-Gm-Gg: ASbGncsjeVJrL+o66VMXkiGORrhqSGZ8es4+pIRQ8La/bYdHBGjBzzFTkEcrfo75zEI
- a/bhbzclFN5Y6HDdaTFVg6m9bogPTmgs86zqWL2tdfipzrgktCglSpbINnRM6Mc8Oi0f64IcQ7i
- Il2GkBGE3JZH4GSMBF7Zjd5F6nagE64R4qYuaiamYVE7Fe0xWhLomB9YCeudOwr5AKToSkP5VSO
- z432JtpoJOXqtrC7OuvaZ6T35/aJCNp17SPbBIbx6RO1WVYIcVwTgMSHnZ3QS3deZ8kAyLHD8/L
- 7iJS+sjAuLeKOZZBhJN2tCjKPsfeueqKUuiqiS8pZs0=
-X-Google-Smtp-Source: AGHT+IH5AQ1bopz7e6jU4cPtwXgjcihT4zErOKDatn1W/U/FIX2XjZFa4X+TA1EtJSs+RokAoG1qaQ==
-X-Received: by 2002:a05:6402:274e:b0:5de:d45e:d7e5 with SMTP id
- 4fb4d7f45d1cf-5ded45eda3fmr4537211a12.31.1739532115388; 
- Fri, 14 Feb 2025 03:21:55 -0800 (PST)
-Received: from krabice.lan (ip-89-103-66-201.bb.vodafone.cz. [89.103.66.201])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5dece270b17sm2725181a12.62.2025.02.14.03.21.54
+ d=1e100.net; s=20230601; t=1739532722; x=1740137522;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=IMy+MjI4f1wu9owsKq4areX71QjPlAUFTz86/acqUdA=;
+ b=ttQS3QIEZSzQ/RbVECnBY5GU3ekNkk3VVGesqXlHE6OS4y3RsQuvWJb5sJtxPkMqGa
+ 8SFfj5q75CYgr6ziVfhzRPSvf1rzwOUYqBVgvb6/c3faU/clznL0QvJ2c4QMfmJtDNrW
+ cxBkE88/I2MzCwENyHxWuGM+5LD5TtBLWSbb01Ge+VwD7jYAQzEFACqf4mIhgJIHkBec
+ KfMTFq+ycRn8zTN77B/GMDYKSZeiZq7n3lcH1VkHZ9ob/7hbrDkOP0lDDkh3Q1c3BCvJ
+ 9EgORkEd4KZXizFINsP/HYCGxlgOKlGsCxoIFR3RzOg32jRWb+HVayfzFFTDsEIKCwbe
+ OAlA==
+X-Gm-Message-State: AOJu0YyncAWcyKnVj3OHufM2ct2MrvNK38P4llUZ57jWqOTWNE2A69P3
+ MiVxXzoYL5kLGuSVJHccy2/hb2I6ez6WAjUeNUbPYcOebDAKefe7OQhFiUFTYyPsHZoNHq37ajq
+ r
+X-Gm-Gg: ASbGnct+mfXsf5yzV8opudt9dZTPNLadbgV1c7hK9v48uCA6rPpvgdy0o649WI58qMo
+ RuPy245JBOhqXxT5iWdlxISMDzlEjuBdkp594ZaFXHzPig4UpGzkU1g3bD0VGGUGOvtRqlteKZz
+ wnmGb2fuLiA7NspmBayba61Gg08XnXZNh01W3LCerqe3U81uBy0EKUOurK0mOD3ruQ54GMdObUc
+ /SWUtdTCP5314Bw2MYRm0BDre8DK7klPU/de68J8HGgGBSWtBq+Sfo/xJgdHu9N2GXM7n3FSJ0/
+ uUhSu4qANP4uhqkP+yT0DGhvZFeQreZRwRA0nEU7Kv8GitdsveaTyXKXPA6K65G3DwRGOWWBjXg
+ YgMP8I7qq
+X-Google-Smtp-Source: AGHT+IFrFLyzer+bPuqvb8SrBfuHeO9JpO7Wr9PPGcmDTmXJx4tMCW2R8FRcE1QZHRDO3gZu1/fksw==
+X-Received: by 2002:a17:907:3da2:b0:a9e:b2da:b4a3 with SMTP id
+ a640c23a62f3a-ab7f347dc2bmr1102905666b.42.1739532721958; 
+ Fri, 14 Feb 2025 03:32:01 -0800 (PST)
+Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com
+ ([176.200.207.55]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-aba533bf5casm321668666b.182.2025.02.14.03.32.01
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 14 Feb 2025 03:21:54 -0800 (PST)
-From: =?UTF-8?q?Jan=20=C4=8Cerm=C3=A1k?= <sairon@sairon.cz>
+ Fri, 14 Feb 2025 03:32:01 -0800 (PST)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Fri, 14 Feb 2025 12:21:39 +0100
-Message-ID: <20250214112140.1862254-4-sairon@sairon.cz>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250214112140.1862254-1-sairon@sairon.cz>
-References: <20250214112140.1862254-1-sairon@sairon.cz>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Fri, 14 Feb 2025 12:31:57 +0100
+Message-ID: <20250214113158.3584398-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sairon.cz; s=google; t=1739532115; x=1740136915; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=zaMqx80y+iG7zqIxFLdYPg5Jb5M3mBZIfe9En4eVAaQ=;
- b=J5nyXN9eX/o+ie/g8H44Ki52yYkF+mvWxw5aP49mX7TBrMWZ+b/pumumVamG3ijESt
- A5J1mfP5JSb//1PqpJfoOcSk4rdZWZl2Lh0fQfvlxukmCM9oRAR32EtKzTW9Jf7aDVUL
- gYyaehM6PMR1xVQ4bndoctyVEPY6qrASdVvddYW9C5IjReqcBySSjL31pBo+NVmJ3jiZ
- 0o6tZ11Jyd58pRpRpuzkUCFPknNc04SWqm8A9paa22VqmYazVJNZg5ChbInEtuEpWaQa
- Ckf7eHAYFMfiD5xzT58dIjMAobBx46BznRu+eHmVj+6hVWDxKiwXRg99wjR8+BKQIEEz
- O4LQ==
+ d=amarulasolutions.com; s=google; t=1739532722; x=1740137522;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=IMy+MjI4f1wu9owsKq4areX71QjPlAUFTz86/acqUdA=;
+ b=ZKeUaaOFbGi2Rt1WKFebNzqkGakXycewkXZZToV0gKeEjFOpS7el8r6yj9t2lxzWGT
+ R8E+tlfiu42uicP40rpycxEnyhaUTgGe7+JPr9U0LNE7RE5901Rj0A/ol8sL+IBmgMJ5
+ Wjn29tlbr/6N7HPPfnhizlRZLl27jeWObdVVM=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=sairon.cz
+ header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=sairon.cz header.i=@sairon.cz
- header.a=rsa-sha256 header.s=google header.b=J5nyXN9e
-Subject: [Buildroot] [v2 3/3] fs/erofs: add custom compression option with
- optional compress-hints file
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=ZKeUaaOF
+Subject: [Buildroot] [PATCH 1/1] board/stm32f769-disco: speed up U-Boot
+ bootup
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,68 +107,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Jan=20=C4=8Cerm=C3=A1k?= <sairon@sairon.cz>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWRkIGFub3RoZXIgb3B0aW9uIGZvciBGUyBjb21wcmVzc2lvbiB0aGF0IGFsbG93cyBmaW5lLWdy
-YWluZWQgY29udHJvbCB1c2luZyBhCmxpc3Qgb2YgYWxnb3JpdGhtcyBhbmQgb3B0aW9uYWwgY29t
-cHJlc3MtaGludHMgZmlsZS4gVGhpcyB3YXkgbXVsdGlwbGUKYWxnb3JpdGhtcyBhbmQgcGNsdXN0
-ZXIgc2l6ZXMgY2FuIGJlIHVzZWQgZm9yIGRpZmZlcmVudCBmaWxlcywgZnVsbHkgZXhwb3NpbmcK
-RVJPRlMgY29tcHJlc3Npb24gYWJpbGl0aWVzLgoKU2lnbmVkLW9mZi1ieTogSmFuIMSMZXJtw6Fr
-IDxzYWlyb25Ac2Fpcm9uLmN6PgotLS0KIGZzL2Vyb2ZzL0NvbmZpZy5pbiB8IDM2ICsrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysrKwogZnMvZXJvZnMvZXJvZnMubWsgIHwgIDUgKysr
-KysKIDIgZmlsZXMgY2hhbmdlZCwgNDEgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL2ZzL2Vy
-b2ZzL0NvbmZpZy5pbiBiL2ZzL2Vyb2ZzL0NvbmZpZy5pbgppbmRleCBmZWM4ZWZhMTVlLi41Nzc5
-ODhhMTk4IDEwMDY0NAotLS0gYS9mcy9lcm9mcy9Db25maWcuaW4KKysrIGIvZnMvZXJvZnMvQ29u
-ZmlnLmluCkBAIC0yMiw2ICsyMiwxMCBAQCBjaG9pY2UKIAkgIHNsb3dlciBib3RoIGluIGNvbXBy
-ZXNzaW9uIGFuZCBkZWNvbXByZXNzaW9uLCBhbmQgaGlnaGVyCiAJICBjb21wcmVzc2lvbiBsZXZl
-bHMgY2FuIGhhdmUgbm90aWNlYWJsZSBtZW1vcnkgcmVxdWlyZW1lbnRzLgogCisJICBDdXN0b20g
-Y29tcHJlc3Npb24gYWxsb3dzIGZvciBhZHZhbmNlZCBjb25maWd1cmF0aW9uIG9mIHRoZQorCSAg
-Y29tcHJlc3Npb24gYWxnb3JpdGhtcywgYW5kIGFkZHMgdGhlIHBvc3NpYmlsaXR5IG9mCisJICBm
-aW5lZ3JhaW5lZCBwZXItZmlsZSBjb21wcmVzc2lvbiB1c2luZyBjb21wcmVzc2lvbiBoaW50cy4K
-KwogY29uZmlnIEJSMl9UQVJHRVRfUk9PVEZTX0VST0ZTX05PTkUKIAlib29sICJubyBjb21wcmVz
-c2lvbiIKIApAQCAtMzEsNiArMzUsOSBAQCBjb25maWcgQlIyX1RBUkdFVF9ST09URlNfRVJPRlNf
-TFo0SEMKIGNvbmZpZyBCUjJfVEFSR0VUX1JPT1RGU19FUk9GU19MWk1BCiAJYm9vbCAibHptYSIK
-IAorY29uZmlnIEJSMl9UQVJHRVRfUk9PVEZTX0VST0ZTX0NVU1RPTV9DT01QUkVTU0lPTgorCWJv
-b2wgImN1c3RvbSIKKwogZW5kY2hvaWNlCiAKIGlmIEJSMl9UQVJHRVRfUk9PVEZTX0VST0ZTX0xa
-NEhDCkBAIC01OCw2ICs2NSwzNSBAQCBjb25maWcgQlIyX1RBUkdFVF9ST09URlNfRVJPRlNfTFpN
-QV9MRVZFTAogCiBlbmRpZiAjIEJSMl9UQVJHRVRfUk9PVEZTX0VST0ZTX0xaTUEKIAoraWYgQlIy
-X1RBUkdFVF9ST09URlNfRVJPRlNfQ1VTVE9NX0NPTVBSRVNTSU9OCisKK2NvbmZpZyBCUjJfVEFS
-R0VUX1JPT1RGU19FUk9GU19DT01QUkVTU0lPTl9BTEdPUklUSE1TCisJc3RyaW5nICJjb21wcmVz
-c2lvbiBhbGdvcml0aG1zIgorCWRlZmF1bHQgImx6NGhjLDEyIgorCWhlbHAKKwkgIFNwZWNpZnkg
-YXJiaXRyYXJ5IGNvbXByZXNzaW9uIG9wdGlvbiwgdXNlZnVsIGluIGNvbWJpbmF0aW9uCisJICB3
-aXRoIGNvbXByZXNzaW9uIGhpbnRzLiBJbmRpdmlkdWFsIGFsZ29yaXRobXMgYXJlIHNlcGFyYXRl
-ZAorCSAgYnkgY29sb24gd2l0aCBvcHRpb25hbCBsZXZlbCwgZS5nLiAibHo0aGMsMTI6bHptYSIu
-CisJICBTZWUgZXJvZnMtdXRpbHMgZG9jdW1lbnRhaW9uIGZvciBkZXRhaWxlZCBpbmZvcm1hdGlv
-bi4KKworY29uZmlnIEJSMl9UQVJHRVRfUk9PVEZTX0VST0ZTX0NPTVBSRVNTSU9OX0hJTlRTCisJ
-c3RyaW5nICJwYXRoIHRvIGNvbXByZXNzaW9uIGhpbnRzIGZpbGUiCisJZGVmYXVsdCAiIgorCWhl
-bHAKKwkgIFBhdGggdG8gZmlsZSBjb250YWluaW5nIGNvbXByZXNzaW9uIGhpbnRzLiBFYWNoIGxp
-bmUgaW4gdGhlCisJICBmaWxlIGlzIGRlZmluZWQgYnkgdG9rZW5zIHNlcGFyYXRlZCBieSBzcGFj
-ZXMgaW4gdGhlCisJICBmb2xsb3dpbmcgZm9ybS4gT3B0aW9uYWxseSwgaW5zdGVhZCBvZiB0aGUg
-Z2l2ZW4gcHJpbWFyeQorCSAgYWxnb3JpdGhtLCBhbGdvcml0aG1zIGNhbiBiZSBzcGVjaWZpZWQg
-d2l0aCB6ZXJvLWJhc2VkCisJICBhbGdvcml0aG0taW5kZXggZXhwbGljaXRseToKKworCSAgPHBj
-bHVzdGVyLXNpemUtaW4tYnl0ZXM+IFthbGdvcml0aG0taW5kZXhdIDxtYXRjaC1wYXR0ZXJuPgor
-CisJICBtYXRjaC1wYXR0ZXJucyBhcmUgZXh0ZW5kZWQgcmVndWxhciBleHByZXNzaW9ucywgbWF0
-Y2hlZAorCSAgYWdhaW5zdCBhYnNvbHV0ZSBwYXRocyB3aXRoaW4gdGhlIG91dHB1dCBmaWxlc3lz
-dGVtLCB3aXRoIG5vCisJICBsZWFkaW5nIC8uCisKK2VuZGlmICMgQlIyX1RBUkdFVF9ST09URlNf
-RVJPRlNfTFpNQQorCiBjb25maWcgQlIyX1RBUkdFVF9ST09URlNfRVJPRlNfREVEVVBFCiAJYm9v
-bCAiZW5hYmxlIGRhdGEgZGVkdXBsaWNhdGlvbiIKIAlkZXBlbmRzIG9uICFCUjJfVEFSR0VUX1JP
-T1RGU19FUk9GU19OT05FCmRpZmYgLS1naXQgYS9mcy9lcm9mcy9lcm9mcy5tayBiL2ZzL2Vyb2Zz
-L2Vyb2ZzLm1rCmluZGV4IDNiNjRjYjFjNmUuLjY1NDNhMzY0ZjEgMTAwNjQ0Ci0tLSBhL2ZzL2Vy
-b2ZzL2Vyb2ZzLm1rCisrKyBiL2ZzL2Vyb2ZzL2Vyb2ZzLm1rCkBAIC0xMCw2ICsxMCwxMSBAQCBp
-ZmVxICgkKEJSMl9UQVJHRVRfUk9PVEZTX0VST0ZTX0xaNEhDKSx5KQogUk9PVEZTX0VST0ZTX0FS
-R1MgKz0gLXpsejRoYywkKEJSMl9UQVJHRVRfUk9PVEZTX0VST0ZTX0xaNEhDX0xFVkVMKQogZWxz
-ZSBpZmVxICgkKEJSMl9UQVJHRVRfUk9PVEZTX0VST0ZTX0xaTUEpLHkpCiBST09URlNfRVJPRlNf
-QVJHUyArPSAtemx6bWEsJChCUjJfVEFSR0VUX1JPT1RGU19FUk9GU19MWk1BX0xFVkVMKQorZWxz
-ZSBpZmVxICgkKEJSMl9UQVJHRVRfUk9PVEZTX0VST0ZTX0NVU1RPTV9DT01QUkVTU0lPTikseSkK
-K1JPT1RGU19FUk9GU19BUkdTICs9IC16JChzdHJpcCAkKEJSMl9UQVJHRVRfUk9PVEZTX0VST0ZT
-X0NPTVBSRVNTSU9OX0FMR09SSVRITVMpKQoraWZuZXEgKCQoc3RyaXAgJChCUjJfVEFSR0VUX1JP
-T1RGU19FUk9GU19DT01QUkVTU0lPTl9ISU5UUykpLCkKK1JPT1RGU19FUk9GU19BUkdTICs9IC0t
-Y29tcHJlc3MtaGludHMgJChzdHJpcCAkKEJSMl9UQVJHRVRfUk9PVEZTX0VST0ZTX0NPTVBSRVNT
-SU9OX0hJTlRTKSkKK2VuZGlmCiBlbmRpZgogCiBpZmVxICgkKEJSMl9SRVBST0RVQ0lCTEUpLHkp
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
-dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
-ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Updating the framebuffer takes quite a long time on this slow platform.
+The added patch allow to avoid the following cyclic warning:
+
+ cyclic function video_init took too long: 7280us vs 5000us max
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ ...9-disco-Set-CYCLIC_MAX_CPU_TIME_US-t.patch | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 board/stmicroelectronics/stm32f769-disco/patches/uboot/0001-configs-stm32f769-disco-Set-CYCLIC_MAX_CPU_TIME_US-t.patch
+
+diff --git a/board/stmicroelectronics/stm32f769-disco/patches/uboot/0001-configs-stm32f769-disco-Set-CYCLIC_MAX_CPU_TIME_US-t.patch b/board/stmicroelectronics/stm32f769-disco/patches/uboot/0001-configs-stm32f769-disco-Set-CYCLIC_MAX_CPU_TIME_US-t.patch
+new file mode 100644
+index 000000000000..a9a5c631b629
+--- /dev/null
++++ b/board/stmicroelectronics/stm32f769-disco/patches/uboot/0001-configs-stm32f769-disco-Set-CYCLIC_MAX_CPU_TIME_US-t.patch
+@@ -0,0 +1,48 @@
++From c1bb2b62b00a68ff710d8c5635f68c83a4b8c1c8 Mon Sep 17 00:00:00 2001
++From: Patrice Chotard <patrice.chotard@foss.st.com>
++Date: Wed, 11 Dec 2024 09:09:35 +0100
++Subject: [PATCH] configs: stm32f769-disco: Set CYCLIC_MAX_CPU_TIME_US to 8000
++ for stm32f769-disco
++
++Updating the framebuffer takes quite a long time on this slow patform,
++set CYCLIC_MAX_CPU_TIME_US to 8000 for stm32f769-disco to avoid
++following cyclic warning:
++
++"cyclic function video_init took too long: 7280us vs 5000us max"
++
++Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
++Reviewed-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
++Upstream: https://gitlab.com/u-boot/u-boot/-/commit/c1bb2b62b00a68ff710d8c5635f68c83a4b8c1c8
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++---
++ configs/stm32f769-disco_defconfig     | 1 +
++ configs/stm32f769-disco_spl_defconfig | 1 +
++ 2 files changed, 2 insertions(+)
++
++diff --git a/configs/stm32f769-disco_defconfig b/configs/stm32f769-disco_defconfig
++index 1e09c224fc0d..5be221afd2fa 100644
++--- a/configs/stm32f769-disco_defconfig
+++++ b/configs/stm32f769-disco_defconfig
++@@ -21,6 +21,7 @@ CONFIG_USE_BOOTARGS=y
++ CONFIG_BOOTARGS="console=ttyS0,115200 earlyprintk consoleblank=0 ignore_loglevel"
++ CONFIG_SYS_PBSIZE=1050
++ # CONFIG_DISPLAY_CPUINFO is not set
+++CONFIG_CYCLIC_MAX_CPU_TIME_US=8000
++ CONFIG_SYS_PROMPT="U-Boot > "
++ CONFIG_CMD_GPT=y
++ CONFIG_CMD_MMC=y
++diff --git a/configs/stm32f769-disco_spl_defconfig b/configs/stm32f769-disco_spl_defconfig
++index 787571dba0cf..7d4bda440685 100644
++--- a/configs/stm32f769-disco_spl_defconfig
+++++ b/configs/stm32f769-disco_spl_defconfig
++@@ -30,6 +30,7 @@ CONFIG_USE_BOOTARGS=y
++ CONFIG_BOOTARGS="console=ttyS0,115200 earlyprintk consoleblank=0 ignore_loglevel"
++ CONFIG_SYS_PBSIZE=1050
++ # CONFIG_DISPLAY_CPUINFO is not set
+++CONFIG_CYCLIC_MAX_CPU_TIME_US=8000
++ CONFIG_SPL_PAD_TO=0x9000
++ CONFIG_SPL_NO_BSS_LIMIT=y
++ CONFIG_SPL_BOARD_INIT=y
++-- 
++2.43.0
++
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
