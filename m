@@ -1,99 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25AA9C02198
-	for <buildroot@archiver.kernel.org>; Fri, 14 Feb 2025 09:28:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B4B7C02198
+	for <buildroot@archiver.kernel.org>; Fri, 14 Feb 2025 09:32:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA1FB41335;
-	Fri, 14 Feb 2025 09:28:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E85F881346;
+	Fri, 14 Feb 2025 09:32:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UmzGReNZpJXe; Fri, 14 Feb 2025 09:28:21 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6van7y4H2Krg; Fri, 14 Feb 2025 09:32:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A666B4131F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2C0B8131C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A666B4131F;
-	Fri, 14 Feb 2025 09:28:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5ABE6C2
- for <buildroot@buildroot.org>; Fri, 14 Feb 2025 09:28:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F2C0B8131C;
+	Fri, 14 Feb 2025 09:32:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C04DBC2
+ for <buildroot@buildroot.org>; Fri, 14 Feb 2025 09:32:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4942C4131F
- for <buildroot@buildroot.org>; Fri, 14 Feb 2025 09:28:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AFE71812FE
+ for <buildroot@buildroot.org>; Fri, 14 Feb 2025 09:32:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FWIsCjykAczN for <buildroot@buildroot.org>;
- Fri, 14 Feb 2025 09:28:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EDFD340DCE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDFD340DCE
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EDFD340DCE
- for <buildroot@buildroot.org>; Fri, 14 Feb 2025 09:28:18 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id
- a640c23a62f3a-ab7fa1bc957so339909266b.2
- for <buildroot@buildroot.org>; Fri, 14 Feb 2025 01:28:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1739525296; x=1740130096;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=+V3cuBLHD0B/ustEY806yKuQz+PUDMpd+DzNw/wHJ3g=;
- b=idvA6u41A5NB4Gps39TIZ8hKc7PKkphRPCF4JBj8msJJdWp9BzHSmyR9Rtqz+zE8pc
- zgRAcAvLiIS1GmvVSIYv+uzXoBF9bbrz2we2mjfv3c8FBonHBOxtABRUN1Q6wBAJqOXj
- sC3SB1foOmfdBwUuEO5tqQld33vcld1QWFkfxIhZ14fsiqpGQN9w6U58aVneC3xoY61g
- RZCeZEh1DVJtZ9yfkpkJG/M0vW9Sx9/NhostNqHx5+1sms3c2NJVlsECKZfglSe69EXX
- 0wBClg6Ugjsfd3wd6xMfaE2YO6wsJi455zn0IYon2r4YloUdBGuHdFw+fA0qC+K8NkdQ
- Egjw==
-X-Gm-Message-State: AOJu0Yz7TMtIX4yEZRjOV/mqfu9qC9H1wK5729eJIm9S2gf6COSYEl0F
- /PdUC5X+zx/Ohpq0YE7IC/Q/QHy5Vt/t+F6sp8z+1hglSI0c3yVJDUt9gyK6ol9qrmWyvbyBsTT
- h
-X-Gm-Gg: ASbGncszXC1kX76ZvA9ir3GazxBr47OTmgcaKOdQg75WYFupNK7eXudbdBkPzZsBazg
- fcpkqUGgDaWLiZHnxWf9CCk7hI3KP6Psm309Ctrnmt1J9xx0Ljbt61D2liTQ4T4T0UseiLXpMkF
- MbUmK9qneSd/aqbZt1qyWVFviI6tmY/PMS2RJRg9cgo15tZTRsgnstZ4bdKXnUqzJ3HqUQ8SbVp
- d5oP8lKnQWkPGNNzpL3cxSfUv2Ns2NlMasuL3k4+n4eOJMsDYoecBNrYAJQ1+4sN49BsrGCli3j
- Djp/4QVGNCjgJVL9fThp35suGf62KsuJ2/6tew7tDLgH8bMwZezjmaEfvuI=
-X-Google-Smtp-Source: AGHT+IFA5oxVhsvnA57EBlOaKlEmID7GvG7CTKlqlaGcYI9gCBebdaJOFv7FSRPSqqfs0Q/PhUGvYQ==
-X-Received: by 2002:a17:907:2d8e:b0:ab7:c152:a3ca with SMTP id
- a640c23a62f3a-aba4eb8adbdmr548764866b.6.1739525296510; 
- Fri, 14 Feb 2025 01:28:16 -0800 (PST)
-Received: from dario-ThinkPad-T14s-Gen-2i.. ([176.200.207.55])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-aba5339ddbesm304561366b.152.2025.02.14.01.28.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 14 Feb 2025 01:28:16 -0800 (PST)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Fri, 14 Feb 2025 10:28:08 +0100
-Message-ID: <20250214092808.2372973-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ub_BLknUkYh3 for <buildroot@buildroot.org>;
+ Fri, 14 Feb 2025 09:32:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4E35C812FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E35C812FA
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4E35C812FA
+ for <buildroot@buildroot.org>; Fri, 14 Feb 2025 09:32:36 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 1757A352084A; Fri, 14 Feb 2025 10:32:33 +0100 (CET)
+Date: Fri, 14 Feb 2025 10:32:33 +0100
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: Scott Fan <fancp2007@gmail.com>
+Message-ID: <Z68NsSRTlm0aGSi4@waldemar-brodkorb.de>
+References: <20250214021416.392363-1-fancp2007@gmail.com>
+ <20250214074235.917242-1-fancp2007@gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1739525296; x=1740130096;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=+V3cuBLHD0B/ustEY806yKuQz+PUDMpd+DzNw/wHJ3g=;
- b=AbmaWrfE+lFm5iqSW+PFD0PiOBBRIeGvztdV9HWONKLu29TUpV7kXx/2kM4tTzmduW
- sAGLd/RG6s7GqE6p6/GxDtEm0fdynB6ZAG2mWfAdf8wfLL1BN/L5rzYO4qo3zJZWb82F
- WclpcGrv7eqC6G+iO2eqZbVOu9e6A0LFeQuOw=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=AbmaWrfE
-Subject: [Buildroot] [PATCH 1/1] package/armadillo: bump to version 14.2.3
+Content-Disposition: inline
+In-Reply-To: <20250214074235.917242-1-fancp2007@gmail.com>
+X-Operating-System: Linux 5.10.0-33-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1739525554; bh=4HbVToowaSkws+LGthbGHUHLkLnQXC5M4OKkApDU/QE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=cbiLkxS2Ed9p0R3O89/pc9P5YZjvq8SKHdxJFIPVqIZyIQGsUOHQtsY/NFcqx8aay
+ DRgY1THhblHK3CdMQQ5fJgwk06qmohuMMVcZ0lvWLc3+GvzHfSyoX2jpNepm4wRj6L
+ aa4nmAhC/2Jv1efcHXYAg3VMh7rKICdcPoxdkxa/Zn/T9dTNj28FEeeQGufVUSDT02
+ BrvsuugmF/hwWiKRD2QKe9uGp6m/6HrukLxs7WyRFvcWIdA4fCe/x2lDk21TGffozq
+ owZXI+TVBqJi55v6mPm+uG3a0dtiToIV/27wRuFWD+4jSySf1xB++/69DFPOZW3zG3
+ iCYQLxYFzXi7w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=cbiLkxS2
+Subject: Re: [Buildroot] [PATCH v2] package/sqlite: fix configure options
+ for readline/editline support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,47 +78,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://arma.sourceforge.net/docs.html#changelog
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- package/armadillo/armadillo.hash | 2 +-
- package/armadillo/armadillo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
-index 19446b589a5b..9ef258e160d4 100644
---- a/package/armadillo/armadillo.hash
-+++ b/package/armadillo/armadillo.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  3054c8e63db3abdf1a5c8f9fdb7e6b4ad833f9bcfb58324c0ff86de0784c70e0  armadillo-14.2.2.tar.xz
-+sha256  fc70c3089a8d2bb7f2510588597d4b35b4323f6d4be5db5c17c6dba20ab4a9cc  armadillo-14.2.3.tar.xz
- # License files, locally calculated
- sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index 1798cbf5ed13..14d7738ea3f0 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ARMADILLO_VERSION = 14.2.2
-+ARMADILLO_VERSION = 14.2.3
- ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
- ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
- ARMADILLO_INSTALL_STAGING = YES
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpzb3JyeSBJIGZvcmdvdCB0byBkcm9wIHYxIG9mIHRoZSBwYXRjaC4KCldvcmtzIG5vdy4g
+WW91IGNhbiBhZGQgYSAKVGVzdGVkLWJ5OiBXYWxkZW1hciBCcm9ka29yYiA8d2J4QG9wZW5hZGsu
+b3JnPgoKYmVzdCByZWdhcmRzCiBXYWxkZW1hcgoKU2NvdHQgRmFuIHdyb3RlLAoKPiBUaGUgYXV0
+b3NldHVwIHNjcmlwdCB3aWxsIHNraXAgY2hlY2tpbmcgZm9yIHJlYWRsaW5lLmggd2hlbiBjcm9z
+cy1jb21waWxpbmcsCj4gd2hpY2ggd2lsbCBjYXVzZSBsaW5lLWVkaXRpbmcgc3VwcG9ydCBmb3Ig
+dGhlIHNxbGl0ZTMgc2hlbGwgdG8gYWx3YXlzIGJlICJub25lIi4KPiAKPiBJbiB0aGlzIGNhc2Us
+IGlmIHRoZSAtLWVkaXRsaW5lIG9wdGlvbiBpcyBwcm92aWRlZCwgYW4gZXJyb3Igd2lsbCBiZSBy
+ZXBvcnRlZDoKPiBFUlJPUjogRXhwbGljaXQgLS1lZGl0bGluZSBmYWlsZWQgdG8gZmluZCBhIG1h
+dGNoaW5nIGxpYnJhcnkuCj4gCj4gSG93ZXZlciwgd2UgY2FuIGVuYWJsZSByZWFkbGluZSBvciBl
+ZGl0bGluZSBzdXBwb3J0IGJ5IHNwZWNpZnlpbmcgdGhlIENGTEFHUwo+IGFuZCBMREZMQUdTIHZh
+bHVlcyDigIvigItpbnN0ZWFkIG9mIGhhdmluZyBpdCBoYW5kbGVkIGF1dG9tYXRpY2FsbHkgYnkg
+dGhlCj4gYXV0b3NldHVwIGNvbmZpZ3VyZSBzY3JpcHQuCj4gCj4gSW4gYWRkaXRpb24sIHRoZSBs
+aWJlZGl0IHBhY2thZ2UgYWN0dWFsbHkgZGVwZW5kcyBvbiB0aGUgbmN1cnNlcyBwYWNrYWdlLAo+
+IGp1c3QgbGlrZSB0aGUgcmVhZGxpbmUgcGFja2FnZS4gU28gd2hlbiB1c2luZyB0aGUgbGliZWRp
+dCBwYWNrYWdlLAo+IGFsc28gYWRkIHRoZSBuY3Vyc2VzIGRlcGVuZGVuY3kuCj4gCj4gU2lnbmVk
+LW9mZi1ieTogU2NvdHQgRmFuIDxmYW5jcDIwMDdAZ21haWwuY29tPgo+IAo+IC0tLQo+IENoYW5n
+ZXMgdjEgLT4gdjI6Cj4gICAtIHVzZSB0aGUgQ0ZMQUdTIGFuZCBMREZMQUdTIHZhbHVlcyBpbnN0
+ZWFkIG9mIGF1dG9zZXR1cCBjb25maWd1cmUgb3B0aW9ucwo+ICAgLSB1cGRhdGUgY29tbWl0IG1l
+c3NhZ2UKPiAtLS0KPiAgcGFja2FnZS9zcWxpdGUvc3FsaXRlLm1rIHwgMTEgKysrKysrKy0tLS0K
+PiAgMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKPiAKPiBk
+aWZmIC0tZ2l0IGEvcGFja2FnZS9zcWxpdGUvc3FsaXRlLm1rIGIvcGFja2FnZS9zcWxpdGUvc3Fs
+aXRlLm1rCj4gaW5kZXggNWE4YjAzM2NlMC4uMjU1ZGRjOTM3YiAxMDA2NDQKPiAtLS0gYS9wYWNr
+YWdlL3NxbGl0ZS9zcWxpdGUubWsKPiArKysgYi9wYWNrYWdlL3NxbGl0ZS9zcWxpdGUubWsKPiBA
+QCAtNDQsOSArNDQsMTIgQEAgZW5kaWYKPiAgCj4gIGlmZXEgKCQoQlIyX1BBQ0tBR0VfTkNVUlNF
+UykkKEJSMl9QQUNLQUdFX1JFQURMSU5FKSx5eSkKPiAgU1FMSVRFX0RFUEVOREVOQ0lFUyArPSBu
+Y3Vyc2VzIHJlYWRsaW5lCj4gLWVsc2UgaWZlcSAoJChCUjJfUEFDS0FHRV9MSUJFRElUKSx5KQo+
+IC1TUUxJVEVfREVQRU5ERU5DSUVTICs9IGxpYmVkaXQKPiAtU1FMSVRFX0NPTkZfT1BUUyArPSAt
+LWRpc2FibGUtcmVhZGxpbmUgLS1lZGl0bGluZQo+ICtTUUxJVEVfQ0ZMQUdTICArPSAtREhBVkVf
+UkVBRExJTkU9MQo+ICtTUUxJVEVfTERGTEFHUyArPSAtbHJlYWRsaW5lIC1sbmN1cnNlcwo+ICtl
+bHNlIGlmZXEgKCQoQlIyX1BBQ0tBR0VfTkNVUlNFUykkKEJSMl9QQUNLQUdFX0xJQkVESVQpLHl5
+KQo+ICtTUUxJVEVfREVQRU5ERU5DSUVTICs9IG5jdXJzZXMgbGliZWRpdAo+ICtTUUxJVEVfQ0ZM
+QUdTICArPSAtREhBVkVfRURJVExJTkU9MQo+ICtTUUxJVEVfTERGTEFHUyArPSAtbGVkaXQgLWxu
+Y3Vyc2VzCj4gIGVsc2UKPiAgU1FMSVRFX0NPTkZfT1BUUyArPSAtLWRpc2FibGUtcmVhZGxpbmUK
+PiAgZW5kaWYKPiBAQCAtNTksNyArNjIsNyBAQCBpZmVxICgkKEJSMl9QQUNLQUdFX1NRTElURV9F
+TkFCTEVfSlNPTjEpLCkKPiAgU1FMSVRFX0NPTkZfT1BUUyArPSAtLWRpc2FibGUtanNvbgo+ICBl
+bmRpZgo+ICAKPiAtU1FMSVRFX0NPTkZfRU5WID0gQ0ZMQUdTPSIkKFNRTElURV9DRkxBR1MpIgo+
+ICtTUUxJVEVfQ09ORl9FTlYgPSBDRkxBR1M9IiQoU1FMSVRFX0NGTEFHUykiIExERkxBR1M9IiQo
+U1FMSVRFX0xERkxBR1MpIgo+ICAKPiAgZGVmaW5lIFNRTElURV9DT05GSUdVUkVfQ01EUwo+ICAJ
+KGNkICQoQEQpOyAkKFRBUkdFVF9DT05GSUdVUkVfT1BUUykgJChTUUxJVEVfQ09ORl9FTlYpIC4v
+Y29uZmlndXJlIFwKPiAtLSAKPiAyLjQzLjAKPiAKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
+bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
+dWlsZHJvb3QK
