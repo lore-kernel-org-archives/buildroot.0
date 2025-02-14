@@ -1,85 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60F84C02198
-	for <buildroot@archiver.kernel.org>; Fri, 14 Feb 2025 22:04:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55B3BC02198
+	for <buildroot@archiver.kernel.org>; Fri, 14 Feb 2025 22:36:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A05341710;
-	Fri, 14 Feb 2025 22:04:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09FB96FBD3;
+	Fri, 14 Feb 2025 22:36:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jkTYL9Slj_qV; Fri, 14 Feb 2025 22:04:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M1sy4KDwh6IP; Fri, 14 Feb 2025 22:36:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1A3B417C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26A056FC47
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1A3B417C3;
-	Fri, 14 Feb 2025 22:04:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E5791E7
- for <buildroot@buildroot.org>; Fri, 14 Feb 2025 22:04:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 26A056FC47;
+	Fri, 14 Feb 2025 22:36:13 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9378BDF
+ for <buildroot@buildroot.org>; Fri, 14 Feb 2025 22:36:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F1E09411D1
- for <buildroot@buildroot.org>; Fri, 14 Feb 2025 22:04:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6CE7C4086E
+ for <buildroot@buildroot.org>; Fri, 14 Feb 2025 22:36:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PEVyUMU7-HMk for <buildroot@buildroot.org>;
- Fri, 14 Feb 2025 22:04:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A493740F4B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A493740F4B
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A493740F4B
- for <buildroot@buildroot.org>; Fri, 14 Feb 2025 22:04:01 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9C08120457;
- Fri, 14 Feb 2025 22:03:57 +0000 (UTC)
-Date: Fri, 14 Feb 2025 23:03:56 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Neal Frager via buildroot <buildroot@buildroot.org>
-Cc: Neal Frager <neal.frager@amd.com>, ibai.erkiaga-elorza@amd.com,
- luca.ceresoli@bootlin.com, brandon.maier@collins.com, ju.o@free.fr,
- romain.naour@smile.fr, michal.simek@amd.com
-Message-ID: <20250214230356.7463c628@windsurf>
-In-Reply-To: <20250214165402.1128194-4-neal.frager@amd.com>
-References: <20250214165402.1128194-1-neal.frager@amd.com>
- <20250214165402.1128194-4-neal.frager@amd.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+ id lNqoEDp9HkhF for <buildroot@buildroot.org>;
+ Fri, 14 Feb 2025 22:36:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.176;
+ helo=smtpcmd15176.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1E886400EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E886400EB
+Received: from smtpcmd15176.aruba.it (smtpcmd15176.aruba.it [62.149.156.176])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1E886400EB
+ for <buildroot@buildroot.org>; Fri, 14 Feb 2025 22:36:07 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id j4I0tMPqTFcEPj4I0t4VZf; Fri, 14 Feb 2025 23:36:04 +0100
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Fri, 14 Feb 2025 23:33:18 +0100
+Message-Id: <20250214223318.2670223-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdehtdektdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeltdegvdejheegtefgueffgfelhfekvdefudevieeileetleeitdefgfeugffghfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgduleemkeelgegsmeehhedttdemvddutggvmegsvgehieemrggsfedvmegtrggrvgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudelmeekleegsgemheehtddtmedvudgtvgemsggvheeimegrsgefvdemtggrrggvpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeekpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehnvggrlhdrfhhrrghgvghrsegrmhgurdgtohhmpdhrtghpthhtohepihgsrghir
- dgvrhhkihgrghgrqdgvlhhorhiirgesrghmugdrtghomhdprhgtphhtthhopehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepsghrrghnughonhdrmhgrihgvrhestgholhhlihhnshdrtghomhdprhgtphhtthhopehjuhdrohesfhhrvggvrdhfrhdprhgtphhtthhopehrohhmrghinhdrnhgrohhurhesshhmihhlvgdrfhhrpdhrtghpthhtohepmhhitghhrghlrdhsihhmvghksegrmhgurdgtohhm
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1739570638;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=bPiIPJoLCLGgnVil/svvjRM8CL0MWHdaehBs2jaeYw4=;
- b=ew3s3S5EtDL8Ce2H2g5Y8DirqYdNHyq88tj24M1AEfWb4NQ7RCcWu2wSoeWNTy23swypTR
- kgNkQVQMM4DLhW1Fif3g05dNY3C5u3f9ul2Hr/vnPXymqlwS5GyidzbYXfiQMnIi6x+Ds6
- RW8jNU74KhZEGJJZhywqCvglYO/VfbNHhQNYXWxaCuvFQxluHhWPFT/9Tc6w/ejJ5HnqHz
- Jj5EUA+2IZzdZ06wL7KwZE/rcaHc9gtjPiaJ8aWy+x0aGLwtd2I+A+S8k/QHzpfXO+sLIy
- T1AeZ0UHXERCxhKPD4jkIvw8hdlNJcrT18GpCnFlHCkfMpmLIjWLDwvkJU+edg==
+X-CMAE-Envelope: MS4xfI4Oqfr98Mguo1OWaFChefBDj5LBsqhgjm4LQHcVBrXFhhYgt7DaMxoW/yUTWKsdMwXdtFXECdDURJATzEHd2c/zjN9f49he86qhVqKEadOZhJzdd69J
+ fRRlDemWxfgvFYsYc9XAdUNWbI7dwPM5nFI+Re3aEQrRYaeR9dZwkTh4w+4wGV+jsOVsLFFzWbL5rtJg2FpD7GOFgVFDEHL6nBk60cequdVWc0F1mmeAvJWH
+ gtAr4j5RMiBM9nwk5wNrp9OxKADOA5OBivW7xZPmeec=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1739572564; bh=jyN1ZCBGhdH5PBXZdq06gOaA+Hx2+rMlg0nObSkHF4U=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=kwfXc8xQyUtAFIoIGiCJVMtzhhrvwXiuaC7lnVWQwIIstNJJo8EpS+SDDgnl9zL5a
+ k+lIjL4DdGrRg5bO8Es3pYuD2Gb5yUgv3jbZlu2cLraZszy1CvFRqXHvzxsHkIlZR/
+ cdpX13JzGIpcAik/qarIzrv7/OLzfcADJG152i5849Sw29e0Q36qPDvAhvN6dNCek/
+ 8lOVhVulRNTKF/77M292YSNSFM4HKFhZxGOyWZPugSuyi/yBByeeIv2RR6z/XoXK1Q
+ vIGim24hdXL89P7ioKUWVpv2rKp5Hwnr9+KtkCS3AQM0TB1Ufu8sdc3rhC3bV/mJYS
+ KLZAbJB99/Seg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ew3s3S5E
-Subject: Re: [Buildroot] [PATCH v2 4/4]
- toolchain/toolchain-bare-metal-buildroot: update help text for multiple
- tuple support
+ dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=kwfXc8xQ
+Subject: [Buildroot] [PATCH] package/libblockdev: bump to version 3.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,63 +83,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Neal,
+For change log, see:
+https://github.com/storaged-project/libblockdev/blob/3.3.0/NEWS.rst
 
-On Fri, 14 Feb 2025 16:54:02 +0000
-Neal Frager via buildroot <buildroot@buildroot.org> wrote:
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libblockdev/libblockdev.hash | 2 +-
+ package/libblockdev/libblockdev.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Now that binutils-bare-metal, gcc-bare-metal and newlib-bare-metal packages
-> have been upgraded to support a list of architecture tuples, this patch
-> updates the toolchain-bare-metal-buildroot help text to describe the new
-> capability.
-> 
-> BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH is still backwards compatible with
-> its prior definition as defining a single tuple with this new definition
-> works exactly the same as before.
-> 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-
-Overall looks good. Maybe one minor wording comment.
-
->  config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH
-> -	string "architecture tuple"
-> +	string "list of architecture tuples"
->  	help
-> -	  This option allows to define the architecture tuple for the
-> -	  bare-metal toolchain.
-> +	  This option defines a list of architecture tuples for
-> +	  building bare metal toolchains.
-
-This option allows to define the list of architecture tuples for which
-bare-metal toolchains will be created. One toolchain will be built for
-each of the architecture tuples specified in this option.
-
-> +
-> +	  For example, to build both a microblaze and a riscv bare
-
-microblaze -> Microblaze
-
-riscv -> RISC-V
-
-> +	  metal toolchain for Xilinx platforms, use the following
-
-I'm not sure the "Xilinx platforms" here is very relevant.
-
-> +	  definition:
-> +	  "microblazeel-xilinx-elf riscv32-xilinx-elf"
-
-In fact, I'm not sure the "xilinx" parts of the tuples here are very
-relevant/useful. It's the vendor part of the tuple, so it has basically
-no effect. It would probably be even more logical to use
-microblazel-none-elf, or even microblazeel-buildroot-elf.
-
-Thanks!
-
-Thomas
+diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
+index 1466c88451..dd6f8b1a27 100644
+--- a/package/libblockdev/libblockdev.hash
++++ b/package/libblockdev/libblockdev.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  318b9e2cedfdfe88161f28079fcb63239aeb5592223f4485b861cfc6ef11189a  libblockdev-3.2.1.tar.gz
++sha256  c4738e1abedefffe886521f9f0e7a9306c6f50f7691d88e011438c88608bdfa7  libblockdev-3.3.0.tar.gz
+ sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
+diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
+index 4cac905666..265cee2e28 100644
+--- a/package/libblockdev/libblockdev.mk
++++ b/package/libblockdev/libblockdev.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBBLOCKDEV_VERSION = 3.2.1
++LIBBLOCKDEV_VERSION = 3.3.0
+ LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)
+ LIBBLOCKDEV_LICENSE = LGPL-2.1
+ LIBBLOCKDEV_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
