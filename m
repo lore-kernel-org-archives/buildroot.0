@@ -4,63 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84D35C021A0
-	for <buildroot@archiver.kernel.org>; Sat, 15 Feb 2025 08:37:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D980AC021A0
+	for <buildroot@archiver.kernel.org>; Sat, 15 Feb 2025 08:37:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 36EAE813B0;
-	Sat, 15 Feb 2025 08:37:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 26831849BA;
+	Sat, 15 Feb 2025 08:37:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QdCtmHr9Niz3; Sat, 15 Feb 2025 08:37:23 +0000 (UTC)
+ id D5EMiaO0vm-E; Sat, 15 Feb 2025 08:37:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45D22848A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C284F848DA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 45D22848A2;
-	Sat, 15 Feb 2025 08:37:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 23846DE
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 08:37:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C284F848DA;
+	Sat, 15 Feb 2025 08:37:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id CFD61DE
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 08:37:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 076A06090A
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 08:37:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BFCD184969
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 08:37:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LBfILD_X-cTP for <buildroot@buildroot.org>;
- Sat, 15 Feb 2025 08:37:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4C6276-23n8E for <buildroot@buildroot.org>;
+ Sat, 15 Feb 2025 08:37:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CAB3D60630
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAB3D60630
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CAB3D60630
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 08:37:20 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 95D1D4443B;
- Sat, 15 Feb 2025 08:37:17 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tjDfo-00GbCj-2p;
- Sat, 15 Feb 2025 09:37:16 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1B588209E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C1B588209E
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 08:37:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A553B8755D; Sat, 15 Feb 2025 08:37:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-References: <20250214212201.139174-1-ju.o@free.fr>
-Date: Sat, 15 Feb 2025 09:37:16 +0100
-In-Reply-To: <20250214212201.139174-1-ju.o@free.fr> (Julien Olivain's message
- of "Fri, 14 Feb 2025 22:22:01 +0100")
-Message-ID: <87ikpbvc1v.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdehvddtjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepfeeuveefteefheeufffgledugeeffeffudevleejjedtuddujeevhffgveelvdeinecuffhomhgrihhnpehgihhtlhgrsgdrtghomhdpsghuihhlughrohhothdrohhrghenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopehjuhdrohesfhhrvggvrdhfrhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/fakeroot: add patch to fix
+To: buildroot@buildroot.org
+Date: Sat, 15 Feb 2025 09:34:52 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 32dd92d18edb3d83ff465e366ff211f741767222
+X-Git-Newrev: 45c13bf2490124f265a2efd6c0c3b8065e4498f6
+X-Patchwork-Hint: ignore
+Message-Id: <20250215083733.A553B8755D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fakeroot: add patch to fix
  parallel build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -73,50 +59,169 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=45c13bf2490124f265a2efd6c0c3b8065e4498f6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > When building host-fakeroot on host with large number of CPUs,
- > compilation can randomly fail. Failures are observed on hosts
- > with 24 CPUs or more.
+When building host-fakeroot on host with large number of CPUs,
+compilation can randomly fail. Failures are observed on hosts
+with 24 CPUs or more.
 
- > Build logs show errors such as:
+Build logs show errors such as:
 
- >     make -j$(nproc)
- >     ...
- >     awk -f ./wrapawk < ./wrapfunc.inp
- >     awk -f ./wrapawk < ./wrapfunc.inp
- >     ...
- >     In file included from libfakeroot.c:265:
- >     wraptmpf.h:607: error: unterminated #ifdef
- >       607 | #ifdef __APPLE__
- >           |
- >     wraptmpf.h:601: error: unterminated #ifdef
- >       601 | #ifdef HAVE_FTS_CHILDREN
- >           |
- >     wraptmpf.h:2: error: unterminated #ifndef
- >         2 | #ifndef WRAPTMPF_H
- >           |
- >     ...
+    make -j$(nproc)
+    ...
+    awk -f ./wrapawk < ./wrapfunc.inp
+    awk -f ./wrapawk < ./wrapfunc.inp
+    ...
+    In file included from libfakeroot.c:265:
+    wraptmpf.h:607: error: unterminated #ifdef
+      607 | #ifdef __APPLE__
+          |
+    wraptmpf.h:601: error: unterminated #ifdef
+      601 | #ifdef HAVE_FTS_CHILDREN
+          |
+    wraptmpf.h:2: error: unterminated #ifndef
+        2 | #ifndef WRAPTMPF_H
+          |
+    ...
 
- > This commit fixes the issue by adding a package patch.
+This commit fixes the issue by adding a package patch.
 
- > Fixes:
- > - https://gitlab.com/buildroot.org/buildroot/-/jobs/9085451831
- > - https://gitlab.com/buildroot.org/buildroot/-/jobs/9085451244
- > - https://gitlab.com/buildroot.org/buildroot/-/jobs/9085451198
- > - and many more...
+Fixes:
+- https://gitlab.com/buildroot.org/buildroot/-/jobs/9085451831
+- https://gitlab.com/buildroot.org/buildroot/-/jobs/9085451244
+- https://gitlab.com/buildroot.org/buildroot/-/jobs/9085451198
+- and many more...
 
- > Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0001-Makefile.am-fix-parallel-build.patch      | 97 ++++++++++++++++++++++
+ package/fakeroot/fakeroot.mk                       |  2 +
+ 2 files changed, 99 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/fakeroot/0001-Makefile.am-fix-parallel-build.patch b/package/fakeroot/0001-Makefile.am-fix-parallel-build.patch
+new file mode 100644
+index 0000000000..2f21f84349
+--- /dev/null
++++ b/package/fakeroot/0001-Makefile.am-fix-parallel-build.patch
+@@ -0,0 +1,97 @@
++From 29e9322e6a8238205780107e731a51b48845f9c7 Mon Sep 17 00:00:00 2001
++From: Julien Olivain <ju.o@free.fr>
++Date: Mon, 10 Feb 2025 22:59:04 +0100
++Subject: [PATCH] Makefile.am: fix parallel build
++
++When building fakeroot on host with large number of CPUs, compilation
++can randomly fail. Failures were observed on hosts with 24 CPUs.
++
++Build logs show errors such as:
++
++    make -j$(nproc)
++    ...
++    awk -f ./wrapawk < ./wrapfunc.inp
++    awk -f ./wrapawk < ./wrapfunc.inp
++    ...
++    In file included from libfakeroot.c:265:
++    wraptmpf.h:607: error: unterminated #ifdef
++      607 | #ifdef __APPLE__
++          |
++    wraptmpf.h:601: error: unterminated #ifdef
++      601 | #ifdef HAVE_FTS_CHILDREN
++          |
++    wraptmpf.h:2: error: unterminated #ifndef
++        2 | #ifndef WRAPTMPF_H
++          |
++    ...
++
++The issue was observed in the builders of Buildroot Linux [1], which
++is using fakeroot. Examples of build failures are [2], [3], [4].
++
++It is important to note that in all failing cases, there is
++more that one parallel invocation of the "wrapawk" script [5].
++
++This script is meant to generate many output files (wrapped.h,
++wrapdef.h, wrapstruct.h, wraptmpf.h) from a single invocation.
++
++The Makefile.am file is using multiple targets in an attempt to
++reflect that generation of multiple outputs at once. See [6].
++
++This use of multiple targets in this rule is incorrect here. See
++the Make manual [7]. This construct, used in Makefile.am, incorrectly
++assumes all those targets are independant (so they can be executed in
++parallel). They are not. In the current failing case, parallel
++invocations will generates all their respective output files,
++overwriting each other. This could lead to incomplete generated
++files, resulting to the observed compilation failures.
++
++Note that GNU Make 4.3 introduced "Grouped Targets" for that purpose.
++See "Rules with Grouped Targets" section in [7]. But this would add a
++requirement on Make >= 4.3.
++
++For that reason, this commit fixes the issue by using a simpler
++construct, working with all Make versions: the first output file
++"wrapped.h" is kept as a target, and it is devlared as a
++dependency of the three other generated files. This change makes sure
++that only one invocation of "wrapawk" will happen at a time,
++disregarding the number of parallel jobs requiring those generated
++files. This has the effect of completely solving the parallel build
++for all GNU Make versions.
++
++[1] https://buildroot.org/
++[2] https://gitlab.com/buildroot.org/buildroot/-/jobs/9085451831
++[3] https://gitlab.com/buildroot.org/buildroot/-/jobs/9085451244
++[4] https://gitlab.com/buildroot.org/buildroot/-/jobs/9085451198
++[5] https://salsa.debian.org/clint/fakeroot/-/blob/master/wrapawk
++[6] https://salsa.debian.org/clint/fakeroot/-/blob/upstream/1.37/Makefile.am#L54
++[7] https://www.gnu.org/software/make/manual/html_node/Multiple-Targets.html
++
++Upstream: Proposed: https://salsa.debian.org/clint/fakeroot/-/merge_requests/33
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ Makefile.am | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 46f01eb..ff71a8d 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -48,12 +48,13 @@ EXTRA_DIST=wrapawk wrapawk_macosx wrapfunc.inp           \
++ CLEAN_FILES=fakerootconfig.h
++ 
++ if MACOSX
++-wrapped.h wrapdef.h wrapstruct.h wraptmpf.h:wrapawk_macosx wrapfunc.inp
+++wrapped.h: wrapawk_macosx wrapfunc.inp
++ 	awk -f $(srcdir)/wrapawk_macosx < $(srcdir)/wrapfunc.inp
++ else !MACOSX
++-wrapped.h wrapdef.h wrapstruct.h wraptmpf.h:wrapawk wrapfunc.inp
+++wrapped.h: wrapawk wrapfunc.inp
++ 	awk -f $(srcdir)/wrapawk < $(srcdir)/wrapfunc.inp
++ endif !MACOSX
+++wrapdef.h wrapstruct.h wraptmpf.h: wrapped.h
++ 
++ libfakeroot.lo:libfakeroot.c wrapdef.h wrapstruct.h wraptmpf.h
++ 
++-- 
++2.48.1
++
+diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
+index e18cdc5f07..f557161770 100644
+--- a/package/fakeroot/fakeroot.mk
++++ b/package/fakeroot/fakeroot.mk
+@@ -15,6 +15,8 @@ HOST_FAKEROOT_DEPENDENCIES = host-acl
+ HOST_FAKEROOT_CONF_ENV = \
+ 	ac_cv_header_sys_capability_h=no \
+ 	ac_cv_func_capset=no
++# 0001-Makefile.am-fix-parallel-build.patch
++HOST_FAKEROOT_AUTORECONF = YES
+ FAKEROOT_LICENSE = GPL-3.0+
+ FAKEROOT_LICENSE_FILES = COPYING
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
