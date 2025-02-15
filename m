@@ -1,63 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CF43C021A0
-	for <buildroot@archiver.kernel.org>; Sat, 15 Feb 2025 10:30:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B38EC021A0
+	for <buildroot@archiver.kernel.org>; Sat, 15 Feb 2025 10:33:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2ADB40CFA;
-	Sat, 15 Feb 2025 10:30:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id szAhp3mzDLKI; Sat, 15 Feb 2025 10:30:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 596BA41253
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 596BA41253;
-	Sat, 15 Feb 2025 10:30:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 474F772
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 10:30:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3671A811F5
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 10:30:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1149E81176;
+	Sat, 15 Feb 2025 10:33:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UonVBj-ejnLx for <buildroot@buildroot.org>;
- Sat, 15 Feb 2025 10:30:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0207F811CD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0207F811CD
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0207F811CD
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 10:30:03 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C64D443299;
- Sat, 15 Feb 2025 10:30:01 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1tjFQv-000HGt-07;
- Sat, 15 Feb 2025 11:30:01 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+ id BwDMibXgD6aO; Sat, 15 Feb 2025 10:33:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22B478102A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 22B478102A;
+	Sat, 15 Feb 2025 10:33:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C3E68DF
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 10:33:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BDE5C607E8
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 10:33:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TKXPaX2RsDFB for <buildroot@buildroot.org>;
+ Sat, 15 Feb 2025 10:33:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4D7376077D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D7376077D
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4D7376077D
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 10:33:51 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-43948021a45so29671285e9.1
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 02:33:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1739615629; x=1740220429;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=VJu/Z1WoU7wW/jxU/w0VdUDYbA2OiopjdrXW9siEsqk=;
+ b=k5hfMWelrK+8+yQgw3sgLvED2hADJy+dtbpi5xfQCQNciLxNxJORofKAysOMe+slPl
+ mBARANL9PXyPq3Y8quiiCS4Nkz+gSQ0x24w4/lJKkpf1svzLYlEr+1kAqRiKC+6Bzuuk
+ oB/RRBbCtfqFo9NyNwKP4Uad4Bgqf8qxT72F+4dEc3IUCFOs6hHNn1vHt0NM/et/mCmr
+ bN9lQMcWtIP2wPXz8sCgdkSOG+Kehc88ytr7MO2mUR43kazN45MMvOQpTFef31BbmrRr
+ dc6YAsWDHGD2VPe/uzMXnr3rdo1PRf4+UDVDfnvZ9qkMllayxWwe5X0diPQmhru/T3rg
+ 2TmQ==
+X-Gm-Message-State: AOJu0YxCHqYAjv9FYKTH2RVCsFGKxxymrLPGNtJTh9Zm4VV6D2iO5lVM
+ vz6KGVGeIqUh3q/D926li9i1R+JYTAzo6OqRO94+xcEQvpzvB578YwthFg==
+X-Gm-Gg: ASbGncsrPE6S2YgbYB6R1dhsVH9C925U8GfTwFA+Af6mG9B5kXYUHOyHT073lcFggvC
+ vyfjgvvQyYsFiGL/xaqQFDitk0wUTJFl+cp+9JVvp79sIf+l/Y1HzEr38xlL80l5Bm8kNq+sVfg
+ rL3vULbqw+92pbOEasu+wJR3cDrb/Np97pWPCNTUeviKiquSve/viSGbOD501M1lS5H4fiW+7SA
+ AoDCnmPQHOcbuqQVsUY3GShMghbIvOtceXe0hu/+u5M8//9mbKEHQQxmbu6+15jZZ+t4u1xVb+O
+ Iz8voatU5ltOlVtsTMqQGLHVNg==
+X-Google-Smtp-Source: AGHT+IEa+k+K/IemZ79+6V3zswWAPp4FjWM96HU3ic1DP3ubQtTAIK9zICoWNpODw9K7NO81I6s4pw==
+X-Received: by 2002:a05:600c:4f95:b0:439:6ab6:5d47 with SMTP id
+ 5b1f17b1804b1-4396e73462cmr32361605e9.30.1739615628750; 
+ Sat, 15 Feb 2025 02:33:48 -0800 (PST)
+Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-38f259d65bcsm6940030f8f.65.2025.02.15.02.33.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 15 Feb 2025 02:33:48 -0800 (PST)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Feb 2025 11:29:59 +0100
-Message-Id: <20250215103000.66380-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
+Cc: Christian Stewart <christian@aperture.us>,
+ Fiona Klute <fiona.klute@gmx.de>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Date: Sat, 15 Feb 2025 11:33:47 +0100
+Message-ID: <cover.1739615626.git.yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdehvdefudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeetffefgeekvdduteehleeuvdekgfduuefgleeihfeuvefgkeehjeffgfetjeevfeenucffohhmrghinhepohhpvghnfigrlhhlrdgtohhmpdhmuhhslhdqlhhisggtrdhorhhgnecukfhppedujeekrdduudelrddurddufeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudejkedrudduledruddrudefjedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghkoheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomh
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/musl: add upstream security fixes for
- CVE-2025-26519
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1739615629; x=1740220429; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=VJu/Z1WoU7wW/jxU/w0VdUDYbA2OiopjdrXW9siEsqk=;
+ b=LErOFcOT96Vu7SF+6rAseEYvyy9o5RgQ2zf8ScWwtmNFWvat2yLvZUKbcdUT1UeI6a
+ njw2CpkaD2UuWloznxCg3alEJZmG76Uk1Ln/65pOBslt/ZNOOEQvljxJKk9/KSE/doTB
+ X5CH7pSZnK1GphRS33mI4CPab+DWp29e7KFe9RlWvThSCBrbqH3xsBv+Pckk5yXHYeGp
+ pLY3FACOY8Xyb/tJzKTWjESoZlEY3Qy3pYD+DTwD5WUs54cPvnX2fSRFlS9nvGRtq3HY
+ UyqHpc0hN2t0TuMjuuhc8hdJInpyHJTkW991nI5I8D4M/qMaqGEgdlux06EeRQEoMs0v
+ gbJw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=LErOFcOT
+Subject: [Buildroot] [PATCH 0/4] package/catatonit: update,
+ and use as init or docker init (branch yem/docker-init)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,137 +108,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes CVE-2025-26519: Musl libc: input-controlled out-of-bounds write
-primitive in iconv()
+Hello All!
 
-https://www.openwall.com/lists/musl/2025/02/13/1
+This samall series brings catatonit to the same level of support as the
+other init systems, and especially as a docker-engine init system, like
+tini.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ous-input-validation-in-EUC-KR-decod.patch | 41 +++++++++++++++++++
- ...-8-output-code-path-against-input-de.patch | 40 ++++++++++++++++++
- package/musl/musl.mk                          |  4 ++
- 3 files changed, 85 insertions(+)
- create mode 100644 package/musl/0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch
- create mode 100644 package/musl/0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch
+Tested with the following defconfig (based on qemu_x86_64_defconfig):
 
-diff --git a/package/musl/0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch b/package/musl/0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch
-new file mode 100644
-index 0000000000..dbfd87db76
---- /dev/null
-+++ b/package/musl/0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch
-@@ -0,0 +1,41 @@
-+From e5adcd97b5196e29991b524237381a0202a60659 Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Sun, 9 Feb 2025 10:07:19 -0500
-+Subject: [PATCH] iconv: fix erroneous input validation in EUC-KR decoder
-+
-+as a result of incorrect bounds checking on the lead byte being
-+decoded, certain invalid inputs which should produce an encoding
-+error, such as "\xc8\x41", instead produced out-of-bounds loads from
-+the ksc table.
-+
-+in a worst case, the loaded value may not be a valid unicode scalar
-+value, in which case, if the output encoding was UTF-8, wctomb would
-+return (size_t)-1, causing an overflow in the output pointer and
-+remaining buffer size which could clobber memory outside of the output
-+buffer.
-+
-+bug report was submitted in private by Nick Wellnhofer on account of
-+potential security implications.
-+
-+Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=e5adcd97b5196e29991b524237381a0202a60659
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/locale/iconv.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/locale/iconv.c b/src/locale/iconv.c
-+index 9605c8e9..008c93f0 100644
-+--- a/src/locale/iconv.c
-++++ b/src/locale/iconv.c
-+@@ -502,7 +502,7 @@ size_t iconv(iconv_t cd, char **restrict in, size_t *restrict inb, char **restri
-+ 			if (c >= 93 || d >= 94) {
-+ 				c += (0xa1-0x81);
-+ 				d += 0xa1;
-+-				if (c >= 93 || c>=0xc6-0x81 && d>0x52)
-++				if (c > 0xc6-0x81 || c==0xc6-0x81 && d>0x52)
-+ 					goto ilseq;
-+ 				if (d-'A'<26) d = d-'A';
-+ 				else if (d-'a'<26) d = d-'a'+26;
-+-- 
-+2.39.5
-+
-diff --git a/package/musl/0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch b/package/musl/0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch
-new file mode 100644
-index 0000000000..a14041364a
---- /dev/null
-+++ b/package/musl/0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch
-@@ -0,0 +1,40 @@
-+From c47ad25ea3b484e10326f933e927c0bc8cded3da Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Wed, 12 Feb 2025 17:06:30 -0500
-+Subject: [PATCH] iconv: harden UTF-8 output code path against input decoder
-+ bugs
-+
-+the UTF-8 output code was written assuming an invariant that iconv's
-+decoders only emit valid Unicode Scalar Values which wctomb can encode
-+successfully, thereby always returning a value between 1 and 4.
-+
-+if this invariant is not satisfied, wctomb returns (size_t)-1, and the
-+subsequent adjustments to the output buffer pointer and remaining
-+output byte count overflow, moving the output position backwards,
-+potentially past the beginning of the buffer, without storing any
-+bytes.
-+
-+Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=c47ad25ea3b484e10326f933e927c0bc8cded3da
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/locale/iconv.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/locale/iconv.c b/src/locale/iconv.c
-+index 008c93f0..52178950 100644
-+--- a/src/locale/iconv.c
-++++ b/src/locale/iconv.c
-+@@ -545,6 +545,10 @@ size_t iconv(iconv_t cd, char **restrict in, size_t *restrict inb, char **restri
-+ 				if (*outb < k) goto toobig;
-+ 				memcpy(*out, tmp, k);
-+ 			} else k = wctomb_utf8(*out, c);
-++			/* This failure condition should be unreachable, but
-++			 * is included to prevent decoder bugs from translating
-++			 * into advancement outside the output buffer range. */
-++			if (k>4) goto ilseq;
-+ 			*out += k;
-+ 			*outb -= k;
-+ 			break;
-+-- 
-+2.39.5
-+
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 783a103fcd..13a49a15eb 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -26,6 +26,10 @@ MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
- MUSL_INSTALL_STAGING = YES
- 
-+# 0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch
-+# 0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch
-+MUSL_IGNORE_CVES += CVE-2025-26519
-+
- # musl does not build with LTO, so explicitly disable it
- # when using a compiler that may have support for LTO
- ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),y)
--- 
-2.39.5
+    BR2_x86_64=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
+    BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+    BR2_PER_PACKAGE_DIRECTORIES=y
+    BR2_SYSTEM_DHCP="eth0"
+    BR2_ROOTFS_POST_BUILD_SCRIPT="board/qemu/x86_64/post-build.sh"
+    BR2_ROOTFS_POST_IMAGE_SCRIPT="board/qemu/post-image.sh"
+    BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+    BR2_LINUX_KERNEL=y
+    BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+    BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
+    BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+    BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
+    BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+    BR2_PACKAGE_CA_CERTIFICATES=y
+    BR2_PACKAGE_DOCKER_CLI=y
+    BR2_PACKAGE_DOCKER_ENGINE=y
+    BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_CATATONIT=y
+    BR2_TARGET_ROOTFS_EXT2=y
+    BR2_TARGET_ROOTFS_EXT2_SIZE="252M"
+    BR2_TARGET_ROOTFS_EXT2_RESBLKS=1
+    BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS=""
+    # BR2_TARGET_ROOTFS_TAR is not set
+    BR2_PACKAGE_HOST_GO_BIN=y
 
+And then, in the VM, after login:
+
+    # ls -l /usr/libexec/docker/
+    lrwxrwxrwx    1 root     root            19 Feb 15 09:34 docker-init -> ../../bin/catatonit
+    # docker container run -ti --init busybox:latest
+    [...]
+    / # ps
+    PID   USER     TIME  COMMAND
+        1 root      0:00 /sbin/docker-init -- sh
+        6 root      0:00 sh
+        7 root      0:00 ps
+    / # ls -l /proc/1/exe
+    lrwxrwxrwx    1 root     root             0 Feb 15 09:35 /proc/1/exe -> /sbin/docker-init
+
+Replacing BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_CATATONIT=y with
+BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_TINI=y still works as previously,
+with the init symlink being to tini instead of catatonit.
+
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (4):
+      package/docker-engine: carry the tini init symlink
+      package/docker-engine: add option to support catatonit as init
+      package/catatonit: update to version 0.2.1
+      system: add catatonit as init system
+
+ Config.in.legacy                                   |  9 ++++
+ .../catatonit/0001-fix-build-with-kernel-5.9.patch | 49 ----------------------
+ package/catatonit/catatonit.hash                   |  2 +-
+ package/catatonit/catatonit.mk                     |  2 +-
+ package/docker-engine/Config.in                    | 32 +++++++++++---
+ package/docker-engine/docker-engine.mk             | 10 +++++
+ package/tini/tini.mk                               |  2 -
+ system/Config.in                                   | 10 +++++
+ 8 files changed, 58 insertions(+), 58 deletions(-)
+ delete mode 100644 package/catatonit/0001-fix-build-with-kernel-5.9.patch
+
+--
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
