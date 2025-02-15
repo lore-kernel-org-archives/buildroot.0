@@ -4,63 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25A30C021A0
-	for <buildroot@archiver.kernel.org>; Sat, 15 Feb 2025 13:21:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BDB3C021A0
+	for <buildroot@archiver.kernel.org>; Sat, 15 Feb 2025 13:33:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CA9864120E;
-	Sat, 15 Feb 2025 13:21:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF0544123F;
+	Sat, 15 Feb 2025 13:33:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OI02buildSWr; Sat, 15 Feb 2025 13:21:16 +0000 (UTC)
+ id ZpLv1UvhmH4Z; Sat, 15 Feb 2025 13:33:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC0EF412D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B89EE40CAD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC0EF412D1;
-	Sat, 15 Feb 2025 13:21:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EAC6272
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 13:21:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B89EE40CAD;
+	Sat, 15 Feb 2025 13:33:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B44BF72
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 13:33:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA49C412D1
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 13:21:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A2F10608F0
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 13:33:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HouAtvBwJsTU for <buildroot@buildroot.org>;
- Sat, 15 Feb 2025 13:21:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VzhHJ8kEhmIm for <buildroot@buildroot.org>;
+ Sat, 15 Feb 2025 13:33:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4A8BB4120E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A8BB4120E
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4A8BB4120E
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 13:21:13 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 980A444302;
- Sat, 15 Feb 2025 13:21:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9250E60635
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9250E60635
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9250E60635
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 13:33:27 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6E46A44270;
+ Sat, 15 Feb 2025 13:33:24 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tjI6X-000utN-2L;
- Sat, 15 Feb 2025 14:21:09 +0100
+ (envelope-from <peko@dell.be.48ers.dk>) id 1tjIIN-001574-29;
+ Sat, 15 Feb 2025 14:33:23 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Adrian Perez de Castro <aperez@igalia.com>
-Cc: buildroot@buildroot.org
-References: <20250215093954.989564-1-aperez@igalia.com>
-Date: Sat, 15 Feb 2025 14:21:09 +0100
-In-Reply-To: <20250215093954.989564-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Sat, 15 Feb 2025 11:39:52 +0200")
-Message-ID: <87eczzuywq.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+To: buildroot@buildroot.org
+Date: Sat, 15 Feb 2025 14:33:19 +0100
+Message-Id: <20250215133320.257965-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
 X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdehvdeigecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufhffjgfkfgggtgesthdttddttdertdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpedtjedvjeevieehhfeuvdfguddttefgjeeiheeuvdffveefteegkeduffelleeuffenucffohhmrghinhepfhhrvggvuggvshhkthhophdrohhrghenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegrphgvrhgviiesihhgrghlihgrrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdehvdeijecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnheptdetgeekkeejudeggeelleeuueehteduvddvjeekgfehgfdtieelheffvdeitddtnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvkhhosehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhm
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/wlroots: bump to version 0.18.2
+Subject: [Buildroot] [PATCH] package/imagemagick: bump to version 7.1.1-43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,17 +73,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+For various bugfixes.  Notice that 7.1.1-36 fixed a security vulnerability
+(CVE-2024-41817), but that issue is specific to the AppImage version:
 
- > This is a minor bugfix release. Changelog:
- >   https://gitlab.freedesktop.org/wlroots/wlroots/-/releases/0.18.2
+https://github.com/ImageMagick/ImageMagick/security/advisories/GHSA-8rxc-922v-phg8
 
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Release notes:
+https://github.com/ImageMagick/ImageMagick/releases/tag/7.1.1-43
 
-Committed, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 30a12220dd..2983b511cc 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c82210ea3fdbd044b656ba3d5b42df1da9a18e78fc0e500169bad70d3b0d9ba3  imagemagick-7.1.1-31.tar.gz
++sha256  ceb972266b23dc7c1cfce0da5a7f0c9acfb4dc81f40eb542a49476fedbc2618f  imagemagick-7.1.1-43.tar.gz
+ sha256  a556c5292c87c9a6ac795c80669b0c3660f9f729de8c476bf2b10f83ab1b34ec  LICENSE
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index b2d3e755a6..6bbda40396 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 7.1.1-31
++IMAGEMAGICK_VERSION = 7.1.1-43
+ IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
+ IMAGEMAGICK_LICENSE = Apache-2.0
+ IMAGEMAGICK_LICENSE_FILES = LICENSE
 -- 
-Bye, Peter Korsgaard
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
