@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2ECB2C021A0
-	for <buildroot@archiver.kernel.org>; Sat, 15 Feb 2025 21:12:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BACEC021A0
+	for <buildroot@archiver.kernel.org>; Sat, 15 Feb 2025 21:13:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E254360AC3;
-	Sat, 15 Feb 2025 21:12:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E68B60AEF;
+	Sat, 15 Feb 2025 21:13:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w4N6_JgDlPtD; Sat, 15 Feb 2025 21:12:03 +0000 (UTC)
+ id skVgpFVcrHIc; Sat, 15 Feb 2025 21:13:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E8DE8606D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C4DC60AE2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E8DE8606D3;
-	Sat, 15 Feb 2025 21:12:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id CE360DF
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:12:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4C4DC60AE2;
+	Sat, 15 Feb 2025 21:13:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 62232DE
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:13:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BB1954052D
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:12:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 41D5B4052D
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:13:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VpE6ay5LRGoK for <buildroot@buildroot.org>;
- Sat, 15 Feb 2025 21:12:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE58640378
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CE58640378
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:12:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B7E8487636; Sat, 15 Feb 2025 21:12:00 +0000 (UTC)
+ id dDYAmpVgj7AJ for <buildroot@buildroot.org>;
+ Sat, 15 Feb 2025 21:13:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3A33D40378
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A33D40378
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3A33D40378
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:13:02 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id F3F2CB00535;
+ Sat, 15 Feb 2025 22:12:59 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 15 Feb 2025 22:12:59 +0100
+MIME-Version: 1.0
+Date: Sat, 15 Feb 2025 22:12:59 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 15 Feb 2025 22:00:24 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: befcc152f942786c05211471f0b213050bdaef8c
-X-Git-Newrev: b5ff38782cf8f1dbc1fd9585f49affdfb14833e8
-X-Patchwork-Hint: ignore
-Message-Id: <20250215211200.B7E8487636@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/imagemagick: bump to version
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250215133320.257965-1-peter@korsgaard.com>
+References: <20250215133320.257965-1-peter@korsgaard.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <f86d497a9d6a40eaf40621825f4bf5a2@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1739653981;
+ bh=60Mjn28X4KYZHwxmA2t8PVuPJAgAl8vfI+sfKne53D4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=gdYSz9sNTDgx6/BrVewAzjM01h/iO87Y4g0gzne050VELShoKwcq6I5AKbsY8xwki
+ 3mHdZQ6PpLkHfsDjUkctiDKn2yQ56A5WK4389LGqdsUHnz/xgc2LmrCxTJdaikU4Kh
+ jelRXj+Yd5VXljocmijzTCQqhUU86RbIjOqj9Tpa/FVP/z007KAMbBsLf20U6AtbHK
+ 3rXDB/64gRSjP9nsTxy9+9X8kdm4IB8MzqFn5VGAD5GhzQnIjEtx1zfAHG8GC3QtOG
+ vhJlEyRlUOZOdjQRqPz9T9cLWVxvyc9q6B/1zYqhuf6QDi3gyWiJDDR4eelz+qhjgg
+ /s8glp5plU0PA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=gdYSz9sN
+Subject: Re: [Buildroot] [PATCH] package/imagemagick: bump to version
  7.1.1-43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,52 +82,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5ff38782cf8f1dbc1fd9585f49affdfb14833e8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 15/02/2025 14:33, Peter Korsgaard wrote:
+> For various bugfixes.  Notice that 7.1.1-36 fixed a security 
+> vulnerability
+> (CVE-2024-41817), but that issue is specific to the AppImage version:
+> 
+> https://github.com/ImageMagick/ImageMagick/security/advisories/GHSA-8rxc-922v-phg8
+> 
+> Release notes:
+> https://github.com/ImageMagick/ImageMagick/releases/tag/7.1.1-43
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-For various bugfixes.  Notice that 7.1.1-36 fixed a security vulnerability
-(CVE-2024-41817), but that issue is specific to the AppImage version:
-
-https://github.com/ImageMagick/ImageMagick/security/advisories/GHSA-8rxc-922v-phg8
-
-Release notes:
-https://github.com/ImageMagick/ImageMagick/releases/tag/7.1.1-43
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 30a12220dd..2983b511cc 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  c82210ea3fdbd044b656ba3d5b42df1da9a18e78fc0e500169bad70d3b0d9ba3  imagemagick-7.1.1-31.tar.gz
-+sha256  ceb972266b23dc7c1cfce0da5a7f0c9acfb4dc81f40eb542a49476fedbc2618f  imagemagick-7.1.1-43.tar.gz
- sha256  a556c5292c87c9a6ac795c80669b0c3660f9f729de8c476bf2b10f83ab1b34ec  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index b2d3e755a6..6bbda40396 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 7.1.1-31
-+IMAGEMAGICK_VERSION = 7.1.1-43
- IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
- IMAGEMAGICK_LICENSE = Apache-2.0
- IMAGEMAGICK_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
