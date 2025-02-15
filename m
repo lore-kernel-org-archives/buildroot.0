@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3D5BC021A4
-	for <buildroot@archiver.kernel.org>; Sat, 15 Feb 2025 21:19:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C110C021A0
+	for <buildroot@archiver.kernel.org>; Sat, 15 Feb 2025 21:20:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABEC660B8D;
-	Sat, 15 Feb 2025 21:19:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F225484781;
+	Sat, 15 Feb 2025 21:20:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tuReBSLyZ2zr; Sat, 15 Feb 2025 21:19:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dXBlNWv1hLP4; Sat, 15 Feb 2025 21:20:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CA9160B95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17C7D84778
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7CA9160B95;
-	Sat, 15 Feb 2025 21:19:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 57CCD1E3
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:19:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17C7D84778;
+	Sat, 15 Feb 2025 21:20:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 91E39DF
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:20:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3BD6160B72
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:19:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 807A280FFD
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:20:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Svpn4370kIpQ for <buildroot@buildroot.org>;
- Sat, 15 Feb 2025 21:19:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FE6760B8D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3FE6760B8D
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:19:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E95D875B1; Sat, 15 Feb 2025 21:19:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZsFm86Zw9oDr for <buildroot@buildroot.org>;
+ Sat, 15 Feb 2025 21:20:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D2F5F84778
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D2F5F84778
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D2F5F84778
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:20:50 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id C31C520039E;
+ Sat, 15 Feb 2025 22:20:47 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 15 Feb 2025 22:20:47 +0100
+MIME-Version: 1.0
+Date: Sat, 15 Feb 2025 22:20:47 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 15 Feb 2025 22:17:51 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e9c0222bf41d8277469938a103ee97f6df72fb08
-X-Git-Newrev: 59a8322ce8363289f880f41fce4667680189b18b
-X-Patchwork-Hint: ignore
-Message-Id: <20250215211943.2E95D875B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/angularjs: drop package
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250215110705.159871-1-peter@korsgaard.com>
+References: <20250215110705.159871-1-peter@korsgaard.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <711fd2c4e6f8c517971e1e9d00565cd6@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1739654448;
+ bh=v2goIw+uikF77wUxo6UJB3V4cETIXk+4ZBXyH+IDqRI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=qV2Iewj2Rqy8TKrvAmj+HkOynDlTUjPWGvuPpN7/hI9GJmAcZwP42ISFAtfqddPNv
+ aO/O8iuwRE1cEwA0bfTmf9R+vIAEu1TLaC/P/aHLLubm5BZpub9/dUNCaMKTU7pDaP
+ 7/577aLTvw7paBoszoaZ522+BQletRXHWLmIjMWk1Cjuo3G5HtOuDZL79IjfQ8/Q0W
+ rePfbzsYCOyny6ZL6FEWJboseib59rtU2LU9iMm0EEYPtKUWsBy2DWKjvA5Uz/68MQ
+ noSTHO8GFINnXQfJhuI8KPr/b0pjPPpKIDEfk8B2MveI0M2OxQQDbhlZukxYnSwkIx
+ mu6ZvG1h5allg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=qV2Iewj2
+Subject: Re: [Buildroot] [PATCH 1/2] package/angular-websocket: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,155 +81,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1075864215477024949=="
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1075864215477024949==
-Content-Type: text/plain
+On 15/02/2025 12:07, Peter Korsgaard wrote:
+> The package has not been updated since it was added in 2016 and the 
+> upstream
+> Github project has been archived as of Feb 17, 2024 - So drop the 
+> package.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59a8322ce8363289f880f41fce4667680189b18b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The package has not been updated since 2020, has known vulnerabilities and
-the upstream Github project has been archived as of April 12, 2024 - So drop
-the package.
-
-For reference, AngularJS website [1] reads, at the time of
-this commit:
-"""
-AngularJS support has officially ended as of January 2022.
-See what ending support means [2] and read the end of life
-announcement [3].
-"""
-
-[1] https://angularjs.org/
-[2] https://docs.angularjs.org/misc/version-support-status
-[3] https://goo.gle/angularjs-end-of-life
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Julien: add end-of-life announce and links in commit log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- Config.in.legacy                 |  7 +++++++
- DEVELOPERS                       |  3 ---
- package/Config.in                |  1 -
- package/angularjs/Config.in      |  6 ------
- package/angularjs/angularjs.hash |  3 ---
- package/angularjs/angularjs.mk   | 29 -----------------------------
- 6 files changed, 7 insertions(+), 42 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 037f9a8b89..f94a7db7b0 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2025.02"
- 
-+config BR2_PACKAGE_ANGULARJS
-+	bool "angularjs has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The angularjs package was removed as the upstream
-+	  project has been archived.
-+
- config BR2_PACKAGE_ANGULAR_WEBSOCKET
- 	bool "angular-websocket has been removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5f98257b86..4914acba0d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1447,9 +1447,6 @@ F:	package/gcc-bare-metal/
- F:	package/newlib-bare-metal/
- F:	toolchain/toolchain-bare-metal-buildroot/
- 
--N:	Ignacy Gawędzki <ignacy.gawedzki@green-communications.fr>
--F:	package/angularjs/
--
- N:	Ilias Apalodimas <apalos@gmail.com>
- F:	package/keepalived/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 5e2dc79cb5..6f79eafc4b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1862,7 +1862,6 @@ menu "Hardware handling"
- endmenu
- 
- menu "Javascript"
--	source "package/angularjs/Config.in"
- 	source "package/bootstrap/Config.in"
- 	source "package/chartjs/Config.in"
- 	source "package/datatables/Config.in"
-diff --git a/package/angularjs/Config.in b/package/angularjs/Config.in
-deleted file mode 100644
-index f0d2015a70..0000000000
---- a/package/angularjs/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_ANGULARJS
--	bool "angularjs"
--	help
--	  AngularJS web application framework.
--
--	  http://angularjs.org
-diff --git a/package/angularjs/angularjs.hash b/package/angularjs/angularjs.hash
-deleted file mode 100644
-index 5468174e4d..0000000000
---- a/package/angularjs/angularjs.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed:
--sha256  471b57064031da8c5fd3b1ba3f52dd1e0d2740a97ed34da2e8ab2a4cc2718280  angular-1.8.2.zip
--sha256  237656fae6e39d02cd71cbcfbf91b7964eba5796aafca1bfcfff3b054ce3fed6  angular.js
-diff --git a/package/angularjs/angularjs.mk b/package/angularjs/angularjs.mk
-deleted file mode 100644
-index d393c82c19..0000000000
---- a/package/angularjs/angularjs.mk
-+++ /dev/null
-@@ -1,29 +0,0 @@
--################################################################################
--#
--# angularjs
--#
--################################################################################
--
--ANGULARJS_VERSION = 1.8.2
--ANGULARJS_SOURCE = angular-$(ANGULARJS_VERSION).zip
--ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)
--ANGULARJS_LICENSE = MIT
--# There's no separate license file in the archive, so use angular.js instead.
--ANGULARJS_LICENSE_FILES = angular.js
--ANGULARJS_CPE_ID_VENDOR = angularjs
--ANGULARJS_CPE_ID_PRODUCT = angular.js
--
--define ANGULARJS_EXTRACT_CMDS
--	unzip $(ANGULARJS_DL_DIR)/$(ANGULARJS_SOURCE) -d $(@D)
--	mv $(@D)/angular-$(ANGULARJS_VERSION)/* $(@D)
--	rmdir $(@D)/angular-$(ANGULARJS_VERSION)
--endef
--
--# install .min.js as .js
--define ANGULARJS_INSTALL_TARGET_CMDS
--	$(foreach f,$(notdir $(wildcard $(@D)/*.min.js)),
--		$(INSTALL) -m 0644 -D $(@D)/$(f) \
--			$(TARGET_DIR)/var/www/$(f:.min.js=.js)$(sep))
--endef
--
--$(eval $(generic-package))
-
---===============1075864215477024949==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1075864215477024949==--
