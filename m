@@ -1,76 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BACEC021A0
-	for <buildroot@archiver.kernel.org>; Sat, 15 Feb 2025 21:13:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED8DDC021A0
+	for <buildroot@archiver.kernel.org>; Sat, 15 Feb 2025 21:19:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E68B60AEF;
-	Sat, 15 Feb 2025 21:13:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8D00981098;
+	Sat, 15 Feb 2025 21:19:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id skVgpFVcrHIc; Sat, 15 Feb 2025 21:13:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GOcuG6EwaX3Y; Sat, 15 Feb 2025 21:19:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C4DC60AE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7790781003
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C4DC60AE2;
-	Sat, 15 Feb 2025 21:13:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 62232DE
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:13:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7790781003;
+	Sat, 15 Feb 2025 21:19:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 34CE4DE
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:19:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 41D5B4052D
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:13:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0670380FA6
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:19:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dDYAmpVgj7AJ for <buildroot@buildroot.org>;
- Sat, 15 Feb 2025 21:13:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3A33D40378
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A33D40378
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3A33D40378
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:13:02 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id F3F2CB00535;
- Sat, 15 Feb 2025 22:12:59 +0100 (CET)
-Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
- via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 15 Feb 2025 22:12:59 +0100
-MIME-Version: 1.0
-Date: Sat, 15 Feb 2025 22:12:59 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OR1LM_ofA4vK for <buildroot@buildroot.org>;
+ Sat, 15 Feb 2025 21:19:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2794580F88
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2794580F88
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:19:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1B193875C1; Sat, 15 Feb 2025 21:19:43 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250215133320.257965-1-peter@korsgaard.com>
-References: <20250215133320.257965-1-peter@korsgaard.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <f86d497a9d6a40eaf40621825f4bf5a2@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1739653981;
- bh=60Mjn28X4KYZHwxmA2t8PVuPJAgAl8vfI+sfKne53D4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=gdYSz9sNTDgx6/BrVewAzjM01h/iO87Y4g0gzne050VELShoKwcq6I5AKbsY8xwki
- 3mHdZQ6PpLkHfsDjUkctiDKn2yQ56A5WK4389LGqdsUHnz/xgc2LmrCxTJdaikU4Kh
- jelRXj+Yd5VXljocmijzTCQqhUU86RbIjOqj9Tpa/FVP/z007KAMbBsLf20U6AtbHK
- 3rXDB/64gRSjP9nsTxy9+9X8kdm4IB8MzqFn5VGAD5GhzQnIjEtx1zfAHG8GC3QtOG
- vhJlEyRlUOZOdjQRqPz9T9cLWVxvyc9q6B/1zYqhuf6QDi3gyWiJDDR4eelz+qhjgg
- /s8glp5plU0PA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=gdYSz9sN
-Subject: Re: [Buildroot] [PATCH] package/imagemagick: bump to version
- 7.1.1-43
+To: buildroot@buildroot.org
+Date: Sat, 15 Feb 2025 22:13:51 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b5ff38782cf8f1dbc1fd9585f49affdfb14833e8
+X-Git-Newrev: e9c0222bf41d8277469938a103ee97f6df72fb08
+X-Patchwork-Hint: ignore
+Message-Id: <20250215211943.1B193875C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/angular-websocket: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,24 +58,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 15/02/2025 14:33, Peter Korsgaard wrote:
-> For various bugfixes.  Notice that 7.1.1-36 fixed a security 
-> vulnerability
-> (CVE-2024-41817), but that issue is specific to the AppImage version:
-> 
-> https://github.com/ImageMagick/ImageMagick/security/advisories/GHSA-8rxc-922v-phg8
-> 
-> Release notes:
-> https://github.com/ImageMagick/ImageMagick/releases/tag/7.1.1-43
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=e9c0222bf41d8277469938a103ee97f6df72fb08
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+The package has not been updated since it was added in 2016 and the upstream
+Github project has been archived as of Feb 17, 2024 - So drop the package.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ Config.in.legacy                                 |  7 +++++++
+ package/Config.in                                |  5 -----
+ package/angular-websocket/Config.in              |  7 -------
+ package/angular-websocket/angular-websocket.hash |  3 ---
+ package/angular-websocket/angular-websocket.mk   | 18 ------------------
+ 5 files changed, 7 insertions(+), 33 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index c302b73423..037f9a8b89 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2025.02"
+ 
++config BR2_PACKAGE_ANGULAR_WEBSOCKET
++	bool "angular-websocket has been removed"
++	select BR2_LEGACY
++	help
++	  The angular-websocket package was removed as the upstream
++	  project has been archived.
++
+ config BR2_PACKAGE_LATENCYTOP
+ 	bool "latencytop has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index dac1fc568d..5e2dc79cb5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1863,11 +1863,6 @@ endmenu
+ 
+ menu "Javascript"
+ 	source "package/angularjs/Config.in"
+-if BR2_PACKAGE_ANGULARJS
+-menu "External AngularJS plugins"
+-	source "package/angular-websocket/Config.in"
+-endmenu
+-endif
+ 	source "package/bootstrap/Config.in"
+ 	source "package/chartjs/Config.in"
+ 	source "package/datatables/Config.in"
+diff --git a/package/angular-websocket/Config.in b/package/angular-websocket/Config.in
+deleted file mode 100644
+index 0981bd0d52..0000000000
+--- a/package/angular-websocket/Config.in
++++ /dev/null
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_ANGULAR_WEBSOCKET
+-	bool "angular-websocket"
+-	help
+-	  An AngularJS WebSocket service for connecting client
+-	  applications to servers.
+-
+-	  https://github.com/AngularClass/angular-websocket
+diff --git a/package/angular-websocket/angular-websocket.hash b/package/angular-websocket/angular-websocket.hash
+deleted file mode 100644
+index 3aa5b5e7e1..0000000000
+--- a/package/angular-websocket/angular-websocket.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  69d752896bc17c08750a2fda24b5eb3c6d653afc6f406dd90a6b7c920b22a14a  angular-websocket-2.0.0.tar.gz
+-sha256  3013a57f2c8df37775804b8be5b107665a2ca209607bb92c618bcc084feb00a7  LICENSE
+diff --git a/package/angular-websocket/angular-websocket.mk b/package/angular-websocket/angular-websocket.mk
+deleted file mode 100644
+index d45bfdf910..0000000000
+--- a/package/angular-websocket/angular-websocket.mk
++++ /dev/null
+@@ -1,18 +0,0 @@
+-################################################################################
+-#
+-# angular-websocket
+-#
+-################################################################################
+-
+-ANGULAR_WEBSOCKET_VERSION = 2.0.0
+-ANGULAR_WEBSOCKET_SITE = $(call github,AngularClass,angular-websocket,v$(ANGULAR_WEBSOCKET_VERSION))
+-ANGULAR_WEBSOCKET_LICENSE = MIT
+-ANGULAR_WEBSOCKET_LICENSE_FILES = LICENSE
+-
+-# install .min.js as .js
+-define ANGULAR_WEBSOCKET_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0644 -D $(@D)/dist/angular-websocket.min.js \
+-		$(TARGET_DIR)/var/www/angular-websocket.js
+-endef
+-
+-$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
