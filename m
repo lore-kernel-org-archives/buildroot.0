@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8610C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:18:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BF40C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:19:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1791F70440;
-	Fri, 28 Feb 2025 17:18:55 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1HmbRFGttocm; Fri, 28 Feb 2025 17:18:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F41DD70D04
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F41DD70D04;
-	Fri, 28 Feb 2025 17:18:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 11E5B68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F2276451C5
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E51BE509B7;
+	Fri, 28 Feb 2025 17:18:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OnTw6555y6Tv for <buildroot@buildroot.org>;
+ id JNzfnpTkLNxB; Fri, 28 Feb 2025 17:18:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BBD950117
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BBD950117;
+	Fri, 28 Feb 2025 17:18:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 183EC711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5F3434253C
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id doa2SchJpG_P for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:31:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5C0F42588
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A35E845AC9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E5C0F42588
+ by smtp4.osuosl.org (Postfix) with ESMTP id A35E845AC9
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E006F86FED; Fri, 28 Feb 2025 16:30:40 +0000 (UTC)
+ id 9EDDE87C6F; Fri, 28 Feb 2025 16:30:40 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Feb 2025 22:17:51 +0100
+Date: Sat, 15 Feb 2025 21:56:55 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e9c0222bf41d8277469938a103ee97f6df72fb08
-X-Git-Newrev: 59a8322ce8363289f880f41fce4667680189b18b
+X-Git-Oldrev: 30da391756dfba96f078a6e04707c6e8a63a4162
+X-Git-Newrev: befcc152f942786c05211471f0b213050bdaef8c
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163040.E006F86FED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/angularjs: drop package
+Message-Id: <20250228163040.9EDDE87C6F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/musl: add upstream
+ security fixes for CVE-2025-26519
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,154 +60,140 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8917376585672119361=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8917376585672119361==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=59a8322ce8363289f880f41fce4667680189b18b
+commit: https://git.buildroot.net/buildroot/commit/?id=befcc152f942786c05211471f0b213050bdaef8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The package has not been updated since 2020, has known vulnerabilities and
-the upstream Github project has been archived as of April 12, 2024 - So drop
-the package.
+Fixes CVE-2025-26519: Musl libc: input-controlled out-of-bounds write
+primitive in iconv()
 
-For reference, AngularJS website [1] reads, at the time of
-this commit:
-"""
-AngularJS support has officially ended as of January 2022.
-See what ending support means [2] and read the end of life
-announcement [3].
-"""
+https://www.openwall.com/lists/musl/2025/02/13/1
 
-[1] https://angularjs.org/
-[2] https://docs.angularjs.org/misc/version-support-status
-[3] https://goo.gle/angularjs-end-of-life
+Fixes:
+https://nvd.nist.gov/vuln/detail/CVE-2025-26519
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Julien: add end-of-life announce and links in commit log]
+[Julien: add link to cve]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- Config.in.legacy                 |  7 +++++++
- DEVELOPERS                       |  3 ---
- package/Config.in                |  1 -
- package/angularjs/Config.in      |  6 ------
- package/angularjs/angularjs.hash |  3 ---
- package/angularjs/angularjs.mk   | 29 -----------------------------
- 6 files changed, 7 insertions(+), 42 deletions(-)
+ ...rroneous-input-validation-in-EUC-KR-decod.patch | 41 ++++++++++++++++++++++
+ ...n-UTF-8-output-code-path-against-input-de.patch | 40 +++++++++++++++++++++
+ package/musl/musl.mk                               |  4 +++
+ 3 files changed, 85 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 037f9a8b89..f94a7db7b0 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2025.02"
- 
-+config BR2_PACKAGE_ANGULARJS
-+	bool "angularjs has been removed"
-+	select BR2_LEGACY
-+	help
-+	  The angularjs package was removed as the upstream
-+	  project has been archived.
+diff --git a/package/musl/0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch b/package/musl/0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch
+new file mode 100644
+index 0000000000..dbfd87db76
+--- /dev/null
++++ b/package/musl/0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch
+@@ -0,0 +1,41 @@
++From e5adcd97b5196e29991b524237381a0202a60659 Mon Sep 17 00:00:00 2001
++From: Rich Felker <dalias@aerifal.cx>
++Date: Sun, 9 Feb 2025 10:07:19 -0500
++Subject: [PATCH] iconv: fix erroneous input validation in EUC-KR decoder
 +
- config BR2_PACKAGE_ANGULAR_WEBSOCKET
- 	bool "angular-websocket has been removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5f98257b86..4914acba0d 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1447,9 +1447,6 @@ F:	package/gcc-bare-metal/
- F:	package/newlib-bare-metal/
- F:	toolchain/toolchain-bare-metal-buildroot/
++as a result of incorrect bounds checking on the lead byte being
++decoded, certain invalid inputs which should produce an encoding
++error, such as "\xc8\x41", instead produced out-of-bounds loads from
++the ksc table.
++
++in a worst case, the loaded value may not be a valid unicode scalar
++value, in which case, if the output encoding was UTF-8, wctomb would
++return (size_t)-1, causing an overflow in the output pointer and
++remaining buffer size which could clobber memory outside of the output
++buffer.
++
++bug report was submitted in private by Nick Wellnhofer on account of
++potential security implications.
++
++Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=e5adcd97b5196e29991b524237381a0202a60659
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/locale/iconv.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/locale/iconv.c b/src/locale/iconv.c
++index 9605c8e9..008c93f0 100644
++--- a/src/locale/iconv.c
+++++ b/src/locale/iconv.c
++@@ -502,7 +502,7 @@ size_t iconv(iconv_t cd, char **restrict in, size_t *restrict inb, char **restri
++ 			if (c >= 93 || d >= 94) {
++ 				c += (0xa1-0x81);
++ 				d += 0xa1;
++-				if (c >= 93 || c>=0xc6-0x81 && d>0x52)
+++				if (c > 0xc6-0x81 || c==0xc6-0x81 && d>0x52)
++ 					goto ilseq;
++ 				if (d-'A'<26) d = d-'A';
++ 				else if (d-'a'<26) d = d-'a'+26;
++-- 
++2.39.5
++
+diff --git a/package/musl/0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch b/package/musl/0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch
+new file mode 100644
+index 0000000000..a14041364a
+--- /dev/null
++++ b/package/musl/0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch
+@@ -0,0 +1,40 @@
++From c47ad25ea3b484e10326f933e927c0bc8cded3da Mon Sep 17 00:00:00 2001
++From: Rich Felker <dalias@aerifal.cx>
++Date: Wed, 12 Feb 2025 17:06:30 -0500
++Subject: [PATCH] iconv: harden UTF-8 output code path against input decoder
++ bugs
++
++the UTF-8 output code was written assuming an invariant that iconv's
++decoders only emit valid Unicode Scalar Values which wctomb can encode
++successfully, thereby always returning a value between 1 and 4.
++
++if this invariant is not satisfied, wctomb returns (size_t)-1, and the
++subsequent adjustments to the output buffer pointer and remaining
++output byte count overflow, moving the output position backwards,
++potentially past the beginning of the buffer, without storing any
++bytes.
++
++Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=c47ad25ea3b484e10326f933e927c0bc8cded3da
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/locale/iconv.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/src/locale/iconv.c b/src/locale/iconv.c
++index 008c93f0..52178950 100644
++--- a/src/locale/iconv.c
+++++ b/src/locale/iconv.c
++@@ -545,6 +545,10 @@ size_t iconv(iconv_t cd, char **restrict in, size_t *restrict inb, char **restri
++ 				if (*outb < k) goto toobig;
++ 				memcpy(*out, tmp, k);
++ 			} else k = wctomb_utf8(*out, c);
+++			/* This failure condition should be unreachable, but
+++			 * is included to prevent decoder bugs from translating
+++			 * into advancement outside the output buffer range. */
+++			if (k>4) goto ilseq;
++ 			*out += k;
++ 			*outb -= k;
++ 			break;
++-- 
++2.39.5
++
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index 783a103fcd..13a49a15eb 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -26,6 +26,10 @@ MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
  
--N:	Ignacy Gawędzki <ignacy.gawedzki@green-communications.fr>
--F:	package/angularjs/
--
- N:	Ilias Apalodimas <apalos@gmail.com>
- F:	package/keepalived/
+ MUSL_INSTALL_STAGING = YES
  
-diff --git a/package/Config.in b/package/Config.in
-index 5e2dc79cb5..6f79eafc4b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1862,7 +1862,6 @@ menu "Hardware handling"
- endmenu
- 
- menu "Javascript"
--	source "package/angularjs/Config.in"
- 	source "package/bootstrap/Config.in"
- 	source "package/chartjs/Config.in"
- 	source "package/datatables/Config.in"
-diff --git a/package/angularjs/Config.in b/package/angularjs/Config.in
-deleted file mode 100644
-index f0d2015a70..0000000000
---- a/package/angularjs/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_ANGULARJS
--	bool "angularjs"
--	help
--	  AngularJS web application framework.
--
--	  http://angularjs.org
-diff --git a/package/angularjs/angularjs.hash b/package/angularjs/angularjs.hash
-deleted file mode 100644
-index 5468174e4d..0000000000
---- a/package/angularjs/angularjs.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed:
--sha256  471b57064031da8c5fd3b1ba3f52dd1e0d2740a97ed34da2e8ab2a4cc2718280  angular-1.8.2.zip
--sha256  237656fae6e39d02cd71cbcfbf91b7964eba5796aafca1bfcfff3b054ce3fed6  angular.js
-diff --git a/package/angularjs/angularjs.mk b/package/angularjs/angularjs.mk
-deleted file mode 100644
-index d393c82c19..0000000000
---- a/package/angularjs/angularjs.mk
-+++ /dev/null
-@@ -1,29 +0,0 @@
--################################################################################
--#
--# angularjs
--#
--################################################################################
--
--ANGULARJS_VERSION = 1.8.2
--ANGULARJS_SOURCE = angular-$(ANGULARJS_VERSION).zip
--ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)
--ANGULARJS_LICENSE = MIT
--# There's no separate license file in the archive, so use angular.js instead.
--ANGULARJS_LICENSE_FILES = angular.js
--ANGULARJS_CPE_ID_VENDOR = angularjs
--ANGULARJS_CPE_ID_PRODUCT = angular.js
--
--define ANGULARJS_EXTRACT_CMDS
--	unzip $(ANGULARJS_DL_DIR)/$(ANGULARJS_SOURCE) -d $(@D)
--	mv $(@D)/angular-$(ANGULARJS_VERSION)/* $(@D)
--	rmdir $(@D)/angular-$(ANGULARJS_VERSION)
--endef
--
--# install .min.js as .js
--define ANGULARJS_INSTALL_TARGET_CMDS
--	$(foreach f,$(notdir $(wildcard $(@D)/*.min.js)),
--		$(INSTALL) -m 0644 -D $(@D)/$(f) \
--			$(TARGET_DIR)/var/www/$(f:.min.js=.js)$(sep))
--endef
--
--$(eval $(generic-package))
-
---===============8917376585672119361==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++# 0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch
++# 0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch
++MUSL_IGNORE_CVES += CVE-2025-26519
++
+ # musl does not build with LTO, so explicitly disable it
+ # when using a compiler that may have support for LTO
+ ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8917376585672119361==--
