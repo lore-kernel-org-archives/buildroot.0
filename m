@@ -1,53 +1,112 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3F99C021A0
-	for <buildroot@archiver.kernel.org>; Sat, 15 Feb 2025 19:47:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F7C4C021A0
+	for <buildroot@archiver.kernel.org>; Sat, 15 Feb 2025 19:48:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 39D29606D0;
-	Sat, 15 Feb 2025 19:47:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E9EE241270;
+	Sat, 15 Feb 2025 19:48:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P1TT0GmO-k5T; Sat, 15 Feb 2025 19:48:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9108540B6E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9108540B6E;
+	Sat, 15 Feb 2025 19:48:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DE997DF
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 19:48:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CBDE7607C0
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 19:48:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IM5e79uOnzGO; Sat, 15 Feb 2025 19:47:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B6C360867
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B6C360867;
-	Sat, 15 Feb 2025 19:47:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6FDB172
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 19:47:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3E5EB40A3A
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 19:47:23 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pbH_pmyfTJHe for <buildroot@buildroot.org>;
- Sat, 15 Feb 2025 19:47:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F25DA409BD
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id F25DA409BD
- for <buildroot@buildroot.org>; Sat, 15 Feb 2025 19:47:21 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E1D5B8756C; Sat, 15 Feb 2025 19:47:21 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 15 Feb 2025 20:43:15 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3dc8a793b646d1a91ce99baf534b19b3d214b883
-X-Git-Newrev: 2867f4be4248ed9ec6432168b7b75bd42f972be6
-X-Patchwork-Hint: ignore
-Message-Id: <20250215194721.E1D5B8756C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libtasn1: security bump to version
- 4.20.0
+ id B939gn5eS28s for <buildroot@buildroot.org>;
+ Sat, 15 Feb 2025 19:48:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2001:4860:4864:20::29; helo=mail-oa1-x29.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 966BD606D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 966BD606D0
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com
+ [IPv6:2001:4860:4864:20::29])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 966BD606D0
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 19:48:05 +0000 (UTC)
+Received: by mail-oa1-x29.google.com with SMTP id
+ 586e51a60fabf-2b8718226e9so1529595fac.3
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 11:48:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1739648884; x=1740253684;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8hm0DvMhYzIF/NcE8QZzZnMGNLgZuxDAe90CzCG3WfI=;
+ b=C4uKFHLskFG6lSdSyYZv9Coy797Q6wHahX037+rGMcUjHiIdkYCkic/mLfLV19a+oK
+ MJ798CRDllxoyHDudj4EnWLdJdkymTpJOjUjdDMwapSDF7s1VmbsfOO7tY0yJUh13S6P
+ lxvcKrLQyrPjFIYBUeJhyMFVN80Z/QRhhE4xKq4l7qHjXqhHVgGiObm4iTu6eN6rUYgq
+ gNu9vUT02I0COAbnfM7iXKzxy7cWuw+ozIzSKMCfa922WivSH1+Vt769UKJHqw5YWt34
+ fIJSMYxoTB21krQU/X22DLfb3JktKbYnOltlkR4mbvN0w5XFYWgSNvfxK9ZfAK1ElGF/
+ ab5w==
+X-Gm-Message-State: AOJu0YyLoW0FM1d0k5ORqa7Ku33y0+YeGVCH81/9CQeKBhE4/fbg1rRP
+ NSuCnrRLnNAd1rAOfpWWMqXCvnTdd2DpqYwhdhNOisZDP/n7/ltWzshBxvsX1Ou48LclVtBxF+D
+ D
+X-Gm-Gg: ASbGncs9X8xKxy1B/+HzriEe1XLkpjsZs/Hjdycu8QXWHCjRZbysMAPJs4G924kIzYr
+ evkTYv6Xy/Wb0EhkYAoUh1S88QJq64lan1TDLw5mZjK9tjUIv68XqLftOq/J5pmlJwZBT3Qbbtp
+ qdjJAcy+S8Cefy5o/r9kcPnnuY+8k49Y8zgPSyLdeeiycorj1yLc+uvQq3lEbBSzAj8jhbB1kof
+ r4hog0sCTFI0BWdTvGqQt5CcUUAnUJsKKcXp+BV9uI/cTofhIMTc6X2kr+/5nyS3Zkbg3lT46wL
+ KkH6o7L8mU7dJjOFJyQs0s7NIcq52MV/XZhKKSf5yNoMWTl00Eq16VBAFoA=
+X-Google-Smtp-Source: AGHT+IFOPe4tLNbsrQ+E2wkt15nAkzALkl8MkwAEyy3/0LpC721FMAE4YqLEpp4QA54h6E2kozqWkw==
+X-Received: by 2002:a05:6870:ac2b:b0:2a3:d9b3:3d01 with SMTP id
+ 586e51a60fabf-2bc99d41c05mr2343785fac.29.1739648883884; 
+ Sat, 15 Feb 2025 11:48:03 -0800 (PST)
+Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com.
+ [209.85.167.177]) by smtp.gmail.com with ESMTPSA id
+ 586e51a60fabf-2b95a6bf7b3sm2745992fac.32.2025.02.15.11.48.02
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 15 Feb 2025 11:48:03 -0800 (PST)
+Received: by mail-oi1-f177.google.com with SMTP id
+ 5614622812f47-3f3f149c334so134577b6e.1
+ for <buildroot@buildroot.org>; Sat, 15 Feb 2025 11:48:02 -0800 (PST)
+X-Received: by 2002:a05:6808:1396:b0:3f3:dd2f:6a9b with SMTP id
+ 5614622812f47-3f3eb137a10mr1796086b6e.30.1739648882703; Sat, 15 Feb 2025
+ 11:48:02 -0800 (PST)
+MIME-Version: 1.0
+References: <cover.1739615626.git.yann.morin.1998@free.fr>
+In-Reply-To: <cover.1739615626.git.yann.morin.1998@free.fr>
+Date: Sat, 15 Feb 2025 11:47:52 -0800
+X-Gmail-Original-Message-ID: <CA+h8R2rQMP8-Zaz579C-q8=fzKqforCqbPUSGZNR986+VpOa-A@mail.gmail.com>
+X-Gm-Features: AWEUYZk_e1tHl35T_h6zmvL8MetBjns04LjztAZgrjNJ3PENdTZ2TA9rnRpqRxk
+Message-ID: <CA+h8R2rQMP8-Zaz579C-q8=fzKqforCqbPUSGZNR986+VpOa-A@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Buildroot Mailing List <buildroot@buildroot.org>,
+ Fiona Klute <fiona.klute@gmx.de>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=aperture.us; s=google; t=1739648884; x=1740253684; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=8hm0DvMhYzIF/NcE8QZzZnMGNLgZuxDAe90CzCG3WfI=;
+ b=BkCSqnLrJ9W1FOfyvrWbpMt3Snm7sfGYjIrUz9i9KAm667MwNP+txAbNaWAOzRJRwf
+ ndDQR2tLl1UvgK/yn4WA6prcF/RGboxweM9tZNIUN2SLbaA+/2GMrNKyTL/A6K2BYcd0
+ sCdab1aysABwx/I36SOcOpCTVlEKFm65sa427ClUoVxA5BLBnfz2bJq8Q62X/YYST3W2
+ FMfrukrEoQ9+Tvj+m5DenDxTzLDcix6hSmVnRDrfdz0eFF2BWcq6hSLIuUJ2NLJOcoGF
+ fhELWL54+oVrOY2zePuKjbNEQlMqBoWgEyMSEd/E88IF5Ggnzq7ufjLhM+nmK7RKhVKt
+ Dxxg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=aperture.us
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=BkCSqnLr
+Subject: Re: [Buildroot] [PATCH 0/4] package/catatonit: update,
+ and use as init or docker init (branch yem/docker-init)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,70 +118,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Content-Type: multipart/mixed; boundary="===============2568278711328570745=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2867f4be4248ed9ec6432168b7b75bd42f972be6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+--===============2568278711328570745==
+Content-Type: multipart/alternative; boundary="000000000000b00d28062e3391b2"
 
-Fixes the following security vulnerability:
+--000000000000b00d28062e3391b2
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-CVE-2024-12133: Potential DoS in handling of numerous SEQUENCE OF or SET
+Hi Yann,
 
-https://lists.gnu.org/archive/html/help-libtasn1/2025-02/msg00001.html
+On Sat, Feb 15, 2025, 2:33=E2=80=AFAM Yann E. MORIN <yann.morin.1998@free.f=
+r> wrote:
 
-Adjust the license files after upstream moved the license clarification to
-README.md and moved the COPYING* files top the top level directory /
-slightly updated the COPYING* files (http->https) with:
+> ----------------------------------------------------------------
+> Yann E. MORIN (4):
+>       package/docker-engine: carry the tini init symlink
+>       package/docker-engine: add option to support catatonit as init
+>       package/catatonit: update to version 0.2.1
+>       system: add catatonit as init system
+>
+>  Config.in.legacy                                   |  9 ++++
+>  .../catatonit/0001-fix-build-with-kernel-5.9.patch | 49
+> ----------------------
+>  package/catatonit/catatonit.hash                   |  2 +-
+>  package/catatonit/catatonit.mk                     |  2 +-
+>  package/docker-engine/Config.in                    | 32 +++++++++++---
+>  package/docker-engine/docker-engine.mk             | 10 +++++
+>  package/tini/tini.mk                               |  2 -
+>  system/Config.in                                   | 10 +++++
+>  8 files changed, 58 insertions(+), 58 deletions(-)
+>  delete mode 100644 package/catatonit/0001-fix-build-with-kernel-5.9.patc=
+h
+>
 
-https://gitlab.com/gnutls/libtasn1/-/commit/73cc886c3ff29c326a5f1a10b3127d521574a1ad
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libtasn1/libtasn1.hash | 10 +++++-----
- package/libtasn1/libtasn1.mk   |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+Patch series lgtm. Thanks!
 
-diff --git a/package/libtasn1/libtasn1.hash b/package/libtasn1/libtasn1.hash
-index 4bcb6a3feb..b9c9dad131 100644
---- a/package/libtasn1/libtasn1.hash
-+++ b/package/libtasn1/libtasn1.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.19.0.tar.gz.sig
--sha256  1613f0ac1cf484d6ec0ce3b8c06d56263cc7242f1c23b30d82d23de345a63f7a  libtasn1-4.19.0.tar.gz
-+# https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.20.0.tar.gz.sig
-+sha256  92e0e3bd4c02d4aeee76036b2ddd83f0c732ba4cda5cb71d583272b23587a76c  libtasn1-4.20.0.tar.gz
- # Locally calculated
--sha256  7446831f659f7ebfd8d497acc7f05dfa8e31c6cb6ba1b45df33d4895ab80f5a6  COPYING
--sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  doc/COPYING
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  doc/COPYING.LESSER
-+sha256  990ef6a87f29a9d3db33698b94ea026a5d0f81bbf9806333d73699a250b7e5d6  README.md
-+sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
-+sha256  20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95  COPYING.LESSERv2
-diff --git a/package/libtasn1/libtasn1.mk b/package/libtasn1/libtasn1.mk
-index 3af1bcdcbb..3154e500f1 100644
---- a/package/libtasn1/libtasn1.mk
-+++ b/package/libtasn1/libtasn1.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--LIBTASN1_VERSION = 4.19.0
-+LIBTASN1_VERSION = 4.20.0
- LIBTASN1_SITE = $(BR2_GNU_MIRROR)/libtasn1
- LIBTASN1_DEPENDENCIES = host-bison host-pkgconf
- LIBTASN1_LICENSE = GPL-3.0+ (tests, tools), LGPL-2.1+ (library)
--LIBTASN1_LICENSE_FILES = COPYING doc/COPYING doc/COPYING.LESSER
-+LIBTASN1_LICENSE_FILES = README.md COPYING COPYING.LESSERv2
- LIBTASN1_CPE_ID_VENDOR = gnu
- LIBTASN1_INSTALL_STAGING = YES
- 
+Reviewed-by: Christian Stewart <christian@aperture.us>
+
+--000000000000b00d28062e3391b2
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto"><div>Hi Yann,<br><br><div class=3D"gmail_quote gmail_quot=
+e_container"><div dir=3D"ltr" class=3D"gmail_attr">On Sat, Feb 15, 2025, 2:=
+33=E2=80=AFAM Yann E. MORIN &lt;<a href=3D"mailto:yann.morin.1998@free.fr">=
+yann.morin.1998@free.fr</a>&gt; wrote:</div><blockquote class=3D"gmail_quot=
+e" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">
+----------------------------------------------------------------<br>
+Yann E. MORIN (4):<br>
+=C2=A0 =C2=A0 =C2=A0 package/docker-engine: carry the tini init symlink<br>
+=C2=A0 =C2=A0 =C2=A0 package/docker-engine: add option to support catatonit=
+ as init<br>
+=C2=A0 =C2=A0 =C2=A0 package/catatonit: update to version 0.2.1<br>
+=C2=A0 =C2=A0 =C2=A0 system: add catatonit as init system<br>
+<br>
+=C2=A0Config.in.legacy=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=
+=C2=A0 9 ++++<br>
+=C2=A0.../catatonit/0001-fix-build-with-kernel-5.9.patch | 49 -------------=
+---------<br>
+=C2=A0package/catatonit/catatonit.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 2 +-<br>
+=C2=A0package/catatonit/<a href=3D"http://catatonit.mk" rel=3D"noreferrer n=
+oreferrer" target=3D"_blank">catatonit.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 2 +-<br>
+=C2=A0package/docker-engine/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | 32 +++++++++++---<br>
+=C2=A0package/docker-engine/<a href=3D"http://docker-engine.mk" rel=3D"nore=
+ferrer noreferrer" target=3D"_blank">docker-engine.mk</a>=C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| 10 +++++<br>
+=C2=A0package/tini/<a href=3D"http://tini.mk" rel=3D"noreferrer noreferrer"=
+ target=3D"_blank">tini.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 2=
+ -<br>
+=C2=A0system/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| =
+10 +++++<br>
+=C2=A08 files changed, 58 insertions(+), 58 deletions(-)<br>
+=C2=A0delete mode 100644 package/catatonit/0001-fix-build-with-kernel-5.9.p=
+atch<br></blockquote></div></div><div dir=3D"auto"><br></div><div dir=3D"au=
+to"><br></div><div dir=3D"auto">Patch series lgtm. Thanks!</div><div dir=3D=
+"auto"><br></div><div dir=3D"auto">Reviewed-by: Christian Stewart &lt;<a hr=
+ef=3D"mailto:christian@aperture.us">christian@aperture.us</a>&gt;</div></di=
+v>
+
+--000000000000b00d28062e3391b2--
+
+--===============2568278711328570745==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2568278711328570745==--
