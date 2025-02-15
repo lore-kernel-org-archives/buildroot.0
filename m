@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED8DDC021A0
-	for <buildroot@archiver.kernel.org>; Sat, 15 Feb 2025 21:19:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3D5BC021A4
+	for <buildroot@archiver.kernel.org>; Sat, 15 Feb 2025 21:19:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D00981098;
-	Sat, 15 Feb 2025 21:19:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABEC660B8D;
+	Sat, 15 Feb 2025 21:19:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GOcuG6EwaX3Y; Sat, 15 Feb 2025 21:19:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tuReBSLyZ2zr; Sat, 15 Feb 2025 21:19:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7790781003
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CA9160B95
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7790781003;
-	Sat, 15 Feb 2025 21:19:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 34CE4DE
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CA9160B95;
+	Sat, 15 Feb 2025 21:19:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 57CCD1E3
  for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:19:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0670380FA6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3BD6160B72
  for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:19:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OR1LM_ofA4vK for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Svpn4370kIpQ for <buildroot@buildroot.org>;
  Sat, 15 Feb 2025 21:19:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2794580F88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FE6760B8D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2794580F88
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3FE6760B8D
  for <buildroot@buildroot.org>; Sat, 15 Feb 2025 21:19:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1B193875C1; Sat, 15 Feb 2025 21:19:43 +0000 (UTC)
+ id 2E95D875B1; Sat, 15 Feb 2025 21:19:43 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Feb 2025 22:13:51 +0100
+Date: Sat, 15 Feb 2025 22:17:51 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b5ff38782cf8f1dbc1fd9585f49affdfb14833e8
-X-Git-Newrev: e9c0222bf41d8277469938a103ee97f6df72fb08
+X-Git-Oldrev: e9c0222bf41d8277469938a103ee97f6df72fb08
+X-Git-Newrev: 59a8322ce8363289f880f41fce4667680189b18b
 X-Patchwork-Hint: ignore
-Message-Id: <20250215211943.1B193875C1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/angular-websocket: drop package
+Message-Id: <20250215211943.2E95D875B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/angularjs: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,108 +59,154 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1075864215477024949=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e9c0222bf41d8277469938a103ee97f6df72fb08
+--===============1075864215477024949==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=59a8322ce8363289f880f41fce4667680189b18b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The package has not been updated since it was added in 2016 and the upstream
-Github project has been archived as of Feb 17, 2024 - So drop the package.
+The package has not been updated since 2020, has known vulnerabilities and
+the upstream Github project has been archived as of April 12, 2024 - So drop
+the package.
+
+For reference, AngularJS website [1] reads, at the time of
+this commit:
+"""
+AngularJS support has officially ended as of January 2022.
+See what ending support means [2] and read the end of life
+announcement [3].
+"""
+
+[1] https://angularjs.org/
+[2] https://docs.angularjs.org/misc/version-support-status
+[3] https://goo.gle/angularjs-end-of-life
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Julien: add end-of-life announce and links in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- Config.in.legacy                                 |  7 +++++++
- package/Config.in                                |  5 -----
- package/angular-websocket/Config.in              |  7 -------
- package/angular-websocket/angular-websocket.hash |  3 ---
- package/angular-websocket/angular-websocket.mk   | 18 ------------------
- 5 files changed, 7 insertions(+), 33 deletions(-)
+ Config.in.legacy                 |  7 +++++++
+ DEVELOPERS                       |  3 ---
+ package/Config.in                |  1 -
+ package/angularjs/Config.in      |  6 ------
+ package/angularjs/angularjs.hash |  3 ---
+ package/angularjs/angularjs.mk   | 29 -----------------------------
+ 6 files changed, 7 insertions(+), 42 deletions(-)
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index c302b73423..037f9a8b89 100644
+index 037f9a8b89..f94a7db7b0 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
 @@ -146,6 +146,13 @@ endif
  
  comment "Legacy options removed in 2025.02"
  
-+config BR2_PACKAGE_ANGULAR_WEBSOCKET
-+	bool "angular-websocket has been removed"
++config BR2_PACKAGE_ANGULARJS
++	bool "angularjs has been removed"
 +	select BR2_LEGACY
 +	help
-+	  The angular-websocket package was removed as the upstream
++	  The angularjs package was removed as the upstream
 +	  project has been archived.
 +
- config BR2_PACKAGE_LATENCYTOP
- 	bool "latencytop has been removed"
+ config BR2_PACKAGE_ANGULAR_WEBSOCKET
+ 	bool "angular-websocket has been removed"
  	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5f98257b86..4914acba0d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1447,9 +1447,6 @@ F:	package/gcc-bare-metal/
+ F:	package/newlib-bare-metal/
+ F:	toolchain/toolchain-bare-metal-buildroot/
+ 
+-N:	Ignacy Gawędzki <ignacy.gawedzki@green-communications.fr>
+-F:	package/angularjs/
+-
+ N:	Ilias Apalodimas <apalos@gmail.com>
+ F:	package/keepalived/
+ 
 diff --git a/package/Config.in b/package/Config.in
-index dac1fc568d..5e2dc79cb5 100644
+index 5e2dc79cb5..6f79eafc4b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1863,11 +1863,6 @@ endmenu
+@@ -1862,7 +1862,6 @@ menu "Hardware handling"
+ endmenu
  
  menu "Javascript"
- 	source "package/angularjs/Config.in"
--if BR2_PACKAGE_ANGULARJS
--menu "External AngularJS plugins"
--	source "package/angular-websocket/Config.in"
--endmenu
--endif
+-	source "package/angularjs/Config.in"
  	source "package/bootstrap/Config.in"
  	source "package/chartjs/Config.in"
  	source "package/datatables/Config.in"
-diff --git a/package/angular-websocket/Config.in b/package/angular-websocket/Config.in
+diff --git a/package/angularjs/Config.in b/package/angularjs/Config.in
 deleted file mode 100644
-index 0981bd0d52..0000000000
---- a/package/angular-websocket/Config.in
+index f0d2015a70..0000000000
+--- a/package/angularjs/Config.in
 +++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_ANGULAR_WEBSOCKET
--	bool "angular-websocket"
+@@ -1,6 +0,0 @@
+-config BR2_PACKAGE_ANGULARJS
+-	bool "angularjs"
 -	help
--	  An AngularJS WebSocket service for connecting client
--	  applications to servers.
+-	  AngularJS web application framework.
 -
--	  https://github.com/AngularClass/angular-websocket
-diff --git a/package/angular-websocket/angular-websocket.hash b/package/angular-websocket/angular-websocket.hash
+-	  http://angularjs.org
+diff --git a/package/angularjs/angularjs.hash b/package/angularjs/angularjs.hash
 deleted file mode 100644
-index 3aa5b5e7e1..0000000000
---- a/package/angular-websocket/angular-websocket.hash
+index 5468174e4d..0000000000
+--- a/package/angularjs/angularjs.hash
 +++ /dev/null
 @@ -1,3 +0,0 @@
--# Locally calculated
--sha256  69d752896bc17c08750a2fda24b5eb3c6d653afc6f406dd90a6b7c920b22a14a  angular-websocket-2.0.0.tar.gz
--sha256  3013a57f2c8df37775804b8be5b107665a2ca209607bb92c618bcc084feb00a7  LICENSE
-diff --git a/package/angular-websocket/angular-websocket.mk b/package/angular-websocket/angular-websocket.mk
+-# Locally computed:
+-sha256  471b57064031da8c5fd3b1ba3f52dd1e0d2740a97ed34da2e8ab2a4cc2718280  angular-1.8.2.zip
+-sha256  237656fae6e39d02cd71cbcfbf91b7964eba5796aafca1bfcfff3b054ce3fed6  angular.js
+diff --git a/package/angularjs/angularjs.mk b/package/angularjs/angularjs.mk
 deleted file mode 100644
-index d45bfdf910..0000000000
---- a/package/angular-websocket/angular-websocket.mk
+index d393c82c19..0000000000
+--- a/package/angularjs/angularjs.mk
 +++ /dev/null
-@@ -1,18 +0,0 @@
+@@ -1,29 +0,0 @@
 -################################################################################
 -#
--# angular-websocket
+-# angularjs
 -#
 -################################################################################
 -
--ANGULAR_WEBSOCKET_VERSION = 2.0.0
--ANGULAR_WEBSOCKET_SITE = $(call github,AngularClass,angular-websocket,v$(ANGULAR_WEBSOCKET_VERSION))
--ANGULAR_WEBSOCKET_LICENSE = MIT
--ANGULAR_WEBSOCKET_LICENSE_FILES = LICENSE
+-ANGULARJS_VERSION = 1.8.2
+-ANGULARJS_SOURCE = angular-$(ANGULARJS_VERSION).zip
+-ANGULARJS_SITE = https://code.angularjs.org/$(ANGULARJS_VERSION)
+-ANGULARJS_LICENSE = MIT
+-# There's no separate license file in the archive, so use angular.js instead.
+-ANGULARJS_LICENSE_FILES = angular.js
+-ANGULARJS_CPE_ID_VENDOR = angularjs
+-ANGULARJS_CPE_ID_PRODUCT = angular.js
+-
+-define ANGULARJS_EXTRACT_CMDS
+-	unzip $(ANGULARJS_DL_DIR)/$(ANGULARJS_SOURCE) -d $(@D)
+-	mv $(@D)/angular-$(ANGULARJS_VERSION)/* $(@D)
+-	rmdir $(@D)/angular-$(ANGULARJS_VERSION)
+-endef
 -
 -# install .min.js as .js
--define ANGULAR_WEBSOCKET_INSTALL_TARGET_CMDS
--	$(INSTALL) -m 0644 -D $(@D)/dist/angular-websocket.min.js \
--		$(TARGET_DIR)/var/www/angular-websocket.js
+-define ANGULARJS_INSTALL_TARGET_CMDS
+-	$(foreach f,$(notdir $(wildcard $(@D)/*.min.js)),
+-		$(INSTALL) -m 0644 -D $(@D)/$(f) \
+-			$(TARGET_DIR)/var/www/$(f:.min.js=.js)$(sep))
 -endef
 -
 -$(eval $(generic-package))
+
+--===============1075864215477024949==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1075864215477024949==--
