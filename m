@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 500D5C282C6
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0B0BC282C1
 	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:20:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8EF4170393;
-	Fri, 28 Feb 2025 17:20:01 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U70t6auY3nJR; Fri, 28 Feb 2025 17:20:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80ED670660
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80ED670660;
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE9CE82F19;
 	Fri, 28 Feb 2025 17:20:00 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jI516gM_ilkc; Fri, 28 Feb 2025 17:19:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DB6A82229
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1DB6A82229;
+	Fri, 28 Feb 2025 17:19:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1441868
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0571B68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6351A49BD7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 53C464639D
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gRRhtJ5WpBNN for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:32:00 +0000 (UTC)
+ id 3uvz7mzw0I14 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE27242D67
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C870342D72
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EE27242D67
+ by smtp4.osuosl.org (Postfix) with ESMTP id C870342D72
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E45B486405; Fri, 28 Feb 2025 16:30:41 +0000 (UTC)
+ id C09B686143; Fri, 28 Feb 2025 16:30:41 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 16 Feb 2025 16:28:59 +0100
+Date: Sun, 16 Feb 2025 15:05:51 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b8638648d6ef292cb95a80f1c6d627bb14776364
-X-Git-Newrev: 67a0f96b88a23976c7dbf7e64ffb2cebadd8ec6f
+X-Git-Oldrev: 9f5ef2d8727499b9b92bfd24735e6d6b5a07bd18
+X-Git-Newrev: 678ad7d69d1b9757433d2235e8d2856961d904d1
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163041.E45B486405@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/intel-microcode:
- security bump version to 20250211
+Message-Id: <20250228163041.C09B686143@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sdl2_image: bump
+ version to 2.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,57 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67a0f96b88a23976c7dbf7e64ffb2cebadd8ec6f
+commit: https://git.buildroot.net/buildroot/commit/?id=678ad7d69d1b9757433d2235e8d2856961d904d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20250211
+For release notes since 2.8.2, see:
+https://github.com/libsdl-org/SDL_image/releases/tag/release-2.8.3
+https://github.com/libsdl-org/SDL_image/releases/tag/release-2.8.4
 
-CVE-2024-31068:
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01166.html
-
-CVE-2024-36293
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01213.html
-
-CVE-2023-43758, CVE-2023-34440, CVE-2024-24582, CVE-2024-29214,
-CVE-2024-28127, CVE-2024-39279, CVE-2024-31157 & CVE-2024-28047:
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01139.html
-
-CVE-2024-39355:
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01228.html
-
-CVE-2024-37020:
-https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01194.html
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
+[Julien: add links to release notes]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/intel-microcode/intel-microcode.hash | 2 +-
- package/intel-microcode/intel-microcode.mk   | 2 +-
+ package/sdl2_image/sdl2_image.hash | 2 +-
+ package/sdl2_image/sdl2_image.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index 81a4573110..9721a15976 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
+diff --git a/package/sdl2_image/sdl2_image.hash b/package/sdl2_image/sdl2_image.hash
+index 53a887c6f9..9d5ae395cd 100644
+--- a/package/sdl2_image/sdl2_image.hash
++++ b/package/sdl2_image/sdl2_image.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  37246208ef68039be752438c72400a688a2238df13a7f5282497c80be2d8366d  intel-microcode-20241112.tar.gz
-+sha256  1da88b51953c9da2e20b5c94b3d7270cf87ea5babcaa56e3d6a5c9eaf11694b3  intel-microcode-20250211.tar.gz
- sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index 17f25edc83..db3e690ec7 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
+ # Locally calculated
+-sha256  8f486bbfbcf8464dd58c9e5d93394ab0255ce68b51c5a966a918244820a76ddc  SDL2_image-2.8.2.tar.gz
++sha256  f7c06a8783952cfe960adccdd3d8472b63ab31475b4390d10cfdcc1aea61238f  SDL2_image-2.8.4.tar.gz
+ sha256  a0e8ce06504966e45088ee1cc7583cc8af9aac615d4cf56d47d847da9cb15139  LICENSE.txt
+diff --git a/package/sdl2_image/sdl2_image.mk b/package/sdl2_image/sdl2_image.mk
+index 40b9e3c915..e058cd9f74 100644
+--- a/package/sdl2_image/sdl2_image.mk
++++ b/package/sdl2_image/sdl2_image.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_MICROCODE_VERSION = 20241112
-+INTEL_MICROCODE_VERSION = 20250211
- INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license
+-SDL2_IMAGE_VERSION = 2.8.2
++SDL2_IMAGE_VERSION = 2.8.4
+ SDL2_IMAGE_SOURCE = SDL2_image-$(SDL2_IMAGE_VERSION).tar.gz
+ SDL2_IMAGE_SITE = http://www.libsdl.org/projects/SDL_image/release
+ SDL2_IMAGE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
