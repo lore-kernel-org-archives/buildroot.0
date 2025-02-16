@@ -4,72 +4,108 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96AC9C02198
-	for <buildroot@archiver.kernel.org>; Sun, 16 Feb 2025 12:44:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01337C02198
+	for <buildroot@archiver.kernel.org>; Sun, 16 Feb 2025 13:02:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4368B40D7C;
-	Sun, 16 Feb 2025 12:44:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88F2C408D2;
+	Sun, 16 Feb 2025 13:02:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jty7OyhIA9zo; Sun, 16 Feb 2025 12:44:55 +0000 (UTC)
+ id aoxLfsDvJsbd; Sun, 16 Feb 2025 13:02:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 359BF40DAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EDDD408C2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 359BF40DAF;
-	Sun, 16 Feb 2025 12:44:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E9FD91BA
- for <buildroot@buildroot.org>; Sun, 16 Feb 2025 12:44:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1EDDD408C2;
+	Sun, 16 Feb 2025 13:02:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E1F0EC8
+ for <buildroot@buildroot.org>; Sun, 16 Feb 2025 13:02:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D84C54013D
- for <buildroot@buildroot.org>; Sun, 16 Feb 2025 12:44:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C4C5340FA8
+ for <buildroot@buildroot.org>; Sun, 16 Feb 2025 13:02:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SeGFQ45R42CL for <buildroot@buildroot.org>;
- Sun, 16 Feb 2025 12:44:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0C1DD40EFD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C1DD40EFD
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0C1DD40EFD
- for <buildroot@buildroot.org>; Sun, 16 Feb 2025 12:44:51 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 94E2320039E;
- Sun, 16 Feb 2025 13:44:47 +0100 (CET)
-Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
- via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 16 Feb 2025 13:44:47 +0100
+ id YzjOcgeJOdC0 for <buildroot@buildroot.org>;
+ Sun, 16 Feb 2025 13:02:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 53F4840F9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53F4840F9C
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 53F4840F9C
+ for <buildroot@buildroot.org>; Sun, 16 Feb 2025 13:02:14 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-439685e14f1so13769285e9.3
+ for <buildroot@buildroot.org>; Sun, 16 Feb 2025 05:02:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1739710933; x=1740315733;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=4ZJfqY5UMPSEDUt2gYnE5drOFLOvTWiAmFed8E+0uGg=;
+ b=alz3cbt70kENEbDW8fy0nPe5phuHWo9xD80cz61P7jBOEdO/fRdurHom4/4moNFBj9
+ gTwMQwLs7kQpRauvFs3K88/vg+6ttkE7Oop4q6TpcHyh8dskvne0PdMV9bLNaLNKPKtg
+ 95+1Ry1O9bJE3rwcx4KlJYa0R5FtFjzm3s+yZaN9WZ9ys3NN/kcU42Sbz++03IP7S82w
+ AHp1iMTSYphT3CQpQScP6AjzQWGJl8/gevKj9gyuRJz6kpMlHX6ri/L5ZgXytITAN0sa
+ T+IVgHRiPAmuqkNFZahc/KwYxyz3A0QLiCye1bO1s+vbIfk+I15xz9Cvxf+ctxGugzOt
+ mkRg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWN2L8XnuNWlxw5pBEFjj9L1FEd3okR9FXa6gNz2yYcLoe/Pn4mc53+nYuRRhPeT8gVXYfUw4eLRZo=@buildroot.org
+X-Gm-Message-State: AOJu0Yy5ttTxfQ9O/5KyDOTQcFAzqJDihcXhc6diOLtilRm4Akmo93kn
+ jCc2CVvNeNOolE20hncx5ITc8KOdENT5Th9+bKHR/d7BRqJxGY9MjkRRIuJGf+E=
+X-Gm-Gg: ASbGncsVSRzPn34otQN6BWvW5M8rYVDaZsMD22Y6sp6pSFf7j8Bv9l9wr3c3j2KnxI/
+ PMXKjpeDf2ztVig/9npTjwT8D9/Syo2K/isjv/jT7sJNVNFd+gF6v6tmmXukt99rtbgmQ/nrR7m
+ XmCaZ4UwrUbhDae+9oh7L4QXoKgfbW05ZIQ1HxARCrc+nQJQsiNNGWwb7SBiqKMyYYjlwQ2Z3cr
+ iNEIxfnDg81S3FFl+tIk2SF1mvUA9QYoL6XDEdvPH1kjjhS7DrNhT6uKwkmed9cGSLcXWPcKfa6
+ KUraNbKxmuZKRKj/s8fKE/CG21hBQ7ZIA2zU76GuwqOOqYFwLAFSuZipZ49ah9OatEesURkFxBs
+ /l5x2xg0jfFvfYu1b2NP9qtybel2nh6i/nh/EMWZfipYX8w==
+X-Google-Smtp-Source: AGHT+IGvEqonthBqUPd8/bHEFc3m+Jt22Emo/DI90ylb9diMEbFulX1Sypz/8bAx2x2g3+Tl1Xwocg==
+X-Received: by 2002:adf:e8d2:0:b0:38d:d603:ff46 with SMTP id
+ ffacd0b85a97d-38f33f1c86fmr5122730f8f.14.1739710932774; 
+ Sun, 16 Feb 2025 05:02:12 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-38f258cccdesm9601030f8f.26.2025.02.16.05.02.10
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 16 Feb 2025 05:02:11 -0800 (PST)
+Message-ID: <bcc4d526-57dc-4a95-9dc5-29c1c94f0ffa@mind.be>
+Date: Sun, 16 Feb 2025 14:02:09 +0100
 MIME-Version: 1.0
-Date: Sun, 16 Feb 2025 13:44:47 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: yann.morin@orange.com
-Cc: buildroot@buildroot.org
-In-Reply-To: <0c2abc96fab2e91a794019f5d2ee577f2c9268d0.1739524072.git.yann.morin@orange.com>
-References: <0c2abc96fab2e91a794019f5d2ee577f2c9268d0.1739524072.git.yann.morin@orange.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <718dabd04b0ddf34037a41aac094645e@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1739709888;
- bh=Zw9chD5W4pMVRBNFNkxc7DFycx9MR4zUK1E9WiZmmNU=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ZSOH7dJYyrX4ZIOE/g6QRFPuNJsf3TX66t2GyCqlyBAeduRtnBaSdqaAAIZIJhe3x
- +1NOBXRIZS443ngEcp3Qf69UpU5AXCq9cCmJM83AHRK4hiTxmQmaL8tK2yOe76Ion2
- X80bOkJXqiyi8fHeZj7EFpsi4dkVbqJK1Gyw4VBvZPm8E4Ip9XMzenBtdzVbCY43BD
- gHgYJnlYWffuz8jjZMaoxbUWMJbJdpVk5w9+S2RWeUhMgiFjq0/16tyFsaWihzLQGO
- 9r/lj8W29nsNQM7G7VtJ+9CVRY1Tu7CITpEIvPHX6T+CM2wWXLvSt/fLnVNJsWKWvr
- 0E17PMdI/uwXA==
+User-Agent: Mozilla Thunderbird
+To: Neal Frager <neal.frager@amd.com>, buildroot@buildroot.org
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ brandon.maier@collins.com, ju.o@free.fr, thomas.petazzoni@bootlin.com,
+ romain.naour@smile.fr, michal.simek@amd.com
+References: <20250215125732.2965257-1-neal.frager@amd.com>
+Content-Language: en-GB
+In-Reply-To: <20250215125732.2965257-1-neal.frager@amd.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1739710933; x=1740315733; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=4ZJfqY5UMPSEDUt2gYnE5drOFLOvTWiAmFed8E+0uGg=;
+ b=eR4Omv3sxBn3rjnOZqXzXEv/avkjDt235UL6lrJfpglsXlGYn55Zj88hOK5BGsgtc5
+ dUP6MgmrNb8R+Z4ZPbD7e1XIOfRc9mwbYWVHn+WHsK+ZLuvdqOxxAiAHY+RXZcUK3duo
+ V9lhqwTQ8wR6rmW8qndr6GkdsYlf0RrqBqw/TJZW47ZD8lblnAh29wOHQ/vgsKCuqYzD
+ Q9tUqmvHBtIJND0xEklvlz1l+ffvVW0s/5oE0kZ1jizHy42my+6yTZRLPH38z1V4R9LX
+ WJiur7O4Ff3z9kFClK9BqHSzEQ4dYDoWFcCGUhN+ImS90TniLQ4PgdxwaiodrMeNVPyb
+ opjA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ZSOH7dJY
-Subject: Re: [Buildroot] [PATCH] package/skopeo: bup to version 1.18.0
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=eR4Omv3s
+Subject: Re: [Buildroot] [PATCH v3 1/5] package/binutils-bare-metal: add
+ multiple tuple support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,17 +117,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 14/02/2025 10:07, yann.morin@orange.com wrote:
-> From: "Yann E. MORIN" <yann.morin@orange.com>
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 
-Applied to master, thanks.
+
+On 15/02/2025 13:57, Neal Frager via buildroot wrote:
+> Add support to binutils-bare-metal to support multiple architecture tuples
+> with the BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH string.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+> V1->V2:
+> - no changes
+> V2->V3:
+> - removed unnecessary symlinks
+> - removed unnecessary semi-colons
+> ---
+>   .../binutils-bare-metal.mk                    | 54 +++++++++++++++----
+>   1 file changed, 45 insertions(+), 9 deletions(-)
+> 
+> diff --git a/package/binutils-bare-metal/binutils-bare-metal.mk b/package/binutils-bare-metal/binutils-bare-metal.mk
+> index 3525e9fdf2..7a3017a12c 100644
+> --- a/package/binutils-bare-metal/binutils-bare-metal.mk
+> +++ b/package/binutils-bare-metal/binutils-bare-metal.mk
+> @@ -21,14 +21,50 @@ HOST_BINUTILS_BARE_METAL_CONF_ENV += MAKEINFO=true
+>   HOST_BINUTILS_BARE_METAL_MAKE_OPTS += MAKEINFO=true
+>   HOST_BINUTILS_BARE_METAL_INSTALL_OPTS += MAKEINFO=true install
+>   
+> -HOST_BINUTILS_BARE_METAL_CONF_OPTS = \
+> -	--target=$(TOOLCHAIN_BARE_METAL_BUILDR OOT_ARCH_TUPLE) \
+> -	--disable-gprof \
+> -	--disable-shared \
+> -	--enable-lto \
+> -	--enable-static \
+> -	--disable-initfini-array \
+> -	--disable-multilib \
+> -	--disable-werror
+> +define HOST_BINUTILS_BARE_METAL_CONFIGURE_CMDS
+> +	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
+> +		mkdir -p $(@D)/build-$(arch_tuple) && \
+> +		cd $(@D)/build-$(arch_tuple) && \
+> +		$(HOST_CONFIGURE_OPTS) \
+> +		$(HOST_BINUTILS_BARE_METAL_CONF_ENV) \
+> +		$(@D)/configure \
+> +			--prefix=$(HOST_DIR) \
+> +			--sysconfdir=$(HOST_DIR)/etc \
+> +			--localstatedir=$(HOST_DIR)/var \
+> +			--disable-shared --enable-static \
+> +			--disable-gtk-doc \
+> +			--disable-gtk-doc-html \
+> +			--disable-doc \
+> +			--disable-docs \
+> +			--disable-documentation \
+> +			--disable-debug \
+> +			--with-xmlto=no \
+> +			--with-fop=no \
+> +			--disable-nls \
+> +			--disable-dependency-tracking \
+
+  It's a bit confusing to me... All of the above are copied from 
+host-autotools-package, except:
+
+- --enable-shared --disable-static is reverted (because that's what binutils.mk 
+does);
+- $(if $($(PKG)_OVERRIDE_SRCDIR),,...) is dropped
+- $(QUIET) is dropped
+- CFLAGS and LDFLAGS environment variables are dropped
+- CONFIG_SITE is dropped.
+
+  For the latter four, I don't see why they should be dropped.
+
+  In addition, there are a lot of configure options that don't exist. We add 
+them to the generic autotools infra because unknown options are ignored (with a 
+warning) and it saves a lot of repetition in autotools package, but here we 
+could include just the options that actually exist.
+
+
+  I think we have two possibilities here: either we use the stuff from 
+autotools-package _exactly_ and just add to it (perhaps even keeping 
+HOST_BINUTILS_BARE_METAL_CONF_OPTS as a variable) or we adapt the entire thing 
+to precisely what is needed and useful for host-binutils-baremetal (so dropping 
+all the useless options). Either option works for me.
+
+  In the first case, we could even rewrite the autotools infra so all the common 
+stuff gets put in variables HOST_CONF_ENV and HOST_CONF_OPTS.
+
+  Regards,
+  Arnout
+
+> +			--target=$(arch_tuple) \
+> +			--disable-gprof \
+> +			--enable-lto \
+> +			--disable-initfini-array \
+> +			--disable-multilib \
+> +			--disable-werror; \
+> +	)
+> +endef
+> +
+> +define HOST_BINUTILS_BARE_METAL_BUILD_CMDS
+> +	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
+> +		$(HOST_MAKE_ENV) $(MAKE) \
+> +			$(HOST_BINUTILS_BARE_METAL_MAKE_OPTS) \
+> +			-C $(@D)/build-$(arch_tuple)
+> +	)
+> +endef
+> +
+> +define HOST_BINUTILS_BARE_METAL_INSTALL_CMDS
+> +	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
+> +		$(HOST_MAKE_ENV) $(MAKE) \
+> +			$(HOST_BINUTILS_BARE_METAL_INSTALL_OPTS) \
+> +			-C $(@D)/build-$(arch_tuple)
+> +	)
+> +endef
+>   
+>   $(eval $(host-autotools-package))
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
