@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED6E8C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:20:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32271C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:20:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 459F185E2B;
-	Fri, 28 Feb 2025 17:20:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3EB3E7066A;
+	Fri, 28 Feb 2025 17:20:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ECljSw3pBlSo; Fri, 28 Feb 2025 17:20:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9Ryzn3-5AKfe; Fri, 28 Feb 2025 17:20:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 05CEF85809
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C9DA70D7F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 05CEF85809;
-	Fri, 28 Feb 2025 17:20:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C9DA70D7F;
+	Fri, 28 Feb 2025 17:20:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0793368
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:23 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A9CD711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D2BB742D57
+ by smtp4.osuosl.org (Postfix) with ESMTP id DD30746930
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LkC7yrNU5r4S for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:32:03 +0000 (UTC)
+ id fxs9DgCMORpW for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:32:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7FCD46C49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9507446637
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A7FCD46C49
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9507446637
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 99D0580807; Fri, 28 Feb 2025 16:30:43 +0000 (UTC)
+ id 8E4E186143; Fri, 28 Feb 2025 16:30:42 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 18 Feb 2025 20:45:00 +0100
+Date: Sun, 16 Feb 2025 18:33:09 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3761177a89a78c83a102d811efd0079ed01a3abb
-X-Git-Newrev: 3aacb38098864eba4f0af21e947cb9cbf2cf6dbe
+X-Git-Oldrev: f32da8b9844ae5f1b9dc6b7a89d7d9bd9d194f55
+X-Git-Newrev: 2577fbedbe8da043cdee4e3758033c19859da11e
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163043.99D0580807@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] utils/brmake: drop use of
- unbuffer
+Message-Id: <20250228163042.8E4E186143@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/webp: bump to version
+ 1.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,70 +59,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3aacb38098864eba4f0af21e947cb9cbf2cf6dbe
+commit: https://git.buildroot.net/buildroot/commit/?id=2577fbedbe8da043cdee4e3758033c19859da11e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When it was introduced in afdb545b2847 (tools: new tool to filter the
-output of make), brmake made use of unbuffer, so as to try and ensure
-that no output would get lost between make printing it, and the logger
-loop time-stamping it and storing it in the logfile, in case the user
-would interrup the build (SIGINT, ^C)
+ChangeLog (concise version):
+https://github.com/webmproject/libwebp/blob/main/NEWS
 
-However, unbuffer is missing in our reference build image (we could have
-added it, but we missed the occasion to do so every time we updated the
-reference build image).
+ChangeLog (detailed version):
+https://github.com/webmproject/libwebp/blob/main/ChangeLog
 
-Furthermore, the rationale for using unbuffer, although reasonable, is
-not so practical: indeed, when the user hits Crtl-C, this is inherently
-asynchronous, and they can't expect everything to be entirely cleanly
-terminated, especially buffering. Using unbuffer is thus slightly
-superfluous.
-
-The timestamps will be slightly off because of buffering, but a build
-generates so much output that this won't be a problem in practice.
-
-Drop use of unbuffer.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- utils/brmake | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ package/webp/webp.hash | 2 +-
+ package/webp/webp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/utils/brmake b/utils/brmake
-index 4756016a0c..e5437d8f2c 100755
---- a/utils/brmake
-+++ b/utils/brmake
-@@ -5,11 +5,6 @@
- main() {
-     local ret start d h m mf
+diff --git a/package/webp/webp.hash b/package/webp/webp.hash
+index d579356a7c..8d80c72711 100644
+--- a/package/webp/webp.hash
++++ b/package/webp/webp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  61f873ec69e3be1b99535634340d5bde750b2e4447caa1db9f61be3fd49ab1e5  libwebp-1.4.0.tar.gz
++sha256  7d6fab70cf844bf6769077bd5d7a74893f8ffd4dfb42861745750c63c2a5c92c  libwebp-1.5.0.tar.gz
+ sha256  5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  COPYING
+diff --git a/package/webp/webp.mk b/package/webp/webp.mk
+index a4d030948b..83d5506c0f 100644
+--- a/package/webp/webp.mk
++++ b/package/webp/webp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--    if ! which unbuffer >/dev/null 2>&1; then
--        printf "you need to install 'unbuffer' (from package expect or expect-dev)\n" >&2
--        exit 1
--    fi
--
-     start=${SECONDS}
- 
-     if [ -n "$BR2_DOCKER" ]; then
-@@ -18,7 +13,7 @@ main() {
-         docker=()
-     fi
- 
--    ( exec 2>&1; unbuffer "${docker[@]}" make "${@}"; ) \
-+    ( exec 2>&1; "${docker[@]}" make "${@}"; ) \
-     > >( while read -r line; do
-              printf "%(%Y-%m-%dT%H:%M:%S)T %s\n" -1 "${line}"
-          done \
+-WEBP_VERSION = 1.4.0
++WEBP_VERSION = 1.5.0
+ WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
+ WEBP_SITE = http://downloads.webmproject.org/releases/webp
+ WEBP_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
