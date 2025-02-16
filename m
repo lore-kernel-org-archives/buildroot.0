@@ -1,76 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66609C02198
-	for <buildroot@archiver.kernel.org>; Sun, 16 Feb 2025 17:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BFB9C02198
+	for <buildroot@archiver.kernel.org>; Sun, 16 Feb 2025 17:34:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 00F9B60665;
-	Sun, 16 Feb 2025 17:32:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D22E4811F8;
+	Sun, 16 Feb 2025 17:34:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0GaSlJOshorh; Sun, 16 Feb 2025 17:32:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Rhe5p32aAFR2; Sun, 16 Feb 2025 17:34:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 233D060656
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3C0B80FB9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 233D060656;
-	Sun, 16 Feb 2025 17:32:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A413E72
- for <buildroot@buildroot.org>; Sun, 16 Feb 2025 17:32:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E3C0B80FB9;
+	Sun, 16 Feb 2025 17:34:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 48A41DE
+ for <buildroot@buildroot.org>; Sun, 16 Feb 2025 17:34:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 888E5409FE
- for <buildroot@buildroot.org>; Sun, 16 Feb 2025 17:32:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2B77180FB9
+ for <buildroot@buildroot.org>; Sun, 16 Feb 2025 17:34:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ign1qPo0mrC8 for <buildroot@buildroot.org>;
- Sun, 16 Feb 2025 17:32:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2ED2E40901
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2ED2E40901
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2ED2E40901
- for <buildroot@buildroot.org>; Sun, 16 Feb 2025 17:32:48 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 08AED13F89A;
- Sun, 16 Feb 2025 18:32:45 +0100 (CET)
-Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
- via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 16 Feb 2025 18:32:45 +0100
-MIME-Version: 1.0
-Date: Sun, 16 Feb 2025 18:32:45 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WO_h7S7lnh8C for <buildroot@buildroot.org>;
+ Sun, 16 Feb 2025 17:34:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65C5380F7F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 65C5380F7F
+ for <buildroot@buildroot.org>; Sun, 16 Feb 2025 17:34:36 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4F136876C5; Sun, 16 Feb 2025 17:34:36 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Gilles Talis <gilles.talis@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250216153441.2706067-5-gilles.talis@gmail.com>
-References: <20250216153441.2706067-1-gilles.talis@gmail.com>
- <20250216153441.2706067-5-gilles.talis@gmail.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <c3bacd6dc0128342304f85cb92b6068f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1739727167;
- bh=Fl0JdmIn+nkcFVzAccDjW88cjCBNBaLBdwzfFfPt2yk=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=h0Bn654/iTa+NcJ7cb4Eff3IXJuO7ZBw1UB/CxJADcvvclCQM5UuDIb8agyjfSkKE
- h20d7Hcsfm0pX9C7XC2zwWety9T7nwQZXmSaltyACRoTloMoK6JXqSVhmqfDHFShz9
- J2Rvx1YbME76G39fNOlBfuDh7fDLGqLkoA4zuZtOluxfx0p+zy5XSzJ4g3tlkZEwRC
- UBhRhY+tchwmCV1/jIGKa9wEhwKjKJbA5FgKtgqQ9w4qhQQpg9QQvE7yspjbTFuxl4
- btO7eCzryoJxpFvsUOzwyvI+Hh7tl4CtPT859lMsjBn/8idVDfl+JSPylDKAU0BFYJ
- Fx/4c7xgsXQug==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=h0Bn654/
-Subject: Re: [Buildroot] [PATCH] package/tesseract-ocr: bump to version 5.5.0
+To: buildroot@buildroot.org
+Date: Sun, 16 Feb 2025 18:33:09 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f32da8b9844ae5f1b9dc6b7a89d7d9bd9d194f55
+X-Git-Newrev: 2577fbedbe8da043cdee4e3758033c19859da11e
+X-Patchwork-Hint: ignore
+Message-Id: <20250216173436.4F136876C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/webp: bump to version 1.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,18 +58,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 16/02/2025 16:34, Gilles Talis wrote:
-> Change log:
-> https://github.com/tesseract-ocr/tesseract/blob/main/ChangeLog
-> 
-> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=2577fbedbe8da043cdee4e3758033c19859da11e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+ChangeLog (concise version):
+https://github.com/webmproject/libwebp/blob/main/NEWS
+
+ChangeLog (detailed version):
+https://github.com/webmproject/libwebp/blob/main/ChangeLog
+
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/webp/webp.hash | 2 +-
+ package/webp/webp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/webp/webp.hash b/package/webp/webp.hash
+index d579356a7c..8d80c72711 100644
+--- a/package/webp/webp.hash
++++ b/package/webp/webp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  61f873ec69e3be1b99535634340d5bde750b2e4447caa1db9f61be3fd49ab1e5  libwebp-1.4.0.tar.gz
++sha256  7d6fab70cf844bf6769077bd5d7a74893f8ffd4dfb42861745750c63c2a5c92c  libwebp-1.5.0.tar.gz
+ sha256  5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  COPYING
+diff --git a/package/webp/webp.mk b/package/webp/webp.mk
+index a4d030948b..83d5506c0f 100644
+--- a/package/webp/webp.mk
++++ b/package/webp/webp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBP_VERSION = 1.4.0
++WEBP_VERSION = 1.5.0
+ WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
+ WEBP_SITE = http://downloads.webmproject.org/releases/webp
+ WEBP_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
