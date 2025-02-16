@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2A9CC021A6
-	for <buildroot@archiver.kernel.org>; Sun, 16 Feb 2025 14:12:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABAB4C02198
+	for <buildroot@archiver.kernel.org>; Sun, 16 Feb 2025 14:13:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80AF660B38;
-	Sun, 16 Feb 2025 14:12:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BIwil0N1REsD; Sun, 16 Feb 2025 14:12:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F6E860B49
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F6E860B49;
-	Sun, 16 Feb 2025 14:12:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 021D8DE
- for <buildroot@buildroot.org>; Sun, 16 Feb 2025 14:12:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DAA9E411D4
- for <buildroot@buildroot.org>; Sun, 16 Feb 2025 14:12:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 714D0412CF;
+	Sun, 16 Feb 2025 14:13:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t7kgPjRp1Fdq for <buildroot@buildroot.org>;
- Sun, 16 Feb 2025 14:12:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D599B411AB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D599B411AB
- for <buildroot@buildroot.org>; Sun, 16 Feb 2025 14:12:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C4A1D876BA; Sun, 16 Feb 2025 14:12:24 +0000 (UTC)
+ id v8NAirjj1Lyy; Sun, 16 Feb 2025 14:13:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C96B412F8
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C96B412F8;
+	Sun, 16 Feb 2025 14:13:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 91EF5DE
+ for <buildroot@buildroot.org>; Sun, 16 Feb 2025 14:13:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8103760B49
+ for <buildroot@buildroot.org>; Sun, 16 Feb 2025 14:13:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8eHzxFOe4vjC for <buildroot@buildroot.org>;
+ Sun, 16 Feb 2025 14:13:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ACF8260B38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACF8260B38
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ACF8260B38
+ for <buildroot@buildroot.org>; Sun, 16 Feb 2025 14:13:08 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id A3439B0054E;
+ Sun, 16 Feb 2025 15:13:04 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 16 Feb 2025 15:13:04 +0100
+MIME-Version: 1.0
+Date: Sun, 16 Feb 2025 15:13:04 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 16 Feb 2025 15:05:51 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9f5ef2d8727499b9b92bfd24735e6d6b5a07bd18
-X-Git-Newrev: 678ad7d69d1b9757433d2235e8d2856961d904d1
-X-Patchwork-Hint: ignore
-Message-Id: <20250216141224.C4A1D876BA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sdl2_image: bump version to 2.8.4
+To: Peter Thompson <peter.macleod.thompson@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250213081956.24293-1-peter.macleod.thompson@gmail.com>
+References: <20250213081956.24293-1-peter.macleod.thompson@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <9a63c2adfccc87e6c0b427b21ac7934e@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1739715185;
+ bh=y7XprMNCHcv8KaKkvzFjBnxr3iHyFgtRO5NY0nVbAgw=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=frkzyv1oIXObWy0dTydXUic7edMMDFDWutwssYBye4Up7c8yCw2fLy8LE5lljgcs7
+ mCTSAOlH95zNdoWdUAkx+ATtAb5jahPTVYT6Va329Aj4c6d8IpsyKcgVr9ha76H+CZ
+ Nk/HEXmgxlQDoc1qB3+PDiMwxlzdPCZP2XMe9hbWTRU+/DqD6SQhQ7WgT2U5xub3oa
+ mKWA1IGP1UVevuH0XnZCj9mpdSkAiu0xYnDscjggRSaguhWKgXfPpMoyvYcNjK7X2j
+ IrynP28/n135R7z0eOPX08p7cq++8ztuAOY7fFxGHwwUhrj9YhG72LV7eVm16vuVzv
+ E4Yyf8uWQO0ug==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=frkzyv1o
+Subject: Re: [Buildroot] [PATCH 1/2] package/sdl2_ttf: bump version to 2.24.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,49 +81,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=678ad7d69d1b9757433d2235e8d2856961d904d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 13/02/2025 09:19, Peter Thompson wrote:
+> From: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
+> 
+> Signed-off-by: Peter Macleod Thompson 
+> <peter.macleod.thompson@gmail.com>
 
-For release notes since 2.8.2, see:
-https://github.com/libsdl-org/SDL_image/releases/tag/release-2.8.3
-https://github.com/libsdl-org/SDL_image/releases/tag/release-2.8.4
+Series applied to master, thanks.
 
-Signed-off-by: Peter Macleod Thompson <peter.macleod.thompson@gmail.com>
-[Julien: add links to release notes]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/sdl2_image/sdl2_image.hash | 2 +-
- package/sdl2_image/sdl2_image.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I added links to release notes in commit logs. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/9f5ef2d8727499b9b92bfd24735e6d6b5a07bd18
+https://gitlab.com/buildroot.org/buildroot/-/commit/678ad7d69d1b9757433d2235e8d2856961d904d1
 
-diff --git a/package/sdl2_image/sdl2_image.hash b/package/sdl2_image/sdl2_image.hash
-index 53a887c6f9..9d5ae395cd 100644
---- a/package/sdl2_image/sdl2_image.hash
-+++ b/package/sdl2_image/sdl2_image.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8f486bbfbcf8464dd58c9e5d93394ab0255ce68b51c5a966a918244820a76ddc  SDL2_image-2.8.2.tar.gz
-+sha256  f7c06a8783952cfe960adccdd3d8472b63ab31475b4390d10cfdcc1aea61238f  SDL2_image-2.8.4.tar.gz
- sha256  a0e8ce06504966e45088ee1cc7583cc8af9aac615d4cf56d47d847da9cb15139  LICENSE.txt
-diff --git a/package/sdl2_image/sdl2_image.mk b/package/sdl2_image/sdl2_image.mk
-index 40b9e3c915..e058cd9f74 100644
---- a/package/sdl2_image/sdl2_image.mk
-+++ b/package/sdl2_image/sdl2_image.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SDL2_IMAGE_VERSION = 2.8.2
-+SDL2_IMAGE_VERSION = 2.8.4
- SDL2_IMAGE_SOURCE = SDL2_image-$(SDL2_IMAGE_VERSION).tar.gz
- SDL2_IMAGE_SITE = http://www.libsdl.org/projects/SDL_image/release
- SDL2_IMAGE_INSTALL_STAGING = YES
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
