@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BF40C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:19:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A3ACC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:19:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E51BE509B7;
-	Fri, 28 Feb 2025 17:18:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 492BC85DC5;
+	Fri, 28 Feb 2025 17:19:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JNzfnpTkLNxB; Fri, 28 Feb 2025 17:18:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2tD56itHFo2a; Fri, 28 Feb 2025 17:18:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BBD950117
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9733385DC3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8BBD950117;
-	Fri, 28 Feb 2025 17:18:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9733385DC3;
+	Fri, 28 Feb 2025 17:18:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 183EC711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:45 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1283D1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F3434253C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 95D354595C
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:31:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id doa2SchJpG_P for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:57 +0000 (UTC)
+ id DIcezPkH_tfm for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A35E845AC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74F5642D4C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A35E845AC9
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 74F5642D4C
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9EDDE87C6F; Fri, 28 Feb 2025 16:30:40 +0000 (UTC)
+ id 6B48F867FA; Fri, 28 Feb 2025 16:30:41 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Feb 2025 21:56:55 +0100
+Date: Sun, 16 Feb 2025 12:47:52 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 30da391756dfba96f078a6e04707c6e8a63a4162
-X-Git-Newrev: befcc152f942786c05211471f0b213050bdaef8c
+X-Git-Oldrev: 9bc3bbce3873667c229d8b16552f58045ee3c439
+X-Git-Newrev: e2870d7669aa3006780c7d672cd7b51499e1d396
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163040.9EDDE87C6F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/musl: add upstream
- security fixes for CVE-2025-26519
+Message-Id: <20250228163041.6B48F867FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-evdev: bump to
+ version 1.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,134 +65,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=befcc152f942786c05211471f0b213050bdaef8c
+commit: https://git.buildroot.net/buildroot/commit/?id=e2870d7669aa3006780c7d672cd7b51499e1d396
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes CVE-2025-26519: Musl libc: input-controlled out-of-bounds write
-primitive in iconv()
+Since Buildroot commit [1] "package/python-evdev: bump to version
+1.8.0", python-evdev is failing to build with error:
 
-https://www.openwall.com/lists/musl/2025/02/13/1
+    evdev/ecodes.c: In function 'PyInit__ecodes':
+    evdev/ecodes.c:65:29: error: 'BUS_AMD_SFH' undeclared (first use in this function)
+       65 |     PyModule_AddIntMacro(m, BUS_AMD_SFH);
+          |                             ^~~~~~~~~~~
+    /home/autobuild/autobuild/instance-8/output-1/build/python3-3.12.8/Include/modsupport.h:61:70: note: in definition of macro 'PyModule_AddIntMacro'
+       61 | #define PyModule_AddIntMacro(m, c) PyModule_AddIntConstant((m), #c, (c))
+          |                                                                      ^
+    ...
+
+Upstream commit [2] included in this version fixes issues when
+building wheels.
 
 Fixes:
-https://nvd.nist.gov/vuln/detail/CVE-2025-26519
+- https://gitlab.com/buildroot.org/buildroot/-/jobs/9085451384
+- https://autobuild.buildroot.org/results/61a3b74e60f2f0f93e312803812ab4d98c492599/
+- and many others...
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Julien: add link to cve]
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/455ef44d26f027abc1936ba9041427a4b2e86f42
+[2] https://github.com/gvalkov/python-evdev/commit/3ff9816e08be95b331ea9dadc18fc17f1e04e272
+
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+[Julien: reworded the commit log to add extra info]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...rroneous-input-validation-in-EUC-KR-decod.patch | 41 ++++++++++++++++++++++
- ...n-UTF-8-output-code-path-against-input-de.patch | 40 +++++++++++++++++++++
- package/musl/musl.mk                               |  4 +++
- 3 files changed, 85 insertions(+)
+ package/python-evdev/python-evdev.hash | 4 ++--
+ package/python-evdev/python-evdev.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/musl/0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch b/package/musl/0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch
-new file mode 100644
-index 0000000000..dbfd87db76
---- /dev/null
-+++ b/package/musl/0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch
-@@ -0,0 +1,41 @@
-+From e5adcd97b5196e29991b524237381a0202a60659 Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Sun, 9 Feb 2025 10:07:19 -0500
-+Subject: [PATCH] iconv: fix erroneous input validation in EUC-KR decoder
-+
-+as a result of incorrect bounds checking on the lead byte being
-+decoded, certain invalid inputs which should produce an encoding
-+error, such as "\xc8\x41", instead produced out-of-bounds loads from
-+the ksc table.
-+
-+in a worst case, the loaded value may not be a valid unicode scalar
-+value, in which case, if the output encoding was UTF-8, wctomb would
-+return (size_t)-1, causing an overflow in the output pointer and
-+remaining buffer size which could clobber memory outside of the output
-+buffer.
-+
-+bug report was submitted in private by Nick Wellnhofer on account of
-+potential security implications.
-+
-+Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=e5adcd97b5196e29991b524237381a0202a60659
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/locale/iconv.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/locale/iconv.c b/src/locale/iconv.c
-+index 9605c8e9..008c93f0 100644
-+--- a/src/locale/iconv.c
-++++ b/src/locale/iconv.c
-+@@ -502,7 +502,7 @@ size_t iconv(iconv_t cd, char **restrict in, size_t *restrict inb, char **restri
-+ 			if (c >= 93 || d >= 94) {
-+ 				c += (0xa1-0x81);
-+ 				d += 0xa1;
-+-				if (c >= 93 || c>=0xc6-0x81 && d>0x52)
-++				if (c > 0xc6-0x81 || c==0xc6-0x81 && d>0x52)
-+ 					goto ilseq;
-+ 				if (d-'A'<26) d = d-'A';
-+ 				else if (d-'a'<26) d = d-'a'+26;
-+-- 
-+2.39.5
-+
-diff --git a/package/musl/0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch b/package/musl/0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch
-new file mode 100644
-index 0000000000..a14041364a
---- /dev/null
-+++ b/package/musl/0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch
-@@ -0,0 +1,40 @@
-+From c47ad25ea3b484e10326f933e927c0bc8cded3da Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Wed, 12 Feb 2025 17:06:30 -0500
-+Subject: [PATCH] iconv: harden UTF-8 output code path against input decoder
-+ bugs
-+
-+the UTF-8 output code was written assuming an invariant that iconv's
-+decoders only emit valid Unicode Scalar Values which wctomb can encode
-+successfully, thereby always returning a value between 1 and 4.
-+
-+if this invariant is not satisfied, wctomb returns (size_t)-1, and the
-+subsequent adjustments to the output buffer pointer and remaining
-+output byte count overflow, moving the output position backwards,
-+potentially past the beginning of the buffer, without storing any
-+bytes.
-+
-+Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=c47ad25ea3b484e10326f933e927c0bc8cded3da
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/locale/iconv.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/locale/iconv.c b/src/locale/iconv.c
-+index 008c93f0..52178950 100644
-+--- a/src/locale/iconv.c
-++++ b/src/locale/iconv.c
-+@@ -545,6 +545,10 @@ size_t iconv(iconv_t cd, char **restrict in, size_t *restrict inb, char **restri
-+ 				if (*outb < k) goto toobig;
-+ 				memcpy(*out, tmp, k);
-+ 			} else k = wctomb_utf8(*out, c);
-++			/* This failure condition should be unreachable, but
-++			 * is included to prevent decoder bugs from translating
-++			 * into advancement outside the output buffer range. */
-++			if (k>4) goto ilseq;
-+ 			*out += k;
-+ 			*outb -= k;
-+ 			break;
-+-- 
-+2.39.5
-+
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 783a103fcd..13a49a15eb 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -26,6 +26,10 @@ MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
+diff --git a/package/python-evdev/python-evdev.hash b/package/python-evdev/python-evdev.hash
+index d31e236989..733c0c9cda 100644
+--- a/package/python-evdev/python-evdev.hash
++++ b/package/python-evdev/python-evdev.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/evdev/json
+-md5  a38ac9e2297940430bb27cea41be964e  evdev-1.8.0.tar.gz
+-sha256  45598eee1ae3876a3122ca1dc0ec8049c01931672d12478b5c610afc24e47d75  evdev-1.8.0.tar.gz
++md5  c1440732b435dad5796bbb8e91d0340b  evdev-1.9.0.tar.gz
++sha256  38218bc95507cad756bc621a5fe7a77a41eb8d9c1213855de8e4ba0aba28e79f  evdev-1.9.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  d4554960d6496150c88c1fd02d7973121a9a57b961ea58fe349fbf8ada3816b2  LICENSE
+diff --git a/package/python-evdev/python-evdev.mk b/package/python-evdev/python-evdev.mk
+index f465aff933..d24974a037 100644
+--- a/package/python-evdev/python-evdev.mk
++++ b/package/python-evdev/python-evdev.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- MUSL_INSTALL_STAGING = YES
- 
-+# 0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch
-+# 0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch
-+MUSL_IGNORE_CVES += CVE-2025-26519
-+
- # musl does not build with LTO, so explicitly disable it
- # when using a compiler that may have support for LTO
- ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),y)
+-PYTHON_EVDEV_VERSION = 1.8.0
++PYTHON_EVDEV_VERSION = 1.9.0
+ PYTHON_EVDEV_SOURCE = evdev-$(PYTHON_EVDEV_VERSION).tar.gz
+-PYTHON_EVDEV_SITE = https://files.pythonhosted.org/packages/4c/eb/b8900082a13a47bb9f69f415174d03cbf12ce95d07345722e1f4ef0e2093
++PYTHON_EVDEV_SITE = https://files.pythonhosted.org/packages/8c/bf/0fe4d372ee62fe5aec06aae2e97c0603d131b8e3cbaffa2329e0bd763a98
+ PYTHON_EVDEV_SETUP_TYPE = setuptools
+ PYTHON_EVDEV_LICENSE = Revised BSD License
+ PYTHON_EVDEV_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
