@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26705C282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:19:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 500D5C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:20:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC5CE42ED3;
-	Fri, 28 Feb 2025 17:19:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8EF4170393;
+	Fri, 28 Feb 2025 17:20:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wTZRJBgrkapP; Fri, 28 Feb 2025 17:19:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U70t6auY3nJR; Fri, 28 Feb 2025 17:20:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA67950A1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80ED670660
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA67950A1C;
-	Fri, 28 Feb 2025 17:19:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 80ED670660;
+	Fri, 28 Feb 2025 17:20:00 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 042501DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:07 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1441868
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2084D42573
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6351A49BD7
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id risZuWMF51pH for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:57 +0000 (UTC)
+ id gRRhtJ5WpBNN for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:32:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB9BE45B4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE27242D67
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BB9BE45B4F
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE27242D67
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF27287C83; Fri, 28 Feb 2025 16:30:40 +0000 (UTC)
+ id E45B486405; Fri, 28 Feb 2025 16:30:41 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Feb 2025 22:00:24 +0100
+Date: Sun, 16 Feb 2025 16:28:59 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: befcc152f942786c05211471f0b213050bdaef8c
-X-Git-Newrev: b5ff38782cf8f1dbc1fd9585f49affdfb14833e8
+X-Git-Oldrev: b8638648d6ef292cb95a80f1c6d627bb14776364
+X-Git-Newrev: 67a0f96b88a23976c7dbf7e64ffb2cebadd8ec6f
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163040.AF27287C83@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/imagemagick: bump to
- version 7.1.1-43
+Message-Id: <20250228163041.E45B486405@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/intel-microcode:
+ security bump version to 20250211
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,46 +65,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5ff38782cf8f1dbc1fd9585f49affdfb14833e8
+commit: https://git.buildroot.net/buildroot/commit/?id=67a0f96b88a23976c7dbf7e64ffb2cebadd8ec6f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For various bugfixes.  Notice that 7.1.1-36 fixed a security vulnerability
-(CVE-2024-41817), but that issue is specific to the AppImage version:
-
-https://github.com/ImageMagick/ImageMagick/security/advisories/GHSA-8rxc-922v-phg8
-
 Release notes:
-https://github.com/ImageMagick/ImageMagick/releases/tag/7.1.1-43
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20250211
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+CVE-2024-31068:
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01166.html
+
+CVE-2024-36293
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01213.html
+
+CVE-2023-43758, CVE-2023-34440, CVE-2024-24582, CVE-2024-29214,
+CVE-2024-28127, CVE-2024-39279, CVE-2024-31157 & CVE-2024-28047:
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01139.html
+
+CVE-2024-39355:
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01228.html
+
+CVE-2024-37020:
+https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01194.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 30a12220dd..2983b511cc 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index 81a4573110..9721a15976 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  c82210ea3fdbd044b656ba3d5b42df1da9a18e78fc0e500169bad70d3b0d9ba3  imagemagick-7.1.1-31.tar.gz
-+sha256  ceb972266b23dc7c1cfce0da5a7f0c9acfb4dc81f40eb542a49476fedbc2618f  imagemagick-7.1.1-43.tar.gz
- sha256  a556c5292c87c9a6ac795c80669b0c3660f9f729de8c476bf2b10f83ab1b34ec  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index b2d3e755a6..6bbda40396 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
+-sha256  37246208ef68039be752438c72400a688a2238df13a7f5282497c80be2d8366d  intel-microcode-20241112.tar.gz
++sha256  1da88b51953c9da2e20b5c94b3d7270cf87ea5babcaa56e3d6a5c9eaf11694b3  intel-microcode-20250211.tar.gz
+ sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index 17f25edc83..db3e690ec7 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 7.1.1-31
-+IMAGEMAGICK_VERSION = 7.1.1-43
- IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
- IMAGEMAGICK_LICENSE = Apache-2.0
- IMAGEMAGICK_LICENSE_FILES = LICENSE
+-INTEL_MICROCODE_VERSION = 20241112
++INTEL_MICROCODE_VERSION = 20250211
+ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
