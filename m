@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB630C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:19:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76A03C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:19:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70CA8509D7;
-	Fri, 28 Feb 2025 17:19:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 645A185DE6;
+	Fri, 28 Feb 2025 17:19:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id svRJTGPSx6TT; Fri, 28 Feb 2025 17:19:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id up9G33BoTNS8; Fri, 28 Feb 2025 17:19:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85FEB509ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 92BD185DE0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85FEB509ED;
-	Fri, 28 Feb 2025 17:19:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 92BD185DE0;
+	Fri, 28 Feb 2025 17:19:12 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0AB2B1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:50 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 110C268
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:46:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 11F8747B6F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 459AB44C65
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PuE4umSqiv3k for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:31:58 +0000 (UTC)
+ id 4VksDEa_mQRn for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:31:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33B9D41881
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A303C45F56
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 33B9D41881
+ by smtp4.osuosl.org (Postfix) with ESMTP id A303C45F56
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 29AED82658; Fri, 28 Feb 2025 16:30:41 +0000 (UTC)
+ id 9F22886143; Fri, 28 Feb 2025 16:30:41 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 16 Feb 2025 11:39:13 +0100
+Date: Sun, 16 Feb 2025 13:47:34 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1040a4b714f530cb96589f35db017fcef5448dc8
-X-Git-Newrev: 4c98a3ddc3c73da474d54e10f3c369ad9af89db9
+X-Git-Oldrev: 7ba7da8f7d64ffb614d0c61c0e083159f06e4f6f
+X-Git-Newrev: 9ee276732a776b540ac495ec46e8c27b28c856ef
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163041.29AED82658@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libblockdev: bump to
- version 3.3.0
+Message-Id: <20250228163041.9F22886143@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/erofs-utils: bump to
+ version 1.8.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,47 +60,61 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5306028440815753958=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c98a3ddc3c73da474d54e10f3c369ad9af89db9
+--===============5306028440815753958==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=9ee276732a776b540ac495ec46e8c27b28c856ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For change log, see:
-https://github.com/storaged-project/libblockdev/blob/3.3.0/NEWS.rst
+Bump to latest maintenance release containing various fixes and performance
+improvements, for details see the changelog:
+https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/tree/ChangeLog?h=v1.8.5
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Jan Čermák <sairon@sairon.cz>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libblockdev/libblockdev.hash | 2 +-
- package/libblockdev/libblockdev.mk   | 2 +-
+ package/erofs-utils/erofs-utils.hash | 2 +-
+ package/erofs-utils/erofs-utils.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libblockdev/libblockdev.hash b/package/libblockdev/libblockdev.hash
-index 1466c88451..dd6f8b1a27 100644
---- a/package/libblockdev/libblockdev.hash
-+++ b/package/libblockdev/libblockdev.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  318b9e2cedfdfe88161f28079fcb63239aeb5592223f4485b861cfc6ef11189a  libblockdev-3.2.1.tar.gz
-+sha256  c4738e1abedefffe886521f9f0e7a9306c6f50f7691d88e011438c88608bdfa7  libblockdev-3.3.0.tar.gz
- sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
-diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-index 4cac905666..265cee2e28 100644
---- a/package/libblockdev/libblockdev.mk
-+++ b/package/libblockdev/libblockdev.mk
+diff --git a/package/erofs-utils/erofs-utils.hash b/package/erofs-utils/erofs-utils.hash
+index 3b8a5dc3da..04bdd557f8 100644
+--- a/package/erofs-utils/erofs-utils.hash
++++ b/package/erofs-utils/erofs-utils.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  3c5cc03603ea08ba9ae5e0420eeaea5ff17ed29e2280685310356cbf25304e85  erofs-utils-1.8.3.tar.gz
++sha256  cd8611270e9c86fe062f647103ca6ada9ed710e4430fdd5960d514777919200d  erofs-utils-1.8.5.tar.gz
+ sha256  0df042de29b44887355db86c79708a4489ce6e6666f6e33ad02040293f09e6a2  COPYING
+ sha256  a400f85dd06d230f1b308cde4290a53f345b6e320a376b7904b31c51c2fd4b1a  LICENSES/Apache-2.0
+ sha256  feee3b3157dcdf78d4f50edefbd5dd7adf8b6d52c11bfaaa746a85a373256713  LICENSES/GPL-2.0
+diff --git a/package/erofs-utils/erofs-utils.mk b/package/erofs-utils/erofs-utils.mk
+index 930b40f6f1..bfdcfe58eb 100644
+--- a/package/erofs-utils/erofs-utils.mk
++++ b/package/erofs-utils/erofs-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBBLOCKDEV_VERSION = 3.2.1
-+LIBBLOCKDEV_VERSION = 3.3.0
- LIBBLOCKDEV_SITE = https://github.com/storaged-project/libblockdev/releases/download/$(LIBBLOCKDEV_VERSION)
- LIBBLOCKDEV_LICENSE = LGPL-2.1
- LIBBLOCKDEV_LICENSE_FILES = LICENSE
+-EROFS_UTILS_VERSION = 1.8.3
++EROFS_UTILS_VERSION = 1.8.5
+ EROFS_UTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot
+ EROFS_UTILS_LICENSE = GPL-2.0+, GPL-2.0+ or Apache-2.0 (liberofs)
+ EROFS_UTILS_LICENSE_FILES = COPYING LICENSES/Apache-2.0 LICENSES/GPL-2.0
+
+--===============5306028440815753958==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5306028440815753958==--
