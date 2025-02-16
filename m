@@ -1,52 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ABAAC02198
-	for <buildroot@archiver.kernel.org>; Sun, 16 Feb 2025 10:58:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBB6FC02198
+	for <buildroot@archiver.kernel.org>; Sun, 16 Feb 2025 11:01:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B6A53410E0;
-	Sun, 16 Feb 2025 10:58:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 909D8846F3;
+	Sun, 16 Feb 2025 11:01:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KSnBRYI0fEFX; Sun, 16 Feb 2025 10:58:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KCd5riR5Mi_X; Sun, 16 Feb 2025 11:01:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E46A41117
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9133E8472B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5E46A41117;
-	Sun, 16 Feb 2025 10:58:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2EA3BDE
- for <buildroot@buildroot.org>; Sun, 16 Feb 2025 10:58:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9133E8472B;
+	Sun, 16 Feb 2025 11:01:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BAFE472
+ for <buildroot@buildroot.org>; Sun, 16 Feb 2025 11:01:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1815540F8F
- for <buildroot@buildroot.org>; Sun, 16 Feb 2025 10:58:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9FA2A60D61
+ for <buildroot@buildroot.org>; Sun, 16 Feb 2025 11:01:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eDpGIcqLTW0T for <buildroot@buildroot.org>;
- Sun, 16 Feb 2025 10:58:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5EC740151
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E5EC740151
- for <buildroot@buildroot.org>; Sun, 16 Feb 2025 10:58:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CE40487610; Sun, 16 Feb 2025 10:58:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kvb1cCDBuXLg for <buildroot@buildroot.org>;
+ Sun, 16 Feb 2025 11:01:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9E57E60635
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E57E60635
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9E57E60635
+ for <buildroot@buildroot.org>; Sun, 16 Feb 2025 11:01:29 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id A1809B0055E;
+ Sun, 16 Feb 2025 12:01:26 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 16 Feb 2025 12:01:26 +0100
+MIME-Version: 1.0
+Date: Sun, 16 Feb 2025 12:01:26 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 16 Feb 2025 11:55:41 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4c98a3ddc3c73da474d54e10f3c369ad9af89db9
-X-Git-Newrev: acb81d4a690ab30d6d9cedc811b20d89ff128376
-X-Patchwork-Hint: ignore
-Message-Id: <20250216105833.CE40487610@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libmdbx: bump version to 0.13.4
+To: =?UTF-8?Q?=D0=9B=D0=B5=D0=BE=D0=BD=D0=B8=D0=B4_=D0=AE=D1=80=D1=8C?=
+ =?UTF-8?Q?=D0=B5=D0=B2_=28Leonid_Yuriev=29?= <leo@yuriev.ru>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250214183242.2297637-1-leo@yuriev.ru>
+References: <20250214183242.2297637-1-leo@yuriev.ru>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <548d2bd51af6db64df9f397cdb5d351c@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1739703687;
+ bh=sYfHM+ktyuqUUkwM25UtBH4ISYji490TSy0pH+7eVYg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=WsV6xIwB3V70z5wm/TId0aRkofXIuHI8Wv3FvhNrEvUDIIC+16zX8Rd/fqZonOjDT
+ kLwE3yYwMcwYUgBoVxc2FSAjGj6HgtQq4fscXOLCnIPiJBb/y9r5hc16EzuxS3y56z
+ LIqHhevOdab1alVpgLKi/NtSec8mSPrrf7Mnc/XEstwF5rlupxHxSvMidq2Kha3DA2
+ kEzedrIykE2ZbVu6XC645kmX3rCHb8VhBwja809DhvHGuw/j8PPimyWjP6/KdBnH5j
+ cBhdhuBr2jrUcsfbYzQvZZVRme7XzLsssU2Tu0PqVri9DPjF9XIhwMiDC7eRFTuinc
+ fZFwJdf2hgpvA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=WsV6xIwB
+Subject: Re: [Buildroot] [PATCH] package/libmdbx: bump version to 0.13.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,80 +83,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0170879479564289816=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0170879479564289816==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=acb81d4a690ab30d6d9cedc811b20d89ff128376
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This is stable release "Sigma Boy" of frontward libmdbx branch with new superior features.
-
-Since 0.13.x libmdbx is licensed under the Apache 2.0 License.
-For notes about the license change, credits and acknowledgments,
-please refer to the COPYRIGHT file within original libmdbx source code
-repository https://gitflic.ru/project/erthink/libmdbx
-
-Please visit https://libmdbx.dqdkfa.ru for more information, changelog,
-documentation, C++ API description and links to the original git repo
-with the source code. Questions, feedback and suggestions are welcome
-to the Telegram' group https://t.me/libmdbx.
-
-Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
-[Julien: remove _REDISTRIBUTE = YES to fix check-package error]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libmdbx/libmdbx.hash | 5 +++--
- package/libmdbx/libmdbx.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
-index 222e7caf5c..202937e7be 100644
---- a/package/libmdbx/libmdbx.hash
-+++ b/package/libmdbx/libmdbx.hash
-@@ -1,5 +1,6 @@
- # Hashes from: https://libmdbx.dqdkfa.ru/release/SHA256SUMS
--sha256  19c0eb33e1ed43ca2a94dceb06dd31946432d16f30a9751d3701c67efa22eb1a  libmdbx-amalgamated-0.12.12.tar.xz
-+sha256  86df30ca2231c9b3ad71424bb829dca9041947f5539d4295030c653d4982c1be  libmdbx-amalgamated-0.13.4.tar.xz
- 
- # Locally calculated
--sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-+sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
-+sha256  699a62986b6c8d31124646dffd4b15872c7d3bc5eecea5994edb1f5195df49d1  NOTICE
-diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
-index c736945e92..204815e688 100644
---- a/package/libmdbx/libmdbx.mk
-+++ b/package/libmdbx/libmdbx.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--LIBMDBX_VERSION = 0.12.12
-+LIBMDBX_VERSION = 0.13.4
- LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
- LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
- LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
--LIBMDBX_LICENSE = OLDAP-2.8
--LIBMDBX_LICENSE_FILES = LICENSE
-+LIBMDBX_LICENSE = Apache-2.0
-+LIBMDBX_LICENSE_FILES = LICENSE NOTICE
- LIBMDBX_STRIP_COMPONENTS = 0
- LIBMDBX_INSTALL_STAGING = YES
- 
-
---===============0170879479564289816==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0170879479564289816==--
+SGkgTGVvbmlkLAoKT24gMTQvMDIvMjAyNSAxOTozMiwg0JvQtdC+0L3QuNC0INCu0YDRjNC10LIg
+d3JvdGU6Cj4gVGhpcyBpcyBzdGFibGUgcmVsZWFzZSAiU2lnbWEgQm95IiBvZiBmcm9udHdhcmQg
+bGlibWRieCBicmFuY2ggd2l0aCBuZXcgCj4gc3VwZXJpb3IgZmVhdHVyZXMuCj4gCj4gU2luY2Ug
+MC4xMy54IGxpYm1kYnggaXMgbGljZW5zZWQgdW5kZXIgdGhlIEFwYWNoZSAyLjAgTGljZW5zZS4K
+PiBGb3Igbm90ZXMgYWJvdXQgdGhlIGxpY2Vuc2UgY2hhbmdlLCBjcmVkaXRzIGFuZCBhY2tub3ds
+ZWRnbWVudHMsCj4gcGxlYXNlIHJlZmVyIHRvIHRoZSBDT1BZUklHSFQgZmlsZSB3aXRoaW4gb3Jp
+Z2luYWwgbGlibWRieCBzb3VyY2UgY29kZQo+IHJlcG9zaXRvcnkgaHR0cHM6Ly9naXRmbGljLnJ1
+L3Byb2plY3QvZXJ0aGluay9saWJtZGJ4Cj4gCj4gUGxlYXNlIHZpc2l0IGh0dHBzOi8vbGlibWRi
+eC5kcWRrZmEucnUgZm9yIG1vcmUgaW5mb3JtYXRpb24sIGNoYW5nZWxvZywKPiBkb2N1bWVudGF0
+aW9uLCBDKysgQVBJIGRlc2NyaXB0aW9uIGFuZCBsaW5rcyB0byB0aGUgb3JpZ2luYWwgZ2l0IHJl
+cG8KPiB3aXRoIHRoZSBzb3VyY2UgY29kZS4gUXVlc3Rpb25zLCBmZWVkYmFjayBhbmQgc3VnZ2Vz
+dGlvbnMgYXJlIHdlbGNvbWUKPiB0byB0aGUgVGVsZWdyYW0nIGdyb3VwIGh0dHBzOi8vdC5tZS9s
+aWJtZGJ4Lgo+IAo+IFNpZ25lZC1vZmYtYnk6INCb0LXQvtC90LjQtCDQrtGA0YzQtdCyIChMZW9u
+aWQgWXVyaWV2KSA8bGVvQHl1cmlldi5ydT4KCkkgYXBwbGllZCB0aGUgcGF0Y2ggdG8gbWFzdGVy
+LiBGb3IgaW5mbywgSSByZW1vdmVkCl9SRURJU1RSSUJVVEUgPSBZRVMgdG8gZml4IGEgIm1ha2Ug
+Y2hlY2stcGFja2FnZSIgZXJyb3IuClNpbmNlICJZRVMiIGlzIHRoZSBkZWZhdWx0IHZhbHVlLCBp
+dCBpcyBub3QgbmVlZGVkLgoKQmVzdCByZWdhcmRzLAoKSnVsaWVuLgpfX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1
+aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFu
+L2xpc3RpbmZvL2J1aWxkcm9vdAo=
