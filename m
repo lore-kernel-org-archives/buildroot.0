@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83F65C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:19:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27F6EC282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:19:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B7B54F210;
-	Fri, 28 Feb 2025 17:19:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 49204812D2;
+	Fri, 28 Feb 2025 17:19:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nxB06mi6NPB5; Fri, 28 Feb 2025 17:19:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5wWp2LToaJim; Fri, 28 Feb 2025 17:19:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4202750730
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55A778134F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4202750730;
-	Fri, 28 Feb 2025 17:19:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55A778134F;
+	Fri, 28 Feb 2025 17:19:43 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 100DC68
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CCF51DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5CD1A42552
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6F64F42D9A
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o__spTGuO1Tc for <buildroot@buildroot.org>;
+ id P2nr9Q4Jr6Ob for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:32:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 372D842D9A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47D8F4645A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 372D842D9A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 47D8F4645A
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 31FD586405; Fri, 28 Feb 2025 16:30:42 +0000 (UTC)
+ id 4313E873D5; Fri, 28 Feb 2025 16:30:42 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 16 Feb 2025 17:50:18 +0100
+Date: Sun, 16 Feb 2025 18:06:33 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b74f9b8a9759eaae8fe9c892e61814e7e99cf747
-X-Git-Newrev: 34a488ba7b5bb8c492f1d0918c505629fb99ad50
+X-Git-Oldrev: 34a488ba7b5bb8c492f1d0918c505629fb99ad50
+X-Git-Newrev: 90047d0c2239aad040c197bcf1a007137d0c7ff8
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163042.31FD586405@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/friendlyarm_nanopi_r2s: update BSP versions
+Message-Id: <20250228163042.4313E873D5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/leptonica: bump to
+ version 1.85.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,67 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34a488ba7b5bb8c492f1d0918c505629fb99ad50
+commit: https://git.buildroot.net/buildroot/commit/?id=90047d0c2239aad040c197bcf1a007137d0c7ff8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Switch to Linux LTS release 6.12.13
-- Switch to U-Boot 2024.10
-- Switch to ATF 2.12
-- Add BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS option required to build U-Boot
-- Also fixes multiple occurrences of this issue:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/9122556338
+Change log:
+http://www.leptonica.org/source/version-notes.html
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-[Julien: add missing BR2_TARGET_UBOOT_NEEDS_GNUTLS=y]
+[Julien: add "package/" in patch title]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/friendlyarm_nanopi_r2s_defconfig | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ package/leptonica/leptonica.hash | 2 +-
+ package/leptonica/leptonica.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/friendlyarm_nanopi_r2s_defconfig b/configs/friendlyarm_nanopi_r2s_defconfig
-index c190de35f8..547d9d5f59 100644
---- a/configs/friendlyarm_nanopi_r2s_defconfig
-+++ b/configs/friendlyarm_nanopi_r2s_defconfig
-@@ -1,6 +1,6 @@
- BR2_aarch64=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TARGET_GENERIC_HOSTNAME="rk3328-nanopi-r2s"
- BR2_TARGET_GENERIC_ISSUE="Welcome to Nanopi R2S RK3328"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-r2s/post-build.sh"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-r2s/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.16"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.13"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3328-nanopi-r2s"
-@@ -19,18 +19,20 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.12"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3328"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=""
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi-r2s-rk3328"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+diff --git a/package/leptonica/leptonica.hash b/package/leptonica/leptonica.hash
+index 3416cfeb39..698342ae99 100644
+--- a/package/leptonica/leptonica.hash
++++ b/package/leptonica/leptonica.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256  2b3e1254b1cca381e77c819b59ca99774ff43530209b9aeb511e1d46588a64f6  leptonica-1.84.1.tar.gz
++sha256  3745ae3bf271a6801a2292eead83ac926e3a9bc1bf622e9cd4dd0f3786e17205  leptonica-1.85.0.tar.gz
+ sha256  87829abb5bbb00b55a107365da89e9a33f86c4250169e5a1e5588505be7d5806  leptonica-license.txt
+diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
+index 0e902c6488..58db93d34c 100644
+--- a/package/leptonica/leptonica.mk
++++ b/package/leptonica/leptonica.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LEPTONICA_VERSION = 1.84.1
++LEPTONICA_VERSION = 1.85.0
+ LEPTONICA_SITE = https://github.com/DanBloomberg/leptonica/releases/download/$(LEPTONICA_VERSION)
+ LEPTONICA_LICENSE = BSD-2-Clause
+ LEPTONICA_LICENSE_FILES = leptonica-license.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
