@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5242AC021A9
-	for <buildroot@archiver.kernel.org>; Mon, 17 Feb 2025 15:19:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3805C021A9
+	for <buildroot@archiver.kernel.org>; Mon, 17 Feb 2025 15:20:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DFA7560E41;
-	Mon, 17 Feb 2025 15:19:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 69A6781188;
+	Mon, 17 Feb 2025 15:20:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SdXA3FCgqIz3; Mon, 17 Feb 2025 15:19:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 28sbKKU8a9_V; Mon, 17 Feb 2025 15:20:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0C9060E49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0EE82811CC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D0C9060E49;
-	Mon, 17 Feb 2025 15:19:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EE82811CC;
+	Mon, 17 Feb 2025 15:20:05 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 31CB3C8
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 15:19:34 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B0C64DE
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 15:20:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 164B14045A
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 15:19:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A83C54045A
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 15:20:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rY0C-l3nfLLM for <buildroot@buildroot.org>;
- Mon, 17 Feb 2025 15:19:33 +0000 (UTC)
+ id DLv21qGIVzFO for <buildroot@buildroot.org>;
+ Mon, 17 Feb 2025 15:20:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 58AD540422
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58AD540422
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B7F3640C27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7F3640C27
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 58AD540422
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 15:19:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B7F3640C27
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 15:20:01 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.7.2] ([85.22.115.144]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MD9X9-1tb0Md0epd-00ENhG; Mon, 17
- Feb 2025 16:19:30 +0100
-Message-ID: <d93186ec-d97c-479a-b793-9bcbff222b04@gmx.de>
-Date: Mon, 17 Feb 2025 16:19:29 +0100
+Received: from [192.168.7.2] ([85.22.115.144]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MVvL5-1ttdiV41tl-00Z2hh; Mon, 17
+ Feb 2025 16:19:59 +0100
+Message-ID: <1d486798-ed6a-464a-974e-6bc2ada40819@gmx.de>
+Date: Mon, 17 Feb 2025 16:19:58 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Cc: Christian Stewart <christian@aperture.us>
 References: <cover.1739615626.git.yann.morin.1998@free.fr>
- <9f1441b0cfb92eb66c6d379e2723d52000e35c9f.1739615626.git.yann.morin.1998@free.fr>
+ <d2e8acab3a2df2ff91de48072407ce7977c4fc8d.1739615626.git.yann.morin.1998@free.fr>
 Content-Language: en-US, de-DE-1901, de-DE
 Autocrypt: addr=fiona.klute@gmx.de; keydata=
  xsFNBFrLsicBEADA7Px5KipL9zM7AVkZ6/U4QaWQyxhqim6MX88TxZ6KnqFiTSmevecEWbls
@@ -92,56 +92,56 @@ Autocrypt: addr=fiona.klute@gmx.de; keydata=
  MCTaUC2HWAAsiG90beT7JkkKKgMLS9DxmX9BN5Cm18Azckexy+vMg79LCcfw/gocQ4+lQn4/
  3BjqSuHfj+dXG+qcQ9pgB5+4/812hHog78dKT2r8l3ax3mHZCDTAC9Ks3LQU9/pMBm6K6nnL
  a4ASpGZSg2zLGIT0gnzi5h8EcIu9J1BFq6zRPZIjxBlhswF6J0BXjlDVe/3JzmeTTts=
-In-Reply-To: <9f1441b0cfb92eb66c6d379e2723d52000e35c9f.1739615626.git.yann.morin.1998@free.fr>
-X-Provags-ID: V03:K1:FPfhRtVDCMN44oY58b6ruKWjJJcRt/Bc4PiTAzsIy5QWIe+m3Ze
- 0Z5h2eQrWHZeiea3vg3ykhLgqRc1CMa9qpiCmo1ifR3uiSBhn6cwNJayxtptFT8vCEB0AiB
- ooP3NS0MCBpN8yvBLC+KJEuoC3eTirymQY0SNkwE+Au/CyslLxJ1dy43k00Bn5E7oraK52f
- KXA6RsDAUBkyQfWh0XCgQ==
-UI-OutboundReport: notjunk:1;M01:P0:NpQ1UThxHRI=;trN5AtlxrSXk0hpDBkmxlby6FPY
- NaMX/eskQAzRHndK3C5mFz/Q0ctiBhU0l/+je2yNINodToQAjHDASZDmXHHuNicjl5kt3FKz6
- ZzYZPcosQMLZ7zwSfDBV4zaIMobjPbxEKFEMaR/LCy1T/DUxmd2oRAEWEAdpXBhZWqG6ZKMNw
- tq69eLSUJ0EGQmbfjNvNgmIaqCvuQGYgyF7s9pWEOvA6mvrch7cIBSXX/ZyDRD2qpegAwuZqC
- cSUyEjqsbQoKqAFsAD47OUTzBhu6ebEynBiAKgRj+ou0ghzbCqqiGlRamg2GJporojracrK4m
- 2NcdzK2ECtas3kNf4aTmmQ470ZIToLoN3jVhpBKqrik0TNN9t8s6934kG3alwEJJTogUYXJog
- 5KivWyLrcAzq4om1tjPxk23VmeQSYYTNP/7WGk6Lep3B6F/QkfMeTPJc1VN5g78hgJb2ewmUW
- S+sHrHZUIfW+3Vl/Kk6zJf7gAUEuwhYtntyQ2NId2UbHVQQw/C9GJ0aNeHHH0BSHbGv/4G/Xt
- 1oqk0v+nyD1WoItCw7K4+03SsHAUlQQrGvLHGVBoeb4qqiZ8nvTDYooXUy3MyILFe/x3ER6sY
- vJCAAVwfpal3qOakKITU31RUvh7B2KjiFBFb8UWsV2Tu+wISTVm2z+kfAC8FpDSNfAzjI8721
- 9JuK+WSl2f37lUZGD06OFA2+ruicCsYHMhMCKBiI6/JmbwkjCEsHAwfIgiJNBLFfi4YF82UyK
- cbTaTRPwZfvtRBaFf3RP+ZP9QJ3OgaS0QC2duWtNsREhJAVGpxycs4XhGVwiT6zJcLLDL+isR
- TfMcBN0z7/99QMS910YBpb+PXcB02k3l1GbezPPAgqIfQnYFz6LwgGHp25RqkTCL+8ECzVDzA
- NRAJGggH07XzU9hVpHOexzKUXzY16mILsacrd3um00GD62kyTBNLEAb6SwmB+N8w7tQ6dXCsF
- Lq4fNxofBU+naJ4zAxXcIQ9jf4DnrU8Fhcq926ZBFFmNoc+2L+32w/WNJ8upSFv+p0lASCs+2
- mwB2gLYgOX2TSbgDfdj+axpUsz/KenxkUeQaVdMM1GUivpARa04w4X6w/ulQ2rYr4LQ9vrYop
- IAfa8iuAdw8U8Qf1urBfZcT5vYoThB21NoDzJ4kPz7ZN/Yacr8BkvZmaiXn/EKg/K1YTn2rMC
- zPbcIlotlF2PQH+MSFq/lOwNlL8T8sY8hoY73W3yjJ58R5vMOkJnrRRKfUpOJ4QiaWOPi1mMq
- CB4SvJUfHGw3SFB7s+2mLAKdQqksIP5bSWKToG/taNVCHeIi7HC9sJrvM1BrCMzyUWQ3ex0nS
- YyXhoisbKTC88HmLXiIGucBw+Ex537ndhcyidmp0r6/z0OnvAH+yxtbjDXdfe8rema9UqDS28
- 4FA/p1irtvNZBjfBJOGYgBrapPwN1Ty+3KC7yfDj7AdzMhUIHC2aoHsg5p5FlYKw6tUUw2x9X
- qXNvHBw==
+In-Reply-To: <d2e8acab3a2df2ff91de48072407ce7977c4fc8d.1739615626.git.yann.morin.1998@free.fr>
+X-Provags-ID: V03:K1:EOqtoAd+bONX+R2h9ZRnXSYVfoal0TSHZPtPTrQSy9qRSmdrRt9
+ Wv4UkZhckijmksc961fTxvRT+uG07Ry8ga04RzswIg+mw9IrgNKDBQVJqpnffx3XrQkdHGW
+ hQ846TC3MqEOMAYbT6ERsUmT9kNFSMp9FAnQFay8dRRF9fRHHA0cam8LkP18vKWhV8taZxC
+ oknPoYRJxyWxhyIrMmTHg==
+UI-OutboundReport: notjunk:1;M01:P0:QULdM4sTwBs=;CgiNDxVp1WasKfQuiXeefR1SpGd
+ rcfmpy9XpaD2hbYZ+f21KRtHuI0fqMQ1VfgNfImYBVMEpVqmx+WdDjmfX6d29jMv3DzF0kzA0
+ +qFip298M79RHi00y/pM68/orVu3gtyfpzr3pnSX/eNF1lS90PAyfPPgKsEWA3q5Cjl8oloqZ
+ 5cnS0G+pfwWGDwRgDP2UU4cPkVdF46o83ySSv0plM4i3mZeO6VcTFNeLXJYESg1cewhOe8g0E
+ R6FIV1TqE18t2612CsAPiNsjB6fuw3BGvKVl3QscpvVtLe7hX/yEA/DgBZtxrFszcDPrgtxqL
+ IxN72n36T5/NszefV5Vpm4mong6KK/patYspnDJZAa08MOiI759qPaTAsaQvuLO0UkhW4VCXD
+ 1tuYNYxwsL7P/+Mrhmk6bpammKKU+rhoC9azCqcACc7xjM0VgVS+ZI4YjnoGoQ2/6iTo28t6d
+ ySYtITPx7lOvMwAylShSWEFG5yeYlhMBR8yJ+h3y/kEaOQBdBtdIvTxA2ZA2erONsCut3PAgY
+ iCQihkDykBMAlSKXgjVy5hUiKbxdqvOsJOSic4yJLbGIZOSaFVfeO5KDYTiHPefq/9MS21LtI
+ ECYYcHbh3ESd2lWvNBA6Wqi3jKmnuzBE/Fy1yZ/+EBLAUioSPxpHTko/XM2S9gHIzZX3b2fiy
+ Giw4105yK1a4vrGofFgSjtTgn2ea8fE0OMKvJacpxIdwTypdHYJQLvQKpoHT6Z0ir4GIRspgZ
+ rCrazSOjLDn8aVG4ESMu68HxyFAHYt//klsN55ldGMeV53l8EojhrUWBNlatrUlSQPnf6BDF7
+ memj9H7U6dsPuWDXhQoU8UDmFhlH2txYUhZbK1vvs0Atwuz4DbgTN1WgxpbMApIE2oYG2k2N1
+ i9dLNpGDS7yoeqKmIB4OaKSq7hrn2XQPDhwJvpdSYbKPWY/3yTIignWL8+yVnE+jhLfcMA54C
+ Ga3gQqZ5+qe8cg6MBq7g1epN2lMM9XEXSmfRdLHgeXg/DNaJHN84fR+9RaiQ9b9vDGnSysg1Z
+ zDq3hkJk5bHa8Wmt6ufpij4X6NqX7uZVZpgRByUxs0eUryWPTkG/L+PwQOaxPsweMD0mXww+M
+ iQzcMyXmaCsxK4xmpJUmb6IUIYgeOZwPRx6Rw4xanzQU4BMuUFrQmiZ6tI1BHQ4a8MNTMJ6Zo
+ kIX27SPCszPYv6uovmiHDaL/X1bkoU5UPgrEtpnK4UasxlA6+zI0UHHOwodTzJ9kPcvxTTDA4
+ CP9Ne8qM2vXYPh6M144TKZ1DlFuOlMxJDEsQ7BcZwPUcZI+307XQm1expdfH7DJq4BEiCAr79
+ ygO7ZDwLBN+QM2JsESuC85da+69DmF5ZYVrtQhhuP98H8HxWwUrQ6NNCW0JHQ+50vJIYhYBWa
+ XB6N3zx88/VJ6N2Y19Gjl4w9+umPE+i6qLiIhIYLfi9MpwExVSG6ewEoG3EMGNQxL7LVxlgT2
+ prSxUJC/QtaWJChdtvi2u7DsR15WJlnO7hlgdNmJmhnY2xJzd
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1739805570; x=1740410370; i=fiona.klute@gmx.de;
- bh=1sX9zQs5WmXhliI9ZT5BEE5zAv/ctcxoF+QSnauIi3k=;
+ s=s31663417; t=1739805599; x=1740410399; i=fiona.klute@gmx.de;
+ bh=Od9oie2n4DnA/Qd/Ubq3OtjubXoXTibHsrzivumQzJk=;
  h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
  References:From:In-Reply-To:Content-Type:
  Content-Transfer-Encoding:cc:content-transfer-encoding:
  content-type:date:from:message-id:mime-version:reply-to:subject:
  to;
- b=kJchLOHW/vjT9H0tx5kXAZ7UKH5Ndpg7TUuVSBqNQI3OXqf6N/eGX6V2YEDusFfn
- I5+6a3CKDUNNLKiEsOpONMybcqc2WeVs5JierQ+qeMyyY7uFyC8RVsExjDlDLr+BE
- M3k3i90LH1H1PltM1lpl01Q+iISwqgd2SpjJ/Ew7RmfsMnOuKGNvyyV8hCSDR4bn5
- EptMWDOn27Kd5vdbbcB6mrHXoWlcUPp2xTT7Jq8JL8NE0CGvvsutcxhGMZteZTJFD
- PpVNr6EE+dnB8cePuet0T9OTkJ4ZlDP4brAgZUxbE7hLrx1nm07u8TORR26l4BOwC
- AR9KNWj0kQ9WzOHANw==
+ b=Mvsv+I/yugFhwnTiVC8cq5pIWVRncdimKgKwA7XwvtH80Gw+QQWrV8PWv7bzLcQO
+ mb/PfVklbUS16RZtIbv8neBP5+LwTW5Z0GYG3V9VnlVXq/BUQQqG5wLXvDcnXCsTS
+ XoU1KjIkWO8XS64kZlVUMCD4Qdv03BYOcQuUNgQaltEZBaueJSzjO1lk+SglhmLsf
+ cGNeD1HWeZIDMtGKd50+Pn/fSKqF3GvI4N3NKNhk+PzYu3r4i9hRTgLiEjko+Y/mv
+ 2Di6IPtfQlyNqU7Xk7AM/IOgbHfa8a8IB91J3VJsMjK1oG7fp5LrvRqBqlNXxMTNK
+ /k35/5UwAyv2U03xPw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=kJchLOHW
-Subject: Re: [Buildroot] [PATCH 2/4] package/docker-engine: add option to
- support catatonit as init
+ header.a=rsa-sha256 header.s=s31663417 header.b=Mvsv+I/y
+Subject: Re: [Buildroot] [PATCH 3/4] package/catatonit: update to version
+ 0.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,116 +161,97 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Am 15.02.25 um 11:33 schrieb Yann E. MORIN:
-> currently, docker-engine can only use tini as injected init. catatonit
-> as a package exists, but it does not create the symlink that would be
-> needed at runtime [0].
->
-> Add a choice at the docker-engine level, for which injected init to use,
-> bringing catatonit to the integration level of tini.
->
-> [0] that could be done in a post-build script, but that's not practical.
->
 > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 > Cc: Christian Stewart <christian@aperture.us>
-> Cc: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 
 Tested-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 
 Thanks!
 
 > ---
->   Config.in.legacy                       |  9 ++++++++
->   package/docker-engine/Config.in        | 32 ++++++++++++++++++++++----
->   package/docker-engine/docker-engine.mk |  6 +++--
->   3 files changed, 40 insertions(+), 7 deletions(-)
+>   .../0001-fix-build-with-kernel-5.9.patch      | 49 -------------------
+>   package/catatonit/catatonit.hash              |  2 +-
+>   package/catatonit/catatonit.mk                |  2 +-
+>   3 files changed, 2 insertions(+), 51 deletions(-)
+>   delete mode 100644 package/catatonit/0001-fix-build-with-kernel-5.9.patch
 >
-> diff --git a/Config.in.legacy b/Config.in.legacy
-> index c302b73423..eaf4d708d0 100644
-> --- a/Config.in.legacy
-> +++ b/Config.in.legacy
-> @@ -146,6 +146,15 @@ endif
+> diff --git a/package/catatonit/0001-fix-build-with-kernel-5.9.patch b/package/catatonit/0001-fix-build-with-kernel-5.9.patch
+> deleted file mode 100644
+> index 37def8e546..0000000000
+> --- a/package/catatonit/0001-fix-build-with-kernel-5.9.patch
+> +++ /dev/null
+> @@ -1,49 +0,0 @@
+> -From 65e1b96bd40cb14b3729ac56bb9f1fcb77254403 Mon Sep 17 00:00:00 2001
+> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -Date: Tue, 1 Nov 2022 14:16:01 +0100
+> -Subject: [PATCH] fix build with kernel < 5.9
+> -
+> -linux/close_range.h is only available since kernel 5.9 and
+> -https://github.com/torvalds/linux/commit/60997c3d45d9a67daf01c56d805ae4fec37e0bd8
+> -resulting in the following build failure:
+> -
+> -catatonit.c:39:11: fatal error: linux/close_range.h: No such file or directory
+> -   39 | # include <linux/close_range.h>
+> -      |           ^~~~~~~~~~~~~~~~~~~~~
+> -
+> -Fixes:
+> - - http://autobuild.buildroot.org/results/ed9a847905083175c7fcb2f2df28f9ac5b9c3313
+> -
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -Upstream: https://github.com/openSUSE/catatonit/commit/663ad1670689143f65af3a288f90cecb7feed54f
+> ----
+> - catatonit.c  | 2 +-
+> - configure.ac | 2 +-
+> - 2 files changed, 2 insertions(+), 2 deletions(-)
+> -
+> -diff --git a/catatonit.c b/catatonit.c
+> -index a33f4cd..b10d9b0 100644
+> ---- a/catatonit.c
+> -+++ b/catatonit.c
+> -@@ -36,7 +36,7 @@
+> - #include <limits.h>
+> - #include <dirent.h>
+> -
+> --#ifdef HAVE_CLOSE_RANGE
+> -+#ifdef HAVE_LINUX_CLOSE_RANGE_H
+> - # include <linux/close_range.h>
+> - #else
+> - # include <sys/syscall.h>
+> -diff --git a/configure.ac b/configure.ac
+> -index 69e89f0..b37f146 100644
+> ---- a/configure.ac
+> -+++ b/configure.ac
+> -@@ -24,7 +24,7 @@ LT_PREREQ([2.4.2])
+> - LT_INIT([disable-shared])
+> -
+> - AC_CHECK_HEADERS([errno.h fcntl.h signal.h stdarg.h stdio.h stdlib.h unistd.h])
+> --AC_CHECK_HEADERS([sys/prctl.h sys/signalfd.h sys/stat.h sys/types.h sys/wait.h])
+> -+AC_CHECK_HEADERS([linux/close_range.h sys/prctl.h sys/signalfd.h sys/stat.h sys/types.h sys/wait.h])
+> -
+> - AC_CHECK_FUNCS([close_range])
+> -
+> diff --git a/package/catatonit/catatonit.hash b/package/catatonit/catatonit.hash
+> index 9940309c76..7b13100a33 100644
+> --- a/package/catatonit/catatonit.hash
+> +++ b/package/catatonit/catatonit.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed
+> -sha256  d0cf1feffdc89c9fb52af20fc10127887a408bbd99e0424558d182b310a3dc92  catatonit-0.2.0.tar.gz
+> +sha256  771385049516fdd561fbb9164eddf376075c4c7de3900a8b18654660172748f1  catatonit-0.2.1.tar.gz
+>   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+> diff --git a/package/catatonit/catatonit.mk b/package/catatonit/catatonit.mk
+> index a308ea6471..aa7e60f697 100644
+> --- a/package/catatonit/catatonit.mk
+> +++ b/package/catatonit/catatonit.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
 >
->   comment "Legacy options removed in 2025.02"
->
-> +# BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT is still referenced in docker-engine
-> +config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT
-> +	bool "docker-engine init support is now a choice"
-> +	select BR2_LEGACY
-> +	help
-> +	  docker-engine init support is now a choice. The original
-> +	  setting has been adapted; be sure to review it in the
-> +	  docker-engine package.
-> +
->   config BR2_PACKAGE_LATENCYTOP
->   	bool "latencytop has been removed"
->   	select BR2_LEGACY
-> diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-> index e03ecceeff..6338eeeef1 100644
-> --- a/package/docker-engine/Config.in
-> +++ b/package/docker-engine/Config.in
-> @@ -48,16 +48,38 @@ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
->   	help
->   	  Build the vfs filesystem driver for Docker.
->
-> -config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT
-> +choice
->   	bool "support docker-init"
-> +	default BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_TINI if BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT  # legacy
-> +	help
-> +	  Support providing a minimal init process for containers.
-> +	  Required to use "docker run --init".
-> +
-> +config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_NONE
-> +	bool "none"
-> +	help
-> +	  Do not support docker-init.
-> +
-> +config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_CATATONIT
-> +	bool "catatonit"
-> +	select BR2_PACKAGE_CATATONIT # runtime
-> +	help
-> +	  Support providing a minimal init process for containers,
-> +	  using catatonit.
-> +
-> +config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_TINI
-> +	bool "tini"
->   	select BR2_PACKAGE_TINI # runtime
->   	help
->   	  Support providing a minimal init process for containers,
-> -	  using tini. Required to use "docker run --init".
-> +	  using tini.
->
-> -	  This does not change the Docker engine build, the
-> -	  docker-init symlink is provided by the tini package
-> -	  itself. This option only adds the dependency.
-> +endchoice
-> +
-> +config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_NAME
-> +	string
-> +	default "tini" if BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_TINI
-> +	default "catatonit" if BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_CATATONIT
->
->   endif
->
-> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-> index 7467f13b39..c39dc2b440 100644
-> --- a/package/docker-engine/docker-engine.mk
-> +++ b/package/docker-engine/docker-engine.mk
-> @@ -35,10 +35,12 @@ DOCKER_ENGINE_DEPENDENCIES += systemd
->   DOCKER_ENGINE_TAGS += systemd journald
->   endif
->
-> -ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT),y)
-> +DOCKER_ENGINE_INIT_NAME = $(call qstrip,$(BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_NAME))
-> +ifneq ($(DOCKER_ENGINE_INIT_NAME),)
->   define DOCKER_ENGINE_INIT
->   	mkdir -p $(TARGET_DIR)/usr/libexec/docker
-> -	ln -sf ../../bin/tini $(TARGET_DIR)/usr/libexec/docker/docker-init
-> +	ln -sf ../../bin/$(DOCKER_ENGINE_INIT_NAME) \
-> +		$(TARGET_DIR)/usr/libexec/docker/docker-init
->   endef
->   DOCKER_ENGINE_POST_INSTALL_TARGET_HOOKS += DOCKER_ENGINE_INIT
->   endif
+> -CATATONIT_VERSION = 0.2.0
+> +CATATONIT_VERSION = 0.2.1
+>   CATATONIT_SITE = $(call github,openSUSE,catatonit,v$(CATATONIT_VERSION))
+>   CATATONIT_LICENSE = GPL-2.0+
+>   CATATONIT_LICENSE_FILES = COPYING
 
 _______________________________________________
 buildroot mailing list
