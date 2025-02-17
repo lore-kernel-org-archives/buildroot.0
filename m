@@ -1,77 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26CB6C021AA
-	for <buildroot@archiver.kernel.org>; Mon, 17 Feb 2025 18:42:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1484C021A9
+	for <buildroot@archiver.kernel.org>; Mon, 17 Feb 2025 18:43:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25FA44056F;
-	Mon, 17 Feb 2025 18:42:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B52181179;
+	Mon, 17 Feb 2025 18:43:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uuLIJ77mEeHQ; Mon, 17 Feb 2025 18:42:06 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P8VqHb1Ypky7; Mon, 17 Feb 2025 18:43:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CE2C40570
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60AAB82033
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CE2C40570;
-	Mon, 17 Feb 2025 18:42:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 60AAB82033;
+	Mon, 17 Feb 2025 18:43:46 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 31788DE
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 18:42:05 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id BF43972
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 18:43:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 15ADB400C8
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 18:42:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A2F06400B8
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 18:43:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z2Tl1LLkn39a for <buildroot@buildroot.org>;
- Mon, 17 Feb 2025 18:42:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EA81A400B8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA81A400B8
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EA81A400B8
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 18:42:02 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 64D435FFAA;
- Mon, 17 Feb 2025 19:41:58 +0100 (CET)
-Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
- via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 17 Feb 2025 19:41:58 +0100
+ id eFWqFU3YZqlb for <buildroot@buildroot.org>;
+ Mon, 17 Feb 2025 18:43:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.bonnefille@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 268E5400C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 268E5400C8
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 268E5400C8
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 18:43:42 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3E4FB44437;
+ Mon, 17 Feb 2025 18:43:38 +0000 (UTC)
+Date: Mon, 17 Feb 2025 19:43:34 +0100
 MIME-Version: 1.0
-Date: Mon, 17 Feb 2025 19:41:58 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Gilles Talis <gilles.talis@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250216213842.3620056-1-gilles.talis@gmail.com>
-References: <20250216213842.3620056-1-gilles.talis@gmail.com>
-User-Agent: Webmail Free/1.6.9
-Message-ID: <f0d08d8ec0674a63895d8c184ce5ab67@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1739817719;
- bh=XcG7rGVRu47AtAlpA82uXeX96WvzYID7lnR12aZJXro=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Ar3kBJaml/9eQOjM8QgAsGPEPU/SsqRCSMtWWariN5pS5r4YkKqs9/6PDO9vOhuX0
- ObLNFk7Fxf958RUVco5j4wieabgx1dvjKfURm2q12mwfQ2Nf9SDPY9zq3+Jtw/6PRd
- sH6pFcXVDRxmM20/e8Ji3sSlhyVshsh0YkQyUY1lrcxaDIrxLhoclfiqRxS4LxpzhN
- tfh0074FoFcI0KFhxPHL7z3GuM9oXAjQ1iVwce7i25+JYAxY9D7Py+3vRKrBLkFWUU
- 7TU774/dX03HR+h2aSFUt58wH1QLYViyNMiaCIiczRd/8BDtPHbTDXC3lq62pJUzH6
- ZkXCplnmMtnQA==
+Message-Id: <20250217-repair_foot-v2-1-f118f9a8282f@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAFWDs2cC/22MQQ6CMBAAv0L2bM22tgKe/IchpsAim2hLtoRoC
+ H+3cvY4k8yskEiYElyKFYQWThxDBnMooBt9eJDiPjMYNA4NWiU0eZb7EOOsKixb58oafUmQi0l
+ o4Pd+uzWZR05zlM8+X/TP/v8sWmll68riuUd/quy1zfrJ4djFFzTbtn0BEjYegqgAAAA=
+X-Change-ID: 20250204-repair_foot-807b55790a7e
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ =?utf-8?q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>, 
+ Adam Duskett <adam.duskett@amarulasolutions.com>, 
+ Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdehleduhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkffvvefosehtjeertdertdejnecuhfhrohhmpefvhhhomhgrshcuuehonhhnvghfihhllhgvuceothhhohhmrghsrdgsohhnnhgvfhhilhhlvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepudefhfefhfdtgfegteejuddvueeujedtgeeljeejfefgteejgfehleehieffueelnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhorhhgpdhkvghrnhgvlhdrohhrghdptghouggvsggvrhhgrdhorhhgnecukfhppedvrgdtudemtggsudelmeelhegsleemrggttddtmegvsgdttgemuggrsgefmeekieguleemfedugegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgduleemleehsgelmegrtgdttdemvggstdgtmegurggsfeemkeeiugelmeefudegvgdphhgvlhhopegludelvddrudeikedruddruddvngdpmhgrihhlfhhrohhmpehthhhomhgrshdrsghonhhnvghfihhllhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheprggurghmrdguuhhskhgvthhtsegrmhgrrhhulhgrshholhhuthhiohhnshdrt
+ ghomhdprhgtphhtthhopehthhhomhgrshdrsghonhhnvghfihhllhgvsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhm
+X-GND-Sasl: thomas.bonnefille@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1739817819;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=fdTju8+lBiu4slPVMb2kjrzDX7F9X/qNRbZGdCqTgow=;
+ b=gq9Ksu5ceHz7Zvw5Zv5nALSKqqI400P8xAnvSFSEdz6rPtdNM1Rezjf4191e6UddzbJuaN
+ G+OVhkvlApsjOhP0EJjrmyDxbjoOin3echcSK5cqq78ZGtpPnjeotD9XElJFiM2XJj+NC5
+ nRVNLaG30FUMlvGHw4OjOl/FwCs+AXHgotCNK49WruDIUgnb35aXIGQCoirWGcuZqHsngM
+ wBTnPOOsPCkySGmsA4AvUCR2U4XGeKFhoV0hHtycW5OKky6YKAZP0wCVvzVX69VuvYun/p
+ AhsMjNacwSfdDDGyMRCxgecwVFeA4PGC2ifF3/hE4wPJjwvcs1/rK3pqOYTJxg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Ar3kBJam
-Subject: Re: [Buildroot] [PATCH v2] configs/polyhex_debix_model_a_defconfig:
- new defconfig
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=gq9Ksu5c
+Subject: [Buildroot] [PATCH v2] package/foot: support soft-float architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,177 +88,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Bonnefille via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Gilles,
+Architecture using soft float don't support the math FE_* exceptions.
+This commit adds a patch to conditionnally build the FE_* exception
+handling.
 
-Thanks for the updates!
+Fixes:
+    https://autobuild.buildroot.org/results/88d/88d764dd12bdbdbe633ebc703c461ebe95b75693/
 
-There is a regression compared to v1.
-When compiling with this patch with commands:
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+---
+Changes in v2:
+- Reworked patch and got it merged to the initial project
+- Link to v1: https://lore.kernel.org/r/20250204-repair_foot-v1-1-498406d0a384@bootlin.com
+---
+ ...wings-handle-architecture-with-soft-float.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-     make polyhex_debix_model_a_defconfig
-     make
+diff --git a/package/foot/0001-box-drawings-handle-architecture-with-soft-float.patch b/package/foot/0001-box-drawings-handle-architecture-with-soft-float.patch
+new file mode 100644
+index 0000000000000000000000000000000000000000..1120fa44c178a968d6a7109d3af18ab06847abb7
+--- /dev/null
++++ b/package/foot/0001-box-drawings-handle-architecture-with-soft-float.patch
+@@ -0,0 +1,42 @@
++From 9443ac7e2937bb4f26cf44c73bb8150860c5df45 Mon Sep 17 00:00:00 2001
++From: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
++Date: Tue, 4 Feb 2025 09:48:13 +0100
++Subject: [PATCH] box-drawings: handle architecture with soft-float
++
++Currently, architecture using soft-floats doesn't support instructions
++FE_INVALID, FE_DIVBYZERO, FE_OVERFLOW and FE_UNDERFLOW and so building
++on those architectures results with a build error.
++As the sqrt math function should set errno to EDOM if an error occurs,
++fetestexcept shouldn't be mandatory.
++
++This commit removes the float environment error handling.
++
++Upstream: https://codeberg.org/dnkl/foot/commit/9443ac7e2937bb4f26cf44c73bb8150860c5df45
++Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
++---
++ box-drawing.c | 4 +---
++ 1 file changed, 1 insertion(+), 3 deletions(-)
++
++diff --git a/box-drawing.c b/box-drawing.c
++index 1c613051..421ff54d 100644
++--- a/box-drawing.c
+++++ b/box-drawing.c
++@@ -1462,14 +1462,12 @@ draw_box_drawings_light_arc(struct buf *buf, char32_t wc)
++      */
++     for (double i = y_min*16; i <= y_max*16; i++) {
++         errno = 0;
++-        feclearexcept(FE_ALL_EXCEPT);
++ 
++         double y = i / 16.;
++         double x = circle_hemisphere * sqrt(c_r2 - (y - c_y) * (y - c_y)) + c_x;
++ 
++         /* See math_error(7) */
++-        if (errno != 0 ||
++-            fetestexcept(FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW | FE_UNDERFLOW))
+++        if (errno != 0)
++         {
++             continue;
++         }
++-- 
++2.48.1
++
 
-compilation is failing with output:
-
-     Incorrect selection of kernel headers: expected 2.6.x, got 6.12.x
-
-The BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y is no longer set
-in the defconfig.
-
-I also have few other comments, see below.
-
-On 16/02/2025 22:38, Gilles Talis wrote:
-> This configuration builds an image for the Polyhex Debix Model A SBC
-> 
-> DEBIX Model A is an industrial grade single board computer
-> powered by NXP i.MX 8M Plus applications processor
-> 
-> https://www.debix.io/hardware/model-a.html
-> 
-> - Linux Kernel: Upstream version 6.12.13
-> - U-boot: Upstream version 2024.10
-> - ATF: Upstream version 2.12
-> 
-> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-> ---
-> Changes v1 --> v2:
-> - Fixed post-build.sh script warnings
-> - Enabled BR2_DOWNLOAD_FORCE_CHECK_HASHES
-> - Added Linux and U-Boot hashes
-> - Renamed post-build.sh processed files as *.in
-> ---
-
-[...]
-
-> diff --git a/board/polyhex/debix-model-a/patches/linux/linux.hash 
-> b/board/polyhex/debix-model-a/patches/linux/linux.hash
-> new file mode 100644
-> index 0000000000..948f3a26a9
-> --- /dev/null
-> +++ b/board/polyhex/debix-model-a/patches/linux/linux.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-
-Since this defconfig is using an upstream kernel archive, the
-"# Locally calculated" comment can be replaced by:
-
-# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-
-This allow the reuse the hash value from upstream, and the signature
-can also be verified.
-
-> +sha256  
-> f3ebdeea9e555b4cface44e29670056f4024541e6bd222fbcf776c818974fbba  
-> linux-6.12.13.tar.xz
-> diff --git a/board/polyhex/debix-model-a/patches/uboot/uboot.hash 
-> b/board/polyhex/debix-model-a/patches/uboot/uboot.hash
-> new file mode 100644
-> index 0000000000..904fa56c02
-> --- /dev/null
-> +++ b/board/polyhex/debix-model-a/patches/uboot/uboot.hash
-> @@ -0,0 +1,2 @@
-> +# Locally calculated
-> +sha256  
-> b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  
-> u-boot-2024.10.tar.bz2
-
-The hash symlink for linux-headers is missing. This is probably due to
-the missing BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y. Could you add 
-it
-please?
-
-See how it is done in another board, for example:
-https://gitlab.com/buildroot.org/buildroot/-/tree/master/board/freescale/imx8mpevk/patches/
-
-You are also missing the hash file for arm-trusted-firmware (because
-the defconfig sets a CUSTOM_VERSION). It is currently working because
-this version happen to be the default TF-A version and a valid hash is
-in: boot/arm-trusted-firmware/*/arm-trusted-firmware.hash
-
-To make sure this defconfig can be updated independently of
-boot/arm-trusted-firmware/ default version, you should have your own
-arm-trusted-firmware.hash too.
-
-Could you add the arm-trusted-firmware.hash please?
-
-[...]
-
-> diff --git a/configs/polyhex_debix_model_a_defconfig 
-> b/configs/polyhex_debix_model_a_defconfig
-> new file mode 100644
-> index 0000000000..e0ada738f1
-> --- /dev/null
-> +++ b/configs/polyhex_debix_model_a_defconfig
-> @@ -0,0 +1,46 @@
-> +BR2_aarch64=y
-> +BR2_ARM_FPU_VFPV3=y
-
-Could you add back BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-here please?
-
-> +BR2_GLOBAL_PATCH_DIR="board/polyhex/debix-model-a/patches"
-> +BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/polyhex/debix-model-a/post-build.sh"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.13"
-
-For info, 6.12.14 was tagged today, in case you want to update
-it, while you are doing other changes.
-
-> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mp-debix-model-a"
-> +BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
-> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> +BR2_PACKAGE_FREESCALE_IMX=y
-> +BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP=y
-> +BR2_PACKAGE_FIRMWARE_IMX=y
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.12"
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mp"
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
-
-There is already a u-boot version v2025.01 available. Could you
-consider switching to it?
-
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mp_debix_model_a"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-> +BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
-> +BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
-> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-> +BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="flash.bin"
-> +BR2_TARGET_UBOOT_SPL=y
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_IMX_MKIMAGE=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
-> --
-> 2.43.0
+---
+base-commit: d5b3795e92727c6565901cddf0c0f17c7854df56
+change-id: 20250204-repair_foot-807b55790a7e
 
 Best regards,
+-- 
+Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
