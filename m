@@ -1,102 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54C46C021A9
-	for <buildroot@archiver.kernel.org>; Mon, 17 Feb 2025 13:44:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C231C021A9
+	for <buildroot@archiver.kernel.org>; Mon, 17 Feb 2025 13:44:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF187406F9;
-	Mon, 17 Feb 2025 13:44:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E647080B97;
+	Mon, 17 Feb 2025 13:44:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FMXguEfzghB6; Mon, 17 Feb 2025 13:44:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zOzDGi_VP58F; Mon, 17 Feb 2025 13:44:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96CA34070F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCC0880AFD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96CA34070F;
-	Mon, 17 Feb 2025 13:44:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DCC0880AFD;
+	Mon, 17 Feb 2025 13:44:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7B172C8
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 13:44:25 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 357FDDE
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 13:44:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D32A40428
+ by smtp2.osuosl.org (Postfix) with ESMTP id C57D440428
  for <buildroot@buildroot.org>; Mon, 17 Feb 2025 13:44:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id elgU5L5mOj1h for <buildroot@buildroot.org>;
+ id qnxd9GJqgaw8 for <buildroot@buildroot.org>;
  Mon, 17 Feb 2025 13:44:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=82.165.159.41;
- helo=mout-xforward.gmx.net; envelope-from=fiona.klute@gmx.de;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 71FCE400D6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71FCE400D6
-Received: from mout-xforward.gmx.net (mout-xforward.gmx.net [82.165.159.41])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 71FCE400D6
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 13:44:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3A3BF40258
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A3BF40258
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3A3BF40258
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 13:44:23 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.home.arpa ([85.22.115.144]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mxm3K-1tQx6A0X5a-013YeX; Mon, 17
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MAwXh-1td6Sb1oxV-0072ms; Mon, 17
  Feb 2025 14:44:20 +0100
 To: buildroot@buildroot.org
 Cc: Fiona Klute <fiona.klute@gmx.de>,
 	Joachim Wiberg <troglobit@gmail.com>
-Date: Mon, 17 Feb 2025 14:44:13 +0100
-Message-ID: <20250217134414.276793-1-fiona.klute@gmx.de>
+Date: Mon, 17 Feb 2025 14:44:14 +0100
+Message-ID: <20250217134414.276793-2-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250217134414.276793-1-fiona.klute@gmx.de>
+References: <20250217134414.276793-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:1jaGjne/o0mK82jk1Nhk2sBtt2SjrSyq89eO48OBEfUeYI5baSG
- fhPdBrl6+s8YLwDsMEcxT8LH6wADNBMd/r/a8/6A0QZpc+G+HDV6+o5dFXHj8KjiXfzmlsI
- Nk4kcURdkXXyVezHplliZiErRiVM3pzZ/5fRcCqnv5sYMa0HPy7CcDylqmqLqIEyQ4Fgh2c
- nKtpTtFkiCgfUnELvokOw==
-UI-OutboundReport: junk:10;M01:P0:SjUwddB1vGo=;xdlTuMO0n5qhsQnkUzBIHyT4txfoJ
- lwjRbjgOr12z0TuslZYIDsJm4/PcYkj17dLNiPE6Ac1r9C6yct3oJecZJ2Ot+aEKUP449dGy3
- /09YIAdRSABmY31pTOWSIuqyEOtAb+5suFo3gjx4/nAOQkbpnYm3WnuK50zbXxd+ZQeVx+M+a
- EydRIw/ZikaAcxN7XfI8NPiU9wFG1uPJylr2uLEmZguoK272MFEjOrEJnYy3BCmxFlrKm6yiJ
- 4+PVR+wt8N98pkFGXhK54KNDiiTZ8kguiL09hjEvTvD1jhd0BUIdK7c8LEWcheAB/xsdSdPSB
- 6s7jLX4H+58akp/Mgr8pznG93Fe33CT2lSu+nfe9CJhfEyYLMX0o/oquSu0p0elqOsL/ldT2y
- 5GC1SxIvnKJLwMDZo0WVGxzKicIiotQF5LIaIDkcOVPBYPORp+bc8D7MdF+4FESTOK+JavnFd
- /yoYWBEpSyHOrklDzD4Q3R22YbbvWUD74oA/c2VqIwe8i2841c/T1vvYQxRMRee/eVteBnNGZ
- AiTEinc+WBxMgBiFtyTvoIqOCMiH2zsq8o8qCfHpru2C4AoLqlE3NOKqMnK9Jp1OlDPdwnGi1
- myDD9WNwp8KT6hIkvV9is54rs3tTSDpL+1QYpgZ/NM+d+J7PCEXlhnN8/1PtsdY3/Mhaln6fk
- csMTF1kK+O7m3JMR0MLlqDgdYem6RHCoxUgZhPPPlQFIlhu2GjoBZ9V1YVIRY6YMkwv4fvMIN
- 5BlmeNFC91Es1PxadwlIC4PsbunykhfwXt5tJqmYAVjOXtGvte0cBETLnDqNIu3F0Te9ol6Jn
- IEL6FUL1WZSd0WYY3KqfRh0ukvc5A5jmY2Sz5XwV9UEF0iPqWRwMN6vC6K8+uSSimQK9OTJMu
- KUC6SEQbgE+fMTJU191zJIOtuckxspf52kRG5+91MkUhCP6X5TipcsXJz93gVXlsfM+EZfYiR
- tl6+eViwIVOEzNl3QDwHgI0V7QjefcLCNRWZeUtuWbq8vR+K60hRkn74wxOccMP+nR5AH3OEu
- 3MxMSLpgAHrFvBMwHqEo945M0jjpoERLmx9adrd/2yveMd5npI797bB6Rmthl2NjatTNo/cqo
- t8WRlmIMcFTiReYrxmuTFd/XYX1jpm4gSl8WQqRuH1xouN71ZeQsmVeQcG0wrf58taTs9WLWP
- fZE3paCnYKzxNx3gFBFeW3RTeFbT9fx1qqiYSaHKCPygbDuvXQzW0xkJoJyri8Zq6zdFCsyhK
- qiZHb9/e1/Q8+o0v9PGgGpkdYHzy30R5sUBiWISMSapH3hiHWbL4GpqdZKaEOrZMiqX65uDNw
- pvFueljZx0oUQejsMeyi54lYnE6BB1QAI+bwR7Q4mYnSgEEvTDmP/1SqLf4ZOx8QCkX0jQU/X
- Iuv595oyeNa7x6T0Yw4ER97NnieHOVwJ0UhzEHZs0MPh17W22CrZy2a4Y990d6aw2JrwVJ8/U
- ex9d0Q2NOj0SSyL2ABCKfLqgzo/XEt6KKbPUpHn+mYKQlB1oz8CaA0M5hxdjrS3RN6bMQ==
+X-Provags-ID: V03:K1:WIPzkZyIUXQCzSO1HcVhK8tjgqHyw0bFo01nqm0dEwa9FM+X3cM
+ mHhiitCNVfwMNcxzhQvHmp55NS2JAIep6v8SXdsKjATbMc7Ol70aGYg7fzE9sSTJYSWXDCN
+ aMpqO5aO4du//pVGGKKQKKS9jJ4ULK+Uockbvn1OXAn7sSJB7i5Se3ZzR37ZyzMDKN/XvYk
+ BlPFwu7wlQoY8aDR6FwyQ==
+UI-OutboundReport: notjunk:1;M01:P0:uqB9UDI2UIA=;EjHYjBAWc7M+B1q1sh33J78vZ5b
+ 1/UvcbhP3kY4NAEs86ZXWSHFvkivh7KM855JWnEGD7iDemBR3+zBLp910YgnAjhBo6b229y8e
+ 6W1BNtGo3x8q7qXX9i8aN4xrVxKuO2G5BKyxvneTaSHsRwQi2yae4vmG6HJysobpw4XIKF2Bq
+ HbutCbudoEdf261tUvzNOMOrUGOF588ZSpS9ICllpfQqxWwfpCOen2DgEiC4dGJEgQi1WX4bD
+ jWiv/AaRZ0Sq0U75gF+WJ4gOM0AI6kJmYvldm6kAvAwAn7AelH3mDKTJe3pdWczXpC4YGliMu
+ kypZ506oWW4nvv91fh8yMw2Wnw6ETLalW8a0n9NzTxSeOEkjZyO8wZ6j98ZCyfGCt05WpC7Pb
+ wFGH9hRrAA83bWngiD5ZqAIUzZ9FHA8Vzd/AhVZtA7aPJ8RcSqvmDlfnzjdhoFdHOmwUdQW9O
+ gRaQFoIdGtZL4kU8SUWXAPnJH9M68rvrvJNnXW5VXSjbFH4eBPqHWG/4rRAuN2kUKMyTPmz7Y
+ 8nyBjKAEEk+amqeTZAmqqaTRS1CKi3N5Npo9SR53ODyCiOOATWO8yK0WNDNXiPSxSjNTucbaI
+ Fy2M4QjrB3/BKzfU9xdqDleKRB1vIJMdoluev9OMYQ56pWdXBENPf5ZaKz234EQ9v56VHvMRQ
+ zyGaI0sp6O4GX6CGYuJ69q17t5YnSy8tIAgCIsbn7wsgc7SIQWROKqqkZ3nKAmGz7dcOun8MP
+ qAPQpb4Dzgrgov+2aq1XuIyoussm+ZeiBII7qcZLMC1iJtQa4QarI3mgbpKHTpEPnnkZHObOF
+ TvoUT2rMnT+9eVmtw8BJYLYjncvYMB+V2W/xhmeZYos5lnAgYRA/22gpozr/t1CYc6Hp4gAgP
+ AjappkoXg2wsm9PPqEcyaczpWnX+fVB7KD8rGGlnNgBTqPayDujx/JNoDffPZ3paY0d6nL01O
+ 7gDKIa0Kw5aaS0BqM0z0YJC+DS63RPzmv/5+jb71I7X8eS+qQ8iapVlW01lwCDZ3E9iFyPGG6
+ 7C4PoJI6RO4L2xyLKsG9g5yhCV8xSiEM39gJw/LfWC2S/Em/Zt/p5gTdVtiFNuk1z0/jQcUw1
+ G3uDmM0x2+S1xtAIMfC2abLCHUfT9ZqG3F9VvpDEhI8HDh+ic1+JLIgM8dY56WZMgkvLSt7zz
+ ldhDHpulR3X9dbiNBTOH+zdjcMRD3jEgoQi6n5+lZAycjdBRJ9JivpgtF8qo8eiE/l8aAMZL1
+ 2+jGqHoN7EwkHRtPqXQ/qErka/139mx/ZZ5ygvew6aEGujGDjhNCmqXPxyMDjhBRKtmMXPrA/
+ zqVTbmcW+wcs8+3rPaOGKMQEoJvEYmCfUrbuzcMqCvLmVnuhRJOzuAId3rBKPARF5kxJDJzq7
+ 8rauG7zVqUaA6Ed9kMLdVNOXBc8G/6KTDIXsYkN4kxeiKNPDlMVnNcs82F+U6aH7SgPNiR/7E
+ 8IIMx1g==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
  s=s31663417; t=1739799860; x=1740404660; i=fiona.klute@gmx.de;
- bh=fEtCHKGAaAY0tp5Xb1fkScfe47xlTYZ4FKD0tI7hGLA=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
+ bh=tcztPMFj5wetxNqX3gULnEW6Ff8EySnpsmvFzW48F+0=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+ References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=ufzOUMAu4g7u0Fy8HA5UKvODiRUCmCYj9cv+nit235sK2kJWNGdJAKrRdODXAAgr
- 9INiSaeWJ7TjHFSFKeEDNTqFHVc5O+f+qG6GGQ71Xe0Jrd4We9S2j1CCF0tIeZIEE
- 9CY2P49KgIX2Gk51F0kHU4Jyjb9dmpaaHIKHBb2CIMLu2mg8ug4vQyAZVwAM7GN6l
- XEBuP1KS0ElT+jvENclH3xt6E0oIzTb70L2dckSk+7lqwmrjUFZcY7GJ/IXTv2lIM
- knRNcI0LIjiw4/wuARh/1S9AqMifk1NdLL9qQ/bedtB/WVYfN+SsTbOHoxMev65Sj
- KezoKax8262HCjvEZw==
+ b=rMoesrWH/LSCWQz5xZ8UgvVCKePCRfaN2bVDOdh/T01ndkp8gRQbtQosMNI5jKAX
+ K6QIc2PsjIhUoWMEkPB7346u71btqZ6BZ/kyvhV0Xao1wcDQpcSpGNONWOwkmHbmu
+ ImdgctRWCwuStSYC9nDqfI+bpe9QfeO4oAs3qIopWipfkAwhnIldwfbTp89vGVZfR
+ YVEnBwvx+O9khn3vsSSBSHbF4hpO2YR2+GuNxw9NA8b77cjHfOIpArUYr3F7x5hG3
+ MVsNHv9WopSwVeZWsINCslznykiJ9Zd3e10jRpvGGL3j6wsofCIoEQTMlk0QO+p2D
+ MlR0S+7BOl3DJUVXtg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=ufzOUMAu
-Subject: [Buildroot] [PATCH v2 1/2] package/watchdogd: fix use of
- uninitialized exit status
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=rMoesrWH
+Subject: [Buildroot] [PATCH v2 2/2] package/watchdogd: fix sysv init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,112 +116,151 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-The bug could lead to incorrect "critical error" reports if that
-uninitialized memory happened to contain a value that interpreted as
-an int was above the critical threshold. It affected primarily scripts
-running approximately one second or longer, because access happens by
-timer.
+PIDFILE was set incorrectly, watchdogd writes its PID file to
+/var/run/watchdogd/pid (note the slash), which is not configurable
+without patching.
+
+Restructure the rest of the script to match current style while at it.
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
-Changed v1 -> v2: Update patch to the version merged upstream, with a
-separate field to track if the process has exited.
+ .checkpackageignore            |   1 -
+ package/watchdogd/S01watchdogd | 102 +++++++++++++++++++++------------
+ 2 files changed, 66 insertions(+), 37 deletions(-)
+ mode change 100755 => 100644 package/watchdogd/S01watchdogd
 
- ...Fix-use-of-uninitialized-exit-status.patch | 85 +++++++++++++++++++
- 1 file changed, 85 insertions(+)
- create mode 100644 package/watchdogd/0001-Fix-use-of-uninitialized-exit-status.patch
-
-diff --git a/package/watchdogd/0001-Fix-use-of-uninitialized-exit-status.patch b/package/watchdogd/0001-Fix-use-of-uninitialized-exit-status.patch
-new file mode 100644
-index 0000000000..69e7b36ef4
---- /dev/null
-+++ b/package/watchdogd/0001-Fix-use-of-uninitialized-exit-status.patch
-@@ -0,0 +1,85 @@
-+From f6d56c374723923e276ccfd442fdd0cabf23d095 Mon Sep 17 00:00:00 2001
-+From: Fiona Klute <fiona.klute@gmx.de>
-+Date: Fri, 14 Feb 2025 19:26:24 +0100
-+Subject: [PATCH] Fix use of uninitialized exit status
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 6e46b44b09..3366122d04 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1262,7 +1262,6 @@ package/waffle/0003-drop-C-dependency.patch lib_patch.Upstream
+ package/wampcc/0001-Add-RISC-V-endian-detection.patch lib_patch.Upstream
+ package/wampcc/0002-include-wampcc-platform.h-fix-build-with-musl-1.2.0.patch lib_patch.Upstream
+ package/wampcc/0003-Broken-build-on-Windows.patch lib_patch.Upstream
+-package/watchdogd/S01watchdogd NotExecutable lib_sysv.Indent
+ package/wget/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch lib_patch.Upstream
+ package/wilc-driver/0001-cfg80211.c-fix-missing-prandom_u32-with-Linux-6.1.0.patch lib_patch.Upstream
+ package/wilc-driver/0002-spi.c-fix-build-failure-on-remove-callback.patch lib_patch.Upstream
+diff --git a/package/watchdogd/S01watchdogd b/package/watchdogd/S01watchdogd
+old mode 100755
+new mode 100644
+index df57b8ad7a..8f811ac0fc
+--- a/package/watchdogd/S01watchdogd
++++ b/package/watchdogd/S01watchdogd
+@@ -1,47 +1,77 @@
+ #!/bin/sh
+ 
+ DAEMON="watchdogd"
+-PIDFILE="/var/run/$DAEMON.pid"
++PIDFILE="/var/run/$DAEMON/pid"
+ 
+ # shellcheck source=/dev/null
+ [ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
+ 
+-cmd()
+-{
+-    start-stop-daemon -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" "$@"
+-    status=$?
+-    if [ $status -eq 0 ]; then
+-	echo "OK"
+-    else
+-	echo "FAIL"
+-    fi
+-    return $status
++start() {
++	printf "Starting %s: " "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon --start --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON" -- $WATCHDOGD_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
 +
-+Depending on the timing between the SIGCHLD callback run and the first
-+generic_cb() timer callback run, script_exit_status() sometimes
-+returned uninitialized memory as the exit status of a script. This
-+could lead to incorrect "critical error" reports if that uninitialized
-+memory happened to contain a value that interpreted as an int was
-+above the critical threshold.
++stop() {
++	printf "Stopping %s: " "$DAEMON"
++	start-stop-daemon --stop --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	# watchdogd deletes its PID file on exit, wait for it to be gone
++	while [ -f "$PIDFILE" ]; do
++		sleep 0.1
++	done
++	return "$status"
++}
 +
-+Additionally, script_exit_status() unconditionally removed the process
-+information from the queue, meaning that if a process had not
-+completed by the time its status was first probed, its status could
-+never be updated or successfully probed again, leading to timeout. Fix
-+this by removing the process only if the status indicates it has
-+terminated (successful or not).
++restart() {
++	stop
++	start
++}
 +
-+The problems affected primarily scripts running approximately one
-+second or longer, because very short running scripts will very likely
-+have their exit status collected by the SIGCHLD callback before the
-+first timer callback run.
++reload() {
++	printf "Reloading %s config: " "$DAEMON"
++	start-stop-daemon --stop --signal HUP -q --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
+ }
+ 
+ case "$1" in
+-    start)
+-	printf 'Starting %s: ' "$DAEMON"
+-	# shellcheck disable=SC2086 # we need the word splitting
+-	cmd -S -- $SMCROUTED_ARGS
+-	;;
+-
+-    stop)
+-	printf 'Stopping %s: ' "$DAEMON"
+-	cmd -K
+-	;;
+-
+-    restart)
+-	$0 stop
+-	sleep 1
+-	$0 start
+-	;;
+-
+-    reload)
+-	printf 'Reloading %s: ' "$DAEMON"
+-	cmd -K -s HUP
+-	;;
+-
+-    *)
+-	echo "Usage: $0 {start|stop|restart|reload}"
+-	exit 1
++	start)
++		start
++		;;
++	stop)
++		stop
++		;;
++	restart)
++		restart
++		;;
++	reload)
++		reload
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++		;;
+ esac
 +
-+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-+Upstream: https://github.com/troglobit/watchdogd/pull/52
-+---
-+ src/script.c | 13 ++++++++++---
-+ 1 file changed, 10 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/script.c b/src/script.c
-+index 1220fb9..f6e0763 100644
-+--- a/src/script.c
-++++ b/src/script.c
-+@@ -16,6 +16,7 @@
-+  */
-+ 
-+ #include <errno.h>
-++#include <stdbool.h>		/* bool type (before C23) */
-+ #include <stdlib.h>		/* setenv() */
-+ #include <sys/wait.h>		/* waitpid() */
-+ #include <unistd.h>		/* execv(), _exit() */
-+@@ -28,6 +29,7 @@
-+ struct exec_info {
-+ 	pid_t   pid;
-+ 	int     exit_status;
-++	bool    exited;
-+ 	void  (*cb)(void *arg);
-+ 	void   *arg;
-+ 	LIST_ENTRY(exec_info) entry;
-+@@ -64,6 +66,8 @@ static void add(pid_t pid, void (*cb)(void *), void *arg)
-+ 	}
-+ 
-+ 	info->pid = pid;
-++	info->exit_status = 0;
-++	info->exited = false;
-+ 	info->cb  = cb;
-+ 	info->arg = arg;
-+ 	LIST_INSERT_HEAD(&exec_info_head, info, entry);
-+@@ -78,6 +82,7 @@ static int exec(pid_t pid, int status)
-+ 			continue;
-+ 
-+ 		info->exit_status = status;
-++		info->exited = true;
-+ 		if (info->cb)
-+ 			info->cb(info->arg);
-+ 
-+@@ -96,9 +101,11 @@ int script_exit_status(pid_t pid)
-+ 		if (info->pid != pid)
-+ 			continue;
-+ 
-+-		status = info->exit_status;
-+-		LIST_REMOVE(info, entry);
-+-		free(info);
-++		if (info->exited) {
-++			status = info->exit_status;
-++			LIST_REMOVE(info, entry);
-++			free(info);
-++		}
-+ 		break;
-+ 	}
-+ 
-+-- 
-+2.47.2
-+
++exit $?
 -- 
 2.47.2
 
