@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41D57C282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:20:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08DD1C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:20:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B384784CFC;
-	Fri, 28 Feb 2025 17:20:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78FFE50A64;
+	Fri, 28 Feb 2025 17:20:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 18oWm0tlJG9F; Fri, 28 Feb 2025 17:20:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GMthzWz4Aiw1; Fri, 28 Feb 2025 17:20:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B035D850A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF4B550A62
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B035D850A8;
-	Fri, 28 Feb 2025 17:20:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF4B550A62;
+	Fri, 28 Feb 2025 17:20:26 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 13A841DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:20 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FE6868
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9121F464C9
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC11B46541
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yX_hIJSWlBhQ for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:32:02 +0000 (UTC)
+ id ynvKGErs_gKy for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:32:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1811742DAB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2FE842D57
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1811742DAB
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C2FE842D57
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1120980807; Fri, 28 Feb 2025 16:30:43 +0000 (UTC)
+ id BCFB480807; Fri, 28 Feb 2025 16:30:42 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 17 Feb 2025 21:28:45 +0100
+Date: Mon, 17 Feb 2025 19:47:54 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0ee5c51d6a615e698c2d58cdca3c335878cf26f9
-X-Git-Newrev: ef3d171e50fb6aec9d1477356b07036cadc2409c
+X-Git-Oldrev: 071741f98145f38507e3c863fc5d87909dc86556
+X-Git-Newrev: d95ea2dcf3378b57f14ebb1f6e0e72a8914b58dd
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163043.1120980807@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libosmium: bump
- version to 2.21.0
+Message-Id: <20250228163042.BCFB480807@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/cubieboard2: bump
+ Linux to 6.12.14 and U-Boot to 2025.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,80 +65,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef3d171e50fb6aec9d1477356b07036cadc2409c
+commit: https://git.buildroot.net/buildroot/commit/?id=d95ea2dcf3378b57f14ebb1f6e0e72a8914b58dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release-notes: https://github.com/osmcode/libosmium/releases/tag/v2.21.0
-
-Bump minimal GCC version to 5. (Switched to C++14 as minimum requirement)
-https://github.com/osmcode/libosmium/commit/a83fbf8852b00e57bf30fe3f69c37f575726c7d7
-
-Remove support for projection using the Proj library
-https://github.com/osmcode/libosmium/commit/711721cb1f37dff18bcfb2e5fbd7667c7a22bbf0
-
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libosmium/Config.in      | 6 +++---
- package/libosmium/libosmium.hash | 2 +-
- package/libosmium/libosmium.mk   | 6 +-----
- 3 files changed, 5 insertions(+), 9 deletions(-)
+ board/cubietech/cubieboard2/patches/linux/linux.hash | 2 +-
+ board/cubietech/cubieboard2/patches/uboot/uboot.hash | 2 +-
+ configs/cubieboard2_defconfig                        | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libosmium/Config.in b/package/libosmium/Config.in
-index 825e2b7e33..c2e905cd37 100644
---- a/package/libosmium/Config.in
-+++ b/package/libosmium/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_LIBOSMIUM
- 	bool "libosmium"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
- 	depends on BR2_USE_WCHAR # boost
- 	select BR2_PACKAGE_BOOST
-@@ -13,6 +13,6 @@ config BR2_PACKAGE_LIBOSMIUM
- 
- 	  https://osmcode.org/libosmium/
- 
--comment "libosmium needs a toolchain w/ C++, wchar, threads, gcc >= 4.7"
-+comment "libosmium needs a toolchain w/ C++, wchar, threads, gcc >= 5"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 || !BR2_TOOLCHAIN_HAS_THREADS
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/libosmium/libosmium.hash b/package/libosmium/libosmium.hash
-index 37bcdd267c..82657d7fe7 100644
---- a/package/libosmium/libosmium.hash
-+++ b/package/libosmium/libosmium.hash
-@@ -1,3 +1,3 @@
+diff --git a/board/cubietech/cubieboard2/patches/linux/linux.hash b/board/cubietech/cubieboard2/patches/linux/linux.hash
+index 450cb12423..2e30d90bb1 100644
+--- a/board/cubietech/cubieboard2/patches/linux/linux.hash
++++ b/board/cubietech/cubieboard2/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
--sha256  3d3e0873c6aaabb3b2ef4283896bebf233334891a7a49f4712af30ca6ed72477  libosmium-2.20.0.tar.gz
-+sha256  5a222e555865f742102d2802a7ad7ef91d6e1c8944c097c70a924214e079c858  libosmium-2.21.0.tar.gz
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE
-diff --git a/package/libosmium/libosmium.mk b/package/libosmium/libosmium.mk
-index c39e7d0152..e5392b06e9 100644
---- a/package/libosmium/libosmium.mk
-+++ b/package/libosmium/libosmium.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOSMIUM_VERSION = 2.20.0
-+LIBOSMIUM_VERSION = 2.21.0
- LIBOSMIUM_SITE = $(call github,osmcode,libosmium,v$(LIBOSMIUM_VERSION))
- LIBOSMIUM_LICENSE = BSL-1.0
- LIBOSMIUM_LICENSE_FILES = LICENSE
-@@ -23,10 +23,6 @@ ifeq ($(BR2_PACKAGE_LIBGEOS),y)
- LIBOSMIUM_DEPENDENCIES += libgeos
- endif
- 
--ifeq ($(BR2_PACKAGE_PROJ),y)
--LIBOSMIUM_DEPENDENCIES += proj
--endif
--
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- LIBOSMIUM_DEPENDENCIES += zlib
- endif
+-sha256  39207fce1ce42838e085261bae0af5ce4a0843aa777cfc0f5c49bc7729602bcd  linux-6.12.5.tar.xz
++sha256  9423f4bfb4d875417e39cb0b017b5499fea47da56119f0cd28a201735d898f14  linux-6.12.14.tar.xz
+diff --git a/board/cubietech/cubieboard2/patches/uboot/uboot.hash b/board/cubietech/cubieboard2/patches/uboot/uboot.hash
+index 904fa56c02..50674352d7 100644
+--- a/board/cubietech/cubieboard2/patches/uboot/uboot.hash
++++ b/board/cubietech/cubieboard2/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
++sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
+diff --git a/configs/cubieboard2_defconfig b/configs/cubieboard2_defconfig
+index bace740ce9..6161e3a559 100644
+--- a/configs/cubieboard2_defconfig
++++ b/configs/cubieboard2_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/cubietech/cubieboard2/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.14"
+ BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun7i-a20-cubieboard2"
+@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
