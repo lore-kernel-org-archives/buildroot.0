@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CF1AC282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:20:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B9F0C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:20:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4DC86707F9;
-	Fri, 28 Feb 2025 17:20:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 367A2413E7;
+	Fri, 28 Feb 2025 17:20:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ddzl1SJBIvq1; Fri, 28 Feb 2025 17:20:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HFfO1Ry0ahLx; Fri, 28 Feb 2025 17:20:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44FB870BB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96EEF50772
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44FB870BB4;
-	Fri, 28 Feb 2025 17:20:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96EEF50772;
+	Fri, 28 Feb 2025 17:20:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 11D4768
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:14 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 04F431DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC19C49EDB
+ by smtp4.osuosl.org (Postfix) with ESMTP id F20284631A
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 25npKH4dwLIl for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:32:00 +0000 (UTC)
+ id 7MF7yEyAGfk1 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:32:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58750464C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D72C542DA0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58750464C9
+ by smtp4.osuosl.org (Postfix) with ESMTP id D72C542DA0
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5487C81529; Fri, 28 Feb 2025 16:30:42 +0000 (UTC)
+ id CFCDC802FC; Fri, 28 Feb 2025 16:30:42 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 16 Feb 2025 18:19:09 +0100
+Date: Mon, 17 Feb 2025 21:12:22 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 90047d0c2239aad040c197bcf1a007137d0c7ff8
-X-Git-Newrev: 605d17e56fe7800f3fc7cae8bbed7a3f1201bdea
+X-Git-Oldrev: d95ea2dcf3378b57f14ebb1f6e0e72a8914b58dd
+X-Git-Newrev: ad82b284271b7039144a290b503aba294c1e39bf
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163042.5487C81529@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/httping: bump to
- version ffb9201042813c58d020df41697f6445df96f438
+Message-Id: <20250228163042.CFCDC802FC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/assimp: add upstream
+ security fix for CVE-2024-48423
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,54 +65,231 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=605d17e56fe7800f3fc7cae8bbed7a3f1201bdea
+commit: https://git.buildroot.net/buildroot/commit/?id=ad82b284271b7039144a290b503aba294c1e39bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Use the latest upstream verified commit.
-Also fixes multiple issues like:
-https://autobuild.buildroot.org/results/fe33a0d9cfa242cbcda0c5fb759b84efc6662097
+Fixes the following security issue:
 
-that were due to the usage of OpenSSL deprecated routines
-(ERR_remove_state and ENGINE_cleanup)
+CVE-2024-48423: An issue in assimp v.5.4.3 allows a local attacker to
+execute arbitrary code via the CallbackToLogRedirector function within the
+Assimp library
 
-The build failure happen since Buildroot commit [1] "package/httping:
-update to latest git" and when BR2_PACKAGE_HTTPING_SSL=y.
+https://github.com/assimp/assimp/issues/5788
+https://www.cve.org/CVERecord?id=CVE-2024-48423
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/1c2fa85cb12de3992b275068890508983973fcdd
-
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-[Julien:
- - remove test-pkg result from commit log,
- - add info on the failure
-]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/httping/httping.hash | 2 +-
- package/httping/httping.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/assimp/0001-Fix-leak-5762.patch            | 139 +++++++++++++++++++++
+ ...er-free-in-the-CallbackToLogRedirector-59.patch |  39 ++++++
+ package/assimp/assimp.mk                           |   4 +
+ 3 files changed, 182 insertions(+)
 
-diff --git a/package/httping/httping.hash b/package/httping/httping.hash
-index e07f3e32e0..a55febb15f 100644
---- a/package/httping/httping.hash
-+++ b/package/httping/httping.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  4bf8641ebc44a6fa52086f82c60a29051e094424996d972263155d267c96d305  httping-0e26c53d5fe504eb7204d64b23513729aa4a5bb0-git4.tar.gz
-+sha256  22c794df06a1c680e923891a445a3745fc88e01b24854af1be8457a37be19fe6  httping-ffb9201042813c58d020df41697f6445df96f438-git4.tar.gz
- sha256  8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef  LICENSE
-diff --git a/package/httping/httping.mk b/package/httping/httping.mk
-index 8cb4f7f2f9..3759f9fb76 100644
---- a/package/httping/httping.mk
-+++ b/package/httping/httping.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/assimp/0001-Fix-leak-5762.patch b/package/assimp/0001-Fix-leak-5762.patch
+new file mode 100644
+index 0000000000..a78970e1d3
+--- /dev/null
++++ b/package/assimp/0001-Fix-leak-5762.patch
+@@ -0,0 +1,139 @@
++From 4024726eca89331503bdab33d0b9186e901bbc45 Mon Sep 17 00:00:00 2001
++From: Kim Kulling <kimkulling@users.noreply.github.com>
++Date: Sat, 7 Sep 2024 21:02:34 +0200
++Subject: [PATCH] Fix leak (#5762)
++
++* Fix leak
++
++* Update utLogger.cpp
++
++Upstream: https://github.com/assimp/assimp/commit/4024726eca89331503bdab33d0b9186e901bbc45
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ code/Common/Assimp.cpp        | 13 ++++++---
++ fuzz/assimp_fuzzer.cc         |  2 +-
++ test/CMakeLists.txt           |  1 +
++ test/unit/Common/utLogger.cpp | 52 +++++++++++++++++++++++++++++++++++
++ 4 files changed, 63 insertions(+), 5 deletions(-)
++ create mode 100644 test/unit/Common/utLogger.cpp
++
++diff --git a/code/Common/Assimp.cpp b/code/Common/Assimp.cpp
++index ef3ee7b5d..91896e405 100644
++--- a/code/Common/Assimp.cpp
+++++ b/code/Common/Assimp.cpp
++@@ -359,20 +359,25 @@ void CallbackToLogRedirector(const char *msg, char *dt) {
++     s->write(msg);
++ }
++ 
+++static LogStream *DefaultStream = nullptr;
+++
++ // ------------------------------------------------------------------------------------------------
++ ASSIMP_API aiLogStream aiGetPredefinedLogStream(aiDefaultLogStream pStream, const char *file) {
++     aiLogStream sout;
++ 
++     ASSIMP_BEGIN_EXCEPTION_REGION();
++-    LogStream *stream = LogStream::createDefaultStream(pStream, file);
++-    if (!stream) {
+++    if (DefaultStream == nullptr) {
+++        DefaultStream = LogStream::createDefaultStream(pStream, file);
+++    }
+++    
+++    if (!DefaultStream) {
++         sout.callback = nullptr;
++         sout.user = nullptr;
++     } else {
++         sout.callback = &CallbackToLogRedirector;
++-        sout.user = (char *)stream;
+++        sout.user = (char *)DefaultStream;
++     }
++-    gPredefinedStreams.push_back(stream);
+++    gPredefinedStreams.push_back(DefaultStream);
++     ASSIMP_END_EXCEPTION_REGION(aiLogStream);
++     return sout;
++ }
++diff --git a/fuzz/assimp_fuzzer.cc b/fuzz/assimp_fuzzer.cc
++index 8178674e8..91ffd9d69 100644
++--- a/fuzz/assimp_fuzzer.cc
+++++ b/fuzz/assimp_fuzzer.cc
++@@ -47,7 +47,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
++ using namespace Assimp;
++ 
++ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t dataSize) {
++-    aiLogStream stream = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT,NULL);
+++    aiLogStream stream = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT, nullptr);
++     aiAttachLogStream(&stream);
++ 
++     Importer importer;
++diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
++index 7b7fd850a..1a45adac7 100644
++--- a/test/CMakeLists.txt
+++++ b/test/CMakeLists.txt
++@@ -100,6 +100,7 @@ SET( COMMON
++   unit/Common/utBase64.cpp
++   unit/Common/utHash.cpp
++   unit/Common/utBaseProcess.cpp
+++  unit/Common/utLogger.cpp
++ )
++ 
++ SET(Geometry 
++diff --git a/test/unit/Common/utLogger.cpp b/test/unit/Common/utLogger.cpp
++new file mode 100644
++index 000000000..932240a7f
++--- /dev/null
+++++ b/test/unit/Common/utLogger.cpp
++@@ -0,0 +1,52 @@
+++/*
+++---------------------------------------------------------------------------
+++Open Asset Import Library (assimp)
+++---------------------------------------------------------------------------
+++
+++Copyright (c) 2006-2024, assimp team
+++
+++All rights reserved.
+++
+++Redistribution and use of this software in source and binary forms,
+++with or without modification, are permitted provided that the following
+++conditions are met:
+++
+++* Redistributions of source code must retain the above
+++copyright notice, this list of conditions and the
+++following disclaimer.
+++
+++* Redistributions in binary form must reproduce the above
+++copyright notice, this list of conditions and the
+++following disclaimer in the documentation and/or other
+++materials provided with the distribution.
+++
+++* Neither the name of the assimp team, nor the names of its
+++contributors may be used to endorse or promote products
+++derived from this software without specific prior
+++written permission of the assimp team.
+++
+++THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+++"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+++LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+++A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+++OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+++SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+++LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+++DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+++THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+++(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+++OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+++---------------------------------------------------------------------------
+++*/
+++
+++#include "UnitTestPCH.h"
+++#include <assimp/Importer.hpp>
+++
+++using namespace Assimp;
+++class utLogger : public ::testing::Test {};
+++
+++TEST_F(utLogger, aiGetPredefinedLogStream_leak_test) {
+++    aiLogStream stream1 = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT, nullptr);
+++    aiLogStream stream2 = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT, nullptr);
+++    ASSERT_EQ(stream1.callback, stream2.callback);
+++}
++-- 
++2.39.5
++
+diff --git a/package/assimp/0002-Fix-use-after-free-in-the-CallbackToLogRedirector-59.patch b/package/assimp/0002-Fix-use-after-free-in-the-CallbackToLogRedirector-59.patch
+new file mode 100644
+index 0000000000..c4cd2af5aa
+--- /dev/null
++++ b/package/assimp/0002-Fix-use-after-free-in-the-CallbackToLogRedirector-59.patch
+@@ -0,0 +1,39 @@
++From f12e52198669239af525e525ebb68407977f8e34 Mon Sep 17 00:00:00 2001
++From: tyler92 <tyler92@inbox.ru>
++Date: Wed, 11 Dec 2024 12:17:14 +0200
++Subject: [PATCH] Fix use after free in the CallbackToLogRedirector (#5918)
++
++The heap-use-after-free vulnerability occurs in the
++CallbackToLogRedirector function. During the process of logging,
++a previously freed memory region is accessed, leading to a
++use-after-free condition. This vulnerability stems from incorrect
++memory management, specifically, freeing a log stream and then
++attempting to access it later on.
++
++This patch sets NULL value for The DefaultStream global pointer.
++
++Co-authored-by: Kim Kulling <kimkulling@users.noreply.github.com>
++Upstream: https://github.com/assimp/assimp/commit/f12e52198669239af525e525ebb68407977f8e34
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ code/Common/Assimp.cpp | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/code/Common/Assimp.cpp b/code/Common/Assimp.cpp
++index 91896e405..22e16bd36 100644
++--- a/code/Common/Assimp.cpp
+++++ b/code/Common/Assimp.cpp
++@@ -416,6 +416,10 @@ ASSIMP_API aiReturn aiDetachLogStream(const aiLogStream *stream) {
++     DefaultLogger::get()->detachStream(it->second);
++     delete it->second;
++ 
+++    if ((Assimp::LogStream *)stream->user == DefaultStream) {
+++        DefaultStream = nullptr;
+++    }
+++
++     gActiveLogStreams.erase(it);
++ 
++     if (gActiveLogStreams.empty()) {
++-- 
++2.39.5
++
+diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+index ba0d506033..a4614a01a2 100644
+--- a/package/assimp/assimp.mk
++++ b/package/assimp/assimp.mk
+@@ -12,6 +12,10 @@ ASSIMP_CPE_ID_VENDOR = assimp
+ ASSIMP_DEPENDENCIES = zlib
+ ASSIMP_INSTALL_STAGING = YES
  
--HTTPING_VERSION = 0e26c53d5fe504eb7204d64b23513729aa4a5bb0
-+HTTPING_VERSION = ffb9201042813c58d020df41697f6445df96f438
- HTTPING_SITE = https://github.com/folkertvanheusden/HTTPing
- HTTPING_SITE_METHOD = git
- HTTPING_LICENSE = AGPL-3.0
++# 0001-Fix-leak-5762.patch
++# 0002-Fix-use-after-free-in-the-CallbackToLogRedirector-59.patch
++ASSIMP_IGNORE_CVES += CVE-2024-48423
++
+ # relocation truncated to fit: R_68K_GOT16O. We also need to disable
+ # optimizations to not run into "Error: value -43420 out of range"
+ # assembler issues.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
