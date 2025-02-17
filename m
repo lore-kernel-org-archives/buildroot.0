@@ -1,82 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1484C021A9
-	for <buildroot@archiver.kernel.org>; Mon, 17 Feb 2025 18:43:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9734C021A9
+	for <buildroot@archiver.kernel.org>; Mon, 17 Feb 2025 18:45:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B52181179;
-	Mon, 17 Feb 2025 18:43:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 585B84070A;
+	Mon, 17 Feb 2025 18:45:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P8VqHb1Ypky7; Mon, 17 Feb 2025 18:43:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Zso3RSt7AONo; Mon, 17 Feb 2025 18:45:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60AAB82033
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30BBF406E1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 60AAB82033;
-	Mon, 17 Feb 2025 18:43:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id BF43972
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 18:43:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30BBF406E1;
+	Mon, 17 Feb 2025 18:45:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5079172
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 18:45:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A2F06400B8
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 18:43:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4B32F6082A
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 18:45:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eFWqFU3YZqlb for <buildroot@buildroot.org>;
- Mon, 17 Feb 2025 18:43:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.bonnefille@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 268E5400C8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 268E5400C8
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 268E5400C8
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 18:43:42 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3E4FB44437;
- Mon, 17 Feb 2025 18:43:38 +0000 (UTC)
-Date: Mon, 17 Feb 2025 19:43:34 +0100
-MIME-Version: 1.0
-Message-Id: <20250217-repair_foot-v2-1-f118f9a8282f@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAFWDs2cC/22MQQ6CMBAAv0L2bM22tgKe/IchpsAim2hLtoRoC
- H+3cvY4k8yskEiYElyKFYQWThxDBnMooBt9eJDiPjMYNA4NWiU0eZb7EOOsKixb58oafUmQi0l
- o4Pd+uzWZR05zlM8+X/TP/v8sWmll68riuUd/quy1zfrJ4djFFzTbtn0BEjYegqgAAAA=
-X-Change-ID: 20250204-repair_foot-807b55790a7e
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GHe6FarmeuGC for <buildroot@buildroot.org>;
+ Mon, 17 Feb 2025 18:45:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A9AE3606E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9AE3606E1
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A9AE3606E1
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 18:45:12 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1b112.dip0.t-ipconnect.de [84.161.177.18])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 20445A4C4B67;
+ Mon, 17 Feb 2025 19:45:09 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:49794)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98)
+ (envelope-from <bernd@kuhls.net>) id 1tk67A-0000000074p-3zZw;
+ Mon, 17 Feb 2025 18:45:08 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- =?utf-8?q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>, 
- Adam Duskett <adam.duskett@amarulasolutions.com>, 
- Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdehleduhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkffvvefosehtjeertdertdejnecuhfhrohhmpefvhhhomhgrshcuuehonhhnvghfihhllhgvuceothhhohhmrghsrdgsohhnnhgvfhhilhhlvgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepudefhfefhfdtgfegteejuddvueeujedtgeeljeejfefgteejgfehleehieffueelnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhorhhgpdhkvghrnhgvlhdrohhrghdptghouggvsggvrhhgrdhorhhgnecukfhppedvrgdtudemtggsudelmeelhegsleemrggttddtmegvsgdttgemuggrsgefmeekieguleemfedugegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgduleemleehsgelmegrtgdttdemvggstdgtmegurggsfeemkeeiugelmeefudegvgdphhgvlhhopegludelvddrudeikedruddruddvngdpmhgrihhlfhhrohhmpehthhhomhgrshdrsghonhhnvghfihhllhgvsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheprggurghmrdguuhhskhgvthhtsegrmhgrrhhulhgrshholhhuthhiohhnshdrt
- ghomhdprhgtphhtthhopehthhhomhgrshdrsghonhhnvghfihhllhgvsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhm
-X-GND-Sasl: thomas.bonnefille@bootlin.com
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
+ Daniel Lang <dalang@gmx.at>, Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Julien Olivain <ju.o@free.fr>, Romain Naour <romain.naour@gmail.com>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
+Date: Mon, 17 Feb 2025 19:45:04 +0100
+Message-Id: <20250217184508.609972-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
+MIME-Version: 1.0
+X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1739817819;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=fdTju8+lBiu4slPVMb2kjrzDX7F9X/qNRbZGdCqTgow=;
- b=gq9Ksu5ceHz7Zvw5Zv5nALSKqqI400P8xAnvSFSEdz6rPtdNM1Rezjf4191e6UddzbJuaN
- G+OVhkvlApsjOhP0EJjrmyDxbjoOin3echcSK5cqq78ZGtpPnjeotD9XElJFiM2XJj+NC5
- nRVNLaG30FUMlvGHw4OjOl/FwCs+AXHgotCNK49WruDIUgnb35aXIGQCoirWGcuZqHsngM
- wBTnPOOsPCkySGmsA4AvUCR2U4XGeKFhoV0hHtycW5OKky6YKAZP0wCVvzVX69VuvYun/p
- AhsMjNacwSfdDDGyMRCxgecwVFeA4PGC2ifF3/hE4wPJjwvcs1/rK3pqOYTJxg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=kuhls.net; 
+ s=kas202412041019; t=1739817909;
+ bh=fUzo7Rwa3McL58jeJVDfFTn2GrhvhaVq+bN6vyWpkK8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=d5jWf4YzHBwPWmOyM97Dm14KAxwiNfR1s8fb/nuYr0IIBDnuZEFUz4hGPiveq9Spg
+ PPACNlLS6B4NrQZv4fbAQdV1aulzNi287tQk4mqsDGRt6Gv4nTIBP/rn3SSt6zcYxq
+ juSjBBh48P2fWke8E7UU2kkCUr35bz9dPAe3qHDm+YozMSwprg1WF2gD6SWF4rv3In
+ 2/ahwIx2x5PxA5AUktdde2zqdbb/iAA/AShbOGKR8URLj/8/I9J48Z2ORwigBbGJCr
+ jK3AJ/eYbj6jUHpJe+UzuFT9LdMhosFbs4ZZt+KF9Wwkrnui7kdvr7snTGc4JwDwnz
+ T4CkRXezWu9NQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gq9Ksu5c
-Subject: [Buildroot] [PATCH v2] package/foot: support soft-float architecture
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202412041019 header.b=d5jWf4Yz
+Subject: [Buildroot] [PATCH v2 1/5] package/libdrm: add host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,85 +84,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Bonnefille via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Architecture using soft float don't support the math FE_* exceptions.
-This commit adds a patch to conditionnally build the FE_* exception
-handling.
+host-libdrm is needed by host-mesa3d (introduced by this patch series),
+which is needed by (target) mesa3d, when enabling the Gallium Iris
+driver since version 24.1.0.
 
-Fixes:
-    https://autobuild.buildroot.org/results/88d/88d764dd12bdbdbe633ebc703c461ebe95b75693/
-
-Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-Changes in v2:
-- Reworked patch and got it merged to the initial project
-- Link to v1: https://lore.kernel.org/r/20250204-repair_foot-v1-1-498406d0a384@bootlin.com
----
- ...wings-handle-architecture-with-soft-float.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+v2: Clarified why host variant is needed (Julien)
 
-diff --git a/package/foot/0001-box-drawings-handle-architecture-with-soft-float.patch b/package/foot/0001-box-drawings-handle-architecture-with-soft-float.patch
-new file mode 100644
-index 0000000000000000000000000000000000000000..1120fa44c178a968d6a7109d3af18ab06847abb7
---- /dev/null
-+++ b/package/foot/0001-box-drawings-handle-architecture-with-soft-float.patch
-@@ -0,0 +1,42 @@
-+From 9443ac7e2937bb4f26cf44c73bb8150860c5df45 Mon Sep 17 00:00:00 2001
-+From: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-+Date: Tue, 4 Feb 2025 09:48:13 +0100
-+Subject: [PATCH] box-drawings: handle architecture with soft-float
-+
-+Currently, architecture using soft-floats doesn't support instructions
-+FE_INVALID, FE_DIVBYZERO, FE_OVERFLOW and FE_UNDERFLOW and so building
-+on those architectures results with a build error.
-+As the sqrt math function should set errno to EDOM if an error occurs,
-+fetestexcept shouldn't be mandatory.
-+
-+This commit removes the float environment error handling.
-+
-+Upstream: https://codeberg.org/dnkl/foot/commit/9443ac7e2937bb4f26cf44c73bb8150860c5df45
-+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-+---
-+ box-drawing.c | 4 +---
-+ 1 file changed, 1 insertion(+), 3 deletions(-)
-+
-+diff --git a/box-drawing.c b/box-drawing.c
-+index 1c613051..421ff54d 100644
-+--- a/box-drawing.c
-++++ b/box-drawing.c
-+@@ -1462,14 +1462,12 @@ draw_box_drawings_light_arc(struct buf *buf, char32_t wc)
-+      */
-+     for (double i = y_min*16; i <= y_max*16; i++) {
-+         errno = 0;
-+-        feclearexcept(FE_ALL_EXCEPT);
-+ 
-+         double y = i / 16.;
-+         double x = circle_hemisphere * sqrt(c_r2 - (y - c_y) * (y - c_y)) + c_x;
-+ 
-+         /* See math_error(7) */
-+-        if (errno != 0 ||
-+-            fetestexcept(FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW | FE_UNDERFLOW))
-++        if (errno != 0)
-+         {
-+             continue;
-+         }
-+-- 
-+2.48.1
-+
+ package/libdrm/libdrm.mk | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
----
-base-commit: d5b3795e92727c6565901cddf0c0f17c7854df56
-change-id: 20250204-repair_foot-807b55790a7e
-
-Best regards,
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 9d463ca01e..a8a912859e 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -116,4 +116,25 @@ else
+ LIBDRM_CONF_OPTS += -Dtests=false
+ endif
+ 
++HOST_LIBDRM_CONF_OPTS = \
++	-Damdgpu=disabled \
++	-Dcairo-tests=disabled \
++	-Detnaviv=disabled \
++	-Dexynos=disabled \
++	-Dfreedreno=disabled \
++	-Dfreedreno-kgsl=false \
++	-Dinstall-test-programs=false \
++	-Dintel=disabled \
++	-Dman-pages=disabled \
++	-Dnouveau=disabled \
++	-Domap=disabled \
++	-Dradeon=disabled \
++	-Dtegra=disabled \
++	-Dvc4=disabled \
++	-Dvmwgfx=disabled \
++	-Dtests=false \
++	-Dudev=false \
++	-Dvalgrind=disabled
++
+ $(eval $(meson-package))
++$(eval $(host-meson-package))
 -- 
-Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+2.39.5
 
 _______________________________________________
 buildroot mailing list
