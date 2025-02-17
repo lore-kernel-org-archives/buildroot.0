@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F22BBC021A9
-	for <buildroot@archiver.kernel.org>; Mon, 17 Feb 2025 22:24:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 344D3C021AB
+	for <buildroot@archiver.kernel.org>; Mon, 17 Feb 2025 22:24:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A665D80C9E;
-	Mon, 17 Feb 2025 22:24:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E5F1860868;
+	Mon, 17 Feb 2025 22:24:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AwkYig5ZTCQW; Mon, 17 Feb 2025 22:24:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lc2gNyTygDE4; Mon, 17 Feb 2025 22:24:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B403280CD4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF0A260B62
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B403280CD4;
-	Mon, 17 Feb 2025 22:24:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id ECC30E04
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF0A260B62;
+	Mon, 17 Feb 2025 22:24:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EADA8968
  for <buildroot@buildroot.org>; Mon, 17 Feb 2025 22:24:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D065680CD2
+ by smtp3.osuosl.org (Postfix) with ESMTP id CE5B560843
  for <buildroot@buildroot.org>; Mon, 17 Feb 2025 22:24:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id va6M7Pz4un9U for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S808CkQrmrvH for <buildroot@buildroot.org>;
  Mon, 17 Feb 2025 22:24:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB6CC80CD4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD67A60AA8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AB6CC80CD4
+ by smtp3.osuosl.org (Postfix) with ESMTP id CD67A60AA8
  for <buildroot@buildroot.org>; Mon, 17 Feb 2025 22:24:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 94DE287751; Mon, 17 Feb 2025 22:24:51 +0000 (UTC)
+ id BC05287754; Mon, 17 Feb 2025 22:24:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 17 Feb 2025 22:24:26 +0100
+Date: Mon, 17 Feb 2025 23:22:19 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8a1ae9e0b151063528e67b8b34a1229dc729df3c
-X-Git-Newrev: 57d73ec8e08e8cef1fe51665bd1ccfc5d53a6eeb
+X-Git-Oldrev: 28ae74a1345181be4a913c1a9727991b9b6fdc84
+X-Git-Newrev: 02b9d987c4865d4cb6354728c6eac1310e6a619f
 X-Patchwork-Hint: ignore
-Message-Id: <20250217222451.94DE287751@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/binutils-bare-metal: add multiple
- tuple support
+Message-Id: <20250217222451.BC05287754@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain/toolchain-bare-metal-buildroot:
+ update help text for multiple tuple support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,97 +66,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57d73ec8e08e8cef1fe51665bd1ccfc5d53a6eeb
+commit: https://git.buildroot.net/buildroot/commit/?id=02b9d987c4865d4cb6354728c6eac1310e6a619f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add support to binutils-bare-metal to support multiple architecture tuples
-with the BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH string.
+Now that binutils-bare-metal, gcc-bare-metal and newlib-bare-metal packages
+have been upgraded to support a list of architecture tuples, this patch
+updates the toolchain-bare-metal-buildroot help text to describe the new
+capability.
 
-To do this, custom configure, build and install commands are needed, so that
-each step goes through a loop of the architecture tuples in the list.
-
-To keep consistency with autotools, all the relevant host configurations have
-been copied into the HOST_BINUTILS_BARE_METAL_CONF_OPTS while removing any
-configurations that do not apply to binutils and removing redundant configs.
-
-autotools redundant configs covered by $(HOST_CONFIGURE_OPTS):
-	CFLAGS="$$(HOST_CFLAGS)"
-	LDFLAGS="$$(HOST_LDFLAGS)"
-
-autotools configs not applicable to binutils:
-	--disable-gtk-doc
-	--disable-gtk-doc-html
-	--disable-doc
-	--disable-docs
-	--disable-documentation
-	--disable-debug
-	--with-xmlto=no
-	--with-fop=no
-	--disable-nls
-
-One of the configurations already in the binutils-bare-metal package was not
-needed.
-
---enable-static -> handled by --disable-shared
+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH is still backwards compatible with
+its prior definition as defining a single tuple with this new definition
+works exactly the same as before.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/binutils-bare-metal/binutils-bare-metal.mk | 36 ++++++++++++++++++++--
- 1 file changed, 34 insertions(+), 2 deletions(-)
+ toolchain/Config.in                                          |  2 +-
+ toolchain/toolchain-bare-metal-buildroot/Config.in           | 12 +++++++++---
+ .../toolchain-bare-metal-buildroot.mk                        |  1 -
+ 3 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/package/binutils-bare-metal/binutils-bare-metal.mk b/package/binutils-bare-metal/binutils-bare-metal.mk
-index 3525e9fdf2..709d072765 100644
---- a/package/binutils-bare-metal/binutils-bare-metal.mk
-+++ b/package/binutils-bare-metal/binutils-bare-metal.mk
-@@ -22,13 +22,45 @@ HOST_BINUTILS_BARE_METAL_MAKE_OPTS += MAKEINFO=true
- HOST_BINUTILS_BARE_METAL_INSTALL_OPTS += MAKEINFO=true install
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index d6ed25ff96..94723da141 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -941,7 +941,7 @@ config BR2_TOOLCHAIN_HAS_LIBQUADMATH
+ comment "Bare metal toolchain"
  
- HOST_BINUTILS_BARE_METAL_CONF_OPTS = \
--	--target=$(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE) \
-+	--prefix=$(HOST_DIR) \
-+	--sysconfdir=$(HOST_DIR)/etc \
-+	--localstatedir=$(HOST_DIR)/var \
-+	$(if $$($$(PKG)_OVERRIDE_SRCDIR),,--disable-dependency-tracking) \
-+	$(QUIET) \
- 	--disable-gprof \
- 	--disable-shared \
- 	--enable-lto \
--	--enable-static \
- 	--disable-initfini-array \
- 	--disable-multilib \
- 	--disable-werror
+ config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
+-	bool "Build a bare metal toolchain"
++	bool "Build bare metal toolchains"
+ 	select BR2_PACKAGE_NEWLIB_BARE_METAL
+ 	help
+ 	  Select if you need a bare-metal toolchain for building
+diff --git a/toolchain/toolchain-bare-metal-buildroot/Config.in b/toolchain/toolchain-bare-metal-buildroot/Config.in
+index 6fe969357f..c86c5d725c 100644
+--- a/toolchain/toolchain-bare-metal-buildroot/Config.in
++++ b/toolchain/toolchain-bare-metal-buildroot/Config.in
+@@ -1,10 +1,16 @@
+ if BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
  
-+define HOST_BINUTILS_BARE_METAL_CONFIGURE_CMDS
-+	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
-+		mkdir -p $(@D)/build-$(arch_tuple) && \
-+		cd $(@D)/build-$(arch_tuple) && \
-+		$(HOST_CONFIGURE_OPTS) \
-+		$(HOST_BINUTILS_BARE_METAL_CONF_ENV) \
-+		CONFIG_SITE=/dev/null \
-+		$(@D)/configure \
-+			$(HOST_BINUTILS_BARE_METAL_CONF_OPTS) \
-+			--target=$(arch_tuple)
-+	)
-+endef
+ config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH
+-	string "architecture tuple"
++	string "list of architecture tuples"
+ 	help
+-	  This option allows to define the architecture tuple for the
+-	  bare-metal toolchain.
++	  This option allows to define the list of architecture
++	  tuples for which bare-metal toolchains will be created.
++	  One toolchain will be built for each of the architecture
++	  tuples specified in this option.
 +
-+define HOST_BINUTILS_BARE_METAL_BUILD_CMDS
-+	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
-+		$(HOST_MAKE_ENV) $(MAKE) \
-+			$(HOST_BINUTILS_BARE_METAL_MAKE_OPTS) \
-+			-C $(@D)/build-$(arch_tuple)
-+	)
-+endef
-+
-+define HOST_BINUTILS_BARE_METAL_INSTALL_CMDS
-+	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
-+		$(HOST_MAKE_ENV) $(MAKE) \
-+			$(HOST_BINUTILS_BARE_METAL_INSTALL_OPTS) \
-+			-C $(@D)/build-$(arch_tuple)
-+	)
-+endef
-+
- $(eval $(host-autotools-package))
++	  For example, to build both a Microblaze and a RISC-V bare
++	  metal toolchain, use the following definition:
++	  "microblazeel-xilinx-elf riscv32-buldroot-elf"
+ 
+ source "package/newlib-bare-metal/Config.in"
+ 
+diff --git a/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk b/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk
+index dbfe30a910..71063fcee4 100644
+--- a/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk
++++ b/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk
+@@ -6,7 +6,6 @@
+ 
+ TOOLCHAIN_BARE_METAL_BUILDROOT_DEPENDENCIES = newlib-bare-metal
+ TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE = $(call qstrip,$(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH))
+-TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT = $(HOST_DIR)/$(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE)/sysroot
+ TOOLCHAIN_BARE_METAL_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
+ 
+ $(eval $(virtual-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
