@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44654C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:20:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3D32C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:20:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E72934F095;
-	Fri, 28 Feb 2025 17:20:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C75B4F6C9;
+	Fri, 28 Feb 2025 17:20:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o37--iKffLDZ; Fri, 28 Feb 2025 17:20:35 +0000 (UTC)
+ id Tf634evgF_-q; Fri, 28 Feb 2025 17:20:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74F964F6F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1A55A4F5CF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74F964F6F9;
-	Fri, 28 Feb 2025 17:20:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A55A4F5CF;
+	Fri, 28 Feb 2025 17:20:40 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F8C41DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:25 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0716268
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1337746637
+ by smtp4.osuosl.org (Postfix) with ESMTP id 329BB42DED
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tRKSUhvaTeGh for <buildroot@buildroot.org>;
+ id wjTlH7DHNNZ4 for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:32:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49C9646B64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04E6342DA8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 49C9646B64
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04E6342DA8
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 44AE4875C7; Fri, 28 Feb 2025 16:30:43 +0000 (UTC)
+ id F2EBE875C7; Fri, 28 Feb 2025 16:30:42 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 17 Feb 2025 22:24:26 +0100
+Date: Mon, 17 Feb 2025 21:23:29 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8a1ae9e0b151063528e67b8b34a1229dc729df3c
-X-Git-Newrev: 57d73ec8e08e8cef1fe51665bd1ccfc5d53a6eeb
+X-Git-Oldrev: ee53f5fcbaabe17617fba300e78b965c81863f90
+X-Git-Newrev: 0ee5c51d6a615e698c2d58cdca3c335878cf26f9
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163043.44AE4875C7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/binutils-bare-metal:
- add multiple tuple support
+Message-Id: <20250228163042.F2EBE875C7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/timescaledb: bump
+ version to 2.18.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,105 +59,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=57d73ec8e08e8cef1fe51665bd1ccfc5d53a6eeb
+commit: https://git.buildroot.net/buildroot/commit/?id=0ee5c51d6a615e698c2d58cdca3c335878cf26f9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add support to binutils-bare-metal to support multiple architecture tuples
-with the BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH string.
+Release notes: https://github.com/timescale/timescaledb/blob/2.18.1/CHANGELOG.md
 
-To do this, custom configure, build and install commands are needed, so that
-each step goes through a loop of the architecture tuples in the list.
-
-To keep consistency with autotools, all the relevant host configurations have
-been copied into the HOST_BINUTILS_BARE_METAL_CONF_OPTS while removing any
-configurations that do not apply to binutils and removing redundant configs.
-
-autotools redundant configs covered by $(HOST_CONFIGURE_OPTS):
-	CFLAGS="$$(HOST_CFLAGS)"
-	LDFLAGS="$$(HOST_LDFLAGS)"
-
-autotools configs not applicable to binutils:
-	--disable-gtk-doc
-	--disable-gtk-doc-html
-	--disable-doc
-	--disable-docs
-	--disable-documentation
-	--disable-debug
-	--with-xmlto=no
-	--with-fop=no
-	--disable-nls
-
-One of the configurations already in the binutils-bare-metal package was not
-needed.
-
---enable-static -> handled by --disable-shared
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/binutils-bare-metal/binutils-bare-metal.mk | 36 ++++++++++++++++++++--
- 1 file changed, 34 insertions(+), 2 deletions(-)
+ package/timescaledb/timescaledb.hash | 2 +-
+ package/timescaledb/timescaledb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/binutils-bare-metal/binutils-bare-metal.mk b/package/binutils-bare-metal/binutils-bare-metal.mk
-index 3525e9fdf2..709d072765 100644
---- a/package/binutils-bare-metal/binutils-bare-metal.mk
-+++ b/package/binutils-bare-metal/binutils-bare-metal.mk
-@@ -22,13 +22,45 @@ HOST_BINUTILS_BARE_METAL_MAKE_OPTS += MAKEINFO=true
- HOST_BINUTILS_BARE_METAL_INSTALL_OPTS += MAKEINFO=true install
+diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
+index f799b0c7f8..7c770618b2 100644
+--- a/package/timescaledb/timescaledb.hash
++++ b/package/timescaledb/timescaledb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  86248970971ad075e0b5ed64dbba5b190eb8794d6e36b508427a5cc42b20a420  timescaledb-2.18.0.tar.gz
++sha256  f293fc54bc76d06c5955ae68e2e8124331bee80aee8b499047afae01b10513ce  timescaledb-2.18.1.tar.gz
+ sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
+diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
+index 99756cb0b8..c1f65d5f3a 100644
+--- a/package/timescaledb/timescaledb.mk
++++ b/package/timescaledb/timescaledb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- HOST_BINUTILS_BARE_METAL_CONF_OPTS = \
--	--target=$(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE) \
-+	--prefix=$(HOST_DIR) \
-+	--sysconfdir=$(HOST_DIR)/etc \
-+	--localstatedir=$(HOST_DIR)/var \
-+	$(if $$($$(PKG)_OVERRIDE_SRCDIR),,--disable-dependency-tracking) \
-+	$(QUIET) \
- 	--disable-gprof \
- 	--disable-shared \
- 	--enable-lto \
--	--enable-static \
- 	--disable-initfini-array \
- 	--disable-multilib \
- 	--disable-werror
- 
-+define HOST_BINUTILS_BARE_METAL_CONFIGURE_CMDS
-+	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
-+		mkdir -p $(@D)/build-$(arch_tuple) && \
-+		cd $(@D)/build-$(arch_tuple) && \
-+		$(HOST_CONFIGURE_OPTS) \
-+		$(HOST_BINUTILS_BARE_METAL_CONF_ENV) \
-+		CONFIG_SITE=/dev/null \
-+		$(@D)/configure \
-+			$(HOST_BINUTILS_BARE_METAL_CONF_OPTS) \
-+			--target=$(arch_tuple)
-+	)
-+endef
-+
-+define HOST_BINUTILS_BARE_METAL_BUILD_CMDS
-+	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
-+		$(HOST_MAKE_ENV) $(MAKE) \
-+			$(HOST_BINUTILS_BARE_METAL_MAKE_OPTS) \
-+			-C $(@D)/build-$(arch_tuple)
-+	)
-+endef
-+
-+define HOST_BINUTILS_BARE_METAL_INSTALL_CMDS
-+	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
-+		$(HOST_MAKE_ENV) $(MAKE) \
-+			$(HOST_BINUTILS_BARE_METAL_INSTALL_OPTS) \
-+			-C $(@D)/build-$(arch_tuple)
-+	)
-+endef
-+
- $(eval $(host-autotools-package))
+-TIMESCALEDB_VERSION = 2.18.0
++TIMESCALEDB_VERSION = 2.18.1
+ TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
+ TIMESCALEDB_LICENSE = Apache-2.0
+ TIMESCALEDB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
