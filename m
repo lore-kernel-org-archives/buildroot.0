@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9E77C021A9
-	for <buildroot@archiver.kernel.org>; Mon, 17 Feb 2025 20:02:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79733C021A9
+	for <buildroot@archiver.kernel.org>; Mon, 17 Feb 2025 20:11:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A5DC4081D;
-	Mon, 17 Feb 2025 20:02:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 449F04031F;
+	Mon, 17 Feb 2025 20:11:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LdXZ0nS5gKLu; Mon, 17 Feb 2025 20:02:05 +0000 (UTC)
+ id RxkUm-oohwAP; Mon, 17 Feb 2025 20:11:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9ACE840787
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D82DF4091F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9ACE840787;
-	Mon, 17 Feb 2025 20:02:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id BFC2972
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 20:02:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D82DF4091F;
+	Mon, 17 Feb 2025 20:11:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BC0D8C8
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 20:11:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BB91940037
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 20:02:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AB1EF40017
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 20:11:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mvoZ-qhvD92N for <buildroot@buildroot.org>;
- Mon, 17 Feb 2025 20:02:00 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cFOR-Ad1T6H8 for <buildroot@buildroot.org>;
+ Mon, 17 Feb 2025 20:11:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 569124076C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68E1340201
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 569124076C
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 20:02:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 68E1340201
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 20:11:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4358D876EE; Mon, 17 Feb 2025 20:02:00 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 5321F876FF; Mon, 17 Feb 2025 20:11:22 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 17 Feb 2025 20:58:53 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 84f78d98e70eb92149eae865b6522a67fe5fa5ea
-X-Git-Newrev: 2219410297d8fc8ec39c243a0a59038a4f5f3779
+Date: Mon, 17 Feb 2025 19:47:54 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 071741f98145f38507e3c863fc5d87909dc86556
+X-Git-Newrev: d95ea2dcf3378b57f14ebb1f6e0e72a8914b58dd
 X-Patchwork-Hint: ignore
-Message-Id: <20250217200200.4358D876EE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libcurl: bump
- version to 8.12.1
+Message-Id: <20250217201122.5321F876FF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/cubieboard2: bump Linux to 6.12.14
+ and U-Boot to 2025.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,201 +65,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2219410297d8fc8ec39c243a0a59038a4f5f3779
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d95ea2dcf3378b57f14ebb1f6e0e72a8914b58dd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://curl.se/ch/8.12.1.html
-
-Removed patch which is included in this release.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f6770cc13e2a1fe01b4244e3a0a67b281dc510f9)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...0001-vtsl-eliminate-data-state-ssl_scache.patch | 147 ---------------------
- package/libcurl/libcurl.hash                       |   4 +-
- package/libcurl/libcurl.mk                         |   2 +-
- 3 files changed, 3 insertions(+), 150 deletions(-)
+ board/cubietech/cubieboard2/patches/linux/linux.hash | 2 +-
+ board/cubietech/cubieboard2/patches/uboot/uboot.hash | 2 +-
+ configs/cubieboard2_defconfig                        | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libcurl/0001-vtsl-eliminate-data-state-ssl_scache.patch b/package/libcurl/0001-vtsl-eliminate-data-state-ssl_scache.patch
-deleted file mode 100644
-index 775aaa667f..0000000000
---- a/package/libcurl/0001-vtsl-eliminate-data-state-ssl_scache.patch
-+++ /dev/null
-@@ -1,147 +0,0 @@
--https://github.com/curl/curl/issues/16236#issuecomment-2645385845
--https://github.com/curl/curl/commit/242a1439e7d8cdb72ae6a2fa2e705e2d9a2b7501
--
--Fixes curl bug https://github.com/curl/curl/issues/16236 "that caused
--a segfault in kodi".
--
--Instead of adding upstream commit
--https://github.com/curl/curl/commit/242a1439e7d8cdb72ae6a2fa2e705e2d9a2b7501
--which does not apply cleanly on libcurl 8.12.0 we use the Gentoo version:
--https://github.com/gentoo/gentoo/blob/master/net-misc/curl/files/curl-8.12.0-multi.patch
--
--Upstream: https://github.com/curl/curl/commit/242a1439e7d8cdb72ae6a2fa2e705e2d9a2b7501
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
--
----- a/lib/setopt.c
--+++ b/lib/setopt.c
--@@ -1584,10 +1584,6 @@ static CURLcode setopt_pointers(struct Curl_easy *data, CURLoption option,
--       if(data->share->hsts == data->hsts)
--         data->hsts = NULL;
-- #endif
---#ifdef USE_SSL
---      if(data->share->ssl_scache == data->state.ssl_scache)
---        data->state.ssl_scache = data->multi ? data->multi->ssl_scache : NULL;
---#endif
-- #ifdef USE_LIBPSL
--       if(data->psl == &data->share->psl)
--         data->psl = data->multi ? &data->multi->psl : NULL;
--@@ -1628,10 +1624,6 @@ static CURLcode setopt_pointers(struct Curl_easy *data, CURLoption option,
--         data->hsts = data->share->hsts;
--       }
-- #endif
---#ifdef USE_SSL
---      if(data->share->ssl_scache)
---        data->state.ssl_scache = data->share->ssl_scache;
---#endif
-- #ifdef USE_LIBPSL
--       if(data->share->specifier & (1 << CURL_LOCK_DATA_PSL))
--         data->psl = &data->share->psl;
----- a/lib/transfer.c
--+++ b/lib/transfer.c
--@@ -567,12 +567,6 @@ CURLcode Curl_pretransfer(struct Curl_easy *data)
-- #endif
--   data->state.httpreq = data->set.method;
-- 
---#ifdef USE_SSL
---  if(!data->state.ssl_scache)
---    /* There was no ssl session cache set via a share, use the multi one */
---    data->state.ssl_scache = data->multi->ssl_scache;
---#endif
---
--   data->state.requests = 0;
--   data->state.followlocation = 0; /* reset the location-follow counter */
--   data->state.this_is_a_follow = FALSE; /* reset this */
----- a/lib/urldata.h
--+++ b/lib/urldata.h
--@@ -1199,7 +1199,6 @@ struct UrlState {
--   curl_prot_t first_remote_protocol;
-- 
--   int retrycount; /* number of retries on a new connection */
---  struct Curl_ssl_scache *ssl_scache; /* TLS session pool */
--   int os_errno;  /* filled in with errno whenever an error occurs */
--   long followlocation; /* redirect counter */
--   int requests; /* request counter: redirects + authentication retakes */
----- a/lib/vtls/vtls_scache.c
--+++ b/lib/vtls/vtls_scache.c
--@@ -82,6 +82,17 @@ struct Curl_ssl_scache {
--   long age;
-- };
-- 
--+static struct Curl_ssl_scache *cf_ssl_scache_get(struct Curl_easy *data)
--+{
--+  struct Curl_ssl_scache *scache = NULL;
--+  /* If a share is present, its ssl_scache has preference over the multi */
--+  if(data->share && data->share->ssl_scache)
--+    scache = data->share->ssl_scache;
--+  else if(data->multi && data->multi->ssl_scache)
--+    scache = data->multi->ssl_scache;
--+  return scache;
--+}
--+
-- static void cf_ssl_scache_clear_session(struct Curl_ssl_session *s)
-- {
--   if(s->sdata) {
--@@ -792,7 +803,7 @@ CURLcode Curl_ssl_scache_put(struct Curl_cfilter *cf,
--                              const char *ssl_peer_key,
--                              struct Curl_ssl_session *s)
-- {
---  struct Curl_ssl_scache *scache = data->state.ssl_scache;
--+  struct Curl_ssl_scache *scache = cf_ssl_scache_get(data);
--   struct ssl_config_data *ssl_config = Curl_ssl_cf_get_config(cf, data);
--   CURLcode result;
--   DEBUGASSERT(ssl_config);
--@@ -826,7 +837,7 @@ CURLcode Curl_ssl_scache_take(struct Curl_cfilter *cf,
--                               const char *ssl_peer_key,
--                               struct Curl_ssl_session **ps)
-- {
---  struct Curl_ssl_scache *scache = data->state.ssl_scache;
--+  struct Curl_ssl_scache *scache = cf_ssl_scache_get(data);
--   struct ssl_primary_config *conn_config = Curl_ssl_cf_get_primary_config(cf);
--   struct Curl_ssl_scache_peer *peer = NULL;
--   struct Curl_llist_node *n;
--@@ -870,7 +881,7 @@ CURLcode Curl_ssl_scache_add_obj(struct Curl_cfilter *cf,
--                                  void *sobj,
--                                  Curl_ssl_scache_obj_dtor *sobj_free)
-- {
---  struct Curl_ssl_scache *scache = data->state.ssl_scache;
--+  struct Curl_ssl_scache *scache = cf_ssl_scache_get(data);
--   struct ssl_primary_config *conn_config = Curl_ssl_cf_get_primary_config(cf);
--   struct Curl_ssl_scache_peer *peer = NULL;
--   CURLcode result;
--@@ -898,7 +909,7 @@ bool Curl_ssl_scache_get_obj(struct Curl_cfilter *cf,
--                              const char *ssl_peer_key,
--                              void **sobj)
-- {
---  struct Curl_ssl_scache *scache = data->state.ssl_scache;
--+  struct Curl_ssl_scache *scache = cf_ssl_scache_get(data);
--   struct ssl_primary_config *conn_config = Curl_ssl_cf_get_primary_config(cf);
--   struct Curl_ssl_scache_peer *peer = NULL;
--   CURLcode result;
--@@ -924,7 +935,7 @@ void Curl_ssl_scache_remove_all(struct Curl_cfilter *cf,
--                                 struct Curl_easy *data,
--                                 const char *ssl_peer_key)
-- {
---  struct Curl_ssl_scache *scache = data->state.ssl_scache;
--+  struct Curl_ssl_scache *scache = cf_ssl_scache_get(data);
--   struct ssl_primary_config *conn_config = Curl_ssl_cf_get_primary_config(cf);
--   struct Curl_ssl_scache_peer *peer = NULL;
--   CURLcode result;
--@@ -1021,7 +1032,7 @@ CURLcode Curl_ssl_session_import(struct Curl_easy *data,
--                                  const unsigned char *shmac, size_t shmac_len,
--                                  const unsigned char *sdata, size_t sdata_len)
-- {
---  struct Curl_ssl_scache *scache = data->state.ssl_scache;
--+  struct Curl_ssl_scache *scache = cf_ssl_scache_get(data);
--   struct Curl_ssl_scache_peer *peer = NULL;
--   struct Curl_ssl_session *s = NULL;
--   bool locked = FALSE;
--@@ -1092,7 +1103,7 @@ CURLcode Curl_ssl_session_export(struct Curl_easy *data,
--                                  curl_ssls_export_cb *export_fn,
--                                  void *userptr)
-- {
---  struct Curl_ssl_scache *scache = data->state.ssl_scache;
--+  struct Curl_ssl_scache *scache = cf_ssl_scache_get(data);
--   struct Curl_ssl_scache_peer *peer;
--   struct dynbuf sbuf, hbuf;
--   struct Curl_llist_node *n;
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index a79635ed21..4a26a1774d 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-8.12.0.tar.xz.asc
-+# https://curl.se/download/curl-8.12.1.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  9a4628c764be6b1a9909567c13e8e771041609df43b2158fcac4e05ea7097e5d  curl-8.12.0.tar.xz
-+sha256  0341f1ed97a26c811abaebd37d62b833956792b7607ea3f15d001613c76de202  curl-8.12.1.tar.xz
- sha256  e18f1989333b70044b2adfb7dc2f905d0119dbdcac3bc9f4bc9d540e3a29de5b  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 56a5761d68..2066ba0388 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 8.12.0
-+LIBCURL_VERSION = 8.12.1
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+diff --git a/board/cubietech/cubieboard2/patches/linux/linux.hash b/board/cubietech/cubieboard2/patches/linux/linux.hash
+index 450cb12423..2e30d90bb1 100644
+--- a/board/cubietech/cubieboard2/patches/linux/linux.hash
++++ b/board/cubietech/cubieboard2/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  39207fce1ce42838e085261bae0af5ce4a0843aa777cfc0f5c49bc7729602bcd  linux-6.12.5.tar.xz
++sha256  9423f4bfb4d875417e39cb0b017b5499fea47da56119f0cd28a201735d898f14  linux-6.12.14.tar.xz
+diff --git a/board/cubietech/cubieboard2/patches/uboot/uboot.hash b/board/cubietech/cubieboard2/patches/uboot/uboot.hash
+index 904fa56c02..50674352d7 100644
+--- a/board/cubietech/cubieboard2/patches/uboot/uboot.hash
++++ b/board/cubietech/cubieboard2/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
++sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
+diff --git a/configs/cubieboard2_defconfig b/configs/cubieboard2_defconfig
+index bace740ce9..6161e3a559 100644
+--- a/configs/cubieboard2_defconfig
++++ b/configs/cubieboard2_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/cubietech/cubieboard2/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.14"
+ BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun7i-a20-cubieboard2"
+@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
