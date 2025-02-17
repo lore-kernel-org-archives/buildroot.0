@@ -1,53 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8AF5C021AB
-	for <buildroot@archiver.kernel.org>; Mon, 17 Feb 2025 20:52:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A548C021A9
+	for <buildroot@archiver.kernel.org>; Mon, 17 Feb 2025 20:54:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 60547401BA;
-	Mon, 17 Feb 2025 20:52:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2CDE960A79;
+	Mon, 17 Feb 2025 20:54:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FdN8VzwMPDCW; Mon, 17 Feb 2025 20:52:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dj4S8AguYcaR; Mon, 17 Feb 2025 20:54:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A3474066A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 350E660EC2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0A3474066A;
-	Mon, 17 Feb 2025 20:52:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4707CC8
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 20:52:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 350E660EC2;
+	Mon, 17 Feb 2025 20:54:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id F4033DE
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 20:53:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 36BC14066A
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 20:52:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E098340290
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 20:53:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ShIjRgeSATzj for <buildroot@buildroot.org>;
- Mon, 17 Feb 2025 20:52:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC61F401BA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC61F401BA
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 20:52:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D903F8772C; Mon, 17 Feb 2025 20:52:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5rUw20S9mZY7 for <buildroot@buildroot.org>;
+ Mon, 17 Feb 2025 20:53:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 089BD40153
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 089BD40153
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 089BD40153
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 20:53:58 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 974D05FFB4;
+ Mon, 17 Feb 2025 21:53:53 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 17 Feb 2025 21:53:53 +0100
+MIME-Version: 1.0
+Date: Mon, 17 Feb 2025 21:53:53 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 17 Feb 2025 21:40:53 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 004db1f5f3adaab7264b84e0896f9761cd9a2657
-X-Git-Newrev: 8a1ae9e0b151063528e67b8b34a1229dc729df3c
-X-Patchwork-Hint: ignore
-Message-Id: <20250217205216.D903F8772C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sqlite: fix build issue if C++ is
- not enabled since bump to 3.49.0
+To: Scott Fan <fancp2007@gmail.com>
+Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>
+In-Reply-To: <20250217023835.349770-1-fancp2007@gmail.com>
+References: <20250217023835.349770-1-fancp2007@gmail.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <54b53b1070c7fb44b84eb60e49ba0dbc@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1739825636;
+ bh=8S0M3KmBOCoD4nq+OZVRu2hFUDnk4FS9+VhdZ/+wA1A=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=AYX5ui6lAAT8FWuOJJxJqZVwdQ0AtTrVAuv78WVIrahSQeAALSADgEqWFDs6TFM/7
+ 5nQxgA7ScbP5S787/sOzdm/Hax3EXQ+YPM7ZkmJZqoBn8ElbqLkHGX2/mvS6YErDtp
+ M0syEhxY5rtEGSgKFKiYGZjgoO8lqXCTTPfbberyfxx6/7kM8JVt1u1Y9xC0z3G90D
+ RhD22OMqAg5Lg5xLYYdO5pnESLoyjN+F1EM6jXAXDtwh4hOz3zDnZfIelkBqJ2htpR
+ QRExP3XH1lYnaudfd+cjpNrI+gvJ6UdxTNoFK4lB7naOW9ky13YgV/8xuMg+x+XB4M
+ qnhsuOvMAY8Tw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=AYX5ui6l
+Subject: Re: [Buildroot] [PATCH 1/2] package/sqlite: fix configure options
+ for readline/editline support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,71 +82,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a1ae9e0b151063528e67b8b34a1229dc729df3c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Buildroot commit [1] bumped sqlite to 3.49.0, and commit [2] fixed the
-package infra. But if the toolchain does not have C++ support enabled,
-the following error will occur.
-  Error: failed to find: no
-
-The reason was CXX has been set to 'no' in the package/Makefile.in file.
-ifneq ($(BR2_INSTALL_LIBSTDCPP),y)
-TARGET_CONFIGURE_OPTS += CXX=no
-endif
-
-Then the autosetup script will look for a required path ('no' above),
-and will exit with an error if not found.
-
-To solve it, we can set CXX to 'false' instead of 'no', so that the
-autosetup script will skip checking for a C++ compiler.
-
-Fixes:
-  https://autobuild.buildroot.org/?reason=sqlite-3.49.0
-  https://autobuild.buildroot.org/results/569a3750681cc10688ac663450dc2773a317bb07/
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/db85638cea3414ca0293cbbb2352e5b0b63a2579
-[2] https://gitlab.com/buildroot.org/buildroot/-/commit/a93680be30bc35f7d2465ef576035fb937ea1d64
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-[Julien: add a link to an actual build failure]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/sqlite/sqlite.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 255ddc937b..8016ff1c4c 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -65,7 +65,9 @@ endif
- SQLITE_CONF_ENV = CFLAGS="$(SQLITE_CFLAGS)" LDFLAGS="$(SQLITE_LDFLAGS)"
- 
- define SQLITE_CONFIGURE_CMDS
--	(cd $(@D); $(TARGET_CONFIGURE_OPTS) $(SQLITE_CONF_ENV) ./configure \
-+	(cd $(@D); $(TARGET_CONFIGURE_OPTS) \
-+		$(if $(BR2_INSTALL_LIBSTDCPP),,CXX=false) \
-+		$(SQLITE_CONF_ENV) ./configure \
- 		--prefix=/usr \
- 		--host="$(GNU_TARGET_NAME)" \
- 		--build="$(GNU_HOST_NAME)" \
-@@ -87,7 +89,8 @@ define SQLITE_INSTALL_TARGET_CMDS
- endef
- 
- define HOST_SQLITE_CONFIGURE_CMDS
--	(cd $(@D); $(HOST_CONFIGURE_OPTS) $(SQLITE_CONF_ENV) ./configure \
-+	(cd $(@D); $(HOST_CONFIGURE_OPTS) \
-+		$(SQLITE_CONF_ENV) ./configure \
- 		--prefix=/usr \
- 		--host="$(GNU_HOST_NAME)" \
- 		--build="$(GNU_HOST_NAME)" \
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gMTcvMDIvMjAyNSAwMzozOCwgU2NvdHQgRmFuIHdyb3RlOgo+IFRoZSBhdXRvc2V0dXAgc2Ny
+aXB0IHdpbGwgc2tpcCBjaGVja2luZyBmb3IgcmVhZGxpbmUuaCB3aGVuIAo+IGNyb3NzLWNvbXBp
+bGluZywKPiB3aGljaCB3aWxsIGNhdXNlIGxpbmUtZWRpdGluZyBzdXBwb3J0IGZvciB0aGUgc3Fs
+aXRlMyBzaGVsbCB0byBhbHdheXMgCj4gYmUgIm5vbmUiLgo+IAo+IEluIHRoaXMgY2FzZSwgaWYg
+dGhlIC0tZWRpdGxpbmUgb3B0aW9uIGlzIHByb3ZpZGVkLCBhbiBlcnJvciB3aWxsIGJlIAo+IHJl
+cG9ydGVkOgo+IEVSUk9SOiBFeHBsaWNpdCAtLWVkaXRsaW5lIGZhaWxlZCB0byBmaW5kIGEgbWF0
+Y2hpbmcgbGlicmFyeS4KPiAKPiBIb3dldmVyLCB3ZSBjYW4gZW5hYmxlIHJlYWRsaW5lIG9yIGVk
+aXRsaW5lIHN1cHBvcnQgYnkgc3BlY2lmeWluZyB0aGUgCj4gQ0ZMQUdTCj4gYW5kIExERkxBR1Mg
+dmFsdWVzIOKAi+KAi2luc3RlYWQgb2YgaGF2aW5nIGl0IGhhbmRsZWQgYXV0b21hdGljYWxseSBi
+eSB0aGUKPiBhdXRvc2V0dXAgY29uZmlndXJlIHNjcmlwdC4KPiAKPiBJbiBhZGRpdGlvbiwgdGhl
+IGxpYmVkaXQgcGFja2FnZSBhY3R1YWxseSBkZXBlbmRzIG9uIHRoZSBuY3Vyc2VzIAo+IHBhY2th
+Z2UsCj4ganVzdCBsaWtlIHRoZSByZWFkbGluZSBwYWNrYWdlLiBTbyB3aGVuIHVzaW5nIHRoZSBs
+aWJlZGl0IHBhY2thZ2UsCj4gYWxzbyBhZGQgdGhlIG5jdXJzZXMgZGVwZW5kZW5jeS4KPiAKPiBU
+ZXN0ZWQtYnk6IFdhbGRlbWFyIEJyb2Rrb3JiIDx3YnhAb3BlbmFkay5vcmc+Cj4gU2lnbmVkLW9m
+Zi1ieTogU2NvdHQgRmFuIDxmYW5jcDIwMDdAZ21haWwuY29tPgoKU2VyaWVzIGFwcGxpZWQgdG8g
+bWFzdGVyLCB0aGFua3MuCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
+cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
