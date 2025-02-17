@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1A3AC282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:21:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63C60C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:21:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98FCB85E9B;
-	Fri, 28 Feb 2025 17:21:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFCE570384;
+	Fri, 28 Feb 2025 17:21:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k91sTX68fJDm; Fri, 28 Feb 2025 17:21:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1vi3c4fauvUM; Fri, 28 Feb 2025 17:21:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 974C885E9C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CC6570374
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 974C885E9C;
-	Fri, 28 Feb 2025 17:21:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8CC6570374;
+	Fri, 28 Feb 2025 17:21:25 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D4AD711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:40 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 055A31DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 862A946E35
+ by smtp4.osuosl.org (Postfix) with ESMTP id D820046493
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wEc3W02XcVNZ for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:32:03 +0000 (UTC)
+ id Yx0xUc33AxO4 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:32:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE0F7459F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EBD6424BC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CE0F7459F4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6EBD6424BC
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C0FD087A74; Fri, 28 Feb 2025 16:30:43 +0000 (UTC)
+ id 6A2CC80807; Fri, 28 Feb 2025 16:30:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 18 Feb 2025 21:18:48 +0100
+Date: Mon, 17 Feb 2025 22:48:43 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d21aeb44e06eb8259179edb3f7e330a07f8b908f
-X-Git-Newrev: 25b6a6eceeb8b13ba1827649a0d6586dd65f11aa
+X-Git-Oldrev: 1ff6caf801bc3a9367666d6cf2ea46b5b83df273
+X-Git-Newrev: 28ae74a1345181be4a913c1a9727991b9b6fdc84
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163043.C0FD087A74@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] utils/docker-run: allow
- explicitly setting of docker/podman/...
+Message-Id: <20250228163043.6A2CC80807@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/newlib-bare-metal: add
+ multiple tuple support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,52 +66,100 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25b6a6eceeb8b13ba1827649a0d6586dd65f11aa
+commit: https://git.buildroot.net/buildroot/commit/?id=28ae74a1345181be4a913c1a9727991b9b6fdc84
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, our docker-run helper will decide on its own whether it
-should use docker (preferred) or podman (fallback), as introduced in
-9a629f5129d6 (utils/docker-run: allow running with Podman). In case
-both are installed, it is not possible to exercise the podman case.
-Often, 'docker' is just an alias for 'podman' when both are available,
-but this is not always true - and in the latter case, the user needs to
-be able to choose which one they want.
+Add support to gcc-bare-metal to support multiple architecture tuples
+with the BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH string.
 
-Allow the user to force the one to use, by setting the BR2_DOCKER
-environment variable. If that is set and it doesn't exist, exit with
-an explicit error message (rather than relying on the failure when
-eventually exec-ing the specified command).
+To do this, custom configure, build and install commands are needed, so that
+each step goes through a loop of the architecture tuples in the list.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-Cc: Julien Olivain <ju.o@free.fr>
-Cc: Fiona Klute <fiona.klute@gmx.de>
-Reviewed-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+To keep consistency with autotools, all the relevant target configurations
+have been copied into the NEWLIB_BARE_METAL_CONF_OPTS while removing any
+configurations that do not apply to newlib.
+
+Also, the following configs were not taken because newlib is being built for
+each of the bare-metal targets and not the main target of Buildroot.
+
+$$(TARGET_CONFIGURE_OPTS)
+$$(TARGET_CONFIGURE_ARGS)
+--target=$$(GNU_TARGET_NAME)
+--host=$$(GNU_TARGET_NAME)
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- utils/docker-run | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ package/newlib-bare-metal/newlib-bare-metal.mk | 47 +++++++++++++++++++-------
+ 1 file changed, 34 insertions(+), 13 deletions(-)
 
-diff --git a/utils/docker-run b/utils/docker-run
-index 849df66d54..27c169db72 100755
---- a/utils/docker-run
-+++ b/utils/docker-run
-@@ -35,7 +35,14 @@ declare -a mountpoints=(
- # compatibility command.
- export PODMAN_USERNS="keep-id"
+diff --git a/package/newlib-bare-metal/newlib-bare-metal.mk b/package/newlib-bare-metal/newlib-bare-metal.mk
+index e28e7a717c..bd740046c9 100644
+--- a/package/newlib-bare-metal/newlib-bare-metal.mk
++++ b/package/newlib-bare-metal/newlib-bare-metal.mk
+@@ -22,28 +22,49 @@ NEWLIB_BARE_METAL_INSTALL_STAGING = YES
+ NEWLIB_BARE_METAL_INSTALL_TARGET = NO
+ NEWLIB_BARE_METAL_MAKE_OPTS = MAKEINFO=true
  
--if command -v docker >/dev/null; then
-+if [ "${BR2_DOCKER}" ]; then
-+    if command -v "${BR2_DOCKER}" >/dev/null; then
-+        DOCKER="${BR2_DOCKER}"
-+    else
-+        printf 'ERROR: Command "%s" (from env BR2_DOCKER) not found.\n' "${BR2_DOCKER}" >&2
-+        exit 1
-+    fi
-+elif command -v docker >/dev/null; then
-     DOCKER="docker"
- elif command -v podman >/dev/null; then
-     DOCKER="podman"
++NEWLIB_BARE_METAL_CONF_OPTS = \
++	--build=$(GNU_HOST_NAME) \
++	--prefix=/usr \
++	--exec-prefix=/usr \
++	--sysconfdir=/etc \
++	--localstatedir=/var \
++	--program-prefix="" \
++	$(if $$($$(PKG)_OVERRIDE_SRCDIR),,--disable-dependency-tracking) \
++	$(QUIET) \
++	--enable-newlib-io-c99-formats \
++	--enable-newlib-io-long-long \
++	--enable-newlib-io-float \
++	--enable-newlib-io-long-double \
++	--disable-multilib \
++	--with-tooldir=/usr
++
+ define NEWLIB_BARE_METAL_CONFIGURE_CMDS
+-	(cd $(@D) && \
++	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
++		mkdir -p $(@D)/build-$(arch_tuple) && \
++		cd $(@D)/build-$(arch_tuple) && \
+ 		PATH=$(BR_PATH) \
+-		./configure \
+-			--target=$(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE) \
+-			--prefix=/usr \
+-			--enable-newlib-io-c99-formats \
+-			--enable-newlib-io-long-long \
+-			--enable-newlib-io-float \
+-			--enable-newlib-io-long-double \
+-			--disable-multilib \
+-			--with-tooldir=/usr \
++		CONFIG_SITE=/dev/null \
++		$(@D)/configure \
++			$(NEWLIB_BARE_METAL_CONF_OPTS) \
++			--target=$(arch_tuple)
+ 	)
+ endef
+ 
+ define NEWLIB_BARE_METAL_BUILD_CMDS
+-	PATH=$(BR_PATH) $(MAKE1) $(NEWLIB_BARE_METAL_MAKE_OPTS) -C $(@D)
++	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
++		PATH=$(BR_PATH) $(MAKE1) \
++			$(NEWLIB_BARE_METAL_MAKE_OPTS) \
++			-C $(@D)/build-$(arch_tuple)
++	)
+ endef
+ 
+ define NEWLIB_BARE_METAL_INSTALL_STAGING_CMDS
+-	PATH=$(BR_PATH) $(MAKE1) -C $(@D) $(NEWLIB_BARE_METAL_MAKE_OPTS) \
+-		DESTDIR=$(TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT) install
++	$(foreach arch_tuple, $(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE), \
++		PATH=$(BR_PATH) $(MAKE1) \
++			$(NEWLIB_BARE_METAL_MAKE_OPTS) \
++			-C $(@D)/build-$(arch_tuple) \
++			DESTDIR=$(HOST_DIR)/$(arch_tuple)/sysroot install
++	)
+ endef
+ 
+ $(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
