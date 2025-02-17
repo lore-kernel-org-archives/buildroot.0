@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 344D3C021AB
-	for <buildroot@archiver.kernel.org>; Mon, 17 Feb 2025 22:24:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AA48C021AA
+	for <buildroot@archiver.kernel.org>; Mon, 17 Feb 2025 22:25:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5F1860868;
-	Mon, 17 Feb 2025 22:24:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF24360894;
+	Mon, 17 Feb 2025 22:24:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lc2gNyTygDE4; Mon, 17 Feb 2025 22:24:56 +0000 (UTC)
+ id 6TEUIRdDWw8A; Mon, 17 Feb 2025 22:24:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF0A260B62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07C9560EAD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF0A260B62;
-	Mon, 17 Feb 2025 22:24:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id EADA8968
- for <buildroot@buildroot.org>; Mon, 17 Feb 2025 22:24:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07C9560EAD;
+	Mon, 17 Feb 2025 22:24:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 11B25E05
+ for <buildroot@buildroot.org>; Mon, 17 Feb 2025 22:24:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CE5B560843
+ by smtp2.osuosl.org (Postfix) with ESMTP id F3248403CA
  for <buildroot@buildroot.org>; Mon, 17 Feb 2025 22:24:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S808CkQrmrvH for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VjCYSt5s5JkW for <buildroot@buildroot.org>;
  Mon, 17 Feb 2025 22:24:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD67A60AA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D381A4011D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD67A60AA8
+ by smtp2.osuosl.org (Postfix) with ESMTP id D381A4011D
  for <buildroot@buildroot.org>; Mon, 17 Feb 2025 22:24:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BC05287754; Mon, 17 Feb 2025 22:24:51 +0000 (UTC)
+ id CA80687751; Mon, 17 Feb 2025 22:24:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 17 Feb 2025 23:22:19 +0100
+Date: Mon, 17 Feb 2025 23:22:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 28ae74a1345181be4a913c1a9727991b9b6fdc84
-X-Git-Newrev: 02b9d987c4865d4cb6354728c6eac1310e6a619f
+X-Git-Oldrev: 02b9d987c4865d4cb6354728c6eac1310e6a619f
+X-Git-Newrev: 3761177a89a78c83a102d811efd0079ed01a3abb
 X-Patchwork-Hint: ignore
-Message-Id: <20250217222451.BC05287754@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] toolchain/toolchain-bare-metal-buildroot:
- update help text for multiple tuple support
+Message-Id: <20250217222451.CA80687751@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/xilinx-embeddedsw: change dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,75 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02b9d987c4865d4cb6354728c6eac1310e6a619f
+commit: https://git.buildroot.net/buildroot/commit/?id=3761177a89a78c83a102d811efd0079ed01a3abb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that binutils-bare-metal, gcc-bare-metal and newlib-bare-metal packages
-have been upgraded to support a list of architecture tuples, this patch
-updates the toolchain-bare-metal-buildroot help text to describe the new
-capability.
+Now that BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH can contain multiple tuples,
+BR2_TARGET_XILINX_EMBEDDEDSW can no longer be dependent on:
 
-BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH is still backwards compatible with
-its prior definition as defining a single tuple with this new definition
-works exactly the same as before.
+depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH = "microblazeel-xilinx-elf"
+
+A valid definition could have "microblazeel-xilinx-elf" as just one of many
+tuples in the list.
+
+For this reason, this patch changes the dependency to:
+
+depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
+
+One side effect of this is that the user comment will be displayed now when
+using multiple tuples, even if one of them is the required tuple.
 
 Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- toolchain/Config.in                                          |  2 +-
- toolchain/toolchain-bare-metal-buildroot/Config.in           | 12 +++++++++---
- .../toolchain-bare-metal-buildroot.mk                        |  1 -
- 3 files changed, 10 insertions(+), 5 deletions(-)
+ boot/xilinx-embeddedsw/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index d6ed25ff96..94723da141 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -941,7 +941,7 @@ config BR2_TOOLCHAIN_HAS_LIBQUADMATH
- comment "Bare metal toolchain"
- 
- config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
--	bool "Build a bare metal toolchain"
-+	bool "Build bare metal toolchains"
- 	select BR2_PACKAGE_NEWLIB_BARE_METAL
+diff --git a/boot/xilinx-embeddedsw/Config.in b/boot/xilinx-embeddedsw/Config.in
+index 757ff59e35..b0691d7e7b 100644
+--- a/boot/xilinx-embeddedsw/Config.in
++++ b/boot/xilinx-embeddedsw/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_TARGET_XILINX_EMBEDDEDSW
+ 	bool "xilinx-embeddedsw"
+ 	depends on BR2_aarch64
+-	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH = "microblazeel-xilinx-elf"
++	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
  	help
- 	  Select if you need a bare-metal toolchain for building
-diff --git a/toolchain/toolchain-bare-metal-buildroot/Config.in b/toolchain/toolchain-bare-metal-buildroot/Config.in
-index 6fe969357f..c86c5d725c 100644
---- a/toolchain/toolchain-bare-metal-buildroot/Config.in
-+++ b/toolchain/toolchain-bare-metal-buildroot/Config.in
-@@ -1,10 +1,16 @@
- if BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
- 
- config BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH
--	string "architecture tuple"
-+	string "list of architecture tuples"
- 	help
--	  This option allows to define the architecture tuple for the
--	  bare-metal toolchain.
-+	  This option allows to define the list of architecture
-+	  tuples for which bare-metal toolchains will be created.
-+	  One toolchain will be built for each of the architecture
-+	  tuples specified in this option.
-+
-+	  For example, to build both a Microblaze and a RISC-V bare
-+	  metal toolchain, use the following definition:
-+	  "microblazeel-xilinx-elf riscv32-buldroot-elf"
- 
- source "package/newlib-bare-metal/Config.in"
- 
-diff --git a/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk b/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk
-index dbfe30a910..71063fcee4 100644
---- a/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk
-+++ b/toolchain/toolchain-bare-metal-buildroot/toolchain-bare-metal-buildroot.mk
-@@ -6,7 +6,6 @@
- 
- TOOLCHAIN_BARE_METAL_BUILDROOT_DEPENDENCIES = newlib-bare-metal
- TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE = $(call qstrip,$(BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH))
--TOOLCHAIN_BARE_METAL_BUILDROOT_SYSROOT = $(HOST_DIR)/$(TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH_TUPLE)/sysroot
- TOOLCHAIN_BARE_METAL_BUILDROOT_ADD_TOOLCHAIN_DEPENDENCY = NO
- 
- $(eval $(virtual-package))
+ 	  Build boot firmware applications from source for Xilinx
+ 	  boards. Users can mix and match applications to be built
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
