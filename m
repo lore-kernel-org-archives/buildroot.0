@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58658C02198
-	for <buildroot@archiver.kernel.org>; Tue, 18 Feb 2025 09:04:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11931C021AA
+	for <buildroot@archiver.kernel.org>; Tue, 18 Feb 2025 09:04:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD83040B96;
-	Tue, 18 Feb 2025 09:04:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D04D2410BA;
+	Tue, 18 Feb 2025 09:04:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hoargFZqvsJt; Tue, 18 Feb 2025 09:04:17 +0000 (UTC)
+ id XWCXmlDhEtwP; Tue, 18 Feb 2025 09:04:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40906408EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADD5140BC1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 40906408EC;
-	Tue, 18 Feb 2025 09:04:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id DB42F1D76
- for <buildroot@buildroot.org>; Tue, 18 Feb 2025 09:04:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADD5140BC1;
+	Tue, 18 Feb 2025 09:04:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 620FAE05
+ for <buildroot@buildroot.org>; Tue, 18 Feb 2025 09:04:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C96484053A
+ by smtp2.osuosl.org (Postfix) with ESMTP id E802C405C7
  for <buildroot@buildroot.org>; Tue, 18 Feb 2025 09:04:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id isCz6Z8vB74b for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qhEU4qj-fNDM for <buildroot@buildroot.org>;
  Tue, 18 Feb 2025 09:04:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D07D4042E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4970A404FF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D07D4042E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4970A404FF
  for <buildroot@buildroot.org>; Tue, 18 Feb 2025 09:04:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 59F9E8778C; Tue, 18 Feb 2025 09:04:07 +0000 (UTC)
+ id 2D46F8778A; Tue, 18 Feb 2025 09:04:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 18 Feb 2025 09:24:03 +0100
+Date: Tue, 18 Feb 2025 09:20:02 +0100
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 7c4e482b15359b186e697678de5ee1f280d78450
-X-Git-Newrev: 84d0090751201207fb4ffaac7391a901b57a47b5
+X-Git-Oldrev: 7cd02fa986c6c986f8fc299105f1a0c9339b5294
+X-Git-Newrev: 82ccb6dbb0e5646d19a590bfa1d064b7d36ed2c1
 X-Patchwork-Hint: ignore
-Message-Id: <20250218090407.59F9E8778C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/musl: add
- upstream security fixes for CVE-2025-26519
+Message-Id: <20250218090407.2D46F8778A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/unbound: security
+ bump to version 1.21.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,136 +65,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84d0090751201207fb4ffaac7391a901b57a47b5
+commit: https://git.buildroot.net/buildroot/commit/?id=82ccb6dbb0e5646d19a590bfa1d064b7d36ed2c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Fixes CVE-2025-26519: Musl libc: input-controlled out-of-bounds write
-primitive in iconv()
+Fixes the following security vulnerability:
 
-https://www.openwall.com/lists/musl/2025/02/13/1
+CVE-2024-8508: A vulnerability has been discovered in Unbound when handling
+replies with very large RRsets that Unbound needs to perform name
+compression for.
 
-Fixes:
-https://nvd.nist.gov/vuln/detail/CVE-2025-26519
+https://nlnetlabs.nl/downloads/unbound/CVE-2024-8508.txt
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Julien: add link to cve]
+[Julien: update pgp key id in hash file]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit befcc152f942786c05211471f0b213050bdaef8c)
+(cherry picked from commit 3f98b643fb8a24da71585561758a61dcdb4092d2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...rroneous-input-validation-in-EUC-KR-decod.patch | 41 ++++++++++++++++++++++
- ...n-UTF-8-output-code-path-against-input-de.patch | 40 +++++++++++++++++++++
- package/musl/musl.mk                               |  4 +++
- 3 files changed, 85 insertions(+)
+ package/unbound/unbound.hash | 8 ++++----
+ package/unbound/unbound.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/musl/0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch b/package/musl/0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch
-new file mode 100644
-index 0000000000..dbfd87db76
---- /dev/null
-+++ b/package/musl/0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch
-@@ -0,0 +1,41 @@
-+From e5adcd97b5196e29991b524237381a0202a60659 Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Sun, 9 Feb 2025 10:07:19 -0500
-+Subject: [PATCH] iconv: fix erroneous input validation in EUC-KR decoder
-+
-+as a result of incorrect bounds checking on the lead byte being
-+decoded, certain invalid inputs which should produce an encoding
-+error, such as "\xc8\x41", instead produced out-of-bounds loads from
-+the ksc table.
-+
-+in a worst case, the loaded value may not be a valid unicode scalar
-+value, in which case, if the output encoding was UTF-8, wctomb would
-+return (size_t)-1, causing an overflow in the output pointer and
-+remaining buffer size which could clobber memory outside of the output
-+buffer.
-+
-+bug report was submitted in private by Nick Wellnhofer on account of
-+potential security implications.
-+
-+Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=e5adcd97b5196e29991b524237381a0202a60659
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/locale/iconv.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/locale/iconv.c b/src/locale/iconv.c
-+index 9605c8e9..008c93f0 100644
-+--- a/src/locale/iconv.c
-++++ b/src/locale/iconv.c
-+@@ -502,7 +502,7 @@ size_t iconv(iconv_t cd, char **restrict in, size_t *restrict inb, char **restri
-+ 			if (c >= 93 || d >= 94) {
-+ 				c += (0xa1-0x81);
-+ 				d += 0xa1;
-+-				if (c >= 93 || c>=0xc6-0x81 && d>0x52)
-++				if (c > 0xc6-0x81 || c==0xc6-0x81 && d>0x52)
-+ 					goto ilseq;
-+ 				if (d-'A'<26) d = d-'A';
-+ 				else if (d-'a'<26) d = d-'a'+26;
-+-- 
-+2.39.5
-+
-diff --git a/package/musl/0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch b/package/musl/0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch
-new file mode 100644
-index 0000000000..a14041364a
---- /dev/null
-+++ b/package/musl/0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch
-@@ -0,0 +1,40 @@
-+From c47ad25ea3b484e10326f933e927c0bc8cded3da Mon Sep 17 00:00:00 2001
-+From: Rich Felker <dalias@aerifal.cx>
-+Date: Wed, 12 Feb 2025 17:06:30 -0500
-+Subject: [PATCH] iconv: harden UTF-8 output code path against input decoder
-+ bugs
-+
-+the UTF-8 output code was written assuming an invariant that iconv's
-+decoders only emit valid Unicode Scalar Values which wctomb can encode
-+successfully, thereby always returning a value between 1 and 4.
-+
-+if this invariant is not satisfied, wctomb returns (size_t)-1, and the
-+subsequent adjustments to the output buffer pointer and remaining
-+output byte count overflow, moving the output position backwards,
-+potentially past the beginning of the buffer, without storing any
-+bytes.
-+
-+Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=c47ad25ea3b484e10326f933e927c0bc8cded3da
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ src/locale/iconv.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/locale/iconv.c b/src/locale/iconv.c
-+index 008c93f0..52178950 100644
-+--- a/src/locale/iconv.c
-++++ b/src/locale/iconv.c
-+@@ -545,6 +545,10 @@ size_t iconv(iconv_t cd, char **restrict in, size_t *restrict inb, char **restri
-+ 				if (*outb < k) goto toobig;
-+ 				memcpy(*out, tmp, k);
-+ 			} else k = wctomb_utf8(*out, c);
-++			/* This failure condition should be unreachable, but
-++			 * is included to prevent decoder bugs from translating
-++			 * into advancement outside the output buffer range. */
-++			if (k>4) goto ilseq;
-+ 			*out += k;
-+ 			*outb -= k;
-+ 			break;
-+-- 
-+2.39.5
-+
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 08706c139f..92ecb0624d 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -26,6 +26,10 @@ MUSL_ADD_TOOLCHAIN_DEPENDENCY = NO
+diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
+index ba876299c2..d9397f698a 100644
+--- a/package/unbound/unbound.hash
++++ b/package/unbound/unbound.hash
+@@ -1,8 +1,8 @@
+-# From https://nlnetlabs.nl/downloads/unbound/unbound-1.21.0.tar.gz.sha256
++# From https://nlnetlabs.nl/downloads/unbound/unbound-1.21.1.tar.gz.sha256
+ # After checking pgp signature from:
+-# https://nlnetlabs.nl/downloads/unbound/unbound-1.21.0.tar.gz.asc
+-# with key: EDFAA3F2CA4E6EB05681AF8E9F6F1C2D7E045F8D
+-sha256  e7dca7d6b0f81bdfa6fa64ebf1053b5a999a5ae9278a87ef182425067ea14521  unbound-1.21.0.tar.gz
++# https://nlnetlabs.nl/downloads/unbound/unbound-1.21.1.tar.gz.asc
++# with key: 948EB42322C5D00B79340F5DCFF3344D9087A490
++sha256  3036d23c23622b36d3c87e943117bdec1ac8f819636eb978d806416b0fa9ea46  unbound-1.21.1.tar.gz
  
- MUSL_INSTALL_STAGING = YES
+ # Locally calculated
+ sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index 8677cb4d4e..fb15705948 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0004-iconv-fix-erroneous-input-validation-in-EUC-KR-decod.patch
-+# 0005-iconv-harden-UTF-8-output-code-path-against-input-de.patch
-+MUSL_IGNORE_CVES += CVE-2025-26519
-+
- # musl does not build with LTO, so explicitly disable it
- # when using a compiler that may have support for LTO
- ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),y)
+-UNBOUND_VERSION = 1.21.0
++UNBOUND_VERSION = 1.21.1
+ UNBOUND_SITE = https://nlnetlabs.nl/downloads/unbound
+ UNBOUND_INSTALL_STAGING = YES
+ UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
