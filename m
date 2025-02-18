@@ -4,82 +4,194 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9767C021AA
-	for <buildroot@archiver.kernel.org>; Tue, 18 Feb 2025 05:37:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84D22C02198
+	for <buildroot@archiver.kernel.org>; Tue, 18 Feb 2025 05:56:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9738C60F08;
-	Tue, 18 Feb 2025 05:37:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3007D60F69;
+	Tue, 18 Feb 2025 05:56:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6n4FXGOtpFsF; Tue, 18 Feb 2025 05:37:27 +0000 (UTC)
+ id p0UD2YCNyQxE; Tue, 18 Feb 2025 05:56:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A325F60F11
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A39860F8B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A325F60F11;
-	Tue, 18 Feb 2025 05:37:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A39860F8B;
+	Tue, 18 Feb 2025 05:56:44 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7A6AA72
- for <buildroot@buildroot.org>; Tue, 18 Feb 2025 05:37:25 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id DD5B8968
+ for <buildroot@buildroot.org>; Tue, 18 Feb 2025 05:56:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 75DD660F11
- for <buildroot@buildroot.org>; Tue, 18 Feb 2025 05:37:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C162360F69
+ for <buildroot@buildroot.org>; Tue, 18 Feb 2025 05:56:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5C25MtYpV3du for <buildroot@buildroot.org>;
- Tue, 18 Feb 2025 05:37:24 +0000 (UTC)
-X-Greylist: delayed 81008 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 18 Feb 2025 05:37:23 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2612F60F08
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2612F60F08
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=95.163.59.58;
- helo=send219.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
-Received: from send219.i.mail.ru (send219.i.mail.ru [95.163.59.58])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2612F60F08
- for <buildroot@buildroot.org>; Tue, 18 Feb 2025 05:37:23 +0000 (UTC)
-Received: by exim-smtp-844687bc8-8d2vh with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1tkGIJ-000000001lC-3g6N; Tue, 18 Feb 2025 08:37:20 +0300
-To: buildroot@buildroot.org
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Tue, 18 Feb 2025 08:37:18 +0300
-Message-ID: <20250218053718.80431-1-fido_max@inbox.ru>
-X-Mailer: git-send-email 2.47.1
+ id YJ-DllpGTAPO for <buildroot@buildroot.org>;
+ Tue, 18 Feb 2025 05:56:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:2413::608;
+ helo=nam10-dm6-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B65C060F8B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B65C060F8B
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam10on20608.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2413::608])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B65C060F8B
+ for <buildroot@buildroot.org>; Tue, 18 Feb 2025 05:56:41 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=sRWCfBsdLX+c2YZONzzTjh1GAFWtuVjqdnGSYcjp4B+7T7G1uzUQF9pqw2mukIzpNIHz+bFkzjCjz32EMi/IIpV435fjzWVQTVCrHuHga25WFM6HtwYaYQ7HFKabSoXCHvgKucOdhhGULE/HLKzwO4k9PFC8tJ289n+jI32j51hOvwNouY/aBulJQ8ScZWC8XS0vqFXA3shSUSSnK4ryI8qsrdYjCH+ZU0diF8Ap190+Zbw8y6qyqcCs/PQkYPY0j9VytDRPowdP1Su9Px4ddxdVmLQrSzaTgT1chxjyGV1QqtnO7mgN8f+/ubrrWXQjWd0EiMJB2gDF4Y2u5X9IhQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0nFQvVDJs47DTxRP1YtPzR8V1NmmlI6Xd4fG95dwW1g=;
+ b=PXTFkLZkDqPvMqqAXnZA6+nl0Kh2IpcZ4qm2emQFGbNAsnP5goVGtYz6z/AMm7JA+TdMwnJlksD7fOlrgIL7T81J0sjQ9auNzOtuqYwbVU5MDwEG/E4Lf1S6J/1MVRcsGCp+qaAkOtPSzO0H2phGh1j+KAy1TnIlYk3PHDuMy2tKDDqFMUnKnIPgLbvASsqWZ/i+UKU2ZkJss4Vo/gheyfmQFxt0r8LVvEaXwt4HKR9QujygOfxAOzSkiPxVWorsIK9IUKZ2XyNNzLTpXJfF+q6c4BGmFkoMqLGtZLSKYy+6PV/I8rRSJfbuwIgGl4tDe41SVYxVl96x+OGZMRIYlw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from SA1PR12MB5615.namprd12.prod.outlook.com (2603:10b6:806:229::17)
+ by CH1PPF931B95D07.namprd12.prod.outlook.com
+ (2603:10b6:61f:fc00::619) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.21; Tue, 18 Feb
+ 2025 05:56:38 +0000
+Received: from SA1PR12MB5615.namprd12.prod.outlook.com
+ ([fe80::7557:587c:4ec:1913]) by SA1PR12MB5615.namprd12.prod.outlook.com
+ ([fe80::7557:587c:4ec:1913%7]) with mapi id 15.20.8445.017; Tue, 18 Feb 2025
+ 05:56:37 +0000
+To: Arnout Vandecappelle <arnout@mind.be>, "buildroot@buildroot.org"
+ <buildroot@buildroot.org>
+CC: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>,
+ "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
+ "brandon.maier@collins.com" <brandon.maier@collins.com>, "ju.o@free.fr"
+ <ju.o@free.fr>, "thomas.petazzoni@bootlin.com"
+ <thomas.petazzoni@bootlin.com>, "romain.naour@smile.fr"
+ <romain.naour@smile.fr>, "Simek, Michal" <michal.simek@amd.com>
+Thread-Topic: [Buildroot] [PATCH v3 1/5] package/binutils-bare-metal: add
+ multiple tuple support
+Thread-Index: AQHbf6kyWn7uMT21M0acf/GM+lz6bLNJ5qaAgABOhdCAAQXlAIAAHcQggACrLICAAI/7oA==
+Date: Tue, 18 Feb 2025 05:56:37 +0000
+Message-ID: <SA1PR12MB56157DC145A9132AD77048DEF0FA2@SA1PR12MB5615.namprd12.prod.outlook.com>
+References: <20250215125732.2965257-1-neal.frager@amd.com>
+ <bcc4d526-57dc-4a95-9dc5-29c1c94f0ffa@mind.be>
+ <SA1PR12MB5615121EEE77BC29889A29D8F0F82@SA1PR12MB5615.namprd12.prod.outlook.com>
+ <8e84d75f-32f7-4095-80f9-0c1279d3ab10@mind.be>
+ <SA1PR12MB561507917041F98A96EC4044F0FB2@SA1PR12MB5615.namprd12.prod.outlook.com>
+ <940016c1-23aa-4a59-a168-dcc6ac5e144f@mind.be>
+In-Reply-To: <940016c1-23aa-4a59-a168-dcc6ac5e144f@mind.be>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR12MB5615:EE_|CH1PPF931B95D07:EE_
+x-ms-office365-filtering-correlation-id: f549dda5-ac4c-49b9-3a60-08dd4fe10226
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|376014|1800799024|366016|38070700018|41080700001; 
+x-microsoft-antispam-message-info: =?utf-8?B?bEp1bHpxTFB4Y1pSclo4c3FEOGJ3TnZkTGx3SDBFemxtam5EM0RYZ3JzMlBT?=
+ =?utf-8?B?M0NubmJBZU5jVGxsN2NpMHpRRnM3ZXpQem5rLy9nRmNqWndVbFJydmk4UnBo?=
+ =?utf-8?B?Q3BhQzZBTmdtYXA0L1BsdmNadDk4Q1ovN1kzNkgwYkNxQkhLZ042ZGlRWEFK?=
+ =?utf-8?B?d3E4QkVjbTJycEZHRmJsRHhLemJJckxvNWdzR3VZT3VCSXRZMVU4UGxvZVpT?=
+ =?utf-8?B?YTAwc1hyRG9hQ1ZzbjFxRFNMVHRBdVpkY3BvTGJ5ZVFZeklXTnJVbVZqZ3N2?=
+ =?utf-8?B?azJPRndldE9pWGZmWnl2Q1BZT20yOG1vU3ljdnNpTTFhaTZQazNjV2h2eXZT?=
+ =?utf-8?B?SnljekJncVpYVnJJTjc1WGg1d01aTTdpV1hwSmZDMDZCZDhOVllHZ1hRUVV1?=
+ =?utf-8?B?ZUhTdWQ1QnFJWlNoVklSOGxTWTJvUUtOMEs0dkNCVHRKOXhWTWtjS3BtYlFF?=
+ =?utf-8?B?OUYvaVo2RS9WTG1lZ2VacXE4QkNRWjY0dVJQUi9WVnFKSnkzdmhiL3YrczB2?=
+ =?utf-8?B?OXR6bGNQNWRhZXpzZi9PN0xOcnV4bk93QW44SFRmL3F6Z3VSVHA5aVpKMjJq?=
+ =?utf-8?B?MjMwV21GTjB3S09xeVdTZmdacngyOUVUbW5BMmlwU25PQUhpWVpEYVhiZUtp?=
+ =?utf-8?B?WVl3Z3VZSWY0aml3TW5BL1dSYTJjMk9Ha1B0dG0xMmIyMHdQdDVjQW04YVEr?=
+ =?utf-8?B?MElyR1U4N0Z3dFl0VmU4K2dnbEZUbkxsbFUwK3RrNzN0dVlpekJ4dWtKekdz?=
+ =?utf-8?B?OXZFWjVLU3VCRkhXcFprbUZBVjZ0aFpDK0JpY1ZmdWdJcDVoZ0p3ZG1tMEJN?=
+ =?utf-8?B?a2d4L2hWTXR2VHlyTGVBU05MVVM3VFFCZGF0YlY0UEF5bHUxWjVIUC9BYThC?=
+ =?utf-8?B?Q0ozdVhHWlZCYTBsL1gySmJibmZqL1Fqd2kwckpaT2hsWlpwWWJJMGJhWXRL?=
+ =?utf-8?B?bERudGVrNlR3Q1VNKzMyQzVqd09QNHdnMlo3ZlgyREVNc0lYemV2bGlDdkk0?=
+ =?utf-8?B?Y1pBeG9EV3FWTzROM3hKMUl2OERDMWRhejJiQjFlS2xwNlZWZE5FMDhSaUh6?=
+ =?utf-8?B?N0lLaitDNEQ0NytBNk1YUHJiT3JnekRGSkdhMjRybEg5cnlZN2VmOGxDNElp?=
+ =?utf-8?B?Z2x6WlFUbFB3My9DWU1ubm5pdXZ5WGZxNmJVR1lsalE1djViNGtHM0pHSmxO?=
+ =?utf-8?B?OGFUUitZLytTeGZacGVZZGt4OEFvL3FBMFZOZERaNkpVelpEWm9XWkpuZk9u?=
+ =?utf-8?B?cjZ6VXVWUFBCQVN1NitiMUJRZWlnZnNIWFRNY2NFTHFPQjlQRXcvYzBsOTV2?=
+ =?utf-8?B?S2FERHFETE5QTkMzcnJvR3ZNOEI5STI1S2JDb2JTdmJYUkxBYmQ3MCtsQjFz?=
+ =?utf-8?B?NzlveWdhcHpONFRyYVozaGtBeWFYT2VYQmlmTmZ4S2xGbU1KRHhqOWcwTXNU?=
+ =?utf-8?B?SVJheUhBRzY4K2JGVlVzUE1CUlozZjdmR1FCQkxVaUJobFErZGtNR3RUMTk5?=
+ =?utf-8?B?Y1Ewa2xpNjVkd2ZjRDFBbHcrOU5VL21NbHZhUGV0MVpLOHU1WmdjcGVaUlBZ?=
+ =?utf-8?B?SHZzMVA3TlhHZkJMZEVEdGlyNHgraC81cVUvRmR2WUgwVnoyYjNEOHc2YS9o?=
+ =?utf-8?B?ZXNpSm8zTVB6WGE2N2N3YVdXcVNzdHdXTEpYRGt5ZjMva2xJNVZqcVY1V0dV?=
+ =?utf-8?B?REdadHd5cjBnK3JBbDdyV1hyNjhZbFQraHgwYzArS0Z6RklJM0xLcTRkQ0pS?=
+ =?utf-8?B?aHVLbFZNUllMQW5jNlE4MVVSQmpCUlF6WFpTVStnTkVKTVRUcEE5NG1BMzF2?=
+ =?utf-8?B?WlJVeHl4NzdrWWxJSk5Ub0UvdlFuRk5UK0ZTVExOSEZkMTA2WnN6L1hXaGZ2?=
+ =?utf-8?B?S3hwNXRpWXUxZ2plTlpCOHVLUldhZndlejlNTFIvTHJISXJEdTlBT1dpb3NZ?=
+ =?utf-8?B?TEJoaDNmemlFZGhLWklFbnJJVi9HazJxYUM4SUpPdUk1WTI5QkNJT0E2clFM?=
+ =?utf-8?B?WGpUcXo0REZBPT0=?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:SA1PR12MB5615.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(376014)(1800799024)(366016)(38070700018)(41080700001); DIR:OUT;
+ SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YlZyZzdJYUwzaENsQXlueWx5alVVL3FtOXZlZjZCVlJGRzBQOU9KUWdHTWdj?=
+ =?utf-8?B?Z1FSN0pPYngrMDZiSEpJMzdwS2c4QzB6L0JUQUIyNVNSd0ZBdjJRY2RJTXpl?=
+ =?utf-8?B?b21LdzRHbXpXTTR2UkVmSWRWVmY3WFJ5UUxEaVpPSDlVL29JYXBZRllkUkE0?=
+ =?utf-8?B?VDdRbjJoN0FSSVIzWlYxa3BVVlAzVmgxOXl4WVVpcW1IVzViaGNtaCtiMTNH?=
+ =?utf-8?B?TWJpKzhlQTB6YW5ZQUdXUFhNTTFRRWI4SlBZdlFEYjd3ZHZjV1ZoMzJhUnVx?=
+ =?utf-8?B?RlM4RzIyYW1QdlkxWGxPcVpOYXlQOEgxclF0NmcrS29ac0FTQ0oxK0Z2NUVl?=
+ =?utf-8?B?b3BVSks1d24xZWtHb1NhVkYyR0JMdnpqQ3M5ZUo1MkNCcEpqNndMN2pQUFlC?=
+ =?utf-8?B?eGk2NU1Dd2dOOTVtcUNycXQxN2lRNlVKS1lZdU1VYlFpeTlnRExtUldHcjUv?=
+ =?utf-8?B?alQ4YmlUdW9oMDNZd3o3a0tTSkxjR3FiQlVnOUlrNHhBU0JtNVp3SENWWmxq?=
+ =?utf-8?B?Q2c0d0NIRFVnSTNORXlNN2J0SDQ1NVh1amJmZFVQdzZpZWtWZzJIb1AzcjJJ?=
+ =?utf-8?B?bFdETmhOSnZsclRQQSsvVjl6T2xYQVFQeVhSUkJ6a3lHaS95Y2IzZ0t4LzBF?=
+ =?utf-8?B?aWJyTFhRYUxHV3ZNT2YxdnF4R1pLcGNENzVOSCtKL04rYWJQaXNyWG8wQ1JL?=
+ =?utf-8?B?TXRadllKN1VVb2owRG8rZHpUdThYaXlDcGd3am9mbkFOclFDV2hkSUlmUHVB?=
+ =?utf-8?B?REdqUXFzWG1qNkNUME5zUzNTMmt1dExiTTlmc01EREI0VFVuL2pUeFNtZllE?=
+ =?utf-8?B?YTN5WGUvMzBYMFpGTUdocHEwK2RxNlhCNVdJR1pvd2E3ckxzTDQySjJ0M1h6?=
+ =?utf-8?B?dEt1OU1HSzV1V1JkejhWeGNSN0FXRElXeG43ZEFLc3NGSEEzVXpOQXZMRkQy?=
+ =?utf-8?B?cTJ1YmJQZjhEMm52NGVtZ0o4QWUwN09EZUpmb1g0M25iaWd0ZENPRG00RmF3?=
+ =?utf-8?B?WTFhcTFiYVZuRVRkYnZxNlJvK21Nd3ordkd2VUZ6QzIxTFIwSzZIdzhoQVI1?=
+ =?utf-8?B?cnZnSE9EVmZ1SHBDTG9BcWVlamhaT2ttRjd4NVJ0bGJkQ0thVUprNG1XeHdn?=
+ =?utf-8?B?bk11Z01keS82c2p2Ukt4SE14Zkc1MnUrVzU4Z1lXNHJWNE5XTFcxczdFUHVm?=
+ =?utf-8?B?c3dZWlR4bTNFUkdVVzFyMEx6cXJDM2N2b0E4aFg5ZU85UllMQkw4QkxqZE5W?=
+ =?utf-8?B?TFNOdlJRUk8wZE02Z2F0eTdiWkh5OTV0b29IVHhuc3ZOaDFPYXJ5bkg2U1Uw?=
+ =?utf-8?B?U0dFWkNYZERsa1dRT3ZraDJibDdnNnY4a2h1eUVFUTZmUitDdDI5MlRBaFBt?=
+ =?utf-8?B?MHZoUTR1cDdNQmwzOW9QWXZuMHFZNVZEZEhnQWdRM2NOdXlscUE0SGNpTmhP?=
+ =?utf-8?B?U24zYmM1dFpYcTBvUXk2YlIvQ0crVEZDa1hWQ3ExRVY3WFlzOFVYSk9mMTVx?=
+ =?utf-8?B?ZTNHRTlGMU83aTU2Ull6bCtINWVCMkVoVlhYbWc4YUFlN251cG9yYWhmREhS?=
+ =?utf-8?B?c1FxNW9Dd3poQ0JQRmRiRDNzZkpFWFFibDRWUGtabFdjTUJScDI0TCtDNWRE?=
+ =?utf-8?B?UDl4cGZ3Nzl0ZnkzUldBUCtScUpBUTJ2eUZHa3FyTXJBdVJpMUlEbUI2SHlB?=
+ =?utf-8?B?NFkwY0gyY2VZdnZHcXd3UUZmTFNXU0gvNDFVVFZTbEI1enNMUlNNOTRxTTdk?=
+ =?utf-8?B?T01GeUIxRzlPYjlaZGQ5elIxamtjdmk1aXZ2aDkvdE4xVGxvL1ljYis4aGZm?=
+ =?utf-8?B?dFIxUDlxekVzYVBHZDdwMU5vZndnaWRLTVRpdDFlYk1XNFpjU3kxNGNZUUxz?=
+ =?utf-8?B?Sk5DV3g0T0pGNTZyUEVQckNMWHJFTm5keVFURis0VXFqQkx2R0t2WVBreWZu?=
+ =?utf-8?B?UEU2R0ZMWGpWdEQzdGxpWEtEekNWTFEvb0V0aFNrZkNLUk9PK2gyNW0yOXVC?=
+ =?utf-8?B?cWxad3FnWm53a2tUQ20rVFNxK1ZHeUJwc294RWYxVlkzcmhTRUphV1lBckEx?=
+ =?utf-8?B?M3pDamtObllWRFRxWjZUTWJUN1hSOFlwODhoVzJ4NUltTzEzaUFsYlZScnZ2?=
+ =?utf-8?Q?zUlw=3D?=
 MIME-Version: 1.0
-X-Mailru-Src: smtp
-X-7564579A: 646B95376F6C166E
-X-77F55803: 4F1203BC0FB41BD93899CACFFF273C599441A9C4784ECFDD3A67E815C75128A7182A05F5380850403F8C9A1345F8CA983DE06ABAFEAF6705331DB9AEF040992428CD28B960291FAA5709D77201D190DA
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE792C68BF9CD4C0E9EEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637C2ED30353E4AD6B18638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D82546BFDF12487F67467823DBF7423A0D271A8EC57F1B074320879F7C8C5043D14489FFFB0AA5F4BFA417C69337E82CC2CC7F00164DA146DAFE8445B8C89999728AA50765F7900637855F30AB076FAB09389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC8B1E7EB37E7A723DAF6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA7E827F84554CEF5019E625A9149C048EE9ECD01F8117BC8BEE2021AF6380DFAD18AA50765F790063735872C767BF85DA227C277FBC8AE2E8BDAE3FA6833AEA0C275ECD9A6C639B01B4E70A05D1297E1BBCB5012B2E24CD356
-X-C1DE0DAB: 0D63561A33F958A543C343099EEE85945002B1117B3ED696D4833A57DF58A1D569995D676B7B4CBE823CB91A9FED034534781492E4B8EEAD3C056C6FCE5AFF8EC79554A2A72441328621D336A7BC284946AD531847A6065A17B107DEF921CE79BDAD6C7F3747799A
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF401E1F26C89A0AE135EFBA8B46B14A73DD6E3B04971B671E41F95BE653030DC217059C39C4D662420526A8B1FD8BF66B67DFF3D2EEAF51486FD6EDF58E61E390C627F7B007FD0218111DC66A97D0BFE2913E6812662D5F2A17D6C1CDD2003EB8E03787203701020945C72C348FB7EED3
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+ObcCpyrx6l7KImUglyhkEat/+ysWwi0gdhEs0JGjl6ggRWTy1haxBpVdbIX1nthFXMZebaIdHP2ghjoIc/363UZI6Kf1ptIMVWiyXSWEEqdrXYFxdquIuBc=
-X-Mailru-Sender: 689FA8AB762F739381B31377CF4CA219FA89CDD5EB07DCFB908ED357D782B6D81CDF72C24F867B4190DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; 
- s=mail4; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:
- To:From:From:Sender:Reply-To:To:Cc:Content-Type:Content-Transfer-Encoding:
- Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
- Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
- List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
- X-Cloud-Ids:Disposition-Notification-To;
- bh=S8ew3jD0pE0bDmYdKUjfGoOWxnVW21+CJPfKnVGRjvU=; t=1739857044; x=1739947044; 
- b=c+91qEHA4I3twNsK624PQT9mnRNrX3shmdqAAH9zwSREJeel7+7wibXHl/gieC/kIUTO4kfwzWm
- dpf/P+o7EadViGGcsSz/lIkBEXsm6uD9QhnGx58CweZBx9B2qEewJmHGvnhUDe3ghSTrAhTQskb+s
- BpvFsSfExKQleE8a6zqFlveCiH9aYGFEQlyz4JRQtWdqFYNF9vJrrmJUZj6vBfAU5nsuVQqNln4DD
- bVbWtyS0fkdNGiNWK2nFELA/Gd248NgOxbOg0iXpxO1UIQhO1Q0rZwaTDnOHifgB50C/X/qUrDRp6
- KBmqe4fT2GpLc1FexAn++AUmPooZ0n13AfhA==;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR12MB5615.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f549dda5-ac4c-49b9-3a60-08dd4fe10226
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Feb 2025 05:56:37.8757 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wQIHhlNA/CisIsWrWXzX8uGsraYnUjNcw6JqZpTStZ45ewy/8cyq+8gCpWIIiByQ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH1PPF931B95D07
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0nFQvVDJs47DTxRP1YtPzR8V1NmmlI6Xd4fG95dwW1g=;
+ b=qgZ5DGsxIqRLVg3TRkqXIIaAeQp6ufbujxBurya00Gouxw8vaGX+VPkGOjMxs6sSsVuAUEHzaDutYxLSE0TV7MQbnzzk73EvT5o7DCH/Kq+ADQNmeEeMIOXHmL8WeejvMAAJam6SY1ioUh/RKzLhWnDbfmEwFruMtCeCMaNgWOY=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=inbox.ru
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
- header.s=mail4 header.b=c+91qEHA
-X-Mailman-Original-Authentication-Results: exim-smtp-844687bc8-8d2vh; auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: [Buildroot] [PATCH 1/1] package/postgis: bump to version 3.5.2
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=qgZ5DGsx
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH v3 1/5] package/binutils-bare-metal: add
+ multiple tuple support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,46 +203,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://github.com/postgis/postgis/blob/3.5.2/NEWS
+Hi Arnout,
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
----
- package/postgis/postgis.hash | 2 +-
- package/postgis/postgis.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> CFLAGS and LDFLAGS are already defined as part of HOST_CONFIGURE_OPTS.
+> Is this always the case?  And are they always the same path definitions?
+> 
+>  From what I am seeing, I believe we can do the following with the autotools
+> infrastructure.
+> 
+> pkg-autotools.mk:
+> 
+> define $(2)_CONFIGURE_CMDS
+> 	(cd $$($$(PKG)_SRCDIR) && rm -rf config.cache; \
+> 	$$(HOST_CONFIGURE_OPTS) \
+> -	CFLAGS="$$(HOST_CFLAGS)" \
+> -	LDFLAGS="$$(HOST_LDFLAGS)" \
+> 	$$($$(PKG)_CONF_ENV) \
+> 	CONFIG_SITE=/dev/null \
+> 	./configure \
+> 
+> Could you verify this?
 
-diff --git a/package/postgis/postgis.hash b/package/postgis/postgis.hash
-index 9e283f5ac7..83c4e9c99f 100644
---- a/package/postgis/postgis.hash
-+++ b/package/postgis/postgis.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ca698a22cc2b2b3467ac4e063b43a28413f3004ddd505bdccdd74c56a647f510  postgis-3.5.0.tar.gz
-+sha256  fb9f95d56e3aaef6a296473c76a3b99005ac41864d486c197cd478c9b14f791a  postgis-3.5.2.tar.gz
- sha256  81749eea887e78402c9b85896cd629b155bc29256927f818f01001f038146391  LICENSE.TXT
-diff --git a/package/postgis/postgis.mk b/package/postgis/postgis.mk
-index a2b121e6f5..b6deb36cb3 100644
---- a/package/postgis/postgis.mk
-+++ b/package/postgis/postgis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGIS_VERSION = 3.5.0
-+POSTGIS_VERSION = 3.5.2
- POSTGIS_SITE = https://download.osgeo.org/postgis/source
- # parallel build issues
- POSTGIS_MAKE = $(MAKE1)
--- 
-2.47.1
+>   Indeed! This redundancy was introduced by Thomas 15 years ago in commit 
+> b07030a708293756e25edd6432ed02cc53ff758e. Before that, HOST_CONFIGURE_OPTS defined
 
+> CC="$(HOSTCC) $(HOST_CFLAGS)"
+
+> which is not actually sufficient in many cases because configure wants to parse 
+> and interpret CFLAGS... So an additional CFLAGS=... had to be added in the 
+> configure call.
+
+> So yes, please remove that redundancy!
+
+Ok!  I will do that.
+
+Best regards,
+Neal Frager
+AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
