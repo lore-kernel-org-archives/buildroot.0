@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87056C282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:20:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E51AC282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:20:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1CD3A70D99;
-	Fri, 28 Feb 2025 17:20:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6EEE750A90;
+	Fri, 28 Feb 2025 17:20:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8_9p8tF1oJL5; Fri, 28 Feb 2025 17:20:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PqoVrmPBerIN; Fri, 28 Feb 2025 17:20:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBD1C70D96
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64072508D5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BBD1C70D96;
-	Fri, 28 Feb 2025 17:20:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64072508D5;
+	Fri, 28 Feb 2025 17:20:52 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FD9D1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 139EF711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 886684694C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8658442E68
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JjpbWsv-6eFb for <buildroot@buildroot.org>;
+ id Yeqx4aHm-P1i for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:32:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C05B542558
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D1C5424BA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C05B542558
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1D1C5424BA
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B3C68875C7; Fri, 28 Feb 2025 16:30:43 +0000 (UTC)
+ id 161B6875C7; Fri, 28 Feb 2025 16:30:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 18 Feb 2025 20:58:16 +0100
+Date: Tue, 18 Feb 2025 21:48:41 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5494efe61b64c40dc5b197d8fd9732b4a3fadd98
-X-Git-Newrev: d21aeb44e06eb8259179edb3f7e330a07f8b908f
+X-Git-Oldrev: 01b45ef87db4e9af5ee912052fe8276bff4a9745
+X-Git-Newrev: 39aec97630e63559af2b84832da91e074582445d
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163043.B3C68875C7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] utils/brmake: simplify
- redirection
+Message-Id: <20250228163044.161B6875C7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] fs/erofs: add config options
+ for dedupe, fragments and ztailpacking
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,42 +61,103 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0172819830228521730=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d21aeb44e06eb8259179edb3f7e330a07f8b908f
+--===============0172819830228521730==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=39aec97630e63559af2b84832da91e074582445d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-We want to redirect both stdout and stderr to the log, so just do both
-redirections at once. This simplifies the call to make, which was
-inherited from afdb545b2847 (tools: new tool to filter the output of
-make) when brmake was using unbuffer (and even then it was not entirely
-waranted to do the redirection that way).
+Add Kconfig toggles for a few more extended options that are useful for
+reducing size and improving performance of EROFS images. Descriptions of the
+config options were taken from the erofs-utils manpage.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Jan Čermák <sairon@sairon.cz>
+[Arnout: fix Config.in help text and indentation]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- utils/brmake | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/erofs/Config.in | 27 +++++++++++++++++++++++++++
+ fs/erofs/erofs.mk  | 16 ++++++++++++++++
+ 2 files changed, 43 insertions(+)
 
-diff --git a/utils/brmake b/utils/brmake
-index 4b9179e415..a4b9e7fa71 100755
---- a/utils/brmake
-+++ b/utils/brmake
-@@ -7,8 +7,8 @@ main() {
+diff --git a/fs/erofs/Config.in b/fs/erofs/Config.in
+index 2041a0034e..91f51b76d7 100644
+--- a/fs/erofs/Config.in
++++ b/fs/erofs/Config.in
+@@ -58,6 +58,33 @@ config BR2_TARGET_ROOTFS_EROFS_LZMA_LEVEL
  
-     start=${SECONDS}
+ endif # BR2_TARGET_ROOTFS_EROFS_LZMA
  
--    ( exec 2>&1; make "${@}" ) \
--    > >( while read -r line; do
-+    make "${@}" \
-+    &> >( while read -r line; do
-              printf "%(%Y-%m-%dT%H:%M:%S)T %s\n" -1 "${line}"
-          done \
-          |tee -a br.log \
++config BR2_TARGET_ROOTFS_EROFS_DEDUPE
++	bool "enable data deduplication"
++	depends on !BR2_TARGET_ROOTFS_EROFS_NONE
++	help
++	  Enable global compressed data deduplication to reduce FS image
++	  size. Introduced in Linux 6.1.
++
++config BR2_TARGET_ROOTFS_EROFS_FRAGMENTS
++	bool "enable fragments packing"
++	help
++	  Pack the tail part (pcluster) of compressed files, or entire
++	  files, into a special inode for smaller image size.
++	  Introduced in Linux 6.1.
++
++config BR2_TARGET_ROOTFS_EROFS_ALL_FRAGMENTS
++	bool "enable fragments packing"
++	help
++	  Forcely record the whole files into a special inode for better
++	  compression. Introduced in Linux 6.1.
++
++config BR2_TARGET_ROOTFS_EROFS_ZTAILPACKING
++	bool "enable ztailpacking"
++	help
++	  Pack the tail part (pcluster) of compressed files into its
++	  metadata to save more space and the tail part I/O. Introduced
++	  in Linux 5.17.
++
+ config BR2_TARGET_ROOTFS_EROFS_PCLUSTERSIZE
+ 	int "pcluster size"
+ 	default 0
+diff --git a/fs/erofs/erofs.mk b/fs/erofs/erofs.mk
+index e8d30bace8..3b64cb1c6e 100644
+--- a/fs/erofs/erofs.mk
++++ b/fs/erofs/erofs.mk
+@@ -22,6 +22,22 @@ ifneq ($(BR2_TARGET_ROOTFS_EROFS_PCLUSTERSIZE),0)
+ ROOTFS_EROFS_ARGS += -C$(strip $(BR2_TARGET_ROOTFS_EROFS_PCLUSTERSIZE))
+ endif
+ 
++ifeq ($(BR2_TARGET_ROOTFS_EROFS_DEDUPE),y)
++ROOTFS_EROFS_ARGS += -Ededupe
++endif
++
++ifeq ($(BR2_TARGET_ROOTFS_EROFS_FRAGMENTS),y)
++ROOTFS_EROFS_ARGS += -Efragments
++endif
++
++ifeq ($(BR2_TARGET_ROOTFS_EROFS_ALL_FRAGMENTS),y)
++ROOTFS_EROFS_ARGS += -Eall-fragments
++endif
++
++ifeq ($(BR2_TARGET_ROOTFS_EROFS_ZTAILPACKING),y)
++ROOTFS_EROFS_ARGS += -Eztailpacking
++endif
++
+ define ROOTFS_EROFS_CMD
+ 	$(HOST_DIR)/bin/mkfs.erofs $(ROOTFS_EROFS_ARGS) $@ $(TARGET_DIR)
+ endef
+
+--===============0172819830228521730==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0172819830228521730==--
