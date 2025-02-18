@@ -4,50 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C1DFC021AD
-	for <buildroot@archiver.kernel.org>; Tue, 18 Feb 2025 12:09:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E1F7C02198
+	for <buildroot@archiver.kernel.org>; Tue, 18 Feb 2025 12:10:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B1A0610CA;
-	Tue, 18 Feb 2025 12:09:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ECD9961079;
+	Tue, 18 Feb 2025 12:10:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hk6X_k7RBI7N; Tue, 18 Feb 2025 12:09:22 +0000 (UTC)
+ id WspgvSE-_hrc; Tue, 18 Feb 2025 12:10:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4723C610D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AB33610CB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4723C610D4;
-	Tue, 18 Feb 2025 12:09:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 96848C8
- for <buildroot@buildroot.org>; Tue, 18 Feb 2025 12:09:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0AB33610CB;
+	Tue, 18 Feb 2025 12:10:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 679ACC8
+ for <buildroot@buildroot.org>; Tue, 18 Feb 2025 12:10:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 841884129C
- for <buildroot@buildroot.org>; Tue, 18 Feb 2025 12:09:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4C38A83B74
+ for <buildroot@buildroot.org>; Tue, 18 Feb 2025 12:10:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ybPsenMaJbxv for <buildroot@buildroot.org>;
- Tue, 18 Feb 2025 12:09:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5-DnpCaAJQka for <buildroot@buildroot.org>;
+ Tue, 18 Feb 2025 12:10:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C2C5412A7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2C2C5412A7
- for <buildroot@buildroot.org>; Tue, 18 Feb 2025 12:09:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1BB17877E4; Tue, 18 Feb 2025 12:09:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4375480F3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4375480F3C
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4375480F3C
+ for <buildroot@buildroot.org>; Tue, 18 Feb 2025 12:10:41 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B99A51F687;
+ Tue, 18 Feb 2025 12:10:38 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1tkMQw-003H7z-07;
+ Tue, 18 Feb 2025 13:10:38 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 18 Feb 2025 10:50:27 +0100
-X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: ab5f8362bdc3a7cb60a08eb36c0725be0faa7fc7
-X-Git-Newrev: be469ec0cc06cae4cdd76e7c5813f15604b6502a
-X-Patchwork-Hint: ignore
-Message-Id: <20250218120916.1BB17877E4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] support/testing:
- test_python_{gnupg, spake2}: increase timeout value
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+References: <20250216135034.2068766-1-bernd@kuhls.net>
+Date: Tue, 18 Feb 2025 13:10:38 +0100
+In-Reply-To: <20250216135034.2068766-1-bernd@kuhls.net> (Bernd Kuhls's message
+ of "Sun, 16 Feb 2025 14:50:34 +0100")
+Message-ID: <87mseja1xd.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeiuddvkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufhffjgfkfgggtgesthdttddttdertdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeevledvleehfefhjeeutedtgffhvdekfefggffgueeuiedvvedufeejgfffvdehffenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhinhhtvghlrdgtohhmnecukfhppedujeekrdduudelrddurddufeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudejkedrudduledruddrudefjedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsggvrhhnugeskhhuhhhlshdrnhgvthdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/intel-microcode: security bump
+ version to 20250211
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,48 +73,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be469ec0cc06cae4cdd76e7c5813f15604b6502a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-Previously, these tests had the potential for timing out with the
-default 5 second timeout value if initializing /dev/urandom took too
-long.
+ > Release notes:
+ > https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20250211
 
-Now the tests use a 10 second timeout value.
+ > CVE-2024-31068:
+ > https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01166.html
 
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 9bc3bbce3873667c229d8b16552f58045ee3c439)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/testing/tests/package/test_python_gnupg.py  | 1 +
- support/testing/tests/package/test_python_spake2.py | 1 +
- 2 files changed, 2 insertions(+)
+ > CVE-2024-36293
+ > https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01213.html
 
-diff --git a/support/testing/tests/package/test_python_gnupg.py b/support/testing/tests/package/test_python_gnupg.py
-index 8861115130..8b438aed15 100644
---- a/support/testing/tests/package/test_python_gnupg.py
-+++ b/support/testing/tests/package/test_python_gnupg.py
-@@ -9,3 +9,4 @@ class TestPythonPy3GnuPG(TestPythonPackageBase):
-         BR2_PACKAGE_PYTHON_GNUPG=y
-         """
-     sample_scripts = ["tests/package/sample_python_gnupg.py"]
-+    timeout = 10  # /dev/urandom can take a while to become initialized
-diff --git a/support/testing/tests/package/test_python_spake2.py b/support/testing/tests/package/test_python_spake2.py
-index fb47a0802c..0629772bc3 100644
---- a/support/testing/tests/package/test_python_spake2.py
-+++ b/support/testing/tests/package/test_python_spake2.py
-@@ -9,3 +9,4 @@ class TestPythonPy3Spake2(TestPythonPackageBase):
-         BR2_PACKAGE_PYTHON_SPAKE2=y
-         """
-     sample_scripts = ["tests/package/sample_python_spake2.py"]
-+    timeout = 10  # /dev/urandom can take a while to become initialized
+ > CVE-2023-43758, CVE-2023-34440, CVE-2024-24582, CVE-2024-29214,
+ > CVE-2024-28127, CVE-2024-39279, CVE-2024-31157 & CVE-2024-28047:
+ > https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01139.html
+
+ > CVE-2024-39355:
+ > https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01228.html
+
+ > CVE-2024-37020:
+ > https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01194.html
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+
+Committed to 2024.02.x and 2024.11.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
