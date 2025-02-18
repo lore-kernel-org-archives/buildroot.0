@@ -4,49 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFCD1C021AA
-	for <buildroot@archiver.kernel.org>; Tue, 18 Feb 2025 21:22:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF8F8C021AA
+	for <buildroot@archiver.kernel.org>; Tue, 18 Feb 2025 21:48:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8DC4160F34;
-	Tue, 18 Feb 2025 21:22:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 965086101A;
+	Tue, 18 Feb 2025 21:48:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zao51OwUFdkk; Tue, 18 Feb 2025 21:22:36 +0000 (UTC)
+ id ue9zTjSHBBKO; Tue, 18 Feb 2025 21:48:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54883608F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2AAF60838
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54883608F6;
-	Tue, 18 Feb 2025 21:22:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 70B63C8
- for <buildroot@buildroot.org>; Tue, 18 Feb 2025 21:22:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2AAF60838;
+	Tue, 18 Feb 2025 21:48:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DF55FE05
+ for <buildroot@buildroot.org>; Tue, 18 Feb 2025 21:48:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5939F40132
- for <buildroot@buildroot.org>; Tue, 18 Feb 2025 21:22:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C40A981461
+ for <buildroot@buildroot.org>; Tue, 18 Feb 2025 21:48:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IJ6E6bnYY8D7 for <buildroot@buildroot.org>;
- Tue, 18 Feb 2025 21:22:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7AA140578
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E7AA140578
- for <buildroot@buildroot.org>; Tue, 18 Feb 2025 21:22:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DDACD878A4; Tue, 18 Feb 2025 21:22:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WrMqLkbPvXqn for <buildroot@buildroot.org>;
+ Tue, 18 Feb 2025 21:48:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::233; helo=mail-lj1-x233.google.com;
+ envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A5741817D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5741817D3
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com
+ [IPv6:2a00:1450:4864:20::233])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A5741817D3
+ for <buildroot@buildroot.org>; Tue, 18 Feb 2025 21:48:44 +0000 (UTC)
+Received: by mail-lj1-x233.google.com with SMTP id
+ 38308e7fff4ca-3098088c630so32580061fa.1
+ for <buildroot@buildroot.org>; Tue, 18 Feb 2025 13:48:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1739915322; x=1740520122;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=kLWLIWdX3ot4HUbW/FIcNNLh0cKsIvNWGlW9f4WfVmk=;
+ b=ruha2o3+eGwcwLK7jisL10j+Fg7aynI2x/V+vu4M2pv15nlBj6q+t/zrwwoF9eMntN
+ kAsg1x0BkmZRCSH9yh4P/sr9sCHnUu567SvVW6ZPsq5e1Z/kUCSfdPiTPHCQPyjq8SVq
+ F3ZQMyc5o+mKK1T5CIvhPnWKhLRMF62mQ51gRRcQxz1CQv1Da1a0KTz/p7XLhQPUg2Bs
+ 8xJO06zDf0zi05cSsPkoW/NgbeDUYLLHcCJ+cSMv62u8HusO5PnburS76I1AyT2Y5ghS
+ getUIwJuWTn+7hhKSbznNAFWMI6oiy9IymJ5uCFN5qn5swrmO6rxMXpGbPgRKHTOHuVl
+ VqkQ==
+X-Gm-Message-State: AOJu0YwaKULaM073qZqbmJfa08olCkEnXq1DVVMII0P3CUjACAJnojXX
+ BTF0X+sRSA6Jzxfm6dSuTzyQjvTFpX77dXmHYQIL63mTUBmJrb7MLECqjQ==
+X-Gm-Gg: ASbGncuDJRX1VdIfpiXRJCtHRfY7HRpTcXUU4SQgbhueIWguRDQ0/B1bFL9soQzcfFy
+ G3Ug5upHcbCVn9TbO1a/wJn/NtdUDjjUoODe/efH2C/hAdMk+iO9MBhdPqIa1c9/b8v/MJiOVHB
+ rObICyZB3D1spW6sGWLvIGXhD23o5T+PYXNRojjI4tQDAAy1CImcmGDC493CVLvuwJbOnwKBIxc
+ SC3VzeqjxMBRByIKZatvxAW3milQwnioCJMM5p1cg9HP1XjTpLGUTVWb4RJtuGTgcFOpo/kzccB
+ Pgr9kuBDP3k/rweqMARR6TsxSA5ZwIBeYW6obbjr/NMq/II3yQ==
+X-Google-Smtp-Source: AGHT+IHjhMtaQP0xS5XfFUN3qhzWwagaCjV5yPxSSC5Nma5ECkzP47lnEORYSbH9P8mDSQZ0bJbztQ==
+X-Received: by 2002:a2e:8e95:0:b0:308:eb34:103a with SMTP id
+ 38308e7fff4ca-30927b1a415mr44834091fa.28.1739915322002; 
+ Tue, 18 Feb 2025 13:48:42 -0800 (PST)
+Received: from precision7530-arch-roy.lan
+ ([2a01:799:1a22:4401:9825:b52b:4cba:665e])
+ by smtp.gmail.com with ESMTPSA id
+ 38308e7fff4ca-30a2be45876sm9720011fa.68.2025.02.18.13.48.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 18 Feb 2025 13:48:40 -0800 (PST)
+From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 18 Feb 2025 21:48:43 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 39aec97630e63559af2b84832da91e074582445d
-X-Git-Newrev: a02e437417193c467b3df67ea811523b8e0517e6
-X-Patchwork-Hint: ignore
-Message-Id: <20250218212227.DDACD878A4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] fs/erofs: add custom compression option
- with optional compress-hints file
+Cc: Andreas Naumann <ANaumann@ultratronik.de>, Baxiche Su <baxiche@gmail.com>,
+ Christian Hitz <christian@klarinett.li>,
+ Jesse Van Gavere <jesseevg@gmail.com>,
+ Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Date: Tue, 18 Feb 2025 22:48:26 +0100
+Message-ID: <20250218214830.169568-1-roykollensvendsen@gmail.com>
+X-Mailer: git-send-email 2.48.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1739915322; x=1740520122; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=kLWLIWdX3ot4HUbW/FIcNNLh0cKsIvNWGlW9f4WfVmk=;
+ b=jQ6tuHNulKF5kFNY8QTIDo5Txadzv9yCZOVKeO6NNPdgxC1yRuwC4sNWi82LMu48Qw
+ 6MjH10OkVeJx0JbVB6y1+0Hc/Yol/bvf9AauoelbsbA8k2IF7I3/hCbXzrAHg9K0IeK0
+ 9NpoqhSTncMgBt/yWVbaNii3u87bdvtI7wWCY2lAXhZxLhvt5LtdeqDmJr2BLb4tXBbQ
+ cE/QHUYH064tdKTF8Vm+04wUWh5A0Qeobis4DgnHUYg4vjfAeVupKGgVlYzy/rXjUVBk
+ vUtLXb4eSDzLyuY7+ZdB266WXcWSkd1VxrcWYhuvQS8UAwGe9M3LKE2W+LtvnTH7Zah1
+ rJJA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=jQ6tuHNu
+Subject: [Buildroot] [PATCH 1/3] package/qt6: bump version to 6.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,118 +111,342 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0482847020975243954=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0482847020975243954==
-Content-Type: text/plain
+For details see:
+ - https://code.qt.io/cgit/qt/qtreleasenotes.git/about/qt/6.8.2/release-note.md
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a02e437417193c467b3df67ea811523b8e0517e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Qt6 Multimedia:
+legal-info broke because license files were removed. This problem was fixed
+by removing the corresponding hashes and LICENSE_FILES entries.
 
-Add another option for FS compression that allows fine-grained control using a
-list of algorithms and optional compress-hints file. This way multiple
-algorithms and pcluster sizes can be used for different files, fully exposing
-EROFS compression abilities.
-
-Signed-off-by: Jan Čermák <sairon@sairon.cz>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 ---
- fs/erofs/Config.in | 36 ++++++++++++++++++++++++++++++++++++
- fs/erofs/erofs.mk  |  5 +++++
- 2 files changed, 41 insertions(+)
+ package/qt6/qt6.mk                                   |  2 +-
+ package/qt6/qt6base/qt6base.hash                     |  4 ++--
+ package/qt6/qt6charts/qt6charts.hash                 |  4 ++--
+ package/qt6/qt6core5compat/qt6core5compat.hash       |  4 ++--
+ package/qt6/qt6declarative/qt6declarative.hash       |  4 ++--
+ package/qt6/qt6graphs/qt6graphs.hash                 |  4 ++--
+ package/qt6/qt6languageserver/qt6languageserver.hash |  4 ++--
+ package/qt6/qt6mqtt/qt6mqtt.hash                     |  2 +-
+ package/qt6/qt6multimedia/qt6multimedia.hash         | 12 ++----------
+ package/qt6/qt6multimedia/qt6multimedia.mk           |  8 --------
+ package/qt6/qt6opcua/qt6opcua.hash                   |  2 +-
+ package/qt6/qt6quick3d/qt6quick3d.hash               |  4 ++--
+ package/qt6/qt6quicktimeline/qt6quicktimeline.hash   |  4 ++--
+ package/qt6/qt6scxml/qt6scxml.hash                   |  4 ++--
+ package/qt6/qt6serialbus/qt6serialbus.hash           |  4 ++--
+ package/qt6/qt6serialport/qt6serialport.hash         |  4 ++--
+ package/qt6/qt6shadertools/qt6shadertools.hash       |  4 ++--
+ package/qt6/qt6svg/qt6svg.hash                       |  4 ++--
+ package/qt6/qt6tools/qt6tools.hash                   |  4 ++--
+ .../qt6/qt6virtualkeyboard/qt6virtualkeyboard.hash   |  4 ++--
+ package/qt6/qt6wayland/qt6wayland.hash               |  4 ++--
+ package/qt6/qt6websockets/qt6websockets.hash         |  4 ++--
+ 22 files changed, 39 insertions(+), 55 deletions(-)
 
-diff --git a/fs/erofs/Config.in b/fs/erofs/Config.in
-index 91f51b76d7..00f27faeeb 100644
---- a/fs/erofs/Config.in
-+++ b/fs/erofs/Config.in
-@@ -22,6 +22,10 @@ choice
- 	  slower both in compression and decompression, and higher
- 	  compression levels can have noticeable memory requirements.
+diff --git a/package/qt6/qt6.mk b/package/qt6/qt6.mk
+index 33cbf7551f..67bc0e45e4 100644
+--- a/package/qt6/qt6.mk
++++ b/package/qt6/qt6.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+	  Custom compression allows for advanced configuration of the
-+	  compression algorithms, and adds the possibility of
-+	  finegrained per-file compression using compression hints.
-+
- config BR2_TARGET_ROOTFS_EROFS_NONE
- 	bool "no compression"
+ QT6_VERSION_MAJOR = 6.8
+-QT6_VERSION = $(QT6_VERSION_MAJOR).1
++QT6_VERSION = $(QT6_VERSION_MAJOR).2
+ QT6_SOURCE_TARBALL_PREFIX = everywhere-src
+ QT6_SITE = https://download.qt.io/archive/qt/$(QT6_VERSION_MAJOR)/$(QT6_VERSION)/submodules
  
-@@ -31,6 +35,9 @@ config BR2_TARGET_ROOTFS_EROFS_LZ4HC
- config BR2_TARGET_ROOTFS_EROFS_LZMA
- 	bool "lzma"
+diff --git a/package/qt6/qt6base/qt6base.hash b/package/qt6/qt6base/qt6base.hash
+index 94269047c5..ba535f94c2 100644
+--- a/package/qt6/qt6base/qt6base.hash
++++ b/package/qt6/qt6base/qt6base.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtbase-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  40b14562ef3bd779bc0e0418ea2ae08fa28235f8ea6e8c0cb3bce1d6ad58dcaf  qtbase-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qtbase-everywhere-src-6.8.2.tar.xz.sha256
++sha256  012043ce6d411e6e8a91fdc4e05e6bedcfa10fcb1347d3c33908f7fdd10dfe05  qtbase-everywhere-src-6.8.2.tar.xz
  
-+config BR2_TARGET_ROOTFS_EROFS_CUSTOM_COMPRESSION
-+	bool "custom"
-+
- endchoice
+ # Hashes for license files
+ sha256  e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb  LICENSES/Apache-2.0.txt
+diff --git a/package/qt6/qt6charts/qt6charts.hash b/package/qt6/qt6charts/qt6charts.hash
+index 215d18c576..148e30eb0e 100644
+--- a/package/qt6/qt6charts/qt6charts.hash
++++ b/package/qt6/qt6charts/qt6charts.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtcharts-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  2edea3f16e248ef508d99332798645b7f5ab6edbbf2e3d7d78fb674156f07d29  qtcharts-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qtcharts-everywhere-src-6.8.2.tar.xz.sha256
++sha256  ec7c84da1a5d7b2f8cea610df6f993fa3c48990dc9f6bec995c69c5bfb34c55f  qtcharts-everywhere-src-6.8.2.tar.xz
  
- if BR2_TARGET_ROOTFS_EROFS_LZ4HC
-@@ -58,6 +65,35 @@ config BR2_TARGET_ROOTFS_EROFS_LZMA_LEVEL
+ # Hashes for license files
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
+diff --git a/package/qt6/qt6core5compat/qt6core5compat.hash b/package/qt6/qt6core5compat/qt6core5compat.hash
+index ba13da8d4e..9a9a21f774 100644
+--- a/package/qt6/qt6core5compat/qt6core5compat.hash
++++ b/package/qt6/qt6core5compat/qt6core5compat.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qt5compat-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  05c8c088b4cd8331fa8a9c8b7ff7c42a088cb112e673eae5708048d0131264fc  qt5compat-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qt5compat-everywhere-src-6.8.2.tar.xz.sha256
++sha256  b53154bc95ec08e2ddc266bef250fbd684b4eb2df96bc8c27d26b1e953495316  qt5compat-everywhere-src-6.8.2.tar.xz
  
- endif # BR2_TARGET_ROOTFS_EROFS_LZMA
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6declarative/qt6declarative.hash b/package/qt6/qt6declarative/qt6declarative.hash
+index 81b8ca929b..353ebee2d2 100644
+--- a/package/qt6/qt6declarative/qt6declarative.hash
++++ b/package/qt6/qt6declarative/qt6declarative.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtdeclarative-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  95d15d5c1b6adcedb1df6485219ad13b8dc1bb5168b5151f2f1f7246a4c039fc  qtdeclarative-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qtdeclarative-everywhere-src-6.8.2.tar.xz.sha256
++sha256  144d876adc8bb55909735143e678d1e24eadcd0a380a0186792d88b731346d56  qtdeclarative-everywhere-src-6.8.2.tar.xz
  
-+if BR2_TARGET_ROOTFS_EROFS_CUSTOM_COMPRESSION
-+
-+config BR2_TARGET_ROOTFS_EROFS_COMPRESSION_ALGORITHMS
-+	string "compression algorithms"
-+	default "lz4hc,12"
-+	help
-+	  Specify arbitrary compression option, useful in combination
-+	  with compression hints. Individual algorithms are separated
-+	  by colon with optional level, e.g. "lz4hc,12:lzma".
-+	  See erofs-utils documentaion for detailed information.
-+
-+config BR2_TARGET_ROOTFS_EROFS_COMPRESSION_HINTS
-+	string "path to compression hints file"
-+	default ""
-+	help
-+	  Path to file containing compression hints. Each line in the
-+	  file is defined by tokens separated by spaces in the
-+	  following form. Optionally, instead of the given primary
-+	  algorithm, algorithms can be specified with zero-based
-+	  algorithm-index explicitly:
-+
-+	  <pcluster-size-in-bytes> [algorithm-index] <match-pattern>
-+
-+	  match-patterns are extended regular expressions, matched
-+	  against absolute paths within the output filesystem, with no
-+	  leading /.
-+
-+endif # BR2_TARGET_ROOTFS_EROFS_LZMA
-+
- config BR2_TARGET_ROOTFS_EROFS_DEDUPE
- 	bool "enable data deduplication"
- 	depends on !BR2_TARGET_ROOTFS_EROFS_NONE
-diff --git a/fs/erofs/erofs.mk b/fs/erofs/erofs.mk
-index 3b64cb1c6e..6543a364f1 100644
---- a/fs/erofs/erofs.mk
-+++ b/fs/erofs/erofs.mk
-@@ -10,6 +10,11 @@ ifeq ($(BR2_TARGET_ROOTFS_EROFS_LZ4HC),y)
- ROOTFS_EROFS_ARGS += -zlz4hc,$(BR2_TARGET_ROOTFS_EROFS_LZ4HC_LEVEL)
- else ifeq ($(BR2_TARGET_ROOTFS_EROFS_LZMA),y)
- ROOTFS_EROFS_ARGS += -zlzma,$(BR2_TARGET_ROOTFS_EROFS_LZMA_LEVEL)
-+else ifeq ($(BR2_TARGET_ROOTFS_EROFS_CUSTOM_COMPRESSION),y)
-+ROOTFS_EROFS_ARGS += -z$(strip $(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_ALGORITHMS))
-+ifneq ($(strip $(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_HINTS)),)
-+ROOTFS_EROFS_ARGS += --compress-hints $(strip $(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_HINTS))
-+endif
- endif
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6graphs/qt6graphs.hash b/package/qt6/qt6graphs/qt6graphs.hash
+index 59d35d9e66..0575eaf628 100644
+--- a/package/qt6/qt6graphs/qt6graphs.hash
++++ b/package/qt6/qt6graphs/qt6graphs.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtgraphs-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  1e46e3de69936835652ab40ef8caf5824ea71e26871274561fb65ec142d54a80  qtgraphs-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qtgraphs-everywhere-src-6.8.2.tar.xz.sha256
++sha256  05c7a4a3482f6ffd7e9005964bb5ab634062a6d023ccd96f5447db6eae3c46d4  qtgraphs-everywhere-src-6.8.2.tar.xz
  
- ifeq ($(BR2_REPRODUCIBLE),y)
-
---===============0482847020975243954==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+ # Hashes for license files
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
+diff --git a/package/qt6/qt6languageserver/qt6languageserver.hash b/package/qt6/qt6languageserver/qt6languageserver.hash
+index a330ecb323..cdfcc99395 100644
+--- a/package/qt6/qt6languageserver/qt6languageserver.hash
++++ b/package/qt6/qt6languageserver/qt6languageserver.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtlanguageserver-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  865e9436c1432a53e38a30625b6cee60bf72553ff508047115513a233c8e6d7e  qtlanguageserver-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qtlanguageserver-everywhere-src-6.8.2.tar.xz.sha256
++sha256  9eeb74ac15334c08777548c01e4ede80a4e2d36f1ebcb322423f24f14c2785fb  qtlanguageserver-everywhere-src-6.8.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6mqtt/qt6mqtt.hash b/package/qt6/qt6mqtt/qt6mqtt.hash
+index f13fbaab9c..ad2fcbfaa9 100644
+--- a/package/qt6/qt6mqtt/qt6mqtt.hash
++++ b/package/qt6/qt6mqtt/qt6mqtt.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  757c96a645b81e858c19b5407d54b3a40ee288d04ffadc9a96dd52e50c6d8d6b  qt6mqtt-6.8.1-git4.tar.gz
++sha256  bca5d18defb259ac049cbfd261c54ad778d6eac6aa372d9eb3141ec1316a1dfe  qt6mqtt-6.8.2-git4.tar.gz
+ 
+ # Hashes for license files
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6multimedia/qt6multimedia.hash b/package/qt6/qt6multimedia/qt6multimedia.hash
+index cddafb56a8..af9ab62621 100644
+--- a/package/qt6/qt6multimedia/qt6multimedia.hash
++++ b/package/qt6/qt6multimedia/qt6multimedia.hash
+@@ -1,22 +1,14 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtmultimedia-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  75fa87134f9afab7f0a62c55a4744799ac79519560d19c8e1d4c32bdd173f953  qtmultimedia-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qtmultimedia-everywhere-src-6.8.2.tar.xz.sha256
++sha256  34f561fdc07b158bcc4ad040b596fc6086c48908060e854b473b557e4feb1569  qtmultimedia-everywhere-src-6.8.2.tar.xz
+ 
+ # Hashes for license files
+-sha256  f32fb3b417a194167cfad068223fc975ba96c5960513a10f66a3c28720aec1df  LICENSES/BSD-2-Clause.txt
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+-sha256  1f1b677d26ab73e159a55c3a914cf12d888e18a9d0d469fedab4aa6e5a48b1c0  LICENSES/BSD-Source-Code.txt
+-sha256  84c6ef3ea9e3254a54d0acf5d3e0c61ae011b8fef7dd6940591cf060e6380a8f  LICENSES/BSL-1.0.txt
+ sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
+-sha256  7658542977bfdced9e1059a6c934ce4281de76d103b831007b825917dc62511a  LICENSES/IJG.txt
+-sha256  f2ec607f67bb0dd3053b49835b02110d5cd0f8eb6da3aac4dc0b142a6b299be9  LICENSES/ISC.txt
+-sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  LICENSES/LGPL-2.1-or-later.txt
+ sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
+-sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
+ sha256  66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172  LICENSES/MPL-2.0.txt
+ sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
+-sha256  bfb1112d49db5b1daecdfef24bd7e2f3ea0bafb33aa67aa0ab51e2bf8407c03d  LICENSES/Zlib.txt
+ sha256  85da7c29c2d2f2e6b3116b1219584cb513474cab797b3312a779be4c2181e51e  src/3rdparty/eigen/COPYING.BSD
+ sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  src/3rdparty/eigen/COPYING.MPL2
+ sha256  8b69cf3ac3ddd34df478c4ae6eaacf5e6c63ea7ee6403c8dad97e4d1438bc3c4  src/3rdparty/eigen/COPYRIGHTS
+diff --git a/package/qt6/qt6multimedia/qt6multimedia.mk b/package/qt6/qt6multimedia/qt6multimedia.mk
+index 517b1fccb4..9ba574645c 100644
+--- a/package/qt6/qt6multimedia/qt6multimedia.mk
++++ b/package/qt6/qt6multimedia/qt6multimedia.mk
+@@ -13,21 +13,13 @@ QT6MULTIMEDIA_CMAKE_BACKEND = ninja
+ QT6MULTIMEDIA_LICENSE = GPL-3.0, LGPL-3.0
+ 
+ QT6MULTIMEDIA_LICENSE_FILES = \
+-	LICENSES/BSD-2-Clause.txt \
+ 	LICENSES/BSD-3-Clause.txt \
+-	LICENSES/BSD-Source-Code.txt \
+-	LICENSES/BSL-1.0.txt \
+ 	LICENSES/GFDL-1.3-no-invariants-only.txt \
+ 	LICENSES/GPL-2.0-only.txt \
+ 	LICENSES/GPL-3.0-only.txt \
+-	LICENSES/IJG.txt \
+-	LICENSES/ISC.txt \
+-	LICENSES/LGPL-2.1-or-later.txt \
+ 	LICENSES/LGPL-3.0-only.txt \
+-	LICENSES/MIT.txt \
+ 	LICENSES/MPL-2.0.txt \
+ 	LICENSES/Qt-GPL-exception-1.0.txt \
+-	LICENSES/Zlib.txt \
+ 	src/3rdparty/eigen/COPYING.BSD \
+ 	src/3rdparty/eigen/COPYING.MPL2 \
+ 	src/3rdparty/eigen/COPYRIGHTS \
+diff --git a/package/qt6/qt6opcua/qt6opcua.hash b/package/qt6/qt6opcua/qt6opcua.hash
+index 627450af60..843877e148 100644
+--- a/package/qt6/qt6opcua/qt6opcua.hash
++++ b/package/qt6/qt6opcua/qt6opcua.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  0283f634707bf5c88ed30fec604bf7ea3bc22620cd060517812f9fb6304f254b  qt6opcua-6.8.1-git4.tar.gz
++sha256  c20c55b9f80cc822925aa786a1bde4cc4963700ec13cdc8a37a5c25dbb96389a  qt6opcua-6.8.2-git4.tar.gz
+ 
+ # Hashes for license files
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6quick3d/qt6quick3d.hash b/package/qt6/qt6quick3d/qt6quick3d.hash
+index 960cda69ad..57017dcef6 100644
+--- a/package/qt6/qt6quick3d/qt6quick3d.hash
++++ b/package/qt6/qt6quick3d/qt6quick3d.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtquick3d-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  3f3d345e6c95fcd40ab37e6a37cd31811e5d239dea8e142e632d4ea41bf20ce7  qtquick3d-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qtquick3d-everywhere-src-6.8.2.tar.xz.sha256
++sha256  084cebccb8c5b1c6bafb7756ab89b08ced23c20cd2e996ed54909a154a9f0b6d  qtquick3d-everywhere-src-6.8.2.tar.xz
+ 
+ # Hashes for license files
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6quicktimeline/qt6quicktimeline.hash b/package/qt6/qt6quicktimeline/qt6quicktimeline.hash
+index b042b4e2f8..eef6a91f62 100644
+--- a/package/qt6/qt6quicktimeline/qt6quicktimeline.hash
++++ b/package/qt6/qt6quicktimeline/qt6quicktimeline.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtquicktimeline-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  fdbc198e27fd7bce0801fb3cfa336e81932607e6a36c97ae8394880eedfe12a3  qtquicktimeline-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qtquicktimeline-everywhere-src-6.8.2.tar.xz.sha256
++sha256  c33dbceed9fabb3d7f6731a68aee602bad5a04bb6f0a473792e61858c0bc1aaa  qtquicktimeline-everywhere-src-6.8.2.tar.xz
+ 
+ # Hashes for license files
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
+diff --git a/package/qt6/qt6scxml/qt6scxml.hash b/package/qt6/qt6scxml/qt6scxml.hash
+index f239f18dd3..ddac88a575 100644
+--- a/package/qt6/qt6scxml/qt6scxml.hash
++++ b/package/qt6/qt6scxml/qt6scxml.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtscxml-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  2f406f44cfacd6eddb90468012a5d1d99d7a64ec05a21a2a7eda9dfc12614fd6  qtscxml-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qtscxml-everywhere-src-6.8.2.tar.xz.sha256
++sha256  683c4a11a24001e901cc84853723046a1ba27004bcc06680a72eaac6cf8ea193  qtscxml-everywhere-src-6.8.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6serialbus/qt6serialbus.hash b/package/qt6/qt6serialbus/qt6serialbus.hash
+index 9777633b85..1b065bc97c 100644
+--- a/package/qt6/qt6serialbus/qt6serialbus.hash
++++ b/package/qt6/qt6serialbus/qt6serialbus.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtserialbus-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  40788d92ec5c3ae297818e9f9eea9d21e398a54fa3fd8ddd530d324548ed15da  qtserialbus-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qtserialbus-everywhere-src-6.8.2.tar.xz.sha256
++sha256  1919d6bad2d935587fdb629c9737ced2ffe3c104c6b54bedb350ea9593b9a112  qtserialbus-everywhere-src-6.8.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6serialport/qt6serialport.hash b/package/qt6/qt6serialport/qt6serialport.hash
+index d30c297d0f..b890294b5b 100644
+--- a/package/qt6/qt6serialport/qt6serialport.hash
++++ b/package/qt6/qt6serialport/qt6serialport.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtserialport-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  098e72a5c06d7db003e3eea1b0ed72d7308e3ea9cb9e89b538816dc96c938395  qtserialport-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qtserialport-everywhere-src-6.8.2.tar.xz.sha256
++sha256  ed17e02361e989f149f58d021ab8cd66f21db4cdfb8cde0a462017e6ac1e3be7  qtserialport-everywhere-src-6.8.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6shadertools/qt6shadertools.hash b/package/qt6/qt6shadertools/qt6shadertools.hash
+index 015ec5b96f..ca7791e36c 100644
+--- a/package/qt6/qt6shadertools/qt6shadertools.hash
++++ b/package/qt6/qt6shadertools/qt6shadertools.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtshadertools-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  55b70cd632473a8043c74ba89310f7ba9c5041d253bc60e7ae1fa789169c4846  qtshadertools-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qtshadertools-everywhere-src-6.8.2.tar.xz.sha256
++sha256  d1d5f90e8885fc70d63ac55a4ce4d9a2688562033a000bc4aff9320f5f551871  qtshadertools-everywhere-src-6.8.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6svg/qt6svg.hash b/package/qt6/qt6svg/qt6svg.hash
+index cd7a148fb7..f7b9edf1f8 100644
+--- a/package/qt6/qt6svg/qt6svg.hash
++++ b/package/qt6/qt6svg/qt6svg.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtsvg-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  3d0de73596e36b2daa7c48d77c4426bb091752856912fba720215f756c560dd0  qtsvg-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qtsvg-everywhere-src-6.8.2.tar.xz.sha256
++sha256  aa2579f21ca66d19cbcf31d87e9067e07932635d36869c8239d4decd0a9dc1fa  qtsvg-everywhere-src-6.8.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6tools/qt6tools.hash b/package/qt6/qt6tools/qt6tools.hash
+index ede1608ec4..a1dae628ac 100644
+--- a/package/qt6/qt6tools/qt6tools.hash
++++ b/package/qt6/qt6tools/qt6tools.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qttools-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  9d43d409be08b8681a0155a9c65114b69c9a3fc11aef6487bb7fdc5b283c432d  qttools-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qttools-everywhere-src-6.8.2.tar.xz.sha256
++sha256  326381b7d43f07913612f291abc298ae79bd95382e2233abce982cff2b53d2c0  qttools-everywhere-src-6.8.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6virtualkeyboard/qt6virtualkeyboard.hash b/package/qt6/qt6virtualkeyboard/qt6virtualkeyboard.hash
+index 60b9ab08de..bb09de842b 100644
+--- a/package/qt6/qt6virtualkeyboard/qt6virtualkeyboard.hash
++++ b/package/qt6/qt6virtualkeyboard/qt6virtualkeyboard.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtvirtualkeyboard-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  1022a3bc4093ec732e85b659158c8a70a31eecbd0dfef4e4f6c67f474f89a264  qtvirtualkeyboard-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qtvirtualkeyboard-everywhere-src-6.8.2.tar.xz.sha256
++sha256  2ddce5156978b5da04c97b0de1abb9d5172a06796b56bca53cbb5e976277cb27  qtvirtualkeyboard-everywhere-src-6.8.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6wayland/qt6wayland.hash b/package/qt6/qt6wayland/qt6wayland.hash
+index a378097eb4..2d75282bd4 100644
+--- a/package/qt6/qt6wayland/qt6wayland.hash
++++ b/package/qt6/qt6wayland/qt6wayland.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtwayland-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  2226fbde4e2ddd12f8bf4b239c8f38fd706a54e789e63467dfddc77129eca203  qtwayland-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qtwayland-everywhere-src-6.8.2.tar.xz.sha256
++sha256  5e46157908295f2bf924462d8c0855b0508ba338ced9e810891fefa295dc9647  qtwayland-everywhere-src-6.8.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+diff --git a/package/qt6/qt6websockets/qt6websockets.hash b/package/qt6/qt6websockets/qt6websockets.hash
+index 789f51a71d..7a448e921f 100644
+--- a/package/qt6/qt6websockets/qt6websockets.hash
++++ b/package/qt6/qt6websockets/qt6websockets.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtwebsockets-everywhere-src-6.8.1.tar.xz.sha256
+-sha256  e4cfdae8760bedd1c2b00429a6c9bf88cc11c5018dcb46bde277fb1edf341e3f  qtwebsockets-everywhere-src-6.8.1.tar.xz
++# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.2/submodules/qtwebsockets-everywhere-src-6.8.2.tar.xz.sha256
++sha256  919df562ba3446c8393992d112085ad2d96d23aaf802b1cd7a30bf3ba2fe8cbe  qtwebsockets-everywhere-src-6.8.2.tar.xz
+ 
+ # Hashes for license files:
+ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
+-- 
+2.48.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0482847020975243954==--
