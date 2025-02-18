@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5392C021AA
-	for <buildroot@archiver.kernel.org>; Tue, 18 Feb 2025 09:05:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7281BC02198
+	for <buildroot@archiver.kernel.org>; Tue, 18 Feb 2025 09:05:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CAE84070E;
-	Tue, 18 Feb 2025 09:05:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DCD1240BB0;
+	Tue, 18 Feb 2025 09:05:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y_noMOuIZFff; Tue, 18 Feb 2025 09:05:32 +0000 (UTC)
+ id jSdcWCZUMCAa; Tue, 18 Feb 2025 09:05:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31B98408EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA991408EC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 31B98408EC;
-	Tue, 18 Feb 2025 09:05:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AE090C8
- for <buildroot@buildroot.org>; Tue, 18 Feb 2025 09:05:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA991408EC;
+	Tue, 18 Feb 2025 09:05:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1DF54E05
+ for <buildroot@buildroot.org>; Tue, 18 Feb 2025 09:05:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A698D40A06
- for <buildroot@buildroot.org>; Tue, 18 Feb 2025 09:05:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 080484027D
+ for <buildroot@buildroot.org>; Tue, 18 Feb 2025 09:05:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ClBg25f_OweC for <buildroot@buildroot.org>;
- Tue, 18 Feb 2025 09:05:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CduMT3QS9Bof for <buildroot@buildroot.org>;
+ Tue, 18 Feb 2025 09:05:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4C5F4070E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13C51400FD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A4C5F4070E
- for <buildroot@buildroot.org>; Tue, 18 Feb 2025 09:05:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13C51400FD
+ for <buildroot@buildroot.org>; Tue, 18 Feb 2025 09:05:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 93BE9877AF; Tue, 18 Feb 2025 09:05:27 +0000 (UTC)
+ id F39F3877B7; Tue, 18 Feb 2025 09:05:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 18 Feb 2025 08:35:39 +0100
+Date: Tue, 18 Feb 2025 10:01:28 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 2a24d3410d9e5909450a0aa9a034d5db7ec18529
-X-Git-Newrev: 20bfa70a680e4cb587335a4f09c8b35f93783ae5
+X-Git-Oldrev: 877ddbd1d287bf2234d97fb6b9006a669ffb7c67
+X-Git-Newrev: d572e03e262f27e0c0d0dcb5308314967746e105
 X-Patchwork-Hint: ignore
-Message-Id: <20250218090527.93BE9877AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/postgresql:
- security bump version to 16.7
+Message-Id: <20250218090527.F39F3877B7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/imagemagick: bump
+ to version 7.1.1-43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,49 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20bfa70a680e4cb587335a4f09c8b35f93783ae5
+commit: https://git.buildroot.net/buildroot/commit/?id=d572e03e262f27e0c0d0dcb5308314967746e105
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
+For various bugfixes.  Notice that 7.1.1-36 fixed a security vulnerability
+(CVE-2024-41817), but that issue is specific to the AppImage version:
+
+https://github.com/ImageMagick/ImageMagick/security/advisories/GHSA-8rxc-922v-phg8
+
 Release notes:
-https://www.postgresql.org/docs/release/16.7/
-https://www.postgresql.org/about/news/postgresql-173-167-1511-1416-and-1319-released-3015/
-
-Fixes CVE-2025-1094:
-https://www.postgresql.org/support/security/CVE-2025-1094/
-
-Updated license hash due to copyright year bump:
-https://git.postgresql.org/gitweb/?p=postgresql.git;a=commitdiff;h=759620716adb347c1d8c8b2e6f7d88b947a54c98
+https://github.com/ImageMagick/ImageMagick/releases/tag/7.1.1-43
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit b5ff38782cf8f1dbc1fd9585f49affdfb14833e8)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index 88730dc353..11c0e77b05 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.postgresql.org/pub/source/v16.6/postgresql-16.6.tar.bz2.sha256
--sha256  23369cdaccd45270ac5dcc30fa9da205d5be33fa505e1f17a0418d2caeca477b  postgresql-16.6.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v16.7/postgresql-16.7.tar.bz2.sha256
-+sha256  62e02f77ebfc4a37f1700c20cc3ccd85ff797b5613766ebf949a7899bb2113fe  postgresql-16.7.tar.bz2
- # License file, Locally calculated
- sha256  9bf20ee493926a7e17a74bc7f05089fbc014269667b1540bc35a6b194a40c9de  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 4656eba3d8..f4b384ed82 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 30a12220dd..2983b511cc 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c82210ea3fdbd044b656ba3d5b42df1da9a18e78fc0e500169bad70d3b0d9ba3  imagemagick-7.1.1-31.tar.gz
++sha256  ceb972266b23dc7c1cfce0da5a7f0c9acfb4dc81f40eb542a49476fedbc2618f  imagemagick-7.1.1-43.tar.gz
+ sha256  a556c5292c87c9a6ac795c80669b0c3660f9f729de8c476bf2b10f83ab1b34ec  LICENSE
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index b2d3e755a6..6bbda40396 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--POSTGRESQL_VERSION = 16.6
-+POSTGRESQL_VERSION = 16.7
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+-IMAGEMAGICK_VERSION = 7.1.1-31
++IMAGEMAGICK_VERSION = 7.1.1-43
+ IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
+ IMAGEMAGICK_LICENSE = Apache-2.0
+ IMAGEMAGICK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
