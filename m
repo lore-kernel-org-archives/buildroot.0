@@ -1,79 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5AD4C021AA
-	for <buildroot@archiver.kernel.org>; Wed, 19 Feb 2025 08:52:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82EB7C021AA
+	for <buildroot@archiver.kernel.org>; Wed, 19 Feb 2025 08:52:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 70DF884DA7;
-	Wed, 19 Feb 2025 08:52:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 521F44F3BA;
+	Wed, 19 Feb 2025 08:52:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7r_8Bw8JA9wJ; Wed, 19 Feb 2025 08:52:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NVeWVzyegXZ3; Wed, 19 Feb 2025 08:52:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7916284D9E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 289935041F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7916284D9E;
-	Wed, 19 Feb 2025 08:52:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4FBFB127
+	by smtp4.osuosl.org (Postfix) with ESMTP id 289935041F;
+	Wed, 19 Feb 2025 08:52:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id AB20F127
  for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:51:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AEA2460071
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:51:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9943B411CE
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:51:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0m7An7hr8Fir for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wImxKduh6yfu for <buildroot@buildroot.org>;
  Wed, 19 Feb 2025 08:51:02 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DB03860671
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB03860671
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DB03860671
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:51:01 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-438a39e659cso44007575e9.2
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 00:51:01 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 824B140603
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 824B140603
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 824B140603
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:51:02 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-38f325dd90eso2746533f8f.3
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 00:51:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1739955060; x=1740559860;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=zHMbf7dVpcoS986xJKFxn99q15fQiinwazTqAXVE3bc=;
- b=Iu0pm1ZM8x/98UNvzNdS59s9S3FRrRO9OAbYTKz946BwLBJ/ispWflSL/eF2uDQa2Q
- 06/BnHY67Mkrx3oxBVLfa7lLL7jj5bSANHrxaCebu82/XNULqfpvdDORshIRIldvtqdK
- uZXKK/x8uKo/KAYbwmPgtnFNqcRIpzyW+6pLfI4TzaiKEkmAZcT35hg+FgpV+iLbozs1
- COzxCOMzjQEp4yKL6MeozrGilpvTAGy6GiDDOuEfFxlKyEUThg63caIO8BNIHIIl3f2W
- 81N37m5jm0sTwtalSRlLveIVoCst/w5wNgtkWS5BuOrIwqcRANhr77jz8xxj5LHSigEk
- 1HPQ==
-X-Gm-Message-State: AOJu0YxkvhYpSGm4iPyvx4sw9VdU0B0Hu+T3470oYRz8TKmsycuV40J2
- vNr/ioOT0YQMOmNv2xIVCNfaEp7OZtYH0GUc/+pHAxHTYCB9PzK4hSa/qg==
-X-Gm-Gg: ASbGnctO29cA/zwPJGo8AmZ4dXSo5XxtsEk93rO6zDHVS/CdYhais/BjgPJnYsuNgHb
- 4gDUO3UYOf2vwZMkhZ3MqIp09xtDs+4Ftp8KSSUNzlYYgtaR4T8wWNvGFVOPyrCZjOW4Rca/4F6
- vC9xbKFdmMeUbQirMgTB0JTkeu8oNSE4UwuBWt29iIDwvQDdVV2R3WFeUAxxaMZ7xVIKj9bI4hv
- KPTmb+8A6yiJSs6lOzSNorqNBMgiMkrcAR0Azo7FMQYvA6+TMJbev1QWwRuIjvmcOlQSOVDr9Fs
- d44uQkEXI9F0bHYtRgg7mh//ng==
-X-Google-Smtp-Source: AGHT+IEw8ey4O3pU0wGMkCh8CeKWw4W9JNP6fNpqfwaYLfEkQ2IYh4MJLnuhvGZia72PhEJQNQzHRA==
-X-Received: by 2002:a05:600c:4e49:b0:439:8523:36cc with SMTP id
- 5b1f17b1804b1-4398523382cmr113040295e9.11.1739955059840; 
- Wed, 19 Feb 2025 00:50:59 -0800 (PST)
+ bh=nJq8nSNZCOYAl/JCVjJ8i/nXpSpRjds9OJk8asvQjK0=;
+ b=abP0WMl4woqRn1STKxYNOUB1W/4UItNHF62KbhUNDftkdrdsqsqjbvjZv7R7nE3uvc
+ MNllcXg3hY1NHfFgsqTiDDc63xyDk59SNqGI0nRd5dRjiI6wp0caXruBk7GQN62abcA7
+ F3pML97ZR+BtZqXgmXtMke1OjIA//qxGYKZjCKMcwWI1whXqH5RkG69gftujAVHIV7Hx
+ 0dTQC88DjJnclAj5Cky3Hop+05E8sOtFbib8Pe1CMMzsIzM3vAi9WKtU0xkTQ+ZatsTW
+ W4QES9dh5ydCfE34u0MN8dz/hgGRrNj73JpfjCgPDRzTmyWdpjdJYqnBoDmG2z498hze
+ xdIw==
+X-Gm-Message-State: AOJu0YyXqSwshPrA0bRYX+a9FmmQaeyXX/qzd99cOJsxSj1JNfHxqZ9u
+ JZZB39dSSiqNzWvTrkP7TKrF7rDF5cRgTlM0Y4/JBugxDKl35lh2xg08XQ==
+X-Gm-Gg: ASbGncvZkeaHCQIJK99cGFWkSjgDsb3fGUvzp4VWvxdbA+NMRgOfDcn+sU/uOR7CSEI
+ TQCmyLmaRHYpX82NNVDvzRau7dS2D32wn1VPn9eIRzt343bCGtPvfPmC33EYbvKVB0NIbX8aNRK
+ phlcHmu3I87kE9S2du+tXEZ81zFcuAKs7vN1JioiuPdG6ULxob1wd0UWLIuEuLnzOauXwXzM3JW
+ UuAJNkfym/9G5bCCdQ7tMk8ifmAIUdoXspxqYX58nyJWpxqOtCJSAQQ5UUmfFl+r9D9o0Vc1hfJ
+ dgr6opeptEGjubGcnt4ICjCURg==
+X-Google-Smtp-Source: AGHT+IFYOOfrmGRgmk53D1aMZZjHf33iCOIjKbZ5Cg13j6n6inCQb2SJLcSuBs3QnUNwU9Uv0k7uPw==
+X-Received: by 2002:adf:fed1:0:b0:38f:229a:b4d with SMTP id
+ ffacd0b85a97d-38f33f4b81cmr14918153f8f.35.1739955060409; 
+ Wed, 19 Feb 2025 00:51:00 -0800 (PST)
 Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
  by smtp.gmail.com with ESMTPSA id
  ffacd0b85a97d-38f259d5e9esm17517399f8f.61.2025.02.19.00.50.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 19 Feb 2025 00:50:59 -0800 (PST)
+ Wed, 19 Feb 2025 00:51:00 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
 Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Date: Wed, 19 Feb 2025 09:50:40 +0100
-Message-ID: <f908f28f1dc58ee3145e7bab18f02149d6acf43d.1739955023.git.yann.morin.1998@free.fr>
+Date: Wed, 19 Feb 2025 09:50:41 +0100
+Message-ID: <cff853777c06b4d3e41c5ee0ec50b39c4a7e752c.1739955023.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1739955023.git.yann.morin.1998@free.fr>
 References: <cover.1739955023.git.yann.morin.1998@free.fr>
@@ -83,20 +83,21 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=zHMbf7dVpcoS986xJKFxn99q15fQiinwazTqAXVE3bc=;
- b=Ktt/rpm7UZrPkimZPIwrBQkZpSrl0x2N1APCILl8Kbezij/YYOqHjUw4cSPhReE7J7
- ouYIB4+SsL+z9i+UUzRK6EI3Z2w0JcqVFv2XsuBv4CrGDdRQ+3ndznihecd12fxjz/fi
- tWXJJw+jjOzNxrQ2a/6DlN6NJad/EL+gRHfLk+SWCE5L7b6BsbPQSY7Fr7GYVIPS7eFy
- CkYxkhcXgS3sKP3oemyVwKPTQHk2+prSOUnxg2oQgJejOBdlGdlzbIIHfQrJvBJeAfOD
- XNMg1zEjz4YpXHrlqU0ZEc4SN5BHyZ1ZSC/983PIUfOtS+MOZcpoZKarihY9d/GHZPD/
- l0SQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=nJq8nSNZCOYAl/JCVjJ8i/nXpSpRjds9OJk8asvQjK0=;
+ b=IsKV1UlueuY6/DDgCCg1uGJ7WNyvQjavShLhyxYQZa1wpIEMqdpTuK7AUvxEpmVbtU
+ F6Tkyv0Gp1+yqnXoYkKEQQxxs2U8zAKAo7xzw1n8Cr76owlurBRnfpe6dvFLUpSHt+L8
+ 9T6CL45CctGjOoakJjEVG2SE1YHmoZZCJ/hnKPXfySo7NdIoqu8x7421qhaMJXTKO9y9
+ 3BLm+QuCFVUfQH7sUPc0xxQ1IZ7irXFKLP4uuJtNQRIhCVPtmY34I0wC9IG1yqa+RLgO
+ SAUAKv8wQumswtu2XFOAY9tpQxzktZ6xih9Px0/Plz6n3k307Z3htv33KHYbaQJp4kvX
+ f0Gw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Ktt/rpm7
-Subject: [Buildroot] [PATCH 25/27] package/sdcc: add option for the z80 port
+ header.a=rsa-sha256 header.s=20230601 header.b=IsKV1Ulu
+Subject: [Buildroot] [PATCH 26/27] package/sdcc: add option for the device
+ lib
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,64 +114,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The z80 is a common microprocessor familly, and although it is currently
-unused in Buildroot, it makes sense to enable to demonstrate how to
-enable ports other than the mcs51.
+This enables the "stdlib"-like set of libraries for the enabled ports
+and for the various memory models supported by each port.
 
-Note that we decided to add a single option that enables all the
-variants of z80, rather than one for each variant: this only installs a
-single additional program that handles all z80 variants anyway. When the
-device libs are enabled, one set of libs is installed for each variant,
-though they are small enough that it does not warrant adding an option
-for each variant.
+For some ports, there are non-fee libraries (and includes) available.
+However, their licensing terms are dubious, and they are only available
+for the PIC ports which we currently do not enable in Buildroot. So we
+do not enable those non-free stuff.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/sdcc/Config.in.host | 8 ++++++++
- package/sdcc/sdcc.mk        | 8 ++++----
- 2 files changed, 12 insertions(+), 4 deletions(-)
+ package/sdcc/Config.in.host |  5 +++++
+ package/sdcc/sdcc.mk        | 21 +++++++++++++++++++--
+ 2 files changed, 24 insertions(+), 2 deletions(-)
 
 diff --git a/package/sdcc/Config.in.host b/package/sdcc/Config.in.host
-index 1c851951b8..711da37444 100644
+index 711da37444..56ac8c7ed1 100644
 --- a/package/sdcc/Config.in.host
 +++ b/package/sdcc/Config.in.host
-@@ -28,4 +28,12 @@ config BR2_PACKAGE_HOST_SDCC_MCS51
- 	  Add support for Intel MCS-51 based Microprocessors (8031,
- 	  8032, 8051, 8052, etc.),
+@@ -36,4 +36,9 @@ config BR2_PACKAGE_HOST_SDCC_Z80
+ 	  mode, SM83, Rabbit 2000/3000, Rabbit 3000A , Toshiba TLCS-90,
+ 	  Zilog eZ80 in Z80 mode, ASCII R800),
  
-+config BR2_PACKAGE_HOST_SDCC_Z80
-+	bool "z80 (et al.)"
-+	select BR2_PACKAGE_HOST_SDCC_HAS_PORT
-+	help
-+	  Add support for Zilog Z80 based MCUs (Z80, Z180, eZ80 in Z80
-+	  mode, SM83, Rabbit 2000/3000, Rabbit 3000A , Toshiba TLCS-90,
-+	  Zilog eZ80 in Z80 mode, ASCII R800),
++comment "libraries"
++
++config BR2_PACKAGE_HOST_SDCC_DEV_LIB
++	bool "device-lib"
 +
  endif
 diff --git a/package/sdcc/sdcc.mk b/package/sdcc/sdcc.mk
-index 60ed688ce4..8e5032427f 100644
+index 8e5032427f..0e2de37748 100644
 --- a/package/sdcc/sdcc.mk
 +++ b/package/sdcc/sdcc.mk
-@@ -48,7 +48,7 @@ HOST_SDCC_CONF_OPTS += \
- HOST_SDCC_CONF_OPTS += \
- 	--disable-ds390-port \
- 	--disable-ds400-port \
--	--disable-ez80_z80-port \
-+	$(if $(BR2_PACKAGE_HOST_SDCC_Z80),--enable,--disable)-ez80_z80-port \
- 	--disable-f8-port \
- 	--disable-hc08-port \
- 	$(if $(BR2_PACKAGE_HOST_SDCC_MCS51),--enable,--disable)-mcs51-port \
-@@ -68,8 +68,8 @@ HOST_SDCC_CONF_OPTS += \
- 	--disable-sm83-port \
- 	--disable-stm8-port \
- 	--disable-tlcs90-port \
--	--disable-z180-port \
--	--disable-z80-port \
--	--disable-z80n-port
-+	$(if $(BR2_PACKAGE_HOST_SDCC_Z80),--enable,--disable)-z180-port \
-+	$(if $(BR2_PACKAGE_HOST_SDCC_Z80),--enable,--disable)-z80-port \
-+	$(if $(BR2_PACKAGE_HOST_SDCC_Z80),--enable,--disable)-z80n-port
+@@ -32,8 +32,6 @@ HOST_SDCC_DEPENDENCIES = \
+ HOST_SDCC_CONF_OPTS = \
+ 	--without-ccache \
+ 	--disable-doc \
+-	--disable-device-lib \
+-	--disable-non-free \
+ 	--disable-libgc
  
+ # Keep utilities separate, and alphabeticaly ordered.
+@@ -72,4 +70,23 @@ HOST_SDCC_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_HOST_SDCC_Z80),--enable,--disable)-z80-port \
+ 	$(if $(BR2_PACKAGE_HOST_SDCC_Z80),--enable,--disable)-z80n-port
+ 
++ifeq ($(BR2_PACKAGE_HOST_SDCC_DEV_LIB),y)
++SDCC_LICENSE += \
++	, GPL-2.0-only with Library Exception (device libraries)
++
++HOST_SDCC_CONF_OPTS += \
++	--enable-device-lib \
++	--disable-non-free
++define HOST_SDCC_DEV_LIB_CLEAN
++	rm -rf $(HOST_DIR)/share/sdcc/lib/src
++	find $(HOST_DIR)/share/sdcc/include $(HOST_DIR)/share/sdcc/lib \
++		-depth -type d -empty -delete
++endef
++HOST_SDCC_POST_INSTALL_HOOKS += HOST_SDCC_DEV_LIB_CLEAN
++else
++HOST_SDCC_CONF_OPTS += \
++	--disable-device-lib \
++	--disable-non-free
++endif
++
  $(eval $(host-autotools-package))
 -- 
 2.47.0
