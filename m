@@ -1,73 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CB6BC021B0
-	for <buildroot@archiver.kernel.org>; Wed, 19 Feb 2025 20:55:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82912C021AA
+	for <buildroot@archiver.kernel.org>; Wed, 19 Feb 2025 21:05:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3DC3A40B5A;
-	Wed, 19 Feb 2025 20:55:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 063F1610E7;
+	Wed, 19 Feb 2025 21:05:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dKUrc9fTc9_m; Wed, 19 Feb 2025 20:55:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1-7yqMbM3N4U; Wed, 19 Feb 2025 21:05:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10C3A40B5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B8F16116C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10C3A40B5E;
-	Wed, 19 Feb 2025 20:55:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4AF5ECF
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 20:55:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B8F16116C;
+	Wed, 19 Feb 2025 21:05:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id AFA8FCF
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 21:05:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 39AE6409FC
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 20:55:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A698E606A6
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 21:05:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tzGTSh3EF58H for <buildroot@buildroot.org>;
- Wed, 19 Feb 2025 20:55:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.87;
- helo=smtpcmd0987.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4E3B340B5A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E3B340B5A
-Received: from smtpcmd0987.aruba.it (smtpcmd0987.aruba.it [62.149.156.87])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4E3B340B5A
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 20:55:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h3fIS3pQoeIo for <buildroot@buildroot.org>;
+ Wed, 19 Feb 2025 21:04:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.117;
+ helo=smtpcmd11117.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 592CC610E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 592CC610E7
+Received: from smtpcmd11117.aruba.it (smtpcmd11117.aruba.it [62.149.156.117])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 592CC610E7
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 21:04:50 +0000 (UTC)
 Received: from localhost.localdomain ([84.33.84.190])
  by Aruba SMTP with ESMTPSA
- id kr69tqYwsS934kr69tjoIp; Wed, 19 Feb 2025 21:55:13 +0100
+ id krFQtzoMrtr9dkrFQtXaia; Wed, 19 Feb 2025 22:04:48 +0100
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Joseph Kogut <joseph.kogut@gmail.com>
-Date: Wed, 19 Feb 2025 21:49:35 +0100
-Message-Id: <20250219204935.25502-1-giulio.benetti@benettiengineering.com>
+ Pierre-Jean Texier <texier.pj2@gmail.com>
+Date: Wed, 19 Feb 2025 22:04:02 +0100
+Message-Id: <20250219210402.146462-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfCif7xY1z4HqEvIoEoGruEtOnJpQYVSw2Jqb1wbSiU8JVkEGT2ORG+yEQ6hoFel2NN1dJk2EP0ezwbqnZPfr1z9qFH79D32m4fxfpJNHS9vzCxFuMtFw
- gaSpAb3+RoNjNrlu5/G3GTYrG54BfBlEzjgZ5d4ssygxHlXBRDntgMmy4oN9TUM4wKzAli7xhxf1aS5XuewjhROLTa6dBpoDScl5q9Ag80+pljIaHHn5XHqZ
- pM49zroY0IZH/P8qi+fxoq4Brh7SoBJ8vDiVxPgbV9C4GQDxmAXtjow4kZXsSWdXfC3OjcL4B83NYvKddosqIA==
+X-CMAE-Envelope: MS4xfDtwbJq2cFVgdoAjqCoeydzj6407PvFZMl5uI/HTl4KXNiU+dgSANPaZ4ud2RzMT1y00oTtMRzsjorOhuR486TTnky5gDfs0JWhKuUZUQMc7mpcVqDR+
+ yw4SBU5v1/nhA9fjXD1o86cp7mPFzlFNZEAycfX4w+bZTjbFhgf07o/bEGed10PTRlDgMJuC/xFNTF6mR27xnD5YE+yf+B1xxaHXuRcbNgZBoDsgMK01aFsn
+ JrpspORI9auZGNC+S/w+Tkbfkngo9aZEwvzmCRPkQQKzyfVq/eu3TuC68jFdSIA43i5y/Sp6ZRjAX/HKHydjcg==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1739998513; bh=GHBrYj0w9RNkq/9w7WouIELXMqMBmxEiOWIR/PTak7s=;
+ t=1739999088; bh=kvnziuCB0/pYp+Nzq8tkyZPnbJmKx9lkXAAWt7eqJjY=;
  h=From:To:Subject:Date:MIME-Version;
- b=W7WMZb/aSWN7EeQ5BBrEKgD7RADE9xyr+hiPFKtv3jeav/9d6ejlWjTc6mz9jgmgT
- 9Q4vmi7IVFLZTlJkgV/Rsez/CG6JMz/HlpWFwqLKSOjP3lZqLTSjvlZY7Qu4hSQIkd
- HlLraGYBijFiSwIo+GAutt0U4Ssx4VH7j7mT1MqsKYApC7YXvQtHjBEkE+Ei4yPvg3
- wIhFaqMh/Dr/a6MpLYK0KLcnFUhGT58HeBeUD0KuTCc73maQ8uDgEewJNH8UeSrt5W
- 8S7FkwIogeFvzKWpHAmXJMZiJqdLYLcYIecDpUv5dI01O7h1LOaRrDIHU+8w0qZAsQ
- lCdbcT/M9YNhQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=nEhngdM9JfIfLDcI7HbeERoEXVbM76llQ2Gq+cY8wEC1n1SAZRgoet91ExTw+2iPe
+ E63+uvjd5E/3XFFtDNdRG1Vg2hkJ5xSf15rcqjzvfKFZQaedCktZKxF3sG82M+4Stz
+ v3CqKpZPu6+68BYkIfRUIhXXNQm5sD0/nVsSS0qK6IXbC1ipRMNQoeIbqO6p06TV7v
+ bNDN4gTS6ivu7Y9D19x5JtcjTib7jE1MfV5qFCC8TrejIY9CyxKnG5dLrkz+mzOGC4
+ p8UROdbIhtZ60Wgda2BUYBD19r1fGftkosgYo5TPtRCpogLGUJRCSV9HsFjg4OiMcV
+ kSDrsxXmYoGUA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=W7WMZb/a
-Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.108
+ header.s=a1 header.b=nEhngdM9
+Subject: [Buildroot] [PATCH] package/mongoose: bump to version 7.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,39 +84,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For release note, see:
-https://firefox-source-docs.mozilla.org/security/nss/releases/nss_3_108.html
+https://github.com/cesanta/mongoose/releases/tag/7.17
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
+ package/mongoose/mongoose.hash | 4 ++--
+ package/mongoose/mongoose.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index fe29029633..0f73002243 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_107_RTM/src/SHA256SUMS
--sha256  7f7e96473e38150771a615f5d40e8c41ba3a19385301ae0c525091f2fc9d6729  nss-3.107.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_108_RTM/src/SHA256SUMS
-+sha256  a0f6fcb5dbadc1635b43827517a979e3a6d005d0788527802a6b31e2c5f66eec  nss-3.108.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 8f2da4a5c4..9a5afeaf4f 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+index 15aa2b35ba..18b5e222ac 100644
+--- a/package/mongoose/mongoose.hash
++++ b/package/mongoose/mongoose.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  f2c42135f7bc34b3d10b6401e9326a20ba5dd42d4721b6a526826ba31c1679fd  mongoose-7.16.tar.gz
+-sha256  7e2bc5dabbc27b431a530540161ba860906f12109d4b84b1e4bc8879f1afc3bc  LICENSE
++sha256  b6a6f69912c2cd0c67f85633c6b578d4dcdf385c3628acdcd21de28787c676e5  mongoose-7.17.tar.gz
++sha256  9abc2509d90c01ff2a0c91abf73582cdbcf1d2dbcc0b7973097eced43cf4cdd4  LICENSE
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 9ec6423e93..b41f6a054d 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.107
-+LIBNSS_VERSION = 3.108
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-MONGOOSE_VERSION = 7.16
++MONGOOSE_VERSION = 7.17
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPL-2.0
+ MONGOOSE_LICENSE_FILES = LICENSE
 -- 
 2.39.5
 
