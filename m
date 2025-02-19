@@ -1,103 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 388C9C021AA
-	for <buildroot@archiver.kernel.org>; Wed, 19 Feb 2025 08:52:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D7BFC021B0
+	for <buildroot@archiver.kernel.org>; Wed, 19 Feb 2025 08:52:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0721984DA3;
-	Wed, 19 Feb 2025 08:52:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 90FB04F3B4;
+	Wed, 19 Feb 2025 08:52:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 96iuVMG62pjq; Wed, 19 Feb 2025 08:52:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OI1gdfiAyRYh; Wed, 19 Feb 2025 08:52:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B10E84D9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6C0B50408
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B10E84D9F;
-	Wed, 19 Feb 2025 08:52:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 37B5D127
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:51:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C6C0B50408;
+	Wed, 19 Feb 2025 08:52:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 145BC127
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:51:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1BBA840603
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:51:02 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UsphPsdBeo7g for <buildroot@buildroot.org>;
- Wed, 19 Feb 2025 08:51:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
- envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7843A410D1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7843A410D1
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7843A410D1
+ by smtp3.osuosl.org (Postfix) with ESMTP id F342260071
  for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:51:00 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-38a25d4b9d4so4159624f8f.0
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 00:51:00 -0800 (PST)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jTytvE9wTY-t for <buildroot@buildroot.org>;
+ Wed, 19 Feb 2025 08:50:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8A8FE60671
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A8FE60671
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8A8FE60671
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:50:59 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-43964e79314so59887325e9.3
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 00:50:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1739955058; x=1740559858;
+ d=1e100.net; s=20230601; t=1739955057; x=1740559857;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=ubxIylZR0HBtM93RVqkKEzMANuEsMkamUN4K1b7QFck=;
- b=qfLkeEpRH9JaWht/DNDHWuRzBxyIvtBzIG/6z7qYAVDTEG+Kcfj/uCJiAfIU3ayySL
- RHk2ii5pUdmhgt6YyJLc8yMbK1IsjipjXhv4km874iZ7EQPrx+r0k6xs1C6T/mU5bZDh
- zye1lFHrkjkyDd2NjjdbdKXSQVNM36Qr+Kuz55loRxDRIbnPt7amM578lRhNcqilS9wB
- jyhGTrVseBK44HTNMCB2o3taXNzsJvtsqohvVeUnOmjaPYr57r2K6F8HZVWM+4TXsEYk
- zHgJoqhoHpXfIENbe3jSz7Ngt2ZjMDKf0OFQJpwJ3DjYX6LlssbPRXzXZiWtCJkLjON0
- NWaA==
-X-Gm-Message-State: AOJu0YxZFf/0p/una6L2yTiFCbtEOaf9xskWdTyLr2rLI9q1U9pfJoZA
- 0Mf7zVc1USek6j5yETfVKKVH22zb1v9jpJUU3tZ84RlDCAa2LTTlLzynrw==
-X-Gm-Gg: ASbGnctzfbkDrA9mmuKAS3NMrdQltLIgAn2fExmiWVupO2Wbp1iX8oj9LLtOLt06Zs0
- +fez5MSdlsT3E9mgPSEuJnNSmolUAmSICaIkuYWAtok9s/DyOu2tqttQUheiF2pJ1X8LkcCm07H
- z+zXTcD1/EENZbbBO2yy10e9og9j51pwvrqOHDkzTiQsBozl903HbNxK5kA2/Z9E/UFWIKaiUNV
- aZ2mC3dk0sp+6XrGUnfyEhi9QNKW+5AkL/ZjzNNktQMdJsDo86Xyc70LaA78EX1dkr17qnu9V7c
- vJSWENhSrkoaQJtRhnGdhrq+wQ==
-X-Google-Smtp-Source: AGHT+IECu6Gl6OzqltiFYONGQWBWv8WDEY32/Ocpd1WfPTBMVraC1DHeVDGSht7jHXE5d++RWTP2bg==
-X-Received: by 2002:a05:6000:1844:b0:38f:4d40:358 with SMTP id
- ffacd0b85a97d-38f4d400751mr8291457f8f.9.1739955058293; 
- Wed, 19 Feb 2025 00:50:58 -0800 (PST)
+ bh=P57laVPRBuQ5O8Lor2tcPDWHDK2QMP8f5f8RLfKQvZg=;
+ b=OcTb3qeIx8ZrP6UU4KaoV/jbVd+zhk4kLJaFjKqGoQKZJ+jGKJsdF5agniZkkgLmp3
+ m57cF6pIJiGeYwf+AqQ/EWo5iFAdZnQFq3jO6GvJDLyxnO0C/jds9c/0xG2rm3vxw/jk
+ c0alsyZqRLKaOBNc9S1xY+LyG0PE9Wfv+cudX2Ctz+CQvT64EQpEDWTy8dLm1aU6ycWR
+ ZyHFiJAwUG9CtxP+cPRhYy7W9EJV/bKQ2vSO9xGTQHZ3hkmiqRaAOq8glSiMNY86jshr
+ NZqdUR8znlrSEXhYLZhnW3U+Lfciwmji0V8MgdiixqArg8lw8B/RnxD9bxBghPEvgo8i
+ aUIw==
+X-Gm-Message-State: AOJu0Yzgw80UHW3IekRPHt98IzoOvtIwVRgKBHbgNB4M2qW/TDeWwide
+ EhkTONE1NNhrzBnp7uqUSYiUmOUH0WVdfs416sCZsQHvXZ/SwDtbLEL9eA==
+X-Gm-Gg: ASbGncu6ZP+00JC1FcYfhNKZrkO+BaxS3+ZfA2f64tKXjf1fotZYTas4wztrfcRLEzw
+ Pr5VInBnEfZSSzFUj7l5HY6CbtY3KpZwnwgwvE0vcxO4SO18ZCocF2KRUqSHkJWsuiqDTW0xMTm
+ PQY1wVuLHatpi0CIB0HknKnU8ABaD5i5qrktgNkYuCY6ijny7KqcuIPoZoCy2zdMclY49ezzFOf
+ K8epxHBshR1eByvRz+OFaVeRMB8FtmjEelIpc3x03fU+6Nou3+lsbyUTmpK/D/xcxPPL2ZJk2hy
+ eMPO8mS/MqKR/dq1sdof8YW2og==
+X-Google-Smtp-Source: AGHT+IHiNadvwdIKkIAZwfD0DSRTzEsntGQBFFFw9B5TyNHf/kPDeE6C5PLFNIH6nrgv3MFzEV5AVw==
+X-Received: by 2002:a5d:6c66:0:b0:388:c61d:43e0 with SMTP id
+ ffacd0b85a97d-38f34167d68mr18846575f8f.48.1739955057467; 
+ Wed, 19 Feb 2025 00:50:57 -0800 (PST)
 Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-38f259d5e9esm17517399f8f.61.2025.02.19.00.50.57
+ ffacd0b85a97d-38f259d5e9esm17517399f8f.61.2025.02.19.00.50.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 19 Feb 2025 00:50:57 -0800 (PST)
+ Wed, 19 Feb 2025 00:50:56 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Feb 2025 09:50:38 +0100
-Message-ID: <e649d3746a89803634428e01107b2e3297597712.1739955023.git.yann.morin.1998@free.fr>
+Date: Wed, 19 Feb 2025 09:50:37 +0100
+Message-ID: <ffc1ab29bb215a7d95fa8e57eabae520f4a9b437.1739955023.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1739955023.git.yann.morin.1998@free.fr>
 References: <cover.1739955023.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1739955058; x=1740559858; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1739955057; x=1740559857; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ubxIylZR0HBtM93RVqkKEzMANuEsMkamUN4K1b7QFck=;
- b=TwzHHA/ZT5opTouiXJCxbLS6JOjDEPGyhTLJZxEA9O/YxA5vQ/vG8Pj2MDa09sFZtT
- RPTbh3klJbgJHIGzZytbbrtyB2v3DoZsxqS8XYkU/ujcixdKSGaIizraeJWJbUSxN3Yr
- CuH8CXizRh8fXGdQDt6kjV50Lsr8f1YTkCw0EAQZBt5HpkOoYZy8/YRS8dZBJKlcBML2
- qiNmNohKpxb70/o5g4Y6yg8FLrqzAnk5OCRoZYMtS++waBXP5VYQUZTG7GMdacvuwdE7
- t27H7vH83aDRpKRmpxDW0A8XnGIxxSNG5x4wuHek6kqs8/h+VDB/MT1VGszZ4SjboTgC
- 2Ykg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=P57laVPRBuQ5O8Lor2tcPDWHDK2QMP8f5f8RLfKQvZg=;
+ b=DSculN19VqkhJXm21V5BD7b83/be5oMxFC/Yf3A/FaUo7m2jxP4uXVG/hq2pSOOqAH
+ bZzpq6YaIgsrdcCLEXYs5c4Qdr9oZDB4/Nvq/UTOuTwqJjICGT9sOJvpXxa/8rd/vney
+ TjZZ/KIqWFZhW9e9JNxA7IokfI92/XboWK94LrMoTKpE2/8/y5W5lxtsp6iZA/ov/agv
+ 4anDtGW6QfvJKbZEJ+I5ulsA+SckMeba2+vixNGvvPTAO8ej3s995TGFo/GIo/eK21bQ
+ D6k2OnNC3HoHy4yzfSGM593TGjdrZ671hURTLo/TVUmsBmtvY2lrN+Xusm0MG8FCeouA
+ JuRw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=TwzHHA/Z
-Subject: [Buildroot] [PATCH 23/27] package/sdcc: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=DSculN19
+Subject: [Buildroot] [PATCH 22/27] package/boost: bump to version 1.87.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,210 +107,373 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Although they are optional, most ports need sdcppp and sdbinutils,
-especially when we later add an option to build the device libraries.
-Furthermore, they are relatively quick to build. So, we always build
-them unconditionally.
+Add a slew of new libraries as reported by ./bootstrap --show-libraries.
+Add a comment about how to maintain the list, and that they may not all
+be exposed in the menuconfig.
 
-For now, we enable no port, to get a basic package. Enabling ports will
-come in following commits [0].
+There has been a few dependency changes. Those have been identified by
+removing all selects, building Boost with exactly one option enabled,
+identifying those that built without issue (thus were leaf options),
+then adding dependencies to failing options, and so on iteratively,
+until all options would build when selected on their own, and without a
+select that was not already satisfied transitively (that's a limitation,
+but hey...)
 
-To be noted: sdcc will hard-code its PREFIX/share/sdcc/ (from configure
---datadir and --datarootdir) as a search path to lok for its stdlib. It
-also add a path relative ot where its executable is, i.e. something like
-[...]/bin/../share/sdcc/ as an additional search path for additional
-libraries. When PPD is enabled, PREFIX/share/sdcc/ is copied to the
-depndee's PPD, so the stdlibs will be found in both locations, causing
-sdld to eventually whine because of duplicate symbols:
+Some dependencies were dropped, and that has been confirned by
+inspecting the corresponding upstream component. For example, contract
+no longer needs system since upstream commit eedf51b2c675 (removed
+linking to boost.system [...]) and available since boost 1.72.0 (so yes,
+we've had superfluous dependencies for a while now, but it is extra
+diffficult to detect).
 
-    ?ASlink-Warning-Definition of public symbol '___sdcc_external_startup' found more than once:
-       Library: '.../per-package/fx2lafw/host/bin/../share/sdcc/lib/small/libsdcc.lib', Module: '_startup.rel'
-       Library: '.../per-package/host-sdcc/host/share/sdcc/lib/small/libsdcc.lib', Module: '_startup.rel'
+In some cases, this implies a change in what symbol has to be ignored or
+not:
+  - contract now selects nothing, so appears orphaned, so must be
+    ignored;
+  - exception is now selected by coroutine, so no longer appears
+    orphaned, so must not be ignored;
+  - timer now selects nothing, so appears orphaned, so must be ignored;
+  - url now select system, so it no longer appears orphaned, so must not
+    be ignored.
 
-As tested with fx2lafw (to come in a later commit), the generated
-binaries are byte-for-byte identical whether PPD is enabled (duplicate
-symbols) or not (no duplicate symbol).
-
-The licensing terms are a bit hectic: the core of sdcc, the sdcc
-compiler itself, is GPLv2, and the doc [1] adds "GPLv3 might apply
-depending on the libraries used when building", which is a bit
-ambiguous... GPLv3 is however the license for other parts of sdcc,
-like the sdcpp preprocessor (derived from gcc), the sdbinutils (derived
-from binutils), or the sdasXXX assemblers and sdld linker (derived from
-an external package, asXXXX [2]). As sdld is always built, GPLv3 always
-applies. One tool is under the zlib license. Others are disabled, so
-their licensing terms do not apply (until we add options to enable
-them).
-
-[0] with all ports disabled as it is in this initial commit, sdcc will
-    end up building some stuff at install time; this is not a problem in
-    practice, as the default commands and flags all work nicely.
-    Furthermore, the issue will disappear when we eventually add one
-    port, in the following commit.
-[1] the PDF rendered from the in-tree docs/dsccman.lyx, and of which the
-    latest version is at https://sdcc.sourceforge.net/doc/sdccman.pdf,
-    notably section 1.2, SDCC Suite Licenses.
-[2] https://shop-pdp.net/ashtml/
+Drop the backported patch, it's been applied upstream since 1.84.0.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Michael Nosthoff <buildroot@heine.tech>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- DEVELOPERS                  |  3 ++
- package/Config.in.host      |  1 +
- package/sdcc/Config.in.host | 15 ++++++++
- package/sdcc/sdcc.hash      |  7 ++++
- package/sdcc/sdcc.mk        | 75 +++++++++++++++++++++++++++++++++++++
- 5 files changed, 101 insertions(+)
- create mode 100644 package/sdcc/Config.in.host
- create mode 100644 package/sdcc/sdcc.hash
- create mode 100644 package/sdcc/sdcc.mk
+ .../0001-unordered-fix-copy-assign.patch      | 22 ------
+ package/boost/Config.in                       | 34 ++++------
+ package/boost/boost.hash                      |  2 +-
+ package/boost/boost.mk                        | 68 ++++++++++++++++++-
+ 4 files changed, 81 insertions(+), 45 deletions(-)
+ delete mode 100644 package/boost/0001-unordered-fix-copy-assign.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6827866db1..4d0d294a8f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3416,6 +3416,9 @@ F:	package/casync/
- F:	package/gloox/
- F:	package/tpm2-pkcs11/
+diff --git a/package/boost/0001-unordered-fix-copy-assign.patch b/package/boost/0001-unordered-fix-copy-assign.patch
+deleted file mode 100644
+index 670552535a..0000000000
+--- a/package/boost/0001-unordered-fix-copy-assign.patch
++++ /dev/null
+@@ -1,22 +0,0 @@
+-Upstream Patch for Unordered
+-
+-Prevent erroneous copying of groups data, update max load to properly propagate
+-
+-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+-Upstream: https://github.com/boostorg/unordered/commit/067884a4e213352e7c81c441f1453c54735c39f3
+-diff --git a/include/boost/unordered/detail/foa/core.hpp b/include/boost/unordered/detail/foa/core.hpp
+-index 239d05d3..7ae9f2c8 100644
+---- a/boost/unordered/detail/foa/core.hpp
+-+++ b/boost/unordered/detail/foa/core.hpp
+-@@ -1870,9 +1870,10 @@ private:
+- 
+-   void fast_copy_elements_from(const table_core& x)
+-   {
+--    if(arrays.elements){
+-+    if(arrays.elements&&x.arrays.elements){
+-       copy_elements_array_from(x);
+-       copy_groups_array_from(x);
+-+      size_ctrl.ml=std::size_t(x.size_ctrl.ml);
+-       size_ctrl.size=std::size_t(x.size_ctrl.size);
+-     }
+-   }
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 784c40278b..d1d1dc2423 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -65,11 +65,11 @@ config BR2_PACKAGE_BOOST_CONTEXT
+ comment "boost-context needs a toolchain w/ C++11, gcc>=4.8"
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
  
-+N:	Yann E. MORIN <yann.morin.1998@free.fr>
-+F:	package/sdcc/
-+
- N:	Yann E. MORIN <yann.morin@orange.com>
- F:	.editorconfig
- F:	package/gpsd/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 3e6fef9e50..d29fa33e27 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -109,6 +109,7 @@ menu "Host utilities"
- 	source "package/sam-ba/Config.in.host"
- 	source "package/sdbus-cpp/Config.in.host"
- 	source "package/sdbusplus/Config.in.host"
-+	source "package/sdcc/Config.in.host"
- 	source "package/sentry-cli/Config.in.host"
- 	source "package/skopeo/Config.in.host"
- 	source "package/sloci-image/Config.in.host"
-diff --git a/package/sdcc/Config.in.host b/package/sdcc/Config.in.host
-new file mode 100644
-index 0000000000..52934aa150
---- /dev/null
-+++ b/package/sdcc/Config.in.host
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_HOST_SDCC
-+	bool "host sdcc"
-+	select BR2_PACKAGE_HOST_BOOST
-+	select BR2_PACKAGE_HOST_BOOST_GRAPH
-+	help
-+	  SDCC is a retargettable, optimizing Standard C (ANSI C89, ISO
-+	  C99, ISO C11, ISO C23) compiler suite that targets the Intel
-+	  MCS51 based microprocessors (8031, 8032, 8051, 8052, etc.),
-+	  Maxim (formerly Dallas) DS80C390 variants, Freescale (formerly
-+	  Motorola) HC08 based (hc08, s08), Zilog Z80 based MCUs (Z80,
-+	  Z180, SM83, Rabbit 2000, 2000A, 3000A, TLCS-90, R800), Padauk
-+	  (pdk14, pdk15), STMicroelectronics STM8, MOS 6502 and WDC
-+	  65C02.
-+
-+	  https://sdcc.sourceforge.net/
-diff --git a/package/sdcc/sdcc.hash b/package/sdcc/sdcc.hash
-new file mode 100644
-index 0000000000..ef5ceb686a
---- /dev/null
-+++ b/package/sdcc/sdcc.hash
-@@ -0,0 +1,7 @@
-+# From sourceforge
-+sha1  ffc600a471b2684a3b268859b038487e43b811ed  sdcc-src-4.5.0.tar.bz2
-+# Locally computed
-+sha256  d5030437fb436bb1d93a8dbdbfb46baaa60613318f4fb3f5871d72815d1eed80  sdcc-src-4.5.0.tar.bz2
-+sha256  1ca3e8f71b7de618968e7ea9fe47822d9e704dc476aef8544033abedec355225  COPYING
-+sha256  c23d0df4adc62b3f7cddcf96bec64e7100bfe7671eefe2ce31b9ace366fcc001  LICENSE
-+sha256  39c81a22595e472dcae2caf7b1a4009a9bbaad7b043d800a5af0631c612961af  doc/README.txt
-diff --git a/package/sdcc/sdcc.mk b/package/sdcc/sdcc.mk
-new file mode 100644
-index 0000000000..b2082c36bc
---- /dev/null
-+++ b/package/sdcc/sdcc.mk
-@@ -0,0 +1,75 @@
-+################################################################################
-+#
-+# sdcc
-+#
-+################################################################################
-+
-+SDCC_VERSION = 4.5.0
-+SDCC_SOURCE = sdcc-src-$(SDCC_VERSION).tar.bz2
-+SDCC_SITE = https://downloads.sourceforge.net/project/sdcc/sdcc/$(SDCC_VERSION)
-+
-+SDCC_LICENSE = \
-+	GPL-2.0-only (sdcc), \
-+	GPL-3.0-or-later (sdcpp, sdas, sdld), \
-+	Zlib (makebin)
-+
-+# doc/README.txt refers to dccman.pdf for the whole licensing information,
-+# but that's a generated file, so we can't add it to the license files.
-+SDCC_LICENSE_FILES = \
-+	COPYING \
-+	LICENSE \
-+	doc/README.txt
-+
-+HOST_SDCC_DEPENDENCIES = \
-+	$(BR2_PYTHON3_HOST_DEPENDENCY) \
-+	host-bison \
-+	host-flex \
-+	host-gawk \
-+	host-zlib \
-+	host-boost
-+
-+# ccache is handled by Buildroot and included in $(HOSTCC)
-+HOST_SDCC_CONF_OPTS = \
-+	--without-ccache \
-+	--disable-doc \
-+	--disable-device-lib \
-+	--disable-non-free \
-+	--disable-libgc
-+
-+# Keep utilities separate, and alphabeticaly ordered.
-+HOST_SDCC_CONF_OPTS += \
-+	--enable-sdbinutils \
-+	--enable-sdcpp \
-+	--disable-packihx \
-+	--disable-sdcdb \
-+	--disable-ucsim
-+
-+# Keep the list of ports separate, and alphabetically ordered.
-+HOST_SDCC_CONF_OPTS += \
-+	--disable-ds390-port \
-+	--disable-ds400-port \
-+	--disable-ez80_z80-port \
-+	--disable-f8-port \
-+	--disable-hc08-port \
-+	--disable-mcs51-port \
-+	--disable-mos6502-port \
-+	--disable-mos65c02-port \
-+	--disable-pdk13-port \
-+	--disable-pdk14-port \
-+	--disable-pdk15-port \
-+	--disable-pdk16-port \
-+	--disable-pic14-port \
-+	--disable-pic16-port \
-+	--disable-r2k-port \
-+	--disable-r2ka-port \
-+	--disable-r3ka-port \
-+	--disable-r800-port \
-+	--disable-s08-port \
-+	--disable-sm83-port \
-+	--disable-stm8-port \
-+	--disable-tlcs90-port \
-+	--disable-z180-port \
-+	--disable-z80-port \
-+	--disable-z80n-port
-+
-+$(eval $(host-autotools-package))
++# check-symbol ignore
+ config BR2_PACKAGE_BOOST_CONTRACT
+ 	bool "boost-contract"
+ 	# pthread_condattr_setclock
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	select BR2_PACKAGE_BOOST_SYSTEM
+ 	help
+ 	  Contract programming for C++.
+ 
+@@ -82,10 +82,9 @@ config BR2_PACKAGE_BOOST_COROUTINE
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # boost-context
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context, boost-thread
+-	select BR2_PACKAGE_BOOST_CHRONO
+ 	select BR2_PACKAGE_BOOST_CONTEXT
++	select BR2_PACKAGE_BOOST_EXCEPTION
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+-	select BR2_PACKAGE_BOOST_THREAD
+ 	help
+ 	  deprecated coroutine library, the non-deprecated coroutine2
+ 	  library is a header-only library and does not need to be
+@@ -105,7 +104,6 @@ config BR2_PACKAGE_BOOST_DATE_TIME
+ 	  A set of date-time libraries based on generic programming
+ 	  concepts.
+ 
+-# check-symbol ignore
+ config BR2_PACKAGE_BOOST_EXCEPTION
+ 	bool "boost-exception"
+ 	help
+@@ -125,7 +123,6 @@ config BR2_PACKAGE_BOOST_FIBER
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	select BR2_PACKAGE_BOOST_CONTEXT
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+-	select BR2_PACKAGE_BOOST_SYSTEM
+ 	help
+ 	  C++11 userland threads library.
+ 
+@@ -149,7 +146,6 @@ config BR2_PACKAGE_BOOST_FILESYSTEM
+ 
+ config BR2_PACKAGE_BOOST_GRAPH
+ 	bool "boost-graph"
+-	select BR2_PACKAGE_BOOST_REGEX
+ 	help
+ 	  The BGL graph interface and graph components are generic, in
+ 	  the same sense as the the Standard Template Library (STL).
+@@ -165,6 +161,8 @@ config BR2_PACKAGE_BOOST_IOSTREAMS
+ 	bool "boost-iostreams"
+ 	select BR2_PACKAGE_BZIP2
+ 	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_BOOST_RANDOM
++	select BR2_PACKAGE_BOOST_REGEX
+ 	help
+ 	  Boost.IOStreams provides a framework for defining streams,
+ 	  stream buffers and i/o filters.
+@@ -172,6 +170,7 @@ config BR2_PACKAGE_BOOST_IOSTREAMS
+ config BR2_PACKAGE_BOOST_JSON
+ 	bool "boost-json"
+ 	select BR2_PACKAGE_BOOST_CONTAINER
++	select BR2_PACKAGE_BOOST_SYSTEM
+ 	help
+ 	  Boost.JSON is a portable C++ library which provides containers
+ 	  and algorithms that implement JavaScript Object Notation, or
+@@ -193,7 +192,6 @@ config BR2_PACKAGE_BOOST_LOCALE
+ 	depends on !(BR2_TOOLCHAIN_HAS_GCC_BUG_64735 && BR2_PACKAGE_ICU) # boost-thread
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS \
+ 		|| !BR2_PACKAGE_ICU # boost-thread
+-	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD if BR2_PACKAGE_ICU
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+ 	help
+@@ -214,11 +212,7 @@ config BR2_PACKAGE_BOOST_LOG
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-atomic
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
+-	select BR2_PACKAGE_BOOST_ATOMIC
+-	select BR2_PACKAGE_BOOST_DATE_TIME
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+-	select BR2_PACKAGE_BOOST_REGEX
+-	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
+ 	help
+ 	  Logging library.
+@@ -233,6 +227,8 @@ comment "boost-log needs a toolchain not affected by GCC bug 64735"
+ config BR2_PACKAGE_BOOST_MATH
+ 	bool "boost-math"
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # C++14
++	select BR2_PACKAGE_BOOST_CONTAINER
++	select BR2_PACKAGE_BOOST_RANDOM
+ 	help
+ 	  Boost.Math includes several contributions in the domain of
+ 	  mathematics:
+@@ -282,6 +278,8 @@ config BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
+ config BR2_PACKAGE_BOOST_PYTHON
+ 	bool "boost-python"
+ 	depends on BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_BOOST_CONTAINER
++	select BR2_PACKAGE_BOOST_GRAPH
+ 	help
+ 	  The Boost Python Library is a framework for interfacing Python
+ 	  and C++. It allows you to quickly and seamlessly expose C++
+@@ -324,8 +322,6 @@ config BR2_PACKAGE_BOOST_SYSTEM
+ config BR2_PACKAGE_BOOST_TEST
+ 	bool "boost-test"
+ 	depends on BR2_USE_MMU # fork()
+-	select BR2_PACKAGE_BOOST_SYSTEM
+-	select BR2_PACKAGE_BOOST_TIMER
+ 	help
+ 	  Support for simple program testing, full unit testing, and for
+ 	  program execution monitoring.
+@@ -334,18 +330,16 @@ config BR2_PACKAGE_BOOST_THREAD
+ 	bool "boost-thread"
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::current_exception
+-	select BR2_PACKAGE_BOOST_CHRONO
+-	select BR2_PACKAGE_BOOST_SYSTEM
++	select BR2_PACKAGE_BOOST_CHRONO  # For dependents only
+ 	help
+ 	  Portable C++ multi-threading. C++11, C++14.
+ 
+ comment "boost-thread needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 
++# check-symbol ignore
+ config BR2_PACKAGE_BOOST_TIMER
+ 	bool "boost-timer"
+-	select BR2_PACKAGE_BOOST_CHRONO
+-	select BR2_PACKAGE_BOOST_SYSTEM
+ 	help
+ 	  Event timer, progress timer, and progress display classes.
+ 
+@@ -361,9 +355,9 @@ config BR2_PACKAGE_BOOST_TYPE_ERASURE
+ comment "boost-type_erasure needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 
+-# check-symbol ignore
+ config BR2_PACKAGE_BOOST_URL
+ 	bool "boost-url"
++	select BR2_PACKAGE_BOOST_SYSTEM
+ 	help
+ 	  Boost.URL is a portable C++ library which provides containers
+ 	  and algorithms which model a "URL," more formally described
+@@ -382,9 +376,9 @@ config BR2_PACKAGE_BOOST_WAVE
+ 	depends on !BR2_m68k_cf
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-thread
+-	select BR2_PACKAGE_BOOST_DATE_TIME
++	select BR2_PACKAGE_BOOST_CONTAINER
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+-	select BR2_PACKAGE_BOOST_SYSTEM
++	select BR2_PACKAGE_BOOST_SERIALIZATION
+ 	select BR2_PACKAGE_BOOST_THREAD
+ 	help
+ 	  The Boost.Wave library is a Standards conformant, and highly
+diff --git a/package/boost/boost.hash b/package/boost/boost.hash
+index 14403758ac..505f0b9721 100644
+--- a/package/boost/boost.hash
++++ b/package/boost/boost.hash
+@@ -1,5 +1,5 @@
+ # From https://www.boost.org/users/history/version_1_83_0.html
+-sha256  6478edfe2f3305127cffe8caf73ea0176c53769f4bf1585be237eb30798c3b8e  boost_1_83_0.tar.bz2
++sha256  af57be25cb4c4f4b413ed692fe378affb4352ea50fbe294a11ef548f4d527d89  boost_1_87_0.tar.bz2
+ 
+ # Locally computed
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE_1_0.txt
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 600364c5a7..834c4403b3 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BOOST_VERSION = 1.83.0
++BOOST_VERSION = 1.87.0
+ BOOST_SOURCE = boost_$(subst .,_,$(BOOST_VERSION)).tar.bz2
+ BOOST_SITE = https://archives.boost.io/release/$(BOOST_VERSION)/source
+ BOOST_INSTALL_STAGING = YES
+@@ -12,40 +12,104 @@ BOOST_LICENSE = BSL-1.0
+ BOOST_LICENSE_FILES = LICENSE_1_0.txt
+ BOOST_CPE_ID_VENDOR = boost
+ 
++# This is the list of libraries that Boost can build. They may not all be
++# exposed in the Buildroot menuconfig; only add them as the need arises.
++# How to maintain that list (the last step takes a bit of time):
++#  - make boost-direclean
++#  - make boost-patch
++#  - cd output/build/boost-X.Y.Z
++#  - ./bootstrap.sh --show-libraries |sed -r -e '/^ +- (.+)$/!d; s//\t\1 \\/' |sort
+ BOOST_ALL_LIBS = \
++	any \
++	asio \
++	assert \
+ 	atomic \
++	beast \
++	bimap \
++	bind \
++	charconv \
+ 	chrono \
++	cobalt \
++	compat \
+ 	container \
++	container_hash \
+ 	context \
+ 	contract \
++	conversion \
++	core \
+ 	coroutine \
++	coroutine2 \
++	crc \
+ 	date_time \
++	describe \
++	detail \
++	dll \
++	endian \
+ 	exception \
+ 	fiber \
+ 	filesystem \
++	flyweight \
++	function \
++	function_types \
++	geometry \
+ 	graph \
+ 	graph_parallel \
++	hana \
+ 	headers \
++	heap \
++	integer \
++	interprocess \
++	intrusive \
+ 	iostreams \
++	iterator \
+ 	json \
++	lambda2 \
++	lexical_cast \
+ 	locale \
++	lockfree \
+ 	log \
+ 	math \
++	move \
++	mp11 \
+ 	mpi \
++	msm \
++	multi_index \
++	mysql \
+ 	nowide \
++	optional \
++	outcome \
++	parameter \
++	pfr \
++	poly_collection \
++	predef \
++	process \
+ 	program_options \
+ 	python \
+ 	random \
++	ratio \
++	redis \
+ 	regex \
++	scope \
+ 	serialization \
++	signals2 \
++	smart_ptr \
+ 	stacktrace \
++	stl_interfaces \
+ 	system \
+ 	test \
+ 	thread \
++	throw_exception \
+ 	timer \
++	tuple \
+ 	type_erasure \
++	type_index \
++	unordered \
+ 	url \
+-	wave
++	uuid \
++	variant \
++	variant2 \
++	wave \
++	winapi
+ 
+ BOOST_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
 -- 
 2.47.0
 
