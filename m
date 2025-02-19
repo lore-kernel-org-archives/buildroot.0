@@ -1,67 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E82C2C021AA
-	for <buildroot@archiver.kernel.org>; Wed, 19 Feb 2025 19:55:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62284C021AA
+	for <buildroot@archiver.kernel.org>; Wed, 19 Feb 2025 19:57:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1CAE83A0C;
-	Wed, 19 Feb 2025 19:55:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0L25cf3vrgGt; Wed, 19 Feb 2025 19:55:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C69DF83A1C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C69DF83A1C;
-	Wed, 19 Feb 2025 19:55:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B1492E0C
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 19:55:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 93D4440C08
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 19:55:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 159F640678;
+	Wed, 19 Feb 2025 19:57:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fGA3UGnzPW2w for <buildroot@buildroot.org>;
- Wed, 19 Feb 2025 19:55:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id A3SLJ4kqgXje; Wed, 19 Feb 2025 19:56:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D12DE4060F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D12DE4060F;
+	Wed, 19 Feb 2025 19:56:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6A0D3E0C
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 19:56:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 58DCA405BC
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 19:56:56 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B8LV5fCWzzBs for <buildroot@buildroot.org>;
+ Wed, 19 Feb 2025 19:56:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 85EF740BFA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85EF740BFA
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 85EF740BFA
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 19:55:55 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 55C61442D3;
- Wed, 19 Feb 2025 19:55:52 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tkqAh-0003bC-1G;
- Wed, 19 Feb 2025 20:55:51 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CB864017A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5CB864017A
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 19:56:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 47E8A87963; Wed, 19 Feb 2025 19:56:55 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: buildroot@buildroot.org,  Bernd Kuhls <bernd.kuhls@t-online.de>
-References: <20250207204258.87410-1-yann.morin.1998@free.fr>
-Date: Wed, 19 Feb 2025 20:55:51 +0100
-In-Reply-To: <20250207204258.87410-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Fri, 7 Feb 2025 21:42:58 +0100")
-Message-ID: <875xl5so8o.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeiheduhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufhffjgfkfgggtgesthdttddttdertdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeetgfelveffveehtdevgeefjeeiudduledtffehgefgleekteektedutdfhleeiueenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopeihrghnnhdrmhhorhhinhdrudelleeksehfrhgvvgdrfhhrpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegsvghrnhgurdhkuhhhlhhssehtqdhonhhlihhnvgdruggv
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/kodi: don't uselessly select
- libdisplay-info
+To: buildroot@buildroot.org
+Date: Wed, 19 Feb 2025 20:54:56 +0100
+X-Git-Refname: refs/heads/2024.11.x
+X-Git-Oldrev: e28f3ba80df9cee48f54e6a941ecb98e47bde882
+X-Git-Newrev: 4013ba6a4215f6652a41b56878c0590592d48f2c
+X-Patchwork-Hint: ignore
+Message-Id: <20250219195655.47E8A87963@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/kodi: don't
+ uselessly select libdisplay-info
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -73,31 +59,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4013ba6a4215f6652a41b56878c0590592d48f2c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
- > Commit c61934611111 (package/kodi: bump version to 21.0-Omega) added a
- > select onto libdisplay-info from a blind option that only represents
- > whether a specific subset of Kodi is available, not whether Kodi itself
- > is enabled.
+Commit c61934611111 (package/kodi: bump version to 21.0-Omega) added a
+select onto libdisplay-info from a blind option that only represents
+whether a specific subset of Kodi is available, not whether Kodi itself
+is enabled.
 
- > This causes useless builds of libdisplay-info for a lot of builds where
- > Kodi is not enabled.
+This causes useless builds of libdisplay-info for a lot of builds where
+Kodi is not enabled.
 
- > Move the select to the man Kodi symbol itself, guarded with the proper
- > condition, like a few existing dependencies for GBM.
+Move the select to the main Kodi symbol itself, guarded with the proper
+condition, like a few existing dependencies for GBM.
 
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+(cherry picked from commit 64b2f03f5a2e35b7ab873d6f7db64735a0567d59)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/kodi/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2024.11.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 1977263db8..9661ab47bc 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -27,7 +27,6 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM
+ 	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
+ 	depends on BR2_PACKAGE_HAS_UDEV # libinput
+ 	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+-	select BR2_PACKAGE_LIBDISPLAY_INFO
+ 
+ comment "kodi needs udev support for gbm"
+ 	depends on !BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+@@ -108,6 +107,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_PACKAGE_TINYXML2
+ 	select BR2_PACKAGE_ZLIB
+ 	select BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY if BR2_TOOLCHAIN_USES_GLIBC # runtime UTF conversion support
++	select BR2_PACKAGE_LIBDISPLAY_INFO if BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM
+ 	select BR2_PACKAGE_LIBINPUT if BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM
+ 	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM
+ 	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
