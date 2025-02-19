@@ -4,84 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A09A9C021AA
-	for <buildroot@archiver.kernel.org>; Wed, 19 Feb 2025 08:24:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6FEFC021B0
+	for <buildroot@archiver.kernel.org>; Wed, 19 Feb 2025 08:50:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 397A242CFA;
-	Wed, 19 Feb 2025 08:24:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7CC054F390;
+	Wed, 19 Feb 2025 08:50:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3BPZc7Roe3Qi; Wed, 19 Feb 2025 08:24:20 +0000 (UTC)
+ id PCcawA9rAyBQ; Wed, 19 Feb 2025 08:50:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF7D04FD5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB1F3503A3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF7D04FD5B;
-	Wed, 19 Feb 2025 08:24:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7F88DC8
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:24:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB1F3503A3;
+	Wed, 19 Feb 2025 08:50:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5A8E7C8
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:50:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 62AE3848C5
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:24:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 48C3D606A3
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:50:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CVxaKDavQT5n for <buildroot@buildroot.org>;
- Wed, 19 Feb 2025 08:24:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=160.92.124.103;
- helo=smtp-outgoing-1802.laposte.net; envelope-from=vincent.stehle@laposte.net;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4334A848BF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4334A848BF
-Received: from smtp-outgoing-1802.laposte.net (smtp-outgoing-1802.laposte.net
- [160.92.124.103])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4334A848BF
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:24:15 +0000 (UTC)
-X-mail-filterd: {"version":"1.8.0","queueID":"4YyTvJ2CZ1zWf0T","contextId":
- "443c27cd-769c-4a10-b062-17474701f073"}
-Received: from outgoing-mail.laposte.net (localhost.localdomain [127.0.0.1])
- by mlpnf0107.laposte.net (SMTP Server) with ESMTP id 4YyTvJ2CZ1zWf0T;
- Wed, 19 Feb 2025 09:24:12 +0100 (CET)
-X-mail-filterd: {"version":"1.8.0","queueID":"4YyTvH6JtxzWf0M","contextId":
- "881d7b3a-686a-4458-a135-7e7bb64202c7"}
-X-lpn-mailing: LEGIT
-X-lpn-spamrating: 36
-X-lpn-spamlevel: not-spam
-Received: from romuald.bergerie (88-169-129-225.subs.proxad.net
- [88.169.129.225])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits))
- (No client certificate requested)
- by mlpnf0107.laposte.net (SMTP Server) with ESMTPSA id 4YyTvH6JtxzWf0M;
- Wed, 19 Feb 2025 09:24:11 +0100 (CET)
-Received: from radicelle (radicelle.bergerie [192.168.42.3])
- by romuald.bergerie (Postfix) with ESMTP id 25DB16404995;
- Wed, 19 Feb 2025 09:24:31 +0100 (CET)
-Received: from vincent by radicelle with local (Exim 4.98)
- (envelope-from <vincent@radicelle.bergerie>)
- id 1tkfNt-000000007pL-1WLz; Wed, 19 Feb 2025 09:24:45 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a4deUK6MsEAa for <buildroot@buildroot.org>;
+ Wed, 19 Feb 2025 08:50:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6C0A060071
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C0A060071
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6C0A060071
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:50:43 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-38f504f087eso1526042f8f.1
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 00:50:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1739955041; x=1740559841;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=FwzIxmG+bWJBCnsB5iUsLwHDaaAu/fHuZtmgcANINkQ=;
+ b=wQm1k8N7ixShvzaANO+gm9K1JYkGdQcB9jPlVihSTNgG4IZIH0hcsFN+0xXp8YMAGd
+ LxMe3C3xxxkSOvbLkMUC32wRcDeJExnCf3hSc8Z22kUUxNAhr5h1jDAVUH7fdGlrdi6L
+ JWulItaxBCo7tvywhhr0TN57e0NXg0fqe53f7r/8gR+X1WOhSKdN5J3Bwvt8jVOMxG3x
+ BTHq0m+yx/oDx1c7dinXVv84yWcZj4pNkjtRdnjPkb0swlwhjdLiLikveYwWvVvFDq/C
+ rY0gjhxgWB/llNFh87Q9Xtr6NgAD/r04qX4fF1+5quAnjBp309p/3p6Cgwm4zGm1awkl
+ zf1Q==
+X-Gm-Message-State: AOJu0Yz3FxVChGdbRzkmgG86j1uf/mgo6G+HZWlCz6B2Z8WvNoij9+M2
+ H0kTbEk7f/z0es11vK+QyYVntzLFBlpfowSmstffB2Y1dtPGoHOXwpjoeQ==
+X-Gm-Gg: ASbGncsg5QEmsHTeCZTXaBvpImb/O2yozz30B6LIVGUppf3vnRmHqXnKoZqadotGfET
+ 36IUFyF0LZ4shupdKhj4SVpSksFGsDeCK2qUBnXpOO2ZW01AhKWpP3w1xpaDNAWcSouZBme6gRG
+ rnMMHAFewj8SPJUwQ87MhiTpD75RN7LFvDNvPiICFeVwb6SeQsvQRONvX/MDeKaNpCB/gVvoNgg
+ jvWIRvqddPgMyOYl3Xa86X8GAqnoitT2PW8WSPI45o/9P/lHkcAsEKmnNrXk1HShX/dbovhRwnZ
+ 3I4RpQDbPkbMZ6p+49FoNM1uRA==
+X-Google-Smtp-Source: AGHT+IEg7HqTkyFx8L5sBe3vqefHy3gShxIHMc0dC6RgetkPtouaZskzhl/j8/fm6ERDHgVYiiWwBA==
+X-Received: by 2002:a05:6000:1788:b0:38f:2e78:450c with SMTP id
+ ffacd0b85a97d-38f5878df68mr2025904f8f.19.1739955040880; 
+ Wed, 19 Feb 2025 00:50:40 -0800 (PST)
+Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-38f25913eb6sm17367806f8f.51.2025.02.19.00.50.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 19 Feb 2025 00:50:40 -0800 (PST)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Cc: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>,
- Masahiro Yamada <yamada.masahiro@socionext.com>
-Date: Wed, 19 Feb 2025 09:24:42 +0100
-Message-ID: <20250219082442.30082-1-vincent.stehle@laposte.net>
-X-Mailer: git-send-email 2.45.2
+Date: Wed, 19 Feb 2025 09:50:39 +0100
+Message-ID: <cover.1739955023.git.yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=laposte.net; s=lpn-wlmd; t=1739953453;
- bh=l4mw7BslDXHyonNtC2N4pZR4SEntklW5N3iEcMFFi6w=;
- h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding;
- b=lZSWAN0cgX8fH7qlIJO4Crn0eGI/qhmTn9/WLo9+ccU8qT55xoRNjbaNTR3rUpqiRus2OZsEZUKQgpyO837qO90zWJ9zRhlb7DRwbIpKwx0bgba9N5bHWYDdiJwiqsxYkg1VSDnfiphH6CVsEHteqFYnlNZh7KaYdpJlebm1zDWEWQOH4G/ZaGyDSUNIywgGC1sFRSFNSbQIHfZrjvKcGECawmdbmiG8eSTAWRGxEQFv9tSV6bARyuhtFlT9rtdMuz36Ljm1YtgYFeqUh3Qzws3EUHMSQ1PEa/N84csKzoxUUpwLMq34gZWxc9qlQcwMDwkbjVK/CxkLAe/O6Xo8NQ==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=laposte.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=laposte.net header.i=@laposte.net header.a=rsa-sha256
- header.s=lpn-wlmd header.b=lZSWAN0c
-Subject: [Buildroot] [PATCH] configs/arm_foundationv8: bump to Linux 6.12
- and model 11.27
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1739955041; x=1740559841; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=FwzIxmG+bWJBCnsB5iUsLwHDaaAu/fHuZtmgcANINkQ=;
+ b=jMgVuSWd0DAMi2rfOeduTRU8e7/Ibd31UmrCB7qQkSzbRLCJ7gdDZBPhPzWmy4M3CO
+ 3YqzqE+Q7FuGOBN6CcPsr2m3hxp8AkyWmEKIwO4PYQl35Afi/3lASI0bY0lYWpZS/Q0p
+ 8+ylv30AWacDjOBkE+MHhR1yXLBg5+e6qFfslCgJ/CTWm8jy4DeRaQXItH8kF0tiL1OA
+ gI0eKoTsymaklQ9+hrkFbhvuV4LcqxyCggMzYVLNPXetNhe1vAJAuQSEPVctgSW9yJCM
+ KNPP2/6EWPW0kkbRmlpzXMS17d7YZIi02yMxMj5G6sygN5MtdjXVDlQxid0h9uEdgS15
+ 2TSw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=jMgVuSWd
+Subject: [Buildroot] [PATCH 00/27] package: improve for better pulseview
+ integration (branch yem/sdcc-fx2lafw)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,108 +105,173 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Vincent_Stehl=C3=A9_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Kamel Bouhara <kamel.bouhara@gmail.com>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+ Klaus Heinrich Kiwi <klaus@linux.vnet.ibm.com>, Julien Olivain <ju.o@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LSBCdW1wIExpbnV4IGtlcm5lbCB0byB2Ni4xMi4xNSBhbmQgdXBkYXRlIHRoZSBoYXNoIGZpbGUu
-Ci0gQnVtcCB0aGUgRlZQIGluIHRoZSByZWFkbWUgdG8gdmVyc2lvbiAxMS4yNyBidWlsZCAxOS4K
-CldoaWxlIGF0IGl0OgotIFJld29yayB0aGUgcmVhZG1lIGEgYml0IHdpdGggZXhwbGljaXQgYnVp
-bGQgaW5zdHJ1Y3Rpb25zLCBhZGQgYSBsaW5rCiAgdG8gdGhlIG1vZGVsIGJpbmFyaWVzIHJ1bm5p
-bmcgb24gQUFyY2g2NCBob3N0IGFuZCB1cGRhdGUgdGhlIG1vZGVsCiAgY29tbWFuZCBsaW5lIHRv
-IHNwZWNpZnkgQXJtIHY4LjAgKGFzIHdlIGFyZSBidWlsZGluZyBmb3IgQ29ydGV4LUE1MykuCi0g
-VHVybiBvbiBoYXNoZXMgdmVyaWZpY2F0aW9uIGFuZCB1cGRhdGUgLmNoZWNrcGFja2FnZWlnbm9y
-ZQogIGFjY29yZGluZ2x5LgotIEFkZCBteXNlbGYgYXMgY28tZGV2ZWxvcGVyIGZvciB0aGlzIGRl
-ZmNvbmZpZy4KClNpZ25lZC1vZmYtYnk6IFZpbmNlbnQgU3RlaGzDqSA8dmluY2VudC5zdGVobGVA
-bGFwb3N0ZS5uZXQ+CkNjOiBNYXNhaGlybyBZYW1hZGEgPHlhbWFkYS5tYXNhaGlyb0Bzb2Npb25l
-eHQuY29tPgotLS0KCgpIaSwKClRoaXMgd2FzIHRlc3RlZCBvaywgYm90aCB3aXRoIHRoZSBhY3R1
-YWwgYm9vdC13cmFwcGVyLWFhcmNoNjQgdmVyc2lvbgphbmQgbmV3IG9uZSBpbi1mbGlnaHQgYXQg
-WzFdLgoKRGVhciBNYXNhaGlyby1zYW4sIGRlYXIgbWFpbnRhaW5lcnMsIEkgYW0gYWRkaW5nIG15
-c2VsZiBpbiBERVZFTE9QRVJTIHRvCnJlY2VpdmUgZnV0dXJlIG5vdGlmaWNhdGlvbnMgYnkgZS1t
-YWlsLiBEbyBub3QgaGVzaXRhdGUgdG8gZHJvcCB0aGlzCnBhcnQgaWYgdGhhdCBpcyBub3QgYXBw
-cm9wcmlhdGUuCgpCZXN0IHJlZ2FyZHMsClZpbmNlbnQuCgpbMV0gaHR0cHM6Ly9saXN0cy5idWls
-ZHJvb3Qub3JnL3BpcGVybWFpbC9idWlsZHJvb3QvMjAyNS1GZWJydWFyeS83NzMzNTUuaHRtbAoK
-CiAuY2hlY2twYWNrYWdlaWdub3JlICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMSAtCiBE
-RVZFTE9QRVJTICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMiArKwogLi4u
-L2ZvdW5kYXRpb24tdjgvcGF0Y2hlcy9saW51eC9saW51eC5oYXNoICAgIHwgIDMgKystCiBib2Fy
-ZC9hcm0vZm91bmRhdGlvbi12OC9yZWFkbWUudHh0ICAgICAgICAgICAgfCAyNiArKysrKysrKysr
-KysrKysrLS0tCiBjb25maWdzL2FybV9mb3VuZGF0aW9udjhfZGVmY29uZmlnICAgICAgICAgICAg
-fCAgNSArKy0tCiA1IGZpbGVzIGNoYW5nZWQsIDI5IGluc2VydGlvbnMoKyksIDggZGVsZXRpb25z
-KC0pCgpkaWZmIC0tZ2l0IGEvLmNoZWNrcGFja2FnZWlnbm9yZSBiLy5jaGVja3BhY2thZ2VpZ25v
-cmUKaW5kZXggZDU0YmQzNTNiMi4uYjEwZjY5ZWMzNiAxMDA2NDQKLS0tIGEvLmNoZWNrcGFja2Fn
-ZWlnbm9yZQorKysgYi8uY2hlY2twYWNrYWdlaWdub3JlCkBAIC0xMDUsNyArMTA1LDYgQEAgY29u
-Zmlncy9hbTU3NHhfaWRrX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBj
-b25maWdzL2FuZGVzX2FlMzUwXzQ1X2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tI
-YXNoCiBjb25maWdzL2FyY3R1cnVzX3VjbHMxMDEyYV9kZWZjb25maWcgbGliX2RlZmNvbmZpZy5G
-b3JjZUNoZWNrSGFzaAogY29uZmlncy9hcmN0dXJ1c191Y3AxMDIwX2RlZmNvbmZpZyBsaWJfZGVm
-Y29uZmlnLkZvcmNlQ2hlY2tIYXNoCi1jb25maWdzL2FybV9mb3VuZGF0aW9udjhfZGVmY29uZmln
-IGxpYl9kZWZjb25maWcuRm9yY2VDaGVja0hhc2gKIGNvbmZpZ3MvYXNwZWVkX2FzdDI1MDBldmJf
-ZGVmY29uZmlnIGxpYl9kZWZjb25maWcuRm9yY2VDaGVja0hhc2gKIGNvbmZpZ3MvYXNwZWVkX2Fz
-dDI2MDBldmJfZGVmY29uZmlnIGxpYl9kZWZjb25maWcuRm9yY2VDaGVja0hhc2gKIGNvbmZpZ3Mv
-YXN1c190aW5rZXItc19yazMyODhfZGVmY29uZmlnIGxpYl9kZWZjb25maWcuRm9yY2VDaGVja0hh
-c2gKZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMgYi9ERVZFTE9QRVJTCmluZGV4IDY4Mjc4NjZkYjEu
-LjczZDQyODFkMTIgMTAwNjQ0Ci0tLSBhL0RFVkVMT1BFUlMKKysrIGIvREVWRUxPUEVSUwpAQCAt
-MzMzMiw3ICszMzMyLDkgQEAgRjoJY29uZmlncy9xZW11X2FybV9lYmJyX2RlZmNvbmZpZwogRjoJ
-cGFja2FnZS9lZGsyLW5vbi1vc2kvCiAKIE46CVZpbmNlbnQgU3RlaGzDqSA8dmluY2VudC5zdGVo
-bGVAbGFwb3N0ZS5uZXQ+CitGOglib2FyZC9hcm0vZm91bmRhdGlvbi12OC8KIEY6CWJvYXJkL2Jh
-bmFuYXBpL2JhbmFuYXBpLW0yLXplcm8vCitGOgljb25maWdzL2FybV9mb3VuZGF0aW9udjhfZGVm
-Y29uZmlnCiBGOgljb25maWdzL2JhbmFuYXBpX20yX3plcm9fZGVmY29uZmlnCiBGOgljb25maWdz
-L3Vldm01NDMyX2RlZmNvbmZpZwogRjoJcGFja2FnZS9pN3ovCmRpZmYgLS1naXQgYS9ib2FyZC9h
-cm0vZm91bmRhdGlvbi12OC9wYXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2ggYi9ib2FyZC9hcm0vZm91
-bmRhdGlvbi12OC9wYXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2gKaW5kZXggNTU5YjUzYmUyZC4uMDI3
-MTg3YzVhNyAxMDA2NDQKLS0tIGEvYm9hcmQvYXJtL2ZvdW5kYXRpb24tdjgvcGF0Y2hlcy9saW51
-eC9saW51eC5oYXNoCisrKyBiL2JvYXJkL2FybS9mb3VuZGF0aW9uLXY4L3BhdGNoZXMvbGludXgv
-bGludXguaGFzaApAQCAtMSwyICsxLDMgQEAKICMgTG9jYWxseSBjYWxjdWxhdGVkCi1zaGEyNTYg
-IGIwYmI5MmQ5ODJmODgzODBlNWIyMDU5MzQ5YzNhODYyZTBhZmE3MTJlMDY0NmViMGUwODJiOWMy
-YzVjYjUxNzYgIGxpbnV4LTYuOC4xMC50YXIueHoKKyMgRnJvbSBodHRwczovL2Nkbi5rZXJuZWwu
-b3JnL3B1Yi9saW51eC9rZXJuZWwvdjYueC9zaGEyNTZzdW1zLmFzYworc2hhMjU2ICA1ZmY1YmQ4
-NGVhMGUyMmM1MzQzNzMwMmRiNWQzOTRkMGE5MmQ4YjhiMWE4OGNlMjBkMTA5ODI5OGU5Zjc2MzBh
-ICBsaW51eC02LjEyLjE1LnRhci54egpkaWZmIC0tZ2l0IGEvYm9hcmQvYXJtL2ZvdW5kYXRpb24t
-djgvcmVhZG1lLnR4dCBiL2JvYXJkL2FybS9mb3VuZGF0aW9uLXY4L3JlYWRtZS50eHQKaW5kZXgg
-NzAxY2YzY2ViMC4uYzY0MDQ5MTIxNSAxMDA2NDQKLS0tIGEvYm9hcmQvYXJtL2ZvdW5kYXRpb24t
-djgvcmVhZG1lLnR4dAorKysgYi9ib2FyZC9hcm0vZm91bmRhdGlvbi12OC9yZWFkbWUudHh0CkBA
-IC0xLDE2ICsxLDM0IEBACitJbnRyb2R1Y3Rpb24KKz09PT09PT09PT09PQorCiBUaGlzIGlzIHRo
-ZSBzdXBwb3J0IGZvciB0aGUgQVJNIEZvdW5kYXRpb24gdjggbWFjaGluZSBlbXVsYXRlZCBieSB0
-aGUKIEFSTSBzb2Z0d2FyZSBzaW11bGF0b3Igb2YgdGhlIEFBcmNoNjQgYXJjaGl0ZWN0dXJlLgog
-Ci1GaXJzdCwgb25lIGhhcyB0byBkb3dubG9hZCB0aGUgQUFyY2g2NCBzb2Z0d2FyZSBzaW11bGF0
-b3IgZnJvbToKK0J1aWxkaW5nCis9PT09PT09PQorCisgICQgbWFrZSBhcm1fZm91bmRhdGlvbnY4
-X2RlZmNvbmZpZworICAkIG1ha2UKKworR2VuZXJhdGVkIGZpbGVzIHVuZGVyIG91dHB1dC9pbWFn
-ZXM6CisKKyogbGludXgtc3lzdGVtLmF4ZjogQW4gaW1hZ2UgY29tcHJpc2luZyB0aGUgYm9vdC13
-cmFwcGVyLWFhcmNoNjQgbWluaW1hbAorICAgICAgICAgICAgICAgICAgICBmaXJtd2FyZSBhbmQg
-Ym9vdGxvYWRlciwgYSBEZXZpY2V0cmVlIGFuZCB0aGUgTGludXgga2VybmVsLgorKiByb290ZnMu
-ZXh0MjogICAgICBUaGUgT1Mgcm9vdCBmaWxlc3lzdGVtLgorCitSdW5uaW5nIG9uIHRoZSBzaW11
-bGF0b3IKKz09PT09PT09PT09PT09PT09PT09PT09PQogCi0gIGh0dHBzOi8vZGV2ZWxvcGVyLmFy
-bS5jb20vLS9tZWRpYS9GaWxlcy9kb3dubG9hZHMvZWNvc3lzdGVtLW1vZGVscy9GTV8xMV8yNS9G
-b3VuZGF0aW9uX1BsYXRmb3JtXzExLjI1XzE1X0xpbnV4NjQudGd6CitEb3dubG9hZCB0aGUgQUFy
-Y2g2NCBzb2Z0d2FyZSBzaW11bGF0b3IgZnJvbSBvbmUgb2YgdGhlIGZvbGxvd2luZyBzb3VyY2Vz
-LAorY29ycmVzcG9uZGluZyB0byB5b3VyIGhvc3QgY29tcHV0ZXI6CiAKLVRoZW4sIHVzZSB0aGUg
-YXJtX2ZvdW5kYXRpb252OF9kZWZjb25maWcgY29uZmlndXJhdGlvbiB0byBidWlsZCB5b3VyCi1C
-dWlsZHJvb3Qgc3lzdGVtLgorLSBodHRwczovL2RldmVsb3Blci5hcm0uY29tLy0vY2RuLWRvd25s
-b2Fkcy9wZXJtYWxpbmsvRlZQcy1BcmNoaXRlY3R1cmUvRk0tMTEuMjcvRm91bmRhdGlvbl9QbGF0
-Zm9ybV8xMS4yN18xOV9MaW51eDY0LnRnegorLSBodHRwczovL2RldmVsb3Blci5hcm0uY29tLy0v
-Y2RuLWRvd25sb2Fkcy9wZXJtYWxpbmsvRlZQcy1BcmNoaXRlY3R1cmUvRk0tMTEuMjcvRm91bmRh
-dGlvbl9QbGF0Zm9ybV8xMS4yN18xOV9MaW51eDY0X2FybXY4bC50Z3oKIAogRmluYWxseSwgYm9v
-dCB5b3VyIHN5c3RlbSB3aXRoOgogCiAgJHtMT0NBVElPTl9PRl9GT1VOREFUSU9OVjhfU0lNVUxB
-VE9SfS9tb2RlbHMvTGludXg2NF9HQ0MtOS4zL0ZvdW5kYXRpb25fUGxhdGZvcm0gXAorICAgIC0t
-YXJtLXY4LjAgXAogICAgIC0taW1hZ2Ugb3V0cHV0L2ltYWdlcy9saW51eC1zeXN0ZW0uYXhmIFwK
-ICAgICAtLWJsb2NrLWRldmljZSBvdXRwdXQvaW1hZ2VzL3Jvb3Rmcy5leHQyIFwKICAgICAtLW5l
-dHdvcms9bmF0IFwKZGlmZiAtLWdpdCBhL2NvbmZpZ3MvYXJtX2ZvdW5kYXRpb252OF9kZWZjb25m
-aWcgYi9jb25maWdzL2FybV9mb3VuZGF0aW9udjhfZGVmY29uZmlnCmluZGV4IGQ0ZTdjYTBkZDQu
-LjdmYTNiOTdkZWYgMTAwNjQ0Ci0tLSBhL2NvbmZpZ3MvYXJtX2ZvdW5kYXRpb252OF9kZWZjb25m
-aWcKKysrIGIvY29uZmlncy9hcm1fZm91bmRhdGlvbnY4X2RlZmNvbmZpZwpAQCAtMSwxMCArMSwx
-MSBAQAogQlIyX2FhcmNoNjQ9eQotQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RP
-TV82Xzg9eQorQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82XzEyPXkKIEJS
-Ml9HTE9CQUxfUEFUQ0hfRElSPSJib2FyZC9hcm0vZm91bmRhdGlvbi12OC9wYXRjaGVzIgorQlIy
-X0RPV05MT0FEX0ZPUkNFX0NIRUNLX0hBU0hFUz15CiBCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlf
-UE9SVD0idHR5QU1BMCIKIEJSMl9MSU5VWF9LRVJORUw9eQogQlIyX0xJTlVYX0tFUk5FTF9DVVNU
-T01fVkVSU0lPTj15Ci1CUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2Ljgu
-MTAiCitCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEyLjE1IgogQlIy
-X0xJTlVYX0tFUk5FTF9VU0VfQVJDSF9ERUZBVUxUX0NPTkZJRz15CiBCUjJfTElOVVhfS0VSTkVM
-X0RUU19TVVBQT1JUPXkKIEJSMl9MSU5VWF9LRVJORUxfSU5UUkVFX0RUU19OQU1FPSJhcm0vZm91
-bmRhdGlvbi12OC1naWN2My1wc2NpIgotLSAKMi40NS4yCgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+Hello All!
+
+This series aims at making the pulseview and other sigrok-related
+packages more integrated. The series is articulated around three main
+goals, the details of which are expanded later:
+ 1. cleanup and extend pulseview dependencies, not ably the need for
+    fonts;
+ 2. extend the boost package, for a better host variant, and better
+    maintainability;
+ 3. introduce sdcc and fx2lafw, to allow use of Cypress FX2-based logic
+    analyzers.
+
+Below are the details of the series, starting with the utimate goal, and
+then going backward with its dependencies and the foundational changes
+it required (i.e. git-log style).
+
+fx2lafw is "an open-source firmware for Cypress FX2 chips which makes
+them usable as simple logic analyzer and/or oscilloscope hardware.
+It is licensed under the terms of the GNU GPL (version 2, or later)"
+[0], so we want to be able to build it (rather than use the pre-built
+blobs).
+
+To build fx2lafw, we need host-sdcc, "a retargettable, optimizing
+standard C [..] compiler that targets a growing list of architectures
+[...] microprocessors" [1]. sdcc contains a few utilities, that are not
+all always needed, and can target many architectures, that too are not
+all always needed. So we introduce a basic sdcc package, and add options
+for those few features and ports we need as a we go.
+
+To introduce host-sdcc, first some changes in how we handle host-boost
+are needed: indeed, host-sdcc needs yet another boost library, but we do
+not want to enable it unless sdcc is actually enabled. So, we extend the
+host-boost variant to have configurable options, that host packages,
+when they are enabled, can select. This causes a bit of preparatory
+churn in the few packages that do.
+
+Then we rework the way the boost libraries are handled, so that it is
+easier to update the list for both the target and host variants in one
+go, which we exercise and demonstrate by indeed actually bumping Boost
+to the latest release.
+
+To support this new use-case, where some Kconfig symbol are not
+explicitly referenced, we extend check-symbol to recognise synbol
+definitions that should be ignored.
+
+Now, pulseview, the Qt5-based UI for th esigrok ecosystem, is brought
+up to more up-to-date dependency handling, and new dependecies are added
+to ensure fonts are available at runtime. This is achieved by adding a
+pseduo-package (by lack of better infra and wording) that ensure that at
+least one font is actually installed.
+
+This eventually led to some minor fixes in two font packages, that could
+be configured to install nothing.
+
+Finally, a trivial missing runtime dependency is added to
+libsigrokdecode, which contains protocol decoders for the other sigrok
+packages.
+
+[0] https://sigrok.org/wiki/Fx2lafw
+[1] https://sourceforge.net/projects/sdcc/
+
+PS. This is a huge series, that's true. It all started "just" because I
+wanted to build and install the fx2lafw firmwares, which ultimately
+build in "just" a few seconds, and install "just" about 160kiB... And
+from fx2lafw, it all snowballed to this huge series...
+
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (27):
+      package/libsigrokdecode: needs python3 w/ zlib support
+      package/dejavu: update homepage
+      package/dejavu: ensure at least one typeface is installed
+      package/liberation: ensure at least one typeface is installed
+      package/some-font: new pseudo-package
+      package/pulseview: fix, update, and reorganise dependencies
+      package/pulseview: needs some font, and fontconfig support in qt5base
+      package/boost: move host variables closer together
+      package/boost: move taget library selection variables closer together
+      package/boost: prepare for a configurable host variant
+      package/boost: add host symbol
+      package/libodb-boost: afirm host-boost dependency for host variant
+      package/thrift: afirm host-boost dependency for host variant
+      package/riscv-isa-sim: afirm host-boost dependency
+      pakcage/boost: make host variant slightly configurable
+      utils/check-symbols: allow ignoring some defined-but-unused symbols
+      package/boost: commonalise list of libs
+      package/boost: add graph option for host variant
+      package/boost: headers-only libs are always installed
+      package/boost: check that known libs match Boost's list
+      package/boost: use positive logic to enable libraries
+      package/boost: bump to version 1.87.0
+      package/sdcc: new package
+      package/sdcc: add option for the mcs51 (aka 8051) port
+      package/sdcc: add option for the z80 port
+      package/sdcc: add option for the device lib
+      package/fx2lafw: new package
+
+ DEVELOPERS                                         |   4 +
+ package/Config.in                                  |   3 +
+ package/Config.in.host                             |   2 +
+ package/bitstream-vera/Config.in                   |   1 +
+ package/boost/0001-unordered-fix-copy-assign.patch |  22 ---
+ package/boost/Config.in                            |  43 +++---
+ package/boost/Config.in.host                       |  18 +++
+ package/boost/boost.hash                           |   2 +-
+ package/boost/boost.mk                             | 164 +++++++++++++++------
+ package/cantarell/Config.in                        |   1 +
+ package/dejavu/Config.in                           |  11 +-
+ package/font-awesome/Config.in                     |   1 +
+ package/fx2lafw/Config.in                          |  11 ++
+ package/fx2lafw/fx2lafw.hash                       |   5 +
+ package/fx2lafw/fx2lafw.mk                         |  18 +++
+ package/ghostscript-fonts/Config.in                |   1 +
+ package/inconsolata/Config.in                      |   1 +
+ package/liberation/Config.in                       |   6 +
+ package/libodb-boost/Config.in.host                |   3 +
+ package/libsigrokdecode/Config.in                  |   1 +
+ package/odb/Config.in.host                         |   1 +
+ package/pulseview/Config.in                        |  44 +++---
+ package/riscv-isa-sim/Config.in.host               |   3 +
+ package/sdcc/Config.in.host                        |  44 ++++++
+ package/sdcc/sdcc.hash                             |   7 +
+ package/sdcc/sdcc.mk                               |  92 ++++++++++++
+ package/some-font/Config.in                        |  17 +++
+ package/thrift/Config.in                           |   1 +
+ package/thrift/Config.in.host                      |   3 +
+ package/wqy-zenhei/Config.in                       |   1 +
+ utils/check-symbols                                |   9 +-
+ utils/checksymbolslib/br.py                        |   1 +
+ utils/checksymbolslib/db.py                        |  56 ++++++-
+ utils/checksymbolslib/kconfig.py                   |  18 +++
+ utils/checksymbolslib/test_db.py                   |  17 +++
+ utils/checksymbolslib/test_kconfig.py              |  63 +++++++-
+ 36 files changed, 581 insertions(+), 114 deletions(-)
+ delete mode 100644 package/boost/0001-unordered-fix-copy-assign.patch
+ create mode 100644 package/boost/Config.in.host
+ create mode 100644 package/fx2lafw/Config.in
+ create mode 100644 package/fx2lafw/fx2lafw.hash
+ create mode 100644 package/fx2lafw/fx2lafw.mk
+ create mode 100644 package/libodb-boost/Config.in.host
+ create mode 100644 package/sdcc/Config.in.host
+ create mode 100644 package/sdcc/sdcc.hash
+ create mode 100644 package/sdcc/sdcc.mk
+ create mode 100644 package/some-font/Config.in
+ create mode 100644 package/thrift/Config.in.host
+
+--
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
