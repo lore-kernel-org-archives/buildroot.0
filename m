@@ -1,103 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2000BC021AB
-	for <buildroot@archiver.kernel.org>; Wed, 19 Feb 2025 08:52:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7C67C021AA
+	for <buildroot@archiver.kernel.org>; Wed, 19 Feb 2025 09:26:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E4B4F84DA8;
-	Wed, 19 Feb 2025 08:52:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 387534FC91;
+	Wed, 19 Feb 2025 09:26:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FJYftR7yuttX; Wed, 19 Feb 2025 09:26:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC27E4FC9A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC27E4FC9A;
+	Wed, 19 Feb 2025 09:26:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 579C0C8
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 09:26:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4732E84F46
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 09:26:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m3kpGPVEM_3M; Wed, 19 Feb 2025 08:52:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D12A684DA1
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D12A684DA1;
-	Wed, 19 Feb 2025 08:52:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E553DC8
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:51:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DD767410D1
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:51:04 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4-vWt4eSP5KD for <buildroot@buildroot.org>;
- Wed, 19 Feb 2025 08:51:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
- envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5BAB6411CD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BAB6411CD
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5BAB6411CD
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:51:03 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-4396a4d5e3bso48323865e9.3
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 00:51:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1739955061; x=1740559861;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=LV3oG5ip/Ap7dHRk7DMwmi+4M3VZrHjz/0O9JVylXWk=;
- b=vxbZOCDrk/LK3ERH8zMdzLLUBlIt+8370gqEbw4LtettD8WyOccIPmJRIbxHu6TPWY
- q3BXtfzjVfltpKz6PZMwP2B0B/EvkeIIj54V/+OP2Tivp1//7lSDYAU3jJDWj8+TtSsn
- umVZ93et7G2kwCknyJN3RJf44gPOyY7PVALwNE2FkIwzegQVkchREFlFmCohnaDYlGCQ
- Wx5uBeBH7IJEp4oW5aj8TJUELnXAhZM+0uZhPgZvqw5GiqYsCocDv/4MXjvkOVTUFR2y
- mCMiHZZw1no4+a/zoLB7DFkCpLaCjDjusOcPMsv3Bh8E2QM8HW9JvYeZP1GmakH8/9MZ
- FniQ==
-X-Gm-Message-State: AOJu0YzoYBKsQXyPAEXNmuBk4OJj4enNFqmnwS7P/eI8M0Yx3Kipj3hq
- /oT1x8PQYIXTQekSBOxoGLW5JpzHOS3omcEuRgnJ3JtxxBK3fk2zKutVNQ==
-X-Gm-Gg: ASbGncvkZ9gTyYZOFyMVTltVSk1DuY5iuscdbTxNd5fCaUPum2kpcRiJjKP5rDe/ykR
- YYEpxcd067F5SqytYwUY0iypgSwR4PspVadb/maYcsheE1myQR7eNsTUbeJ9NHA0pvAnXjab0LC
- MNdyoTxrgDIC0okvuj8M9Dft72ibNFKl3JLdTHo5IHmOP/wjpHOWwJGnK2uRxrofZI4agtgNID8
- ktRGemG7PcVWv4DT8nsbDMHLZc9nJaNyDdPp/0U1A1hBvBvSM9Xw7UqsSDvd63pRSNPn3kVyfdG
- FZg4hotbSK1I7hDjd73gkj2q9Q==
-X-Google-Smtp-Source: AGHT+IHoSNtHwqRcyAdzTy27dnh0+TF+3YfBQvCjHl9Qcmwn4xMkCXhDKzAOdUDV6bIld0dGWSCvSA==
-X-Received: by 2002:a05:600c:1c18:b0:439:6d7c:48fd with SMTP id
- 5b1f17b1804b1-43999d755acmr24587235e9.4.1739955061009; 
- Wed, 19 Feb 2025 00:51:01 -0800 (PST)
-Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-38f259d5e9esm17517399f8f.61.2025.02.19.00.51.00
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 19 Feb 2025 00:51:00 -0800 (PST)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ id uqHlrG_VNFWK for <buildroot@buildroot.org>;
+ Wed, 19 Feb 2025 09:26:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=160.92.124.106;
+ helo=smtp-outgoing-1902.laposte.net; envelope-from=vincent.stehle@laposte.net;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 709D381F6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 709D381F6B
+Received: from smtp-outgoing-1902.laposte.net (smtp-outgoing-1902.laposte.net
+ [160.92.124.106])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 709D381F6B
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 09:26:43 +0000 (UTC)
+X-mail-filterd: {"version":"1.8.0","queueID":"4YyWHN3yK4zqSH5","contextId":
+ "58cf1a24-ce37-4996-9fa1-19985356ef46"}
+Received: from outgoing-mail.laposte.net (localhost.localdomain [127.0.0.1])
+ by mlpnf0108.laposte.net (SMTP Server) with ESMTP id 4YyWHN3yK4zqSH5;
+ Wed, 19 Feb 2025 10:26:40 +0100 (CET)
+X-mail-filterd: {"version":"1.8.0","queueID":"4YyWHN10nHzqSGl","contextId":
+ "fa1ed378-f2a8-4c6c-a849-fe430d9dc04e"}
+X-lpn-mailing: LEGIT
+X-lpn-spamrating: 36
+X-lpn-spamlevel: not-spam
+Received: from romuald.bergerie (88-169-129-225.subs.proxad.net
+ [88.169.129.225])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mlpnf0108.laposte.net (SMTP Server) with ESMTPSA id 4YyWHN10nHzqSGl;
+ Wed, 19 Feb 2025 10:26:40 +0100 (CET)
+Received: from radicelle (radicelle.bergerie [192.168.42.3])
+ by romuald.bergerie (Postfix) with ESMTP id 5820A6404DB3;
+ Wed, 19 Feb 2025 10:26:59 +0100 (CET)
+Received: from vincent by radicelle with local (Exim 4.98)
+ (envelope-from <vincent@radicelle.bergerie>)
+ id 1tkgML-000000008OP-22Qg; Wed, 19 Feb 2025 10:27:13 +0100
 To: buildroot@buildroot.org
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Feb 2025 09:50:42 +0100
-Message-ID: <20fb13c87db6e0a2da3afa4e5119583a73473a2f.1739955023.git.yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <cover.1739955023.git.yann.morin.1998@free.fr>
-References: <cover.1739955023.git.yann.morin.1998@free.fr>
+Cc: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>,
+ Masahiro Yamada <yamada.masahiro@socionext.com>
+Date: Wed, 19 Feb 2025 10:27:11 +0100
+Message-ID: <20250219092711.32256-1-vincent.stehle@laposte.net>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250219082442.30082-1-vincent.stehle@laposte.net>
+References: <20250219082442.30082-1-vincent.stehle@laposte.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1739955061; x=1740559861; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=LV3oG5ip/Ap7dHRk7DMwmi+4M3VZrHjz/0O9JVylXWk=;
- b=S9ItSiiziu0rBGDVaN4wrCa89kDDDQMkGGeCXJOWhIlay6c88OhSwQIPXKdS69eyCO
- MNSjpKC1bFPOr+Q9aBVXAiKEvVKpUkyKOmWB0A7ModV06to7Qt+fdYOT4zoTivw+QZre
- bnUi9C7Mv9OtceWauHr/aGNLIQhm1OLSB5ZEyjnbofZ7nGPLjZ0kF7OkpTLKRWheCHG9
- w7or15U/JWmhgtumN/BLJrN+mDstZ7mUENJ1st4tat9ZMn9k2iL+ZvNzROO9ifwgQk4Y
- EFCxM8rAK6cWco4e1lGnmFjFvZPn1t6tal6lSTti/TKHfgimEKZAAltuCnxhfBvyeTCz
- vcKA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=S9ItSiiz
-Subject: [Buildroot] [PATCH 27/27] package/fx2lafw: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=laposte.net; s=lpn-wlmd; t=1739957201;
+ bh=A5aVqfgx48C7xvADZtpJRk+B3vC4yDUfmF8HgRCgjgk=;
+ h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding;
+ b=Fc4XHAeGtMNtq1KDInhJRbTd9KjKdsZBLPHsn3f+3jLyUY+NdYmoGAh1jCTXMdCdC+Dr9ki5ssbpIc24FQhyeXH9gs+J18tGDSwTnVED/Q7+HkMwtPfOD3r5b6q5Wl+9Y+aT/j+WSsMzKObOz7CHW0HPCgeiH2MzGwMuzup3Fj1E4XUxpDL/wOf8FXPn6mKsKByzhG/H7hf9y0CATaDKAyiGzVwF7vZcQhP79gOlWdvwNNSXBQ5Oe8Oj7biL0r9Krfh0ksMpWs4xH5n2lrOPU3IYtqgX8vzhgw6A/e6xan8zusBg4di0MXJ+KBWPDWjZFHwMgHyS8x0Sl0pIqScPlg==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=laposte.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=laposte.net header.i=@laposte.net header.a=rsa-sha256
+ header.s=lpn-wlmd header.b=Fc4XHAeG
+Subject: [Buildroot] [PATCH v2] configs/arm_foundationv8: bump to Linux 6.12
+ and model 11.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,134 +95,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Vincent_Stehl=C3=A9_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-fx2lafw (FX2 logic analyser firmware) is a set of firmware files for
-FX2- or FX2L-based logic analysers. It is developped by the Sigrok
-project.
-
-The latest release, 0.1.7, is more than 5 years old now, and no longer
-builds with recent sdcc versions (starting with 4.2.3). The git tree has
-fixes for those build failures. Rather than backport the 4 commits of
-interest, just use the git tree directly: it contains another unrelated
-fix, a few documentation changes, and two new firmwares. Also, given the
-git tree has not been touched since early 2024, and given the frequency
-of releases before that, don't wait to get those two new firmwares.
-
-fx2lafw bundles fx2lib. Usually, we'd avoid using a bundled version, but
-in this case, it is an old version, and anyway fx2lafw can't use a
-pre-installed version. The probability that another package would use
-fx2lib is extra slim as well; if we eventually get one, the chances it
-also bundles its own copy are also relatively high. And finally, fx2lib
-runs on a separate microcontroller, not on the target's main CPU, so it
-can't be shared to any "real target" package. There is no reason to
-expand the efforts to unbundle it.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
----
-Note: sigrok.org's IPv6 is unresponsive, and as it is the first one
-tried when connecting, this causes a huge delay when fetching; indeed,
-our git backend does at least three git-fetch, each timing out after
-~135s, for a total of ~400s, plus the time of download (which is
-fortunately rather small for this package). So, during review, do not
-be alarmed that the download takes ages: that's just it, it *does* take
-ages... :-/
----
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/fx2lafw/Config.in    | 11 +++++++++++
- package/fx2lafw/fx2lafw.hash |  5 +++++
- package/fx2lafw/fx2lafw.mk   | 18 ++++++++++++++++++
- 5 files changed, 36 insertions(+)
- create mode 100644 package/fx2lafw/Config.in
- create mode 100644 package/fx2lafw/fx2lafw.hash
- create mode 100644 package/fx2lafw/fx2lafw.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4d0d294a8f..89b246266c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3417,6 +3417,7 @@ F:	package/gloox/
- F:	package/tpm2-pkcs11/
- 
- N:	Yann E. MORIN <yann.morin.1998@free.fr>
-+F:	package/fx2lafw/
- F:	package/sdcc/
- 
- N:	Yann E. MORIN <yann.morin@orange.com>
-diff --git a/package/Config.in b/package/Config.in
-index cb84e3caad..1370f6561b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -444,6 +444,7 @@ menu "Firmware"
- 	source "package/armbian-firmware/Config.in"
- 	source "package/b43-firmware/Config.in"
- 	source "package/brcmfmac_sdio-firmware-rpi/Config.in"
-+	source "package/fx2lafw/Config.in"
- 	source "package/linux-firmware/Config.in"
- 	source "package/murata-cyw-fw/Config.in"
- 	source "package/nxp-bt-wifi-firmware/Config.in"
-diff --git a/package/fx2lafw/Config.in b/package/fx2lafw/Config.in
-new file mode 100644
-index 0000000000..675750d114
---- /dev/null
-+++ b/package/fx2lafw/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_FX2LAFW
-+	bool "fx2lafw"
-+	select BR2_PACKAGE_HOST_SDCC
-+	select BR2_PACKAGE_HOST_SDCC_DEV_LIB
-+	select BR2_PACKAGE_HOST_SDCC_MCS51
-+	help
-+	  fx2lafw is an open-source firmware for Cypress FX2 chips which
-+	  makes them usable as simple logic analyzer and/or oscilloscope
-+	  hardware.
-+
-+	  https://sigrok.org/wiki/Fx2lafw
-diff --git a/package/fx2lafw/fx2lafw.hash b/package/fx2lafw/fx2lafw.hash
-new file mode 100644
-index 0000000000..4584dedbb2
---- /dev/null
-+++ b/package/fx2lafw/fx2lafw.hash
-@@ -0,0 +1,5 @@
-+# Locally computed
-+sha256  2631ef96a48d1dc4589c46d50334262ea14a761a32e345f1f2fd71ef0c27a799  fx2lafw-bb3c6dfdb3f95bf529ed95dcc5fb3610e4473673-git4.tar.gz
-+sha256  5081618178f9a8946720f37b898fb502a06d470092dbeb64041fa988a45aab8c  README
-+sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
-diff --git a/package/fx2lafw/fx2lafw.mk b/package/fx2lafw/fx2lafw.mk
-new file mode 100644
-index 0000000000..d209f04003
---- /dev/null
-+++ b/package/fx2lafw/fx2lafw.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# fx2lafw
-+#
-+################################################################################
-+
-+FX2LAFW_VERSION = bb3c6dfdb3f95bf529ed95dcc5fb3610e4473673
-+FX2LAFW_SITE = git://sigrok.org/sigrok-firmware-fx2lafw
-+
-+FX2LAFW_LICENSE = GPL-2.0-or-later, LGPL-2.1-or-later (fx2lib)
-+FX2LAFW_LICENSE_FILES = README COPYING COPYING.LESSER
-+
-+FX2LAFW_DEPENDENCIES = host-sdcc
-+
-+# Straight our of git tree
-+FX2LAFW_AUTORECONF = YES
-+
-+$(eval $(autotools-package))
--- 
-2.47.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+LSBCdW1wIExpbnV4IGtlcm5lbCB0byB2Ni4xMi4xNSwgdXBkYXRlIHRoZSBoYXNoIGZpbGUgYW5k
+IGFkZCB0aGUKICBkZXBlbmRlbmN5IG9uIGhvc3QtcHl0aG9uMy4KLSBCdW1wIHRoZSBGVlAgaW4g
+dGhlIHJlYWRtZSB0byB2ZXJzaW9uIDExLjI3IGJ1aWxkIDE5LgoKV2hpbGUgYXQgaXQ6Ci0gUmV3
+b3JrIHRoZSByZWFkbWUgYSBiaXQgd2l0aCBleHBsaWNpdCBidWlsZCBpbnN0cnVjdGlvbnMsIGFk
+ZCBhIGxpbmsKICB0byB0aGUgbW9kZWwgYmluYXJpZXMgcnVubmluZyBvbiBBQXJjaDY0IGhvc3Qg
+YW5kIHVwZGF0ZSB0aGUgbW9kZWwKICBjb21tYW5kIGxpbmUgdG8gc3BlY2lmeSBBcm0gdjguMCAo
+YXMgd2UgYXJlIGJ1aWxkaW5nIGZvciBDb3J0ZXgtQTUzKS4KLSBUdXJuIG9uIGhhc2hlcyB2ZXJp
+ZmljYXRpb24gYW5kIHVwZGF0ZSAuY2hlY2twYWNrYWdlaWdub3JlCiAgYWNjb3JkaW5nbHkuCi0g
+QWRkIG15c2VsZiBhcyBjby1kZXZlbG9wZXIgZm9yIHRoaXMgZGVmY29uZmlnLgoKU2lnbmVkLW9m
+Zi1ieTogVmluY2VudCBTdGVobMOpIDx2aW5jZW50LnN0ZWhsZUBsYXBvc3RlLm5ldD4KQ2M6IE1h
+c2FoaXJvIFlhbWFkYSA8eWFtYWRhLm1hc2FoaXJvQHNvY2lvbmV4dC5jb20+Ci0tLQoKCkhpLAoK
+SSBtaXNzZWQgdGhlIG5ldyBrZXJuZWwncyBkZXBlbmRlbmN5IG9uIGhvc3QtcHl0aG9uMyBpbiB0
+aGUgb3JpZ2luYWwKcGF0Y2g7IHNvcnJ5IGFib3V0IHRoYXQuIEhlcmUgaXMgYSB2MiB0byBmaXgg
+dGhpcy4KCkJlc3QgcmVnYXJkcywKVmluY2VudC4KCkNoYW5nZXMgdjEgLT4gdjI6CiAgLSBBZGQg
+TGludXggZGVwZW5kZW5jeSBvbiBob3N0IHB5dGhvbjMuCiAgLSBXcmFwIGNvbW1pdCBtZXNzYWdl
+IGxpbmVzIGF0IDcyIGNoYXJhY3RlcnMuCgoKIC5jaGVja3BhY2thZ2VpZ25vcmUgICAgICAgICAg
+ICAgICAgICAgICAgICAgICB8ICAxIC0KIERFVkVMT1BFUlMgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICB8ICAyICsrCiAuLi4vZm91bmRhdGlvbi12OC9wYXRjaGVzL2xpbnV4L2xp
+bnV4Lmhhc2ggICAgfCAgMyArKy0KIGJvYXJkL2FybS9mb3VuZGF0aW9uLXY4L3JlYWRtZS50eHQg
+ICAgICAgICAgICB8IDI2ICsrKysrKysrKysrKysrKystLS0KIGNvbmZpZ3MvYXJtX2ZvdW5kYXRp
+b252OF9kZWZjb25maWcgICAgICAgICAgICB8ICA2ICsrKy0tCiA1IGZpbGVzIGNoYW5nZWQsIDMw
+IGluc2VydGlvbnMoKyksIDggZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvLmNoZWNrcGFja2Fn
+ZWlnbm9yZSBiLy5jaGVja3BhY2thZ2VpZ25vcmUKaW5kZXggZDU0YmQzNTNiMi4uYjEwZjY5ZWMz
+NiAxMDA2NDQKLS0tIGEvLmNoZWNrcGFja2FnZWlnbm9yZQorKysgYi8uY2hlY2twYWNrYWdlaWdu
+b3JlCkBAIC0xMDUsNyArMTA1LDYgQEAgY29uZmlncy9hbTU3NHhfaWRrX2RlZmNvbmZpZyBsaWJf
+ZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBjb25maWdzL2FuZGVzX2FlMzUwXzQ1X2RlZmNvbmZp
+ZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBjb25maWdzL2FyY3R1cnVzX3VjbHMxMDEy
+YV9kZWZjb25maWcgbGliX2RlZmNvbmZpZy5Gb3JjZUNoZWNrSGFzaAogY29uZmlncy9hcmN0dXJ1
+c191Y3AxMDIwX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCi1jb25maWdz
+L2FybV9mb3VuZGF0aW9udjhfZGVmY29uZmlnIGxpYl9kZWZjb25maWcuRm9yY2VDaGVja0hhc2gK
+IGNvbmZpZ3MvYXNwZWVkX2FzdDI1MDBldmJfZGVmY29uZmlnIGxpYl9kZWZjb25maWcuRm9yY2VD
+aGVja0hhc2gKIGNvbmZpZ3MvYXNwZWVkX2FzdDI2MDBldmJfZGVmY29uZmlnIGxpYl9kZWZjb25m
+aWcuRm9yY2VDaGVja0hhc2gKIGNvbmZpZ3MvYXN1c190aW5rZXItc19yazMyODhfZGVmY29uZmln
+IGxpYl9kZWZjb25maWcuRm9yY2VDaGVja0hhc2gKZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMgYi9E
+RVZFTE9QRVJTCmluZGV4IDY4Mjc4NjZkYjEuLjczZDQyODFkMTIgMTAwNjQ0Ci0tLSBhL0RFVkVM
+T1BFUlMKKysrIGIvREVWRUxPUEVSUwpAQCAtMzMzMiw3ICszMzMyLDkgQEAgRjoJY29uZmlncy9x
+ZW11X2FybV9lYmJyX2RlZmNvbmZpZwogRjoJcGFja2FnZS9lZGsyLW5vbi1vc2kvCiAKIE46CVZp
+bmNlbnQgU3RlaGzDqSA8dmluY2VudC5zdGVobGVAbGFwb3N0ZS5uZXQ+CitGOglib2FyZC9hcm0v
+Zm91bmRhdGlvbi12OC8KIEY6CWJvYXJkL2JhbmFuYXBpL2JhbmFuYXBpLW0yLXplcm8vCitGOglj
+b25maWdzL2FybV9mb3VuZGF0aW9udjhfZGVmY29uZmlnCiBGOgljb25maWdzL2JhbmFuYXBpX20y
+X3plcm9fZGVmY29uZmlnCiBGOgljb25maWdzL3Vldm01NDMyX2RlZmNvbmZpZwogRjoJcGFja2Fn
+ZS9pN3ovCmRpZmYgLS1naXQgYS9ib2FyZC9hcm0vZm91bmRhdGlvbi12OC9wYXRjaGVzL2xpbnV4
+L2xpbnV4Lmhhc2ggYi9ib2FyZC9hcm0vZm91bmRhdGlvbi12OC9wYXRjaGVzL2xpbnV4L2xpbnV4
+Lmhhc2gKaW5kZXggNTU5YjUzYmUyZC4uMDI3MTg3YzVhNyAxMDA2NDQKLS0tIGEvYm9hcmQvYXJt
+L2ZvdW5kYXRpb24tdjgvcGF0Y2hlcy9saW51eC9saW51eC5oYXNoCisrKyBiL2JvYXJkL2FybS9m
+b3VuZGF0aW9uLXY4L3BhdGNoZXMvbGludXgvbGludXguaGFzaApAQCAtMSwyICsxLDMgQEAKICMg
+TG9jYWxseSBjYWxjdWxhdGVkCi1zaGEyNTYgIGIwYmI5MmQ5ODJmODgzODBlNWIyMDU5MzQ5YzNh
+ODYyZTBhZmE3MTJlMDY0NmViMGUwODJiOWMyYzVjYjUxNzYgIGxpbnV4LTYuOC4xMC50YXIueHoK
+KyMgRnJvbSBodHRwczovL2Nkbi5rZXJuZWwub3JnL3B1Yi9saW51eC9rZXJuZWwvdjYueC9zaGEy
+NTZzdW1zLmFzYworc2hhMjU2ICA1ZmY1YmQ4NGVhMGUyMmM1MzQzNzMwMmRiNWQzOTRkMGE5MmQ4
+YjhiMWE4OGNlMjBkMTA5ODI5OGU5Zjc2MzBhICBsaW51eC02LjEyLjE1LnRhci54egpkaWZmIC0t
+Z2l0IGEvYm9hcmQvYXJtL2ZvdW5kYXRpb24tdjgvcmVhZG1lLnR4dCBiL2JvYXJkL2FybS9mb3Vu
+ZGF0aW9uLXY4L3JlYWRtZS50eHQKaW5kZXggNzAxY2YzY2ViMC4uYzY0MDQ5MTIxNSAxMDA2NDQK
+LS0tIGEvYm9hcmQvYXJtL2ZvdW5kYXRpb24tdjgvcmVhZG1lLnR4dAorKysgYi9ib2FyZC9hcm0v
+Zm91bmRhdGlvbi12OC9yZWFkbWUudHh0CkBAIC0xLDE2ICsxLDM0IEBACitJbnRyb2R1Y3Rpb24K
+Kz09PT09PT09PT09PQorCiBUaGlzIGlzIHRoZSBzdXBwb3J0IGZvciB0aGUgQVJNIEZvdW5kYXRp
+b24gdjggbWFjaGluZSBlbXVsYXRlZCBieSB0aGUKIEFSTSBzb2Z0d2FyZSBzaW11bGF0b3Igb2Yg
+dGhlIEFBcmNoNjQgYXJjaGl0ZWN0dXJlLgogCi1GaXJzdCwgb25lIGhhcyB0byBkb3dubG9hZCB0
+aGUgQUFyY2g2NCBzb2Z0d2FyZSBzaW11bGF0b3IgZnJvbToKK0J1aWxkaW5nCis9PT09PT09PQor
+CisgICQgbWFrZSBhcm1fZm91bmRhdGlvbnY4X2RlZmNvbmZpZworICAkIG1ha2UKKworR2VuZXJh
+dGVkIGZpbGVzIHVuZGVyIG91dHB1dC9pbWFnZXM6CisKKyogbGludXgtc3lzdGVtLmF4ZjogQW4g
+aW1hZ2UgY29tcHJpc2luZyB0aGUgYm9vdC13cmFwcGVyLWFhcmNoNjQgbWluaW1hbAorICAgICAg
+ICAgICAgICAgICAgICBmaXJtd2FyZSBhbmQgYm9vdGxvYWRlciwgYSBEZXZpY2V0cmVlIGFuZCB0
+aGUgTGludXgga2VybmVsLgorKiByb290ZnMuZXh0MjogICAgICBUaGUgT1Mgcm9vdCBmaWxlc3lz
+dGVtLgorCitSdW5uaW5nIG9uIHRoZSBzaW11bGF0b3IKKz09PT09PT09PT09PT09PT09PT09PT09
+PQogCi0gIGh0dHBzOi8vZGV2ZWxvcGVyLmFybS5jb20vLS9tZWRpYS9GaWxlcy9kb3dubG9hZHMv
+ZWNvc3lzdGVtLW1vZGVscy9GTV8xMV8yNS9Gb3VuZGF0aW9uX1BsYXRmb3JtXzExLjI1XzE1X0xp
+bnV4NjQudGd6CitEb3dubG9hZCB0aGUgQUFyY2g2NCBzb2Z0d2FyZSBzaW11bGF0b3IgZnJvbSBv
+bmUgb2YgdGhlIGZvbGxvd2luZyBzb3VyY2VzLAorY29ycmVzcG9uZGluZyB0byB5b3VyIGhvc3Qg
+Y29tcHV0ZXI6CiAKLVRoZW4sIHVzZSB0aGUgYXJtX2ZvdW5kYXRpb252OF9kZWZjb25maWcgY29u
+ZmlndXJhdGlvbiB0byBidWlsZCB5b3VyCi1CdWlsZHJvb3Qgc3lzdGVtLgorLSBodHRwczovL2Rl
+dmVsb3Blci5hcm0uY29tLy0vY2RuLWRvd25sb2Fkcy9wZXJtYWxpbmsvRlZQcy1BcmNoaXRlY3R1
+cmUvRk0tMTEuMjcvRm91bmRhdGlvbl9QbGF0Zm9ybV8xMS4yN18xOV9MaW51eDY0LnRnegorLSBo
+dHRwczovL2RldmVsb3Blci5hcm0uY29tLy0vY2RuLWRvd25sb2Fkcy9wZXJtYWxpbmsvRlZQcy1B
+cmNoaXRlY3R1cmUvRk0tMTEuMjcvRm91bmRhdGlvbl9QbGF0Zm9ybV8xMS4yN18xOV9MaW51eDY0
+X2FybXY4bC50Z3oKIAogRmluYWxseSwgYm9vdCB5b3VyIHN5c3RlbSB3aXRoOgogCiAgJHtMT0NB
+VElPTl9PRl9GT1VOREFUSU9OVjhfU0lNVUxBVE9SfS9tb2RlbHMvTGludXg2NF9HQ0MtOS4zL0Zv
+dW5kYXRpb25fUGxhdGZvcm0gXAorICAgIC0tYXJtLXY4LjAgXAogICAgIC0taW1hZ2Ugb3V0cHV0
+L2ltYWdlcy9saW51eC1zeXN0ZW0uYXhmIFwKICAgICAtLWJsb2NrLWRldmljZSBvdXRwdXQvaW1h
+Z2VzL3Jvb3Rmcy5leHQyIFwKICAgICAtLW5ldHdvcms9bmF0IFwKZGlmZiAtLWdpdCBhL2NvbmZp
+Z3MvYXJtX2ZvdW5kYXRpb252OF9kZWZjb25maWcgYi9jb25maWdzL2FybV9mb3VuZGF0aW9udjhf
+ZGVmY29uZmlnCmluZGV4IGQ0ZTdjYTBkZDQuLjkzNjEzZjVhMzQgMTAwNjQ0Ci0tLSBhL2NvbmZp
+Z3MvYXJtX2ZvdW5kYXRpb252OF9kZWZjb25maWcKKysrIGIvY29uZmlncy9hcm1fZm91bmRhdGlv
+bnY4X2RlZmNvbmZpZwpAQCAtMSwxNCArMSwxNiBAQAogQlIyX2FhcmNoNjQ9eQotQlIyX1BBQ0tB
+R0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RPTV82Xzg9eQorQlIyX1BBQ0tBR0VfSE9TVF9MSU5V
+WF9IRUFERVJTX0NVU1RPTV82XzEyPXkKIEJSMl9HTE9CQUxfUEFUQ0hfRElSPSJib2FyZC9hcm0v
+Zm91bmRhdGlvbi12OC9wYXRjaGVzIgorQlIyX0RPV05MT0FEX0ZPUkNFX0NIRUNLX0hBU0hFUz15
+CiBCUjJfVEFSR0VUX0dFTkVSSUNfR0VUVFlfUE9SVD0idHR5QU1BMCIKIEJSMl9MSU5VWF9LRVJO
+RUw9eQogQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVSU0lPTj15Ci1CUjJfTElOVVhfS0VSTkVM
+X0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjguMTAiCitCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9W
+RVJTSU9OX1ZBTFVFPSI2LjEyLjE1IgogQlIyX0xJTlVYX0tFUk5FTF9VU0VfQVJDSF9ERUZBVUxU
+X0NPTkZJRz15CiBCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKIEJSMl9MSU5VWF9LRVJO
+RUxfSU5UUkVFX0RUU19OQU1FPSJhcm0vZm91bmRhdGlvbi12OC1naWN2My1wc2NpIgogQlIyX0xJ
+TlVYX0tFUk5FTF9ORUVEU19IT1NUX09QRU5TU0w9eQorQlIyX0xJTlVYX0tFUk5FTF9ORUVEU19I
+T1NUX1BZVEhPTjM9eQogQlIyX1RBUkdFVF9ST09URlNfRVhUMj15CiBCUjJfVEFSR0VUX1JPT1RG
+U19FWFQyX1NJWkU9IjEyOE0iCiAjIEJSMl9UQVJHRVRfUk9PVEZTX1RBUiBpcyBub3Qgc2V0Ci0t
+IAoyLjQ1LjIKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
+aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
