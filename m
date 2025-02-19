@@ -1,53 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD062C021AA
-	for <buildroot@archiver.kernel.org>; Wed, 19 Feb 2025 19:59:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 897FFC021AA
+	for <buildroot@archiver.kernel.org>; Wed, 19 Feb 2025 20:43:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6EF35821E7;
-	Wed, 19 Feb 2025 19:59:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B38D610F9;
+	Wed, 19 Feb 2025 20:43:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V_OyVq05ysav; Wed, 19 Feb 2025 19:59:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EeLB1YF0ra0Z; Wed, 19 Feb 2025 20:43:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E87183A45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0713E610EA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E87183A45;
-	Wed, 19 Feb 2025 19:59:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 85E94E0C
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 19:59:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0713E610EA;
+	Wed, 19 Feb 2025 20:43:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8A4BDE0C
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 20:43:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 664CD4136F
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 19:59:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 77A90404D1
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 20:43:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id db1vaecy-DEZ for <buildroot@buildroot.org>;
- Wed, 19 Feb 2025 19:59:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 038F64136E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 038F64136E
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 19:59:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E898C85F84; Wed, 19 Feb 2025 19:59:25 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id g9zJlGiaWpB3 for <buildroot@buildroot.org>;
+ Wed, 19 Feb 2025 20:43:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org ED2AD4017A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED2AD4017A
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id ED2AD4017A
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 20:43:12 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-38f5fc33602so140926f8f.0
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 12:43:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1739997790; x=1740602590;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=HppYpBFShGUq45sw0IXpu/3utoEfGb5+oWYWx4ObDbA=;
+ b=GjV3+WCNcA+EII5Suf2DbTwzkoInqkIsAxBbgf2VgAZmkcaMv8Gh0ENVW17g76cXl4
+ LTgdF6xCW/05N580tjrR7J2MubWsXgxD2TQDZeQh0dUnN3D+LXx83vTHAJTtsNFXSgil
+ 30G63qOEsPQ8T8Syn7F0VHI9anW9Hhcwxn0ruxZEBz8YQJDrkOF5sht39wM1uqd5r0p8
+ 8Pp4JnWhkSjpP3QqeGXaVjgbydsjAh2yoy7mr7y6nyV2Pu3COSwEjTQz+rBsTERaSvjq
+ vb19Ft5VJw4bkQ1kk/XA2N/zRZ1M8oYALFE6te2vowyXO9vr/oI4jfwozUKqNzYN/Rfo
+ A1Yg==
+X-Gm-Message-State: AOJu0YwiatRUMGUKoANbQQvNmSORBKlUkxK6W0Z9kInqKJbBV05dsEAF
+ l1OcnfiW/ilIHYszfzdrkGkOzH90dOvlTbfEZk41VBto/4VE1vdJja481lZ89r3SkzmCOahjgzh
+ Kh9qCpw==
+X-Gm-Gg: ASbGncvv8AZqJfzuVt6M9ACMuSQHD4fjxnaVjKyW6JmBM/so2uptCGOHWgvNLRNSY54
+ eliOaltBO4Hnqpq6WbmJDpf0Ibnpvv9TRr4iD78QJIaiFJI8ey6/HyeZl7JHwx73BGj/DGl6l41
+ E2WG/6KgqrDd75Co9beyhu6rmRLaFb7/LKeKt5doOYDtkTWeV/nhbFIilZ75/zxB2W5r3uTIySZ
+ tdIRfsyz4OlYyhPQUzWiGJqKfIPV+v1ne04y97OXZlRGrEVHAAt/Csejq6/b5nR/YuwRXrIb1Cd
+ zxM6I7Gs1zUebfzX+OcBZwzUW64p88CXZQ==
+X-Google-Smtp-Source: AGHT+IExT9dpsGuAlIr/dye5NBoxpw0IrCnd+NnkkoOmt2OOrEPU6gtIqx9v2UItDKa/drxbsbsHFA==
+X-Received: by 2002:a05:6000:1f8f:b0:38d:b8fd:591f with SMTP id
+ ffacd0b85a97d-38f614991e7mr549961f8f.5.1739997790287; 
+ Wed, 19 Feb 2025 12:43:10 -0800 (PST)
+Received: from debian-hp-1.my-cloud.eu ([91.26.90.210])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-38f259d65bcsm18894822f8f.65.2025.02.19.12.43.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 19 Feb 2025 12:43:09 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Wed, 19 Feb 2025 20:40:08 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: d559776a3a0437267a9fbbd3c8313141562b9be6
-X-Git-Newrev: 0bdc4429d800b334b0947fb23646027b62e66845
-X-Patchwork-Hint: ignore
-Message-Id: <20250219195925.E898C85F84@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/assimp: add
- upstream security fix for CVE-2024-48423
+Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
+ Bernd Kuhls <bernd@kuhls.net>
+Date: Wed, 19 Feb 2025 21:42:54 +0100
+Message-ID: <20250219204255.202762-1-raphael.melotte@mind.be>
+X-Mailer: git-send-email 2.48.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1739997790; x=1740602590; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=HppYpBFShGUq45sw0IXpu/3utoEfGb5+oWYWx4ObDbA=;
+ b=YsOlNgr+ghd4NQJospmRRa1OhNDKszX6GI47kipzVpgLQRUNxP61/Cr8r9ckbHTdux
+ 45KnFzhmFmM1Ts0iwyy2znC1kY1GqaopQGsE9hcGKUlcsjv8UFDdFhTQkblGDjYp8Lio
+ 4Dsfr1bvPPZnV9N5awJLIbFZvDjRL4q7YYFfSIrFdZmyfbQm7mLBzTxCS7fP/vzmIImB
+ BYVlDGDgB/OGaQ3R0YeZvCtvvZZod9Xa/V09Du0VWtsLOTS+B9kdYfrzVipGB3Dj/1yf
+ A80b45PrdfdlFKSHAGjJahm5qgOCTunkVZe33y11fcoFhPdZQkyJX7z63oG+W+pTq/N+
+ qDNw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=YsOlNgr+
+Subject: [Buildroot] [PATCH 1/1] package/libfreeglut: add upstream security
+ fix for CVE-2024-2425{8, 9}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,240 +107,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Rapha=C3=ABl_M=C3=A9lotte_via_buildroot?=
+ <buildroot@buildroot.org>
+Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bdc4429d800b334b0947fb23646027b62e66845
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
-
-Fixes the following security issue:
-
-CVE-2024-48423: An issue in assimp v.5.4.3 allows a local attacker to
-execute arbitrary code via the CallbackToLogRedirector function within the
-Assimp library
-
-https://github.com/assimp/assimp/issues/5788
-https://www.cve.org/CVERecord?id=CVE-2024-48423
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit ad82b284271b7039144a290b503aba294c1e39bf)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/assimp/0001-Fix-leak-5762.patch            | 139 +++++++++++++++++++++
- ...er-free-in-the-CallbackToLogRedirector-59.patch |  39 ++++++
- package/assimp/assimp.mk                           |   4 +
- 3 files changed, 182 insertions(+)
-
-diff --git a/package/assimp/0001-Fix-leak-5762.patch b/package/assimp/0001-Fix-leak-5762.patch
-new file mode 100644
-index 0000000000..a78970e1d3
---- /dev/null
-+++ b/package/assimp/0001-Fix-leak-5762.patch
-@@ -0,0 +1,139 @@
-+From 4024726eca89331503bdab33d0b9186e901bbc45 Mon Sep 17 00:00:00 2001
-+From: Kim Kulling <kimkulling@users.noreply.github.com>
-+Date: Sat, 7 Sep 2024 21:02:34 +0200
-+Subject: [PATCH] Fix leak (#5762)
-+
-+* Fix leak
-+
-+* Update utLogger.cpp
-+
-+Upstream: https://github.com/assimp/assimp/commit/4024726eca89331503bdab33d0b9186e901bbc45
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ code/Common/Assimp.cpp        | 13 ++++++---
-+ fuzz/assimp_fuzzer.cc         |  2 +-
-+ test/CMakeLists.txt           |  1 +
-+ test/unit/Common/utLogger.cpp | 52 +++++++++++++++++++++++++++++++++++
-+ 4 files changed, 63 insertions(+), 5 deletions(-)
-+ create mode 100644 test/unit/Common/utLogger.cpp
-+
-+diff --git a/code/Common/Assimp.cpp b/code/Common/Assimp.cpp
-+index ef3ee7b5d..91896e405 100644
-+--- a/code/Common/Assimp.cpp
-++++ b/code/Common/Assimp.cpp
-+@@ -359,20 +359,25 @@ void CallbackToLogRedirector(const char *msg, char *dt) {
-+     s->write(msg);
-+ }
-+ 
-++static LogStream *DefaultStream = nullptr;
-++
-+ // ------------------------------------------------------------------------------------------------
-+ ASSIMP_API aiLogStream aiGetPredefinedLogStream(aiDefaultLogStream pStream, const char *file) {
-+     aiLogStream sout;
-+ 
-+     ASSIMP_BEGIN_EXCEPTION_REGION();
-+-    LogStream *stream = LogStream::createDefaultStream(pStream, file);
-+-    if (!stream) {
-++    if (DefaultStream == nullptr) {
-++        DefaultStream = LogStream::createDefaultStream(pStream, file);
-++    }
-++    
-++    if (!DefaultStream) {
-+         sout.callback = nullptr;
-+         sout.user = nullptr;
-+     } else {
-+         sout.callback = &CallbackToLogRedirector;
-+-        sout.user = (char *)stream;
-++        sout.user = (char *)DefaultStream;
-+     }
-+-    gPredefinedStreams.push_back(stream);
-++    gPredefinedStreams.push_back(DefaultStream);
-+     ASSIMP_END_EXCEPTION_REGION(aiLogStream);
-+     return sout;
-+ }
-+diff --git a/fuzz/assimp_fuzzer.cc b/fuzz/assimp_fuzzer.cc
-+index 8178674e8..91ffd9d69 100644
-+--- a/fuzz/assimp_fuzzer.cc
-++++ b/fuzz/assimp_fuzzer.cc
-+@@ -47,7 +47,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-+ using namespace Assimp;
-+ 
-+ extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t dataSize) {
-+-    aiLogStream stream = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT,NULL);
-++    aiLogStream stream = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT, nullptr);
-+     aiAttachLogStream(&stream);
-+ 
-+     Importer importer;
-+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
-+index 7b7fd850a..1a45adac7 100644
-+--- a/test/CMakeLists.txt
-++++ b/test/CMakeLists.txt
-+@@ -100,6 +100,7 @@ SET( COMMON
-+   unit/Common/utBase64.cpp
-+   unit/Common/utHash.cpp
-+   unit/Common/utBaseProcess.cpp
-++  unit/Common/utLogger.cpp
-+ )
-+ 
-+ SET(Geometry 
-+diff --git a/test/unit/Common/utLogger.cpp b/test/unit/Common/utLogger.cpp
-+new file mode 100644
-+index 000000000..932240a7f
-+--- /dev/null
-++++ b/test/unit/Common/utLogger.cpp
-+@@ -0,0 +1,52 @@
-++/*
-++---------------------------------------------------------------------------
-++Open Asset Import Library (assimp)
-++---------------------------------------------------------------------------
-++
-++Copyright (c) 2006-2024, assimp team
-++
-++All rights reserved.
-++
-++Redistribution and use of this software in source and binary forms,
-++with or without modification, are permitted provided that the following
-++conditions are met:
-++
-++* Redistributions of source code must retain the above
-++copyright notice, this list of conditions and the
-++following disclaimer.
-++
-++* Redistributions in binary form must reproduce the above
-++copyright notice, this list of conditions and the
-++following disclaimer in the documentation and/or other
-++materials provided with the distribution.
-++
-++* Neither the name of the assimp team, nor the names of its
-++contributors may be used to endorse or promote products
-++derived from this software without specific prior
-++written permission of the assimp team.
-++
-++THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-++"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-++LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-++A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-++OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-++SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-++LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-++DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-++THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-++(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-++OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-++---------------------------------------------------------------------------
-++*/
-++
-++#include "UnitTestPCH.h"
-++#include <assimp/Importer.hpp>
-++
-++using namespace Assimp;
-++class utLogger : public ::testing::Test {};
-++
-++TEST_F(utLogger, aiGetPredefinedLogStream_leak_test) {
-++    aiLogStream stream1 = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT, nullptr);
-++    aiLogStream stream2 = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT, nullptr);
-++    ASSERT_EQ(stream1.callback, stream2.callback);
-++}
-+-- 
-+2.39.5
-+
-diff --git a/package/assimp/0002-Fix-use-after-free-in-the-CallbackToLogRedirector-59.patch b/package/assimp/0002-Fix-use-after-free-in-the-CallbackToLogRedirector-59.patch
-new file mode 100644
-index 0000000000..c4cd2af5aa
---- /dev/null
-+++ b/package/assimp/0002-Fix-use-after-free-in-the-CallbackToLogRedirector-59.patch
-@@ -0,0 +1,39 @@
-+From f12e52198669239af525e525ebb68407977f8e34 Mon Sep 17 00:00:00 2001
-+From: tyler92 <tyler92@inbox.ru>
-+Date: Wed, 11 Dec 2024 12:17:14 +0200
-+Subject: [PATCH] Fix use after free in the CallbackToLogRedirector (#5918)
-+
-+The heap-use-after-free vulnerability occurs in the
-+CallbackToLogRedirector function. During the process of logging,
-+a previously freed memory region is accessed, leading to a
-+use-after-free condition. This vulnerability stems from incorrect
-+memory management, specifically, freeing a log stream and then
-+attempting to access it later on.
-+
-+This patch sets NULL value for The DefaultStream global pointer.
-+
-+Co-authored-by: Kim Kulling <kimkulling@users.noreply.github.com>
-+Upstream: https://github.com/assimp/assimp/commit/f12e52198669239af525e525ebb68407977f8e34
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ code/Common/Assimp.cpp | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/code/Common/Assimp.cpp b/code/Common/Assimp.cpp
-+index 91896e405..22e16bd36 100644
-+--- a/code/Common/Assimp.cpp
-++++ b/code/Common/Assimp.cpp
-+@@ -416,6 +416,10 @@ ASSIMP_API aiReturn aiDetachLogStream(const aiLogStream *stream) {
-+     DefaultLogger::get()->detachStream(it->second);
-+     delete it->second;
-+ 
-++    if ((Assimp::LogStream *)stream->user == DefaultStream) {
-++        DefaultStream = nullptr;
-++    }
-++
-+     gActiveLogStreams.erase(it);
-+ 
-+     if (gActiveLogStreams.empty()) {
-+-- 
-+2.39.5
-+
-diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
-index ba0d506033..a4614a01a2 100644
---- a/package/assimp/assimp.mk
-+++ b/package/assimp/assimp.mk
-@@ -12,6 +12,10 @@ ASSIMP_CPE_ID_VENDOR = assimp
- ASSIMP_DEPENDENCIES = zlib
- ASSIMP_INSTALL_STAGING = YES
- 
-+# 0001-Fix-leak-5762.patch
-+# 0002-Fix-use-after-free-in-the-CallbackToLogRedirector-59.patch
-+ASSIMP_IGNORE_CVES += CVE-2024-48423
-+
- # relocation truncated to fit: R_68K_GOT16O. We also need to disable
- # optimizations to not run into "Error: value -43420 out of range"
- # assembler issues.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Rml4ZXMgdGhlIGZvbGxvd2luZyBzZWN1cml0eSBpc3N1ZXM6CgotIENWRS0yMDI0LTI0MjU4OiBm
+cmVlZ2x1dCAzLjQuMCB3YXMgZGlzY292ZXJlZCB0byBjb250YWluIGEgbWVtb3J5IGxlYWsKdmlh
+IHRoZSBtZW51RW50cnkgdmFyaWFibGUgaW4gdGhlIGdsdXRBZGRTdWJNZW51IGZ1bmN0aW9uLgot
+IENWRS0yMDI0LTI0MjU5OiBmcmVlZ2x1dCB0aHJvdWdoIDMuNC4wIHdhcyBkaXNjb3ZlcmVkIHRv
+IGNvbnRhaW4gYQptZW1vcnkgbGVhayB2aWEgdGhlIG1lbnVFbnRyeSB2YXJpYWJsZSBpbiB0aGUg
+Z2x1dEFkZE1lbnVFbnRyeQpmdW5jdGlvbi4KCmh0dHBzOi8vbnZkLm5pc3QuZ292L3Z1bG4vZGV0
+YWlsL0NWRS0yMDI0LTI0MjU4Cmh0dHBzOi8vbnZkLm5pc3QuZ292L3Z1bG4vZGV0YWlsL0NWRS0y
+MDI0LTI0MjU5CgpUaGUgQ1ZFcyBhcmUgbm90IHRlY2huaWNhbGx5IHJlcG9ydGVkIGZvciB0aGUg
+bGliZnJlZWdsdXQgcGFja2FnZQppdHNlbGYgKHdoaWNoIGRvZXNuJ3QgaGF2ZSBhIENQRSBpZGVu
+dGlmaWVyKSBidXQgZm9yIG11cGRmLgoKTm90ZSB0aGF0IG11ZHBmIHByb3ZpZGVzIGl0cyBvd24g
+KG9sZCkgdmVyc2lvbiBvZiBmcmVlZ2x1dCwgYnV0IG91cgptdXBkZiBwYWNrYWdlIHVzZXMgdGhl
+IEJ1aWxkcm9vdC1wcm92aWRlZCBmcmVlZ2x1dCAod2hpY2ggbm93IGNvbnRhaW5zCnRoZSBmaXgp
+LgoKSXQgYWxzbyBoYXMgdG8gYmUgbm90ZWQgdGhhdCBhIG1vcmUgcmVjZW50IHJlbGVhc2Ugb2Yg
+bGliZnJlZWdsdXQKZXhpc3RzIHVwc3RyZWFtLCBhbmQgaXQgZml4ZXMgdGhlIHNhbWUgQ1ZFcy4g
+IEJ1bXBpbmcgb3VyIHBhY2thZ2UKdmVyc2lvbiBob3dldmVyIHJlcXVpcmVzIG1vcmUgd29yayB0
+aGF0IGNhbiBiZSBkb25lIHNlcGFyYXRlbHkuCkluY2x1ZGluZyB0aGlzIHBhdGNoIGZpcnN0IGFs
+c28gaGFzIHRoZSBhZHZhbnRhZ2UgdGhhdCBpdCBjYW4gZWFzaWx5CmJlIGJhY2twb3J0ZWQgd2hl
+cmV2ZXIgaXQncyBuZWVkZWQuCgpTaWduZWQtb2ZmLWJ5OiBSYXBoYcOrbCBNw6lsb3R0ZSA8cmFw
+aGFlbC5tZWxvdHRlQG1pbmQuYmU+Ci0tLQogLi4uLW1lbW9yeS1sZWFrLXRoYXQtaGFwcGVucy11
+cG9uLWVycm9yLnBhdGNoIHwgNTQgKysrKysrKysrKysrKysrKysrKwogcGFja2FnZS9tdXBkZi9t
+dXBkZi5tayAgICAgICAgICAgICAgICAgICAgICAgIHwgIDUgKysKIDIgZmlsZXMgY2hhbmdlZCwg
+NTkgaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGliZnJlZWdsdXQv
+MDAwMS1QbHVnLW1lbW9yeS1sZWFrLXRoYXQtaGFwcGVucy11cG9uLWVycm9yLnBhdGNoCgpkaWZm
+IC0tZ2l0IGEvcGFja2FnZS9saWJmcmVlZ2x1dC8wMDAxLVBsdWctbWVtb3J5LWxlYWstdGhhdC1o
+YXBwZW5zLXVwb24tZXJyb3IucGF0Y2ggYi9wYWNrYWdlL2xpYmZyZWVnbHV0LzAwMDEtUGx1Zy1t
+ZW1vcnktbGVhay10aGF0LWhhcHBlbnMtdXBvbi1lcnJvci5wYXRjaApuZXcgZmlsZSBtb2RlIDEw
+MDY0NAppbmRleCAwMDAwMDAwMDAwLi5kMDllOWJlZmIzCi0tLSAvZGV2L251bGwKKysrIGIvcGFj
+a2FnZS9saWJmcmVlZ2x1dC8wMDAxLVBsdWctbWVtb3J5LWxlYWstdGhhdC1oYXBwZW5zLXVwb24t
+ZXJyb3IucGF0Y2gKQEAgLTAsMCArMSw1NCBAQAorRnJvbSA5YWQzMjBjMWFkMWEyNTU1ODk5OGRk
+ZmU0NzY3NDUxMTU2N2ZlYzU3IE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJvbTogU2ViYXN0
+aWFuIFJhc211c3NlbiA8c2VicmFzQGdtYWlsLmNvbT4KK0RhdGU6IE1vbiwgMTIgRmViIDIwMjQg
+MTQ6NDY6MjIgKzA4MDAKK1N1YmplY3Q6IFtQQVRDSF0gUGx1ZyBtZW1vcnkgbGVhayB0aGF0IGhh
+cHBlbnMgdXBvbiBlcnJvci4KKworSWYgZmdTdHJ1Y3R1cmUuQ3VycmVudE1lbnUgaXMgc2V0IHdo
+ZW4gZ2x1dEFkZE1lbnVFbnRyeSgpIG9yCitnbHV0QWRkU3ViTWVudSgpIGlzIGNhbGxlZCB0aGUg
+YWxsb2NhdGVkIG1lbnVFbnRyeSB2YXJpYWJsZSB3aWxsCitsZWFrLiBUaGlzIGNvbW1pdCBwb3N0
+cG9uZXMgYWxsb2NhdGluZyBtZW51RW50cnkgdW50aWwgYWZ0ZXIgdGhlCitlcnJvciBjaGVja3Ms
+IHRoZXJlYnkgcGx1Z2dpbmcgdGhlIG1lbW9yeSBsZWFrLgorCitUaGlzIGZpeGVzIENWRS0yMDI0
+LTI0MjU4IGFuZCBDVkUtMjAyNC0yNDI1OS4KK1Vwc3RyZWFtOiBodHRwczovL2dpdGh1Yi5jb20v
+ZnJlZWdsdXQvZnJlZWdsdXQvY29tbWl0LzlhZDMyMGMxYWQxYTI1NTU4OTk4ZGRmZTQ3Njc0NTEx
+NTY3ZmVjNTcKK1NpZ25lZC1vZmYtYnk6IFJhcGhhw6tsIE3DqWxvdHRlIDxyYXBoYWVsLm1lbG90
+dGVAbWluZC5iZT4KKy0tLQorIHNyYy9mZ19tZW51LmMgfCA0ICsrLS0KKyAxIGZpbGUgY2hhbmdl
+ZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQorCitkaWZmIC0tZ2l0IGEvc3JjL2Zn
+X21lbnUuYyBiL3NyYy9mZ19tZW51LmMKK2luZGV4IDUzMTEyZGMyLi4wZGE4ODkwMSAxMDA2NDQK
+Ky0tLSBhL3NyYy9mZ19tZW51LmMKKysrKyBiL3NyYy9mZ19tZW51LmMKK0BAIC04NjQsMTIgKzg2
+NCwxMiBAQCB2b2lkIEZHQVBJRU5UUlkgZ2x1dEFkZE1lbnVFbnRyeSggY29uc3QgY2hhciogbGFi
+ZWwsIGludCB2YWx1ZSApCisgeworICAgICBTRkdfTWVudUVudHJ5KiBtZW51RW50cnk7CisgICAg
+IEZSRUVHTFVUX0VYSVRfSUZfTk9UX0lOSVRJQUxJU0VEICggImdsdXRBZGRNZW51RW50cnkiICk7
+CistICAgIG1lbnVFbnRyeSA9IChTRkdfTWVudUVudHJ5ICopY2FsbG9jKCBzaXplb2YoU0ZHX01l
+bnVFbnRyeSksIDEgKTsKKyAKKyAgICAgZnJlZWdsdXRfcmV0dXJuX2lmX2ZhaWwoIGZnU3RydWN0
+dXJlLkN1cnJlbnRNZW51ICk7CisgICAgIGlmIChmZ1N0YXRlLkFjdGl2ZU1lbnVzKQorICAgICAg
+ICAgZmdFcnJvcigiTWVudSBtYW5pcHVsYXRpb24gbm90IGFsbG93ZWQgd2hpbGUgbWVudXMgaW4g
+dXNlLiIpOworIAorKyAgICBtZW51RW50cnkgPSAoU0ZHX01lbnVFbnRyeSAqKWNhbGxvYyggc2l6
+ZW9mKFNGR19NZW51RW50cnkpLCAxICk7CisgICAgIG1lbnVFbnRyeS0+VGV4dCA9IHN0cmR1cCgg
+bGFiZWwgKTsKKyAgICAgbWVudUVudHJ5LT5JRCAgID0gdmFsdWU7CisgCitAQCAtODg4LDcgKzg4
+OCw2IEBAIHZvaWQgRkdBUElFTlRSWSBnbHV0QWRkU3ViTWVudSggY29uc3QgY2hhciAqbGFiZWws
+IGludCBzdWJNZW51SUQgKQorICAgICBTRkdfTWVudSAqc3ViTWVudTsKKyAKKyAgICAgRlJFRUdM
+VVRfRVhJVF9JRl9OT1RfSU5JVElBTElTRUQgKCAiZ2x1dEFkZFN1Yk1lbnUiICk7CistICAgIG1l
+bnVFbnRyeSA9ICggU0ZHX01lbnVFbnRyeSAqICljYWxsb2MoIHNpemVvZiggU0ZHX01lbnVFbnRy
+eSApLCAxICk7CisgICAgIHN1Yk1lbnUgPSBmZ01lbnVCeUlEKCBzdWJNZW51SUQgKTsKKyAKKyAg
+ICAgZnJlZWdsdXRfcmV0dXJuX2lmX2ZhaWwoIGZnU3RydWN0dXJlLkN1cnJlbnRNZW51ICk7CitA
+QCAtODk3LDYgKzg5Niw3IEBAIHZvaWQgRkdBUElFTlRSWSBnbHV0QWRkU3ViTWVudSggY29uc3Qg
+Y2hhciAqbGFiZWwsIGludCBzdWJNZW51SUQgKQorIAorICAgICBmcmVlZ2x1dF9yZXR1cm5faWZf
+ZmFpbCggc3ViTWVudSApOworIAorKyAgICBtZW51RW50cnkgPSAoIFNGR19NZW51RW50cnkgKiAp
+Y2FsbG9jKCBzaXplb2YoIFNGR19NZW51RW50cnkgKSwgMSApOworICAgICBtZW51RW50cnktPlRl
+eHQgICAgPSBzdHJkdXAoIGxhYmVsICk7CisgICAgIG1lbnVFbnRyeS0+U3ViTWVudSA9IHN1Yk1l
+bnU7CisgICAgIG1lbnVFbnRyeS0+SUQgICAgICA9IC0xOworLS0gCisyLjQ4LjEKKwpkaWZmIC0t
+Z2l0IGEvcGFja2FnZS9tdXBkZi9tdXBkZi5tayBiL3BhY2thZ2UvbXVwZGYvbXVwZGYubWsKaW5k
+ZXggOWVlY2I4NDIzMi4uZDI4MjlkOGI3MSAxMDA2NDQKLS0tIGEvcGFja2FnZS9tdXBkZi9tdXBk
+Zi5taworKysgYi9wYWNrYWdlL211cGRmL211cGRmLm1rCkBAIC0yMSw2ICsyMSwxMSBAQCBNVVBE
+Rl9ERVBFTkRFTkNJRVMgPSBcCiAJbGNtczIgb3BlbmpwZWcgXAogCXpsaWIKIAorIyBsaWJmcmVl
+Z2x1dC8wMDAxLVBsdWctbWVtb3J5LWxlYWstdGhhdC1oYXBwZW5zLXVwb24tZXJyb3IucGF0Y2gK
+K01VUERGX0lHTk9SRV9DVkVTID0gXAorCUNWRS0yMDI0LTI0MjU4IFwKKwlDVkUtMjAyNC0yNDI1
+OQorCiAjIG11cGRmIGRvZXNuJ3QgdXNlIENGTEFHUyBhbmQgTElCUyBidXQgWENGTEFHUyBhbmQg
+WExJQlMgaW5zdGVhZC4KICMgd2l0aCBVU0VfU1lTVEVNX0xJQlMgaXQgd2lsbCB0cnkgdG8gdXNl
+IHN5c3RlbSBsaWJyYXJpZXMgaW5zdGVhZCBvZiB0aGUgYnVuZGxlZCBvbmVzLgogTVVQREZfTUFL
+RV9FTlYgPSAkKFRBUkdFVF9NQUtFX0VOVikgJChUQVJHRVRfQ09ORklHVVJFX09QVFMpIFwKLS0g
+CjIuMzQuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
