@@ -1,101 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D709CC021AA
-	for <buildroot@archiver.kernel.org>; Wed, 19 Feb 2025 08:51:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C2D8C021B1
+	for <buildroot@archiver.kernel.org>; Wed, 19 Feb 2025 08:51:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A9B7881313;
-	Wed, 19 Feb 2025 08:51:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eo_Eia5fEc71; Wed, 19 Feb 2025 08:51:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C3E684D9F
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7C3E684D9F;
-	Wed, 19 Feb 2025 08:51:51 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3DE42C8
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:50:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 17A5D4F386
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:50:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B5F24F395;
+	Wed, 19 Feb 2025 08:51:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vZCDmVgshFif for <buildroot@buildroot.org>;
+ id Jzlyyib_QvMZ; Wed, 19 Feb 2025 08:51:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C85CF4F3B2
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id C85CF4F3B2;
+	Wed, 19 Feb 2025 08:51:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 91E83968
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:50:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 739C381203
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:50:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JyETv4DFzVUs for <buildroot@buildroot.org>;
  Wed, 19 Feb 2025 08:50:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8E12F503C1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E12F503C1
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8E12F503C1
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:50:56 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-4399deda38cso1238155e9.1
- for <buildroot@buildroot.org>; Wed, 19 Feb 2025 00:50:56 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8633F8128E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8633F8128E
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
+ [IPv6:2a00:1450:4864:20::42d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8633F8128E
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 08:50:57 +0000 (UTC)
+Received: by mail-wr1-x42d.google.com with SMTP id
+ ffacd0b85a97d-38f2cb1ba55so3936290f8f.3
+ for <buildroot@buildroot.org>; Wed, 19 Feb 2025 00:50:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1739955054; x=1740559854;
+ d=1e100.net; s=20230601; t=1739955055; x=1740559855;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=gBgnV9uB361OaiWzuRlovPeKJ5JPynTGlYcI4oFFzc4=;
- b=P9e9dty2I9wh6eWZVDCcCG/hzoSs6KvHp4nWZ3zywsjSIoVgL04cgqEWoXKvX99ZtV
- IJx3sibb2MeEElzMsNcOcIlMkCdrUjzuUNsAYqc58LXxPyjthtgkAjVlZ9hULl5P8b0L
- 7GjEIKkHzrLoRiOq3uQEaCzn7iT1Oh/VjVSHDxdYtNyQ19zjin5SYIxOhTxxgk301Zo1
- XaxhZe6zHNT1opsHJOQRwcbNy9W4y6lONk1R2zn6B10b9+WiVytrzGRdON20+ztvtLdT
- 8LgXkUmAO3BPJ2u258EWcOLy+vLy8Zhbf/4/d36kBrmBGOnRk/Jx5bEPNObpiDehTgV6
- x20g==
-X-Gm-Message-State: AOJu0YzSBU8+IH+A2TJXKqk6wxaAhS7tGtUVvRuNuNPZlDiX8TN4Bq2V
- Go9ywXdgTassxZQjMLUhWM+o34+6oQjqUNFgSUOWPDa4qvxLaCzjbzpFvw==
-X-Gm-Gg: ASbGncuKhkG5qjkgwww+WJUaWB9Z6JuYfEccHbZRoY6OHm0OjERMfkcoji3B+KgV/7T
- 8Yf2YX0LDx+IRyfOjDZ4+0JYuiKpA4KpXhKQercRNYuYjxNqFSGzO4vejNSzAzLtStdbQ6F8w82
- Hjx2JToEPSlAl3byOEwtCceCX5K4Vmj8mlJ3q7p5Yj62ZqZH+ABZyp2XOBbIqn8K0vSLPP+/ocB
- waPzyIRmLVdB4MznPjRsmVFmUj2rSCS67WLwNBAHQGYvskvB808nlzPo2UGAeCymLxau7ySxbSh
- +EZVyQtp5eQ2aZSwORntcmUzmA==
-X-Google-Smtp-Source: AGHT+IHsXVI1UFDNmS1bmW6+w6AM2lPKE3QRMB2ra/smzyoTtQC/Pv9hnOlfKN/aUYDzCpRigyF+aA==
-X-Received: by 2002:a05:600c:4f91:b0:439:9a40:aa09 with SMTP id
- 5b1f17b1804b1-4399a40ad23mr16754395e9.25.1739955054027; 
- Wed, 19 Feb 2025 00:50:54 -0800 (PST)
+ bh=sC/eMMmVWFmEai8dQsgovNw4Ya0at9dXZaQdlUk5MeQ=;
+ b=s9P5OtzRcw4D1a2Q1RjCdqtcN5m9J5v/ixk2ClQ3Y9xYQcywyxGJQ2HMI3XXPyeOEy
+ eEsF9r8M0DL4tWQUTzLnkLNuZzduc87r9Ns/oEGKuhSI3ilj/RGE/rYciEBJE35fE9bG
+ WI4OGfPiRlkVwmrQ7fxVoMIIafHD4mB4r+tk5KrVZixhA+NDQqYF3Cuai0e2flWPB5jd
+ CrZ8u6goNQpPlHh/BdATM7qaG5wqTseQcHYpTdfgjqr2fhk3pU2o2WpK1i5zbzwxtmwm
+ Nuarc7g9zdgaXdSNpCKVKUvcWaP4jJkr8Lkl5IBD3jyiIqJ/yf1/r+zdrZWiLlHwjlME
+ obFQ==
+X-Gm-Message-State: AOJu0YyLd4lWwa0qllPjwVB321Cw0J61VdLy1XWJdHpjB52YED7svKsw
+ ZGVNVEXya1Xf96xhRPMf91b68yD1pcGhbA3A1adyRiJkKIIsUiRaKta0vw==
+X-Gm-Gg: ASbGnct4HHDPDYVuR+qh/1s7qkd1CcIo/Peu3JlaPibCi8e2+R0lB+z64acUirQFI5Z
+ yzXBFc0RsV4c3HV6K0NrMawc6qKXilXMTPtug/0ttougyVl/gML9ZCPkjAs/dwmeE6P0RfPBIMR
+ Xsm85bG2rv4lW+DqAVb0yiaqhVAfEZi+7C9BWf2TZdA88QEH/vrh9u8BNgT1DAlYECDEu+zdjLb
+ N2VMc5l+WbgpSbh3F8PUULAF1ANDBhsjK/TUEyu13ycvTMQmdU5+k3qIqLKrikqKNM5M8t2zIe4
+ 8HcHWDubjsBRwbwTlwo2kbpMpA==
+X-Google-Smtp-Source: AGHT+IE94JrgEBDiJjtTfltLwSHdv2SkZnaCo7opWpSVL3pzd9EsmqwooCif1fJjYZCXvPXMDyZjGQ==
+X-Received: by 2002:a05:6000:2c6:b0:38f:276a:1662 with SMTP id
+ ffacd0b85a97d-38f5878be87mr2160201f8f.13.1739955055417; 
+ Wed, 19 Feb 2025 00:50:55 -0800 (PST)
 Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-38f259d5e9esm17517399f8f.61.2025.02.19.00.50.53
+ ffacd0b85a97d-38f259d5e9esm17517399f8f.61.2025.02.19.00.50.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 19 Feb 2025 00:50:53 -0800 (PST)
+ Wed, 19 Feb 2025 00:50:55 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 19 Feb 2025 09:50:32 +0100
-Message-ID: <acb508b4dbb8f51e04526a8a2b56e5a7cdbe3534.1739955023.git.yann.morin.1998@free.fr>
+Date: Wed, 19 Feb 2025 09:50:34 +0100
+Message-ID: <cf2ae39d3fec453dc573b2028cddbbcfbb8e0d05.1739955023.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1739955023.git.yann.morin.1998@free.fr>
 References: <cover.1739955023.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1739955054; x=1740559854; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1739955055; x=1740559855; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=gBgnV9uB361OaiWzuRlovPeKJ5JPynTGlYcI4oFFzc4=;
- b=PDnUCBAb1I+QO//BGmBG3CNYXqP3oRpo3eKjCSB6m0Jvgei98nXJJo+idHoSPooqrb
- zyoS0dceaO010d/sEl9944+6q8bwhu0z8UT6/cUWsEtIfW+bc7Qj5E3uYtv2yijnvTOJ
- KQFJuf/JmP31OnH7NIdjSMMqaB5qXXYFYo3uRzfBzgc7/NxPbyL0/Lf+VTGpMnmSkzVL
- w+T/ysFPMm1uGDIvkk2yIYeBCVTGaItbQLRk7JrN0f1W5cVZa1Kme7RbgOpz62I5hnnT
- jfnA2vS93Vd50cYzY/xkRT5oWOReSpsqJDorjigpsbw045aWf7kltFbnhw+7Ex1dzQ8E
- PU3A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=sC/eMMmVWFmEai8dQsgovNw4Ya0at9dXZaQdlUk5MeQ=;
+ b=d4V47ef6a81NyaPDRavaA06ra48PFrHp1dUZwQPoe22+nHA/Oo5uH17MBZyToraqSR
+ R3m89Bw3fOH4psxUushCjkrbhCTG7VxaZM1nuvW5VHxPtfQPhkeOTdnVEuM8tl3Bq0E/
+ KIOrgqYmJ6j6V0DhQM83uW3t1yZGekBC8OmrL9eBEILN+yVG0qUCOTb35OQC80p+Evdf
+ YloRqu2axR6ZyXlgGU1YqWr81u6OSOhkEseMTe5c0PBiMz8Hv7XMzo9k2YHh1/TR7tVv
+ 4Vsxn153PKqYB2bix8xppUwjcS/Rv0UkUFyIAPbWH5CvPptRN0Ivg4j0cIq9ldOyOr6S
+ k9UQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=PDnUCBAb
-Subject: [Buildroot] [PATCH 17/27] package/boost: commonalise list of libs
+ header.a=rsa-sha256 header.s=20230601 header.b=d4V47ef6
+Subject: [Buildroot] [PATCH 19/27] package/boost: headers-only libs are
+ always installed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,229 +114,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The list of available libraries is duplicated for the host and target
-variants, which is prone to getting desynchronised next time we bump and
-the list changes (with additions or removals).
+The headers-only libraries are an entry like the others for the boos
+build system, and are reported in the list of libraries when it is
+queried:
 
-This incidentally greatly cleanups the target variant variable, which
-used the superfluous, verbose repetition of append-assignments rather
-than a multi-line single assignment.
+    $ ./bootstrap.sh --show-libraries
+    [--SNIP--]
+    The Boost libraries requiring separate building and installation are:
+        [...]
+        - headers
+        [...]
 
-For the ost variant, if we do not have an option for a library, the
-library will default to being disabled, which is exactly what we want.
+However, they are always "built" and installed, and can't be disabled,
+even using the --without-headers flag.
 
-Note: This diff best viewed with: --anchored='BOOST_TARGET_CXXFLAGS ='
+In a followup change, we'll make sure that the sets of libs provided by
+Boost on one hand, and known to Buildroot on the other, are identical,
+so we'll want to have 'headers' be present in the list known to
+Buildroot.
+
+Add an Kconfig symbol to represent that library. To inform the user that
+the headers library is installed, we expose it with a prompt; we however
+make sure the symbol can't be disabled when Boost is enabled. Since it
+is a "special' library, we list if first, not in alphabetical order.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Michael Nosthoff <buildroot@heine.tech>
 Cc: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/boost/Config.in      |   6 ++
- package/boost/Config.in.host |   2 +
- package/boost/boost.mk       | 103 +++++++++++++----------------------
- 3 files changed, 47 insertions(+), 64 deletions(-)
+ package/boost/Config.in | 7 +++++++
+ package/boost/boost.mk  | 1 +
+ 2 files changed, 8 insertions(+)
 
 diff --git a/package/boost/Config.in b/package/boost/Config.in
-index c7c90aa9ab..f37efd129b 100644
+index f37efd129b..784c40278b 100644
 --- a/package/boost/Config.in
 +++ b/package/boost/Config.in
-@@ -98,6 +98,7 @@ config BR2_PACKAGE_BOOST_DATE_TIME
- 	  A set of date-time libraries based on generic programming
- 	  concepts.
- 
-+# check-symbol ignore
- config BR2_PACKAGE_BOOST_EXCEPTION
- 	bool "boost-exception"
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_BOOST
+ 	# let's depend on threads.
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_BOOST_HEADERS
  	help
-@@ -146,6 +147,7 @@ config BR2_PACKAGE_BOOST_GRAPH
- 	  The BGL graph interface and graph components are generic, in
- 	  the same sense as the the Standard Template Library (STL).
+ 	  A general purpose C++ library
  
-+# check-symbol ignore
- config BR2_PACKAGE_BOOST_GRAPH_PARALLEL
- 	bool "boost-graph_parallel"
- 	help
-@@ -249,12 +251,14 @@ config BR2_PACKAGE_BOOST_MATH
- comment "boost-math needs a toolchain w/ C++14, gcc>=5.0"
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5
+@@ -16,6 +17,12 @@ config BR2_PACKAGE_BOOST
  
-+# check-symbol ignore
- config BR2_PACKAGE_BOOST_MPI
- 	bool "boost-mpi"
- 	help
- 	  Message Passing Interface library, for use in
- 	  distributed-memory parallel application programming.
+ if BR2_PACKAGE_BOOST
  
-+# check-symbol ignore
- config BR2_PACKAGE_BOOST_NOWIDE
- 	bool "boost-nowide"
- 	help
-@@ -294,6 +298,7 @@ config BR2_PACKAGE_BOOST_SERIALIZATION
- 	help
- 	  Serialization for persistence and marshalling.
- 
-+# check-symbol ignore
- config BR2_PACKAGE_BOOST_STACKTRACE
- 	bool "boost-stacktrace"
- 	depends on !BR2_STATIC_LIBS
-@@ -349,6 +354,7 @@ config BR2_PACKAGE_BOOST_TYPE_ERASURE
- comment "boost-type_erasure needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 
-+# check-symbol ignore
- config BR2_PACKAGE_BOOST_URL
- 	bool "boost-url"
- 	help
-diff --git a/package/boost/Config.in.host b/package/boost/Config.in.host
-index d377a8fbd8..bf69287383 100644
---- a/package/boost/Config.in.host
-+++ b/package/boost/Config.in.host
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_HOST_BOOST
- 	bool
- 
-+# keep host variant as minimal as possible, only add options when
-+# an actual host package needs it.
- if BR2_PACKAGE_HOST_BOOST
- 
- config BR2_PACKAGE_HOST_BOOST_REGEX
++# Headers-only libraries are always installed by Boost's buildsystem
++config BR2_PACKAGE_BOOST_HEADERS
++	bool "boost-headers"
++	help
++	  Headers-only libraries; those are always installed.
++
+ config BR2_PACKAGE_BOOST_ATOMIC
+ 	bool "boost-atomic"
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
 diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 95191476a8..2b952baaac 100644
+index 2b952baaac..e849f902f2 100644
 --- a/package/boost/boost.mk
 +++ b/package/boost/boost.mk
-@@ -12,36 +12,7 @@ BOOST_LICENSE = BSL-1.0
- BOOST_LICENSE_FILES = LICENSE_1_0.txt
- BOOST_CPE_ID_VENDOR = boost
- 
--BOOST_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
--
--BOOST_FLAGS = --with-toolset=gcc
--
--ifeq ($(BR2_PACKAGE_ICU),y)
--BOOST_FLAGS += --with-icu=$(STAGING_DIR)/usr
--BOOST_DEPENDENCIES += icu
--else
--BOOST_FLAGS += --without-icu
--endif
--
--ifeq ($(BR2_PACKAGE_BOOST_IOSTREAMS),y)
--BOOST_DEPENDENCIES += bzip2 zlib
--endif
--
--ifeq ($(BR2_PACKAGE_BOOST_PYTHON),y)
--BOOST_FLAGS += \
--	--with-python-root=$(HOST_DIR) \
--	--with-python=$(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR)
--BOOST_TARGET_CXXFLAGS += -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
--BOOST_DEPENDENCIES += python3
--endif
--
--HOST_BOOST_FLAGS = \
--	--without-icu \
--	--with-toolset=gcc
--
--# keep host variant as minimal as possible, only add options when
--# an actual host package needs it.
--HOST_BOOST_WITHOUT_FLAGS = \
-+BOOST_ALL_LIBS = \
- 	atomic \
- 	chrono \
- 	container \
-@@ -64,10 +35,10 @@ HOST_BOOST_WITHOUT_FLAGS = \
- 	program_options \
- 	python \
- 	random \
--	$(if $(BR2_PACKAGE_HOST_BOOST_REGEX),,regex) \
-+	regex \
- 	serialization \
- 	stacktrace \
--	$(if $(BR2_PACKAGE_HOST_BOOST_SYSTEM),,system) \
-+	system \
- 	test \
- 	thread \
- 	timer \
-@@ -75,6 +46,38 @@ HOST_BOOST_WITHOUT_FLAGS = \
- 	url \
- 	wave
- 
-+BOOST_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
-+
-+BOOST_FLAGS = --with-toolset=gcc
-+
-+ifeq ($(BR2_PACKAGE_ICU),y)
-+BOOST_FLAGS += --with-icu=$(STAGING_DIR)/usr
-+BOOST_DEPENDENCIES += icu
-+else
-+BOOST_FLAGS += --without-icu
-+endif
-+
-+ifeq ($(BR2_PACKAGE_BOOST_IOSTREAMS),y)
-+BOOST_DEPENDENCIES += bzip2 zlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_BOOST_PYTHON),y)
-+BOOST_FLAGS += \
-+	--with-python-root=$(HOST_DIR) \
-+	--with-python=$(HOST_DIR)/bin/python$(PYTHON3_VERSION_MAJOR)
-+BOOST_TARGET_CXXFLAGS += -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MAJOR)
-+BOOST_DEPENDENCIES += python3
-+endif
-+
-+HOST_BOOST_FLAGS = \
-+	--without-icu \
-+	--with-toolset=gcc
-+
-+HOST_BOOST_WITHOUT_FLAGS = \
-+	$(foreach lib, $(BOOST_ALL_LIBS), \
-+		$(if $(BR2_PACKAGE_HOST_BOOST_$(call UPPERCASE,$(lib))),,$(lib)) \
-+	)
-+
- HOST_BOOST_WITHOUT_FLAGS_COMMASEPARATED = $(subst $(space),$(comma),$(strip $(HOST_BOOST_WITHOUT_FLAGS)))
- HOST_BOOST_FLAGS += $(if $(HOST_BOOST_WITHOUT_FLAGS_COMMASEPARATED), --without-libraries=$(HOST_BOOST_WITHOUT_FLAGS_COMMASEPARATED))
- 
-@@ -126,38 +129,10 @@ endif
- BOOST_DEPENDENCIES += $(if $(BR2_ENABLE_LOCALE),,libiconv)
- endif
- 
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTAINER),,container)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTRACT),,contract)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COROUTINE),,coroutine)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FIBER),,fiber)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_GRAPH),,graph)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_GRAPH_PARALLEL),,graph_parallel)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_IOSTREAMS),,iostreams)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_JSON),,json)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_LOCALE),,locale)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_LOG),,log)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MATH),,math)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MPI),,mpi)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_NOWIDE),,nowide)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PROGRAM_OPTIONS),,program_options)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PYTHON),,python)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_RANDOM),,random)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_REGEX),,regex)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_SERIALIZATION),,serialization)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_STACKTRACE),,stacktrace)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_SYSTEM),,system)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TEST),,test)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_THREAD),,thread)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TIMER),,timer)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TYPE_ERASURE),,type_erasure)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_URL),,url)
--BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_WAVE),,wave)
-+BOOST_WITHOUT_FLAGS = \
-+	$(foreach lib, $(BOOST_ALL_LIBS), \
-+		$(if $(BR2_PACKAGE_BOOST_$(call UPPERCASE,$(lib))),,$(lib)) \
-+	)
- 
- BOOST_WITHOUT_FLAGS_COMMASEPARATED += $(subst $(space),$(comma),$(strip $(BOOST_WITHOUT_FLAGS)))
- BOOST_FLAGS += $(if $(BOOST_WITHOUT_FLAGS_COMMASEPARATED), --without-libraries=$(BOOST_WITHOUT_FLAGS_COMMASEPARATED))
+@@ -25,6 +25,7 @@ BOOST_ALL_LIBS = \
+ 	filesystem \
+ 	graph \
+ 	graph_parallel \
++	headers \
+ 	iostreams \
+ 	json \
+ 	locale \
 -- 
 2.47.0
 
