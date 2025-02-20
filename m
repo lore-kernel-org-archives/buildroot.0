@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EAABC021B2
-	for <buildroot@archiver.kernel.org>; Thu, 20 Feb 2025 21:48:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DA2BC021B2
+	for <buildroot@archiver.kernel.org>; Thu, 20 Feb 2025 21:49:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 327D3414C6;
-	Thu, 20 Feb 2025 21:48:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10CE640C6C;
+	Thu, 20 Feb 2025 21:49:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pKLvRe3qQ4w3; Thu, 20 Feb 2025 21:48:46 +0000 (UTC)
+ id AauCxXHzTAwT; Thu, 20 Feb 2025 21:49:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F5A14145C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D23DF40C7C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F5A14145C;
-	Thu, 20 Feb 2025 21:48:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id EFC66194
- for <buildroot@buildroot.org>; Thu, 20 Feb 2025 21:48:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D23DF40C7C;
+	Thu, 20 Feb 2025 21:49:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9F8F7194
+ for <buildroot@buildroot.org>; Thu, 20 Feb 2025 21:49:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BFBD340AD6
- for <buildroot@buildroot.org>; Thu, 20 Feb 2025 21:48:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8FB4760A71
+ for <buildroot@buildroot.org>; Thu, 20 Feb 2025 21:49:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id byHsGHRwFGjk for <buildroot@buildroot.org>;
- Thu, 20 Feb 2025 21:48:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rcKcOZDQxHQr for <buildroot@buildroot.org>;
+ Thu, 20 Feb 2025 21:49:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 88B6E40A60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA529608B3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 88B6E40A60
- for <buildroot@buildroot.org>; Thu, 20 Feb 2025 21:48:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA529608B3
+ for <buildroot@buildroot.org>; Thu, 20 Feb 2025 21:49:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 74E4F8798C; Thu, 20 Feb 2025 21:48:24 +0000 (UTC)
+ id C4DE88799B; Thu, 20 Feb 2025 21:49:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 20 Feb 2025 21:39:25 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 3a863002bdde72bd6bfe5d3703708fa0862acd18
-X-Git-Newrev: ce0e7c7d5fe7fb1d08eaaafb290349f5903cc23a
+Date: Thu, 20 Feb 2025 20:58:13 +0100
+X-Git-Refname: refs/heads/2024.11.x
+X-Git-Oldrev: 4013ba6a4215f6652a41b56878c0590592d48f2c
+X-Git-Newrev: d843e65028680881aaee0c87baf65956158842e9
 X-Patchwork-Hint: ignore
-Message-Id: <20250220214824.74E4F8798C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/openssh: install
- sshd-session
+Message-Id: <20250220214929.C4DE88799B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] {linux,
+ linux-headers}: bump 6.{6, 12}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,42 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce0e7c7d5fe7fb1d08eaaafb290349f5903cc23a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d843e65028680881aaee0c87baf65956158842e9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-In OpenSSH 9.8 the server is split into two processes: sshd and
-sshd-session which results in the following error, when trying
-to start sshd:
-
-Starting sshd: /usr/libexec/sshd-session does not exist or is not executable
-
-This patch installs the sshd-session binary.
-
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/issues/11
-Fixes: 4ac2cc5beec0eac4991fb28f286707a5659fa67e
-
-Signed-off-by: Niklas Yann Wettengel <niyawe@niyawe.de>
-Reviewed-by: Nevo Hed <nhed+buildroot@starry.com>
-Tested-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 11d2ad31046263d80da5ff6b36c3d25b1bbc0d82)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 4d6e3ea7a5693e11727ed8bd39446b4f35275f8e)
+[Peter: drop 6.12.x bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openssh/openssh.mk | 1 +
- 1 file changed, 1 insertion(+)
+ linux/linux.hash                     | 2 +-
+ package/linux-headers/Config.in.host | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index b2ee1e715e..ab91c829a1 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -112,6 +112,7 @@ endif
- ifeq ($(BR2_PACKAGE_OPENSSH_SERVER),y)
- define OPENSSH_INSTALL_SERVER_PROGRAMS
- 	$(INSTALL) -D -m 0755 $(@D)/sshd $(TARGET_DIR)/usr/sbin/sshd
-+	$(INSTALL) -D -m 0755 $(@D)/sshd-session $(TARGET_DIR)/usr/libexec/sshd-session
- 	$(INSTALL) -D -m 0755 $(@D)/sftp-server $(TARGET_DIR)/usr/libexec/sftp-server
- endef
- OPENSSH_POST_INSTALL_TARGET_HOOKS += OPENSSH_INSTALL_SERVER_PROGRAMS
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 9eb7f8702d..01c2c30dfb 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,6 +1,6 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+ sha256  62148e7e17f54c4a5ab5e75ad4882682c54bee818948be61a5963234fc0849fc  linux-6.11.11.tar.xz
+-sha256  081089dfcf125aef67aa940ebb995ff789b646129f5d4b2365e1d5685b29a84e  linux-6.6.77.tar.xz
++sha256  5aa39a9bd555133ad741058f9908a277e6b36bb928481e747d885b50aaaa93ed  linux-6.6.78.tar.xz
+ sha256  874d67d3181570e69ac6b33853f0448f05fc90d4cf3e4baaadc4a9cede7c50f3  linux-6.1.128.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  efe9f7eb5ea4d26cec6290689343e1804eb3b4a88ff5a60497a696fc08157c42  linux-5.15.178.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 52d9be1380..0116158e1a 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -433,7 +433,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.10.234"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.178"	if BR2_KERNEL_HEADERS_5_15
+ 	default "6.1.128"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.77"	if BR2_KERNEL_HEADERS_6_6
++	default "6.6.78"	if BR2_KERNEL_HEADERS_6_6
+ 	default "6.11.11"	if BR2_KERNEL_HEADERS_6_11
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
