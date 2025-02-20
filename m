@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D1E1C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:21:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA015C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:21:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA09883F12;
-	Fri, 28 Feb 2025 17:21:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1825570DD7;
+	Fri, 28 Feb 2025 17:21:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JDysHzFxLnJc; Fri, 28 Feb 2025 17:21:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WbTrJMvHAV9G; Fri, 28 Feb 2025 17:21:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0F9785EC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2147770DE3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0F9785EC5;
-	Fri, 28 Feb 2025 17:21:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2147770DE3;
+	Fri, 28 Feb 2025 17:21:41 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F4FE1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 045E7711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F02944710A
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 111234A43F
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DysiIWe_ShcO for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:32:05 +0000 (UTC)
+ id 5Pnnppq5FxQV for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:32:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7C1647141
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E523647169
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D7C1647141
+ by smtp4.osuosl.org (Postfix) with ESMTP id E523647169
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D05BA87A74; Fri, 28 Feb 2025 16:30:44 +0000 (UTC)
+ id DD4AB86143; Fri, 28 Feb 2025 16:30:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 20 Feb 2025 20:15:15 +0100
+Date: Thu, 20 Feb 2025 20:15:44 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ea30149c13cecbca986526a21bda73ec98067247
-X-Git-Newrev: 9f7fb952866fe855bcc7a614cdc5f5f6d18f51d7
+X-Git-Oldrev: 9f7fb952866fe855bcc7a614cdc5f5f6d18f51d7
+X-Git-Newrev: 882d0129caf3db622d4a13dd65003662d4addefa
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163044.D05BA87A74@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/docker/Dockerfile: fix
- typo in tar configure options
+Message-Id: <20250228163044.DD4AB86143@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ support/docker/apt-sources.list: move to 20250218 snapshot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,34 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f7fb952866fe855bcc7a614cdc5f5f6d18f51d7
+commit: https://git.buildroot.net/buildroot/commit/?id=882d0129caf3db622d4a13dd65003662d4addefa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit 12e9fc1da5d4 ("support/docker: add tar 1.35") added logic to download
-and build tar for the host, but mistyped a configure option:
-
-configure: WARNING: unrecognized options: --disable-year2028
-
-Fix that.
+With the TARGETPLATFORM fix we need to rebuild the container so move to the
+latest snapshot to get updated (security) fixes.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/docker/Dockerfile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/docker/apt-sources.list | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index 12d3fe024c..e7677ac6a9 100644
---- a/support/docker/Dockerfile
-+++ b/support/docker/Dockerfile
-@@ -80,7 +80,7 @@ RUN curl -sfL https://ftpmirror.gnu.org/tar/tar-${TAR_VERSION}.tar.xz | \
-     tar -Jx -C /tmp && \
-     cd /tmp/tar-${TAR_VERSION} && \
-     FORCE_UNSAFE_CONFIGURE=1 ./configure \
--        --disable-year2028 && \
-+        --disable-year2038 && \
-     make && \
-     make install && \
-     rm -rf /tmp/tar-${TAR_VERSION}
+diff --git a/support/docker/apt-sources.list b/support/docker/apt-sources.list
+index ddbe15eed8..d6fbf85270 100644
+--- a/support/docker/apt-sources.list
++++ b/support/docker/apt-sources.list
+@@ -1,4 +1,4 @@
+-# Latest just before 20250205151400Z:
+-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20250205T145632Z/ bookworm main
+-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20250205T145632Z/ bookworm-security main
+-deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20250205T145632Z/ bookworm-updates main
++# Latest just before 20250218211000Z:
++deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20250218T144938Z/ bookworm main
++deb [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20250218T144938Z/ bookworm-security main
++deb [check-valid-until=no] http://snapshot.debian.org/archive/debian/20250218T144938Z/ bookworm-updates main
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
