@@ -1,52 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36704C021B3
-	for <buildroot@archiver.kernel.org>; Fri, 21 Feb 2025 14:54:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB549C021B3
+	for <buildroot@archiver.kernel.org>; Fri, 21 Feb 2025 16:44:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C450B60B71;
-	Fri, 21 Feb 2025 14:54:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bUCNDSyHJDFZ; Fri, 21 Feb 2025 14:54:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 497F460B6C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 497F460B6C;
-	Fri, 21 Feb 2025 14:54:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id EDA36D92
- for <buildroot@buildroot.org>; Fri, 21 Feb 2025 14:54:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DDE2B81919
- for <buildroot@buildroot.org>; Fri, 21 Feb 2025 14:54:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 87D0080DA0;
+	Fri, 21 Feb 2025 16:44:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TsA8_H0fqURW for <buildroot@buildroot.org>;
- Fri, 21 Feb 2025 14:54:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7590818C4
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B7590818C4
- for <buildroot@buildroot.org>; Fri, 21 Feb 2025 14:54:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A3FC7878DF; Fri, 21 Feb 2025 14:54:12 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id y1G8RmAKaYfY; Fri, 21 Feb 2025 16:44:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 973FD80C7A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 973FD80C7A;
+	Fri, 21 Feb 2025 16:44:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B1D46D92
+ for <buildroot@buildroot.org>; Fri, 21 Feb 2025 16:44:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 82FF960706
+ for <buildroot@buildroot.org>; Fri, 21 Feb 2025 16:44:28 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DWvakGH4SH9I for <buildroot@buildroot.org>;
+ Fri, 21 Feb 2025 16:44:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 539C4606F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 539C4606F8
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 539C4606F8
+ for <buildroot@buildroot.org>; Fri, 21 Feb 2025 16:44:26 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6cc6a.dip0.t-ipconnect.de [79.214.204.106])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 821C9A4C4F15;
+ Fri, 21 Feb 2025 17:44:23 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:54578)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98)
+ (envelope-from <bernd@kuhls.net>) id 1tlW8U-000000003JJ-3skB;
+ Fri, 21 Feb 2025 16:44:22 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 21 Feb 2025 15:51:39 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 396219f0539817b03437fb7c9394dbfd2d5c2ef9
-X-Git-Newrev: ca47c9511835c62f27c097faeb5be6a4c20b8895
-X-Patchwork-Hint: ignore
-Message-Id: <20250221145412.A3FC7878DF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website: Update for 2024.02.11
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
+ Daniel Lang <dalang@gmx.at>, Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Julien Olivain <ju.o@free.fr>, Romain Naour <romain.naour@gmail.com>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
+Date: Fri, 21 Feb 2025 17:44:18 +0100
+Message-Id: <20250221164422.47060-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
+MIME-Version: 1.0
+X-Spamd-Bar: +++
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=kuhls.net; 
+ s=kas202412041019; t=1740156263;
+ bh=fUzo7Rwa3McL58jeJVDfFTn2GrhvhaVq+bN6vyWpkK8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=JFmc/HL3acl3FFJhY2X/WjRnaEOFIGvfaZTCmZKoPg1n+UJ3qTHySyjrFPDR6e99z
+ AHd+gjQvp58pVATMARJac0Ayufpu3iJNYTHjkucTTp02zkwrMxisXl0aydNIhHzAos
+ P4pX38anikv8CeSrNGb73sDfvLPqVwU20RDp58tfKhy0FPTbgCkLb9EN9NWvH9mnFm
+ 3C8c4xuJZuTHTWOgRjvocklgZQMBn6RphiTkLEiGIQpMT4RcLgmR7ZZ7lDkJHm54rf
+ UyRxfnpMlOkZ6B5H8u63vZC9HxCJBylp7Q/4J3CS1b+KRCN9N8D8QOh2/6GBdOYkQ9
+ 5BmQDg1zupgSA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202412041019 header.b=JFmc/HL3
+Subject: [Buildroot] [PATCH v2 1/5] package/libdrm: add host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,102 +84,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca47c9511835c62f27c097faeb5be6a4c20b8895
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+host-libdrm is needed by host-mesa3d (introduced by this patch series),
+which is needed by (target) mesa3d, when enabling the Gallium Iris
+driver since version 24.1.0.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+v2: Clarified why host variant is needed (Julien)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 3854f052a9..7ee897761f 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+ package/libdrm/libdrm.mk | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 9d463ca01e..a8a912859e 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -116,4 +116,25 @@ else
+ LIBDRM_CONF_OPTS += -Dtests=false
+ endif
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2024.02.10</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2024.02.11</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2024.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.02.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2024.02.10.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.02.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2024.02.10.tar.gz">buildroot-2024.02.10.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2024.02.10.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2024.02.11.tar.gz">buildroot-2024.02.11.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2024.02.11.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2024.02.10.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.02.11.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2024.02.10.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.02.11.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2024.02.10.tar.xz">buildroot-2024.02.10.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2024.02.10.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2024.02.11.tar.xz">buildroot-2024.02.11.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2024.02.11.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 190998f931..8441ba1fa4 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2024.02.11 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>21 Febrary 2025</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2024.02.11 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2024.02.10 release. See the
-+	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2024.02.11/CHANGES">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/87zfifo0oj.fsf@dell.be.48ers.dk/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2024.02.11.tar.xz">2024.02.11 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++HOST_LIBDRM_CONF_OPTS = \
++	-Damdgpu=disabled \
++	-Dcairo-tests=disabled \
++	-Detnaviv=disabled \
++	-Dexynos=disabled \
++	-Dfreedreno=disabled \
++	-Dfreedreno-kgsl=false \
++	-Dinstall-test-programs=false \
++	-Dintel=disabled \
++	-Dman-pages=disabled \
++	-Dnouveau=disabled \
++	-Domap=disabled \
++	-Dradeon=disabled \
++	-Dtegra=disabled \
++	-Dvc4=disabled \
++	-Dvmwgfx=disabled \
++	-Dtests=false \
++	-Dudev=false \
++	-Dvalgrind=disabled
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+ $(eval $(meson-package))
++$(eval $(host-meson-package))
+-- 
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
