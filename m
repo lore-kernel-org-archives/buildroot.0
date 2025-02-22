@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A700AC021B5
-	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 14:47:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0093FC021B2
+	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 17:08:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 73876811A2;
-	Sat, 22 Feb 2025 14:47:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B22BC8129E;
+	Sat, 22 Feb 2025 17:08:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wSVhdhK3yNws; Sat, 22 Feb 2025 14:47:35 +0000 (UTC)
+ id uvRc4r7fermY; Sat, 22 Feb 2025 17:08:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B5D8811B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF765812CD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B5D8811B5;
-	Sat, 22 Feb 2025 14:47:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C2E88F11
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 14:47:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BF765812CD;
+	Sat, 22 Feb 2025 17:08:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A98E86B
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:08:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AD026400D3
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 14:47:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 87249606D3
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:08:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ohhsU0RR5_Ik for <buildroot@buildroot.org>;
- Sat, 22 Feb 2025 14:47:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sgiyKnvHcilP for <buildroot@buildroot.org>;
+ Sat, 22 Feb 2025 17:08:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52F3A400B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BED71605BE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 52F3A400B5
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 14:47:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BED71605BE
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:08:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3C352878F6; Sat, 22 Feb 2025 14:47:30 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id AA5B58770B; Sat, 22 Feb 2025 17:08:15 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 22 Feb 2025 15:44:18 +0100
+Date: Sat, 22 Feb 2025 18:06:42 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d0fe6c68dfa0a7eda9b7d201b592e4f8fe5a6abe
-X-Git-Newrev: bfb87bafdb817291a66cfb6050b78e31b02ceda4
+X-Git-Oldrev: 51b848b534b194dc716cf4a75133b64f0fa216d9
+X-Git-Newrev: d0711b892d09723cda3a3a017c8a1d62c51b81af
 X-Patchwork-Hint: ignore
-Message-Id: <20250222144730.3C352878F6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/watchdogd: fix use of
- uninitialized exit status
+Message-Id: <20250222170815.AA5B58770B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rnnoise: fix builds with
+ BR2_OPTIMIZE_FAST
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,112 +65,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfb87bafdb817291a66cfb6050b78e31b02ceda4
+commit: https://git.buildroot.net/buildroot/commit/?id=d0711b892d09723cda3a3a017c8a1d62c51b81af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The bug could lead to incorrect "critical error" reports if that
-uninitialized memory happened to contain a value that interpreted as
-an int was above the critical threshold. It affected primarily scripts
-running approximately one second or longer, because access happens by
-timer.
+Fixes https://autobuild.buildroot.org/results/3e954cf8e4365d81e58949df50db7e82bf0d0ebf/
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Rnnoise refuses to build with -Ofast unless FLOAT_APPROX is defined:
+
+src/arch.h:171:2: error: #error Cannot build libopus with -ffast-math unless
+FLOAT_APPROX is defined.  This could result in crashes on extreme (e.g.
+NaN) input
+
+So do that.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...0001-Fix-use-of-uninitialized-exit-status.patch | 85 ++++++++++++++++++++++
- 1 file changed, 85 insertions(+)
+ package/rnnoise/rnnoise.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/watchdogd/0001-Fix-use-of-uninitialized-exit-status.patch b/package/watchdogd/0001-Fix-use-of-uninitialized-exit-status.patch
-new file mode 100644
-index 0000000000..69e7b36ef4
---- /dev/null
-+++ b/package/watchdogd/0001-Fix-use-of-uninitialized-exit-status.patch
-@@ -0,0 +1,85 @@
-+From f6d56c374723923e276ccfd442fdd0cabf23d095 Mon Sep 17 00:00:00 2001
-+From: Fiona Klute <fiona.klute@gmx.de>
-+Date: Fri, 14 Feb 2025 19:26:24 +0100
-+Subject: [PATCH] Fix use of uninitialized exit status
+diff --git a/package/rnnoise/rnnoise.mk b/package/rnnoise/rnnoise.mk
+index edbe2b5606..f696d4ed9f 100644
+--- a/package/rnnoise/rnnoise.mk
++++ b/package/rnnoise/rnnoise.mk
+@@ -12,4 +12,9 @@ RNNOISE_INSTALL_STAGING = YES
+ 
+ RNNOISE_CONF_OPTS = --disable-examples
+ 
++# rnnoise refuses to build with -Ofast unless FLOAT_APPROX is defined
++ifeq ($(BR2_OPTIMIZE_FAST),y)
++RNNOISE_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -DFLOAT_APPROX"
++endif
 +
-+Depending on the timing between the SIGCHLD callback run and the first
-+generic_cb() timer callback run, script_exit_status() sometimes
-+returned uninitialized memory as the exit status of a script. This
-+could lead to incorrect "critical error" reports if that uninitialized
-+memory happened to contain a value that interpreted as an int was
-+above the critical threshold.
-+
-+Additionally, script_exit_status() unconditionally removed the process
-+information from the queue, meaning that if a process had not
-+completed by the time its status was first probed, its status could
-+never be updated or successfully probed again, leading to timeout. Fix
-+this by removing the process only if the status indicates it has
-+terminated (successful or not).
-+
-+The problems affected primarily scripts running approximately one
-+second or longer, because very short running scripts will very likely
-+have their exit status collected by the SIGCHLD callback before the
-+first timer callback run.
-+
-+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-+Upstream: https://github.com/troglobit/watchdogd/pull/52
-+---
-+ src/script.c | 13 ++++++++++---
-+ 1 file changed, 10 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/script.c b/src/script.c
-+index 1220fb9..f6e0763 100644
-+--- a/src/script.c
-++++ b/src/script.c
-+@@ -16,6 +16,7 @@
-+  */
-+ 
-+ #include <errno.h>
-++#include <stdbool.h>		/* bool type (before C23) */
-+ #include <stdlib.h>		/* setenv() */
-+ #include <sys/wait.h>		/* waitpid() */
-+ #include <unistd.h>		/* execv(), _exit() */
-+@@ -28,6 +29,7 @@
-+ struct exec_info {
-+ 	pid_t   pid;
-+ 	int     exit_status;
-++	bool    exited;
-+ 	void  (*cb)(void *arg);
-+ 	void   *arg;
-+ 	LIST_ENTRY(exec_info) entry;
-+@@ -64,6 +66,8 @@ static void add(pid_t pid, void (*cb)(void *), void *arg)
-+ 	}
-+ 
-+ 	info->pid = pid;
-++	info->exit_status = 0;
-++	info->exited = false;
-+ 	info->cb  = cb;
-+ 	info->arg = arg;
-+ 	LIST_INSERT_HEAD(&exec_info_head, info, entry);
-+@@ -78,6 +82,7 @@ static int exec(pid_t pid, int status)
-+ 			continue;
-+ 
-+ 		info->exit_status = status;
-++		info->exited = true;
-+ 		if (info->cb)
-+ 			info->cb(info->arg);
-+ 
-+@@ -96,9 +101,11 @@ int script_exit_status(pid_t pid)
-+ 		if (info->pid != pid)
-+ 			continue;
-+ 
-+-		status = info->exit_status;
-+-		LIST_REMOVE(info, entry);
-+-		free(info);
-++		if (info->exited) {
-++			status = info->exit_status;
-++			LIST_REMOVE(info, entry);
-++			free(info);
-++		}
-+ 		break;
-+ 	}
-+ 
-+-- 
-+2.47.2
-+
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
