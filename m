@@ -4,75 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32AA2C021B2
-	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 14:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28770C021B5
+	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 14:45:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D9B5881387;
-	Sat, 22 Feb 2025 14:32:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB08E811C4;
+	Sat, 22 Feb 2025 14:45:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CWXdtSpeaIKD; Sat, 22 Feb 2025 14:32:39 +0000 (UTC)
+ id ruzyniXW8fA5; Sat, 22 Feb 2025 14:45:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1E178138E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DCBCC811B2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C1E178138E;
-	Sat, 22 Feb 2025 14:32:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id EA987F11
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 14:32:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DCBCC811B2;
+	Sat, 22 Feb 2025 14:45:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 78293D92
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 14:45:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CE906405E6
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 14:32:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6F83E4024E
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 14:45:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id knLFSdjmofEA for <buildroot@buildroot.org>;
- Sat, 22 Feb 2025 14:32:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tOOGVejANvCo for <buildroot@buildroot.org>;
+ Sat, 22 Feb 2025 14:45:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 88433405A4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88433405A4
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 88433405A4
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 14:32:37 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 181F519F5B2;
- Sat, 22 Feb 2025 15:32:31 +0100 (CET)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 22 Feb 2025 15:32:30 +0100
-Date: Sat, 22 Feb 2025 15:32:30 +0100
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: buildroot@buildroot.org, yann.morin@orange.com,
- Christian Stewart <christian@aperture.us>
-Message-ID: <Z7nf_jNmDVM-N6WI@landeda>
-References: <20250205135825.2310972-1-fiona.klute@gmx.de>
- <20250205135825.2310972-2-fiona.klute@gmx.de>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5BF00400B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5BF00400B5
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5BF00400B5
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 14:45:51 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 006D4442DD;
+ Sat, 22 Feb 2025 14:45:48 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1tlqlI-00674d-0Q;
+ Sat, 22 Feb 2025 15:45:48 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fiona Klute via buildroot <buildroot@buildroot.org>
+Cc: Fiona Klute <fiona.klute@gmx.de>,  Joachim Wiberg <troglobit@gmail.com>
+References: <20250217134414.276793-1-fiona.klute@gmx.de>
+Date: Sat, 22 Feb 2025 15:45:48 +0100
+In-Reply-To: <20250217134414.276793-1-fiona.klute@gmx.de> (Fiona Klute via
+ buildroot's message of "Mon, 17 Feb 2025 14:44:13 +0100")
+Message-ID: <87ldtynilf.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20250205135825.2310972-2-fiona.klute@gmx.de>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1740234755;
- bh=PCu+ANLseT/S41lYepBGRI+2DWiG5wyw3H58O4VGwYY=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=p8cXzIfOZWYem5y6eKU64CPnJOg0wSWOjWthfeeg62ObQp4hLzuiikoNSil8vl1y2
- AVQ/aTgGjqr6eMKbyFH/IeNUEPuSL03APRvatC4LS54PEfEXE/5My4SRftRerO3usa
- +bHKoS8KTiIynFXkBm95qSqhPqvRvkFjKIWp+81ReaOR5arOROcmqcehmO+BLbWGsD
- JM3TU39NJ0o9O5UBFvgYwlQjKxp5m2VUuvGp9sntaProvNqrICLC2ic/Qcb71UjVbr
- gYsYSGF2QfzNH0Luz/KV1TZSHHMmu3CXWVlZ4BoymNn/37qo23ahlFeSEoFZSsRNWY
- lE3RMsZAjBF9A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=p8cXzIfO
-Subject: Re: [Buildroot] [PATCH v3 2/3] package/pkg-golang: use ld.bfd
- instead of ld.gold on aarch64
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdejfedvtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufhffjgfkfgggtgesthdttddttdertdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeetgfelveffveehtdevgeefjeeiudduledtffehgefgleekteektedutdfhleeiueenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepfhhiohhnrgdrkhhluhhtvgesghhmgidruggvpdhrtghpthhtohepthhrohhglhhosghithesghhmrghilhdrtghomh
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/watchdogd: fix use of
+ uninitialized exit status
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,80 +78,24 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fiona, All,
+>>>>> "Fiona" == Fiona Klute via buildroot <buildroot@buildroot.org> writes:
 
-On 2025-02-05 14:58 +0100, Fiona Klute via buildroot spake thusly:
-> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-> 
-> Go forces use of the Gold linker on aarch64 due to a bug in BFD that
-> is fixed in Binutils >= 2.41 (that includes all versions provided by
-> Buildroot). Forcing Gold will break with toolchains that don't provide
-> it (like the Buildroot toolchains), so override the flag and use BFD.
-> 
-> This override should be removed if Go stops forcing Gold, and may have
-> to be adapted if the set of available linkers changes (e.g. with a
-> future Binutils update).
+ > From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+ > The bug could lead to incorrect "critical error" reports if that
+ > uninitialized memory happened to contain a value that interpreted as
+ > an int was above the critical threshold. It affected primarily scripts
+ > running approximately one second or longer, because access happens by
+ > timer.
 
-This patch would fix issues also related to containerd, that we also
-see in the autobuilders, e.g.:
+ > Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+ > ---
+ > Changed v1 -> v2: Update patch to the version merged upstream, with a
+ > separate field to track if the process has exited.
 
-    http://autobuild.buildroot.org/results/a59/a59bc999e9620ff6b9d97138a2de898aadc07529/build-end.log
-
-    [...]/host/bin/aarch64-buildroot-linux-gnu-gcc [...] -fuse-ld=gold [...]
-    collect2: fatal error: cannot find 'ld'
-    compilation terminated.
-
-Regards,
-Yann E. MORIN.
-
-> See: https://github.com/golang/go/issues/22040
-> 
-> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-> ---
-> Changes v2 -> v3:
-> * Note in commit message that changes to the override may be required
->   with Go or Binutils updates
-> 
->  package/pkg-golang.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-> index a3421af288..bdf8de4d66 100644
-> --- a/package/pkg-golang.mk
-> +++ b/package/pkg-golang.mk
-> @@ -118,6 +118,16 @@ $(2)_EXTLDFLAGS += -static
->  $(2)_TAGS += osusergo netgo
->  endif
->  
-> +ifeq ($(BR2_aarch64),y)
-> +# Go forces use of the Gold linker on aarch64 due to a bug in BFD that
-> +# is fixed in Binutils >= 2.41 (that includes all versions provided by
-> +# Buildroot). Forcing Gold will break with toolchains that don't
-> +# provide it (like the Buildroot toolchains), so override the flag and
-> +# use BFD.
-> +# See: https://github.com/golang/go/issues/22040
-> +$(2)_EXTLDFLAGS += -fuse-ld=bfd
-> +endif
-> +
->  ifneq ($$($(2)_EXTLDFLAGS),)
->  $(2)_LDFLAGS += -extldflags '$$($(2)_EXTLDFLAGS)'
->  endif
-> -- 
-> 2.47.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
+Committed, thanks.
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
