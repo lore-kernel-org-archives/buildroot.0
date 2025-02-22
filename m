@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F24DC021B2
-	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 12:03:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3DA7C021B2
+	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 12:04:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E35B815AD;
-	Sat, 22 Feb 2025 12:03:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6BE3D605E4;
+	Sat, 22 Feb 2025 12:04:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FaGXrenh7I-H; Sat, 22 Feb 2025 12:03:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YqZlESIFP68P; Sat, 22 Feb 2025 12:04:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 026518148A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7984460907
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 026518148A;
-	Sat, 22 Feb 2025 12:03:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 521B2F11
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 12:03:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7984460907;
+	Sat, 22 Feb 2025 12:04:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 16688F11
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 12:04:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 35C708148A
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 12:03:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EDAA2408AD
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 12:04:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2mAA6Aj3z6ak for <buildroot@buildroot.org>;
- Sat, 22 Feb 2025 12:03:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46B5A8141B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 46B5A8141B
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 12:03:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3A8DE87753; Sat, 22 Feb 2025 12:03:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7BAmBLbkK0b9 for <buildroot@buildroot.org>;
+ Sat, 22 Feb 2025 12:04:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EFAC6408A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFAC6408A6
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EFAC6408A6
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 12:04:50 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 3B67D13F854;
+ Sat, 22 Feb 2025 13:04:46 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 22 Feb 2025 13:04:46 +0100
+MIME-Version: 1.0
+Date: Sat, 22 Feb 2025 13:04:46 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 22 Feb 2025 12:40:53 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f3cd0519efd5f79a7ee46d59fc559d46942c9d36
-X-Git-Newrev: b13373466bd7e8ac2d587cbd2489b1396fbb2f82
-X-Patchwork-Hint: ignore
-Message-Id: <20250222120316.3A8DE87753@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/valgrind: update to 3.24.0
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org
+In-Reply-To: <Z7X4Tnu6xLc118qs@waldemar-brodkorb.de>
+References: <Z7X4Tnu6xLc118qs@waldemar-brodkorb.de>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <73bc938aa972c98f5fadbbbb44fdefce@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1740225887;
+ bh=ICgNxHa6rO0rNjQYp5NjbzgfG9IoDt8zAjtqmRO1bJ0=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=OzU1+sxNrqWDcSU+qv55ZPN5RhMxp+PVZOWBpdBu8ggrgMXqskiF5C7hHnkBPEMI9
+ 3uWhKwmwp/efIfW8IO2X/qwixAe9gsuDfOf+lPYy8GZ1rS9HlldUu/6NSTr7/xos7M
+ xg6Rv3Kf4WrpolKZKi1ddz5FVE0QbWQ8kOHGKEKkYc8DEGvbwl9t5pTHwPdE8m42jG
+ ZN7JRbBq3uCCMtCFABJfwxdUkFORKZPu1FyRJC3m0/pUWGhHDXNJMHuSdvosa4557j
+ iLEE6aEcFZrSqCs6xm5GkHlQKB6Ph9tt+PV2TRUfxHjPHZ/WUnkou5sabnZq8rVNCQ
+ 6ABW3S079sB8g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=OzU1+sxN
+Subject: Re: [Buildroot] [PATCH] package/valgrind: update to 3.24.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,148 +81,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b13373466bd7e8ac2d587cbd2489b1396fbb2f82
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 19/02/2025 16:27, Waldemar Brodkorb wrote:
+> See here for a changelog:
+> https://valgrind.org/docs/manual/dist.news.html
+> 
+> Patches 0003/0004 are applied upstream and so got removed here.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-See here for a changelog:
-https://valgrind.org/docs/manual/dist.news.html
-
-Patches 0003/0004 are applied upstream and so got removed here.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...Fix-uninitialized-err-in-handle_extension.patch | 47 ----------------------
- ...f-guest_IP_AT_SYSCALL-in-handle_extension.patch | 33 ---------------
- package/valgrind/valgrind.hash                     |  4 +-
- package/valgrind/valgrind.mk                       |  2 +-
- 4 files changed, 3 insertions(+), 83 deletions(-)
-
-diff --git a/package/valgrind/0003-Fix-uninitialized-err-in-handle_extension.patch b/package/valgrind/0003-Fix-uninitialized-err-in-handle_extension.patch
-deleted file mode 100644
-index c6a6b3dce3..0000000000
---- a/package/valgrind/0003-Fix-uninitialized-err-in-handle_extension.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From 94c2e5c6be23c6323f24deacdad5f98fb9f0b1c2 Mon Sep 17 00:00:00 2001
--From: Andreas Arnez <arnez@linux.ibm.com>
--Date: Wed, 15 May 2024 14:32:42 +0200
--Subject: [PATCH] Fix uninitialized `err' in handle_extension()
--
--In handle_extension(), in the case of a second return from SCHEDSETJMP the
--variable `err' would be used uninitialized.  Fix this by avoiding any
--access to `err' in this case.
--
--Signed-off-by: Andreas Arnez <arnez@linux.ibm.com>
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--Upstream: https://sourceware.org/git/?p=valgrind.git;a=commit;h=94c2e5c6be23c6323f24deacdad5f98fb9f0b1c2
-----
-- coregrind/m_scheduler/scheduler.c | 10 ++++------
-- 1 file changed, 4 insertions(+), 6 deletions(-)
--
--diff --git a/coregrind/m_scheduler/scheduler.c b/coregrind/m_scheduler/scheduler.c
--index fc8cf7c9c..29751bb28 100644
----- a/coregrind/m_scheduler/scheduler.c
--+++ b/coregrind/m_scheduler/scheduler.c
--@@ -1233,7 +1233,10 @@ static void handle_extension(ThreadId tid)
--    SCHEDSETJMP(tid, jumped, err = VG_(client_extension)(tid));
--    vg_assert(VG_(is_running_thread)(tid));
-- 
---   if (err != ExtErr_OK) {
--+   if (jumped != (UWord)0) {
--+      block_signals();
--+      VG_(poll_signals)(tid);
--+   } else if (err != ExtErr_OK) {
--       ThreadState* tst = VG_(get_ThreadState)(tid);
--       Addr addr = tst->arch.vex.guest_IP_AT_SYSCALL;
--       switch (err) {
--@@ -1244,11 +1247,6 @@ static void handle_extension(ThreadId tid)
--          VG_(core_panic)("scheduler: bad return code from extension");
--       }
--    }
---
---   if (jumped != (UWord)0) {
---      block_signals();
---      VG_(poll_signals)(tid);
---   }
-- }
-- 
-- /* tid just requested a jump to the noredir version of its current
---- 
--2.39.2
--
-diff --git a/package/valgrind/0004-Avoid-use-of-guest_IP_AT_SYSCALL-in-handle_extension.patch b/package/valgrind/0004-Avoid-use-of-guest_IP_AT_SYSCALL-in-handle_extension.patch
-deleted file mode 100644
-index 006e24096e..0000000000
---- a/package/valgrind/0004-Avoid-use-of-guest_IP_AT_SYSCALL-in-handle_extension.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From 16249b21456d681b5d98400287b8dbd926050c75 Mon Sep 17 00:00:00 2001
--From: Andreas Arnez <arnez@linux.ibm.com>
--Date: Wed, 15 May 2024 14:32:42 +0200
--Subject: [PATCH] Avoid use of guest_IP_AT_SYSCALL in handle_extension()
--
--The guest state field guest_IP_AT_SYSCALL is referenced in
--handle_extension(), even though it may not be defined by all
--architectures.  Avoid its use altogether.
--
--Signed-off-by: Andreas Arnez <arnez@linux.ibm.com>
--Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--Upstream: https://sourceware.org/git/?p=valgrind.git;a=commit;h=16249b21456d681b5d98400287b8dbd926050c75
-----
-- coregrind/m_scheduler/scheduler.c | 3 +--
-- 1 file changed, 1 insertion(+), 2 deletions(-)
--
--diff --git a/coregrind/m_scheduler/scheduler.c b/coregrind/m_scheduler/scheduler.c
--index 29751bb28..cc8d070b7 100644
----- a/coregrind/m_scheduler/scheduler.c
--+++ b/coregrind/m_scheduler/scheduler.c
--@@ -1237,8 +1237,7 @@ static void handle_extension(ThreadId tid)
--       block_signals();
--       VG_(poll_signals)(tid);
--    } else if (err != ExtErr_OK) {
---      ThreadState* tst = VG_(get_ThreadState)(tid);
---      Addr addr = tst->arch.vex.guest_IP_AT_SYSCALL;
--+      Addr addr = VG_(get_IP)(tid);
--       switch (err) {
--       case ExtErr_Illop:
--          VG_(synth_sigill)(tid, addr);
---- 
--2.39.2
--
-diff --git a/package/valgrind/valgrind.hash b/package/valgrind/valgrind.hash
-index 9cb66b583a..203a0770e1 100644
---- a/package/valgrind/valgrind.hash
-+++ b/package/valgrind/valgrind.hash
-@@ -1,7 +1,7 @@
- # From https://valgrind.org/downloads/current.html
--sha1  ec410c75d3920d4f9249a5cfa2cac31e1bf6d586  valgrind-3.23.0.tar.bz2
-+sha1  6fc0470fedc0d85dae3e042297cabd13c6100749  valgrind-3.24.0.tar.bz2
- # locally computed
--sha256  c5c34a3380457b9b75606df890102e7df2c702b9420c2ebef9540f8b5d56264d  valgrind-3.23.0.tar.bz2
-+sha256  71aee202bdef1ae73898ccf7e9c315134fa7db6c246063afc503aef702ec03bd  valgrind-3.24.0.tar.bz2
- 
- # License files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index a5cb4b1c03..f0638f464b 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VALGRIND_VERSION = 3.23.0
-+VALGRIND_VERSION = 3.24.0
- VALGRIND_SITE = https://sourceware.org/pub/valgrind
- VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
- VALGRIND_LICENSE = GPL-2.0, GFDL-1.2
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
