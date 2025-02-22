@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EEE0C282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:22:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCFE3C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:22:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 859464FBF0;
-	Fri, 28 Feb 2025 17:22:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 589F184FDF;
+	Fri, 28 Feb 2025 17:22:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SPnJ6t5U2OOf; Fri, 28 Feb 2025 17:22:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2HKCrFmaIZI9; Fri, 28 Feb 2025 17:22:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A67C4FB3F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55185858FC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5A67C4FB3F;
-	Fri, 28 Feb 2025 17:22:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55185858FC;
+	Fri, 28 Feb 2025 17:22:10 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1643B711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:58 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0816868
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:47:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0387B475AA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2B975424C8
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uYRj62o8JW4S for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:32:07 +0000 (UTC)
+ id omV974WL2v62 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:32:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E3BF47394
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 185DA47661
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E3BF47394
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 185DA47661
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7406D80807; Fri, 28 Feb 2025 16:30:45 +0000 (UTC)
+ id 0EDA98017D; Fri, 28 Feb 2025 16:30:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 21 Feb 2025 15:53:51 +0100
+Date: Sat, 22 Feb 2025 15:44:18 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: eae53ae0f47546b666f3b7637c53bc8a43e9a1da
-X-Git-Newrev: 2f0c31bffdb59fb224387e35134a6d5e09a81d57
+X-Git-Oldrev: d0fe6c68dfa0a7eda9b7d201b592e4f8fe5a6abe
+X-Git-Newrev: bfb87bafdb817291a66cfb6050b78e31b02ceda4
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163045.7406D80807@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] docs/website: Update for
- 2024.11.2
+Message-Id: <20250228163046.0EDA98017D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/watchdogd: fix use of
+ uninitialized exit status
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,96 +65,112 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f0c31bffdb59fb224387e35134a6d5e09a81d57
+commit: https://git.buildroot.net/buildroot/commit/?id=bfb87bafdb817291a66cfb6050b78e31b02ceda4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+The bug could lead to incorrect "critical error" reports if that
+uninitialized memory happened to contain a value that interpreted as
+an int was above the critical threshold. It affected primarily scripts
+running approximately one second or longer, because access happens by
+timer.
+
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ ...0001-Fix-use-of-uninitialized-exit-status.patch | 85 ++++++++++++++++++++++
+ 1 file changed, 85 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 7ee897761f..2b9d8030ce 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
- 
--      <h3 style="text-align: center;">Latest stable release: <b>2024.11.1</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2024.11.2</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2024.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2024.11.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.11.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2024.11.1.tar.gz">buildroot-2024.11.1.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2024.11.1.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2024.11.2.tar.gz">buildroot-2024.11.2.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2024.11.2.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2024.11.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.11.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2024.11.1.tar.xz"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2024.11.2.tar.xz"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2024.11.1.tar.xz">buildroot-2024.11.1.tar.xz</a></h3>
--	  <p><a href="/downloads/buildroot-2024.11.1.tar.xz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2024.11.2.tar.xz">buildroot-2024.11.2.tar.xz</a></h3>
-+	  <p><a href="/downloads/buildroot-2024.11.2.tar.xz.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 8441ba1fa4..88ac274e59 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2024.11.2 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>21 February 2025</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2024.11.2 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2024.11.1 release. See the
-+	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2024.11.2/CHANGES">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/87v7t3nyls.fsf@dell.be.48ers.dk/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2024.11.2.tar.xz">2024.11.2 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
+diff --git a/package/watchdogd/0001-Fix-use-of-uninitialized-exit-status.patch b/package/watchdogd/0001-Fix-use-of-uninitialized-exit-status.patch
+new file mode 100644
+index 0000000000..69e7b36ef4
+--- /dev/null
++++ b/package/watchdogd/0001-Fix-use-of-uninitialized-exit-status.patch
+@@ -0,0 +1,85 @@
++From f6d56c374723923e276ccfd442fdd0cabf23d095 Mon Sep 17 00:00:00 2001
++From: Fiona Klute <fiona.klute@gmx.de>
++Date: Fri, 14 Feb 2025 19:26:24 +0100
++Subject: [PATCH] Fix use of uninitialized exit status
 +
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++Depending on the timing between the SIGCHLD callback run and the first
++generic_cb() timer callback run, script_exit_status() sometimes
++returned uninitialized memory as the exit status of a script. This
++could lead to incorrect "critical error" reports if that uninitialized
++memory happened to contain a value that interpreted as an int was
++above the critical threshold.
++
++Additionally, script_exit_status() unconditionally removed the process
++information from the queue, meaning that if a process had not
++completed by the time its status was first probed, its status could
++never be updated or successfully probed again, leading to timeout. Fix
++this by removing the process only if the status indicates it has
++terminated (successful or not).
++
++The problems affected primarily scripts running approximately one
++second or longer, because very short running scripts will very likely
++have their exit status collected by the SIGCHLD callback before the
++first timer callback run.
++
++Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
++Upstream: https://github.com/troglobit/watchdogd/pull/52
++---
++ src/script.c | 13 ++++++++++---
++ 1 file changed, 10 insertions(+), 3 deletions(-)
++
++diff --git a/src/script.c b/src/script.c
++index 1220fb9..f6e0763 100644
++--- a/src/script.c
+++++ b/src/script.c
++@@ -16,6 +16,7 @@
++  */
++ 
++ #include <errno.h>
+++#include <stdbool.h>		/* bool type (before C23) */
++ #include <stdlib.h>		/* setenv() */
++ #include <sys/wait.h>		/* waitpid() */
++ #include <unistd.h>		/* execv(), _exit() */
++@@ -28,6 +29,7 @@
++ struct exec_info {
++ 	pid_t   pid;
++ 	int     exit_status;
+++	bool    exited;
++ 	void  (*cb)(void *arg);
++ 	void   *arg;
++ 	LIST_ENTRY(exec_info) entry;
++@@ -64,6 +66,8 @@ static void add(pid_t pid, void (*cb)(void *), void *arg)
++ 	}
++ 
++ 	info->pid = pid;
+++	info->exit_status = 0;
+++	info->exited = false;
++ 	info->cb  = cb;
++ 	info->arg = arg;
++ 	LIST_INSERT_HEAD(&exec_info_head, info, entry);
++@@ -78,6 +82,7 @@ static int exec(pid_t pid, int status)
++ 			continue;
++ 
++ 		info->exit_status = status;
+++		info->exited = true;
++ 		if (info->cb)
++ 			info->cb(info->arg);
++ 
++@@ -96,9 +101,11 @@ int script_exit_status(pid_t pid)
++ 		if (info->pid != pid)
++ 			continue;
++ 
++-		status = info->exit_status;
++-		LIST_REMOVE(info, entry);
++-		free(info);
+++		if (info->exited) {
+++			status = info->exit_status;
+++			LIST_REMOVE(info, entry);
+++			free(info);
+++		}
++ 		break;
++ 	}
++ 
++-- 
++2.47.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
