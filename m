@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA12BC021B2
-	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 21:28:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D991C021B5
+	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 21:28:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7EDEC60A4D;
-	Sat, 22 Feb 2025 21:28:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D48DB4035C;
+	Sat, 22 Feb 2025 21:28:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id riOuxDFu6MWN; Sat, 22 Feb 2025 21:28:20 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WgEpysVn6UHk; Sat, 22 Feb 2025 21:28:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01FB960A35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 820A64035E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 01FB960A35;
-	Sat, 22 Feb 2025 21:28:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2F956D92
+	by smtp4.osuosl.org (Postfix) with ESMTP id 820A64035E;
+	Sat, 22 Feb 2025 21:28:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 443E91ED5
  for <buildroot@buildroot.org>; Sat, 22 Feb 2025 21:28:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 25D1340129
+ by smtp4.osuosl.org (Postfix) with ESMTP id 219354035C
  for <buildroot@buildroot.org>; Sat, 22 Feb 2025 21:28:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q3Q5MTQGrxC8 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D_bACNwIEbt5 for <buildroot@buildroot.org>;
  Sat, 22 Feb 2025 21:28:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1059A400BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1400F4035E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1059A400BA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1400F4035E
  for <buildroot@buildroot.org>; Sat, 22 Feb 2025 21:28:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0833B879B5; Sat, 22 Feb 2025 21:28:15 +0000 (UTC)
+ id F22B2879B4; Sat, 22 Feb 2025 21:28:14 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 22 Feb 2025 22:20:38 +0100
+Date: Sat, 22 Feb 2025 22:18:28 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dcb5d1d91849bf3e22639b38657bdae6e50767d1
-X-Git-Newrev: 838a269b8701f59695d200826a65909e09045a9b
+X-Git-Oldrev: 0748e761e2962e085ecc266bd79bb7991ff71462
+X-Git-Newrev: dcb5d1d91849bf3e22639b38657bdae6e50767d1
 X-Patchwork-Hint: ignore
-Message-Id: <20250222212815.0833B879B5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-golang: use ld.bfd instead of
- ld.gold on aarch64
+Message-Id: <20250222212814.F22B2879B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-golang: allow packages to
+ provide extldflags
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,52 +66,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=838a269b8701f59695d200826a65909e09045a9b
+commit: https://git.buildroot.net/buildroot/commit/?id=dcb5d1d91849bf3e22639b38657bdae6e50767d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Go forces use of the Gold linker on aarch64 due to a bug in BFD that
-is fixed in Binutils >= 2.41 (that includes all versions provided by
-Buildroot). Forcing Gold will break with toolchains that don't provide
-it (like the Buildroot toolchains), so override the flag and use BFD.
+Currently, only the -static extldflags may be set in the
+golang-package infra. However, in some cases, it might be necessary to
+pass other flags, either because they are needed on a specific
+architecture, or a specific C library; packages may also have a need
+to pass arbitrary linker flags when they use CGO linking.
 
-This override should be removed if Go stops forcing Gold, and may have
-to be adapted if the set of available linkers changes (e.g. with a
-future Binutils update).
+For example, on AArch64, go forcibly uses ld.gold, but it is not
+available in all toolchains, and ld.bfd works nowadays (following
+patch); another case is musl, where PIE is not supported with go.
 
-See: https://github.com/golang/go/issues/22040
+Introduce FOO_EXTLDFLAGS, which we use to set those flags, and that
+packages can set to pass such flags.
 
-Fixes:
-http://autobuild.buildroot.org/results/a59/a59bc999e9620ff6b9d97138a2de898aadc07529
+Migrate the current setting of -static to use that new variable.
 
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Tested-by: Nathaniel Roach <nroach44@nroach44.id.au>
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Reviewed-by: Yann E. MORIN <yann.morin@orange.com>
-[Romain: add autobuild reference]
+Reviewed-by: Christian Stewart <christian@aperture.us>
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/pkg-golang.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ docs/manual/adding-packages-golang.adoc | 6 ++++--
+ package/pkg-golang.mk                   | 6 +++++-
+ 2 files changed, 9 insertions(+), 3 deletions(-)
 
+diff --git a/docs/manual/adding-packages-golang.adoc b/docs/manual/adding-packages-golang.adoc
+index aa25426591..6de0916a83 100644
+--- a/docs/manual/adding-packages-golang.adoc
++++ b/docs/manual/adding-packages-golang.adoc
+@@ -84,8 +84,10 @@ therefore only use a few of them, or none.
+   infrastructure will automatically generate a minimal +go.mod+ file
+   in the package source tree if it doesn't exist.
+ 
+-* +FOO_LDFLAGS+ and +FOO_TAGS+ can be used to pass respectively the
+-  +LDFLAGS+ or the +TAGS+ to the +go+ build command.
++* +FOO_LDFLAGS+, +FOO_EXTLDFLAGS+, and +FOO_TAGS+ can be used to pass
++  respectively the go +LDFLAGS+ (via the `-ldflags` command line flag),
++  the external linker flags +EXTLDFLAGS+ (via the `-extldflags`
++  command line flag), or the +TAGS+ to the +go+ build command.
+ 
+ * +FOO_BUILD_TARGETS+ can be used to pass the list of targets that
+   should be built. If +FOO_BUILD_TARGETS+ is not specified, it
 diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index a3421af288..bdf8de4d66 100644
+index 33cf9bfb1a..a3421af288 100644
 --- a/package/pkg-golang.mk
 +++ b/package/pkg-golang.mk
-@@ -118,6 +118,16 @@ $(2)_EXTLDFLAGS += -static
+@@ -114,10 +114,14 @@ ifndef $(2)_BUILD_CMDS
+ ifeq ($(4),target)
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
+-$(2)_LDFLAGS += -extldflags '-static'
++$(2)_EXTLDFLAGS += -static
  $(2)_TAGS += osusergo netgo
  endif
  
-+ifeq ($(BR2_aarch64),y)
-+# Go forces use of the Gold linker on aarch64 due to a bug in BFD that
-+# is fixed in Binutils >= 2.41 (that includes all versions provided by
-+# Buildroot). Forcing Gold will break with toolchains that don't
-+# provide it (like the Buildroot toolchains), so override the flag and
-+# use BFD.
-+# See: https://github.com/golang/go/issues/22040
-+$(2)_EXTLDFLAGS += -fuse-ld=bfd
++ifneq ($$($(2)_EXTLDFLAGS),)
++$(2)_LDFLAGS += -extldflags '$$($(2)_EXTLDFLAGS)'
 +endif
 +
- ifneq ($$($(2)_EXTLDFLAGS),)
- $(2)_LDFLAGS += -extldflags '$$($(2)_EXTLDFLAGS)'
- endif
+ # Build package for target
+ define $(2)_BUILD_CMDS
+ 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
