@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED5FDC282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:22:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBAA1C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:22:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 30B7B70A02;
-	Fri, 28 Feb 2025 17:22:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50FB05087C;
+	Fri, 28 Feb 2025 17:22:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NIzw4vMKJZWQ; Fri, 28 Feb 2025 17:22:27 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bK2j5FlcqKkW; Fri, 28 Feb 2025 17:22:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C002670E19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B00942586
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C002670E19;
-	Fri, 28 Feb 2025 17:22:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B00942586;
+	Fri, 28 Feb 2025 17:22:30 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B2691DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:48:07 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 03FE668
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:48:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4991C47489
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5F9FB47963
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S7J3fQtj-XHM for <buildroot@buildroot.org>;
+ id HJp49lyNXZUs for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:32:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7991F47963
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A40B547995
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7991F47963
+ by smtp4.osuosl.org (Postfix) with ESMTP id A40B547995
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7552883577; Fri, 28 Feb 2025 16:30:46 +0000 (UTC)
+ id 9E20983577; Fri, 28 Feb 2025 16:30:46 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 22 Feb 2025 18:35:28 +0100
+Date: Sat, 22 Feb 2025 18:52:21 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 99d4180edae555c47d70ea40ca63316445c56ac2
-X-Git-Newrev: 180fc4ec96e280a6f1caaf043b11430a13c1bf0b
+X-Git-Oldrev: dbab39e2d90899f28929af5db3fb0facae19b6a1
+X-Git-Newrev: f683440eddca647170b310a1ed549d768a6560ae
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163046.7552883577@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pkg-utils.mk: add
- patches to show-info json
+Message-Id: <20250228163046.9E20983577@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mongoose: bump to
+ version 7.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,69 +59,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=180fc4ec96e280a6f1caaf043b11430a13c1bf0b
+commit: https://git.buildroot.net/buildroot/commit/?id=f683440eddca647170b310a1ed549d768a6560ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit adds support for listing the patches path or url applied to a
-package when calling `show-info`.
+https://github.com/cesanta/mongoose/releases/tag/7.17
 
-To avoid making `show-info` dependant on having to download and patch the
-packages there is a known limitation with the patch listing of `show-info`:
-
-  * If a package applies patches in the pre/post hook, they won't be listed
-    (for instance: `android-tool`, `libmad`, `gcc-initial`, `gcc-final`,
-    `linux-header`, ...).
-  * Patches defined in the `<pkg-name>_PATCH` variable will be listed as
-    an URL instead of listing the content with a path. For individual
-    patches this is probably OK, but it's not so ideal if it's a tarball
-    containing patches
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Co-authored-by: Matthias Swiggers <matthias.swiggers@mind.be>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/pkg-utils.mk | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ package/mongoose/mongoose.hash | 4 ++--
+ package/mongoose/mongoose.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index ca736da597..0266f66b42 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -168,6 +168,12 @@ pkg-patches-dirs = \
- 			$(or $(wildcard $(dir)/$($(1)_VERSION)),$(dir)),\
- 			$(dir))))
+diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+index 15aa2b35ba..18b5e222ac 100644
+--- a/package/mongoose/mongoose.hash
++++ b/package/mongoose/mongoose.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  f2c42135f7bc34b3d10b6401e9326a20ba5dd42d4721b6a526826ba31c1679fd  mongoose-7.16.tar.gz
+-sha256  7e2bc5dabbc27b431a530540161ba860906f12109d4b84b1e4bc8879f1afc3bc  LICENSE
++sha256  b6a6f69912c2cd0c67f85633c6b578d4dcdf385c3628acdcd21de28787c676e5  mongoose-7.17.tar.gz
++sha256  9abc2509d90c01ff2a0c91abf73582cdbcf1d2dbcc0b7973097eced43cf4cdd4  LICENSE
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 9ec6423e93..b41f6a054d 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+pkg-patches-url = $(foreach patch,$($(1)_PATCH),\
-+	$(if $(findstring ://,$(patch)),$(patch),\
-+		$($(1)_SITE_METHOD)+$($(1)_SITE)/$(patch)))
-+
-+pkg-patches-list = $(foreach patchdir,$(call pkg-patches-dirs,$(1)),$(wildcard $(addsuffix /*.patch,$(patchdir)))) $(call pkg-patches-url,$(1))
-+
- define _json-info-pkg-details
- 	"version": $(call mk-json-str,$($(1)_DL_VERSION)),
- 	"licenses": $(call mk-json-str,$($(1)_LICENSE)),
-@@ -190,6 +196,13 @@ define _json-info-pkg-details
- 		},
- 	)
- 	],
-+	"patches": [
-+		$(foreach patch, \
-+			$(call pkg-patches-list,$(1)), \
-+			$(call mk-json-str,$(patsubst $(CONFIG_DIR)/%,%,$(patch)))$(comma) \
-+
-+		)
-+	],
- endef
- 
- define _json-info-fs
+-MONGOOSE_VERSION = 7.16
++MONGOOSE_VERSION = 7.17
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPL-2.0
+ MONGOOSE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
