@@ -4,107 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02DCBC021B2
-	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 17:40:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41B0CC021B2
+	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 17:50:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1929405C3;
-	Sat, 22 Feb 2025 17:40:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 07D8440747;
+	Sat, 22 Feb 2025 17:50:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4neD3YgvFCkK; Sat, 22 Feb 2025 17:40:16 +0000 (UTC)
+ id FE3X5gveQxNe; Sat, 22 Feb 2025 17:50:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B7A9406AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A92274074C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B7A9406AE;
-	Sat, 22 Feb 2025 17:40:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C1916B
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:40:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A92274074C;
+	Sat, 22 Feb 2025 17:50:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9CDD06B
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:50:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1DB69606BF
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:40:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 80E6360661
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:50:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jVQNyl1Xeoeq for <buildroot@buildroot.org>;
- Sat, 22 Feb 2025 17:40:14 +0000 (UTC)
+ id b2p92M7iztCC for <buildroot@buildroot.org>;
+ Sat, 22 Feb 2025 17:50:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AF612606B3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF612606B3
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AF612606B3
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:40:13 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4397dff185fso27426885e9.2
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 09:40:13 -0800 (PST)
+ client-ip=2607:f8b0:4864:20::32f; helo=mail-ot1-x32f.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 76CC9606B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76CC9606B3
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com
+ [IPv6:2607:f8b0:4864:20::32f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 76CC9606B3
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:50:44 +0000 (UTC)
+Received: by mail-ot1-x32f.google.com with SMTP id
+ 46e09a7af769-727118c4f9aso844280a34.1
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 09:50:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1740246011; x=1740850811;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=38QG7DrW6JsMB2JdX4lbObyuewt4Z8cflM3eB/vJ5g0=;
- b=saRKMDob7W+UU5IAAUJ+YHleyF5aStGkVRBjnOjufyzoOeii/aV8HXfPOPdQxcrv9J
- /RhS5vgpg0Fx96Kq/UDLR1v7uCRdBFzpmNMYgMFmTk7eeFH79fHKAfUxLVmIOx+u5VjT
- dLSqOyT3++JNy2PxKvTE6lDy3GY8oO5j3UQ7Nwo5nXNNwNNog4sCfqMqNsO6X+dAdg1C
- dkHnLPmFn4W41ww4dJqd07BZWeYjSrYSBZhXAFD5hY8lJ8SwmGT6WxyYWBQrJzq8E7DV
- f4eSHqvlE2qrX/0IoyYcVwWzV9PbQ4e+921KFsV2p7EMgUYz/Mh4h9QiiNTuEeUFpuzh
- Ak1A==
+ d=1e100.net; s=20230601; t=1740246643; x=1740851443;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=iDGQtn1L0GwEuxRourwdfZGAEGpxL2zKI8iN2zKO1YI=;
+ b=P1iDNdmIpttNvzJKQwpO8ZiBXQ6hVN0htwHTSAs/2vBn0m4byfdlGQhEoClRTJP+uP
+ 3atx65ALjeOl1oawM9TXDnTDVr+Z5mzmPgBGgcsfMtjjUSya6ibpb4njMfgVemqzQXAR
+ 1RIaAbVQIk0A8Qc1uXAdHYw/MGQ/S9bIP5pW5otHbBMC6G8xWpv3CvxUgdkloi7GjBG5
+ tO8iyG9OzOpKa2PWKtRHweHtefBw12+kzV7IQby42v35SSJZCF+r4CklOqzBZ5YpVJeg
+ yTnHUS2Jo+1l/p/0dE6oKyGx1j5dh50gYlZh/XSOHlRCiwjfQpsy4/OJ5jKvnptLcpmv
+ +Vuw==
 X-Forwarded-Encrypted: i=1;
- AJvYcCUB4LPhki+Xxin+Xm1to0RKAD/100VwdBYiyPU+9RGqlbXJrsB4VM4LCOoLhNnstqFmH5mpobrOEcA=@buildroot.org
-X-Gm-Message-State: AOJu0YxW/sQ/MQLFhqmOoHAzY+XhB9TUsO+bILxxVW6Sua4tPaTkRNNe
- DtF7OQP0ymVd4EJsEVC8VB6K0O340WBWljSj3gpV7/N6bQTLlLXCeRJVFl++2a4=
-X-Gm-Gg: ASbGncv2kn6pTTOJ6r7IC2VcJp8kEj5qd0roagxjTYnyivEC7Jh9uDVbhknRYOWSktG
- pAmhgwXvyqp28qISnO3cMTckJ6GeJT8J3xSQHPQVYBRndXwr4603XYbLlnvCTEQWVsYrQkKXowF
- gCzeh0o0ZKIUbZ5P/Ek6myCGq65OjTxS9NhfIIlb7tLbv9bBl1AV2jJKAzAS6YF9ql5XLPaJp6B
- bI/muvtLqGepVZqM70ZinUpUiv5mRxPhvrzHqJXRTa+QSRg843sKN4vGzlBcS7UAgPVGiuFNrME
- /Oj/QHin7DG56fbA16WtOUTn3dN0N3tSBIsHzN3ZnH/f2JJdrpjayvoUOJxLnGaPoMG6oAUx5HJ
- LNIv6X/4RRnIhElodv408bKEo2JH593RWhaVCLTOORtXcNuUEkp5c9utS
-X-Google-Smtp-Source: AGHT+IFXgyyw+W0gkrOvJ/1Vh/O1gDeWS6veDaZaPeHZ1Jrw4ilpeXVZkapIuV9F2gpFmuz/DEroOA==
-X-Received: by 2002:a05:600c:1e0c:b0:439:88bb:d002 with SMTP id
- 5b1f17b1804b1-43a9dece3c4mr7029255e9.23.1740246010458; 
- Sat, 22 Feb 2025 09:40:10 -0800 (PST)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-439b030bdb4sm53720625e9.27.2025.02.22.09.40.09
+ AJvYcCX0yne8GmiXColmlnRC0Tvbrme5UlM91lAmm5I6zi+C7Ogq8dzovAo/iudOcB+ueTTSG2ggH1IG5ao=@buildroot.org
+X-Gm-Message-State: AOJu0YxVVwvN//odBzlWeuvueISQiA6gpQWprXUdo8tr9Ty3BHetoPUw
+ IyhyKy0FBwDya1waTL1u6pOkop1pnJ/owlDDIjqbbb0fyhtk49B2D1sjUjA1Nb/QSZUM7x0ELMV
+ K
+X-Gm-Gg: ASbGncsZS/mCE042nao4ujIovtP9nz8ZZ+fY9Fz8rPaBHVMOUTctYIsnu2BIwlSfVCI
+ sjqlLzrGOrolwAGW4/he8JRrQEGCRaQJAh6JZvsFwso9b4BOqBFt5a8tD11mxj39pIRW5ceC1X7
+ 64SaWDuayg/h3JDRdRvxYbudB00sJKkYpoUXFlOztUwFI/XfZGWFLcko9qiTH5ooNJU5qFSySVW
+ AexOalOfoIoE81UExx1TPYt9GNas7exF0CNZxntJBkJ+f3OXz+JSkXzN2tcKl58ZI8F6TRmAJT2
+ PtX2w+kAYJx3+giKoQPZebkKIOzVNbmGubAK8wINaAptEPVlG5PHgHSHTY8USMwcOXPw+g==
+X-Google-Smtp-Source: AGHT+IFVub83RWDr2462dllMWC8jpcnKIp03unc7u/AjyA83eampsLBNXGoTGEmUC7Pi01jmcA+r7A==
+X-Received: by 2002:a05:6830:2652:b0:727:423c:95ea with SMTP id
+ 46e09a7af769-7274c25a636mr5682731a34.19.1740246643236; 
+ Sat, 22 Feb 2025 09:50:43 -0800 (PST)
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com.
+ [209.85.167.171]) by smtp.gmail.com with ESMTPSA id
+ 46e09a7af769-72739ef6e2bsm1756645a34.10.2025.02.22.09.50.42
+ for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 22 Feb 2025 09:40:09 -0800 (PST)
-Message-ID: <7b1f278b-9e9a-4bdc-ba0e-532809936aa0@mind.be>
-Date: Sat, 22 Feb 2025 18:40:08 +0100
+ Sat, 22 Feb 2025 09:50:42 -0800 (PST)
+Received: by mail-oi1-f171.google.com with SMTP id
+ 5614622812f47-3f410506043so843045b6e.0
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 09:50:42 -0800 (PST)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCU6GZntISZrZ2xD4AD8ZB08XnySqcERDDN5DqpNo9WVA6A7b3lf9RTJtM/puyaN3daEeFNiiChml48=@buildroot.org
+X-Received: by 2002:a05:6808:2205:b0:3f4:9c5:8809 with SMTP id
+ 5614622812f47-3f4247a945fmr5378063b6e.33.1740246642276; Sat, 22 Feb 2025
+ 09:50:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Matthias Swiggers <matthias.swiggers@mind.be>,
- Vincent Jardin <vjardin@free.fr>
-References: <20250206180614.984105-1-thomas.perale@mind.be>
-Content-Language: en-GB
-In-Reply-To: <20250206180614.984105-1-thomas.perale@mind.be>
+References: <20250205135825.2310972-1-fiona.klute@gmx.de>
+ <20250205135825.2310972-2-fiona.klute@gmx.de>
+ <Z7nf_jNmDVM-N6WI@landeda>
+In-Reply-To: <Z7nf_jNmDVM-N6WI@landeda>
+Date: Sat, 22 Feb 2025 09:50:31 -0800
+X-Gmail-Original-Message-ID: <CA+h8R2p90D+sS3C3OU6iN+0k_icWd1GB=zj0zgq0aWRrOkX4BA@mail.gmail.com>
+X-Gm-Features: AWEUYZm2Uuyqa01DwCaYRAEkv5O4vH5IbCko_gYuUJFUF9Lqi4ByKzSNzfJ77S0
+Message-ID: <CA+h8R2p90D+sS3C3OU6iN+0k_icWd1GB=zj0zgq0aWRrOkX4BA@mail.gmail.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org,
+ yann.morin@orange.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1740246011; x=1740850811; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=38QG7DrW6JsMB2JdX4lbObyuewt4Z8cflM3eB/vJ5g0=;
- b=J2mB5ZDZUrqwdbIvhw4b1lB3fo6lNa6l+Q03V5WIvHSK26zzX2KTmaFOZ6FJ8Y8n7v
- d6IdHRRsHOLY/qvcSD/vo0i3JoviMcUllvyOy5EW4Cf6z3PPndmbLoPXng19aEslOOoY
- XbLEc+tJm/7oBJoQwvRNVtsvjnI0/vMX8WH794ao614YdkuPaKy2w1qYdJUIW4/c/PIl
- DG5vxBZ/lRIbkMR0BsOukLQuf4wwxRtwAf/H9lgUnf5FIBH7kUdrNo6/K1+L3uYs4XBp
- rzUItgfpdgoAxAmybCxgcVHKCWLTj/CyOEwAfjrVf6pQ1g2dqNjQAezt1AnUM6MhNNkG
- AODA==
+ d=aperture.us; s=google; t=1740246643; x=1740851443; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=iDGQtn1L0GwEuxRourwdfZGAEGpxL2zKI8iN2zKO1YI=;
+ b=GnBHaxQs+o/H/u1JjUjJwsunMYu2roJNNVzHXnspBc+ngsJBSOobPtDPEAlE/mJUWc
+ NGEC5ItGsA9txWEvQ2uy358UE7v1IZLgUO5CSLUEuxLIszrmHDC5j2hD/0/U5QyWpHCy
+ GOfrR3hbiPPVQPJb2bBOcBxjfcEcmbzYtWG+TNb8Sh6GulV1JPQnXRVfavn0Nge3HKvn
+ Ep2QxkyzDNrtLuNbQmq5RMNGwZOdndh1pHay9xXBX2F62oE36LdKgv7lEB5Oee2VDQs0
+ 6pEOIS+aK0zLoR8OIxxjbiaftlQVLoZhnVEGRn44iRhvY7EjyPBfTJzAjjTYYz2dAq5D
+ 7osw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=reject dis=none)
+ header.from=aperture.us
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=J2mB5ZDZ
-Subject: Re: [Buildroot] [v3,RFC,PATCH 0/2] Support CycloneDX SBOM
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=GnBHaxQs
+Subject: Re: [Buildroot] [PATCH v3 2/3] package/pkg-golang: use ld.bfd
+ instead of ld.gold on aarch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,99 +124,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Content-Type: multipart/mixed; boundary="===============7177405631422989338=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Thomas,
+--===============7177405631422989338==
+Content-Type: multipart/alternative; boundary="000000000000ef4fd0062ebebe62"
 
-On 06/02/2025 19:06, Thomas Perale wrote:
-> This series is the sequel of a patch series sent in April 2024
-> https://lore.kernel.org/buildroot/Zhb8vKs-ltd8ghUR@landeda/T/
-> from which it was agreed to parse the content of the `show-info` JSON
-> output with a python script instead of generating the SBOM from the makefile.
-> 
-> The DependencyTrack instance is still available at https://dependencytrack-lqgs7zhwmq-ew.a.run.app/
-> for you to test CycloneDX and see the possibility.
-> Login with username `buildroot` and password `buildroot`.
-> 
-> To generate a CycloneDX SBOM you can run the following command:
-> 
-> ```
-> make show-info | utils/generate-cyclonedx.py | jq '.'
-> ```
-> 
-> ## Changes from v2
-> 
-> * show-info: removed the absolute path for the patches. Similar to the
->    `staging_dir`, etc .. properties.
-> * Python: bug fixes
-> * Python: code retrieve the final of virtual package in the dependency without
->    adding the virtual package to it.
-> * Python: In the vulnerabilities property is should be stated that it has been
->    excluded by buildroot
-> * pkg-utils: Doesn't rely on `.applied_patches_list`, and instead returns a
->    consistant list of patches. For now we will ignore the corner cases that rely
->    on patching during the pre/post hooks.
-> * pkg-utils: Use the `pkg-patches-dir` function during the `.stamp_patched` step
->    and the `<pkg>_HASH_FILE` variable in `pkg-generic.mk`.
->    * This change would need special attention. The logic of the
->      variable changed a bit, the previous implementation would only pick the
->      hash/patch file in the version subdirectory if present if a hash/patch file
->      also exist in the package directory it will also be applied.
->      I don't think there is a case where where an hash file is present in
->      the `<pkg>/<version/*.hash` directory as well as in `<pkg>/*.hash`
->      directory. For instance the 'lua', 'openjdk-bin' package has hash files
->      only in version sub-directory.
+--000000000000ef4fd0062ebebe62
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-  I finally applied the series but with quite a few changes.
+All,
 
-  First of all, I split the first patch into two commits: the first one just 
-does the refactoring, and the second one adds the patches to show-info.
+On Sat, Feb 22, 2025 at 6:32=E2=80=AFAM Yann E. MORIN <yann.morin.1998@free=
+.fr>
+wrote:
 
-  While testing, I discovered that the behaviour of hash files and patches is 
-actually quite different: patches use only the version directory if it exists, 
-while hashes use both the version dir and the base dir. In-tree, the behaviour 
-for hashes _is_ actually used like that. For patches it is not, but there may be 
-externals that rely on it, so I didn't want to change that behaviour. Therefore, 
-the patches and hashes are not fully refactored. Look at the code to see what I 
-ended up with.
+> Fiona, All,
+>
+> On 2025-02-05 14:58 +0100, Fiona Klute via buildroot spake thusly:
+> > From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+> >
+> > Go forces use of the Gold linker on aarch64 due to a bug in BFD that
+> > is fixed in Binutils >=3D 2.41 (that includes all versions provided by
+> > Buildroot). Forcing Gold will break with toolchains that don't provide
+> > it (like the Buildroot toolchains), so override the flag and use BFD.
+> >
+> > This override should be removed if Go stops forcing Gold, and may have
+> > to be adapted if the set of available linkers changes (e.g. with a
+> > future Binutils update).
+>
+> This patch would fix issues also related to containerd, that we also
+> see in the autobuilders, e.g.:
+>
+>
+> http://autobuild.buildroot.org/results/a59/a59bc999e9620ff6b9d97138a2de89=
+8aadc07529/build-end.log
+>
+>     [...]/host/bin/aarch64-buildroot-linux-gnu-gcc [...] -fuse-ld=3Dgold
+> [...]
+>     collect2: fatal error: cannot find 'ld'
+>     compilation terminated.
+>
+> Regards,
+> Yann E. MORIN.
+>
 
-  There were a few more details as well:
+I am seeing these build failures on my end as well and recommend merging
+this series.
 
-      - don't fully factor with _HASH_FILES because version is treaded
-        differently;
-      - introduce pkg-patch-hash-dirs;
-      - retain the RAWNAME comment, but move it to pkg-patch-hash-dirs;
-      - use foreach instead of shell loop, and $(seq) instead of exit 1;
+Best regards,
+Christian Stewart
 
-and on the generate-cyclonedx.py patch:
+--000000000000ef4fd0062ebebe62
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-      - alphabetically order imports;
-      - use endswith instead if 'in' to check suffix;
-      - add usage to help text;
-      - remove .py suffix.
+<div dir=3D"ltr"><div dir=3D"ltr">All,</div><br><div class=3D"gmail_quote g=
+mail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">On Sat, Feb 22,=
+ 2025 at 6:32=E2=80=AFAM Yann E. MORIN &lt;<a href=3D"mailto:yann.morin.199=
+8@free.fr">yann.morin.1998@free.fr</a>&gt; wrote:<br></div><blockquote clas=
+s=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid r=
+gb(204,204,204);padding-left:1ex">Fiona, All,<br>
+<br>
+On 2025-02-05 14:58 +0100, Fiona Klute via buildroot spake thusly:<br>
+&gt; From: &quot;Fiona Klute (WIWA)&quot; &lt;<a href=3D"mailto:fiona.klute=
+@gmx.de" target=3D"_blank">fiona.klute@gmx.de</a>&gt;<br>
+&gt; <br>
+&gt; Go forces use of the Gold linker on aarch64 due to a bug in BFD that<b=
+r>
+&gt; is fixed in Binutils &gt;=3D 2.41 (that includes all versions provided=
+ by<br>
+&gt; Buildroot). Forcing Gold will break with toolchains that don&#39;t pro=
+vide<br>
+&gt; it (like the Buildroot toolchains), so override the flag and use BFD.<=
+br>
+&gt; <br>
+&gt; This override should be removed if Go stops forcing Gold, and may have=
+<br>
+&gt; to be adapted if the set of available linkers changes (e.g. with a<br>
+&gt; future Binutils update).<br>
+<br>
+This patch would fix issues also related to containerd, that we also<br>
+see in the autobuilders, e.g.:<br>
+<br>
+=C2=A0 =C2=A0 <a href=3D"http://autobuild.buildroot.org/results/a59/a59bc99=
+9e9620ff6b9d97138a2de898aadc07529/build-end.log" rel=3D"noreferrer" target=
+=3D"_blank">http://autobuild.buildroot.org/results/a59/a59bc999e9620ff6b9d9=
+7138a2de898aadc07529/build-end.log</a><br>
+<br>
+=C2=A0 =C2=A0 [...]/host/bin/aarch64-buildroot-linux-gnu-gcc [...] -fuse-ld=
+=3Dgold [...]<br>
+=C2=A0 =C2=A0 collect2: fatal error: cannot find &#39;ld&#39;<br>
+=C2=A0 =C2=A0 compilation terminated.<br>
+<br>
+Regards,<br>
+Yann E. MORIN.<br></blockquote><div><br></div><div>I am seeing these build =
+failures on my end as well and recommend merging this series.</div><div><br=
+></div><div>Best regards,</div><div>Christian Stewart</div></div></div>
 
+--000000000000ef4fd0062ebebe62--
 
-  Regards,
-  Arnout
-
-
-> Thomas Perale (2):
->    package/pkg-utils.mk: add patches to show-info json
->    support/scripts/generate-cyclonedx.py: add script to generate
->      CycloneDX-style SBOM
-> 
->   package/pkg-utils.mk        |  20 +++
->   utils/generate-cyclonedx.py | 307 ++++++++++++++++++++++++++++++++++++
->   2 files changed, 327 insertions(+)
->   create mode 100755 utils/generate-cyclonedx.py
-> 
+--===============7177405631422989338==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7177405631422989338==--
