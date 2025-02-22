@@ -4,59 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22E31C021B2
-	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 10:42:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF178C021B2
+	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 11:01:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B7AD60ADC;
-	Sat, 22 Feb 2025 10:42:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 678E960712;
+	Sat, 22 Feb 2025 11:01:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bfrw3Km53x7g; Sat, 22 Feb 2025 10:42:32 +0000 (UTC)
+ id SCutFqhn9y2y; Sat, 22 Feb 2025 11:01:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E3D9606D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 051F2606BF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E3D9606D5;
-	Sat, 22 Feb 2025 10:42:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5A5A6D92
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 10:42:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 051F2606BF;
+	Sat, 22 Feb 2025 11:01:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B75ADF11
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 11:01:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 48CD381A92
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 10:42:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9B7BF81468
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 11:01:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bq_XTVCNFjxo for <buildroot@buildroot.org>;
- Sat, 22 Feb 2025 10:42:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+ id M2h5dl-se1lO for <buildroot@buildroot.org>;
+ Sat, 22 Feb 2025 11:01:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3F81581237
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F81581237
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3F81581237
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 10:42:27 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0CC921F687;
- Sat, 22 Feb 2025 10:42:23 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1tlmxj-005dHQ-0L;
- Sat, 22 Feb 2025 11:42:23 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D4AC8145D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6D4AC8145D
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 11:01:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 635DD837EE; Sat, 22 Feb 2025 11:01:24 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 22 Feb 2025 11:42:20 +0100
-Message-Id: <20250222104220.1342617-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdejvdejtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepveelheejieefffeuleegvedtfeehhfdujedvfeelffdvgeefieffieetffehgfefnecuffhomhgrihhnpehgnhhomhgvrdhorhhgpdhophgvnhifrghllhdrtghomhenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvkhhosehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopeefpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhrtghpthhtohepthgvgihivghrrdhpjhdvsehgmhgrihhlrdgtohhm
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/libxml2: security bump to version 2.13.6
+Date: Sat, 22 Feb 2025 11:58:15 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2f0c31bffdb59fb224387e35134a6d5e09a81d57
+X-Git-Newrev: 843a4faa6d2fd047c307178bd07549c32ec76eae
+X-Patchwork-Hint: ignore
+Message-Id: <20250222110124.635DD837EE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libxml2: security bump to version
+ 2.13.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,163 +59,234 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Pierre-Jean Texier <texier.pj2@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============5415874150753157726=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Rml4ZXMgdGhlIGZvbGxvd2luZyBzZWN1cml0eSB2dWxuZXJhYmlsaXRpZXM6CgpbQ1ZFLTIwMjQt
-NTYxNzFdIFVzZS1hZnRlci1mcmVlIGluIHhtbFNjaGVtYUlEQ0ZpbGxOb2RlVGFibGVzCmh0dHBz
-Oi8vZ2l0bGFiLmdub21lLm9yZy9HTk9NRS9saWJ4bWwyLy0vaXNzdWVzLzgyOAoKW0NWRS0yMDI1
-LTI0OTI4XSBTdGFjay1idWZmZXItb3ZlcmZsb3cgaW4geG1sU25wcmludGZFbGVtZW50cwpodHRw
-czovL2dpdGxhYi5nbm9tZS5vcmcvR05PTUUvbGlieG1sMi8tL2lzc3Vlcy84NDcKCk51bGwtZGVy
-ZWYgaW4geG1sUGF0TWF0Y2gKaHR0cHM6Ly9naXRsYWIuZ25vbWUub3JnL0dOT01FL2xpYnhtbDIv
-LS9pc3N1ZXMvODYxCgpodHRwczovL3d3dy5vcGVud2FsbC5jb20vbGlzdHMvb3NzLXNlY3VyaXR5
-LzIwMjUvMDIvMTgvMgoKRHJvcCBub3cgdXBzdHJlYW1lZCBwYXRjaGVzOgpodHRwczovL2dpdGxh
-Yi5nbm9tZS5vcmcvR05PTUUvbGlieG1sMi8tL2NvbW1pdC9mYzcyZTA4MzNhNGU1NzI0YWVmNjA0
-ZTJmZDlhZGIxMDE0Y2I0ODQ0Cmh0dHBzOi8vZ2l0bGFiLmdub21lLm9yZy9HTk9NRS9saWJ4bWwy
-Ly0vY29tbWl0LzUzOTY2MzYyNmI5MTU2NzE1OWE3MDc5MWMwZjJiM2IxNjcxMzVlOWIKClNpZ25l
-ZC1vZmYtYnk6IFBldGVyIEtvcnNnYWFyZCA8cGV0ZXJAa29yc2dhYXJkLmNvbT4KLS0tCiAuLi4v
-MDAwMS1GaXgtY29tcGlsYXRpb24td2l0aC11Y2xpYmMucGF0Y2ggICAgfCAxMTQgLS0tLS0tLS0t
-LS0tLS0tLS0tCiAuLi4wMDAyLUZpeC1GaXgtY29tcGlsYXRpb24td2l0aC11Y2xpYmMucGF0Y2gg
-fCAgMzEgLS0tLS0KIHBhY2thZ2UvbGlieG1sMi9saWJ4bWwyLmhhc2ggICAgICAgICAgICAgICAg
-ICB8ICAgNCArLQogcGFja2FnZS9saWJ4bWwyL2xpYnhtbDIubWsgICAgICAgICAgICAgICAgICAg
-IHwgICAyICstCiA0IGZpbGVzIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMTQ4IGRlbGV0aW9u
-cygtKQogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGlieG1sMi8wMDAxLUZpeC1jb21waWxh
-dGlvbi13aXRoLXVjbGliYy5wYXRjaAogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbGlieG1s
-Mi8wMDAyLUZpeC1GaXgtY29tcGlsYXRpb24td2l0aC11Y2xpYmMucGF0Y2gKCmRpZmYgLS1naXQg
-YS9wYWNrYWdlL2xpYnhtbDIvMDAwMS1GaXgtY29tcGlsYXRpb24td2l0aC11Y2xpYmMucGF0Y2gg
-Yi9wYWNrYWdlL2xpYnhtbDIvMDAwMS1GaXgtY29tcGlsYXRpb24td2l0aC11Y2xpYmMucGF0Y2gK
-ZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IGFlZGFkMjdlMDUuLjAwMDAwMDAwMDAKLS0t
-IGEvcGFja2FnZS9saWJ4bWwyLzAwMDEtRml4LWNvbXBpbGF0aW9uLXdpdGgtdWNsaWJjLnBhdGNo
-CisrKyAvZGV2L251bGwKQEAgLTEsMTE0ICswLDAgQEAKLUZyb20gZmM3MmUwODMzYTRlNTcyNGFl
-ZjYwNGUyZmQ5YWRiMTAxNGNiNDg0NCBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKLUZyb206IERh
-cmlvIEJpbmFjY2hpIDxkYXJpby5iaW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNvbT4KLURhdGU6
-IE1vbiwgMTYgRGVjIDIwMjQgMTc6MjM6MjMgKzAxMDAKLVN1YmplY3Q6IFtQQVRDSF0gRml4IGNv
-bXBpbGF0aW9uIHdpdGggdWNsaWJjCi1NSU1FLVZlcnNpb246IDEuMAotQ29udGVudC1UeXBlOiB0
-ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04Ci1Db250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0
-Ci0KLVRoZSBwYXRjaCBmaXhlcyB0aGUgZm9sbG93aW5nIGVycm9ycyBhbmQgd2FybmluZ3MgcmFp
-c2VkIGJ5IHRoZQotY29tcGlsYXRpb24gb2YgdGhlIGxpYnJhcnkgd2l0aCB1Q2xpYmM6Ci0KLWVu
-Y29kaW5nLmM6IEluIGZ1bmN0aW9uIOKAmHhtbEVuY0lucHV0Q2h1bmvigJk6Ci1lbmNvZGluZy5j
-OjIyMDk6MzI6IHdhcm5pbmc6IGNvbXBhcmlzb24gYmV0d2VlbiBwb2ludGVyIGFuZCBpbnRlZ2Vy
-Ci0gMjIwOSB8ICAgICBlbHNlIGlmIChoYW5kbGVyLT5pY29udl9pbiAhPSBOVUxMKSB7Ci0gICAg
-ICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBefgotZW5jb2RpbmcuYzogSW4gZnVu
-Y3Rpb24g4oCYeG1sRW5jT3V0cHV0Q2h1bmvigJk6Ci1lbmNvZGluZy5jOjIyNjk6MzM6IHdhcm5p
-bmc6IGNvbXBhcmlzb24gYmV0d2VlbiBwb2ludGVyIGFuZCBpbnRlZ2VyCi0gMjI2OSB8ICAgICBl
-bHNlIGlmIChoYW5kbGVyLT5pY29udl9vdXQgIT0gTlVMTCkgewotICAgICAgfCAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIF5+Ci1lbmNvZGluZy5jOiBJbiBmdW5jdGlvbiDigJh4bWxD
-aGFyRW5jQ2xvc2VGdW5j4oCZOgotZW5jb2RpbmcuYzoyNjgxOjI5OiB3YXJuaW5nOiBjb21wYXJp
-c29uIGJldHdlZW4gcG9pbnRlciBhbmQgaW50ZWdlcgotIDI2ODEgfCAgICAgaWYgKChoYW5kbGVy
-LT5pY29udl9vdXQgIT0gTlVMTCkgfHwgKGhhbmRsZXItPmljb252X2luICE9IE5VTEwpKSB7Ci0g
-ICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBefgotZW5jb2RpbmcuYzoyNjgxOjYw
-OiB3YXJuaW5nOiBjb21wYXJpc29uIGJldHdlZW4gcG9pbnRlciBhbmQgaW50ZWdlcgotIDI2ODEg
-fCAgICAgaWYgKChoYW5kbGVyLT5pY29udl9vdXQgIT0gTlVMTCkgfHwgKGhhbmRsZXItPmljb252
-X2luICE9IE5VTEwpKSB7Ci0gICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgXn4KLWVuY29kaW5nLmM6MjY4MzozMjogd2Fybmlu
-ZzogY29tcGFyaXNvbiBiZXR3ZWVuIHBvaW50ZXIgYW5kIGludGVnZXIKLSAyNjgzIHwgICAgICAg
-ICBpZiAoaGFuZGxlci0+aWNvbnZfb3V0ICE9IE5VTEwpIHsKLSAgICAgIHwgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIF5+Ci1lbmNvZGluZy5jOjI2ODY6MzI6IGVycm9yOiBhc3NpZ25t
-ZW50IHRvIOKAmGljb252X3TigJkge2FrYSDigJhsb25nIGludOKAmX0gZnJvbSDigJh2b2lkICri
-gJkgbWFrZXMgaW50ZWdlciBmcm9tIHBvaW50ZXIgd2l0aG91dCBhIGNhc3QgWy1XaW50LWNvbnZl
-cnNpb25dCi0gMjY4NiB8ICAgICAgICAgICAgIGhhbmRsZXItPmljb252X291dCA9IE5VTEw7Ci0g
-ICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBeCi1lbmNvZGluZy5jOjI2ODg6
-MzE6IHdhcm5pbmc6IGNvbXBhcmlzb24gYmV0d2VlbiBwb2ludGVyIGFuZCBpbnRlZ2VyCi0gMjY4
-OCB8ICAgICAgICAgaWYgKGhhbmRsZXItPmljb252X2luICE9IE5VTEwpIHsKLSAgICAgIHwgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgXn4KLWVuY29kaW5nLmM6MjY5MTozMTogZXJyb3I6
-IGFzc2lnbm1lbnQgdG8g4oCYaWNvbnZfdOKAmSB7YWthIOKAmGxvbmcgaW504oCZfSBmcm9tIOKA
-mHZvaWQgKuKAmSBtYWtlcyBpbnRlZ2VyIGZyb20gcG9pbnRlciB3aXRob3V0IGEgY2FzdCBbLVdp
-bnQtY29udmVyc2lvbl0KLSAyNjkxIHwgICAgICAgICAgICAgaGFuZGxlci0+aWNvbnZfaW4gPSBO
-VUxMOwotICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBeCi1tYWtlWzRdOiAq
-KiogW01ha2VmaWxlOjExNDc6IGxpYnhtbDJfbGEtZW5jb2RpbmcubG9dIEVycm9yIDEKLQotU2ln
-bmVkLW9mZi1ieTogRGFyaW8gQmluYWNjaGkgPGRhcmlvLmJpbmFjY2hpQGFtYXJ1bGFzb2x1dGlv
-bnMuY29tPgotVXBzdHJlYW06IGh0dHBzOi8vZ2l0bGFiLmdub21lLm9yZy9HTk9NRS9saWJ4bWwy
-Ly0vY29tbWl0L2ZjNzJlMDgzM2E0ZTU3MjRhZWY2MDRlMmZkOWFkYjEwMTRjYjQ4NDQKLS0tLQot
-IGVuY29kaW5nLmMgfCAyMCArKysrKysrKysrLS0tLS0tLS0tLQotIDEgZmlsZSBjaGFuZ2VkLCAx
-MCBpbnNlcnRpb25zKCspLCAxMCBkZWxldGlvbnMoLSkKLQotZGlmZiAtLWdpdCBhL2VuY29kaW5n
-LmMgYi9lbmNvZGluZy5jCi1pbmRleCAxNGZmYWZkZGJjMDIuLjQxZWNkZTE4ODVlNCAxMDA2NDQK
-LS0tLSBhL2VuY29kaW5nLmMKLSsrKyBiL2VuY29kaW5nLmMKLUBAIC0xMjY0LDcgKzEyNjQsNyBA
-QCBERUNMQVJFX0lTT19GVU5DUygxNikKLSAjZW5kaWYgLyogTElCWE1MX0lTTzg4NTlYX0VOQUJM
-RUQgKi8KLSAKLSAjaWZkZWYgTElCWE1MX0lDT05WX0VOQUJMRUQKLS0gICNkZWZpbmUgRU1QVFlf
-SUNPTlYgLCAoaWNvbnZfdCkgMCwgKGljb252X3QpIDAKLSsgICNkZWZpbmUgRU1QVFlfSUNPTlYg
-LCAoaWNvbnZfdCkgLTEsIChpY29udl90KSAtMQotICNlbHNlCi0gICAjZGVmaW5lIEVNUFRZX0lD
-T05WCi0gI2VuZGlmCi1AQCAtMTM4OSw4ICsxMzg5LDggQEAgeG1sTmV3Q2hhckVuY29kaW5nSGFu
-ZGxlcihjb25zdCBjaGFyICpuYW1lLAotICAgICBoYW5kbGVyLT5uYW1lID0gdXA7Ci0gCi0gI2lm
-ZGVmIExJQlhNTF9JQ09OVl9FTkFCTEVECi0tICAgIGhhbmRsZXItPmljb252X2luID0gTlVMTDsK
-LS0gICAgaGFuZGxlci0+aWNvbnZfb3V0ID0gTlVMTDsKLSsgICAgaGFuZGxlci0+aWNvbnZfaW4g
-PSAoaWNvbnZfdCkgLTE7Ci0rICAgIGhhbmRsZXItPmljb252X291dCA9IChpY29udl90KSAtMTsK
-LSAjZW5kaWYKLSAjaWZkZWYgTElCWE1MX0lDVV9FTkFCTEVECi0gICAgIGhhbmRsZXItPnVjb252
-X2luID0gTlVMTDsKLUBAIC0yMjAwLDcgKzIyMDAsNyBAQCB4bWxFbmNJbnB1dENodW5rKHhtbENo
-YXJFbmNvZGluZ0hhbmRsZXIgKmhhbmRsZXIsIHVuc2lnbmVkIGNoYXIgKm91dCwKLSAgICAgICAg
-IH0KLSAgICAgfQotICNpZmRlZiBMSUJYTUxfSUNPTlZfRU5BQkxFRAotLSAgICBlbHNlIGlmICho
-YW5kbGVyLT5pY29udl9pbiAhPSBOVUxMKSB7Ci0rICAgIGVsc2UgaWYgKGhhbmRsZXItPmljb252
-X2luICE9IChpY29udl90KSAtMSkgewotICAgICAgICAgcmV0ID0geG1sSWNvbnZXcmFwcGVyKGhh
-bmRsZXItPmljb252X2luLCBvdXQsIG91dGxlbiwgaW4sIGlubGVuKTsKLSAgICAgfQotICNlbmRp
-ZiAvKiBMSUJYTUxfSUNPTlZfRU5BQkxFRCAqLwotQEAgLTIyNjAsNyArMjI2MCw3IEBAIHhtbEVu
-Y091dHB1dENodW5rKHhtbENoYXJFbmNvZGluZ0hhbmRsZXIgKmhhbmRsZXIsIHVuc2lnbmVkIGNo
-YXIgKm91dCwKLSAgICAgICAgIH0KLSAgICAgfQotICNpZmRlZiBMSUJYTUxfSUNPTlZfRU5BQkxF
-RAotLSAgICBlbHNlIGlmIChoYW5kbGVyLT5pY29udl9vdXQgIT0gTlVMTCkgewotKyAgICBlbHNl
-IGlmIChoYW5kbGVyLT5pY29udl9vdXQgIT0gKGljb252X3QpIC0xKSB7Ci0gICAgICAgICByZXQg
-PSB4bWxJY29udldyYXBwZXIoaGFuZGxlci0+aWNvbnZfb3V0LCBvdXQsIG91dGxlbiwgaW4sIGlu
-bGVuKTsKLSAgICAgfQotICNlbmRpZiAvKiBMSUJYTUxfSUNPTlZfRU5BQkxFRCAqLwotQEAgLTI2
-NzIsMTcgKzI2NzIsMTcgQEAgeG1sQ2hhckVuY0Nsb3NlRnVuYyh4bWxDaGFyRW5jb2RpbmdIYW5k
-bGVyICpoYW5kbGVyKSB7Ci0gICAgICAqIEljb252IGhhbmRsZXJzIGNhbiBiZSB1c2VkIG9ubHkg
-b25jZSwgZnJlZSB0aGUgd2hvbGUgYmxvY2suCi0gICAgICAqIGFuZCB0aGUgYXNzb2NpYXRlZCBp
-Y29uIHJlc291cmNlcy4KLSAgICAgICovCi0tICAgIGlmICgoaGFuZGxlci0+aWNvbnZfb3V0ICE9
-IE5VTEwpIHx8IChoYW5kbGVyLT5pY29udl9pbiAhPSBOVUxMKSkgewotKyAgICBpZiAoKGhhbmRs
-ZXItPmljb252X291dCAhPSAoaWNvbnZfdCkgLTEpIHx8IChoYW5kbGVyLT5pY29udl9pbiAhPSAo
-aWNvbnZfdCkgLTEpKSB7Ci0gICAgICAgICB0b2ZyZWUgPSAxOwotLQlpZiAoaGFuZGxlci0+aWNv
-bnZfb3V0ICE9IE5VTEwpIHsKLSsJaWYgKGhhbmRsZXItPmljb252X291dCAhPSAoaWNvbnZfdCkg
-LTEpIHsKLSAJICAgIGlmIChpY29udl9jbG9zZShoYW5kbGVyLT5pY29udl9vdXQpKQotIAkJcmV0
-ID0gLTE7Ci0tCSAgICBoYW5kbGVyLT5pY29udl9vdXQgPSBOVUxMOwotKwkgICAgaGFuZGxlci0+
-aWNvbnZfb3V0ID0gKGljb252X3QpIC0xOwotIAl9Ci0tCWlmIChoYW5kbGVyLT5pY29udl9pbiAh
-PSBOVUxMKSB7Ci0rCWlmIChoYW5kbGVyLT5pY29udl9pbiAhPSAoaWNvbnZfdCkgLTEpIHsKLSAJ
-ICAgIGlmIChpY29udl9jbG9zZShoYW5kbGVyLT5pY29udl9pbikpCi0gCQlyZXQgPSAtMTsKLS0J
-ICAgIGhhbmRsZXItPmljb252X2luID0gTlVMTDsKLSsJICAgIGhhbmRsZXItPmljb252X2luID0g
-KGljb252X3QpIC0xOwotIAl9Ci0gICAgIH0KLSAjZW5kaWYgLyogTElCWE1MX0lDT05WX0VOQUJM
-RUQgKi8KLS0tIAotMi40My4wCi0KZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGlieG1sMi8wMDAyLUZp
-eC1GaXgtY29tcGlsYXRpb24td2l0aC11Y2xpYmMucGF0Y2ggYi9wYWNrYWdlL2xpYnhtbDIvMDAw
-Mi1GaXgtRml4LWNvbXBpbGF0aW9uLXdpdGgtdWNsaWJjLnBhdGNoCmRlbGV0ZWQgZmlsZSBtb2Rl
-IDEwMDY0NAppbmRleCA3NmVhNzExOTYyLi4wMDAwMDAwMDAwCi0tLSBhL3BhY2thZ2UvbGlieG1s
-Mi8wMDAyLUZpeC1GaXgtY29tcGlsYXRpb24td2l0aC11Y2xpYmMucGF0Y2gKKysrIC9kZXYvbnVs
-bApAQCAtMSwzMSArMCwwIEBACi1Gcm9tIDUzOTY2MzYyNmI5MTU2NzE1OWE3MDc5MWMwZjJiM2Ix
-NjcxMzVlOWIgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCi1Gcm9tOiBOaWNrIFdlbGxuaG9mZXIg
-PHdlbGxuaG9mZXJAYWV2dW0uZGU+Ci1EYXRlOiBUaHUsIDE2IEphbiAyMDI1IDE1OjUwOjQ2ICsw
-MTAwCi1TdWJqZWN0OiBbUEFUQ0hdIEZpeCAiRml4IGNvbXBpbGF0aW9uIHdpdGggdWNsaWJjIgot
-Ci1UaGUgSUNVIGNvZGUgbXVzdCBpbml0aWFsaXplIHRoZSBpY29udiBtZW1iZXJzIGFzIHdlbGwu
-Ci0KLVNpZ25lZC1vZmYtYnk6IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwu
-Y29tPgotVXBzdHJlYW06IGh0dHBzOi8vZ2l0bGFiLmdub21lLm9yZy9HTk9NRS9saWJ4bWwyLy0v
-Y29tbWl0LzUzOTY2MzYyNmI5MTU2NzE1OWE3MDc5MWMwZjJiM2IxNjcxMzVlOWIKLS0tLQotIGVu
-Y29kaW5nLmMgfCA0ICsrKysKLSAxIGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspCi0KLWRp
-ZmYgLS1naXQgYS9lbmNvZGluZy5jIGIvZW5jb2RpbmcuYwotaW5kZXggNDFlY2RlMTguLjBjZThk
-NDc5IDEwMDY0NAotLS0tIGEvZW5jb2RpbmcuYwotKysrIGIvZW5jb2RpbmcuYwotQEAgLTE2NDEs
-NiArMTY0MSwxMCBAQCB4bWxDcmVhdGVVY29udkhhbmRsZXIoY29uc3QgY2hhciAqbmFtZSwgeG1s
-Q2hhckVuY29kaW5nSGFuZGxlciAqKm91dCkgewotICAgICB9Ci0gICAgIGVuYy0+aW5wdXQgPSBO
-VUxMOwotICAgICBlbmMtPm91dHB1dCA9IE5VTEw7Ci0rI2lmZGVmIExJQlhNTF9JQ09OVl9FTkFC
-TEVECi0rICAgIGVuYy0+aWNvbnZfaW4gPSAoaWNvbnZfdCkgLTE7Ci0rICAgIGVuYy0+aWNvbnZf
-b3V0ID0gKGljb252X3QpIC0xOwotKyNlbmRpZgotICAgICBlbmMtPnVjb252X2luID0gdWN2X2lu
-OwotICAgICBlbmMtPnVjb252X291dCA9IHVjdl9vdXQ7Ci0gCi0tLSAKLTIuMzQuMQotCmRpZmYg
-LS1naXQgYS9wYWNrYWdlL2xpYnhtbDIvbGlieG1sMi5oYXNoIGIvcGFja2FnZS9saWJ4bWwyL2xp
-YnhtbDIuaGFzaAppbmRleCBlYjkyYWQ0MzI0Li44OGM3ZjViOWZmIDEwMDY0NAotLS0gYS9wYWNr
-YWdlL2xpYnhtbDIvbGlieG1sMi5oYXNoCisrKyBiL3BhY2thZ2UvbGlieG1sMi9saWJ4bWwyLmhh
-c2gKQEAgLTEsNCArMSw0IEBACi0jIEZyb20gaHR0cHM6Ly9kb3dubG9hZC5nbm9tZS5vcmcvc291
-cmNlcy9saWJ4bWwyLzIuMTMvbGlieG1sMi0yLjEzLjUuc2hhMjU2c3VtCi1zaGEyNTYgIDc0ZmMx
-NjMyMTdhMzk2NDI1N2QzYmUzOWFmOTQzZTA4ODYxMjYzYzQyMzFmOWVmNWI0OTZiNmY2ZDRjN2Iy
-YjYgIGxpYnhtbDItMi4xMy41LnRhci54egorIyBGcm9tIGh0dHBzOi8vZG93bmxvYWQuZ25vbWUu
-b3JnL3NvdXJjZXMvbGlieG1sMi8yLjEzL2xpYnhtbDItMi4xMy42LnNoYTI1NnN1bQorc2hhMjU2
-ICBmNDUzNDgwMzA3NTI0OTY4ZjdhMDRlYzY1ZTY0ZjJhODNhODI1OTczYmNkMjYwYTJlNzY5MWJl
-ODJhZTcwYzk2ICBsaWJ4bWwyLTIuMTMuNi50YXIueHoKICMgTGljZW5zZSBmaWxlcywgbG9jYWxs
-eSBjYWxjdWxhdGVkCiBzaGEyNTYgIGM5OWFhZTFhZmUwMTNlNTBiOGIzNzAxZTA4OTIyMmIzNTEy
-NTgwNDNjMzAyNWI2NDA1M2EyMzNmZDI1YjRiZTcgIENvcHlyaWdodApkaWZmIC0tZ2l0IGEvcGFj
-a2FnZS9saWJ4bWwyL2xpYnhtbDIubWsgYi9wYWNrYWdlL2xpYnhtbDIvbGlieG1sMi5tawppbmRl
-eCBhOGNiODZhYjJmLi4xNDhmY2Q4NzYyIDEwMDY0NAotLS0gYS9wYWNrYWdlL2xpYnhtbDIvbGli
-eG1sMi5taworKysgYi9wYWNrYWdlL2xpYnhtbDIvbGlieG1sMi5tawpAQCAtNSw3ICs1LDcgQEAK
-ICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCiAKIExJQlhNTDJfVkVSU0lPTl9NQUpPUiA9IDIuMTMK
-LUxJQlhNTDJfVkVSU0lPTiA9ICQoTElCWE1MMl9WRVJTSU9OX01BSk9SKS41CitMSUJYTUwyX1ZF
-UlNJT04gPSAkKExJQlhNTDJfVkVSU0lPTl9NQUpPUikuNgogTElCWE1MMl9TT1VSQ0UgPSBsaWJ4
-bWwyLSQoTElCWE1MMl9WRVJTSU9OKS50YXIueHoKIExJQlhNTDJfU0lURSA9IFwKIAlodHRwczov
-L2Rvd25sb2FkLmdub21lLm9yZy9zb3VyY2VzL2xpYnhtbDIvJChMSUJYTUwyX1ZFUlNJT05fTUFK
-T1IpCi0tIAoyLjM5LjUKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
-cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+--===============5415874150753157726==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=843a4faa6d2fd047c307178bd07549c32ec76eae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes the following security vulnerabilities:
+
+[CVE-2024-56171] Use-after-free in xmlSchemaIDCFillNodeTables
+https://gitlab.gnome.org/GNOME/libxml2/-/issues/828
+
+[CVE-2025-24928] Stack-buffer-overflow in xmlSnprintfElements
+https://gitlab.gnome.org/GNOME/libxml2/-/issues/847
+
+Null-deref in xmlPatMatch
+https://gitlab.gnome.org/GNOME/libxml2/-/issues/861
+
+https://www.openwall.com/lists/oss-security/2025/02/18/2
+
+Drop now upstreamed patches:
+https://gitlab.gnome.org/GNOME/libxml2/-/commit/fc72e0833a4e5724aef604e2fd9adb1014cb4844
+https://gitlab.gnome.org/GNOME/libxml2/-/commit/539663626b91567159a70791c0f2b3b167135e9b
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../libxml2/0001-Fix-compilation-with-uclibc.patch | 114 ---------------------
+ .../0002-Fix-Fix-compilation-with-uclibc.patch     |  31 ------
+ package/libxml2/libxml2.hash                       |   4 +-
+ package/libxml2/libxml2.mk                         |   2 +-
+ 4 files changed, 3 insertions(+), 148 deletions(-)
+
+diff --git a/package/libxml2/0001-Fix-compilation-with-uclibc.patch b/package/libxml2/0001-Fix-compilation-with-uclibc.patch
+deleted file mode 100644
+index aedad27e05..0000000000
+--- a/package/libxml2/0001-Fix-compilation-with-uclibc.patch
++++ /dev/null
+@@ -1,114 +0,0 @@
+-From fc72e0833a4e5724aef604e2fd9adb1014cb4844 Mon Sep 17 00:00:00 2001
+-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+-Date: Mon, 16 Dec 2024 17:23:23 +0100
+-Subject: [PATCH] Fix compilation with uclibc
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-The patch fixes the following errors and warnings raised by the
+-compilation of the library with uClibc:
+-
+-encoding.c: In function ‘xmlEncInputChunk’:
+-encoding.c:2209:32: warning: comparison between pointer and integer
+- 2209 |     else if (handler->iconv_in != NULL) {
+-      |                                ^~
+-encoding.c: In function ‘xmlEncOutputChunk’:
+-encoding.c:2269:33: warning: comparison between pointer and integer
+- 2269 |     else if (handler->iconv_out != NULL) {
+-      |                                 ^~
+-encoding.c: In function ‘xmlCharEncCloseFunc’:
+-encoding.c:2681:29: warning: comparison between pointer and integer
+- 2681 |     if ((handler->iconv_out != NULL) || (handler->iconv_in != NULL)) {
+-      |                             ^~
+-encoding.c:2681:60: warning: comparison between pointer and integer
+- 2681 |     if ((handler->iconv_out != NULL) || (handler->iconv_in != NULL)) {
+-      |                                                            ^~
+-encoding.c:2683:32: warning: comparison between pointer and integer
+- 2683 |         if (handler->iconv_out != NULL) {
+-      |                                ^~
+-encoding.c:2686:32: error: assignment to ‘iconv_t’ {aka ‘long int’} from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
+- 2686 |             handler->iconv_out = NULL;
+-      |                                ^
+-encoding.c:2688:31: warning: comparison between pointer and integer
+- 2688 |         if (handler->iconv_in != NULL) {
+-      |                               ^~
+-encoding.c:2691:31: error: assignment to ‘iconv_t’ {aka ‘long int’} from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
+- 2691 |             handler->iconv_in = NULL;
+-      |                               ^
+-make[4]: *** [Makefile:1147: libxml2_la-encoding.lo] Error 1
+-
+-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+-Upstream: https://gitlab.gnome.org/GNOME/libxml2/-/commit/fc72e0833a4e5724aef604e2fd9adb1014cb4844
+----
+- encoding.c | 20 ++++++++++----------
+- 1 file changed, 10 insertions(+), 10 deletions(-)
+-
+-diff --git a/encoding.c b/encoding.c
+-index 14ffafddbc02..41ecde1885e4 100644
+---- a/encoding.c
+-+++ b/encoding.c
+-@@ -1264,7 +1264,7 @@ DECLARE_ISO_FUNCS(16)
+- #endif /* LIBXML_ISO8859X_ENABLED */
+- 
+- #ifdef LIBXML_ICONV_ENABLED
+--  #define EMPTY_ICONV , (iconv_t) 0, (iconv_t) 0
+-+  #define EMPTY_ICONV , (iconv_t) -1, (iconv_t) -1
+- #else
+-   #define EMPTY_ICONV
+- #endif
+-@@ -1389,8 +1389,8 @@ xmlNewCharEncodingHandler(const char *name,
+-     handler->name = up;
+- 
+- #ifdef LIBXML_ICONV_ENABLED
+--    handler->iconv_in = NULL;
+--    handler->iconv_out = NULL;
+-+    handler->iconv_in = (iconv_t) -1;
+-+    handler->iconv_out = (iconv_t) -1;
+- #endif
+- #ifdef LIBXML_ICU_ENABLED
+-     handler->uconv_in = NULL;
+-@@ -2200,7 +2200,7 @@ xmlEncInputChunk(xmlCharEncodingHandler *handler, unsigned char *out,
+-         }
+-     }
+- #ifdef LIBXML_ICONV_ENABLED
+--    else if (handler->iconv_in != NULL) {
+-+    else if (handler->iconv_in != (iconv_t) -1) {
+-         ret = xmlIconvWrapper(handler->iconv_in, out, outlen, in, inlen);
+-     }
+- #endif /* LIBXML_ICONV_ENABLED */
+-@@ -2260,7 +2260,7 @@ xmlEncOutputChunk(xmlCharEncodingHandler *handler, unsigned char *out,
+-         }
+-     }
+- #ifdef LIBXML_ICONV_ENABLED
+--    else if (handler->iconv_out != NULL) {
+-+    else if (handler->iconv_out != (iconv_t) -1) {
+-         ret = xmlIconvWrapper(handler->iconv_out, out, outlen, in, inlen);
+-     }
+- #endif /* LIBXML_ICONV_ENABLED */
+-@@ -2672,17 +2672,17 @@ xmlCharEncCloseFunc(xmlCharEncodingHandler *handler) {
+-      * Iconv handlers can be used only once, free the whole block.
+-      * and the associated icon resources.
+-      */
+--    if ((handler->iconv_out != NULL) || (handler->iconv_in != NULL)) {
+-+    if ((handler->iconv_out != (iconv_t) -1) || (handler->iconv_in != (iconv_t) -1)) {
+-         tofree = 1;
+--	if (handler->iconv_out != NULL) {
+-+	if (handler->iconv_out != (iconv_t) -1) {
+- 	    if (iconv_close(handler->iconv_out))
+- 		ret = -1;
+--	    handler->iconv_out = NULL;
+-+	    handler->iconv_out = (iconv_t) -1;
+- 	}
+--	if (handler->iconv_in != NULL) {
+-+	if (handler->iconv_in != (iconv_t) -1) {
+- 	    if (iconv_close(handler->iconv_in))
+- 		ret = -1;
+--	    handler->iconv_in = NULL;
+-+	    handler->iconv_in = (iconv_t) -1;
+- 	}
+-     }
+- #endif /* LIBXML_ICONV_ENABLED */
+--- 
+-2.43.0
+-
+diff --git a/package/libxml2/0002-Fix-Fix-compilation-with-uclibc.patch b/package/libxml2/0002-Fix-Fix-compilation-with-uclibc.patch
+deleted file mode 100644
+index 76ea711962..0000000000
+--- a/package/libxml2/0002-Fix-Fix-compilation-with-uclibc.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 539663626b91567159a70791c0f2b3b167135e9b Mon Sep 17 00:00:00 2001
+-From: Nick Wellnhofer <wellnhofer@aevum.de>
+-Date: Thu, 16 Jan 2025 15:50:46 +0100
+-Subject: [PATCH] Fix "Fix compilation with uclibc"
+-
+-The ICU code must initialize the iconv members as well.
+-
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-Upstream: https://gitlab.gnome.org/GNOME/libxml2/-/commit/539663626b91567159a70791c0f2b3b167135e9b
+----
+- encoding.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/encoding.c b/encoding.c
+-index 41ecde18..0ce8d479 100644
+---- a/encoding.c
+-+++ b/encoding.c
+-@@ -1641,6 +1641,10 @@ xmlCreateUconvHandler(const char *name, xmlCharEncodingHandler **out) {
+-     }
+-     enc->input = NULL;
+-     enc->output = NULL;
+-+#ifdef LIBXML_ICONV_ENABLED
+-+    enc->iconv_in = (iconv_t) -1;
+-+    enc->iconv_out = (iconv_t) -1;
+-+#endif
+-     enc->uconv_in = ucv_in;
+-     enc->uconv_out = ucv_out;
+- 
+--- 
+-2.34.1
+-
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index eb92ad4324..88c7f5b9ff 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.5.sha256sum
+-sha256  74fc163217a3964257d3be39af943e08861263c4231f9ef5b496b6f6d4c7b2b6  libxml2-2.13.5.tar.xz
++# From https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.6.sha256sum
++sha256  f453480307524968f7a04ec65e64f2a83a825973bcd260a2e7691be82ae70c96  libxml2-2.13.6.tar.xz
+ # License files, locally calculated
+ sha256  c99aae1afe013e50b8b3701e089222b351258043c3025b64053a233fd25b4be7  Copyright
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index a8cb86ab2f..148fcd8762 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBXML2_VERSION_MAJOR = 2.13
+-LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).5
++LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).6
+ LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
+ LIBXML2_SITE = \
+ 	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
+
+--===============5415874150753157726==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5415874150753157726==--
