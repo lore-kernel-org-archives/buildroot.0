@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7E7BC021B2
-	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 11:58:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F24DC021B2
+	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 12:03:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8D2A98144F;
-	Sat, 22 Feb 2025 11:58:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E35B815AD;
+	Sat, 22 Feb 2025 12:03:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OXAXpzLQ9kPC; Sat, 22 Feb 2025 11:58:13 +0000 (UTC)
+ id FaGXrenh7I-H; Sat, 22 Feb 2025 12:03:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9386E81421
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 026518148A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9386E81421;
-	Sat, 22 Feb 2025 11:58:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B8776F11
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 11:58:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 026518148A;
+	Sat, 22 Feb 2025 12:03:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 521B2F11
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 12:03:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9EEC2400C1
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 11:58:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 35C708148A
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 12:03:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9YoMc6mDRSTM for <buildroot@buildroot.org>;
- Sat, 22 Feb 2025 11:58:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F12CF400B5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F12CF400B5
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F12CF400B5
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 11:58:09 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p54a1b302.dip0.t-ipconnect.de [84.161.179.2])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id DF41DA4C507B
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 12:58:05 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46810)
- by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1tlo8z-000000007xA-01o0
- for buildroot@buildroot.org; Sat, 22 Feb 2025 11:58:05 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2mAA6Aj3z6ak for <buildroot@buildroot.org>;
+ Sat, 22 Feb 2025 12:03:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46B5A8141B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 46B5A8141B
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 12:03:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3A8DE87753; Sat, 22 Feb 2025 12:03:16 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 22 Feb 2025 12:58:05 +0100
-Message-Id: <20250222115805.3332092-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.5
-MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202412041019; t=1740225485;
- bh=DU2FTBZDALpPUjD/FG/Y0WDkXcFq532G9TDGXjjHkic=;
- h=From:To:Subject:Date:From;
- b=CYhwPd3jLk9qa0v9KpWHxXhrz/VbQAxaDZAv8LDDtCwyHutdkQ/ZiGVS5EFaDkMw3
- MoKwZ8onc+XdN1Iu/7ijObECzHrGwEATuB7TnE4icZIcs6pSjDZo+St6G8MOlyNxDF
- BlDkMBQFFd6EoRrqP1n/WKPm3Ctyi51H+d2RUC7yd02HAEEckz1IX0IFTYlQT8tThU
- gZea4VSKAVhz93o3+Pte9lgjUlLQR3RoZYJIiAc3Vp/frDlpl3xmS2UJQVjnKcdR2K
- J1MrtNM3gWd3x0Yp8y2UIj5N8QtI5ot+khETElyZP/nvL2tQVs31QYHRIJKWq9IYvi
- fzaNXytCPU8Ew==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202412041019 header.b=CYhwPd3j
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.{1, 6,
- 12}.x series
+Date: Sat, 22 Feb 2025 12:40:53 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f3cd0519efd5f79a7ee46d59fc559d46942c9d36
+X-Git-Newrev: b13373466bd7e8ac2d587cbd2489b1396fbb2f82
+X-Patchwork-Hint: ignore
+Message-Id: <20250222120316.3A8DE87753@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/valgrind: update to 3.24.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,66 +58,148 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=b13373466bd7e8ac2d587cbd2489b1396fbb2f82
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+See here for a changelog:
+https://valgrind.org/docs/manual/dist.news.html
+
+Patches 0003/0004 are applied upstream and so got removed here.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 6 +++---
- package/linux-headers/Config.in.host | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ ...Fix-uninitialized-err-in-handle_extension.patch | 47 ----------------------
+ ...f-guest_IP_AT_SYSCALL-in-handle_extension.patch | 33 ---------------
+ package/valgrind/valgrind.hash                     |  4 +-
+ package/valgrind/valgrind.mk                       |  2 +-
+ 4 files changed, 3 insertions(+), 83 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 238ef4aada..c7c8cf3492 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -137,7 +137,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.12.15" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.12.16" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index e81b506682..e6ea2ec3c2 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
+diff --git a/package/valgrind/0003-Fix-uninitialized-err-in-handle_extension.patch b/package/valgrind/0003-Fix-uninitialized-err-in-handle_extension.patch
+deleted file mode 100644
+index c6a6b3dce3..0000000000
+--- a/package/valgrind/0003-Fix-uninitialized-err-in-handle_extension.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 94c2e5c6be23c6323f24deacdad5f98fb9f0b1c2 Mon Sep 17 00:00:00 2001
+-From: Andreas Arnez <arnez@linux.ibm.com>
+-Date: Wed, 15 May 2024 14:32:42 +0200
+-Subject: [PATCH] Fix uninitialized `err' in handle_extension()
+-
+-In handle_extension(), in the case of a second return from SCHEDSETJMP the
+-variable `err' would be used uninitialized.  Fix this by avoiding any
+-access to `err' in this case.
+-
+-Signed-off-by: Andreas Arnez <arnez@linux.ibm.com>
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Upstream: https://sourceware.org/git/?p=valgrind.git;a=commit;h=94c2e5c6be23c6323f24deacdad5f98fb9f0b1c2
+----
+- coregrind/m_scheduler/scheduler.c | 10 ++++------
+- 1 file changed, 4 insertions(+), 6 deletions(-)
+-
+-diff --git a/coregrind/m_scheduler/scheduler.c b/coregrind/m_scheduler/scheduler.c
+-index fc8cf7c9c..29751bb28 100644
+---- a/coregrind/m_scheduler/scheduler.c
+-+++ b/coregrind/m_scheduler/scheduler.c
+-@@ -1233,7 +1233,10 @@ static void handle_extension(ThreadId tid)
+-    SCHEDSETJMP(tid, jumped, err = VG_(client_extension)(tid));
+-    vg_assert(VG_(is_running_thread)(tid));
+- 
+--   if (err != ExtErr_OK) {
+-+   if (jumped != (UWord)0) {
+-+      block_signals();
+-+      VG_(poll_signals)(tid);
+-+   } else if (err != ExtErr_OK) {
+-       ThreadState* tst = VG_(get_ThreadState)(tid);
+-       Addr addr = tst->arch.vex.guest_IP_AT_SYSCALL;
+-       switch (err) {
+-@@ -1244,11 +1247,6 @@ static void handle_extension(ThreadId tid)
+-          VG_(core_panic)("scheduler: bad return code from extension");
+-       }
+-    }
+--
+--   if (jumped != (UWord)0) {
+--      block_signals();
+--      VG_(poll_signals)(tid);
+--   }
+- }
+- 
+- /* tid just requested a jump to the noredir version of its current
+--- 
+-2.39.2
+-
+diff --git a/package/valgrind/0004-Avoid-use-of-guest_IP_AT_SYSCALL-in-handle_extension.patch b/package/valgrind/0004-Avoid-use-of-guest_IP_AT_SYSCALL-in-handle_extension.patch
+deleted file mode 100644
+index 006e24096e..0000000000
+--- a/package/valgrind/0004-Avoid-use-of-guest_IP_AT_SYSCALL-in-handle_extension.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 16249b21456d681b5d98400287b8dbd926050c75 Mon Sep 17 00:00:00 2001
+-From: Andreas Arnez <arnez@linux.ibm.com>
+-Date: Wed, 15 May 2024 14:32:42 +0200
+-Subject: [PATCH] Avoid use of guest_IP_AT_SYSCALL in handle_extension()
+-
+-The guest state field guest_IP_AT_SYSCALL is referenced in
+-handle_extension(), even though it may not be defined by all
+-architectures.  Avoid its use altogether.
+-
+-Signed-off-by: Andreas Arnez <arnez@linux.ibm.com>
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Upstream: https://sourceware.org/git/?p=valgrind.git;a=commit;h=16249b21456d681b5d98400287b8dbd926050c75
+----
+- coregrind/m_scheduler/scheduler.c | 3 +--
+- 1 file changed, 1 insertion(+), 2 deletions(-)
+-
+-diff --git a/coregrind/m_scheduler/scheduler.c b/coregrind/m_scheduler/scheduler.c
+-index 29751bb28..cc8d070b7 100644
+---- a/coregrind/m_scheduler/scheduler.c
+-+++ b/coregrind/m_scheduler/scheduler.c
+-@@ -1237,8 +1237,7 @@ static void handle_extension(ThreadId tid)
+-       block_signals();
+-       VG_(poll_signals)(tid);
+-    } else if (err != ExtErr_OK) {
+--      ThreadState* tst = VG_(get_ThreadState)(tid);
+--      Addr addr = tst->arch.vex.guest_IP_AT_SYSCALL;
+-+      Addr addr = VG_(get_IP)(tid);
+-       switch (err) {
+-       case ExtErr_Illop:
+-          VG_(synth_sigill)(tid, addr);
+--- 
+-2.39.2
+-
+diff --git a/package/valgrind/valgrind.hash b/package/valgrind/valgrind.hash
+index 9cb66b583a..203a0770e1 100644
+--- a/package/valgrind/valgrind.hash
++++ b/package/valgrind/valgrind.hash
 @@ -1,7 +1,7 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  5ff5bd84ea0e22c53437302db5d394d0a92d8b8b1a88ce20d1098298e9f7630a  linux-6.12.15.tar.xz
--sha256  5aa39a9bd555133ad741058f9908a277e6b36bb928481e747d885b50aaaa93ed  linux-6.6.78.tar.xz
--sha256  874d67d3181570e69ac6b33853f0448f05fc90d4cf3e4baaadc4a9cede7c50f3  linux-6.1.128.tar.xz
-+sha256  5f81362a694f51520bff9faecb73f1cc9bc7bece6fdd10d5c27e348df39d7dc4  linux-6.12.16.tar.xz
-+sha256  07a6f904470da1a099aa1683e3025a999dd82f2438f78b006b80c6ae2e9dfe8d  linux-6.6.79.tar.xz
-+sha256  9d63e3bfde75a44a99e18812b002e5e5c0797b4eb3db408a7a9225c2c719b52b  linux-6.1.129.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  efe9f7eb5ea4d26cec6290689343e1804eb3b4a88ff5a60497a696fc08157c42  linux-5.15.178.tar.xz
- sha256  9597c4fee2f1ce452acfec516f4325ad342155872052fd5f0d9ce2ddcc26ebe5  linux-5.10.234.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e762ded1f7..6ddb308fa8 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -431,9 +431,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.4.290"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.234"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.178"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.128"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.78"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.15"	if BR2_KERNEL_HEADERS_6_12
-+	default "6.1.129"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.79"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.16"	if BR2_KERNEL_HEADERS_6_12
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
--- 
-2.39.5
-
+ # From https://valgrind.org/downloads/current.html
+-sha1  ec410c75d3920d4f9249a5cfa2cac31e1bf6d586  valgrind-3.23.0.tar.bz2
++sha1  6fc0470fedc0d85dae3e042297cabd13c6100749  valgrind-3.24.0.tar.bz2
+ # locally computed
+-sha256  c5c34a3380457b9b75606df890102e7df2c702b9420c2ebef9540f8b5d56264d  valgrind-3.23.0.tar.bz2
++sha256  71aee202bdef1ae73898ccf7e9c315134fa7db6c246063afc503aef702ec03bd  valgrind-3.24.0.tar.bz2
+ 
+ # License files
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+index a5cb4b1c03..f0638f464b 100644
+--- a/package/valgrind/valgrind.mk
++++ b/package/valgrind/valgrind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-VALGRIND_VERSION = 3.23.0
++VALGRIND_VERSION = 3.24.0
+ VALGRIND_SITE = https://sourceware.org/pub/valgrind
+ VALGRIND_SOURCE = valgrind-$(VALGRIND_VERSION).tar.bz2
+ VALGRIND_LICENSE = GPL-2.0, GFDL-1.2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
