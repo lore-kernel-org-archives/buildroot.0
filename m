@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2F3BC021B2
-	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 17:32:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 439D0C021B2
+	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 17:33:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6892E405C3;
-	Sat, 22 Feb 2025 17:32:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C95540556;
+	Sat, 22 Feb 2025 17:33:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OwaH-k0JJTsp; Sat, 22 Feb 2025 17:32:36 +0000 (UTC)
+ id Czw9Iw5oA-7V; Sat, 22 Feb 2025 17:33:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27A7840556
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 004B44054B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 27A7840556;
-	Sat, 22 Feb 2025 17:32:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6B7366B
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:32:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 004B44054B;
+	Sat, 22 Feb 2025 17:32:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 61B296B
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:32:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 58B5180F06
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:32:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5D63F606B3
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:32:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tic9DZuNyMmH for <buildroot@buildroot.org>;
- Sat, 22 Feb 2025 17:32:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86D6780F0D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 86D6780F0D
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:32:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7EBCD87172; Sat, 22 Feb 2025 17:32:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jazW2EazF9w7 for <buildroot@buildroot.org>;
+ Sat, 22 Feb 2025 17:32:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ADD0860628
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADD0860628
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ADD0860628
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:32:57 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 617102003DD;
+ Sat, 22 Feb 2025 18:32:53 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 22 Feb 2025 18:32:53 +0100
+MIME-Version: 1.0
+Date: Sat, 22 Feb 2025 18:32:53 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 22 Feb 2025 18:26:43 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 811993924351dbd122a8da1b012069f5b7115ae9
-X-Git-Newrev: 98aec6280a1255b93b0d04e81af1440590ca1f7b
-X-Patchwork-Hint: ignore
-Message-Id: <20250222173233.7EBCD87172@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tftpy: bump to 0.8.5
+To: Colin Foster <colin.foster@in-advantage.com>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <20250220192621.1744526-1-colin.foster@in-advantage.com>
+References: <20250220192621.1744526-1-colin.foster@in-advantage.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <97f2bd2d08d69009fc4dd5d9418bac54@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1740245575;
+ bh=tcSW9+EyVPtrHdehq4C3ahYgjmPSSrjrvjRbmL5W2rM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=pqMNiEabACXQiqEepobY8ARxBt9shv5P6rY98bCt++BKUAN5P3FLBlIskzXkryBQc
+ t+ALjT5ECrNYT909c3dQYp5YbstoJPyjm0Nals2+6bL3ey2LvnwgqZXmrFKAHedPuw
+ 3qwZz8wIWeR+vRQ4gE519JZ/h/uYYNJnFbkK3v8tWE8WGCptwHPUUgllSiCgqdNR+R
+ 0fsKm2rOBmyFP8onK0NSMaPGgenqyIoLGYomG1yn0DetXMMdswUU3/3nCxbZlMbEQd
+ RjUCBDECPQWG82R3c/nZse4HidpJFfaRSWVkYEJa70Ohw0YPalBo4TYD9SsWZVlBTq
+ aqiWWbh1U0okg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=pqMNiEab
+Subject: Re: [Buildroot] [PATCH] package/tftpy: bump to 0.8.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,44 +81,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98aec6280a1255b93b0d04e81af1440590ca1f7b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 20/02/2025 20:26, Colin Foster wrote:
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
 
-Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-tftpy/python-tftpy.hash | 2 +-
- package/python-tftpy/python-tftpy.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/python-tftpy/python-tftpy.hash b/package/python-tftpy/python-tftpy.hash
-index 1fae4fdeef..3a040a456a 100644
---- a/package/python-tftpy/python-tftpy.hash
-+++ b/package/python-tftpy/python-tftpy.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  2bfbf6377f6e3b6ba647f0ac614e9cbc225d1cc35b52991860ba6ea1ec58ef9d  python-tftpy-0.8.2.tar.gz
-+sha256  fc1460bf698c4207a255fffb446ce21d44cb0d9a8f2ee5ad705cd40969800050  python-tftpy-0.8.5.tar.gz
- sha256  4616f0c71e62ce2e0f6cdd3aef6d3c285f8730c9304b88a9f3ce3f14c2e6f756  LICENSE
-diff --git a/package/python-tftpy/python-tftpy.mk b/package/python-tftpy/python-tftpy.mk
-index fd3c601496..66de17eaab 100644
---- a/package/python-tftpy/python-tftpy.mk
-+++ b/package/python-tftpy/python-tftpy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PYTHON_TFTPY_VERSION = 0.8.2
-+PYTHON_TFTPY_VERSION = 0.8.5
- PYTHON_TFTPY_SITE = $(call github,msoulier,tftpy,$(PYTHON_TFTPY_VERSION))
- PYTHON_TFTPY_LICENSE = MIT
- PYTHON_TFTPY_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
