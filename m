@@ -4,49 +4,107 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21497C021B2
-	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 17:36:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02DCBC021B2
+	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 17:40:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B8E440828;
-	Sat, 22 Feb 2025 17:36:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C1929405C3;
+	Sat, 22 Feb 2025 17:40:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NmkUsukiVl_A; Sat, 22 Feb 2025 17:36:02 +0000 (UTC)
+ id 4neD3YgvFCkK; Sat, 22 Feb 2025 17:40:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8A0C4082D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B7A9406AE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8A0C4082D;
-	Sat, 22 Feb 2025 17:36:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A3FDD92
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:35:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B7A9406AE;
+	Sat, 22 Feb 2025 17:40:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C1916B
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:40:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F24F980F18
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:35:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1DB69606BF
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:40:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZiEJuEnrpSZ2 for <buildroot@buildroot.org>;
- Sat, 22 Feb 2025 17:35:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9564B80F0D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9564B80F0D
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:35:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 82222876AA; Sat, 22 Feb 2025 17:35:53 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 22 Feb 2025 18:35:30 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 180fc4ec96e280a6f1caaf043b11430a13c1bf0b
-X-Git-Newrev: dbab39e2d90899f28929af5db3fb0facae19b6a1
-X-Patchwork-Hint: ignore
-Message-Id: <20250222173553.82222876AA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/generate-cyclonedx.py: add
- script to generate CycloneDX-style SBOM
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jVQNyl1Xeoeq for <buildroot@buildroot.org>;
+ Sat, 22 Feb 2025 17:40:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AF612606B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF612606B3
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AF612606B3
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:40:13 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-4397dff185fso27426885e9.2
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 09:40:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1740246011; x=1740850811;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=38QG7DrW6JsMB2JdX4lbObyuewt4Z8cflM3eB/vJ5g0=;
+ b=saRKMDob7W+UU5IAAUJ+YHleyF5aStGkVRBjnOjufyzoOeii/aV8HXfPOPdQxcrv9J
+ /RhS5vgpg0Fx96Kq/UDLR1v7uCRdBFzpmNMYgMFmTk7eeFH79fHKAfUxLVmIOx+u5VjT
+ dLSqOyT3++JNy2PxKvTE6lDy3GY8oO5j3UQ7Nwo5nXNNwNNog4sCfqMqNsO6X+dAdg1C
+ dkHnLPmFn4W41ww4dJqd07BZWeYjSrYSBZhXAFD5hY8lJ8SwmGT6WxyYWBQrJzq8E7DV
+ f4eSHqvlE2qrX/0IoyYcVwWzV9PbQ4e+921KFsV2p7EMgUYz/Mh4h9QiiNTuEeUFpuzh
+ Ak1A==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUB4LPhki+Xxin+Xm1to0RKAD/100VwdBYiyPU+9RGqlbXJrsB4VM4LCOoLhNnstqFmH5mpobrOEcA=@buildroot.org
+X-Gm-Message-State: AOJu0YxW/sQ/MQLFhqmOoHAzY+XhB9TUsO+bILxxVW6Sua4tPaTkRNNe
+ DtF7OQP0ymVd4EJsEVC8VB6K0O340WBWljSj3gpV7/N6bQTLlLXCeRJVFl++2a4=
+X-Gm-Gg: ASbGncv2kn6pTTOJ6r7IC2VcJp8kEj5qd0roagxjTYnyivEC7Jh9uDVbhknRYOWSktG
+ pAmhgwXvyqp28qISnO3cMTckJ6GeJT8J3xSQHPQVYBRndXwr4603XYbLlnvCTEQWVsYrQkKXowF
+ gCzeh0o0ZKIUbZ5P/Ek6myCGq65OjTxS9NhfIIlb7tLbv9bBl1AV2jJKAzAS6YF9ql5XLPaJp6B
+ bI/muvtLqGepVZqM70ZinUpUiv5mRxPhvrzHqJXRTa+QSRg843sKN4vGzlBcS7UAgPVGiuFNrME
+ /Oj/QHin7DG56fbA16WtOUTn3dN0N3tSBIsHzN3ZnH/f2JJdrpjayvoUOJxLnGaPoMG6oAUx5HJ
+ LNIv6X/4RRnIhElodv408bKEo2JH593RWhaVCLTOORtXcNuUEkp5c9utS
+X-Google-Smtp-Source: AGHT+IFXgyyw+W0gkrOvJ/1Vh/O1gDeWS6veDaZaPeHZ1Jrw4ilpeXVZkapIuV9F2gpFmuz/DEroOA==
+X-Received: by 2002:a05:600c:1e0c:b0:439:88bb:d002 with SMTP id
+ 5b1f17b1804b1-43a9dece3c4mr7029255e9.23.1740246010458; 
+ Sat, 22 Feb 2025 09:40:10 -0800 (PST)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-439b030bdb4sm53720625e9.27.2025.02.22.09.40.09
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sat, 22 Feb 2025 09:40:09 -0800 (PST)
+Message-ID: <7b1f278b-9e9a-4bdc-ba0e-532809936aa0@mind.be>
+Date: Sat, 22 Feb 2025 18:40:08 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Matthias Swiggers <matthias.swiggers@mind.be>,
+ Vincent Jardin <vjardin@free.fr>
+References: <20250206180614.984105-1-thomas.perale@mind.be>
+Content-Language: en-GB
+In-Reply-To: <20250206180614.984105-1-thomas.perale@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1740246011; x=1740850811; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=38QG7DrW6JsMB2JdX4lbObyuewt4Z8cflM3eB/vJ5g0=;
+ b=J2mB5ZDZUrqwdbIvhw4b1lB3fo6lNa6l+Q03V5WIvHSK26zzX2KTmaFOZ6FJ8Y8n7v
+ d6IdHRRsHOLY/qvcSD/vo0i3JoviMcUllvyOy5EW4Cf6z3PPndmbLoPXng19aEslOOoY
+ XbLEc+tJm/7oBJoQwvRNVtsvjnI0/vMX8WH794ao614YdkuPaKy2w1qYdJUIW4/c/PIl
+ DG5vxBZ/lRIbkMR0BsOukLQuf4wwxRtwAf/H9lgUnf5FIBH7kUdrNo6/K1+L3uYs4XBp
+ rzUItgfpdgoAxAmybCxgcVHKCWLTj/CyOEwAfjrVf6pQ1g2dqNjQAezt1AnUM6MhNNkG
+ AODA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=J2mB5ZDZ
+Subject: Re: [Buildroot] [v3,RFC,PATCH 0/2] Support CycloneDX SBOM
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,474 +118,96 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbab39e2d90899f28929af5db3fb0facae19b6a1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+  Hi Thomas,
 
-There is a growing need to generate software bill of materials (SBOM) from
-buildroot configurations. Right now there are different solutions available
-for buildroot users `show-info`, `legal-info` and `pkg-stats`.
-They all generate similar information but in a format that is specific
-to buildroot.
+On 06/02/2025 19:06, Thomas Perale wrote:
+> This series is the sequel of a patch series sent in April 2024
+> https://lore.kernel.org/buildroot/Zhb8vKs-ltd8ghUR@landeda/T/
+> from which it was agreed to parse the content of the `show-info` JSON
+> output with a python script instead of generating the SBOM from the makefile.
+> 
+> The DependencyTrack instance is still available at https://dependencytrack-lqgs7zhwmq-ew.a.run.app/
+> for you to test CycloneDX and see the possibility.
+> Login with username `buildroot` and password `buildroot`.
+> 
+> To generate a CycloneDX SBOM you can run the following command:
+> 
+> ```
+> make show-info | utils/generate-cyclonedx.py | jq '.'
+> ```
+> 
+> ## Changes from v2
+> 
+> * show-info: removed the absolute path for the patches. Similar to the
+>    `staging_dir`, etc .. properties.
+> * Python: bug fixes
+> * Python: code retrieve the final of virtual package in the dependency without
+>    adding the virtual package to it.
+> * Python: In the vulnerabilities property is should be stated that it has been
+>    excluded by buildroot
+> * pkg-utils: Doesn't rely on `.applied_patches_list`, and instead returns a
+>    consistant list of patches. For now we will ignore the corner cases that rely
+>    on patching during the pre/post hooks.
+> * pkg-utils: Use the `pkg-patches-dir` function during the `.stamp_patched` step
+>    and the `<pkg>_HASH_FILE` variable in `pkg-generic.mk`.
+>    * This change would need special attention. The logic of the
+>      variable changed a bit, the previous implementation would only pick the
+>      hash/patch file in the version subdirectory if present if a hash/patch file
+>      also exist in the package directory it will also be applied.
+>      I don't think there is a case where where an hash file is present in
+>      the `<pkg>/<version/*.hash` directory as well as in `<pkg>/*.hash`
+>      directory. For instance the 'lua', 'openjdk-bin' package has hash files
+>      only in version sub-directory.
 
-CycloneDX is a SBOM specification that can be consumed by different services.
+  I finally applied the series but with quite a few changes.
 
-This patch introduces a Python script, that converts the JSON output of the
-show-info Makefile target to a CycloneDX-style SBOM.
-The script output contains the following information.
-    - A list of all packages, or "components" with information about
-      version, cpe (if available), applied patches.
-    - By default virtual packages are not listed in the SBOM.
-    - Additional information is added to the component 'properties' to
-      specify wheter the component is present on the target or the host
-      under the `BR_TYPE` property name.
-    - An overview of the licenses applicable to each package. If possible,
-      the names of these licenses have been matched to known SPDX license
-      identifiers.
-    - Per package, a list of (recursive) dependencies on other packages.
-    - A list of ignored CVE and their associated component.
+  First of all, I split the first patch into two commits: the first one just 
+does the refactoring, and the second one adds the patches to show-info.
 
-More information on CycloneDX at https://cyclonedx.org/.
+  While testing, I discovered that the behaviour of hash files and patches is 
+actually quite different: patches use only the version directory if it exists, 
+while hashes use both the version dir and the base dir. In-tree, the behaviour 
+for hashes _is_ actually used like that. For patches it is not, but there may be 
+externals that rely on it, so I didn't want to change that behaviour. Therefore, 
+the patches and hashes are not fully refactored. Look at the code to see what I 
+ended up with.
 
-Usage:
-    make show-info | utils/generate-cyclonedx.py | jq '.'
+  There were a few more details as well:
 
-Example output:
+      - don't fully factor with _HASH_FILES because version is treaded
+        differently;
+      - introduce pkg-patch-hash-dirs;
+      - retain the RAWNAME comment, but move it to pkg-patch-hash-dirs;
+      - use foreach instead of shell loop, and $(seq) instead of exit 1;
 
-```
-{
-  "bomFormat": "CycloneDX",
-  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
-  "specVersion": "1.6",
-  "components": [
-    {
-      "bom-ref": "busybox",
-      "type": "library",
-      "name": "busybox",
-      "version": "1.36.1",
-      "licenses": [
-        {
-          "license": {
-            "id": "GPL-2.0"
-          }
-        },
-        ...
-      ],
-      "cpe": "cpe:2.3:a:busybox:busybox:1.36.1:*:*:*:*:*:*:*",
-      "pedigree": {
-        "patches": [
-          {
-            "type": "unofficial",
-            "diff": {
-              "text": {
-                "content": "..."
-              }
-            }
-          }
-        ]
-      }
-      "properties": [
-        {
-          "name": "BR_TYPE",
-          "value": "target"
-        }
-      ]
-    },
-    ...
-  ],
-  "dependencies": [
-    {
-      "ref": "busybox",
-      "dependsOn": [
-        "host-skeleton",
-        "skeleton",
-        "skeleton-init-sysv",
-        "skeleton-init-common",
-        ...
-    }
-    ...
-  ],
-  "vulnerabilities": [
-    {
-      "id": "CVE-2022-28391",
-      "analysis": {
-        "state": "in_triage",
-        "detail": "The CVE 'CVE-2022-28391' has been marked as ignored by Buildroot"
-      },
-      "affects": [
-        {
-          "ref": "busybox"
-        }
-      ]
-    },
-    ...
-  ],
-  "metadata": {
-    "component": {
-      "bom-ref": "buildroot",
-      "name": "buildroot",
-      "type": "firmware",
-      "version": "2024.02-4744-gafea667f00-dirty"
-    }
-  }
-}
-```
+and on the generate-cyclonedx.py patch:
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Co-authored-by: Matthias Swiggers <matthias.swiggers@mind.be>
-Reviewed-by: Vincent Jardin <vjardin@free.fr>
-[Arnout:
- - alphabetically order imports;
- - use endswith instead if 'in' to check suffix;
- - add usage to help text;
- - remove .py suffix.
-]
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- DEVELOPERS               |   1 +
- utils/generate-cyclonedx | 317 +++++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 318 insertions(+)
+      - alphabetically order imports;
+      - use endswith instead if 'in' to check suffix;
+      - add usage to help text;
+      - remove .py suffix.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 73d4281d12..9a220359e7 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3176,6 +3176,7 @@ F:	package/xorcurses/
- 
- N:	Thomas Perale <thomas.perale@mind.be>
- F:	package/go/
-+F:	utils/generate-cyclonedx.py
- 
- N:	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- F:	arch/Config.in.arm
-diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-new file mode 100755
-index 0000000000..993d7154ef
---- /dev/null
-+++ b/utils/generate-cyclonedx
-@@ -0,0 +1,317 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+
-+# This script converts the output of the show-info make target
-+# to CycloneDX format.
-+#
-+# Example usage:
-+# > make show-info | utils/generate-cyclonedx.py | jq '.'
-+
-+
-+import argparse
-+import bz2
-+import gzip
-+import json
-+import os
-+from pathlib import Path
-+import urllib.request
-+import subprocess
-+import sys
-+
-+CYCLONEDX_VERSION = "1.6"
-+SPDX_SCHEMA_URL = f"https://raw.githubusercontent.com/CycloneDX/specification/{CYCLONEDX_VERSION}/schema/spdx.schema.json"
-+
-+brpath = Path(__file__).parent.parent
-+
-+cyclonedxpath = Path(os.getenv("BR2_DL_DIR", brpath / "dl")) / "cyclonedx"
-+SPDX_SCHEMA_PATH = cyclonedxpath / f"spdx-{CYCLONEDX_VERSION}.schema.json"
-+
-+BR2_VERSION_FULL = (
-+    subprocess.check_output(
-+        ["make", "--no-print-directory", "-C", brpath, "print-version"]
-+    )
-+    .decode()
-+    .strip()
-+)
-+
-+SPDX_LICENSES = []
-+
-+if not SPDX_SCHEMA_PATH.exists():
-+    # Download the CycloneDX SPDX schema JSON, and cache it locally
-+    cyclonedxpath.mkdir(parents=True, exist_ok=True)
-+    urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
-+
-+try:
-+    with SPDX_SCHEMA_PATH.open() as f:
-+        SPDX_LICENSES = json.load(f).get("enum", [])
-+except json.JSONDecodeError:
-+    # In case of error the license will just not be matched to the SPDX names
-+    # but the SBOM generation still work.
-+    print(f"Failed to load the SPDX licenses file: {SPDX_SCHEMA_PATH}", file=sys.stderr)
-+
-+
-+def split_top_level_comma(subj):
-+    """Split a string at comma's, but do not split at comma's in between parentheses.
-+
-+    Args:
-+        subj (str): String to be split.
-+
-+    Returns:
-+        list: A list of substrings
-+    """
-+    counter = 0
-+    substring = ""
-+
-+    for char in subj:
-+        if char == "," and counter == 0:
-+            yield substring
-+            substring = ""
-+        else:
-+            if char == "(":
-+                counter += 1
-+            elif char == ")":
-+                counter -= 1
-+            substring += char
-+
-+    yield substring
-+
-+
-+def cyclonedx_license(lic):
-+    """Given the name of a license, create an individual entry in
-+    CycloneDX format. In CycloneDX, the 'id' keyword is used for
-+    names that are recognized as SPDX License abbreviations. All other
-+    license names are placed under the 'name' keyword.
-+
-+    Args:
-+        lic (str): Name of the license
-+
-+    Returns:
-+        dict: An entry for the license in CycloneDX format.
-+    """
-+    key = "id" if lic in SPDX_LICENSES else "name"
-+    return {
-+        key: lic,
-+    }
-+
-+
-+def cyclonedx_licenses(lic_list):
-+    """Create a licenses list formatted for a CycloneDX component
-+
-+    Args:
-+        lic_list (str): A comma separated list of license names.
-+
-+    Returns:
-+        dict: A dictionary with license information for the component,
-+        in CycloneDX format.
-+    """
-+    return {
-+        "licenses": [
-+            {"license": cyclonedx_license(lic.strip())} for lic in split_top_level_comma(lic_list)
-+        ]
-+    }
-+
-+
-+def cyclonedx_patches(patch_list):
-+    """Translate a list of patches from the show-info JSON to a list of
-+    patches in CycloneDX format.
-+
-+    Args:
-+        patch_list (dict): Information about the patches as a Python dictionary.
-+
-+    Returns:
-+        dict: Patch information in CycloneDX format.
-+    """
-+    patch_contents = []
-+    for patch in patch_list:
-+        patch_path = brpath / patch
-+        if patch_path.exists():
-+            f = None
-+            if patch.endswith('.gz'):
-+                f = gzip.open(patch_path, mode="rt")
-+            elif patch.endswith('.bz'):
-+                f = bz2.open(patch_path, mode="rt")
-+            else:
-+                f = open(patch_path)
-+
-+            try:
-+                patch_contents.append({
-+                    "text": {
-+                        "content": f.read()
-+                    }
-+                })
-+            except Exception:
-+                # If the patch can't be read it won't be added to
-+                # the resulting SBOM.
-+                print(f"Failed to handle patch: {patch}", file=sys.stderr)
-+
-+            f.close()
-+        else:
-+            # If the patch is not a file it's a tarball or diff url passed
-+            # through the `<pkg-name>_PATCH` variable.
-+            patch_contents.append({
-+                "url": patch
-+            })
-+
-+    return {
-+        "pedigree": {
-+            "patches": [{
-+                "type": "unofficial",
-+                "diff": content
-+            } for content in patch_contents]
-+        },
-+    }
-+
-+
-+def cyclonedx_component(name, comp):
-+    """Translate a component from the show-info output, to a component entry in CycloneDX format.
-+
-+    Args:
-+        name (str): Key used for the package in the show-info output.
-+        comp (dict): Data about the package as a Python dictionary.
-+
-+    Returns:
-+        dict: Component information in CycloneDX format.
-+    """
-+    return {
-+        "bom-ref": name,
-+        "type": "library",
-+        **({
-+            "name": comp["name"],
-+        } if "name" in comp else {}),
-+        **({
-+            "version": comp["version"],
-+            **(cyclonedx_licenses(comp["licenses"]) if "licenses" in comp else {}),
-+        } if not comp["virtual"] else {}),
-+        **({
-+            "cpe": comp["cpe-id"],
-+        } if "cpe-id" in comp else {}),
-+        **(cyclonedx_patches(comp["patches"]) if comp.get("patches") else {}),
-+        "properties": [{
-+            "name": "BR_TYPE",
-+            "value": comp["type"],
-+        }],
-+    }
-+
-+
-+def cyclonedx_dependency(ref, depends):
-+    """Create JSON for dependency relationships between components.
-+
-+    Args:
-+        ref (str): reference to a component bom-ref.
-+        depends (list): array of component bom-ref identifier to create the dependencies.
-+
-+    Returns:
-+        dict: Dependency information in CycloneDX format.
-+    """
-+    return {
-+        "ref": ref,
-+        "dependsOn": depends,
-+    }
-+
-+
-+def cyclonedx_vulnerabilities(show_info_dict):
-+    """Create a JSON list of vulnerabilities ignored by buildroot and associate
-+    the component for which they are solved.
-+
-+    Args:
-+        show_info_dict (dict): The JSON output of the show-info
-+            command, parsed into a Python dictionary.
-+
-+    Returns:
-+        list: Solved vulnerabilities list in CycloneDX format.
-+    """
-+    cves = {}
-+
-+    for name, comp in show_info_dict.items():
-+        for cve in comp.get('ignore_cves', []):
-+            cves.setdefault(cve, []).append(name)
-+
-+    return [{
-+        "id": cve,
-+        "analysis": {
-+            "state": "in_triage",
-+            "detail": f"The CVE '{cve}' has been marked as ignored by Buildroot"
-+        },
-+        "affects": [
-+            {"ref": bomref} for bomref in components
-+        ]
-+    } for cve, components in cves.items()]
-+
-+
-+def br2_parse_deps_recursively(ref, show_info_dict, virtual=False, deps=[]):
-+    """Parse dependencies from the show-info output. This function will
-+    recursively collect all dependencies, and return a list where each dependency
-+    is stated at most once.
-+    The dependency on virtual package will collect the final dependency without
-+    including the virtual one.
-+
-+    Args:
-+        ref (str): The identifier of the package for which the dependencies have
-+            to be looked up.
-+        show_info_dict (dict): The JSON output of the show-info
-+            command, parsed into a Python dictionary.
-+
-+    Kwargs:
-+        deps (list): A list, to which dependencies will be appended. If set to None,
-+            a new empty list will be created. Defaults to None.
-+
-+    Returns:
-+        list: A list of dependencies of the 'ref' package.
-+    """
-+    for dep in show_info_dict.get(ref, {}).get("dependencies", []):
-+        if dep not in deps:
-+            if virtual or show_info_dict.get(dep, {}).get("virtual") is False:
-+                deps.append(dep)
-+            br2_parse_deps_recursively(dep, show_info_dict, virtual, deps)
-+
-+    return deps
-+
-+
-+def main():
-+    parser = argparse.ArgumentParser(
-+            description='''Create a CycloneDX SBoM for the Buildroot configuration.
-+                Example usage: make show-info | utils/generate-cyclonedx.py | jq > sbom.json
-+            '''
-+        )
-+    parser.add_argument("-i", "--in-file", nargs="?", type=argparse.FileType("r"), default=sys.stdin)
-+    parser.add_argument("-o", "--out-file", nargs="?", type=argparse.FileType("w"), default=sys.stdout)
-+    parser.add_argument("--virtual", default=False, action='store_true',
-+                        help="This option includes virtual packages to the CycloneDX output")
-+
-+    args = parser.parse_args()
-+
-+    show_info_dict = json.load(args.in_file)
-+
-+    # Remove rootfs and virtual packages if not explicitly included
-+    # from the cli arguments
-+    filtered_show_info_dict = {k: v for k, v in show_info_dict.items()
-+                               if ("rootfs" not in v["type"]) and (args.virtual or v["virtual"] is False)}
-+
-+    cyclonedx_dict = {
-+        "bomFormat": "CycloneDX",
-+        "$schema": f"http://cyclonedx.org/schema/bom-{CYCLONEDX_VERSION}.schema.json",
-+        "specVersion": f"{CYCLONEDX_VERSION}",
-+        "components": [
-+            cyclonedx_component(name, comp) for name, comp in filtered_show_info_dict.items()
-+        ],
-+        "dependencies": [
-+            cyclonedx_dependency("buildroot", list(filtered_show_info_dict)),
-+            *[cyclonedx_dependency(ref, br2_parse_deps_recursively(ref, show_info_dict, args.virtual))
-+              for ref in filtered_show_info_dict],
-+        ],
-+        "vulnerabilities": cyclonedx_vulnerabilities(show_info_dict),
-+        "metadata": {
-+            "component": {
-+                "bom-ref": "buildroot",
-+                "name": "buildroot",
-+                "type": "firmware",
-+                "version": f"{BR2_VERSION_FULL}",
-+            },
-+        },
-+    }
-+
-+    args.out_file.write(json.dumps(cyclonedx_dict))
-+
-+
-+if __name__ == "__main__":
-+    main()
+
+  Regards,
+  Arnout
+
+
+> Thomas Perale (2):
+>    package/pkg-utils.mk: add patches to show-info json
+>    support/scripts/generate-cyclonedx.py: add script to generate
+>      CycloneDX-style SBOM
+> 
+>   package/pkg-utils.mk        |  20 +++
+>   utils/generate-cyclonedx.py | 307 ++++++++++++++++++++++++++++++++++++
+>   2 files changed, 327 insertions(+)
+>   create mode 100755 utils/generate-cyclonedx.py
+> 
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
