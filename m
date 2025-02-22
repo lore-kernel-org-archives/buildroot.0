@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 612C6C021B2
-	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 17:24:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FE7FC021B5
+	for <buildroot@archiver.kernel.org>; Sat, 22 Feb 2025 17:24:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E01CF409F6;
-	Sat, 22 Feb 2025 17:24:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2345840A02;
+	Sat, 22 Feb 2025 17:24:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nxTTg89ZgyHM; Sat, 22 Feb 2025 17:24:36 +0000 (UTC)
+ id XdnuCu-mPqHO; Sat, 22 Feb 2025 17:24:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3F7C40A00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A67D40B3A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B3F7C40A00;
-	Sat, 22 Feb 2025 17:24:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 644846B
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:24:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A67D40B3A;
+	Sat, 22 Feb 2025 17:24:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 13FB96B
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:24:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 50FC780DCB
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:24:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B2F540B5E
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:24:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6Jxh9rGaOxgh for <buildroot@buildroot.org>;
- Sat, 22 Feb 2025 17:24:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6652B80D67
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6652B80D67
- for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:24:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4DADC879FD; Sat, 22 Feb 2025 17:24:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VZto0ZB4LORc for <buildroot@buildroot.org>;
+ Sat, 22 Feb 2025 17:24:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 285AB40B07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 285AB40B07
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 285AB40B07
+ for <buildroot@buildroot.org>; Sat, 22 Feb 2025 17:24:42 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 97B2660137;
+ Sat, 22 Feb 2025 18:24:37 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 22 Feb 2025 18:24:37 +0100
+MIME-Version: 1.0
+Date: Sat, 22 Feb 2025 18:24:37 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 22 Feb 2025 18:16:10 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d0711b892d09723cda3a3a017c8a1d62c51b81af
-X-Git-Newrev: 811993924351dbd122a8da1b012069f5b7115ae9
-X-Patchwork-Hint: ignore
-Message-Id: <20250222172433.4DADC879FD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/linux-firmware: add option for
+To: iliana etaoin <iliana@buttslol.net>
+Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>
+In-Reply-To: <20250222050637.107330-1-iliana@buttslol.net>
+References: <20250222050637.107330-1-iliana@buttslol.net>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <0811c4e1f9e729d711b548cb790cf923@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1740245079;
+ bh=qPox+Y6WE4HR/9O1I/PpU13IqYUUbW9Z3LfycoXLgWU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ZxGbneq6o+voPyvYJH2673spchoV5iKQakuw0wmUqgIo9lpbY/GYjrI27ppH4vDZz
+ HcXx4lxHN1COcu+gbXN+JGfroJFJVN7QeuJPkyXkIdGmmZYnxw0YsQAORF/mb/bTYZ
+ dfhdcVbwnVD3fR4rjTQrNWCZmK7G4SThgo75NPbD9qiWvGp+Nrz3FtyYRZptg9zPVb
+ mQdYh8DXQaIy/COHkZb3FSKpI6yglzlYFtPlRol7B45aWK0uZ1YLrhcN9JYV3WSAvi
+ pxq4BEwU58ZQtMH5sq9tUt1orUyJZyiL65cZ+ZgLiwvr0ZXGM8t6u0esanyzWnRZgE
+ Gg6j7vmqwsPEQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=ZxGbneq6
+Subject: Re: [Buildroot] [PATCH] package/linux-firmware: add option for
  Chelsio T6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,58 +82,19 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=811993924351dbd122a8da1b012069f5b7115ae9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 22/02/2025 06:06, iliana etaoin wrote:
+> Add an option to install the Chelsio T6 firmware files used by the 
+> cxgb4
+> driver.
+> 
+> Signed-off-by: iliana etaoin <iliana@buttslol.net>
 
-Add an option to install the Chelsio T6 firmware files used by the cxgb4
-driver.
-
-Signed-off-by: iliana etaoin <iliana@buttslol.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/linux-firmware/Config.in         | 6 ++++++
- package/linux-firmware/linux-firmware.mk | 5 +++++
- 2 files changed, 11 insertions(+)
-
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 4630252c5e..af36b8a6b1 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -570,6 +570,12 @@ config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T5
- 	  Firmware files for Chelsio T5 1Gb and 10Gb ethernet cards
- 	  (cxgb4)
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T6
-+	bool "Chelsio T6"
-+	help
-+	  Firmware files for Chelsio T6 1/10/25/40/50/100 Gb ethernet
-+	  cards (cxgb4)
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_E100
- 	bool "Intel e100 825xx"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index e73d688592..fac5733ad4 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -647,6 +647,11 @@ LINUX_FIRMWARE_FILES += cxgb4/t5fw*.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_CXGB4_T6),y)
-+LINUX_FIRMWARE_FILES += cxgb4/t6fw*.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.chelsio_firmware
-+endif
-+
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_INTEL_E100),y)
- LINUX_FIRMWARE_FILES += e100/*.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.e100
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
