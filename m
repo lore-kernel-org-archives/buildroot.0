@@ -4,49 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C406C021B2
-	for <buildroot@archiver.kernel.org>; Sun, 23 Feb 2025 12:13:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8B5CC021B2
+	for <buildroot@archiver.kernel.org>; Sun, 23 Feb 2025 12:13:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 12F6F817AB;
-	Sun, 23 Feb 2025 12:13:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9AC82817AB;
+	Sun, 23 Feb 2025 12:13:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yhyxcK-DTKgm; Sun, 23 Feb 2025 12:13:18 +0000 (UTC)
+ id fV2n3MFcnMQa; Sun, 23 Feb 2025 12:13:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34CCC81831
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB0E781852
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 34CCC81831;
-	Sun, 23 Feb 2025 12:13:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2F07A920
- for <buildroot@buildroot.org>; Sun, 23 Feb 2025 12:13:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BB0E781852;
+	Sun, 23 Feb 2025 12:13:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C7A58943
+ for <buildroot@buildroot.org>; Sun, 23 Feb 2025 12:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1EBF460BA0
- for <buildroot@buildroot.org>; Sun, 23 Feb 2025 12:13:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C280E40F31
+ for <buildroot@buildroot.org>; Sun, 23 Feb 2025 12:13:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 75PIAmPa5FaE for <buildroot@buildroot.org>;
- Sun, 23 Feb 2025 12:13:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5455B608C2
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5455B608C2
- for <buildroot@buildroot.org>; Sun, 23 Feb 2025 12:13:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3C614879DC; Sun, 23 Feb 2025 12:13:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X38lH6OfM6Zg for <buildroot@buildroot.org>;
+ Sun, 23 Feb 2025 12:13:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E3E8E40B65
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E3E8E40B65
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E3E8E40B65
+ for <buildroot@buildroot.org>; Sun, 23 Feb 2025 12:13:39 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id B09452003DE;
+ Sun, 23 Feb 2025 13:13:32 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 23 Feb 2025 13:13:32 +0100
+MIME-Version: 1.0
+Date: Sun, 23 Feb 2025 13:13:32 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 23 Feb 2025 13:12:00 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9d544ef3bd8e96cafc68b98ad8d06e32ab546ea4
-X-Git-Newrev: dd824f6254fa7b1156cb872b115ded6ab67bab54
-X-Patchwork-Hint: ignore
-Message-Id: <20250223121315.3C614879DC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt6/qt6multimedia: fix ffmpeg
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Baxiche Su <baxiche@gmail.com>, Jesse Van
+ Gavere <jesseevg@gmail.com>, Roy Kollen Svendsen
+ <roykollensvendsen@gmail.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250223083610.14229-1-bernd@kuhls.net>
+References: <20250223083610.14229-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <d0017d805c0ccf20534e68cad4fabe25@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1740312818;
+ bh=sWCdMKItUV0VFenfUGSS+5p+Gbah+s7JKlbP/OXly90=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=JIWMeuUlwUvq4nMsP5NUbW3zlKUdy6YxNAQsMhIvm+KdU7Oj32SKeg6AUtafS957m
+ uoG8hCUnXpTYVwItUQlvOBDTkpFnvS18m8wri+mZ2yWQM8fasvaaBNoMrw7otEaOwM
+ YU3VdYErKs+PTWZYOyEk+0dPlbVos9D0rY7odLBa6tcAeXok3g8l00aNJNoX/pTnZ6
+ E8MBvV0VBva0hwsfP5jit2BsVfzAF7+AQ5OD3Y5Qdz8OosH5H24SiTsmfoBfCZqzBL
+ ZpfUGZY4/x/mItNg55JawEbRBAm891EzqFT6WDNPwAugxpFDhEiGVtdfKlS6xVAd1h
+ 17EFOWzH/kqsQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=JIWMeuUl
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt6/qt6multimedia: fix ffmpeg
  configure option typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,37 +86,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dd824f6254fa7b1156cb872b115ded6ab67bab54
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 23/02/2025 09:36, Bernd Kuhls wrote:
+> Buildroot commit 553c55e9bd3cfa05cb84fa4cdfc5d25d51c3486b added this
+> package with a typo in the configure option to disable ffmpeg support.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Buildroot commit 553c55e9bd3cfa05cb84fa4cdfc5d25d51c3486b added this
-package with a typo in the configure option to disable ffmpeg support.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/qt6/qt6multimedia/qt6multimedia.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/qt6/qt6multimedia/qt6multimedia.mk b/package/qt6/qt6multimedia/qt6multimedia.mk
-index 517b1fccb4..98ab2ec4be 100644
---- a/package/qt6/qt6multimedia/qt6multimedia.mk
-+++ b/package/qt6/qt6multimedia/qt6multimedia.mk
-@@ -67,7 +67,7 @@ ifeq ($(BR2_PACKAGE_QT6MULTIMEDIA_FFMPEG),y)
- QT6MULTIMEDIA_CONF_OPTS += -DFEATURE_ffmpeg=ON
- QT6MULTIMEDIA_DEPENDENCIES += ffmpeg
- else
--QT6MULTIMEDIA_CONF_OPTS += -DFEATURE_ffmpeg=ON
-+QT6MULTIMEDIA_CONF_OPTS += -DFEATURE_ffmpeg=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_QT6MULTIMEDIA_GSTREAMER),y)
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
