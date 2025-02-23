@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 731D0C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:23:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19968C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:23:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F0D385FA3;
-	Fri, 28 Feb 2025 17:23:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 524495093C;
+	Fri, 28 Feb 2025 17:23:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XLuuijcZMQIq; Fri, 28 Feb 2025 17:23:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IWJvEjtOkW1n; Fri, 28 Feb 2025 17:23:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AA9485F8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F11A350B1F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AA9485F8C;
-	Fri, 28 Feb 2025 17:23:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F11A350B1F;
+	Fri, 28 Feb 2025 17:23:34 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F9CB1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:48:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E8BB68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:48:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0BA7C47F82
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5E8AD42DBF
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZBcWVYSNGJXK for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:32:12 +0000 (UTC)
+ id 3aUrN9FtclJO for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:32:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 547364866D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2EE1483DF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 547364866D
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2EE1483DF
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 447C68017D; Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
+ id DED5887C6F; Fri, 28 Feb 2025 16:30:47 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 25 Feb 2025 20:42:48 +0100
+Date: Sun, 23 Feb 2025 21:49:13 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5a1515b5976aed8f1b15eacf513d40ab70b908a8
-X-Git-Newrev: c73fb46fea066fe2b1b02ba71cfd5a77c62e08f0
+X-Git-Oldrev: 6faa08a9e3f3ad170b70439a14bf8da6256f887e
+X-Git-Newrev: 544249ff7761db2df61783c8731e834574df957a
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163048.447C68017D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mokutil: fix
- dependencies of comment
+Message-Id: <20250228163047.DED5887C6F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/fontconfig: fix build
+ with toolchains without pthread
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,39 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c73fb46fea066fe2b1b02ba71cfd5a77c62e08f0
+commit: https://git.buildroot.net/buildroot/commit/?id=544249ff7761db2df61783c8731e834574df957a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since the package was introduced in 2e6e121496bf (package/mokutil: new
-package), the dependencies for the comment about missing dependencies
-are not all inverted compared to the actual dependencies.
+../test/test-crbug1004254.c:28:10: fatal error: pthread.h: No such file or directory
+   28 | #include <pthread.h>
+      |          ^~~~~~~~~~~
 
-Notably, gcc and headers versions should be negative, not positive,
-dependencies. This makes the comment visible even when said dependencies
-are met.
+Commit cef7358 "package/fontconfig: fix compilation on targets without pthread support"
+fixed compilation for targets without pthread support, but that was apparently nog enough.
 
-Fix that.
+Back then, I tested all the targets by using `./utils/test-pkg -p fontconfig -a`,
+but somehow these targets didn't enable the fontconfig tests, so I didn't see this
+compile failure. Fix it now by explicitly disabling the fontconfig tests.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Julien Olivain <ju.o@free.fr>
+Fixes:
+ -  https://autobuild.buildroot.org/results/5f0/5f0c716c20788ba49a3a9f185251ded373a764cd/build-end.log
+
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+[Julien: reword commit log title]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/mokutil/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/fontconfig/fontconfig.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mokutil/Config.in b/package/mokutil/Config.in
-index 8895b66d20..33208ac583 100644
---- a/package/mokutil/Config.in
-+++ b/package/mokutil/Config.in
-@@ -30,6 +30,6 @@ comment "mokutil needs a toolchain w/ dynamic library, threads, gcc >= 4.9, head
- 	depends on BR2_PACKAGE_SHIM_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS || \
--		BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
+index 21eba76a83..7ac8872e82 100644
+--- a/package/fontconfig/fontconfig.mk
++++ b/package/fontconfig/fontconfig.mk
+@@ -18,6 +18,7 @@ FONTCONFIG_CPE_ID_VALID = YES
+ 
+ FONTCONFIG_CONF_OPTS = \
+ 	-Dcache-dir=/var/cache/fontconfig \
++	-Dtests=disabled \
+ 	-Ddoc=disabled
+ 
+ FONTCONFIG_CFLAGS = $(TARGET_CFLAGS)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
