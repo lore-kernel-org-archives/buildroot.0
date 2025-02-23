@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 683E8C021B3
-	for <buildroot@archiver.kernel.org>; Sun, 23 Feb 2025 12:49:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EE6BC021B2
+	for <buildroot@archiver.kernel.org>; Sun, 23 Feb 2025 12:56:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 21ECC60A4B;
-	Sun, 23 Feb 2025 12:49:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C666B80E5F;
+	Sun, 23 Feb 2025 12:56:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J6uFwJy4iR0g; Sun, 23 Feb 2025 12:49:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mHvNJyJDcy7U; Sun, 23 Feb 2025 12:56:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FB6860611
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE6CB80E61
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4FB6860611;
-	Sun, 23 Feb 2025 12:49:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 72F1F920
- for <buildroot@buildroot.org>; Sun, 23 Feb 2025 12:49:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE6CB80E61;
+	Sun, 23 Feb 2025 12:56:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 18FE2943
+ for <buildroot@buildroot.org>; Sun, 23 Feb 2025 12:56:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 62484608B9
- for <buildroot@buildroot.org>; Sun, 23 Feb 2025 12:49:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F113640167
+ for <buildroot@buildroot.org>; Sun, 23 Feb 2025 12:56:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K0YQ_XgbDPkH for <buildroot@buildroot.org>;
- Sun, 23 Feb 2025 12:49:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 798F560611
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 798F560611
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 798F560611
- for <buildroot@buildroot.org>; Sun, 23 Feb 2025 12:49:16 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 982AE60129;
- Sun, 23 Feb 2025 13:49:13 +0100 (CET)
-Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
- via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 23 Feb 2025 13:49:13 +0100
-MIME-Version: 1.0
-Date: Sun, 23 Feb 2025 13:49:13 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OBVSmUqoU0uD for <buildroot@buildroot.org>;
+ Sun, 23 Feb 2025 12:56:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BF0C9400FE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF0C9400FE
+ for <buildroot@buildroot.org>; Sun, 23 Feb 2025 12:56:21 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AB20F87610; Sun, 23 Feb 2025 12:56:21 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: buildroot@buildroot.org
-In-Reply-To: <Z7mIA7MNvH7QS1Cu@waldemar-brodkorb.de>
-References: <Z7mIA7MNvH7QS1Cu@waldemar-brodkorb.de>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <14565e7f73942258c99526796b99f2ae@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1740314954;
- bh=liG5eZnsToKuv4PFz/ZSrpLLfdAk7IN06tb3tDsuTrY=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=UhmNnOhgP9ND5OPK4hlS8QQzOIE/Pd/tRDOODQdpcJLpynFwtJ5cCxUMCyTzSrkGD
- brsetcyT+BwjooqQvVPm0Xo69JsLVwYjg7m89OhJscr/Ly6AXBPnfyeE8hyImcGeTu
- EVE5mqpsc1WV4YGTDe9MeIFlqfNXJ/CCAIqYwJiR94DKXg7aQ7GT4Of5jIBoiOF8n2
- p6XGSkDlauWBo1m/PAUb3OX203uT0N+z7kP6y4+2dDhAAwDWcg69QpsYoI3r3QcxhM
- /fiokgvXqUhS/DgvUVc1RhraDsAYRR06TNkQCBlhAee2jisX4GVubCSK36fJNod8T6
- NXMmzhYtLKlCQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=UhmNnOhg
-Subject: Re: [Buildroot] [PATCH] package/zabbix: update to 7.2.3
+To: buildroot@buildroot.org
+Date: Sun, 23 Feb 2025 13:53:28 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f8fb0b5942421af6f64d061e6384590b7149f400
+X-Git-Newrev: 1e8955e12c10e68d9eb119ebae99692dd2432fa0
+X-Patchwork-Hint: ignore
+Message-Id: <20250223125621.AB20F87610@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jbig2dec: bump to version 0.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,19 +58,77 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============5525217759588566919=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 22/02/2025 09:17, Waldemar Brodkorb wrote:
-> See here for a changelog:
-> https://www.zabbix.com/rn/rn7.2.3
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+--===============5525217759588566919==
+Content-Type: text/plain
 
-Applied to master, thanks.
+commit: https://git.buildroot.net/buildroot/commit/?id=1e8955e12c10e68d9eb119ebae99692dd2432fa0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Starting from this version newer releases are only available at a new
+dedicated repository, so the site is updated accordingly.
+
+Hash files no longer exist in the new repo, so remove the related
+comment.
+
+It turns out that install-sh has been available in the tarball since
+version 0.19, so remove JBIG2DEC_AUTORECONF.
+
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/jbig2dec/jbig2dec.hash | 4 +---
+ package/jbig2dec/jbig2dec.mk   | 6 ++----
+ 2 files changed, 3 insertions(+), 7 deletions(-)
+
+diff --git a/package/jbig2dec/jbig2dec.hash b/package/jbig2dec/jbig2dec.hash
+index 5a34af37f6..a93e8d8a6d 100644
+--- a/package/jbig2dec/jbig2dec.hash
++++ b/package/jbig2dec/jbig2dec.hash
+@@ -1,7 +1,5 @@
+-# https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9530/MD5SUMS
+-# and SHA512SUMS are missing the hashes for this file.
+ # Locally computed:
+-sha256  279476695b38f04939aa59d041be56f6bade3422003a406a85e9792c27118a37  jbig2dec-0.19.tar.gz
++sha256  7b63ff6470289547e7a3a0f145cb8ea6c2afffdd65645b7d87d3b7febc96fb3a  jbig2dec-0.20.tar.gz
+ 
+ # Hash for license files:
+ sha256  1bf5258afe453934484fd0cea97508b72301633a6a78b0ae8a9ee44ac78f26d9  LICENSE
+diff --git a/package/jbig2dec/jbig2dec.mk b/package/jbig2dec/jbig2dec.mk
+index 8d881136ad..8509a609c4 100644
+--- a/package/jbig2dec/jbig2dec.mk
++++ b/package/jbig2dec/jbig2dec.mk
+@@ -4,14 +4,12 @@
+ #
+ ################################################################################
+ 
+-JBIG2DEC_VERSION = 0.19
++JBIG2DEC_VERSION = 0.20
+ JBIG2DEC_SITE = \
+-	https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9530
++	https://github.com/ArtifexSoftware/jbig2dec/releases/download/$(JBIG2DEC_VERSION)
+ JBIG2DEC_LICENSE = AGPL-3.0+
+ JBIG2DEC_LICENSE_FILES = LICENSE
+ JBIG2DEC_CPE_ID_VENDOR = artifex
+ JBIG2DEC_INSTALL_STAGING = YES
+-# tarball is missing install-sh, install.sh, or shtool
+-JBIG2DEC_AUTORECONF = YES
+ 
+ $(eval $(autotools-package))
+
+--===============5525217759588566919==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5525217759588566919==--
