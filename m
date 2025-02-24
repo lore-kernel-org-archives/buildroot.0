@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0106C021B8
-	for <buildroot@archiver.kernel.org>; Tue, 25 Feb 2025 07:14:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F350C021B2
+	for <buildroot@archiver.kernel.org>; Tue, 25 Feb 2025 07:25:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D992606FF;
-	Tue, 25 Feb 2025 07:14:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id raAMVSpbGqqK; Tue, 25 Feb 2025 07:14:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EBA8607F5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6EBA8607F5;
-	Tue, 25 Feb 2025 07:14:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 36CFC2292
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 07:14:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EE50D40BE4
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 07:14:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E335940CC5;
+	Tue, 25 Feb 2025 07:25:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 56beTG_dDmZp for <buildroot@buildroot.org>;
- Tue, 25 Feb 2025 07:14:08 +0000 (UTC)
+ id PFVfmme03fmm; Tue, 25 Feb 2025 07:25:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57BC440CB2
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57BC440CB2;
+	Tue, 25 Feb 2025 07:25:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6DD602DE0
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 07:25:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5209540EDC
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 07:25:00 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P9Hm8qbXSaCN for <buildroot@buildroot.org>;
+ Tue, 25 Feb 2025 07:24:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7291A40BEC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D61A340399
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7291A40BEC
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 07:14:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D61A340399
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 07:24:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2BD3780079; Tue, 25 Feb 2025 07:14:07 +0000 (UTC)
+ id BF90D87AA6; Tue, 25 Feb 2025 07:24:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 25 Feb 2025 08:12:31 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 4d772ebe75a922695e3c0c71ae7236c89ba76e01
-X-Git-Newrev: e0b0fa2f163368134b6af51ec3448f804a09a282
+Date: Mon, 24 Feb 2025 22:24:40 +0100
+X-Git-Refname: refs/heads/2024.11.x
+X-Git-Oldrev: 2287e900c4cad44bad35e34aafdf10c5ef4975f1
+X-Git-Newrev: 6db0e9620fb6dbc23fe9e20aabe7f574ba703698
 X-Patchwork-Hint: ignore
-Message-Id: <20250225071407.2BD3780079@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libxml2: security
- bump to version 2.12.10
+Message-Id: <20250225072458.BF90D87AA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/libxml2: security
+ bump to version 2.13.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,13 +60,15 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8240834755375118575=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e0b0fa2f163368134b6af51ec3448f804a09a282
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+--===============8240834755375118575==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=6db0e9620fb6dbc23fe9e20aabe7f574ba703698
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
 Fixes the following security vulnerabilities:
 
@@ -81,38 +83,212 @@ https://gitlab.gnome.org/GNOME/libxml2/-/issues/861
 
 https://www.openwall.com/lists/oss-security/2025/02/18/2
 
+Drop now upstreamed patches:
+https://gitlab.gnome.org/GNOME/libxml2/-/commit/fc72e0833a4e5724aef604e2fd9adb1014cb4844
+https://gitlab.gnome.org/GNOME/libxml2/-/commit/539663626b91567159a70791c0f2b3b167135e9b
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 843a4faa6d2fd047c307178bd07549c32ec76eae)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxml2/libxml2.hash | 4 ++--
- package/libxml2/libxml2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../libxml2/0001-Fix-compilation-with-uclibc.patch | 114 ---------------------
+ .../0002-Fix-Fix-compilation-with-uclibc.patch     |  31 ------
+ package/libxml2/libxml2.hash                       |   4 +-
+ package/libxml2/libxml2.mk                         |   2 +-
+ 4 files changed, 3 insertions(+), 148 deletions(-)
 
+diff --git a/package/libxml2/0001-Fix-compilation-with-uclibc.patch b/package/libxml2/0001-Fix-compilation-with-uclibc.patch
+deleted file mode 100644
+index aedad27e05..0000000000
+--- a/package/libxml2/0001-Fix-compilation-with-uclibc.patch
++++ /dev/null
+@@ -1,114 +0,0 @@
+-From fc72e0833a4e5724aef604e2fd9adb1014cb4844 Mon Sep 17 00:00:00 2001
+-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+-Date: Mon, 16 Dec 2024 17:23:23 +0100
+-Subject: [PATCH] Fix compilation with uclibc
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-The patch fixes the following errors and warnings raised by the
+-compilation of the library with uClibc:
+-
+-encoding.c: In function ‘xmlEncInputChunk’:
+-encoding.c:2209:32: warning: comparison between pointer and integer
+- 2209 |     else if (handler->iconv_in != NULL) {
+-      |                                ^~
+-encoding.c: In function ‘xmlEncOutputChunk’:
+-encoding.c:2269:33: warning: comparison between pointer and integer
+- 2269 |     else if (handler->iconv_out != NULL) {
+-      |                                 ^~
+-encoding.c: In function ‘xmlCharEncCloseFunc’:
+-encoding.c:2681:29: warning: comparison between pointer and integer
+- 2681 |     if ((handler->iconv_out != NULL) || (handler->iconv_in != NULL)) {
+-      |                             ^~
+-encoding.c:2681:60: warning: comparison between pointer and integer
+- 2681 |     if ((handler->iconv_out != NULL) || (handler->iconv_in != NULL)) {
+-      |                                                            ^~
+-encoding.c:2683:32: warning: comparison between pointer and integer
+- 2683 |         if (handler->iconv_out != NULL) {
+-      |                                ^~
+-encoding.c:2686:32: error: assignment to ‘iconv_t’ {aka ‘long int’} from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
+- 2686 |             handler->iconv_out = NULL;
+-      |                                ^
+-encoding.c:2688:31: warning: comparison between pointer and integer
+- 2688 |         if (handler->iconv_in != NULL) {
+-      |                               ^~
+-encoding.c:2691:31: error: assignment to ‘iconv_t’ {aka ‘long int’} from ‘void *’ makes integer from pointer without a cast [-Wint-conversion]
+- 2691 |             handler->iconv_in = NULL;
+-      |                               ^
+-make[4]: *** [Makefile:1147: libxml2_la-encoding.lo] Error 1
+-
+-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+-Upstream: https://gitlab.gnome.org/GNOME/libxml2/-/commit/fc72e0833a4e5724aef604e2fd9adb1014cb4844
+----
+- encoding.c | 20 ++++++++++----------
+- 1 file changed, 10 insertions(+), 10 deletions(-)
+-
+-diff --git a/encoding.c b/encoding.c
+-index 14ffafddbc02..41ecde1885e4 100644
+---- a/encoding.c
+-+++ b/encoding.c
+-@@ -1264,7 +1264,7 @@ DECLARE_ISO_FUNCS(16)
+- #endif /* LIBXML_ISO8859X_ENABLED */
+- 
+- #ifdef LIBXML_ICONV_ENABLED
+--  #define EMPTY_ICONV , (iconv_t) 0, (iconv_t) 0
+-+  #define EMPTY_ICONV , (iconv_t) -1, (iconv_t) -1
+- #else
+-   #define EMPTY_ICONV
+- #endif
+-@@ -1389,8 +1389,8 @@ xmlNewCharEncodingHandler(const char *name,
+-     handler->name = up;
+- 
+- #ifdef LIBXML_ICONV_ENABLED
+--    handler->iconv_in = NULL;
+--    handler->iconv_out = NULL;
+-+    handler->iconv_in = (iconv_t) -1;
+-+    handler->iconv_out = (iconv_t) -1;
+- #endif
+- #ifdef LIBXML_ICU_ENABLED
+-     handler->uconv_in = NULL;
+-@@ -2200,7 +2200,7 @@ xmlEncInputChunk(xmlCharEncodingHandler *handler, unsigned char *out,
+-         }
+-     }
+- #ifdef LIBXML_ICONV_ENABLED
+--    else if (handler->iconv_in != NULL) {
+-+    else if (handler->iconv_in != (iconv_t) -1) {
+-         ret = xmlIconvWrapper(handler->iconv_in, out, outlen, in, inlen);
+-     }
+- #endif /* LIBXML_ICONV_ENABLED */
+-@@ -2260,7 +2260,7 @@ xmlEncOutputChunk(xmlCharEncodingHandler *handler, unsigned char *out,
+-         }
+-     }
+- #ifdef LIBXML_ICONV_ENABLED
+--    else if (handler->iconv_out != NULL) {
+-+    else if (handler->iconv_out != (iconv_t) -1) {
+-         ret = xmlIconvWrapper(handler->iconv_out, out, outlen, in, inlen);
+-     }
+- #endif /* LIBXML_ICONV_ENABLED */
+-@@ -2672,17 +2672,17 @@ xmlCharEncCloseFunc(xmlCharEncodingHandler *handler) {
+-      * Iconv handlers can be used only once, free the whole block.
+-      * and the associated icon resources.
+-      */
+--    if ((handler->iconv_out != NULL) || (handler->iconv_in != NULL)) {
+-+    if ((handler->iconv_out != (iconv_t) -1) || (handler->iconv_in != (iconv_t) -1)) {
+-         tofree = 1;
+--	if (handler->iconv_out != NULL) {
+-+	if (handler->iconv_out != (iconv_t) -1) {
+- 	    if (iconv_close(handler->iconv_out))
+- 		ret = -1;
+--	    handler->iconv_out = NULL;
+-+	    handler->iconv_out = (iconv_t) -1;
+- 	}
+--	if (handler->iconv_in != NULL) {
+-+	if (handler->iconv_in != (iconv_t) -1) {
+- 	    if (iconv_close(handler->iconv_in))
+- 		ret = -1;
+--	    handler->iconv_in = NULL;
+-+	    handler->iconv_in = (iconv_t) -1;
+- 	}
+-     }
+- #endif /* LIBXML_ICONV_ENABLED */
+--- 
+-2.43.0
+-
+diff --git a/package/libxml2/0002-Fix-Fix-compilation-with-uclibc.patch b/package/libxml2/0002-Fix-Fix-compilation-with-uclibc.patch
+deleted file mode 100644
+index 76ea711962..0000000000
+--- a/package/libxml2/0002-Fix-Fix-compilation-with-uclibc.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 539663626b91567159a70791c0f2b3b167135e9b Mon Sep 17 00:00:00 2001
+-From: Nick Wellnhofer <wellnhofer@aevum.de>
+-Date: Thu, 16 Jan 2025 15:50:46 +0100
+-Subject: [PATCH] Fix "Fix compilation with uclibc"
+-
+-The ICU code must initialize the iconv members as well.
+-
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-Upstream: https://gitlab.gnome.org/GNOME/libxml2/-/commit/539663626b91567159a70791c0f2b3b167135e9b
+----
+- encoding.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/encoding.c b/encoding.c
+-index 41ecde18..0ce8d479 100644
+---- a/encoding.c
+-+++ b/encoding.c
+-@@ -1641,6 +1641,10 @@ xmlCreateUconvHandler(const char *name, xmlCharEncodingHandler **out) {
+-     }
+-     enc->input = NULL;
+-     enc->output = NULL;
+-+#ifdef LIBXML_ICONV_ENABLED
+-+    enc->iconv_in = (iconv_t) -1;
+-+    enc->iconv_out = (iconv_t) -1;
+-+#endif
+-     enc->uconv_in = ucv_in;
+-     enc->uconv_out = ucv_out;
+- 
+--- 
+-2.34.1
+-
 diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index 73fd0ecedf..1b77422f7a 100644
+index eb92ad4324..88c7f5b9ff 100644
 --- a/package/libxml2/libxml2.hash
 +++ b/package/libxml2/libxml2.hash
 @@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.9.sha256sum
--sha256  59912db536ab56a3996489ea0299768c7bcffe57169f0235e7f962a91f483590  libxml2-2.12.9.tar.xz
-+# From https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.10.sha256sum
-+sha256  c3d8c0c34aa39098f66576fe51969db12a5100b956233dc56506f7a8679be995  libxml2-2.12.10.tar.xz
+-# From https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.5.sha256sum
+-sha256  74fc163217a3964257d3be39af943e08861263c4231f9ef5b496b6f6d4c7b2b6  libxml2-2.13.5.tar.xz
++# From https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.6.sha256sum
++sha256  f453480307524968f7a04ec65e64f2a83a825973bcd260a2e7691be82ae70c96  libxml2-2.13.6.tar.xz
  # License files, locally calculated
- sha256  7fb0a66f3989f9bd5c7e5438a3de02cd4a7a47dde0aea2f7ea2ba2ff454ee6a4  Copyright
+ sha256  c99aae1afe013e50b8b3701e089222b351258043c3025b64053a233fd25b4be7  Copyright
 diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index b69722b21d..bea99f6b5c 100644
+index a8cb86ab2f..148fcd8762 100644
 --- a/package/libxml2/libxml2.mk
 +++ b/package/libxml2/libxml2.mk
 @@ -5,7 +5,7 @@
  ################################################################################
  
- LIBXML2_VERSION_MAJOR = 2.12
--LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).9
-+LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).10
+ LIBXML2_VERSION_MAJOR = 2.13
+-LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).5
++LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).6
  LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
  LIBXML2_SITE = \
  	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
+
+--===============8240834755375118575==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8240834755375118575==--
