@@ -1,99 +1,126 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FF4BC021A4
-	for <buildroot@archiver.kernel.org>; Mon, 24 Feb 2025 16:09:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FA5CC021BB
+	for <buildroot@archiver.kernel.org>; Mon, 24 Feb 2025 16:27:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA17880CD9;
-	Mon, 24 Feb 2025 16:09:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1145440BE6;
+	Mon, 24 Feb 2025 16:27:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rer7b56lPjGg; Mon, 24 Feb 2025 16:09:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G9q7MaDgNj5c; Mon, 24 Feb 2025 16:27:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8722A80D58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4FBF40BED
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8722A80D58;
-	Mon, 24 Feb 2025 16:09:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F25094E
- for <buildroot@buildroot.org>; Mon, 24 Feb 2025 16:09:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4FBF40BED;
+	Mon, 24 Feb 2025 16:27:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3134B76C
+ for <buildroot@buildroot.org>; Mon, 24 Feb 2025 16:27:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F027960E14
- for <buildroot@buildroot.org>; Mon, 24 Feb 2025 16:09:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1FF3B40BED
+ for <buildroot@buildroot.org>; Mon, 24 Feb 2025 16:27:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ojF3aB5FrvFP for <buildroot@buildroot.org>;
- Mon, 24 Feb 2025 16:09:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::633; helo=mail-pl1-x633.google.com;
- envelope-from=festevam@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C4F1260E06
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C4F1260E06
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com
- [IPv6:2607:f8b0:4864:20::633])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C4F1260E06
- for <buildroot@buildroot.org>; Mon, 24 Feb 2025 16:09:35 +0000 (UTC)
-Received: by mail-pl1-x633.google.com with SMTP id
- d9443c01a7336-220c665ef4cso79485425ad.3
- for <buildroot@buildroot.org>; Mon, 24 Feb 2025 08:09:35 -0800 (PST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7PQYT1O9AdKB for <buildroot@buildroot.org>;
+ Mon, 24 Feb 2025 16:27:42 +0000 (UTC)
+Received-SPF: Permerror (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::644; helo=mail-ej1-x644.google.com;
+ envelope-from=bram.vlerick@openpixelsystems.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BC77140BE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC77140BE6
+Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com
+ [IPv6:2a00:1450:4864:20::644])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BC77140BE6
+ for <buildroot@buildroot.org>; Mon, 24 Feb 2025 16:27:40 +0000 (UTC)
+Received: by mail-ej1-x644.google.com with SMTP id
+ a640c23a62f3a-abb8045c3f3so568998066b.2
+ for <buildroot@buildroot.org>; Mon, 24 Feb 2025 08:27:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1740413374; x=1741018174;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1740414458; x=1741019258;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=nCejOOq+aYbXd8PDVjulMCQb50Zkdd065WUTHjf9kWA=;
- b=WJBDYua/AE51Wy7rwqjQFtpI8FqFZtUTSJvnA4/7jqIgUmZ+jzs0vkF7aNQtA3MYvn
- LvoTHuKBbIpWcgDESXie4oU+kvRwu8gGEmbW3E92k5BlBAmtxAXQVKj/DhDYCvP770ta
- cBtYi47Lte7jx5eDqGLKatjV76BNDRIC9nXY8jpceGZ/ih7eE20AezZ2aWxYkrvCjRRL
- 6CB/7TPTh5kZp5BLtGZipkw5UcNRA/CAsTQkuA+uer37+MtLk701oq+Xs0UcYxaBaQ0M
- 08N+G4sJEDZatmEceaNnt9ykZFAX6MoF4nhljHSJ4SLlXFZalOUkggS+5cOBed9jDMpD
- fVZA==
-X-Gm-Message-State: AOJu0YyIdeA9koi3sgX6nFw1mMfd9xG9JH3023dztPK3AqfzjsLolwuJ
- brvAHN/VpqKYcMXQ/TsLA4JIMJJRUb9i62aJ9eDJi7v7dGg+2ApOTTiYqQ==
-X-Gm-Gg: ASbGnctgc0vpWpdFelUX3stnJe3uNg0KZ5ldo5luE2POprWx57f+5bhV61mrLo0Ns93
- puqqy7E1WAlZhqLWh4PJw7XpI79nrem+cciHpYI+ODOGc4Dx7i+oTDbDqIQio9BmUJV+Q9NBjwH
- VWB6IAumOu6w5X5spq7G/vXoIKvfSry8F7iznTWxR5qyawnjFXnF+j8elNuQp6QFjjW3eeYm8HM
- SLhQFuUtqa79n3vin6cm9syboK0f+wVSOi7Rsq3Uoj87yJur4Ph4OZRGlYLirpLQhD+TQoHc+yR
- voQ658471HbX0ZqsZoLA3db1VQvg97PfmSqKxmkX
-X-Google-Smtp-Source: AGHT+IEiSTYL+eGqzRQsBfks3aHUpxDJB7rVTw/O7DUC4iIXYsHv/o+8JYvLWMFzD6bB8vazAlFtJg==
-X-Received: by 2002:a05:6a00:9aa:b0:729:a31:892d with SMTP id
- d2e1a72fcca58-73426cb1292mr24692473b3a.8.1740413374017; 
- Mon, 24 Feb 2025 08:09:34 -0800 (PST)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:5291:bbb9:f462:e26e])
- by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-732713ff922sm16136144b3a.58.2025.02.24.08.09.32
+ bh=mShXC6HBkUdLflAaumk6qrhxz92+WA+04Gp++5VT0lk=;
+ b=pmc2KzW1q+Gckvj9lG3XWTWE6ZKipSJtD4IlVemPjER+5eP/wNFFHdhD4Bft253Y3u
+ 2j6uKzR7SyyW6B0+Cglvr2Ok8ZU/k+QswoyntTUwHZZtTqDO/SkSqQ3IeqBtm5auZClp
+ D6sVKnV5GvUam2o6FXRMffA0Btaw1MPKiuirQUet45bbofYByTFFI1F1YgHq13Zfn1df
+ gGzI91DSiBTWJN81HJtL5Ke6XNDXQypCKXwUg1Cp/Raucx7TXcZ8Hnl7bIDRkzHfBBNA
+ mncWoaFmISxo6nXTY2huB0+oyxlqXZcX1y1jDqmzcaVidDJtDDRRdcsX0j1I01UUY19v
+ xETg==
+X-Gm-Message-State: AOJu0Yx8e962vb6erWPsWx6AKH/eRqPhnBT/etNc36+XhldDuk47hed/
+ MpVz44F+DF/pyoQdA2Up1OSIZQ/hcYWD4HxBkaNVgvHWd77TPyP593eMSadxXJ0=
+X-Gm-Gg: ASbGncvs7iedlKV67BsHTEFwKa+OT6bgLy/BFUwaCh8PfJ/BeCx7mUq6syzrOt1679O
+ Up2p+R3luWyINFT80iNOKTLZCI+nQYBzBsdT5xSCYTPydjlij+V4ow00L3daAGqBHkqmXzUyWwx
+ m9TC1t9KTozQcmprKW0sTFeW1myiJZrA1zmfd0CNIae5IPb2dMoFg+37EyEaoPnIzNFfDpE1lsE
+ eSfo1umXzvP+iDN6TJCk82Nk1We6c7sjDA/zwYixwrUWoNWvVT29gKJXV2FXttHLK2CxTMmbILA
+ xuz0qyf+Iy0rjCAJhVhybr2e9zmrwqGA60etY/tWCmoRZ1jjtoRsJ9Gcm1E8Pj+UHldR7otyni7
+ Gsy41GLrOyQx/+XRP
+X-Google-Smtp-Source: AGHT+IE8sNdGcd2mic2iDAFLeFUNms7FrWYttGHTdYXJMKmLFysM5W7lLpQKAcI+5OrDQCxyvUZR2w==
+X-Received: by 2002:a17:906:30cf:b0:ab7:d537:91cb with SMTP id
+ a640c23a62f3a-abc099bc179mr1014960766b.7.1740414457698; 
+ Mon, 24 Feb 2025 08:27:37 -0800 (PST)
+Received: from [172.0.1.2] (253.124-78-194.adsl-static.isp.belgacom.be.
+ [194.78.124.253]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-abec0324d4bsm142985266b.108.2025.02.24.08.27.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 24 Feb 2025 08:09:33 -0800 (PST)
-From: Fabio Estevam <festevam@gmail.com>
-To: buildroot@buildroot.org
-Cc: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 24 Feb 2025 13:09:27 -0300
-Message-Id: <20250224160927.909402-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ Mon, 24 Feb 2025 08:27:37 -0800 (PST)
+From: Bram Vlerick <bram.vlerick@openpixelsystems.org>
+Date: Mon, 24 Feb 2025 17:27:35 +0100
 MIME-Version: 1.0
+Message-Id: <20250224-systemd-ukify-v1-1-e42872af25f6@openpixelsystems.org>
+X-B4-Tracking: v=1; b=H4sIAPadvGcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDIyMT3eLK4pLU3BTd0uzMtEpd46TkpCQDC1MD81QTJaCegqLUtMwKsHn
+ RsbW1AElqbWNfAAAA
+X-Change-ID: 20250224-systemd-ukify-3bcbb08507e4
+To: buildroot@buildroot.org
+Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>, 
+ Bram Vlerick <bram.vlerick@openpixelsystems.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2600;
+ i=bram.vlerick@openpixelsystems.org; h=from:subject:message-id;
+ bh=ReRPtCJLeaQc9teCiKTFBFDkFOFEfmjcYNfU/QdaPBg=;
+ b=owEBbQKS/ZANAwAIAblauka9BQbwAcsmYgBnvJ34UdwSVZ9aBbuQtBw0r+nXM6LwB/8ntTX2r
+ QU2S9CA4K+JAjMEAAEIAB0WIQQO7PtG7b77XLxuay25WrpGvQUG8AUCZ7yd+AAKCRC5WrpGvQUG
+ 8J1yD/9wpwYuWKqsLJ6JB4+UU228SkL9w9GOp/8Ptrqsu75Z4h0GxThMRq9XgLRXtZ8sORgrRiK
+ EsRti2pH+UJiNYO/8t7MghNG3d+ZjKK18NudX65/bBzLc+l7eEyPHgXT1/eKj2z8Uk990V02r5T
+ xE1NECPnRgzMkDolp8k70Lf8DcMzR/elpU6YvlwiMhKYlZOwGgnXX09yh0RCypyUtWCri6O1b0m
+ mUQvA624pMBkUXz8U2VAQH4PDGmhkBTbV0FLTIlDhP4JsGTGheAJY+68R49rUi6F1vDATyvSpF4
+ dn2ovi4BUonPs0BIsFZ5bc9DknNIZoFNwGMom/3YO1e9uJqQn32GKfj68aM+4U0ayY7zmEExxlP
+ J10KV48CWvCrkBPrCZNpZ+pLauH2r2mObqNtUcaIPny+X1/S+Thhfc2viBwR2KBY6IALD+LuiMn
+ +xe5TAx0sy9QhBnDSvmJaXr2zbOzDXRrq+NZ9ddoCgVYk48KEOuKw+jzOAYCo7HCTfneOSsx7Z0
+ cuH/VxSiJRXVl8dfp7Vp0j4lmTrb102t32zcoF5ej/kjrxWZVw18/dx17YfcvAK04XuqSEJP5q3
+ CZXXZi/4C01T9zCiR6Mi0WAfSUD9zMaSxNyh3LINv/vbGoDCvWNBiCObHzGwcXLjy2X6YoTY0p4
+ jkC5zS1VFQ2OV5g==
+X-Developer-Key: i=bram.vlerick@openpixelsystems.org; a=openpgp;
+ fpr=0EECFB46EDBEFB5CBC6E6B2DB95ABA46BD0506F0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1740413374; x=1741018174; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=nCejOOq+aYbXd8PDVjulMCQb50Zkdd065WUTHjf9kWA=;
- b=JOCay/79mXrMEcahJ8MHHCHNz0bwdfgEAAgO95xeYQQpB1GOxTYmj4dBC9YGF8SLaH
- axPude5X5iTWwgny45h8QjD8sXhg6oDDIY0h3Ltq4k7hJd9JUhTGUcktsWTHW1rN5nId
- boYkRJppJyd6w3HKZadV4q6xUfKMOiLr/VRhf1woVA7D5JIsTn7cLnHIrSAD/LLf0Moc
- VvUnF7kbJOEscpknMyyzbNC0ctyalW06ihi3KVHTNO8IV4U/yBidWhEg8MT7uLuBOOJi
- LOb+/3vIT9Jnih2uVTlxTba1zaElEV4pveZHGvviWMsS0Wfww3gLCaHy7FdIjGa6Shy+
- npVw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=JOCay/79
-Subject: [Buildroot] [PATCH] configs/imx8mn-ddr4-evk_defconfig: new defconfig
+ d=openpixelsystems-org.20230601.gappssmtp.com; s=20230601; t=1740414458;
+ x=1741019258; darn=buildroot.org; 
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=mShXC6HBkUdLflAaumk6qrhxz92+WA+04Gp++5VT0lk=;
+ b=AvR8eWLOegiGCQfpDFbb2HPdgTezIN9h+LUk69hqW/bAb3g0PBE4OWoGkK89+/Iglk
+ mXHYznO/Sqeu3QMlowodwuhubp0wZN+8ekN/uQqH6OsYlcqxQv/Ifv3SEzO7wkrakpSQ
+ M53K1IpMq1YtFgom+Xu7SQ7n7anLWpvlvFQ+AC12xlAtQvqnllKLsk0KOe1I3xk+aTZL
+ 1ZDb9sRfzNCAanSKDVkuSYF/iSaIcOlY5xQZD+e9b4T9l9UqwuI39PjfvHyQF4qcfWo5
+ eY2O42UhmIcN4HOS6xKarjwgCsr1OxQS7WFF3y4jWyfSrm1MqH/ttMWLPu9tWdUdkdVn
+ PxcA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openpixelsystems.org
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=openpixelsystems-org.20230601.gappssmtp.com
+ header.i=@openpixelsystems-org.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=AvR8eWLO
+Subject: [Buildroot] [PATCH] package/systemd: add BR2_PACKAGE_SYSTEMD_UKIFY
+ option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,206 +137,87 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a new defconfig for the imx8mn-ddr4-evk board that uses upstream
-components, such as:
-    
-- Linux Kernel: Upstream version 6.12.16
-- U-boot: Upstream version 2025.01
-- ATF: Upstream version 2.12
-    
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- board/freescale/imx8mn-evk/extlinux.conf.in   |  4 ++
- board/freescale/imx8mn-evk/genimage.cfg.in    | 17 +++++++
- .../arm-trusted-firmware.hash                 |  2 +
- .../patches/linux-headers/linux-headers.hash  |  1 +
- .../imx8mn-evk/patches/linux/linux.hash       |  2 +
- .../imx8mn-evk/patches/uboot/uboot.hash       |  2 +
- board/freescale/imx8mn-evk/post-build.sh      |  7 +++
- board/freescale/imx8mn-evk/readme.txt         | 31 ++++++++++++
- configs/imx8mn-ddr4-evk_defconfig             | 48 +++++++++++++++++++
- 9 files changed, 114 insertions(+)
- create mode 100644 board/freescale/imx8mn-evk/extlinux.conf.in
- create mode 100644 board/freescale/imx8mn-evk/genimage.cfg.in
- create mode 100644 board/freescale/imx8mn-evk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
- create mode 120000 board/freescale/imx8mn-evk/patches/linux-headers/linux-headers.hash
- create mode 100644 board/freescale/imx8mn-evk/patches/linux/linux.hash
- create mode 100644 board/freescale/imx8mn-evk/patches/uboot/uboot.hash
- create mode 100755 board/freescale/imx8mn-evk/post-build.sh
- create mode 100644 board/freescale/imx8mn-evk/readme.txt
- create mode 100644 configs/imx8mn-ddr4-evk_defconfig
+Add option to enable or disable the build of systemd's ukify tool to
+create unified kernel images.
 
-diff --git a/board/freescale/imx8mn-evk/extlinux.conf.in b/board/freescale/imx8mn-evk/extlinux.conf.in
-new file mode 100644
-index 000000000000..e408dd6a15ff
---- /dev/null
-+++ b/board/freescale/imx8mn-evk/extlinux.conf.in
-@@ -0,0 +1,4 @@
-+label buildroot
-+  kernel /boot/Image
-+  devicetree /boot/freescale/imx8mn-ddr4-evk.dtb
-+  append root=PARTUUID=%PARTUUID% rootwait rw
-diff --git a/board/freescale/imx8mn-evk/genimage.cfg.in b/board/freescale/imx8mn-evk/genimage.cfg.in
-new file mode 100644
-index 000000000000..10c52548cdfa
---- /dev/null
-+++ b/board/freescale/imx8mn-evk/genimage.cfg.in
-@@ -0,0 +1,17 @@
-+image sdcard.img {
-+	hdimage {
-+		partition-table-type = "gpt"
-+	}
+Signed-off-by: Bram Vlerick <bram.vlerick@openpixelsystems.org>
+---
+ package/systemd/Config.in  |  7 +++++++
+ package/systemd/systemd.mk | 14 ++++++++++++--
+ 2 files changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 851b91aeba70d0726cdc1ea411d7aca017f8fe68..eaeb245bb51f8ae6276273ef546115b1c1ae0f08 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -164,6 +164,13 @@ config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
+ config BR2_PACKAGE_SYSTEMD_EFI
+ 	bool "enable EFI support"
+ 
++config BR2_PACKAGE_SYSTEMD_UKIFY
++	bool "systemd-ukify"
++	select BR2_PACKAGE_SYSTEMD_EFI
++	select BR2_PACKAGE_SYSTEMD_BOOT
++	help
++	  systemd-ukify is a tool to generate a Unified Kernel Image
 +
-+	partition imx-boot {
-+		in-partition-table = "no"
-+		image = "flash.bin"
-+		offset = 32K
-+	}
+ config BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE
+ 	bool "enable journal remote tools"
+ 	select BR2_PACKAGE_LIBCURL
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 28091a72a6d1d7d91fa18d4fe16c637c2112571b..50c466a105b808d0cf15207cf53e9fc4c48bde17 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -100,7 +100,6 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dinstall-tests=false \
+ 	-Dlog-message-verification=disabled \
+ 	-Dtmpfiles=true \
+-	-Dukify=disabled \
+ 	-Dbpf-framework=disabled \
+ 	-Dvmlinux-h=disabled \
+ 	-Dumount-path=/usr/bin/umount \
+@@ -664,6 +663,12 @@ else
+ SYSTEMD_CONF_OPTS += -Defi=false
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_UKIFY),y)
++SYSTEMD_CONF_OPTS += -Dukify=true
++else
++SYSTEMD_CONF_OPTS += -Dukify=false
++endif
 +
-+	partition rootfs {
-+		offset = 8M
-+		image = "rootfs.ext4"
-+		partition-uuid = %PARTUUID%
-+	}
-+}
-diff --git a/board/freescale/imx8mn-evk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/imx8mn-evk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-new file mode 100644
-index 000000000000..b5898cba3f96
---- /dev/null
-+++ b/board/freescale/imx8mn-evk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  06b35a3596b8417bf66f7bfdd7acd181bcb53fc36dc13216227b5cae154e0219  arm-trusted-firmware-v2.12-git4.tar.gz
-diff --git a/board/freescale/imx8mn-evk/patches/linux-headers/linux-headers.hash b/board/freescale/imx8mn-evk/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 000000000000..5808d92afe89
---- /dev/null
-+++ b/board/freescale/imx8mn-evk/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/freescale/imx8mn-evk/patches/linux/linux.hash b/board/freescale/imx8mn-evk/patches/linux/linux.hash
-new file mode 100644
-index 000000000000..5e0df51126d5
---- /dev/null
-+++ b/board/freescale/imx8mn-evk/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  5f81362a694f51520bff9faecb73f1cc9bc7bece6fdd10d5c27e348df39d7dc4  linux-6.12.16.tar.xz
-diff --git a/board/freescale/imx8mn-evk/patches/uboot/uboot.hash b/board/freescale/imx8mn-evk/patches/uboot/uboot.hash
-new file mode 100644
-index 000000000000..50674352d71d
---- /dev/null
-+++ b/board/freescale/imx8mn-evk/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
-diff --git a/board/freescale/imx8mn-evk/post-build.sh b/board/freescale/imx8mn-evk/post-build.sh
-new file mode 100755
-index 000000000000..604f387768d8
---- /dev/null
-+++ b/board/freescale/imx8mn-evk/post-build.sh
-@@ -0,0 +1,7 @@
-+#!/bin/sh
-+BOARD_DIR="$(dirname "$0")"
-+PARTUUID="$("$HOST_DIR"/bin/uuidgen)"
+ SYSTEMD_FALLBACK_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+ ifneq ($(SYSTEMD_FALLBACK_HOSTNAME),)
+ SYSTEMD_CONF_OPTS += -Dfallback-hostname=$(SYSTEMD_FALLBACK_HOSTNAME)
+@@ -978,7 +983,6 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dinitrd=false \
+ 	-Dxdg-autostart=false \
+ 	-Dkernel-install=false \
+-	-Dukify=disabled \
+ 	-Danalyze=false \
+ 	-Dbpf-framework=disabled \
+ 	-Dvmlinux-h=disabled \
+@@ -1012,6 +1016,12 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dlibfido2=disabled \
+ 	-Dpcre2=disabled
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD_UKIFY),y)
++HOST_SYSTEMD_CONF_OPTS += -Dukify=true
++else
++HOST_SYSTEMD_CONF_OPTS += -Dukify=false
++endif
 +
-+install -d "$TARGET_DIR/boot/extlinux/"
-+sed "s/%PARTUUID%/$PARTUUID/g" "$BOARD_DIR/extlinux.conf.in" > "$TARGET_DIR/boot/extlinux/extlinux.conf"
-+sed "s/%PARTUUID%/$PARTUUID/g" "$BOARD_DIR/genimage.cfg.in" > "$BINARIES_DIR/genimage.cfg"
-diff --git a/board/freescale/imx8mn-evk/readme.txt b/board/freescale/imx8mn-evk/readme.txt
-new file mode 100644
-index 000000000000..c5b4c05c48cd
---- /dev/null
-+++ b/board/freescale/imx8mn-evk/readme.txt
-@@ -0,0 +1,31 @@
-+NXP i.MX8MN DDR4 EVK
-+====================
-+
-+This is a Buildroot target for building an image for the imx8mn-ddr4-evk
-+board using upstream components: TF-A, U-Boot and kernel.
-+
-+How to build it
-+===============
-+
-+Configure Buildroot and build it:
-+
-+  $ make imx8mn-ddr4-evk_defconfig
-+  $ make
-+
-+Flashing the SD card image
-+==========================
-+
-+Copy the sdcard.img file into the SD card:
-+
-+  $ sudo dd if=output/images/sdcard.img of=<your-sd-device>; sync
-+
-+
-+Booting the board
-+=================
-+
-+To boot your newly created system:
-+
-+- Insert the SD card in the MicroSD slot of the board.
-+- Connect a serial to USB cable to the DEBUG port.
-+- Open a terminal on ttyUSB2 port. For example: sudo picocom -b 115200 /dev/ttyUSB1
-+- Power on the board.
-diff --git a/configs/imx8mn-ddr4-evk_defconfig b/configs/imx8mn-ddr4-evk_defconfig
-new file mode 100644
-index 000000000000..fa38a62f0e97
---- /dev/null
-+++ b/configs/imx8mn-ddr4-evk_defconfig
-@@ -0,0 +1,48 @@
-+BR2_aarch64=y
-+BR2_ARM_FPU_VFPV3=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_GLOBAL_PATCH_DIR="board/freescale/imx8mn-evk/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/imx8mn-evk/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.16"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mn-ddr4-evk"
-+BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MN=y
-+BR2_PACKAGE_FIRMWARE_IMX=y
-+BR2_PACKAGE_FIRMWARE_IMX_DDR4=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.12"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mn"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mn_ddr4_evk"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
-+BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="flash.bin"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+ HOST_SYSTEMD_DEPENDENCIES = \
+ 	$(BR2_COREUTILS_HOST_DEPENDENCY) \
+ 	host-util-linux \
+
+---
+base-commit: 544249ff7761db2df61783c8731e834574df957a
+change-id: 20250224-systemd-ukify-3bcbb08507e4
+
+Best regards,
 -- 
-2.34.1
+Bram Vlerick <bram.vlerick@openpixelsystems.org>
 
 _______________________________________________
 buildroot mailing list
