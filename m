@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B316C021A4
-	for <buildroot@archiver.kernel.org>; Mon, 24 Feb 2025 20:38:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38C48C021BB
+	for <buildroot@archiver.kernel.org>; Mon, 24 Feb 2025 20:39:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C13940B65;
-	Mon, 24 Feb 2025 20:38:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE4E980CC1;
+	Mon, 24 Feb 2025 20:39:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Su0QrQNifjdd; Mon, 24 Feb 2025 20:38:38 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1dBtK3GytVPG; Mon, 24 Feb 2025 20:39:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97B8A406A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 051DD80F2D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 97B8A406A1;
-	Mon, 24 Feb 2025 20:38:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 03CDC1531
- for <buildroot@buildroot.org>; Mon, 24 Feb 2025 20:38:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 051DD80F2D;
+	Mon, 24 Feb 2025 20:39:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B25401531
+ for <buildroot@buildroot.org>; Mon, 24 Feb 2025 20:39:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D3E5560A58
- for <buildroot@buildroot.org>; Mon, 24 Feb 2025 20:38:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AE0B26070C
+ for <buildroot@buildroot.org>; Mon, 24 Feb 2025 20:39:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EIoubfcWBEqY for <buildroot@buildroot.org>;
- Mon, 24 Feb 2025 20:38:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C89E46070C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C89E46070C
- for <buildroot@buildroot.org>; Mon, 24 Feb 2025 20:38:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B4B5D87A4C; Mon, 24 Feb 2025 20:38:36 +0000 (UTC)
+ id uyzNAgEa_d83 for <buildroot@buildroot.org>;
+ Mon, 24 Feb 2025 20:39:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BCAF1607B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCAF1607B6
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BCAF1607B6
+ for <buildroot@buildroot.org>; Mon, 24 Feb 2025 20:38:59 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 50DD313F854;
+ Mon, 24 Feb 2025 21:38:55 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 24 Feb 2025 21:38:55 +0100
+MIME-Version: 1.0
+Date: Mon, 24 Feb 2025 21:38:55 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 24 Feb 2025 21:33:00 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5a74a007ab9d06167ac32e813cec29415d8e756c
-X-Git-Newrev: 8e1693c1a5853a7d32078f59ab7a653b0221b6e6
-X-Patchwork-Hint: ignore
-Message-Id: <20250224203836.B4B5D87A4C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/imx8mm-evk_defconfig: new defconfig
+To: Fabio Estevam <festevam@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250224193608.1700020-1-festevam@gmail.com>
+References: <20250224193608.1700020-1-festevam@gmail.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <a470214ed21c60317f2e89eeba47f708@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1740429536;
+ bh=veOp2jZuEwbmDr0+ZR2NWfgR0e6n44tbSr5MyiMw6h8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ojc2c2nf+armfExG7dz47EuCoI4fkJXiD5YZjFEiMOIVVplF3xmbt1OKizxC0LVvl
+ Ue8FUeRuqKdJoDTA2haAMSo0p5PYN3qXzEPunTHVSYHlfut9iyHREfxBLi4uo7oqaV
+ 2Gsm9PFeIWIUTrEBXVmwBpXJPXIsLhwdDDB4+mff+JZunXRGv9j1KPqcUi3yPqDenL
+ 6C5aGtwLpIIdBYCN1/qo5MoK7vKzMj9xnepruM1/ROtcbMcEdktHnitq1pvIcgqpzt
+ 5JLwXg5Ns0296z7jwPKZuZgltV5Yw5c4Ah+eyBHs3QuRRQGxrbEmwKtxeFRZyqnMFg
+ ip/YWh5EeNXEw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=ojc2c2nf
+Subject: Re: [Buildroot] [PATCH] configs/imx8mm-evk_defconfig: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,207 +82,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e1693c1a5853a7d32078f59ab7a653b0221b6e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 24/02/2025 20:36, Fabio Estevam wrote:
+> Add a new defconfig for the imx8mm-evk board that uses upstream
+> components, such as:
+> 
+> - Linux Kernel: Upstream version 6.12.16
+> - U-boot: Upstream version 2025.01
+> - ATF: Upstream version 2.12
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
-Add a new defconfig for the imx8mm-evk board that uses upstream
-components, such as:
-
-- Linux Kernel: Upstream version 6.12.16
-- U-boot: Upstream version 2025.01
-- ATF: Upstream version 2.12
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Tested-by: Julien Olivain <ju.o@free.fr>
-[Julien: Tested on board 700-31407 REV A1]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- board/freescale/imx8mm-evk/extlinux.conf.in        |  4 ++
- board/freescale/imx8mm-evk/genimage.cfg.in         | 17 ++++++++
- .../arm-trusted-firmware/arm-trusted-firmware.hash |  2 +
- .../patches/linux-headers/linux-headers.hash       |  1 +
- .../freescale/imx8mm-evk/patches/linux/linux.hash  |  2 +
- .../freescale/imx8mm-evk/patches/uboot/uboot.hash  |  2 +
- board/freescale/imx8mm-evk/post-build.sh           |  7 ++++
- board/freescale/imx8mm-evk/readme.txt              | 31 ++++++++++++++
- configs/imx8mm-evk_defconfig                       | 48 ++++++++++++++++++++++
- 9 files changed, 114 insertions(+)
-
-diff --git a/board/freescale/imx8mm-evk/extlinux.conf.in b/board/freescale/imx8mm-evk/extlinux.conf.in
-new file mode 100644
-index 0000000000..f647394cf3
---- /dev/null
-+++ b/board/freescale/imx8mm-evk/extlinux.conf.in
-@@ -0,0 +1,4 @@
-+label buildroot
-+  kernel /boot/Image
-+  devicetree /boot/freescale/imx8mm-evk.dtb
-+  append root=PARTUUID=%PARTUUID% rootwait rw
-diff --git a/board/freescale/imx8mm-evk/genimage.cfg.in b/board/freescale/imx8mm-evk/genimage.cfg.in
-new file mode 100644
-index 0000000000..bc100b171d
---- /dev/null
-+++ b/board/freescale/imx8mm-evk/genimage.cfg.in
-@@ -0,0 +1,17 @@
-+image sdcard.img {
-+	hdimage {
-+		partition-table-type = "gpt"
-+	}
-+
-+	partition imx-boot {
-+		in-partition-table = "no"
-+		image = "flash.bin"
-+		offset = 33K
-+	}
-+
-+	partition rootfs {
-+		offset = 8M
-+		image = "rootfs.ext4"
-+		partition-uuid = %PARTUUID%
-+	}
-+}
-diff --git a/board/freescale/imx8mm-evk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/imx8mm-evk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-new file mode 100644
-index 0000000000..b5898cba3f
---- /dev/null
-+++ b/board/freescale/imx8mm-evk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  06b35a3596b8417bf66f7bfdd7acd181bcb53fc36dc13216227b5cae154e0219  arm-trusted-firmware-v2.12-git4.tar.gz
-diff --git a/board/freescale/imx8mm-evk/patches/linux-headers/linux-headers.hash b/board/freescale/imx8mm-evk/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/freescale/imx8mm-evk/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/freescale/imx8mm-evk/patches/linux/linux.hash b/board/freescale/imx8mm-evk/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..5e0df51126
---- /dev/null
-+++ b/board/freescale/imx8mm-evk/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-+sha256  5f81362a694f51520bff9faecb73f1cc9bc7bece6fdd10d5c27e348df39d7dc4  linux-6.12.16.tar.xz
-diff --git a/board/freescale/imx8mm-evk/patches/uboot/uboot.hash b/board/freescale/imx8mm-evk/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..50674352d7
---- /dev/null
-+++ b/board/freescale/imx8mm-evk/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
-diff --git a/board/freescale/imx8mm-evk/post-build.sh b/board/freescale/imx8mm-evk/post-build.sh
-new file mode 100755
-index 0000000000..604f387768
---- /dev/null
-+++ b/board/freescale/imx8mm-evk/post-build.sh
-@@ -0,0 +1,7 @@
-+#!/bin/sh
-+BOARD_DIR="$(dirname "$0")"
-+PARTUUID="$("$HOST_DIR"/bin/uuidgen)"
-+
-+install -d "$TARGET_DIR/boot/extlinux/"
-+sed "s/%PARTUUID%/$PARTUUID/g" "$BOARD_DIR/extlinux.conf.in" > "$TARGET_DIR/boot/extlinux/extlinux.conf"
-+sed "s/%PARTUUID%/$PARTUUID/g" "$BOARD_DIR/genimage.cfg.in" > "$BINARIES_DIR/genimage.cfg"
-diff --git a/board/freescale/imx8mm-evk/readme.txt b/board/freescale/imx8mm-evk/readme.txt
-new file mode 100644
-index 0000000000..452a066c70
---- /dev/null
-+++ b/board/freescale/imx8mm-evk/readme.txt
-@@ -0,0 +1,31 @@
-+NXP i.MX8MM EVK
-+===============
-+
-+This is a Buildroot target for building an image for the imx8mm-evk
-+board using upstream components: TF-A, U-Boot and kernel.
-+
-+How to build it
-+===============
-+
-+Configure Buildroot and build it:
-+
-+  $ make imx8mm-evk_defconfig
-+  $ make
-+
-+Flashing the SD card image
-+==========================
-+
-+Copy the sdcard.img file into the SD card:
-+
-+  $ sudo dd if=output/images/sdcard.img of=<your-sd-device>; sync
-+
-+
-+Booting the board
-+=================
-+
-+To boot your newly created system:
-+
-+- Insert the SD card in the MicroSD slot of the board.
-+- Connect a serial to USB cable to the DEBUG port.
-+- Open a terminal on the ttyUSB1 port. For example: sudo picocom -b 115200 /dev/ttyUSB1
-+- Power on the board.
-diff --git a/configs/imx8mm-evk_defconfig b/configs/imx8mm-evk_defconfig
-new file mode 100644
-index 0000000000..00fe2fa761
---- /dev/null
-+++ b/configs/imx8mm-evk_defconfig
-@@ -0,0 +1,48 @@
-+BR2_aarch64=y
-+BR2_ARM_FPU_VFPV3=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-+BR2_GLOBAL_PATCH_DIR="board/freescale/imx8mm-evk/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/freescale/imx8mm-evk/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.16"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk"
-+BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_FREESCALE_IMX=y
-+BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y
-+BR2_PACKAGE_FIRMWARE_IMX=y
-+BR2_PACKAGE_FIRMWARE_IMX_LPDDR4=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.12"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
-+BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-+BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="flash.bin"
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-+BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
