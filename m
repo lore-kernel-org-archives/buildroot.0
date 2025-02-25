@@ -1,70 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26BC9C021B2
-	for <buildroot@archiver.kernel.org>; Tue, 25 Feb 2025 13:46:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E2DEC021B2
+	for <buildroot@archiver.kernel.org>; Tue, 25 Feb 2025 15:51:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E32AB60F72;
-	Tue, 25 Feb 2025 13:46:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2617040DE9;
+	Tue, 25 Feb 2025 15:51:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AlZYlB7BFgXP; Tue, 25 Feb 2025 13:46:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wvW4xMZKAUop; Tue, 25 Feb 2025 15:51:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC1F560F6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC13340DFD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC1F560F6C;
-	Tue, 25 Feb 2025 13:46:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9ADE72DE0
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 13:46:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC13340DFD;
+	Tue, 25 Feb 2025 15:51:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 368242DE0
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 15:51:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7FF4860F6C
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 13:46:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3187881F43
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 15:51:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OsMiwuzvoXcp for <buildroot@buildroot.org>;
- Tue, 25 Feb 2025 13:46:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EB63E60812
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB63E60812
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EB63E60812
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 13:46:29 +0000 (UTC)
-Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id D28E32C80169;
- Tue, 25 Feb 2025 14:46:26 +0100 (CET)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LFnCeCnNuAgC for <buildroot@buildroot.org>;
+ Tue, 25 Feb 2025 15:51:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
+ helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5B4BE81F05
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B4BE81F05
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5B4BE81F05
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 15:51:09 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 85DA41814B9; Tue, 25 Feb 2025 16:51:06 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Tue, 25 Feb 2025 14:46:25 +0100
-Message-ID: <20250225134626.1483376-1-buildroot@bubu1.eu>
+Date: Tue, 25 Feb 2025 16:50:38 +0100
+Message-ID: <20250225155040.3209582-2-buildroot@heine.tech>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1740491187; bh=jnuztrPc08HOd+Mr9Cm1tUflQaAGlUOvXx0+lgSA55k=;
- h=From:To:Cc:Subject:Date;
- b=MxQ/F7HyuI1Z6I3ZN90jF4PpLT0acdfIk6nl0JcqqBkCHMEs0u6HlvdEgduKzfAc2
- D8zu/oOLoHzZctW/0LxrbR5CzrTN0iq845+BF8xEMYbduNTVcSAZm84USrLY80HNpw
- MxkHUMWuzbEjLSbmlhAuzrgND61PvALqGWSiVEjPjyldoTqAe7a7F1B+rxqluk133w
- nI9h958yCib9FA4EwVmaNDYQbvFr8rxDou8H+yxzO8DB8cyzYsSddEaUr0lmot5CYK
- qMI9c+5Hrzk7EjDzMIBHVqU2LYSbKeJJXRpRkH7fAYw10fhfOmBSRTDmlcdHLf3jVp
- 862XUr/m/3uaQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=MxQ/F7Hy
-Subject: [Buildroot] [PATCH] package/python-tzlocal: new package
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=heine.tech; s=dkim; t=1740498667;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=8jdm5CLKVHQF49WX4YItOnPgyPKR/l5uPf+xqKcSCgY=;
+ b=m3z13FnnV0HjPMFKWAa2XcUEu5bkNLfDiNeI4Py9VuVlrkhNpr97Vqc/dQR9+43ehVDszC
+ FwBJtbLWM8DW/F8rRTA7W5urdaifqdLmPkqhqYV14ansrOnU16cqctl3+/S5kHoGv4A98i
+ /mtys5AIIDdHj9v436L+LhGp0LEfX8M=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=heine.tech
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
+ header.s=dkim header.b=m3z13Fnn
+Subject: [Buildroot] [PATCH] package/procps-ng: fix build with missing
+ pidfd_open
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,133 +73,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Marcus Hoffmann <bubu@bubu1.eu>
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
----
- DEVELOPERS                                         |  2 ++
- package/Config.in                                  |  1 +
- package/python-tzlocal/Config.in                   |  5 +++++
- package/python-tzlocal/python-tzlocal.hash         |  5 +++++
- package/python-tzlocal/python-tzlocal.mk           | 14 ++++++++++++++
- .../testing/tests/package/sample_python_tzlocal.py |  5 +++++
- .../testing/tests/package/test_python_tzlocal.py   | 14 ++++++++++++++
- 7 files changed, 46 insertions(+)
- create mode 100644 package/python-tzlocal/Config.in
- create mode 100644 package/python-tzlocal/python-tzlocal.hash
- create mode 100644 package/python-tzlocal/python-tzlocal.mk
- create mode 100644 support/testing/tests/package/sample_python_tzlocal.py
- create mode 100644 support/testing/tests/package/test_python_tzlocal.py
+port back patch introduced shortly after the 4.0.5 release.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 61b531f424..b9b59d92e3 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2260,9 +2260,11 @@ F:	package/picotool/
- F:	package/python-immutabledict/
- F:	package/python-jc/
- F:	package/python-ruamel-yaml-clib/
-+F:	package/python-tzlocal/
- F:	package/python-waitress/
- F:	support/testing/tests/package/test_python_fastapi.py
- F:	support/testing/tests/package/test_python_ruamel_yaml.py
-+F:	support/testing/tests/package/test_python_tzlocal.py
- F:	support/testing/tests/package/test_python_waitress.py
- F:	support/testing/tests/package/sample_python_fastapi.py
- F:	support/testing/tests/package/sample_python_ruamel_yaml.py
-diff --git a/package/Config.in b/package/Config.in
-index bd3a00abc3..d42aeb548c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1450,6 +1450,7 @@ menu "External python modules"
- 	source "package/python-types-python-dateutil/Config.in"
- 	source "package/python-typing-extensions/Config.in"
- 	source "package/python-typing-inspect/Config.in"
-+	source "package/python-tzlocal/Config.in"
- 	source "package/python-u-msgpack/Config.in"
- 	source "package/python-ubjson/Config.in"
- 	source "package/python-uhid/Config.in"
-diff --git a/package/python-tzlocal/Config.in b/package/python-tzlocal/Config.in
+Fixes:
+  checking for __NR_pidfd_open... no
+  configure: error: Neither pidfd_open or __NR_pidfd_open found. Disable pidwait with configure option --disable-pidwait
+
+happening with this defconfig:
+
+BR2_arm=y
+BR2_cortex_a15_a7=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_INIT_SYSTEMD=y
+BR2_PACKAGE_PROCPS_NG=y
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+ ...provide-definition-for-nr-pidfd_open.patch | 57 +++++++++++++++++++
+ package/procps-ng/procps-ng.mk                |  3 +
+ 2 files changed, 60 insertions(+)
+ create mode 100644 package/procps-ng/0001-pgrep-provide-definition-for-nr-pidfd_open.patch
+
+diff --git a/package/procps-ng/0001-pgrep-provide-definition-for-nr-pidfd_open.patch b/package/procps-ng/0001-pgrep-provide-definition-for-nr-pidfd_open.patch
 new file mode 100644
-index 0000000000..6a2959325e
+index 0000000000..9c83124311
 --- /dev/null
-+++ b/package/python-tzlocal/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_PYTHON_TZLOCAL
-+	bool "python-tzlocal"
-+	help
-+	  A Python module that tries to figure out what your
-+	  local timezone is.
-diff --git a/package/python-tzlocal/python-tzlocal.hash b/package/python-tzlocal/python-tzlocal.hash
-new file mode 100644
-index 0000000000..dce19103a5
---- /dev/null
-+++ b/package/python-tzlocal/python-tzlocal.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/tzlocal/json
-+md5  9d8d4c12b047d5d45e6eb72bb95fd90e  tzlocal-5.3.tar.gz
-+sha256  2fafbfc07e9d8b49ade18f898d6bcd37ae88ce3ad6486842a2e4f03af68323d2  tzlocal-5.3.tar.gz
-+# Locally computed sha256 checksums
-+sha256  d99ab209aeb16aad2c25c90ffd83c1a981e290ffff76a420a2ab03e03f041b8c  LICENSE.txt
-diff --git a/package/python-tzlocal/python-tzlocal.mk b/package/python-tzlocal/python-tzlocal.mk
-new file mode 100644
-index 0000000000..c616974f64
---- /dev/null
-+++ b/package/python-tzlocal/python-tzlocal.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-tzlocal
-+#
-+################################################################################
++++ b/package/procps-ng/0001-pgrep-provide-definition-for-nr-pidfd_open.patch
+@@ -0,0 +1,57 @@
++From 90a0ddcd64c2d43dc2c2c856b1b42b5cae6b8a44 Mon Sep 17 00:00:00 2001
++From: Markus Mayer <mmayer@broadcom.com>
++Date: Wed, 11 Dec 2024 14:53:33 -0800
++Subject: [PATCH] pgrep: provide definition for __NR_pidfd_open if needed
 +
-+PYTHON_TZLOCAL_VERSION = 5.3
-+PYTHON_TZLOCAL_SOURCE = tzlocal-$(PYTHON_TZLOCAL_VERSION).tar.gz
-+PYTHON_TZLOCAL_SITE = https://files.pythonhosted.org/packages/33/cc/11360404b20a6340b9b4ed39a3338c4af47bc63f87f6cea94dbcbde07029
-+PYTHON_TZLOCAL_SETUP_TYPE = setuptools
-+PYTHON_TZLOCAL_LICENSE = MIT
-+PYTHON_TZLOCAL_LICENSE_FILES = LICENSE.txt
++We already implement pidfd_open() ourselves if libc doesn't provide it.
++Let's also provide our own definition of __NR_pidfd_open in case the
++kernel headers don't contain it.
 +
-+$(eval $(python-package))
-diff --git a/support/testing/tests/package/sample_python_tzlocal.py b/support/testing/tests/package/sample_python_tzlocal.py
-new file mode 100644
-index 0000000000..9aeb431c64
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_tzlocal.py
-@@ -0,0 +1,5 @@
-+from tzlocal import get_localzone
-+from zoneinfo import ZoneInfo
++This way, pgrep can provide its full capabilities after being built
++against older kernel headers (for increased compatibility) but being run
++on systems with newer kernels.
 +
-+tz = get_localzone()
-+assert tz == ZoneInfo(key='posix/Europe/Berlin')
-diff --git a/support/testing/tests/package/test_python_tzlocal.py b/support/testing/tests/package/test_python_tzlocal.py
-new file mode 100644
-index 0000000000..d7dac361bf
---- /dev/null
-+++ b/support/testing/tests/package/test_python_tzlocal.py
-@@ -0,0 +1,14 @@
-+from tests.package.test_python import TestPythonPackageBase
++Signed-off-by: Markus Mayer <mmayer@broadcom.com>
++Upstream: https://gitlab.com/procps-ng/procps/-/commit/90a0ddcd64c2d43dc2c2c856b1b42b5cae6b8a44
++Signed-off: Michael Nosthoff <buildroot@heine.tech>
++---
++ configure.ac | 2 +-
++ src/pgrep.c  | 9 +++++++++
++ 2 files changed, 10 insertions(+), 1 deletion(-)
 +
++diff --git a/configure.ac b/configure.ac
++index 1e984b12..14ba3ad7 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -325,7 +325,7 @@ AS_IF([[test "x$enable_pidwait" = xyes -a "x$have_pidfd_open" = xno]],
++    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
++ #include <sys/syscall.h>
++ #ifndef __NR_pidfd_open
++-#error __NR_pidfd_open not defined
+++#warning __NR_pidfd_open not defined; using our definition
++ #endif
++       ])],
++       AC_MSG_RESULT([yes]),
++diff --git a/src/pgrep.c b/src/pgrep.c
++index 2c6b06b8..6fc25dd4 100644
++--- a/src/pgrep.c
+++++ b/src/pgrep.c
++@@ -874,6 +874,15 @@ static int signal_option(int *argc, char **argv)
++ }
 +
-+class TestPythonPy3TZLocal(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_TARGET_TZ_INFO=y
-+        BR2_TARGET_LOCALTIME="Europe/Berlin"
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_TZLOCAL=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_tzlocal.py"]
-+    timeout = 10
++ #if defined(ENABLE_PIDWAIT) && !defined(HAVE_PIDFD_OPEN)
+++
+++#ifndef __NR_pidfd_open
+++#ifdef __alpha__
+++#define __NR_pidfd_open 544
+++#else
+++#define __NR_pidfd_open 434
+++#endif
+++#endif
+++
++ static int pidfd_open (pid_t pid, unsigned int flags)
++ {
++ 	return syscall(__NR_pidfd_open, pid, flags);
++--
++GitLab
++
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index f4eadcb547..56fe1790c3 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -14,6 +14,9 @@ PROCPS_NG_INSTALL_STAGING = YES
+ PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
+ 
++# Applying 0001-pgrep-provide-definition-for-nr-pidfd_open.patch touches configure.ac
++PROCPS_NG_AUTORECONF = YES
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ PROCPS_NG_DEPENDENCIES += systemd
+ PROCPS_NG_CONF_OPTS += --with-systemd
 -- 
 2.43.0
 
