@@ -1,104 +1,98 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DBEEC021B8
-	for <buildroot@archiver.kernel.org>; Mon, 24 Feb 2025 21:22:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D003C021B2
+	for <buildroot@archiver.kernel.org>; Tue, 25 Feb 2025 04:15:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 02F868197D;
-	Mon, 24 Feb 2025 21:22:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B814608CD;
+	Tue, 25 Feb 2025 04:15:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OZXI9ffZpA3t; Mon, 24 Feb 2025 21:22:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gvhQyWhsp4Fq; Tue, 25 Feb 2025 04:15:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F05C5819D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 237C96087A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F05C5819D5;
-	Mon, 24 Feb 2025 21:22:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E704D1531
- for <buildroot@buildroot.org>; Mon, 24 Feb 2025 21:22:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 237C96087A;
+	Tue, 25 Feb 2025 04:15:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 419AF2292
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 04:15:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D2A2340127
- for <buildroot@buildroot.org>; Mon, 24 Feb 2025 21:22:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0EE2A40821
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 04:15:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B9TNu6k7yA3e for <buildroot@buildroot.org>;
- Mon, 24 Feb 2025 21:22:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id z5w0XB0xF0qq for <buildroot@buildroot.org>;
+ Tue, 25 Feb 2025 04:15:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
- envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9BE8740F50
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BE8740F50
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9BE8740F50
- for <buildroot@buildroot.org>; Mon, 24 Feb 2025 21:22:28 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-439a4dec9d5so47164705e9.0
- for <buildroot@buildroot.org>; Mon, 24 Feb 2025 13:22:28 -0800 (PST)
+ client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
+ envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D1FA24077C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1FA24077C
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D1FA24077C
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 04:15:20 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-5dee1626093so11113343a12.1
+ for <buildroot@buildroot.org>; Mon, 24 Feb 2025 20:15:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1740432146; x=1741036946;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=3uLPAQYv09V5Xi2D99msd0l4or8oS49A+bC9LkFFMPM=;
- b=tghyLMg97mHhqDCrsLrrx8g2XzXDQ9jYedSaZAjsq/tPEuh1SWVsKi3OEIegdGgaRL
- SyqUbxkpneIVaV+NjcJA4enSUc5boF1cDTaAUbmlb/XHEd3pbJgo7XFVXmDodywE9h3G
- KfGGd8mGiXG+J1p7R3I1XBs0jhxRF/lKxN5z8ShIjbKdZIHczB+G6idszgEqcGzU3Vem
- vuFEKNoyQz2s2w7MsmoRFg4PAGwurSLEft/6bKiVbaFwlTGHMY/A5IOeNwh6XaHsfQCG
- Hrn8OiWn0PQ4wSUMwOtkdiQeoqfBiJdS2RnGzjEoA9DR+v7cJUo6Jj7EacdF04c6Rzw4
- RnaA==
-X-Gm-Message-State: AOJu0YxPuGMkQ7aMA8sNtfE85I/L5oaRLAAMbIKfqCEdGXEf/L9zFZY6
- wEkCUU8uJvy2yJukbAAQ88+rRYx+3hUGZ9+wZMYL0wlVGTKZEkW8dK+Sgg==
-X-Gm-Gg: ASbGncs6LoKx3Dv6fVsWFAUm5R6xWOmrXl1Pi9AGFdxKC2Z1E+JAPb6BeFGVbNliIzw
- Rjj61+Qkc7u+EHvmGx12qNRdQkH8DnsyuH5yoc8RdkE80Zh3YT8D0JwEE/7Fx8qBD6pt2OVr4Cx
- CTBrX+4m1SmBRSE9/RpkKdT6jyrevRrr7IHekK58F4JqJojTC1QYaAzZ0JpTf0SUZ8LFJaQbIvZ
- vUUl8wfefi9HHHWfa5OTLT6sKeDOUwWwXYP5wBAX8etPT+LAMLIAajUhDL9+KFrv2+R78RLlFqP
- T0iGkUaKjqRz0XCY+a0RROiVB8ffJJBO5bgm
-X-Google-Smtp-Source: AGHT+IE6UjqXjk1icRskKKxAscUQ1rgEop3zdO5jB5pJ7Cj9AG7NBb9vOCSpqf1BeLnwwtIASy6aVA==
-X-Received: by 2002:a05:600c:4f0e:b0:439:98ca:e39b with SMTP id
- 5b1f17b1804b1-43ab0f6fd66mr7619115e9.29.1740432146165; 
- Mon, 24 Feb 2025 13:22:26 -0800 (PST)
-Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ d=1e100.net; s=20230601; t=1740456919; x=1741061719;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=FN5R5iUXXDhLa+Ru3/HjKZfIxvd8dgY3ap+Yf65dWBE=;
+ b=Iw9gb60x7kWZjsfGGahg8kLuZJzZBvuAUXz6jZh5VhHWHZ4cVEJcFr8iWWGYW/3xx1
+ Ycnqe5MRgQpvoxle21vEO+rJGvaFIf1xCD5c+uNqNXsyTmki9aBpBKUjZ1YM36ofrU9H
+ WXoUBNXt/gqv7A5r1o/dGmixpiaQz6OOj3XNKnTfO6I/Uq1WoJRJ/szdnCcioNqlFk74
+ /yeC79JGXqiFYCC7FC1FycJISK2ZCxttbW0jCGQrJCebF42OsrTO62yDTWCXnQwvKxU8
+ rVyo5tFKGXGQw+El5cJSdTaLp3ZIh8V9FMZuU6qW8Mk1cXTtE5Dh4FTSuHcsrES+JC9L
+ iLpA==
+X-Gm-Message-State: AOJu0YxWc0jDIg3kYrSKQfIc9sZOlhqDirCYqvHh6eXWhC77zJiWiLv0
+ lZTDzS5THDNLeCfg2wNa3FelWHr9C/ND5FrV9Qn2l9Gfnextx0wLjBE88A==
+X-Gm-Gg: ASbGncuZGo5J2GTUyUViUjeqEVipJY44pibjO7JWZS5uj76xSDFkiVnoJK7IHnoJ/ec
+ O+JrlKT58KHx4R3YN1JDYYabLt2tjEuwwZG0aYcuioLkw9CCcvHeriTOnzc5SXpQ72N8wkF3jEl
+ D4FDjKZGPjSh/UUenHDUD9VA/mcraaW/TdNFji8eqfa45MssWfxlC7meK950H3A9Eg2Ff2kG4Ot
+ WcuLoB5uwka5OElF1PGTQHtdd8enNEA73YKLyYqfHuKgpBRjS2Yu4eFTzgAvfLMrsOU+JBQnLp1
+ eia91feWKiLEn77u7m7x7EC0fRPWCw==
+X-Google-Smtp-Source: AGHT+IE0BnEFU5hlVIR4YbvgmzfC7EZORHaRss2UVJMNEeFVU6Dd6mxH8o3/L4xfLBwPBK/QDzbDaA==
+X-Received: by 2002:a17:907:8e91:b0:abe:d2f6:5a06 with SMTP id
+ a640c23a62f3a-abed2f65ba9mr105728666b.27.1740456918364; 
+ Mon, 24 Feb 2025 20:15:18 -0800 (PST)
+Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-439b01346d1sm119875635e9.0.2025.02.24.13.22.25
+ a640c23a62f3a-abed1d537c3sm70631066b.38.2025.02.24.20.15.17
+ for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 24 Feb 2025 13:22:25 -0800 (PST)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Christian Stewart <christian@aperture.us>, Julien Olivain <ju.o@free.fr>
-Date: Mon, 24 Feb 2025 22:22:21 +0100
-Message-ID: <067f51a0121c26b575818c32a98cb283cb2c6536.1740432132.git.yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <cover.1740432132.git.yann.morin.1998@free.fr>
-References: <cover.1740432132.git.yann.morin.1998@free.fr>
+ Mon, 24 Feb 2025 20:15:18 -0800 (PST)
+Message-ID: <67bd43d6.170a0220.105af.2bab@mx.google.com>
 MIME-Version: 1.0
+To: buildroot@buildroot.org
+From: Buildroot Notifications <buildroot.notifications@gmail.com>
+Date: Tue, 25 Feb 2025 04:15:17 -0000
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1740432146; x=1741036946; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=3uLPAQYv09V5Xi2D99msd0l4or8oS49A+bC9LkFFMPM=;
- b=jn47LoAc/wUanIhfqwc1GRft/v8f6jC/idTovMPWRfT9g2ifrwYbP2GTWrpqAxDcEs
- 2md7jPFNP7WGIUQyE1LNHpSbYKvA3JJH5BqFQqLDYpxsPykSQGnSwo8CKr6GVgYhtGs/
- Grht6u1c8ZjYET1ueq5SCSz7BBYYQIBdf3DwFTZZQb6k7LJXozsM0uxKYyDgUYyLJN5+
- uZGU5GbOklQi5iIh8yBxYFLI1/z/llNqMEaFkFKV7L5gXWrXfvlFfQRhyJA8+2b97BKi
- sBzZNtBQjHUZQeOoQfW+Dd9jr3155hvR9gNMTuu0JGRZxoxrv7L4h8r07iPXBotOWpdU
- UP6w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=jn47LoAc
-Subject: [Buildroot] [PATCH 8/8 v2] package/podman: new package
+ d=gmail.com; s=20230601; t=1740456919; x=1741061719; darn=buildroot.org;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:from:to:cc:subject:date:message-id:reply-to;
+ bh=FN5R5iUXXDhLa+Ru3/HjKZfIxvd8dgY3ap+Yf65dWBE=;
+ b=RcrNXYH001p4GfhdMxkPf6uBNNe3kWax3SaIblFob/VZy/pQHMDZKO3W4go+rqee3m
+ uXOH8AJaEBhsswsL2FLfIXYj38df3h48IuR0RPTFAuDyb6HZPndoPg+P7H1XywavxhXO
+ bkTPLSdA0ApH/mggOBOiMecTlsbSYLQHnh1gjoVfo6bOrRBP4mPGEh42FDHxybkEIYv6
+ l0ACAbUjWQHBgQ0LZfEDzxT1BLv5kKkE6ycHs5h38jAsSXDN6o4DRmvhAlq6+5iE6h4E
+ NSsLual+9x7wpb//peVhGH/Iu3Bq2sMznaguTMfvTro3mAecjTGcsOrnyFPOOEzKhzzs
+ 47rA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=RcrNXYH0
+Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2025-02-24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,415 +109,205 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Podman is a container manager not unlike Docker, but is daemon-less.
+Hello,
 
-Similalry to docker-engine, quite a few kernel config options are
-required; as they are very similar in goals and features, the options
-from docker-engine ahve been duplicated for podma. As that was not
-enough, a few additoinal options have been added after trial-and-error
-testing.
+Autobuild statistics for 2025-02-24
+===================================
 
-The documentation [0] states that seccomp can be disabled (i.e. not
-enabled), but we were unable to start a container without seccomp
-support in podman. So we make that mandatory.
+      branch |  OK | NOK | TIM | TOT |
+  2024.02.x  |  4  |  5  |  0  |  9  |
+  2024.11.x  |  4  |  2  |  0  |  6  |
+    master   | 16  | 56  |  0  | 72  |
 
-Similar to Docker, podman can inject a minimalist init as PID1 in
-containers, and like Docker, this is optional; podman however can only
-use catatonit as such an init. Given the size of catatonit (1.3% that
-of podman!), we do not bother to make it optional, and always enable it.
+Classification of failures by reason for master
+-----------------------------------------------
 
-podman requires at least two config files; they can be either per-user
-or system-wide:
-  - policy.json [1]: defines what signature to accept to validate
-    images; without one such file, podman just refuses to pull images;
-  - registries.conf [2]: defines where to pull iamges from; without it,
-    podman does not know how to pull un-qualified images (i.e. images
-    where the registry is not specified in the path, and which Docker
-    would fetch from the Docker Hub, e.g. "busybox:latest").
+                elfutils-0.192 | 3 
+  gobject-introspection-1.82.0 | 2 
+                 hddtemp-0.4.3 | 2 
+host-heimdal-f4faaeaba371ff... | 2 
+           janus-gateway-1.1.2 | 2 
+                 libcdio-2.2.0 | 2 
+              libopenssl-3.4.1 | 2 
+                memtest86-7.20 | 2 
+                    mpir-3.0.0 | 2 
+                  rt-tests-2.8 | 2 
+           at-spi2-core-2.50.0 | 1 
+                    azmq-1.0.3 | 1 
+                  bcusdk-0.0.5 | 1 
+                  cairo-1.18.2 | 1 
+dbus-triggerd-ba3dbec805cb7... | 1 
+fs/erofs/erofs.mk:69: /home... | 1 
+fs/erofs/erofs.mk:69: /home... | 1 
+                   fwupd-2.0.4 | 1 
+glibc-2.41-5-gcb7f206537240... | 1 
+       host-gcc-initial-14.2.0 | 1 
+                 host-gdb-16.1 | 1 
+                   host-go-src | 1 
+    host-mender-artifact-4.0.0 | 1 
+              host-rust-1.82.0 | 1 
+              libcamera-v0.4.0 | 1 
+                libdrm-2.4.124 | 1 
+                  liburing-2.6 | 1 
+                 libv4l-1.28.1 | 1 
+     linux-5.10.162-cip24-rt10 | 1 
+                lmbench-3.0-a9 | 1 
+        ltp-testsuite-20250130 | 1 
+           oath-toolkit-2.6.12 | 1 
+               openblas-0.3.29 | 1 
+               owl-linux-1.0.7 | 1 
+                   perl-5.40.1 | 1 
+               postgresql-17.3 | 1 
+                 rtptools-1.22 | 1 
+                   strace-6.13 | 1 
+           uboot-tools-2021.07 | 1 
+                       unknown | 1 
+             util-linux-2.40.2 | 1 
+        util-linux-libs-2.40.2 | 1 
+           v4l2loopback-0.13.2 | 1 
+               valgrind-3.24.0 | 1 
+                 watchdog-5.16 | 1 
 
-For those two files, we provide a very minimal default that allows
-pulling unqualified images from the Docker Hub, as is traditional, and
-that allows pulling images which signature can't be verified. Providing
-actual files is going to be use-case dependent, and interested parties
-will have to provide their own confoig files, e.g. in a rootfs overlay.
 
-Finally, we add a runtime test for podman. The official busybox image on
-the Docker Hub supports a lot of architectures, of which armv7 which we
-use for this runtime test. Finding a small image that also supports
-armv7 on other registries was a bit of a challenge; we eventually found
-one busybox image on quay.io, but it is not an official busybox image;
-still, it fits the bill, so we use it.
+Detail of failures for master
+-----------------------------
 
-The default kernel used in runtime tests is missing a lot of features,
-so w eneed to build our own. We can't use cpio either, because we need a
-filesystem that can be used as a lower and upper of overlayfs, which i
-not possible withe filesystem the cpio is extracted into; ext2 fits the
-bill, so we use that. We need a bit of space to store images and stuff,
-so let's be generous and allocate 256M.
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    or1k     |      at-spi2-core-2.50.0       | NOK | https://autobuild.buildroot.org/results/b0079338623c8580e46df457ef0388e3ddf42607 |     
+   s390x     |           azmq-1.0.3           | NOK | https://autobuild.buildroot.org/results/bcd53838b08aedd1fb124fbf3d0d4dc39226e35c |     
+  sparc64    |          bcusdk-0.0.5          | NOK | https://autobuild.buildroot.org/results/d71e7c07fd762f494fcd343e7b3892143ce0ecd4 |     
+   armeb     |          cairo-1.18.2          | NOK | https://autobuild.buildroot.org/results/305c25679ef2c0479cd51b43e47d16a8d3f4e1b6 |     
+powerpc64le  | dbus-triggerd-ba3dbec805cb7... | NOK | https://autobuild.buildroot.org/results/9a25d02347a41a49631da4feec1ba8dad9666619 | ORPH
+   x86_64    |         elfutils-0.192         | NOK | https://autobuild.buildroot.org/results/f916d1285800516ec4e13951175142347d60f4bc | ORPH
+   s390x     |         elfutils-0.192         | NOK | https://autobuild.buildroot.org/results/9b6362e7d47b6089416ecaf90cb25de3a8be648e | ORPH
+    or1k     |         elfutils-0.192         | NOK | https://autobuild.buildroot.org/results/545d284121c4b6e92118764ebd9ee8d84a243400 | ORPH
+  sparc64    | fs/erofs/erofs.mk:69: /home... | NOK | https://autobuild.buildroot.org/results/15d695ba0d254cbcdaabcde61d1fadba3bf7c470 |     
+    arm      | fs/erofs/erofs.mk:69: /home... | NOK | https://autobuild.buildroot.org/results/005edcd9f903da9cf6646e2edca41b7b20c75516 |     
+    i686     |          fwupd-2.0.4           | NOK | https://autobuild.buildroot.org/results/4f1755b470672766978d2906152dfefc777b35e7 |     
+   arceb     | glibc-2.41-5-gcb7f206537240... | NOK | https://autobuild.buildroot.org/results/6e2abeafe8c603d817e0fcfcb8d1ee15150c496a |     
+  sparc64    |  gobject-introspection-1.82.0  | NOK | https://autobuild.buildroot.org/results/7949c4e5ef19164456fdf8c6d8ee2a54bda6c50d | ORPH
+   x86_64    |  gobject-introspection-1.82.0  | NOK | https://autobuild.buildroot.org/results/603ed1bb74082ff889a61457b9a1dcc5d86b18bb | ORPH
+  aarch64    |         hddtemp-0.4.3          | NOK | https://autobuild.buildroot.org/results/4d9413d983b451b4ad863d96a07bdaa7a5296076 |     
+   x86_64    |         hddtemp-0.4.3          | NOK | https://autobuild.buildroot.org/results/1679f9620f2206904a59ca5533e579f53fb5934e |     
+powerpc64le  |    host-gcc-initial-14.2.0     | NOK | https://autobuild.buildroot.org/results/a5cbb99f033e3db86e2be504bec7ba98ee57ac0e |     
+  mips64el   |         host-gdb-16.1          | NOK | https://autobuild.buildroot.org/results/946e6de8a094ebdaf673b3a43f44d3615bf0a09b | ORPH
+    i586     |          host-go-src           | NOK | https://autobuild.buildroot.org/results/96231edc2e1ca729ddcd5cdfe33d116f979204f4 |     
+    arm      | host-heimdal-f4faaeaba371ff... | NOK | https://autobuild.buildroot.org/results/9df5744829d91a3cdf10eb6c83c3f68037c2df3c | ORPH
+ powerpc64   | host-heimdal-f4faaeaba371ff... | NOK | https://autobuild.buildroot.org/results/4978c6a93a753cda615778f97517b6ff326d74bf | ORPH
+   mips64    |   host-mender-artifact-4.0.0   | NOK | https://autobuild.buildroot.org/results/a8a6b54004eefb7375214739d63712644c3f2be2 |     
+    i686     |        host-rust-1.82.0        | NOK | https://autobuild.buildroot.org/results/4de1df45df0cc82d1464760ad938afd6f012fe2e |     
+    mips     |      janus-gateway-1.1.2       | NOK | https://autobuild.buildroot.org/results/2c64f928128b09270eb39595a6023376e3d72cca |     
+    mips     |      janus-gateway-1.1.2       | NOK | https://autobuild.buildroot.org/results/425c0ba95916d5c9696390cefa0507886a3d1300 |     
+   s390x     |        libcamera-v0.4.0        | NOK | https://autobuild.buildroot.org/results/61e4bce00a2aff3f531de6c1896d4dc1f92ba5e3 |     
+microblazeel |         libcdio-2.2.0          | NOK | https://autobuild.buildroot.org/results/8d6fa016dbaf11164a7dd0ee54809770e5e74afe |     
+   mips64    |         libcdio-2.2.0          | NOK | https://autobuild.buildroot.org/results/af057b236386b7f4f7780afcdf903b971907832d |     
+   sparc     |         libdrm-2.4.124         | NOK | https://autobuild.buildroot.org/results/adfbd507127472ce93fc0fbb58de692871a5ac70 |     
+    arc      |        libopenssl-3.4.1        | NOK | https://autobuild.buildroot.org/results/d38d1eb12afc5916016cd3a5f8c79ceffecc6ce4 | ORPH
+    arc      |        libopenssl-3.4.1        | NOK | https://autobuild.buildroot.org/results/5a9abad39438387afeff55a6c2992f957f6d5ab9 | ORPH
+   sparc     |          liburing-2.6          | NOK | https://autobuild.buildroot.org/results/d946689277c2a8e41e2e0f523a19cfc95a7e4b47 |     
+    mips     |         libv4l-1.28.1          | NOK | https://autobuild.buildroot.org/results/50978375ba185851dbae46297dbd3bdfe312432b |     
+    mips     |   linux-5.10.162-cip24-rt10    | NOK | https://autobuild.buildroot.org/results/0775a8928c84dc740c9c54a5d84d4796b72b831e | ORPH
+   s390x     |         lmbench-3.0-a9         | NOK | https://autobuild.buildroot.org/results/96ce4dcf15cb9416969e443c328a1fe23cbbeb3c | ORPH
+  powerpc    |     ltp-testsuite-20250130     | NOK | https://autobuild.buildroot.org/results/6abeab53efd634bfa2660fa1861e3001184f9cf3 |     
+   x86_64    |         memtest86-7.20         | NOK | https://autobuild.buildroot.org/results/2d20e04f1e59d09895f616c52368a68ea38f4490 |     
+   x86_64    |         memtest86-7.20         | NOK | https://autobuild.buildroot.org/results/1610aa599e8853ce97e06a70e94f86c18862e18e |     
+   mips64    |           mpir-3.0.0           | NOK | https://autobuild.buildroot.org/results/ed6616c32881dbbcce140caac49bf989cb879ec8 |     
+   mipsel    |           mpir-3.0.0           | NOK | https://autobuild.buildroot.org/results/3c01388a2fb8a98e51be4072b406102cbfc26467 |     
+   s390x     |      oath-toolkit-2.6.12       | NOK | https://autobuild.buildroot.org/results/a50781306b64ec00a5747004de7d3959616e3239 |     
+  mips64el   |        openblas-0.3.29         | NOK | https://autobuild.buildroot.org/results/4b7a76c2d912c708d424ec84ae7c721f775a0ca6 |     
+   armeb     |        owl-linux-1.0.7         | NOK | https://autobuild.buildroot.org/results/7e1c6d33fbd260f7573cccd81782db6cbdfc2527 |     
+  powerpc    |          perl-5.40.1           | NOK | https://autobuild.buildroot.org/results/70106b69e7fe3fa119cbe3785eb195774ce90c18 |     
+   mips64    |        postgresql-17.3         | NOK | https://autobuild.buildroot.org/results/60b040d5a3a4f1d35a7c4f0a58d0f34abc620c81 |     
+ microblaze  |          rt-tests-2.8          | NOK | https://autobuild.buildroot.org/results/2330cd7a87d81b1e1dfe873dc8b72e6ad67b9429 |     
+   mips64    |          rt-tests-2.8          | NOK | https://autobuild.buildroot.org/results/8aa47c7822b96645213dac5a4b41ef9811cf85b5 |     
+  mips64el   |         rtptools-1.22          | NOK | https://autobuild.buildroot.org/results/a6d8291542eaa1f637210fd5a1b2fb4d6b26edcd | ORPH
+    m68k     |          strace-6.13           | NOK | https://autobuild.buildroot.org/results/ec3de790a66373f270f731519e2ef51c293ba683 |     
+microblazeel |      uboot-tools-2021.07       | NOK | https://autobuild.buildroot.org/results/49e1bec995fe6ce815ad02556c86e5080a220525 | ORPH
+microblazeel |            unknown             | NOK | https://autobuild.buildroot.org/results/462642022490cc6957e245c15295e46509e54be7 |     
+  riscv64    |       util-linux-2.40.2        | NOK | https://autobuild.buildroot.org/results/40828020d55defe3c8c6dfc555e6d6da4ec6cb35 | ORPH
+   mips64    |     util-linux-libs-2.40.2     | NOK | https://autobuild.buildroot.org/results/b463dce10ca5d5f8a718b591e2330f0a24efb1bf | ORPH
+ microblaze  |      v4l2loopback-0.13.2       | NOK | https://autobuild.buildroot.org/results/76ad23c7d1c09be57565730855c1286045887307 |     
+  mips64el   |        valgrind-3.24.0         | NOK | https://autobuild.buildroot.org/results/d44e9c060324d434d1b7c30766e67c45be212b3c | ORPH
+   s390x     |         watchdog-5.16          | NOK | https://autobuild.buildroot.org/results/adeec20a21566cfd880470aa0ff93b9fe789e809 |     
 
-[0] https://podman.io/docs/installation#get-source-code
-[1] https://github.com/containers/image/blob/main/docs/containers-policy.json.5.md
-[2] https://github.com/containers/image/blob/main/docs/containers-registries.conf.5.md
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Christian Stewart <christian@aperture.us>
-Cc: Julien Olivain <ju.o@free.fr>
+Classification of failures by reason for 2024.02.x
+--------------------------------------------------
 
----
-Changes v1 -> v2:
-  - add licensing information  (Julien)
----
- package/Config.in                            |   1 +
- package/podman/Config.in                     |  38 ++++++
- package/podman/podman.hash                   |   3 +
- package/podman/podman.mk                     | 112 +++++++++++++++++
- package/podman/policy.json                   |   7 ++
- package/podman/registries.conf               |   1 +
- support/testing/tests/package/test_podman.py | 124 +++++++++++++++++++
- 7 files changed, 286 insertions(+)
- create mode 100644 package/podman/Config.in
- create mode 100644 package/podman/podman.hash
- create mode 100644 package/podman/podman.mk
- create mode 100644 package/podman/policy.json
- create mode 100644 package/podman/registries.conf
- create mode 100644 support/testing/tests/package/test_podman.py
+                    bsdiff-4.3 | 1 
+       freeradius-server-3.2.3 | 1 
+                   iperf3-3.18 | 1 
+                 mdevd-0.1.6.0 | 1 
+                 openssh-9.9p2 | 1 
 
-diff --git a/package/Config.in b/package/Config.in
-index 460955cb90..65c458bfa9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2868,6 +2868,7 @@ menu "System tools"
- 	source "package/openvmtools/Config.in"
- 	source "package/pamtester/Config.in"
- 	source "package/petitboot/Config.in"
-+	source "package/podman/Config.in"
- 	source "package/polkit/Config.in"
- 	source "package/powerpc-utils/Config.in"
- 	source "package/procps-ng/Config.in"
-diff --git a/package/podman/Config.in b/package/podman/Config.in
-new file mode 100644
-index 0000000000..b2c5aacefe
---- /dev/null
-+++ b/package/podman/Config.in
-@@ -0,0 +1,38 @@
-+config BR2_PACKAGE_PODMAN
-+	bool "podman"
-+	depends on BR2_USE_MMU  # catatonit, conmon, btrfs-progs, libgpgme
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS  # host-go
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS  # netavark
-+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS  # libgpgme
-+	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS  # libseccomp
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17  # libseccomp
-+	depends on BR2_TOOLCHAIN_HAS_THREADS  # conmon, btrfs-progs
-+	depends on BR2_USE_WCHAR  # conmon
-+	select BR2_PACKAGE_HOST_GO
-+	select BR2_PACKAGE_CA_CERTIFICATES  # runtime
-+	select BR2_PACKAGE_CATATONIT  # runtime
-+	select BR2_PACKAGE_CGROUPFS_V2_MOUNT if !BR2_PACKAGE_CGROUPFS_MOUNT && !BR2_INIT_SYSTEMD
-+	select BR2_PACKAGE_CONMON  # runtime
-+	select BR2_PACKAGE_IPTABLES  # runtime
-+	select BR2_PACKAGE_LIBGPGME
-+	select BR2_PACKAGE_LIBSECCOMP
-+	select BR2_PACKAGE_NETAVARK  # runtime
-+	select BR2_PACKAGE_RUNC if !BR2_PACKAGE_CRUN  # runtime
-+	help
-+	  The best free & open source container tools
-+
-+	  Manage containers, pods, and images with Podman. Seamlessly
-+	  work with containers and Kubernetes from your local
-+	  environment.
-+
-+	  https://podman.io/
-+
-+comment "podman needs a toolchain w/ headers >= 3.17, threads, wchar"
-+	depends on BR2_USE_MMU
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_USE_WCHAR
-diff --git a/package/podman/podman.hash b/package/podman/podman.hash
-new file mode 100644
-index 0000000000..4cbba59dc0
---- /dev/null
-+++ b/package/podman/podman.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  e5cae3433931e6d6259b72d8d6513661f70cb083ea338068604c47fff5666127  podman-v5.4.0-git4-go2.tar.gz
-+sha256  62fb8a3a9621dc2388174caaabe9c2317b694bb9a1d46c98bcf5655b68f51be3  LICENSE
-diff --git a/package/podman/podman.mk b/package/podman/podman.mk
-new file mode 100644
-index 0000000000..d8f1eec067
---- /dev/null
-+++ b/package/podman/podman.mk
-@@ -0,0 +1,112 @@
-+################################################################################
-+#
-+# podman
-+#
-+################################################################################
-+
-+PODMAN_VERSION = v5.4.0
-+PODMAN_SITE = https://github.com/containers/podman
-+PODMAN_SITE_METHOD = git
-+
-+PODMAN_LICENSE = Apache-2.0
-+PODMAN_LICENSE_FILES = LICENSE
-+
-+PODMAN_DEPENDENCIES = host-pkgconf libgpgme
-+
-+PODMAN_GOMOD = github.com/containers/podman/v5
-+PODMAN_BUILD_TARGETS = cmd/podman
-+PODMAN_TAGS = selinux
-+
-+# https://podman.io/docs/installation#get-source-code mandates that flag be
-+# set, as device-mapper is not officially supported.
-+PODMAN_TAGS += exclude_graphdriver_devicemapper
-+
-+# This is supposedly optional, but a basic (busybox:latest) image does not
-+# even start without seccomp support
-+PODMAN_DEPENDENCIES += libseccomp
-+PODMAN_TAGS += seccomp
-+
-+ifeq ($(BR2_PACKAGE_BTRFS_PROGS),y)
-+PODMAN_DEPENDENCIES += btrfs-progs
-+define PODMAN_LINUX_CONFIG_FIXUPS_BTRFS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BTRFS_FS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BTRFS_FS_POSIX_ACL)
-+endef
-+else
-+PODMAN_TAGS += exclude_graphdriver_btrfs
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
-+PODMAN_DEPENDENCIES += libapparmor
-+PODMAN_TAGS += apparmor
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SHADOW_SUBORDINATE_IDS),y)
-+PODMAN_DEPENDENCIES += shadow
-+PODMAN_TAGS += libsubid
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+PODMAN_DEPENDENCIES += systemd
-+PODMAN_TAGS += systemd
-+endif
-+
-+define PODMAN_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CPUSETS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BPF_SYSCALL)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_POSIX_MQUEUE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_MEMCG)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_SCHED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_FREEZER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_DEVICE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_CPUACCT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_PIDS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_BPF)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NAMESPACES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_UTS_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IPC_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_PID_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USER_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_NS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_SECCOMP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_ADVANCED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XTABLES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_ADDRTYPE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_COMMENT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_CONNTRACK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MARK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETFILTER_XT_MATCH_IPVS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_CONNTRACK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_IPTABLES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_FILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_NAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_NF_TARGET_MASQUERADE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BRIDGE_NETFILTER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CORE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_VETH)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_OVERLAY_FS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_KEYS)
-+	$(PODMAN_LINUX_CONFIG_FIXUPS_BTRFS)
-+endef
-+
-+define PODMAN_CONFIG
-+	$(Q)$(INSTALL) -D -m 0644 \
-+		$(PODMAN_PKGDIR)/registries.conf \
-+		$(TARGET_DIR)/etc/containers/registries.conf
-+	$(Q)$(INSTALL) -D -m 0644 \
-+		$(PODMAN_PKGDIR)/policy.json \
-+		$(TARGET_DIR)/etc/containers/policy.json
-+endef
-+PODMAN_POST_INSTALL_TARGET_HOOKS += PODMAN_CONFIG
-+
-+define PODMAN_HELPERS
-+	$(Q)mkdir -p $(TARGET_DIR)/usr/libexec/podman
-+	$(Q)ln -sf ../../bin/netavark $(TARGET_DIR)/usr/libexec/podman/netavark
-+	$(Q)ln -sf ../../bin/catatonit $(TARGET_DIR)/usr/libexec/podman/catatonit
-+endef
-+PODMAN_POST_INSTALL_TARGET_HOOKS += PODMAN_HELPERS
-+
-+$(eval $(golang-package))
-diff --git a/package/podman/policy.json b/package/podman/policy.json
-new file mode 100644
-index 0000000000..9333053f93
---- /dev/null
-+++ b/package/podman/policy.json
-@@ -0,0 +1,7 @@
-+{
-+  "default": [
-+    {
-+      "type": "insecureAcceptAnything"
-+    }
-+  ]
-+}
-diff --git a/package/podman/registries.conf b/package/podman/registries.conf
-new file mode 100644
-index 0000000000..d44d892da3
---- /dev/null
-+++ b/package/podman/registries.conf
-@@ -0,0 +1 @@
-+unqualified-search-registries = ["docker.io"]
-diff --git a/support/testing/tests/package/test_podman.py b/support/testing/tests/package/test_podman.py
-new file mode 100644
-index 0000000000..ba6d615849
---- /dev/null
-+++ b/support/testing/tests/package/test_podman.py
-@@ -0,0 +1,124 @@
-+import infra.basetest
-+import json
-+import os
-+
-+
-+class TestPodman(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_PER_PACKAGE_DIRECTORIES=y
-+        BR2_SYSTEM_DHCP="eth0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.202"
-+        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
-+        BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
-+        BR2_PACKAGE_CA_CERTIFICATES=y
-+        BR2_PACKAGE_PODMAN=y
-+        BR2_PACKAGE_HOST_GO_BIN=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        kernel_file = os.path.join(self.builddir, 'images', 'zImage')
-+        dtb_file = os.path.join(self.builddir, 'images', 'vexpress-v2p-ca9.dtb')
-+        ext2_file = os.path.join(self.builddir, 'images', 'rootfs.ext2')
-+        self.emulator.boot(
-+            arch='armv5',
-+            kernel=kernel_file,
-+            kernel_cmdline=[
-+                'root=/dev/mmcblk0',
-+                'rootwait',
-+                'console=ttyAMA0',
-+            ],
-+            options=[
-+                '-M', 'vexpress-a9',
-+                '-dtb', dtb_file,
-+                '-drive', f'file={ext2_file},if=sd,format=raw',
-+            ]
-+        )
-+        self.emulator.login()
-+
-+        # The podman binary is huge, so it takes time to load...
-+        # Next calls will be faster, though, as it is going to be cached.
-+        self.assertRunOk('podman --version', timeout=30)
-+
-+        # Check for an empty image storage
-+        output, exit_code = self.emulator.run('podman image ls --format "{{ json }}"')
-+        img_info = json.loads("".join(output))
-+        self.assertEqual(len(img_info), 0, f"{len(img_info)} image(s) already present")
-+
-+        # Pull an image; it can take time: network, hash checksums...
-+        self.assertRunOk('podman image pull busybox:1.37.0', timeout=60)
-+        output, exit_code = self.emulator.run('podman image ls --format "{{ json }}"')
-+        img_info = json.loads("".join(output))
-+        self.assertEqual(len(img_info), 1, f"{len(img_info)} image(s), expecting 1")
-+        self.assertTrue("Id" in img_info[0], '"Id" not in img_info[0]')
-+        self.assertTrue("Digest" in img_info[0], '"Digest" not in img_info[0]')
-+        self.assertEqual(img_info[0]["Names"][0], "docker.io/library/busybox:1.37.0")
-+
-+        output, _ = self.emulator.run('echo ${br_container}')
-+        self.assertEqual(output[0], "", "Already in a container")
-+
-+        # Spawn the container; that can take a bit of time
-+        self.assertRunOk(
-+            "podman container run --rm -ti -e PS1 -e br_container=podman busybox:1.37.0",
-+            timeout=60,
-+        )
-+        # Twist! The command above is still running, but the shell it
-+        # started exposes the same prompt we expect. This is all what we want.
-+        output, _ = self.emulator.run('echo ${br_container}')
-+        self.assertEqual(output[0], "podman", "Not in a podman container")
-+
-+        # Check that pid1 is the shell
-+        output, _ = self.emulator.run('readlink /proc/1/exe')
-+        self.assertEqual(output[0], "/bin/sh", f"PID1 is {output[0]}, should be /bin/sh")
-+
-+        # Exit the container
-+        self.assertRunOk("exit 0")
-+        # Twist, take two! We are now back to the shell in the VM.
-+        output, _ = self.emulator.run('echo ${br_container}')
-+        self.assertEqual(output[0], "", "Still in a container")
-+
-+        # Spawn a container, round two, but with an injected init this time
-+        self.assertRunOk("podman container run --rm -ti -e PS1 --init -e br_container=podman busybox:1.37.0", timeout=60)
-+        output, _ = self.emulator.run('echo ${br_container}')
-+        self.assertEqual(output[0], "podman", "Not in a podman container")
-+
-+        # Check that pid1 is the init injected by podman
-+        output, _ = self.emulator.run('readlink /proc/1/exe')
-+        self.assertEqual(output[0], "/run/podman-init", f"PID1 is {output[0]}, should be /run/podman-init")
-+
-+        # Exit the container
-+        self.assertRunOk("exit 0")
-+        output, _ = self.emulator.run('echo ${br_container}')
-+        self.assertEqual(output[0], "", "Still in a container")
-+
-+        # Remove the image
-+        self.assertRunOk('podman image rm busybox:1.37.0')
-+        output, exit_code = self.emulator.run('podman image ls --format "{{ json }}"')
-+        img_info = json.loads("".join(output))
-+        self.assertEqual(len(img_info), 0, f"{len(img_info)} image(s) still present, expecting 0")
-+
-+        # Use an image from another registry, spawn without pulling first
-+        self.assertRunOk(
-+            "podman container run --rm -ti -e PS1 -e br_container=podman quay.io/prometheus/busybox:latest",
-+            timeout=60,
-+        )
-+        output, _ = self.emulator.run('echo ${br_container}')
-+        self.assertEqual(output[0], "podman", "Not in a podman container")
-+        self.assertRunOk("exit 0")
-+        output, _ = self.emulator.run('echo ${br_container}')
-+        self.assertEqual(output[0], "", "Still in a container")
-+        self.assertRunOk('podman image prune -af')
-+        output, exit_code = self.emulator.run('podman image ls --format "{{ json }}"')
-+        img_info = json.loads("".join(output))
-+        self.assertEqual(len(img_info), 0, f"{len(img_info)} image(s) still present, expecting 0")
+
+Detail of failures for 2024.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   xtensa    |           bsdiff-4.3           | NOK | https://autobuild.buildroot.org/results/24bb6d01e97f6409236b4be65071c1d94b467ff9 |     
+ microblaze  |    freeradius-server-3.2.3     | NOK | https://autobuild.buildroot.org/results/54db6fed89642228bfe60a3a4857e74e29d6aa75 |     
+   xtensa    |          iperf3-3.18           | NOK | https://autobuild.buildroot.org/results/678b60e5ea0a8670300ad0c4604d915b589fd32f | ORPH
+  aarch64    |         mdevd-0.1.6.0          | NOK | https://autobuild.buildroot.org/results/65e2f981b58b7ab50830b67a310e9a1571b0eb03 |     
+   mips64    |         openssh-9.9p2          | NOK | https://autobuild.buildroot.org/results/6d04d81f73f3500d93091c8f3e5e77799379770e | ORPH
+
+
+Classification of failures by reason for 2024.11.x
+--------------------------------------------------
+
+  gobject-introspection-1.76.1 | 1 
+                lmbench-3.0-a9 | 1 
+
+
+Detail of failures for 2024.11.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   x86_64    |  gobject-introspection-1.76.1  | NOK | https://autobuild.buildroot.org/results/ef8bb7a4316317727a424dab9bb1929fd26513fa | ORPH
+    m68k     |         lmbench-3.0-a9         | NOK | https://autobuild.buildroot.org/results/1a0aebb712d604782eb119a3624b4631eacb841f | ORPH
+
+
+Gitlab CI results for 2025-02-24
+================================
+
+Detail of runtime-test failures for master
+------------------------------------------
+
+             runtime-test |                        link to the job                        | orph?
+--------------------------+---------------------------------------------------------------+------
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220348671  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220348668  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220348634  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220348562  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220348520  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220348414  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220348406  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220348311  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220348279  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220348248  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220348242  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220348218  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220348215  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220348197  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220348195  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220348055  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220347896  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220347872  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220347745  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220347468  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220347459  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220347307  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220347204  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220347176  | ORPH 
+                 test_run | https://gitlab.com/buildroot.org/buildroot/-/jobs/9220347161  | ORPH 
+
+
+
 -- 
-2.47.0
-
+https://autobuild.buildroot.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
