@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE335C021B2
-	for <buildroot@archiver.kernel.org>; Tue, 25 Feb 2025 20:30:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2439C021BB
+	for <buildroot@archiver.kernel.org>; Tue, 25 Feb 2025 20:30:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5CD8A8207D;
-	Tue, 25 Feb 2025 20:30:14 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yggaquCmB0FS; Tue, 25 Feb 2025 20:30:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7293282082
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7293282082;
-	Tue, 25 Feb 2025 20:30:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C13AE2019
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 20:30:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B096B60813
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 20:30:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A8B6C60813;
+	Tue, 25 Feb 2025 20:30:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4hX0pQ36urOR for <buildroot@buildroot.org>;
+ id LQRLvIZJWJA7; Tue, 25 Feb 2025 20:30:15 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A84AF60825
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A84AF60825;
+	Tue, 25 Feb 2025 20:30:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 174472DE0
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 20:30:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id EBFAF40529
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 20:30:11 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jNcirWyiAeQa for <buildroot@buildroot.org>;
  Tue, 25 Feb 2025 20:30:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AEA9160A88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3D5C40F2C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AEA9160A88
+ by smtp2.osuosl.org (Postfix) with ESMTP id C3D5C40F2C
  for <buildroot@buildroot.org>; Tue, 25 Feb 2025 20:30:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A39F787B2D; Tue, 25 Feb 2025 20:30:10 +0000 (UTC)
+ id AF75587B2E; Tue, 25 Feb 2025 20:30:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 25 Feb 2025 20:44:08 +0100
+Date: Tue, 25 Feb 2025 20:56:07 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 6db0e9620fb6dbc23fe9e20aabe7f574ba703698
-X-Git-Newrev: 1fc6877fd0160a306ca440430b9631a301c0e050
+X-Git-Oldrev: 1fc6877fd0160a306ca440430b9631a301c0e050
+X-Git-Newrev: 1891b4569450b7920c93e9520ab12f59981011ec
 X-Patchwork-Hint: ignore
-Message-Id: <20250225203010.A39F787B2D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] {linux,
- linux-headers}: bump 6.{1, 6, 12}.x series
+Message-Id: <20250225203010.AF75587B2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/watchdogd: fix
+ use of uninitialized exit status
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,48 +65,114 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1fc6877fd0160a306ca440430b9631a301c0e050
+commit: https://git.buildroot.net/buildroot/commit/?id=1891b4569450b7920c93e9520ab12f59981011ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 1bcd3d6bc5e07b75acea0ae2ae554725e2fcc3e3)
-[Peter: drop 6.12.x bump]
+The bug could lead to incorrect "critical error" reports if that
+uninitialized memory happened to contain a value that interpreted as
+an int was above the critical threshold. It affected primarily scripts
+running approximately one second or longer, because access happens by
+timer.
+
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit bfb87bafdb817291a66cfb6050b78e31b02ceda4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...0001-Fix-use-of-uninitialized-exit-status.patch | 85 ++++++++++++++++++++++
+ 1 file changed, 85 insertions(+)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 01c2c30dfb..c8c00b95dc 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,7 +1,7 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- sha256  62148e7e17f54c4a5ab5e75ad4882682c54bee818948be61a5963234fc0849fc  linux-6.11.11.tar.xz
--sha256  5aa39a9bd555133ad741058f9908a277e6b36bb928481e747d885b50aaaa93ed  linux-6.6.78.tar.xz
--sha256  874d67d3181570e69ac6b33853f0448f05fc90d4cf3e4baaadc4a9cede7c50f3  linux-6.1.128.tar.xz
-+sha256  07a6f904470da1a099aa1683e3025a999dd82f2438f78b006b80c6ae2e9dfe8d  linux-6.6.79.tar.xz
-+sha256  9d63e3bfde75a44a99e18812b002e5e5c0797b4eb3db408a7a9225c2c719b52b  linux-6.1.129.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  efe9f7eb5ea4d26cec6290689343e1804eb3b4a88ff5a60497a696fc08157c42  linux-5.15.178.tar.xz
- sha256  9597c4fee2f1ce452acfec516f4325ad342155872052fd5f0d9ce2ddcc26ebe5  linux-5.10.234.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 0116158e1a..c5f2d328fa 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -432,8 +432,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.4.290"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.234"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.178"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.128"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.78"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.1.129"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.79"	if BR2_KERNEL_HEADERS_6_6
- 	default "6.11.11"	if BR2_KERNEL_HEADERS_6_11
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+diff --git a/package/watchdogd/0001-Fix-use-of-uninitialized-exit-status.patch b/package/watchdogd/0001-Fix-use-of-uninitialized-exit-status.patch
+new file mode 100644
+index 0000000000..69e7b36ef4
+--- /dev/null
++++ b/package/watchdogd/0001-Fix-use-of-uninitialized-exit-status.patch
+@@ -0,0 +1,85 @@
++From f6d56c374723923e276ccfd442fdd0cabf23d095 Mon Sep 17 00:00:00 2001
++From: Fiona Klute <fiona.klute@gmx.de>
++Date: Fri, 14 Feb 2025 19:26:24 +0100
++Subject: [PATCH] Fix use of uninitialized exit status
++
++Depending on the timing between the SIGCHLD callback run and the first
++generic_cb() timer callback run, script_exit_status() sometimes
++returned uninitialized memory as the exit status of a script. This
++could lead to incorrect "critical error" reports if that uninitialized
++memory happened to contain a value that interpreted as an int was
++above the critical threshold.
++
++Additionally, script_exit_status() unconditionally removed the process
++information from the queue, meaning that if a process had not
++completed by the time its status was first probed, its status could
++never be updated or successfully probed again, leading to timeout. Fix
++this by removing the process only if the status indicates it has
++terminated (successful or not).
++
++The problems affected primarily scripts running approximately one
++second or longer, because very short running scripts will very likely
++have their exit status collected by the SIGCHLD callback before the
++first timer callback run.
++
++Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
++Upstream: https://github.com/troglobit/watchdogd/pull/52
++---
++ src/script.c | 13 ++++++++++---
++ 1 file changed, 10 insertions(+), 3 deletions(-)
++
++diff --git a/src/script.c b/src/script.c
++index 1220fb9..f6e0763 100644
++--- a/src/script.c
+++++ b/src/script.c
++@@ -16,6 +16,7 @@
++  */
++ 
++ #include <errno.h>
+++#include <stdbool.h>		/* bool type (before C23) */
++ #include <stdlib.h>		/* setenv() */
++ #include <sys/wait.h>		/* waitpid() */
++ #include <unistd.h>		/* execv(), _exit() */
++@@ -28,6 +29,7 @@
++ struct exec_info {
++ 	pid_t   pid;
++ 	int     exit_status;
+++	bool    exited;
++ 	void  (*cb)(void *arg);
++ 	void   *arg;
++ 	LIST_ENTRY(exec_info) entry;
++@@ -64,6 +66,8 @@ static void add(pid_t pid, void (*cb)(void *), void *arg)
++ 	}
++ 
++ 	info->pid = pid;
+++	info->exit_status = 0;
+++	info->exited = false;
++ 	info->cb  = cb;
++ 	info->arg = arg;
++ 	LIST_INSERT_HEAD(&exec_info_head, info, entry);
++@@ -78,6 +82,7 @@ static int exec(pid_t pid, int status)
++ 			continue;
++ 
++ 		info->exit_status = status;
+++		info->exited = true;
++ 		if (info->cb)
++ 			info->cb(info->arg);
++ 
++@@ -96,9 +101,11 @@ int script_exit_status(pid_t pid)
++ 		if (info->pid != pid)
++ 			continue;
++ 
++-		status = info->exit_status;
++-		LIST_REMOVE(info, entry);
++-		free(info);
+++		if (info->exited) {
+++			status = info->exit_status;
+++			LIST_REMOVE(info, entry);
+++			free(info);
+++		}
++ 		break;
++ 	}
++ 
++-- 
++2.47.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
