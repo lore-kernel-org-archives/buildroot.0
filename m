@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EF15C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:24:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62D76C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:24:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7812F417E3;
-	Fri, 28 Feb 2025 17:24:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A96984B1A;
+	Fri, 28 Feb 2025 17:24:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V144paiDthxb; Fri, 28 Feb 2025 17:24:04 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZE9hIEYKKR5P; Fri, 28 Feb 2025 17:24:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EE2150A95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5299485FD8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EE2150A95;
-	Fri, 28 Feb 2025 17:24:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5299485FD8;
+	Fri, 28 Feb 2025 17:24:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 14BD3711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:48:44 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 048B168
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:48:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AD1EA4A607
+ by smtp4.osuosl.org (Postfix) with ESMTP id BDA404A612
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NEoGTZj5MptD for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:32:12 +0000 (UTC)
+ id 9SlMWgERAlCx for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:32:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CB7542D2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA018487DC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5CB7542D2C
+ by smtp4.osuosl.org (Postfix) with ESMTP id AA018487DC
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57D91817EE; Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
+ id A49A881620; Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 25 Feb 2025 20:55:41 +0100
+Date: Tue, 25 Feb 2025 21:46:48 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c73fb46fea066fe2b1b02ba71cfd5a77c62e08f0
-X-Git-Newrev: 0aa1b043dfa3ac2b9d8970cdf25349f77ab31458
+X-Git-Oldrev: 80b42e226a5f1f833e8bec5b7af6a7a5f7ac58d0
+X-Git-Newrev: 9eeb8108c6974293a43a448d2cf1f219902d8fa0
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163048.57D91817EE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/procps-ng: fix build
- with missing pidfd_open
+Message-Id: <20250228163048.A49A881620@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/beaglebone: bump Linux
+ to 6.6.58-ti-arm32-r10 and U-Boot to 2025.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,107 +65,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0aa1b043dfa3ac2b9d8970cdf25349f77ab31458
+commit: https://git.buildroot.net/buildroot/commit/?id=9eeb8108c6974293a43a448d2cf1f219902d8fa0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-port back patch introduced shortly after the 4.0.5 release.
+The patch bumps the Linux kernel to version 6.6.58-ti-arm32-r10 and
+U-Boot to version 2025.01.
 
-Fixes:
-  checking for __NR_pidfd_open... no
-  configure: error: Neither pidfd_open or __NR_pidfd_open found. Disable pidwait with configure option --disable-pidwait
+Tested on beaglebone black.
 
-happening with this defconfig:
+Link: https://github.com/beagleboard/linux/releases/tag/6.6.58-ti-arm32-r10
 
-BR2_arm=y
-BR2_cortex_a15_a7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_INIT_SYSTEMD=y
-BR2_PACKAGE_PROCPS_NG=y
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...grep-provide-definition-for-nr-pidfd_open.patch | 57 ++++++++++++++++++++++
- package/procps-ng/procps-ng.mk                     |  3 ++
- 2 files changed, 60 insertions(+)
+ board/beagleboard/beaglebone/patches/linux/linux.hash | 2 +-
+ board/beagleboard/beaglebone/patches/uboot/uboot.hash | 2 +-
+ configs/beaglebone_defconfig                          | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/procps-ng/0001-pgrep-provide-definition-for-nr-pidfd_open.patch b/package/procps-ng/0001-pgrep-provide-definition-for-nr-pidfd_open.patch
-new file mode 100644
-index 0000000000..9c83124311
---- /dev/null
-+++ b/package/procps-ng/0001-pgrep-provide-definition-for-nr-pidfd_open.patch
-@@ -0,0 +1,57 @@
-+From 90a0ddcd64c2d43dc2c2c856b1b42b5cae6b8a44 Mon Sep 17 00:00:00 2001
-+From: Markus Mayer <mmayer@broadcom.com>
-+Date: Wed, 11 Dec 2024 14:53:33 -0800
-+Subject: [PATCH] pgrep: provide definition for __NR_pidfd_open if needed
-+
-+We already implement pidfd_open() ourselves if libc doesn't provide it.
-+Let's also provide our own definition of __NR_pidfd_open in case the
-+kernel headers don't contain it.
-+
-+This way, pgrep can provide its full capabilities after being built
-+against older kernel headers (for increased compatibility) but being run
-+on systems with newer kernels.
-+
-+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-+Upstream: https://gitlab.com/procps-ng/procps/-/commit/90a0ddcd64c2d43dc2c2c856b1b42b5cae6b8a44
-+Signed-off: Michael Nosthoff <buildroot@heine.tech>
-+---
-+ configure.ac | 2 +-
-+ src/pgrep.c  | 9 +++++++++
-+ 2 files changed, 10 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 1e984b12..14ba3ad7 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -325,7 +325,7 @@ AS_IF([[test "x$enable_pidwait" = xyes -a "x$have_pidfd_open" = xno]],
-+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-+ #include <sys/syscall.h>
-+ #ifndef __NR_pidfd_open
-+-#error __NR_pidfd_open not defined
-++#warning __NR_pidfd_open not defined; using our definition
-+ #endif
-+       ])],
-+       AC_MSG_RESULT([yes]),
-+diff --git a/src/pgrep.c b/src/pgrep.c
-+index 2c6b06b8..6fc25dd4 100644
-+--- a/src/pgrep.c
-++++ b/src/pgrep.c
-+@@ -874,6 +874,15 @@ static int signal_option(int *argc, char **argv)
-+ }
-+
-+ #if defined(ENABLE_PIDWAIT) && !defined(HAVE_PIDFD_OPEN)
-++
-++#ifndef __NR_pidfd_open
-++#ifdef __alpha__
-++#define __NR_pidfd_open 544
-++#else
-++#define __NR_pidfd_open 434
-++#endif
-++#endif
-++
-+ static int pidfd_open (pid_t pid, unsigned int flags)
-+ {
-+ 	return syscall(__NR_pidfd_open, pid, flags);
-+--
-+GitLab
-+
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index f4eadcb547..56fe1790c3 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -14,6 +14,9 @@ PROCPS_NG_INSTALL_STAGING = YES
- PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
- 
-+# Applying 0001-pgrep-provide-definition-for-nr-pidfd_open.patch touches configure.ac
-+PROCPS_NG_AUTORECONF = YES
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- PROCPS_NG_DEPENDENCIES += systemd
- PROCPS_NG_CONF_OPTS += --with-systemd
+diff --git a/board/beagleboard/beaglebone/patches/linux/linux.hash b/board/beagleboard/beaglebone/patches/linux/linux.hash
+index 4a7384d036..b7d4412941 100644
+--- a/board/beagleboard/beaglebone/patches/linux/linux.hash
++++ b/board/beagleboard/beaglebone/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  f1ae7325c6c146e0f852866a3bfd3f90ae1b5f46e414bc99a38384ed677e3721  linux-6.6.32-ti-arm32-r7.tar.gz
++sha256  c6ee813cc48fe7e308c149798100d621514e832da507e34d1dfd8247ef9ae39f  linux-6.6.58-ti-arm32-r10.tar.gz
+diff --git a/board/beagleboard/beaglebone/patches/uboot/uboot.hash b/board/beagleboard/beaglebone/patches/uboot/uboot.hash
+index 904fa56c02..50674352d7 100644
+--- a/board/beagleboard/beaglebone/patches/uboot/uboot.hash
++++ b/board/beagleboard/beaglebone/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
++sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index cad32e90b1..ddeb221e86 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beagleboard/beaglebone/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.6.32-ti-arm32-r7)/linux-6.6.32-ti-arm32-r7.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.6.58-ti-arm32-r10)/linux-6.6.58-ti-arm32-r10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/omap/am335x-evm ti/omap/am335x-bone ti/omap/am335x-boneblack ti/omap/am335x-bonegreen ti/omap/am335x-evmsk ti/omap/am335x-boneblue ti/omap/am335x-boneblack-wireless ti/omap/am335x-bonegreen-wireless"
+@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
