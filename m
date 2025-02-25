@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F216C282D0
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:24:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EF15C282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:24:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 33D6385A0B;
-	Fri, 28 Feb 2025 17:24:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7812F417E3;
+	Fri, 28 Feb 2025 17:24:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WY_QlDmW9GXq; Fri, 28 Feb 2025 17:24:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V144paiDthxb; Fri, 28 Feb 2025 17:24:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD6E8810E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EE2150A95
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CD6E8810E1;
-	Fri, 28 Feb 2025 17:23:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EE2150A95;
+	Fri, 28 Feb 2025 17:24:04 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1E446711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:48:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 14BD3711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:48:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6B465488C8
+ by smtp4.osuosl.org (Postfix) with ESMTP id AD1EA4A607
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BuHzik6sx965 for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:32:13 +0000 (UTC)
+ id NEoGTZj5MptD for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:32:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 258B042DCD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CB7542D2C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 258B042DCD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5CB7542D2C
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1EC2E81620; Fri, 28 Feb 2025 16:30:49 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 57D91817EE; Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 26 Feb 2025 15:40:57 +0100
+Date: Tue, 25 Feb 2025 20:55:41 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 08380c47f7b64921715268e2182dfda24e563e39
-X-Git-Newrev: 9489f251ff1447ff22fe512eb0e4049118532c99
+X-Git-Oldrev: c73fb46fea066fe2b1b02ba71cfd5a77c62e08f0
+X-Git-Newrev: 0aa1b043dfa3ac2b9d8970cdf25349f77ab31458
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163049.1EC2E81620@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/zynq_microzed_defconfig: bump to 6.6.70
+Message-Id: <20250228163048.57D91817EE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/procps-ng: fix build
+ with missing pidfd_open
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,30 +65,107 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9489f251ff1447ff22fe512eb0e4049118532c99
+commit: https://git.buildroot.net/buildroot/commit/?id=0aa1b043dfa3ac2b9d8970cdf25349f77ab31458
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch bumps the zynq_microzed_defconfig to Linux kernel 6.6.70.
+port back patch introduced shortly after the 4.0.5 release.
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+  checking for __NR_pidfd_open... no
+  configure: error: Neither pidfd_open or __NR_pidfd_open found. Disable pidwait with configure option --disable-pidwait
+
+happening with this defconfig:
+
+BR2_arm=y
+BR2_cortex_a15_a7=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_INIT_SYSTEMD=y
+BR2_PACKAGE_PROCPS_NG=y
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/zynq_microzed_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...grep-provide-definition-for-nr-pidfd_open.patch | 57 ++++++++++++++++++++++
+ package/procps-ng/procps-ng.mk                     |  3 ++
+ 2 files changed, 60 insertions(+)
 
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index 18148b5fbd..b9b2da3849 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.60)/xlnx_rebase_v6.6_LTS_merge_6.6.60.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.70)/xlnx_rebase_v6.6_LTS_merge_6.6.70.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+diff --git a/package/procps-ng/0001-pgrep-provide-definition-for-nr-pidfd_open.patch b/package/procps-ng/0001-pgrep-provide-definition-for-nr-pidfd_open.patch
+new file mode 100644
+index 0000000000..9c83124311
+--- /dev/null
++++ b/package/procps-ng/0001-pgrep-provide-definition-for-nr-pidfd_open.patch
+@@ -0,0 +1,57 @@
++From 90a0ddcd64c2d43dc2c2c856b1b42b5cae6b8a44 Mon Sep 17 00:00:00 2001
++From: Markus Mayer <mmayer@broadcom.com>
++Date: Wed, 11 Dec 2024 14:53:33 -0800
++Subject: [PATCH] pgrep: provide definition for __NR_pidfd_open if needed
++
++We already implement pidfd_open() ourselves if libc doesn't provide it.
++Let's also provide our own definition of __NR_pidfd_open in case the
++kernel headers don't contain it.
++
++This way, pgrep can provide its full capabilities after being built
++against older kernel headers (for increased compatibility) but being run
++on systems with newer kernels.
++
++Signed-off-by: Markus Mayer <mmayer@broadcom.com>
++Upstream: https://gitlab.com/procps-ng/procps/-/commit/90a0ddcd64c2d43dc2c2c856b1b42b5cae6b8a44
++Signed-off: Michael Nosthoff <buildroot@heine.tech>
++---
++ configure.ac | 2 +-
++ src/pgrep.c  | 9 +++++++++
++ 2 files changed, 10 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 1e984b12..14ba3ad7 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -325,7 +325,7 @@ AS_IF([[test "x$enable_pidwait" = xyes -a "x$have_pidfd_open" = xno]],
++    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
++ #include <sys/syscall.h>
++ #ifndef __NR_pidfd_open
++-#error __NR_pidfd_open not defined
+++#warning __NR_pidfd_open not defined; using our definition
++ #endif
++       ])],
++       AC_MSG_RESULT([yes]),
++diff --git a/src/pgrep.c b/src/pgrep.c
++index 2c6b06b8..6fc25dd4 100644
++--- a/src/pgrep.c
+++++ b/src/pgrep.c
++@@ -874,6 +874,15 @@ static int signal_option(int *argc, char **argv)
++ }
++
++ #if defined(ENABLE_PIDWAIT) && !defined(HAVE_PIDFD_OPEN)
+++
+++#ifndef __NR_pidfd_open
+++#ifdef __alpha__
+++#define __NR_pidfd_open 544
+++#else
+++#define __NR_pidfd_open 434
+++#endif
+++#endif
+++
++ static int pidfd_open (pid_t pid, unsigned int flags)
++ {
++ 	return syscall(__NR_pidfd_open, pid, flags);
++--
++GitLab
++
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index f4eadcb547..56fe1790c3 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -14,6 +14,9 @@ PROCPS_NG_INSTALL_STAGING = YES
+ PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
+ 
++# Applying 0001-pgrep-provide-definition-for-nr-pidfd_open.patch touches configure.ac
++PROCPS_NG_AUTORECONF = YES
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ PROCPS_NG_DEPENDENCIES += systemd
+ PROCPS_NG_CONF_OPTS += --with-systemd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
