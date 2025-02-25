@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06CC3C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:24:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A21CC282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:24:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4924670979;
-	Fri, 28 Feb 2025 17:24:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 03C8881EE4;
+	Fri, 28 Feb 2025 17:24:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ashVJXw9foq2; Fri, 28 Feb 2025 17:24:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zC0hSjqcw2bA; Fri, 28 Feb 2025 17:24:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 344937086B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E81C381E91
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 344937086B;
-	Fri, 28 Feb 2025 17:24:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E81C381E91;
+	Fri, 28 Feb 2025 17:24:53 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E33F1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:49:03 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A9BA711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:49:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0D65B4AA2C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6CF5A42DBB
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LzVfvStpXp6u for <buildroot@buildroot.org>;
+ id 4rlu7vdLYtyG for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 16:32:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7282A42DC2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8599342DB6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7282A42DC2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8599342DB6
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6BA7F82849; Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
+ id 7EBBE81620; Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 25 Feb 2025 21:03:02 +0100
+Date: Tue, 25 Feb 2025 21:11:46 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0aa1b043dfa3ac2b9d8970cdf25349f77ab31458
-X-Git-Newrev: 84eed2762945f0287cff2cf604947b65c0408c8f
+X-Git-Oldrev: 84eed2762945f0287cff2cf604947b65c0408c8f
+X-Git-Newrev: d577c1c339649d54b0dab41949a192006c86a3ae
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163048.6BA7F82849@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libglib2: bump version
- to 2.82.5
+Message-Id: <20250228163048.7EBBE81620@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-sqlalchemy:
+ bump to version 2.0.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,54 +60,65 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2655594381700327359=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84eed2762945f0287cff2cf604947b65c0408c8f
+--===============2655594381700327359==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=d577c1c339649d54b0dab41949a192006c86a3ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This is a small bugfix release, the fix relevant for Buildroot is a
-possible integer overflow when parsing ISO 8601 date/time strings:
-https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4499/diffs
+For change log, see:
+https://docs.sqlalchemy.org/en/20/changelog/changelog_20.html#change-2.0.38
 
-Full upstream changelog, two other fixes are for macos, one related to
-testing:
-https://gitlab.gnome.org/GNOME/glib/-/blob/2.82.5/NEWS?ref_type=tags
-
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
+[Julien: add link to change log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libglib2/libglib2.hash | 4 ++--
- package/libglib2/libglib2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-sqlalchemy/python-sqlalchemy.hash | 4 ++--
+ package/python-sqlalchemy/python-sqlalchemy.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 6175a7157c..8bd4bf157d 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.82/glib-2.82.4.sha256sum
--sha256  37dd0877fe964cd15e9a2710b044a1830fb1bd93652a6d0cb6b8b2dff187c709  glib-2.82.4.tar.xz
-+# https://download.gnome.org/sources/glib/2.82/glib-2.82.5.sha256sum
-+sha256  05c2031f9bdf6b5aba7a06ca84f0b4aced28b19bf1b50c6ab25cc675277cbc3f  glib-2.82.5.tar.xz
- # License files, locally calculated
- sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 58a9eb3ee6..6c012c79c7 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.hash b/package/python-sqlalchemy/python-sqlalchemy.hash
+index cfa326cfdc..aa9888b58d 100644
+--- a/package/python-sqlalchemy/python-sqlalchemy.hash
++++ b/package/python-sqlalchemy/python-sqlalchemy.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/sqlalchemy/json
+-md5  b7b1514b01796c1b98d7b7ddd2b2c79a  sqlalchemy-2.0.37.tar.gz
+-sha256  12b28d99a9c14eaf4055810df1001557176716de0167b91026e648e65229bffb  sqlalchemy-2.0.37.tar.gz
++md5  3cbf218c54b25fa4e18d78842956601d  sqlalchemy-2.0.38.tar.gz
++sha256  e5a4d82bdb4bf1ac1285a68eab02d253ab73355d9f0fe725a97e1e0fa689decb  sqlalchemy-2.0.38.tar.gz
+ # Locally computed sha256 checksums
+ sha256  9821720b58d4a565b61321007a8ad43ab6991a3959e66cd5db4dd9eae69c7dfc  LICENSE
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.mk b/package/python-sqlalchemy/python-sqlalchemy.mk
+index c8d919c3cd..3a9d9e06b6 100644
+--- a/package/python-sqlalchemy/python-sqlalchemy.mk
++++ b/package/python-sqlalchemy/python-sqlalchemy.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- LIBGLIB2_VERSION_MAJOR = 2.82
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).5
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = https://download.gnome.org/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.1+
+-PYTHON_SQLALCHEMY_VERSION = 2.0.37
++PYTHON_SQLALCHEMY_VERSION = 2.0.38
+ PYTHON_SQLALCHEMY_SOURCE = sqlalchemy-$(PYTHON_SQLALCHEMY_VERSION).tar.gz
+-PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/3b/20/93ea2518df4d7a14ebe9ace9ab8bb92aaf7df0072b9007644de74172b06c
++PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/e4/08/9a90962ea72acd532bda71249a626344d855c4032603924b1b547694b837
+ PYTHON_SQLALCHEMY_SETUP_TYPE = setuptools
+ PYTHON_SQLALCHEMY_LICENSE = MIT
+ PYTHON_SQLALCHEMY_LICENSE_FILES = LICENSE
+
+--===============2655594381700327359==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2655594381700327359==--
