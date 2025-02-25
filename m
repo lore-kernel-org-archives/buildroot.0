@@ -1,106 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 050ADC021B2
-	for <buildroot@archiver.kernel.org>; Tue, 25 Feb 2025 13:45:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26BC9C021B2
+	for <buildroot@archiver.kernel.org>; Tue, 25 Feb 2025 13:46:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B0ED140E61;
-	Tue, 25 Feb 2025 13:45:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E32AB60F72;
+	Tue, 25 Feb 2025 13:46:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZTo8Y9zLRJ4Z; Tue, 25 Feb 2025 13:45:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AlZYlB7BFgXP; Tue, 25 Feb 2025 13:46:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FB5440E5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC1F560F6C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8FB5440E5E;
-	Tue, 25 Feb 2025 13:45:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 33AFC2019
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 13:45:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC1F560F6C;
+	Tue, 25 Feb 2025 13:46:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9ADE72DE0
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 13:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 181E040E5E
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 13:45:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7FF4860F6C
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 13:46:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y7vn8eCDcefD for <buildroot@buildroot.org>;
- Tue, 25 Feb 2025 13:45:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
- envelope-from=raphael.pavlidis@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 26BC240E58
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26BC240E58
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 26BC240E58
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 13:45:55 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-4394036c0efso35515285e9.2
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 05:45:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1740491153; x=1741095953;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=LUIZibfJXgJAVYGQKNpk69HDXHtYJk/b+sXYgMEdIqM=;
- b=VJclxEldTt5+4ElAd+sNUoIzCRGdy4qsrAbFNZAuglr5cdUQ96pJYjwAGvpeAZi4vC
- M4wgqAhEGwyP4enXLypQPnsgyarfiybqchGnTI118lsljhJadTN1QOPt1d9C4oHmx8pR
- 9GwkxjwpPfyCfnI329fFExNjVe75yuTZNCaWURZYDQXRBKjPTiUwPDd7zgfoM+ranbqn
- dKOCcE9pxBqCpgj0IzdwBrNHtaGQfGNnjKGJRmiyeuHJ0TSnMIo52/GLQpsD66zSw/Q2
- Y9vbbfofpmjiPz0ULv4HlzYOlCrEgdFVsIhO0r8Y+oEk6bEmbACNifVKmBFSp900IUdK
- 2PQA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCU1lmd+ZScvii46WlEoIWHz32gT9V5nqRidklKqpG80fRzPt+Gp3XOA4oal8Cd/wa2D9Qc5UTTn63c=@buildroot.org
-X-Gm-Message-State: AOJu0YwyVZlX5FtdtMhTA2ZOtgqUFkjZdzqXHQtlCvYC/Ro6CHQ0wfmV
- MWMLhZzmI0mIUma1Gn58sJ+yvC859kKXXVMIpIJnOA5t9GR9I4OH
-X-Gm-Gg: ASbGncs28TgdqEPYEBt9x/gn6laPmtwzIQbCj/+mSEC05YWP6fMYVWPFhymm5Bjc/25
- vXlZ49FtXSda3LmbFz5QGQ+6aa3K/7cVaYmTy+isXUs77zG5X9sWFNDYKMt8sH+qASwg3dOqxCx
- FdOQaufuo9KOeMhDMYWRXBCmjQ+RtHdhLPCv3FyPgUzxsMLQlRSjK/+C+iIaNEgCUUkymV264dY
- r0LFIIUw+aElL2dOxni3QVaT6VwXE2Tdy/OeN6Y4n3TLPCIUhkLOAzKhHNAADg9ZjmT17xC4uqX
- uYDbagLSUk5yJXYrgnlifqvJWX+R52uerlVhu/RlA9t0EDcq
-X-Google-Smtp-Source: AGHT+IG6glLBSq1xiQrf+j4795DqLYQnWaMlXztpmDNgzTNwkmIC1DVofLUb1CILSZ2nxOamOASQJw==
-X-Received: by 2002:a05:600c:1c98:b0:439:86fb:7340 with SMTP id
- 5b1f17b1804b1-439ae21d2abmr179323245e9.30.1740491152742; 
- Tue, 25 Feb 2025 05:45:52 -0800 (PST)
-Received: from ?IPV6:2a02:8070:2483:7e00::f0b8? ([2a02:8070:2483:7e00::f0b8])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-390cd8e78e8sm2327909f8f.79.2025.02.25.05.45.52
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 25 Feb 2025 05:45:52 -0800 (PST)
-Message-ID: <2363315a-c8cf-404f-ac02-59cba1dbbd7d@gmail.com>
-Date: Tue, 25 Feb 2025 14:46:00 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OsMiwuzvoXcp for <buildroot@buildroot.org>;
+ Tue, 25 Feb 2025 13:46:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EB63E60812
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB63E60812
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EB63E60812
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 13:46:29 +0000 (UTC)
+Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id D28E32C80169;
+ Tue, 25 Feb 2025 14:46:26 +0100 (CET)
+To: buildroot@buildroot.org
+Date: Tue, 25 Feb 2025 14:46:25 +0100
+Message-ID: <20250225134626.1483376-1-buildroot@bubu1.eu>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-References: <cover.1740345268.git.yann.morin.1998@free.fr>
- <ac0db0d8eca730ce7d8b0763e750e72fe4e3aa1c.1740345268.git.yann.morin.1998@free.fr>
-Content-Language: en-US
-From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-In-Reply-To: <ac0db0d8eca730ce7d8b0763e750e72fe4e3aa1c.1740345268.git.yann.morin.1998@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1740491153; x=1741095953; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=LUIZibfJXgJAVYGQKNpk69HDXHtYJk/b+sXYgMEdIqM=;
- b=AAKcComPr9oewwiG9TwmAx7TTfzgpvn+pTwmMIeyMzKhdRlLY1iKLmaKT4WCPAUUcO
- aTMYuLwC8rEYj9NajpXz79k4Vjya0+GpBSk7K4/vggjTdC87eZzJo8Wq8Xklk2M7SYfT
- go1tI34wQn3Kd8LO/6bNVhoAsNQLNlIkm6yV9zl8t0Mi0SB6O5PWo3yeNADCbPutAjTo
- zrqVtIXShP37yQGS37W6BeBLEAmB4vjplfklxQwrULGf5K/bEg8adU+dsiCwwWHzg9gy
- 2lsK4LJ+NqqNqnqtEENCN2e2XM2Dq85cMGahbB2HAoKfH13Kmez3dBnAKFh76OP38SFN
- glSg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=AAKcComP
-Subject: Re: [Buildroot] [PATCH 2/8] package/shadow: install to staging for
- subids
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1740491187; bh=jnuztrPc08HOd+Mr9Cm1tUflQaAGlUOvXx0+lgSA55k=;
+ h=From:To:Cc:Subject:Date;
+ b=MxQ/F7HyuI1Z6I3ZN90jF4PpLT0acdfIk6nl0JcqqBkCHMEs0u6HlvdEgduKzfAc2
+ D8zu/oOLoHzZctW/0LxrbR5CzrTN0iq845+BF8xEMYbduNTVcSAZm84USrLY80HNpw
+ MxkHUMWuzbEjLSbmlhAuzrgND61PvALqGWSiVEjPjyldoTqAe7a7F1B+rxqluk133w
+ nI9h958yCib9FA4EwVmaNDYQbvFr8rxDou8H+yxzO8DB8cyzYsSddEaUr0lmot5CYK
+ qMI9c+5Hrzk7EjDzMIBHVqU2LYSbKeJJXRpRkH7fAYw10fhfOmBSRTDmlcdHLf3jVp
+ 862XUr/m/3uaQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=MxQ/F7Hy
+Subject: [Buildroot] [PATCH] package/python-tzlocal: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,51 +76,135 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Marcus Hoffmann <bubu@bubu1.eu>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Yann,
-the changes looks good.
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+---
+ DEVELOPERS                                         |  2 ++
+ package/Config.in                                  |  1 +
+ package/python-tzlocal/Config.in                   |  5 +++++
+ package/python-tzlocal/python-tzlocal.hash         |  5 +++++
+ package/python-tzlocal/python-tzlocal.mk           | 14 ++++++++++++++
+ .../testing/tests/package/sample_python_tzlocal.py |  5 +++++
+ .../testing/tests/package/test_python_tzlocal.py   | 14 ++++++++++++++
+ 7 files changed, 46 insertions(+)
+ create mode 100644 package/python-tzlocal/Config.in
+ create mode 100644 package/python-tzlocal/python-tzlocal.hash
+ create mode 100644 package/python-tzlocal/python-tzlocal.mk
+ create mode 100644 support/testing/tests/package/sample_python_tzlocal.py
+ create mode 100644 support/testing/tests/package/test_python_tzlocal.py
 
-Regards,
-Raphael Pavlidis
-
-On 2/23/25 22:14, Yann E. MORIN wrote:
-> When the subids feature is enabled, shadow will install a library and a
-> header:
-> 
->      $ sort output/build/shadow-4.16.0/.files-list.txt
->      [...]
->      shadow,./lib/libsubid.la
->      shadow,./lib/libsubid.so
->      shadow,./lib/libsubid.so.5
->      shadow,./lib/libsubid.so.5.0.0
->      [...]
->      shadow,./usr/include/shadow/subid.h
->      [...]
-> 
-> Install to staging in that case.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-> ---
->   package/shadow/shadow.mk | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
-> index f0a2b57b4d..2937a9601e 100644
-> --- a/package/shadow/shadow.mk
-> +++ b/package/shadow/shadow.mk
-> @@ -46,6 +46,7 @@ SHADOW_CONF_OPTS += --disable-account-tools-setuid
->   endif
->   
->   ifeq ($(BR2_PACKAGE_SHADOW_SUBORDINATE_IDS),y)
-> +SHADOW_INSTALL_STAGING = YES
->   SHADOW_CONF_OPTS += --enable-subordinate-ids
->   define SHADOW_SUBORDINATE_IDS_PERMISSIONS
->   	/usr/bin/newuidmap f 4755 0 0 - - - - -
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 61b531f424..b9b59d92e3 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2260,9 +2260,11 @@ F:	package/picotool/
+ F:	package/python-immutabledict/
+ F:	package/python-jc/
+ F:	package/python-ruamel-yaml-clib/
++F:	package/python-tzlocal/
+ F:	package/python-waitress/
+ F:	support/testing/tests/package/test_python_fastapi.py
+ F:	support/testing/tests/package/test_python_ruamel_yaml.py
++F:	support/testing/tests/package/test_python_tzlocal.py
+ F:	support/testing/tests/package/test_python_waitress.py
+ F:	support/testing/tests/package/sample_python_fastapi.py
+ F:	support/testing/tests/package/sample_python_ruamel_yaml.py
+diff --git a/package/Config.in b/package/Config.in
+index bd3a00abc3..d42aeb548c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1450,6 +1450,7 @@ menu "External python modules"
+ 	source "package/python-types-python-dateutil/Config.in"
+ 	source "package/python-typing-extensions/Config.in"
+ 	source "package/python-typing-inspect/Config.in"
++	source "package/python-tzlocal/Config.in"
+ 	source "package/python-u-msgpack/Config.in"
+ 	source "package/python-ubjson/Config.in"
+ 	source "package/python-uhid/Config.in"
+diff --git a/package/python-tzlocal/Config.in b/package/python-tzlocal/Config.in
+new file mode 100644
+index 0000000000..6a2959325e
+--- /dev/null
++++ b/package/python-tzlocal/Config.in
+@@ -0,0 +1,5 @@
++config BR2_PACKAGE_PYTHON_TZLOCAL
++	bool "python-tzlocal"
++	help
++	  A Python module that tries to figure out what your
++	  local timezone is.
+diff --git a/package/python-tzlocal/python-tzlocal.hash b/package/python-tzlocal/python-tzlocal.hash
+new file mode 100644
+index 0000000000..dce19103a5
+--- /dev/null
++++ b/package/python-tzlocal/python-tzlocal.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/tzlocal/json
++md5  9d8d4c12b047d5d45e6eb72bb95fd90e  tzlocal-5.3.tar.gz
++sha256  2fafbfc07e9d8b49ade18f898d6bcd37ae88ce3ad6486842a2e4f03af68323d2  tzlocal-5.3.tar.gz
++# Locally computed sha256 checksums
++sha256  d99ab209aeb16aad2c25c90ffd83c1a981e290ffff76a420a2ab03e03f041b8c  LICENSE.txt
+diff --git a/package/python-tzlocal/python-tzlocal.mk b/package/python-tzlocal/python-tzlocal.mk
+new file mode 100644
+index 0000000000..c616974f64
+--- /dev/null
++++ b/package/python-tzlocal/python-tzlocal.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-tzlocal
++#
++################################################################################
++
++PYTHON_TZLOCAL_VERSION = 5.3
++PYTHON_TZLOCAL_SOURCE = tzlocal-$(PYTHON_TZLOCAL_VERSION).tar.gz
++PYTHON_TZLOCAL_SITE = https://files.pythonhosted.org/packages/33/cc/11360404b20a6340b9b4ed39a3338c4af47bc63f87f6cea94dbcbde07029
++PYTHON_TZLOCAL_SETUP_TYPE = setuptools
++PYTHON_TZLOCAL_LICENSE = MIT
++PYTHON_TZLOCAL_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/sample_python_tzlocal.py b/support/testing/tests/package/sample_python_tzlocal.py
+new file mode 100644
+index 0000000000..9aeb431c64
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_tzlocal.py
+@@ -0,0 +1,5 @@
++from tzlocal import get_localzone
++from zoneinfo import ZoneInfo
++
++tz = get_localzone()
++assert tz == ZoneInfo(key='posix/Europe/Berlin')
+diff --git a/support/testing/tests/package/test_python_tzlocal.py b/support/testing/tests/package/test_python_tzlocal.py
+new file mode 100644
+index 0000000000..d7dac361bf
+--- /dev/null
++++ b/support/testing/tests/package/test_python_tzlocal.py
+@@ -0,0 +1,14 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3TZLocal(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_TARGET_TZ_INFO=y
++        BR2_TARGET_LOCALTIME="Europe/Berlin"
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_TZLOCAL=y
++        """
++    sample_scripts = ["tests/package/sample_python_tzlocal.py"]
++    timeout = 10
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
