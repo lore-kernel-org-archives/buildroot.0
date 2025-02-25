@@ -1,75 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABFDFC021B2
-	for <buildroot@archiver.kernel.org>; Tue, 25 Feb 2025 20:45:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33447C021B2
+	for <buildroot@archiver.kernel.org>; Tue, 25 Feb 2025 21:10:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 76C1260EE2;
-	Tue, 25 Feb 2025 20:45:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rIfVvEU0BkSF; Tue, 25 Feb 2025 20:45:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81B8960EF2
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81B8960EF2;
-	Tue, 25 Feb 2025 20:45:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 07B632DE0
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 20:45:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EAE6840C69
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 20:45:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A7AFA40D1A;
+	Tue, 25 Feb 2025 21:10:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JyF-iArvEAk1 for <buildroot@buildroot.org>;
- Tue, 25 Feb 2025 20:45:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B648D40C20
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B648D40C20
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B648D40C20
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 20:45:38 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 2C2F5B0057C;
- Tue, 25 Feb 2025 21:45:34 +0100 (CET)
-Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
- via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 25 Feb 2025 21:45:34 +0100
-MIME-Version: 1.0
-Date: Tue, 25 Feb 2025 21:45:34 +0100
+ id pgye_7VwtVIA; Tue, 25 Feb 2025 21:10:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4781640CE1
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4781640CE1;
+	Tue, 25 Feb 2025 21:10:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F282C2DE0
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 21:10:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D6B2F60756
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 21:10:31 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xGnvHWWl9wMu for <buildroot@buildroot.org>;
+ Tue, 25 Feb 2025 21:10:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3ACF60811
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E3ACF60811
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 21:10:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CE61D83B35; Tue, 25 Feb 2025 21:10:30 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250221220000.149303-1-giulio.benetti@benettiengineering.com>
-References: <20250221220000.149303-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <e2f3eae6c2ad405b4cfd11d195e4c65c@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1740516335;
- bh=7henIxH6xv2WxVEXVjFYKupdIFZ9vz/Th3AQr+jPT4A=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=o7LGNlDkr+8bR7rvFY9USOIRN8/rWZJ6InBE7FDuPCfQ7ZS5e9NzFlLr4fkpcUgZZ
- y+1mEs7lNH6870wYHY8CeJyNNbUCGNNd/iPMBjUY++0BRJhCqkqwsgXvhfMDJ95Puo
- FePgyF2EPCczfn3+B9Woul4rXsrdpnSDXgT2WpvJRUZCnt29PP2ee+yQO2BHwCMj/M
- EqnZmtS9D4FiDp9kEJqufdZPu86B+3DUPgvxR5tOXFLL55SXm/oIowb3a9xbb1Z4+q
- KamknM+2hkueypkQz88lUWaN5wKrPS8SmNNZ8yeuDllkkN/eqYw0wQgs2j4ZaBThkD
- bNnzovYofr7pg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=o7LGNlDk
-Subject: Re: [Buildroot] [PATCH] package/harfbuzz: bump to version 10.3.0
+To: buildroot@buildroot.org
+Date: Tue, 25 Feb 2025 21:46:48 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 80b42e226a5f1f833e8bec5b7af6a7a5f7ac58d0
+X-Git-Newrev: 9eeb8108c6974293a43a448d2cf1f219902d8fa0
+X-Patchwork-Hint: ignore
+Message-Id: <20250225211030.CE61D83B35@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/beaglebone: bump Linux to
+ 6.6.58-ti-arm32-r10 and U-Boot to 2025.01
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,18 +59,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 21/02/2025 23:00, Giulio Benetti wrote:
-> Release Notes:
-> https://github.com/harfbuzz/harfbuzz/releases/tag/10.3.0
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=9eeb8108c6974293a43a448d2cf1f219902d8fa0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+The patch bumps the Linux kernel to version 6.6.58-ti-arm32-r10 and
+U-Boot to version 2025.01.
+
+Tested on beaglebone black.
+
+Link: https://github.com/beagleboard/linux/releases/tag/6.6.58-ti-arm32-r10
+
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ board/beagleboard/beaglebone/patches/linux/linux.hash | 2 +-
+ board/beagleboard/beaglebone/patches/uboot/uboot.hash | 2 +-
+ configs/beaglebone_defconfig                          | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/board/beagleboard/beaglebone/patches/linux/linux.hash b/board/beagleboard/beaglebone/patches/linux/linux.hash
+index 4a7384d036..b7d4412941 100644
+--- a/board/beagleboard/beaglebone/patches/linux/linux.hash
++++ b/board/beagleboard/beaglebone/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  f1ae7325c6c146e0f852866a3bfd3f90ae1b5f46e414bc99a38384ed677e3721  linux-6.6.32-ti-arm32-r7.tar.gz
++sha256  c6ee813cc48fe7e308c149798100d621514e832da507e34d1dfd8247ef9ae39f  linux-6.6.58-ti-arm32-r10.tar.gz
+diff --git a/board/beagleboard/beaglebone/patches/uboot/uboot.hash b/board/beagleboard/beaglebone/patches/uboot/uboot.hash
+index 904fa56c02..50674352d7 100644
+--- a/board/beagleboard/beaglebone/patches/uboot/uboot.hash
++++ b/board/beagleboard/beaglebone/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
++sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index cad32e90b1..ddeb221e86 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beagleboard/beaglebone/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.6.32-ti-arm32-r7)/linux-6.6.32-ti-arm32-r7.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.6.58-ti-arm32-r10)/linux-6.6.58-ti-arm32-r10.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/omap/am335x-evm ti/omap/am335x-bone ti/omap/am335x-boneblack ti/omap/am335x-bonegreen ti/omap/am335x-evmsk ti/omap/am335x-boneblue ti/omap/am335x-boneblack-wireless ti/omap/am335x-bonegreen-wireless"
+@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
