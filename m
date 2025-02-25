@@ -1,67 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E2DEC021B2
-	for <buildroot@archiver.kernel.org>; Tue, 25 Feb 2025 15:51:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B9E3C021B2
+	for <buildroot@archiver.kernel.org>; Tue, 25 Feb 2025 17:43:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2617040DE9;
-	Tue, 25 Feb 2025 15:51:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA043608FD;
+	Tue, 25 Feb 2025 17:43:13 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jt52ReBGQ5EY; Tue, 25 Feb 2025 17:43:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA6CD60AD9
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA6CD60AD9;
+	Tue, 25 Feb 2025 17:43:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 896242DE0
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 17:43:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6D85D406C1
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 17:43:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wvW4xMZKAUop; Tue, 25 Feb 2025 15:51:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC13340DFD
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC13340DFD;
-	Tue, 25 Feb 2025 15:51:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 368242DE0
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 15:51:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3187881F43
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 15:51:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LFnCeCnNuAgC for <buildroot@buildroot.org>;
- Tue, 25 Feb 2025 15:51:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
- helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5B4BE81F05
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B4BE81F05
-Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5B4BE81F05
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 15:51:09 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 85DA41814B9; Tue, 25 Feb 2025 16:51:06 +0100 (CET)
+ id BDyUveKDpe_m for <buildroot@buildroot.org>;
+ Tue, 25 Feb 2025 17:43:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::132; helo=mail-lf1-x132.google.com;
+ envelope-from=kuzminov.sergey81@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3063340826
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3063340826
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com
+ [IPv6:2a00:1450:4864:20::132])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3063340826
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 17:43:09 +0000 (UTC)
+Received: by mail-lf1-x132.google.com with SMTP id
+ 2adb3069b0e04-543e4bbcd86so6757977e87.1
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 09:43:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1740505387; x=1741110187;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Iwg1Ypf7Lonh6aunkZrDAVeHDFzDy3AtCDmTNwkv6/E=;
+ b=LPcJnRiC90bDjlph3siVBigEj+uwSHC1Dp/A87nmQCdvWfzzo19N0LL2JGugc+ScOg
+ 2cg+J3E4gcAiMCfVgX/e6JVIgkxfdNKksjOnFgD2aIaGH4kFe0CsRC3Ezr1W7OVJFFv7
+ FTOZFniGYSwuFb5ZfYsQrginnohkh32fp5x3S0AQPYXpJWFkpQF40AanucFQc2tCAbgX
+ FVG48O3d9NikMIjlDKb83rWeIVI492Ta5qPamVz/TfwZa7GzNEg2czUdbMROf9H0GyI6
+ rIk8XnkyTZedIvRM/vrQ8Ccakplgg8sJHN3YjDiiwUaBf7ymdw+xW3Xm34EltpGoCJDB
+ 3IYw==
+X-Gm-Message-State: AOJu0Yzw6T54tX0ttv7GqJGzwogWmWAYAwhf8Qxutq95LrOveSqTEXc3
+ GBKIR4W6NQGg+KG2AMqd4WE9YxOQvOQsjJ1bQMsG2J7jBDYxnX4FTou2vw==
+X-Gm-Gg: ASbGncurAcxJLVwSHjr6sgOiYCRBrGc1JjyoV9gmU3893D4n7TDHF9T4fiaGIY7NSzP
+ J0HhPj6hpwaKCNXs8jTzWWuJ3sbbsAeDYWvgdiHiaZrzo6S295RrXadOVVRWuNHOWqLQCiotkIM
+ sKErpKNxJbW7gB/Duy2/7Pob0qmFVVb4D9LT5qXhtCDkNf4I/qJSd009OxwCJE/xWQJibfeXIrb
+ pnYRlkO7Mp0ct18qzMQH7KwvpBB6r/th5R/Daq0OQKsi0OdwFj/Vh2TuOM8l8TR210wcWScwsXw
+ uIgkUZhmE67DqAyfeQ0NDFz2xByPhnP+iEnZlKtPtQ==
+X-Google-Smtp-Source: AGHT+IHP4md6OJSv9WK9sdSG5lmz+xt79jprHr4EMqdkv1wN7+ToLXyQlU+3bzQneNguIXjSHD4iCQ==
+X-Received: by 2002:a05:6512:104d:b0:545:ebf:145f with SMTP id
+ 2adb3069b0e04-5493c5c8f21mr142540e87.53.1740505387307; 
+ Tue, 25 Feb 2025 09:43:07 -0800 (PST)
+Received: from calculate.local ([188.191.244.248])
+ by smtp.gmail.com with ESMTPSA id
+ 2adb3069b0e04-548514f4a02sm229490e87.164.2025.02.25.09.43.06
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 25 Feb 2025 09:43:06 -0800 (PST)
+From: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 25 Feb 2025 16:50:38 +0100
-Message-ID: <20250225155040.3209582-2-buildroot@heine.tech>
-X-Mailer: git-send-email 2.43.0
+Cc: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+Date: Tue, 25 Feb 2025 20:43:04 +0300
+Message-ID: <20250225174304.1810-1-kuzminov.sergey81@gmail.com>
+X-Mailer: git-send-email 2.45.3
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; t=1740498667;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=8jdm5CLKVHQF49WX4YItOnPgyPKR/l5uPf+xqKcSCgY=;
- b=m3z13FnnV0HjPMFKWAa2XcUEu5bkNLfDiNeI4Py9VuVlrkhNpr97Vqc/dQR9+43ehVDszC
- FwBJtbLWM8DW/F8rRTA7W5urdaifqdLmPkqhqYV14ansrOnU16cqctl3+/S5kHoGv4A98i
- /mtys5AIIDdHj9v436L+LhGp0LEfX8M=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=heine.tech
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
- header.s=dkim header.b=m3z13Fnn
-Subject: [Buildroot] [PATCH] package/procps-ng: fix build with missing
- pidfd_open
+ d=gmail.com; s=20230601; t=1740505387; x=1741110187; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Iwg1Ypf7Lonh6aunkZrDAVeHDFzDy3AtCDmTNwkv6/E=;
+ b=Q3bcKH7RSpWkktw9hJFWSspdJah5c/5hD/p1WO3ChL/w7aDZIBDzbNWvbkS9ehfb4j
+ TGPDacXvf/xJzdNW6xpn9FIhxzqHhIK2ROyNx9qcaOhKXp25MIpS3CfbJXY2VLsZyQis
+ +19j0uAxQy7kvq+mjwDCFYZBRjuROM1RQe/CEPDZcZM0ytxK7KmotqXtRnYmpj4nCr+H
+ B2jYXoAPv2qpfPBPY3sQ/TjeBB+UUp3EPOkDEax6D3EoQRAWRl/ILXsdVcpNGVprO71n
+ Tu23D7bEk6Usr6wFGdyjGCEOYrQ5NewoWRbzJy67ZLmnsViaHah/z+m2apr2p2UPFkjO
+ kDog==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Q3bcKH7R
+Subject: [Buildroot] [PATCH] board/friendlyarm/nanopi-r3s:
+ rk3566-nanopi-r3s.dts: enable hw random
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -73,113 +106,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-port back patch introduced shortly after the 4.0.5 release.
+This patch enables the hardware random number generator in the device tree.
+Without it, the entropy level in the Linux kernel increases very slowly.
+To check the entropy level: cat /proc/sys/kernel/random/entropy_avail
 
-Fixes:
-  checking for __NR_pidfd_open... no
-  configure: error: Neither pidfd_open or __NR_pidfd_open found. Disable pidwait with configure option --disable-pidwait
-
-happening with this defconfig:
-
-BR2_arm=y
-BR2_cortex_a15_a7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_INIT_SYSTEMD=y
-BR2_PACKAGE_PROCPS_NG=y
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
 ---
- ...provide-definition-for-nr-pidfd_open.patch | 57 +++++++++++++++++++
- package/procps-ng/procps-ng.mk                |  3 +
- 2 files changed, 60 insertions(+)
- create mode 100644 package/procps-ng/0001-pgrep-provide-definition-for-nr-pidfd_open.patch
+ ...001-rk3566-nanopi-r3s.dts-enable-rng.patch | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 board/friendlyarm/nanopi-r3s/patches/linux/0001-rk3566-nanopi-r3s.dts-enable-rng.patch
 
-diff --git a/package/procps-ng/0001-pgrep-provide-definition-for-nr-pidfd_open.patch b/package/procps-ng/0001-pgrep-provide-definition-for-nr-pidfd_open.patch
+diff --git a/board/friendlyarm/nanopi-r3s/patches/linux/0001-rk3566-nanopi-r3s.dts-enable-rng.patch b/board/friendlyarm/nanopi-r3s/patches/linux/0001-rk3566-nanopi-r3s.dts-enable-rng.patch
 new file mode 100644
-index 0000000000..9c83124311
+index 0000000000..b376004377
 --- /dev/null
-+++ b/package/procps-ng/0001-pgrep-provide-definition-for-nr-pidfd_open.patch
-@@ -0,0 +1,57 @@
-+From 90a0ddcd64c2d43dc2c2c856b1b42b5cae6b8a44 Mon Sep 17 00:00:00 2001
-+From: Markus Mayer <mmayer@broadcom.com>
-+Date: Wed, 11 Dec 2024 14:53:33 -0800
-+Subject: [PATCH] pgrep: provide definition for __NR_pidfd_open if needed
++++ b/board/friendlyarm/nanopi-r3s/patches/linux/0001-rk3566-nanopi-r3s.dts-enable-rng.patch
+@@ -0,0 +1,30 @@
++From 284e6683b4a0ee6b1fd22ccd34785e1f2d58c115 Mon Sep 17 00:00:00 2001
++From: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
++Date: Tue, 25 Feb 2025 19:49:00 +0300
++Subject: [PATCH] rk3566-nanopi-r3s.dts: enable rng
 +
-+We already implement pidfd_open() ourselves if libc doesn't provide it.
-+Let's also provide our own definition of __NR_pidfd_open in case the
-+kernel headers don't contain it.
++This patch enables the hardware random number generator in the device tree.
++Without it, the entropy level in the Linux kernel increases very slowly.
++To check the entropy level: cat /proc/sys/kernel/random/entropy_avail
 +
-+This way, pgrep can provide its full capabilities after being built
-+against older kernel headers (for increased compatibility) but being run
-+on systems with newer kernels.
-+
-+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-+Upstream: https://gitlab.com/procps-ng/procps/-/commit/90a0ddcd64c2d43dc2c2c856b1b42b5cae6b8a44
-+Signed-off: Michael Nosthoff <buildroot@heine.tech>
++Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
++Upstream: Not applicable, Buildroot specific.
 +---
-+ configure.ac | 2 +-
-+ src/pgrep.c  | 9 +++++++++
-+ 2 files changed, 10 insertions(+), 1 deletion(-)
++ arch/arm64/boot/dts/rockchip/rk3566-nanopi-r3s.dts | 4 ++++
++ 1 file changed, 4 insertions(+)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 1e984b12..14ba3ad7 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -325,7 +325,7 @@ AS_IF([[test "x$enable_pidwait" = xyes -a "x$have_pidfd_open" = xno]],
-+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-+ #include <sys/syscall.h>
-+ #ifndef __NR_pidfd_open
-+-#error __NR_pidfd_open not defined
-++#warning __NR_pidfd_open not defined; using our definition
-+ #endif
-+       ])],
-+       AC_MSG_RESULT([yes]),
-+diff --git a/src/pgrep.c b/src/pgrep.c
-+index 2c6b06b8..6fc25dd4 100644
-+--- a/src/pgrep.c
-++++ b/src/pgrep.c
-+@@ -874,6 +874,15 @@ static int signal_option(int *argc, char **argv)
-+ }
-+
-+ #if defined(ENABLE_PIDWAIT) && !defined(HAVE_PIDFD_OPEN)
++diff --git a/arch/arm64/boot/dts/rockchip/rk3566-nanopi-r3s.dts b/arch/arm64/boot/dts/rockchip/rk3566-nanopi-r3s.dts
++index fb1f65c86883..a89bdbf71e12 100644
++--- a/arch/arm64/boot/dts/rockchip/rk3566-nanopi-r3s.dts
+++++ b/arch/arm64/boot/dts/rockchip/rk3566-nanopi-r3s.dts
++@@ -552,3 +552,7 @@ &vop {
++ &vop_mmu {
++ 	status = "okay";
++ };
 ++
-++#ifndef __NR_pidfd_open
-++#ifdef __alpha__
-++#define __NR_pidfd_open 544
-++#else
-++#define __NR_pidfd_open 434
-++#endif
-++#endif
-++
-+ static int pidfd_open (pid_t pid, unsigned int flags)
-+ {
-+ 	return syscall(__NR_pidfd_open, pid, flags);
-+--
-+GitLab
+++&rng {
+++	status = "okay";
+++};
++-- 
++2.45.3
 +
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index f4eadcb547..56fe1790c3 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -14,6 +14,9 @@ PROCPS_NG_INSTALL_STAGING = YES
- PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
- 
-+# Applying 0001-pgrep-provide-definition-for-nr-pidfd_open.patch touches configure.ac
-+PROCPS_NG_AUTORECONF = YES
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- PROCPS_NG_DEPENDENCIES += systemd
- PROCPS_NG_CONF_OPTS += --with-systemd
 -- 
-2.43.0
+2.45.3
 
 _______________________________________________
 buildroot mailing list
