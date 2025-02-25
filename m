@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2439C021BB
-	for <buildroot@archiver.kernel.org>; Tue, 25 Feb 2025 20:30:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA180C021B2
+	for <buildroot@archiver.kernel.org>; Tue, 25 Feb 2025 20:30:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A8B6C60813;
-	Tue, 25 Feb 2025 20:30:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 90ABC40E09;
+	Tue, 25 Feb 2025 20:30:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dWvcpJdeObWN; Tue, 25 Feb 2025 20:30:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4844A40E0E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4844A40E0E;
+	Tue, 25 Feb 2025 20:30:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CF672DE0
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 20:30:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id F13E960813
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 20:30:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LQRLvIZJWJA7; Tue, 25 Feb 2025 20:30:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A84AF60825
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A84AF60825;
-	Tue, 25 Feb 2025 20:30:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 174472DE0
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 20:30:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EBFAF40529
- for <buildroot@buildroot.org>; Tue, 25 Feb 2025 20:30:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jNcirWyiAeQa for <buildroot@buildroot.org>;
+ id CXDewL19EGNq for <buildroot@buildroot.org>;
  Tue, 25 Feb 2025 20:30:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3D5C40F2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD982608CE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C3D5C40F2C
+ by smtp3.osuosl.org (Postfix) with ESMTP id CD982608CE
  for <buildroot@buildroot.org>; Tue, 25 Feb 2025 20:30:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF75587B2E; Tue, 25 Feb 2025 20:30:10 +0000 (UTC)
+ id BB9E787B2F; Tue, 25 Feb 2025 20:30:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 25 Feb 2025 20:56:07 +0100
+Date: Tue, 25 Feb 2025 21:02:28 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 1fc6877fd0160a306ca440430b9631a301c0e050
-X-Git-Newrev: 1891b4569450b7920c93e9520ab12f59981011ec
+X-Git-Oldrev: 1891b4569450b7920c93e9520ab12f59981011ec
+X-Git-Newrev: 197a1bd331390fbe5765b400baff1fb8d5e9371e
 X-Patchwork-Hint: ignore
-Message-Id: <20250225203010.AF75587B2E@busybox.osuosl.org>
+Message-Id: <20250225203010.BB9E787B2F@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2024.11.x] package/watchdogd: fix
- use of uninitialized exit status
+ sysv init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,114 +65,156 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1891b4569450b7920c93e9520ab12f59981011ec
+commit: https://git.buildroot.net/buildroot/commit/?id=197a1bd331390fbe5765b400baff1fb8d5e9371e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-The bug could lead to incorrect "critical error" reports if that
-uninitialized memory happened to contain a value that interpreted as
-an int was above the critical threshold. It affected primarily scripts
-running approximately one second or longer, because access happens by
-timer.
+PIDFILE was set incorrectly, watchdogd writes its PID file to
+/var/run/watchdogd/pid (note the slash), which is not configurable
+without patching.
+
+Restructure the rest of the script to match current style while at it.
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit bfb87bafdb817291a66cfb6050b78e31b02ceda4)
+(cherry picked from commit 51b848b534b194dc716cf4a75133b64f0fa216d9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0001-Fix-use-of-uninitialized-exit-status.patch | 85 ++++++++++++++++++++++
- 1 file changed, 85 insertions(+)
+ .checkpackageignore            |   1 -
+ package/watchdogd/S01watchdogd | 102 ++++++++++++++++++++++++++---------------
+ 2 files changed, 66 insertions(+), 37 deletions(-)
 
-diff --git a/package/watchdogd/0001-Fix-use-of-uninitialized-exit-status.patch b/package/watchdogd/0001-Fix-use-of-uninitialized-exit-status.patch
-new file mode 100644
-index 0000000000..69e7b36ef4
---- /dev/null
-+++ b/package/watchdogd/0001-Fix-use-of-uninitialized-exit-status.patch
-@@ -0,0 +1,85 @@
-+From f6d56c374723923e276ccfd442fdd0cabf23d095 Mon Sep 17 00:00:00 2001
-+From: Fiona Klute <fiona.klute@gmx.de>
-+Date: Fri, 14 Feb 2025 19:26:24 +0100
-+Subject: [PATCH] Fix use of uninitialized exit status
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 0dcca5ebc7..bb815b6329 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1315,7 +1315,6 @@ package/waffle/0003-drop-C-dependency.patch lib_patch.Upstream
+ package/wampcc/0001-Add-RISC-V-endian-detection.patch lib_patch.Upstream
+ package/wampcc/0002-include-wampcc-platform.h-fix-build-with-musl-1.2.0.patch lib_patch.Upstream
+ package/wampcc/0003-Broken-build-on-Windows.patch lib_patch.Upstream
+-package/watchdogd/S01watchdogd NotExecutable lib_sysv.Indent
+ package/wget/0001-lib-getrandom.c-fix-build-with-uclibc-1.0.35.patch lib_patch.Upstream
+ package/wilc-driver/0001-cfg80211.c-fix-missing-prandom_u32-with-Linux-6.1.0.patch lib_patch.Upstream
+ package/wilc-driver/0002-spi.c-fix-build-failure-on-remove-callback.patch lib_patch.Upstream
+diff --git a/package/watchdogd/S01watchdogd b/package/watchdogd/S01watchdogd
+old mode 100755
+new mode 100644
+index df57b8ad7a..8f811ac0fc
+--- a/package/watchdogd/S01watchdogd
++++ b/package/watchdogd/S01watchdogd
+@@ -1,47 +1,77 @@
+ #!/bin/sh
+ 
+ DAEMON="watchdogd"
+-PIDFILE="/var/run/$DAEMON.pid"
++PIDFILE="/var/run/$DAEMON/pid"
+ 
+ # shellcheck source=/dev/null
+ [ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
+ 
+-cmd()
+-{
+-    start-stop-daemon -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" "$@"
+-    status=$?
+-    if [ $status -eq 0 ]; then
+-	echo "OK"
+-    else
+-	echo "FAIL"
+-    fi
+-    return $status
++start() {
++	printf "Starting %s: " "$DAEMON"
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon --start --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON" -- $WATCHDOGD_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
 +
-+Depending on the timing between the SIGCHLD callback run and the first
-+generic_cb() timer callback run, script_exit_status() sometimes
-+returned uninitialized memory as the exit status of a script. This
-+could lead to incorrect "critical error" reports if that uninitialized
-+memory happened to contain a value that interpreted as an int was
-+above the critical threshold.
++stop() {
++	printf "Stopping %s: " "$DAEMON"
++	start-stop-daemon --stop --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	# watchdogd deletes its PID file on exit, wait for it to be gone
++	while [ -f "$PIDFILE" ]; do
++		sleep 0.1
++	done
++	return "$status"
++}
 +
-+Additionally, script_exit_status() unconditionally removed the process
-+information from the queue, meaning that if a process had not
-+completed by the time its status was first probed, its status could
-+never be updated or successfully probed again, leading to timeout. Fix
-+this by removing the process only if the status indicates it has
-+terminated (successful or not).
++restart() {
++	stop
++	start
++}
 +
-+The problems affected primarily scripts running approximately one
-+second or longer, because very short running scripts will very likely
-+have their exit status collected by the SIGCHLD callback before the
-+first timer callback run.
++reload() {
++	printf "Reloading %s config: " "$DAEMON"
++	start-stop-daemon --stop --signal HUP -q --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
+ }
+ 
+ case "$1" in
+-    start)
+-	printf 'Starting %s: ' "$DAEMON"
+-	# shellcheck disable=SC2086 # we need the word splitting
+-	cmd -S -- $SMCROUTED_ARGS
+-	;;
+-
+-    stop)
+-	printf 'Stopping %s: ' "$DAEMON"
+-	cmd -K
+-	;;
+-
+-    restart)
+-	$0 stop
+-	sleep 1
+-	$0 start
+-	;;
+-
+-    reload)
+-	printf 'Reloading %s: ' "$DAEMON"
+-	cmd -K -s HUP
+-	;;
+-
+-    *)
+-	echo "Usage: $0 {start|stop|restart|reload}"
+-	exit 1
++	start)
++		start
++		;;
++	stop)
++		stop
++		;;
++	restart)
++		restart
++		;;
++	reload)
++		reload
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++		;;
+ esac
 +
-+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-+Upstream: https://github.com/troglobit/watchdogd/pull/52
-+---
-+ src/script.c | 13 ++++++++++---
-+ 1 file changed, 10 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/script.c b/src/script.c
-+index 1220fb9..f6e0763 100644
-+--- a/src/script.c
-++++ b/src/script.c
-+@@ -16,6 +16,7 @@
-+  */
-+ 
-+ #include <errno.h>
-++#include <stdbool.h>		/* bool type (before C23) */
-+ #include <stdlib.h>		/* setenv() */
-+ #include <sys/wait.h>		/* waitpid() */
-+ #include <unistd.h>		/* execv(), _exit() */
-+@@ -28,6 +29,7 @@
-+ struct exec_info {
-+ 	pid_t   pid;
-+ 	int     exit_status;
-++	bool    exited;
-+ 	void  (*cb)(void *arg);
-+ 	void   *arg;
-+ 	LIST_ENTRY(exec_info) entry;
-+@@ -64,6 +66,8 @@ static void add(pid_t pid, void (*cb)(void *), void *arg)
-+ 	}
-+ 
-+ 	info->pid = pid;
-++	info->exit_status = 0;
-++	info->exited = false;
-+ 	info->cb  = cb;
-+ 	info->arg = arg;
-+ 	LIST_INSERT_HEAD(&exec_info_head, info, entry);
-+@@ -78,6 +82,7 @@ static int exec(pid_t pid, int status)
-+ 			continue;
-+ 
-+ 		info->exit_status = status;
-++		info->exited = true;
-+ 		if (info->cb)
-+ 			info->cb(info->arg);
-+ 
-+@@ -96,9 +101,11 @@ int script_exit_status(pid_t pid)
-+ 		if (info->pid != pid)
-+ 			continue;
-+ 
-+-		status = info->exit_status;
-+-		LIST_REMOVE(info, entry);
-+-		free(info);
-++		if (info->exited) {
-++			status = info->exit_status;
-++			LIST_REMOVE(info, entry);
-++			free(info);
-++		}
-+ 		break;
-+ 	}
-+ 
-+-- 
-+2.47.2
-+
++exit $?
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
