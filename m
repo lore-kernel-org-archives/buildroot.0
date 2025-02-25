@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15748C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:24:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06CC3C282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:24:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6E2081400;
-	Fri, 28 Feb 2025 17:24:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4924670979;
+	Fri, 28 Feb 2025 17:24:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N-UJvtq0d99v; Fri, 28 Feb 2025 17:24:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ashVJXw9foq2; Fri, 28 Feb 2025 17:24:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 957B781449
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 344937086B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 957B781449;
-	Fri, 28 Feb 2025 17:24:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 344937086B;
+	Fri, 28 Feb 2025 17:24:48 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1227A1DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:49:02 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E33F1DD
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:49:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B33BC4917A
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D65B4AA2C
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mFMRIzcC0dlj for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:32:15 +0000 (UTC)
+ id LzVfvStpXp6u for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:32:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2157142DF5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7282A42DC2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2157142DF5
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7282A42DC2
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1BDDD81EB8; Fri, 28 Feb 2025 16:30:50 +0000 (UTC)
+ id 6BA7F82849; Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 26 Feb 2025 21:58:15 +0100
+Date: Tue, 25 Feb 2025 21:03:02 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c13239ca14b52a21e00458577a8657e317a60b0c
-X-Git-Newrev: 1ec956130d6f721c0218ba7b806416c98c5df604
+X-Git-Oldrev: 0aa1b043dfa3ac2b9d8970cdf25349f77ab31458
+X-Git-Newrev: 84eed2762945f0287cff2cf604947b65c0408c8f
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163050.1BDDD81EB8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/freescale-imx: Allow
- firmware installation on i.MX93
+Message-Id: <20250228163048.6BA7F82849@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libglib2: bump version
+ to 2.82.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,47 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ec956130d6f721c0218ba7b806416c98c5df604
+commit: https://git.buildroot.net/buildroot/commit/?id=84eed2762945f0287cff2cf604947b65c0408c8f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, the LPDDR firmware binaries do not get installed into the
-U-Boot mainline directory, causing U-Boot build to fail for i.MX93.
+This is a small bugfix release, the fix relevant for Buildroot is a
+possible integer overflow when parsing ISO 8601 date/time strings:
+https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4499/diffs
 
-Fix this problem by expanding the BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW
-checks to also take BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW_IMX9 into account.
+Full upstream changelog, two other fixes are for macos, one related to
+testing:
+https://gitlab.gnome.org/GNOME/glib/-/blob/2.82.5/NEWS?ref_type=tags
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- boot/uboot/Config.in                         | 1 +
- package/freescale-imx/firmware-imx/Config.in | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/libglib2/libglib2.hash | 4 ++--
+ package/libglib2/libglib2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index f17f932c9e..10098ed227 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -314,6 +314,7 @@ config BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE
- 	bool "U-Boot needs firmware-imx"
- 	depends on BR2_PACKAGE_FIRMWARE_IMX
- 	depends on BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW || \
-+		BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW_IMX9 || \
- 		BR2_PACKAGE_FIRMWARE_IMX_NEEDS_HDMI_FW
- 	help
- 	  Some i.MX8 platforms (such as i.MX8 M, i.MX 8M Mini, i.MX 8M
-diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-index 4a9986448f..17c10039b2 100644
---- a/package/freescale-imx/firmware-imx/Config.in
-+++ b/package/freescale-imx/firmware-imx/Config.in
-@@ -62,7 +62,7 @@ config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW_IMX9
- 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX91
- 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 6175a7157c..8bd4bf157d 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.82/glib-2.82.4.sha256sum
+-sha256  37dd0877fe964cd15e9a2710b044a1830fb1bd93652a6d0cb6b8b2dff187c709  glib-2.82.4.tar.xz
++# https://download.gnome.org/sources/glib/2.82/glib-2.82.5.sha256sum
++sha256  05c2031f9bdf6b5aba7a06ca84f0b4aced28b19bf1b50c6ab25cc675277cbc3f  glib-2.82.5.tar.xz
+ # License files, locally calculated
+ sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 58a9eb3ee6..6c012c79c7 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
--if BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW
-+if BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW || BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW_IMX9
- 
- choice
- 	bool "DDR training binaries"
+ LIBGLIB2_VERSION_MAJOR = 2.82
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).5
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = https://download.gnome.org/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
