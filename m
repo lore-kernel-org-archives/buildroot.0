@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBAE4C021B8
-	for <buildroot@archiver.kernel.org>; Wed, 26 Feb 2025 11:07:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBA01C021B8
+	for <buildroot@archiver.kernel.org>; Wed, 26 Feb 2025 12:13:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EAC0C82A6C;
-	Wed, 26 Feb 2025 11:07:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3FB44411AD;
+	Wed, 26 Feb 2025 12:13:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TUoLoAW5si-Q; Wed, 26 Feb 2025 11:07:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q0Cx9FRcf0Wt; Wed, 26 Feb 2025 12:13:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B499582A4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3BA8F40C49
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B499582A4F;
-	Wed, 26 Feb 2025 11:07:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B802794F
- for <buildroot@buildroot.org>; Wed, 26 Feb 2025 11:07:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3BA8F40C49;
+	Wed, 26 Feb 2025 12:13:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4035068
+ for <buildroot@buildroot.org>; Wed, 26 Feb 2025 12:13:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9F5A060FEA
- for <buildroot@buildroot.org>; Wed, 26 Feb 2025 11:07:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2C1C940B9B
+ for <buildroot@buildroot.org>; Wed, 26 Feb 2025 12:13:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hvEDgna4uxTd for <buildroot@buildroot.org>;
- Wed, 26 Feb 2025 11:07:01 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E9MJbvsFXt2w for <buildroot@buildroot.org>;
+ Wed, 26 Feb 2025 12:13:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
  helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3F59060FB4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F59060FB4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1A0CF40C08
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A0CF40C08
 Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3F59060FB4
- for <buildroot@buildroot.org>; Wed, 26 Feb 2025 11:07:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1A0CF40C08
+ for <buildroot@buildroot.org>; Wed, 26 Feb 2025 12:13:28 +0000 (UTC)
 Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 69F642C88FBB;
- Wed, 26 Feb 2025 12:06:58 +0100 (CET)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 53D982C88FBB;
+ Wed, 26 Feb 2025 13:13:26 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Wed, 26 Feb 2025 12:06:56 +0100
-Message-ID: <20250226110657.2305399-1-buildroot@bubu1.eu>
+Date: Wed, 26 Feb 2025 13:13:24 +0100
+Message-ID: <20250226121325.2511167-1-buildroot@bubu1.eu>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=bubu1.eu; s=bubu; 
- t=1740568018; bh=ZuSkuWZgmjH3axDW48I3IlrnWV5nr2O4W/Ul6leoMaM=;
+ t=1740572006; bh=lLUH3HNHwgmL9ajlxn1N5lRE/+b/oRMYSfDKZZEeNDY=;
  h=From:To:Cc:Subject:Date;
- b=aXniSJpxOMFR99rwLaS1ee8Ipkzh01DQujRhhqH0oHRkMasb9mxoY11pvdTmB+uqD
- /XYWRYZ4LN5rjFz+P0gs+y/vCkWn8q7BvN3sAOS4TNbzTUxxA2n1fqVhbL5pF3sEJy
- s8pi5cfIYojcgVCNh2HS2rpyvWojGtqfjpE+Rk1tV54K0UQt8ZG6YhGh9NRAYN+OOk
- 5OLfx/0E58qPH6/udXPcfXYiMqshUQS8t3pdIbj5VCSvqXHvnwOm/xHI1Z5fokaeuq
- J5asHZo1fR0Jf0vjs+uGhgHS1ufuxPQza66sybosNLpv44z7aDgylX4hhOsP71lN+a
- JQ0NbXLPs1suw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=ogllElkrKahWTJn+NcPvIBExeMgn4yVgxmFwlsXji4sRy6OmDwwrEi2+J534AzbWy
+ PAy60znKYKrmKZ9FtB/IyI5uZumpZrbb+RiyykacMJ7WwLzqjKK2uw4H6AGaQY7lxs
+ uZ/JAeq3x9frrwwbGsd9NQEo5MJLwrbEcYcKRnA0EOfK/HYH7QiDL0R5pa1odu8MSz
+ QYB2KQeD+cpXU2QPLoISLm1MLREI3zh7EuwYQWlDm9IdWJaKK6SZLf4d7fTz75bdcs
+ duvQnhEhGFyLVf3wQzrX+L5xYhF3TUkh5EWSITWMucp+W9XBi+gJyCYtjSNL5d8uKr
+ m7qAP6v9oMjUA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=aXniSJpx
-Subject: [Buildroot] [PATCH v3] package/python-whitenoise: new package
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=ogllElkr
+Subject: [Buildroot] [PATCH] package/python-diskcache: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,163 +86,173 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The test is using the django integration of whitenoise as it's the most
-common setup and allows to model the test case after the django one as
-well.
-
-The setup we need to do is a bit more complicated though and follows
-the whitenoise getting started documentation [1].
-
-We then request a .css file from the django admin app that is enabled
-by default in template project. Due to running django's development
-server with --nostatic we ensure that static file handling is taken over
-by whitenoise.
-
-[1] https://whitenoise.readthedocs.io/en/stable/django.html
+The package imports itself in setup.py to get the package-name and
+version number. This doesn't work during the buildroot build, so we
+replace this by the hardcoded package-name and the version number stored
+in buildroot.
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
-
-Changes v1 -> v2:
-  - update to latest version
-  - drop change to unrelated test
-  - fix lint errors in test
-
-Changes v2 -> v3:
-  - update to whitenoise 6.9
-  - add DEVELOPERS entry
-
- DEVELOPERS                                    |  2 +
- package/Config.in                             |  1 +
- package/python-whitenoise/Config.in           |  7 ++++
- .../python-whitenoise/python-whitenoise.hash  |  5 +++
- .../python-whitenoise/python-whitenoise.mk    | 14 +++++++
- .../tests/package/test_python_whitenoise.py   | 41 +++++++++++++++++++
- 6 files changed, 70 insertions(+)
- create mode 100644 package/python-whitenoise/Config.in
- create mode 100644 package/python-whitenoise/python-whitenoise.hash
- create mode 100644 package/python-whitenoise/python-whitenoise.mk
- create mode 100644 support/testing/tests/package/test_python_whitenoise.py
+ DEVELOPERS                                    |   3 +++
+ package/Config.in                             |   1 +
+ ...n-t-import-package-from-setup.py.patch.swp | Bin 0 -> 12288 bytes
+ package/python-diskcache/Config.in            |   8 +++++++
+ .../python-diskcache/python-diskcache.hash    |   5 +++++
+ package/python-diskcache/python-diskcache.mk  |  20 ++++++++++++++++++
+ .../tests/package/sample_python_diskcache.py  |   9 ++++++++
+ .../tests/package/test_python_diskcache.py    |  12 +++++++++++
+ 8 files changed, 58 insertions(+)
+ create mode 100644 package/python-diskcache/.0001-don-t-import-package-from-setup.py.patch.swp
+ create mode 100644 package/python-diskcache/Config.in
+ create mode 100644 package/python-diskcache/python-diskcache.hash
+ create mode 100644 package/python-diskcache/python-diskcache.mk
+ create mode 100644 support/testing/tests/package/sample_python_diskcache.py
+ create mode 100644 support/testing/tests/package/test_python_diskcache.py
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 837fa93f4d..24f1821ee5 100644
+index c07837e431..6676f2cf31 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2265,9 +2265,11 @@ F:	package/python-immutabledict/
+@@ -2257,13 +2257,16 @@ N:	Marcus Hoffmann <bubu@bubu1.eu>
+ F:	package/nethogs/
+ F:	package/pico-sdk/
+ F:	package/picotool/
++F:	package/python-diskcache/
+ F:	package/python-immutabledict/
  F:	package/python-jc/
  F:	package/python-ruamel-yaml-clib/
  F:	package/python-waitress/
-+F:	package/python-whitenoise/
++F:	support/testing/tests/package/test_python_diskcache.py
  F:	support/testing/tests/package/test_python_fastapi.py
  F:	support/testing/tests/package/test_python_ruamel_yaml.py
  F:	support/testing/tests/package/test_python_waitress.py
-+F:	support/testing/tests/package/test_python_whitenoise.py
++F:	support/testing/tests/package/sample_python_diskcache.py
  F:	support/testing/tests/package/sample_python_fastapi.py
  F:	support/testing/tests/package/sample_python_ruamel_yaml.py
  
 diff --git a/package/Config.in b/package/Config.in
-index 3153fd6afa..10365b6b16 100644
+index 4a81a62ec4..7e9ba87e30 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1476,6 +1476,7 @@ menu "External python modules"
- 	source "package/python-websocket-client/Config.in"
- 	source "package/python-websockets/Config.in"
- 	source "package/python-werkzeug/Config.in"
-+	source "package/python-whitenoise/Config.in"
- 	source "package/python-whoosh/Config.in"
- 	source "package/python-wrapt/Config.in"
- 	source "package/python-ws4py/Config.in"
-diff --git a/package/python-whitenoise/Config.in b/package/python-whitenoise/Config.in
+@@ -1084,6 +1084,7 @@ menu "External python modules"
+ 	source "package/python-dictdiffer/Config.in"
+ 	source "package/python-dicttoxml/Config.in"
+ 	source "package/python-dicttoxml2/Config.in"
++	source "package/python-diskcache/Config.in"
+ 	source "package/python-distro/Config.in"
+ 	source "package/python-django/Config.in"
+ 	source "package/python-django-enumfields/Config.in"
+diff --git a/package/python-diskcache/.0001-don-t-import-package-from-setup.py.patch.swp b/package/python-diskcache/.0001-don-t-import-package-from-setup.py.patch.swp
 new file mode 100644
-index 0000000000..47df3ad5bf
+index 0000000000000000000000000000000000000000..6b122f4a32ff89be9f4841dc6be41d0591d1de94
+GIT binary patch
+literal 12288
+zcmeI2O^YK%7{_b8ETXI8g5d4hQA|RoJN=T0onU0fnbmbQD7#Svk!*GM(@8r?SJPF|
+zSrNU6ckvs@eh2X)eh3fZO+SGmp1k<<%Zx!`y(;q*`KP+-ski6XbqV=L?%S`<VC;B;
+z$`e9-|Hrq>`{Jp+rw^YK8(GF%T?HOo%=Qcu^~U_cqlEaRS#VHdq4XfyX6vL>%GldN
+zn-b+_P{{aHE^$!YGb@$bNv2O@8Lx2Qx~^v@)Me~!Q>fC|?NB={)yCFnwuMvNa|&tV
+z)xRBs<4oX^61XY?-*c<vpV_|-*PeXql5*g*nE(@D0!)AjFaajO1en0(Bw&g?@hPSL
+zP@Dd<ZN2xmx@~gB1egF5U;<2l2`~XBzyz286JP>NfC>B$3CKi<`;Q3m`lEDs`v3p@
+z_y0GK3-LKgl5A3+)FoXb{rs2^Kasv8eMS0`^cm?c=_S&`q${M~uL|)S=~vPZq_0T@
+zX->LLx<#@`S4h9m{y&nwAZgM&q&aCus?PQri3<~80!)AjFaajO1egF5U;_Uk0>0xP
+zkdxT9K|odHmVCVBwDU?Sa|5?9Kh>Rn6I!c$xkymQWmcF><x?^MCmU>|yMfLL*?{4=
+z@&N;_T(@MNK$@))B61940tJ>j(*|jm+A!?UHdb|l52^sIzJK71oM6B0&E*EC`xo|N
+z>b7?WUj&@RqFrFIXvfr3cL$ivtg#A1?LzK~HuokUm_qe{rBhYio;W-N+YkC7SiVQ!
+z)ci0rD^LaI-OlYBM<=rzPN_|&517X)$@1m2vo)z5c6uOnyV#^*m|#j2a=Fev!iB0a
+z>aNCh+M@yST51h*b=IAuHpgnSA!t=V*rGL2!$ls|p(`hKlY>!et(~};;ux9^jq4if
+zXFA5tlK+@^KDNeD=Ub;6^hZ^;^)8t@A5`TnEX#suaBkwJ>tlobtC{5qo<TGmC*wGD
+zoHTW17zW_E?r1m^NtUK`EtZ+tnX|i^0I#_!@k-`PO#0wMmTN4lTc^8LuMa~=aE(pd
+z?zJzH?Bwt<jKH$!JcNuS?rfv?F*Xx;_sygE@y+*uEa{yKIISgp2PCZ_PNcyJ%(qzW
+zb5xYzyM6$^H}S%W>x1R`t}9+9_7j-ZetWp7(v)6S4lgu*d1uvj94fQIa-*CCU#zD<
+zG!9cYjzT%cP!10Q>0yAwC>+JX0X2t#KaBjb9K%fIa0d(Uo(I>R)E_#C>xn-BYQt|_
+
+literal 0
+HcmV?d00001
+
+diff --git a/package/python-diskcache/Config.in b/package/python-diskcache/Config.in
+new file mode 100644
+index 0000000000..4bf6c57406
 --- /dev/null
-+++ b/package/python-whitenoise/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_WHITENOISE
-+	bool "python-whitenoise"
++++ b/package/python-diskcache/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_DISKCACHE
++	bool "python-diskcache"
++	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
++	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
 +	help
-+	  Radically simplified static file serving for WSGI
-+	  applications.
++	  Disk Cache -- Disk and file backed persistent cache.
 +
-+	  https://github.com/evansd/whitenoise
-diff --git a/package/python-whitenoise/python-whitenoise.hash b/package/python-whitenoise/python-whitenoise.hash
++	  http://www.grantjenks.com/docs/diskcache/
+diff --git a/package/python-diskcache/python-diskcache.hash b/package/python-diskcache/python-diskcache.hash
 new file mode 100644
-index 0000000000..e5ad875c99
+index 0000000000..4befb40a4e
 --- /dev/null
-+++ b/package/python-whitenoise/python-whitenoise.hash
++++ b/package/python-diskcache/python-diskcache.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/whitenoise/json
-+md5  0341c669420de0975fce0278dc1471fe  whitenoise-6.9.0.tar.gz
-+sha256  8c4a7c9d384694990c26f3047e118c691557481d624f069b7f7752a2f735d609  whitenoise-6.9.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/diskcache/json
++md5  d92b4afa944bb70ed38c84a622f7abb5  diskcache-5.6.3.tar.gz
++sha256  2c3a3fa2743d8535d832ec61c2054a1641f41775aa7c556758a109941e33e4fc  diskcache-5.6.3.tar.gz
 +# Locally computed sha256 checksums
-+sha256  ebfd469b4fb6b5adada547747e1e8da725ecf20595d54aced043275d4f4a3600  LICENSE
-diff --git a/package/python-whitenoise/python-whitenoise.mk b/package/python-whitenoise/python-whitenoise.mk
++sha256  583546baa3fd93607d845126570677a401f508e228b5044fefbc3949af179672  LICENSE
+diff --git a/package/python-diskcache/python-diskcache.mk b/package/python-diskcache/python-diskcache.mk
 new file mode 100644
-index 0000000000..21b36906fa
+index 0000000000..676508857e
 --- /dev/null
-+++ b/package/python-whitenoise/python-whitenoise.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-diskcache/python-diskcache.mk
+@@ -0,0 +1,20 @@
 +################################################################################
 +#
-+# python-whitenoise
++# python-diskcache
 +#
 +################################################################################
 +
-+PYTHON_WHITENOISE_VERSION = 6.9.0
-+PYTHON_WHITENOISE_SOURCE = whitenoise-$(PYTHON_WHITENOISE_VERSION).tar.gz
-+PYTHON_WHITENOISE_SITE = https://files.pythonhosted.org/packages/b9/cf/c15c2f21aee6b22a9f6fc9be3f7e477e2442ec22848273db7f4eb73d6162
-+PYTHON_WHITENOISE_SETUP_TYPE = setuptools
-+PYTHON_WHITENOISE_LICENSE = MIT
-+PYTHON_WHITENOISE_LICENSE_FILES = LICENSE
++PYTHON_DISKCACHE_VERSION = 5.6.3
++PYTHON_DISKCACHE_SOURCE = diskcache-$(PYTHON_DISKCACHE_VERSION).tar.gz
++PYTHON_DISKCACHE_SITE = https://files.pythonhosted.org/packages/3f/21/1c1ffc1a039ddcc459db43cc108658f32c57d271d7289a2794e401d0fdb6
++PYTHON_DISKCACHE_SETUP_TYPE = setuptools
++PYTHON_DISKCACHE_LICENSE = Apache-2.0
++PYTHON_DISKCACHE_LICENSE_FILES = LICENSE
++
++define PYTHON_DISKCACHE_REMOVE_SELF_IMPORT
++        sed -i -e '/import diskcache/d' -e 's/diskcache.__title__/"diskcache"/' -e 's/diskcache.__version__/"${PYTHON_DISKCACHE_VERSION}"/' $(@D)/setup.py
++endef
++
++PYTHON_DISKCACHE_POST_PATCH_HOOKS += PYTHON_DISKCACHE_REMOVE_SELF_IMPORT
 +
 +$(eval $(python-package))
-diff --git a/support/testing/tests/package/test_python_whitenoise.py b/support/testing/tests/package/test_python_whitenoise.py
+diff --git a/support/testing/tests/package/sample_python_diskcache.py b/support/testing/tests/package/sample_python_diskcache.py
 new file mode 100644
-index 0000000000..5a76b6d5be
+index 0000000000..8ba34daf6e
 --- /dev/null
-+++ b/support/testing/tests/package/test_python_whitenoise.py
-@@ -0,0 +1,41 @@
-+import time
++++ b/support/testing/tests/package/sample_python_diskcache.py
+@@ -0,0 +1,9 @@
++from diskcache import Cache
 +
++cache = Cache()
++
++cache['test'] = 123
++assert cache['test'] == 123
++del cache['test']
++assert 'test' not in cache
++cache.close()
+diff --git a/support/testing/tests/package/test_python_diskcache.py b/support/testing/tests/package/test_python_diskcache.py
+new file mode 100644
+index 0000000000..d8618c1681
+--- /dev/null
++++ b/support/testing/tests/package/test_python_diskcache.py
+@@ -0,0 +1,12 @@
 +from tests.package.test_python import TestPythonPackageBase
 +
 +
-+class TestPythonPy3Whitenoise(TestPythonPackageBase):
++class TestPythonPy3DiskCache(TestPythonPackageBase):
 +    __test__ = True
 +    config = TestPythonPackageBase.config + \
 +        """
 +        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_DJANGO=y
-+        BR2_PACKAGE_PYTHON_WHITENOISE=y
-+        BR2_PACKAGE_PYTHON3_SQLITE=y
++        BR2_PACKAGE_PYTHON_DISKCACHE=y
 +        """
-+
-+    def test_run(self):
-+        self.login()
-+        timeout = 35
-+
-+        cmd = "cd /opt && /usr/bin/django-admin startproject testsite"
-+        self.assertRunOk(cmd, timeout=timeout)
-+        # STATIC_ROOT needs to be set for 'collectstatic' to work.
-+        self.emulator.run("echo 'STATIC_ROOT = BASE_DIR / \"staticfiles\"' >> /opt/testsite/testsite/settings.py")
-+        cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py collectstatic"
-+        self.assertRunOk(cmd, timeout=timeout)
-+        # whitenoise docs say it needs to be added directly after SecurityMiddleware, so we do this here with sed.
-+        cmd = """sed -i -e /django.middleware.security.SecurityMiddleware/a\\ \\"whitenoise.middleware.WhiteNoiseMiddleware\\",\
-+        /opt/testsite/testsite/settings.py"""
-+        self.assertRunOk(cmd, timeout=timeout)
-+        # --nostatic ensures the builtin django server doesn't serve the static files,
-+        # so we can test that whitenoise serves them
-+        cmd = "cd /opt/testsite && " + self.interpreter + " ./manage.py runserver --nostatic 0.0.0.0:1234 > /dev/null 2>&1 & "
-+        self.assertRunOk(cmd, timeout=timeout)
-+        # give some time to setup the server
-+        for attempt in range(30 * self.emulator.timeout_multiplier):
-+            time.sleep(1)
-+            cmd = "wget http://127.0.0.1:1234/static/admin/css/base.css"
-+            _, exit_code = self.emulator.run(cmd)
-+            if exit_code == 0:
-+                break
-+        self.assertEqual(exit_code, 0, "Timeout while waiting for django server")
++    sample_scripts = ["tests/package/sample_python_diskcache.py"]
++    timeout = 10
 -- 
 2.43.0
 
