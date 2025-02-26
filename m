@@ -1,70 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F80FC021BF
-	for <buildroot@archiver.kernel.org>; Wed, 26 Feb 2025 12:34:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12A46C18E7C
+	for <buildroot@archiver.kernel.org>; Wed, 26 Feb 2025 14:28:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B80DA4121A;
-	Wed, 26 Feb 2025 12:34:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE2106070F;
+	Wed, 26 Feb 2025 14:28:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3HgH_kpWMplz; Wed, 26 Feb 2025 12:34:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bEAVPD0pxQtR; Wed, 26 Feb 2025 14:28:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AA2B4121B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C374B60758
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4AA2B4121B;
-	Wed, 26 Feb 2025 12:34:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2A5F768
- for <buildroot@buildroot.org>; Wed, 26 Feb 2025 12:34:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C374B60758;
+	Wed, 26 Feb 2025 14:28:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 008DB94F
+ for <buildroot@buildroot.org>; Wed, 26 Feb 2025 14:28:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EF9784121A
- for <buildroot@buildroot.org>; Wed, 26 Feb 2025 12:34:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BDD4B40930
+ for <buildroot@buildroot.org>; Wed, 26 Feb 2025 14:28:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xwVtd5BhjbT5 for <buildroot@buildroot.org>;
- Wed, 26 Feb 2025 12:34:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6B0934121B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B0934121B
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6B0934121B
- for <buildroot@buildroot.org>; Wed, 26 Feb 2025 12:34:18 +0000 (UTC)
-Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id CDD892C88FBB;
- Wed, 26 Feb 2025 13:34:15 +0100 (CET)
-To: buildroot@buildroot.org
-Date: Wed, 26 Feb 2025 13:34:13 +0100
-Message-ID: <20250226123415.2518118-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8_GPOkVhZ5ZQ for <buildroot@buildroot.org>;
+ Wed, 26 Feb 2025 14:28:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=188.165.52.147;
+ helo=8.mo560.mail-out.ovh.net; envelope-from=sebastien.szymanski@armadeus.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 84EE5400DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84EE5400DA
+Received: from 8.mo560.mail-out.ovh.net (8.mo560.mail-out.ovh.net
+ [188.165.52.147])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 84EE5400DA
+ for <buildroot@buildroot.org>; Wed, 26 Feb 2025 14:28:29 +0000 (UTC)
+Received: from director6.ghost.mail-out.ovh.net (unknown [10.108.2.54])
+ by mo560.mail-out.ovh.net (Postfix) with ESMTP id 4Z2xfL6wnPz1kj1
+ for <buildroot@buildroot.org>; Wed, 26 Feb 2025 14:28:26 +0000 (UTC)
+Received: from ghost-submission-5b5ff79f4f-vdgn2 (unknown [10.110.178.91])
+ by director6.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 870921FDD5;
+ Wed, 26 Feb 2025 14:28:26 +0000 (UTC)
+Received: from armadeus.com ([37.59.142.97])
+ by ghost-submission-5b5ff79f4f-vdgn2 with ESMTPSA
+ id ARlTFAolv2dTIQAABrTzDg
+ (envelope-from <sebastien.szymanski@armadeus.com>);
+ Wed, 26 Feb 2025 14:28:26 +0000
+X-OVh-ClientIp: 92.148.253.243
+From: =?utf-8?q?S=C3=A9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Wed, 26 Feb 2025 15:28:14 +0100
+Message-Id: <20250226-nxp-mwifiex-kconfig-fix-v1-0-5e2a46c520a5@armadeus.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1740573256; bh=C/KM2UBCnnItI1NEhU134gPf6KVDMkO7t7aAs7r7aik=;
- h=From:To:Cc:Subject:Date;
- b=Y3b55txYaYF3i6MnwxO2juOl8dWCJ1xfDtp9i2ZBHCkkWVrzbwLrjk63H4yECG6SS
- wGtcyJ9OOUXi4GezyBHy5+Ei1k7qqBAqYLNsq2LYTpnFM9ndgKNhE1k3NOw7VfNMJ4
- XgADsomS6OLjooPSAa644hUDFoRTPmVYNlsUb7OuS9OD9V67wNGJEqNzAO5ZYEqs3a
- P2WAeYnrDWkH1GmjT068ZJe/htPiX5LrrRss6ZmXMZMKU3de7nwBUhPXLB6XzKBWVu
- NUo/HgTPy1bTmWYWVjZbhAoEqcH51jBfeeyTJD3Cm3k9NZ3CW4+7VwM9ZqkoTB0f1u
- tTReJbn6vK0vQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-B4-Tracking: v=1; b=H4sIAP4kv2cC/x2MQQqAIBAAvxJ7bsEWTOor0aFytSWyUCgh+nvSc
+ QZmHkgchRP01QORL0lyhAJNXcGyTsEzii0MpEgrohZDPnG/xQln3JYjOPHoJGNnjKLZOj0ZglK
+ fkYv+z8P4vh+GCA2GaQAAAA==
+X-Change-ID: 20250226-nxp-mwifiex-kconfig-fix-97702bdf5a72
+To: buildroot@buildroot.org
+X-Mailer: b4 0.14.2
+X-Ovh-Tracer-Id: 2668945729752001515
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekgeekvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhephffufffkgggtgffvvefosehtkeertdertdejnecuhfhrohhmpefurogsrghsthhivghnucfuiiihmhgrnhhskhhiuceoshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmqeenucggtffrrghtthgvrhhnpeevgeeghfejvdegtedukeejieetheekjeejvdfhtdeguedukeejtdeftdeugeeileenucfkphepuddvjedrtddrtddruddpledvrddugeekrddvheefrddvgeefpdefjedrheelrddugedvrdeljeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduvdejrddtrddtrddupdhmrghilhhfrhhomhepshgvsggrshhtihgvnhdrshiihihmrghnshhkihesrghrmhgruggvuhhsrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdpoffvtefjohhsthepmhhoheeitdgmpdhmohguvgepshhmthhpohhuth
+X-Mailman-Original-DKIM-Signature: a=rsa-sha256;
+ bh=T6FBCFtnIbPVy9CNpDREXEz/LftkwwjYygRefTrHuyA=; 
+ c=relaxed/relaxed; d=armadeus.com; h=From; s=ovhmo103079-selector1;
+ t=1740580107; v=1;
+ b=oVNWTPftV2DPVDZO0Ba3htbaHpLhQd09FgJks0n8bvQvdCnh34d0ki7FM+aRcMejv6HYOOoJ
+ twBnWrD0dMK29enqRUr2kANa/cflCQULz4awOEErTJdonIvbQegvJin/7PoQoqZpypnSDonk5v5
+ qIK777YKgvZbTRKvXy41k+z7hvLUNkcn0s+tvPhGYpWyhNddBmg8D6zyOQqO1UIe0e700yE4GNM
+ iRvXER0PVtf8OCuguD7Gi8773YMITVQAuVsx9hI1HBnzfhnDXBCowsho7Syy+TVPc2fOixdML2+
+ HJrfeWEx9d6bDPPImp9ufDhwDi39Q9JjwdyBtcI/bK5OA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=armadeus.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=Y3b55txY
-Subject: [Buildroot] [PATCH v3] package/python-diskcache: new package
+ unprotected) header.d=armadeus.com header.i=@armadeus.com header.a=rsa-sha256
+ header.s=ovhmo103079-selector1 header.b=oVNWTPft
+X-Mailman-Original-Authentication-Results: garm.ovh; auth=pass
+ (GARM-97G00207e7c3cb-2532-43be-a055-4ceb9213bfe3,
+ A50FC0A5E7C9DA406CB1ACD9B6A167DCAC5E06BF)
+ smtp.auth=sebastien.szymanski@armadeus.com
+Subject: [Buildroot] [PATCH 0/2] package/nxp-mwifiex: fix build failures
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,162 +96,22 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Marcus Hoffmann <bubu@bubu1.eu>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The package imports itself in setup.py to get the package-name and
-version number. This doesn't work during the buildroot build, so we
-replace this by the hardcoded package-name and the version number stored
-in buildroot.
-
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
----
-
-Changes v2: remove accidentally commited .swp file
-Chanegs v3: fix python-diskcache.mk lint errors
-
- DEVELOPERS                                    |  3 +++
- package/Config.in                             |  1 +
- package/python-diskcache/Config.in            |  8 ++++++++
- .../python-diskcache/python-diskcache.hash    |  5 +++++
- package/python-diskcache/python-diskcache.mk  | 20 +++++++++++++++++++
- .../tests/package/sample_python_diskcache.py  |  9 +++++++++
- .../tests/package/test_python_diskcache.py    | 12 +++++++++++
- 7 files changed, 58 insertions(+)
- create mode 100644 package/python-diskcache/Config.in
- create mode 100644 package/python-diskcache/python-diskcache.hash
- create mode 100644 package/python-diskcache/python-diskcache.mk
- create mode 100644 support/testing/tests/package/sample_python_diskcache.py
- create mode 100644 support/testing/tests/package/test_python_diskcache.py
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c07837e431..6676f2cf31 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2257,13 +2257,16 @@ N:	Marcus Hoffmann <bubu@bubu1.eu>
- F:	package/nethogs/
- F:	package/pico-sdk/
- F:	package/picotool/
-+F:	package/python-diskcache/
- F:	package/python-immutabledict/
- F:	package/python-jc/
- F:	package/python-ruamel-yaml-clib/
- F:	package/python-waitress/
-+F:	support/testing/tests/package/test_python_diskcache.py
- F:	support/testing/tests/package/test_python_fastapi.py
- F:	support/testing/tests/package/test_python_ruamel_yaml.py
- F:	support/testing/tests/package/test_python_waitress.py
-+F:	support/testing/tests/package/sample_python_diskcache.py
- F:	support/testing/tests/package/sample_python_fastapi.py
- F:	support/testing/tests/package/sample_python_ruamel_yaml.py
- 
-diff --git a/package/Config.in b/package/Config.in
-index 4a81a62ec4..7e9ba87e30 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1084,6 +1084,7 @@ menu "External python modules"
- 	source "package/python-dictdiffer/Config.in"
- 	source "package/python-dicttoxml/Config.in"
- 	source "package/python-dicttoxml2/Config.in"
-+	source "package/python-diskcache/Config.in"
- 	source "package/python-distro/Config.in"
- 	source "package/python-django/Config.in"
- 	source "package/python-django-enumfields/Config.in"
-diff --git a/package/python-diskcache/Config.in b/package/python-diskcache/Config.in
-new file mode 100644
-index 0000000000..4bf6c57406
---- /dev/null
-+++ b/package/python-diskcache/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_DISKCACHE
-+	bool "python-diskcache"
-+	select BR2_PACKAGE_PYTHON3_SQLITE # runtime
-+	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
-+	help
-+	  Disk Cache -- Disk and file backed persistent cache.
-+
-+	  http://www.grantjenks.com/docs/diskcache/
-diff --git a/package/python-diskcache/python-diskcache.hash b/package/python-diskcache/python-diskcache.hash
-new file mode 100644
-index 0000000000..4befb40a4e
---- /dev/null
-+++ b/package/python-diskcache/python-diskcache.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/diskcache/json
-+md5  d92b4afa944bb70ed38c84a622f7abb5  diskcache-5.6.3.tar.gz
-+sha256  2c3a3fa2743d8535d832ec61c2054a1641f41775aa7c556758a109941e33e4fc  diskcache-5.6.3.tar.gz
-+# Locally computed sha256 checksums
-+sha256  583546baa3fd93607d845126570677a401f508e228b5044fefbc3949af179672  LICENSE
-diff --git a/package/python-diskcache/python-diskcache.mk b/package/python-diskcache/python-diskcache.mk
-new file mode 100644
-index 0000000000..327d076779
---- /dev/null
-+++ b/package/python-diskcache/python-diskcache.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# python-diskcache
-+#
-+################################################################################
-+
-+PYTHON_DISKCACHE_VERSION = 5.6.3
-+PYTHON_DISKCACHE_SOURCE = diskcache-$(PYTHON_DISKCACHE_VERSION).tar.gz
-+PYTHON_DISKCACHE_SITE = https://files.pythonhosted.org/packages/3f/21/1c1ffc1a039ddcc459db43cc108658f32c57d271d7289a2794e401d0fdb6
-+PYTHON_DISKCACHE_SETUP_TYPE = setuptools
-+PYTHON_DISKCACHE_LICENSE = Apache-2.0
-+PYTHON_DISKCACHE_LICENSE_FILES = LICENSE
-+
-+define PYTHON_DISKCACHE_REMOVE_SELF_IMPORT
-+	sed -i -e '/import diskcache/d' -e 's/diskcache.__title__/"diskcache"/' -e 's/diskcache.__version__/"$(PYTHON_DISKCACHE_VERSION)"/' $(@D)/setup.py
-+endef
-+
-+PYTHON_DISKCACHE_POST_PATCH_HOOKS += PYTHON_DISKCACHE_REMOVE_SELF_IMPORT
-+
-+$(eval $(python-package))
-diff --git a/support/testing/tests/package/sample_python_diskcache.py b/support/testing/tests/package/sample_python_diskcache.py
-new file mode 100644
-index 0000000000..8ba34daf6e
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_diskcache.py
-@@ -0,0 +1,9 @@
-+from diskcache import Cache
-+
-+cache = Cache()
-+
-+cache['test'] = 123
-+assert cache['test'] == 123
-+del cache['test']
-+assert 'test' not in cache
-+cache.close()
-diff --git a/support/testing/tests/package/test_python_diskcache.py b/support/testing/tests/package/test_python_diskcache.py
-new file mode 100644
-index 0000000000..d8618c1681
---- /dev/null
-+++ b/support/testing/tests/package/test_python_diskcache.py
-@@ -0,0 +1,12 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3DiskCache(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_DISKCACHE=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_diskcache.py"]
-+    timeout = 10
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyB0d28gcGF0Y2hlcyBmaXggYnVpbGRzIGZhaWx1cmUgZHVlIHRvIEtDT05GSUdfUENJIG1p
+c3R5cGVkIGFuZApSVENfQ0xBU1MgbWlzc2luZy4KClNpZ25lZC1vZmYtYnk6IFPDqWJhc3RpZW4g
+U3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFybWFkZXVzLmNvbT4KLS0tClPDqWJhc3Rp
+ZW4gU3p5bWFuc2tpICgyKToKICAgICAgcGFja2FnZS9ueHAtbXdpZmlleDogdXNlIHJpZ2h0IGtl
+cm5lbCBjb25maWcgc3ltYm9sIHRvIGVuYWJsZSBQQ0kKICAgICAgcGFja2FnZS9ueHAtbXdpZmll
+eDogZW5hYmxlIExpbnV4IG9wdGlvbiBSVENfQ0xBU1MKCiBwYWNrYWdlL254cC1td2lmaWV4L254
+cC1td2lmaWV4Lm1rIHwgMyArKy0KIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEg
+ZGVsZXRpb24oLSkKLS0tCmJhc2UtY29tbWl0OiA5ZWViODEwOGM2OTc0MjkzYTQzYTQ0OGQyY2Yx
+ZjIxOTkwMmQ4ZmEwCmNoYW5nZS1pZDogMjAyNTAyMjYtbnhwLW13aWZpZXgta2NvbmZpZy1maXgt
+OTc3MDJiZGY1YTcyCgpCZXN0IHJlZ2FyZHMsCi0tIApTw6liYXN0aWVuIFN6eW1hbnNraSA8c2Vi
+YXN0aWVuLnN6eW1hbnNraUBhcm1hZGV1cy5jb20+CgpfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
+dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
+L2J1aWxkcm9vdAo=
