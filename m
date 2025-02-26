@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AA73C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:24:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF68FC282C1
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:24:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 785944074C;
-	Fri, 28 Feb 2025 17:23:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A13070A6F;
+	Fri, 28 Feb 2025 17:24:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gwU68t2cl0ue; Fri, 28 Feb 2025 17:23:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VGHVpOtoVcRG; Fri, 28 Feb 2025 17:24:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 188FC407B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22F0170E84
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 188FC407B0;
-	Fri, 28 Feb 2025 17:23:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 22F0170E84;
+	Fri, 28 Feb 2025 17:24:02 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 051C71DD
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:48:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1313D68
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:48:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5D4BC42DC3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 847D642DCD
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rWG85ZlEaoTR for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:32:09 +0000 (UTC)
+ id ZYJRqJpIkwEb for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:32:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFF5347A21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37011489E0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CFF5347A21
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37011489E0
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C5B1783577; Fri, 28 Feb 2025 16:30:46 +0000 (UTC)
+ id 2F013817EE; Fri, 28 Feb 2025 16:30:49 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 22 Feb 2025 22:18:28 +0100
+Date: Wed, 26 Feb 2025 15:41:05 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0748e761e2962e085ecc266bd79bb7991ff71462
-X-Git-Newrev: dcb5d1d91849bf3e22639b38657bdae6e50767d1
+X-Git-Oldrev: 9489f251ff1447ff22fe512eb0e4049118532c99
+X-Git-Newrev: 5f085911923983e9b8668017c50a44e8b5f0153f
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163046.C5B1783577@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pkg-golang: allow
- packages to provide extldflags
+Message-Id: <20250228163049.2F013817EE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/zynq_zed_defconfig:
+ bump to 6.6.70
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,80 +59,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dcb5d1d91849bf3e22639b38657bdae6e50767d1
+commit: https://git.buildroot.net/buildroot/commit/?id=5f085911923983e9b8668017c50a44e8b5f0153f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Currently, only the -static extldflags may be set in the
-golang-package infra. However, in some cases, it might be necessary to
-pass other flags, either because they are needed on a specific
-architecture, or a specific C library; packages may also have a need
-to pass arbitrary linker flags when they use CGO linking.
+This patch bumps the zynq_zed_defconfig to Linux kernel 6.6.70.
 
-For example, on AArch64, go forcibly uses ld.gold, but it is not
-available in all toolchains, and ld.bfd works nowadays (following
-patch); another case is musl, where PIE is not supported with go.
-
-Introduce FOO_EXTLDFLAGS, which we use to set those flags, and that
-packages can set to pass such flags.
-
-Migrate the current setting of -static to use that new variable.
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Tested-by: Nathaniel Roach <nroach44@nroach44.id.au>
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Reviewed-by: Yann E. MORIN <yann.morin@orange.com>
-Reviewed-by: Christian Stewart <christian@aperture.us>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-golang.adoc | 6 ++++--
- package/pkg-golang.mk                   | 6 +++++-
- 2 files changed, 9 insertions(+), 3 deletions(-)
+ configs/zynq_zed_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/adding-packages-golang.adoc b/docs/manual/adding-packages-golang.adoc
-index aa25426591..6de0916a83 100644
---- a/docs/manual/adding-packages-golang.adoc
-+++ b/docs/manual/adding-packages-golang.adoc
-@@ -84,8 +84,10 @@ therefore only use a few of them, or none.
-   infrastructure will automatically generate a minimal +go.mod+ file
-   in the package source tree if it doesn't exist.
- 
--* +FOO_LDFLAGS+ and +FOO_TAGS+ can be used to pass respectively the
--  +LDFLAGS+ or the +TAGS+ to the +go+ build command.
-+* +FOO_LDFLAGS+, +FOO_EXTLDFLAGS+, and +FOO_TAGS+ can be used to pass
-+  respectively the go +LDFLAGS+ (via the `-ldflags` command line flag),
-+  the external linker flags +EXTLDFLAGS+ (via the `-extldflags`
-+  command line flag), or the +TAGS+ to the +go+ build command.
- 
- * +FOO_BUILD_TARGETS+ can be used to pass the list of targets that
-   should be built. If +FOO_BUILD_TARGETS+ is not specified, it
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index 33cf9bfb1a..a3421af288 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -114,10 +114,14 @@ ifndef $(2)_BUILD_CMDS
- ifeq ($(4),target)
- 
- ifeq ($(BR2_STATIC_LIBS),y)
--$(2)_LDFLAGS += -extldflags '-static'
-+$(2)_EXTLDFLAGS += -static
- $(2)_TAGS += osusergo netgo
- endif
- 
-+ifneq ($$($(2)_EXTLDFLAGS),)
-+$(2)_LDFLAGS += -extldflags '$$($(2)_EXTLDFLAGS)'
-+endif
-+
- # Build package for target
- define $(2)_BUILD_CMDS
- 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
+diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
+index ef74c73b3b..c9e8e7ea2c 100644
+--- a/configs/zynq_zed_defconfig
++++ b/configs/zynq_zed_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.60)/xlnx_rebase_v6.6_LTS_merge_6.6.60.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.70)/xlnx_rebase_v6.6_LTS_merge_6.6.70.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
