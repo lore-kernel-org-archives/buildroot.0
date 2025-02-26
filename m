@@ -1,69 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77CECC021B8
-	for <buildroot@archiver.kernel.org>; Wed, 26 Feb 2025 12:20:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F80FC021BF
+	for <buildroot@archiver.kernel.org>; Wed, 26 Feb 2025 12:34:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E6A560B39;
-	Wed, 26 Feb 2025 12:20:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B80DA4121A;
+	Wed, 26 Feb 2025 12:34:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TCjm9iflqgnL; Wed, 26 Feb 2025 12:20:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3HgH_kpWMplz; Wed, 26 Feb 2025 12:34:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB43D60B56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AA2B4121B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB43D60B56;
-	Wed, 26 Feb 2025 12:20:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A2DF21ED4
- for <buildroot@buildroot.org>; Wed, 26 Feb 2025 12:20:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4AA2B4121B;
+	Wed, 26 Feb 2025 12:34:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A5F768
+ for <buildroot@buildroot.org>; Wed, 26 Feb 2025 12:34:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 926AB60B56
- for <buildroot@buildroot.org>; Wed, 26 Feb 2025 12:20:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF9784121A
+ for <buildroot@buildroot.org>; Wed, 26 Feb 2025 12:34:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uD2tyuWez8Rg for <buildroot@buildroot.org>;
- Wed, 26 Feb 2025 12:20:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xwVtd5BhjbT5 for <buildroot@buildroot.org>;
+ Wed, 26 Feb 2025 12:34:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
  helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4236060B39
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4236060B39
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6B0934121B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B0934121B
 Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4236060B39
- for <buildroot@buildroot.org>; Wed, 26 Feb 2025 12:20:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6B0934121B
+ for <buildroot@buildroot.org>; Wed, 26 Feb 2025 12:34:18 +0000 (UTC)
 Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id B666C2C88FBB;
- Wed, 26 Feb 2025 13:20:23 +0100 (CET)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id CDD892C88FBB;
+ Wed, 26 Feb 2025 13:34:15 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Wed, 26 Feb 2025 13:20:21 +0100
-Message-ID: <20250226122022.2513035-1-buildroot@bubu1.eu>
+Date: Wed, 26 Feb 2025 13:34:13 +0100
+Message-ID: <20250226123415.2518118-1-buildroot@bubu1.eu>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=bubu1.eu; s=bubu; 
- t=1740572423; bh=TOCO18xvfeEzwlJqUkMZQGpDbHhzNZLw1ePUvBth7wY=;
+ t=1740573256; bh=C/KM2UBCnnItI1NEhU134gPf6KVDMkO7t7aAs7r7aik=;
  h=From:To:Cc:Subject:Date;
- b=sKmqpKVn5OLMvuxsTms9KoSbQi9U0vmptRkhh+90IFKEUzauoZj4eziYB3vzyrjeO
- 5OkPrrpkj8oURwJopM5xdl17P2LwH5Cui2pBHHP8aDRiK+aobAliVPfOytZ+TbEojB
- tNgR9ZjCcB2Dll/9aFhwv+NlC5qLnwBuFmrHN8Z29GTk3yl6QmukeCDgUk5FeGbmYn
- Y8K2+hY8yiMBX8gqJ6sV9pNeMe9ldt6973zvt7EYoxQNtnZM/RCo4hGf2KrYcHFYqd
- 2ds93tluqmhSFI2BUCLAgXweJJKq2XMUlnVcFUedL3sI5cDWgxMbCyysOo50lGJ8p/
- OXhQ4JYkT+vfA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=Y3b55txYaYF3i6MnwxO2juOl8dWCJ1xfDtp9i2ZBHCkkWVrzbwLrjk63H4yECG6SS
+ wGtcyJ9OOUXi4GezyBHy5+Ei1k7qqBAqYLNsq2LYTpnFM9ndgKNhE1k3NOw7VfNMJ4
+ XgADsomS6OLjooPSAa644hUDFoRTPmVYNlsUb7OuS9OD9V67wNGJEqNzAO5ZYEqs3a
+ P2WAeYnrDWkH1GmjT068ZJe/htPiX5LrrRss6ZmXMZMKU3de7nwBUhPXLB6XzKBWVu
+ NUo/HgTPy1bTmWYWVjZbhAoEqcH51jBfeeyTJD3Cm3k9NZ3CW4+7VwM9ZqkoTB0f1u
+ tTReJbn6vK0vQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=sKmqpKVn
-Subject: [Buildroot] [PATCH v2] package/python-diskcache: new package
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=Y3b55txY
+Subject: [Buildroot] [PATCH v3] package/python-diskcache: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,7 +94,8 @@ in buildroot.
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
 
-    Changes v2: remove accidentally commited .swp file
+Changes v2: remove accidentally commited .swp file
+Chanegs v3: fix python-diskcache.mk lint errors
 
  DEVELOPERS                                    |  3 +++
  package/Config.in                             |  1 +
@@ -169,7 +171,7 @@ index 0000000000..4befb40a4e
 +sha256  583546baa3fd93607d845126570677a401f508e228b5044fefbc3949af179672  LICENSE
 diff --git a/package/python-diskcache/python-diskcache.mk b/package/python-diskcache/python-diskcache.mk
 new file mode 100644
-index 0000000000..676508857e
+index 0000000000..327d076779
 --- /dev/null
 +++ b/package/python-diskcache/python-diskcache.mk
 @@ -0,0 +1,20 @@
@@ -187,7 +189,7 @@ index 0000000000..676508857e
 +PYTHON_DISKCACHE_LICENSE_FILES = LICENSE
 +
 +define PYTHON_DISKCACHE_REMOVE_SELF_IMPORT
-+        sed -i -e '/import diskcache/d' -e 's/diskcache.__title__/"diskcache"/' -e 's/diskcache.__version__/"${PYTHON_DISKCACHE_VERSION}"/' $(@D)/setup.py
++	sed -i -e '/import diskcache/d' -e 's/diskcache.__title__/"diskcache"/' -e 's/diskcache.__version__/"$(PYTHON_DISKCACHE_VERSION)"/' $(@D)/setup.py
 +endef
 +
 +PYTHON_DISKCACHE_POST_PATCH_HOOKS += PYTHON_DISKCACHE_REMOVE_SELF_IMPORT
