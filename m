@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62D76C282C1
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:24:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54FF9C282D0
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 17:24:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4A96984B1A;
-	Fri, 28 Feb 2025 17:24:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 055F370846;
+	Fri, 28 Feb 2025 17:24:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZE9hIEYKKR5P; Fri, 28 Feb 2025 17:24:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RNu0BrL_Mk58; Fri, 28 Feb 2025 17:24:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5299485FD8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1484D70888
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5299485FD8;
-	Fri, 28 Feb 2025 17:24:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1484D70888;
+	Fri, 28 Feb 2025 17:24:10 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 048B168
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:48:45 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 046D368
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:48:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BDA404A612
+ by smtp4.osuosl.org (Postfix) with ESMTP id E861E487DC
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:32:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9SlMWgERAlCx for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 16:32:13 +0000 (UTC)
+ id Tatf41P9DN_W for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 16:32:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA018487DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D0F448CE3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AA018487DC
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D0F448CE3
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 16:30:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A49A881620; Fri, 28 Feb 2025 16:30:48 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 951D282849; Fri, 28 Feb 2025 16:30:49 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 25 Feb 2025 21:46:48 +0100
+Date: Wed, 26 Feb 2025 18:51:13 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 80b42e226a5f1f833e8bec5b7af6a7a5f7ac58d0
-X-Git-Newrev: 9eeb8108c6974293a43a448d2cf1f219902d8fa0
+X-Git-Oldrev: 9efee8a646edaa34aac1a5a12c2fe4ba78c98ff3
+X-Git-Newrev: e1562ede3705fa5a6cbeb11cd1038d8925bf2921
 X-Patchwork-Hint: ignore
-Message-Id: <20250228163048.A49A881620@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/beaglebone: bump Linux
- to 6.6.58-ti-arm32-r10 and U-Boot to 2025.01
+Message-Id: <20250228163049.951D282849@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ configs/zynqmp_zcu106_defconfig: bump to Linux 6.6.70
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,62 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9eeb8108c6974293a43a448d2cf1f219902d8fa0
+commit: https://git.buildroot.net/buildroot/commit/?id=e1562ede3705fa5a6cbeb11cd1038d8925bf2921
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The patch bumps the Linux kernel to version 6.6.58-ti-arm32-r10 and
-U-Boot to version 2025.01.
+This patch bumps the zynqmp_zcu106_defconfig to Linux kernel 6.6.70.
 
-Tested on beaglebone black.
-
-Link: https://github.com/beagleboard/linux/releases/tag/6.6.58-ti-arm32-r10
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/beagleboard/beaglebone/patches/linux/linux.hash | 2 +-
- board/beagleboard/beaglebone/patches/uboot/uboot.hash | 2 +-
- configs/beaglebone_defconfig                          | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ configs/zynqmp_zcu106_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/beagleboard/beaglebone/patches/linux/linux.hash b/board/beagleboard/beaglebone/patches/linux/linux.hash
-index 4a7384d036..b7d4412941 100644
---- a/board/beagleboard/beaglebone/patches/linux/linux.hash
-+++ b/board/beagleboard/beaglebone/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  f1ae7325c6c146e0f852866a3bfd3f90ae1b5f46e414bc99a38384ed677e3721  linux-6.6.32-ti-arm32-r7.tar.gz
-+sha256  c6ee813cc48fe7e308c149798100d621514e832da507e34d1dfd8247ef9ae39f  linux-6.6.58-ti-arm32-r10.tar.gz
-diff --git a/board/beagleboard/beaglebone/patches/uboot/uboot.hash b/board/beagleboard/beaglebone/patches/uboot/uboot.hash
-index 904fa56c02..50674352d7 100644
---- a/board/beagleboard/beaglebone/patches/uboot/uboot.hash
-+++ b/board/beagleboard/beaglebone/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
-+sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
-diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index cad32e90b1..ddeb221e86 100644
---- a/configs/beaglebone_defconfig
-+++ b/configs/beaglebone_defconfig
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beagleboard/beaglebone/genimage.cfg"
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index 2669afe1f6..51287fdffb 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.6.32-ti-arm32-r7)/linux-6.6.32-ti-arm32-r7.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.6.58-ti-arm32-r10)/linux-6.6.58-ti-arm32-r10.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.60)/xlnx_rebase_v6.6_LTS_merge_6.6.60.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.70)/xlnx_rebase_v6.6_LTS_merge_6.6.70.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/omap/am335x-evm ti/omap/am335x-bone ti/omap/am335x-boneblack ti/omap/am335x-bonegreen ti/omap/am335x-evmsk ti/omap/am335x-boneblue ti/omap/am335x-boneblack-wireless ti/omap/am335x-bonegreen-wireless"
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
