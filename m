@@ -1,70 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E944C021A4
-	for <buildroot@archiver.kernel.org>; Wed, 26 Feb 2025 05:26:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5529C021B8
+	for <buildroot@archiver.kernel.org>; Wed, 26 Feb 2025 06:17:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2F3880CB5;
-	Wed, 26 Feb 2025 05:26:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R4KRW2hHM5fp; Wed, 26 Feb 2025 05:26:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A47ED80CAA
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A47ED80CAA;
-	Wed, 26 Feb 2025 05:26:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C9881ED4
- for <buildroot@buildroot.org>; Wed, 26 Feb 2025 05:26:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2976F4023C
- for <buildroot@buildroot.org>; Wed, 26 Feb 2025 05:26:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 727B341232;
+	Wed, 26 Feb 2025 06:17:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GyTlhyUfRjnx for <buildroot@buildroot.org>;
- Wed, 26 Feb 2025 05:26:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
- helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 64ABD4022F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64ABD4022F
-Received: from mail.tkos.co.il (hours.tkos.co.il [84.110.109.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 64ABD4022F
- for <buildroot@buildroot.org>; Wed, 26 Feb 2025 05:26:38 +0000 (UTC)
-Received: from localhost (unknown [10.0.8.3])
- by mail.tkos.co.il (Postfix) with ESMTP id 9A40B440B08;
- Wed, 26 Feb 2025 07:20:56 +0200 (IST)
-To: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250225174304.1810-1-kuzminov.sergey81@gmail.com> (Sergey
- Kuzminov's message of "Tue, 25 Feb 2025 20:43:04 +0300")
-References: <20250225174304.1810-1-kuzminov.sergey81@gmail.com>
-User-Agent: mu4e 1.12.8; emacs 29.4
-Date: Wed, 26 Feb 2025 07:26:32 +0200
-Message-ID: <87zfi9e0on.fsf@tarshish>
+ id gt73f51rsFvO; Wed, 26 Feb 2025 06:17:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DA8341233
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DA8341233;
+	Wed, 26 Feb 2025 06:17:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DE8711ED4
+ for <buildroot@buildroot.org>; Wed, 26 Feb 2025 06:17:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id AAA14411AB
+ for <buildroot@buildroot.org>; Wed, 26 Feb 2025 06:17:28 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jw-2n9liTRM8 for <buildroot@buildroot.org>;
+ Wed, 26 Feb 2025 06:17:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::22f; helo=mail-lj1-x22f.google.com;
+ envelope-from=kuzminov.sergey81@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AB91A4119D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB91A4119D
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com
+ [IPv6:2a00:1450:4864:20::22f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AB91A4119D
+ for <buildroot@buildroot.org>; Wed, 26 Feb 2025 06:17:27 +0000 (UTC)
+Received: by mail-lj1-x22f.google.com with SMTP id
+ 38308e7fff4ca-30a29f4bd43so57690231fa.0
+ for <buildroot@buildroot.org>; Tue, 25 Feb 2025 22:17:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1740550645; x=1741155445;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=/2sF1eTPZj68UzVnKcxbp6iu2uxxnAyDRTkj3OV8lmo=;
+ b=kt9fMxzvT4fyW5o59MmbipVYinRjs/qNob8h5+PEQh7IEkaIa5yJYriwgpOSYPf7ih
+ P8ZcJBokDCQCqQXvbGGud34XxdiXveyFQ7FE6anWL5GHvZu2WQTXPae9PSTca9s5Yxnd
+ HyvqUxYtSHiUyKwEGOZB/x1ebKe6qhLvGaqpQN5wpUMU1/hurgfhtqiJgp9V0gacVZP2
+ xeyCfwWI/IU6GC0vwSK9nv6LqI55aJ/3bHOn9aIEooPTqyg3l7W8Eb2vCISLPZBa/srp
+ A77rC28l2qLlI74/sbWAAFyl+QGFsVN+irJo9kogtF0LehQNfhMqClPNKLKgE+zn+ak9
+ MUSg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCW1GE59uO/kpd3iGk/C5uuSHnnRKNyiDnvpAZMAOyVg09tY/qlM3GRQvRUXXMcafQJzCoVRVBfEL/M=@buildroot.org
+X-Gm-Message-State: AOJu0YzBWfM+bE4AES+babE4mbrF6qMojJIvb4SlalGF1eyoR2cJhnwt
+ Xped0QlHTIRi88+V5t0W039vlb186b6bowVPbWZb/6/JJIOqFNKu0ItVug==
+X-Gm-Gg: ASbGncsRKNPBSTDsaOgv1TxW6YhiU2mKOoTshGoMGFVThTi1YqEEjLKZXmpyoRyItpg
+ tkJzPBYPCYud10bKe4yaGmpBpW/R8/MsmEJZf0LmLdCatvEe4Fw7X5DjItJnk0BF+AqSrQI4jY4
+ Lny5bkovJm2oL37BwIp5sIxv8k220qtJ5AKbORbnunYenTBg44oHvL4yuJWjm4/RvjtQZ62rXk4
+ MDoFMcZkchIFQsgmnOTSz+h7SQQZxrKxDm0bfNujL7Sp84s+xB4p5M4TNExVUpdXlgFDNje1OE4
+ DEZ31qJTzq9pxFIOBFJgT42h6kG0UBxzeHk07NbQqiamxyivBuRVxyfuQA==
+X-Google-Smtp-Source: AGHT+IEM+VfEUOkB41LXBJbYa9kuJR/MoMw/RhWqMECpotI6uTBnl5yGOCee6UIH5bB45Qsmv/cdwA==
+X-Received: by 2002:a2e:9617:0:b0:308:f479:5696 with SMTP id
+ 38308e7fff4ca-30b7915fa35mr18385271fa.15.1740550644852; 
+ Tue, 25 Feb 2025 22:17:24 -0800 (PST)
+Received: from [192.168.188.32] ([62.141.72.206])
+ by smtp.gmail.com with ESMTPSA id
+ 38308e7fff4ca-30a81ae58b6sm4764631fa.88.2025.02.25.22.17.23
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 25 Feb 2025 22:17:24 -0800 (PST)
+Message-ID: <13aaf7b3-200e-4ad0-b008-c9cf750cd8c5@gmail.com>
+Date: Wed, 26 Feb 2025 09:17:11 +0300
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1740547256;
- bh=349yO2N2txuA3tw2gn6gFKOXGgxDppKxi9NgS8gDV/Q=;
- h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
- b=FA+T437Htw6UUYIaQMkIcoKtZaMfS2o6+4BSACRFsNWxSFMsIIarIIqE0RWZWH1fw
- xQgwc7Lysf6I8AD0SUIbHXkGRtXEPRoXvK98UBUyp/LogwOR7VWUEOABC7xSlSpoCo
- NXH/NkqH596BKBVIJ8jAUXIc0I+huqLGNRBrKBmQFAo4ER33Cr4TDr/Z76+Qx2DJKf
- TluHgQtihSNpaSnq8dc7XGRh6iADlzXhcPLemmxHlB45pWTMTSd7UpTVHmKxXli68Q
- J9Fysh6QXr0bZEeewc/H+OQ1SKVmZPfIhGmwYPnT8KuBNs7scLGorZ8UqXOnisaDl3
- FPWVvXWDfZbUQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=tkos.co.il
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+User-Agent: Mozilla Thunderbird
+To: Meri Jaan <merijaan328462@gmail.com>, buildroot@buildroot.org
+References: <CAGmsXdzOtEvjSvCe63_B4FScwUO5GK-V+N2hQ1VB0je4-Z+T9g@mail.gmail.com>
+Content-Language: ru
+From: Kuzminov Sergey <kuzminov.sergey81@gmail.com>
+In-Reply-To: <CAGmsXdzOtEvjSvCe63_B4FScwUO5GK-V+N2hQ1VB0je4-Z+T9g@mail.gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1740550645; x=1741155445; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=/2sF1eTPZj68UzVnKcxbp6iu2uxxnAyDRTkj3OV8lmo=;
+ b=Tkte4i7ACfdlqROcBQqaYOlc4P1PI/6OHhkK8IMPVqRsd6g7UIvsg8nd9CU77yoDe4
+ SmEIWBP+U2Gq5fcOjHY+8CJQWbeX0apEeZc1aJq92Fa5x42RF7l6/U2u/Thl+hToWXNb
+ mb+3DoRY7+BdZSLLqYR83cWR1gEOMH7RfU3KQxrIlPxNTN6CpPNACNW0w6LjCu03zFks
+ vC+E8tksqB4IFJunT5tK44LcOFiUugBxvKBQkFpf2JgS+o5lLTzBKPV5pQxi9Xo7LnXT
+ +BPxuCnKQmU+XESRwY/qWPWlYFF7UnfDLZPiZaRnbWsEXSkP6Oddub5jk2vcu92Fo/gi
+ 1klA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
- header.s=default header.b=FA+T437H
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Tkte4i7A
 Subject: Re: [Buildroot] [PATCH] board/friendlyarm/nanopi-r3s:
  rk3566-nanopi-r3s.dts: enable hw random
 X-BeenThere: buildroot@buildroot.org
@@ -78,74 +112,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Sergey,
+Hi, Baruch
+For some reason, the email from you turned out to be empty, so I 
+inserted the text from patchwork in the response.
 
-On Tue, Feb 25 2025, Sergey Kuzminov wrote:
-> This patch enables the hardware random number generator in the device tree.
-> Without it, the entropy level in the Linux kernel increases very slowly.
-> To check the entropy level: cat /proc/sys/kernel/random/entropy_avail
->
-> Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-> ---
->  ...001-rk3566-nanopi-r3s.dts-enable-rng.patch | 30 +++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 board/friendlyarm/nanopi-r3s/patches/linux/0001-rk3566-nanopi-r3s.dts-enable-rng.patch
->
-> diff --git
-> a/board/friendlyarm/nanopi-r3s/patches/linux/0001-rk3566-nanopi-r3s.dts-enable-rng.patch
-> b/board/friendlyarm/nanopi-r3s/patches/linux/0001-rk3566-nanopi-r3s.dts-enable-rng.patch
-> new file mode 100644
-> index 0000000000..b376004377
-> --- /dev/null
-> +++ b/board/friendlyarm/nanopi-r3s/patches/linux/0001-rk3566-nanopi-r3s.dts-enable-rng.patch
-> @@ -0,0 +1,30 @@
-> +From 284e6683b4a0ee6b1fd22ccd34785e1f2d58c115 Mon Sep 17 00:00:00 2001
-> +From: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-> +Date: Tue, 25 Feb 2025 19:49:00 +0300
-> +Subject: [PATCH] rk3566-nanopi-r3s.dts: enable rng
-> +
-> +This patch enables the hardware random number generator in the device tree.
-> +Without it, the entropy level in the Linux kernel increases very slowly.
-> +To check the entropy level: cat /proc/sys/kernel/random/entropy_avail
-> +
-> +Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
-> +Upstream: Not applicable, Buildroot specific.
 
-What makes this patch Buildroot specific?
+ >Hi Sergey,
+ >> +Signed-off-by: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+ >> +Upstream: Not applicable, Buildroot specific.
 
-baruch
+ >What makes this patch Buildroot specific?
 
-> +---
-> + arch/arm64/boot/dts/rockchip/rk3566-nanopi-r3s.dts | 4 ++++
-> + 1 file changed, 4 insertions(+)
-> +
-> +diff --git a/arch/arm64/boot/dts/rockchip/rk3566-nanopi-r3s.dts b/arch/arm64/boot/dts/rockchip/rk3566-nanopi-r3s.dts
-> +index fb1f65c86883..a89bdbf71e12 100644
-> +--- a/arch/arm64/boot/dts/rockchip/rk3566-nanopi-r3s.dts
-> ++++ b/arch/arm64/boot/dts/rockchip/rk3566-nanopi-r3s.dts
-> +@@ -552,3 +552,7 @@ &vop {
-> + &vop_mmu {
-> + 	status = "okay";
-> + };
-> ++
-> ++&rng {
-> ++	status = "okay";
-> ++};
-> +-- 
-> +2.45.3
-> +
+ >baruch
 
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Without this comment, the verification script (utils/docker-run make 
+check-package) reports an error. I took this comment from some similar 
+buildroot patch.
+
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
