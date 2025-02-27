@@ -1,74 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35081C19F2E
-	for <buildroot@archiver.kernel.org>; Thu, 27 Feb 2025 15:34:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3F12C19F2E
+	for <buildroot@archiver.kernel.org>; Thu, 27 Feb 2025 15:36:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D2D7280D50;
-	Thu, 27 Feb 2025 15:34:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wwCpnBBo84HR; Thu, 27 Feb 2025 15:34:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C28568214A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C28568214A;
-	Thu, 27 Feb 2025 15:34:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A5E76711
- for <buildroot@buildroot.org>; Thu, 27 Feb 2025 15:34:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 88E0F4142F
- for <buildroot@buildroot.org>; Thu, 27 Feb 2025 15:34:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 71B9540BE5;
+	Thu, 27 Feb 2025 15:36:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FMhhBPnQXTf0 for <buildroot@buildroot.org>;
- Thu, 27 Feb 2025 15:34:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=kory.maincent@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 46E8541437
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46E8541437
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 46E8541437
- for <buildroot@buildroot.org>; Thu, 27 Feb 2025 15:34:04 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 08F594440D;
- Thu, 27 Feb 2025 15:34:00 +0000 (UTC)
+ id pv2h1ePXBmnH; Thu, 27 Feb 2025 15:36:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E3BA40C54
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E3BA40C54;
+	Thu, 27 Feb 2025 15:36:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A121B68
+ for <buildroot@buildroot.org>; Thu, 27 Feb 2025 15:36:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8B5B940C54
+ for <buildroot@buildroot.org>; Thu, 27 Feb 2025 15:36:41 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Dvcobd9z4kdG for <buildroot@buildroot.org>;
+ Thu, 27 Feb 2025 15:36:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::635; helo=mail-ej1-x635.google.com;
+ envelope-from=raphael.pavlidis@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 448C140BE5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 448C140BE5
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 448C140BE5
+ for <buildroot@buildroot.org>; Thu, 27 Feb 2025 15:36:40 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id
+ a640c23a62f3a-abb7f539c35so198717566b.1
+ for <buildroot@buildroot.org>; Thu, 27 Feb 2025 07:36:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1740670598; x=1741275398;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=YPmeh7x2K9K21nI8wrOAcuoZI+gt38aCN5nTJWgw8lU=;
+ b=XFgjUbnkndsVtXHJmghJof/G0FkyjtTWbnPzVOX0Hw14M2Kd/BXTAqADnR9iD76nR8
+ XIEUHf6otillrUI9mnnDtynZrCFl+4nC+j+hoayKoP/xDnmtCyQle5ae5W+86N7Xx2Lt
+ NJAzidi+9doF2gMy77GrjabmqMs+XEEL1yik2SiabffxA5uU5JL4d4ao65lF5SAfEGVK
+ PxAqDGHxvvHSvaRgyls+Rqb+JsO3cByXqfc7YDCTuPyHJzamxVp1GZe2rH2IFFh73EmR
+ Wa90ByAWNAN+uzMwcukmCLZnwIzm8CEJ0vA3Vgqp9R7TtnxzfNc7tU8kMB6WqfbWlnU8
+ uxOw==
+X-Gm-Message-State: AOJu0Yz7yUPaYGdZbDzhHAP9cc3hVItqPqf6Vbtr/tX5A53J4Ue6skAW
+ NdgPF7ztQA/MqJR2j4H8BLPj5Q4qwV724cc1RG7Fs6sk30vfPulj/QRvWg==
+X-Gm-Gg: ASbGnct8Z5ubHXcTKLFzv7l3VIxL+TrSLu+YTjk+n1GuCqKKCKmnDkte5eTArZMb9y8
+ Igk9yW2e1MvaovC58A8CK7iSolJcrmBuOlIFAxhbTF8HKnFk/+DfV35/fvh3mGDCugPcmGd1h+r
+ cOEaauPWXvtEPUSpYWtJ0dDsUB+hTuz8sub2tZTDAkrTVEB+VTj008F3QF+y//A9DUhPK+ed9ni
+ YoSret9t8L3UseX6h8aK4mBSXeKjXF6Vus8ekhvQvF01XyDF0gGUIN7GofcYqlWbdyjUBaV/DoJ
+ TIeQhgiZmD89VukIR48ajzpQMbvQkI6u
+X-Google-Smtp-Source: AGHT+IEMLs91wg/FwfeZEcNJrtsz1PCOWQ/ZgVzTAFBdbIkUVDQ8NEerw/q+8cVv6mnHJjbyCm/4tQ==
+X-Received: by 2002:a17:906:31c6:b0:aa6:9461:a186 with SMTP id
+ a640c23a62f3a-abed1016d48mr1274021666b.46.1740670597909; 
+ Thu, 27 Feb 2025 07:36:37 -0800 (PST)
+Received: from localhost.localdomain ([2a02:8070:2483:7e00::478])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-abf0c74fb00sm139199866b.130.2025.02.27.07.36.37
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 27 Feb 2025 07:36:37 -0800 (PST)
+From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 27 Feb 2025 15:33:57 +0000
-Message-Id: <20250227153358.526791-1-kory.maincent@bootlin.com>
-X-Mailer: git-send-email 2.34.1
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Date: Thu, 27 Feb 2025 16:36:20 +0000
+Message-ID: <20250227163620.462308-1-raphael.pavlidis@gmail.com>
+X-Mailer: git-send-email 2.48.1
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekjeekfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepmfhorhihucforghinhgtvghnthcuoehkohhrhidrmhgrihhntggvnhhtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegudegvdeklefhheefueeiieegteegteeuudegteduvdevffeikefgjeekgfdukeenucfkphepvdgrtddumeegfhelmeeftdejtdemvdelugdvmeemvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemgehfleemfedtjedtmedvleguvdemmedvpdhhvghlohepsghuihhlugegrdgsohhothhlihhnrdgtohhmpdhmrghilhhfrhhomhepkhhorhihrdhmrghinhgtvghnthessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdprhgtphhtthhopehkohhrhidrmhgrihhntggvnhhtsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhm
-X-GND-Sasl: kory.maincent@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1740670441;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=vbqTUzRbMBi4BEdu7hdyHXgRcow1+gnRzNvni07hBvg=;
- b=jDQB5uwXimKzXCQbbT9xnv0DjbnKOXqWo6BpgteR5hpUreY9gePv8oAj64xZYye4FN0W8Y
- yZJK/33QVRMLwyqPsi2CLbaWn+WZ6pEZLHgY+vhMhVobzHWvLQw3FuKwiEJ+R8h0RG/J0B
- qu7//hbpehUeAwzeffY3jZNkqTaCtAT7EFfqOgivWAdvi+OMrdvMKlJTuAtiAGzczKPwlw
- 94weoCHcYgLtJ32hn9k+9nDKp+FxF799o3m4owaAZEBJ2V7o8+hpzRrSzMiAbcNyV+PENk
- G93F6IfTpTUfGPndDhCrwdPoRYiEJVneTtDJXEAl46QOCrs0hjdKCmpPsMzgIQ==
+ d=gmail.com; s=20230601; t=1740670598; x=1741275398; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=YPmeh7x2K9K21nI8wrOAcuoZI+gt38aCN5nTJWgw8lU=;
+ b=c4ZqgLfrzDHsYeTmsvgbuLgKcKowyfih8KURDG4mUV84DIbgXpvIU8oFjyBDgV4fjf
+ TfkEGumJiRmehVLrsLVhd7+kI5CPzDVUOM07IlFlCq/++kZD1ByfHMj6EM01Zw271YU0
+ 5E2ehVipwesB+PF6QInhPh720g29HjP7WGUuOYM7UzNlpRI3ZOdwuY1MmF4qEAYcZKUn
+ yryrFlPI0V8wtrpqtCpKBqay7eVc7gZLE8rbHWQI9uTjJsVaS7LkfuhoZnO2drfXb5u/
+ s4F3LfqySorZJNw87kb10DbF6plJvK7SLhUYWMzXfR6csKUZbJg+CbfmJgb7a3x3qMUF
+ 58cQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jDQB5uwX
-Subject: [Buildroot] [PATCH] board/octavo: Add FORCE_CHECK_HASHES config and
- custom hashes
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=c4ZqgLfr
+Subject: [Buildroot] [PATCH 1/1] package/shadow: bump to version 4.17.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,110 +105,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kory Maincent via buildroot <buildroot@buildroot.org>
-Reply-To: Kory Maincent <kory.maincent@bootlin.com>
-Cc: Kory Maincent <kory.maincent@bootlin.com>, thomas.petazzoni@bootlin.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Enable FORCE_CHECK_HASHES to ensure that all hashes are valid even
-from custom packages.
-Add custom version package hashes of Linux, U-boot and TF-A.
+Changelog: [1] [2] [3] [4].
 
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+[1]: https://github.com/shadow-maint/shadow/releases/tag/4.17.3
+[2]: https://github.com/shadow-maint/shadow/releases/tag/4.17.2
+[3]: https://github.com/shadow-maint/shadow/releases/tag/4.17.1
+[4]: https://github.com/shadow-maint/shadow/releases/tag/4.17.0
+
+Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash      | 2 ++
- board/octavo/osd32mp1-brk/patches/linux/linux.hash              | 2 ++
- board/octavo/osd32mp1-brk/patches/uboot/uboot.hash              | 2 ++
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash      | 2 ++
- board/octavo/osd32mp1-red/patches/linux/linux.hash              | 2 ++
- board/octavo/osd32mp1-red/patches/uboot/uboot.hash              | 2 ++
- configs/octavo_osd32mp1_brk_defconfig                           | 1 +
- configs/octavo_osd32mp1_red_defconfig                           | 1 +
- 8 files changed, 14 insertions(+)
- create mode 100644 board/octavo/osd32mp1-brk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
- create mode 100644 board/octavo/osd32mp1-brk/patches/linux/linux.hash
- create mode 100644 board/octavo/osd32mp1-brk/patches/uboot/uboot.hash
- create mode 100644 board/octavo/osd32mp1-red/patches/arm-trusted-firmware/arm-trusted-firmware.hash
- create mode 100644 board/octavo/osd32mp1-red/patches/linux/linux.hash
- create mode 100644 board/octavo/osd32mp1-red/patches/uboot/uboot.hash
+ package/shadow/shadow.hash | 4 ++--
+ package/shadow/shadow.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/octavo/osd32mp1-brk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/octavo/osd32mp1-brk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-new file mode 100644
-index 0000000000..2ba1cc0972
---- /dev/null
-+++ b/board/octavo/osd32mp1-brk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  83d744c155097f27682a06fdba5f7e976fde6edf61474d40a5a44e71862a3822  arm-trusted-firmware-v2.4-stm32mp-r1-git4.tar.gz
-diff --git a/board/octavo/osd32mp1-brk/patches/linux/linux.hash b/board/octavo/osd32mp1-brk/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..ec9218e388
---- /dev/null
-+++ b/board/octavo/osd32mp1-brk/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  c2e22c6d13e5970839231ca29cfbe3bb66ef4d4d1cd3c2b5afb61f591f89d71a  linux-v5.10-stm32mp-r2.1-git4.tar.gz
-diff --git a/board/octavo/osd32mp1-brk/patches/uboot/uboot.hash b/board/octavo/osd32mp1-brk/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..6b51c2685b
---- /dev/null
-+++ b/board/octavo/osd32mp1-brk/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  49a2470ecd29c29cc712861372335c9e2020e5c56392c6417faf66dc7a782261  uboot-v2020.10-stm32mp-r2.1-git4.tar.gz
-diff --git a/board/octavo/osd32mp1-red/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/octavo/osd32mp1-red/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-new file mode 100644
-index 0000000000..2ba1cc0972
---- /dev/null
-+++ b/board/octavo/osd32mp1-red/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  83d744c155097f27682a06fdba5f7e976fde6edf61474d40a5a44e71862a3822  arm-trusted-firmware-v2.4-stm32mp-r1-git4.tar.gz
-diff --git a/board/octavo/osd32mp1-red/patches/linux/linux.hash b/board/octavo/osd32mp1-red/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..ec9218e388
---- /dev/null
-+++ b/board/octavo/osd32mp1-red/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  c2e22c6d13e5970839231ca29cfbe3bb66ef4d4d1cd3c2b5afb61f591f89d71a  linux-v5.10-stm32mp-r2.1-git4.tar.gz
-diff --git a/board/octavo/osd32mp1-red/patches/uboot/uboot.hash b/board/octavo/osd32mp1-red/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..6b51c2685b
---- /dev/null
-+++ b/board/octavo/osd32mp1-red/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  49a2470ecd29c29cc712861372335c9e2020e5c56392c6417faf66dc7a782261  uboot-v2020.10-stm32mp-r2.1-git4.tar.gz
-diff --git a/configs/octavo_osd32mp1_brk_defconfig b/configs/octavo_osd32mp1_brk_defconfig
-index e8857f3649..2a6d794722 100644
---- a/configs/octavo_osd32mp1_brk_defconfig
-+++ b/configs/octavo_osd32mp1_brk_defconfig
-@@ -4,6 +4,7 @@ BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
- BR2_GLOBAL_PATCH_DIR="board/octavo/osd32mp1-brk/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_OVERLAY="board/octavo/osd32mp1-brk/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/octavo/osd32mp1-brk/genimage.cfg"
-diff --git a/configs/octavo_osd32mp1_red_defconfig b/configs/octavo_osd32mp1_red_defconfig
-index d179e0a27e..3646e2d04f 100644
---- a/configs/octavo_osd32mp1_red_defconfig
-+++ b/configs/octavo_osd32mp1_red_defconfig
-@@ -4,6 +4,7 @@ BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
- BR2_GLOBAL_PATCH_DIR="board/octavo/osd32mp1-red/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_OVERLAY="board/octavo/osd32mp1-red/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/octavo/osd32mp1-red/genimage.cfg"
+diff --git a/package/shadow/shadow.hash b/package/shadow/shadow.hash
+index 7155baff07..6e7fdb4603 100644
+--- a/package/shadow/shadow.hash
++++ b/package/shadow/shadow.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://github.com/shadow-maint/shadow/releases/download/4.14.5/shadow-4.14.5.tar.xz.asc
++# Verified from https://github.com/shadow-maint/shadow/releases/download/4.17.3/shadow-4.17.3.tar.xz.asc
+ # with key 66D0387DB85D320F8408166DB175CFA98F192AF2
+-sha256  b78e3921a95d53282a38e90628880624736bf6235e36eea50c50835f59a3530b  shadow-4.16.0.tar.xz
++sha256  09e896c7b01c97ba4be2d6be332c55a3e478b4893cd3c3466d8224e622bd4943  shadow-4.17.3.tar.xz
+ sha256  3d25ab8f43fdc14624296a56ff8dc3e72e499ad35f32ae0c803f4959cfe17c0a  COPYING
+diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
+index f0a2b57b4d..cea984012d 100644
+--- a/package/shadow/shadow.mk
++++ b/package/shadow/shadow.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHADOW_VERSION = 4.16.0
++SHADOW_VERSION = 4.17.3
+ SHADOW_SITE = https://github.com/shadow-maint/shadow/releases/download/$(SHADOW_VERSION)
+ SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.xz
+ SHADOW_LICENSE = BSD-3-Clause
 -- 
-2.34.1
+2.48.1
 
 _______________________________________________
 buildroot mailing list
