@@ -1,99 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3F12C19F2E
-	for <buildroot@archiver.kernel.org>; Thu, 27 Feb 2025 15:36:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FC23C19F2E
+	for <buildroot@archiver.kernel.org>; Thu, 27 Feb 2025 16:01:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 71B9540BE5;
-	Thu, 27 Feb 2025 15:36:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BCB7F60A43;
+	Thu, 27 Feb 2025 16:01:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pv2h1ePXBmnH; Thu, 27 Feb 2025 15:36:43 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RlsjKSh4a6Tl; Thu, 27 Feb 2025 16:01:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E3BA40C54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C778C6129C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E3BA40C54;
-	Thu, 27 Feb 2025 15:36:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A121B68
- for <buildroot@buildroot.org>; Thu, 27 Feb 2025 15:36:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C778C6129C;
+	Thu, 27 Feb 2025 16:01:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C85B0711
+ for <buildroot@buildroot.org>; Thu, 27 Feb 2025 16:01:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8B5B940C54
- for <buildroot@buildroot.org>; Thu, 27 Feb 2025 15:36:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6F99640020
+ for <buildroot@buildroot.org>; Thu, 27 Feb 2025 16:01:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dvcobd9z4kdG for <buildroot@buildroot.org>;
- Thu, 27 Feb 2025 15:36:40 +0000 (UTC)
+ id A1-P5SBj2GLK for <buildroot@buildroot.org>;
+ Thu, 27 Feb 2025 16:01:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::635; helo=mail-ej1-x635.google.com;
+ client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
  envelope-from=raphael.pavlidis@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 448C140BE5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 448C140BE5
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
- [IPv6:2a00:1450:4864:20::635])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 448C140BE5
- for <buildroot@buildroot.org>; Thu, 27 Feb 2025 15:36:40 +0000 (UTC)
-Received: by mail-ej1-x635.google.com with SMTP id
- a640c23a62f3a-abb7f539c35so198717566b.1
- for <buildroot@buildroot.org>; Thu, 27 Feb 2025 07:36:40 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 598214170E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 598214170E
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 598214170E
+ for <buildroot@buildroot.org>; Thu, 27 Feb 2025 16:01:26 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-ab78e6edb99so151406666b.2
+ for <buildroot@buildroot.org>; Thu, 27 Feb 2025 08:01:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1740670598; x=1741275398;
+ d=1e100.net; s=20230601; t=1740672084; x=1741276884;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=YPmeh7x2K9K21nI8wrOAcuoZI+gt38aCN5nTJWgw8lU=;
- b=XFgjUbnkndsVtXHJmghJof/G0FkyjtTWbnPzVOX0Hw14M2Kd/BXTAqADnR9iD76nR8
- XIEUHf6otillrUI9mnnDtynZrCFl+4nC+j+hoayKoP/xDnmtCyQle5ae5W+86N7Xx2Lt
- NJAzidi+9doF2gMy77GrjabmqMs+XEEL1yik2SiabffxA5uU5JL4d4ao65lF5SAfEGVK
- PxAqDGHxvvHSvaRgyls+Rqb+JsO3cByXqfc7YDCTuPyHJzamxVp1GZe2rH2IFFh73EmR
- Wa90ByAWNAN+uzMwcukmCLZnwIzm8CEJ0vA3Vgqp9R7TtnxzfNc7tU8kMB6WqfbWlnU8
- uxOw==
-X-Gm-Message-State: AOJu0Yz7yUPaYGdZbDzhHAP9cc3hVItqPqf6Vbtr/tX5A53J4Ue6skAW
- NdgPF7ztQA/MqJR2j4H8BLPj5Q4qwV724cc1RG7Fs6sk30vfPulj/QRvWg==
-X-Gm-Gg: ASbGnct8Z5ubHXcTKLFzv7l3VIxL+TrSLu+YTjk+n1GuCqKKCKmnDkte5eTArZMb9y8
- Igk9yW2e1MvaovC58A8CK7iSolJcrmBuOlIFAxhbTF8HKnFk/+DfV35/fvh3mGDCugPcmGd1h+r
- cOEaauPWXvtEPUSpYWtJ0dDsUB+hTuz8sub2tZTDAkrTVEB+VTj008F3QF+y//A9DUhPK+ed9ni
- YoSret9t8L3UseX6h8aK4mBSXeKjXF6Vus8ekhvQvF01XyDF0gGUIN7GofcYqlWbdyjUBaV/DoJ
- TIeQhgiZmD89VukIR48ajzpQMbvQkI6u
-X-Google-Smtp-Source: AGHT+IEMLs91wg/FwfeZEcNJrtsz1PCOWQ/ZgVzTAFBdbIkUVDQ8NEerw/q+8cVv6mnHJjbyCm/4tQ==
-X-Received: by 2002:a17:906:31c6:b0:aa6:9461:a186 with SMTP id
- a640c23a62f3a-abed1016d48mr1274021666b.46.1740670597909; 
- Thu, 27 Feb 2025 07:36:37 -0800 (PST)
+ bh=Y4y9Sq8/hecTQiZctGnCJEgK3xcdQwyq/d48qEG7uDQ=;
+ b=u/6AutzxbuvqCjmhcNe1ohr99vak5fXJWAKwZuF4CtWcTRz5vduAqeJgxzZW7101SU
+ Tk9fUf2wWwD0hVtskHnki5aGkU9J1SqPcsXXQttLnRQFRMf9VXGn9/SwKpW+Lc/jyjO5
+ y6SIMlCUS5meIo8daTeHKbyuLvPr31bQo0p/ldZV9ddvKutNmoh93+Ku1GnATUiIEZV6
+ z8Ymsw3XIH06B8KIU9yJnLSJ79q9uJ3aamsrOdMspCrGJURg6iq4KXdX1Ola2z42G2QQ
+ p0Zgvjqu12VFok8Zcxs4yoe2oEi2UP0jiCuIx3ZzYQDX2HI0PdSV2aPtiqQjUSYrp7A8
+ 5aUw==
+X-Gm-Message-State: AOJu0Yz1kLiaTYrfI6c87V2mfPNqqTEUQYPccH6p0oj1EkLoWPRnfXRy
+ xP7uRPhR7B6LnTtIp0tvQHpWr6xHgewxWFj3pI0NTGkdgV7b0gLZJCKGoA==
+X-Gm-Gg: ASbGncsY7Dw5EjQ8p7YPU84+SGXnYMPlF03jZryYnERZ3prn9FHmzqCSsX4C6Um2+MX
+ icKcspqBR7wkDOHAlCpNOY2pWUO3b5M8fcsQim1Sg4hzn/K/+QoBxOk49WDOQIJZYIpxj3Ve0zt
+ QDbSd9Rq0X8/VVODg2iTdLlfeCmXONupi/SdFJPGPEuPGKk5vbbLjvvYfFefpy3IdwHuibB3oo6
+ qSqK/WNB2jqHD+0ba5kkZvtIjh+B4f3NrHM/ghTQuN6uj85t5NPA8PPglrj5TZeYuLvpBs5o5jm
+ ch+O+N+eNN8F5Sech82qM1yqM2CY+6Tc
+X-Google-Smtp-Source: AGHT+IELe7KrFB72lMLX23594m9rORp0/BKQ660Q7OaH59mNsCwNNQqeY16vt67juUBSMfjF7TuxJg==
+X-Received: by 2002:a17:907:7759:b0:ab7:5cc9:66fc with SMTP id
+ a640c23a62f3a-abeeef701eemr1011549066b.50.1740672083769; 
+ Thu, 27 Feb 2025 08:01:23 -0800 (PST)
 Received: from localhost.localdomain ([2a02:8070:2483:7e00::478])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-abf0c74fb00sm139199866b.130.2025.02.27.07.36.37
+ a640c23a62f3a-abf0c7bf82fsm141402866b.173.2025.02.27.08.01.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 27 Feb 2025 07:36:37 -0800 (PST)
+ Thu, 27 Feb 2025 08:01:23 -0800 (PST)
 From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 To: buildroot@buildroot.org
 Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Date: Thu, 27 Feb 2025 16:36:20 +0000
-Message-ID: <20250227163620.462308-1-raphael.pavlidis@gmail.com>
+Date: Thu, 27 Feb 2025 17:01:03 +0000
+Message-ID: <20250227170103.902346-1-raphael.pavlidis@gmail.com>
 X-Mailer: git-send-email 2.48.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1740670598; x=1741275398; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1740672084; x=1741276884; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=YPmeh7x2K9K21nI8wrOAcuoZI+gt38aCN5nTJWgw8lU=;
- b=c4ZqgLfrzDHsYeTmsvgbuLgKcKowyfih8KURDG4mUV84DIbgXpvIU8oFjyBDgV4fjf
- TfkEGumJiRmehVLrsLVhd7+kI5CPzDVUOM07IlFlCq/++kZD1ByfHMj6EM01Zw271YU0
- 5E2ehVipwesB+PF6QInhPh720g29HjP7WGUuOYM7UzNlpRI3ZOdwuY1MmF4qEAYcZKUn
- yryrFlPI0V8wtrpqtCpKBqay7eVc7gZLE8rbHWQI9uTjJsVaS7LkfuhoZnO2drfXb5u/
- s4F3LfqySorZJNw87kb10DbF6plJvK7SLhUYWMzXfR6csKUZbJg+CbfmJgb7a3x3qMUF
- 58cQ==
+ bh=Y4y9Sq8/hecTQiZctGnCJEgK3xcdQwyq/d48qEG7uDQ=;
+ b=hA69BmstKjlI1Yc2CNd3DCP+67OkYXqnVDs5APDw5SjGxIKdWbpunCOLRxJoj+car/
+ abM9TGu74UgdV6XSAIv74JZ1mlxtP5a6SzOdcXsyNiwdI6jvxe6BaGvcB2TakONRxnjC
+ MHoV+fc2ecHYE3ZS/YYSyQpYeeod57NBCjlG86X0lIVnN6coHvqU6RZYh+Mvp3yay75u
+ tYvk1OFHHct+0IiUNbsQcN9CSuqmmG47VRRHZ5F1iQdViZ+ROyROIw+7gvTsWIV2UOXz
+ Dsm0R6dHtOMy1JDW2DP0freWf6s4TyWHVGj2fbNmMMOY+46XR73EsOylNErhbEuKQ2La
+ WiLQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=c4ZqgLfr
-Subject: [Buildroot] [PATCH 1/1] package/shadow: bump to version 4.17.3
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=hA69Bmst
+Subject: [Buildroot] [PATCH 1/1] package/slirp4netns: bump to version 1.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,43 +111,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: [1] [2] [3] [4].
+Changelog: [1].
 
-[1]: https://github.com/shadow-maint/shadow/releases/tag/4.17.3
-[2]: https://github.com/shadow-maint/shadow/releases/tag/4.17.2
-[3]: https://github.com/shadow-maint/shadow/releases/tag/4.17.1
-[4]: https://github.com/shadow-maint/shadow/releases/tag/4.17.0
+[1]: https://github.com/rootless-containers/slirp4netns/releases/tag/v1.3.2
 
 Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
- package/shadow/shadow.hash | 4 ++--
- package/shadow/shadow.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/slirp4netns/slirp4netns.hash | 2 +-
+ package/slirp4netns/slirp4netns.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/shadow/shadow.hash b/package/shadow/shadow.hash
-index 7155baff07..6e7fdb4603 100644
---- a/package/shadow/shadow.hash
-+++ b/package/shadow/shadow.hash
-@@ -1,4 +1,4 @@
--# Verified from https://github.com/shadow-maint/shadow/releases/download/4.14.5/shadow-4.14.5.tar.xz.asc
-+# Verified from https://github.com/shadow-maint/shadow/releases/download/4.17.3/shadow-4.17.3.tar.xz.asc
- # with key 66D0387DB85D320F8408166DB175CFA98F192AF2
--sha256  b78e3921a95d53282a38e90628880624736bf6235e36eea50c50835f59a3530b  shadow-4.16.0.tar.xz
-+sha256  09e896c7b01c97ba4be2d6be332c55a3e478b4893cd3c3466d8224e622bd4943  shadow-4.17.3.tar.xz
- sha256  3d25ab8f43fdc14624296a56ff8dc3e72e499ad35f32ae0c803f4959cfe17c0a  COPYING
-diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
-index f0a2b57b4d..cea984012d 100644
---- a/package/shadow/shadow.mk
-+++ b/package/shadow/shadow.mk
+diff --git a/package/slirp4netns/slirp4netns.hash b/package/slirp4netns/slirp4netns.hash
+index 1a6a657066..1751566185 100644
+--- a/package/slirp4netns/slirp4netns.hash
++++ b/package/slirp4netns/slirp4netns.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  a3b7c7b593b279c46d25a48b583371ab762968e98b6a46457d8d52a755852eb9  slirp4netns-1.3.1.tar.gz
++sha256  c98ef2679c7b8c96eed95409138a22904a0550494d191385637e953534d15c75  slirp4netns-1.3.2.tar.gz
+ sha256  58db3cfabf8ec806bc060e54ab5466a31de4a3ae80fe4a8aa02fb6b1c053c93f  COPYING
+diff --git a/package/slirp4netns/slirp4netns.mk b/package/slirp4netns/slirp4netns.mk
+index ce8ea34f2e..ffcd334ab6 100644
+--- a/package/slirp4netns/slirp4netns.mk
++++ b/package/slirp4netns/slirp4netns.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SHADOW_VERSION = 4.16.0
-+SHADOW_VERSION = 4.17.3
- SHADOW_SITE = https://github.com/shadow-maint/shadow/releases/download/$(SHADOW_VERSION)
- SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.xz
- SHADOW_LICENSE = BSD-3-Clause
+-SLIRP4NETNS_VERSION = 1.3.1
++SLIRP4NETNS_VERSION = 1.3.2
+ SLIRP4NETNS_SITE = $(call github,rootless-containers,slirp4netns,v$(SLIRP4NETNS_VERSION))
+ SLIRP4NETNS_LICENSE = GPL-2.0
+ SLIRP4NETNS_LICENSE_FILES = COPYING
 -- 
 2.48.1
 
