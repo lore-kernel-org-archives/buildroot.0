@@ -1,78 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F1FDC282C5
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 22:39:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5ACA3C282C5
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 22:43:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2E9FD7054E;
-	Fri, 28 Feb 2025 22:37:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE17884AFE;
+	Fri, 28 Feb 2025 22:39:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qu2XuRCl7dwX; Fri, 28 Feb 2025 22:37:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IVTDidNqwAji; Fri, 28 Feb 2025 22:39:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46D5270A12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03DD784C87
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46D5270A12;
-	Fri, 28 Feb 2025 22:32:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4D2DC1CB
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 22:31:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 03DD784C87;
+	Fri, 28 Feb 2025 22:33:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 222531CB
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 22:33:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1009E441A7
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 22:11:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 96F4E4F72C
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 22:07:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p1HYv5HYrhkv for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 22:11:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5AF6949CAC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AF6949CAC
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5AF6949CAC
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 21:03:03 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lZCE8TWyONW5 for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 22:07:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8B4CC5145A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B4CC5145A
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8B4CC5145A
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 21:50:45 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
  (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id E26142003CC;
- Fri, 28 Feb 2025 22:02:57 +0100 (CET)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 5AB4813F879;
+ Fri, 28 Feb 2025 22:50:42 +0100 (CET)
 Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
  via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 28 Feb 2025 22:02:57 +0100
+ with HTTP (HTTP/1.0 POST); Fri, 28 Feb 2025 22:50:42 +0100
 MIME-Version: 1.0
-Date: Fri, 28 Feb 2025 22:02:57 +0100
+Date: Fri, 28 Feb 2025 22:50:42 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: buildroot@buildroot.org, Ricardo Martincoski
- <ricardo.martincoski@datacom.com.br>
-In-Reply-To: <20250217153127.1363472-2-fiona.klute@gmx.de>
-References: <20250217153127.1363472-1-fiona.klute@gmx.de>
- <20250217153127.1363472-2-fiona.klute@gmx.de>
+To: Maxim Kochetkov <fido_max@inbox.ru>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250228064643.91177-1-fido_max@inbox.ru>
+References: <20250228064643.91177-1-fido_max@inbox.ru>
 User-Agent: Webmail Free/1.6.10
-Message-ID: <81df7c1059c279de0fde65d96ff8ff37@free.fr>
+Message-ID: <986fadf42374341522d4a0eef2090904@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1740776580;
- bh=rPR2jjem7KYRfVGRKfWe4qWBuGrOM8hVrYUpA8XNvVE=;
+ d=free.fr; s=smtp-20201208; t=1740779443;
+ bh=DzBbrqUaHUskO75CWUBet2aT8UgDTI/3LdDvhDHdG94=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=eH0dPZY/5aa9ddkN4OjWeaV6yDJbqC17a1BP+jIi3ZK+Vihwbjgi5G7uC8B1q1JL+
- ORCSowt6tFxaWm/dmGy2A+3EzGtQ4pKyiNa+hANeUtNxax2zyXo48Z0iWqvgZTVcDD
- 9VAIsjoqqbDdIXYRKrsw1AV363gPEIC1rL7jtxtfoE5msf9RflxtiCGFQ4r5rzSzbm
- eIUSWcQNmt0QFTssb1b+DSewnrv7TgypL+S6Xw0FrYnIUL2Ixm+GDMHYLMTYI7sh9x
- pMzOKfMPSx9UhLfi+SdvYLGwtU5OpOztrmSNuYJzSnfpTfHqn4ImtpWj231yGsnKLQ
- adWG6jXq4GaEw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=VGSLxPBCBxcCdYHCjzSbfmhEx33yJnNLBKnec+8RKDJZNGFvHUcR8C4YDwnb2NJc0
+ tqqirc/q90T/UdlR3hPxxIHmHVaYkq5BEowIr6WT/xnAKCFj0fUfLSl+ytMQGhxxl2
+ 6nKzxb7vCBca2CanZzu0biCpVYiKO62TesNaklNite5tE3GmACrNwFh8bhiZ2fgQp3
+ HsBQqLLx7uiNBmBmFssg4uCjdRdbZcQb459xjsd9NbtodhvzgrDwx/OVao4Iv5xOWc
+ I7xeibAfubZMEYjwLKO7wT+bQzNTfRFDyFrgks6h8rYIiEEwKGSUDP6SDpmP4yy5n1
+ G0JyFU2z8EziQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=eH0dPZY/
-Subject: Re: [Buildroot] [PATCH v6 1/6] package/nftables: add init script
+ header.s=smtp-20201208 header.b=VGSLxPBC
+Subject: Re: [Buildroot] [PATCH 1/1] package/osm2pgsql: bump version to 2.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,18 +87,15 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 17/02/2025 16:31, Fiona Klute via buildroot wrote:
-> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+On 28/02/2025 07:46, Maxim Kochetkov wrote:
+> Release-notes: 
+> https://github.com/osm2pgsql-dev/osm2pgsql/releases/tag/2.0.1
 > 
-> The init script handles an nftables ruleset file with support for
-> atomic reloading. By default the ruleset is expected in
-> /etc/nftables.conf, the location can be changed in
-> /etc/default/nftables. If the ruleset file does not exist, the script
-> does nothing and shows a warning about that fact.
+> Change URL to osm2pgsql-dev.
 > 
-> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+> Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 
-Series applied to next, thanks!
+Applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
