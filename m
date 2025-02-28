@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9502C28B28
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:02:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27607C28B28
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:03:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9380E60853;
-	Tue, 18 Mar 2025 15:02:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9A0A60BDF;
+	Tue, 18 Mar 2025 15:03:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8I9omOuMkBAA; Tue, 18 Mar 2025 15:02:55 +0000 (UTC)
+ id dxPj_zH_iPBW; Tue, 18 Mar 2025 15:03:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AE7560866
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB07560906
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7AE7560866;
-	Tue, 18 Mar 2025 15:02:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB07560906;
+	Tue, 18 Mar 2025 15:03:04 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A955D8C
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1EE5916E
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9AE3F408D0
+ by smtp4.osuosl.org (Postfix) with ESMTP id D2DD7408D4
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RkGKDJ3_AA1e for <buildroot@buildroot.org>;
+ id vGzcb9jeGnEp for <buildroot@buildroot.org>;
  Tue, 18 Mar 2025 15:02:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6449F40734
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FFA24073C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6449F40734
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FFA24073C
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B8AB880EE; Tue, 18 Mar 2025 15:02:41 +0000 (UTC)
+ id 6B986880AF; Tue, 18 Mar 2025 15:02:41 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 28 Feb 2025 21:10:49 +0100
+Date: Fri, 28 Feb 2025 21:10:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2625440614b6000109ff1c8fc3a64e5b92d90f77
-X-Git-Newrev: 475722ea46fdd18ea5859b44954da9267762d8a4
+X-Git-Oldrev: 475722ea46fdd18ea5859b44954da9267762d8a4
+X-Git-Newrev: 1af307504a4f1e7ed9704ae14cae49ce82fa8a00
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150241.5B8AB880EE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iptables: check for rules in init
+Message-Id: <20250318150241.6B986880AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: test for nftables init
  script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -60,104 +60,123 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2379822431051542357=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=475722ea46fdd18ea5859b44954da9267762d8a4
+--===============2379822431051542357==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=1af307504a4f1e7ed9704ae14cae49ce82fa8a00
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Instead of installing an empty rules file, the init script now checks
-if the rules file exists and does nothing if it doesn't. The "save"
-action is exempt from that limit because it may be used to create the
-rules file.
-
-Also fix the shellcheck warning about the unused IPTABLES_ARGS
-variable, and use long form options for iptables commands.
+The new test checks that a pre-defined rules file can be loaded and
+works as expected, and that after flushing the blocked IP responds to
+ping again.
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore          |  1 -
- package/iptables/S35iptables | 16 +++++++++++-----
- package/iptables/iptables.mk |  1 -
- 3 files changed, 11 insertions(+), 7 deletions(-)
+ DEVELOPERS                                         |  1 +
+ support/testing/tests/package/test_nftables.py     | 37 +++++++++++++++++++++-
+ .../test_nftables/rootfs-overlay/etc/nftables.conf |  8 +++++
+ 3 files changed, 45 insertions(+), 1 deletion(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 66b3e100bb..e97d2ebdf9 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -584,7 +584,6 @@ package/ipmitool/0002-Fix-enterprise-numbers-URL.patch lib_patch.Upstream
- package/ipmitool/0003-Do-not-require-the-IANA-PEN-registry-file.patch lib_patch.Upstream
- package/ipmitool/0004-configure.ac-allow-disabling-registry-downloads.patch lib_patch.Upstream
- package/iprutils/0001-configure.ac-add-AC_USE_SYSTEM_EXTENSIONS.patch lib_patch.Upstream
--package/iptables/S35iptables Shellcheck
- package/irda-utils/0001-daemon.patch lib_patch.Sob lib_patch.Upstream
- package/irda-utils/0002-nommu.patch lib_patch.Sob lib_patch.Upstream
- package/irda-utils/0003-subdir.patch lib_patch.Sob lib_patch.Upstream
-diff --git a/package/iptables/S35iptables b/package/iptables/S35iptables
-index a2de29d222..fc42fc9a8c 100644
---- a/package/iptables/S35iptables
-+++ b/package/iptables/S35iptables
-@@ -2,11 +2,18 @@
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1f04dd2a1e..25cb5dc764 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1110,6 +1110,7 @@ F:	package/python-poetry-dynamic-versioning/
+ F:	package/python-pyasynchat/
+ F:	package/python-pyasyncore/
+ F:	support/testing/tests/package/sample_python_networkmanager_goi.py
++F:	support/testing/tests/package/test_nftables.py
+ F:	support/testing/tests/package/test_python_networkmanager_goi.py
  
- DAEMON="iptables"
+ N:	Flávio Tapajós <flavio.tapajos@newtesc.com.br>
+diff --git a/support/testing/tests/package/test_nftables.py b/support/testing/tests/package/test_nftables.py
+index 142e7d0352..2622c7e822 100644
+--- a/support/testing/tests/package/test_nftables.py
++++ b/support/testing/tests/package/test_nftables.py
+@@ -85,7 +85,7 @@ class TestNftables(infra.basetest.BRTest):
+         # supposed to fail earlier is now supposed to succeed.
+         self.assertRunOk(ping_test_cmd)
  
--IPTABLES_ARGS=""
-+IPTABLES_CONF="/etc/iptables.conf"
+-    def test_run(self):
++    def boot_vm(self):
+         img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
+         kern = os.path.join(self.builddir, "images", "Image")
+         self.emulator.boot(arch="aarch64",
+@@ -97,6 +97,9 @@ class TestNftables(infra.basetest.BRTest):
+                                     "-initrd", img])
+         self.emulator.login()
+ 
++    def test_run(self):
++        self.boot_vm()
 +
-+# Run only if IPTABLES_CONF exists, except when the action is "save"
-+# (which creates it).
-+if [ ! -f "${IPTABLES_CONF}" ] && [ "$1" != "save" ]; then
-+	echo "${IPTABLES_CONF} does not exist, nothing to do."
-+	exit 0
-+fi
+         # We check the program can execute.
+         self.assertRunOk("nft --version")
  
- start() {
- 	printf 'Starting %s: ' "$DAEMON"
--	iptables-restore /etc/iptables.conf
-+	iptables-restore "$IPTABLES_CONF"
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
- 		echo "OK"
-@@ -18,7 +25,7 @@ start() {
- 
- stop() {
- 	printf 'Stopping %s: ' "$DAEMON"
--	iptables -F
-+	iptables --flush
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
- 		echo "OK"
-@@ -30,13 +37,12 @@ stop() {
- 
- restart() {
- 	stop
--	sleep 1
- 	start
- }
- 
- save() {
- 	printf 'Saving %s: ' "$DAEMON"
--	iptables-save -f /etc/iptables.conf
-+	iptables-save --file "$IPTABLES_CONF"
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
- 		echo "OK"
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index 8d23dca249..a9d912f6cc 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -59,7 +59,6 @@ endef
- define IPTABLES_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/iptables/S35iptables \
- 		$(TARGET_DIR)/etc/init.d/S35iptables
--	touch $(TARGET_DIR)/etc/iptables.conf
- endef
- 
- ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES_DEFAULT),y)
+@@ -107,3 +110,35 @@ class TestNftables(infra.basetest.BRTest):
+         # We run again the same test sequence using our simple nft
+         # python implementation, to check the language bindings.
+         self.nftables_test(prog="/root/nft.py")
++
++
++class TestNftablesInit(TestNftables):
++    config = TestNftables.config + \
++        """
++        BR2_INIT_BUSYBOX=y
++        """
++
++    def test_run(self):
++        self.boot_vm()
++
++        # start with known state (rules from /etc/nftables.conf)
++        self.assertRunOk("/etc/init.d/S35nftables reload")
++
++        # Same concept as in TestNftables.nftables_test: The rules
++        # should allow ping to 127.0.0.1, but not 127.0.0.2.
++        ping_cmd_prefix = "ping -c 3 -i 0.5 -W 2 "
++        self.assertRunOk(ping_cmd_prefix + "127.0.0.1")
++        _, exit_code = self.emulator.run(ping_cmd_prefix + "127.0.0.2")
++        self.assertNotEqual(exit_code, 0)
++
++        # Stop should flush the rules, ping to both addresses should
++        # work now.
++        self.assertRunOk("/etc/init.d/S35nftables stop")
++        self.assertRunOk(ping_cmd_prefix + "127.0.0.1")
++        self.assertRunOk(ping_cmd_prefix + "127.0.0.2")
++
++        # Start is essentially the same as reload, check that
++        # 127.0.0.2 gets blocked again.
++        self.assertRunOk("/etc/init.d/S35nftables start")
++        _, exit_code = self.emulator.run(ping_cmd_prefix + "127.0.0.2")
++        self.assertNotEqual(exit_code, 0)
+diff --git a/support/testing/tests/package/test_nftables/rootfs-overlay/etc/nftables.conf b/support/testing/tests/package/test_nftables/rootfs-overlay/etc/nftables.conf
+new file mode 100644
+index 0000000000..a04af1d634
+--- /dev/null
++++ b/support/testing/tests/package/test_nftables/rootfs-overlay/etc/nftables.conf
+@@ -0,0 +1,8 @@
++flush ruleset
++
++table inet filter {
++	chain input {
++		type filter hook input priority filter; policy accept;
++		ip daddr 127.0.0.2 icmp type echo-request drop
++	}
++}
+
+--===============2379822431051542357==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2379822431051542357==--
