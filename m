@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D894AC282EC
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:02:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68798C28B2F
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:02:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9801860816;
-	Tue, 18 Mar 2025 15:02:50 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UVWNGNqMq0bc; Tue, 18 Mar 2025 15:02:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CEC660853
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8CEC660853;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F04D81D21;
 	Tue, 18 Mar 2025 15:02:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7F630D5
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 612E08154D
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uxIejYpYD0qN for <buildroot@buildroot.org>;
+ id I3uafjSEct1r; Tue, 18 Mar 2025 15:02:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7BFC81EFD
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C7BFC81EFD;
+	Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7CA8916E
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 645BF400F1
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DtC9uVGnffKH for <buildroot@buildroot.org>;
  Tue, 18 Mar 2025 15:02:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 900568136D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51B2F40147
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 900568136D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 51B2F40147
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F125880EC; Tue, 18 Mar 2025 15:02:41 +0000 (UTC)
+ id 3B306880AF; Tue, 18 Mar 2025 15:02:41 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 28 Feb 2025 21:10:58 +0100
+Date: Fri, 28 Feb 2025 21:10:38 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1af307504a4f1e7ed9704ae14cae49ce82fa8a00
-X-Git-Newrev: 1b9bba85999b5840e5804a2f5d672c7a8d24792e
+X-Git-Oldrev: 29af0f1b0c623d18e29bddd836b18d7a2badaffb
+X-Git-Newrev: a639e31268ba5483b607b32b32896346f62509d6
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150241.7F125880EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: include init script in
- iptables test
+Message-Id: <20250318150241.3B306880AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nftables: add init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,57 +64,120 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b9bba85999b5840e5804a2f5d672c7a8d24792e
+commit: https://git.buildroot.net/buildroot/commit/?id=a639e31268ba5483b607b32b32896346f62509d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Check a save/start/stop cycle based on the rules created by direct
-commands in the pre-existing test.
+The init script handles an nftables ruleset file with support for
+atomic reloading. By default the ruleset is expected in
+/etc/nftables.conf, the location can be changed in
+/etc/default/nftables. If the ruleset file does not exist, the script
+does nothing and shows a warning about that fact.
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- support/testing/tests/package/test_iptables.py | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ package/nftables/S35nftables | 76 ++++++++++++++++++++++++++++++++++++++++++++
+ package/nftables/nftables.mk |  5 +++
+ 2 files changed, 81 insertions(+)
 
-diff --git a/support/testing/tests/package/test_iptables.py b/support/testing/tests/package/test_iptables.py
-index 924a483ddb..6e4db0ac06 100644
---- a/support/testing/tests/package/test_iptables.py
-+++ b/support/testing/tests/package/test_iptables.py
-@@ -11,6 +11,7 @@ class TestIptables(infra.basetest.BRTest):
-         """
-         BR2_aarch64=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_INIT_BUSYBOX=y
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-@@ -70,9 +71,26 @@ class TestIptables(infra.basetest.BRTest):
-         _, exit_code = self.emulator.run(ping_test_cmd)
-         self.assertNotEqual(exit_code, 0)
+diff --git a/package/nftables/S35nftables b/package/nftables/S35nftables
+new file mode 100644
+index 0000000000..35b089e154
+--- /dev/null
++++ b/package/nftables/S35nftables
+@@ -0,0 +1,76 @@
++#!/bin/sh
++
++DAEMON="nftables"
++
++# Main ruleset file, override in /etc/default/nftables if you want a
++# different location. The file should include a "flush ruleset"
++# command to atomically replace any previous rules on reload (instead
++# of adding to them).
++NFTABLES_CONFIG="/etc/nftables.conf"
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++# Run only if the ruleset file exists.
++if [ ! -f "${NFTABLES_CONFIG}" ]; then
++	echo "${NFTABLES_CONFIG} does not exist, nothing to do."
++	exit 0
++fi
++
++start() {
++	printf "Loading nftables rules: "
++	/usr/sbin/nft --file "${NFTABLES_CONFIG}"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf "Clearing nftables rules: "
++	/usr/sbin/nft flush ruleset
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	start
++}
++
++reload() {
++	FLUSH='flush ruleset'
++	if ! grep -q -x "$FLUSH" "${NFTABLES_CONFIG}"; then
++		printf 'WARNING: no "%s" in %s, duplicated rules likely\n' \
++			"$FLUSH" "${NFTABLES_CONFIG}"
++	fi
++	start
++}
++
++case "$1" in
++	start)
++		start
++		;;
++	stop)
++		stop
++		;;
++	restart)
++		restart
++		;;
++	reload)
++		reload
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
++
++exit $?
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index c958f0eb26..380e553cde 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -57,6 +57,11 @@ define NFTABLES_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_INET)
+ endef
  
-+        # Save the current rules to test the init script later.
-+        self.assertRunOk("/etc/init.d/S35iptables save")
++define NFTABLES_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/nftables/S35nftables \
++		$(TARGET_DIR)/etc/init.d/S35nftables
++endef
 +
-         # We delete our only rule #1 in the INPUT chain.
-         self.assertRunOk("iptables --delete INPUT 1")
+ $(eval $(autotools-package))
  
-         # Since we deleted the rule, the ping test command which was
-         # supposed to fail earlier is now supposed to succeed.
-         self.assertRunOk(ping_test_cmd)
-+
-+        # Load the rules as saved before.
-+        self.assertRunOk("/etc/init.d/S35iptables start")
-+
-+        # Ping to 127.0.0.2 is expected to fail again.
-+        _, exit_code = self.emulator.run(ping_test_cmd)
-+        self.assertNotEqual(exit_code, 0)
-+
-+        # And flush the rules again.
-+        self.assertRunOk("/etc/init.d/S35iptables stop")
-+
-+        # Since we deleted the rule, the ping test command which was
-+        # supposed to fail earlier is now supposed to succeed.
-+        self.assertRunOk(ping_test_cmd)
+ # Legacy: we used to handle it in this .mk
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
