@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A16C7C19776
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 13:57:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADEF8C282C5
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 13:57:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6130B41333;
-	Fri, 28 Feb 2025 13:57:50 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kTF5OwFt3kkE; Fri, 28 Feb 2025 13:57:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D3EE412E9
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D3EE412E9;
-	Fri, 28 Feb 2025 13:57:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0AC35711
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 13:57:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 058A7838D3
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 13:57:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 756A1836E1;
+	Fri, 28 Feb 2025 13:57:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JuxnGcbQiqQD for <buildroot@buildroot.org>;
+ id 71w6deN0V-9d; Fri, 28 Feb 2025 13:57:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80A0E8386E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 80A0E8386E;
+	Fri, 28 Feb 2025 13:57:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F54A94F
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 13:57:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 079FF60AA5
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 13:57:48 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4ZEVnS5fPOaO for <buildroot@buildroot.org>;
  Fri, 28 Feb 2025 13:57:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1ABED836E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B93E6079D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1ABED836E1
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B93E6079D
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 13:57:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F0DCC87CD9; Fri, 28 Feb 2025 13:57:46 +0000 (UTC)
+ id 33E0087CD9; Fri, 28 Feb 2025 13:57:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Feb 2025 14:52:36 +0100
+Date: Fri, 28 Feb 2025 14:53:51 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 97f8ba4ea240733f3403583b19a83b427da5a143
-X-Git-Newrev: b71d7eae59f82683e547b60f06538c4a2af8c5d3
+X-Git-Oldrev: 2ef5e56d1f4f52e10ed1b04953f99d262002a7e5
+X-Git-Newrev: 5297c761baf7430e961f4a406c7447d2e776414f
 X-Patchwork-Hint: ignore
-Message-Id: <20250228135746.F0DCC87CD9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/octavo: Add FORCE_CHECK_HASHES
- config and custom hashes
+Message-Id: <20250228135747.33E0087CD9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/postgresql: bump version to 17.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,98 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b71d7eae59f82683e547b60f06538c4a2af8c5d3
+commit: https://git.buildroot.net/buildroot/commit/?id=5297c761baf7430e961f4a406c7447d2e776414f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Enable FORCE_CHECK_HASHES to ensure that all hashes are valid even
-from custom packages.
-Add custom version package hashes of Linux, U-boot and TF-A.
+Release notes:
+https://www.postgresql.org/docs/release/17.4/
+https://www.postgresql.org/about/news/postgresql-174-168-1512-1417-and-1320-released-3018/
 
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../osd32mp1-brk/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 2 ++
- board/octavo/osd32mp1-brk/patches/linux/linux.hash                      | 2 ++
- board/octavo/osd32mp1-brk/patches/uboot/uboot.hash                      | 2 ++
- .../osd32mp1-red/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 2 ++
- board/octavo/osd32mp1-red/patches/linux/linux.hash                      | 2 ++
- board/octavo/osd32mp1-red/patches/uboot/uboot.hash                      | 2 ++
- configs/octavo_osd32mp1_brk_defconfig                                   | 1 +
- configs/octavo_osd32mp1_red_defconfig                                   | 1 +
- 8 files changed, 14 insertions(+)
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/octavo/osd32mp1-brk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/octavo/osd32mp1-brk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-new file mode 100644
-index 0000000000..2ba1cc0972
---- /dev/null
-+++ b/board/octavo/osd32mp1-brk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  83d744c155097f27682a06fdba5f7e976fde6edf61474d40a5a44e71862a3822  arm-trusted-firmware-v2.4-stm32mp-r1-git4.tar.gz
-diff --git a/board/octavo/osd32mp1-brk/patches/linux/linux.hash b/board/octavo/osd32mp1-brk/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..ec9218e388
---- /dev/null
-+++ b/board/octavo/osd32mp1-brk/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  c2e22c6d13e5970839231ca29cfbe3bb66ef4d4d1cd3c2b5afb61f591f89d71a  linux-v5.10-stm32mp-r2.1-git4.tar.gz
-diff --git a/board/octavo/osd32mp1-brk/patches/uboot/uboot.hash b/board/octavo/osd32mp1-brk/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..6b51c2685b
---- /dev/null
-+++ b/board/octavo/osd32mp1-brk/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  49a2470ecd29c29cc712861372335c9e2020e5c56392c6417faf66dc7a782261  uboot-v2020.10-stm32mp-r2.1-git4.tar.gz
-diff --git a/board/octavo/osd32mp1-red/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/octavo/osd32mp1-red/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-new file mode 100644
-index 0000000000..2ba1cc0972
---- /dev/null
-+++ b/board/octavo/osd32mp1-red/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  83d744c155097f27682a06fdba5f7e976fde6edf61474d40a5a44e71862a3822  arm-trusted-firmware-v2.4-stm32mp-r1-git4.tar.gz
-diff --git a/board/octavo/osd32mp1-red/patches/linux/linux.hash b/board/octavo/osd32mp1-red/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..ec9218e388
---- /dev/null
-+++ b/board/octavo/osd32mp1-red/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  c2e22c6d13e5970839231ca29cfbe3bb66ef4d4d1cd3c2b5afb61f591f89d71a  linux-v5.10-stm32mp-r2.1-git4.tar.gz
-diff --git a/board/octavo/osd32mp1-red/patches/uboot/uboot.hash b/board/octavo/osd32mp1-red/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..6b51c2685b
---- /dev/null
-+++ b/board/octavo/osd32mp1-red/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  49a2470ecd29c29cc712861372335c9e2020e5c56392c6417faf66dc7a782261  uboot-v2020.10-stm32mp-r2.1-git4.tar.gz
-diff --git a/configs/octavo_osd32mp1_brk_defconfig b/configs/octavo_osd32mp1_brk_defconfig
-index e8857f3649..2a6d794722 100644
---- a/configs/octavo_osd32mp1_brk_defconfig
-+++ b/configs/octavo_osd32mp1_brk_defconfig
-@@ -4,6 +4,7 @@ BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
- BR2_GLOBAL_PATCH_DIR="board/octavo/osd32mp1-brk/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_OVERLAY="board/octavo/osd32mp1-brk/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/octavo/osd32mp1-brk/genimage.cfg"
-diff --git a/configs/octavo_osd32mp1_red_defconfig b/configs/octavo_osd32mp1_red_defconfig
-index d179e0a27e..3646e2d04f 100644
---- a/configs/octavo_osd32mp1_red_defconfig
-+++ b/configs/octavo_osd32mp1_red_defconfig
-@@ -4,6 +4,7 @@ BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
- BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
- BR2_GLOBAL_PATCH_DIR="board/octavo/osd32mp1-red/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_OVERLAY="board/octavo/osd32mp1-red/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/octavo/osd32mp1-red/genimage.cfg"
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index e582510832..1c77119207 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v17.3/postgresql-17.3.tar.bz2.sha256
+-sha256  13c18b35bf67a97bd639925fc581db7fd2aae4d3548eac39fcdb8da74ace2bea  postgresql-17.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v17.4/postgresql-17.4.tar.bz2.sha256
++sha256  c4605b73fea11963406699f949b966e5d173a7ee0ccaef8938dec0ca8a995fe7  postgresql-17.4.tar.bz2
+ # License file, Locally calculated
+ sha256  e3822c4797fadcab31a3fc73f75c28ac20c73d72b565da91e9974cf9398ef4d2  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index a9ca9f4ee1..2b6e78b941 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 17.3
++POSTGRESQL_VERSION = 17.4
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
