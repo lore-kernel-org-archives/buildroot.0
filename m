@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31F52C28B2F
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:02:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9502C28B28
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:02:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F104B82087;
-	Tue, 18 Mar 2025 15:02:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9380E60853;
+	Tue, 18 Mar 2025 15:02:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2_iGPC-y-lc4; Tue, 18 Mar 2025 15:02:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8I9omOuMkBAA; Tue, 18 Mar 2025 15:02:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9D9D82099
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AE7560866
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E9D9D82099;
-	Tue, 18 Mar 2025 15:02:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D54F16E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7AE7560866;
+	Tue, 18 Mar 2025 15:02:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A955D8C
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 749CA8136D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9AE3F408D0
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cBgCH_7sDkfj for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RkGKDJ3_AA1e for <buildroot@buildroot.org>;
  Tue, 18 Mar 2025 15:02:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BC28813AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6449F40734
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9BC28813AA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6449F40734
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 88F39880ED; Tue, 18 Mar 2025 15:02:41 +0000 (UTC)
+ id 5B8AB880EE; Tue, 18 Mar 2025 15:02:41 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 28 Feb 2025 21:11:01 +0100
+Date: Fri, 28 Feb 2025 21:10:49 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1b9bba85999b5840e5804a2f5d672c7a8d24792e
-X-Git-Newrev: ec2735686a24bb6806a028bc2177000e389cd782
+X-Git-Oldrev: 2625440614b6000109ff1c8fc3a64e5b92d90f77
+X-Git-Newrev: 475722ea46fdd18ea5859b44954da9267762d8a4
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150241.88F39880ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: fix MyPy warnings about
- BRConfigTest
+Message-Id: <20250318150241.5B8AB880EE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iptables: check for rules in init
+ script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,34 +65,98 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec2735686a24bb6806a028bc2177000e389cd782
+commit: https://git.buildroot.net/buildroot/commit/?id=475722ea46fdd18ea5859b44954da9267762d8a4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This removes warnings in editors/IDEs with MyPy typechecking
-integration. Test classes override "config" with strings (different
-type than None).
+Instead of installing an empty rules file, the init script now checks
+if the rules file exists and does nothing if it doesn't. The "save"
+action is exempt from that limit because it may be used to create the
+rules file.
+
+Also fix the shellcheck warning about the unused IPTABLES_ARGS
+variable, and use long form options for iptables commands.
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- support/testing/infra/basetest.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .checkpackageignore          |  1 -
+ package/iptables/S35iptables | 16 +++++++++++-----
+ package/iptables/iptables.mk |  1 -
+ 3 files changed, 11 insertions(+), 7 deletions(-)
 
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index 1ae6232da8..4f020e8a93 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -24,8 +24,8 @@ MINIMAL_CONFIG = \
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 66b3e100bb..e97d2ebdf9 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -584,7 +584,6 @@ package/ipmitool/0002-Fix-enterprise-numbers-URL.patch lib_patch.Upstream
+ package/ipmitool/0003-Do-not-require-the-IANA-PEN-registry-file.patch lib_patch.Upstream
+ package/ipmitool/0004-configure.ac-allow-disabling-registry-downloads.patch lib_patch.Upstream
+ package/iprutils/0001-configure.ac-add-AC_USE_SYSTEM_EXTENSIONS.patch lib_patch.Upstream
+-package/iptables/S35iptables Shellcheck
+ package/irda-utils/0001-daemon.patch lib_patch.Sob lib_patch.Upstream
+ package/irda-utils/0002-nommu.patch lib_patch.Sob lib_patch.Upstream
+ package/irda-utils/0003-subdir.patch lib_patch.Sob lib_patch.Upstream
+diff --git a/package/iptables/S35iptables b/package/iptables/S35iptables
+index a2de29d222..fc42fc9a8c 100644
+--- a/package/iptables/S35iptables
++++ b/package/iptables/S35iptables
+@@ -2,11 +2,18 @@
  
- class BRConfigTest(unittest.TestCase):
-     """Test up to the configure stage."""
--    config = None
--    br2_external = list()
-+    config: str
-+    br2_external: list[str] = list()
-     downloaddir = None
-     outputdir = None
-     logtofile = True
+ DAEMON="iptables"
+ 
+-IPTABLES_ARGS=""
++IPTABLES_CONF="/etc/iptables.conf"
++
++# Run only if IPTABLES_CONF exists, except when the action is "save"
++# (which creates it).
++if [ ! -f "${IPTABLES_CONF}" ] && [ "$1" != "save" ]; then
++	echo "${IPTABLES_CONF} does not exist, nothing to do."
++	exit 0
++fi
+ 
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
+-	iptables-restore /etc/iptables.conf
++	iptables-restore "$IPTABLES_CONF"
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+ 		echo "OK"
+@@ -18,7 +25,7 @@ start() {
+ 
+ stop() {
+ 	printf 'Stopping %s: ' "$DAEMON"
+-	iptables -F
++	iptables --flush
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+ 		echo "OK"
+@@ -30,13 +37,12 @@ stop() {
+ 
+ restart() {
+ 	stop
+-	sleep 1
+ 	start
+ }
+ 
+ save() {
+ 	printf 'Saving %s: ' "$DAEMON"
+-	iptables-save -f /etc/iptables.conf
++	iptables-save --file "$IPTABLES_CONF"
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+ 		echo "OK"
+diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
+index 8d23dca249..a9d912f6cc 100644
+--- a/package/iptables/iptables.mk
++++ b/package/iptables/iptables.mk
+@@ -59,7 +59,6 @@ endef
+ define IPTABLES_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/iptables/S35iptables \
+ 		$(TARGET_DIR)/etc/init.d/S35iptables
+-	touch $(TARGET_DIR)/etc/iptables.conf
+ endef
+ 
+ ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES_DEFAULT),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
