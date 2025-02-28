@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 106C6C28B2F
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:03:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD4A2C282EC
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:03:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B74F682087;
-	Tue, 18 Mar 2025 15:03:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8FEE260B39;
+	Tue, 18 Mar 2025 15:03:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 26IBodrOsyFf; Tue, 18 Mar 2025 15:03:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZmKe6Haq5rRA; Tue, 18 Mar 2025 15:03:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21E5182D04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9156560BD2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21E5182D04;
-	Tue, 18 Mar 2025 15:03:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1714D16E
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9156560BD2;
+	Tue, 18 Mar 2025 15:03:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2030FD8C
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1CDE181E33
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29E1A409BC
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gfS7U5lUxJhn for <buildroot@buildroot.org>;
- Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IxF1cZKVUkOp for <buildroot@buildroot.org>;
+ Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C10A681776
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AC9240842
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C10A681776
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1AC9240842
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BA253880EC; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
+ id 15763880ED; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 1 Mar 2025 17:28:12 +0100
+Date: Fri, 28 Feb 2025 23:11:44 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 69487c630be20949f1060df83996ae64ff5ce095
-X-Git-Newrev: b4b29434a34648baa89c9c23e4c8caa004f3675d
+X-Git-Oldrev: 50aeed6b2323aed3f76f8a7dee6215955a3c45fd
+X-Git-Newrev: fe43cf9c9522d992cf2d5b57442297bb8567f659
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150242.BA253880EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/freescale_imx8qxpmek: bump BSP
- components to lf-6.6.52-2.2.0
+Message-Id: <20250318150242.15763880ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-weasyprint: bump to version
+ 64.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,74 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b4b29434a34648baa89c9c23e4c8caa004f3675d
+commit: https://git.buildroot.net/buildroot/commit/?id=fe43cf9c9522d992cf2d5b57442297bb8567f659
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump ATF, U-Boot and Linux kernel to the NXP BSP lf-6.6.52-2.2.0
-versions.
-
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash          | 2 +-
- board/freescale/imx8qxpmek/patches/linux/linux.hash                 | 2 +-
- board/freescale/imx8qxpmek/patches/uboot/uboot.hash                 | 2 +-
- configs/freescale_imx8qxpmek_defconfig                              | 6 +++---
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-weasyprint/python-weasyprint.hash | 4 ++--
+ package/python-weasyprint/python-weasyprint.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/freescale/imx8qxpmek/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/imx8qxpmek/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-index 0266b45d6a..58100572e4 100644
---- a/board/freescale/imx8qxpmek/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/board/freescale/imx8qxpmek/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  37f0dee8b3b52d6c7f8a46c3bdd4138b528f9cc607015400e7cad0c206df41d7  imx-atf-lf-6.6.23-2.0.0.tar.gz
-+sha256  2b5b4a370a55b790ca318e95e2c1aac9d9166ea549179ef9929c346863b4ea57  imx-atf-lf-6.6.52-2.2.0.tar.gz
-diff --git a/board/freescale/imx8qxpmek/patches/linux/linux.hash b/board/freescale/imx8qxpmek/patches/linux/linux.hash
-index 3c4223976b..620a7377ef 100644
---- a/board/freescale/imx8qxpmek/patches/linux/linux.hash
-+++ b/board/freescale/imx8qxpmek/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  c70adedadce88f8685cb26d9703b930292c1349138e2c55ed9b4cd6e277de3bd  linux-imx-lf-6.6.23-2.0.0.tar.gz
-+sha256  6567dd20dbcdff19da1d005acde949b20874cace5e34bf2b8e90d14fcd130174  linux-imx-lf-6.6.52-2.2.0.tar.gz
-diff --git a/board/freescale/imx8qxpmek/patches/uboot/uboot.hash b/board/freescale/imx8qxpmek/patches/uboot/uboot.hash
-index 4e0d729ca0..4b763ba3ba 100644
---- a/board/freescale/imx8qxpmek/patches/uboot/uboot.hash
-+++ b/board/freescale/imx8qxpmek/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  179b6531ef1d4ce681d139741ac7b4144220c90b7223297df28b61e98e8d37fc  uboot-imx-lf-6.6.23-2.0.0.tar.gz
-+sha256  5acad057c9c5e802536abf84b9fcb4405b8f701e13da1294e0d90bc6c186639d  uboot-imx-lf-6.6.52-2.2.0.tar.gz
-diff --git a/configs/freescale_imx8qxpmek_defconfig b/configs/freescale_imx8qxpmek_defconfig
-index 3ff476e992..9dbc4be81b 100644
---- a/configs/freescale_imx8qxpmek_defconfig
-+++ b/configs/freescale_imx8qxpmek_defconfig
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare
- BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8qxp-mek.dtb"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.23-2.0.0)/linux-imx-lf-6.6.23-2.0.0.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.52-2.2.0)/linux-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8qxp-mek"
-@@ -24,13 +24,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.6.23-2.0.0)/imx-atf-lf-6.6.23-2.0.0.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.6.52-2.2.0)/imx-atf-lf-6.6.52-2.2.0.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8qx"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.23-2.0.0)/uboot-imx-lf-6.6.23-2.0.0.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.52-2.2.0)/uboot-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8qxp_mek"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+diff --git a/package/python-weasyprint/python-weasyprint.hash b/package/python-weasyprint/python-weasyprint.hash
+index 0d39d55aae..9c51ad95a3 100644
+--- a/package/python-weasyprint/python-weasyprint.hash
++++ b/package/python-weasyprint/python-weasyprint.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/weasyprint/json
+-md5  219b0f3ea8247e97f16477d509ee0f40  weasyprint-63.1.tar.gz
+-sha256  cb424e63e8dd3f14195bfe5f203527646aa40a2f00ac819f9d39b8304cec0044  weasyprint-63.1.tar.gz
++md5  9e87ec00619aad446c51f679117be676  weasyprint-64.0.tar.gz
++sha256  1ceb3ea6306db4a3d06df0eafae3a5a6e879c35c40091aa8ceb5bcb143e80b29  weasyprint-64.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  bfd14eccfa6100575460e685556b183399d4bd335904e3c9521b0116d21c54da  LICENSE
+diff --git a/package/python-weasyprint/python-weasyprint.mk b/package/python-weasyprint/python-weasyprint.mk
+index 583af799b1..7edb9f28da 100644
+--- a/package/python-weasyprint/python-weasyprint.mk
++++ b/package/python-weasyprint/python-weasyprint.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WEASYPRINT_VERSION = 63.1
++PYTHON_WEASYPRINT_VERSION = 64.0
+ PYTHON_WEASYPRINT_SOURCE = weasyprint-$(PYTHON_WEASYPRINT_VERSION).tar.gz
+-PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/2b/f0/1ac7d241b8cabaaf047278ef67b64869473a4e0a2218a1cbc0a6ffb0d8fd
++PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/e3/04/c73f99531bce81d4ced5cd18a159855de261f83843a5633acd67ae327933
+ PYTHON_WEASYPRINT_SETUP_TYPE = flit
+ PYTHON_WEASYPRINT_LICENSE = BSD-3-Clause
+ PYTHON_WEASYPRINT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
