@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5E29C282C5
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 23:05:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D76FC282C5
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 23:05:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 903D484A9E;
-	Fri, 28 Feb 2025 23:05:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CCE1984AC0;
+	Fri, 28 Feb 2025 23:05:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZCD0gmD_9P7f; Fri, 28 Feb 2025 23:05:07 +0000 (UTC)
+ id dbg3l1n_qJo1; Fri, 28 Feb 2025 23:05:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8AA1584A94
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E185384AAC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8AA1584A94;
-	Fri, 28 Feb 2025 23:05:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 04449950
+	by smtp1.osuosl.org (Postfix) with ESMTP id E185384AAC;
+	Fri, 28 Feb 2025 23:05:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4088D1DD
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 23:04:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E4784405C6
+ by smtp4.osuosl.org (Postfix) with ESMTP id A8B3C42F74
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 23:04:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cs28igaYctm3 for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 23:04:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aJhXGcniUluS for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 23:04:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7504416AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FAD742F79
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D7504416AF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FAD742F79
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 23:04:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C513E87D66; Fri, 28 Feb 2025 23:04:56 +0000 (UTC)
+ id 6C63687D65; Fri, 28 Feb 2025 23:04:56 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 28 Feb 2025 23:11:44 +0100
+Date: Fri, 28 Feb 2025 23:11:30 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 50aeed6b2323aed3f76f8a7dee6215955a3c45fd
-X-Git-Newrev: fe43cf9c9522d992cf2d5b57442297bb8567f659
+X-Git-Oldrev: e4469759c1c6b107c303b97a38903896d9466c6c
+X-Git-Newrev: e0af35c76a11f9edfe1b793086bffaba0f4e033c
 X-Patchwork-Hint: ignore
-Message-Id: <20250228230456.C513E87D66@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-weasyprint:
- bump to version 64.0
+Message-Id: <20250228230456.6C63687D65@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-cryptography:
+ bump to version 44.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe43cf9c9522d992cf2d5b57442297bb8567f659
+commit: https://git.buildroot.net/buildroot/commit/?id=e0af35c76a11f9edfe1b793086bffaba0f4e033c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+For change log, see:
+https://cryptography.io/en/44.0.1/changelog/
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Julien: add link to change log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-weasyprint/python-weasyprint.hash | 4 ++--
- package/python-weasyprint/python-weasyprint.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-cryptography/python-cryptography.hash | 2 +-
+ package/python-cryptography/python-cryptography.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-weasyprint/python-weasyprint.hash b/package/python-weasyprint/python-weasyprint.hash
-index 0d39d55aae..9c51ad95a3 100644
---- a/package/python-weasyprint/python-weasyprint.hash
-+++ b/package/python-weasyprint/python-weasyprint.hash
+diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+index aa7e16a043..909b702d16 100644
+--- a/package/python-cryptography/python-cryptography.hash
++++ b/package/python-cryptography/python-cryptography.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/weasyprint/json
--md5  219b0f3ea8247e97f16477d509ee0f40  weasyprint-63.1.tar.gz
--sha256  cb424e63e8dd3f14195bfe5f203527646aa40a2f00ac819f9d39b8304cec0044  weasyprint-63.1.tar.gz
-+md5  9e87ec00619aad446c51f679117be676  weasyprint-64.0.tar.gz
-+sha256  1ceb3ea6306db4a3d06df0eafae3a5a6e879c35c40091aa8ceb5bcb143e80b29  weasyprint-64.0.tar.gz
+ # Locally calculated after vendoring
+-sha256  09a765af8da172785de52631fe6c626508fdc8e451b7fb01d52f58b7841a813b  python-cryptography-44.0.0-cargo2.tar.gz
++sha256  85cb9d02cf5237881d0b62abab086acd1149d972f6f8c5aece4f8e10a37c944c  python-cryptography-44.0.1-cargo2.tar.gz
  # Locally computed sha256 checksums
- sha256  bfd14eccfa6100575460e685556b183399d4bd335904e3c9521b0116d21c54da  LICENSE
-diff --git a/package/python-weasyprint/python-weasyprint.mk b/package/python-weasyprint/python-weasyprint.mk
-index 583af799b1..7edb9f28da 100644
---- a/package/python-weasyprint/python-weasyprint.mk
-+++ b/package/python-weasyprint/python-weasyprint.mk
+ sha256  3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb  LICENSE
+ sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
+diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+index 9ae1fdbd83..fd2c3d7a50 100644
+--- a/package/python-cryptography/python-cryptography.mk
++++ b/package/python-cryptography/python-cryptography.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WEASYPRINT_VERSION = 63.1
-+PYTHON_WEASYPRINT_VERSION = 64.0
- PYTHON_WEASYPRINT_SOURCE = weasyprint-$(PYTHON_WEASYPRINT_VERSION).tar.gz
--PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/2b/f0/1ac7d241b8cabaaf047278ef67b64869473a4e0a2218a1cbc0a6ffb0d8fd
-+PYTHON_WEASYPRINT_SITE = https://files.pythonhosted.org/packages/e3/04/c73f99531bce81d4ced5cd18a159855de261f83843a5633acd67ae327933
- PYTHON_WEASYPRINT_SETUP_TYPE = flit
- PYTHON_WEASYPRINT_LICENSE = BSD-3-Clause
- PYTHON_WEASYPRINT_LICENSE_FILES = LICENSE
+-PYTHON_CRYPTOGRAPHY_VERSION = 44.0.0
++PYTHON_CRYPTOGRAPHY_VERSION = 44.0.1
+ PYTHON_CRYPTOGRAPHY_SOURCE_PYPI = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+-PYTHON_CRYPTOGRAPHY_SITE_PYPI = https://files.pythonhosted.org/packages/91/4c/45dfa6829acffa344e3967d6006ee4ae8be57af746ae2eba1c431949b32c
++PYTHON_CRYPTOGRAPHY_SITE_PYPI = https://files.pythonhosted.org/packages/c7/67/545c79fe50f7af51dbad56d16b23fe33f63ee6a5d956b3cb68ea110cbe64
+ PYTHON_CRYPTOGRAPHY_SITE = $(PYTHON_CRYPTOGRAPHY_SITE_PYPI)/$(PYTHON_CRYPTOGRAPHY_SOURCE_PYPI)?buildroot-path=filename
+ PYTHON_CRYPTOGRAPHY_SETUP_TYPE = maturin
+ PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
