@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA1A5C282C6
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 23:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CC5DC282C6
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 23:05:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 84F7984ACD;
-	Fri, 28 Feb 2025 23:05:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E9E9984AF7;
+	Fri, 28 Feb 2025 23:05:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jbOffz0dFdCw; Fri, 28 Feb 2025 23:05:16 +0000 (UTC)
+ id xKSqn0K8yhac; Fri, 28 Feb 2025 23:05:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 787DA84AEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCBA084B05
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 787DA84AEA;
-	Fri, 28 Feb 2025 23:05:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 117431DD
+	by smtp1.osuosl.org (Postfix) with ESMTP id CCBA084B05;
+	Fri, 28 Feb 2025 23:05:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3DBF1950
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 23:04:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D96D842F80
+ by smtp1.osuosl.org (Postfix) with ESMTP id A8E8B84935
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 23:04:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zNKgMNDdPTgA for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 23:04:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sCRChACQz9gY for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 23:04:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DCB3542F7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DADD784A13
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DCB3542F7D
+ by smtp1.osuosl.org (Postfix) with ESMTP id DADD784A13
  for <buildroot@buildroot.org>; Fri, 28 Feb 2025 23:04:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4A8E187D63; Fri, 28 Feb 2025 23:04:56 +0000 (UTC)
+ id D71BF87D64; Fri, 28 Feb 2025 23:04:56 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 28 Feb 2025 23:09:49 +0100
+Date: Fri, 28 Feb 2025 23:11:44 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1539003393839048756f2cc05fc4a4cef75088a2
-X-Git-Newrev: 02e41b516ccb4ffe71e83996507c4e0f0bd070b5
+X-Git-Oldrev: fe43cf9c9522d992cf2d5b57442297bb8567f659
+X-Git-Newrev: 7c9ac213d4a5f8ce89a00b461d16e78e5652a54a
 X-Patchwork-Hint: ignore
-Message-Id: <20250228230456.4A8E187D63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-aiohttp: bump
- to version 3.11.12
+Message-Id: <20250228230456.D71BF87D64@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-websockets:
+ bump to version 15.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02e41b516ccb4ffe71e83996507c4e0f0bd070b5
+commit: https://git.buildroot.net/buildroot/commit/?id=7c9ac213d4a5f8ce89a00b461d16e78e5652a54a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-aiohttp/python-aiohttp.hash | 4 ++--
- package/python-aiohttp/python-aiohttp.mk   | 4 ++--
+ package/python-websockets/python-websockets.hash | 4 ++--
+ package/python-websockets/python-websockets.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-aiohttp/python-aiohttp.hash b/package/python-aiohttp/python-aiohttp.hash
-index 0aa22e9fa3..a99e21d14c 100644
---- a/package/python-aiohttp/python-aiohttp.hash
-+++ b/package/python-aiohttp/python-aiohttp.hash
+diff --git a/package/python-websockets/python-websockets.hash b/package/python-websockets/python-websockets.hash
+index 3e762c5029..3279977431 100644
+--- a/package/python-websockets/python-websockets.hash
++++ b/package/python-websockets/python-websockets.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp/json
--md5  17f04b60068122e998a60a3010679501  aiohttp-3.11.11.tar.gz
--sha256  bb49c7f1e6ebf3821a42d81d494f538107610c3a705987f53068546b0e90303e  aiohttp-3.11.11.tar.gz
-+md5  efe78467dfb0b559cb4725554b1fb53a  aiohttp-3.11.12.tar.gz
-+sha256  7603ca26d75b1b86160ce1bbe2787a0b706e592af5b2504e12caa88a217767b0  aiohttp-3.11.12.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/websockets/json
+-md5  26d1dc6e53395f537667d66ba1832ea7  websockets-14.2.tar.gz
+-sha256  5059ed9c54945efb321f097084b4c7e52c246f2c869815876a69d1efc4ad6eb5  websockets-14.2.tar.gz
++md5  753a523e3de5b0f32927e590b910dfde  websockets-15.0.tar.gz
++sha256  ca36151289a15b39d8d683fd8b7abbe26fc50be311066c5f8dcf3cb8cee107ab  websockets-15.0.tar.gz
  # Locally computed sha256 checksums
- sha256  9f80d0db7d755a941db4572172c270ecbd8f082ba215ddd095985942ed94a9eb  LICENSE.txt
-diff --git a/package/python-aiohttp/python-aiohttp.mk b/package/python-aiohttp/python-aiohttp.mk
-index 19e62745e0..5e436321b9 100644
---- a/package/python-aiohttp/python-aiohttp.mk
-+++ b/package/python-aiohttp/python-aiohttp.mk
+ sha256  3d6a0c050d8bec52fabad502e45fb25bd02bcadbd70dea34d447b6a0ff4e6da8  LICENSE
+diff --git a/package/python-websockets/python-websockets.mk b/package/python-websockets/python-websockets.mk
+index 2de0b32d58..a39c7580ef 100644
+--- a/package/python-websockets/python-websockets.mk
++++ b/package/python-websockets/python-websockets.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_AIOHTTP_VERSION = 3.11.11
-+PYTHON_AIOHTTP_VERSION = 3.11.12
- PYTHON_AIOHTTP_SOURCE = aiohttp-$(PYTHON_AIOHTTP_VERSION).tar.gz
--PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/fe/ed/f26db39d29cd3cb2f5a3374304c713fe5ab5a0e4c8ee25a0c45cc6adf844
-+PYTHON_AIOHTTP_SITE = https://files.pythonhosted.org/packages/37/4b/952d49c73084fb790cb5c6ead50848c8e96b4980ad806cf4d2ad341eaa03
- PYTHON_AIOHTTP_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_LICENSE_FILES = LICENSE.txt
+-PYTHON_WEBSOCKETS_VERSION = 14.2
++PYTHON_WEBSOCKETS_VERSION = 15.0
+ PYTHON_WEBSOCKETS_SOURCE = websockets-$(PYTHON_WEBSOCKETS_VERSION).tar.gz
+-PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/94/54/8359678c726243d19fae38ca14a334e740782336c9f19700858c4eb64a1e
++PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/2e/7a/8bc4d15af7ff30f7ba34f9a172063bfcee9f5001d7cef04bee800a658f33
+ PYTHON_WEBSOCKETS_SETUP_TYPE = setuptools
+ PYTHON_WEBSOCKETS_LICENSE = BSD-3-Clause
+ PYTHON_WEBSOCKETS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
