@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50168C282EC
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:03:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81C16C35FF3
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:03:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F32DD8224A;
-	Tue, 18 Mar 2025 15:03:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 420D160BC1;
+	Tue, 18 Mar 2025 15:03:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zK-MjzCztZXn; Tue, 18 Mar 2025 15:03:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gnEvA5zMs-uy; Tue, 18 Mar 2025 15:03:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE8DD827A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01C6A60BC5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE8DD827A1;
-	Tue, 18 Mar 2025 15:03:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 12FA9D5
+	by smtp3.osuosl.org (Postfix) with ESMTP id 01C6A60BC5;
+	Tue, 18 Mar 2025 15:03:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F626D8C
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AEDEA814BB
+ by smtp4.osuosl.org (Postfix) with ESMTP id D66C14096B
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id evPKnmO7LD27 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sqxn33nv4733 for <buildroot@buildroot.org>;
  Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80AE28156A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0EC4C4083B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 80AE28156A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0EC4C4083B
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7AE03880EC; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
+ id 0B69F880AF; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 1 Mar 2025 11:32:49 +0100
+Date: Fri, 28 Feb 2025 23:11:44 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fe08ec9efa6ec9a2506f7e3ffcb83c14b96b55ec
-X-Git-Newrev: 793b45cea77ed645f6800240811d03f8be392ccd
+X-Git-Oldrev: 0df577df87d61090a2bf4228e35a4b44a1fe1ded
+X-Git-Newrev: 50aeed6b2323aed3f76f8a7dee6215955a3c45fd
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150242.7AE03880EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- package/freescale-imx/imx-vpu-hantro-daemon: bump version to 1.4.0
+Message-Id: <20250318150242.0B69F880AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-sentry-sdk: bump to version
+ 2.21.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,71 +60,54 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3161238544693263347=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3161238544693263347==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=793b45cea77ed645f6800240811d03f8be392ccd
+commit: https://git.buildroot.net/buildroot/commit/?id=50aeed6b2323aed3f76f8a7dee6215955a3c45fd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version is aligned with NXP Linux BSP version "lf-6.6.52-2.2.0".
+License hash changed due to date range removal:
+https://github.com/getsentry/sentry-python/commit/7473afb77d7f0ba534bf5fdcd22622b06a5f7e62
 
-Add SCR-imx-vpu-hantro-daemon.txt to _LICENSE_FILES.
-
-Note: in this release, the package source archive name changed to
-include a revision. This commit adds a new _REVISION variable with the
-value published in the corresponding NXP BSP.
-
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-[Julien: fixed the bsp version name in commit log]
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash  | 3 ++-
- .../freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk    | 6 ++++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/python-sentry-sdk/python-sentry-sdk.hash | 6 +++---
+ package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash
-index 0fd64cdf9d..0f3ca60865 100644
---- a/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash
-+++ b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash
-@@ -1,3 +1,4 @@
- # Locally computed:
--sha256  80d6620063fd5e5506b05c907677b579d471a9b6daa8b26ffb963110cc680bf9  imx-vpu-hantro-daemon-1.1.9.tar.gz
-+sha256  c3ac36c203fef44ef21c98a90b3fff73af9f328f16b4d85157308848f6c34823  imx-vpu-hantro-daemon-1.4.0-75d9dd9.tar.gz
- sha256  bb645f02b260955f333348100e40af76253e2cd8b116bac047230439dd53ec5a  LICENSE.txt
-+sha256  c61176048f74950c0849d91b4b6b30e335e050462a8950b89a4e6f35c7fe577b  SCR-imx-vpu-hantro-daemon.txt
-diff --git a/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk
-index 12ec055f92..a328005328 100644
---- a/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk
-+++ b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk
-@@ -4,10 +4,12 @@
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
+index 0bf0392c77..b1b816fa51 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.hash
++++ b/package/python-sentry-sdk/python-sentry-sdk.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
+-md5  1ee9b58ddcc2227b8534c7ab9c5b8da7  sentry_sdk-2.20.0.tar.gz
+-sha256  afa82713a92facf847df3c6f63cec71eb488d826a50965def3d7722aa6f0fdab  sentry_sdk-2.20.0.tar.gz
++md5  a24d71a651889b89c12983c6bd3d1abf  sentry_sdk-2.21.0.tar.gz
++sha256  a6d38e0fb35edda191acf80b188ec713c863aaa5ad8d5798decb8671d02077b6  sentry_sdk-2.21.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  6d7ec62dc20e8b92cb88b89fb3b55ee8576505f3e1afa57952548f6eea5d008e  LICENSE
++sha256  2a140d660f462812fa290bc740d04633126c5ec45d84b79b569e127b0eeddd0b  LICENSE
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
+index a404bcda15..25b419f1e2 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.mk
++++ b/package/python-sentry-sdk/python-sentry-sdk.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--IMX_VPU_HANTRO_DAEMON_VERSION = 1.1.9
-+IMX_VPU_HANTRO_DAEMON_VERSION = 1.4.0
-+IMX_VPU_HANTRO_DAEMON_REVISION = 75d9dd9
-+IMX_VPU_HANTRO_DAEMON_SOURCE = imx-vpu-hantro-daemon-$(IMX_VPU_HANTRO_DAEMON_VERSION)-$(IMX_VPU_HANTRO_DAEMON_REVISION).tar.gz
- IMX_VPU_HANTRO_DAEMON_SITE = $(FREESCALE_IMX_SITE)
- IMX_VPU_HANTRO_DAEMON_LICENSE = NXP Semiconductor Software License Agreement
--IMX_VPU_HANTRO_DAEMON_LICENSE_FILES = LICENSE.txt
-+IMX_VPU_HANTRO_DAEMON_LICENSE_FILES = LICENSE.txt SCR-imx-vpu-hantro-daemon.txt
- IMX_VPU_HANTRO_DAEMON_REDISTRIBUTE = NO
- IMX_VPU_HANTRO_DAEMON_DEPENDENCIES = imx-vpu-hantro linux
- ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP),y)
-
---===============3161238544693263347==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-PYTHON_SENTRY_SDK_VERSION = 2.20.0
++PYTHON_SENTRY_SDK_VERSION = 2.21.0
+ PYTHON_SENTRY_SDK_SOURCE = sentry_sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
+-PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/68/e8/6a366c0cd5e129dda6ecb20ff097f70b18182c248d4c27e813c21f98992a
++PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/08/63/3f0e88709cf4af992e2813c27d8ba628a891db0805e3fcc6dc834e142c5b
+ PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
+ PYTHON_SENTRY_SDK_LICENSE = MIT
+ PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3161238544693263347==--
