@@ -4,82 +4,118 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD785C19776
-	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 06:46:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 739BEC19776
+	for <buildroot@archiver.kernel.org>; Fri, 28 Feb 2025 10:52:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5EE5761B31;
-	Fri, 28 Feb 2025 06:46:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF46860805;
+	Fri, 28 Feb 2025 10:52:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bSr3IouOyGHV; Fri, 28 Feb 2025 06:46:51 +0000 (UTC)
+ id LqGUZHM5-K_l; Fri, 28 Feb 2025 10:52:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DBC961B38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16FF760ADD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7DBC961B38;
-	Fri, 28 Feb 2025 06:46:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1480368
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 06:46:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 16FF760ADD;
+	Fri, 28 Feb 2025 10:52:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5D882711
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 10:52:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D8F8984134
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 06:46:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3EC8F4000B
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 10:52:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fxg7Fm9OuJvY for <buildroot@buildroot.org>;
- Fri, 28 Feb 2025 06:46:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=95.163.59.82;
- helo=send243.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ED67B8411C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED67B8411C
-Received: from send243.i.mail.ru (send243.i.mail.ru [95.163.59.82])
- by smtp1.osuosl.org (Postfix) with ESMTPS id ED67B8411C
- for <buildroot@buildroot.org>; Fri, 28 Feb 2025 06:46:48 +0000 (UTC)
-Received: by exim-smtp-6559db9d9c-bqh9w with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1tnu8z-00000000UYS-2ERo; Fri, 28 Feb 2025 09:46:45 +0300
-From: Maxim Kochetkov <fido_max@inbox.ru>
-To: buildroot@buildroot.org
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Fri, 28 Feb 2025 09:46:43 +0300
-Message-ID: <20250228064643.91177-1-fido_max@inbox.ru>
-X-Mailer: git-send-email 2.47.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ys_fL9D10qXd for <buildroot@buildroot.org>;
+ Fri, 28 Feb 2025 10:52:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ envelope-from=rgallaispou@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1AF7440131
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AF7440131
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1AF7440131
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 10:52:29 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-43984e9cc90so19071865e9.1
+ for <buildroot@buildroot.org>; Fri, 28 Feb 2025 02:52:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1740739948; x=1741344748;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=s0EtD6VuoMKDo3U6BNSSjyhnxmeprj8ROJTMAdM9mqQ=;
+ b=d6iHVQM1nHIdDT+Mz9CS6FGGGMMwB+T6HVj/WtbKs/XOSlq1KRl9sOLqPM/CBJVA+H
+ RI6PHTeubsTDYDLup8tmws9KtxjIzv2hdJKiEZkTqd5YpJHqphzQgRSUKSfUBGgnWuua
+ aV4RGD7XrjBq5i97GxFqibGPFgnSOM0e7z7FfapP9IC6V62AaQR9mHB4vBDRHdXeURQa
+ CTcuM95252kclwrlc/XfOWR3QEQgXZDKHasipJb9uqq+m1vZuujDuQrBz0JYp/FEpv08
+ aj45Y9z0WDzF9Qvi4EDoGB8QYGpsotkUgJOYB0ujtF/BNp8uUfJFxusw3B8OleV5U40k
+ DT1g==
+X-Gm-Message-State: AOJu0YxVPP/BSHTsV+whqIGrz1GtjysUUJ35wLJfQa+YnqGBaNazB1Km
+ iAc+bmpDkCq1oJtCYTAOCQc8DBRL3x38UMTeivcWTJYQHieGzcHNP7i3j8QO
+X-Gm-Gg: ASbGncvw6d6sDGZGo7g66v6PkEHQcpKMdGJIfOVcPBIuy5SFe3qoaY4YZvX0t4Cdm4T
+ Yx04qqp0vT+IG9dtcqA/nzB90BiWLGj4lacLc3EJvy57jZXI+23dJ+nT5VESAcEGRqUEB8KejY1
+ H/D1hfVPdeAQwKMtPvxL8YIzwLhFHDQSmKPMRWClZOC/YxiMIjaErlTB84INtWASUcreu1KLrT5
+ 2Pxc9nS3KK4vl1qXB2iLyXnCt57MYGmuvOMFRMg53IOWQPG8dP1qf1DKJnJ1ZL+vz14LoqZ2k1H
+ e2Hm+dj0yCJ2vLNf8KHr56TOHg==
+X-Google-Smtp-Source: AGHT+IFhzYC348bl1E+oV9TEDLOTNmoike9mrq2JYBtVQ+JXt4N08HwtFK0897ZuQIFuk2rA1DbuGQ==
+X-Received: by 2002:a5d:5f94:0:b0:38d:e0a9:7e5e with SMTP id
+ ffacd0b85a97d-390e164b4bcmr5713592f8f.6.1740739947896; 
+ Fri, 28 Feb 2025 02:52:27 -0800 (PST)
+Received: from localhost ([2001:861:3385:e20:6384:4cf:52c5:3194])
+ by smtp.gmail.com with UTF8SMTPSA id
+ ffacd0b85a97d-390e47b6f22sm4752392f8f.47.2025.02.28.02.52.27
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 28 Feb 2025 02:52:27 -0800 (PST)
+From: Raphael Gallais-Pou <rgallaispou@gmail.com>
+Date: Fri, 28 Feb 2025 11:52:27 +0100
 MIME-Version: 1.0
-X-Mailru-Src: smtp
-X-7564579A: B8F34718100C35BD
-X-77F55803: 4F1203BC0FB41BD94C6F4C9F24859151C5DB9F5BB2BD23916E0D5913813AD4EB00894C459B0CD1B967CEFDBD22B4EDA8C8659717DE992388A867FF8EBC7443F7058AE1A1BADE7A28A2BA58D3D091CA1F
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE79389E7A2A88AA7BCEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637AC83A81C8FD4AD23D82A6BABE6F325AC2E85FA5F3EDFCBAA7353EFBB553375662B0B15A2BD47BC34A3978F742ACA12E306A8B9150784938109718A9396CC28C38EEF46B7454FC60B9742502CCDD46D0DD166953D3EA3826BF6B57BC7E64490618DEB871D839B73339E8FC8737B5C2249A5DF9383870C0FEDCC7F00164DA146DAFE8445B8C89999729449624AB7ADAF37F6B57BC7E64490611E7FA7ABCAF51C92176DF2183F8FC7C0A0DA03275E5C1BCF8941B15DA834481F9449624AB7ADAF372E808ACE2090B5E14AD6D5ED66289B5259CC434672EE63711DD303D21008E298D5E8D9A59859A8B6B372FE9A2E580EFC725E5C173C3A84C315AF0D0D4FC4FA3D35872C767BF85DA2F004C90652538430E4A6367B16DE6309
-X-C1DE0DAB: 0D63561A33F958A59008B13E741E26F35002B1117B3ED69662DB1698F1D6804C9E040399BDE4761E823CB91A9FED034534781492E4B8EEAD9F68E8F4EDE74A9DC79554A2A72441328621D336A7BC284946AD531847A6065A535571D14F44ED41
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CFD23EA584B45F74FAB1BA71E1D6CD12997EB7498F154C93F8E62427BBD6A32E0F8135B9CF208C7BB7D4F7E0138972EF02B5968B4D07A407C56D7B2E43D16477180A87E3B29AC7BD9C111DC66A97D0BFE2913E6812662D5F2A17D6C1CDD2003EB8E03787203701020945C72C348FB7EED3
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+ObcCpyrx6l7KImUglyhkEat/+ysWwi0gdhEs0JGjl6ggRWTy1haxBpVdbIX1nthFXMZebaIdHP2ghjoIc/363UZI6Kf1ptIMVQQG/FugD0/CpmEL+MFijbQ=
-X-Mailru-Sender: 689FA8AB762F739381B31377CF4CA219288DEB5BD61177E1589676318E5F2E07762D6305C9250B5A90DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; 
- s=mail4; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:
- To:From:From:Sender:Reply-To:To:Cc:Content-Type:Content-Transfer-Encoding:
- Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
- Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
- List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
- X-Cloud-Ids:Disposition-Notification-To;
- bh=BZl0fZ/k3qguuucbthTXmOGDSkWPjgZyVFfLypUj20Y=; t=1740725209; x=1740815209; 
- b=V2RaPzi4jasZEQnM/zvhU/bXpFpUZUOE9g4mcAdeM0M31CHa5sEN/kkUTvh2lErA0WALwWAvBQJ
- Eyx5qSKcXA8SSiHs8+r53eKuIoP4WyazZi+6rV2z4HlLtnXGRyVRHN4mft3YlGnK9BxqsZVphoMK4
- rFcvSV5SWSZMItZnXwX1cpmWtzRR4qjtEyj/lhe2mtjpPzWKL1Rcqvh/3BUMeSA7evXkq2qjT0bmU
- KzIszqoIyILLcPbBrT2Bi+XbvWwO2oZaAMx3JgVQE4FQmPGYQqINecwkm+nd34SQuK94wV3ktxOtc
- QYwwM0Uc2Yzsx614HP4ao7tPR8bHSohCYlCg==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=inbox.ru
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
- header.s=mail4 header.b=V2RaPzi4
-X-Mailman-Original-Authentication-Results: exim-smtp-6559db9d9c-bqh9w;
- auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: [Buildroot] [PATCH 1/1] package/osm2pgsql: bump version to 2.0.1
+Message-Id: <20250228-master-v1-1-5711275f36cc@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAGqVwWcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDIyMz3dzE4pLUIl1z4yRjI8uk1DSTJEMloOKCotS0zAqwQdGxtbUAC4f
+ fjFgAAAA=
+X-Change-ID: 20250226-master-73b329bef4b1
+To: buildroot@buildroot.org
+Cc: 
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1132; i=rgallaispou@gmail.com; 
+ h=from:subject:message-id;
+ bh=0Qp/Cu1vefwJ8teAtm2ti9h6p+BFUUEh7ZVEe5k9IMI=; 
+ b=owEBbQKS/ZANAwAIAechimjUEsK1AcsmYgBnwZVrtglip3fmlfObjPPB1hBWuhjt3qCa3iznD
+ nxurAKKIniJAjMEAAEIAB0WIQQgmXv2E+fvbV/9ui/nIYpo1BLCtQUCZ8GVawAKCRDnIYpo1BLC
+ tcNDEACRyozYV9nksNDUJASGpi58/KijQgMMHODxLVriU+3cNb4k/8uBgMTZ++O45D1QBSEsn+v
+ EkGEdohh58Ywkzqr4yAA963wCqE5o7nA+2W7E6bRsrVeaBviDpgJ0363jcCr7Cs/WAOe0HImgJT
+ /qIbw1nz+XE88C5nRh9G8jARqbTFnyfHNx4XG1qi5SN3xjOEEJasTNNFYRef1BI4NUurn6Y59Zj
+ CxTLb6qSwuDZrAuJlpuZ/ctv5j/nJhR+XlglyxMUYJs8brgzlDInmsSOoIRIzVOGe6r7lm5R8KG
+ hEoh7c7A+U+4qbG2b3OrLaDE4F7ShzPCtcrumyauNq2M7qvZh41ymM/adT+T20O6hSe3hqWjXbi
+ sQexGsHWcmEMCXBm3U4rPZj8o91Qn8DZGZSXEb350SCXGuT4xXTBMgg0/+CapPLeqNY/9AaqIWX
+ 67xAhDJiEYGS8oUfgc4FYbo0Kub5ot3CE21IerUJiJiwJOzJm2ddruT/RuaLRTZlh18v/mvYHuR
+ Kqcj5NhnRb5+epB48YhSyAn1AjLlTGb3xHY0GwQvzXg1OemB3wsR8qUzGMeoIGYnNg2vK0NCy6a
+ w03j0/W1z6yevKlKEY6Vycdxs67Im6WVULtKizWfg2GLa74zvLSd4Bi89XFTD9lD+ALq7lJzKEs
+ vKodFtgXF5NeKtg==
+X-Developer-Key: i=rgallaispou@gmail.com; a=openpgp;
+ fpr=20997BF613E7EF6D5FFDBA2FE7218A68D412C2B5
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1740739948; x=1741344748; darn=buildroot.org;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=s0EtD6VuoMKDo3U6BNSSjyhnxmeprj8ROJTMAdM9mqQ=;
+ b=f/tJr5Y8pRfWC6oFM2tlKLikvXRnTwpS61Lfwalu1CX77NI7dhSvCnHy7KCpgDtrE0
+ fEW5sXhD6nVWWXCW4FqlCJzPhe7KBaAAftY3nS/LsosfTI3SPsw0gq5v2PT95TH4XDF0
+ 0IcDi8AGhyWVeg0Xi4U818cecIF0YXhMZfkTR8QDvW1PgJriwMxq9/2V16gnQzkUipoA
+ v/SDEl3278qK3TsNNtTNReyojs6YR9HCFzHI19yAO3xmv0eDhUDhao9wlKFTuSTS539M
+ lr455H+ZWHkLULSUt+V5f3QaS/Zyf5KWxSaXQDkt0BsYHECFL0CBZCoOT03Tjbw96wqs
+ zuOg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=f/tJr5Y8
+Subject: [Buildroot] [PATCH] configs/stm32mp135f-dk: switch toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,42 +132,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release-notes: https://github.com/osm2pgsql-dev/osm2pgsql/releases/tag/2.0.1
+As Arnout stated[1], defconfigs should use a Bootlin toolchain (stable, glibc).
 
-Change URL to osm2pgsql-dev.
+[1] https://lore.kernel.org/buildroot/e9576c4f-243b-4a89-a74d-3fee591100a8@mind.be/
 
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
 ---
- package/osm2pgsql/osm2pgsql.hash | 2 +-
- package/osm2pgsql/osm2pgsql.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/stm32mp135f_dk_defconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/osm2pgsql/osm2pgsql.hash b/package/osm2pgsql/osm2pgsql.hash
-index cc0d91f98f..9f119d9c7d 100644
---- a/package/osm2pgsql/osm2pgsql.hash
-+++ b/package/osm2pgsql/osm2pgsql.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  05c2355b4a59d03a0f9855b4234a3bdc717b078faee625e73357947d1a82fe89  osm2pgsql-2.0.0.tar.gz
-+sha256  b9d5c95ccc928aafc3c6caccb8b5bc19c4d48a5d1640cada07388d0dbf171ecc  osm2pgsql-2.0.1.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/osm2pgsql/osm2pgsql.mk b/package/osm2pgsql/osm2pgsql.mk
-index 7b54e4c0d2..f968a159d2 100644
---- a/package/osm2pgsql/osm2pgsql.mk
-+++ b/package/osm2pgsql/osm2pgsql.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--OSM2PGSQL_VERSION = 2.0.0
--OSM2PGSQL_SITE = $(call github,openstreetmap,osm2pgsql,$(OSM2PGSQL_VERSION))
-+OSM2PGSQL_VERSION = 2.0.1
-+OSM2PGSQL_SITE = $(call github,osm2pgsql-dev,osm2pgsql,$(OSM2PGSQL_VERSION))
- OSM2PGSQL_LICENSE = GPL-2.0+
- OSM2PGSQL_LICENSE_FILES = COPYING
- OSM2PGSQL_SUPPORTS_IN_SOURCE_BUILD = NO
+diff --git a/configs/stm32mp135f_dk_defconfig b/configs/stm32mp135f_dk_defconfig
+index 387fe3a4143235dfca12a97d1ccbd7e34e4fe149..59c09e8ecd10c14c48338038fbd9263a78442488 100644
+--- a/configs/stm32mp135f_dk_defconfig
++++ b/configs/stm32mp135f_dk_defconfig
+@@ -1,6 +1,8 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
+ BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/common/stm32mp1xx/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+
+---
+base-commit: 5a1515b5976aed8f1b15eacf513d40ab70b908a8
+change-id: 20250226-master-73b329bef4b1
+
+Best regards,
 -- 
-2.47.1
+Raphael Gallais-Pou <rgallaispou@gmail.com>
 
 _______________________________________________
 buildroot mailing list
