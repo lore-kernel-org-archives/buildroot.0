@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B7F9C282EC
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:06:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60B1DC28B28
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:07:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 02D8884184;
-	Tue, 18 Mar 2025 15:06:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2667980DF8;
+	Tue, 18 Mar 2025 15:07:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ri-q-Hfe8aEG; Tue, 18 Mar 2025 15:06:56 +0000 (UTC)
+ id pM6kYEOFatFD; Tue, 18 Mar 2025 15:07:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 99DBC84197
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F4E78433A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 99DBC84197;
-	Tue, 18 Mar 2025 15:06:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F4E78433A;
+	Tue, 18 Mar 2025 15:06:59 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2F806D8C
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:03:24 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 16556D8C
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:03:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4C7BE408FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id BEC89408D1
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IRGyaoprtZbT for <buildroot@buildroot.org>;
- Tue, 18 Mar 2025 15:02:47 +0000 (UTC)
+ id fq6cDZnrURsq for <buildroot@buildroot.org>;
+ Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99E9E407D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B56A4086A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 99E9E407D7
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B56A4086A
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 95FA285FD1; Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
+ id 486CE880AF; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Mar 2025 22:21:58 +0100
+Date: Sat, 1 Mar 2025 11:31:40 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ebbaac08e3f462bf023c12077f739ed1c0543eb2
-X-Git-Newrev: b36475315b974e1ac3120156745b55daf1b7557c
+X-Git-Oldrev: 44355f79980562177228c5f010683fa4cffe47b9
+X-Git-Newrev: f34a7a13af0afc2d977439dccf6e0e4240e95044
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150245.95FA285FD1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/aardvark-dns: new package
+Message-Id: <20250318150242.486CE880AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/firmware-ele-imx:
+ bump to version 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,180 +60,78 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============9009240945827434565=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b36475315b974e1ac3120156745b55daf1b7557c
+--===============9009240945827434565==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=f34a7a13af0afc2d977439dccf6e0e4240e95044
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-aardvark-dns is needed by netavark to provide cross-container DNS
-resolving with Podman.
+This version is aligned with NXP Linux BSP version "lf-6.6.52-2.2.0".
 
-It is to be noted that netavark and aardvark-dns have to be updated in
-lock-step [0].
+License hashes changed because the LA_OPT_NXP_Software_License changed
+from "v49 September 2023" to "v57 July 2024".
+Add SCR.txt file to _LICENSE_FILES.
 
-Update the podman runtime test to validate this is working.
+Note: in this release, the package source archive name changed to
+include a revision. This commit adds a new _REVISION variable with the
+value published in the corresponding NXP BSP.
 
-[0] https://github.com/containers/podman/blob/main/DISTRO_PACKAGE.md#networking-tools-netavark-aardvark-dns-passt
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+[Julien: fixed the bsp version name in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/Config.in                            |  1 +
- package/aardvark-dns/Config.in               |  9 +++++++
- package/aardvark-dns/aardvark-dns.hash       |  3 +++
- package/aardvark-dns/aardvark-dns.mk         | 15 +++++++++++
- package/netavark/Config.in                   |  1 +
- package/netavark/netavark.mk                 |  1 +
- package/podman/podman.mk                     |  1 +
- support/testing/tests/package/test_podman.py | 38 ++++++++++++++++++++++++++++
- 8 files changed, 69 insertions(+)
+ package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash | 7 ++++---
+ package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk   | 7 ++++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 7e98256cdf..4297903fd8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2411,6 +2411,7 @@ menu "Miscellaneous"
- endmenu
- 
- menu "Networking applications"
-+	source "package/aardvark-dns/Config.in"
- 	source "package/aircrack-ng/Config.in"
- 	source "package/alfred/Config.in"
- 	source "package/aoetools/Config.in"
-diff --git a/package/aardvark-dns/Config.in b/package/aardvark-dns/Config.in
-new file mode 100644
-index 0000000000..83ef5a16f9
---- /dev/null
-+++ b/package/aardvark-dns/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_AARDVARK_DNS
-+	bool "aardvark-dns"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
-+	help
-+	  Authoritative dns server for A/AAAA container records.
-+	  Forwards other request to host's /etc/resolv.conf
-+
-+	  https://github.com/containers/aardvark-dns/
-diff --git a/package/aardvark-dns/aardvark-dns.hash b/package/aardvark-dns/aardvark-dns.hash
-new file mode 100644
-index 0000000000..5327a38b7e
---- /dev/null
-+++ b/package/aardvark-dns/aardvark-dns.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  bbd4a0b0bdf6788c09266f1f944d5c5397b6db4f1da0735a1d42738a6e074249  aardvark-dns-v1.14.0-git4-cargo2.tar.gz
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/aardvark-dns/aardvark-dns.mk b/package/aardvark-dns/aardvark-dns.mk
-new file mode 100644
-index 0000000000..a2e74a72bf
---- /dev/null
-+++ b/package/aardvark-dns/aardvark-dns.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# aardvark-dns
-+#
-+################################################################################
-+
-+# When updating the version here, also update netavark in lockstep
-+AARDVARK_DNS_VERSION = v1.14.0
-+AARDVARK_DNS_SITE = https://github.com/containers/aardvark-dns
-+AARDVARK_DNS_SITE_METHOD = git
-+
-+AARDVARK_DNS_LICENSE = Apache-2.0
-+AARDVARK_DNS_LICENSE_FILES = LICENSE
-+
-+$(eval $(cargo-package))
-diff --git a/package/netavark/Config.in b/package/netavark/Config.in
-index cf7b731141..c78e57556f 100644
---- a/package/netavark/Config.in
-+++ b/package/netavark/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_NETAVARK
- 	bool "netavark"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	select BR2_PACKAGE_HOST_RUSTC
-+	select BR2_PACKAGE_AARDVARK_DNS  # runtime
- 	select BR2_PACKAGE_IPTABLES if !BR2_PACKAGE_NFTABLES  # runtime
- 	select BR2_PACKAGE_NFTABLES_JSON if BR2_PACKAGE_NFTABLES && !BR2_PACKAGE_IPTABLES
- 	help
-diff --git a/package/netavark/netavark.mk b/package/netavark/netavark.mk
-index c96912ef5a..31d0b28b74 100644
---- a/package/netavark/netavark.mk
-+++ b/package/netavark/netavark.mk
-@@ -4,6 +4,7 @@
+diff --git a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
+index 0923e546b0..6182dc57be 100644
+--- a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
++++ b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
+@@ -1,4 +1,5 @@
+ # Locally calculated
+-sha256  4a0440168d8dfb95989a17be8fafb149589e110e7d4518e5e8a33463dfb5e5ca  firmware-ele-imx-0.1.0.bin
+-sha256  24d7cb3a7e51011466a149bd99acf89387b832be2d0890ce2e183dfbc9d7cb84  COPYING
+-sha256  3282d88fad766897f93b0827297a70c2707d9358db24cccd5777abf7c997da77  EULA
++sha256  8791109824767346237e53ac2c712824e54608e2092859161e6bb3e5385a7595  firmware-ele-imx-1.3.0-17945fc.bin
++sha256  601fa790c5b4d03579bd182fb4d65a6f329a32faf49db22f98e4608221e861f7  COPYING
++sha256  c3d9a7b2a5a7db5da690e9c1081b98b665802c3efbbba7fb237339395a92f607  EULA
++sha256  8721a617a5d4c7f366aaf857ebda21eb4c9fc9175dc92b70f627c611d403ec8e  SCR.txt
+diff --git a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
+index d493fe4a96..4225805d50 100644
+--- a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
++++ b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
+@@ -4,12 +4,13 @@
  #
  ################################################################################
  
-+# When updating the version here, also update aardvark-dns in lockstep
- NETAVARK_VERSION = v1.14.0
- NETAVARK_SITE = https://github.com/containers/netavark
- NETAVARK_SITE_METHOD = git
-diff --git a/package/podman/podman.mk b/package/podman/podman.mk
-index 48b4cd9b27..29c5591a0a 100644
---- a/package/podman/podman.mk
-+++ b/package/podman/podman.mk
-@@ -101,6 +101,7 @@ PODMAN_POST_INSTALL_TARGET_HOOKS += PODMAN_CONFIG
+-FIRMWARE_ELE_IMX_VERSION = 0.1.0
++FIRMWARE_ELE_IMX_VERSION = 1.3.0
++FIRMWARE_ELE_IMX_REVISION = 17945fc
+ FIRMWARE_ELE_IMX_SITE = $(FREESCALE_IMX_SITE)
+-FIRMWARE_ELE_IMX_SOURCE = firmware-ele-imx-$(FIRMWARE_ELE_IMX_VERSION).bin
++FIRMWARE_ELE_IMX_SOURCE = firmware-ele-imx-$(FIRMWARE_ELE_IMX_VERSION)-$(FIRMWARE_ELE_IMX_REVISION).bin
  
- define PODMAN_HELPERS
- 	$(Q)mkdir -p $(TARGET_DIR)/usr/libexec/podman
-+	$(Q)ln -sf ../../bin/aardvark-dns $(TARGET_DIR)/usr/libexec/podman/aardvark-dns
- 	$(Q)ln -sf ../../bin/netavark $(TARGET_DIR)/usr/libexec/podman/netavark
- 	$(Q)ln -sf ../../bin/slirp4netns $(TARGET_DIR)/usr/libexec/podman/slirp4netns
- 	$(PODMAN_HELPER_INIT)
-diff --git a/support/testing/tests/package/test_podman.py b/support/testing/tests/package/test_podman.py
-index e2b0598961..44211b438e 100644
---- a/support/testing/tests/package/test_podman.py
-+++ b/support/testing/tests/package/test_podman.py
-@@ -166,6 +166,44 @@ class PodmanBase(infra.basetest.BRTest):
-         output, _ = self.emulator.run('echo ${br_container}')
-         self.assertEqual(output[0], "", "Still in a container")
+ FIRMWARE_ELE_IMX_LICENSE = NXP Semiconductor Software License Agreement
+-FIRMWARE_ELE_IMX_LICENSE_FILES = COPYING EULA
++FIRMWARE_ELE_IMX_LICENSE_FILES = COPYING EULA SCR.txt
+ FIRMWARE_ELE_IMX_REDISTRIBUTE = NO
  
-+        # Test networking between two containers
-+        self.assertRunOk("podman network create buz")
-+        self.assertRunOk(
-+            "podman container run --rm -ti --name pod007 --network buz --detach busybox:1.37.0",
-+        )
-+        self.assertRunOk(
-+            "podman container run --rm -ti --name pod006 --network buz --detach busybox:1.37.0",
-+        )
-+        # Ensure each pod can resolv itself and the other
-+        # (not using itertools.matrix() just for those trivial combinations)
-+        for pod1, pod2 in [
-+            ("pod006", "pod006"),
-+            ("pod006", "pod007"),
-+            ("pod007", "pod007"),
-+            ("pod007", "pod006"),
-+        ]:
-+            output, exit_code = self.emulator.run(
-+                f"podman container exec {pod1} nslookup {pod2}",
-+            )
-+            self.assertEqual(exit_code, 0)
-+            self.assertTrue(output[0].startswith("Server:"))
-+            self.assertTrue(output[1].startswith("Address:"))
-+            # Busybox' nslookup emits one "Non-authoritative answer" per
-+            # supported address familly: IPv4 and IPv6.
-+            self.assertEqual(
-+                len([line for line in output[2:] if line == "Non-authoritative answer:"]),
-+                2,
-+            )
-+            # But only IPv4 is available on this network
-+            self.assertEqual(
-+                len([line for line in output[2:] if line.startswith("Address:")]),
-+                1,
-+            )
-+        self.assertRunOk("podman container kill --all")
-+        output, _ = self.emulator.run("podman container ls --format '{{ json }}'")
-+        pod_info = json.loads("".join(output))
-+        self.assertEqual(len(pod_info), 0, f"{len(pod_info)} container(s) still present, expecting 0")
-+
-         # Remove the offical image
-         self.assertRunOk('podman image rm busybox:1.37.0')
-         output, _ = self.emulator.run("podman image ls --format '{{ json }}'")
+ FIRMWARE_ELE_IMX_INSTALL_IMAGES = YES
+
+--===============9009240945827434565==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============9009240945827434565==--
