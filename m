@@ -4,100 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3238DC282D1
-	for <buildroot@archiver.kernel.org>; Sat,  1 Mar 2025 14:27:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECCDEC282D1
+	for <buildroot@archiver.kernel.org>; Sat,  1 Mar 2025 14:27:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 012AA703F7;
-	Sat,  1 Mar 2025 14:27:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D2EA60AE8;
+	Sat,  1 Mar 2025 14:27:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZE9a02hjoyW8; Sat,  1 Mar 2025 14:27:17 +0000 (UTC)
+ id ZqsI21TeP5pN; Sat,  1 Mar 2025 14:27:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA29860D87
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5252F70838
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA29860D87;
-	Sat,  1 Mar 2025 14:27:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1955D1CB
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 14:27:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5252F70838;
+	Sat,  1 Mar 2025 14:27:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5FC82181
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 14:27:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 091E34F083
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 14:27:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 86BCE40118
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 14:27:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a1x8bgQnmW5k for <buildroot@buildroot.org>;
- Sat,  1 Mar 2025 14:27:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ohMlvvLG_DMo for <buildroot@buildroot.org>;
+ Sat,  1 Mar 2025 14:27:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::a34; helo=mail-vk1-xa34.google.com;
+ client-ip=2607:f8b0:4864:20::a31; helo=mail-vk1-xa31.google.com;
  envelope-from=gilles.talis@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 140CA47C46
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 140CA47C46
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com
- [IPv6:2607:f8b0:4864:20::a34])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 140CA47C46
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 14:27:08 +0000 (UTC)
-Received: by mail-vk1-xa34.google.com with SMTP id
- 71dfb90a1353d-52364925cfeso1252079e0c.0
- for <buildroot@buildroot.org>; Sat, 01 Mar 2025 06:27:08 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9634B40C21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9634B40C21
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com
+ [IPv6:2607:f8b0:4864:20::a31])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9634B40C21
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 14:27:11 +0000 (UTC)
+Received: by mail-vk1-xa31.google.com with SMTP id
+ 71dfb90a1353d-51e902b58c0so2521660e0c.0
+ for <buildroot@buildroot.org>; Sat, 01 Mar 2025 06:27:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1740839227; x=1741444027;
+ d=1e100.net; s=20230601; t=1740839230; x=1741444030;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=dZ142zBd8yk/Ir5XMydOYRfEmOhOrYYrTkmeNscLjwU=;
- b=O8LAreSKS9HdEbL4UBfacylEbFTzvsJADN4uw8VsJlGB0Ltjo3bIEPLbaGhKnfTEYk
- vyUmAtoHNZoZCiAZUhIgSi7v1BIphKceUAgVL9PLPyNr/bAX+ZYS9yWZbBEgxoxLE7uI
- tahkC/9KM9Hzepn/b2u2fVr4Xsm+AYtyYv/1QEEtf9RLmSs6McaaNptNg6+l6b4rzucR
- zqOetZP3NEbx3b0fpnASf5enzB3Kswl3jxr6xIQ9ieGaI+ACD5gPRO7Q/B/7jLmWmRuK
- pvhIGumk+qhLtDJhBRZsZcNpGtEwQhLDz8dCwteQpCYqasdHkpGQLOLwYSbbwEJuBBCE
- U+IQ==
-X-Gm-Message-State: AOJu0YzMK6q+ON8SR32EtiymsqLk5W2wyKUwVCxQdkuHAmH2Oq8Agxy+
- DjXd5ATtgVve+k3Yk0IOsbflaEh7EfnntmCAtAOR0Cttpx5S6Xi58rF/HjWU50M=
-X-Gm-Gg: ASbGncv0YMRqjVLuYtIYU1wH3vMDwp3/sdyIyTPBSkHth9DAAC+lq5QVC+v2T0ntxY8
- /liLp+qrvVml/IB9WncEvVkmu2h0dv83837JbC+apXeEl6sb6sWZ/OZfXRHl69VH9o7wOmwwWO7
- 3VKWOsjtJcTyw+Dub03ZoKT/EmPKjqawNoDkaaR2QMN5Nc27YM/IraAVdAm+1HVahg8q8gE65s9
- fZd2bD3syUm/Xqb5Q7R0xr1kVsJ+hUSwL1MXaBuCmhztuQu2P9yXLoLfw7DEyKxhmHWFWFrM6/E
- kTjRU9Yg8J9cnOfvHTAxSiBLKqnIUQmuilFv3Euw5CcVXFVlzFe4oWtpLb7zVy8xYA==
-X-Google-Smtp-Source: AGHT+IFVpf0f/oJtcf+IzU1wmw8JR86GTBMryeF+uNyHNSdKnaYH9bZSR8QY7zjnKp8irmdZ12EyAA==
-X-Received: by 2002:a05:6102:82c1:b0:4c0:d2da:ecac with SMTP id
- ada2fe7eead31-4c0d2daef65mr3013370137.3.1740839227473; 
- Sat, 01 Mar 2025 06:27:07 -0800 (PST)
+ bh=hg9a+3ev0AOQvAGvTBmN9CXtFxpyVAUI0fQVqX7FYtw=;
+ b=DF7nMiIExx62uZGocdWeo3eQq6tb1D+VUt42JMIHZ32hQVnqbBYgzv26XqYrBwhlul
+ Bc8LZRib2fUs7QhqEHVsNwuMAwwKzg4qjCFb2mOoBC0cNXzIJDw+BABf01IOXLGgJ38A
+ bTE28SEWEUfZdpFJ1+7WVFinJrR7FZUDXR/Sv8PDDt+ZAyOej4MkxtY5zWZ7xAbrTjfB
+ Q4Z8rh13yy3u8IaTni7YEvR7FD3aoVyDdG/63PL0wsj+lgleRbKOhygH+StOiGHAt0iU
+ 56TdnD+WQApI07hW+kWQm3wH/jS1J6Ahp6YDKBh+qk07lRKwHY/rwJ6/kN4sSi0+U/WI
+ WHpw==
+X-Gm-Message-State: AOJu0Ywxr73/FJdoORz5ocjSz1g+yatnOX3bxoIEDwM4PVqYMNB9IzZY
+ K7Ma8+uZZ+T9AzZTpFnfZJy+o8MEZyM9mdidwDOMAM1FehRrkEgA+65kPIB/LrQ=
+X-Gm-Gg: ASbGncuYd5fLYUOopoLiEGi8FXUGEFsA2LGJsg+iQsvXXkyMVurEH62YB4K3upqU1vU
+ oON2B4GXPae2LYB/EzVgVgIeRLnO5wT8p1HvDUK2/+rAxUwNDKSr9b3IWbEmzK4Bz9HxBzG4Csd
+ XuNPetow8oCXuytdSNKCfqoEpkdM71b0KDcBq0IexibLd5iSNCRXOBOQaNBCV2guAcsYiImX8hk
+ 6pE4N+AB879Q53LTPixiOhQ9dNLnoz2YJd7Q1yDd1p0Hpt2bmr14t0w5+8qG5URqPWlR/jgWHLE
+ NKanSi2XzpzxQx2w0U1l9DtdJIbNRn6I0L6F8zdgK2nlci9QwreRzxbzJld5SmJh4Q==
+X-Google-Smtp-Source: AGHT+IFUYR2XZ6WKNlJymsTK0H+1TY258Vcf4pLuGMUwU8DyzERgQ2DHdGdeslCjM2ttAjZJtJhZ/A==
+X-Received: by 2002:a05:6122:8293:b0:520:3536:febc with SMTP id
+ 71dfb90a1353d-5235bcc9951mr4604605e0c.8.1740839229834; 
+ Sat, 01 Mar 2025 06:27:09 -0800 (PST)
 Received: from localhost.localdomain
  ([2605:59c0:148d:1710:e8e3:b53d:c3e3:1bc3])
  by smtp.gmail.com with ESMTPSA id
- a1e0cc1a2514c-86b3dc1359esm858841241.10.2025.03.01.06.27.05
+ a1e0cc1a2514c-86b3dc1359esm858841241.10.2025.03.01.06.27.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 01 Mar 2025 06:27:06 -0800 (PST)
+ Sat, 01 Mar 2025 06:27:08 -0800 (PST)
 From: Gilles Talis <gilles.talis@gmail.com>
 To: buildroot@buildroot.org
 Cc: Gilles Talis <gilles.talis@gmail.com>
-Date: Sat,  1 Mar 2025 10:26:14 -0400
-Message-ID: <20250301142619.72570-7-gilles.talis@gmail.com>
+Date: Sat,  1 Mar 2025 10:26:15 -0400
+Message-ID: <20250301142619.72570-8-gilles.talis@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250301142619.72570-1-gilles.talis@gmail.com>
 References: <20250301142619.72570-1-gilles.talis@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1740839227; x=1741444027; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1740839230; x=1741444030; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=dZ142zBd8yk/Ir5XMydOYRfEmOhOrYYrTkmeNscLjwU=;
- b=lUXjWh4eGFZBR0pnSzXJ5apIo65+ccBb9i4OGndneTao7Cdauw2l0a6OedeF7KVrK+
- 3HomzcjYhZnTICM/QJX7E2Yr7jX2tY6kaJ7IKva+vGZ8aHWB4VVAszfvRKLoLJUCt980
- fx13hQt0uUipcoNfJtkEdx7zYqqoNnExM/hDyR/5wj6YxhUBYapfRf/loAByC5gz00AC
- 8GhParCkfw54SAq1SbzlGzVt5uIxmxn4pXONRpHdY2IJCOJ12dUgB/kYROOv2c0pymsl
- 8vMqv6ooDFzhVxEnY8CRXhbi8l2MSiDYtILa4EcDf3t+TdBvlr88FyD3O6CFqgNDCNT0
- sJWQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=hg9a+3ev0AOQvAGvTBmN9CXtFxpyVAUI0fQVqX7FYtw=;
+ b=AXh/RmSk8gvqW7wgL+NekIOvYCSqTUYQ0tYhvw8eBF8X6DJXygqIe++Rm4B2P46anW
+ suFZV6gMoQY6vDr1/WdnBNaCo8zsvPUcRU5iLasIPIuHV5nMH7HqSfmhsKOPWnoBV5Ch
+ AI/9QZVx5ZvqHLsIYivrUO/xoE4Ymm580Pl03wVJFy18SQnT+EGSHrWpO8DQNG3U4aVc
+ V6FCFk1WiZorArCWcK2OLE45jjEPvwrZ6N1judGDbgW373Zz0+2BgDG7mTB0oufoz8iB
+ FtFknYRB1vYi3uFlQ1FIItO/R8phaYjZjYcGeXz3TbwmhuBRS5DHeUlT00N8zOaBr7oC
+ Er5Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=lUXjWh4e
-Subject: [Buildroot] [PATCH 06/11] configs/freescale_imx8mnevk: bump BSP
+ header.a=rsa-sha256 header.s=20230601 header.b=AXh/RmSk
+Subject: [Buildroot] [PATCH 07/11] configs/freescale_imx8mmevk: bump BSP
  components to lf-6.6.52-2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -121,62 +121,62 @@ versions.
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
  .../patches/arm-trusted-firmware/arm-trusted-firmware.hash  | 2 +-
- board/freescale/imx8mnevk/patches/linux/linux.hash          | 2 +-
- board/freescale/imx8mnevk/patches/uboot/uboot.hash          | 2 +-
- configs/freescale_imx8mnevk_defconfig                       | 6 +++---
+ board/freescale/imx8mmevk/patches/linux/linux.hash          | 2 +-
+ board/freescale/imx8mmevk/patches/uboot/uboot.hash          | 2 +-
+ configs/freescale_imx8mmevk_defconfig                       | 6 +++---
  4 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/board/freescale/imx8mnevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/imx8mnevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+diff --git a/board/freescale/imx8mmevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/imx8mmevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
 index 0266b45d6a..58100572e4 100644
---- a/board/freescale/imx8mnevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/board/freescale/imx8mnevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+--- a/board/freescale/imx8mmevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/freescale/imx8mmevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
 -sha256  37f0dee8b3b52d6c7f8a46c3bdd4138b528f9cc607015400e7cad0c206df41d7  imx-atf-lf-6.6.23-2.0.0.tar.gz
 +sha256  2b5b4a370a55b790ca318e95e2c1aac9d9166ea549179ef9929c346863b4ea57  imx-atf-lf-6.6.52-2.2.0.tar.gz
-diff --git a/board/freescale/imx8mnevk/patches/linux/linux.hash b/board/freescale/imx8mnevk/patches/linux/linux.hash
+diff --git a/board/freescale/imx8mmevk/patches/linux/linux.hash b/board/freescale/imx8mmevk/patches/linux/linux.hash
 index 3c4223976b..620a7377ef 100644
---- a/board/freescale/imx8mnevk/patches/linux/linux.hash
-+++ b/board/freescale/imx8mnevk/patches/linux/linux.hash
+--- a/board/freescale/imx8mmevk/patches/linux/linux.hash
++++ b/board/freescale/imx8mmevk/patches/linux/linux.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
 -sha256  c70adedadce88f8685cb26d9703b930292c1349138e2c55ed9b4cd6e277de3bd  linux-imx-lf-6.6.23-2.0.0.tar.gz
 +sha256  6567dd20dbcdff19da1d005acde949b20874cace5e34bf2b8e90d14fcd130174  linux-imx-lf-6.6.52-2.2.0.tar.gz
-diff --git a/board/freescale/imx8mnevk/patches/uboot/uboot.hash b/board/freescale/imx8mnevk/patches/uboot/uboot.hash
+diff --git a/board/freescale/imx8mmevk/patches/uboot/uboot.hash b/board/freescale/imx8mmevk/patches/uboot/uboot.hash
 index 4e0d729ca0..4b763ba3ba 100644
---- a/board/freescale/imx8mnevk/patches/uboot/uboot.hash
-+++ b/board/freescale/imx8mnevk/patches/uboot/uboot.hash
+--- a/board/freescale/imx8mmevk/patches/uboot/uboot.hash
++++ b/board/freescale/imx8mmevk/patches/uboot/uboot.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
 -sha256  179b6531ef1d4ce681d139741ac7b4144220c90b7223297df28b61e98e8d37fc  uboot-imx-lf-6.6.23-2.0.0.tar.gz
 +sha256  5acad057c9c5e802536abf84b9fcb4405b8f701e13da1294e0d90bc6c186639d  uboot-imx-lf-6.6.52-2.2.0.tar.gz
-diff --git a/configs/freescale_imx8mnevk_defconfig b/configs/freescale_imx8mnevk_defconfig
-index fc601dd5fb..83a4357b59 100644
---- a/configs/freescale_imx8mnevk_defconfig
-+++ b/configs/freescale_imx8mnevk_defconfig
+diff --git a/configs/freescale_imx8mmevk_defconfig b/configs/freescale_imx8mmevk_defconfig
+index b5b52c1f2d..3807b8ada7 100644
+--- a/configs/freescale_imx8mmevk_defconfig
++++ b/configs/freescale_imx8mmevk_defconfig
 @@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare
- BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mn-ddr4-evk.dtb"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mm-evk.dtb"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
 -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.23-2.0.0)/linux-imx-lf-6.6.23-2.0.0.tar.gz"
 +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.52-2.2.0)/linux-imx-lf-6.6.52-2.2.0.tar.gz"
  BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mn-ddr4-evk"
-@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk freescale/imx8mm-evk-revb-qca-wifi"
+@@ -21,13 +21,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
  BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
  BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
 -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.6.23-2.0.0)/imx-atf-lf-6.6.23-2.0.0.tar.gz"
 +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.6.52-2.2.0)/imx-atf-lf-6.6.52-2.2.0.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mn"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
  BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
  BR2_TARGET_UBOOT=y
  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
  BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
 -BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.23-2.0.0)/uboot-imx-lf-6.6.23-2.0.0.tar.gz"
 +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.52-2.2.0)/uboot-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mn_ddr4_evk"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
  BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 -- 
