@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85BCFC282EC
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:04:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1913C35FF3
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:04:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 23975828AF;
-	Tue, 18 Mar 2025 15:04:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A84E283495;
+	Tue, 18 Mar 2025 15:04:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xg2h94yXK6Ln; Tue, 18 Mar 2025 15:04:38 +0000 (UTC)
+ id IErfFIMwcE69; Tue, 18 Mar 2025 15:04:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DAF3D834C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8723C828AF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DAF3D834C7;
-	Tue, 18 Mar 2025 15:04:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 160EB16E
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8723C828AF;
+	Tue, 18 Mar 2025 15:04:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 67F82D5
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C616981D46
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E045B408B6
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Iww5MDXWFxaF for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g3--wcUiU0Pv for <buildroot@buildroot.org>;
  Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3181881D68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97273408CF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3181881D68
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 97273408CF
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E672880EC; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
+ id 9062A880ED; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 1 Mar 2025 17:28:12 +0100
+Date: Sat, 1 Mar 2025 11:32:56 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 731922527667d54ffc2c8d185224c5ab60b05ebb
-X-Git-Newrev: f907f2a0feb291b7a6b70e24dae7cf69ec9c6ec8
+X-Git-Oldrev: 0f0949cee02a8bc577bed151673d032f630ce405
+X-Git-Newrev: 8f2a6c9c469a8c840a74ee9fa9312692bd2428db
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150243.2E672880EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/freescale_imx6{dl, q,
- sx}*: bump BSP components to lf-6.6.52-2.2.0
+Message-Id: <20250318150242.9062A880ED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-sc-firmware:
+ bump version to 1.17.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,167 +60,78 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7451390564445023721=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f907f2a0feb291b7a6b70e24dae7cf69ec9c6ec8
+--===============7451390564445023721==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=8f2a6c9c469a8c840a74ee9fa9312692bd2428db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Note: configs/freescale_imx6{dl,q,sx}* corresponds to the five:
-freescale_imx6dlsabreauto_defconfig
-freescale_imx6dlsabresd_defconfig
-freescale_imx6qsabreauto_defconfig
-freescale_imx6qsabresd_defconfig
-freescale_imx6sxsabresd_defconfig
+This version is aligned with NXP Linux BSP version "lf-6.6.52-2.2.0".
 
-Those i.MX6 Sabre defconfigs have a lot in common. This is why they are
-all updated at once in this single commit.
+License hashes changed because the LA_OPT_NXP_Software_License changed
+from "v56 April 2024" to "v57 July 2024".
+Add SCR.txt to _LICENSE_FILES.
 
-This commit bumps U-Boot and Linux kernel to the NXP BSP
-lf-6.6.52-2.2.0 versions
+Note: in this release, the package source archive name changed to
+include a revision. This commit adds a new _REVISION variable with the
+value published in the corresponding NXP BSP.
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-Tested-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+[Julien: fixed the bsp version name in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/freescale/imx6sabre/patches/linux/linux.hash | 2 +-
- board/freescale/imx6sabre/patches/uboot/uboot.hash | 2 +-
- configs/freescale_imx6dlsabreauto_defconfig        | 4 ++--
- configs/freescale_imx6dlsabresd_defconfig          | 4 ++--
- configs/freescale_imx6qsabreauto_defconfig         | 4 ++--
- configs/freescale_imx6qsabresd_defconfig           | 4 ++--
- configs/freescale_imx6sxsabresd_defconfig          | 4 ++--
- 7 files changed, 12 insertions(+), 12 deletions(-)
+ package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash | 7 ++++---
+ package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk   | 7 ++++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/board/freescale/imx6sabre/patches/linux/linux.hash b/board/freescale/imx6sabre/patches/linux/linux.hash
-index 3c4223976b..620a7377ef 100644
---- a/board/freescale/imx6sabre/patches/linux/linux.hash
-+++ b/board/freescale/imx6sabre/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
+index 955879eb43..9a12383e02 100644
+--- a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
++++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
+@@ -1,4 +1,5 @@
  # Locally calculated
--sha256  c70adedadce88f8685cb26d9703b930292c1349138e2c55ed9b4cd6e277de3bd  linux-imx-lf-6.6.23-2.0.0.tar.gz
-+sha256  6567dd20dbcdff19da1d005acde949b20874cace5e34bf2b8e90d14fcd130174  linux-imx-lf-6.6.52-2.2.0.tar.gz
-diff --git a/board/freescale/imx6sabre/patches/uboot/uboot.hash b/board/freescale/imx6sabre/patches/uboot/uboot.hash
-index 4e0d729ca0..4b763ba3ba 100644
---- a/board/freescale/imx6sabre/patches/uboot/uboot.hash
-+++ b/board/freescale/imx6sabre/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  179b6531ef1d4ce681d139741ac7b4144220c90b7223297df28b61e98e8d37fc  uboot-imx-lf-6.6.23-2.0.0.tar.gz
-+sha256  5acad057c9c5e802536abf84b9fcb4405b8f701e13da1294e0d90bc6c186639d  uboot-imx-lf-6.6.52-2.2.0.tar.gz
-diff --git a/configs/freescale_imx6dlsabreauto_defconfig b/configs/freescale_imx6dlsabreauto_defconfig
-index 02970a8c6d..bf0a7786bb 100644
---- a/configs/freescale_imx6dlsabreauto_defconfig
-+++ b/configs/freescale_imx6dlsabreauto_defconfig
-@@ -10,7 +10,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.23-2.0.0)/linux-imx-lf-6.6.23-2.0.0.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.52-2.2.0)/linux-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6dl-sabreauto"
-@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabreauto"
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.23-2.0.0)/uboot-imx-lf-6.6.23-2.0.0.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.52-2.2.0)/uboot-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMX=y
-diff --git a/configs/freescale_imx6dlsabresd_defconfig b/configs/freescale_imx6dlsabresd_defconfig
-index daedb68e96..0809a5e11b 100644
---- a/configs/freescale_imx6dlsabresd_defconfig
-+++ b/configs/freescale_imx6dlsabresd_defconfig
-@@ -10,7 +10,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.23-2.0.0)/linux-imx-lf-6.6.23-2.0.0.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.52-2.2.0)/linux-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6dl-sabresd"
-@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6dlsabresd"
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.23-2.0.0)/uboot-imx-lf-6.6.23-2.0.0.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.52-2.2.0)/uboot-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMX=y
-diff --git a/configs/freescale_imx6qsabreauto_defconfig b/configs/freescale_imx6qsabreauto_defconfig
-index 9c95576758..3fee47af20 100644
---- a/configs/freescale_imx6qsabreauto_defconfig
-+++ b/configs/freescale_imx6qsabreauto_defconfig
-@@ -10,7 +10,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.23-2.0.0)/linux-imx-lf-6.6.23-2.0.0.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.52-2.2.0)/linux-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6q-sabreauto"
-@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6qsabreauto"
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.23-2.0.0)/uboot-imx-lf-6.6.23-2.0.0.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.52-2.2.0)/uboot-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMX=y
-diff --git a/configs/freescale_imx6qsabresd_defconfig b/configs/freescale_imx6qsabresd_defconfig
-index 54d0a6c3a8..1a56c0732f 100644
---- a/configs/freescale_imx6qsabresd_defconfig
-+++ b/configs/freescale_imx6qsabresd_defconfig
-@@ -10,7 +10,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.23-2.0.0)/linux-imx-lf-6.6.23-2.0.0.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.52-2.2.0)/linux-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6q-sabresd"
-@@ -20,7 +20,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6qsabresd"
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.23-2.0.0)/uboot-imx-lf-6.6.23-2.0.0.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.52-2.2.0)/uboot-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMX=y
-diff --git a/configs/freescale_imx6sxsabresd_defconfig b/configs/freescale_imx6sxsabresd_defconfig
-index 1389629b85..df6a34c6ff 100644
---- a/configs/freescale_imx6sxsabresd_defconfig
-+++ b/configs/freescale_imx6sxsabresd_defconfig
-@@ -10,7 +10,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.23-2.0.0)/linux-imx-lf-6.6.23-2.0.0.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.52-2.2.0)/linux-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6sx-sdb"
-@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sxsabresd"
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.23-2.0.0)/uboot-imx-lf-6.6.23-2.0.0.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.52-2.2.0)/uboot-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMX=y
+-sha256  23327c38ffc746321697528b2c4c726ed5c3ebadf4b312592d533664719595bd  imx-sc-firmware-1.16.0.bin
+-sha256  165f6c0eacb4d3a05289dfb79331c9a2c05207eb7a67ef28a117f246a0145428  EULA
+-sha256  c9ee518510d72e254d62743f5098163eacdb6428c6ba4d8119afe2d12edba068  COPYING
++sha256  083e86cc26f2187863513677085474149960311e7ebca36df69306014daab948  imx-sc-firmware-1.17.0-83624b9.bin
++sha256  c3d9a7b2a5a7db5da690e9c1081b98b665802c3efbbba7fb237339395a92f607  EULA
++sha256  601fa790c5b4d03579bd182fb4d65a6f329a32faf49db22f98e4608221e861f7  COPYING
++sha256  bfbeef332d05c9608c790a12bbbf4c66a8acc76b159145ba7ef48d3799ca8a61  SCR.txt
+diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
+index 5c9ec59d8a..1e6d6e7dd5 100644
+--- a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
++++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
+ 
+-IMX_SC_FIRMWARE_VERSION = 1.16.0
++IMX_SC_FIRMWARE_VERSION = 1.17.0
++IMX_SC_FIRMWARE_REVISION = 83624b9
+ IMX_SC_FIRMWARE_SITE = $(FREESCALE_IMX_SITE)
+-IMX_SC_FIRMWARE_SOURCE = imx-sc-firmware-$(IMX_SC_FIRMWARE_VERSION).bin
++IMX_SC_FIRMWARE_SOURCE = imx-sc-firmware-$(IMX_SC_FIRMWARE_VERSION)-$(IMX_SC_FIRMWARE_REVISION).bin
+ 
+ IMX_SC_FIRMWARE_LICENSE = NXP Semiconductor Software License Agreement
+-IMX_SC_FIRMWARE_LICENSE_FILES = EULA COPYING
++IMX_SC_FIRMWARE_LICENSE_FILES = EULA COPYING SCR.txt
+ IMX_SC_FIRMWARE_REDISTRIBUTE = NO
+ 
+ define IMX_SC_FIRMWARE_EXTRACT_CMDS
+
+--===============7451390564445023721==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7451390564445023721==--
