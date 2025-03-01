@@ -1,68 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E254C021B8
-	for <buildroot@archiver.kernel.org>; Sat,  1 Mar 2025 15:06:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2413CC282C6
+	for <buildroot@archiver.kernel.org>; Sat,  1 Mar 2025 15:06:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D878542D43;
-	Sat,  1 Mar 2025 15:06:01 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vnm5xSyRgT6K; Sat,  1 Mar 2025 15:06:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A09F42D20
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A09F42D20;
-	Sat,  1 Mar 2025 15:06:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 68A27181
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:50 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44C2784C47
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC41284C9A;
+	Sat,  1 Mar 2025 15:06:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id laiOlw6S-5W6 for <buildroot@buildroot.org>;
+ id UVeU1cKCNVcp; Sat,  1 Mar 2025 15:06:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0A6A84C3A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id C0A6A84C3A;
+	Sat,  1 Mar 2025 15:06:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A3C2068
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 883C740177
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 30RyOMp19ATy for <buildroot@buildroot.org>;
  Sat,  1 Mar 2025 15:05:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1441C84C44
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1441C84C44
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1441C84C44
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CE1DD40118
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE1DD40118
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CE1DD40118
  for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:48 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-4397e5d5d99so19690825e9.1
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4397dff185fso27298595e9.2
  for <buildroot@buildroot.org>; Sat, 01 Mar 2025 07:05:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1740841547; x=1741446347;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=4zd2wnRmV9DWpzE2eTq0KCQLnKFPbJTsXUgsJKQg66A=;
- b=jjYbxuRkBHqc0TBdMDuGhV48vRVm7d1q2wDSH6+rDJtZBfwT8M05aHkl7QjskdpnxI
- dpWLyJpvEubSBDGu6/ferC8cTR0+Tt3QVVMHv8fVgOmsdsERRajb8TNIFZcahZLsDgUk
- xIjNcPJoNsj+w0d2gOzJC+yJOPrVwlMwfHBdtsdXZ8Ul+HSuzBA05nmKc2LjFlMFp99/
- TM8+zAwT+0j1IbZQ5Zlau34nvOQnJWWQuQQz4XefuwGPMVikRH8Y/NWx5SyuUkDHFkDW
- A1KKk/75CSSY3BzSaJTkBMWz4sDW2j1WH/UpWkHbSHtTunB8BY2rt1Rg7t1z58TAxs8a
- eg1w==
-X-Gm-Message-State: AOJu0Yz2iGpaeOMIHLU6A+qwTHvwNkZQLnqif6lvjRC+iJPOyHBwTXwU
- w+Tuswl4Nc5sT3JWoVTUDIx6gQzstd3fNeiWZnu8HSXh27IWZxhh8c3/+w==
-X-Gm-Gg: ASbGncvk0PPn52UM3y7HOUM5uiDskNT0rjiBpJTNsS9V6dufHJIlQFs8c02XKPYs5QO
- 11CAoXPb3dxLTYd/bBgOjrKeSJL6gN8yhU7qvkvM4QtDzb32guDfnKBpEk+vn10GGu2j4upFbnK
- udboSKsDPeE0j5gzvs/sBQjitgQwyIKLvEDOk4gS13dKxb+I6mOSP+4yf4maoG8z6c3X8MBBKnR
- 4kFfBb7v671hMACssZ+7Uuhx9LQKy89zGZDfZy5m/lR4SVZkBbm5+m1oGKBSbq4E2Hcbg3b/y8I
- CFGrq7qfPLLKzYrK+TEfPTQE3VRh0zWmKAbukxQQRGmwD05SLea2kCA=
-X-Google-Smtp-Source: AGHT+IGYgYc7QH7Acz5HdPyR8fVg9cynRXGvW7Cyile9yqAlby/5+fzuji8vuBKiNnmV8K1prGPrDQ==
-X-Received: by 2002:a05:600c:3513:b0:439:9f42:c137 with SMTP id
- 5b1f17b1804b1-43ba66e218emr69492485e9.11.1740841546988; 
+ bh=WFK01jl1rcmwXg0iiEyltKevREwhwo0ZMKDfYaZIdbs=;
+ b=m6C9Ttp3JijFgaLhMmaeEQ/J3E4SoTQtLD5ZSswBnzP62suauEo7kEsyGf370vk6vD
+ zGKnIRwKYBiS0lMOGHqcvq5o6ZQDmV3crgm154XV3dZCv5Wb/e+U8bkRYjSFx1TA+8aw
+ JECffGFUwHy5JUuVnr2O2HpRwWByCauODYZYKZcTdYSZ9BLhRdivPAKVX52m6Oe4HksU
+ mnwCTbjdpE8PjAJLrs9owEbu6opScb+6//n+jabC2nfkF5ysdrF8wgG7GCGuUY0OpSz5
+ BNi/fINS7jaN/utj+7DhvmdPTIIK1UwgKqnwqT+amagJbACgcybtlJnjl7LAVFshd24F
+ VoiQ==
+X-Gm-Message-State: AOJu0YyjiT5Mn6YXUkN6eLpgr3oAm+sWbfTV0K+042BAch7C2Ma1jqX/
+ FPJypeLYjRKcwqTGDYLLmIwKVw79hGUDxdYWkMF8XyEiWfzo09dLlElkRg==
+X-Gm-Gg: ASbGncsswdhzYy1enSv+PtkkuSlhVzzQvVBAynGo2X962ycbvVIEERkvGLeeqbw07P9
+ uxp0H53YqPzt0yxQSceIej648qJgNVauHI3JQrp7sBcth7aI3ytUUw43yJAGdXcJIPMCI6VqyqH
+ 7Vm4egJf/esOx1MVLe3YjNrfamA57sOyl1YNJvaLfU9Hgyl3Kc8s6/oyWTgj96oEZxhPzbQLl3C
+ /5zRe6bWqISVRRcPnZkuSsMyyJljXwH9iTsmPFyE4TZlOCU4sE/KxPzJL+yPldIL8g0DsqYiDGz
+ 0eT8rJRoYvskX/i1LAAXzz74hNrTVGmxiwX8C3rlRw8GuDLJkl8X/WY=
+X-Google-Smtp-Source: AGHT+IHDvFWRnDdCPBZRZdNJE+WgEE+uRxBVi85LUaK6lr6vYIhmaAJg+yI4USj1pMqR4MsKh87EPA==
+X-Received: by 2002:a05:600c:45d4:b0:439:6118:c188 with SMTP id
+ 5b1f17b1804b1-43ba6727cc1mr58753865e9.19.1740841546561; 
  Sat, 01 Mar 2025 07:05:46 -0800 (PST)
 Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
  by smtp.gmail.com with ESMTPSA id
@@ -71,9 +71,11 @@ Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
  Sat, 01 Mar 2025 07:05:46 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Date: Sat,  1 Mar 2025 16:05:41 +0100
-Message-ID: <1c1b6bc9fed9219fa289a40ad76aec2239e390d7.1740841539.git.yann.morin.1998@free.fr>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Christian Stewart <christian@aperture.us>,
+ "Yann E. MORIN" <yann.morin@orange.com>
+Date: Sat,  1 Mar 2025 16:05:40 +0100
+Message-ID: <cc2b6999bee8751b7295c60f75d84d451ae96576.1740841539.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1740841539.git.yann.morin.1998@free.fr>
 References: <cover.1740841539.git.yann.morin.1998@free.fr>
@@ -83,21 +85,20 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=4zd2wnRmV9DWpzE2eTq0KCQLnKFPbJTsXUgsJKQg66A=;
- b=P0/aiWXQPtkFpVTA9tnLj5RcSmOpEPGe7zPid+mogKzJq6n+20kA6/ZXV01tsXZGo+
- gENF5ipSZoyrnIyD8iPUPtD94UiBfRbfpB6VJMceZlyuaVZ6BxwBQ2pXo6zzYJLuMm1P
- P89E0e+Fq3vI/w9/GC4gRfp+JChCIfog38v5PRYUpT2sfCXR0RJAa2WbGyIeaMw52zl9
- TvY8a3Z+AR8x0c6wuwIErV/g37jJaixNva+Xz7o/Bs4DGq8agO/xDobwYfGI6HeYljGM
- Nn3+sFeRA6x7nWpmaUrlKhfZqCM1SrCfE6gKCmGSEHxB5c0YHP2LvLkCpGcI9Mafv0l5
- FcxA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=WFK01jl1rcmwXg0iiEyltKevREwhwo0ZMKDfYaZIdbs=;
+ b=ILMKhzRDf8o5Np0yyHoxuscdQopmMj2JZw9sMYWU1ugfXx0NmVEIvwtFynRk98Bw1w
+ JLzpCnCOfQAIGp2w5OMfXYZ7LnFcl6BMIfERt+JSOaRIxhJAXBuPxfsgOxBK8OnV9vB/
+ O19HP1Xgd0ILwexch0TFPJfmAs80IGVnjxc1aIdL1j3zrPGHa+RDsiVdUuQHR76S6PrK
+ 3kfls/msrT2ApSAMV1HR/lmUKGT/vXv+/FY3AERNWbN7EK/L4XO+zOZAhTaQqMlm3JYb
+ Mw8gxDOouBhVysWWqUB9N+Qd3gTcn8cJMMjXW1iYfr6JwBOnmKecB+/ixky4QOhvIEZE
+ /u3A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=P0/aiWXQ
-Subject: [Buildroot] [PATCH 6/9 v3] package/cgroupfs-mount: tweak the kernel
- config
+ header.a=rsa-sha256 header.s=20230601 header.b=ILMKhzRD
+Subject: [Buildroot] [PATCH 5/9 v3] package/skopeo: add target variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,70 +115,143 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When it was introduced in 2016 with commit 0e1547a87cfd (cgroupfs-mount:
-new package), we did not yet have the infrastrucutre for package to set
-kernel config options, which only came 4 years later with commit
-0aed4c2dae76 (linux: allow packages to set kernel config options).
+Skopeo can be used to manipulate container images, and so can be usefull
+on target devices that are going to be used as a host to run containers.
 
-So at that time, the requirements for cgroupfs-mount were documented in
-the help for the Kconfig symbol.
+So, add a target variant for skopeo.
 
-But now that we do have tha infrastructure in place, actually use it to
-set the required options, and drop the list from the Lconfig entry (that
-would be duplication, prone to bit-rot with time, and other packages do
-not document their requirements in LKconfig, they just use the infra to
-set the options).
+... with a runtime test while at it.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Christian Stewart <christian@aperture.us>
+Cc: Yann E. MORIN <yann.morin@orange.com>
 ---
- package/cgroupfs-mount/Config.in         | 12 +-----------
- package/cgroupfs-mount/cgroupfs-mount.mk | 11 +++++++++++
- 2 files changed, 12 insertions(+), 11 deletions(-)
+ package/Config.in                            |  1 +
+ package/skopeo/Config.in                     | 25 ++++++++++++
+ package/skopeo/skopeo.mk                     | 10 +++++
+ support/testing/tests/package/test_skopeo.py | 41 ++++++++++++++++++++
+ 4 files changed, 77 insertions(+)
+ create mode 100644 package/skopeo/Config.in
+ create mode 100644 support/testing/tests/package/test_skopeo.py
 
-diff --git a/package/cgroupfs-mount/Config.in b/package/cgroupfs-mount/Config.in
-index 0b2e4ba1e7..29a40c93d1 100644
---- a/package/cgroupfs-mount/Config.in
-+++ b/package/cgroupfs-mount/Config.in
-@@ -4,16 +4,6 @@ config BR2_PACKAGE_CGROUPFS_MOUNT
- 	help
- 	  cgroupfs mount and umount scripts.
- 
--	  requires a Linux kernel >= 3.0 with the following options
--	  enabled:
--
--	  - CONFIG_BLK_CGROUP
--	  - CONFIG_CGROUPS
--	  - CONFIG_CGROUP_CPUACCT
--	  - CONFIG_CGROUP_DEVICE
--	  - CONFIG_CGROUP_FREEZER
--	  - CONFIG_CGROUP_WRITEBACK
--	  - CONFIG_CGROUP_SCHED
--	  - CONFIG_CGROUP_PIDS
-+	  Requires a Linux kernel >= 3.0
- 
- 	  https://github.com/tianon/cgroupfs-mount
-diff --git a/package/cgroupfs-mount/cgroupfs-mount.mk b/package/cgroupfs-mount/cgroupfs-mount.mk
-index 5af87629ea..156d584266 100644
---- a/package/cgroupfs-mount/cgroupfs-mount.mk
-+++ b/package/cgroupfs-mount/cgroupfs-mount.mk
-@@ -10,6 +10,17 @@ CGROUPFS_MOUNT_LICENSE = GPL-3.0+
- CGROUPFS_MOUNT_LICENSE_FILES = debian/copyright
- CGROUPFS_MOUNT_CPE_ID_VALID = YES
- 
-+define CGROUPFS_MOUNT_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_CGROUP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_CPUACCT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_DEVICE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_FREEZER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_WRITEBACK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_SCHED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_PIDS)
-+endef
+diff --git a/package/Config.in b/package/Config.in
+index 4a81a62ec4..33fcfd0597 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2892,6 +2892,7 @@ menu "System tools"
+ 	source "package/sdbusplus/Config.in"
+ 	source "package/seatd/Config.in"
+ 	source "package/shadow/Config.in"
++	source "package/skopeo/Config.in"
+ 	source "package/smack/Config.in"
+ 	source "package/start-stop-daemon/Config.in"
+ 	source "package/supervisor/Config.in"
+diff --git a/package/skopeo/Config.in b/package/skopeo/Config.in
+new file mode 100644
+index 0000000000..f1acc3a50f
+--- /dev/null
++++ b/package/skopeo/Config.in
+@@ -0,0 +1,25 @@
++config BR2_PACKAGE_SKOPEO
++	bool "skopeo"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	depends on BR2_USE_MMU  # btrfs-progs, libgpgme, lvm2
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS  # libgpgme
++	depends on BR2_TOOLCHAIN_HAS_THREADS  # btrfs-progs, lvm2
++	depends on !BR2_STATIC_LIBS  # lvm2
++	select BR2_PACKAGE_HOST_GO
++	select BR2_PACKAGE_BTRFS_PROGS
++	select BR2_PACKAGE_LIBGPGME
++	select BR2_PACKAGE_LVM2
++	help
++	  skopeo is a command line utility that performs various
++	  operations on container images and image repositories.
 +
- define CGROUPFS_MOUNT_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/cgroupfs-mount $(TARGET_DIR)/usr/bin/cgroupfs-mount
- 	$(INSTALL) -D -m 0755 $(@D)/cgroupfs-umount $(TARGET_DIR)/usr/bin/cgroupfs-umount
++	  https://github.com/containers/skopeo
++
++comment "skopeo needs a toolchain w/ threads, sahred libs"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	depends on BR2_USE_MMU
++	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS \
++		|| BR2_STATIC_LIBS
+diff --git a/package/skopeo/skopeo.mk b/package/skopeo/skopeo.mk
+index 8e3a302e8d..b3b213983f 100644
+--- a/package/skopeo/skopeo.mk
++++ b/package/skopeo/skopeo.mk
+@@ -11,13 +11,23 @@ SKOPEO_LICENSE = Apache-2.0
+ SKOPEO_LICENSE_FILES = LICENSE
+ SKOPEO_CPE_ID_VALID = YES
+ 
++SKOPEO_DEPENDENCIES = \
++	host-pkgconf \
++	btrfs-progs \
++	libgpgme \
++	lvm2
++
+ HOST_SKOPEO_DEPENDENCIES = \
+ 	host-btrfs-progs \
+ 	host-libgpgme \
+ 	host-lvm2 \
+ 	host-pkgconf
+ 
++SKOPEO_GO_ENV = PKG_CONFIG_PATH=$(HOST_DIR)/lib/pkgconfig
++SKOPEO_BUILD_TARGETS = cmd/skopeo
++
+ HOST_SKOPEO_GO_ENV = PKG_CONFIG_PATH=$(HOST_DIR)/lib/pkgconfig
+ HOST_SKOPEO_BUILD_TARGETS = cmd/skopeo
+ 
++$(eval $(golang-package))
+ $(eval $(host-golang-package))
+diff --git a/support/testing/tests/package/test_skopeo.py b/support/testing/tests/package/test_skopeo.py
+new file mode 100644
+index 0000000000..79c3da8b3d
+--- /dev/null
++++ b/support/testing/tests/package/test_skopeo.py
+@@ -0,0 +1,41 @@
++import infra.basetest
++import json
++import os
++
++
++class TestSkopeo(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PER_PACKAGE_DIRECTORIES=y
++        BR2_SYSTEM_DHCP="eth0"
++        BR2_PACKAGE_CA_CERTIFICATES=y
++        BR2_PACKAGE_SKOPEO=y
++        BR2_PACKAGE_HOST_GO_BIN=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file, "-nic", "user,model=rtl8139"])
++        self.emulator.login()
++
++        self.assertRunOk("skopeo --version", timeout=30)
++
++        # First, check we can reach the default registry: docker.io
++        output, _ = self.emulator.run(
++            "skopeo inspect docker://busybox:latest",
++            timeout=60,
++        )
++        bb_info = json.loads("".join(output))
++        self.assertEqual(bb_info["Name"], "docker.io/library/busybox")
++
++        # Now, check we can reach an arbitrary registry: quay.io
++        output, _ = self.emulator.run(
++            "skopeo inspect docker://quay.io/quay/busybox:latest",
++            timeout=60,
++        )
++        skopeo_info = json.loads("".join(output))
++        self.assertEqual(skopeo_info["Name"], "quay.io/quay/busybox")
 -- 
 2.47.0
 
