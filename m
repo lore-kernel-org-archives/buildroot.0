@@ -1,100 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD332C282C6
-	for <buildroot@archiver.kernel.org>; Sat,  1 Mar 2025 14:29:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4AC0C021B8
+	for <buildroot@archiver.kernel.org>; Sat,  1 Mar 2025 15:05:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D0577051E;
-	Sat,  1 Mar 2025 14:29:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 54EED84C45;
+	Sat,  1 Mar 2025 15:05:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JOdVIzp4t-It; Sat,  1 Mar 2025 14:29:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xVltui77-Vf0; Sat,  1 Mar 2025 15:05:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A7AA6FCD2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D88984C3C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A7AA6FCD2;
-	Sat,  1 Mar 2025 14:29:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D88984C3C;
+	Sat,  1 Mar 2025 15:05:48 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 957E868
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 14:29:03 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 05DEE181
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 84C6F4EFEA
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 14:29:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E909C4293D
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r0INnbPruCF1 for <buildroot@buildroot.org>;
- Sat,  1 Mar 2025 14:29:02 +0000 (UTC)
+ id 3qzepiIdsxgK for <buildroot@buildroot.org>;
+ Sat,  1 Mar 2025 15:05:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62d; helo=mail-ej1-x62d.google.com;
- envelope-from=gilles.talis@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7165740C16
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7165740C16
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7165740C16
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 14:29:02 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id
- a640c23a62f3a-aaec61d0f65so623373966b.1
- for <buildroot@buildroot.org>; Sat, 01 Mar 2025 06:29:02 -0800 (PST)
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 54B77426BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54B77426BA
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 54B77426BA
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:45 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-390f69e71c8so602892f8f.0
+ for <buildroot@buildroot.org>; Sat, 01 Mar 2025 07:05:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1740839340; x=1741444140;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=HY1G6jbQfE+n46JN9AWhc3ZoUPI7BlTpZuqjwxtXwOQ=;
- b=FC7UqkDmbVHDijsnhVG6RdYYoLeVlFf/KQ8aK+yR7fCLGajwkF17BSRMsSvqLr+uI+
- SXvlJ7FX8TY6+mozTKM31H42shbmGbvUemGyxNyoIJCisgVlHfQo7RkOSKnhcOkE+Gjy
- iyseuGCc0XbdhMZq3c6xqCyp8xcCttykNg2k0WdfX/EM8HS16tk8jl8HM71kV1TSheIL
- 05HPd/zVfmHX4Nbg5fEz875ezHBoHR1nhcLVYqMjWqb31DBpRfqW7rSqJkamM0ffXEqF
- g+/0Vt4LQ+1iF+YXh+6yKPvUr/zfmlRyjT7oz7HxwTR7fLpUulqd65IQErQhkMH2mNFo
- whdA==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVuCqgaMafIOv2uM53/RKN7iZm6ICSnxa9bVrf8c1ztt3kE+wjy/2etYoCSwu4BPI7qhbXYuHYiEm8=@buildroot.org
-X-Gm-Message-State: AOJu0YxjtBbV1ALyuhTU5K5+dneUysuGPMEK53UeSebPI13m682Sb8OA
- i1UCpai4EQ+bmDXwpV+V5Hbi39XK0w3k4lRF5SNvAzsXa/Pu17FxTdPdCevhUZ1qU1/gEPdylPc
- 25ywTT67YHiAFw1IleDfeyitaZF4=
-X-Gm-Gg: ASbGncvL6SU/ZGVCRvLFALjBZYeS2lnbpTNlc9YUWpxI+XS+AcIoPeJUNRJtmyu9pKt
- fsJTLXZavOZIHbYL7iI7L3kssMDBh5+CNMwgy0crni4zzSaF/pvjckYWORjWmMPduxNG/cxabUh
- bXxAEKf5mBhlR6Gf6Fp26qKhyNlDkrJm4Bjpp5PXUttIb1SOqML4HZ7Un+paSQ
-X-Google-Smtp-Source: AGHT+IFRscrxxbSlk27oX854JzgpkVKQS9KH7JKeieDbMjcrbRlfDSvWU73+/B1F5hONo88STBW4VX/u0kKbX4R5r+E=
-X-Received: by 2002:a17:907:76ea:b0:abf:4da0:28e8 with SMTP id
- a640c23a62f3a-abf4da02ab3mr276246166b.17.1740839340029; Sat, 01 Mar 2025
- 06:29:00 -0800 (PST)
-MIME-Version: 1.0
-References: <20250205-imx-packages-bump-v1-0-2f11b86d2da5@armadeus.com>
- <20250205-imx-packages-bump-v1-1-2f11b86d2da5@armadeus.com>
- <06a9719a2eb955a091e37f2bf23c8112@free.fr>
-In-Reply-To: <06a9719a2eb955a091e37f2bf23c8112@free.fr>
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sat, 1 Mar 2025 10:28:48 -0400
-X-Gm-Features: AQ5f1JoRVdJugchQLLGvB_jU-DuRNc_KvLbunuOo76R6VvBA_l1UoNdhFKPCKI4
-Message-ID: <CAKcgs2z1Hug4gwjLeT0tMexgUyHiY-OvQg4aZ=nGGzL54sAWvg@mail.gmail.com>
-To: Julien Olivain <ju.o@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1740839340; x=1741444140; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
+ d=1e100.net; s=20230601; t=1740841543; x=1741446343;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=HY1G6jbQfE+n46JN9AWhc3ZoUPI7BlTpZuqjwxtXwOQ=;
- b=iMT91BNJ2fA5eeUWlDXpkRKEdRi4gWfMqeF+8quVsa6wTa8XGlKZSlos53mTDbX+yz
- /5vJUJgbFb6YsqZ87l94Cp/G44oq31BRRnzsGi2HB0lHF7prMX45VOBXUXWz+bFB1sxB
- Gcdjw1SVEwS6z4fy7PCZ+nM2Vj5ETDfk20obpNFf8qX/K5gr+yLch4DFydIzG+qQzWAR
- lZgbGCkSmFk6TpLvChO3Q7fboFMfEGtjDy8eOBOzO2+FzRUr+D0ZPOBqfQM6F2eICdK7
- ZOwMas3hw9ukF8gPi6KlgfVlNKjemO9UbCYR6by33ZLjvzkma5SZmg17CbAux2Qv3rfL
- NyVg==
+ bh=e1Hf/4xr8BZ3/fAntTzNj3Hq7Uwv4TTrBfiSDfjslnk=;
+ b=BQD53aIqmcHLRo3DCEi8G59j8tgc1gl61EIcGd+oWOqK+ZBS1pEr2D7JhJpFj7mpAN
+ JXSUdEmoMyUe7HZpfyoxBZN25FL5z6dqSkgsGf4QkIpbLefUTEBM/SuaHjWbuxTJdDBq
+ DD1jyfqMp/szj8H90gVaahXnqmUCqrw8QMbHX+Ux2njYjmDEEmEfUMDZVoq5MV5nwBJK
+ y7CBDgzZaq4lPek1ZiauT4kQPriaK82j4d0PePKaScbzd8ZErEAmzDrxLwW01aW4+/fx
+ yjqNi1NUAvfUeFO5OMX/GsOeHlSrUaOQKxc5Qiz5LOq0CIWHOZDxsmc+wc+jEwophllb
+ nBxQ==
+X-Gm-Message-State: AOJu0YyDWnxZOryytNcMY2sEkJc5kHKuklh78Lr5RG7H08EPEvQDRN3w
+ cCAEbtXRJsDgJ6SOeioRCEu8VvCgcW9UbIcsr0WVzHl7yllZxbJZjUFE5w==
+X-Gm-Gg: ASbGncvCu3dYDaWeFyj43FuSbPidRrvNC9TXXPhf9OHQq7Rz9MV4y9BNqRjSTJltY5T
+ an+o2TPLNjNgwhPEIse/x8dPXH+24AQe4Uue16cQnXvvl1VSraTdX18kBWiuo9CLdqnQ8ANDwq5
+ yGo25pIgwtUTH0MgalTEf5k47Mup6AWtRA0xl7UCjnEkX6JphtH91H7UT3vsrByKZNG4YqMWQIY
+ fuSCH9uRcQ92PbFR6dsx9fUgRVsMbE5uKDwa42FbFikL1n3MfHr9mWOfRSWeoreotNWCVZ9P52l
+ ohfIqMKWwfvNBx3cS7pb5xphE6POfAi1kYxAZltUSdqM1+x9LSx2NSc=
+X-Google-Smtp-Source: AGHT+IHn+envI4IgybCRIFnWSdTXoNW0blGT6d8bR0t/mUZx8s8Tf/oe3ggjf78h9sMUMQYTZVvYZQ==
+X-Received: by 2002:a5d:598d:0:b0:38d:fede:54f8 with SMTP id
+ ffacd0b85a97d-390ec155371mr5318833f8f.16.1740841542986; 
+ Sat, 01 Mar 2025 07:05:42 -0800 (PST)
+Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-390e47965f3sm8513394f8f.9.2025.03.01.07.05.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 01 Mar 2025 07:05:42 -0800 (PST)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Cc: Christian Stewart <christian@aperture.us>,
+ Fiona Klute <fiona.klute@gmx.de>, Julien Olivain <ju.o@free.fr>,
+ Raphael Pavlidis <raphael.pavlidis@gmail.com>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ "Yann E . MORIN" <yann.morin@orange.com>
+Date: Sat,  1 Mar 2025 16:05:41 +0100
+Message-ID: <cover.1740841539.git.yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.47.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1740841543; x=1741446343; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=e1Hf/4xr8BZ3/fAntTzNj3Hq7Uwv4TTrBfiSDfjslnk=;
+ b=hxB94rng8vTAYOvBrKzZJP66/r7ozq3B9srkJE7ncNVB7aLW3iqwyNL97ewtcHE2qb
+ pJd2sAxcUCcAB7Jnsk9OxWyOjtHMvmgHcVuImUicEGplSnoB/8AWTc+k9P+uB3AsRAtB
+ p5WTyG7Zr8TVeTD3U+qe750dxQtb5mHXN3bJk5hz9BQUSGucI2MZ+rlLghhxMxpOQFd3
+ WqPDBgvJNuT/7ekUOJWCfYHfS5giS4Jmyw7MZCrzZuoPhqwgOrQ5Pd7sFBnT78CyHOWg
+ I1HCXHDEgTZsZG7ni4eXV5WnlevGFirUXUrY/x1KZphEIOKu/lWOof3o9hawhn+cW701
+ rTuQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=fail (p=none dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=iMT91BNJ
-Subject: Re: [Buildroot] [PATCH 01/11] package/freescale-imx/imx-gpu-g2d:
- install the specific library for i.MX8MM
+ header.a=rsa-sha256 header.s=20230601 header.b=hxB94rng
+Subject: [Buildroot] [PATCH 0/9 v3] package/podman: new package (branch
+ yem/podman)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,36 +112,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gary Bisson <bisson.gary@gmail.com>,
- Refik Tuzakli <tuzakli.refik@gmail.com>,
- Chris Dimich <chris.dimich@boundarydevices.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgSnVsaWVuLCBhbGwKCkxlIHNhbS4gMSBtYXJzIDIwMjUgw6AgMDg6NTksIEp1bGllbiBPbGl2
-YWluIDxqdS5vQGZyZWUuZnI+IGEgw6ljcml0IDoKPgo+IEhpIFPDqWJhc3RpZW4sCj4KPiBPbiAw
-NS8wMi8yMDI1IDEyOjQwLCBTw6liYXN0aWVuIFN6eW1hbnNraSB3cm90ZToKPiA+IEZvciB0aGUg
-aS5NWDhNTSwgdGhpcyBwYWNrYWdlIGNvbnRhaW5zIGEgc3BlY2lmaWMgbGlicmFyeSB0aGF0IGlz
-IG5vdAo+ID4gbGlua2VkIHRvIE9wZW5DTCBiZWNhdXNlIHRoZXJlIGlzIG5vIG9wZW5DTCBzdXBw
-b3J0IG9uIGkuTVg4TU0gR1BVLgo+ID4KPiA+IFNpZ25lZC1vZmYtYnk6IFPDqWJhc3RpZW4gU3p5
-bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tpQGFybWFkZXVzLmNvbT4KPgo+IEkgYXBwbGllZCB0
-aGlzIHNlcmllcyB0byBuZXh0Lgo+Cj4gSSBmaXhlZCBhbGwgbWVudGlvbiBpbiBjb21taXQgbG9n
-cyB0byBiZToKPiAiIiIKPiBUaGlzIHZlcnNpb24gaXMgYWxpZ25lZCB3aXRoIE5YUCBMaW51eCBC
-U1AgdmVyc2lvbiAibGYtNi42LjUyLTIuMi4wIi4KPiAiIiIKPgo+IFRoZXJlIHdhcyBtZW50aW9u
-cyBvZiAibGYtNi42LjU1LTIuMi4wIiBvciAibGYtNi42LjUyLTIuMC4wIi4KPiBUaGVyZSBpcyBu
-byA2LjYuNTUgcmVsZWFzZSBmb3Igbm93LCBvbmx5IDYuNi41Mi4gQW5kIGl0IGlzIC0yLjIuMAo+
-ICh0aGUgLTIuMC4wIHJlbGVhc2UgaXMgYmFzZWQgb24gNi42LjIzKS4KPgo+IFNlZToKPiBodHRw
-czovL2dpdGh1Yi5jb20vbnhwLWlteC9pbXgtbWFuaWZlc3QvY29tbWl0L2RiMTg2N2I4MTY3NmEy
-NTEzYjkxMjY3ZTRjODUzNjlkZWUyMGE4MDAKPgo+IEknbGwgc2VuZCBkZWZjb25maWdzIGJ1bXBz
-IGZvciBhbGwgYXBwbGljYWJsZSBjb25maWdzL2ZyZWVzY2FsZV9pbXgqCj4gc29vbi4KSSBoYWQg
-cHJlcGFyZWQgdGhlIHBhdGNoZXMgYW5kIGp1c3Qgc2VudCB0aGVtIG92ZXIuIENhbiB5b3UgcGxl
-YXNlCnJldmlldyBhbmQgcHJvdmlkZSBjb21tZW50cyBpZiB5b3Ugc2VlIGFueXRoaW5nIHdyb25n
-Pwo+Cj4KPiBCZXN0IHJlZ2FyZHMsCj4KPiBKdWxpZW4uCj4gX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX18KPiBidWlsZHJvb3QgbWFpbGluZyBsaXN0Cj4gYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKPiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QKdGhhbmsgeW91ClJlZ2FyZHMKR2lsbGVzLgpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
-aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hello All!
+
+This series introduce podman, an alternative to Docker. Podman is
+daemon-less, and does not need root either.
+
+The series starts with preparatory commits in existing packages and the
+testing infra: then it introduces new packages on which podman will
+rely.
+
+Not required by podman, skopeo is made a target package as well, as it
+was of help debugging podman (and Docker in a separate series).
+
+Changes v1 -> v2:
+  - add licensing info for netavark and podman  (Julien)
+
+Changes v2 -> v3:
+  - make rootless actually work (Raphael)
+
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (9):
+      support/testing: set date in emulated machine
+      package/shadow: install to staging for subids
+      package/conmon: depends on systemd when enabled
+      package/slirp4netns: needs TUN support in the kernel
+      package/skopeo: add target variant
+      package/cgroupfs-mount: tweak the kernel config
+      package/cgroupfs-v2-mount: new package
+      package/netavark: new package
+      package/podman: new package
+
+ package/Config.in                              |   4 +
+ package/cgroupfs-mount/Config.in               |  12 +-
+ package/cgroupfs-mount/cgroupfs-mount.mk       |  11 ++
+ package/cgroupfs-v2-mount/Config.in            |  10 ++
+ package/cgroupfs-v2-mount/S30cgroupfs2         |  44 ++++++++
+ package/cgroupfs-v2-mount/cgroupfs-v2-mount.mk |  20 ++++
+ package/conmon/conmon.mk                       |   4 +
+ package/netavark/Config.in                     |  10 ++
+ package/netavark/netavark.hash                 |   3 +
+ package/netavark/netavark.mk                   |  19 ++++
+ package/podman/Config.in                       |  41 +++++++
+ package/podman/containers.conf                 |   2 +
+ package/podman/podman.hash                     |   3 +
+ package/podman/podman.mk                       | 114 +++++++++++++++++++
+ package/podman/policy.json                     |   7 ++
+ package/podman/registries.conf                 |   1 +
+ package/shadow/shadow.mk                       |   1 +
+ package/skopeo/Config.in                       |  25 +++++
+ package/skopeo/skopeo.mk                       |  10 ++
+ package/slirp4netns/slirp4netns.mk             |   9 ++
+ support/testing/infra/emulator.py              |   5 +
+ support/testing/tests/package/test_podman.py   | 147 +++++++++++++++++++++++++
+ support/testing/tests/package/test_skopeo.py   |  41 +++++++
+ 23 files changed, 532 insertions(+), 11 deletions(-)
+ create mode 100644 package/cgroupfs-v2-mount/Config.in
+ create mode 100644 package/cgroupfs-v2-mount/S30cgroupfs2
+ create mode 100644 package/cgroupfs-v2-mount/cgroupfs-v2-mount.mk
+ create mode 100644 package/netavark/Config.in
+ create mode 100644 package/netavark/netavark.hash
+ create mode 100644 package/netavark/netavark.mk
+ create mode 100644 package/podman/Config.in
+ create mode 100644 package/podman/containers.conf
+ create mode 100644 package/podman/podman.hash
+ create mode 100644 package/podman/podman.mk
+ create mode 100644 package/podman/policy.json
+ create mode 100644 package/podman/registries.conf
+ create mode 100644 package/skopeo/Config.in
+ create mode 100644 support/testing/tests/package/test_podman.py
+ create mode 100644 support/testing/tests/package/test_skopeo.py
+
+--
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
