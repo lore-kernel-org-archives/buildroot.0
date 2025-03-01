@@ -4,50 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6351C282D1
-	for <buildroot@archiver.kernel.org>; Sat,  1 Mar 2025 12:49:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1061DC021B8
+	for <buildroot@archiver.kernel.org>; Sat,  1 Mar 2025 12:52:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4D427035D;
-	Sat,  1 Mar 2025 12:49:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D29936FC73;
+	Sat,  1 Mar 2025 12:52:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p6VJdVwfv-h0; Sat,  1 Mar 2025 12:49:54 +0000 (UTC)
+ id LBmxg4MinO92; Sat,  1 Mar 2025 12:52:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F9727040F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F38586FC41
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F9727040F;
-	Sat,  1 Mar 2025 12:49:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F4C1181
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 12:49:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F38586FC41;
+	Sat,  1 Mar 2025 12:52:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1FF6C181
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 12:52:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 538A542E82
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 12:49:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D263404F8
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 12:52:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iEAfDdIeXFeM for <buildroot@buildroot.org>;
- Sat,  1 Mar 2025 12:49:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 107D542ED8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 107D542ED8
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 12:49:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0B3E687E7F; Sat,  1 Mar 2025 12:49:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8yxb5b03Mrai for <buildroot@buildroot.org>;
+ Sat,  1 Mar 2025 12:52:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0848E40B29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0848E40B29
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0848E40B29
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 12:52:21 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 46BFEB0055A;
+ Sat,  1 Mar 2025 13:52:14 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 01 Mar 2025 13:52:14 +0100
+MIME-Version: 1.0
+Date: Sat, 01 Mar 2025 13:52:14 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 1 Mar 2025 11:32:49 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fe08ec9efa6ec9a2506f7e3ffcb83c14b96b55ec
-X-Git-Newrev: 793b45cea77ed645f6800240811d03f8be392ccd
-X-Patchwork-Hint: ignore
-Message-Id: <20250301124923.0B3E687E7F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/freescale-imx/imx-vpu-hantro-daemon: bump version to 1.4.0
+To: =?UTF-8?Q?S=C3=A9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
+Cc: buildroot@buildroot.org, Gary Bisson <bisson.gary@gmail.com>, Chris
+ Dimich <chris.dimich@boundarydevices.com>, Refik Tuzakli
+ <tuzakli.refik@gmail.com>
+In-Reply-To: <20250205-imx-packages-bump-v1-1-2f11b86d2da5@armadeus.com>
+References: <20250205-imx-packages-bump-v1-0-2f11b86d2da5@armadeus.com>
+ <20250205-imx-packages-bump-v1-1-2f11b86d2da5@armadeus.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <06a9719a2eb955a091e37f2bf23c8112@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1740833538;
+ bh=m9c5xiNU21kshPbee9G1aNEPJfpzRm4OOYqTliOM7+E=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Wgxm4dYu/t7pBIHKxFLodMyzgvClRYKTPDKM0aDMUKWAknFpoiE9Zt0K40/z9JkL4
+ hg76zE2Q+EE+n5cKUHukO0imfcyspbLSpnDSV5HMRd82x6ecvgT9fc7ahjGcbeO8OM
+ DScW4trMdQABooJM3wlKtr4w8bHSkHoJ5+T07usxwxdY1mbs2lt3EAypJYDrqehWkc
+ ciMxOpkBVQBLNs6ix7ArkYjnO/OxPqrujeAsZE2GEbHA0Q7nDFjI4ChjpdCJlLsJgd
+ TPmSbUQMeJPVnUoGibClB8LZgKX1QxgiNW7Ng3eMFrr7Z9ZG7Hhmqq/tOzGB3a+xVG
+ dn44xeWX49YPw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Wgxm4dYu
+Subject: Re: [Buildroot] [PATCH 01/11] package/freescale-imx/imx-gpu-g2d:
+ install the specific library for i.MX8MM
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,72 +85,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2003363820720326714=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2003363820720326714==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=793b45cea77ed645f6800240811d03f8be392ccd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-This version is aligned with NXP Linux BSP version "lf-6.6.52-2.2.0".
-
-Add SCR-imx-vpu-hantro-daemon.txt to _LICENSE_FILES.
-
-Note: in this release, the package source archive name changed to
-include a revision. This commit adds a new _REVISION variable with the
-value published in the corresponding NXP BSP.
-
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
-[Julien: fixed the bsp version name in commit log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash  | 3 ++-
- .../freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk    | 6 ++++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash
-index 0fd64cdf9d..0f3ca60865 100644
---- a/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash
-+++ b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.hash
-@@ -1,3 +1,4 @@
- # Locally computed:
--sha256  80d6620063fd5e5506b05c907677b579d471a9b6daa8b26ffb963110cc680bf9  imx-vpu-hantro-daemon-1.1.9.tar.gz
-+sha256  c3ac36c203fef44ef21c98a90b3fff73af9f328f16b4d85157308848f6c34823  imx-vpu-hantro-daemon-1.4.0-75d9dd9.tar.gz
- sha256  bb645f02b260955f333348100e40af76253e2cd8b116bac047230439dd53ec5a  LICENSE.txt
-+sha256  c61176048f74950c0849d91b4b6b30e335e050462a8950b89a4e6f35c7fe577b  SCR-imx-vpu-hantro-daemon.txt
-diff --git a/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk
-index 12ec055f92..a328005328 100644
---- a/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk
-+++ b/package/freescale-imx/imx-vpu-hantro-daemon/imx-vpu-hantro-daemon.mk
-@@ -4,10 +4,12 @@
- #
- ################################################################################
- 
--IMX_VPU_HANTRO_DAEMON_VERSION = 1.1.9
-+IMX_VPU_HANTRO_DAEMON_VERSION = 1.4.0
-+IMX_VPU_HANTRO_DAEMON_REVISION = 75d9dd9
-+IMX_VPU_HANTRO_DAEMON_SOURCE = imx-vpu-hantro-daemon-$(IMX_VPU_HANTRO_DAEMON_VERSION)-$(IMX_VPU_HANTRO_DAEMON_REVISION).tar.gz
- IMX_VPU_HANTRO_DAEMON_SITE = $(FREESCALE_IMX_SITE)
- IMX_VPU_HANTRO_DAEMON_LICENSE = NXP Semiconductor Software License Agreement
--IMX_VPU_HANTRO_DAEMON_LICENSE_FILES = LICENSE.txt
-+IMX_VPU_HANTRO_DAEMON_LICENSE_FILES = LICENSE.txt SCR-imx-vpu-hantro-daemon.txt
- IMX_VPU_HANTRO_DAEMON_REDISTRIBUTE = NO
- IMX_VPU_HANTRO_DAEMON_DEPENDENCIES = imx-vpu-hantro linux
- ifeq ($(BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MP),y)
-
---===============2003363820720326714==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2003363820720326714==--
+SGkgU8OpYmFzdGllbiwKCk9uIDA1LzAyLzIwMjUgMTI6NDAsIFPDqWJhc3RpZW4gU3p5bWFuc2tp
+IHdyb3RlOgo+IEZvciB0aGUgaS5NWDhNTSwgdGhpcyBwYWNrYWdlIGNvbnRhaW5zIGEgc3BlY2lm
+aWMgbGlicmFyeSB0aGF0IGlzIG5vdAo+IGxpbmtlZCB0byBPcGVuQ0wgYmVjYXVzZSB0aGVyZSBp
+cyBubyBvcGVuQ0wgc3VwcG9ydCBvbiBpLk1YOE1NIEdQVS4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBT
+w6liYXN0aWVuIFN6eW1hbnNraSA8c2ViYXN0aWVuLnN6eW1hbnNraUBhcm1hZGV1cy5jb20+CgpJ
+IGFwcGxpZWQgdGhpcyBzZXJpZXMgdG8gbmV4dC4KCkkgZml4ZWQgYWxsIG1lbnRpb24gaW4gY29t
+bWl0IGxvZ3MgdG8gYmU6CiIiIgpUaGlzIHZlcnNpb24gaXMgYWxpZ25lZCB3aXRoIE5YUCBMaW51
+eCBCU1AgdmVyc2lvbiAibGYtNi42LjUyLTIuMi4wIi4KIiIiCgpUaGVyZSB3YXMgbWVudGlvbnMg
+b2YgImxmLTYuNi41NS0yLjIuMCIgb3IgImxmLTYuNi41Mi0yLjAuMCIuClRoZXJlIGlzIG5vIDYu
+Ni41NSByZWxlYXNlIGZvciBub3csIG9ubHkgNi42LjUyLiBBbmQgaXQgaXMgLTIuMi4wCih0aGUg
+LTIuMC4wIHJlbGVhc2UgaXMgYmFzZWQgb24gNi42LjIzKS4KClNlZToKaHR0cHM6Ly9naXRodWIu
+Y29tL254cC1pbXgvaW14LW1hbmlmZXN0L2NvbW1pdC9kYjE4NjdiODE2NzZhMjUxM2I5MTI2N2U0
+Yzg1MzY5ZGVlMjBhODAwCgpJJ2xsIHNlbmQgZGVmY29uZmlncyBidW1wcyBmb3IgYWxsIGFwcGxp
+Y2FibGUgY29uZmlncy9mcmVlc2NhbGVfaW14KiAKc29vbi4KCkJlc3QgcmVnYXJkcywKCkp1bGll
+bi4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
+b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
+aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
