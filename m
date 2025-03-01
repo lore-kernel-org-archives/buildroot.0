@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1913C35FF3
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:04:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 603D4C35FFA
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:04:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A84E283495;
-	Tue, 18 Mar 2025 15:04:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A15760C12;
+	Tue, 18 Mar 2025 15:04:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IErfFIMwcE69; Tue, 18 Mar 2025 15:04:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q1emfad4MlXz; Tue, 18 Mar 2025 15:04:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8723C828AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F3C0A60C18
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8723C828AF;
-	Tue, 18 Mar 2025 15:04:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3C0A60C18;
+	Tue, 18 Mar 2025 15:04:41 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 67F82D5
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:56 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 28CAED8C
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E045B408B6
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 10D54408CF
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g3--wcUiU0Pv for <buildroot@buildroot.org>;
+ id A3-_lpYzqrey for <buildroot@buildroot.org>;
  Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97273408CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADD1D40734
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 97273408CF
+ by smtp4.osuosl.org (Postfix) with ESMTP id ADD1D40734
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9062A880ED; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
+ id A5034880AF; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 1 Mar 2025 11:32:56 +0100
+Date: Sat, 1 Mar 2025 11:33:02 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0f0949cee02a8bc577bed151673d032f630ce405
-X-Git-Newrev: 8f2a6c9c469a8c840a74ee9fa9312692bd2428db
+X-Git-Oldrev: 816f239e370d57a76ff388a52acbca28f84e8911
+X-Git-Newrev: ab1c1c7f4919794289fdeb338647f7ca8c547fbc
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150242.9062A880ED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freescale-imx/imx-sc-firmware:
- bump version to 1.17.0
+Message-Id: <20250318150242.A5034880AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-gpu-viv: bump
+ version to 6.4.11.p2.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,14 +60,14 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7451390564445023721=="
+Content-Type: multipart/mixed; boundary="===============3326380502806632750=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7451390564445023721==
+--===============3326380502806632750==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f2a6c9c469a8c840a74ee9fa9312692bd2428db
+commit: https://git.buildroot.net/buildroot/commit/?id=ab1c1c7f4919794289fdeb338647f7ca8c547fbc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This version is aligned with NXP Linux BSP version "lf-6.6.52-2.2.0".
@@ -84,46 +84,55 @@ Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
 [Julien: fixed the bsp version name in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash | 7 ++++---
- package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk   | 7 ++++---
- 2 files changed, 8 insertions(+), 6 deletions(-)
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash | 9 +++++----
+ package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 9 +++++----
+ 2 files changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
-index 955879eb43..9a12383e02 100644
---- a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
-+++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.hash
-@@ -1,4 +1,5 @@
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+index cce08e2727..87ac86ab7a 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
+@@ -1,5 +1,6 @@
  # Locally calculated
--sha256  23327c38ffc746321697528b2c4c726ed5c3ebadf4b312592d533664719595bd  imx-sc-firmware-1.16.0.bin
--sha256  165f6c0eacb4d3a05289dfb79331c9a2c05207eb7a67ef28a117f246a0145428  EULA
+-sha256  cf6e42c9c9a903cd933b767d411131390d237a4b92ecad579db57d54538707f3  imx-gpu-viv-6.4.11.p2.6-aarch32-bc7b6a2.bin
+-sha256  5fe828113b9b2801b3fd60cd15eadfd0ac747e5897ef7db7fa22f80e7dd8a8e1  imx-gpu-viv-6.4.11.p2.6-aarch64-bc7b6a2.bin
 -sha256  c9ee518510d72e254d62743f5098163eacdb6428c6ba4d8119afe2d12edba068  COPYING
-+sha256  083e86cc26f2187863513677085474149960311e7ebca36df69306014daab948  imx-sc-firmware-1.17.0-83624b9.bin
-+sha256  c3d9a7b2a5a7db5da690e9c1081b98b665802c3efbbba7fb237339395a92f607  EULA
+-sha256  165f6c0eacb4d3a05289dfb79331c9a2c05207eb7a67ef28a117f246a0145428  EULA
++sha256  2242c7cbf1a2b07d40eefe5d1507747e477c54912f179ee0585a5d7965074ce0  imx-gpu-viv-6.4.11.p2.10-aarch32-accdd64.bin
++sha256  8108fd146de6986486f34860227511a5101b31072b99cd78ae38afba8939fd4e  imx-gpu-viv-6.4.11.p2.10-aarch64-accdd64.bin
 +sha256  601fa790c5b4d03579bd182fb4d65a6f329a32faf49db22f98e4608221e861f7  COPYING
-+sha256  bfbeef332d05c9608c790a12bbbf4c66a8acc76b159145ba7ef48d3799ca8a61  SCR.txt
-diff --git a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
-index 5c9ec59d8a..1e6d6e7dd5 100644
---- a/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
-+++ b/package/freescale-imx/imx-sc-firmware/imx-sc-firmware.mk
-@@ -4,12 +4,13 @@
++sha256  c3d9a7b2a5a7db5da690e9c1081b98b665802c3efbbba7fb237339395a92f607  EULA
++sha256  ab20fa3f527fce99087d8d3cd4e2cf4b9cfdfaaa98b3d766a2b5953a981323d3  SCR-imx-gpu-viv.txt
+diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+index a559bb7478..857a11b3b9 100644
+--- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
++++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
+@@ -4,18 +4,19 @@
  #
  ################################################################################
  
--IMX_SC_FIRMWARE_VERSION = 1.16.0
-+IMX_SC_FIRMWARE_VERSION = 1.17.0
-+IMX_SC_FIRMWARE_REVISION = 83624b9
- IMX_SC_FIRMWARE_SITE = $(FREESCALE_IMX_SITE)
--IMX_SC_FIRMWARE_SOURCE = imx-sc-firmware-$(IMX_SC_FIRMWARE_VERSION).bin
-+IMX_SC_FIRMWARE_SOURCE = imx-sc-firmware-$(IMX_SC_FIRMWARE_VERSION)-$(IMX_SC_FIRMWARE_REVISION).bin
++IMX_GPU_VIV_REVISION = accdd64
+ ifeq ($(BR2_aarch64),y)
+-IMX_GPU_VIV_VERSION = 6.4.11.p2.6-aarch64-bc7b6a2
++IMX_GPU_VIV_VERSION = 6.4.11.p2.10-aarch64
+ else
+-IMX_GPU_VIV_VERSION = 6.4.11.p2.6-aarch32-bc7b6a2
++IMX_GPU_VIV_VERSION = 6.4.11.p2.10-aarch32
+ endif
+ IMX_GPU_VIV_SITE = $(FREESCALE_IMX_SITE)
+-IMX_GPU_VIV_SOURCE = imx-gpu-viv-$(IMX_GPU_VIV_VERSION).bin
++IMX_GPU_VIV_SOURCE = imx-gpu-viv-$(IMX_GPU_VIV_VERSION)-$(IMX_GPU_VIV_REVISION).bin
  
- IMX_SC_FIRMWARE_LICENSE = NXP Semiconductor Software License Agreement
--IMX_SC_FIRMWARE_LICENSE_FILES = EULA COPYING
-+IMX_SC_FIRMWARE_LICENSE_FILES = EULA COPYING SCR.txt
- IMX_SC_FIRMWARE_REDISTRIBUTE = NO
+ IMX_GPU_VIV_INSTALL_STAGING = YES
  
- define IMX_SC_FIRMWARE_EXTRACT_CMDS
+ IMX_GPU_VIV_LICENSE = NXP Semiconductor Software License Agreement
+-IMX_GPU_VIV_LICENSE_FILES = EULA COPYING
++IMX_GPU_VIV_LICENSE_FILES = EULA COPYING SCR-imx-gpu-viv.txt
+ IMX_GPU_VIV_REDISTRIBUTE = NO
+ 
+ IMX_GPU_VIV_PROVIDES = libegl libgles libopencl libopenvg
 
---===============7451390564445023721==
+--===============3326380502806632750==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -134,4 +143,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============7451390564445023721==--
+--===============3326380502806632750==--
