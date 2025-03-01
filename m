@@ -1,104 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D6C5C021B8
-	for <buildroot@archiver.kernel.org>; Sat,  1 Mar 2025 15:05:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E254C021B8
+	for <buildroot@archiver.kernel.org>; Sat,  1 Mar 2025 15:06:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B40C60BE7;
-	Sat,  1 Mar 2025 15:05:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nny_h7BQM9ZU; Sat,  1 Mar 2025 15:05:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1495A607CD
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1495A607CD;
-	Sat,  1 Mar 2025 15:05:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B5165181
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B97F4408E6
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D878542D43;
+	Sat,  1 Mar 2025 15:06:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cwtk5-fDg2ZO for <buildroot@buildroot.org>;
- Sat,  1 Mar 2025 15:05:48 +0000 (UTC)
+ id Vnm5xSyRgT6K; Sat,  1 Mar 2025 15:06:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A09F42D20
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A09F42D20;
+	Sat,  1 Mar 2025 15:06:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 68A27181
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 44C2784C47
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id laiOlw6S-5W6 for <buildroot@buildroot.org>;
+ Sat,  1 Mar 2025 15:05:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7A726426BA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A726426BA
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7A726426BA
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:47 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-390f69e71c8so602909f8f.0
- for <buildroot@buildroot.org>; Sat, 01 Mar 2025 07:05:47 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1441C84C44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1441C84C44
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1441C84C44
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:48 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-4397e5d5d99so19690825e9.1
+ for <buildroot@buildroot.org>; Sat, 01 Mar 2025 07:05:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1740841545; x=1741446345;
+ d=1e100.net; s=20230601; t=1740841547; x=1741446347;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=tz7jGwe8W4Vzd0bXJuN7Ozou4H0uRv8yz+fXspSdaUI=;
- b=X/WSnREE93/DzAjaeUE2MnM1pLCfzlXB+ufgH5sXcnOjnoTRzhNqudn6C9MfHbiPNR
- JHMeDVfiTBhwlqJJ7sJWIzZXLRcW7KNe88DWomA7eWs9VGvIi3PEIDyvwBZjSZlUeVT/
- rXLhift6S3RoeoCX43kwUK49+EopXJ1UHgny6F9xy3ZW4SjlqcNnXo+p/RzGXsG6C/gw
- IBI7K1McyNFSv+xTjc90Ge6Fn15aQ+r2zst3IHGUn2BCqKwRgMCkgJ6muIzC9MZbTmAj
- wqNms3JeevEslOM1AEY2yJE3pHOxvxuXn939Ee1vqZ7N9Hs9aoFIYv+1kjrPv5TYiILH
- kC1g==
-X-Gm-Message-State: AOJu0Yy7Z3Ihqfcu9D/4rF5sPksetKAaZ9St73Ty0Ukg9UWf1Bb8DhhM
- 4IERQRTma/98VxZxbzlcM3ip/4ovFFGWEPijItlYK+atbtv+OPg9r7FwCQ==
-X-Gm-Gg: ASbGnctJietLdGxhityiITJz+8yNtuFZLaF58g44SHCZzY7MaOEPD7LzBw0vUXcjrjE
- i2e5/EwOxrQfSPkhJRDpYiNTx/8CBaUsfyrcVfZPFCbz4YpE1kR58Bc9ufCoRLF3/iRoiUFs465
- OGco8UxsIa9VR3IFx3GKdSck2k0zukhHO4cqrKss0eofkfHFVuPeYI1QeOjC+JiRSEb+FY68bIi
- tQZNJCWW4UeRKOWTklxBt4NVbaWUG2CXOwSV2+cGAzFLQbNiU1iiOtXhJof53XMaS+9L4hizgVA
- tIExDH6qbrgxEolPD423Vh6DLHL5ZunspQtSib+DAe5S8Q+ez5zVbHE=
-X-Google-Smtp-Source: AGHT+IEe84Hr0xSA4ubgogk7fhybUX1/FR2QzesByploQ7Hc69Z+WCm94DRsjqNyyMl3pPvF5lE6sg==
-X-Received: by 2002:a5d:64a1:0:b0:38f:3e0a:ca6a with SMTP id
- ffacd0b85a97d-390e164b56dmr9976315f8f.2.1740841545313; 
- Sat, 01 Mar 2025 07:05:45 -0800 (PST)
+ bh=4zd2wnRmV9DWpzE2eTq0KCQLnKFPbJTsXUgsJKQg66A=;
+ b=jjYbxuRkBHqc0TBdMDuGhV48vRVm7d1q2wDSH6+rDJtZBfwT8M05aHkl7QjskdpnxI
+ dpWLyJpvEubSBDGu6/ferC8cTR0+Tt3QVVMHv8fVgOmsdsERRajb8TNIFZcahZLsDgUk
+ xIjNcPJoNsj+w0d2gOzJC+yJOPrVwlMwfHBdtsdXZ8Ul+HSuzBA05nmKc2LjFlMFp99/
+ TM8+zAwT+0j1IbZQ5Zlau34nvOQnJWWQuQQz4XefuwGPMVikRH8Y/NWx5SyuUkDHFkDW
+ A1KKk/75CSSY3BzSaJTkBMWz4sDW2j1WH/UpWkHbSHtTunB8BY2rt1Rg7t1z58TAxs8a
+ eg1w==
+X-Gm-Message-State: AOJu0Yz2iGpaeOMIHLU6A+qwTHvwNkZQLnqif6lvjRC+iJPOyHBwTXwU
+ w+Tuswl4Nc5sT3JWoVTUDIx6gQzstd3fNeiWZnu8HSXh27IWZxhh8c3/+w==
+X-Gm-Gg: ASbGncvk0PPn52UM3y7HOUM5uiDskNT0rjiBpJTNsS9V6dufHJIlQFs8c02XKPYs5QO
+ 11CAoXPb3dxLTYd/bBgOjrKeSJL6gN8yhU7qvkvM4QtDzb32guDfnKBpEk+vn10GGu2j4upFbnK
+ udboSKsDPeE0j5gzvs/sBQjitgQwyIKLvEDOk4gS13dKxb+I6mOSP+4yf4maoG8z6c3X8MBBKnR
+ 4kFfBb7v671hMACssZ+7Uuhx9LQKy89zGZDfZy5m/lR4SVZkBbm5+m1oGKBSbq4E2Hcbg3b/y8I
+ CFGrq7qfPLLKzYrK+TEfPTQE3VRh0zWmKAbukxQQRGmwD05SLea2kCA=
+X-Google-Smtp-Source: AGHT+IGYgYc7QH7Acz5HdPyR8fVg9cynRXGvW7Cyile9yqAlby/5+fzuji8vuBKiNnmV8K1prGPrDQ==
+X-Received: by 2002:a05:600c:3513:b0:439:9f42:c137 with SMTP id
+ 5b1f17b1804b1-43ba66e218emr69492485e9.11.1740841546988; 
+ Sat, 01 Mar 2025 07:05:46 -0800 (PST)
 Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-43aba57145esm123806065e9.30.2025.03.01.07.05.44
+ 5b1f17b1804b1-43aba57145esm123806065e9.30.2025.03.01.07.05.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 01 Mar 2025 07:05:45 -0800 (PST)
+ Sat, 01 Mar 2025 07:05:46 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Date: Sat,  1 Mar 2025 16:05:37 +0100
-Message-ID: <57a570cc2ba3d56346a32f2f6a3e4758ca3b2c3a.1740841539.git.yann.morin.1998@free.fr>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Date: Sat,  1 Mar 2025 16:05:41 +0100
+Message-ID: <1c1b6bc9fed9219fa289a40ad76aec2239e390d7.1740841539.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1740841539.git.yann.morin.1998@free.fr>
 References: <cover.1740841539.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1740841545; x=1741446345; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1740841547; x=1741446347; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=tz7jGwe8W4Vzd0bXJuN7Ozou4H0uRv8yz+fXspSdaUI=;
- b=LxIhwL5TP6Y9fe4WHodSxbeo22XWcpLHqLElo2UXf3h0/opPlSXxFwUfHXakOkG2T2
- 39TD5UcsXd4PvirCwOWGjuVCQKUGn1zLbuC/QBzJ5MPwtlTNakSpUtrjFa7S5jZKB8lz
- CNTZo0dN6Mmly7OgnEM4UqcnriX42zGZQKxm+MElr/sirAkGl3abdv2EssW3l6CwAvlt
- mGy0OpSoI8rmJbBDqr98ohklfuYtPzJo4ArR0tao411D2vL8I8ih68j0J2iiXtoJExEj
- WNgpPL03w36BAan4Y+PuixPrTAd4KVnpkDDyiCKi3hFoS2dkWkQdJSDpbO+tyl96x0yC
- EP6g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=4zd2wnRmV9DWpzE2eTq0KCQLnKFPbJTsXUgsJKQg66A=;
+ b=P0/aiWXQPtkFpVTA9tnLj5RcSmOpEPGe7zPid+mogKzJq6n+20kA6/ZXV01tsXZGo+
+ gENF5ipSZoyrnIyD8iPUPtD94UiBfRbfpB6VJMceZlyuaVZ6BxwBQ2pXo6zzYJLuMm1P
+ P89E0e+Fq3vI/w9/GC4gRfp+JChCIfog38v5PRYUpT2sfCXR0RJAa2WbGyIeaMw52zl9
+ TvY8a3Z+AR8x0c6wuwIErV/g37jJaixNva+Xz7o/Bs4DGq8agO/xDobwYfGI6HeYljGM
+ Nn3+sFeRA6x7nWpmaUrlKhfZqCM1SrCfE6gKCmGSEHxB5c0YHP2LvLkCpGcI9Mafv0l5
+ FcxA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=LxIhwL5T
-Subject: [Buildroot] [PATCH 2/9 v3] package/shadow: install to staging for
- subids
+ header.a=rsa-sha256 header.s=20230601 header.b=P0/aiWXQ
+Subject: [Buildroot] [PATCH 6/9 v3] package/cgroupfs-mount: tweak the kernel
+ config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,39 +114,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When the subids feature is enabled, shadow will install a library and a
-header:
+When it was introduced in 2016 with commit 0e1547a87cfd (cgroupfs-mount:
+new package), we did not yet have the infrastrucutre for package to set
+kernel config options, which only came 4 years later with commit
+0aed4c2dae76 (linux: allow packages to set kernel config options).
 
-    $ sort output/build/shadow-4.16.0/.files-list.txt
-    [...]
-    shadow,./lib/libsubid.la
-    shadow,./lib/libsubid.so
-    shadow,./lib/libsubid.so.5
-    shadow,./lib/libsubid.so.5.0.0
-    [...]
-    shadow,./usr/include/shadow/subid.h
-    [...]
+So at that time, the requirements for cgroupfs-mount were documented in
+the help for the Kconfig symbol.
 
-Install to staging in that case.
+But now that we do have tha infrastructure in place, actually use it to
+set the required options, and drop the list from the Lconfig entry (that
+would be duplication, prone to bit-rot with time, and other packages do
+not document their requirements in LKconfig, they just use the infra to
+set the options).
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 ---
- package/shadow/shadow.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/cgroupfs-mount/Config.in         | 12 +-----------
+ package/cgroupfs-mount/cgroupfs-mount.mk | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
-index cea984012d..c598ad88fd 100644
---- a/package/shadow/shadow.mk
-+++ b/package/shadow/shadow.mk
-@@ -46,6 +46,7 @@ SHADOW_CONF_OPTS += --disable-account-tools-setuid
- endif
+diff --git a/package/cgroupfs-mount/Config.in b/package/cgroupfs-mount/Config.in
+index 0b2e4ba1e7..29a40c93d1 100644
+--- a/package/cgroupfs-mount/Config.in
++++ b/package/cgroupfs-mount/Config.in
+@@ -4,16 +4,6 @@ config BR2_PACKAGE_CGROUPFS_MOUNT
+ 	help
+ 	  cgroupfs mount and umount scripts.
  
- ifeq ($(BR2_PACKAGE_SHADOW_SUBORDINATE_IDS),y)
-+SHADOW_INSTALL_STAGING = YES
- SHADOW_CONF_OPTS += --enable-subordinate-ids
- define SHADOW_SUBORDINATE_IDS_PERMISSIONS
- 	/usr/bin/newuidmap f 4755 0 0 - - - - -
+-	  requires a Linux kernel >= 3.0 with the following options
+-	  enabled:
+-
+-	  - CONFIG_BLK_CGROUP
+-	  - CONFIG_CGROUPS
+-	  - CONFIG_CGROUP_CPUACCT
+-	  - CONFIG_CGROUP_DEVICE
+-	  - CONFIG_CGROUP_FREEZER
+-	  - CONFIG_CGROUP_WRITEBACK
+-	  - CONFIG_CGROUP_SCHED
+-	  - CONFIG_CGROUP_PIDS
++	  Requires a Linux kernel >= 3.0
+ 
+ 	  https://github.com/tianon/cgroupfs-mount
+diff --git a/package/cgroupfs-mount/cgroupfs-mount.mk b/package/cgroupfs-mount/cgroupfs-mount.mk
+index 5af87629ea..156d584266 100644
+--- a/package/cgroupfs-mount/cgroupfs-mount.mk
++++ b/package/cgroupfs-mount/cgroupfs-mount.mk
+@@ -10,6 +10,17 @@ CGROUPFS_MOUNT_LICENSE = GPL-3.0+
+ CGROUPFS_MOUNT_LICENSE_FILES = debian/copyright
+ CGROUPFS_MOUNT_CPE_ID_VALID = YES
+ 
++define CGROUPFS_MOUNT_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_CGROUP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_CPUACCT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_DEVICE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_FREEZER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_WRITEBACK)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_SCHED)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_PIDS)
++endef
++
+ define CGROUPFS_MOUNT_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/cgroupfs-mount $(TARGET_DIR)/usr/bin/cgroupfs-mount
+ 	$(INSTALL) -D -m 0755 $(@D)/cgroupfs-umount $(TARGET_DIR)/usr/bin/cgroupfs-umount
 -- 
 2.47.0
 
