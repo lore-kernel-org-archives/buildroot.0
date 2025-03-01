@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C8C2C28B2F
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:06:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 341E4C282EC
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:06:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C68F83B9C;
-	Tue, 18 Mar 2025 15:06:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0004F83D3C;
+	Tue, 18 Mar 2025 15:06:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hB3cWbr-eibc; Tue, 18 Mar 2025 15:06:04 +0000 (UTC)
+ id uunWDKN0Vosn; Tue, 18 Mar 2025 15:06:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B77683C9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A07C782B5E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B77683C9F;
-	Tue, 18 Mar 2025 15:06:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E0D1D5
+	by smtp1.osuosl.org (Postfix) with ESMTP id A07C782B5E;
+	Tue, 18 Mar 2025 15:06:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 64441D5
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:03:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C11C9816E9
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7736F40DB4
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uF-QRNWpV0NX for <buildroot@buildroot.org>;
- Tue, 18 Mar 2025 15:02:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KwgBNpQNeET3 for <buildroot@buildroot.org>;
+ Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7893F81776
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AFF940733
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7893F81776
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8AFF940733
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 72AD284755; Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
+ id 857E1880AF; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Mar 2025 22:16:22 +0100
+Date: Sat, 1 Mar 2025 11:32:53 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5ae4c36dfe392c2a0a729f2d5bc823759e83cf51
-X-Git-Newrev: 2795fecc50ca91d7303ae817cdfa260eabd0975e
+X-Git-Oldrev: 793b45cea77ed645f6800240811d03f8be392ccd
+X-Git-Newrev: 0f0949cee02a8bc577bed151673d032f630ce405
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150245.72AD284755@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nftables: add an option to force
- JSON support
+Message-Id: <20250318150242.857E1880AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-seco: bump
+ version to 5.9.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,69 +60,79 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8062516016254426706=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2795fecc50ca91d7303ae817cdfa260eabd0975e
+--===============8062516016254426706==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=0f0949cee02a8bc577bed151673d032f630ce405
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, nftables JSON support is implicit: if jansson is enabled,
-JSON support is enabled, otherwise it is not.
+This version is aligned with NXP Linux BSP version "lf-6.6.52-2.2.0".
 
-Some packages will require that nftables be built with JSON support;
-that's the case of netavarks, for example (to come in a later patch).
-So, in the current state, it would mean a package would have to select
-jansson, although it does not itself use it, so that nftables has JSON
-support. This does not feel right.
+License hashes changed because the LA_OPT_NXP_Software_License changed
+from "v56 April 2024" to "v57 July 2024".
+Add SCR.txt and SCR-imx-seco.txt to _LICENSE_FILES.
 
-Instead, introduce an option to nftables, to explicitly enabled JSON
-support. Packages such as netavark would then just have to require JSON
-support in nftables.
+Note: in this release, the package source archive name changed to
+include a revision. This commit adds a new _REVISION variable with the
+value published in the corresponding NXP BSP.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+[Julien: fixed the bsp version name in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/nftables/Config.in   | 7 ++++++-
- package/nftables/nftables.mk | 2 +-
- 2 files changed, 7 insertions(+), 2 deletions(-)
+ package/freescale-imx/imx-seco/imx-seco.hash | 8 +++++---
+ package/freescale-imx/imx-seco/imx-seco.mk   | 7 ++++---
+ 2 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/package/nftables/Config.in b/package/nftables/Config.in
-index 833a3a38a2..514682ec48 100644
---- a/package/nftables/Config.in
-+++ b/package/nftables/Config.in
-@@ -13,9 +13,14 @@ config BR2_PACKAGE_NFTABLES
+diff --git a/package/freescale-imx/imx-seco/imx-seco.hash b/package/freescale-imx/imx-seco/imx-seco.hash
+index a91dbc2274..5c29ec4fa9 100644
+--- a/package/freescale-imx/imx-seco/imx-seco.hash
++++ b/package/freescale-imx/imx-seco/imx-seco.hash
+@@ -1,4 +1,6 @@
+ # Locally calculated
+-sha256  9b04be33814a9cbda9bbfcb6711585cf7e4ed2527793813c95230f350323cba7  imx-seco-5.9.4.bin
+-sha256  165f6c0eacb4d3a05289dfb79331c9a2c05207eb7a67ef28a117f246a0145428  EULA
+-sha256  c9ee518510d72e254d62743f5098163eacdb6428c6ba4d8119afe2d12edba068  COPYING
++sha256  bd8dc01966076836aabff53f2463295294166595006e1db430db21b6ffa6b667  imx-seco-5.9.4.1-0333596.bin
++sha256  c3d9a7b2a5a7db5da690e9c1081b98b665802c3efbbba7fb237339395a92f607  EULA
++sha256  601fa790c5b4d03579bd182fb4d65a6f329a32faf49db22f98e4608221e861f7  COPYING
++sha256  92d7a6594cece4d59f4da4677f3128aa4997fd49955aee50a6fed32e3800df76  SCR.txt
++sha256  92d7a6594cece4d59f4da4677f3128aa4997fd49955aee50a6fed32e3800df76  SCR-imx-seco.txt
+diff --git a/package/freescale-imx/imx-seco/imx-seco.mk b/package/freescale-imx/imx-seco/imx-seco.mk
+index 4afac8005b..012f367099 100644
+--- a/package/freescale-imx/imx-seco/imx-seco.mk
++++ b/package/freescale-imx/imx-seco/imx-seco.mk
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
  
- 	  http://www.netfilter.org/projects/nftables/index.html
+-IMX_SECO_VERSION = 5.9.4
++IMX_SECO_VERSION = 5.9.4.1
++IMX_SECO_REVISION = 0333596
+ IMX_SECO_SITE = $(FREESCALE_IMX_SITE)
+-IMX_SECO_SOURCE = imx-seco-$(IMX_SECO_VERSION).bin
++IMX_SECO_SOURCE = imx-seco-$(IMX_SECO_VERSION)-$(IMX_SECO_REVISION).bin
  
--# Legacy: this used to be handled in nftables.mk
- if BR2_PACKAGE_NFTABLES
-+# Legacy: this used to be handled in nftables.mk
- source "package/nftables/nftables-python/Config.in"
-+
-+config BR2_PACKAGE_NFTABLES_JSON
-+	bool "json support"
-+	select BR2_PACKAGE_JANSSON
-+
- endif
+ IMX_SECO_LICENSE = NXP Semiconductor Software License Agreement
+-IMX_SECO_LICENSE_FILES = EULA COPYING
++IMX_SECO_LICENSE_FILES = EULA COPYING SCR.txt SCR-imx-seco.txt
+ IMX_SECO_REDISTRIBUTE = NO
  
- comment "nftables needs a toolchain w/ wchar, headers >= 3.12"
-diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
-index 380e553cde..f6e6a64efd 100644
---- a/package/nftables/nftables.mk
-+++ b/package/nftables/nftables.mk
-@@ -42,7 +42,7 @@ else
- NFTABLES_CONF_OPTS += --without-cli
- endif
- 
--ifeq ($(BR2_PACKAGE_JANSSON),y)
-+ifeq ($(BR2_PACKAGE_NFTABLES_JSON),y)
- NFTABLES_DEPENDENCIES += jansson
- NFTABLES_CONF_OPTS += --with-json
- else
+ define IMX_SECO_EXTRACT_CMDS
+
+--===============8062516016254426706==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8062516016254426706==--
