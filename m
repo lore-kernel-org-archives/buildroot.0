@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AD9EC282EC
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:04:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25F65C282EC
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:05:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 445048379F;
-	Tue, 18 Mar 2025 15:04:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E87F460E1A;
+	Tue, 18 Mar 2025 15:05:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lt_P1JoEP_XO; Tue, 18 Mar 2025 15:04:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aD3bnr-J50XY; Tue, 18 Mar 2025 15:05:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B52D837EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E18FC60E08
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B52D837EC;
-	Tue, 18 Mar 2025 15:04:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C22C16E
+	by smtp3.osuosl.org (Postfix) with ESMTP id E18FC60E08;
+	Tue, 18 Mar 2025 15:05:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 50C57D8C
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:03:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 200C5815AB
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5643F40D64
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GvExv451QZpq for <buildroot@buildroot.org>;
- Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fuXW_hBh-8RX for <buildroot@buildroot.org>;
+ Tue, 18 Mar 2025 15:02:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2104D8136D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13F9940901
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2104D8136D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 13F9940901
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1E51383519; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
+ id 08C4E880EE; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
 Date: Sat, 1 Mar 2025 17:28:12 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 850e71c6afe76dcd5d1f97262beff4319ade0a2e
-X-Git-Newrev: 731922527667d54ffc2c8d185224c5ab60b05ebb
+X-Git-Oldrev: 9a7a729b45bf28ac1a5212f6bfd40311f0a96e49
+X-Git-Newrev: ca24f2d6d8309d9f6fc5e4af74324f7eae158b5a
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150243.1E51383519@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/freescale_imx6ullevk: bump BSP
+Message-Id: <20250318150243.08C4E880EE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/freescale_imx8dxlevk: bump BSP
  components to lf-6.6.52-2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -65,57 +65,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=731922527667d54ffc2c8d185224c5ab60b05ebb
+commit: https://git.buildroot.net/buildroot/commit/?id=ca24f2d6d8309d9f6fc5e4af74324f7eae158b5a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump U-Boot and Linux kernel to the NXP BSP lf-6.6.52-2.2.0 versions.
+Bump ATF, U-Boot and Linux kernel to the NXP BSP lf-6.6.52-2.2.0
+versions.
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/freescale/imx6ullevk/patches/linux/linux.hash | 2 +-
- board/freescale/imx6ullevk/patches/uboot/uboot.hash | 2 +-
- configs/freescale_imx6ullevk_defconfig              | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ .../patches/arm-trusted-firmware/arm-trusted-firmware.hash          | 2 +-
+ board/freescale/imx8dxlevk/patches/linux/linux.hash                 | 2 +-
+ board/freescale/imx8dxlevk/patches/uboot/uboot.hash                 | 2 +-
+ configs/freescale_imx8dxlevk_defconfig                              | 6 +++---
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/board/freescale/imx6ullevk/patches/linux/linux.hash b/board/freescale/imx6ullevk/patches/linux/linux.hash
+diff --git a/board/freescale/imx8dxlevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/imx8dxlevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index 0266b45d6a..58100572e4 100644
+--- a/board/freescale/imx8dxlevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/freescale/imx8dxlevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  37f0dee8b3b52d6c7f8a46c3bdd4138b528f9cc607015400e7cad0c206df41d7  imx-atf-lf-6.6.23-2.0.0.tar.gz
++sha256  2b5b4a370a55b790ca318e95e2c1aac9d9166ea549179ef9929c346863b4ea57  imx-atf-lf-6.6.52-2.2.0.tar.gz
+diff --git a/board/freescale/imx8dxlevk/patches/linux/linux.hash b/board/freescale/imx8dxlevk/patches/linux/linux.hash
 index 3c4223976b..620a7377ef 100644
---- a/board/freescale/imx6ullevk/patches/linux/linux.hash
-+++ b/board/freescale/imx6ullevk/patches/linux/linux.hash
+--- a/board/freescale/imx8dxlevk/patches/linux/linux.hash
++++ b/board/freescale/imx8dxlevk/patches/linux/linux.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
 -sha256  c70adedadce88f8685cb26d9703b930292c1349138e2c55ed9b4cd6e277de3bd  linux-imx-lf-6.6.23-2.0.0.tar.gz
 +sha256  6567dd20dbcdff19da1d005acde949b20874cace5e34bf2b8e90d14fcd130174  linux-imx-lf-6.6.52-2.2.0.tar.gz
-diff --git a/board/freescale/imx6ullevk/patches/uboot/uboot.hash b/board/freescale/imx6ullevk/patches/uboot/uboot.hash
+diff --git a/board/freescale/imx8dxlevk/patches/uboot/uboot.hash b/board/freescale/imx8dxlevk/patches/uboot/uboot.hash
 index 4e0d729ca0..4b763ba3ba 100644
---- a/board/freescale/imx6ullevk/patches/uboot/uboot.hash
-+++ b/board/freescale/imx6ullevk/patches/uboot/uboot.hash
+--- a/board/freescale/imx8dxlevk/patches/uboot/uboot.hash
++++ b/board/freescale/imx8dxlevk/patches/uboot/uboot.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
 -sha256  179b6531ef1d4ce681d139741ac7b4144220c90b7223297df28b61e98e8d37fc  uboot-imx-lf-6.6.23-2.0.0.tar.gz
 +sha256  5acad057c9c5e802536abf84b9fcb4405b8f701e13da1294e0d90bc6c186639d  uboot-imx-lf-6.6.52-2.2.0.tar.gz
-diff --git a/configs/freescale_imx6ullevk_defconfig b/configs/freescale_imx6ullevk_defconfig
-index e29a9898fc..6474228c64 100644
---- a/configs/freescale_imx6ullevk_defconfig
-+++ b/configs/freescale_imx6ullevk_defconfig
-@@ -8,7 +8,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+diff --git a/configs/freescale_imx8dxlevk_defconfig b/configs/freescale_imx8dxlevk_defconfig
+index 1ee1413eb0..c3017074c9 100644
+--- a/configs/freescale_imx8dxlevk_defconfig
++++ b/configs/freescale_imx8dxlevk_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare
+ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8dxl-evk.dtb"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
 -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.23-2.0.0)/linux-imx-lf-6.6.23-2.0.0.tar.gz"
 +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.52-2.2.0)/linux-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/freescale/imx6ullevk/linux_sdma.fragment"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -22,7 +22,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8dxl-evk"
+@@ -24,13 +24,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.6.23-2.0.0)/imx-atf-lf-6.6.23-2.0.0.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.6.52-2.2.0)/imx-atf-lf-6.6.52-2.2.0.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8dxl"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
  BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6ull_14x14_evk"
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
  BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
 -BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.23-2.0.0)/uboot-imx-lf-6.6.23-2.0.0.tar.gz"
 +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.52-2.2.0)/uboot-imx-lf-6.6.52-2.2.0.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8dxl_evk"
  BR2_TARGET_UBOOT_NEEDS_DTC=y
  BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMX=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
