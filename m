@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FACAC282EC
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:04:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AD9EC282EC
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:04:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 110C083653;
-	Tue, 18 Mar 2025 15:04:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 445048379F;
+	Tue, 18 Mar 2025 15:04:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dxcSOOymhkb7; Tue, 18 Mar 2025 15:04:55 +0000 (UTC)
+ id Lt_P1JoEP_XO; Tue, 18 Mar 2025 15:04:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06A38837A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5B52D837EC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 06A38837A4;
-	Tue, 18 Mar 2025 15:04:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 954DF16E
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B52D837EC;
+	Tue, 18 Mar 2025 15:04:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1C22C16E
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:03:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 50C9A40D47
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 200C5815AB
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SidUh8E9E7Cz for <buildroot@buildroot.org>;
- Tue, 18 Mar 2025 15:02:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GvExv451QZpq for <buildroot@buildroot.org>;
+ Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B26A4090B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2104D8136D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B26A4090B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2104D8136D
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 13D0B880AF; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
+ id 1E51383519; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
 Date: Sat, 1 Mar 2025 17:28:12 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ca24f2d6d8309d9f6fc5e4af74324f7eae158b5a
-X-Git-Newrev: 850e71c6afe76dcd5d1f97262beff4319ade0a2e
+X-Git-Oldrev: 850e71c6afe76dcd5d1f97262beff4319ade0a2e
+X-Git-Newrev: 731922527667d54ffc2c8d185224c5ab60b05ebb
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150243.13D0B880AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/freescale_imx7dsabresd: bump BSP
+Message-Id: <20250318150243.1E51383519@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/freescale_imx6ullevk: bump BSP
  components to lf-6.6.52-2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -65,7 +65,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=850e71c6afe76dcd5d1f97262beff4319ade0a2e
+commit: https://git.buildroot.net/buildroot/commit/?id=731922527667d54ffc2c8d185224c5ab60b05ebb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Bump U-Boot and Linux kernel to the NXP BSP lf-6.6.52-2.2.0 versions.
@@ -73,43 +73,43 @@ Bump U-Boot and Linux kernel to the NXP BSP lf-6.6.52-2.2.0 versions.
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/freescale/imx7dsdb/patches/linux/linux.hash | 2 +-
- board/freescale/imx7dsdb/patches/uboot/uboot.hash | 2 +-
- configs/freescale_imx7dsabresd_defconfig          | 4 ++--
+ board/freescale/imx6ullevk/patches/linux/linux.hash | 2 +-
+ board/freescale/imx6ullevk/patches/uboot/uboot.hash | 2 +-
+ configs/freescale_imx6ullevk_defconfig              | 4 ++--
  3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/freescale/imx7dsdb/patches/linux/linux.hash b/board/freescale/imx7dsdb/patches/linux/linux.hash
+diff --git a/board/freescale/imx6ullevk/patches/linux/linux.hash b/board/freescale/imx6ullevk/patches/linux/linux.hash
 index 3c4223976b..620a7377ef 100644
---- a/board/freescale/imx7dsdb/patches/linux/linux.hash
-+++ b/board/freescale/imx7dsdb/patches/linux/linux.hash
+--- a/board/freescale/imx6ullevk/patches/linux/linux.hash
++++ b/board/freescale/imx6ullevk/patches/linux/linux.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
 -sha256  c70adedadce88f8685cb26d9703b930292c1349138e2c55ed9b4cd6e277de3bd  linux-imx-lf-6.6.23-2.0.0.tar.gz
 +sha256  6567dd20dbcdff19da1d005acde949b20874cace5e34bf2b8e90d14fcd130174  linux-imx-lf-6.6.52-2.2.0.tar.gz
-diff --git a/board/freescale/imx7dsdb/patches/uboot/uboot.hash b/board/freescale/imx7dsdb/patches/uboot/uboot.hash
+diff --git a/board/freescale/imx6ullevk/patches/uboot/uboot.hash b/board/freescale/imx6ullevk/patches/uboot/uboot.hash
 index 4e0d729ca0..4b763ba3ba 100644
---- a/board/freescale/imx7dsdb/patches/uboot/uboot.hash
-+++ b/board/freescale/imx7dsdb/patches/uboot/uboot.hash
+--- a/board/freescale/imx6ullevk/patches/uboot/uboot.hash
++++ b/board/freescale/imx6ullevk/patches/uboot/uboot.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
 -sha256  179b6531ef1d4ce681d139741ac7b4144220c90b7223297df28b61e98e8d37fc  uboot-imx-lf-6.6.23-2.0.0.tar.gz
 +sha256  5acad057c9c5e802536abf84b9fcb4405b8f701e13da1294e0d90bc6c186639d  uboot-imx-lf-6.6.52-2.2.0.tar.gz
-diff --git a/configs/freescale_imx7dsabresd_defconfig b/configs/freescale_imx7dsabresd_defconfig
-index a9df6671ce..83a3f4494a 100644
---- a/configs/freescale_imx7dsabresd_defconfig
-+++ b/configs/freescale_imx7dsabresd_defconfig
-@@ -7,7 +7,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+diff --git a/configs/freescale_imx6ullevk_defconfig b/configs/freescale_imx6ullevk_defconfig
+index e29a9898fc..6474228c64 100644
+--- a/configs/freescale_imx6ullevk_defconfig
++++ b/configs/freescale_imx6ullevk_defconfig
+@@ -8,7 +8,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
 -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.23-2.0.0)/linux-imx-lf-6.6.23-2.0.0.tar.gz"
 +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.52-2.2.0)/linux-imx-lf-6.6.52-2.2.0.tar.gz"
  BR2_LINUX_KERNEL_DEFCONFIG="imx_v7"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/freescale/imx6ullevk/linux_sdma.fragment"
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx7d-sdb"
-@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+@@ -22,7 +22,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
  BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
+ BR2_TARGET_UBOOT_BOARDNAME="mx6ull_14x14_evk"
  BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
 -BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.23-2.0.0)/uboot-imx-lf-6.6.23-2.0.0.tar.gz"
 +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.52-2.2.0)/uboot-imx-lf-6.6.52-2.2.0.tar.gz"
