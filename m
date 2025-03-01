@@ -1,106 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4AC0C021B8
-	for <buildroot@archiver.kernel.org>; Sat,  1 Mar 2025 15:05:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5D5FC282C6
+	for <buildroot@archiver.kernel.org>; Sat,  1 Mar 2025 15:05:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 54EED84C45;
-	Sat,  1 Mar 2025 15:05:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8323960017;
+	Sat,  1 Mar 2025 15:05:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xVltui77-Vf0; Sat,  1 Mar 2025 15:05:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gP-ty-oS1O0Z; Sat,  1 Mar 2025 15:05:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D88984C3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BB93607CD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D88984C3C;
-	Sat,  1 Mar 2025 15:05:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 05DEE181
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8BB93607CD;
+	Sat,  1 Mar 2025 15:05:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 73911181
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E909C4293D
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 570E140177
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3qzepiIdsxgK for <buildroot@buildroot.org>;
- Sat,  1 Mar 2025 15:05:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fKkG14HOAy5A for <buildroot@buildroot.org>;
+ Sat,  1 Mar 2025 15:05:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 54B77426BA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54B77426BA
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 54B77426BA
- for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:45 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-390f69e71c8so602892f8f.0
- for <buildroot@buildroot.org>; Sat, 01 Mar 2025 07:05:45 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 34D3E40104
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34D3E40104
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 34D3E40104
+ for <buildroot@buildroot.org>; Sat,  1 Mar 2025 15:05:47 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-439a1e8ba83so29174935e9.3
+ for <buildroot@buildroot.org>; Sat, 01 Mar 2025 07:05:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1740841543; x=1741446343;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=e1Hf/4xr8BZ3/fAntTzNj3Hq7Uwv4TTrBfiSDfjslnk=;
- b=BQD53aIqmcHLRo3DCEi8G59j8tgc1gl61EIcGd+oWOqK+ZBS1pEr2D7JhJpFj7mpAN
- JXSUdEmoMyUe7HZpfyoxBZN25FL5z6dqSkgsGf4QkIpbLefUTEBM/SuaHjWbuxTJdDBq
- DD1jyfqMp/szj8H90gVaahXnqmUCqrw8QMbHX+Ux2njYjmDEEmEfUMDZVoq5MV5nwBJK
- y7CBDgzZaq4lPek1ZiauT4kQPriaK82j4d0PePKaScbzd8ZErEAmzDrxLwW01aW4+/fx
- yjqNi1NUAvfUeFO5OMX/GsOeHlSrUaOQKxc5Qiz5LOq0CIWHOZDxsmc+wc+jEwophllb
- nBxQ==
-X-Gm-Message-State: AOJu0YyDWnxZOryytNcMY2sEkJc5kHKuklh78Lr5RG7H08EPEvQDRN3w
- cCAEbtXRJsDgJ6SOeioRCEu8VvCgcW9UbIcsr0WVzHl7yllZxbJZjUFE5w==
-X-Gm-Gg: ASbGncvCu3dYDaWeFyj43FuSbPidRrvNC9TXXPhf9OHQq7Rz9MV4y9BNqRjSTJltY5T
- an+o2TPLNjNgwhPEIse/x8dPXH+24AQe4Uue16cQnXvvl1VSraTdX18kBWiuo9CLdqnQ8ANDwq5
- yGo25pIgwtUTH0MgalTEf5k47Mup6AWtRA0xl7UCjnEkX6JphtH91H7UT3vsrByKZNG4YqMWQIY
- fuSCH9uRcQ92PbFR6dsx9fUgRVsMbE5uKDwa42FbFikL1n3MfHr9mWOfRSWeoreotNWCVZ9P52l
- ohfIqMKWwfvNBx3cS7pb5xphE6POfAi1kYxAZltUSdqM1+x9LSx2NSc=
-X-Google-Smtp-Source: AGHT+IHn+envI4IgybCRIFnWSdTXoNW0blGT6d8bR0t/mUZx8s8Tf/oe3ggjf78h9sMUMQYTZVvYZQ==
-X-Received: by 2002:a5d:598d:0:b0:38d:fede:54f8 with SMTP id
- ffacd0b85a97d-390ec155371mr5318833f8f.16.1740841542986; 
- Sat, 01 Mar 2025 07:05:42 -0800 (PST)
+ d=1e100.net; s=20230601; t=1740841545; x=1741446345;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=cCGA/MBEJuPF8THUIpnmbuUT27T5TfurEiykUM2BDSo=;
+ b=F59yYlEkziV8Xvwnf+ORldfFrQ78o1IQ7oOsFB7msurXIKllzLQxTTccbdeAHkcfwI
+ VOBQungWNMlzsFonbzZpzPvoxVwzpkHZeru0NcHdK1ktw2yRZNm0iCQrpFUAmACifmPl
+ yBt5yGRB3roBwABTeubl1v+vqbI4zGokuzWdzI/Stp/14FUOXi2Mj845UJiEUhj2yfHM
+ 0lyt85pCUvmZKuqjP53qY/0P9cenGupl5RIu396n2GA8b5E6KPnWz8iYEtzk8Xnw6U+Y
+ MZdVeBkAy4pObRrxtTE6UOx/tzj2KQtDWkaXapATmztVGw0XGfgLfjUSB75AdVpo/id9
+ muFA==
+X-Gm-Message-State: AOJu0YxYc6da03rY44iwCER5Gch0NpvU0azeQEpv4bXqK9OqeZTtBxR2
+ eC7mvr4E9n4MKYlLp5fneVe6/VIlNUxs3II2O4rOLm9iEhsInw0eY/dTEA==
+X-Gm-Gg: ASbGncsVTfafQNQzoxykMMGnD2e9SA9wjngyGExQisp34giZZqEmz0XbXym7RT0mP/s
+ U1wOvsjuCuPs8D6Mo9kGyNP/Nmy5UHCenCajlK1ad/pYIJcwkvpml3agjgVeWjVw/eUg6wpX4tY
+ M4Qeo8tCSyzE7GC/daRQl2RPd0BtW9iSfHRHqLACegbPGKMRcekOAIe+PIDrqbIKb04Ex0KTp4L
+ GQPL31lDeiUHSR7dwGnwSQ8yvAI/FC4oNRAYdpXgGJQFV8cZ28F01JpHFrDDfONZB+2N4kcaPHb
+ iLU+xPSeuQ7BSe0FyM+nPVKA57ZZ4iu9eW+fan5cbEY23YkpuZepi58=
+X-Google-Smtp-Source: AGHT+IEMFHu09/63cSDX/7hZnjdEMqKF3uFQCaYijQRNM9hbViBin1HPMrfoJKx6Cha1U9g4TKJAuQ==
+X-Received: by 2002:a05:600c:4f89:b0:439:88bb:d013 with SMTP id
+ 5b1f17b1804b1-43ba66f96b4mr63550095e9.7.1740841544923; 
+ Sat, 01 Mar 2025 07:05:44 -0800 (PST)
 Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-390e47965f3sm8513394f8f.9.2025.03.01.07.05.42
+ 5b1f17b1804b1-43aba57145esm123806065e9.30.2025.03.01.07.05.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 01 Mar 2025 07:05:42 -0800 (PST)
+ Sat, 01 Mar 2025 07:05:44 -0800 (PST)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Cc: Christian Stewart <christian@aperture.us>,
- Fiona Klute <fiona.klute@gmx.de>, Julien Olivain <ju.o@free.fr>,
- Raphael Pavlidis <raphael.pavlidis@gmail.com>,
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
  Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- "Yann E . MORIN" <yann.morin@orange.com>
-Date: Sat,  1 Mar 2025 16:05:41 +0100
-Message-ID: <cover.1740841539.git.yann.morin.1998@free.fr>
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat,  1 Mar 2025 16:05:36 +0100
+Message-ID: <745bdcacbdff342d7e37dd1003a03923dc03b935.1740841539.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.47.0
+In-Reply-To: <cover.1740841539.git.yann.morin.1998@free.fr>
+References: <cover.1740841539.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1740841543; x=1741446343; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=e1Hf/4xr8BZ3/fAntTzNj3Hq7Uwv4TTrBfiSDfjslnk=;
- b=hxB94rng8vTAYOvBrKzZJP66/r7ozq3B9srkJE7ncNVB7aLW3iqwyNL97ewtcHE2qb
- pJd2sAxcUCcAB7Jnsk9OxWyOjtHMvmgHcVuImUicEGplSnoB/8AWTc+k9P+uB3AsRAtB
- p5WTyG7Zr8TVeTD3U+qe750dxQtb5mHXN3bJk5hz9BQUSGucI2MZ+rlLghhxMxpOQFd3
- WqPDBgvJNuT/7ekUOJWCfYHfS5giS4Jmyw7MZCrzZuoPhqwgOrQ5Pd7sFBnT78CyHOWg
- I1HCXHDEgTZsZG7ni4eXV5WnlevGFirUXUrY/x1KZphEIOKu/lWOof3o9hawhn+cW701
- rTuQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1740841545; x=1741446345; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=cCGA/MBEJuPF8THUIpnmbuUT27T5TfurEiykUM2BDSo=;
+ b=YyFpDXbEDbPx3BYfsPYbgLtjNQMX6k8/a/S6rYUItXFCMApycCHJk7cMIebzMIpmLQ
+ /K/84GH1qTZHy2lES26l9XwVMnwKXA4+nNxDsl8rmZSPIdLwY/nyGvnw+wGC5PaV9ES4
+ qPQHMwJxunOudyR9xAqtpzDz0Fecwl+sRQT9Z14ZfjOVYqlhjeor5LgTPyTfQCZyTk4X
+ XqWecoSmXE7nxeRZ/lR54x4tBoTM4NSFUraWLk6xrhmhyJIlL71IYuOS9zmaP8czuP6K
+ j6Tkb1xcXbhD/J8qZsAcEUD1PsxEQoJS/0s9cA72XKNuuM9i0ijt/MYUkM78vXyBwtPF
+ kqvg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=hxB94rng
-Subject: [Buildroot] [PATCH 0/9 v3] package/podman: new package (branch
- yem/podman)
+ header.a=rsa-sha256 header.s=20230601 header.b=YyFpDXbE
+Subject: [Buildroot] [PATCH 1/9 v3] support/testing: set date in emulated
+ machine
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,87 +116,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello All!
+When time comes to check certificates, the date and time in the emulated
+machine should be close enough to the actual values, so that certificate
+validity can be checked.
 
-This series introduce podman, an alternative to Docker. Podman is
-daemon-less, and does not need root either.
+Set the date to the date of the system. This is going to be accurate to
+the second, which is, by far, enough for our purpose.
 
-The series starts with preparatory commits in existing packages and the
-testing infra: then it introduces new packages on which podman will
-rely.
+The Emulator() class doesn't inherit from unittest.TestCase, so we can't
+call any of the usual self.assertXXX() methods; instead, we just raise
+a standard exception, like is done a few lines above to detect the login
+prompt.
 
-Not required by podman, skopeo is made a target package as well, as it
-was of help debugging podman (and Docker in a separate series).
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
+---
 Changes v1 -> v2:
-  - add licensing info for netavark and podman  (Julien)
+  - catch failure to set the date
+---
+ support/testing/infra/emulator.py | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Changes v2 -> v3:
-  - make rootless actually work (Raphael)
+diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+index ef5be2a19e..9be1143944 100644
+--- a/support/testing/infra/emulator.py
++++ b/support/testing/infra/emulator.py
+@@ -5,6 +5,7 @@ import os
+ 
+ import pexpect
+ import pexpect.replwrap
++import time
+ 
+ import infra
+ 
+@@ -152,6 +153,10 @@ class Emulator(object):
+ 
+         self.connect_shell()
+ 
++        output, exit_code = self.run(f"date @{int(time.time())}")
++        if exit_code:
++            raise SystemError("Cannot set date in virtual machine")
++
+     def connect_shell(self):
+         extra_init_cmd = " && ".join([
+             'export PAGER=cat',
+-- 
+2.47.0
 
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Yann E. MORIN (9):
-      support/testing: set date in emulated machine
-      package/shadow: install to staging for subids
-      package/conmon: depends on systemd when enabled
-      package/slirp4netns: needs TUN support in the kernel
-      package/skopeo: add target variant
-      package/cgroupfs-mount: tweak the kernel config
-      package/cgroupfs-v2-mount: new package
-      package/netavark: new package
-      package/podman: new package
-
- package/Config.in                              |   4 +
- package/cgroupfs-mount/Config.in               |  12 +-
- package/cgroupfs-mount/cgroupfs-mount.mk       |  11 ++
- package/cgroupfs-v2-mount/Config.in            |  10 ++
- package/cgroupfs-v2-mount/S30cgroupfs2         |  44 ++++++++
- package/cgroupfs-v2-mount/cgroupfs-v2-mount.mk |  20 ++++
- package/conmon/conmon.mk                       |   4 +
- package/netavark/Config.in                     |  10 ++
- package/netavark/netavark.hash                 |   3 +
- package/netavark/netavark.mk                   |  19 ++++
- package/podman/Config.in                       |  41 +++++++
- package/podman/containers.conf                 |   2 +
- package/podman/podman.hash                     |   3 +
- package/podman/podman.mk                       | 114 +++++++++++++++++++
- package/podman/policy.json                     |   7 ++
- package/podman/registries.conf                 |   1 +
- package/shadow/shadow.mk                       |   1 +
- package/skopeo/Config.in                       |  25 +++++
- package/skopeo/skopeo.mk                       |  10 ++
- package/slirp4netns/slirp4netns.mk             |   9 ++
- support/testing/infra/emulator.py              |   5 +
- support/testing/tests/package/test_podman.py   | 147 +++++++++++++++++++++++++
- support/testing/tests/package/test_skopeo.py   |  41 +++++++
- 23 files changed, 532 insertions(+), 11 deletions(-)
- create mode 100644 package/cgroupfs-v2-mount/Config.in
- create mode 100644 package/cgroupfs-v2-mount/S30cgroupfs2
- create mode 100644 package/cgroupfs-v2-mount/cgroupfs-v2-mount.mk
- create mode 100644 package/netavark/Config.in
- create mode 100644 package/netavark/netavark.hash
- create mode 100644 package/netavark/netavark.mk
- create mode 100644 package/podman/Config.in
- create mode 100644 package/podman/containers.conf
- create mode 100644 package/podman/podman.hash
- create mode 100644 package/podman/podman.mk
- create mode 100644 package/podman/policy.json
- create mode 100644 package/podman/registries.conf
- create mode 100644 package/skopeo/Config.in
- create mode 100644 support/testing/tests/package/test_podman.py
- create mode 100644 support/testing/tests/package/test_skopeo.py
-
---
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
