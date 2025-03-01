@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5259DC28B28
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:04:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 446BEC28B2F
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:04:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 16857821EE;
-	Tue, 18 Mar 2025 15:04:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0179582DE6;
+	Tue, 18 Mar 2025 15:04:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ykm6BNcpBI0k; Tue, 18 Mar 2025 15:03:59 +0000 (UTC)
+ id zoYNfL25rvr6; Tue, 18 Mar 2025 15:04:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EF64A82DE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 746EB82F4A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF64A82DE6;
-	Tue, 18 Mar 2025 15:03:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 133ACD5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 746EB82F4A;
+	Tue, 18 Mar 2025 15:04:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 46F1DD8C
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7D04681A29
+ by smtp4.osuosl.org (Postfix) with ESMTP id 50819409D7
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rXL1xrEUnSs5 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wcpkEVBpctCe for <buildroot@buildroot.org>;
  Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03ADF81C6F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A65A40892
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 03ADF81C6F
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A65A40892
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F1CA283519; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
+ id 676F8880AF; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 1 Mar 2025 17:28:12 +0100
+Date: Sat, 1 Mar 2025 11:31:54 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cd8dc24ac84513caf06fe3c1e12985d2bb3f8c7f
-X-Git-Newrev: 9a7a729b45bf28ac1a5212f6bfd40311f0a96e49
+X-Git-Oldrev: 6295c5ef567d8500d6a8d1ee9e29396d39fa4a67
+X-Git-Newrev: f3350d1af2cfca8f48756843e964168b5bb7718e
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150242.F1CA283519@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/freescale_imx8mmevk: bump BSP
- components to lf-6.6.52-2.2.0
+Message-Id: <20250318150242.676F8880AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/imx-vpu-hantro: bump
+ version to 1.35.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,81 +60,83 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3765905487885415613=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a7a729b45bf28ac1a5212f6bfd40311f0a96e49
+--===============3765905487885415613==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=f3350d1af2cfca8f48756843e964168b5bb7718e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump ATF, U-Boot and Linux kernel to the NXP BSP lf-6.6.52-2.2.0
-versions.
+This version is aligned with NXP Linux BSP version "lf-6.6.52-2.2.0".
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
-Tested-by: Julien Olivain <ju.o@free.fr>
+License hashes changed because the LA_OPT_NXP_Software_License changed
+from "v49 September 2023" to "v57 July 2024".
+Add SCR-imx-vpu-hantro.txt to _LICENSE_FILES.
+
+Note: in this release, the package source archive name changed to
+include a revision. This commit adds a new _REVISION variable with the
+value published in the corresponding NXP BSP.
+
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+[Julien: fixed the bsp version name in commit log and SoB email]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash          | 2 +-
- board/freescale/imx8mmevk/patches/linux/linux.hash                  | 2 +-
- board/freescale/imx8mmevk/patches/uboot/uboot.hash                  | 2 +-
- configs/freescale_imx8mmevk_defconfig                               | 6 +++---
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.hash | 7 ++++---
+ package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.mk   | 7 ++++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/board/freescale/imx8mmevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/imx8mmevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-index 0266b45d6a..58100572e4 100644
---- a/board/freescale/imx8mmevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/board/freescale/imx8mmevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  37f0dee8b3b52d6c7f8a46c3bdd4138b528f9cc607015400e7cad0c206df41d7  imx-atf-lf-6.6.23-2.0.0.tar.gz
-+sha256  2b5b4a370a55b790ca318e95e2c1aac9d9166ea549179ef9929c346863b4ea57  imx-atf-lf-6.6.52-2.2.0.tar.gz
-diff --git a/board/freescale/imx8mmevk/patches/linux/linux.hash b/board/freescale/imx8mmevk/patches/linux/linux.hash
-index 3c4223976b..620a7377ef 100644
---- a/board/freescale/imx8mmevk/patches/linux/linux.hash
-+++ b/board/freescale/imx8mmevk/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  c70adedadce88f8685cb26d9703b930292c1349138e2c55ed9b4cd6e277de3bd  linux-imx-lf-6.6.23-2.0.0.tar.gz
-+sha256  6567dd20dbcdff19da1d005acde949b20874cace5e34bf2b8e90d14fcd130174  linux-imx-lf-6.6.52-2.2.0.tar.gz
-diff --git a/board/freescale/imx8mmevk/patches/uboot/uboot.hash b/board/freescale/imx8mmevk/patches/uboot/uboot.hash
-index 4e0d729ca0..4b763ba3ba 100644
---- a/board/freescale/imx8mmevk/patches/uboot/uboot.hash
-+++ b/board/freescale/imx8mmevk/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  179b6531ef1d4ce681d139741ac7b4144220c90b7223297df28b61e98e8d37fc  uboot-imx-lf-6.6.23-2.0.0.tar.gz
-+sha256  5acad057c9c5e802536abf84b9fcb4405b8f701e13da1294e0d90bc6c186639d  uboot-imx-lf-6.6.52-2.2.0.tar.gz
-diff --git a/configs/freescale_imx8mmevk_defconfig b/configs/freescale_imx8mmevk_defconfig
-index b5b52c1f2d..3807b8ada7 100644
---- a/configs/freescale_imx8mmevk_defconfig
-+++ b/configs/freescale_imx8mmevk_defconfig
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare
- BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mm-evk.dtb"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.23-2.0.0)/linux-imx-lf-6.6.23-2.0.0.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.52-2.2.0)/linux-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk freescale/imx8mm-evk-revb-qca-wifi"
-@@ -21,13 +21,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.6.23-2.0.0)/imx-atf-lf-6.6.23-2.0.0.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.6.52-2.2.0)/imx-atf-lf-6.6.52-2.2.0.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.23-2.0.0)/uboot-imx-lf-6.6.23-2.0.0.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.52-2.2.0)/uboot-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+diff --git a/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.hash b/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.hash
+index 069700fc5f..f103970893 100644
+--- a/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.hash
++++ b/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.hash
+@@ -1,4 +1,5 @@
+ # Locally computed:
+-sha256  21fb3288f6f44631ebf6479284c5c081ff829a3068811eebbacc510f14300ab4  imx-vpu-hantro-1.31.0.bin
+-sha256  24d7cb3a7e51011466a149bd99acf89387b832be2d0890ce2e183dfbc9d7cb84  COPYING
+-sha256  3282d88fad766897f93b0827297a70c2707d9358db24cccd5777abf7c997da77  EULA
++sha256  c4730cb996a3eafbc06ed0765cd509caa63cdeecdc0c4958efbc91383e0501fd  imx-vpu-hantro-1.35.0-98ff183.bin
++sha256  601fa790c5b4d03579bd182fb4d65a6f329a32faf49db22f98e4608221e861f7  COPYING
++sha256  c3d9a7b2a5a7db5da690e9c1081b98b665802c3efbbba7fb237339395a92f607  EULA
++sha256  5d06ff9de56f0788f6b090c93226dd951764124635c687cef64f29776c2e8cf8  SCR-imx-vpu-hantro.txt
+diff --git a/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.mk b/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.mk
+index 64df16e21b..256153892b 100644
+--- a/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.mk
++++ b/package/freescale-imx/imx-vpu-hantro/imx-vpu-hantro.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-IMX_VPU_HANTRO_VERSION = 1.31.0
++IMX_VPU_HANTRO_VERSION = 1.35.0
++IMX_VPU_HANTRO_REVISION = 98ff183
+ IMX_VPU_HANTRO_SITE = $(FREESCALE_IMX_SITE)
+-IMX_VPU_HANTRO_SOURCE = imx-vpu-hantro-$(IMX_VPU_HANTRO_VERSION).bin
++IMX_VPU_HANTRO_SOURCE = imx-vpu-hantro-$(IMX_VPU_HANTRO_VERSION)-$(IMX_VPU_HANTRO_REVISION).bin
+ IMX_VPU_HANTRO_DEPENDENCIES = linux
+ IMX_VPU_HANTRO_INSTALL_STAGING = YES
+ 
+@@ -19,7 +20,7 @@ IMX_VPU_HANTRO_MAKE_ENV = \
+ 	PLATFORM=$(BR2_PACKAGE_FREESCALE_IMX_PLATFORM)
+ 
+ IMX_VPU_HANTRO_LICENSE = NXP Semiconductor Software License Agreement
+-IMX_VPU_HANTRO_LICENSE_FILES = EULA COPYING
++IMX_VPU_HANTRO_LICENSE_FILES = EULA COPYING SCR-imx-vpu-hantro.txt
+ IMX_VPU_HANTRO_REDISTRIBUTE = NO
+ 
+ define IMX_VPU_HANTRO_EXTRACT_CMDS
+
+--===============3765905487885415613==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3765905487885415613==--
