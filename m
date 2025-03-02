@@ -4,95 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 249F3C19F32
-	for <buildroot@archiver.kernel.org>; Sun,  2 Mar 2025 15:01:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42275C19F32
+	for <buildroot@archiver.kernel.org>; Sun,  2 Mar 2025 19:22:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B748D40B35;
-	Sun,  2 Mar 2025 15:01:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF97E40C49;
+	Sun,  2 Mar 2025 19:22:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J4kNQeTzJX6T; Sun,  2 Mar 2025 15:01:14 +0000 (UTC)
+ id 4JZZ5QUufq_f; Sun,  2 Mar 2025 19:22:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E44B40C80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 687E040C88
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E44B40C80;
-	Sun,  2 Mar 2025 15:01:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id A36C8D2
- for <buildroot@buildroot.org>; Sun,  2 Mar 2025 15:01:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 687E040C88;
+	Sun,  2 Mar 2025 19:22:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E1285182
+ for <buildroot@buildroot.org>; Sun,  2 Mar 2025 19:22:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 92914400E4
- for <buildroot@buildroot.org>; Sun,  2 Mar 2025 15:01:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5CD3605BB
+ for <buildroot@buildroot.org>; Sun,  2 Mar 2025 19:22:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5PmCHr78S612 for <buildroot@buildroot.org>;
- Sun,  2 Mar 2025 15:01:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MpTg90rY7I6M for <buildroot@buildroot.org>;
+ Sun,  2 Mar 2025 19:22:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::236; helo=mail-lj1-x236.google.com;
- envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2A7DF40245
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A7DF40245
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
- [IPv6:2a00:1450:4864:20::236])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2A7DF40245
- for <buildroot@buildroot.org>; Sun,  2 Mar 2025 15:01:09 +0000 (UTC)
-Received: by mail-lj1-x236.google.com with SMTP id
- 38308e7fff4ca-30b83290b7bso42771891fa.1
- for <buildroot@buildroot.org>; Sun, 02 Mar 2025 07:01:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1740927666; x=1741532466;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=kvlXsA3AcybeRw9PEvDcWH+wPys6SCdL0JcSgTEwP3E=;
- b=SmWgBLTFLNBdb8af0bf8Lprx8gBMVhYTiGE2m4qi7x3fSzFLj0ynwiGlKTkj8vu91Z
- 7hOg1GOxLshFpgqctGEhueSD4MChYfy5h6E3sLcqswUzK6dWxhU98vEeKR0mjyjP5Zz5
- TwnrYcGR161TUyB+K6hOWFh8Nse3etANJYlh9SsXKGZi34LgFBR9eoPZOiXKzG2/9H93
- +RNuZpd2OT+9kQcutoSgK0PzFSuyy969/KSC15cxLeGOCNOugT/DYBgBycqrHqOWC52Y
- LaFTNjksFuMaszFv8L/G3ReyjiuhAjw0fkS4gbhkotsVyekzn9dyE6HaxVEk7IvG3ctQ
- hJMA==
-X-Gm-Message-State: AOJu0YyGAbSfaPUY7HnV8rUxa2NUJQ1A7pAO7XVybEb61H/dCgU2volp
- hy31sEZL2i8o61FGQYnNOxO3R9xg10BXLvUOBi0FGRjh+IUvqDO8qIRpNEdAa6cFIFJvc7CaZKC
- gmaOr+bjwoXLsa8Z4qn8dn+tBHrgapXLm
-X-Gm-Gg: ASbGnctAL3/MDk5UFeCtKNTfjaiTtpl4YlKBOEItn8qO8vnBpPxXMzKXa1UMT2WNatk
- Djq9Uzzq+iog34aTphlpVzARHvfvlCC+SRFx68B7mJaBdDJsLRTcYR2aWNVDzlOYEW/nN4UDScN
- 2ZygZROapo1JDhFtUikKHK+1BFQ+Q=
-X-Google-Smtp-Source: AGHT+IEV1I67OMPDdrObzij9JxELFirxpbLzBRZ//xYNpagM/b9gkOwLATG+Ovx9MeR+yStmdj2L1WgfCFPvw/C2+Sc=
-X-Received: by 2002:a2e:b8d5:0:b0:302:2598:de91 with SMTP id
- 38308e7fff4ca-30b932357c0mr35300281fa.16.1740927666094; Sun, 02 Mar 2025
- 07:01:06 -0800 (PST)
+ client-ip=2001:868:100:600::216; helo=shout01.mail.de;
+ envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6A4E160704
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A4E160704
+Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6A4E160704
+ for <buildroot@buildroot.org>; Sun,  2 Mar 2025 19:22:48 +0000 (UTC)
+Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
+ by shout01.mail.de (Postfix) with ESMTP id 305B824054C;
+ Sun,  2 Mar 2025 20:22:46 +0100 (CET)
+Received: from smtp01.mail.de (smtp03.bt.mail.de [10.0.121.213])
+ by postfix03.mail.de (Postfix) with ESMTP id 03CA126003B;
+ Sun,  2 Mar 2025 20:22:46 +0100 (CET)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp01.mail.de (Postfix) with ESMTPSA id 4CDC4240CA2;
+ Sun,  2 Mar 2025 20:22:43 +0100 (CET)
+To: Han Gao <rabenda.cn@gmail.com>, Romain Naour <romain.naour@smile.fr>
+Cc: buildroot@buildroot.org, Drew Fustini <dfustini@tenstorrent.com>,
+ Drew Fustini <drew@beagleboard.org>, robertcnelson@beagleboard.org,
+ jkridner@beagleboard.org,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 02 Mar 2025 20:21:10 +0100
+Message-ID: <3279501.5fSG56mABF@kilian-laptop>
+In-Reply-To: <1913069.tdWV9SEqCh@kilian-laptop>
+References: <20250101205435.1513140-1-kilian.zinnecker@mail.de>
+ <e508e642-3942-47e8-9ff2-a23f16d9d706@smile.fr>
+ <1913069.tdWV9SEqCh@kilian-laptop>
 MIME-Version: 1.0
-References: <20250302143758.300057-1-fancp2007@gmail.com>
-In-Reply-To: <20250302143758.300057-1-fancp2007@gmail.com>
-From: Scott Fan <fancp2007@gmail.com>
-Date: Sun, 2 Mar 2025 23:00:53 +0800
-X-Gm-Features: AQ5f1Jrh6k3pYzGQet4aw85fnEyd0aPZkdJ1KJOT5WILsbIAFRJcNl_Vm2mB7aA
-Message-ID: <CAFkzVZbWicY58swiTT5MrUO+hOD2-JqBRLFR7qcV3ixPyryR7w@mail.gmail.com>
-To: buildroot@buildroot.org
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1740927666; x=1741532466; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=kvlXsA3AcybeRw9PEvDcWH+wPys6SCdL0JcSgTEwP3E=;
- b=fZhy8aKgPc/RSzA2LtjGCae6JCNdQFyHYlYuKaLFM25TBeZ2ByZfaBTuZhPp+OFlDG
- W+lEkzAaAYEnaN8IQLtmYsnFXEFeAU9A2y9Vzi6XhUpLun117avEu9mKs5ATyW2KI9+K
- RZdnVW2Dg3H4IMRoEn9CCcKr0smrF/1YxNth19BgDBoqVb1UXLp1m2qh6EIEMt4ydfti
- S+vyepm10xKaUZhICSjqHkOS50Tqq7wANVMNedY5vGbqr6BZWuoaJXDk3QgKs9ohBBvB
- 4/r6PdrKAL5XdtwpqfdSQkcYszow5HY+abuLWirSbRALHFLQ8UYjv0LfOcat8UWglchp
- zbLg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-purgate: clean
+X-purgate: This mail is considered clean (visit http://www.eleven.de for
+ further information)
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) https://www.eleven.de
+X-purgate: This mail is considered clean (visit https://www.eleven.de for
+ further information)
+X-purgate: clean
+X-purgate-size: 3215
+X-purgate-ID: 154282::1740943365-1651689A-1939DB06/10/3626336762
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=mail.de; s=mailde202009; t=1740943366;
+ bh=kWoQsr4kKxDa5lZGM7J7vSxJ0ToK5kT0g8Q+El9aPMI=;
+ h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
+ b=OMXIATqKvJhh3NXYvnxue3m9MkFosBxoRQlaN5Ukrn2eeIURh+zgwD1KKhgvlMiAl
+ ganv/j2nn+ZFbueo+o0f/LmBs91jBIND8TEGwS8AbqyXreuJbqEGhV0GQUEposhKDy
+ vjC4d241ZTs/wZQtd7+4zOzvR/jSRJ6KEnFtangJlvwOZSPqIEy8NQzPgoWPc1T8HO
+ RA4NDLEQY9FREtc4eAEx4f2oLgmGOyfKhhLp6MgmKZ8OOX8MiB0FgXdx5uSraPmQ9E
+ kOCsPkdDHrBxHpr47AY2uTYyRFLtxSx6RIHk5z5l2kT4oiu6SyjV+lFeaoGotqFl02
+ kj/ONsCnuJkgA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mail.de
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=fZhy8aKg
-Subject: Re: [Buildroot] [PATCH 2024.02.x] package/postgresql: bump version
- to 16.8
+ unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
+ header.s=mailde202009 header.b=OMXIATqK
+Subject: Re: [Buildroot] [PATCH v6 0/2] Add board support for the
+ BeagleV-Ahead
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,52 +102,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SW4gdGhlIGxhc3QgYnVtcCB0byAxNi43LCBQZXRlciBmb3Jnb3QgdG8gdXBkYXRlIHRoZSBsaWNl
-bnNlIGhhc2ggb2YKdGhlIENPUFlSSUdIVCBmaWxlLCB3aGljaCBjYXVzZWQgdGhlIGZvbGxvd2lu
-ZyB0d28gYnVpbGRzIHRvIGZhaWwuCgpGaXhlcyAoMjAyNC4xMS54KToKaHR0cHM6Ly9hdXRvYnVp
-bGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2ZkNTY5NDk1YzU2NzM3ZDNkNGI1MWYxMjIwYzc2OGI1
-NDY1ZjdmZmEvCgpGaXhlcyAoMjAyNC4wMi54KToKaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290
-Lm9yZy9yZXN1bHRzL2Y1ZWEyN2FjODJiYTIzMzNhMjUyNzExYmFjOTZmZjBhM2JkZWViODcvCgoK
-U2NvdHQgRmFuCgpPbiBTdW4sIE1hciAyLCAyMDI1IGF0IDEwOjM44oCvUE0gU2NvdHQgRmFuIDxm
-YW5jcDIwMDdAZ21haWwuY29tPiB3cm90ZToKPgo+IFJlbGVhc2Ugbm90ZXM6Cj4gaHR0cHM6Ly93
-d3cucG9zdGdyZXNxbC5vcmcvZG9jcy9yZWxlYXNlLzE2LjgvCj4gaHR0cHM6Ly93d3cucG9zdGdy
-ZXNxbC5vcmcvYWJvdXQvbmV3cy9wb3N0Z3Jlc3FsLTE3NC0xNjgtMTUxMi0xNDE3LWFuZC0xMzIw
-LXJlbGVhc2VkLTMwMTgvCj4KPiBVcGRhdGVkIGxpY2Vuc2UgaGFzaCBkdWUgdG8gY29weXJpZ2h0
-IHllYXIgYnVtcDoKPiBodHRwczovL2dpdC5wb3N0Z3Jlc3FsLm9yZy9naXR3ZWIvP3A9cG9zdGdy
-ZXNxbC5naXQ7YT1jb21taXRkaWZmO2g9NzU5NjIwNzE2YWRiMzQ3YzFkOGM4YjJlNmY3ZDg4Yjk0
-N2E1NGM5OAo+Cj4gU2lnbmVkLW9mZi1ieTogU2NvdHQgRmFuIDxmYW5jcDIwMDdAZ21haWwuY29t
-Pgo+IC0tLQo+ICBwYWNrYWdlL3Bvc3RncmVzcWwvcG9zdGdyZXNxbC5oYXNoIHwgNiArKystLS0K
-PiAgcGFja2FnZS9wb3N0Z3Jlc3FsL3Bvc3RncmVzcWwubWsgICB8IDIgKy0KPiAgMiBmaWxlcyBj
-aGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCj4KPiBkaWZmIC0tZ2l0IGEv
-cGFja2FnZS9wb3N0Z3Jlc3FsL3Bvc3RncmVzcWwuaGFzaCBiL3BhY2thZ2UvcG9zdGdyZXNxbC9w
-b3N0Z3Jlc3FsLmhhc2gKPiBpbmRleCAxMWMwZTc3YjA1Li41YzdhNDY2YThmIDEwMDY0NAo+IC0t
-LSBhL3BhY2thZ2UvcG9zdGdyZXNxbC9wb3N0Z3Jlc3FsLmhhc2gKPiArKysgYi9wYWNrYWdlL3Bv
-c3RncmVzcWwvcG9zdGdyZXNxbC5oYXNoCj4gQEAgLTEsNCArMSw0IEBACj4gLSMgRnJvbSBodHRw
-czovL2Z0cC5wb3N0Z3Jlc3FsLm9yZy9wdWIvc291cmNlL3YxNi43L3Bvc3RncmVzcWwtMTYuNy50
-YXIuYnoyLnNoYTI1Ngo+IC1zaGEyNTYgIDYyZTAyZjc3ZWJmYzRhMzdmMTcwMGMyMGNjM2NjZDg1
-ZmY3OTdiNTYxMzc2NmViZjk0OWE3ODk5YmIyMTEzZmUgIHBvc3RncmVzcWwtMTYuNy50YXIuYnoy
-Cj4gKyMgRnJvbSBodHRwczovL2Z0cC5wb3N0Z3Jlc3FsLm9yZy9wdWIvc291cmNlL3YxNi44L3Bv
-c3RncmVzcWwtMTYuOC50YXIuYnoyLnNoYTI1Ngo+ICtzaGEyNTYgIDk0NjgwODNhNTZjZTBlZTdk
-Mjk0NjAxYjc0ZGFkM2RkOWZjNjlkODdhZmY2MWYwYTlmYjYzYzgxM2ZmN2VmZDggIHBvc3RncmVz
-cWwtMTYuOC50YXIuYnoyCj4gICMgTGljZW5zZSBmaWxlLCBMb2NhbGx5IGNhbGN1bGF0ZWQKPiAt
-c2hhMjU2ICA5YmYyMGVlNDkzOTI2YTdlMTdhNzRiYzdmMDUwODlmYmMwMTQyNjk2NjdiMTU0MGJj
-MzVhNmIxOTRhNDBjOWRlICBDT1BZUklHSFQKPiArc2hhMjU2ICBlMzgyMmM0Nzk3ZmFkY2FiMzFh
-M2ZjNzNmNzVjMjhhYzIwYzczZDcyYjU2NWRhOTFlOTk3NGNmOTM5OGVmNGQyICBDT1BZUklHSFQK
-PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9wb3N0Z3Jlc3FsL3Bvc3RncmVzcWwubWsgYi9wYWNrYWdl
-L3Bvc3RncmVzcWwvcG9zdGdyZXNxbC5tawo+IGluZGV4IGY0YjM4NGVkODIuLjQ5ZjBjMGRlNzAg
-MTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9wb3N0Z3Jlc3FsL3Bvc3RncmVzcWwubWsKPiArKysgYi9w
-YWNrYWdlL3Bvc3RncmVzcWwvcG9zdGdyZXNxbC5tawo+IEBAIC00LDcgKzQsNyBAQAo+ICAjCj4g
-ICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4KPiAtUE9TVEdSRVNRTF9WRVJTSU9OID0gMTYuNwo+
-ICtQT1NUR1JFU1FMX1ZFUlNJT04gPSAxNi44Cj4gIFBPU1RHUkVTUUxfU09VUkNFID0gcG9zdGdy
-ZXNxbC0kKFBPU1RHUkVTUUxfVkVSU0lPTikudGFyLmJ6Mgo+ICBQT1NUR1JFU1FMX1NJVEUgPSBo
-dHRwczovL2Z0cC5wb3N0Z3Jlc3FsLm9yZy9wdWIvc291cmNlL3YkKFBPU1RHUkVTUUxfVkVSU0lP
-TikKPiAgUE9TVEdSRVNRTF9MSUNFTlNFID0gUG9zdGdyZVNRTAo+IC0tCj4gMi40My4wCj4KX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
-aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hello Romain, Han and all,
+
+I was able to have a look into the Ghostwrite issue: The author of the paper 
+helped me and it looks to me that in Kernel 6.13 the vector extension is 
+disabled via a RISC-V status register for the TH1520. And as long as the 
+instructions triggering Ghostwrite cannot be executed from userspace, 
+Ghostwrite itself cannot be triggered. I would still add some note about it in 
+the Readme, so that someone does not activate the vector extension, without 
+knowing the implications.
+
+Regarding the Xuantie binaries license issue: I created an issue in the 
+Xuantie github [1]. Han, could you have a look at it and maybe help that the 
+developers of the repository add some more explicit note on what the license 
+of the binaries is?
+
+To me it looks like the Xuantie binary license issue is now the last thing to 
+clarify. I will send another version of the patches once we know about the 
+binaries's licence.
+
+Thanks and best regards,
+Kilian
+
+[1] https://github.com/XUANTIE-RV/xuantie-yocto/issues/4
+
+On Sunday, 23 February 2025 16:41:54 CET Kilian Zinnecker wrote:
+> Hello Romain,
+> 
+> [--SNIP--]
+> 
+> > > I am not sure, but I assumed the Apache License could also cover
+> > > binaries,
+> > > i.e., such that they may be redistributed? Can someone shed a bit light
+> > > on
+> > > this?
+> > 
+> > If unsure, use XUANTIE_BINS_REDISTRIBUTE = NO like for the
+> > amlogic-boot-fip
+> > package [1]
+> 
+> Thanks, I will have a look! Maybe that's an option!
+> 
+> > It seems we have lost the provenance of this binary (who built it). The
+> > xuantie project uses an apache license and the Debian image from
+> > Beagleboard project provide its own version.
+> > 
+> > xuantie-yocto deploy theses binaries blob (light_aon_fpga.bin and many
+> > more) from a closed source package [2].
+> > 
+> > Kilian, can you try to ask on the Xuatie github?
+> 
+> I already asked in the past via email, but they never uploaded a license to
+> the git. Do you mean I should directly ask on the git, e.g., opening an
+> issue for that?
+> 
+> > [1]
+> > https://gitlab.com/buildroot.org/buildroot/-/blob/master/package/amlogic-b
+> > oo t-fip/amlogic-boot-fip.mk?ref_type=heads#L11 [2]
+> > https://github.com/XUANTIE-RV/xuantie-yocto/blob/master/meta-light/recipes
+> > -b sp/opensbi/opensbi_0.9.bb#L2
+> 
+> [--SNIP--]
+> 
+> > In Buildroot we can't track if an harware mitigation has been enabled or
+> > not. It would be the same issue for Spectre V1/V2 etc?
+> > 
+> > At least, this topic deseve to be added into the commit log and probably
+> > into the board readme.txt too.
+> > 
+> > Builroot defconfig are provided as the minimal configuration to boot the
+> > board, not to produce a final/customer image.
+> > 
+> > You can add a note for the user about the "Ghostwrite" issue?
+> 
+> Yes, good idea! I already started formulating something, but I also
+> currently am trying to clarify on it, so it will probably take a little bit
+> more time before I send another version of the patches (probably few days
+> or one or two weeks, let's see - didn't find the time to already do that
+> the last few weeks).
+> 
+> Thanks and best regards,
+> Kilian
+
+
+
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
