@@ -1,101 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EB80C19F32
-	for <buildroot@archiver.kernel.org>; Sun,  2 Mar 2025 21:52:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCD2FC282CD
+	for <buildroot@archiver.kernel.org>; Sun,  2 Mar 2025 21:52:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FE4E83F5B;
-	Sun,  2 Mar 2025 21:52:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n1XDlC3V5ndI; Sun,  2 Mar 2025 21:52:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E4D583F60
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E4D583F60;
-	Sun,  2 Mar 2025 21:52:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 597A9182
- for <buildroot@buildroot.org>; Sun,  2 Mar 2025 21:52:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4897140D76
- for <buildroot@buildroot.org>; Sun,  2 Mar 2025 21:52:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 19D1F4134F;
+	Sun,  2 Mar 2025 21:52:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6d1S12lArggh for <buildroot@buildroot.org>;
- Sun,  2 Mar 2025 21:52:38 +0000 (UTC)
+ id yiA3ADgBz46i; Sun,  2 Mar 2025 21:52:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74D4240D86
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 74D4240D86;
+	Sun,  2 Mar 2025 21:52:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E0A46958
+ for <buildroot@buildroot.org>; Sun,  2 Mar 2025 21:52:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DA99140529
+ for <buildroot@buildroot.org>; Sun,  2 Mar 2025 21:52:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GXlMqcKDXg9V for <buildroot@buildroot.org>;
+ Sun,  2 Mar 2025 21:52:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=olteanv@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5705140D86
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5705140D86
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5705140D86
- for <buildroot@buildroot.org>; Sun,  2 Mar 2025 21:52:38 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-439999d2bbfso4367625e9.2
- for <buildroot@buildroot.org>; Sun, 02 Mar 2025 13:52:38 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 56C974022B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56C974022B
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 56C974022B
+ for <buildroot@buildroot.org>; Sun,  2 Mar 2025 21:52:36 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-4394944f161so4365775e9.3
+ for <buildroot@buildroot.org>; Sun, 02 Mar 2025 13:52:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1740952356; x=1741557156;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=x2t9elHJOQ8R1tvA+NekH6Ev232VzQu/oKL0YDkcZJU=;
- b=sEaHbKd29BKWQ3nIOISrFKMhI7TVh+LYLjg+N9WxXLX2VG/K4ZSwlOstJg4QGchlkR
- sUgN4qrrQlL2s1vYGyehSYiP8kTGGUJhCBtOQ0xmwumEnbwerXM8BLnbJ1FAiB048Xir
- gWtOI8BxzhYJs+xgWpZFrjxhH4MO6s+gqOSocXHK5CAH4p9re9BKdXHHRR1Dpq852MT/
- qWoin9YBWuAmiL1oq5nQzQ8d1slZdL73f3W1jFG90LuvHRLQ0t78qy4/eFVpWKSazZRT
- VnexC/stFUMaG3Gt5tEkWRVM7vzYTaad/+KR5NVedFvfrMKEYdE4yJhypOI5PHwhz2oq
- pQrQ==
-X-Gm-Message-State: AOJu0Yyl5tLoqfmM157VtDAFUkZkuI9a3qM29DgKLL4TqAHlkcaToHgw
- zQzg//atx12W3kwOVK1LkRNwHAZRFUjEH8uH1kEqw8i7P9aTNvZDzrj4q+Bs
-X-Gm-Gg: ASbGncsDDlM3Vbflq4DJNRhNOysBSjN690hRy8WJXX9Euc8T9FVLEIbuMln3auCbBS1
- 9Lt8rQwrbr97XCLBKobphb/ysBNzjeN6kMF6tzM1m6HylbZbCpKP8ItkWILUdIhTDnU+T9B/kkJ
- dq/7tLLYIkM919J1YwZzw4UPy5+EwEdfjIb58ANZ3h3w2mHZc8jXnlhamY1ctewHc1G6uBrrOPj
- OJvquLMQgo9CJNQig2JrGgSDohB3/cJg7x5So6rDHBqnFHDljgCPz/9czHhrNSfMflsRA9GKEzG
- cGEoaFIn3guctAYxt+nbenQyGGIe79ThGbgG7Q==
-X-Google-Smtp-Source: AGHT+IEN30aA+GPCjTeSDcdp6X4BWsJtXXm+TxOkid2ThhdOO4kvoV8wDjppxqx5rvnWfYXPJ+jCdQ==
-X-Received: by 2002:a05:600c:35ca:b0:439:9b3f:2dd9 with SMTP id
- 5b1f17b1804b1-43ba6a791ffmr38797785e9.7.1740952355549; 
- Sun, 02 Mar 2025 13:52:35 -0800 (PST)
+ d=1e100.net; s=20230601; t=1740952354; x=1741557154;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=CCzmKuaqlETYusmMZmtxFTmky0qilcN22u+Wkw4bqXE=;
+ b=hnBrLhGFQRTcQqtt5/2fffuHxR68qIrKDwBORNdk/3f2VmsgPndSL6s17hfY6li6yW
+ D8uasxjCFn2XpBkazEwTnpsqxPpTfkD9n/vjtZwibEaeKwGvrX2yj6fwcZ47mIzBmczP
+ O5S00ld3Zy0cxJI/CXNUmkL4GnaqJn2y/8BUUgrItfjds8g/ngEkLeM1qDALUkZBo646
+ 4+kfbgm8O4bk2d7/AchfIYgf7QT9tKVGdy8vLYY8/TDCMew4zNTHHMBeNeAL9o/LsL29
+ kV3fF5eoaFTuAYKoCuypaBBGbkMOuLBDpql70NLsfHhhg7rXi7VqGXpCA3o9sRvxTW5C
+ pLdQ==
+X-Gm-Message-State: AOJu0Yyanc8RK0MCvHoebYWTT7xCvmOBACmoSA1sZN1Z6/9POCtfwheJ
+ A7opQ2Ze+hJ3SugVopaKu43iRnCdxDyCdVfA4D8aPlOHBITOV4+tV64z9aml
+X-Gm-Gg: ASbGncvfG0gLKZj1mxtZJi+fLK4j26QYGEEzcLW45qobLmD1UQXIFlrjBxjXt9s/xjX
+ 0OhSDbdoSGtiChzBUN8k+g4kAA7AF6k3isQ5v7uf0Z3rc2neodMVAOv6pS61P7VoRqMCraiGuXZ
+ Xf8YdrT7XBs5weckzVEqSQAoA+AuxtJUnGQtx6xnZGfqX12cIb+XMXkTWSaQRdF2jDw2h9GoS92
+ 7kq2nvaDTqRvjr1we9fHEZx6JrczEmKb+ovpOLOq5DdhNrkigigXXIaexf3x2aczxRVuRlwELGn
+ SHeaCLIHxUNgbe+uI9caaAxLyjEnHSDTZCQhbw==
+X-Google-Smtp-Source: AGHT+IFZOxn7Py2ufJN+RNor31aRLjHyksWtL18JpLLWJWl1I1KzJfaIGvd7nMaBabH12lewfTVXAA==
+X-Received: by 2002:a05:600c:3b04:b0:439:9c0e:36e6 with SMTP id
+ 5b1f17b1804b1-43ba6766c69mr37639655e9.3.1740952353471; 
+ Sun, 02 Mar 2025 13:52:33 -0800 (PST)
 Received: from skbuf.lan ([86.127.124.81]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-43ab2cb1063sm113389645e9.2.2025.03.02.13.52.33
+ 5b1f17b1804b1-43ab2cb1063sm113389645e9.2.2025.03.02.13.52.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 02 Mar 2025 13:52:34 -0800 (PST)
+ Sun, 02 Mar 2025 13:52:31 -0800 (PST)
 From: Vladimir Oltean <olteanv@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  2 Mar 2025 23:52:05 +0200
-Message-ID: <20250302215219.1276480-2-olteanv@gmail.com>
+Date: Sun,  2 Mar 2025 23:52:04 +0200
+Message-ID: <20250302215219.1276480-1-olteanv@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250302215219.1276480-1-olteanv@gmail.com>
-References: <20250302215219.1276480-1-olteanv@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1740952356; x=1741557156; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=x2t9elHJOQ8R1tvA+NekH6Ev232VzQu/oKL0YDkcZJU=;
- b=VzTB3WWX0NTNz9TqqLRcHze7KqPbztuiTYLUVYMVpEMhnZYruIcPhamwiXRaaBPb7b
- ajSgE2HO5EpPptQEkBgHr0I4K42d1TnJbe+UMmfYawKw9JDLbUzvIviopE4rp7Hz/bql
- PAvI3ahR9IQOVMppktWCt22MGl101Mbi3kXqXr5Zz11hPz2HMUWCuqJDFpjx+qPPYXlU
- 8e+XIZt0sUUDgpjPTKiFK75htVhduVWNHSvC2HHCfYEztpHE78kM8RGa9w7TWip7XYk4
- i0tGT/JWmRlvr+McvNds45Qu5B9QR8bTljkI3owvGUmisZz5mqsf+0AvvrboLbpgp7qk
- 8cMg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1740952354; x=1741557154; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=CCzmKuaqlETYusmMZmtxFTmky0qilcN22u+Wkw4bqXE=;
+ b=T5+pa1RXHGJDX8Bs3yPv6u4ze3kVD2zTsbTJRc0ZOMk052OLgDq+BdWfyDgDiuxfUN
+ KX/YhzWlK71FnDyZNNrD2XtREFci15CwxuV3mtv2CvLjQWkKHKa4zNw7dqfkzTa6TPx7
+ XYqEegRqBzkfq0Yy9s+WTg7PtZcU2mKr38Ru8XbAdgtrCR5fea/haMfES8Tkfo4Br+5r
+ eUYFkpiwEPp6z9rrAgjrRrrhGEy6lsYJU7rpbyNzVU/4XLrCHOr9GZhdcbBnkbgDAg3i
+ 3sjT8oAVUHDwfRCc/aU5lxWg1yXwfy3btRZ2McoUHW6tf/XSX3dNX+qBXzGPAV9QoeUT
+ BNcA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=VzTB3WWX
-Subject: [Buildroot] [PATCH 01/15] package/qoriq-rcw: update to tag
- lf-6.6.52-2.2.0
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=T5+pa1RX
+Subject: [Buildroot] [PATCH 00/15] Layerscape uprev to lf-6.6.52-2.2.0,
+ initial LX2160A support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,51 +114,121 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Change log:
-b77c789f6fd8 lx2160aqds: new SerDes protocol 19_9_2
-35a7ba376245 lx2162aqds: remove SerDes equalization files for lanes A-D
-0fe5b25266cd lx2160aqds_rev2: extend SD1 protocol 13 with 100G MAC 1 split into 4 x 25G ports
-6b912edba08e lx2160aqds_rev2: add protocol 7_7_2 with SerDes2 lanes A and E converted to SGMII
-729048acf6d1 lx2160asi: add SerDes 28G register description
-00f1030e9a0c lx2160a: fix SerDes lane documentation
-a8a91256d190 ls1028a: make all switch PCSes addressable on the MDIO bus
-3fee38cec2ae ls1046a: offer SerDes1 protocol 0x3333 with PLL mapping 1111
-c60e9195f148 layerscape: introduce macros for the SerDes 10G registers
+Hello,
 
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
----
-Change log:
-- Break out RCW changes out of larger "[PATCH v2 01/11]
-  platform/layerscape: bump Linux Factory tag to lf-6.6.36-2.1.0" patch
-- Bump to lf-6.6.52-2.2.0 instead of lf-6.6.36-2.1.0 (new tag appeared
-  in between)
+This is logically a continuation of "[PATCH v2 00/11] Initial support
+for SolidRun LX2160A-CEX7":
+https://lore.kernel.org/buildroot/20241208143802.1048266-1-olteanv@gmail.com/
 
- package/qoriq-rcw/qoriq-rcw.hash | 2 +-
- package/qoriq-rcw/qoriq-rcw.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+where I was requested to split out the Layerscape BSP uprev and initial
+LX2160A support from the more problematic Solidrun board support.
+But as with any splitting of a larger series, the version counter resets
+here at one.
 
-diff --git a/package/qoriq-rcw/qoriq-rcw.hash b/package/qoriq-rcw/qoriq-rcw.hash
-index 1f664842f5ea..b9316582ffc6 100644
---- a/package/qoriq-rcw/qoriq-rcw.hash
-+++ b/package/qoriq-rcw/qoriq-rcw.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  52dfb95a3d8e811609dd8a982a5c6f3ba88fac096ea8448a27b571b7c25e3a83  qoriq-rcw-lf-6.6.23-2.0.0.tar.gz
-+sha256  bfb992fcb396894874143257b53d14394ada48df0771f7edb55324fa932bbcdc  qoriq-rcw-lf-6.6.52-2.2.0.tar.gz
- sha256  68f4b15ecc085729419bc60ca6eeadca5af0237bbfec791e8a79da9c943d42e9  LICENSE
-diff --git a/package/qoriq-rcw/qoriq-rcw.mk b/package/qoriq-rcw/qoriq-rcw.mk
-index c6cfe59a5629..c536a12373fc 100644
---- a/package/qoriq-rcw/qoriq-rcw.mk
-+++ b/package/qoriq-rcw/qoriq-rcw.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QORIQ_RCW_VERSION = lf-6.6.23-2.0.0
-+QORIQ_RCW_VERSION = lf-6.6.52-2.2.0
- QORIQ_RCW_SITE = $(call github,nxp-qoriq,rcw,$(QORIQ_RCW_VERSION))
- QORIQ_RCW_LICENSE = BSD-3-Clause
- QORIQ_RCW_LICENSE_FILES = LICENSE
+Overview of the set:
+LX2160A needs:
+- qoriq-ddr-phy-binary: LX2160A-specific package added by patch 04/15
+- qoriq-mc-binary: DPAA2 (Layerscape sub-architecture) specific package
+  added by patch 05/15
+- qoriq-mc-utils: DPAA2-specific package added by patch 06/15
+- qoriq-restool: DPAA2-specific package added by patch 07/15
+- qoriq-rcw: Layerscape-specific package, updated to latest Linux
+  Factory BSP by patch 01/15
+Because I updated the common RCW package to the latest BSP tag, I
+couldn't leave the other Layerscape platforms (LS1028A, LS1043A, LS1046A)
+not completely updated as well. So in addition, we have:
+LS1028A, which needs:
+- qoriq-cadence-dp-firmware: BSP tag updated in patch 02/15
+LS1043A/LS1046A, which need:
+- fmlib: DPAA1 (Layerscape sub-architecture) specific package updated by
+  patch 08/15 to the latest BSP
+- fmc: DPAA1-specific package updated by patch 09/15 to the latest BSP
+- qoriq-fm-ucode: DPAA1-specific package updated by patch 10/15 to the
+  latest BSP
+
+In addition to the last point. I noticed, while performing the fmc
+uprev, that no DPAA1 board defconfig defines it by default. To that end,
+I created patches 13-15/15 which enable it for LS1043A and LS1046A.
+Also, I noticed that the tclap package (a fmc dependency) has
+autotools-related compilation issues for me, which were solved by
+updating to the newest upstream revision. This no longer uses autotools
+at all, but CMake.
+
+Change logs in individual patches, where applicable.
+
+Disclaimer copied from original cover letter:
+Although I also work at NXP, I am submitting this in a personal
+capacity, and for personal use.
+
+Vladimir Oltean (15):
+  package/qoriq-rcw: update to tag lf-6.6.52-2.2.0
+  package/qoriq-cadence-dp-firmware: sync with NXP Yocto download site
+  configs/ls1028ardb: update to lf-6.6.52-2.2.0 tag
+  package/qoriq-ddr-phy-binary: new package
+  package/qoriq-mc-binary: new package
+  package/qoriq-mc-utils: new package
+  package/qoriq-restool: new package
+  package/fmlib: bump to tag lf-6.6.52-2.2.0
+  package/fmc: bump to version lf-6.6.52-2.2.0
+  package/qoriq-fm-ucode: bump to tag lf-6.6.52-2.2.0
+  configs/ls1046a-frwy: update to tag lf-6.6.52-2.2.0
+  package/tclap: update to tag 1.4.0-rc2
+  configs/ls1046a-frwy: enable the fmc package and dependencies
+  configs/ls1046a-rdb: enable the fmc package and dependencies
+  configs/ls1043a-rdb: enable the fmc package and dependencies
+
+ DEVELOPERS                                    |  6 +++
+ .../arm-trusted-firmware.hash                 |  2 +-
+ .../ls1028ardb/patches/linux/linux.hash       |  2 +-
+ .../ls1028ardb/patches/uboot/uboot.hash       |  2 +-
+ board/freescale/ls1028ardb/readme.txt         | 27 +++++++----
+ .../arm-trusted-firmware.hash                 |  2 +-
+ .../ls1046a-frwy/patches/linux/linux.hash     |  2 +-
+ .../ls1046a-frwy/patches/uboot/uboot.hash     |  2 +-
+ board/freescale/ls1046a-frwy/readme.txt       | 31 ++++++++----
+ configs/ls1028ardb_defconfig                  |  6 +--
+ configs/ls1043a-rdb_defconfig                 |  4 ++
+ configs/ls1046a-frwy_defconfig                | 10 ++--
+ configs/ls1046a-rdb_defconfig                 |  4 ++
+ package/Config.in                             |  4 ++
+ package/fmc/fmc.hash                          |  4 +-
+ package/fmc/fmc.mk                            |  4 +-
+ package/fmlib/fmlib.hash                      |  4 +-
+ package/fmlib/fmlib.mk                        |  4 +-
+ .../qoriq-cadence-dp-firmware.hash            |  2 +-
+ .../qoriq-cadence-dp-firmware.mk              | 10 ++--
+ package/qoriq-ddr-phy-binary/Config.in        |  6 +++
+ .../qoriq-ddr-phy-binary.hash                 |  3 ++
+ .../qoriq-ddr-phy-binary.mk                   | 18 +++++++
+ package/qoriq-fm-ucode/qoriq-fm-ucode.hash    |  2 +-
+ package/qoriq-fm-ucode/qoriq-fm-ucode.mk      |  2 +-
+ package/qoriq-mc-binary/Config.in             | 47 +++++++++++++++++++
+ package/qoriq-mc-binary/qoriq-mc-binary.hash  |  3 ++
+ package/qoriq-mc-binary/qoriq-mc-binary.mk    | 22 +++++++++
+ package/qoriq-mc-utils/Config.in              | 37 +++++++++++++++
+ package/qoriq-mc-utils/qoriq-mc-utils.hash    |  3 ++
+ package/qoriq-mc-utils/qoriq-mc-utils.mk      | 22 +++++++++
+ package/qoriq-rcw/qoriq-rcw.hash              |  2 +-
+ package/qoriq-rcw/qoriq-rcw.mk                |  2 +-
+ package/qoriq-restool/Config.in               | 22 +++++++++
+ package/qoriq-restool/qoriq-restool.hash      |  3 ++
+ package/qoriq-restool/qoriq-restool.mk        | 24 ++++++++++
+ package/tclap/tclap.hash                      |  2 +-
+ package/tclap/tclap.mk                        |  5 +-
+ 38 files changed, 305 insertions(+), 52 deletions(-)
+ create mode 100644 package/qoriq-ddr-phy-binary/Config.in
+ create mode 100644 package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
+ create mode 100644 package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk
+ create mode 100644 package/qoriq-mc-binary/Config.in
+ create mode 100644 package/qoriq-mc-binary/qoriq-mc-binary.hash
+ create mode 100644 package/qoriq-mc-binary/qoriq-mc-binary.mk
+ create mode 100644 package/qoriq-mc-utils/Config.in
+ create mode 100644 package/qoriq-mc-utils/qoriq-mc-utils.hash
+ create mode 100644 package/qoriq-mc-utils/qoriq-mc-utils.mk
+ create mode 100644 package/qoriq-restool/Config.in
+ create mode 100644 package/qoriq-restool/qoriq-restool.hash
+ create mode 100644 package/qoriq-restool/qoriq-restool.mk
+
 -- 
 2.43.0
 
