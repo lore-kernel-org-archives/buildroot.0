@@ -1,101 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06B70C282D2
-	for <buildroot@archiver.kernel.org>; Sun,  2 Mar 2025 21:52:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7698FC282CD
+	for <buildroot@archiver.kernel.org>; Sun,  2 Mar 2025 21:52:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B665C605C9;
-	Sun,  2 Mar 2025 21:52:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4708B40DDE;
+	Sun,  2 Mar 2025 21:52:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VCW4eqXRlbPB; Sun,  2 Mar 2025 21:52:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XVsfgieaykDB; Sun,  2 Mar 2025 21:52:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D98060725
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D10BC413A2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D98060725;
-	Sun,  2 Mar 2025 21:52:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 307A0958
+	by smtp4.osuosl.org (Postfix) with ESMTP id D10BC413A2;
+	Sun,  2 Mar 2025 21:52:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B3DC9958
  for <buildroot@buildroot.org>; Sun,  2 Mar 2025 21:52:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0EF44408C3
+ by smtp1.osuosl.org (Postfix) with ESMTP id A10CA83F62
  for <buildroot@buildroot.org>; Sun,  2 Mar 2025 21:52:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sl7SHj3Y6sgg for <buildroot@buildroot.org>;
- Sun,  2 Mar 2025 21:52:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QorJ1Jxc_Baz for <buildroot@buildroot.org>;
+ Sun,  2 Mar 2025 21:52:42 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
  envelope-from=olteanv@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6D03B4022B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D03B4022B
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6D03B4022B
- for <buildroot@buildroot.org>; Sun,  2 Mar 2025 21:52:40 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-390e9e44807so268385f8f.1
- for <buildroot@buildroot.org>; Sun, 02 Mar 2025 13:52:40 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 32ED783F5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32ED783F5F
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 32ED783F5F
+ for <buildroot@buildroot.org>; Sun,  2 Mar 2025 21:52:42 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-390ef13838cso193320f8f.1
+ for <buildroot@buildroot.org>; Sun, 02 Mar 2025 13:52:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1740952358; x=1741557158;
+ d=1e100.net; s=20230601; t=1740952360; x=1741557160;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=AE3lv+rr2Owb/oqkrDUfeQTRif02tHWEJHG1AWOWFoY=;
- b=MuBS1eAGUHrfu9UNT/kcHGJPWlr4i3xnGdZljjcdYtiq1w3MMRe5vnTEEO8vwXJe1n
- Ibw8SRU76ZCUnK5gCjeJFf5q6R8ii4EEZhH6XpUV7frNc1o4uDutWJqKX4UFoxpoWY7w
- lA5nEaqNO7tfVetT+YXl7gPCnuF+Rrv9v/1DZN0YYoLKQw1raoME8VGNynhm+BaavJ5j
- m0KKS1D/pHhgapPFIKnWEn90a38jUZGA2bRaAjkU9I9ltxJTnRBvezadpWrTv421Kzq9
- /jX9WbB7dx/soc4Hr0I/pKpB7CJKMF7SiJRcG1v8IvVgPZs26yxUdbQzVfGT8ut/ShJT
- 5W0Q==
-X-Gm-Message-State: AOJu0YyBc6TtRghotCNCpivRxZADFcnUTQ8w2MO40rYkJR6ZDfO5yKsy
- SghZ0dwtfFxaIB12BPSsjb3z8jW3Jfh9eug394aaF4lMJlnxzgWig7BmJ5y6
-X-Gm-Gg: ASbGncu1dM/tJRD8KFDghT1RE1s1Z18VjBTw8bK+I+1qaQDQJ0wzyhZdPv6e9A8uNt4
- H/o8IbPoXsSAD8Dc5LTqflOrDEO+UZemtscVyL2+q0XH9yV/wojHLv3YzMDRpcNTMWjKdwWqWZ/
- /OvRidfL0vU+ZnRZk4GMcMmZgdLzM7zz84b5KXR8BCPi45LAfudhO0CmN0CjVDeyvDy+tPJRyaZ
- OseKIrqIVvfQNDwDXXGVUwvT7+RNe/exmbBuo6kUPnwZYZzEwPIAUCaOHsfgEzXeXhX9GPOBfbo
- ly0TjFZTEKWUSq0LeQDUwhK4QCV/dSJXOkHU5Q==
-X-Google-Smtp-Source: AGHT+IHG2Qbumzw2TOeML8rkAMwvy+hwxlkc+4ZcK5EPVEAvJrZApYtV5bRCJpMuR8RS1nLPAE8bEg==
-X-Received: by 2002:a05:600c:4451:b0:439:94f8:fc74 with SMTP id
- 5b1f17b1804b1-43ba665f7dbmr35081895e9.0.1740952357746; 
- Sun, 02 Mar 2025 13:52:37 -0800 (PST)
+ bh=52V/6pxj6nJwQfiU0Ntf68nUWH0NjuhYAEoKqJUJ9qo=;
+ b=rIqgpSm938RFz95pLH7NU+sEtgsnlh/MVbjcoaBUZ+LAQseqOlh1Jvo7+GYAh9K4iL
+ mP+MjK9cEyOY7+6K5AkB1PlLkmCrDXNp2DtrkMgjLJ6kl2pa/FnJ4O6YVDt7XpF9C/FX
+ djmglHre94O0ApeCSGWfmbEPdAMDbT6YYiy5JBnPI9w/CtvQuM+wh3GHLg9dtmlSGHfD
+ nVNUssVdXOvWGfw1FCdN6UqMo/tXXEkqJ4kJdfGS1NBe7OzTpK07Pwtl63zbO3BiUv3O
+ BWpQdt1DY0qlzHZp45dfFhAe3PaF5ptMqJIyMIU0k2H/A5xnbJzSEvr5kyqpiNFJX0tz
+ ejBA==
+X-Gm-Message-State: AOJu0Yy7gfUzsZXC0VCBsi/u+mW/Tuc1sTiwMUZk/qAnYluZWuyGrcHI
+ 0PYkHNAMznDed3ruyDqm8i+pba6PTgnoWMa21BV1ee5u4otjaCxIaLH9BL6F
+X-Gm-Gg: ASbGnct9S1UiZvGncTV4cHEsZv8+dsJzGYzuAf8K4g+M9W1agfyOQDExF12y3l2S/YT
+ LVw9SGbD9X/0rqdZVr+2uK2TWMl8BIRCMfHwjyKR2w5/VBPbEyRtrMTYXt/YPmLzUQs/CjWHn37
+ Y64YEo5T2opMIyxWK1CIJCmveNwa4a0nUcrLQduqFSTJWTDSyMoC0F1pIXRB2Vvc6cJbwlI5w+P
+ 97IrN8Ne2PpAT28hkv7qQ5V0e5idcQ3jJ6LzCMf2xwVCyL0VlrX/u6PCsjucnIeqBDiyxyFLoGc
+ omUFqyj82gp+CncV+AR/QCVNzRSxut1RQroE7A==
+X-Google-Smtp-Source: AGHT+IHqjAJtDVsr0hEoJpkhlybiv0F7ISSoNwFVhZcyWj7n8YYysCQMkTPFRPL019nj9U+c9x1arQ==
+X-Received: by 2002:a05:600c:154a:b0:439:9821:7938 with SMTP id
+ 5b1f17b1804b1-43ba67448e9mr37613885e9.6.1740952359356; 
+ Sun, 02 Mar 2025 13:52:39 -0800 (PST)
 Received: from skbuf.lan ([86.127.124.81]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-43ab2cb1063sm113389645e9.2.2025.03.02.13.52.35
+ 5b1f17b1804b1-43ab2cb1063sm113389645e9.2.2025.03.02.13.52.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 02 Mar 2025 13:52:36 -0800 (PST)
+ Sun, 02 Mar 2025 13:52:38 -0800 (PST)
 From: Vladimir Oltean <olteanv@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  2 Mar 2025 23:52:06 +0200
-Message-ID: <20250302215219.1276480-3-olteanv@gmail.com>
+Date: Sun,  2 Mar 2025 23:52:07 +0200
+Message-ID: <20250302215219.1276480-4-olteanv@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250302215219.1276480-1-olteanv@gmail.com>
 References: <20250302215219.1276480-1-olteanv@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1740952358; x=1741557158; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1740952360; x=1741557160; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=AE3lv+rr2Owb/oqkrDUfeQTRif02tHWEJHG1AWOWFoY=;
- b=KOZ1wT83aFHd+UTjaPnZB+OykEVngskBAGNKf9JHokXrcFeYOutJJM1YAaqXm2Mker
- dFGPzC9YykdWMtdEqqTaXp2sMW/dVDtWX32YN4+aGTwfzDTQwWNHHfM2c6nQyafvM2/i
- yX96LO+hq17ZpjAR2EZI2qY3NsUk1B9wOjsi7HPqPaPZJZ9oAqjSUMjLjIFDSoiutcYr
- 60m99M64gH5Z/uzBjxp+mlE4CSdr+dMGKQamfeFxnNDLDzJbe+ADFA9u12gy1uMWmvFy
- c1/4Z/xfBf9QQ188yNNzJyI8ZdjX5ptrt0idA0sQqzSSdQM84nwhmRPFZuetekIxQnBP
- C6YQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=52V/6pxj6nJwQfiU0Ntf68nUWH0NjuhYAEoKqJUJ9qo=;
+ b=PBPZpgDvsaqOCoQ9PeQJFUbaf+U1kjjtlte4r03DQGUcm/XWlJW8zLc1gA33BYy99L
+ NesenXpnJhOBYoiIPdCHXNYVASZcwUQy3bz4oGvYHtdXMfVQFKA5brTSluDOLwBUxNEh
+ cFXcKdmYx65ib9tZut6k6UxrV1m7peGN5m9bv6+uGmDqZEJVL11dGzxXudqt7CzLD4eF
+ igj+lMcxQ1U4/vNjACQLoE5Xz6oFN26tUcEHb3S7jBbVq2W9HjQibyVySCZM4UccFM+d
+ lUZkr0atyEk9N4VxK//wGfPxDLQj8dvbQKykjuL405M1sB29SxYMvUgPj+0FtT/jQvUX
+ YwNA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=KOZ1wT83
-Subject: [Buildroot] [PATCH 02/15] package/qoriq-cadence-dp-firmware: sync
- with NXP Yocto download site
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=PBPZpgDv
+Subject: [Buildroot] [PATCH 03/15] configs/ls1028ardb: update to
+ lf-6.6.52-2.2.0 tag
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,64 +117,122 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The updated download path was taken from the Yocto BSP at
-https://github.com/nxp-qoriq/yocto-sdk.
-
-The recipe is here:
-https://github.com/Freescale/meta-freescale/blob/master/recipes-bsp/dp-firmware-cadence/dp-firmware-cadence_22.04.bb
+Update the kernel, U-Boot, ATF tags, as well as documentation, used by
+the LS1028A-RDB to the latest Linux Factory release.
 
 Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
 ---
 Change log:
-- Break out DP firmware changes out of larger "[PATCH v2 01/11]
-  platform/layerscape: bump Linux Factory tag to lf-6.6.36-2.1.0" patch
+- Break out LS1028A defconfig and board patch file changes out of larger
+  "[PATCH v2 01/11] platform/layerscape: bump Linux Factory tag to
+  lf-6.6.36-2.1.0" patch
+- Bump to lf-6.6.52-2.2.0 instead of lf-6.6.36-2.1.0 (new tag appeared
+  in between)
 
- .../qoriq-cadence-dp-firmware.hash                     |  2 +-
- .../qoriq-cadence-dp-firmware.mk                       | 10 +++++-----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ .../arm-trusted-firmware.hash                 |  2 +-
+ .../ls1028ardb/patches/linux/linux.hash       |  2 +-
+ .../ls1028ardb/patches/uboot/uboot.hash       |  2 +-
+ board/freescale/ls1028ardb/readme.txt         | 27 ++++++++++++-------
+ configs/ls1028ardb_defconfig                  |  6 ++---
+ 5 files changed, 24 insertions(+), 15 deletions(-)
 
-diff --git a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-index 6e5c761463d9..eb6579b919c9 100644
---- a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-+++ b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-@@ -1,5 +1,5 @@
+diff --git a/board/freescale/ls1028ardb/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/ls1028ardb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index f9af28ab3cf5..344a6299d88d 100644
+--- a/board/freescale/ls1028ardb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/freescale/ls1028ardb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
--sha256  e267655a47fbe118f6960bca7994bd6b8986ef955344fe006a424be96f868602  firmware-cadence-lsdk2012.bin
-+sha256  65f829a9e2597bffc58a680aaefa638122144a083633d1ae09b3aec1d9f8ab84  firmware-imx-8.16.bin
- sha256  9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
- sha256  72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
- sha256  53e3eb0b2bd81c171fa04c17514e20b39b7bb1fe1224c593f7717f615fb9d52b  EULA.txt
-diff --git a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-index 4f75287269a3..04e3a2a6d9ee 100644
---- a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-+++ b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+-sha256  4f4dc78bfb5b7391a65ae0f83856661071f666ac2bf6a9380fddbe376a8bdaaa  atf-lf-6.6.23-2.0.0.tar.gz
++sha256  f03dad74e5c3df8059554def03e9298b6fbd4ffdd3e940a18b7e84a60b12a37a  atf-lf-6.6.52-2.2.0.tar.gz
+diff --git a/board/freescale/ls1028ardb/patches/linux/linux.hash b/board/freescale/ls1028ardb/patches/linux/linux.hash
+index e038c2286237..fa38fb1f75b1 100644
+--- a/board/freescale/ls1028ardb/patches/linux/linux.hash
++++ b/board/freescale/ls1028ardb/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  6d592722e004516309f8ce33e654f1322e4d1f0f33567acb86ca19229176fd9e  linux-lf-6.6.23-2.0.0.tar.gz
++sha256  5665b927616a7e27e69f3f8fface6dd693b01f35d42ae4f9a0f0a10be3621487  linux-lf-6.6.52-2.2.0.tar.gz
+diff --git a/board/freescale/ls1028ardb/patches/uboot/uboot.hash b/board/freescale/ls1028ardb/patches/uboot/uboot.hash
+index a5ccd82b2b0d..a1e3b693768d 100644
+--- a/board/freescale/ls1028ardb/patches/uboot/uboot.hash
++++ b/board/freescale/ls1028ardb/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  a2bcd7a34d4908ffbadfea731d0f0fd20f19a31cff6ff6310980e7f6743ceb24  u-boot-lf-6.6.23-2.0.0.tar.gz
++sha256  00fc7bd053de19d02c990b3aa214a27c6103f4306e756f3f6d4afb12314556e4  u-boot-lf-6.6.52-2.2.0.tar.gz
+diff --git a/board/freescale/ls1028ardb/readme.txt b/board/freescale/ls1028ardb/readme.txt
+index 6633d60b9013..0d83e4370912 100644
+--- a/board/freescale/ls1028ardb/readme.txt
++++ b/board/freescale/ls1028ardb/readme.txt
+@@ -4,19 +4,28 @@ NXP LS1028ARDB
  
--QORIQ_CADENCE_DP_FIRMWARE_VERSION = lsdk2012
--QORIQ_CADENCE_DP_FIRMWARE_SITE = http://www.nxp.com/lgfiles/sdk/$(QORIQ_CADENCE_DP_FIRMWARE_VERSION)
--QORIQ_CADENCE_DP_FIRMWARE_SOURCE = firmware-cadence-$(QORIQ_CADENCE_DP_FIRMWARE_VERSION).bin
-+QORIQ_CADENCE_DP_FIRMWARE_VERSION = 8.16
-+QORIQ_CADENCE_DP_FIRMWARE_SITE = https://www.nxp.com/lgfiles/NMG/MAD/YOCTO
-+QORIQ_CADENCE_DP_FIRMWARE_SOURCE = firmware-imx-$(QORIQ_CADENCE_DP_FIRMWARE_VERSION).bin
- QORIQ_CADENCE_DP_FIRMWARE_LICENSE = NXP Semiconductor Software License Agreement
- QORIQ_CADENCE_DP_FIRMWARE_LICENSE_FILES = COPYING EULA EULA.txt
- QORIQ_CADENCE_DP_FIRMWARE_REDISTRIBUTE = NO
-@@ -20,11 +20,11 @@ define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_CMDS
- endef
+ This file documents the Buildroot support for the LS1028A Reference Design Board.
  
- define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin $(TARGET_DIR)/boot/ls1028a-dp-fw.bin
-+	$(INSTALL) -D -m 0644 $(@D)/firmware/hdmi/cadence/dp_ls1028a.bin $(TARGET_DIR)/boot/ls1028a-dp-fw.bin
- endef
+-for more details about the board and the QorIQ Layerscape SoC, see the following pages:
++For more details about the board and the QorIQ Layerscape SoC, see the following pages:
+   - https://www.nxp.com/design/qoriq-developer-resources/layerscape-ls1028a-reference-design-board:LS1028ARDB
+   - https://www.nxp.com/LS1028A
  
- define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin $(BINARIES_DIR)/ls1028a-dp-fw.bin
-+	$(INSTALL) -D -m 0644 $(@D)/firmware/hdmi/cadence/dp_ls1028a.bin $(BINARIES_DIR)/ls1028a-dp-fw.bin
- endef
+-for the software NXP LSDK (Layerscape Software Development Kit), see
+-  - https://www.nxp.com/docs/en/user-guide/LSDKUG_Rev21.08.pdf
++Layerscape platforms are officially supported by NXP under the Layerscape
++Debian Linux SDK (LDLSDK). This uses components from Linux Factory, currently
++tag lf-6.6.36-2.1.0, one release behind the latest lf-6.6.52-2.2.0.
++In Buildroot, the latest Linux Factory release tag is used.
  
- $(eval $(generic-package))
+-the components from NXP are:
+-  - rcw, lf-6.6.23-2.0.0
+-  - atf (fork), lf-6.6.23-2.0.0
+-  - uboot (fork), lf-6.6.23-2.0.0
+-  - cadence-dp-firmware (blob), LSDK 20.12
+-  - linux (fork), lf-6.6.23-2.0.0
++For the software Layerscape Debian Linux SDK User Guide, see:
++  - https://docs.nxp.com/bundle/UG10143/page/topics/about_this_document.html
++  - https://www.nxp.com/docs/en/user-guide/UG10143.pdf
++
++Note: the latest Linux Factory release may contain features which are not yet
++documented in the LDLSDKUG.
++
++The components from NXP are:
++  - rcw, lf-6.6.52-2.2.0
++  - atf (fork), lf-6.6.52-2.2.0
++  - uboot (fork), lf-6.6.52-2.2.0
++  - cadence-dp-firmware (blob), lf-6.6.52-2.2.0
++  - linux (fork), lf-6.6.52-2.2.0
+ 
+ Build
+ =====
+diff --git a/configs/ls1028ardb_defconfig b/configs/ls1028ardb_defconfig
+index 0d1843bf5fce..c47761e7cff5 100644
+--- a/configs/ls1028ardb_defconfig
++++ b/configs/ls1028ardb_defconfig
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/ls1028ardb/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.6.23-2.0.0)/linux-lf-6.6.23-2.0.0.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.6.52-2.2.0)/linux-lf-6.6.52-2.2.0.tar.gz"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -25,7 +25,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.6.23-2.0.0)/atf-lf-6.6.23-2.0.0.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.6.52-2.2.0)/atf-lf-6.6.52-2.2.0.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1028ardb"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+@@ -35,7 +35,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.6.23-2.0.0)/u-boot-lf-6.6.23-2.0.0.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.6.52-2.2.0)/u-boot-lf-6.6.52-2.2.0.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ls1028ardb_tfa"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
 2.43.0
 
