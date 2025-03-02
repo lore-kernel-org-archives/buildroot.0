@@ -1,100 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1E82C19F32
-	for <buildroot@archiver.kernel.org>; Sun,  2 Mar 2025 21:53:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23FF3C282CD
+	for <buildroot@archiver.kernel.org>; Sun,  2 Mar 2025 21:53:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF06C608F3;
-	Sun,  2 Mar 2025 21:53:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9298841462;
+	Sun,  2 Mar 2025 21:53:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id USd02wKPyX99; Sun,  2 Mar 2025 21:53:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6eJx8sxrkhpr; Sun,  2 Mar 2025 21:53:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C3A460A6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F26DD4143E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C3A460A6B;
-	Sun,  2 Mar 2025 21:53:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F26DD4143E;
+	Sun,  2 Mar 2025 21:53:09 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FCF2958
- for <buildroot@buildroot.org>; Sun,  2 Mar 2025 21:53:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 039BF958
+ for <buildroot@buildroot.org>; Sun,  2 Mar 2025 21:53:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C3C3783F89
- for <buildroot@buildroot.org>; Sun,  2 Mar 2025 21:53:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1853783FB0
+ for <buildroot@buildroot.org>; Sun,  2 Mar 2025 21:53:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HepXJb7NBsvG for <buildroot@buildroot.org>;
- Sun,  2 Mar 2025 21:53:01 +0000 (UTC)
+ id HP4vGahiSmCt for <buildroot@buildroot.org>;
+ Sun,  2 Mar 2025 21:53:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
  envelope-from=olteanv@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A4EA884007
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4EA884007
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A4EA884007
- for <buildroot@buildroot.org>; Sun,  2 Mar 2025 21:53:01 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-4394944f161so4366065e9.3
- for <buildroot@buildroot.org>; Sun, 02 Mar 2025 13:53:01 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3089B83FF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3089B83FF2
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3089B83FF2
+ for <buildroot@buildroot.org>; Sun,  2 Mar 2025 21:53:00 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-38c62ef85daso499712f8f.3
+ for <buildroot@buildroot.org>; Sun, 02 Mar 2025 13:52:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1740952379; x=1741557179;
+ d=1e100.net; s=20230601; t=1740952378; x=1741557178;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=Nj4lsNJ2BKkKKTO4n0LU0retC4+DDWkCvAmq3BlEEyE=;
- b=Vzt+EA6ACwJpjiInXGvUz5wXUX5K6PsphWCZKoGBehcCuv70FzKe01Oqu331CQhq4Q
- 56hWPvJ0nNoN+k+9RCCV/Gh13PkDyBMUhFf0cv8++NygNp60SNRe8yBb9J1w4BA8b8Nh
- r3KJCLi+p/Qb0OItWPhI+4uC9zg47VkXa5PPAFuqX5fzwdlPd4ciCdgZhb5q703d7Qv6
- azRFFPd0GPUOe7RME3Dy9CmvtJdzdHs8NbMbsIXZysnenucMq+pSL17L75mJSt5z9L9t
- hnA9PiQugtGApWoQo8zvIeiUy/wTX02wgw+ShRxOSKcHOM2DEvRleYajJvL1J03jW2uF
- lR7w==
-X-Gm-Message-State: AOJu0Yys4lYqKWIx6ofDhtSqoFTus84dNit8GWZotUOP1WNqGmVxIFTQ
- eD1omn0ltHZPYuwdnYmBtVzrABjZ+bGGf0Lj8LVoitfdLQo0+CHni8XN28Ze
-X-Gm-Gg: ASbGncvO5U+Qk00DjcdWpT31Znim2HClfXwFA3/cu2PHpAeddrWioj+K0uqx2kwP4gH
- OJHanhcaqbsCx6c3HSkXp/Xrsj0jDpT3OuUv5kEimz+f5gRwjkpCvJaLJc91PwbjaG3olI+56NY
- BH1sb/t9lbo69hcatY7KhlGXC1S7Vrqi0eX8xv7IrdHa4OR+i7YlReYAhKAgpqD5O8vvrqkBs2J
- 0Bc8qs9/JXOpPQmiZmNjTO9pQJEjDibFmn84wEm0tUCo6m7odTAHsnEk7RkFDOHUGna1FlhOBOT
- lS6z6p7GdvL+eWJPWfy0GXQZCz5Lmoh8G8rYIQ==
-X-Google-Smtp-Source: AGHT+IHoJ+auQaQCnVIEOABQgg4f1NlX7lrI1XquAQooq7VfLDCUVDpqTWjmNSLJH3MCtpM9YI12sg==
-X-Received: by 2002:a05:600c:4f56:b0:439:a1ce:5669 with SMTP id
- 5b1f17b1804b1-43ba7310bc1mr36631515e9.5.1740952378960; 
- Sun, 02 Mar 2025 13:52:58 -0800 (PST)
+ bh=l4NlkjE+9CQWwwlNG5bcCB4Them3PAOJqpi58FZwT/I=;
+ b=Du3FYigFQeO7l1uzm0V4Q5iuM1T0wFRAcVoRcJdvBD/DGUYlj8iHUCio9H0daPX0YG
+ dvPMuGiJFlYV8g0QaA+rlusIkzza3Ixjv2m2CadIQ5ILDeMyAeCMfVRWM3gawuxvE9ZO
+ CugPpf0qvJ1d2rn3iZycx+cvxYlwFAvkagJGydMHOIpFBIfgL7l91/NeI9NkFgjya7ww
+ 0bw6QcjuC/dzQasy81hYWBhXj5aU5J4QBjQBOF6683u6QDiVlLJDM0v9lml2w8kC456t
+ cuLAZpLWYrDtKaoGmCGVVNR00QmkfYueHyTc3somiNzww7wgwAy15i1XFM5dCpGQvGYv
+ /p7A==
+X-Gm-Message-State: AOJu0Yy6Z9ZXiVUBV7W2g2SJhb/FKYMWaPCwuPVdwGCWuPuNxsXr3PUZ
+ e2al7Fpe6REsD5c7nQ6w3uszBQo+j7dz7TKCQZBvJPkTrfYCuoctTHS4naFM
+X-Gm-Gg: ASbGncvjbdw7gbCFpz+XrxZzSE7J5vwbuPD+wLp4nT7tHhG+jqSpO2CL58fYSoUZiAo
+ kdto9CScoCnPz/jIv+YJQH5TFunUFuBA0XGDaoRgZ76wqV5tGtMOVaUfFQ7jZD8XcmxaMiOu66+
+ +lo1mmmIVqSs5Odmc8L7xwjLyKFu8/d8THCQLxGrUUNCU2mf3xDlxO6hevItCAoPjVulg2a+GyR
+ WLzmVLPw22LZTjzKH895Qj8LVDf+VzTV9Kw4ZJBuVkauk83qy+kYl9ghPdPNSvujbW4YCcDRhMA
+ pRGhAEbDsnA9cOwMNOGT65QaeuCvLvhsDqS2VA==
+X-Google-Smtp-Source: AGHT+IGvDE3AZc6nJmFXM7au6NWc8u43G9zMKPYPj3NIFth7kxPxWIJDIPnhqJRjONV/IleK6hIPgw==
+X-Received: by 2002:a05:600c:a01:b0:439:9a40:aa1a with SMTP id
+ 5b1f17b1804b1-43ba675b15amr37397465e9.6.1740952377483; 
+ Sun, 02 Mar 2025 13:52:57 -0800 (PST)
 Received: from skbuf.lan ([86.127.124.81]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-43ab2cb1063sm113389645e9.2.2025.03.02.13.52.57
+ 5b1f17b1804b1-43ab2cb1063sm113389645e9.2.2025.03.02.13.52.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 02 Mar 2025 13:52:58 -0800 (PST)
+ Sun, 02 Mar 2025 13:52:56 -0800 (PST)
 From: Vladimir Oltean <olteanv@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun,  2 Mar 2025 23:52:16 +0200
-Message-ID: <20250302215219.1276480-13-olteanv@gmail.com>
+Date: Sun,  2 Mar 2025 23:52:15 +0200
+Message-ID: <20250302215219.1276480-12-olteanv@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250302215219.1276480-1-olteanv@gmail.com>
 References: <20250302215219.1276480-1-olteanv@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1740952379; x=1741557179; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1740952378; x=1741557178; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Nj4lsNJ2BKkKKTO4n0LU0retC4+DDWkCvAmq3BlEEyE=;
- b=jl7X4BkF5k0AsSQKY/kei5OvgD9to9HSXZksUxckwJVwamQzOIsBfWO/LzqboTFTN8
- I1s6kYNzhbKVJMiTzIAXZF5n/n0DTOVu3OFhbJ1y2Q+O2x5Qpmbeu7DePNBWODjyrg3f
- U6bg5vR31tsmkpxDMlr1QDSakCyPSRFMux9RJllbxQmzlxXl/wyUnz868mnaDZFqz7IF
- RF1KgQohnWDNhD07vBNzx7hkV6wVwMVmO+6tUusYEa7WFOEQNlqrBd1j31rLtTVygZqS
- 0BhdZDq+jdPXmV2Wl1nM58ZPyTEfS+T4Lz8BAWz+kCqRnKvWOJp9tY8uFPpllC4wKdxp
- Ys9Q==
+ bh=l4NlkjE+9CQWwwlNG5bcCB4Them3PAOJqpi58FZwT/I=;
+ b=U/xOcRE89SHkBiD3XrJgGO5397SWexl01gd7pQr+QeLgdL9JP2tXGAQxLqJj6SoA2M
+ D2vrtI49znIYieq5BeszC9wVBPxwcrqHoHCIE7S2/cwznovLHyTL873a7kWi+qAm8r04
+ HoJciG05FW3K+DIbXhcwcfte7Bg22lunrO0kSZZuIo/QL65y0N28faJ0XdexZ8pAU8mb
+ ALGcYNSmJU7pptZYxMnSNQQQi9bJVfV3IlyvGQ4UZso8C53Fd3GwBE+pRYCfOTArbIIM
+ 0tDwuSpzE+ru88tHggN47K395w2Ag+bhqe6pf0pHgS9xixhnK/4OBser/ZXTYyh+J+tA
+ ALfw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=jl7X4BkF
-Subject: [Buildroot] [PATCH 12/15] package/tclap: update to tag 1.4.0-rc2
+ header.a=rsa-sha256 header.s=20230601 header.b=U/xOcRE8
+Subject: [Buildroot] [PATCH 11/15] configs/ls1046a-frwy: update to tag
+ lf-6.6.52-2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,109 +116,125 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This was the only version which got rid of this error (nothing specific,
-just moved from autotools to cmake):
-
- ## ----------- ##
- ## Core tests. ##
- ## ----------- ##
-
- configure:2095: checking for a BSD-compatible install
- configure:2163: result: /usr/bin/install -c
- configure:2174: checking whether build environment is sane
- configure:2229: result: yes
- configure:2267: WARNING: 'missing' script is too old or missing
- configure:2288: checking for aarch64-buildroot-linux-gnu-strip
- configure:2315: result: /opt/buildroot/output-ls1046afrwy/host/bin/aarch64-buildroot-linux-gnu-strip
- configure:2380: checking for a thread-safe mkdir -p
- configure:2419: result: /usr/bin/mkdir -p
- configure:2426: checking for gawk
- configure:2442: found /opt/buildroot/output-ls1046afrwy/host/bin/gawk
- configure:2453: result: gawk
- configure:2464: checking whether make sets $(MAKE)
- configure:2486: result: yes
- configure:2515: checking whether make supports nested variables
- configure:2532: result: yes
- configure:2770: checking for C++ compiler version
- configure:2779: no --version >&5
- ./configure: line 2781: no: command not found
- configure:2790: $? = 127
- configure:2779: no -v >&5
- ./configure: line 2781: no: command not found
- configure:2790: $? = 127
- configure:2779: no -V >&5
- ./configure: line 2781: no: command not found
- configure:2790: $? = 127
- configure:2779: no -qversion >&5
- ./configure: line 2781: no: command not found
- configure:2790: $? = 127
- configure:2810: checking whether the C++ compiler works
- configure:2832: no -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0 -D_FORTIFY_SOURCE=1 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.cpp  >&5
- ./configure: line 2834: no: command not found
- configure:2836: $? = 127
- configure:2874: result: no
- configure: failed program was:
- | /* confdefs.h */
- | #define PACKAGE_NAME "tclap"
- | #define PACKAGE_TARNAME "tclap"
- | #define PACKAGE_VERSION "1.2.4"
- | #define PACKAGE_STRING "tclap 1.2.4"
- | #define PACKAGE_BUGREPORT ""
- | #define PACKAGE_URL ""
- | #define PACKAGE "tclap"
- | #define VERSION "1.2.4"
- | /* end confdefs.h.  */
- |
- | int
- | main ()
- | {
- |
- |   ;
- |   return 0;
- | }
- configure:2879: error: in `/opt/buildroot/output-ls1046afrwy/build/tclap-1.2.4':
- configure:2881: error: C++ compiler cannot create executables
- See `config.log' for more details
+Update the kernel, U-Boot, ATF tags, as well as documentation, used by
+the LS1046A-FRWY to the latest Linux Factory release.
 
 Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
 ---
 Change log:
-Patch is new.
+- Break out LS1046A-FRWY defconfig changes out of larger "[PATCH v2 01/11]
+  platform/layerscape: bump Linux Factory tag to lf-6.6.36-2.1.0" patch
+- Bump to lf-6.6.52-2.2.0 instead of lf-6.6.36-2.1.0 (new tag appeared
+  in between)
 
- package/tclap/tclap.hash | 2 +-
- package/tclap/tclap.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ .../arm-trusted-firmware.hash                 |  2 +-
+ .../ls1046a-frwy/patches/linux/linux.hash     |  2 +-
+ .../ls1046a-frwy/patches/uboot/uboot.hash     |  2 +-
+ board/freescale/ls1046a-frwy/readme.txt       | 31 +++++++++++++------
+ configs/ls1046a-frwy_defconfig                |  6 ++--
+ 5 files changed, 27 insertions(+), 16 deletions(-)
 
-diff --git a/package/tclap/tclap.hash b/package/tclap/tclap.hash
-index fdfd46a2e46d..6627d32aa062 100644
---- a/package/tclap/tclap.hash
-+++ b/package/tclap/tclap.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  634c5b59dbb1ccbc9d6a5f6de494a257e29a3f59dcb6fc30445ff39b45188574  tclap-1.2.4.tar.gz
-+sha256  ca52ce5badc477aeda59866601aad85c55e014c5400c15ed13e21fe7d0c1c5f7  tclap-1.4.0-rc2.tar.bz2
- sha256  cd81a61d47aeb1ed63036ca260baee37719923bbd7ebd988ec4edae128f3b6eb  COPYING
-diff --git a/package/tclap/tclap.mk b/package/tclap/tclap.mk
-index 665bec2d6769..3dad42019fa7 100644
---- a/package/tclap/tclap.mk
-+++ b/package/tclap/tclap.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
+diff --git a/board/freescale/ls1046a-frwy/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/ls1046a-frwy/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index f9af28ab3cf5..344a6299d88d 100644
+--- a/board/freescale/ls1046a-frwy/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/freescale/ls1046a-frwy/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  4f4dc78bfb5b7391a65ae0f83856661071f666ac2bf6a9380fddbe376a8bdaaa  atf-lf-6.6.23-2.0.0.tar.gz
++sha256  f03dad74e5c3df8059554def03e9298b6fbd4ffdd3e940a18b7e84a60b12a37a  atf-lf-6.6.52-2.2.0.tar.gz
+diff --git a/board/freescale/ls1046a-frwy/patches/linux/linux.hash b/board/freescale/ls1046a-frwy/patches/linux/linux.hash
+index e038c2286237..fa38fb1f75b1 100644
+--- a/board/freescale/ls1046a-frwy/patches/linux/linux.hash
++++ b/board/freescale/ls1046a-frwy/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  6d592722e004516309f8ce33e654f1322e4d1f0f33567acb86ca19229176fd9e  linux-lf-6.6.23-2.0.0.tar.gz
++sha256  5665b927616a7e27e69f3f8fface6dd693b01f35d42ae4f9a0f0a10be3621487  linux-lf-6.6.52-2.2.0.tar.gz
+diff --git a/board/freescale/ls1046a-frwy/patches/uboot/uboot.hash b/board/freescale/ls1046a-frwy/patches/uboot/uboot.hash
+index a5ccd82b2b0d..a1e3b693768d 100644
+--- a/board/freescale/ls1046a-frwy/patches/uboot/uboot.hash
++++ b/board/freescale/ls1046a-frwy/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  a2bcd7a34d4908ffbadfea731d0f0fd20f19a31cff6ff6310980e7f6743ceb24  u-boot-lf-6.6.23-2.0.0.tar.gz
++sha256  00fc7bd053de19d02c990b3aa214a27c6103f4306e756f3f6d4afb12314556e4  u-boot-lf-6.6.52-2.2.0.tar.gz
+diff --git a/board/freescale/ls1046a-frwy/readme.txt b/board/freescale/ls1046a-frwy/readme.txt
+index 4d1e0e1dcd9c..8c638b4c96a8 100644
+--- a/board/freescale/ls1046a-frwy/readme.txt
++++ b/board/freescale/ls1046a-frwy/readme.txt
+@@ -4,20 +4,31 @@ NXP LS1046A-FRWY
  
--TCLAP_VERSION = 1.2.4
-+TCLAP_VERSION = 1.4.0-rc2
- TCLAP_SITE = http://downloads.sourceforge.net/project/tclap
-+TCLAP_SOURCE = tclap-$(TCLAP_VERSION).tar.bz2
- TCLAP_LICENSE = MIT
- TCLAP_LICENSE_FILES = COPYING
- TCLAP_INSTALL_STAGING = YES
-@@ -14,4 +15,4 @@ TCLAP_CPE_ID_VALID = YES
- # This package is a pure C++ template library, only made of headers.
- TCLAP_INSTALL_TARGET = NO
+ This file documents the Buildroot support for the LS1046A Freeway Board.
  
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
+-for more details about the board and the QorIQ Layerscape SoC, see the following pages:
++For more details about the board and the QorIQ Layerscape SoC, see the following pages:
+   - https://www.nxp.com/design/software/qoriq-developer-resources/ls1046a-freeway-board:FRWY-LS1046A
+   - https://www.nxp.com/FRWY-LS1046A
+   - https://www.nxp.com/docs/en/quick-reference-guide/FRWY-LS1046AGSG.pdf
+ 
+-for the software NXP LSDK (Layerscape Software Development Kit), see
+-  - https://www.nxp.com/docs/en/user-guide/LSDKUG_Rev21.08.pdf
+-
+-the components from NXP are:
+-  - rcw, lf-6.6.23-2.0.0
+-  - atf (fork), lf-6.6.23-2.0.0
+-  - uboot (fork), lf-6.6.23-2.0.0
+-  - qoriq-fm-ucode (blob), lf-6.6.23-2.0.0
+-  - linux (fork), lf-6.6.23-2.0.0
++Layerscape platforms are officially supported by NXP under the Layerscape
++Debian Linux SDK (LDLSDK). This uses components from Linux Factory, currently
++tag lf-6.6.36-2.1.0, one release behind the latest lf-6.6.52-2.2.0.
++In Buildroot, the latest Linux Factory release tag is used.
++
++For the software Layerscape Debian Linux SDK User Guide, see:
++  - https://docs.nxp.com/bundle/UG10143/page/topics/about_this_document.html
++  - https://www.nxp.com/docs/en/user-guide/UG10143.pdf
++
++Note: the latest Linux Factory release may contain features which are not yet
++documented in the LDLSDKUG.
++
++The components from NXP are:
++  - rcw, lf-6.6.52-2.2.0
++  - atf (fork), lf-6.6.52-2.2.0
++  - uboot (fork), lf-6.6.52-2.2.0
++  - qoriq-fm-ucode (blob), lf-6.6.52-2.2.0
++  - linux (fork), lf-6.6.52-2.2.0
++  - fmlib, lf-6.6.52-2.2.0
++  - fmc, lf-6.6.52-2.2.0
+ 
+ Build
+ =====
+diff --git a/configs/ls1046a-frwy_defconfig b/configs/ls1046a-frwy_defconfig
+index 2cf0f9c8bc50..52d8f0cc07bb 100644
+--- a/configs/ls1046a-frwy_defconfig
++++ b/configs/ls1046a-frwy_defconfig
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/ls1046a-frwy/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.6.23-2.0.0)/linux-lf-6.6.23-2.0.0.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.6.52-2.2.0)/linux-lf-6.6.52-2.2.0.tar.gz"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -25,7 +25,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.6.23-2.0.0)/atf-lf-6.6.23-2.0.0.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.6.52-2.2.0)/atf-lf-6.6.52-2.2.0.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1046afrwy"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+@@ -35,7 +35,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.6.23-2.0.0)/u-boot-lf-6.6.23-2.0.0.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.6.52-2.2.0)/u-boot-lf-6.6.52-2.2.0.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ls1046afrwy_tfa"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
 2.43.0
 
