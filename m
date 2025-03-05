@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FEB2C3DA6D
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3158C3ABD8
 	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:40:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F41BB82148;
-	Mon, 19 May 2025 10:40:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6338D41E49;
+	Mon, 19 May 2025 10:40:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FbYAEVKR5J-j; Mon, 19 May 2025 10:40:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1tMzq-psoaTu; Mon, 19 May 2025 10:40:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F28E82135
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E328D40E11
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F28E82135;
-	Mon, 19 May 2025 10:40:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2FDF7193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E328D40E11;
+	Mon, 19 May 2025 10:40:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B88DE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CE8F34101D
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 885D840D5F
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vwxPd6Am9qMr for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u_00Z8mCrOvh for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F98C401AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EDB140C46
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1F98C401AD
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8EDB140C46
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1D2D58725C; Mon, 19 May 2025 10:39:43 +0000 (UTC)
+ id 4E4D6873D4; Mon, 19 May 2025 10:39:41 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 18 Mar 2025 21:40:57 +0100
+Date: Wed, 5 Mar 2025 20:07:21 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 29cf86b8d005f1dd1c5080160042395a9ab9bf26
-X-Git-Newrev: b8dfcb4f045fce200e5e521bb1f15df8bf58bc8a
+X-Git-Oldrev: 8d1deb3d191972e1e17a8b7f415f6e5653438580
+X-Git-Newrev: 290f6bb45a247e3b5d1718d29dc5ec4e9ea774f4
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103943.1D2D58725C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] {linux,
- linux-headers}: bump 6.13.x series
+Message-Id: <20250519103941.4E4D6873D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] linux: introduce
+ BR2_LINUX_KERNEL_CUSTOM_DTS_DIR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,60 +60,194 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3274867423599603841=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8dfcb4f045fce200e5e521bb1f15df8bf58bc8a
+--===============3274867423599603841==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=290f6bb45a247e3b5d1718d29dc5ec4e9ea774f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Since Linux 6.12, the Buildroot option BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+does not work as expected on arm, arm64, mips and riscv[1]. These are
+the architectures that store the in-tree DTS files in vendor-specific
+subdirectories of arch/$ARCH/boot/dts/.
+
+BR2_LINUX_KERNEL_CUSTOM_DTS_PATH was introduced in Buildroot 2012.08
+(commit 69fc497df0ae "Rework support for the device tree"). At the time,
+the kernel kept all in-tree DTS files directly in arch/$ARCH/boot/dts/,
+and this is where Buildroot drops the user's custom DTS. Vendor-specific
+subdirectories appeared in Linux v3.19 for the arm64 architecture, and
+this scheme was later adopted by mips, riscv and arm.
+
+For these architectures, Linux 6.12 (commit e7e2941300d2, "kbuild: split
+device tree build rules into scripts/Makefile.dtbs") made the DTB build
+infrastructure incompatible with the way
+BR2_LINUX_KERNEL_CUSTOM_DTS_PATH is implemented. This infrastructure now
+expects all DTS files to be in vendor-specific subdirectories on the
+architectures that use this scheme.
+
+We can't update easily the current behavior of
+BR2_LINUX_KERNEL_CUSTOM_DTS_PATH since it expect a list of files but
+can also be used "unexpectedly" with directories [2].
+
+  BR2_LINUX_KERNEL_INTREE_DTS_NAME="st/stm32mp135f-dk-mx"
+  BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="$(BR2_EXTERNAL_ST_PATH)/[...]/linux-dts/st"
+
+In this case, the st directory is copied into the arch/$ARCH/boot/dts/
+and BR2_LINUX_KERNEL_INTREE_DTS_NAME is used to build stm32mp135f-dk-mx dtb
+as if it was intree.
+
+Introduce BR2_LINUX_KERNEL_CUSTOM_DTS_DIR configuration
+parameter to specify a list of directories that are copied as-is over
+the arch/<arch>/boot/dts/ directory before building the device tree
+blob:
+
+  board/acmesystems/acqua-a5/dts/
+  └── microchip
+      └── at91-sama5d3_acqua.dts
+
+defconfig:
+  BR2_LINUX_KERNEL_CUSTOM_DTS_DIR="board/acmesystems/acqua-a5/dts"
+
+Each dts file found is automatically added to the list of devicetree
+to build.
+
+BR2_LINUX_KERNEL_CUSTOM_DTS_DIR can also be used for external
+devicetree overlays files:
+
+  board/ti/am574x-idk/dts/
+  └── ti
+      └── omap
+          └── am57xx-evm.dtso
+
+With this new option, BR2_LINUX_KERNEL_CUSTOM_DTS_PATH is now deprecated.
+
+Note: We want to create a list of dts files (LINUX_DTS_LIST) present in
+diectrories listed by BR2_LINUX_KERNEL_CUSTOM_DTS_DIR. But
+LINUX_DTS_LIST must not contain BR2_LINUX_KERNEL_CUSTOM_DTS_DIR
+paths. Use GNU 'find' print format %P to print each dts file path
+without their respective dts overlay directory path.
+Do the same for LINUX_DTSO_LIST.
+
+Thanks to Edgar Bonet for the initial contribution [3].
+
+[1] https://lists.buildroot.org/pipermail/buildroot/2024-October/765463.html
+[2] https://github.com/bootlin/buildroot-external-st/blob/541ba7d96330cd7da5674b46806b549a7ccf9da8/configs/st_stm32mp135f_dk_demo_defconfig#L21
+[3] https://lore.kernel.org/buildroot/93f83afb-6987-441c-8e06-dab4d43b828f@grenoble.cnrs.fr/
+
+Cc: Michael Walle <michael@walle.cc>
+Cc: Gaël PORTAY <gael.portay+rtone@gmail.com>
+Reported-by: Chris Packham <judge.packham@gmail.com>
+Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+[Romain:
+  - Rework the initial contribution by Edgar Bonet by
+    BR2_LINUX_KERNEL_CUSTOM_DTS_DIR following
+    Michael Walle comments and Gaël PORTAY review.
+  - Reword the commit log accordingly.
+]
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Reviewed-by: Niklas Cassel <niklas.cassel@wdc.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 2 +-
- package/linux-headers/Config.in.host | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in | 29 +++++++++++++++++++++++++++++
+ linux/linux.mk  | 17 +++++++++++++++++
+ 2 files changed, 46 insertions(+)
 
 diff --git a/linux/Config.in b/linux/Config.in
-index 506eccf0ed..c2f730709b 100644
+index d6a0ace6c0..ad9bb57439 100644
 --- a/linux/Config.in
 +++ b/linux/Config.in
-@@ -137,7 +137,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+@@ -435,6 +435,7 @@ config BR2_LINUX_KERNEL_INTREE_DTSO_NAMES
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.13.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.13.7" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index b85cad7c3c..a8f37fd097 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  283ecb0784f3fbc16dd822fb1d9642e230ec7515ed33f120e551b839f355e6e2  linux-6.13.5.tar.xz
-+sha256  3a39b62038b7ac2f43d26a1f84b4283e197804e1e817ad637e9a3d874c47801d  linux-6.13.7.tar.xz
- sha256  d73bf057bec04434b169d1b61641936f7d0c97ceb923a281f32e35dd4dcc6531  linux-6.12.19.tar.xz
- sha256  894bbbe63b7484a0bc576a1e11a8dbc090fbd476d6424431bdc8435e03c2c208  linux-6.6.83.tar.xz
- sha256  44caf510603b4cbbe78ef828620099d200536d666e909ddb73bb2938c7de5b16  linux-6.1.131.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index eff20e9846..9be5957596 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -442,7 +442,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "6.1.131"	if BR2_KERNEL_HEADERS_6_1
- 	default "6.6.83"	if BR2_KERNEL_HEADERS_6_6
- 	default "6.12.19"	if BR2_KERNEL_HEADERS_6_12
--	default "6.13.5"	if BR2_KERNEL_HEADERS_6_13
-+	default "6.13.7"	if BR2_KERNEL_HEADERS_6_13
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+ 	string "Out-of-tree Device Tree Source file paths"
++	depends on BR2_LINUX_KERNEL_CUSTOM_DTS_DIR = ""
+ 	help
+ 	  Paths to out-of-tree Device Tree Source (.dts), Device Tree
+ 	  Source Include (.dtsi) and Device Tree Overlay Source (.dtso)
+@@ -442,6 +443,34 @@ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+ 	  kernel sources and the .dts files will
+ 	  be compiled from there.
+ 
++	  Due to a kernel build system changes in 6.12,
++	  BR2_LINUX_KERNEL_CUSTOM_DTS_PATH is now deprecated and
++	  replaced by BR2_LINUX_KERNEL_CUSTOM_DTS_DIR
++
++config BR2_LINUX_KERNEL_CUSTOM_DTS_DIR
++	string "Out-of-tree Device Tree Source overlay directories"
++	help
++	  Specify a list of directories that are copied as-is over the
++	  arch/<arch>/boot/dts/ directory before building the device
++	  tree blob.
++
++	  This overlay can contain dts, dtso and dtsi files.
++
++	  BR2_LINUX_KERNEL_CUSTOM_DTS_DIR should point to one or more
++	  directories containing a vendor subdirectory (e.g. rockchip)
++	  which contains the dts files. This vendor subdirectory should
++	  match the vendor subdirectory used by the board in the kernel
++	  (e.g. arch/arm64/boot/dts/rockchip/).
++
++	  While most architechtures make use of vendor subdirectories,
++	  like arm, arm64 and riscv, some architectures like powerpc
++	  and xtensa do not.
++	  In this case, BR2_LINUX_KERNEL_CUSTOM_DTS_DIR should point to
++	  a directory containing the dts files directly.
++
++	  Since the 6.12 release, each out-of-tree Device Tree Source
++	  file must be copied into their corresponding sub-directory.
++
+ config BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME
+ 	bool "Keep the directory name of the Device Tree"
+ 	help
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 9c621c18d5..f915823dcf 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -213,6 +213,22 @@ LINUX_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH))
+ LINUX_DTS_NAME += $(basename $(filter %.dts,$(notdir $(LINUX_CUSTOM_DTS_PATH))))
+ LINUX_DTSO_NAMES += $(basename $(filter %.dtso,$(notdir $(LINUX_CUSTOM_DTS_PATH))))
+ 
++LINUX_KERNEL_CUSTOM_DTS_DIR = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_DIR))
++ifneq ($(LINUX_KERNEL_CUSTOM_DTS_DIR),)
++# Use evaluation-during-assignment using := to avoid any re-evaluation
++# of LINUX_DTS_LIST when LINUX_DTS_NAME is used.
++LINUX_DTS_LIST := $(shell find $(LINUX_KERNEL_CUSTOM_DTS_DIR) -name '*.dts' -printf '%P\n' 2>/dev/null)
++LINUX_DTSO_LIST := $(shell find $(LINUX_KERNEL_CUSTOM_DTS_DIR) -name '*.dtso' -printf '%P\n' 2>/dev/null)
++LINUX_DTS_NAME += $(basename $(LINUX_DTS_LIST))
++LINUX_DTSO_NAMES += $(basename $(LINUX_DTSO_LIST))
++
++define LINUX_COPY_CUSTOM_DTS_FILES
++	$(foreach d, $(LINUX_KERNEL_CUSTOM_DTS_DIR), \
++		@$(call MESSAGE,"Copying devicetree overlay $(d)")$(sep) \
++		$(Q)$(call SYSTEM_RSYNC,$(d),$(LINUX_ARCH_PATH)/boot/dts/)$(sep))
++endef
++endif
++
+ LINUX_DTBS = $(addsuffix .dtb,$(LINUX_DTS_NAME)) $(addsuffix .dtbo,$(LINUX_DTSO_NAMES))
+ 
+ ifeq ($(BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM),y)
+@@ -527,6 +543,7 @@ define LINUX_BUILD_CMDS
+ 	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
+ 		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
+ 	)
++	$(LINUX_COPY_CUSTOM_DTS_FILES)
+ 	$(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all
+ 	$(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	$(LINUX_BUILD_DTB)
+
+--===============3274867423599603841==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3274867423599603841==--
