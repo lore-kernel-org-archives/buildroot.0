@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F7F2C2D0CD
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B198CC3DA6D
 	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0489540DE8;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3F95560EE1;
 	Mon, 19 May 2025 10:39:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FZvQLDcH3sDb; Mon, 19 May 2025 10:39:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D20DA40D71
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D20DA40D71;
-	Mon, 19 May 2025 10:39:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id EFE79E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E06E460EE5
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mm4gaWH-7dyg for <buildroot@buildroot.org>;
+ id YoJrJUeH7Mk0; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B85260EB6
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B85260EB6;
+	Mon, 19 May 2025 10:39:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0AE78193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E49FD41028
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:41 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Lg---KbQwNRs for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:39:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C4CB60E91
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A442401AD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3C4CB60E91
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A442401AD
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2DBF98725C; Mon, 19 May 2025 10:39:41 +0000 (UTC)
+ id 35C81872E7; Mon, 19 May 2025 10:39:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 5 Mar 2025 19:55:42 +0100
+Date: Wed, 5 Mar 2025 19:55:43 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3a2baca4b785db33175058741f6123dfef85df84
-X-Git-Newrev: 630c20a2b2ad78fa590e80456be9a38484781685
+X-Git-Oldrev: 630c20a2b2ad78fa590e80456be9a38484781685
+X-Git-Newrev: 66a0513e0eb08b55e1246ba414f80f4f0358fb08
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103941.2DBF98725C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] CHANGES: mention glibc /
- uclibc-ng bumps for 2025.02-rc1
+Message-Id: <20250519103941.35C81872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] utils/generate-cyclonedx: fix
+ wrong example usage
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,15 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=630c20a2b2ad78fa590e80456be9a38484781685
+commit: https://git.buildroot.net/buildroot/commit/?id=66a0513e0eb08b55e1246ba414f80f4f0358fb08
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+The real file is utils/generate-cyclonedx,
+not utils/generate-cyclonedx.py.
+
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 2 ++
- 1 file changed, 2 insertions(+)
+ utils/generate-cyclonedx | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index 365c2b06ea..39d59173d2 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -5,7 +5,7 @@
+ # to CycloneDX format.
+ #
+ # Example usage:
+-# > make show-info | utils/generate-cyclonedx.py | jq '.'
++# > make show-info | utils/generate-cyclonedx | jq '.'
+ 
+ 
+ import argparse
+@@ -270,7 +270,7 @@ def br2_parse_deps_recursively(ref, show_info_dict, virtual=False, deps=[]):
+ def main():
+     parser = argparse.ArgumentParser(
+             description='''Create a CycloneDX SBoM for the Buildroot configuration.
+-                Example usage: make show-info | utils/generate-cyclonedx.py | jq > sbom.json
++                Example usage: make show-info | utils/generate-cyclonedx | jq > sbom.json
+             '''
+         )
+     parser.add_argument("-i", "--in-file", nargs="?", type=argparse.FileType("r"),
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
