@@ -1,76 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAA42C19F32
-	for <buildroot@archiver.kernel.org>; Wed,  5 Mar 2025 21:54:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD188C282EC
+	for <buildroot@archiver.kernel.org>; Wed,  5 Mar 2025 21:54:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A749860894;
-	Wed,  5 Mar 2025 21:54:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6q7hXKvhEWVn; Wed,  5 Mar 2025 21:54:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC189608D1
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC189608D1;
-	Wed,  5 Mar 2025 21:54:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E108BE2E
- for <buildroot@buildroot.org>; Wed,  5 Mar 2025 21:54:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D08D940B3E
- for <buildroot@buildroot.org>; Wed,  5 Mar 2025 21:54:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7A43140713;
+	Wed,  5 Mar 2025 21:54:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UenkYDSoMox9 for <buildroot@buildroot.org>;
- Wed,  5 Mar 2025 21:54:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AE76D40967
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE76D40967
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AE76D40967
- for <buildroot@buildroot.org>; Wed,  5 Mar 2025 21:54:09 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 373042003EE;
- Wed,  5 Mar 2025 22:54:06 +0100 (CET)
-Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
- via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 05 Mar 2025 22:54:06 +0100
-MIME-Version: 1.0
-Date: Wed, 05 Mar 2025 22:54:06 +0100
+ id 83Z7Lv_TGgMX; Wed,  5 Mar 2025 21:54:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2069F40680
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2069F40680;
+	Wed,  5 Mar 2025 21:54:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 97CEFE2E
+ for <buildroot@buildroot.org>; Wed,  5 Mar 2025 21:54:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7CA266001B
+ for <buildroot@buildroot.org>; Wed,  5 Mar 2025 21:54:45 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p4RY01W5pC1F for <buildroot@buildroot.org>;
+ Wed,  5 Mar 2025 21:54:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C034C6066A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C034C6066A
+ for <buildroot@buildroot.org>; Wed,  5 Mar 2025 21:54:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9E52B874C7; Wed,  5 Mar 2025 21:54:44 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Joachim Wiberg <troglobit@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250303041551.3968139-2-troglobit@gmail.com>
-References: <20250303041551.3968139-1-troglobit@gmail.com>
- <20250303041551.3968139-2-troglobit@gmail.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <4b80dc987f8bbaae0cd7f1a29b9e647f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1741211647;
- bh=QFurkLMiKu4desxbqVvH0tNohWGzIqk//58YwtTuQx8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=utvVv9HNWoyTIx5YxyW0VOjOLbaogIj7xTZNR42f3344UHbnwh/3x8C6xac6qeNXX
- Nt2j0yGY+gzMAFX544xTQ2Z5WILUVsWpbOFJzeTY/qbQ55EV2zA/NMHFwi0JKEg4C6
- 7MALvTvvHZSLgBHvEdq6RD5TrYJgwoGg1ZO+KXsDqPiSfbB9K9eiElnv+UA5QKz+vW
- W2q8TVpMLCcqfmJOKmTmuoAuM4IjU+TFZZkQFyy1xtA/MY8UvfT5KKe7B7XUdAPhQI
- 6zE5H4JySgAPXCOyoz5ixHNFhCAgho3YleDiPVnX7GUVFIo8k1aYxw42Stbt0fTqvv
- NW40x1YM/OzHA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=utvVv9HN
-Subject: Re: [Buildroot] [PATCH 1/1] package/sysklogd: bump to v2.7.1
+To: buildroot@buildroot.org
+Date: Wed, 5 Mar 2025 22:51:06 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 1b1696b408ad3b9cab1e2b68151c38470806e0e8
+X-Git-Newrev: 7a0725723b80ebf5fb0984410f7b4b665f9ee49d
+X-Patchwork-Hint: ignore
+Message-Id: <20250305215444.9E52B874C7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sysklogd: bump to
+ v2.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,23 +59,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 03/03/2025 05:15, Joachim Wiberg wrote:
-> - Update syslogd -T documentation, it applies to messages originating
->    both locally and from remote syslog servers
->  - Fix hostname filtering support, introduced in v2.7.0, broken
->  - Fix parsing of userspace messages in /dev/kmsg, inserted an
->    extra space before the message payload
-> 
-> From https://github.com/troglobit/sysklogd/releases/tag/v2.7.1
-> 
-> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=7a0725723b80ebf5fb0984410f7b4b665f9ee49d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Applied to next, thanks.
+- Update syslogd -T documentation, it applies to messages originating
+   both locally and from remote syslog servers
+ - Fix hostname filtering support, introduced in v2.7.0, broken
+ - Fix parsing of userspace messages in /dev/kmsg, inserted an
+   extra space before the message payload
+
+From https://github.com/troglobit/sysklogd/releases/tag/v2.7.1
+
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/sysklogd/sysklogd.hash | 4 ++--
+ package/sysklogd/sysklogd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
+index 4024965e23..645bc6a0ae 100644
+--- a/package/sysklogd/sysklogd.hash
++++ b/package/sysklogd/sysklogd.hash
+@@ -1,4 +1,4 @@
+-# Upstream .sha256 from https://github.com/troglobit/sysklogd/releases/tag/v2.7.0
+-sha256  6ab74ab5001121bb32697fd2f7ab3cc4b4452c3f721677e06e5b60982a04d0cc  sysklogd-2.7.0.tar.gz
++# Upstream .sha256 from https://github.com/troglobit/sysklogd/releases/tag/v2.7.1
++sha256  69944b2227647bf47ee01c9f482d19a79dbf2b53b8ce8ded0486b08db8c68c40  sysklogd-2.7.1.tar.gz
+ # Locally calculated
+ sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index e8b7fe2062..a3e27fd17b 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSKLOGD_VERSION = 2.7.0
++SYSKLOGD_VERSION = 2.7.1
+ SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
+ SYSKLOGD_LICENSE = BSD-3-Clause
+ SYSKLOGD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
