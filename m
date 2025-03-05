@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F49CC28B28
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:04:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7541C282EC
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:04:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A0C0835A7;
-	Tue, 18 Mar 2025 15:04:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3213C8374F;
+	Tue, 18 Mar 2025 15:04:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rkmSypYJjdRz; Tue, 18 Mar 2025 15:04:45 +0000 (UTC)
+ id ve-7XasBrtaN; Tue, 18 Mar 2025 15:04:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 754048343F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C4FD8343F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 754048343F;
-	Tue, 18 Mar 2025 15:04:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 105DDD5
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1C4FD8343F;
+	Tue, 18 Mar 2025 15:04:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C5C62D5
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9E3481F2E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3FC6B40BB4
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kE6Qz96PBX0K for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NEZhkPvorEqj for <buildroot@buildroot.org>;
  Tue, 18 Mar 2025 15:02:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 964C381E1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 542E3408D0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 964C381E1F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 542E3408D0
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 91D7B880EC; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
+ id 4B24E866DD; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 8 Mar 2025 14:48:37 +0100
+Date: Wed, 5 Mar 2025 22:51:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ad5445a347ccec583c133c5476c7751c5448a920
-X-Git-Newrev: 4f0c7b0dcb48d5e9e9fc54ce49c1771f7e49f54a
+X-Git-Oldrev: 1b1696b408ad3b9cab1e2b68151c38470806e0e8
+X-Git-Newrev: 7a0725723b80ebf5fb0984410f7b4b665f9ee49d
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150243.91D7B880EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnss: bump version to 3.109
+Message-Id: <20250318150243.4B24E866DD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sysklogd: bump to v2.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,43 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f0c7b0dcb48d5e9e9fc54ce49c1771f7e49f54a
+commit: https://git.buildroot.net/buildroot/commit/?id=7a0725723b80ebf5fb0984410f7b4b665f9ee49d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For release note, see:
-https://hg.mozilla.org/projects/nss/diff/82eb56300e9d8e1e65312acc8ed11b26de8de222/doc/rst/releases/nss_3_109.rst
+- Update syslogd -T documentation, it applies to messages originating
+   both locally and from remote syslog servers
+ - Fix hostname filtering support, introduced in v2.7.0, broken
+ - Fix parsing of userspace messages in /dev/kmsg, inserted an
+   extra space before the message payload
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+From https://github.com/troglobit/sysklogd/releases/tag/v2.7.1
+
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
+ package/sysklogd/sysklogd.hash | 4 ++--
+ package/sysklogd/sysklogd.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 0f73002243..9244a0000d 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
+diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
+index 4024965e23..645bc6a0ae 100644
+--- a/package/sysklogd/sysklogd.hash
++++ b/package/sysklogd/sysklogd.hash
 @@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_108_RTM/src/SHA256SUMS
--sha256  a0f6fcb5dbadc1635b43827517a979e3a6d005d0788527802a6b31e2c5f66eec  nss-3.108.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_109_RTM/src/SHA256SUMS
-+sha256  bea46c256118cd8910202f05339627d75291f13b80054527df58419b9d29c18b  nss-3.109.tar.gz
+-# Upstream .sha256 from https://github.com/troglobit/sysklogd/releases/tag/v2.7.0
+-sha256  6ab74ab5001121bb32697fd2f7ab3cc4b4452c3f721677e06e5b60982a04d0cc  sysklogd-2.7.0.tar.gz
++# Upstream .sha256 from https://github.com/troglobit/sysklogd/releases/tag/v2.7.1
++sha256  69944b2227647bf47ee01c9f482d19a79dbf2b53b8ce8ded0486b08db8c68c40  sysklogd-2.7.1.tar.gz
  # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 9881b382d5..bcd08b8b12 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+ sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index e8b7fe2062..a3e27fd17b 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.108
-+LIBNSS_VERSION = 3.109
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-SYSKLOGD_VERSION = 2.7.0
++SYSKLOGD_VERSION = 2.7.1
+ SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
+ SYSKLOGD_LICENSE = BSD-3-Clause
+ SYSKLOGD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
