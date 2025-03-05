@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D34CC2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A32CC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61E9081F2E;
+	by smtp4.osuosl.org (Postfix) with ESMTP id C212941D96;
 	Mon, 19 May 2025 10:41:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qlNZPJ9awtpb; Mon, 19 May 2025 10:41:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Mr1GSGSWYyCw; Mon, 19 May 2025 10:41:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9139D821C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05D5540DA4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9139D821C0;
-	Mon, 19 May 2025 10:41:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05D5540DA4;
+	Mon, 19 May 2025 10:40:24 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 19162193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:56 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 05CF8D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BCB84410C7
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2EC9A41028
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fq-qtcrDALGt for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:42 +0000 (UTC)
+ id 3t-m0tmkaS-a for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF87D4105B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87CDE40FC5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id AF87D4105B
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 87CDE40FC5
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AD7C6872E7; Mon, 19 May 2025 10:39:42 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 85D79872E7; Mon, 19 May 2025 10:39:41 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 16 Mar 2025 20:44:34 +0100
+Date: Wed, 5 Mar 2025 22:28:21 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fc690631caa3f061adc22c1f7dc4def226a80194
-X-Git-Newrev: 9679ddbcd066d562ffc8b8d46a571fd99fe7f275
+X-Git-Oldrev: b19976abc90c9712e807726f207ad3d447d876dd
+X-Git-Newrev: 14a7e99b6deb373739aeb97f38f962bf10d28c6b
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103942.AD7C6872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rauc: needs libopenssl,
- not libressl
+Message-Id: <20250519103941.85D79872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ board/mender/x86_64/post-build.sh: fix device_type location
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,50 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9679ddbcd066d562ffc8b8d46a571fd99fe7f275
+commit: https://git.buildroot.net/buildroot/commit/?id=14a7e99b6deb373739aeb97f38f962bf10d28c6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes http://autobuild.buildroot.net/results/6efc1275d3aac9f0a4c000f3d0911b5a880e495d/
+Currently, the post-build.sh script adds device_type to /var/lib/mender,
+however, this doesn't work for two reasons:
+ 1) /data/ mounts to /var/lib/mender
+ 2) The device_type location in mender.conf points to /etc/mender/device_type.
 
-Rauc uses X509_PURPOSE_get_by_id() since rauc-1.3 with commit 375dbb16dd94
-("src/signature: add support for codesigning certificate purpose"):
+This leads to an error during the bootstrap process because mender reads the
+default device_type file installed by mender.mk in /etc/mender, leading to the
+following error:
 
-../src/signature.c: In function 'signature_init':
-../src/signature.c:97:13: warning: implicit declaration of function 'X509_PURPOSE_get_by_id'; did you mean 'X509_PURPOSE_get_id'? [-Wimplicit-function-declaration]
-   97 |         if (X509_PURPOSE_get_by_id(id) >= 0) {
+```
+Error while handling bootstrap Artifact, continuing: invalid bootstrap
+Artifact: readHeaderV3: handleHeaderReads: image
+(device types [buildroot-x86_64]) not compatible with device BUILDROOT_DEVICE
+```
 
-Which is not provided by LibreSSL:
+Set the creation of the device_type file in board/mender/x86_64/post-build.sh
+to /etc/mender/device_type to fix the error.
 
-nm -D target/usr/lib/libcrypto.so | grep X509_PURPOSE_
-00000000001377b0 T X509_PURPOSE_get0
-0000000000137850 T X509_PURPOSE_get0_name
-0000000000137860 T X509_PURPOSE_get0_sname
-00000000001377d0 T X509_PURPOSE_get_by_sname
-00000000001377a0 T X509_PURPOSE_get_count
-0000000000137840 T X509_PURPOSE_get_id
-
-So force the use of libopenssl.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/rauc/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ board/mender/x86_64/post-build.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rauc/Config.in b/package/rauc/Config.in
-index af0b99c36b..8d0c0a4f2a 100644
---- a/package/rauc/Config.in
-+++ b/package/rauc/Config.in
-@@ -5,8 +5,9 @@ config BR2_PACKAGE_RAUC
- 	depends on BR2_USE_WCHAR # glib2
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL # uses X509_PURPOSE_get_by_id
- 	# uses ENGINE_* API
--	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENGINES
- 	select BR2_PACKAGE_SQUASHFS # run-time dependency
- 	select BR2_PACKAGE_UBOOT_TOOLS if BR2_TARGET_UBOOT # run-time dependency
- 	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV if BR2_TARGET_UBOOT
+diff --git a/board/mender/x86_64/post-build.sh b/board/mender/x86_64/post-build.sh
+index 5e6967ebd1..9e909e9281 100755
+--- a/board/mender/x86_64/post-build.sh
++++ b/board/mender/x86_64/post-build.sh
+@@ -42,7 +42,7 @@ mender_fixup() {
+ main() {
+     parse_args "${@}"
+     mender_fixup
+-    echo "device_type=${DEVICE_TYPE}" > "${TARGET_DIR}/var/lib/mender/device_type"
++    echo "device_type=${DEVICE_TYPE}" > "${TARGET_DIR}/etc/mender/device_type"
+ }
+ 
+ main "${@}"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
