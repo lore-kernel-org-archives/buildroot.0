@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE361C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:40:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68419C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:40:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9B8A060F04;
-	Mon, 19 May 2025 10:40:26 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GDnl3kwF4f6c; Mon, 19 May 2025 10:40:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAC2660F08
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CAC2660F08;
-	Mon, 19 May 2025 10:40:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 188F9193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 17E4740D81
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C03241518;
+	Mon, 19 May 2025 10:40:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ls7dk3CjNdXw for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:42 +0000 (UTC)
+ id eyQ6LX0PdaTq; Mon, 19 May 2025 10:40:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B97B440D85
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B97B440D85;
+	Mon, 19 May 2025 10:40:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 19574E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5C5B14106B
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:42 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dJ4TyD1INLPI for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FCC640D4C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DC49405C8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0FCC640D4C
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6DC49405C8
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0E90F8725C; Mon, 19 May 2025 10:39:42 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 5E19E872E7; Mon, 19 May 2025 10:39:41 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 12 Mar 2025 11:01:30 +0100
+Date: Wed, 5 Mar 2025 20:07:39 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8ea3365b61045d3e41adf79b474993dbb28b7a00
-X-Git-Newrev: b7f154eab797eb9e3f30ee364ec27fc3629e02d5
+X-Git-Oldrev: 8a8b6a3a2f9774bae073aefdbd35e3127ea15f51
+X-Git-Newrev: 33b23bfbd9d208b13c3860ad26926bc10a22e74c
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103942.0E90F8725C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sqlite: json extension
- enabled by default
+Message-Id: <20250519103941.5E19E872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ configs/acmesystems_acqua_a5_*: bump to Linux 6.12.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,81 +65,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7f154eab797eb9e3f30ee364ec27fc3629e02d5
+commit: https://git.buildroot.net/buildroot/commit/?id=33b23bfbd9d208b13c3860ad26926bc10a22e74c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since SQLite 3.38 [0] the JSON extension is enabled by default.
-A new Option was introduced to actively disable the extension. [1]
-
-The JSON support is very small (<4%) compared to the rest of sqlite, so
-enable it unconditionally:
-
--rwxr-xr-x 1 peko peko 1470368 Mar 12 10:50 output-without/target/usr/lib/libsqlite3.so.0.8.6
--rwxr-xr-x 1 peko peko 1530232 Mar 12 10:46 output-with/target/usr/lib/libsqlite3.so.0.8.6
-
-E.G. a delta of 59864 bytes or 3.9%
-
-[0] https://sqlite.org/releaselog/3_38_0.html
-[1] https://sqlite.org/json1.html#compiling_in_json_support
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-[Peter: unconditionally include JSON support]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Acked-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Tested-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Reviewed-by: Niklas Cassel <niklas.cassel@wdc.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- Config.in.legacy         | 6 ++++++
- package/sqlite/Config.in | 6 ------
- package/sqlite/sqlite.mk | 4 ----
- 3 files changed, 6 insertions(+), 10 deletions(-)
+ board/acmesystems/acqua-a5/patches/linux/linux.hash | 2 +-
+ configs/acmesystems_acqua_a5_256mb_defconfig        | 4 ++--
+ configs/acmesystems_acqua_a5_512mb_defconfig        | 4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index f94a7db7b0..44ee749329 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2025.02"
- 
-+config BR2_PACKAGE_SQLITE_ENABLE_JSON1
-+	bool "Enable the JSON extensions for SQLite has been removed"
-+	select BR2_LEGACY
-+	help
-+	  Since SQLite 3.38 the JSON Extension is enabled by default.
-+
- config BR2_PACKAGE_ANGULARJS
- 	bool "angularjs has been removed"
- 	select BR2_LEGACY
-diff --git a/package/sqlite/Config.in b/package/sqlite/Config.in
-index ce1e369b20..12fb8b9415 100644
---- a/package/sqlite/Config.in
-+++ b/package/sqlite/Config.in
-@@ -30,12 +30,6 @@ config BR2_PACKAGE_SQLITE_ENABLE_FTS3
- 	  http://www.sqlite.org/amalgamation.html), version 3 of the
- 	  full-text search engine is added to the build automatically.
- 
--config BR2_PACKAGE_SQLITE_ENABLE_JSON1
--	bool "Enable the JSON extensions for SQLite"
--	help
--	  When this option is defined in the amalgamation, the JSON
--	  extensions are added to the build automatically.
--
- config BR2_PACKAGE_SQLITE_ENABLE_UNLOCK_NOTIFY
- 	bool "Enable sqlite3_unlock_notify() interface"
- 	help
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index c8f12a427a..218b3f0a1d 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -25,10 +25,6 @@ ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_FTS3),y)
- SQLITE_CFLAGS += -DSQLITE_ENABLE_FTS3
- endif
- 
--ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_JSON1),y)
--SQLITE_CFLAGS += -DSQLITE_ENABLE_JSON1
--endif
--
- ifeq ($(BR2_PACKAGE_SQLITE_ENABLE_UNLOCK_NOTIFY),y)
- SQLITE_CFLAGS += -DSQLITE_ENABLE_UNLOCK_NOTIFY
- endif
+diff --git a/board/acmesystems/acqua-a5/patches/linux/linux.hash b/board/acmesystems/acqua-a5/patches/linux/linux.hash
+index 4b20a009a7..7a4c4e57c9 100644
+--- a/board/acmesystems/acqua-a5/patches/linux/linux.hash
++++ b/board/acmesystems/acqua-a5/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  b66a5b863b0f8669448b74ca83bd641a856f164b29956e539bbcb5fdeeab9cc6  linux-6.6.30.tar.xz
++sha256  87be0360df0931b340d2bac35161a548070fbc3a8c352c49e21e96666c26aeb4  linux-6.12.9.tar.xz
+diff --git a/configs/acmesystems_acqua_a5_256mb_defconfig b/configs/acmesystems_acqua_a5_256mb_defconfig
+index d21ff97216..a50e306b1b 100644
+--- a/configs/acmesystems_acqua_a5_256mb_defconfig
++++ b/configs/acmesystems_acqua_a5_256mb_defconfig
+@@ -2,7 +2,7 @@ BR2_arm=y
+ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/acmesystems/acqua-a5/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_SYSTEM_DHCP="eth0"
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.30"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_CUSTOM_DTS_DIR="board/acmesystems/acqua-a5/dts"
+diff --git a/configs/acmesystems_acqua_a5_512mb_defconfig b/configs/acmesystems_acqua_a5_512mb_defconfig
+index d83a058537..6ae8d037e7 100644
+--- a/configs/acmesystems_acqua_a5_512mb_defconfig
++++ b/configs/acmesystems_acqua_a5_512mb_defconfig
+@@ -2,7 +2,7 @@ BR2_arm=y
+ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/acmesystems/acqua-a5/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_SYSTEM_DHCP="eth0"
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.30"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_CUSTOM_DTS_DIR="board/acmesystems/acqua-a5/dts"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
