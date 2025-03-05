@@ -4,75 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8440BC19F32
-	for <buildroot@archiver.kernel.org>; Wed,  5 Mar 2025 20:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A743C19F32
+	for <buildroot@archiver.kernel.org>; Wed,  5 Mar 2025 20:24:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B31040C82;
-	Wed,  5 Mar 2025 20:02:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 797794088D;
+	Wed,  5 Mar 2025 20:24:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K60YDnosefG4; Wed,  5 Mar 2025 20:02:51 +0000 (UTC)
+ id Rfmz2U2ksbZu; Wed,  5 Mar 2025 20:24:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 192A140805
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2165E408EA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 192A140805;
-	Wed,  5 Mar 2025 20:02:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id BFDC3E2E
- for <buildroot@buildroot.org>; Wed,  5 Mar 2025 20:02:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2165E408EA;
+	Wed,  5 Mar 2025 20:24:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 94CF9194
+ for <buildroot@buildroot.org>; Wed,  5 Mar 2025 20:24:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9DC5A409FD
- for <buildroot@buildroot.org>; Wed,  5 Mar 2025 20:02:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 67ED060712
+ for <buildroot@buildroot.org>; Wed,  5 Mar 2025 20:24:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0d8BmG2OvKbj for <buildroot@buildroot.org>;
- Wed,  5 Mar 2025 20:02:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6E9AF401FB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E9AF401FB
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6E9AF401FB
- for <buildroot@buildroot.org>; Wed,  5 Mar 2025 20:02:46 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 6678F2008E5;
- Wed,  5 Mar 2025 21:02:40 +0100 (CET)
-Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
- via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 05 Mar 2025 21:02:40 +0100
-MIME-Version: 1.0
-Date: Wed, 05 Mar 2025 21:02:40 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bi6KXdLza4-Q for <buildroot@buildroot.org>;
+ Wed,  5 Mar 2025 20:24:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FF0860615
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7FF0860615
+ for <buildroot@buildroot.org>; Wed,  5 Mar 2025 20:24:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 584CF87EE4; Wed,  5 Mar 2025 20:24:27 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Romain Naour <romain.naour@smile.fr>
-Cc: buildroot@buildroot.org, Michael Walle <michael@walle.cc>, Niklas Cassel
- <niklas.cassel@wdc.com>
-In-Reply-To: <20250221225529.441084-1-romain.naour@smile.fr>
-References: <20250221225529.441084-1-romain.naour@smile.fr>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <71bc39ac04b174cbfc4f89494cd2baa8@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1741204963;
- bh=24/6fyCjHz/mvF6TSpAAWk8lcgEfaUzKX0rG3o1Rd6c=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=liZ5Zu2J3QvQgSWd+/zl8YByacf10MAu6u3g7BVLBHyXyDj0LEQh1JvBuMrVLWwc4
- FBJggfsWYISYbEwEYstkQcF5hbD1qTODvF/MEdP3IzUJ45N+nZIgikJaDUMONFnqgS
- Hjr4i8d7jYBYzVuhVbsusSLJ0paD7Z0Bzu6Fmg6FRT9YDtzlBVAaPCwXyMpsFIhNqN
- +nvBxIW/Shha6ztwhy+WMn445lqKydEyfyYI9ddMskygZFXYTk/O2ogIJR2jyBmJ2t
- qzSvT+pWJo2PBBqulxdVsmuDGfBXGaHkcr/UmRaA6bBMU6Evx+TJFxiwQFMErACBq9
- i7WOp760ejSJQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=liZ5Zu2J
-Subject: Re: [Buildroot] [PATCH v6 1/5] linux: add support for device tree
- overlays
+To: buildroot@buildroot.org
+Date: Wed, 5 Mar 2025 21:07:48 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 33b23bfbd9d208b13c3860ad26926bc10a22e74c
+X-Git-Newrev: 77674c6cfbd40e174048897255658d31e3ead15a
+X-Patchwork-Hint: ignore
+Message-Id: <20250305202427.584CF87EE4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/go: security bump to version 1.23.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,26 +58,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 21/02/2025 23:55, Romain Naour via buildroot wrote:
-> From: Michael Walle <michael@walle.cc>
-> 
-> The linux kernel can build device tree overlays (.dtbo) itself. Add
-> support to build and copy them along with the actual device trees.
-> These can either be in-tree device tree overlays
-> (BR2_LINUX_KERNEL_INTREE_DTSO_NAMES) or they can be provided outside of
-> the kernel (BR2_LINUX_KERNEL_CUSTOM_DTS_PATH). In the latter case, the
-> overlay source files will be copied into the kernel tree first.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> Reviewed-by: Niklas Cassel <niklas.cassel@wdc.com>
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
+commit: https://git.buildroot.net/buildroot/commit/?id=77674c6cfbd40e174048897255658d31e3ead15a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+go1.23.7 (released 2025-03-04) includes security fixes to the net/http
+package, as well as bug fixes to cgo, the compiler, and the reflect,
+runtime, and syscall package.
+
+https://github.com/golang/go/issues?q=milestone%3AGo1.23.7+label%3ACherryPickApproved
+
+Fixes:
+https://www.cve.org/CVERecord?id=CVE-2025-22870
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Julien: add candidate CVE link]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/go/go.hash | 14 +++++++-------
+ package/go/go.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/package/go/go.hash b/package/go/go.hash
+index fd2cd71c59..8b9541642d 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,9 +1,9 @@
+ # sha256 checksum from https://go.dev/dl/
+-sha256  039c5b04e65279daceee8a6f71e70bd05cf5b801782b6f77c6e19e2ed0511222  go1.23.6.src.tar.gz
+-sha256  e61f87693169c0bbcc43363128f1e929b9dff0b7f448573f1bdd4e4a0b9687ba  go1.23.6.linux-386.tar.gz
+-sha256  9379441ea310de000f33a4dc767bd966e72ab2826270e038e78b2c53c2e7802d  go1.23.6.linux-amd64.tar.gz
+-sha256  561c780e8f4a8955d32bf72e46af0b5ee5e0debe1e4633df9a03781878219202  go1.23.6.linux-arm64.tar.gz
+-sha256  27a4611010c16b8c4f37ade3aada55bd5781998f02f348b164302fd5eea4eb74  go1.23.6.linux-armv6l.tar.gz
+-sha256  0f817201e83d78ddbfa27f5f78d9b72450b92cc21d5e045145efacd0d3244a99  go1.23.6.linux-ppc64le.tar.gz
+-sha256  321e7ed0d5416f731479c52fa7610b52b8079a8061967bd48cec6d66f671a60e  go1.23.6.linux-s390x.tar.gz
++sha256  7cfabd46b73eb4c26b19d69515dd043d7183a6559acccd5cfdb25eb6b266a458  go1.23.7.src.tar.gz
++sha256  9115f7d751efe5b17b63a7630d24cd0a2479976465eecb277b5deec8aa0f4143  go1.23.7.linux-386.tar.gz
++sha256  4741525e69841f2e22f9992af25df0c1112b07501f61f741c12c6389fcb119f3  go1.23.7.linux-amd64.tar.gz
++sha256  597acbd0505250d4d98c4c83adf201562a8c812cbcd7b341689a07087a87a541  go1.23.7.linux-arm64.tar.gz
++sha256  c9e9ecd6a8cf1429f1c65d81115c450258258ac65833d95a82d5f4e5ad7d2d7a  go1.23.7.linux-armv6l.tar.gz
++sha256  3ffc310bfd11fd0bcc713a764a0f7252c4d52d03f12abebfaebaaae77e027028  go1.23.7.linux-ppc64le.tar.gz
++sha256  af1d4c5d01e32c2cf6e3cc00e44cb240e1a6cef539b28a64389b2b9ca284ac6c  go1.23.7.linux-s390x.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index fd47ed7c3b..da380483ef 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.23.6
++GO_VERSION = 1.23.7
+ 
+ HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
+ HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
