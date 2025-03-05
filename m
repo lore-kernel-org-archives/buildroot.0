@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A2B5C19F32
-	for <buildroot@archiver.kernel.org>; Wed,  5 Mar 2025 21:46:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8E44C19F32
+	for <buildroot@archiver.kernel.org>; Wed,  5 Mar 2025 21:46:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CAFC440713;
-	Wed,  5 Mar 2025 21:46:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E76604071B;
+	Wed,  5 Mar 2025 21:46:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jegpCXejrkz4; Wed,  5 Mar 2025 21:46:21 +0000 (UTC)
+ id 1AhHp-9j5m_w; Wed,  5 Mar 2025 21:46:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F6514071B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48C5F40B4B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F6514071B;
-	Wed,  5 Mar 2025 21:46:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7D59495F
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48C5F40B4B;
+	Wed,  5 Mar 2025 21:46:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BC3B9E2E
  for <buildroot@buildroot.org>; Wed,  5 Mar 2025 21:46:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6CA8E406F9
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA08840167
  for <buildroot@buildroot.org>; Wed,  5 Mar 2025 21:46:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9T2Ds4ikspeu for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id byoirIm-iv5G for <buildroot@buildroot.org>;
  Wed,  5 Mar 2025 21:46:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 828B740713
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9377541153
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 828B740713
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9377541153
  for <buildroot@buildroot.org>; Wed,  5 Mar 2025 21:46:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 75F9987F7F; Wed,  5 Mar 2025 21:46:18 +0000 (UTC)
+ id 89EDB87F80; Wed,  5 Mar 2025 21:46:18 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 5 Mar 2025 22:28:21 +0100
+Date: Wed, 5 Mar 2025 22:28:28 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b19976abc90c9712e807726f207ad3d447d876dd
-X-Git-Newrev: 14a7e99b6deb373739aeb97f38f962bf10d28c6b
+X-Git-Oldrev: 14a7e99b6deb373739aeb97f38f962bf10d28c6b
+X-Git-Newrev: e070406523af4547d94fd3fea96354622eccb0ad
 X-Patchwork-Hint: ignore
-Message-Id: <20250305214618.75F9987F7F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/mender/x86_64/post-build.sh: fix
- device_type location
+Message-Id: <20250305214618.89EDB87F80@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/mender/x86_64/post-image-efi.sh: fix
+ bootstrap creation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,46 +65,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14a7e99b6deb373739aeb97f38f962bf10d28c6b
+commit: https://git.buildroot.net/buildroot/commit/?id=e070406523af4547d94fd3fea96354622eccb0ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, the post-build.sh script adds device_type to /var/lib/mender,
-however, this doesn't work for two reasons:
- 1) /data/ mounts to /var/lib/mender
- 2) The device_type location in mender.conf points to /etc/mender/device_type.
-
-This leads to an error during the bootstrap process because mender reads the
-default device_type file installed by mender.mk in /etc/mender, leading to the
-following error:
+As the mender_x86_64_efi_defconfig does not build the xz package, creating a
+boostrap image with a lzma compression results in the following error on boot:
 
 ```
 Error while handling bootstrap Artifact, continuing: invalid bootstrap
-Artifact: readHeaderV3: handleHeaderReads: image
-(device types [buildroot-x86_64]) not compatible with device BUILDROOT_DEVICE
+Artifact: readHeaderV3: handleHeaderReads: readHeader: readNext: Failed to get
+next header: reader: error reading archive: unexpected EOF
 ```
 
-Set the creation of the device_type file in board/mender/x86_64/post-build.sh
-to /etc/mender/device_type to fix the error.
+This also results in the same error for the generated mender image, as it's
+also created with lzma compression unconditionally.
+
+Set the compression to none to resolve the above error.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/mender/x86_64/post-build.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ board/mender/x86_64/post-image-efi.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/mender/x86_64/post-build.sh b/board/mender/x86_64/post-build.sh
-index 5e6967ebd1..9e909e9281 100755
---- a/board/mender/x86_64/post-build.sh
-+++ b/board/mender/x86_64/post-build.sh
-@@ -42,7 +42,7 @@ mender_fixup() {
- main() {
-     parse_args "${@}"
-     mender_fixup
--    echo "device_type=${DEVICE_TYPE}" > "${TARGET_DIR}/var/lib/mender/device_type"
-+    echo "device_type=${DEVICE_TYPE}" > "${TARGET_DIR}/etc/mender/device_type"
- }
+diff --git a/board/mender/x86_64/post-image-efi.sh b/board/mender/x86_64/post-image-efi.sh
+index 3d4ef1176a..a3e262f8fe 100755
+--- a/board/mender/x86_64/post-image-efi.sh
++++ b/board/mender/x86_64/post-image-efi.sh
+@@ -53,7 +53,7 @@ generate_mender_bootstrap_artifact() {
  
- main "${@}"
+   "${HOST_DIR}"/bin/mender-artifact \
+     write bootstrap-artifact \
+-    --compression lzma \
++    --compression none \
+     --artifact-name "${ARTIFACT_NAME}" \
+     --device-type "${DEVICE_TYPE}" \
+     --provides "rootfs-image.version:${ARTIFACT_NAME}" \
+@@ -68,7 +68,7 @@ generate_mender_image() {
+     echo "Creating ${BINARIES_DIR}/${DEVICE_TYPE}-${ARTIFACT_NAME}.mender"
+     "${HOST_DIR}/bin/mender-artifact" \
+         write rootfs-image \
+-        --compression lzma \
++        --compression none \
+         -t "${DEVICE_TYPE}" \
+         -n "${BR2_VERSION}" \
+         -f "${BINARIES_DIR}/rootfs.ext2" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
