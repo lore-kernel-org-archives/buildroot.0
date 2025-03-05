@@ -1,53 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D46BC19F32
-	for <buildroot@archiver.kernel.org>; Wed,  5 Mar 2025 20:02:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8440BC19F32
+	for <buildroot@archiver.kernel.org>; Wed,  5 Mar 2025 20:02:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD56960D4E;
-	Wed,  5 Mar 2025 20:02:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B31040C82;
+	Wed,  5 Mar 2025 20:02:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LZvmA-O2h9jb; Wed,  5 Mar 2025 20:02:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K60YDnosefG4; Wed,  5 Mar 2025 20:02:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D382060B78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 192A140805
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D382060B78;
-	Wed,  5 Mar 2025 20:02:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D5C5194
- for <buildroot@buildroot.org>; Wed,  5 Mar 2025 20:02:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 192A140805;
+	Wed,  5 Mar 2025 20:02:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BFDC3E2E
+ for <buildroot@buildroot.org>; Wed,  5 Mar 2025 20:02:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9070460676
- for <buildroot@buildroot.org>; Wed,  5 Mar 2025 20:02:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9DC5A409FD
+ for <buildroot@buildroot.org>; Wed,  5 Mar 2025 20:02:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YmRRLb5pQZnk for <buildroot@buildroot.org>;
- Wed,  5 Mar 2025 20:02:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8EAF60710
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B8EAF60710
- for <buildroot@buildroot.org>; Wed,  5 Mar 2025 20:02:29 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B27DC87EF1; Wed,  5 Mar 2025 20:02:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0d8BmG2OvKbj for <buildroot@buildroot.org>;
+ Wed,  5 Mar 2025 20:02:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6E9AF401FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6E9AF401FB
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6E9AF401FB
+ for <buildroot@buildroot.org>; Wed,  5 Mar 2025 20:02:46 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 6678F2008E5;
+ Wed,  5 Mar 2025 21:02:40 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 05 Mar 2025 21:02:40 +0100
+MIME-Version: 1.0
+Date: Wed, 05 Mar 2025 21:02:40 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Wed, 5 Mar 2025 20:07:39 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8a8b6a3a2f9774bae073aefdbd35e3127ea15f51
-X-Git-Newrev: 33b23bfbd9d208b13c3860ad26926bc10a22e74c
-X-Patchwork-Hint: ignore
-Message-Id: <20250305200229.B27DC87EF1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/acmesystems_acqua_a5_*: bump to
- Linux 6.12.9
+To: Romain Naour <romain.naour@smile.fr>
+Cc: buildroot@buildroot.org, Michael Walle <michael@walle.cc>, Niklas Cassel
+ <niklas.cassel@wdc.com>
+In-Reply-To: <20250221225529.441084-1-romain.naour@smile.fr>
+References: <20250221225529.441084-1-romain.naour@smile.fr>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <71bc39ac04b174cbfc4f89494cd2baa8@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1741204963;
+ bh=24/6fyCjHz/mvF6TSpAAWk8lcgEfaUzKX0rG3o1Rd6c=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=liZ5Zu2J3QvQgSWd+/zl8YByacf10MAu6u3g7BVLBHyXyDj0LEQh1JvBuMrVLWwc4
+ FBJggfsWYISYbEwEYstkQcF5hbD1qTODvF/MEdP3IzUJ45N+nZIgikJaDUMONFnqgS
+ Hjr4i8d7jYBYzVuhVbsusSLJ0paD7Z0Bzu6Fmg6FRT9YDtzlBVAaPCwXyMpsFIhNqN
+ +nvBxIW/Shha6ztwhy+WMn445lqKydEyfyYI9ddMskygZFXYTk/O2ogIJR2jyBmJ2t
+ qzSvT+pWJo2PBBqulxdVsmuDGfBXGaHkcr/UmRaA6bBMU6Evx+TJFxiwQFMErACBq9
+ i7WOp760ejSJQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=liZ5Zu2J
+Subject: Re: [Buildroot] [PATCH v6 1/5] linux: add support for device tree
+ overlays
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,79 +84,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33b23bfbd9d208b13c3860ad26926bc10a22e74c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 21/02/2025 23:55, Romain Naour via buildroot wrote:
+> From: Michael Walle <michael@walle.cc>
+> 
+> The linux kernel can build device tree overlays (.dtbo) itself. Add
+> support to build and copy them along with the actual device trees.
+> These can either be in-tree device tree overlays
+> (BR2_LINUX_KERNEL_INTREE_DTSO_NAMES) or they can be provided outside of
+> the kernel (BR2_LINUX_KERNEL_CUSTOM_DTS_PATH). In the latter case, the
+> overlay source files will be copied into the kernel tree first.
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> Reviewed-by: Niklas Cassel <niklas.cassel@wdc.com>
+> Signed-off-by: Romain Naour <romain.naour@smile.fr>
 
-Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Acked-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Tested-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Reviewed-by: Niklas Cassel <niklas.cassel@wdc.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- board/acmesystems/acqua-a5/patches/linux/linux.hash | 2 +-
- configs/acmesystems_acqua_a5_256mb_defconfig        | 4 ++--
- configs/acmesystems_acqua_a5_512mb_defconfig        | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/board/acmesystems/acqua-a5/patches/linux/linux.hash b/board/acmesystems/acqua-a5/patches/linux/linux.hash
-index 4b20a009a7..7a4c4e57c9 100644
---- a/board/acmesystems/acqua-a5/patches/linux/linux.hash
-+++ b/board/acmesystems/acqua-a5/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  b66a5b863b0f8669448b74ca83bd641a856f164b29956e539bbcb5fdeeab9cc6  linux-6.6.30.tar.xz
-+sha256  87be0360df0931b340d2bac35161a548070fbc3a8c352c49e21e96666c26aeb4  linux-6.12.9.tar.xz
-diff --git a/configs/acmesystems_acqua_a5_256mb_defconfig b/configs/acmesystems_acqua_a5_256mb_defconfig
-index d21ff97216..a50e306b1b 100644
---- a/configs/acmesystems_acqua_a5_256mb_defconfig
-+++ b/configs/acmesystems_acqua_a5_256mb_defconfig
-@@ -2,7 +2,7 @@ BR2_arm=y
- BR2_cortex_a5=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/acmesystems/acqua-a5/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.30"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_DIR="board/acmesystems/acqua-a5/dts"
-diff --git a/configs/acmesystems_acqua_a5_512mb_defconfig b/configs/acmesystems_acqua_a5_512mb_defconfig
-index d83a058537..6ae8d037e7 100644
---- a/configs/acmesystems_acqua_a5_512mb_defconfig
-+++ b/configs/acmesystems_acqua_a5_512mb_defconfig
-@@ -2,7 +2,7 @@ BR2_arm=y
- BR2_cortex_a5=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/acmesystems/acqua-a5/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.30"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_DIR="board/acmesystems/acqua-a5/dts"
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
