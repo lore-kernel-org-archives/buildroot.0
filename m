@@ -1,82 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52933C282D1
-	for <buildroot@archiver.kernel.org>; Thu,  6 Mar 2025 11:55:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E8A7C282EC
+	for <buildroot@archiver.kernel.org>; Thu,  6 Mar 2025 14:36:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AEE0060AF2;
-	Thu,  6 Mar 2025 11:55:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 37FD68361C;
+	Thu,  6 Mar 2025 14:36:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XIhVdAOCyq7o; Thu,  6 Mar 2025 11:55:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q45i8KwSQWtg; Thu,  6 Mar 2025 14:36:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9814B60B34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46D4A83639
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9814B60B34;
-	Thu,  6 Mar 2025 11:55:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B079DE2E
- for <buildroot@buildroot.org>; Thu,  6 Mar 2025 11:55:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46D4A83639;
+	Thu,  6 Mar 2025 14:36:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9071395F
+ for <buildroot@buildroot.org>; Thu,  6 Mar 2025 14:35:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 80E4E406DE
- for <buildroot@buildroot.org>; Thu,  6 Mar 2025 11:55:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F2B440BF2
+ for <buildroot@buildroot.org>; Thu,  6 Mar 2025 14:35:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y5fSmRtvXAr4 for <buildroot@buildroot.org>;
- Thu,  6 Mar 2025 11:55:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.243.197.30;
- helo=mail.hostpark.net; envelope-from=christian@klarinett.li;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org ACD1740570
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACD1740570
-Received: from mail.hostpark.net (mail.hostpark.net [212.243.197.30])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ACD1740570
- for <buildroot@buildroot.org>; Thu,  6 Mar 2025 11:54:58 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by mail.hostpark.net (Postfix) with ESMTP id 21BD316649;
- Thu,  6 Mar 2025 12:54:56 +0100 (CET)
-X-Virus-Scanned: by Hostpark/NetZone Mailprotection at hostpark.net
-Received: from mail.hostpark.net ([127.0.0.1])
- by localhost (mail1.hostpark.net [127.0.0.1]) (amavisd-new, port 10224)
- with ESMTP id YdhpVzrkeKK0; Thu,  6 Mar 2025 12:54:55 +0100 (CET)
-Received: from customer (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mail.hostpark.net (Postfix) with ESMTPSA id 9F13D1660E;
- Thu,  6 Mar 2025 12:54:54 +0100 (CET)
+ id FD1eHOHLBkUB for <buildroot@buildroot.org>;
+ Thu,  6 Mar 2025 14:35:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ envelope-from=mickael.tansorier@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CF1D340BE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF1D340BE8
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CF1D340BE8
+ for <buildroot@buildroot.org>; Thu,  6 Mar 2025 14:35:56 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-3912baafc58so450293f8f.1
+ for <buildroot@buildroot.org>; Thu, 06 Mar 2025 06:35:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1741271754; x=1741876554;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=/rlB1l3V9E51n9C4unJV8DwCyeFLCTlKV5ywZeG+ch4=;
+ b=sJ8Oz8tfpZ8dudc2TDJlhq5I/ljp/CLtRx3VjT1thxCgTnuF9x3kQKCC4A7VVW9Oad
+ NW7H3HBPyf3u0Vj48r/HGZGL+QhUhlitZ6Xi9aI4CBeTxPpIlyzEXEnb5KwlBR9W2vX9
+ CO+f4ejxBpOwUI42k9j+jRjLelDnA/7oDqq+vTzXWM+PnwdOZ23prlnAIgWY8j4KQyV3
+ W4Sz2ulB4+WFgYyIo6ky5nB0MVyyKaw9SpJhDp0uD610S9iuTyFgLoZVNRe8D6yvxe3X
+ Bko7ToG/xdiiQB36Za791vxqRRSn3F/of4/PeRk/Lucof3vlHIkVi3nXBkhj3VMn4PIi
+ vI7g==
+X-Gm-Message-State: AOJu0YzGheh8FufDE9g1Vb5Ktg7MrH3E4robkbAfUUzaMYIASmhKBgZV
+ 7tTD/Etc4TWTN/1WKB6oDfCU3PNmtLh6HrCHUv29hSYuAI6K9YTIn8hb78LDSqDgq9TTY9PCeIX
+ 0
+X-Gm-Gg: ASbGncvJaJGiFI8DT4VUL7HTuVZmsOCJD9hJGSsxKJvMrh+ViWGuVPdSdUKAA2Qxy9C
+ bfXMG4DXQ09wg2FRTPTfli6aiFCHcZKIczwpBMl6LXKPWAcsq7yio7RMkv/5lTtFqe1UE3Nekly
+ 1ad7nm6qWHgxLicwT7NqQuC//6IOaYjvzz7acsW3gGO3/7apHIrcgRQ/D977DILGOycLtrxLS6R
+ Z47U+44xfn7iCTXDrKRwjkQ+apoQPs6gca/wIrzNR7ex7N0GwSJu9dTuJ+V1XxFSryKeFcEjVNh
+ sbB5vvkxV3sHd9312JJJsxchaw+bF9GGGnTxGcq7BTkx3xmWuVgJ5GyvYHyFa/LVangs7lF0H3B
+ nFJr0IoiNYevyxuWiXHH62dYz21/Yb/aHZZjT9l+Ld+nh
+X-Google-Smtp-Source: AGHT+IHi5GM4mm1xiIMyVOl1ObKKKq/aJZ49yao0AMtRBGxJ3shq6TNoytnF6plqXn4KMVyTT/hrrA==
+X-Received: by 2002:a05:6000:2d0e:b0:390:dfa1:3448 with SMTP id
+ ffacd0b85a97d-3911f7af240mr4747178f8f.43.1741271754415; 
+ Thu, 06 Mar 2025 06:35:54 -0800 (PST)
+Received: from baku.localdomain
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-43bdd93c9d6sm21475045e9.26.2025.03.06.06.35.53
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 06 Mar 2025 06:35:54 -0800 (PST)
 To: buildroot@buildroot.org
-Cc: Christian Hitz <christian.hitz@bbv.ch>,
- Jesse Van Gavere <jesseevg@gmail.com>,
- Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu,  6 Mar 2025 12:54:43 +0100
-Message-ID: <20250306115443.2453044-1-christian@klarinett.li>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ =?UTF-8?q?Micka=C3=ABl=20Tansorier?= <mickael.tansorier@smile.fr>
+Date: Thu,  6 Mar 2025 15:35:52 +0100
+Message-ID: <20250306143552.1719990-1-mickael.tansorier@smile.fr>
 X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20240911131230.2299474-1-christian@klarinett.li>
-References: <20240911131230.2299474-1-christian@klarinett.li>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=klarinett.li; h=
- content-transfer-encoding:mime-version:references:in-reply-to
- :x-mailer:message-id:date:date:subject:subject:from:from; s=
- sel2011a; t=1741262095; bh=kAyQwlVkCNZ5wduab57xH/FpqcDzOaw6mfU7o
- 9ZADrI=; b=OpVWuBDjaW7ZAuz1LaAFzpCB06yoHOvD8ZtDsrcxApUDBhTjzOFSi
- ch6kJLs7s+c+R4pw0cxPoQCPIcuLT3ijFbTTbEn7zBcEX+o8PZcs3xkDQ73I4cnI
- nscE1co5v8Gqnx/MScdm+pZDB06Vqm3uXOl1YdoaFSsEPqPuHNdMiU=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=smile.fr; s=google; t=1741271754; x=1741876554; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=/rlB1l3V9E51n9C4unJV8DwCyeFLCTlKV5ywZeG+ch4=;
+ b=XtI64exQPICYTyR6a7fYjzc23f4qNUwCg4x3VI6AbJJS8fllZBkYCr+mEZcRCBPBBy
+ OpWSEFU/6alOD7ZMn2uiXoumcd9GLHwmr7bkn2ClqHGY+BiJEboLydTEmaiB6sCDdtrU
+ XC0TJlCVNCi/bZ1862DSJDJoRmB/TSXPBn/qw=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=klarinett.li
+ header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
- unprotected) header.d=klarinett.li header.i=@klarinett.li header.a=rsa-sha256
- header.s=sel2011a header.b=OpVWuBDj
-Subject: [Buildroot] [PATCH v2] package/qt6/qt6connectivity: new package
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=XtI64exQ
+Subject: [Buildroot] [PATCH] package/minetest: Fix missing license about
+ irrlicht
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,135 +108,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Hitz via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Hitz <christian@klarinett.li>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Micka=C3=ABl_Tansorier_via_buildroot?=
+ <buildroot@buildroot.org>
+Reply-To: =?UTF-8?q?Micka=C3=ABl=20Tansorier?= <mickael.tansorier@smile.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Christian Hitz <christian.hitz@bbv.ch>
-
-Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
----
-Changes v1 -> v2:
-  - remove concurrent dependency
-  - make dependency to neard runtime-only
-  - fix licenses and their hashes
----
- package/qt6/Config.in                         |  1 +
- package/qt6/qt6connectivity/Config.in         | 17 ++++++++
- .../qt6/qt6connectivity/qt6connectivity.hash  | 11 +++++
- .../qt6/qt6connectivity/qt6connectivity.mk    | 42 +++++++++++++++++++
- 4 files changed, 71 insertions(+)
- create mode 100644 package/qt6/qt6connectivity/Config.in
- create mode 100644 package/qt6/qt6connectivity/qt6connectivity.hash
- create mode 100644 package/qt6/qt6connectivity/qt6connectivity.mk
-
-diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-index 10594691cf..3597417ef7 100644
---- a/package/qt6/Config.in
-+++ b/package/qt6/Config.in
-@@ -45,6 +45,7 @@ if BR2_PACKAGE_QT6
- 
- source "package/qt6/qt6base/Config.in"
- source "package/qt6/qt6charts/Config.in"
-+source "package/qt6/qt6connectivity/Config.in"
- source "package/qt6/qt6core5compat/Config.in"
- source "package/qt6/qt6declarative/Config.in"
- source "package/qt6/qt6graphs/Config.in"
-diff --git a/package/qt6/qt6connectivity/Config.in b/package/qt6/qt6connectivity/Config.in
-new file mode 100644
-index 0000000000..ba329d732e
---- /dev/null
-+++ b/package/qt6/qt6connectivity/Config.in
-@@ -0,0 +1,17 @@
-+config BR2_PACKAGE_QT6CONNECTIVITY
-+	bool "qt6connectivity"
-+	depends on BR2_PACKAGE_NEARD || BR2_PACKAGE_BLUEZ5_UTILS
-+	select BR2_PACKAGE_QT6BASE_NETWORK
-+	select BR2_PACKAGE_QT6BASE_DBUS
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  Qt Connectivity module provides support for Bluetooth/NFC
-+	  peripherials.
-+
-+	  https://doc.qt.io/qt-6/qtbluetooth-index.html
-+	  https://doc.qt.io/qt-6/qtnfc-index.html
-+
-+comment "qt6connectivity needs neard and/or bluez5_utils"
-+	depends on !BR2_PACKAGE_NEARD && !BR2_PACKAGE_BLUEZ5_UTILS
-diff --git a/package/qt6/qt6connectivity/qt6connectivity.hash b/package/qt6/qt6connectivity/qt6connectivity.hash
-new file mode 100644
-index 0000000000..f2c10a0adb
---- /dev/null
-+++ b/package/qt6/qt6connectivity/qt6connectivity.hash
-@@ -0,0 +1,11 @@
-+# Hash from: https://download.qt.io/official_releases/qt/6.8/6.8.1/submodules/qtconnectivity-everywhere-src-6.8.1.tar.xz.sha256
-+sha256  ccfd46e7ad2290710788274e145fb1f224d8a5ce360764ec10824b5908a6441c  qtconnectivity-everywhere-src-6.8.1.tar.xz
-+
-+# Hashes for license files:
-+sha256  e3ba223bb1423f0aad8c3dfce0fe3148db48926d41e6fbc3afbbf5ff9e1c89cb  LICENSES/Apache-2.0.txt
-+sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
-+sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
-+sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
-diff --git a/package/qt6/qt6connectivity/qt6connectivity.mk b/package/qt6/qt6connectivity/qt6connectivity.mk
-new file mode 100644
-index 0000000000..4d77b2328b
---- /dev/null
-+++ b/package/qt6/qt6connectivity/qt6connectivity.mk
-@@ -0,0 +1,42 @@
-+################################################################################
-+#
-+# qt6connectivity
-+#
-+################################################################################
-+
-+QT6CONNECTIVITY_VERSION = $(QT6_VERSION)
-+QT6CONNECTIVITY_SITE = $(QT6_SITE)
-+QT6CONNECTIVITY_SOURCE = qtconnectivity-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6CONNECTIVITY_VERSION).tar.xz
-+QT6CONNECTIVITY_INSTALL_STAGING = YES
-+QT6CONNECTIVITY_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+QT6CONNECTIVITY_CMAKE_BACKEND = ninja
-+
-+QT6CONNECTIVITY_LICENSE = \
-+	GPL-2.0 or GPL-3.0 or LGPL-3.0, \
-+	GPL-3.0 with Qt GPL exception 1.0 (sdpscanner), \
-+	BSD-3-Clause (build system, examples), \
-+	Apache-2.0 (examples), \
-+	GPL-3.0, GFDL-1.3 no invariants (docs)
-+
-+QT6CONNECTIVITY_LICENSE_FILES = \
-+	LICENSES/Apache-2.0.txt \
-+	LICENSES/BSD-3-Clause.txt \
-+	LICENSES/GFDL-1.3-no-invariants-only.txt \
-+	LICENSES/GPL-2.0-only.txt \
-+	LICENSES/GPL-3.0-only.txt \
-+	LICENSES/LGPL-3.0-only.txt \
-+	LICENSES/Qt-GPL-exception-1.0.txt
-+
-+QT6CONNECTIVITY_CONF_OPTS = \
-+	-DQT_HOST_PATH=$(HOST_DIR) \
-+	-DBUILD_WITH_PCH=OFF \
-+	-DQT_BUILD_EXAMPLES=OFF \
-+	-DQT_BUILD_TESTS=OFF
-+
-+QT6CONNECTIVITY_DEPENDENCIES = \
-+	qt6base
-+
-+QT6CONNECTIVITY_DEPENDENCIES += $(if $(BR2_PACKAGE_BLUEZ5_UTILS),bluez5_utils)
-+
-+$(eval $(cmake-package))
--- 
-2.48.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+aXJybGljaHQgd2FzIGluY2x1ZGUgZGlyZWN0bHkgaW50byBzb3VyY2UgY29kZSBhZnRlciB2ZXJz
+aW9uIDUuOVsxXQoKWzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9taW5ldGVzdC9pcnJsaWNodC9ibG9i
+L21hc3Rlci9SRUFETUUubWQKClNpZ25lZC1vZmYtYnk6IE1pY2thw6tsIFRhbnNvcmllciA8bWlj
+a2FlbC50YW5zb3JpZXJAc21pbGUuZnI+Ci0tLQogcGFja2FnZS9taW5ldGVzdC9taW5ldGVzdC5o
+YXNoIHwgMSArCiBwYWNrYWdlL21pbmV0ZXN0L21pbmV0ZXN0Lm1rICAgfCAyICstCiAyIGZpbGVz
+IGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvbWluZXRlc3QvbWluZXRlc3QuaGFzaCBiL3BhY2thZ2UvbWluZXRlc3QvbWluZXRlc3Qu
+aGFzaAppbmRleCA1ZDg1OTM4NGNhLi4wNDc3ZGM1ZDJhIDEwMDY0NAotLS0gYS9wYWNrYWdlL21p
+bmV0ZXN0L21pbmV0ZXN0Lmhhc2gKKysrIGIvcGFja2FnZS9taW5ldGVzdC9taW5ldGVzdC5oYXNo
+CkBAIC0yLDMgKzIsNCBAQAogc2hhMjU2ICBmODE3MzQzNjc4MmI1YTI1NDRhYTE5YzU0ZjU3MmE4
+MTgzMWI2Y2ZjODk0ODA3MzdjY2Y2NzY4OTkyYzY1MWVhICBtaW5ldGVzdC01LjkuMS50YXIuZ3oK
+IAogc2hhMjU2ICBiMzhjOGQ0MjhjZWRkZjhlOWI0OWRjYTYzNjEwYzc0NDk5ZDk1Mjg5NWQ3NTZi
+N2VhYjVmNWQ0Y2VmMjk1NGY2ICBMSUNFTlNFLnR4dAorc2hhMjU2ICAyYzk0MzQ4ODZkMzE0NGVh
+ZDYwNmI5NTljZjYxZGM0MTkzNWQxNzU0YzA3NGY0NzM1NDFkYTRhM2RkNDA0ZWZhICBpcnIvTElD
+RU5TRQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9taW5ldGVzdC9taW5ldGVzdC5tayBiL3BhY2thZ2Uv
+bWluZXRlc3QvbWluZXRlc3QubWsKaW5kZXggYjA3ZWE1N2VhNy4uYWMwZWE0ZWY1MiAxMDA2NDQK
+LS0tIGEvcGFja2FnZS9taW5ldGVzdC9taW5ldGVzdC5taworKysgYi9wYWNrYWdlL21pbmV0ZXN0
+L21pbmV0ZXN0Lm1rCkBAIC02LDcgKzYsNyBAQAogCiBNSU5FVEVTVF9WRVJTSU9OID0gNS45LjEK
+IE1JTkVURVNUX1NJVEUgPSAkKGNhbGwgZ2l0aHViLG1pbmV0ZXN0LG1pbmV0ZXN0LCQoTUlORVRF
+U1RfVkVSU0lPTikpCi1NSU5FVEVTVF9MSUNFTlNFID0gTEdQTC0yLjErIChjb2RlKSwgQ0MtQlkt
+U0EtMy4wICh0ZXh0dXJlcyBhbmQgc291bmRzKQorTUlORVRFU1RfTElDRU5TRSA9IExHUEwtMi4x
+KyAoY29kZSksIENDLUJZLVNBLTMuMCAodGV4dHVyZXMgYW5kIHNvdW5kcyksIFpsaWIgKGlycmxp
+Y2h0KQogTUlORVRFU1RfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UudHh0CiBNSU5FVEVTVF9DUEVf
+SURfVkVORE9SID0gbWluZXRlc3QKIAotLSAKMi40OC4xCgpfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
+bmZvL2J1aWxkcm9vdAo=
