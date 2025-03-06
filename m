@@ -1,80 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B673AC282D1
-	for <buildroot@archiver.kernel.org>; Thu,  6 Mar 2025 20:35:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB521C282D1
+	for <buildroot@archiver.kernel.org>; Thu,  6 Mar 2025 20:48:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF8596109A;
-	Thu,  6 Mar 2025 20:35:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M6ov5_yKe22e; Thu,  6 Mar 2025 20:35:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 653D461021
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 653D461021;
-	Thu,  6 Mar 2025 20:35:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 436E071F
- for <buildroot@buildroot.org>; Thu,  6 Mar 2025 20:35:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 312D3408D0
- for <buildroot@buildroot.org>; Thu,  6 Mar 2025 20:35:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F162D4062F;
+	Thu,  6 Mar 2025 20:48:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DCRm8Y8XTQlY for <buildroot@buildroot.org>;
- Thu,  6 Mar 2025 20:35:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 76DBF40882
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76DBF40882
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 76DBF40882
- for <buildroot@buildroot.org>; Thu,  6 Mar 2025 20:35:01 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a002f.dip0.t-ipconnect.de [91.58.0.47])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D1315A4C1457;
- Thu,  6 Mar 2025 21:34:07 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:58864)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.1)
- (envelope-from <bernd@kuhls.net>) id 1tqHux-000000005OO-0IfN;
- Thu, 06 Mar 2025 20:34:07 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id hSLBKzP4DpGw; Thu,  6 Mar 2025 20:48:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33E674133E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33E674133E;
+	Thu,  6 Mar 2025 20:48:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3EC0271F
+ for <buildroot@buildroot.org>; Thu,  6 Mar 2025 20:48:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0B58940139
+ for <buildroot@buildroot.org>; Thu,  6 Mar 2025 20:48:07 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jWKGolX-j9I6 for <buildroot@buildroot.org>;
+ Thu,  6 Mar 2025 20:48:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 47141400D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47141400D7
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 47141400D7
+ for <buildroot@buildroot.org>; Thu,  6 Mar 2025 20:48:04 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id D0093B0055A;
+ Thu,  6 Mar 2025 21:47:56 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
- Daniel Lang <dalang@gmx.at>, Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Julien Olivain <ju.o@free.fr>, Romain Naour <romain.naour@gmail.com>,
- Valentin Korenblit <valentinkorenblit@gmail.com>
-Date: Thu,  6 Mar 2025 21:34:05 +0100
-Message-Id: <20250306203405.3348934-5-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250306203405.3348934-1-bernd@kuhls.net>
-References: <20250306203405.3348934-1-bernd@kuhls.net>
+Date: Thu,  6 Mar 2025 21:47:30 +0100
+Message-ID: <20250306204730.29180-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.48.1
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202412041019; t=1741293247;
- bh=/LCA0JwY/sXTQnD61iry4sDbP/Vr+GHq+Fy0pvgDxTU=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=V8rdQV8KqUZa1+Irq6QwB3stuS5xtw9rGlLGPOT9uBDVDH2iP5Nqj33lzFqqP2tc4
- qWpuIzEMLtAkN7Ko6O+vYElhJd2JMlkHtLbiQjgH2sAPJ8pVga4APqVES/ens8/qD5
- 8v8fUY0Rt3qiSsAxfs/3AQX6LFZP2muFWvqxUSyxpIEm+LZnfx0oVFIrzM4KP+wqLE
- 576oYcmHFxTGRoziO7LYy/cx8f+3NjWiCrRbaRWMfgHwD6BRuT+h/z6MyCpO2RB5LQ
- DOOlp/WOu1LYsidZQPUSl06ITb3+OEPGgss094ahEHwfhJGD161Pz+xa1vQyR0N3ut
- a6WEcoyqqW9RQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1741294081;
+ bh=HC223wAgCTgBHtqkml+YuOj00u4JBhjCE3IA5BAF7ro=;
+ h=From:To:Cc:Subject:Date:From;
+ b=jarYSu13PoQsu0zu0HFuIAOhhsxbjSc/2Kbu+xHYHLLPcYZXwGk1IdVFWFXoqbirE
+ ACLBwoNDSutb85muk5G0C1lar8uxo2PJtyOeIb5872APptNO1w7bhE6HwOxn0MX7Qd
+ Z/TEvOZDfz7c7S0Llaga8Rhx1gsuI9pm3QD6ZwSvdHDMUUYsVUwMYSN0LPL+a0zcyr
+ Nfo5lWLSADJ5lO3xnczYs+EC883ihsRJYKno8U0nSTexsVUzEF3PU9IwyIr13ucQxc
+ +pP+zG/FZPruo735kAutj/K4l0bblvCOwOjmUFQj4WLvsuIY6fhnJPjFFs7Ndb7a7a
+ 4LV1UKEXrjl4A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202412041019 header.b=V8rdQV8K
-Subject: [Buildroot] [PATCH/next v9 5/5] package/{mesa3d,
- mesa3d-headers}: bump version to 25.0.1
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=jarYSu13
+Subject: [Buildroot] [PATCH next 1/1] configs/freescale_imx93frdm: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,583 +77,167 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Martin Chabot <martin.chabot@gmail.com>, Julien Olivain <ju.o@free.fr>,
+ Fabio Estevam <festevam@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://lists.freedesktop.org/archives/mesa-announce/2024-May/000762.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-June/000763.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-June/000765.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-July/000766.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-July/000767.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-July/000771.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-August/000773.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-August/000776.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-September/000778.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-September/000779.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-October/000780.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-October/000781.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-October/000782.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-November/000784.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-November/000786.html
-https://lists.freedesktop.org/archives/mesa-announce/2024-December/000788.html
-https://docs.mesa3d.org/relnotes/24.3.2.html
-https://docs.mesa3d.org/relnotes/24.3.3.html
-https://docs.mesa3d.org/relnotes/24.3.4.html
-https://lists.freedesktop.org/archives/mesa-announce/2025-February/000793.html
-https://lists.freedesktop.org/archives/mesa-announce/2025-March/000794.html
-------------------------------------------------------------------------
-Changes needed for the bump to 24.1.x:
-
-Added dependency to llvm & Co. for iris driver due to upstream commit:
-https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=24.1&id=a512c2a8b572c5da360873320dbbd343c6223cd6
-
-Added host version of mesa tool intel_clc needed for target build of the
-iris driver.
-
-Added dependency to host-python-pycparser for etnaviv driver due to
-upstream commit:
-https://cgit.freedesktop.org/mesa/mesa/commit/src/etnaviv/hwdb/meson.build?h=24.1&id=2192e620bb0c68b75ff45165d0b117c7ecb77268
-
-Added dependency to host-python-ply for intel vulkan driver due to
-upstream commit:
-https://cgit.freedesktop.org/mesa/mesa/commit/src/intel/vulkan/grl/meson.build?h=24.1&id=dc1aedef2bd054884685ad971a3ef5be07ecd101
-
-Although this dependency exists since mesa3d 22.3 it is only needed when
-intel-clc is enabled, this dependency is added with this patch so no need
-to backport this dependency to older buildroot trees.
-
-Update configure parameter of glvnd option due to upstream commit:
-https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=24.1&id=4f25b84b2460524d375424a81b42faa4d99c8e60
-------------------------------------------------------------------------
-Changes needed for the bump to 24.2.x:
-
-Added dependency to host-python-pyyaml to host and target build, needed
-due to upstream commit
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/a3813327575e8875c8c3ed24b5f45a0b7ba64446
-
-Rebased patch 0002 due to upstream commit:
-https://cgit.freedesktop.org/mesa/mesa/commit/src/gallium/drivers/vc4/meson.build?h=24.2&id=da70827656757cd070faac7aff5ca057f1e7fb8a
-
-Renamed BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST to
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE (also updated tests) and
-added new option BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LLVMPIPE due to
-upstream commit
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/010b2f9497ab256d9e8041207902948331af5b4b
-"gallium/meson: Deconflate swrast/softpipe/llvmpipe"
-------------------------------------------------------------------------
-Changes needed for the bump to 24.3.x:
-
-Rebased patch 0002 again due to upstream commit:
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/25ba90fd888cef431c2098c8afdb0a2bbd34b303
-
-Removed dri3 configure option:
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/8f6fca89aa1812b03da6d9f7fac3966955abc41e
-
-Removed gallium-omx configure option:
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/9b6c27a320ab4b0fcf1fb16220ae7c3d3f06f7df
-
-Removed gallium kmsro configure option:
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/89863a050bea429d9574a307bc28953bb60accaf
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/70813c1c13b99cb029c8fa3537163650bdd17b6d
-No legacy option needed due to automatic handling by the mesa build
-system: "Automatically include it if we're building with a driver that
-depends on it, and don't include it if we're not."
-------------------------------------------------------------------------
-Changes needed for the bump to 25.0.x:
-
-Rebased patch 0001, added license files and updated license hash
-due to upstream commits which restructured the license files:
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/69849bc4d1dd3cb9e9dd5d83b2ff63b8b4edce9b#e672208340b30f973cdab11421f1c91b39d5c02e
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/c22d640fe94f6390068f79475fb6b2c45bb2557b
-
-Removed configure option opencl-spirv due to upstream commit:
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/80c4ffb61a91ed252d45e38a96e893cec0771940
-
-Updated configure options for host-build clc which was also renamed from
-intel_clc to mesa_clc, added host version of vtn_bindgen:
-https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/32719
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/13fe5a597bb8ededaa7c1c83f3b64c4e90315618
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/5ddeea9a62f720e9fd3a6e5c76f74ef6e8b1fdf8
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-v9: bumped to 25.0.1
-v8: bumped to 25.0.0
-v7: removed kmsro configure option (Fiona), rebased
-v6: added comment why host-mesa3d is needed (Julien)
-v5: bumped to 24.3.4, rebased
-v4: bumped to 24.3.3
-v3: bumped to 24.3.2
-    renamed remaining occurences of BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
-    to BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE (Andreas)
-v2: sed -i 's/SWRAST/SOFTPIPE/g' support/testing/tests/package/test_*.py
-    (Julien)
-
- Config.in.legacy                              |  7 ++
- package/mesa3d-headers/mesa3d-headers.mk      |  2 +-
- ...t-proper-value-for-LIBCLC_INCLUDEDIR.patch |  8 +--
- ...tion-to-disable-optional-neon-suppor.patch | 18 ++---
- package/mesa3d/Config.in                      | 38 ++++++----
- package/mesa3d/mesa3d.hash                    | 10 +--
- package/mesa3d/mesa3d.mk                      | 69 ++++++++++++++-----
- support/testing/tests/package/test_flutter.py |  2 +-
- .../tests/package/test_glslsandbox_player.py  |  2 +-
- support/testing/tests/package/test_glxinfo.py |  2 +-
- support/testing/tests/package/test_kmscube.py |  2 +-
- .../tests/package/test_python_pyqt5.py        |  2 +-
- support/testing/tests/package/test_weston.py  |  2 +-
- 13 files changed, 109 insertions(+), 55 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index f94a7db7b0..611b52e92b 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2025.02"
- 
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
-+	bool "mesa Gallium swrast driver was replaced by softpipe"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE
-+	help
-+	  The Gallium swrast driver was replaced by softpipe.
-+
- config BR2_PACKAGE_ANGULARJS
- 	bool "angularjs has been removed"
- 	select BR2_LEGACY
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 33c60b285f..adea447a8c 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 24.0.9
-+MESA3D_HEADERS_VERSION = 25.0.1
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch b/package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
-index e3c70c3f24..ff362551ea 100644
---- a/package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
-+++ b/package/mesa3d/0001-meson-Set-proper-value-for-LIBCLC_INCLUDEDIR.patch
-@@ -17,8 +17,8 @@ that they are not removed by Buildroot target-finalize logic.
- Based on the patch for autotools provided by Valentin Korenblit.
- 
- Signed-off-by: Romain Naour <romain.naour@smile.fr>
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[rebased for 20.2.0 & 20.3.0]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+[rebased for 20.2.0, 20.3.0 & 25.0.0]
- ---
-  src/gallium/frontends/clover/meson.build | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-@@ -27,7 +27,7 @@ diff --git a/src/gallium/frontends/clover/meson.build b/src/gallium/frontends/cl
- index 62ac5f5278d..ecdeb39669c 100644
- --- a/src/gallium/frontends/clover/meson.build
- +++ b/src/gallium/frontends/clover/meson.build
--@@ -27,7 +27,7 @@
-+@@ -10,7 +10,7 @@
-    '-DCL_USE_DEPRECATED_OPENCL_2_0_APIS',
-    '-DCL_USE_DEPRECATED_OPENCL_2_1_APIS',
-    '-DCL_USE_DEPRECATED_OPENCL_2_2_APIS',
-@@ -35,7 +35,7 @@ index 62ac5f5278d..ecdeb39669c 100644
- +  '-DLIBCLC_INCLUDEDIR="/usr/share"',
-    '-DLIBCLC_LIBEXECDIR="@0@/"'.format(dep_clc.get_variable(pkgconfig : 'libexecdir'))
-  ]
-- clover_spirv_cpp_args = []
-+ clover_incs = [inc_include, inc_src, inc_gallium, inc_gallium_aux]
- -- 
- 2.20.1
- 
-diff --git a/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch b/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-index f3919478a6..3b9bca0693 100644
---- a/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-+++ b/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
-@@ -9,8 +9,8 @@ to force disabling it at compile time.
- 
- Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4114
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[rebased for 20.2.0, 20.3.0, 21.1.0, 23.1.0 & 23.2.0]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+[rebased for 20.2.0, 20.3.0, 21.1.0, 23.1.0, 23.2.0 & 24.3.0]
- Signed-off-by: Peter Seiderer <ps.report@gmx.net>
- [fix syntax error after previous rebases]
- ---
-@@ -23,7 +23,7 @@ diff --git a/meson_options.txt b/meson_options.txt
- index 8e0bf2a..1cf0e07 100644
- --- a/meson_options.txt
- +++ b/meson_options.txt
--@@ -124,6 +124,13 @@ option(
-+@@ -117,6 +117,13 @@ option(
-    description : 'enable gallium va frontend.',
-  )
-  
-@@ -41,18 +41,18 @@ diff --git a/src/gallium/drivers/vc4/meson.build b/src/gallium/drivers/vc4/meson
- index 84da951..7f950de 100644
- --- a/src/gallium/drivers/vc4/meson.build
- +++ b/src/gallium/drivers/vc4/meson.build
--@@ -84,7 +84,7 @@ files_libvc4 = files(
-- vc4_c_args = []
-+@@ -72,7 +72,7 @@ files_libvc4 = files(
-+ ]
-  
-  libvc4_neon = []
- -if host_machine.cpu_family() == 'arm'
- +if host_machine.cpu_family() == 'arm' and not get_option('gallium-vc4-neon').disabled()
-    libvc4_neon = static_library(
-      'vc4_neon',
--     'vc4_tiling_lt_neon.c',
--@@ -93,7 +93,7 @@ if host_machine.cpu_family() == 'arm'
--     ],
--     c_args : '-mfpu=neon',
-+     'vc4_tiling_lt.c',
-+@@ -82,7 +82,7 @@ if host_machine.cpu_family() == 'arm'
-+     c_args : ['-mfpu=neon', '-DV3D_BUILD_NEON'],
-+     dependencies : vc4_deps,
-    )
- -  vc4_c_args += '-DUSE_ARM_ASM'
- +  vc4_c_args += '-DVC4_TILING_LT_NEON'
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 0412998214..ef2c2c3258 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -50,7 +50,8 @@ config BR2_PACKAGE_MESA3D_OPENCL
- 	bool "OpenCL support"
- 	depends on BR2_PACKAGE_MESA3D_LLVM
- 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 || \
--		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
-+		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI || \
-+		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
- 	select BR2_PACKAGE_LLVM_RTTI
- 	select BR2_PACKAGE_CLANG
- 	select BR2_PACKAGE_LIBCLC
-@@ -129,10 +130,18 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
- 	bool "Gallium iris driver"
- 	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_PACKAGE_MESA3D_LLVM
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_MESA3D_OPENCL
-+	select BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
-+	select BR2_PACKAGE_SPIRV_TOOLS
- 	help
- 	  Mesa driver for iris-based Intel GPUs.
- 
-+comment "iris driver needs llvm"
-+	depends on BR2_i386 || BR2_x86_64
-+	depends on !BR2_PACKAGE_MESA3D_LLVM
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
- 	bool "Gallium lima driver"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
-@@ -140,17 +149,16 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
- 	help
- 	  Mesa driver for ARM Mali Utgard GPUs.
- 
--config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO
--	bool "Gallium kmsro drivers"
--	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV \
--		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO \
--		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA \
--		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST \
--		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D \
--		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LLVMPIPE
-+	bool "Gallium llvmpipe driver"
-+	depends on BR2_PACKAGE_MESA3D_LLVM
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	help
--	  Mesa drivers for kernel mode-setting render-only devices
-+	  This is a llvm opengl implementation using the Gallium3D
-+	  infrastructure.
-+
-+comment "llvmpipe driver needs llvm"
-+	depends on !BR2_PACKAGE_MESA3D_LLVM
- 
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- 	bool "Gallium nouveau driver"
-@@ -224,8 +232,8 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
- 	help
- 	  This is a virtual GPU driver for VMWare virtual machines.
- 
--config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
--	bool "Gallium swrast driver"
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE
-+	bool "Gallium softpipe driver"
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	help
- 	  This is a software opengl implementation using the Gallium3D
-@@ -307,7 +315,7 @@ comment "Vulkan drivers"
- config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_BROADCOM
- 	bool "Vulkan broadcom driver"
- 	depends on BR2_arm || BR2_aarch64
--	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # dri3/libxshmfence
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libxshmfence
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	help
- 	  Vulkan broadcom driver.
-@@ -331,7 +339,7 @@ comment "intel vulkan needs a glibc toolchain w/ headers >= 3.17"
- config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST
- 	bool "Vulkan swrast driver"
- 	depends on BR2_PACKAGE_MESA3D_LLVM
--	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	help
- 	  Vulkan swrast driver.
-@@ -346,7 +354,7 @@ comment "Off-screen Rendering"
- 
- config BR2_PACKAGE_MESA3D_OSMESA_GALLIUM
- 	bool "OSMesa (Gallium) library"
--	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
-+	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE
- 	help
- 	  The OSMesa API provides functions for off-screen rendering.
- 
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index d506d398b8..77a5d545f0 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,5 +1,7 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2024-June/000764.html
--sha256  51aa686ca4060e38711a9e8f60c8f1efaa516baf411946ed7f2c265cd582ca4c  mesa-24.0.9.tar.xz
--sha512  de2ee6c9df1fc106ee10befe0a76be1e9cfe83d65dbdb83bad6d8d7cfaa085232fb115293a1a790b37b50b1fe14bd58aafbcfe5a15e953b5901a7105d57569a5  mesa-24.0.9.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2025-March/000794.html
-+sha256  49eb55ba5acccae91deb566573a6a73144a0f39014be1982d78c21c5b6b0bb3f  mesa-25.0.1.tar.xz
-+sha512  1ecb1b90c5f78de4c61f177888543778285731faccc6f78d266d4b437f7b422a78b705a6e9fc6c9eab62c08f2573db5dd725eaa9cc9e5bedcaa7d8cfe6b47a1f  mesa-25.0.1.tar.xz
- # License
--sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
-+sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
-+sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
-+sha256  686bf035a1fd22076416fd3b90370ac67771e884bf57f55693d51f8ce7c710a7  licenses/SGI-B-2.0
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 202fc5cc74..ce2ff9b70e 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,11 +5,14 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 24.0.9
-+MESA3D_VERSION = 25.0.1
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
--MESA3D_LICENSE_FILES = docs/license.rst
-+MESA3D_LICENSE_FILES = \
-+	docs/license.rst \
-+	licenses/MIT \
-+	licenses/SGI-B-2.0
- MESA3D_CPE_ID_VENDOR = mesa3d
- MESA3D_CPE_ID_PRODUCT = mesa
- 
-@@ -21,19 +24,19 @@ MESA3D_DEPENDENCIES = \
- 	host-bison \
- 	host-flex \
- 	host-python-mako \
-+	host-python-pyyaml \
- 	expat \
- 	libdrm \
- 	zlib
- 
- MESA3D_CONF_OPTS = \
--	-Dgallium-omx=disabled \
-+	-Dgallium-opencl=disabled \
-+	-Dgallium-rusticl=false \
-+	-Dmicrosoft-clc=disabled \
- 	-Dpower8=disabled
- 
- ifeq ($(BR2_PACKAGE_MESA3D_DRIVER)$(BR2_PACKAGE_XORG7),yy)
--MESA3D_CONF_OPTS += -Ddri3=enabled
- MESA3D_DEPENDENCIES += xlib_libxshmfence
--else
--MESA3D_CONF_OPTS += -Ddri3=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_MESA3D_LLVM),y)
-@@ -50,14 +53,9 @@ else
- MESA3D_CONF_OPTS += -Dllvm=disabled
- endif
- 
--# Disable opencl-icd: OpenCL lib will be named libOpenCL instead of
--# libMesaOpenCL and CL headers are installed
- ifeq ($(BR2_PACKAGE_MESA3D_OPENCL),y)
- MESA3D_PROVIDES += libopencl
- MESA3D_DEPENDENCIES += clang libclc
--MESA3D_CONF_OPTS += -Dgallium-opencl=standalone
--else
--MESA3D_CONF_OPTS += -Dgallium-opencl=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS),y)
-@@ -99,14 +97,14 @@ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO) += freedre
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915)     += i915
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS)     += iris
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA)     += lima
--MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO)    += kmsro
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LLVMPIPE) += llvmpipe
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST) += panfrost
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300)     += r300
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA)     += svga
--MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST)   += swrast
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE) += softpipe
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_TEGRA)    += tegra
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D)      += v3d
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4)      += vc4
-@@ -129,6 +127,19 @@ MESA3D_CONF_OPTS += \
- 	-Dgallium-extra-hud=true
- endif
- 
-+ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
-+MESA3D_DEPENDENCIES += host-python-pycparser
-+endif
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL),y)
-+MESA3D_DEPENDENCIES += host-python-ply
-+endif
-+
-+ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS),y)
-+MESA3D_CONF_OPTS += -Dmesa-clc=system -Dprecomp-compiler=system
-+MESA3D_DEPENDENCIES += host-mesa3d spirv-llvm-translator spirv-tools
-+endif
-+
- ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
- MESA3D_CONF_OPTS += \
- 	-Dvulkan-drivers=
-@@ -254,12 +265,38 @@ endif
- ifeq ($(BR2_PACKAGE_LIBGLVND),y)
- ifneq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX)$(BR2_PACKAGE_MESA3D_OPENGL_EGL),)
- MESA3D_DEPENDENCIES += libglvnd
--MESA3D_CONF_OPTS += -Dglvnd=true
-+MESA3D_CONF_OPTS += -Dglvnd=enabled
- else
--MESA3D_CONF_OPTS += -Dglvnd=false
-+MESA3D_CONF_OPTS += -Dglvnd=disabled
- endif
- else
--MESA3D_CONF_OPTS += -Dglvnd=false
-+MESA3D_CONF_OPTS += -Dglvnd=disabled
- endif
- 
-+# host-mesa3d is needed by mesa3d only when the Iris Gallium driver is
-+# enabled
-+HOST_MESA3D_CONF_OPTS = \
-+	-Dglvnd=disabled \
-+	-Dgallium-drivers=iris \
-+	-Dgallium-vdpau=disabled \
-+	-Dinstall-mesa-clc=true \
-+	-Dmesa-clc=enabled \
-+	-Dplatforms= \
-+	-Dprecomp-compiler=enabled \
-+	-Dglx=disabled \
-+	-Dvulkan-drivers=""
-+
-+HOST_MESA3D_DEPENDENCIES = \
-+	host-libclc \
-+	host-libdrm \
-+	host-python-mako \
-+	host-python-pyyaml \
-+	host-spirv-tools
-+
-+define HOST_MESA3D_INSTALL_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/build/src/compiler/clc/mesa_clc $(HOST_DIR)/bin/mesa_clc
-+	$(INSTALL) -D -m 0755 $(@D)/build/src/compiler/spirv/vtn_bindgen $(HOST_DIR)/bin/vtn_bindgen
-+endef
-+
- $(eval $(meson-package))
-+$(eval $(host-meson-package))
-diff --git a/support/testing/tests/package/test_flutter.py b/support/testing/tests/package/test_flutter.py
-index 08aa497417..e4040ca7dc 100644
---- a/support/testing/tests/package/test_flutter.py
-+++ b/support/testing/tests/package/test_flutter.py
-@@ -22,7 +22,7 @@ class TestFlutter(infra.basetest.BRTest, GraphicsBase):
-         BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{infra.filepath("tests/package/test_flutter/linux-vkms.fragment")}"
-         BR2_PACKAGE_LIBDRM=y
-         BR2_PACKAGE_MESA3D=y
--        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-+        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
-         BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL=y
-         BR2_PACKAGE_MESA3D_OPENGL_ES=y
-         BR2_PACKAGE_FLUTTER_PI=y
-diff --git a/support/testing/tests/package/test_glslsandbox_player.py b/support/testing/tests/package/test_glslsandbox_player.py
-index 3b0dd60395..f72ac2adce 100644
---- a/support/testing/tests/package/test_glslsandbox_player.py
-+++ b/support/testing/tests/package/test_glslsandbox_player.py
-@@ -17,7 +17,7 @@ class TestGlslsandboxPlayer(infra.basetest.BRTest):
-         BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
-         BR2_PACKAGE_LIBDRM=y
-         BR2_PACKAGE_MESA3D=y
--        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-+        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
-         BR2_PACKAGE_MESA3D_LLVM=y
-         BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-         BR2_PACKAGE_MESA3D_OPENGL_ES=y
-diff --git a/support/testing/tests/package/test_glxinfo.py b/support/testing/tests/package/test_glxinfo.py
-index 3ccbdca8d9..2fece52372 100644
---- a/support/testing/tests/package/test_glxinfo.py
-+++ b/support/testing/tests/package/test_glxinfo.py
-@@ -19,7 +19,7 @@ class TestGlxinfo(infra.basetest.BRTest):
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
-         BR2_PACKAGE_MESA3D_DEMOS=y
-         BR2_PACKAGE_MESA3D=y
--        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-+        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
-         BR2_PACKAGE_MESA3D_OPENGL_GLX=y
-         BR2_PACKAGE_XORG7=y
-         BR2_PACKAGE_XSERVER_XORG_SERVER=y
-diff --git a/support/testing/tests/package/test_kmscube.py b/support/testing/tests/package/test_kmscube.py
-index 0ddeb67939..4a0eb07c32 100644
---- a/support/testing/tests/package/test_kmscube.py
-+++ b/support/testing/tests/package/test_kmscube.py
-@@ -18,7 +18,7 @@ class TestKmsCube(infra.basetest.BRTest):
-         BR2_PACKAGE_KMSCUBE=y
-         BR2_PACKAGE_LIBDRM=y
-         BR2_PACKAGE_MESA3D=y
--        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-+        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
-         BR2_PACKAGE_MESA3D_LLVM=y
-         BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-         BR2_PACKAGE_MESA3D_OPENGL_ES=y
-diff --git a/support/testing/tests/package/test_python_pyqt5.py b/support/testing/tests/package/test_python_pyqt5.py
-index 5f1952b559..65130f9c03 100644
---- a/support/testing/tests/package/test_python_pyqt5.py
-+++ b/support/testing/tests/package/test_python_pyqt5.py
-@@ -28,7 +28,7 @@ class TestPythonPyQt5(infra.basetest.BRTest):
-         BR2_PACKAGE_DEJAVU=y
-         BR2_PACKAGE_LIBDRM=y
-         BR2_PACKAGE_MESA3D=y
--        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-+        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
-         BR2_PACKAGE_MESA3D_LLVM=y
-         BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-         BR2_PACKAGE_MESA3D_OPENGL_ES=y
-diff --git a/support/testing/tests/package/test_weston.py b/support/testing/tests/package/test_weston.py
-index 2ed59a7f15..461ae50544 100644
---- a/support/testing/tests/package/test_weston.py
-+++ b/support/testing/tests/package/test_weston.py
-@@ -22,7 +22,7 @@ class TestWeston(infra.basetest.BRTest, GraphicsBase):
-         BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
-         BR2_PACKAGE_LIBDRM=y
-         BR2_PACKAGE_MESA3D=y
--        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-+        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
-         BR2_PACKAGE_MESA3D_LLVM=y
-         BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-         BR2_PACKAGE_MESA3D_OPENGL_ES=y
--- 
-2.39.5
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBjb21taXQgYWRkcyBzdXBwb3J0IGZvciB0aGUgaS5NWCA5MyBGUkRNIChGcmVlZG9tKSBi
+b2FyZC4KClRoZSBpLk1YOTMgRlJETSBkZXZlbG9wbWVudCBib2FyZCBpcyBhIGxvdy1jb3N0IGFu
+ZCBjb21wYWN0CmRldmVsb3BtZW50IGJvYXJkIGZlYXR1cmluZyB0aGUgaS5NWDkzIGFwcGxpY2F0
+aW9ucyBwcm9jZXNzb3IuCgpTZWU6IGh0dHBzOi8vbnhwLmNvbS9GUkRNLUlNWDkzCgpUaGlzIGRl
+ZmNvbmZpZyBpcyBiYXNlZCBvbiBmcmVlc2NhbGVfaW14OTNldmtfZGVmY29uZmlnIGludHJvZHVj
+ZWQKYnkgU8OpYmFzdGllbiwgaW4gQ2MuCgpOb3RlOiB0aGUgTGludXggYW5kIFUtQm9vdCByZXBv
+c2l0b3JpZXMgYXJlIGZvcmtzLiBUaGlzIGlzIGJlY2F1c2UKdGhlIE5YUCBzb2Z0d2FyZSB0ZWFt
+IGRpZCBub3QgaW5jbHVkZWQgYWxsIHRoZSBuZWNlc3NhcnkgaS5NWDkzIEZSRE0KcGF0Y2hlcyBp
+biB0aGUgc3RhbmRhcmQgTlhQIGkuTVggQlNQIGF0IHRoZSB0aW1lIG9mIHRoaXMgY29tbWl0LgpJ
+bnN0ZWFkLCBwYXRjaGVzIHdlcmUgcHVibGlzaGVkIGluIGEgZGVkaWNhdGVkIFlvY3RvIExheWVy
+IGZyb20gWzFdLgpUaGUgZm9ya3MgdXNlZCBpbiB0aGlzIGRlZmNvbmZpZyBhcmUgc2ltcGx5IHRo
+ZSByZXBvc2l0b3JpZXMgWzJdCmFuZCBbM10gd2l0aCBwYXRjaGVzIGZyb20gWzFdIGFwcGxpZWQg
+b24gdGhlbS4gVGhpcyBpcyBvbmx5IHRvIG1ha2UgdGhpcwpkZWZjb25maWcgc2ltcGxlciBpbiB0
+aGUgbWVhbnRpbWUgdGhlIEJTUCBwYXRjaGVzIGFyZSBpbmNsdWRlZCBpbiB0aGUKTlhQIEJTUCBy
+ZXBvc2l0b3JpZXMuCgpUaGFua3MgdG8gTWFydGluIENoYWJvdCBmb3IgbGVuZGluZyBhIGJvYXJk
+IQoKWzFdIGh0dHBzOi8vZ2l0aHViLmNvbS9ueHAtaW14LXN1cHBvcnQvbWV0YS1pbXgtZnJkbQpb
+Ml0gaHR0cHM6Ly9naXRodWIuY29tL254cC1pbXgvdWJvb3QtaW14ClszXSBodHRwczovL2dpdGh1
+Yi5jb20vbnhwLWlteC9saW51eC1pbXgKCkNjOiBNYXJ0aW4gQ2hhYm90IDxtYXJ0aW4uY2hhYm90
+QGdtYWlsLmNvbT4KQ2M6IFPDqWJhc3RpZW4gU3p5bWFuc2tpIDxzZWJhc3RpZW4uc3p5bWFuc2tp
+QGFybWFkZXVzLmNvbT4KVGVzdGVkLWJ5OiBKdWxpZW4gT2xpdmFpbiA8anUub0BmcmVlLmZyPgpb
+SnVsaWVuOiBUZXN0ZWQgb24gYm9hcmQgNzAwLTk0NjExIFJldiBCMV0KU2lnbmVkLW9mZi1ieTog
+SnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4KLS0tCiBERVZFTE9QRVJTICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgfCAgMiArCiAuLi4vYXJtLXRydXN0ZWQtZmlybXdhcmUu
+aGFzaCAgICAgICAgICAgICAgICAgfCAgMiArCiAuLi4vcGF0Y2hlcy9saW51eC1oZWFkZXJzL2xp
+bnV4LWhlYWRlcnMuaGFzaCAgfCAgMSArCiAuLi4vaW14OTNmcmRtL3BhdGNoZXMvbGludXgvbGlu
+dXguaGFzaCAgICAgICAgfCAgMiArCiAuLi4vaW14OTNmcmRtL3BhdGNoZXMvdWJvb3QvdWJvb3Qu
+aGFzaCAgICAgICAgfCAgMiArCiBib2FyZC9mcmVlc2NhbGUvaW14OTNmcmRtL3JlYWRtZS50eHQg
+ICAgICAgICAgfCA3NCArKysrKysrKysrKysrKysrKysrCiBjb25maWdzL2ZyZWVzY2FsZV9pbXg5
+M2ZyZG1fZGVmY29uZmlnICAgICAgICAgfCA0MSArKysrKysrKysrCiA3IGZpbGVzIGNoYW5nZWQs
+IDEyNCBpbnNlcnRpb25zKCspCiBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvZnJlZXNjYWxlL2lt
+eDkzZnJkbS9wYXRjaGVzL2FybS10cnVzdGVkLWZpcm13YXJlL2FybS10cnVzdGVkLWZpcm13YXJl
+Lmhhc2gKIGNyZWF0ZSBtb2RlIDEyMDAwMCBib2FyZC9mcmVlc2NhbGUvaW14OTNmcmRtL3BhdGNo
+ZXMvbGludXgtaGVhZGVycy9saW51eC1oZWFkZXJzLmhhc2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBi
+b2FyZC9mcmVlc2NhbGUvaW14OTNmcmRtL3BhdGNoZXMvbGludXgvbGludXguaGFzaAogY3JlYXRl
+IG1vZGUgMTAwNjQ0IGJvYXJkL2ZyZWVzY2FsZS9pbXg5M2ZyZG0vcGF0Y2hlcy91Ym9vdC91Ym9v
+dC5oYXNoCiBjcmVhdGUgbW9kZSAxMDA2NDQgYm9hcmQvZnJlZXNjYWxlL2lteDkzZnJkbS9yZWFk
+bWUudHh0CiBjcmVhdGUgbW9kZSAxMDA2NDQgY29uZmlncy9mcmVlc2NhbGVfaW14OTNmcmRtX2Rl
+ZmNvbmZpZwoKZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMgYi9ERVZFTE9QRVJTCmluZGV4IDI1Y2I1
+ZGM3NjQuLjk3OThiMTRhNDEgMTAwNjQ0Ci0tLSBhL0RFVkVMT1BFUlMKKysrIGIvREVWRUxPUEVS
+UwpAQCAtMTgwMCw5ICsxODAwLDExIEBAIEY6CWNvbmZpZ3MvdHM3NjgwX2RlZmNvbmZpZwogRjoJ
+cGFja2FnZS9wYWhvLW1xdHQtYwogCiBOOglKdWxpZW4gT2xpdmFpbiA8anUub0BmcmVlLmZyPgor
+RjoJYm9hcmQvZnJlZXNjYWxlL2lteDkzZnJkbS8KIEY6CWJvYXJkL3FlbXUvcmlzY3Y2NC12aXJ0
+LWVmaS8KIEY6CWJvYXJkL3NwaWtlLwogRjoJYm9hcmQvdGVjaG5leGlvbi9pbXg4bW1waWNvLwor
+RjoJY29uZmlncy9mcmVlc2NhbGVfaW14OTNmcmRtX2RlZmNvbmZpZwogRjoJY29uZmlncy9pbXg4
+bW1waWNvX2RlZmNvbmZpZwogRjoJY29uZmlncy9xZW11X3Jpc2N2NjRfdmlydF9lZmlfZGVmY29u
+ZmlnCiBGOgljb25maWdzL3NwaWtlX3Jpc2N2MzJfZGVmY29uZmlnCmRpZmYgLS1naXQgYS9ib2Fy
+ZC9mcmVlc2NhbGUvaW14OTNmcmRtL3BhdGNoZXMvYXJtLXRydXN0ZWQtZmlybXdhcmUvYXJtLXRy
+dXN0ZWQtZmlybXdhcmUuaGFzaCBiL2JvYXJkL2ZyZWVzY2FsZS9pbXg5M2ZyZG0vcGF0Y2hlcy9h
+cm0tdHJ1c3RlZC1maXJtd2FyZS9hcm0tdHJ1c3RlZC1maXJtd2FyZS5oYXNoCm5ldyBmaWxlIG1v
+ZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjc1NjEzODVjYjgKLS0tIC9kZXYvbnVsbAorKysg
+Yi9ib2FyZC9mcmVlc2NhbGUvaW14OTNmcmRtL3BhdGNoZXMvYXJtLXRydXN0ZWQtZmlybXdhcmUv
+YXJtLXRydXN0ZWQtZmlybXdhcmUuaGFzaApAQCAtMCwwICsxLDIgQEAKKyMgTG9jYWxseSBjYWxj
+dWxhdGVkCitzaGEyNTYgIDhjZmUwYWZjOTAzZWJiYzAzZjI3ZTQ4NzRhYTljZTgyYmU3ODg0M2E4
+YjQyZWQ0YzkwNjg3MWU3ZjMxMWI1MTAgIGlteC1hdGYtbGYtNi42LjM2LTIuMS4wLnRhci5negpk
+aWZmIC0tZ2l0IGEvYm9hcmQvZnJlZXNjYWxlL2lteDkzZnJkbS9wYXRjaGVzL2xpbnV4LWhlYWRl
+cnMvbGludXgtaGVhZGVycy5oYXNoIGIvYm9hcmQvZnJlZXNjYWxlL2lteDkzZnJkbS9wYXRjaGVz
+L2xpbnV4LWhlYWRlcnMvbGludXgtaGVhZGVycy5oYXNoCm5ldyBmaWxlIG1vZGUgMTIwMDAwCmlu
+ZGV4IDAwMDAwMDAwMDAuLjU4MDhkOTJhZmUKLS0tIC9kZXYvbnVsbAorKysgYi9ib2FyZC9mcmVl
+c2NhbGUvaW14OTNmcmRtL3BhdGNoZXMvbGludXgtaGVhZGVycy9saW51eC1oZWFkZXJzLmhhc2gK
+QEAgLTAsMCArMSBAQAorLi4vbGludXgvbGludXguaGFzaApcIE5vIG5ld2xpbmUgYXQgZW5kIG9m
+IGZpbGUKZGlmZiAtLWdpdCBhL2JvYXJkL2ZyZWVzY2FsZS9pbXg5M2ZyZG0vcGF0Y2hlcy9saW51
+eC9saW51eC5oYXNoIGIvYm9hcmQvZnJlZXNjYWxlL2lteDkzZnJkbS9wYXRjaGVzL2xpbnV4L2xp
+bnV4Lmhhc2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uMGRhOGMwMzM4
+NAotLS0gL2Rldi9udWxsCisrKyBiL2JvYXJkL2ZyZWVzY2FsZS9pbXg5M2ZyZG0vcGF0Y2hlcy9s
+aW51eC9saW51eC5oYXNoCkBAIC0wLDAgKzEsMiBAQAorIyBMb2NhbGx5IGNhbGN1bGF0ZWQKK3No
+YTI1NiAgMzI0NGRjM2M2MmM5OTBkOWRlOTBlMWM3MTkzYWEzMDk5ZTBlNzRlNzIwZGU1YzljMTNl
+ZGZiZmRkODAyZjU5NiAgbGludXgtaW14LWxmLTYuNi4zNi0yLjEuMC1pbXg5M2ZyZG0udGFyLmd6
+CmRpZmYgLS1naXQgYS9ib2FyZC9mcmVlc2NhbGUvaW14OTNmcmRtL3BhdGNoZXMvdWJvb3QvdWJv
+b3QuaGFzaCBiL2JvYXJkL2ZyZWVzY2FsZS9pbXg5M2ZyZG0vcGF0Y2hlcy91Ym9vdC91Ym9vdC5o
+YXNoCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLmU1MTJjMjdmN2QKLS0t
+IC9kZXYvbnVsbAorKysgYi9ib2FyZC9mcmVlc2NhbGUvaW14OTNmcmRtL3BhdGNoZXMvdWJvb3Qv
+dWJvb3QuaGFzaApAQCAtMCwwICsxLDIgQEAKKyMgTG9jYWxseSBjYWxjdWxhdGVkCitzaGEyNTYg
+IGJjZWQ0MzM0MzYzMTk5ZDU0NjU1MzJkMjIxZDA2ZGMzYTViNDkyNzEwNjdkNzQ0MDgwMTljODI1
+ZWQyY2E3MTUgIHVib290LWlteC1sZi02LjYuMzYtMi4xLjAtaW14OTNmcmRtLnRhci5negpkaWZm
+IC0tZ2l0IGEvYm9hcmQvZnJlZXNjYWxlL2lteDkzZnJkbS9yZWFkbWUudHh0IGIvYm9hcmQvZnJl
+ZXNjYWxlL2lteDkzZnJkbS9yZWFkbWUudHh0Cm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAw
+MDAwMDAwMDAuLjNlNWY0MDQwMjkKLS0tIC9kZXYvbnVsbAorKysgYi9ib2FyZC9mcmVlc2NhbGUv
+aW14OTNmcmRtL3JlYWRtZS50eHQKQEAgLTAsMCArMSw3NCBAQAorKioqKioqKioqKioqKioqKioq
+KioqKgorTlhQIGkuTVggOTMgRlJETSBib2FyZAorKioqKioqKioqKioqKioqKioqKioqKgorCitU
+aGlzIGZpbGUgZG9jdW1lbnRzIHRoZSBCdWlsZHJvb3Qgc3VwcG9ydCBmb3IgdGhlIGkuTVggOTMg
+RlJETQorKEZyZWVkb20pIGJvYXJkLiBGb3IgbW9yZSBpbmZvcm1hdGlvbiBvbiB0aGlzIGJvYXJk
+LCBzZWUgWzFdLgorCisKK0J1aWxkCis9PT09PQorCitGaXJzdCwgY29uZmlndXJlIEJ1aWxkcm9v
+dCBmb3IgdGhlIGkuTVggOTMgRlJETSBib2FyZDoKKworICAgIG1ha2UgZnJlZXNjYWxlX2lteDkz
+ZnJkbV9kZWZjb25maWcKKworQnVpbGQgYWxsIGNvbXBvbmVudHM6CisKKyAgICBtYWtlCisKK1do
+ZW4gdGhpcyBjb21tYW5kIGNvbXBsZXRlcywgdGhlIGdlbmVyYXRlZCBpbWFnZSBjb250YWluaW5n
+IGV2ZXJ5dGhpbmcKK3RvIGJvb3QgZnJvbSB0aGUgU0QgY2FyZCBpcyBsb2NhdGVkIGluICJvdXRw
+dXQvaW1hZ2VzL3NkY2FyZC5pbWciLgorCisKK0NyZWF0ZSBhIGJvb3RhYmxlIFNEIGNhcmQKKz09
+PT09PT09PT09PT09PT09PT09PT09PT0KKworVG8gZGV0ZXJtaW5lIHRoZSBkZXZpY2UgYXNzb2Np
+YXRlZCB0byB0aGUgU0QgY2FyZCBoYXZlIGEgbG9vayBpbiB0aGUKKy9wcm9jL3BhcnRpdGlvbnMg
+ZmlsZToKKworICAgIGNhdCAvcHJvYy9wYXJ0aXRpb25zCisKK0J1aWxkcm9vdCBwcmVwYXJlcyBh
+IGJvb3RhYmxlICJzZGNhcmQuaW1nIiBpbWFnZSBpbiB0aGUgb3V0cHV0L2ltYWdlcy8KK2RpcmVj
+dG9yeSwgcmVhZHkgdG8gYmUgZHVtcGVkIG9uIGEgU0QgY2FyZC4gTGF1bmNoIHRoZSBmb2xsb3dp
+bmcKK2NvbW1hbmQgYXMgcm9vdDoKKworICAgIGRkIGlmPW91dHB1dC9pbWFnZXMvc2RjYXJkLmlt
+ZyBvZj0vZGV2Lzx5b3VyLXNkLWRldmljZT4KKworKioqIFdBUk5JTkchIFRoaXMgd2lsbCBkZXN0
+cm95IGFsbCB0aGUgY2FyZCBjb250ZW50LiBVc2Ugd2l0aCBjYXJlISAqKioKKworRm9yIGRldGFp
+bHMgYWJvdXQgdGhlIG1lZGl1bSBpbWFnZSBsYXlvdXQsIHNlZSB0aGUgZGVmaW5pdGlvbiBpbgor
+Ym9hcmQvZnJlZXNjYWxlL2NvbW1vbi9pbXgvZ2VuaW1hZ2UuY2ZnLnRlbXBsYXRlX2lteDkuCisK
+KworQm9vdCB0aGUgaS5NWCA5MyBGUkRNIGJvYXJkCis9PT09PT09PT09PT09PT09PT09PT09PT09
+PT0KKworVG8gYm9vdCB5b3VyIG5ld2x5IGNyZWF0ZWQgc3lzdGVtIChyZWZlciB0byB0aGUgaS5N
+WCA5MyBGUkRNCitEb2N1bWVudGF0aW9uIFsyXSBmb3IgZ3VpZGFuY2UpOgorLSBpbnNlcnQgdGhl
+IFNEIGNhcmQgaW4gdGhlIFNEIHNsb3QgKFAxMykgb2YgdGhlIGJvYXJkOworLSBDb25maWd1cmUg
+dGhlIFNXMSBib290IHN3aXRjaGVzIGFzIGZvbGxvd3M6CisgIFNXMTogMTEwMCBTVzFbMS00XSAo
+IlVTREhDMiA0LWJpdCBTRDMuMCIgQm9vdCBNb2RlKQorLSBjb25uZWN0IGEgVVNCIFR5cGUtQyBj
+YWJsZSBpbnRvIHRoZSBQMTYgRGVidWcgVVNCIFBvcnQgYW5kIGNvbm5lY3QKKyAgdXNpbmcgYSB0
+ZXJtaW5hbCBlbXVsYXRvciBhdCAxMTUyMDAgYnBzLCA4bjE7CistIHBvd2VyIG9uIHRoZSBib2Fy
+ZCBieSBjb25uZWN0aW5nIGEgVVNCIFR5cGUtQyBjYWJsZSBpbnRvIHRoZSBQMQorICBQb3dlciBV
+U0IgUG9ydC4KKworTm90ZSAxOiB0aGUgYm9hcmQgYm9vdCBzd2l0Y2hlcyBkZWZhdWx0IGNvbmZp
+Z3VyYXRpb24gaXM6CitTVzE6IDAxMDAgU1cxWzEtNF0gKCJVU0RIQzEgOC1iaXQgZU1NQyA1LjEi
+IEJvb3QgTW9kZSkKK2FuZCB0aGUgYm9hcmQgaXMgYWxzbyBwcmUtZmxhc2hlZCB3aXRoIGEgcmVm
+ZXJlbmNlIExpbnV4IGRlbW8KK2ltYWdlLiBJdCBpcyBpbXBvcnRhbnQgdG8gY2hhbmdlIHRoZSBi
+b290IGNvbmZpZyBzd2l0Y2hlcyB0byBtYWtlCitzdXJlIHRoZSBzeXN0ZW0gd2lsbCBib290IG9u
+IHRoZSBTRCBDYXJkLgorCitOb3RlIDI6IHRoZSBkZWJ1ZyBVU0IgY29ubmVjdG9yIHByZXNlbnRz
+IDIgVUFSVHMgKGZvciBleGFtcGxlCisvZGV2L3R0eUFDTVswLTFdKSwgdGhlIENvcnRleC1BNTUg
+VUFSVCBzaG91bGQgYmUgdGhlIDFzdCBvbmUgKGluIHRoZQorcHJldmlvdXMgZXhhbXBsZSwgL2Rl
+di90dHlBQ00wKS4gUmVmZXIgdG8gdGhlIGRvY3VtZW50YXRpb24gWzJdIGZvcgorbW9yZSBkZXRh
+aWxzLgorCitFbmpveSEKKworCitSZWZlcmVuY2VzCis9PT09PT09PT09CitbMV0gaHR0cHM6Ly93
+d3cubnhwLmNvbS9GUkRNLUlNWDkzCitbMl0gaHR0cHM6Ly93d3cubnhwLmNvbS9kb2N1bWVudC9n
+dWlkZS9nZXR0aW5nLXN0YXJ0ZWQtd2l0aC1mcmRtLWlteDkzOkdTLUZSRE0tSU1YOTMKZGlmZiAt
+LWdpdCBhL2NvbmZpZ3MvZnJlZXNjYWxlX2lteDkzZnJkbV9kZWZjb25maWcgYi9jb25maWdzL2Zy
+ZWVzY2FsZV9pbXg5M2ZyZG1fZGVmY29uZmlnCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAw
+MDAwMDAwMDAuLjhlMTY3NjJkOGYKLS0tIC9kZXYvbnVsbAorKysgYi9jb25maWdzL2ZyZWVzY2Fs
+ZV9pbXg5M2ZyZG1fZGVmY29uZmlnCkBAIC0wLDAgKzEsNDEgQEAKK0JSMl9hYXJjaDY0PXkKK0JS
+Ml9jb3J0ZXhfYTU1PXkKK0JSMl9BUk1fRlBVX1ZGUFY0RDE2PXkKK0JSMl9QQUNLQUdFX0hPU1Rf
+TElOVVhfSEVBREVSU19DVVNUT01fNl82PXkKK0JSMl9HTE9CQUxfUEFUQ0hfRElSPSJib2FyZC9m
+cmVlc2NhbGUvaW14OTNmcmRtL3BhdGNoZXMiCitCUjJfRE9XTkxPQURfRk9SQ0VfQ0hFQ0tfSEFT
+SEVTPXkKK0JSMl9UQVJHRVRfR0VORVJJQ19HRVRUWV9QT1JUPSJ0dHlMUDAiCitCUjJfUk9PVEZT
+X1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC9mcmVlc2NhbGUvY29tbW9uL2lteC9pbXg5LWJvb3Rs
+b2FkZXItcHJlcGFyZS5zaCBib2FyZC9mcmVlc2NhbGUvY29tbW9uL2lteC9wb3N0LWltYWdlLnNo
+IgorQlIyX0xJTlVYX0tFUk5FTD15CitCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9UQVJCQUxMPXkK
+K0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1RBUkJBTExfTE9DQVRJT049IiQoY2FsbCBnaXRodWIs
+am9saXZhaW4sbGludXgtaW14LGxmLTYuNi4zNi0yLjEuMC1pbXg5M2ZyZG0pL2xpbnV4LWlteC1s
+Zi02LjYuMzYtMi4xLjAtaW14OTNmcmRtLnRhci5neiIKK0JSMl9MSU5VWF9LRVJORUxfREVGQ09O
+RklHPSJpbXhfdjgiCitCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKK0JSMl9MSU5VWF9L
+RVJORUxfSU5UUkVFX0RUU19OQU1FPSJmcmVlc2NhbGUvaW14OTMtMTF4MTEtZnJkbSIKK0JSMl9M
+SU5VWF9LRVJORUxfTkVFRFNfSE9TVF9PUEVOU1NMPXkKK0JSMl9QQUNLQUdFX0ZSRUVTQ0FMRV9J
+TVg9eQorQlIyX1BBQ0tBR0VfRlJFRVNDQUxFX0lNWF9QTEFURk9STV9JTVg5Mz15CitCUjJfUEFD
+S0FHRV9GSVJNV0FSRV9FTEVfSU1YPXkKK0JSMl9QQUNLQUdFX0ZJUk1XQVJFX0lNWD15CitCUjJf
+VEFSR0VUX1JPT1RGU19FWFQyPXkKK0JSMl9UQVJHRVRfUk9PVEZTX0VYVDJfND15CitCUjJfVEFS
+R0VUX1JPT1RGU19FWFQyX1NJWkU9IjEyME0iCitCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1X
+QVJFPXkKK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQ1VTVE9NX1RBUkJBTEw9eQor
+QlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0i
+JChjYWxsIGdpdGh1YixueHAtaW14LGlteC1hdGYsbGYtNi42LjM2LTIuMS4wKS9pbXgtYXRmLWxm
+LTYuNi4zNi0yLjEuMC50YXIuZ3oiCitCUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX1BM
+QVRGT1JNPSJpbXg5MyIKK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfQkwzMT15CitC
+UjJfVEFSR0VUX1VCT09UPXkKK0JSMl9UQVJHRVRfVUJPT1RfQlVJTERfU1lTVEVNX0tDT05GSUc9
+eQorQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVEFSQkFMTD15CitCUjJfVEFSR0VUX1VCT09UX0NV
+U1RPTV9UQVJCQUxMX0xPQ0FUSU9OPSIkKGNhbGwgZ2l0aHViLGpvbGl2YWluLHVib290LWlteCxs
+Zi02LjYuMzYtMi4xLjAtaW14OTNmcmRtKS91Ym9vdC1pbXgtbGYtNi42LjM2LTIuMS4wLWlteDkz
+ZnJkbS50YXIuZ3oiCitCUjJfVEFSR0VUX1VCT09UX0JPQVJEX0RFRkNPTkZJRz0iaW14OTNfMTF4
+MTFfZnJkbSIKK0JSMl9UQVJHRVRfVUJPT1RfTkVFRFNfRFRDPXkKK0JSMl9UQVJHRVRfVUJPT1Rf
+TkVFRFNfT1BFTlNTTD15CitCUjJfVEFSR0VUX1VCT09UX05FRURTX0dOVVRMUz15CitCUjJfVEFS
+R0VUX1VCT09UX1NQTD15CitCUjJfUEFDS0FHRV9IT1NUX0RPU0ZTVE9PTFM9eQorQlIyX1BBQ0tB
+R0VfSE9TVF9HRU5JTUFHRT15CitCUjJfUEFDS0FHRV9IT1NUX0lNWF9NS0lNQUdFPXkKK0JSMl9Q
+QUNLQUdFX0hPU1RfTVRPT0xTPXkKK0JSMl9QQUNLQUdFX0hPU1RfVUJPT1RfVE9PTFM9eQotLSAK
+Mi40OC4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpi
+dWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlz
+dHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
