@@ -4,77 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62AEDC19F32
-	for <buildroot@archiver.kernel.org>; Fri,  7 Mar 2025 18:49:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4489BC19F32
+	for <buildroot@archiver.kernel.org>; Fri,  7 Mar 2025 18:55:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 000ED4167C;
-	Fri,  7 Mar 2025 18:49:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E697C40BDD;
+	Fri,  7 Mar 2025 18:55:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x40y3fpjrQKL; Fri,  7 Mar 2025 18:49:20 +0000 (UTC)
+ id rcEMM6u2emFc; Fri,  7 Mar 2025 18:55:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7113B4143D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1C9140C01
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7113B4143D;
-	Fri,  7 Mar 2025 18:49:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 801EF1C9
- for <buildroot@buildroot.org>; Fri,  7 Mar 2025 18:49:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A1C9140C01;
+	Fri,  7 Mar 2025 18:55:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 751141C9
+ for <buildroot@buildroot.org>; Fri,  7 Mar 2025 18:55:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 50C07810DA
- for <buildroot@buildroot.org>; Fri,  7 Mar 2025 18:49:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4C6E140C01
+ for <buildroot@buildroot.org>; Fri,  7 Mar 2025 18:55:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RYKDQkpiOU5q for <buildroot@buildroot.org>;
- Fri,  7 Mar 2025 18:49:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VoFDB7z7X2dM for <buildroot@buildroot.org>;
+ Fri,  7 Mar 2025 18:55:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
  helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4237D80CDF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4237D80CDF
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3A45540BDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A45540BDD
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4237D80CDF
- for <buildroot@buildroot.org>; Fri,  7 Mar 2025 18:49:17 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3A45540BDD
+ for <buildroot@buildroot.org>; Fri,  7 Mar 2025 18:55:15 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 10E71B0059B;
- Fri,  7 Mar 2025 19:49:10 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 38237B00563;
+ Fri,  7 Mar 2025 19:55:10 +0100 (CET)
 Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
  via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 07 Mar 2025 19:49:10 +0100
+ with HTTP (HTTP/1.0 POST); Fri, 07 Mar 2025 19:55:10 +0100
 MIME-Version: 1.0
-Date: Fri, 07 Mar 2025 19:49:10 +0100
+Date: Fri, 07 Mar 2025 19:55:10 +0100
 From: Julien Olivain <ju.o@free.fr>
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: buildroot@buildroot.org, Ricardo Martincoski
- <ricardo.martincoski@datacom.com.br>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-In-Reply-To: <745bdcacbdff342d7e37dd1003a03923dc03b935.1740841539.git.yann.morin.1998@free.fr>
+Cc: buildroot@buildroot.org, Raphael Pavlidis <raphael.pavlidis@gmail.com>,
+ Christian Stewart <christian@aperture.us>
+In-Reply-To: <dee1cb43f9e636b7ccdc7d4602ae0ab438952c3a.1740841539.git.yann.morin.1998@free.fr>
 References: <cover.1740841539.git.yann.morin.1998@free.fr>
- <745bdcacbdff342d7e37dd1003a03923dc03b935.1740841539.git.yann.morin.1998@free.fr>
+ <dee1cb43f9e636b7ccdc7d4602ae0ab438952c3a.1740841539.git.yann.morin.1998@free.fr>
 User-Agent: Webmail Free/1.6.10
-Message-ID: <8fb79f2dfe7c9cedca2e2e854e4b3c48@free.fr>
+Message-ID: <4f56e492d92a06450d65a951c2d92781@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1741373354;
- bh=o12lErEutzHVTbtq+hIhGaRXr2/IjvUY0hfjjwwDKU8=;
+ d=free.fr; s=smtp-20201208; t=1741373713;
+ bh=DG4+MmSx23WjR62gzuueRTkH2uQGlaRP79MKL0E9o9M=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=foL8YUkCqAXe2P3hlZhAn0V3Nppwd1W0RMnWHJLg9KWEsFsq35uT3f1bhA+CbJ51s
- Id4MvbqxrM955jYFTOnnvFCBVrzXpdlOYsI6uBLnfqLzvRwz4JSqE+mLxNCJEq9aHU
- Wp3Fi0nDYoHQzowLFKAPe+AyXD4LJqMwizd+eG/Vmq6/kSrC4Uj6U/6STQPJchyIm2
- tPefFNI11mS1fAX+2eQdRxV4RVAacLY7owBNxkgsN9AbGqFAs9WiVWdCg5erPz5Rlq
- EMKJ1ToYerF9uYX8nHniQSrEUvQTwIhyuloI87/yVHtF7ynDK7HTwvcbtyu3Xv56Z+
- 9Br53x3cxcNDw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=NreKrzZQERk8xegnF1UmYd2pgr/ZlWSBKRtetp67oYv0JEmVf3Mrw4bHpLvCIOhbG
+ j93XHGUTEymfaR0UFiyj4cbqv95WRuDpUIwjOwKgbZndqAO2aXpy+ymziDTZ9E2F50
+ l7dpIb6d2cPTPLxczrkg5bfoXbY80NNdTVUA2vI/Cg2w15Ol8WqhjLPayV4GyWadah
+ dhhMV1FBx51AP63jvGyHlQcaiy5QjAK7pNmXU03p/LX5nH66LVWStBT+2/k0n4njrR
+ u4MZkP3Yw+qTssZjTyqtep9b4ORvBL8aMv/TkIQ8pc5iJrNIsc6AVzyeWS58toqdWw
+ LUjUDdGvQhS1Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=foL8YUkC
-Subject: Re: [Buildroot] [PATCH 1/9 v3] support/testing: set date in
- emulated machine
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=NreKrzZQ
+Subject: Re: [Buildroot] [PATCH 9/9 v3] package/podman: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,78 +91,100 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Hi Yann, all,
 
 On 01/03/2025 16:05, Yann E. MORIN wrote:
-> When time comes to check certificates, the date and time in the 
-> emulated
-> machine should be close enough to the actual values, so that 
-> certificate
-> validity can be checked.
-> 
-> Set the date to the date of the system. This is going to be accurate to
-> the second, which is, by far, enough for our purpose.
-> 
-> The Emulator() class doesn't inherit from unittest.TestCase, so we 
-> can't
-> call any of the usual self.assertXXX() methods; instead, we just raise
-> a standard exception, like is done a few lines above to detect the 
-> login
-> prompt.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - catch failure to set the date
-> ---
->  support/testing/infra/emulator.py | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/support/testing/infra/emulator.py 
-> b/support/testing/infra/emulator.py
-> index ef5be2a19e..9be1143944 100644
-> --- a/support/testing/infra/emulator.py
-> +++ b/support/testing/infra/emulator.py
-> @@ -5,6 +5,7 @@ import os
-> 
->  import pexpect
->  import pexpect.replwrap
-> +import time
-> 
->  import infra
-> 
-> @@ -152,6 +153,10 @@ class Emulator(object):
-> 
->          self.connect_shell()
-> 
-> +        output, exit_code = self.run(f"date @{int(time.time())}")
-> +        if exit_code:
-> +            raise SystemError("Cannot set date in virtual machine")
+> Podman is a container manager not unlike Docker, but is daemon-less.
+
+[...]
+
+> diff --git a/support/testing/tests/package/test_podman.py 
+> b/support/testing/tests/package/test_podman.py
+> new file mode 100644
+> index 0000000000..9e5be98b00
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_podman.py
+> @@ -0,0 +1,147 @@
+> +import infra.basetest
+> +import json
+> +import os
 > +
+> +
+> +class TestPodman(infra.basetest.BRTest):
+> +    config = \
+> +        """
+> +        BR2_arm=y
+> +        BR2_cortex_a9=y
+> +        BR2_ARM_ENABLE_VFP=y
+> +        BR2_TOOLCHAIN_EXTERNAL=y
+> +        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> +        BR2_PER_PACKAGE_DIRECTORIES=y
+> +        BR2_SYSTEM_DHCP="eth0"
+> +        BR2_LINUX_KERNEL=y
+> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.202"
+> +        BR2_LINUX_KERNEL_DEFCONFIG="vexpress"
+> +        BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +        BR2_LINUX_KERNEL_INTREE_DTS_NAME="vexpress-v2p-ca9"
+> +        BR2_PACKAGE_PODMAN=y
+> +        BR2_PACKAGE_UTIL_LINUX=y
+> +        BR2_PACKAGE_UTIL_LINUX_MOUNT=y
+> +        BR2_PACKAGE_HOST_GO_BIN=y
+> +        BR2_TARGET_ROOTFS_EXT2=y
+> +        BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
+> +        # BR2_TARGET_ROOTFS_TAR is not set
+> +        """
+> +
+> +    def test_run(self):
+> +        kernel_file = os.path.join(self.builddir, 'images', 'zImage')
+> +        dtb_file = os.path.join(self.builddir, 'images', 
+> 'vexpress-v2p-ca9.dtb')
+> +        ext2_file = os.path.join(self.builddir, 'images', 
+> 'rootfs.ext2')
+> +        self.emulator.boot(
+> +            arch='armv5',
+> +            kernel=kernel_file,
+> +            kernel_cmdline=[
+> +                'root=/dev/mmcblk0',
+> +                'rootwait',
+> +                'console=ttyAMA0',
+> +            ],
+> +            options=[
+> +                '-M', 'vexpress-a9',
+> +                '-dtb', dtb_file,
+> +                '-drive', f'file={ext2_file},if=sd,format=raw',
+> +            ]
+> +        )
+> +        self.emulator.login()
+> +
+> +        # Do some preparation for rootless use
+> +        self.assertRunOk("mount --make-shared /")
+> +        self.assertRunOk("chmod 666 /dev/net/tun")
+> +        self.assertRunOk("useradd -d /home/foo -m -s /bin/sh -u 1000 
+> foo")
 
-Is this really needed?
+It would be nice to keep tests idempotent. This can be useful
+while debugging tests, and avoid rebuilding everything at each
+attempt. It is even more useful in tests with a long build time
+like this one.
 
-Arm and Aarch64 qemu machines includes a pl031 RTC.
-x86/x86_64 includes a mc146818 RTC.
-RISC-V has a Goldfish RTC.
+In the current state, running the test once with the command:
 
-If we revert this patch, the podman runtime test still succeed.
-In the runtime log "TestPodman-run.log", when the kernel boots,
-we see:
+     utils/docker-run support/testing/run-tests \
+         -k -d dl -o output_folder \
+         tests.package.test_podman
 
-...
-rtc-pl031 10017000.rtc: registered as rtc0
-rtc-pl031 10017000.rtc: setting system clock to 2025-03-07T17:38:24 UTC 
-(1741369104)
-...
+succeeds. But running it a second time, it fails with error:
 
-I understand that it is not always guaranteed that the qemu machine
-has a rtc and the used kernel has a driver for it, which is why we
-would like to set the date like this. But this could be left to the
-test implementer to make sure this is properly handled. And in the
-podman test case, you did.
+     useradd: user 'foo' already exists
 
-What do you think?
+This because this tests emulates a persistent storage.
+
+If possible, could you improve the test to make sure it can run
+at least two time in a row with the run-tests "-k" option, please?
+
+For example, with a construct like:
+
+id -u foo || useradd ... foo
+
+There is possibly few other places that might need cleanup too.
 
 Best regards,
 
