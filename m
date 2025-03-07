@@ -4,83 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A3A0C19F32
-	for <buildroot@archiver.kernel.org>; Fri,  7 Mar 2025 08:37:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 233FBC19F32
+	for <buildroot@archiver.kernel.org>; Fri,  7 Mar 2025 10:09:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B4E6B414C8;
-	Fri,  7 Mar 2025 08:37:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C35AB40561;
+	Fri,  7 Mar 2025 10:09:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HbufpByTpiHe; Fri,  7 Mar 2025 08:37:21 +0000 (UTC)
+ id 0ejihCe0gid6; Fri,  7 Mar 2025 10:09:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1654414BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BF9A40563
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1654414BE;
-	Fri,  7 Mar 2025 08:37:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6252371F
- for <buildroot@buildroot.org>; Fri,  7 Mar 2025 08:37:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BF9A40563;
+	Fri,  7 Mar 2025 10:09:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7DDBE944
+ for <buildroot@buildroot.org>; Fri,  7 Mar 2025 10:09:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3DC8C6100B
- for <buildroot@buildroot.org>; Fri,  7 Mar 2025 08:37:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4984580C6D
+ for <buildroot@buildroot.org>; Fri,  7 Mar 2025 10:09:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VhqSBw3fPs37 for <buildroot@buildroot.org>;
- Fri,  7 Mar 2025 08:37:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=95.163.59.103;
- helo=send264.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ACECF605D2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACECF605D2
-Received: from send264.i.mail.ru (send264.i.mail.ru [95.163.59.103])
- by smtp3.osuosl.org (Postfix) with ESMTPS id ACECF605D2
- for <buildroot@buildroot.org>; Fri,  7 Mar 2025 08:37:17 +0000 (UTC)
-Received: by exim-smtp-8cb569c79-6dn7r with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1tqTCj-000000007MO-0Z02; Fri, 07 Mar 2025 11:37:13 +0300
-From: Maxim Kochetkov <fido_max@inbox.ru>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tTZqIXQenwEF for <buildroot@buildroot.org>;
+ Fri,  7 Mar 2025 10:09:39 +0000 (UTC)
+X-Greylist: delayed 599 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 07 Mar 2025 10:09:39 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 44D8B80C4C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44D8B80C4C
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=208.88.110.44;
+ helo=mail.savoirfairelinux.com;
+ envelope-from=luc.beaufils@savoirfairelinux.com; receiver=<UNKNOWN> 
+Received: from mail.savoirfairelinux.com (mail.savoirfairelinux.com
+ [208.88.110.44])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 44D8B80C4C
+ for <buildroot@buildroot.org>; Fri,  7 Mar 2025 10:09:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.savoirfairelinux.com (Postfix) with ESMTP id 551B59C89B7;
+ Fri,  7 Mar 2025 05:00:04 -0500 (EST)
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10032)
+ with ESMTP id Bdz4ZCugm7nB; Fri,  7 Mar 2025 05:00:03 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.savoirfairelinux.com (Postfix) with ESMTP id D58639C8A9C;
+ Fri,  7 Mar 2025 05:00:03 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.savoirfairelinux.com D58639C8A9C
+X-Virus-Scanned: amavis at mail.savoirfairelinux.com
+Received: from mail.savoirfairelinux.com ([127.0.0.1])
+ by localhost (mail.savoirfairelinux.com [127.0.0.1]) (amavis, port 10026)
+ with ESMTP id xtiio_6ApSzB; Fri,  7 Mar 2025 05:00:03 -0500 (EST)
+Received: from jean.rennes.sfl (80-15-101-118.ftth.fr.orangecustomers.net
+ [80.15.101.118])
+ by mail.savoirfairelinux.com (Postfix) with ESMTPSA id 2D6359C89B7;
+ Fri,  7 Mar 2025 05:00:03 -0500 (EST)
+From: Luc BEAUFILS <luc.beaufils@savoirfairelinux.com>
 To: buildroot@buildroot.org
-Cc: Maxim Kochetkov <fido_max@inbox.ru>
-Date: Fri,  7 Mar 2025 11:37:10 +0300
-Message-ID: <20250307083710.1699963-1-fido_max@inbox.ru>
-X-Mailer: git-send-email 2.48.1
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Thomas Perrot <thomas.perrot@bootlin.com>,
+ Luc BEAUFILS <luc.beaufils@savoirfairelinux.com>
+Date: Fri,  7 Mar 2025 10:59:03 +0100
+Message-Id: <20250307095904.19075-2-luc.beaufils@savoirfairelinux.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250307095904.19075-1-luc.beaufils@savoirfairelinux.com>
+References: <20250307095904.19075-1-luc.beaufils@savoirfairelinux.com>
 MIME-Version: 1.0
-X-Mailru-Src: smtp
-X-7564579A: 78E4E2B564C1792B
-X-77F55803: 4F1203BC0FB41BD9C8AED3E6A44DB6AB09B64268BF6FE0DD2AA28AB0457A3495182A05F53808504058854C489F40475D3DE06ABAFEAF670599B8BE2F457598631EACAA62D4B3045D73C1DF025D8865E1
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7519D5B419DD3416AEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637AC83A81C8FD4AD23D82A6BABE6F325AC2E85FA5F3EDFCBAA7353EFBB553375666B3C118DAE8E67002E95CA72D089B0D7C1E7B3F75EA32C454CEC636B407A7ED68EEF46B7454FC60B9742502CCDD46D0DEE16715F795C715CF6B57BC7E64490618DEB871D839B73339E8FC8737B5C224915519F706774CB6ACC7F00164DA146DAFE8445B8C89999729449624AB7ADAF37F6B57BC7E64490611E7FA7ABCAF51C92176DF2183F8FC7C0F6FAE79CA2B8C2908941B15DA834481F9449624AB7ADAF372E808ACE2090B5E14AD6D5ED66289B5259CC434672EE63711DD303D21008E298D5E8D9A59859A8B6B372FE9A2E580EFC725E5C173C3A84C315AF0D0D4FC4FA3D35872C767BF85DA2F004C90652538430E4A6367B16DE6309
-X-87b9d050: 1
-X-C1DE0DAB: 0D63561A33F958A52A7EDDBD92604EB15002B1117B3ED6968E19B2E0D3008D93E99897350C7C491E823CB91A9FED034534781492E4B8EEAD81B3E0F64AD3EF57C79554A2A72441328621D336A7BC284946AD531847A6065A535571D14F44ED41
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF7CE9D093C42C1605840D9799CB656CEA24616FF4DC6A2AD3CDD087EAB0070FCB7DB53F1827808597EDA8A7084F1AF31870D4C693BF1A2292217EAABB4CF15AA56E952BA50CD086C4111DC66A97D0BFE2913E6812662D5F2A17D6C1CDD2003EB8E03787203701020945C72C348FB7EED3
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+ObcCpyrx6l7KImUglyhkEat/+ysWwi0gdhEs0JGjl6ggRWTy1haxBpVdbIX1nthFXMZebaIdHP2ghjoIc/363UZI6Kf1ptIMVQiWK+2I7Y2sebyHoQrX58o=
-X-Mailru-Sender: 689FA8AB762F739381B31377CF4CA21908301980EC2C77EBAA7AB643A5B97E305B12607FBF30CFF390DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; 
- s=mail4; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:
- To:From:From:Sender:Reply-To:To:Cc:Content-Type:Content-Transfer-Encoding:
- Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
- Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
- List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
- X-Cloud-Ids:Disposition-Notification-To;
- bh=+VaCL7Pj/cIoZ+YhwS5k8oNl/rY3UD4DlHAjyUPfKto=; t=1741336637; x=1741426637; 
- b=VSsWpKadaxoQFczkQPs96KWVXB7cWLc+JAt1XGpTxzFWmY5E8wcTJ7xTpE/Yjy/taoNCSEX6Bc+
- hL+xAmWo8ASpgGM9Pxi6duupqMLvnDzP+lN1FrZ1ejTMlPUCuqdS3Ptzh1MzQKRaTifEI1UgCR5D/
- 8xlYmhg4tClOLbBRxOFadoEzDLXAp6xlp/rIBAJSJY/7Fm31hh/TT9n4HvXBuzXOCKDjYUfVyjfa/
- A61vKUh7Ft7stQYKDxU38sCxpjl90zLedljE2w4tDEZ5idH6Fz/DHdeqp6sOm5BmptJiDFIZOFIcj
- jkomTuWBmW5h8jgYhFPEMNcS4yCJV6YzjOMw==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=inbox.ru
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=savoirfairelinux.com; s=DFC430D2-D198-11EC-948E-34200CB392D2;
+ t=1741341603; bh=kofI4KrmkA6ThI8GtK4eyvzUCrDA0rOdTMmylIPgOKA=;
+ h=From:To:Date:Message-Id:MIME-Version;
+ b=cEbtDvd89gG+zK3sPGioBDSWEmZGxN8AUUZSVnxnmQOACDmy9wwt2WOhbD7w60Trt
+ 5oBf3xTnVGO8NAVYWxbpIYdxd1DCxawfkE0/tFIAzff0hZllEKSx1GOOizCaZ9dDTO
+ v+WOQygS5JC3we4jvLAlvaYgBmfG2/F2l4C+2jxjQiMiW55pN7ThpX985KKbFeYb3O
+ 8wLRxZE0HrMlRCxWFMs44hlWYDy/79j7F74FNI1R5N+FLScs8/yS79DWRccH5qzp9V
+ FzwUSRpHW5d0zqodufwh997uMvurN3M40MpYedp0Fmp1iibw/kLK+jWTYvDH8W7cQy
+ Qae5bHNLKQBSQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=savoirfairelinux.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
- header.s=mail4 header.b=VSsWpKad
-X-Mailman-Original-Authentication-Results: exim-smtp-8cb569c79-6dn7r; auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: fix build with external
- gettext
+ unprotected) header.d=savoirfairelinux.com header.i=@savoirfairelinux.com
+ header.a=rsa-sha256 header.s=DFC430D2-D198-11EC-948E-34200CB392D2
+ header.b=cEbtDvd8
+Subject: [Buildroot] [PATCH v2 1/2] package/byacc: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,37 +104,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Postgresql fails to build with NLS enabled against uclibc/musl:
--------------------------------------------------------
-/home/autobuild/autobuild/instance-13/output-1/host/lib/gcc/aarch64-buildroot-linux-uclibc/12.4.0/../../../../aarch64-buildroot-linux-uclibc/bin/ld: scram-common.c:(.text+0x65c): undefined reference to `libintl_gettext'
-/home/autobuild/autobuild/instance-13/output-1/host/lib/gcc/aarch64-buildroot-linux-uclibc/12.4.0/../../../../aarch64-buildroot-linux-uclibc/bin/ld: scram-common.c:(.text+0x6cc): undefined reference to `libintl_gettext'
-/home/autobuild/autobuild/instance-13/output-1/host/lib/gcc/aarch64-buildroot-linux-uclibc/12.4.0/../../../../aarch64-buildroot-linux-uclibc/bin/ld: scram-common.c:(.text+0x73c): undefined reference to `libintl_gettext'
--------------------------------------------------------
+From: Thomas Perrot <thomas.perrot@bootlin.com>
 
-uclibc/musl toolchains use GNU gettext for NLS support.
-So we need to link against external libintl.
+This package provides a Berkeley LALR Yacc parser generator that is
+required by the i.MX Code Signing tool.
 
-Fixes: https://autobuild.buildroot.org/results/244f154aece46d02747b875faba4c51e7b5d0dc2/
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Signed-off-by: Thomas Perrot <thomas.perrot@bootlin.com>
+Signed-off-by: Luc BEAUFILS <luc.beaufils@savoirfairelinux.com>
 ---
- package/postgresql/postgresql.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/byacc/byacc.hash |  3 +++
+ package/byacc/byacc.mk   | 16 ++++++++++++++++
+ 2 files changed, 19 insertions(+)
+ create mode 100644 package/byacc/byacc.hash
+ create mode 100644 package/byacc/byacc.mk
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 2b6e78b941..7c023bb7aa 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -13,7 +13,7 @@ POSTGRESQL_CPE_ID_VENDOR = postgresql
- POSTGRESQL_SELINUX_MODULES = postgresql
- POSTGRESQL_INSTALL_STAGING = YES
- POSTGRESQL_CONFIG_SCRIPTS = pg_config
--POSTGRESQL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
-+POSTGRESQL_LDFLAGS += $(TARGET_NLS_LIBS)
- # We have to force invalid paths for xmllint and xsltproc, otherwise
- # if detected they get used, even with -Ddocs=disabled and
- # -Ddocs_pdf=disabled, and it causes build failures
+diff --git a/package/byacc/byacc.hash b/package/byacc/byacc.hash
+new file mode 100644
+index 0000000000..d2ad441df3
+--- /dev/null
++++ b/package/byacc/byacc.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  42c1805cc529314e6a76326fe1b33e80c70862a44b01474da362e2f7db2d749c  byacc-20220128.tgz
++sha256  654a231fe9cd4d36e580214962fa777a1df0771d6889cfc74d19a3d414f14711  LICENSE
+diff --git a/package/byacc/byacc.mk b/package/byacc/byacc.mk
+new file mode 100644
+index 0000000000..7ca620b425
+--- /dev/null
++++ b/package/byacc/byacc.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# byacc
++#
++################################################################################
++
++BYACC_SITE = https://invisible-mirror.net/archives/byacc
++BYACC_VERSION = 20220128
++BYACC_SOURCE = byacc-$(BYACC_VERSION).tgz
++BYACC_LICENSE = Public Domain
++BYACC_LICENSE_FILES = LICENSE
++
++# To rename the binary byacc instead of yacc.
++HOST_BYACC_CONF_OPTS = --program-transform-name='s,^,b,'
++
++$(eval $(host-autotools-package))
 -- 
-2.48.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
