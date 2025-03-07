@@ -1,64 +1,67 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0965C19F32
-	for <buildroot@archiver.kernel.org>; Fri,  7 Mar 2025 19:05:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 030B7C19F32
+	for <buildroot@archiver.kernel.org>; Fri,  7 Mar 2025 19:05:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 634F840755;
-	Fri,  7 Mar 2025 19:05:25 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cTNBfnXmYlev; Fri,  7 Mar 2025 19:05:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4814440749
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4814440749;
-	Fri,  7 Mar 2025 19:05:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6D1B1E21
- for <buildroot@buildroot.org>; Fri,  7 Mar 2025 19:05:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F16988120C
- for <buildroot@buildroot.org>; Fri,  7 Mar 2025 19:05:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BF8D083F94;
+	Fri,  7 Mar 2025 19:05:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wZlxQQSQ4Fgt for <buildroot@buildroot.org>;
- Fri,  7 Mar 2025 19:05:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.125.25.8;
- helo=smtp-1908.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
+ id reDHex9vurAs; Fri,  7 Mar 2025 19:05:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 925CC84090
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 925CC84090;
+	Fri,  7 Mar 2025 19:05:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 534231C9
+ for <buildroot@buildroot.org>; Fri,  7 Mar 2025 19:05:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 27DB7404CF
+ for <buildroot@buildroot.org>; Fri,  7 Mar 2025 19:05:16 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OEhsWQzv0R8R for <buildroot@buildroot.org>;
+ Fri,  7 Mar 2025 19:05:13 +0000 (UTC)
+X-Greylist: delayed 357 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 07 Mar 2025 19:05:13 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7E956403AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E956403AA
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=83.166.143.168;
+ helo=smtp-8fa8.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EED168120E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EED168120E
-Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch
- [185.125.25.8])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EED168120E
+Received: from smtp-8fa8.mail.infomaniak.ch (smtp-8fa8.mail.infomaniak.ch
+ [83.166.143.168])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7E956403AA
  for <buildroot@buildroot.org>; Fri,  7 Mar 2025 19:05:13 +0000 (UTC)
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch
- [10.4.36.108])
- by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Z8bDh02wQz2Zb;
- Fri,  7 Mar 2025 19:59:16 +0100 (CET)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown
+ [IPv6:2001:1600:4:17::246c])
+ by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Z8bDg2ds7z3M2;
+ Fri,  7 Mar 2025 19:59:15 +0100 (CET)
 Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA
- id 4Z8bDg4pwzzKL8; Fri,  7 Mar 2025 19:59:15 +0100 (CET)
+ id 4Z8bDf6yrszKBn; Fri,  7 Mar 2025 19:59:14 +0100 (CET)
 From: Quentin Schulz <foss+buildroot@0leil.net>
-Date: Fri, 07 Mar 2025 19:58:45 +0100
+Date: Fri, 07 Mar 2025 19:58:43 +0100
 MIME-Version: 1.0
-Message-Id: <20250307-setserial-fix-v1-3-c37c1e7e8234@cherry.de>
+Message-Id: <20250307-setserial-fix-v1-1-c37c1e7e8234@cherry.de>
 References: <20250307-setserial-fix-v1-0-c37c1e7e8234@cherry.de>
 In-Reply-To: <20250307-setserial-fix-v1-0-c37c1e7e8234@cherry.de>
 To: buildroot@buildroot.org
-Cc: Quentin Schulz <quentin.schulz@cherry.de>
+Cc: Quentin Schulz <quentin.schulz@cherry.de>, 
+ Peter Korsgaard <jacmet@sunsite.dk>
 X-Mailer: b4 0.14.2
 X-Infomaniak-Routing: alpha
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=0leil.net
-Subject: [Buildroot] [PATCH 3/4] package/setserial: update to 2.17-57 for
- compatibility with newer toolchains
+Subject: [Buildroot] [PATCH 1/4] package/setserial: apply patches from
+ setserial_2.17-45.3.diff.gz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -70,94 +73,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Quentin Schulz <quentin.schulz@cherry.de>
-
-Debian has a newer setserial which compiles on newer toolchains, so
-let's update to it.
-
-Noteworthy is the change from a big diff to a tarball containing the
-whole debian directory. The series file which contains all patches to
-apply is named properly so no need to rename 00list anymore. The patches
-file extension is now .patch instead of .dpatch.
-
-This fixes the build with BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64 external
-toolchain (14.2.rel1).
-
-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
----
- package/setserial/setserial.hash |  4 ++--
- package/setserial/setserial.mk   | 21 +++++++--------------
- 2 files changed, 9 insertions(+), 16 deletions(-)
-
-diff --git a/package/setserial/setserial.hash b/package/setserial/setserial.hash
-index 991d2860a9509642950981204d9700fda2d899c8..3c1ade56ff21dfa1b038a906f71226bc2c66427c 100644
---- a/package/setserial/setserial.hash
-+++ b/package/setserial/setserial.hash
-@@ -1,5 +1,5 @@
--# From http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/setserial/setserial_2.17-45.3.dsc
-+# From https://snapshot.debian.org/file/98a1ce8758c5313a8b8a266d493605e578bcc4f6/setserial_2.17-57.dsc
- sha256  7e4487d320ac31558563424189435d396ddf77953bb23111a17a3d1487b5794a  setserial_2.17.orig.tar.gz
--sha256  33db87e8a86cf12b7c97efca9e056865e71358e8cfeb3931118b2647ce1eecc6  setserial_2.17-45.3.diff.gz
-+sha256  e96ef61d3e5fc5a77d6e54c4c48a2caee31931732a18ee49e4c67d128ad181c9  setserial_2.17-57.debian.tar.xz
- # Locally computed
- sha256  1d7e810ed28daf370def626dfd4c502f2f77d2b678f1ac72e2ba675dd6f9af0d  debian/copyright
-diff --git a/package/setserial/setserial.mk b/package/setserial/setserial.mk
-index 6567738e762b7d628c63d10f8ab87a898ef9e236..9b27e4e867e65231eb7c27c11685befcfcb6b75f 100644
---- a/package/setserial/setserial.mk
-+++ b/package/setserial/setserial.mk
-@@ -6,8 +6,8 @@
- 
- SETSERIAL_VERSION = 2.17
- SETSERIAL_SOURCE = setserial_$(SETSERIAL_VERSION).orig.tar.gz
--SETSERIAL_SITE = http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/s/setserial
--SETSERIAL_EXTRA_DOWNLOADS = setserial_2.17-45.3.diff.gz
-+SETSERIAL_SITE = https://snapshot.debian.org/archive/debian/20250307T084701Z/pool/main/s/setserial/
-+SETSERIAL_EXTRA_DOWNLOADS = setserial_$(SETSERIAL_VERSION)-57.debian.tar.xz
- SETSERIAL_LICENSE = GPL-2.0
- SETSERIAL_LICENSE_FILES = debian/copyright
- # make all also builds setserial.cat which needs nroff
-@@ -18,26 +18,19 @@ SETSERIAL_AUTORECONF = YES
- # Extract the Debian tarball inside the sources
- define SETSERIAL_DEBIAN_EXTRACT
- 	$(call suitable-extractor,$(notdir $(SETSERIAL_EXTRA_DOWNLOADS))) \
--		$(SETSERIAL_DL_DIR)/$(notdir $(SETSERIAL_EXTRA_DOWNLOADS)) > $(@D)/setserial_2.17-45.3.diff
-+		$(SETSERIAL_DL_DIR)/$(notdir $(SETSERIAL_EXTRA_DOWNLOADS)) | \
-+		$(TAR) -C $(@D) $(TAR_OPTIONS) -
- endef
- 
- SETSERIAL_POST_EXTRACT_HOOKS += SETSERIAL_DEBIAN_EXTRACT
- 
- define SETSERIAL_APPLY_DEBIAN_PATCHES
--	# - Applying diff gotten from SETSERIAL_EXTRA_DOWNLOADS
- 	# - Touching gorhack.h is needed for the Debian patch 18 to work
--	# - Rename 00list which contains the list of patches to "series" so
--	#   Buildroot knows in which order the patches need to be applied. This
--	#   is necessary because their file extension is dpatch, which isn't
--	#   supported by the APPLY_PATCHES script outside of the series
--	#   mechanism.
--	$(APPLY_PATCHES) $(@D) $(@D) setserial_2.17-45.3.diff
--
-+	# - Apply patches in the order listed in debian/patches/series
- 	if [ -d $(@D)/debian/patches ]; then \
- 		touch $(@D)/gorhack.h; \
--		rm $(@D)/debian/patches/01_makefile.dpatch; \
--		mv $(@D)/debian/patches/00list $(@D)/debian/patches/series; \
--		sed -i '/01_makefile.dpatch/d' $(@D)/debian/patches/series; \
-+		rm $(@D)/debian/patches/01_makefile.patch; \
-+		sed -i '/01_makefile.patch/d' $(@D)/debian/patches/series; \
- 		$(APPLY_PATCHES) $(@D) $(@D)/debian/patches series; \
- 	fi
- endef
-
--- 
-2.48.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJvbTogUXVlbnRpbiBTY2h1bHogPHF1ZW50aW4uc2NodWx6QGNoZXJyeS5kZT4KClNpbmNlIDY0
+YWM3MTk5NTI1ZiAoImFwcGx5LXBhdGNoZXMuc2g6IGFkZCByZWN1cnNpdml0eSB3aGVuIHNjYW5u
+aW5nCnBhdGNoZGlyIiksIHBhdGNoZXMgd2l0aCB0aGUgLmRwYXRjaCBmaWxlIGV4dGVuc2lvbiBh
+cmUgc2ltcGx5IGlnbm9yZWQuCgpVbmZvcnR1bmF0ZWx5LCBzZXRzZXJpYWwgcGFja2FnZSBzdG9w
+cGVkIGFwcGx5aW5nIHRoZSBwYXRjaGVzIGFmdGVyIHRoYXQKY29tbWl0LgoKU2FkbHksIDAwMDIt
+dGlvY2doYXllc2VzcC1idWlsZC1maXgucGF0Y2ggaXMgYnJlYWtpbmcgdGhlIHBhdGNoIGNvbnRl
+eHQKZm9yIHBhdGNoIDE4IGluIHRoZSBkZWJpYW4gZGlmZiBiZWNhdXNlIHdlIGFyZSBjdXJyZW50
+bHkgYXBwbHlpbmcKcGF0Y2hlcyBmcm9tIHdpdGhpbiBCdWlsZHJvb3QgdHJlZSBiZWZvcmUgYXBw
+bHlpbmcgdGhlIG9uZXMgd2UgZG93bmxvYWQKZnJvbSBEZWJpYW4uIEluc3RlYWQgb2YgZG9pbmcg
+c29tZSBoYWNrcywgbGV0J3MgYXBwbHkgRGViaWFuIHBhdGNoZXMKYmVmb3JlIEJ1aWxkcm9vdCdz
+LiBIb3dldmVyLCB0aGlzIHJlcXVpcmVzIGEgZmV3IGNoYW5nZXMuIEZpcnN0LCB3ZSBuZWVkCnRv
+IG1pZ3JhdGUgYXdheSBmcm9tIHRoZSBTRVRTRVJJQUxfUEFUQ0ggbWVjaGFuaXNtIGJlY2F1c2Ug
+Y3VycmVudGx5Cl9QUkVfUEFUQ0hfSE9PS1MgcnVucyBiZWZvcmUgdGhpcyBpcyBhcHBsaWVkIGFu
+ZCBfUE9TVF9QQVRDSF9IT09LUyBydW5zCmFmdGVyIHRoZSBCdWlsZHJvb3QgcGF0Y2hlcyBhcmUg
+YXBwbGllZC4KSW5zdGVhZCwgbGV0J3MgdXNlIGFuIF9FWFRSQV9ET1dOTE9BRFMgd2UgbWFudWFs
+bHkgZXh0cmFjdCDDoC1sYQpwYWNrYWdlL2FuZHJvaWQtdG9vbHMvYW5kcm9pZC10b29scy5tay4g
+VGhlbiBpbiB0aGUgX1BSRV9QQVRDSF9IT09LUywgd2UKYXBwbHkgdGhlIGJpZyBkaWZmIHRoZSBf
+RVhUUkFfRE9XTkxPQURTIGNvbnRhaW5zIHNvIHRoYXQgdGhlIHBhdGNoZXMKZnJvbSB3aXRoaW4g
+Y2FuIGJlIGFwcGxpZWQgYWZ0ZXJ3YXJkcy4KCkJlY2F1c2UgdGhlIGJpZyBkaWZmIHN0aWxsIGNv
+bnRhaW5zIG9ubHkgcGF0Y2hlcyB3aXRoIHRoZSAqLmRwYXRjaApleHRlbnNpb25zIHRoYXQgYXJl
+IG5vdCBzdXBwb3J0ZWQgYW55bW9yZSwgd2UgbmVlZCB0byBlaXRoZXIgcmVuYW1lIGFsbApwYXRj
+aGVzIG9yIHVzZSB0aGUgMDBsaXN0IGZpbGUgdGhhdCBsaXN0cyBhbGwgcGF0Y2hlcyBpbiB0aGUg
+b3JkZXIgdGhleQpuZWVkIHRvIGJlIGFwcGxpZWQuIEZvcnR1bmF0ZWx5LCBCdWlsZHJvb3QgYWxy
+ZWFkeSBzdXBwb3J0cyBhcHBseWluZwpwYXRjaGVzIHdpdGggYHBhdGNoYCByZWdhcmRsZXNzIG9m
+IHRoZWlyIGV4dGVuc2lvbiBpZiB0aGV5IGFyZSB3aXRoaW4Kc3VjaCBhIGZpbGUuIFVuZm9ydHVu
+YXRlbHksIGl0IG5lZWRzIHRvIGJlIGNhbGxlZCAic2VyaWVzIiwgaGVuY2UgdGhlCnJlbmFtaW5n
+LgoKQmVjYXVzZSBwYXRjaCAxOCBmcm9tIHRoZSBiaWcgZGlmZiBpcyBub3cgYXBwbGllZCBiZWZv
+cmUKMDAwMi10aW9jZ2hheWVzZXNwLWJ1aWxkLWZpeC5wYXRjaCBmcm9tIEJ1aWxkcm9vdCB0cmVl
+LCB0aGUgbGF0dGVyIHdpbGwKZmFpbCBpZiBsZWZ0IHVubW9kaWZpZWQsIHNvIHRoaXMgY29tbWl0
+IGFsc28gcmViYXNlcyBpdC4KCkZpbmFsbHksIHdlIGtlZXAgdGhlIHJlbW92YWwgb2YgMDFfbWFr
+ZWZpbGUuZHBhdGNoIGZvciBub3cgZXZlbiB0aG91Z2gKaXQgb25seSBleGlzdHMgYmVjYXVzZSBp
+dCBnZW5lcmF0ZXMgYSBjb25mbGljdCB3aXRoCjAwMDEtYnVpbGQtc3lzdGVtLWZpeC5wYXRjaCBm
+cm9tIEJ1aWxkcm9vdCB0cmVlLiBJdCdsbCBiZSByZWJhc2VkIGluIGEKbGF0ZXIgY29tbWl0IHRo
+b3VnaC4KClNpZ25lZC1vZmYtYnk6IFF1ZW50aW4gU2NodWx6IDxxdWVudGluLnNjaHVsekBjaGVy
+cnkuZGU+Ci0tLQogLi4uL3NldHNlcmlhbC8wMDAyLXRpb2NnaGF5ZXNlc3AtYnVpbGQtZml4LnBh
+dGNoICAgfCAgNyArKysrLS0KIHBhY2thZ2Uvc2V0c2VyaWFsL3NldHNlcmlhbC5tayAgICAgICAg
+ICAgICAgICAgICAgIHwgMjYgKysrKysrKysrKysrKysrKysrLS0tLQogMiBmaWxlcyBjaGFuZ2Vk
+LCAyNyBpbnNlcnRpb25zKCspLCA2IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2Uv
+c2V0c2VyaWFsLzAwMDItdGlvY2doYXllc2VzcC1idWlsZC1maXgucGF0Y2ggYi9wYWNrYWdlL3Nl
+dHNlcmlhbC8wMDAyLXRpb2NnaGF5ZXNlc3AtYnVpbGQtZml4LnBhdGNoCmluZGV4IDE3NmEwYzll
+MTUyYWVjNGEzNGViNWZiZjg3ZjJmMGMyNWE1MjNmYmIuLjY3MGJlMzRjMjhmNTQ4YzQ5OTU3ZDkx
+YWU1MThjOGY1MTExZjMyN2QgMTAwNjQ0Ci0tLSBhL3BhY2thZ2Uvc2V0c2VyaWFsLzAwMDItdGlv
+Y2doYXllc2VzcC1idWlsZC1maXgucGF0Y2gKKysrIGIvcGFja2FnZS9zZXRzZXJpYWwvMDAwMi10
+aW9jZ2hheWVzZXNwLWJ1aWxkLWZpeC5wYXRjaApAQCAtNiw2ICs2LDkgQEAgZGVmaW5lIHRoZSBU
+SU9DR0hBWUVTRVNQIGlvY3RsLCBicmVha2luZyB0aGUgYnVpbGQuCiBJdCdzIHZlcnkgdW5saWtl
+bHkgdG8gYmUgb2YgaW50ZXJlc3QgYW55bW9yZSwgc28ganVzdCB1bmRlZiBpdC4KIAogU2lnbmVk
+LW9mZi1ieTogUGV0ZXIgS29yc2dhYXJkIDxqYWNtZXRAc3Vuc2l0ZS5kaz4KK1tyZWJhc2VkIG9u
+IHRvcCBvZiBEZWJpYW4ncyBzZXRzZXJpYWxfMi4xNy00NS4zLmRpZmZdCitVcHN0cmVhbTogTi9B
+IG9ubHkgZm9yIGNvbXBhdGliaWxpdHkgd2l0aCBMaW51eCBrZXJuZWxzIFsyLjYuMzM7Mi42LjM2
+WworU2lnbmVkLW9mZi1ieTogUXVlbnRpbiBTY2h1bHogPHF1ZW50aW4uc2NodWx6QGNoZXJyeS5k
+ZT4KIC0tLQogIHNldHNlcmlhbC5jIHwgICAgNSArKysrKwogIDEgZmlsZSBjaGFuZ2VkLCA1IGlu
+c2VydGlvbnMoKykKQEAgLTE0LDkgKzE3LDkgQEAgSW5kZXg6IHNldHNlcmlhbC0yLjE3L3NldHNl
+cmlhbC5jCiA9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09CiAtLS0gc2V0c2VyaWFsLTIuMTcub3JpZy9zZXRzZXJpYWwuYwog
+KysrIHNldHNlcmlhbC0yLjE3L3NldHNlcmlhbC5jCi1AQCAtMjQsNiArMjQsMTEgQEAKK0BAIC0z
+OSw2ICszOSwxMSBAQAorICNpbmNsdWRlICJzYWZldHkuaCIKICAjZW5kaWYKLSAjaW5jbHVkZSA8
+bGludXgvc2VyaWFsLmg+CiAgCiArLyogbGludXgvaGF5ZXNlc3AuaCBnb3QgcmVtb3ZlZCBpbiAy
+LjYuMzMgYnV0IHNvbWUgYXJjaHMgKGxpa2UgeDg2KQogKyAgIHN0aWxsIGRlZmluZSBUSU9DR0hB
+WUVTRVNQLiBJdCdzIHZlcnkgdW5saWtlbHkgdG8gYmUgb2YgaW50ZXJlc3QKZGlmZiAtLWdpdCBh
+L3BhY2thZ2Uvc2V0c2VyaWFsL3NldHNlcmlhbC5tayBiL3BhY2thZ2Uvc2V0c2VyaWFsL3NldHNl
+cmlhbC5tawppbmRleCA2NmNhNTlkNzlkMTEzMjkzOTczYzQ1NWQ4NWQ1Y2IwODY3ZTMyMWYyLi4w
+MDJiZjIxMTYxM2E2MmY5OWVmZDBiNzdhYTg5YmZmYzNmMGExNmY1IDEwMDY0NAotLS0gYS9wYWNr
+YWdlL3NldHNlcmlhbC9zZXRzZXJpYWwubWsKKysrIGIvcGFja2FnZS9zZXRzZXJpYWwvc2V0c2Vy
+aWFsLm1rCkBAIC01LDIzICs1LDQxIEBACiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCiBTRVRT
+RVJJQUxfVkVSU0lPTiA9IDIuMTcKLVNFVFNFUklBTF9QQVRDSCA9IHNldHNlcmlhbF8yLjE3LTQ1
+LjMuZGlmZi5negogU0VUU0VSSUFMX1NPVVJDRSA9IHNldHNlcmlhbF8kKFNFVFNFUklBTF9WRVJT
+SU9OKS5vcmlnLnRhci5negogU0VUU0VSSUFMX1NJVEUgPSBodHRwOi8vc25hcHNob3QuZGViaWFu
+Lm9yZy9hcmNoaXZlL2RlYmlhbi8yMDE0MTAyM1QwNDMxMzJaL3Bvb2wvbWFpbi9zL3NldHNlcmlh
+bAorU0VUU0VSSUFMX0VYVFJBX0RPV05MT0FEUyA9IHNldHNlcmlhbF8yLjE3LTQ1LjMuZGlmZi5n
+egogU0VUU0VSSUFMX0xJQ0VOU0UgPSBHUEwtMi4wCiBTRVRTRVJJQUxfTElDRU5TRV9GSUxFUyA9
+IGRlYmlhbi9jb3B5cmlnaHQKICMgbWFrZSBhbGwgYWxzbyBidWlsZHMgc2V0c2VyaWFsLmNhdCB3
+aGljaCBuZWVkcyBucm9mZgogU0VUU0VSSUFMX01BS0VfT1BUUyA9IHNldHNlcmlhbAogCisjIEV4
+dHJhY3QgdGhlIERlYmlhbiB0YXJiYWxsIGluc2lkZSB0aGUgc291cmNlcworZGVmaW5lIFNFVFNF
+UklBTF9ERUJJQU5fRVhUUkFDVAorCSQoY2FsbCBzdWl0YWJsZS1leHRyYWN0b3IsJChub3RkaXIg
+JChTRVRTRVJJQUxfRVhUUkFfRE9XTkxPQURTKSkpIFwKKwkJJChTRVRTRVJJQUxfRExfRElSKS8k
+KG5vdGRpciAkKFNFVFNFUklBTF9FWFRSQV9ET1dOTE9BRFMpKSA+ICQoQEQpL3NldHNlcmlhbF8y
+LjE3LTQ1LjMuZGlmZgorZW5kZWYKKworU0VUU0VSSUFMX1BPU1RfRVhUUkFDVF9IT09LUyArPSBT
+RVRTRVJJQUxfREVCSUFOX0VYVFJBQ1QKKwogZGVmaW5lIFNFVFNFUklBTF9BUFBMWV9ERUJJQU5f
+UEFUQ0hFUwotCSMgVG91Y2hpbmcgZ29yaGFjay5oIGlzIG5lZWRlZCBmb3IgdGhlIERlYmlhbiBw
+YXRjaCAxOCB0byB3b3JrCisJIyAtIEFwcGx5aW5nIGRpZmYgZ290dGVuIGZyb20gU0VUU0VSSUFM
+X0VYVFJBX0RPV05MT0FEUworCSMgLSBUb3VjaGluZyBnb3JoYWNrLmggaXMgbmVlZGVkIGZvciB0
+aGUgRGViaWFuIHBhdGNoIDE4IHRvIHdvcmsKKwkjIC0gUmVuYW1lIDAwbGlzdCB3aGljaCBjb250
+YWlucyB0aGUgbGlzdCBvZiBwYXRjaGVzIHRvICJzZXJpZXMiIHNvCisJIyAgIEJ1aWxkcm9vdCBr
+bm93cyBpbiB3aGljaCBvcmRlciB0aGUgcGF0Y2hlcyBuZWVkIHRvIGJlIGFwcGxpZWQuIFRoaXMK
+KwkjICAgaXMgbmVjZXNzYXJ5IGJlY2F1c2UgdGhlaXIgZmlsZSBleHRlbnNpb24gaXMgZHBhdGNo
+LCB3aGljaCBpc24ndAorCSMgICBzdXBwb3J0ZWQgYnkgdGhlIEFQUExZX1BBVENIRVMgc2NyaXB0
+IG91dHNpZGUgb2YgdGhlIHNlcmllcworCSMgICBtZWNoYW5pc20uCisJJChBUFBMWV9QQVRDSEVT
+KSAkKEBEKSAkKEBEKSBzZXRzZXJpYWxfMi4xNy00NS4zLmRpZmYKKwogCWlmIFsgLWQgJChARCkv
+ZGViaWFuL3BhdGNoZXMgXTsgdGhlbiBcCiAJCXRvdWNoICQoQEQpL2dvcmhhY2suaDsgXAogCQly
+bSAkKEBEKS9kZWJpYW4vcGF0Y2hlcy8wMV9tYWtlZmlsZS5kcGF0Y2g7IFwKLQkJJChBUFBMWV9Q
+QVRDSEVTKSAkKEBEKSAkKEBEKS9kZWJpYW4vcGF0Y2hlcyAqLmRwYXRjaDsgXAorCQltdiAkKEBE
+KS9kZWJpYW4vcGF0Y2hlcy8wMGxpc3QgJChARCkvZGViaWFuL3BhdGNoZXMvc2VyaWVzOyBcCisJ
+CXNlZCAtaSAnLzAxX21ha2VmaWxlLmRwYXRjaC9kJyAkKEBEKS9kZWJpYW4vcGF0Y2hlcy9zZXJp
+ZXM7IFwKKwkJJChBUFBMWV9QQVRDSEVTKSAkKEBEKSAkKEBEKS9kZWJpYW4vcGF0Y2hlcyBzZXJp
+ZXM7IFwKIAlmaQogZW5kZWYKIAotU0VUU0VSSUFMX1BPU1RfUEFUQ0hfSE9PS1MgKz0gU0VUU0VS
+SUFMX0FQUExZX0RFQklBTl9QQVRDSEVTCitTRVRTRVJJQUxfUFJFX1BBVENIX0hPT0tTICs9IFNF
+VFNFUklBTF9BUFBMWV9ERUJJQU5fUEFUQ0hFUwogCiAkKGV2YWwgJChhdXRvdG9vbHMtcGFja2Fn
+ZSkpCgotLSAKMi40OC4xCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
