@@ -4,103 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3420EC19F32
-	for <buildroot@archiver.kernel.org>; Fri,  7 Mar 2025 13:20:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E3BCC19F32
+	for <buildroot@archiver.kernel.org>; Fri,  7 Mar 2025 13:40:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 33D1160F69;
-	Fri,  7 Mar 2025 13:20:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1E9260770;
+	Fri,  7 Mar 2025 13:40:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HuQ-B3mJ2z_5; Fri,  7 Mar 2025 13:20:51 +0000 (UTC)
+ id aO63GZbMqOOG; Fri,  7 Mar 2025 13:40:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C8E960765
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC52160784
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C8E960765;
-	Fri,  7 Mar 2025 13:20:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6B48671F
- for <buildroot@buildroot.org>; Fri,  7 Mar 2025 13:20:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC52160784;
+	Fri,  7 Mar 2025 13:40:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 22CC41C9
+ for <buildroot@buildroot.org>; Fri,  7 Mar 2025 13:40:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4DED460757
- for <buildroot@buildroot.org>; Fri,  7 Mar 2025 13:20:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E835F4060D
+ for <buildroot@buildroot.org>; Fri,  7 Mar 2025 13:40:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id epbD_cVgw6Ez for <buildroot@buildroot.org>;
- Fri,  7 Mar 2025 13:20:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1Xv7Dbckc42D for <buildroot@buildroot.org>;
+ Fri,  7 Mar 2025 13:40:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::530; helo=mail-ed1-x530.google.com;
+ client-ip=2a00:1450:4864:20::533; helo=mail-ed1-x533.google.com;
  envelope-from=raphael.pavlidis@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7D751605EA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D751605EA
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7D751605EA
- for <buildroot@buildroot.org>; Fri,  7 Mar 2025 13:20:48 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id
- 4fb4d7f45d1cf-5e5e34f4e89so1579618a12.1
- for <buildroot@buildroot.org>; Fri, 07 Mar 2025 05:20:48 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 87B1B4056E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87B1B4056E
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 87B1B4056E
+ for <buildroot@buildroot.org>; Fri,  7 Mar 2025 13:40:32 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id
+ 4fb4d7f45d1cf-5e5dce099f4so1983814a12.1
+ for <buildroot@buildroot.org>; Fri, 07 Mar 2025 05:40:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1741353646; x=1741958446;
+ d=1e100.net; s=20230601; t=1741354830; x=1741959630;
  h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=pzmBLR1m5LriYY7KhOiLbiMILBnHYdSqwWXZKSMqx1Q=;
- b=WpOBB8lyXqtz6dkRqvFQjzZfeDZsM6NZTZDfINgwCt+CO/5dKKxULJ1StpdFN81Vf+
- 7Q5+uGdQvutluPd+kM9Ik8ZenYUC82cbEwIZPGSZVmbztNr9W3i4X5cOWjyfexVfuYoU
- uEKKI4eTqPj1BImSVT4QxeuB8kSnEnc8OAsdxOkr+DDliB9ARTQosxIbJZODsOaWSTa0
- gnlt0GvzEag2Y4bE+s05VJIYA3+3BYFzJQT7px56nxHY7r0LzLlew9DdhEYKU6UJXhcQ
- r9nC0z25Y7cIuMedPAHlsghCkxXFbmij+WANk/u+nvfALIeaq5RcmzaXHmf/1NwyM/wk
- Kzyw==
+ bh=d0laVk1m7Zwzm4V1vyhtdyCkReFqQnlUo7YzyUy6YxA=;
+ b=fp2YEr13YLMeGFugqsX+7FF/mrgSk/oY3kvo+NyjS/7/uoL3aWq26F/+es0Jwg00G6
+ h1YwIM4oWw12yQaJTqsmHBPKOq/GgVPlxcO/FTreu8sHFWVTn+wUvinQJBWxvFtfzqMh
+ pA2lRaK+bbb37k6g0AmEsUPtNuFJQ1c/vP3BvvRehBaZvRiRGOG1I4rY+MrLei2tAQlc
+ UMeS6oH2tNKZIittPJteEyNsuzNSQWXjAtj2JFAWal8vP3k17yFn0fKNEFHrOuazjXGA
+ zf6LQltqnIpbYWvh/dnPcWmia5E1LLrTGH7bUn6zH2v/zZ30Dx2fhmPyAFgZ8vlvYmgm
+ 37pQ==
 X-Forwarded-Encrypted: i=1;
- AJvYcCV16M6ON8cHEhArawiiW8nHbXUuE2QPYW/W1Vwz4bQ2IE7xreETKD+WSKZGwzVd0BbkgSbw/TjiSP0=@buildroot.org
-X-Gm-Message-State: AOJu0YzAIRN0XCn1VQCnJvdiDujL3no499dODimQatR9WH1BwDu7OAPU
- SxartBaag+QiT6iUFU/NBjMertT26wNzUM99UNie0fB3EhDFVI0O0Az2OQ==
-X-Gm-Gg: ASbGncurwWLe4ek4spBzyqf1l8cj7cZDG9EHzC1ZwvHl2EKnun3tl46FaeqawJrccTB
- lmRJLGChjZn4FrzEyjwT4AXa+OorD0FLBtqSGzSBFXpaY+KwATDM/CRWg5LKn6cDP9q/1rJTbnH
- KAQsSeME7ee/Yze6DGTPO53FKsbmItc9yZFX67XOjovmgVHAbYC1y/ffR2DPBxBiRE5vBPWaR5F
- 4snnnnWdyjGsjKt/cFvXkkNXfmunDxnY1k9LwAQEJCRrc7mQsYK00p90tIwlwpebO0RqFOl2ZJw
- L4t3vJN1CkTsIXMgcUY4gWZ6GUZ2RClhUdXaQ/9AQGkK3IYTdWKmz6pmI+WMZuQAEPs=
-X-Google-Smtp-Source: AGHT+IEVZp60EH9bjM5K6wS9rUj1OYsXL+gUq+RA4rN4DP/+3Ghr71INdqiT0yvkUJhnbbiFSyniWw==
-X-Received: by 2002:a17:906:f589:b0:abf:d4a9:a0a5 with SMTP id
- a640c23a62f3a-ac252f8e28fmr396953366b.45.1741353646272; 
- Fri, 07 Mar 2025 05:20:46 -0800 (PST)
+ AJvYcCWBNSnWQyfLmNb1UjjklLeI3crxWwWZXa5vG4grb6rMsJmBUXYDQ6r1/TlCBjSKUTJCsVOYftoQ048=@buildroot.org
+X-Gm-Message-State: AOJu0YxrpZiiqH9BJ0dJNFsgCeK6KE5+fwQnqsOhOvLHaxAohBqf7yhZ
+ HNCMziAj3Rov/OVH41aLGcHpV67Rs/NQkT0UbjMu06PppND7FVJx
+X-Gm-Gg: ASbGncuqplDLawlG6WKCguyTEQVHDAYB52x8WX3yfi88Tg/mi9YEJfVQ/rM/5fUh6sq
+ q/ij9CLxoJAYxxlprTHqNcqkh5lxNjRTcTh5yRN+2x9HZauF1LvQxakN8gAdXZBOIVS4oxiTlmQ
+ RF1U55H0p9GZYduyxAB/2VWLLoxQrp0sHHLovADnpV0Q3y649wufbhrufpsCXml7MTaruSInTsS
+ 6M+W4xmDBIFmA0byYrXacvJzltnM5yE1yL/I8uh/s6AhdYjRoTqlKi2CG+6c/ya8ZDHKwoartSP
+ LZKE6kHdEFAO9C7wbg3kG8/1+8VLDczT4etIBfXP5jQs02iKHFpbsB4gOjJQmckFnFs=
+X-Google-Smtp-Source: AGHT+IGei7NgzymL3UiyfvkcMW2utLnpfprVO+FelLeIEwgjTB3IPgddFOmig50mvymLylbSkEkQUA==
+X-Received: by 2002:a05:6402:4021:b0:5e5:e78a:c4ff with SMTP id
+ 4fb4d7f45d1cf-5e5e78aca7dmr2977624a12.27.1741354830242; 
+ Fri, 07 Mar 2025 05:40:30 -0800 (PST)
 Received: from ?IPV6:2a02:8070:2483:7e00::f0b8? ([2a02:8070:2483:7e00::f0b8])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-ac239485bf3sm279605366b.63.2025.03.07.05.20.45
+ 4fb4d7f45d1cf-5e5c733f4c3sm2656926a12.14.2025.03.07.05.40.29
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 07 Mar 2025 05:20:45 -0800 (PST)
-Message-ID: <be26f445-7e91-45c6-b249-ef8cf0653606@gmail.com>
-Date: Fri, 7 Mar 2025 14:20:55 +0100
+ Fri, 07 Mar 2025 05:40:29 -0800 (PST)
+Message-ID: <549206ba-180d-4ee1-9a5b-a9d99ab2d3d1@gmail.com>
+Date: Fri, 7 Mar 2025 14:40:39 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: Christian Stewart <christian@aperture.us>, Julien Olivain <ju.o@free.fr>
 References: <cover.1740841539.git.yann.morin.1998@free.fr>
- <b583ec300376e548aa474691e08d8486dff91a16.1740841539.git.yann.morin.1998@free.fr>
+ <dee1cb43f9e636b7ccdc7d4602ae0ab438952c3a.1740841539.git.yann.morin.1998@free.fr>
 Content-Language: en-US
 From: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-In-Reply-To: <b583ec300376e548aa474691e08d8486dff91a16.1740841539.git.yann.morin.1998@free.fr>
+In-Reply-To: <dee1cb43f9e636b7ccdc7d4602ae0ab438952c3a.1740841539.git.yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1741353646; x=1741958446; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1741354830; x=1741959630; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:from:content-language
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=pzmBLR1m5LriYY7KhOiLbiMILBnHYdSqwWXZKSMqx1Q=;
- b=kHTNTBHaNlFgp3uW1QUosImoS5aLNMy5h5oNaNE+iCt/3WKmxLhtjG3RxXLgFUcV1O
- zQfV0q58TnHvf96GDwAEGETOJHvs3AWJrimR1zyh4GIPxURRjyXlPSV+6yIpA9sflA4f
- qgjVPVQ4NBJh6dkGDopSwuICH4IEBJ9fUrF5rmAfaaCHbXhkULwNJzxJ58XLytf+COKE
- 8H3lCSTo8jrJ+HpGKsKtRcVRGDoDcjiaTVcGeznCz6uMJiudR41UqHwSOEyEyhyv0MZC
- XXGJl7GcZxiIiXGMCmFFnbbxryAkrfr0H4PnjHK/pIiuvjQCN7t6qMGqG+HBYfplF0BG
- cZqA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=d0laVk1m7Zwzm4V1vyhtdyCkReFqQnlUo7YzyUy6YxA=;
+ b=dNBHdGM8nd4bkwD71Jvqgxscqd57XPQNP0om4+8YbYMd8L167GyV8CfPXp/2CSnSwL
+ uwscm8Or/lpBvXR1QHdmiOWE+wVMuM+jOfv9B1d5jeUsPhaNnDwHiXRXPTB4eIoGyet2
+ IU2Lsg6IV+nxJzv8yo8OqgAs1Nu179VLyyLU1zrVxrOuradFqH7haRGJD13MyaFPnpy/
+ O/9XKNBJjbgEoj+IGOixhJ7AOGEe8gwQOLR86KEnjLzC/oexixc+FrWN3QzxBKcuznEX
+ Pp24E7s898fCFLg59mhgTPhJ+zNzK17550iVyMsHm0VGwCWubnU8Ge+4xleMaDkD0noX
+ k+Ng==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=kHTNTBHa
-Subject: Re: [Buildroot] [PATCH 4/9 v3] package/slirp4netns: needs TUN
- support in the kernel
+ header.a=rsa-sha256 header.s=20230601 header.b=dNBHdGM8
+Subject: Re: [Buildroot] [PATCH 9/9 v3] package/podman: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,29 +117,58 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Yann,
-the changes looks good.
+Hello Yann, All,
 
 On 3/1/25 16:05, Yann E. MORIN wrote:
 [snip]
->   
-> +define SLIRP4NETNS_LINUX_CONFIG_FIXUPS
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CORE)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NETDEVICES)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CORE)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
-> +	$(call KCONFIG_ENABLE_OPT,CONFIG_TUN)
-> +endef
+> 
+> The documentation [0] states that seccomp can be disabled (i.e. not
+> enabled), but we were unable to start a container without seccomp
+> support in podman. So we make that mandatory.
 
-Yes, you are right; those kernel configurations have to be applied.
+You can start a container without seccomp by passing the
+--security-opt=seccomp=unconfined` option. But it is okay for me if it 
+is mandatory.
 
-Thank you for the trial and error. ;)
+> 
+[snip]
+> 
+> Similar to Docker, podman can inject a minimalist init as PID1 in
+> containers, and like Docker, this is optional; podman however can only
+> use catatonit as such an init [2]. Given the size of catatonit (1.3%
+> that of podman!), we do not bother to make it optional, and always
+> enable it as well.
+
+I think systemd can also be used as a init. According to the 
+documentation [1].
+
+[snip]
+> +	select BR2_PACKAGE_IPTABLES  # runtime
+
+I am sure that you do not need iptables if you are using nftables.
+
+[snip]
+> +		$(PODMAN_PKGDIR)/containers.conf \
+> +		$(TARGET_DIR)/etc/containers/containers.conf
+> +	$(Q)$(INSTALL) -D -m 0644 \
+> +		$(PODMAN_PKGDIR)/policy.json \
+> +		$(TARGET_DIR)/etc/containers/policy.json
+> +	$(Q)$(INSTALL) -D -m 0644 \
+> +		$(PODMAN_PKGDIR)/registries.conf \
+> +		$(TARGET_DIR)/etc/containers/registries.conf
+
+Just for curiosity, why not installing those files under 
+/usr/share/containers?
 
 [snip]
 
+Thanks for your good work.
+
 Regards,
-Raphael
+Raphael Pavlidis
+
+[1]: 
+https://docs.podman.io/en/latest/markdown/podman-run.1.html#systemd-true-false-always
 
 _______________________________________________
 buildroot mailing list
