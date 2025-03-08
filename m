@@ -1,106 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A81D9C282EC
-	for <buildroot@archiver.kernel.org>; Sat,  8 Mar 2025 06:13:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46BC4C282EC
+	for <buildroot@archiver.kernel.org>; Sat,  8 Mar 2025 06:13:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5898361107;
-	Sat,  8 Mar 2025 06:13:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 077D78478F;
+	Sat,  8 Mar 2025 06:13:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AgpFMlCKe21o; Sat,  8 Mar 2025 06:13:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pw_HqzJzS595; Sat,  8 Mar 2025 06:13:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4722D6110C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2E5F847A0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4722D6110C;
-	Sat,  8 Mar 2025 06:13:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E73FA1C9
- for <buildroot@buildroot.org>; Sat,  8 Mar 2025 06:13:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E2E5F847A0;
+	Sat,  8 Mar 2025 06:13:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7BFAE1C9
+ for <buildroot@buildroot.org>; Sat,  8 Mar 2025 06:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CA7E46110C
- for <buildroot@buildroot.org>; Sat,  8 Mar 2025 06:13:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 60D348478F
+ for <buildroot@buildroot.org>; Sat,  8 Mar 2025 06:13:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fJHBl4yJEE4Q for <buildroot@buildroot.org>;
- Sat,  8 Mar 2025 06:13:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eCMzwxSf6MkO for <buildroot@buildroot.org>;
+ Sat,  8 Mar 2025 06:13:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1033; helo=mail-pj1-x1033.google.com;
+ client-ip=2607:f8b0:4864:20::102f; helo=mail-pj1-x102f.google.com;
  envelope-from=kanakshilledar@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E012761107
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E012761107
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com
- [IPv6:2607:f8b0:4864:20::1033])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E012761107
- for <buildroot@buildroot.org>; Sat,  8 Mar 2025 06:13:32 +0000 (UTC)
-Received: by mail-pj1-x1033.google.com with SMTP id
- 98e67ed59e1d1-2ff62f9b6e4so668624a91.0
- for <buildroot@buildroot.org>; Fri, 07 Mar 2025 22:13:32 -0800 (PST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5AB418478B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AB418478B
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com
+ [IPv6:2607:f8b0:4864:20::102f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5AB418478B
+ for <buildroot@buildroot.org>; Sat,  8 Mar 2025 06:13:39 +0000 (UTC)
+Received: by mail-pj1-x102f.google.com with SMTP id
+ 98e67ed59e1d1-2ff67f44fcaso679830a91.3
+ for <buildroot@buildroot.org>; Fri, 07 Mar 2025 22:13:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1741414411; x=1742019211;
+ d=1e100.net; s=20230601; t=1741414418; x=1742019218;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=0zEvj6tDZEPJUVDVHrDj1dksvP18OedGTgJW5WSBZLc=;
- b=JrnHOahFTa9xaRF1Y4Lq6DpXeBsvpQK3w6AXEfcJ1yBTgAqrA6p7mu9Z2nQ49rfuYs
- 0YdWClS4bWDpaGMwt70fUm5GIssuyT6sACTxAt0rrWFsjnrJDoIuged8AS8SKztanNCU
- 69ktEI/FHDk2Ko9L8K0674X17VWinSXFZUrFHVchfW/m9ftmrJXJmMtn4z9V8QSzjonH
- Ra8tOjWzkVBN0eZPXITPi/TiPblVjMGhWf086718dge/5FtPtKzl6gBdmYKrnka0jKU0
- S8EHxkhq+PwGrXfrUsuvavWLwMHIvI292gLNaE46/o1/ujXoeYU3g5YOcb73OTApXmyD
- oldQ==
-X-Gm-Message-State: AOJu0Yy3jrEBYLTkNdGVHxFWX/Iu+8aNtISqVOK7QWPr/QfdNleSejL0
- AXY2Y9WzfcQnVz1iFIVL8eXjelDnv3cUGLoaICBOxu+8/cqVJIMoDSe5W+OC
-X-Gm-Gg: ASbGncvS4DbqXgPYnz5v6Q8ErJkJVWb2b8VnLvyMXMO8C3Z4PUWBfhhyBpQAvnM/dyv
- 13K5xg4YpLPVSkwG5o3dBBiTpheSYqdIvgqKREecW6f4nVykOZ0K13gAfPwAwaUEUIHIbnH1ZS6
- Y933Ri2qC239xI6+oEH02idMMUP+k4EN8xbJv/If3WmZ9L0zAeiky88nKBC56TyX2G6x3y7yBVf
- oTji+vkFcL0HfTkOrMCw+p+K3vZJ1WCnAYYmdlDyYrfNLRhkoR9owShGhFxmxSuon8pLxZltxJf
- Ia4Nbxq87Z5KObo1Wi1ehkV8mapnDHHDnvZGllAlSFuLs6UIpYyZJQHMnE4=
-X-Google-Smtp-Source: AGHT+IHAfaCRgHJ6GlNIbk7MQdb4euIo5dEtSNQfTDhQMg5KAs/8ffNWWNNMX5oiVTTsdECmYtBvuA==
-X-Received: by 2002:a05:6a00:4fc7:b0:736:3222:c392 with SMTP id
- d2e1a72fcca58-736becb1adfmr1093201b3a.2.1741414411491; 
- Fri, 07 Mar 2025 22:13:31 -0800 (PST)
+ bh=S5lEj/E2MsjKFm965YjCfvlpbtlo51/stTSFwHQZlTY=;
+ b=od4cEl2NU1jEuupRnP7uO8AlHBxWwXTt9D9BsJf5NRQPGo/fXE+wNIh8BZJ+dSw0pX
+ crgOjWwQ8Kuk+CcBi5/OaulqnyzMGuRCD5YFMF4jUrsDF+VDpmKLYIwrTLpo9VXwuwAP
+ uBdiE0YYzMowQhek23v30XAQ5tSdJbeU/j2ZNLTnUrozKn/FfqTE5sycFcX1pJMDQwHP
+ dQtKkLG6Dzip514Y7rrHrI3agzTYymC4ypEqMiHfMGlmNBzxTqc9/UoIKH6Gz9A/KhD6
+ 7+VzBAnhyqhvJVc8ocdxehJd55LWTSmMIm4x5iA9AriqJSvvFmEcr0vYSLSqNs754aAJ
+ Ermg==
+X-Gm-Message-State: AOJu0Yy2x5pqbPmPnAKzjkKjGYhXqu8CBh663/4tb1ojN3ePe6kUgsEE
+ PXdDBNAjnPeZBo6FxBETa4fUeWRx3d+joRS9RHqPs6a5Mzz1hWwRDkxcTQjx
+X-Gm-Gg: ASbGncth5Nu5SYFR1GvLF1VL6HF+bxpvrAFhB+DdR/t3fxibAH17eJbOEmvCaFUwpRO
+ g+o1UrzGhCJ1MjY8rGHqWfmfBEHwCZb3ttjwvsmQzGU4wrSQF1+1TlQIi8uyGcrqbq2Cuz5wkRS
+ oW14i8T5p7Dbm414izT17FxTt1NHzupjNZL/S7x31BTtCqbrSOo3Xj5kP+8mzBqG1eH7wN1C62m
+ +4ww4qJzHrVj9JwhxDwQ5nNvcwjpao4toQiI+YekidreJT9BheI49gDj49mTwa+h1XuCU+j16s/
+ SvzqknVLZsfa3E50EPnIUxdUpBwppRUYE60Q5cEGkbAUStQNszKLbSqHsVE=
+X-Google-Smtp-Source: AGHT+IH6tipTkkCJshJgifPpP1JjSkX839z3pUdxpttLFwMrKPfurXTB8DCuFkKeF5cev1/4j90DAQ==
+X-Received: by 2002:a05:6a20:9f88:b0:1f5:5295:985e with SMTP id
+ adf61e73a8af0-1f55841d8acmr1000840637.11.1741414418176; 
+ Fri, 07 Mar 2025 22:13:38 -0800 (PST)
 Received: from ga401ii.. (n235.ucndns.in. [103.183.91.235])
  by smtp.googlemail.com with ESMTPSA id
- d2e1a72fcca58-73699da011asm4189922b3a.84.2025.03.07.22.13.29
+ d2e1a72fcca58-73699da011asm4189922b3a.84.2025.03.07.22.13.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 07 Mar 2025 22:13:31 -0800 (PST)
+ Fri, 07 Mar 2025 22:13:37 -0800 (PST)
 From: Kanak Shilledar <kanakshilledar@gmail.com>
 To: buildroot@buildroot.org
 Cc: Damien Le Moal <dlemoal@kernel.org>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Kanak Shilledar <kanakshilledar@gmail.com>
-Date: Sat,  8 Mar 2025 11:42:45 +0530
-Message-ID: <20250308061245.1774235-3-kanakshilledar@gmail.com>
+Date: Sat,  8 Mar 2025 11:42:46 +0530
+Message-ID: <20250308061245.1774235-4-kanakshilledar@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250308061245.1774235-2-kanakshilledar@gmail.com>
 References: <20250308061245.1774235-2-kanakshilledar@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1741414411; x=1742019211; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1741414418; x=1742019218; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=0zEvj6tDZEPJUVDVHrDj1dksvP18OedGTgJW5WSBZLc=;
- b=ZfQmggGvo4Fowbzw8OauD+ggiv9DnQfhuvu1NgQpZquQpuQ1hVqQ1+gfNJ9ND/9jqq
- 6Y4WjQDk5v8s5iTnrJtqi2JbKOh03hmFQuRJ/pnn7Dtt8XqrxXnsOWLpOsnGJGH+dv2i
- 7u+Zh6jnX1SU2lVFWh8tfkuNGOmQ5ee+kV3c3dK0giURUsrae+o5kbr+1QE62tEQWVbT
- o+IeNR64wOKObGXSK3DyBvxPmnHDAdC88FLMpJGAKsNuzG3WXUBW3K3wQ/gL0GmYPI2m
- KQnynPFqkQMaq3uNTHugdj+FOvLcJ/rzb6E0nue5gqPygueB2XVEeEab4mp6adHL4eQ3
- Asyg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=S5lEj/E2MsjKFm965YjCfvlpbtlo51/stTSFwHQZlTY=;
+ b=HtP6xhghfJbvEkalLE5fXWpPPB2ghbUjnlbVKlYAzYoOIfWCJJnkpGHx/INoywNdVq
+ omkyLVUHhCoE1R19794SFGCwWH/69R8fjdFFwR2JzvRKUNQD5OUjKOXipie9y2XU0Nyl
+ Q2ql1mD+noZ41pyfVMJDIBLnU7AFovtLgZfInUijvNdoJ58L/Byn75EoDLe+FX1DYcaL
+ bkH7a7lb+pduzBDMHW/CFRTdIfje5quSVhe4O6UvfrxbkEj4SavTEFz6t/5nAVJ3EsR1
+ vbFx65s3K09yIQaS/6ojbw2bAz+1PZJWRrv7LjDLvRsgPoW47H4mK//DywQf57MeVsOC
+ i87A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=ZfQmggGv
-Subject: [Buildroot] [PATCH 1/2] package/sipeed-lpi4abin: add licheepi4a
- boot bins
+ header.s=20230601 header.b=HtP6xhgh
+Subject: [Buildroot] [PATCH 2/2] configs/sipeed_licheepi_4a: add new board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,91 +116,196 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Sipeed LicheePi 4A requires some proprietary binaries
-for booting, these are provided in the th1520-boot-firmware
-repo [1]. These binaries are also required for the onboard
-sound and wifi.
+Add support for the LicheePi 4A with mainline component:
+ - Linux Kernel 6.12
 
-[1] https://github.com/revyos/th1520-boot-firmware
+The following components are provided by vendor:
+ - U-Boot 2020.01
+ - OpenSBI v0.9
 
+Board homepage and more usable wiki:
+ - https://wiki.sipeed.com/hardware/en/lichee/th1520/lpi4a/1_intro.html
+
+th1520-boot-firmware is selected from the package sipeed-lpi4abins.
+This is inspired from lone0's fork of buildroot for th1520.[1]
+
+[1] https://github.com/lone0/buildroot-th1520
 Signed-off-by: Kanak Shilledar <kanakshilledar@gmail.com>
 ---
- package/Config.in                            |  1 +
- package/sipeed-lpi4abin/Config.in            |  5 ++++
- package/sipeed-lpi4abin/sipeed-lpi4abin.hash |  2 ++
- package/sipeed-lpi4abin/sipeed-lpi4abin.mk   | 30 ++++++++++++++++++++
- 4 files changed, 38 insertions(+)
- create mode 100644 package/sipeed-lpi4abin/Config.in
- create mode 100644 package/sipeed-lpi4abin/sipeed-lpi4abin.hash
- create mode 100644 package/sipeed-lpi4abin/sipeed-lpi4abin.mk
+ .../sipeed/licheepi_4a/extlinux/extlinux.conf |  4 ++
+ board/sipeed/licheepi_4a/genimage.cfg         |  9 ++++
+ board/sipeed/licheepi_4a/post-image.sh        | 25 +++++++++
+ board/sipeed/licheepi_4a/readme.txt           | 54 +++++++++++++++++++
+ configs/sipeed_licheepi_4a_defconfig          | 40 ++++++++++++++
+ 5 files changed, 132 insertions(+)
+ create mode 100644 board/sipeed/licheepi_4a/extlinux/extlinux.conf
+ create mode 100644 board/sipeed/licheepi_4a/genimage.cfg
+ create mode 100755 board/sipeed/licheepi_4a/post-image.sh
+ create mode 100644 board/sipeed/licheepi_4a/readme.txt
+ create mode 100644 configs/sipeed_licheepi_4a_defconfig
 
-diff --git a/package/Config.in b/package/Config.in
-index 4a81a62ec4..ce8cb95d7e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -616,6 +616,7 @@ endmenu
- 	source "package/setserial/Config.in"
- 	source "package/sg3_utils/Config.in"
- 	source "package/sigrok-cli/Config.in"
-+	source "package/sipeed-lpi4abin/Config.in"
- 	source "package/sispmctl/Config.in"
- 	source "package/smartmontools/Config.in"
- 	source "package/smstools3/Config.in"
-diff --git a/package/sipeed-lpi4abin/Config.in b/package/sipeed-lpi4abin/Config.in
+diff --git a/board/sipeed/licheepi_4a/extlinux/extlinux.conf b/board/sipeed/licheepi_4a/extlinux/extlinux.conf
 new file mode 100644
-index 0000000000..b8dc9fbc9e
+index 0000000000..add3954184
 --- /dev/null
-+++ b/package/sipeed-lpi4abin/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_SIPEED_LPI4ABIN
-+	bool "sipeed-lpi4abin"
-+	depends on BR2_riscv=y
-+	help
-+	  This package provides TH1520 SoC binary blobs for LicheePi 4A.
-diff --git a/package/sipeed-lpi4abin/sipeed-lpi4abin.hash b/package/sipeed-lpi4abin/sipeed-lpi4abin.hash
++++ b/board/sipeed/licheepi_4a/extlinux/extlinux.conf
+@@ -0,0 +1,4 @@
++label linux
++  kernel /Image
++  devicetree /th1520-lichee-pi-4a.dtb
++  append console=ttyS0,115200 root=/dev/mmcblk0p4 rootfstype=ext4 rootwait rw earlycon clk_ignore_unused init=/sbin/init
+diff --git a/board/sipeed/licheepi_4a/genimage.cfg b/board/sipeed/licheepi_4a/genimage.cfg
 new file mode 100644
-index 0000000000..f7a8abdfdd
+index 0000000000..7eef4465db
 --- /dev/null
-+++ b/package/sipeed-lpi4abin/sipeed-lpi4abin.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 e5b29e1267009617dcf7cf3d0d59d7de62b06b96bb1981de3206b9a53123481f  sipeed-lpi4abin-master-git4.tar.gz
-diff --git a/package/sipeed-lpi4abin/sipeed-lpi4abin.mk b/package/sipeed-lpi4abin/sipeed-lpi4abin.mk
++++ b/board/sipeed/licheepi_4a/genimage.cfg
+@@ -0,0 +1,9 @@
++image boot.ext4 {
++	ext4 {
++		use-mke2fs = true
++		label = "boot"
++	}
++
++	size = 64M
++}
++
+diff --git a/board/sipeed/licheepi_4a/post-image.sh b/board/sipeed/licheepi_4a/post-image.sh
+new file mode 100755
+index 0000000000..93a7572ee3
+--- /dev/null
++++ b/board/sipeed/licheepi_4a/post-image.sh
+@@ -0,0 +1,25 @@
++#!/bin/bash
++
++set -e
++
++BOARD_DIR="$(dirname $0)"
++BOARD_NAME="$(basename ${BOARD_DIR})"
++GENIMAGE_CFG="${BOARD_DIR}/genimage.cfg"
++GENIMAGE_TMP="${BUILD_DIR}/genimage.tmp"
++
++trap 'rm -rf "${ROOTPATH_TMP}"' EXIT
++ROOTPATH_TMP="$(mktemp -d)"
++rm -rf "${GENIMAGE_TMP}"
++
++cp ${BINARIES_DIR}/Image ${BINARIES_DIR}/*.dtb ${BINARIES_DIR}/fw_dynamic.bin ${ROOTPATH_TMP}
++cp -a ${BINARIES_DIR}/bootbins/* ${ROOTPATH_TMP}
++cp -a ${BOARD_DIR}/extlinux ${ROOTPATH_TMP}
++
++genimage \
++	--rootpath "${ROOTPATH_TMP}"   \
++	--tmppath "${GENIMAGE_TMP}"    \
++	--inputpath "${BINARIES_DIR}"  \
++	--outputpath "${BINARIES_DIR}" \
++	--config "${GENIMAGE_CFG}"
++
++exit $?
+diff --git a/board/sipeed/licheepi_4a/readme.txt b/board/sipeed/licheepi_4a/readme.txt
 new file mode 100644
-index 0000000000..c0aadef35f
+index 0000000000..77a3a9b3bc
 --- /dev/null
-+++ b/package/sipeed-lpi4abin/sipeed-lpi4abin.mk
-@@ -0,0 +1,30 @@
-+################################################################################
-+#
-+# sipeed-lpi4abin
-+#
-+################################################################################
++++ b/board/sipeed/licheepi_4a/readme.txt
+@@ -0,0 +1,54 @@
++Intro
++=====
 +
-+SIPEED_LPI4ABIN_VERSION = master
-+SIPEED_LPI4ABIN_SITE = https://github.com/revyos/th1520-boot-firmware.git
-+SIPEED_LPI4ABIN_SITE_METHOD = git
-+# SIPEED_LPI4ABIN_LICENSE = PROPRIETARY
-+# SIPEED_LPI4ABIN_LICENSE_FILES = LICENSE
++This directory contains a buildroot configuration for building a
++LicheePi 4A.
 +
-+SIPEED_LPI4ABIN_INSTALL_IMAGES = YES
-+SIPEED_LPI4ABIN_INSTALL_TARGET = NO
++How to build it
++===============
 +
-+SIPEED_LPI4ABIN_AON_FPGA_FILENAME = addons/boot/light_aon_fpga.bin
-+SIPEED_LPI4ABIN_C906_AUDIO_FILENAME = addons/boot/light_c906_audio.bin
-+SIPEED_LPI4ABIN_STR_FILENAME = addons/boot/str.bin
++Configure Buildroot
++-------------------
 +
-+define SIPEED_LPI4ABIN_INSTALL_IMAGES_CMDS
-+	$(foreach f, \
-+		$(SIPEED_LPI4ABIN_AON_FPGA_FILENAME) \
-+		$(SIPEED_LPI4ABIN_C906_AUDIO_FILENAME) \
-+		$(SIPEED_LPI4ABIN_STR_FILENAME) \
-+		, \
-+		$(INSTALL) -D -m 0644 -t $(BINARIES_DIR)/bootbins $(@D)/$(f)
-+	)
-+endef
++  $ make sipeed_licheepi_4a_defconfig
 +
-+$(eval $(generic-package))
++Build the boot and rootfs
++----------------
++
++Note: you will need to have access to the network, since Buildroot
++will download the packages' sources.
++
++You may now build your rootfs with:
++
++  $ make
++
++(This may take a while, consider getting yourself a coffee ;-) )
++
++Result of the build
++-------------------
++
++After building, you should obtain this tree:
++
++    output/images/
++    +-- boot.ext4
++    +-- rootfs.ext2
++    +-- rootfs.ext4 -> rootfs.ext2
++    +-- rootfs.tar
++    +-- u-boot.bin
++    +-- u-boot-with-spl.bin
++    +-- fw_dynamic.bin
++    `-- Image
++
++How to flash the board
++========================
++
++Once the build process is finished you will have to flash the
++correspoding images to the respective partitions in the eMMC.
++LicheePi 4A uses fastboot to flash the images.
++
++# fastboot flash ram u-boot-with-spl.bin
++# fastboot reboot
++# fastboot flash uboot u-boot-with-spl.bin
++# fastboot flash boot boot.ext4
++# fastboot flash root rootfs.ext2
++
+diff --git a/configs/sipeed_licheepi_4a_defconfig b/configs/sipeed_licheepi_4a_defconfig
+new file mode 100644
+index 0000000000..14e6717e8c
+--- /dev/null
++++ b/configs/sipeed_licheepi_4a_defconfig
+@@ -0,0 +1,40 @@
++BR2_riscv=y
++BR2_RISCV_ISA_RVC=y
++BR2_RISCV_ISA_RVV=y
++BR2_TARGET_GENERIC_HOSTNAME="licheepi4a"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the LicheePi 4A"
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=y
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/sipeed/licheepi_4a/post-image.sh"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="thead/th1520-lichee-pi-4a"
++BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++BR2_PACKAGE_LINUX_FIRMWARE=y
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_RTW88=y
++BR2_PACKAGE_HDPARM=y
++BR2_PACKAGE_IPERF3=y
++BR2_PACKAGE_IW=y
++BR2_PACKAGE_SIPEED_LPI4ABIN=y
++BR2_PACKAGE_WIRELESS_REGDB=y
++BR2_PACKAGE_WIRELESS_TOOLS=y
++BR2_PACKAGE_WPA_SUPPLICANT=y
++BR2_PACKAGE_WPA_SUPPLICANT_CLI=y
++BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_OPENSBI=y
++BR2_TARGET_OPENSBI_CUSTOM_GIT=y
++BR2_TARGET_OPENSBI_CUSTOM_REPO_URL="https://github.com/revyos/thead-opensbi.git"
++BR2_TARGET_OPENSBI_CUSTOM_REPO_VERSION="lpi4a"
++BR2_TARGET_OPENSBI_PLAT="generic"
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BOARDNAME="light_lpi4a"
++BR2_TARGET_UBOOT_CUSTOM_GIT=y
++BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/revyos/thead-u-boot.git"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="th1520"
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-with-spl.bin"
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
 2.43.0
 
