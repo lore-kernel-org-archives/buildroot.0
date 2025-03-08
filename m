@@ -4,72 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31936C28B28
-	for <buildroot@archiver.kernel.org>; Sat,  8 Mar 2025 17:52:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5331C282EC
+	for <buildroot@archiver.kernel.org>; Sat,  8 Mar 2025 21:15:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CDFAF82156;
-	Sat,  8 Mar 2025 17:52:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E20983AEE;
+	Sat,  8 Mar 2025 21:15:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uDjpCjfm4tI0; Sat,  8 Mar 2025 17:52:25 +0000 (UTC)
+ id JG16jkHT2Ube; Sat,  8 Mar 2025 21:15:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E2418215D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6238983AFB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E2418215D;
-	Sat,  8 Mar 2025 17:52:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id E98C894A
- for <buildroot@buildroot.org>; Sat,  8 Mar 2025 17:52:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6238983AFB;
+	Sat,  8 Mar 2025 21:15:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 01EA71C9
+ for <buildroot@buildroot.org>; Sat,  8 Mar 2025 21:15:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D5AA940194
- for <buildroot@buildroot.org>; Sat,  8 Mar 2025 17:52:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E4A8083AD9
+ for <buildroot@buildroot.org>; Sat,  8 Mar 2025 21:15:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JH-7woYpQ23z for <buildroot@buildroot.org>;
- Sat,  8 Mar 2025 17:52:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B117F400DA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B117F400DA
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B117F400DA
- for <buildroot@buildroot.org>; Sat,  8 Mar 2025 17:52:22 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 550082003EF;
- Sat,  8 Mar 2025 18:52:17 +0100 (CET)
-Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
- via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 08 Mar 2025 18:52:17 +0100
-MIME-Version: 1.0
-Date: Sat, 08 Mar 2025 18:52:17 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UlxihZRO1JnV for <buildroot@buildroot.org>;
+ Sat,  8 Mar 2025 21:15:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F1F583AE0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0F1F583AE0
+ for <buildroot@buildroot.org>; Sat,  8 Mar 2025 21:15:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EEE4987DCC; Sat,  8 Mar 2025 21:15:39 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250307212422.502634-1-giulio.benetti@benettiengineering.com>
-References: <20250307212422.502634-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <7a065182e647de6e1a10f1b633f718de@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1741456338;
- bh=vvzwqPC6Ep/MMiA7buD7GezKTGO2dKPwcF57j5PW3Nw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=RZBPLdjX3GQ2vVCmCADS8qQmuCBU2ubPVKQGIYlvT/5Mjf2m4IS4omE94sOd2h36w
- Y6mgNgRBizS+ioCvWvdIz64a2rupqmwhP0I3WFj0RDJkfIfDKRzIQzBY+yOCzwSeJ7
- LGKRQZYcrf1Fi0FWjeTNV6etw4dwjZmc9mRFbres3ywcIobkjpJ8CMx3+AzdBTh762
- j7fyPbkzY77SvrJbSMYBE9wrH0pFS9C5kUeE6zOGv2yw2lpMA+NG7ZR3c+qgwP9WLO
- EitRLVDdnFvvMM0cWzhbzoSzYt32QSPmhOMEc0EGTdlVjhlqkSM1WsEOwDHDbTqIwC
- 3cIltvuNHBH0g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=RZBPLdjX
-Subject: Re: [Buildroot] [PATCH] package/harfbuzz: bump to version 10.4.0
+To: buildroot@buildroot.org
+Date: Sat, 8 Mar 2025 22:11:26 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 7b9a6f5373093ad8764ff48e0c4ec0beb791afa2
+X-Git-Newrev: 2af019a1bd3e4d9d8a3600cf12682a14acb6e965
+X-Patchwork-Hint: ignore
+Message-Id: <20250308211539.EEE4987DCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libsigc2: bump to
+ version 2.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,18 +59,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 07/03/2025 22:24, Giulio Benetti wrote:
-> Release Notes:
-> https://github.com/harfbuzz/harfbuzz/releases/tag/10.4.0
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=2af019a1bd3e4d9d8a3600cf12682a14acb6e965
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Applied to next, thanks.
+https://github.com/libsigcplusplus/libsigcplusplus/blob/2.12.1/NEWS
+
+Signed-off-by: Daniel Lang <dalang@gmx.at>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libsigc2/libsigc2.hash | 4 ++--
+ package/libsigc2/libsigc2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libsigc2/libsigc2.hash b/package/libsigc2/libsigc2.hash
+index 4811213568..e7bf7d4e7d 100644
+--- a/package/libsigc2/libsigc2.hash
++++ b/package/libsigc2/libsigc2.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/libsigc++/2.12/libsigc++-2.12.0.sha256sum
+-sha256  1c466d2e64b34f9b118976eb21b138c37ed124d0f61497df2a90ce6c3d9fa3b5  libsigc++-2.12.0.tar.xz
++# From https://download.gnome.org/sources/libsigc++/2.12/libsigc++-2.12.1.sha256sum
++sha256  a9dbee323351d109b7aee074a9cb89ca3e7bcf8ad8edef1851f4cf359bd50843  libsigc++-2.12.1.tar.xz
+ 
+ # Locally calculated
+ sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING
+diff --git a/package/libsigc2/libsigc2.mk b/package/libsigc2/libsigc2.mk
+index 845d03ba85..b5685fd50a 100644
+--- a/package/libsigc2/libsigc2.mk
++++ b/package/libsigc2/libsigc2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBSIGC2_VERSION_MAJOR = 2.12
+-LIBSIGC2_VERSION = $(LIBSIGC2_VERSION_MAJOR).0
++LIBSIGC2_VERSION = $(LIBSIGC2_VERSION_MAJOR).1
+ LIBSIGC2_SOURCE = libsigc++-$(LIBSIGC2_VERSION).tar.xz
+ LIBSIGC2_SITE = https://download.gnome.org/sources/libsigc++/$(LIBSIGC2_VERSION_MAJOR)
+ LIBSIGC2_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
