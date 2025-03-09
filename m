@@ -1,76 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90AE5C28B28
-	for <buildroot@archiver.kernel.org>; Sun,  9 Mar 2025 08:32:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40E3BC282D1
+	for <buildroot@archiver.kernel.org>; Sun,  9 Mar 2025 10:12:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 46A9540BFA;
-	Sun,  9 Mar 2025 08:32:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DCB1D605EE;
+	Sun,  9 Mar 2025 10:12:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wpcBa2_3nXGj; Sun,  9 Mar 2025 08:32:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dBBIaVEX7Ce2; Sun,  9 Mar 2025 10:12:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0933E40C26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1A5460632
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0933E40C26;
-	Sun,  9 Mar 2025 08:32:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1A5460632;
+	Sun,  9 Mar 2025 10:12:20 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 418D4DC
- for <buildroot@buildroot.org>; Sun,  9 Mar 2025 08:32:20 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CD4C91E3
+ for <buildroot@buildroot.org>; Sun,  9 Mar 2025 10:12:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 30D704018D
- for <buildroot@buildroot.org>; Sun,  9 Mar 2025 08:32:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B852A400E5
+ for <buildroot@buildroot.org>; Sun,  9 Mar 2025 10:12:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yUb5vOQnrOns for <buildroot@buildroot.org>;
- Sun,  9 Mar 2025 08:32:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EDF9D400AC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDF9D400AC
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EDF9D400AC
- for <buildroot@buildroot.org>; Sun,  9 Mar 2025 08:32:18 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p4fd6c397.dip0.t-ipconnect.de [79.214.195.151])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id EF030A4C1ACA;
- Sun,  9 Mar 2025 09:32:16 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:49288)
- by fli4l.lan.fli4l with esmtp (Exim 4.98.1)
- (envelope-from <bernd@kuhls.net>) id 1trC52-0000000020b-1FBP;
- Sun, 09 Mar 2025 08:32:16 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id mdiClk7mw7Wl for <buildroot@buildroot.org>;
+ Sun,  9 Mar 2025 10:12:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 59B56400AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59B56400AC
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 59B56400AC
+ for <buildroot@buildroot.org>; Sun,  9 Mar 2025 10:12:17 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id B973BB00585;
+ Sun,  9 Mar 2025 11:12:11 +0100 (CET)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun,  9 Mar 2025 09:32:16 +0100
-Message-Id: <20250309083216.824179-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.5
+Cc: Bogdan Radulescu <bogdan@nimblex.net>,
+	Julien Olivain <ju.o@free.fr>
+Date: Sun,  9 Mar 2025 11:12:07 +0100
+Message-ID: <20250309101207.86496-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.48.1
 MIME-Version: 1.0
-X-Spamd-Bar: +++++++
-X-Spam: Yes
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202412041019; t=1741509136;
- bh=XBhJhH2Ak+Iv/+79mg04JpmjA05hoIcojczKCBX2OtQ=;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1741515134;
+ bh=y38iV0xh6NmFQVNilRcaJLokAjWARc8AnAMmc9zBvbY=;
  h=From:To:Cc:Subject:Date:From;
- b=ERnXgqIq4iG2w2MDfq8TE4xTnLGDMY5533SJ+IFkTVQwi08t3cIoWnDHIgyG9Q9k0
- 4nrTKg948mUr7l/G7+C2skRhe8ZOglnTqkIa0UODQ60sA3LnNKWvE45Xqgez/4lsK8
- eUz3vosiH7NJp80Uk/3rmxc1pQd1Q+JHq3ilz93L/F71myVexevlPT6vPs2O2g3jWz
- js8kiKnvkoWAr46CfjcZDctp8eQJnAsISUI19HQMuyhSPO8s+An46MjcgbKG3+0QyS
- 1fg4vdIdXvLh5Iz4r+X9fqsVAj9XzT3Wbd9jzo63J6wgbMMe/Wn5xzFy1fHx+WW0pR
- /7cJs28ldWWJA==
+ b=hF1qaYSEqBT9bXEDsSiH5OGi/879xyI3zgX3WH/x9iccDhiBTAUHR1nAB5ZinJr04
+ qUY32tgGbgENfqsfetGzVjyCzF6D8DElIGLhtopxFhkg8IqhaxzzsqAr6wi7EGYm0V
+ EUsbqEcKYgTbn6kYuopZk0kH0oxAgFudEVNKY5xof/fqUDu61umVNf88XlDzcV1d0G
+ bQKlXMEe/9rRvhUD+KxQvLMGJzFAIrEbK6Ga7qjdxboi6xnq12Bpm+AhrZZXsd/Jqx
+ KlKCwfVImG61QUPOzYbo2b3BQFxB1UA438mpjN+8d+sJbQSCTEtjKxkY+xsilxwMfO
+ M1B1qpnGjIQeg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202412041019 header.b=ERnXgqIq
-Subject: [Buildroot] [PATCH/next v2 1/1] package/dropbear: bump version to
- 2025.87
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=hF1qaYSE
+Subject: [Buildroot] [PATCH next 1/1] package/ncdu: bump to version 1.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,57 +82,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog: https://matt.ucc.asn.au/dropbear/CHANGES
+For change log since 1.21, see:
+https://dev.yorhel.nl/ncdu/changes
 
-Upstream disabled sha1 by default:
-https://github.com/mkj/dropbear/commit/f3465a34eb4007ca3e45044ebdf863842e0346d5
-
-Add the options to DROPBEAR_ENABLE_LEGACY_CRYPTO hook.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-v2: optionally enable sha1 (Baruch)
+Patch tested in:
+https://gitlab.com/jolivain/buildroot/-/jobs/9354120019
+---
+ package/ncdu/ncdu.hash | 8 ++++----
+ package/ncdu/ncdu.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
- package/dropbear/dropbear.hash | 2 +-
- package/dropbear/dropbear.mk   | 5 ++++-
- 2 files changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
-index cf2dd18d61..777910da15 100644
---- a/package/dropbear/dropbear.hash
-+++ b/package/dropbear/dropbear.hash
-@@ -1,5 +1,5 @@
- # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
--sha256  e78936dffc395f2e0db099321d6be659190966b99712b55c530dd0a1822e0a5e  dropbear-2024.86.tar.bz2
-+sha256  738b7f358547f0c64c3e1a56bbc5ef98d34d9ec6adf9ccdf01dc0bf2caa2bc8d  dropbear-2025.87.tar.bz2
+diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
+index 40faf9bd0d..623b7d060b 100644
+--- a/package/ncdu/ncdu.hash
++++ b/package/ncdu/ncdu.hash
+@@ -1,10 +1,10 @@
+ # From https://dev.yorhel.nl/ncdu
+ # After checking pgp signature from:
+-# https://dev.yorhel.nl/download/ncdu-1.21.tar.gz.asc
++# https://dev.yorhel.nl/download/ncdu-1.22.tar.gz.asc
+ # With key 74460D32B80810EBA9AFA2E962394C698C2739FA
+-md5  3d5f399a00ca2ac3ba319e8cb99118ab  ncdu-1.21.tar.gz
+-sha1  98c365e681f2c42a54d6277bea041d5a7104d934  ncdu-1.21.tar.gz
+-sha256  a894d3a9b46bce578a6039bef48f54533ec402fb589b0769bfbb1d1edf9601a6  ncdu-1.21.tar.gz
++md5  46245039bd07a40d7594a2053139e43f  ncdu-1.22.tar.gz
++sha1  6c686e7cc08b20562e46c6bfb306c1e15cbf01aa  ncdu-1.22.tar.gz
++sha256  0ad6c096dc04d5120581104760c01b8f4e97d4191d6c9ef79654fa3c691a176b  ncdu-1.22.tar.gz
  
- # License file, locally computed
- sha256  a99ce657d790b761c132ee7e0de18edb437ae6361e536d991c6a12f36e770445  LICENSE
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index e043893aa1..b0f5dc7afe 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
+ # computed locally
+ sha256  a324e25fe6af7fa45286b34a516b4c5a11544344bc80efb74fc51033b2e76df4  COPYING
+diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
+index c8c691605a..6da9966481 100644
+--- a/package/ncdu/ncdu.mk
++++ b/package/ncdu/ncdu.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DROPBEAR_VERSION = 2024.86
-+DROPBEAR_VERSION = 2025.87
- DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
- DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain
-@@ -69,6 +69,9 @@ define DROPBEAR_ENABLE_LEGACY_CRYPTO
- 	echo '#define DROPBEAR_SHA1_96_HMAC 1'          >> $(@D)/localoptions.h
- 	echo '#define DROPBEAR_DH_GROUP1 1'             >> $(@D)/localoptions.h
- 	echo '#define DROPBEAR_DSS 1'                   >> $(@D)/localoptions.h
-+	echo '#define DROPBEAR_SHA1_HMAC 1'             >> $(@D)/localoptions.h
-+	echo '#define DROPBEAR_RSA_SHA1 1'              >> $(@D)/localoptions.h
-+	echo '#define DROPBEAR_DH_GROUP14_SHA1 1'       >> $(@D)/localoptions.h
- endef
- DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_LEGACY_CRYPTO
- endif
+-NCDU_VERSION = 1.21
++NCDU_VERSION = 1.22
+ NCDU_SITE = https://dev.yorhel.nl/download
+ 
+ NCDU_DEPENDENCIES = host-pkgconf ncurses
 -- 
-2.39.5
+2.48.1
 
 _______________________________________________
 buildroot mailing list
