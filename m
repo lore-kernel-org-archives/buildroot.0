@@ -4,68 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40E3BC282D1
-	for <buildroot@archiver.kernel.org>; Sun,  9 Mar 2025 10:12:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87099C282D1
+	for <buildroot@archiver.kernel.org>; Sun,  9 Mar 2025 10:58:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCB1D605EE;
-	Sun,  9 Mar 2025 10:12:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3FCCF605EA;
+	Sun,  9 Mar 2025 10:58:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dBBIaVEX7Ce2; Sun,  9 Mar 2025 10:12:21 +0000 (UTC)
+ id jH4IcdNsOH1i; Sun,  9 Mar 2025 10:58:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1A5460632
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 45F94605F9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1A5460632;
-	Sun,  9 Mar 2025 10:12:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id CD4C91E3
- for <buildroot@buildroot.org>; Sun,  9 Mar 2025 10:12:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45F94605F9;
+	Sun,  9 Mar 2025 10:58:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AEFCE1C1
+ for <buildroot@buildroot.org>; Sun,  9 Mar 2025 10:58:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B852A400E5
- for <buildroot@buildroot.org>; Sun,  9 Mar 2025 10:12:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9E139408D4
+ for <buildroot@buildroot.org>; Sun,  9 Mar 2025 10:58:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mdiClk7mw7Wl for <buildroot@buildroot.org>;
- Sun,  9 Mar 2025 10:12:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 59B56400AC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 59B56400AC
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 59B56400AC
- for <buildroot@buildroot.org>; Sun,  9 Mar 2025 10:12:17 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id B973BB00585;
- Sun,  9 Mar 2025 11:12:11 +0100 (CET)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gDG1wOVmSJRA for <buildroot@buildroot.org>;
+ Sun,  9 Mar 2025 10:58:35 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::631; helo=mail-ej1-x631.google.com;
+ envelope-from=gero.schwaericke@sevenlab.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BFC6E409E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BFC6E409E7
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BFC6E409E7
+ for <buildroot@buildroot.org>; Sun,  9 Mar 2025 10:58:34 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id
+ a640c23a62f3a-ac27cb35309so123825466b.2
+ for <buildroot@buildroot.org>; Sun, 09 Mar 2025 03:58:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1741517912; x=1742122712;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=O7MyRyUvLb/4jqmwwegiQodl7bIUm3CxoGvhUWV1fnY=;
+ b=CQuYhekOzdDLnYV8dMZtC60/MdbhUXT21D3Dpbvfka/EuV+FPDk0bYJ+7RDv/aCG+N
+ 3PcjjhG1hF2nWVudXCPLfgxoRb82aCfxn0DMtsz+ImG9ZmridO1caa+/MCPeWBLNukJA
+ ei5SQraAKLmr7qmkyhYJV0CejxephtJOj3Y7DKfiJvvypmEaqZOuy7VOnkAVoh3EvIvC
+ Y7LgAaNkjWMsDo8hqFRxdbOaD7/BuGgzLH6/0v5/h22s/atcUh309/5uCWqSeNBNje7Z
+ BXLdVlEHUD6xu9rkvhBKA4URvyrSy0gyRd7XYR5U8uD2UgBNZSZjdgjAZ5V7Li2ylts7
+ D/Lg==
+X-Gm-Message-State: AOJu0YwthUhol+9jmiIyIyy030nOoinMaDwKjaB93dLoteWHOjwAKa+N
+ GPdyloy/NCX7wzmigHPBoaL8V2R93UkQdhsruJLBMW1aTGMtRvLIWudJRzQtcOM32T25rbL0QWI
+ /
+X-Gm-Gg: ASbGncsi8jE0h+/U6Qtnf6L+1PzI2VctTQs2AI+uYfYiyQB8xvkHSyeSu3P9IJ4zkLe
+ CZiT/h7hPmOlZEuGT/VxrwQgfCQxiyDYIQ0zjrppdQeJG6kZDelrhF6KhBCxKLcXESEJojzCtYP
+ HkfSb9XZCYgKs9sj+gojtdcTooPOT20J/41SmltqJDwDWfFMdSKkRaYCG6xClDKcjzUHyb9wLRS
+ p3vHa/0d3RkHKcuONO5Nzv6wSA6vLrPTbI7QDKgsYkzWLweF9CYqCIisOjkbW2pWs/ttrN3pxbu
+ 2g2WBnuasQQD2Uresf3ONCKl18GnkrcyH3QmU3GDUbWGRNmRkjewfIw+Xz6bo7/A+3SfvARg0Dc
+ =
+X-Google-Smtp-Source: AGHT+IFgK40Pp3hEe+eyhaQAQFBo1RhAhkg2D26bk/nYAZMpC7Cw2L7wLExSewZ6XJV6Mr/R768tQQ==
+X-Received: by 2002:a17:907:938a:b0:ac2:92df:fab3 with SMTP id
+ a640c23a62f3a-ac292e003e5mr99826666b.16.1741517912449; 
+ Sun, 09 Mar 2025 03:58:32 -0700 (PDT)
+Received: from Theia.fritz.box ([2a02:8109:8ab2:a800:d63:2b93:3ed0:eeea])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-ac23988b0b0sm579373866b.130.2025.03.09.03.58.32
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 09 Mar 2025 03:58:32 -0700 (PDT)
+From: =?UTF-8?q?Gero=20Schw=C3=A4ricke?= <gero.schwaericke@sevenlab.de>
 To: buildroot@buildroot.org
-Cc: Bogdan Radulescu <bogdan@nimblex.net>,
-	Julien Olivain <ju.o@free.fr>
-Date: Sun,  9 Mar 2025 11:12:07 +0100
-Message-ID: <20250309101207.86496-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.48.1
+Cc: =?UTF-8?q?Gero=20Schw=C3=A4ricke?= <gero.schwaericke@sevenlab.de>
+Date: Sun,  9 Mar 2025 11:58:02 +0100
+Message-ID: <20250309105806.157831-1-gero.schwaericke@sevenlab.de>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1741515134;
- bh=y38iV0xh6NmFQVNilRcaJLokAjWARc8AnAMmc9zBvbY=;
- h=From:To:Cc:Subject:Date:From;
- b=hF1qaYSEqBT9bXEDsSiH5OGi/879xyI3zgX3WH/x9iccDhiBTAUHR1nAB5ZinJr04
- qUY32tgGbgENfqsfetGzVjyCzF6D8DElIGLhtopxFhkg8IqhaxzzsqAr6wi7EGYm0V
- EUsbqEcKYgTbn6kYuopZk0kH0oxAgFudEVNKY5xof/fqUDu61umVNf88XlDzcV1d0G
- bQKlXMEe/9rRvhUD+KxQvLMGJzFAIrEbK6Ga7qjdxboi6xnq12Bpm+AhrZZXsd/Jqx
- KlKCwfVImG61QUPOzYbo2b3BQFxB1UA438mpjN+8d+sJbQSCTEtjKxkY+xsilxwMfO
- M1B1qpnGjIQeg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=hF1qaYSE
-Subject: [Buildroot] [PATCH next 1/1] package/ncdu: bump to version 1.22
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sevenlab-de.20230601.gappssmtp.com; s=20230601; t=1741517912; x=1742122712;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=O7MyRyUvLb/4jqmwwegiQodl7bIUm3CxoGvhUWV1fnY=;
+ b=uZ1xX/Ti7xmitzkU32E08dzqGnZawWhHq7HAYaUv0ViqTIYaRzdCPx35DkUgZcrywn
+ jus/4ZpTMhUiE3wh83Upx/7+mQL+8tObxvmlhluVfJgk1IcyxnlsTzZo4IxpNQw7aGNJ
+ gMWpcML9ca7mQdE1XPzHDMgZohgr122xf/5aUlWnF4Q/LYh02+phflFffTLDEOG0HCX8
+ GgCDJUGy27X2Th0e+JW/sfBtU+7H1xA/EcNzPv02rgqR4aORKWTlE3xdXjTRPd+6zdHe
+ 4MqAXd2a6RXZOiMIeINALoCXeWbANone23xAWN1NHkzyPzZRjyXMzxOrXP7R0s9YODGp
+ y1OQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=sevenlab.de
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=sevenlab-de.20230601.gappssmtp.com
+ header.i=@sevenlab-de.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=uZ1xX/Ti
+Subject: [Buildroot] [PATCH 1/1] board/stmicroelectronics/stm32mp135f-dk:
+ fix boot steps in readme
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -77,59 +111,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log since 1.21, see:
-https://dev.yorhel.nl/ncdu/changes
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/9354120019
----
- package/ncdu/ncdu.hash | 8 ++++----
- package/ncdu/ncdu.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
-index 40faf9bd0d..623b7d060b 100644
---- a/package/ncdu/ncdu.hash
-+++ b/package/ncdu/ncdu.hash
-@@ -1,10 +1,10 @@
- # From https://dev.yorhel.nl/ncdu
- # After checking pgp signature from:
--# https://dev.yorhel.nl/download/ncdu-1.21.tar.gz.asc
-+# https://dev.yorhel.nl/download/ncdu-1.22.tar.gz.asc
- # With key 74460D32B80810EBA9AFA2E962394C698C2739FA
--md5  3d5f399a00ca2ac3ba319e8cb99118ab  ncdu-1.21.tar.gz
--sha1  98c365e681f2c42a54d6277bea041d5a7104d934  ncdu-1.21.tar.gz
--sha256  a894d3a9b46bce578a6039bef48f54533ec402fb589b0769bfbb1d1edf9601a6  ncdu-1.21.tar.gz
-+md5  46245039bd07a40d7594a2053139e43f  ncdu-1.22.tar.gz
-+sha1  6c686e7cc08b20562e46c6bfb306c1e15cbf01aa  ncdu-1.22.tar.gz
-+sha256  0ad6c096dc04d5120581104760c01b8f4e97d4191d6c9ef79654fa3c691a176b  ncdu-1.22.tar.gz
- 
- # computed locally
- sha256  a324e25fe6af7fa45286b34a516b4c5a11544344bc80efb74fc51033b2e76df4  COPYING
-diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
-index c8c691605a..6da9966481 100644
---- a/package/ncdu/ncdu.mk
-+++ b/package/ncdu/ncdu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NCDU_VERSION = 1.21
-+NCDU_VERSION = 1.22
- NCDU_SITE = https://dev.yorhel.nl/download
- 
- NCDU_DEPENDENCIES = host-pkgconf ncurses
--- 
-2.48.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhlIGluc3RydWN0aW9ucyBpbiB0aGUgcmVhZG1lIHVzZSBpbmNvcnJlY3QgY29ubmVjdG9yIG5h
+bWVzLgoKU2VlIGFsc28gdGhlIG9mZmljaWFsIGRldmtpdCBkb2N1bWVudGF0aW9uOgpodHRwczov
+L3dpa2kuc3QuY29tL3N0bTMybXB1L3dpa2kvR2V0dGluZ19zdGFydGVkL1NUTTMyTVAxX2JvYXJk
+cy9TVE0zMk1QMTM1eC1ESy9MZXQlMjdzX3N0YXJ0L1VucGFja190aGVfU1RNMzJNUDEzNXgtREtf
+Ym9hcmQjT3V0LW9mLXRoZS1ib3hfa2l0CgpBbHNvIHRoZSBib2FyZCBkb2VzIG5vdCBzaG93IHRo
+ZSBjb25zb2xlIG9uIHRoZSBzY3JlZW4uCgpUaGlzIG1heSBoYXZlIGJlZW4gYSBjb3B5ICYgcGFz
+dGUgb3ZlcnNpZ2h0IGZyb20gdGhlIFNUTTMyTVAxNTcgcmVhZG1lLgoKU2lnbmVkLW9mZi1ieTog
+R2VybyBTY2h3w6RyaWNrZSA8Z2Vyby5zY2h3YWVyaWNrZUBzZXZlbmxhYi5kZT4KLS0tCiBib2Fy
+ZC9zdG1pY3JvZWxlY3Ryb25pY3Mvc3RtMzJtcDEzNWYtZGsvcmVhZG1lLnR4dCB8IDkgKysrKy0t
+LS0tCiAxIGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygtKQoKZGlm
+ZiAtLWdpdCBhL2JvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMm1wMTM1Zi1kay9yZWFkbWUu
+dHh0IGIvYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL3N0bTMybXAxMzVmLWRrL3JlYWRtZS50eHQK
+aW5kZXggNDY4NzlmODhjZi4uNDQ0NzI4NDBiMyAxMDA2NDQKLS0tIGEvYm9hcmQvc3RtaWNyb2Vs
+ZWN0cm9uaWNzL3N0bTMybXAxMzVmLWRrL3JlYWRtZS50eHQKKysrIGIvYm9hcmQvc3RtaWNyb2Vs
+ZWN0cm9uaWNzL3N0bTMybXAxMzVmLWRrL3JlYWRtZS50eHQKQEAgLTI3LDEyICsyNywxMSBAQCBD
+b3B5IHRoZSBib290YWJsZSAic2RjYXJkLmltZyIgb250byBhbiBtaWNyb1NEIGNhcmQgd2l0aCAi
+ZGQiOgogQm9vdCB0aGUgYm9hcmQKID09PT09PT09PT09PT09CiAKLSAoMSkgSW5zZXJ0IHRoZSBt
+aWNyb1NEIGNhcmQgaW4gY29ubmVjdG9yIENOMTUKKyAoMSkgSW5zZXJ0IHRoZSBtaWNyb1NEIGNh
+cmQgaW4gY29ubmVjdG9yIENOMwogCi0gKDIpIFBsdWcgYSBtaWNyby1VU0IgY2FibGUgaW4gY29u
+bmVjdG9yIENOMTEgYW5kIHJ1biB5b3VyIHNlcmlhbAorICgyKSBQbHVnIGEgbWljcm8tVVNCIGNh
+YmxlIGluIGNvbm5lY3RvciBDTjEwIGFuZCBydW4geW91ciBzZXJpYWwKICAgICAgY29tbXVuaWNh
+dGlvbiBwcm9ncmFtIG9uIC9kZXYvdHR5QUNNMC4KIAotICgzKSBQbHVnIGEgVVNCLUMgY2FibGUg
+aW4gQ042IHRvIHBvd2VyLXVwIHRoZSBib2FyZC4KKyAoMykgUGx1ZyBhIFVTQi1DIGNhYmxlIGlu
+IENOMTIgdG8gcG93ZXItdXAgdGhlIGJvYXJkLgogCi0gKDQpIFRoZSBzeXN0ZW0gd2lsbCBzdGFy
+dCwgd2l0aCB0aGUgY29uc29sZSBvbiBVQVJULCBidXQgYWxzbyB2aXNpYmxlCi0gICAgIG9uIHRo
+ZSBzY3JlZW4uCisgKDQpIFRoZSBzeXN0ZW0gd2lsbCBzdGFydCwgd2l0aCB0aGUgY29uc29sZSBv
+biBVQVJULgotLSAKMi40My4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
