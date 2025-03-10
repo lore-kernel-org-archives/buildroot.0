@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 255ECC28B28
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:05:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF396C28B28
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:05:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D937382323;
-	Tue, 18 Mar 2025 15:05:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BDE5D60D76;
+	Tue, 18 Mar 2025 15:05:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nPuZ2ayabCmZ; Tue, 18 Mar 2025 15:05:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G-0Xed-7uo29; Tue, 18 Mar 2025 15:05:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 279B683B8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B8F5260D93
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 279B683B8D;
-	Tue, 18 Mar 2025 15:05:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8F5260D93;
+	Tue, 18 Mar 2025 15:05:50 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 12DCC16E
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:03:06 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EFD7D8C
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:03:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 29A6440864
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2B3324090D
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ym5Kj-Q2Cy-7 for <buildroot@buildroot.org>;
- Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
+ id k2mLh-rbGH0e for <buildroot@buildroot.org>;
+ Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B680B408D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00DD54083B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B680B408D1
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 00DD54083B
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF488880EE; Tue, 18 Mar 2025 15:02:42 +0000 (UTC)
+ id EC4A3880EC; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 1 Mar 2025 17:28:12 +0100
+Date: Mon, 10 Mar 2025 23:55:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ab1c1c7f4919794289fdeb338647f7ca8c547fbc
-X-Git-Newrev: 69487c630be20949f1060df83996ae64ff5ce095
+X-Git-Oldrev: fb8300f4b7dad2cdc54d6b733347afab9b1d6cd6
+X-Git-Newrev: 086f8472d6325b137985f3b1b817b08815dd5c87
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150242.AF488880EE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/freescale_imx93evk: bump BSP
- components to lf-6.6.52-2.2.0
+Message-Id: <20250318150243.EC4A3880EC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/minicom: bump to version 2.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,74 +64,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69487c630be20949f1060df83996ae64ff5ce095
+commit: https://git.buildroot.net/buildroot/commit/?id=086f8472d6325b137985f3b1b817b08815dd5c87
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump ATF, U-Boot and Linux kernel to the NXP BSP lf-6.6.52-2.2.0
-versions.
+Release Notes:
+https://salsa.debian.org/minicom-team/minicom/-/releases/2.10
 
-Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../imx93evk/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
- board/freescale/imx93evk/patches/linux/linux.hash                   | 2 +-
- board/freescale/imx93evk/patches/uboot/uboot.hash                   | 2 +-
- configs/freescale_imx93evk_defconfig                                | 6 +++---
- 4 files changed, 6 insertions(+), 6 deletions(-)
+ package/minicom/minicom.hash | 2 +-
+ package/minicom/minicom.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/freescale/imx93evk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/imx93evk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-index 0266b45d6a..58100572e4 100644
---- a/board/freescale/imx93evk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/board/freescale/imx93evk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
+index dd10450262..92a50d010c 100644
+--- a/package/minicom/minicom.hash
++++ b/package/minicom/minicom.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  37f0dee8b3b52d6c7f8a46c3bdd4138b528f9cc607015400e7cad0c206df41d7  imx-atf-lf-6.6.23-2.0.0.tar.gz
-+sha256  2b5b4a370a55b790ca318e95e2c1aac9d9166ea549179ef9929c346863b4ea57  imx-atf-lf-6.6.52-2.2.0.tar.gz
-diff --git a/board/freescale/imx93evk/patches/linux/linux.hash b/board/freescale/imx93evk/patches/linux/linux.hash
-index 3c4223976b..620a7377ef 100644
---- a/board/freescale/imx93evk/patches/linux/linux.hash
-+++ b/board/freescale/imx93evk/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  c70adedadce88f8685cb26d9703b930292c1349138e2c55ed9b4cd6e277de3bd  linux-imx-lf-6.6.23-2.0.0.tar.gz
-+sha256  6567dd20dbcdff19da1d005acde949b20874cace5e34bf2b8e90d14fcd130174  linux-imx-lf-6.6.52-2.2.0.tar.gz
-diff --git a/board/freescale/imx93evk/patches/uboot/uboot.hash b/board/freescale/imx93evk/patches/uboot/uboot.hash
-index 4e0d729ca0..4b763ba3ba 100644
---- a/board/freescale/imx93evk/patches/uboot/uboot.hash
-+++ b/board/freescale/imx93evk/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  179b6531ef1d4ce681d139741ac7b4144220c90b7223297df28b61e98e8d37fc  uboot-imx-lf-6.6.23-2.0.0.tar.gz
-+sha256  5acad057c9c5e802536abf84b9fcb4405b8f701e13da1294e0d90bc6c186639d  uboot-imx-lf-6.6.52-2.2.0.tar.gz
-diff --git a/configs/freescale_imx93evk_defconfig b/configs/freescale_imx93evk_defconfig
-index b244ba9684..1472914270 100644
---- a/configs/freescale_imx93evk_defconfig
-+++ b/configs/freescale_imx93evk_defconfig
-@@ -8,7 +8,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyLP0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx9-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.23-2.0.0)/linux-imx-lf-6.6.23-2.0.0.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.52-2.2.0)/linux-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx93-11x11-evk"
-@@ -22,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.6.23-2.0.0)/imx-atf-lf-6.6.23-2.0.0.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.6.52-2.2.0)/imx-atf-lf-6.6.52-2.2.0.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx93"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.23-2.0.0)/uboot-imx-lf-6.6.23-2.0.0.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.52-2.2.0)/uboot-imx-lf-6.6.52-2.2.0.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx93_11x11_evk"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+-sha256  9efbb6458140e5a0de445613f0e76bcf12cbf7a9892b2f53e075c2e7beaba86c  minicom-2.9.tar.bz2
++sha256  90e7ce2856b3eaaa3f452354d17981c49d32c426a255b6f0d3063a227c101538  minicom-2.10.tar.bz2
+ sha256  cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
+diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
+index 8bc5717417..0c9b1ae434 100644
+--- a/package/minicom/minicom.mk
++++ b/package/minicom/minicom.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MINICOM_VERSION = 2.9
++MINICOM_VERSION = 2.10
+ MINICOM_SOURCE = minicom-$(MINICOM_VERSION).tar.bz2
+ MINICOM_SITE = \
+ 	https://salsa.debian.org/minicom-team/minicom/-/archive/$(MINICOM_VERSION)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
