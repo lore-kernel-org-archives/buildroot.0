@@ -4,50 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C604CC282DE
-	for <buildroot@archiver.kernel.org>; Mon, 10 Mar 2025 20:18:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E52AC282DE
+	for <buildroot@archiver.kernel.org>; Mon, 10 Mar 2025 20:18:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C08140BB8;
-	Mon, 10 Mar 2025 20:18:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E84A140BB8;
+	Mon, 10 Mar 2025 20:18:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aRfqz_6h7Ouf; Mon, 10 Mar 2025 20:18:26 +0000 (UTC)
+ id Ml_FvvcdKvvt; Mon, 10 Mar 2025 20:18:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74BA940BB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBBF040BB9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74BA940BB9;
-	Mon, 10 Mar 2025 20:18:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id AC8111C1
- for <buildroot@buildroot.org>; Mon, 10 Mar 2025 20:18:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBBF040BB9;
+	Mon, 10 Mar 2025 20:18:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 932781C1
+ for <buildroot@buildroot.org>; Mon, 10 Mar 2025 20:18:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 90B9060707
- for <buildroot@buildroot.org>; Mon, 10 Mar 2025 20:18:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 77A6981397
+ for <buildroot@buildroot.org>; Mon, 10 Mar 2025 20:18:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nJRU-5FJHkdT for <buildroot@buildroot.org>;
- Mon, 10 Mar 2025 20:18:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D72F9606F2
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D72F9606F2
- for <buildroot@buildroot.org>; Mon, 10 Mar 2025 20:18:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 85FAC87EC4; Mon, 10 Mar 2025 20:18:23 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wrgMoMlBI0Vc for <buildroot@buildroot.org>;
+ Mon, 10 Mar 2025 20:18:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8E61E81236
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E61E81236
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8E61E81236
+ for <buildroot@busybox.net>; Mon, 10 Mar 2025 20:18:46 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 3816278035E;
+ Mon, 10 Mar 2025 21:18:43 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 10 Mar 2025 21:18:43 +0100
+MIME-Version: 1.0
+Date: Mon, 10 Mar 2025 21:18:43 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 10 Mar 2025 21:15:14 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2af019a1bd3e4d9d8a3600cf12682a14acb6e965
-X-Git-Newrev: 99a73492f855c05ad563825d1204d6c41b9f28be
-X-Patchwork-Hint: ignore
-Message-Id: <20250310201823.85FAC87EC4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sdl2: bump version to
- 2.32.2
+To: Michael Fischer <mf@go-sys.de>
+Cc: buildroot@busybox.net
+In-Reply-To: <20250310141048.18154-1-mf@go-sys.de>
+References: <20250310141048.18154-1-mf@go-sys.de>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <6a3660b7ea80c5b5e6d56f5ab890e970@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1741637924;
+ bh=yyAFiOUg8dZcFGsHj2j1Mmk/E6BCYRraH1DY/5EPBXc=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=DP5VEbZJT96eB9juzS7Kew9kG5YOPNUFraVnILLIJB5iGt88HFGtEE9O5VuqfQ+qC
+ 6VGCdNamga8O3isIpHTjzrEsK4VrTVKnwgTUbZ5IoX0UdsOoKNICTnPQw3h5CgN/nt
+ 8rYyD/z1tVuk67/JekPSVd3JrnwuFLq1xyfARIjKqM98hH5v8H/xS5+43irp7jEfNt
+ uCjNEOG3RCC8j8KKouyCdpbqz9JRrlY6b4mlKzjpz3JCEXdwGAiyc4hxi17xU60jQE
+ YZkxc0YOxZ0mjsU53GOgqP3RVPaksdYT97EcYxrNOVBHR8jhynR+qe+ubYlwhZ0N0K
+ ahd7J/InkBE7A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=DP5VEbZJ
+Subject: Re: [Buildroot] [PATCH] package/sdl2: bump version to 2.32.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,49 +82,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99a73492f855c05ad563825d1204d6c41b9f28be
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 10/03/2025 15:10, Michael Fischer wrote:
+> Release notes:
+> https://github.com/libsdl-org/SDL/releases/tag/release-2.32.2
+> 
+> Signed-off-by: Michael Fischer <mf@go-sys.de>
 
-Release notes:
-https://github.com/libsdl-org/SDL/releases/tag/release-2.32.2
-
-Signed-off-by: Michael Fischer <mf@go-sys.de>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/sdl2/sdl2.hash | 4 ++--
- package/sdl2/sdl2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 9171139889..140de28eae 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.12.tar.gz.sig
--sha256  ac356ea55e8b9dd0b2d1fa27da40ef7e238267ccf9324704850d5d47375b48ea  SDL2-2.30.12.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.32.2.tar.gz.sig
-+sha256  c5f30c427fd8107ee4a400c84d4447dd211352512eaf0b6e89cc6a50a2821922  SDL2-2.32.2.tar.gz
- # Locally calculated
- sha256  97f35b302b361680ec1e891e95d2d52097bb95abff361434916d99dc1305f127  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 67a4978e22..8e4d7700c0 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SDL2_VERSION = 2.30.12
-+SDL2_VERSION = 2.32.2
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
+Applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
