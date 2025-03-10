@@ -1,58 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC765C282D1
-	for <buildroot@archiver.kernel.org>; Thu,  6 Mar 2025 20:37:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13B0DC28B2E
+	for <buildroot@archiver.kernel.org>; Mon, 10 Mar 2025 14:19:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9C4E840563;
-	Thu,  6 Mar 2025 20:37:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 52C6960AC5;
+	Mon, 10 Mar 2025 14:19:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T1M2E2VYyBC2; Thu,  6 Mar 2025 20:37:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZjIWIFRZrLbG; Mon, 10 Mar 2025 14:19:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6F3740590
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B44FC60A55
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B6F3740590;
-	Thu,  6 Mar 2025 20:37:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7118771F
- for <buildroot@buildroot.org>; Thu,  6 Mar 2025 20:37:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B44FC60A55;
+	Mon, 10 Mar 2025 14:19:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6585BDC
+ for <buildroot@buildroot.org>; Mon, 10 Mar 2025 14:19:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 552EF400FB
- for <buildroot@buildroot.org>; Thu,  6 Mar 2025 20:37:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 494F181EB7
+ for <buildroot@buildroot.org>; Mon, 10 Mar 2025 14:19:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hoJ06DqhGs0c for <buildroot@buildroot.org>;
- Thu,  6 Mar 2025 20:37:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
- helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5wfPnfhgDH3f for <buildroot@buildroot.org>;
+ Mon, 10 Mar 2025 14:19:03 +0000 (UTC)
+X-Greylist: delayed 489 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 10 Mar 2025 14:19:03 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 546F381EA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 546F381EA7
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=134.119.228.108;
+ helo=smtprelay08.ispgateway.de; envelope-from=mf@go-sys.de;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4609E400D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4609E400D7
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4609E400D7
- for <buildroot@uclibc.org>; Thu,  6 Mar 2025 20:37:12 +0000 (UTC)
-Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1tqHxt-000A24-93
- for buildroot@uclibc.org; Thu, 06 Mar 2025 21:37:09 +0100
-X-Injected-Via-Gmane: http://gmane.org/
-To: buildroot@uclibc.org
-From: Bernd Kuhls <bernd@kuhls.net>
-Date: Thu, 06 Mar 2025 21:36:24 +0100
-Message-ID: <pan$b3f27$6f3c1c17$cd697a35$4ab3b8fb@ID-313208.user.individual.net>
-References: <67c92148.050a0220.f37d1.0880__11471.0668962047$1741234534$gmane$org@mx.google.com>
-Mime-Version: 1.0
-User-Agent: Pan/0.154 (Izium; 517acf4)
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=kuhls.net
-Subject: Re: [Buildroot] [autobuild.buildroot.org] Daily results for
- 2025-03-05
+Received: from smtprelay08.ispgateway.de (smtprelay08.ispgateway.de
+ [134.119.228.108])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 546F381EA7
+ for <buildroot@busybox.net>; Mon, 10 Mar 2025 14:19:03 +0000 (UTC)
+Received: from [84.191.234.224] (helo=mail.go-sys.de)
+ by smtprelay08.ispgateway.de with esmtpsa (TLS1.2) tls
+ TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.98)
+ (envelope-from <mf@go-sys.de>) id 1trdqG-000000005hs-1GlV
+ for buildroot@busybox.net; Mon, 10 Mar 2025 15:10:52 +0100
+Received: from mail.go-sys.de (192.168.1.9) by mail.go-sys.de (192.168.1.9)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.43; Mon, 10 Mar
+ 2025 15:10:49 +0100
+Received: from go-sys.de (192.168.1.210) by mail.go-sys.de (192.168.1.9) with
+ Microsoft SMTP Server id 15.1.2507.43 via Frontend Transport;
+ Mon, 10 Mar 2025 15:10:49 +0100
+From: Michael Fischer <mf@go-sys.de>
+To: <buildroot@busybox.net>
+CC: Michael Fischer <mf@go-sys.de>
+Date: Mon, 10 Mar 2025 15:10:48 +0100
+Message-ID: <20250310141048.18154-1-mf@go-sys.de>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+X-C2ProcessedOrg: 5fa85167-cd6f-46be-bafe-19070fe3dac3
+X-CrossPremisesHeadersFilteredBySendConnector: mail.go-sys.de
+X-OrganizationHeadersPreserved: mail.go-sys.de
+X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=go-sys.de
+Subject: [Buildroot] [PATCH] package/sdl2: bump version to 2.32.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,19 +83,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+Release notes:
+https://github.com/libsdl-org/SDL/releases/tag/release-2.32.2
 
-Am Thu, 06 Mar 2025 04:15:04 -0000 schrieb Buildroot Notifications:
+Signed-off-by: Michael Fischer <mf@go-sys.de>
+---
+ package/sdl2/sdl2.hash | 4 ++--
+ package/sdl2/sdl2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> Classification of failures by reason for master
-> -----------------------------------------------
-[..]
->                  libcdio-2.2.0 | 4
-
-fixed by https://patchwork.ozlabs.org/project/buildroot/patch/
-20250209112915.401359-1-bernd@kuhls.net/
-
-Regards, Bernd
+diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
+index 9171139889..140de28eae 100644
+--- a/package/sdl2/sdl2.hash
++++ b/package/sdl2/sdl2.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.12.tar.gz.sig
+-sha256  ac356ea55e8b9dd0b2d1fa27da40ef7e238267ccf9324704850d5d47375b48ea  SDL2-2.30.12.tar.gz
++# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.32.2.tar.gz.sig
++sha256  c5f30c427fd8107ee4a400c84d4447dd211352512eaf0b6e89cc6a50a2821922  SDL2-2.32.2.tar.gz
+ # Locally calculated
+ sha256  97f35b302b361680ec1e891e95d2d52097bb95abff361434916d99dc1305f127  LICENSE.txt
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 67a4978e22..8e4d7700c0 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SDL2_VERSION = 2.30.12
++SDL2_VERSION = 2.32.2
+ SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
+ SDL2_SITE = http://www.libsdl.org/release
+ SDL2_LICENSE = Zlib
+-- 
+2.20.1
 
 _______________________________________________
 buildroot mailing list
