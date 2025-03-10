@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06DB7C28B2F
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:05:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37142C28B28
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:05:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B05F083AAC;
-	Tue, 18 Mar 2025 15:05:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 037BC83B37;
+	Tue, 18 Mar 2025 15:05:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rlHnf0wcrP8s; Tue, 18 Mar 2025 15:05:27 +0000 (UTC)
+ id idhJ4dCDY_TB; Tue, 18 Mar 2025 15:05:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A94D283B31
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2076082EA1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A94D283B31;
-	Tue, 18 Mar 2025 15:05:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1264316E
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2076082EA1;
+	Tue, 18 Mar 2025 15:05:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5E60516E
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:03:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6BF2781E1F
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F1B3440DAA
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9_yjolAAyp_K for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l6ZvXtx5L8Xn for <buildroot@buildroot.org>;
  Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C37A81C6F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC6EB4095A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C37A81C6F
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC6EB4095A
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 84DD28713E; Tue, 18 Mar 2025 15:02:44 +0000 (UTC)
+ id C4003880EC; Tue, 18 Mar 2025 15:02:43 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Mar 2025 15:07:23 +0100
+Date: Mon, 10 Mar 2025 21:21:25 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a3412adb2aacb39db1a27d9d498b34647c8cfbdf
-X-Git-Newrev: ba8a8359e988c472e16fee8db2710520f3f277fc
+X-Git-Oldrev: 99a73492f855c05ad563825d1204d6c41b9f28be
+X-Git-Newrev: bc933199e0a850afe54ae5372d68aa9b76137822
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150244.84DD28713E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fmc: bump version to
- lf-6.6.52-2.2.0
+Message-Id: <20250318150243.C4003880EC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/raspberrypi-usbboot: bump version
+ to 20250227-132106
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,46 +65,100 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ba8a8359e988c472e16fee8db2710520f3f277fc
+commit: https://git.buildroot.net/buildroot/commit/?id=bc933199e0a850afe54ae5372d68aa9b76137822
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- The license file was renamed from COPYING to LICENSE.
+32-bit mass-storage-gadget has been replaced with
+mass-storage-gadget64. Drop patch included upstream.
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-Reviewed-by: Brandon Maier <brandon.maier@gmail.com>
+Upstream diff:
+https://github.com/raspberrypi/usbboot/compare/20240926-102326...20250227-132106
+
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/fmc/fmc.hash | 4 ++--
- package/fmc/fmc.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .checkpackageignore                                |  1 -
+ ...001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch | 34 ----------------------
+ .../raspberrypi-usbboot/raspberrypi-usbboot.hash   |  2 +-
+ package/raspberrypi-usbboot/raspberrypi-usbboot.mk |  2 +-
+ 4 files changed, 2 insertions(+), 37 deletions(-)
 
-diff --git a/package/fmc/fmc.hash b/package/fmc/fmc.hash
-index 961ce18ac7..8f59c94e6a 100644
---- a/package/fmc/fmc.hash
-+++ b/package/fmc/fmc.hash
-@@ -1,3 +1,3 @@
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 08285eadcc..e38d576a20 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1048,7 +1048,6 @@ package/qt5/qt5webkit/0006-Warnings-due-to-AppSinkCallbacks-struct-growth-https.
+ package/qt5cinex/0001-Fix-execution-problem-with-Qt5.3.patch lib_patch.Upstream
+ package/racehound/0001-Fix-module-install-path-lib-instead-of-usr-lib-prefi.patch lib_patch.Upstream
+ package/rapidxml/0001-ensure-internal-print-operations-are-declared-before.patch lib_patch.Upstream
+-package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch lib_patch.Upstream
+ package/read-edid/0001-Fix-install-file-list.patch lib_patch.Upstream
+ package/read-edid/0002-Fix-compiler-check.patch lib_patch.Upstream
+ package/read-edid/0003-fix-build-with-gcc-10.patch lib_patch.Upstream
+diff --git a/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch b/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
+deleted file mode 100644
+index fe2614d35e..0000000000
+--- a/package/raspberrypi-usbboot/0001-Makefile-allow-passing-CFLAGS-LDFLAGS.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From d580bf031011d1e1e022ab1e1024f7cc5939f956 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-Date: Fri, 2 Dec 2016 23:09:44 +0100
+-Subject: [PATCH] Makefile: allow passing CFLAGS/LDFLAGS
+-
+-This might be needed to pass some custom CFLAGS/LDFLAGS when building
+-rpiboot.
+-
+-Submitted-upstream: https://github.com/raspberrypi/usbboot/pull/2
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-[Rebased on 9324fd7]
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+-[Rebased on 20240926-102326-0-g82d8755]
+-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+----
+- Makefile | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile b/Makefile
+-index d2f7585..9812d6d 100755
+---- a/Makefile
+-+++ b/Makefile
+-@@ -3,7 +3,7 @@ GIT_VER=$(shell git rev-parse HEAD 2>/dev/null | cut -c1-8 || echo "")
+- INSTALL_PREFIX?=/usr
+- 
+- rpiboot: main.c bootfiles.c decode_duid.c msd/bootcode.h msd/start.h msd/bootcode4.h msd/start4.h
+--	$(CC) -Wall -Wextra -g -o $@ main.c bootfiles.c decode_duid.c `pkg-config --cflags --libs libusb-1.0` -DGIT_VER="\"$(GIT_VER)\"" -DPKG_VER="\"$(PKG_VER)\"" -DINSTALL_PREFIX=\"$(INSTALL_PREFIX)\"
+-+	$(CC) -Wall -Wextra -g $(CFLAGS) -o $@ main.c bootfiles.c decode_duid.c `pkg-config --cflags --libs libusb-1.0` -DGIT_VER="\"$(GIT_VER)\"" -DPKG_VER="\"$(PKG_VER)\"" -DINSTALL_PREFIX=\"$(INSTALL_PREFIX)\" $(LDFLAGS)
+- 
+- %.h: %.bin ./bin2c
+- 	./bin2c $< $@
+--- 
+-2.45.2
+-
+diff --git a/package/raspberrypi-usbboot/raspberrypi-usbboot.hash b/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
+index 413fe88f03..e17be5f411 100644
+--- a/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
++++ b/package/raspberrypi-usbboot/raspberrypi-usbboot.hash
+@@ -1,5 +1,5 @@
  # Locally calculated
--sha256  a58514816108a16d07307f924ebceb67c7d61709e4449978763fc44ed6e1fc44  fmc-LSDK-21.08.tar.gz
--sha256  f92862ceb95db5492f50a59d7c799c9395b714db88db92d11891dc0233e2ac42  COPYING
-+sha256  13a5e327ef1d727946187fbd021513194981e42681c73e56933109af8a5889e7  fmc-lf-6.6.52-2.2.0.tar.gz
-+sha256  f92862ceb95db5492f50a59d7c799c9395b714db88db92d11891dc0233e2ac42  LICENSE
-diff --git a/package/fmc/fmc.mk b/package/fmc/fmc.mk
-index 4f25545ffd..c6d36f14a0 100644
---- a/package/fmc/fmc.mk
-+++ b/package/fmc/fmc.mk
-@@ -4,10 +4,10 @@
+-sha256  2ce52a9f1de1aab39daa10fa487c55d20d34f679d11b1a1743d0ef81ffb3c726  raspberrypi-usbboot-20240926-102326-git4.tar.gz
++sha256  339b1e2a0853ad700339206a2424c3fc9559518bc37ebfaac76b0484cf6f5bdb  raspberrypi-usbboot-20250227-132106-git4.tar.gz
+ 
+ # License files
+ sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE
+diff --git a/package/raspberrypi-usbboot/raspberrypi-usbboot.mk b/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
+index 3135741e9b..dd7a2a1b24 100644
+--- a/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
++++ b/package/raspberrypi-usbboot/raspberrypi-usbboot.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FMC_VERSION = LSDK-21.08
-+FMC_VERSION = lf-6.6.52-2.2.0
- FMC_SITE = $(call github,nxp-qoriq,fmc,$(FMC_VERSION))
- FMC_LICENSE = MIT
--FMC_LICENSE_FILES = COPYING
-+FMC_LICENSE_FILES = LICENSE
- FMC_DEPENDENCIES = libxml2 tclap fmlib
- 
- FMC_MAKE_OPTS = \
+-RASPBERRYPI_USBBOOT_VERSION = 20240926-102326
++RASPBERRYPI_USBBOOT_VERSION = 20250227-132106
+ RASPBERRYPI_USBBOOT_SITE = https://github.com/raspberrypi/usbboot.git
+ RASPBERRYPI_USBBOOT_SITE_METHOD = git
+ RASPBERRYPI_USBBOOT_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
