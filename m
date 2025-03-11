@@ -1,118 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94195C282DE
-	for <buildroot@archiver.kernel.org>; Tue, 11 Mar 2025 02:48:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDEDBC282DE
+	for <buildroot@archiver.kernel.org>; Tue, 11 Mar 2025 02:50:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 00093406DF;
-	Tue, 11 Mar 2025 02:48:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5G_Lz2DQ9FWG; Tue, 11 Mar 2025 02:48:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C874B4081E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C874B4081E;
-	Tue, 11 Mar 2025 02:48:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id AB40EEDF
- for <buildroot@buildroot.org>; Tue, 11 Mar 2025 02:48:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F96B606BF
- for <buildroot@buildroot.org>; Tue, 11 Mar 2025 02:48:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 60C8560825;
+	Tue, 11 Mar 2025 02:50:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z1CbSebZbotD for <buildroot@buildroot.org>;
- Tue, 11 Mar 2025 02:48:45 +0000 (UTC)
+ id BPKa_ZYQDdZD; Tue, 11 Mar 2025 02:50:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EB1960A5E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5EB1960A5E;
+	Tue, 11 Mar 2025 02:50:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CF312EDF
+ for <buildroot@buildroot.org>; Tue, 11 Mar 2025 02:50:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id ABD0540DB5
+ for <buildroot@buildroot.org>; Tue, 11 Mar 2025 02:50:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CCf2jvfkbr8c for <buildroot@buildroot.org>;
+ Tue, 11 Mar 2025 02:50:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::633; helo=mail-pl1-x633.google.com;
+ client-ip=2607:f8b0:4864:20::629; helo=mail-pl1-x629.google.com;
  envelope-from=charlie@rivosinc.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 36DFD60664
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36DFD60664
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com
- [IPv6:2607:f8b0:4864:20::633])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 36DFD60664
- for <buildroot@buildroot.org>; Tue, 11 Mar 2025 02:48:44 +0000 (UTC)
-Received: by mail-pl1-x633.google.com with SMTP id
- d9443c01a7336-2254e0b4b79so27672345ad.2
- for <buildroot@buildroot.org>; Mon, 10 Mar 2025 19:48:44 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 16D33405E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16D33405E6
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com
+ [IPv6:2607:f8b0:4864:20::629])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 16D33405E6
+ for <buildroot@buildroot.org>; Tue, 11 Mar 2025 02:50:53 +0000 (UTC)
+Received: by mail-pl1-x629.google.com with SMTP id
+ d9443c01a7336-223959039f4so98185775ad.3
+ for <buildroot@buildroot.org>; Mon, 10 Mar 2025 19:50:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1741661324; x=1742266124;
- h=cc:to:message-id:content-transfer-encoding:mime-version:subject
- :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=oJi1QNEr+ja5ML1eRTv6gDCJgdUoDVk5Wwj/OAC+mHs=;
- b=T7ePlP6BQfPcjrKOaA9WGlqVRWZ1KKgieMrF8g4/ca7M6vNZfx9kuhHmrIIaLqxXvb
- 2ELfz9x+plCU7T+yyLYjT6pPOI5dN+G8cMLu9KpDNMiCAY2BnfI6ub7iOYFHD9uP3VcK
- B4FXLBT7QZuUoZfqP0vFa/EANONBwQWu1zGdr8sDJmzwv+cD0Fp9sqI6Qro5DsP2O1sV
- /g+24l6PvrMWqoCZIfAJRYRJvitycetS29JEd1XQ7HS40ZD8HmjFqM3iO50bN0bgaYZ8
- n97zEwJWoryUuGpMPz1GdyjI4w66SoazBlWIK3c3t0lwOkSEGhywELC4KPfNCGR2yS6x
- x3jQ==
-X-Gm-Message-State: AOJu0YygPlFLh0lz7I56HTYNDKUXqGKc2fjlYZhExoNIL3CiNRodqRdr
- E6S9ldWnlUJD8/Dx4EiDhDRutmFeWou/avf/0wK9Q2vcAcLsJseSyYmbMeqv0so=
-X-Gm-Gg: ASbGncudM0Kd9WyWqpyXlP5h8mES3jT8qAX/BJ96zd+hGIYIf/EJJPkeR7zZG3u4Pyh
- p0U1s0BMU0uhnq3Cm3Hv6Hfpo8kf0IDMvyxrE2vOQy+XZ+zrNkAXd+BuzBnG4V9r8mWpuTIOMth
- /5v2hE38zH31jenmy0ar6uvDGt2owri/o5qMdUwW29hqUgDtJi/Ihko+EHH48k32GZaC+IP7I8J
- xFlJRCxknBcveO3W5XKnqQPsX4A90xm5Go3Pc/qzhXPe7jk91wf3W4AbMUrU+A7UUt2mudKOefv
- XzLXBeqdGcp6a8EMFU6YeSfM1L8EuxdCQmKQHjLIv3a9cqXIGqkZ6m1Jcvfb
-X-Google-Smtp-Source: AGHT+IGDrE1FlxxCEr2MS8etjHHfmD73OdUmPxK+/9x9dHax3hcztuTR+rj6aP88nRV4DOBn8XvYTA==
-X-Received: by 2002:a17:902:cf07:b0:224:192a:9154 with SMTP id
- d9443c01a7336-22428a8cf90mr253834955ad.26.1741661324432; 
- Mon, 10 Mar 2025 19:48:44 -0700 (PDT)
-Received: from charlie.ba.rivosinc.com ([64.71.180.162])
- by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-224109ea7f9sm86267365ad.84.2025.03.10.19.48.43
+ d=1e100.net; s=20230601; t=1741661453; x=1742266253;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=SVcrTS6qj1Tn8lvaO5jOF+vUXKp9rZyqzwZ45ohiNUY=;
+ b=snIGmJYOw9nColi9aOe4OL3X7JkY+qRaaHQWlKmnS8VI1h5ACBWDychOm/9caLyQmQ
+ 8gyLdxMNoW8ylin2sqTA9973mB9YBLsyomoTVw0k6YUdmh3H5Hglc7f0cinffVvovXg1
+ WtwzbMfk/IRfDSkfgpZKKqeMFjQ+123z+sj69NzpnxdmjUsLifJzU4xoxwhrSpvZ4n12
+ itpG0eZjGU/B5YwOoaeh9jirzOiR8pA9vw1eVubT1+mlhiRPKOJR3htSB/3IpT45tUfq
+ 57irVqshGb03a3AviYR+D0//zf1ShgCuDbbtzdIwNSnLSgFKYvC7T0XV1o2Pv3J3LMgv
+ +CIg==
+X-Gm-Message-State: AOJu0YxByapLpz8J6W7PRfOuiiw0ODCpJcL1oYExPJZHKv4rZaqAPSKN
+ qi6otvuR3DgHFVb+CVoGRpbMnJJSMQnNk7dto0maexPgpc5FneggY2tZLchKWdGizLLUu3RZYJW
+ K
+X-Gm-Gg: ASbGnctoUIl9+zuEpVTiZnIojJeF0iXUH4iPwaqHWzwLQwZz0yl/IxpQb4wp9+0i47m
+ A5BS56p2fuepW2MEt2MdbrrUODYD9QLDDDRSu31YGrIpjiPL58fGPJhFY2m+ZxHEE1DyPXevhGM
+ D8GtZdsqFbHByRexWN0X3FKLLtOzMEDhYbT+TCeiJd4SoCMj67j36WupPUh8cPD8xRrIcxxsGk1
+ 06USk5gPwgtW6BQ/4rHBdhg+783YjJw/rcC9pPw/iEzMFN05tuh4RTCfw3PHgGYaEMdIBXleQWB
+ kkL00Rw2PafPo1XqZXzWng25X/Bn7ZhF/ulPLUs95y/XzQ==
+X-Google-Smtp-Source: AGHT+IE1K+Pe8mlOpPebcYev7BN0Ksj47LSM1yPwyRDNHUY7YSUJrFY7ZFSeWFYx8jcObUNDD0n6+w==
+X-Received: by 2002:a05:6a20:4393:b0:1f5:769a:a4c2 with SMTP id
+ adf61e73a8af0-1f5769aa6c0mr11408858637.22.1741661452808; 
+ Mon, 10 Mar 2025 19:50:52 -0700 (PDT)
+Received: from ghost ([50.145.13.30]) by smtp.gmail.com with ESMTPSA id
+ d2e1a72fcca58-736982065dfsm9189833b3a.30.2025.03.10.19.50.52
+ for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 10 Mar 2025 19:48:43 -0700 (PDT)
+ Mon, 10 Mar 2025 19:50:52 -0700 (PDT)
+Date: Mon, 10 Mar 2025 19:50:50 -0700
 From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Mon, 10 Mar 2025 19:48:33 -0700
-MIME-Version: 1.0
-Message-Id: <20250310-fix_external_toolchains-v1-1-446f48af7cf7@rivosinc.com>
-X-B4-Tracking: v=1; b=H4sIAICkz2cC/x2MWwqAIBAArxL7naA9ILpKhFhutRAaq4QQ3b2lz
- 4GZeSAhEyYYqwcYb0oUg4CpK1gPF3ZU5IWh0U2vW6PVRsViycjBnTbHeIpGISlvlmHtvNMLDiD
- 1xSjqf57m9/0ALyxruGkAAAA=
-X-Change-ID: 20250310-fix_external_toolchains-d1b8c4da0be8
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>, 
- Romain Naour <romain.naour@gmail.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Charlie Jenkins <charlie@rivosinc.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1955; i=charlie@rivosinc.com; 
- h=from:subject:message-id;
- bh=PrqrwG415bjMJ0KK4fQtqMLDCfcF0Pfd5QC2dZhhGR4=; 
- b=owGbwMvMwCXWx5hUnlvL8Y3xtFoSQ/r5JS0fTPlmLpaU3VRVdl09p2Ca2LLISYmXz+W+K+vod
- BFMCmDsKGFhEONikBVTZOG51sDceke/7Kho2QSYOaxMIEMYuDgFYCKvwhl+bMzLiqhxm8nv0ali
- HxPdU33AwySxal5U3pH2wJ3PIlUZGW7c4vfY1+H8gW22y/ol97Rv6DEsTu5RzrzOvdm1cJWdJRs A
-X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
- fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
+Message-ID: <Z8-lCmBldqRf-Mwr@ghost>
+References: <Z85-NfSRZVA9VxK6@ghost>
+ <Z86AGdrKHaUqgLVt@ghost>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <Z86AGdrKHaUqgLVt@ghost>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1741661324; x=1742266124;
+ d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1741661453; x=1742266253;
  darn=buildroot.org; 
- h=cc:to:message-id:content-transfer-encoding:mime-version:subject
- :date:from:from:to:cc:subject:date:message-id:reply-to;
- bh=oJi1QNEr+ja5ML1eRTv6gDCJgdUoDVk5Wwj/OAC+mHs=;
- b=PrXw8ywZhRqcK9qezbYRQ2/EE91OlvbCO1fnI/ONR6O/h1khEQKbBfiBD0SRoCTWNy
- rN5HailYSGgfmeSh7pHooytdWkmBe+dymyTs4jpvDxRJBY9uqaaPEwxIDsuoU38EXjbp
- 7JAAkwrINK3XlVTsMAqsbwzTNAKJY6FNeeItnLQ2GI1FsQb7OpOklHyXe0LBzJbrDAPm
- +JPhl5HGVJqul5mHC0eEwes38V3eR90WXiuP6ds1awcP+/PS+g4CfCPizUCn65RzWjb4
- K3P7FlZeOpqoAfFBDnZ7MrkbMzn+yI9i6DqZTureRoIZED0tOgjDgjE/wFTEBa8ylaWl
- 7z5w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+ bh=SVcrTS6qj1Tn8lvaO5jOF+vUXKp9rZyqzwZ45ohiNUY=;
+ b=26MRO3ZW9h2IuAvlF+lWbuSH0ivjE1WXfW20W5Wrc4IIqcVK7Naih5MQ2TeTA+pN3K
+ FD4RihzE1C4fTx6ddNzzj9RZ3rjcaj1vWFSCsiERF1gmoupO2Jhq/LaMl8Kjt/GCS9WF
+ 8UtvEIhIl+IA2mX/e53mHI+gu9r0kVSHgjJN899gbsbcOqRfSGMxb0v7LGQQ/LuXU3la
+ fC+pICh8fZdTs7Gb4QIg+hoRDfWp/9xTwRjXyRqVAMOyo7IUlloB51tpbdZbhJrsU5wu
+ 2+/PviAYWU3cOMFksM53n28Pc/77LvAYZKE6hPKr7R3tFUzn661MJqSlzIvj5JvrCM0D
+ YHlg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=rivosinc.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=rivosinc-com.20230601.gappssmtp.com
  header.i=@rivosinc-com.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=PrXw8ywZ
-Subject: [Buildroot] [PATCH] toolchain-external: Fix external toolchains
- when BR2_ROOTFS_MERGED_USR
+ header.s=20230601 header.b=26MRO3ZW
+Subject: Re: [Buildroot] Crosstool-ng external toolchain with
+ BR2_ROOTFS_MERGED_USR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,55 +117,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-External toolchains like crosstool-ng place libraries at /lib.
-When BR2_ROOTFS_MERGED_USR is enabled, these libraries were not being
-copied into the target. This caused these toolchains to be unusable with
-this option.
+On Sun, Mar 09, 2025 at 11:00:57PM -0700, Charlie Jenkins wrote:
+> On Sun, Mar 09, 2025 at 10:52:53PM -0700, Charlie Jenkins wrote:
+> > I am trying to use a crosstool-ng build toolchain in Buildroot with the
+> > BR2_ROOTFS_MERGED_USR option enabled. However, crosstool-ng installs
+> > the sysroot libs at /lib instead /usr/lib as BR2_ROOTFS_MERGED_USR
+> > expects. I am not sure what the best solution for this is. Should
+> > BR2_ROOTFS_MERGED_USR be ignored for toolchain packages when an external
+> > toolchain is being used?
+> 
+> I meant to add more information about the failure...
+> 
+> Because crosstool-ng installs the libs at /lib instead of /usr/lib, the
+> libraries end up getting symlinked into nothingness. For example:
+> 
+> $ ls -l ./output/host/riscv64-buildroot-linux-gnu/sysroot/usr/lib/libm.so
+> lrwxrwxrwx 1 charlie rvs 6 Mar  9 22:58 ./output/host/riscv64-buildroot-linux-gnu/sysroot/usr/lib/libm.so -> ../../
 
-WHen BR2_ROOTFS_MERGED_USR is selected, copy the /lib and /lib64
-directories into /usr/lib and /usr/lib64 respectively.
+I believed I fixed the problem here:
 
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
----
-I originally reported this issue here [1].
+https://lore.kernel.org/buildroot/20250310-fix_external_toolchains-v1-1-446f48af7cf7@rivosinc.com/T/#u
 
-[1] https://lore.kernel.org/buildroot/Z86AGdrKHaUqgLVt@ghost/T/#t
----
- toolchain/helpers.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index f3fdaaec07c5a01688da685c4d0fd4e2cb357b95..b565da8a3a8f12567920f14dd3b6a18e548da6c7 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -55,6 +55,9 @@ copy_toolchain_lib_root = \
- # corresponding architecture variants), and we don't want to import
- # them.
- #
-+# Furthermore, when BR2_ROOTFS_MERGED_USR is enabled, the 'lib*' directories
-+# need to be copied over to usr/'lib*'.
-+#
- # If ARCH_LIB_DIR is not a singular directory component, e.g.
- # 'lib32/octeon2', then symbolic links in ARCH_LIB_DIR and
- # usr/ARCH_LIB_DIR may be broken because Buildroot will flatten the
-@@ -109,6 +112,10 @@ copy_toolchain_sysroot = \
- 	ARCH_SUBDIR="$(strip $3)"; \
- 	ARCH_LIB_DIR="$(strip $4)" ; \
- 	SUPPORT_LIB_DIR="$(strip $5)" ; \
-+	if [ "$(BR2_ROOTFS_MERGED_USR)" == "y" ]; then \
-+		rsync -au --chmod=u=rwX,go=rX $${ARCH_SYSROOT_DIR}/lib $(STAGING_DIR)/usr/lib 1>&2 ; \
-+		rsync -au --chmod=u=rwX,go=rX $${ARCH_SYSROOT_DIR}/$${ARCH_LIB_DIR} $(STAGING_DIR)/usr/$${ARCH_LIB_DIR} 1>&2 ; \
-+	fi ; \
- 	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
- 		if [ ! -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
- 			continue ; \
-
----
-base-commit: 4809690d42f9b395ccb76ee7583c199fdd8d42c5
-change-id: 20250310-fix_external_toolchains-d1b8c4da0be8
--- 
 - Charlie
 
+> 
+> > 
+> > My crosstool-ng config is:
+> > CT_CONFIG_VERSION="4"
+> > CT_ARCH_RISCV=y
+> > # CT_DEMULTILIB is not set
+> > CT_ARCH_USE_MMU=y
+> > CT_ARCH_64=y
+> > CT_ARCH_ARCH="rv64gc"
+> > CT_KERNEL_LINUX=y
+> > CT_CC_LANG_CXX=y
+> > CT_DEBUG_GDB=y
+> > # CT_GDB_CROSS_PYTHON is not set
+> > # CT_GDB_GDBSERVER is not set
+> > 
+> > My buildroot config is:
+> > BR2_riscv=y
+> > BR2_TOOLCHAIN_EXTERNAL=y
+> > BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> > BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> > BR2_TOOLCHAIN_EXTERNAL_URL="<path to built crosstool-ng toolchain>"
+> > BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-unknown-linux-gnu"
+> > BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_11=y
+> > BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> > # BR2_TOOLCHAIN_EXTERNAL_INET_RPC is not set
+> > # BR2_STRIP_strip is not set
+> > BR2_ROOTFS_MERGED_USR=y
+> > 
+> > - Charlie
+> > 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
