@@ -1,69 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DF8BC282EC
-	for <buildroot@archiver.kernel.org>; Tue, 11 Mar 2025 11:55:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CC52C28B30
+	for <buildroot@archiver.kernel.org>; Tue, 11 Mar 2025 12:00:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14E77605CD;
-	Tue, 11 Mar 2025 11:55:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VJERCdpYb9FK; Tue, 11 Mar 2025 11:55:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0397E6064C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0397E6064C;
-	Tue, 11 Mar 2025 11:55:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id C3D451DA
- for <buildroot@buildroot.org>; Tue, 11 Mar 2025 11:55:14 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BE84580D9B
- for <buildroot@buildroot.org>; Tue, 11 Mar 2025 11:55:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A5B8F80EDF;
+	Tue, 11 Mar 2025 12:00:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dEWPxZL2YhIW for <buildroot@buildroot.org>;
- Tue, 11 Mar 2025 11:55:13 +0000 (UTC)
-X-Greylist: delayed 368 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 11 Mar 2025 11:55:13 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AFB0A80B87
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFB0A80B87
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:1600:4:17::1908;
- helo=smtp-1908.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
- receiver=<UNKNOWN> 
-Received: from smtp-1908.mail.infomaniak.ch (smtp-1908.mail.infomaniak.ch
- [IPv6:2001:1600:4:17::1908])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AFB0A80B87
- for <buildroot@buildroot.org>; Tue, 11 Mar 2025 11:55:13 +0000 (UTC)
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch
- [10.4.36.108])
- by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4ZBsVR3hWnz6xT;
- Tue, 11 Mar 2025 12:49:03 +0100 (CET)
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA
- id 4ZBsVR0jmHzJ7R; Tue, 11 Mar 2025 12:49:03 +0100 (CET)
-From: Quentin Schulz <foss+buildroot@0leil.net>
-Date: Tue, 11 Mar 2025 12:48:53 +0100
-MIME-Version: 1.0
-Message-Id: <20250311-libcamera-qt6-v1-1-4897aadc6fe3@cherry.de>
-X-B4-Tracking: v=1; b=H4sIACQj0GcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDY0MD3ZzMpOTE3NSiRN3CEjPdtDTDNAtDE5M081RDJaCegqLUtMwKsHn
- RsbW1AMDmaJ1fAAAA
-X-Change-ID: 20250310-libcamera-qt6-ff1f8144f7e1
+ id 2gMY2rMO4q_V; Tue, 11 Mar 2025 12:00:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80D6980EF5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 80D6980EF5;
+	Tue, 11 Mar 2025 12:00:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9E3B11DA
+ for <buildroot@buildroot.org>; Tue, 11 Mar 2025 12:00:44 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 82FA080EF5
+ for <buildroot@buildroot.org>; Tue, 11 Mar 2025 12:00:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NMcLYZEqVJNy for <buildroot@buildroot.org>;
+ Tue, 11 Mar 2025 12:00:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ envelope-from=alex.bennee@linaro.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 576F780ED5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 576F780ED5
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 576F780ED5
+ for <buildroot@buildroot.org>; Tue, 11 Mar 2025 12:00:42 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-43d0618746bso2791775e9.2
+ for <buildroot@buildroot.org>; Tue, 11 Mar 2025 05:00:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1741694440; x=1742299240;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=M7zxq6/BiRXBp+1molsjfSFrZCimFRSQp7nYaSH4QC0=;
+ b=k8gZoEa17EF3WH4KqqE3rle3RMdSENn8dGHbkiNCCchvVrD6vj6qTpPbxMMjbSONm/
+ OjCoClfmrpyKnJnZGX7RPRWq5a3T9LJroSh3EWbK0F5pR6gbSSmuZAx83j9enwU4enOv
+ +pLOX91lGKFoBRMfZcHBqz3JwF1Cttce2MnSUR0QB8VYxsHH8knjed3+4OtQMDu/V04I
+ nXp07HWqS0CtASWUVlpo6rqEUoD6wlqbGAHjWRqA8JLPiAOVcHC9KgAz83dBQnxdvHdu
+ yaVZCpQazJxwOOr7kkxX+4iXd2QBgfKdarAMyaPMDsHG0kgqRBKZMk8KSIw0GrE/1ufK
+ 3eww==
+X-Gm-Message-State: AOJu0YzBMSQK7aKMffrMDgFv6h+as1FtAP/7pYsnefun0jWe/mlvd6jL
+ 7fCXVz6aVW4ZOWfH5Z56i8v8Sp8PGH5zN+LhEpG1eLwbvJkR7Pash81XCn0pCol5Egh8zQHi5zm
+ G
+X-Gm-Gg: ASbGncu2nPsx2GSd+N8IMGgo4P1+tfx2VLV7C6MKAGAf625PmHhy57aBvmBaNlY/OKB
+ ENKep9uau3D8KGQCcVs8toQFGFND+NL4kwf0TJg3IyYYrh93k4GABBnSHQQRAPBQsgb6N3W2tx1
+ Usd+ZJ9KeGOLxj3cXaqHdhNKstrXt7t3N+Y8Ht/HOikj14bgV6pBinr7oBJIGINm3QlYgDgbjbn
+ lJr8azdYudSsumc9dCkeE95HUd3Buo8svyyTMW1mQuE/0VSmYsnMm0vXF+zVGlBpZMyZhWYpfSy
+ 9/b4bzq2eeUAmJvJEOqB0+NbUPC3ImPUnVsE0GIR7+J+N4k=
+X-Google-Smtp-Source: AGHT+IFQfQ/wdrFSgJETXpC4FFQixbqF4Vv8G2EayCvWvsfv/CAxVCRBpnywIAXrg87ejxj6lUi7iw==
+X-Received: by 2002:a05:600c:3b21:b0:43c:fe85:e4a0 with SMTP id
+ 5b1f17b1804b1-43cfe85e60bmr64810395e9.7.1741694439314; 
+ Tue, 11 Mar 2025 05:00:39 -0700 (PDT)
+Received: from draig.lan ([185.126.160.109]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3912c0e3250sm18040612f8f.61.2025.03.11.05.00.38
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 11 Mar 2025 05:00:38 -0700 (PDT)
+Received: from draig.lan (localhost [IPv6:::1])
+ by draig.lan (Postfix) with ESMTP id 8E9665F762;
+ Tue, 11 Mar 2025 12:00:36 +0000 (GMT)
+From: =?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>
 To: buildroot@buildroot.org
-Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>, 
- Marcus Folkesson <marcus.folkesson@gmail.com>, 
- Quentin Schulz <quentin.schulz@cherry.de>
-X-Mailer: b4 0.14.2
-X-Infomaniak-Routing: alpha
+Date: Tue, 11 Mar 2025 12:00:32 +0000
+Message-Id: <20250311120032.13973-1-alex.bennee@linaro.org>
+X-Mailer: git-send-email 2.39.5
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=linaro.org; s=google; t=1741694440; x=1742299240; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=M7zxq6/BiRXBp+1molsjfSFrZCimFRSQp7nYaSH4QC0=;
+ b=alHy6QmPP0oIcVdOr08bf19uxC7UmDkGo8xGUiPwOZzcAbGSh+tAs+rt3JPDPhQhTW
+ auYqxq24TyVW2QMLlGGUMIKtmz0GG+3HNx2DysGIh6MYDsm0UW/LowDUgb9cScTToU98
+ cGI/CmFjT/fYms02t7BUZ9I53kJWNB3+ErHlnRccyn45RYq3dExIOZmCcEC8Kt0z7Rd8
+ crrU61osrwZYJqbEcaR8l0aY6skJODdqq/wCnbuu5kZXu1lsVvHHLY935wxtiSFG7K+T
+ QWzAR9Jd93IAz47613ySraJoaFr1iUSYadpuIFsdHdICSDXeRqpznU1FToKbpasjUmrC
+ bxWQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=0leil.net
-Subject: [Buildroot] [PATCH] package/libcamera: force-disable qcam for now
+ dmarc=pass (p=none dis=none)
+ header.from=linaro.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=linaro.org header.i=@linaro.org header.a=rsa-sha256
+ header.s=google header.b=alHy6QmP
+Subject: [Buildroot] [PATCH v4] package/elfutils: handle missing
+ user_pac_mask on aarch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,104 +109,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Quentin Schulz <quentin.schulz@cherry.de>
-
-qcam is based on Qt6 since commit 71aa3ceec30b ("apps: qcam: Port to Qt
-6") which is part of the v0.3.1 release.
-
-qcam being enabled when BR2_PACKAGE_QT5BASE_WIDGETS symbol is defined
-breaks the build as it's missing the qt6 dependencies.
-
-The migration to Qt 6 for the Buildroot package isn't straightforward
-though as we're hitting a meson bug[1].
-
-For now, let's just always disable qcam until we can get everything
-fixed and migrated properly.
-
-[1] https://github.com/mesonbuild/meson/issues/13018
-
-Fixes: 72757d111a5d ("package/libcamera: bump to version 0.3.2")
-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
----
-This is suboptimal solution to unbreaking Buildroot builds of libcamera
-when Qt5 Widgets are enabled but that should do for Buildroot 2025.02
-release.
-
-We should ideally work on adding proper support for qcam in a later
-commit, once the issue reported in
-https://github.com/mesonbuild/meson/issues/13018 is either fixed or
-worked around in Buildroot.
-
-FWIW, I went as far as:
-
-```
-ifeq ($(BR2_PACKAGE_QT6BASE_WIDGETS)$(BR2_PACKAGE_QT6_OPENGL),yy)
-LIBCAMERA_CONF_OPTS += -Dqcam=enabled
-LIBCAMERA_DEPENDENCIES += qt6base
-else
-LIBCAMERA_CONF_OPTS += -Dqcam=disabled
-endif
-```
-
-as Qt6 OpenGL module seems required now. Additionally, the Qt6 tools
-dependency is doing nothing so it can be removed. It actually never did
-anything but turn a check from meson from red to green in the configure
-step, the binaries with and without Qt tools (qt5 or qt6) were always
-identical to the bit.
-
-There are also a number of other changes we should be making to the
-recipe as libcamera is extended without knobs if libdrm, libsdl2,
-libjpeg, libdw and/or libunwind are provided. So we should add those to
-LIBCAMERA_DEPENDENCIES if they are part of the build, to make builds
-reproducible.
----
- package/libcamera/libcamera.mk | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
-
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index dcfa54e5dd7fcafcdaaf012ab30df5992ba1d4ce..b3132dc01658ed2fe9e5f780951f3152596dcfcf 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -18,6 +18,7 @@ LIBCAMERA_DEPENDENCIES = \
- LIBCAMERA_CONF_OPTS = \
- 	-Dandroid=disabled \
- 	-Ddocumentation=disabled \
-+	-Dqcam=disabled \
- 	-Dtest=false \
- 	-Dwerror=false
- LIBCAMERA_INSTALL_STAGING = YES
-@@ -83,16 +84,6 @@ LIBCAMERA_CONF_OPTS += -Dgstreamer=enabled
- LIBCAMERA_DEPENDENCIES += gstreamer1 gst1-plugins-base
- endif
- 
--ifeq ($(BR2_PACKAGE_QT5BASE_WIDGETS),y)
--LIBCAMERA_CONF_OPTS += -Dqcam=enabled
--LIBCAMERA_DEPENDENCIES += qt5base
--ifeq ($(BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS),y)
--LIBCAMERA_DEPENDENCIES += qt5tools
--endif
--else
--LIBCAMERA_CONF_OPTS += -Dqcam=disabled
--endif
--
- ifeq ($(BR2_PACKAGE_LIBEVENT),y)
- LIBCAMERA_CONF_OPTS += -Dcam=enabled
- LIBCAMERA_DEPENDENCIES += libevent
-
----
-base-commit: f2498258d4d0c7e4f181a54a5334b45ab73612d8
-change-id: 20250310-libcamera-qt6-ff1f8144f7e1
-
-Best regards,
--- 
-Quentin Schulz <quentin.schulz@cherry.de>
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+U2luY2UgQnVpbGRyb290IGNvbW1pdCBbMV0gInBhY2thZ2UvZWxmdXRpbHM6IGJ1bXAgdG8gdmVy
+c2lvbiAwLjE5MiIKZWxmdXRpbHMgZmFpbHMgdG8gYnVpbGQgb24gQWFyY2g2NCB3aXRoIHRvb2xj
+aGFpbiBpbmNsdWRpbmcgS2VybmVsIG9sZGVyCnRoYW4gdmVyc2lvbiA1LjAuIEVycm9yIHNob3dz
+OgoKICAgIGFhcmNoNjRfaW5pdHJlZy5jOiBJbiBmdW5jdGlvbiAnYWFyY2g2NF9zZXRfaW5pdGlh
+bF9yZWdpc3RlcnNfdGlkJzoKICAgIGFhcmNoNjRfaW5pdHJlZy5jOjYxOjI0OiBlcnJvcjogc3Rv
+cmFnZSBzaXplIG9mICdwYWNfbWFzaycgaXNuJ3QKICAgIGtub3duCiAgICAgICA2MSB8ICAgc3Ry
+dWN0IHVzZXJfcGFjX21hc2sgcGFjX21hc2s7CiAgICAgICAgICB8ICAgICAgICAgICAgICAgICAg
+ICAgICAgXn5+fn5+fn4KCmVsZnV0aWxzIDAuMTkyIGludHJvZHVjZWQgYSBBYXJjaDY0IHBvaW50
+ZXIgYXV0aGVudGljYXRpb24gc3VwcG9ydCBpbgp1cHN0cmVhbSBjb21taXQgWzJdLgoKRm9yIHJl
+ZmVyZW5jZSwgdGhlIHVzZXJfcGFjX21hc2sgc3RydWN0dXJlIHdhcyBpbnRyb2R1Y2VkIGluIEtl
+cm5lbAp1cHN0cmVhbSBjb21taXQgWzNdLCBpbmNsdWRlZCBpbiBLZXJuZWwgdjUuMC4KClRoaXMg
+aXMgZml4ZWQgaW4gdGhlIHVwc3RyZWFtIFs0XSBzbyBicmluZyB0aGF0IHBhdGNoIGluLgoKRml4
+ZXM6Ci0gZS5nIGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy81MTU2OTAx
+YTczYmU1MmNlOGZmYmYxMDcyOWU2ODUyNDk5YTMwMGJlLwotIDQvNiBvZiB0aGUgZmFpbHVyZXMg
+aGVyZTogaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy8/cmVhc29uPWVsZnV0aWxzLTAu
+MTkyJmFyY2g9YWFyY2g2NAoKWzFdIGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1
+aWxkcm9vdC8tL2NvbW1pdC81ZWI3MzQ3NjZiMjRkZTVmY2U2ZTU4Njg5N2NkNDgyN2Y4ODU1NDQy
+ClsyXSBodHRwczovL3NvdXJjZXdhcmUub3JnL2dpdC8/cD1lbGZ1dGlscy5naXQ7YT1jb21taXRk
+aWZmO2g9NjRlM2I0NTFhZDJjZWM4ZDQ1NjYxYjE4MTZlM2QyZGM0NDMxZjNjYQpbM10gaHR0cHM6
+Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvc3RhYmxlL2xpbnV4Lmdp
+dC9jb21taXQvP2lkPWVjNmU4MjJkMWEyMmQwZWVmMWQxZmEyNjBkZmY3NTFkYmE5YTQyNTgKWzRd
+IGh0dHBzOi8vc291cmNld2FyZS5vcmcvZ2l0Lz9wPWVsZnV0aWxzLmdpdDthPWNvbW1pdDtoPTUy
+YTc0N2EzMTYwNDJlNzBhMjJhY2I0ODlkZjllNTFiZmM2YmYyZDUKClNpZ25lZC1vZmYtYnk6IEFs
+ZXggQmVubsOpZSA8YWxleC5iZW5uZWVAbGluYXJvLm9yZz4KCi0tLQp2NAogIC0ganVzdCB1c2Ug
+dXBzdHJlYW0gcGF0Y2ggcmF0aGVyIHRoYW4gZm9yY2luZyA1LjAgaGVhZGVycwotLS0KIC4uLi8w
+MDAzLWRlZmluZS11c2VyX3BhY19tYXNrLWlmLW5lZWRlZC5wYXRjaCB8IDk3ICsrKysrKysrKysr
+KysrKysrKysKIDEgZmlsZSBjaGFuZ2VkLCA5NyBpbnNlcnRpb25zKCspCiBjcmVhdGUgbW9kZSAx
+MDA2NDQgcGFja2FnZS9lbGZ1dGlscy8wMDAzLWRlZmluZS11c2VyX3BhY19tYXNrLWlmLW5lZWRl
+ZC5wYXRjaAoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvZWxmdXRpbHMvMDAwMy1kZWZpbmUtdXNlcl9w
+YWNfbWFzay1pZi1uZWVkZWQucGF0Y2ggYi9wYWNrYWdlL2VsZnV0aWxzLzAwMDMtZGVmaW5lLXVz
+ZXJfcGFjX21hc2staWYtbmVlZGVkLnBhdGNoCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAw
+MDAwMDAwMDAuLjI3NTNhMjMwOTQKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL2VsZnV0aWxz
+LzAwMDMtZGVmaW5lLXVzZXJfcGFjX21hc2staWYtbmVlZGVkLnBhdGNoCkBAIC0wLDAgKzEsOTcg
+QEAKK0Zyb20gNTJhNzQ3YTMxNjA0MmU3MGEyMmFjYjQ4OWRmOWU1MWJmYzZiZjJkNSBNb24gU2Vw
+IDE3IDAwOjAwOjAwIDIwMDEKK0Zyb206IE1hcmt1cyBNYXllciA8bW1heWVyQGJyb2FkY29tLmNv
+bT4KK0RhdGU6IEZyaSwgMjEgRmViIDIwMjUgMTE6MTk6MzQgLTA4MDAKK1N1YmplY3Q6IFtQQVRD
+SF0gYWFyY2g2NDogZGVmaW5lIHN0cnVjdCB1c2VyX3BhY19tYXNrIGlmIG5lZWRlZAorCitPbiBB
+YXJjaDY0LCBMaW51eCBpcyB1c2luZyBQb2ludGVyIEF1dGhlbnRpY2F0aW9uIENvZGUgKFBBQykg
+Zm9yIHBvaW50ZXIKK2F1dGhlbnRpY2F0aW9uLlsxXSBUaGUgc3RydWN0ICJ1c2VyX3BhY19tYXNr
+IiBoYXMgYmVlbiBwYXJ0IG9mIHRoZSBMaW51eAora2VybmVsIHNpbmNlIHZlcnNpb24gNS4wIGFz
+IHBhcnQgb2YgdGhpcyBmZWF0dXJlLiBIb3dldmVyLCBvbGRlciBrZXJuZWxzCitkbyBub3QgZGVm
+aW5lIGl0LgorCitUaGVyZWZvcmUsIHdlIHdhbnQgdG8gY2hlY2sgaWYgdGhlIGRlZmluaXRpb24g
+aXMgcHJlc2VudCBpbiB0aGUga2VybmVsCitoZWFkZXJzIGFuZCBwcm92aWRlIG9uZSBpZiBpdCBp
+c24ndC4gVGhpcyBlbnN1cmVzIHR3byB0aGluZ3M6CisKKyogZWxmdXRpbHMgd2lsbCBjb250aW51
+ZSB0byBjb21waWxlIGFnYWluc3Qga2VybmVsIGhlYWRlcnMgZnJvbSA0LngKKyogYmluYXJpZXMg
+YnVpbHQgYWdhaW5zdCBvbGRlciBrZXJuZWwgaGVhZGVycyB3aWxsIHN0aWxsIGJlIGZ1bGx5Cisg
+IGZ1bmN0aW9uYWwgaWYgdXNlZCBvbiBhIG5ld2VyIHN5c3RlbQorCitGb3IgcmVmZXJlbmNlLCB0
+aGUgYnVpbGQgZXJyb3IgdGhhdCBpcyBiZWluZyBhdm9pZGVkIGxvb2tzIGxpa2UgdGhpczoKKwor
+Wy4uLl0KKyAgQ0MgICAgICAgYWFyY2g2NF9pbml0cmVnLm8KK2FhcmNoNjRfaW5pdHJlZy5jOiBJ
+biBmdW5jdGlvbiAnYWFyY2g2NF9zZXRfaW5pdGlhbF9yZWdpc3RlcnNfdGlkJzoKK2FhcmNoNjRf
+aW5pdHJlZy5jOjYxOjI0OiBlcnJvcjogc3RvcmFnZSBzaXplIG9mICdwYWNfbWFzaycgaXNuJ3Qg
+a25vd24KKyAgIHN0cnVjdCB1c2VyX3BhY19tYXNrIHBhY19tYXNrOworICAgICAgICAgICAgICAg
+ICAgICAgICAgXn5+fn5+fn4KK2FhcmNoNjRfaW5pdHJlZy5jOjYxOjI0OiB3YXJuaW5nOiB1bnVz
+ZWQgdmFyaWFibGUgJ3BhY19tYXNrJyBbLVd1bnVzZWQtdmFyaWFibGVdCittYWtlWzRdOiAqKiog
+W01ha2VmaWxlOjgzMTogYWFyY2g2NF9pbml0cmVnLm9dIEVycm9yIDEKK21ha2VbM106ICoqKiBb
+TWFrZWZpbGU6NTQ3OiBhbGwtcmVjdXJzaXZlXSBFcnJvciAxCittYWtlWzJdOiAqKiogW01ha2Vm
+aWxlOjQ2MzogYWxsXSBFcnJvciAyCisKK1sxXSBodHRwczovL2RvY3Mua2VybmVsLm9yZy9hcmNo
+L2FybTY0L3BvaW50ZXItYXV0aGVudGljYXRpb24uaHRtbAorCitodHRwczovL3NvdXJjZXdhcmUu
+b3JnL2J1Z3ppbGxhL3Nob3dfYnVnLmNnaT9pZD0zMjY4NAorCitGaXhlczogNjRlM2I0NTFhZDJj
+ICgiYWFyY2g2NDogZXh0ZW5kIGR3ZmxfdGhyZWFkX3N0YXRlX3JlZ2lzdGVycyB0byBoYW5kbGUg
+UEFDIikKK1NpZ25lZC1vZmYtYnk6IE1hcmt1cyBNYXllciA8bW1heWVyQGJyb2FkY29tLmNvbT4K
+K1NpZ25lZC1vZmYtYnk6IEFsZXggQmVubsOpZSA8YWxleC5iZW5uZWVAbGluYXJvLm9yZz4KK1Vw
+c3RyZWFtOiBodHRwczovL3NvdXJjZXdhcmUub3JnL2dpdC8/cD1lbGZ1dGlscy5naXQ7YT1jb21t
+aXQ7aD01MmE3NDdhMzE2MDQyZTcwYTIyYWNiNDg5ZGY5ZTUxYmZjNmJmMmQ1CistLS0KKyBiYWNr
+ZW5kcy9hYXJjaDY0X2luaXRyZWcuYyB8IDIxICsrKysrKysrKysrKysrKysrKysrKworIGNvbmZp
+Z3VyZS5hYyAgICAgICAgICAgICAgIHwgIDggKysrKysrKysKKyAyIGZpbGVzIGNoYW5nZWQsIDI5
+IGluc2VydGlvbnMoKykKKworZGlmZiAtLWdpdCBhL2JhY2tlbmRzL2FhcmNoNjRfaW5pdHJlZy5j
+IGIvYmFja2VuZHMvYWFyY2g2NF9pbml0cmVnLmMKK2luZGV4IDVlYzQ1ZWE2MC4uYTZiYWRiYjQ1
+IDEwMDY0NAorLS0tIGEvYmFja2VuZHMvYWFyY2g2NF9pbml0cmVnLmMKKysrKyBiL2JhY2tlbmRz
+L2FhcmNoNjRfaW5pdHJlZy5jCitAQCAtNDcsNiArNDcsMjcgQEAKKyAjZGVmaW5lIEJBQ0tFTkQg
+YWFyY2g2NF8KKyAjaW5jbHVkZSAibGliZWJsX0NQVS5oIgorIAorKy8qCisrICogcG9pbnRlciBh
+dXRoZW50aWNhdGlvbiBtYXNrcyAoTlRfQVJNX1BBQ19NQVNLKQorKyAqCisrICogRGVmaW5lZCBi
+eSBMaW51eCBrZXJuZWwgaGVhZGVycyBzaW5jZSBMaW51eCA1LjAuIERlZmluZSBpdCBoZXJlIGlm
+IGtlcm5lbAorKyAqIGhlYWRlcnMgYXJlIG9sZGVyIHRoYW4gdGhhdCwgdG8gZW5zdXJlIHRoaXMg
+ZmlsZSBidWlsZHMgcmVnYXJkbGVzcy4KKysgKi8KKysjaWYgZGVmaW5lZChfX2FhcmNoNjRfXykg
+JiYgZGVmaW5lZChfX2xpbnV4X18pCisrCisrI2lmbmRlZiBOVF9BUk1fUEFDX01BU0sKKysjZGVm
+aW5lIE5UX0FSTV9QQUNfTUFTSyAweDQwNgorKyNlbmRpZgorKworKyNpZm5kZWYgSEFWRV9VU0VS
+X1BBQ0tfTUFTSworK3N0cnVjdCB1c2VyX3BhY19tYXNrIHsKKysgIF9fdTY0IGRhdGFfbWFzazsK
+KysgIF9fdTY0IGluc25fbWFzazsKKyt9OworKyNlbmRpZgorKworKyNlbmRpZiAvKiBfX2FhcmNo
+NjRfXyAmJiBfX2xpbnV4X18gKi8KKysKKyBib29sCisgYWFyY2g2NF9zZXRfaW5pdGlhbF9yZWdp
+c3RlcnNfdGlkIChwaWRfdCB0aWQgX19hdHRyaWJ1dGVfXyAoKHVudXNlZCkpLAorIAkJCSAgZWJs
+X3RpZF9yZWdpc3RlcnNfdCAqc2V0ZnVuYyBfX2F0dHJpYnV0ZV9fICgodW51c2VkKSksCitkaWZm
+IC0tZ2l0IGEvY29uZmlndXJlLmFjIGIvY29uZmlndXJlLmFjCitpbmRleCBlNTdkMzkyNzUuLjMy
+OThmN2ZjNyAxMDA2NDQKKy0tLSBhL2NvbmZpZ3VyZS5hYworKysrIGIvY29uZmlndXJlLmFjCitA
+QCAtNzc3LDYgKzc3NywxNCBAQCBpZiB0ZXN0ICIkc3lzX3VzZXJfaGFzX3VzZXJfcmVncyIgPSAi
+eWVzIjsgdGhlbgorICAgICAgICAgICAgIFtEZWZpbmUgdG8gMSBpZiA8c3lzL3VzZXIuaD4gZGVm
+aW5lcyBzdHJ1Y3QgdXNlcl9yZWdzX3N0cnVjdF0pCisgZmkKKyAKKytBQ19DSEVDS19UWVBFKFtz
+dHJ1Y3QgdXNlcl9wYWNfbWFza10sCisrICAgICAgICAgICAgICBbaGFzX3VzZXJfcGFjX21hc2s9
+eWVzXSwgW2hhc191c2VyX3BhY19tYXNrPW5vXSwKKysgICAgICAgICAgICAgIFtbI2luY2x1ZGUg
+PGFzbS9wdHJhY2UuaD5dXSkKKytpZiB0ZXN0ICIkaGFzX3VzZXJfcGFjX21hc2siID0gInllcyI7
+IHRoZW4KKysgIEFDX0RFRklORShIQVZFX1VTRVJfUEFDS19NQVNLLCAxLAorKyAgICAgICAgICAg
+IFtEZWZpbmVkIGlmIHN0cnVjdCB1c2VyX3BhY19tYXNrIGV4aXN0cy5dKQorK2ZpCisrCisgIyBP
+biBhIDY0LWJpdCBob3N0IHdoZXJlIGNhbiBjYW4gdXNlICRDQyAtbTMyLCB3ZSdsbCBydW4gdHdv
+IHNldHMgb2YgdGVzdHMuCisgdXRyYWNlX0JJQVJDSAorIENDX0JJQVJDSD0iJENDICR1dHJhY2Vf
+YmlhcmNoIgorLS0gCisyLjQzLjUKKwotLSAKMi4zOS41CgpfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
+bmZvL2J1aWxkcm9vdAo=
