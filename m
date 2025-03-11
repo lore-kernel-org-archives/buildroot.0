@@ -4,73 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 751C4C282EC
-	for <buildroot@archiver.kernel.org>; Tue, 11 Mar 2025 20:07:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 779E5C2BA1B
+	for <buildroot@archiver.kernel.org>; Tue, 11 Mar 2025 20:11:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1DDFC60B7D;
-	Tue, 11 Mar 2025 20:07:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1BC2360B90;
+	Tue, 11 Mar 2025 20:11:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sbHt_43OeYSC; Tue, 11 Mar 2025 20:07:55 +0000 (UTC)
+ id zHnPbvyNopKb; Tue, 11 Mar 2025 20:11:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C67560B2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20F7C60B93
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C67560B2C;
-	Tue, 11 Mar 2025 20:07:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3B7331C8
- for <buildroot@buildroot.org>; Tue, 11 Mar 2025 20:07:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20F7C60B93;
+	Tue, 11 Mar 2025 20:11:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 09B941C8
+ for <buildroot@buildroot.org>; Tue, 11 Mar 2025 20:11:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2989D40159
- for <buildroot@buildroot.org>; Tue, 11 Mar 2025 20:07:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DA34740916
+ for <buildroot@buildroot.org>; Tue, 11 Mar 2025 20:11:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xT5-M2uyVO_Q for <buildroot@buildroot.org>;
- Tue, 11 Mar 2025 20:07:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B7FB040118
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7FB040118
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B7FB040118
- for <buildroot@buildroot.org>; Tue, 11 Mar 2025 20:07:51 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nSeyczF9i7Ve for <buildroot@buildroot.org>;
+ Tue, 11 Mar 2025 20:11:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9F44240983
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F44240983
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9F44240983
+ for <buildroot@buildroot.org>; Tue, 11 Mar 2025 20:11:36 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 477F7B0051E;
- Tue, 11 Mar 2025 21:07:47 +0100 (CET)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 651E4780375;
+ Tue, 11 Mar 2025 21:11:31 +0100 (CET)
 Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
  via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 11 Mar 2025 21:07:47 +0100
+ with HTTP (HTTP/1.0 POST); Tue, 11 Mar 2025 21:11:31 +0100
 MIME-Version: 1.0
-Date: Tue, 11 Mar 2025 21:07:47 +0100
+Date: Tue, 11 Mar 2025 21:11:31 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: =?UTF-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250311120032.13973-1-alex.bennee@linaro.org>
-References: <20250311120032.13973-1-alex.bennee@linaro.org>
+To: Kanak Shilledar <kanakshilledar@gmail.com>
+Cc: buildroot@buildroot.org, Damien Le Moal <dlemoal@kernel.org>, Thomas
+ Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250309130230.1520839-4-kanakshilledar@gmail.com>
+References: <20250309130230.1520839-2-kanakshilledar@gmail.com>
+ <20250309130230.1520839-4-kanakshilledar@gmail.com>
 User-Agent: Webmail Free/1.6.10
-Message-ID: <91cf54ee43e5a34808fcec4525f57f69@free.fr>
+Message-ID: <704fcc5d132c37da06f4d21cf24b418f@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1741723668;
- bh=BUk2pUM4+rSHdlgjwZGJmzyQ2vHhiRmFX9+RZjkbbaI=;
+ d=free.fr; s=smtp-20201208; t=1741723894;
+ bh=d1FKFxN/9/QwrHgyWn1QZki/HOlWb12kCjt8SfU3lvI=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=iM4N58OiAZAuc+StpZECrbXQlbiu5d7HDQy8fdd3aMR4e4iPFCQek6+yoh4zEjDzm
- 61NsXJHFAZbhIerEiyzYt2HQPPnWNbocyaKHhtZdhBk6ZfG4XBIYcPH4tAKgnE9CiV
- ye9L3yAHzhH4DShgBgErGteN88ImXwFGjK1Ucevp3Xto8YV0Y5lMT55uBnGtr9hlsU
- 5kzT6/Ft/VigpHuKLIsZeNJ/lTcH4v6t3KGmWrLKn1fuX/hu9NPd7OWeY1HR9YqCtB
- VsEmHJGibaHSDwNAs9F0WgaCIxMCCi0c/fTEoKnqnnSp7IM9chYWu/Zq6XQdTG1U3N
- ZKsz1mp2ZJ9gw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=OrGdyuT96QBNfXl0oap4ucYhhKRz2CdPIm8exYPihGYmMWIH23jQYA/rXr9DTp5Ms
+ UUgBlc40Z8lOMdUPFaIXIl2NZKJhW42nmAatSTYnAf1JOuw7eqfpOUIsdyRbvq38by
+ 1RIPujxffXMWbD6Eo78LeYxIRcw7bhML/ibp99J5Oq+6XAgVOViQ1pw+j6tbQl0UAQ
+ xKxXSYMK18A/Wk0quWZbKC+hpACbZ6WwvMXCo2+J/XhEypS1AiPnj4dI0hC8J15YzB
+ 3lXWAW0vDlURRybdtH8S/E6QdZ4D7nLpV3unundRvjOWKJM/3GKpvMhll0kM6CZoG5
+ zKSdvOJvayQCw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=iM4N58Oi
-Subject: Re: [Buildroot] [PATCH v4] package/elfutils: handle missing
- user_pac_mask on aarch64
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=OrGdyuT9
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/sipeed-lpi4abin: add
+ licheepi4a boot bins
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,37 +85,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMTEvMDMvMjAyNSAxMzowMCwgQWxleCBCZW5uw6llIHdyb3RlOgo+IFNpbmNlIEJ1aWxkcm9v
-dCBjb21taXQgWzFdICJwYWNrYWdlL2VsZnV0aWxzOiBidW1wIHRvIHZlcnNpb24gMC4xOTIiCj4g
-ZWxmdXRpbHMgZmFpbHMgdG8gYnVpbGQgb24gQWFyY2g2NCB3aXRoIHRvb2xjaGFpbiBpbmNsdWRp
-bmcgS2VybmVsIAo+IG9sZGVyCj4gdGhhbiB2ZXJzaW9uIDUuMC4gRXJyb3Igc2hvd3M6Cj4gCj4g
-ICAgIGFhcmNoNjRfaW5pdHJlZy5jOiBJbiBmdW5jdGlvbiAnYWFyY2g2NF9zZXRfaW5pdGlhbF9y
-ZWdpc3RlcnNfdGlkJzoKPiAgICAgYWFyY2g2NF9pbml0cmVnLmM6NjE6MjQ6IGVycm9yOiBzdG9y
-YWdlIHNpemUgb2YgJ3BhY19tYXNrJyBpc24ndAo+ICAgICBrbm93bgo+ICAgICAgICA2MSB8ICAg
-c3RydWN0IHVzZXJfcGFjX21hc2sgcGFjX21hc2s7Cj4gICAgICAgICAgIHwgICAgICAgICAgICAg
-ICAgICAgICAgICBefn5+fn5+fgo+IAo+IGVsZnV0aWxzIDAuMTkyIGludHJvZHVjZWQgYSBBYXJj
-aDY0IHBvaW50ZXIgYXV0aGVudGljYXRpb24gc3VwcG9ydCBpbgo+IHVwc3RyZWFtIGNvbW1pdCBb
-Ml0uCj4gCj4gRm9yIHJlZmVyZW5jZSwgdGhlIHVzZXJfcGFjX21hc2sgc3RydWN0dXJlIHdhcyBp
-bnRyb2R1Y2VkIGluIEtlcm5lbAo+IHVwc3RyZWFtIGNvbW1pdCBbM10sIGluY2x1ZGVkIGluIEtl
-cm5lbCB2NS4wLgo+IAo+IFRoaXMgaXMgZml4ZWQgaW4gdGhlIHVwc3RyZWFtIFs0XSBzbyBicmlu
-ZyB0aGF0IHBhdGNoIGluLgo+IAo+IEZpeGVzOgo+IC0gZS5nIAo+IGh0dHBzOi8vYXV0b2J1aWxk
-LmJ1aWxkcm9vdC5vcmcvcmVzdWx0cy81MTU2OTAxYTczYmU1MmNlOGZmYmYxMDcyOWU2ODUyNDk5
-YTMwMGJlLwo+IC0gNC82IG9mIHRoZSBmYWlsdXJlcyBoZXJlOiAKPiBodHRwczovL2F1dG9idWls
-ZC5idWlsZHJvb3Qub3JnLz9yZWFzb249ZWxmdXRpbHMtMC4xOTImYXJjaD1hYXJjaDY0Cj4gCj4g
-WzFdIAo+IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2NvbW1p
-dC81ZWI3MzQ3NjZiMjRkZTVmY2U2ZTU4Njg5N2NkNDgyN2Y4ODU1NDQyCj4gWzJdIAo+IGh0dHBz
-Oi8vc291cmNld2FyZS5vcmcvZ2l0Lz9wPWVsZnV0aWxzLmdpdDthPWNvbW1pdGRpZmY7aD02NGUz
-YjQ1MWFkMmNlYzhkNDU2NjFiMTgxNmUzZDJkYzQ0MzFmM2NhCj4gWzNdIAo+IGh0dHBzOi8vZ2l0
-Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3N0YWJsZS9saW51eC5naXQvY29t
-bWl0Lz9pZD1lYzZlODIyZDFhMjJkMGVlZjFkMWZhMjYwZGZmNzUxZGJhOWE0MjU4Cj4gWzRdIAo+
-IGh0dHBzOi8vc291cmNld2FyZS5vcmcvZ2l0Lz9wPWVsZnV0aWxzLmdpdDthPWNvbW1pdDtoPTUy
-YTc0N2EzMTYwNDJlNzBhMjJhY2I0ODlkZjllNTFiZmM2YmYyZDUKPiAKPiBTaWduZWQtb2ZmLWJ5
-OiBBbGV4IEJlbm7DqWUgPGFsZXguYmVubmVlQGxpbmFyby5vcmc+CgpBcHBsaWVkIHRvIG1hc3Rl
-ciwgdGhhbmtzLgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
-bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hi Kanak,
+
+On 09/03/2025 14:02, Kanak Shilledar wrote:
+> Sipeed LicheePi 4A requires some proprietary binaries
+> for booting, these are provided in the th1520-boot-firmware
+> repo [1]. These binaries are also required for the onboard
+> sound and wifi.
+> 
+> [1] https://github.com/revyos/th1520-boot-firmware
+
+I applied this patch series to next, thanks!
+
+I was able to get access to this board, so I could actually runtime
+test those patches. While doing so, I did few minor changes and added
+extra information in the readme.txt.
+
+See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/29861832a38976911d931256e8e5a3aad526e761
+https://gitlab.com/buildroot.org/buildroot/-/commit/1ab37899ae7c7595d3fc1ab70b67388e67e70c33
+
+Best regards,
+
+Julien.
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
