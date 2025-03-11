@@ -1,76 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2B5EC282EC
-	for <buildroot@archiver.kernel.org>; Tue, 11 Mar 2025 21:51:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFBB4C28B2E
+	for <buildroot@archiver.kernel.org>; Tue, 11 Mar 2025 21:55:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9EFAB6073C;
-	Tue, 11 Mar 2025 21:51:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kY5HzUBuW1BU; Tue, 11 Mar 2025 21:51:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94C6060B7D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 94C6060B7D;
-	Tue, 11 Mar 2025 21:51:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 26BCC1DB
- for <buildroot@buildroot.org>; Tue, 11 Mar 2025 21:51:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 10C474094E
- for <buildroot@buildroot.org>; Tue, 11 Mar 2025 21:51:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FFB040B43;
+	Tue, 11 Mar 2025 21:55:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id go7qEZYnslQR for <buildroot@buildroot.org>;
- Tue, 11 Mar 2025 21:51:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E80054094B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E80054094B
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E80054094B
- for <buildroot@buildroot.org>; Tue, 11 Mar 2025 21:51:43 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id E6850B0053D;
- Tue, 11 Mar 2025 22:51:39 +0100 (CET)
-Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
- via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 11 Mar 2025 22:51:39 +0100
-MIME-Version: 1.0
-Date: Tue, 11 Mar 2025 22:51:39 +0100
+ id EWLPYo8nekPF; Tue, 11 Mar 2025 21:55:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 839974086F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 839974086F;
+	Tue, 11 Mar 2025 21:55:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A1DFC1DA
+ for <buildroot@buildroot.org>; Tue, 11 Mar 2025 21:54:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 90657400FB
+ for <buildroot@buildroot.org>; Tue, 11 Mar 2025 21:54:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tFHH-RShTrBA for <buildroot@buildroot.org>;
+ Tue, 11 Mar 2025 21:54:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60FB14011F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 60FB14011F
+ for <buildroot@buildroot.org>; Tue, 11 Mar 2025 21:54:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 53B5E87E8D; Tue, 11 Mar 2025 21:54:57 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Lubomir Rintel <lkundrak@v3.sk>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250311094327.1887514-1-lkundrak@v3.sk>
-References: <20250311094327.1887514-1-lkundrak@v3.sk>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <e052dac4cabd384a413b0527f4f5b3e8@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1741729901;
- bh=imqOXmWUYNV0Faj/WUS/XHHbHjramb6Hx7j8/6pk0ZQ=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=e9rm3aOLLPPXWJWPvd7X3l+97NyEnb06IR7uTM08q+/1c4BXpwTNeKBTu4bpP6o/0
- qESH1srTrQdwT8K/2BZt2o4XpHpdU56VZgTfESxxTNrWIeIzy4OTjy5fFzIBua1e7k
- Ecx01dLNCarEpEmoKXz7zrcTuXvkM56EEWrCdThbAPO9EOxfevElwiK8NbaiinRWoD
- TitdatP5RWC8DY49HPH5PSuSxUcRCvnsKz08NUdBt7gGmYneP1kk9yV9EQgOknOYkj
- Iq5+7Mij8wS75HFPAcXQTklY6pj4hWcTwCXffdjkRgyoLrWWZtXsa6tyly2eT0RISD
- 7KU2TO32VHJ7Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=e9rm3aOL
-Subject: Re: [Buildroot] [PATCH] configs/olpc_xo175_defconfig: bump kernel
- version to 6.13.6
+To: buildroot@buildroot.org
+Date: Tue, 11 Mar 2025 22:52:19 +0100
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: e444597f486deb86cf8ef7ea84af8693397002c2
+X-Git-Newrev: ff85110701cf884869f07b04bd041e06dcac3018
+X-Patchwork-Hint: ignore
+Message-Id: <20250311215457.53B5E87E8D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/network-manager: bump
+ version to 1.52.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,36 +59,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Lubomir,
+commit: https://git.buildroot.net/buildroot/commit/?id=ff85110701cf884869f07b04bd041e06dcac3018
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 11/03/2025 10:43, Lubomir Rintel wrote:
-> Update kernel to version 6.13.6. Tested.
-> 
-> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
+Upstream changelog with a mix of new features and bugfixes:
+https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/1.52.0/NEWS?ref_type=tags
 
-Thanks for the patch. I applied it on branch next.
+Support for the "dhcpcanon" DHCP client has been removed.
 
-Could you also send a followup patch to enabling
-BR2_DOWNLOAD_FORCE_CHECK_HASHES=y for those updated defconfigs,
-please?
+Systemd code imported into NetworkManager [1] now requires kernel
+headers 5.4 [2], update "depends on" accordingly.
 
-There is few commit examples:
-https://gitlab.com/buildroot.org/buildroot/-/commit/4ca8f0ea762061ad04016d065f37e0c351d578f1
+Also update the homepage, wiki.gnome.org has been retired.
 
-See also the documentation:
-https://buildroot.org/downloads/manual/manual.html#_adding_project_specific_patches_and_hashes
+[1] https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/merge_requests/2115
+[2] https://github.com/systemd/systemd/commit/6e14c46bac760d01868b0bf48461f6ac44c86be3
 
-Finally, you can use the helper script for that:
-https://gitlab.com/buildroot.org/buildroot/-/blob/master/utils/add-custom-hashes
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/network-manager/Config.in            | 8 ++++----
+ package/network-manager/network-manager.hash | 4 ++--
+ package/network-manager/network-manager.mk   | 4 ++--
+ 3 files changed, 8 insertions(+), 8 deletions(-)
 
-Best regards,
-
-Julien.
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index de7989a9c5..b388c573fe 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	# We need NETLINK_GET_STRICT_CHK
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_WCHAR # libglib2
+@@ -23,7 +23,7 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	  configured and joined once, it can be detected and re-joined
+ 	  automatically the next time it's available.
+ 
+-	  http://projects.gnome.org/NetworkManager/
++	  https://networkmanager.dev/
+ 
+ if BR2_PACKAGE_NETWORK_MANAGER
+ 
+@@ -60,10 +60,10 @@ config BR2_PACKAGE_NETWORK_MANAGER_OVS
+ 	  This option enables support for OpenVSwitch
+ endif
+ 
+-comment "NetworkManager needs udev /dev management and a glibc or musl toolchain w/ headers >= 4.20, dynamic library, wchar, threads, gcc >= 4.9"
++comment "NetworkManager needs udev /dev management and a glibc or musl toolchain w/ headers >= 5.4, dynamic library, wchar, threads, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_PACKAGE_HAS_UDEV || \
+-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20 || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 || \
+ 		!(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
+ 		BR2_STATIC_LIBS || \
+ 		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 64ec5acbea..a0963e010f 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,5 +1,5 @@
+-# From https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/1.50.2/downloads/NetworkManager-1.50.2.tar.xz.sha256sum
+-sha256  10473be9d3ab89f8a27a68b7bf5bc9557851a5183b74b6241e5e0fa5c6921fef  NetworkManager-1.50.2.tar.xz
++# From https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/1.52.0/downloads/NetworkManager-1.52.0.tar.xz.sha256sum
++sha256  356f21a15da51e4218fd4d0fd78cea61e067b1116a25cddee4af9df05062e92d  NetworkManager-1.52.0.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 1a0adacfa0..ab3a437838 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-NETWORK_MANAGER_VERSION_MAJOR = 1.50
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
++NETWORK_MANAGER_VERSION_MAJOR = 1.52
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/$(NETWORK_MANAGER_VERSION)/downloads
+ NETWORK_MANAGER_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
