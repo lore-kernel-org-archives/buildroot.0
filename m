@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFDDFC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D2CAC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 927D960FB1;
-	Mon, 19 May 2025 10:41:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1129F80EF4;
+	Mon, 19 May 2025 10:41:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1LMcqRPxSkA6; Mon, 19 May 2025 10:41:49 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kl4ztGzz0BYk; Mon, 19 May 2025 10:41:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B728E60EFA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32CBA80E80
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B728E60EFA;
-	Mon, 19 May 2025 10:41:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 32CBA80E80;
+	Mon, 19 May 2025 10:41:52 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 294F91BF
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1AB511BF
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC24740DBA
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23D6F40DBD
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b0AiXCzQ-8R7 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ id P4sPwDqumMcG for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29E9640C40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C760C40D34
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 29E9640C40
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C760C40D34
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2720E872E7; Mon, 19 May 2025 10:39:43 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id C37DF873D4; Mon, 19 May 2025 10:39:41 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 18 Mar 2025 21:53:24 +0100
+Date: Tue, 11 Mar 2025 18:46:30 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b8dfcb4f045fce200e5e521bb1f15df8bf58bc8a
-X-Git-Newrev: 2248c732c621730ff6cf26b2bb06034a7e583f22
+X-Git-Oldrev: 4809690d42f9b395ccb76ee7583c199fdd8d42c5
+X-Git-Newrev: 5dab98d721e978e65afce44ee2ea92fcae2d2b67
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103943.2720E872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ply: bump version to
- 2.4.0
+Message-Id: <20250519103941.C37DF873D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libjxl: security bump
+ to version 0.11.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2248c732c621730ff6cf26b2bb06034a7e583f22
+commit: https://git.buildroot.net/buildroot/commit/?id=5dab98d721e978e65afce44ee2ea92fcae2d2b67
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump to new available version.
+For release notes since v0.11.0, see:
+https://github.com/libjxl/libjxl/releases/tag/v0.11.1
 
-For change log, see:
-https://github.com/wkz/ply/releases/tag/2.4.0
+Fixes:
+https://www.cve.org/cverecord?id=CVE-2024-11403
+https://www.cve.org/cverecord?id=CVE-2024-11498
 
-Signed-off-by: Andreas Klinger <ak@it-klinger.de>
-[Julien: replaced the change log url]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ply/ply.hash | 2 +-
- package/ply/ply.mk   | 2 +-
+ package/libjxl/libjxl.hash | 2 +-
+ package/libjxl/libjxl.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ply/ply.hash b/package/ply/ply.hash
-index b6a56aa909..ee9a57462b 100644
---- a/package/ply/ply.hash
-+++ b/package/ply/ply.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  99be1ed3942370699cbfc7f493bc3ffd4601312a81471215ac7ccb2e04a0a8b2  ply-2.3.0.tar.gz
-+sha256  f7c1461f3c570c91f28b1d33424846ead0d6e4429e4a9ce4429db8f2327283a5  ply-2.4.0.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/ply/ply.mk b/package/ply/ply.mk
-index dc02fc5472..964765b918 100644
---- a/package/ply/ply.mk
-+++ b/package/ply/ply.mk
+diff --git a/package/libjxl/libjxl.hash b/package/libjxl/libjxl.hash
+index 1778acf2e9..56d1909110 100644
+--- a/package/libjxl/libjxl.hash
++++ b/package/libjxl/libjxl.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  7ce4ec8bb37a435a73ac18c4c9ff56c2dc6c98892bf3f53a328e3eca42efb9cf  libjxl-0.11.0.tar.gz
++sha256  1492dfef8dd6c3036446ac3b340005d92ab92f7d48ee3271b5dac1d36945d3d9  libjxl-0.11.1.tar.gz
+ sha256  8405932022a556380c2d8c272eff154a923feb197233f348ce5f7334fb0a5ede  LICENSE
+ sha256  91915f8ae056a68a3c5bdf05d9f6f78bb6903e27a8ca3a8434c9e4ac87300575  PATENTS
+diff --git a/package/libjxl/libjxl.mk b/package/libjxl/libjxl.mk
+index 6fc9ca5a6e..18bebad662 100644
+--- a/package/libjxl/libjxl.mk
++++ b/package/libjxl/libjxl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PLY_VERSION = 2.3.0
-+PLY_VERSION = 2.4.0
- PLY_SITE = $(call github,wkz,ply,$(PLY_VERSION))
- PLY_AUTORECONF = YES
- PLY_LICENSE = GPL-2.0
+-LIBJXL_VERSION = 0.11.0
++LIBJXL_VERSION = 0.11.1
+ LIBJXL_SITE = $(call github,libjxl,libjxl,v$(LIBJXL_VERSION))
+ LIBJXL_LICENSE = BSD-3-Clause
+ LIBJXL_LICENSE_FILES = LICENSE PATENTS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
