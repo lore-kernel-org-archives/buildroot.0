@@ -1,195 +1,183 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C5CCC28B28
-	for <buildroot@archiver.kernel.org>; Wed, 12 Mar 2025 08:40:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D5D9C28B28
+	for <buildroot@archiver.kernel.org>; Wed, 12 Mar 2025 09:51:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1A8A607ED;
-	Wed, 12 Mar 2025 08:40:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D509824EF;
+	Wed, 12 Mar 2025 09:51:48 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PhM7_okWKI2C; Wed, 12 Mar 2025 09:51:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EBDA8206C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6EBDA8206C;
+	Wed, 12 Mar 2025 09:51:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A8AAB1C8
+ for <buildroot@buildroot.org>; Wed, 12 Mar 2025 09:51:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8C5AB60C0A
+ for <buildroot@buildroot.org>; Wed, 12 Mar 2025 09:51:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ezcsFhvsB89j; Wed, 12 Mar 2025 08:40:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F284160C20
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F284160C20;
-	Wed, 12 Mar 2025 08:40:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7E8ED943
- for <buildroot@buildroot.org>; Wed, 12 Mar 2025 08:40:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 615E140E2C
- for <buildroot@buildroot.org>; Wed, 12 Mar 2025 08:40:29 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rC7NJOXXexN8 for <buildroot@buildroot.org>;
- Wed, 12 Mar 2025 08:40:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=68.232.143.124;
- helo=esa2.hgst.iphmx.com; envelope-from=prvs=159c3cfdf=niklas.cassel@wdc.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 77D6B40DD9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77D6B40DD9
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 77D6B40DD9
- for <buildroot@buildroot.org>; Wed, 12 Mar 2025 08:40:28 +0000 (UTC)
-X-CSE-ConnectionGUID: kU/IzevoRqqepI5xGgX6Sw==
-X-CSE-MsgGUID: EeAK0LZmSEaHCdffFBDbig==
-X-IronPort-AV: E=Sophos;i="6.14,241,1736784000"; d="scan'208";a="48587866"
-Received: from mail-westcentralusazlp17013076.outbound.protection.outlook.com
- (HELO CY3PR05CU001.outbound.protection.outlook.com) ([40.93.6.76])
- by ob1.hgst.iphmx.com with ESMTP; 12 Mar 2025 16:40:24 +0800
+ id FY-ldIj71jyE for <buildroot@buildroot.org>;
+ Wed, 12 Mar 2025 09:51:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:260e::623;
+ helo=eur03-am7-obe.outbound.protection.outlook.com;
+ envelope-from=quentin.schulz@cherry.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 29DFB606CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29DFB606CC
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com
+ (mail-am7eur03on20623.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:260e::623])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 29DFB606CC
+ for <buildroot@buildroot.org>; Wed, 12 Mar 2025 09:51:40 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=r15EFoyaqn2mceZk2dPHt2cESqGMukPIfNzVhZ5k8glDl8eXMGjrBOx3rZjUHvr+Pc5+MKm5D8eAhb01WZucblIetaGDFXP310XO2RrU5l6bAuZASPrE3ebPZuDL8oZxpX+yBfu6k+0FGi5/0sIZ66RHAlj6NAgHPA0RinGQLjcd/BsJyPZOrfZF9dCpdU7e3KhWmv4lO9i0wL3sUyGLJdV6q1d9X3B9YpfyN8GaRESHXvVlaaQbG/564QwaRBC/rwbMsWBAMUw8pBwN2dTG6EbsV3/FG3nf27drQoZysX0qHYrSp5zYka9vhs6uN+xG3ZS04RoIziQn7XB+Np2xAQ==
+ b=jZe8YNs/0xjz4oZwKfnIi/vzF3GUw5QkZpKkPxfpPZ1qJSPAQOS5o5qwMSwGaag/79bPTOdRT4datlNMU8sp/3OtFHutUErCwpyJY8pOLKARqXk5MU+JFlTCCs7vfSVPhANnQfjTB1sWo38J1BgZAoWVbmdzMCC6GjQyO4VbrJpU2FRVXO8elvvBSbYCS5R4URFR2CFI1PxysRNbd2zFPwJWGB5RCXrvfVxV0rDyWj4D/Mh745Ora9eJmjy9SapZZwQoeC/hVZ5WOUQR88RQcLFppP4EHsAl2OGtKUCJyjVcG9vA3ZThcT659yE3oY8glYZEyN9vBvg7JPi6wpzfWQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MOjo0GTp2oSscBF8yOoldEKXPDNUGmhFn3DWYTFb01k=;
- b=w1GVnxr0jZMBTwNxt0qQu9ywfxFQTA/WchfNvvHlfziTepTp50wXx6QbvcFVGdlogCRRdu/wdcdAxDe+ZJXvhW7+BuhYjdQcXcvbsV3SX2zMBdmtUvIGKBeSY2u1FCz8cgwgrsDgSW6KGfrQti+zR3zALBtmkB5CIQ/7cp4q2tjvV4AUcPZ7sobW374628lOO25FjRAdcnOhCGEy+Z6uCTZyQKRMvOsmN2M7aFGejRzlKamIxeeW+JHUx0DKBiHJF8InK14sbWPhUfu/bBpVSeLxqomFwQi9IbJ9BvTF0pKKttT13g6lPh+EfvcIJpqtmsyy9l4zCcuvsvXQ6/w0Lg==
+ bh=ta4iVBhftJT5zjuLd4efWX0m96ieL/y5jVeYEzltRu4=;
+ b=WDOqD2ykWwxhqbbTui8TXMOAP7SoQw1RMqZHuVtDCvTKJ17clQ1sOTJYj7jPiKxpyYdH7knfq7J1ZDPxTJBLbTD1B1PSzGKojk2KaOiHFQ3dw/POHY1Q0txi4266yGidG9iwvRePb5cfgrz8shaUH6JjKBfPnqWCs20GZHwOJ10RwjOqeOhjCjiAr0GbKhhrliP0PiCKUAG4yEmB6G+7BbP7I0W9FRqrudgn1HBuwNV9hGvxGSBssGWYnKMPfeZ38j+isYVX1zpgwE/esQB5iR6VLwau5yFIbJafGF0jjVZLfVjiugmUlIRMZAK6dy5UbbT36R4aPifmSnd+OTKTQA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
-Received: from SJ0PR04MB8326.namprd04.prod.outlook.com (2603:10b6:a03:3db::16)
- by IA0PR04MB9033.namprd04.prod.outlook.com (2603:10b6:208:481::14)
+ smtp.mailfrom=cherry.de; dmarc=pass action=none header.from=cherry.de;
+ dkim=pass header.d=cherry.de; arc=none
+Received: from AS8PR04MB8897.eurprd04.prod.outlook.com (2603:10a6:20b:42c::20)
+ by VI0PR04MB10686.eurprd04.prod.outlook.com (2603:10a6:800:25d::21)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.28; Wed, 12 Mar
- 2025 08:40:21 +0000
-Received: from SJ0PR04MB8326.namprd04.prod.outlook.com
- ([fe80::5088:5f08:45a0:9a8]) by SJ0PR04MB8326.namprd04.prod.outlook.com
- ([fe80::5088:5f08:45a0:9a8%7]) with mapi id 15.20.8511.026; Wed, 12 Mar 2025
- 08:40:21 +0000
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-CC: "buildroot@buildroot.org" <buildroot@buildroot.org>, Damien Le Moal
- <dlemoal@kernel.org>, Florian Fainelli <f.fainelli@gmail.com>, "Yann E .
- MORIN" <yann.morin@orange.com>, "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Niklas Cassel <cassel@kernel.org>
-Thread-Topic: [PATCH 1/2] package/linux-tools: perf: Fix _BIN_ARCH_EXCLUDE
-Thread-Index: AQHbgfKd+HnhM9TeK0CK3zJVMv5KAbNvUHVh
-Date: Wed, 12 Mar 2025 08:40:21 +0000
-Message-ID: <SJ0PR04MB83266CB336F8FFEDBC027DDDF2D02@SJ0PR04MB8326.namprd04.prod.outlook.com>
-References: <20250218104807.2329338-1-Niklas.Cassel@wdc.com>
-In-Reply-To: <20250218104807.2329338-1-Niklas.Cassel@wdc.com>
-Accept-Language: en-US
+ 2025 09:51:34 +0000
+Received: from AS8PR04MB8897.eurprd04.prod.outlook.com
+ ([fe80::35f6:bc7d:633:369a]) by AS8PR04MB8897.eurprd04.prod.outlook.com
+ ([fe80::35f6:bc7d:633:369a%6]) with mapi id 15.20.8511.026; Wed, 12 Mar 2025
+ 09:51:33 +0000
+Message-ID: <6f910801-f085-4a78-a9f9-8bf36cd87148@cherry.de>
+Date: Wed, 12 Mar 2025 10:51:32 +0100
+User-Agent: Mozilla Thunderbird
+To: Peter Korsgaard <peter@korsgaard.com>,
+ Quentin Schulz <foss+buildroot@0leil.net>
+Cc: buildroot@buildroot.org, Kieran Bingham <kieran.bingham@ideasonboard.com>,
+ Marcus Folkesson <marcus.folkesson@gmail.com>
+References: <20250311-libcamera-qt6-v1-1-4897aadc6fe3@cherry.de>
+ <87ldtbfn7p.fsf@dell.be.48ers.dk>
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ0PR04MB8326:EE_|IA0PR04MB9033:EE_
-x-ms-office365-filtering-correlation-id: 333cf447-2034-4882-987c-08dd61418656
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230040|366016|1800799024|376014|38070700018|41080700001; 
-x-microsoft-antispam-message-info: =?iso-8859-1?Q?oOOexon4bb2bxcTD+P/NBHYzcncQyHLflHzilK8e++6RWqTeJohx6pvFrr?=
- =?iso-8859-1?Q?pWFmQ9wtuuBmZwmauNUNn0Ty4hJacMKINKjE7ErTdREYb2uVfnRg6ulKMR?=
- =?iso-8859-1?Q?QBfl7vpNzNXz85dequgRyhMRkQ2Q+i/zOxLT4/Z0WlCgOoUdINu8YkKDAA?=
- =?iso-8859-1?Q?bEzbgmqbLXKFr4FlJvJjZkKjHGzjkJKBTPGIhpVZ2XACUZYkkRruB+ldTC?=
- =?iso-8859-1?Q?bC0SRCuRwaEHv6OFrVJp4rst/Nl+q94OVRy0XHqm3hYdX7B2CO2p4jxIcN?=
- =?iso-8859-1?Q?rPViarQumo8bXNdXVJMESvtZ9ozS5wy13Q0ciOqdvFBPQ4g0QEZrW4/qkc?=
- =?iso-8859-1?Q?VHtq3cYZJdt7xdfVSgpfBkt5mJhtZxQwwbNz3X0KHXfHx+J7UM/n0wRGHn?=
- =?iso-8859-1?Q?dX+t1At79oJnQBh8cFCMzMorMvtKHrvJY9IYs6hDX9qyQuOXvOuNgvO8e8?=
- =?iso-8859-1?Q?Y5eD5g3CI+vgI3lgZ+oJDkaJL+Np7ei2zRqAqu94YX0SNVjaVRa6wN6Fjb?=
- =?iso-8859-1?Q?qbZ6oPdKRH8m97zS9r8dIpcOCVZPfviSKuFIQGrxDn++Q4f0cfngujASlQ?=
- =?iso-8859-1?Q?G9ldNW+HhAD1Cwcp21OYBFdfjQCLArDIDuMPCgyBJ7oz98u7r8rXneMzsB?=
- =?iso-8859-1?Q?GjVg1lWeplBLUdQbz799gxqKZbSQWWtTpU5tC/Kb44MKvpS9gF8uKx/wxt?=
- =?iso-8859-1?Q?4UQUAeB+qc+SDRBzKss9v35Eou/0hJYA8NTSPvCL3cFKVTTeujClJRRnqY?=
- =?iso-8859-1?Q?7Rf6ncpnKKWI5kwRiZ1qUtEHdmDq1PPzyrHIy+zRyFeYBuY5uzGryIPpIJ?=
- =?iso-8859-1?Q?6LKkj730yPVfEOqEOnB63thXe/5uofOm2pd4BeG75EQMfaMiutUpUVS+OI?=
- =?iso-8859-1?Q?oEeDNRQNvlgpcDa3kb2BQR/cQD2nu1zIdXH0HN3/gIULNT+71e4Z7qGCxd?=
- =?iso-8859-1?Q?kpSNNzTUYXuggo/6iV8velomSi/wOtTaqRuFvP98iFWYMIBIF2moqh4E+i?=
- =?iso-8859-1?Q?qQ4AK0tQcRCTlecwrPsGJBhRt34tUrjH0QC1T8HiHIwXpmkRGVhXKJawDH?=
- =?iso-8859-1?Q?s3D+B+7R58OkzsBGFm/3zAzxAdBbTAx9ShZp0C4WN/GSNqk399d4PYwCbH?=
- =?iso-8859-1?Q?fSf+6OD+GeZN7lsJnf1BfGw5PUyjhUXFnt2+nCmb4DYzWaLbwVUqBRqFlo?=
- =?iso-8859-1?Q?xlrv29W/QK2YVpUEdRfCT+gTcEoFqIBB967ik1a3FV5aVYHHFdBZ9dglUy?=
- =?iso-8859-1?Q?KiCIce1vQQbRbXe4sDmINpEHTOuRlFcnNPYFz8sjRyquNSL8/qGB2it4yz?=
- =?iso-8859-1?Q?BB5beFuB8xomdTlIxyc5ibeeeuFvHm54IdI+Gt9cIyS1MCKDQz5YFH1eQX?=
- =?iso-8859-1?Q?dTL+MGNcTM0XBmXubXvJwX7sviI7Fdn7daKxZANW9C0qhPAgA0xSbwZQqR?=
- =?iso-8859-1?Q?2o1vK6FpzNg2fRQUNzg+4V2p+ozQ68ebQnFiWoR6U3n+LDPjrBdWuDrC5I?=
- =?iso-8859-1?Q?WJqMycL+umWzkSojzVDsKBQ0Fzo8PCU7GwjV22ILy7sA=3D=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SJ0PR04MB8326.namprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(366016)(1800799024)(376014)(38070700018)(41080700001); DIR:OUT;
- SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?wd88xiFD/m6l/CyQyNIz1v7F0lZpEe1wG2zum0ODBRpZqEPmOVNWDfVb3p?=
- =?iso-8859-1?Q?skSartz8r2VyoZNZi3qiMcBs8PGq1+0ZLllHsENYWfBiaoJuIx02T8xhLW?=
- =?iso-8859-1?Q?Vc7f/WztXJBj78EkNv7qOLzc/0KE92iW+iqldHvp2wMpup/b9D3DEHIs+U?=
- =?iso-8859-1?Q?3coRahbSocoVORtUZZKJsa7zq71QsSa2qXH+sAakT4JjJm7h3/nK8vivru?=
- =?iso-8859-1?Q?8pJatP8qiEp89YNZEIkg3P6SKVwUTIpHwBjs7eCvOeQUKqewbkKEhzRrKw?=
- =?iso-8859-1?Q?K/W8ognpXa/eBDeuQB18srLkckBDGipQ75jlYwlCRs25ARQ1if1kIW7Ycf?=
- =?iso-8859-1?Q?pCSPPxgUEwFGrjOVXlwd0/mSD5UVZHPi+yzMzwgELzrPOWCy1oEALa062e?=
- =?iso-8859-1?Q?1ubZjjHXzUdHEPIMvauvCT8zm7WkHs9o4tgNY1iloSGz4N4sjNDGeedYiI?=
- =?iso-8859-1?Q?ZXSJqQfmvpulAXqRqrnbdC4F3v+lIe//Q6DRS6b8QCHItKQ22AbQuC6WQZ?=
- =?iso-8859-1?Q?q8s9PZKtYo/viqHYP4Ue7AcpOkDbOwotym21yfUi7TtCYbE/tIp4ElVipv?=
- =?iso-8859-1?Q?SBIJgi3tf3Iy0+P2Wwk+85D8YYwXQ8QfNWZuc593CS8CFnIddXleOh0oyA?=
- =?iso-8859-1?Q?MGaujBY+gZFrVSCqUgYt4lgQnyBvNpQAiBMMc5mPwAvQtMoMhx92m/+PzH?=
- =?iso-8859-1?Q?nJY5Gwlb+qCNs9EuzyL56GaQpXY01HxUgtrnh3Qvqi+2/JppWo+ZBwsypR?=
- =?iso-8859-1?Q?GHE1UZWVjqGBUr8EWxBrf8yYSN22kHC5wVeII9rD763R2svagdSpPMp/dp?=
- =?iso-8859-1?Q?rgySHWTCPuazAmm/y5VWONCChSXmQcczOuYDb6FtoF8bbbO3/8IQt2em9Z?=
- =?iso-8859-1?Q?6x0TIhSZNvSUejKtq0Lx/rq65nLxF5zq7lPBRyPzO6ZMe9em5qjX1gF4bs?=
- =?iso-8859-1?Q?VoWux37kq5Hhqn4W2cRclEF2wQTGyciAcqiD1FWE0zg0NuUSoHEZgMRyAt?=
- =?iso-8859-1?Q?/BIBCzp5MxYN8NJeAGIFkdcUkU9ugyXWEPaJPOM/ePBAp+fkGlZPiWBQdW?=
- =?iso-8859-1?Q?7xw5Ce8z4LafGyw+CaJ7XCEV5F4Nw1M2dSjEvq+UaYcQ0Kf2CSEAlmePxW?=
- =?iso-8859-1?Q?GC+PgW342w9Ma1wcpFHo30lo/i6/uSIzXsz0/y1fbZ+hiqgTZPRU1EOHhF?=
- =?iso-8859-1?Q?cPTzvQk5NlM6WuUnr8nV2DkaN8t//73vmlo/kii8DaQf6tiwLeelsBds+P?=
- =?iso-8859-1?Q?1ABpOmzUuYDJM2qggACMmFSuiQTrx7zsUWRJRr16tKhH/CuctTBiYTO3R0?=
- =?iso-8859-1?Q?Uo54Sj8f2BIJJYjkvmZ0BadpQvJA42Hm0mw7WF5SoZVwhYe4TO4i7c3ve3?=
- =?iso-8859-1?Q?4yjIFiHwFLChjE+G/CFfUcpAPxb/YnHkK2OFTkFZbEYeCP327A0nhpAB6J?=
- =?iso-8859-1?Q?lryYN0yTKJgoIxtUYMXlydkshCgZ2P2K/CZu9sWDOumua2OIBprJJWEEGe?=
- =?iso-8859-1?Q?CWzl1qQk6Ld63QkAN3IoOUX7Nh1YfyQGgRqa493PjawxmXQVRf973Td9GB?=
- =?iso-8859-1?Q?P08qiZEIx3+G4Tj51oaa1U6YP6XuLRTwqBoH78yCVtThzTsCwRK6wFYKv0?=
- =?iso-8859-1?Q?sLJIaTvXz/PuOw5GNTYR6s0X+coV9YaJcv?=
+In-Reply-To: <87ldtbfn7p.fsf@dell.be.48ers.dk>
+X-ClientProxiedBy: FR3P281CA0210.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a5::19) To AS8PR04MB8897.eurprd04.prod.outlook.com
+ (2603:10a6:20b:42c::20)
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: kuG7n6jFpOY3Ie4SAkrNIAmXk3vXnu2PjiLEPTdO1bYJRb/KpCmVEo9psrhDN1YH6KRFAk55ImNGEKqJxofdYtYvQtLqwIrefXSwf14R3Yj+tyM5MCjgDP23ZCN7Awmt7qIfIqGo2n+FGi4jR9eXMl+50Dpi3xhVPvMxwII/yKjDrJ0vVndMH2j7EnAjS8JI2hRasu0IBdHqI95ii6n5FzMVWC3XXlX8fytCB9+8OUP2emM/7Es90i28W19TZxnazpnjTW2hFJy6JK4m7M0LbSchbMZol0gt4Y38RUnNP72icz32yJu9TGvVKL/AAvMwS5GnFrJp3IlSN0IdF9sawSfoCZmAjYXLP+n/868SQ/5KTXgWbEOdPjcsKtuBmIj+juGtHmrrjCnsdKdvyfnszU92O+yAQCmXORcmdEpmumxrsNim9ha9eaoCJAeCzDgMBV0v0MmClHogsTcSGBsW0SG0EQl3B/aFYE44Pl+jLqztQeZR8F9p34VP62mFAhlg6sOWS/xxTxK2HpjmtSV+9dT7cvwvWwVEalU2nPrRh+ywv5fCPC5WbO5IDpRsfwsn3wl4IPl9+xwVyW1+LqKpYfLNv8/zvoL9+NdCgrWy9sM98AIc+f250DXEwRqnybCf
-X-OriginatorOrg: wdc.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR04MB8897:EE_|VI0PR04MB10686:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3e390bcc-6a00-421e-1be8-08dd614b78df
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0; ARA:13230040|366016|1800799024|376014|13003099007;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?RkQ2L0NJekxHcVJJUkRBQUdycTJLaEo3cEdXTHhQaFB1d2lVZkxIOGM0NTFk?=
+ =?utf-8?B?QkhlRnYyVkdnUlRjYWZTcVZLK29BbHNCQWl3UEZkRUI2c0lMU0JMbUg1QnpM?=
+ =?utf-8?B?NlVTaW5vWEU3ZTZTeGY0bnR2ak1yZDN3ODRSaFE0eVBOTTIrbDJqZzhCNklO?=
+ =?utf-8?B?VTFXQkd4VHcrRU93dGE1WXB3WkFMeElRT3dEYmVWWXdxb25aTjVTUWFGS1ZN?=
+ =?utf-8?B?a1pJUUtyS3IwVjZTY3JtVzlVMmJlcGhFUG0yZ2MyWXdUMjlveDBRK2FTekdx?=
+ =?utf-8?B?VXI1dFVsQTVpNlZzRkFXUFdLMnNzK0JpMXp1SXdqbkZwbU12cVhFbU9laTdx?=
+ =?utf-8?B?NzlBeFg1eVprOGZlcFpIMnBkeWRDdnV6eTlrZFpMRExmTjNSdG5idDdmVkF4?=
+ =?utf-8?B?dFRxZm4yaEhjTjd0Uytoa3lTYXBVckF3MUx3ZFdRL0VVYi9wVjFIQjZqd3g5?=
+ =?utf-8?B?akFFZlc4aU11RWFGT0xuc0VxY2pEdWxhYW9uT0dmMWk2NEdyWG5LYnpWVTVE?=
+ =?utf-8?B?KytKSHR6V3V5Wkk2STZKRndEczRxRWtXVXN4M3NmRFQxU3JXNEkvUmJNTHV6?=
+ =?utf-8?B?cVl2MldxUDhGR2JFWWhFNlhzL2Y1YUxKdnR3UG51bGJXVG01b3pXSGNOai9C?=
+ =?utf-8?B?dzA4bHRYQ1ZiTnFORC9OUkp4MFkwZG42NmpOelpxMXBXblhlL3lKVzNKVGw5?=
+ =?utf-8?B?LzZuTk1VNnZ5NlJ5MUNnOUdDTDN0QmRZTE8wNENqWEVleTBoek8zNWEyL0I1?=
+ =?utf-8?B?U0FuMlFNYTVMVWlHdGl0eThiMzl3TFp4alFWSVVGZ0NNaGNKMS82d1Y4M3dn?=
+ =?utf-8?B?OWZyNXpYSjhHMlJIMTBSZ2tEL0o2bjlOVUxOZGpTUm9YOHkySTBjT052Q2to?=
+ =?utf-8?B?eUFURmJDeE0rUXhsaWVMbWtUb3VkSStMd3g5aytvelQ5b2IvV3I4YTdlMVYx?=
+ =?utf-8?B?L2tOdnlJYW0rd0JMTkh5UmxGbTlSdzAzSmZmMytzWTUzSnBseUZHR0UycVRz?=
+ =?utf-8?B?QW9JN2dJNjFoZlgvSnF1NHM2WWh5ZmIxQU1OUXZJVlJWNCtrT05vbXYyOWxH?=
+ =?utf-8?B?NEtZTXUza0pkSFR6RDNBRkxaMjdJYlpCMFQzZE96RVB6MUhJdCtYQjJGQmw5?=
+ =?utf-8?B?dUY0aElpWkZhWkdLb2tYOUk3UVpwUmdzOXEwT01MWUdGUm41Q1VyUld5ZEp6?=
+ =?utf-8?B?R1BUSDh4cTZNV2I3eG1YWHVIZ29nNitORWxMb0p5c05DS09aVDF2Ukl3OXJw?=
+ =?utf-8?B?M3ZHV09XRWhUbWxMY2paZWJjR3FSNkZiV21UMnBubms0NzZxUnBDRHFzM1Bv?=
+ =?utf-8?B?OFhiS01SRE5MMTlXOUNjNGNiUDZhZE9UclFKZDBjNFdnSmt6T1NhMTcxcEpl?=
+ =?utf-8?B?eHNmR2NGU3oxMnc5QVFYck5ZWEtrNUllL3U5TDRmZWt4aFdMbkxSZDVWbWVI?=
+ =?utf-8?B?WHhzZXhDaTdLQVMwdTFSM1gxcU9va3l5Znp2YUcySUFjcGdPbTdIQW0vSWlI?=
+ =?utf-8?B?WDc4Tko4ZG4vNnRsWExweTBTMWVLanA1dkh0MWVNaXBXRG5pbjdIZklyaG1O?=
+ =?utf-8?B?clMrS3VGa0FPVEJCZ08yOGlydk9SREF3YTZSYzBWZEQ0NXJESDFJV3lkOXlC?=
+ =?utf-8?B?RmoydW1jQ0lidzYzeU1pRjIwVktVR2xjNXdIWVdCdHBPNGlmczRSTjBRS21C?=
+ =?utf-8?B?MFpwNFQ2ajljL1pTRVJpK3FrczM1bVQrb1l6SkJzdDE4M3hvQlZ6NVNBaG9T?=
+ =?utf-8?B?Q2VFSXo5cE1SVFprUWFLQkVPQlpXeDdNVE1LRDFIaU8vMEJZQmg2N3RUL1Bi?=
+ =?utf-8?B?RXJ0MlY1NlRIbHJ0YVVPQT09?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:AS8PR04MB8897.eurprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(366016)(1800799024)(376014)(13003099007); DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SlE4d1BnODFIeVIzcjR2dlZockFyN0NydjZJZHJFTTY1NUNkN0U3OTB6eFBV?=
+ =?utf-8?B?WUhMNlpVdzVxWGdFSkd6WEE4QzhlR2dzZDExeHRnZEMyY1dHaGhSTGRmQlRi?=
+ =?utf-8?B?bUpDQjg2aEdkbE5IRnFjdkpHOTE3VmNGa1NsbktmOFN1dldXWTBYaGhjemU1?=
+ =?utf-8?B?RHFURWxGNk8yclkyaTVRajk2RGRQREJoY3pUZC9DemczSzhTTFZzdCsyYUgr?=
+ =?utf-8?B?dk5pZVJHQytCc3ZaQ0FsZk1KQmtaMHg3RVlDRUdQQk9yaC9MekFlR0FhYWdu?=
+ =?utf-8?B?QXZDc0VlRFFtTWxka0dsbVkzWkVzbUJDMGZCT2tOcVZuZzQ5TGpCTmQ3K3hE?=
+ =?utf-8?B?aHRWRktYUUNkS2tsbEJlZCtEWlB5Wnh4am9NNzBFVWFxRUhyK0pxNk4xZllL?=
+ =?utf-8?B?RjNGeXBLK1dHN0w4NjBZUlBVNC9QMEdyMitYUVdnUXFldEhxT3BUdVRXMWxy?=
+ =?utf-8?B?Rmd2NS85VWM3cEp6RUxuUy95SVJ4OTlNQkQ2K01IZFdjTUM2d0FEdDN3TG9N?=
+ =?utf-8?B?UFpxOUFpTUJWa2M5Z3pwSXJrMmhZOVFsdksyMkt4dTZkSmpsSksrRllST0lU?=
+ =?utf-8?B?ZDV4ZXN3Wll6YUIvRXVmbmpaVm1PdWEyVmhoQ0M5aGNTSDlXRG9hWkFFbjZa?=
+ =?utf-8?B?TVpRdGdOU0k4am9OUldPYWFrbE5teWVBd2w2Ti9ZSjB1RVpjVDdveGkvTmNJ?=
+ =?utf-8?B?bmFseTdsY3p3c0Y1Ym1hSkJpSC9vV0JKTTMxL09JZ0tNdWpacGVQWW5CK0RF?=
+ =?utf-8?B?RU94QWxmRTZoZGxUMGFyeWxYNktYeWJlRklKeVk2Vk1DdzVSc1JpdWFmalkv?=
+ =?utf-8?B?V1ZQT2dMNGJHK29wMGJOcThIaTVLUElBRlVGNnR2TzZ4NklpbHdLZmNPZWlX?=
+ =?utf-8?B?VkVNd2diTW11L2pURU5iRUJFS3FkNHRDcE1FNjZUUk4xWmhYRDBpSFN0bWN3?=
+ =?utf-8?B?RXdXeTRFQkhMdHI3NEVTbmVoVXRVOUxCQThtdzc1L010cmRjU0daWDdXM3No?=
+ =?utf-8?B?U09TSUxhNyt6SnZvNE5hYXpodFlqTDJxUG9oaEZZK0Q5c2F4ZlFPRHI5MFNi?=
+ =?utf-8?B?QmdyUmpHTWNZOUxQRVpCWTlja1g4V2hZMllGMGlEY0pBamZ2R2FTRVZTbW9Z?=
+ =?utf-8?B?MXNwaDl0bElLNlpYb1c2c1RGVld1VDZrYUx0aHhwajRwZDlkY2Q1ekhPQyts?=
+ =?utf-8?B?OUJvNXJkM0t0bmV2dFhOS1NVUFJWQkJBUWJwQXZmNXNzQkltNXgza2pLbTdx?=
+ =?utf-8?B?aC81ZXd5dkVPSHdhZmlmVWY5VXU5bzhwNkc1Z2lNbEpmTWV5dXlFYkNSeUg2?=
+ =?utf-8?B?N0VMMmtOK1VEM0MwTUMxbGVTM0VkZm80OHl6YnBXcGtKNkJjK0ZaZjIzUE0z?=
+ =?utf-8?B?Mm0ra3VNWjFwNFFCdGk2WUMrMnBVbnFENlUvQlg0QkJ5R2M0YnZxZzVkMi9n?=
+ =?utf-8?B?TE5QQ003ak5mWlBqbTFveTNRek9DY3ZwcFZyb0tOVmFWOG0zTE43aHdmNDJ0?=
+ =?utf-8?B?QUw0cnhrbXM4UmlBK0V1cjQ0VTVXYXc5ZU5mKzVXUGdZNUMyNWY5eTZKV2lF?=
+ =?utf-8?B?VmRzOXZiaXZMdnF2ZFNvR1ZmRE1rbFFPSmdvWHJMN05IVkc0N3N3ZUgvYWFs?=
+ =?utf-8?B?R3N4UEpsWkVZSnJwdU1xZDdpUUp1RVFjQXB0M2V6cFZLL1ZDYlBVODlkand5?=
+ =?utf-8?B?K0NwV0ZDUnFsMk43Smk1a2dNNzF1S2FZSnBqR2FLWVB0b3JWWUVkTUFRV3c3?=
+ =?utf-8?B?clVvMHdZR244a2Z4cjVFa1ZvSlVoRVJBUndQbDZNcVBidnRyWnZNVXlPSzgw?=
+ =?utf-8?B?L3h0a0szZnV2UDRMUmNaNXMzbGlBWFJVbTgxTTNJa2ZnaFE4bzNZaHNpK0w5?=
+ =?utf-8?B?SzQwaVBlNWRiNmRsRUlXRnBYbkdGbVpKUjdDcFFwNmEzbDhlb21IYUEzOFd4?=
+ =?utf-8?B?TEgvdUNUNlh1eGRMcjZtNlowMitJM0p5RGJydnYvNWVHZGY4Tk54WnFRYzgz?=
+ =?utf-8?B?U2pkenpWNXRmZG0yeVpOaFZFa0R1dVUvUmNteW5lZHRNbk8vR0xKZ0J0OUZ3?=
+ =?utf-8?B?ZEh5eXdaTlBoK3ZHTVUxcSt5ZGxRUWNaeThadWxGVXV2SFUyK1pPYUJya2Ev?=
+ =?utf-8?B?L0tVMFVka3lyOXJhM2xUSDFhZ3dZTzIrV1F0M25yRDRwTm1zL1RrRDVNSFFM?=
+ =?utf-8?B?MWc9PQ==?=
+X-OriginatorOrg: cherry.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e390bcc-6a00-421e-1be8-08dd614b78df
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8897.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR04MB8326.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 333cf447-2034-4882-987c-08dd61418656
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Mar 2025 08:40:21.0768 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: HzssppPr1ESQ8+VqL0O+CuOOBIc0UlHdQqB9haA0PEh5DJJLnoHLjjs2FoL5bBWzTvBj/gk6WHPKU9asRLxHbw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR04MB9033
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1741768828; x=1773304828;
- h=from:to:cc:subject:date:message-id:references:
- in-reply-to:content-transfer-encoding:mime-version;
- bh=MOjo0GTp2oSscBF8yOoldEKXPDNUGmhFn3DWYTFb01k=;
- b=b9VeuuT/KZxJqiCwf20/OPl9hnc65YEP/GsYvwc6G1lEnEINC1HdpNJM
- Zk4M6RTdCp0nb3e4bQ3wmZWwJzc5CHoVngXOle55nOYXVEvxJsm9UJ9YO
- l5nO204Rj3W6ETgsu9sHFTP8odm7hDXRIpay9mprkHffGP0vxkcRGd7cx
- Hg7kdPi8LKPfRopDQ4Q32twUE+XBJb+8KHR0H623cSL4Mpmg6P0+oXPfh
- d1PnC5Kv177aVk0t/qj3ZqJ6jSzjQccD7qJFF47LDs6+q6nbM9TnTtvKZ
- YmOGeLcZwOE/xnDCJrPoO7GGhBgbLQ5Tt3Q3SpcAQ7bMLtj7FkG+1GEoF
- Q==;
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2025 09:51:33.7139 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1PKu/iKORfQCUZYtN74kQKLOH/4ZDQcXErwMQoNygHohRmi5to72y2SfeyXE/x3UwFGOSJz+bxlBE/y69RwLJLIqvP8v4QCz4/aVRtBS4Zc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR04MB10686
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ d=cherry.de; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MOjo0GTp2oSscBF8yOoldEKXPDNUGmhFn3DWYTFb01k=;
- b=UIZs/Uk1cZKPETMuzDuO/HljSzVgwhVtTUOXGXVcHhfmwnEJZb2VUZ5Njl486KZAMOflf93DRcmHFs2ro582CP6KYEvhXJJFGO3hXASzFsdfZrc1a4q+Xx/gfAvTG5/WhyxZn/pT2Avm+HiQUz4SrJLLHtSVpRkuDjNGN2ox7R8=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=ta4iVBhftJT5zjuLd4efWX0m96ieL/y5jVeYEzltRu4=;
+ b=Tzz5LzdA/tQCpndZ54A/Mz3QJFb4uVM24ijY1QEa3ql7GofS48BuVgBkA1lbQqQ0p0t3qydWa/8OfDP74cPjofPgoo3+UuvhtELBTIumruZX4Px6zifW8NNYefvxeEDTxais2n0e5dM++kdla/wkvEyqjffvWyuh962nUKxCO/Q=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=wdc.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key, unprotected) header.d=wdc.com header.i=@wdc.com
- header.a=rsa-sha256 header.s=dkim.wdc.com header.b=b9VeuuT/; 
+ header.from=cherry.de
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
- unprotected) header.d=sharedspace.onmicrosoft.com
- header.i=@sharedspace.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-sharedspace-onmicrosoft-com header.b=UIZs/Uk1
+ unprotected) header.d=cherry.de header.i=@cherry.de header.a=rsa-sha256
+ header.s=selector1 header.b=Tzz5LzdA
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-Subject: Re: [Buildroot] [PATCH 1/2] package/linux-tools: perf: Fix
- _BIN_ARCH_EXCLUDE
+ header.d=none;dmarc=none action=none header.from=cherry.de;
+Subject: Re: [Buildroot] [PATCH] package/libcamera: force-disable qcam for
+ now
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -201,22 +189,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Niklas Cassel via buildroot <buildroot@buildroot.org>
-Reply-To: Niklas Cassel <Niklas.Cassel@wdc.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Quentin Schulz via buildroot <buildroot@buildroot.org>
+Reply-To: Quentin Schulz <quentin.schulz@cherry.de>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello all,
+Hi Peter,
 
+On 3/11/25 7:15 PM, Peter Korsgaard wrote:
+>>>>>> "Quentin" == Quentin Schulz <foss+buildroot@0leil.net> writes:
+> 
+>   > From: Quentin Schulz <quentin.schulz@cherry.de>
+>   > qcam is based on Qt6 since commit 71aa3ceec30b ("apps: qcam: Port to Qt
+>   > 6") which is part of the v0.3.1 release.
+> 
+>   > qcam being enabled when BR2_PACKAGE_QT5BASE_WIDGETS symbol is defined
+>   > breaks the build as it's missing the qt6 dependencies.
+> 
+>   > The migration to Qt 6 for the Buildroot package isn't straightforward
+>   > though as we're hitting a meson bug[1].
+> 
+>   > For now, let's just always disable qcam until we can get everything
+>   > fixed and migrated properly.
+> 
+>   > [1] https://github.com/mesonbuild/meson/issues/13018
+> 
+>   > Fixes: 72757d111a5d ("package/libcamera: bump to version 0.3.2")
+>   > Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+> 
+> Committed after adding an autobuilder reference, thanks.
+> 
 
-Considering that this series is Acked-by Florian,
-any chance to get it picked up (on next branch)?
+Ah, wasn't aware this was a known issue!
 
+>> ---
+>   > This is suboptimal solution to unbreaking Buildroot builds of libcamera
+>   > when Qt5 Widgets are enabled but that should do for Buildroot 2025.02
+>   > release.
+> 
+>   > We should ideally work on adding proper support for qcam in a later
+>   > commit, once the issue reported in
+>   > https://github.com/mesonbuild/meson/issues/13018 is either fixed or
+>   > worked around in Buildroot.
+> 
+>   > FWIW, I went as far as:
+> 
+>   > ```
+>   > ifeq ($(BR2_PACKAGE_QT6BASE_WIDGETS)$(BR2_PACKAGE_QT6_OPENGL),yy)
+>   > LIBCAMERA_CONF_OPTS += -Dqcam=enabled
+>   > LIBCAMERA_DEPENDENCIES += qt6base
+>   > else
+>   > LIBCAMERA_CONF_OPTS += -Dqcam=disabled
+>   > endif
+>   > ```
+> 
+>   > as Qt6 OpenGL module seems required now. Additionally, the Qt6 tools
+>   > dependency is doing nothing so it can be removed. It actually never did
+>   > anything but turn a check from meson from red to green in the configure
+>   > step, the binaries with and without Qt tools (qt5 or qt6) were always
+>   > identical to the bit.
+> 
+> Thanks for investigating!
+> 
 
-Kind regards,
-Niklas
+To be fair, I may be wrong. 
+https://lists.libcamera.org/pipermail/libcamera-devel/2025-March/049157.html 
+for following discussion on the libcamera ML (no answer at the moment 
+but it's not even been 24h :) ).
+
+Before I forget, it seems qcam also has a dependency on TIFF that we 
+forgot to enforce (there's a knob to add a dependency on TIFF if the 
+package is built, but that won't be enough).
+
+> 
+>   > There are also a number of other changes we should be making to the
+>   > recipe as libcamera is extended without knobs if libdrm, libsdl2,
+>   > libjpeg, libdw and/or libunwind are provided. So we should add those to
+>   > LIBCAMERA_DEPENDENCIES if they are part of the build, to make builds
+>   > reproducible.
+> 
+> Will you send patches for that as well?
+> 
+
+I may, but anyone feel free to work on that if you feel like it. That 
+will be a build-tested patch only though from me.
+
+Looking at it a few more seconds, seems like there are also other knobs 
+we don't support right now, e.g. the virtual and mali-c55 pipelines.
+
+Cheers,
+Quentin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
