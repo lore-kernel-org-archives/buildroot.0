@@ -4,66 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1002CC28B28
-	for <buildroot@archiver.kernel.org>; Wed, 12 Mar 2025 10:38:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2826FC28B2F
+	for <buildroot@archiver.kernel.org>; Wed, 12 Mar 2025 13:52:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CEFF6811C0;
-	Wed, 12 Mar 2025 10:38:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77856810AA;
+	Wed, 12 Mar 2025 13:52:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xhSPb2rZg1cr; Wed, 12 Mar 2025 10:38:17 +0000 (UTC)
+ id GFu9Kht40i5H; Wed, 12 Mar 2025 13:52:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30D4081240
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B46480EA4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 30D4081240;
-	Wed, 12 Mar 2025 10:38:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id DADF91DB
- for <buildroot@buildroot.org>; Wed, 12 Mar 2025 10:38:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B46480EA4;
+	Wed, 12 Mar 2025 13:52:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D24DF1C8
+ for <buildroot@buildroot.org>; Wed, 12 Mar 2025 13:51:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CA18481240
- for <buildroot@buildroot.org>; Wed, 12 Mar 2025 10:38:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AE49C607AD
+ for <buildroot@buildroot.org>; Wed, 12 Mar 2025 13:51:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y_i44OTlZ3x3 for <buildroot@buildroot.org>;
- Wed, 12 Mar 2025 10:38:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E5099811C0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5099811C0
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E5099811C0
- for <buildroot@buildroot.org>; Wed, 12 Mar 2025 10:38:13 +0000 (UTC)
-Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 0A43C2C8327E;
- Wed, 12 Mar 2025 11:38:10 +0100 (CET)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8ALjJABfYScf for <buildroot@buildroot.org>;
+ Wed, 12 Mar 2025 13:51:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.249;
+ helo=mslow3.mail.gandi.net; envelope-from=richard.genoud@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1F0986064C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F0986064C
+Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1F0986064C
+ for <buildroot@buildroot.org>; Wed, 12 Mar 2025 13:51:56 +0000 (UTC)
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by mslow3.mail.gandi.net (Postfix) with ESMTP id 5F6E75846B5
+ for <buildroot@buildroot.org>; Wed, 12 Mar 2025 13:38:04 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D18ED44201;
+ Wed, 12 Mar 2025 13:37:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 12 Mar 2025 11:38:09 +0100
-Message-ID: <20250312103810.1950590-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.43.0
+Cc: Jesse Van Gavere <jesseevg@gmail.com>,
+ Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Ben Hutchings <ben.hutchings@mind.be>,
+ Richard Genoud <richard.genoud@bootlin.com>
+Date: Wed, 12 Mar 2025 14:37:41 +0100
+Message-ID: <20250312133741.1673476-1-richard.genoud@bootlin.com>
+X-Mailer: git-send-email 2.47.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1741775891; bh=cpbr24YmGPv19/V9B7HIwjNdQgG4cnEmAlC+hVJmlSQ=;
- h=From:To:Cc:Subject:Date;
- b=WsmaNLHIP9U/+1x3zIJCo4M7tWphyVp32YskzHLogNkTXdp3u0+w2ZSSTTZt2taGg
- tsFezmGEjHxlsMTohxdnmxgyRHls9nZZHEZjeLzhUH1UVN274tSJOLrNHtksw2aTJI
- 6/ZzbOJgOmB3B7NZXBKNod87dqOKs52GpKxELLK24gpBTSimM6Hl3kPPB6xJEM3XEm
- AGSeinoykX6VfDL/qnlTMZjB80C2PPSsa+J9mv/2qYoK5kGUNl+UZ5WuiIB0B7hQjR
- 7k1R/Qz45RS/asKXgqJ/QkUA7Wn9Ru6XqS3lth6GPAu9pTxLKSS2bxmjHa+tbrJatA
- Ge7XNsIBNn2Tw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvdehvddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeftihgthhgrrhguucfivghnohhuugcuoehrihgthhgrrhgurdhgvghnohhuugessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnheptdfggeetgeehvdevteegieetffeiudfhvdekgefhgeeifeffleejleffteetudejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdptghonhhfrdhinhenucfkphepvdgrtddumegtsgdutdemleelgehfmegtiedttdemjegtfegumeehvgefieemvgeljeemudekrggtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdutdemleelgehfmegtiedttdemjegtfegumeehvgefieemvgeljeemudekrggtpdhhvghloheplhhotggrlhhhohhsthdrlhhotggrlhguohhmrghinhdpmhgrihhlfhhrohhmpehrihgthhgrrhgurdhgvghnohhuugessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepiedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepjhgvshhsvggvvhhgsehgmhgrihhlrdgtohhmpdhrtghpt
+ hhtoheprhhohihkohhllhgvnhhsvhgvnhgushgvnhesghhmrghilhdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegsvghnrdhhuhhttghhihhnghhssehmihhnugdrsggvpdhrtghpthhtoheprhhitghhrghrugdrghgvnhhouhgusegsohhothhlihhnrdgtohhm
+X-GND-Sasl: richard.genoud@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1741786679;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=6ZLAQiFJT2aBluLGl9sbrOeIv/69nzqE48h9TAjMrA4=;
+ b=IiBmTgS72RyP7VBz4R+YAch4lAJXZ4gGUbaOMxN6lODDZPm6ElRt+Kl4CpVKau8vfUQVwL
+ itc8UV0lc/3aKU5ilXYh5ozvNkcBg/c/xIaEw6OpHss9bLih4e0sOCSSnl2SKhtcB1Hq3N
+ WktRzLz2XTUkjPjOjKGd7egj9D0ymInrIikGOGsOqVuCIwObkW4CgEmYYvkgQ9Wigx5m/9
+ Q2+N4CffJmnWXrpGYRHUX/w86m7zqU7ss8lLE1gPjUdIJARsaJaD9J+SbQglViQXONeJSb
+ 53sJX4YBJ+mwvuXuWSzJY5HXLhXBHlGIglwFFiAntY+IeTTVhCBSdFGiQrRXew==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=WsmaNLHI
-Subject: [Buildroot] [PATCH v2 1/1] package/can-utils: bump to v2025.01
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=IiBmTgS7
+Subject: [Buildroot] [PATCH] package/qt6/qt6base: Make qmake work
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,494 +88,200 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+From: Richard Genoud via buildroot <buildroot@buildroot.org>
+Reply-To: Richard Genoud <richard.genoud@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove patches that are now included in upstream release.
-Package switched from autotools to cmake based build.
-Backport two build fixes that are already merged upstream.
+Currently the qt6base package does not install a working cross-qmake
+program, so applications can only be built with CMake.
 
-* 0001-Include-time.h-for-timespec-struct-definition.patch fixes a musl
-  build issue
-* 0002-CMakeLists.txt-add-an-option-to-control-shared-libra.patch fixes
-  static only builds
+There's actually a qmake in the staging directory that could be used on
+the target (or in a chroot+qemu).
+There's the qmake build from the host-qmake package, in the host
+directory. This one can build qmake packages for the host.
 
-Release Notes: https://github.com/linux-can/can-utils/releases/tag/v2025.01
+And the cross-qmake (the one that create a Makfile for
+cross-compilation) is missing.
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+We can't call it host/usr/bin/qmake since it's already taken by the
+host-qmake6, but host/usr/bin/tuple-qmake seems to be a good choice,
+since it's made for cross-compilation.
+
+This patch is resurrected from:
+https://lore.kernel.org/buildroot/20240411145559.1183064-1-ben.hutchings@mind.be/
+
+To ease upgrades from Qt 5, make qmake work as well:
+
+- Create a linux-buildroot-g++ device spec, like we do for Qt 5.
+
+- Generate a target_qt.conf file in the host/usr/bin directory.
+
+- Add a tuple-qmake wrapper script in the host/usr/bin/ directory to set
+  the QMAKEPATH environment variable.
+
+Changes from original version:
+- Instead of modifying the qmake in the staging directory, we add a
+cross-qmake in the host/usr/bin directory.
+- The qmake-and-qtpaths-wrapper is modified in order to call the
+  cross-qmake also in subprojects, where qmake calls itself.
+
+Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
+Signed-off-by: Richard Genoud <richard.genoud@bootlin.com>
 ---
-Changes v2: add two patches from upstream fixing build issues
+ ...x-qmake-wrappers-for-recursive-qmake.patch | 15 +++++++
+ package/qt6/qt6base/qmake.conf.in             | 34 +++++++++++++++
+ package/qt6/qt6base/qplatformdefs.h           |  1 +
+ package/qt6/qt6base/qt6base.mk                | 42 +++++++++++++++++++
+ package/qt6/qt6base/target_qt.conf.in         | 11 +++++
+ 5 files changed, 103 insertions(+)
+ create mode 100644 package/qt6/qt6base/0001-fix-qmake-wrappers-for-recursive-qmake.patch
+ create mode 100644 package/qt6/qt6base/qmake.conf.in
+ create mode 100644 package/qt6/qt6base/qplatformdefs.h
+ create mode 100644 package/qt6/qt6base/target_qt.conf.in
 
- ...ograms-using-fork-on-MMU-less-system.patch | 257 ------------------
- ...ime.h-for-timespec-struct-definition.patch |  28 ++
- ...dd-an-option-to-control-shared-libra.patch |  37 +++
- ...y-poption-prefix-to-use-when-logging.patch |  79 ------
- package/can-utils/can-utils.hash              |   2 +-
- package/can-utils/can-utils.mk                |   5 +-
- 6 files changed, 68 insertions(+), 340 deletions(-)
- delete mode 100644 package/can-utils/0001-Don-t-compile-programs-using-fork-on-MMU-less-system.patch
- create mode 100644 package/can-utils/0001-Include-time.h-for-timespec-struct-definition.patch
- create mode 100644 package/can-utils/0002-CMakeLists.txt-add-an-option-to-control-shared-libra.patch
- delete mode 100644 package/can-utils/0002-j1939acd-remove-legacy-poption-prefix-to-use-when-logging.patch
-
-diff --git a/package/can-utils/0001-Don-t-compile-programs-using-fork-on-MMU-less-system.patch b/package/can-utils/0001-Don-t-compile-programs-using-fork-on-MMU-less-system.patch
-deleted file mode 100644
-index 57f93b18e0..0000000000
---- a/package/can-utils/0001-Don-t-compile-programs-using-fork-on-MMU-less-system.patch
-+++ /dev/null
-@@ -1,257 +0,0 @@
--From 5ed3b4ded6cf3e4de6fc8c8739b84231b0285b0e Mon Sep 17 00:00:00 2001
--From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
--Date: Fri, 5 May 2023 08:57:45 +0200
--Subject: [PATCH] Don't compile programs using fork() on MMU-less systems
--
--Systems that lack a MMU cannot use fork() to create the child process.
--The patch does not compile the affected programs on MMU-less systems.
--
--Co-developed-by: Marc Kleine-Budde <mkl@pengutronix.de>
--Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
--Upstream: https://github.com/linux-can/can-utils/commit/5ed3b4ded6cf3e4de6fc8c8739b84231b0285b0e
-----
-- CMakeLists.txt | 15 ++++++++++++---
-- GNUmakefile.am | 10 +++++++---
-- Makefile       | 16 +++++++++++++---
-- check_cc.sh    | 16 ++++++++++++++++
-- configure.ac   |  2 ++
-- fork_test.c    | 27 +++++++++++++++++++++++++++
-- 6 files changed, 77 insertions(+), 9 deletions(-)
-- create mode 100755 check_cc.sh
-- create mode 100644 fork_test.c
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 09ccd805de66..aee8ff7fca02 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.3)
-- 
-- project(can-utils LANGUAGES C)
-- 
--+include (CheckFunctionExists)
-- include (CheckSymbolExists)
-- include (GNUInstallDirs)
-- 
--@@ -25,12 +26,13 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DSCM_TXTIME=SO_TXTIME")
-- include_directories (.)
-- include_directories (./include)
-- 
--+check_function_exists(fork HAVE_FORK)
--+
-- set(PROGRAMS_CANLIB
--     asc2log
--     canbusload
--     candump
--     cangen
---    canlogserver
--     canplayer
--     cansend
--     cansequence
--@@ -39,6 +41,10 @@ set(PROGRAMS_CANLIB
--     slcanpty
-- )
-- 
--+if(HAVE_FORK)
--+    list(APPEND PROGRAMS_CANLIB canlogserver)
--+endif()
--+
-- set(PROGRAMS_J1939
--     j1939acd
--     j1939cat
--@@ -49,7 +55,6 @@ set(PROGRAMS_J1939
-- 
-- set(PROGRAMS
--     ${PROGRAMS_CANLIB}
---    bcmserver
--     canfdtest
--     cangw
--     cansniffer
--@@ -57,13 +62,17 @@ set(PROGRAMS
--     isotpperf
--     isotprecv
--     isotpsend
---    isotpserver
--     isotpsniffer
--     isotptun
--     slcan_attach
--     slcand
-- )
-- 
--+if(HAVE_FORK)
--+    list(APPEND PROGRAMS bcmserver)
--+    list(APPEND PROGRAMS isotpserver)
--+endif()
--+
-- add_executable(can-calc-bit-timing
--     calc-bit-timing/can-calc-bit-timing.c
-- )
--diff --git a/GNUmakefile.am b/GNUmakefile.am
--index 5a7ad75f682e..e818754db3a4 100644
----- a/GNUmakefile.am
--+++ b/GNUmakefile.am
--@@ -75,14 +75,12 @@ EXTRA_DIST += \
-- 
-- bin_PROGRAMS = \
-- 	asc2log \
---	bcmserver \
-- 	can-calc-bit-timing \
-- 	canbusload \
-- 	candump \
-- 	canfdtest \
-- 	cangen \
-- 	cangw \
---	canlogserver \
-- 	canplayer \
-- 	cansend \
-- 	cansequence \
--@@ -91,7 +89,6 @@ bin_PROGRAMS = \
-- 	isotpperf \
-- 	isotprecv \
-- 	isotpsend \
---	isotpserver \
-- 	isotpsniffer \
-- 	isotptun \
-- 	j1939acd \
--@@ -106,6 +103,13 @@ bin_PROGRAMS = \
-- 	slcanpty \
-- 	testj1939
-- 
--+if HAVE_FORK
--+bin_PROGRAMS += \
--+	bcmserver \
--+	canlogserver \
--+	isotpserver
--+endif
--+
-- j1939acd_LDADD = libj1939.la
-- j1939cat_LDADD = libj1939.la
-- j1939spy_LDADD = libj1939.la
--diff --git a/Makefile b/Makefile
--index 29eef997b290..a26ff3d75e67 100644
----- a/Makefile
--+++ b/Makefile
--@@ -45,6 +45,8 @@ MAKEFLAGS := -k
-- 
-- CFLAGS := -O2 -Wall -Wno-parentheses
-- 
--+HAVE_FORK := $(shell ./check_cc.sh "$(CC)" fork_test.c)
--+
-- CPPFLAGS += \
-- 	-I. \
-- 	-Iinclude \
--@@ -66,10 +68,14 @@ PROGRAMS_ISOTP := \
-- 	isotpperf \
-- 	isotprecv \
-- 	isotpsend \
---	isotpserver \
-- 	isotpsniffer \
-- 	isotptun
-- 
--+ifeq ($(HAVE_FORK),1)
--+PROGRAMS_ISOTP += \
--+	isotpserver
--+endif
--+
-- PROGRAMS_J1939 := \
-- 	j1939acd \
-- 	j1939cat \
--@@ -87,14 +93,12 @@ PROGRAMS := \
-- 	$(PROGRAMS_J1939) \
-- 	$(PROGRAMS_SLCAN) \
-- 	asc2log \
---	bcmserver \
-- 	can-calc-bit-timing \
-- 	canbusload \
-- 	candump \
-- 	canfdtest \
-- 	cangen \
-- 	cansequence \
---	canlogserver \
-- 	canplayer \
-- 	cansend \
-- 	cansniffer \
--@@ -103,6 +107,12 @@ PROGRAMS := \
-- 	mcp251xfd-dump \
-- 	slcanpty
-- 
--+ifeq ($(HAVE_FORK),1)
--+PROGRAMS += \
--+	canlogserver \
--+	bcmserver
--+endif
--+
-- all: $(PROGRAMS)
-- 
-- clean:
--diff --git a/check_cc.sh b/check_cc.sh
--new file mode 100755
--index 000000000000..d85ad129da9d
----- /dev/null
--+++ b/check_cc.sh
--@@ -0,0 +1,16 @@
--+#!/bin/sh
--+# SPDX-License-Identifier: GPL-2.0-only
--+# check_cc.sh - Helper to test userspace compilation support
--+# Copyright (c) 2015 Andrew Lutomirski
--+
--+CC="$1"
--+TESTPROG="$2"
--+shift 2
--+
--+if [ -n "$CC" ] && $CC -o /dev/null "$TESTPROG" -O0 "$@"; then
--+    echo 1
--+else
--+    echo 0
--+fi
--+
--+exit 0
--diff --git a/configure.ac b/configure.ac
--index 5493c9c7ccdf..9bf62a5c6409 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -76,6 +76,8 @@ AC_CHECK_FUNCS([ \
-- 	strtoul \
-- ])
-- 
--+AM_CONDITIONAL(HAVE_FORK, test "$ac_cv_func_fork_works" = "yes")
--+
-- # glibc versions before 2.17 needs to link with -lrt for clock_nanosleep
-- AC_SEARCH_LIBS([clock_nanosleep], [rt])
-- 
--diff --git a/fork_test.c b/fork_test.c
--new file mode 100644
--index 000000000000..036692392483
----- /dev/null
--+++ b/fork_test.c
--@@ -0,0 +1,27 @@
--+/* SPDX-License-Identifier: GPL-2.0-only */
--+/*
--+ * Copyright (C) 2023 Dario Binacchi <dario.binacchi@amarulasolutions.com>
--+ *
--+ * This program is free software; you can redistribute it and/or modify
--+ * it under the terms of the version 2 of the GNU General Public License
--+ * as published by the Free Software Foundation
--+ *
--+ * This program is distributed in the hope that it will be useful,
--+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
--+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
--+ * GNU General Public License for more details.
--+ *
--+ * You should have received a copy of the GNU General Public License
--+ * along with this program; if not, see <http://www.gnu.org/licenses/>.
--+ */
--+
--+#include <stdio.h>
--+#include <sys/types.h>
--+#include <unistd.h>
--+
--+int main(int argc, char **argv)
--+{
--+	fork();
--+
--+	return 0;
--+}
---- 
--2.32.0
--
-diff --git a/package/can-utils/0001-Include-time.h-for-timespec-struct-definition.patch b/package/can-utils/0001-Include-time.h-for-timespec-struct-definition.patch
+diff --git a/package/qt6/qt6base/0001-fix-qmake-wrappers-for-recursive-qmake.patch b/package/qt6/qt6base/0001-fix-qmake-wrappers-for-recursive-qmake.patch
 new file mode 100644
-index 0000000000..ca7f658553
+index 000000000000..9d6abee4d2ea
 --- /dev/null
-+++ b/package/can-utils/0001-Include-time.h-for-timespec-struct-definition.patch
-@@ -0,0 +1,28 @@
-+From 2b8c7c5f4b71726806de0d718c4c56eeba2c7332 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Thu, 13 Feb 2025 22:14:47 -0800
-+Subject: [PATCH] Include time.h for timespec struct definition
-+
-+Fixes
-+git/isobusfs/../libj1939.h:33:18: error: field has incomplete type 'struct timespec'
-+   33 |         struct timespec next_send_time;
-+      |                         ^
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-+Upstream: https://github.com/linux-can/can-utils/commit/2b8c7c5f4b71726806de0d718c4c56eeba2c7332
-+---
-+ libj1939.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libj1939.h b/libj1939.h
-+index 44393a2a..7c19f43e 100644
-+--- a/libj1939.h
-++++ b/libj1939.h
-+@@ -17,6 +17,7 @@
-+ #include <linux/can/j1939.h>
-+ #include <stdbool.h>
-+ #include <stdint.h>
-++#include <time.h>
-+ #include <sys/socket.h>
++++ b/package/qt6/qt6base/0001-fix-qmake-wrappers-for-recursive-qmake.patch
+@@ -0,0 +1,15 @@
++--- qt6base-6.4.3/bin/qmake-and-qtpaths-wrapper.in.old	2025-03-05 09:01:11.723198499 +0100
+++++ qt6base-6.4.3/bin/qmake-and-qtpaths-wrapper.in	2025-03-05 09:07:14.618403895 +0100
++@@ -1,7 +1,10 @@
++-#!/bin/sh
+++#!/bin/bash
 + 
-+ #ifndef J1939_LIB_H
-diff --git a/package/can-utils/0002-CMakeLists.txt-add-an-option-to-control-shared-libra.patch b/package/can-utils/0002-CMakeLists.txt-add-an-option-to-control-shared-libra.patch
++ # The directory of this script is the expanded absolute path of the "$qt_prefix/bin" directory.
++ script_dir_path=`dirname $0`
++ script_dir_path=`(cd "$script_dir_path"; /bin/pwd)`
++ 
++-@host_qt_bindir@/@tool_name@@tool_version@ -qtconf "$script_dir_path/target_qt.conf" $*
+++# bash exec -a permits to change the $0 argument of the executed program
+++# like that, the qmake will think it has been called as this wrapper.
+++# The goal is to use also this wrapper when qmake calls itself.
+++exec -a $0 @host_qt_bindir@/@tool_name@@tool_version@ -qtconf "$script_dir_path/target_qt.conf" $*
+diff --git a/package/qt6/qt6base/qmake.conf.in b/package/qt6/qt6base/qmake.conf.in
 new file mode 100644
-index 0000000000..390ffa50e6
+index 000000000000..b62a671c35a8
 --- /dev/null
-+++ b/package/can-utils/0002-CMakeLists.txt-add-an-option-to-control-shared-libra.patch
-@@ -0,0 +1,37 @@
-+From 59716ea66203b4d5f70dd0e41fe6f9661f8ad686 Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Wed, 12 Mar 2025 10:27:48 +0100
-+Subject: [PATCH] CMakeLists.txt: add an option to control shared library
-+ creation
++++ b/package/qt6/qt6base/qmake.conf.in
+@@ -0,0 +1,34 @@
++# Qt6 has a mechanism to support "device" profiles, so that people can
++# specify the compiler, compiler flags and so on for a specific device.
 +
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-+Upstream: Backported from https://github.com/linux-can/can-utils/commit/a904183b4e65a6d982db3d12ad9d0a9a883edc1d
-+---
-+ CMakeLists.txt | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
++# We leverage this mechanism in the Buildroot packaging of qt6 to
++# simplify cross-compilation: we have our own "device" definition, which
++# allows us to easily pass the cross-compiler paths and flags from our
++# qt6.mk.
 +
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 01f90f9..318a236 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -14,6 +14,7 @@ endif()
-+ 
-+ # Add an option to enable treating warnings as errors
-+ option(ENABLE_WERROR "Treat all compiler warnings as errors" OFF)
-++option(BUILD_SHARED_LIBS "Build shared libraries" ON)
-+ 
-+ if(ENABLE_WERROR)
-+   add_compile_options(-Werror)
-+@@ -114,7 +115,7 @@ if(NOT ANDROID)
-+     PRIVATE can
-+   )
-+ 
-+-  add_library(isobusfs SHARED
-++  add_library(isobusfs
-+     isobusfs/isobusfs_cmn.c
-+     isobusfs/isobusfs_cmn_dh.c
-+   )
-+-- 
-+2.43.0
++CROSS_COMPILE = @CROSS_COMPILE@
 +
-diff --git a/package/can-utils/0002-j1939acd-remove-legacy-poption-prefix-to-use-when-logging.patch b/package/can-utils/0002-j1939acd-remove-legacy-poption-prefix-to-use-when-logging.patch
-deleted file mode 100644
-index 36c96d59e4..0000000000
---- a/package/can-utils/0002-j1939acd-remove-legacy-poption-prefix-to-use-when-logging.patch
-+++ /dev/null
-@@ -1,79 +0,0 @@
--From d337863d9189501dbbb15467cc3dcba85946a2a3 Mon Sep 17 00:00:00 2001
--From: Peter Seiderer <ps.report@gmx.net>
--Date: Mon, 22 Jul 2024 16:12:04 +0200
--Subject: [PATCH] j1939acd: remove legacy '-p' option (prefix to use when
-- logging)
--
--- remove legacy '-p' option (prefix to use when logging), fixes uclibc
--  compile
--
--Fixes:
--
--  j1939acd.c: In function 'main':
--  j1939acd.c:489:38: error: passing argument 1 of 'asprintf' from incompatible pointer type [-Wincompatible-pointer-types]
--    489 |                         if (asprintf(&program_invocation_name, "%s.%s",
--        |                                      ^~~~~~~~~~~~~~~~~~~~~~~~
--        |                                      |
--        |                                      const char **
--
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
--Upstream: https://github.com/linux-can/can-utils/commit/d337863d9189501dbbb15467cc3dcba85946a2a3
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- j1939acd.c | 16 +---------------
-- 1 file changed, 1 insertion(+), 15 deletions(-)
--
--diff --git a/j1939acd.c b/j1939acd.c
--index 44bb826c..ae4e58ac 100644
----- a/j1939acd.c
--+++ b/j1939acd.c
--@@ -38,7 +38,6 @@ static const char help_msg[] =
-- 	"			e.g. 80,50-100,200-210 (defaults to 0-253)" "\n"
-- 	"  -c, --cache=FILE	Cache file to save/restore the source address" "\n"
-- 	"  -a, --address=ADDRESS	Start with Source Address ADDRESS" "\n"
---	"  -p, --prefix=STR	Prefix to use when logging" "\n"
-- 	"\n"
-- 	"NAME is the 64bit nodename" "\n"
-- 	"\n"
--@@ -54,14 +53,13 @@ static struct option long_opts[] = {
-- 	{ "range", required_argument, NULL, 'r', },
-- 	{ "cache", required_argument, NULL, 'c', },
-- 	{ "address", required_argument, NULL, 'a', },
---	{ "prefix", required_argument, NULL, 'p', },
-- 	{ },
-- };
-- #else
-- #define getopt_long(argc, argv, optstring, longopts, longindex) \
-- 	getopt((argc), (argv), (optstring))
-- #endif
---static const char optstring[] = "vr:c:a:p:?";
--+static const char optstring[] = "vr:c:a:?";
-- 
-- /* byte swap functions */
-- static inline int host_is_little_endian(void)
--@@ -466,9 +464,6 @@ int main(int argc, char *argv[])
-- 	struct sockaddr_can saddr;
-- 	uint64_t cmd_name;
-- 
---#ifdef _GNU_SOURCE
---	program_invocation_name = program_invocation_short_name;
---#endif
-- 	/* argument parsing */
-- 	while ((opt = getopt_long(argc, argv, optstring, long_opts, NULL)) != -1)
-- 		switch (opt) {
--@@ -484,15 +479,6 @@ int main(int argc, char *argv[])
-- 		case 'a':
-- 			s.current_sa = strtoul(optarg, 0, 0);
-- 			break;
---		case 'p':
---#ifdef _GNU_SOURCE
---			if (asprintf(&program_invocation_name, "%s.%s",
---				     program_invocation_short_name, optarg) < 0)
---				err(1, "asprintf(program invocation name)");
---#else
---			err(0, "compile with -D_GNU_SOURCE to use -p");
---#endif
---			break;
-- 		default:
-- 			fputs(help_msg, stderr);
-- 			exit(1);
-diff --git a/package/can-utils/can-utils.hash b/package/can-utils/can-utils.hash
-index e539e05b45..1112e47448 100644
---- a/package/can-utils/can-utils.hash
-+++ b/package/can-utils/can-utils.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  2790dfb57fe3ec22b6fd512838c6480c39f7c9ae193e59f1ae01221216505a7e  can-utils-2023.03.tar.gz
-+sha256  88b30feace372c4a61e6adb2534791c0cfba6123ebcca7f59bbb76580d4a6915  can-utils-2025.01.tar.gz
- sha256  c3dc748f5e725cf5ed89784fe78e4ff1b05d309bf1e7ade4c572e8fde1b8406c  LICENSES/BSD-3-Clause
- sha256  995a31f60a9ddb4c609214cc7d17ca94cc3cbc7f37e1e64dba81e7f8ea9d4f91  LICENSES/GPL-2.0-only.txt
-diff --git a/package/can-utils/can-utils.mk b/package/can-utils/can-utils.mk
-index 462e123c6d..fc5170ed9d 100644
---- a/package/can-utils/can-utils.mk
-+++ b/package/can-utils/can-utils.mk
-@@ -4,10 +4,9 @@
- #
- ################################################################################
++include(../common/linux_device_pre.conf)
++
++# modifications to gcc-base.conf
++QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
++QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
++# Remove all optimisation flags, we really only want our own.
++QMAKE_CFLAGS_OPTIMIZE       =
++QMAKE_CFLAGS_OPTIMIZE_DEBUG =
++QMAKE_CFLAGS_OPTIMIZE_FULL  =
++QMAKE_CFLAGS_OPTIMIZE_SIZE  =
++QMAKE_CFLAGS_DEBUG =
++QMAKE_CXXFLAGS_DEBUG =
++QMAKE_CFLAGS_RELEASE =
++QMAKE_CXXFLAGS_RELEASE =
++CONFIG                 += nostrip
++
++QMAKE_LIBS             += -lrt -lpthread -ldl
++QMAKE_CFLAGS_ISYSTEM   =
++
++# Architecture specific configuration
++include(arch.conf)
++
++include(../common/linux_device_post.conf)
++load(qt_config)
+diff --git a/package/qt6/qt6base/qplatformdefs.h b/package/qt6/qt6base/qplatformdefs.h
+new file mode 100644
+index 000000000000..99e9a2792329
+--- /dev/null
++++ b/package/qt6/qt6base/qplatformdefs.h
+@@ -0,0 +1 @@
++#include "../../linux-g++/qplatformdefs.h"
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index a4c56da6018d..af099e398f90 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -78,6 +78,48 @@ QT6BASE_CONF_OPTS += \
+ 	-DFEATURE_avx512vl=OFF \
+ 	-DFEATURE_vaes=OFF
  
--CAN_UTILS_VERSION = 2023.03
-+CAN_UTILS_VERSION = 2025.01
- CAN_UTILS_SITE = $(call github,linux-can,can-utils,v$(CAN_UTILS_VERSION))
- CAN_UTILS_LICENSE = BSD-3-Clause or GPL-2.0
- CAN_UTILS_LICENSE_FILES = LICENSES/BSD-3-Clause LICENSES/GPL-2.0-only.txt
--CAN_UTILS_AUTORECONF = YES
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++define QT6BASE_MKSPEC_ARCH_CONFIG
++# Qt 6 needs atomics, which on various architectures are in -latomic
++	printf '!host_build { \n LIBS += -latomic\n }' > \
++		$(STAGING_DIR)/usr/mkspecs/devices/linux-buildroot-g++/arch.conf
++endef
++endif
++
++define QT6BASE_INSTALL_MKSPEC
++	mkdir -p $(STAGING_DIR)/usr/mkspecs/devices/linux-buildroot-g++
++	$(INSTALL) -m 0644 $(QT6BASE_PKGDIR)/qplatformdefs.h \
++		$(STAGING_DIR)/usr/mkspecs/devices/linux-buildroot-g++/
++	sed 's%@CROSS_COMPILE@%$(TARGET_CROSS)%' \
++		< $(QT6BASE_PKGDIR)/qmake.conf.in \
++		> $(STAGING_DIR)/usr/mkspecs/devices/linux-buildroot-g++/qmake.conf
++	touch $(STAGING_DIR)/usr/mkspecs/devices/linux-buildroot-g++/arch.conf
++	$(QT6BASE_MKSPEC_ARCH_CONFIG)
++endef
++
++# Install the target_qt.conf needed for cross-qmake
++define QT6BASE_INSTALL_TARGET_QT_CONF
++	sed 's%@HOST_DIR@%$(HOST_DIR)%; s%@SYSROOT@%$(STAGING_DIR)%' \
++		< $(QT6BASE_PKGDIR)/target_qt.conf.in \
++		> $(HOST_DIR)/usr/bin/target_qt.conf
++endef
++
++# Create the cross-qmake from the wrapper script in sysroot.
++# This time, we add QMAKEPATH, so that it finds specs and modules
++# installed for the target
++define QT6BASE_INSTALL_CROSS_QMAKE
++	$(INSTALL) -m 0755 $(STAGING_DIR)/usr/bin/qmake \
++		$(TARGET_CROSS)qmake
++	sed -i '1a\
++export QMAKEPATH=$(STAGING_DIR)/usr' \
++		$(TARGET_CROSS)qmake
++endef
++
++QT6BASE_POST_INSTALL_STAGING_HOOKS += \
++	QT6BASE_INSTALL_MKSPEC \
++	QT6BASE_INSTALL_TARGET_QT_CONF \
++	QT6BASE_INSTALL_CROSS_QMAKE
++
+ HOST_QT6BASE_DEPENDENCIES = \
+ 	host-double-conversion \
+ 	host-libb2 \
+diff --git a/package/qt6/qt6base/target_qt.conf.in b/package/qt6/qt6base/target_qt.conf.in
+new file mode 100644
+index 000000000000..5702970c47f6
+--- /dev/null
++++ b/package/qt6/qt6base/target_qt.conf.in
+@@ -0,0 +1,11 @@
++[Paths]
++Prefix=/usr
++HostPrefix=@HOST_DIR@
++HostBinaries=bin
++HostLibraries=lib
++HostLibraryExecutables=libexec
++HostData=.
++Sysroot=@SYSROOT@
++SysrootifyPrefix=true
++TargetSpec=devices/linux-buildroot-g++
++HostSpec=
 -- 
-2.43.0
+2.47.2
 
 _______________________________________________
 buildroot mailing list
