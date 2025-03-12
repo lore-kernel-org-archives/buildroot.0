@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16226C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:40:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71AD7C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:40:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FB598210E;
-	Mon, 19 May 2025 10:40:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4448282068;
+	Mon, 19 May 2025 10:40:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oLa5fo5itwux; Mon, 19 May 2025 10:40:27 +0000 (UTC)
+ id lQAEJlVXSiSw; Mon, 19 May 2025 10:40:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82D8481F80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 561C782110
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 82D8481F80;
-	Mon, 19 May 2025 10:40:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B15F1BF
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 561C782110;
+	Mon, 19 May 2025 10:40:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0ED0CD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B0F668145E
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5810F40D88
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q69WaRhgsX6k for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HhHZmuEnbvft for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF42B81E7E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E59E40D52
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CF42B81E7E
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E59E40D52
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD6A18725C; Mon, 19 May 2025 10:39:44 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 2CFBA8725C; Mon, 19 May 2025 10:39:42 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 24 Mar 2025 21:39:17 +0100
+Date: Wed, 12 Mar 2025 20:00:18 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e287bc7f44df312ace41f53416e763abe35aeaf7
-X-Git-Newrev: b111e07fd5ac90e3403fc2f7a4944bffbb5a518f
+X-Git-Oldrev: 3e88ba41a9b1ab610f07eaa62132036e46ac9bd9
+X-Git-Newrev: a199751e5bbfede9e9879d4bfb0bec7c9f4aa871
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103944.CD6A18725C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] docs/website: add current LTS
- sponsors
+Message-Id: <20250519103942.2CFBA8725C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/webkitgtk: bump to
+ 2.46.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,127 +65,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b111e07fd5ac90e3403fc2f7a4944bffbb5a518f
+commit: https://git.buildroot.net/buildroot/commit/?id=a199751e5bbfede9e9879d4bfb0bec7c9f4aa871
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add the LTS sponsors who engaged already for 2025: EVS, Open Home
-Foundation, and Sense Labs. There is one more sponsor but they prefer to
-remain anonymous.
+Stable release to the 2.46 series.
 
-For Open Home Foundation, we can reuse the existing logo. For the other
-two, add their logo.
+Release notes:
 
-Add a new class panel-lts-sponsor for sizing the panels. It is different
-from panel-sponsor because there doesn't need to be space for an
-explanation of what type of sponsorship is done, we just need to have
-space for the company name. So the minimum height is 200px instead of
-350px.
+  https://webkitgtk.org/2024/09/17/webkitgtk2.46.0-released.html
+  https://webkitgtk.org/2024/09/30/webkitgtk2.46.1-released.html
+  https://webkitgtk.org/2024/10/21/webkitgtk2.46.2-released.html
+  https://webkitgtk.org/2024/10/30/webkitgtk2.46.3-released.html
+  https://webkitgtk.org/2024/11/27/webkitgtk2.46.4-released.html
 
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Added BR2_PACKAGE_WEBP_MUX to fix this error:
+
+-- The following WebP libraries were not found:
+--  mux (required)
+
+Added USE_SYSTEM_SYSPROF_CAPTURE=OFF to fix this error:
+
+-- Checking for module 'sysprof-capture-4'
+--   Package 'sysprof-capture-4', required by 'virtual:world', not found
+-- Could NOT find SysProfCapture (missing: SysProfCapture_LIBRARY SysProfCapture_INCLUDE_DIR)
+
+For now, use USE_SKIA=OFF which is the replacement for cairo.
+
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/css/main.css          |   6 ++++
- docs/website/images/evs-logo.png   | Bin 0 -> 16552 bytes
- docs/website/images/sense-logo.png | Bin 0 -> 2616 bytes
- docs/website/sponsors.html         |  59 ++++++++++++++++++++++++++++++++++---
- 4 files changed, 61 insertions(+), 4 deletions(-)
+ package/webkitgtk/Config.in      | 1 +
+ package/webkitgtk/webkitgtk.hash | 6 +++---
+ package/webkitgtk/webkitgtk.mk   | 4 +++-
+ 3 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/docs/website/css/main.css b/docs/website/css/main.css
-index 5255531b30..81bcd2c4b6 100644
---- a/docs/website/css/main.css
-+++ b/docs/website/css/main.css
-@@ -168,6 +168,12 @@ i {
- 	text-justify: inter-word;
- }
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index dca62cf0f8..3594299314 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -53,6 +53,7 @@ config BR2_PACKAGE_WEBKITGTK
+ 	select BR2_PACKAGE_SQLITE
+ 	select BR2_PACKAGE_WEBP
+ 	select BR2_PACKAGE_WEBP_DEMUX
++	select BR2_PACKAGE_WEBP_MUX
+ 	select BR2_PACKAGE_WOFF2
+ 	select BR2_PACKAGE_XLIB_LIBXCOMPOSITE if BR2_PACKAGE_LIBGTK3_X11
+ 	select BR2_PACKAGE_XLIB_LIBXDAMAGE if BR2_PACKAGE_LIBGTK3_X11
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 49f758d6a8..96100d4c7c 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,6 +1,6 @@
+-# From https://www.webkitgtk.org/releases/webkitgtk-2.44.4.tar.xz.sums
+-sha1  3699ff9c9b84e755a0736e72dfd6e5a13151f7d6  webkitgtk-2.44.4.tar.xz
+-sha256  2ce4ec1b78413035037aba8326b31ed72696626b7bea7bace5e46ac0d8cbe796  webkitgtk-2.44.4.tar.xz
++# From https://www.webkitgtk.org/releases/webkitgtk-2.46.4.tar.xz.sums
++sha1  10d4dbd222acec30b1d20ee3b7d02c0d9727c5a9  webkitgtk-2.46.4.tar.xz
++sha256  0eff5f0ab0a2872ec87df62bc32e3289c8af625716ac71e94b298d74e0374176  webkitgtk-2.46.4.tar.xz
  
-+.panel-lts-sponsor {
-+	min-height: 200px;
-+	text-align: justify;
-+	text-justify: inter-word;
-+}
-+
- @media (min-width: 768px) and (max-width: 991px) {
- 	.navbar-collapse.collapse {
- 		display: none !important;
-diff --git a/docs/website/images/evs-logo.png b/docs/website/images/evs-logo.png
-new file mode 100644
-index 0000000000..bcaabe8cb5
-Binary files /dev/null and b/docs/website/images/evs-logo.png differ
-diff --git a/docs/website/images/sense-logo.png b/docs/website/images/sense-logo.png
-new file mode 100644
-index 0000000000..d4cab95b82
-Binary files /dev/null and b/docs/website/images/sense-logo.png differ
-diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
-index e5fdbc8c88..ba11b4b081 100644
---- a/docs/website/sponsors.html
-+++ b/docs/website/sponsors.html
-@@ -9,11 +9,62 @@
-     <div class="panel-body">
-       <p>The maintenance of the Long Term Support branch of Buildroot is
-          possible thanks to the sponsors of the
--         <a href="https://mind.be/buildroot-lts">Buildroot LTS Sponsoring
-+         <a href="https://mind.be/buildroot-lts">Buildroot LTS Sponsorship
-          Program</a>.</p>
--      <p>When the Buildroot LTS Sponsoring program will be operational
--         later in 2024, those sponsors will be mentioned here.</p>
--      </div>
-+    </div>
-+    <div class="panel-body">
-+      <h3>Gold Sponsors</h3>
-+
-+	<div class="col-sm-4">
-+	  <div class="panel panel-default panel-lts-sponsor">
-+	    <div class="panel-body">
-+	      <div class="col-sm-12" style="height: 150px;">
-+		<a href="https://evs.com">
-+		  <img class="img-responsive center-block" src="images/evs-logo.png"/>
-+		</a>
-+	      </div>
-+	      <div class="col-sm-12">
-+		<a href="http://evs.com">EVS Broadcast Equipment</a>
-+	      </div>
-+	    </div>
-+	  </div>
-+	</div>
-+	<div class="col-sm-4">
-+	  <div class="panel panel-default panel-lts-sponsor">
-+	    <div class="panel-body">
-+	      <div class="col-sm-12" style="height: 150px;">
-+		<a href="https://www.openhomefoundation.org/">
-+		  <img class="img-responsive center-block" src="images/openhomefoundation-logo.png"/>
-+		</a>
-+	      </div>
-+	      <div class="col-sm-12">
-+		<a href="https://www.openhomefoundation.org">Open Home
-+		Foundation</a>
-+	    </div>
-+	  </div>
-+	</div>
-+    </div>
-+
-+    </div>
-+    <div class="panel-body">
-+      <h3>Bronze Sponsors</h3>
-+
-+	<div class="col-sm-4">
-+	  <div class="panel panel-default panel-lts-sponsor">
-+	    <div class="panel-body">
-+	      <div class="col-sm-12" style="height: 150px;">
-+		<a href="https://www.sense.com">
-+		  <img class="img-responsive center-block" style="width: 100%;" src="images/sense-logo.png"/>
-+		</a>
-+	      </div>
-+	      <div class="col-sm-12">
-+		<a href="https://www.sense.com">Sense Labs</a>
-+	      </div>
-+	    </div>
-+	  </div>
-+	</div>
-+
-+    </div>
-     </div>
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 49a532d9aa..ec63d093b7 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     <div class="panel panel-primary">
+-WEBKITGTK_VERSION = 2.44.4
++WEBKITGTK_VERSION = 2.46.4
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
+@@ -30,6 +30,8 @@ WEBKITGTK_CONF_OPTS = \
+ 	-DUSE_AVIF=OFF \
+ 	-DUSE_GTK4=OFF \
+ 	-DUSE_LIBHYPHEN=OFF \
++	-DUSE_SKIA=OFF \
++	-DUSE_SYSTEM_SYSPROF_CAPTURE=OFF \
+ 	-DUSE_WOFF2=ON
+ 
+ ifeq ($(BR2_PACKAGE_WEBKITGTK_SANDBOX),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
