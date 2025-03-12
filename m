@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABA49C28B28
-	for <buildroot@archiver.kernel.org>; Wed, 12 Mar 2025 18:55:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E6CEC28B28
+	for <buildroot@archiver.kernel.org>; Wed, 12 Mar 2025 18:55:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 645C1605F4;
-	Wed, 12 Mar 2025 18:55:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F0DDA41262;
+	Wed, 12 Mar 2025 18:55:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CRDP1Opdt9wn; Wed, 12 Mar 2025 18:55:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XapJf7FFQZ7D; Wed, 12 Mar 2025 18:55:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C222606EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEAAD41267
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C222606EA;
-	Wed, 12 Mar 2025 18:55:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7C4571DB
- for <buildroot@buildroot.org>; Wed, 12 Mar 2025 18:55:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEAAD41267;
+	Wed, 12 Mar 2025 18:55:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DA6C1DB
+ for <buildroot@buildroot.org>; Wed, 12 Mar 2025 18:55:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B96A811B5
- for <buildroot@buildroot.org>; Wed, 12 Mar 2025 18:55:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E5525811B5
+ for <buildroot@buildroot.org>; Wed, 12 Mar 2025 18:55:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O6j85kt7qjYN for <buildroot@buildroot.org>;
- Wed, 12 Mar 2025 18:55:42 +0000 (UTC)
+ id z7WIdjiGNtCC for <buildroot@buildroot.org>;
+ Wed, 12 Mar 2025 18:55:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A75180E6D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 181E3811B8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A75180E6D
- for <buildroot@buildroot.org>; Wed, 12 Mar 2025 18:55:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 181E3811B8
+ for <buildroot@buildroot.org>; Wed, 12 Mar 2025 18:55:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 65EC487EA3; Wed, 12 Mar 2025 18:55:42 +0000 (UTC)
+ id 0832287EA3; Wed, 12 Mar 2025 18:55:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 12 Mar 2025 19:54:33 +0100
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 71ba7404535cb3a917da14c75e9c86f4cf885045
-X-Git-Newrev: fa7d35db4c0f05344f23e0ed0b80ff974c071bef
+Date: Wed, 12 Mar 2025 19:55:23 +0100
+X-Git-Refname: refs/heads/2024.11.x
+X-Git-Oldrev: 197a1bd331390fbe5765b400baff1fb8d5e9371e
+X-Git-Newrev: 155038635faf13385fbd34fed71285d61fd00b0c
 X-Patchwork-Hint: ignore
-Message-Id: <20250312185542.65EC487EA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/postgresql: bump
+Message-Id: <20250312185548.0832287EA3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/postgresql: bump
  version to 16.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa7d35db4c0f05344f23e0ed0b80ff974c071bef
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=155038635faf13385fbd34fed71285d61fd00b0c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
 Release notes:
 https://www.postgresql.org/docs/release/16.8/
