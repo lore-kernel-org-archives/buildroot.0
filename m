@@ -4,64 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A25EDC35FF1
-	for <buildroot@archiver.kernel.org>; Thu, 13 Mar 2025 20:45:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28E0FC282DE
+	for <buildroot@archiver.kernel.org>; Thu, 13 Mar 2025 20:47:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47A7F40486;
-	Thu, 13 Mar 2025 20:45:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1272405A3;
+	Thu, 13 Mar 2025 20:47:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bLwIzXIbuslt; Thu, 13 Mar 2025 20:45:37 +0000 (UTC)
+ id cR1nSJ9TLPGi; Thu, 13 Mar 2025 20:47:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 504D9405A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2F35413E6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 504D9405A3;
-	Thu, 13 Mar 2025 20:45:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E094EA
- for <buildroot@buildroot.org>; Thu, 13 Mar 2025 20:45:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2F35413E6;
+	Thu, 13 Mar 2025 20:47:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2FFCBEA
+ for <buildroot@buildroot.org>; Thu, 13 Mar 2025 20:47:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 11E5B401D8
- for <buildroot@buildroot.org>; Thu, 13 Mar 2025 20:45:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 13F1883F20
+ for <buildroot@buildroot.org>; Thu, 13 Mar 2025 20:47:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gp_0wfsyz5_k for <buildroot@buildroot.org>;
- Thu, 13 Mar 2025 20:45:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 93AIv7DqSJSB for <buildroot@buildroot.org>;
+ Thu, 13 Mar 2025 20:47:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 25507401A2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25507401A2
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 25507401A2
- for <buildroot@buildroot.org>; Thu, 13 Mar 2025 20:45:34 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C15794340C;
- Thu, 13 Mar 2025 20:45:31 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tspQo-00ETPJ-1w;
- Thu, 13 Mar 2025 21:45:30 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DF8983F22
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2DF8983F22
+ for <buildroot@buildroot.org>; Thu, 13 Mar 2025 20:47:03 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 27C6987FAA; Thu, 13 Mar 2025 20:47:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Andreas Naumann <anaumann@ultratronik.de>
-Cc: buildroot@buildroot.org
-References: <20250226105313.25330-1-anaumann@ultratronik.de>
- <87frk0srbv.fsf@dell.be.48ers.dk>
-Date: Thu, 13 Mar 2025 21:45:30 +0100
-In-Reply-To: <87frk0srbv.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Wed, 26 Feb 2025 15:39:32 +0100")
-Message-ID: <87tt7w64np.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvdekleehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnheptefgleevffevhedtveegfeejieduudeltdffheeggfelkeetkeetuddthfelieeunecukfhppedujeekrdduudelrddurddufeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudejkedrudduledruddrudefjedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheprghnrghumhgrnhhnsehulhhtrhgrthhrohhnihhkrdguvgdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] DEVELOPERS: update email address
+To: buildroot@buildroot.org
+Date: Thu, 13 Mar 2025 21:19:46 +0100
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 3d6e2e41114d4ce0d1a44dad18a7f609eb4e778c
+X-Git-Newrev: d976cec1be8ed1b97b8141bd000aec66ae9dc58f
+X-Patchwork-Hint: ignore
+Message-Id: <20250313204703.27C6987FAA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/foot: support
+ soft-float architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -73,23 +59,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d976cec1be8ed1b97b8141bd000aec66ae9dc58f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
->>>>> "Andreas" == Andreas Naumann <anaumann@ultratronik.de> writes:
- >> Update my email address in the DEVELOPERS file.
- >> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+Architecture using soft float don't support the math FE_* exceptions.
+This commit adds a patch to conditionnally build the FE_* exception
+handling.
 
- > Committed, thanks.
+Fixes:
+    https://autobuild.buildroot.org/results/88d/88d764dd12bdbdbe633ebc703c461ebe95b75693/
 
-Committed to 2024.02.x and 2024.11.x, thanks.
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit ac83fdcb29f64af79839bb8efffbaae71f0cc3cc)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...wings-handle-architecture-with-soft-float.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/foot/0001-box-drawings-handle-architecture-with-soft-float.patch b/package/foot/0001-box-drawings-handle-architecture-with-soft-float.patch
+new file mode 100644
+index 0000000000..1120fa44c1
+--- /dev/null
++++ b/package/foot/0001-box-drawings-handle-architecture-with-soft-float.patch
+@@ -0,0 +1,42 @@
++From 9443ac7e2937bb4f26cf44c73bb8150860c5df45 Mon Sep 17 00:00:00 2001
++From: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
++Date: Tue, 4 Feb 2025 09:48:13 +0100
++Subject: [PATCH] box-drawings: handle architecture with soft-float
++
++Currently, architecture using soft-floats doesn't support instructions
++FE_INVALID, FE_DIVBYZERO, FE_OVERFLOW and FE_UNDERFLOW and so building
++on those architectures results with a build error.
++As the sqrt math function should set errno to EDOM if an error occurs,
++fetestexcept shouldn't be mandatory.
++
++This commit removes the float environment error handling.
++
++Upstream: https://codeberg.org/dnkl/foot/commit/9443ac7e2937bb4f26cf44c73bb8150860c5df45
++Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
++---
++ box-drawing.c | 4 +---
++ 1 file changed, 1 insertion(+), 3 deletions(-)
++
++diff --git a/box-drawing.c b/box-drawing.c
++index 1c613051..421ff54d 100644
++--- a/box-drawing.c
+++++ b/box-drawing.c
++@@ -1462,14 +1462,12 @@ draw_box_drawings_light_arc(struct buf *buf, char32_t wc)
++      */
++     for (double i = y_min*16; i <= y_max*16; i++) {
++         errno = 0;
++-        feclearexcept(FE_ALL_EXCEPT);
++ 
++         double y = i / 16.;
++         double x = circle_hemisphere * sqrt(c_r2 - (y - c_y) * (y - c_y)) + c_x;
++ 
++         /* See math_error(7) */
++-        if (errno != 0 ||
++-            fetestexcept(FE_INVALID | FE_DIVBYZERO | FE_OVERFLOW | FE_UNDERFLOW))
+++        if (errno != 0)
++         {
++             continue;
++         }
++-- 
++2.48.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
