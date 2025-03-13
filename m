@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8080C3DA6D
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68A27C2D0CD
 	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 998FF6108A;
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0BB1941273;
 	Mon, 19 May 2025 10:42:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qc8BNWu56GMF; Mon, 19 May 2025 10:42:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mEUEsL6giO4p; Mon, 19 May 2025 10:42:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FBDA60F3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E779B4252C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9FBDA60F3B;
-	Mon, 19 May 2025 10:42:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 40213D4
+	by smtp4.osuosl.org (Postfix) with ESMTP id E779B4252C;
+	Mon, 19 May 2025 10:42:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E625D4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5FCA54105B
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4408740E19
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b8FTntuz-r9Z for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JzzzXZOQp4bM for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DB794100D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77B9440D59
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9DB794100D
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 77B9440D59
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 99809872E7; Mon, 19 May 2025 10:39:45 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 717A384AD1; Mon, 19 May 2025 10:39:42 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Mar 2025 19:39:45 +0100
+Date: Thu, 13 Mar 2025 11:40:10 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f8bc27111531e9607f79121414f61c0c2d5f83c0
-X-Git-Newrev: 65be2c6ac07b2b4a94ccc2199521a0541094e73c
+X-Git-Oldrev: 53f74f49c039a41c97875b3e6fe871b8e82a013b
+X-Git-Newrev: 873407b46c2b6b9e154be97bfdec61c9c8349229
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103945.99809872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/xserver_xorg-server:
- security bump to version 21.1.16
+Message-Id: <20250519103942.717A384AD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] docs/website/news.html: refer
+ to gitlab bug tracker
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,186 +65,1605 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65be2c6ac07b2b4a94ccc2199521a0541094e73c
+commit: https://git.buildroot.net/buildroot/commit/?id=873407b46c2b6b9e154be97bfdec61c9c8349229
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-21.1.14 fixes the following security issues:
-
-1) CVE-2024-9632: Heap-based buffer overflow privilege escalation in
-_XkbSetCompatMap
-
-Introduced in: xorg-server-1.1.1 (2006)
-Fixed in: xorg-server-21.1.14 and xwayland-24.1.4
-Fix:
-https://gitlab.freedesktop.org/xorg/xserver/-/commit/85b776571487f52e756f68a069c768757369bfe3
-Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
-
-The _XkbSetCompatMap() function attempts to resize the `sym_interpret`
-buffer.
-
-However, It didn't update its size properly. It updated `num_si` only,
-without updating `size_si`.
-
-This may lead to local privilege escalation if the server is run as root
-or remote code execution (e.g. x11 over ssh).
-
-xorg-server-21.1.14 and xwayland-24.1.4 have been patched to fix this issue.
-
-https://lists.x.org/archives/xorg-announce/2024-October/003545.html
-https://lists.x.org/archives/xorg-announce/2024-October/003546.html
-
-21.1.16 fixes the following security issues:
-
-1) CVE-2025-26594: Use-after-free of the root cursor
-
-Introduced in: Unknown - Prior to X11R6.6 Xorg baseline
-Fixed in: xorg-server-21.1.16 and xwayland-24.1.6
-Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/01642f26
-      https://gitlab.freedesktop.org/xorg/xserver/-/commit/b0a09ba6
-Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
-
-The root cursor is referenced in the xserver as a global variable. If
-a client manages to free the root cursor, the internal reference points
-to freed memory and causes a use-after-free.
-
-xorg-server-21.1.16 and xwayland-24.1.6 have been patched to fix this issue.
-
-2) CVE-2025-26595: Buffer overflow in XkbVModMaskText()
-
-Introduced in: Prior to X11R6.1
-Fixed in: xorg-server-21.1.16 and xwayland-24.1.6
-Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/11fcda87
-Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
-
-The code in XkbVModMaskText() allocates a fixed sized buffer on the
-stack and copies the names of the virtual modifiers to that buffer.
-
-The code however fails to check the bounds of the buffer correctly and
-would copy the data regardless of the size, which may lead to a buffer
-overflow.
-
-xorg-server-21.1.16 and xwayland-24.1.6 have been patched to fix this issue.
-
-3) CVE-2025-26596: Heap overflow in XkbWriteKeySyms()
-
-Introduced in: initial version of xc/programs/Xserver/xkb/xkb.c in X11R6
-Fixed in: xorg-server-21.1.16 and xwayland-24.1.6
-Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/80d69f01
-Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
-
-The computation of the length in XkbSizeKeySyms() differs from what is
-actually written in XkbWriteKeySyms(), which may lead to a heap based
-buffer overflow.
-
-xorg-server-21.1.16 and xwayland-24.1.6 have been patched to fix this issue.
-
-4) CVE-2025-26597: Buffer overflow in XkbChangeTypesOfKey()
-
-Introduced in: X11R6.1
-Fixed in: xorg-server-21.1.16 and xwayland-24.1.6
-Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/0e4ed949
-Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
-
-If XkbChangeTypesOfKey() is called with 0 group, it will resize the key
-symbols table to 0 but leave the key actions unchanged.
-
-If later, the same function is called with a non-zero value of groups,
-this will cause a buffer overflow because the key actions are of the wrong
-size.
-
-5) CVE-2025-26598: Out-of-bounds write in CreatePointerBarrierClient()
-
-Introduced in: xorg-server-1.14.0
-Fixed in: xorg-server-21.1.16 and xwayland-24.1.6
-Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/bba9df1a
-Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
-
-The function GetBarrierDevice() searches for the pointer device based on
-its device id and returns the matching value, or supposedly NULL if no
-match was found.
-
-However the code will return the last element of the list if no matching
-device id was found which can lead to out of bounds memory access.
-
-6) CVE-2025-26599: Use of uninitialized pointer in compRedirectWindow()
-
-Introduced in: Xorg 6.8.0.
-Fixed in: xorg-server-21.1.16 and xwayland-24.1.6
-Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/c1ff84be
-      https://gitlab.freedesktop.org/xorg/xserver/-/commit/b07192a8
-Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
-
-The function compCheckRedirect() may fail if it cannot allocate the backing
-pixmap. In that case, compRedirectWindow() will return a BadAlloc error
-without the validation of the window tree marked just before, which leaves
-the validate data partly initialized, and the use of an uninitialized pointer
-later.
-
-7) CVE-2025-26600: Use-after-free in PlayReleasedEvents()
-
-Introduced in: X11R5
-Fixed in: xorg-server-21.1.16 and xwayland-24.1.6
-Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/6e0f332b
-Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
-
-When a device is removed while still frozen, the events queued for that
-device remain while the device itself is freed and replaying the events
-will cause a use after free.
-
-8) CVE-2025-26601: Use-after-free in SyncInitTrigger()
-
-Introduced in: X11R6
-Fixed in: xorg-server-21.1.16 and xwayland-24.1.6
-Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/16a1242d
-      https://gitlab.freedesktop.org/xorg/xserver/-/commit/f52cea2f
-      https://gitlab.freedesktop.org/xorg/xserver/-/commit/8cbc90c8
-      https://gitlab.freedesktop.org/xorg/xserver/-/commit/c2857989
-Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
-
-When changing an alarm, the values of the change mask are evaluated one
-after the other, changing the trigger values as requested and eventually,
-SyncInitTrigger() is called.
-If one of the changes triggers an error, the function will return early,
-not adding the new sync object.
-This can be used to cause a use after free when the alarm eventually
-triggers.
-
-https://lists.x.org/archives/xorg-announce/2025-February/003584.html
-https://lists.x.org/archives/xorg-announce/2025-February/003585.html
+We moved the issue tracking to gitlab some time ago.  Adjust the bug tracker
+references in news.html to point to there instead of bugzilla for clarity.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ docs/website/news.html | 352 ++++++++++++++++++++++++-------------------------
+ 1 file changed, 176 insertions(+), 176 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 3520de242f..abf1c83c75 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2024-April/003504.html
--sha256  2864b6a5359ab41c5a6132c69b5d0c9af6eb85ad26d433edb012c914029de752  xorg-server-21.1.13.tar.gz
--sha512  9bf5617d577dd3526a9578daedc1f2e3527da6913841f8fc78a2bda311ebf1560e84e31942cb8133a2a2ac99487c13b9153db6fb2d00859fc24d053f6b91fe34  xorg-server-21.1.13.tar.gz
-+# From https://lists.x.org/archives/xorg-announce/2025-February/003585.html
-+sha256  59fa52b63f6f8747ee2c4716decb29ced249c4c574e2a18c96b7d3b1420f7fd9  xorg-server-21.1.16.tar.gz
-+sha512  d0cd176e4c7273b6870999a3d008ed282fd5609acb2e0919c16447af3a5b2228d8592424388a8ace67acf216cdfae3a2d52f7a7ba81f6071467c61d57f32f314  xorg-server-21.1.16.tar.gz
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 05ba938c30..afb79b223e 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 03fcae660a..b643ce1b07 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -25,7 +25,7 @@
+ 	  <a href="/downloads/buildroot-2025.02-rc2.tar.xz">2025.02-rc2
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -203,7 +203,7 @@
+ 	  <a href="/downloads/buildroot-2024.11-rc3.tar.xz">2024.11-rc3
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -224,7 +224,7 @@
+ 	  <a href="/downloads/buildroot-2024.11-rc2.tar.xz">2024.11-rc2
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -444,7 +444,7 @@
+ 	  <a href="/downloads/buildroot-2024.08-rc2.tar.xz">2024.08-rc2
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -621,7 +621,7 @@
+ 	  <a href="/downloads/buildroot-2024.05-rc2.tar.xz">2024.05-rc2
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -642,7 +642,7 @@
+ 	  <a href="/downloads/buildroot-2024.05-rc1.tar.xz">2024.05-rc1
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -767,7 +767,7 @@
+ 	  <a href="/downloads/buildroot-2024.02-rc2.tar.xz">2024.02-rc2
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -826,7 +826,7 @@
+ 	  <a href="/downloads/buildroot-2024.02-rc1.tar.xz">2024.02-rc1
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -966,7 +966,7 @@
+ 	  <a href="/downloads/buildroot-2023.11-rc2.tar.xz">2023.11-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -1025,7 +1025,7 @@
+ 	  <a href="/downloads/buildroot-2023.11-rc1.tar.xz">2023.11-rc1
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -1201,7 +1201,7 @@
+ 	  <a href="/downloads/buildroot-2023.08-rc3.tar.xz">2023.08-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -1222,7 +1222,7 @@
+ 	  <a href="/downloads/buildroot-2023.08-rc2.tar.xz">2023.08-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -1243,7 +1243,7 @@
+           <a href="/downloads/buildroot-2023.08-rc1.tar.xz">2023.08-rc1
+             release</a>, and report any problems found to the
+           <a href="support.html">mailing list</a> or
+-          <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++          <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -1340,7 +1340,7 @@
+ 	  <a href="/downloads/buildroot-2023.05-rc3.tar.xz">2023.05-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -1361,7 +1361,7 @@
+ 	  <a href="/downloads/buildroot-2023.05-rc2.tar.xz">2023.05-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -1382,7 +1382,7 @@
+ 	  <a href="/downloads/buildroot-2023.05-rc1.tar.xz">2023.05-rc1
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -1507,7 +1507,7 @@
+ 	  <a href="/downloads/buildroot-2023.02-rc3.tar.xz">2023.02-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -1566,7 +1566,7 @@
+ 	  <a href="/downloads/buildroot-2023.02-rc2.tar.xz">2023.02-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -1587,7 +1587,7 @@
+ 	  <a href="/downloads/buildroot-2023.02-rc1.tar.xz">2023.02-rc1
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -1703,7 +1703,7 @@
+ 	  <a href="/downloads/buildroot-2022.11-rc3.tar.xz">2022.11-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -1762,7 +1762,7 @@
+ 	  <a href="/downloads/buildroot-2022.11-rc2.tar.xz">2022.11-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -1783,7 +1783,7 @@
+ 	  <a href="/downloads/buildroot-2022.11-rc1.tar.xz">2022.11-rc1
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -1883,7 +1883,7 @@
+ 	  <a href="/downloads/buildroot-2022.08-rc2.tar.xz">2022.08-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -1942,7 +1942,7 @@
+ 	  <a href="/downloads/buildroot-2022.08-rc1.tar.xz">2022.08-rc1
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -2039,7 +2039,7 @@
+ 	  <a href="/downloads/buildroot-2022.05-rc2.tar.xz">2022.05-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -2079,7 +2079,7 @@
+ 	  <a href="/downloads/buildroot-2022.05-rc1.tar.xz">2022.05-rc1
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -2204,7 +2204,7 @@
+ 	  <a href="/downloads/buildroot-2022.02-rc3.tar.bz2">2022.02-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -2263,7 +2263,7 @@
+ 	  <a href="/downloads/buildroot-2022.02-rc2.tar.bz2">2022.02-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -2284,7 +2284,7 @@
+ 	  <a href="/downloads/buildroot-2022.02-rc1.tar.xz">2022.02-rc1
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -2403,7 +2403,7 @@
+ 	  <a href="/downloads/buildroot-2021.11-rc3.tar.bz2">2021.11-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -2424,7 +2424,7 @@
+ 	  <a href="/downloads/buildroot-2021.11-rc2.tar.bz2">2021.11-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -2483,7 +2483,7 @@
+ 	  <a href="/downloads/buildroot-2021.11-rc1.tar.bz2">2021.11-rc1
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -2621,7 +2621,7 @@
+ 	  <a href="/downloads/buildroot-2021.08-rc3.tar.bz2">2021.08-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -2642,7 +2642,7 @@
+ 	  <a href="/downloads/buildroot-2021.08-rc2.tar.bz2">2021.08-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -2701,7 +2701,7 @@
+ 	  <a href="/downloads/buildroot-2021.08-rc1.tar.bz2">2021.08-rc1
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -2760,7 +2760,7 @@
+ 	  <a href="/downloads/buildroot-2021.05-rc3.tar.bz2">2021.05-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -2781,7 +2781,7 @@
+ 	  <a href="/downloads/buildroot-2021.05-rc2.tar.bz2">2021.05-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -2821,7 +2821,7 @@
+ 	  <a href="/downloads/buildroot-2021.05-rc1.tar.bz2">2021.05-rc1
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -2927,7 +2927,7 @@
+ 	  <a href="/downloads/buildroot-2021.02-rc3.tar.bz2">2021.02-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -2986,7 +2986,7 @@
+ 	  <a href="/downloads/buildroot-2021.02-rc2.tar.bz2">2021.02-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -3007,7 +3007,7 @@
+ 	  <a href="/downloads/buildroot-2021.02-rc1.tar.bz2">2021.02-rc1
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -3145,7 +3145,7 @@
+ 	  <a href="/downloads/buildroot-2020.11-rc3.tar.bz2">2020.11-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -3204,7 +3204,7 @@
+ 	  <a href="/downloads/buildroot-2020.11-rc2.tar.bz2">2020.11-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -3225,7 +3225,7 @@
+ 	  <a href="/downloads/buildroot-2020.11-rc1.tar.bz2">2020.11-rc1
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -3382,7 +3382,7 @@
+ 	  <a href="/downloads/buildroot-2020.08-rc3.tar.bz2">2020.08-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -3403,7 +3403,7 @@
+ 	  <a href="/downloads/buildroot-2020.08-rc2.tar.bz2">2020.08-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -3521,7 +3521,7 @@
+ 	  <a href="/downloads/buildroot-2020.05-rc3.tar.bz2">2020.05-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -3542,7 +3542,7 @@
+ 	  <a href="/downloads/buildroot-2020.05-rc2.tar.bz2">2020.05-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -3582,7 +3582,7 @@
+ 	  <a href="/downloads/buildroot-2020.05-rc1.tar.bz2">2020.05-rc1
+ 	  release</a>, and report any problems found to the
+          <a href="support.html">mailing list</a> or
+-         <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++         <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -3726,7 +3726,7 @@
+ 	  <a href="/downloads/buildroot-2020.02-rc3.tar.bz2">2020.02-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -3747,7 +3747,7 @@
+ 	  <a href="/downloads/buildroot-2020.02-rc2.tar.bz2">2020.02-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -3770,7 +3770,7 @@
+ 	  <a href="/downloads/buildroot-2020.02-rc1.tar.bz2">2020.02-rc1
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -3889,7 +3889,7 @@
+ 	  <a href="/downloads/buildroot-2019.11-rc3.tar.bz2">2019.11-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -3910,7 +3910,7 @@
+ 	  <a href="/downloads/buildroot-2019.11-rc2.tar.bz2">2019.11-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -3971,7 +3971,7 @@
+ 	  <a href="/downloads/buildroot-2019.11-rc1.tar.bz2">2019.11-rc1
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -4109,7 +4109,7 @@
+ 	  <a href="/downloads/buildroot-2019.08-rc3.tar.bz2">2019.08-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -4130,7 +4130,7 @@
+ 	  <a href="/downloads/buildroot-2019.08-rc2.tar.bz2">2019.08-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -4153,7 +4153,7 @@
+ 	  <a href="/downloads/buildroot-2019.08-rc1.tar.bz2">2019.08-rc1
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -4250,7 +4250,7 @@
+ 	  <a href="/downloads/buildroot-2019.05-rc3.tar.bz2">2019.05-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -4271,7 +4271,7 @@
+ 	  <a href="/downloads/buildroot-2019.05-rc2.tar.bz2">2019.05-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -4295,7 +4295,7 @@
+ 	  <a href="/downloads/buildroot-2019.05-rc1.tar.bz2">2019.05-rc1
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -4421,7 +4421,7 @@
+ 	  <a href="/downloads/buildroot-2019.02-rc3.tar.bz2">2019.02-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -4481,7 +4481,7 @@
+ 	  <a href="/downloads/buildroot-2019.02-rc2.tar.bz2">2019.02-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -4505,7 +4505,7 @@
+ 	  <a href="/downloads/buildroot-2019.02-rc1.tar.bz2">2019.02-rc1
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -4643,7 +4643,7 @@
+ 	  <a href="/downloads/buildroot-2018.11-rc3.tar.bz2">2018.11-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -4703,7 +4703,7 @@
+ 	  <a href="/downloads/buildroot-2018.11-rc2.tar.bz2">2018.11-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -4727,7 +4727,7 @@
+ 	  <a href="/downloads/buildroot-2018.11-rc1.tar.bz2">2018.11-rc1
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -4863,7 +4863,7 @@
+ 	  <a href="/downloads/buildroot-2018.08-rc3.tar.bz2">2018.08-rc3
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -4923,7 +4923,7 @@
+ 	  <a href="/downloads/buildroot-2018.08-rc2.tar.bz2">2018.08-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -4947,7 +4947,7 @@
+ 	  <a href="/downloads/buildroot-2018.08-rc1.tar.bz2">2018.08-rc1
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5045,7 +5045,7 @@
+ 	  the <a href="/downloads/buildroot-2018.05-rc3.tar.bz2">2018.05-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5067,7 +5067,7 @@
+ 	  <a href="/downloads/buildroot-2018.05-rc2.tar.bz2">2018.05-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5091,7 +5091,7 @@
+ 	  <a href="/downloads/buildroot-2018.05-rc1.tar.bz2">2018.05-rc1
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5194,7 +5194,7 @@
+ 	  the <a href="/downloads/buildroot-2018.02-rc3.tar.bz2">2018.02-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5216,7 +5216,7 @@
+ 	  <a href="/downloads/buildroot-2018.02-rc2.tar.bz2">2018.02-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5240,7 +5240,7 @@
+ 	  <a href="/downloads/buildroot-2018.02-rc1.tar.bz2">2018.02-rc1
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5395,7 +5395,7 @@
+ 	  <a href="/downloads/buildroot-2017.11-rc2.tar.bz2">2017.11-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5418,7 +5418,7 @@
+ 	  <a href="/downloads/buildroot-2017.11-rc1.tar.bz2">2017.11-rc1
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5518,7 +5518,7 @@
+ 	    release candidate</a>, and report any
+ 	  problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5543,7 +5543,7 @@
+ 	    release candidate</a>, and report any
+ 	  problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5567,7 +5567,7 @@
+ 	    release candidate</a>, and report any
+ 	  problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5703,7 +5703,7 @@
+ 	  the <a href="/downloads/buildroot-2017.05-rc3.tar.bz2">2017.05-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5725,7 +5725,7 @@
+ 	  <a href="/downloads/buildroot-2017.05-rc2.tar.bz2">2017.05-rc2
+ 	  release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5749,7 +5749,7 @@
+ 	    release candidate</a>, and report any
+ 	  problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5852,7 +5852,7 @@
+ 	  the <a href="/downloads/buildroot-2017.02-rc3.tar.bz2">2017.02-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5874,7 +5874,7 @@
+ 	  <a href="/downloads/buildroot-2017.02-rc2.tar.bz2">2017.02-rc2
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5899,7 +5899,7 @@
+ 	    release candidate</a>, and report any
+ 	  problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -5978,7 +5978,7 @@
+ 	  the <a href="/downloads/buildroot-2016.11-rc3.tar.bz2">2016.11-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6002,7 +6002,7 @@
+ 	    release candidate</a>, and report any
+ 	  problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6027,7 +6027,7 @@
+ 	    release candidate</a>, and report any
+ 	  problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6089,7 +6089,7 @@
+ 	  the <a href="/downloads/buildroot-2016.08-rc3.tar.bz2">2016.08-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6111,7 +6111,7 @@
+ 	  <a href="/downloads/buildroot-2016.08-rc2.tar.bz2">2016.08-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6136,7 +6136,7 @@
+ 	    release candidate</a>, and report any
+ 	  problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6177,7 +6177,7 @@
+ 	  the <a href="/downloads/buildroot-2016.05-rc3.tar.bz2">2016.05-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6199,7 +6199,7 @@
+ 	  <a href="/downloads/buildroot-2016.05-rc2.tar.bz2">2016.05-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6224,7 +6224,7 @@
+ 	    release candidate</a>, and report any
+ 	  problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.buildroot.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6265,7 +6265,7 @@
+ 	  the <a href="/downloads/buildroot-2016.02-rc3.tar.bz2">2016.02-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6287,7 +6287,7 @@
+ 	  <a href="/downloads/buildroot-2016.02-rc2.tar.bz2">2016.02-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6312,7 +6312,7 @@
+ 	    release candidate</a>, and report any
+ 	  problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6372,7 +6372,7 @@
+ 	  the <a href="/downloads/buildroot-2015.11-rc3.tar.bz2">2015.11-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6394,7 +6394,7 @@
+ 	  the <a href="/downloads/buildroot-2015.11-rc2.tar.bz2">2015.11-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6419,7 +6419,7 @@
+ 	    release candidate</a>, and report any
+ 	  problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6481,7 +6481,7 @@
+ 	  <a href="/downloads/buildroot-2015.08-rc2.tar.bz2">2015.08-rc2
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6503,7 +6503,7 @@
+ 	  <a href="/downloads/buildroot-2015.08-rc1.tar.bz2">2015.08-rc1
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6544,7 +6544,7 @@
+ 	  the <a href="/downloads/buildroot-2015.05-rc3.tar.bz2">2015.05-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6566,7 +6566,7 @@
+ 	  <a href="/downloads/buildroot-2015.05-rc2.tar.bz2">2015.05-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6588,7 +6588,7 @@
+ 	  <a href="/downloads/buildroot-2015.05-rc1.tar.bz2">2015.05-rc1
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6630,7 +6630,7 @@
+ 	  <a href="/downloads/buildroot-2015.02-rc3.tar.bz2">2015.02-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6652,7 +6652,7 @@
+ 	  <a href="/downloads/buildroot-2015.02-rc2.tar.bz2">2015.02-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6676,7 +6676,7 @@
+ 	    release candidate</a>, and report any problems found to
+ 	  the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6717,7 +6717,7 @@
+ 	  <a href="/downloads/buildroot-2014.11-rc3.tar.bz2">2014.11-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6739,7 +6739,7 @@
+ 	  <a href="/downloads/buildroot-2014.11-rc2.tar.bz2">2014.11-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6787,7 +6787,7 @@
+ 	  <a href="/downloads/buildroot-2014.11-rc1.tar.bz2">2014.11-rc1
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6828,7 +6828,7 @@
+ 	  <a href="/downloads/buildroot-2014.08-rc3.tar.bz2">2014.08-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6850,7 +6850,7 @@
+ 	  <a href="/downloads/buildroot-2014.08-rc2.tar.bz2">2014.08-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6873,7 +6873,7 @@
+ 	  <a href="/downloads/buildroot-2014.08-rc1.tar.bz2">2014.08-rc1
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6914,7 +6914,7 @@
+ 	  <a href="/downloads/buildroot-2014.05-rc3.tar.bz2">2014.05-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6937,7 +6937,7 @@
+ 	  <a href="/downloads/buildroot-2014.05-rc2.tar.bz2">2014.05-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -6960,7 +6960,7 @@
+ 	  <a href="/downloads/buildroot-2014.05-rc1.tar.bz2">2014.05-rc1
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7000,7 +7000,7 @@
+ 	  <a href="/downloads/buildroot-2014.02-rc3.tar.bz2">2014.02-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7022,7 +7022,7 @@
+ 	  <a href="/downloads/buildroot-2014.02-rc2.tar.bz2">2014.02-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7045,7 +7045,7 @@
+ 	  <a href="/downloads/buildroot-2014.02-rc1.tar.bz2">2014.02-rc1
+ 	    release candidate</a>, and report any problems found to the
+ 	  <a href="support.html">mailing list</a> or
+-	  <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7148,7 +7148,7 @@
+ 	  <a href="/downloads/buildroot-2013.11-rc3.tar.bz2">2013.11-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7170,7 +7170,7 @@
+ 	  <a href="/downloads/buildroot-2013.11-rc2.tar.bz2">2013.11-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7227,7 +7227,7 @@
+ 	  <a href="/downloads/buildroot-2013.11-rc1.tar.bz2">2013.11-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7331,7 +7331,7 @@
+ 	  <a href="/downloads/buildroot-2013.08-rc3.tar.bz2">2013.08-rc3
+ 	    release candidate</a>, and report any problems found to the <a
+ 									   href="support.html">mailing list</a> or <a
+-														      href="https://bugs.uclibc.org">bug tracker</a>.</p>
++														      href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7353,7 +7353,7 @@
+ 	  <a href="/downloads/buildroot-2013.08-rc2.tar.bz2">2013.08-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7375,7 +7375,7 @@
+ 	  <a href="/downloads/buildroot-2013.08-rc1.tar.bz2">2013.08-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7416,7 +7416,7 @@
+ 	  <a href="/downloads/buildroot-2013.05-rc3.tar.bz2">2013.05-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7438,7 +7438,7 @@
+ 	  <a href="/downloads/buildroot-2013.05-rc2.tar.bz2">2013.05-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7461,7 +7461,7 @@
+ 	  <a href="/downloads/buildroot-2013.05-rc1.tar.bz2">2013.05-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7501,7 +7501,7 @@
+ 	  <a href="/downloads/buildroot-2013.02-rc3.tar.bz2">2013.02-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7523,7 +7523,7 @@
+ 	  <a href="/downloads/buildroot-2013.02-rc2.tar.bz2">2013.02-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7546,7 +7546,7 @@
+ 	  <a href="/downloads/buildroot-2013.02-rc1.tar.bz2">2013.02-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7652,7 +7652,7 @@
+ 	  <a href="/downloads/buildroot-2012.11-rc2.tar.bz2">2012.11-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7675,7 +7675,7 @@
+ 	  <a href="/downloads/buildroot-2012.11-rc1.tar.bz2">2012.11-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7740,7 +7740,7 @@
+ 	  <a href="/downloads/buildroot-2012.08-rc3.tar.bz2">2012.08-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7762,7 +7762,7 @@
+ 	  <a href="/downloads/buildroot-2012.08-rc2.tar.bz2">2012.08-rc2
+ 	    release candidate</a>, and report any problems found to the <a
+ 									   href="support.html">mailing list</a> or <a
+-														      href="https://bugs.uclibc.org">bug tracker</a>.</p>
++														      href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7784,7 +7784,7 @@
+ 	  <a href="/downloads/buildroot-2012.08-rc1.tar.bz2">2012.08-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7849,7 +7849,7 @@
+ 	  <a href="/downloads/buildroot-2012.05-rc3.tar.bz2">2012.05-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7871,7 +7871,7 @@
+ 	  <a href="/downloads/buildroot-2012.05-rc2.tar.bz2">2012.05-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7894,7 +7894,7 @@
+ 	  <a href="/downloads/buildroot-2012.05-rc1.tar.bz2">2012.05-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7958,7 +7958,7 @@
+ 	  <a href="/downloads/buildroot-2012.02-rc3.tar.bz2">2012.02-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -7980,7 +7980,7 @@
+ 	  <a href="/downloads/buildroot-2012.02-rc2.tar.bz2">2012.02-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8003,7 +8003,7 @@
+ 	  <a href="/downloads/buildroot-2012.02-rc1.tar.bz2">2012.02-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8062,7 +8062,7 @@
+ 	  <a href="/downloads/buildroot-2011.11-rc3.tar.bz2">2011.11-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8084,7 +8084,7 @@
+ 	  <a href="/downloads/buildroot-2011.11-rc2.tar.bz2">2011.11-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8107,7 +8107,7 @@
+ 	  <a href="/downloads/buildroot-2011.11-rc1.tar.bz2">2011.11-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8146,7 +8146,7 @@
+ 	  <a href="/downloads/buildroot-2011.08-rc2.tar.bz2">2011.08-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8169,7 +8169,7 @@
+ 	  <a href="/downloads/buildroot-2011.08-rc1.tar.bz2">2011.08-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8207,7 +8207,7 @@
+ 	  <a href="/downloads/buildroot-2011.05-rc2.tar.bz2">2011.05-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8230,7 +8230,7 @@
+ 	  <a href="/downloads/buildroot-2011.05-rc1.tar.bz2">2011.05-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8270,7 +8270,7 @@
+ 	  <a href="/downloads/buildroot-2011.02-rc2.tar.bz2">2011.02-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8293,7 +8293,7 @@
+ 	  <a href="/downloads/buildroot-2011.02-rc1.tar.bz2">2011.02-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8333,7 +8333,7 @@
+ 	  <a href="/downloads/buildroot-2010.11-rc2.tar.bz2">2010.11-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8356,7 +8356,7 @@
+ 	  <a href="/downloads/buildroot-2010.11-rc1.tar.bz2">2010.11-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8419,7 +8419,7 @@
+ 	  <a href="/downloads/buildroot-2010.08-rc2.tar.bz2">2010.08-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
  
--XSERVER_XORG_SERVER_VERSION = 21.1.13
-+XSERVER_XORG_SERVER_VERSION = 21.1.16
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.gz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+ 	This is very much expected to be the final release candidate,
+ 	so give it a good test and expect a final 2010.08 release
+@@ -8445,7 +8445,7 @@
+ 	  <a href="/downloads/buildroot-2010.08-rc1.tar.bz2">2010.08-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8485,7 +8485,7 @@
+ 	  <a href="/downloads/buildroot-2010.05-rc3.tar.bz2">2010.05-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8505,7 +8505,7 @@
+ 	  <a href="/downloads/buildroot-2010.05-rc2.tar.bz2">2010.05-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8527,7 +8527,7 @@
+ 	  <a href="/downloads/buildroot-2010.05-rc1.tar.bz2">2010.05-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8584,7 +8584,7 @@
+ 	  <a href="/downloads/buildroot-2010.02-rc2.tar.bz2">2010.02-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8606,7 +8606,7 @@
+ 	  <a href="/downloads/buildroot-2010.02-rc1.tar.bz2">2010.02-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8646,7 +8646,7 @@
+ 	  <a href="/downloads/buildroot-2009.11-rc2.tar.bz2">2009.11-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8668,7 +8668,7 @@
+ 	  <a href="/downloads/buildroot-2009.11-rc1.tar.bz2">2009.11-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8740,7 +8740,7 @@
+ 	  <a href="/downloads/buildroot-2009.08-rc3.tar.bz2">2009.08-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8761,7 +8761,7 @@
+ 	  <a href="/downloads/buildroot-2009.08-rc2.tar.bz2">2009.08-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8783,7 +8783,7 @@
+ 	  <a href="/downloads/buildroot-2009.08-rc1.tar.bz2">2009.08-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8825,7 +8825,7 @@
+ 	  <a href="/downloads/buildroot-2009.05-rc3.tar.bz2">2009.05-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8848,7 +8848,7 @@
+ 	  <a href="/downloads/buildroot-2009.05-rc2.tar.bz2">2009.05-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8890,7 +8890,7 @@
+ 	  <a href="/downloads/buildroot-2009.05-rc1.tar.bz2">2009.05-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8970,7 +8970,7 @@
+ 	  <a href="/downloads/buildroot-2009.02-rc4.tar.bz2">2009.02-rc4
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -8992,7 +8992,7 @@
+ 	  <a href="/downloads/buildroot-2009.02-rc3.tar.bz2">2009.02-rc3
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -9012,7 +9012,7 @@
+ 	  <a href="/downloads/buildroot-2009.02-rc2.tar.bz2">2009.02-rc2
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>.</p>
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>.</p>
+       </div>
+     </div>
+   </li>
+@@ -9035,7 +9035,7 @@
+ 	  <a href="/downloads/buildroot-2009.02-rc1.tar.bz2">2009.02-rc1
+ 	    release candidate</a>, and report any problems found to
+ 	  the <a href="support.html">mailing list</a>
+-	  or <a href="https://bugs.uclibc.org">bug tracker</a>. The
++	  or <a href="https://gitlab.com/buildroot.org/buildroot/-/issues">bug tracker</a>. The
+ 	  plan is to release 2009.02 in time
+ 	  for <a href="http://www.fosdem.org/2009/">FOSDEM</a>.</p>
+       </div>
+@@ -9077,7 +9077,7 @@
+ 
+ 	<p>If you find a bug in buildroot, or wish to submit a patch
+ 	  to fix a problem or add a shiny new feature, please use
+-	  the <a href="https://bugs.uclibc.org/">Bug and Patch
++	  the <a href="https://gitlab.com/buildroot.org/buildroot/-/issues/">Bug and Patch
+ 	  Tracking System</a> to post the details, to make certain
+ 	  your work is not lost</p>
+       </div>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
