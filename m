@@ -4,66 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1095C282DE
-	for <buildroot@archiver.kernel.org>; Thu, 13 Mar 2025 20:47:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98B3DC282DE
+	for <buildroot@archiver.kernel.org>; Thu, 13 Mar 2025 20:49:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB7DF405A3;
-	Thu, 13 Mar 2025 20:47:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5D59341759;
+	Thu, 13 Mar 2025 20:49:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KRN_3ZmhAW_7; Thu, 13 Mar 2025 20:47:28 +0000 (UTC)
+ id rah728reT0Wa; Thu, 13 Mar 2025 20:49:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 849DD41781
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27ECD41763
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 849DD41781;
-	Thu, 13 Mar 2025 20:47:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 27ECD41763;
+	Thu, 13 Mar 2025 20:49:01 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id CE340EA
- for <buildroot@buildroot.org>; Thu, 13 Mar 2025 20:47:26 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C7CFCEA
+ for <buildroot@buildroot.org>; Thu, 13 Mar 2025 20:48:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF74C41781
- for <buildroot@buildroot.org>; Thu, 13 Mar 2025 20:47:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C13A241763
+ for <buildroot@buildroot.org>; Thu, 13 Mar 2025 20:48:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5mqeQ8VDXxs4 for <buildroot@buildroot.org>;
- Thu, 13 Mar 2025 20:47:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id wq1MgGu-hLip for <buildroot@buildroot.org>;
+ Thu, 13 Mar 2025 20:48:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8834E405A3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8834E405A3
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8834E405A3
- for <buildroot@buildroot.org>; Thu, 13 Mar 2025 20:47:25 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 864EF433E9;
- Thu, 13 Mar 2025 20:47:23 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1tspSc-00ETkZ-2O;
- Thu, 13 Mar 2025 21:47:22 +0100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5096405A3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C5096405A3
+ for <buildroot@buildroot.org>; Thu, 13 Mar 2025 20:48:58 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BBE0687FC0; Thu, 13 Mar 2025 20:48:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: =?utf-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= via buildroot
- <buildroot@buildroot.org>
-Cc: =?utf-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= <raphael.melotte@mind.be>
-References: <20250310110841.1556155-1-raphael.melotte@mind.be>
-Date: Thu, 13 Mar 2025 21:47:22 +0100
-In-Reply-To: <20250310110841.1556155-1-raphael.melotte@mind.be>
- (=?utf-8?Q?=22Rapha=C3=ABl=09M=C3=A9lotte?= via buildroot"'s message of
- "Mon, 10 Mar 2025 11:08:40 +0000")
-Message-ID: <87plik64kl.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduvdekleehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtgfesthhqtddttderjeenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeffgeeffedvgeehgeefvddttedvtdejheeikedtledugedvudeiteffuddtvdehieenucffohhmrghinheptghvvgdrohhrghenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtoheprhgrphhhrggvlhdrmhgvlhhothhtvgesmhhinhgurdgsvg
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/jbig2dec: add upstream security
- fix for CVE-2023-46361
+To: buildroot@buildroot.org
+Date: Thu, 13 Mar 2025 21:28:34 +0100
+X-Git-Refname: refs/heads/2024.11.x
+X-Git-Oldrev: 9ddb20f8dc065dbd197ecd560cb470cc41cfcd64
+X-Git-Newrev: f95260e2dc15d79047913eec8e61c9dd87b7b70c
+X-Patchwork-Hint: ignore
+Message-Id: <20250313204858.BBE0687FC0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/mokutil: fix
+ dependencies of comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,23 +59,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIlJhcGhhw6tsIiA9PSBSYXBoYcOrbCBNw6lsb3R0ZSB2aWEgYnVpbGRyb290IDxidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JpdGVzOgoKID4gRml4ZXMgdGhlIGZvbGxvd2luZyBzZWN1
-cml0eSBpc3N1ZToKID4gQ1ZFLTIwMjMtNDYzNjE6IEFydGlmZXggU29mdHdhcmUgamJpZzJkZWMg
-djAuMjAgd2FzIGRpc2NvdmVyZWQgdG8KID4gY29udGFpbiBhIFNFR1YgdnVsbmVyYWJpbGl0eSB2
-aWEgamJpZzJfZXJyb3IgYXQgL2piaWcyZGVjL2piaWcyLmMuCgogPiBodHRwczovL3d3dy5jdmUu
-b3JnL0NWRVJlY29yZD9pZD1DVkUtMjAyMy00NjM2MQoKID4gTm90ZSB0aGF0IGpiaWcyZGVjIHZl
-cnNpb24gMC4xOSAodXNlZCBpbiBCdWlsZHJvb3QgMjAyNC4wMi4xMSkgaXMgbm90CiA+IG9mZmlj
-aWFsbHkgbGlzdGVkIGFzIGFmZmVjdGVkLCBidXQgaXQgYWN0dWFsbHkgaGFzIHRoZSBzYW1lIGJ1
-Zy4KCiA+IEFsc28gbm90ZSB0aGF0IHRoaXMgQ1ZFIGlzIGFib3V0IGEgY3Jhc2ggaW4gdGhlIENM
-SSB0b29sIG9ubHkuCgogPiBTaWduZWQtb2ZmLWJ5OiBSYXBoYcOrbCBNw6lsb3R0ZSA8cmFwaGFl
-bC5tZWxvdHRlQG1pbmQuYmU+CgpDb21taXR0ZWQgdG8gMjAyNC4wMi54IGFuZCAyMDI0LjExLngs
-IHRoYW5rcy4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=f95260e2dc15d79047913eec8e61c9dd87b7b70c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
+
+Since the package was introduced in 2e6e121496bf (package/mokutil: new
+package), the dependencies for the comment about missing dependencies
+are not all inverted compared to the actual dependencies.
+
+Notably, gcc and headers versions should be negative, not positive,
+dependencies. This makes the comment visible even when said dependencies
+are met.
+
+Fix that.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit c73fb46fea066fe2b1b02ba71cfd5a77c62e08f0)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/mokutil/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/mokutil/Config.in b/package/mokutil/Config.in
+index 8895b66d20..33208ac583 100644
+--- a/package/mokutil/Config.in
++++ b/package/mokutil/Config.in
+@@ -30,6 +30,6 @@ comment "mokutil needs a toolchain w/ dynamic library, threads, gcc >= 4.9, head
+ 	depends on BR2_PACKAGE_SHIM_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || \
+-		BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
