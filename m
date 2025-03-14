@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 711BBC28B30
-	for <buildroot@archiver.kernel.org>; Fri, 14 Mar 2025 13:09:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00D39C282EC
+	for <buildroot@archiver.kernel.org>; Fri, 14 Mar 2025 13:09:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E66B82E14;
-	Fri, 14 Mar 2025 13:09:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE12683563;
+	Fri, 14 Mar 2025 13:09:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sL86W8BwtV-m; Fri, 14 Mar 2025 13:09:49 +0000 (UTC)
+ id E3MDDLLu6N1F; Fri, 14 Mar 2025 13:09:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F28C582E22
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1DD582F9B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F28C582E22;
-	Fri, 14 Mar 2025 13:09:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7126561
- for <buildroot@buildroot.org>; Fri, 14 Mar 2025 13:09:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1DD582F9B;
+	Fri, 14 Mar 2025 13:09:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 75B66EA
+ for <buildroot@buildroot.org>; Fri, 14 Mar 2025 13:09:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 564696058B
+ by smtp1.osuosl.org (Postfix) with ESMTP id 86AB6811C1
  for <buildroot@buildroot.org>; Fri, 14 Mar 2025 13:09:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8J-1gu-RBZhr for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tTC0zp9tPbX8 for <buildroot@buildroot.org>;
  Fri, 14 Mar 2025 13:09:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4649C6068B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4580811FB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4649C6068B
+ by smtp1.osuosl.org (Postfix) with ESMTP id A4580811FB
  for <buildroot@buildroot.org>; Fri, 14 Mar 2025 13:09:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 368E786E85; Fri, 14 Mar 2025 13:09:35 +0000 (UTC)
+ id 58EA287FED; Fri, 14 Mar 2025 13:09:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 14 Mar 2025 09:06:06 +0100
+Date: Fri, 14 Mar 2025 11:25:18 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: a6c50d8c8d37da249385b48bf85371f284283329
-X-Git-Newrev: bbb0d3140625bc3b899672ca33dfac7e7a586b95
+X-Git-Oldrev: b4e1bc7aa5e6cd30c285c802df068c305b261e0e
+X-Git-Newrev: 4042019fdaeb5fd2512ecaae3266094deead04af
 X-Patchwork-Hint: ignore
-Message-Id: <20250314130935.368E786E85@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] board/octavo/osd32mp1:
- Fix TF-A build error
+Message-Id: <20250314130935.58EA287FED@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/exim: security
+ bump version to 4.98.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,161 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bbb0d3140625bc3b899672ca33dfac7e7a586b95
+commit: https://git.buildroot.net/buildroot/commit/?id=4042019fdaeb5fd2512ecaae3266094deead04af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-The Octavo defconfig currently uses TF-A version 2.4 from ST, which leads
-to build errors due to missing patches. This update imports the necessary
-TF-A 2.4 patches to ensure compatibility and resolve the build issues for
-these boards.
+Fixes CVE 2025-26794:
+https://lists.exim.org/lurker/message/20250221.121401.a509f6c9.en.html
+https://exim.org/static/doc/security/CVE-2025-26794.txt
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/8751983324
-https://gitlab.com/buildroot.org/buildroot/-/jobs/8751983326
-
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 793b88a7ae7050f59fd23ad8221b5cb912d90f99)
+(cherry picked from commit 97f8ba4ea240733f3403583b19a83b427da5a143)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ild-add-support-for-new-binutils-versions.patch | 61 ++++++++++++++++++++++
- ...ild-add-support-for-new-binutils-versions.patch | 61 ++++++++++++++++++++++
- 2 files changed, 122 insertions(+)
+ package/exim/exim.hash | 4 ++--
+ package/exim/exim.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/octavo/osd32mp1-brk/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch b/board/octavo/osd32mp1-brk/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch
-new file mode 100644
-index 0000000000..335c18553a
---- /dev/null
-+++ b/board/octavo/osd32mp1-brk/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch
-@@ -0,0 +1,61 @@
-+From 0f75b03c008eacb9818af3a56dc088e72a623d17 Mon Sep 17 00:00:00 2001
-+From: Marco Felsch <m.felsch@pengutronix.de>
-+Date: Wed, 9 Nov 2022 12:59:09 +0100
-+Subject: [PATCH] feat(build): add support for new binutils versions
-+
-+Users of GNU ld (BPF) from binutils 2.39+ will observe multiple instaces
-+of a new warning when linking the bl*.elf in the form:
-+
-+  ld.bfd: warning: stm32mp1_helper.o: missing .note.GNU-stack section implies executable stack
-+  ld.bfd: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-+  ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
-+  ld.bfd: warning: bl32.elf has a LOAD segment with RWX permissions
-+
-+These new warnings are enbaled by default to secure elf binaries:
-+ - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-+ - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=0d38576a34ec64a1b4500c9277a8e9d0f07e6774
-+
-+Fix it in a similar way to what the Linux kernel does, see:
-+https://lore.kernel.org/all/20220810222442.2296651-1-ndesaulniers@google.com/
-+
-+Following the reasoning there, we set "-z noexecstack" for all linkers
-+(although LLVM's LLD defaults to it) and optional add
-+--no-warn-rwx-segments since this a ld.bfd related.
-+
-+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-+Signed-off-by: Robert Schwebel <r.schwebel@pengutronix.de>
-+Change-Id: I9430f5fa5036ca88da46cd3b945754d62616b617
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-+Upstream: https://github.com/ARM-software/arm-trusted-firmware/commit/1f49db5f25cdd4e43825c9bcc0575070b80f628c
-+---
-+ Makefile | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 1ddb7b844..470956b19 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -416,6 +416,8 @@ endif
-+ 
-+ GCC_V_OUTPUT		:=	$(shell $(CC) -v 2>&1)
-+ 
-++TF_LDFLAGS		+=	-z noexecstack
-++
-+ # LD = armlink
-+ ifneq ($(findstring armlink,$(notdir $(LD))),)
-+ TF_LDFLAGS		+=	--diag_error=warning --lto_level=O1
-+@@ -442,7 +444,10 @@ TF_LDFLAGS		+=	$(subst --,-Xlinker --,$(TF_LDFLAGS_$(ARCH)))
-+ 
-+ # LD = gcc-ld (ld) or llvm-ld (ld.lld) or other
-+ else
-+-TF_LDFLAGS		+=	--fatal-warnings -O1
-++# With ld.bfd version 2.39 and newer new warnings are added. Skip those since we
-++# are not loaded by a elf loader.
-++TF_LDFLAGS		+=	$(call ld_option, --no-warn-rwx-segments)
-++TF_LDFLAGS		+=	-O1
-+ TF_LDFLAGS		+=	--gc-sections
-+ # ld.lld doesn't recognize the errata flags,
-+ # therefore don't add those in that case
-+-- 
-+2.30.2
-+
-diff --git a/board/octavo/osd32mp1-red/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch b/board/octavo/osd32mp1-red/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch
-new file mode 100644
-index 0000000000..335c18553a
---- /dev/null
-+++ b/board/octavo/osd32mp1-red/patches/arm-trusted-firmware/0001-feat-build-add-support-for-new-binutils-versions.patch
-@@ -0,0 +1,61 @@
-+From 0f75b03c008eacb9818af3a56dc088e72a623d17 Mon Sep 17 00:00:00 2001
-+From: Marco Felsch <m.felsch@pengutronix.de>
-+Date: Wed, 9 Nov 2022 12:59:09 +0100
-+Subject: [PATCH] feat(build): add support for new binutils versions
-+
-+Users of GNU ld (BPF) from binutils 2.39+ will observe multiple instaces
-+of a new warning when linking the bl*.elf in the form:
-+
-+  ld.bfd: warning: stm32mp1_helper.o: missing .note.GNU-stack section implies executable stack
-+  ld.bfd: NOTE: This behaviour is deprecated and will be removed in a future version of the linker
-+  ld.bfd: warning: bl2.elf has a LOAD segment with RWX permissions
-+  ld.bfd: warning: bl32.elf has a LOAD segment with RWX permissions
-+
-+These new warnings are enbaled by default to secure elf binaries:
-+ - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=ba951afb99912da01a6e8434126b8fac7aa75107
-+ - https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=0d38576a34ec64a1b4500c9277a8e9d0f07e6774
-+
-+Fix it in a similar way to what the Linux kernel does, see:
-+https://lore.kernel.org/all/20220810222442.2296651-1-ndesaulniers@google.com/
-+
-+Following the reasoning there, we set "-z noexecstack" for all linkers
-+(although LLVM's LLD defaults to it) and optional add
-+--no-warn-rwx-segments since this a ld.bfd related.
-+
-+Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-+Signed-off-by: Robert Schwebel <r.schwebel@pengutronix.de>
-+Change-Id: I9430f5fa5036ca88da46cd3b945754d62616b617
-+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-+Upstream: https://github.com/ARM-software/arm-trusted-firmware/commit/1f49db5f25cdd4e43825c9bcc0575070b80f628c
-+---
-+ Makefile | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 1ddb7b844..470956b19 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -416,6 +416,8 @@ endif
-+ 
-+ GCC_V_OUTPUT		:=	$(shell $(CC) -v 2>&1)
-+ 
-++TF_LDFLAGS		+=	-z noexecstack
-++
-+ # LD = armlink
-+ ifneq ($(findstring armlink,$(notdir $(LD))),)
-+ TF_LDFLAGS		+=	--diag_error=warning --lto_level=O1
-+@@ -442,7 +444,10 @@ TF_LDFLAGS		+=	$(subst --,-Xlinker --,$(TF_LDFLAGS_$(ARCH)))
-+ 
-+ # LD = gcc-ld (ld) or llvm-ld (ld.lld) or other
-+ else
-+-TF_LDFLAGS		+=	--fatal-warnings -O1
-++# With ld.bfd version 2.39 and newer new warnings are added. Skip those since we
-++# are not loaded by a elf loader.
-++TF_LDFLAGS		+=	$(call ld_option, --no-warn-rwx-segments)
-++TF_LDFLAGS		+=	-O1
-+ TF_LDFLAGS		+=	--gc-sections
-+ # ld.lld doesn't recognize the errata flags,
-+ # therefore don't add those in that case
-+-- 
-+2.30.2
-+
+diff --git a/package/exim/exim.hash b/package/exim/exim.hash
+index de803bb27b..eba73e267f 100644
+--- a/package/exim/exim.hash
++++ b/package/exim/exim.hash
+@@ -1,6 +1,6 @@
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
+-sha256  0ebc108a779f9293ba4b423c20818f9a3db79b60286d96abc6ba6b85a15852f7  exim-4.98.tar.xz
++sha256  d858b75ad2cc6bf71c9071ba26a55b3ea9add26607bd832df3cb54f82221c2ce  exim-4.98.1.tar.xz
+ # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
+-sha512  13dd963dd0899bb4d64bee44c20883e720e469a4d77456b877d6693cfc4419805a045cb561508cdf763dbb37cc84fbdc6177d68acc2183934c3224fbd03caf15  exim-4.98.tar.xz
++sha512  8f80999a41ed40e86ee16eea5cfd765e2f164ea149f40eeb410fd02fcf35c23317dc69540efe336e9e0fae930b1cc6771e0180dd70f1314531cdb139740c744e  exim-4.98.1.tar.xz
+ # Locally calculated
+ sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
+diff --git a/package/exim/exim.mk b/package/exim/exim.mk
+index 45708d3941..5135d02574 100644
+--- a/package/exim/exim.mk
++++ b/package/exim/exim.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXIM_VERSION = 4.98
++EXIM_VERSION = 4.98.1
+ EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
+ EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
+ EXIM_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
