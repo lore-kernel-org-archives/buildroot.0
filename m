@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00D39C282EC
-	for <buildroot@archiver.kernel.org>; Fri, 14 Mar 2025 13:09:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56204C28B30
+	for <buildroot@archiver.kernel.org>; Fri, 14 Mar 2025 13:10:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AE12683563;
-	Fri, 14 Mar 2025 13:09:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF97E61173;
+	Fri, 14 Mar 2025 13:10:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E3MDDLLu6N1F; Fri, 14 Mar 2025 13:09:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dDZE9J2Kosuh; Fri, 14 Mar 2025 13:09:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1DD582F9B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6D20611D1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E1DD582F9B;
-	Fri, 14 Mar 2025 13:09:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 75B66EA
- for <buildroot@buildroot.org>; Fri, 14 Mar 2025 13:09:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6D20611D1;
+	Fri, 14 Mar 2025 13:09:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DCBA4EA
+ for <buildroot@buildroot.org>; Fri, 14 Mar 2025 13:09:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 86AB6811C1
- for <buildroot@buildroot.org>; Fri, 14 Mar 2025 13:09:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A970B4029F
+ for <buildroot@buildroot.org>; Fri, 14 Mar 2025 13:09:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tTC0zp9tPbX8 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yyecaYDp7GG9 for <buildroot@buildroot.org>;
  Fri, 14 Mar 2025 13:09:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4580811FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AAFE412E2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A4580811FB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4AAFE412E2
  for <buildroot@buildroot.org>; Fri, 14 Mar 2025 13:09:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58EA287FED; Fri, 14 Mar 2025 13:09:35 +0000 (UTC)
+ id 436C887FBC; Fri, 14 Mar 2025 13:09:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 14 Mar 2025 11:25:18 +0100
+Date: Fri, 14 Mar 2025 09:06:38 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: b4e1bc7aa5e6cd30c285c802df068c305b261e0e
-X-Git-Newrev: 4042019fdaeb5fd2512ecaae3266094deead04af
+X-Git-Oldrev: bbb0d3140625bc3b899672ca33dfac7e7a586b95
+X-Git-Newrev: cd407e89f89b0ca59a6ead7af44669ec01ce2a12
 X-Patchwork-Hint: ignore
-Message-Id: <20250314130935.58EA287FED@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/exim: security
- bump version to 4.98.1
+Message-Id: <20250314130935.436C887FBC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] board/octavo: Fix Linux
+ compilation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,55 +60,772 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1456173767320645488=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4042019fdaeb5fd2512ecaae3266094deead04af
+--===============1456173767320645488==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=cd407e89f89b0ca59a6ead7af44669ec01ce2a12
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-Fixes CVE 2025-26794:
-https://lists.exim.org/lurker/message/20250221.121401.a509f6c9.en.html
-https://exim.org/static/doc/security/CVE-2025-26794.txt
+Since commit dc0f7215c604e ("package/gcc: switch to 13.x as default"),
+the Linux kernel is failing to build with this output:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+In file included from ./include/linux/kernel.h:10,
+                 from drivers/ata/libahci.c:35:
+drivers/ata/libahci.c: In function ‘ahci_led_store’:
+./include/linux/compiler.h:348:45: error: call to ‘__compiletime_assert_1154’ declared with attribute error: BUILD_BUG_ON failed: sizeof(_s) > sizeof(long)
+   348 |         _compiletime_assert(condition, msg, __compiletime_assert_, __LINE__)
+
+Fix it by importing Linux upstream patch.
+
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 97f8ba4ea240733f3403583b19a83b427da5a143)
+(cherry picked from commit 864cb7ea29a601c1628a33144dfc973473ee518b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/exim/exim.hash | 4 ++--
- package/exim/exim.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...01-ata-ahci-fix-enum-constants-for-gcc-13.patch | 357 +++++++++++++++++++++
+ ...01-ata-ahci-fix-enum-constants-for-gcc-13.patch | 357 +++++++++++++++++++++
+ 2 files changed, 714 insertions(+)
 
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index de803bb27b..eba73e267f 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,6 +1,6 @@
- # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
--sha256  0ebc108a779f9293ba4b423c20818f9a3db79b60286d96abc6ba6b85a15852f7  exim-4.98.tar.xz
-+sha256  d858b75ad2cc6bf71c9071ba26a55b3ea9add26607bd832df3cb54f82221c2ce  exim-4.98.1.tar.xz
- # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
--sha512  13dd963dd0899bb4d64bee44c20883e720e469a4d77456b877d6693cfc4419805a045cb561508cdf763dbb37cc84fbdc6177d68acc2183934c3224fbd03caf15  exim-4.98.tar.xz
-+sha512  8f80999a41ed40e86ee16eea5cfd765e2f164ea149f40eeb410fd02fcf35c23317dc69540efe336e9e0fae930b1cc6771e0180dd70f1314531cdb139740c744e  exim-4.98.1.tar.xz
- # Locally calculated
- sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 45708d3941..5135d02574 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXIM_VERSION = 4.98
-+EXIM_VERSION = 4.98.1
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
- EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPL-2.0+
+diff --git a/board/octavo/osd32mp1-brk/patches/linux/0001-ata-ahci-fix-enum-constants-for-gcc-13.patch b/board/octavo/osd32mp1-brk/patches/linux/0001-ata-ahci-fix-enum-constants-for-gcc-13.patch
+new file mode 100644
+index 0000000000..fe5402e639
+--- /dev/null
++++ b/board/octavo/osd32mp1-brk/patches/linux/0001-ata-ahci-fix-enum-constants-for-gcc-13.patch
+@@ -0,0 +1,357 @@
++From 201719b670b0861f5846ebcda1ad3e4626ae0a33 Mon Sep 17 00:00:00 2001
++From: Arnd Bergmann <arnd@arndb.de>
++Date: Sat, 3 Dec 2022 11:54:25 +0100
++Subject: [PATCH] ata: ahci: fix enum constants for gcc-13
++
++commit f07788079f515ca4a681c5f595bdad19cfbd7b1d upstream.
++
++gcc-13 slightly changes the type of constant expressions that are defined
++in an enum, which triggers a compile time sanity check in libata:
++
++linux/drivers/ata/libahci.c: In function 'ahci_led_store':
++linux/include/linux/compiler_types.h:357:45: error: call to '__compiletime_assert_302' declared with attribute error: BUILD_BUG_ON failed: sizeof(_s) > sizeof(long)
++357 | _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
++
++The new behavior is that sizeof() returns the same value for the
++constant as it does for the enum type, which is generally more sensible
++and consistent.
++
++The problem in libata is that it contains a single enum definition for
++lots of unrelated constants, some of which are large positive (unsigned)
++integers like 0xffffffff, while others like (1<<31) are interpreted as
++negative integers, and this forces the enum type to become 64 bit wide
++even though most constants would still fit into a signed 32-bit 'int'.
++
++Fix this by changing the entire enum definition to use BIT(x) in place
++of (1<<x), which results in all values being seen as 'unsigned' and
++fitting into an unsigned 32-bit type.
++
++Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107917
++Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107405
++Reported-by: Luis Machado <luis.machado@arm.com>
++Cc: linux-ide@vger.kernel.org
++Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
++Cc: stable@vger.kernel.org
++Cc: Randy Dunlap <rdunlap@infradead.org>
++Signed-off-by: Arnd Bergmann <arnd@arndb.de>
++Tested-by: Luis Machado <luis.machado@arm.com>
++Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
++[Backport to linux-4.19.y]
++Signed-off-by: Paul Barker <paul.barker.ct@bp.renesas.com>
++Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
++Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=4c3ddc06cedb62f2904e58fd95170bf206bee149
++---
++ drivers/ata/ahci.h | 232 +++++++++++++++++++++++----------------------
++ 1 file changed, 117 insertions(+), 115 deletions(-)
++
++diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
++index d1f284f0c83d..de1bc374e1b6 100644
++--- a/drivers/ata/ahci.h
+++++ b/drivers/ata/ahci.h
++@@ -24,6 +24,7 @@
++ #include <linux/libata.h>
++ #include <linux/phy/phy.h>
++ #include <linux/regulator/consumer.h>
+++#include <linux/bits.h>
++ 
++ /* Enclosure Management Control */
++ #define EM_CTRL_MSG_TYPE              0x000f0000
++@@ -54,12 +55,12 @@ enum {
++ 	AHCI_PORT_PRIV_FBS_DMA_SZ	= AHCI_CMD_SLOT_SZ +
++ 					  AHCI_CMD_TBL_AR_SZ +
++ 					  (AHCI_RX_FIS_SZ * 16),
++-	AHCI_IRQ_ON_SG		= (1 << 31),
++-	AHCI_CMD_ATAPI		= (1 << 5),
++-	AHCI_CMD_WRITE		= (1 << 6),
++-	AHCI_CMD_PREFETCH	= (1 << 7),
++-	AHCI_CMD_RESET		= (1 << 8),
++-	AHCI_CMD_CLR_BUSY	= (1 << 10),
+++	AHCI_IRQ_ON_SG		= BIT(31),
+++	AHCI_CMD_ATAPI		= BIT(5),
+++	AHCI_CMD_WRITE		= BIT(6),
+++	AHCI_CMD_PREFETCH	= BIT(7),
+++	AHCI_CMD_RESET		= BIT(8),
+++	AHCI_CMD_CLR_BUSY	= BIT(10),
++ 
++ 	RX_FIS_PIO_SETUP	= 0x20,	/* offset of PIO Setup FIS data */
++ 	RX_FIS_D2H_REG		= 0x40,	/* offset of D2H Register FIS data */
++@@ -77,37 +78,37 @@ enum {
++ 	HOST_CAP2		= 0x24, /* host capabilities, extended */
++ 
++ 	/* HOST_CTL bits */
++-	HOST_RESET		= (1 << 0),  /* reset controller; self-clear */
++-	HOST_IRQ_EN		= (1 << 1),  /* global IRQ enable */
++-	HOST_MRSM		= (1 << 2),  /* MSI Revert to Single Message */
++-	HOST_AHCI_EN		= (1 << 31), /* AHCI enabled */
+++	HOST_RESET		= BIT(0),  /* reset controller; self-clear */
+++	HOST_IRQ_EN		= BIT(1),  /* global IRQ enable */
+++	HOST_MRSM		= BIT(2),  /* MSI Revert to Single Message */
+++	HOST_AHCI_EN		= BIT(31), /* AHCI enabled */
++ 
++ 	/* HOST_CAP bits */
++-	HOST_CAP_SXS		= (1 << 5),  /* Supports External SATA */
++-	HOST_CAP_EMS		= (1 << 6),  /* Enclosure Management support */
++-	HOST_CAP_CCC		= (1 << 7),  /* Command Completion Coalescing */
++-	HOST_CAP_PART		= (1 << 13), /* Partial state capable */
++-	HOST_CAP_SSC		= (1 << 14), /* Slumber state capable */
++-	HOST_CAP_PIO_MULTI	= (1 << 15), /* PIO multiple DRQ support */
++-	HOST_CAP_FBS		= (1 << 16), /* FIS-based switching support */
++-	HOST_CAP_PMP		= (1 << 17), /* Port Multiplier support */
++-	HOST_CAP_ONLY		= (1 << 18), /* Supports AHCI mode only */
++-	HOST_CAP_CLO		= (1 << 24), /* Command List Override support */
++-	HOST_CAP_LED		= (1 << 25), /* Supports activity LED */
++-	HOST_CAP_ALPM		= (1 << 26), /* Aggressive Link PM support */
++-	HOST_CAP_SSS		= (1 << 27), /* Staggered Spin-up */
++-	HOST_CAP_MPS		= (1 << 28), /* Mechanical presence switch */
++-	HOST_CAP_SNTF		= (1 << 29), /* SNotification register */
++-	HOST_CAP_NCQ		= (1 << 30), /* Native Command Queueing */
++-	HOST_CAP_64		= (1 << 31), /* PCI DAC (64-bit DMA) support */
+++	HOST_CAP_SXS		= BIT(5),  /* Supports External SATA */
+++	HOST_CAP_EMS		= BIT(6),  /* Enclosure Management support */
+++	HOST_CAP_CCC		= BIT(7),  /* Command Completion Coalescing */
+++	HOST_CAP_PART		= BIT(13), /* Partial state capable */
+++	HOST_CAP_SSC		= BIT(14), /* Slumber state capable */
+++	HOST_CAP_PIO_MULTI	= BIT(15), /* PIO multiple DRQ support */
+++	HOST_CAP_FBS		= BIT(16), /* FIS-based switching support */
+++	HOST_CAP_PMP		= BIT(17), /* Port Multiplier support */
+++	HOST_CAP_ONLY		= BIT(18), /* Supports AHCI mode only */
+++	HOST_CAP_CLO		= BIT(24), /* Command List Override support */
+++	HOST_CAP_LED		= BIT(25), /* Supports activity LED */
+++	HOST_CAP_ALPM		= BIT(26), /* Aggressive Link PM support */
+++	HOST_CAP_SSS		= BIT(27), /* Staggered Spin-up */
+++	HOST_CAP_MPS		= BIT(28), /* Mechanical presence switch */
+++	HOST_CAP_SNTF		= BIT(29), /* SNotification register */
+++	HOST_CAP_NCQ		= BIT(30), /* Native Command Queueing */
+++	HOST_CAP_64		= BIT(31), /* PCI DAC (64-bit DMA) support */
++ 
++ 	/* HOST_CAP2 bits */
++-	HOST_CAP2_BOH		= (1 << 0),  /* BIOS/OS handoff supported */
++-	HOST_CAP2_NVMHCI	= (1 << 1),  /* NVMHCI supported */
++-	HOST_CAP2_APST		= (1 << 2),  /* Automatic partial to slumber */
++-	HOST_CAP2_SDS		= (1 << 3),  /* Support device sleep */
++-	HOST_CAP2_SADM		= (1 << 4),  /* Support aggressive DevSlp */
++-	HOST_CAP2_DESO		= (1 << 5),  /* DevSlp from slumber only */
+++	HOST_CAP2_BOH		= BIT(0),  /* BIOS/OS handoff supported */
+++	HOST_CAP2_NVMHCI	= BIT(1),  /* NVMHCI supported */
+++	HOST_CAP2_APST		= BIT(2),  /* Automatic partial to slumber */
+++	HOST_CAP2_SDS		= BIT(3),  /* Support device sleep */
+++	HOST_CAP2_SADM		= BIT(4),  /* Support aggressive DevSlp */
+++	HOST_CAP2_DESO		= BIT(5),  /* DevSlp from slumber only */
++ 
++ 	/* registers for each SATA port */
++ 	PORT_LST_ADDR		= 0x00, /* command list DMA addr */
++@@ -129,24 +130,25 @@ enum {
++ 	PORT_DEVSLP		= 0x44, /* device sleep */
++ 
++ 	/* PORT_IRQ_{STAT,MASK} bits */
++-	PORT_IRQ_COLD_PRES	= (1 << 31), /* cold presence detect */
++-	PORT_IRQ_TF_ERR		= (1 << 30), /* task file error */
++-	PORT_IRQ_HBUS_ERR	= (1 << 29), /* host bus fatal error */
++-	PORT_IRQ_HBUS_DATA_ERR	= (1 << 28), /* host bus data error */
++-	PORT_IRQ_IF_ERR		= (1 << 27), /* interface fatal error */
++-	PORT_IRQ_IF_NONFATAL	= (1 << 26), /* interface non-fatal error */
++-	PORT_IRQ_OVERFLOW	= (1 << 24), /* xfer exhausted available S/G */
++-	PORT_IRQ_BAD_PMP	= (1 << 23), /* incorrect port multiplier */
++-
++-	PORT_IRQ_PHYRDY		= (1 << 22), /* PhyRdy changed */
++-	PORT_IRQ_DEV_ILCK	= (1 << 7), /* device interlock */
++-	PORT_IRQ_CONNECT	= (1 << 6), /* port connect change status */
++-	PORT_IRQ_SG_DONE	= (1 << 5), /* descriptor processed */
++-	PORT_IRQ_UNK_FIS	= (1 << 4), /* unknown FIS rx'd */
++-	PORT_IRQ_SDB_FIS	= (1 << 3), /* Set Device Bits FIS rx'd */
++-	PORT_IRQ_DMAS_FIS	= (1 << 2), /* DMA Setup FIS rx'd */
++-	PORT_IRQ_PIOS_FIS	= (1 << 1), /* PIO Setup FIS rx'd */
++-	PORT_IRQ_D2H_REG_FIS	= (1 << 0), /* D2H Register FIS rx'd */
+++	PORT_IRQ_COLD_PRES	= BIT(31), /* cold presence detect */
+++	PORT_IRQ_TF_ERR		= BIT(30), /* task file error */
+++	PORT_IRQ_HBUS_ERR	= BIT(29), /* host bus fatal error */
+++	PORT_IRQ_HBUS_DATA_ERR	= BIT(28), /* host bus data error */
+++	PORT_IRQ_IF_ERR		= BIT(27), /* interface fatal error */
+++	PORT_IRQ_IF_NONFATAL	= BIT(26), /* interface non-fatal error */
+++	PORT_IRQ_OVERFLOW	= BIT(24), /* xfer exhausted available S/G */
+++	PORT_IRQ_BAD_PMP	= BIT(23), /* incorrect port multiplier */
+++
+++	PORT_IRQ_PHYRDY		= BIT(22), /* PhyRdy changed */
+++	PORT_IRQ_DEV_ILCK	= BIT(7),  /* device interlock */
+++	PORT_IRQ_DMPS		= BIT(7),  /* mechanical presence status */
+++	PORT_IRQ_CONNECT	= BIT(6),  /* port connect change status */
+++	PORT_IRQ_SG_DONE	= BIT(5),  /* descriptor processed */
+++	PORT_IRQ_UNK_FIS	= BIT(4),  /* unknown FIS rx'd */
+++	PORT_IRQ_SDB_FIS	= BIT(3),  /* Set Device Bits FIS rx'd */
+++	PORT_IRQ_DMAS_FIS	= BIT(2),  /* DMA Setup FIS rx'd */
+++	PORT_IRQ_PIOS_FIS	= BIT(1),  /* PIO Setup FIS rx'd */
+++	PORT_IRQ_D2H_REG_FIS	= BIT(0),  /* D2H Register FIS rx'd */
++ 
++ 	PORT_IRQ_FREEZE		= PORT_IRQ_HBUS_ERR |
++ 				  PORT_IRQ_IF_ERR |
++@@ -162,34 +164,34 @@ enum {
++ 				  PORT_IRQ_PIOS_FIS | PORT_IRQ_D2H_REG_FIS,
++ 
++ 	/* PORT_CMD bits */
++-	PORT_CMD_ASP		= (1 << 27), /* Aggressive Slumber/Partial */
++-	PORT_CMD_ALPE		= (1 << 26), /* Aggressive Link PM enable */
++-	PORT_CMD_ATAPI		= (1 << 24), /* Device is ATAPI */
++-	PORT_CMD_FBSCP		= (1 << 22), /* FBS Capable Port */
++-	PORT_CMD_ESP		= (1 << 21), /* External Sata Port */
++-	PORT_CMD_HPCP		= (1 << 18), /* HotPlug Capable Port */
++-	PORT_CMD_PMP		= (1 << 17), /* PMP attached */
++-	PORT_CMD_LIST_ON	= (1 << 15), /* cmd list DMA engine running */
++-	PORT_CMD_FIS_ON		= (1 << 14), /* FIS DMA engine running */
++-	PORT_CMD_FIS_RX		= (1 << 4), /* Enable FIS receive DMA engine */
++-	PORT_CMD_CLO		= (1 << 3), /* Command list override */
++-	PORT_CMD_POWER_ON	= (1 << 2), /* Power up device */
++-	PORT_CMD_SPIN_UP	= (1 << 1), /* Spin up device */
++-	PORT_CMD_START		= (1 << 0), /* Enable port DMA engine */
++-
++-	PORT_CMD_ICC_MASK	= (0xf << 28), /* i/f ICC state mask */
++-	PORT_CMD_ICC_ACTIVE	= (0x1 << 28), /* Put i/f in active state */
++-	PORT_CMD_ICC_PARTIAL	= (0x2 << 28), /* Put i/f in partial state */
++-	PORT_CMD_ICC_SLUMBER	= (0x6 << 28), /* Put i/f in slumber state */
+++	PORT_CMD_ASP		= BIT(27), /* Aggressive Slumber/Partial */
+++	PORT_CMD_ALPE		= BIT(26), /* Aggressive Link PM enable */
+++	PORT_CMD_ATAPI		= BIT(24), /* Device is ATAPI */
+++	PORT_CMD_FBSCP		= BIT(22), /* FBS Capable Port */
+++	PORT_CMD_ESP		= BIT(21), /* External Sata Port */
+++	PORT_CMD_HPCP		= BIT(18), /* HotPlug Capable Port */
+++	PORT_CMD_PMP		= BIT(17), /* PMP attached */
+++	PORT_CMD_LIST_ON	= BIT(15), /* cmd list DMA engine running */
+++	PORT_CMD_FIS_ON		= BIT(14), /* FIS DMA engine running */
+++	PORT_CMD_FIS_RX		= BIT(4),  /* Enable FIS receive DMA engine */
+++	PORT_CMD_CLO		= BIT(3),  /* Command list override */
+++	PORT_CMD_POWER_ON	= BIT(2),  /* Power up device */
+++	PORT_CMD_SPIN_UP	= BIT(1),  /* Spin up device */
+++	PORT_CMD_START		= BIT(0),  /* Enable port DMA engine */
+++
+++	PORT_CMD_ICC_MASK	= (0xfu << 28), /* i/f ICC state mask */
+++	PORT_CMD_ICC_ACTIVE	= (0x1u << 28), /* Put i/f in active state */
+++	PORT_CMD_ICC_PARTIAL	= (0x2u << 28), /* Put i/f in partial state */
+++	PORT_CMD_ICC_SLUMBER	= (0x6u << 28), /* Put i/f in slumber state */
++ 
++ 	/* PORT_FBS bits */
++ 	PORT_FBS_DWE_OFFSET	= 16, /* FBS device with error offset */
++ 	PORT_FBS_ADO_OFFSET	= 12, /* FBS active dev optimization offset */
++ 	PORT_FBS_DEV_OFFSET	= 8,  /* FBS device to issue offset */
++ 	PORT_FBS_DEV_MASK	= (0xf << PORT_FBS_DEV_OFFSET),  /* FBS.DEV */
++-	PORT_FBS_SDE		= (1 << 2), /* FBS single device error */
++-	PORT_FBS_DEC		= (1 << 1), /* FBS device error clear */
++-	PORT_FBS_EN		= (1 << 0), /* Enable FBS */
+++	PORT_FBS_SDE		= BIT(2), /* FBS single device error */
+++	PORT_FBS_DEC		= BIT(1), /* FBS device error clear */
+++	PORT_FBS_EN		= BIT(0), /* Enable FBS */
++ 
++ 	/* PORT_DEVSLP bits */
++ 	PORT_DEVSLP_DM_OFFSET	= 25,             /* DITO multiplier offset */
++@@ -197,45 +199,45 @@ enum {
++ 	PORT_DEVSLP_DITO_OFFSET	= 15,             /* DITO offset */
++ 	PORT_DEVSLP_MDAT_OFFSET	= 10,             /* Minimum assertion time */
++ 	PORT_DEVSLP_DETO_OFFSET	= 2,              /* DevSlp exit timeout */
++-	PORT_DEVSLP_DSP		= (1 << 1),       /* DevSlp present */
++-	PORT_DEVSLP_ADSE	= (1 << 0),       /* Aggressive DevSlp enable */
+++	PORT_DEVSLP_DSP		= BIT(1),         /* DevSlp present */
+++	PORT_DEVSLP_ADSE	= BIT(0),         /* Aggressive DevSlp enable */
++ 
++ 	/* hpriv->flags bits */
++ 
++ #define AHCI_HFLAGS(flags)		.private_data	= (void *)(flags)
++ 
++-	AHCI_HFLAG_NO_NCQ		= (1 << 0),
++-	AHCI_HFLAG_IGN_IRQ_IF_ERR	= (1 << 1), /* ignore IRQ_IF_ERR */
++-	AHCI_HFLAG_IGN_SERR_INTERNAL	= (1 << 2), /* ignore SERR_INTERNAL */
++-	AHCI_HFLAG_32BIT_ONLY		= (1 << 3), /* force 32bit */
++-	AHCI_HFLAG_MV_PATA		= (1 << 4), /* PATA port */
++-	AHCI_HFLAG_NO_MSI		= (1 << 5), /* no PCI MSI */
++-	AHCI_HFLAG_NO_PMP		= (1 << 6), /* no PMP */
++-	AHCI_HFLAG_SECT255		= (1 << 8), /* max 255 sectors */
++-	AHCI_HFLAG_YES_NCQ		= (1 << 9), /* force NCQ cap on */
++-	AHCI_HFLAG_NO_SUSPEND		= (1 << 10), /* don't suspend */
++-	AHCI_HFLAG_SRST_TOUT_IS_OFFLINE	= (1 << 11), /* treat SRST timeout as
++-							link offline */
++-	AHCI_HFLAG_NO_SNTF		= (1 << 12), /* no sntf */
++-	AHCI_HFLAG_NO_FPDMA_AA		= (1 << 13), /* no FPDMA AA */
++-	AHCI_HFLAG_YES_FBS		= (1 << 14), /* force FBS cap on */
++-	AHCI_HFLAG_DELAY_ENGINE		= (1 << 15), /* do not start engine on
++-						        port start (wait until
++-						        error-handling stage) */
++-	AHCI_HFLAG_NO_DEVSLP		= (1 << 17), /* no device sleep */
++-	AHCI_HFLAG_NO_FBS		= (1 << 18), /* no FBS */
+++	AHCI_HFLAG_NO_NCQ		= BIT(0),
+++	AHCI_HFLAG_IGN_IRQ_IF_ERR	= BIT(1), /* ignore IRQ_IF_ERR */
+++	AHCI_HFLAG_IGN_SERR_INTERNAL	= BIT(2), /* ignore SERR_INTERNAL */
+++	AHCI_HFLAG_32BIT_ONLY		= BIT(3), /* force 32bit */
+++	AHCI_HFLAG_MV_PATA		= BIT(4), /* PATA port */
+++	AHCI_HFLAG_NO_MSI		= BIT(5), /* no PCI MSI */
+++	AHCI_HFLAG_NO_PMP		= BIT(6), /* no PMP */
+++	AHCI_HFLAG_SECT255		= BIT(8), /* max 255 sectors */
+++	AHCI_HFLAG_YES_NCQ		= BIT(9), /* force NCQ cap on */
+++	AHCI_HFLAG_NO_SUSPEND		= BIT(10), /* don't suspend */
+++	AHCI_HFLAG_SRST_TOUT_IS_OFFLINE	= BIT(11), /* treat SRST timeout as
+++						      link offline */
+++	AHCI_HFLAG_NO_SNTF		= BIT(12), /* no sntf */
+++	AHCI_HFLAG_NO_FPDMA_AA		= BIT(13), /* no FPDMA AA */
+++	AHCI_HFLAG_YES_FBS		= BIT(14), /* force FBS cap on */
+++	AHCI_HFLAG_DELAY_ENGINE		= BIT(15), /* do not start engine on
+++						      port start (wait until
+++						      error-handling stage) */
+++	AHCI_HFLAG_NO_DEVSLP		= BIT(17), /* no device sleep */
+++	AHCI_HFLAG_NO_FBS		= BIT(18), /* no FBS */
++ 
++ #ifdef CONFIG_PCI_MSI
++-	AHCI_HFLAG_MULTI_MSI		= (1 << 20), /* per-port MSI(-X) */
+++	AHCI_HFLAG_MULTI_MSI		= BIT(20), /* per-port MSI(-X) */
++ #else
++ 	/* compile out MSI infrastructure */
++ 	AHCI_HFLAG_MULTI_MSI		= 0,
++ #endif
++-	AHCI_HFLAG_WAKE_BEFORE_STOP	= (1 << 22), /* wake before DMA stop */
++-	AHCI_HFLAG_YES_ALPM		= (1 << 23), /* force ALPM cap on */
++-	AHCI_HFLAG_NO_WRITE_TO_RO	= (1 << 24), /* don't write to read
++-							only registers */
++-	AHCI_HFLAG_IS_MOBILE		= (1 << 25), /* mobile chipset, use
+++	AHCI_HFLAG_WAKE_BEFORE_STOP	= BIT(22), /* wake before DMA stop */
+++	AHCI_HFLAG_YES_ALPM		= BIT(23), /* force ALPM cap on */
+++	AHCI_HFLAG_NO_WRITE_TO_RO	= BIT(24), /* don't write to read
+++						      only registers */
+++	AHCI_HFLAG_IS_MOBILE		= BIT(25), /* mobile chipset, use
++ 							SATA_MOBILE_LPM_POLICY
++ 							as default lpm_policy */
++ 	AHCI_HFLAG_SUSPEND_PHYS		= (1 << 26), /* handle PHYs during
++@@ -258,22 +260,22 @@ enum {
++ 	EM_MAX_RETRY			= 5,
++ 
++ 	/* em_ctl bits */
++-	EM_CTL_RST		= (1 << 9), /* Reset */
++-	EM_CTL_TM		= (1 << 8), /* Transmit Message */
++-	EM_CTL_MR		= (1 << 0), /* Message Received */
++-	EM_CTL_ALHD		= (1 << 26), /* Activity LED */
++-	EM_CTL_XMT		= (1 << 25), /* Transmit Only */
++-	EM_CTL_SMB		= (1 << 24), /* Single Message Buffer */
++-	EM_CTL_SGPIO		= (1 << 19), /* SGPIO messages supported */
++-	EM_CTL_SES		= (1 << 18), /* SES-2 messages supported */
++-	EM_CTL_SAFTE		= (1 << 17), /* SAF-TE messages supported */
++-	EM_CTL_LED		= (1 << 16), /* LED messages supported */
+++	EM_CTL_RST		= BIT(9), /* Reset */
+++	EM_CTL_TM		= BIT(8), /* Transmit Message */
+++	EM_CTL_MR		= BIT(0), /* Message Received */
+++	EM_CTL_ALHD		= BIT(26), /* Activity LED */
+++	EM_CTL_XMT		= BIT(25), /* Transmit Only */
+++	EM_CTL_SMB		= BIT(24), /* Single Message Buffer */
+++	EM_CTL_SGPIO		= BIT(19), /* SGPIO messages supported */
+++	EM_CTL_SES		= BIT(18), /* SES-2 messages supported */
+++	EM_CTL_SAFTE		= BIT(17), /* SAF-TE messages supported */
+++	EM_CTL_LED		= BIT(16), /* LED messages supported */
++ 
++ 	/* em message type */
++-	EM_MSG_TYPE_LED		= (1 << 0), /* LED */
++-	EM_MSG_TYPE_SAFTE	= (1 << 1), /* SAF-TE */
++-	EM_MSG_TYPE_SES2	= (1 << 2), /* SES-2 */
++-	EM_MSG_TYPE_SGPIO	= (1 << 3), /* SGPIO */
+++	EM_MSG_TYPE_LED		= BIT(0), /* LED */
+++	EM_MSG_TYPE_SAFTE	= BIT(1), /* SAF-TE */
+++	EM_MSG_TYPE_SES2	= BIT(2), /* SES-2 */
+++	EM_MSG_TYPE_SGPIO	= BIT(3), /* SGPIO */
++ };
++ 
++ struct ahci_cmd_hdr {
++-- 
++2.34.1
++
+diff --git a/board/octavo/osd32mp1-red/patches/linux/0001-ata-ahci-fix-enum-constants-for-gcc-13.patch b/board/octavo/osd32mp1-red/patches/linux/0001-ata-ahci-fix-enum-constants-for-gcc-13.patch
+new file mode 100644
+index 0000000000..fe5402e639
+--- /dev/null
++++ b/board/octavo/osd32mp1-red/patches/linux/0001-ata-ahci-fix-enum-constants-for-gcc-13.patch
+@@ -0,0 +1,357 @@
++From 201719b670b0861f5846ebcda1ad3e4626ae0a33 Mon Sep 17 00:00:00 2001
++From: Arnd Bergmann <arnd@arndb.de>
++Date: Sat, 3 Dec 2022 11:54:25 +0100
++Subject: [PATCH] ata: ahci: fix enum constants for gcc-13
++
++commit f07788079f515ca4a681c5f595bdad19cfbd7b1d upstream.
++
++gcc-13 slightly changes the type of constant expressions that are defined
++in an enum, which triggers a compile time sanity check in libata:
++
++linux/drivers/ata/libahci.c: In function 'ahci_led_store':
++linux/include/linux/compiler_types.h:357:45: error: call to '__compiletime_assert_302' declared with attribute error: BUILD_BUG_ON failed: sizeof(_s) > sizeof(long)
++357 | _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
++
++The new behavior is that sizeof() returns the same value for the
++constant as it does for the enum type, which is generally more sensible
++and consistent.
++
++The problem in libata is that it contains a single enum definition for
++lots of unrelated constants, some of which are large positive (unsigned)
++integers like 0xffffffff, while others like (1<<31) are interpreted as
++negative integers, and this forces the enum type to become 64 bit wide
++even though most constants would still fit into a signed 32-bit 'int'.
++
++Fix this by changing the entire enum definition to use BIT(x) in place
++of (1<<x), which results in all values being seen as 'unsigned' and
++fitting into an unsigned 32-bit type.
++
++Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107917
++Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107405
++Reported-by: Luis Machado <luis.machado@arm.com>
++Cc: linux-ide@vger.kernel.org
++Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
++Cc: stable@vger.kernel.org
++Cc: Randy Dunlap <rdunlap@infradead.org>
++Signed-off-by: Arnd Bergmann <arnd@arndb.de>
++Tested-by: Luis Machado <luis.machado@arm.com>
++Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
++[Backport to linux-4.19.y]
++Signed-off-by: Paul Barker <paul.barker.ct@bp.renesas.com>
++Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
++Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=4c3ddc06cedb62f2904e58fd95170bf206bee149
++---
++ drivers/ata/ahci.h | 232 +++++++++++++++++++++++----------------------
++ 1 file changed, 117 insertions(+), 115 deletions(-)
++
++diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
++index d1f284f0c83d..de1bc374e1b6 100644
++--- a/drivers/ata/ahci.h
+++++ b/drivers/ata/ahci.h
++@@ -24,6 +24,7 @@
++ #include <linux/libata.h>
++ #include <linux/phy/phy.h>
++ #include <linux/regulator/consumer.h>
+++#include <linux/bits.h>
++ 
++ /* Enclosure Management Control */
++ #define EM_CTRL_MSG_TYPE              0x000f0000
++@@ -54,12 +55,12 @@ enum {
++ 	AHCI_PORT_PRIV_FBS_DMA_SZ	= AHCI_CMD_SLOT_SZ +
++ 					  AHCI_CMD_TBL_AR_SZ +
++ 					  (AHCI_RX_FIS_SZ * 16),
++-	AHCI_IRQ_ON_SG		= (1 << 31),
++-	AHCI_CMD_ATAPI		= (1 << 5),
++-	AHCI_CMD_WRITE		= (1 << 6),
++-	AHCI_CMD_PREFETCH	= (1 << 7),
++-	AHCI_CMD_RESET		= (1 << 8),
++-	AHCI_CMD_CLR_BUSY	= (1 << 10),
+++	AHCI_IRQ_ON_SG		= BIT(31),
+++	AHCI_CMD_ATAPI		= BIT(5),
+++	AHCI_CMD_WRITE		= BIT(6),
+++	AHCI_CMD_PREFETCH	= BIT(7),
+++	AHCI_CMD_RESET		= BIT(8),
+++	AHCI_CMD_CLR_BUSY	= BIT(10),
++ 
++ 	RX_FIS_PIO_SETUP	= 0x20,	/* offset of PIO Setup FIS data */
++ 	RX_FIS_D2H_REG		= 0x40,	/* offset of D2H Register FIS data */
++@@ -77,37 +78,37 @@ enum {
++ 	HOST_CAP2		= 0x24, /* host capabilities, extended */
++ 
++ 	/* HOST_CTL bits */
++-	HOST_RESET		= (1 << 0),  /* reset controller; self-clear */
++-	HOST_IRQ_EN		= (1 << 1),  /* global IRQ enable */
++-	HOST_MRSM		= (1 << 2),  /* MSI Revert to Single Message */
++-	HOST_AHCI_EN		= (1 << 31), /* AHCI enabled */
+++	HOST_RESET		= BIT(0),  /* reset controller; self-clear */
+++	HOST_IRQ_EN		= BIT(1),  /* global IRQ enable */
+++	HOST_MRSM		= BIT(2),  /* MSI Revert to Single Message */
+++	HOST_AHCI_EN		= BIT(31), /* AHCI enabled */
++ 
++ 	/* HOST_CAP bits */
++-	HOST_CAP_SXS		= (1 << 5),  /* Supports External SATA */
++-	HOST_CAP_EMS		= (1 << 6),  /* Enclosure Management support */
++-	HOST_CAP_CCC		= (1 << 7),  /* Command Completion Coalescing */
++-	HOST_CAP_PART		= (1 << 13), /* Partial state capable */
++-	HOST_CAP_SSC		= (1 << 14), /* Slumber state capable */
++-	HOST_CAP_PIO_MULTI	= (1 << 15), /* PIO multiple DRQ support */
++-	HOST_CAP_FBS		= (1 << 16), /* FIS-based switching support */
++-	HOST_CAP_PMP		= (1 << 17), /* Port Multiplier support */
++-	HOST_CAP_ONLY		= (1 << 18), /* Supports AHCI mode only */
++-	HOST_CAP_CLO		= (1 << 24), /* Command List Override support */
++-	HOST_CAP_LED		= (1 << 25), /* Supports activity LED */
++-	HOST_CAP_ALPM		= (1 << 26), /* Aggressive Link PM support */
++-	HOST_CAP_SSS		= (1 << 27), /* Staggered Spin-up */
++-	HOST_CAP_MPS		= (1 << 28), /* Mechanical presence switch */
++-	HOST_CAP_SNTF		= (1 << 29), /* SNotification register */
++-	HOST_CAP_NCQ		= (1 << 30), /* Native Command Queueing */
++-	HOST_CAP_64		= (1 << 31), /* PCI DAC (64-bit DMA) support */
+++	HOST_CAP_SXS		= BIT(5),  /* Supports External SATA */
+++	HOST_CAP_EMS		= BIT(6),  /* Enclosure Management support */
+++	HOST_CAP_CCC		= BIT(7),  /* Command Completion Coalescing */
+++	HOST_CAP_PART		= BIT(13), /* Partial state capable */
+++	HOST_CAP_SSC		= BIT(14), /* Slumber state capable */
+++	HOST_CAP_PIO_MULTI	= BIT(15), /* PIO multiple DRQ support */
+++	HOST_CAP_FBS		= BIT(16), /* FIS-based switching support */
+++	HOST_CAP_PMP		= BIT(17), /* Port Multiplier support */
+++	HOST_CAP_ONLY		= BIT(18), /* Supports AHCI mode only */
+++	HOST_CAP_CLO		= BIT(24), /* Command List Override support */
+++	HOST_CAP_LED		= BIT(25), /* Supports activity LED */
+++	HOST_CAP_ALPM		= BIT(26), /* Aggressive Link PM support */
+++	HOST_CAP_SSS		= BIT(27), /* Staggered Spin-up */
+++	HOST_CAP_MPS		= BIT(28), /* Mechanical presence switch */
+++	HOST_CAP_SNTF		= BIT(29), /* SNotification register */
+++	HOST_CAP_NCQ		= BIT(30), /* Native Command Queueing */
+++	HOST_CAP_64		= BIT(31), /* PCI DAC (64-bit DMA) support */
++ 
++ 	/* HOST_CAP2 bits */
++-	HOST_CAP2_BOH		= (1 << 0),  /* BIOS/OS handoff supported */
++-	HOST_CAP2_NVMHCI	= (1 << 1),  /* NVMHCI supported */
++-	HOST_CAP2_APST		= (1 << 2),  /* Automatic partial to slumber */
++-	HOST_CAP2_SDS		= (1 << 3),  /* Support device sleep */
++-	HOST_CAP2_SADM		= (1 << 4),  /* Support aggressive DevSlp */
++-	HOST_CAP2_DESO		= (1 << 5),  /* DevSlp from slumber only */
+++	HOST_CAP2_BOH		= BIT(0),  /* BIOS/OS handoff supported */
+++	HOST_CAP2_NVMHCI	= BIT(1),  /* NVMHCI supported */
+++	HOST_CAP2_APST		= BIT(2),  /* Automatic partial to slumber */
+++	HOST_CAP2_SDS		= BIT(3),  /* Support device sleep */
+++	HOST_CAP2_SADM		= BIT(4),  /* Support aggressive DevSlp */
+++	HOST_CAP2_DESO		= BIT(5),  /* DevSlp from slumber only */
++ 
++ 	/* registers for each SATA port */
++ 	PORT_LST_ADDR		= 0x00, /* command list DMA addr */
++@@ -129,24 +130,25 @@ enum {
++ 	PORT_DEVSLP		= 0x44, /* device sleep */
++ 
++ 	/* PORT_IRQ_{STAT,MASK} bits */
++-	PORT_IRQ_COLD_PRES	= (1 << 31), /* cold presence detect */
++-	PORT_IRQ_TF_ERR		= (1 << 30), /* task file error */
++-	PORT_IRQ_HBUS_ERR	= (1 << 29), /* host bus fatal error */
++-	PORT_IRQ_HBUS_DATA_ERR	= (1 << 28), /* host bus data error */
++-	PORT_IRQ_IF_ERR		= (1 << 27), /* interface fatal error */
++-	PORT_IRQ_IF_NONFATAL	= (1 << 26), /* interface non-fatal error */
++-	PORT_IRQ_OVERFLOW	= (1 << 24), /* xfer exhausted available S/G */
++-	PORT_IRQ_BAD_PMP	= (1 << 23), /* incorrect port multiplier */
++-
++-	PORT_IRQ_PHYRDY		= (1 << 22), /* PhyRdy changed */
++-	PORT_IRQ_DEV_ILCK	= (1 << 7), /* device interlock */
++-	PORT_IRQ_CONNECT	= (1 << 6), /* port connect change status */
++-	PORT_IRQ_SG_DONE	= (1 << 5), /* descriptor processed */
++-	PORT_IRQ_UNK_FIS	= (1 << 4), /* unknown FIS rx'd */
++-	PORT_IRQ_SDB_FIS	= (1 << 3), /* Set Device Bits FIS rx'd */
++-	PORT_IRQ_DMAS_FIS	= (1 << 2), /* DMA Setup FIS rx'd */
++-	PORT_IRQ_PIOS_FIS	= (1 << 1), /* PIO Setup FIS rx'd */
++-	PORT_IRQ_D2H_REG_FIS	= (1 << 0), /* D2H Register FIS rx'd */
+++	PORT_IRQ_COLD_PRES	= BIT(31), /* cold presence detect */
+++	PORT_IRQ_TF_ERR		= BIT(30), /* task file error */
+++	PORT_IRQ_HBUS_ERR	= BIT(29), /* host bus fatal error */
+++	PORT_IRQ_HBUS_DATA_ERR	= BIT(28), /* host bus data error */
+++	PORT_IRQ_IF_ERR		= BIT(27), /* interface fatal error */
+++	PORT_IRQ_IF_NONFATAL	= BIT(26), /* interface non-fatal error */
+++	PORT_IRQ_OVERFLOW	= BIT(24), /* xfer exhausted available S/G */
+++	PORT_IRQ_BAD_PMP	= BIT(23), /* incorrect port multiplier */
+++
+++	PORT_IRQ_PHYRDY		= BIT(22), /* PhyRdy changed */
+++	PORT_IRQ_DEV_ILCK	= BIT(7),  /* device interlock */
+++	PORT_IRQ_DMPS		= BIT(7),  /* mechanical presence status */
+++	PORT_IRQ_CONNECT	= BIT(6),  /* port connect change status */
+++	PORT_IRQ_SG_DONE	= BIT(5),  /* descriptor processed */
+++	PORT_IRQ_UNK_FIS	= BIT(4),  /* unknown FIS rx'd */
+++	PORT_IRQ_SDB_FIS	= BIT(3),  /* Set Device Bits FIS rx'd */
+++	PORT_IRQ_DMAS_FIS	= BIT(2),  /* DMA Setup FIS rx'd */
+++	PORT_IRQ_PIOS_FIS	= BIT(1),  /* PIO Setup FIS rx'd */
+++	PORT_IRQ_D2H_REG_FIS	= BIT(0),  /* D2H Register FIS rx'd */
++ 
++ 	PORT_IRQ_FREEZE		= PORT_IRQ_HBUS_ERR |
++ 				  PORT_IRQ_IF_ERR |
++@@ -162,34 +164,34 @@ enum {
++ 				  PORT_IRQ_PIOS_FIS | PORT_IRQ_D2H_REG_FIS,
++ 
++ 	/* PORT_CMD bits */
++-	PORT_CMD_ASP		= (1 << 27), /* Aggressive Slumber/Partial */
++-	PORT_CMD_ALPE		= (1 << 26), /* Aggressive Link PM enable */
++-	PORT_CMD_ATAPI		= (1 << 24), /* Device is ATAPI */
++-	PORT_CMD_FBSCP		= (1 << 22), /* FBS Capable Port */
++-	PORT_CMD_ESP		= (1 << 21), /* External Sata Port */
++-	PORT_CMD_HPCP		= (1 << 18), /* HotPlug Capable Port */
++-	PORT_CMD_PMP		= (1 << 17), /* PMP attached */
++-	PORT_CMD_LIST_ON	= (1 << 15), /* cmd list DMA engine running */
++-	PORT_CMD_FIS_ON		= (1 << 14), /* FIS DMA engine running */
++-	PORT_CMD_FIS_RX		= (1 << 4), /* Enable FIS receive DMA engine */
++-	PORT_CMD_CLO		= (1 << 3), /* Command list override */
++-	PORT_CMD_POWER_ON	= (1 << 2), /* Power up device */
++-	PORT_CMD_SPIN_UP	= (1 << 1), /* Spin up device */
++-	PORT_CMD_START		= (1 << 0), /* Enable port DMA engine */
++-
++-	PORT_CMD_ICC_MASK	= (0xf << 28), /* i/f ICC state mask */
++-	PORT_CMD_ICC_ACTIVE	= (0x1 << 28), /* Put i/f in active state */
++-	PORT_CMD_ICC_PARTIAL	= (0x2 << 28), /* Put i/f in partial state */
++-	PORT_CMD_ICC_SLUMBER	= (0x6 << 28), /* Put i/f in slumber state */
+++	PORT_CMD_ASP		= BIT(27), /* Aggressive Slumber/Partial */
+++	PORT_CMD_ALPE		= BIT(26), /* Aggressive Link PM enable */
+++	PORT_CMD_ATAPI		= BIT(24), /* Device is ATAPI */
+++	PORT_CMD_FBSCP		= BIT(22), /* FBS Capable Port */
+++	PORT_CMD_ESP		= BIT(21), /* External Sata Port */
+++	PORT_CMD_HPCP		= BIT(18), /* HotPlug Capable Port */
+++	PORT_CMD_PMP		= BIT(17), /* PMP attached */
+++	PORT_CMD_LIST_ON	= BIT(15), /* cmd list DMA engine running */
+++	PORT_CMD_FIS_ON		= BIT(14), /* FIS DMA engine running */
+++	PORT_CMD_FIS_RX		= BIT(4),  /* Enable FIS receive DMA engine */
+++	PORT_CMD_CLO		= BIT(3),  /* Command list override */
+++	PORT_CMD_POWER_ON	= BIT(2),  /* Power up device */
+++	PORT_CMD_SPIN_UP	= BIT(1),  /* Spin up device */
+++	PORT_CMD_START		= BIT(0),  /* Enable port DMA engine */
+++
+++	PORT_CMD_ICC_MASK	= (0xfu << 28), /* i/f ICC state mask */
+++	PORT_CMD_ICC_ACTIVE	= (0x1u << 28), /* Put i/f in active state */
+++	PORT_CMD_ICC_PARTIAL	= (0x2u << 28), /* Put i/f in partial state */
+++	PORT_CMD_ICC_SLUMBER	= (0x6u << 28), /* Put i/f in slumber state */
++ 
++ 	/* PORT_FBS bits */
++ 	PORT_FBS_DWE_OFFSET	= 16, /* FBS device with error offset */
++ 	PORT_FBS_ADO_OFFSET	= 12, /* FBS active dev optimization offset */
++ 	PORT_FBS_DEV_OFFSET	= 8,  /* FBS device to issue offset */
++ 	PORT_FBS_DEV_MASK	= (0xf << PORT_FBS_DEV_OFFSET),  /* FBS.DEV */
++-	PORT_FBS_SDE		= (1 << 2), /* FBS single device error */
++-	PORT_FBS_DEC		= (1 << 1), /* FBS device error clear */
++-	PORT_FBS_EN		= (1 << 0), /* Enable FBS */
+++	PORT_FBS_SDE		= BIT(2), /* FBS single device error */
+++	PORT_FBS_DEC		= BIT(1), /* FBS device error clear */
+++	PORT_FBS_EN		= BIT(0), /* Enable FBS */
++ 
++ 	/* PORT_DEVSLP bits */
++ 	PORT_DEVSLP_DM_OFFSET	= 25,             /* DITO multiplier offset */
++@@ -197,45 +199,45 @@ enum {
++ 	PORT_DEVSLP_DITO_OFFSET	= 15,             /* DITO offset */
++ 	PORT_DEVSLP_MDAT_OFFSET	= 10,             /* Minimum assertion time */
++ 	PORT_DEVSLP_DETO_OFFSET	= 2,              /* DevSlp exit timeout */
++-	PORT_DEVSLP_DSP		= (1 << 1),       /* DevSlp present */
++-	PORT_DEVSLP_ADSE	= (1 << 0),       /* Aggressive DevSlp enable */
+++	PORT_DEVSLP_DSP		= BIT(1),         /* DevSlp present */
+++	PORT_DEVSLP_ADSE	= BIT(0),         /* Aggressive DevSlp enable */
++ 
++ 	/* hpriv->flags bits */
++ 
++ #define AHCI_HFLAGS(flags)		.private_data	= (void *)(flags)
++ 
++-	AHCI_HFLAG_NO_NCQ		= (1 << 0),
++-	AHCI_HFLAG_IGN_IRQ_IF_ERR	= (1 << 1), /* ignore IRQ_IF_ERR */
++-	AHCI_HFLAG_IGN_SERR_INTERNAL	= (1 << 2), /* ignore SERR_INTERNAL */
++-	AHCI_HFLAG_32BIT_ONLY		= (1 << 3), /* force 32bit */
++-	AHCI_HFLAG_MV_PATA		= (1 << 4), /* PATA port */
++-	AHCI_HFLAG_NO_MSI		= (1 << 5), /* no PCI MSI */
++-	AHCI_HFLAG_NO_PMP		= (1 << 6), /* no PMP */
++-	AHCI_HFLAG_SECT255		= (1 << 8), /* max 255 sectors */
++-	AHCI_HFLAG_YES_NCQ		= (1 << 9), /* force NCQ cap on */
++-	AHCI_HFLAG_NO_SUSPEND		= (1 << 10), /* don't suspend */
++-	AHCI_HFLAG_SRST_TOUT_IS_OFFLINE	= (1 << 11), /* treat SRST timeout as
++-							link offline */
++-	AHCI_HFLAG_NO_SNTF		= (1 << 12), /* no sntf */
++-	AHCI_HFLAG_NO_FPDMA_AA		= (1 << 13), /* no FPDMA AA */
++-	AHCI_HFLAG_YES_FBS		= (1 << 14), /* force FBS cap on */
++-	AHCI_HFLAG_DELAY_ENGINE		= (1 << 15), /* do not start engine on
++-						        port start (wait until
++-						        error-handling stage) */
++-	AHCI_HFLAG_NO_DEVSLP		= (1 << 17), /* no device sleep */
++-	AHCI_HFLAG_NO_FBS		= (1 << 18), /* no FBS */
+++	AHCI_HFLAG_NO_NCQ		= BIT(0),
+++	AHCI_HFLAG_IGN_IRQ_IF_ERR	= BIT(1), /* ignore IRQ_IF_ERR */
+++	AHCI_HFLAG_IGN_SERR_INTERNAL	= BIT(2), /* ignore SERR_INTERNAL */
+++	AHCI_HFLAG_32BIT_ONLY		= BIT(3), /* force 32bit */
+++	AHCI_HFLAG_MV_PATA		= BIT(4), /* PATA port */
+++	AHCI_HFLAG_NO_MSI		= BIT(5), /* no PCI MSI */
+++	AHCI_HFLAG_NO_PMP		= BIT(6), /* no PMP */
+++	AHCI_HFLAG_SECT255		= BIT(8), /* max 255 sectors */
+++	AHCI_HFLAG_YES_NCQ		= BIT(9), /* force NCQ cap on */
+++	AHCI_HFLAG_NO_SUSPEND		= BIT(10), /* don't suspend */
+++	AHCI_HFLAG_SRST_TOUT_IS_OFFLINE	= BIT(11), /* treat SRST timeout as
+++						      link offline */
+++	AHCI_HFLAG_NO_SNTF		= BIT(12), /* no sntf */
+++	AHCI_HFLAG_NO_FPDMA_AA		= BIT(13), /* no FPDMA AA */
+++	AHCI_HFLAG_YES_FBS		= BIT(14), /* force FBS cap on */
+++	AHCI_HFLAG_DELAY_ENGINE		= BIT(15), /* do not start engine on
+++						      port start (wait until
+++						      error-handling stage) */
+++	AHCI_HFLAG_NO_DEVSLP		= BIT(17), /* no device sleep */
+++	AHCI_HFLAG_NO_FBS		= BIT(18), /* no FBS */
++ 
++ #ifdef CONFIG_PCI_MSI
++-	AHCI_HFLAG_MULTI_MSI		= (1 << 20), /* per-port MSI(-X) */
+++	AHCI_HFLAG_MULTI_MSI		= BIT(20), /* per-port MSI(-X) */
++ #else
++ 	/* compile out MSI infrastructure */
++ 	AHCI_HFLAG_MULTI_MSI		= 0,
++ #endif
++-	AHCI_HFLAG_WAKE_BEFORE_STOP	= (1 << 22), /* wake before DMA stop */
++-	AHCI_HFLAG_YES_ALPM		= (1 << 23), /* force ALPM cap on */
++-	AHCI_HFLAG_NO_WRITE_TO_RO	= (1 << 24), /* don't write to read
++-							only registers */
++-	AHCI_HFLAG_IS_MOBILE		= (1 << 25), /* mobile chipset, use
+++	AHCI_HFLAG_WAKE_BEFORE_STOP	= BIT(22), /* wake before DMA stop */
+++	AHCI_HFLAG_YES_ALPM		= BIT(23), /* force ALPM cap on */
+++	AHCI_HFLAG_NO_WRITE_TO_RO	= BIT(24), /* don't write to read
+++						      only registers */
+++	AHCI_HFLAG_IS_MOBILE		= BIT(25), /* mobile chipset, use
++ 							SATA_MOBILE_LPM_POLICY
++ 							as default lpm_policy */
++ 	AHCI_HFLAG_SUSPEND_PHYS		= (1 << 26), /* handle PHYs during
++@@ -258,22 +260,22 @@ enum {
++ 	EM_MAX_RETRY			= 5,
++ 
++ 	/* em_ctl bits */
++-	EM_CTL_RST		= (1 << 9), /* Reset */
++-	EM_CTL_TM		= (1 << 8), /* Transmit Message */
++-	EM_CTL_MR		= (1 << 0), /* Message Received */
++-	EM_CTL_ALHD		= (1 << 26), /* Activity LED */
++-	EM_CTL_XMT		= (1 << 25), /* Transmit Only */
++-	EM_CTL_SMB		= (1 << 24), /* Single Message Buffer */
++-	EM_CTL_SGPIO		= (1 << 19), /* SGPIO messages supported */
++-	EM_CTL_SES		= (1 << 18), /* SES-2 messages supported */
++-	EM_CTL_SAFTE		= (1 << 17), /* SAF-TE messages supported */
++-	EM_CTL_LED		= (1 << 16), /* LED messages supported */
+++	EM_CTL_RST		= BIT(9), /* Reset */
+++	EM_CTL_TM		= BIT(8), /* Transmit Message */
+++	EM_CTL_MR		= BIT(0), /* Message Received */
+++	EM_CTL_ALHD		= BIT(26), /* Activity LED */
+++	EM_CTL_XMT		= BIT(25), /* Transmit Only */
+++	EM_CTL_SMB		= BIT(24), /* Single Message Buffer */
+++	EM_CTL_SGPIO		= BIT(19), /* SGPIO messages supported */
+++	EM_CTL_SES		= BIT(18), /* SES-2 messages supported */
+++	EM_CTL_SAFTE		= BIT(17), /* SAF-TE messages supported */
+++	EM_CTL_LED		= BIT(16), /* LED messages supported */
++ 
++ 	/* em message type */
++-	EM_MSG_TYPE_LED		= (1 << 0), /* LED */
++-	EM_MSG_TYPE_SAFTE	= (1 << 1), /* SAF-TE */
++-	EM_MSG_TYPE_SES2	= (1 << 2), /* SES-2 */
++-	EM_MSG_TYPE_SGPIO	= (1 << 3), /* SGPIO */
+++	EM_MSG_TYPE_LED		= BIT(0), /* LED */
+++	EM_MSG_TYPE_SAFTE	= BIT(1), /* SAF-TE */
+++	EM_MSG_TYPE_SES2	= BIT(2), /* SES-2 */
+++	EM_MSG_TYPE_SGPIO	= BIT(3), /* SGPIO */
++ };
++ 
++ struct ahci_cmd_hdr {
++-- 
++2.34.1
++
+
+--===============1456173767320645488==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1456173767320645488==--
