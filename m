@@ -4,50 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46D16C282EC
-	for <buildroot@archiver.kernel.org>; Fri, 14 Mar 2025 22:24:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2037FC282EC
+	for <buildroot@archiver.kernel.org>; Fri, 14 Mar 2025 22:25:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D71B6408A1;
-	Fri, 14 Mar 2025 22:24:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A946E42448;
+	Fri, 14 Mar 2025 22:25:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nLQEpWlT2KAp; Fri, 14 Mar 2025 22:24:47 +0000 (UTC)
+ id ytDzTsIh4qDO; Fri, 14 Mar 2025 22:25:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A891D4099E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B67442445
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A891D4099E;
-	Fri, 14 Mar 2025 22:24:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C129EA
- for <buildroot@buildroot.org>; Fri, 14 Mar 2025 22:24:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B67442445;
+	Fri, 14 Mar 2025 22:25:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1B0CF61
+ for <buildroot@buildroot.org>; Fri, 14 Mar 2025 22:25:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 43B49400B5
- for <buildroot@buildroot.org>; Fri, 14 Mar 2025 22:24:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F362D61130
+ for <buildroot@buildroot.org>; Fri, 14 Mar 2025 22:25:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8DCM_FvbyrL3 for <buildroot@buildroot.org>;
- Fri, 14 Mar 2025 22:24:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2977F400A8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2977F400A8
- for <buildroot@buildroot.org>; Fri, 14 Mar 2025 22:24:45 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2174A88023; Fri, 14 Mar 2025 22:24:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 87vYAvvwigsP for <buildroot@buildroot.org>;
+ Fri, 14 Mar 2025 22:25:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E4BDC607DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4BDC607DD
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E4BDC607DD
+ for <buildroot@buildroot.org>; Fri, 14 Mar 2025 22:25:03 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 2E4762003C6;
+ Fri, 14 Mar 2025 23:24:58 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 14 Mar 2025 23:24:58 +0100
+MIME-Version: 1.0
+Date: Fri, 14 Mar 2025 23:24:58 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 14 Mar 2025 22:41:55 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 291a3263e0993d3cba9100cf01cb3bc0c04deee7
-X-Git-Newrev: e7cbf8979845d750520accdbc8a3ca120144c38b
-X-Patchwork-Hint: ignore
-Message-Id: <20250314222445.2174A88023@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libglib2: bump version
- to 2.84.0
+To: Fiona Klute <fiona.klute@gmx.de>
+Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+In-Reply-To: <20250311112509.2245199-1-fiona.klute@gmx.de>
+References: <20250311112509.2245199-1-fiona.klute@gmx.de>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <4364dadc3db11eafdcf67f0bd1942ab7@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1741991100;
+ bh=IJ/yCsZu7SwZX6FB7qK9ss1VenyZdvTMkRGNybsIAwI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=l1PZwjkwb9Nljo8g9dPNwrFVcRHXRvvaCwRw7OOzuKUTa5myplH97fghZ29uDxAG4
+ IDzOxP/Hcj8TA9gEYi1bajRWY+SGtwUALZ/EXwUkPJKnQyS3BvkuCfOd4S3uArOx45
+ hFX9ra1MLKE/Ybnanr95nEAuzC/mp/J/MQw8zGCXjwJ2K9vLb+tu2cY92uvXduplL0
+ xExBQBv/G3vacX97WcAAge3NJiF0TZAyhpoCto42dfi5AQjLqSyjKc5uXsI7my386g
+ r1XczjmAqttj7DRripVOQlqAqdvPb7g6zwCMzeNi9kEwXjpXy7lm5oKlTpe/3cbY7A
+ U8JaOszxz6A7Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=l1PZwjkw
+Subject: Re: [Buildroot] [PATCH 1/1] package/libglib2: bump version to 2.84.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,69 +81,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e7cbf8979845d750520accdbc8a3ca120144c38b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 11/03/2025 12:25, Fiona Klute via buildroot wrote:
+> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+> 
+> Upstream changelog:
+> https://gitlab.gnome.org/GNOME/glib/-/blob/main/NEWS?ref_type=heads
+> 
+> Note that upstream is planning to require C11 starting with 2.85.x,
+> and encourages people who would have problems with that to file
+> issues: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4473
+> 
+> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 
-Upstream changelog:
-https://gitlab.gnome.org/GNOME/glib/-/blob/main/NEWS?ref_type=heads
-
-Note that upstream is planning to require C11 starting with 2.85.x,
-and encourages people who would have problems with that to file
-issues: https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4473
-
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libglib2/Config.in     | 2 +-
- package/libglib2/libglib2.hash | 4 ++--
- package/libglib2/libglib2.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/libglib2/Config.in b/package/libglib2/Config.in
-index 393a7f4405..a875203da7 100644
---- a/package/libglib2/Config.in
-+++ b/package/libglib2/Config.in
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_LIBGLIB2
- 	help
- 	  Low-level core library that forms the basis of GTK+ and GNOME.
- 
--	  http://www.gtk.org/
-+	  https://www.gtk.org/
- 
- comment "libglib2 needs a toolchain w/ wchar, threads"
- 	depends on BR2_USE_MMU
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 8bd4bf157d..9bc244ff22 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.82/glib-2.82.5.sha256sum
--sha256  05c2031f9bdf6b5aba7a06ca84f0b4aced28b19bf1b50c6ab25cc675277cbc3f  glib-2.82.5.tar.xz
-+# https://download.gnome.org/sources/glib/2.84/glib-2.84.0.sha256sum
-+sha256  f8823600cb85425e2815cfad82ea20fdaa538482ab74e7293d58b3f64a5aff6a  glib-2.84.0.tar.xz
- # License files, locally calculated
- sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 6c012c79c7..a1a3954914 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBGLIB2_VERSION_MAJOR = 2.82
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).5
-+LIBGLIB2_VERSION_MAJOR = 2.84
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).0
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = https://download.gnome.org/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.1+
+Applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
