@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFB73C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0633AC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD0E1613A1;
-	Mon, 19 May 2025 10:43:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B3D48832D9;
+	Mon, 19 May 2025 10:43:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4jP8pwa-xqUf; Mon, 19 May 2025 10:43:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DFeMX3JypZbI; Mon, 19 May 2025 10:43:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A05B6138F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8771D832D8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A05B6138F;
-	Mon, 19 May 2025 10:43:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7DBD9E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8771D832D8;
+	Mon, 19 May 2025 10:43:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 07CD2D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8BA4F4172E
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5C46840E53
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kK-KDl0WTDEI for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M53lzqoI8R6Q for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3751D4106B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AC8140D61
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3751D4106B
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8AC8140D61
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 31A5E84A21; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ id 87CA6872E7; Mon, 19 May 2025 10:39:42 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 21 Mar 2025 21:14:27 +0100
+Date: Fri, 14 Mar 2025 19:01:50 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8bf3bd9fdce7421a73646a6d0d19ff6d369b2972
-X-Git-Newrev: 12bdfa42e9b086337fa791379525742d93285d8d
+X-Git-Oldrev: befd90b7655804aa30eae494fae6640ff178217c
+X-Git-Newrev: 9f60aa973d1fb3905eb3f655b32ec368419e2bf6
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103944.31A5E84A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-sqlalchemy:
- bump to version 2.0.39
+Message-Id: <20250519103942.87CA6872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rt-tests: fix build
+ with glibc 2.41+
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,64 +60,106 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1181516163408055813=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1181516163408055813==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=12bdfa42e9b086337fa791379525742d93285d8d
+commit: https://git.buildroot.net/buildroot/commit/?id=9f60aa973d1fb3905eb3f655b32ec368419e2bf6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For change log, see:
-https://docs.sqlalchemy.org/en/20/changelog/changelog_20.html#change-2.0.39
+Since glibc bump to 2.41 in Buildroot commit [1], rt-tests is failing
+to build with error:
 
-Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
+    In file included from src/lib/rt-utils.c:28:
+    src/include/rt-sched.h:45:8: error: redefinition of 'struct sched_attr'
+       45 | struct sched_attr {
+          |        ^~~~~~~~~~
+
+glibc 2.41 adds sched_*attr, conflicting with rt-sched.h in the rt-tests
+package. This commit resolves the conflict by applying a patch from
+upstream which excludes the conflicting code when using glibc >= 2.41.
+
+Fixes:
+https://autobuild.buildroot.org/results/30308c74291004c328d6c3603ce68d600c5ef281/
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/6ecab31fad12a494ec0d2a3767c736a55c80a769
+
+Signed-off-by: Brandon Lumbra <brandon.lumbra@sense.com>
+[Julien:
+ - add extra info in commit log
+ - add missing Signed-off-by line in commit log
+ - add missing Signed-off-by in patch
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-sqlalchemy/python-sqlalchemy.hash | 4 ++--
- package/python-sqlalchemy/python-sqlalchemy.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../rt-tests/0003-Fix-build-with-glibc-2.41.patch  | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/package/python-sqlalchemy/python-sqlalchemy.hash b/package/python-sqlalchemy/python-sqlalchemy.hash
-index aa9888b58d..c66ee44e91 100644
---- a/package/python-sqlalchemy/python-sqlalchemy.hash
-+++ b/package/python-sqlalchemy/python-sqlalchemy.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sqlalchemy/json
--md5  3cbf218c54b25fa4e18d78842956601d  sqlalchemy-2.0.38.tar.gz
--sha256  e5a4d82bdb4bf1ac1285a68eab02d253ab73355d9f0fe725a97e1e0fa689decb  sqlalchemy-2.0.38.tar.gz
-+md5  4aecb8d3b1d077d6099c1f8ed18367a4  sqlalchemy-2.0.39.tar.gz
-+sha256  5d2d1fe548def3267b4c70a8568f108d1fed7cbbeccb9cc166e05af2abc25c22  sqlalchemy-2.0.39.tar.gz
- # Locally computed sha256 checksums
- sha256  9821720b58d4a565b61321007a8ad43ab6991a3959e66cd5db4dd9eae69c7dfc  LICENSE
-diff --git a/package/python-sqlalchemy/python-sqlalchemy.mk b/package/python-sqlalchemy/python-sqlalchemy.mk
-index 3a9d9e06b6..26d7d308b9 100644
---- a/package/python-sqlalchemy/python-sqlalchemy.mk
-+++ b/package/python-sqlalchemy/python-sqlalchemy.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_SQLALCHEMY_VERSION = 2.0.38
-+PYTHON_SQLALCHEMY_VERSION = 2.0.39
- PYTHON_SQLALCHEMY_SOURCE = sqlalchemy-$(PYTHON_SQLALCHEMY_VERSION).tar.gz
--PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/e4/08/9a90962ea72acd532bda71249a626344d855c4032603924b1b547694b837
-+PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/00/8e/e77fcaa67f8b9f504b4764570191e291524575ddbfe78a90fc656d671fdc
- PYTHON_SQLALCHEMY_SETUP_TYPE = setuptools
- PYTHON_SQLALCHEMY_LICENSE = MIT
- PYTHON_SQLALCHEMY_LICENSE_FILES = LICENSE
-
---===============1181516163408055813==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/rt-tests/0003-Fix-build-with-glibc-2.41.patch b/package/rt-tests/0003-Fix-build-with-glibc-2.41.patch
+new file mode 100644
+index 0000000000..6899b55c99
+--- /dev/null
++++ b/package/rt-tests/0003-Fix-build-with-glibc-2.41.patch
+@@ -0,0 +1,57 @@
++From 280e198c39d1b17d0491d7c4e7afda97ae6c8e6f Mon Sep 17 00:00:00 2001
++From: Yaakov Selkowitz <yselkowi@redhat.com>
++Date: Wed, 29 Jan 2025 16:46:11 -0500
++Subject: [PATCH] Fix rt-tests build with glibc-2.41
++
++The sched_*attr APIs were added to glibc
++https://sourceware.org/git/?p=glibc.git;a=commit;h=21571ca0d70302909cf72707b2a7736cf12190a0
++
++This fixes the build conflict in rt-tests with glibc-2.4
++
++Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
++Signed-off-by: John Kacur <jkacur@redhat.com>
++Upstream: https://web.git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git/commit/?id=d3a23a0cc76789c3083df3bad78982cd49bc4c5e
++Signed-off-by: Brandon Lumbra <brandon.lumbra@sense.com>
++---
++ src/include/rt-sched.h | 2 ++
++ src/lib/rt-sched.c     | 2 ++
++ 2 files changed, 4 insertions(+)
++
++diff --git a/src/include/rt-sched.h b/src/include/rt-sched.h
++index 80171c76e0ee..dfd7f45f51cc 100644
++--- a/src/include/rt-sched.h
+++++ b/src/include/rt-sched.h
++@@ -42,6 +42,7 @@
++ #define __NR_sched_getattr		275
++ #endif
++ 
+++#if ! __GLIBC_PREREQ(2, 41)
++ struct sched_attr {
++ 	uint32_t size;
++ 	uint32_t sched_policy;
++@@ -67,5 +68,6 @@ int sched_getattr(pid_t pid,
++ 		  struct sched_attr *attr,
++ 		  unsigned int size,
++ 		  unsigned int flags);
+++#endif
++ 
++ #endif /* __RT_SCHED_H__ */
++diff --git a/src/lib/rt-sched.c b/src/lib/rt-sched.c
++index 8023bc70c473..2500abde26e4 100644
++--- a/src/lib/rt-sched.c
+++++ b/src/lib/rt-sched.c
++@@ -14,6 +14,7 @@
++ 
++ #include "rt-sched.h"
++ 
+++#if ! __GLIBC_PREREQ(2, 41)
++ int sched_setattr(pid_t pid,
++ 		  const struct sched_attr *attr,
++ 		  unsigned int flags)
++@@ -28,3 +29,4 @@ int sched_getattr(pid_t pid,
++ {
++ 	return syscall(__NR_sched_getattr, pid, attr, size, flags);
++ }
+++#endif
++-- 
++2.47.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1181516163408055813==--
