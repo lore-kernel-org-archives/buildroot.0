@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D2CAC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F156C3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1129F80EF4;
-	Mon, 19 May 2025 10:41:53 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Kl4ztGzz0BYk; Mon, 19 May 2025 10:41:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32CBA80E80
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 32CBA80E80;
-	Mon, 19 May 2025 10:41:52 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1AB511BF
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 23D6F40DBD
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADD77408D0;
+	Mon, 19 May 2025 10:41:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P4sPwDqumMcG for <buildroot@buildroot.org>;
+ id tKc1qn3a_mua; Mon, 19 May 2025 10:41:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D22A44096A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D22A44096A;
+	Mon, 19 May 2025 10:41:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2C53FE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D5772411ED
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DjYg5EJm2rxB for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:39:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C760C40D34
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8227940917
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C760C40D34
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8227940917
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C37DF873D4; Mon, 19 May 2025 10:39:41 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 7BD9D873D1; Mon, 19 May 2025 10:39:42 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 11 Mar 2025 18:46:30 +0100
+Date: Fri, 14 Mar 2025 18:47:25 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4809690d42f9b395ccb76ee7583c199fdd8d42c5
-X-Git-Newrev: 5dab98d721e978e65afce44ee2ea92fcae2d2b67
+X-Git-Oldrev: 873407b46c2b6b9e154be97bfdec61c9c8349229
+X-Git-Newrev: befd90b7655804aa30eae494fae6640ff178217c
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103941.C37DF873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libjxl: security bump
- to version 0.11.1
+Message-Id: <20250519103942.7BD9D873D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/php: security bump
+ version to 8.3.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,46 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5dab98d721e978e65afce44ee2ea92fcae2d2b67
+commit: https://git.buildroot.net/buildroot/commit/?id=befd90b7655804aa30eae494fae6640ff178217c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For release notes since v0.11.0, see:
-https://github.com/libjxl/libjxl/releases/tag/v0.11.1
+Changelog: https://www.php.net/ChangeLog-8.php#PHP_8_3
 
-Fixes:
-https://www.cve.org/cverecord?id=CVE-2024-11403
-https://www.cve.org/cverecord?id=CVE-2024-11498
+Release notes: https://news-web.php.net/php.announce/455
+"(The 8.3.18 release was skipped due to the erroneous omission of a
+non-security related patch.)"
 
+Fixes CVE-2024-11235, CVE-2025-1219, CVE-2025-1736, CVE-2025-1861,
+CVE-2025-1734, and CVE-2025-1217.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libjxl/libjxl.hash | 2 +-
- package/libjxl/libjxl.mk   | 2 +-
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libjxl/libjxl.hash b/package/libjxl/libjxl.hash
-index 1778acf2e9..56d1909110 100644
---- a/package/libjxl/libjxl.hash
-+++ b/package/libjxl/libjxl.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  7ce4ec8bb37a435a73ac18c4c9ff56c2dc6c98892bf3f53a328e3eca42efb9cf  libjxl-0.11.0.tar.gz
-+sha256  1492dfef8dd6c3036446ac3b340005d92ab92f7d48ee3271b5dac1d36945d3d9  libjxl-0.11.1.tar.gz
- sha256  8405932022a556380c2d8c272eff154a923feb197233f348ce5f7334fb0a5ede  LICENSE
- sha256  91915f8ae056a68a3c5bdf05d9f6f78bb6903e27a8ca3a8434c9e4ac87300575  PATENTS
-diff --git a/package/libjxl/libjxl.mk b/package/libjxl/libjxl.mk
-index 6fc9ca5a6e..18bebad662 100644
---- a/package/libjxl/libjxl.mk
-+++ b/package/libjxl/libjxl.mk
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 8696b234c7..ba9c5bb468 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  6158ee678e698395da13d72c7679a406d2b7554323432f14d37b60ed87d8ccfb  php-8.3.17.tar.xz
++sha256  976e4077dd25bec96b5dfe8938052d243bbd838f95368a204896eff12756545f  php-8.3.19.tar.xz
+ 
+ # License file
+ sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index d127154815..374fdb2c69 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBJXL_VERSION = 0.11.0
-+LIBJXL_VERSION = 0.11.1
- LIBJXL_SITE = $(call github,libjxl,libjxl,v$(LIBJXL_VERSION))
- LIBJXL_LICENSE = BSD-3-Clause
- LIBJXL_LICENSE_FILES = LICENSE PATENTS
+-PHP_VERSION = 8.3.17
++PHP_VERSION = 8.3.19
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
