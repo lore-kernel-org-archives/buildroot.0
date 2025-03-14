@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44E4EC282EC
-	for <buildroot@archiver.kernel.org>; Fri, 14 Mar 2025 20:03:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9573C282EC
+	for <buildroot@archiver.kernel.org>; Fri, 14 Mar 2025 20:05:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD4DF60642;
-	Fri, 14 Mar 2025 20:03:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A23F5848A4;
+	Fri, 14 Mar 2025 20:05:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yuTO3r0hdA11; Fri, 14 Mar 2025 20:05:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AFB37848A5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFB37848A5;
+	Fri, 14 Mar 2025 20:05:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D906C8
+ for <buildroot@buildroot.org>; Fri, 14 Mar 2025 20:05:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id F19B861255
+ for <buildroot@buildroot.org>; Fri, 14 Mar 2025 20:05:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HE-Wh24dH1QZ; Fri, 14 Mar 2025 20:03:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0852F60652
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0852F60652;
-	Fri, 14 Mar 2025 20:03:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B340C8
- for <buildroot@buildroot.org>; Fri, 14 Mar 2025 20:03:54 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2EE7B4086C
- for <buildroot@buildroot.org>; Fri, 14 Mar 2025 20:03:54 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lcw5UlPaOtkO for <buildroot@buildroot.org>;
- Fri, 14 Mar 2025 20:03:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4856D4064D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4856D4064D
- for <buildroot@buildroot.org>; Fri, 14 Mar 2025 20:03:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3C10388007; Fri, 14 Mar 2025 20:03:53 +0000 (UTC)
+ id 8a5y7BArgg98 for <buildroot@buildroot.org>;
+ Fri, 14 Mar 2025 20:05:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CF3F0611FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF3F0611FA
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CF3F0611FA
+ for <buildroot@buildroot.org>; Fri, 14 Mar 2025 20:05:22 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 0790578035E;
+ Fri, 14 Mar 2025 21:05:16 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 14 Mar 2025 21:05:16 +0100
+MIME-Version: 1.0
+Date: Fri, 14 Mar 2025 21:05:16 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 14 Mar 2025 20:58:04 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a79c862fa193d4f0685a1619f391fe228346d8ea
-X-Git-Newrev: fc690631caa3f061adc22c1f7dc4def226a80194
-X-Patchwork-Hint: ignore
-Message-Id: <20250314200353.3C10388007@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fio: explicitly control libnfs
+To: =?UTF-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>
+Cc: buildroot@buildroot.org, Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+In-Reply-To: <20250314104109.2821418-1-alex.bennee@linaro.org>
+References: <20250314104109.2821418-1-alex.bennee@linaro.org>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <cc51e4f2c3bdb94dc184a5583e35584f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1741982719;
+ bh=mQbFz9w9lHe7jFuooFd7XxMhA2tld7/taYKJEAOKxv0=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=CBRM9ECdnsx87aXM0SbZeGP8hrS+LV20s3nI+gFFbugK4bb1qyau2IctUx6y91fZv
+ ReP0xobyJ1AHnJ7p7IJBDCgfC8rtlI9+2bBmGB3vV6T63MdePr7xRwQbVVyTMGjYrM
+ eR3j3/uXrVenLbR6l9WrmU8iB41E3xFPG9eIfEYQowBiNxb4vXuNNtTTm51avpjgMS
+ OZpcWD37Re5sRTmOg+Y2LfMN2stC9ig/7rsE4dr6vOFrP/41Uelf+lWMDbYlyNwZR9
+ 6EJlnKcZMEpf4hX/d6GhCPF4wZapqJpzfK/Lq+QFyE3iWB6gYbIPc83mOVqDpHsR7q
+ ZxSbMI7MtNFGg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=CBRM9ECd
+Subject: Re: [Buildroot] [RFC PATCH] package/fio: explicitly control libnfs
  dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,63 +83,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9034953421544099097=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9034953421544099097==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=fc690631caa3f061adc22c1f7dc4def226a80194
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-The upstream uses pkg-config to detect and enable libnfs usage if it
-is found [1]. This can get confused by the host configuration so at the
-least we should disable detection if we are not planning to build with
-it.
-
-Note: the fio configure script accept both --enable-libnfs
-and --disable-libnfs since upstream commit [2], first included
-in fio v3.31. In Buildroot, this is supported since [3].
-
-[1] https://github.com/axboe/fio/blob/fio-3.38/configure#L2360
-[2] https://github.com/axboe/fio/commit/98ab12629c6a98fb53e28a4a70f53ce594cca858
-[3] https://gitlab.com/buildroot.org/buildroot/-/commit/256395d8e5e7258df830dc19b47dc9ef19e48535
-
-Signed-off-by: Alex Bennée <alex.bennee@linaro.org>
-[Julien: add extra info in commit log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/fio/fio.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/package/fio/fio.mk b/package/fio/fio.mk
-index 10fafb8a0e..57a54dc34a 100644
---- a/package/fio/fio.mk
-+++ b/package/fio/fio.mk
-@@ -16,7 +16,10 @@ FIO_DEPENDENCIES += libaio
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBNFS),y)
--FIO_DEPENDENCIES += libnfs
-+FIO_OPTS += --enable-libnfs
-+FIO_DEPENDENCIES += host-pkgconf libnfs
-+else
-+FIO_OPTS += --disable-libnfs
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBISCSI),y)
-
---===============9034953421544099097==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9034953421544099097==--
+T24gMTQvMDMvMjAyNSAxMTo0MSwgQWxleCBCZW5uw6llIHdyb3RlOgo+IFRoZSB1cHN0cmVhbSB1
+c2VzIHBrZy1jb25maWcgdG8gZGV0ZWN0IGFuZCBlbmFibGUgbGlibmZzIHVzYWdlIGlmIGl0Cj4g
+aXMgZm91bmQuIFRoaXMgY2FuIGdldCBjb25mdXNlZCBieSB0aGUgaG9zdCBjb25maWd1cmF0aW9u
+IHNvIGF0IHRoZQo+IGxlYXN0IHdlIHNob3VsZCBkaXNhYmxlIGRldGVjdGlvbiBpZiB3ZSBhcmUg
+bm90IHBsYW5uaW5nIHRvIGJ1aWxkIHdpdGgKPiBpdC4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBBbGV4
+IEJlbm7DqWUgPGFsZXguYmVubmVlQGxpbmFyby5vcmc+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhh
+bmtzLgpJIGFsc28gYWRkZWQgZXh0cmEgaW5mbyBpbiB0aGUgY29tbWl0IGxvZy4gU2VlOgpodHRw
+czovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9jb21taXQvZmM2OTA2MzFj
+YWEzZjA2MWFkYzIyYzFmN2RjNGRlZjIyNmE4MDE5NAoKQmVzdCByZWdhcmRzLAoKSnVsaWVuLgpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
