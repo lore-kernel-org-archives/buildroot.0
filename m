@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94FE6C282EC
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:07:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53FBFC282EC
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:07:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 406B28115D;
-	Tue, 18 Mar 2025 15:07:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 03168810AA;
+	Tue, 18 Mar 2025 15:07:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eMvtarrRXaLu; Tue, 18 Mar 2025 15:07:18 +0000 (UTC)
+ id WNAYqdBqWfWZ; Tue, 18 Mar 2025 15:07:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE9A5810FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A073581AEA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE9A5810FB;
-	Tue, 18 Mar 2025 15:07:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A073581AEA;
+	Tue, 18 Mar 2025 15:07:23 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 48D6416E
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:03:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id A52B4D5
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:03:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F11E4097E
+ by smtp4.osuosl.org (Postfix) with ESMTP id AAD264090B
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Us2SRiWNR72W for <buildroot@buildroot.org>;
+ id yKKBWydllt98 for <buildroot@buildroot.org>;
  Tue, 18 Mar 2025 15:02:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D8304090B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC4C440DA8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D8304090B
+ by smtp4.osuosl.org (Postfix) with ESMTP id BC4C440DA8
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6822381E08; Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
+ id B902485FD1; Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Mar 2025 22:13:25 +0100
+Date: Sat, 15 Mar 2025 22:23:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2c7a817dc512d77400f7367818d9febc5d5de51e
-X-Git-Newrev: 5ae4c36dfe392c2a0a729f2d5bc823759e83cf51
+X-Git-Oldrev: 54f79d804f8fc78d1ebbc064b91adc6c26cf01cc
+X-Git-Newrev: 3a2baca4b785db33175058741f6123dfef85df84
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150245.6822381E08@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/cgroupfs-v2-mount: new package
+Message-Id: <20250318150245.B902485FD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] system/skeleton: move target of
+ /etc/resolv.conf symlink
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,150 +65,131 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ae4c36dfe392c2a0a729f2d5bc823759e83cf51
+commit: https://git.buildroot.net/buildroot/commit/?id=3a2baca4b785db33175058741f6123dfef85df84
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, the cgroupfs-mount package only mounts a cgroup v1 hierarchy,
-but v1 is considered legacy and obsolete, while v2 has been around for a
-while now, and is required by some packages (e.g. podman whines about
-v1).
+In commit ba70f94e629e (subversion makes it so we do not need a separate
+tarball to store empty directories and symlinks for the target_skeleton.)
+/etc/resolv.conf was made a symlink to ../tmp/resolv.conf. There was no
+rationale behind this change, but back at the time (2006!), the only
+location that Buildroot guaranteed to be writable was /tmp, and we
+needed a writable location to create resolv.conf from a DHCP reply for
+example, so the change made sense.
 
-cgroupfs-mount has not had a release in almost 8 years now, and only the
-occasional commit since then and until more than 3 years ago. It's not
-going to evolve...
+Commits 2f67d9e2fe7b (preparation for BR2_PACKAGE_BUSYBOX_SKELETON), in
+2007, then d9119c0bc55d (move default skeleton to fs/ and drop busybox
+skeleton), in 2010, and finally 6c3e3ad41977 (New top-level directory:
+system), in 2012, propagated that /etc/resolv.conf without any change in
+the target of the symlink.
 
-Add a new package with a simple-enough sysv startup script, that mounts
-the cgroup v2 hierarchy filesystem. For systemd, there's nothing to do,
-as systemd handles the mount by itself.
+However, since commit d380dde1d287 (skeleton: make /run a proper
+directory/filesystem), in 2015, a tmpfs has been mounted on /run, so it
+is now guaranteed to be writable as well for SYS-V-based systems. That
+has also been the case for openrc since commit a840e485d174
+(package/skeleton-init-openrc: new package), in 2019. This has also
+always been the case for systemd as well.
 
-Since both cgroup v1 and v2 use the same mountpoint, we can't have both
-enabled at the same time, and thus we restrict the v2 to be hidden when
-v1 is enabled (quite a few packages select the v1; changing those would
-require that they be validated against v2 first...)
+resolv.conf is not a temporary file [0]; it is really more of a runtime
+data; its location in /tmp is just a historical artefact of a long-wrong
+assertion.
 
-Note that, due to limitations in Kconfig, cgroupfs-v2-mount will appear
-indented below cgroupfs-mount, because it has a (negative) dependency on
-it. This spurious indentation is unfortunate and annoying, but benign;
-fixing that would require breaking the dependency with a random Kconfig
-symbol, which we don't have, and which we decided not to introduce just
-for this one use-case (well, there's host-gnupg and host-gnupg2 that
-have the exact same issue, but meh...)
+Nowadays, distributions either have an actual file as /etc/resolv.conf
+(when /etc is writable), or it is a symlink to a location below /run.
+
+Although resolv.conf is used by the C library resolver, a lot of
+applications now will directly use it; this is the case for some
+container management tools, such as podman (and its helpers, like
+netavark), that expect /etc/resolv.conf to either be a file or a symlink
+to somewhere in /run, and fail to provide DNS services if that is not
+the case.
+
+So, we move the target of /etc/resolv.conf to ../run/resolv.conf.
+
+As a consequence, we can drop the workaround in podman's runtime test.
+
+To be noted: there are tow custom fstab files in Buildroot that do not
+explicitly mount a tmpfs on /run:
+  - one for a systemd runtime test, so /run would also be a tmpfs there
+    anyway, as systemd does mount one;
+  - one for the mender_x86_64_efi_defconfig; that's a not a problem:
+    / is an ext4 that is mounted r/w (and /tmp is not a tmpfs either, so
+    the symlink to /tmp would not not have worked if / was not r/w
+    anyway).
+
+This leaves people with their own fstab, to adapt. Cater to them by
+adding a little blurb in the documentation.
+
+Note: the following 43 tests all built and ran successfully:
+    tests.init
+    tests.package.test_apache
+    tests.package.test_docker_compose
+    tests.package.test_dropbear
+    tests.package.test_iputils
+    tests.package.test_podman
+    tests.package.test_skopeo
+    tests.package.test_wget
+
+(no other runtime test were attempted)
+
+[0] temporary, as in relatively short-lived.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Fiona Klute <fiona.klute@gmx.de>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/Config.in                              |  1 +
- package/cgroupfs-v2-mount/Config.in            | 10 ++++++
- package/cgroupfs-v2-mount/S30cgroupfs2         | 44 ++++++++++++++++++++++++++
- package/cgroupfs-v2-mount/cgroupfs-v2-mount.mk | 20 ++++++++++++
- 4 files changed, 75 insertions(+)
+ docs/manual/migrating.adoc                   | 14 ++++++++++++++
+ support/testing/tests/package/test_podman.py |  7 -------
+ system/skeleton/etc/resolv.conf              |  2 +-
+ 3 files changed, 15 insertions(+), 8 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 0c9b5bb6cf..7d8540869d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2809,6 +2809,7 @@ menu "System tools"
- 	source "package/balena-engine/Config.in"
- 	source "package/bubblewrap/Config.in"
- 	source "package/cgroupfs-mount/Config.in"
-+	source "package/cgroupfs-v2-mount/Config.in"
- 	source "package/circus/Config.in"
- 	source "package/conmon/Config.in"
- 	source "package/containerd/Config.in"
-diff --git a/package/cgroupfs-v2-mount/Config.in b/package/cgroupfs-v2-mount/Config.in
-new file mode 100644
-index 0000000000..2dd2dbc089
---- /dev/null
-+++ b/package/cgroupfs-v2-mount/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_CGROUPFS_V2_MOUNT
-+	bool "cgroupfs-v2-mount"
-+	depends on !BR2_INIT_SYSTEMD
-+	depends on !BR2_PACKAGE_CGROUPFS_MOUNT
-+	help
-+	  Mount the cgroup v2 hierarchy filesystem.
+diff --git a/docs/manual/migrating.adoc b/docs/manual/migrating.adoc
+index 5e8c3ea2c6..1b55bc6173 100644
+--- a/docs/manual/migrating.adoc
++++ b/docs/manual/migrating.adoc
+@@ -195,3 +195,17 @@ host-mender-artifact. See +board/mender/x86_64/post-image-efi.sh+ for an
+ example of how to generate the bootstrap.mender file. See 
+ https://docs.mender.io/release-information/release-notes-changelog/mender-client#mender-3-5-0-1[the
+ release notes], under features, for more information.
 +
-+comment "cgroupfs-v2-mount is incompatible with cgroupfs-mount"
-+	depends on !BR2_INIT_SYSTEMD
-+	depends on BR2_PACKAGE_CGROUPFS_MOUNT
-diff --git a/package/cgroupfs-v2-mount/S30cgroupfs2 b/package/cgroupfs-v2-mount/S30cgroupfs2
-new file mode 100644
-index 0000000000..42839ef921
---- /dev/null
-+++ b/package/cgroupfs-v2-mount/S30cgroupfs2
-@@ -0,0 +1,44 @@
-+#!/bin/sh
++[[migrating-resolv.conf]]
++=== Migrating to 2025.05
 +
-+DAEMON=cgroupfs2
++In 2025.05, for SYS-V-like systems (busybox, sysvinit, openrc), the
++`/etc/resolv.conf` symlink was changed to point to `/run/resolv.conf`,
++rather than the legacy location in `/tmp`. Users of a custom `fstab`
++will need to ensure that `/run` is writable before resolv.conf is
++created (usually by a DHCP client), either with an entry for `/run`,
++or with a startup script.
 +
-+start() {
-+	printf 'Mounting %s: ' "${DAEMON}"
-+	mkdir -p /sys/fs/cgroup
-+	mount -t cgroup2 none /sys/fs/cgroup
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Unmounting %s: ' "${DAEMON}"
-+	umount /sys/fs/cgroup
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+case "$1" in
-+	start|stop|restart)
-+		"$1";;
-+	reload)
-+		# Restart, since there is no true "reload" feature.
-+		restart;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+esac
-diff --git a/package/cgroupfs-v2-mount/cgroupfs-v2-mount.mk b/package/cgroupfs-v2-mount/cgroupfs-v2-mount.mk
-new file mode 100644
-index 0000000000..10e18d8d41
---- /dev/null
-+++ b/package/cgroupfs-v2-mount/cgroupfs-v2-mount.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# cgroupfs-v2-mount
-+#
-+################################################################################
-+
-+CGROUPFS_V2_MOUNT_VERSION =
-+CGROUPFS_V2_MOUNT_SITE =
-+
-+define CGROUPFS_V2_MOUNT_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
-+endef
-+
-+define CGROUPFS_V2_MOUNT_INSTALL_INIT_SYSV
-+	$(INSTALL) -m 0755 -D \
-+		$(CGROUPFS_V2_MOUNT_PKGDIR)/S30cgroupfs2 \
-+		$(TARGET_DIR)/etc/init.d/S30cgroupfs2
-+endef
-+
-+$(eval $(generic-package))
++Note that systems using systemd are not impacted: systemd always ensures
++that `/run` is writable. Systems further using systemd-resolved already
++had a `/etc/resolv.conf` that pointed into `/run` anyway.
+diff --git a/support/testing/tests/package/test_podman.py b/support/testing/tests/package/test_podman.py
+index 4d9b19310e..9d86a06129 100644
+--- a/support/testing/tests/package/test_podman.py
++++ b/support/testing/tests/package/test_podman.py
+@@ -71,13 +71,6 @@ class PodmanBase(infra.basetest.BRTest):
+         self.assertRunOk("touch /etc/subuid /etc/subgid")
+         self.assertRunOk("usermod --add-subuids 10000-75535 foo")
+         self.assertRunOk("usermod --add-subgids 10000-75535 foo")
+-        # If /etc/resolv.conf is a symlink, it has to point either into /etc
+-        # (or deep in there), or into /run (or deep in there), as only those
+-        # would eventually get used by podman/netavark for # rootless containers.
+-        # This is considered a workaround to the current situation; resolv,conf
+-        # should ultimately be in /run rather than /tmp.
+-        self.assertRunOk("mv /tmp/resolv.conf /run/resolv.conf")
+-        self.assertRunOk("ln -sf /run/resolv.conf /etc/resolv.conf")
+ 
+         # First, test podman as root (the current user)
+         self.do_podman()
+diff --git a/system/skeleton/etc/resolv.conf b/system/skeleton/etc/resolv.conf
+index 71f6f96576..2ce2910f08 120000
+--- a/system/skeleton/etc/resolv.conf
++++ b/system/skeleton/etc/resolv.conf
+@@ -1 +1 @@
+-../tmp/resolv.conf
+\ No newline at end of file
++../run/resolv.conf
+\ No newline at end of file
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
