@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3299EC28B28
-	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:06:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B85ECC28B2F
+	for <buildroot@archiver.kernel.org>; Tue, 18 Mar 2025 15:06:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0528760BD2;
-	Tue, 18 Mar 2025 15:06:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DC6382E1A;
+	Tue, 18 Mar 2025 15:06:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1VRWiTS-ivCT; Tue, 18 Mar 2025 15:06:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O-16eG8qQ8GH; Tue, 18 Mar 2025 15:06:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EE5B60C31
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A42C84073
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EE5B60C31;
-	Tue, 18 Mar 2025 15:06:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A42C84073;
+	Tue, 18 Mar 2025 15:06:45 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 23ABDD8C
- for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:03:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 82C28D8C
+ for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:03:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9F992408F2
+ by smtp4.osuosl.org (Postfix) with ESMTP id C7070408D0
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0u3vFjAl6YJj for <buildroot@buildroot.org>;
- Tue, 18 Mar 2025 15:02:46 +0000 (UTC)
+ id tlfThChJ3jxp for <buildroot@buildroot.org>;
+ Tue, 18 Mar 2025 15:02:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46B5A408D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6218740901
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 46B5A408D0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6218740901
  for <buildroot@buildroot.org>; Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 439AB81E08; Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
+ id 5BC5085FD1; Tue, 18 Mar 2025 15:02:45 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Mar 2025 21:59:46 +0100
+Date: Sat, 15 Mar 2025 22:11:01 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8edab9217886f6dac81626d92180019e7901fd7b
-X-Git-Newrev: c1add224622319a7c5dc66b073dba0faef98b420
+X-Git-Oldrev: 5c77357c580f84e5a2986a4155e0cfd194c44b70
+X-Git-Newrev: 2c7a817dc512d77400f7367818d9febc5d5de51e
 X-Patchwork-Hint: ignore
-Message-Id: <20250318150245.439AB81E08@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/slirp4netns: needs TUN support in
- the kernel
+Message-Id: <20250318150245.5BC5085FD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cgroupfs-mount: tweak the kernel
+ config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,38 +65,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1add224622319a7c5dc66b073dba0faef98b420
+commit: https://git.buildroot.net/buildroot/commit/?id=2c7a817dc512d77400f7367818d9febc5d5de51e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-slirp4netns needs a kernel with TUN support, so enable that and the few
-options it depends on.
+When it was introduced in 2016 with commit 0e1547a87cfd (cgroupfs-mount:
+new package), we did not yet have the infrastructure for package to set
+kernel config options, which only came 4 years later with commit
+0aed4c2dae76 (linux: allow packages to set kernel config options).
+
+So at that time, the requirements for cgroupfs-mount were documented in
+the help for the Kconfig symbol.
+
+But now that we do have the infrastructure in place, actually use it to
+set the required options, and drop the list from the Kconfig entry (that
+would be duplication, prone to bit-rot with time, and other packages do
+not document their requirements in Kconfig, they just use the infra to
+set the options).
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Reviewed-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/slirp4netns/slirp4netns.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ package/cgroupfs-mount/Config.in         | 12 +-----------
+ package/cgroupfs-mount/cgroupfs-mount.mk | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/package/slirp4netns/slirp4netns.mk b/package/slirp4netns/slirp4netns.mk
-index ffcd334ab6..5923957c25 100644
---- a/package/slirp4netns/slirp4netns.mk
-+++ b/package/slirp4netns/slirp4netns.mk
-@@ -12,4 +12,13 @@ SLIRP4NETNS_DEPENDENCIES = libcap libglib2 libseccomp slirp
+diff --git a/package/cgroupfs-mount/Config.in b/package/cgroupfs-mount/Config.in
+index 0b2e4ba1e7..29a40c93d1 100644
+--- a/package/cgroupfs-mount/Config.in
++++ b/package/cgroupfs-mount/Config.in
+@@ -4,16 +4,6 @@ config BR2_PACKAGE_CGROUPFS_MOUNT
+ 	help
+ 	  cgroupfs mount and umount scripts.
  
- SLIRP4NETNS_AUTORECONF = YES
+-	  requires a Linux kernel >= 3.0 with the following options
+-	  enabled:
+-
+-	  - CONFIG_BLK_CGROUP
+-	  - CONFIG_CGROUPS
+-	  - CONFIG_CGROUP_CPUACCT
+-	  - CONFIG_CGROUP_DEVICE
+-	  - CONFIG_CGROUP_FREEZER
+-	  - CONFIG_CGROUP_WRITEBACK
+-	  - CONFIG_CGROUP_SCHED
+-	  - CONFIG_CGROUP_PIDS
++	  Requires a Linux kernel >= 3.0
  
-+define SLIRP4NETNS_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CORE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETDEVICES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CORE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_TUN)
+ 	  https://github.com/tianon/cgroupfs-mount
+diff --git a/package/cgroupfs-mount/cgroupfs-mount.mk b/package/cgroupfs-mount/cgroupfs-mount.mk
+index 5af87629ea..156d584266 100644
+--- a/package/cgroupfs-mount/cgroupfs-mount.mk
++++ b/package/cgroupfs-mount/cgroupfs-mount.mk
+@@ -10,6 +10,17 @@ CGROUPFS_MOUNT_LICENSE = GPL-3.0+
+ CGROUPFS_MOUNT_LICENSE_FILES = debian/copyright
+ CGROUPFS_MOUNT_CPE_ID_VALID = YES
+ 
++define CGROUPFS_MOUNT_LINUX_CONFIG_FIXUPS
++	$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_CGROUP)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_CPUACCT)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_DEVICE)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_FREEZER)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_WRITEBACK)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_SCHED)
++	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_PIDS)
 +endef
 +
- $(eval $(autotools-package))
+ define CGROUPFS_MOUNT_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/cgroupfs-mount $(TARGET_DIR)/usr/bin/cgroupfs-mount
+ 	$(INSTALL) -D -m 0755 $(@D)/cgroupfs-umount $(TARGET_DIR)/usr/bin/cgroupfs-umount
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
