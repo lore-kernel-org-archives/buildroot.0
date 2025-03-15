@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 040ACC35FF1
-	for <buildroot@archiver.kernel.org>; Sat, 15 Mar 2025 23:12:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A9B8C35FF3
+	for <buildroot@archiver.kernel.org>; Sat, 15 Mar 2025 23:12:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C54F5834DB;
-	Sat, 15 Mar 2025 23:12:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 07B7840DE0;
+	Sat, 15 Mar 2025 23:12:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ztOIj24rtyEO; Sat, 15 Mar 2025 23:12:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E8SMICraOSc3; Sat, 15 Mar 2025 23:12:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1DE58222C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD3DC410A9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1DE58222C;
-	Sat, 15 Mar 2025 23:12:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2A75B16B
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD3DC410A9;
+	Sat, 15 Mar 2025 23:12:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A7E0061
  for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:11:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A085F6076D
+ by smtp4.osuosl.org (Postfix) with ESMTP id B9AD9406A1
  for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:11:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ld13JGJpcSj6 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IhXfxqz3XLux for <buildroot@buildroot.org>;
  Sat, 15 Mar 2025 23:11:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C229606B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4C0A406FD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8C229606B1
+ by smtp4.osuosl.org (Postfix) with ESMTP id C4C0A406FD
  for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:11:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 79E7488002; Sat, 15 Mar 2025 23:11:51 +0000 (UTC)
+ id BF8708800D; Sat, 15 Mar 2025 23:11:51 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Mar 2025 21:58:27 +0100
+Date: Sat, 15 Mar 2025 22:16:22 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cf8641b73e7f1577637bfef0ece78dd519b25d19
-X-Git-Newrev: 4554ab98154c50cb24e3b8417b9e76ef5a0737a5
+X-Git-Oldrev: 5ae4c36dfe392c2a0a729f2d5bc823759e83cf51
+X-Git-Newrev: 2795fecc50ca91d7303ae817cdfa260eabd0975e
 X-Patchwork-Hint: ignore
-Message-Id: <20250315231151.79E7488002@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/shadow: install to
- staging for subids
+Message-Id: <20250315231151.BF8708800D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/nftables: add an
+ option to force JSON support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4554ab98154c50cb24e3b8417b9e76ef5a0737a5
+commit: https://git.buildroot.net/buildroot/commit/?id=2795fecc50ca91d7303ae817cdfa260eabd0975e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When the subids feature is enabled, shadow will install a library and a
-header:
+Currently, nftables JSON support is implicit: if jansson is enabled,
+JSON support is enabled, otherwise it is not.
 
-    $ sort output/build/shadow-4.16.0/.files-list.txt
-    [...]
-    shadow,./lib/libsubid.la
-    shadow,./lib/libsubid.so
-    shadow,./lib/libsubid.so.5
-    shadow,./lib/libsubid.so.5.0.0
-    [...]
-    shadow,./usr/include/shadow/subid.h
-    [...]
+Some packages will require that nftables be built with JSON support;
+that's the case of netavarks, for example (to come in a later patch).
+So, in the current state, it would mean a package would have to select
+jansson, although it does not itself use it, so that nftables has JSON
+support. This does not feel right.
 
-Install to staging in that case.
+Instead, introduce an option to nftables, to explicitly enabled JSON
+support. Packages such as netavark would then just have to require JSON
+support in nftables.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Reviewed-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/shadow/shadow.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/nftables/Config.in   | 7 ++++++-
+ package/nftables/nftables.mk | 2 +-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
-index cea984012d..c598ad88fd 100644
---- a/package/shadow/shadow.mk
-+++ b/package/shadow/shadow.mk
-@@ -46,6 +46,7 @@ SHADOW_CONF_OPTS += --disable-account-tools-setuid
+diff --git a/package/nftables/Config.in b/package/nftables/Config.in
+index 833a3a38a2..514682ec48 100644
+--- a/package/nftables/Config.in
++++ b/package/nftables/Config.in
+@@ -13,9 +13,14 @@ config BR2_PACKAGE_NFTABLES
+ 
+ 	  http://www.netfilter.org/projects/nftables/index.html
+ 
+-# Legacy: this used to be handled in nftables.mk
+ if BR2_PACKAGE_NFTABLES
++# Legacy: this used to be handled in nftables.mk
+ source "package/nftables/nftables-python/Config.in"
++
++config BR2_PACKAGE_NFTABLES_JSON
++	bool "json support"
++	select BR2_PACKAGE_JANSSON
++
  endif
  
- ifeq ($(BR2_PACKAGE_SHADOW_SUBORDINATE_IDS),y)
-+SHADOW_INSTALL_STAGING = YES
- SHADOW_CONF_OPTS += --enable-subordinate-ids
- define SHADOW_SUBORDINATE_IDS_PERMISSIONS
- 	/usr/bin/newuidmap f 4755 0 0 - - - - -
+ comment "nftables needs a toolchain w/ wchar, headers >= 3.12"
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 380e553cde..f6e6a64efd 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -42,7 +42,7 @@ else
+ NFTABLES_CONF_OPTS += --without-cli
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_JANSSON),y)
++ifeq ($(BR2_PACKAGE_NFTABLES_JSON),y)
+ NFTABLES_DEPENDENCIES += jansson
+ NFTABLES_CONF_OPTS += --with-json
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
