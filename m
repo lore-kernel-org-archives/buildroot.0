@@ -1,80 +1,82 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAE45C28B28
-	for <buildroot@archiver.kernel.org>; Sat, 15 Mar 2025 23:14:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7E94C28B28
+	for <buildroot@archiver.kernel.org>; Sat, 15 Mar 2025 23:43:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6CD5A409F0;
-	Sat, 15 Mar 2025 23:14:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3F917605ED;
+	Sat, 15 Mar 2025 23:43:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LnMS8oluS04l; Sat, 15 Mar 2025 23:14:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SM2yKjqfdezB; Sat, 15 Mar 2025 23:43:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3363340C20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DE8A60830
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3363340C20;
-	Sat, 15 Mar 2025 23:14:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8BB2F61
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:14:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3DE8A60830;
+	Sat, 15 Mar 2025 23:43:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9B9F1C8
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:43:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6CF614011C
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:14:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 801CB6082F
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:43:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q_ZZfYfrrxad for <buildroot@buildroot.org>;
- Sat, 15 Mar 2025 23:14:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q5inadYj5Qcv for <buildroot@buildroot.org>;
+ Sat, 15 Mar 2025 23:42:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
  helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4924A400D6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4924A400D6
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4924A400D6
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:14:07 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5E29E605ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E29E605ED
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5E29E605ED
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:42:59 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id E9D47B0053E;
- Sun, 16 Mar 2025 00:14:00 +0100 (CET)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id F3A4FB0053E;
+ Sun, 16 Mar 2025 00:42:50 +0100 (CET)
 Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
  via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 16 Mar 2025 00:13:58 +0100
+ with HTTP (HTTP/1.0 POST); Sun, 16 Mar 2025 00:42:50 +0100
 MIME-Version: 1.0
-Date: Sun, 16 Mar 2025 00:13:58 +0100
+Date: Sun, 16 Mar 2025 00:42:50 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: buildroot@buildroot.org, Ricardo Martincoski
- <ricardo.martincoski@datacom.com.br>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-In-Reply-To: <d16d5f276345efd9a9abf3d177da8bd7341bd5e6.1742068624.git.yann.morin.1998@free.fr>
-References: <cover.1742068624.git.yann.morin.1998@free.fr>
- <d16d5f276345efd9a9abf3d177da8bd7341bd5e6.1742068624.git.yann.morin.1998@free.fr>
+To: Vladimir Oltean <olteanv@gmail.com>
+Cc: Vincent Jardin <vjardin@free.fr>, buildroot@buildroot.org, Ioana Ciornei
+ <ioana.ciornei@nxp.com>, Brandon Maier <Brandon.Maier@collins.com>, Romain
+ Naour <romain.naour@smile.fr>, Akhilesh Nema <nemaakhilesh@gmail.com>
+In-Reply-To: <20250315171101.qcng2f6rsice3a4n@skbuf>
+References: <20250302215219.1276480-1-olteanv@gmail.com>
+ <20250302215219.1276480-6-olteanv@gmail.com>
+ <7ppsoggazufebwywfwqqlkmssypneyqtmbg4tr4dx76o5dx7q7@iyndbkzeo2zl>
+ <616d3621a153da86972c8b1497f71c53@free.fr>
+ <20250315171101.qcng2f6rsice3a4n@skbuf>
 User-Agent: Webmail Free/1.6.10
-Message-ID: <205df8c1cd27cb8498835a3178055bc4@free.fr>
+Message-ID: <fc010781aca9965029fefa404da84c6b@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1742080444;
- bh=NMVqiQV9qCkaYF6oCPQE3EaoSSN82cN4tGsGuA/0zME=;
+ d=free.fr; s=smtp-20201208; t=1742082177;
+ bh=8oqjlBdfd0/LX7ikEtZIkxHAVPwADhA2aAoOwbxfr3I=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ZduGnLqg4nSMfUmHZrgs/avG0lj9ffv6qckuNqa9U2f7QX4TedfAsLwd1SnzjPqoQ
- iXPBdBqMSh+R/cyjtJtbcQaTGWRCmGC0nvNAb3M35A88rsITrFeh2AFeSfOWWgS2nW
- jM5ygie6cKDW/EdT/eR93pz+xLs5OFF1yFuBQenfqE5t1WGRL+lTRzFUiYGZGZ1arh
- vlx5SHpTHUcAbZLjL86Fxr9bxU8yX/jJ+QHhEAxOQ3pJlXFEJtNO/sUAg014DgZnVm
- h4PddG6pgJTmcIA8z6QbUZhzsYBfZENuqXaz7ZO9Xpkh5CH/LxGq/DSjTJE9TYDDmc
- rQBGTGr04Dk5Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=p3ef7w/Qn1FiuEqKdyZoEKw6J1cE6VLvaRJOhOwu4LsN/BDaX9L9cquiVlK6cTL0V
+ NxpiPxagRmg7CxYvDWTYiCQ9pta5KIDSwPmc9cYBWnQ4FtOlGZx8nri7O0XchlZMLH
+ 1PY1z7K8SUBRi0JYKM7YaX1aq2JcDZqrl9y7sP9mhgCo97ni1+5KNiYaqVLYPQo4wJ
+ aBhUxtOg+mB+CzM8/PgedvcekFm6Nlga63Gxoa+V4wEeLcOckreA9a1tJ1bLeJEHzn
+ 2wET/k634ADeJf8i7Zr/r9dLYOcddBXZGe5lySEsD6ki215kqgIXXeRivD8/G05utw
+ 55hDUaa4UoIMA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=ZduGnLqg
-Subject: Re: [Buildroot] [PATCH 01/14 v4] support/testing: set date in
- emulated machine
+ header.s=smtp-20201208 header.b=p3ef7w/Q
+Subject: Re: [Buildroot] [PATCH 05/15] package/qoriq-mc-binary: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,54 +93,76 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Yann, All,
+Hi Vladimir,
 
-On 15/03/2025 20:56, Yann E. MORIN wrote:
-> When time comes to check certificates, the date and time in the 
-> emulated
-> machine should be close enough to the actual values, so that 
-> certificate
-> validity can be checked.
+On 15/03/2025 18:11, Vladimir Oltean wrote:
+> Hi Julien,
 > 
-> Some Qemu machines have an RTC (e.g. arm vexpress-a9 has a pl031), and
-> the kernel needs a driver for those RTC. It is not guaranteed that the
-> machine used for a test meets those two conditions; in such a case, the
-> time in the machine starts way back in the past (1970-01-01T00:00:00Z 
-> on
-> sysv, or the release date of systemd). This is the case with the 
-> default
-> kernel, so such tests do not have the proper time.
+> On Sat, Mar 15, 2025 at 01:47:55PM +0100, Julien Olivain wrote:
+>> Vladimir: could you add a comment describing how to find the
+>> "best" version? And also, describe to what other components version
+>> it should be aligned.
+>> 
+>> To keep track of that, the way we're trying to do it on i.MX
+>> components, is to add the tag name of the nxp bsp it's coming from,
+>> in the commit log.
+>> For example:
+>> """
+>> qoriq-mc-binary version 10.39.0 is aligned with
+>> nxp-qoriq yocto bsp lf-6.6.36-2.1.0.
+>> """
+>> This helps further debug, when some components are misaligned.
 > 
-> Set the date to the date of the host system. This is going to be 
-> accurate
-> to the second, which is, by far, enough for our purpose.
+> So, if I understand you correctly, a sentence in the commit message is
+> sufficient?
 > 
-> To avoid having to consider what combination of emulated machine and 
-> kernel
-> configuration are being used, we always set the date, as this is a
-> generic step that should be done by the infra (like login in as root 
-> is).
+> "The API exposed by the MC firmware respects backwards compatibility
+> principles, which means that the latest firmware version can always be
+> (and should always be) used on a platform, irrespective of the Linux,
+> U-Boot, RCW and restool versions, even though the latest features might
+> not be used by older API consumers.
 > 
-> The Emulator() class doesn't inherit from unittest.TestCase, so we 
-> can't
-> call any of the usual self.assertXXX() methods; instead, we just raise
-> a standard exception, like is done a few lines above to detect the 
-> login
-> prompt.
+> In terms of forwards compatibility, old MC firmware versions can be 
+> used
+> as long as the qoriq-restool package is built with a 
+> MC_VERSION_COMPATIBLE
+> variable (located in its Makefile, signifying "minimum compatible
+> version") older than, or equal to it.
 > 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> If the use of qoriq-restool is not desired (networking objects are
+> statically created by the DPL), old MC firmware versions are supported
+> by U-Boot and the Linux kernel with a limited feature set. Thus, it
+> is still possible to an extent to use firmware versions older than
+> MC_VERSION_COMPATIBLE.
+> 
+> According to the upstream maintainer, the latest MC firmware version
+> is identified by the fact that it is always located at the HEAD of the
+> "master" branch:
+> https://lore.kernel.org/buildroot/482493f17e63d2b4cb285b50049ed8e6@free.fr/T/#m62c3ec04ba546ac9b0a194d13bc35fedeaa9deb0
+> Currently, the latest MC firmware version is 10.39.0. This version
+> should be in sync with the qoriq-mc-utils package.
+> 
+> At this stage, the latest lf-6.6.52-2.2.0 NXP BSP has qoriq-restool 
+> with
+> an MC_VERSION_COMPATIBLE='10.32.0', which means that it supports this 
+> MC
+> firmware version.
+> https://github.com/nxp-qoriq/restool/blob/lf-6.6.52-2.2.0/Makefile#L23"
+> 
+> Should I resend with the above paragraphs appended to the commit 
+> message
+> in this way?
 
-I applied this series in branch next.
+Yes, please.
+Having such a description in the commit log would be great!
 
-This series was starting to get big, and I think that it is in a good
-shape to be merged. It is also a good time to merge that in the
-branch next, early in the release cycle. It will give time to have
-all the runtime tests running on it and let people test it. We'll do
-follow up fixes, if needed.
+If you plan to send an updated series, please consider rebasing
+on the branch -next instead:
+https://gitlab.com/buildroot.org/buildroot/-/commits/next
 
-Thanks for this great work!
+I applied today few qoriq component updates from Akhilesh Nema.
+Some of those patches seems identical to some included in this
+series.
 
 Best regards,
 
