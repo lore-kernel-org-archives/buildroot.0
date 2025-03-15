@@ -1,53 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1FCB2C28B30
-	for <buildroot@archiver.kernel.org>; Sat, 15 Mar 2025 20:50:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A479AC28B28
+	for <buildroot@archiver.kernel.org>; Sat, 15 Mar 2025 20:51:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CB77E607A2;
-	Sat, 15 Mar 2025 20:50:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 747E680E92;
+	Sat, 15 Mar 2025 20:51:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tTdDl0Vw5xE7; Sat, 15 Mar 2025 20:50:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sTlqghKuhKUj; Sat, 15 Mar 2025 20:51:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ADB7D607BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D54983794
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ADB7D607BE;
-	Sat, 15 Mar 2025 20:50:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 47DE7C8
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 20:50:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D54983794;
+	Sat, 15 Mar 2025 20:51:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E214761
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 20:51:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 377B740477
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 20:50:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C594783777
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 20:51:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1nrcI5u_FZyX for <buildroot@buildroot.org>;
- Sat, 15 Mar 2025 20:50:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC6954046C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EC6954046C
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 20:50:31 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C43687F18; Sat, 15 Mar 2025 20:50:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AO7p9KfxWOvL for <buildroot@buildroot.org>;
+ Sat, 15 Mar 2025 20:51:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B7C6980E92
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7C6980E92
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B7C6980E92
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 20:51:02 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 0043813F879;
+ Sat, 15 Mar 2025 21:50:55 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 15 Mar 2025 21:50:55 +0100
+MIME-Version: 1.0
+Date: Sat, 15 Mar 2025 21:50:55 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 15 Mar 2025 21:45:31 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cb97f6a9b32456b33e160afbc6677db089ad9412
-X-Git-Newrev: 022f49618cab99f7d944bf6608578ae4a5f543b3
-X-Patchwork-Hint: ignore
-Message-Id: <20250315205031.6C43687F18@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/docker-engine: add
- option to support catatonit as init
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: buildroot@buildroot.org, Christian Stewart <christian@aperture.us>,
+ "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+In-Reply-To: <6f7da99f22b412afc8f202c8b8053e8fec0da9e7.1739615626.git.yann.morin.1998@free.fr>
+References: <cover.1739615626.git.yann.morin.1998@free.fr>
+ <6f7da99f22b412afc8f202c8b8053e8fec0da9e7.1739615626.git.yann.morin.1998@free.fr>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <cdec34adf8964b6c139f5b7c805c88c3@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1742071859;
+ bh=QjLruBoCqu2ocixQAmwg1RpZ1Ot+m4QrZCoVkkyye7U=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=aGgMb3lthn0OeP48tzDGTJJtboQMzT/LRR3Io183N8ebzyvAY7KUzb1UolDRtN5jw
+ whlYle2cNYh6+icZJ8aHmX/mz9oFo98KUzKVQRWOkHZnFkL4GFR5N0lkYlI5KmwYRy
+ FcK+RVE3kN/JIoWRK35FBQb1iVDWQwR/zPjUwKgU/BkVMgJViTFsITh6oSoFKgYNMR
+ mLXAd0S/DTqGTZsT9I/wFZEjy1157098CPFmZtN31qIzEoDXbefZQ+wT2NI/wllFfJ
+ I/3yUjH8Qlr2QqELxS3J3O8DyibQFXgeWMcX8i8fIj3s6FgC699pGjEtL+4Oft+oG2
+ DcXEyMFMTpp3w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=aGgMb3lt
+Subject: Re: [Buildroot] [PATCH 1/4] package/docker-engine: carry the tini
+ init symlink
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,125 +85,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=022f49618cab99f7d944bf6608578ae4a5f543b3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On 15/02/2025 11:33, Yann E. MORIN wrote:
+> tini can be used standalone, not just as an init injected by docker.
+> As such, creating the docker-engine's init symlink does not belong to
+> tini itself, but to docker-engine.
+> 
+> This will also help later, when we allow docker-engine to use another
+> init alternative, catatonit (already paclkaged in Buildroot, but not
+> integrated with docker).
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Christian Stewart <christian@aperture.us>
+> Cc: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 
-currently, docker-engine can only use tini as injected init. catatonit
-as a package exists, but it does not create the symlink that would be
-needed at runtime [0].
-
-Add a choice at the docker-engine level, for which injected init to use,
-bringing catatonit to the integration level of tini.
-
-[0] that could be done in a post-build script, but that's not practical.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Christian Stewart <christian@aperture.us>
-Cc: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Tested-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-[Julien: move the legacy option to a new 2025.05 section]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- Config.in.legacy                       | 11 +++++++++++
- package/docker-engine/Config.in        | 32 +++++++++++++++++++++++++++-----
- package/docker-engine/docker-engine.mk |  6 ++++--
- 3 files changed, 42 insertions(+), 7 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index f94a7db7b0..998e175d4a 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -144,6 +144,17 @@ endif
- 
- ###############################################################################
- 
-+comment "Legacy options removed in 2025.05"
-+
-+# BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT is still referenced in docker-engine
-+config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT
-+	bool "docker-engine init support is now a choice"
-+	select BR2_LEGACY
-+	help
-+	  docker-engine init support is now a choice. The original
-+	  setting has been adapted; be sure to review it in the
-+	  docker-engine package.
-+
- comment "Legacy options removed in 2025.02"
- 
- config BR2_PACKAGE_ANGULARJS
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index e03ecceeff..6338eeeef1 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -48,16 +48,38 @@ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
- 	help
- 	  Build the vfs filesystem driver for Docker.
- 
--config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT
-+choice
- 	bool "support docker-init"
-+	default BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_TINI if BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT  # legacy
-+	help
-+	  Support providing a minimal init process for containers.
-+	  Required to use "docker run --init".
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_NONE
-+	bool "none"
-+	help
-+	  Do not support docker-init.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_CATATONIT
-+	bool "catatonit"
-+	select BR2_PACKAGE_CATATONIT # runtime
-+	help
-+	  Support providing a minimal init process for containers,
-+	  using catatonit.
-+
-+config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_TINI
-+	bool "tini"
- 	select BR2_PACKAGE_TINI # runtime
- 	help
- 	  Support providing a minimal init process for containers,
--	  using tini. Required to use "docker run --init".
-+	  using tini.
-+
-+endchoice
- 
--	  This does not change the Docker engine build, the
--	  docker-init symlink is provided by the tini package
--	  itself. This option only adds the dependency.
-+config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_NAME
-+	string
-+	default "tini" if BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_TINI
-+	default "catatonit" if BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_CATATONIT
- 
- endif
- 
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 7467f13b39..c39dc2b440 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -35,10 +35,12 @@ DOCKER_ENGINE_DEPENDENCIES += systemd
- DOCKER_ENGINE_TAGS += systemd journald
- endif
- 
--ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT),y)
-+DOCKER_ENGINE_INIT_NAME = $(call qstrip,$(BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_NAME))
-+ifneq ($(DOCKER_ENGINE_INIT_NAME),)
- define DOCKER_ENGINE_INIT
- 	mkdir -p $(TARGET_DIR)/usr/libexec/docker
--	ln -sf ../../bin/tini $(TARGET_DIR)/usr/libexec/docker/docker-init
-+	ln -sf ../../bin/$(DOCKER_ENGINE_INIT_NAME) \
-+		$(TARGET_DIR)/usr/libexec/docker/docker-init
- endef
- DOCKER_ENGINE_POST_INSTALL_TARGET_HOOKS += DOCKER_ENGINE_INIT
- endif
+Series applied to next, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
