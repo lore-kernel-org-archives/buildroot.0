@@ -1,110 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 790A8C28B28
-	for <buildroot@archiver.kernel.org>; Sat, 15 Mar 2025 17:11:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CAA0C28B28
+	for <buildroot@archiver.kernel.org>; Sat, 15 Mar 2025 19:57:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EBF0E81467;
-	Sat, 15 Mar 2025 17:11:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8877F607C8;
+	Sat, 15 Mar 2025 19:57:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U3q9Wfpyx-yo; Sat, 15 Mar 2025 17:11:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kONMeLQKt1NS; Sat, 15 Mar 2025 19:57:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED3B28156A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5419B607BE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED3B28156A;
-	Sat, 15 Mar 2025 17:11:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 31D98C8
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 17:11:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5419B607BE;
+	Sat, 15 Mar 2025 19:57:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BC94FEA
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 19:57:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1550081467
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 17:11:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AACE9411C9
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 19:57:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z-47PbalfEbY for <buildroot@buildroot.org>;
- Sat, 15 Mar 2025 17:11:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uA6Obumz9rfB for <buildroot@buildroot.org>;
+ Sat, 15 Mar 2025 19:57:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
- envelope-from=olteanv@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 80E1381E2C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80E1381E2C
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 80E1381E2C
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 17:11:07 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-3912b75c0f2so317878f8f.0
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 10:11:07 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AC52741147
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AC52741147
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AC52741147
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 19:57:13 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-43bb6b0b898so7858105e9.1
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 12:57:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1742058665; x=1742663465;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+ d=1e100.net; s=20230601; t=1742068631; x=1742673431;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=FHEe+OF3w/A46Np5ugZ42bMx5ad2kye8pz0WTQ/kun0=;
- b=rOhrmHcaqHGoc6NvwSONWSNl8hRzc3jJXFENCHZDOTONtUZ046lDqM1htucm7Htq4Y
- ZzjQsiS2y/UoqO4Gw1acjvNhtQb8WkUZunjwFA/D11KfqNJNlPYYHpLIom0irQFkEOWF
- xKC5CajD4iFpupuhHPn2UqP9zecoye1/LocVt2i/5tN4o0IeUoMJLRP6qxCZipdm7Tt7
- bR+KW4wooiA+8p2whJs2Bq+1aVJO3i/7PKHF6hvd9bj5Uxtw7FCcWmI81rYDYOL/Dm8G
- xvS72+jbdI3X7Tr2JPcbfLb6/+MPchWG/D4E6aI78ZB4M2iKkGgrkJGbvU4F7yFNLqcC
- lizg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCWe//4h02HKjM12ZSJLuABoHk9UQT5RdF3nrDistEcowboQdTywDmudbVyvBp+R9uO4ofBjNzHUzLA=@buildroot.org
-X-Gm-Message-State: AOJu0Yz0hoMLuRBO0a+5Y3nsHyJmApMxzZmf7yKYarH/bldZvr+Yb0BQ
- HeD0XaAYaFaNdny4z7X8zhRwDoVSzR9BIpHtnpu5+itWPM44YeOE
-X-Gm-Gg: ASbGncs5pldgZVk2Vex7ZCSGq1TZ0vCllXF0olkwauCvH3eocn+Tlfd/zA907EIwbnq
- PIRT6CgbiO25qgVRNZX1xZg8/gNyHx6cNuoh/7IYTKE3iZyP1kvaeZq3Z1PxwybUmQmbn9r+L5J
- MZnrTQiiKtIHjEj/srct+4et0SHuNsMdWQa9LY8Fr66U0szmnnKumNHlq0sqGsc+5VSGG6eFuXp
- mOnDecbwl4y9zAbf6WQa8qQNeE2spGVV8tVfA5sqUR7LEMVxre7GFfXZ3IV4V1e+NP378OoLcKg
- 3EoX7mrHn1peBiToRl41XgpUMq2RqcFb
-X-Google-Smtp-Source: AGHT+IFcBSqNMknlcmiaA8PBfSjTrG85PnaU4c2JJGULp/c8tsoLAaVwQp79Qo45OFacak6uXsxaow==
-X-Received: by 2002:a05:6000:1a8e:b0:38e:48a6:280f with SMTP id
- ffacd0b85a97d-3971f12bb41mr3304611f8f.9.1742058665246; 
- Sat, 15 Mar 2025 10:11:05 -0700 (PDT)
-Received: from skbuf ([86.127.125.88]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-395cb40cd78sm9613670f8f.78.2025.03.15.10.11.03
+ bh=SngFbQS7SFA3Qj5NYN841qZ/aUzx+5eDC3KjQTfE9rQ=;
+ b=D7skp4dIj8KLExV3YvgM2whHUFZhRK2Yz9oy3ChBH9OkdZKLFoMiVZEdUFD2y6bdMY
+ MxSCLRFInpJSVgiu3H1M15j3+/z/mzWdprGkPlMQxBBTrboYeKraCA5pNplnghSB4imv
+ P34wu16cYFhLsgL8zePUccr8dD/FB9hHwuI/2KghGYBJjIv1sOluYSxlEGghdh2V/g84
+ d6kyZopGVZGGKgys3ZAfcIPQoIZAZh/L44apaLbsVlGADY/D11usz/5da3V1ACzGBXSX
+ tzCJuPyVcOUeLgGLRTfijTI+Cu9H0XkT09/FopwJLGWELBS/LEQz/psO/o6mM7p1BGLk
+ s8SA==
+X-Gm-Message-State: AOJu0YzBEzWWumad5J6xiCwmLqQbONpUSVgr/x2OaK+9qPjUGuo1kozd
+ MCre3TF8h+TY7eWTZ8ZiOx1aWexe96593/YC9SDhON4o9lUAINNwa7dD5g==
+X-Gm-Gg: ASbGncthX6r4JtMh0+Rbo588jcxp8A+wS0p7gdZZWzsJ3SolLjaJJSJ8RV4mLOlcKwv
+ fnT8V3oX00N92+/CfiHaJlT/YhIxr1DR35YT0v8CqUa6hu2p3XrBFzQnbS2v9I9hzoPPvr1tcKb
+ DRAVgHpAM4jpcCTDD3uhRCz8CU6l7sj9JbzlTO5YFprMBOyiawS0x+wBeevEFRY8aarhsk2pCLt
+ ioETJg6/4cYzs+Z77aQsRYujDGdpSO8KyUt3qD2Dl8IvtKRMta4h6C5mWMvD6GrMmMfC8QncAxw
+ mu2u+dBNYyo+vnVaLYjCy+Cru8evj7/tZTugSy1w21bsic74jQXnCWTS
+X-Google-Smtp-Source: AGHT+IFCwzBchjZZ/uPchHjuCpXCh5N2o+RANMOo5RqZWYjBl1ao1NW/MWipbv+o39H7JLBd+zubMw==
+X-Received: by 2002:a05:600c:1994:b0:43c:f470:7605 with SMTP id
+ 5b1f17b1804b1-43d1ec80e5cmr85379985e9.12.1742068631084; 
+ Sat, 15 Mar 2025 12:57:11 -0700 (PDT)
+Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-43d1fd301edsm29313365e9.0.2025.03.15.12.57.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 15 Mar 2025 10:11:04 -0700 (PDT)
-Date: Sat, 15 Mar 2025 19:11:01 +0200
-From: Vladimir Oltean <olteanv@gmail.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: Vincent Jardin <vjardin@free.fr>, buildroot@buildroot.org,
- Ioana Ciornei <ioana.ciornei@nxp.com>,
- Brandon Maier <Brandon.Maier@collins.com>,
- Romain Naour <romain.naour@smile.fr>,
- Akhilesh Nema <nemaakhilesh@gmail.com>
-Message-ID: <20250315171101.qcng2f6rsice3a4n@skbuf>
-References: <20250302215219.1276480-1-olteanv@gmail.com>
- <20250302215219.1276480-6-olteanv@gmail.com>
- <7ppsoggazufebwywfwqqlkmssypneyqtmbg4tr4dx76o5dx7q7@iyndbkzeo2zl>
- <616d3621a153da86972c8b1497f71c53@free.fr>
+ Sat, 15 Mar 2025 12:57:10 -0700 (PDT)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 15 Mar 2025 20:57:09 +0100
+Message-ID: <cover.1742068624.git.yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <616d3621a153da86972c8b1497f71c53@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1742058665; x=1742663465; darn=buildroot.org;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
- bh=FHEe+OF3w/A46Np5ugZ42bMx5ad2kye8pz0WTQ/kun0=;
- b=jhwhSRZQRcS6w4hC1nqTMEIjbzWPLkvcJXjwiR2/cZraNVTEV4M2OFLJR/QYPzkeUA
- n8foGhSAVkDMRtcyoz608heS4o+jVR25WhohP0B7dmBh5PkTzKa8x1GM1oJdoRocDFI4
- 1ygCAHWV1CfdItu7n81nMZkzoVJXmlb0MFwJujSWIxYgQfwLc8pmM9pz6MDoOix7sIRF
- DnBypAAaoWkqEt3R1p0jHqmcKmpxM2zB0ZwlaeTCs43/jW0XDrlL6/iCY36nL4ipyTU4
- kWVNHRrcqgSvuZz9CZb37poqgFL+CJb6BeHOsvxgMjMlym17Ggxulk/7gqbEOTnTaeHt
- qh9A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=jhwhSRZQ
-Subject: Re: [Buildroot] [PATCH 05/15] package/qoriq-mc-binary: new package
+ d=gmail.com; s=20230601; t=1742068631; x=1742673431; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=SngFbQS7SFA3Qj5NYN841qZ/aUzx+5eDC3KjQTfE9rQ=;
+ b=kIWfcN0vQ/CSuOTApfGVlO6W8CaKXmd15gB3Pt9ophBmEWBi/eoC3wM8TPZTJc0Cwh
+ W9LcYMT1GhYBSzt02Yffn2jEfeBaIp/rrh6UQgmztGXdCyLN4n2BLcDnHfn2j3WvdM/h
+ yGGm7JLZ6rsoCrhHNLtgDM/E0cbbRg+oE7NMYflIPd1Nf13sSf0UhVJHHZHuV8a70JFG
+ e8toRVpoAAxT6qUeRMqcdX9NlhF8Mxx9drPGobLtABXY33O1xYYYWtDsToV5vwc0UTBB
+ XL8o6CQziXgA1V6lLXCJiPVifY3vVHoBROLsHY6F3UZLBsit2D5horIF0ggAZ0BUfyGS
+ h7Vg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=kIWfcN0v
+Subject: [Buildroot] [PATCH 00/14 v4] package/podman: new package (branch
+ yem/podman)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,62 +105,136 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>,
+ Christian Stewart <christian@aperture.us>,
+ "Yann E . MORIN" <yann.morin@orange.com>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>, Julien Olivain <ju.o@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Julien,
+Hello All!
 
-On Sat, Mar 15, 2025 at 01:47:55PM +0100, Julien Olivain wrote:
-> Vladimir: could you add a comment describing how to find the
-> "best" version? And also, describe to what other components version
-> it should be aligned.
-> 
-> To keep track of that, the way we're trying to do it on i.MX
-> components, is to add the tag name of the nxp bsp it's coming from,
-> in the commit log.
-> For example:
-> """
-> qoriq-mc-binary version 10.39.0 is aligned with
-> nxp-qoriq yocto bsp lf-6.6.36-2.1.0.
-> """
-> This helps further debug, when some components are misaligned.
+This series introduce podman, an alternative to Docker. Podman is
+daemon-less, and does not need root either.
 
-So, if I understand you correctly, a sentence in the commit message is
-sufficient?
+The series starts with preparatory commits in existing packages and the
+testing infra: then it introduces new packages on which podman will
+rely.
 
-"The API exposed by the MC firmware respects backwards compatibility
-principles, which means that the latest firmware version can always be
-(and should always be) used on a platform, irrespective of the Linux,
-U-Boot, RCW and restool versions, even though the latest features might
-not be used by older API consumers.
+Eventually, it adds a few optional packages that extend podman's
+functionality.
 
-In terms of forwards compatibility, old MC firmware versions can be used
-as long as the qoriq-restool package is built with a MC_VERSION_COMPATIBLE
-variable (located in its Makefile, signifying "minimum compatible
-version") older than, or equal to it.
+Not required by podman, skopeo is made a target package as well, as it
+was of help debugging podman (and Docker in a separate series).
 
-If the use of qoriq-restool is not desired (networking objects are
-statically created by the DPL), old MC firmware versions are supported
-by U-Boot and the Linux kernel with a limited feature set. Thus, it
-is still possible to an extent to use firmware versions older than
-MC_VERSION_COMPATIBLE.
+Last but not least, the ultmate patch in th eseries moves the
+/etc/resolv.conf symlink target to pont into /run rather than the
+current /tmp.
 
-According to the upstream maintainer, the latest MC firmware version
-is identified by the fact that it is always located at the HEAD of the
-"master" branch:
-https://lore.kernel.org/buildroot/482493f17e63d2b4cb285b50049ed8e6@free.fr/T/#m62c3ec04ba546ac9b0a194d13bc35fedeaa9deb0
-Currently, the latest MC firmware version is 10.39.0. This version
-should be in sync with the qoriq-mc-utils package.
+Changes v1 -> v2:
+  - add licensing info for netavark and podman  (Julien)
 
-At this stage, the latest lf-6.6.52-2.2.0 NXP BSP has qoriq-restool with
-an MC_VERSION_COMPATIBLE='10.32.0', which means that it supports this MC
-firmware version.
-https://github.com/nxp-qoriq/restool/blob/lf-6.6.52-2.2.0/Makefile#L23"
+Changes v2 -> v3:
+  - make rootless actually work (Raphael)
 
-Should I resend with the above paragraphs appended to the commit message
-in this way?
+Changes v3 -> v4;
+  - bump podman to 5.4.1 (from 5.4.0)
+  - add support for nftables in lieu of iptables  (Raphael)
+  - move iptables and nftables options from podman to netavark
+  - ditto for related kernel config fixups
+  - add json option to nftables
+  - add aardvark-dns (for inter-container DNS) and passt (alternative to
+    slitrp4netns)
+  - extend podman's runtime test with network testing
+  - move /etc/resolv.conf symlink to point into /run
+
+Regards,
+Yann E. MORIN.
+
+
+----------------------------------------------------------------
+Yann E. MORIN (14):
+      support/testing: set date in emulated machine
+      package/shadow: install to staging for subids
+      package/conmon: depends on systemd when enabled
+      package/slirp4netns: needs TUN support in the kernel
+      package/skopeo: add target variant
+      package/cgroupfs-mount: tweak the kernel config
+      package/cgroupfs-v2-mount: new package
+      package/nftables: add an option to force JSON support
+      package/netavark: new package
+      package/podman: new package
+      package/aardvark-dns: new package
+      package/passt: new package
+      package/podman: add option to use passt as network backend
+      system/skeleton: move target of /etc/resolv.conf symlink
+
+ docs/manual/migrating.adoc                     |  14 ++
+ package/Config.in                              |   6 +
+ package/aardvark-dns/Config.in                 |   9 +
+ package/aardvark-dns/aardvark-dns.hash         |   3 +
+ package/aardvark-dns/aardvark-dns.mk           |  15 ++
+ package/cgroupfs-mount/Config.in               |  12 +-
+ package/cgroupfs-mount/cgroupfs-mount.mk       |  11 ++
+ package/cgroupfs-v2-mount/Config.in            |  10 +
+ package/cgroupfs-v2-mount/S30cgroupfs2         |  44 +++++
+ package/cgroupfs-v2-mount/cgroupfs-v2-mount.mk |  20 ++
+ package/conmon/conmon.mk                       |   4 +
+ package/netavark/Config.in                     |  13 ++
+ package/netavark/netavark.hash                 |   3 +
+ package/netavark/netavark.mk                   |  93 +++++++++
+ package/nftables/Config.in                     |   7 +-
+ package/nftables/nftables.mk                   |   2 +-
+ package/passt/Config.in                        |  19 ++
+ package/passt/passt.hash                       |   4 +
+ package/passt/passt.mk                         |  41 ++++
+ package/podman/Config.in                       |  92 +++++++++
+ package/podman/podman.hash                     |   3 +
+ package/podman/podman.mk                       | 122 ++++++++++++
+ package/podman/policy.json                     |   7 +
+ package/podman/registries.conf                 |   1 +
+ package/shadow/shadow.mk                       |   1 +
+ package/skopeo/Config.in                       |  25 +++
+ package/skopeo/skopeo.mk                       |  10 +
+ package/slirp4netns/slirp4netns.mk             |   9 +
+ support/testing/infra/emulator.py              |   5 +
+ support/testing/tests/package/test_podman.py   | 253 +++++++++++++++++++++++++
+ support/testing/tests/package/test_skopeo.py   |  41 ++++
+ system/skeleton/etc/resolv.conf                |   2 +-
+ 32 files changed, 887 insertions(+), 14 deletions(-)
+ create mode 100644 package/aardvark-dns/Config.in
+ create mode 100644 package/aardvark-dns/aardvark-dns.hash
+ create mode 100644 package/aardvark-dns/aardvark-dns.mk
+ create mode 100644 package/cgroupfs-v2-mount/Config.in
+ create mode 100644 package/cgroupfs-v2-mount/S30cgroupfs2
+ create mode 100644 package/cgroupfs-v2-mount/cgroupfs-v2-mount.mk
+ create mode 100644 package/netavark/Config.in
+ create mode 100644 package/netavark/netavark.hash
+ create mode 100644 package/netavark/netavark.mk
+ create mode 100644 package/passt/Config.in
+ create mode 100644 package/passt/passt.hash
+ create mode 100644 package/passt/passt.mk
+ create mode 100644 package/podman/Config.in
+ create mode 100644 package/podman/podman.hash
+ create mode 100644 package/podman/podman.mk
+ create mode 100644 package/podman/policy.json
+ create mode 100644 package/podman/registries.conf
+ create mode 100644 package/skopeo/Config.in
+ create mode 100644 support/testing/tests/package/test_podman.py
+ create mode 100644 support/testing/tests/package/test_skopeo.py
+
+--
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
