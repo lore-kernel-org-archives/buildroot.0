@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8E16C28B30
-	for <buildroot@archiver.kernel.org>; Sat, 15 Mar 2025 15:43:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4156C28B28
+	for <buildroot@archiver.kernel.org>; Sat, 15 Mar 2025 15:43:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F3A460856;
-	Sat, 15 Mar 2025 15:43:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8457260869;
+	Sat, 15 Mar 2025 15:43:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eolp__sFHmio; Sat, 15 Mar 2025 15:43:04 +0000 (UTC)
+ id 0sBKaUITvLbz; Sat, 15 Mar 2025 15:43:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 66BD760865
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1721060887
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 66BD760865;
-	Sat, 15 Mar 2025 15:43:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1721060887;
+	Sat, 15 Mar 2025 15:43:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6944FC8
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 15:42:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CDE9FC8
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 15:42:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4CE7D41273
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 15:42:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BE2EC41241
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 15:42:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RzMXbEXxoGbo for <buildroot@buildroot.org>;
+ id HWyQF2n7Hg2b for <buildroot@buildroot.org>;
  Sat, 15 Mar 2025 15:42:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E883D41241
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0068041256
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E883D41241
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0068041256
  for <buildroot@buildroot.org>; Sat, 15 Mar 2025 15:42:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D615B87F59; Sat, 15 Mar 2025 15:42:53 +0000 (UTC)
+ id ED02B87F53; Sat, 15 Mar 2025 15:42:53 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Mar 2025 15:06:42 +0100
+Date: Sat, 15 Mar 2025 16:36:33 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2522130175e5d8ec5c779335b9d6f237b278df56
-X-Git-Newrev: a3412adb2aacb39db1a27d9d498b34647c8cfbdf
+X-Git-Oldrev: ba8a8359e988c472e16fee8db2710520f3f277fc
+X-Git-Newrev: ce3dae7a83b2539737cb9a321a6dc73005aece4e
 X-Patchwork-Hint: ignore
-Message-Id: <20250315154253.D615B87F59@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/fmlib: bump version to
- lf-6.6.52-2.2.0
+Message-Id: <20250315154253.ED02B87F53@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ configs/ls1046a-frwy_defconfig: bump BSP components to lf-6.6.52-2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,150 +60,106 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8476668795940029234=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8476668795940029234==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=a3412adb2aacb39db1a27d9d498b34647c8cfbdf
+commit: https://git.buildroot.net/buildroot/commit/?id=ce3dae7a83b2539737cb9a321a6dc73005aece4e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- The license file was renamed from COPYING to LICENSE.
-- Added a patch to fix build errors with gcc-14.
+- Updated Linux, U-Boot, and TF-A to lf-6.6.52-2.2.0 tag.
+- Updated readme.txt
 
 Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-Reviewed-by: Brandon Maier <brandon.maier@gmail.com>
+[Julien: remove fmc and fmlib in readme.txt to reflect
+  comment from Brandon Maier]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...eger-conversion-error-and-enum-compare-wa.patch | 79 ++++++++++++++++++++++
- package/fmlib/fmlib.hash                           |  4 +-
- package/fmlib/fmlib.mk                             |  4 +-
- 3 files changed, 83 insertions(+), 4 deletions(-)
+ .../patches/arm-trusted-firmware/arm-trusted-firmware.hash     |  2 +-
+ board/freescale/ls1046a-frwy/patches/linux/linux.hash          |  2 +-
+ board/freescale/ls1046a-frwy/patches/uboot/uboot.hash          |  2 +-
+ board/freescale/ls1046a-frwy/readme.txt                        | 10 +++++-----
+ configs/ls1046a-frwy_defconfig                                 |  6 +++---
+ 5 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/fmlib/0001-Fix-the-integer-conversion-error-and-enum-compare-wa.patch b/package/fmlib/0001-Fix-the-integer-conversion-error-and-enum-compare-wa.patch
-new file mode 100644
-index 0000000000..e38b36128f
---- /dev/null
-+++ b/package/fmlib/0001-Fix-the-integer-conversion-error-and-enum-compare-wa.patch
-@@ -0,0 +1,79 @@
-+From 3a1962a70cec74b3dac979e52a2cbcaa8897b9c8 Mon Sep 17 00:00:00 2001
-+From: Akhilesh Nema <nemaakhilesh@gmail.com>
-+Date: Fri, 10 Jan 2025 20:20:50 -0800
-+Subject: [PATCH] Fix the integer conversion error and enum compare
-+ warnings on build under gcc-14
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Error:
-+src/fm_lib.c: In function ‘GetDeviceId’:
-+src/fm_lib.c:139:21: error: returning ‘uintptr_t’ {aka ‘long unsigned int’} from a function with return type ‘t_Handle’ {aka ‘void *’} makes pointer from integer without a cast [-Wint-conversion]
-+  139 |         return p_Dev->id;
-+      |                ~~~~~^~~~
-+
-+Warnings:
-+
-+src/fm_lib.c: In function ‘FM_PCD_CcRootModifyNextEngine’:
-+src/fm_lib.c:997:51: warning: comparison between ‘e_FmPcdEngine’ and ‘enum ioc_fm_pcd_engine’ [-Wenum-compare]
-+  997 |         if (p_FmPcdCcNextEngineParams->nextEngine == e_IOC_FM_PCD_FR) {
-+      |                                                   ^~
-+src/fm_lib.c: In function ‘FM_PCD_MatchTableAddKey’:
-+src/fm_lib.c:1103:57: warning: comparison between ‘e_FmPcdEngine’ and ‘enum ioc_fm_pcd_engine’ [-Wenum-compare]
-+ 1103 |     else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
-+      |                                                         ^~
-+src/fm_lib.c: In function ‘FM_PCD_MatchTableModifyKeyAndNextEngine’:
-+src/fm_lib.c:1174:57: warning: comparison between ‘e_FmPcdEngine’ and ‘enum ioc_fm_pcd_engine’ [-Wenum-compare]
-+ 1174 |     else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
-+
-+Upstream: https://github.com/nxp-qoriq/fmlib/pull/1
-+
-+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-+---
-+ src/fm_lib.c | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/fm_lib.c b/src/fm_lib.c
-+index 4ea40ff..85b4a66 100644
-+--- a/src/fm_lib.c
-++++ b/src/fm_lib.c
-+@@ -136,7 +136,7 @@ t_Handle GetDeviceId(t_Handle h_Dev)
-+ {
-+ 	t_Device *p_Dev = (t_Device*)h_Dev;
-+ 
-+-	return p_Dev->id;
-++	return (t_Handle) p_Dev->id;
-+ }
-+ 
-+ 
-+@@ -994,7 +994,7 @@ t_Error FM_PCD_CcRootModifyNextEngine(t_Handle                  h_CcTree,
-+     }
-+ 
-+ #if (DPAA_VERSION >= 11)
-+-	if (p_FmPcdCcNextEngineParams->nextEngine == e_IOC_FM_PCD_FR) {
-++	if (p_FmPcdCcNextEngineParams->nextEngine == e_FM_PCD_FR) {
-+         t_Device *p_NextDev = (t_Device*) p_FmPcdCcNextEngineParams->params.frParams.h_FrmReplic;
-+         params.cc_next_engine_params.params.fr_params.frm_replic_id = UINT_TO_PTR(p_NextDev->id);
-+     }
-+@@ -1100,7 +1100,7 @@ t_Error FM_PCD_MatchTableAddKey(t_Handle            h_CcNode,
-+     	params.key_params.cc_next_engine_params.params.kg_params.p_direct_scheme = UINT_TO_PTR(p_NextDev->id);
-+     }
-+ #if (DPAA_VERSION >= 11)
-+-    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
-++    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_FM_PCD_FR) {
-+     	t_Device *p_NextDev = (t_Device*) p_KeyParams->ccNextEngineParams.params.frParams.h_FrmReplic;
-+     	params.key_params.cc_next_engine_params.params.fr_params.frm_replic_id = UINT_TO_PTR(p_NextDev->id);
-+     }
-+@@ -1171,7 +1171,7 @@ t_Error FM_PCD_MatchTableModifyKeyAndNextEngine(t_Handle            h_CcNode,
-+     	params.key_params.cc_next_engine_params.params.kg_params.p_direct_scheme = UINT_TO_PTR(p_NextDev->id);
-+     }
-+ #if (DPAA_VERSION >= 11)
-+-    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
-++    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_FM_PCD_FR) {
-+     	t_Device *p_NextDev = (t_Device*) p_KeyParams->ccNextEngineParams.params.frParams.h_FrmReplic;
-+     	params.key_params.cc_next_engine_params.params.fr_params.frm_replic_id = UINT_TO_PTR(p_NextDev->id);
-+     }
-+-- 
-+2.25.1
-+
-diff --git a/package/fmlib/fmlib.hash b/package/fmlib/fmlib.hash
-index f81b017869..edf87426df 100644
---- a/package/fmlib/fmlib.hash
-+++ b/package/fmlib/fmlib.hash
-@@ -1,3 +1,3 @@
+diff --git a/board/freescale/ls1046a-frwy/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/ls1046a-frwy/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index f9af28ab3c..344a6299d8 100644
+--- a/board/freescale/ls1046a-frwy/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/freescale/ls1046a-frwy/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  4f4dc78bfb5b7391a65ae0f83856661071f666ac2bf6a9380fddbe376a8bdaaa  atf-lf-6.6.23-2.0.0.tar.gz
++sha256  f03dad74e5c3df8059554def03e9298b6fbd4ffdd3e940a18b7e84a60b12a37a  atf-lf-6.6.52-2.2.0.tar.gz
+diff --git a/board/freescale/ls1046a-frwy/patches/linux/linux.hash b/board/freescale/ls1046a-frwy/patches/linux/linux.hash
+index e038c22862..fa38fb1f75 100644
+--- a/board/freescale/ls1046a-frwy/patches/linux/linux.hash
++++ b/board/freescale/ls1046a-frwy/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
  # Locally computed
--sha256  64dc76c0adc3aa58bce6aba470dee7dee001d4964ccb1958e899a59d9917b21d  fmlib-LSDK-21.08.tar.gz
--sha256  5d7770fa9f70f0c6f0b4784bbca8401811259a4b1e03455dbd863ffd0d34d2ca  COPYING
-+sha256  173f1c41207e50dd3908c7dad192962240fd1a9269bca6e368f401134b3503bf  fmlib-lf-6.6.52-2.2.0.tar.gz
-+sha256  5d7770fa9f70f0c6f0b4784bbca8401811259a4b1e03455dbd863ffd0d34d2ca  LICENSE
-diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
-index 3d185979d5..601a3e16ef 100644
---- a/package/fmlib/fmlib.mk
-+++ b/package/fmlib/fmlib.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
+-sha256  6d592722e004516309f8ce33e654f1322e4d1f0f33567acb86ca19229176fd9e  linux-lf-6.6.23-2.0.0.tar.gz
++sha256  5665b927616a7e27e69f3f8fface6dd693b01f35d42ae4f9a0f0a10be3621487  linux-lf-6.6.52-2.2.0.tar.gz
+diff --git a/board/freescale/ls1046a-frwy/patches/uboot/uboot.hash b/board/freescale/ls1046a-frwy/patches/uboot/uboot.hash
+index a5ccd82b2b..a1e3b69376 100644
+--- a/board/freescale/ls1046a-frwy/patches/uboot/uboot.hash
++++ b/board/freescale/ls1046a-frwy/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  a2bcd7a34d4908ffbadfea731d0f0fd20f19a31cff6ff6310980e7f6743ceb24  u-boot-lf-6.6.23-2.0.0.tar.gz
++sha256  00fc7bd053de19d02c990b3aa214a27c6103f4306e756f3f6d4afb12314556e4  u-boot-lf-6.6.52-2.2.0.tar.gz
+diff --git a/board/freescale/ls1046a-frwy/readme.txt b/board/freescale/ls1046a-frwy/readme.txt
+index 4d1e0e1dcd..fb1c82067c 100644
+--- a/board/freescale/ls1046a-frwy/readme.txt
++++ b/board/freescale/ls1046a-frwy/readme.txt
+@@ -13,11 +13,11 @@ for the software NXP LSDK (Layerscape Software Development Kit), see
+   - https://www.nxp.com/docs/en/user-guide/LSDKUG_Rev21.08.pdf
  
--FMLIB_VERSION = LSDK-21.08
-+FMLIB_VERSION = lf-6.6.52-2.2.0
- FMLIB_SITE = $(call github,nxp-qoriq,fmlib,$(FMLIB_VERSION))
- FMLIB_LICENSE = BSD-3-Clause
--FMLIB_LICENSE_FILES = COPYING
-+FMLIB_LICENSE_FILES = LICENSE
- FMLIB_DEPENDENCIES = linux
- FMLIB_INSTALL_STAGING = YES
+ the components from NXP are:
+-  - rcw, lf-6.6.23-2.0.0
+-  - atf (fork), lf-6.6.23-2.0.0
+-  - uboot (fork), lf-6.6.23-2.0.0
+-  - qoriq-fm-ucode (blob), lf-6.6.23-2.0.0
+-  - linux (fork), lf-6.6.23-2.0.0
++  - rcw, lf-6.6.52-2.2.0
++  - atf (fork), lf-6.6.52-2.2.0
++  - uboot (fork), lf-6.6.52-2.2.0
++  - qoriq-fm-ucode (blob), lf-6.6.52-2.2.0
++  - linux (fork), lf-6.6.52-2.2.0
  
-
---===============8476668795940029234==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ Build
+ =====
+diff --git a/configs/ls1046a-frwy_defconfig b/configs/ls1046a-frwy_defconfig
+index 2cf0f9c8bc..52d8f0cc07 100644
+--- a/configs/ls1046a-frwy_defconfig
++++ b/configs/ls1046a-frwy_defconfig
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/ls1046a-frwy/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.6.23-2.0.0)/linux-lf-6.6.23-2.0.0.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.6.52-2.2.0)/linux-lf-6.6.52-2.2.0.tar.gz"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -25,7 +25,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.6.23-2.0.0)/atf-lf-6.6.23-2.0.0.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.6.52-2.2.0)/atf-lf-6.6.52-2.2.0.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1046afrwy"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+@@ -35,7 +35,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.6.23-2.0.0)/u-boot-lf-6.6.23-2.0.0.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.6.52-2.2.0)/u-boot-lf-6.6.52-2.2.0.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ls1046afrwy_tfa"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8476668795940029234==--
