@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33828C28B28
-	for <buildroot@archiver.kernel.org>; Sat, 15 Mar 2025 23:12:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 040ACC35FF1
+	for <buildroot@archiver.kernel.org>; Sat, 15 Mar 2025 23:12:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E7D6640D39;
-	Sat, 15 Mar 2025 23:12:04 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9LuLRKHBfZXv; Sat, 15 Mar 2025 23:12:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9CB440E0C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B9CB440E0C;
-	Sat, 15 Mar 2025 23:12:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1E1B812C
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:11:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E096821D3
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:11:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C54F5834DB;
+	Sat, 15 Mar 2025 23:12:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 79i1GxX9LHz5 for <buildroot@buildroot.org>;
+ id ztOIj24rtyEO; Sat, 15 Mar 2025 23:12:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B1DE58222C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id B1DE58222C;
+	Sat, 15 Mar 2025 23:12:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A75B16B
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:11:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A085F6076D
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:11:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ld13JGJpcSj6 for <buildroot@buildroot.org>;
  Sat, 15 Mar 2025 23:11:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B914982200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C229606B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B914982200
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8C229606B1
  for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:11:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A941D88002; Sat, 15 Mar 2025 23:11:51 +0000 (UTC)
+ id 79E7488002; Sat, 15 Mar 2025 23:11:51 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Mar 2025 22:11:01 +0100
+Date: Sat, 15 Mar 2025 21:58:27 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5c77357c580f84e5a2986a4155e0cfd194c44b70
-X-Git-Newrev: 2c7a817dc512d77400f7367818d9febc5d5de51e
+X-Git-Oldrev: cf8641b73e7f1577637bfef0ece78dd519b25d19
+X-Git-Newrev: 4554ab98154c50cb24e3b8417b9e76ef5a0737a5
 X-Patchwork-Hint: ignore
-Message-Id: <20250315231151.A941D88002@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/cgroupfs-mount: tweak
- the kernel config
+Message-Id: <20250315231151.79E7488002@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/shadow: install to
+ staging for subids
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,74 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c7a817dc512d77400f7367818d9febc5d5de51e
+commit: https://git.buildroot.net/buildroot/commit/?id=4554ab98154c50cb24e3b8417b9e76ef5a0737a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When it was introduced in 2016 with commit 0e1547a87cfd (cgroupfs-mount:
-new package), we did not yet have the infrastructure for package to set
-kernel config options, which only came 4 years later with commit
-0aed4c2dae76 (linux: allow packages to set kernel config options).
+When the subids feature is enabled, shadow will install a library and a
+header:
 
-So at that time, the requirements for cgroupfs-mount were documented in
-the help for the Kconfig symbol.
+    $ sort output/build/shadow-4.16.0/.files-list.txt
+    [...]
+    shadow,./lib/libsubid.la
+    shadow,./lib/libsubid.so
+    shadow,./lib/libsubid.so.5
+    shadow,./lib/libsubid.so.5.0.0
+    [...]
+    shadow,./usr/include/shadow/subid.h
+    [...]
 
-But now that we do have the infrastructure in place, actually use it to
-set the required options, and drop the list from the Kconfig entry (that
-would be duplication, prone to bit-rot with time, and other packages do
-not document their requirements in Kconfig, they just use the infra to
-set the options).
+Install to staging in that case.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Reviewed-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/cgroupfs-mount/Config.in         | 12 +-----------
- package/cgroupfs-mount/cgroupfs-mount.mk | 11 +++++++++++
- 2 files changed, 12 insertions(+), 11 deletions(-)
+ package/shadow/shadow.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/cgroupfs-mount/Config.in b/package/cgroupfs-mount/Config.in
-index 0b2e4ba1e7..29a40c93d1 100644
---- a/package/cgroupfs-mount/Config.in
-+++ b/package/cgroupfs-mount/Config.in
-@@ -4,16 +4,6 @@ config BR2_PACKAGE_CGROUPFS_MOUNT
- 	help
- 	  cgroupfs mount and umount scripts.
+diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
+index cea984012d..c598ad88fd 100644
+--- a/package/shadow/shadow.mk
++++ b/package/shadow/shadow.mk
+@@ -46,6 +46,7 @@ SHADOW_CONF_OPTS += --disable-account-tools-setuid
+ endif
  
--	  requires a Linux kernel >= 3.0 with the following options
--	  enabled:
--
--	  - CONFIG_BLK_CGROUP
--	  - CONFIG_CGROUPS
--	  - CONFIG_CGROUP_CPUACCT
--	  - CONFIG_CGROUP_DEVICE
--	  - CONFIG_CGROUP_FREEZER
--	  - CONFIG_CGROUP_WRITEBACK
--	  - CONFIG_CGROUP_SCHED
--	  - CONFIG_CGROUP_PIDS
-+	  Requires a Linux kernel >= 3.0
- 
- 	  https://github.com/tianon/cgroupfs-mount
-diff --git a/package/cgroupfs-mount/cgroupfs-mount.mk b/package/cgroupfs-mount/cgroupfs-mount.mk
-index 5af87629ea..156d584266 100644
---- a/package/cgroupfs-mount/cgroupfs-mount.mk
-+++ b/package/cgroupfs-mount/cgroupfs-mount.mk
-@@ -10,6 +10,17 @@ CGROUPFS_MOUNT_LICENSE = GPL-3.0+
- CGROUPFS_MOUNT_LICENSE_FILES = debian/copyright
- CGROUPFS_MOUNT_CPE_ID_VALID = YES
- 
-+define CGROUPFS_MOUNT_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_CGROUP)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUPS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_CPUACCT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_DEVICE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_FREEZER)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_WRITEBACK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_SCHED)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_PIDS)
-+endef
-+
- define CGROUPFS_MOUNT_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/cgroupfs-mount $(TARGET_DIR)/usr/bin/cgroupfs-mount
- 	$(INSTALL) -D -m 0755 $(@D)/cgroupfs-umount $(TARGET_DIR)/usr/bin/cgroupfs-umount
+ ifeq ($(BR2_PACKAGE_SHADOW_SUBORDINATE_IDS),y)
++SHADOW_INSTALL_STAGING = YES
+ SHADOW_CONF_OPTS += --enable-subordinate-ids
+ define SHADOW_SUBORDINATE_IDS_PERMISSIONS
+ 	/usr/bin/newuidmap f 4755 0 0 - - - - -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
