@@ -1,53 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08D27C28B28
-	for <buildroot@archiver.kernel.org>; Sat, 15 Mar 2025 23:12:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAE45C28B28
+	for <buildroot@archiver.kernel.org>; Sat, 15 Mar 2025 23:14:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C9F7083437;
-	Sat, 15 Mar 2025 23:12:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6CD5A409F0;
+	Sat, 15 Mar 2025 23:14:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BASrJ10iKh5L; Sat, 15 Mar 2025 23:12:30 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LnMS8oluS04l; Sat, 15 Mar 2025 23:14:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D9E68222C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3363340C20
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9D9E68222C;
-	Sat, 15 Mar 2025 23:12:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id F2FF961
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:11:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3363340C20;
+	Sat, 15 Mar 2025 23:14:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8BB2F61
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:14:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BFC946076D
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:11:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6CF614011C
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:14:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lXH-CXXmY39G for <buildroot@buildroot.org>;
- Sat, 15 Mar 2025 23:11:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E84596079D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E84596079D
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:11:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E4C9D88009; Sat, 15 Mar 2025 23:11:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q_ZZfYfrrxad for <buildroot@buildroot.org>;
+ Sat, 15 Mar 2025 23:14:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4924A400D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4924A400D6
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4924A400D6
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:14:07 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id E9D47B0053E;
+ Sun, 16 Mar 2025 00:14:00 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 16 Mar 2025 00:13:58 +0100
+MIME-Version: 1.0
+Date: Sun, 16 Mar 2025 00:13:58 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 15 Mar 2025 22:21:58 +0100
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ebbaac08e3f462bf023c12077f739ed1c0543eb2
-X-Git-Newrev: b36475315b974e1ac3120156745b55daf1b7557c
-X-Patchwork-Hint: ignore
-Message-Id: <20250315231151.E4C9D88009@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/aardvark-dns: new
- package
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: buildroot@buildroot.org, Ricardo Martincoski
+ <ricardo.martincoski@datacom.com.br>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+In-Reply-To: <d16d5f276345efd9a9abf3d177da8bd7341bd5e6.1742068624.git.yann.morin.1998@free.fr>
+References: <cover.1742068624.git.yann.morin.1998@free.fr>
+ <d16d5f276345efd9a9abf3d177da8bd7341bd5e6.1742068624.git.yann.morin.1998@free.fr>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <205df8c1cd27cb8498835a3178055bc4@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1742080444;
+ bh=NMVqiQV9qCkaYF6oCPQE3EaoSSN82cN4tGsGuA/0zME=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ZduGnLqg4nSMfUmHZrgs/avG0lj9ffv6qckuNqa9U2f7QX4TedfAsLwd1SnzjPqoQ
+ iXPBdBqMSh+R/cyjtJtbcQaTGWRCmGC0nvNAb3M35A88rsITrFeh2AFeSfOWWgS2nW
+ jM5ygie6cKDW/EdT/eR93pz+xLs5OFF1yFuBQenfqE5t1WGRL+lTRzFUiYGZGZ1arh
+ vlx5SHpTHUcAbZLjL86Fxr9bxU8yX/jJ+QHhEAxOQ3pJlXFEJtNO/sUAg014DgZnVm
+ h4PddG6pgJTmcIA8z6QbUZhzsYBfZENuqXaz7ZO9Xpkh5CH/LxGq/DSjTJE9TYDDmc
+ rQBGTGr04Dk5Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=ZduGnLqg
+Subject: Re: [Buildroot] [PATCH 01/14 v4] support/testing: set date in
+ emulated machine
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,180 +86,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b36475315b974e1ac3120156745b55daf1b7557c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hi Yann, All,
 
-aardvark-dns is needed by netavark to provide cross-container DNS
-resolving with Podman.
+On 15/03/2025 20:56, Yann E. MORIN wrote:
+> When time comes to check certificates, the date and time in the 
+> emulated
+> machine should be close enough to the actual values, so that 
+> certificate
+> validity can be checked.
+> 
+> Some Qemu machines have an RTC (e.g. arm vexpress-a9 has a pl031), and
+> the kernel needs a driver for those RTC. It is not guaranteed that the
+> machine used for a test meets those two conditions; in such a case, the
+> time in the machine starts way back in the past (1970-01-01T00:00:00Z 
+> on
+> sysv, or the release date of systemd). This is the case with the 
+> default
+> kernel, so such tests do not have the proper time.
+> 
+> Set the date to the date of the host system. This is going to be 
+> accurate
+> to the second, which is, by far, enough for our purpose.
+> 
+> To avoid having to consider what combination of emulated machine and 
+> kernel
+> configuration are being used, we always set the date, as this is a
+> generic step that should be done by the infra (like login in as root 
+> is).
+> 
+> The Emulator() class doesn't inherit from unittest.TestCase, so we 
+> can't
+> call any of the usual self.assertXXX() methods; instead, we just raise
+> a standard exception, like is done a few lines above to detect the 
+> login
+> prompt.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-It is to be noted that netavark and aardvark-dns have to be updated in
-lock-step [0].
+I applied this series in branch next.
 
-Update the podman runtime test to validate this is working.
+This series was starting to get big, and I think that it is in a good
+shape to be merged. It is also a good time to merge that in the
+branch next, early in the release cycle. It will give time to have
+all the runtime tests running on it and let people test it. We'll do
+follow up fixes, if needed.
 
-[0] https://github.com/containers/podman/blob/main/DISTRO_PACKAGE.md#networking-tools-netavark-aardvark-dns-passt
+Thanks for this great work!
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/Config.in                            |  1 +
- package/aardvark-dns/Config.in               |  9 +++++++
- package/aardvark-dns/aardvark-dns.hash       |  3 +++
- package/aardvark-dns/aardvark-dns.mk         | 15 +++++++++++
- package/netavark/Config.in                   |  1 +
- package/netavark/netavark.mk                 |  1 +
- package/podman/podman.mk                     |  1 +
- support/testing/tests/package/test_podman.py | 38 ++++++++++++++++++++++++++++
- 8 files changed, 69 insertions(+)
+Best regards,
 
-diff --git a/package/Config.in b/package/Config.in
-index 7e98256cdf..4297903fd8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2411,6 +2411,7 @@ menu "Miscellaneous"
- endmenu
- 
- menu "Networking applications"
-+	source "package/aardvark-dns/Config.in"
- 	source "package/aircrack-ng/Config.in"
- 	source "package/alfred/Config.in"
- 	source "package/aoetools/Config.in"
-diff --git a/package/aardvark-dns/Config.in b/package/aardvark-dns/Config.in
-new file mode 100644
-index 0000000000..83ef5a16f9
---- /dev/null
-+++ b/package/aardvark-dns/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_AARDVARK_DNS
-+	bool "aardvark-dns"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
-+	help
-+	  Authoritative dns server for A/AAAA container records.
-+	  Forwards other request to host's /etc/resolv.conf
-+
-+	  https://github.com/containers/aardvark-dns/
-diff --git a/package/aardvark-dns/aardvark-dns.hash b/package/aardvark-dns/aardvark-dns.hash
-new file mode 100644
-index 0000000000..5327a38b7e
---- /dev/null
-+++ b/package/aardvark-dns/aardvark-dns.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  bbd4a0b0bdf6788c09266f1f944d5c5397b6db4f1da0735a1d42738a6e074249  aardvark-dns-v1.14.0-git4-cargo2.tar.gz
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/aardvark-dns/aardvark-dns.mk b/package/aardvark-dns/aardvark-dns.mk
-new file mode 100644
-index 0000000000..a2e74a72bf
---- /dev/null
-+++ b/package/aardvark-dns/aardvark-dns.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# aardvark-dns
-+#
-+################################################################################
-+
-+# When updating the version here, also update netavark in lockstep
-+AARDVARK_DNS_VERSION = v1.14.0
-+AARDVARK_DNS_SITE = https://github.com/containers/aardvark-dns
-+AARDVARK_DNS_SITE_METHOD = git
-+
-+AARDVARK_DNS_LICENSE = Apache-2.0
-+AARDVARK_DNS_LICENSE_FILES = LICENSE
-+
-+$(eval $(cargo-package))
-diff --git a/package/netavark/Config.in b/package/netavark/Config.in
-index cf7b731141..c78e57556f 100644
---- a/package/netavark/Config.in
-+++ b/package/netavark/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_NETAVARK
- 	bool "netavark"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	select BR2_PACKAGE_HOST_RUSTC
-+	select BR2_PACKAGE_AARDVARK_DNS  # runtime
- 	select BR2_PACKAGE_IPTABLES if !BR2_PACKAGE_NFTABLES  # runtime
- 	select BR2_PACKAGE_NFTABLES_JSON if BR2_PACKAGE_NFTABLES && !BR2_PACKAGE_IPTABLES
- 	help
-diff --git a/package/netavark/netavark.mk b/package/netavark/netavark.mk
-index c96912ef5a..31d0b28b74 100644
---- a/package/netavark/netavark.mk
-+++ b/package/netavark/netavark.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
- 
-+# When updating the version here, also update aardvark-dns in lockstep
- NETAVARK_VERSION = v1.14.0
- NETAVARK_SITE = https://github.com/containers/netavark
- NETAVARK_SITE_METHOD = git
-diff --git a/package/podman/podman.mk b/package/podman/podman.mk
-index 48b4cd9b27..29c5591a0a 100644
---- a/package/podman/podman.mk
-+++ b/package/podman/podman.mk
-@@ -101,6 +101,7 @@ PODMAN_POST_INSTALL_TARGET_HOOKS += PODMAN_CONFIG
- 
- define PODMAN_HELPERS
- 	$(Q)mkdir -p $(TARGET_DIR)/usr/libexec/podman
-+	$(Q)ln -sf ../../bin/aardvark-dns $(TARGET_DIR)/usr/libexec/podman/aardvark-dns
- 	$(Q)ln -sf ../../bin/netavark $(TARGET_DIR)/usr/libexec/podman/netavark
- 	$(Q)ln -sf ../../bin/slirp4netns $(TARGET_DIR)/usr/libexec/podman/slirp4netns
- 	$(PODMAN_HELPER_INIT)
-diff --git a/support/testing/tests/package/test_podman.py b/support/testing/tests/package/test_podman.py
-index e2b0598961..44211b438e 100644
---- a/support/testing/tests/package/test_podman.py
-+++ b/support/testing/tests/package/test_podman.py
-@@ -166,6 +166,44 @@ class PodmanBase(infra.basetest.BRTest):
-         output, _ = self.emulator.run('echo ${br_container}')
-         self.assertEqual(output[0], "", "Still in a container")
- 
-+        # Test networking between two containers
-+        self.assertRunOk("podman network create buz")
-+        self.assertRunOk(
-+            "podman container run --rm -ti --name pod007 --network buz --detach busybox:1.37.0",
-+        )
-+        self.assertRunOk(
-+            "podman container run --rm -ti --name pod006 --network buz --detach busybox:1.37.0",
-+        )
-+        # Ensure each pod can resolv itself and the other
-+        # (not using itertools.matrix() just for those trivial combinations)
-+        for pod1, pod2 in [
-+            ("pod006", "pod006"),
-+            ("pod006", "pod007"),
-+            ("pod007", "pod007"),
-+            ("pod007", "pod006"),
-+        ]:
-+            output, exit_code = self.emulator.run(
-+                f"podman container exec {pod1} nslookup {pod2}",
-+            )
-+            self.assertEqual(exit_code, 0)
-+            self.assertTrue(output[0].startswith("Server:"))
-+            self.assertTrue(output[1].startswith("Address:"))
-+            # Busybox' nslookup emits one "Non-authoritative answer" per
-+            # supported address familly: IPv4 and IPv6.
-+            self.assertEqual(
-+                len([line for line in output[2:] if line == "Non-authoritative answer:"]),
-+                2,
-+            )
-+            # But only IPv4 is available on this network
-+            self.assertEqual(
-+                len([line for line in output[2:] if line.startswith("Address:")]),
-+                1,
-+            )
-+        self.assertRunOk("podman container kill --all")
-+        output, _ = self.emulator.run("podman container ls --format '{{ json }}'")
-+        pod_info = json.loads("".join(output))
-+        self.assertEqual(len(pod_info), 0, f"{len(pod_info)} container(s) still present, expecting 0")
-+
-         # Remove the offical image
-         self.assertRunOk('podman image rm busybox:1.37.0')
-         output, _ = self.emulator.run("podman image ls --format '{{ json }}'")
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
