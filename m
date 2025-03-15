@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2891C35FF1
-	for <buildroot@archiver.kernel.org>; Sat, 15 Mar 2025 23:11:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A99DC28B28
+	for <buildroot@archiver.kernel.org>; Sat, 15 Mar 2025 23:12:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66BB640C05;
-	Sat, 15 Mar 2025 23:11:57 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L7fdBcrdvQ0R; Sat, 15 Mar 2025 23:11:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4029940C20
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4029940C20;
-	Sat, 15 Mar 2025 23:11:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B344F12C
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:11:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8EA7F82231
- for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:11:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B7B77821D3;
+	Sat, 15 Mar 2025 23:11:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B4yTO_JtHu1S for <buildroot@buildroot.org>;
+ id zDoYl3hbMLhY; Sat, 15 Mar 2025 23:11:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE18882200
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE18882200;
+	Sat, 15 Mar 2025 23:11:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B8A1C16B
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:11:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9BD3A406FE
+ for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:11:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6T3P4MpwywvI for <buildroot@buildroot.org>;
  Sat, 15 Mar 2025 23:11:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A324D821D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83FD6406A1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A324D821D3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83FD6406A1
  for <buildroot@buildroot.org>; Sat, 15 Mar 2025 23:11:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 905448800D; Sat, 15 Mar 2025 23:11:51 +0000 (UTC)
+ id 6ECBA87FFE; Sat, 15 Mar 2025 23:11:51 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 15 Mar 2025 21:59:46 +0100
+Date: Sat, 15 Mar 2025 21:57:45 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8edab9217886f6dac81626d92180019e7901fd7b
-X-Git-Newrev: c1add224622319a7c5dc66b073dba0faef98b420
+X-Git-Oldrev: 6dc177bee8b7fe1ae1607bd7c0819b0dc63397d7
+X-Git-Newrev: cf8641b73e7f1577637bfef0ece78dd519b25d19
 X-Patchwork-Hint: ignore
-Message-Id: <20250315231151.905448800D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/slirp4netns: needs TUN
- support in the kernel
+Message-Id: <20250315231151.6ECBA87FFE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/testing: set date in
+ emulated machine
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,38 +65,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1add224622319a7c5dc66b073dba0faef98b420
+commit: https://git.buildroot.net/buildroot/commit/?id=cf8641b73e7f1577637bfef0ece78dd519b25d19
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-slirp4netns needs a kernel with TUN support, so enable that and the few
-options it depends on.
+When time comes to check certificates, the date and time in the emulated
+machine should be close enough to the actual values, so that certificate
+validity can be checked.
+
+Some Qemu machines have an RTC (e.g. arm vexpress-a9 has a pl031), and
+the kernel needs a driver for those RTC. It is not guaranteed that the
+machine used for a test meets those two conditions; in such a case, the
+time in the machine starts way back in the past (1970-01-01T00:00:00Z on
+sysv, or the release date of systemd). This is the case with the default
+kernel, so such tests do not have the proper time.
+
+Set the date to the date of the host system. This is going to be accurate
+to the second, which is, by far, enough for our purpose.
+
+To avoid having to consider what combination of emulated machine and kernel
+configuration are being used, we always set the date, as this is a
+generic step that should be done by the infra (like login in as root is).
+
+The Emulator() class doesn't inherit from unittest.TestCase, so we can't
+call any of the usual self.assertXXX() methods; instead, we just raise
+a standard exception, like is done a few lines above to detect the login
+prompt.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
-Reviewed-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/slirp4netns/slirp4netns.mk | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ support/testing/infra/emulator.py | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/slirp4netns/slirp4netns.mk b/package/slirp4netns/slirp4netns.mk
-index ffcd334ab6..5923957c25 100644
---- a/package/slirp4netns/slirp4netns.mk
-+++ b/package/slirp4netns/slirp4netns.mk
-@@ -12,4 +12,13 @@ SLIRP4NETNS_DEPENDENCIES = libcap libglib2 libseccomp slirp
+diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+index ef5be2a19e..9be1143944 100644
+--- a/support/testing/infra/emulator.py
++++ b/support/testing/infra/emulator.py
+@@ -5,6 +5,7 @@ import os
  
- SLIRP4NETNS_AUTORECONF = YES
+ import pexpect
+ import pexpect.replwrap
++import time
  
-+define SLIRP4NETNS_LINUX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CORE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NETDEVICES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_NET_CORE)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_INET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_TUN)
-+endef
+ import infra
+ 
+@@ -152,6 +153,10 @@ class Emulator(object):
+ 
+         self.connect_shell()
+ 
++        output, exit_code = self.run(f"date @{int(time.time())}")
++        if exit_code:
++            raise SystemError("Cannot set date in virtual machine")
 +
- $(eval $(autotools-package))
+     def connect_shell(self):
+         extra_init_cmd = " && ".join([
+             'export PAGER=cat',
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
