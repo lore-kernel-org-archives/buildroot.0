@@ -4,76 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81879C282DE
-	for <buildroot@archiver.kernel.org>; Sun, 16 Mar 2025 17:41:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3034BC282DE
+	for <buildroot@archiver.kernel.org>; Sun, 16 Mar 2025 17:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1A92140B9C;
-	Sun, 16 Mar 2025 17:41:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C93DE40BD3;
+	Sun, 16 Mar 2025 17:47:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GIMYs5JheE7D; Sun, 16 Mar 2025 17:41:25 +0000 (UTC)
+ id Yss-t6WKiaiX; Sun, 16 Mar 2025 17:47:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D51E640BA2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75A4B40BEE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D51E640BA2;
-	Sun, 16 Mar 2025 17:41:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7D33061
- for <buildroot@buildroot.org>; Sun, 16 Mar 2025 17:41:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 75A4B40BEE;
+	Sun, 16 Mar 2025 17:47:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2C63961
+ for <buildroot@buildroot.org>; Sun, 16 Mar 2025 17:47:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 60E0740B9C
- for <buildroot@buildroot.org>; Sun, 16 Mar 2025 17:41:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1AAAE40BEE
+ for <buildroot@buildroot.org>; Sun, 16 Mar 2025 17:47:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IzYUgaZbZ_kj for <buildroot@buildroot.org>;
- Sun, 16 Mar 2025 17:41:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 336E040B9B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 336E040B9B
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 336E040B9B
- for <buildroot@buildroot.org>; Sun, 16 Mar 2025 17:41:21 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+ id l_7Y0OKciVEu for <buildroot@buildroot.org>;
+ Sun, 16 Mar 2025 17:47:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 393FA40BD3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 393FA40BD3
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 393FA40BD3
+ for <buildroot@buildroot.org>; Sun, 16 Mar 2025 17:47:45 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
  (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 8BD7360146;
- Sun, 16 Mar 2025 18:41:12 +0100 (CET)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id A57C22003CE;
+ Sun, 16 Mar 2025 18:47:36 +0100 (CET)
 Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
  via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sun, 16 Mar 2025 18:41:12 +0100
+ with HTTP (HTTP/1.0 POST); Sun, 16 Mar 2025 18:47:36 +0100
 MIME-Version: 1.0
-Date: Sun, 16 Mar 2025 18:41:12 +0100
+Date: Sun, 16 Mar 2025 18:47:36 +0100
 From: Julien Olivain <ju.o@free.fr>
 To: Vladimir Oltean <olteanv@gmail.com>
 Cc: buildroot@buildroot.org, Ioana Ciornei <ciorneiioana@gmail.com>, Brandon
  Maier <Brandon.Maier@collins.com>, Vincent Jardin <vjardin@free.fr>, Romain
  Naour <romain.naour@smile.fr>, Akhilesh Nema <nemaakhilesh@gmail.com>
-In-Reply-To: <20250302215219.1276480-3-olteanv@gmail.com>
+In-Reply-To: <20250302215219.1276480-5-olteanv@gmail.com>
 References: <20250302215219.1276480-1-olteanv@gmail.com>
- <20250302215219.1276480-3-olteanv@gmail.com>
+ <20250302215219.1276480-5-olteanv@gmail.com>
 User-Agent: Webmail Free/1.6.10
-Message-ID: <5f4b824c8c386143338a4a1e790ba19c@free.fr>
+Message-ID: <97b018cf657cc67f86699a2e2a5d8380@free.fr>
 X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1742146879;
- bh=/y6sffn3eucC8VOdxHQiYkl5oNti6okK3P2wOlSPqZ8=;
+ d=free.fr; s=smtp-20201208; t=1742147263;
+ bh=7p57fG9k59yJTPPfO36veBSKMwd+etrojLce57FTx7M=;
  h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=gpGRcVOgxRo9KSKxaxWtiV2d5rFSE0j1Ol6oVZ2PaBoPqddJapssEC13F+GU+aPJD
- uHfY+WSKTFQ7X3cxLQCLhT7DT6lgpJJmt3uyS5HWsMtNVJGxLXLaWrspQ9IhYN4D+Q
- ij8uJDznalowbM4HrY4f9LZLtH7nBy7b64eiLg5doPTMhcCGzy4QqTcPnE/kV75FYX
- ri9WBIsrHySK74y45RDCa9ADdCdlcS4O9ijcW58gkhAbJJEt4EAcrz0HjK7Sbu1Vv8
- OQhVuB7x8zIOCSvhj0b1UR95CIu+e1SrkKZjn5Sjxux7G31bb+OW5sJyhw0WEm0esj
- 56aRn7DQ9vRQA==
+ b=sTNgIwUGmVq3egPodKOOU5KUYThw9/PlGyzWx1owJnbOzee0HezLh8L5VrODUbk9F
+ yT6Rgl3DvIKhqcCtLHTDXcg59bREYmtGwWQR5+V44mQhIKx7B0QX/NbO1925mIhVwZ
+ rcolb/nDMtqy8BrM3Eh74AmhSIBd8ggKArRwCQ2DzZPssjUqLD2kH+SHHMbeKhL3Zn
+ +A8xANwRYaO8PRqkOLA+8Wqjt1F81dd4sKwnhYVSC5rs6VAk9QCXlwPRwqoI+DLEMe
+ 8Mi9F4dcIUKjMl07nwp4oPze5Qw/9tBapRXG4XoNTA87mTHeCfK7Ch/trjMfxvOk82
+ bD88rYH5rEI0A==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=gpGRcVOg
-Subject: Re: [Buildroot] [PATCH 02/15] package/qoriq-cadence-dp-firmware:
- sync with NXP Yocto download site
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=sTNgIwUG
+Subject: Re: [Buildroot] [PATCH 04/15] package/qoriq-ddr-phy-binary: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,58 +92,48 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi Vladimir,
 
-Thanks for the patch.
-
 On 02/03/2025 22:52, Vladimir Oltean wrote:
-> The updated download path was taken from the Yocto BSP at
-> https://github.com/nxp-qoriq/yocto-sdk.
-> 
-> The recipe is here:
-> https://github.com/Freescale/meta-freescale/blob/master/recipes-bsp/dp-firmware-cadence/dp-firmware-cadence_22.04.bb
+> The DDR PHY on the NXP LX2160A SoC needs firmware. This is distributed
+> as prebuilt binaries by NXP through GitHub.
 > 
 > Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+> Reviewed-by: Romain Naour <romain.naour@smile.fr>
+> Reviewed-by: Vincent Jardin <vjardin@free.fr>
+
 [...]
-> diff --git 
-> a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash 
-> b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-> index 6e5c761463d9..eb6579b919c9 100644
-> --- a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-> +++ b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated
-> -sha256  
-> e267655a47fbe118f6960bca7994bd6b8986ef955344fe006a424be96f868602  
-> firmware-cadence-lsdk2012.bin
+
+> diff --git a/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash 
+> b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
+> new file mode 100644
+> index 000000000000..7357e741fcfa
+> --- /dev/null
+> +++ b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
 > +sha256  
-> 65f829a9e2597bffc58a680aaefa638122144a083633d1ae09b3aec1d9f8ab84  
-> firmware-imx-8.16.bin
->  sha256  
-> 9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  
-> COPYING
+> b49cb34f941f7e534ec31d3d14d18d4e565e4875b690ecb0d7e2992b72c64dc7  
+> qoriq-ddr-phy-binary-lf-6.6.36-2.1.0.tar.gz
+> +sha256  
+> 7a223031d76339df0e4e5a94d193a270fb9963d42b577aa42fe130a4657f3e17  
+> NXP-Binary-EULA.txt
 
-With this patch, running command:
+With this patch, running the command:
 
-     make qoriq-cadence-dp-firmware-legal-info
+     make qoriq-ddr-phy-binary-legal-info
 
-Fail with output:
+Fails with output:
 
-     >>> qoriq-cadence-dp-firmware 8.16 Collecting legal info
+     >>> qoriq-ddr-phy-binary lf-6.6.36-2.1.0 Collecting legal info
      ERROR: while checking hashes from 
-package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-     ERROR: COPYING has wrong sha256 hash:
+package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
+     ERROR: NXP-Binary-EULA.txt has wrong sha256 hash:
      ERROR: expected: 
-9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1
+7a223031d76339df0e4e5a94d193a270fb9963d42b577aa42fe130a4657f3e17
      ERROR: got     : 
-4c89574f9a76e861919f80fef84bac30e4ba7fb8732b0fcda4b26d400239f517
+e7e5f4949f7ac9f9a5d4d68b8f835f3ddc93ad47b594a11de699d90b9175413f
      ERROR: Incomplete download, or man-in-the-middle (MITM) attack
 
 Can you check and fix the legal info hashes, please?
-
->  sha256  
-> 72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
->  sha256  
-> 53e3eb0b2bd81c171fa04c17514e20b39b7bb1fe1224c593f7717f615fb9d52b  
-> EULA.txt
 
 Best regards,
 
