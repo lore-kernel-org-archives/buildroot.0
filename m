@@ -4,97 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDAB1C282DE
-	for <buildroot@archiver.kernel.org>; Sun, 16 Mar 2025 21:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11F57C282DE
+	for <buildroot@archiver.kernel.org>; Sun, 16 Mar 2025 21:52:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6797460882;
-	Sun, 16 Mar 2025 21:02:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BDED860756;
+	Sun, 16 Mar 2025 21:52:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uDJYhUg4ZOcE; Sun, 16 Mar 2025 21:02:51 +0000 (UTC)
+ id rIRFMKwpN47E; Sun, 16 Mar 2025 21:52:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44C04608C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE56060762
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44C04608C6;
-	Sun, 16 Mar 2025 21:02:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A01ED61
- for <buildroot@buildroot.org>; Sun, 16 Mar 2025 21:02:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE56060762;
+	Sun, 16 Mar 2025 21:52:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id AB3F4D5
+ for <buildroot@buildroot.org>; Sun, 16 Mar 2025 21:52:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E5DB81FB9
- for <buildroot@buildroot.org>; Sun, 16 Mar 2025 21:02:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 905A060762
+ for <buildroot@buildroot.org>; Sun, 16 Mar 2025 21:52:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZN2a-C1Oypbi for <buildroot@buildroot.org>;
- Sun, 16 Mar 2025 21:02:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
- envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6CAE581FBA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CAE581FBA
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6CAE581FBA
- for <buildroot@buildroot.org>; Sun, 16 Mar 2025 21:02:48 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-43bb6b0b898so14607615e9.1
- for <buildroot@buildroot.org>; Sun, 16 Mar 2025 14:02:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1742158966; x=1742763766;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=kesbCyZzmT6ARY1KeXyqWxrKVUJi4bVFZdXEiRraHV8=;
- b=tWtu2aipWvYO3ac+7YF7qnmM5Auv7uNEsVebow8Xqf1bOfOvQTCUyxua6joqmJqycy
- uwH4l85cfP6Ikhlf2+1ykYveIpVE1DMv2kyoKDpPMWLm1cXAYxVJtx8Dip8Mhq1kNccc
- TNJWNsRcN1ZRnmpr8ucoILi7KHXjiaP+7CLGJf5P6XCudiQDNbE5vwAW2lWWvR48rqbZ
- McOBxP5xf6hQqbs22UVuWWG1ZATzrXyHAHdV/imKgSTL1Bk3rEMDA1RvnMzmpbisC9KY
- mWkw80NTx8+ZhHI0r+SEe7jg5VKw4OXOImP9M5bLv+f8sTdFPO8ZioSQoWTU4pxOdoX1
- kz/Q==
-X-Gm-Message-State: AOJu0YzttAkqyP5yymRGibH086tQopiE70vWRbPadkDcNNO9fEBkRQwj
- Q/5EFnYa84IpGfgJPBG44WcXeEzXlp3PFz2LnlQEsxkjpXD7FBMRCac0oQ==
-X-Gm-Gg: ASbGncuvFkYttobGq1XIV9mtvC8OGjt789A380z9zmbL2Zr7Lbam/ponvRL4b8dmwyi
- /rQSqLRXP4+etrZ1L8tesS0Vim3ls+EUcwhL2b8V7GCvaXemSXXy9ffY1WkWElKy4zIBKWVWDqa
- CD1Vl5fdWuKK4UHpdMdvF2ii+oavnVcE5Cj8FEUQqxyr9Hu5f/iWnJOoIEheddbWVkvT/apzd3I
- x6suNNxhHX8n0wHjKFpM3JlzRrj6p79K9V/m2+CqiJI9y5jq23aS0kF/rkETczYe0MxfEL+Cfr9
- d5fTwNsA5ObQyjCVXPvGWs0qnIBHLwZ60PkFO10JwFq1QE5dUkVxxcn5
-X-Google-Smtp-Source: AGHT+IHSqhuhz+ib7NDR4+Fcoxl5kXtprXFYsrKtMmCjz/XekuBtnxwv4gURbcJtmNmALJ54q41Vpw==
-X-Received: by 2002:a05:600c:4747:b0:43c:ec0a:ddfd with SMTP id
- 5b1f17b1804b1-43d1ec7250fmr95715095e9.6.1742158966104; 
- Sun, 16 Mar 2025 14:02:46 -0700 (PDT)
-Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-43d1ffc450esm86678045e9.23.2025.03.16.14.02.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 16 Mar 2025 14:02:45 -0700 (PDT)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Date: Sun, 16 Mar 2025 22:02:45 +0100
-Message-ID: <20250316210245.1706946-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.47.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Oo1MMydMgb97 for <buildroot@buildroot.org>;
+ Sun, 16 Mar 2025 21:52:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3346E606F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3346E606F3
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3346E606F3
+ for <buildroot@buildroot.org>; Sun, 16 Mar 2025 21:52:09 +0000 (UTC)
+Received: from L25025.local (unknown
+ [IPv6:2a01:e0a:2af:22b0:5419:6efd:b79f:c072])
+ (Authenticated sender: vjardin@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 4B81220039E;
+ Sun, 16 Mar 2025 22:52:00 +0100 (CET)
+Date: Sun, 16 Mar 2025 22:52:00 +0100
+From: Vincent Jardin <vjardin@free.fr>
+To: Julien Olivain <ju.o@free.fr>
+Cc: Vladimir Oltean <olteanv@gmail.com>, buildroot@buildroot.org, 
+ Ioana Ciornei <ciorneiioana@gmail.com>,
+ Brandon Maier <Brandon.Maier@collins.com>, 
+ Romain Naour <romain.naour@smile.fr>, Akhilesh Nema <nemaakhilesh@gmail.com>
+Message-ID: <nrnb4esfx7ipazrmv2wrbeecme5tgeeeh77kqs5okma3gz4s4f@mbqilfrx6ymx>
+References: <20250302215219.1276480-1-olteanv@gmail.com>
+ <20250302215219.1276480-7-olteanv@gmail.com>
+ <e97fba5fb8387c2e671d5e47aeaac1d2@free.fr>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1742158966; x=1742763766; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=kesbCyZzmT6ARY1KeXyqWxrKVUJi4bVFZdXEiRraHV8=;
- b=jWZnvkP64qZtRoP3mT6BPYuem8FGRdHqLcfn7IOiKVN/n86bEFbbZ+vHc5QQ+FlbFv
- 4hMxDW+IwsQgWVcEaKJqWKbDM84VnUJe5Oqu7J99Yih5P5pfW3g2ItaPvorQH0bEkset
- yVqk0h6NEEdBCRFnzMJWOBhfJEXF6J+FS8doSwAzp8nDpQOOXvTyt2qYvQAU3MSuFYM6
- 5sfRQxs9t7nyh6vxowS04YxiZfC4tss4i6/TPd+9KJtmZOj44X1JI1ewjL8LyWhcjP1A
- kllEYSAX/XKtVjdNo0C0imHxmsjNUtLZtLwnt95daXKQ93OZ/BG8DzBrDFeR38s8T3Ey
- OH7A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=fail (p=none dis=none)
+Content-Disposition: inline
+In-Reply-To: <e97fba5fb8387c2e671d5e47aeaac1d2@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1742161926;
+ bh=AX5ovQhEgTkm7K8Xu6VMiKQ27/LUkaZmaNuI4z2/M0s=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=nFBZpHc1jC1VCE6ZZgwFEmzb/F3y5GXRivfj3MF5O0+W0vvZp+++BdqmYhu8OGDQn
+ lZqCykf+facvkuc4Di4c1O0MQBvOsXssIPLVeaNErUDj6OAGN7S4TOZAw+EL0gqDyV
+ xJibRJ7NDGrBQUbnCn132bKpXSlh5gFY6qhxjTWkS1Z/0sBB/D75qZ7liD0gk1QSRr
+ wtSW60zsYHLQq1WMgaoOIoygGZpHTuyLXg7ROSyQLUHAHnxlntnFGSOpdWtOmOeDWD
+ tRi0WS86XMg93LYa/TK2PsBLCUZqs47BN70gUrmSkXiZVNBPjw/TXrmMLcWsHDi42K
+ 8cPzM1yNPA0BQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=jWZnvkP6
-Subject: [Buildroot] [PATCH] package/libopenssl do not build in parallel
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=nFBZpHc1
+Subject: Re: [Buildroot] [PATCH 06/15] package/qoriq-mc-utils: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,87 +88,147 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-With highly parallel build on a hevily loaded machine, the libopenssl
-build often (about half of the time) fails with spurious missing rules
-in its Makefile:
+Hi Julien, Vladimir,
 
-    >>> host-libopenssl 3.4.1 Installing to host directory
-    [...] /usr/bin/make  -C [...]/build/host-libopenssl-3.4.1 install
-    "/usr/bin/make" depend && "/usr/bin/make" _build_libs
-    "/usr/bin/make" depend && "/usr/bin/make" _build_modules
-    "/usr/bin/make" depend && "/usr/bin/make" _build_programs
-    [...]
-    make[3]: *** No rule to make target '_build_modules'.  Stop.
-    make[2]: *** [Makefile:3159: build_modules] Error 2
-    make[2]: *** Waiting for unfinished jobs....
-    make[3]: Nothing to be done for '_build_programs'.
-    make[3]: Nothing to be done for '_build_libs'.
-    make[1]: *** [package/pkg-generic.mk:283: [...]/build/host-libopenssl-3.4.1/.stamp_host_installed] Error 2
-    make[1]: *** Waiting for unfinished jobs....
-    [...]
-    make: *** [Makefile:23: _all] Error 2
+In fact, I believe it requires another minor rework too, mostly for the API version, see below:
 
-Ideally, we'd like to fix the issue. However, the Nakefile is generated
-by the Configure script, written in perl, from the template in
-Configurations/unix-Makefile.tmpl, which also uses some kind of special
-(perl-related, probably) templating language. That makes it pretty
-difficult to see what is going on, though, and nigh impossible to fix
-without a deep understanding of the openssl buildsystem.
+> > +config BR2_PACKAGE_QORIQ_MC_UTILS_DPC
+> > +	string "Data Path Configuration (DPC) file"
+> > +	help
+> > +	  The DPC file contains the settings defining the behavior
+> > +	  of the MC firmware. Its source code follows the device
+> > +	  tree syntax and is compiled to a device tree blob, which
+> > +	  is the file that must be specified here.
+> 
+> If the DPC file is mandatory, could you add a note about that here?
+> (and possibly give an example?)
 
-So, we can only disable parallel builds until the issue is fixed
-upstream [0]. Add a comment to both build commands (host and target) to
-reference the upstream issue report.
++1, yes a depency can be added so we enforce the host `dpc`, something like:
+```
+ config BR2_PACKAGE_QORIQ_MC_UTILS
+        bool "qoriq-mc-utils"
++       select BR2_PACKAGE_HOST_DTC
+```
 
-Note that the issue has mostly been observed in the build of the host
-variant so far, but there is no reason why it can't happen in the build
-of the target variant.
+Or a bit more elaborated.
 
-[0] https://github.com/openssl/openssl/issues/27074
+> > +	$(MAKE) -C $(@D)/config/
+> 
+> You will then need to add the Buildroot host path during the
+> make invocation. Here, we should have:
+> 
+>     PATH=$(BR_PATH) $(MAKE) -C $(@D)/config/
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/libopenssl/libopenssl.mk | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+@Julien, is it the proper way of doing it ? How to be sure that we'll be
+using the buildroot's dpc and not the one from the host based on
+ordering of BR_PATH ?
 
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index c1c5b818d7..663e8d9b9f 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -132,24 +132,26 @@ endef
- LIBOPENSSL_POST_CONFIGURE_HOOKS += LIBOPENSSL_FIXUP_STATIC_MAKEFILE
- endif
- 
-+# Parallel build broken: https://github.com/openssl/openssl/issues/27074
- define HOST_LIBOPENSSL_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)
+I'd rather prefer a clean Makefile assuming:
+  https://github.com/nxp-qoriq/mc-utils/pull/1
++       DTC=$(HOST_DIR)/bin/dtc $(MAKE) -C $(@D)/config/
+
+
+Then, there is an issue with the version of the API. I faced it since I
+needed to use something that was not the 10.39.0
+
+Vladmir,
+
+on top of Julien's comments, I believe that we need to be able to
+configure the version API indepently of the tag version. Somethink like:
+...
+QORIQ_MC_UTILS_VERSION = xyz
++QORIQ_MC_UTILS_LATEST_API_VERSION = mc_release_10.39.0
++
++# Assuming than any git sha version leads to using the latest version
++ifneq ($(findstring mc_release_,$(QORIQ_MC_UTILS_VERSION)),)
++  QORIQ_MC_UTILS_API_VERSION = $(QORIQ_MC_UTILS_VERSION)
++else
++  QORIQ_MC_UTILS_API_VERSION = $(QORIQ_MC_UTILS_LATEST_API_VERSION)
++endif
++
++$(info QORIQ_MC_UTILS_API_VERSION uses $(QORIQ_MC_UTILS_API_VERSION))
++
++QORIQ_MC_UTILS_SITE = $(call github,nxp-qoriq,mc-utils,$(QORIQ_MC_UTILS_VERSION))
+...
+
+Then, once we set this version, we can build the dplib API too:
+ define QORIQ_MC_UTILS_BUILD_CMDS
++       DTC=$(HOST_DIR)/bin/dtc $(MAKE) -C $(@D)/config/
++       $(MAKE) -C $(@D)/api/$(QORIQ_MC_UTILS_API_VERSION)/
  endef
- 
-+# Parallel build broken: https://github.com/openssl/openssl/issues/27074
- define LIBOPENSSL_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)
- endef
- 
- define LIBOPENSSL_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) install
- endef
- 
- define HOST_LIBOPENSSL_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) install
- endef
- 
- define LIBOPENSSL_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) install
- 	$(RM) -rf $(TARGET_DIR)/usr/lib/ssl
- 	$(RM) -f $(TARGET_DIR)/usr/bin/c_rehash
- endef
--- 
-2.47.0
 
+
+> > +define QORIQ_MC_UTILS_INSTALL_IMAGES_CMDS
+> > +	$(INSTALL) -D $(@D)/config/$(call
+> > qstrip,$(BR2_PACKAGE_QORIQ_MC_UTILS_DPC)) $(BINARIES_DIR)/dpc.dtb
+> > +	$(INSTALL) -D $(@D)/config/$(call
+> > qstrip,$(BR2_PACKAGE_QORIQ_MC_UTILS_DPL)) $(BINARIES_DIR)/dpl.dtb
+> 
+> The _INSTALL_IMAGES_CMDS fails if either
+> BR2_PACKAGE_QORIQ_MC_UTILS_DPC, or BR2_PACKAGE_QORIQ_MC_UTILS_DPL
+> are empty, which is their default in Kconfig.
+> 
+> If it is really mandatory to have values set for those
+> configuration variables, maybe you could add an explicit error message?
+> See for example:
+> https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02-rc2/package/panel-mipi-dbi-firmware/panel-mipi-dbi-firmware.mk#L30
+
+Moreover, the Config.in help should explain that the dpc and dpl names should be a
+{dpc-*,dpl-*}*.dtb file not a .dts file such as:
+BR2_PACKAGE_QORIQ_MC_UTILS_DPC="lx2160a/LX2160A-QDS/dpc.13.dtb"
+BR2_PACKAGE_QORIQ_MC_UTILS_DPL="lx2160a/LX2160A-QDS/dpl-eth.13.dtb"
+
+> Can you send an updated version of the patch, please?
+
+Thanks Vladimir.
+
+It that can help, enclosed my local update that I was using in order to
+run it quickly from your package:
++++ b/package/qoriq-mc-utils/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_QORIQ_MC_UTILS
+        bool "qoriq-mc-utils"
++       select BR2_PACKAGE_HOST_DTC
+        help
+          The Management Complex (MC) is a key component of the
+          networking subsystem named DPAA2 (Data Path Acceleration
+
+--- a/package/qoriq-mc-utils/qoriq-mc-utils.mk
++++ b/package/qoriq-mc-utils/qoriq-mc-utils.mk
+@@ -5,13 +5,29 @@
+ ################################################################################
+
+ QORIQ_MC_UTILS_VERSION = ba4be529fa5b315049f237c8bdd123a90da94266
+-QORIQ_MC_UTILS_SITE = $(call github,nxp-qoriq,mc-utils,mc_release_$(QORIQ_MC_UTILS_VERSION))
++QORIQ_MC_UTILS_LATEST_API_VERSION = mc_release_10.39.0
++
++# Assuming than any git sha version leads to using the latest version
++ifneq ($(findstring mc_release_,$(QORIQ_MC_UTILS_VERSION)),)
++  QORIQ_MC_UTILS_API_VERSION = $(QORIQ_MC_UTILS_VERSION)
++else
++  QORIQ_MC_UTILS_API_VERSION = $(QORIQ_MC_UTILS_LATEST_API_VERSION)
++endif
++
++$(info QORIQ_MC_UTILS_API_VERSION uses $(QORIQ_MC_UTILS_API_VERSION))
++
++QORIQ_MC_UTILS_SITE = $(call github,nxp-qoriq,mc-utils,$(QORIQ_MC_UTILS_VERSION))
+ QORIQ_MC_UTILS_LICENSE = BSD-3-Clause
+ QORIQ_MC_UTILS_INSTALL_IMAGES = YES
+ QORIQ_MC_UTILS_INSTALL_TARGET = NO
+
++# XXX it shall not be needed
++BR_NO_CHECK_HASH_FOR += $(QORIQ_MC_UTILS_SOURCE)
++
++QORIQ_MC_UTILS_DEPENDENCIES = host-dtc
++
+ define QORIQ_MC_UTILS_BUILD_CMDS
+-       $(MAKE) -C $(@D)/config/
++       DTC=$(HOST_DIR)/bin/dtc $(MAKE) -C $(@D)/config/
++       $(MAKE) -C $(@D)/api/$(QORIQ_MC_UTILS_API_VERSION)/
+ endef
+
+Best regards,
+  Vincent
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
