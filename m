@@ -4,74 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11F57C282DE
-	for <buildroot@archiver.kernel.org>; Sun, 16 Mar 2025 21:52:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A318C35FF1
+	for <buildroot@archiver.kernel.org>; Sun, 16 Mar 2025 22:00:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BDED860756;
-	Sun, 16 Mar 2025 21:52:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D5A8D6085C;
+	Sun, 16 Mar 2025 22:00:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rIRFMKwpN47E; Sun, 16 Mar 2025 21:52:12 +0000 (UTC)
+ id iSrZnhUiLD-K; Sun, 16 Mar 2025 22:00:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE56060762
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E53360820
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE56060762;
-	Sun, 16 Mar 2025 21:52:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id AB3F4D5
- for <buildroot@buildroot.org>; Sun, 16 Mar 2025 21:52:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E53360820;
+	Sun, 16 Mar 2025 22:00:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D89D61
+ for <buildroot@buildroot.org>; Sun, 16 Mar 2025 22:00:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 905A060762
- for <buildroot@buildroot.org>; Sun, 16 Mar 2025 21:52:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0175B60820
+ for <buildroot@buildroot.org>; Sun, 16 Mar 2025 22:00:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Oo1MMydMgb97 for <buildroot@buildroot.org>;
- Sun, 16 Mar 2025 21:52:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3346E606F3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3346E606F3
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3346E606F3
- for <buildroot@buildroot.org>; Sun, 16 Mar 2025 21:52:09 +0000 (UTC)
-Received: from L25025.local (unknown
- [IPv6:2a01:e0a:2af:22b0:5419:6efd:b79f:c072])
- (Authenticated sender: vjardin@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 4B81220039E;
- Sun, 16 Mar 2025 22:52:00 +0100 (CET)
-Date: Sun, 16 Mar 2025 22:52:00 +0100
-From: Vincent Jardin <vjardin@free.fr>
-To: Julien Olivain <ju.o@free.fr>
-Cc: Vladimir Oltean <olteanv@gmail.com>, buildroot@buildroot.org, 
- Ioana Ciornei <ciorneiioana@gmail.com>,
- Brandon Maier <Brandon.Maier@collins.com>, 
- Romain Naour <romain.naour@smile.fr>, Akhilesh Nema <nemaakhilesh@gmail.com>
-Message-ID: <nrnb4esfx7ipazrmv2wrbeecme5tgeeeh77kqs5okma3gz4s4f@mbqilfrx6ymx>
-References: <20250302215219.1276480-1-olteanv@gmail.com>
- <20250302215219.1276480-7-olteanv@gmail.com>
- <e97fba5fb8387c2e671d5e47aeaac1d2@free.fr>
+ id fzyOvXgoThvY for <buildroot@buildroot.org>;
+ Sun, 16 Mar 2025 22:00:00 +0000 (UTC)
+X-Greylist: delayed 305 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sun, 16 Mar 2025 21:59:59 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 68E3F60756
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68E3F60756
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.126.134;
+ helo=mout.kundenserver.de; envelope-from=paguilar@paguilar.org;
+ receiver=<UNKNOWN> 
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 68E3F60756
+ for <buildroot@buildroot.org>; Sun, 16 Mar 2025 21:59:59 +0000 (UTC)
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from uxmal.fritz.box ([151.51.219.64]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.17.189]) with ESMTPSA (Nemesis) id
+ 1MLAF0-1tbibW3cFW-00Hc5q; Sun, 16 Mar 2025 22:54:52 +0100
+From: Pedro Aguilar <paguilar@paguilar.org>
+To: buildroot@buildroot.org
+Cc: paguilar@paguilar.org
+Date: Sun, 16 Mar 2025 22:54:00 +0100
+Message-Id: <20250316215400.6001-1-paguilar@paguilar.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <e97fba5fb8387c2e671d5e47aeaac1d2@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1742161926;
- bh=AX5ovQhEgTkm7K8Xu6VMiKQ27/LUkaZmaNuI4z2/M0s=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=nFBZpHc1jC1VCE6ZZgwFEmzb/F3y5GXRivfj3MF5O0+W0vvZp+++BdqmYhu8OGDQn
- lZqCykf+facvkuc4Di4c1O0MQBvOsXssIPLVeaNErUDj6OAGN7S4TOZAw+EL0gqDyV
- xJibRJ7NDGrBQUbnCn132bKpXSlh5gFY6qhxjTWkS1Z/0sBB/D75qZ7liD0gk1QSRr
- wtSW60zsYHLQq1WMgaoOIoygGZpHTuyLXg7ROSyQLUHAHnxlntnFGSOpdWtOmOeDWD
- tRi0WS86XMg93LYa/TK2PsBLCUZqs47BN70gUrmSkXiZVNBPjw/TXrmMLcWsHDi42K
- 8cPzM1yNPA0BQ==
+X-Provags-ID: V03:K1:TmBc8qNhj7USo4/W+DXHAdtaNVGE7IEGLLZpOJz+fzZ4+Ro1W3S
+ O3ebTqfpqySlUQ8Z0eyYeh8upxz8n247mY/ZGnXz9SrI8HWkfPNkqYzoauOv4ufc7qqPhT1
+ PWxLXS6y2otzkSbFgNzN/utPKV/WEoxAgXbGc172DuRDf1yxy74rdQgT6L4qqoDiQP0+qhS
+ io3cQMxtnFD4bFzCLuwhw==
+UI-OutboundReport: notjunk:1;M01:P0:JpUXYUHo7Cw=;UJ48LZmEO8uYgbdXoiyo4UrgkAz
+ 6q6ZVNKP518dUnI6V5kBMdfLy4uKkDkPX2S58HGmCG717RphRb7f06A1DAMyhUyl9Mo9U8GRI
+ T5ALWBATp6K8RDrVJYKTXXJAz6b5+9QnBj/4y8gzjZq4xY9ULmiOdQfz7SP0PaDta6M/tLSiC
+ T/2pDuwKmQRK/c+/RphIWa9roSeKHqYB1s7d2gI4ryd1SstjasDDEPBRsraCeFZYHlgI6O6TZ
+ nLC2LacQJG7nWUQgCWLeoW4FhlrrpXkbJi+eDhWb1GUaEk47fBFR1o1pwDAtyLLQDhYJejnOd
+ dUl1/imTYDl0rWXkAjEAYrArXjH56YQ+zlZIqBxUXBQKT5Pip2ejlNxYrYoL4T0FDoqeXzvmh
+ GFfC6l2xzw2GoW6IXl563i76q3zyw1eT6UqbdePDHPT/L+Zyd0Pq0+wOrZcFNSD39lMuu3ChV
+ Alk8YXSnqOqpWN10t/JliwvA5C1lBl4Z7/L4ZwkGNKII2SKZMHEAFdeUAb75SHBoyZJu/QEPV
+ mnFPoynqddpVCNJbPVoxcLHL7+8bdHgZsP0yiM0JaraqcKgQ81rKnIlefTnTzNe7Sl/6BJ9Sj
+ kVw9CVMjEBC6LjbZ91LJu4gx2s279EukqbsXBebMxthLUj3jqYwPot/dj2e/go6Ze6px9eZcE
+ Jl14d9mo3djaXq7FMjbWLbMapRoZkb7l8bYFtMEk/9uZ+mbzvYjnrsd7tgC0aAdiAn7iAHmon
+ EhnH1PiO8/YkRBll7cPGJ9RMmsOEDUxirNcbeIkwZT0chyPJZb52PW7o4r3WzFbpb66b97bS4
+ aNiSmp6vGxrGo+5am/DCbGYuHnM+AzM08/u8UG3YtCjF7zMYHPbQ+IaIILeUFaIe8F1Nduea3
+ YYIbpeKUPySoTnoZUUJ61SSejATzQl6a1d25bKe/XzH0gmxrse9k0/nwfKpQiC2TJh+zKbi0o
+ EEsEzAauWumgPx6CUUh9F5UClj1pUnbeW3vuEoBTeQ6sd3NIeqIDwwX0I+YVtPFS2wh2VtClO
+ 2yMRF5yofR16a54EoIDkifoBodv7TZtxowq17Lj+JX6HfPOncfEFJUSq67Ft7vH+KoJ7tcDHZ
+ gM19seQ+AdpwFqjcTREw/+oP1NGwmhzERnGx8Wd2Wxwo9sRDbEu8PS/Il45FYf9aEW7HfJFPW
+ FE6GSjZ8NiyLqbaCTKHEDkvPoFize8Z1lAaIPmEv7b97C+oATdxkEmPGTdgdxO9cV0XssHgQa
+ xhA5gmhl5KQJ09n3xkAW1iv3VAOIeOhj4QsqDqn+3oPW1Q1V3nb/cpCHU+JQtDJf2RqKd+bLf
+ ozufDyfJgWebRAaa5nsBtpjD+pD6P+IcUmBSjaidzQyyjHiFQ8bymTbmOy/ntjydrsMHcJ71e
+ cO7KOO3WYC+65jRA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=paguilar.org; 
+ s=s1-ionos; t=1742162397; x=1742767197; i=paguilar@paguilar.org;
+ bh=JxruxSUx+m7u9rT0XqwTG4aiutDYNAG8LmeNTsJa8k8=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=Y7T6RUvs1gUQWVPX+Y4CZRtWZxGd5bWEWpQp/ce9dKl+nHwm1JGI9igtLGJYdJTX
+ 2YwlXTCNDcdKaRSumU6hDr51W9kvtggin4Ox+/wB/fz5PZLmLQ1uaqK0qQa5jm9zs
+ BP8ismgr/rqqC/HRuQ2sbLqymCow5qPV1YzOC96PrHRhSjoei2syS+6VJi/l5spGO
+ 7x0HHFzNOxxvahfP9wBGBDmDEH3lWb2IgTIXoLy2KFRagjVkxmvgNOVydbWkXsQhq
+ JjvLVCysCZQsOZUy11NT9y8blMDrLFEETlJ/WA3Y2IlG4tfb1DLAn69tJzV8rUXd2
+ wfgwJJ+i/EtZVt4+Lw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
+ dmarc=none (p=none dis=none)
+ header.from=paguilar.org
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=nFBZpHc1
-Subject: Re: [Buildroot] [PATCH 06/15] package/qoriq-mc-utils: new package
+ dkim=pass (2048-bit key,
+ unprotected) header.d=paguilar.org header.i=paguilar@paguilar.org
+ header.a=rsa-sha256 header.s=s1-ionos header.b=Y7T6RUvs
+Subject: [Buildroot] [PATCH 1/1] package/libunistring: Skip 'tests' dir when
+ building
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,147 +114,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Julien, Vladimir,
+The tests/ dir gives different types of linking errors when building
+under different archs and with different C libs such as libc and musl.
+This dir is not necessary when building and it can be safely skipped,
+so let's remove it from the building process.
 
-In fact, I believe it requires another minor rework too, mostly for the API version, see below:
+This fixes the building errors reported here:
+https://autobuild.buildroot.org/results/770ac5653ee832a9117a7cd288a193750dfcfe29
+https://autobuild.buildroot.org/results/a31d608388b0ff28334f674baeb501b023bdb4bf
+https://autobuild.buildroot.org/results/f5a833a3dcd7094290fcbc6b8989620749bc6316
+https://autobuild.buildroot.org/results/b572db1524de16006d55a42dca43a0a500f78ed0
+https://autobuild.buildroot.org/results/a155a54b30f6cb02d74687992088f543fa63cb74
+https://autobuild.buildroot.org/results/dfe061ddaa9ef0b6e39b2da20858baa36ae1fca2
 
-> > +config BR2_PACKAGE_QORIQ_MC_UTILS_DPC
-> > +	string "Data Path Configuration (DPC) file"
-> > +	help
-> > +	  The DPC file contains the settings defining the behavior
-> > +	  of the MC firmware. Its source code follows the device
-> > +	  tree syntax and is compiled to a device tree blob, which
-> > +	  is the file that must be specified here.
-> 
-> If the DPC file is mandatory, could you add a note about that here?
-> (and possibly give an example?)
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+---
+ .../0001-Makefile-do-not-build-tests-dir.patch        | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+ create mode 100644 package/libunistring/0001-Makefile-do-not-build-tests-dir.patch
 
-+1, yes a depency can be added so we enforce the host `dpc`, something like:
-```
- config BR2_PACKAGE_QORIQ_MC_UTILS
-        bool "qoriq-mc-utils"
-+       select BR2_PACKAGE_HOST_DTC
-```
-
-Or a bit more elaborated.
-
-> > +	$(MAKE) -C $(@D)/config/
-> 
-> You will then need to add the Buildroot host path during the
-> make invocation. Here, we should have:
-> 
->     PATH=$(BR_PATH) $(MAKE) -C $(@D)/config/
-
-@Julien, is it the proper way of doing it ? How to be sure that we'll be
-using the buildroot's dpc and not the one from the host based on
-ordering of BR_PATH ?
-
-I'd rather prefer a clean Makefile assuming:
-  https://github.com/nxp-qoriq/mc-utils/pull/1
-+       DTC=$(HOST_DIR)/bin/dtc $(MAKE) -C $(@D)/config/
-
-
-Then, there is an issue with the version of the API. I faced it since I
-needed to use something that was not the 10.39.0
-
-Vladmir,
-
-on top of Julien's comments, I believe that we need to be able to
-configure the version API indepently of the tag version. Somethink like:
-...
-QORIQ_MC_UTILS_VERSION = xyz
-+QORIQ_MC_UTILS_LATEST_API_VERSION = mc_release_10.39.0
+diff --git a/package/libunistring/0001-Makefile-do-not-build-tests-dir.patch b/package/libunistring/0001-Makefile-do-not-build-tests-dir.patch
+new file mode 100644
+index 0000000000..b1ef642224
+--- /dev/null
++++ b/package/libunistring/0001-Makefile-do-not-build-tests-dir.patch
+@@ -0,0 +1,11 @@
++--- a/Makefile.in	2024-10-16 13:33:55.000000000 +0200
+++++ b/Makefile.in	2025-03-16 18:40:35.108110641 +0100
++@@ -2351,7 +2351,7 @@
++ top_srcdir = @top_srcdir@
++ AUTOMAKE_OPTIONS = 1.5 gnu no-dependencies
++ ACLOCAL_AMFLAGS = -I m4 -I gnulib-m4
++-SUBDIRS = doc gnulib-local lib tests
+++SUBDIRS = doc gnulib-local lib
 +
-+# Assuming than any git sha version leads to using the latest version
-+ifneq ($(findstring mc_release_,$(QORIQ_MC_UTILS_VERSION)),)
-+  QORIQ_MC_UTILS_API_VERSION = $(QORIQ_MC_UTILS_VERSION)
-+else
-+  QORIQ_MC_UTILS_API_VERSION = $(QORIQ_MC_UTILS_LATEST_API_VERSION)
-+endif
++ # Allow users to use "gnulib-tool --update".
 +
-+$(info QORIQ_MC_UTILS_API_VERSION uses $(QORIQ_MC_UTILS_API_VERSION))
-+
-+QORIQ_MC_UTILS_SITE = $(call github,nxp-qoriq,mc-utils,$(QORIQ_MC_UTILS_VERSION))
-...
+--
+2.34.1
 
-Then, once we set this version, we can build the dplib API too:
- define QORIQ_MC_UTILS_BUILD_CMDS
-+       DTC=$(HOST_DIR)/bin/dtc $(MAKE) -C $(@D)/config/
-+       $(MAKE) -C $(@D)/api/$(QORIQ_MC_UTILS_API_VERSION)/
- endef
-
-
-> > +define QORIQ_MC_UTILS_INSTALL_IMAGES_CMDS
-> > +	$(INSTALL) -D $(@D)/config/$(call
-> > qstrip,$(BR2_PACKAGE_QORIQ_MC_UTILS_DPC)) $(BINARIES_DIR)/dpc.dtb
-> > +	$(INSTALL) -D $(@D)/config/$(call
-> > qstrip,$(BR2_PACKAGE_QORIQ_MC_UTILS_DPL)) $(BINARIES_DIR)/dpl.dtb
-> 
-> The _INSTALL_IMAGES_CMDS fails if either
-> BR2_PACKAGE_QORIQ_MC_UTILS_DPC, or BR2_PACKAGE_QORIQ_MC_UTILS_DPL
-> are empty, which is their default in Kconfig.
-> 
-> If it is really mandatory to have values set for those
-> configuration variables, maybe you could add an explicit error message?
-> See for example:
-> https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02-rc2/package/panel-mipi-dbi-firmware/panel-mipi-dbi-firmware.mk#L30
-
-Moreover, the Config.in help should explain that the dpc and dpl names should be a
-{dpc-*,dpl-*}*.dtb file not a .dts file such as:
-BR2_PACKAGE_QORIQ_MC_UTILS_DPC="lx2160a/LX2160A-QDS/dpc.13.dtb"
-BR2_PACKAGE_QORIQ_MC_UTILS_DPL="lx2160a/LX2160A-QDS/dpl-eth.13.dtb"
-
-> Can you send an updated version of the patch, please?
-
-Thanks Vladimir.
-
-It that can help, enclosed my local update that I was using in order to
-run it quickly from your package:
-+++ b/package/qoriq-mc-utils/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_QORIQ_MC_UTILS
-        bool "qoriq-mc-utils"
-+       select BR2_PACKAGE_HOST_DTC
-        help
-          The Management Complex (MC) is a key component of the
-          networking subsystem named DPAA2 (Data Path Acceleration
-
---- a/package/qoriq-mc-utils/qoriq-mc-utils.mk
-+++ b/package/qoriq-mc-utils/qoriq-mc-utils.mk
-@@ -5,13 +5,29 @@
- ################################################################################
-
- QORIQ_MC_UTILS_VERSION = ba4be529fa5b315049f237c8bdd123a90da94266
--QORIQ_MC_UTILS_SITE = $(call github,nxp-qoriq,mc-utils,mc_release_$(QORIQ_MC_UTILS_VERSION))
-+QORIQ_MC_UTILS_LATEST_API_VERSION = mc_release_10.39.0
-+
-+# Assuming than any git sha version leads to using the latest version
-+ifneq ($(findstring mc_release_,$(QORIQ_MC_UTILS_VERSION)),)
-+  QORIQ_MC_UTILS_API_VERSION = $(QORIQ_MC_UTILS_VERSION)
-+else
-+  QORIQ_MC_UTILS_API_VERSION = $(QORIQ_MC_UTILS_LATEST_API_VERSION)
-+endif
-+
-+$(info QORIQ_MC_UTILS_API_VERSION uses $(QORIQ_MC_UTILS_API_VERSION))
-+
-+QORIQ_MC_UTILS_SITE = $(call github,nxp-qoriq,mc-utils,$(QORIQ_MC_UTILS_VERSION))
- QORIQ_MC_UTILS_LICENSE = BSD-3-Clause
- QORIQ_MC_UTILS_INSTALL_IMAGES = YES
- QORIQ_MC_UTILS_INSTALL_TARGET = NO
-
-+# XXX it shall not be needed
-+BR_NO_CHECK_HASH_FOR += $(QORIQ_MC_UTILS_SOURCE)
-+
-+QORIQ_MC_UTILS_DEPENDENCIES = host-dtc
-+
- define QORIQ_MC_UTILS_BUILD_CMDS
--       $(MAKE) -C $(@D)/config/
-+       DTC=$(HOST_DIR)/bin/dtc $(MAKE) -C $(@D)/config/
-+       $(MAKE) -C $(@D)/api/$(QORIQ_MC_UTILS_API_VERSION)/
- endef
-
-Best regards,
-  Vincent
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
