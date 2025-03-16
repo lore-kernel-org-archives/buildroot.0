@@ -4,79 +4,64 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D16E3C282DE
-	for <buildroot@archiver.kernel.org>; Sun, 16 Mar 2025 19:55:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5246C282DE
+	for <buildroot@archiver.kernel.org>; Sun, 16 Mar 2025 19:56:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D41A408A7;
-	Sun, 16 Mar 2025 19:55:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3D354096D;
+	Sun, 16 Mar 2025 19:56:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AiORKpeDmbCd; Sun, 16 Mar 2025 19:55:40 +0000 (UTC)
+ id COmRU9bOnJ-4; Sun, 16 Mar 2025 19:56:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77BD340967
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C1B840967
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 77BD340967;
-	Sun, 16 Mar 2025 19:55:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DDCB16E
- for <buildroot@buildroot.org>; Sun, 16 Mar 2025 19:55:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8C1B840967;
+	Sun, 16 Mar 2025 19:56:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E0D9C61
+ for <buildroot@buildroot.org>; Sun, 16 Mar 2025 19:56:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F24F181778
- for <buildroot@buildroot.org>; Sun, 16 Mar 2025 19:55:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CD1A54015E
+ for <buildroot@buildroot.org>; Sun, 16 Mar 2025 19:56:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LXQvB4jqkw7P for <buildroot@buildroot.org>;
- Sun, 16 Mar 2025 19:55:38 +0000 (UTC)
-X-Greylist: delayed 1799 seconds by postgrey-1.37 at util1.osuosl.org;
- Sun, 16 Mar 2025 19:55:37 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2733281699
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2733281699
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=78.46.3.230;
- helo=www571.your-server.de; envelope-from=ak@it-klinger.de;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e_jZLjvK3j-C for <buildroot@buildroot.org>;
+ Sun, 16 Mar 2025 19:56:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-Received: from www571.your-server.de (www571.your-server.de [78.46.3.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2733281699
- for <buildroot@buildroot.org>; Sun, 16 Mar 2025 19:55:37 +0000 (UTC)
-Received: from sslproxy03.your-server.de ([88.198.220.132])
- by www571.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
- (Exim 4.96.2) (envelope-from <ak@it-klinger.de>) id 1tttBL-000JvI-1i;
- Sun, 16 Mar 2025 19:57:55 +0100
-Received: from [2a0f:6480:1:600:fc64:4dfc:9829:9e5f]
- (helo=anderl.linuxhotel.de)
- by sslproxy03.your-server.de with esmtpsa (TLS1.3) tls TLS_AES_256_GCM_SHA384
- (Exim 4.96) (envelope-from <ak@it-klinger.de>) id 1tttBL-000Dm9-2h;
- Sun, 16 Mar 2025 19:57:55 +0100
-From: Andreas Klinger <ak@it-klinger.de>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6D00840423
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D00840423
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6D00840423
+ for <buildroot@buildroot.org>; Sun, 16 Mar 2025 19:56:03 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6D7D14435A;
+ Sun, 16 Mar 2025 19:56:00 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1ttu5V-003vw1-39;
+ Sun, 16 Mar 2025 20:55:57 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Cc: Andreas Klinger <ak@it-klinger.de>
-Date: Sun, 16 Mar 2025 19:57:44 +0100
-Message-Id: <20250316185744.332684-1-ak@it-klinger.de>
-X-Mailer: git-send-email 2.39.5
+Cc: Christian Stewart <christian@aperture.us>,  Thomas Perale
+ <thomas.perale@mind.be>
+References: <20250305184400.3555236-1-peter@korsgaard.com>
+Date: Sun, 16 Mar 2025 20:55:57 +0100
+In-Reply-To: <20250305184400.3555236-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 5 Mar 2025 19:44:00 +0100")
+Message-ID: <87cyeg4unm.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Authenticated-Sender: ak@it-klinger.de
-X-Virus-Scanned: Clear (ClamAV 1.0.7/27579/Sun Mar 16 09:35:38 2025)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; 
- d=it-klinger.de; s=default2502; h=Content-Transfer-Encoding:MIME-Version:
- Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:In-Reply-To:References;
- bh=srX5FbpibpZOtLc94ZR0Vhd4++XW7TqQoobAGcLHfVY=; b=n0f9noCg/iwrTWMQWx6sxoOdT0
- rye1RtslJkHj7JDNia5L/Q2iN37zMDgAzsbVLh5GQ1yjj1yjKAz9rYwZtPFDoTxrWU0BURgjftjix
- UaDQE047z1Kesr80CVVDT5t0YkQ+ARNx8Bg4tkP6eCOQFGd6u4NaB4cnmyC6qHUravQZp9yDwCDe6
- 4ofYYh8rGbWFU8YHLC+JUfJTYLsL+ujtxoYu+XIO0MMsbH4k2U6i0IsGbjuzI2yOw4qdRdfYq6pUJ
- Rr4LO6gk/h0fX7beLRzV+cY9J/edABfnpH1NJQPrDmbAoXgy7UeXv0NsjEqNIWlRvGl8Sjgo5WVkT
- dg5ieWBA==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddufeejheduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepkeegffdtieevkeejheevteeludetveeffedutedvkeefjeehiedtvdfhkeffueetnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtoheptghhrhhishhtihgrnhesrghpvghrthhurhgvrdhushdprhgtphhtthhopehthhhomhgrshdrphgvrhgrlhgvsehmihhnugdrsggv
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=it-klinger.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=it-klinger.de header.i=@it-klinger.de
- header.a=rsa-sha256 header.s=default2502 header.b=n0f9noCg
-Subject: [Buildroot] [PATCH] package/ply: bump version to 2.4
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/go: security bump to version 1.23.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,40 +78,20 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump to new available version.
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-See: https://release-monitoring.org/project/143128
-Signed-off-by: Andreas Klinger <ak@it-klinger.de>
----
- package/ply/ply.hash | 2 +-
- package/ply/ply.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > go1.23.7 (released 2025-03-04) includes security fixes to the net/http
+ > package, as well as bug fixes to cgo, the compiler, and the reflect,
+ > runtime, and syscall package.
 
-diff --git a/package/ply/ply.hash b/package/ply/ply.hash
-index b6a56aa909..ee9a57462b 100644
---- a/package/ply/ply.hash
-+++ b/package/ply/ply.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  99be1ed3942370699cbfc7f493bc3ffd4601312a81471215ac7ccb2e04a0a8b2  ply-2.3.0.tar.gz
-+sha256  f7c1461f3c570c91f28b1d33424846ead0d6e4429e4a9ce4429db8f2327283a5  ply-2.4.0.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/ply/ply.mk b/package/ply/ply.mk
-index dc02fc5472..964765b918 100644
---- a/package/ply/ply.mk
-+++ b/package/ply/ply.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PLY_VERSION = 2.3.0
-+PLY_VERSION = 2.4.0
- PLY_SITE = $(call github,wkz,ply,$(PLY_VERSION))
- PLY_AUTORECONF = YES
- PLY_LICENSE = GPL-2.0
+ > https://github.com/golang/go/issues?q=milestone%3AGo1.23.7+label%3ACherryPickApproved
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed to 2024.11.x, thanks.
+
 -- 
-2.39.5
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
