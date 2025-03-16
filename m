@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36498C28B30
-	for <buildroot@archiver.kernel.org>; Sun, 16 Mar 2025 20:27:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50C7AC282DE
+	for <buildroot@archiver.kernel.org>; Sun, 16 Mar 2025 20:27:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 02F5381EAA;
-	Sun, 16 Mar 2025 20:27:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B21981E89;
+	Sun, 16 Mar 2025 20:27:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZoMRCozc4bJ0; Sun, 16 Mar 2025 20:27:02 +0000 (UTC)
+ id yZXwltK1LO-2; Sun, 16 Mar 2025 20:27:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47D9E81EAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C893F81F1A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47D9E81EAE;
-	Sun, 16 Mar 2025 20:27:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 34DA061
- for <buildroot@buildroot.org>; Sun, 16 Mar 2025 20:26:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C893F81F1A;
+	Sun, 16 Mar 2025 20:27:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E707E16E
+ for <buildroot@buildroot.org>; Sun, 16 Mar 2025 20:26:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2F6A3802E7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B1D1405F6
  for <buildroot@buildroot.org>; Sun, 16 Mar 2025 20:26:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e6FVGZRLXHZB for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IlCFp7cdrNqM for <buildroot@buildroot.org>;
  Sun, 16 Mar 2025 20:26:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CCF781E7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7136940604
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5CCF781E7D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7136940604
  for <buildroot@buildroot.org>; Sun, 16 Mar 2025 20:26:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4AD9C88054; Sun, 16 Mar 2025 20:26:46 +0000 (UTC)
+ id 66B0A86E1E; Sun, 16 Mar 2025 20:26:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 16 Mar 2025 21:08:23 +0100
+Date: Sun, 16 Mar 2025 21:23:59 +0100
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 1666a565e7f28bf5b48c0301e8b85499de6709c0
-X-Git-Newrev: 4ad66243dc0fb8d6514c25a5f33e17c86e954731
+X-Git-Oldrev: e33e8a43a3f581da856015a8b291211efe915fd4
+X-Git-Newrev: 4d779a7d2d33684375efda51db39c98037399987
 X-Patchwork-Hint: ignore
-Message-Id: <20250316202646.4AD9C88054@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/util-linux: add
- uuidd user and group
+Message-Id: <20250316202646.66B0A86E1E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/prboom: Fix big
+ endian fix up
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,74 +65,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4ad66243dc0fb8d6514c25a5f33e17c86e954731
+commit: https://git.buildroot.net/buildroot/commit/?id=4d779a7d2d33684375efda51db39c98037399987
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-When util-linux is compiled with the uuidd daemon and with systemd
-init, the rootfs creation fails in fakeroot as follows:
+The hack to force big endian support when building
+for a big endian machine doesn't work as there is
+some whitespace between "#" and "undef" in config.h.
 
-    printf 'host/bin/systemctl --root=build/buildroot-fs/ext2/target preset-all\n' >> build/buildroot-fs/ext2/fakeroot
-    [...]
-    FAKEROOTDONTTRYCHOWN=1 host/bin/fakeroot -- build/buildroot-fs/ext2/fakeroot
-    rootdir=build/buildroot-fs/ext2/target
-    table='build/buildroot-fs/full_devices_table.txt'
-    ignored spec: h /var/log/journal/%m - - - - +C
-    ignored spec: x /var/tmp/systemd-private-%b-*
-    ignored spec: X /var/tmp/systemd-private-%b-*/tmp
-    ignored spec: x  /var/lib/systemd/coredump/.#core*.%b*
-    ignored spec: z /var/log/journal/%m 2755 root systemd-journal - -
-    ignored spec: z /var/log/journal/%m/system.journal 0640 root systemd-journal - -
-    <stdin>:37: Failed to resolve user 'uuidd': No such process
-    make[1]: *** [fs/ext2/ext2.mk:66: images/rootfs.ext2] Error 65
-    make: *** [Makefile:83: _all] Error 2
+Add a wildcard between those two so that the target
+line matches and the replacement is done.
 
-This error can be reproduced with the commands:
+Allows me to play DOOM on my LC475.
 
-    cat <<EOF >.config
-    BR2_aarch64=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_PACKAGE_UTIL_LINUX=y
-    BR2_PACKAGE_UTIL_LINUX_UUIDD=y
-    BR2_INIT_SYSTEMD=y
-    BR2_TARGET_ROOTFS_EXT2=y
-    EOF
-    make olddefconfig
-    make
-
-The error comes from systemctl, which cannot find the uuidd user in
-the target rootfs, needed in the uuidd.service unit file [1].
-
-This commit fixes the issue by adding the uuidd user and group in
-support/scripts/mkusers syntax.
-
-[1] https://web.git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/misc-utils/uuidd.service.in?h=v2.40.2
-
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
-[Julien: add commands to reproduce the issue in commit log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 4809690d42f9b395ccb76ee7583c199fdd8d42c5)
+Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit ebcd82198f2c84efddf82c7be9b0782b4180ce93)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/util-linux/util-linux.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/prboom/prboom.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
-index 7a143290eb..ed30c0b107 100644
---- a/package/util-linux/util-linux.mk
-+++ b/package/util-linux/util-linux.mk
-@@ -60,6 +60,12 @@ HOST_UTIL_LINUX_CONF_OPTS = \
- 	--with-systemdsystemunitdir=no \
- 	--without-python
+diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
+index c1ba05ff70..fc440e5cf8 100644
+--- a/package/prboom/prboom.mk
++++ b/package/prboom/prboom.mk
+@@ -40,7 +40,7 @@ PRBOOM_CONF_OPTS = \
  
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_UUIDD),y)
-+define UTIL_LINUX_USERS
-+	uuidd -1 uuidd -1 * - - - uuidd user
-+endef
-+endif
-+
- ifneq ($(BR2_PACKAGE_UTIL_LINUX_BINARIES)$(BR2_PACKAGE_UTIL_LINUX_CRAMFS)$(BR2_PACKAGE_UTIL_LINUX_FSCK)$(BR2_PACKAGE_UTIL_LINUX_LOSETUP),)
- UTIL_LINUX_SELINUX_MODULES = fstools
- endif
+ # endianness detection isn't used when cross compiling
+ define PRBOOM_BIG_ENDIAN_FIXUP
+-	$(SED) 's,.*#undef WORDS_BIGENDIAN.*,#define WORDS_BIGENDIAN 1,g' \
++	$(SED) 's,.*#.*undef WORDS_BIGENDIAN.*,#define WORDS_BIGENDIAN 1,g' \
+ 		$(PRBOOM_DIR)/config.h
+ endef
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
