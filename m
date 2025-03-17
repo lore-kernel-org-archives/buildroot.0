@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1268EC282EC
-	for <buildroot@archiver.kernel.org>; Mon, 17 Mar 2025 17:55:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8494C35FF8
+	for <buildroot@archiver.kernel.org>; Mon, 17 Mar 2025 17:55:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE32260A61;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EDDC81F30;
+	Mon, 17 Mar 2025 17:55:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eqi8AwpxZzHi; Mon, 17 Mar 2025 17:55:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65A0381E3F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 65A0381E3F;
 	Mon, 17 Mar 2025 17:55:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 12D4312E
+ for <buildroot@buildroot.org>; Mon, 17 Mar 2025 17:55:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id E9B2F6073C
+ for <buildroot@buildroot.org>; Mon, 17 Mar 2025 17:55:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VnTiuTOcrBRW; Mon, 17 Mar 2025 17:55:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74E0C60735
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74E0C60735;
-	Mon, 17 Mar 2025 17:55:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id EF51216E
- for <buildroot@buildroot.org>; Mon, 17 Mar 2025 17:54:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DDCB94056E
- for <buildroot@buildroot.org>; Mon, 17 Mar 2025 17:54:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ivuTeyC_nMpn for <buildroot@buildroot.org>;
- Mon, 17 Mar 2025 17:54:58 +0000 (UTC)
+ id 9W3JL-CE6_mK for <buildroot@buildroot.org>;
+ Mon, 17 Mar 2025 17:54:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A5E83400F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDA836065D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A5E83400F2
+ by smtp3.osuosl.org (Postfix) with ESMTP id BDA836065D
  for <buildroot@buildroot.org>; Mon, 17 Mar 2025 17:54:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 92639880B1; Mon, 17 Mar 2025 17:54:58 +0000 (UTC)
+ id ABF02880B0; Mon, 17 Mar 2025 17:54:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 17 Mar 2025 18:32:11 +0100
+Date: Mon, 17 Mar 2025 18:54:20 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dcd6bea6aeee09a533974d30c578b990c2ecdede
-X-Git-Newrev: 27ab880ebb9a3efdec15733841f7b88063604247
+X-Git-Oldrev: 27ab880ebb9a3efdec15733841f7b88063604247
+X-Git-Newrev: aa2d7ca53f704af901f6c33c13e4bb1591886700
 X-Patchwork-Hint: ignore
-Message-Id: <20250317175458.92639880B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libopenssl do not build in parallel
+Message-Id: <20250317175458.ABF02880B0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Update for 2025.02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,88 +64,158 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27ab880ebb9a3efdec15733841f7b88063604247
+commit: https://git.buildroot.net/buildroot/commit/?id=aa2d7ca53f704af901f6c33c13e4bb1591886700
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With highly parallel builds on a heavily loaded machine, the libopenssl
-build often (about half of the time) fails with spurious missing rules
-in its Makefile:
-
-    >>> host-libopenssl 3.4.1 Installing to host directory
-    [...] /usr/bin/make  -C [...]/build/host-libopenssl-3.4.1 install
-    "/usr/bin/make" depend && "/usr/bin/make" _build_libs
-    "/usr/bin/make" depend && "/usr/bin/make" _build_modules
-    "/usr/bin/make" depend && "/usr/bin/make" _build_programs
-    [...]
-    make[3]: *** No rule to make target '_build_modules'.  Stop.
-    make[2]: *** [Makefile:3159: build_modules] Error 2
-    make[2]: *** Waiting for unfinished jobs....
-    make[3]: Nothing to be done for '_build_programs'.
-    make[3]: Nothing to be done for '_build_libs'.
-    make[1]: *** [package/pkg-generic.mk:283: [...]/build/host-libopenssl-3.4.1/.stamp_host_installed] Error 2
-    make[1]: *** Waiting for unfinished jobs....
-    [...]
-    make: *** [Makefile:23: _all] Error 2
-
-Ideally, we'd like to fix the issue. However, the Nakefile is generated
-by the Configure script, written in perl, from the template in
-Configurations/unix-Makefile.tmpl, which also uses some kind of special
-(perl-related, probably) templating language. That makes it pretty
-difficult to see what is going on, though, and nigh impossible to fix
-without a deep understanding of the openssl buildsystem.
-
-So, we can only disable parallel builds until the issue is fixed
-upstream [0]. Add a comment to both build commands (host and target) to
-reference the upstream issue report.
-
-Note that the issue has mostly been observed in the build of the host
-variant so far, but there is no reason why it can't happen in the build
-of the target variant.
-
-[0] https://github.com/openssl/openssl/issues/27074
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libopenssl/libopenssl.mk | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ CHANGES                    |  7 +++++++
+ Makefile                   |  4 ++--
+ docs/website/download.html | 22 +++++++++++-----------
+ docs/website/news.html     | 21 +++++++++++++++++++++
+ support/misc/Vagrantfile   |  2 +-
+ 5 files changed, 42 insertions(+), 14 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index c1c5b818d7..663e8d9b9f 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -132,24 +132,26 @@ endef
- LIBOPENSSL_POST_CONFIGURE_HOOKS += LIBOPENSSL_FIXUP_STATIC_MAKEFILE
- endif
+diff --git a/CHANGES b/CHANGES
+index 83859bb47a..e7bfe4134e 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,10 @@
++2025.02, released March 17th, 2025
++
++	Various fixes.
++
++	Updated/fixed packages: expat, fio, libopenssl, php, rauc,
++	rt-tests
++
+ 2025.02-rc2, released March 13th 28th, 2025
  
-+# Parallel build broken: https://github.com/openssl/openssl/issues/27074
- define HOST_LIBOPENSSL_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)
- endef
+ 	Fixes all over the tree.
+diff --git a/Makefile b/Makefile
+index 30222c9747..4006bfbda7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
  
-+# Parallel build broken: https://github.com/openssl/openssl/issues/27074
- define LIBOPENSSL_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)
- endef
+ # Set and export the version string
+-export BR2_VERSION := 2025.02-rc2
++export BR2_VERSION := 2025.02
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1741860000
++BR2_VERSION_EPOCH = 1742234000
  
- define LIBOPENSSL_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) install
- endef
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 263b03309a..501fcc68f8 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,40 +8,40 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
  
- define HOST_LIBOPENSSL_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) install
- endef
+-      <h3 style="text-align: center;">Latest long term support release: <b>2024.02.11</b></h3>
++      <h3 style="text-align: center;">Latest stable / long term support release: <b>2025.02</b></h3>
  
- define LIBOPENSSL_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) install
- 	$(RM) -rf $(TARGET_DIR)/usr/lib/ssl
- 	$(RM) -f $(TARGET_DIR)/usr/bin/c_rehash
- endef
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2024.02.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2025.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2024.02.11.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2025.02.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2024.02.11.tar.gz">buildroot-2024.02.11.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2024.02.11.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2025.02.tar.gz">buildroot-2025.02.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2025.02.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2024.02.11.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2025.02.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2024.02.11.tar.xz"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2025.02.tar.xz"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2024.02.11.tar.xz">buildroot-2024.02.11.tar.xz</a></h3>
+-	  <p><a href="/downloads/buildroot-2024.02.11.tar.xz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2025.02.tar.xz">buildroot-2025.02.tar.xz</a></h3>
++	  <p><a href="/downloads/buildroot-2025.02.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
++<!--
+       <h3 style="text-align: center;">Latest stable release: <b>2024.11.2</b></h3>
+ 
+       <div class="row mt centered">
+@@ -109,7 +109,7 @@
+ 	  <p><a href="/downloads/buildroot-2025.02-rc2.tar.xz.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+-
++-->
+       This and earlier releases (and their PGP signatures) can always be downloaded from
+       <a href="/downloads/">http://buildroot.net/downloads/</a>.
+     </div>
+diff --git a/docs/website/news.html b/docs/website/news.html
+index b643ce1b07..79ecf00836 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,27 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2025.02 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>17 March 2025</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The stable 2025.02 release is out - Thanks to everyone
++	  contributing and testing the release candidates. See the
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02/CHANGES">CHANGES</a>
++	  file for more details
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2025.02.tar.xz">2025.02 release</a>.</p>
++
++	  <p>Notice that this is a long term support release which will be
++	  supported with security and other important fixes until (at least) March 2026.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
+diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+index 34d404dc4c..6c1cdf204a 100644
+--- a/support/misc/Vagrantfile
++++ b/support/misc/Vagrantfile
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Buildroot version to use
+-RELEASE='2024.11.2'
++RELEASE='2025.02'
+ 
+ ### Change here for more memory/cores ###
+ VM_MEMORY=2048
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
