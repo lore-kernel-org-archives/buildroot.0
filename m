@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C521C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E215C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 683C160EF5;
-	Mon, 19 May 2025 10:41:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1E1DD82113;
+	Mon, 19 May 2025 10:41:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UFXDiMQtUSdt; Mon, 19 May 2025 10:41:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VotkfQYXZqsa; Mon, 19 May 2025 10:41:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AE3C60F13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 598268212C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6AE3C60F13;
-	Mon, 19 May 2025 10:41:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 04384193
+	by smtp1.osuosl.org (Postfix) with ESMTP id 598268212C;
+	Mon, 19 May 2025 10:41:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1640B1BF
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7776960F00
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 81BB040DA4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dcX-91nlPs0d for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eVRoTSD5P7ZS for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9576060E91
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A2C940D37
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9576060E91
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A2C940D37
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 90DE8873DB; Mon, 19 May 2025 10:39:57 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 083E4873D1; Mon, 19 May 2025 10:39:43 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 25 Apr 2025 18:24:08 +0200
+Date: Tue, 18 Mar 2025 15:41:43 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 72661cb424c18399ce1f352d15416a71b746712b
-X-Git-Newrev: 460da6d4b4b189a8a0fc512f6ccd2d642e610c66
+X-Git-Oldrev: 55cfcf52e1bacd793f9e22111e4ee814bd5e5525
+X-Git-Newrev: 781987d67e89b34da0e7c275d1325cab4ab2cd92
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103957.90DE8873DB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/raspberrypi2_64: new
- defconfig
+Message-Id: <20250519103943.083E4873D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Merge branch 'next'
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,159 +59,15 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3008831728130631198=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3008831728130631198==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=460da6d4b4b189a8a0fc512f6ccd2d642e610c66
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-This configuration builds an image for the Raspberry Pi 2 Rev 1.2
-(64-bit).
-
-Note: Raspberry Pi 2 Model B Rev 1.2[1] switched from BCM2836[2] to
-BCM2837[3] that is 64-bit.
-
-	BCM2836[2]
-
-	The Broadcom chip used in the Raspberry Pi 2 Model B. The
-	underlying architecture in BCM2836 is identical to BCM2835. The
-	only significant difference is the removal of the ARM1176JZF-S
-	processor and replacement with a quad-core Cortex-A7 cluster.
-
-	BCM2837[3]
-
-	This is the Broadcom chip used in the Raspberry Pi 3 Model B,
-	later models of the Raspberry Pi 2 Model B, and the Raspberry Pi
-	Compute Module 3. The underlying architecture of the BCM2837 is
-	identical to the BCM2836. The only significant difference is the
-	replacement of the ARMv7 quad core cluster with a quad-core ARM
-	Cortex A53 (ARMv8) cluster.
-
-	The ARM cores run at 1.2GHz, making the device about 50% faster
-	than the Raspberry Pi 2. The VideoCore IV runs at 400MHz.
-
-[1]: https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#flagship-series
-[2]: https://www.raspberrypi.com/documentation/computers/processors.html#bcm2836
-[3]: https://www.raspberrypi.com/documentation/computers/processors.html#bcm2837
-
-Signed-off-by: Gaël PORTAY <gael.portay+rtone@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- board/raspberrypi/config_2_64bit.txt | 26 ++++++++++++++++++++++++++
- board/raspberrypi/readme.txt         |  4 ++++
- board/raspberrypi2-64                |  1 +
- configs/raspberrypi2_64_defconfig    | 34 ++++++++++++++++++++++++++++++++++
- 4 files changed, 65 insertions(+)
-
-diff --git a/board/raspberrypi/config_2_64bit.txt b/board/raspberrypi/config_2_64bit.txt
-new file mode 100644
-index 0000000000..5b531b1cae
---- /dev/null
-+++ b/board/raspberrypi/config_2_64bit.txt
-@@ -0,0 +1,26 @@
-+# Please note that this is only a sample, we recommend you to change it to fit
-+# your needs.
-+# You should override this file using BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE.
-+# See http://buildroot.org/manual.html#rootfs-custom
-+# and http://elinux.org/RPiconfig for a description of config.txt syntax
-+
-+start_file=start.elf
-+fixup_file=fixup.dat
-+
-+kernel=Image
-+
-+# To use an external initramfs file
-+#initramfs rootfs.cpio.gz
-+
-+# Disable overscan assuming the display supports displaying the full resolution
-+# If the text shown on the screen disappears off the edge, comment this out
-+disable_overscan=1
-+
-+# How much memory in MB to assign to the GPU on Pi models having
-+# 256, 512 or 1024 MB total memory
-+gpu_mem_256=100
-+gpu_mem_512=100
-+gpu_mem_1024=100
-+
-+# enable 64bits support
-+arm_64bit=1
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index 47814736bd..7dda631387 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -54,6 +54,10 @@ For model 2 B:
- 
-   $ make raspberrypi2_defconfig
- 
-+or for model 2 B (Rev 1.2, model B3 without wireless LAN and Bluetooth, 64 bit):
-+
-+  $ make raspberrypi2_64_defconfig
-+
- For model 3 B, B+, CM3 and CM3+:
- 
-   $ make raspberrypi3_defconfig
-diff --git a/board/raspberrypi2-64 b/board/raspberrypi2-64
-new file mode 120000
-index 0000000000..fcdafc81ed
---- /dev/null
-+++ b/board/raspberrypi2-64
-@@ -0,0 +1 @@
-+raspberrypi
-\ No newline at end of file
-diff --git a/configs/raspberrypi2_64_defconfig b/configs/raspberrypi2_64_defconfig
-new file mode 100644
-index 0000000000..211e8470b4
---- /dev/null
-+++ b/configs/raspberrypi2_64_defconfig
-@@ -0,0 +1,34 @@
-+BR2_aarch64=y
-+BR2_ARM_FPU_VFPV4=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
-+BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi2-64/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi2-64/post-image.sh"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-2-b"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-+BR2_PACKAGE_XZ=y
-+BR2_PACKAGE_RPI_FIRMWARE=y
-+BR2_PACKAGE_RPI_FIRMWARE_BOOTCODE_BIN=y
-+BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI=y
-+BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi2-64/config_2_64bit.txt"
-+# BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS is not set
-+BR2_PACKAGE_KMOD=y
-+BR2_PACKAGE_KMOD_TOOLS=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_KMOD_XZ=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-
---===============3008831728130631198==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+commit: https://git.buildroot.net/buildroot/commit/?id=781987d67e89b34da0e7c275d1325cab4ab2cd92
+Patch is too large, so refusing to show it
+Patch is too large, so refusing to show it
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3008831728130631198==--
