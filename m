@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34800C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFDDFC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 08DF5403CF;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 927D960FB1;
+	Mon, 19 May 2025 10:41:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1LMcqRPxSkA6; Mon, 19 May 2025 10:41:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B728E60EFA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B728E60EFA;
 	Mon, 19 May 2025 10:41:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 294F91BF
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC24740DBA
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sXbeSbcsy71s; Mon, 19 May 2025 10:41:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 354FB403D9
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 354FB403D9;
-	Mon, 19 May 2025 10:41:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 25CCF193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BF8BF41089
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZTXUhjXX9lj1 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:43 +0000 (UTC)
+ id b0AiXCzQ-8R7 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9AFE4103B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29E9640C40
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A9AFE4103B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29E9640C40
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9FAB783A2E; Mon, 19 May 2025 10:39:43 +0000 (UTC)
+ id 2720E872E7; Mon, 19 May 2025 10:39:43 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 20 Mar 2025 22:44:32 +0100
+Date: Tue, 18 Mar 2025 21:53:24 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 572197f6d9cc079d73c57da91381191671ed8564
-X-Git-Newrev: 4d7292675af34fa0807c78089a5ea6b3e7b897eb
+X-Git-Oldrev: b8dfcb4f045fce200e5e521bb1f15df8bf58bc8a
+X-Git-Newrev: 2248c732c621730ff6cf26b2bb06034a7e583f22
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103943.9FAB783A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/linux-tools: perf: Fix
- _BIN_ARCH_EXCLUDE
+Message-Id: <20250519103943.2720E872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ply: bump version to
+ 2.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,57 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4d7292675af34fa0807c78089a5ea6b3e7b897eb
+commit: https://git.buildroot.net/buildroot/commit/?id=2248c732c621730ff6cf26b2bb06034a7e583f22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-support/scripts/check-bin-arch has an option -i to exclude a path
-(or many paths by using -i multiple times).
+Bump to new available version.
 
-This was implemented in commit 01d90f0d093f ("spport/check-bin-arch:
-accept arbitrary per-package ignore paths").
+For change log, see:
+https://github.com/wkz/ply/releases/tag/2.4.0
 
-Looking at this feature (which hasn't changed since being added),
-we can see that check-bin-arch automatically adds a trailing slash
-to all entries specified using -i.
-
-Thus, specifying a path to a file, e.g.
-"/usr/libexec/perf-core/tests/pe-file.exe" will cause check-bin-arch
-to add "/usr/libexec/perf-core/tests/pe-file.exe/" to the IGNORES array.
-
-When running the main loop, the file
-"/usr/libexec/perf-core/tests/pe-file.exe" will thus not be ignored,
-since it will not trigger a match the pattern that was added to the
-IGNORES array ("/usr/libexec/perf-core/tests/pe-file.exe/").
-
-This means that the -i option in check-bin-arch only supports directories
-and not files.
-
-Fix the LINUX_TOOLS_BIN_ARCH_EXCLUDE in
-package/linux-tools/linux-tool-perf.mk.in to specify a directory, as the
-existing LINUX_TOOLS_BIN_ARCH_EXCLUDE can never have actually worked.
-
-Fixes: a7ad7816262d ("package/linux-tools: Exclude checking PE binaries from perf test")
-Signed-off-by: Niklas Cassel <cassel@kernel.org>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Andreas Klinger <ak@it-klinger.de>
+[Julien: replaced the change log url]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/linux-tools/linux-tool-perf.mk.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/ply/ply.hash | 2 +-
+ package/ply/ply.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
-index df3030439e..d67318571a 100644
---- a/package/linux-tools/linux-tool-perf.mk.in
-+++ b/package/linux-tools/linux-tool-perf.mk.in
-@@ -180,8 +180,7 @@ define PERF_INSTALL_REMOVE_SCRIPTS
- endef
+diff --git a/package/ply/ply.hash b/package/ply/ply.hash
+index b6a56aa909..ee9a57462b 100644
+--- a/package/ply/ply.hash
++++ b/package/ply/ply.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  99be1ed3942370699cbfc7f493bc3ffd4601312a81471215ac7ccb2e04a0a8b2  ply-2.3.0.tar.gz
++sha256  f7c1461f3c570c91f28b1d33424846ead0d6e4429e4a9ce4429db8f2327283a5  ply-2.4.0.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/ply/ply.mk b/package/ply/ply.mk
+index dc02fc5472..964765b918 100644
+--- a/package/ply/ply.mk
++++ b/package/ply/ply.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- LINUX_TOOLS_BIN_ARCH_EXCLUDE += \
--	/usr/libexec/perf-core/tests/pe-file.exe \
--	/usr/libexec/perf-core/tests/pe-file.exe.debug
-+	/usr/libexec/perf-core/tests/
- endif
- 
- define PERF_INSTALL_TARGET_CMDS
+-PLY_VERSION = 2.3.0
++PLY_VERSION = 2.4.0
+ PLY_SITE = $(call github,wkz,ply,$(PLY_VERSION))
+ PLY_AUTORECONF = YES
+ PLY_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
