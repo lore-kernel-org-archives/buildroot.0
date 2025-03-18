@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AED40C54756
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E667CC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F80360FFC;
-	Mon, 19 May 2025 10:42:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC84C8211F;
+	Mon, 19 May 2025 10:42:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fAb7_ILU8wgg; Mon, 19 May 2025 10:42:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iUFz6fH5OHEG; Mon, 19 May 2025 10:42:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD4366101A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77B78829BB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD4366101A;
-	Mon, 19 May 2025 10:42:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77B78829BB;
+	Mon, 19 May 2025 10:42:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 088DE193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 10872D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8378340DFD
+ by smtp4.osuosl.org (Postfix) with ESMTP id C50FB40E0A
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QOtd--aRUCQv for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:45 +0000 (UTC)
+ id 8HShgtg9EYBr for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8268E40DA9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3422B40D4C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8268E40DA9
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3422B40D4C
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 775A7872E7; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ id 30D5383A2E; Mon, 19 May 2025 10:39:43 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 22 Mar 2025 16:25:02 +0100
+Date: Tue, 18 Mar 2025 21:55:39 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: cf4f2f858d13aa8be1fc3d3215df66e64e7b57e6
-X-Git-Newrev: 6ca1ee306a3dc46430e80b7c2eb9689bdc1fbf1b
+X-Git-Oldrev: 2248c732c621730ff6cf26b2bb06034a7e583f22
+X-Git-Newrev: ba8bce8a11063b645a28dacc1fbe26d289bbf51f
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103944.775A7872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-tzlocal: new
- package
+Message-Id: <20250519103943.30D5383A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/zlib-ng: bump to 2.2.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,122 +64,104 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ca1ee306a3dc46430e80b7c2eb9689bdc1fbf1b
+commit: https://git.buildroot.net/buildroot/commit/?id=ba8bce8a11063b645a28dacc1fbe26d289bbf51f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Remove patch that is included upstream now.
+License hash changed due to copyright year update [1].
+
+Release Notes: https://github.com/zlib-ng/zlib-ng/releases
+
+[1] https://github.com/zlib-ng/zlib-ng/commit/fc634263722f39bfcf52437b783db32ff53f2b36
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                             |  2 ++
- package/Config.in                                      |  1 +
- package/python-tzlocal/Config.in                       |  5 +++++
- package/python-tzlocal/python-tzlocal.hash             |  5 +++++
- package/python-tzlocal/python-tzlocal.mk               | 14 ++++++++++++++
- support/testing/tests/package/sample_python_tzlocal.py |  5 +++++
- support/testing/tests/package/test_python_tzlocal.py   | 14 ++++++++++++++
- 7 files changed, 46 insertions(+)
+ ...h-riscv-riscv-features-c-fix-uclibc-build.patch | 51 ----------------------
+ package/zlib-ng/zlib-ng.hash                       |  4 +-
+ package/zlib-ng/zlib-ng.mk                         |  2 +-
+ 3 files changed, 3 insertions(+), 54 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index a0e0183257..c080608bcf 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2268,9 +2268,11 @@ F:	package/picotool/
- F:	package/python-immutabledict/
- F:	package/python-jc/
- F:	package/python-ruamel-yaml-clib/
-+F:	package/python-tzlocal/
- F:	package/python-waitress/
- F:	support/testing/tests/package/test_python_fastapi.py
- F:	support/testing/tests/package/test_python_ruamel_yaml.py
-+F:	support/testing/tests/package/test_python_tzlocal.py
- F:	support/testing/tests/package/test_python_waitress.py
- F:	support/testing/tests/package/sample_python_fastapi.py
- F:	support/testing/tests/package/sample_python_ruamel_yaml.py
-diff --git a/package/Config.in b/package/Config.in
-index 60b375e674..d8751fc19f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1453,6 +1453,7 @@ menu "External python modules"
- 	source "package/python-types-python-dateutil/Config.in"
- 	source "package/python-typing-extensions/Config.in"
- 	source "package/python-typing-inspect/Config.in"
-+	source "package/python-tzlocal/Config.in"
- 	source "package/python-u-msgpack/Config.in"
- 	source "package/python-ubjson/Config.in"
- 	source "package/python-uhid/Config.in"
-diff --git a/package/python-tzlocal/Config.in b/package/python-tzlocal/Config.in
-new file mode 100644
-index 0000000000..6a2959325e
---- /dev/null
-+++ b/package/python-tzlocal/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_PYTHON_TZLOCAL
-+	bool "python-tzlocal"
-+	help
-+	  A Python module that tries to figure out what your
-+	  local timezone is.
-diff --git a/package/python-tzlocal/python-tzlocal.hash b/package/python-tzlocal/python-tzlocal.hash
-new file mode 100644
-index 0000000000..dce19103a5
---- /dev/null
-+++ b/package/python-tzlocal/python-tzlocal.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/tzlocal/json
-+md5  9d8d4c12b047d5d45e6eb72bb95fd90e  tzlocal-5.3.tar.gz
-+sha256  2fafbfc07e9d8b49ade18f898d6bcd37ae88ce3ad6486842a2e4f03af68323d2  tzlocal-5.3.tar.gz
-+# Locally computed sha256 checksums
-+sha256  d99ab209aeb16aad2c25c90ffd83c1a981e290ffff76a420a2ab03e03f041b8c  LICENSE.txt
-diff --git a/package/python-tzlocal/python-tzlocal.mk b/package/python-tzlocal/python-tzlocal.mk
-new file mode 100644
-index 0000000000..c616974f64
---- /dev/null
-+++ b/package/python-tzlocal/python-tzlocal.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-tzlocal
-+#
-+################################################################################
-+
-+PYTHON_TZLOCAL_VERSION = 5.3
-+PYTHON_TZLOCAL_SOURCE = tzlocal-$(PYTHON_TZLOCAL_VERSION).tar.gz
-+PYTHON_TZLOCAL_SITE = https://files.pythonhosted.org/packages/33/cc/11360404b20a6340b9b4ed39a3338c4af47bc63f87f6cea94dbcbde07029
-+PYTHON_TZLOCAL_SETUP_TYPE = setuptools
-+PYTHON_TZLOCAL_LICENSE = MIT
-+PYTHON_TZLOCAL_LICENSE_FILES = LICENSE.txt
-+
-+$(eval $(python-package))
-diff --git a/support/testing/tests/package/sample_python_tzlocal.py b/support/testing/tests/package/sample_python_tzlocal.py
-new file mode 100644
-index 0000000000..9aeb431c64
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_tzlocal.py
-@@ -0,0 +1,5 @@
-+from tzlocal import get_localzone
-+from zoneinfo import ZoneInfo
-+
-+tz = get_localzone()
-+assert tz == ZoneInfo(key='posix/Europe/Berlin')
-diff --git a/support/testing/tests/package/test_python_tzlocal.py b/support/testing/tests/package/test_python_tzlocal.py
-new file mode 100644
-index 0000000000..d7dac361bf
---- /dev/null
-+++ b/support/testing/tests/package/test_python_tzlocal.py
-@@ -0,0 +1,14 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3TZLocal(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_TARGET_TZ_INFO=y
-+        BR2_TARGET_LOCALTIME="Europe/Berlin"
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_TZLOCAL=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_tzlocal.py"]
-+    timeout = 10
+diff --git a/package/zlib-ng/0001-arch-riscv-riscv-features-c-fix-uclibc-build.patch b/package/zlib-ng/0001-arch-riscv-riscv-features-c-fix-uclibc-build.patch
+deleted file mode 100644
+index 39cc93f929..0000000000
+--- a/package/zlib-ng/0001-arch-riscv-riscv-features-c-fix-uclibc-build.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 3f35bfccff2d1dacdfe9844712be1e042d028700 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 17 Mar 2024 21:56:53 +0100
+-Subject: [PATCH] arch/riscv/riscv_features.c: fix uclibc build
+-
+-Fix the following uclibc build failure raised since version 2.1.4 and
+-https://github.com/zlib-ng/zlib-ng/commit/6ff8b52cefe56a824fae1d53fdd687bcde2e53c9:
+-
+-/home/autobuild/autobuild/instance-2/output-1/build/zlib-ng-2.1.6/arch/riscv/riscv_features.c:4:10: fatal error: sys/auxv.h: No such file or directory
+-    4 | #include <sys/auxv.h>
+-      |          ^~~~~~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/06a7d8e59ec4de7c711d3f4a4624f67b97d78afe
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://github.com/zlib-ng/zlib-ng/commit/3f35bfccff2d1dacdfe9844712be1e042d028700
+----
+- arch/riscv/riscv_features.c | 9 ++++++++-
+- 1 file changed, 8 insertions(+), 1 deletion(-)
+-
+-diff --git a/arch/riscv/riscv_features.c b/arch/riscv/riscv_features.c
+-index 506b480c11..1e3f45e0a7 100644
+---- a/arch/riscv/riscv_features.c
+-+++ b/arch/riscv/riscv_features.c
+-@@ -1,9 +1,12 @@
+- #include <stdio.h>
+- #include <stdlib.h>
+- #include <string.h>
+--#include <sys/auxv.h>
+- #include <sys/utsname.h>
+- 
+-+#if defined(__linux__) && defined(HAVE_SYS_AUXV_H)
+-+#  include <sys/auxv.h>
+-+#endif
+-+
+- #include "../../zbuild.h"
+- #include "riscv_features.h"
+- 
+-@@ -33,7 +36,11 @@ void Z_INTERNAL riscv_check_features_compile_time(struct riscv_cpu_features *fea
+- }
+- 
+- void Z_INTERNAL riscv_check_features_runtime(struct riscv_cpu_features *features) {
+-+#if defined(__linux__) && defined(HAVE_SYS_AUXV_H)
+-     unsigned long hw_cap = getauxval(AT_HWCAP);
+-+#else
+-+    unsigned long hw_cap = 0;
+-+#endif
+-     features->has_rvv = hw_cap & ISA_V_HWCAP;
+- }
+- 
+diff --git a/package/zlib-ng/zlib-ng.hash b/package/zlib-ng/zlib-ng.hash
+index 908164aa60..d128565469 100644
+--- a/package/zlib-ng/zlib-ng.hash
++++ b/package/zlib-ng/zlib-ng.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a5d504c0d52e2e2721e7e7d86988dec2e290d723ced2307145dedd06aeb6fef2  zlib-ng-2.1.6.tar.gz
+-sha256  d3c80be055d94d798eaa786116e84fa0b010bc11420b5d2060d978ea77845436  LICENSE.md
++sha256  a73343c3093e5cdc50d9377997c3815b878fd110bf6511c2c7759f2afb90f5a3  zlib-ng-2.2.4.tar.gz
++sha256  6c9f0d975b41afaa34d22f55bb8986ce69e5cb7ad327cb2b28820cd425edf5ee  LICENSE.md
+diff --git a/package/zlib-ng/zlib-ng.mk b/package/zlib-ng/zlib-ng.mk
+index c9d022da3e..68a3b2d6f3 100644
+--- a/package/zlib-ng/zlib-ng.mk
++++ b/package/zlib-ng/zlib-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZLIB_NG_VERSION = 2.1.6
++ZLIB_NG_VERSION = 2.2.4
+ ZLIB_NG_SITE = $(call github,zlib-ng,zlib-ng,$(ZLIB_NG_VERSION))
+ ZLIB_NG_LICENSE = Zlib
+ ZLIB_NG_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
