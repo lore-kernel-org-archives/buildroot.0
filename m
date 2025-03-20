@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 479A8C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34800C3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A8C680DEC;
-	Mon, 19 May 2025 10:41:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08DF5403CF;
+	Mon, 19 May 2025 10:41:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UhpxIJkE_xE2; Mon, 19 May 2025 10:41:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sXbeSbcsy71s; Mon, 19 May 2025 10:41:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1111B80D59
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 354FB403D9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1111B80D59;
-	Mon, 19 May 2025 10:41:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 354FB403D9;
+	Mon, 19 May 2025 10:41:48 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C5EED4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:03 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 25CCF193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9618340FC5
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF8BF41089
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wYKShtAISzkI for <buildroot@buildroot.org>;
+ id ZTXUhjXX9lj1 for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:39:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69B7541089
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9AFE4103B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 69B7541089
+ by smtp2.osuosl.org (Postfix) with ESMTP id A9AFE4103B
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 65A02873D1; Mon, 19 May 2025 10:39:43 +0000 (UTC)
+ id 9FAB783A2E; Mon, 19 May 2025 10:39:43 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 19 Mar 2025 21:16:00 +0100
+Date: Thu, 20 Mar 2025 22:44:32 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 088808ccc74323dc78439c6980e9760b5be1dee2
-X-Git-Newrev: 06dc0cc3537b0a1b1f04c63de9caed993ce737dc
+X-Git-Oldrev: 572197f6d9cc079d73c57da91381191671ed8564
+X-Git-Newrev: 4d7292675af34fa0807c78089a5ea6b3e7b897eb
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103943.65A02873D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] boot: move package options to
- a submenu
+Message-Id: <20250519103943.9FAB783A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/linux-tools: perf: Fix
+ _BIN_ARCH_EXCLUDE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,194 +65,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06dc0cc3537b0a1b1f04c63de9caed993ce737dc
+commit: https://git.buildroot.net/buildroot/commit/?id=4d7292675af34fa0807c78089a5ea6b3e7b897eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Change all Kconfig entries for packages in the "Bootloaders" menu to
-submenus.
+support/scripts/check-bin-arch has an option -i to exclude a path
+(or many paths by using -i multiple times).
 
-Currently many bootloaders and firmwares in this menu use a 'config'
-keyword and thus menuconfig presents their sub-options as a flat list in
-the same menu. This is not very convenient as some have a lot of
-sub-options, and in (more and more common) configurations with multiple
-such packages enabled the menuconfig screen becomes very crowded. Moreover
-options of 'string' type don't have a visible indentation when their value
-exceeds a few characters, thus making it visually hard to grasp which
-package the various options belong to.
+This was implemented in commit 01d90f0d093f ("spport/check-bin-arch:
+accept arbitrary per-package ignore paths").
 
-Non-bootloader packages having suboptions usually use a 'menuconfig'
-keywork to have sub-options in a submenu. Do the same for packages in the
-"Bootloaders" menu which have more than one sub-option.
+Looking at this feature (which hasn't changed since being added),
+we can see that check-bin-arch automatically adds a trailing slash
+to all entries specified using -i.
 
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Reviewed-by: Neal Frager <neal.frager@amd.com>
+Thus, specifying a path to a file, e.g.
+"/usr/libexec/perf-core/tests/pe-file.exe" will cause check-bin-arch
+to add "/usr/libexec/perf-core/tests/pe-file.exe/" to the IGNORES array.
+
+When running the main loop, the file
+"/usr/libexec/perf-core/tests/pe-file.exe" will thus not be ignored,
+since it will not trigger a match the pattern that was added to the
+IGNORES array ("/usr/libexec/perf-core/tests/pe-file.exe/").
+
+This means that the -i option in check-bin-arch only supports directories
+and not files.
+
+Fix the LINUX_TOOLS_BIN_ARCH_EXCLUDE in
+package/linux-tools/linux-tool-perf.mk.in to specify a directory, as the
+existing LINUX_TOOLS_BIN_ARCH_EXCLUDE can never have actually worked.
+
+Fixes: a7ad7816262d ("package/linux-tools: Exclude checking PE binaries from perf test")
+Signed-off-by: Niklas Cassel <cassel@kernel.org>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- boot/afboot-stm32/Config.in         | 2 +-
- boot/arm-trusted-firmware/Config.in | 2 +-
- boot/at91bootstrap3/Config.in       | 2 +-
- boot/barebox/Config.in              | 2 +-
- boot/boot-wrapper-aarch64/Config.in | 2 +-
- boot/grub2/Config.in                | 2 +-
- boot/mxs-bootlets/Config.in         | 2 +-
- boot/opensbi/Config.in              | 2 +-
- boot/optee-os/Config.in             | 2 +-
- boot/syslinux/Config.in             | 2 +-
- boot/ti-k3-r5-loader/Config.in      | 2 +-
- boot/uboot/Config.in                | 2 +-
- boot/xilinx-embeddedsw/Config.in    | 2 +-
- boot/xilinx-prebuilt/Config.in      | 2 +-
- 14 files changed, 14 insertions(+), 14 deletions(-)
+ package/linux-tools/linux-tool-perf.mk.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/boot/afboot-stm32/Config.in b/boot/afboot-stm32/Config.in
-index 23372705ad..23d6eda5d4 100644
---- a/boot/afboot-stm32/Config.in
-+++ b/boot/afboot-stm32/Config.in
-@@ -1,4 +1,4 @@
--config BR2_TARGET_AFBOOT_STM32
-+menuconfig BR2_TARGET_AFBOOT_STM32
- 	bool "afboot-stm32"
- 	depends on BR2_arm
- 	help
-diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-index becc3f69c3..72684e5974 100644
---- a/boot/arm-trusted-firmware/Config.in
-+++ b/boot/arm-trusted-firmware/Config.in
-@@ -1,4 +1,4 @@
--config BR2_TARGET_ARM_TRUSTED_FIRMWARE
-+menuconfig BR2_TARGET_ARM_TRUSTED_FIRMWARE
- 	bool "ARM Trusted Firmware (ATF)"
- 	depends on (BR2_ARM_CPU_ARMV8A || BR2_ARM_CPU_ARMV7A)
- 	help
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index b3e18fce7c..35bdb28162 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -1,4 +1,4 @@
--config BR2_TARGET_AT91BOOTSTRAP3
-+menuconfig BR2_TARGET_AT91BOOTSTRAP3
- 	bool "AT91 Bootstrap 3+"
- 	depends on BR2_arm926t || BR2_cortex_a5 || BR2_cortex_a7
- 	help
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 0bd3386795..c3cb0b3332 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -1,4 +1,4 @@
--config BR2_TARGET_BAREBOX
-+menuconfig BR2_TARGET_BAREBOX
- 	bool "Barebox"
- 	help
- 	  The Barebox bootloader, formerly known as U-Boot v2.
-diff --git a/boot/boot-wrapper-aarch64/Config.in b/boot/boot-wrapper-aarch64/Config.in
-index cf7389282f..dfefb7a9fd 100644
---- a/boot/boot-wrapper-aarch64/Config.in
-+++ b/boot/boot-wrapper-aarch64/Config.in
-@@ -2,7 +2,7 @@ comment "boot-wrapper-aarch64 needs a Linux kernel to be built"
- 	depends on BR2_aarch64
- 	depends on !BR2_LINUX_KERNEL
+diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+index df3030439e..d67318571a 100644
+--- a/package/linux-tools/linux-tool-perf.mk.in
++++ b/package/linux-tools/linux-tool-perf.mk.in
+@@ -180,8 +180,7 @@ define PERF_INSTALL_REMOVE_SCRIPTS
+ endef
  
--config BR2_TARGET_BOOT_WRAPPER_AARCH64
-+menuconfig BR2_TARGET_BOOT_WRAPPER_AARCH64
- 	bool "boot-wrapper-aarch64"
- 	depends on BR2_aarch64
- 	depends on BR2_LINUX_KERNEL
-diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
-index e1f2fc105e..ecee9ef74c 100644
---- a/boot/grub2/Config.in
-+++ b/boot/grub2/Config.in
-@@ -7,7 +7,7 @@ config BR2_TARGET_GRUB2_ARCH_SUPPORTS
- 	default y if BR2_RISCV_64
- 	depends on BR2_USE_MMU
+ LINUX_TOOLS_BIN_ARCH_EXCLUDE += \
+-	/usr/libexec/perf-core/tests/pe-file.exe \
+-	/usr/libexec/perf-core/tests/pe-file.exe.debug
++	/usr/libexec/perf-core/tests/
+ endif
  
--config BR2_TARGET_GRUB2
-+menuconfig BR2_TARGET_GRUB2
- 	bool "grub2"
- 	depends on BR2_TARGET_GRUB2_ARCH_SUPPORTS
- 	depends on BR2_USE_WCHAR
-diff --git a/boot/mxs-bootlets/Config.in b/boot/mxs-bootlets/Config.in
-index 8f9334b610..00819c5ad6 100644
---- a/boot/mxs-bootlets/Config.in
-+++ b/boot/mxs-bootlets/Config.in
-@@ -1,4 +1,4 @@
--config BR2_TARGET_MXS_BOOTLETS
-+menuconfig BR2_TARGET_MXS_BOOTLETS
- 	bool "mxs-bootlets"
- 	depends on BR2_arm
- 	depends on BR2_TARGET_BAREBOX || BR2_LINUX_KERNEL || \
-diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-index 98d6103ed6..37f06cd99d 100644
---- a/boot/opensbi/Config.in
-+++ b/boot/opensbi/Config.in
-@@ -1,4 +1,4 @@
--config BR2_TARGET_OPENSBI
-+menuconfig BR2_TARGET_OPENSBI
- 	bool "opensbi"
- 	depends on BR2_riscv
- 	help
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index 6c4afccc7a..563f192b18 100644
---- a/boot/optee-os/Config.in
-+++ b/boot/optee-os/Config.in
-@@ -1,4 +1,4 @@
--config BR2_TARGET_OPTEE_OS
-+menuconfig BR2_TARGET_OPTEE_OS
- 	bool "optee_os"
- 	depends on BR2_ARM_CPU_ARMV8A || BR2_ARM_CPU_ARMV7A || BR2_RISCV_64
- 	help
-diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-index c95dac1804..2891eae013 100644
---- a/boot/syslinux/Config.in
-+++ b/boot/syslinux/Config.in
-@@ -1,4 +1,4 @@
--config BR2_TARGET_SYSLINUX
-+menuconfig BR2_TARGET_SYSLINUX
- 	bool "syslinux"
- 	depends on BR2_i386 || BR2_x86_64
- 	# Make sure at least one of the flavors is installed
-diff --git a/boot/ti-k3-r5-loader/Config.in b/boot/ti-k3-r5-loader/Config.in
-index fe429bb8b4..b4fb46e55b 100644
---- a/boot/ti-k3-r5-loader/Config.in
-+++ b/boot/ti-k3-r5-loader/Config.in
-@@ -1,4 +1,4 @@
--config BR2_TARGET_TI_K3_R5_LOADER
-+menuconfig BR2_TARGET_TI_K3_R5_LOADER
- 	bool "ti-k3-r5-loader"
- 	depends on BR2_aarch64
- 	depends on BR2_PACKAGE_HOST_ARM_GNU_TOOLCHAIN_SUPPORTS
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 10098ed227..6739d53cb8 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -1,4 +1,4 @@
--config BR2_TARGET_UBOOT
-+menuconfig BR2_TARGET_UBOOT
- 	bool "U-Boot"
- 	help
- 	  Build "Das U-Boot" Boot Monitor
-diff --git a/boot/xilinx-embeddedsw/Config.in b/boot/xilinx-embeddedsw/Config.in
-index 007b24e668..a27253d594 100644
---- a/boot/xilinx-embeddedsw/Config.in
-+++ b/boot/xilinx-embeddedsw/Config.in
-@@ -1,7 +1,7 @@
- comment "xilinx-embeddedsw needs a bare metal toolchain for tuple microblazeel-xilinx-elf"
- 	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH != "microblazeel-xilinx-elf"
- 
--config BR2_TARGET_XILINX_EMBEDDEDSW
-+menuconfig BR2_TARGET_XILINX_EMBEDDEDSW
- 	bool "xilinx-embeddedsw"
- 	depends on BR2_aarch64
- 	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT
-diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
-index 4e0850f3ce..b95df5cbf4 100644
---- a/boot/xilinx-prebuilt/Config.in
-+++ b/boot/xilinx-prebuilt/Config.in
-@@ -1,4 +1,4 @@
--config BR2_TARGET_XILINX_PREBUILT
-+menuconfig BR2_TARGET_XILINX_PREBUILT
- 	bool "xilinx-prebuilt"
- 	depends on BR2_aarch64
- 	help
+ define PERF_INSTALL_TARGET_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
