@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C06BC3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F256EC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13930610B3;
-	Mon, 19 May 2025 10:43:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A381883054;
+	Mon, 19 May 2025 10:43:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cARkxvt8LkM9; Mon, 19 May 2025 10:43:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Qc4fXnbjbQLe; Mon, 19 May 2025 10:43:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3307E60F7A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D25B783046
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3307E60F7A;
-	Mon, 19 May 2025 10:43:00 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E4DBE4
+	by smtp1.osuosl.org (Postfix) with ESMTP id D25B783046;
+	Mon, 19 May 2025 10:43:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 10FC5193
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 208F541026
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BEA8140E32
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rR73mHfYDAb6 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YHFHDSosBxTk for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 80F944172E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC0D540D94
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 80F944172E
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CC0D540D94
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7BD80873A7; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+ id C8C4A83A2E; Mon, 19 May 2025 10:39:43 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 9 Apr 2025 21:54:29 +0200
+Date: Thu, 20 Mar 2025 22:58:24 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 2c18a7d235dda7a91604c19fdba8d57de4fadd71
-X-Git-Newrev: e40db2ac5526574df66407236bf771755abe9f8a
+X-Git-Oldrev: 5d35180b8a0cdf37c82887a3cb77ed7ef48059a8
+X-Git-Newrev: f64eeb88540afddaad45996f53a3c3d3ff23d78c
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103948.7BD80873A7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/esp-hosted: bump to
- version 2025-04-08
+Message-Id: <20250519103943.C8C4A83A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/python-aiohappyeyeballs: bump to version 2.6.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,83 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e40db2ac5526574df66407236bf771755abe9f8a
+commit: https://git.buildroot.net/buildroot/commit/?id=f64eeb88540afddaad45996f53a3c3d3ff23d78c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This version add support for esp32c5 and local patch has been committed so
-drop it.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/esp-hosted/0001-Fix-Linux-6.13.patch | 35 ----------------------------
- package/esp-hosted/esp-hosted.hash           |  2 +-
- package/esp-hosted/esp-hosted.mk             |  2 +-
- 3 files changed, 2 insertions(+), 37 deletions(-)
+ package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash | 4 ++--
+ package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/esp-hosted/0001-Fix-Linux-6.13.patch b/package/esp-hosted/0001-Fix-Linux-6.13.patch
-deleted file mode 100644
-index 98f86e8a8f..0000000000
---- a/package/esp-hosted/0001-Fix-Linux-6.13.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From f41f4a55e7787c9517ca6ac72f83dc244b4011e4 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Sat, 5 Apr 2025 00:35:23 +0200
--Subject: [PATCH] Fix Linux 6.13
--
--With Linux commit:
--https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0809a9ccac4a2ffdfd1561bb551aec6099775545
--spi_alloc_master() has been renamed to spi_alloc_host() so let's rename it
--accordingly checking for Linux version 6.13.0.
--
--Upstream: https://github.com/espressif/esp-hosted/pull/589
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- esp_hosted_ng/host/spi/esp_spi.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/esp_hosted_ng/host/spi/esp_spi.c b/esp_hosted_ng/host/spi/esp_spi.c
--index 51df26d8d7..fc63487821 100644
----- a/esp_hosted_ng/host/spi/esp_spi.c
--+++ b/esp_hosted_ng/host/spi/esp_spi.c
--@@ -394,7 +394,11 @@ static struct spi_controller *spi_busnum_to_master(u16 bus_num)
-- 	pdev->num_resources = 0;
-- 	platform_device_add(pdev);
-- 
--+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0))
--+	master = spi_alloc_host(&pdev->dev, sizeof(void *));
--+#else
-- 	master = spi_alloc_master(&pdev->dev, sizeof(void *));
--+#endif
-- 	if (!master) {
-- 		pr_err("Error: failed to allocate SPI master device\n");
-- 		platform_device_del(pdev);
---- 
--2.39.5
--
-diff --git a/package/esp-hosted/esp-hosted.hash b/package/esp-hosted/esp-hosted.hash
-index ac0164c38c..8de3c00190 100644
---- a/package/esp-hosted/esp-hosted.hash
-+++ b/package/esp-hosted/esp-hosted.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7fd95a9b47c203a8bd0fdcab21f15c9d4cf1cad936f0206a94da0d932dd42206  esp-hosted-927a34f99724bb744efaf865a7c75cc1615f59a2.tar.gz
-+sha256  66c07e2f69d8a10fb111b6df27fbe3558734d660207a54391c46eea3e12b29ee  esp-hosted-9a2312b0b2630e41bacb3091faaba489cb43b0ab.tar.gz
- sha256  ed57d96d27be775b22f9571d3724ef84e0d0b8f24b805ec7f87a32189de19a9c  LICENSE
-diff --git a/package/esp-hosted/esp-hosted.mk b/package/esp-hosted/esp-hosted.mk
-index f4382e7fee..4c249eec46 100644
---- a/package/esp-hosted/esp-hosted.mk
-+++ b/package/esp-hosted/esp-hosted.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
+index 069dad89cf..10d3d5cadc 100644
+--- a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
++++ b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohappyeyeballs/json
+-md5  57d956f516c6558674f6248d8ba38321  aiohappyeyeballs-2.4.4.tar.gz
+-sha256  5fdd7d87889c63183afc18ce9271f9b0a7d32c2303e394468dd45d514a757745  aiohappyeyeballs-2.4.4.tar.gz
++md5  2fa845a1ce2f7730045fa763aa9987f8  aiohappyeyeballs-2.6.1.tar.gz
++sha256  c3f9d0113123803ccadfdf3f0faa505bc78e6a72d1cc4806cbd719826e943558  aiohappyeyeballs-2.6.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
+diff --git a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
+index 9669b04793..8dcc59a77b 100644
+--- a/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
++++ b/package/python-aiohappyeyeballs/python-aiohappyeyeballs.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--ESP_HOSTED_VERSION = 927a34f99724bb744efaf865a7c75cc1615f59a2
-+ESP_HOSTED_VERSION = 9a2312b0b2630e41bacb3091faaba489cb43b0ab
- ESP_HOSTED_SITE = $(call github,espressif,esp-hosted,$(ESP_HOSTED_VERSION))
- ESP_HOSTED_DEPENDENCIES = linux
- ESP_HOSTED_LICENSE = GPL-2.0
+-PYTHON_AIOHAPPYEYEBALLS_VERSION = 2.4.4
++PYTHON_AIOHAPPYEYEBALLS_VERSION = 2.6.1
+ PYTHON_AIOHAPPYEYEBALLS_SOURCE = aiohappyeyeballs-$(PYTHON_AIOHAPPYEYEBALLS_VERSION).tar.gz
+-PYTHON_AIOHAPPYEYEBALLS_SITE = https://files.pythonhosted.org/packages/7f/55/e4373e888fdacb15563ef6fa9fa8c8252476ea071e96fb46defac9f18bf2
++PYTHON_AIOHAPPYEYEBALLS_SITE = https://files.pythonhosted.org/packages/26/30/f84a107a9c4331c14b2b586036f40965c128aa4fee4dda5d3d51cb14ad54
+ PYTHON_AIOHAPPYEYEBALLS_SETUP_TYPE = poetry
+ PYTHON_AIOHAPPYEYEBALLS_LICENSE = PSF-2.0
+ PYTHON_AIOHAPPYEYEBALLS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
