@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C56AC2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 032D3C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F82760FDC;
-	Mon, 19 May 2025 10:42:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B7082812E7;
+	Mon, 19 May 2025 10:42:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PEpfOn2vwPTA; Mon, 19 May 2025 10:42:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id klqb2anB3a_m; Mon, 19 May 2025 10:42:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BEDF60F9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C63598127C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1BEDF60F9F;
-	Mon, 19 May 2025 10:42:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C63598127C;
+	Mon, 19 May 2025 10:42:06 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 092451BF
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 14C57193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C2E040DCF
+ by smtp4.osuosl.org (Postfix) with ESMTP id B863940DDC
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RVmldvEIzEbe for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ id dWyXW4jxRtHY for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8997140D56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D480840C46
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8997140D56
+ by smtp4.osuosl.org (Postfix) with ESMTP id D480840C46
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 82B8A8725C; Mon, 19 May 2025 10:39:43 +0000 (UTC)
+ id D1CF18725C; Mon, 19 May 2025 10:39:43 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 19 Mar 2025 21:25:52 +0100
+Date: Thu, 20 Mar 2025 22:58:24 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e9fc78d9fa8d3bc3ad6c26f5e4dca0782a991cff
-X-Git-Newrev: f786d9d3b81977fa2c6483ed7bfca1950f0117c9
+X-Git-Oldrev: f64eeb88540afddaad45996f53a3c3d3ff23d78c
+X-Git-Newrev: 4e08ab7acd8fcfc68c6a1313eefed87972b37171
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103943.82B8A8725C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/intel-vpl-gpu-rt: bump
- version to 25.1.3
+Message-Id: <20250519103943.D1CF18725C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-aiohttp-cors:
+ bump to version 0.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,38 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f786d9d3b81977fa2c6483ed7bfca1950f0117c9
+commit: https://git.buildroot.net/buildroot/commit/?id=4e08ab7acd8fcfc68c6a1313eefed87972b37171
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+License hash changed due to formatting changes:
+https://github.com/aio-libs/aiohttp-cors/commit/c4a4ead0df64eaa266ba36660a8a841370bf07cd
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash | 2 +-
- package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-aiohttp-cors/python-aiohttp-cors.hash | 6 +++---
+ package/python-aiohttp-cors/python-aiohttp-cors.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-index 22c48df729..1fc4d44a8c 100644
---- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-+++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  02a9e9ddc9dd75e87ac3902a7c987b49eff6afe59531bf7ebb90cfcd9a2d7ee3  intel-vpl-gpu-rt-25.1.2.tar.gz
-+sha256  28b1ec37cc747db296e0a8bdd824206aa26d14623737bcd94d245009976cc552  intel-vpl-gpu-rt-25.1.3.tar.gz
- sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
-diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-index a7cc5ef2c0..4bb98c6d2f 100644
---- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-+++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-aiohttp-cors/python-aiohttp-cors.hash b/package/python-aiohttp-cors/python-aiohttp-cors.hash
+index 29ae2d7909..5bcd8bdb05 100644
+--- a/package/python-aiohttp-cors/python-aiohttp-cors.hash
++++ b/package/python-aiohttp-cors/python-aiohttp-cors.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp_cors/json
+-md5  de3940a901b269be82c8bd9f28d53ff0  aiohttp-cors-0.7.0.tar.gz
+-sha256  4d39c6d7100fd9764ed1caf8cebf0eb01bf5e3f24e2e073fda6234bc48b19f5d  aiohttp-cors-0.7.0.tar.gz
++md5  c993585a46c40cc4292c5722c7dfbaf0  aiohttp_cors-0.8.0.tar.gz
++sha256  ec70f38432c938e39d240ff38a7d789a5aa0a18087882c12d6cc141eef1144f6  aiohttp_cors-0.8.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  86cb2262ff825ce1c8b8fb9ea9f5174318badc3912639b9275fc25d0e305c556  LICENSE
++sha256  c20f93f9891ddab8de9a4db5415d39c1d7d782174fe218b4c38ad78a771706e2  LICENSE
+diff --git a/package/python-aiohttp-cors/python-aiohttp-cors.mk b/package/python-aiohttp-cors/python-aiohttp-cors.mk
+index 27443540d0..26fa43bfa2 100644
+--- a/package/python-aiohttp-cors/python-aiohttp-cors.mk
++++ b/package/python-aiohttp-cors/python-aiohttp-cors.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--INTEL_VPL_GPU_RT_VERSION = 25.1.2
-+INTEL_VPL_GPU_RT_VERSION = 25.1.3
- INTEL_VPL_GPU_RT_SITE = $(call github,intel,vpl-gpu-rt,intel-onevpl-$(INTEL_VPL_GPU_RT_VERSION))
- INTEL_VPL_GPU_RT_LICENSE = MIT
- INTEL_VPL_GPU_RT_LICENSE_FILES = LICENSE
+-PYTHON_AIOHTTP_CORS_VERSION = 0.7.0
+-PYTHON_AIOHTTP_CORS_SOURCE = aiohttp-cors-$(PYTHON_AIOHTTP_CORS_VERSION).tar.gz
+-PYTHON_AIOHTTP_CORS_SITE = https://files.pythonhosted.org/packages/44/9e/6cdce7c3f346d8fd487adf68761728ad8cd5fbc296a7b07b92518350d31f
++PYTHON_AIOHTTP_CORS_VERSION = 0.8.0
++PYTHON_AIOHTTP_CORS_SOURCE = aiohttp_cors-$(PYTHON_AIOHTTP_CORS_VERSION).tar.gz
++PYTHON_AIOHTTP_CORS_SITE = https://files.pythonhosted.org/packages/1d/a8/3edbba1d565f7888c52e04ac6188e19b812a9fc39d81dea413f3abf81bfa
+ PYTHON_AIOHTTP_CORS_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_CORS_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_CORS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
