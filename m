@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE6B1C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FDECC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 57CAC41464;
-	Mon, 19 May 2025 10:42:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0474B820AA;
+	Mon, 19 May 2025 10:42:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4WefAs_SPBFS; Mon, 19 May 2025 10:42:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SGb-wDlFEhHI; Mon, 19 May 2025 10:42:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2CC1D41463
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39CDD8218A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2CC1D41463;
-	Mon, 19 May 2025 10:42:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 39CDD8218A;
+	Mon, 19 May 2025 10:42:18 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 20D41E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:12 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B219193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DDD5340DE6
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0F98A40DEA
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2_PEXQFXklbx for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ id G61wlVG4kzLn for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A7E640D8A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1728640D9C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5A7E640D8A
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1728640D9C
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 534B883A2E; Mon, 19 May 2025 10:39:43 +0000 (UTC)
+ id 14B45872E7; Mon, 19 May 2025 10:39:44 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 19 Mar 2025 20:53:21 +0100
+Date: Thu, 20 Mar 2025 23:02:42 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d65c10c20add58f17cf1d7b6de8e7903b0aa9ddc
-X-Git-Newrev: 25af5a3b3aa3480ee10158e55c280d675430442a
+X-Git-Oldrev: 5c96fb3a12d859cac822471b4f4a88a47cedd27f
+X-Git-Newrev: f0693546ab9eb30ee033747fe1c51664d23b207b
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103943.534B883A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mpd: update version to
- 0.24
+Message-Id: <20250519103944.14B45872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-setuptools:
+ bump to version 76.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,186 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25af5a3b3aa3480ee10158e55c280d675430442a
+commit: https://git.buildroot.net/buildroot/commit/?id=f0693546ab9eb30ee033747fe1c51664d23b207b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Require C++20, drop dependency on boost, require new minimum versions for
-tools and libraries:
-
-package        mpd-0.24 buildroot
-  gcc          12       12.4.0
-  meson         1.0      1.7.0
-  alsa-lib      1.1      1.2.13
-  ffmpeg        4.0      6.1.2
-  libfmt        9       11.0.2
-  libmpdclient  2.15     2.22
-  libnfs        4.0      5.0.3
-  libsoxr       0.1.2    0.1.3
-
-The GenParseName tool compiled and run on the build machine now needs
-host-gcc 10, because the parsed structure uses constexpr (P1143R2). [1][2]
-
-Due to the introduction of openat2 system calls (available since Linux
-kernel 5.6), MPD now has a minimum kernel header requirement. [3][4]
-
-Release note: https://musicpd.org/news/2025/03/mpd-0-24-released/
-Change log: https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.24/NEWS
-
-$ utils/check-package package/mpd/*
-919 lines processed
-0 warnings generated
-
-$ gcc --version
-gcc (Ubuntu 10.5.0-4ubuntu2) 10.5.0
-
-$ mkdir ~/output
-$ echo "BR2_PACKAGE_MPD=y" > ~/output/mpd.config
-$ utils/test-pkg -a -c ~/output/mpd.config -d ~/output -p mpd
-                             arm-aarch64 [ 1/40]: SKIPPED
-                   bootlin-aarch64-glibc [ 2/40]: SKIPPED
-               bootlin-arcle-hs38-uclibc [ 3/40]: SKIPPED
-                    bootlin-armv5-uclibc [ 4/40]: SKIPPED
-                     bootlin-armv7-glibc [ 5/40]: OK
-                   bootlin-armv7m-uclibc [ 6/40]: SKIPPED
-                      bootlin-armv7-musl [ 7/40]: SKIPPED
-                bootlin-m68k-5208-uclibc [ 8/40]: SKIPPED
-               bootlin-m68k-68040-uclibc [ 9/40]: SKIPPED
-             bootlin-microblazeel-uclibc [10/40]: SKIPPED
-                bootlin-mipsel32r6-glibc [11/40]: SKIPPED
-                   bootlin-mipsel-uclibc [12/40]: SKIPPED
-                 bootlin-openrisc-uclibc [13/40]: SKIPPED
-        bootlin-powerpc64le-power8-glibc [14/40]: SKIPPED
-           bootlin-powerpc-e500mc-uclibc [15/40]: SKIPPED
-                   bootlin-riscv32-glibc [16/40]: OK
-                   bootlin-riscv64-glibc [17/40]: OK
-                    bootlin-riscv64-musl [18/40]: SKIPPED
-                 bootlin-s390x-z13-glibc [19/40]: OK
-                      bootlin-sh4-uclibc [20/40]: SKIPPED
-                   bootlin-sparc64-glibc [21/40]: SKIPPED
-                    bootlin-sparc-uclibc [22/40]: SKIPPED
-                    bootlin-x86-64-glibc [23/40]: OK
-                     bootlin-x86-64-musl [24/40]: SKIPPED
-                   bootlin-x86-64-uclibc [25/40]: SKIPPED
-                   bootlin-x86-i686-musl [26/40]: SKIPPED
-                   bootlin-xtensa-uclibc [27/40]: SKIPPED
-                            br-arm-basic [28/40]: SKIPPED
-                    br-arm-full-nothread [29/40]: SKIPPED
-                      br-arm-full-static [30/40]: SKIPPED
-                   br-i386-pentium4-full [31/40]: SKIPPED
-                      br-mips64-n64-full [32/40]: SKIPPED
-                 br-mips64r6-el-hf-glibc [33/40]: SKIPPED
-               br-powerpc-603e-basic-cpp [34/40]: SKIPPED
-               br-powerpc64-power7-glibc [35/40]: SKIPPED
-                       linaro-aarch64-be [36/40]: SKIPPED
-                          linaro-aarch64 [37/40]: SKIPPED
-                              linaro-arm [38/40]: SKIPPED
-                         sourcery-mips64 [39/40]: SKIPPED
-                           sourcery-mips [40/40]: SKIPPED
-40 builds, 35 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
-
-[1] https://github.com/MusicPlayerDaemon/MPD/blob/master/src/tag/Names.cxx#L9
-[2] https://gcc.gnu.org/projects/cxx-status.html#cxx20
-[3] https://github.com/MusicPlayerDaemon/MPD/commit/dda85e0
-[4] https://man7.org/linux/man-pages/man2/openat2.2.html
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...event-meson.build-add-atomic-dependency-for-spar.patch |  6 +++++-
- package/mpd/Config.in                                     | 15 ++++++++-------
- package/mpd/mpd.hash                                      |  2 +-
- package/mpd/mpd.mk                                        |  6 +++---
- 4 files changed, 17 insertions(+), 12 deletions(-)
+ package/python-setuptools/python-setuptools.hash | 4 ++--
+ package/python-setuptools/python-setuptools.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch b/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
-index 28a82da30a..9ebf7d09d9 100644
---- a/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
-+++ b/package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch
-@@ -13,6 +13,10 @@ Upstream: not sent (the same kind of patch for ncmpc was
- refused: https://github.com/MusicPlayerDaemon/ncmpc/pull/45)
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- [Andreas: adapt upstream formatting]
-+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-+---
-+Rebase for mpd-0.24
-+
- Signed-off-by: Andreas Ziegler <br015@umbiko.net>
- ---
-  src/event/meson.build | 4 ++++
-@@ -22,7 +26,7 @@ diff --git a/src/event/meson.build b/src/event/meson.build
- index bc13bbcd2..88370c03a 100644
- --- a/src/event/meson.build
- +++ b/src/event/meson.build
--@@ -47,9 +47,13 @@ event = declare_dependency(
-+@@ -46,9 +46,13 @@
-    ],
-  )
-  
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 03ceaa1e00..6bf745b30b 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -1,13 +1,13 @@
- menuconfig BR2_PACKAGE_MPD
- 	bool "mpd"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_WCHAR # boost
-+	depends on BR2_USE_WCHAR # libfmt
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
--	depends on BR2_HOST_GCC_AT_LEAST_8 # C++17
--	select BR2_PACKAGE_BOOST
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_12 # C++20 recommended
-+	depends on BR2_HOST_GCC_AT_LEAST_10 # C++20 constinit P4311R2
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6 # openat2.h
- 	select BR2_PACKAGE_FMT
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	help
-@@ -433,10 +433,11 @@ config BR2_PACKAGE_MPD_ID3TAG
- 
- endif
- 
--comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 8, host gcc >= 8"
-+comment "mpd needs a toolchain w/ C++, threads, wchar, host-gcc 10, gcc 12, headers 5.6"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || \
--		!BR2_HOST_GCC_AT_LEAST_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_12 || \
-+		!BR2_THOST_GCC_AT_LEAST_10 || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_6
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index ce6d63addf..a8d2b31b3e 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  a86f4fe811695743b08db82a9f1a840b8918bb4f46b06f48aa1d8d1b5386dff2  mpd-0.23.17.tar.xz
-+sha256  1c828a290816d540fb2dec90f78044b55ff5ef8b49dd47a639ac34e3e5226bc5  mpd-0.24.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index b0935d5184..0f5c07ae71 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
+index 87a4d877ea..d2aa961b04 100644
+--- a/package/python-setuptools/python-setuptools.hash
++++ b/package/python-setuptools/python-setuptools.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/setuptools/json
+-md5  a42b075e3e18e724580f4caf7944354a  setuptools-75.8.0.tar.gz
+-sha256  c5afc8f407c626b8313a86e10311dd3f661c6cd9c09d4bf8c15c0e11f9f2b0e6  setuptools-75.8.0.tar.gz
++md5  a15701d19326a1d4132fce56f2861a60  setuptools-76.0.0.tar.gz
++sha256  43b4ee60e10b0d0ee98ad11918e114c70701bc6051662a9a675a0496c1a158f4  setuptools-76.0.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index af59e54d11..7157b1c771 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--MPD_VERSION_MAJOR = 0.23
--MPD_VERSION = $(MPD_VERSION_MAJOR).17
-+MPD_VERSION_MAJOR = 0.24
-+MPD_VERSION = $(MPD_VERSION_MAJOR)
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
--MPD_DEPENDENCIES = host-pkgconf boost fmt
-+MPD_DEPENDENCIES = host-pkgconf fmt
- MPD_LICENSE = GPL-2.0+
- MPD_LICENSE_FILES = COPYING
- # these refer to the FreeBSD PPP daemon
+-PYTHON_SETUPTOOLS_VERSION = 75.8.0
++PYTHON_SETUPTOOLS_VERSION = 76.0.0
+ PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/92/ec/089608b791d210aec4e7f97488e67ab0d33add3efccb83a056cbafe3a2a6
++PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/32/d2/7b171caf085ba0d40d8391f54e1c75a1cda9255f542becf84575cfd8a732
+ PYTHON_SETUPTOOLS_LICENSE = MIT
+ PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
