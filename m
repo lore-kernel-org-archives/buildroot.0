@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80F03C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F0E4C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4659D61015;
-	Mon, 19 May 2025 10:42:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1DA3981E9E;
+	Mon, 19 May 2025 10:42:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8wa7Vs1pGfko; Mon, 19 May 2025 10:42:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nD3ClJRXA0iu; Mon, 19 May 2025 10:42:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48C7F61007
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41CCF81EBE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48C7F61007;
-	Mon, 19 May 2025 10:42:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 117C4D4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 41CCF81EBE;
+	Mon, 19 May 2025 10:42:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A40B193
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B279A411F9
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C3CF240DE2
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sV44ls2kJaYr for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MmKNRjeZ_bQd for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DD0A411AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F145D40C49
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8DD0A411AB
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F145D40C49
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8A7E584A21; Mon, 19 May 2025 10:39:46 +0000 (UTC)
+ id EDA3783A2E; Mon, 19 May 2025 10:39:43 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 30 Mar 2025 22:21:22 +0200
+Date: Thu, 20 Mar 2025 23:02:42 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4204bfea5d117df123b275e67be225dfcbdaa3d4
-X-Git-Newrev: b896dca532929530eb74c6daf3e2fedcbba6c53b
+X-Git-Oldrev: c5659cebb7b54e2522601824a10c47c0ef73a09f
+X-Git-Newrev: 76f9e5dede66a48a430cdcb1969b0e15a4dfd142
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103946.8A7E584A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libsoup3: bump to 3.6.5
+Message-Id: <20250519103943.EDA3783A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-maturin: bump
+ to version 1.8.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,60 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b896dca532929530eb74c6daf3e2fedcbba6c53b
+commit: https://git.buildroot.net/buildroot/commit/?id=76f9e5dede66a48a430cdcb1969b0e15a4dfd142
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-News:
-- https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.3.news
-- https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.4.news
-- https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.5.news
-
-Also drop the krb5_config, which was dropped in commit
-https://gitlab.gnome.org/GNOME/libsoup/-/commit/123eb029bf3fa08f3c45678c0a43ae4b930e6631.
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Julien: rebase patch after merge of next branch]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libsoup3/libsoup3.hash | 4 ++--
- package/libsoup3/libsoup3.mk   | 6 ++----
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ package/python-maturin/python-maturin.hash | 2 +-
+ package/python-maturin/python-maturin.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libsoup3/libsoup3.hash b/package/libsoup3/libsoup3.hash
-index 23af347903..32aa7382fa 100644
---- a/package/libsoup3/libsoup3.hash
-+++ b/package/libsoup3/libsoup3.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.1.sha256sum
--sha256  ceb1f1aa2bdd73b2cd8159d3998c96c55ef097ef15e4b4f36029209fa18af838  libsoup-3.6.1.tar.xz
-+# From https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.5.sha256sum
-+sha256  6891765aac3e949017945c3eaebd8cc8216df772456dc9f460976fbdb7ada234  libsoup-3.6.5.tar.xz
- # Locally calculated
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libsoup3/libsoup3.mk b/package/libsoup3/libsoup3.mk
-index f2f96c2def..0db587a93a 100644
---- a/package/libsoup3/libsoup3.mk
-+++ b/package/libsoup3/libsoup3.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/python-maturin/python-maturin.hash b/package/python-maturin/python-maturin.hash
+index 34e0f1da32..16d0c79af6 100644
+--- a/package/python-maturin/python-maturin.hash
++++ b/package/python-maturin/python-maturin.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after vendoring
+-sha256  0e8fdcd6cf3f4f7e018a624e35b731d00971b09a71515e6108df43407cd684eb  python-maturin-1.8.2-cargo2.tar.gz
++sha256  91da291029b8d62103044a91d8b9cf0220c73e282de096c20d1a38c55aa82dd1  python-maturin-1.8.3-cargo2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  license-apache
+ sha256  ea7882c559733766ad08343bde1d1ec80a4967c03a738fb8e0058ef6289f7b7c  license-mit
+diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
+index 6a99bbf376..af6cf44b68 100644
+--- a/package/python-maturin/python-maturin.mk
++++ b/package/python-maturin/python-maturin.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- LIBSOUP3_VERSION_MAJOR = 3.6
--LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).1
-+LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).5
- LIBSOUP3_SOURCE = libsoup-$(LIBSOUP3_VERSION).tar.xz
- LIBSOUP3_SITE = https://download.gnome.org/sources/libsoup/$(LIBSOUP3_VERSION_MAJOR)
- LIBSOUP3_LICENSE = LGPL-2.0+
-@@ -45,9 +45,7 @@ LIBSOUP3_CONF_OPTS += -Dintrospection=disabled -Dvapi=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBKRB5),y)
--LIBSOUP3_CONF_OPTS += \
--	-Dgssapi=enabled \
--	-Dkrb5_config=$(STAGING_DIR)/usr/bin/krb5-config
-+LIBSOUP3_CONF_OPTS += -Dgssapi=enabled
- LIBSOUP3_DEPENDENCIES += libkrb5
- else
- LIBSOUP3_CONF_OPTS += -Dgssapi=disabled
+-PYTHON_MATURIN_VERSION = 1.8.2
++PYTHON_MATURIN_VERSION = 1.8.3
+ PYTHON_MATURIN_SOURCE_PYPI = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
+-PYTHON_MATURIN_SITE_PYPI = https://files.pythonhosted.org/packages/e0/8f/6978427ce3f72b189012e1731d1d2d27b3151caa741666c905320e0a3662
++PYTHON_MATURIN_SITE_PYPI = https://files.pythonhosted.org/packages/30/0b/3fd746cf5cfa3c8d7e20ea08c0dbc2c2c765ae051d0fc43d808a38bc9548
+ PYTHON_MATURIN_SITE = $(PYTHON_MATURIN_SITE_PYPI)/$(PYTHON_MATURIN_SOURCE_PYPI)?buildroot-path=filename
+ PYTHON_MATURIN_SETUP_TYPE = setuptools-rust
+ PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
