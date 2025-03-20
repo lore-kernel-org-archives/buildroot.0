@@ -1,97 +1,194 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34B02C28B30
-	for <buildroot@archiver.kernel.org>; Thu, 20 Mar 2025 09:47:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88886C28B30
+	for <buildroot@archiver.kernel.org>; Thu, 20 Mar 2025 12:25:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 716C1813B0;
-	Thu, 20 Mar 2025 09:47:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ptsm9d4P_qXL; Thu, 20 Mar 2025 09:47:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EBC381323
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2EBC381323;
-	Thu, 20 Mar 2025 09:47:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6E71D1A4
- for <buildroot@buildroot.org>; Thu, 20 Mar 2025 09:47:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 522914081D
- for <buildroot@buildroot.org>; Thu, 20 Mar 2025 09:47:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03341417B6;
+	Thu, 20 Mar 2025 12:25:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c1bJEZAVFbXz for <buildroot@buildroot.org>;
- Thu, 20 Mar 2025 09:47:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::a36; helo=mail-vk1-xa36.google.com;
- envelope-from=meena.murthy@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C846F40862
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C846F40862
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com
- [IPv6:2607:f8b0:4864:20::a36])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C846F40862
- for <buildroot@buildroot.org>; Thu, 20 Mar 2025 09:47:03 +0000 (UTC)
-Received: by mail-vk1-xa36.google.com with SMTP id
- 71dfb90a1353d-523eb86b31aso260899e0c.0
- for <buildroot@buildroot.org>; Thu, 20 Mar 2025 02:47:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1742464022; x=1743068822;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=vTGeTnHl11Y4ZNeF+pbohpaig7MLbolTFQ2Jv4oWElo=;
- b=IiAGV4KVPj9Cbd6cFP4rxwk4C7TjS45EXEyrI/6JnjjOH7HaIVvfOW4zze64sjfNIj
- k8LfiUos6umzS1PIAXSXavCooHslb6YqK+IUu/mOlxw6j+Qa0o2tKYf0rCh6MC1ZZ+Fm
- FjIEltgmAbQwNvB/jeXpSIYuj536xnrytvxf8+voFiftBOfmZuQlEUeM2y5REKRfYhuK
- 5lFo3/ZQlwlISvGHJZru354SYfo5M6D4SmBQLGoAciMA+MmtOvclT/Eg1etZCASwBoV0
- 0gzailEE3aqeY7dDnpnO1z8GJKe97WrvfaawWbLQEK4Ch/Gdcmma2xfr5qAOvPEFLbMW
- fvMg==
-X-Gm-Message-State: AOJu0Yw+nIfiWAWnUMb73XUUj9+epRwD/5CFZdKOE3zo5VwVYeMFF+Db
- O6UM9jVGHudhT7nmUfpZdWfOfGaR8l6gJpwMxEXmWeo78HuTMnZWtn/j1UjLVJ7MYLGBwQ1AA3c
- lK5I8RX6SCw544nDOjNhak8LzQzO3pkgr2X8Z
-X-Gm-Gg: ASbGncsVG6L6tmDCa4OgUw6vnX/nHSjZ81aLbwJ04H+AnAiMTTnKkpK6HhkyLwz+eXr
- ouMQtiXHqsAxgvJbOI0tJuVipkmyr8XVlyuC1Z/GML+q+kec07mPCZa1YXJRwcmV9p2tnxaKni6
- 0KB1ZtRNmHwkLc2u9twdUjKnTR
-X-Google-Smtp-Source: AGHT+IEARudFm8FMQmOAHDXRfKjM+NNnlBSIfcAAOu0/RuuAr5dAKhJn4KeeQnfFt+7Yt2slOyU/32e+g5ezErLKmOg=
-X-Received: by 2002:a05:6102:4415:b0:4c1:8e07:40b8 with SMTP id
- ada2fe7eead31-4c4ec661b2emr4149099137.6.1742464022201; Thu, 20 Mar 2025
- 02:47:02 -0700 (PDT)
+ id TsnCBDEjv_Sx; Thu, 20 Mar 2025 12:25:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5471417AE
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5471417AE;
+	Thu, 20 Mar 2025 12:25:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6680D1A4
+ for <buildroot@buildroot.org>; Thu, 20 Mar 2025 12:25:07 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4944341957
+ for <buildroot@buildroot.org>; Thu, 20 Mar 2025 12:25:07 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3Q9wPRZhym5y for <buildroot@buildroot.org>;
+ Thu, 20 Mar 2025 12:25:05 +0000 (UTC)
+X-Greylist: delayed 794 seconds by postgrey-1.37 at util1.osuosl.org;
+ Thu, 20 Mar 2025 12:25:04 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0A8C64026B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A8C64026B
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.132.183.227;
+ helo=mx07-0015a003.pphosted.com; envelope-from=ian.merin@entrust.com;
+ receiver=<UNKNOWN> 
+Received: from mx07-0015a003.pphosted.com (mx07-0015a003.pphosted.com
+ [185.132.183.227])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0A8C64026B
+ for <buildroot@buildroot.org>; Thu, 20 Mar 2025 12:25:04 +0000 (UTC)
+Received: from pps.filterd (m0242864.ppops.net [127.0.0.1])
+ by mx08-0015a003.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52K930dL020433
+ for <buildroot@buildroot.org>; Thu, 20 Mar 2025 07:11:48 -0500
+Received: from nam11-co1-obe.outbound.protection.outlook.com
+ (mail-co1nam11lp2175.outbound.protection.outlook.com [104.47.56.175])
+ by mx08-0015a003.pphosted.com (PPS) with ESMTPS id 45gg208gua-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+ for <buildroot@buildroot.org>; Thu, 20 Mar 2025 07:11:48 -0500 (CDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Zr+9BEZ1y7LwrpyzptbGil3JR/uvRdlShi5QLEFrNAROEP3QGXdbY7JFwo8QTyqeDCclwu7yv5oOT/uDtRkeYm2oFPFieMCc+DDtiYHjZQLedNmP+cCao1Mxw2Ft4DWOp7lRQrN1PEmLjvFX9/4Ki6Z2GEt+RjmTXeoxLb0OEoGFUKNOnvwJKKnyJinnD0lbIpPHvvIMBbFlfGEHNVUaP8siP+Alqu4Fs5URWN6UBlt2MqzTihsOlb80kribPsrnjBj2rJM2XHa4l3yTt6Fq0PCuaq2PdMesL9RpzSfUCz2/+eykbzh1VUzfyyBGlDEcF8bCHFoQqHLJq9GDs0dcQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0nc8IIclROC5p+NRoxjlIPWPb5iMMbXMfnQIC0th9sI=;
+ b=mEYTpYeEW0r3Tkr8u2ItE6XIhzVGVhPPVm8KWFqjBoNqxJOrQ5ZJ3AnUxZY/sd/XPhLEQ+pdkpXsw0thU8prrz8UXr2rYFh0Dbf2tLpIIIcdqcaJXC23mljSpEmlNioPXdD49WtHuDE7meeKbW/Bx+XhY6MFVm7ieXGGi0DaNXKLz5TjisSIg1gg3GGVpY/kzdh/surxI1nJBasvNwzKRVVkfRGAaEGvR7YEPzPgduqiyES0Ty9WLjYgTAl4jF2yAWIVTodRPVuvPV3MNYMgmrSprbyA/P89/iBqTKeEft0VtZ0RMFk7G9IldY50PZUoKuozKvpwoj9ecbpVDETBOA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=entrust.com; dmarc=pass action=none header.from=entrust.com;
+ dkim=pass header.d=entrust.com; arc=none
+Received: from BN7PR11MB2788.namprd11.prod.outlook.com (2603:10b6:406:b2::30)
+ by PH8PR11MB6754.namprd11.prod.outlook.com (2603:10b6:510:1c9::6)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.34; Thu, 20 Mar
+ 2025 12:11:40 +0000
+Received: from BN7PR11MB2788.namprd11.prod.outlook.com
+ ([fe80::949b:9d7b:ea0a:c834]) by BN7PR11MB2788.namprd11.prod.outlook.com
+ ([fe80::949b:9d7b:ea0a:c834%7]) with mapi id 15.20.8534.034; Thu, 20 Mar 2025
+ 12:11:39 +0000
+To: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Thread-Topic: Apparmor.mk references libapparmor variables
+Thread-Index: AduZkOysXBjJ+T3/R3OJS6k/XqKJFw==
+Date: Thu, 20 Mar 2025 12:11:39 +0000
+Message-ID: <BN7PR11MB278825F154A3B6A0FDB55E90FFD82@BN7PR11MB2788.namprd11.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN7PR11MB2788:EE_|PH8PR11MB6754:EE_
+x-ms-office365-filtering-correlation-id: a3343e7d-ffba-4206-4d86-08dd67a85ec8
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|1800799024|376014|366016|13003099007|8096899003|38070700018; 
+x-microsoft-antispam-message-info: =?us-ascii?Q?Sa5hPMtCnz7XsShBwQ08ZPWubc7k4hu15oYuCyI8N3r1wzLJOrnrCR/79S4U?=
+ =?us-ascii?Q?lO0E3/8BBSlDHwjDDX8YlE4qfOu2IRHyyLwmpemRlbbY74mZXMknPiY1sU2T?=
+ =?us-ascii?Q?o4kwsqEy5V0xjuGf+xCSK4o/V3C9GZGxpLZfW0S3vDaBKDFqmDuRMe3eTNGM?=
+ =?us-ascii?Q?Kpofg8DNRD9bukyvAjqSefXwbD7hiDzhcFJHAYm6jbCVPERzp/wV4boLWnJS?=
+ =?us-ascii?Q?Vt72CfvBKxzuoMDGmX2UC8lycBwmN13xXS19pfFLpo5fbbf3b4DwdFnm/COs?=
+ =?us-ascii?Q?rS6m6RzoYg9Dp5c1ftU/1RNCQQFhvYCbajDGzN+h+tyBqjuEyp64JyAtTaGo?=
+ =?us-ascii?Q?MDeF5kAA2s1T/BNLeMyCNxd5xSfQ87uajbNTe3NpMorkKgTYEUgXdzUoCxi0?=
+ =?us-ascii?Q?bF0JCNWPsVKwzwZK84qbIcibWSD/6EZSyjsInOymHhU40xPXldfRetSz/Khl?=
+ =?us-ascii?Q?7Qo+XNEibEIJEmTwpRJGNqEeKZOcCgDM+3ixCniQHL9UT8O86QXtgAm2Y2jo?=
+ =?us-ascii?Q?3/w5ruah7jEfR5bDZJAoXm9/1kMDFzkArA9GLyrlaWn0sS8crGdw5jgOBgLi?=
+ =?us-ascii?Q?jI8R9pUTKNH/BI2DcHnYLq9xyC+NJ7OQB+5kpxh8AGSnKHj/Ym3RXgaE5GR0?=
+ =?us-ascii?Q?z6TprBYWQhyuBGYa/Ap4+V4g6CKIwppUXZ6l/zevU4o1IRfJ0TXoLWJefvnG?=
+ =?us-ascii?Q?dA0cM3I8RqDKPLDtDuCaWT/7t8E03BlyZn1E0VeSC4UrPeSvpMEUNllOR8a4?=
+ =?us-ascii?Q?9mNwPuY/RpxpAlHsHQtXouWIndEDprJB3sUXAb4PRRjJn58VFYQxJOZp5mdN?=
+ =?us-ascii?Q?1gQTP0rAkHZfpy/B387B6vhSEXsnanS/4nwLMHFjrLFWzGfxIYsaRWz3R8Ln?=
+ =?us-ascii?Q?1ObMrgXvoIBdKxO+fYyChS6VgGJC6O+Xt41DH8kK6kmg5nLXd0tFECrxTNMU?=
+ =?us-ascii?Q?HBr+OQ+vlqfUiZQG6TXG3GKNg32NBf7gvLqXgpX6QAyuVBwEkqGNLjCy0JKG?=
+ =?us-ascii?Q?dc+ZNmA5738qyu3y4biHJYVxS2zFd1Oe5xgLWH4NAfhT7iGZJLlEnt5Dwrnr?=
+ =?us-ascii?Q?EOdpF9GdW7BtmY/TpSNmm95QrVmhIYib1StX97A9AtqkeUCfUuk6ZC0d4JoM?=
+ =?us-ascii?Q?ixTXFV/VVyapGwdEmvLpfTYYltvtA0wbfNyP4i3zyK7XQqOe0RIVITrnlZLT?=
+ =?us-ascii?Q?NiABoJjkuSK//9XGT9mmS1vnTJups8N/BjrIa7Ey9kQCSwxoGpLsd8rsB8nf?=
+ =?us-ascii?Q?wXLhO3kgGvHs7qk8I6iZJZp00kmYQhvlePuuUsw3K0HIlaMI6CMjahW0ufk1?=
+ =?us-ascii?Q?In/SL/ig7GkeIrwjCMeDBnzC9kJIzZc3e+w04L5Yyhi+bQFiLLST6rfEFE/P?=
+ =?us-ascii?Q?wOVC9S+TUUtcPAKpKKvL6jIE/KgSVmFoJQ3mFO5ui8OciyhWwydsYWry2JLr?=
+ =?us-ascii?Q?ZmbA8yyRsAtGi5JCipBhaLnVFddRtlCv?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:BN7PR11MB2788.namprd11.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(1800799024)(376014)(366016)(13003099007)(8096899003)(38070700018);
+ DIR:OUT; SFP:1102; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?rp3OCHTU8hhEH3YWF+CEb/UcP4Q/+fAyns5rWCoM9Q6bOFB5VxYivnA9rdUm?=
+ =?us-ascii?Q?diAwHyI2KZiWVy0ZSSRN2E3PdsUhpt2wAwscbIJl5/CqE499uMhFbk66J7BL?=
+ =?us-ascii?Q?NKZQje1C5QqyK5htiFYwCtFQ5vTUw++q+E+bwaVDsQw8G/KK9Ithj2FQiCDQ?=
+ =?us-ascii?Q?5N1jbNu0/VDUmKhrJA3RFk6wCUM5S86+FnrWJYAIuT8RSXJXckVAUbeDyv1N?=
+ =?us-ascii?Q?uvZTU9YtpZeG+byF6lKOkjtN3cB8dSGt8BTlzrXGR2NLFOwX051W8JY65DA3?=
+ =?us-ascii?Q?qtsU0t1T1QvXqhAhXdrjCHeSkRzy8/LEuq/C/0EvrHx9YgWHEsRAPivuxgCs?=
+ =?us-ascii?Q?kn6KUwBXQaNWRLnbl+w8u2iW67Vy7yxb8VDIsQm+T/d4K5LSK3zUSklmlVz6?=
+ =?us-ascii?Q?74VEcU19/INjub+JsaBujg2LcyF9FpR7C1ly2sptQ9MzTF1IReU//oWiyK0n?=
+ =?us-ascii?Q?VWfkHYa5TyJwlytSGGMqkhPq3ErcbeD2//s2Ytzvupx0EyPsQIMnDQjW4xCB?=
+ =?us-ascii?Q?3IJANXFtTZrFqAudq/LqwssyN0cDzWdnqvfwQYKA7EL+dQTFrbUt1I9PnJUS?=
+ =?us-ascii?Q?/s+pbpl08ES/lzocP+F8fzm8mCDVp6LcKGxle7NDlGQRXjX/N+tllsqZQrdG?=
+ =?us-ascii?Q?Z38sWRWoOe47pD91ub03F3pb8MxXbLWKJUvAf23GVmlLJFseX4fKMrz1ySrz?=
+ =?us-ascii?Q?AGT4G1nag6ypOYv5Mo005ds3DE0TXituSd6JT7pQtFVRgTfifWDgSP2C9ha1?=
+ =?us-ascii?Q?SkgBg29P96SePwX5Fwp8uBtSiOkM7RqXhgsLYvAXqRUj5yjERdyRE7WofUBl?=
+ =?us-ascii?Q?OkDLgQCFlJjX799/U1Uq52E/b0nEI3ckQdWjjZkCr/wEA+KnrNB3YHz6ywdK?=
+ =?us-ascii?Q?Xhu4WkMdHfzl2kNH02dj9JpLqJ08A/jxDJXU1X1dntL6SrBw6rWiiF3nJw4G?=
+ =?us-ascii?Q?7wsHjrB45jFsRRS25OjTJs6IPc2V2kioy4AYkZkjrsqUyPkBdlzYjIHtR0Wr?=
+ =?us-ascii?Q?dS+hYSPxfdysUY17o5H90IYBhuaKtZlVhQN4u1XV/GNVxCoCvaLgrjGTJXOx?=
+ =?us-ascii?Q?DPwuBCzKbML11Q9OtBKAI7zDngA+eHCBn1XPs+fA/gjO6+2yTXJjLLq+VWqp?=
+ =?us-ascii?Q?P54CliRyePmN3mOb++waRuP2iTQUCSZddS339fr3qLkO48o1YlcCxGAz4ybf?=
+ =?us-ascii?Q?BW/obgRf3RU1JcUf4jkyxjbM0lgTNPN6FE5rCzncY080+npx7m99jbLK0RpO?=
+ =?us-ascii?Q?bMl+P87N0dYL5V0AhCuZ7/azg4RkrUpmAwerTCte9DJ0Qeabz/v9xedOlwGq?=
+ =?us-ascii?Q?qd8Q83B2eH97CT3cuj+rv5oPD+Z0vukcA5Hw9d9ITnPgcFk9VrmdyVO0UjvX?=
+ =?us-ascii?Q?dndH2TTTCj0sVDGhv4kac3w71yXdjfPL9UGfx0rtakhpTHJLXBw3w1DvNenM?=
+ =?us-ascii?Q?xfHGjy+9yjoke/pTfoV1PH0nbqwvCCLKrHz+xMaSSiPMDTyS1NX5Oibu90+r?=
+ =?us-ascii?Q?05nnt1U8msF/59UY7RcNmVNjKxsmuqULgqeP4JfnFRki0ceHEMMg8buW6sjd?=
+ =?us-ascii?Q?0S09yyvJYPheyV2TqhniELDsNfoxRvvugI4guWHx?=
 MIME-Version: 1.0
-References: <20250310055356.273718-2-meena.murthy@amarulasolutions.com>
- <e79f82c56b52b16221625312fab2894f@free.fr>
-In-Reply-To: <e79f82c56b52b16221625312fab2894f@free.fr>
-From: Meena Murthy <meena.murthy@amarulasolutions.com>
-Date: Thu, 20 Mar 2025 15:16:26 +0530
-X-Gm-Features: AQ5f1JoI_N0WbVW7Ds2CiZheNQnxe47yyRFxFVyQH2SafzS0Zy7g7kTm-XeV760
-Message-ID: <CAFaLCFUEW6auKyGF4xBf28W4nJLW8f5oHX5568AR-Hd5v3W7qg@mail.gmail.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org, linux-amarula@amarulasolutions.com, 
- Michael Trimarchi <michael@amarulasolutions.com>
+X-OriginatorOrg: entrust.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN7PR11MB2788.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a3343e7d-ffba-4206-4d86-08dd67a85ec8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Mar 2025 12:11:39.8308 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f46cf439-27ef-4acf-a800-15072bb7ddc1
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Y3DHm+IPN+5om//QUxEO9M6lhsQvXKYsDjcygAJLDCCqeY7WII5vWpw9pWwXhodEw7NThcC50sZeWFKN3cGgQg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6754
+X-Proofpoint-GUID: 8MBCgbXk65Y3m-AuBwWnXHoRALhRyg8u
+X-Proofpoint-ORIG-GUID: 8MBCgbXk65Y3m-AuBwWnXHoRALhRyg8u
+X-Authority-Analysis: v=2.4 cv=cdDSrmDM c=1 sm=1 tr=0 ts=67dc0604 cx=c_pps
+ a=AuG0SFjpmAmqNFFXyzUckA==:117 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
+ a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19
+ a=xqWC_Br6kY4A:10 a=Vs1iUdzkB0EA:10
+ a=H5OGdu5hBBwA:10 a=FEbzDYiKvWYA:10 a=p0WdMEafAAAA:8 a=NEAV23lmAAAA:8
+ a=Dpm-dxPRuvrIagQXJJwA:9 a=CjuIK1q_8ugA:10 a=yMhMjlubAAAA:8 a=SSmOFEACAAAA:8
+ a=89goTulxMKBr6O1s:21 a=gKO2Hq4RSVkA:10 a=UiCQ7L4-1S4A:10 a=hTZeC7Yk6K0A:10
+ a=frz4AuCg-hUA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-20_03,2025-03-19_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ mlxlogscore=774
+ malwarescore=0 bulkscore=0 lowpriorityscore=0 mlxscore=0 clxscore=1015
+ spamscore=0 phishscore=0 priorityscore=1501 suspectscore=0 impostorscore=0
+ adultscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.21.0-2502280000
+ definitions=main-2503200074
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1742464022; x=1743068822;
- darn=buildroot.org; 
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=vTGeTnHl11Y4ZNeF+pbohpaig7MLbolTFQ2Jv4oWElo=;
- b=b7dGJGVtj60b6H4HzNvSwPvLLdJgDwmmgMTEDJ6H3KF+TFS3BWnlkotArHWaClR8ww
- KcGAXvATngYLisk17phaWILVcE+zG9O0RRdjI6dSvedtxasFL9JZds8ubeL3L/39Dk+r
- DvmW4Td6A6vT9WIjySQpPSvwAHxgxGwcKBGoA=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=b7dGJGVt
-Subject: Re: [Buildroot] [PATCH v3] board: Add support for Engicam PX30 SOM
- board
+ d=entrust.com; h=
+ content-type:date:from:message-id:mime-version:subject:to; s=
+ mail1; bh=0nc8IIclROC5p+NRoxjlIPWPb5iMMbXMfnQIC0th9sI=; b=NB2FQn
+ 8fg2cgSyvFU86Wu0R/vAW9kD/EVdD+/gsqBihcvmSBQF5I4raQFMLj+Tko7pDQhM
+ PYw7xKmhSpMC1FnPCP6Ik9U26d9jglWmEm7qf5lKa/iYq7EgFthWFVh9Lp8Aih2f
+ ymTEr9DM3pt50iyxGKTj23TLghbOBPyyc2UdIk31ntxHrW7mb4PZUKpIWg+UvFfL
+ 2/07PCZSTp4sq2APjb1kOvHJX25OamJYFR5ifP7BqA2IJm9VlPif0EYP3aZAbORP
+ kTxKBgAQgxj5aQK8i6Ks77VNOM9Igjhm7xedVCKt5KHPJ1V5qN5SFIGO40f9UuLP
+ WWcIb+3C1yTB+sMw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=entrust.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=entrust.com header.i=@entrust.com header.a=rsa-sha256
+ header.s=mail1 header.b=NB2FQn8f
+Subject: [Buildroot] Apparmor.mk references libapparmor variables
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,646 +200,139 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============0682855430316528508=="
+From: Ian Merin via buildroot <buildroot@buildroot.org>
+Reply-To: Ian Merin <Ian.Merin@entrust.com>
+Content-Type: multipart/mixed; boundary="===============8020072451173381270=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0682855430316528508==
-Content-Type: multipart/alternative; boundary="00000000000013ecc00630c30565"
+--===============8020072451173381270==
+Content-Language: en-US
+Content-Type: multipart/alternative;
+	boundary="_000_BN7PR11MB278825F154A3B6A0FDB55E90FFD82BN7PR11MB2788namp_"
 
---00000000000013ecc00630c30565
-Content-Type: text/plain; charset="UTF-8"
+--_000_BN7PR11MB278825F154A3B6A0FDB55E90FFD82BN7PR11MB2788namp_
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Julien,
+apparmor.mk is using ${LIBAPPARMOR_VERSION} in the source URI instead of ${=
+APPARMOR_VERSION} as it was previously
 
-Thank you for taking the time to review my patch, starting to work on your
-feedback.
-
-Regards,
-
-*Meena Murthy*
-
-Software Engineer
-
-M. +91 994 5695125
-
-meena.murthy@amarulasolutions.com
-
-__________________________________
+Is this an expected change or is it a copy/paste error?
 
 
-*Amarula Solutions Pvt. Ltd*
+# When updating the version here, please also update the libapparmor packag=
+e
+APPARMOR_VERSION_MAJOR =3D 3.1
+APPARMOR_VERSION =3D $(APPARMOR_VERSION_MAJOR).7
+APPARMOR_SOURCE =3D apparmor-v$(LIBAPPARMOR_VERSION).tar.gz
+APPARMOR_SITE =3D https://gitlab.com/apparmor/apparmor/-/archive/v$(LIBAPPA=
+RMOR_VERSION)
+APPARMOR_DL_SUBDIR =3D libapparmor
 
-405/E-Block, Sri Lakshmi Shubham Arcade, Chandanagar, Hyderabad - 500050, I=
-N
-info@amarulasolutions.com
+https://github.com/buildroot/buildroot/commit/5649202ddccdbc4d6e2a6aca8330c=
+0846d9cd999
+Any email and files/attachments transmitted with it are intended solely for=
+ the use of the individual or entity to whom they are addressed. If this me=
+ssage has been sent to you in error, you must not copy, distribute or discl=
+ose of the information it contains. Please notify Entrust immediately and d=
+elete the message from your system.
 
-www.amarulasolutions.com
 
-
-
-On Sun, Mar 16, 2025 at 10:47=E2=80=AFPM Julien Olivain <ju.o@free.fr> wrot=
-e:
-
-> Hi Meena,
->
-> Thanks for the patch!  I have few comments.
->
-> First, to follow the "convention" with other commits, could you
-> change the commit one-liner title to:
->
-> configs/engicam_px30_core_defconfig: new defconfig
->
-> See for example:
->
-> https://gitlab.com/buildroot.org/buildroot/-/commit/27b3e6774fe447dc5eb12=
-cc7f498ec8868eb65c9
->
-> On 10/03/2025 06:53, Meena Murthy wrote:
-> > Add initial support for Engicam PX30 SOM board
-> > with below features:
-> > - U-Boot 2024.01
-> > - Linux 6.4.16
-> > - Default packages from buildroot
-> >
-> > px30 ctouch2 with 10 inches display
-> >
-> > https://www.engicam.com/vis-prod/C-Touch-2-0-Carrier-Board/ \
-> >
->  General-purpose-carrier-board-with-capacitive-touch-interface-EDIMM-20-c=
-ompliant
-> >
-> > ---
-> >
-> > Changes v2 -> v3:
-> > Used BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS so tht arguments are passed only
-> > to BR2_ROOTFS_POST_IMAGE_SCRIPT
-> >
-> > Changes v1 -> v2:
-> > Based on code review comments
-> > - Added more details in readme.txt for Engicam board
-> > - Corrected board name
-> > - Removed android-sparse image from genimage.cfg
-> > - Changes to configuration file
-> >
-> > Signed-off-by: Meena Murthy <meena.murthy@amarulasolutions.com>
-> > Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
->
-> Those "Signed-off-by" lines should be moved in the previous section
-> (before "---", as this patch change list gets removed when applied).
->
-> > ---
-> >  DEVELOPERS                                    |  4 ++
-> >  board/engicam/px30core/extlinux.conf          |  4 ++
-> >  board/engicam/px30core/genimage.cfg           | 22 +++++++
-> >  .../patches/linux-headers/linux-headers.hash  |  1 +
-> >  .../engicam/px30core/patches/linux/linux.hash |  2 +
-> >  .../engicam/px30core/patches/uboot/uboot.hash |  2 +
-> >  board/engicam/px30core/post-build.sh          |  5 ++
-> >  board/engicam/px30core/readme.txt             | 60 +++++++++++++++++++
-> >  configs/engicam_px30_core_defconfig           | 55 +++++++++++++++++
-> >  9 files changed, 155 insertions(+)
-> >  create mode 100644 board/engicam/px30core/extlinux.conf
-> >  create mode 100644 board/engicam/px30core/genimage.cfg
-> >  create mode 120000
-> > board/engicam/px30core/patches/linux-headers/linux-headers.hash
-> >  create mode 100644 board/engicam/px30core/patches/linux/linux.hash
-> >  create mode 100644 board/engicam/px30core/patches/uboot/uboot.hash
-> >  create mode 100755 board/engicam/px30core/post-build.sh
-> >  create mode 100644 board/engicam/px30core/readme.txt
-> >  create mode 100644 configs/engicam_px30_core_defconfig
->
-> [...]
->
-> > diff --git a/board/engicam/px30core/patches/linux/linux.hash
-> > b/board/engicam/px30core/patches/linux/linux.hash
-> > new file mode 100644
-> > index 0000000000..db84a5e56b
-> > --- /dev/null
-> > +++ b/board/engicam/px30core/patches/linux/linux.hash
-> > @@ -0,0 +1,2 @@
-> > +# Locally calculated
->
-> Since you are using an upstream Kernel, we can get hashes from
-> upstream. Can you change this "# Locally calculated" with:
->
-> # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
->
-> > +sha256
-> > 9626ec84a39ecb009bf11a271dd520941159c165d4e62f82e3a77b79d20ff27d
-> > linux-6.4.16.tar.xz
->
-> [...]
->
-> > diff --git a/configs/engicam_px30_core_defconfig
-> > b/configs/engicam_px30_core_defconfig
-> > new file mode 100644
-> > index 0000000000..d92dba69ed
-> > --- /dev/null
-> > +++ b/configs/engicam_px30_core_defconfig
-> > @@ -0,0 +1,55 @@
-> > +BR2_aarch64=3Dy
-> > +BR2_cortex_a72_a53=3Dy
->
-> The Kernel device tree you reference below is:
-> rockchip/px30-engicam-px30-core-ctouch2-of10
->
->  From:
->
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree=
-/arch/arm64/boot/dts/rockchip/px30-engicam-px30-core-ctouch2-of10.dts?h=3Dv=
-6.4.16#n9
->
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree=
-/arch/arm64/boot/dts/rockchip/px30.dtsi?h=3Dv6.4.16#n38
->
-> this DTS describes 4x Cortex-A35 CPUs in the PX30.
-> This should preferably be:
->
-> BR2_cortex_a35=3Dy
->
-> Can you double-check, and correct if needed?
->
-> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_4=3Dy
->
-> I recommend to switch to 6.12.x series, so this should become:
-> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=3Dy
-> See also my comment for BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE.
->
-> > +BR2_BINUTILS_VERSION_2_42_X=3Dy
->
-> Buildroot defconfigs usually keep the default binutils version. So
-> this "BR2_BINUTILS_VERSION_2_42_X=3Dy" can be removed.
->
-> > +BR2_CURL=3D"curl -q --ftp-pasv --retry 3"
-> > +BR2_WGET=3D"wget -nd -t 3"
-> > +BR2_SVN=3D"svn --non-interactive"
-> > +BR2_SCP=3D"scp"
-> > +BR2_SFTP=3D"sftp"
-> > +BR2_GNU_MIRROR=3D"http://ftpmirror.gnu.org"
->
-> BR2_CURL to BR2_GNU_MIRROR variables does not seem specific to this
-> board defconfig. They can be removed so the defconfig can use the
-> Buildroot default values.
->
-> > +BR2_GLOBAL_PATCH_DIR=3D"board/engicam/px30core/patches"
-> > +BR2_DOWNLOAD_FORCE_CHECK_HASHES=3Dy
-> > +BR2_TARGET_GENERIC_HOSTNAME=3D""
->
-> BR2_TARGET_GENERIC_HOSTNAME should preferably contain a string
-> identifying the board, like "engicam-px30-core", or could be
-> completely removed (to use the default value). Could you change
-> to use one of those two options?
->
-> > +BR2_TARGET_GENERIC_ISSUE=3D""
->
-> Same comment for BR2_TARGET_GENERIC_ISSUE. Can you use a string
-> identifying the board, like "Welcome to Engicam PX30.Core C.TOUCH 2.0"
-> or remove this config variable (to use the default value)?
->
-> > +BR2_ROOTFS_MERGED_USR=3Dy
->
-> BR2_ROOTFS_MERGED_USR should be a choice left to the end user.
-> Can you remove this configuration from this defconfig?
->
-> > +BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=3Dy
-> > +BR2_ROOTFS_POST_BUILD_SCRIPT=3D"board/engicam/px30core/post-build.sh"
-> > +BR2_ROOTFS_POST_IMAGE_SCRIPT=3D"support/scripts/genimage.sh"
-> > +BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS=3D"-c
-> > board/engicam/px30core/genimage.cfg"
-> > +BR2_LINUX_KERNEL=3Dy
-> > +BR2_LINUX_KERNEL_CUSTOM_VERSION=3Dy
-> > +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=3D"6.4.16"
->
-> Kernel 6.4.x series is not LTS and is no longer maintained. Since
-> this board is still maintained upstream, could you update the
-> kernel to the latest LTS? At this time, this is v6.12.19. See:
->
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree=
-/arch/arm64/boot/dts/rockchip/px30-engicam-px30-core-ctouch2-of10.dts?h=3Dv=
-6.12.19
->
-> > +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=3Dy
-> > +BR2_LINUX_KERNEL_DTS_SUPPORT=3Dy
-> >
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME=3D"rockchip/px30-engicam-px30-core-ctou=
-ch2-of10"
-> > +BR2_LINUX_KERNEL_INSTALL_TARGET=3Dy
-> > +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=3Dy
-> > +BR2_TARGET_ROOTFS_EXT2=3Dy
-> > +BR2_TARGET_ROOTFS_EXT2_4=3Dy
-> > +BR2_TARGET_ROOTFS_EXT2_SIZE=3D"150M"
-> > +BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS=3D"-O 64bit"
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE=3Dy
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=3Dy
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL=3D"
-> https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git"
->
-> The _CUSTOM_REPO_URL given here is the same as the Buildroot
-> default value. See:
->
-> https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02-rc2/boot/arm-tr=
-usted-firmware/arm-trusted-firmware.mk?ref_type=3Dtags#L19
->
-> So _CUSTOM_GIT and _CUSTOM_REPO_URL can be removed.
->
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION=3D"v2.9"
->
-> Since this platform seems to be supported upstream, can you
-> update to the latest lts version? At this time, it is "lts-v2.12.1".
-> See:
->
-> https://git.trustedfirmware.org/plugins/gitiles/TF-A/trusted-firmware-a.g=
-it/+/refs/tags/lts-v2.12.1
->
-> So this should become:
-> BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=3Dy
-> BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE=3D"lts-v2.12.1"
->
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM=3D"px30"
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=3D""
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=3Dy
-> > +BR2_TARGET_UBOOT=3Dy
-> > +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=3Dy
-> > +BR2_TARGET_UBOOT_CUSTOM_VERSION=3Dy
-> > +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE=3D"2024.01"
->
-> Same comment for u-boot. Since this board seems to be supported in
-> upstream u-boot, it could be updated to v2025.01. See:
->
-> https://source.denx.de/u-boot/u-boot/-/blob/v2025.01/configs/px30-core-ct=
-ouch2-of10-px30_defconfig
->
-> > +BR2_TARGET_UBOOT_BOARD_DEFCONFIG=3D"px30-core-ctouch2-of10-px30"
-> > +BR2_TARGET_UBOOT_NEEDS_DTC=3Dy
-> > +BR2_TARGET_UBOOT_NEEDS_OPENSSL=3Dy
-> > +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=3Dy
-> > +BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=3Dy
-> > +BR2_TARGET_UBOOT_USE_BINMAN=3Dy
-> > +BR2_TARGET_UBOOT_FORMAT_CUSTOM=3Dy
-> > +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME=3D"u-boot.itb"
-> > +BR2_TARGET_UBOOT_SPL=3Dy
-> > +BR2_TARGET_UBOOT_SPL_NAME=3D"idbloader.img"
-> > +BR2_PACKAGE_HOST_DOSFSTOOLS=3Dy
-> > +BR2_PACKAGE_HOST_GENIMAGE=3Dy
-> > +BR2_PACKAGE_HOST_MTOOLS=3Dy
->
-> Can you send an updated version of this patch with those changes,
-> please?
->
-> Best regards,
->
-> Julien.
->
-
---00000000000013ecc00630c30565
-Content-Type: text/html; charset="UTF-8"
+--_000_BN7PR11MB278825F154A3B6A0FDB55E90FFD82BN7PR11MB2788namp_
+Content-Type: text/html; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 
-<div dir=3D"ltr"><div>Hi Julien,<br><br>Thank you for taking the time to re=
-view my patch, starting to work on your feedback.<br><br>Regards,</div><div=
-><div dir=3D"ltr" class=3D"gmail_signature" data-smartmail=3D"gmail_signatu=
-re"><div dir=3D"ltr"><span><p dir=3D"ltr" style=3D"line-height:1.7999999999=
-999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"font-size:10pt;font=
--family:Ubuntu,sans-serif;color:rgb(0,0,0);background-color:transparent;ver=
-tical-align:baseline;white-space:pre-wrap"><b>Meena Murthy</b></span></p><p=
- dir=3D"ltr" style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-=
-bottom:0pt"><span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quo=
-t;,monospace;color:rgb(0,0,0);background-color:transparent;vertical-align:b=
-aseline;white-space:pre-wrap">Software Engineer</span></p><p dir=3D"ltr" st=
-yle=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"><sp=
-an style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;co=
-lor:rgb(0,0,0);background-color:transparent;vertical-align:baseline;white-s=
-pace:pre-wrap">M. +91 994 5695125</span></p><p dir=3D"ltr" style=3D"line-he=
-ight:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"fo=
-nt-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0)=
-;background-color:transparent;vertical-align:baseline;white-space:pre-wrap"=
-><a href=3D"mailto:meena.murthy@amarulasolutions.com" target=3D"_blank">mee=
-na.murthy@amarulasolutions.com</a></span></p><p dir=3D"ltr" style=3D"line-h=
-eight:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"><span style=3D"f=
-ont-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0=
-);background-color:transparent;vertical-align:baseline;white-space:pre-wrap=
-">__________________________________</span></p><p dir=3D"ltr" style=3D"line=
--height:1.7999999999999998;margin-top:0pt;margin-bottom:0pt"><span style=3D=
-"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0=
-,0);background-color:transparent;vertical-align:baseline;white-space:pre-wr=
-ap"><br></span><span style=3D"font-size:10pt;font-family:Ubuntu,sans-serif;=
-color:rgb(0,0,0);background-color:transparent;vertical-align:baseline;white=
--space:pre-wrap"><b>Amarula Solutions Pvt. Ltd</b></span></p><p dir=3D"ltr"=
- style=3D"line-height:1.7999999999999998;margin-top:0pt;margin-bottom:0pt">=
-<span style=3D"font-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace=
-;color:rgb(0,0,0);background-color:transparent;vertical-align:baseline;whit=
-e-space:pre-wrap">405/E-Block, Sri Lakshmi Shubham Arcade, Chandanagar, Hyd=
-erabad - 500050, IN</span><span style=3D"font-size:10pt;font-family:&quot;U=
-buntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent;ve=
-rtical-align:baseline;white-space:pre-wrap"><br></span><span style=3D"font-=
-size:10pt;font-family:&quot;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);ba=
-ckground-color:transparent;vertical-align:baseline;white-space:pre-wrap"><a=
- href=3D"mailto:info@amarulasolutions.com" target=3D"_blank">info@amarulaso=
-lutions.com</a></span></p><p dir=3D"ltr" style=3D"line-height:1.79999999999=
-99998;margin-top:0pt;margin-bottom:0pt"><a href=3D"http://www.amarulasoluti=
-ons.com/" target=3D"_blank"><span style=3D"font-size:10pt;font-family:&quot=
-;Ubuntu Mono&quot;,monospace;color:rgb(0,0,0);background-color:transparent;=
-vertical-align:baseline;white-space:pre-wrap">www.amarulasolutions.com</spa=
-n></a></p><div><br></div></span></div></div></div><br></div><br><div class=
-=3D"gmail_quote gmail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr=
-">On Sun, Mar 16, 2025 at 10:47=E2=80=AFPM Julien Olivain &lt;<a href=3D"ma=
-ilto:ju.o@free.fr">ju.o@free.fr</a>&gt; wrote:<br></div><blockquote class=
-=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
-b(204,204,204);padding-left:1ex">Hi Meena,<br>
+<html xmlns:v=3D"urn:schemas-microsoft-com:vml" xmlns:o=3D"urn:schemas-micr=
+osoft-com:office:office" xmlns:w=3D"urn:schemas-microsoft-com:office:word" =
+xmlns:m=3D"http://schemas.microsoft.com/office/2004/12/omml" xmlns=3D"http:=
+//www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Dus-ascii"=
+>
+<meta name=3D"Generator" content=3D"Microsoft Word 15 (filtered medium)">
+<style><!--
+/* Font Definitions */
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Aptos;}
+/* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	font-size:12.0pt;
+	font-family:"Aptos",sans-serif;
+	mso-ligatures:standardcontextual;}
+a:link, span.MsoHyperlink
+	{mso-style-priority:99;
+	color:#467886;
+	text-decoration:underline;}
+span.EmailStyle17
+	{mso-style-type:personal-compose;
+	font-family:"Aptos",sans-serif;
+	color:windowtext;}
+.MsoChpDefault
+	{mso-style-type:export-only;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+--></style><!--[if gte mso 9]><xml>
+<o:shapedefaults v:ext=3D"edit" spidmax=3D"1026" />
+</xml><![endif]--><!--[if gte mso 9]><xml>
+<o:shapelayout v:ext=3D"edit">
+<o:idmap v:ext=3D"edit" data=3D"1" />
+</o:shapelayout></xml><![endif]-->
+</head>
+<body lang=3D"EN-US" link=3D"#467886" vlink=3D"#96607D" style=3D"word-wrap:=
+break-word">
+<div class=3D"WordSection1">
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt">apparmor.mk is usin=
+g ${LIBAPPARMOR_VERSION} in the source URI instead of ${APPARMOR_VERSION} a=
+s it was previously<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt"><o:p>&nbsp;</o:p></=
+span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt">Is this an expected=
+ change or is it a copy/paste error?<br>
 <br>
-Thanks for the patch!=C2=A0 I have few comments.<br>
 <br>
-First, to follow the &quot;convention&quot; with other commits, could you<b=
-r>
-change the commit one-liner title to:<br>
+# When updating the version here, please also update the libapparmor packag=
+e<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt">APPARMOR_VERSION_MA=
+JOR =3D 3.1<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt">APPARMOR_VERSION =
+=3D $(APPARMOR_VERSION_MAJOR).7<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt">APPARMOR_SOURCE =3D=
+ apparmor-v$(LIBAPPARMOR_VERSION).tar.gz<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt">APPARMOR_SITE =3D <=
+a href=3D"https://gitlab.com/apparmor/apparmor/-/archive/v$(LIBAPPARMOR_VER=
+SION)">
+https://gitlab.com/apparmor/apparmor/-/archive/v$(LIBAPPARMOR_VERSION)</a><=
+o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt">APPARMOR_DL_SUBDIR =
+=3D libapparmor<o:p></o:p></span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt"><o:p>&nbsp;</o:p></=
+span></p>
+<p class=3D"MsoNormal"><span style=3D"font-size:11.0pt"><a href=3D"https://=
+github.com/buildroot/buildroot/commit/5649202ddccdbc4d6e2a6aca8330c0846d9cd=
+999">https://github.com/buildroot/buildroot/commit/5649202ddccdbc4d6e2a6aca=
+8330c0846d9cd999</a><o:p></o:p></span></p>
+</div>
+<i>Any email and files/attachments transmitted with it are intended solely =
+for the use of the individual or entity to whom they are addressed. If this=
+ message has been sent to you in error, you must not copy, distribute or di=
+sclose of the information it contains.
+<u>Please notify Entrust immediately and delete the message from your syste=
+m.</u></i><br>
 <br>
-configs/engicam_px30_core_defconfig: new defconfig<br>
-<br>
-See for example:<br>
-<a href=3D"https://gitlab.com/buildroot.org/buildroot/-/commit/27b3e6774fe4=
-47dc5eb12cc7f498ec8868eb65c9" rel=3D"noreferrer" target=3D"_blank">https://=
-gitlab.com/buildroot.org/buildroot/-/commit/27b3e6774fe447dc5eb12cc7f498ec8=
-868eb65c9</a><br>
-<br>
-On 10/03/2025 06:53, Meena Murthy wrote:<br>
-&gt; Add initial support for Engicam PX30 SOM board<br>
-&gt; with below features:<br>
-&gt; - U-Boot 2024.01<br>
-&gt; - Linux 6.4.16<br>
-&gt; - Default packages from buildroot<br>
-&gt; <br>
-&gt; px30 ctouch2 with 10 inches display<br>
-&gt; <br>
-&gt; <a href=3D"https://www.engicam.com/vis-prod/C-Touch-2-0-Carrier-Board/=
-" rel=3D"noreferrer" target=3D"_blank">https://www.engicam.com/vis-prod/C-T=
-ouch-2-0-Carrier-Board/</a> \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0General-purpose-carrier-board-with-capacitiv=
-e-touch-interface-EDIMM-20-compliant<br>
-&gt; <br>
-&gt; ---<br>
-&gt; <br>
-&gt; Changes v2 -&gt; v3:<br>
-&gt; Used BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS so tht arguments are passed onl=
-y <br>
-&gt; to BR2_ROOTFS_POST_IMAGE_SCRIPT<br>
-&gt; <br>
-&gt; Changes v1 -&gt; v2:<br>
-&gt; Based on code review comments<br>
-&gt; - Added more details in readme.txt for Engicam board<br>
-&gt; - Corrected board name<br>
-&gt; - Removed android-sparse image from genimage.cfg<br>
-&gt; - Changes to configuration file<br>
-&gt; <br>
-&gt; Signed-off-by: Meena Murthy &lt;<a href=3D"mailto:meena.murthy@amarula=
-solutions.com" target=3D"_blank">meena.murthy@amarulasolutions.com</a>&gt;<=
-br>
-&gt; Signed-off-by: Michael Trimarchi &lt;<a href=3D"mailto:michael@amarula=
-solutions.com" target=3D"_blank">michael@amarulasolutions.com</a>&gt;<br>
-<br>
-Those &quot;Signed-off-by&quot; lines should be moved in the previous secti=
-on<br>
-(before &quot;---&quot;, as this patch change list gets removed when applie=
-d).<br>
-<br>
-&gt; ---<br>
-&gt;=C2=A0 DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=
-=C2=A0 4 ++<br>
-&gt;=C2=A0 board/engicam/px30core/extlinux.conf=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 |=C2=A0 4 ++<br>
-&gt;=C2=A0 board/engicam/px30core/genimage.cfg=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0| 22 +++++++<br>
-&gt;=C2=A0 .../patches/linux-headers/linux-headers.hash=C2=A0 |=C2=A0 1 +<b=
-r>
-&gt;=C2=A0 .../engicam/px30core/patches/linux/linux.hash |=C2=A0 2 +<br>
-&gt;=C2=A0 .../engicam/px30core/patches/uboot/uboot.hash |=C2=A0 2 +<br>
-&gt;=C2=A0 board/engicam/px30core/post-build.sh=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 |=C2=A0 5 ++<br>
-&gt;=C2=A0 board/engicam/px30core/readme.txt=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0| 60 +++++++++++++++++++<br>
-&gt;=C2=A0 configs/engicam_px30_core_defconfig=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0| 55 +++++++++++++++++<br>
-&gt;=C2=A0 9 files changed, 155 insertions(+)<br>
-&gt;=C2=A0 create mode 100644 board/engicam/px30core/extlinux.conf<br>
-&gt;=C2=A0 create mode 100644 board/engicam/px30core/genimage.cfg<br>
-&gt;=C2=A0 create mode 120000 <br>
-&gt; board/engicam/px30core/patches/linux-headers/linux-headers.hash<br>
-&gt;=C2=A0 create mode 100644 board/engicam/px30core/patches/linux/linux.ha=
-sh<br>
-&gt;=C2=A0 create mode 100644 board/engicam/px30core/patches/uboot/uboot.ha=
-sh<br>
-&gt;=C2=A0 create mode 100755 board/engicam/px30core/post-build.sh<br>
-&gt;=C2=A0 create mode 100644 board/engicam/px30core/readme.txt<br>
-&gt;=C2=A0 create mode 100644 configs/engicam_px30_core_defconfig<br>
-<br>
-[...]<br>
-<br>
-&gt; diff --git a/board/engicam/px30core/patches/linux/linux.hash <br>
-&gt; b/board/engicam/px30core/patches/linux/linux.hash<br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..db84a5e56b<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/board/engicam/px30core/patches/linux/linux.hash<br>
-&gt; @@ -0,0 +1,2 @@<br>
-&gt; +# Locally calculated<br>
-<br>
-Since you are using an upstream Kernel, we can get hashes from<br>
-upstream. Can you change this &quot;# Locally calculated&quot; with:<br>
-<br>
-# From <a href=3D"https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.a=
-sc" rel=3D"noreferrer" target=3D"_blank">https://www.kernel.org/pub/linux/k=
-ernel/v6.x/sha256sums.asc</a><br>
-<br>
-&gt; +sha256=C2=A0 <br>
-&gt; 9626ec84a39ecb009bf11a271dd520941159c165d4e62f82e3a77b79d20ff27d=C2=A0=
- <br>
-&gt; linux-6.4.16.tar.xz<br>
-<br>
-[...]<br>
-<br>
-&gt; diff --git a/configs/engicam_px30_core_defconfig <br>
-&gt; b/configs/engicam_px30_core_defconfig<br>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..d92dba69ed<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/configs/engicam_px30_core_defconfig<br>
-&gt; @@ -0,0 +1,55 @@<br>
-&gt; +BR2_aarch64=3Dy<br>
-&gt; +BR2_cortex_a72_a53=3Dy<br>
-<br>
-The Kernel device tree you reference below is:<br>
-rockchip/px30-engicam-px30-core-ctouch2-of10<br>
-<br>
-=C2=A0From:<br>
-<a href=3D"https://web.git.kernel.org/pub/scm/linux/kernel/git/stable/linux=
-.git/tree/arch/arm64/boot/dts/rockchip/px30-engicam-px30-core-ctouch2-of10.=
-dts?h=3Dv6.4.16#n9" rel=3D"noreferrer" target=3D"_blank">https://web.git.ke=
-rnel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/arch/arm64/boot/dts=
-/rockchip/px30-engicam-px30-core-ctouch2-of10.dts?h=3Dv6.4.16#n9</a><br>
-<a href=3D"https://web.git.kernel.org/pub/scm/linux/kernel/git/stable/linux=
-.git/tree/arch/arm64/boot/dts/rockchip/px30.dtsi?h=3Dv6.4.16#n38" rel=3D"no=
-referrer" target=3D"_blank">https://web.git.kernel.org/pub/scm/linux/kernel=
-/git/stable/linux.git/tree/arch/arm64/boot/dts/rockchip/px30.dtsi?h=3Dv6.4.=
-16#n38</a><br>
-<br>
-this DTS describes 4x Cortex-A35 CPUs in the PX30.<br>
-This should preferably be:<br>
-<br>
-BR2_cortex_a35=3Dy<br>
-<br>
-Can you double-check, and correct if needed?<br>
-<br>
-&gt; +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_4=3Dy<br>
-<br>
-I recommend to switch to 6.12.x series, so this should become:<br>
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=3Dy<br>
-See also my comment for BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE.<br>
-<br>
-&gt; +BR2_BINUTILS_VERSION_2_42_X=3Dy<br>
-<br>
-Buildroot defconfigs usually keep the default binutils version. So<br>
-this &quot;BR2_BINUTILS_VERSION_2_42_X=3Dy&quot; can be removed.<br>
-<br>
-&gt; +BR2_CURL=3D&quot;curl -q --ftp-pasv --retry 3&quot;<br>
-&gt; +BR2_WGET=3D&quot;wget -nd -t 3&quot;<br>
-&gt; +BR2_SVN=3D&quot;svn --non-interactive&quot;<br>
-&gt; +BR2_SCP=3D&quot;scp&quot;<br>
-&gt; +BR2_SFTP=3D&quot;sftp&quot;<br>
-&gt; +BR2_GNU_MIRROR=3D&quot;<a href=3D"http://ftpmirror.gnu.org" rel=3D"no=
-referrer" target=3D"_blank">http://ftpmirror.gnu.org</a>&quot;<br>
-<br>
-BR2_CURL to BR2_GNU_MIRROR variables does not seem specific to this<br>
-board defconfig. They can be removed so the defconfig can use the<br>
-Buildroot default values.<br>
-<br>
-&gt; +BR2_GLOBAL_PATCH_DIR=3D&quot;board/engicam/px30core/patches&quot;<br>
-&gt; +BR2_DOWNLOAD_FORCE_CHECK_HASHES=3Dy<br>
-&gt; +BR2_TARGET_GENERIC_HOSTNAME=3D&quot;&quot;<br>
-<br>
-BR2_TARGET_GENERIC_HOSTNAME should preferably contain a string<br>
-identifying the board, like &quot;engicam-px30-core&quot;, or could be<br>
-completely removed (to use the default value). Could you change<br>
-to use one of those two options?<br>
-<br>
-&gt; +BR2_TARGET_GENERIC_ISSUE=3D&quot;&quot;<br>
-<br>
-Same comment for BR2_TARGET_GENERIC_ISSUE. Can you use a string<br>
-identifying the board, like &quot;Welcome to Engicam PX30.Core C.TOUCH 2.0&=
-quot;<br>
-or remove this config variable (to use the default value)?<br>
-<br>
-&gt; +BR2_ROOTFS_MERGED_USR=3Dy<br>
-<br>
-BR2_ROOTFS_MERGED_USR should be a choice left to the end user.<br>
-Can you remove this configuration from this defconfig?<br>
-<br>
-&gt; +BR2_TARGET_GENERIC_GETTY_BAUDRATE_115200=3Dy<br>
-&gt; +BR2_ROOTFS_POST_BUILD_SCRIPT=3D&quot;board/engicam/px30core/post-buil=
-d.sh&quot;<br>
-&gt; +BR2_ROOTFS_POST_IMAGE_SCRIPT=3D&quot;support/scripts/genimage.sh&quot=
-;<br>
-&gt; +BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS=3D&quot;-c <br>
-&gt; board/engicam/px30core/genimage.cfg&quot;<br>
-&gt; +BR2_LINUX_KERNEL=3Dy<br>
-&gt; +BR2_LINUX_KERNEL_CUSTOM_VERSION=3Dy<br>
-&gt; +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=3D&quot;6.4.16&quot;<br>
-<br>
-Kernel 6.4.x series is not LTS and is no longer maintained. Since<br>
-this board is still maintained upstream, could you update the<br>
-kernel to the latest LTS? At this time, this is v6.12.19. See:<br>
-<a href=3D"https://web.git.kernel.org/pub/scm/linux/kernel/git/stable/linux=
-.git/tree/arch/arm64/boot/dts/rockchip/px30-engicam-px30-core-ctouch2-of10.=
-dts?h=3Dv6.12.19" rel=3D"noreferrer" target=3D"_blank">https://web.git.kern=
-el.org/pub/scm/linux/kernel/git/stable/linux.git/tree/arch/arm64/boot/dts/r=
-ockchip/px30-engicam-px30-core-ctouch2-of10.dts?h=3Dv6.12.19</a><br>
-<br>
-&gt; +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=3Dy<br>
-&gt; +BR2_LINUX_KERNEL_DTS_SUPPORT=3Dy<br>
-&gt; +BR2_LINUX_KERNEL_INTREE_DTS_NAME=3D&quot;rockchip/px30-engicam-px30-c=
-ore-ctouch2-of10&quot;<br>
-&gt; +BR2_LINUX_KERNEL_INSTALL_TARGET=3Dy<br>
-&gt; +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=3Dy<br>
-&gt; +BR2_TARGET_ROOTFS_EXT2=3Dy<br>
-&gt; +BR2_TARGET_ROOTFS_EXT2_4=3Dy<br>
-&gt; +BR2_TARGET_ROOTFS_EXT2_SIZE=3D&quot;150M&quot;<br>
-&gt; +BR2_TARGET_ROOTFS_EXT2_MKFS_OPTIONS=3D&quot;-O 64bit&quot;<br>
-&gt; +BR2_TARGET_ARM_TRUSTED_FIRMWARE=3Dy<br>
-&gt; +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=3Dy<br>
-&gt; +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL=3D&quot;<a href=3D"ht=
-tps://git.trustedfirmware.org/TF-A/trusted-firmware-a.git" rel=3D"noreferre=
-r" target=3D"_blank">https://git.trustedfirmware.org/TF-A/trusted-firmware-=
-a.git</a>&quot;<br>
-<br>
-The _CUSTOM_REPO_URL given here is the same as the Buildroot<br>
-default value. See:<br>
-<a href=3D"https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02-rc2/bo=
-ot/arm-trusted-firmware/arm-trusted-firmware.mk?ref_type=3Dtags#L19" rel=3D=
-"noreferrer" target=3D"_blank">https://gitlab.com/buildroot.org/buildroot/-=
-/blob/2025.02-rc2/boot/arm-trusted-firmware/arm-trusted-firmware.mk?ref_typ=
-e=3Dtags#L19</a><br>
-<br>
-So _CUSTOM_GIT and _CUSTOM_REPO_URL can be removed.<br>
-<br>
-&gt; +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION=3D&quot;v2.9&quot=
-;<br>
-<br>
-Since this platform seems to be supported upstream, can you<br>
-update to the latest lts version? At this time, it is &quot;lts-v2.12.1&quo=
-t;.<br>
-See:<br>
-<a href=3D"https://git.trustedfirmware.org/plugins/gitiles/TF-A/trusted-fir=
-mware-a.git/+/refs/tags/lts-v2.12.1" rel=3D"noreferrer" target=3D"_blank">h=
-ttps://git.trustedfirmware.org/plugins/gitiles/TF-A/trusted-firmware-a.git/=
-+/refs/tags/lts-v2.12.1</a><br>
-<br>
-So this should become:<br>
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=3Dy<br>
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE=3D&quot;lts-v2.12.1&qu=
-ot;<br>
-<br>
-&gt; +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM=3D&quot;px30&quot;<br>
-&gt; +BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES=3D&quot;&quot;<br>
-&gt; +BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=3Dy<br>
-&gt; +BR2_TARGET_UBOOT=3Dy<br>
-&gt; +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=3Dy<br>
-&gt; +BR2_TARGET_UBOOT_CUSTOM_VERSION=3Dy<br>
-&gt; +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE=3D&quot;2024.01&quot;<br>
-<br>
-Same comment for u-boot. Since this board seems to be supported in<br>
-upstream u-boot, it could be updated to v2025.01. See:<br>
-<a href=3D"https://source.denx.de/u-boot/u-boot/-/blob/v2025.01/configs/px3=
-0-core-ctouch2-of10-px30_defconfig" rel=3D"noreferrer" target=3D"_blank">ht=
-tps://source.denx.de/u-boot/u-boot/-/blob/v2025.01/configs/px30-core-ctouch=
-2-of10-px30_defconfig</a><br>
-<br>
-&gt; +BR2_TARGET_UBOOT_BOARD_DEFCONFIG=3D&quot;px30-core-ctouch2-of10-px30&=
-quot;<br>
-&gt; +BR2_TARGET_UBOOT_NEEDS_DTC=3Dy<br>
-&gt; +BR2_TARGET_UBOOT_NEEDS_OPENSSL=3Dy<br>
-&gt; +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=3Dy<br>
-&gt; +BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=3Dy<br>
-&gt; +BR2_TARGET_UBOOT_USE_BINMAN=3Dy<br>
-&gt; +BR2_TARGET_UBOOT_FORMAT_CUSTOM=3Dy<br>
-&gt; +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME=3D&quot;u-boot.itb&quot;<br>
-&gt; +BR2_TARGET_UBOOT_SPL=3Dy<br>
-&gt; +BR2_TARGET_UBOOT_SPL_NAME=3D&quot;idbloader.img&quot;<br>
-&gt; +BR2_PACKAGE_HOST_DOSFSTOOLS=3Dy<br>
-&gt; +BR2_PACKAGE_HOST_GENIMAGE=3Dy<br>
-&gt; +BR2_PACKAGE_HOST_MTOOLS=3Dy<br>
-<br>
-Can you send an updated version of this patch with those changes,<br>
-please?<br>
-<br>
-Best regards,<br>
-<br>
-Julien.<br>
-</blockquote></div>
+</body>
+</html>
 
---00000000000013ecc00630c30565--
+--_000_BN7PR11MB278825F154A3B6A0FDB55E90FFD82BN7PR11MB2788namp_--
 
---===============0682855430316528508==
+--===============8020072451173381270==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -753,4 +343,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0682855430316528508==--
+--===============8020072451173381270==--
