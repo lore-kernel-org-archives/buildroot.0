@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 138ADC3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BC3BC54756
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8FD160F27;
-	Mon, 19 May 2025 10:41:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 13964821D2;
+	Mon, 19 May 2025 10:41:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gsn2aZek8Nj3; Mon, 19 May 2025 10:41:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TpTT-5al8BLD; Mon, 19 May 2025 10:41:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77B7060F02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15D7481EBF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 77B7060F02;
-	Mon, 19 May 2025 10:41:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0811BE4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 15D7481EBF;
+	Mon, 19 May 2025 10:41:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2648EE4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 37D8C40D9F
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 35034405C8
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7LaHSB3y7Fgx for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3_ipHseljP-d for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBF0340D66
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 134E940FF3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BBF0340D66
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 134E940FF3
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8DBB84AD1; Mon, 19 May 2025 10:39:42 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 0B5A884A21; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 17 Mar 2025 18:23:29 +0100
+Date: Thu, 20 Mar 2025 23:02:42 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9679ddbcd066d562ffc8b8d46a571fd99fe7f275
-X-Git-Newrev: dcd6bea6aeee09a533974d30c578b990c2ecdede
+X-Git-Oldrev: 5c3df37dbde5fe8909cc472bd93538248d904293
+X-Git-Newrev: 5c96fb3a12d859cac822471b4f4a88a47cedd27f
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103942.B8DBB84AD1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/expat: security update
- to 2.7.0
+Message-Id: <20250519103944.0B5A884A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/python-setuptools-rust: bump to version 1.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dcd6bea6aeee09a533974d30c578b990c2ecdede
+commit: https://git.buildroot.net/buildroot/commit/?id=5c96fb3a12d859cac822471b4f4a88a47cedd27f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes CVE-2024-8176.
-
-For more details, see:
-https://blog.hartwork.org/posts/expat-2-7-0-released/
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/expat/expat.hash | 2 +-
- package/expat/expat.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-setuptools-rust/python-setuptools-rust.hash | 4 ++--
+ package/python-setuptools-rust/python-setuptools-rust.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index b0273c73e8..4975d0f864 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  a695629dae047055b37d50a0ff4776d1d45d0a4c842cf4ccee158441f55ff7ee  expat-2.6.4.tar.xz
-+sha256  25df13dd2819e85fb27a1ce0431772b7047d72af81ae78dc26b4c6e0805f48d1  expat-2.7.0.tar.xz
- sha256  122f2c27000472a201d337b9b31f7eb2b52d091b02857061a8880371612d9534  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 24cfa0a9d2..5d40133f08 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-setuptools-rust/python-setuptools-rust.hash b/package/python-setuptools-rust/python-setuptools-rust.hash
+index fbaa515863..2b7c7b9387 100644
+--- a/package/python-setuptools-rust/python-setuptools-rust.hash
++++ b/package/python-setuptools-rust/python-setuptools-rust.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/setuptools-rust/json
+-md5  755ce9ab3d5e7b9f420992ca891a3965  setuptools_rust-1.10.2.tar.gz
+-sha256  5d73e7eee5f87a6417285b617c97088a7c20d1a70fcea60e3bdc94ff567c29dc  setuptools_rust-1.10.2.tar.gz
++md5  09bd134c06a3083ed65a6ca01314dbe7  setuptools_rust-1.11.0.tar.gz
++sha256  f765d66f3def6fdc85e1e6d889c6a812aea1430c8dadcf1c7b6779b45f874fb2  setuptools_rust-1.11.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b20668c1590582b3882854050ccfbdb7aee1f71a1ffe9eacc4c5aeb08a14161b  LICENSE
+diff --git a/package/python-setuptools-rust/python-setuptools-rust.mk b/package/python-setuptools-rust/python-setuptools-rust.mk
+index ab1023ea4a..ef61da549a 100644
+--- a/package/python-setuptools-rust/python-setuptools-rust.mk
++++ b/package/python-setuptools-rust/python-setuptools-rust.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--EXPAT_VERSION = 2.6.4
-+EXPAT_VERSION = 2.7.0
- EXPAT_SITE = https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
+-PYTHON_SETUPTOOLS_RUST_VERSION = 1.10.2
++PYTHON_SETUPTOOLS_RUST_VERSION = 1.11.0
+ PYTHON_SETUPTOOLS_RUST_SOURCE = setuptools_rust-$(PYTHON_SETUPTOOLS_RUST_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_RUST_SITE = https://files.pythonhosted.org/packages/d3/6b/99a1588d826ceb108694ba00f78bc6afda10ed5d72d550ae8f256af1f7b4
++PYTHON_SETUPTOOLS_RUST_SITE = https://files.pythonhosted.org/packages/e0/0c/db5a68b4e95229db38a1793d58561870bd68b92b95fed183c6cd48910c9f
+ PYTHON_SETUPTOOLS_RUST_SETUP_TYPE = setuptools
+ PYTHON_SETUPTOOLS_RUST_LICENSE = MIT
+ PYTHON_SETUPTOOLS_RUST_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
