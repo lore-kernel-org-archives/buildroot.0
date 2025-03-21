@@ -1,95 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC784C36000
-	for <buildroot@archiver.kernel.org>; Fri, 21 Mar 2025 13:39:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7387DC36002
+	for <buildroot@archiver.kernel.org>; Fri, 21 Mar 2025 13:39:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4F07D413B3;
-	Fri, 21 Mar 2025 13:39:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UwGDakfRdZFI; Fri, 21 Mar 2025 13:39:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D7E441383
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D7E441383;
-	Fri, 21 Mar 2025 13:39:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id BE3961A0
- for <buildroot@buildroot.org>; Fri, 21 Mar 2025 13:39:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A4D1A82021
- for <buildroot@buildroot.org>; Fri, 21 Mar 2025 13:39:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 217E88405A;
+	Fri, 21 Mar 2025 13:39:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HTro4aKigpit for <buildroot@buildroot.org>;
+ id kHa1GFdPS9xY; Fri, 21 Mar 2025 13:39:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F9E682021
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F9E682021;
+	Fri, 21 Mar 2025 13:39:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F59A1A4
+ for <buildroot@buildroot.org>; Fri, 21 Mar 2025 13:39:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 361AE60821
+ for <buildroot@buildroot.org>; Fri, 21 Mar 2025 13:39:25 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8BlnZ9srm9zU for <buildroot@buildroot.org>;
  Fri, 21 Mar 2025 13:39:24 +0000 (UTC)
-X-Greylist: delayed 430 seconds by postgrey-1.37 at util1.osuosl.org;
- Fri, 21 Mar 2025 13:39:23 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7BEE381E65
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BEE381E65
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.124;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.123;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.124])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7BEE381E65
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E23E1606E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E23E1606E6
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.123])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E23E1606E6
  for <buildroot@buildroot.org>; Fri, 21 Mar 2025 13:39:23 +0000 (UTC)
-X-CSE-ConnectionGUID: SVoodoZmQeWTfzfHPXROvQ==
-X-CSE-MsgGUID: ChEgwWg8T1+UgxKL0u6iQA==
-Received: from unknown (HELO opfedv1rlp0g.nor.fr.ftgroup) ([x.x.x.x]) by
+X-CSE-ConnectionGUID: rTfwkOh9TVyFqKp8aUb7DA==
+X-CSE-MsgGUID: 08TKXYqhSbCy33Vc3ghgjQ==
+Received: from unknown (HELO opfedv1rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 21 Mar 2025 14:32:10 +0100
+ 21 Mar 2025 14:32:13 +0100
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0g.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Mar 2025 14:32:10 +0100
+ ([x.x.x.x]) by opfedv1rlp0c.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Mar 2025 14:32:13 +0100
 Received: from yd-6wlzhs3 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup
  [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Fri, 21 Mar 2025 14:32:09 +0100
+ Fri, 21 Mar 2025 14:32:11 +0100
 Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Fri, 21 Mar 2025 14:32:08 +0100
-X-CSE-ConnectionGUID: qnYkuQzRT6qK46zNT4uD/w==
-X-CSE-MsgGUID: SrPp/pyTSbOfnW1lKtYJtA==
-X-IronPort-AV: E=Sophos;i="6.14,264,1736809200"; d="scan'208";a="266327201"
+ Fri, 21 Mar 2025 14:32:11 +0100
+X-CSE-ConnectionGUID: g9t6mWg+SxWqYsHCA2IHhA==
+X-CSE-MsgGUID: Xfvf3xgtQyeo1FbXQnn6MQ==
+X-IronPort-AV: E=Sophos;i="6.14,264,1736809200"; d="scan'208";a="270099554"
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-CC: Christian Stewart <christian@aperture.us>, "Yann E . MORIN"
- <yann.morin@orange.com>
+CC: <yann.morin@orange.com>, Christian Stewart <christian@aperture.us>
 Date: Fri, 21 Mar 2025 14:32:08 +0100
-Message-ID: <cover.1742563913.git.yann.morin@orange.com>
+Message-ID: <45bf4abdbbb4ff9d87b4ac7d7eebf687e723e7c4.1742563913.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1742563913.git.yann.morin@orange.com>
+References: <cover.1742563913.git.yann.morin@orange.com>
 MIME-Version: 1.0
-X-Patchwork-Hint: ignore
-X-Originating-IP: [10.115.26.50]
-X-ClientProxiedBy: OPE16NORMBX101.corporate.adroot.infra.ftgroup (10.115.26.2)
+X-Originating-IP: [10.115.26.52]
+X-ClientProxiedBy: OPE16NORMBX207.corporate.adroot.infra.ftgroup (10.115.27.8)
  To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1742564363; x=1774100363;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=dSxyod5EvnhtmrmEZ4qyXOCeuU8cV1UrlC0kRgz111k=;
- b=nlYbqrLnpW3NiOCTeSIi9SpOIZHWp4fYfEGW8dIgOp3xbUtwRofgCxMw
- 6gKheEFl5NuJPJChFmuEfOEgYhBwKjP/EPkv95p7AWeG+JBi96epRKdTs
- 8riHdqUCI6AFdC23ruFvg3PxalE5pKRwD7ybWguJ0YGOYtKTiiHhJlCB0
- 3nHexq3cu2gZl4EsWINJOxRCrC54NnrOBmq06Tu7z+42zxV0kRByNey2d
- k9IRxkSlyuUTX0vB/iMiCQ8Xuyoe3tQq2Zo9zY5T2e6gQuI1ly8ZZFV1S
- WaEomCGs7cX5SLsn5v/eW7h2k/w5s+8yXl+iDcsEFwwk9SCwfmVsx3v0K
- g==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ t=1742564364; x=1774100364;
+ h=from:to:cc:subject:date:message-id:in-reply-to:
+ references:mime-version:content-transfer-encoding;
+ bh=eh+r9bFknbnkLikbVXx/0ZqnZe5+evWxHiEInmtMK1Q=;
+ b=rbrIt059gjqHxuTx5PAVztUy3NOnhdIj+5JyGbjUhHVTTo2+In/Y9s/Z
+ h5HedM9vCX3eTHNu6wZzZp1n96nAPfxpAPdwK8lEISuZSROI5q3hSjE4y
+ mkK993Jw1F+KBaFqCeBOQ1k2c6aHTNCPkgZ51wosslXOUUmpZ2pui/wEX
+ cPts+KtPLuPaX7A4EWJkCw0C4vFq3TffbqXhEdZjKD0NiZy4zgabEJ8b3
+ 3yDViQXSgZtfwr8YZLCIML1EXMrut+VaeKtdsUjXt7Y7yUCbq1q/ARR3o
+ ee5POigR2CCItMYcvVwlQ1C4X+fLn9QBgKt0SS/S5Y7uWo2jb71Q9dpNO
+ A==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=nlYbqrLn
-Subject: [Buildroot] [PATCH 0/4] package: add some docker credential helpers
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=rbrIt059
+Subject: [Buildroot] [PATCH 1/4] package/pkg-golang: support _SUBDIR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,72 +107,98 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Hello All!
+Some packages have their actual source tree in a sub-directory (even if
+that is the only source in the repository); this is the case for example
+with the Amazon ECR credential helper (to be packaged in a follow up
+commit):
+    https://github.com/awslabs/amazon-ecr-credential-helper
 
-This series introduces some docker credential helpers for various cloud
-providers: AWS ECR, Google Cloud Platform, and Azure. This will allow
-one to pull and push images to/from those registries.
+Do the build in _SUBDIR, and also do the vendoring in there.
 
-The series starts by extending the golab-package infra to accept
-packages which sources are located in a sub-directory.
+We don't need the build to generate executables inside _SUBDIR, so we
+just keep using $(@D)/bin as a place to generate them (and install them
+from).
 
-Then it introduces the credential helpers. Pretty boring packages...
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Christian Stewart <christian@aperture.us>
+---
+ package/pkg-golang.mk            | 13 +++++++++----
+ support/download/go-post-process |  5 +++--
+ 2 files changed, 12 insertions(+), 6 deletions(-)
 
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit f0693546ab9eb30ee033747fe1c51664d23b207b
-
-  package/python-setuptools: bump to version 76.0.0 (2025-03-20 23:02:42 +0100)
-
-
-are available as patches in this mail series,
-
-for you to apply patches up to cff564db203c97fc8800efa120d8e0494696814d
-
-  package/docker-credential-acr-env: new package (2025-03-21 10:58:44 +0100)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (4):
-      package/pkg-golang: support _SUBDIR
-      package/amazon-ecr-credential-helper: new package
-      package/docker-credential-gcr: new package
-      package/docker-credential-acr-env: new package
-
- package/Config.in                                    |  3 +++
- package/amazon-ecr-credential-helper/Config.in       |  9 +++++++++
- .../amazon-ecr-credential-helper.hash                |  2 ++
- .../amazon-ecr-credential-helper.mk                  | 20 ++++++++++++++++++++
- package/docker-credential-acr-env/Config.in          | 12 ++++++++++++
- .../docker-credential-acr-env.hash                   |  2 ++
- .../docker-credential-acr-env.mk                     | 14 ++++++++++++++
- package/docker-credential-gcr/Config.in              | 10 ++++++++++
- .../docker-credential-gcr/docker-credential-gcr.hash |  2 ++
- .../docker-credential-gcr/docker-credential-gcr.mk   | 16 ++++++++++++++++
- package/pkg-golang.mk                                | 13 +++++++++----
- support/download/go-post-process                     |  5 +++--
- 12 files changed, 102 insertions(+), 6 deletions(-)
- create mode 100644 package/amazon-ecr-credential-helper/Config.in
- create mode 100644 package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.hash
- create mode 100644 package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk
- create mode 100644 package/docker-credential-acr-env/Config.in
- create mode 100644 package/docker-credential-acr-env/docker-credential-acr-env.hash
- create mode 100644 package/docker-credential-acr-env/docker-credential-acr-env.mk
- create mode 100644 package/docker-credential-gcr/Config.in
- create mode 100644 package/docker-credential-gcr/docker-credential-gcr.hash
- create mode 100644 package/docker-credential-gcr/docker-credential-gcr.mk
-
---
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index bdf8de4d66..a4e8bd30cc 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -79,8 +79,8 @@ $(2)_GOMOD ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
+ # Generate a go.mod file if it doesn't exist. Note: Go is configured
+ # to use the "vendor" dir and not make network calls.
+ define $(2)_GEN_GOMOD
+-	if [ ! -f $$(@D)/go.mod ]; then \
+-		printf "module $$($(2)_GOMOD)\n" > $$(@D)/go.mod; \
++	if [ ! -f $$(@D)/$$($(2)_SUBDIR)/go.mod ]; then \
++		printf "module $$($(2)_GOMOD)\n" > $$(@D)/$$($(2)_SUBDIR)/go.mod; \
+ 	fi
+ endef
+ $(2)_POST_PATCH_HOOKS += $(2)_GEN_GOMOD
+@@ -91,6 +91,11 @@ $(2)_DL_ENV += \
+ 	GOPROXY=direct \
+ 	$$($(2)_GO_ENV)
+ 
++# If building in a sub directory, do the vendoring in there
++ifneq ($$($(2)_SUBDIR),)
++$(2)_DOWNLOAD_POST_PROCESS_OPTS += -s$$($(2)_SUBDIR)
++endif
++
+ # Because we append vendored info, we can't rely on the values being empty
+ # once we eventually get into the generic-package infra. So, we duplicate
+ # the heuristics here
+@@ -135,7 +140,7 @@ endif
+ # Build package for target
+ define $(2)_BUILD_CMDS
+ 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
+-		cd $$(@D); \
++		cd $$(@D)/$$($(2)_SUBDIR); \
+ 		$$(HOST_GO_TARGET_ENV) \
+ 			$$($(2)_GO_ENV) \
+ 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
+@@ -147,7 +152,7 @@ else
+ # Build package for host
+ define $(2)_BUILD_CMDS
+ 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
+-		cd $$(@D); \
++		cd $$(@D)/$$($(2)_SUBDIR); \
+ 		$$(HOST_GO_HOST_ENV) \
+ 			$$($(2)_GO_ENV) \
+ 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
+diff --git a/support/download/go-post-process b/support/download/go-post-process
+index ef96a76948..edc23ec564 100755
+--- a/support/download/go-post-process
++++ b/support/download/go-post-process
+@@ -5,10 +5,11 @@ set -e
+ . "${0%/*}/helpers"
+ 
+ # Parse our options
+-while getopts "n:o:" OPT; do
++while getopts "n:o:s:" OPT; do
+     case "${OPT}" in
+     o)  output="${OPTARG}";;
+     n)  base_name="${OPTARG}";;
++    s)  subdir="${OPTARG}";;
+     :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
+     \?) error "unknown option '%s'\n" "${OPTARG}";;
+     esac
+@@ -22,7 +23,7 @@ fi
+ post_process_unpack "${base_name}" "${output}"
+ 
+ # Do the Go vendoring
+-pushd "${base_name}" > /dev/null
++pushd "${base_name}/${subdir}" > /dev/null
+ 
+ if [ ! -f go.mod ]; then
+     echo "ERROR: no vendor/ folder and no go.mod, aborting"
+-- 
+2.34.1
 
 ____________________________________________________________________________________________________________
 Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
