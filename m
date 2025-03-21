@@ -1,94 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7387DC36002
-	for <buildroot@archiver.kernel.org>; Fri, 21 Mar 2025 13:39:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 787AFC36001
+	for <buildroot@archiver.kernel.org>; Fri, 21 Mar 2025 13:39:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 217E88405A;
-	Fri, 21 Mar 2025 13:39:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05A71423E4;
+	Fri, 21 Mar 2025 13:39:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kHa1GFdPS9xY; Fri, 21 Mar 2025 13:39:28 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9aHAVpBut6W5; Fri, 21 Mar 2025 13:39:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F9E682021
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10858413E0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F9E682021;
-	Fri, 21 Mar 2025 13:39:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4F59A1A4
- for <buildroot@buildroot.org>; Fri, 21 Mar 2025 13:39:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10858413E0;
+	Fri, 21 Mar 2025 13:39:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 87BAC1A0
+ for <buildroot@buildroot.org>; Fri, 21 Mar 2025 13:39:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 361AE60821
- for <buildroot@buildroot.org>; Fri, 21 Mar 2025 13:39:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6E54C4049E
+ for <buildroot@buildroot.org>; Fri, 21 Mar 2025 13:39:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8BlnZ9srm9zU for <buildroot@buildroot.org>;
- Fri, 21 Mar 2025 13:39:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.123;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QJlonvG48Nrb for <buildroot@buildroot.org>;
+ Fri, 21 Mar 2025 13:39:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.122;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E23E1606E6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E23E1606E6
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.123])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E23E1606E6
- for <buildroot@buildroot.org>; Fri, 21 Mar 2025 13:39:23 +0000 (UTC)
-X-CSE-ConnectionGUID: rTfwkOh9TVyFqKp8aUb7DA==
-X-CSE-MsgGUID: 08TKXYqhSbCy33Vc3ghgjQ==
-Received: from unknown (HELO opfedv1rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 34F594011C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34F594011C
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.122])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 34F594011C
+ for <buildroot@buildroot.org>; Fri, 21 Mar 2025 13:39:28 +0000 (UTC)
+X-CSE-ConnectionGUID: eOWkbZDgSoqYoSe3BPs53Q==
+X-CSE-MsgGUID: mxnZoPAWQYO1x7OGavR5CA==
+Received: from unknown (HELO opfedv1rlp0e.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 21 Mar 2025 14:32:13 +0100
+ 21 Mar 2025 14:32:18 +0100
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0c.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Mar 2025 14:32:13 +0100
+ ([x.x.x.x]) by opfedv1rlp0e.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 21 Mar 2025 14:32:18 +0100
 Received: from yd-6wlzhs3 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup
  [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Fri, 21 Mar 2025 14:32:11 +0100
+ Fri, 21 Mar 2025 14:32:16 +0100
 Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Fri, 21 Mar 2025 14:32:11 +0100
-X-CSE-ConnectionGUID: g9t6mWg+SxWqYsHCA2IHhA==
-X-CSE-MsgGUID: Xfvf3xgtQyeo1FbXQnn6MQ==
-X-IronPort-AV: E=Sophos;i="6.14,264,1736809200"; d="scan'208";a="270099554"
+ Fri, 21 Mar 2025 14:32:16 +0100
+X-CSE-ConnectionGUID: 7EfmlsVWQm6ESK4H71ayOw==
+X-CSE-MsgGUID: doXhwvTQQmOL5LD8/qh2NA==
+X-IronPort-AV: E=Sophos;i="6.14,264,1736809200"; d="scan'208";a="266333689"
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
 CC: <yann.morin@orange.com>, Christian Stewart <christian@aperture.us>
-Date: Fri, 21 Mar 2025 14:32:08 +0100
-Message-ID: <45bf4abdbbb4ff9d87b4ac7d7eebf687e723e7c4.1742563913.git.yann.morin@orange.com>
+Date: Fri, 21 Mar 2025 14:32:11 +0100
+Message-ID: <cff564db203c97fc8800efa120d8e0494696814d.1742563913.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1742563913.git.yann.morin@orange.com>
 References: <cover.1742563913.git.yann.morin@orange.com>
 MIME-Version: 1.0
 X-Originating-IP: [10.115.26.52]
-X-ClientProxiedBy: OPE16NORMBX207.corporate.adroot.infra.ftgroup (10.115.27.8)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-ClientProxiedBy: OPE16NORMBX403.corporate.adroot.infra.ftgroup
+ (10.115.26.16) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1742564364; x=1774100364;
+ t=1742564369; x=1774100369;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=eh+r9bFknbnkLikbVXx/0ZqnZe5+evWxHiEInmtMK1Q=;
- b=rbrIt059gjqHxuTx5PAVztUy3NOnhdIj+5JyGbjUhHVTTo2+In/Y9s/Z
- h5HedM9vCX3eTHNu6wZzZp1n96nAPfxpAPdwK8lEISuZSROI5q3hSjE4y
- mkK993Jw1F+KBaFqCeBOQ1k2c6aHTNCPkgZ51wosslXOUUmpZ2pui/wEX
- cPts+KtPLuPaX7A4EWJkCw0C4vFq3TffbqXhEdZjKD0NiZy4zgabEJ8b3
- 3yDViQXSgZtfwr8YZLCIML1EXMrut+VaeKtdsUjXt7Y7yUCbq1q/ARR3o
- ee5POigR2CCItMYcvVwlQ1C4X+fLn9QBgKt0SS/S5Y7uWo2jb71Q9dpNO
- A==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=XnH/s/eh4mBY2YCE0R47GhYtuOjI0rVbexFVxFQd+Hk=;
+ b=YwKDSVyDSSx1WPDFCLN9ueNu65lUfojVdAD9Wue80DtJiKFqJuj0c7wQ
+ 4Hld6M0IY7jt9u3fjItdMvZpFxvEfssYfvMriH3Lt8w+PrkwoqX49GGHP
+ Bbd47cAH0bgjZaAHw9CjEmrwGmg4PqNkNpEPjCXes98LMpFcA26DcnoHF
+ 44WLmdGSqDb6UqOu5s//aDC/2XCOQ7MpDxRNUVUaCJk1wac/Ob5dCE0TY
+ MwiyK2hbIddw57RDB7sk8TN6+JMUUxQS+w5KJSv9W3Nh8EB/MDrgjonpM
+ X3ucxFVXCq9pf4YjLpQe5QXIgB4Y0uvi5ENGK/2mOyX49A3pEFuQZK09t
+ w==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=rbrIt059
-Subject: [Buildroot] [PATCH 1/4] package/pkg-golang: support _SUBDIR
+ header.s=orange002 header.b=YwKDSVyD
+Subject: [Buildroot] [PATCH 4/4] package/docker-credential-acr-env: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,96 +108,76 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Some packages have their actual source tree in a sub-directory (even if
-that is the only source in the repository); this is the case for example
-with the Amazon ECR credential helper (to be packaged in a follow up
-commit):
-    https://github.com/awslabs/amazon-ecr-credential-helper
-
-Do the build in _SUBDIR, and also do the vendoring in there.
-
-We don't need the build to generate executables inside _SUBDIR, so we
-just keep using $(@D)/bin as a place to generate them (and install them
-from).
-
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Cc: Christian Stewart <christian@aperture.us>
 ---
- package/pkg-golang.mk            | 13 +++++++++----
- support/download/go-post-process |  5 +++--
- 2 files changed, 12 insertions(+), 6 deletions(-)
+ package/Config.in                                  |  1 +
+ package/docker-credential-acr-env/Config.in        | 12 ++++++++++++
+ .../docker-credential-acr-env.hash                 |  2 ++
+ .../docker-credential-acr-env.mk                   | 14 ++++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 package/docker-credential-acr-env/Config.in
+ create mode 100644 package/docker-credential-acr-env/docker-credential-acr-env.hash
+ create mode 100644 package/docker-credential-acr-env/docker-credential-acr-env.mk
 
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index bdf8de4d66..a4e8bd30cc 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -79,8 +79,8 @@ $(2)_GOMOD ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
- # Generate a go.mod file if it doesn't exist. Note: Go is configured
- # to use the "vendor" dir and not make network calls.
- define $(2)_GEN_GOMOD
--	if [ ! -f $$(@D)/go.mod ]; then \
--		printf "module $$($(2)_GOMOD)\n" > $$(@D)/go.mod; \
-+	if [ ! -f $$(@D)/$$($(2)_SUBDIR)/go.mod ]; then \
-+		printf "module $$($(2)_GOMOD)\n" > $$(@D)/$$($(2)_SUBDIR)/go.mod; \
- 	fi
- endef
- $(2)_POST_PATCH_HOOKS += $(2)_GEN_GOMOD
-@@ -91,6 +91,11 @@ $(2)_DL_ENV += \
- 	GOPROXY=direct \
- 	$$($(2)_GO_ENV)
- 
-+# If building in a sub directory, do the vendoring in there
-+ifneq ($$($(2)_SUBDIR),)
-+$(2)_DOWNLOAD_POST_PROCESS_OPTS += -s$$($(2)_SUBDIR)
-+endif
+diff --git a/package/Config.in b/package/Config.in
+index 345ce6ff1d..b8ac01d4e9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2831,6 +2831,7 @@ menu "System tools"
+ 	source "package/docker-cli/Config.in"
+ 	source "package/docker-cli-buildx/Config.in"
+ 	source "package/docker-compose/Config.in"
++	source "package/docker-credential-acr-env/Config.in"
+ 	source "package/docker-credential-gcr/Config.in"
+ 	source "package/docker-engine/Config.in"
+ 	source "package/earlyoom/Config.in"
+diff --git a/package/docker-credential-acr-env/Config.in b/package/docker-credential-acr-env/Config.in
+new file mode 100644
+index 0000000000..ddb101d52f
+--- /dev/null
++++ b/package/docker-credential-acr-env/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_DOCKER_CREDENTIAL_ACR_ENV
++	bool "docker-credential-acr-env"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	help
++	  The ACR docker credential helper is an alternative to the
++	  existing file store based ACR helper [...] which relies
++	  on az command line and is not optimised for use in CI
++	  environments. Primary use case for this helper is for use
++	  with kaniko and other tools running in CI scenarios wishing
++	  to push to Azure Container Registry.
 +
- # Because we append vendored info, we can't rely on the values being empty
- # once we eventually get into the generic-package infra. So, we duplicate
- # the heuristics here
-@@ -135,7 +140,7 @@ endif
- # Build package for target
- define $(2)_BUILD_CMDS
- 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
--		cd $$(@D); \
-+		cd $$(@D)/$$($(2)_SUBDIR); \
- 		$$(HOST_GO_TARGET_ENV) \
- 			$$($(2)_GO_ENV) \
- 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
-@@ -147,7 +152,7 @@ else
- # Build package for host
- define $(2)_BUILD_CMDS
- 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
--		cd $$(@D); \
-+		cd $$(@D)/$$($(2)_SUBDIR); \
- 		$$(HOST_GO_HOST_ENV) \
- 			$$($(2)_GO_ENV) \
- 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
-diff --git a/support/download/go-post-process b/support/download/go-post-process
-index ef96a76948..edc23ec564 100755
---- a/support/download/go-post-process
-+++ b/support/download/go-post-process
-@@ -5,10 +5,11 @@ set -e
- . "${0%/*}/helpers"
- 
- # Parse our options
--while getopts "n:o:" OPT; do
-+while getopts "n:o:s:" OPT; do
-     case "${OPT}" in
-     o)  output="${OPTARG}";;
-     n)  base_name="${OPTARG}";;
-+    s)  subdir="${OPTARG}";;
-     :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
-     \?) error "unknown option '%s'\n" "${OPTARG}";;
-     esac
-@@ -22,7 +23,7 @@ fi
- post_process_unpack "${base_name}" "${output}"
- 
- # Do the Go vendoring
--pushd "${base_name}" > /dev/null
-+pushd "${base_name}/${subdir}" > /dev/null
- 
- if [ ! -f go.mod ]; then
-     echo "ERROR: no vendor/ folder and no go.mod, aborting"
++	  https://github.com/chrismellard/docker-credential-acr-env/
+diff --git a/package/docker-credential-acr-env/docker-credential-acr-env.hash b/package/docker-credential-acr-env/docker-credential-acr-env.hash
+new file mode 100644
+index 0000000000..eb1fdebbf8
+--- /dev/null
++++ b/package/docker-credential-acr-env/docker-credential-acr-env.hash
+@@ -0,0 +1,2 @@
++# Localy computed
++sha256  deff9d133fdd87b6cbe454e82e72eb7b124d1aea330c17236e804071a446b4ae  docker-credential-acr-env-0.7.0-git4-go2.tar.gz
+diff --git a/package/docker-credential-acr-env/docker-credential-acr-env.mk b/package/docker-credential-acr-env/docker-credential-acr-env.mk
+new file mode 100644
+index 0000000000..31f895e0e3
+--- /dev/null
++++ b/package/docker-credential-acr-env/docker-credential-acr-env.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# docker-credential-acr-env
++#
++################################################################################
++
++DOCKER_CREDENTIAL_ACR_ENV_VERSION = 0.7.0
++DOCKER_CREDENTIAL_ACR_ENV_SITE = https://github.com/chrismellard/docker-credential-acr-env
++DOCKER_CREDENTIAL_ACR_ENV_SITE_METHOD = git
++
++DOCKER_CREDENTIAL_ACR_ENV_LICENSE = Apache-2.0
++DOCKER_CREDENTIAL_ACR_ENV_LICENSE_FILES = LICENSE
++
++$(eval $(golang-package))
 -- 
 2.34.1
 
