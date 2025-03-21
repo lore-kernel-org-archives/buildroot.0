@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6540C36002
-	for <buildroot@archiver.kernel.org>; Fri, 21 Mar 2025 20:07:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 125A3C36000
+	for <buildroot@archiver.kernel.org>; Fri, 21 Mar 2025 20:13:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7011F41E35;
-	Fri, 21 Mar 2025 20:07:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A0A58617BD;
+	Fri, 21 Mar 2025 20:13:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dw4qpbonqjWM; Fri, 21 Mar 2025 20:07:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Wht9wt4wyjbS; Fri, 21 Mar 2025 20:13:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7A8B40B65
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6709617B0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7A8B40B65;
-	Fri, 21 Mar 2025 20:07:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B267B12F
- for <buildroot@buildroot.org>; Fri, 21 Mar 2025 20:07:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A6709617B0;
+	Fri, 21 Mar 2025 20:13:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 20B731A0
+ for <buildroot@buildroot.org>; Fri, 21 Mar 2025 20:13:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9926040430
- for <buildroot@buildroot.org>; Fri, 21 Mar 2025 20:07:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 06DC384779
+ for <buildroot@buildroot.org>; Fri, 21 Mar 2025 20:13:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EkbAAE_c8vvp for <buildroot@buildroot.org>;
- Fri, 21 Mar 2025 20:07:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org ABC904010C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABC904010C
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id ABC904010C
- for <buildroot@buildroot.org>; Fri, 21 Mar 2025 20:07:16 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 0400613F86E;
- Fri, 21 Mar 2025 21:07:11 +0100 (CET)
-Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
- via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 21 Mar 2025 21:07:11 +0100
-MIME-Version: 1.0
-Date: Fri, 21 Mar 2025 21:07:11 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xQoiKyfEk9dJ for <buildroot@buildroot.org>;
+ Fri, 21 Mar 2025 20:13:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A8C28477B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7A8C28477B
+ for <buildroot@buildroot.org>; Fri, 21 Mar 2025 20:13:11 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7306A88268; Fri, 21 Mar 2025 20:13:11 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250321164209.936661-1-bernd@kuhls.net>
-References: <20250321164209.936661-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <9dbc852d1686a87f5d935a62859bc49b@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1742587633;
- bh=Yj+nz+RpjAagWCfSiw1IiAWuz5+gLVYbisiCrnpzM5Q=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=nYEpd5yZevhXmaackJViGfTdVVVfr9Uu8FqPMC7SuBK7+6j4t/ggWs1uOxvypAMIa
- wTg7HZ6o5mr3P77gZBHSVz5ityfE69UeDvQQ+m2gHSzW8LbPSg/I6dNgIXOvWuByKh
- U5lA3NYVBHldQ1za83yGQ+xpfhjxW3FK/r0RIzu5byr7XFqWg6kPcEsFT6JUDHRwlY
- nxRL1N0nXys6NOMJ+kdekAdm6CkPPN43hgUzrBJ+huW+sgepv2u2VPSGpODo5AV80j
- lIVJaVLg+qFL/IQUy4CL8pfQMGYKL24dKMSd8JpuN2D32uQ4pbZE7Bmglv02oN/8il
- j4sWlQrb+Hu0A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=nYEpd5yZ
-Subject: Re: [Buildroot] [PATCH 1/1] package/nut: fix build with python 3.13
+To: buildroot@buildroot.org
+Date: Fri, 21 Mar 2025 21:09:44 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3dc5f39ac9b615be325774c8001fc9c34b5dd9da
+X-Git-Newrev: 8bf3bd9fdce7421a73646a6d0d19ff6d369b2972
+X-Patchwork-Hint: ignore
+Message-Id: <20250321201311.7306A88268@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rsyslog: bump version to 8.2502.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,29 +58,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============8662245219239273482=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 21/03/2025 17:42, Bernd Kuhls wrote:
-> Buildroot bumped Python from 3.12.x to version 3.13.x with commit
-> d63e207eb869063f82c867658676c2903beb08cb
-> 
-> This python bump removed telnetlib which is needed by nut.
-> Add upstream patches to fix a build error not yet caught by 
-> autobuilders.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+--===============8662245219239273482==
+Content-Type: text/plain
 
-Applied to master, thanks.
+commit: https://git.buildroot.net/buildroot/commit/?id=8bf3bd9fdce7421a73646a6d0d19ff6d369b2972
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For info, I fixed "make check-packages" errors.
+Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/rsyslog/rsyslog.hash | 2 +-
+ package/rsyslog/rsyslog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Best regards,
+diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
+index bd783a69b6..157cbe30bd 100644
+--- a/package/rsyslog/rsyslog.hash
++++ b/package/rsyslog/rsyslog.hash
+@@ -1,5 +1,5 @@
+ # From http://www.rsyslog.com/downloads/download-v8-stable/
+-sha256  8cdfa5a077cba576bdd6b1841cc2848b774e663b2e44a39512bb820174174802  rsyslog-8.2412.0.tar.gz
++sha256  02fa197d21d519f5a25a928deb9397cd387ba7382b9b449782ba31d8f3118206  rsyslog-8.2502.0.tar.gz
+ 
+ # Locally calculated
+ sha256  054b3a047d9232376a46b87356b19b0c0c2924cb5e6911ab96a01fc4b515f083  COPYING
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index f72e19ee0d..4f86bb68da 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RSYSLOG_VERSION = 8.2412.0
++RSYSLOG_VERSION = 8.2502.0
+ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
+ RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
+ RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
 
-Julien.
+--===============8662245219239273482==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8662245219239273482==--
