@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 634CBC54756
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1896FC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 358274252C;
-	Mon, 19 May 2025 10:42:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A9D8282C8F;
+	Mon, 19 May 2025 10:42:47 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cunrLmLVnO2r; Mon, 19 May 2025 10:42:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7170D82C7D
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7170D82C7D;
+	Mon, 19 May 2025 10:42:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 05BDCE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4604540E1B
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2LjuoEHi-BKp; Mon, 19 May 2025 10:42:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 656F342534
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 656F342534;
-	Mon, 19 May 2025 10:42:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4556BE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6ED564174B
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mjIw0lJm9aYQ for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ id dBzxTAgIBaPg for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DE92411C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C03A40DA0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DE92411C6
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4C03A40DA0
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6BD4283A2E; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ id 438028725C; Mon, 19 May 2025 10:39:44 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 6 Apr 2025 11:22:44 +0200
+Date: Fri, 21 Mar 2025 22:04:08 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e22b828db6622e3c4263086c70cd7d84756b653e
-X-Git-Newrev: 14ef1ed7d27ba2f6d99bbdd0d80f67df50fccce9
+X-Git-Oldrev: cd8a9eba0179d0b02bfd63baea68d6de986bd4d2
+X-Git-Newrev: f9a02e7b80b24c3f71e69f149169fac556c6a63e
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103947.6BD4283A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] boot/optee-os: bump to 4.5.0
+Message-Id: <20250519103944.438028725C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/tor: bump version to
+ 0.4.8.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,51 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14ef1ed7d27ba2f6d99bbdd0d80f67df50fccce9
+commit: https://git.buildroot.net/buildroot/commit/?id=f9a02e7b80b24c3f71e69f149169fac556c6a63e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Update OP-TEE to its latest tag
+Release notes:
+https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
+https://forum.torproject.org/t/stable-release-0-4-8-15/17998
 
-Signed-off-by: Nayab Sayed <nayabbasha.sayed@microchip.com>
-[Julien: move package archive hash to the "Locally computed" section]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- boot/optee-os/Config.in     | 4 ++--
- boot/optee-os/optee-os.hash | 3 +--
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/tor/tor.hash | 4 ++--
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index 563f192b18..de0ed3168b 100644
---- a/boot/optee-os/Config.in
-+++ b/boot/optee-os/Config.in
-@@ -18,7 +18,7 @@ choice
- 	  Select the version of OP-TEE OS you want to use
- 
- config BR2_TARGET_OPTEE_OS_LATEST
--	bool "4.3.0"
-+	bool "4.5.0"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	select BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY
- 	help
-@@ -79,7 +79,7 @@ endif
- 
- config BR2_TARGET_OPTEE_OS_VERSION
- 	string
--	default "4.3.0"		if BR2_TARGET_OPTEE_OS_LATEST
-+	default "4.5.0"		if BR2_TARGET_OPTEE_OS_LATEST
- 	default BR2_TARGET_OPTEE_OS_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_OPTEE_OS_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL
-diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
-index 16b3d7430e..685826d2f9 100644
---- a/boot/optee-os/optee-os.hash
-+++ b/boot/optee-os/optee-os.hash
-@@ -1,4 +1,3 @@
--# From https://github.com/OP-TEE/optee_os/archive/4.3.0/optee-os-4.3.0.tar.gz
--sha256  390b271905c828d6def9fa6a77bbaa425f3b434d733c8eb18f582ccbc6896096  optee-os-4.3.0.tar.gz
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index def488d516..d2e3cc533d 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,4 +1,4 @@
+-# From https://dist.torproject.org/tor-0.4.8.14.tar.gz.sha256sum
+-sha256  5047e1ded12d9aac4eb858f7634a627714dd58ce99053d517691a4b304a66d10  tor-0.4.8.14.tar.gz
++# From https://dist.torproject.org/tor-0.4.8.15.tar.gz.sha256sum
++sha256  5d5d99e21992c4c71af1afcef16c70f4c5e7ee021633ac138b2a2761be75064b  tor-0.4.8.15.tar.gz
  # Locally computed
-+sha256  43c389f0505e8bc21d6fbaa8ea83ec67d1746ed14a537e3f505cd0e5b4cc2db9  optee-os-4.5.0.tar.gz
- sha256  1247ee90858f4037b6cac63cbffddfed435d0d73c631b37d78c1e6e6ab3e5d1a  LICENSE
+ sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index f4e1efb051..e8e769bdef 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.4.8.14
++TOR_VERSION = 0.4.8.15
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
