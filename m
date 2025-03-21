@@ -1,75 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41E7AC36002
-	for <buildroot@archiver.kernel.org>; Fri, 21 Mar 2025 21:11:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1D74C36002
+	for <buildroot@archiver.kernel.org>; Fri, 21 Mar 2025 21:18:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0999061177;
-	Fri, 21 Mar 2025 21:11:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 452A841DE3;
+	Fri, 21 Mar 2025 21:18:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T2xg5yUkEzyv; Fri, 21 Mar 2025 21:11:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eS8GqDDxRuBv; Fri, 21 Mar 2025 21:18:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3ED666077C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7E3E741DE7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3ED666077C;
-	Fri, 21 Mar 2025 21:11:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B706C1A0
- for <buildroot@buildroot.org>; Fri, 21 Mar 2025 21:11:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E3E741DE7;
+	Fri, 21 Mar 2025 21:18:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C97431A0
+ for <buildroot@buildroot.org>; Fri, 21 Mar 2025 21:18:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A4DF74010C
- for <buildroot@buildroot.org>; Fri, 21 Mar 2025 21:11:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BBA7541DE3
+ for <buildroot@buildroot.org>; Fri, 21 Mar 2025 21:18:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M9OyqxEInRV4 for <buildroot@buildroot.org>;
- Fri, 21 Mar 2025 21:11:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AE515404B6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE515404B6
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AE515404B6
- for <buildroot@buildroot.org>; Fri, 21 Mar 2025 21:11:04 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 9139219F522;
- Fri, 21 Mar 2025 22:11:01 +0100 (CET)
-Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
- via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 21 Mar 2025 22:11:01 +0100
-MIME-Version: 1.0
-Date: Fri, 21 Mar 2025 22:11:01 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250321164243.936786-1-bernd@kuhls.net>
-References: <20250321164243.936786-1-bernd@kuhls.net>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <9642a63aa99ac08a23fb29ff7c41d409@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1742591462;
- bh=KwE491HW4xgAunM7XVhdUqInNCLzOJCQqJPc6BDtizE=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=Rz+pVi74m2M41DrXIkki65tcUqW5iEY2w4AXK0/AQ6R/A2FS7HtjEhaE10FyqgmS/
- zuKXbWvv5jgPzPFxAbsGEXgVTZO4PpmBfv7LpK3cWtoKsKLZd4+HO365D1ia824cJZ
- NqUMZiJKWve4vG00CEur/jVluy96WwCQ7sZnlTN88zRsHneOMFkuPaWiRZqslS03F3
- MVhTzYhAI/M5lj+SrYhqtqmKZ9O/PkopkfZzkvPdF5tyGImrlSlCeajWNJApEikYoZ
- /E+f5LoHSqRkFQ4JAAgVIo7rmJPROOxlDXh41ZQGpgGUXNhD0uAtYjZrBWm/lVfiDz
- PHTAZ3n/hRvRQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=Rz+pVi74
-Subject: Re: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.8.15
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mOSCz6d8yi4q for <buildroot@buildroot.org>;
+ Fri, 21 Mar 2025 21:18:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C7DA141DE7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C7DA141DE7
+ for <buildroot@buildroot.org>; Fri, 21 Mar 2025 21:18:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BE52F88285; Fri, 21 Mar 2025 21:18:51 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Fri, 21 Mar 2025 16:00:19 +0100
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 78e596e45b249357a472b0dee1cd38e76223ffb6
+X-Git-Newrev: bfcceaca1d91a4babdd439065cb5d9fcc4578b09
+X-Patchwork-Hint: ignore
+Message-Id: <20250321211851.BE52F88285@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/musl: Add
+ upstream patch to fix building strace on m68k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,19 +59,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 21/03/2025 17:42, Bernd Kuhls wrote:
-> Release notes:
-> https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
-> https://forum.torproject.org/t/stable-release-0-4-8-15/17998
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://git.buildroot.net/buildroot/commit/?id=bfcceaca1d91a4babdd439065cb5d9fcc4578b09
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Applied to master, thanks.
+Fixes:
+http://autobuild.buildroot.net/results/ec3de790a66373f270f731519e2ef51c293ba683/
+
+Currently it's not possible to build strace on m68k when using
+musl because the version of musl in buildroot doesn't have the
+m68k specific definitions of POLLWRNORM and POLLWRBAND.
+
+This is already fixed upstream so manually apply the patch
+until the next release.
+
+Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+[Peter: add autobuilder ref and upstream link / s-o-b in patch description]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 3e88ba41a9b1ab610f07eaa62132036e46ac9bd9)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/musl/0006-m68k-fix-poll.patch | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+
+diff --git a/package/musl/0006-m68k-fix-poll.patch b/package/musl/0006-m68k-fix-poll.patch
+new file mode 100644
+index 0000000000..cafee534e4
+--- /dev/null
++++ b/package/musl/0006-m68k-fix-poll.patch
+@@ -0,0 +1,26 @@
++From b09e3174a695d1db60b2abc442d29ed3f87f0358 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Wed, 7 Aug 2024 08:51:03 +0300
++Subject: m68k: fix POLLWRNORM and POLLWRBAND
++
++As noted in commit f5011c62c3 ("fix POLLWRNORM and POLLWRBAND on mips")
++m68k uses a different definition.
++
++Signed-off-by: Daniel Palmer <daniel@0x0f.com>
++Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=b09e3174a695d1db60b2abc442d29ed3f87f0358
++---
++ arch/m68k/bits/poll.h | 2 ++
++ 1 file changed, 2 insertions(+)
++ create mode 100644 arch/m68k/bits/poll.h
++
++diff --git a/arch/m68k/bits/poll.h b/arch/m68k/bits/poll.h
++new file mode 100644
++index 00000000..00063f41
++--- /dev/null
+++++ b/arch/m68k/bits/poll.h
++@@ -0,0 +1,2 @@
+++#define POLLWRNORM POLLOUT
+++#define POLLWRBAND 256
++-- 
++cgit v1.2.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
