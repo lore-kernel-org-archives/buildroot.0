@@ -4,73 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F05DC36000
-	for <buildroot@archiver.kernel.org>; Fri, 21 Mar 2025 20:13:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A09D6C36000
+	for <buildroot@archiver.kernel.org>; Fri, 21 Mar 2025 20:24:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19563406D8;
-	Fri, 21 Mar 2025 20:13:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30633424B3;
+	Fri, 21 Mar 2025 20:24:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 80hEqNoatCP5; Fri, 21 Mar 2025 20:13:31 +0000 (UTC)
+ id 5geuwRMKPoI2; Fri, 21 Mar 2025 20:24:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5386B41398
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40F4F424B1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5386B41398;
-	Fri, 21 Mar 2025 20:13:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5DFAD1A0
- for <buildroot@buildroot.org>; Fri, 21 Mar 2025 20:13:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 40F4F424B1;
+	Fri, 21 Mar 2025 20:24:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3881F1A0
+ for <buildroot@buildroot.org>; Fri, 21 Mar 2025 20:24:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3D85360087
- for <buildroot@buildroot.org>; Fri, 21 Mar 2025 20:13:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1F3E740423
+ for <buildroot@buildroot.org>; Fri, 21 Mar 2025 20:24:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OOk8tCXV26Ho for <buildroot@buildroot.org>;
- Fri, 21 Mar 2025 20:13:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 913DD617A2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 913DD617A2
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 913DD617A2
- for <buildroot@buildroot.org>; Fri, 21 Mar 2025 20:13:29 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id CB41E19F740;
- Fri, 21 Mar 2025 21:13:26 +0100 (CET)
-Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
- via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 21 Mar 2025 21:13:26 +0100
-MIME-Version: 1.0
-Date: Fri, 21 Mar 2025 21:13:26 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AYfFO7oQoLvD for <buildroot@buildroot.org>;
+ Fri, 21 Mar 2025 20:24:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64D0B4010C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 64D0B4010C
+ for <buildroot@buildroot.org>; Fri, 21 Mar 2025 20:24:32 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5BDBC88270; Fri, 21 Mar 2025 20:24:32 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: =?UTF-8?Q?Fl=C3=A1vio_Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250321162034.1851757-1-flavio.tapajos@newtesc.com.br>
-References: <20250321162034.1851757-1-flavio.tapajos@newtesc.com.br>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <7102faddda664c6cc4ba128a0e4e16b1@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1742588007;
- bh=ExH6QNiXJ1UG+FGz+vikJyf6dQPwSCdPA/fWDCGJFW4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=uCYUepHrYMqq2uUQQkWZ1IcGgT9BaNzTJ4TbT6zl9S1qWW9mclK/z1fKeK2dC5mKH
- +TGMRCxUOI5wcsRDAqjeQgr4TOiLIlAfBTIoc3t7ja8wIF6HJ0v8jAA0HyPdp3G6JG
- gThkydivQDA5R88jgxyNxWTG4oioJwW9sd+nTr3feDmnh2LfBgfF48mis0dd8TG5oa
- 8Fsxkq2s92Csud2gmMKokGfpc2ZQkg537yk3HQb27kQqXU7FUvWv5Je8ATpxNqOou7
- 7qQfrILOBV62SBi8zYBjco0hhgXNspgK6MBzx3lnH3S9CKShOMqO/xpgUtkWEE5xHS
- trrG9mNR2OL2A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=uCYUepHr
-Subject: Re: [Buildroot] [PATCH 1/1] package/rsyslog: bump version to
- 8.2502.0
+To: buildroot@buildroot.org
+Date: Fri, 21 Mar 2025 21:14:27 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8bf3bd9fdce7421a73646a6d0d19ff6d369b2972
+X-Git-Newrev: 12bdfa42e9b086337fa791379525742d93285d8d
+X-Patchwork-Hint: ignore
+Message-Id: <20250321202432.5BDBC88270@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-sqlalchemy: bump to version
+ 2.0.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,14 +59,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1738420714109769475=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMjEvMDMvMjAyNSAxNzoyMCwgRmzDoXZpbyBUYXBhasOzcyB3cm90ZToKPiBTaWduZWQtb2Zm
-LWJ5OiBGbMOhdmlvIFRhcGFqw7NzIDxmbGF2aW8udGFwYWpvc0BuZXd0ZXNjLmNvbS5icj4KCkFw
-cGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290Cg==
+--===============1738420714109769475==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=12bdfa42e9b086337fa791379525742d93285d8d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+For change log, see:
+https://docs.sqlalchemy.org/en/20/changelog/changelog_20.html#change-2.0.39
+
+Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/python-sqlalchemy/python-sqlalchemy.hash | 4 ++--
+ package/python-sqlalchemy/python-sqlalchemy.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.hash b/package/python-sqlalchemy/python-sqlalchemy.hash
+index aa9888b58d..c66ee44e91 100644
+--- a/package/python-sqlalchemy/python-sqlalchemy.hash
++++ b/package/python-sqlalchemy/python-sqlalchemy.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/sqlalchemy/json
+-md5  3cbf218c54b25fa4e18d78842956601d  sqlalchemy-2.0.38.tar.gz
+-sha256  e5a4d82bdb4bf1ac1285a68eab02d253ab73355d9f0fe725a97e1e0fa689decb  sqlalchemy-2.0.38.tar.gz
++md5  4aecb8d3b1d077d6099c1f8ed18367a4  sqlalchemy-2.0.39.tar.gz
++sha256  5d2d1fe548def3267b4c70a8568f108d1fed7cbbeccb9cc166e05af2abc25c22  sqlalchemy-2.0.39.tar.gz
+ # Locally computed sha256 checksums
+ sha256  9821720b58d4a565b61321007a8ad43ab6991a3959e66cd5db4dd9eae69c7dfc  LICENSE
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.mk b/package/python-sqlalchemy/python-sqlalchemy.mk
+index 3a9d9e06b6..26d7d308b9 100644
+--- a/package/python-sqlalchemy/python-sqlalchemy.mk
++++ b/package/python-sqlalchemy/python-sqlalchemy.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SQLALCHEMY_VERSION = 2.0.38
++PYTHON_SQLALCHEMY_VERSION = 2.0.39
+ PYTHON_SQLALCHEMY_SOURCE = sqlalchemy-$(PYTHON_SQLALCHEMY_VERSION).tar.gz
+-PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/e4/08/9a90962ea72acd532bda71249a626344d855c4032603924b1b547694b837
++PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/00/8e/e77fcaa67f8b9f504b4764570191e291524575ddbfe78a90fc656d671fdc
+ PYTHON_SQLALCHEMY_SETUP_TYPE = setuptools
+ PYTHON_SQLALCHEMY_LICENSE = MIT
+ PYTHON_SQLALCHEMY_LICENSE_FILES = LICENSE
+
+--===============1738420714109769475==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1738420714109769475==--
