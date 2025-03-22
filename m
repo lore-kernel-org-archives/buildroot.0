@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 032D3C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA3DDC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B7082812E7;
-	Mon, 19 May 2025 10:42:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id klqb2anB3a_m; Mon, 19 May 2025 10:42:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C63598127C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C63598127C;
-	Mon, 19 May 2025 10:42:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 14C57193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B863940DDC
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 83441424E0;
+	Mon, 19 May 2025 10:42:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dWyXW4jxRtHY for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:45 +0000 (UTC)
+ id t6O5SM3z-2_P; Mon, 19 May 2025 10:42:08 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B3F6424CA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B3F6424CA;
+	Mon, 19 May 2025 10:42:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 213DCE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 93C1641190
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qiDGC0nwZkOr for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D480840C46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61358410B6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D480840C46
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61358410B6
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D1CF18725C; Mon, 19 May 2025 10:39:43 +0000 (UTC)
+ id 58A8F84A21; Mon, 19 May 2025 10:39:44 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 20 Mar 2025 22:58:24 +0100
+Date: Sat, 22 Mar 2025 12:34:21 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f64eeb88540afddaad45996f53a3c3d3ff23d78c
-X-Git-Newrev: 4e08ab7acd8fcfc68c6a1313eefed87972b37171
+X-Git-Oldrev: 486672da0243f5f397d91ff50bc0ed23cec96348
+X-Git-Newrev: e59cb9e95630efbefadead1ffa8f11e11fc13737
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103943.D1CF18725C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-aiohttp-cors:
- bump to version 0.8.0
+Message-Id: <20250519103944.58A8F84A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/lowdown: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,49 +64,104 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e08ab7acd8fcfc68c6a1313eefed87972b37171
+commit: https://git.buildroot.net/buildroot/commit/?id=e59cb9e95630efbefadead1ffa8f11e11fc13737
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-License hash changed due to formatting changes:
-https://github.com/aio-libs/aiohttp-cors/commit/c4a4ead0df64eaa266ba36660a8a841370bf07cd
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-aiohttp-cors/python-aiohttp-cors.hash | 6 +++---
- package/python-aiohttp-cors/python-aiohttp-cors.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/lowdown/Config.in    | 14 ++++++++++++++
+ package/lowdown/lowdown.hash |  5 +++++
+ package/lowdown/lowdown.mk   | 24 ++++++++++++++++++++++++
+ 5 files changed, 45 insertions(+)
 
-diff --git a/package/python-aiohttp-cors/python-aiohttp-cors.hash b/package/python-aiohttp-cors/python-aiohttp-cors.hash
-index 29ae2d7909..5bcd8bdb05 100644
---- a/package/python-aiohttp-cors/python-aiohttp-cors.hash
-+++ b/package/python-aiohttp-cors/python-aiohttp-cors.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aiohttp_cors/json
--md5  de3940a901b269be82c8bd9f28d53ff0  aiohttp-cors-0.7.0.tar.gz
--sha256  4d39c6d7100fd9764ed1caf8cebf0eb01bf5e3f24e2e073fda6234bc48b19f5d  aiohttp-cors-0.7.0.tar.gz
-+md5  c993585a46c40cc4292c5722c7dfbaf0  aiohttp_cors-0.8.0.tar.gz
-+sha256  ec70f38432c938e39d240ff38a7d789a5aa0a18087882c12d6cc141eef1144f6  aiohttp_cors-0.8.0.tar.gz
- # Locally computed sha256 checksums
--sha256  86cb2262ff825ce1c8b8fb9ea9f5174318badc3912639b9275fc25d0e305c556  LICENSE
-+sha256  c20f93f9891ddab8de9a4db5415d39c1d7d782174fe218b4c38ad78a771706e2  LICENSE
-diff --git a/package/python-aiohttp-cors/python-aiohttp-cors.mk b/package/python-aiohttp-cors/python-aiohttp-cors.mk
-index 27443540d0..26fa43bfa2 100644
---- a/package/python-aiohttp-cors/python-aiohttp-cors.mk
-+++ b/package/python-aiohttp-cors/python-aiohttp-cors.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_AIOHTTP_CORS_VERSION = 0.7.0
--PYTHON_AIOHTTP_CORS_SOURCE = aiohttp-cors-$(PYTHON_AIOHTTP_CORS_VERSION).tar.gz
--PYTHON_AIOHTTP_CORS_SITE = https://files.pythonhosted.org/packages/44/9e/6cdce7c3f346d8fd487adf68761728ad8cd5fbc296a7b07b92518350d31f
-+PYTHON_AIOHTTP_CORS_VERSION = 0.8.0
-+PYTHON_AIOHTTP_CORS_SOURCE = aiohttp_cors-$(PYTHON_AIOHTTP_CORS_VERSION).tar.gz
-+PYTHON_AIOHTTP_CORS_SITE = https://files.pythonhosted.org/packages/1d/a8/3edbba1d565f7888c52e04ac6188e19b812a9fc39d81dea413f3abf81bfa
- PYTHON_AIOHTTP_CORS_SETUP_TYPE = setuptools
- PYTHON_AIOHTTP_CORS_LICENSE = Apache-2.0
- PYTHON_AIOHTTP_CORS_LICENSE_FILES = LICENSE
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 026670cece..a0e0183257 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1636,6 +1636,7 @@ F:	package/libite/
+ F:	package/libnet/
+ F:	package/libteam/
+ F:	package/libuev/
++F:	package/lowdown/
+ F:	package/mg/
+ F:	package/mdnsd/
+ F:	package/mini-snmpd/
+diff --git a/package/Config.in b/package/Config.in
+index 120a71dd2d..60b375e674 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2779,6 +2779,7 @@ comment "Utilities"
+ 	source "package/lockfile-progs/Config.in"
+ 	source "package/logrotate/Config.in"
+ 	source "package/logsurfer/Config.in"
++	source "package/lowdown/Config.in"
+ 	source "package/minisign/Config.in"
+ 	source "package/neofetch/Config.in"
+ 	source "package/pdmenu/Config.in"
+diff --git a/package/lowdown/Config.in b/package/lowdown/Config.in
+new file mode 100644
+index 0000000000..00ae6fcce6
+--- /dev/null
++++ b/package/lowdown/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_LOWDOWN
++	bool "lowdown"
++	depends on BR2_USE_WCHAR
++	depends on !BR2_STATIC_LIBS
++	help
++	  Simple markdown translator to HTML5, terminal, and more.
++	  Useful for providing the same help texts both for a CLI
++	  and web.
++
++	  https://kristaps.bsd.lv/lowdown/
++
++comment "lowdown needs a toolchain w/ wchar and shared library support"
++	depends on BR2_USE_WCHAR
++	depends on !BR2_STATIC_LIBS
+diff --git a/package/lowdown/lowdown.hash b/package/lowdown/lowdown.hash
+new file mode 100644
+index 0000000000..0b4d1fd25d
+--- /dev/null
++++ b/package/lowdown/lowdown.hash
+@@ -0,0 +1,5 @@
++# SHA512 from release archive https://kristaps.bsd.lv/lowdown/snapshots/
++sha512  316b27384f83cb57fa414c315556fd177f2998c009e031986446e82252f276dc68adfeb263b88640deccb7084da4771d0ee8fae7d37388dba4e1a0aa426c701d  lowdown-1.4.0.tar.gz
++
++# Locally calculated
++sha256  204658eb0d5ba87935056630534cdafd21ed29597e0a9c9f8f557779a3fb99d4  LICENSE.md
+diff --git a/package/lowdown/lowdown.mk b/package/lowdown/lowdown.mk
+new file mode 100644
+index 0000000000..d88b70327a
+--- /dev/null
++++ b/package/lowdown/lowdown.mk
+@@ -0,0 +1,24 @@
++################################################################################
++#
++# lowdown
++#
++################################################################################
++
++LOWDOWN_VERSION = 1.4.0
++LOWDOWN_SITE = https://kristaps.bsd.lv/lowdown/snapshots
++LOWDOWN_LICENSE = ISC
++LOWDOWN_LICENSE_FILES = LICENSE.md
++
++define LOWDOWN_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure)
++endef
++
++define LOWDOWN_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define LOWDOWN_INSTALL_TARGET_CMDS
++	$(INSTALL) -t $(TARGET_DIR)/usr/bin -D -m 0755 $(@D)/lowdown
++endef
++
++$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
