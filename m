@@ -4,50 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DE59C28B30
-	for <buildroot@archiver.kernel.org>; Sun, 23 Mar 2025 10:32:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE18DC28B30
+	for <buildroot@archiver.kernel.org>; Sun, 23 Mar 2025 10:32:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B7DCA60A6B;
-	Sun, 23 Mar 2025 10:32:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72421607B7;
+	Sun, 23 Mar 2025 10:32:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yq4X6dgDOIBJ; Sun, 23 Mar 2025 10:32:08 +0000 (UTC)
+ id f3weFzzK7FlS; Sun, 23 Mar 2025 10:32:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D68B060A45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9CA160A45
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D68B060A45;
-	Sun, 23 Mar 2025 10:32:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 24DF4E2
- for <buildroot@buildroot.org>; Sun, 23 Mar 2025 10:32:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9CA160A45;
+	Sun, 23 Mar 2025 10:32:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B8A851C9
+ for <buildroot@buildroot.org>; Sun, 23 Mar 2025 10:32:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0D92282107
- for <buildroot@buildroot.org>; Sun, 23 Mar 2025 10:32:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9E42A82101
+ for <buildroot@buildroot.org>; Sun, 23 Mar 2025 10:32:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rjNtYq8MY_0F for <buildroot@buildroot.org>;
- Sun, 23 Mar 2025 10:32:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3519D820FF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3519D820FF
- for <buildroot@buildroot.org>; Sun, 23 Mar 2025 10:32:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1FBC48829F; Sun, 23 Mar 2025 10:32:05 +0000 (UTC)
+ id kvkrwlkzFj3l for <buildroot@buildroot.org>;
+ Sun, 23 Mar 2025 10:32:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D9AE882100
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D9AE882100
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D9AE882100
+ for <buildroot@buildroot.org>; Sun, 23 Mar 2025 10:32:48 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id D865319F54D;
+ Sun, 23 Mar 2025 11:32:43 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:38090])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 23 Mar 2025 11:32:43 +0100
+MIME-Version: 1.0
+Date: Sun, 23 Mar 2025 11:32:43 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 23 Mar 2025 11:15:09 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6ca1ee306a3dc46430e80b7c2eb9689bdc1fbf1b
-X-Git-Newrev: 96ed66f75cc92d50e8297a0da1e944085e9c718e
-X-Patchwork-Hint: ignore
-Message-Id: <20250323103205.1FBC48829F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-proto-plus: bump to version
- 1.26.0
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250128171630.2446611-1-james.hilliard1@gmail.com>
+References: <20250128171630.2446611-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <962b9162ad304ca0ef7befbd14f167e9@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1742725965;
+ bh=9gQnCr3XInIgDNKoncwdjYM3CGO03Ok0oTwjhScIyKM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=pMsIOIAMbATVOD36YNemWo2pyGLb1PeCh8TOLd0e4YndI3CgShRCb447cRq36XIbX
+ 2MgVrULj67KNcTUTmEqJI55WB6fzAY1VzyZu/WuD53ZOH+K+812yY7cwxvQYWIZL7b
+ Z0wmSxGG/ehuniMgfbpKDhhemtBa0j8S3Sql5U2JRKHwIChfNjzBQq9W0fEhLED69w
+ IV9tiB/zVov3hHct8Ut8jdErNjv0kGKqiiDnjzbb5mCAvvfIakN+Vaf0HBBble59ql
+ T0bDCLrkBMJRNdxlE5ejHHjlPugtR8a7JRGB/75IxJrpybpJHW0MAV97Lae9Gb10wq
+ iECSk2ZNAJ8EQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=pMsIOIAM
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-proto-plus: bump to
+ version 1.26.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,50 +84,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96ed66f75cc92d50e8297a0da1e944085e9c718e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 28/01/2025 18:16, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-proto-plus/python-proto-plus.hash | 4 ++--
- package/python-proto-plus/python-proto-plus.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python-proto-plus/python-proto-plus.hash b/package/python-proto-plus/python-proto-plus.hash
-index ebf3426886..fc8c1ad2f4 100644
---- a/package/python-proto-plus/python-proto-plus.hash
-+++ b/package/python-proto-plus/python-proto-plus.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/proto-plus/json
--md5  f1465151dcad7bb3c4ec3271e4afbc3d  proto_plus-1.25.0.tar.gz
--sha256  fbb17f57f7bd05a68b7707e745e26528b0b3c34e378db91eef93912c54982d91  proto_plus-1.25.0.tar.gz
-+md5  12eab5f7e789e1153cd0dab5018bda09  proto_plus-1.26.0.tar.gz
-+sha256  6e93d5f5ca267b54300880fff156b6a3386b3fa3f43b1da62e680fc0c586ef22  proto_plus-1.26.0.tar.gz
- # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-proto-plus/python-proto-plus.mk b/package/python-proto-plus/python-proto-plus.mk
-index 734c6b2003..1fe4fa3431 100644
---- a/package/python-proto-plus/python-proto-plus.mk
-+++ b/package/python-proto-plus/python-proto-plus.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PROTO_PLUS_VERSION = 1.25.0
-+PYTHON_PROTO_PLUS_VERSION = 1.26.0
- PYTHON_PROTO_PLUS_SOURCE = proto_plus-$(PYTHON_PROTO_PLUS_VERSION).tar.gz
--PYTHON_PROTO_PLUS_SITE = https://files.pythonhosted.org/packages/7e/05/74417b2061e1bf1b82776037cad97094228fa1c1b6e82d08a78d3fb6ddb6
-+PYTHON_PROTO_PLUS_SITE = https://files.pythonhosted.org/packages/26/79/a5c6cbb42268cfd3ddc652dc526889044a8798c688a03ff58e5e92b743c8
- PYTHON_PROTO_PLUS_SETUP_TYPE = setuptools
- PYTHON_PROTO_PLUS_LICENSE = Apache-2.0
- PYTHON_PROTO_PLUS_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
