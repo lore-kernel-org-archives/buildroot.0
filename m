@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 278FCC3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CA4BC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D02141E4E;
-	Mon, 19 May 2025 10:41:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F26A4249A;
+	Mon, 19 May 2025 10:41:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zh_geFuwYLGt; Mon, 19 May 2025 10:41:18 +0000 (UTC)
+ id C3HTt4nm7QIR; Mon, 19 May 2025 10:41:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC5BE42433
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D989D4247B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC5BE42433;
-	Mon, 19 May 2025 10:41:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 11103D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D989D4247B;
+	Mon, 19 May 2025 10:41:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 08ECAD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6643E40DA1
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 909DC41155
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jlw1zBnIW2ot for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 52f9xst7_bTr for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C56BB40D6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8AA4C4100D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C56BB40D6C
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8AA4C4100D
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C400B8725C; Mon, 19 May 2025 10:39:42 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 8106983A2E; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 17 Mar 2025 18:32:11 +0100
+Date: Sun, 23 Mar 2025 11:15:09 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: dcd6bea6aeee09a533974d30c578b990c2ecdede
-X-Git-Newrev: 27ab880ebb9a3efdec15733841f7b88063604247
+X-Git-Oldrev: 6ca1ee306a3dc46430e80b7c2eb9689bdc1fbf1b
+X-Git-Newrev: 96ed66f75cc92d50e8297a0da1e944085e9c718e
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103942.C400B8725C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libopenssl do not
- build in parallel
+Message-Id: <20250519103944.8106983A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-proto-plus:
+ bump to version 1.26.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,88 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=27ab880ebb9a3efdec15733841f7b88063604247
+commit: https://git.buildroot.net/buildroot/commit/?id=96ed66f75cc92d50e8297a0da1e944085e9c718e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-With highly parallel builds on a heavily loaded machine, the libopenssl
-build often (about half of the time) fails with spurious missing rules
-in its Makefile:
-
-    >>> host-libopenssl 3.4.1 Installing to host directory
-    [...] /usr/bin/make  -C [...]/build/host-libopenssl-3.4.1 install
-    "/usr/bin/make" depend && "/usr/bin/make" _build_libs
-    "/usr/bin/make" depend && "/usr/bin/make" _build_modules
-    "/usr/bin/make" depend && "/usr/bin/make" _build_programs
-    [...]
-    make[3]: *** No rule to make target '_build_modules'.  Stop.
-    make[2]: *** [Makefile:3159: build_modules] Error 2
-    make[2]: *** Waiting for unfinished jobs....
-    make[3]: Nothing to be done for '_build_programs'.
-    make[3]: Nothing to be done for '_build_libs'.
-    make[1]: *** [package/pkg-generic.mk:283: [...]/build/host-libopenssl-3.4.1/.stamp_host_installed] Error 2
-    make[1]: *** Waiting for unfinished jobs....
-    [...]
-    make: *** [Makefile:23: _all] Error 2
-
-Ideally, we'd like to fix the issue. However, the Nakefile is generated
-by the Configure script, written in perl, from the template in
-Configurations/unix-Makefile.tmpl, which also uses some kind of special
-(perl-related, probably) templating language. That makes it pretty
-difficult to see what is going on, though, and nigh impossible to fix
-without a deep understanding of the openssl buildsystem.
-
-So, we can only disable parallel builds until the issue is fixed
-upstream [0]. Add a comment to both build commands (host and target) to
-reference the upstream issue report.
-
-Note that the issue has mostly been observed in the build of the host
-variant so far, but there is no reason why it can't happen in the build
-of the target variant.
-
-[0] https://github.com/openssl/openssl/issues/27074
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libopenssl/libopenssl.mk | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ package/python-proto-plus/python-proto-plus.hash | 4 ++--
+ package/python-proto-plus/python-proto-plus.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index c1c5b818d7..663e8d9b9f 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -132,24 +132,26 @@ endef
- LIBOPENSSL_POST_CONFIGURE_HOOKS += LIBOPENSSL_FIXUP_STATIC_MAKEFILE
- endif
+diff --git a/package/python-proto-plus/python-proto-plus.hash b/package/python-proto-plus/python-proto-plus.hash
+index ebf3426886..fc8c1ad2f4 100644
+--- a/package/python-proto-plus/python-proto-plus.hash
++++ b/package/python-proto-plus/python-proto-plus.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/proto-plus/json
+-md5  f1465151dcad7bb3c4ec3271e4afbc3d  proto_plus-1.25.0.tar.gz
+-sha256  fbb17f57f7bd05a68b7707e745e26528b0b3c34e378db91eef93912c54982d91  proto_plus-1.25.0.tar.gz
++md5  12eab5f7e789e1153cd0dab5018bda09  proto_plus-1.26.0.tar.gz
++sha256  6e93d5f5ca267b54300880fff156b6a3386b3fa3f43b1da62e680fc0c586ef22  proto_plus-1.26.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-proto-plus/python-proto-plus.mk b/package/python-proto-plus/python-proto-plus.mk
+index 734c6b2003..1fe4fa3431 100644
+--- a/package/python-proto-plus/python-proto-plus.mk
++++ b/package/python-proto-plus/python-proto-plus.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
-+# Parallel build broken: https://github.com/openssl/openssl/issues/27074
- define HOST_LIBOPENSSL_BUILD_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)
- endef
- 
-+# Parallel build broken: https://github.com/openssl/openssl/issues/27074
- define LIBOPENSSL_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)
- endef
- 
- define LIBOPENSSL_INSTALL_STAGING_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) install
- endef
- 
- define HOST_LIBOPENSSL_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
-+	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) install
- endef
- 
- define LIBOPENSSL_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) install
- 	$(RM) -rf $(TARGET_DIR)/usr/lib/ssl
- 	$(RM) -f $(TARGET_DIR)/usr/bin/c_rehash
- endef
+-PYTHON_PROTO_PLUS_VERSION = 1.25.0
++PYTHON_PROTO_PLUS_VERSION = 1.26.0
+ PYTHON_PROTO_PLUS_SOURCE = proto_plus-$(PYTHON_PROTO_PLUS_VERSION).tar.gz
+-PYTHON_PROTO_PLUS_SITE = https://files.pythonhosted.org/packages/7e/05/74417b2061e1bf1b82776037cad97094228fa1c1b6e82d08a78d3fb6ddb6
++PYTHON_PROTO_PLUS_SITE = https://files.pythonhosted.org/packages/26/79/a5c6cbb42268cfd3ddc652dc526889044a8798c688a03ff58e5e92b743c8
+ PYTHON_PROTO_PLUS_SETUP_TYPE = setuptools
+ PYTHON_PROTO_PLUS_LICENSE = Apache-2.0
+ PYTHON_PROTO_PLUS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
