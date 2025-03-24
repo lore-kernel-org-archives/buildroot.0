@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D65CC2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C4A1C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 701C74277D;
-	Mon, 19 May 2025 10:43:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6AB1560F69;
+	Mon, 19 May 2025 10:43:46 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ljn2BpdkHts8; Mon, 19 May 2025 10:43:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A6016100D
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A6016100D;
+	Mon, 19 May 2025 10:43:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 091D9D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 97784410C6
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iLIj_ng6pTTE; Mon, 19 May 2025 10:43:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9842041213
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9842041213;
-	Mon, 19 May 2025 10:43:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2D28CE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D81E41082
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:51 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V1D2Wlhs_lGZ for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:48 +0000 (UTC)
+ id ILd_7IVw6bQ5 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0864A41028
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D991240DB9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0864A41028
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D991240DB9
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 067BC8725C; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+ id D5DBE83A2E; Mon, 19 May 2025 10:39:44 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 7 Apr 2025 20:14:14 +0200
+Date: Mon, 24 Mar 2025 22:09:26 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 939f524d77b83d47d2be018dea02d7182fda522e
-X-Git-Newrev: fd00502ee0816218a8d2bd3e5428872bcca2cc98
+X-Git-Oldrev: b111e07fd5ac90e3403fc2f7a4944bffbb5a518f
+X-Git-Newrev: 209204becfa0ed16fda1e7d274bb046fa22f8946
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103948.067BC8725C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/gstreamer1/gstreamer1-editing-services: bump version to 1.24.11
+Message-Id: <20250519103944.D5DBE83A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/intel-gmmlib: bump
+ version to 22.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,46 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd00502ee0816218a8d2bd3e5428872bcca2cc98
+commit: https://git.buildroot.net/buildroot/commit/?id=209204becfa0ed16fda1e7d274bb046fa22f8946
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-No functional change, but bump for consistency. For details, see the
-release notes:
-
-    https://gstreamer.freedesktop.org/releases/1.24/
-
-Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../gstreamer1-editing-services/gstreamer1-editing-services.hash      | 4 ++--
- .../gstreamer1-editing-services/gstreamer1-editing-services.mk        | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/intel-gmmlib/intel-gmmlib.hash | 2 +-
+ package/intel-gmmlib/intel-gmmlib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index e6bba20724..584d235451 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.22.12.tar.xz.sha256sum
--sha256  792339135ce713088663cc5d44e0aea8217793e88fabfd11571e7abf4a429f2c  gst-editing-services-1.22.12.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.24.11.tar.xz.sha256sum
-+sha256  85fd74dab259e137a95ab4427e009dd853f4ca82874500cb5493c33bcef1ef08  gst-editing-services-1.24.11.tar.xz
- 
- # Hashes for license files:
- sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index 75c660f31d..0832cfa30f 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+diff --git a/package/intel-gmmlib/intel-gmmlib.hash b/package/intel-gmmlib/intel-gmmlib.hash
+index badeccd2df..28a5bf2e91 100644
+--- a/package/intel-gmmlib/intel-gmmlib.hash
++++ b/package/intel-gmmlib/intel-gmmlib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  05852b59e7e0757cc85e79842fefc5d63c75d51b26fd388732ca0b4d3af93584  intel-gmmlib-22.7.0.tar.gz
++sha256  3b84d993950069f0a9b0cc373e2f4b026b194d8fdfb2a8856490d17dadd1b5a5  intel-gmmlib-22.7.1.tar.gz
+ sha256  8b7446825df3f8b0268307e272aa6aaaf78351c83161d860d02c913c22666c48  LICENSE.md
+diff --git a/package/intel-gmmlib/intel-gmmlib.mk b/package/intel-gmmlib/intel-gmmlib.mk
+index 6668abd23e..3c87090233 100644
+--- a/package/intel-gmmlib/intel-gmmlib.mk
++++ b/package/intel-gmmlib/intel-gmmlib.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.22.12
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.24.11
- GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
+-INTEL_GMMLIB_VERSION = 22.7.0
++INTEL_GMMLIB_VERSION = 22.7.1
+ INTEL_GMMLIB_SITE = https://github.com/intel/gmmlib/archive
+ INTEL_GMMLIB_LICENSE = MIT
+ INTEL_GMMLIB_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
