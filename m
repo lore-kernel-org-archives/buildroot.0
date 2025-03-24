@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AAECC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B243AC3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D33214256F;
-	Mon, 19 May 2025 10:43:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FD60612DB;
+	Mon, 19 May 2025 10:43:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DpHj1ZTfYHOy; Mon, 19 May 2025 10:43:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9850560F4D
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9850560F4D;
+	Mon, 19 May 2025 10:43:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2B847E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2907640D81
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1FCCdLL6Q75o; Mon, 19 May 2025 10:43:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1448441D1A
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1448441D1A;
-	Mon, 19 May 2025 10:43:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id AE283D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 50C0B41038
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gypJI8EoII-G for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:49 +0000 (UTC)
+ id R2ED5EH6Xqsp for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7F4541005
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4FDE40C99
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D7F4541005
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A4FDE40C99
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D5B5B872E7; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+ id A3672873D1; Mon, 19 May 2025 10:39:44 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 12 Apr 2025 12:59:16 +0200
+Date: Mon, 24 Mar 2025 21:08:34 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3a3ab70fc2f4c26c4d943de01748b0fa2c0cdacd
-X-Git-Newrev: 03cd7d1a4c8ba5b55af7d7343559060fe58d82b2
+X-Git-Oldrev: 4087461203c9788bc51c918d38a0ae9911499fa7
+X-Git-Newrev: 3b4048c132254717a9ffc2428afe798b8d8b8dfd
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103948.D5B5B872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] boot/ti-k3-boot-firmware: bump
- to version 11.00.10
+Message-Id: <20250519103944.A3672873D1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ccache: bump version
+ to 4.11.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03cd7d1a4c8ba5b55af7d7343559060fe58d82b2
+commit: https://git.buildroot.net/buildroot/commit/?id=3b4048c132254717a9ffc2428afe798b8d8b8dfd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Update to latest available version from TI.
+For release note, see:
+https://ccache.dev/releasenotes.html#_ccache_4_11_2
 
-Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
-Reviewed-by: Bryan Brattlof <bb@ti.com>
-[Dario: Tested on SK-AM62B-P1]
-Tested-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Updated license hash due to copyright year and version bumps:
+https://github.com/ccache/ccache/commits/v4.11.2/LICENSE.adoc
+
+Follow upstream rename of Config.cpp to config.cpp:
+https://github.com/ccache/ccache/commit/d805b66b0f1ffdfc7035537fbca677d7463d2782
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Julien: add link to release note]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash | 2 +-
- boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ccache/ccache.hash |  4 ++--
+ package/ccache/ccache.mk   | 14 +++++++-------
+ 2 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
-index 2398d02da2..d9cb66cd6a 100644
---- a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
-+++ b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256  ab20ffbe7bba7e94be246b3417d33a914b3f07c16c47ef5a7f7602349a666a61  LICENSE.ti
--sha256  ae888a0a22f8c5b8fe841236d6e40bb2f821d9a4161dab6924fd989e1467ef0e  ti-linux-firmware-09.02.00.009.tar.xz
-+sha256  884c454b1a518e6d31304acb201493156685fb8ff111383c842bb292a1b35c9b  ti-linux-firmware-11.00.10.tar.xz
-diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
-index 9332732ad4..e04165edd1 100644
---- a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
-+++ b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
+diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
+index 6624fdef65..259041d2e9 100644
+--- a/package/ccache/ccache.hash
++++ b/package/ccache/ccache.hash
+@@ -1,4 +1,4 @@
+ # sha256 computed locally
+-sha256  c0b85ddfc1a3e77b105ec9ada2d24aad617fa0b447c6a94d55890972810f0f5a  ccache-4.10.2.tar.xz
++sha256  319390f276123968cfa565acc3da0b1e18414374b40ff25274230e6860352125  ccache-4.11.2.tar.xz
+ sha256  80b5112739a423dfac7bed1ca8a1df3cccda3d794425441997d4462b83db4dd5  GPL-3.0.txt
+-sha256  de4684f5251a0a2c58f3a7ab94d6a8d3443822cbd01abcdadd9250d3d1e0bfe1  LICENSE.adoc
++sha256  115fd61246934e8581b1ef9263017cae89e61b5f11599d7f7d6b98f69a700e66  LICENSE.adoc
+diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
+index f3f675586d..f452bb40af 100644
+--- a/package/ccache/ccache.mk
++++ b/package/ccache/ccache.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TI_K3_BOOT_FIRMWARE_VERSION = 09.02.00.009
-+TI_K3_BOOT_FIRMWARE_VERSION = 11.00.10
- TI_K3_BOOT_FIRMWARE_SITE = https://git.ti.com/cgit/processor-firmware/ti-linux-firmware/snapshot
- TI_K3_BOOT_FIRMWARE_SOURCE = ti-linux-firmware-$(TI_K3_BOOT_FIRMWARE_VERSION).tar.xz
- TI_K3_BOOT_FIRMWARE_INSTALL_IMAGES = YES
+-CCACHE_VERSION = 4.10.2
++CCACHE_VERSION = 4.11.2
+ CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
+ CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
+ CCACHE_LICENSE = GPL-3.0+, others
+@@ -43,12 +43,12 @@ HOST_CCACHE_CONF_OPTS += \
+ HOST_CCACHE_DEFAULT_CCACHE_DIR = $(patsubst $(HOME)/%,%,$(BR_CACHE_DIR))
+ 
+ define HOST_CCACHE_PATCH_CONFIGURATION
+-	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/src/ccache/Config.cpp
+-	sed -i 's,".ccache","$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/src/ccache/Config.cpp
+-	sed -i 's,"/.cache/ccache","/$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/src/ccache/Config.cpp
+-	sed -i 's,"/.config/ccache","/$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/src/ccache/Config.cpp
+-	sed -i 's,getenv("XDG_CACHE_HOME"),nullptr,' $(@D)/src/ccache/Config.cpp
+-	sed -i 's,getenv("XDG_CONFIG_HOME"),nullptr,' $(@D)/src/ccache/Config.cpp
++	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/src/ccache/config.cpp
++	sed -i 's,".ccache","$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/src/ccache/config.cpp
++	sed -i 's,"/.cache/ccache","/$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/src/ccache/config.cpp
++	sed -i 's,"/.config/ccache","/$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/src/ccache/config.cpp
++	sed -i 's,getenv("XDG_CACHE_HOME"),nullptr,' $(@D)/src/ccache/config.cpp
++	sed -i 's,getenv("XDG_CONFIG_HOME"),nullptr,' $(@D)/src/ccache/config.cpp
+ endef
+ 
+ HOST_CCACHE_POST_PATCH_HOOKS += HOST_CCACHE_PATCH_CONFIGURATION
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
