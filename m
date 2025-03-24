@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68419C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:40:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16226C3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:40:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C03241518;
-	Mon, 19 May 2025 10:40:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8FB598210E;
+	Mon, 19 May 2025 10:40:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eyQ6LX0PdaTq; Mon, 19 May 2025 10:40:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oLa5fo5itwux; Mon, 19 May 2025 10:40:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B97B440D85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82D8481F80
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B97B440D85;
-	Mon, 19 May 2025 10:40:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 19574E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 82D8481F80;
+	Mon, 19 May 2025 10:40:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1B15F1BF
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5C5B14106B
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B0F668145E
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dJ4TyD1INLPI for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:41 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q69WaRhgsX6k for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6DC49405C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF42B81E7E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6DC49405C8
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CF42B81E7E
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E19E872E7; Mon, 19 May 2025 10:39:41 +0000 (UTC)
+ id CD6A18725C; Mon, 19 May 2025 10:39:44 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 5 Mar 2025 20:07:39 +0100
+Date: Mon, 24 Mar 2025 21:39:17 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8a8b6a3a2f9774bae073aefdbd35e3127ea15f51
-X-Git-Newrev: 33b23bfbd9d208b13c3860ad26926bc10a22e74c
+X-Git-Oldrev: e287bc7f44df312ace41f53416e763abe35aeaf7
+X-Git-Newrev: b111e07fd5ac90e3403fc2f7a4944bffbb5a518f
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103941.5E19E872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/acmesystems_acqua_a5_*: bump to Linux 6.12.9
+Message-Id: <20250519103944.CD6A18725C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] docs/website: add current LTS
+ sponsors
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,73 +65,127 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33b23bfbd9d208b13c3860ad26926bc10a22e74c
+commit: https://git.buildroot.net/buildroot/commit/?id=b111e07fd5ac90e3403fc2f7a4944bffbb5a518f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Acked-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Tested-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Reviewed-by: Niklas Cassel <niklas.cassel@wdc.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Add the LTS sponsors who engaged already for 2025: EVS, Open Home
+Foundation, and Sense Labs. There is one more sponsor but they prefer to
+remain anonymous.
+
+For Open Home Foundation, we can reuse the existing logo. For the other
+two, add their logo.
+
+Add a new class panel-lts-sponsor for sizing the panels. It is different
+from panel-sponsor because there doesn't need to be space for an
+explanation of what type of sponsorship is done, we just need to have
+space for the company name. So the minimum height is 200px instead of
+350px.
+
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/acmesystems/acqua-a5/patches/linux/linux.hash | 2 +-
- configs/acmesystems_acqua_a5_256mb_defconfig        | 4 ++--
- configs/acmesystems_acqua_a5_512mb_defconfig        | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ docs/website/css/main.css          |   6 ++++
+ docs/website/images/evs-logo.png   | Bin 0 -> 16552 bytes
+ docs/website/images/sense-logo.png | Bin 0 -> 2616 bytes
+ docs/website/sponsors.html         |  59 ++++++++++++++++++++++++++++++++++---
+ 4 files changed, 61 insertions(+), 4 deletions(-)
 
-diff --git a/board/acmesystems/acqua-a5/patches/linux/linux.hash b/board/acmesystems/acqua-a5/patches/linux/linux.hash
-index 4b20a009a7..7a4c4e57c9 100644
---- a/board/acmesystems/acqua-a5/patches/linux/linux.hash
-+++ b/board/acmesystems/acqua-a5/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  b66a5b863b0f8669448b74ca83bd641a856f164b29956e539bbcb5fdeeab9cc6  linux-6.6.30.tar.xz
-+sha256  87be0360df0931b340d2bac35161a548070fbc3a8c352c49e21e96666c26aeb4  linux-6.12.9.tar.xz
-diff --git a/configs/acmesystems_acqua_a5_256mb_defconfig b/configs/acmesystems_acqua_a5_256mb_defconfig
-index d21ff97216..a50e306b1b 100644
---- a/configs/acmesystems_acqua_a5_256mb_defconfig
-+++ b/configs/acmesystems_acqua_a5_256mb_defconfig
-@@ -2,7 +2,7 @@ BR2_arm=y
- BR2_cortex_a5=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/acmesystems/acqua-a5/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.30"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_DIR="board/acmesystems/acqua-a5/dts"
-diff --git a/configs/acmesystems_acqua_a5_512mb_defconfig b/configs/acmesystems_acqua_a5_512mb_defconfig
-index d83a058537..6ae8d037e7 100644
---- a/configs/acmesystems_acqua_a5_512mb_defconfig
-+++ b/configs/acmesystems_acqua_a5_512mb_defconfig
-@@ -2,7 +2,7 @@ BR2_arm=y
- BR2_cortex_a5=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_INSTRUCTIONS_THUMB2=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/acmesystems/acqua-a5/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/acqua-a5/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.30"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.9"
- BR2_LINUX_KERNEL_DEFCONFIG="sama5"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_CUSTOM_DTS_DIR="board/acmesystems/acqua-a5/dts"
+diff --git a/docs/website/css/main.css b/docs/website/css/main.css
+index 5255531b30..81bcd2c4b6 100644
+--- a/docs/website/css/main.css
++++ b/docs/website/css/main.css
+@@ -168,6 +168,12 @@ i {
+ 	text-justify: inter-word;
+ }
+ 
++.panel-lts-sponsor {
++	min-height: 200px;
++	text-align: justify;
++	text-justify: inter-word;
++}
++
+ @media (min-width: 768px) and (max-width: 991px) {
+ 	.navbar-collapse.collapse {
+ 		display: none !important;
+diff --git a/docs/website/images/evs-logo.png b/docs/website/images/evs-logo.png
+new file mode 100644
+index 0000000000..bcaabe8cb5
+Binary files /dev/null and b/docs/website/images/evs-logo.png differ
+diff --git a/docs/website/images/sense-logo.png b/docs/website/images/sense-logo.png
+new file mode 100644
+index 0000000000..d4cab95b82
+Binary files /dev/null and b/docs/website/images/sense-logo.png differ
+diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
+index e5fdbc8c88..ba11b4b081 100644
+--- a/docs/website/sponsors.html
++++ b/docs/website/sponsors.html
+@@ -9,11 +9,62 @@
+     <div class="panel-body">
+       <p>The maintenance of the Long Term Support branch of Buildroot is
+          possible thanks to the sponsors of the
+-         <a href="https://mind.be/buildroot-lts">Buildroot LTS Sponsoring
++         <a href="https://mind.be/buildroot-lts">Buildroot LTS Sponsorship
+          Program</a>.</p>
+-      <p>When the Buildroot LTS Sponsoring program will be operational
+-         later in 2024, those sponsors will be mentioned here.</p>
+-      </div>
++    </div>
++    <div class="panel-body">
++      <h3>Gold Sponsors</h3>
++
++	<div class="col-sm-4">
++	  <div class="panel panel-default panel-lts-sponsor">
++	    <div class="panel-body">
++	      <div class="col-sm-12" style="height: 150px;">
++		<a href="https://evs.com">
++		  <img class="img-responsive center-block" src="images/evs-logo.png"/>
++		</a>
++	      </div>
++	      <div class="col-sm-12">
++		<a href="http://evs.com">EVS Broadcast Equipment</a>
++	      </div>
++	    </div>
++	  </div>
++	</div>
++	<div class="col-sm-4">
++	  <div class="panel panel-default panel-lts-sponsor">
++	    <div class="panel-body">
++	      <div class="col-sm-12" style="height: 150px;">
++		<a href="https://www.openhomefoundation.org/">
++		  <img class="img-responsive center-block" src="images/openhomefoundation-logo.png"/>
++		</a>
++	      </div>
++	      <div class="col-sm-12">
++		<a href="https://www.openhomefoundation.org">Open Home
++		Foundation</a>
++	    </div>
++	  </div>
++	</div>
++    </div>
++
++    </div>
++    <div class="panel-body">
++      <h3>Bronze Sponsors</h3>
++
++	<div class="col-sm-4">
++	  <div class="panel panel-default panel-lts-sponsor">
++	    <div class="panel-body">
++	      <div class="col-sm-12" style="height: 150px;">
++		<a href="https://www.sense.com">
++		  <img class="img-responsive center-block" style="width: 100%;" src="images/sense-logo.png"/>
++		</a>
++	      </div>
++	      <div class="col-sm-12">
++		<a href="https://www.sense.com">Sense Labs</a>
++	      </div>
++	    </div>
++	  </div>
++	</div>
++
++    </div>
+     </div>
+ 
+     <div class="panel panel-primary">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
