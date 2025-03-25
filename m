@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2612BC3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAC94C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D7E2A834E3;
-	Mon, 19 May 2025 10:43:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B343D6140C;
+	Mon, 19 May 2025 10:43:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xXaJt9undr2C; Mon, 19 May 2025 10:43:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pFQU0hXVB-1y; Mon, 19 May 2025 10:43:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E4E4834B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C499D6139D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E4E4834B6;
-	Mon, 19 May 2025 10:43:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C499D6139D;
+	Mon, 19 May 2025 10:43:30 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1192C193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:33 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1AAFBD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9F6CF40EC3
+ by smtp4.osuosl.org (Postfix) with ESMTP id E8898410A7
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id slG8LunZ0DCP for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ id OPiL0Xk9ulkR for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2466D40DC0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5738F40DCB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2466D40DC0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5738F40DCB
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2321483A2E; Mon, 19 May 2025 10:39:45 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 5480F84A21; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 25 Mar 2025 09:43:41 +0100
+Date: Tue, 25 Mar 2025 19:34:58 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d3df91fca0ef8df1b178e045959e257486504a9e
-X-Git-Newrev: 38a3ddda93dd55b3e12a45a371fba35c1a03c225
+X-Git-Oldrev: 6abdf5591f6c20dad9e7464e8b8b0eddc19c5964
+X-Git-Newrev: 24efb23a1074b920fe32763ae455a4694410eb6e
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103945.2321483A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Update for 2024.02.12
+Message-Id: <20250519103945.5480F84A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/testing: add git
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,40 +65,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38a3ddda93dd55b3e12a45a371fba35c1a03c225
+commit: https://git.buildroot.net/buildroot/commit/?id=24efb23a1074b920fe32763ae455a4694410eb6e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit aeeeefb855ab829e4de428a460ee5f59eecb6998)
-[Peter: drop Makefile/Vagrantfile changes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- CHANGES | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ DEVELOPERS                                |  1 +
+ support/testing/tests/package/test_git.py | 57 +++++++++++++++++++++++++++++++
+ 2 files changed, 58 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index 8b0e596672..836871373c 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -636,6 +636,18 @@
-         #16036: android-tools version is too old
-         #16075: Cannot use linux kernel extensions from external tree..
- 
-+2024.02.12, released March 24st, 2025
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c080608bcf..44f7684c97 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1900,6 +1900,7 @@ F:	support/testing/tests/package/test_fwts.py
+ F:	support/testing/tests/package/test_gawk.py
+ F:	support/testing/tests/package/test_ghostscript.py
+ F:	support/testing/tests/package/test_ghostscript/
++F:	support/testing/tests/package/test_git.py
+ F:	support/testing/tests/package/test_glslsandbox_player.py
+ F:	support/testing/tests/package/test_glslsandbox_player/
+ F:	support/testing/tests/package/test_gnupg2.py
+diff --git a/support/testing/tests/package/test_git.py b/support/testing/tests/package/test_git.py
+new file mode 100644
+index 0000000000..878c4c8092
+--- /dev/null
++++ b/support/testing/tests/package/test_git.py
+@@ -0,0 +1,57 @@
++import os
 +
-+	Important / security related fixes.
++import infra.basetest
 +
-+	Defconfigs: Octavo osd23mp1: Fix TF-A/Linux compilation after
-+	move to newer toolchain versions.
 +
-+	Updated/fixed packages: compiler-rt, exim, expat, fio, foot,
-+	jbig2dec, libjxl, libxml2, musl, optee-os, php, postgresql,
-+	prboom, python-typing-extensions, systemd, util-linux,
-+	watchdogd, webkitgtk
++class TestGit(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_GIT=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
 +
- 2024.02.11, released February 21st, 2025
- 
- 	Important / security related fixes.
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check the program can execute.
++        self.assertRunOk("git --version")
++
++        # Initialize some git global configuration.
++        git_cfg = [
++            ("user.name", "Build Root"),
++            ("user.email", "build.root@localhost.localdomain"),
++            ("color.ui", "false"),
++            ("init.defaultBranch", "master"),
++            ("core.pager", "")
++        ]
++        for cfg_name, cfg_value in git_cfg:
++            cmd = f"git config --global {cfg_name} '{cfg_value}'"
++            self.assertRunOk(cmd)
++
++        # Run a sequence of few git commands.
++        commands = [
++            "mkdir workdir",
++            "cd workdir",
++            "git init",
++            "echo 'Hello World' > file.txt",
++            "git add file.txt",
++            "git commit -as -m 'Initial commit'",
++            "git checkout -b my_branch",
++            "sed -i 's/World/Buildroot/g' file.txt",
++            "git status",
++            "git commit -as -m 'Replace World by Buildroot'",
++            "git format-patch -M -n -s -o patches master",
++            "ls -al patches/*.patch",
++            "git checkout -b another_branch master",
++            "git am patches/*.patch",
++            "git diff --exit-code my_branch another_branch",
++            "git tag -a -m 'Tagged v1.0' v1.0",
++            "git log"
++        ]
++        for cmd in commands:
++            self.assertRunOk(cmd)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
