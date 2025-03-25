@@ -4,85 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45625C35FFC
-	for <buildroot@archiver.kernel.org>; Tue, 25 Mar 2025 10:11:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C811EC35FFC
+	for <buildroot@archiver.kernel.org>; Tue, 25 Mar 2025 10:16:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF2CF60FFF;
-	Tue, 25 Mar 2025 10:11:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 524FD60AD9;
+	Tue, 25 Mar 2025 10:16:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DwMtahFDXWH1; Tue, 25 Mar 2025 10:11:31 +0000 (UTC)
+ id If9YvY0pU9DK; Tue, 25 Mar 2025 10:16:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F9826077B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C42D60B6B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F9826077B;
-	Tue, 25 Mar 2025 10:11:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7F0D1C0
- for <buildroot@buildroot.org>; Tue, 25 Mar 2025 10:11:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C42D60B6B;
+	Tue, 25 Mar 2025 10:16:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BAA31E0
+ for <buildroot@buildroot.org>; Tue, 25 Mar 2025 10:16:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7A33A607AC
- for <buildroot@buildroot.org>; Tue, 25 Mar 2025 10:11:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B76D24068B
+ for <buildroot@buildroot.org>; Tue, 25 Mar 2025 10:16:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OK_g4HuDFTkm for <buildroot@buildroot.org>;
- Tue, 25 Mar 2025 10:11:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.43;
- helo=mail-wm1-f43.google.com; envelope-from=thomas.devoogdt@gmail.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YOYaw-3Ys1S4 for <buildroot@buildroot.org>;
+ Tue, 25 Mar 2025 10:16:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.54;
+ helo=mail-wr1-f54.google.com; envelope-from=thomas.devoogdt@gmail.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 301D96077B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 301D96077B
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com
- [209.85.128.43])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 301D96077B
- for <buildroot@buildroot.org>; Tue, 25 Mar 2025 10:11:28 +0000 (UTC)
-Received: by mail-wm1-f43.google.com with SMTP id
- 5b1f17b1804b1-43cec5cd73bso34121705e9.3
- for <buildroot@buildroot.org>; Tue, 25 Mar 2025 03:11:27 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 807E74064F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 807E74064F
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com
+ [209.85.221.54])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 807E74064F
+ for <buildroot@buildroot.org>; Tue, 25 Mar 2025 10:16:50 +0000 (UTC)
+Received: by mail-wr1-f54.google.com with SMTP id
+ ffacd0b85a97d-39ac9aea656so326793f8f.3
+ for <buildroot@buildroot.org>; Tue, 25 Mar 2025 03:16:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1742897486; x=1743502286;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=NLOJICZ8LdqZ7EcC/8HQIq8TjoQ+/GIXwCuLGldv6Mo=;
- b=MftKwQOAJw77UuVhsKhiRCU1bcBvQ3aW3LMHEwZOXoPVy/U1s+RlUMvawq+d/4CpiR
- EXtLGsJ7ZpjwNHTGbz+oeF39RviCoOohyVQ9cgCvgw954d2jNrJwycZdUmEXDXc5wzGG
- rWDT+N1+Im3FjP8FC9Mrf1YO1gOtRiNFiPCjk6hvDNUlNbaW+C6m0ZuH1QQjhx8y7F08
- Fz56eQP9Q7MizP/vNXmxkC8dbtBfDCwM9uNsxDwk406BTprZjEMHItNx7SLtCJV6QGAF
- Q50ogNkwjjZ7AmEUdgsbrUkdR3yJJQDyD+SnjrhUmtyAcNmwfUiOXUNZ5a0Vd0A5ufuf
- XXXg==
-X-Gm-Message-State: AOJu0YxjcnzI6MuT+tfidwsRfw1HtJdzhXRLq7jp8BVAIkhHcK0JrCOQ
- GxZwGdiMfo68yMP1RLLk7NcUZf3HyidXv2LB1ix/YQ+QAdPCYmg7thR7XHqY
-X-Gm-Gg: ASbGncuWPqTnd/8cfiupyyDEwLwSpum0JaShnEI1pJUL0TBmmfUHVtWfP4IcpSQWRMn
- VDFPzklYmhJH168LKeOi9lbkJSMPH0eTqlcadofi32XkwtibL8Tds6MYlv0PhHuzphrJMgJsugW
- kUavzctw9QWE4s7UJ/+4dzP1M3ws1W9G8rBVyNtx9s38y8ELZTVvGf1p779P2w09k2PqN2R2yyG
- 9gAKTWnjBmm8ss1XnuJMjKKqaR9AaWn+wnLeO9uMtB1SYsVJGfNJsrD/a4hqxDDR8A/NzLHaeEF
- 8H1vNr2QdpAdoXIqdoFCnvj9P2xuZT8l5WTRGGkIb1mQBK8CErT9IozMKUgdsCxgSt8tvbMZleL
- VSaNQnpVTzHdVgqenk4XeTw==
-X-Google-Smtp-Source: AGHT+IFwQPsDQeGxG7yKJrrmTIW7MHyBbf+753CavBSoJRFx3CFwikcyEpFrYumfGB283WGjyGBx3Q==
-X-Received: by 2002:a05:600c:4584:b0:43d:94:2d1e with SMTP id
- 5b1f17b1804b1-43d509f3bffmr132723895e9.13.1742897485546; 
- Tue, 25 Mar 2025 03:11:25 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1742897808; x=1743502608;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=aAtDqG5EbVtfu23/0xJvBn/lNPMbyqK4ExRprJ+2wu8=;
+ b=HQmFI5YXOy1pPwQpStri5mnTdErBOEYZ8jp75axCUNI85y1OW6z9njeKyG/uTdpZNf
+ DaZ4CFmNF6RPuK/VvMXISKqOwgeQrPp2QSfk/UY/3hB6coCCrY54iITPCIV5Xss7iwpm
+ J4VIH/81PKdIeZuQqBZlRKO1bdi4qvsnEw1WBi+xpswzph6hpNie2Cmd+129uIxAYgGH
+ xXRNck4pDqOft7a3iAFhE8FAJJ7J9V3+Vm0vHCA7EH21XWKAZ9Lj9YIku5RtnQh6Xj6n
+ HfYMWzoOAyjyGysb5s/YXqOlgcsptnHIHPZO3XBSfG3Kl6wnH8Eu/8FjeCVrgZ/Pm/KZ
+ uwpA==
+X-Gm-Message-State: AOJu0YxfK5LBP/no5/uUY91LKAv0+o5s0dXtEyQ1wLGWYWOkGB/osM80
+ N8Yqhx7qlL2GGD1ZQtieHIa6xpnlftRu7dxsoRhKnNB/5fN+F6vbtQ0uo0Jh
+X-Gm-Gg: ASbGncvgdWblEnhbqXnUly+Bu5neL7TyEm1Ca5bGD6TKEDsKBB6AhjSZAGlcP8674WM
+ YQ9FQ07W+fW26OKivMfZWtMvcGP1lzO/Z1ofmBEReTjpRb9oAIMKlzjh66Mlug22/P3vg8tGk70
+ mHHdLLkiEIL0VrCNwPWWEle4KEqIkbISj1OJKrrNvofE1OQ+OT8nQKGkkAgfCbpoSsXqFaO885d
+ 2qIdmnD8F0ryim+5ZI4ifK31/xHFyWbPx8tzNAW7TUKasLdz4J2BO7T7ftlUplyTBH7tWwDROuM
+ MANsCk+aSX/sPgQcN923YJjw2UEPV79vTjVGOV/E5bWi3FkL6n6JwmnHr+dX+VocPYOdy01GPvD
+ ZR6vU2y1fHjwd5YVTGHqQzA==
+X-Google-Smtp-Source: AGHT+IGS+TU/sG/XyzOlyzBbDimC5FN41gI1CEk/EmlyONjukyzrs5z9K1CYBgPZFZYcwUw0pOCQOw==
+X-Received: by 2002:a05:6000:1a8d:b0:38f:2a32:abbb with SMTP id
+ ffacd0b85a97d-3997f8f9d54mr12525969f8f.4.1742897807957; 
+ Tue, 25 Mar 2025 03:16:47 -0700 (PDT)
 Received: from thomas-Precision-7670.barco.com (d528f5fde.static.telenet.be.
  [82.143.95.222]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3997f9a31a7sm13112621f8f.23.2025.03.25.03.11.25
+ ffacd0b85a97d-3997f9a3c7fsm13518390f8f.34.2025.03.25.03.16.47
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 25 Mar 2025 03:11:25 -0700 (PDT)
+ Tue, 25 Mar 2025 03:16:47 -0700 (PDT)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Tue, 25 Mar 2025 11:11:15 +0100
-Message-ID: <20250325101116.791637-2-thomas@devoogdt.com>
+Cc: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Date: Tue, 25 Mar 2025 11:16:45 +0100
+Message-ID: <20250325101646.920286-1-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250325101116.791637-1-thomas@devoogdt.com>
-References: <20250205163750.6072f1bc@windsurf>
- <20250325101116.791637-1-thomas@devoogdt.com>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v2] package/libgtk4: bump to 4.18.2
+Subject: [Buildroot] [PATCH v1] package/util-linux: bump to 2.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,206 +92,379 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: thomas@devoogdt.com, thomas.petazzoni@bootlin.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-aHR0cHM6Ly9naXRsYWIuZ25vbWUub3JnL0dOT01FL2d0ay8tL2Jsb2IvNC4xOC4yL05FV1MKCk5v
-dGUgdGhhdCBsaWJndGs0IG5ldmVyIHNlbGVjdGVkIEJSMl9QQUNLQUdFX0NBSVJPX3tQTkcsWkxJ
-Qn0gYXMgaXQgaXMKbm90IG5lZWRlZCB0aGFua3MgdG8gWzFdLiBIb3dldmVyLCB3ZSBuZWVkIHRv
-IHNlbGVjdCBCUjJfUEFDS0FHRV9MSUJQTkcgWzJdLgpJbiBsaWJndGszLCB0aGlzIHdhcyBpbmRp
-cmVjdGx5IGRvbmUgYXMgbGliZ3RrMyBzZWxlY3RzIEJSMl9QQUNLQUdFX0NBSVJPX1BORy4KCkFs
-c28sIGFkZCBwYXRjaGVzIGZvcjoKIC0gdG9vbGNoYWlucyB3aXRob3V0IGZlbnYuaC4gWzNdCiAt
-IHdoZW4gY2Fpcm8gaGFzIGJlZW4gY29tcGlsZWQgd2l0aG91dCBzdXJmYWNlcy4gWzRdCgpbMV0g
-aHR0cHM6Ly9naXRsYWIuZ25vbWUub3JnL0dOT01FL2d0ay8tL21lcmdlX3JlcXVlc3RzLzc3MTcK
-WzJdIGh0dHBzOi8vZ2l0bGFiLmdub21lLm9yZy9HTk9NRS9ndGsvLS9ibG9iLzQuMTguMi9tZXNv
-bi5idWlsZD9yZWZfdHlwZT10YWdzI0w0NTAKWzNdIGh0dHBzOi8vZ2l0bGFiLmdub21lLm9yZy9H
-Tk9NRS9ndGsvLS9tZXJnZV9yZXF1ZXN0cy83OTI1Cls0XSBodHRwczovL2dpdGxhYi5nbm9tZS5v
-cmcvR05PTUUvZ3RrLy0vbWVyZ2VfcmVxdWVzdHMvNzkyNgoKU2lnbmVkLW9mZi1ieTogVGhvbWFz
-IERldm9vZ2R0IDx0aG9tYXNAZGV2b29nZHQuY29tPgotLS0KdjI6IGJ1bXBlZCB0byBhIHN0YWJs
-ZSB2ZXJzaW9uLCBhbmQgY2hhbmdlZCB0aGUgZ2l0IG1lc3NhZ2UgYSBiaXQKLS0tCiAuLi51aWxk
-LWFkZC1hLWNoZWNrLWZvci10aGUtZmVudi1oZWFkZXIucGF0Y2ggfCAgMjYgKysrKysKIC4uLnZh
-bHVlLmMtZml4LWNvbXBpbGF0aW9uLWlmLWZlbnYuaC1pcy5wYXRjaCB8IDEwNiArKysrKysrKysr
-KysrKysrKysKIC4uLmtlbmRzLWd0a3ByaW50YmFja2VuZGZpbGUuYy1maXgtY29tcC5wYXRjaCB8
-ICA5NiArKysrKysrKysrKysrKysrCiBwYWNrYWdlL2xpYmd0azQvQ29uZmlnLmluICAgICAgICAg
-ICAgICAgICAgICAgfCAgIDEgKwogcGFja2FnZS9saWJndGs0L2xpYmd0azQuaGFzaCAgICAgICAg
-ICAgICAgICAgIHwgICA0ICstCiBwYWNrYWdlL2xpYmd0azQvbGliZ3RrNC5tayAgICAgICAgICAg
-ICAgICAgICAgfCAgIDUgKy0KIDYgZmlsZXMgY2hhbmdlZCwgMjM0IGluc2VydGlvbnMoKyksIDQg
-ZGVsZXRpb25zKC0pCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9saWJndGs0LzAwMDEtbWVz
-b24uYnVpbGQtYWRkLWEtY2hlY2stZm9yLXRoZS1mZW52LWhlYWRlci5wYXRjaAogY3JlYXRlIG1v
-ZGUgMTAwNjQ0IHBhY2thZ2UvbGliZ3RrNC8wMDAyLWd0ay1ndGtjc3NudW1iZXJ2YWx1ZS5jLWZp
-eC1jb21waWxhdGlvbi1pZi1mZW52LmgtaXMucGF0Y2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNr
-YWdlL2xpYmd0azQvMDAwMy1tb2R1bGVzLXByaW50YmFja2VuZHMtZ3RrcHJpbnRiYWNrZW5kZmls
-ZS5jLWZpeC1jb21wLnBhdGNoCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJndGs0LzAwMDEtbWVz
-b24uYnVpbGQtYWRkLWEtY2hlY2stZm9yLXRoZS1mZW52LWhlYWRlci5wYXRjaCBiL3BhY2thZ2Uv
-bGliZ3RrNC8wMDAxLW1lc29uLmJ1aWxkLWFkZC1hLWNoZWNrLWZvci10aGUtZmVudi1oZWFkZXIu
-cGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uNzBiZmQxMWQ1Nwot
-LS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvbGliZ3RrNC8wMDAxLW1lc29uLmJ1aWxkLWFkZC1h
-LWNoZWNrLWZvci10aGUtZmVudi1oZWFkZXIucGF0Y2gKQEAgLTAsMCArMSwyNiBAQAorRnJvbSBj
-OTczOWRjZTQ0M2Q4ZmRiMmQwZThhZDAxYjYyZDMyZDRhOTA1ZGFiIE1vbiBTZXAgMTcgMDA6MDA6
-MDAgMjAwMQorRnJvbTogVGhvbWFzIERldm9vZ2R0IDx0aG9tYXNAZGV2b29nZHQuY29tPgorRGF0
-ZTogRnJpLCAxNSBOb3YgMjAyNCAwODoyMjoyMyArMDEwMAorU3ViamVjdDogW1BBVENIXSBtZXNv
-bi5idWlsZDogYWRkIGEgY2hlY2sgZm9yIHRoZSBmZW52IGhlYWRlcgorCitVcHN0cmVhbTogaHR0
-cHM6Ly9naXRsYWIuZ25vbWUub3JnL0dOT01FL2d0ay8tL21lcmdlX3JlcXVlc3RzLzc5MjUKK1Np
-Z25lZC1vZmYtYnk6IFRob21hcyBEZXZvb2dkdCA8dGhvbWFzQGRldm9vZ2R0LmNvbT4KKy0tLQor
-IG1lc29uLmJ1aWxkIHwgMSArCisgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspCisKK2Rp
-ZmYgLS1naXQgYS9tZXNvbi5idWlsZCBiL21lc29uLmJ1aWxkCitpbmRleCBhOGJlODNlNGRjLi45
-MDQ2ZmIwODRlIDEwMDY0NAorLS0tIGEvbWVzb24uYnVpbGQKKysrKyBiL21lc29uLmJ1aWxkCitA
-QCAtMjAyLDYgKzIwMiw3IEBAIGNkYXRhLnNldF9xdW90ZWQoJ0dFVFRFWFRfUEFDS0FHRScsICdn
-dGs0MCcpCisgCisgY2hlY2tfaGVhZGVycyA9IFsKKyAgICdkZXYvZXZkZXYvaW5wdXQuaCcsCisr
-ICAnZmVudi5oJywKKyAgICdmdHcuaCcsCisgICAnbGludXgvaW5wdXQuaCcsCisgICAnbGludXgv
-bWVtZmQuaCcsCistLSAKKzIuNDMuMAorCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmd0azQvMDAw
-Mi1ndGstZ3RrY3NzbnVtYmVydmFsdWUuYy1maXgtY29tcGlsYXRpb24taWYtZmVudi5oLWlzLnBh
-dGNoIGIvcGFja2FnZS9saWJndGs0LzAwMDItZ3RrLWd0a2Nzc251bWJlcnZhbHVlLmMtZml4LWNv
-bXBpbGF0aW9uLWlmLWZlbnYuaC1pcy5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAw
-MDAwMDAwMDAwLi4wMmQ2YTI1NTI2Ci0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9saWJndGs0
-LzAwMDItZ3RrLWd0a2Nzc251bWJlcnZhbHVlLmMtZml4LWNvbXBpbGF0aW9uLWlmLWZlbnYuaC1p
-cy5wYXRjaApAQCAtMCwwICsxLDEwNiBAQAorRnJvbSBlNzZlMmMwYzhhZmFkODBjNjkxODg5MGU0
-NDM0MThlNGY3OGM5N2MzIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJvbTogVGhvbWFzIERl
-dm9vZ2R0IDx0aG9tYXNAZGV2b29nZHQuY29tPgorRGF0ZTogRnJpLCAxNSBOb3YgMjAyNCAwODoy
-Mjo0MCArMDEwMAorU3ViamVjdDogW1BBVENIXSBndGsvZ3RrY3NzbnVtYmVydmFsdWUuYzogZml4
-IGNvbXBpbGF0aW9uIGlmIGZlbnYuaCBpcyBtaXNzaW5nCisKKy4uL2d0ay9ndGtjc3NudW1iZXJ2
-YWx1ZS5jOjI5OjEwOiBmYXRhbCBlcnJvcjogZmVudi5oOiBObyBzdWNoIGZpbGUgb3IgZGlyZWN0
-b3J5CisgICAyOSB8ICNpbmNsdWRlIDxmZW52Lmg+CisgICAgICB8CisKK1Vwc3RyZWFtOiBodHRw
-czovL2dpdGxhYi5nbm9tZS5vcmcvR05PTUUvZ3RrLy0vbWVyZ2VfcmVxdWVzdHMvNzkyNQorU2ln
-bmVkLW9mZi1ieTogVGhvbWFzIERldm9vZ2R0IDx0aG9tYXNAZGV2b29nZHQuY29tPgorLS0tCisg
-Z3RrL2d0a2Nzc251bWJlcnZhbHVlLmMgfCA1OSArKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKy0tLS0tLS0tLQorIDEgZmlsZSBjaGFuZ2VkLCA0NyBpbnNlcnRpb25zKCspLCAxMiBkZWxl
-dGlvbnMoLSkKKworZGlmZiAtLWdpdCBhL2d0ay9ndGtjc3NudW1iZXJ2YWx1ZS5jIGIvZ3RrL2d0
-a2Nzc251bWJlcnZhbHVlLmMKK2luZGV4IDExODFjMWE4MDIuLjAzY2YzMDI2MmEgMTAwNjQ0Cist
-LS0gYS9ndGsvZ3RrY3NzbnVtYmVydmFsdWUuYworKysrIGIvZ3RrL2d0a2Nzc251bWJlcnZhbHVl
-LmMKK0BAIC0yNiw3ICsyNiw5IEBACisgI2luY2x1ZGUgImd0a2Nzc3N0eWxlcHJpdmF0ZS5oIgor
-ICNpbmNsdWRlICJndGtwcml2YXRlLmgiCisgCisrI2lmZGVmIEhBVkVfRkVOVl9ICisgI2luY2x1
-ZGUgPGZlbnYuaD4KKysjZW5kaWYKKyAKKyAjZGVmaW5lIFJBRF9UT19ERUcoeCkgKCh4KSAqIDE4
-MC4wIC8gR19QSSkKKyAjZGVmaW5lIERFR19UT19SQUQoeCkgKCh4KSAqIEdfUEkgLyAxODAuMCkK
-K0BAIC0xODQ2LDEzICsxODQ4LDI1IEBAIGd0a19jc3NfZGltZW5zaW9uX3ZhbHVlX2lzX3plcm8g
-KGNvbnN0IEd0a0Nzc1ZhbHVlICp2YWx1ZSkKKyAgIHJldHVybiB2YWx1ZS0+ZGltZW5zaW9uLnZh
-bHVlID09IDA7CisgfQorIAorLXN0YXRpYyBkb3VibGUKKy1fcm91bmQgKGd1aW50IG1vZGUsIGRv
-dWJsZSBhLCBkb3VibGUgYikKKysjaWZkZWYgSEFWRV9GRU5WX0gKKytzdGF0aWMgaW5saW5lIGRv
-dWJsZQorK19yb3VuZF9mZW52IChpbnQgbW9kZSwgZG91YmxlIGEsIGRvdWJsZSBiKQorIHsKKy0g
-IGludCBvbGRfbW9kZTsKKy0gIGludCBtb2Rlc1tdID0geyBGRV9UT05FQVJFU1QsIEZFX1VQV0FS
-RCwgRkVfRE9XTldBUkQsIEZFX1RPV0FSRFpFUk8gfTsKKyAgIGRvdWJsZSByZXN1bHQ7CisrICBp
-bnQgb2xkX21vZGU7CisgCisrICBvbGRfbW9kZSA9IGZlZ2V0cm91bmQgKCk7CisrICBmZXNldHJv
-dW5kIChtb2RlKTsKKysgIHJlc3VsdCA9IG5lYXJieWludCAoYS9iKSAqIGI7CisrICBmZXNldHJv
-dW5kIChvbGRfbW9kZSk7CisrCisrICByZXR1cm4gcmVzdWx0OworK30KKysjZW5kaWYKKysKKytz
-dGF0aWMgZG91YmxlCisrX3JvdW5kIChndWludCBtb2RlLCBkb3VibGUgYSwgZG91YmxlIGIpCisr
-eworICAgaWYgKGIgPT0gMCkKKyAgICAgcmV0dXJuIE5BTjsKKyAKK0BAIC0xODgwLDE0ICsxODk0
-LDM1IEBAIF9yb3VuZCAoZ3VpbnQgbW9kZSwgZG91YmxlIGEsIGRvdWJsZSBiKQorICAgICAgICAg
-fQorICAgICB9CisgCistICBvbGRfbW9kZSA9IGZlZ2V0cm91bmQgKCk7CistICBmZXNldHJvdW5k
-IChtb2Rlc1ttb2RlXSk7CistCistICByZXN1bHQgPSBuZWFyYnlpbnQgKGEvYikgKiBiOworLQor
-LSAgZmVzZXRyb3VuZCAob2xkX21vZGUpOworLQorLSAgcmV0dXJuIHJlc3VsdDsKKysgIHN3aXRj
-aCAobW9kZSkKKysgICAgeworKyAgICBjYXNlIFJPVU5EX05FQVJFU1Q6CisrI2lmZGVmIEZFX1RP
-TkVBUkVTVAorKyAgICAgIHJldHVybiBfcm91bmRfZmVudiAoRkVfVE9ORUFSRVNULCBhLCBiKTsK
-KysjZWxzZQorKyAgICAgIHJldHVybiByb3VuZCAoYS9iKSAqIGI7CisrI2VuZGlmCisrICAgIGNh
-c2UgUk9VTkRfVVA6CisrI2lmZGVmIEZFX1VQV0FSRAorKyAgICAgIHJldHVybiBfcm91bmRfZmVu
-diAoRkVfVVBXQVJELCBhLCBiKTsKKysjZWxzZQorKyAgICAgIHJldHVybiAoKChhL2IpID49IDAp
-ID8gY2VpbCAoYS9iKSA6IGZsb29yIChhL2IpKSAqIGI7CisrI2VuZGlmCisrICAgIGNhc2UgUk9V
-TkRfRE9XTjoKKysjaWZkZWYgRkVfRE9XTldBUkQKKysgICAgICByZXR1cm4gX3JvdW5kX2ZlbnYg
-KEZFX0RPV05XQVJELCBhLCBiKTsKKysjZWxzZQorKyAgICAgIHJldHVybiAoKChhL2IpID49IDAp
-ID8gZmxvb3IgKGEvYikgOiBjZWlsIChhL2IpKSAqIGI7CisrI2VuZGlmCisrICAgIGNhc2UgUk9V
-TkRfVE9fWkVSTzoKKysjaWZkZWYgRkVfVE9XQVJEWkVSTworKyAgICAgIHJldHVybiBfcm91bmRf
-ZmVudiAoRkVfVE9XQVJEWkVSTywgYSwgYik7CisrI2Vsc2UKKysgICAgICByZXR1cm4gKCgoYS9i
-KSA+PSAwKSA/IGZsb29yIChhL2IpIDogY2VpbCAoYS9iKSkgKiBiOworKyNlbmRpZgorKyAgICBk
-ZWZhdWx0OgorKyAgICAgIGdfYXNzZXJ0X25vdF9yZWFjaGVkICgpOworKyAgICB9CisgfQorIAor
-IHN0YXRpYyBkb3VibGUKKy0tIAorMi40My4wCisKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGliZ3Rr
-NC8wMDAzLW1vZHVsZXMtcHJpbnRiYWNrZW5kcy1ndGtwcmludGJhY2tlbmRmaWxlLmMtZml4LWNv
-bXAucGF0Y2ggYi9wYWNrYWdlL2xpYmd0azQvMDAwMy1tb2R1bGVzLXByaW50YmFja2VuZHMtZ3Rr
-cHJpbnRiYWNrZW5kZmlsZS5jLWZpeC1jb21wLnBhdGNoCm5ldyBmaWxlIG1vZGUgMTAwNjQ0Cmlu
-ZGV4IDAwMDAwMDAwMDAuLmM5YmZhZDAxOTgKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL2xp
-Ymd0azQvMDAwMy1tb2R1bGVzLXByaW50YmFja2VuZHMtZ3RrcHJpbnRiYWNrZW5kZmlsZS5jLWZp
-eC1jb21wLnBhdGNoCkBAIC0wLDAgKzEsOTYgQEAKK0Zyb20gMTk3YmY1NmNlZmI5YzEzZTMwZjAw
-ZmQ0ZjVlNjUxZTg3YmE4NWUwYiBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKK0Zyb206IFRob21h
-cyBEZXZvb2dkdCA8dGhvbWFzQGRldm9vZ2R0LmNvbT4KK0RhdGU6IEZyaSwgMTUgTm92IDIwMjQg
-MTM6NDI6NTggKzAxMDAKK1N1YmplY3Q6IFtQQVRDSF0gbW9kdWxlcy9wcmludGJhY2tlbmRzL2d0
-a3ByaW50YmFja2VuZGZpbGUuYzogZml4IGNvbXBpbGF0aW9uCisgaWYgbm8gY2Fpcm8gc3VyZmFj
-ZXMgYXJlIHByZXNlbnQKK01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6IHRleHQvcGxh
-aW47IGNoYXJzZXQ9VVRGLTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKKworLi4v
-bW9kdWxlcy9wcmludGJhY2tlbmRzL2d0a3ByaW50YmFja2VuZGZpbGUuYzogSW4gZnVuY3Rpb24g
-4oCYb3V0cHV0X2ZpbGVfZnJvbV9zZXR0aW5nc+KAmToKKy4uL21vZHVsZXMvcHJpbnRiYWNrZW5k
-cy9ndGtwcmludGJhY2tlbmRmaWxlLmM6MjQxOjIwOiBlcnJvcjogbGFiZWwgYXQgZW5kIG9mIGNv
-bXBvdW5kIHN0YXRlbWVudAorICAyNDEgfCAgICAgICAgICAgICAgIGNhc2UgTl9GT1JNQVRTOgor
-ICAgICAgfCAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+CisuLi9tb2R1bGVzL3ByaW50YmFj
-a2VuZHMvZ3RrcHJpbnRiYWNrZW5kZmlsZS5jOiBJbiBmdW5jdGlvbiDigJhmaWxlX3ByaW50ZXJf
-Y3JlYXRlX2NhaXJvX3N1cmZhY2XigJk6CisuLi9tb2R1bGVzL3ByaW50YmFja2VuZHMvZ3RrcHJp
-bnRiYWNrZW5kZmlsZS5jOjM2MzoxMjogZXJyb3I6IGxhYmVsIGF0IGVuZCBvZiBjb21wb3VuZCBz
-dGF0ZW1lbnQKKyAgMzYzIHwgICAgICAgY2FzZSBOX0ZPUk1BVFM6CisgICAgICB8ICAgICAgICAg
-ICAgXn5+fn5+fn5+CisKK1Vwc3RyZWFtOiBodHRwczovL2dpdGxhYi5nbm9tZS5vcmcvR05PTUUv
-Z3RrLy0vbWVyZ2VfcmVxdWVzdHMvNzkyNgorU2lnbmVkLW9mZi1ieTogVGhvbWFzIERldm9vZ2R0
-IDx0aG9tYXNAZGV2b29nZHQuY29tPgorLS0tCisgbW9kdWxlcy9wcmludGJhY2tlbmRzL2d0a3By
-aW50YmFja2VuZGZpbGUuYyB8IDE2ICsrKysrKysrKysrKysrKy0KKyAxIGZpbGUgY2hhbmdlZCwg
-MTUgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQorCitkaWZmIC0tZ2l0IGEvbW9kdWxlcy9w
-cmludGJhY2tlbmRzL2d0a3ByaW50YmFja2VuZGZpbGUuYyBiL21vZHVsZXMvcHJpbnRiYWNrZW5k
-cy9ndGtwcmludGJhY2tlbmRmaWxlLmMKK2luZGV4IGRkZmQ4ZDQ0MjUuLjQzNmM3NjdlNGYgMTAw
-NjQ0CistLS0gYS9tb2R1bGVzL3ByaW50YmFja2VuZHMvZ3RrcHJpbnRiYWNrZW5kZmlsZS5jCisr
-KysgYi9tb2R1bGVzL3ByaW50YmFja2VuZHMvZ3RrcHJpbnRiYWNrZW5kZmlsZS5jCitAQCAtNTUs
-NiArNTUsMTIgQEAgdHlwZWRlZiBzdHJ1Y3QgX0d0a1ByaW50QmFja2VuZEZpbGVDbGFzcyBHdGtQ
-cmludEJhY2tlbmRGaWxlQ2xhc3M7CisgCisgI2RlZmluZSBfU1RSRUFNX01BWF9DSFVOS19TSVpF
-IDgxOTIKKyAKKysjaWYgZGVmaW5lZChDQUlST19IQVNfUERGX1NVUkZBQ0UpIHx8IFwKKysgICAg
-ZGVmaW5lZChDQUlST19IQVNfUFNfU1VSRkFDRSkgfHwgXAorKyAgICBkZWZpbmVkKENBSVJPX0hB
-U19TVkdfU1VSRkFDRSkKKysjZGVmaW5lIF9DQUlST19IQVNfU1VSRkFDRSAxCisrI2VuZGlmCisr
-Cisgc3RydWN0IF9HdGtQcmludEJhY2tlbmRGaWxlQ2xhc3MKKyB7CisgICBHdGtQcmludEJhY2tl
-bmRDbGFzcyBwYXJlbnRfY2xhc3M7CitAQCAtMjM3LDggKzI0MywxMCBAQCBvdXRwdXRfZmlsZV9m
-cm9tX3NldHRpbmdzIChHdGtQcmludFNldHRpbmdzICpzZXR0aW5ncywKKyAgICAgICAgICAgZm9y
-bWF0ID0gZm9ybWF0X2Zyb21fc2V0dGluZ3MgKHNldHRpbmdzKTsKKyAgICAgICAgICAgc3dpdGNo
-IChmb3JtYXQpCisgICAgICAgICAgICAgeworKyNpZmRlZiBfQ0FJUk9fSEFTX1NVUkZBQ0UKKyAg
-ICAgICAgICAgICAgIGRlZmF1bHQ6CisgICAgICAgICAgICAgICBjYXNlIE5fRk9STUFUUzoKKysj
-ZW5kaWYKKyAjaWZkZWYgQ0FJUk9fSEFTX1BERl9TVVJGQUNFCisgICAgICAgICAgICAgICBjYXNl
-IEZPUk1BVF9QREY6CisgICAgICAgICAgICAgICAgIGV4dGVuc2lvbiA9ICJwZGYiOworQEAgLTM1
-OSw4ICszNjcsMTAgQEAgZmlsZV9wcmludGVyX2NyZWF0ZV9jYWlyb19zdXJmYWNlIChHdGtQcmlu
-dGVyICAgICAgICpwcmludGVyLAorIAorICAgc3dpdGNoIChmb3JtYXQpCisgICAgIHsKKysjaWZk
-ZWYgX0NBSVJPX0hBU19TVVJGQUNFCisgICAgICAgZGVmYXVsdDoKKyAgICAgICBjYXNlIE5fRk9S
-TUFUUzoKKysjZW5kaWYKKyAjaWZkZWYgQ0FJUk9fSEFTX1BERl9TVVJGQUNFCisgICAgICAgY2Fz
-ZSBGT1JNQVRfUERGOgorICAgICAgICAgc3VyZmFjZSA9IGNhaXJvX3BkZl9zdXJmYWNlX2NyZWF0
-ZV9mb3Jfc3RyZWFtIChfY2Fpcm9fd3JpdGUsIGNhY2hlX2lvLCB3aWR0aCwgaGVpZ2h0KTsKK0BA
-IC03MjcsOCArNzM3LDEwIEBAIGZpbGVfcHJpbnRlcl9nZXRfb3B0aW9ucyAoR3RrUHJpbnRlciAg
-ICAgICAgICAgKnByaW50ZXIsCisgICAgIHsKKyAgICAgICBzd2l0Y2ggKGZvcm1hdCkKKyAgICAg
-ICAgIHsKKysjaWZkZWYgX0NBSVJPX0hBU19TVVJGQUNFCisgICAgICAgICAgIGRlZmF1bHQ6Cisg
-ICAgICAgICAgIGNhc2UgTl9GT1JNQVRTOgorKyNlbmRpZgorICNpZmRlZiBDQUlST19IQVNfUERG
-X1NVUkZBQ0UKKyAgICAgICAgICAgY2FzZSBGT1JNQVRfUERGOgorICAgICAgICAgICAgIGN1cnJl
-bnRfZm9ybWF0ID0gRk9STUFUX1BERjsKK0BAIC03NDEsNyArNzUzLDcgQEAgZmlsZV9wcmludGVy
-X2dldF9vcHRpb25zIChHdGtQcmludGVyICAgICAgICAgICAqcHJpbnRlciwKKyAjZW5kaWYKKyAj
-aWZkZWYgQ0FJUk9fSEFTX1NWR19TVVJGQUNFCisgICAgICAgICAgIGNhc2UgRk9STUFUX1NWRzoK
-Ky0gICAgICAgICAgICBjdXJyZW50X2Zvcm1hdCA9IEZPUk1BVF9TVkc7ICAgICAgICAgICAgCisr
-ICAgICAgICAgICAgY3VycmVudF9mb3JtYXQgPSBGT1JNQVRfU1ZHOworICAgICAgICAgICAgIGJy
-ZWFrOworICNlbmRpZgorICAgICAgICAgfQorQEAgLTg1NCw3ICs4NjYsOSBAQCBmaWxlX3ByaW50
-ZXJfcHJlcGFyZV9mb3JfcHJpbnQgKEd0a1ByaW50ZXIgICAgICAgKnByaW50ZXIsCisgI2lmZGVm
-IENBSVJPX0hBU19QREZfU1VSRkFDRQorICAgICAgIGNhc2UgRk9STUFUX1BERjoKKyAjZW5kaWYK
-KysjaWZkZWYgX0NBSVJPX0hBU19TVVJGQUNFCisgICAgICAgY2FzZSBOX0ZPUk1BVFM6CisrI2Vu
-ZGlmCisgCWd0a19wcmludF9qb2Jfc2V0X3JvdGF0ZSAocHJpbnRfam9iLCBGQUxTRSk7CisgICAg
-ICAgICBicmVhazsKKyAgICAgICBkZWZhdWx0OgorLS0gCisyLjQzLjAKKwpkaWZmIC0tZ2l0IGEv
-cGFja2FnZS9saWJndGs0L0NvbmZpZy5pbiBiL3BhY2thZ2UvbGliZ3RrNC9Db25maWcuaW4KaW5k
-ZXggOTk1NTNmYzQ0ZS4uMmY1OTdlYTg3MiAxMDA2NDQKLS0tIGEvcGFja2FnZS9saWJndGs0L0Nv
-bmZpZy5pbgorKysgYi9wYWNrYWdlL2xpYmd0azQvQ29uZmlnLmluCkBAIC0yNyw2ICsyNyw3IEBA
-IGNvbmZpZyBCUjJfUEFDS0FHRV9MSUJHVEs0CiAJc2VsZWN0IEJSMl9QQUNLQUdFX0dSQVBIRU5F
-CiAJc2VsZWN0IEJSMl9QQUNLQUdFX0xJQkVQT1hZCiAJc2VsZWN0IEJSMl9QQUNLQUdFX0xJQkdM
-SUIyCisJc2VsZWN0IEJSMl9QQUNLQUdFX0xJQlBORwogCXNlbGVjdCBCUjJfUEFDS0FHRV9QQU5H
-TwogCXNlbGVjdCBCUjJfUEFDS0FHRV9USUZGCiAJIyBBdCBsZWFzdCBvbmUgYmFja2VuZCBpcyBy
-ZXF1aXJlZApkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJndGs0L2xpYmd0azQuaGFzaCBiL3BhY2th
-Z2UvbGliZ3RrNC9saWJndGs0Lmhhc2gKaW5kZXggNjM2YjY3NWQxNS4uMjE1MDY2YzZjOSAxMDA2
-NDQKLS0tIGEvcGFja2FnZS9saWJndGs0L2xpYmd0azQuaGFzaAorKysgYi9wYWNrYWdlL2xpYmd0
-azQvbGliZ3RrNC5oYXNoCkBAIC0xLDUgKzEsNSBAQAotIyBGcm9tIGh0dHBzOi8vZG93bmxvYWQu
-Z25vbWUub3JnL3NvdXJjZXMvZ3RrLzQuMTQvZ3RrLTQuMTQuNS5zaGEyNTZzdW0KLXNoYTI1NiAg
-NTU0N2YyYjlmMDA2YjEzMzk5M2UwNzBiODdjMTc4MDRlMDUxZWZkYTM5MTNmZWFjYTExMDhmYTJi
-ZTQxZTI0ZCAgZ3RrLTQuMTQuNS50YXIueHoKKyMgRnJvbSBodHRwczovL2Rvd25sb2FkLmdub21l
-Lm9yZy9zb3VyY2VzL2d0ay80LjE4L2d0ay00LjE4LjIuc2hhMjU2c3VtCitzaGEyNTYgIGNjYTU2
-NzdiZTRjM2U1MDFiNDlmMWM1MGJjYWZhY2JhOGRjZjRiZDNhMmQwMTYzODhmODM0ZWZmMjc0ZGMx
-NTkgIGd0ay00LjE4LjIudGFyLnh6CiAKICMgSGFzaCBmb3IgbGljZW5zZSBmaWxlOgogc2hhMjU2
-ICBiNzk5MzIyNTEwNGQ5MGRkZDgwMjRmZDgzOGZhZjMwMGJlYTVlODNkOTEyMDNlYWI5OGUyOTUx
-MmFjZWJkNjljICBDT1BZSU5HCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpYmd0azQvbGliZ3RrNC5t
-ayBiL3BhY2thZ2UvbGliZ3RrNC9saWJndGs0Lm1rCmluZGV4IGIwMGEyZmFjYWQuLjMxYzBkYTFk
-MGUgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvbGliZ3RrNC9saWJndGs0Lm1rCisrKyBiL3BhY2thZ2Uv
-bGliZ3RrNC9saWJndGs0Lm1rCkBAIC00LDggKzQsOCBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMKIAotTElCR1RLNF9WRVJTSU9OX01BSk9SID0gNC4xNAotTElCR1RLNF9WRVJTSU9OID0g
-JChMSUJHVEs0X1ZFUlNJT05fTUFKT1IpLjUKK0xJQkdUSzRfVkVSU0lPTl9NQUpPUiA9IDQuMTgK
-K0xJQkdUSzRfVkVSU0lPTiA9ICQoTElCR1RLNF9WRVJTSU9OX01BSk9SKS4yCiBMSUJHVEs0X1NP
-VVJDRSA9IGd0ay0kKExJQkdUSzRfVkVSU0lPTikudGFyLnh6CiBMSUJHVEs0X1NJVEUgPSBodHRw
-czovL2Rvd25sb2FkLmdub21lLm9yZy9zb3VyY2VzL2d0ay8kKExJQkdUSzRfVkVSU0lPTl9NQUpP
-UikKIExJQkdUSzRfTElDRU5TRSA9IExHUEwtMi4wKwpAQCAtMjEsNiArMjEsNyBAQCBMSUJHVEs0
-X0RFUEVOREVOQ0lFUyA9IFwKIAlncmFwaGVuZSBcCiAJbGliZXBveHkgXAogCWxpYmdsaWIyIFwK
-KwlsaWJwbmcgXAogCXBhbmdvIFwKIAkkKFRBUkdFVF9OTFNfREVQRU5ERU5DSUVTKQogCi0tIAoy
-LjQzLjAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1
-aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0
-cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+
+News: https://lore.kernel.org/util-linux/2cifsg7vkdiivfsmmximhbzybrsopn7zfqgwz2f6hyflh35pjr@ecyicq2cbsro/
+
+- Dropped patches which are all upstream.
+- Synced all license files.
+
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+---
+ ...ch.c-fix-build-with-uclibc-ng-1.0.39.patch | 39 ---------
+ .../0002-c.h-consolidate-THREAD_LOCAL.patch   | 65 ---------------
+ ...ine-HAVE_LIBPTHREAD-and-PTHREAD_LIBS.patch | 47 -----------
+ .../0004-meson-add-HAVE_LIBPTHREAD.patch      | 27 ------
+ ...non-cached-scenarios-when-lpthread-i.patch | 82 -------------------
+ package/util-linux/util-linux.hash            | 10 ++-
+ package/util-linux/util-linux.mk              |  8 +-
+ 7 files changed, 13 insertions(+), 265 deletions(-)
+ delete mode 100644 package/util-linux/0001-sys-utils-setarch.c-fix-build-with-uclibc-ng-1.0.39.patch
+ delete mode 100644 package/util-linux/0002-c.h-consolidate-THREAD_LOCAL.patch
+ delete mode 100644 package/util-linux/0003-autotools-define-HAVE_LIBPTHREAD-and-PTHREAD_LIBS.patch
+ delete mode 100644 package/util-linux/0004-meson-add-HAVE_LIBPTHREAD.patch
+ delete mode 100644 package/util-linux/0005-libuuid-support-non-cached-scenarios-when-lpthread-i.patch
+
+diff --git a/package/util-linux/0001-sys-utils-setarch.c-fix-build-with-uclibc-ng-1.0.39.patch b/package/util-linux/0001-sys-utils-setarch.c-fix-build-with-uclibc-ng-1.0.39.patch
+deleted file mode 100644
+index 12dd119ef3..0000000000
+--- a/package/util-linux/0001-sys-utils-setarch.c-fix-build-with-uclibc-ng-1.0.39.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From beef18da4de87ca5aaadf2beb14187f35cc4f50f Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Wed, 15 May 2024 18:22:11 +0200
+-Subject: [PATCH] sys-utils/setarch.c: fix build with uclibc-ng < 1.0.39
+-
+-Fix the following build failure with uclibc-ng < 1.0.39 (i.e., without
+-https://github.com/wbx-github/uclibc-ng/commit/85ac4f04d94e98389a8315e720630d0f95bfdfd6)
+-raised since version 2.39 and
+-https://github.com/util-linux/util-linux/commit/03a254f010b08da1175f50a8ae7882e59228f1b4:
+-
+-sys-utils/setarch.c:106:7: error: 'PER_LINUX32_3GB' undeclared here (not in a function); did you mean 'PER_LINUX32'?
+-  106 |     X(PER_LINUX32_3GB) \
+-      |       ^~~~~~~~~~~~~~~
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/fb1feb47f2660882fa53f66bacc63e191fd52175
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Upstream: https://github.com/util-linux/util-linux/commit/4647fc6afbf7e99c49531600425df60f1243fcd2
+----
+- sys-utils/setarch.c | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/sys-utils/setarch.c b/sys-utils/setarch.c
+-index 227bc6b5de..4bcb5e69e6 100644
+---- a/sys-utils/setarch.c
+-+++ b/sys-utils/setarch.c
+-@@ -89,6 +89,11 @@
+- # define PER_LINUX_FDPIC	(PER_LINUX | FDPIC_FUNCPTRS)
+- #endif
+- 
+-+/* fallback for old uclibc-headers < 1.0.39 */
+-+#ifndef PER_LINUX32_3GB
+-+# define PER_LINUX32_3GB	(PER_LINUX32 | ADDR_LIMIT_3GB)
+-+#endif
+-+
+- #define ALL_PERSONALITIES \
+-     X(PER_LINUX) \
+-     X(PER_LINUX_32BIT) \
+diff --git a/package/util-linux/0002-c.h-consolidate-THREAD_LOCAL.patch b/package/util-linux/0002-c.h-consolidate-THREAD_LOCAL.patch
+deleted file mode 100644
+index bb1a63ecc2..0000000000
+--- a/package/util-linux/0002-c.h-consolidate-THREAD_LOCAL.patch
++++ /dev/null
+@@ -1,65 +0,0 @@
+-From 7b3db914fa9073c667ea482c8b6b4e07fe6202cc Mon Sep 17 00:00:00 2001
+-From: Karel Zak <kzak@redhat.com>
+-Date: Mon, 27 Jan 2025 13:40:23 +0100
+-Subject: [PATCH] c.h: consolidate THREAD_LOCAL.
+-
+-Let's define this macro in one place only.
+-
+-Upstream: https://github.com/util-linux/util-linux/pull/3383
+-Signed-off-by: Karel Zak <kzak@redhat.com>
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- include/c.h            | 9 +++++++++
+- lib/randutils.c        | 5 -----
+- libuuid/src/gen_uuid.c | 1 -
+- 3 files changed, 9 insertions(+), 6 deletions(-)
+-
+-diff --git a/include/c.h b/include/c.h
+-index 61b95ab2d..848c48536 100644
+---- a/include/c.h
+-+++ b/include/c.h
+-@@ -595,4 +595,13 @@ static inline void *reallocarray(void *ptr, size_t nmemb, size_t size)
+- }
+- #endif
+- 
+-+/*
+-+ * thread-local storage
+-+ */
+-+#ifdef HAVE_TLS
+-+# define THREAD_LOCAL static __thread
+-+#else
+-+# define THREAD_LOCAL static
+-+#endif
+-+
+- #endif /* UTIL_LINUX_C_H */
+-diff --git a/lib/randutils.c b/lib/randutils.c
+-index 15c2f7834..4c806e682 100644
+---- a/lib/randutils.c
+-+++ b/lib/randutils.c
+-@@ -20,11 +20,6 @@
+- #include "randutils.h"
+- #include "nls.h"
+- 
+--#ifdef HAVE_TLS
+--#define THREAD_LOCAL static __thread
+--#else
+--#define THREAD_LOCAL static
+--#endif
+- 
+- #ifdef HAVE_GETRANDOM
+- # include <sys/random.h>
+-diff --git a/libuuid/src/gen_uuid.c b/libuuid/src/gen_uuid.c
+-index 3b76ddc9a..69712267f 100644
+---- a/libuuid/src/gen_uuid.c
+-+++ b/libuuid/src/gen_uuid.c
+-@@ -92,7 +92,6 @@
+- #include "md5.h"
+- #include "sha1.h"
+- 
+--#define THREAD_LOCAL static __thread
+- 
+- #ifdef _WIN32
+- static void gettimeofday (struct timeval *tv, void *dummy)
+--- 
+-2.48.1
+-
+diff --git a/package/util-linux/0003-autotools-define-HAVE_LIBPTHREAD-and-PTHREAD_LIBS.patch b/package/util-linux/0003-autotools-define-HAVE_LIBPTHREAD-and-PTHREAD_LIBS.patch
+deleted file mode 100644
+index 843253a56a..0000000000
+--- a/package/util-linux/0003-autotools-define-HAVE_LIBPTHREAD-and-PTHREAD_LIBS.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From 0735eb8bc0ed4bc9820ea7e4e600fed246457b18 Mon Sep 17 00:00:00 2001
+-From: Karel Zak <kzak@redhat.com>
+-Date: Mon, 27 Jan 2025 14:01:38 +0100
+-Subject: [PATCH] autotools: define HAVE_LIBPTHREAD and PTHREAD_LIBS
+-
+-Upstream: https://github.com/util-linux/util-linux/pull/3383
+-Signed-off-by: Karel Zak <kzak@redhat.com>
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- configure.ac              | 7 +++++++
+- libuuid/src/Makemodule.am | 2 +-
+- 2 files changed, 8 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 82d0e4bf9..9a7f260c5 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -738,6 +738,13 @@ AS_IF([test x"$have_timer" = xno], [
+- ])
+- 
+- 
+-+AC_CHECK_LIB([pthread], [pthread_atfork], [
+-+	PTHREAD_LIBS="-lpthread"
+-+	AC_DEFINE([HAVE_LIBPTHREAD], [1], [Define if libpthred exist])
+-+])
+-+AC_SUBST([PTHREAD_LIBS])
+-+
+-+
+- AC_CHECK_LIB([rtas], [rtas_get_sysparm], [
+- 	RTAS_LIBS="-lrtas"
+- 	AC_DEFINE([HAVE_LIBRTAS], [1], [Define if librtas exists])
+-diff --git a/libuuid/src/Makemodule.am b/libuuid/src/Makemodule.am
+-index 867ad7be5..58b64fe9b 100644
+---- a/libuuid/src/Makemodule.am
+-+++ b/libuuid/src/Makemodule.am
+-@@ -31,7 +31,7 @@ libuuid_la_SOURCES = \
+- EXTRA_libuuid_la_DEPENDENCIES = \
+- 	libuuid/src/libuuid.sym
+- 
+--libuuid_la_LIBADD       = $(LDADD) $(SOCKET_LIBS) -lpthread
+-+libuuid_la_LIBADD       = $(LDADD) $(SOCKET_LIBS) $(PTHREAD_LIBS)
+- 
+- libuuid_la_CFLAGS = \
+- 	$(AM_CFLAGS) \
+--- 
+-2.48.1
+-
+diff --git a/package/util-linux/0004-meson-add-HAVE_LIBPTHREAD.patch b/package/util-linux/0004-meson-add-HAVE_LIBPTHREAD.patch
+deleted file mode 100644
+index 19e0697769..0000000000
+--- a/package/util-linux/0004-meson-add-HAVE_LIBPTHREAD.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-From f540cc6fed7224fb9ca162cb2f33c338260ae1d2 Mon Sep 17 00:00:00 2001
+-From: Karel Zak <kzak@redhat.com>
+-Date: Mon, 27 Jan 2025 14:11:35 +0100
+-Subject: [PATCH] meson: add HAVE_LIBPTHREAD
+-
+-Upstream: https://github.com/util-linux/util-linux/pull/3383
+-Signed-off-by: Karel Zak <kzak@redhat.com>
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- meson.build | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/meson.build b/meson.build
+-index 6d1f986af..ac5fdd799 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -748,6 +748,7 @@ endif
+- conf.set('HAVE_CLOCK_GETTIME', have ? 1 : false)
+- 
+- thread_libs = dependency('threads')
+-+conf.set('HAVE_LIBPTHREAD', thread_libs.found() ? 1 : false)
+- 
+- have = cc.has_function('timer_create')
+- if not have
+--- 
+-2.48.1
+-
+diff --git a/package/util-linux/0005-libuuid-support-non-cached-scenarios-when-lpthread-i.patch b/package/util-linux/0005-libuuid-support-non-cached-scenarios-when-lpthread-i.patch
+deleted file mode 100644
+index 0d90f8aec9..0000000000
+--- a/package/util-linux/0005-libuuid-support-non-cached-scenarios-when-lpthread-i.patch
++++ /dev/null
+@@ -1,82 +0,0 @@
+-From eecaa2c0dda817eba2d493f6ddb42c39cf789fc2 Mon Sep 17 00:00:00 2001
+-From: Karel Zak <kzak@redhat.com>
+-Date: Mon, 27 Jan 2025 14:28:36 +0100
+-Subject: [PATCH] libuuid: support non-cached scenarios (when -lpthread is
+- unavailable)
+-
+-This patch makes the dependence on pthread optional for libuuid. In
+-certain cases, such as Buildroot Linux, uClibc-ng, and very low
+-resource systems, libpthread may be unavailable.
+-
+-If libuuid is compiled without pthread, it will not use a local cache
+-and will instead request a UUID from uuidd for each call. This may
+-result in less efficient performance, but the UUIDs generated will
+-still be unique and reliable.
+-
+-On minimalistic systems, it is highly likely that uuidd will not be
+-installed, making this change important for portability and robust
+-code.
+-
+-Upstream: https://github.com/util-linux/util-linux/pull/3383
+-Addresses: https://github.com/util-linux/util-linux/pull/3375
+-Signed-off-by: Karel Zak <kzak@redhat.com>
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- libuuid/src/gen_uuid.c | 18 +++++++++++++++---
+- 1 file changed, 15 insertions(+), 3 deletions(-)
+-
+-diff --git a/libuuid/src/gen_uuid.c b/libuuid/src/gen_uuid.c
+-index 69712267f..1ed82b46b 100644
+---- a/libuuid/src/gen_uuid.c
+-+++ b/libuuid/src/gen_uuid.c
+-@@ -80,7 +80,10 @@
+- #if defined(__linux__) && defined(HAVE_SYS_SYSCALL_H)
+- #include <sys/syscall.h>
+- #endif
+--#include <pthread.h>
+-+#ifdef HAVE_LIBPTHREAD
+-+# include <pthread.h>
+-+#endif
+-+
+- #include <signal.h>
+- 
+- #include "all-io.h"
+-@@ -580,8 +583,7 @@ int __uuid_generate_time_cont(uuid_t out, int *num, uint32_t cont_offset)
+-  * If neither of these is possible (e.g. because of insufficient permissions), it generates
+-  * the UUID anyway, but returns -1. Otherwise, returns 0.
+-  */
+--
+--/* thread local cache for uuidd based requests */
+-+#ifdef HAVE_LIBPTHREAD
+- THREAD_LOCAL struct {
+- 	int		num;
+- 	int		cache_size;
+-@@ -597,8 +599,10 @@ static void reset_uuidd_cache(void)
+- 	memset(&uuidd_cache, 0, sizeof(uuidd_cache));
+- 	uuidd_cache.cache_size = CS_MIN;
+- }
+-+#endif /* HAVE_LIBPTHREAD */
+- 
+- static int uuid_generate_time_generic(uuid_t out) {
+-+#ifdef HAVE_LIBPTHREAD
+- 	static volatile sig_atomic_t atfork_registered;
+- 	time_t	now;
+- 
+-@@ -651,6 +655,14 @@ static int uuid_generate_time_generic(uuid_t out) {
+- 		return 0;
+- 	}
+- 
+-+#else /* !HAVE_LIBPTHREAD */
+-+	{
+-+		int num = 1;
+-+		if (get_uuid_via_daemon(UUIDD_OP_TIME_UUID, out, &num) == 0)
+-+			return 0;
+-+	}
+-+#endif /* HAVE_LIBPTHREAD */
+-+
+- 	return __uuid_generate_time(out, NULL);
+- }
+- 
+--- 
+-2.48.1
+-
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+index 317efebcbf..e74aa17c94 100644
+--- a/package/util-linux/util-linux.hash
++++ b/package/util-linux/util-linux.hash
+@@ -1,10 +1,14 @@
+-# From https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.40/sha256sums.asc
+-sha256  d78b37a66f5922d70edf3bdfb01a6b33d34ed3c3cafd6628203b2a2b67c8e8b3  util-linux-2.40.2.tar.xz
++# From https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.41/sha256sums.asc
++sha256  81ee93b3cfdfeb7d7c4090cedeba1d7bbce9141fd0b501b686b3fe475ddca4c6  util-linux-2.41.tar.xz
+ # License files, locally calculated
+-sha256  27f25514040a401b2ceb7057eae1f46cedb1666664b519b5be7e0960d1b35164  README.licensing
++sha256  4c2db318192bda62f3f8fcf71488bb5e602ae4385eba281d711b46cc13a40bb3  README.licensing
++sha256  527f738966ca396cd5a68c1509390de2a780c6b614d9ee57f7544a6161938ed1  Documentation/licenses/COPYING.BSD-2-Clause
+ sha256  9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
+ sha256  ba7640f00d93e72e92b94b9d71f25ec53bac2f1682f5c4adcccb0018359f60f8  Documentation/licenses/COPYING.BSD-4-Clause-UC
++sha256  6fc9e709ccbfe0d77fbffa2427a983282be2eb88e47b1cdb49f21a83b4d1e665  Documentation/licenses/COPYING.EUPL-1.2
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Documentation/licenses/COPYING.GPL-2.0-only
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Documentation/licenses/COPYING.GPL-2.0-or-later
++sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  Documentation/licenses/COPYING.GPL-3.0-or-later
+ sha256  e53348ce276358e9997014071c5294b36a18c4b34f32f00ee57b9acce0aafd63  Documentation/licenses/COPYING.ISC
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Documentation/licenses/COPYING.LGPL-2.1-or-later
+ sha256  8555341619542abb48c102afd954e42d4478e5be16ad3d5af7b0ff71009e7348  Documentation/licenses/COPYING.MIT
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index ed30c0b107..b097d42b7b 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -7,8 +7,8 @@
+ # When making changes to this file, please check if
+ # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
+ 
+-UTIL_LINUX_VERSION_MAJOR = 2.40
+-UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
++UTIL_LINUX_VERSION_MAJOR = 2.41
++UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+ 
+@@ -24,9 +24,13 @@ UTIL_LINUX_LICENSE = \
+ 	ISC (rfkill) \
+ 	MIT (hardlink, flock)
+ UTIL_LINUX_LICENSE_FILES = README.licensing \
++	Documentation/licenses/COPYING.BSD-2-Clause \
+ 	Documentation/licenses/COPYING.BSD-3-Clause \
+ 	Documentation/licenses/COPYING.BSD-4-Clause-UC \
++	Documentation/licenses/COPYING.EUPL-1.2 \
++	Documentation/licenses/COPYING.GPL-2.0-only \
+ 	Documentation/licenses/COPYING.GPL-2.0-or-later \
++	Documentation/licenses/COPYING.GPL-3.0-or-later \
+ 	Documentation/licenses/COPYING.ISC \
+ 	Documentation/licenses/COPYING.LGPL-2.1-or-later \
+ 	Documentation/licenses/COPYING.MIT
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
