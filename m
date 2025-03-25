@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB0C1C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51B8FC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FD88834DE;
-	Mon, 19 May 2025 10:43:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 255BE4120E;
+	Mon, 19 May 2025 10:43:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xl4nzcwH9iho; Mon, 19 May 2025 10:43:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oSz7cRmqHfWs; Mon, 19 May 2025 10:43:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2E3C8356C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D66041E79
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B2E3C8356C;
-	Mon, 19 May 2025 10:43:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7352FD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5D66041E79;
+	Mon, 19 May 2025 10:43:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0DF41E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 28894410D0
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4C8C7410B4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xOAtQ3cTjkNE for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UfDhXmBFEeCk for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4089D416F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5ECED40734
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4089D416F4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5ECED40734
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3EAD7872E7; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+ id 5CA028725C; Mon, 19 May 2025 10:39:45 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 8 Apr 2025 19:21:29 +0200
+Date: Tue, 25 Mar 2025 19:35:17 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: bdffdcfdac3e8f7f99556765ef0226a8bb10c506
-X-Git-Newrev: 593771fafc17d001438fa946b6885422e94bd769
+X-Git-Oldrev: 24efb23a1074b920fe32763ae455a4694410eb6e
+X-Git-Newrev: 440e99e5799fae693d157e15d77b1118f6882a67
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103948.3EAD7872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/kmon: bump to version
- 1.7.1
+Message-Id: <20250519103945.5CA028725C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/git: bump to version
+ 2.49.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=593771fafc17d001438fa946b6885422e94bd769
+commit: https://git.buildroot.net/buildroot/commit/?id=440e99e5799fae693d157e15d77b1118f6882a67
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-No functional change, but bump for consistency.
+Bump the package version to v2.49.0.
 
-For details, see the release Notes:
-https://github.com/orhun/kmon/releases/tag/v1.7.1
+Release notes:
+https://lore.kernel.org/git/xmqqfrjfilc8.fsf@gitster.g/
 
-Signed-off-by: Leo Yu-Chi Liang <ycliang@andestech.com>
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/kmon/kmon.hash | 2 +-
- package/kmon/kmon.mk   | 2 +-
+ package/git/git.hash | 2 +-
+ package/git/git.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kmon/kmon.hash b/package/kmon/kmon.hash
-index 96400977b8..1bf3830243 100644
---- a/package/kmon/kmon.hash
-+++ b/package/kmon/kmon.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/git/git.hash b/package/git/git.hash
+index 7608cbe176..6235a8aa0a 100644
+--- a/package/git/git.hash
++++ b/package/git/git.hash
+@@ -1,5 +1,5 @@
+ # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
+-sha256  1c5d545f5dc1eb51e95d2c50d98fdf88b1a36ba1fa30e9ae5d5385c6024f82ad  git-2.48.1.tar.xz
++sha256  618190cf590b7e9f6c11f91f23b1d267cd98c3ab33b850416d8758f8b5a85628  git-2.49.0.tar.xz
  # Locally calculated
--sha256  e4723d733a2b6ad5f318a6bea77f973f3a9dbfdb727ba00352a13b9db0522194  kmon-1.6.5-cargo2.tar.gz
-+sha256  54fc677b6ef9617802132d862f41a6d93bd473d119b888b454d223f0d307fd27  kmon-1.7.1-cargo2.tar.gz
- sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
-diff --git a/package/kmon/kmon.mk b/package/kmon/kmon.mk
-index afd996f376..a29282df98 100644
---- a/package/kmon/kmon.mk
-+++ b/package/kmon/kmon.mk
+ sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
+ sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
+diff --git a/package/git/git.mk b/package/git/git.mk
+index de3103f4ff..68a0fff65f 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KMON_VERSION = 1.6.5
-+KMON_VERSION = 1.7.1
- KMON_SITE = $(call github,orhun,kmon,v$(KMON_VERSION))
- KMON_LICENSE = GPL-3.0
- KMON_LICENSE_FILES = LICENSE
+-GIT_VERSION = 2.48.1
++GIT_VERSION = 2.49.0
+ GIT_SOURCE = git-$(GIT_VERSION).tar.xz
+ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
