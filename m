@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 495A1C3600B
-	for <buildroot@archiver.kernel.org>; Tue, 25 Mar 2025 18:31:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 203ABC36008
+	for <buildroot@archiver.kernel.org>; Tue, 25 Mar 2025 18:50:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 05EEA80F41;
-	Tue, 25 Mar 2025 18:31:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9977581396;
+	Tue, 25 Mar 2025 18:50:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XnKV9MZO9eeQ; Tue, 25 Mar 2025 18:31:37 +0000 (UTC)
+ id gRuHXFfXQcva; Tue, 25 Mar 2025 18:50:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49DAF80F87
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C25798133A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 49DAF80F87;
-	Tue, 25 Mar 2025 18:31:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0FE721B8
- for <buildroot@buildroot.org>; Tue, 25 Mar 2025 18:31:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C25798133A;
+	Tue, 25 Mar 2025 18:50:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 375A3C0
+ for <buildroot@buildroot.org>; Tue, 25 Mar 2025 18:50:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EA85E608BF
- for <buildroot@buildroot.org>; Tue, 25 Mar 2025 18:31:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 298E24026A
+ for <buildroot@buildroot.org>; Tue, 25 Mar 2025 18:50:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ruOrPeG4PrFR for <buildroot@buildroot.org>;
- Tue, 25 Mar 2025 18:31:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 062186102F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 062186102F
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 062186102F
- for <buildroot@buildroot.org>; Tue, 25 Mar 2025 18:31:34 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id 80A7013F8D6;
- Tue, 25 Mar 2025 19:31:30 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:46728])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 25 Mar 2025 19:31:30 +0100
-MIME-Version: 1.0
-Date: Tue, 25 Mar 2025 19:31:30 +0100
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9r5CFK7ARHYW for <buildroot@buildroot.org>;
+ Tue, 25 Mar 2025 18:50:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 675584028F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 675584028F
+ for <buildroot@buildroot.org>; Tue, 25 Mar 2025 18:50:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4FD5C82D9E; Tue, 25 Mar 2025 18:50:37 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Scott Fan <fancp2007@gmail.com>
-Cc: buildroot@buildroot.org, Maxim Kochetkov <fido_max@inbox.ru>
-In-Reply-To: <20250325014602.1168402-1-fancp2007@gmail.com>
-References: <20250325014602.1168402-1-fancp2007@gmail.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <c01bcae980ba91ea76cb9abb55746c2d@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1742927492;
- bh=8UZN6Ur9jcN/Ioh/ho+9WHA0F+ySVToSw9+Knfuj15Y=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=DRkvs5ofn0S6id678Q3cIBON76HXiDKKd1o9NVbQ4+5J8Zi/rpbT14RTSaj1M31ui
- LnYlxHlPYG1/UlX9VljQSFh6BkNSAroubEjrOy/veLtIsIASei6G58k6UHIrHdZfnE
- tjQjw8OiWhvS1+UwJtuLVNVBN/6zkXfbKFSvfmtXvxQRw87NBe8ZQNY7+/a6kp1mlF
- y6Od40gOgda43EcqyjWIeCrWpQlTdZbNWA09kJLxRGSax3uUD0hpM9YX8IQa/kuFks
- ifzLCVRxu3ebNYwCJKngngwxJMD9GHj//dguX3/Pcac9NNy/jVP0EOUYQ0DsRzhgnV
- GoCtd26A3DsLg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=DRkvs5of
-Subject: Re: [Buildroot] [PATCH] package/timescaledb: bump version to 2.19.0
+To: buildroot@buildroot.org
+Date: Tue, 25 Mar 2025 19:34:58 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6abdf5591f6c20dad9e7464e8b8b0eddc19c5964
+X-Git-Newrev: 24efb23a1074b920fe32763ae455a4694410eb6e
+X-Patchwork-Hint: ignore
+Message-Id: <20250325185037.4FD5C82D9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add git runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,18 +58,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 25/03/2025 02:45, Scott Fan wrote:
-> Release notes: 
-> https://github.com/timescale/timescaledb/blob/2.19.0/CHANGELOG.md
-> 
-> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=24efb23a1074b920fe32763ae455a4694410eb6e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ DEVELOPERS                                |  1 +
+ support/testing/tests/package/test_git.py | 57 +++++++++++++++++++++++++++++++
+ 2 files changed, 58 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c080608bcf..44f7684c97 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1900,6 +1900,7 @@ F:	support/testing/tests/package/test_fwts.py
+ F:	support/testing/tests/package/test_gawk.py
+ F:	support/testing/tests/package/test_ghostscript.py
+ F:	support/testing/tests/package/test_ghostscript/
++F:	support/testing/tests/package/test_git.py
+ F:	support/testing/tests/package/test_glslsandbox_player.py
+ F:	support/testing/tests/package/test_glslsandbox_player/
+ F:	support/testing/tests/package/test_gnupg2.py
+diff --git a/support/testing/tests/package/test_git.py b/support/testing/tests/package/test_git.py
+new file mode 100644
+index 0000000000..878c4c8092
+--- /dev/null
++++ b/support/testing/tests/package/test_git.py
+@@ -0,0 +1,57 @@
++import os
++
++import infra.basetest
++
++
++class TestGit(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_GIT=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check the program can execute.
++        self.assertRunOk("git --version")
++
++        # Initialize some git global configuration.
++        git_cfg = [
++            ("user.name", "Build Root"),
++            ("user.email", "build.root@localhost.localdomain"),
++            ("color.ui", "false"),
++            ("init.defaultBranch", "master"),
++            ("core.pager", "")
++        ]
++        for cfg_name, cfg_value in git_cfg:
++            cmd = f"git config --global {cfg_name} '{cfg_value}'"
++            self.assertRunOk(cmd)
++
++        # Run a sequence of few git commands.
++        commands = [
++            "mkdir workdir",
++            "cd workdir",
++            "git init",
++            "echo 'Hello World' > file.txt",
++            "git add file.txt",
++            "git commit -as -m 'Initial commit'",
++            "git checkout -b my_branch",
++            "sed -i 's/World/Buildroot/g' file.txt",
++            "git status",
++            "git commit -as -m 'Replace World by Buildroot'",
++            "git format-patch -M -n -s -o patches master",
++            "ls -al patches/*.patch",
++            "git checkout -b another_branch master",
++            "git am patches/*.patch",
++            "git diff --exit-code my_branch another_branch",
++            "git tag -a -m 'Tagged v1.0' v1.0",
++            "git log"
++        ]
++        for cmd in commands:
++            self.assertRunOk(cmd)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
