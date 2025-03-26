@@ -4,177 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D27ACC3600B
-	for <buildroot@archiver.kernel.org>; Wed, 26 Mar 2025 14:09:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60850C36008
+	for <buildroot@archiver.kernel.org>; Wed, 26 Mar 2025 14:20:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 78A3A611BE;
-	Wed, 26 Mar 2025 14:09:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7F59611AF;
+	Wed, 26 Mar 2025 14:20:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 51y8JQF1_YQs; Wed, 26 Mar 2025 14:09:56 +0000 (UTC)
+ id 6hhUaVYh2e37; Wed, 26 Mar 2025 14:20:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9027161170
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E683A61254
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9027161170;
-	Wed, 26 Mar 2025 14:09:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2A95EC0
- for <buildroot@buildroot.org>; Wed, 26 Mar 2025 14:09:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E683A61254;
+	Wed, 26 Mar 2025 14:20:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C3D59C0
+ for <buildroot@buildroot.org>; Wed, 26 Mar 2025 14:20:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 10FE283F01
- for <buildroot@buildroot.org>; Wed, 26 Mar 2025 14:09:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA3FD40522
+ for <buildroot@buildroot.org>; Wed, 26 Mar 2025 14:20:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ou7A_KGlPqzu for <buildroot@buildroot.org>;
- Wed, 26 Mar 2025 14:09:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PiG9ZiTpahHC for <buildroot@buildroot.org>;
+ Wed, 26 Mar 2025 14:20:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2413::609;
- helo=nam10-dm6-obe.outbound.protection.outlook.com;
- envelope-from=nayabbasha.sayed@microchip.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 32F3983A77
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32F3983A77
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam10on20609.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2413::609])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 32F3983A77
- for <buildroot@buildroot.org>; Wed, 26 Mar 2025 14:09:53 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=L6/51fG0bHFo9vwAjhn4BgcMAw0iBXP9c7ygl2TYNK1VD2xC3yBPtg9kvIJkampT5909pEVbTK/2Kc9pYMv/iEpp7thPZsDiWgXfrSbE80EKcQVmPwr7WggQjXCKskUwg/WVsVYOO9pXMVz9XKs9/n/BvWs11VWdR7lVs+dq1i/+/Cdp5amVi/uS2uBO1FAUDjyo7oX4gyT+RAICU3e/Ki5vI4m6yFRJYdu6ETQ41jHX1yXBAPHRysb0bs9ft7t5f/dC9q91I5ZtTIuSMW6CeDh2sc6ZE67UIKtH5mewqI9WLOapxS5LjJql34PCFhUkzjvmo2qJCS8UPHQR6NAHiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9dETz3I0QAOWNQklXSX1M3k5zy1O+jsCzq9MWpMtCtk=;
- b=owU+3iBXfEaZR7QCCaJlbJFAixfNbrL9zyWIVVAccNNrIbu2RFRKO+7hclnv5Rg8BRaczBDkFShqtID8pNku6ktUxlDcJacIzE9fLqP8JOtkKgYLdLMslNtT/z1WE/IBYun1ObpMptE+YpNK6XZsznJBCDiuYTd9+cgephkintIMQMv+1XO+EZU6i6CAQAQou5JdKtlGxAKDYgyLXVTvFtNNcC7aXBxAZ3jpgP6TzFyQ+mIGHoQ+lnFfa54qH+5o01mY6Z5YW52cj39i25CVPmRey5TqD+t/dJa4v0gCvpMXOoscoRNJcMbDpS19qx7ZmSvNqZ0QOdwmCCCkLNxq0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-Received: from DS0PR11MB7264.namprd11.prod.outlook.com (2603:10b6:8:13b::5) by
- PH7PR11MB5957.namprd11.prod.outlook.com (2603:10b6:510:1e0::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8534.44; Wed, 26 Mar
- 2025 14:09:48 +0000
-Received: from DS0PR11MB7264.namprd11.prod.outlook.com
- ([fe80::d250:d70b:55aa:5ff7]) by DS0PR11MB7264.namprd11.prod.outlook.com
- ([fe80::d250:d70b:55aa:5ff7%5]) with mapi id 15.20.8534.042; Wed, 26 Mar 2025
- 14:09:48 +0000
-To: <buildroot@buildroot.org>
-Thread-Topic: [help] v4l2loopback package build fails for raspberrypi5
-Thread-Index: AQHbnli7+e1lckMsAE+qkh9GBp4K+A==
-Date: Wed, 26 Mar 2025 14:09:48 +0000
-Message-ID: <37ad9e8d-bc5a-4e79-85e0-0128adfac465@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR11MB7264:EE_|PH7PR11MB5957:EE_
-x-ms-office365-filtering-correlation-id: 6f68302f-bc2c-422e-2067-08dd6c6fde3d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0; ARA:13230040|1800799024|366016|376014|38070700018;
-x-microsoft-antispam-message-info: =?utf-8?B?RmZCTXZ5MmV0aFdvT3hxZ2hlZ2ZQNUFhZ1VYRG9CNjA0Q2pLWDFhODBMUk5Y?=
- =?utf-8?B?Y0liY2oxVC9pcWo3QlY5ejBabFNDWmJmVXViQ2tRRUtzTEtXU0Y4Z3M0VGtu?=
- =?utf-8?B?TTF1WmN0MWYxNktGRngxSEh4eHF2bHg0L1RWa3ZnTHNsVTFUQlk1ZU10SGE1?=
- =?utf-8?B?Y0lkckxVUU1BRlVmYnpkU3FQc25ock5RREFmNTNUK082VHJCT1VjaVFBOFVX?=
- =?utf-8?B?VDdMRjVobzFId0pCQWNOY2ZRczlhbkM3bzZPNFR3R0hEbXNibzBhSW1pMjlB?=
- =?utf-8?B?cVQ2ZWRyQWEzc3M0eFVGclJIb0dFQzMzV1Z5alVhQUtiMWFLMFY0eFhZNDNy?=
- =?utf-8?B?V0syT3NHTDg3dkt1TWRDSEt6VGw5OXcvT056TGRkbGlVdmx5TWlnRFFZV0Rk?=
- =?utf-8?B?TENOSkRLMzd3cllRK0piOUljMktQUkpDMWhSQVR5ckpROEVWWTVpY281WHho?=
- =?utf-8?B?MkNUaEJ2bHYrcGRpeVlIREFqQTlTSVRkaUxVRDdidE8vWENjLzAvUkI4OGpF?=
- =?utf-8?B?YVpJbXMrWGNNWlNwWE9DaGZjV0Y4ejdxejYvUG9QVGxlbEJKZHZPTDBHQzVH?=
- =?utf-8?B?bTJPVUJjQlRTN2g2V3dzK09rRnNpNTdwS0RqUUNXajRlc094OXBRSkM5Qkp1?=
- =?utf-8?B?ZnFMMXhMTExPclVXTXVjcmdwZTcxWWRBN3N4Zng4eGl5UzJDMElVOHB5dEVF?=
- =?utf-8?B?cTFvTEtubGxINHV5UnNBRDdRZGVROHE0eHBvTGRMSFl6T1pnby96WnowQ1JS?=
- =?utf-8?B?cWRYckY1VDNETkgrYXdoUGM4RFdBRDZLcC9KRzZhU2FqODIza3ZvN1J3dlNp?=
- =?utf-8?B?NVlac0EzRmkrbi9mc0ROd01OWWlsYTJTVGxzOG1XZDdwZnZHL3Y0QW01Zzg2?=
- =?utf-8?B?bE9wZE54OE5VMWVaaEUzSjJXQkRRZ2lQRUZBYXVHaXN4QVB3N3JKbERHVnNJ?=
- =?utf-8?B?VnloTU03K0VGbTN3bDRtL3pHdVhDeFZvWktONitMOVhCWUR6UWFSbzBIbmhk?=
- =?utf-8?B?dmI2ZXZ4MjU0YndTd1IvOG13MEtJb2UvZGRLNFBvVHdTbVJnUkJYelBNQjd5?=
- =?utf-8?B?ekIzWjRTdU81MGQ0MldCUXZqL2hqL1ZaSXEvTkNEdURYbUs3U0YwOU5DbmxX?=
- =?utf-8?B?VmJzdGFlb3Q2WVhaenRZV1dtSDIyYjg0TnZPTFlseER5bm5jVWhNaSt1WXFy?=
- =?utf-8?B?Ujk2elFkdXdnM0R6UXNHVWVEWExhcUJ6TjM5NmdtdEhNWk9qSUlpcGlESnNi?=
- =?utf-8?B?N2ZjZXJOT3lrMXJpTXZMVWJWc3AwejBaNHRsbVZldWNsRTZ0YW41aHFnaHBp?=
- =?utf-8?B?dHBYQkJVTFdCTjdvNStuSE5wSlVOcWxQbmh5RVVRTXVxbU42M2FRbWx0S1pS?=
- =?utf-8?B?dlhWSzJ0dVlZNnQrUEhRd25OQ2loT0xRSmdHMmhSRk5QZmI3MlU2TW9rVmhW?=
- =?utf-8?B?U0N6aTdrcUF3YlhMc01EY0ZEK1drbUczdUhMOFF6TnA2UGdES2VNbkhCWDZ6?=
- =?utf-8?B?Q2xrRVNrWXVhWDUrUjdJU0RlVEMvRkRJc3BSbEd1Ukl0ZGQrTldUdVlSVDNj?=
- =?utf-8?B?QUo1dkR1VTBLcldMeFBaWHFPNDEwVUJueUVIbjlRQUkwTTNVaEVJYTlYUDk1?=
- =?utf-8?B?c1lkV3ovZnNmZmFQZ1V1UlFtWlVpRThIMXNIQjUvekE2WHNBK2tFQWhZbjAr?=
- =?utf-8?B?VitVeDVJQlFJTkk1TmNMeWdnRzVCaENHMlI5YzJENjJ5cXVxRnNMQTJQM1VN?=
- =?utf-8?B?NDJpYk5zQk9FN2JDQzNWdjhzeCtBYlNHUWdxdkN2UjFOVDVHRzV0VkU4U2NN?=
- =?utf-8?B?YVJpcktoak92cUoyeXdVQTNmbDZZVUliLzQzKzB2TWhHVWlkZXdvZENGNktX?=
- =?utf-8?B?NS9LeldYYzMyemlaYmgrc082SGFmNkJYVWgwRVdHMC9DRVNCcGkybU93eDU5?=
- =?utf-8?Q?Ege6qXalSyHi8O+G5oU3pTqzpm1pa1RE?=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:DS0PR11MB7264.namprd11.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(1800799024)(366016)(376014)(38070700018); DIR:OUT; SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VWJGZUQzbFlLRE9QOHJwZFJmaGlYYTBoQm1QRHdpY0dybTF6a0c1YncvOEtz?=
- =?utf-8?B?dy80UXhwR3A5bkNZRng5Y09CL3Z5dE14bzJrUEhhSWQ2dE5ueDRaV0syY1Ny?=
- =?utf-8?B?S3VQYTZ6bFI0SzhrTTFRVjdaZUd1YVBhQWgyNmlRZER0bnZSWjVWTWlGOHJN?=
- =?utf-8?B?ekNub2tyRU1CMkkvWGo0MEZ1THVLbExNR1R1Z3B0dlhRWi9oSEtLTnBaZnVV?=
- =?utf-8?B?TlJ4NjhqK0NrWGFOdnY1azRKMUdTbDh3TzZPdE0zcW8wZGZvMmppZ2Y5OE1r?=
- =?utf-8?B?R016WU5tbHkzeGFsWVBWblgvR1lxWUtBVlRNTzY3VldQR3dhWnFPbWgvL0tC?=
- =?utf-8?B?VFMwbFp6QkdVZmpmQ0pYb0JEM1hqNTJOMmY4Zm1RVit5ZE5YQUcxR1JoYU1U?=
- =?utf-8?B?MnlLTHRjMWNwNE9XdXA5RzZkNVYzc3NPaXRUYUF5akhpaVJyZEFjczk0MVlO?=
- =?utf-8?B?bTVMdWJHdXAwSmMzNnZyREU4anFDeVA0SHUvUXJIcit1OHcxV1VjSXdYMGx5?=
- =?utf-8?B?Q2tGYUtrdTBzNExzTWtid2krYW5JL0Jlc0ZNMVgxQzdIYnBZRW9yZ2k2aVVP?=
- =?utf-8?B?cG1MWUkwT2dtdS9WZitOUUpteGovUDJCMHJ5Y1NOT0JaS0kzbUJzMytBN1cr?=
- =?utf-8?B?c1FoN0c1cmNYV2R5QUlTVEFoWFVjUnBvSmNYbzltTlM5NzNsSW5SRDA5UVE3?=
- =?utf-8?B?Y3VrMUNvOHBONFc1Z2VWWGoyWnJyM2VwRFZOR0Fhb04xcjFyMXRFOFhLcXRr?=
- =?utf-8?B?bkZwc25obVpBQUlhQXh4TkRrSzVLbHI1d0hPWlFONDFuVjJYUE53RkVSUnl3?=
- =?utf-8?B?Y1dadUpEM1h5eHNYSjYrWlNqOFhCOHRub2tQVytrT3FTRlNSWVE2UStselRG?=
- =?utf-8?B?TnFiMW1SV2lEVWFKTHVZSldHRFRLbGFERVUyS1JrS0ZETFUwTEh5eVkxQXVu?=
- =?utf-8?B?MHJvSDIwdldLcFJGQlZwMml5dUJEZFpUYTd1OWEwQWNLRXRraGhwQWFsSTJM?=
- =?utf-8?B?a2hjd05TOVV6aDhucXFCY1JaMDQxWXkvd0FjR1hZeU1UdXp2YWFGYnR1U1A2?=
- =?utf-8?B?WVF1RnZscHN4YlROR0lsVGp0R3NZRjQza3U0cDFSTER4a2ZEaTJSZUJ5VTFl?=
- =?utf-8?B?UE9xckJ5clB1RVUwVis3RHptQjBlNlp1eWdvK0VaamFqU1ZYNFpic2psWEJl?=
- =?utf-8?B?Mi9BN0NXNFZQSThNYTRjdW5iRXFCbkhnRFVFdVJpaVVwa1V5SndFbEVtcnhI?=
- =?utf-8?B?Kzl1aFFrQTZ4SlpMRkxmQVdJd1Q3RkF3ZGNBSXJ2RmNCeXl0ZEtkZ1RYMVp2?=
- =?utf-8?B?ZGZxZW9DUXIrTDJOcHNmS0d5cjdzNkN1RmxER2ZzVkJFNHpsbkFuNXJobTFl?=
- =?utf-8?B?SG0xUEJNaDdNd29HNmpPKzhTRXBPL0lNc2RaczNJWWdyRE1ITUhMdENJcXVv?=
- =?utf-8?B?RnF2eGVDdk5pbkZaaVJKQ1NsY0pwdGZUMm9FeE9pZEcxS0dkdVE0L3ltYVVm?=
- =?utf-8?B?MUE3cHdhTEh6dDlVZ1VuSnhMUFg0emp2VjVka3JPcFZXTlNLeFBxRXo1aU1R?=
- =?utf-8?B?UUFXK1ozdGZyeVNhOExkZDQxdW9VdmZhUEpyTWVTejZRamFYdTRWZUJvN3dQ?=
- =?utf-8?B?WEtVVWYzTGhhbkpOa29za3FGcFdUeVRMaW15bGMxL1BRcTdXYldLV25CRUV1?=
- =?utf-8?B?b0JnaDlVVjlUT3ZSZ0lmRFlaMjMxTGR4MTVKUVdwZ0Vkc0p1bTdwa3oxNmh6?=
- =?utf-8?B?S0VjMUtONmRZbnhHN1EyUEpXRVppRDdmYmJCYUJzdmhRZEhVL0hWK1AzNHp4?=
- =?utf-8?B?Q1h0dTJZS0UrK2t2TWMreVhESE9wYU5Uc3dRZXhJOXZ5QmRPY1BySjBtTVM5?=
- =?utf-8?B?OHpVL2FNUCswcEhocU8yV3E5MWtTcWtUU0ZwQkk3cWFNSWRYSVZLd3NYTzA0?=
- =?utf-8?B?MDF1Q2RGZnF2allFd1FlckptRlpaSXZ4U2hJbCt1MHRPZ3VkWGs4cTFLRWxa?=
- =?utf-8?B?amNZVmQ4NUQ0Z0UxZzEzbHVxRnJtZmhocU53QlpvWWlaKzBnaEEwSnFGQ2dU?=
- =?utf-8?B?V0E2NFZOeEJEWEVqbzhhR1FyWDh5NkpCZDJHK2N0Q05WQXNET0N4TC9Mckpq?=
- =?utf-8?B?U3VJWkZpeVhzN3FmV2hFOXFGU1U0Nkt0NEdJMTRrNUMzUlhWb2pyR2g3azRO?=
- =?utf-8?B?aHc9PQ==?=
-Content-ID: <B83CE1F67DB4B2488490B51B22C3E9CE@namprd11.prod.outlook.com>
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ envelope-from=olteanv@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 963EF404A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 963EF404A4
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 963EF404A4
+ for <buildroot@buildroot.org>; Wed, 26 Mar 2025 14:20:50 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-3912387cf48so337881f8f.3
+ for <buildroot@buildroot.org>; Wed, 26 Mar 2025 07:20:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1742998849; x=1743603649;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=uQPA+UTm+SDScO94CFbe73uwnR7j4c+qzAwxnZihd14=;
+ b=ISf7sejl1xgQ1/ztcHcumWOnowszqcZGuelSK7q+HOoSyJWVvnxzOw3LdbWc31qLaP
+ NJzhGAcWf9x/996k8kew8tmN5j3If0WMPBDhukDuh4c0ObcKjgPamSC7lhWw2ws+usok
+ YkDf5gT4Mb85aHTz5u32osbsrYhVhuV7XwYliaeVu5DRJ1nCtVRVwfmL7TlEbaU/DTSQ
+ eJ2on6GTHL63JJKZVH4D/4gKSCjir+Hq3/Mo5hclEzhYA9Z+kxF3ElIFdUjJ+6FsHCNB
+ LhZ/FLegke/XmqsXmEcykH9PqhVNfd5WGTyRqkIlY9uc6/YRgBGe4MqMrkW2PWZzB2cO
+ h+fQ==
+X-Gm-Message-State: AOJu0YwUg6w1/YRTq+YmGbop2g0czkLdJ5AN2TV83OOtZml+g2OjpwXp
+ /jAEeDHINnAsUlWYnm6A0IiiHu4D7IUDVKsWaZZZcrrfV/lnUSdO
+X-Gm-Gg: ASbGncujqNQAShePUOYkKzHYIHZ13b7zuK00h7zjWm5jlT38VDb2hZ4BfoiQrKIfavJ
+ 3IvyRNVOOzO/N/qDXqL41sS/LCz8V1LHDM8i6a/x/dpB+t9z3tqlzocCSttcCAnjku+27XBbHnO
+ i7Dh2ZOQrH6mCahvhoUefPPVtosY8nRh3NjdfpvX1G2/rRBgWotiKcNWbhlMs4KxbnHVnrg33KH
+ v5+I3RoRKuv703d9fbMLEPCK2lpmc2GTGCr4/KSomhjopJX4s+cwIfI20LYzWyud3l1GyHddZlN
+ 0gtkoZzyM5RwHXg/45InNdFkc9ATLiyS
+X-Google-Smtp-Source: AGHT+IHPydBhRUXnfmrkEj8PR+Ll0wyQE1pHRzzqSrXr5wFBOL6ykvjVUvjiD2ci60y1OHA6Oa4T/w==
+X-Received: by 2002:a5d:6d81:0:b0:391:29ab:c9df with SMTP id
+ ffacd0b85a97d-3997f9038a3mr7500240f8f.4.1742998848327; 
+ Wed, 26 Mar 2025 07:20:48 -0700 (PDT)
+Received: from skbuf ([188.25.110.61]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-43d82efdffdsm3347945e9.18.2025.03.26.07.20.47
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 26 Mar 2025 07:20:47 -0700 (PDT)
+Date: Wed, 26 Mar 2025 16:20:45 +0200
+From: Vladimir Oltean <olteanv@gmail.com>
+To: Vincent Jardin <vjardin@free.fr>
+Cc: buildroot@buildroot.org, Romain Naour <romain.naour@smile.fr>,
+ Julien Olivain <ju.o@free.fr>
+Message-ID: <20250326142045.do23qo6dh4qkgu5l@skbuf>
+References: <20250318163228.9989-1-vjardin@free.fr>
+ <kxf5rnunnok625w5yglz2hhylmha633bvma3sa4mcvnjy5vl6p@6jl2dapqadt6>
 MIME-Version: 1.0
-X-OriginatorOrg: microchip.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7264.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f68302f-bc2c-422e-2067-08dd6c6fde3d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Mar 2025 14:09:48.2097 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: n4Ea/ZE9fIcqm18SAZYgitmYg0uCNr0lvB3QPamzWfUo9qqDDpUfTbXbtJhh5SBSLwTzEtsFjlac/iF2JdDHJGE6Fbrl0vXF7vsL/bjNTRY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB5957
+Content-Disposition: inline
+In-Reply-To: <kxf5rnunnok625w5yglz2hhylmha633bvma3sa4mcvnjy5vl6p@6jl2dapqadt6>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchip.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9dETz3I0QAOWNQklXSX1M3k5zy1O+jsCzq9MWpMtCtk=;
- b=GNrQw35sJYS5hoVuTXu4l+UpoXb0RqOa1Wl+Zo+iouggXD0p3zzwoQFM05DyXEm/jdtEJb0omcezuVD8OaE0cEosIncgwnonDx3IfI787KbwbobhWDPWA0Tb+UIrJH64eciXNFg5rvDX/33+ULna0gklcpo100toIsQgV545yVMg/9EBpMBEXa1OkPeVx9WAISQi5NksEP2zyJbJStndBNjvS9iV2RgqbkcGOea/ppBQnVYzUn2+cyin1zwZjJ9gEZefi3jYOI+XPAYMx6dl3xH69uGuVDN5G02jKS+LRnJyAx3PkYcITio1yt8DgsQ8koe9AFJ7ZcMHbQk2LdIhzQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=microchip.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1742998849; x=1743603649; darn=buildroot.org;
+ h=in-reply-to:content-disposition:mime-version:references:message-id
+ :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+ bh=uQPA+UTm+SDScO94CFbe73uwnR7j4c+qzAwxnZihd14=;
+ b=Lzfv+qsQ+OPhDuclDyw9kw9vqV3aMYLnHfaASlqEenEkc/d0FL1dxXVwwMglZO02oz
+ w3VLVNBBOVfxq6/bMbUm25jqD2llQ5N/d3Drqu6GIGYGpMqGMLZDcHzWfx6buWuqjucp
+ PxHs2IwgFoJicldNrLgBATv4Hi58ru2IT0jV9WvCH2j6QLVwW5nZym5KQ44luT0QmlaN
+ I1VcqCnuFHjbiuZ/1isSDE4nnApHG2EhsGdQkHdzjUa7eQ/UXqMr0LhGsHSy5r/8GxMH
+ smPe4gMmCjSGEKvsXabZF0AeyeHnmorQQqRGSLhqo8GNMlbFY3Eal8JClBs4IIY3wuXq
+ To7A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=microchip.com header.i=@microchip.com
- header.a=rsa-sha256 header.s=selector1 header.b=GNrQw35s
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-Subject: [Buildroot] [help] v4l2loopback package build fails for raspberrypi5
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Lzfv+qsQ
+Subject: Re: [Buildroot] [PATCH] boot/qoriq-ddr-phy-binary: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -186,50 +109,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Nayab Sayed via buildroot <buildroot@buildroot.org>
-Reply-To: Nayabbasha.Sayed@microchip.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi there,
+Hi Vincent,
 
-I am using latest source on master branch.
+On Tue, Mar 18, 2025 at 05:36:28PM +0100, Vincent Jardin wrote:
+> On Tue, Mar 18, 2025 at 05:32:28PM +0100, Vincent Jardin wrote:
+> > This firmware is linked and used by the ATF.
+> 
+> Please, can you consider this move to boot/ ? It seems to be better
+> aligned with some other binary firmwares that are used to build the ATF
+> using Buildroot such as binaries-marvell/ for instance.
 
-I am trying to build the v4l2loopback package after enabling the config 
-BR2_PACKAGE_V4L2LOOPBACK_UTILS in menuconfig
+I didn't study the binaries-marvell case, but I can explain the
+situation here.
 
-    make O=raspberrypi5 raspberrypi5_defconfig
+You say "the [DDR PHY] firmware is linked by the ATF" and required to
+build it, but that isn't really the case.
 
-    make O=raspberrypi5 v4l2loopback
+The documentation at https://docs.nxp.com/bundle/UG10143/page/topics/tf-a_features.html
+says:
 
-When installing to target, I see the following error:
+  How to compile DDR FIP image (only applicable for LX2160ARDB and LX2162AQDS)
 
-    >>> v4l2loopback 0.13.2 Installing to target
-    /usr/bin/install -D -m 0755
-    /home/nayab/buildroot/raspberrypi5/build/v4l2loopback-0.13.2/utils/v4l2loopback-ctl
-    /home/nayab/buildroot/raspberrypi5/target/usr/bin/v4l2loopback-ctl
-    /usr/bin/install: cannot stat
-    '/home/nayab/buildroot/raspberrypi5/build/v4l2loopback-0.13.2/utils/v4l2loopback-ctl':
-    No such file or directory
-    make[1]: *** [package/pkg-generic.mk:364:
-    /home/nayab/buildroot/raspberrypi5/build/v4l2loopback-0.13.2/.stamp_target_installed]
-    Error 1
-    make: *** [Makefile:83: _all] Error 2
+  A pre-built FIP image is already provided in the release.
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  To regenerate the DDR fip image for LX2160ARDB, and LX2162AQDS, perform
+  the following steps [ proceeds to show how to use fiptool ]:
 
-In 2025.02-LTS also, I see this behavior. Buildroot is unable to 
-generate the file `v4l2loopback-ctl` in the 
-build/v4l2loopback-0.13.2/utils/ directory.
+In other words, running the commands below results in the exact same
+fip_ddr binary as the atf would produce.
 
-But when I go the package build directory and execute `make`, I could 
-see the file is generating.
+[vladimir@pc /opt] $ git clone https://github.com/nxp-qoriq/ddr-phy-binary.git qoriq-ddr-phy-binary
+Cloning into 'qoriq-ddr-phy-binary'...
+remote: Enumerating objects: 110, done.
+remote: Counting objects: 100% (43/43), done.
+remote: Compressing objects: 100% (31/31), done.
+remote: Total 110 (delta 25), reused 28 (delta 12), pack-reused 67 (from 1)
+Receiving objects: 100% (110/110), 255.87 KiB | 602.00 KiB/s, done.
+Resolving deltas: 100% (69/69), done.
+[vladimir@pc /opt] $ cd qoriq-ddr-phy-binary
+[vladimir@pc /opt/qoriq-ddr-phy-binary] $ /opt/qoriq-atf/tools/fiptool/fiptool info lx2160a/fip_ddr.bin
+DDR UDIMM PHY IMEM 1d FW: offset=0x178, size=0x6BD0, cmdline="--ddr-immem-udimm-1d"
+DDR UDIMM PHY IMEM 2d FW: offset=0x6D48, size=0x694C, cmdline="--ddr-immem-udimm-2d"
+DDR UDIMM PHY DMEM 1d FW: offset=0xD694, size=0x6D0, cmdline="--ddr-dmmem-udimm-1d"
+DDR UDIMM PHY DMEM 2d FW: offset=0xDD64, size=0x5BC, cmdline="--ddr-dmmem-udimm-2d"
+DDR RDIMM PHY IMEM 1d FW: offset=0xE320, size=0x7050, cmdline="--ddr-immem-rdimm-1d"
+DDR RDIMM PHY IMEM 2d FW: offset=0x15370, size=0x6D14, cmdline="--ddr-immem-rdimm-2d"
+DDR RDIMM PHY DMEM 1d FW: offset=0x1C084, size=0x714, cmdline="--ddr-dmmem-rdimm-1d"
+DDR RDIMM PHY DMEM 2d FW: offset=0x1C798, size=0x5FC, cmdline="--ddr-dmmem-rdimm-2d"
+[vladimir@pc /opt/qoriq-ddr-phy-binary] $ /opt/qoriq-atf/tools/fiptool/fiptool create --ddr-immem-udimm-1d lx2160a/ddr4_pmu_train_imem.bin --ddr-immem-udimm-2d lx2160a/ddr4_2d_pmu_train_imem.bin --ddr-dmmem-udimm-1d lx2160a/ddr4_pmu_train_dmem.bin --ddr-dmmem-udimm-2d lx2160a/ddr4_2d_pmu_train_dmem.bin --ddr-immem-rdimm-1d lx2160a/ddr4_rdimm_pmu_train_imem.bin --ddr-immem-rdimm-2d lx2160a/ddr4_rdimm2d_pmu_train_imem.bin --ddr-dmmem-rdimm-1d lx2160a/ddr4_rdimm_pmu_train_dmem.bin --ddr-dmmem-rdimm-2d lx2160a/ddr4_rdimm2d_pmu_train_dmem.bin fip_ddr_new.bin
+[vladimir@pc /opt/qoriq-ddr-phy-binary] $ diff fip_ddr_new.bin lx2160a/fip_ddr.bin
+[vladimir@pc /opt/qoriq-ddr-phy-binary] $ echo $?
+0
 
-Could somebody help fixing this issue?
+Even at runtime, the DDR PHY firmware is not compiled into the ATF firmware.
+Rather, if you look at qoriq-atf commit 34d483565078 ("nxp: fip-handler
+for additional ddr-fip.bin"), you will see that ddr_fip_setup() reads
+the FIP image from offset 8M ("#define PLAT_DDR_FIP_OFFSET 0x800000") of
+whatever boot storage device ATF was compiled for (QSPI_BOOT, NOR_BOOT etc).
+In other words, the fact that board/solidrun/lx2160acex7/genimage.cfg in
+my previous submission had "offset = 8M" here:
 
-Thanks,
-Nayab
++       partition ddr-phy {
++               in-partition-table = "no"
++               image = "fip_ddr.bin"
++               offset = 8M
++       }
 
+is not a coincidence, but ATF's expectation of where to find the FIP
+image for the DDR PHY firmware at runtime. The two are in principle
+decoupled at build time, and tied together by this convention.
+
+But, my understanding is that one might want to re-generate another
+Firmware Image Package (FIP) with DDR PHY firmware only in the case
+where you have a trusted boot flow, and you want to authenticate the
+firmware image by signing it with your own keys (more in
+docs/plat/nxp/nxp-ls-tbbr.rst). That isn't something I was intending to
+support, but is not something that your proposed patch supports either.
+I would also imagine that using ATF's build system is not the only
+possible way to sign the firmware images, but truth be told, I don't
+really know, I never explored this, and for my personal use I don't
+need it.
+
+What is your intention? Do you just want me to move this package to
+"boot" because of a misunderstanding, or do you want to support signing
+of the DDR PHY firmware using ATF's build system?
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
