@@ -4,64 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B53D7C36008
-	for <buildroot@archiver.kernel.org>; Wed, 26 Mar 2025 20:20:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4797C36008
+	for <buildroot@archiver.kernel.org>; Wed, 26 Mar 2025 20:32:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D1DC60A64;
-	Wed, 26 Mar 2025 20:20:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3BF7061AB5;
+	Wed, 26 Mar 2025 20:32:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eNX3vvpgfBta; Wed, 26 Mar 2025 20:20:24 +0000 (UTC)
+ id PO-OdLgEO-jE; Wed, 26 Mar 2025 20:32:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90F7E60AA6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53DBE6FA2B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 90F7E60AA6;
-	Wed, 26 Mar 2025 20:20:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 582AE150
- for <buildroot@buildroot.org>; Wed, 26 Mar 2025 20:20:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53DBE6FA2B;
+	Wed, 26 Mar 2025 20:32:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6040B1B8
+ for <buildroot@buildroot.org>; Wed, 26 Mar 2025 20:32:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4729280E59
- for <buildroot@buildroot.org>; Wed, 26 Mar 2025 20:20:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EF3178418E
+ for <buildroot@buildroot.org>; Wed, 26 Mar 2025 20:32:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DaTD2lxl4FWE for <buildroot@buildroot.org>;
- Wed, 26 Mar 2025 20:20:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1600F80E46
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1600F80E46
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1600F80E46
- for <buildroot@buildroot.org>; Wed, 26 Mar 2025 20:20:21 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 85CFD443B3;
- Wed, 26 Mar 2025 20:20:18 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1txXEX-00CqNy-2a;
- Wed, 26 Mar 2025 21:20:17 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20250326201652.3058963-1-peter@korsgaard.com>
-Date: Wed, 26 Mar 2025 21:20:17 +0100
-In-Reply-To: <20250326201652.3058963-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 26 Mar 2025 21:16:51 +0100")
-Message-ID: <87tt7fv91a.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+ id dhHveKe_9uMQ for <buildroot@buildroot.org>;
+ Wed, 26 Mar 2025 20:32:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 28EE884338
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28EE884338
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 28EE884338
+ for <buildroot@buildroot.org>; Wed, 26 Mar 2025 20:32:53 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 8C21C2003DA;
+ Wed, 26 Mar 2025 21:32:47 +0100 (CET)
+Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
+ via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 26 Mar 2025 21:32:47 +0100
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduieeigeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepfedvveekhfetudeggffffeektdekueeulefhhefhvedvvdfggfejhfelfedvffdunecuffhomhgrihhnpehrvggrughthhgvughotghsrdhiohdpghhithhhuhgsrdgtohhmnecukfhppedujeekrdduudelrddurddufeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudejkedrudduledruddrudefjedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehfohhnthgrihhnvgdrfhgrsghrihgtvgesghhmrghilhdrtghomh
-X-GND-Sasl: peter@korsgaard.com
+Date: Wed, 26 Mar 2025 21:32:47 +0100
+From: Julien Olivain <ju.o@free.fr>
+To: Francois Dugast <francois.dugast.foss@gmail.com>
+Cc: buildroot@buildroot.org, Alistair Francis <alistair@alistair23.me>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250323172806.558397-2-francois.dugast.foss@gmail.com>
+References: <20250323172806.558397-1-francois.dugast.foss@gmail.com>
+ <20250323172806.558397-2-francois.dugast.foss@gmail.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <6369e9cbe4e2db67e15bcdc76d66df4e@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1743021171;
+ bh=1uecknvwkD/Xs1/ZosLRZ5hI/ik8TFHxMHZAf5uQFk4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=rHmb6XHCxiUxifdfDXBb0JmMntf916rIzxH+g4o+iHtbBnXPAzeHWHhy/epRzTzno
+ gDOIm/1zWit8taX9MbrCFL/JeTS1zx7aht1+111BqQdu92gF9VsauWpb2zmYGygbef
+ RF8zAf9d+Y5enGHugsuGBKm70fnBKA7pWIJ2P2arRqhsnB3j1BQyf0qKV7+QdhlCab
+ 5iCnH+IorHbCGPkG2a+LHA1mc37ct7BSaEF+PcQE3jkkYZurfasNO2dEhySCx36u+a
+ yhUG6nA2PwBUiXwlzeAmrDik52YEjAmlgCuvcBcbpD9XzE5np6KC70qvItwk9ip3H/
+ zifTw+Tt1jRpQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/mbedtls: security bump to version
- 2.8.10
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=rHmb6XHC
+Subject: Re: [Buildroot] [PATCH 1/2] configs/hifive_unleashed: extract
+ common configuration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -73,45 +84,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hi Francois,
 
- > Fixes the following security issues:
- > - CVE-2025-27809: Note that TLS clients should generally call
- >   mbedtls_ssl_set_hostname() if they use certificate authentication (i.e.
- >   not pre-shared keys).  Otherwise, in many scenarios, the server could be
- >   impersonated.  The library will now prevent the handshake and return
- >   MBEDTLS_ERR_SSL_CERTIFICATE_VERIFICATION_WITHOUT_HOSTNAME if
- >   mbedtls_ssl_set_hostname() has not been called.
+Thank you for the patch!
 
- >   https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2025-03-1/
+On 23/03/2025 18:28, Francois Dugast wrote:
+> Move the generic part of the configuration into a new "common"
+> directory so that it is easier to add similar boards without
+> duplicating the files.
+> 
+> Signed-off-by: Francois Dugast <francois.dugast.foss@gmail.com>
 
- > - CVE-2025-27810: Zeroize temporary heap buffers used in PSA operations.
- >   Fix a vulnerability in the TLS 1.2 handshake.  If memory allocation
- >   failed or there was a cryptographic hardware failure when calculating the
- >   Finished message, it could be calculated incorrectly.  This would break
- >   the security guarantees of the TLS handshake.
+[...]
 
- >   https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2025-03-2/
+> diff --git a/board/sifive/hifive-unleashed/post-build.sh 
+> b/board/sifive/common/post-build.sh
+> similarity index 100%
+> rename from board/sifive/hifive-unleashed/post-build.sh
+> rename to board/sifive/common/post-build.sh
 
- > For more details, see the release notes:
- > https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-2.28.10
+Running the command "utils/docker-run make check-package" generates
+an error here:
 
-Notice this also states:
+     .checkpackageignore:75: ignored file 
+board/sifive/hifive-unleashed/post-build.sh is missing
+     board/sifive/common/post-build.sh:0: run 'shellcheck' and fix the 
+warnings
 
-Mbed TLS 2.28.10 is the last release of the 2.28 LTS and won't receive
-bug fixes or security fixes anymore.  Users are advised to upgrade to a
-maintained version.
+This is because you move the file here, but the entry in
+".checkpackageignore" is not updated accordingly. Since this is a
+trivial shellcheck warning, maybe you could resolve this shellcheck
+warning (by quoting the variables) and remove the entry in
+.checkpackageignore, in a separate patch, before this one.
 
-So it would be great if someone who actually uses mbedtls could bump it
-to the 3.6 series.
+If you do so, then this patch could remain the same.
 
--- 
-Bye, Peter Korsgaard
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
