@@ -4,74 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9ED7C36008
-	for <buildroot@archiver.kernel.org>; Wed, 26 Mar 2025 20:57:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9356EC36008
+	for <buildroot@archiver.kernel.org>; Wed, 26 Mar 2025 21:10:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A20D6FA2E;
-	Wed, 26 Mar 2025 20:57:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 261D060E8E;
+	Wed, 26 Mar 2025 21:10:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xsCE4KsrRmgp; Wed, 26 Mar 2025 20:57:18 +0000 (UTC)
+ id QGshcUV4A6ek; Wed, 26 Mar 2025 21:10:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F3606F6B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 425A2606E6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F3606F6B5;
-	Wed, 26 Mar 2025 20:57:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 64C2B1B8
- for <buildroot@buildroot.org>; Wed, 26 Mar 2025 20:57:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 425A2606E6;
+	Wed, 26 Mar 2025 21:10:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 81F53150
+ for <buildroot@buildroot.org>; Wed, 26 Mar 2025 21:10:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 563C58101C
- for <buildroot@buildroot.org>; Wed, 26 Mar 2025 20:57:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 735EB607F3
+ for <buildroot@buildroot.org>; Wed, 26 Mar 2025 21:10:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id byzycZW-tVBt for <buildroot@buildroot.org>;
- Wed, 26 Mar 2025 20:57:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4FB0C846FB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FB0C846FB
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4FB0C846FB
- for <buildroot@buildroot.org>; Wed, 26 Mar 2025 20:57:16 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id E47C05FFAA;
- Wed, 26 Mar 2025 21:57:09 +0100 (CET)
-Received: from 2a01:e0a:485:b220:8213:2270:4a8d:a1d5
- via 2a01:e0a:485:b220:8213:2270:4a8d:a1d5 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 26 Mar 2025 21:57:09 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id X5wbpltXj_YX for <buildroot@buildroot.org>;
+ Wed, 26 Mar 2025 21:10:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
+ helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1659060619
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1659060619
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1659060619
+ for <buildroot@buildroot.org>; Wed, 26 Mar 2025 21:10:24 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 6C4C81814B9; Wed, 26 Mar 2025 22:10:21 +0100 (CET)
+To: buildroot@buildroot.org
+Date: Wed, 26 Mar 2025 22:10:01 +0100
+Message-ID: <20250326211006.1081561-2-buildroot@heine.tech>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Date: Wed, 26 Mar 2025 21:57:09 +0100
-From: Julien Olivain <ju.o@free.fr>
-To: Francois Dugast <francois.dugast.foss@gmail.com>
-Cc: buildroot@buildroot.org, Alistair Francis <alistair@alistair23.me>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20250323172806.558397-3-francois.dugast.foss@gmail.com>
-References: <20250323172806.558397-1-francois.dugast.foss@gmail.com>
- <20250323172806.558397-3-francois.dugast.foss@gmail.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <a3d8db2e90e72f4482a55e751ce4828e@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1743022633;
- bh=VF61gkqAPN2dSuDAQBD/doLtJNhDci3riGJeb9W8Wi8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=MtT3gG6pmRld3AA7ZZ4/pGQeUHeLSwzxWA/kcANkOAl7JidrIvoayESOdWr77EoET
- doajHKg7NiMngaQoCfbZpUqnQ9X0VhnHmFGFrjKlbh6BeQ/PMnpUHBgVYVVjTRty9z
- BRE5FGxb++FIlACZ77rIoosWk6FEXkSOsOeVsSE2QVqRvG96gYYMMst16cOeKXytVf
- Eo9SWnAnQ87P3c7GKoxwoxgDh6qNG+8hpB0eBjTNLQun/rDIc9OIrghyhL3ZOtojWs
- Y69NOOBjH4LccfpE3K89R5ViONK47EC/H4nu8xcwG9NMHjp4XxE+BVL5GitRJvLRmG
- 7vMKjaKIMCi9A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=MtT3gG6p
-Subject: Re: [Buildroot] [PATCH 2/2] configs/hifive_unmatched: new board
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=heine.tech; s=dkim; t=1743023421;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=iehfGMHF1CiOStGLas3rQdRdsN1hbYWeDCCw6mJzERM=;
+ b=dHPqq4IOSvidgm02kgitA2jIqR2VF1pDvf23Io9DXR5QO6Xjkzb1ZUB7ddMFTfgQSpH8b5
+ dNBgLlMPoQmvOvLj0OavuOsrMXNFRRcbgsdqC6Q2YmeARLzAvxIqPavqXqQAxy2HBFQrIr
+ InUtQh2+X5Cye84p2z/GdfNMedhW3uo=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=heine.tech
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
+ header.s=dkim header.b=dHPqq4IO
+Subject: [Buildroot] [PATCH] package/gtest: bump to version 1.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,124 +72,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Stephan Hoffmann <sho@relinux.de>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Francois,
+release notes: https://github.com/google/googletest/releases/tag/v1.16.0
 
-On 23/03/2025 18:28, Francois Dugast wrote:
-> This patch adds support for the HiFive Unmatched board. This includes
-> building the firmware, kernel and rootFS for the HiFive Unmatched.
-> 
-> The configuration is similar to the one for the HiFive Unleashed, this
-> is why most of it is shared in board/sifive/common.
-> 
-> Signed-off-by: Francois Dugast <francois.dugast.foss@gmail.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+---
+ package/gtest/gtest.hash | 2 +-
+ package/gtest/gtest.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-[...]
+diff --git a/package/gtest/gtest.hash b/package/gtest/gtest.hash
+index e256c4dbfc..d7c1c15921 100644
+--- a/package/gtest/gtest.hash
++++ b/package/gtest/gtest.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  7b42b4d6ed48810c5362c265a17faebe90dc2373c885e5216439d37927f02926  gtest-1.15.2.tar.gz
++sha256  78c676fc63881529bf97bf9d45948d905a66833fbfa5318ea2cd7478cb98f399  gtest-1.16.0.tar.gz
+ sha256  9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  LICENSE
+diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+index c435fd1286..77b2c7aa0e 100644
+--- a/package/gtest/gtest.mk
++++ b/package/gtest/gtest.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GTEST_VERSION = 1.15.2
++GTEST_VERSION = 1.16.0
+ GTEST_SITE = $(call github,google,googletest,v$(GTEST_VERSION))
+ GTEST_INSTALL_STAGING = YES
+ GTEST_INSTALL_TARGET = NO
+-- 
+2.43.0
 
-> diff --git a/configs/hifive_unmatched_defconfig 
-> b/configs/hifive_unmatched_defconfig
-> new file mode 100644
-> index 0000000000..e26aaefb57
-> --- /dev/null
-> +++ b/configs/hifive_unmatched_defconfig
-> @@ -0,0 +1,38 @@
-
-Running the command "utils/docker-run make check-package" generates
-an error on the defconfig:
-
-     configs/hifive_unmatched_defconfig:0: missing 
-BR2_DOWNLOAD_FORCE_CHECK_HASHES
-
-In Buildroot, we are now introducing new defconfigs with
-BR2_DOWNLOAD_FORCE_CHECK_HASHES=y to check all hashes.
-
-See:
-https://buildroot.org/downloads/manual/manual.html#_adding_project_specific_patches_and_hashes
-
-See also an example commit just enabling hashes:
-https://gitlab.com/buildroot.org/buildroot/-/commit/4ca8f0ea762061ad04016d065f37e0c351d578f1
-
-Could you add those custom hashes please?
-
-> +BR2_riscv=y
-> +BR2_riscv_custom=y
-> +BR2_RISCV_ISA_RVM=y
-> +BR2_RISCV_ISA_RVA=y
-> +BR2_RISCV_ISA_RVF=y
-> +BR2_RISCV_ISA_RVD=y
-> +BR2_RISCV_ISA_RVC=y
-
-The defconfigs should defined a specific Kernel version.
-I believe the hifive unmatched was introduced in Kernel v5.12.
-So I recommend to select the latest lts kernel, for example
-v6.12.20. Then, you should have a config line:
-
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttySIF0"
-> +BR2_SYSTEM_DHCP="eth0"
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/sifive/common/post-build.sh"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c 
-> board/sifive/common/genimage_sdcard.cfg"
-> +BR2_LINUX_KERNEL=y
-
-And here, you should also have something like:
-
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.20"
-
-> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sifive/common/linux.config.fragment"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="sifive/hifive-unmatched-a00"
-> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> +BR2_TARGET_ROOTFS_CPIO=y
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +BR2_TARGET_OPENSBI=y
-> +BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
-> +BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.2"
-> +BR2_TARGET_OPENSBI_PLAT="generic"
-> +BR2_TARGET_UBOOT=y
-
-Same comment for u-boot. The defconfig should select a specific
-version. For example, we should have here:
-
-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
-
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sifive_unmatched"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-> +BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
-> +BR2_TARGET_UBOOT_SPL=y
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/sifive/hifive-unmatched/boot.cmd"
-
-Also, as a suggestion, we could add a patch in the series that updates 
-the
-hifive_unleashed_defconfig. Basically, I'm thinking about:
-- add custom hashes (and remove the entry in .checkpackageignore)
-- update uboot and kernel to the same version as this config.
-
-Having those configs aligned would probably make future maintenance 
-easier.
-
-Can you have a look at those changes, please?
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
