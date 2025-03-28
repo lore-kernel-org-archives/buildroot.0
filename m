@@ -1,101 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E0E0C28B20
-	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 18:05:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20803C36013
+	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 18:05:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE3374F347;
-	Fri, 28 Mar 2025 18:05:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D4DF0834DE;
+	Fri, 28 Mar 2025 18:05:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UH3SuIMxHNlR; Fri, 28 Mar 2025 18:05:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ylLFXq04VuXu; Fri, 28 Mar 2025 18:05:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A79B34F341
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3C3782CFD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A79B34F341;
-	Fri, 28 Mar 2025 18:05:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EAD0C1B7
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:05:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A3C3782CFD;
+	Fri, 28 Mar 2025 18:05:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1C0931B8
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:05:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DBDE24F2EB
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:05:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CF85380D04
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:05:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cY6PDalA-Frt for <buildroot@buildroot.org>;
- Fri, 28 Mar 2025 18:05:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bRjQP3P1Y4Kv for <buildroot@buildroot.org>;
+ Fri, 28 Mar 2025 18:05:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=olteanv@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BF9694F337
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BF9694F337
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 54A1080CCB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54A1080CCB
 Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
  [IPv6:2a00:1450:4864:20::333])
- by smtp4.osuosl.org (Postfix) with ESMTPS id BF9694F337
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:05:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 54A1080CCB
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:05:03 +0000 (UTC)
 Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-43d64e6c83eso2577585e9.0
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 11:05:04 -0700 (PDT)
+ 5b1f17b1804b1-43d64e6c83eso2577555e9.0
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 11:05:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1743185102; x=1743789902;
+ d=1e100.net; s=20230601; t=1743185101; x=1743789901;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=L6wkYkGKk2J8gEioP5u2TEaoH6ZIoi+PrVTHcOxWPL4=;
- b=AsV4+Qdx1IGASsioH6JeT0t8iI5HMw8fjFSRev8zLxXJ4ItFawWb0N4xm/dI3lb8Io
- rKIANzfe014br3zC19EGoBGgVPriswdPQSuTPjxwXrABNSEAa9EHUVUE91Xarmk/amys
- n8qBcGP0LEaVPbA2zlPctFEanY2YZ8m2Aymclk+5TLbzSGc9inck1a9ZwwUgoMbVoGAo
- 4lg3oWE2jxbxC5jQs+9zf03vNz/zJo1KJ+wmnD72ENOyA76R6u8Tsa0KkakrIaQ0fVOd
- NeBc7J9TAsY3mLNoMWWCdVK3MGyhDEVl1IgZgS9OSIJsEcWnuKVoWLt1JEMC/+rmPtix
- q9ew==
-X-Gm-Message-State: AOJu0YyJ0KeuQcQzym62sKkHW6FGndr3TLT+wEBn5CRrK+YoiYcLOQUP
- 1bgXSjtkqr7ocKEhnQDVFq3JdvwWOEpB0s/7NEn2Wj0xQXdk81ILImzv1ye7
-X-Gm-Gg: ASbGncv/TU1VuravSd1G/yPigxn8V3dBw555btD86ZmteHyimZfNAtRGMe+4/M6+ULh
- 8ErlBQnqSt5hE/yCEFNLcV4OBDeSB5ugRZRLGrs/vr2VCtOuPOi957vDWAE2R/ccKCUzk00kECe
- Oakq+6bglRuDf3Y7brsSdlIXBPdfnNsUFl+Cr7f3nlkq+4xUyUsAR5i4XrtTCpAfypfzEbEuE8N
- C3UKGGTPi/c47GD5LXc9ZXCaQv7PONTOIEIMQTHyMwoFTpWirZux7ED5bYOYqq946hGkC6w5UJu
- mjP0WbG+O/27ExdwYbuDF8q6Qq0n1FBNpdJmnQ==
-X-Google-Smtp-Source: AGHT+IHX0n2KAFuJzbJlR7XhuUJGfDMDHGZCfgwweB6vduJIyoyyh0PU/kuLM3vejjtzRF2in0zZ8g==
-X-Received: by 2002:a05:600c:4449:b0:43b:c0fa:f9c4 with SMTP id
- 5b1f17b1804b1-43db62bbce0mr1319915e9.4.1743185102309; 
- Fri, 28 Mar 2025 11:05:02 -0700 (PDT)
+ bh=HEhx8sN6f+8kN+S0+LKR5cjGhgxTiA1SgwpelTjYLgI=;
+ b=VHmCpEFfBpYZlIcNMt6I+sZf64EebfGxJw+TV0vwj5t536pog7uFAEBa0L4JjjJ6IN
+ TLFoQRQ8QwXc91HosY1QpyD33Co1uVH8k+b9MnGOK2XJqZ3WMqvKkJA0dRBYWmT+Y0/j
+ kdPQPS7CiddTXdbXg3U03tLaSzTWQO7bNZDpvcjjusiVubJRO45Lmu/NmPSoWiaBYjWR
+ sq1SlscZ7l0tQsuQwNJi93/kFgx/NBntm5m8w7P7cQgRIeYR+u2ZuIm86qI9qQJV0/CZ
+ i36CAvRgyHVTRd+XpZSCzQkPIQAywH2JVGjktGRyw4j7BKkhFQmd+Dc4SkezdXJzotWM
+ WYyw==
+X-Gm-Message-State: AOJu0Yz+7vIgB0D1pTPJ0Z0E7pqXz0EkjI0zrPVI199AJ5C4wflVJ7QR
+ hIPbP6JfPhwQ+NxcvsKC7lmBlVQ4MMgJML2Yx696lrIa40Evcriat4MloIAu
+X-Gm-Gg: ASbGncvQvxyU5237FatLE3MtxzmDQLX+c1kruJa9pdu6ftySwSGCSRkVlxsW21iQrMk
+ V42jngnTgExHj9aEOSfTYNdq4VDfY9WpCrRzoUB+mDbDvYsXL1LlluAyfJZv3lmX/6MMQgLQXtx
+ usMDgFsP4VAEpL39tQnBK+yPtPWi1lF//Q46PcwoqyXF04RJere3jWXLf6Zvygwy3ote3NwU+uS
+ lU1+QSTVyz2tEMHmlnoQ+t8EVcpFZJtXM48ZqOn2WoGg2fXo3XG+wDwGypg2kgb4VZYsbjRhk0U
+ Kfh0lwSdiYjtNzBzutKDjwLYVqLMIoce2o6cGauRKIPVJooJ
+X-Google-Smtp-Source: AGHT+IEx17r8TyBBWDe8ApOO8ecVs6Mrep3IakJXWeNTCXMN6iGqfQmm3JEu8no+PnC6aiSLU4AB1g==
+X-Received: by 2002:a05:600c:1ca9:b0:439:88bb:d00b with SMTP id
+ 5b1f17b1804b1-43db8516c5emr1910065e9.5.1743185100742; 
+ Fri, 28 Mar 2025 11:05:00 -0700 (PDT)
 Received: from skbuf.lan ([188.25.110.61]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-43d90000f48sm34692995e9.37.2025.03.28.11.05.00
+ 5b1f17b1804b1-43d90000f48sm34692995e9.37.2025.03.28.11.04.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 28 Mar 2025 11:05:01 -0700 (PDT)
+ Fri, 28 Mar 2025 11:04:59 -0700 (PDT)
 From: Vladimir Oltean <olteanv@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Mar 2025 20:04:25 +0200
-Message-ID: <20250328180427.3434693-18-olteanv@gmail.com>
+Date: Fri, 28 Mar 2025 20:04:24 +0200
+Message-ID: <20250328180427.3434693-17-olteanv@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250328180427.3434693-1-olteanv@gmail.com>
 References: <20250328180427.3434693-1-olteanv@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1743185102; x=1743789902; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1743185101; x=1743789901; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=L6wkYkGKk2J8gEioP5u2TEaoH6ZIoi+PrVTHcOxWPL4=;
- b=RfYYI88rsPWqM2rtZvAzOiqIKt/9hbnzDaeY/rCPWmQM8YNwmbNBHBrtmBbPdXAxWN
- et/aabnKhTWL2oGYN0ZIfQuIAq5vRXI7ohiwrVE4UV4tkf0D+zZi2whdva9LVD21sjLF
- UhJIC2DduOBYydZXb54c/2y7QlRV6LbKODNHZufImKWF8rdJCNsF9lhDTv1uFErpTDQn
- hfpJnA4zfRBTq/WO+RipYx5MX4yRsPeKKmqOr/Z1wii+unYPf71OY4/CEhMHjEilJRxS
- 9oDqDrdkcB4DWstwNqhlhdtpeHwKerG8hmskWS911xYQCjaXv07cG6EFrwua7mXZavDd
- ZF7w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=HEhx8sN6f+8kN+S0+LKR5cjGhgxTiA1SgwpelTjYLgI=;
+ b=BqVJR7wJzw1m89AwpnbZkywWMOAgfqEo6OosobgrkPM7hMXPtQwNknz6fxJzPACOgp
+ UrYzV11nX+GJ2nHYGjPkccztOh5XtuYbajp2/Amxk/w1ZXHi8oYPjxigb47ZSMIBoCu2
+ /biYmOybiQtXtTTMKiXruLC2pdirOW+uAfW446K0HJRf2E6r1RskBgC9n6LFRP34eVoQ
+ N8qRO7TGGBDj85y0F+nu35iCNrpk8C3xVEaRO3hM0zw3oX6bP0hwgz90DdTCkrUipNIf
+ j2/LuMf/0ufPRp7N5tvfzcUQJd2ASsLnaW0qEiJQMBk3NNz7oum1bIQLwc3zg9ZPX7Mz
+ 9txg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=RfYYI88r
-Subject: [Buildroot] [PATCH v2 17/18] package/qoriq-firmware-inphi: new
- package
+ header.a=rsa-sha256 header.s=20230601 header.b=BqVJR7wJ
+Subject: [Buildroot] [PATCH v2 16/18] package/qoriq-restool: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,97 +115,122 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The NXP BSPs have custom support for a 25G Ethernet retimer
-(drivers/net/phy/in112525.c in U-Boot) for the LX2160A-RDB board.
-That driver requires a text file to be located at a given offset in the
-same storage device as U-Boot itself. The text file contains a list of
-register addresses and values which are programmed into the retimer.
+Introduce a package for the restool program, which permits the user to
+modify the network configuration of the DPAA2 subsystem and create one
+that is adequate to their use case.
 
-All in all, a pretty convoluted mechanism, but the driver is
-non-upstreamable, and to support the board we need this "firmware" file
-deployed.
+We integrate the master branch, which is the lf-6.12.3-1.0.0 tag plus
+commit 14a9058c772b ("manpage: it should be optional"). It was pointed
+out on previous patch submissions that the "make install" target also
+converts man pages from Markdown to groff using pandoc, and apart from
+the fact that Buildroot doesn't want manpages, pandoc is also too heavy
+to drag into the build system. So that feedback was considered valid and
+the patch is included here via upstream.
 
 Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+Reviewed-by: Vincent Jardin <vjardin@free.fr>
 ---
-v1->v2: patch is new
+v1->v2: integrate a patch from Vincent
 
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/qoriq-firmware-inphi/Config.in         |  7 +++++++
- .../qoriq-firmware-inphi.hash                  |  3 +++
- .../qoriq-firmware-inphi.mk                    | 18 ++++++++++++++++++
- 5 files changed, 30 insertions(+)
- create mode 100644 package/qoriq-firmware-inphi/Config.in
- create mode 100644 package/qoriq-firmware-inphi/qoriq-firmware-inphi.hash
- create mode 100644 package/qoriq-firmware-inphi/qoriq-firmware-inphi.mk
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/qoriq-restool/Config.in          | 22 +++++++++++++++++++++
+ package/qoriq-restool/qoriq-restool.hash |  3 +++
+ package/qoriq-restool/qoriq-restool.mk   | 25 ++++++++++++++++++++++++
+ 5 files changed, 52 insertions(+)
+ create mode 100644 package/qoriq-restool/Config.in
+ create mode 100644 package/qoriq-restool/qoriq-restool.hash
+ create mode 100644 package/qoriq-restool/qoriq-restool.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 4288172e8670..22f5e527471c 100644
+index cd67a04b2961..4288172e8670 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -3371,6 +3371,7 @@ F:	configs/ts5500_defconfig
- 
- N:	Vladimir Oltean <olteanv@gmail.com>
+@@ -3373,6 +3373,7 @@ N:	Vladimir Oltean <olteanv@gmail.com>
  F:	package/qoriq-ddr-phy-binary/
-+F:	package/qoriq-firmware-inphi/
  F:	package/qoriq-mc-binary/
  F:	package/qoriq-mc-utils/
- F:	package/qoriq-restool/
++F:	package/qoriq-restool/
+ 
+ N:	Volkov Viacheslav <sv99@inbox.ru>
+ F:	package/v4l2grab/
 diff --git a/package/Config.in b/package/Config.in
-index 40b4bb5307ce..b3212cb0fe9d 100644
+index 754c9e76c26c..40b4bb5307ce 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -449,6 +449,7 @@ menu "Firmware"
- 	source "package/panel-mipi-dbi-firmware/Config.in"
- 	source "package/qcom-db410c-firmware/Config.in"
- 	source "package/qoriq-ddr-phy-binary/Config.in"
-+	source "package/qoriq-firmware-inphi/Config.in"
- 	source "package/qoriq-fm-ucode/Config.in"
- 	source "package/qoriq-mc-binary/Config.in"
- 	source "package/qoriq-mc-utils/Config.in"
-diff --git a/package/qoriq-firmware-inphi/Config.in b/package/qoriq-firmware-inphi/Config.in
+@@ -593,6 +593,7 @@ endmenu
+ 	source "package/pru-software-support/Config.in"
+ 	source "package/pulseview/Config.in"
+ 	source "package/qoriq-cadence-dp-firmware/Config.in"
++	source "package/qoriq-restool/Config.in"
+ 	source "package/raspi-gpio/Config.in"
+ 	source "package/rdma-core/Config.in"
+ 	source "package/read-edid/Config.in"
+diff --git a/package/qoriq-restool/Config.in b/package/qoriq-restool/Config.in
 new file mode 100644
-index 000000000000..88ae96c07531
+index 000000000000..dbe0934d4dd3
 --- /dev/null
-+++ b/package/qoriq-firmware-inphi/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_QORIQ_FIRMWARE_INPHI
-+	bool "qoriq-firmware-inphi"
++++ b/package/qoriq-restool/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_QORIQ_RESTOOL
++	bool "qoriq-restool"
 +	help
-+	  Firmware image for the Inphi IN112525 2x 25GbE SFP+
-+	  retimer, exclusively for use on the NXP LX2160A-RDB.
++	  The DPAA2 architecture in Layerscape SoCs consists of
++	  networking resources that can be assembled into various
++	  nuggets of functionality, called "objects" (DPMAC, DPNI,
++	  DPDMUX, DPSW etc), by the Management Complex (MC) firmware.
 +
-+	  https://github.com/nxp-qoriq/qoriq-firmware-inphi
-diff --git a/package/qoriq-firmware-inphi/qoriq-firmware-inphi.hash b/package/qoriq-firmware-inphi/qoriq-firmware-inphi.hash
++	  The MC firmware reads a file called Data Path Layout (DPL)
++	  which describes the set of networking objects it should
++	  create statically, at boot time.
++
++	  The restool program is able to talk to the Management
++	  Complex at runtime and permits the dynamic reconfiguration
++	  of networking objects, as well as saving the current
++	  configuration into a new DPL file. Without the restool
++	  program, the only possible networking configuration is
++	  that specified in the boot-time DPL file.
++
++	  https://github.com/nxp-qoriq/restool
++	  # sign in required
++	  https://www.nxp.com/webapp/Download?colCode=DPAA2UM
+diff --git a/package/qoriq-restool/qoriq-restool.hash b/package/qoriq-restool/qoriq-restool.hash
 new file mode 100644
-index 000000000000..df860e47a004
+index 000000000000..1081be2f5b1f
 --- /dev/null
-+++ b/package/qoriq-firmware-inphi/qoriq-firmware-inphi.hash
++++ b/package/qoriq-restool/qoriq-restool.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256  bc04d6b7ca578ad4bba053a8ec3929af305f296f23c32557dc290540cb49ac18  qoriq-firmware-inphi-f22e9ff3bfed8342da6efb699e473b11fbad5695.tar.gz
-+sha256  53e3eb0b2bd81c171fa04c17514e20b39b7bb1fe1224c593f7717f615fb9d52b  EULA.txt
-diff --git a/package/qoriq-firmware-inphi/qoriq-firmware-inphi.mk b/package/qoriq-firmware-inphi/qoriq-firmware-inphi.mk
++sha256  75c8cf7192eb54f50ff59047931a9b3210aade5d25d25c027a11eb7e659e8b21  qoriq-restool-14a9058c772b7b556e756ad8fd62a6762cde58df.tar.gz
++sha256  68f4b15ecc085729419bc60ca6eeadca5af0237bbfec791e8a79da9c943d42e9  LICENSE
+diff --git a/package/qoriq-restool/qoriq-restool.mk b/package/qoriq-restool/qoriq-restool.mk
 new file mode 100644
-index 000000000000..630c6634fd6b
+index 000000000000..23ea9c7e310f
 --- /dev/null
-+++ b/package/qoriq-firmware-inphi/qoriq-firmware-inphi.mk
-@@ -0,0 +1,18 @@
++++ b/package/qoriq-restool/qoriq-restool.mk
+@@ -0,0 +1,25 @@
 +################################################################################
 +#
-+# qoriq-firmware-inphi
++# qoriq-restool
 +#
 +################################################################################
 +
-+# Unlikely to ever be updated, keep a fixed version instead of following BSP tags
-+QORIQ_FIRMWARE_INPHI_VERSION = f22e9ff3bfed8342da6efb699e473b11fbad5695
-+QORIQ_FIRMWARE_INPHI_SITE = $(call github,nxp,qoriq-firmware-inphi,$(QORIQ_FIRMWARE_INPHI_VERSION))
-+QORIQ_FIRMWARE_INPHI_LICENSE = NXP Binary EULA
-+QORIQ_FIRMWARE_INPHI_LICENSE_FILES = EULA.txt
-+QORIQ_FIRMWARE_INPHI_INSTALL_IMAGES = YES
++QORIQ_RESTOOL_VERSION = 14a9058c772b7b556e756ad8fd62a6762cde58df
++QORIQ_RESTOOL_SITE = $(call github,nxp-qoriq,restool,$(QORIQ_RESTOOL_VERSION))
++QORIQ_RESTOOL_LICENSE = BSD-3-Clause or GPL-2.0-or-later
++QORIQ_RESTOOL_LICENSE_FILES = COPYING
 +
-+define QORIQ_FIRMWARE_INPHI_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -D $(@D)/in112525-phy-ucode.txt $(BINARIES_DIR)/in112525-phy-ucode.txt
++QORIQ_RESTOOL_MAKE_OPTS = \
++	CC="$(TARGET_CC)" \
++	CROSS_COMPILE="$(TARGET_CROSS)"
++
++define QORIQ_RESTOOL_BUILD_CMDS
++	cd $(@D) && $(TARGET_MAKE_ENV) $(MAKE) $(QORIQ_RESTOOL_MAKE_OPTS)
++endef
++
++define QORIQ_RESTOOL_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) MANPAGE="" $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) \
++		prefix=/usr install
 +endef
 +
 +$(eval $(generic-package))
