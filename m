@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FB72C28B20
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC5CDC36013
 	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 19:57:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 326BF85865;
-	Fri, 28 Mar 2025 19:57:51 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AMgxPqS1EPnr; Fri, 28 Mar 2025 19:57:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 054C7858A6
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 054C7858A6;
-	Fri, 28 Mar 2025 19:57:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id CC75A12A
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 19:57:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BEA8E70903
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 19:57:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F80F70913;
+	Fri, 28 Mar 2025 19:57:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pMfQfY7-KADg for <buildroot@buildroot.org>;
- Fri, 28 Mar 2025 19:57:47 +0000 (UTC)
+ id rFYNHUZAVnv3; Fri, 28 Mar 2025 19:57:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F487708D3
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F487708D3;
+	Fri, 28 Mar 2025 19:57:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 75C0D19A
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 19:57:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 682FD4F260
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 19:57:48 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tcizsdlbT5bE for <buildroot@buildroot.org>;
+ Fri, 28 Mar 2025 19:57:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
  envelope-from=francois.dugast.foss@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E9EFA708E4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9EFA708E4
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E9EFA708E4
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 19:57:46 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-39ac56756f6so2015306f8f.2
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 12:57:46 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 913AB4F268
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 913AB4F268
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 913AB4F268
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 19:57:47 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-39149bccb69so2278733f8f.2
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 12:57:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1743191865; x=1743796665;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=JNfryypOx6BWRinTqgU8NhvvmHUUb0kXE2mJEtKjnXc=;
- b=G6d531B4Ixu5mdgQ9qsBmEapFh6AJp3cvhH8kmFFIfB8FX9HLq0yDs0NtQBwHLXIXc
- TiXfn4xT5fWzcfrc/sG6VlaNRcF0F34sapKyfsA8Al1CABug7QVI2qqzupY22l+kC8fq
- 59cB3gI8V2+HdID8iJLIbL5w1NIuZZnjnPkvmUSW2u8uXVl4uESwQafuLoEO8TjqIeVt
- YN44haqQNCQPbXWhOXFQ4TEJRVnVdN8KGgBxVz1cZvISU5kvdA+jioOcdQHCLDxCVHQy
- h98ZlBqHpi4lY6+0KlVpzDeBDMpgExyRjzphcEKw/z/l8WoeyChPHa3Y+PRTe8ofThWT
- 5fRA==
-X-Gm-Message-State: AOJu0Yx8xTy7sSABUrh5sTYvHRpLIrrzHHGhVm6P0SEgkrjfwyoSGEro
- xKrCtk08DNNyeGjMLoDUJHelI0XjWRPuZpy+DbFzr5acLkc62JpAZ1sisQ==
-X-Gm-Gg: ASbGnctSMbEtRgfXFYR+gEAl9ftfv1sgj2ZrXTmQyB8Qp5EpKFcrsvDTxighwLi6RCz
- nRNMIKZQK2A6Me2q3U0CngeBv8X6mRAWO8Yi/K0VU5cKu4Ji8D6JGSxZ8FvwrOuadrjFL8zXU7+
- Fpol6dfqsVMBODLxbSu2om5q6qOy9o/4sLFP6xTYZCuXaMGsiTTzTGjh5Wnz0rWyeZRQhmuLsVy
- /R7+nDxqeovEz71N4KPDlitvSZpD3uIC7hS13EaN6IsI6uz0KVTd5kQqhO5pRFIJG2ge7a+0WoO
- PbKPuDp4//XEqtSFQ9DCeT1FIDnxLM2jMrQVVifa3hWjBLxp7Q++6Xmdpa4Yb5ZoRg8KK7DSRT7
- 8u0DjfyOf1so38JU5PGS2uZrCUjXb
-X-Google-Smtp-Source: AGHT+IFqbGxx8IbLWO7qv58sbEanrMb8PUoyzQ9IUBcOAyD58F2gubyRQ1tlZayjtwvdh9Hu0fEY9g==
-X-Received: by 2002:a05:6000:22c7:b0:390:fc5a:91c8 with SMTP id
- ffacd0b85a97d-39c1211df1bmr304373f8f.53.1743191864702; 
- Fri, 28 Mar 2025 12:57:44 -0700 (PDT)
+ bh=8e5cRQ2uux4pO4GHY0xb1cOdHI6AiDwLeK0kws4urd8=;
+ b=E4eVWsJXn4AU8ar6X8hO7uNSvaLY5pLDym1wyTcWijMPnchOYdTmb7ILH6kKpSvf17
+ CWWO9Y1kTIcrx21G3+Cay69YsdpDCskvLZ+37riX9XCetvb1TSe6dbEvz3tiZPQZ9qaj
+ EbYJ7vc4FakcQsw1v3hngPf8fGhctcav5y4SLf/IPPbFQii3gy+g36NvOQQH8c+wshAy
+ 0YhkVQdLsZF8yEXH5+4KHYLhEdn73E9srTrwr6NPyqYl4+n4vR3d9QJv4/IgJw/Js7uc
+ W/5NL3cuH623AyqMuPSCInxg2lc0HzmC4L+TEvZ9mxctu/AtMBHqSlDFIBji2SBGdxee
+ nh1w==
+X-Gm-Message-State: AOJu0YzdFej+MwiexE3OW3x4JsgK2sX0RvyDCb1qXm4OJ1mq3zamUX41
+ dAg23vWMP6gEXtZMSquvet5q38GGOd54Tn4xm2/xtikae3KMncN9XEfe3Q==
+X-Gm-Gg: ASbGncv94Ptkmx4vsCDCcM5TC2q9u+vMxVFe9sjSTPQNFL3AqLrcjy3fPTRlT/bxe8X
+ T6Nzoc2qSCyNza85waC6ZNPVReKSbMZbmuYYgBMXzFFM1eiLiR6384XwYFLQaghjDl96cjAULBc
+ EiHk0/Dh7xx14Yrvcum7KEqL+vDUN/SR8RG90JO8m32wiOMAK0ML7KxQxhszRUb4025h/8k7cHv
+ FrO62fI5VGg/whMDn+yvOVU20c7PfTQptkuvaJZ4gsNCTx7dwy8cFvH3u6UgFCJNckj8XnwxLWt
+ V/m5G7Avhg9eAEW/+teX6vMEUylbn46PvJZcLSe1IZonycMr/nWQjkZi66UrMQwKyFu2HkI4j6g
+ i7x5bxr91u+pm4PBKTBqNRtPdI7KJ
+X-Google-Smtp-Source: AGHT+IGFt6HQVIktPMvNK9RowQUbyEtqPNWodeWAGJb9N5Tjk57VGOz6JZF5nZeoeMEzCSQ2iM90JQ==
+X-Received: by 2002:a5d:5f90:0:b0:391:2e0f:efce with SMTP id
+ ffacd0b85a97d-39c120ccaa4mr393705f8f.1.1743191865177; 
+ Fri, 28 Mar 2025 12:57:45 -0700 (PDT)
 Received: from comet.lan (lfbn-ren-1-1629-205.w86-253.abo.wanadoo.fr.
  [86.253.181.205]) by smtp.gmail.com with ESMTPSA id
  ffacd0b85a97d-39c0b79e0dcsm3552272f8f.64.2025.03.28.12.57.44
@@ -74,8 +74,8 @@ From: Francois Dugast <francois.dugast.foss@gmail.com>
 To: buildroot@buildroot.org
 Cc: Alistair Francis <alistair@alistair23.me>, ju.o@free.fr,
  Francois Dugast <francois.dugast.foss@gmail.com>
-Date: Fri, 28 Mar 2025 20:57:38 +0100
-Message-Id: <20250328195741.3921731-2-francois.dugast.foss@gmail.com>
+Date: Fri, 28 Mar 2025 20:57:39 +0100
+Message-Id: <20250328195741.3921731-3-francois.dugast.foss@gmail.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250328195741.3921731-1-francois.dugast.foss@gmail.com>
 References: <20250328195741.3921731-1-francois.dugast.foss@gmail.com>
@@ -85,21 +85,21 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=JNfryypOx6BWRinTqgU8NhvvmHUUb0kXE2mJEtKjnXc=;
- b=E5klk4aHImM5j6Ce6iVBMx8nB7g/+aIv7pbDCD//l7JWkF82i526S1pha6+pj3IZ56
- 5hf13zXKWBVP+dSUZFb/4L41JMQWnPQL94Bu8hP5gE/hRPKw8uZ1kGWkljJoClTGqNuO
- v11RXg9S9Cy8G5qx9RMxBkalQW+/EmzA0qtu/5aVnT9WHNWM/ZqOK8CTx4I5y7zf0FSD
- /LgZtCptk2alUMaz00vfnsoNbw1U7CLeJzdgxk8VDyvcl6zOaGogax+AnFL0g07/fK6g
- RVqIb4C1dTHsHi8ADURaSs3Up0vpCsukTv/3OWyDCz1f9MFqiI/vKQ8KSTp8d3jFb2py
- gn6Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=8e5cRQ2uux4pO4GHY0xb1cOdHI6AiDwLeK0kws4urd8=;
+ b=F0T7b397zJdlbxyO0XqVu0P5hRi01bnUdbk1m1FdrnS/Vubpcl/LN1ZFnowMExFugt
+ IO+33fNkXHDMfx4EvDH340wI4cytA5q9q3tN1YqzhlNXG8q3MF11ng77gChxtzLZI49a
+ fjAxKGodeJCd13nr5vPraDaB/nzbI7rpop5xb1Kw1fVFAprdtkgr9e9oedxVOaKKWPip
+ mvl3BtDk/79VsFxSdEExMZNw/0AX66GPbPl7qJkqY4oOzT97OpmEEge9SR5vEw4Z3CBL
+ 1kgBXyBUOHT4FtA6x7mCDcPEcvUjdsc7U2V2F01hq+mDL/ImCWc/j70ucRxDJnLXKdq1
+ MshQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=E5klk4aH
-Subject: [Buildroot] [PATCH 1/4] board/sifive/hifive-unleashed: fix
- shellcheck warning in post-build.sh
+ header.a=rsa-sha256 header.s=20230601 header.b=F0T7b397
+Subject: [Buildroot] [PATCH 2/4] configs/hifive_unleashed: extract common
+ configuration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,36 +116,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This removes a warning reported by shellcheck: "Double quote to prevent
-globbing and word splitting". As a result, the file can be removed from
-.checkpackageignore.
+Move the generic part of the configuration into a new "common" directory
+so that it is easier to add similar boards without duplicating the files.
 
 Signed-off-by: Francois Dugast <francois.dugast.foss@gmail.com>
 ---
- .checkpackageignore                         | 1 -
- board/sifive/hifive-unleashed/post-build.sh | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ .../sifive/{hifive-unleashed => common}/genimage_sdcard.cfg | 0
+ .../{hifive-unleashed => common}/genimage_spi-nor.cfg       | 0
+ .../{hifive-unleashed => common}/linux.config.fragment      | 0
+ board/sifive/{hifive-unleashed => common}/post-build.sh     | 0
+ board/sifive/hifive-unleashed/readme.txt                    | 2 +-
+ configs/hifive_unleashed_defconfig                          | 6 +++---
+ 6 files changed, 4 insertions(+), 4 deletions(-)
+ rename board/sifive/{hifive-unleashed => common}/genimage_sdcard.cfg (100%)
+ rename board/sifive/{hifive-unleashed => common}/genimage_spi-nor.cfg (100%)
+ rename board/sifive/{hifive-unleashed => common}/linux.config.fragment (100%)
+ rename board/sifive/{hifive-unleashed => common}/post-build.sh (100%)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 66b3e100bb..14f1a40a7c 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -72,7 +72,6 @@ board/roseapplepi/patches/uboot/0001-compiler-.h-sync-include-linux-compiler-.h-
- board/roseapplepi/post-build.sh Shellcheck
- board/seeed/stm32mp157c-odyssey/patches/linux/0001-ARM-dts-stm32-fix-stm32mp157c-odyssey-card-detect.patch lib_patch.Upstream
- board/sheevaplug/patches/uboot/0001-Remove-redundant-YYLOC-global-declaration.patch lib_patch.Upstream
--board/sifive/hifive-unleashed/post-build.sh Shellcheck
- board/solidrun/clearfog/post-build.sh Shellcheck
- board/solidrun/macchiatobin/post-build-mainline.sh Shellcheck
- board/solidrun/macchiatobin/post-build.sh Shellcheck
-diff --git a/board/sifive/hifive-unleashed/post-build.sh b/board/sifive/hifive-unleashed/post-build.sh
-index b418120652..14c80558d5 100755
---- a/board/sifive/hifive-unleashed/post-build.sh
-+++ b/board/sifive/hifive-unleashed/post-build.sh
-@@ -1,2 +1,2 @@
- #!/bin/sh
--cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
-+cp "$BINARIES_DIR/boot.scr" "$TARGET_DIR/boot/boot.scr"
+diff --git a/board/sifive/hifive-unleashed/genimage_sdcard.cfg b/board/sifive/common/genimage_sdcard.cfg
+similarity index 100%
+rename from board/sifive/hifive-unleashed/genimage_sdcard.cfg
+rename to board/sifive/common/genimage_sdcard.cfg
+diff --git a/board/sifive/hifive-unleashed/genimage_spi-nor.cfg b/board/sifive/common/genimage_spi-nor.cfg
+similarity index 100%
+rename from board/sifive/hifive-unleashed/genimage_spi-nor.cfg
+rename to board/sifive/common/genimage_spi-nor.cfg
+diff --git a/board/sifive/hifive-unleashed/linux.config.fragment b/board/sifive/common/linux.config.fragment
+similarity index 100%
+rename from board/sifive/hifive-unleashed/linux.config.fragment
+rename to board/sifive/common/linux.config.fragment
+diff --git a/board/sifive/hifive-unleashed/post-build.sh b/board/sifive/common/post-build.sh
+similarity index 100%
+rename from board/sifive/hifive-unleashed/post-build.sh
+rename to board/sifive/common/post-build.sh
+diff --git a/board/sifive/hifive-unleashed/readme.txt b/board/sifive/hifive-unleashed/readme.txt
+index e9ccb26fa6..45cb8ece55 100644
+--- a/board/sifive/hifive-unleashed/readme.txt
++++ b/board/sifive/hifive-unleashed/readme.txt
+@@ -97,7 +97,7 @@ Adjust Buildroot configuration by:
+   $ make menuconfig
+ 
+ Change "System configuration" -> "Extra arguments passed to custom scripts"
+-value to "-c board/sifive/hifive-unleashed/genimage_spi-nor.cfg", save the
++value to "-c board/sifive/common/genimage_spi-nor.cfg", save the
+ configuration and build. This creates a output/images/spi-nor.img that can
+ be programmed to the on-board SPI flash.
+ 
+diff --git a/configs/hifive_unleashed_defconfig b/configs/hifive_unleashed_defconfig
+index cb217a5af1..f96e171e43 100644
+--- a/configs/hifive_unleashed_defconfig
++++ b/configs/hifive_unleashed_defconfig
+@@ -8,14 +8,14 @@ BR2_RISCV_ISA_RVC=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttySIF0"
+ BR2_SYSTEM_DHCP="eth0"
+-BR2_ROOTFS_POST_BUILD_SCRIPT="board/sifive/hifive-unleashed/post-build.sh"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/sifive/common/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+-BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sifive/hifive-unleashed/genimage_sdcard.cfg"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sifive/common/genimage_sdcard.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.190"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+-BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sifive/hifive-unleashed/linux.config.fragment"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sifive/common/linux.config.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="sifive/hifive-unleashed-a00"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
 -- 
 2.39.5
 
