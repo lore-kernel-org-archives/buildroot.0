@@ -1,106 +1,106 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0849C36010
-	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 08:47:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD343C28B20
+	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 08:48:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5779B4F0FE;
-	Fri, 28 Mar 2025 08:47:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9AEF6857A4;
+	Fri, 28 Mar 2025 08:48:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D9T344gdiBgA; Fri, 28 Mar 2025 08:47:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cv7JXPOAFBDM; Fri, 28 Mar 2025 08:48:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8F034F126
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 342F2857A2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D8F034F126;
-	Fri, 28 Mar 2025 08:47:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 623B312A
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 08:47:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 342F2857A2;
+	Fri, 28 Mar 2025 08:48:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2653F1B7
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 08:47:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 488164F0FE
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 08:47:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0C9E540251
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 08:47:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 63LLqfDVZ3y5 for <buildroot@buildroot.org>;
- Fri, 28 Mar 2025 08:47:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8ySr66h4GZV2 for <buildroot@buildroot.org>;
+ Fri, 28 Mar 2025 08:47:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
  envelope-from=maxime.leroys@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 50DBC4F0DA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50DBC4F0DA
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 50DBC4F0DA
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 08:47:53 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-3913d45a148so1509779f8f.3
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 01:47:53 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3C18740142
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C18740142
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3C18740142
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 08:47:57 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-399749152b4so516438f8f.3
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 01:47:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1743151671; x=1743756471;
+ d=1e100.net; s=20230601; t=1743151675; x=1743756475;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=kPb3o2wzGJbp+8zFYUIWb6eucurMod/QXK++IreLELM=;
- b=Ll1dyiywvJW7qTZ3Ry6g5Mys/I5Ck5D3amOKJH7hd3UFn6GpobbJKK6WYEydwhQzKw
- jKZcMqQ8mhsuzvzLZkMytRc1PgkPv/AHDUNsbSerU/WFzc4/7OX1qlCs06iaQoFIw3r+
- lWmBwnHACkpusGi+/RWi2uv20u94G4S8VMj9NGJsQDH8zOIrF1fJT4c/oUfCNFSYzxdD
- ZD7Bszp/Fz5Z9mts5ah89koUQkC0/ljNkG4HJKsRVnHZXkIJ55uE1e+hNqR7NrHwd88Z
- 2bSHiDhQG1Vhbk8gfGzrLPVDvI23D0jUCVMMIuAkeQsha3YNysPysDyXuBh1EjXwxz69
- zzPA==
-X-Gm-Message-State: AOJu0YznXv+kY4x2rUp/o17BDdc4oO+GiQVASZN8Q96u8aEDeTHPRCPN
- fQPMjfU9cnhg1Y83JGSzTOfz3KDemDiDgmWWZs2xpzzrCPSlCmHfqOiySfQT4Lk=
-X-Gm-Gg: ASbGncvBmeMlan99j/EOhoBfZKtnziQ3t4PXCXe9k/zsXurIkFv7dCfYUE723LHDX+1
- HmV12auT4yTBCDwzECBi0Y95mTRIZKksZjeGqYj+o3+goLFakbdromuocBQvyVwM1Ft9ECkt6No
- IxKLh1KH2vP6B9HwX3/GoGwKfiQkLvCb7LI2+2OxAbODpxkP4YmeVMCvnDlcFFVHvsbvMtcRoCj
- 3pZKlVb4tVKXo9A47lRAd1jvGEpIYw9f40Ag6Q52SzMgv0wGsj7sJePvmvpEYXyBVYGMixW42kw
- uXoefznRlhLgKHD8VlnZjK5QKR6vzFysaMlDzJtbsPJ9u+joUNhC0PsKYx27P6VmuJMNMw3qZA=
+ bh=ZGsR+sfFcLw4zpvx4rW+mclwpJ5kDkSVq9Cc6K37dhc=;
+ b=fH+PwZp/TT3D88WolOBi0aeeWVOfKT6QOpDN1BoXt3EvS16QIAwU2x8NyQ6Go3VjTg
+ uy9RbecjgI/j6KwmuHUWlfbNz7ygsvbtrfjdR9XUK74VwcaMaOSLDoXATC4glxzKpnzx
+ FUHlibetJHWarGFVL1C1M9TmEAWqJ2m0KC3RY/HHRUfjZZN9T41c+qQ9x4k20OfORE/g
+ SmxVIrapWOuzjr1oybYkYuZUmbZYIxgXIyAWZ85/A8tVrc74FwFqNdIpx/oH6lnJYEDg
+ KC3WQZMmk9VfGDjcc7NUj93JPCT4wjRHE3Ru4qxM7d8Aq30TtejdLA2uwoH9O34iv2xi
+ TerA==
+X-Gm-Message-State: AOJu0Yy30ZEkFUEqXmjKHT3Mxeyd6HCGd3fcA4qjmnJxFFNzX/vTfErO
+ ZV9v2b6lKJF5GJ0DQss7cPeru1NNJNic5vXjqPtkqvldb4ITqt/8bL/6Qb/K0sQ=
+X-Gm-Gg: ASbGncvL3/uedmXLiO4C5M0PePMpYlpy/T29vpR62sBT132bOuQ8Q27GDo6rI1ShwA1
+ ktAuYBWXXrDffq6+gM1Ffx0ejYruo2tv4pWeibARav04uLVjSEK3n+DJnq0clXRqgsZyVGAnZe6
+ oLi14RS1zay0JJitD52JQQlSguvtuIS6hQ6NiWrFgsjbaX8/+qgybyr44ozNrWdU43Fik+mMw2h
+ GF2MKxTZgVJaIVpUhzc3EmqKjP38DrLYfX3J477kVhEMjw5QWofhdkq3MjaGxNpGDHm6uf5jWWQ
+ 6PS6Ki0dz3cn+ROVPnutjOji91vVy2ue6lj+4hRCqYH2eLyHEg7kN7yY+YY7kz+CHnfd/feVOA=
  =
-X-Google-Smtp-Source: AGHT+IEoW8yc42BryrkBdeVBqDkuOeiKWH8DoZJlJs/I87wyvaYUDYFAdaFCImxywHFGtHNQlIo3Fw==
-X-Received: by 2002:a5d:5f48:0:b0:391:2bcc:11f2 with SMTP id
- ffacd0b85a97d-39ad173d23bmr6249303f8f.1.1743151671077; 
- Fri, 28 Mar 2025 01:47:51 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHW9i4/cA5e/NnvkOZ4PW62t04nfWpVzto4/3Ea8vHJ+R7oWdEOdUMsV+MRer1rtJBCrnMevg==
+X-Received: by 2002:a5d:47c4:0:b0:391:3988:1c97 with SMTP id
+ ffacd0b85a97d-39ad1749e41mr6077349f8f.17.1743151675120; 
+ Fri, 28 Mar 2025 01:47:55 -0700 (PDT)
 Received: from freepad.iliad.local (free-reseau.vlq16.iliad.fr. [213.36.7.12])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-39c0b79e12bsm1964481f8f.62.2025.03.28.01.47.50
+ ffacd0b85a97d-39c0b79e12bsm1964481f8f.62.2025.03.28.01.47.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 28 Mar 2025 01:47:50 -0700 (PDT)
+ Fri, 28 Mar 2025 01:47:54 -0700 (PDT)
 From: Maxime Leroy <maxime@leroys.fr>
 To: buildroot@buildroot.org
 Cc: Vincent Jardin <vjardin@free.fr>, Robin Jarry <robin@jarry.cc>,
  Julien Olivain <ju.o@free.fr>, Maxime Leroy <maxime@leroys.fr>
-Date: Fri, 28 Mar 2025 09:47:42 +0100
-Message-ID: <20250328084743.8759-3-maxime@leroys.fr>
+Date: Fri, 28 Mar 2025 09:47:43 +0100
+Message-ID: <20250328084743.8759-4-maxime@leroys.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250328084743.8759-1-maxime@leroys.fr>
 References: <20250326132655.35729-1-maxime@leroys.fr>
  <20250328084743.8759-1-maxime@leroys.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1743151671; x=1743756471; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1743151675; x=1743756475; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=kPb3o2wzGJbp+8zFYUIWb6eucurMod/QXK++IreLELM=;
- b=BNQDXFhwWDaTHq4OCGbcMVlg2XCtAMM1M4kQyViAsbyESx3jfN7ccT+TCeXu/4d9eD
- iSPCRdgF/tH5k9ghKx0kjyGE/epzqHggHDmccMcwEiorIcHrestnGHVGHpvGJuRrOf98
- UN1zIPMNpWjdXCMQHAuHy7FjqkNjCude0m4tMNmvpRGLkkWzS2u5edw2HeIKo1Mv6Fgp
- g26KuPJDUAgYbQPdOqRV4QdS/oS4hIZ0tX2SThvU+mF6yhVsWtwyUy6ihhllrh2fXMVO
- NelUaCRtvoXk54g6Sma2gyxlcx6xmo8pj604xVTN2B2najnVV6QUCa+P63nrOmQPrA5e
- 5s3w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=ZGsR+sfFcLw4zpvx4rW+mclwpJ5kDkSVq9Cc6K37dhc=;
+ b=UsM9zV22Ww2m+ZmQBhw437/Ai1DslLbm71Ua0NsHOFNA8HW3/6Yp9qQu2IKf/VuoMW
+ TiXnGduVoGSQemaUiRUZt3OqqXF7D1dXHVZbDtPx5u+h72uoHLgSvEKMBxpzyfwpS+08
+ sN1pawNXuW5ZZ9YOzpWks7i1jMEfviBbwwqJj9eY7K/vbnWVGntdKld0KD8FUCFJoJAH
+ OgJIagl1aurztW7bR20Tcn9SrpaD51B3OpKduuD181R2TsQnx+FliQi9fjAInaNGhFAh
+ ZrZxWX/bVdI+dnOh6GPaQHRZuJxC5PiW1m+A5gksC0MGZAd8kbkBR+3ZWXScRdZSjFRI
+ HvZQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=leroys.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=BNQDXFhw
-Subject: [Buildroot] [PATCH v3 2/3] package/grout: new package
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=UsM9zV22
+Subject: [Buildroot] [PATCH v3 3/3] RFC: support/testing: add grout runtime
+ test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,105 +117,143 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Grout is a Graph router based on DPDK.
+This adds a runtime test for Grout, inspired by test_dpdk.py.
+
+It uses the smoke test normally used to validate development on Grout.
+
+The smoke test are copied into the image by enabled the new option
+BR2_PACKAGE_GROUT_TESTS.
 
 Signed-off-by: Maxime Leroy <maxime@leroys.fr>
-Reviewed-by: Vincent Jardin <vjardin@free.fr>
 ---
- DEVELOPERS               |  3 +++
- package/Config.in        |  1 +
- package/grout/Config.in  | 13 +++++++++++++
- package/grout/grout.hash |  3 +++
- package/grout/grout.mk   | 24 ++++++++++++++++++++++++
- 5 files changed, 44 insertions(+)
- create mode 100644 package/grout/Config.in
- create mode 100644 package/grout/grout.hash
- create mode 100644 package/grout/grout.mk
+ DEVELOPERS                                    |  1 +
+ package/grout/Config.in                       | 16 ++++++
+ package/grout/grout.mk                        |  8 +++
+ support/testing/tests/package/test_grout.py   | 50 +++++++++++++++++++
+ .../package/test_grout/linux-net.fragment     |  4 ++
+ 5 files changed, 79 insertions(+)
+ create mode 100644 support/testing/tests/package/test_grout.py
+ create mode 100644 support/testing/tests/package/test_grout/linux-net.fragment
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 44f7684c97..c9871f5d32 100644
+index c9871f5d32..82ca05d5c1 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2383,6 +2383,9 @@ F:	package/libtraceevent/
- F:	package/libtracefs
- F:	package/linux-tools/linux-tool-rtla.mk.in
+@@ -2385,6 +2385,7 @@ F:	package/linux-tools/linux-tool-rtla.mk.in
  
-+N:	Maxime Leroy <maxime@leroys.fr>
-+F:	package/grout
-+
+ N:	Maxime Leroy <maxime@leroys.fr>
+ F:	package/grout
++F:	support/testing/tests/package/test_grout.py
+ 
  N:	Michael Durrant <mdurrant@arcturusnetworks.com>
  F:	board/arcturus/
- F:	configs/arcturus_ucp1020_defconfig
-diff --git a/package/Config.in b/package/Config.in
-index d8751fc19f..854cbc6cca 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2493,6 +2493,7 @@ endif
- 	source "package/gesftpserver/Config.in"
- 	source "package/gloox/Config.in"
- 	source "package/glorytun/Config.in"
-+	source "package/grout/Config.in"
- 	source "package/gupnp-tools/Config.in"
- 	source "package/gutenprint/Config.in"
- 	source "package/hans/Config.in"
 diff --git a/package/grout/Config.in b/package/grout/Config.in
-new file mode 100644
-index 0000000000..a39c3283eb
---- /dev/null
+index a39c3283eb..8d1466fa02 100644
+--- a/package/grout/Config.in
 +++ b/package/grout/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_GROUT
-+	bool "grout"
-+	depends on BR2_ENABLE_LOCALE
-+	select BR2_PACKAGE_DPDK
-+	select BR2_PACKAGE_LIBEVENT
-+	select BR2_PACKAGE_NUMACTL
-+	select BR2_PACKAGE_LIBECOLI
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
-+	help
-+	  Graph router based on DPDK
+@@ -11,3 +11,19 @@ config BR2_PACKAGE_GROUT
+ 	  Graph router based on DPDK
+ 
+ 	  NOTE: grout needs a working UTF-8 locale (BR2_GENERATE_LOCALE)
 +
-+	  NOTE: grout needs a working UTF-8 locale (BR2_GENERATE_LOCALE)
-diff --git a/package/grout/grout.hash b/package/grout/grout.hash
-new file mode 100644
-index 0000000000..cff686ff19
---- /dev/null
-+++ b/package/grout/grout.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  10f8e20b4aa1a8fe928c87b249e23267eef356f39b04994a0b88b52931fcaa4b  v0.8.4.tar.gz
-+sha256  1e412aae8da58b718c78b3d7a52eb547004384d4347e4746a22ca6af7522930c  LICENSE
++if BR2_PACKAGE_GROUT
++
++config BR2_PACKAGE_GROUT_TESTS
++	bool "Install tests"
++	select BR2_PACKAGE_BASH
++	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS if BR2_PACKAGE_BUSYBOX
++	select BR2_PACKAGE_IPUTILS
++	select BR2_PACKAGE_IPUTILS_PING
++	select BR2_PACKAGE_SOCAT
++	select BR2_PACKAGE_IPROUTE2
++	select BR2_PACKAGE_TRACEROUTE
++	select BR2_PACKAGE_NDISC6
++	select BR2_PACKAGE_NDISC6_RDISC6
++
++endif
 diff --git a/package/grout/grout.mk b/package/grout/grout.mk
-new file mode 100644
-index 0000000000..0d6fb8dce9
---- /dev/null
+index 0d6fb8dce9..19f952330e 100644
+--- a/package/grout/grout.mk
 +++ b/package/grout/grout.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# grout
-+#
-+################################################################################
+@@ -21,4 +21,12 @@ GROUT_DEPENDENCIES = \
+ 	libecoli \
+ 	util-linux
+ 
++ifeq ($(BR2_PACKAGE_GROUT_TESTS),y)
++define GROUT_INSTALL_TEST_SCRIPTS
++	$(INSTALL) -d $(TARGET_DIR)/usr/share/grout-test/
++	$(INSTALL) -D -m 0755 $(@D)/smoke/*.sh $(TARGET_DIR)/usr/share/grout-test
++endef
++GROUT_POST_INSTALL_TARGET_HOOKS += GROUT_INSTALL_TEST_SCRIPTS
++endif
 +
-+GROUT_VERSION = 0.8.4
-+GROUT_SITE = https://github.com/DPDK/grout/archive/refs/tags
-+GROUT_SOURCE = v$(GROUT_VERSION).tar.gz
-+GROUT_LICENSE = BSD-3-Clause
-+GROUT_LICENSE_FILES = LICENSE
+ $(eval $(meson-package))
+diff --git a/support/testing/tests/package/test_grout.py b/support/testing/tests/package/test_grout.py
+new file mode 100644
+index 0000000000..3d66033611
+--- /dev/null
++++ b/support/testing/tests/package/test_grout.py
+@@ -0,0 +1,50 @@
++import os
 +
-+# Avoid using buildroot commit hash
-+GROUT_CONF_ENV += GROUT_VERSION=$(GROUT_VERSION)
++import infra.basetest
 +
-+GROUT_DEPENDENCIES = \
-+	host-pkgconf \
-+	dpdk \
-+	libevent \
-+	numactl \
-+	libecoli \
-+	util-linux
 +
-+$(eval $(meson-package))
++class TestGrout(infra.basetest.BRTest):
++    kernel_fragment = \
++        infra.filepath("tests/package/test_grout/linux-net.fragment")
++    config = \
++        f"""
++        BR2_x86_64=y
++        BR2_x86_nehalem=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.13.8"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kernel_fragment}"
++        BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
++        BR2_PACKAGE_DPDK=y
++        BR2_ENABLE_LOCALE=y
++        BR2_ENABLE_LOCALE_WHITELIST="C.UTF-8"
++        BR2_GENERATE_LOCALE="C.UTF-8"
++        BR2_PACKAGE_GROUT=y
++        BR2_PACKAGE_GROUT_TESTS=y
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_SIZE="300M"
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        img = os.path.join(self.builddir, "images", "rootfs.ext2")
++        kern = os.path.join(self.builddir, "images", "bzImage")
++        self.emulator.boot(arch="x86_64",
++                           kernel=kern,
++                           kernel_cmdline=["root=/dev/vda", "console=ttyS0"],
++                           options=["-cpu", "Nehalem", "-m", "2G",
++                                    "-smp", "4",
++                                    "-device", "virtio-rng-pci",
++                                    "-drive", f"file={img},format=raw,if=virtio",
++                                    "-net", "nic,model=virtio",
++                                    "-net", "user"])
++        self.emulator.login()
++
++        # Remove graph, no needs to check we can generate svg (only for developpement)
++        self.assertRunOk("rm /usr/share/grout-test/graph_svg_test.sh")
++
++        # Run smoke tests
++        self.assertRunOk("/usr/share/grout-test/run.sh .", timeout=600)
+diff --git a/support/testing/tests/package/test_grout/linux-net.fragment b/support/testing/tests/package/test_grout/linux-net.fragment
+new file mode 100644
+index 0000000000..6bdd89bd26
+--- /dev/null
++++ b/support/testing/tests/package/test_grout/linux-net.fragment
+@@ -0,0 +1,4 @@
++CONFIG_VLAN_8021Q=y
++CONFIG_NET_IPIP=y
++CONFIG_IPV6_SEG6_LWTUNNEL=y
++CONFIG_TUN=y
 -- 
 2.43.0
 
