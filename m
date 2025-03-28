@@ -4,97 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B4BAC36010
-	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 18:05:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B8ADC28B20
+	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 18:05:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A8104F304;
-	Fri, 28 Mar 2025 18:05:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 688E14F317;
+	Fri, 28 Mar 2025 18:05:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gTpl_YHws3bP; Fri, 28 Mar 2025 18:05:00 +0000 (UTC)
+ id RnWXYdgfrqyP; Fri, 28 Mar 2025 18:05:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 486884F2EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CA324F325
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 486884F2EB;
-	Fri, 28 Mar 2025 18:05:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BA5AB1B7
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:04:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8CA324F325;
+	Fri, 28 Mar 2025 18:05:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id ED7491B8
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:04:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A9BC584B4D
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:04:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DF7E84F2E6
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:04:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ivfOcZFqxEJU for <buildroot@buildroot.org>;
- Fri, 28 Mar 2025 18:04:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jA1Fq4rjkv0t for <buildroot@buildroot.org>;
+ Fri, 28 Mar 2025 18:04:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
  envelope-from=olteanv@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 90B758594F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90B758594F
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 90B758594F
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:04:52 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-43ce4e47a85so2991075e9.0
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 11:04:52 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CE3BE4F325
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE3BE4F325
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CE3BE4F325
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:04:58 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-3912622c9c0so236865f8f.3
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 11:04:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1743185090; x=1743789890;
+ d=1e100.net; s=20230601; t=1743185096; x=1743789896;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=5CgQ3XwN6W0wVp068441ffFAHKil3mbEVwR+Q5DVtFg=;
- b=kXozM/p7AZEL7W6D3+GoPepTHTiEtl9RTtdMCLHpYoRImipG6TZ1WULOYLzNBYvRD6
- 3S1v3XR9ulGOiow06BXblGGk07P9hPQ+kg9VRw2h1Rx8i3sO2tXwb1htXTnCR0RTNiQc
- YiB/HaltQYcvinkXfySqHJ5svaqKtEEROwg3+qP6OJuJOqXo1YrzrgDb0vzBCSyp4Hw1
- LSQIehwWKd2LazSwE1kxPX0Cz0zsmO80rSdrrmxh3lxziY8ZiVDDP++hcgqq+yANMWWJ
- a/xq8XjlXzn0ByRrlsqBCOg3wbA8tFiCXgVqbCT/sKrkiBxz7ZjY0wUZd3PV+e4ICxiM
- 7nDQ==
-X-Gm-Message-State: AOJu0YwqpRKInlQ5hVq6G1rujdu2g2nYdVMcxj5p8afoIJavP0ksNca+
- Rz+cjxK03GLNef+kbD9+iFdO1qkuQRZj1XnCEP09Et3WBbVO546N+DXtWfan
-X-Gm-Gg: ASbGncu5uUhE7vij4lQ5jUvxc9x/5YSBJ6nKr8uKyxxUNSR3K16hmQye+JoiON1Fb/u
- OK+mN/fNxn5LJcwpGFsJnrg0kB0ZCMzkuXaAa7zUr4tC/Zw/HESfKkyGr/WS5vqJ+NISVTXHowI
- TMDm9txMexEVf4WRxdgagVGPp8KtS4oV3MsGxfUwlIKuZdBFdpex57vF6g3jTFSqaiilT8RzJpd
- gxun5HicvUGSpxTJXlmfYgVb5layJ5wab/dZmd5xwUu+9JpQHXd84+ho4vvT/dPNzTdAXi0Pnz9
- HMNAA4GbppbhQno6vSeTLwx9q3ict2c4NkDJHg==
-X-Google-Smtp-Source: AGHT+IECndUdYyEE8ZJMtAFgwCk79uQBtvDi5+Wypw8KEtRygKzgZDIt7AHIPNdbaWcNfGXlDbDq5Q==
-X-Received: by 2002:a05:600c:a0d:b0:43b:d547:6336 with SMTP id
- 5b1f17b1804b1-43dbc6fa38amr1754185e9.8.1743185089623; 
- Fri, 28 Mar 2025 11:04:49 -0700 (PDT)
+ bh=4R8nGU3uItwqCRui2Zk2HFyzKovgFlrQpq4HS5kZrmg=;
+ b=VT03Ti9x36g5kVQeQX2/Cf4flgcxnGFNvyRgPidi7VDxBJ76qZXxU4P/HU2RZaoRfO
+ WsexjmQqK6PEOMBsGiWki517LhDlt96NBt0lETBR5mkJuXcXZs7BtftvYdb+p4IRvJ2d
+ fP50JIFi4UCQYQ+cGvSWbTe86quqGDNP5YTWQA4/iVbNqD83A2gPR41Puq0AnajMX8/3
+ 34+komQCkO4FTpU7/9binUwrLLhi+XKuMMA0hxT9ieF8UJOKbzbl58BwLDf75/Q747QK
+ 2eG1K1JgulDjbibindJo/mxlcdj3p2tm+y9oototK1XTEV2NgbgoXVY4NaE3m4zUzBGM
+ MLUA==
+X-Gm-Message-State: AOJu0Yypfd+qgh6ZiftCxwl4ufVcB0j8nEz6tJk2kmOTfkqf1N6lmhAw
+ vMbLddbzi56jmP2YfffciR7I5eaCYtZd+ANAGoWMVjwaT6PBP9Oz383jTtJ4
+X-Gm-Gg: ASbGncvAupF53zYTH89Zt9lh0ChTBfUEglA5tdHUc0JyRYkFOHbjjNh9sIDtYv7u/mt
+ Jv9DHDKB+f3RRHCw9hdnT3ItMtXLB20fpDDUHiBbYsRDcX0u31yZwE38g2VPuLgm55jUHuuFRGD
+ HCIco3+CPbGidHuMikC2Cxc61t/HqZkvkIWicjNXKOeuUGyxtjzZa4S8ncqn9//+1E+T2fwigbn
+ TzoP29X+MtDSemuwmp9jx05Z8nXPb5S1vA6kIgIqkTg+wsmTTZThfryMPul/lSfGddLnUq1qvRl
+ ySO0mFJOe/o5WGg/pn9VOF9KSSuqvmmQeSD25A==
+X-Google-Smtp-Source: AGHT+IFKWAY5+9Q9QOhjL0IshzAcvh5x0Mj5E0Z3vqTnyrWChrCTgUMWgGX9K+SivzxyLBH9h+ofFg==
+X-Received: by 2002:a05:600c:1d1b:b0:43b:ca39:a9b8 with SMTP id
+ 5b1f17b1804b1-43db61d9379mr1276825e9.2.1743185095540; 
+ Fri, 28 Mar 2025 11:04:55 -0700 (PDT)
 Received: from skbuf.lan ([188.25.110.61]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-43d90000f48sm34692995e9.37.2025.03.28.11.04.48
+ 5b1f17b1804b1-43d90000f48sm34692995e9.37.2025.03.28.11.04.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 28 Mar 2025 11:04:48 -0700 (PDT)
+ Fri, 28 Mar 2025 11:04:54 -0700 (PDT)
 From: Vladimir Oltean <olteanv@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Mar 2025 20:04:18 +0200
-Message-ID: <20250328180427.3434693-11-olteanv@gmail.com>
+Date: Fri, 28 Mar 2025 20:04:21 +0200
+Message-ID: <20250328180427.3434693-14-olteanv@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250328180427.3434693-1-olteanv@gmail.com>
 References: <20250328180427.3434693-1-olteanv@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1743185090; x=1743789890; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1743185096; x=1743789896; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=5CgQ3XwN6W0wVp068441ffFAHKil3mbEVwR+Q5DVtFg=;
- b=SXL6jqhbnuzptpw7TV0zmAAeNr6Ib0aCRRNwpt9mTVjucCwkif8pFE2LIn421oIiYY
- jr+uYOcYSYisi9rQhFbexHapCWPhc7zf8FFYf2uDb8n2M/6PoX4B0O7e9gyCgeAjlUFN
- O0/g6Bdykfte3kxzmqNAmGmei9+J4ckkhAn4m3vC3dgzty+4oH4+NVCiC96Gg96aWSC1
- RJEKxedTNkMXsKDo4J+EYFLpsUEn+PY2gHWA5O/Mnx0IaX6g/fUA4oSRbJLcwmPQVOs+
- Ezg/QBFbV0YyJYeINkttDu7asBJQAZd7Fh3bfj1ApIkZdGLVv2ZO0eHpWl5h7srHv1uw
- ua8w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=4R8nGU3uItwqCRui2Zk2HFyzKovgFlrQpq4HS5kZrmg=;
+ b=lSEeYS+J2qG/Kq3CL0aOYgNm53uw1uvyIF6N5zndMWpm/k47mQet/UaRCCOtHzgoxL
+ R+JxYnT5vV41ucNFxCeLd6xhnq0bSM6pw1WU6e71nowEZVL0j/tGqzEhawXO6kiOfUkK
+ xURrumMLCUQQWKATA/Frvw3omGaYbobi1nyEQX+GDcFu7052kzLXOU7dzJon1HGCQmHX
+ iJXtBzc5JAvJFWqBvZ48nntTrZbNlJo+iS/TC3VFXJFdjqb2ZV9qJHxn3lKuCoVKW0K7
+ 2KZa/0/sqTTnggiJuHG+a3//Oj+rIPQ5qwmYd8P+B7SJZdVn0CPeMjxs8VquJDusTCgC
+ CZFw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=SXL6jqhb
-Subject: [Buildroot] [PATCH v2 10/18] package/fmlib: uprev to lf-6.12.3-1.0.0
+ header.a=rsa-sha256 header.s=20230601 header.b=lSEeYS+J
+Subject: [Buildroot] [PATCH v2 13/18] package/qoriq-ddr-phy-binary: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,118 +111,113 @@ Cc: Ioana Ciornei <ciorneiioana@gmail.com>,
  Brandon Maier <Brandon.Maier@collins.com>, Vincent Jardin <vjardin@free.fr>,
  Julien Olivain <ju.o@free.fr>, Romain Naour <romain.naour@smile.fr>,
  Akhilesh Nema <nemaakhilesh@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBpcyB0ZWNobmljYWxseSB0aGUgbWFzdGVyIGJyYW5jaCwgYSBmZXcgY29tbWl0cyBwb3N0
-IHJlbGVhc2UgdGFnLgpDaGFuZ2UgbG9nOgoKN2E1OGVjYWYwZDkwIGZtX2xpYjogZXhwbGljaXQg
-Y29udmVyc2lvbiB0byBpb2NfZm1fcGNkX2V4Y2VwdGlvbnMgaW4gRk1fUENEX1NldEV4Y2VwdGlv
-bigpCjIyYTBkM2YxODY3ZSBmbV9saWI6IG1ha2UgUkVQT1JUX0VSUk9SKCkgZGVmaW5pdGlvbiBt
-b3JlIGZ1bmN0aW9uLWxpa2UKMDhhYzhiMzExMmE4IGZtX2xpYjogZml4IGNvbnZlcnNpb24gd2Fy
-bmluZ3MgYmV0d2VlbiBlX0ZtUGNkRW5naW5lIGFuZCBlbnVtIGlvY19mbV9wY2RfZW5naW5lCjE2
-OGVhZTc0ZmQ4YSBmbV9saWI6IGZpeCBpbnRlZ2VyLXRvLXBvaW50ZXIgY29udmVyc2lvbiBidWls
-ZCB3YXJuaW5nIGluIEdldERldmljZUlkKCkKClRoZSBidWlsZCBmaXggcGF0Y2ggZnJvbSBCdWls
-ZHJvb3QgaXMgbm8gbG9uZ2VyIG5lY2Vzc2FyeSwgcmVtb3ZlIGl0LgoKU2lnbmVkLW9mZi1ieTog
-VmxhZGltaXIgT2x0ZWFuIDxvbHRlYW52QGdtYWlsLmNvbT4KLS0tCnYxLT52MjogdXBkYXRlIHRv
-IHdoYXQgaXMgbm93IHRoZSBsYXRlc3QgQlNQIHRhZwoKIC4uLmNvbnZlcnNpb24tZXJyb3ItYW5k
-LWVudW0tY29tcGFyZS13YS5wYXRjaCB8IDc5IC0tLS0tLS0tLS0tLS0tLS0tLS0KIHBhY2thZ2Uv
-Zm1saWIvZm1saWIuaGFzaCAgICAgICAgICAgICAgICAgICAgICB8ICAyICstCiBwYWNrYWdlL2Zt
-bGliL2ZtbGliLm1rICAgICAgICAgICAgICAgICAgICAgICAgfCAgMiArLQogMyBmaWxlcyBjaGFu
-Z2VkLCAyIGluc2VydGlvbnMoKyksIDgxIGRlbGV0aW9ucygtKQogZGVsZXRlIG1vZGUgMTAwNjQ0
-IHBhY2thZ2UvZm1saWIvMDAwMS1GaXgtdGhlLWludGVnZXItY29udmVyc2lvbi1lcnJvci1hbmQt
-ZW51bS1jb21wYXJlLXdhLnBhdGNoCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9mbWxpYi8wMDAxLUZp
-eC10aGUtaW50ZWdlci1jb252ZXJzaW9uLWVycm9yLWFuZC1lbnVtLWNvbXBhcmUtd2EucGF0Y2gg
-Yi9wYWNrYWdlL2ZtbGliLzAwMDEtRml4LXRoZS1pbnRlZ2VyLWNvbnZlcnNpb24tZXJyb3ItYW5k
-LWVudW0tY29tcGFyZS13YS5wYXRjaApkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggZTM4
-YjM2MTI4ZjE3Li4wMDAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9mbWxpYi8wMDAxLUZpeC10aGUt
-aW50ZWdlci1jb252ZXJzaW9uLWVycm9yLWFuZC1lbnVtLWNvbXBhcmUtd2EucGF0Y2gKKysrIC9k
-ZXYvbnVsbApAQCAtMSw3OSArMCwwIEBACi1Gcm9tIDNhMTk2MmE3MGNlYzc0YjNkYWM5NzllNTJh
-MmNiY2FhODg5N2I5YzggTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCi1Gcm9tOiBBa2hpbGVzaCBO
-ZW1hIDxuZW1hYWtoaWxlc2hAZ21haWwuY29tPgotRGF0ZTogRnJpLCAxMCBKYW4gMjAyNSAyMDoy
-MDo1MCAtMDgwMAotU3ViamVjdDogW1BBVENIXSBGaXggdGhlIGludGVnZXIgY29udmVyc2lvbiBl
-cnJvciBhbmQgZW51bSBjb21wYXJlCi0gd2FybmluZ3Mgb24gYnVpbGQgdW5kZXIgZ2NjLTE0Ci1N
-SU1FLVZlcnNpb246IDEuMAotQ29udGVudC1UeXBlOiB0ZXh0L3BsYWluOyBjaGFyc2V0PVVURi04
-Ci1Db250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0Ci0KLUVycm9yOgotc3JjL2ZtX2xpYi5j
-OiBJbiBmdW5jdGlvbiDigJhHZXREZXZpY2VJZOKAmToKLXNyYy9mbV9saWIuYzoxMzk6MjE6IGVy
-cm9yOiByZXR1cm5pbmcg4oCYdWludHB0cl904oCZIHtha2Eg4oCYbG9uZyB1bnNpZ25lZCBpbnTi
-gJl9IGZyb20gYSBmdW5jdGlvbiB3aXRoIHJldHVybiB0eXBlIOKAmHRfSGFuZGxl4oCZIHtha2Eg
-4oCYdm9pZCAq4oCZfSBtYWtlcyBwb2ludGVyIGZyb20gaW50ZWdlciB3aXRob3V0IGEgY2FzdCBb
-LVdpbnQtY29udmVyc2lvbl0KLSAgMTM5IHwgICAgICAgICByZXR1cm4gcF9EZXYtPmlkOwotICAg
-ICAgfCAgICAgICAgICAgICAgICB+fn5+fl5+fn4KLQotV2FybmluZ3M6Ci0KLXNyYy9mbV9saWIu
-YzogSW4gZnVuY3Rpb24g4oCYRk1fUENEX0NjUm9vdE1vZGlmeU5leHRFbmdpbmXigJk6Ci1zcmMv
-Zm1fbGliLmM6OTk3OjUxOiB3YXJuaW5nOiBjb21wYXJpc29uIGJldHdlZW4g4oCYZV9GbVBjZEVu
-Z2luZeKAmSBhbmQg4oCYZW51bSBpb2NfZm1fcGNkX2VuZ2luZeKAmSBbLVdlbnVtLWNvbXBhcmVd
-Ci0gIDk5NyB8ICAgICAgICAgaWYgKHBfRm1QY2RDY05leHRFbmdpbmVQYXJhbXMtPm5leHRFbmdp
-bmUgPT0gZV9JT0NfRk1fUENEX0ZSKSB7Ci0gICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgXn4KLXNyYy9mbV9saWIuYzogSW4gZnVuY3Rpb24g
-4oCYRk1fUENEX01hdGNoVGFibGVBZGRLZXnigJk6Ci1zcmMvZm1fbGliLmM6MTEwMzo1Nzogd2Fy
-bmluZzogY29tcGFyaXNvbiBiZXR3ZWVuIOKAmGVfRm1QY2RFbmdpbmXigJkgYW5kIOKAmGVudW0g
-aW9jX2ZtX3BjZF9lbmdpbmXigJkgWy1XZW51bS1jb21wYXJlXQotIDExMDMgfCAgICAgZWxzZSBp
-ZiAocF9LZXlQYXJhbXMtPmNjTmV4dEVuZ2luZVBhcmFtcy5uZXh0RW5naW5lID09IGVfSU9DX0ZN
-X1BDRF9GUikgewotICAgICAgfCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIF5+Ci1zcmMvZm1fbGliLmM6IEluIGZ1bmN0aW9uIOKAmEZNX1BD
-RF9NYXRjaFRhYmxlTW9kaWZ5S2V5QW5kTmV4dEVuZ2luZeKAmToKLXNyYy9mbV9saWIuYzoxMTc0
-OjU3OiB3YXJuaW5nOiBjb21wYXJpc29uIGJldHdlZW4g4oCYZV9GbVBjZEVuZ2luZeKAmSBhbmQg
-4oCYZW51bSBpb2NfZm1fcGNkX2VuZ2luZeKAmSBbLVdlbnVtLWNvbXBhcmVdCi0gMTE3NCB8ICAg
-ICBlbHNlIGlmIChwX0tleVBhcmFtcy0+Y2NOZXh0RW5naW5lUGFyYW1zLm5leHRFbmdpbmUgPT0g
-ZV9JT0NfRk1fUENEX0ZSKSB7Ci0KLVVwc3RyZWFtOiBodHRwczovL2dpdGh1Yi5jb20vbnhwLXFv
-cmlxL2ZtbGliL3B1bGwvMQotCi1TaWduZWQtb2ZmLWJ5OiBBa2hpbGVzaCBOZW1hIDxuZW1hYWto
-aWxlc2hAZ21haWwuY29tPgotLS0tCi0gc3JjL2ZtX2xpYi5jIHwgOCArKysrLS0tLQotIDEgZmls
-ZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCi0KLWRpZmYgLS1naXQg
-YS9zcmMvZm1fbGliLmMgYi9zcmMvZm1fbGliLmMKLWluZGV4IDRlYTQwZmYuLjg1YjRhNjYgMTAw
-NjQ0Ci0tLS0gYS9zcmMvZm1fbGliLmMKLSsrKyBiL3NyYy9mbV9saWIuYwotQEAgLTEzNiw3ICsx
-MzYsNyBAQCB0X0hhbmRsZSBHZXREZXZpY2VJZCh0X0hhbmRsZSBoX0RldikKLSB7Ci0gCXRfRGV2
-aWNlICpwX0RldiA9ICh0X0RldmljZSopaF9EZXY7Ci0gCi0tCXJldHVybiBwX0Rldi0+aWQ7Ci0r
-CXJldHVybiAodF9IYW5kbGUpIHBfRGV2LT5pZDsKLSB9Ci0gCi0gCi1AQCAtOTk0LDcgKzk5NCw3
-IEBAIHRfRXJyb3IgRk1fUENEX0NjUm9vdE1vZGlmeU5leHRFbmdpbmUodF9IYW5kbGUgICAgICAg
-ICAgICAgICAgICBoX0NjVHJlZSwKLSAgICAgfQotIAotICNpZiAoRFBBQV9WRVJTSU9OID49IDEx
-KQotLQlpZiAocF9GbVBjZENjTmV4dEVuZ2luZVBhcmFtcy0+bmV4dEVuZ2luZSA9PSBlX0lPQ19G
-TV9QQ0RfRlIpIHsKLSsJaWYgKHBfRm1QY2RDY05leHRFbmdpbmVQYXJhbXMtPm5leHRFbmdpbmUg
-PT0gZV9GTV9QQ0RfRlIpIHsKLSAgICAgICAgIHRfRGV2aWNlICpwX05leHREZXYgPSAodF9EZXZp
-Y2UqKSBwX0ZtUGNkQ2NOZXh0RW5naW5lUGFyYW1zLT5wYXJhbXMuZnJQYXJhbXMuaF9Gcm1SZXBs
-aWM7Ci0gICAgICAgICBwYXJhbXMuY2NfbmV4dF9lbmdpbmVfcGFyYW1zLnBhcmFtcy5mcl9wYXJh
-bXMuZnJtX3JlcGxpY19pZCA9IFVJTlRfVE9fUFRSKHBfTmV4dERldi0+aWQpOwotICAgICB9Ci1A
-QCAtMTEwMCw3ICsxMTAwLDcgQEAgdF9FcnJvciBGTV9QQ0RfTWF0Y2hUYWJsZUFkZEtleSh0X0hh
-bmRsZSAgICAgICAgICAgIGhfQ2NOb2RlLAotICAgICAJcGFyYW1zLmtleV9wYXJhbXMuY2NfbmV4
-dF9lbmdpbmVfcGFyYW1zLnBhcmFtcy5rZ19wYXJhbXMucF9kaXJlY3Rfc2NoZW1lID0gVUlOVF9U
-T19QVFIocF9OZXh0RGV2LT5pZCk7Ci0gICAgIH0KLSAjaWYgKERQQUFfVkVSU0lPTiA+PSAxMSkK
-LS0gICAgZWxzZSBpZiAocF9LZXlQYXJhbXMtPmNjTmV4dEVuZ2luZVBhcmFtcy5uZXh0RW5naW5l
-ID09IGVfSU9DX0ZNX1BDRF9GUikgewotKyAgICBlbHNlIGlmIChwX0tleVBhcmFtcy0+Y2NOZXh0
-RW5naW5lUGFyYW1zLm5leHRFbmdpbmUgPT0gZV9GTV9QQ0RfRlIpIHsKLSAgICAgCXRfRGV2aWNl
-ICpwX05leHREZXYgPSAodF9EZXZpY2UqKSBwX0tleVBhcmFtcy0+Y2NOZXh0RW5naW5lUGFyYW1z
-LnBhcmFtcy5mclBhcmFtcy5oX0ZybVJlcGxpYzsKLSAgICAgCXBhcmFtcy5rZXlfcGFyYW1zLmNj
-X25leHRfZW5naW5lX3BhcmFtcy5wYXJhbXMuZnJfcGFyYW1zLmZybV9yZXBsaWNfaWQgPSBVSU5U
-X1RPX1BUUihwX05leHREZXYtPmlkKTsKLSAgICAgfQotQEAgLTExNzEsNyArMTE3MSw3IEBAIHRf
-RXJyb3IgRk1fUENEX01hdGNoVGFibGVNb2RpZnlLZXlBbmROZXh0RW5naW5lKHRfSGFuZGxlICAg
-ICAgICAgICAgaF9DY05vZGUsCi0gICAgIAlwYXJhbXMua2V5X3BhcmFtcy5jY19uZXh0X2VuZ2lu
-ZV9wYXJhbXMucGFyYW1zLmtnX3BhcmFtcy5wX2RpcmVjdF9zY2hlbWUgPSBVSU5UX1RPX1BUUihw
-X05leHREZXYtPmlkKTsKLSAgICAgfQotICNpZiAoRFBBQV9WRVJTSU9OID49IDExKQotLSAgICBl
-bHNlIGlmIChwX0tleVBhcmFtcy0+Y2NOZXh0RW5naW5lUGFyYW1zLm5leHRFbmdpbmUgPT0gZV9J
-T0NfRk1fUENEX0ZSKSB7Ci0rICAgIGVsc2UgaWYgKHBfS2V5UGFyYW1zLT5jY05leHRFbmdpbmVQ
-YXJhbXMubmV4dEVuZ2luZSA9PSBlX0ZNX1BDRF9GUikgewotICAgICAJdF9EZXZpY2UgKnBfTmV4
-dERldiA9ICh0X0RldmljZSopIHBfS2V5UGFyYW1zLT5jY05leHRFbmdpbmVQYXJhbXMucGFyYW1z
-LmZyUGFyYW1zLmhfRnJtUmVwbGljOwotICAgICAJcGFyYW1zLmtleV9wYXJhbXMuY2NfbmV4dF9l
-bmdpbmVfcGFyYW1zLnBhcmFtcy5mcl9wYXJhbXMuZnJtX3JlcGxpY19pZCA9IFVJTlRfVE9fUFRS
-KHBfTmV4dERldi0+aWQpOwotICAgICB9Ci0tLSAKLTIuMjUuMQotCmRpZmYgLS1naXQgYS9wYWNr
-YWdlL2ZtbGliL2ZtbGliLmhhc2ggYi9wYWNrYWdlL2ZtbGliL2ZtbGliLmhhc2gKaW5kZXggZWRm
-ODc0MjZkZmIwLi5iMDM5NmI5MzkxMjcgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvZm1saWIvZm1saWIu
-aGFzaAorKysgYi9wYWNrYWdlL2ZtbGliL2ZtbGliLmhhc2gKQEAgLTEsMyArMSwzIEBACiAjIExv
-Y2FsbHkgY29tcHV0ZWQKLXNoYTI1NiAgMTczZjFjNDEyMDdlNTBkZDM5MDhjN2RhZDE5Mjk2MjI0
-MGZkMWE5MjY5YmNhNmUzNjhmNDAxMTM0YjM1MDNiZiAgZm1saWItbGYtNi42LjUyLTIuMi4wLnRh
-ci5negorc2hhMjU2ICAwODdlMWJlMzU4NGEzOTBjZjBhNzVmYTM3MzA1ODllZGY3NmFhOWE0ODMy
-ZmEwMTJhNjdjMzgxY2JmNWI1N2EzICBmbWxpYi03YTU4ZWNhZjBkOTBkNzFkNmI3OGQzYWM3OTk4
-MjgyYTQ3MmM0Mzk0LnRhci5negogc2hhMjU2ICA1ZDc3NzBmYTlmNzBmMGM2ZjBiNDc4NGJiY2E4
-NDAxODExMjU5YTRiMWUwMzQ1NWRiZDg2M2ZmZDBkMzRkMmNhICBMSUNFTlNFCmRpZmYgLS1naXQg
-YS9wYWNrYWdlL2ZtbGliL2ZtbGliLm1rIGIvcGFja2FnZS9mbWxpYi9mbWxpYi5tawppbmRleCA2
-MDFhM2UxNmVmYjAuLjM4NjgzNTIzZDM0MyAxMDA2NDQKLS0tIGEvcGFja2FnZS9mbWxpYi9mbWxp
-Yi5taworKysgYi9wYWNrYWdlL2ZtbGliL2ZtbGliLm1rCkBAIC00LDcgKzQsNyBAQAogIwogIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotRk1MSUJfVkVSU0lPTiA9IGxmLTYuNi41Mi0yLjIuMAor
-Rk1MSUJfVkVSU0lPTiA9IDdhNThlY2FmMGQ5MGQ3MWQ2Yjc4ZDNhYzc5OTgyODJhNDcyYzQzOTQK
-IEZNTElCX1NJVEUgPSAkKGNhbGwgZ2l0aHViLG54cC1xb3JpcSxmbWxpYiwkKEZNTElCX1ZFUlNJ
-T04pKQogRk1MSUJfTElDRU5TRSA9IEJTRC0zLUNsYXVzZQogRk1MSUJfTElDRU5TRV9GSUxFUyA9
-IExJQ0VOU0UKLS0gCjIuNDMuMAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
-ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+The DDR PHY on the NXP LX2160A SoC needs firmware. This is distributed
+as prebuilt binaries by NXP through GitHub.
+
+There have been discussions and other opinions on previous revisions of
+the patch on how it should be integrated:
+https://lore.kernel.org/buildroot/20250318163228.9989-1-vjardin@free.fr/
+
+But I haven't integrated any of that feedback. It is a simple package
+which copies the pre-built FIP image containing DDR PHY firmware files
+to the images/ folder, to be used by post-image scripts.
+
+Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Reviewed-by: Vincent Jardin <vjardin@free.fr>
+---
+v1->v2: add one paragraph to the commit message
+
+ DEVELOPERS                                     |  3 +++
+ package/Config.in                              |  1 +
+ package/qoriq-ddr-phy-binary/Config.in         |  6 ++++++
+ .../qoriq-ddr-phy-binary.hash                  |  3 +++
+ .../qoriq-ddr-phy-binary.mk                    | 18 ++++++++++++++++++
+ 5 files changed, 31 insertions(+)
+ create mode 100644 package/qoriq-ddr-phy-binary/Config.in
+ create mode 100644 package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
+ create mode 100644 package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 44f7684c974c..a1c7f867808e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3369,6 +3369,9 @@ N:	Vivien Didelot <vivien.didelot@gmail.com>
+ F:	board/technologic/ts5500/
+ F:	configs/ts5500_defconfig
+ 
++N:	Vladimir Oltean <olteanv@gmail.com>
++F:	package/qoriq-ddr-phy-binary/
++
+ N:	Volkov Viacheslav <sv99@inbox.ru>
+ F:	package/v4l2grab/
+ F:	package/zbar/
+diff --git a/package/Config.in b/package/Config.in
+index d8751fc19f54..b6aecf7d7707 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -448,6 +448,7 @@ menu "Firmware"
+ 	source "package/odroidc2-firmware/Config.in"
+ 	source "package/panel-mipi-dbi-firmware/Config.in"
+ 	source "package/qcom-db410c-firmware/Config.in"
++	source "package/qoriq-ddr-phy-binary/Config.in"
+ 	source "package/qoriq-fm-ucode/Config.in"
+ 	source "package/rcw-smarc-sal28/Config.in"
+ 	source "package/rpi-firmware/Config.in"
+diff --git a/package/qoriq-ddr-phy-binary/Config.in b/package/qoriq-ddr-phy-binary/Config.in
+new file mode 100644
+index 000000000000..301a2c197421
+--- /dev/null
++++ b/package/qoriq-ddr-phy-binary/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_QORIQ_DDR_PHY_BINARY
++	bool "qoriq-ddr-phy-binary"
++	help
++	  Firmware binary for DDR PHY of NXP LX2160A family of SoCs.
++
++	  https://github.com/nxp-qoriq/ddr-phy-binary
+diff --git a/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
+new file mode 100644
+index 000000000000..7a689d42a5ad
+--- /dev/null
++++ b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  475bca55d8b05463e75f6d47a8ea7e3def8505a614170b0a3976bd342ca3d759  qoriq-ddr-phy-binary-lf-6.12.3-1.0.0.tar.gz
++sha256  e7e5f4949f7ac9f9a5d4d68b8f835f3ddc93ad47b594a11de699d90b9175413f  NXP-Binary-EULA.txt
+diff --git a/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk
+new file mode 100644
+index 000000000000..5ce990b75b76
+--- /dev/null
++++ b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# qoriq-ddr-phy-binary
++#
++################################################################################
++
++QORIQ_DDR_PHY_BINARY_VERSION = lf-6.12.3-1.0.0
++QORIQ_DDR_PHY_BINARY_SITE = $(call github,nxp-qoriq,ddr-phy-binary,$(QORIQ_DDR_PHY_BINARY_VERSION))
++QORIQ_DDR_PHY_BINARY_LICENSE = NXP Binary EULA
++QORIQ_DDR_PHY_BINARY_LICENSE_FILES = NXP-Binary-EULA.txt
++QORIQ_DDR_PHY_BINARY_INSTALL_IMAGES = YES
++QORIQ_DDR_PHY_BINARY_INSTALL_TARGET = NO
++
++define QORIQ_DDR_PHY_BINARY_INSTALL_IMAGES_CMDS
++	$(INSTALL) -D $(@D)/lx2160a/fip_ddr.bin $(BINARIES_DIR)/fip_ddr.bin
++endef
++
++$(eval $(generic-package))
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
