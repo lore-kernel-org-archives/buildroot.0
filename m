@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1129C28B20
-	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 18:51:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5708DC36010
+	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 18:51:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87F9F40E49;
+	by smtp3.osuosl.org (Postfix) with ESMTP id A811B707F3;
 	Fri, 28 Mar 2025 18:51:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YmmirtfcARSc; Fri, 28 Mar 2025 18:51:54 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jDgSkNWpkvce; Fri, 28 Mar 2025 18:51:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B22ED40D72
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EBC76FA23
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B22ED40D72;
-	Fri, 28 Mar 2025 18:51:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B61F1B7
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:51:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3EBC76FA23;
+	Fri, 28 Mar 2025 18:51:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 83AF81B7
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:51:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6DC14703C2
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5B8BD707A8
  for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:51:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f56C6NN3rpXl for <buildroot@buildroot.org>;
+ id wxEx6ZZxj6ZY for <buildroot@buildroot.org>;
  Fri, 28 Mar 2025 18:51:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 731996FA23
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8154D703C2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 731996FA23
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8154D703C2
  for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:51:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6D4B483760; Fri, 28 Mar 2025 18:51:49 +0000 (UTC)
+ id 77C098375E; Fri, 28 Mar 2025 18:51:49 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
 Date: Fri, 28 Mar 2025 19:39:45 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 57d2bdb1238aa1743400e59f2d52efd51f373180
-X-Git-Newrev: e242a5908cf882e7f692dbc32415de2cfa5ec9f2
+X-Git-Oldrev: e242a5908cf882e7f692dbc32415de2cfa5ec9f2
+X-Git-Newrev: 91bfce113e895fc9637707e73567e5d13da3f169
 X-Patchwork-Hint: ignore
-Message-Id: <20250328185149.6D4B483760@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/exim: security bump version to
- 4.98.2
+Message-Id: <20250328185149.77C098375E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mbedtls: security bump to version
+ 2.8.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,47 +65,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e242a5908cf882e7f692dbc32415de2cfa5ec9f2
+commit: https://git.buildroot.net/buildroot/commit/?id=91bfce113e895fc9637707e73567e5d13da3f169
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes CVE-2025-30232:
-https://lists.exim.org/lurker/message/20250326.140105.6b97555b.en.html
-https://exim.org/static/doc/security/CVE-2025-30232.txt
+Fixes the following security issues:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+- CVE-2025-27809: Note that TLS clients should generally call
+  mbedtls_ssl_set_hostname() if they use certificate authentication (i.e.
+  not pre-shared keys).  Otherwise, in many scenarios, the server could be
+  impersonated.  The library will now prevent the handshake and return
+  MBEDTLS_ERR_SSL_CERTIFICATE_VERIFICATION_WITHOUT_HOSTNAME if
+  mbedtls_ssl_set_hostname() has not been called.
+
+  https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2025-03-1/
+
+- CVE-2025-27810: Zeroize temporary heap buffers used in PSA operations.
+  Fix a vulnerability in the TLS 1.2 handshake.  If memory allocation
+  failed or there was a cryptographic hardware failure when calculating the
+  Finished message, it could be calculated incorrectly.  This would break
+  the security guarantees of the TLS handshake.
+
+  https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2025-03-2/
+
+For more details, see the release notes:
+https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-2.28.10
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/exim/exim.hash | 4 ++--
- package/exim/exim.mk   | 2 +-
+ package/mbedtls/mbedtls.hash | 4 ++--
+ package/mbedtls/mbedtls.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index eba73e267f..0dd5ac47ae 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,6 +1,6 @@
- # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
--sha256  d858b75ad2cc6bf71c9071ba26a55b3ea9add26607bd832df3cb54f82221c2ce  exim-4.98.1.tar.xz
-+sha256  88b8e8a67c1db6cc0b1d148161aa36e662f4ca2fef25d5b6f3694d490e42dcae  exim-4.98.2.tar.xz
- # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
--sha512  8f80999a41ed40e86ee16eea5cfd765e2f164ea149f40eeb410fd02fcf35c23317dc69540efe336e9e0fae930b1cc6771e0180dd70f1314531cdb139740c744e  exim-4.98.1.tar.xz
-+sha512  aaa4cfc8aee90818c6d1c2fd0cf64b82668d1a343f462f678b38b2b79e10a467240f2e81786eec7705eec3598d23686a74437c50b68502f29ff67788393c812a  exim-4.98.2.tar.xz
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 9de7f731da..6fc68ddac6 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.9:
+-sha256  e85ea97aaf78dd6c0a5ba2e54dd5932ffa15f39abfc189c26beef7684630c02b  mbedtls-2.28.9.tar.bz2
++# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.10:
++sha256  19e5b81fdac0fe22009b9e2bdcd52d7dcafbf62bc67fc59cf0a76b5b5540d149  mbedtls-2.28.10.tar.bz2
  # Locally calculated
- sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 5135d02574..9ecae0d038 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
+ sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 2faa6dff55..fd6682fbfd 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXIM_VERSION = 4.98.1
-+EXIM_VERSION = 4.98.2
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
- EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPL-2.0+
+-MBEDTLS_VERSION = 2.28.9
++MBEDTLS_VERSION = 2.28.10
+ MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(MBEDTLS_VERSION)
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION).tar.bz2
+ MBEDTLS_CONF_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
