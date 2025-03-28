@@ -4,97 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5859C28B20
-	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 19:27:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FB72C28B20
+	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 19:57:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 46E9E84F79;
-	Fri, 28 Mar 2025 19:27:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 326BF85865;
+	Fri, 28 Mar 2025 19:57:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VzavvLYGKo9o; Fri, 28 Mar 2025 19:27:02 +0000 (UTC)
+ id AMgxPqS1EPnr; Fri, 28 Mar 2025 19:57:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7536384FEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 054C7858A6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7536384FEE;
-	Fri, 28 Mar 2025 19:27:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 059B51B7
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 19:27:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 054C7858A6;
+	Fri, 28 Mar 2025 19:57:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CC75A12A
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 19:57:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D868842522
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 19:27:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BEA8E70903
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 19:57:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nFNgcsocKVqo for <buildroot@buildroot.org>;
- Fri, 28 Mar 2025 19:27:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pMfQfY7-KADg for <buildroot@buildroot.org>;
+ Fri, 28 Mar 2025 19:57:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
- envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1177B40147
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1177B40147
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1177B40147
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 19:26:59 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-43d04dc73b7so27769985e9.3
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 12:26:59 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
+ envelope-from=francois.dugast.foss@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E9EFA708E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E9EFA708E4
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E9EFA708E4
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 19:57:46 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-39ac56756f6so2015306f8f.2
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 12:57:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1743190018; x=1743794818;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=11+AAbdmE7gWZDqWhWQ/eFLWRlDn/ePYVZGMsGAvQNU=;
- b=ejA5CKmO5/acYTTpqgPkz2ryUtlG24W0nb+udY6cgiILaxHO43sahd65XdhLrfbv9s
- /T+D+eS/s1lhQ6ZnBAUW4622nQf86TpIWFccsVXL3ufEk1j+ORoeSyyYQVpmCW71CHBu
- +NuXsNt+i/2vorGEiWZjm978ky14J//sD0Y/5sgxnZAdMjQMIOxD0/vgZqOSlo/h8bra
- AULWFpzbY997jrDN1e66KksUmzVQBq76SHJS16aolbAn9Y6M2yLg9SQuhm/1ksfHY0iQ
- Aj3mAmMqv71IvUC6Xz8Hi8ZK/s5Jw7cb6R4IoqpbhDBB/kkYiUE+9cnFgAj+G+G7iOpO
- +I7A==
-X-Gm-Message-State: AOJu0YzHUCj1UPacJjwS1mFjPRN5qmOPU6NG7nB+NYuUIWGw7apeCelW
- 0LuwBVYS58qFdxeqOuYVvI79jDC9XlfBZwafT4BZnWGBzJIy0fB+XlWFpQ==
-X-Gm-Gg: ASbGncumnI7QIgHl8iiJlJ+XmqQuE30WN/x8HbBuD3/iEiwiARtZ7y945g0J/8imYhc
- 5H7VHO9OknH4qP3pLEuuaQYmSgfWGX9+PSpWJS9u2kL6vuk1PdfgaIWIQYjWmNW209I1KXYkcuc
- /UKSdX+ud+P2241EAUtZ4aSFKgS4rZKnVz0CMThrle0IdQraO9HpNuqZPs2iMncRbs+bDDbkwTv
- A90sbNf4jtNqTf6dDorSdG7APqofIK+hGAml6pblm2XThksMbfFvD1Qwi7Iy7tYVGebnTTqIm1q
- qN1byLeEPUQTQJkL4/oF3r0+hkrCtiGT6fR7lF4Klc1LDkZj/8m1Is8=
-X-Google-Smtp-Source: AGHT+IHeSRiBQR52Bfdi7sv52Xp8AyCHdMqBUeS/1XdcXOPW4gMogiWPtgveFc0367Jb+RVTriHUGQ==
-X-Received: by 2002:a05:600c:474a:b0:43d:7588:6688 with SMTP id
- 5b1f17b1804b1-43db622a023mr6190205e9.12.1743190017585; 
- Fri, 28 Mar 2025 12:26:57 -0700 (PDT)
-Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-43d8fbc10e1sm36853045e9.12.2025.03.28.12.26.56
+ d=1e100.net; s=20230601; t=1743191865; x=1743796665;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=JNfryypOx6BWRinTqgU8NhvvmHUUb0kXE2mJEtKjnXc=;
+ b=G6d531B4Ixu5mdgQ9qsBmEapFh6AJp3cvhH8kmFFIfB8FX9HLq0yDs0NtQBwHLXIXc
+ TiXfn4xT5fWzcfrc/sG6VlaNRcF0F34sapKyfsA8Al1CABug7QVI2qqzupY22l+kC8fq
+ 59cB3gI8V2+HdID8iJLIbL5w1NIuZZnjnPkvmUSW2u8uXVl4uESwQafuLoEO8TjqIeVt
+ YN44haqQNCQPbXWhOXFQ4TEJRVnVdN8KGgBxVz1cZvISU5kvdA+jioOcdQHCLDxCVHQy
+ h98ZlBqHpi4lY6+0KlVpzDeBDMpgExyRjzphcEKw/z/l8WoeyChPHa3Y+PRTe8ofThWT
+ 5fRA==
+X-Gm-Message-State: AOJu0Yx8xTy7sSABUrh5sTYvHRpLIrrzHHGhVm6P0SEgkrjfwyoSGEro
+ xKrCtk08DNNyeGjMLoDUJHelI0XjWRPuZpy+DbFzr5acLkc62JpAZ1sisQ==
+X-Gm-Gg: ASbGnctSMbEtRgfXFYR+gEAl9ftfv1sgj2ZrXTmQyB8Qp5EpKFcrsvDTxighwLi6RCz
+ nRNMIKZQK2A6Me2q3U0CngeBv8X6mRAWO8Yi/K0VU5cKu4Ji8D6JGSxZ8FvwrOuadrjFL8zXU7+
+ Fpol6dfqsVMBODLxbSu2om5q6qOy9o/4sLFP6xTYZCuXaMGsiTTzTGjh5Wnz0rWyeZRQhmuLsVy
+ /R7+nDxqeovEz71N4KPDlitvSZpD3uIC7hS13EaN6IsI6uz0KVTd5kQqhO5pRFIJG2ge7a+0WoO
+ PbKPuDp4//XEqtSFQ9DCeT1FIDnxLM2jMrQVVifa3hWjBLxp7Q++6Xmdpa4Yb5ZoRg8KK7DSRT7
+ 8u0DjfyOf1so38JU5PGS2uZrCUjXb
+X-Google-Smtp-Source: AGHT+IFqbGxx8IbLWO7qv58sbEanrMb8PUoyzQ9IUBcOAyD58F2gubyRQ1tlZayjtwvdh9Hu0fEY9g==
+X-Received: by 2002:a05:6000:22c7:b0:390:fc5a:91c8 with SMTP id
+ ffacd0b85a97d-39c1211df1bmr304373f8f.53.1743191864702; 
+ Fri, 28 Mar 2025 12:57:44 -0700 (PDT)
+Received: from comet.lan (lfbn-ren-1-1629-205.w86-253.abo.wanadoo.fr.
+ [86.253.181.205]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-39c0b79e0dcsm3552272f8f.64.2025.03.28.12.57.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 28 Mar 2025 12:26:57 -0700 (PDT)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Fri, 28 Mar 2025 12:57:44 -0700 (PDT)
+From: Francois Dugast <francois.dugast.foss@gmail.com>
 To: buildroot@buildroot.org
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, Bernd Kuhls <bernd@kuhls.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 28 Mar 2025 20:26:56 +0100
-Message-ID: <20250328192656.2035235-1-yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.47.0
+Cc: Alistair Francis <alistair@alistair23.me>, ju.o@free.fr,
+ Francois Dugast <francois.dugast.foss@gmail.com>
+Date: Fri, 28 Mar 2025 20:57:38 +0100
+Message-Id: <20250328195741.3921731-2-francois.dugast.foss@gmail.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250328195741.3921731-1-francois.dugast.foss@gmail.com>
+References: <20250328195741.3921731-1-francois.dugast.foss@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1743190018; x=1743794818; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=11+AAbdmE7gWZDqWhWQ/eFLWRlDn/ePYVZGMsGAvQNU=;
- b=SNndmbwdgir8N2ghI90ZKsi4VM3/dogS2qoKPXQ3eUpjm/ZWjaR8a12MYeKrt4LPaK
- mZ1VAUIkkQMLkJGuTDkg4TgjtP6icrNYwtWf0Mi9XYskOD+8iOCL7pDQD1mr3P8eFzQe
- foKUeVIM9lKT+htigYZoLSNlHs1u29Lw3n5qsJYft0D8PTEiiix/9DsLtoDN2dBSmKC7
- mOeXJ2zMOWbmBBGY49spdVPctBx7bzfHZpwDjcotQOiOzzZcHgNhmoJAB0CQkFb/MGYA
- c2cladKefQwcBo451hg7ceUXNMOIsff695fRaPO0VUbwdoAbT3G1mMR3c12LWau9t66V
- 1IHw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1743191865; x=1743796665; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=JNfryypOx6BWRinTqgU8NhvvmHUUb0kXE2mJEtKjnXc=;
+ b=E5klk4aHImM5j6Ce6iVBMx8nB7g/+aIv7pbDCD//l7JWkF82i526S1pha6+pj3IZ56
+ 5hf13zXKWBVP+dSUZFb/4L41JMQWnPQL94Bu8hP5gE/hRPKw8uZ1kGWkljJoClTGqNuO
+ v11RXg9S9Cy8G5qx9RMxBkalQW+/EmzA0qtu/5aVnT9WHNWM/ZqOK8CTx4I5y7zf0FSD
+ /LgZtCptk2alUMaz00vfnsoNbw1U7CLeJzdgxk8VDyvcl6zOaGogax+AnFL0g07/fK6g
+ RVqIb4C1dTHsHi8ADURaSs3Up0vpCsukTv/3OWyDCz1f9MFqiI/vKQ8KSTp8d3jFb2py
+ gn6Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=SNndmbwd
-Subject: [Buildroot] [PATCH] package/libcap: do not attempt to run ldconfig
+ header.a=rsa-sha256 header.s=20230601 header.b=E5klk4aH
+Subject: [Buildroot] [PATCH 1/4] board/sifive/hifive-unleashed: fix
+ shellcheck warning in post-build.sh
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,51 +116,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The libcap Makefile is hand-coded (i.e. not autotools), and hard-codes
-calls to /sbin/ldconfig, unless it is installed out-of-tree. For target
-packages, this is done, but for host package this is not done, as we
-do set PREFIX instead, which causes libcpa's Makefile to call ldconfig
-and emits a spurious warning (twice):
+This removes a warning reported by shellcheck: "Double quote to prevent
+globbing and word splitting". As a result, the file can be removed from
+.checkpackageignore.
 
-    install -m 0755 libcap.so.2.73 /home/ymorin/dev/buildroot/O/master/per-package/host-libcap/host/lib/libcap.so.2.73
-    ln -sf libcap.so.2.73 /home/ymorin/dev/buildroot/O/master/per-package/host-libcap/host/lib/libcap.so.2
-    ln -sf libcap.so.2 /home/ymorin/dev/buildroot/O/master/per-package/host-libcap/host/lib/libcap.so
-    /sbin/ldconfig
-    /sbin/ldconfig: Can't create temporary cache file /etc/ld.so.cache~: Permission denied
-    make[4]: [Makefile:200: install-shared-cap] Error 1 (ignored)
-
-This is just a warning, but it is incorrect still.
-
-Fake an out-of-tree install with a non-empy DESTDIR that is just '/',
-and thus does in fact not install out-of-tree. This is enough to
-actually silence the warning. Add a little comment to explain that.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd@kuhls.net>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Francois Dugast <francois.dugast.foss@gmail.com>
 ---
- package/libcap/libcap.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .checkpackageignore                         | 1 -
+ board/sifive/hifive-unleashed/post-build.sh | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 5a6ed5b494..25b3a46c44 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -64,8 +64,11 @@ define HOST_LIBCAP_BUILD_CMDS
- 		$(HOST_LIBCAP_MAKE_FLAGS)
- endef
- 
-+# Set DESTDIR to a non-empty path, so that libcap's Makefile
-+# does not trigger calls to ldconfig
- define HOST_LIBCAP_INSTALL_CMDS
--	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBCAP_MAKE_FLAGS) install
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBCAP_MAKE_FLAGS) \
-+		DESTDIR=/ install
- endef
- 
- $(eval $(generic-package))
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 66b3e100bb..14f1a40a7c 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -72,7 +72,6 @@ board/roseapplepi/patches/uboot/0001-compiler-.h-sync-include-linux-compiler-.h-
+ board/roseapplepi/post-build.sh Shellcheck
+ board/seeed/stm32mp157c-odyssey/patches/linux/0001-ARM-dts-stm32-fix-stm32mp157c-odyssey-card-detect.patch lib_patch.Upstream
+ board/sheevaplug/patches/uboot/0001-Remove-redundant-YYLOC-global-declaration.patch lib_patch.Upstream
+-board/sifive/hifive-unleashed/post-build.sh Shellcheck
+ board/solidrun/clearfog/post-build.sh Shellcheck
+ board/solidrun/macchiatobin/post-build-mainline.sh Shellcheck
+ board/solidrun/macchiatobin/post-build.sh Shellcheck
+diff --git a/board/sifive/hifive-unleashed/post-build.sh b/board/sifive/hifive-unleashed/post-build.sh
+index b418120652..14c80558d5 100755
+--- a/board/sifive/hifive-unleashed/post-build.sh
++++ b/board/sifive/hifive-unleashed/post-build.sh
+@@ -1,2 +1,2 @@
+ #!/bin/sh
+-cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
++cp "$BINARIES_DIR/boot.scr" "$TARGET_DIR/boot/boot.scr"
 -- 
-2.47.0
+2.39.5
 
 _______________________________________________
 buildroot mailing list
