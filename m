@@ -1,87 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9272C36010
-	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 08:07:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0B37C28B20
+	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 08:47:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 52138612AA;
-	Fri, 28 Mar 2025 08:07:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C9EF85793;
+	Fri, 28 Mar 2025 08:47:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GGbfX-aBkJZF; Fri, 28 Mar 2025 08:07:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7UmgM-M2jvC9; Fri, 28 Mar 2025 08:47:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E0F47082B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C367A85796
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E0F47082B;
-	Fri, 28 Mar 2025 08:07:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D96AD12A
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 08:07:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C367A85796;
+	Fri, 28 Mar 2025 08:47:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 465D31B7
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 08:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C32E470815
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 08:07:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2C6D985792
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 08:47:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id prVtcZYAAlCo for <buildroot@buildroot.org>;
- Fri, 28 Mar 2025 08:07:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.221.237.221;
- helo=send126.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5EB6B70837
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EB6B70837
-Received: from send126.i.mail.ru (send126.i.mail.ru [89.221.237.221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5EB6B70837
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 08:07:08 +0000 (UTC)
-Received: by exim-smtp-78d4fbc7f9-ltzfz with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1ty4k5-00000000FOv-1C8M; Fri, 28 Mar 2025 11:07:05 +0300
-Message-ID: <6ac3af59-b287-49de-8303-681116ec7768@inbox.ru>
-Date: Fri, 28 Mar 2025 11:07:04 +0300
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h-CRZEc5hx0R for <buildroot@buildroot.org>;
+ Fri, 28 Mar 2025 08:47:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ envelope-from=maxime.leroys@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5916D85796
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5916D85796
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5916D85796
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 08:47:48 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-3913fdd0120so1085237f8f.0
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 01:47:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1743151666; x=1743756466;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=ZZ09CCr/32/kuwNAKXVXGRlZPqy2BXvJgxeYkhCU/9Y=;
+ b=PikyeSEJ8+aFkXigp4HT+vG15R5dtl2GVq3Mi2Lupy1fwzPwkrKqlPRN45a3edK+wJ
+ G1i/huv4mEK4F7kYmmtVkD0qwLAcoH62ryHmXqTnD7dvlIO8fhNrlaMFWxz1lRw8MCqZ
+ rd9FTVnwh1SpddOWRcam/qfRSgT0vVQvQ1VCyRKiEzZnqXR1X3eWiNyJy6uspvvu7IrI
+ CiiJPy0qEtRcDTy7t3IRBd/jg4D3J6QWhAjVHQ01l0ukN7QUz0ACPO6G0rhshOMb39Z6
+ JocRLEs6PPKQn5NcLhb38iOrG7xcpYyxjJjezIaQ4cwdImPO6YrTvWSxTTJVCd+Ckatg
+ Gt0Q==
+X-Gm-Message-State: AOJu0YzxyrS9p562IQN08DicIaXP+DeVx+xEeXzmOANtb6jet4kPcvC1
+ gq3Vg6mPk5G9P1FLIq1IgmYgjR0aFYTy/iVsMeyAvqoH1uhYc1VKXlS7Msn8XUo=
+X-Gm-Gg: ASbGnctCW/i+AfiJdoj9oarBu/9oOV9uxwHcZKgJP+uHtvw+Iy+ovVCRoyT4hQrewdz
+ qWKjfKndHy+1ZK2Y2rIIvt+Yn159a9taTdu6ebqIO9SKH3q+80nuBhoMUn856462zcyfqvJq8ze
+ vFg2i99tBwYYLbgtXr6owiKf3HqSHNY2+ygwDPsRBcjJDHK4WR31jQ6qVvzEPdjxP62UyGbuoYr
+ vUqFMuaakIeHYQXL/D5zgnvkVBHUtEtMfRW4rmSGLboFODnlgeX9WWIhYR0dQkEGHcvCzl/dXFE
+ rFCOIeGX0XKsgS1dfH0EZgO9XVi0Z7pcJSTaOOsZOQ+fagdEyXs6CWXXNpFHiw19O+e9jxPppg=
+ =
+X-Google-Smtp-Source: AGHT+IE2cp14r6DEtReSlQYNbLZH0LiwIUdF0LK2tV4/CxnfsxO/QQH6PXQD3tmNVKtz3+AfxKTVHg==
+X-Received: by 2002:a05:6000:400c:b0:391:275a:273f with SMTP id
+ ffacd0b85a97d-39ad17401cbmr5627976f8f.4.1743151666191; 
+ Fri, 28 Mar 2025 01:47:46 -0700 (PDT)
+Received: from freepad.iliad.local (free-reseau.vlq16.iliad.fr. [213.36.7.12])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-39c0b79e12bsm1964481f8f.62.2025.03.28.01.47.45
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 28 Mar 2025 01:47:45 -0700 (PDT)
+From: Maxime Leroy <maxime@leroys.fr>
+To: buildroot@buildroot.org
+Cc: Vincent Jardin <vjardin@free.fr>, Robin Jarry <robin@jarry.cc>,
+ Julien Olivain <ju.o@free.fr>, Maxime Leroy <maxime@leroys.fr>
+Date: Fri, 28 Mar 2025 09:47:40 +0100
+Message-ID: <20250328084743.8759-1-maxime@leroys.fr>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250326132655.35729-1-maxime@leroys.fr>
+References: <20250326132655.35729-1-maxime@leroys.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Scott Fan <fancp2007@gmail.com>, buildroot@buildroot.org
-References: <20250325014602.1168402-1-fancp2007@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20250325014602.1168402-1-fancp2007@gmail.com>
-X-Mailru-Src: smtp
-X-4EC0790: 10
-X-7564579A: 646B95376F6C166E
-X-77F55803: 4F1203BC0FB41BD9A360261D1766EAAE2CEC989D154AEC03D62A88D91B045B7F182A05F538085040B6B0B05C9DD550213DE06ABAFEAF6705992CF38C063C4240DA214197AF4D340D83CBAA0A329D8B6B
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7F1942E6D70B4A2F0EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637AC83A81C8FD4AD23D82A6BABE6F325AC2E85FA5F3EDFCBAA7353EFBB553375661C72F8825BA4B78E341DB6B9F5264E8323BA0F28A92578D7DB2DAE5948F570FF8EEF46B7454FC60B9742502CCDD46D0D706E30CA52318619F6B57BC7E64490618DEB871D839B73339E8FC8737B5C224911E5B64A728E1589CC7F00164DA146DAFE8445B8C89999729449624AB7ADAF37F6B57BC7E64490611E7FA7ABCAF51C92176DF2183F8FC7C07C37DE3F426B52F18941B15DA834481F9449624AB7ADAF372E808ACE2090B5E14AD6D5ED66289B5278DA827A17800CE754F43A495B1ACFC12EB15956EA79C166176DF2183F8FC7C0D05AD665AB97B35D725E5C173C3A84C3335407143AA9223635872C767BF85DA2F004C90652538430E4A6367B16DE6309
-X-C1DE0DAB: 0D63561A33F958A5E9750928B585857A5002B1117B3ED6967985B2973FF319051BDDAE3D1EA49BEA823CB91A9FED034534781492E4B8EEAD2B25D9E4C92BC8ACBDAD6C7F3747799A
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF3FED46C3ACD6F73ED3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF21B7BB7BBE4AA94A86818401AA90A767E2FCA6C368FFBF7DC485B67D9CFBD46BC9FF4CCC84A62DB75B8A6FADB96A467091E676E37F21291EBFC6AF87BB37F530558B6873E1A8161F111DC66A97D0BFE2913E6812662D5F2A17D6C1CDD2003EB8E03787203701020945C72C348FB7EED3
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+ObcCpyrx6l7KImUglyhkEat/+ysWwi0gdhEs0JGjl6ggRWTy1haxBpVdbIX1nthFXMZebaIdHP2ghjoIc/363UZI6Kf1ptIMVZ8CcAyMfNWT9wwPcNUn/2c=
-X-Mailru-Sender: 689FA8AB762F739381B31377CF4CA21958ED7422EC37D8EA9355D46C0D197EE18F2380F6D1BC243F90DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; 
- s=mail4; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References
- :To:Subject:MIME-Version:Date:Message-ID:From:Sender:Reply-To:To:Cc:
- Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
- List-Archive:X-Cloud-Ids:Disposition-Notification-To;
- bh=JRgkHlOx8LEWiEYmXUBvu+HBzgb8Z+ExpcdgFOHTs6w=; t=1743149229; x=1743239229; 
- b=uCI1iDc6SIcIGPHD6UFp3EWqllT08FGp4aaf3HsZXayXBihq0LYMbChDP0YGnRkykALzW+aF3pl
- 1JlgA11IhlntoLIDRqSfQlpriKluyAt/lP+YgdC3nump4yJeMDkFT80UsUMOejpLJegWA5BXZOpoX
- eYKyUx5PEniA7KKuV1nJu/oQ5ca5eibR7eASfLXDbeWb8LeM7wpGYq+DNRTpORZhTR1gJxIE23WXB
- fV3l0J+e0upp6ooAZqaHxiYaaKSiDsLfrtLLN6PdTcxWclA/DjbHKKJkXCfJWcDK9tipLQfBmqoWU
- xTBCAz9dp+odqxA0vogRH1PpHAUbQE4opxpw==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=inbox.ru
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1743151666; x=1743756466; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=ZZ09CCr/32/kuwNAKXVXGRlZPqy2BXvJgxeYkhCU/9Y=;
+ b=SPIsBHetzK0KYnWxOZRhBPYxWBITv1wolPYr7QHrRJOMYsMfg1TsfOk6Af4tx96tTd
+ sHZFfg5DPlyaGKiWiqGsCJLdxEj7ltCXMsYtQt1Y2rkMJttdpl9w+dpu6rHPoAbpJ/lJ
+ w5lhAenphN2gq5mW0P9GUY6YaTXRN4vp9IlKX2GtphxIZGPVap3+xfbvjxPovofZvtV7
+ XXQ1r+PL13419gy+JtC37ObjR7MzzH7QdOGXEFijFBtUCHpRPeIfLVI+Fau1z96FCHek
+ vuRQcrQCyqYC7s/OO2BUjz/dPCCeBGZ7LVY2qAANslgftd6sGevLqnRu6JDJq5UaLh0a
+ 0KcA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=leroys.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
- header.s=mail4 header.b=uCI1iDc6
-X-Mailman-Original-Authentication-Results: exim-smtp-78d4fbc7f9-ltzfz;
- auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: Re: [Buildroot] [PATCH] package/timescaledb: bump version to 2.19.0
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=SPIsBHet
+Subject: [Buildroot] [PATCH v3 0/3] Add grout package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,19 +111,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-25.03.2025 04:45, Scott Fan wrote:
-> Release notes: https://github.com/timescale/timescaledb/blob/2.19.0/CHANGELOG.md
-> 
-> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Changes v2 -> v3:
+  - Add runtime test
+Changes v1 -> v2:
+  - Add LICENSE hash
 
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+Maxime Leroy (3):
+  package/libecoli: bump version to 0.5.0
+  package/grout: new package
+  RFC: support/testing: add grout runtime test
+
+ DEVELOPERS                                    |  4 ++
+ package/Config.in                             |  1 +
+ package/grout/Config.in                       | 29 +++++++++++
+ package/grout/grout.hash                      |  3 ++
+ package/grout/grout.mk                        | 32 ++++++++++++
+ package/libecoli/libecoli.hash                |  2 +-
+ package/libecoli/libecoli.mk                  |  2 +-
+ support/testing/tests/package/test_grout.py   | 50 +++++++++++++++++++
+ .../package/test_grout/linux-net.fragment     |  4 ++
+ 9 files changed, 125 insertions(+), 2 deletions(-)
+ create mode 100644 package/grout/Config.in
+ create mode 100644 package/grout/grout.hash
+ create mode 100644 package/grout/grout.mk
+ create mode 100644 support/testing/tests/package/test_grout.py
+ create mode 100644 support/testing/tests/package/test_grout/linux-net.fragment
+
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
