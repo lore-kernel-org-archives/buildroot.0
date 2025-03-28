@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68C51C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D08FAC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CCB1261350;
-	Mon, 19 May 2025 10:43:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9356183A5E;
+	Mon, 19 May 2025 10:43:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FxlPgRpSmlsU; Mon, 19 May 2025 10:43:51 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uGm38T0Xpo5E; Mon, 19 May 2025 10:43:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C066B60F15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0F7C83A5A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C066B60F15;
-	Mon, 19 May 2025 10:43:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3E99EE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0F7C83A5A;
+	Mon, 19 May 2025 10:43:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 194F9E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 119F141775
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1FDD940E10
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hav_ScU7MLGk for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hxOnq_djjimN for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FDDE410D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BEC0A40C46
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2FDDE410D8
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BEC0A40C46
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2D81E8725C; Mon, 19 May 2025 10:39:50 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id BC93C83A2E; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 14 Apr 2025 21:43:19 +0200
+Date: Fri, 28 Mar 2025 19:39:45 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d39d9b53ec3a718b2b684739e1585352577b3f1f
-X-Git-Newrev: efdf0cdbcb2cf11d54ef8eee123529f264fe8ce9
+X-Git-Oldrev: 91bfce113e895fc9637707e73567e5d13da3f169
+X-Git-Newrev: a7aeb5a46eaaf8a39560c8664593018cf253835a
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103950.2D81E8725C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/cifs-utils: bump to
- version 7.3
+Message-Id: <20250519103945.BC93C83A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libopenh264: security
+ bump to version 2.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,115 +60,67 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2795845248781904723=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2795845248781904723==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=efdf0cdbcb2cf11d54ef8eee123529f264fe8ce9
+commit: https://git.buildroot.net/buildroot/commit/?id=a7aeb5a46eaaf8a39560c8664593018cf253835a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changes 7.1..7.2:
+Fixes the following security issue:
 
-- Security enhancements including support for password rotation,
-  better credential management, and namespaces
-- Various improvements to man pages
+CVE-2025-27091: OpenH264 Decoding Functions Heap Overflow Vulnerability
 
-Changes 7.2..7.3:
+A vulnerability in the decoding functions of OpenH264 codec library could
+allow a remote, unauthenticated attacker to trigger a heap overflow.
 
-- Three fixes, including a fix for "guest" mount problem introduced
-  with version 7.2
+This vulnerability is due to a race condition between a Sequence Parameter
+Set (SPS) memory allocation and a subsequent non Instantaneous Decoder
+Refresh (non-IDR) Network Abstraction Layer (NAL) unit memory usage.  An
+attacker could exploit this vulnerability by crafting a malicious bitstream
+and tricking a victim user into processing an arbitrary video containing the
+malicious bitstream.  An exploit could allow the attacker to cause an
+unexpected crash in the victim's user decoding client and, possibly, perform
+arbitrary commands on the victim's host by abusing the heap overflow.
 
-Our patch is upstream as of 7.2, so we can drop it.
+https://github.com/cisco/openh264/security/advisories/GHSA-m99q-5j7x-7m9x
+https://github.com/cisco/openh264/releases/tag/2.5.1
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+The upstream tag now has no 'v' prefix, so drop it from _SITE.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...ap_ping.c-add-missing-sys-types.h-include.patch | 38 ----------------------
- package/cifs-utils/cifs-utils.hash                 |  2 +-
- package/cifs-utils/cifs-utils.mk                   |  2 +-
- 3 files changed, 2 insertions(+), 40 deletions(-)
+ package/libopenh264/libopenh264.hash | 2 +-
+ package/libopenh264/libopenh264.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/cifs-utils/0001-cldap_ping.c-add-missing-sys-types.h-include.patch b/package/cifs-utils/0001-cldap_ping.c-add-missing-sys-types.h-include.patch
-deleted file mode 100644
-index bf7864e01a..0000000000
---- a/package/cifs-utils/0001-cldap_ping.c-add-missing-sys-types.h-include.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 62297e906149f9d2ca7b187a60f7c5ab99ef5dd5 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Thu, 26 Dec 2024 21:39:05 +0100
--Subject: [PATCH] cldap_ping.c: add missing <sys/types.h> include
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Fixes:
--
--cldap_ping.c: In function ‘read_dns_string’:
--cldap_ping.c:72:37: error: ‘u_char’ undeclared (first use in this function)
--
--when building with the musl C library, but even with glibc u_char is
--defined in <sys/types.h>, it happens to work with glibc <sys/types.h>
--gets included by another header.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Upstream: https://lore.kernel.org/linux-cifs/20241226204235.2311371-1-thomas.petazzoni@bootlin.com/
-----
-- cldap_ping.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/cldap_ping.c b/cldap_ping.c
--index 9183b27..a603be3 100644
----- a/cldap_ping.c
--+++ b/cldap_ping.c
--@@ -20,6 +20,7 @@
-- #include <talloc.h>
-- #include <string.h>
-- #include <sys/socket.h>
--+#include <sys/types.h>
-- #include <arpa/inet.h>
-- #include <unistd.h>
-- #include <resolv.h>
---- 
--2.47.0
--
-diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
-index 942f8aaa39..ea32d4dca7 100644
---- a/package/cifs-utils/cifs-utils.hash
-+++ b/package/cifs-utils/cifs-utils.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  a21123f76a4a6a36c9653189ba4918ebdf3cfcd3f9092730a47ff3450b5b5b2a  cifs-utils-7.1.tar.bz2
-+sha256  c4e1eb5f4ad880d96e16d95a1cdbc7ec978ab51c5b6d8a20ae09dac638f36dd5  cifs-utils-7.3.tar.bz2
- 
- # Hash for license file:
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
-index e8eefde275..9c029342eb 100644
---- a/package/cifs-utils/cifs-utils.mk
-+++ b/package/cifs-utils/cifs-utils.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libopenh264/libopenh264.hash b/package/libopenh264/libopenh264.hash
+index 6eb78e2009..230b33c57d 100644
+--- a/package/libopenh264/libopenh264.hash
++++ b/package/libopenh264/libopenh264.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8ffbe944e74043d0d3fb53d4a2a14c94de71f58dbea6a06d0dc92369542958ea  libopenh264-2.4.1.tar.gz
++sha256  a1b5c88bfb31c4d2251835e57a7df99f91181955cea6ec3ddd4ab82aa54ae9f1  libopenh264-2.5.1.tar.gz
+ sha256  dd5c1c9668512530fa5a96e4c29ac4033d70a7eeb0eed7a42fddb6dd794ebdbb  LICENSE
+diff --git a/package/libopenh264/libopenh264.mk b/package/libopenh264/libopenh264.mk
+index e371e4cdc0..f9a50e4c61 100644
+--- a/package/libopenh264/libopenh264.mk
++++ b/package/libopenh264/libopenh264.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--CIFS_UTILS_VERSION = 7.1
-+CIFS_UTILS_VERSION = 7.3
- CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
- CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
- CIFS_UTILS_LICENSE = GPL-3.0+
-
---===============2795845248781904723==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-LIBOPENH264_VERSION = 2.4.1
+-LIBOPENH264_SITE = $(call github,cisco,openh264,v$(LIBOPENH264_VERSION))
++LIBOPENH264_VERSION = 2.5.1
++LIBOPENH264_SITE = $(call github,cisco,openh264,$(LIBOPENH264_VERSION))
+ LIBOPENH264_LICENSE = BSD-2-Clause
+ LIBOPENH264_LICENSE_FILES = LICENSE
+ LIBOPENH264_CPE_ID_VENDOR = cisco
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2795845248781904723==--
