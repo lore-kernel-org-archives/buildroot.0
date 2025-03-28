@@ -1,101 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B8ADC28B20
-	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 18:05:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 255D2C36010
+	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 18:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 688E14F317;
+	by smtp1.osuosl.org (Postfix) with ESMTP id E825480CD1;
 	Fri, 28 Mar 2025 18:05:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RnWXYdgfrqyP; Fri, 28 Mar 2025 18:05:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Cy_2unBANwpb; Fri, 28 Mar 2025 18:05:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CA324F325
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52D1680DBA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8CA324F325;
-	Fri, 28 Mar 2025 18:05:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id ED7491B8
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:04:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52D1680DBA;
+	Fri, 28 Mar 2025 18:05:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C0DC512A
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:04:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF7E84F2E6
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:04:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A6B768596A
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:04:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jA1Fq4rjkv0t for <buildroot@buildroot.org>;
- Fri, 28 Mar 2025 18:04:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZAzDT4EQrWSp for <buildroot@buildroot.org>;
+ Fri, 28 Mar 2025 18:04:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=olteanv@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CE3BE4F325
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE3BE4F325
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CE3BE4F325
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:04:58 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-3912622c9c0so236865f8f.3
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 11:04:58 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D0E9985967
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0E9985967
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D0E9985967
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 18:04:56 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-43d0953d3e1so2500315e9.2
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 11:04:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1743185096; x=1743789896;
+ d=1e100.net; s=20230601; t=1743185094; x=1743789894;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=4R8nGU3uItwqCRui2Zk2HFyzKovgFlrQpq4HS5kZrmg=;
- b=VT03Ti9x36g5kVQeQX2/Cf4flgcxnGFNvyRgPidi7VDxBJ76qZXxU4P/HU2RZaoRfO
- WsexjmQqK6PEOMBsGiWki517LhDlt96NBt0lETBR5mkJuXcXZs7BtftvYdb+p4IRvJ2d
- fP50JIFi4UCQYQ+cGvSWbTe86quqGDNP5YTWQA4/iVbNqD83A2gPR41Puq0AnajMX8/3
- 34+komQCkO4FTpU7/9binUwrLLhi+XKuMMA0hxT9ieF8UJOKbzbl58BwLDf75/Q747QK
- 2eG1K1JgulDjbibindJo/mxlcdj3p2tm+y9oototK1XTEV2NgbgoXVY4NaE3m4zUzBGM
- MLUA==
-X-Gm-Message-State: AOJu0Yypfd+qgh6ZiftCxwl4ufVcB0j8nEz6tJk2kmOTfkqf1N6lmhAw
- vMbLddbzi56jmP2YfffciR7I5eaCYtZd+ANAGoWMVjwaT6PBP9Oz383jTtJ4
-X-Gm-Gg: ASbGncvAupF53zYTH89Zt9lh0ChTBfUEglA5tdHUc0JyRYkFOHbjjNh9sIDtYv7u/mt
- Jv9DHDKB+f3RRHCw9hdnT3ItMtXLB20fpDDUHiBbYsRDcX0u31yZwE38g2VPuLgm55jUHuuFRGD
- HCIco3+CPbGidHuMikC2Cxc61t/HqZkvkIWicjNXKOeuUGyxtjzZa4S8ncqn9//+1E+T2fwigbn
- TzoP29X+MtDSemuwmp9jx05Z8nXPb5S1vA6kIgIqkTg+wsmTTZThfryMPul/lSfGddLnUq1qvRl
- ySO0mFJOe/o5WGg/pn9VOF9KSSuqvmmQeSD25A==
-X-Google-Smtp-Source: AGHT+IFKWAY5+9Q9QOhjL0IshzAcvh5x0Mj5E0Z3vqTnyrWChrCTgUMWgGX9K+SivzxyLBH9h+ofFg==
-X-Received: by 2002:a05:600c:1d1b:b0:43b:ca39:a9b8 with SMTP id
- 5b1f17b1804b1-43db61d9379mr1276825e9.2.1743185095540; 
- Fri, 28 Mar 2025 11:04:55 -0700 (PDT)
-Received: from skbuf.lan ([188.25.110.61]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-43d90000f48sm34692995e9.37.2025.03.28.11.04.54
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ bh=yu9+lPl5l00YOzVFYbJvnq3B7qih5//gZ0mab05fiGs=;
+ b=pr5oS8a7tBAMK20469tqTOTv6+wKjS00DfS0mfvMTA73rCZ8llagTqCTC3MtT0oCmG
+ tzXtmPNyRLVToFzY/ehrxLHXRBzUL1Mef4jcaxHVkb5Ddu3xTuScCVzps0UD31bcdWd5
+ CKblsKN0+v5G7iUkrtIKIRuYPh4qbf3ln7ez8zcxHEMllch+wGwWoLgOShPIOtjK6Ud7
+ q0LfAWgTUIsWYUnC4dKfpKI4RbjX0dceUr1WvE9/hPdP1qBeypBAEe8O4gKDM9MfhRWO
+ AzxkRq8jXwH4pKAhcdEx7NrX1cNnSb49b9exrOucji61t20dBhOtMVRyuHfg9A3WBWMI
+ nogw==
+X-Gm-Message-State: AOJu0Yxp5hAiH5QXAgyQsVvGQHDozAB/QN1IvGg2ifGYNS4Km2MvpMpu
+ B/DK1foRWKO65BOY3iU65BlJZ8vdMocBXZ0vYLT/Brb/Xw7UCSVRZ/1Ujxvb
+X-Gm-Gg: ASbGncsooR5bTaC8oWiNEFde+0mQClZ73GlrtR2fkdqG2ALdaZoXxSwVyGgYv53sRDs
+ wc9DHiLGNm350sIkP3k1ktvxijZsqE0VyNBIiW/WjZjCNcAcPYhltjXZuUNVv/ZvEXlGq0q61vZ
+ t2z3Klvrld2AX39TiEbG6uNHzeG2MCmUuIpB51CLRYi34EHFdvwQS6uIJXRCfWVYLOBh5GBYqmX
+ C1TdhPI6bdlgSwG+zvhDQuJIiThmg8w9ySZKQbomqoJIqrShz5tEsTypIRldorslAnwPepKAX3s
+ SGQhllAPBEFpR9mlx1zJYLO3LD+ckeGGzR/nSw==
+X-Google-Smtp-Source: AGHT+IHMdFx9gPdYSJhMuQ1AbBrNk6S+GdsEthtR6e2WuZSPyOCA7t1hd69ufpwvwv+ig2Z/LgG6wA==
+X-Received: by 2002:a05:600c:1c0b:b0:439:8294:2115 with SMTP id
+ 5b1f17b1804b1-43dbc6fad1bmr1326255e9.8.1743185094059; 
  Fri, 28 Mar 2025 11:04:54 -0700 (PDT)
+Received: from skbuf.lan ([188.25.110.61]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-43d90000f48sm34692995e9.37.2025.03.28.11.04.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 28 Mar 2025 11:04:53 -0700 (PDT)
 From: Vladimir Oltean <olteanv@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Mar 2025 20:04:21 +0200
-Message-ID: <20250328180427.3434693-14-olteanv@gmail.com>
+Date: Fri, 28 Mar 2025 20:04:20 +0200
+Message-ID: <20250328180427.3434693-13-olteanv@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250328180427.3434693-1-olteanv@gmail.com>
 References: <20250328180427.3434693-1-olteanv@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1743185096; x=1743789896; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1743185094; x=1743789894; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=4R8nGU3uItwqCRui2Zk2HFyzKovgFlrQpq4HS5kZrmg=;
- b=lSEeYS+J2qG/Kq3CL0aOYgNm53uw1uvyIF6N5zndMWpm/k47mQet/UaRCCOtHzgoxL
- R+JxYnT5vV41ucNFxCeLd6xhnq0bSM6pw1WU6e71nowEZVL0j/tGqzEhawXO6kiOfUkK
- xURrumMLCUQQWKATA/Frvw3omGaYbobi1nyEQX+GDcFu7052kzLXOU7dzJon1HGCQmHX
- iJXtBzc5JAvJFWqBvZ48nntTrZbNlJo+iS/TC3VFXJFdjqb2ZV9qJHxn3lKuCoVKW0K7
- 2KZa/0/sqTTnggiJuHG+a3//Oj+rIPQ5qwmYd8P+B7SJZdVn0CPeMjxs8VquJDusTCgC
- CZFw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=yu9+lPl5l00YOzVFYbJvnq3B7qih5//gZ0mab05fiGs=;
+ b=KTp75CnDLFAdu1Kf2qdwUjdkRdZmxsthShyh1Zdx7fUs1JxYQKgUDgsP7yHCq4piJC
+ JXxP+9Ky6SHcgKGk06/0MOc2BfbmZ1OleaEstvZkLeRygugAHLk13bUvh+03wYGD3VgQ
+ fyisZDKQlihWk1Z/Hb/CPw75sRNVmr/VMGtsLBCo4ZPYzpbnEBcLWRvq1xd+bm6vAJiE
+ NbUZV9JuaoXdh5a5sEGl3m1DVqhjE9wIgHAlITDvcf72XAbfVhwQCQ3Tk5PWTJW9N7gY
+ FkSLHN8pcV9W91NaPF0j3Lf0mdpMriHpV3FSoWlL1Mx/Xlh7t22e/i1dlSE7BNfId5oe
+ 1RiA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=lSEeYS+J
-Subject: [Buildroot] [PATCH v2 13/18] package/qoriq-ddr-phy-binary: new
- package
+ header.a=rsa-sha256 header.s=20230601 header.b=KTp75CnD
+Subject: [Buildroot] [PATCH v2 12/18] package/qoriq-fm-ucode: uprev to
+ lf-6.12.3-1.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,104 +116,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The DDR PHY on the NXP LX2160A SoC needs firmware. This is distributed
-as prebuilt binaries by NXP through GitHub.
-
-There have been discussions and other opinions on previous revisions of
-the patch on how it should be integrated:
-https://lore.kernel.org/buildroot/20250318163228.9989-1-vjardin@free.fr/
-
-But I haven't integrated any of that feedback. It is a simple package
-which copies the pre-built FIP image containing DDR PHY firmware files
-to the images/ folder, to be used by post-image scripts.
+Concretely, no change. But saves people the hassle of checking whether
+any updates have been missed.
 
 Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-Reviewed-by: Vincent Jardin <vjardin@free.fr>
 ---
-v1->v2: add one paragraph to the commit message
+v1->v2: update to the latest BSP tag
 
- DEVELOPERS                                     |  3 +++
- package/Config.in                              |  1 +
- package/qoriq-ddr-phy-binary/Config.in         |  6 ++++++
- .../qoriq-ddr-phy-binary.hash                  |  3 +++
- .../qoriq-ddr-phy-binary.mk                    | 18 ++++++++++++++++++
- 5 files changed, 31 insertions(+)
- create mode 100644 package/qoriq-ddr-phy-binary/Config.in
- create mode 100644 package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
- create mode 100644 package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk
+ package/qoriq-fm-ucode/qoriq-fm-ucode.hash | 2 +-
+ package/qoriq-fm-ucode/qoriq-fm-ucode.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 44f7684c974c..a1c7f867808e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3369,6 +3369,9 @@ N:	Vivien Didelot <vivien.didelot@gmail.com>
- F:	board/technologic/ts5500/
- F:	configs/ts5500_defconfig
+diff --git a/package/qoriq-fm-ucode/qoriq-fm-ucode.hash b/package/qoriq-fm-ucode/qoriq-fm-ucode.hash
+index bf494b177bb0..dfad7affe050 100644
+--- a/package/qoriq-fm-ucode/qoriq-fm-ucode.hash
++++ b/package/qoriq-fm-ucode/qoriq-fm-ucode.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  6b9e2a5c383fb9288db1459821fc696f3abfeddd080b04c11cf9f712f0d36470  qoriq-fm-ucode-lf-6.6.52-2.2.0.tar.gz
++sha256  18824746f144ff8f39a5f2f62f7777de7c6cb8ab1a3303a5cad5beadd8aac9fd  qoriq-fm-ucode-lf-6.12.3-1.0.0.tar.gz
+ sha256  7a223031d76339df0e4e5a94d193a270fb9963d42b577aa42fe130a4657f3e17  LICENSE
+diff --git a/package/qoriq-fm-ucode/qoriq-fm-ucode.mk b/package/qoriq-fm-ucode/qoriq-fm-ucode.mk
+index 71904e5b1376..6df0839be32e 100644
+--- a/package/qoriq-fm-ucode/qoriq-fm-ucode.mk
++++ b/package/qoriq-fm-ucode/qoriq-fm-ucode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+N:	Vladimir Oltean <olteanv@gmail.com>
-+F:	package/qoriq-ddr-phy-binary/
-+
- N:	Volkov Viacheslav <sv99@inbox.ru>
- F:	package/v4l2grab/
- F:	package/zbar/
-diff --git a/package/Config.in b/package/Config.in
-index d8751fc19f54..b6aecf7d7707 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -448,6 +448,7 @@ menu "Firmware"
- 	source "package/odroidc2-firmware/Config.in"
- 	source "package/panel-mipi-dbi-firmware/Config.in"
- 	source "package/qcom-db410c-firmware/Config.in"
-+	source "package/qoriq-ddr-phy-binary/Config.in"
- 	source "package/qoriq-fm-ucode/Config.in"
- 	source "package/rcw-smarc-sal28/Config.in"
- 	source "package/rpi-firmware/Config.in"
-diff --git a/package/qoriq-ddr-phy-binary/Config.in b/package/qoriq-ddr-phy-binary/Config.in
-new file mode 100644
-index 000000000000..301a2c197421
---- /dev/null
-+++ b/package/qoriq-ddr-phy-binary/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_QORIQ_DDR_PHY_BINARY
-+	bool "qoriq-ddr-phy-binary"
-+	help
-+	  Firmware binary for DDR PHY of NXP LX2160A family of SoCs.
-+
-+	  https://github.com/nxp-qoriq/ddr-phy-binary
-diff --git a/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
-new file mode 100644
-index 000000000000..7a689d42a5ad
---- /dev/null
-+++ b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  475bca55d8b05463e75f6d47a8ea7e3def8505a614170b0a3976bd342ca3d759  qoriq-ddr-phy-binary-lf-6.12.3-1.0.0.tar.gz
-+sha256  e7e5f4949f7ac9f9a5d4d68b8f835f3ddc93ad47b594a11de699d90b9175413f  NXP-Binary-EULA.txt
-diff --git a/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk
-new file mode 100644
-index 000000000000..5ce990b75b76
---- /dev/null
-+++ b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# qoriq-ddr-phy-binary
-+#
-+################################################################################
-+
-+QORIQ_DDR_PHY_BINARY_VERSION = lf-6.12.3-1.0.0
-+QORIQ_DDR_PHY_BINARY_SITE = $(call github,nxp-qoriq,ddr-phy-binary,$(QORIQ_DDR_PHY_BINARY_VERSION))
-+QORIQ_DDR_PHY_BINARY_LICENSE = NXP Binary EULA
-+QORIQ_DDR_PHY_BINARY_LICENSE_FILES = NXP-Binary-EULA.txt
-+QORIQ_DDR_PHY_BINARY_INSTALL_IMAGES = YES
-+QORIQ_DDR_PHY_BINARY_INSTALL_TARGET = NO
-+
-+define QORIQ_DDR_PHY_BINARY_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -D $(@D)/lx2160a/fip_ddr.bin $(BINARIES_DIR)/fip_ddr.bin
-+endef
-+
-+$(eval $(generic-package))
+-QORIQ_FM_UCODE_VERSION = lf-6.6.52-2.2.0
++QORIQ_FM_UCODE_VERSION = lf-6.12.3-1.0.0
+ QORIQ_FM_UCODE_SITE = $(call github,nxp-qoriq,qoriq-fm-ucode,$(QORIQ_FM_UCODE_VERSION))
+ QORIQ_FM_UCODE_LICENSE = NXP Binary EULA
+ QORIQ_FM_UCODE_LICENSE_FILES = LICENSE
 -- 
 2.43.0
 
