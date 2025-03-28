@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BE9BC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:44:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49647C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:44:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A06CE61499;
-	Mon, 19 May 2025 10:44:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B4B936100E;
+	Mon, 19 May 2025 10:44:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BoOHxjEcCBEH; Mon, 19 May 2025 10:44:29 +0000 (UTC)
+ id ziApRaHU9jel; Mon, 19 May 2025 10:44:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8920E61478
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D98C561494
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8920E61478;
-	Mon, 19 May 2025 10:44:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D98C561494;
+	Mon, 19 May 2025 10:44:31 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1ED7C1BF
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:49 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1833CD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2F9F241163
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3FE494117F
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XrsgLjxv-cjd for <buildroot@buildroot.org>;
+ id JichNqECelTT for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:39:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E928340D8A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A457140D64
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E928340D8A
+ by smtp4.osuosl.org (Postfix) with ESMTP id A457140D64
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E757283A2E; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+ id A20DE83A2E; Mon, 19 May 2025 10:39:45 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
 Date: Fri, 28 Mar 2025 19:39:45 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 364afb899df96f2503ab901063acebdeb8950761
-X-Git-Newrev: 0a5a0772c238d1bd9acc61cd0017ce1ef305195c
+X-Git-Oldrev: 65be2c6ac07b2b4a94ccc2199521a0541094e73c
+X-Git-Newrev: 57d2bdb1238aa1743400e59f2d52efd51f373180
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103945.E757283A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gdb: bump 16.x series
- to 16.2
+Message-Id: <20250519103945.A20DE83A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/xwayland: security
+ bump to version 24.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,269 +65,239 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a5a0772c238d1bd9acc61cd0017ce1ef305195c
+commit: https://git.buildroot.net/buildroot/commit/?id=57d2bdb1238aa1743400e59f2d52efd51f373180
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This is a corrective release over GDB 16.1, fixing the following issues:
+23.2.5 fixes the following security issues:
 
-    PR build/32578 (cannot build GDB 16.1 out of tree when calling the configure script with a relative path)
-    PR tui/32592 ([gdb/tui] internal error in tui-winsource.c:340:refresh_window)
-    PR remote/32593 (Incompatibilities between GDB's and LLDB's 'x' packet implementation)
-    PR build/32610 (Missing #include file in darwin_nat.c)
+1) CVE-2024-31080: Heap buffer overread/data leakage in ProcXIGetSelectedEvents
 
-None of which is really super important for Buildroot, but at least
-we're using the latest without wondering why we're not.
+Introduced in: xorg-server-1.7.0 (2009)
+Fixed in: xorg-server-21.1.12 and xwayland-23.2.5
+Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/96798fc1967491c80a4d0
+Found by: Alan Coopersmith of Oracle Solaris, while investigating
+       https://debbugs.gnu.org/cgi/bugreport.cgi?bug=69762
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+The ProcXIGetSelectedEvents() function uses the byte-swapped length of the
+return data for the amount of data to return to the client, if the client
+has a different endianness than the X server.
+
+2) CVE-2024-31081: Heap buffer overread/data leakage in ProcXIPassiveGrabDevice
+
+Introduced in: xorg-server-1.7.0 (2009)
+Fixed in: xorg-server-21.1.12 and xwayland-23.2.5
+Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/3e77295f888c67fc7645d
+Found by: Alan Coopersmith of Oracle Solaris
+
+The ProcXIPassiveGrabDevice() function uses the byte-swapped length of the
+return data for the amount of data to return to the client, if the client
+has a different endianness than the X server.
+
+3) CVE-2024-31083: User-after-free in ProcRenderAddGlyphs
+
+Introduced in: prior to X11R6.7 (2004)
+Fixed in: xorg-server-21.1.12 and xwayland-23.2.5
+Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/bdca6c3d1f5057eeb3160
+Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
+
+The ProcRenderAddGlyphs() function calls the AllocateGlyph() function
+to store new glyphs sent by the client to the X server.  AllocateGlyph()
+would return a new glyph with refcount=0 and a re-used glyph would end up
+not changing the refcount at all. The resulting glyph_new array would thus
+have multiple entries pointing to the same non-refcounted glyphs.
+
+ProcRenderAddGlyphs() may free a glyph, resulting in a use-after-free when
+the same glyph pointer is then later used.
+
+https://lists.x.org/archives/xorg-announce/2024-April/003497.html
+
+24.1.4 fixes the following security issues:
+
+1) CVE-2024-9632: Heap-based buffer overflow privilege escalation in
+_XkbSetCompatMap
+
+Introduced in: xorg-server-1.1.1 (2006)
+Fixed in: xorg-server-21.1.14 and xwayland-24.1.4
+Fix:
+https://gitlab.freedesktop.org/xorg/xserver/-/commit/85b776571487f52e756f68a069c768757369bfe3
+Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
+
+The _XkbSetCompatMap() function attempts to resize the `sym_interpret`
+buffer.
+
+However, It didn't update its size properly. It updated `num_si` only,
+without updating `size_si`.
+
+This may lead to local privilege escalation if the server is run as root
+or remote code execution (e.g. x11 over ssh).
+
+xorg-server-21.1.14 and xwayland-24.1.4 have been patched to fix this issue.
+
+https://lists.x.org/archives/xorg-announce/2024-October/003545.html
+
+24.1.6 fixes the following security issues:
+
+1) CVE-2025-26594: Use-after-free of the root cursor
+
+Introduced in: Unknown - Prior to X11R6.6 Xorg baseline
+Fixed in: xorg-server-21.1.16 and xwayland-24.1.6
+Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/01642f26
+      https://gitlab.freedesktop.org/xorg/xserver/-/commit/b0a09ba6
+Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
+
+The root cursor is referenced in the xserver as a global variable. If
+a client manages to free the root cursor, the internal reference points
+to freed memory and causes a use-after-free.
+
+xorg-server-21.1.16 and xwayland-24.1.6 have been patched to fix this issue.
+
+2) CVE-2025-26595: Buffer overflow in XkbVModMaskText()
+
+Introduced in: Prior to X11R6.1
+Fixed in: xorg-server-21.1.16 and xwayland-24.1.6
+Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/11fcda87
+Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
+
+The code in XkbVModMaskText() allocates a fixed sized buffer on the
+stack and copies the names of the virtual modifiers to that buffer.
+
+The code however fails to check the bounds of the buffer correctly and
+would copy the data regardless of the size, which may lead to a buffer
+overflow.
+
+xorg-server-21.1.16 and xwayland-24.1.6 have been patched to fix this issue.
+
+3) CVE-2025-26596: Heap overflow in XkbWriteKeySyms()
+
+Introduced in: initial version of xc/programs/Xserver/xkb/xkb.c in X11R6
+Fixed in: xorg-server-21.1.16 and xwayland-24.1.6
+Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/80d69f01
+Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
+
+The computation of the length in XkbSizeKeySyms() differs from what is
+actually written in XkbWriteKeySyms(), which may lead to a heap based
+buffer overflow.
+
+xorg-server-21.1.16 and xwayland-24.1.6 have been patched to fix this issue.
+
+4) CVE-2025-26597: Buffer overflow in XkbChangeTypesOfKey()
+
+Introduced in: X11R6.1
+Fixed in: xorg-server-21.1.16 and xwayland-24.1.6
+Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/0e4ed949
+Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
+
+If XkbChangeTypesOfKey() is called with 0 group, it will resize the key
+symbols table to 0 but leave the key actions unchanged.
+
+If later, the same function is called with a non-zero value of groups,
+this will cause a buffer overflow because the key actions are of the wrong
+size.
+
+5) CVE-2025-26598: Out-of-bounds write in CreatePointerBarrierClient()
+
+Introduced in: xorg-server-1.14.0
+Fixed in: xorg-server-21.1.16 and xwayland-24.1.6
+Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/bba9df1a
+Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
+
+The function GetBarrierDevice() searches for the pointer device based on
+its device id and returns the matching value, or supposedly NULL if no
+match was found.
+
+However the code will return the last element of the list if no matching
+device id was found which can lead to out of bounds memory access.
+
+6) CVE-2025-26599: Use of uninitialized pointer in compRedirectWindow()
+
+Introduced in: Xorg 6.8.0.
+Fixed in: xorg-server-21.1.16 and xwayland-24.1.6
+Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/c1ff84be
+      https://gitlab.freedesktop.org/xorg/xserver/-/commit/b07192a8
+Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
+
+The function compCheckRedirect() may fail if it cannot allocate the backing
+pixmap. In that case, compRedirectWindow() will return a BadAlloc error
+without the validation of the window tree marked just before, which leaves
+the validate data partly initialized, and the use of an uninitialized pointer
+later.
+
+7) CVE-2025-26600: Use-after-free in PlayReleasedEvents()
+
+Introduced in: X11R5
+Fixed in: xorg-server-21.1.16 and xwayland-24.1.6
+Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/6e0f332b
+Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
+
+When a device is removed while still frozen, the events queued for that
+device remain while the device itself is freed and replaying the events
+will cause a use after free.
+
+8) CVE-2025-26601: Use-after-free in SyncInitTrigger()
+
+Introduced in: X11R6
+Fixed in: xorg-server-21.1.16 and xwayland-24.1.6
+Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/16a1242d
+      https://gitlab.freedesktop.org/xorg/xserver/-/commit/f52cea2f
+      https://gitlab.freedesktop.org/xorg/xserver/-/commit/8cbc90c8
+      https://gitlab.freedesktop.org/xorg/xserver/-/commit/c2857989
+Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
+
+When changing an alarm, the values of the change mask are evaluated one
+after the other, changing the trigger values as requested and eventually,
+SyncInitTrigger() is called.
+If one of the changes triggers an error, the function will return early,
+not adding the new sync object.
+This can be used to cause a use after free when the alarm eventually
+triggers.
+
+https://lists.x.org/archives/xorg-announce/2025-February/003584.html
+
+Drop now removed xwayland_eglstream option:
+https://gitlab.freedesktop.org/xorg/xserver/-/commit/701284f057b41bba0b0cc4b3f851958af95ac978
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore                                    | 18 +++++++++---------
- ...ace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch |  4 ++--
- ...ce-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch |  4 ++--
- .../gdb/{16.1 => 16.2}/0003-use-asm-sgidefs.h.patch    |  4 ++--
- .../0004-gdbserver-fix-build-for-m68k.patch            |  4 ++--
- ...0005-nat-fork-inferior-include-linux-ptrace.h.patch |  4 ++--
- ...0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch |  4 ++--
- .../{16.1 => 16.2}/0007-fix-musl-build-on-riscv.patch  |  4 ++--
- .../0008-gdbserver-Makefile.in-fix-NLS-build.patch     |  4 ++--
- .../0009-gdb-Fix-native-build-on-xtensa.patch          |  4 ++--
- package/gdb/Config.in.host                             |  2 +-
- package/gdb/gdb.hash                                   |  2 +-
- 12 files changed, 29 insertions(+), 29 deletions(-)
+ package/x11r7/xwayland/xwayland.hash | 6 +++---
+ package/x11r7/xwayland/xwayland.mk   | 3 +--
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 260168b0e8..0907cb39ed 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -505,15 +505,15 @@ package/gdb/15.1/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch lib_patch.U
- package/gdb/15.1/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
- package/gdb/15.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
- package/gdb/15.1/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
--package/gdb/16.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch lib_patch.Upstream
--package/gdb/16.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch lib_patch.Upstream
--package/gdb/16.1/0003-use-asm-sgidefs.h.patch lib_patch.Upstream
--package/gdb/16.1/0004-gdbserver-fix-build-for-m68k.patch lib_patch.Upstream
--package/gdb/16.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch lib_patch.Upstream
--package/gdb/16.1/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch lib_patch.Upstream
--package/gdb/16.1/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
--package/gdb/16.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
--package/gdb/16.1/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
-+package/gdb/16.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch lib_patch.Upstream
-+package/gdb/16.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch lib_patch.Upstream
-+package/gdb/16.2/0003-use-asm-sgidefs.h.patch lib_patch.Upstream
-+package/gdb/16.2/0004-gdbserver-fix-build-for-m68k.patch lib_patch.Upstream
-+package/gdb/16.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch lib_patch.Upstream
-+package/gdb/16.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch lib_patch.Upstream
-+package/gdb/16.2/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
-+package/gdb/16.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
-+package/gdb/16.2/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
- package/genpart/0001-fix-return-code.patch lib_patch.Upstream
- package/gensio/0001-Fix-missing-EVP_PKEY_ED25519-build-error-on-libressl.patch lib_patch.Upstream
- package/gerbera/S99gerbera lib_sysv.Indent
-diff --git a/package/gdb/16.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch b/package/gdb/16.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-similarity index 95%
-rename from package/gdb/16.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-rename to package/gdb/16.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-index 195aa58a20..5118e929df 100644
---- a/package/gdb/16.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-+++ b/package/gdb/16.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-@@ -1,4 +1,4 @@
--From d251b3cd408849d032c869846364964d1ddc7a9e Mon Sep 17 00:00:00 2001
-+From 7fbcc55c3b2dac91dcb0a8dc6daa5514ff323185 Mon Sep 17 00:00:00 2001
- From: Khem Raj <raj.khem@gmail.com>
- Date: Sat, 6 Aug 2016 17:32:50 -0700
- Subject: [PATCH] ppc/ptrace: Define pt_regs uapi_pt_regs on !GLIBC systems
-@@ -51,5 +51,5 @@ index 3ce978f4c7c..38534297cdf 100644
-  #include "arch/ppc-linux-common.h"
-  #include "arch/ppc-linux-tdesc.h"
- -- 
--2.47.1
-+2.48.1
+diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
+index 5bb26bf17e..2a23891752 100644
+--- a/package/x11r7/xwayland/xwayland.hash
++++ b/package/x11r7/xwayland/xwayland.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2024-January/003443.html
+-sha256  a99e159b6d0d33098b3b6ab22a88bfcece23c8b9d0ca72c535c55dcb0681b46b  xwayland-23.2.4.tar.xz
+-sha512  ac3ff208cbef5bbe4637c335cfda226489c93b0a3768f2f4fb0201c588485ede38262fbce77ef1425b3d2a0be61b6580df53341c7b95e6072c8b6371ad29d187  xwayland-23.2.4.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2025-February/003586.html
++sha256  737e612ca36bbdf415a911644eb7592cf9389846847b47fa46dc705bd754d2d7  xwayland-24.1.6.tar.xz
++sha512  b6dcc87f5c4d880cb23216518171a704c2a501803ac2efd9d01760895d755a617cd82313c6516f27a888b0581c64d74e3f8db5c238e1ae0d13da6cc1a547c02f  xwayland-24.1.6.tar.xz
  
-diff --git a/package/gdb/16.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch b/package/gdb/16.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-similarity index 94%
-rename from package/gdb/16.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-rename to package/gdb/16.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-index 9dae76b3be..878239a82e 100644
---- a/package/gdb/16.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-+++ b/package/gdb/16.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-@@ -1,4 +1,4 @@
--From a5098f7fb6ec72c3694d1e0c34e6db982110d944 Mon Sep 17 00:00:00 2001
-+From ab3ce973d6423552de732a05ac9da04c22b21411 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Sat, 3 Jun 2017 21:23:52 +0200
- Subject: [PATCH] sh/ptrace: Define pt_{dsp,}regs uapi_pt_{dsp,}regs on !GLIBC
-@@ -39,5 +39,5 @@ index 64e6de3480b..4770e652614 100644
-  #define sh_num_regs 41
-  
- -- 
--2.47.1
-+2.48.1
+ # Locally calculated
+ sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
+index c66dd471ac..47dc0b39e6 100644
+--- a/package/x11r7/xwayland/xwayland.mk
++++ b/package/x11r7/xwayland/xwayland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/package/gdb/16.1/0003-use-asm-sgidefs.h.patch b/package/gdb/16.2/0003-use-asm-sgidefs.h.patch
-similarity index 93%
-rename from package/gdb/16.1/0003-use-asm-sgidefs.h.patch
-rename to package/gdb/16.2/0003-use-asm-sgidefs.h.patch
-index 4738733c53..b36d3730de 100644
---- a/package/gdb/16.1/0003-use-asm-sgidefs.h.patch
-+++ b/package/gdb/16.2/0003-use-asm-sgidefs.h.patch
-@@ -1,4 +1,4 @@
--From 047f9e6b31e2d2dcc633d2d1749153a8bb4f5aa1 Mon Sep 17 00:00:00 2001
-+From aa66834f88463c23a641c12e967bce68799cda47 Mon Sep 17 00:00:00 2001
- From: Andre McCurdy <amccurdy@gmail.com>
- Date: Sat, 30 Apr 2016 15:29:06 -0700
- Subject: [PATCH] use <asm/sgidefs.h>
-@@ -36,5 +36,5 @@ index 3d072ea935c..d763c9b8f7e 100644
-  #include <asm/ptrace.h>
-  #include "inf-ptrace.h"
- -- 
--2.47.1
-+2.48.1
- 
-diff --git a/package/gdb/16.1/0004-gdbserver-fix-build-for-m68k.patch b/package/gdb/16.2/0004-gdbserver-fix-build-for-m68k.patch
-similarity index 96%
-rename from package/gdb/16.1/0004-gdbserver-fix-build-for-m68k.patch
-rename to package/gdb/16.2/0004-gdbserver-fix-build-for-m68k.patch
-index 0cee801fed..8711190747 100644
---- a/package/gdb/16.1/0004-gdbserver-fix-build-for-m68k.patch
-+++ b/package/gdb/16.2/0004-gdbserver-fix-build-for-m68k.patch
-@@ -1,4 +1,4 @@
--From 15097e614fd3c686a69779a578a24b63b674925c Mon Sep 17 00:00:00 2001
-+From cec7ed0cb055f960a689f2403a871a7e3e852e6e Mon Sep 17 00:00:00 2001
- From: Romain Naour <romain.naour@gmail.com>
- Date: Fri, 22 Jun 2018 22:40:26 +0200
- Subject: [PATCH] gdbserver: fix build for m68k
-@@ -60,5 +60,5 @@ index 8020e49ac6e..d9ba6235288 100644
-  #define m68k_num_gregs 18
-  
- -- 
--2.47.1
-+2.48.1
- 
-diff --git a/package/gdb/16.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch b/package/gdb/16.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-similarity index 96%
-rename from package/gdb/16.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-rename to package/gdb/16.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-index 23c816887d..1e0bfdf6d1 100644
---- a/package/gdb/16.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-+++ b/package/gdb/16.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-@@ -1,4 +1,4 @@
--From 4919bd469c1385cef4109280c6861db760001690 Mon Sep 17 00:00:00 2001
-+From 11b382a75cae8f4599e9d3f8b85815d2d95a58fa Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Date: Sun, 24 Jun 2018 23:33:55 +0200
- Subject: [PATCH] nat/fork-inferior: include linux-ptrace.h
-@@ -49,5 +49,5 @@ index 41765b102bc..a44a1d48722 100644
-  
-  extern char **environ;
- -- 
--2.47.1
-+2.48.1
- 
-diff --git a/package/gdb/16.1/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch b/package/gdb/16.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
-similarity index 94%
-rename from package/gdb/16.1/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
-rename to package/gdb/16.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
-index ea045e4231..6d205279da 100644
---- a/package/gdb/16.1/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
-+++ b/package/gdb/16.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
-@@ -1,4 +1,4 @@
--From 74c9d53de1c3c3de2e66e559889ce041f41e952a Mon Sep 17 00:00:00 2001
-+From 95d6a5a844083585f4f7b235cba14be94595b04a Mon Sep 17 00:00:00 2001
- From: Peter Seiderer <ps.report@gmx.net>
- Date: Sat, 6 Nov 2021 10:06:25 +0100
- Subject: [PATCH] Fix getrandom compile for uclibc < v1.0.35
-@@ -35,5 +35,5 @@ index e1468730933..3948d8d552a 100644
-  
-  #include <errno.h>
- -- 
--2.47.1
-+2.48.1
- 
-diff --git a/package/gdb/16.1/0007-fix-musl-build-on-riscv.patch b/package/gdb/16.2/0007-fix-musl-build-on-riscv.patch
-similarity index 96%
-rename from package/gdb/16.1/0007-fix-musl-build-on-riscv.patch
-rename to package/gdb/16.2/0007-fix-musl-build-on-riscv.patch
-index 5e8cce435e..aea5eef84a 100644
---- a/package/gdb/16.1/0007-fix-musl-build-on-riscv.patch
-+++ b/package/gdb/16.2/0007-fix-musl-build-on-riscv.patch
-@@ -1,4 +1,4 @@
--From 5895710a6692dfdf00fdb258b89dae6c6784eedc Mon Sep 17 00:00:00 2001
-+From 76bee99c13ab44949c25582f49528cd0c661cdb3 Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Wed, 10 Nov 2021 23:14:54 +0100
- Subject: [PATCH] fix musl build on riscv
-@@ -56,5 +56,5 @@ index 44c805bb6d6..d43c3b9fe02 100644
-  
-  class riscv_target : public linux_process_target
- -- 
--2.47.1
-+2.48.1
- 
-diff --git a/package/gdb/16.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch b/package/gdb/16.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch
-similarity index 96%
-rename from package/gdb/16.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch
-rename to package/gdb/16.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch
-index d5eb12a65d..10156407cb 100644
---- a/package/gdb/16.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch
-+++ b/package/gdb/16.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch
-@@ -1,4 +1,4 @@
--From dd6ca97fa5fa5acd0fdaa5aa7e5aee33f92ba2df Mon Sep 17 00:00:00 2001
-+From e5a09ecd2a222168a6c58eb57a171f64e75ad053 Mon Sep 17 00:00:00 2001
- From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Date: Thu, 18 Nov 2021 22:52:08 +0100
- Subject: [PATCH] gdbserver/Makefile.in: fix NLS build
-@@ -34,5 +34,5 @@ index 365dcf23650..42e1b7bcf6d 100644
-  # Put the proper machine-specific files first, so M-. on a machine
-  # specific routine gets the one for the correct machine.
- -- 
--2.47.1
-+2.48.1
- 
-diff --git a/package/gdb/16.1/0009-gdb-Fix-native-build-on-xtensa.patch b/package/gdb/16.2/0009-gdb-Fix-native-build-on-xtensa.patch
-similarity index 97%
-rename from package/gdb/16.1/0009-gdb-Fix-native-build-on-xtensa.patch
-rename to package/gdb/16.2/0009-gdb-Fix-native-build-on-xtensa.patch
-index 1455810dd5..4d5a171aff 100644
---- a/package/gdb/16.1/0009-gdb-Fix-native-build-on-xtensa.patch
-+++ b/package/gdb/16.2/0009-gdb-Fix-native-build-on-xtensa.patch
-@@ -1,4 +1,4 @@
--From cbb4871a793965abbe53df76c699ff7c4936d4a3 Mon Sep 17 00:00:00 2001
-+From 43501f9838e7aefd7d5d19aede49491591c34c98 Mon Sep 17 00:00:00 2001
- From: Romain Naour <romain.naour@gmail.com>
- Date: Sun, 28 Aug 2022 23:21:37 +0200
- Subject: [PATCH] gdb: Fix native build on xtensa
-@@ -53,5 +53,5 @@ index f8509b02e07..794be827f9a 100644
-  /* Defines ps_err_e, struct ps_prochandle.  */
-  #include "gdb_proc_service.h"
- -- 
--2.47.1
-+2.48.1
- 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 3d21fc2a3f..42e3928a19 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -71,5 +71,5 @@ config BR2_GDB_VERSION
- 	default "arc-2023.09-release" if BR2_arc
- 	default "14.2"     if BR2_GDB_VERSION_14 || (!BR2_PACKAGE_HOST_GDB && !BR2_TOOLCHAIN_GCC_AT_LEAST_9)
- 	default "15.1"	   if BR2_GDB_VERSION_15 || (!BR2_PACKAGE_HOST_GDB && BR2_TOOLCHAIN_GCC_AT_LEAST_9)
--	default "16.1"	   if BR2_GDB_VERSION_16
-+	default "16.2"	   if BR2_GDB_VERSION_16
- 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index 405fb764ac..0336e4a7a4 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -1,7 +1,7 @@
- # From https://gcc.gnu.org/pub/gdb/releases/sha512.sum
- sha512  7e07941f1fe661288cc571b4964012ceabc1760624fce20320db2f470c01439b2386f859b5288da13204b758e2e3b22a74c68c012178db93b9529b06f1e22ede  gdb-14.2.tar.xz
- sha512  0217434073023a8b8316088bf3ee95d53a1b6a7897f6269095429016a8900f9a05e130c390d8d5d5550cc515c16519de1071d8eef96aa58e38056c7e37da1d8b  gdb-15.1.tar.xz
--sha512  17b322fde0655a849506851c879aba9ad1f8bfee804b900efc718806091bec75511383bd4d632b8b32a32ef207233331581501157df18a8df528abe6ff667577  gdb-16.1.tar.xz
-+sha512  f04a6335dbdee371edb7e3213294fcbb878ac39adedb73f7e17e621f54350488f5f5bea9bc742639239c122d590bed158771a74fc3aaeaa7fa0ae304232576a3  gdb-16.2.tar.xz
- 
- # Locally calculated (fetched from Github)
- sha512  3518b47d5c11d1fb478ee152bde1719363f9391db73f3b9f5491217c17742bef8ebca6a51a40302dfaa9476c5a32a8b8f70a4bf64289422dea5f750ae53ab88d  gdb-arc-2023.09-release.tar.gz
+-XWAYLAND_VERSION = 23.2.4
++XWAYLAND_VERSION = 24.1.6
+ XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
+ XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XWAYLAND_LICENSE = MIT
+@@ -25,7 +25,6 @@ XWAYLAND_DEPENDENCIES = \
+ 	xorgproto
+ XWAYLAND_CONF_OPTS = \
+ 	-Ddri3=true \
+-	-Dxwayland_eglstream=false \
+ 	-Dxvfb=false \
+ 	-Ddefault_font_path=/usr/share/fonts/X11/ \
+ 	-Ddtrace=false \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
