@@ -1,63 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBAC0C28B20
-	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 06:49:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DD46C36013
+	for <buildroot@archiver.kernel.org>; Fri, 28 Mar 2025 06:49:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26BBB4F1C6;
-	Fri, 28 Mar 2025 06:49:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F2E336FC6C;
+	Fri, 28 Mar 2025 06:49:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sqxZ3QI0OvUl; Fri, 28 Mar 2025 06:49:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QLdH3UYl7ar4; Fri, 28 Mar 2025 06:49:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 19CAE4EF19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3BFD61295
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19CAE4EF19;
-	Fri, 28 Mar 2025 06:49:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id EE4791B7
+	by smtp3.osuosl.org (Postfix) with ESMTP id E3BFD61295;
+	Fri, 28 Mar 2025 06:49:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id EF2FE1B8
  for <buildroot@buildroot.org>; Fri, 28 Mar 2025 06:49:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CEF6B4EEC2
+ by smtp2.osuosl.org (Postfix) with ESMTP id D7BBA401B2
  for <buildroot@buildroot.org>; Fri, 28 Mar 2025 06:49:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S6k0eqy5iPXe for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EfkBVIzyXKcj for <buildroot@buildroot.org>;
  Fri, 28 Mar 2025 06:49:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 550364EF19
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 550364EF19
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 550364EF19
- for <buildroot@buildroot.org>; Fri, 28 Mar 2025 06:49:25 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7D292443CB;
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 12D1441E7E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12D1441E7E
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 12D1441E7E
+ for <buildroot@buildroot.org>; Fri, 28 Mar 2025 06:49:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1A48F44538;
  Fri, 28 Mar 2025 06:49:22 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1ty3Wr-002FXY-2X;
- Fri, 28 Mar 2025 07:49:21 +0100
+ (envelope-from <peko@dell.be.48ers.dk>) id 1ty3Ws-002FXe-0z;
+ Fri, 28 Mar 2025 07:49:22 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 28 Mar 2025 07:49:18 +0100
-Message-Id: <20250328064920.536373-1-peter@korsgaard.com>
+Date: Fri, 28 Mar 2025 07:49:19 +0100
+Message-Id: <20250328064920.536373-2-peter@korsgaard.com>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250328064920.536373-1-peter@korsgaard.com>
+References: <20250328064920.536373-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddujedtieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeejkeefgeetffekgedtjeduudefudfgvdevfefgkeefudetfeeftdekgeffgeekjeenucffohhmrghinhepfhhrvggvuggvshhkthhophdrohhrghdpgidrohhrghenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvkhhosehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhm
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddujedtieduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepueehhfeijefhjeeufeeijedugeeivdekvdehgeeftedvgeevffdtkeefieevvdeinecuffhomhgrihhnpehfrhgvvgguvghskhhtohhprdhorhhgpdhgnhhurdhorhhgpdigrdhorhhgnecukfhppedujeekrdduudelrddurddufeejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudejkedrudduledruddrudefjedphhgvlhhopeguvghllhdrsggvrdegkegvrhhsrdgukhdpmhgrihhlfhhrohhmpehpvghkoheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdprhgtphhtthhopehrrghphhgrvghlrdhprghvlhhiughishesghhmrghilhdrtghomh
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: [Buildroot] [PATCH 1/2] package/xserver_xorg-server: security bump
- to version 21.1.16
+Subject: [Buildroot] [PATCH 2/2] package/xwayland: security bump to version
+ 24.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -69,12 +71,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Raphael Pavlidis <raphael.pavlidis@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-21.1.14 fixes the following security issues:
+23.2.5 fixes the following security issues:
+
+1) CVE-2024-31080: Heap buffer overread/data leakage in ProcXIGetSelectedEvents
+
+Introduced in: xorg-server-1.7.0 (2009)
+Fixed in: xorg-server-21.1.12 and xwayland-23.2.5
+Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/96798fc1967491c80a4d0
+Found by: Alan Coopersmith of Oracle Solaris, while investigating
+       https://debbugs.gnu.org/cgi/bugreport.cgi?bug=69762
+
+The ProcXIGetSelectedEvents() function uses the byte-swapped length of the
+return data for the amount of data to return to the client, if the client
+has a different endianness than the X server.
+
+2) CVE-2024-31081: Heap buffer overread/data leakage in ProcXIPassiveGrabDevice
+
+Introduced in: xorg-server-1.7.0 (2009)
+Fixed in: xorg-server-21.1.12 and xwayland-23.2.5
+Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/3e77295f888c67fc7645d
+Found by: Alan Coopersmith of Oracle Solaris
+
+The ProcXIPassiveGrabDevice() function uses the byte-swapped length of the
+return data for the amount of data to return to the client, if the client
+has a different endianness than the X server.
+
+3) CVE-2024-31083: User-after-free in ProcRenderAddGlyphs
+
+Introduced in: prior to X11R6.7 (2004)
+Fixed in: xorg-server-21.1.12 and xwayland-23.2.5
+Fix: https://gitlab.freedesktop.org/xorg/xserver/-/commit/bdca6c3d1f5057eeb3160
+Found by: Jan-Niklas Sohn working with Trend Micro Zero Day Initiative
+
+The ProcRenderAddGlyphs() function calls the AllocateGlyph() function
+to store new glyphs sent by the client to the X server.  AllocateGlyph()
+would return a new glyph with refcount=0 and a re-used glyph would end up
+not changing the refcount at all. The resulting glyph_new array would thus
+have multiple entries pointing to the same non-refcounted glyphs.
+
+ProcRenderAddGlyphs() may free a glyph, resulting in a use-after-free when
+the same glyph pointer is then later used.
+
+https://lists.x.org/archives/xorg-announce/2024-April/003497.html
+
+24.1.4 fixes the following security issues:
 
 1) CVE-2024-9632: Heap-based buffer overflow privilege escalation in
 _XkbSetCompatMap
@@ -97,9 +143,8 @@ or remote code execution (e.g. x11 over ssh).
 xorg-server-21.1.14 and xwayland-24.1.4 have been patched to fix this issue.
 
 https://lists.x.org/archives/xorg-announce/2024-October/003545.html
-https://lists.x.org/archives/xorg-announce/2024-October/003546.html
 
-21.1.16 fixes the following security issues:
+24.1.6 fixes the following security issues:
 
 1) CVE-2025-26594: Use-after-free of the root cursor
 
@@ -216,40 +261,51 @@ This can be used to cause a use after free when the alarm eventually
 triggers.
 
 https://lists.x.org/archives/xorg-announce/2025-February/003584.html
-https://lists.x.org/archives/xorg-announce/2025-February/003585.html
+
+Drop now removed xwayland_eglstream option:
+https://gitlab.freedesktop.org/xorg/xserver/-/commit/701284f057b41bba0b0cc4b3f851958af95ac978
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/x11r7/xwayland/xwayland.hash | 6 +++---
+ package/x11r7/xwayland/xwayland.mk   | 3 +--
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index 3520de242f..abf1c83c75 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2024-April/003504.html
--sha256  2864b6a5359ab41c5a6132c69b5d0c9af6eb85ad26d433edb012c914029de752  xorg-server-21.1.13.tar.gz
--sha512  9bf5617d577dd3526a9578daedc1f2e3527da6913841f8fc78a2bda311ebf1560e84e31942cb8133a2a2ac99487c13b9153db6fb2d00859fc24d053f6b91fe34  xorg-server-21.1.13.tar.gz
-+# From https://lists.x.org/archives/xorg-announce/2025-February/003585.html
-+sha256  59fa52b63f6f8747ee2c4716decb29ced249c4c574e2a18c96b7d3b1420f7fd9  xorg-server-21.1.16.tar.gz
-+sha512  d0cd176e4c7273b6870999a3d008ed282fd5609acb2e0919c16447af3a5b2228d8592424388a8ace67acf216cdfae3a2d52f7a7ba81f6071467c61d57f32f314  xorg-server-21.1.16.tar.gz
+diff --git a/package/x11r7/xwayland/xwayland.hash b/package/x11r7/xwayland/xwayland.hash
+index 5bb26bf17e..2a23891752 100644
+--- a/package/x11r7/xwayland/xwayland.hash
++++ b/package/x11r7/xwayland/xwayland.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.x.org/archives/xorg-announce/2024-January/003443.html
+-sha256  a99e159b6d0d33098b3b6ab22a88bfcece23c8b9d0ca72c535c55dcb0681b46b  xwayland-23.2.4.tar.xz
+-sha512  ac3ff208cbef5bbe4637c335cfda226489c93b0a3768f2f4fb0201c588485ede38262fbce77ef1425b3d2a0be61b6580df53341c7b95e6072c8b6371ad29d187  xwayland-23.2.4.tar.xz
++# From https://lists.x.org/archives/xorg-announce/2025-February/003586.html
++sha256  737e612ca36bbdf415a911644eb7592cf9389846847b47fa46dc705bd754d2d7  xwayland-24.1.6.tar.xz
++sha512  b6dcc87f5c4d880cb23216518171a704c2a501803ac2efd9d01760895d755a617cd82313c6516f27a888b0581c64d74e3f8db5c238e1ae0d13da6cc1a547c02f  xwayland-24.1.6.tar.xz
+ 
  # Locally calculated
  sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 05ba938c30..afb79b223e 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+diff --git a/package/x11r7/xwayland/xwayland.mk b/package/x11r7/xwayland/xwayland.mk
+index c66dd471ac..47dc0b39e6 100644
+--- a/package/x11r7/xwayland/xwayland.mk
++++ b/package/x11r7/xwayland/xwayland.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XSERVER_XORG_SERVER_VERSION = 21.1.13
-+XSERVER_XORG_SERVER_VERSION = 21.1.16
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.gz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+-XWAYLAND_VERSION = 23.2.4
++XWAYLAND_VERSION = 24.1.6
+ XWAYLAND_SOURCE = xwayland-$(XWAYLAND_VERSION).tar.xz
+ XWAYLAND_SITE = https://xorg.freedesktop.org/archive/individual/xserver
+ XWAYLAND_LICENSE = MIT
+@@ -25,7 +25,6 @@ XWAYLAND_DEPENDENCIES = \
+ 	xorgproto
+ XWAYLAND_CONF_OPTS = \
+ 	-Ddri3=true \
+-	-Dxwayland_eglstream=false \
+ 	-Dxvfb=false \
+ 	-Ddefault_font_path=/usr/share/fonts/X11/ \
+ 	-Ddtrace=false \
 -- 
 2.39.5
 
