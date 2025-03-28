@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7461CC2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 246D1C3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47AA14123C;
-	Mon, 19 May 2025 10:43:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E54FF60F6F;
+	Mon, 19 May 2025 10:43:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WOSJdONEBiqn; Mon, 19 May 2025 10:43:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19E1B60FEB
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19E1B60FEB;
+	Mon, 19 May 2025 10:43:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A574193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4185B410E1
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rcbQH1u71Dun; Mon, 19 May 2025 10:43:55 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84FA04247C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84FA04247C;
-	Mon, 19 May 2025 10:43:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 43E9AE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 587E7417C0
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gzJ9WfshNGtJ for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:51 +0000 (UTC)
+ id c4kuWaMPEhs6 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 179594107D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B85C940DDA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 179594107D
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B85C940DDA
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1545484A21; Mon, 19 May 2025 10:39:51 +0000 (UTC)
+ id B344184A21; Mon, 19 May 2025 10:39:45 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 16 Apr 2025 19:18:23 +0200
+Date: Fri, 28 Mar 2025 19:39:45 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 26c2dd8fdbb1bc23df6dc0a43e809e26afefd72f
-X-Git-Newrev: 28851289475c4475ab2de9abcf062095e42731b8
+X-Git-Oldrev: e242a5908cf882e7f692dbc32415de2cfa5ec9f2
+X-Git-Newrev: 91bfce113e895fc9637707e73567e5d13da3f169
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103951.1545484A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lua-periphery: bump to
- version 2.4.3
+Message-Id: <20250519103945.B344184A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mbedtls: security bump
+ to version 2.8.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28851289475c4475ab2de9abcf062095e42731b8
+commit: https://git.buildroot.net/buildroot/commit/?id=91bfce113e895fc9637707e73567e5d13da3f169
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-diff LICENSE:
-    - Copyright (c) 2014-2023 vsergeev / Ivan (Vanya) A. Sergeev
-    + Copyright (c) 2014-2025 vsergeev / Ivan (Vanya) A. Sergeev
+Fixes the following security issues:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+- CVE-2025-27809: Note that TLS clients should generally call
+  mbedtls_ssl_set_hostname() if they use certificate authentication (i.e.
+  not pre-shared keys).  Otherwise, in many scenarios, the server could be
+  impersonated.  The library will now prevent the handshake and return
+  MBEDTLS_ERR_SSL_CERTIFICATE_VERIFICATION_WITHOUT_HOSTNAME if
+  mbedtls_ssl_set_hostname() has not been called.
+
+  https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2025-03-1/
+
+- CVE-2025-27810: Zeroize temporary heap buffers used in PSA operations.
+  Fix a vulnerability in the TLS 1.2 handshake.  If memory allocation
+  failed or there was a cryptographic hardware failure when calculating the
+  Finished message, it could be calculated incorrectly.  This would break
+  the security guarantees of the TLS handshake.
+
+  https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2025-03-2/
+
+For more details, see the release notes:
+https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-2.28.10
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/lua-periphery/lua-periphery.hash | 4 ++--
- package/lua-periphery/lua-periphery.mk   | 2 +-
+ package/mbedtls/mbedtls.hash | 4 ++--
+ package/mbedtls/mbedtls.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/lua-periphery/lua-periphery.hash b/package/lua-periphery/lua-periphery.hash
-index 6661656165..b09dbe7c5f 100644
---- a/package/lua-periphery/lua-periphery.hash
-+++ b/package/lua-periphery/lua-periphery.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256  63694d795a630afcdb4812cb0af489ab088501ad7fe1dc9ee1337b53ff849721  lua-periphery-2.4.2-1.src.rock
--sha256  2c29e38ac4d393558522c5fa671bd03f9d6f7d751c899a3482b20ab2a0ba5122  lua-periphery/LICENSE
-+sha256  cd8ecf48e1dd53244f7e108e5e77f8a1c78949e8decd7ada1a881c6178b840e6  lua-periphery-2.4.3-1.src.rock
-+sha256  fd3377c82df42bd00d8ac9c25d22dc63f80b7a491b84f2ba82d2a7621432c511  lua-periphery/LICENSE
-diff --git a/package/lua-periphery/lua-periphery.mk b/package/lua-periphery/lua-periphery.mk
-index b9933a9001..f0a52bf8b3 100644
---- a/package/lua-periphery/lua-periphery.mk
-+++ b/package/lua-periphery/lua-periphery.mk
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 9de7f731da..6fc68ddac6 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.9:
+-sha256  e85ea97aaf78dd6c0a5ba2e54dd5932ffa15f39abfc189c26beef7684630c02b  mbedtls-2.28.9.tar.bz2
++# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.10:
++sha256  19e5b81fdac0fe22009b9e2bdcd52d7dcafbf62bc67fc59cf0a76b5b5540d149  mbedtls-2.28.10.tar.bz2
+ # Locally calculated
+ sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 2faa6dff55..fd6682fbfd 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUA_PERIPHERY_VERSION = 2.4.2-1
-+LUA_PERIPHERY_VERSION = 2.4.3-1
- LUA_PERIPHERY_SUBDIR = lua-periphery
- LUA_PERIPHERY_LICENSE = MIT
- LUA_PERIPHERY_LICENSE_FILES = $(LUA_PERIPHERY_SUBDIR)/LICENSE
+-MBEDTLS_VERSION = 2.28.9
++MBEDTLS_VERSION = 2.28.10
+ MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(MBEDTLS_VERSION)
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION).tar.bz2
+ MBEDTLS_CONF_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
