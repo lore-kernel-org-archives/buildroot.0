@@ -1,78 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6192FC36008
-	for <buildroot@archiver.kernel.org>; Sat, 29 Mar 2025 10:16:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75400C36008
+	for <buildroot@archiver.kernel.org>; Sat, 29 Mar 2025 10:19:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2FF3740B77;
-	Sat, 29 Mar 2025 10:16:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 22A888475A;
+	Sat, 29 Mar 2025 10:19:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YUtCFTgu16YJ; Sat, 29 Mar 2025 10:16:01 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p2ztHS176bKH; Sat, 29 Mar 2025 10:19:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73B4E40B92
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 467328474A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73B4E40B92;
-	Sat, 29 Mar 2025 10:16:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 467328474A;
+	Sat, 29 Mar 2025 10:19:39 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E6CB619C
- for <buildroot@buildroot.org>; Sat, 29 Mar 2025 10:15:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id A61C319A
+ for <buildroot@buildroot.org>; Sat, 29 Mar 2025 10:19:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D7BD660A93
- for <buildroot@buildroot.org>; Sat, 29 Mar 2025 10:15:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 86F48606D4
+ for <buildroot@buildroot.org>; Sat, 29 Mar 2025 10:19:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cpDR0BUsvOaX for <buildroot@buildroot.org>;
- Sat, 29 Mar 2025 10:15:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2DCF9606D4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DCF9606D4
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2DCF9606D4
- for <buildroot@buildroot.org>; Sat, 29 Mar 2025 10:15:59 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 04A476013A;
- Sat, 29 Mar 2025 11:15:53 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:37620])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 29 Mar 2025 11:15:53 +0100
-MIME-Version: 1.0
-Date: Sat, 29 Mar 2025 11:15:53 +0100
+ id 2J0BaPYIH0S4 for <buildroot@buildroot.org>;
+ Sat, 29 Mar 2025 10:19:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CD1C60749
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7CD1C60749
+ for <buildroot@buildroot.org>; Sat, 29 Mar 2025 10:19:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 64B57835F5; Sat, 29 Mar 2025 10:19:37 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: =?UTF-8?Q?S=C3=A9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
-Cc: buildroot@buildroot.org, Gary Bisson <bisson.gary@gmail.com>, Refik
- Tuzakli <tuzakli.refik@gmail.com>
-In-Reply-To: <20250328-fix-g2d-header-install-v1-1-99768aa27b15@armadeus.com>
-References: <20250328-fix-g2d-header-install-v1-1-99768aa27b15@armadeus.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <dc2421eaf5d95b8aa2d1ab82400aee08@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1743243357;
- bh=mo2h7OuE22uh3tTixlRg+ATYuB7vuPnJMKvrytLVK2U=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=b+FHOk+c2t6gK7yw9/Q+3822xrVgeNZjIEafWg+mfKoZ6PmRfBxHSNn40jaGnv1W4
- hDvkjZ1RIDEMC87nJevq/6hbo7Mfa+wH5biLYnITlgEV6Zph6duLDZqaBgcWBMwsYE
- sUanUdfIy2aIJVwW6adTEYdZY1e7hMag39Eb6DVRdjkqxo+zDIpN3MGYSyKSdPQ8It
- MjbAgtY3jvIWHqyJjCpi8L5gcxuVENKvIp4UKZbsKr7SN5FPzJH4qDLQGFO2sKxHXe
- YfkfjZ88Vi153TgvDcTrMDH1M+gMxegHTFanOFsK2lpI1nlvYhyFa8VKI32YlTejqN
- 5Mshmw/Ua9UPw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=b+FHOk+c
-Subject: Re: [Buildroot] [PATCH] package/freescale-imx/imx-gpu-g2d:
- re-install headers to staging
+To: buildroot@buildroot.org
+Date: Sat, 29 Mar 2025 11:18:21 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f3ce9a56f92a07c1fe30ea6054923a2266dcb5b2
+X-Git-Newrev: e172bb48d3460d994e5eaff9059b3055172d28bb
+X-Patchwork-Hint: ignore
+Message-Id: <20250329101937.64B57835F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcap: do not attempt to run
+ ldconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,19 +59,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMjgvMDMvMjAyNSAyMjoyMywgU8OpYmFzdGllbiBTenltYW5za2kgd3JvdGU6Cj4gQ29tbWl0
-IDQ0MzU1Zjc5OTgwNSAoInBhY2thZ2UvZnJlZXNjYWxlLWlteC9pbXgtZ3B1LWcyZDogaW5zdGFs
-bCB0aGUKPiBzcGVjaWZpYyBsaWJyYXJ5IGZvciBpLk1YOE1NIikgYWNjaWRlbnRhbGx5IHJlbW92
-ZSB0aGUgaGVhZGVycycKPiBpbnN0YWxsYXRpb24gdG8gdGhlIHN0YWdpbmcgZGlyZWN0b3J5LiBG
-aXggdGhhdC4KPiAKPiBGaXhlczogNDQzNTVmNzk5ODA1ICgicGFja2FnZS9mcmVlc2NhbGUtaW14
-L2lteC1ncHUtZzJkOiBpbnN0YWxsIHRoZSAKPiBzcGVjaWZpYyBsaWJyYXJ5IGZvciBpLk1YOE1N
-IikKPiBTaWduZWQtb2ZmLWJ5OiBTw6liYXN0aWVuIFN6eW1hbnNraSA8c2ViYXN0aWVuLnN6eW1h
-bnNraUBhcm1hZGV1cy5jb20+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
-aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=e172bb48d3460d994e5eaff9059b3055172d28bb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The libcap Makefile is hand-coded (i.e. not autotools), and hard-codes
+calls to /sbin/ldconfig, unless it is installed out-of-tree. For target
+packages, this is done, but for host package this is not done, as we
+do set PREFIX instead, which causes libcap's Makefile to call ldconfig
+and emits a spurious warning (twice):
+
+    install -m 0755 libcap.so.2.73 /home/ymorin/dev/buildroot/O/master/per-package/host-libcap/host/lib/libcap.so.2.73
+    ln -sf libcap.so.2.73 /home/ymorin/dev/buildroot/O/master/per-package/host-libcap/host/lib/libcap.so.2
+    ln -sf libcap.so.2 /home/ymorin/dev/buildroot/O/master/per-package/host-libcap/host/lib/libcap.so
+    /sbin/ldconfig
+    /sbin/ldconfig: Can't create temporary cache file /etc/ld.so.cache~: Permission denied
+    make[4]: [Makefile:200: install-shared-cap] Error 1 (ignored)
+
+This is just a warning, but it is incorrect still.
+
+Fake an out-of-tree install with a non-empy DESTDIR that is just '/',
+and thus does in fact not install out-of-tree. This is enough to
+actually silence the warning. Add a little comment to explain that.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Bernd Kuhls <bernd@kuhls.net>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libcap/libcap.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
+index 5a6ed5b494..25b3a46c44 100644
+--- a/package/libcap/libcap.mk
++++ b/package/libcap/libcap.mk
+@@ -64,8 +64,11 @@ define HOST_LIBCAP_BUILD_CMDS
+ 		$(HOST_LIBCAP_MAKE_FLAGS)
+ endef
+ 
++# Set DESTDIR to a non-empty path, so that libcap's Makefile
++# does not trigger calls to ldconfig
+ define HOST_LIBCAP_INSTALL_CMDS
+-	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBCAP_MAKE_FLAGS) install
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_LIBCAP_MAKE_FLAGS) \
++		DESTDIR=/ install
+ endef
+ 
+ $(eval $(generic-package))
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
