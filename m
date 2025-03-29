@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BA70C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:45:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D133C3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:45:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF59961569;
-	Mon, 19 May 2025 10:45:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BBF1A61568;
+	Mon, 19 May 2025 10:45:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5BViMPZgo_c5; Mon, 19 May 2025 10:45:08 +0000 (UTC)
+ id 2uITrv_6-298; Mon, 19 May 2025 10:45:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE16B61564
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DD7661567
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE16B61564;
-	Mon, 19 May 2025 10:45:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E867E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DD7661567;
+	Mon, 19 May 2025 10:45:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E406E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 31128417B4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2197A40DFE
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H5Sz-a7IvqK5 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SAcyvSsyS681 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D6DB410BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 455D340DEE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D6DB410BB
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 455D340DEE
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0B35E872E7; Mon, 19 May 2025 10:39:52 +0000 (UTC)
+ id 400B68725C; Mon, 19 May 2025 10:39:46 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 19 Apr 2025 16:34:10 +0200
+Date: Sat, 29 Mar 2025 16:55:32 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f027e7c5b3b84ab920f0ded6f3e2f298b7ad4f55
-X-Git-Newrev: 3012fbdec745640f7ef9f52f4ee9d94d07c82eb6
+X-Git-Oldrev: 1ba1055d3da2d98874aae1eedf1983a2ed933605
+X-Git-Newrev: b974c91fe438541781c2df6f4fe0b8a48ab0a124
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103952.0B35E872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/wilc-driver: fix build
- failure with Linux 6.10
+Message-Id: <20250519103946.400B68725C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pkg-golang: support
+ _SUBDIR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,184 +59,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3012fbdec745640f7ef9f52f4ee9d94d07c82eb6
+commit: https://git.buildroot.net/buildroot/commit/?id=b974c91fe438541781c2df6f4fe0b8a48ab0a124
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add local patches pending upstream to fix 3 different API changes
-throughout Linux 6.7, 6.8, 6.10.
+Some packages have their actual source tree in a sub-directory (even if
+that is the only source in the repository); this is the case for example
+with the Amazon ECR credential helper (to be packaged in a follow up
+commit):
+    https://github.com/awslabs/amazon-ecr-credential-helper
 
-Fixes:
-https://autobuild.buildroot.org/results/e001f70dab4c9cebdbde0443f4f8bb6b42ae5561/
+Do the build in _SUBDIR, and also do the vendoring in there.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+We don't need the build to generate executables inside _SUBDIR, so we
+just keep using $(@D)/bin as a place to generate them (and install them
+from).
+
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Christian Stewart <christian@aperture.us>
+Reviewed-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../0008-Fix-build-with-Linux-6.7.patch            | 46 ++++++++++++++++++
- .../0009-Fix-build-with-Linux-6.8.patch            | 34 +++++++++++++
- .../0010-Fix-build-with-Linux-6.10.patch           | 55 ++++++++++++++++++++++
- 3 files changed, 135 insertions(+)
+ package/pkg-golang.mk            | 13 +++++++++----
+ support/download/go-post-process |  5 +++--
+ 2 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/package/wilc-driver/0008-Fix-build-with-Linux-6.7.patch b/package/wilc-driver/0008-Fix-build-with-Linux-6.7.patch
-new file mode 100644
-index 0000000000..9714a828eb
---- /dev/null
-+++ b/package/wilc-driver/0008-Fix-build-with-Linux-6.7.patch
-@@ -0,0 +1,46 @@
-+From c2024eb93f6d7ec605226d5d8a29ea17fbc71b5d Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Thu, 17 Apr 2025 19:06:48 +0200
-+Subject: [PATCH] Fix build with Linux 6.7
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index bdf8de4d66..a4e8bd30cc 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -79,8 +79,8 @@ $(2)_GOMOD ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
+ # Generate a go.mod file if it doesn't exist. Note: Go is configured
+ # to use the "vendor" dir and not make network calls.
+ define $(2)_GEN_GOMOD
+-	if [ ! -f $$(@D)/go.mod ]; then \
+-		printf "module $$($(2)_GOMOD)\n" > $$(@D)/go.mod; \
++	if [ ! -f $$(@D)/$$($(2)_SUBDIR)/go.mod ]; then \
++		printf "module $$($(2)_GOMOD)\n" > $$(@D)/$$($(2)_SUBDIR)/go.mod; \
+ 	fi
+ endef
+ $(2)_POST_PATCH_HOOKS += $(2)_GEN_GOMOD
+@@ -91,6 +91,11 @@ $(2)_DL_ENV += \
+ 	GOPROXY=direct \
+ 	$$($(2)_GO_ENV)
+ 
++# If building in a sub directory, do the vendoring in there
++ifneq ($$($(2)_SUBDIR),)
++$(2)_DOWNLOAD_POST_PROCESS_OPTS += -s$$($(2)_SUBDIR)
++endif
 +
-+During commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bb55441c57ccc5cc2eab44e1a97698b9d708871d
-+struct cfg80211_ap_settings has been split into multiple structs including
-+beacon. So is Linux version is 6.7+ let's use &info->beacon in place of
-+beacon.
-+
-+Upstream: https://github.com/embeddedTS/wilc3000-external-module/pull/8
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ cfg80211.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/cfg80211.c b/cfg80211.c
-+index 5c92062..25da3a1 100644
-+--- a/cfg80211.c
-++++ b/cfg80211.c
-+@@ -1822,13 +1822,21 @@ static int start_ap(struct wiphy *wiphy, struct net_device *dev,
-+ }
-+ 
-+ static int change_beacon(struct wiphy *wiphy, struct net_device *dev,
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,7,0))
-++			 struct cfg80211_ap_update *info)
-++#else
-+ 			 struct cfg80211_beacon_data *beacon)
-++#endif
-+ {
-+ 	struct wilc_vif *vif = netdev_priv(dev);
-+ 
-+ 	PRINT_INFO(vif->ndev, HOSTAPD_DBG, "Setting beacon\n");
-+ 
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,7,0))
-++	return wilc_add_beacon(vif, 0, 0, &info->beacon);
-++#else
-+ 	return wilc_add_beacon(vif, 0, 0, beacon);
-++#endif
-+ }
-+ 
-+ static int stop_ap(struct wiphy *wiphy, struct net_device *dev
-+-- 
-+2.39.5
-+
-diff --git a/package/wilc-driver/0009-Fix-build-with-Linux-6.8.patch b/package/wilc-driver/0009-Fix-build-with-Linux-6.8.patch
-new file mode 100644
-index 0000000000..2bafd53a9a
---- /dev/null
-+++ b/package/wilc-driver/0009-Fix-build-with-Linux-6.8.patch
-@@ -0,0 +1,34 @@
-+From 90e679f1b7caad02e68fa8672be6569eb1b2b76f Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Thu, 17 Apr 2025 18:56:55 +0200
-+Subject: [PATCH] Fix build with Linux 6.8
-+
-+With commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d26270061ae66b915138af7cd73ca6f8b85e6b44
-+strlcpy() has been superseded in favor of strscpy() so let's #define
-+strlcpy as strscpy if Linux version 6.8+
-+
-+Upstream: https://github.com/embeddedTS/wilc3000-external-module/pull/8
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ mon.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/mon.c b/mon.c
-+index 2c9c2d9..20b7e20 100644
-+--- a/mon.c
-++++ b/mon.c
-+@@ -6,6 +6,10 @@
-+ 
-+ #include "cfg80211.h"
-+ 
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 8, 0))
-++#define strlcpy strscpy
-++#endif
-++
-+ struct wilc_wfi_radiotap_hdr {
-+ 	struct ieee80211_radiotap_header hdr;
-+ 	u8 rate;
-+-- 
-+2.39.5
-+
-diff --git a/package/wilc-driver/0010-Fix-build-with-Linux-6.10.patch b/package/wilc-driver/0010-Fix-build-with-Linux-6.10.patch
-new file mode 100644
-index 0000000000..08444b06e2
---- /dev/null
-+++ b/package/wilc-driver/0010-Fix-build-with-Linux-6.10.patch
-@@ -0,0 +1,55 @@
-+From 684eb3e40c88ee7a2cd4417a12b9b27a35e86655 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Thu, 17 Apr 2025 18:41:07 +0200
-+Subject: [PATCH] Fix build with Linux 6.10
-+
-+During commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9b163e0d330debbf7dcc14b2c3e2dc19a3b50a1d
-+is_dma_mapped member has been dropped since it was not used anymore. The
-+DMA mapping is done directly in single spi drivers in case it's supported
-+so having is_dma_mapped set to 1 lead to code breakage. So we can consider
-+it always as 0 and basically guard it if Linux version is 6.10+
-+
-+Upstream: https://github.com/embeddedTS/wilc3000-external-module/pull/8
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ spi.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/spi.c b/spi.c
-+index f7b43e2..be616f4 100644
-+--- a/spi.c
-++++ b/spi.c
-+@@ -338,7 +338,9 @@ static int wilc_spi_tx(struct wilc *wilc, u8 *b, u32 len)
-+ 		memset(&msg, 0, sizeof(msg));
-+ 		spi_message_init(&msg);
-+ 		msg.spi = spi;
-++#if KERNEL_VERSION(6, 10, 0) > LINUX_VERSION_CODE
-+ 		msg.is_dma_mapped = USE_SPI_DMA;
-++#endif
-+ 		spi_message_add_tail(&tr, &msg);
-+ 
-+ 		ret = spi_sync(spi, &msg);
-+@@ -385,7 +387,9 @@ static int wilc_spi_rx(struct wilc *wilc, u8 *rb, u32 rlen)
-+ 		memset(&msg, 0, sizeof(msg));
-+ 		spi_message_init(&msg);
-+ 		msg.spi = spi;
-++#if KERNEL_VERSION(6, 10, 0) > LINUX_VERSION_CODE
-+ 		msg.is_dma_mapped = USE_SPI_DMA;
-++#endif
-+ 		spi_message_add_tail(&tr, &msg);
-+ 
-+ 		ret = spi_sync(spi, &msg);
-+@@ -427,7 +431,9 @@ static int wilc_spi_tx_rx(struct wilc *wilc, u8 *wb, u8 *rb, u32 rlen)
-+ 		memset(&msg, 0, sizeof(msg));
-+ 		spi_message_init(&msg);
-+ 		msg.spi = spi;
-++#if KERNEL_VERSION(6, 10, 0) > LINUX_VERSION_CODE
-+ 		msg.is_dma_mapped = USE_SPI_DMA;
-++#endif
-+ 
-+ 		spi_message_add_tail(&tr, &msg);
-+ 		ret = spi_sync(spi, &msg);
-+-- 
-+2.39.5
-+
+ # Because we append vendored info, we can't rely on the values being empty
+ # once we eventually get into the generic-package infra. So, we duplicate
+ # the heuristics here
+@@ -135,7 +140,7 @@ endif
+ # Build package for target
+ define $(2)_BUILD_CMDS
+ 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
+-		cd $$(@D); \
++		cd $$(@D)/$$($(2)_SUBDIR); \
+ 		$$(HOST_GO_TARGET_ENV) \
+ 			$$($(2)_GO_ENV) \
+ 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
+@@ -147,7 +152,7 @@ else
+ # Build package for host
+ define $(2)_BUILD_CMDS
+ 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
+-		cd $$(@D); \
++		cd $$(@D)/$$($(2)_SUBDIR); \
+ 		$$(HOST_GO_HOST_ENV) \
+ 			$$($(2)_GO_ENV) \
+ 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
+diff --git a/support/download/go-post-process b/support/download/go-post-process
+index ef96a76948..edc23ec564 100755
+--- a/support/download/go-post-process
++++ b/support/download/go-post-process
+@@ -5,10 +5,11 @@ set -e
+ . "${0%/*}/helpers"
+ 
+ # Parse our options
+-while getopts "n:o:" OPT; do
++while getopts "n:o:s:" OPT; do
+     case "${OPT}" in
+     o)  output="${OPTARG}";;
+     n)  base_name="${OPTARG}";;
++    s)  subdir="${OPTARG}";;
+     :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
+     \?) error "unknown option '%s'\n" "${OPTARG}";;
+     esac
+@@ -22,7 +23,7 @@ fi
+ post_process_unpack "${base_name}" "${output}"
+ 
+ # Do the Go vendoring
+-pushd "${base_name}" > /dev/null
++pushd "${base_name}/${subdir}" > /dev/null
+ 
+ if [ ! -f go.mod ]; then
+     echo "ERROR: no vendor/ folder and no go.mod, aborting"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
