@@ -4,75 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 157E8C36008
-	for <buildroot@archiver.kernel.org>; Sat, 29 Mar 2025 10:19:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECDF5C36008
+	for <buildroot@archiver.kernel.org>; Sat, 29 Mar 2025 10:46:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D37A540B67;
-	Sat, 29 Mar 2025 10:19:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8762240DAC;
+	Sat, 29 Mar 2025 10:46:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5niZgfzsnYSu; Sat, 29 Mar 2025 10:19:58 +0000 (UTC)
+ id tHC1jtVg77Vj; Sat, 29 Mar 2025 10:46:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E10F40C64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6CA040C99
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E10F40C64;
-	Sat, 29 Mar 2025 10:19:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id CF88F19A
- for <buildroot@buildroot.org>; Sat, 29 Mar 2025 10:19:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A6CA040C99;
+	Sat, 29 Mar 2025 10:46:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1520119C
+ for <buildroot@buildroot.org>; Sat, 29 Mar 2025 10:46:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B5C4C40B67
- for <buildroot@buildroot.org>; Sat, 29 Mar 2025 10:19:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EF17E8206E
+ for <buildroot@buildroot.org>; Sat, 29 Mar 2025 10:46:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KoQdwKeM1P_w for <buildroot@buildroot.org>;
- Sat, 29 Mar 2025 10:19:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 21E3140A03
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21E3140A03
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 21E3140A03
- for <buildroot@buildroot.org>; Sat, 29 Mar 2025 10:19:56 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 437A378050A;
- Sat, 29 Mar 2025 11:19:50 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:58500])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 29 Mar 2025 11:19:50 +0100
-MIME-Version: 1.0
-Date: Sat, 29 Mar 2025 11:19:50 +0100
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jYc7E6f50KBz for <buildroot@buildroot.org>;
+ Sat, 29 Mar 2025 10:46:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 283BB82018
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 283BB82018
+ for <buildroot@buildroot.org>; Sat, 29 Mar 2025 10:46:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 211A083622; Sat, 29 Mar 2025 10:46:20 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20250328192656.2035235-1-yann.morin.1998@free.fr>
-References: <20250328192656.2035235-1-yann.morin.1998@free.fr>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <8265da0eaa57e46a0387ad8c84ee07ed@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1743243594;
- bh=CMZ3g0FlnUi1fQNgcNtXIlg6I+S56e9DItR5+k0wuM4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=dTlXFY3qxeFwaSrVgfb/RUTS5IJXAqV1uIVdQlArqyNfIb5zOEtEEMWZCck72IDsJ
- sOe8IRp9Rd78TzK4cBDTAodFeC/BAzpOfnIPNx9NwB1Y4ETW5BScyO0caGnvgrrD5N
- 8Jn60OAJURWabbSCbM5NVzIzzjh+MsalBYQuPTWBO8xMONnawa4hnAk8dzsym+qaiA
- BEn/uqdQeYOj4TKJ8PNyGSYrNQvaxPixPmLCjgJfPsn2juqd1odcssVcmhov1FxO0N
- VkqFC1XM4Pj/B/USp96L7qqL+CwH0gr3MFnjT0ue4WSK61QDtpS5Y9X8vvuGQN8Wki
- zOH3NwVFnNrWw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=dTlXFY3q
-Subject: Re: [Buildroot] [PATCH] package/libcap: do not attempt to run
- ldconfig
+To: buildroot@buildroot.org
+Date: Sat, 29 Mar 2025 11:42:54 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e172bb48d3460d994e5eaff9059b3055172d28bb
+X-Git-Newrev: 15f15cfe019fc1788c01e5819d238328d4282aa1
+X-Patchwork-Hint: ignore
+Message-Id: <20250329104620.211A083622@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freerdp: bump to latest commit on
+ legacy stable branch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,40 +59,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 28/03/2025 20:26, Yann E. MORIN wrote:
-> The libcap Makefile is hand-coded (i.e. not autotools), and hard-codes
-> calls to /sbin/ldconfig, unless it is installed out-of-tree. For target
-> packages, this is done, but for host package this is not done, as we
-> do set PREFIX instead, which causes libcpa's Makefile to call ldconfig
-> and emits a spurious warning (twice):
-> 
->     install -m 0755 libcap.so.2.73 
-> /home/ymorin/dev/buildroot/O/master/per-package/host-libcap/host/lib/libcap.so.2.73
->     ln -sf libcap.so.2.73 
-> /home/ymorin/dev/buildroot/O/master/per-package/host-libcap/host/lib/libcap.so.2
->     ln -sf libcap.so.2 
-> /home/ymorin/dev/buildroot/O/master/per-package/host-libcap/host/lib/libcap.so
->     /sbin/ldconfig
->     /sbin/ldconfig: Can't create temporary cache file 
-> /etc/ld.so.cache~: Permission denied
->     make[4]: [Makefile:200: install-shared-cap] Error 1 (ignored)
-> 
-> This is just a warning, but it is incorrect still.
-> 
-> Fake an out-of-tree install with a non-empy DESTDIR that is just '/',
-> and thus does in fact not install out-of-tree. This is enough to
-> actually silence the warning. Add a little comment to explain that.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Bernd Kuhls <bernd@kuhls.net>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=15f15cfe019fc1788c01e5819d238328d4282aa1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+FreeRDP fails to build on newer gcc:
+
+    /freerdp-2.11.7/libfreerdp/core/info.c:88:39: error: initialization of 'const WCHAR *' {aka 'const short unsigned int *'} from incompatible pointer type 'BYTE *' {aka 'unsigned char *'} [-Wincompatible-pointer-types]
+       88 |                 const WCHAR* domain = Stream_Pointer(s);
+          |                                       ^~~~~~~~~~~~~~
+
+There is a patch upstream [0] to fix that one, but then another similar
+build failure triggers, which is also fixed upstream, but then a third
+failre triggers, again fixed upstream [2], but then...
+
+FreeRDP 2.x has been kinda discontinued, and the new stable is 3.x.
+However, bumping to 3.x looks like a huge leap.
+
+So, rather than backport, just bump to the latest commit on the
+stable-2.0 branch, which carries 12 non-merge commits with build fixes:
+    562ae3588 [winpr,pubsub] add NULL parameter checks
+    68c7c21b9 X11 client: ignore grab related LeaveNotify events
+    a9deecc99 fix [core]: 'invalid hHandle' errors
+    052c525e0 [core] eliminate rdpRdp::instance
+    be23ed4ba [server,proxy] deactivate capture module
+    5b2b53b15 [warnings] fix -Wincompatible-pointer-types
+    67818bddb [client,wayland] fix const correctness
+    d2b6771c7 X11: fix pointer/integer type mismatch
+[2] 7894a7dfc redirection: Fix incompatible pointer type
+[1] f3ed1f1ac redirection: Fix incompatible pointer type
+[0] 4f411197d info: Fix incompatible pointer type
+    a383740a2 next-dev-2.11.8-dev
+
+Fixes:
+    http://autobuild.buildroot.org/results/e1b/e1b95b4fb0005d4e933b027b508cec9ad510bd73/
+    http://autobuild.buildroot.org/results/ba0/ba0beae13e1be2573878ee50b1566f4427b269a3/
+    ...
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/freerdp/freerdp.hash | 4 +---
+ package/freerdp/freerdp.mk   | 6 ++++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
+index 1007215cd6..83b83db121 100644
+--- a/package/freerdp/freerdp.hash
++++ b/package/freerdp/freerdp.hash
+@@ -1,5 +1,3 @@
+-# From https://pub.freerdp.com/releases/freerdp-2.11.7.tar.gz.sha256
+-sha256  5a2d54e1ca0f1facd1632bcc94c73b9f071a80c5fdbbb3f26e79f02aaa586ca3  freerdp-2.11.7.tar.gz
+-
+ # Locally calculated
++sha256  f7cc2bf43b9778e9079cd229ea8e37fc1843eb1c11a8e4e003034af71858ce6a  freerdp-2.11.7-18-g0ee17e2f8e49d56ab5b90d5160fa8f87ffc445e0-git4.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
+index e8c8f320a9..3a1ba61621 100644
+--- a/package/freerdp/freerdp.mk
++++ b/package/freerdp/freerdp.mk
+@@ -4,8 +4,10 @@
+ #
+ ################################################################################
+ 
+-FREERDP_VERSION = 2.11.7
+-FREERDP_SITE = https://pub.freerdp.com/releases
++# Latest, and probably last, commit on the stable-2.0 branch
++FREERDP_VERSION = 2.11.7-18-g0ee17e2f8e49d56ab5b90d5160fa8f87ffc445e0
++FREERDP_SITE = https://github.com/FreeRDP/FreeRDP
++FREERDP_SITE_METHOD = git
+ FREERDP_DEPENDENCIES = libglib2 openssl zlib
+ FREERDP_LICENSE = Apache-2.0
+ FREERDP_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
