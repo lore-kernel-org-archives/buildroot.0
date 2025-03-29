@@ -1,77 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C254C36008
-	for <buildroot@archiver.kernel.org>; Sat, 29 Mar 2025 20:32:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E38C2C36008
+	for <buildroot@archiver.kernel.org>; Sat, 29 Mar 2025 20:45:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CE064608B2;
-	Sat, 29 Mar 2025 20:32:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E30640C01;
+	Sat, 29 Mar 2025 20:45:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GvMN0Q9QTBNd; Sat, 29 Mar 2025 20:32:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7abuDOyTTWtN; Sat, 29 Mar 2025 20:45:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FA4360B0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA6D840C3C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FA4360B0B;
-	Sat, 29 Mar 2025 20:32:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2D01A12A
- for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:32:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA6D840C3C;
+	Sat, 29 Mar 2025 20:45:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DAC5012A
+ for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:45:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 97D188205E
- for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:32:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C743040C4A
+ for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:45:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7HhrlcTJLC3x for <buildroot@buildroot.org>;
- Sat, 29 Mar 2025 20:32:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7E6C082A87
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E6C082A87
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7E6C082A87
- for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:32:06 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 8A1732003A4;
- Sat, 29 Mar 2025 21:32:03 +0100 (CET)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:51492])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 29 Mar 2025 21:32:03 +0100
-MIME-Version: 1.0
-Date: Sat, 29 Mar 2025 21:32:03 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PI6jNfgK-jAh for <buildroot@buildroot.org>;
+ Sat, 29 Mar 2025 20:45:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D20D40C01
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D20D40C01
+ for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:45:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 066398347B; Sat, 29 Mar 2025 20:45:46 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250329174749.1886148-1-thomas@devoogdt.com>
-References: <20250329174749.1886148-1-thomas@devoogdt.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <32ee190f72f6995425aded466b1aa63f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1743280324;
- bh=hs8m0cdy++1QdgpaLpqZh21ddE5KHRDVnGWDxxaG2y8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=i4zuNqStC9BrAtgQzpy2O8A3wIry5biiPjlU7KnD9sjTKC25SPyinGlozth9LsvvB
- IB9g97STfqfQLnCOLdHS/O8Y7rPw7CR7QbDbcwUAxR3jCnR/yB/uhuboxR/ExbSFCH
- C1FOkdB+sMdusE2NzMDMqdhPfqTMMdXf57MZ+C7+xreX7yfnRiV41kaY34vVVIqj1B
- UTAIBHI5SUGL6NheP7pd9kA6lBdzTk6u3OKx7i7AjtJ0ThT8J9Y35fpFVxlmHXca7n
- IfoAO9AyKfakEorVd731Bw+e7qdVrTOHBC+0OV90D3VcnsHKlXKBuTB9Eo8VTIMIeA
- RMeQXbC4n+OIQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=i4zuNqSt
-Subject: Re: [Buildroot] [PATCH v1] package/lighttpd: bump to 1.4.78
+To: buildroot@buildroot.org
+Date: Sat, 29 Mar 2025 21:42:52 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8a402952a7447e2125ef326752f412711fb425d5
+X-Git-Newrev: 8c439db4a14bd67267505623c5b3e20fc96a878c
+X-Patchwork-Hint: ignore
+Message-Id: <20250329204546.066398347B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freeswitch: fix build with GCC 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,18 +58,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 29/03/2025 18:47, Thomas Devoogdt wrote:
-> News:
-> - https://www.lighttpd.net/2025/3/22/1.4.78/
-> 
-> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=8c439db4a14bd67267505623c5b3e20fc96a878c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Fixes:
+https://autobuild.buildroot.org/results/33c/33c41d8da8190933d863ed6f75e5d586d1c22a2f/
+
+Build error is also present on the 2024.11.x branch:
+https://autobuild.buildroot.org/results/7eef69e6587783307cd9231abdc4a2fee60c075f/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...xml_int-mod_xml_rpc-const-compiler-errors.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+
+diff --git a/package/freeswitch/0003-xml_int-mod_xml_rpc-const-compiler-errors.patch b/package/freeswitch/0003-xml_int-mod_xml_rpc-const-compiler-errors.patch
+new file mode 100644
+index 0000000000..0cd5283a14
+--- /dev/null
++++ b/package/freeswitch/0003-xml_int-mod_xml_rpc-const-compiler-errors.patch
+@@ -0,0 +1,35 @@
++From 475b64d1c5707e1302cf9f7cfe3c385b7339c6c4 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?=D0=94=D0=B8=D0=BB=D1=8F=D0=BD=20=D0=9F=D0=B0=D0=BB=D0=B0?=
++ =?UTF-8?q?=D1=83=D0=B7=D0=BE=D0=B2?= <git-dpa@aegee.org>
++Date: Sat, 22 Jun 2024 14:58:52 +0200
++Subject: [PATCH] xml_int/mod_xml_rpc: const compiler errors
++
++Upstream: https://github.com/signalwire/freeswitch/pull/2496
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/mod/xml_int/mod_xml_rpc/mod_xml_rpc.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/mod/xml_int/mod_xml_rpc/mod_xml_rpc.c b/src/mod/xml_int/mod_xml_rpc/mod_xml_rpc.c
++index 8e49462d2c2..0a4e5e1e449 100644
++--- a/src/mod/xml_int/mod_xml_rpc/mod_xml_rpc.c
+++++ b/src/mod/xml_int/mod_xml_rpc/mod_xml_rpc.c
++@@ -321,7 +321,7 @@ static abyss_bool user_attributes(const char *user, const char *domain_name,
++ static abyss_bool is_authorized(const TSession * r, const char *command)
++ {
++ 	char *user = NULL, *domain_name = NULL;
++-	char *allowed_commands = NULL;
+++	const char *allowed_commands = NULL;
++ 	char *dp;
++ 	char *dup = NULL;
++ 	char *argv[256] = { 0 };
++@@ -922,7 +922,7 @@ abyss_bool handler_hook(TSession * r)
++ 				if (len > 0) {
++ 					int succeeded = TRUE;
++ 					char *qp = qbuf;
++-					char *readError;
+++					const char *readError;
++ 
++ 					do {
++ 						int blen = r->connP->buffersize - r->connP->bufferpos;
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
