@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9510C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 584ACC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 77B8F83F9F;
-	Mon, 19 May 2025 10:47:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 276146167A;
+	Mon, 19 May 2025 10:47:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vWUZRfWycaWi; Mon, 19 May 2025 10:47:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gOE199agiMaF; Mon, 19 May 2025 10:47:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6C9683F84
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CB9F613B6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6C9683F84;
-	Mon, 19 May 2025 10:47:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 41FE6E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5CB9F613B6;
+	Mon, 19 May 2025 10:47:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0ECFCE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C836A418B7
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BF19641272
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q8dP1tnjgALB for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wjy19rEEah0q for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10F9D417FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1EE6240D9C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 10F9D417FB
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1EE6240D9C
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0E628873D4; Mon, 19 May 2025 10:40:02 +0000 (UTC)
+ id 1D7068725C; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 12 May 2025 23:00:47 +0200
+Date: Sat, 29 Mar 2025 12:44:56 +0100
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6c4da559ccad17acad5e638aba888543cf4245d0
-X-Git-Newrev: d64ae929685e3b79ba383dee1946a52576bae3de
+X-Git-Oldrev: 15f15cfe019fc1788c01e5819d238328d4282aa1
+X-Git-Newrev: 185c0ba4b93a2647b41ed0afe9ea3f5cfdbfbe77
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104002.0E628873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/imx6ulz_bsh_smm_m2:
- bump Linux to 6.12.28
+Message-Id: <20250519103946.1D7068725C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] board/sifive/hifive-unleashed:
+ fix shellcheck warning in post-build.sh
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,53 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d64ae929685e3b79ba383dee1946a52576bae3de
+commit: https://git.buildroot.net/buildroot/commit/?id=185c0ba4b93a2647b41ed0afe9ea3f5cfdbfbe77
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The patch bumps the Linux kernel to version 6.12.28
+This removes a warning reported by shellcheck: "Double quote to prevent
+globbing and word splitting". As a result, the file can be removed from
+.checkpackageignore.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Francois Dugast <francois.dugast.foss@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash | 2 +-
- configs/imx6ulz_bsh_smm_m2_defconfig                  | 6 +++---
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .checkpackageignore                         | 1 -
+ board/sifive/hifive-unleashed/post-build.sh | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash b/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
-index e300dfeb82..8ad0e7d8c0 100644
---- a/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
-+++ b/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 0907cb39ed..7b02d2a8d0 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -72,7 +72,6 @@ board/roseapplepi/patches/uboot/0001-compiler-.h-sync-include-linux-compiler-.h-
+ board/roseapplepi/post-build.sh Shellcheck
+ board/seeed/stm32mp157c-odyssey/patches/linux/0001-ARM-dts-stm32-fix-stm32mp157c-odyssey-card-detect.patch lib_patch.Upstream
+ board/sheevaplug/patches/uboot/0001-Remove-redundant-YYLOC-global-declaration.patch lib_patch.Upstream
+-board/sifive/hifive-unleashed/post-build.sh Shellcheck
+ board/solidrun/clearfog/post-build.sh Shellcheck
+ board/solidrun/macchiatobin/post-build-mainline.sh Shellcheck
+ board/solidrun/macchiatobin/post-build.sh Shellcheck
+diff --git a/board/sifive/hifive-unleashed/post-build.sh b/board/sifive/hifive-unleashed/post-build.sh
+index b418120652..14c80558d5 100755
+--- a/board/sifive/hifive-unleashed/post-build.sh
++++ b/board/sifive/hifive-unleashed/post-build.sh
 @@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  60c70cdd70ddee384c004242e67844e3dd1fe28f75b26b3586859fff0a07bd23  linux-6.1.134.tar.xz
-+sha256  e8a099182562aecff781de72ce769461e706d97af42d740dff20eb450dd5771e  linux-6.12.28.tar.xz
-diff --git a/configs/imx6ulz_bsh_smm_m2_defconfig b/configs/imx6ulz_bsh_smm_m2_defconfig
-index 2169ab4465..2ca98c5856 100644
---- a/configs/imx6ulz_bsh_smm_m2_defconfig
-+++ b/configs/imx6ulz_bsh_smm_m2_defconfig
-@@ -1,7 +1,7 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_VFPV3=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/bsh/imx6ulz-bsh-smm-m2/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-@@ -9,11 +9,11 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/bsh/imx6ulz-bsh-smm-m2/post-build.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.134"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.28"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/bsh/imx6ulz-bsh-smm-m2/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ulz-bsh-smm-m2"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6ulz-bsh-smm-m2"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_PACKAGE_FREESCALE_IMX=y
- BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6UL=y
+ #!/bin/sh
+-cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
++cp "$BINARIES_DIR/boot.scr" "$TARGET_DIR/boot/boot.scr"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
