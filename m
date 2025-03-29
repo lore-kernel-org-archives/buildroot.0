@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C04EC36008
-	for <buildroot@archiver.kernel.org>; Sat, 29 Mar 2025 20:22:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4D7FC36011
+	for <buildroot@archiver.kernel.org>; Sat, 29 Mar 2025 20:22:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C984660904;
-	Sat, 29 Mar 2025 20:22:06 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C0nVPxFml_k5; Sat, 29 Mar 2025 20:22:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2D1D60AF6
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F2D1D60AF6;
-	Sat, 29 Mar 2025 20:22:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id ED013121
- for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:22:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DEA2F4090C
- for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:22:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BAAC40930;
+	Sat, 29 Mar 2025 20:22:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LuK1XMKQB_Wr for <buildroot@buildroot.org>;
+ id 7bps7E25lStc; Sat, 29 Mar 2025 20:22:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BA06408F9
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9BA06408F9;
+	Sat, 29 Mar 2025 20:22:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A30E19C
+ for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:22:04 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id E50FA405F7
+ for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:22:03 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vElLdrEm0ilm for <buildroot@buildroot.org>;
  Sat, 29 Mar 2025 20:22:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00B57408EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1ED5A409E5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 00B57408EB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1ED5A409E5
  for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:22:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EBCC7838C2; Sat, 29 Mar 2025 20:22:02 +0000 (UTC)
+ id 0D6E8838C5; Sat, 29 Mar 2025 20:22:03 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 29 Mar 2025 16:55:32 +0100
+Date: Sat, 29 Mar 2025 16:55:48 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1ba1055d3da2d98874aae1eedf1983a2ed933605
-X-Git-Newrev: b974c91fe438541781c2df6f4fe0b8a48ab0a124
+X-Git-Oldrev: 9a9580622545db56e97fb8e9778f3a17dab9cbc3
+X-Git-Newrev: 992d43b37356bb8b41fe3c42c5519d4d0bc77028
 X-Patchwork-Hint: ignore
-Message-Id: <20250329202202.EBCC7838C2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-golang: support _SUBDIR
+Message-Id: <20250329202203.0D6E8838C5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-credential-gcr: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,101 +64,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b974c91fe438541781c2df6f4fe0b8a48ab0a124
+commit: https://git.buildroot.net/buildroot/commit/?id=992d43b37356bb8b41fe3c42c5519d4d0bc77028
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Some packages have their actual source tree in a sub-directory (even if
-that is the only source in the repository); this is the case for example
-with the Amazon ECR credential helper (to be packaged in a follow up
-commit):
-    https://github.com/awslabs/amazon-ecr-credential-helper
-
-Do the build in _SUBDIR, and also do the vendoring in there.
-
-We don't need the build to generate executables inside _SUBDIR, so we
-just keep using $(@D)/bin as a place to generate them (and install them
-from).
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Cc: Christian Stewart <christian@aperture.us>
-Reviewed-by: Christian Stewart <christian@aperture.us>
+[Julien: reflow Config.in help to fix check-package error]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/pkg-golang.mk            | 13 +++++++++----
- support/download/go-post-process |  5 +++--
- 2 files changed, 12 insertions(+), 6 deletions(-)
+ package/Config.in                                        |  1 +
+ package/docker-credential-gcr/Config.in                  | 11 +++++++++++
+ package/docker-credential-gcr/docker-credential-gcr.hash |  2 ++
+ package/docker-credential-gcr/docker-credential-gcr.mk   | 16 ++++++++++++++++
+ 4 files changed, 30 insertions(+)
 
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index bdf8de4d66..a4e8bd30cc 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -79,8 +79,8 @@ $(2)_GOMOD ?= $$($(2)_SRC_DOMAIN)/$$($(2)_SRC_VENDOR)/$$($(2)_SRC_SOFTWARE)
- # Generate a go.mod file if it doesn't exist. Note: Go is configured
- # to use the "vendor" dir and not make network calls.
- define $(2)_GEN_GOMOD
--	if [ ! -f $$(@D)/go.mod ]; then \
--		printf "module $$($(2)_GOMOD)\n" > $$(@D)/go.mod; \
-+	if [ ! -f $$(@D)/$$($(2)_SUBDIR)/go.mod ]; then \
-+		printf "module $$($(2)_GOMOD)\n" > $$(@D)/$$($(2)_SUBDIR)/go.mod; \
- 	fi
- endef
- $(2)_POST_PATCH_HOOKS += $(2)_GEN_GOMOD
-@@ -91,6 +91,11 @@ $(2)_DL_ENV += \
- 	GOPROXY=direct \
- 	$$($(2)_GO_ENV)
- 
-+# If building in a sub directory, do the vendoring in there
-+ifneq ($$($(2)_SUBDIR),)
-+$(2)_DOWNLOAD_POST_PROCESS_OPTS += -s$$($(2)_SUBDIR)
-+endif
+diff --git a/package/Config.in b/package/Config.in
+index 69bf526dc9..83c6e3d67b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2834,6 +2834,7 @@ menu "System tools"
+ 	source "package/docker-cli/Config.in"
+ 	source "package/docker-cli-buildx/Config.in"
+ 	source "package/docker-compose/Config.in"
++	source "package/docker-credential-gcr/Config.in"
+ 	source "package/docker-engine/Config.in"
+ 	source "package/earlyoom/Config.in"
+ 	source "package/efibootmgr/Config.in"
+diff --git a/package/docker-credential-gcr/Config.in b/package/docker-credential-gcr/Config.in
+new file mode 100644
+index 0000000000..1b24ff0e59
+--- /dev/null
++++ b/package/docker-credential-gcr/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_DOCKER_CREDENTIAL_GCR
++	bool "docker-credential-gcr"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	help
++	  docker-credential-gcr is Google Container Registry's
++	  standalone, gcloud SDK-independent Docker credential
++	  helper. It allows for v18.03+ Docker clients to easily make
++	  authenticated requests to GCR's repositories (gcr.io,
++	  eu.gcr.io, etc.).
 +
- # Because we append vendored info, we can't rely on the values being empty
- # once we eventually get into the generic-package infra. So, we duplicate
- # the heuristics here
-@@ -135,7 +140,7 @@ endif
- # Build package for target
- define $(2)_BUILD_CMDS
- 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
--		cd $$(@D); \
-+		cd $$(@D)/$$($(2)_SUBDIR); \
- 		$$(HOST_GO_TARGET_ENV) \
- 			$$($(2)_GO_ENV) \
- 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
-@@ -147,7 +152,7 @@ else
- # Build package for host
- define $(2)_BUILD_CMDS
- 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
--		cd $$(@D); \
-+		cd $$(@D)/$$($(2)_SUBDIR); \
- 		$$(HOST_GO_HOST_ENV) \
- 			$$($(2)_GO_ENV) \
- 			$$(GO_BIN) build -v $$($(2)_BUILD_OPTS) \
-diff --git a/support/download/go-post-process b/support/download/go-post-process
-index ef96a76948..edc23ec564 100755
---- a/support/download/go-post-process
-+++ b/support/download/go-post-process
-@@ -5,10 +5,11 @@ set -e
- . "${0%/*}/helpers"
- 
- # Parse our options
--while getopts "n:o:" OPT; do
-+while getopts "n:o:s:" OPT; do
-     case "${OPT}" in
-     o)  output="${OPTARG}";;
-     n)  base_name="${OPTARG}";;
-+    s)  subdir="${OPTARG}";;
-     :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
-     \?) error "unknown option '%s'\n" "${OPTARG}";;
-     esac
-@@ -22,7 +23,7 @@ fi
- post_process_unpack "${base_name}" "${output}"
- 
- # Do the Go vendoring
--pushd "${base_name}" > /dev/null
-+pushd "${base_name}/${subdir}" > /dev/null
- 
- if [ ! -f go.mod ]; then
-     echo "ERROR: no vendor/ folder and no go.mod, aborting"
++	  https://github.com/GoogleCloudPlatform/docker-credential-gcr/
+diff --git a/package/docker-credential-gcr/docker-credential-gcr.hash b/package/docker-credential-gcr/docker-credential-gcr.hash
+new file mode 100644
+index 0000000000..2796b5746c
+--- /dev/null
++++ b/package/docker-credential-gcr/docker-credential-gcr.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  126fdbf7351d2c7aaee6c525d9660738519eae53eeef77920b105fd4d1bc5dbd  docker-credential-gcr-v2.1.26-git4-go2.tar.gz
+diff --git a/package/docker-credential-gcr/docker-credential-gcr.mk b/package/docker-credential-gcr/docker-credential-gcr.mk
+new file mode 100644
+index 0000000000..658e9baf33
+--- /dev/null
++++ b/package/docker-credential-gcr/docker-credential-gcr.mk
+@@ -0,0 +1,16 @@
++################################################################################
++#
++# docker-credential-gcr
++#
++################################################################################
++
++DOCKER_CREDENTIAL_GCR_VERSION = v2.1.26
++DOCKER_CREDENTIAL_GCR_SITE = https://github.com/GoogleCloudPlatform/docker-credential-gcr
++DOCKER_CREDENTIAL_GCR_SITE_METHOD = git
++
++DOCKER_CREDENTIAL_GCR_LICENSE = Apache-2.0
++DOCKER_CREDENTIAL_GCR_LICENSE_FILES = LICENSE
++
++DOCKER_CREDENTIAL_GCR_GOMOD = github.com/GoogleCloudPlatform/docker-credential-gcr/v2
++
++$(eval $(golang-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
