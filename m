@@ -4,49 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8035EC36008
-	for <buildroot@archiver.kernel.org>; Sat, 29 Mar 2025 20:31:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C254C36008
+	for <buildroot@archiver.kernel.org>; Sat, 29 Mar 2025 20:32:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C5A560612;
-	Sat, 29 Mar 2025 20:31:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE064608B2;
+	Sat, 29 Mar 2025 20:32:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XKHontjlebOJ; Sat, 29 Mar 2025 20:31:58 +0000 (UTC)
+ id GvMN0Q9QTBNd; Sat, 29 Mar 2025 20:32:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 451AF60666
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FA4360B0B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 451AF60666;
-	Sat, 29 Mar 2025 20:31:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 13B0D12A
- for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:31:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1FA4360B0B;
+	Sat, 29 Mar 2025 20:32:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2D01A12A
+ for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:32:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F218C60612
- for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:31:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 97D188205E
+ for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:32:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8XFX_NgseIxW for <buildroot@buildroot.org>;
- Sat, 29 Mar 2025 20:31:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 367CC60605
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 367CC60605
- for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:31:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 29EA18227D; Sat, 29 Mar 2025 20:31:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7HhrlcTJLC3x for <buildroot@buildroot.org>;
+ Sat, 29 Mar 2025 20:32:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7E6C082A87
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E6C082A87
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7E6C082A87
+ for <buildroot@buildroot.org>; Sat, 29 Mar 2025 20:32:06 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 8A1732003A4;
+ Sat, 29 Mar 2025 21:32:03 +0100 (CET)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:51492])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 29 Mar 2025 21:32:03 +0100
+MIME-Version: 1.0
+Date: Sat, 29 Mar 2025 21:32:03 +0100
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 29 Mar 2025 21:24:21 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e679cd4974a9f58a211447f6903084f955f2820b
-X-Git-Newrev: 8a402952a7447e2125ef326752f412711fb425d5
-X-Patchwork-Hint: ignore
-Message-Id: <20250329203156.29EA18227D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lighttpd: bump to 1.4.78
+To: Thomas Devoogdt <thomas@devoogdt.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250329174749.1886148-1-thomas@devoogdt.com>
+References: <20250329174749.1886148-1-thomas@devoogdt.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <32ee190f72f6995425aded466b1aa63f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1743280324;
+ bh=hs8m0cdy++1QdgpaLpqZh21ddE5KHRDVnGWDxxaG2y8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=i4zuNqStC9BrAtgQzpy2O8A3wIry5biiPjlU7KnD9sjTKC25SPyinGlozth9LsvvB
+ IB9g97STfqfQLnCOLdHS/O8Y7rPw7CR7QbDbcwUAxR3jCnR/yB/uhuboxR/ExbSFCH
+ C1FOkdB+sMdusE2NzMDMqdhPfqTMMdXf57MZ+C7+xreX7yfnRiV41kaY34vVVIqj1B
+ UTAIBHI5SUGL6NheP7pd9kA6lBdzTk6u3OKx7i7AjtJ0ThT8J9Y35fpFVxlmHXca7n
+ IfoAO9AyKfakEorVd731Bw+e7qdVrTOHBC+0OV90D3VcnsHKlXKBuTB9Eo8VTIMIeA
+ RMeQXbC4n+OIQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=i4zuNqSt
+Subject: Re: [Buildroot] [PATCH v1] package/lighttpd: bump to 1.4.78
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,53 +83,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a402952a7447e2125ef326752f412711fb425d5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 29/03/2025 18:47, Thomas Devoogdt wrote:
+> News:
+> - https://www.lighttpd.net/2025/3/22/1.4.78/
+> 
+> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 
-News:
-- https://www.lighttpd.net/2025/3/22/1.4.78/
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/lighttpd/lighttpd.hash | 8 ++++----
- package/lighttpd/lighttpd.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
-index d4742b5746..4834e2e947 100644
---- a/package/lighttpd/lighttpd.hash
-+++ b/package/lighttpd/lighttpd.hash
-@@ -1,6 +1,6 @@
--# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.77.sha512sum
--sha512  696fd4fd8486a6c3fd1131c7e8a935a02b5384882b74ddc19bf79d085e2a0abed9184a30f97e3a7aafb816d3589e110e8d70115daa15cdc52cf61aa4129e3565  lighttpd-1.4.77.tar.xz
--# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.77.sha256sum
--sha256  acafabdbfa2267d8b6452d03d85fdd2a66525f3f05a36a79b6645c017f1562ce  lighttpd-1.4.77.tar.xz
-+# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.78.sha512sum
-+sha512  40559e676da38b7b4742d7140ab1afe6b69a10ececc5ab1e18c1ea0e4b1c3f13f8058e8e005cbad3df8c008b6b80511afbd0bde9c8094848f3db4d5a29961181  lighttpd-1.4.78.tar.xz
-+# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.78.sha256sum
-+sha256  3c0739e8bc75c9e9fc1cfa89e1c304dd4b0e4abb87adc646a1d20bc6a2db2a3e  lighttpd-1.4.78.tar.xz
- # Locally calculated
- sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 609fe3e3be..5f38637857 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIGHTTPD_VERSION_MAJOR = 1.4
--LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).77
-+LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).78
- LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
- LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
- LIGHTTPD_LICENSE = BSD-3-Clause
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
