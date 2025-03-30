@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4806C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:49:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48859C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:49:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8061F8413E;
-	Mon, 19 May 2025 10:49:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ECC0E6FC27;
+	Mon, 19 May 2025 10:49:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7W-4dRbptq7G; Mon, 19 May 2025 10:49:44 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ftnvepEUkkAz; Mon, 19 May 2025 10:49:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B043B8413B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD4BE60FCF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B043B8413B;
-	Mon, 19 May 2025 10:49:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6BA23E4
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD4BE60FCF;
+	Mon, 19 May 2025 10:49:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 187E4193
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0B1144194A
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 14EB440DA2
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QHNkVO0sfqaR for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 16ymtpLlaZNP for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D2A941938
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CA0540DF8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D2A941938
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7CA0540DF8
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 87D71872E7; Mon, 19 May 2025 10:40:08 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 7998D8725C; Mon, 19 May 2025 10:39:46 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 17:50:19 +0200
+Date: Sun, 30 Mar 2025 11:09:55 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5aa36e173eccc4d91a91b344c643eff6c4c31a32
-X-Git-Newrev: 9401eb80e7bf4e624c82dc6c9969089f7f054db2
+X-Git-Oldrev: 8c439db4a14bd67267505623c5b3e20fc96a878c
+X-Git-Newrev: 0879359c0a226aad3a6cc6776509baaa3215fb8d
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104008.87D71872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/olimex_stmp157: switch
- to Bootlin glibc stable toolchain
+Message-Id: <20250519103946.7998D8725C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libsrtp: bump to 2.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,29 +64,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9401eb80e7bf4e624c82dc6c9969089f7f054db2
+commit: https://git.buildroot.net/buildroot/commit/?id=0879359c0a226aad3a6cc6776509baaa3215fb8d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- configs/olimex_stmp157_olinuxino_lime_defconfig | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+https://github.com/cisco/libsrtp/releases/tag/v2.7.0
 
-diff --git a/configs/olimex_stmp157_olinuxino_lime_defconfig b/configs/olimex_stmp157_olinuxino_lime_defconfig
-index efd267fcbf..29381ec206 100644
---- a/configs/olimex_stmp157_olinuxino_lime_defconfig
-+++ b/configs/olimex_stmp157_olinuxino_lime_defconfig
-@@ -1,6 +1,8 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
- BR2_GLOBAL_PATCH_DIR="board/olimex/stmp1_olinuxino/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_HOSTNAME="stmp1-olinuxino"
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libsrtp/libsrtp.hash | 2 +-
+ package/libsrtp/libsrtp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libsrtp/libsrtp.hash b/package/libsrtp/libsrtp.hash
+index 95daf0d792..232c106387 100644
+--- a/package/libsrtp/libsrtp.hash
++++ b/package/libsrtp/libsrtp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  bf641aa654861be10570bfc137d1441283822418e9757dc71ebb69a6cf84ea6b  libsrtp-2.6.0.tar.gz
++sha256  54facb1727a557c2a76b91194dcb2d0a453aaf8e2d0cbbf1e3c2848c323e28ad  libsrtp-2.7.0.tar.gz
+ sha256  8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  LICENSE
+diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
+index 269c1ae3f8..ba58b900d4 100644
+--- a/package/libsrtp/libsrtp.mk
++++ b/package/libsrtp/libsrtp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSRTP_VERSION = 2.6.0
++LIBSRTP_VERSION = 2.7.0
+ LIBSRTP_SITE = $(call github,cisco,libsrtp,v$(LIBSRTP_VERSION))
+ LIBSRTP_INSTALL_STAGING = YES
+ LIBSRTP_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
