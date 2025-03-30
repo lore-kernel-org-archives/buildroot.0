@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A139EC28B20
-	for <buildroot@archiver.kernel.org>; Sun, 30 Mar 2025 13:21:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1F67C28B20
+	for <buildroot@archiver.kernel.org>; Sun, 30 Mar 2025 13:39:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C98F40747;
-	Sun, 30 Mar 2025 13:21:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11AF5408A8;
+	Sun, 30 Mar 2025 13:39:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ARuPjD2UzyeR; Sun, 30 Mar 2025 13:21:05 +0000 (UTC)
+ id sXlYruUQmlC7; Sun, 30 Mar 2025 13:38:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7778F4087A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD38640851
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7778F4087A;
-	Sun, 30 Mar 2025 13:21:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1FA74121
- for <buildroot@buildroot.org>; Sun, 30 Mar 2025 13:21:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD38640851;
+	Sun, 30 Mar 2025 13:38:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A8C39121
+ for <buildroot@buildroot.org>; Sun, 30 Mar 2025 13:38:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1511F40897
- for <buildroot@buildroot.org>; Sun, 30 Mar 2025 13:21:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E95780B9C
+ for <buildroot@buildroot.org>; Sun, 30 Mar 2025 13:38:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MUGbE5RbVzZE for <buildroot@buildroot.org>;
- Sun, 30 Mar 2025 13:21:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XxPKKSlvVrVc for <buildroot@buildroot.org>;
+ Sun, 30 Mar 2025 13:38:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
  helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A862640725
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A862640725
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8DFC681EB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DFC681EB3
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A862640725
- for <buildroot@buildroot.org>; Sun, 30 Mar 2025 13:21:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8DFC681EB3
+ for <buildroot@buildroot.org>; Sun, 30 Mar 2025 13:38:56 +0000 (UTC)
 Received: from home.juju.sh (unknown [82.64.214.120])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id E1E02B0057C;
- Sun, 30 Mar 2025 15:20:56 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id A58D2B00579;
+ Sun, 30 Mar 2025 15:38:53 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
 Cc: Julien Olivain <ju.o@free.fr>
-Date: Sun, 30 Mar 2025 15:20:51 +0200
-Message-ID: <20250330132051.673201-1-ju.o@free.fr>
+Date: Sun, 30 Mar 2025 15:38:32 +0200
+Message-ID: <20250330133832.876762-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1743340858;
- bh=+GREbvxIIuzlHkseXZzRlOdDv4NJJuXy2Bg1uJAzEZo=;
+ d=free.fr; s=smtp-20201208; t=1743341934;
+ bh=iUUm7uqWCTaMfVneOWxBzsIgTVkXOyO7IwOyF/0hc/Y=;
  h=From:To:Cc:Subject:Date:From;
- b=q8ZgiOzwPgsRocr6ptVQDTO7l6ABcSzFS3ndqJg/FbZjVkYZi5YTymJ45dMHgVEXY
- 2e35nX/JvBrOOxegx2MzKGt6k+pWSF2/sL6/JF6TDGNK1iSevhNVo3ynZlYePWeHrZ
- ndzcBAzFdRx307RPegIadJ8sWOOQ8TWXWP+sAEdbdaVsnZ54IPxfZ4WkCP0ICARaZP
- qFP/gQJMUy4qQf9VzrBTY3UiL/G8gnMmrmdeoEVj9ROtByBtLMdM/2yfvqou4nQtyB
- NqQe7h88vML1H+zwMwVVQWtC6KRD3m32Ad8S55lpGUQuBOvgzUds+blc4upcBwfwqY
- A4eSim+zbQblg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=EPWdpgdgdueVVqu9m46xnRdPvB+/CxQefYGTTHb9/RQGyeRUII+UnlSbIf9y3t7O+
+ jeMRan6MZBKM6M5IOGs8oEGXHCBKUu96NKYf6wpXAzeW3Wz+rnpgpy6gB7gpLhpAlT
+ YSyIq+SCA6QPdNOuaD+O6dWhxDhD6sqUI/VA8ilnAIyogd/3cnZ8uKLyT8SgqR2w5C
+ Po5aucZPQnv34loeN6aBpv8gYmu6z+4bkAZ5P3oF2LT4CLPdoZRwVz/whBEk1kf46q
+ 2UwnlZKH8gC+jMlohRh5s+U2GTIqpdd8aI0dSe1m0rSJMislDunPstPJjn44bC3tbZ
+ 9Tqb0Kdxk3YFQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=q8ZgiOzw
-Subject: [Buildroot] [PATCH 1/1] package/fwts: bump to version 25.03.00
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=EPWdpgdg
+Subject: [Buildroot] [PATCH 1/1] package/hyperfine: bump version to 1.19.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,42 +80,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See release announce:
-https://lists.ubuntu.com/archives/fwts-devel/2025-March/013974.html
+Changelog:
+https://github.com/sharkdp/hyperfine/blob/v1.19.0/CHANGELOG.md
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/9568393971
----
- package/fwts/fwts.hash | 2 +-
- package/fwts/fwts.mk   | 2 +-
+ package/hyperfine/hyperfine.hash | 2 +-
+ package/hyperfine/hyperfine.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/fwts/fwts.hash b/package/fwts/fwts.hash
-index 97b13b3db0..b578b96778 100644
---- a/package/fwts/fwts.hash
-+++ b/package/fwts/fwts.hash
-@@ -1,5 +1,5 @@
- # Hash from: https://fwts.ubuntu.com/release/SHA256SUMS
--sha256  c8bbf62f4bd80f17bb768bab3863ee93e195b2047d10637a3d03fe2086291bd7  fwts-V25.01.00.tar.gz
-+sha256  6e4f795a7b5c7e549515901e197fedba200ee9fd06c8a62f9f49db24301f280b  fwts-V25.03.00.tar.gz
- 
- # Hash for license file
- sha256  77a5f0ea48e53ee8d67aecc7759cf468bcd340c1caca711ed4307b477a93fb47  debian/copyright
-diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
-index 410ce063aa..dd1c16317f 100644
---- a/package/fwts/fwts.mk
-+++ b/package/fwts/fwts.mk
+diff --git a/package/hyperfine/hyperfine.hash b/package/hyperfine/hyperfine.hash
+index 88b8710125..3590d91133 100644
+--- a/package/hyperfine/hyperfine.hash
++++ b/package/hyperfine/hyperfine.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  6cbe5673729ba7fd7a1b0b19a54630f93f4fcc29ea7878845f17931d31cd16fb  hyperfine-1.18.0-cargo2.tar.gz
++sha256  805a1be8dc1667591988ac6ca1ac4fc37408a46a077b4e2332e0a81cc4a3d2e1  hyperfine-1.19.0-cargo2.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
+ sha256  1dfee18c2ff07ce551de4d6a1d2db158c0380746b488a7f0d08c8e0d3568b7c3  LICENSE-MIT
+diff --git a/package/hyperfine/hyperfine.mk b/package/hyperfine/hyperfine.mk
+index b9f09a2820..7ab25fd4f1 100644
+--- a/package/hyperfine/hyperfine.mk
++++ b/package/hyperfine/hyperfine.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FWTS_VERSION = 25.01.00
-+FWTS_VERSION = 25.03.00
- FWTS_SOURCE = fwts-V$(FWTS_VERSION).tar.gz
- FWTS_SITE = https://fwts.ubuntu.com/release
- FWTS_STRIP_COMPONENTS = 0
+-HYPERFINE_VERSION = 1.18.0
++HYPERFINE_VERSION = 1.19.0
+ HYPERFINE_SITE = $(call github,sharkdp,hyperfine,v$(HYPERFINE_VERSION))
+ HYPERFINE_LICENSE = Apache-2.0 or MIT
+ HYPERFINE_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
 -- 
 2.49.0
 
