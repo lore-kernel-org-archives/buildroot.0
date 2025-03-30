@@ -4,66 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1F67C28B20
-	for <buildroot@archiver.kernel.org>; Sun, 30 Mar 2025 13:39:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B2C7C36011
+	for <buildroot@archiver.kernel.org>; Sun, 30 Mar 2025 14:20:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11AF5408A8;
-	Sun, 30 Mar 2025 13:39:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 238014056C;
+	Sun, 30 Mar 2025 14:20:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sXlYruUQmlC7; Sun, 30 Mar 2025 13:38:58 +0000 (UTC)
+ id 339N4lvdlzeF; Sun, 30 Mar 2025 14:20:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD38640851
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F6CF4057D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD38640851;
-	Sun, 30 Mar 2025 13:38:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A8C39121
- for <buildroot@buildroot.org>; Sun, 30 Mar 2025 13:38:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4F6CF4057D;
+	Sun, 30 Mar 2025 14:20:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2316812A
+ for <buildroot@buildroot.org>; Sun, 30 Mar 2025 14:20:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8E95780B9C
- for <buildroot@buildroot.org>; Sun, 30 Mar 2025 13:38:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 01C334057D
+ for <buildroot@buildroot.org>; Sun, 30 Mar 2025 14:20:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XxPKKSlvVrVc for <buildroot@buildroot.org>;
- Sun, 30 Mar 2025 13:38:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mAA3Gl4X76vJ for <buildroot@buildroot.org>;
+ Sun, 30 Mar 2025 14:20:40 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
  helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8DFC681EB3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DFC681EB3
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 025FD4056C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 025FD4056C
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8DFC681EB3
- for <buildroot@buildroot.org>; Sun, 30 Mar 2025 13:38:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 025FD4056C
+ for <buildroot@buildroot.org>; Sun, 30 Mar 2025 14:20:39 +0000 (UTC)
 Received: from home.juju.sh (unknown [82.64.214.120])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id A58D2B00579;
- Sun, 30 Mar 2025 15:38:53 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id C2D21B00565;
+ Sun, 30 Mar 2025 16:20:35 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
 Cc: Julien Olivain <ju.o@free.fr>
-Date: Sun, 30 Mar 2025 15:38:32 +0200
-Message-ID: <20250330133832.876762-1-ju.o@free.fr>
+Date: Sun, 30 Mar 2025 16:20:31 +0200
+Message-ID: <20250330142031.919525-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1743341934;
- bh=iUUm7uqWCTaMfVneOWxBzsIgTVkXOyO7IwOyF/0hc/Y=;
+ d=free.fr; s=smtp-20201208; t=1743344437;
+ bh=GNS/TXxUrCjoZQZzKc4meWvQ5VdlGGDjdXbGbO3q34g=;
  h=From:To:Cc:Subject:Date:From;
- b=EPWdpgdgdueVVqu9m46xnRdPvB+/CxQefYGTTHb9/RQGyeRUII+UnlSbIf9y3t7O+
- jeMRan6MZBKM6M5IOGs8oEGXHCBKUu96NKYf6wpXAzeW3Wz+rnpgpy6gB7gpLhpAlT
- YSyIq+SCA6QPdNOuaD+O6dWhxDhD6sqUI/VA8ilnAIyogd/3cnZ8uKLyT8SgqR2w5C
- Po5aucZPQnv34loeN6aBpv8gYmu6z+4bkAZ5P3oF2LT4CLPdoZRwVz/whBEk1kf46q
- 2UwnlZKH8gC+jMlohRh5s+U2GTIqpdd8aI0dSe1m0rSJMislDunPstPJjn44bC3tbZ
- 9Tqb0Kdxk3YFQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=p0dk3rsq9gB1ntaCGCgt2t3Q63HWT4EZAo80WQMNNNOnxcCB3l1xdZU2M1LImg4BN
+ GQ4GTH+XVcvHi9cdpv4Dxqua6+FKNkGLsdsxNHfPWIhYbnautWYj8SzQyMpvpGyfFL
+ idpmE+1e/My97FFHhP4es4MxEZTR6pPUzMRbcttuAPNjoiROLAgtf81q2iX8HQyvfK
+ ClqaMwplycNiPD1svte+8OcqJ66k0mDpHyLjXqWbcm8veF4vberGBSM+P0yQvCXZNl
+ 7o7HhoOSua66GJ8oi/mHshAjKgm2iQzBegpaVjf7T89jeDz+wWhJucMAuxj6JrGC1v
+ iMKNIpPV19k7w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=EPWdpgdg
-Subject: [Buildroot] [PATCH 1/1] package/hyperfine: bump version to 1.19.0
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=p0dk3rsq
+Subject: [Buildroot] [PATCH 1/1] support/testing: new hyperfine runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,38 +80,59 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://github.com/sharkdp/hyperfine/blob/v1.19.0/CHANGELOG.md
-
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/hyperfine/hyperfine.hash | 2 +-
- package/hyperfine/hyperfine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Patch tested in:
+https://gitlab.com/jolivain/buildroot/-/jobs/9568780110
+---
+ DEVELOPERS                                    |  1 +
+ .../testing/tests/package/test_hyperfine.py   | 25 +++++++++++++++++++
+ 2 files changed, 26 insertions(+)
+ create mode 100644 support/testing/tests/package/test_hyperfine.py
 
-diff --git a/package/hyperfine/hyperfine.hash b/package/hyperfine/hyperfine.hash
-index 88b8710125..3590d91133 100644
---- a/package/hyperfine/hyperfine.hash
-+++ b/package/hyperfine/hyperfine.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  6cbe5673729ba7fd7a1b0b19a54630f93f4fcc29ea7878845f17931d31cd16fb  hyperfine-1.18.0-cargo2.tar.gz
-+sha256  805a1be8dc1667591988ac6ca1ac4fc37408a46a077b4e2332e0a81cc4a3d2e1  hyperfine-1.19.0-cargo2.tar.gz
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
- sha256  1dfee18c2ff07ce551de4d6a1d2db158c0380746b488a7f0d08c8e0d3568b7c3  LICENSE-MIT
-diff --git a/package/hyperfine/hyperfine.mk b/package/hyperfine/hyperfine.mk
-index b9f09a2820..7ab25fd4f1 100644
---- a/package/hyperfine/hyperfine.mk
-+++ b/package/hyperfine/hyperfine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HYPERFINE_VERSION = 1.18.0
-+HYPERFINE_VERSION = 1.19.0
- HYPERFINE_SITE = $(call github,sharkdp,hyperfine,v$(HYPERFINE_VERSION))
- HYPERFINE_LICENSE = Apache-2.0 or MIT
- HYPERFINE_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 44f7684c97..13c630432f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1914,6 +1914,7 @@ F:	support/testing/tests/package/test_gstreamer1.py
+ F:	support/testing/tests/package/test_gzip.py
+ F:	support/testing/tests/package/test_highway.py
+ F:	support/testing/tests/package/test_hwloc.py
++F:	support/testing/tests/package/test_hyperfine.py
+ F:	support/testing/tests/package/test_iozone.py
+ F:	support/testing/tests/package/test_iperf.py
+ F:	support/testing/tests/package/test_iperf3.py
+diff --git a/support/testing/tests/package/test_hyperfine.py b/support/testing/tests/package/test_hyperfine.py
+new file mode 100644
+index 0000000000..4db62c7116
+--- /dev/null
++++ b/support/testing/tests/package/test_hyperfine.py
+@@ -0,0 +1,25 @@
++import os
++
++import infra.basetest
++
++
++class TestHyperfine(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_HYPERFINE=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv7",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        self.assertRunOk("hyperfine --version")
++
++        test_cmd = "sleep 0.1"
++        cmd = f"hyperfine --style basic --runs 10 '{test_cmd}'"
++        self.assertRunOk(cmd, timeout=15)
 -- 
 2.49.0
 
