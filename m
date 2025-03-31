@@ -1,70 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38B23C36014
-	for <buildroot@archiver.kernel.org>; Mon, 31 Mar 2025 20:25:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28B31C36014
+	for <buildroot@archiver.kernel.org>; Mon, 31 Mar 2025 21:11:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1BD980DF3;
-	Mon, 31 Mar 2025 20:25:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7EBE960690;
+	Mon, 31 Mar 2025 21:11:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u7umEn5XNvFU; Mon, 31 Mar 2025 20:25:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6NttFQbj6cqM; Mon, 31 Mar 2025 21:11:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B6AE80BAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 673D0607CC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B6AE80BAD;
-	Mon, 31 Mar 2025 20:25:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 48732D8E
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 20:25:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 673D0607CC;
+	Mon, 31 Mar 2025 21:11:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D369CD8E
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 21:11:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 37EE0401F1
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 20:25:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C8952607CC
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 21:11:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id szh8vblWJ6FX for <buildroot@buildroot.org>;
- Mon, 31 Mar 2025 20:25:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1F65740024
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F65740024
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1F65740024
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 20:25:22 +0000 (UTC)
-Received: from home.juju.sh (unknown [82.64.214.120])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id C7F87B00576;
- Mon, 31 Mar 2025 22:25:17 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>
-Date: Mon, 31 Mar 2025 22:25:13 +0200
-Message-ID: <20250331202513.296233-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.49.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OHsRU7dORkbR for <buildroot@buildroot.org>;
+ Mon, 31 Mar 2025 21:11:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7A3D660690
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A3D660690
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7A3D660690
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 21:11:52 +0000 (UTC)
+Received: from L25025.local (unknown
+ [IPv6:2a01:e0a:2af:22b0:a59d:d797:7d27:3ff9])
+ (Authenticated sender: vjardin@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 568B32003C1;
+ Mon, 31 Mar 2025 23:11:42 +0200 (CEST)
+Date: Mon, 31 Mar 2025 23:11:41 +0200
+From: Vincent Jardin <vjardin@free.fr>
+To: Vladimir Oltean <olteanv@gmail.com>
+Message-ID: <lsefn7ciqjh4vcjresnslswex7o4y67hyewwv324gqkmhaw5tx@s43mnee24je2>
+References: <20250328180427.3434693-1-olteanv@gmail.com>
+ <20250328180427.3434693-19-olteanv@gmail.com>
+ <7rnjce73dhujdnipfea5e2qg7z7g7moczlzbkzsrxzggse2rkb@lpmauc2r4qc6>
+ <20250331103956.tdwjd3xl7jaihse7@skbuf>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20250331103956.tdwjd3xl7jaihse7@skbuf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1743452719;
- bh=dVDNBtjVwvw4z0QNQU79c5VD//Qg9sM56Pp8mPf3Cj8=;
- h=From:To:Cc:Subject:Date:From;
- b=F7UWSBlxzU7e7M02GVIzJmB8pWPTIl/6K3wwUxpz4KBJWVov3Q2ppZFwBSX9ZZ6ME
- tqW0Tm7pIUuvGmduFUEE47DFIbLzWwhAEaGjfS38SNIoQYt3J04FK/SH4v1D7J2Enr
- 46j1wFC/9C3d72/54I2Wj1zoWCqKO8yZ2uN5PdGkKXyQ9XTwzZ8lM/ew8vY2kjny6L
- tZ2U1lB/R6dk/fvGjRwmK9shWTSs5nPQKqQKxZ+PIVgqJbA9ucMd1wWHgBSo4acoSr
- QxnrNaeOcaWUOTn84pde3Hs2lE9zvUJC11q8wFPD9elWb5Sknxnr6wSHgvWDSPB/QD
- Rq45eVootfMaQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1743455510;
+ bh=6B8oC0Msbs6+5/mm2OwhVdqjBhw9iF5LLdC7N53/e6c=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Eszu70pS+slkgaOGDHHqtW9ttcqWvn1DbpgnKePaIwzmXXOkIQAHp/Ioacpasl59d
+ AR/IWyLdmLgi2bJ2x98F3L9MqoT+ifFGwEk/Zzj5f3n5kYbyN7C+rM65EFYWKicUah
+ /B+I8oy3xa8V6AzNw2ypeacZX60GgCZRNvaUW9KQuo2H9AGyDOfhCEeVeUyQniLYA2
+ WjeTrx/9EM5NIMofRE4EAJzR5ba7wonQQogoB+v+E+wim8q9OfC4Ig/0g9Vrfm3KF/
+ x3bbuVSQTKY4rbxLYT0oNK6Mo5igAuMjbuF9AeRvLnm0q4ymtyQMwJG6uR98WkM+ot
+ ixYrlBMkw2cMw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=F7UWSBlx
-Subject: [Buildroot] [PATCH 1/1] package/fakeroot: bump to version 1.37.1.1
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Eszu70pS
+Subject: Re: [Buildroot] [PATCH v2 18/18] board/lx2160ardb: new platform
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,170 +80,168 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Ioana Ciornei <ciorneiioana@gmail.com>,
+ Brandon Maier <Brandon.Maier@collins.com>, Julien Olivain <ju.o@free.fr>,
+ buildroot@buildroot.org, Romain Naour <romain.naour@smile.fr>,
+ Akhilesh Nema <nemaakhilesh@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see:
-https://salsa.debian.org/clint/fakeroot/-/blob/debian/1.37.1.1-1/debian/changelog
+Hi Vladimir,
 
-This commit removes the package patch, included in upstream version.
-HOST_FAKEROOT_AUTORECONF = YES is also removed, because it is no longer
-needed.
+On Mon, Mar 31, 2025 at 01:39:56PM +0100, Vladimir Oltean wrote:
+> Hi Vincent,
+> 
+> On Sat, Mar 29, 2025 at 03:09:30AM +0100, Vincent Jardin wrote:
+> > > +++ b/board/freescale/lx2160ardb/genimage.cfg
+> > > @@ -0,0 +1,47 @@
+> > > +image sdcard.img {
+> > 
+> > Those offsets for a sdcard are valide, but when they are used for a SD
+> > card, the documentation seems to recommend the usage with Block# while
+> > the offset is rather for the Flash. 
+> > 
+> > https://github.com/NXP/flexbuild/blob/main/docs/memory_layout.txt
+> > 
+> > I believe that matters in order to keep it reasily readable/reviewable
+> > from the documentation. Moreover, it matters for the ucode because:
+> > #ifdef CONFIG_SD_BOOT
+> > #define IN112525_FW_ADDR        0x980000
+> > #else
+> > #define IN112525_FW_ADDR        0x20980000
+> > #endif
+> > #define IN112525_FW_LENGTH      0x40000
+> > 
+> > which by the way seems to be a mistake from the NXP documentation:
+> >  |Ethernet PHY firmware        | 256KB   | 0x00980000   | 0x04C00         |
+> > 
+> > printf "%x" $(( $(printf "%d" 0x04C00 ) * 512 ))
+> > 0x980000
+> 
+> What's the problem and your recommendation? I don't understand.
+> The genimage "offset" is in bytes, see https://github.com/pengutronix/genimage.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- .../0001-Makefile.am-fix-parallel-build.patch | 97 -------------------
- package/fakeroot/fakeroot.hash                |  6 +-
- package/fakeroot/fakeroot.mk                  |  6 +-
- 3 files changed, 5 insertions(+), 104 deletions(-)
- delete mode 100644 package/fakeroot/0001-Makefile.am-fix-parallel-build.patch
+I should not do any review so late ;) right, there is no problem.
 
-diff --git a/package/fakeroot/0001-Makefile.am-fix-parallel-build.patch b/package/fakeroot/0001-Makefile.am-fix-parallel-build.patch
-deleted file mode 100644
-index 2f21f84349..0000000000
---- a/package/fakeroot/0001-Makefile.am-fix-parallel-build.patch
-+++ /dev/null
-@@ -1,97 +0,0 @@
--From 29e9322e6a8238205780107e731a51b48845f9c7 Mon Sep 17 00:00:00 2001
--From: Julien Olivain <ju.o@free.fr>
--Date: Mon, 10 Feb 2025 22:59:04 +0100
--Subject: [PATCH] Makefile.am: fix parallel build
--
--When building fakeroot on host with large number of CPUs, compilation
--can randomly fail. Failures were observed on hosts with 24 CPUs.
--
--Build logs show errors such as:
--
--    make -j$(nproc)
--    ...
--    awk -f ./wrapawk < ./wrapfunc.inp
--    awk -f ./wrapawk < ./wrapfunc.inp
--    ...
--    In file included from libfakeroot.c:265:
--    wraptmpf.h:607: error: unterminated #ifdef
--      607 | #ifdef __APPLE__
--          |
--    wraptmpf.h:601: error: unterminated #ifdef
--      601 | #ifdef HAVE_FTS_CHILDREN
--          |
--    wraptmpf.h:2: error: unterminated #ifndef
--        2 | #ifndef WRAPTMPF_H
--          |
--    ...
--
--The issue was observed in the builders of Buildroot Linux [1], which
--is using fakeroot. Examples of build failures are [2], [3], [4].
--
--It is important to note that in all failing cases, there is
--more that one parallel invocation of the "wrapawk" script [5].
--
--This script is meant to generate many output files (wrapped.h,
--wrapdef.h, wrapstruct.h, wraptmpf.h) from a single invocation.
--
--The Makefile.am file is using multiple targets in an attempt to
--reflect that generation of multiple outputs at once. See [6].
--
--This use of multiple targets in this rule is incorrect here. See
--the Make manual [7]. This construct, used in Makefile.am, incorrectly
--assumes all those targets are independant (so they can be executed in
--parallel). They are not. In the current failing case, parallel
--invocations will generates all their respective output files,
--overwriting each other. This could lead to incomplete generated
--files, resulting to the observed compilation failures.
--
--Note that GNU Make 4.3 introduced "Grouped Targets" for that purpose.
--See "Rules with Grouped Targets" section in [7]. But this would add a
--requirement on Make >= 4.3.
--
--For that reason, this commit fixes the issue by using a simpler
--construct, working with all Make versions: the first output file
--"wrapped.h" is kept as a target, and it is devlared as a
--dependency of the three other generated files. This change makes sure
--that only one invocation of "wrapawk" will happen at a time,
--disregarding the number of parallel jobs requiring those generated
--files. This has the effect of completely solving the parallel build
--for all GNU Make versions.
--
--[1] https://buildroot.org/
--[2] https://gitlab.com/buildroot.org/buildroot/-/jobs/9085451831
--[3] https://gitlab.com/buildroot.org/buildroot/-/jobs/9085451244
--[4] https://gitlab.com/buildroot.org/buildroot/-/jobs/9085451198
--[5] https://salsa.debian.org/clint/fakeroot/-/blob/master/wrapawk
--[6] https://salsa.debian.org/clint/fakeroot/-/blob/upstream/1.37/Makefile.am#L54
--[7] https://www.gnu.org/software/make/manual/html_node/Multiple-Targets.html
--
--Upstream: Proposed: https://salsa.debian.org/clint/fakeroot/-/merge_requests/33
--Signed-off-by: Julien Olivain <ju.o@free.fr>
-----
-- Makefile.am | 5 +++--
-- 1 file changed, 3 insertions(+), 2 deletions(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index 46f01eb..ff71a8d 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -48,12 +48,13 @@ EXTRA_DIST=wrapawk wrapawk_macosx wrapfunc.inp           \
-- CLEAN_FILES=fakerootconfig.h
-- 
-- if MACOSX
---wrapped.h wrapdef.h wrapstruct.h wraptmpf.h:wrapawk_macosx wrapfunc.inp
--+wrapped.h: wrapawk_macosx wrapfunc.inp
-- 	awk -f $(srcdir)/wrapawk_macosx < $(srcdir)/wrapfunc.inp
-- else !MACOSX
---wrapped.h wrapdef.h wrapstruct.h wraptmpf.h:wrapawk wrapfunc.inp
--+wrapped.h: wrapawk wrapfunc.inp
-- 	awk -f $(srcdir)/wrapawk < $(srcdir)/wrapfunc.inp
-- endif !MACOSX
--+wrapdef.h wrapstruct.h wraptmpf.h: wrapped.h
-- 
-- libfakeroot.lo:libfakeroot.c wrapdef.h wrapstruct.h wraptmpf.h
-- 
---- 
--2.48.1
--
-diff --git a/package/fakeroot/fakeroot.hash b/package/fakeroot/fakeroot.hash
-index 0d78d71235..e8506672d8 100644
---- a/package/fakeroot/fakeroot.hash
-+++ b/package/fakeroot/fakeroot.hash
-@@ -1,5 +1,5 @@
--# From https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.36-1.dsc
--sha1  ea895c6632fcf1b38cc84987d1b4daf833ffd430  fakeroot_1.36.orig.tar.gz
--sha256  7fe3cf3daf95ee93b47e568e85f4d341a1f9ae91766b4f9a9cdc29737dea4988  fakeroot_1.36.orig.tar.gz
-+# From https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.37.1.1-1.dsc
-+sha1  baec51fadb0900cd4ed095c9efcff59699261623  fakeroot_1.37.1.1.orig.tar.gz
-+sha256  86b0b75bf319ca42e525c098675b6ed10a06b76e69ec9ccf20ef5e03883b3a14  fakeroot_1.37.1.1.orig.tar.gz
- # License files, locally calculated
- sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
-index f557161770..8f85fe16a6 100644
---- a/package/fakeroot/fakeroot.mk
-+++ b/package/fakeroot/fakeroot.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--FAKEROOT_VERSION = 1.36
-+FAKEROOT_VERSION = 1.37.1.1
- FAKEROOT_SOURCE = fakeroot_$(FAKEROOT_VERSION).orig.tar.gz
--FAKEROOT_SITE = https://snapshot.debian.org/archive/debian/20241022T144244Z/pool/main/f/fakeroot/
-+FAKEROOT_SITE = https://snapshot.debian.org/archive/debian/20250329T150348Z/pool/main/f/fakeroot
- 
- HOST_FAKEROOT_DEPENDENCIES = host-acl
- # Force capabilities detection off
-@@ -15,8 +15,6 @@ HOST_FAKEROOT_DEPENDENCIES = host-acl
- HOST_FAKEROOT_CONF_ENV = \
- 	ac_cv_header_sys_capability_h=no \
- 	ac_cv_func_capset=no
--# 0001-Makefile.am-fix-parallel-build.patch
--HOST_FAKEROOT_AUTORECONF = YES
- FAKEROOT_LICENSE = GPL-3.0+
- FAKEROOT_LICENSE_FILES = COPYING
- 
--- 
-2.49.0
+Your genimage are offset in bytes, which is valid, NXP documentation was
+recommending offset in block count, but both are the same.
 
+My confusions, no problem.
+
+> > > +sha256  2751fcd3eb9080c34531f68ca2e1f571a60f4220853df53a5ebed9835abf8c13  atf-lf-6.12.3-1.0.0.tar.gz
+> > 
+> > Why not using the upstream ATF ? The more we use some vendor branches,
+> > the less we get from the updates of the upstreams such as CVEs.
+> 
+> Answering here generally for all NXP components: the reason is pragmatic.
+> The LX2160A-RDB is a board officially supported by the NXP BSP, any bug
+> in these components is the direct responsibility of NXP to fix, and not
+> mine as an individual integrator with limited free time. Additionally,
+> the BSP provides the most feature-complete experience for this board.
+> Upstreaming is desirable and is also in the best interest of NXP
+> engineers, but development constraints are such that not all features
+> are upstream.
+> 
+> This doesn't have to be the case for custom boards based on the LX2160A,
+> and anybody is free to maintain software based on upstream, but for the
+> RDB, I don't see why not.
+> 
+> I don't know if you are talking about any specific CVE for ATF, but the
+> Linux Factory process does track upstream and periodically rebase. An
+> argument can perhaps be made about the pace of updates, but the trees
+> are not disconnected from upstream.
+
+Just because I'd do support an upstream first instead of a NXP first.
+The purpose of an upstream first is to make sure that any other boards,
+including RDB, Silicom, etc... are all based on a same build
+infrastructure instead of a respective "fork".
+
+Then, yes CVE is a topic because it means that only 1 mainstream of SBOM
+has to be handled.
+
+Of course, I do understand NXP willingness to control theirs, but here
+it is about Buildroot, not NXP's Flexbuild. I'd like to read the views
+of Buildroot's maintainers since I am a novice with Buildroot.
+
+> > Does it really make sense to follow NXP's documentation ?
+> 
+> I don't understand this question?
+
+I meant: use lf instead of mainstreams.
+
+> > > +++ b/board/freescale/lx2160ardb/readme.txt
+> > > @@ -0,0 +1,124 @@
+> > > +The components from NXP are:
+> > > +  - rcw, lf-6.12.3-1.0.0
+> > > +  - atf (fork), lf-6.12.3-1.0.0
+> > > +  - uboot (fork), lf-6.12.3-1.0.0
+> > > +  - cadence-dp-firmware (blob), lf-6.12.3-1.0.0
+> > 
+> > Which cadence blob is used ? From the output/images, you do not have any
+> > references.
+> 
+> It is a mistake, I took the README from the LS1028A-RDB and adapted it,
+> there is no Cadence DisplayPort firmware, this line should be removed.
+
+ok, thanks
+
+> > > +++ b/board/freescale/lx2160ardb/uboot-env.txt
+> > > @@ -0,0 +1,77 @@
+> > > +BOARD=lx2160ardb
+> > > +arch=arm
+> > > +baudrate=115200
+> > > +board=lx2160a
+> > > +board_name=lx2160a
+> > > +boot_a_script=load ${devtype} ${devnum}:${distro_bootpart} ${scriptaddr} ${prefix}${script}; env exists secureboot && load ${devtype} ${devnum}:${distro_bootpart} ${scripthdraddr} ${prefix}${boot_script_hdr} && esbc_validate ${scripthdraddr};source ${scriptaddr}
+> > > +boot_efi_binary=load ${devtype} ${devnum}:${distro_bootpart} ${kernel_addr_r} efi/boot/bootaa64.efi; if fdt addr -q ${fdt_addr_r}; then bootefi ${kernel_addr_r} ${fdt_addr_r};else bootefi ${kernel_addr_r} ${fdtcontroladdr};fi
+> > > +boot_efi_bootmgr=if fdt addr -q ${fdt_addr_r}; then bootefi bootmgr ${fdt_addr_r};else bootefi bootmgr;fi
+> > > +boot_extlinux=sysboot ${devtype} ${devnum}:${distro_bootpart} any ${scriptaddr} ${prefix}${boot_syslinux_conf}
+> > > +boot_net_usb_start=usb start
+> > > +boot_pci_enum=pci enum
+> > > +boot_prefixes=/ /boot/
+> > > +boot_script_dhcp=boot.scr.uimg
+> > > +boot_script_hdr=hdr_lx2160ardb_bs.out
+> > > +boot_scripts=lx2160ardb_boot.scr
+> > > +boot_syslinux_conf=extlinux/extlinux.conf
+> > > +boot_targets=usb0 mmc0 mmc1 scsi0 dhcp
+> > > +bootargs=console=ttyAMA0,115200 root=/dev/ram0 earlycon=pl011,mmio32,0x21c0000 ramdisk_size=0x2000000 default_hugepagesz=1024m hugepagesz=1024m hugepages=2 pci=pcie_bus_perf
+> > > +bootcmd=run distro_bootcmd
+> > > +bootcmd_dhcp=devtype=dhcp; run boot_net_usb_start; run boot_pci_enum; if dhcp ${scriptaddr} ${boot_script_dhcp}; then source ${scriptaddr}; fi;setenv efi_fdtfile ${fdtfile}; setenv efi_old_vci ${bootp_vci};setenv efi_old_arch ${bootp_arch};setenv bootp_vci PXEClient:Arch:00011:UNDI:003000;setenv bootp_arch 0xb;if dhcp ${kernel_addr_r}; then tftpboot ${fdt_addr_r} dtb/${efi_fdtfile};if fdt addr -q ${fdt_addr_r}; then bootefi ${kernel_addr_r} ${fdt_addr_r}; else bootefi ${kernel_addr_r} ${fdtcontroladdr};fi;fi;setenv bootp_vci ${efi_old_vci};setenv bootp_arch ${efi_old_arch};setenv efi_fdtfile;setenv efi_old_arch;setenv efi_old_vci;
+> > > +bootcmd_mmc0=devnum=0; run mmc_boot
+> > > +bootcmd_mmc1=devnum=1; run mmc_boot
+> > > +bootcmd_scsi0=devnum=0; run scsi_boot
+> > > +bootcmd_usb0=devnum=0; run usb_boot
+> > > +bootdelay=10
+> > > +console=ttyAMA0,38400n8
+> > 
+> > Is it on will ? Shouldn't it be 115200 ?
+> 
+> This is from "env default -a". It seems unused - bootargs sets a
+> different (and correct) "console" variable.
+
+OK, it was confusing.
+
+> > It is a quite complex uboot env. Are they really needed ? Can't you
+> > minimize it since with Buildroot we should start from the small version
+> > ?, moreover a small env would better match the specific use case of running
+> > with the SD card you described ?
+> 
+> The idea is, as explained in configs/lx2160ardb_defconfig, that this is:
+> # Obtained from "env default -a" plus a custom mcinitcmd
+> Perhaps this is not the most maintainable way, but I wanted to patch the
+> existing default environment, and the only way I saw how to do that was
+> to copy it in its entirety.
+
+OK, I feel that small if beautiful: same, let's check the feedbacks of
+some Buildroot's maintainers.
+
+Thanks Vladimir. Except this minor comment on Cadence DP, I hope that most of
+your serie can be merged asap.
+
+best regards,
+  Vincent
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
