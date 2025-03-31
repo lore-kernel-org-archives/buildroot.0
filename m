@@ -4,102 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42C09C3600C
-	for <buildroot@archiver.kernel.org>; Mon, 31 Mar 2025 15:35:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35D4EC3600B
+	for <buildroot@archiver.kernel.org>; Mon, 31 Mar 2025 17:12:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B1E8980DC0;
-	Mon, 31 Mar 2025 15:35:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A98F48196A;
+	Mon, 31 Mar 2025 17:12:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ByBbnd9NbZkg; Mon, 31 Mar 2025 15:35:09 +0000 (UTC)
+ id f1uGq1DyphV2; Mon, 31 Mar 2025 17:12:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0687280CDD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A18DE8193E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0687280CDD;
-	Mon, 31 Mar 2025 15:35:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A18DE8193E;
+	Mon, 31 Mar 2025 17:12:26 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0EE77D0
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 15:35:07 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C8D68121
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 17:12:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E871640928
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 15:35:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BA46840712
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 17:12:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cz2I6cAJzIZT for <buildroot@buildroot.org>;
- Mon, 31 Mar 2025 15:35:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::832; helo=mail-qt1-x832.google.com;
- envelope-from=tom5760@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5D62C4076A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D62C4076A
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com
- [IPv6:2607:f8b0:4864:20::832])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5D62C4076A
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 15:35:05 +0000 (UTC)
-Received: by mail-qt1-x832.google.com with SMTP id
- d75a77b69052e-47686580529so47468521cf.2
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 08:35:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1743435304; x=1744040104;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=1Db8+2Yg3bt7Mz4LythjQfoVCDl+xsIgykpfQtI4V7A=;
- b=eBjfE6oP5TJpnE2jV4243AcJXvA9BcdCj8p10qs1ndG+85wmx+6G8tNLB5hAowOxsI
- FbNZ5LTskrq/aHZyCO1G2hfwGPDrpRZH7+qn8HjCQg12TdmJ9byzjBTElN+hmSS55VY1
- yYObdoucWQh0D3UeVuskKOWBbZxVxSA9D7HAKQYG2PXdwz4OMk+KAfSfx4+uvhX7daJ5
- oYvRWJ3MY4YDGn9TQ2eoHU7t4/NSdNvd3UclX2EwNFdbYL5DLuHAOMp9bDCLLwT/ooEq
- AuULuEpZAF1Lg3GiDmZtDAfZ1LMv2qp5qCVfM/mxMjcOidjGs9YF6V2+We5IUKKmm0OR
- Jy2g==
-X-Gm-Message-State: AOJu0YzjnWZslp9fySPze8srZUHY8iBEI1S5FLm801c/vPngI7fvdVPF
- Cy78RLzTc+lQ+ofJ+xGqAyfLhTbxqNW/EIVO1joMhCXlII/SClddBJByPAp0rbQ=
-X-Gm-Gg: ASbGncuhgfzV+7OR6xrrxukCQCxpohNEeQCsrH9FvaZOppHiKXH7DxpO0BlL+SkWWwN
- eIqZ6vjjwgqnp4EmRIZ+DvmgXT629iR4bqBSiWd8wskc7ivKVtgZBBXmTEb3+IgxSbWdRaIo8ST
- dXdP4oBsc2tcpxoD+3DIUDeNSQDtAD4BYAhr61T5lRnQOzJZDvb469v63XB39oed09mZa5fdE/c
- ow8ZeT8Q2cUCaZA72OAR1Vy2Xcp6Dorr7mSi2V0NIX3pxUl/l+rN6ft6tWPvdFiUM6r9QZ/8uaR
- sHqCqCnjFK8L/haOBToAqVovX9PNQE/eolbKkmAspTlJbznMkOj9Y6wt6mGznw==
-X-Google-Smtp-Source: AGHT+IErRBXzavOH0cCVdv1tmv0vcowPPT05CnPKxn28W3NgqETfvPVsnIb49doGsESfI7QhvLJWXA==
-X-Received: by 2002:ac8:58d6:0:b0:477:e4e:9186 with SMTP id
- d75a77b69052e-477e4b1ebeamr139628161cf.11.1743435303852; 
- Mon, 31 Mar 2025 08:35:03 -0700 (PDT)
-Received: from lithium.cow-mirzam.ts.net
- ([2601:47:4000:119d:8d35:4f4d:8ca5:bb15])
- by smtp.gmail.com with ESMTPSA id
- d75a77b69052e-477916cd4ddsm41478381cf.47.2025.03.31.08.35.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 31 Mar 2025 08:35:03 -0700 (PDT)
-From: Tom Wambold <tom5760@gmail.com>
+ id jxamo-J_q-js for <buildroot@buildroot.org>;
+ Mon, 31 Mar 2025 17:12:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 894EC40956
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 894EC40956
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 894EC40956
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 17:12:23 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.home.arpa ([85.22.117.119]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MEUz4-1tsCCM0gIs-00C1xx; Mon, 31
+ Mar 2025 19:12:20 +0200
 To: buildroot@buildroot.org
-Cc: Tom Wambold <tom5760@gmail.com>, Christian Stewart <christian@aperture.us>,
- Thomas Perale <thomas.perale@mind.be>
-Date: Mon, 31 Mar 2025 11:34:37 -0400
-Message-ID: <20250331153438.4103-1-tom5760@gmail.com>
+Date: Mon, 31 Mar 2025 19:12:12 +0200
+Message-ID: <20250331171212.1059104-1-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250314154252.10248-1-tom5760@gmail.com>
-References: <20250314154252.10248-1-tom5760@gmail.com>
 MIME-Version: 1.0
+X-Provags-ID: V03:K1:ETEt9NhnSpZO8xIueXkEKzidfkxfDQPR5/7D6c7jnESiiczHEjp
+ GqiOicPc0+mPqxK+MLMpJqzFHMB2GUwrK7K6BOjCvcF1rzfKfc2vEVlIPStDeYGt+1vZCuD
+ iZgvMPxVorSfGUkfuglTy/DJpeKS3mhkpLSJ3cA4E8d59YMOSFZx6Yocf+4ikNqDhWYKA7F
+ jLKXe7/HQixghg9Klpwww==
+UI-OutboundReport: notjunk:1;M01:P0:mIIa5E3RscI=;RlGfCHlAOUol8LgLbYmJv7puv4M
+ e/wRLGeE3zEFPoJ9zW9/QOWH+wgP3XgDKmwcWh1clfEdXukJOuZliZbbBoIngHA9txuGhKQRL
+ g880H6ju+MIL5XUCMnKpueM7CBUr0taXVrucGsKbBFPay7t7Unv0+uGozLlsoBl/7gPhdB6Og
+ yDG1E/05fOJbnpQbP2pdf8m7G+QmNU4+WLASE9Hoob0ju73q9vaz9EaF8ZZeli41lhtyUnswF
+ BuF7bXOsEowehpcgYrTBg80Th22YBlj4IebW2mhonBEUxVL7Q6f09yEidhJ7/T62//oiEVGCe
+ LC1ab1mrkp6xeWxLqQmyX3OsJ6k2HivzhuwVDBOxYGBNu5apqdf3AzDMJJhxVGKyD4gaSR/kA
+ LxvByKPpy6Fkk0ELPx9PFBHTO7o3KVx3GPXPse4p4J/T9s4aa6+v2NLorl/VP/wRgOL6jbG+7
+ 77eWbY2grP67Lc9Dgs7PWB9YoraZXMfYz26eZoAiQoGySdxR9qlcpmeJWmCeWbAAM37jWnphR
+ bCrcIOdui+TTq66gL4ivN8In+oDtROWtsBhtGRWLZGXc0rB+PtFBNKa+pgDYNCgEl3SeYcC0r
+ Ypxw9fF22T8kYItBqEhN9XLB9jr2kXZ78k389gzJU6F/h939cLL+c8BiSvepCMEiHxhBcRhd2
+ zHK/f9LuQcuDO7fK+253HJugnLl/OpBofkzTRbxhhfYZ5jEt0E8Dyr4D8EDWhBQoF/SNOW95V
+ FdgTkTthx+SwLe4wYAWlpuIWz40Lod2DqJKfuizxkkrXHHfhVP/55mDQjtGXUuNttPVM223Hh
+ bfS7acLIF+diCcJRzS8GMMvEUWAtvqb2603Xfmb5ivzgpwg4QNCcerncK60hvTVHz60iZeMYV
+ PliYeuPF6wgw0mMW+ApMrGTLbFt19aPO+AfcHpntBNbulppDfAoGPETcgmmGkEeUPCee4uu2C
+ ZW3ImXrdZ7GRG3LsyHSYMMt4OfCN62aL8Da4FkNnQtjBHrWCnIFelAz+uwpERYPuNz0QuAy3j
+ fYjBFK/D/vtBU8i7nQXufr0QPfaM2f0W7nFaiqgHT5eqNXNevouM9vU1fMmzww5+QRvq5ImB1
+ 3mtOuS9sseToc91+3dMdIzega+/5bwM/woAnY+7p2QDBIGD0a3ku7O9lZ53vN94RcEXcrxtVo
+ NF+2PEkmgv+cEC7QL3QQ0rExkqApXKkJK40kW4MceLr6TPHe/9Vh/K8bdNHDhyM11tkAI7Ka+
+ 07STR6S5N9J1Cm7bx+fKQGhn7pzONDJ7XWH8jYSZhJ8auopZTRsFSNRW+3N+FhbKOnfj6o8gD
+ 5ZSWJNffjxwt6XmVL2ad3hV27dldp//DkojOr6unOOrlrLqvZ69Fg4o8I1M/x5ggwAxEx7UhJ
+ JsGfJTe8CIyCwVhLmurzMLucuPT/TmCO3Nnrlhg60QkFGDYnWc6ulgRaui4nMtD5MGME78Phg
+ 1QoAuMaG7EQmEPszH183+h82cJ8F/gNSWiFEj5BJLydwfrNTq
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1743435304; x=1744040104; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=1Db8+2Yg3bt7Mz4LythjQfoVCDl+xsIgykpfQtI4V7A=;
- b=jO84cF99LxFv+3UhMgC3Kc3cgjuOe8s4okuzoTH6Jsa0cmuTeBJ3FcPLMx66Ks3fqK
- /JjmFcSDo2VSqnMJ80BFVhfxSFg0lmlP4YQvRDdG+Bko4QEQs/7ZXCT6Yfohb9ULKj6C
- BQh7/Hn05utaL7zLFoAQFkznWRBNhV8oe7Eb+d6H3PEsWbq7xjlox1E9oNKrMFCAC7Sg
- cvMJveN57+Ir/jNfQOIEGXLLmRZH0T2+mq9DdOZdYMP4h7wsdBDzji5BqRI93p9saR+C
- vnTAMzkqeJK1QDWruX9DdJ08KaOmFyT8roMRiwhRk5v3AbsbDd+ziWRI49m43uN6c6PF
- jj3g==
+ d=gmx.de; 
+ s=s31663417; t=1743441140; x=1744045940; i=fiona.klute@gmx.de;
+ bh=rFCeAvTXtQpNaT59/bx/FWAwAyAmWoYYAa99AGaPLfI=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=Bqn8aliFb6k7YWHL+2ZimZSnz3O//zEq1/9fC/Gx0bIyMXTgf//aLjygCOdnxX1m
+ CGbSBlxQaRcEp1XYS1E9LMDG2qboVh/va3LuTrpNUzpE6Q2TqOuucQAH14s2HShhy
+ CvizqcwwAfEfT4IKk+ltUZXb4nL7nn0mh7m0kHjZdTJOL4oWEvpuGkEACZFt2jlk5
+ v8dL9JVxkrVmCYqs6l2bZyWXGguMyY8IMr+bOZQpBZknsx8HyxJHy0FkHb7tLO9ty
+ +EVv78vA0KneVYkz3OSIoCasJpRrKPFr8nrDTWw4GX8w/rfv6BOyldz2Tg3sBqU1g
+ YEpgvtCJIgma4tDkrw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=jO84cF99
-Subject: [Buildroot] [PATCH v2] package/go: go-bin host-go provider implies
- target support
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=Bqn8aliF
+Subject: [Buildroot] [PATCH 1/1] package/mosquitto: fix init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,63 +103,148 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: Titouan Christophe <titouanchristophe@gmail.com>,
+ Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS configuration symbol is
-used to determine if we can build Go packages for the target
-architecture.  Previously, this depended *only* on the
-BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS symbol, which is true
-only if the host system can bootstrap the Go compiler.
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-The go-bin package makes it unnecessary to bootstrap the Go compiler.
-Also, some host architectures (i.e. arm64/aarch64) don't support
-bootstrapping the compiler anyway.
+Restart would regularly fail because it did not wait for the old
+process to be gone before starting the new one. Rewrite the script
+according to current style to fix that, and add reload support (see
+mosquitto docs for limitations of reload).
 
-Add a new symbol BR2_PACKAGE_HOST_GO_BIN_TARGET_ARCH_SUPPORTS to let
-BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS depend on either being
-able to bootstrap the compiler *OR* using the go-bin package.  This
-fixes being able to use the Go compiler to build target packages on an
-arm64/aarch64 host system.
-
-Signed-off-by: Tom Wambold <tom5760@gmail.com>
-
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
-Changes v1 -> v2:
-  - Added missing Signed-off-by
----
- package/go/Config.in.host        | 2 +-
- package/go/go-bin/Config.in.host | 5 +++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index 7e354b3298..f9b27cc4d8 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -2,7 +2,7 @@
- config BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	bool
- 	default y
--	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS || BR2_PACKAGE_HOST_GO_BIN_TARGET_ARCH_SUPPORTS
- 	# See https://go.dev/doc/install/source#environment
- 	# See src/go/build/syslist.go for the list of supported architectures
- 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
-diff --git a/package/go/go-bin/Config.in.host b/package/go/go-bin/Config.in.host
-index 6312c1b950..5fe1686fef 100644
---- a/package/go/go-bin/Config.in.host
-+++ b/package/go/go-bin/Config.in.host
-@@ -12,3 +12,8 @@ config BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH_SUPPORTS
- 	bool
- 	default y
- 	depends on BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH != ""
+Policy question: Mosquitto supports configuring a PID file in the
+configuration, but not on the command line. Using that would improve
+the init script: We could let Mosquitto fork to background on its own,
+instead of via start-stop-daemon. The default config would be easy to
+adjust, but it would require people already using Mosquitto with
+custom config files to adjust those to add the pid_file setting. Would
+that be preferable for Buildroot? If yes, I can update the patch.
+
+ .checkpackageignore            |  1 -
+ package/mosquitto/S50mosquitto | 79 +++++++++++++++++++++++++---------
+ 2 files changed, 59 insertions(+), 21 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 5350c6633a..2f9c65c8a3 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -823,7 +823,6 @@ package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch lib_
+ package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch lib_patch.Upstream
+ package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch lib_patch.Upstream
+ package/mono/0002-Ongoing-work-on-the-cmake-build.patch lib_patch.Upstream
+-package/mosquitto/S50mosquitto Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/motion/S99motion Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/mpir/0001-mpn-arm-udiv.asm-workaround-binutils-bug-14887.patch lib_patch.Upstream
+ package/mpv/0001-fix-powerpc64-altivec.patch lib_patch.Upstream
+diff --git a/package/mosquitto/S50mosquitto b/package/mosquitto/S50mosquitto
+index 5241a071d7..89989179c1 100644
+--- a/package/mosquitto/S50mosquitto
++++ b/package/mosquitto/S50mosquitto
+@@ -1,35 +1,74 @@
+ #!/bin/sh
+ 
++DAEMON="mosquitto"
++PIDFILE="/var/run/$DAEMON.pid"
++MOSQUITTO_CONF="/etc/mosquitto/mosquitto.conf"
 +
-+config BR2_PACKAGE_HOST_GO_BIN_TARGET_ARCH_SUPPORTS
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HOST_GO_BIN_HOST_ARCH != ""
++[ -f "$MOSQUITTO_CONF" ] || exit 0
++
+ start() {
+-	printf "Starting mosquitto: "
+-	start-stop-daemon -S -q -m -b -p /var/run/mosquitto.pid \
+-		--exec /usr/sbin/mosquitto \
+-		-- -c /etc/mosquitto/mosquitto.conf
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
++	printf "Starting %s: " "$DAEMON"
++	start-stop-daemon --start --background --make-pidfile \
++		--pidfile "$PIDFILE" --exec "/usr/sbin/$DAEMON" \
++		-- -c "$MOSQUITTO_CONF"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
+ }
++
+ stop() {
+-	printf "Stopping mosquitto: "
+-	start-stop-daemon -K -q -p /var/run/mosquitto.pid
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
++	printf "Stopping %s: " "$DAEMON"
++	start-stop-daemon --stop --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++		return "$status"
++	fi
++	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON"; do
++		sleep 0.1
++	done
++	rm -f "$PIDFILE"
++	return "$status"
+ }
++
+ restart() {
+ 	stop
+ 	start
+ }
+ 
++reload() {
++	printf "Reloading %s config: " "$DAEMON"
++	start-stop-daemon --stop --signal HUP -q --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
+ case "$1" in
+-  start)
+-	start
+-	;;
+-  stop)
+-	stop
+-	;;
+-  restart|reload)
+-	restart
+-	;;
+-  *)
+-	echo "Usage: $0 {start|stop|restart}"
+-	exit 1
++	start)
++		start;;
++	stop)
++		stop;;
++	restart)
++		restart;;
++	reload)
++		reload;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
+ esac
+ 
+ exit $?
 -- 
 2.49.0
 
