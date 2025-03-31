@@ -1,77 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4F30C3600B
-	for <buildroot@archiver.kernel.org>; Mon, 31 Mar 2025 19:59:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4105DC36016
+	for <buildroot@archiver.kernel.org>; Mon, 31 Mar 2025 20:03:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6F46D81BF4;
-	Mon, 31 Mar 2025 19:59:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cXgpdLd62nke; Mon, 31 Mar 2025 19:59:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DF5281E80
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9DF5281E80;
-	Mon, 31 Mar 2025 19:59:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id CA4D5121
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 19:59:04 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B9B5D406C3
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 19:59:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F174F40BC0;
+	Mon, 31 Mar 2025 20:03:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5252PJQ8T14a for <buildroot@buildroot.org>;
- Mon, 31 Mar 2025 19:59:04 +0000 (UTC)
+ id oijC2RTejh-K; Mon, 31 Mar 2025 20:03:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1CCE740BD3
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CCE740BD3;
+	Mon, 31 Mar 2025 20:03:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6FFA61ED5
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 20:03:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5DB1281EE9
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 20:03:10 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dtvpH7O2uZxJ for <buildroot@buildroot.org>;
+ Mon, 31 Mar 2025 20:03:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
  helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DF5BC4072F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF5BC4072F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4894981ED6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4894981ED6
 Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DF5BC4072F
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 19:59:03 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4894981ED6
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 20:03:09 +0000 (UTC)
+Received: from home.juju.sh (unknown [82.64.214.120])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id A4BD5B0053E;
- Mon, 31 Mar 2025 21:59:00 +0200 (CEST)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:50264])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 31 Mar 2025 21:59:00 +0200
-MIME-Version: 1.0
-Date: Mon, 31 Mar 2025 21:59:00 +0200
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 5D754B00593;
+ Mon, 31 Mar 2025 22:03:06 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: buildroot@buildroot.org
-In-Reply-To: <Z-qD3_HeHh2U40Po@waldemar-brodkorb.de>
-References: <Z-qD3_HeHh2U40Po@waldemar-brodkorb.de>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <71d1d2018132293de9d6652a73132fad@free.fr>
-X-Sender: ju.o@free.fr
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
+Date: Mon, 31 Mar 2025 22:03:02 +0200
+Message-ID: <20250331200302.207790-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.49.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1743451141;
- bh=qBE/oq5ap16Mhr9QtmcY5rdDRFPi/E+Xr7eet11mbl8=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=PzoAhKFMCKHcFhGR4CNOmWTg265PP3JUKZ4wRU9MItVGuzCvOTP5ASfZL5n4PgK3t
- BjvHwsBfKtBQCSQPT1Swil28rILZMFDesuX8xFaW2AzD0oWquO9xYtBLB4XnPzoQBj
- qyBnjdqxtu8MLqfk7ZWLJiDBgYBo4OhU/UnL+xM0FxvXEViX0xRu5ZAhVLtHyurVB+
- yrrJ4ofk8VnI3Z29DvUlcN47/SlkPdOBIPlYELfszUaBvdOVvnbrALtDJHCC15HZce
- fDbDZYflR03h5FgPG9QcE3YG3Zp305nMh9XJOn/hVVa0x2M14npP98m4HdD/5Mtj2T
- UQ4JNbA7QNthg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1743451387;
+ bh=l822nx8IUWK6/yq/h7/GHCPXSFGZaJJs6qIJspsPfLo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=pQA1OAeWIiy50gKZFu8XfwYwLANzgx0OrxQ2QtPNKxAC1EkxW/8mUEzcvaebeb4SI
+ DNn5FQ54/2FoIX4XGpSrFsKYGQGCXC3ksCoPkwhQ7dWVJ1pcrdc3C5K0J0rBEpVHRt
+ 2GGaikO1TiKgsh26y1jpHLu8JBttjBb8Xc0usOSw+7w18NqZKFNidD6kjCSuuugVz8
+ y9yRoMlkfG+NK7CDAHN9eQNcZmYImQj3tPiNW2LqKYwotv3HcTYcqaPyAo9+CsTowK
+ 8HN2tohaHF+8MVdQLiErDqrw1KojlRpZF6XoL/k3TIIar497tmiDEpLjq80m+Hdqaz
+ 6SfyTOLhvYouA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=PzoAhKFM
-Subject: Re: [Buildroot] [PATCH] package/zabbix: update to 7.2.5
+ header.s=smtp-20201208 header.b=pQA1OAeW
+Subject: [Buildroot] [PATCH 1/1] support/testing: weston: fix the weston
+ shutdown test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,19 +77,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 31/03/2025 14:00, Waldemar Brodkorb wrote:
-> See here for a changelog:
-> https://www.zabbix.com/rn/rn7.2.5
-> https://www.zabbix.com/rn/rn7.2.4
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Commit [1] "support/testing: improve weston test reliability" moved
+out the wait time from the emulator (to run on the test controller).
 
-Applied to master, thanks.
+While doing so, the sleep time which was initially _after_ the
+"killall weston" invocation to in stop_weston() was incorrectly
+moved before the command invocation. In this state, the test can
+succeed on fast host computer running the test. But it will most
+likely fail on an average computer.
+
+This commit fixes this issue by moving the sleep time after
+the command invocation.
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/6561a5d773d8e159556e2b911b315e3b5a0b89b1
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ support/testing/tests/package/test_weston.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/support/testing/tests/package/test_weston.py b/support/testing/tests/package/test_weston.py
+index 2ed59a7f15..43b5240b2d 100644
+--- a/support/testing/tests/package/test_weston.py
++++ b/support/testing/tests/package/test_weston.py
+@@ -58,8 +58,8 @@ class TestWeston(infra.basetest.BRTest, GraphicsBase):
+ 
+     def stop_weston(self):
+         cmd = "killall weston"
+-        time.sleep(3)
+         self.assertRunOk(cmd)
++        time.sleep(3)
+ 
+     def test_run(self):
+         img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
+-- 
+2.49.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
