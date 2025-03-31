@@ -4,94 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35D4EC3600B
-	for <buildroot@archiver.kernel.org>; Mon, 31 Mar 2025 17:12:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 089F0C3600B
+	for <buildroot@archiver.kernel.org>; Mon, 31 Mar 2025 19:46:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A98F48196A;
-	Mon, 31 Mar 2025 17:12:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C0F381064;
+	Mon, 31 Mar 2025 19:46:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f1uGq1DyphV2; Mon, 31 Mar 2025 17:12:26 +0000 (UTC)
+ id K97Znn937Dv7; Mon, 31 Mar 2025 19:46:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A18DE8193E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4ED9681E5D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A18DE8193E;
-	Mon, 31 Mar 2025 17:12:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C8D68121
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 17:12:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4ED9681E5D;
+	Mon, 31 Mar 2025 19:46:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A05961ED5
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 19:46:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BA46840712
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 17:12:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8FB8181AEF
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 19:46:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jxamo-J_q-js for <buildroot@buildroot.org>;
- Mon, 31 Mar 2025 17:12:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 894EC40956
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 894EC40956
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 894EC40956
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 17:12:23 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.home.arpa ([85.22.117.119]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MEUz4-1tsCCM0gIs-00C1xx; Mon, 31
- Mar 2025 19:12:20 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L9FOWakOsfqm for <buildroot@buildroot.org>;
+ Mon, 31 Mar 2025 19:46:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 73D0481768
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 73D0481768
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 19:46:32 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5F1A883947; Mon, 31 Mar 2025 19:46:32 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 31 Mar 2025 19:12:12 +0200
-Message-ID: <20250331171212.1059104-1-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.49.0
-MIME-Version: 1.0
-X-Provags-ID: V03:K1:ETEt9NhnSpZO8xIueXkEKzidfkxfDQPR5/7D6c7jnESiiczHEjp
- GqiOicPc0+mPqxK+MLMpJqzFHMB2GUwrK7K6BOjCvcF1rzfKfc2vEVlIPStDeYGt+1vZCuD
- iZgvMPxVorSfGUkfuglTy/DJpeKS3mhkpLSJ3cA4E8d59YMOSFZx6Yocf+4ikNqDhWYKA7F
- jLKXe7/HQixghg9Klpwww==
-UI-OutboundReport: notjunk:1;M01:P0:mIIa5E3RscI=;RlGfCHlAOUol8LgLbYmJv7puv4M
- e/wRLGeE3zEFPoJ9zW9/QOWH+wgP3XgDKmwcWh1clfEdXukJOuZliZbbBoIngHA9txuGhKQRL
- g880H6ju+MIL5XUCMnKpueM7CBUr0taXVrucGsKbBFPay7t7Unv0+uGozLlsoBl/7gPhdB6Og
- yDG1E/05fOJbnpQbP2pdf8m7G+QmNU4+WLASE9Hoob0ju73q9vaz9EaF8ZZeli41lhtyUnswF
- BuF7bXOsEowehpcgYrTBg80Th22YBlj4IebW2mhonBEUxVL7Q6f09yEidhJ7/T62//oiEVGCe
- LC1ab1mrkp6xeWxLqQmyX3OsJ6k2HivzhuwVDBOxYGBNu5apqdf3AzDMJJhxVGKyD4gaSR/kA
- LxvByKPpy6Fkk0ELPx9PFBHTO7o3KVx3GPXPse4p4J/T9s4aa6+v2NLorl/VP/wRgOL6jbG+7
- 77eWbY2grP67Lc9Dgs7PWB9YoraZXMfYz26eZoAiQoGySdxR9qlcpmeJWmCeWbAAM37jWnphR
- bCrcIOdui+TTq66gL4ivN8In+oDtROWtsBhtGRWLZGXc0rB+PtFBNKa+pgDYNCgEl3SeYcC0r
- Ypxw9fF22T8kYItBqEhN9XLB9jr2kXZ78k389gzJU6F/h939cLL+c8BiSvepCMEiHxhBcRhd2
- zHK/f9LuQcuDO7fK+253HJugnLl/OpBofkzTRbxhhfYZ5jEt0E8Dyr4D8EDWhBQoF/SNOW95V
- FdgTkTthx+SwLe4wYAWlpuIWz40Lod2DqJKfuizxkkrXHHfhVP/55mDQjtGXUuNttPVM223Hh
- bfS7acLIF+diCcJRzS8GMMvEUWAtvqb2603Xfmb5ivzgpwg4QNCcerncK60hvTVHz60iZeMYV
- PliYeuPF6wgw0mMW+ApMrGTLbFt19aPO+AfcHpntBNbulppDfAoGPETcgmmGkEeUPCee4uu2C
- ZW3ImXrdZ7GRG3LsyHSYMMt4OfCN62aL8Da4FkNnQtjBHrWCnIFelAz+uwpERYPuNz0QuAy3j
- fYjBFK/D/vtBU8i7nQXufr0QPfaM2f0W7nFaiqgHT5eqNXNevouM9vU1fMmzww5+QRvq5ImB1
- 3mtOuS9sseToc91+3dMdIzega+/5bwM/woAnY+7p2QDBIGD0a3ku7O9lZ53vN94RcEXcrxtVo
- NF+2PEkmgv+cEC7QL3QQ0rExkqApXKkJK40kW4MceLr6TPHe/9Vh/K8bdNHDhyM11tkAI7Ka+
- 07STR6S5N9J1Cm7bx+fKQGhn7pzONDJ7XWH8jYSZhJ8auopZTRsFSNRW+3N+FhbKOnfj6o8gD
- 5ZSWJNffjxwt6XmVL2ad3hV27dldp//DkojOr6unOOrlrLqvZ69Fg4o8I1M/x5ggwAxEx7UhJ
- JsGfJTe8CIyCwVhLmurzMLucuPT/TmCO3Nnrlhg60QkFGDYnWc6ulgRaui4nMtD5MGME78Phg
- 1QoAuMaG7EQmEPszH183+h82cJ8F/gNSWiFEj5BJLydwfrNTq
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1743441140; x=1744045940; i=fiona.klute@gmx.de;
- bh=rFCeAvTXtQpNaT59/bx/FWAwAyAmWoYYAa99AGaPLfI=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=Bqn8aliFb6k7YWHL+2ZimZSnz3O//zEq1/9fC/Gx0bIyMXTgf//aLjygCOdnxX1m
- CGbSBlxQaRcEp1XYS1E9LMDG2qboVh/va3LuTrpNUzpE6Q2TqOuucQAH14s2HShhy
- CvizqcwwAfEfT4IKk+ltUZXb4nL7nn0mh7m0kHjZdTJOL4oWEvpuGkEACZFt2jlk5
- v8dL9JVxkrVmCYqs6l2bZyWXGguMyY8IMr+bOZQpBZknsx8HyxJHy0FkHb7tLO9ty
- +EVv78vA0KneVYkz3OSIoCasJpRrKPFr8nrDTWw4GX8w/rfv6BOyldz2Tg3sBqU1g
- YEpgvtCJIgma4tDkrw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=Bqn8aliF
-Subject: [Buildroot] [PATCH 1/1] package/mosquitto: fix init script
+Date: Mon, 31 Mar 2025 21:38:25 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b896dca532929530eb74c6daf3e2fedcbba6c53b
+X-Git-Newrev: 90bbe4f469f79fba02bd078d5bd0fed869dfcbc7
+X-Patchwork-Hint: ignore
+Message-Id: <20250331194632.5F1A883947@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/cairo: bump to 1.18.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,151 +58,133 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: Titouan Christophe <titouanchristophe@gmail.com>,
- Fiona Klute <fiona.klute@gmx.de>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+commit: https://git.buildroot.net/buildroot/commit/?id=90bbe4f469f79fba02bd078d5bd0fed869dfcbc7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Restart would regularly fail because it did not wait for the old
-process to be gone before starting the new one. Rewrite the script
-according to current style to fix that, and add reload support (see
-mosquitto docs for limitations of reload).
+News:
+- https://www.cairographics.org/news/cairo-1.18.4/
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Other changes:
+- 0001-cairo-ft-private.h-fix-missing-FT_Color-error.patch
+  has been dropped because it's upstream. [1]
+
+- c_std=gnu11 override has been dropped because
+  it's upstream. [2]
+
+- Use the new 'lzo' option. [3]
+
+[1] https://gitlab.freedesktop.org/cairo/cairo/-/commit/9607e19a9e4c1784e7b656772e1df82aea26f6e7
+[2] https://gitlab.freedesktop.org/cairo/cairo/-/commit/b60f47dfd5bbe98aec43f6c356ba3be9a1b7989e
+[3] https://gitlab.freedesktop.org/cairo/cairo/-/commit/c1748e79f0b18d44891bda2b6aa877175d802660
+
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
+ ...o-ft-private.h-fix-missing-FT_Color-error.patch | 32 ----------------------
+ package/cairo/cairo.hash                           |  4 +--
+ package/cairo/cairo.mk                             | 11 ++++----
+ 3 files changed, 8 insertions(+), 39 deletions(-)
 
-Policy question: Mosquitto supports configuring a PID file in the
-configuration, but not on the command line. Using that would improve
-the init script: We could let Mosquitto fork to background on its own,
-instead of via start-stop-daemon. The default config would be easy to
-adjust, but it would require people already using Mosquitto with
-custom config files to adjust those to add the pid_file setting. Would
-that be preferable for Buildroot? If yes, I can update the patch.
-
- .checkpackageignore            |  1 -
- package/mosquitto/S50mosquitto | 79 +++++++++++++++++++++++++---------
- 2 files changed, 59 insertions(+), 21 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 5350c6633a..2f9c65c8a3 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -823,7 +823,6 @@ package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch lib_
- package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch lib_patch.Upstream
- package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch lib_patch.Upstream
- package/mono/0002-Ongoing-work-on-the-cmake-build.patch lib_patch.Upstream
--package/mosquitto/S50mosquitto Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/motion/S99motion Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/mpir/0001-mpn-arm-udiv.asm-workaround-binutils-bug-14887.patch lib_patch.Upstream
- package/mpv/0001-fix-powerpc64-altivec.patch lib_patch.Upstream
-diff --git a/package/mosquitto/S50mosquitto b/package/mosquitto/S50mosquitto
-index 5241a071d7..89989179c1 100644
---- a/package/mosquitto/S50mosquitto
-+++ b/package/mosquitto/S50mosquitto
-@@ -1,35 +1,74 @@
- #!/bin/sh
+diff --git a/package/cairo/0001-cairo-ft-private.h-fix-missing-FT_Color-error.patch b/package/cairo/0001-cairo-ft-private.h-fix-missing-FT_Color-error.patch
+deleted file mode 100644
+index 3b18d8077b..0000000000
+--- a/package/cairo/0001-cairo-ft-private.h-fix-missing-FT_Color-error.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From da698db0c20507f0e07492cbe40dbaf1c9053f71 Mon Sep 17 00:00:00 2001
+-From: Thomas Devoogdt <thomas@devoogdt.com>
+-Date: Sun, 12 Nov 2023 09:58:05 +0100
+-Subject: [PATCH] cairo-ft-private.h: fix missing FT_Color error
+-
+-In file included from ../src/cairo-colr-glyph-render.c:37:
+-../src/cairo-ft-private.h:87:30: error: unknown type name 'FT_Color'
+-   87 |                              FT_Color               *palette,
+-      |                              ^~~~~~~~
+-
+-Upstream: https://gitlab.freedesktop.org/cairo/cairo/-/issues/792
+-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+----
+- src/cairo-ft-private.h | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/src/cairo-ft-private.h b/src/cairo-ft-private.h
+-index 836f7e523..6b0e30223 100644
+---- a/src/cairo-ft-private.h
+-+++ b/src/cairo-ft-private.h
+-@@ -43,6 +43,8 @@
+- 
+- #if CAIRO_HAS_FT_FONT
+- 
+-+#include FT_COLOR_H
+-+
+- CAIRO_BEGIN_DECLS
+- 
+- typedef struct _cairo_ft_unscaled_font cairo_ft_unscaled_font_t;
+--- 
+-2.34.1
+-
+diff --git a/package/cairo/cairo.hash b/package/cairo/cairo.hash
+index b2d384d01a..3c66c63f6d 100644
+--- a/package/cairo/cairo.hash
++++ b/package/cairo/cairo.hash
+@@ -1,5 +1,5 @@
+-# From https://www.cairographics.org/releases/cairo-1.18.2.tar.xz.sha256sum
+-sha256  a62b9bb42425e844cc3d6ddde043ff39dbabedd1542eba57a2eb79f85889d45a  cairo-1.18.2.tar.xz
++# From https://www.cairographics.org/releases/cairo-1.18.4.tar.xz.sha256sum
++sha256  445ed8208a6e4823de1226a74ca319d3600e83f6369f99b14265006599c32ccb  cairo-1.18.4.tar.xz
  
-+DAEMON="mosquitto"
-+PIDFILE="/var/run/$DAEMON.pid"
-+MOSQUITTO_CONF="/etc/mosquitto/mosquitto.conf"
-+
-+[ -f "$MOSQUITTO_CONF" ] || exit 0
-+
- start() {
--	printf "Starting mosquitto: "
--	start-stop-daemon -S -q -m -b -p /var/run/mosquitto.pid \
--		--exec /usr/sbin/mosquitto \
--		-- -c /etc/mosquitto/mosquitto.conf
--	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+	printf "Starting %s: " "$DAEMON"
-+	start-stop-daemon --start --background --make-pidfile \
-+		--pidfile "$PIDFILE" --exec "/usr/sbin/$DAEMON" \
-+		-- -c "$MOSQUITTO_CONF"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
- }
-+
- stop() {
--	printf "Stopping mosquitto: "
--	start-stop-daemon -K -q -p /var/run/mosquitto.pid
--	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+	printf "Stopping %s: " "$DAEMON"
-+	start-stop-daemon --stop --pidfile "$PIDFILE" \
-+		--exec "/usr/sbin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+		return "$status"
-+	fi
-+	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
-+		--exec "/usr/sbin/$DAEMON"; do
-+		sleep 0.1
-+	done
-+	rm -f "$PIDFILE"
-+	return "$status"
- }
-+
- restart() {
- 	stop
- 	start
- }
+ # Hash for license files:
+ sha256  67228a9f7c5f9b67c58f556f1be178f62da4d9e2e6285318d8c74d567255abdf  COPYING
+diff --git a/package/cairo/cairo.mk b/package/cairo/cairo.mk
+index c741c97853..26c2555f9d 100644
+--- a/package/cairo/cairo.mk
++++ b/package/cairo/cairo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+reload() {
-+	printf "Reloading %s config: " "$DAEMON"
-+	start-stop-daemon --stop --signal HUP -q --pidfile "$PIDFILE" \
-+		--exec "/usr/sbin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
- case "$1" in
--  start)
--	start
--	;;
--  stop)
--	stop
--	;;
--  restart|reload)
--	restart
--	;;
--  *)
--	echo "Usage: $0 {start|stop|restart}"
--	exit 1
-+	start)
-+		start;;
-+	stop)
-+		stop;;
-+	restart)
-+		restart;;
-+	reload)
-+		reload;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
- esac
+-CAIRO_VERSION = 1.18.2
++CAIRO_VERSION = 1.18.4
+ CAIRO_SOURCE = cairo-$(CAIRO_VERSION).tar.xz
+ CAIRO_LICENSE = LGPL-2.1 or MPL-1.1 (library)
+ CAIRO_LICENSE_FILES = COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
+@@ -37,8 +37,7 @@ CAIRO_CONF_OPTS = \
+ 	-Dtests=disabled \
+ 	-Dspectre=disabled \
+ 	-Dsymbol-lookup=disabled \
+-	-Dgtk_doc=false \
+-	-Dc_std=gnu11
++	-Dgtk_doc=false
+ CAIRO_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	fontconfig \
+@@ -59,8 +58,7 @@ HOST_CAIRO_CONF_OPTS = \
+ 	-Dglib=enabled \
+ 	-Dspectre=disabled \
+ 	-Dsymbol-lookup=disabled \
+-	-Dgtk_doc=false \
+-	-Dc_std=gnu11
++	-Dgtk_doc=false
+ HOST_CAIRO_DEPENDENCIES = \
+ 	host-freetype \
+ 	host-fontconfig \
+@@ -71,7 +69,10 @@ HOST_CAIRO_DEPENDENCIES = \
+ 	host-zlib
  
- exit $?
--- 
-2.49.0
-
+ ifeq ($(BR2_PACKAGE_LZO),y)
++CAIRO_CONF_OPTS += -Dlzo=enabled
+ CAIRO_DEPENDENCIES += lzo
++else
++CAIRO_CONF_OPTS += -Dlzo=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
