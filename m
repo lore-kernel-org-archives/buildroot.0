@@ -4,102 +4,104 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F8F7C3600C
-	for <buildroot@archiver.kernel.org>; Mon, 31 Mar 2025 23:38:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2535C3600C
+	for <buildroot@archiver.kernel.org>; Mon, 31 Mar 2025 23:38:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C8EEF40C3C;
-	Mon, 31 Mar 2025 23:38:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C219A40C84;
+	Mon, 31 Mar 2025 23:38:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X0z73ImyYW9N; Mon, 31 Mar 2025 23:38:17 +0000 (UTC)
+ id 8F3OIMEkSRPc; Mon, 31 Mar 2025 23:38:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D041540C7E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7D7740C93
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D041540C7E;
-	Mon, 31 Mar 2025 23:38:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D7913121
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 23:38:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A7D7740C93;
+	Mon, 31 Mar 2025 23:38:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 19842121
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 23:38:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B987D60617
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 23:38:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09965401B1
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 23:38:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HtZKrGG3Mfdu for <buildroot@buildroot.org>;
- Mon, 31 Mar 2025 23:38:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lqDpqJNIn9rc for <buildroot@buildroot.org>;
+ Mon, 31 Mar 2025 23:38:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::635; helo=mail-pl1-x635.google.com;
+ client-ip=2607:f8b0:4864:20::633; helo=mail-pl1-x633.google.com;
  envelope-from=daniel.crowe@maxmine.com.au; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ED58A6060A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED58A6060A
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com
- [IPv6:2607:f8b0:4864:20::635])
- by smtp3.osuosl.org (Postfix) with ESMTPS id ED58A6060A
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 23:38:14 +0000 (UTC)
-Received: by mail-pl1-x635.google.com with SMTP id
- d9443c01a7336-225df540edcso110262975ad.0
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 16:38:14 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 436314014E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 436314014E
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com
+ [IPv6:2607:f8b0:4864:20::633])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 436314014E
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 23:38:17 +0000 (UTC)
+Received: by mail-pl1-x633.google.com with SMTP id
+ d9443c01a7336-22548a28d0cso134144985ad.3
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 16:38:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1743464293; x=1744069093;
+ d=1e100.net; s=20230601; t=1743464296; x=1744069096;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=233wV3FRRbPs5O9ftODmIZeOAYwWjnUXfDOP09dSaUs=;
- b=MKMRWMzcvZC2ihkJE4ni2SwD4kbMbuyMII6Hr4UCJ+fH7lN0oZwNJzwXU3e+boGL/f
- EQCGc4OY51Djj1ePm9M6bvcSU+X6HD87/3/Q9BxMpDve/uTeCMEMec8svGW0lXRzF3so
- UDZVvmfkrTjvAFn6jNojdWOdnXh7EwCuqabyewQzpODIIfIxOsXakoKcqgL6E4ITSzmm
- ql9Pm3hioJg6jG/6znAur62FLgdnI+VT2qSOhKJnY4COwMb7h3o1ovzvdMPTgV9k5rSn
- pnLW/ZJiG5G8V4QNORChA50xzsEcFCiqFmbla7edjE1v4+H4bQ9Ra81pCjmOdKndJKcL
- GGmQ==
-X-Gm-Message-State: AOJu0YwgXoRulQjXwrYlE/b7yDi27XkdHG0Ny6LRMI+9EVmo8DdkTiXD
- Fhr/3ebnQHqMXJLn/F/jzROMV0P1Cjpiu96p/kl9/5LMJdpADp8A1KcRxlE8dnngZR48X25fCf6
- LzNQ=
-X-Gm-Gg: ASbGncvR2l4Jo4T+csjIdzZlkCH386odA+xYBgirEyOpZK1ecdvNlCbSkL3rWzzGEOY
- PZkQYS3sV424EdjMfcYJ6QkrSHW0RBI0Ungu1cHSKGeASvq5BPjzZV8h6ycsYI3F0qGsA3/D/6l
- rpfZ9i7tu1ljlmXraFK1Wqjhrt0ZWqzwdb2JYgh/CD1VQ+nRpm6mQMbtV+sNNrh8ZXwdYwwju5e
- gU9Uo7EACPXp6jsP4uQagrG9MzQrb2NV3i12tIAFo7v6UQejswm0cyEnn+LDz3DGVuK/Ai7OXJb
- 3iAtBhk8O3LJlCymdj0XXjMy9mQuWIMZKNzbtjfZE8SZYDML1G0461lIKBgN17HMeAem5c6Nb+7
- s4DLDAt3eSkeEIUnQTA==
-X-Google-Smtp-Source: AGHT+IFsWtwLdfMwZPjJnYxcE7Ktr2ko9rUFQL28meKW4rtj/jYT7N+6Ko8wj/tnUJdslV3lZJ8kew==
-X-Received: by 2002:a05:6a00:1950:b0:736:9f2e:1357 with SMTP id
- d2e1a72fcca58-7397f4c7da9mr18932152b3a.12.1743464293487; 
- Mon, 31 Mar 2025 16:38:13 -0700 (PDT)
+ bh=+CTpBxlEEaPTnZhLyoo73gWXiXi8ys0xn8XirW7OLsQ=;
+ b=ZCaESvgvJTrAotpwQ1hcD7MdDhF2y1GT5aDhdtpfGuXc65VO7jm2h1E2A+lBfZSfVN
+ Hb21K44Zln2Ahj62Zv/K9vvcVRHpEr3Wd7SVFDuzwjrmowMBE2eRGSZ/tOvn1rV2iMzO
+ BpHLZekWjPSbaAd7slj84bxEhZLnZe+6FunqtN8IHFAGAPzZgIF5fcZ8ZAe042zV6lJo
+ YhKBQG8cS5hZEUgkFiKC267N54vnM0CQDPgSZYNd9jtTvDzmEW8vbb6fM7w5fLaTKQyQ
+ Ai6SfIWOkrGomVJTZV7vDFA55Ls+YVcZven2FWwXVfzXWEKaNehCnUoHkSJM4rj3xR8K
+ +uXw==
+X-Gm-Message-State: AOJu0Yy//JmJsYponP+vRy0HbuxjMYjUEkLfMUB2e4jRK9UPbuepavrV
+ 66RAdu9U3JpTtBSYOJMnLty0OiZtPe8wB6f1HNnhBDZRak96fPVhPaH6KbLS1mgSe4G09tarxZ2
+ FRVc=
+X-Gm-Gg: ASbGncvZ5FvQNPIPEQ7JZqHJlfld5Kert1GKcHro25eadp0syr72eg29Pt8x3pjnC2k
+ 9RkoBG8ggFysxjrjmCQ6qcoxyOZpXyKKGMJ2GpQNmbUNZrdD7gRn/BU324z7PNAVELtf5WdL2ii
+ 26xLduav8ztPPqZknRLAfSvPUFf5Ytzrvzf1patvXkLqitdVWg8dX8hNClesqDOB3CvBTiQ9/v/
+ UxYGh/KmBmfY0NYbpfeJ67lAoBy/N7JYBRshRcjNr+7IUdpmtL7BzSE2i45vWM/ERr80fvhV58H
+ ec5ERGp2Gs1vhF2s1hiYsOgWoOrC6zuQRIba9FwzTlEsyfrkDmkDKoxOx+SMydaYHoXJoLTJv3J
+ XD2nKxz/4u7BNJaQAbQ==
+X-Google-Smtp-Source: AGHT+IFpN/vtFuZvBstzeAgvYIDYESXa9CokKsBuQYps3QB15X+uedytnXfFTo0+U8i+e55VipDVTQ==
+X-Received: by 2002:a05:6a00:1152:b0:736:ab21:8a69 with SMTP id
+ d2e1a72fcca58-73980011f9emr16226475b3a.0.1743464296183; 
+ Mon, 31 Mar 2025 16:38:16 -0700 (PDT)
 Received: from res-0346.adl.internal.resolution.systems ([103.211.209.15])
  by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-73971091cadsm7577025b3a.126.2025.03.31.16.38.11
+ d2e1a72fcca58-73971091cadsm7577025b3a.126.2025.03.31.16.38.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 31 Mar 2025 16:38:13 -0700 (PDT)
+ Mon, 31 Mar 2025 16:38:15 -0700 (PDT)
 From: Daniel Crowe <daniel.crowe@maxmine.com.au>
 To: buildroot@buildroot.org
-Date: Tue,  1 Apr 2025 10:07:24 +1030
-Message-ID: <20250331233726.3730509-3-daniel.crowe@maxmine.com.au>
+Date: Tue,  1 Apr 2025 10:07:25 +1030
+Message-ID: <20250331233726.3730509-4-daniel.crowe@maxmine.com.au>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250331233726.3730509-1-daniel.crowe@maxmine.com.au>
 References: <20250331233726.3730509-1-daniel.crowe@maxmine.com.au>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=maxmine-com-au.20230601.gappssmtp.com; s=20230601; t=1743464293; x=1744069093;
+ d=maxmine-com-au.20230601.gappssmtp.com; s=20230601; t=1743464296; x=1744069096;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=233wV3FRRbPs5O9ftODmIZeOAYwWjnUXfDOP09dSaUs=;
- b=wtG1HgX3Qxj/d5M/KZPzVza+AFfDxrnEcsB5dJHPLtaegH8X8GhJMfdfhb4Vqw76a+
- eMHKImE2lzpjq83P72kcUulHI13VH+aup1UVXeHSxh4yR5FMFYsOYRgWQpXhEK+a/uUL
- 9aJtxV22r6pytcuLm23V90PL/kOhNxQjNhEMUsGQOIunvdoIRCEf7Hvc0bwHj1Oj6vkF
- pvMh4QV1TVmnIu1IxbGy4kzr1JU4xYY9uR3sVxLcaPmCup+OvmA7wgGy5cyRhBbt9NNI
- lRJDmhGa6n3h7C5jjviBdR1isrg2OKzXxgrarUwA1RL9/R41ulkUqgfMtKpuF2dQJkH0
- iytA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=+CTpBxlEEaPTnZhLyoo73gWXiXi8ys0xn8XirW7OLsQ=;
+ b=XTt5LFWzSLIN6is8UIqt0JvRHrcfKFP4zNODpPq5GssiPWjyweh9KZ3vaXbKDfQOys
+ k+SXa3WeHIEnC46z/HtWGYpd2ZnT74lv1Bef/m7bzfuUFN7vTdPGly4Jd0RP6J27IsHF
+ AhWpLBdREcSovUY6tyW5Wqo8VMcLGNhcR23UipFhSdQNjDwD5tC0vripLrJ4W/bav2uw
+ gkOfiF8Zn9QfTn30fxPMlEKLGwg0njlvu7+4bS2lunxm6KJeIPdksR0DDO9UgKQW5nas
+ x1yN6tfm3ShEqMdWnf2+wH/5sx5SA+kfpS4ltvcqTktw0nunjVprmFZDukFTrnNMG0PR
+ qfRA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=maxmine.com.au
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=maxmine-com-au.20230601.gappssmtp.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=maxmine-com-au.20230601.gappssmtp.com
  header.i=@maxmine-com-au.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=wtG1HgX3
-Subject: [Buildroot] [PATCH 3/5] package/python-aniso8601: add version 10.0.0
+ header.s=20230601 header.b=XTt5LFWz
+Subject: [Buildroot] [PATCH 4/5] package/python-flask-restx: add version
+ 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,73 +121,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-A library for parsing ISO 8601 strings
-https://bitbucket.org/nielsenb/aniso8601/src/master/
+Support REST APIs with Flask applications
+https://flask-restx.readthedocs.io/en/latest/
 
 Signed-off-by: Daniel Crowe <daniel.crowe@maxmine.com.au>
 ---
- package/Config.in                              |  1 +
- package/python-aniso8601/Config.in             |  6 ++++++
- package/python-aniso8601/python-aniso8601.hash |  5 +++++
- package/python-aniso8601/python-aniso8601.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/python-aniso8601/Config.in
- create mode 100644 package/python-aniso8601/python-aniso8601.hash
- create mode 100644 package/python-aniso8601/python-aniso8601.mk
+ package/Config.in                                  |  1 +
+ package/python-flask-restx/Config.in               | 13 +++++++++++++
+ package/python-flask-restx/python-flask-restx.hash |  5 +++++
+ package/python-flask-restx/python-flask-restx.mk   | 14 ++++++++++++++
+ 4 files changed, 33 insertions(+)
+ create mode 100644 package/python-flask-restx/Config.in
+ create mode 100644 package/python-flask-restx/python-flask-restx.hash
+ create mode 100644 package/python-flask-restx/python-flask-restx.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index fa8a347464..f15f5c76d8 100644
+index f15f5c76d8..dc042875e8 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -994,6 +994,7 @@ menu "External python modules"
- 	source "package/python-aiozipkin/Config.in"
- 	source "package/python-alembic/Config.in"
- 	source "package/python-alsaaudio/Config.in"
-+	source "package/python-aniso8601/Config.in"
- 	source "package/python-annotated-types/Config.in"
- 	source "package/python-ansicolors/Config.in"
- 	source "package/python-anyio/Config.in"
-diff --git a/package/python-aniso8601/Config.in b/package/python-aniso8601/Config.in
+@@ -1121,6 +1121,7 @@ menu "External python modules"
+ 	source "package/python-flask-expects-json/Config.in"
+ 	source "package/python-flask-jsonrpc/Config.in"
+ 	source "package/python-flask-login/Config.in"
++	source "package/python-flask-restx/Config.in"
+ 	source "package/python-flask-smorest/Config.in"
+ 	source "package/python-flask-sqlalchemy/Config.in"
+ 	source "package/python-flask-wtf/Config.in"
+diff --git a/package/python-flask-restx/Config.in b/package/python-flask-restx/Config.in
 new file mode 100644
-index 0000000000..cea76eeff5
+index 0000000000..cdbe509891
 --- /dev/null
-+++ b/package/python-aniso8601/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_ANISO8601
-+	bool "python-aniso8601"
++++ b/package/python-flask-restx/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_PYTHON_FLASK_RESTX
++	bool "python-flask-restx"
++	select BR2_PACKAGE_PYTHON_ANISO8601 # runtime
++	select BR2_PACKAGE_PYTHON_FLASK # runtime
++	select BR2_PACKAGE_PYTHON_IMPORTLIB_RESOURCES # runtime
++	select BR2_PACKAGE_PYTHON_JSONSCHEMA # runtime
++	select BR2_PACKAGE_PYTHON_PYTZ # runtime
++	select BR2_PACKAGE_PYTHON_WERKZEUG # runtime
 +	help
-+	  A library for parsing ISO 8601 strings.
++	  Fully featured framework for fast, easy and documented API
++	  development with Flask.
 +
-+	  https://bitbucket.org/nielsenb/aniso8601
-diff --git a/package/python-aniso8601/python-aniso8601.hash b/package/python-aniso8601/python-aniso8601.hash
++	  https://github.com/python-restx/flask-restx
+diff --git a/package/python-flask-restx/python-flask-restx.hash b/package/python-flask-restx/python-flask-restx.hash
 new file mode 100644
-index 0000000000..c0e8f95f3b
+index 0000000000..f90601cdc1
 --- /dev/null
-+++ b/package/python-aniso8601/python-aniso8601.hash
++++ b/package/python-flask-restx/python-flask-restx.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/aniso8601/json
-+md5  29acca96d02d182b7ff09f02047b84a8  aniso8601-10.0.0.tar.gz
-+sha256  ff1d0fc2346688c62c0151547136ac30e322896ed8af316ef7602c47da9426cf  aniso8601-10.0.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/flask-restx/json
++md5  262984a0c902db0b6f4afb86a69ea40e  flask-restx-1.3.0.tar.gz
++sha256  4f3d3fa7b6191fcc715b18c201a12cd875176f92ba4acc61626ccfd571ee1728  flask-restx-1.3.0.tar.gz
 +# Locally computed sha256 checksums
-+sha256  c3cca0b9a74fd29668bd99b5dcf0274d53be904de6778916dc852708f407b0f0  LICENSE
-diff --git a/package/python-aniso8601/python-aniso8601.mk b/package/python-aniso8601/python-aniso8601.mk
++sha256  d736fc20d979831ab5c380973d01542de97857d975b60a4cf03efbd9e4e38997  LICENSE
+diff --git a/package/python-flask-restx/python-flask-restx.mk b/package/python-flask-restx/python-flask-restx.mk
 new file mode 100644
-index 0000000000..1bb6628953
+index 0000000000..23596f23d4
 --- /dev/null
-+++ b/package/python-aniso8601/python-aniso8601.mk
++++ b/package/python-flask-restx/python-flask-restx.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-aniso8601
++# python-flask-restx
 +#
 +################################################################################
 +
-+PYTHON_ANISO8601_VERSION = 10.0.0
-+PYTHON_ANISO8601_SOURCE = aniso8601-$(PYTHON_ANISO8601_VERSION).tar.gz
-+PYTHON_ANISO8601_SITE = https://files.pythonhosted.org/packages/f3/3f/dc8a28fa6dc72c13d8c158b01f8975f240e9e72c336cc1ae00f424e2d7ce
-+PYTHON_ANISO8601_SETUP_TYPE = setuptools
-+PYTHON_ANISO8601_LICENSE = BSD-3-Clause
-+PYTHON_ANISO8601_LICENSE_FILES = LICENSE
++PYTHON_FLASK_RESTX_VERSION = 1.3.0
++PYTHON_FLASK_RESTX_SOURCE = flask-restx-$(PYTHON_FLASK_RESTX_VERSION).tar.gz
++PYTHON_FLASK_RESTX_SITE = https://files.pythonhosted.org/packages/45/4c/2e7d84e2b406b47cf3bf730f521efe474977b404ee170d8ea68dc37e6733
++PYTHON_FLASK_RESTX_SETUP_TYPE = setuptools
++PYTHON_FLASK_RESTX_LICENSE = BSD-3-Clause
++PYTHON_FLASK_RESTX_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
