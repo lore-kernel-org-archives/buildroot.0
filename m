@@ -1,77 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38D6DC3600B
-	for <buildroot@archiver.kernel.org>; Mon, 31 Mar 2025 19:47:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2333BC3600B
+	for <buildroot@archiver.kernel.org>; Mon, 31 Mar 2025 19:58:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C96E34059B;
-	Mon, 31 Mar 2025 19:47:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 51BiiQQ_-DyT; Mon, 31 Mar 2025 19:47:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0229D40586
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0229D40586;
-	Mon, 31 Mar 2025 19:47:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7C7291ED5
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 19:47:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C19360E4C
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 19:47:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C55B76083A;
+	Mon, 31 Mar 2025 19:58:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2ucejRZ20y5r for <buildroot@buildroot.org>;
- Mon, 31 Mar 2025 19:47:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6FB4E608C0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FB4E608C0
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6FB4E608C0
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 19:47:09 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id D21DA780371;
- Mon, 31 Mar 2025 21:47:04 +0200 (CEST)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:47928])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 31 Mar 2025 21:47:04 +0200
-MIME-Version: 1.0
-Date: Mon, 31 Mar 2025 21:47:04 +0200
+ id NnfRWL-5J3Da; Mon, 31 Mar 2025 19:58:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F127B60750
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id F127B60750;
+	Mon, 31 Mar 2025 19:58:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 30989121
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 19:58:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1267581EBF
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 19:58:36 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8Gu1GmkMLiiK for <buildroot@buildroot.org>;
+ Mon, 31 Mar 2025 19:58:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DB5F81ED6
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3DB5F81ED6
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 19:58:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 28D9583953; Mon, 31 Mar 2025 19:58:35 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Cc: buildroot@buildroot.org, Fabrice Fontaine <fontaine.fabrice@gmail.com>
-In-Reply-To: <20250329200354.178980-1-thomas@devoogdt.com>
-References: <20250329200354.178980-1-thomas@devoogdt.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <dea406b24b15d576492fca2ffba6c6e1@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1743450427;
- bh=iqR2X/rXar6RWS3UCwvJeC2smcKExAS6uYdIwJg6s1k=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=BerYpsg8I+8mC/VfVTrHg6olzG6KQf7AAxYWeiUxOM93XVgqar7egp7QXCvADP1Oc
- gpPsbC1Esci+4y1KDhDD1xXkveDBAzPk8Bfx2THGE0BRSXo6dHAho8SbUzi53W4i3P
- ufMJmAVWnLx6difxnVKZIhAiEP61bGdUXq/G0moL9S7b5XuUrvxglnnmTlDCMeDpV8
- Vm7dzwxTwyf6ZsqFnHk+0OS1zNHVdbaO9zBMl4q8da7P7GUW7ws4r1YBhlifmFblVz
- f7kxTk2tg+r8iOZg3xSrSIj/SHqH+Rxjl29f7Dw2A6kdHLMqgIdAXqVENcjZHRk6gw
- AN+PfdvVhjM/g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=BerYpsg8
-Subject: Re: [Buildroot] [PATCH v1] package/cairo: bump to 1.18.4
+To: buildroot@buildroot.org
+Date: Mon, 31 Mar 2025 21:48:05 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 90bbe4f469f79fba02bd078d5bd0fed869dfcbc7
+X-Git-Newrev: 696703dc5ae7c2a5fa637c76190665791869692a
+X-Patchwork-Hint: ignore
+Message-Id: <20250331195835.28D9583953@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zabbix: update to 7.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,34 +58,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 29/03/2025 21:03, Thomas Devoogdt wrote:
-> News:
-> - https://www.cairographics.org/news/cairo-1.18.4/
-> 
-> Other changes:
-> - 0001-cairo-ft-private.h-fix-missing-FT_Color-error.patch
->   has been dropped because it's upstream. [1]
-> 
-> - c_std=gnu11 override has been dropped because
->   it's upstream. [2]
-> 
-> - Use the new 'lzo' option. [3]
-> 
-> [1] 
-> https://gitlab.freedesktop.org/cairo/cairo/-/commit/9607e19a9e4c1784e7b656772e1df82aea26f6e7
-> [2] 
-> https://gitlab.freedesktop.org/cairo/cairo/-/commit/b60f47dfd5bbe98aec43f6c356ba3be9a1b7989e
-> [3] 
-> https://gitlab.freedesktop.org/cairo/cairo/-/commit/c1748e79f0b18d44891bda2b6aa877175d802660
-> 
-> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=696703dc5ae7c2a5fa637c76190665791869692a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+See here for a changelog:
+https://www.zabbix.com/rn/rn7.2.5
+https://www.zabbix.com/rn/rn7.2.4
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/zabbix/zabbix.hash | 2 +-
+ package/zabbix/zabbix.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/zabbix/zabbix.hash b/package/zabbix/zabbix.hash
+index fa229af00e..979b6c8e3f 100644
+--- a/package/zabbix/zabbix.hash
++++ b/package/zabbix/zabbix.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  fa957c533f042ef9b37710b00ada9c8e4c8063819d87c80212103abd53ed10b5  zabbix-7.2.3.tar.gz
++sha256  0d01b393dd22b2a60b36fb37a98fcf1081c683ad98832a2ddd87943a1200839e  zabbix-7.2.5.tar.gz
+ sha256  0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0  COPYING
+diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
+index affadef365..3e685f1ea2 100644
+--- a/package/zabbix/zabbix.mk
++++ b/package/zabbix/zabbix.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ ZABBIX_VERSION_MAJOR = 7.2
+-ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).3
++ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).5
+ ZABBIX_SITE = https://cdn.zabbix.com/zabbix/sources/stable/$(ZABBIX_VERSION_MAJOR)
+ ZABBIX_SELINUX_MODULES = zabbix
+ ZABBIX_LICENSE = AGPL-3.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
