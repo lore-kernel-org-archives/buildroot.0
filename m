@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6379C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:45:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4028DC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:45:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 84FA383C79;
-	Mon, 19 May 2025 10:45:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 136B361582;
+	Mon, 19 May 2025 10:45:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KStt512JdYof; Mon, 19 May 2025 10:45:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XU6xo63Lo6qL; Mon, 19 May 2025 10:45:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA7EE83C99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 40B80615B6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA7EE83C99;
-	Mon, 19 May 2025 10:45:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3A0B7193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 40B80615B6;
+	Mon, 19 May 2025 10:45:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0889B193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA6204179D
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 68BFA40E01
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l58ZlHONJC6d for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:50 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R7MlS5BTzpDO for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A263C41786
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DA0A40DF5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A263C41786
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9DA0A40DF5
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9FFF2872E7; Mon, 19 May 2025 10:39:49 +0000 (UTC)
+ id 9B99A8725C; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 13 Apr 2025 13:34:13 +0200
+Date: Mon, 31 Mar 2025 21:48:05 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b1fac04a6e3d979e8dbcb436b42bbe167db96bab
-X-Git-Newrev: 637eead755ebb1b89aafd9345f2c6dee8412fb19
+X-Git-Oldrev: 90bbe4f469f79fba02bd078d5bd0fed869dfcbc7
+X-Git-Newrev: 696703dc5ae7c2a5fa637c76190665791869692a
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103949.9FFF2872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/ti_am62px_sk_defconfig: switch to am62x op-tee platform flavor
+Message-Id: <20250519103946.9B99A8725C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/zabbix: update to 7.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,51 +64,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=637eead755ebb1b89aafd9345f2c6dee8412fb19
+commit: https://git.buildroot.net/buildroot/commit/?id=696703dc5ae7c2a5fa637c76190665791869692a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since optee_os bump to 4.5.0 in commit [1], the ti_am62px_sk_defconfig
-fails to build with error:
+See here for a changelog:
+https://www.zabbix.com/rn/rn7.2.5
+https://www.zabbix.com/rn/rn7.2.4
 
-    core/arch/arm/plat-k3/drivers/sa2ul.c:36:42: error: 'SA2UL_BASE' undeclared here (not in a function); did you mean 'SCU_BASE'?
-       36 | register_phys_mem_pgdir(MEM_AREA_IO_SEC, SA2UL_BASE, SA2UL_REG_SIZE);
-          |                                          ^~~~~~~~~~
-
-This is due to a logic change in platform flavor selection in upstream.
-See [2].
-
-There is unfortunately no SA2UL_BASE defined for the am62px in op-tee
-which is causing the op-tee builds to fail however the platform is
-identical to the am62x platform. So for now let's switch to using the
-am62x which has the proper configuration for this SoC even if it's
-mislabeled.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/9690373039
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/14ef1ed7d27ba2f6d99bbdd0d80f67df50fccce9
-[2] https://github.com/OP-TEE/optee_os/commit/35c75f355c98242290e342c04648e91baf35a4f3
-
-Signed-off-by: Bryan Brattlof <bb@ti.com>
-[Julien: add extra info in commit log]
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/ti_am62px_sk_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/zabbix/zabbix.hash | 2 +-
+ package/zabbix/zabbix.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/ti_am62px_sk_defconfig b/configs/ti_am62px_sk_defconfig
-index 4937fb704c..e53b41ed5e 100644
---- a/configs/ti_am62px_sk_defconfig
-+++ b/configs/ti_am62px_sk_defconfig
-@@ -22,7 +22,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="k3"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD="lite"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
- BR2_TARGET_OPTEE_OS=y
--BR2_TARGET_OPTEE_OS_PLATFORM="k3-am62px"
-+BR2_TARGET_OPTEE_OS_PLATFORM="k3-am62x"
- BR2_TARGET_TI_K3_R5_LOADER=y
- BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION=y
- BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2024.07"
+diff --git a/package/zabbix/zabbix.hash b/package/zabbix/zabbix.hash
+index fa229af00e..979b6c8e3f 100644
+--- a/package/zabbix/zabbix.hash
++++ b/package/zabbix/zabbix.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  fa957c533f042ef9b37710b00ada9c8e4c8063819d87c80212103abd53ed10b5  zabbix-7.2.3.tar.gz
++sha256  0d01b393dd22b2a60b36fb37a98fcf1081c683ad98832a2ddd87943a1200839e  zabbix-7.2.5.tar.gz
+ sha256  0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0  COPYING
+diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
+index affadef365..3e685f1ea2 100644
+--- a/package/zabbix/zabbix.mk
++++ b/package/zabbix/zabbix.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ ZABBIX_VERSION_MAJOR = 7.2
+-ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).3
++ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).5
+ ZABBIX_SITE = https://cdn.zabbix.com/zabbix/sources/stable/$(ZABBIX_VERSION_MAJOR)
+ ZABBIX_SELINUX_MODULES = zabbix
+ ZABBIX_LICENSE = AGPL-3.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
