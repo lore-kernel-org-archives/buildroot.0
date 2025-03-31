@@ -1,107 +1,105 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2535C3600C
-	for <buildroot@archiver.kernel.org>; Mon, 31 Mar 2025 23:38:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F692C3600C
+	for <buildroot@archiver.kernel.org>; Mon, 31 Mar 2025 23:38:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C219A40C84;
-	Mon, 31 Mar 2025 23:38:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6F1D81421;
+	Mon, 31 Mar 2025 23:38:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8F3OIMEkSRPc; Mon, 31 Mar 2025 23:38:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uyG0HI-OTZ-Q; Mon, 31 Mar 2025 23:38:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A7D7740C93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D472F812C6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A7D7740C93;
-	Mon, 31 Mar 2025 23:38:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 19842121
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 23:38:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D472F812C6;
+	Mon, 31 Mar 2025 23:38:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 56982121
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 23:38:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 09965401B1
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 23:38:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 37EB240275
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 23:38:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lqDpqJNIn9rc for <buildroot@buildroot.org>;
- Mon, 31 Mar 2025 23:38:17 +0000 (UTC)
+ id MhkcEI5fHMFY for <buildroot@buildroot.org>;
+ Mon, 31 Mar 2025 23:38:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2607:f8b0:4864:20::633; helo=mail-pl1-x633.google.com;
  envelope-from=daniel.crowe@maxmine.com.au; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 436314014E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 436314014E
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4E99F401B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E99F401B1
 Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com
  [IPv6:2607:f8b0:4864:20::633])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 436314014E
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 23:38:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4E99F401B1
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 23:38:20 +0000 (UTC)
 Received: by mail-pl1-x633.google.com with SMTP id
- d9443c01a7336-22548a28d0cso134144985ad.3
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 16:38:17 -0700 (PDT)
+ d9443c01a7336-223fd89d036so105617235ad.1
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 16:38:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1743464296; x=1744069096;
+ d=1e100.net; s=20230601; t=1743464299; x=1744069099;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=+CTpBxlEEaPTnZhLyoo73gWXiXi8ys0xn8XirW7OLsQ=;
- b=ZCaESvgvJTrAotpwQ1hcD7MdDhF2y1GT5aDhdtpfGuXc65VO7jm2h1E2A+lBfZSfVN
- Hb21K44Zln2Ahj62Zv/K9vvcVRHpEr3Wd7SVFDuzwjrmowMBE2eRGSZ/tOvn1rV2iMzO
- BpHLZekWjPSbaAd7slj84bxEhZLnZe+6FunqtN8IHFAGAPzZgIF5fcZ8ZAe042zV6lJo
- YhKBQG8cS5hZEUgkFiKC267N54vnM0CQDPgSZYNd9jtTvDzmEW8vbb6fM7w5fLaTKQyQ
- Ai6SfIWOkrGomVJTZV7vDFA55Ls+YVcZven2FWwXVfzXWEKaNehCnUoHkSJM4rj3xR8K
- +uXw==
-X-Gm-Message-State: AOJu0Yy//JmJsYponP+vRy0HbuxjMYjUEkLfMUB2e4jRK9UPbuepavrV
- 66RAdu9U3JpTtBSYOJMnLty0OiZtPe8wB6f1HNnhBDZRak96fPVhPaH6KbLS1mgSe4G09tarxZ2
- FRVc=
-X-Gm-Gg: ASbGncvZ5FvQNPIPEQ7JZqHJlfld5Kert1GKcHro25eadp0syr72eg29Pt8x3pjnC2k
- 9RkoBG8ggFysxjrjmCQ6qcoxyOZpXyKKGMJ2GpQNmbUNZrdD7gRn/BU324z7PNAVELtf5WdL2ii
- 26xLduav8ztPPqZknRLAfSvPUFf5Ytzrvzf1patvXkLqitdVWg8dX8hNClesqDOB3CvBTiQ9/v/
- UxYGh/KmBmfY0NYbpfeJ67lAoBy/N7JYBRshRcjNr+7IUdpmtL7BzSE2i45vWM/ERr80fvhV58H
- ec5ERGp2Gs1vhF2s1hiYsOgWoOrC6zuQRIba9FwzTlEsyfrkDmkDKoxOx+SMydaYHoXJoLTJv3J
- XD2nKxz/4u7BNJaQAbQ==
-X-Google-Smtp-Source: AGHT+IFpN/vtFuZvBstzeAgvYIDYESXa9CokKsBuQYps3QB15X+uedytnXfFTo0+U8i+e55VipDVTQ==
-X-Received: by 2002:a05:6a00:1152:b0:736:ab21:8a69 with SMTP id
- d2e1a72fcca58-73980011f9emr16226475b3a.0.1743464296183; 
- Mon, 31 Mar 2025 16:38:16 -0700 (PDT)
+ bh=kADnlAAiAkzAlkMMjQ7z1yfk9dJY8MKg62YE4xl6NPA=;
+ b=fnJisFOIEiJodyDdvMnRj+bShRsuhvPquZRJEEoa2i7eJ9zGWnGkS1VEASzYSQ1oyZ
+ 3vSVRjKMgKvz2BWgciwZ2AYjirZoS3eglwObhsXhfn1Y1MUh0RF8P0rFZg/eLTwltOOP
+ JJMzAu8wTR/N0vte5ET64oby8be//NDsyx1Jmp40yf2Nxm20mjagh823vaioBB2rTLOH
+ 4H7SiDt0W+bMFF1L1ZYWq4zgtsVbeiEZxTFa7qT5w4CtL+u21m5pMBb3vYM+5txW8asI
+ 9KePvBH6xDQBw6PJUsK38QAL/0XzQeGXZQTYFFtNKoXwPsU4U/+YoQT2bTnak4VawPZG
+ PwjQ==
+X-Gm-Message-State: AOJu0Yw6LTtWZt34uXM0buRhUJyV30ZKQoshENJmJ3wDAg45jOb2awjc
+ NretWlFDbejMwatcuA3DM9jQXBrjSPs+WJR8WeOkyJt794lxRQbL/nM7k4F7fUinSOtV999gYTP
+ rXPs=
+X-Gm-Gg: ASbGnctOjwli2hOVMZWika0satAMBUF0W0pDCqAtIRc+3gwMhYVqUQ0NFZO/ZVZf9kn
+ Kt/lnubO7hPn7uppRFLXLuK5ml2U8TrA8sMHVCo0sq4VbP082e4NF9Hp7eRvCcrwPdLfSO66fxh
+ N9/lrcMBrRH5J5O981+8Dbd+8UoZ1jUyNUWmQ9NgBSd8bkfZPkPXOEzHSemF9C5di7xZ0+94Tkq
+ Pide/jsG2VYflsV5w/YwJG4n7v+Vkznpfi9+pGR2xLJwKO1EN3Pfe55uIYgGGIa7IYn1e8beqxk
+ 3dtCV4H9Ui7tnVZsOu22RMB83O+C6GWwU88yBt2tppTCxNosbGSjPLww730RmGhpgJzoD8spKeB
+ /KixWBPy6e6hpXXZGPA==
+X-Google-Smtp-Source: AGHT+IHrufauPryAqPHpMKNLC9moxWIrQrj0ZaUxOcwsyl9rerzX5WVK/43CYbWjCXvV8E6ulqYh7A==
+X-Received: by 2002:a05:6a20:6a13:b0:1f5:75a9:5255 with SMTP id
+ adf61e73a8af0-2009f79b3fbmr16274060637.39.1743464298871; 
+ Mon, 31 Mar 2025 16:38:18 -0700 (PDT)
 Received: from res-0346.adl.internal.resolution.systems ([103.211.209.15])
  by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-73971091cadsm7577025b3a.126.2025.03.31.16.38.13
+ d2e1a72fcca58-73971091cadsm7577025b3a.126.2025.03.31.16.38.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 31 Mar 2025 16:38:15 -0700 (PDT)
+ Mon, 31 Mar 2025 16:38:18 -0700 (PDT)
 From: Daniel Crowe <daniel.crowe@maxmine.com.au>
 To: buildroot@buildroot.org
-Date: Tue,  1 Apr 2025 10:07:25 +1030
-Message-ID: <20250331233726.3730509-4-daniel.crowe@maxmine.com.au>
+Date: Tue,  1 Apr 2025 10:07:26 +1030
+Message-ID: <20250331233726.3730509-5-daniel.crowe@maxmine.com.au>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250331233726.3730509-1-daniel.crowe@maxmine.com.au>
 References: <20250331233726.3730509-1-daniel.crowe@maxmine.com.au>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=maxmine-com-au.20230601.gappssmtp.com; s=20230601; t=1743464296; x=1744069096;
+ d=maxmine-com-au.20230601.gappssmtp.com; s=20230601; t=1743464299; x=1744069099;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=+CTpBxlEEaPTnZhLyoo73gWXiXi8ys0xn8XirW7OLsQ=;
- b=XTt5LFWzSLIN6is8UIqt0JvRHrcfKFP4zNODpPq5GssiPWjyweh9KZ3vaXbKDfQOys
- k+SXa3WeHIEnC46z/HtWGYpd2ZnT74lv1Bef/m7bzfuUFN7vTdPGly4Jd0RP6J27IsHF
- AhWpLBdREcSovUY6tyW5Wqo8VMcLGNhcR23UipFhSdQNjDwD5tC0vripLrJ4W/bav2uw
- gkOfiF8Zn9QfTn30fxPMlEKLGwg0njlvu7+4bS2lunxm6KJeIPdksR0DDO9UgKQW5nas
- x1yN6tfm3ShEqMdWnf2+wH/5sx5SA+kfpS4ltvcqTktw0nunjVprmFZDukFTrnNMG0PR
- qfRA==
+ bh=kADnlAAiAkzAlkMMjQ7z1yfk9dJY8MKg62YE4xl6NPA=;
+ b=IOJSGIPmrHCdZeULrP1bFFt/Ke2by29bn54fff5yXF6r+fn9e9nfCtzQyG6jpDV3c+
+ eeU5ZfdJytBF/R2w7wyeqAn4iN3ua0JqHoPrWYZCAivwSknOVrqkIK53JW4Jxs63Cq1l
+ hXYolSqlgps0iw08cfIsuSE3/3xhkDyl5/7zGk2V/E0HcLeQCJZqZ9lKd4cG0gbF2sHL
+ wo+uw4gFq+VJWy1Se5i/tqJggvKk1ghnkUHRTcjljcx2UFGomtpgjqNSs/Nc0bbykevc
+ XEcGdSA8MROMb8UJ9nq4lGohzSPhToGa3AfJgqU144dP0ydCh0gTXme4o64MDIurutwC
+ 6Lbw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=maxmine.com.au
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=maxmine-com-au.20230601.gappssmtp.com
+ dkim=pass (2048-bit key) header.d=maxmine-com-au.20230601.gappssmtp.com
  header.i=@maxmine-com-au.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=XTt5LFWz
-Subject: [Buildroot] [PATCH 4/5] package/python-flask-restx: add version
- 1.3.0
+ header.s=20230601 header.b=IOJSGIPm
+Subject: [Buildroot] [PATCH 5/5] package/python-pyproj: add version 3.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,80 +119,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Support REST APIs with Flask applications
-https://flask-restx.readthedocs.io/en/latest/
+Provides cartographic projections in Python
+https://pyproj4.github.io/pyproj/stable/
 
 Signed-off-by: Daniel Crowe <daniel.crowe@maxmine.com.au>
 ---
- package/Config.in                                  |  1 +
- package/python-flask-restx/Config.in               | 13 +++++++++++++
- package/python-flask-restx/python-flask-restx.hash |  5 +++++
- package/python-flask-restx/python-flask-restx.mk   | 14 ++++++++++++++
- 4 files changed, 33 insertions(+)
- create mode 100644 package/python-flask-restx/Config.in
- create mode 100644 package/python-flask-restx/python-flask-restx.hash
- create mode 100644 package/python-flask-restx/python-flask-restx.mk
+ package/Config.in                        |  1 +
+ package/python-pyproj/Config.in          |  8 ++++++++
+ package/python-pyproj/python-pyproj.hash |  5 +++++
+ package/python-pyproj/python-pyproj.mk   | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/python-pyproj/Config.in
+ create mode 100644 package/python-pyproj/python-pyproj.hash
+ create mode 100644 package/python-pyproj/python-pyproj.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index f15f5c76d8..dc042875e8 100644
+index dc042875e8..b82bffd227 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1121,6 +1121,7 @@ menu "External python modules"
- 	source "package/python-flask-expects-json/Config.in"
- 	source "package/python-flask-jsonrpc/Config.in"
- 	source "package/python-flask-login/Config.in"
-+	source "package/python-flask-restx/Config.in"
- 	source "package/python-flask-smorest/Config.in"
- 	source "package/python-flask-sqlalchemy/Config.in"
- 	source "package/python-flask-wtf/Config.in"
-diff --git a/package/python-flask-restx/Config.in b/package/python-flask-restx/Config.in
+@@ -1325,6 +1325,7 @@ menu "External python modules"
+ 	source "package/python-pyphen/Config.in"
+ 	source "package/python-pypika-tortoise/Config.in"
+ 	source "package/python-pypng/Config.in"
++	source "package/python-pyproj/Config.in"
+ 	source "package/python-pyqrcode/Config.in"
+ 	source "package/python-pyqt5/Config.in"
+ 	source "package/python-pyqt5-sip/Config.in"
+diff --git a/package/python-pyproj/Config.in b/package/python-pyproj/Config.in
 new file mode 100644
-index 0000000000..cdbe509891
+index 0000000000..b53b828d5f
 --- /dev/null
-+++ b/package/python-flask-restx/Config.in
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_PYTHON_FLASK_RESTX
-+	bool "python-flask-restx"
-+	select BR2_PACKAGE_PYTHON_ANISO8601 # runtime
-+	select BR2_PACKAGE_PYTHON_FLASK # runtime
-+	select BR2_PACKAGE_PYTHON_IMPORTLIB_RESOURCES # runtime
-+	select BR2_PACKAGE_PYTHON_JSONSCHEMA # runtime
-+	select BR2_PACKAGE_PYTHON_PYTZ # runtime
-+	select BR2_PACKAGE_PYTHON_WERKZEUG # runtime
++++ b/package/python-pyproj/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_PYPROJ
++	bool "python-pyproj"
++	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
 +	help
-+	  Fully featured framework for fast, easy and documented API
-+	  development with Flask.
++	  Python interface to PROJ (cartographic projections and
++	  coordinate transformations library).
 +
-+	  https://github.com/python-restx/flask-restx
-diff --git a/package/python-flask-restx/python-flask-restx.hash b/package/python-flask-restx/python-flask-restx.hash
++	  https://github.com/pyproj4/pyproj
+diff --git a/package/python-pyproj/python-pyproj.hash b/package/python-pyproj/python-pyproj.hash
 new file mode 100644
-index 0000000000..f90601cdc1
+index 0000000000..6d9d4d2a20
 --- /dev/null
-+++ b/package/python-flask-restx/python-flask-restx.hash
++++ b/package/python-pyproj/python-pyproj.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/flask-restx/json
-+md5  262984a0c902db0b6f4afb86a69ea40e  flask-restx-1.3.0.tar.gz
-+sha256  4f3d3fa7b6191fcc715b18c201a12cd875176f92ba4acc61626ccfd571ee1728  flask-restx-1.3.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pyproj/json
++md5  ad62b11249d8e62879778190a3e3ef8c  pyproj-3.7.1.tar.gz
++sha256  60d72facd7b6b79853f19744779abcd3f804c4e0d4fa8815469db20c9f640a47  pyproj-3.7.1.tar.gz
 +# Locally computed sha256 checksums
-+sha256  d736fc20d979831ab5c380973d01542de97857d975b60a4cf03efbd9e4e38997  LICENSE
-diff --git a/package/python-flask-restx/python-flask-restx.mk b/package/python-flask-restx/python-flask-restx.mk
++sha256  a652687151814d4c4715445912fcb49e7e58f5b248d47a1a88b859a8815e0822  LICENSE
+diff --git a/package/python-pyproj/python-pyproj.mk b/package/python-pyproj/python-pyproj.mk
 new file mode 100644
-index 0000000000..23596f23d4
+index 0000000000..f94d9218ba
 --- /dev/null
-+++ b/package/python-flask-restx/python-flask-restx.mk
++++ b/package/python-pyproj/python-pyproj.mk
 @@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-flask-restx
++# python-pyproj
 +#
 +################################################################################
 +
-+PYTHON_FLASK_RESTX_VERSION = 1.3.0
-+PYTHON_FLASK_RESTX_SOURCE = flask-restx-$(PYTHON_FLASK_RESTX_VERSION).tar.gz
-+PYTHON_FLASK_RESTX_SITE = https://files.pythonhosted.org/packages/45/4c/2e7d84e2b406b47cf3bf730f521efe474977b404ee170d8ea68dc37e6733
-+PYTHON_FLASK_RESTX_SETUP_TYPE = setuptools
-+PYTHON_FLASK_RESTX_LICENSE = BSD-3-Clause
-+PYTHON_FLASK_RESTX_LICENSE_FILES = LICENSE
++PYTHON_PYPROJ_VERSION = 3.7.1
++PYTHON_PYPROJ_SOURCE = pyproj-$(PYTHON_PYPROJ_VERSION).tar.gz
++PYTHON_PYPROJ_SITE = https://files.pythonhosted.org/packages/67/10/a8480ea27ea4bbe896c168808854d00f2a9b49f95c0319ddcbba693c8a90
++PYTHON_PYPROJ_SETUP_TYPE = setuptools
++PYTHON_PYPROJ_LICENSE = MIT
++PYTHON_PYPROJ_LICENSE_FILES = LICENSE
 +
 +$(eval $(python-package))
 -- 
