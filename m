@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39670C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50741C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0AD0D616D2;
-	Mon, 19 May 2025 10:47:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1811B61760;
+	Mon, 19 May 2025 10:47:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y0yTexV29mim; Mon, 19 May 2025 10:47:40 +0000 (UTC)
+ id ugNbBB852jmd; Mon, 19 May 2025 10:47:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3230A61752
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D58E761769
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3230A61752;
-	Mon, 19 May 2025 10:47:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 08E41193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D58E761769;
+	Mon, 19 May 2025 10:47:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E0E8D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D307F418E2
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6488541268
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4OrXkmVenlC6 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xP1jhkGrDlMi for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 250344101D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4EFF40E09
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 250344101D
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C4EFF40E09
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 227BC873D5; Mon, 19 May 2025 10:40:01 +0000 (UTC)
+ id BF1E38725C; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 11 May 2025 12:09:23 +0200
+Date: Tue, 1 Apr 2025 21:33:44 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: beefa78b4998c66b41f0d7b62bf693297970e45d
-X-Git-Newrev: 8fbfa622ee4ce9505c924b57cdad17d723c79c54
+X-Git-Oldrev: 2b6b2333cff7f53972bed8c449bd3310f195c0a0
+X-Git-Newrev: 5cab9ee22476373d45e0505dc21cafdd3c821212
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104001.227BC873D5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/kodi-inputstream-adaptive: bump version to 21.5.13-Omega
+Message-Id: <20250519103946.BF1E38725C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ufs-utils: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,40 +64,98 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fbfa622ee4ce9505c924b57cdad17d723c79c54
+commit: https://git.buildroot.net/buildroot/commit/?id=5cab9ee22476373d45e0505dc21cafdd3c821212
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+It's a tool to access UFS (Universal Flash Storage) devices from user
+space.
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                       |  1 +
+ package/Config.in                |  1 +
+ package/ufs-utils/Config.in      | 11 +++++++++++
+ package/ufs-utils/ufs-utils.hash |  3 +++
+ package/ufs-utils/ufs-utils.mk   | 20 ++++++++++++++++++++
+ 5 files changed, 36 insertions(+)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 92814e8da2..98e3416f03 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  1db831ebb0acbda2576e684f8af089c524025c6a410eefb7a015cbbb505aa04d  kodi-inputstream-adaptive-21.5.9-Omega.tar.gz
-+sha256  2cde7954b0a73d353edc2af14306e4e42e6bf9e7f26100a54b937cb80c1309a8  kodi-inputstream-adaptive-21.5.13-Omega.tar.gz
- sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
- sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
- sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index ed33c7bdf6..4cdb7fe2af 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 44f7684c97..e4b8085ca6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -805,6 +805,7 @@ F:	package/babeld/
+ F:	package/iana-assignments/
+ F:	package/sscep/
+ F:	package/tinyinit/
++F:	package/ufs-utils/
+ F:	package/uuu/
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.9-Omega
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.13-Omega
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
- 	BSD-2-Clause-Views \
+ N:	Dario Binacchi <dariobin@libero.it>
+diff --git a/package/Config.in b/package/Config.in
+index 4b7e474cac..eb22c81d1d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -249,6 +249,7 @@ menu "Filesystem and flash utilities"
+ 	source "package/sshfs/Config.in"
+ 	source "package/sunxi-tools/Config.in"
+ 	source "package/udftools/Config.in"
++	source "package/ufs-utils/Config.in"
+ 	source "package/unionfs/Config.in"
+ 	source "package/xfsprogs/Config.in"
+ 	source "package/zerofree/Config.in"
+diff --git a/package/ufs-utils/Config.in b/package/ufs-utils/Config.in
+new file mode 100644
+index 0000000000..438eeaf7a6
+--- /dev/null
++++ b/package/ufs-utils/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_UFS_UTILS
++	bool "ufs-utils"
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
++	help
++	  UFS utils is a set of utilities for managing Universal
++	  Flash Storage (UFS) devices.
++
++	  https://github.com/SanDisk-Open-Source/ufs-utils.git
++
++comment "ufs-utils needs a toolchain w/ headers >= 5.1"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+diff --git a/package/ufs-utils/ufs-utils.hash b/package/ufs-utils/ufs-utils.hash
+new file mode 100644
+index 0000000000..c6ef91a025
+--- /dev/null
++++ b/package/ufs-utils/ufs-utils.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  66259581b13e33edeccb08edd2389627121adf9b425ba4545f6a84d7292ef4fa  ufs-utils-4.13.5.tar.gz
++sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/ufs-utils/ufs-utils.mk b/package/ufs-utils/ufs-utils.mk
+new file mode 100644
+index 0000000000..504f87f375
+--- /dev/null
++++ b/package/ufs-utils/ufs-utils.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# ufs-utils
++#
++################################################################################
++
++UFS_UTILS_VERSION = 4.13.5
++UFS_UTILS_SITE = $(call github,SanDisk-Open-Source,ufs-utils,v$(UFS_UTILS_VERSION))
++UFS_UTILS_LICENSE = GPL-2.0
++UFS_UTILS_LICENSE_FILES = COPYING
++
++define UFS_UTILS_BUILD_CMDS
++	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
++endef
++
++define UFS_UTILS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 $(@D)/ufs-utils $(TARGET_DIR)/usr/bin/ufs-utils
++endef
++
++$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
