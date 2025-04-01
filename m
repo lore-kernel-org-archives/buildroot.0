@@ -1,98 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A2B1C36014
-	for <buildroot@archiver.kernel.org>; Tue,  1 Apr 2025 06:34:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F26CC36008
+	for <buildroot@archiver.kernel.org>; Tue,  1 Apr 2025 06:45:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B063D612BE;
-	Tue,  1 Apr 2025 06:34:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2392A81BCF;
+	Tue,  1 Apr 2025 06:45:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id obAFHJ-beVGm; Tue,  1 Apr 2025 06:34:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yiRFSbVFdHyI; Tue,  1 Apr 2025 06:45:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAA7061AEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1763681B23
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AAA7061AEE;
-	Tue,  1 Apr 2025 06:34:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 83C5917E
- for <buildroot@buildroot.org>; Tue,  1 Apr 2025 06:34:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1763681B23;
+	Tue,  1 Apr 2025 06:45:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6F181121
+ for <buildroot@buildroot.org>; Tue,  1 Apr 2025 06:45:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6972E41397
- for <buildroot@buildroot.org>; Tue,  1 Apr 2025 06:34:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5907C80B74
+ for <buildroot@buildroot.org>; Tue,  1 Apr 2025 06:45:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X1-OuiRmt3bO for <buildroot@buildroot.org>;
- Tue,  1 Apr 2025 06:34:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id REypM-xEXZHx for <buildroot@buildroot.org>;
+ Tue,  1 Apr 2025 06:45:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::b35; helo=mail-yb1-xb35.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 90C9E4136A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90C9E4136A
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com
- [IPv6:2607:f8b0:4864:20::b35])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 90C9E4136A
- for <buildroot@buildroot.org>; Tue,  1 Apr 2025 06:34:37 +0000 (UTC)
-Received: by mail-yb1-xb35.google.com with SMTP id
- 3f1490d57ef6-e46ebe19368so4382518276.0
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 23:34:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1743489276; x=1744094076;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=6Pstc6k0hFNLkjzO2U8oX4BBvpOF5qn9HWtYkC8C9jg=;
- b=lqkElJEvRT7UKCIbIRysUu9Nu6jn2TFbgUaYoQa5OEMCTNxxVpditRgyahZQ3tQddp
- jjqSDjAiRi7TKZPuXH9XsZCJc3w1Uj/YuVSbxtRcQVjg9RN1FuAmC1orBfviGMS/XKic
- 9ytbYLf9cENaLGft49E3lrMYlibfGpPI1fwrbIRhsH9FOb+sBbxHhdKhb3RM6HRnldHk
- PQIsuNdJ7zro2Z2HlgVWOi4Kk2RHcKaaysGRAw9thgKqltBEy23QZmmS+t0EiIgUQo1X
- RgjVXHK6mM5NcIJhZ0YnQqhk80mrb2j9Kyqog8oaYQ5ItfoIAnX8Js/YPD0zg9WFs5RA
- +jgA==
-X-Gm-Message-State: AOJu0Yw05nBsgGs+5oKw7jeI1VHT1vVb06J4VuaKM3EVvyWKdQCz/Obp
- 73NMF6bj7ZBHz6udwNE8ntCQiGOVFJBr9UhZiHU6e+U9oHlVhHPqaqCysRAlgsXKdNZUbr0Drrr
- YehvVjjAkxTQPF30RFuFlHhdnEa+k1UsdBiGmhMZczp9UlrWk5xg=
-X-Gm-Gg: ASbGncuh4wNYPO9E04qJh2p7RuN8Ei9NNQaXvr6oLWXWdogp8wqB+5mOLDEIKh9HYvk
- S+qr/BbBV5sT5im6nUe7tOSAC6QLWpieKTHtTgMnsEW5KyVJZesWnGbBbpADmqvaA4oNEyRKgO1
- kJMiEMUUfOldbylG5WXnbx7R5U
-X-Google-Smtp-Source: AGHT+IHMi9bOi1x5GkEf8I3N5hpSD3bEtY4p43E3qCIbUNTdR/hyfGEMXJMqU8L7Cka+gekkhrrOB3RCAAgHtJ26S8M=
-X-Received: by 2002:a05:6902:144f:b0:e5d:ce4f:66ba with SMTP id
- 3f1490d57ef6-e6b83ad0e26mr15460966276.46.1743489276110; Mon, 31 Mar 2025
- 23:34:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20250213175656.3857792-1-dario.binacchi@amarulasolutions.com>
-In-Reply-To: <20250213175656.3857792-1-dario.binacchi@amarulasolutions.com>
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Tue, 1 Apr 2025 08:34:25 +0200
-X-Gm-Features: AQ5f1JpeJCLoxAlUBml_9e3Q8eKm-ytuowDTOJ7bmCLGYi3-OxZBDnWungBtfNk
-Message-ID: <CABGWkvrjKm7y-cee=8iT=2foGFHk-quHZUqVK4a04S9dfpzPog@mail.gmail.com>
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D232A81A29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D232A81A29
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D232A81A29
+ for <buildroot@buildroot.org>; Tue,  1 Apr 2025 06:45:15 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 2527F3531BF8; Tue,  1 Apr 2025 08:45:13 +0200 (CEST)
+Date: Tue, 1 Apr 2025 08:45:13 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Cc: Bartosz Bilas <b.bilas@grinn-global.com>, Marleen Vos <marleen.vos@mind.be>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- linux-amarula@amarulasolutions.com, Julien Olivain <ju.o@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1743489276; x=1744094076;
- darn=buildroot.org; 
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=6Pstc6k0hFNLkjzO2U8oX4BBvpOF5qn9HWtYkC8C9jg=;
- b=BP//BLv5wSO0rwZViH6H+TQt3vFldukGfdI+oNNdZ9AtN94/+ToBdHJBUsYyYKRlYL
- T0UUPlCfkhSvZX2HthSQ8CgFbW5u0qIuB1drkJRQVGd5vxIrxGcPOXH4AyDlDTRX/IlS
- FfP2F16IxEb623xykoHR/HXJpY/+VPx+t8jhw=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=BP//BLv5
-Subject: Re: [Buildroot] [PATCH 1/1] configs/stm32mp157*_dk*: bump TF-A to
- 2.10, Linux to 6.12.13 and U-Boot to 2025.01
+Message-ID: <Z-uLeeWIu2gCAbn5@waldemar-brodkorb.de>
+MIME-Version: 1.0
+Content-Disposition: inline
+X-Operating-System: Linux 6.1.0-32-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1743489913; bh=hyCiKtok/Zw632REPBYmyHJX52BE1oVVdx+YgkKaF44=;
+ h=Date:From:To:Subject:From;
+ b=Da6dAeKN/w0DIzb8DF/OYrgg//Gbyud/C+yKVA8DOhkEh3+g5t46c6pPoy9M90wuv
+ a6K4rG8QF1oM54SDrGpmSEGSCtlRKFpk5CXGt5nI8fppok3pzT5oAe3DztwAzp1Lnl
+ LB1nO9g1H2nG0kxUA55owqVZC/735lqCuN+Uhl/N0I/8A58Jk6Hn9FotQnomD9F/nR
+ RpFYwjbPyA9Z2c3X3hYxpROpT097cbwj6cSL5ilSeGUHOTRTYc+zR5h6wamfY7f8W6
+ HXajg7iNN+NTP3YWITqR7tFXL0lhVYl2YhM1aVrH+FgY7sKyUoYcZZJKB0lknYgDno
+ kC/N2zq6BGOvQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=Da6dAeKN
+Subject: [Buildroot] [PATCH] package/asterisk: update to 22.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,138 +76,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QSBnZW50bGUgcGluZy4KCkNhbiBzb21lb25lIHBsZWFzZSByZXZpZXcgdGhpcyBwYXRjaD8gSXQg
-aGFzIGJlZW4gc3VibWl0dGVkIGZvciBhIHdoaWxlLgoKVGhhbmtzIGFuZCByZWdhcmRzLApEYXJp
-bwoKT24gVGh1LCBGZWIgMTMsIDIwMjUgYXQgNjo1NuKAr1BNIERhcmlvIEJpbmFjY2hpCjxkYXJp
-by5iaW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNvbT4gd3JvdGU6Cj4KPiBUaGUgcGF0Y2ggYnVt
-cHMgQXJtIFRydXN0ZWQgRmlybXdhcmUgKFRGLUEpIHRvIHZlcnNpb24gMi4xMCBMVFMgdGhlIExp
-bnV4Cj4ga2VybmVsIHRvIHZlcnNpb24gNi4xMi4xMyBhbmQgVS1Cb290IHRvIHZlcnNpb24gMjAy
-NS4wMS4KPiBUaGUgbmV3IHZlcnNpb24gb2YgVS1Cb290IGhhcyBhZGRlZCBFRkkgQ2Fwc3VsZSBz
-dXBwb3J0LCB3aGljaCBkZXBlbmRzIG9uCj4gR251VExTLCB0aHVzIHJlcXVpcmluZyB0aGUgYWN0
-aXZhdGlvbiBvZiBCUjJfVEFSR0VUX1VCT09UX05FRURTX0dOVVRMUy4KPgo+IFRlc3RlZCBvbiBT
-VE0zMk1QMTU3Qy1ESzIgRGlzY292ZXJ5IEJvYXJkLgo+Cj4gU2lnbmVkLW9mZi1ieTogRGFyaW8g
-QmluYWNjaGkgPGRhcmlvLmJpbmFjY2hpQGFtYXJ1bGFzb2x1dGlvbnMuY29tPgo+IC0tLQo+ICAu
-Li4vYXJtLXRydXN0ZWQtZmlybXdhcmUvYXJtLXRydXN0ZWQtZmlybXdhcmUuaGFzaCAgICAgfCAg
-MiAtLQo+ICAuLi4vY29tbW9uL3N0bTMybXAxeHgvcGF0Y2hlcy9saW51eC9saW51eC5oYXNoICAg
-ICAgICAgfCAgMiArLQo+ICAuLi4vY29tbW9uL3N0bTMybXAxeHgvcGF0Y2hlcy91Ym9vdC91Ym9v
-dC5oYXNoICAgICAgICAgfCAgMiArLQo+ICBjb25maWdzL3N0bTMybXAxNTdhX2RrMV9kZWZjb25m
-aWcgICAgICAgICAgICAgICAgICAgICAgfCAxMCArKysrKy0tLS0tCj4gIGNvbmZpZ3Mvc3RtMzJt
-cDE1N2NfZGsyX2RlZmNvbmZpZyAgICAgICAgICAgICAgICAgICAgICB8IDEwICsrKysrLS0tLS0K
-PiAgNSBmaWxlcyBjaGFuZ2VkLCAxMiBpbnNlcnRpb25zKCspLCAxNCBkZWxldGlvbnMoLSkKPiAg
-ZGVsZXRlIG1vZGUgMTAwNjQ0IGJvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9jb21tb24vc3RtMzJt
-cDF4eC9wYXRjaGVzL2FybS10cnVzdGVkLWZpcm13YXJlL2FybS10cnVzdGVkLWZpcm13YXJlLmhh
-c2gKPgo+IGRpZmYgLS1naXQgYS9ib2FyZC9zdG1pY3JvZWxlY3Ryb25pY3MvY29tbW9uL3N0bTMy
-bXAxeHgvcGF0Y2hlcy9hcm0tdHJ1c3RlZC1maXJtd2FyZS9hcm0tdHJ1c3RlZC1maXJtd2FyZS5o
-YXNoIGIvYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL2NvbW1vbi9zdG0zMm1wMXh4L3BhdGNoZXMv
-YXJtLXRydXN0ZWQtZmlybXdhcmUvYXJtLXRydXN0ZWQtZmlybXdhcmUuaGFzaAo+IGRlbGV0ZWQg
-ZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDJiYzUwMzBjZjJmZi4uMDAwMDAwMDAwMDAwCj4gLS0t
-IGEvYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL2NvbW1vbi9zdG0zMm1wMXh4L3BhdGNoZXMvYXJt
-LXRydXN0ZWQtZmlybXdhcmUvYXJtLXRydXN0ZWQtZmlybXdhcmUuaGFzaAo+ICsrKyAvZGV2L251
-bGwKPiBAQCAtMSwyICswLDAgQEAKPiAtIyBMb2NhbGx5IGNhbGN1bGF0ZWQKPiAtc2hhMjU2ICA3
-MmRmMDkyODEzOGRlMTExYmY1ZTc1ZmFlNDdmODhhNGQxYjQ5MzBhZDUyYjc5MDJlMmI1M2UxMTdi
-ZTY1MGM4ICBhcm0tdHJ1c3RlZC1maXJtd2FyZS12Mi45LWdpdDQudGFyLmd6Cj4gZGlmZiAtLWdp
-dCBhL2JvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9jb21tb24vc3RtMzJtcDF4eC9wYXRjaGVzL2xp
-bnV4L2xpbnV4Lmhhc2ggYi9ib2FyZC9zdG1pY3JvZWxlY3Ryb25pY3MvY29tbW9uL3N0bTMybXAx
-eHgvcGF0Y2hlcy9saW51eC9saW51eC5oYXNoCj4gaW5kZXggZjZhNWY1ZTFjOTBjLi4yOGE1MGU0
-MDA1MzIgMTAwNjQ0Cj4gLS0tIGEvYm9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL2NvbW1vbi9zdG0z
-Mm1wMXh4L3BhdGNoZXMvbGludXgvbGludXguaGFzaAo+ICsrKyBiL2JvYXJkL3N0bWljcm9lbGVj
-dHJvbmljcy9jb21tb24vc3RtMzJtcDF4eC9wYXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2gKPiBAQCAt
-MSwzICsxLDMgQEAKPiAgIyBMb2NhbGx5IGNhbGN1bGF0ZWQKPiAtc2hhMjU2ICBmMDQ4MjY3Yjdi
-ODgzMTZjOWNhNzA4YzY4ZDE1YTlhZTgwMmRjZmM5NDNjMzE4OGMxMjczZWI5NThjNDMzMjgxICBs
-aW51eC02LjkuOC50YXIueHoKPiAgc2hhMjU2ICBjOTU0ZjYwMTk3MDA4ZjFlMWYzMmExZTc3Mjkz
-OTAzY2YzODAxZDI1NDNlYzRiZjUyMWY1NjUxZWI3ZjEzM2NlICBsaW51eC02LjExLjYudGFyLnh6
-Cj4gK3NoYTI1NiAgZjNlYmRlZWE5ZTU1NWI0Y2ZhY2U0NGUyOTY3MDA1NmY0MDI0NTQxZTZiZDIy
-MmZiY2Y3NzZjODE4OTc0ZmJiYSAgbGludXgtNi4xMi4xMy50YXIueHoKPiBkaWZmIC0tZ2l0IGEv
-Ym9hcmQvc3RtaWNyb2VsZWN0cm9uaWNzL2NvbW1vbi9zdG0zMm1wMXh4L3BhdGNoZXMvdWJvb3Qv
-dWJvb3QuaGFzaCBiL2JvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9jb21tb24vc3RtMzJtcDF4eC9w
-YXRjaGVzL3Vib290L3Vib290Lmhhc2gKPiBpbmRleCBmZTliNGY1M2RjNjMuLjUwNjc0MzUyZDcx
-ZCAxMDA2NDQKPiAtLS0gYS9ib2FyZC9zdG1pY3JvZWxlY3Ryb25pY3MvY29tbW9uL3N0bTMybXAx
-eHgvcGF0Y2hlcy91Ym9vdC91Ym9vdC5oYXNoCj4gKysrIGIvYm9hcmQvc3RtaWNyb2VsZWN0cm9u
-aWNzL2NvbW1vbi9zdG0zMm1wMXh4L3BhdGNoZXMvdWJvb3QvdWJvb3QuaGFzaAo+IEBAIC0xLDIg
-KzEsMiBAQAo+ICAjIExvY2FsbHkgY2FsY3VsYXRlZAo+IC1zaGEyNTYgIGY1OTFkYTlhYjkwZWYz
-ZDZiM2QxNzM3NjZkMGRkZmY5MGM0ZWQ3MzMwNjgwODk3NDg2MTE3ZGYzOTBkODNjOGYgIHUtYm9v
-dC0yMDI0LjA3LnRhci5iejIKPiArc2hhMjU2ICBjZGVmN2Q1MDdjOTNmMWJiZDlmMDE1ZWE5YmMy
-MWZhMDc0MjY4NDgxNDA1NTAxOTQ1YWJjNmY4NTRkNWI2ODZmICB1LWJvb3QtMjAyNS4wMS50YXIu
-YnoyCj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3Mvc3RtMzJtcDE1N2FfZGsxX2RlZmNvbmZpZyBiL2Nv
-bmZpZ3Mvc3RtMzJtcDE1N2FfZGsxX2RlZmNvbmZpZwo+IGluZGV4IGMxZWNiZDIyYzE5OC4uODVi
-ZmNiYWNhNzIxIDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3Mvc3RtMzJtcDE1N2FfZGsxX2RlZmNvbmZp
-Zwo+ICsrKyBiL2NvbmZpZ3Mvc3RtMzJtcDE1N2FfZGsxX2RlZmNvbmZpZwo+IEBAIC0xLDEzICsx
-LDEzIEBACj4gIEJSMl9hcm09eQo+ICBCUjJfY29ydGV4X2E3PXkKPiAtQlIyX1BBQ0tBR0VfSE9T
-VF9MSU5VWF9IRUFERVJTX0NVU1RPTV82Xzk9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hF
-QURFUlNfQ1VTVE9NXzZfMTI9eQo+ICBCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQvc3RtaWNy
-b2VsZWN0cm9uaWNzL2NvbW1vbi9zdG0zMm1wMXh4L3BhdGNoZXMiCj4gIEJSMl9ET1dOTE9BRF9G
-T1JDRV9DSEVDS19IQVNIRVM9eQo+ICBCUjJfUk9PVEZTX09WRVJMQVk9ImJvYXJkL3N0bWljcm9l
-bGVjdHJvbmljcy9zdG0zMm1wMTU3YS1kazEvb3ZlcmxheS8iCj4gIEJSMl9ST09URlNfUE9TVF9J
-TUFHRV9TQ1JJUFQ9ImJvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9jb21tb24vc3RtMzJtcDF4eC9w
-b3N0LWltYWdlLnNoIgo+ICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9D
-VVNUT01fVkVSU0lPTj15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9
-IjYuOS44Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEyLjEz
-Igo+ICBCUjJfTElOVVhfS0VSTkVMX1VTRV9DVVNUT01fQ09ORklHPXkKPiAgQlIyX0xJTlVYX0tF
-Uk5FTF9DVVNUT01fQ09ORklHX0ZJTEU9ImJvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMm1w
-MTU3YS1kazEvbGludXguY29uZmlnIgo+ICBCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkK
-PiBAQCAtMTgsOCArMTgsNyBAQCBCUjJfVEFSR0VUX1JPT1RGU19FWFQyXzQ9eQo+ICBCUjJfVEFS
-R0VUX1JPT1RGU19FWFQyX1NJWkU9IjEyME0iCj4gICMgQlIyX1RBUkdFVF9ST09URlNfVEFSIGlz
-IG5vdCBzZXQKPiAgQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRT15Cj4gLUJSMl9UQVJH
-RVRfQVJNX1RSVVNURURfRklSTVdBUkVfQ1VTVE9NX1ZFUlNJT049eQo+IC1CUjJfVEFSR0VUX0FS
-TV9UUlVTVEVEX0ZJUk1XQVJFX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSJ2Mi45Igo+ICtCUjJfVEFS
-R0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0xBVEVTVF9MVFNfMl8xMF9WRVJTSU9OPXkKPiAgQlIy
-X1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9QTEFURk9STT0ic3RtMzJtcDEiCj4gIEJSMl9U
-QVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfRklQPXkKPiAgQlIyX1RBUkdFVF9BUk1fVFJVU1RF
-RF9GSVJNV0FSRV9CTDMxPXkKPiBAQCAtMzEsMTAgKzMwLDExIEBAIEJSMl9UQVJHRVRfQVJNX1RS
-VVNURURfRklSTVdBUkVfTkVFRFNfRFRDPXkKPiAgQlIyX1RBUkdFVF9VQk9PVD15Cj4gIEJSMl9U
-QVJHRVRfVUJPT1RfQlVJTERfU1lTVEVNX0tDT05GSUc9eQo+ICBCUjJfVEFSR0VUX1VCT09UX0NV
-U1RPTV9WRVJTSU9OPXkKPiAtQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVkVSU0lPTl9WQUxVRT0i
-MjAyNC4wNyIKPiArQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iMjAyNS4w
-MSIKPiAgQlIyX1RBUkdFVF9VQk9PVF9CT0FSRF9ERUZDT05GSUc9InN0bTMybXAxNV90cnVzdGVk
-Igo+ICBCUjJfVEFSR0VUX1VCT09UX05FRURTX1BZTElCRkRUPXkKPiAgQlIyX1RBUkdFVF9VQk9P
-VF9ORUVEU19PUEVOU1NMPXkKPiArQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19HTlVUTFM9eQo+ICAj
-IEJSMl9UQVJHRVRfVUJPT1RfRk9STUFUX0JJTiBpcyBub3Qgc2V0Cj4gIEJSMl9UQVJHRVRfVUJP
-T1RfRk9STUFUX0RUQj15Cj4gIEJSMl9UQVJHRVRfVUJPT1RfRk9STUFUX0NVU1RPTT15Cj4gZGlm
-ZiAtLWdpdCBhL2NvbmZpZ3Mvc3RtMzJtcDE1N2NfZGsyX2RlZmNvbmZpZyBiL2NvbmZpZ3Mvc3Rt
-MzJtcDE1N2NfZGsyX2RlZmNvbmZpZwo+IGluZGV4IGMzNWQ3NTg1M2YwNi4uYmFlZDI3ZDcxMDI3
-IDEwMDY0NAo+IC0tLSBhL2NvbmZpZ3Mvc3RtMzJtcDE1N2NfZGsyX2RlZmNvbmZpZwo+ICsrKyBi
-L2NvbmZpZ3Mvc3RtMzJtcDE1N2NfZGsyX2RlZmNvbmZpZwo+IEBAIC0xLDEzICsxLDEzIEBACj4g
-IEJSMl9hcm09eQo+ICBCUjJfY29ydGV4X2E3PXkKPiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9I
-RUFERVJTX0NVU1RPTV82Xzk9eQo+ICtCUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VT
-VE9NXzZfMTI9eQo+ICBCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQvc3RtaWNyb2VsZWN0cm9u
-aWNzL2NvbW1vbi9zdG0zMm1wMXh4L3BhdGNoZXMiCj4gIEJSMl9ET1dOTE9BRF9GT1JDRV9DSEVD
-S19IQVNIRVM9eQo+ICBCUjJfUk9PVEZTX09WRVJMQVk9ImJvYXJkL3N0bWljcm9lbGVjdHJvbmlj
-cy9zdG0zMm1wMTU3Yy1kazIvb3ZlcmxheS8iCj4gIEJSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJ
-UFQ9ImJvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9jb21tb24vc3RtMzJtcDF4eC9wb3N0LWltYWdl
-LnNoIgo+ICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVS
-U0lPTj15Cj4gLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuOS44Igo+
-ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjEyLjEzIgo+ICBCUjJf
-TElOVVhfS0VSTkVMX1VTRV9DVVNUT01fQ09ORklHPXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9DVVNU
-T01fQ09ORklHX0ZJTEU9ImJvYXJkL3N0bWljcm9lbGVjdHJvbmljcy9zdG0zMm1wMTU3Yy1kazIv
-bGludXguY29uZmlnIgo+ICBCUjJfTElOVVhfS0VSTkVMX0RUU19TVVBQT1JUPXkKPiBAQCAtMTgs
-OCArMTgsNyBAQCBCUjJfVEFSR0VUX1JPT1RGU19FWFQyXzQ9eQo+ICBCUjJfVEFSR0VUX1JPT1RG
-U19FWFQyX1NJWkU9IjEyME0iCj4gICMgQlIyX1RBUkdFVF9ST09URlNfVEFSIGlzIG5vdCBzZXQK
-PiAgQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRT15Cj4gLUJSMl9UQVJHRVRfQVJNX1RS
-VVNURURfRklSTVdBUkVfQ1VTVE9NX1ZFUlNJT049eQo+IC1CUjJfVEFSR0VUX0FSTV9UUlVTVEVE
-X0ZJUk1XQVJFX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSJ2Mi45Igo+ICtCUjJfVEFSR0VUX0FSTV9U
-UlVTVEVEX0ZJUk1XQVJFX0xBVEVTVF9MVFNfMl8xMF9WRVJTSU9OPXkKPiAgQlIyX1RBUkdFVF9B
-Uk1fVFJVU1RFRF9GSVJNV0FSRV9QTEFURk9STT0ic3RtMzJtcDEiCj4gIEJSMl9UQVJHRVRfQVJN
-X1RSVVNURURfRklSTVdBUkVfRklQPXkKPiAgQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FS
-RV9CTDMxPXkKPiBAQCAtMzEsMTAgKzMwLDExIEBAIEJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklS
-TVdBUkVfTkVFRFNfRFRDPXkKPiAgQlIyX1RBUkdFVF9VQk9PVD15Cj4gIEJSMl9UQVJHRVRfVUJP
-T1RfQlVJTERfU1lTVEVNX0tDT05GSUc9eQo+ICBCUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9WRVJT
-SU9OPXkKPiAtQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iMjAyNC4wNyIK
-PiArQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVkVSU0lPTl9WQUxVRT0iMjAyNS4wMSIKPiAgQlIy
-X1RBUkdFVF9VQk9PVF9CT0FSRF9ERUZDT05GSUc9InN0bTMybXAxNV90cnVzdGVkIgo+ICBCUjJf
-VEFSR0VUX1VCT09UX05FRURTX1BZTElCRkRUPXkKPiAgQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19P
-UEVOU1NMPXkKPiArQlIyX1RBUkdFVF9VQk9PVF9ORUVEU19HTlVUTFM9eQo+ICAjIEJSMl9UQVJH
-RVRfVUJPT1RfRk9STUFUX0JJTiBpcyBub3Qgc2V0Cj4gIEJSMl9UQVJHRVRfVUJPT1RfRk9STUFU
-X0RUQj15Cj4gIEJSMl9UQVJHRVRfVUJPT1RfRk9STUFUX0NVU1RPTT15Cj4gLS0KPiAyLjQzLjAK
-PgoKCi0tIAoKRGFyaW8gQmluYWNjaGkKClNlbmlvciBFbWJlZGRlZCBMaW51eCBEZXZlbG9wZXIK
-CmRhcmlvLmJpbmFjY2hpQGFtYXJ1bGFzb2x1dGlvbnMuY29tCgpfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCgoKQW1hcnVsYSBTb2x1dGlvbnMgU1JMCgpWaWEgTGUgQ2FuZXZhcmUg
-MzAsIDMxMTAwIFRyZXZpc28sIFZlbmV0bywgSVQKClQuICszOSAwNDIgMjQzIDUzMTAKaW5mb0Bh
-bWFydWxhc29sdXRpb25zLmNvbQoKd3d3LmFtYXJ1bGFzb2x1dGlvbnMuY29tCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+For a changelog see here:
+https://downloads.asterisk.org/pub/telephony/asterisk/ChangeLog-22.3.0.md
+
+Changes made by the package maintainer:
+- add systemd service file
+- run asterisk as non-root user asterisk
+- build pjsip as bundled source code, but download it like
+  sound files
+- remove unused configure options
+
+See here for the reason behind using the bundled pjsip:
+https://github.com/asterisk/asterisk/issues/671
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/asterisk/asterisk.hash    |  4 +++-
+ package/asterisk/asterisk.mk      | 28 +++++++++++++------------
+ package/asterisk/asterisk.service | 34 +++++++++++++++++++++++++++++++
+ 3 files changed, 52 insertions(+), 14 deletions(-)
+ create mode 100644 package/asterisk/asterisk.service
+
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index 8c8ebddc47..7b28624921 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
+@@ -1,6 +1,8 @@
+ # Locally computed
+-sha256  94647b3f887f7dc91df51a4f88dfc3a07cc279bef86b8d05aa72f0c49d187571  asterisk-20.11.1.tar.gz
++sha256  4cc403c8885d4aed3956dfb75d315d3e5bcc129eb9cd47c156d3b12ecceed1ba  asterisk-22.3.0.tar.gz
+ 
++# Locally computed
++sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+ sha1  721c512feaea102700d5bdce952fdc0bb29dc640  asterisk-core-sounds-en-gsm-1.6.1.tar.gz
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index ec67632ef4..88bb6902a6 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -4,15 +4,17 @@
+ #
+ ################################################################################
+ 
+-ASTERISK_VERSION = 20.11.1
++ASTERISK_VERSION = 22.3.0
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+ 
++ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.15.1/
+ ASTERISK_SOUNDS_BASE_URL = http://downloads.asterisk.org/pub/telephony/sounds/releases
+ ASTERISK_EXTRA_DOWNLOADS = \
+ 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-core-sounds-en-gsm-1.6.1.tar.gz \
+-	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz
++	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz \
++	$(ASTERISK_PJSIP_URL)/pjproject-2.15.1.tar.bz2
+ 
+ ASTERISK_LICENSE = GPL-2.0, BSD-3-Clause (SHA1, resample), BSD-4-Clause (db1-ast)
+ ASTERISK_LICENSE_FILES = \
+@@ -76,7 +78,6 @@ ASTERISK_CONF_OPTS = \
+ 	--without-neon29 \
+ 	--without-newt \
+ 	--without-openr2 \
+-	--without-osptk \
+ 	--without-postgres \
+ 	--without-popt \
+ 	--without-resample \
+@@ -94,10 +95,9 @@ ASTERISK_CONF_OPTS = \
+ 	--with-libjwt="$(STAGING_DIR)/usr" \
+ 	--with-libxml2 \
+ 	--with-libedit="$(STAGING_DIR)/usr" \
+-	--without-pjproject-bundled \
+-	--with-pjproject="$(STAGING_DIR)/usr" \
++	--with-pjproject-bundled \
+ 	--with-sqlite3="$(STAGING_DIR)/usr" \
+-	--with-sounds-cache=$(ASTERISK_DL_DIR)
++	--with-download-cache=$(ASTERISK_DL_DIR)
+ 
+ # avcodec are from ffmpeg. There is virtually zero chance this could
+ # even work; asterisk is looking for ffmpeg/avcodec.h which has not
+@@ -135,13 +135,6 @@ else
+ ASTERISK_CONF_OPTS += --without-gsm
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
+-ASTERISK_DEPENDENCIES += alsa-lib
+-ASTERISK_CONF_OPTS += --with-asound
+-else
+-ASTERISK_CONF_OPTS += --without-asound
+-endif
+-
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS),y)
+ ASTERISK_DEPENDENCIES += bluez5_utils
+ ASTERISK_CONF_OPTS += --with-bluetooth
+@@ -299,6 +292,15 @@ ASTERISK_INSTALL_TARGET_OPTS = \
+ 	LDCONFIG=true \
+ 	install samples
+ 
++define ASTERISK_USERS
++	asterisk -1 asterisk -1 * /usr/lib/asterisk - - asterisk user
++endef
++
++define ASTERISK_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/asterisk/asterisk.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/asterisk.service
++endef
++
+ $(eval $(autotools-package))
+ 
+ #-------------------------------------------------------------------------------
+diff --git a/package/asterisk/asterisk.service b/package/asterisk/asterisk.service
+new file mode 100644
+index 0000000000..aeb01703ac
+--- /dev/null
++++ b/package/asterisk/asterisk.service
+@@ -0,0 +1,34 @@
++[Unit]
++Description=Asterisk PBX and telephony daemon.
++After=network.target
++#include these if asterisk need to bind to a specific IP (other than 0.0.0.0)
++#Wants=network-online.target
++#After=network-online.target network.target
++
++[Service]
++Type=simple
++Environment=HOME=/usr/lib/asterisk
++#if systemd do not provide hostname and you need to use ${ENV(HOSTNAME)}
++#Environment=HOSTNAME=%H
++WorkingDirectory=/usr/lib/asterisk
++User=asterisk
++Group=asterisk
++ExecStart=/usr/sbin/asterisk -mqf -C /etc/asterisk/asterisk.conf
++ExecReload=/usr/sbin/asterisk -rx 'core reload'
++#if /var/run is a tmpfs, this will create /var/run/asterisk on start
++RuntimeDirectory=asterisk
++
++#Nice=0
++#UMask=0002
++LimitCORE=infinity
++#LimitNOFILE=
++Restart=always
++RestartSec=4
++
++# Prevent duplication of logs with color codes to /var/log/messages
++StandardOutput=null
++
++PrivateTmp=true
++
++[Install]
++WantedBy=multi-user.target
+-- 
+2.39.5
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
