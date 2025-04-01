@@ -1,105 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F692C3600C
-	for <buildroot@archiver.kernel.org>; Mon, 31 Mar 2025 23:38:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FFD0C3600C
+	for <buildroot@archiver.kernel.org>; Tue,  1 Apr 2025 01:13:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6F1D81421;
-	Mon, 31 Mar 2025 23:38:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DBEDD40C71;
+	Tue,  1 Apr 2025 01:13:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uyG0HI-OTZ-Q; Mon, 31 Mar 2025 23:38:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JxGE1KbvlxPJ; Tue,  1 Apr 2025 01:13:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D472F812C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1470D40C75
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D472F812C6;
-	Mon, 31 Mar 2025 23:38:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 56982121
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 23:38:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1470D40C75;
+	Tue,  1 Apr 2025 01:13:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DC4E1121
+ for <buildroot@buildroot.org>; Tue,  1 Apr 2025 01:13:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 37EB240275
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 23:38:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C389E608E3
+ for <buildroot@buildroot.org>; Tue,  1 Apr 2025 01:13:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MhkcEI5fHMFY for <buildroot@buildroot.org>;
- Mon, 31 Mar 2025 23:38:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ea8N6173wDym for <buildroot@buildroot.org>;
+ Tue,  1 Apr 2025 01:13:40 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::633; helo=mail-pl1-x633.google.com;
- envelope-from=daniel.crowe@maxmine.com.au; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4E99F401B1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E99F401B1
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com
- [IPv6:2607:f8b0:4864:20::633])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4E99F401B1
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 23:38:20 +0000 (UTC)
-Received: by mail-pl1-x633.google.com with SMTP id
- d9443c01a7336-223fd89d036so105617235ad.1
- for <buildroot@buildroot.org>; Mon, 31 Mar 2025 16:38:20 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::62f; helo=mail-pl1-x62f.google.com;
+ envelope-from=charlie@rivosinc.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6F14D606F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6F14D606F3
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
+ [IPv6:2607:f8b0:4864:20::62f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6F14D606F3
+ for <buildroot@buildroot.org>; Tue,  1 Apr 2025 01:13:39 +0000 (UTC)
+Received: by mail-pl1-x62f.google.com with SMTP id
+ d9443c01a7336-226185948ffso97246385ad.0
+ for <buildroot@buildroot.org>; Mon, 31 Mar 2025 18:13:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1743464299; x=1744069099;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=kADnlAAiAkzAlkMMjQ7z1yfk9dJY8MKg62YE4xl6NPA=;
- b=fnJisFOIEiJodyDdvMnRj+bShRsuhvPquZRJEEoa2i7eJ9zGWnGkS1VEASzYSQ1oyZ
- 3vSVRjKMgKvz2BWgciwZ2AYjirZoS3eglwObhsXhfn1Y1MUh0RF8P0rFZg/eLTwltOOP
- JJMzAu8wTR/N0vte5ET64oby8be//NDsyx1Jmp40yf2Nxm20mjagh823vaioBB2rTLOH
- 4H7SiDt0W+bMFF1L1ZYWq4zgtsVbeiEZxTFa7qT5w4CtL+u21m5pMBb3vYM+5txW8asI
- 9KePvBH6xDQBw6PJUsK38QAL/0XzQeGXZQTYFFtNKoXwPsU4U/+YoQT2bTnak4VawPZG
- PwjQ==
-X-Gm-Message-State: AOJu0Yw6LTtWZt34uXM0buRhUJyV30ZKQoshENJmJ3wDAg45jOb2awjc
- NretWlFDbejMwatcuA3DM9jQXBrjSPs+WJR8WeOkyJt794lxRQbL/nM7k4F7fUinSOtV999gYTP
- rXPs=
-X-Gm-Gg: ASbGnctOjwli2hOVMZWika0satAMBUF0W0pDCqAtIRc+3gwMhYVqUQ0NFZO/ZVZf9kn
- Kt/lnubO7hPn7uppRFLXLuK5ml2U8TrA8sMHVCo0sq4VbP082e4NF9Hp7eRvCcrwPdLfSO66fxh
- N9/lrcMBrRH5J5O981+8Dbd+8UoZ1jUyNUWmQ9NgBSd8bkfZPkPXOEzHSemF9C5di7xZ0+94Tkq
- Pide/jsG2VYflsV5w/YwJG4n7v+Vkznpfi9+pGR2xLJwKO1EN3Pfe55uIYgGGIa7IYn1e8beqxk
- 3dtCV4H9Ui7tnVZsOu22RMB83O+C6GWwU88yBt2tppTCxNosbGSjPLww730RmGhpgJzoD8spKeB
- /KixWBPy6e6hpXXZGPA==
-X-Google-Smtp-Source: AGHT+IHrufauPryAqPHpMKNLC9moxWIrQrj0ZaUxOcwsyl9rerzX5WVK/43CYbWjCXvV8E6ulqYh7A==
-X-Received: by 2002:a05:6a20:6a13:b0:1f5:75a9:5255 with SMTP id
- adf61e73a8af0-2009f79b3fbmr16274060637.39.1743464298871; 
- Mon, 31 Mar 2025 16:38:18 -0700 (PDT)
-Received: from res-0346.adl.internal.resolution.systems ([103.211.209.15])
+ d=1e100.net; s=20230601; t=1743470019; x=1744074819;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=/71Bd+hnnfcH7WdgeFqyA3wwcneA1OZOpa4Njiuh07U=;
+ b=kYoyK4cQ/r5BeWoGX+lvcz+yk3ydgFPtHt26lxtHbAxPRYT0Rrkrh9sXdTHGB89Wn9
+ sPQjIuwlhvqaWP9qFsS5Xaf7p99sdLkTpq6MBfYX//i4O+kktQC7VytCiUL3bkmRsNhY
+ +EEouNuAtWuRW86nmhMPEDRHkI+htBUj39ZOLTQjsN/ycGqY7jg/Ji+bapgfaBOluI23
+ LpTk3jkMZkLAjRGlCrqC992Y/IUjjeb78nhOG7F35swbeWy7w/G07yT5cVGRMa5h9TMc
+ cOUM2IosdSb6e2sFnkYRtnrLRoeQ0zZFvARJ+mZ0i4ifzdV3R02jVHKbGzqMWVjgUdmu
+ 8Ebg==
+X-Gm-Message-State: AOJu0YwioIP3A3ElvQJwbgxTWPdzO6XphV7RuCjPlnSzUDbqvT4joGWV
+ TJWWgfVX5vYfV1uExmW1yuJ6zZuwjggfDvtSkEHhZhQe6BPF7AGNoO/jpXmOINc=
+X-Gm-Gg: ASbGncukgW1B0bLl04Phy+MjmArQ8nAV5xM/X4EzMhLuTgUBeB7Jspr5nuF9icq6SI4
+ fIeSIVBdRa/J1WSovyMbqwWbfXiU3YgYJq93eQ5X5yTZuR9SQEQJNqR8F6HAWQBYcQ1wCfna2hQ
+ hAOtVZLHQAaGDcOxaxJbU855cYXUrr0/zXM53vb+gjMUrk488c5RqPhWT6zWo543u/PXQKNgqck
+ 6XZ0BjvN3wuIzDn6G3CV92KE7ROErwRqtWcpHeIsAXYGnF/uTYGfpilVR/gbjhQMOukE8gou19i
+ 6LK/R4Fn2L6MgdVXiKVE/QPurRjVjKP7/854k+key2hGLCwAqQ8+jv/q2wJS
+X-Google-Smtp-Source: AGHT+IEcSlxZsoxdfhSU0CKDWZTxBcdtGKDwZutbH37qGtG7+bhulaeNIRU1YRwDsMfEliSMo645iA==
+X-Received: by 2002:a05:6a21:9104:b0:1fe:90c5:7cfb with SMTP id
+ adf61e73a8af0-2009f753542mr20784267637.27.1743470018745; 
+ Mon, 31 Mar 2025 18:13:38 -0700 (PDT)
+Received: from charlie.ba.rivosinc.com ([64.71.180.162])
  by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-73971091cadsm7577025b3a.126.2025.03.31.16.38.16
+ 41be03b00d2f7-af94d063c44sm5256515a12.25.2025.03.31.18.13.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 31 Mar 2025 16:38:18 -0700 (PDT)
-From: Daniel Crowe <daniel.crowe@maxmine.com.au>
-To: buildroot@buildroot.org
-Date: Tue,  1 Apr 2025 10:07:26 +1030
-Message-ID: <20250331233726.3730509-5-daniel.crowe@maxmine.com.au>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250331233726.3730509-1-daniel.crowe@maxmine.com.au>
-References: <20250331233726.3730509-1-daniel.crowe@maxmine.com.au>
+ Mon, 31 Mar 2025 18:13:37 -0700 (PDT)
+From: Charlie Jenkins <charlie@rivosinc.com>
+Date: Mon, 31 Mar 2025 18:13:16 -0700
 MIME-Version: 1.0
+Message-Id: <20250331-fix_liburing_arch-v1-1-296318973123@rivosinc.com>
+X-B4-Tracking: v=1; b=H4sIAKs962cC/x2MWwqAIBAAryL7nWBmYl0lQnpsthAWK0UQ3T3pc
+ 2BmHkjIhAla8QDjRYn2mKEsBEzrEANKmjODVrpWVVXKhW6/0XgyxeAHnlapjFXOucbU1kDuDsY
+ s/c+uf98P9mgU9GMAAAA=
+X-Change-ID: 20250331-fix_liburing_arch-046088894564
+To: buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, 
+ Charlie Jenkins <charlie@rivosinc.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1094; i=charlie@rivosinc.com; 
+ h=from:subject:message-id;
+ bh=84EZ1N6faRqNpTDBxMHTwdmsRJ6cl7qywx5BeBfOOPk=; 
+ b=owGbwMvMwCXWx5hUnlvL8Y3xtFoSQ/pr211z5OXyktQkzv5Ne/krI9K4vfEml/r1S9F7FcyEH
+ vx8fXFWRykLgxgXg6yYIgvPtQbm1jv6ZUdFyybAzGFlAhnCwMUpABM5bcvI8Ljt1rOyN6VF+bvc
+ HyReEQ5x5DL0qtJ66Xj/eRmjySSP3Qz/owOYPh0v0zqS01B8e+qMTqWdfGlPdu6bWtY6b+GSgx/
+ 3sgIA
+X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
+ fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=maxmine-com-au.20230601.gappssmtp.com; s=20230601; t=1743464299; x=1744069099;
+ d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1743470019; x=1744074819;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=kADnlAAiAkzAlkMMjQ7z1yfk9dJY8MKg62YE4xl6NPA=;
- b=IOJSGIPmrHCdZeULrP1bFFt/Ke2by29bn54fff5yXF6r+fn9e9nfCtzQyG6jpDV3c+
- eeU5ZfdJytBF/R2w7wyeqAn4iN3ua0JqHoPrWYZCAivwSknOVrqkIK53JW4Jxs63Cq1l
- hXYolSqlgps0iw08cfIsuSE3/3xhkDyl5/7zGk2V/E0HcLeQCJZqZ9lKd4cG0gbF2sHL
- wo+uw4gFq+VJWy1Se5i/tqJggvKk1ghnkUHRTcjljcx2UFGomtpgjqNSs/Nc0bbykevc
- XEcGdSA8MROMb8UJ9nq4lGohzSPhToGa3AfJgqU144dP0ydCh0gTXme4o64MDIurutwC
- 6Lbw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=maxmine.com.au
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=maxmine-com-au.20230601.gappssmtp.com
- header.i=@maxmine-com-au.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=IOJSGIPm
-Subject: [Buildroot] [PATCH 5/5] package/python-pyproj: add version 3.7.1
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=/71Bd+hnnfcH7WdgeFqyA3wwcneA1OZOpa4Njiuh07U=;
+ b=FoAOmzIh0giojAd1SUxLCkvWlNfqhJsHHtWwICKC3vHldwYU72o7yYdBfRG8I1V9H8
+ k26LxNplZJaobw4eLDaEu6yIUHSANFflWIbrDixJtfVdfzzDxr8peH+tOfe9fPq6WNaZ
+ AN9WhMZPmuj/BZdr+4HtipBcDSv99OVwkhQWdrkbQkiF8q6yDQleksF7KVs78vdMryOt
+ OAbQpv6S+uaOH7ZcuDv4sI54OciNvaL/6+TJjnrWfw+5/cPeLO/fWciQN1Y2bJ4g/0Eh
+ 665ZEJJhioF1EdskJ3KHsGCATKBanTdnbjXSXHVmhx3DLaOCZiHZw71DJlEN0EhXByuK
+ AlUQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=rivosinc.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rivosinc-com.20230601.gappssmtp.com
+ header.i=@rivosinc-com.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=FoAOmzIh
+Subject: [Buildroot] [PATCH] package/liburing: Configure liburing with
+ --use-libc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,87 +123,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Daniel Crowe <daniel.crowe@maxmine.com.au>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Provides cartographic projections in Python
-https://pyproj4.github.io/pyproj/stable/
+liburing requires libc when building for any architecture that doesn't
+have built-in syscall support (that is currently any architecture other
+than x86 and aarch64). Configure liburing with --use-libc to allow these
+other architectures to compile.
 
-Signed-off-by: Daniel Crowe <daniel.crowe@maxmine.com.au>
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+Fixes: 70e3b5a800f8 ("package/liburing: bump to version 2.5")
 ---
- package/Config.in                        |  1 +
- package/python-pyproj/Config.in          |  8 ++++++++
- package/python-pyproj/python-pyproj.hash |  5 +++++
- package/python-pyproj/python-pyproj.mk   | 14 ++++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/python-pyproj/Config.in
- create mode 100644 package/python-pyproj/python-pyproj.hash
- create mode 100644 package/python-pyproj/python-pyproj.mk
+ package/liburing/liburing.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index dc042875e8..b82bffd227 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1325,6 +1325,7 @@ menu "External python modules"
- 	source "package/python-pyphen/Config.in"
- 	source "package/python-pypika-tortoise/Config.in"
- 	source "package/python-pypng/Config.in"
-+	source "package/python-pyproj/Config.in"
- 	source "package/python-pyqrcode/Config.in"
- 	source "package/python-pyqt5/Config.in"
- 	source "package/python-pyqt5-sip/Config.in"
-diff --git a/package/python-pyproj/Config.in b/package/python-pyproj/Config.in
-new file mode 100644
-index 0000000000..b53b828d5f
---- /dev/null
-+++ b/package/python-pyproj/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_PYPROJ
-+	bool "python-pyproj"
-+	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
-+	help
-+	  Python interface to PROJ (cartographic projections and
-+	  coordinate transformations library).
-+
-+	  https://github.com/pyproj4/pyproj
-diff --git a/package/python-pyproj/python-pyproj.hash b/package/python-pyproj/python-pyproj.hash
-new file mode 100644
-index 0000000000..6d9d4d2a20
---- /dev/null
-+++ b/package/python-pyproj/python-pyproj.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/pyproj/json
-+md5  ad62b11249d8e62879778190a3e3ef8c  pyproj-3.7.1.tar.gz
-+sha256  60d72facd7b6b79853f19744779abcd3f804c4e0d4fa8815469db20c9f640a47  pyproj-3.7.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  a652687151814d4c4715445912fcb49e7e58f5b248d47a1a88b859a8815e0822  LICENSE
-diff --git a/package/python-pyproj/python-pyproj.mk b/package/python-pyproj/python-pyproj.mk
-new file mode 100644
-index 0000000000..f94d9218ba
---- /dev/null
-+++ b/package/python-pyproj/python-pyproj.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-pyproj
-+#
-+################################################################################
-+
-+PYTHON_PYPROJ_VERSION = 3.7.1
-+PYTHON_PYPROJ_SOURCE = pyproj-$(PYTHON_PYPROJ_VERSION).tar.gz
-+PYTHON_PYPROJ_SITE = https://files.pythonhosted.org/packages/67/10/a8480ea27ea4bbe896c168808854d00f2a9b49f95c0319ddcbba693c8a90
-+PYTHON_PYPROJ_SETUP_TYPE = setuptools
-+PYTHON_PYPROJ_LICENSE = MIT
-+PYTHON_PYPROJ_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+diff --git a/package/liburing/liburing.mk b/package/liburing/liburing.mk
+index fc3993b38cdd32f589a47c16d6963e87c175a7f8..0bdcc79ee85167788c03ecfc4545777c49d37ac9 100644
+--- a/package/liburing/liburing.mk
++++ b/package/liburing/liburing.mk
+@@ -22,7 +22,7 @@ LIBURING_MAKE_OPTS += ENABLE_SHARED=1
+ endif
+ 
+ define LIBURING_CONFIGURE_CMDS
+-	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure)
++	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./configure --use-libc)
+ endef
+ 
+ define LIBURING_BUILD_CMDS
+
+---
+base-commit: 696703dc5ae7c2a5fa637c76190665791869692a
+change-id: 20250331-fix_liburing_arch-046088894564
 -- 
-2.43.0
+- Charlie
 
 _______________________________________________
 buildroot mailing list
