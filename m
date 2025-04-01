@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16B6AC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:46:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CA77C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:46:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5A2D616A8;
-	Mon, 19 May 2025 10:46:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3FF3660F3A;
+	Mon, 19 May 2025 10:46:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s2Oi7YEw0khu; Mon, 19 May 2025 10:46:48 +0000 (UTC)
+ id uDgGGHsS6gw9; Mon, 19 May 2025 10:46:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E64F61689
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D7F361674
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1E64F61689;
-	Mon, 19 May 2025 10:46:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2DF13E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D7F361674;
+	Mon, 19 May 2025 10:46:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 11D57193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1844417F7
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 268F041233
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RsDVVU6BN6eO for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id J20HZi98Fd3V for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ABE78417FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACF1840E04
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id ABE78417FB
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id ACF1840E04
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A7779873DF; Mon, 19 May 2025 10:39:57 +0000 (UTC)
+ id AB83383A2E; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 25 Apr 2025 21:15:42 +0200
+Date: Tue, 1 Apr 2025 21:11:11 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 294e3a40bb7e0fe3af8fb4689529e595d6895099
-X-Git-Newrev: 6c183754342e6bb73aeab3c8731789c73fcae4ad
+X-Git-Oldrev: 4ba51914e966899910dd7111d7379d6edb3ea1c3
+X-Git-Newrev: 02f42887c3019fa2347fa90eac0dfeb1be4d40f5
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103957.A7779873DF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/strongswan: fix build
- w/ wolfssl
+Message-Id: <20250519103946.AB83383A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/armadillo: bump to
+ version 14.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,56 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c183754342e6bb73aeab3c8731789c73fcae4ad
+commit: https://git.buildroot.net/buildroot/commit/?id=02f42887c3019fa2347fa90eac0dfeb1be4d40f5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The package strongswan relies on the `wc_RsaKeyToDer` & `wc_MakeRsaKey`
-functions of WolfSSL. Building this package with the WolfSSL backend
-by selecting the variable `BR2_PACKAGE_STRONGSWAN_WOLFSSL` would give
-the following error:
+Release notes:
+https://arma.sourceforge.net/docs.html#changelog
 
-```
-libtool: compile:  /home/buildroot/instance-0/output-1/host/bin/sparc-linux-gcc -DHAVE_CONFIG_H -I. -I../../../.. -I../../../../src/libstrongswan -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DWC_NO_RNG -rdynamic -Wno-format -Wno-format-security -Wno-implicit-fallthrough -Wno-missing-field-initializers -Wno-pointer-sign -Wno-sign-compare -Wno-type-limits -Wno-unused-parameter -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Og -g0 -include /home/buildroot/instance-0/output-1/build/strongswan-5.9.14/config.h -c wolfssl_ed_public_key.c -o wolfssl_ed_public_key.o >/dev/null 2>&1
-wolfssl_rsa_private_key.c: In function 'get_encoding':
-wolfssl_rsa_private_key.c:366:31: error: implicit declaration of function 'wc_RsaKeyToDer'; did you mean 'wc_EccKeyToDer'? [-Wimplicit-function-declaration]
-  366 |                         len = wc_RsaKeyToDer(&this->rsa, encoding->ptr, len);
-      |                               ^~~~~~~~~~~~~~
-      |                               wc_EccKeyToDer
-libtool: compile:  /home/buildroot/instance-0/output-1/host/bin/sparc-linux-gcc -DHAVE_CONFIG_H -I. -I../../../.. -I../../../../src/libstrongswan -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DWC_NO_RNG -rdynamic -Wno-format -Wno-format-security -Wno-implicit-fallthrough -Wno-missing-field-initializers -Wno-pointer-sign -Wno-sign-compare -Wno-type-limits -Wno-unused-parameter -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Og -g0 -include /home/buildroot/instance-0/output-1/build/strongswan-5.9.14/config.h -c wolfssl_ec_private_key.c -o wolfssl_ec_private_key.o >/dev/null 2>&1
-wolfssl_rsa_private_key.c: In function 'wolfssl_rsa_private_key_gen':
-wolfssl_rsa_private_key.c:490:13: error: implicit declaration of function 'wc_MakeRsaKey'; did you mean 'wc_FreeRsaKey'? [-Wimplicit-function-declaration]
-  490 |         if (wc_MakeRsaKey(&this->rsa, key_size, WC_RSA_EXPONENT, &this->rng) < 0)
-      |             ^~~~~~~~~~~~~
-      |             wc_FreeRsaKey
-```
-
-Those functions are only present when building the WolfSSL library with
-the keygen supports (`--enable-keygen`).
-
-This patch change the selected package to enable all the option of
-WolfSSL, which include the keygen as well.
-
-Fixes:
-  - https://autobuild.buildroot.org/results/d0e/d0e94f501ad1afd25ae4112443f9af101dfa5dea
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/strongswan/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/armadillo/armadillo.hash | 2 +-
+ package/armadillo/armadillo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-index a62688f9c3..22caa2a573 100644
---- a/package/strongswan/Config.in
-+++ b/package/strongswan/Config.in
-@@ -59,6 +59,7 @@ config BR2_PACKAGE_STRONGSWAN_GMP
- config BR2_PACKAGE_STRONGSWAN_WOLFSSL
- 	bool "wolfssl"
- 	select BR2_PACKAGE_WOLFSSL
-+	select BR2_PACKAGE_WOLFSSL_ALL
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index 734d0c6db9..3161d2df87 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  023242fd59071d98c75fb015fd3293c921132dc39bf46d221d4b059aae8d79f4  armadillo-14.4.0.tar.xz
++sha256  26ce272bfdc8246c278e6f8cfa53777a1efb14ef196e88082fee05da1a463491  armadillo-14.4.1.tar.xz
+ # License files, locally calculated
+ sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index 704199ff91..c41e60625e 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endchoice
- 
+-ARMADILLO_VERSION = 14.4.0
++ARMADILLO_VERSION = 14.4.1
+ ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
+ ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+ ARMADILLO_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
