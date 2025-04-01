@@ -1,52 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 995EBC36010
-	for <buildroot@archiver.kernel.org>; Tue,  1 Apr 2025 19:54:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2067C36010
+	for <buildroot@archiver.kernel.org>; Tue,  1 Apr 2025 20:00:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48FAE6114F;
-	Tue,  1 Apr 2025 19:54:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 752B44093D;
+	Tue,  1 Apr 2025 20:00:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T2dCYTBaUFcG; Tue,  1 Apr 2025 19:54:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hbukO4KFWofT; Tue,  1 Apr 2025 20:00:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7819461178
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDE314094D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7819461178;
-	Tue,  1 Apr 2025 19:54:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BDE314094D;
+	Tue,  1 Apr 2025 20:00:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9635F17F
- for <buildroot@buildroot.org>; Tue,  1 Apr 2025 19:54:37 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4988417F
+ for <buildroot@buildroot.org>; Tue,  1 Apr 2025 20:00:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 846A1415B3
- for <buildroot@buildroot.org>; Tue,  1 Apr 2025 19:54:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3030A400EC
+ for <buildroot@buildroot.org>; Tue,  1 Apr 2025 20:00:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xlV_0iIr7_cm for <buildroot@buildroot.org>;
- Tue,  1 Apr 2025 19:54:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8E7B4097F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D8E7B4097F
- for <buildroot@buildroot.org>; Tue,  1 Apr 2025 19:54:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C02CB839FE; Tue,  1 Apr 2025 19:54:36 +0000 (UTC)
+ id Qz0h_l-PKPha for <buildroot@buildroot.org>;
+ Tue,  1 Apr 2025 20:00:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 62F5540147
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62F5540147
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 62F5540147
+ for <buildroot@buildroot.org>; Tue,  1 Apr 2025 20:00:26 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 059362003E3;
+ Tue,  1 Apr 2025 22:00:20 +0200 (CEST)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:43964])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 01 Apr 2025 22:00:20 +0200
+MIME-Version: 1.0
+Date: Tue, 01 Apr 2025 22:00:20 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 1 Apr 2025 21:33:44 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2b6b2333cff7f53972bed8c449bd3310f195c0a0
-X-Git-Newrev: 5cab9ee22476373d45e0505dc21cafdd3c821212
-X-Patchwork-Hint: ignore
-Message-Id: <20250401195436.C02CB839FE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ufs-utils: new package
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, linux-amarula@amarulasolutions.com
+In-Reply-To: <20250401160957.4020794-1-dario.binacchi@amarulasolutions.com>
+References: <20250401160957.4020794-1-dario.binacchi@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <4d443958903e8a759be29a020a522271@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1743537624;
+ bh=BtWflcH2Hpp+PGC59mP9A9BxsFm3uFRVCV7iY5hyOV8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=nk4R4/Mmzgf8GsIGui6lzk/PuK7g5WUWzzGcILrocQvEaCy/OcLqqRilUc7H+2Zwl
+ X06xfZbcoKYU7N37H7thHVgDcoq2lxftj2lBo4KPhh6xX2E4PHFKaYisCFRzSkgLum
+ 8V8rdE/ilQN8Cty7kR3DnCnYXhOipHTjfnia/9JbiwKf/NGCj82kDJ6310bM3CgmQw
+ MlIHlmwv4KOLETH1eQKrnw/Dlcqg31ti6VqkGvqSK06yenyD6XNqBj6k4bWEfHct1m
+ 3newrsyhIU5OPmspaLu0LR9bf77TyEklDZCpbqeoYtVAOyi9z94GJ+3u0CgbBpWE9X
+ L7WawSfvIWPQQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=nk4R4/Mm
+Subject: Re: [Buildroot] [PATCH 1/1] package/ufs-utils: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,104 +83,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5cab9ee22476373d45e0505dc21cafdd3c821212
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 01/04/2025 18:09, Dario Binacchi wrote:
+> It's a tool to access UFS (Universal Flash Storage) devices from user
+> space.
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-It's a tool to access UFS (Universal Flash Storage) devices from user
-space.
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                       |  1 +
- package/Config.in                |  1 +
- package/ufs-utils/Config.in      | 11 +++++++++++
- package/ufs-utils/ufs-utils.hash |  3 +++
- package/ufs-utils/ufs-utils.mk   | 20 ++++++++++++++++++++
- 5 files changed, 36 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 44f7684c97..e4b8085ca6 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -805,6 +805,7 @@ F:	package/babeld/
- F:	package/iana-assignments/
- F:	package/sscep/
- F:	package/tinyinit/
-+F:	package/ufs-utils/
- F:	package/uuu/
- 
- N:	Dario Binacchi <dariobin@libero.it>
-diff --git a/package/Config.in b/package/Config.in
-index 4b7e474cac..eb22c81d1d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -249,6 +249,7 @@ menu "Filesystem and flash utilities"
- 	source "package/sshfs/Config.in"
- 	source "package/sunxi-tools/Config.in"
- 	source "package/udftools/Config.in"
-+	source "package/ufs-utils/Config.in"
- 	source "package/unionfs/Config.in"
- 	source "package/xfsprogs/Config.in"
- 	source "package/zerofree/Config.in"
-diff --git a/package/ufs-utils/Config.in b/package/ufs-utils/Config.in
-new file mode 100644
-index 0000000000..438eeaf7a6
---- /dev/null
-+++ b/package/ufs-utils/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_UFS_UTILS
-+	bool "ufs-utils"
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
-+	help
-+	  UFS utils is a set of utilities for managing Universal
-+	  Flash Storage (UFS) devices.
-+
-+	  https://github.com/SanDisk-Open-Source/ufs-utils.git
-+
-+comment "ufs-utils needs a toolchain w/ headers >= 5.1"
-+	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
-diff --git a/package/ufs-utils/ufs-utils.hash b/package/ufs-utils/ufs-utils.hash
-new file mode 100644
-index 0000000000..c6ef91a025
---- /dev/null
-+++ b/package/ufs-utils/ufs-utils.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  66259581b13e33edeccb08edd2389627121adf9b425ba4545f6a84d7292ef4fa  ufs-utils-4.13.5.tar.gz
-+sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/ufs-utils/ufs-utils.mk b/package/ufs-utils/ufs-utils.mk
-new file mode 100644
-index 0000000000..504f87f375
---- /dev/null
-+++ b/package/ufs-utils/ufs-utils.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# ufs-utils
-+#
-+################################################################################
-+
-+UFS_UTILS_VERSION = 4.13.5
-+UFS_UTILS_SITE = $(call github,SanDisk-Open-Source,ufs-utils,v$(UFS_UTILS_VERSION))
-+UFS_UTILS_LICENSE = GPL-2.0
-+UFS_UTILS_LICENSE_FILES = COPYING
-+
-+define UFS_UTILS_BUILD_CMDS
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
-+endef
-+
-+define UFS_UTILS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 $(@D)/ufs-utils $(TARGET_DIR)/usr/bin/ufs-utils
-+endef
-+
-+$(eval $(generic-package))
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
