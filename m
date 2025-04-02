@@ -1,103 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 050BAC28B20
-	for <buildroot@archiver.kernel.org>; Wed,  2 Apr 2025 04:41:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D595C28B20
+	for <buildroot@archiver.kernel.org>; Wed,  2 Apr 2025 06:22:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 711FE8397A;
-	Wed,  2 Apr 2025 04:41:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BDB3A60BBE;
+	Wed,  2 Apr 2025 06:22:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u_p49ROJ0hrt; Wed,  2 Apr 2025 04:41:19 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qV9zseYoxs2y; Wed,  2 Apr 2025 06:22:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D545820B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D3A8760E8D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D545820B8;
-	Wed,  2 Apr 2025 04:41:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0834D6C
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 04:41:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3A8760E8D;
+	Wed,  2 Apr 2025 06:22:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id ECD2117E
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 06:22:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E234540C79
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 04:41:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D540D60E8D
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 06:22:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 142X_6PoXINi for <buildroot@buildroot.org>;
- Wed,  2 Apr 2025 04:41:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::629; helo=mail-pl1-x629.google.com;
- envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 20031406CC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20031406CC
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com
- [IPv6:2607:f8b0:4864:20::629])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 20031406CC
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 04:41:16 +0000 (UTC)
-Received: by mail-pl1-x629.google.com with SMTP id
- d9443c01a7336-22622ddcc35so51723885ad.2
- for <buildroot@buildroot.org>; Tue, 01 Apr 2025 21:41:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1743568876; x=1744173676;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=G9vzY6/IPYihaPJypwCjKoN5Kz1qCgTZ9FhJii0E5Mo=;
- b=GT43ydhAv5sXlqRhghTV21j/D4+8Q6SYQ4VYhcComvmL86tHP8et38yVZQocqEK9Pw
- /jBLREEmsbgDlSYjUMwFo5w+MPOj2e6nTE1BM5dqc9vcwpHLhr8D1UNL7HO+qe7Qj8w7
- cNd5PZGHWLm6o/VYLlVNL5lSGOHPUdg20NXz9djS8NrO9xMRYIpGP1nsxwhEYIoNzNBj
- rqncdAzWp9wAJE7AXyRorH3H41l4Lv4X3WDdioD/obZo7XFsbPOFSGxX9zJXK+EEo9FD
- VVpFoIf/Hb5PGpwzAutWR2ViIe7PMlkG2nKIkXXici/6ZTcT3Z5RQLx/jVGcD5EoVm4O
- yw+g==
-X-Gm-Message-State: AOJu0YwVRyGYNPn9C05Dh2JzECE1xMkM5HbKYhadH2m+xcZn+iJHtWyy
- mq9T8GiqvQsw6420TWaG+d40j5RnVbKG6JdSjWRNsNXGfNWVH3o+i0iKMmba6rwmBTC83FDXSVW
- L
-X-Gm-Gg: ASbGnctPohh4M0n0JqLvLhZeA7s5j56aCQndpBDaLYKsrnLzRDLLFt4OmK7RHX661Dc
- xMia83uhLSuwTsRhePGghNjt57LfQOCv4d3K8/XThoC5YcKeO5SQZI9fZ4GCfJppylcOEjko4Kc
- jQu/kzuyKxVcUJnmjRkWc0a6ThUEosCsLdTk7vxXVd/6swvYv+QLGzyLaX2oOi2zuFMK2ZhWNWe
- jWthn+OfG6PQedXXemFpy7ZFJBee7YPqFoGNnMnZTLmZ8S7/nYg/XHhthECTpq0O1QcsOa1VmFr
- qWIyq4MjsribS2mEgOERD91VNCmtEuD3r5h1JAx96DisLkf+TtWRCq4j3TH4mRth0f9x3TM=
-X-Google-Smtp-Source: AGHT+IHF9z7Zjt3ACSqhiU3ehMhRDOFYJAwp8IKbxIrfezOFfXGbJ8KX+7Hn/gvoALOeuCkHvPSvhA==
-X-Received: by 2002:a05:6a00:238a:b0:736:5822:74b4 with SMTP id
- d2e1a72fcca58-739c7965d2dmr1357829b3a.21.1743568876103; 
- Tue, 01 Apr 2025 21:41:16 -0700 (PDT)
-Received: from localhost.localdomain ([94.156.149.175])
- by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-7397106ad9bsm9947121b3a.117.2025.04.01.21.41.15
- (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
- Tue, 01 Apr 2025 21:41:15 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>, Bernd Kuhls <bernd@kuhls.net>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Christian Stewart <christian@aperture.us>
-Date: Tue,  1 Apr 2025 21:41:07 -0700
-Message-ID: <20250402044107.4128-1-christian@aperture.us>
-X-Mailer: git-send-email 2.49.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XGgVJp-zY_LK for <buildroot@buildroot.org>;
+ Wed,  2 Apr 2025 06:22:12 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom;
+ client-ip=2a01:4f8:151:30a2::163; helo=serv15.avernis.de;
+ envelope-from=br015@umbiko.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5584E60BBE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5584E60BBE
+Received: from serv15.avernis.de (serv15.avernis.de
+ [IPv6:2a01:4f8:151:30a2::163])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5584E60BBE
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 06:22:10 +0000 (UTC)
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id DF8A4BDE2995;
+ Wed,  2 Apr 2025 08:22:06 +0200 (CEST)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1743568876; x=1744173676; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=G9vzY6/IPYihaPJypwCjKoN5Kz1qCgTZ9FhJii0E5Mo=;
- b=gN5t3PiLYz3OfaQw1GP2Ya8ySzyAAmq7TcIi3VIG94Vls+H31WwNxLavW6XCEEbHtn
- gGGwiHsyM8JkyMX/2qmKX32WP5yWXRI3/OiZFKqS9hmUD4UXOcpHJaMnCmCGJVlIETXR
- 1TS/IGzhT+kYRqoUy53B5jpc3Erhw0t9ywwfNypMtWrekhNJK7pKuGNuhK2wiR0Bs+xv
- jqFskN8WHWxG77aVcd+mHyIWgCdAa6TAE/8AY7lm9z43t+lDz1ltfIntWsqw3ylM41rD
- bWWMPGjgbtO2UnkgiSbkpH/kDqTtzcHBBcthHNf36arpOkatHU5H7Vt/pU6dCXtAdPO4
- XVvw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=aperture.us
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=gN5t3PiL
-Subject: [Buildroot] [PATCH v1 1/1] package/hiredis: force cmake version 3.5
+Date: Wed, 02 Apr 2025 06:22:06 +0000
+From: Andreas Ziegler <br015@umbiko.net>
+To: David Picard <david.picard@clermont.in2p3.fr>
+Cc: buildroot <buildroot@buildroot.org>
+In-Reply-To: <mailman.334.1743477301.2108631.buildroot@buildroot.org>
+References: <mailman.334.1743477301.2108631.buildroot@buildroot.org>
+Message-ID: <0ef87cdcfab106d7f5c71cfbf612399f@umbiko.net>
+X-Sender: br015@umbiko.net
+X-Virus-Scanned: clamav-milter 1.0.7 at serv15.avernis.de
+X-Virus-Status: Clean
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=umbiko.net; s=mail; 
+ t=1743574927; bh=dfaMaNvM1oihzVxQmIwzNGbd6YID3sOvfePKVzsmmLo=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=MrOroCzEmkupeZOzcj0ALyHMCzrMOzIpJ5MFf4lM95/B7RaOjBraPRJLARoRK67Dx
+ TUywvSOtleLOaEkfnyxZ2LE7/IA4u/MDAp+vbuXo19uDXjuzg4RGXi+g6IwPOPF2S4
+ QkDqplutehjiYG826XzL4ekAH7kZy3n8NL/k61dQ=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=umbiko.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
+ header.s=mail header.b=MrOroCzE
+Subject: Re: [Buildroot] guidelines to select a Wi-Fi/Bluetooth module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,47 +77,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Builds fail with latest Ubuntu due to host-hiredis.
+Hi David,
 
-The CMakeLists.txt within requires CMake 3.0.0, but newer CMake forces
-at minimum version 3.5, leading to build failures:
+Some things that I found useful in the past:
 
-https://github.com/skiffos/SkiffOS/actions/runs/14208988354/job/39812576139#step:8:638
+On 2025-03-31 15:38, David Picard wrote:
+> 
+> Hi,
+> 
+> I need to add Wi-Fi and Bluetooth connectivity to my system. But it's
+> really hard to understand which driver supports which product.
+> 
+> Could you please me some piece of advice to guide my search for a 
+> module ?
 
-Add the suggested build flag to force version 3.5.x and fix the error:
+Linux wireless [1] has a documentation of implemented drivers with 
+reference to supported manufacturers and chipsets. Unfortunately no 
+reverse lookup, so a bit time-consuming to read ...
 
-  -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+If you can obtain a block diagram of the board /the SoC, this might help 
+to identify hardware connected via non-standard interfaces (SDIO, GPIO). 
+In addition to the wireless module, you will need kernel drivers for the 
+subsystem.
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
----
- package/hiredis/hiredis.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+There is the brute force approach: if your hardware is supported by a 
+major distribution, boot an installation image and record the output of 
+dmesg, lsmod, lspci, lsusb. This might give you additional insight, 
+which hardware is present on the system.
 
-diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
-index 86f35bd4cd..55a9ba80ad 100644
---- a/package/hiredis/hiredis.mk
-+++ b/package/hiredis/hiredis.mk
-@@ -23,6 +23,10 @@ HOST_HIREDIS_CONF_OPTS = -DENABLE_NUGET=OFF -DDISABLE_TESTS=ON -DENABLE_SSL=OFF
- HIREDIS_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
- HOST_HIREDIS_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
- 
-+# This package requires CMake 3.0.0 but our CMake requires >=3.5
-+HIREDIS_CONF_OPTS += -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-+HOST_HIREDIS_CONF_OPTS += -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-+
- ifeq ($(BR2_PACKAGE_OPENSSL)$(BR2_TOOLCHAIN_HAS_THREADS),yy)
- HIREDIS_CONF_OPTS += -DENABLE_SSL=ON
- HIREDIS_DEPENDENCIES += openssl
--- 
-2.39.5
+The target package wpa_supplicant is necessary for unattended wireless 
+network access.
 
+Kind regards,
+Andreas
+
+> David
+
+[1] https://wireless.docs.kernel.org/en/latest/en/users/drivers.html
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
