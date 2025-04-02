@@ -1,66 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE462C36018
-	for <buildroot@archiver.kernel.org>; Wed,  2 Apr 2025 19:26:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CA6EC36018
+	for <buildroot@archiver.kernel.org>; Wed,  2 Apr 2025 19:26:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB3B781EB9;
-	Wed,  2 Apr 2025 19:26:19 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7zHeuDAmiu_K; Wed,  2 Apr 2025 19:26:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E17658222C
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E17658222C;
-	Wed,  2 Apr 2025 19:26:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 32AA611F
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 19:26:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 969BB60A6C
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 19:26:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2CADD60A6C;
+	Wed,  2 Apr 2025 19:26:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a2KG1Cv7DN5Q for <buildroot@buildroot.org>;
- Wed,  2 Apr 2025 19:26:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
- helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 877F76104A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 877F76104A
-Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 877F76104A
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 19:26:15 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id ACD2F1C108D; Wed,  2 Apr 2025 21:26:13 +0200 (CEST)
-Message-ID: <875e78ea-3a2d-43ca-a3b2-0ce53b599a0d@rnout.be>
-Date: Wed, 2 Apr 2025 21:26:12 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Waldemar Brodkorb <wbx@openadk.org>, buildroot@buildroot.org
-References: <Z7eHWbet74QuCfJr@waldemar-brodkorb.de>
-Content-Language: en-GB
-In-Reply-To: <Z7eHWbet74QuCfJr@waldemar-brodkorb.de>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1743621973; h=from:subject:date:message-id:to:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=/9VlaWpvZTwDcdLcIw44R4xH1oaD2KoefMJUWvfBrwY=;
- b=GL5XPScKSgmKS3WrNU6FovQ1sgd8j4F0NrDjz7jbJlavVfKe8ccbkEWmjXGSROpfHcNQu8
- X6dj+QwslTZ0jbFNVxD/FagVlcQUK11xSWR8gf6uSlTxxJ1zWGFgu3XlLDdsg6r4bDf3tr
- g7Nel7DXiJz4axiCnsCvF8s8hW/6EwTm1V2uWVCqYn0xVr6I12kexIacV+qNnRTbqd6Ks2
- x1HRh4A5+H6nMi9HBYltrGWoGxPzUI8n05ndTp0idGLS6lYE1RogvxunyQGTuMa2+cfl9j
- FsV0VtZCGLsduL2r+v08xM5Q+GjaO4kaxgvWv7xwv1kSHAxfTyZcwdKf7bbi9w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-Subject: Re: [Buildroot] [PATCH] package/libpjsip: update to 2.15.1
+ id qhnSp5LfXyDT; Wed,  2 Apr 2025 19:26:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72D756F7A4
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72D756F7A4;
+	Wed,  2 Apr 2025 19:26:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 83DFC123
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 19:26:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6A01483BC7
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 19:26:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mhOi87qjMuq6 for <buildroot@buildroot.org>;
+ Wed,  2 Apr 2025 19:26:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7DAD83F2A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B7DAD83F2A
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 19:26:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A6FE683AC8; Wed,  2 Apr 2025 19:26:25 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 2 Apr 2025 21:17:38 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 770f9154978c40ce5b7718174108b37c5310869d
+X-Git-Newrev: b5ef0a1d3cd7192fc57411691b417c4872975a09
+X-Patchwork-Hint: ignore
+Message-Id: <20250402192625.A6FE683AC8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libpjsip: update to 2.15.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -74,36 +59,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Ck9uIDIwLzAyLzIwMjUgMjA6NDksIFdhbGRlbWFyIEJyb2Rrb3JiIHdyb3RlOgo+IEZvciBhIGNo
-YW5nZWxvZyBzZWUgaGVyZToKPiBodHRwczovL2dpdGh1Yi5jb20vcGpzaXAvcGpwcm9qZWN0L3Jl
-bGVhc2VzL3RhZy8yLjE1LjEKPgo+IFNpZ25lZC1vZmYtYnk6IFdhbGRlbWFyIEJyb2Rrb3JiIDx3
-YnhAb3BlbmFkay5vcmc+CgogwqBBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKIMKgUmVnYXJk
-cywKIMKgQXJub3V0Cgo+IC0tLQo+ICAgcGFja2FnZS9saWJwanNpcC9saWJwanNpcC5oYXNoIHwg
-MiArLQo+ICAgcGFja2FnZS9saWJwanNpcC9saWJwanNpcC5tayAgIHwgMiArLQo+ICAgMiBmaWxl
-cyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCj4KPiBkaWZmIC0tZ2l0
-IGEvcGFja2FnZS9saWJwanNpcC9saWJwanNpcC5oYXNoIGIvcGFja2FnZS9saWJwanNpcC9saWJw
-anNpcC5oYXNoCj4gaW5kZXggZDcyZTEwOTBlMy4uZTg1ZDFmNDdiNCAxMDA2NDQKPiAtLS0gYS9w
-YWNrYWdlL2xpYnBqc2lwL2xpYnBqc2lwLmhhc2gKPiArKysgYi9wYWNrYWdlL2xpYnBqc2lwL2xp
-YnBqc2lwLmhhc2gKPiBAQCAtMSwzICsxLDMgQEAKPiAgICMgTG9jYWxseSBjb21wdXRlZAo+IC1z
-aGEyNTYgIDU4MDVjMTE3MWFjYWI0YWY5Njg0ZDdhZDA5NmRjYjkyZjcxZmM0MjgwOTg1MjE0NGU5
-N2UxNDEzNDY4Yzk5ODEgIHBqcHJvamVjdC0yLjE0LnRhci5nego+ICtzaGEyNTYgIDhmM2JkOTlj
-YWYwMDNmOTZlZDgwMzhiOGEzNjAzMWViOWQ4Y2Q5ZWFlYTFlYWZmN2UwMWMyZWVmNmJkNTU3MDYg
-IHBqcHJvamVjdC0yLjE1LjEudGFyLmd6Cj4gICBzaGEyNTYgIDgxNzdmOTc1MTMyMTM1MjZkZjJj
-ZjYxODRkOGZmOTg2YzY3NWFmYjUxNGQ0ZTY4YTQwNDAxMDUyMWI4ODA2NDMgIENPUFlJTkcKPiBk
-aWZmIC0tZ2l0IGEvcGFja2FnZS9saWJwanNpcC9saWJwanNpcC5tayBiL3BhY2thZ2UvbGlicGpz
-aXAvbGlicGpzaXAubWsKPiBpbmRleCA4MTY5ZTBkY2VlLi42OWIzYzFjZmZjIDEwMDY0NAo+IC0t
-LSBhL3BhY2thZ2UvbGlicGpzaXAvbGlicGpzaXAubWsKPiArKysgYi9wYWNrYWdlL2xpYnBqc2lw
-L2xpYnBqc2lwLm1rCj4gQEAgLTQsNyArNCw3IEBACj4gICAjCj4gICAjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIwo+ICAgCj4gLUxJQlBKU0lQX1ZFUlNJT04gPSAyLjE0Cj4gK0xJQlBKU0lQX1ZFUlNJ
-T04gPSAyLjE1LjEKPiAgIExJQlBKU0lQX1NPVVJDRSA9IHBqcHJvamVjdC0kKExJQlBKU0lQX1ZF
-UlNJT04pLnRhci5nego+ICAgTElCUEpTSVBfU0lURSA9ICQoY2FsbCBnaXRodWIscGpzaXAscGpw
-cm9qZWN0LCQoTElCUEpTSVBfVkVSU0lPTikpCj4gICAKX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RA
-YnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5m
-by9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=b5ef0a1d3cd7192fc57411691b417c4872975a09
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+For a changelog see here:
+https://github.com/pjsip/pjproject/releases/tag/2.15.1
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ package/libpjsip/libpjsip.hash | 2 +-
+ package/libpjsip/libpjsip.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libpjsip/libpjsip.hash b/package/libpjsip/libpjsip.hash
+index d72e1090e3..e85d1f47b4 100644
+--- a/package/libpjsip/libpjsip.hash
++++ b/package/libpjsip/libpjsip.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5805c1171acab4af9684d7ad096dcb92f71fc42809852144e97e1413468c9981  pjproject-2.14.tar.gz
++sha256  8f3bd99caf003f96ed8038b8a36031eb9d8cd9eaea1eaff7e01c2eef6bd55706  pjproject-2.15.1.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/libpjsip/libpjsip.mk b/package/libpjsip/libpjsip.mk
+index 8169e0dcee..69b3c1cffc 100644
+--- a/package/libpjsip/libpjsip.mk
++++ b/package/libpjsip/libpjsip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPJSIP_VERSION = 2.14
++LIBPJSIP_VERSION = 2.15.1
+ LIBPJSIP_SOURCE = pjproject-$(LIBPJSIP_VERSION).tar.gz
+ LIBPJSIP_SITE = $(call github,pjsip,pjproject,$(LIBPJSIP_VERSION))
+ 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
