@@ -1,99 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DD77C28B20
-	for <buildroot@archiver.kernel.org>; Wed,  2 Apr 2025 10:18:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02A32C28B20
+	for <buildroot@archiver.kernel.org>; Wed,  2 Apr 2025 11:08:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5FAE16F5C3;
-	Wed,  2 Apr 2025 10:18:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nPSxH9jNADgW; Wed,  2 Apr 2025 10:18:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B925A612AC
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B925A612AC;
-	Wed,  2 Apr 2025 10:18:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6094C11F
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 10:18:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4EE8E4129A
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 10:18:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 55D22412A2;
+	Wed,  2 Apr 2025 11:08:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2XUlGix8OJuh for <buildroot@buildroot.org>;
- Wed,  2 Apr 2025 10:18:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.167.52;
- helo=mail-lf1-f52.google.com; envelope-from=thomas.devoogdt@gmail.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 77EDB4129F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77EDB4129F
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com
- [209.85.167.52])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 77EDB4129F
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 10:18:27 +0000 (UTC)
-Received: by mail-lf1-f52.google.com with SMTP id
- 2adb3069b0e04-54ac9d57173so772724e87.0
- for <buildroot@buildroot.org>; Wed, 02 Apr 2025 03:18:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1743589105; x=1744193905;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ZsZLfsEMvDpTLDdBzL+SMT8MDTPITX4hZ8g00lwTuTM=;
- b=PA4I2BGXo/2h8EmG+oigYnQllwwKSzdVMvGRhjXhu9R0mktjJ+bPvSEi9r58Vd8+wp
- 0kuNAcsv46OMQzfJFlMn9H2uiIYPgA1OmG1zz1mDkUp1r2T189sXoaHluR5mJPaVijdF
- xPcnF1fRcnt232YwtqVEn1mnRWC9ILFHCX5NYcK1/pPJzBEd68ZCXflniUha16+r6v6h
- MchbPrRYdWWXMEiRDieNJUA74RHw/ZsO/xKQ/XzmZ2deLC975UiCXSbNkzGKlYkhCyfM
- 07E3ZPHxwJ17WalZfTTKoZ9WVl29R3e/6q1bNx+o/ubXlFS5uxHbILOcI//ZopOfORPm
- J7Lg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCW3mcVDAMjFScp5Xold42tbdxicIUCg1eSPELARB5hdy+eTHgjwWMdwn98k4c5olnBVNNZT7URIV9E=@buildroot.org
-X-Gm-Message-State: AOJu0Yx5zrgwNUfx//fAXMFF+/C3oJwBkq3wHzaVtHl1DFGhPgG4cZpS
- cDE/UTr4nth6R9gBWnwZrf/cDzmvJZgZ4mT9a0dpsYUGLXMVW8in2G6tOtse
-X-Gm-Gg: ASbGncvdG4Ft0xxAD3IrtyQv1xPsgTrPM4FZJmUvnW7EDTf+Iv5JjKVwa1Wey8prGMH
- XcwavzMWIzpoBG9oxCRJVGMIBzNhaX7xOkNvlSABFWadBKujp83UFBNWXkglI+VhnsUVjqZ4Rr/
- sWsEljNk7CuCBYJVfmV3q7Th8CRQcuwmVJSnpwg5Y5GXxzORUGt5Q5hO+NZWtyrYx4TgeY8aSYq
- a4xPeaSsrRn4bzVGakLu4Ez2wuti2iEm5ai3LGDoJzZvfAXg/hBGR7cAu8TgysDrCITIRA3FPUb
- bOQMc1UQEPg2R4FBmCZIhDbJ3eVXygD8db9/EYvYvzaJCOXu7/jo5bFXHaFyMwdRnsbRkHTXIE3
- MsWZUvw==
-X-Google-Smtp-Source: AGHT+IGCP5xADCfFy60dzY6FOmwHa37qJoswC0bKEdwIgtrbeH9+ItdcpKJzIFMI96R/xj3wfagf8Q==
-X-Received: by 2002:a05:6512:2527:b0:54b:e70:4122 with SMTP id
- 2adb3069b0e04-54c1a0a44ffmr558768e87.21.1743589104510; 
- Wed, 02 Apr 2025 03:18:24 -0700 (PDT)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com.
- [209.85.167.44]) by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-54b0957ff0csm1585142e87.154.2025.04.02.03.18.24
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 02 Apr 2025 03:18:24 -0700 (PDT)
-Received: by mail-lf1-f44.google.com with SMTP id
- 2adb3069b0e04-54b10956398so838673e87.0
- for <buildroot@buildroot.org>; Wed, 02 Apr 2025 03:18:24 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AJvYcCXT0mMCOHWZeizKQ9bEwb7nhy4SRwBrRzVxgvS3CHxaHrnKtuTpF348A+vpajOwa5fQ2Fy93uRkCF4=@buildroot.org
-X-Received: by 2002:a05:6512:3e13:b0:54a:c4af:15 with SMTP id
- 2adb3069b0e04-54c1a1b342amr456453e87.19.1743589103846; Wed, 02 Apr 2025
- 03:18:23 -0700 (PDT)
-MIME-Version: 1.0
+ id KbropTACTjDM; Wed,  2 Apr 2025 11:08:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4FF9411F6
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A4FF9411F6;
+	Wed,  2 Apr 2025 11:08:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C60A11F
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 11:08:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 892AB6F4CE
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 11:08:48 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q2Lglnq98P_3 for <buildroot@buildroot.org>;
+ Wed,  2 Apr 2025 11:08:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E6E37610BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6E37610BD
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E6E37610BD
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 11:08:45 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 47F1835203A7; Wed,  2 Apr 2025 13:08:40 +0200 (CEST)
+Date: Wed, 2 Apr 2025 13:08:40 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: Thomas Devoogdt <thomas@devoogdt.com>
+Message-ID: <Z-0auN0f7ln-1IJH@waldemar-brodkorb.de>
 References: <Z-QAExADR8rp0Afq@waldemar-brodkorb.de>
  <20250402082625.599501-1-thomas@devoogdt.com>
+MIME-Version: 1.0
+Content-Disposition: inline
 In-Reply-To: <20250402082625.599501-1-thomas@devoogdt.com>
-From: Thomas Devoogdt <thomas@devoogdt.com>
-Date: Wed, 2 Apr 2025 12:18:12 +0200
-X-Gmail-Original-Message-ID: <CACXRmJhQkTm1zPx9M55x7HngN-CB_Q=WNSa4BAewW2KvZ0Nf3A@mail.gmail.com>
-X-Gm-Features: AQ5f1JqRJOS_jlmoOHzhoVtyrUEkRi0teAWiS8ECq8XVYMUksT_id-T--FmWl7w
-Message-ID: <CACXRmJhQkTm1zPx9M55x7HngN-CB_Q=WNSa4BAewW2KvZ0Nf3A@mail.gmail.com>
-To: Thomas Devoogdt <thomas@devoogdt.com>
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Operating-System: Linux 6.1.0-32-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1743592121; bh=60W7gT+Rw97kyCJEcn0bed5r193v2L+sIr6Ffgfq8kk=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=QBMAj/BkARZ/qhQ2Z1T2YR2bZor/nmFQcAsiMTqBWhT2QnSXObV8Gg83e16ICAltB
+ wj8IJoMsfCsjTGXeO3kh/UPMncvC7Vp29as3tdmn+V8GydhC7caAZQ76fJG7GPeFRw
+ Lrq61fhtuR4j4V2PNH0MxC/kM+ZM2HtgRd5d1nHORDUpu5hBsmWgPEBSB6Ga1M4Jrr
+ AWhTLKnaFgvBhnvPfKkn7O7jEjJz5mEprSNNtiIMGUukjuxQOkG0zXIXzLEaqs4GbF
+ Y13y12yyriSnSTZ3Wi9SV760t2GQNnENfEsPiJWSYj8wF4aLUON2uw5muiU21/llzQ
+ fgoBDnUFUIjbg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=devoogdt.com
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=QBMAj/Bk
 Subject: Re: [Buildroot] [PATCH v2] package/util-linux: bump to 2.41
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -112,76 +83,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi all,
+Hi Thomas,
 
-FYI:
+my problem with mount still exist. Could you reproduce it?
+I just use defconfig for mips64, change to uclibc-ng and
+then add util-linux mount.
 
-./utils/test-pkg -p util-linux -a
-                             arm-aarch64 [ 1/40]: OK
-                   bootlin-aarch64-glibc [ 2/40]: OK
-               bootlin-arcle-hs38-uclibc [ 3/40]: OK
-                    bootlin-armv5-uclibc [ 4/40]: OK
-                     bootlin-armv7-glibc [ 5/40]: OK
-                   bootlin-armv7m-uclibc [ 6/40]: OK
-                      bootlin-armv7-musl [ 7/40]: OK
-                bootlin-m68k-5208-uclibc [ 8/40]: OK
-               bootlin-m68k-68040-uclibc [ 9/40]: OK
-             bootlin-microblazeel-uclibc [10/40]: OK
-                bootlin-mipsel32r6-glibc [11/40]: OK
-                   bootlin-mipsel-uclibc [12/40]: OK
-                 bootlin-openrisc-uclibc [13/40]: OK
-        bootlin-powerpc64le-power8-glibc [14/40]: OK
-           bootlin-powerpc-e500mc-uclibc [15/40]: OK
-                   bootlin-riscv32-glibc [16/40]: OK
-                   bootlin-riscv64-glibc [17/40]: OK
-                    bootlin-riscv64-musl [18/40]: OK
-                 bootlin-s390x-z13-glibc [19/40]: OK
-                      bootlin-sh4-uclibc [20/40]: OK
-                   bootlin-sparc64-glibc [21/40]: OK
-                    bootlin-sparc-uclibc [22/40]: OK
-                    bootlin-x86-64-glibc [23/40]: OK
-                     bootlin-x86-64-musl [24/40]: OK
-                   bootlin-x86-64-uclibc [25/40]: OK
-                   bootlin-x86-i686-musl [26/40]: OK
-                   bootlin-xtensa-uclibc [27/40]: OK
-                            br-arm-basic [28/40]: OK
-                    br-arm-full-nothread [29/40]: OK
-                      br-arm-full-static [30/40]: OK
-                   br-i386-pentium4-full [31/40]: OK
-                      br-mips64-n64-full [32/40]: OK
-                 br-mips64r6-el-hf-glibc [33/40]: OK
-               br-powerpc-603e-basic-cpp [34/40]: OK
-               br-powerpc64-power7-glibc [35/40]: OK
-                       linaro-aarch64-be [36/40]: OK
-                          linaro-aarch64 [37/40]: OK
-                              linaro-arm [38/40]: OK
-                         sourcery-mips64 [39/40]: OK
-                           sourcery-mips [40/40]: OK
-40 builds, 0 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+best regards
+ Waldemar
 
-Kr,
+Thomas Devoogdt wrote,
 
-Thomas Devoogdt
-
-Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
->
 > From: Thomas Devoogdt <thomas.devoogdt@barco.com>
->
+> 
 > News: https://lore.kernel.org/util-linux/2cifsg7vkdiivfsmmximhbzybrsopn7zfqgwz2f6hyflh35pjr@ecyicq2cbsro/
->
+> 
 > Dropped patches which are all upstream.
 > - https://github.com/util-linux/util-linux/pull/3049
 > - https://github.com/util-linux/util-linux/pull/3383
->
+> 
 > Added some new patches. (which are also upstream)
 > - https://github.com/util-linux/util-linux/pull/3471
 > - https://github.com/util-linux/util-linux/pull/3484
->
+> 
 > Synced all license files.
->
+> 
 > Dropped the AUTORECONF call, since
 > 0001-libmount-ifdef-statx-call.patch is upstream.
->
+> 
 > Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 > ---
 > v2:
@@ -205,7 +134,7 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 >  delete mode 100644 package/util-linux/0003-autotools-define-HAVE_LIBPTHREAD-and-PTHREAD_LIBS.patch
 >  delete mode 100644 package/util-linux/0004-meson-add-HAVE_LIBPTHREAD.patch
 >  delete mode 100644 package/util-linux/0005-libuuid-support-non-cached-scenarios-when-lpthread-i.patch
->
+> 
 > diff --git a/package/util-linux/0001-misc-never-include-wchar.h.patch b/package/util-linux/0001-misc-never-include-wchar.h.patch
 > new file mode 100644
 > index 0000000000..3adfaa2261
@@ -243,7 +172,7 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > +@@ -52,14 +52,10 @@
 > + # include <ncurses/ncurses.h>
 > + #endif
-> +
+> + 
 > +-#ifdef HAVE_WIDECHAR
 > +-# include <wctype.h>
 > +-# include <wchar.h>
@@ -269,10 +198,10 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > +-#include <wchar.h>
 > +-#endif
 > + #include <stdbool.h>
-> +
+> + 
 > ++#include "widechar.h"
 > + #include "cctype.h"
-> +
+> + 
 > + /*
 > +diff --git a/include/fgetwc_or_err.h b/include/fgetwc_or_err.h
 > +index 3cf926283..f6ba71c6b 100644
@@ -281,7 +210,7 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > +@@ -1,13 +1,9 @@
 > + #ifndef UTIL_LINUX_FGETWC_OR_ERR_H
 > + #define UTIL_LINUX_FGETWC_OR_ERR_H
-> +
+> + 
 > +-#include <stdio.h>
 > +-#include <wchar.h>
 > +-#include <errno.h>
@@ -290,9 +219,9 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > + #include "c.h"
 > + #include "nls.h"
 > ++#include "widechar.h"
-> +
+> + 
 > + static inline wint_t fgetwc_or_err(FILE *stream) {
-> +       wint_t ret;
+> + 	wint_t ret;
 > +diff --git a/lib/idcache.c b/lib/idcache.c
 > +index fa77e7b07..7bae76823 100644
 > +--- a/lib/idcache.c
@@ -305,11 +234,11 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > + #include <pwd.h>
 > + #include <grp.h>
 > + #include <sys/types.h>
-> +
+> + 
 > + #include "c.h"
 > ++#include "widechar.h"
 > + #include "idcache.h"
-> +
+> + 
 > + struct identry *get_id(struct idcache *ic, unsigned long int id)
 > +diff --git a/sys-utils/irqtop.c b/sys-utils/irqtop.c
 > +index ce6a2ca5b..f05bf6bef 100644
@@ -318,14 +247,14 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > +@@ -43,13 +43,10 @@
 > + # include <ncurses/ncurses.h>
 > + #endif
-> +
+> + 
 > +-#ifdef HAVE_WIDECHAR
 > +-# include <wctype.h>
 > +-# include <wchar.h>
 > +-#endif
 > +-
 > + #include <libsmartcols.h>
-> +
+> + 
 > ++#include "c.h"
 > ++#include "widechar.h"
 > + #include "closestream.h"
@@ -363,13 +292,13 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > + #include <errno.h>
 > + #include <time.h>
 > + #include <sys/ioctl.h>
-> +
+> + 
 > + #include "c.h"
 > ++#include "widechar.h"
-> +
+> + 
 > + #ifdef __linux__
 > + # include <sys/mount.h>
-> +--
+> +-- 
 > +2.43.0
 > +
 > diff --git a/package/util-linux/0001-sys-utils-setarch.c-fix-build-with-uclibc-ng-1.0.39.patch b/package/util-linux/0001-sys-utils-setarch.c-fix-build-with-uclibc-ng-1.0.39.patch
@@ -406,12 +335,12 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > ---- a/sys-utils/setarch.c
 > -+++ b/sys-utils/setarch.c
 > -@@ -89,6 +89,11 @@
-> - # define PER_LINUX_FDPIC      (PER_LINUX | FDPIC_FUNCPTRS)
+> - # define PER_LINUX_FDPIC	(PER_LINUX | FDPIC_FUNCPTRS)
 > - #endif
-> -
+> - 
 > -+/* fallback for old uclibc-headers < 1.0.39 */
 > -+#ifndef PER_LINUX32_3GB
-> -+# define PER_LINUX32_3GB      (PER_LINUX32 | ADDR_LIMIT_3GB)
+> -+# define PER_LINUX32_3GB	(PER_LINUX32 | ADDR_LIMIT_3GB)
 > -+#endif
 > -+
 > - #define ALL_PERSONALITIES \
@@ -446,7 +375,7 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > -@@ -595,4 +595,13 @@ static inline void *reallocarray(void *ptr, size_t nmemb, size_t size)
 > - }
 > - #endif
-> -
+> - 
 > -+/*
 > -+ * thread-local storage
 > -+ */
@@ -464,13 +393,13 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > -@@ -20,11 +20,6 @@
 > - #include "randutils.h"
 > - #include "nls.h"
-> -
+> - 
 > --#ifdef HAVE_TLS
 > --#define THREAD_LOCAL static __thread
 > --#else
 > --#define THREAD_LOCAL static
 > --#endif
-> -
+> - 
 > - #ifdef HAVE_GETRANDOM
 > - # include <sys/random.h>
 > -diff --git a/libuuid/src/gen_uuid.c b/libuuid/src/gen_uuid.c
@@ -480,12 +409,12 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > -@@ -92,7 +92,6 @@
 > - #include "md5.h"
 > - #include "sha1.h"
-> -
+> - 
 > --#define THREAD_LOCAL static __thread
-> -
+> - 
 > - #ifdef _WIN32
 > - static void gettimeofday (struct timeval *tv, void *dummy)
-> ---
+> --- 
 > -2.48.1
 > -
 > diff --git a/package/util-linux/0002-lsns-fix-undefined-reference-to-add_namespace_for_ns.patch b/package/util-linux/0002-lsns-fix-undefined-reference-to-add_namespace_for_ns.patch
@@ -518,15 +447,15 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > +--- a/sys-utils/lsns.c
 > ++++ b/sys-utils/lsns.c
 > +@@ -587,7 +587,10 @@ static void add_namespace_from_sock(struct lsns *ls, pid_t pid, uint64_t fd)
-> +       if (get_namespace(ls, sb.st_ino))
-> +               goto out_nsfd;
-> +
+> + 	if (get_namespace(ls, sb.st_ino))
+> + 		goto out_nsfd;
+> + 
 > ++#ifdef USE_NS_GET_API
-> +       add_namespace_for_nsfd(ls, nsfd, sb.st_ino);
+> + 	add_namespace_for_nsfd(ls, nsfd, sb.st_ino);
 > ++#endif
 > ++
 > + out_nsfd:
-> +       close(nsfd);
+> + 	close(nsfd);
 > + out_sk:
 > +@@ -608,6 +611,7 @@ static void add_namespace_from_sock(struct lsns *ls __attribute__((__unused__)),
 > + {
@@ -537,20 +466,20 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > + static void read_opened_namespaces(struct lsns *ls, struct path_cxt *pc, pid_t pid)
 > + {
 > +@@ -627,11 +631,13 @@ static void read_opened_namespaces(struct lsns *ls, struct path_cxt *pc, pid_t p
-> +               if (st.st_dev == ls->nsfs_dev) {
-> +                       if (get_namespace(ls, st.st_ino))
-> +                               continue;
+> + 		if (st.st_dev == ls->nsfs_dev) {
+> + 			if (get_namespace(ls, st.st_ino))
+> + 				continue;
 > ++#ifdef USE_NS_GET_API
-> +                       int fd = ul_path_openf(pc, O_RDONLY, "fd/%ju", (uintmax_t) num);
-> +                       if (fd >= 0) {
-> +                               add_namespace_for_nsfd(ls, fd, st.st_ino);
-> +                               close(fd);
-> +                       }
+> + 			int fd = ul_path_openf(pc, O_RDONLY, "fd/%ju", (uintmax_t) num);
+> + 			if (fd >= 0) {
+> + 				add_namespace_for_nsfd(ls, fd, st.st_ino);
+> + 				close(fd);
+> + 			}
 > ++#endif
-> +               } else if ((st.st_mode & S_IFMT) == S_IFSOCK) {
-> +                       add_namespace_from_sock(ls, pid, num);
-> +               }
-> +--
+> + 		} else if ((st.st_mode & S_IFMT) == S_IFSOCK) {
+> + 			add_namespace_from_sock(ls, pid, num);
+> + 		}
+> +-- 
 > +2.43.0
 > +
 > diff --git a/package/util-linux/0003-autotools-define-HAVE_LIBPTHREAD-and-PTHREAD_LIBS.patch b/package/util-linux/0003-autotools-define-HAVE_LIBPTHREAD-and-PTHREAD_LIBS.patch
@@ -578,32 +507,32 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > -+++ b/configure.ac
 > -@@ -738,6 +738,13 @@ AS_IF([test x"$have_timer" = xno], [
 > - ])
-> -
-> -
+> - 
+> - 
 > -+AC_CHECK_LIB([pthread], [pthread_atfork], [
-> -+      PTHREAD_LIBS="-lpthread"
-> -+      AC_DEFINE([HAVE_LIBPTHREAD], [1], [Define if libpthred exist])
+> -+	PTHREAD_LIBS="-lpthread"
+> -+	AC_DEFINE([HAVE_LIBPTHREAD], [1], [Define if libpthred exist])
 > -+])
 > -+AC_SUBST([PTHREAD_LIBS])
 > -+
 > -+
 > - AC_CHECK_LIB([rtas], [rtas_get_sysparm], [
-> -       RTAS_LIBS="-lrtas"
-> -       AC_DEFINE([HAVE_LIBRTAS], [1], [Define if librtas exists])
+> - 	RTAS_LIBS="-lrtas"
+> - 	AC_DEFINE([HAVE_LIBRTAS], [1], [Define if librtas exists])
 > -diff --git a/libuuid/src/Makemodule.am b/libuuid/src/Makemodule.am
 > -index 867ad7be5..58b64fe9b 100644
 > ---- a/libuuid/src/Makemodule.am
 > -+++ b/libuuid/src/Makemodule.am
 > -@@ -31,7 +31,7 @@ libuuid_la_SOURCES = \
 > - EXTRA_libuuid_la_DEPENDENCIES = \
-> -       libuuid/src/libuuid.sym
-> -
+> - 	libuuid/src/libuuid.sym
+> - 
 > --libuuid_la_LIBADD       = $(LDADD) $(SOCKET_LIBS) -lpthread
 > -+libuuid_la_LIBADD       = $(LDADD) $(SOCKET_LIBS) $(PTHREAD_LIBS)
-> -
+> - 
 > - libuuid_la_CFLAGS = \
-> -       $(AM_CFLAGS) \
-> ---
+> - 	$(AM_CFLAGS) \
+> --- 
 > -2.48.1
 > -
 > diff --git a/package/util-linux/0004-meson-add-HAVE_LIBPTHREAD.patch b/package/util-linux/0004-meson-add-HAVE_LIBPTHREAD.patch
@@ -630,13 +559,13 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > -+++ b/meson.build
 > -@@ -748,6 +748,7 @@ endif
 > - conf.set('HAVE_CLOCK_GETTIME', have ? 1 : false)
-> -
+> - 
 > - thread_libs = dependency('threads')
 > -+conf.set('HAVE_LIBPTHREAD', thread_libs.found() ? 1 : false)
-> -
+> - 
 > - have = cc.has_function('timer_create')
 > - if not have
-> ---
+> --- 
 > -2.48.1
 > -
 > diff --git a/package/util-linux/0005-libuuid-support-non-cached-scenarios-when-lpthread-i.patch b/package/util-linux/0005-libuuid-support-non-cached-scenarios-when-lpthread-i.patch
@@ -686,7 +615,7 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > -+#endif
 > -+
 > - #include <signal.h>
-> -
+> - 
 > - #include "all-io.h"
 > -@@ -580,8 +583,7 @@ int __uuid_generate_time_cont(uuid_t out, int *num, uint32_t cont_offset)
 > -  * If neither of these is possible (e.g. because of insufficient permissions), it generates
@@ -696,35 +625,35 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > --/* thread local cache for uuidd based requests */
 > -+#ifdef HAVE_LIBPTHREAD
 > - THREAD_LOCAL struct {
-> -       int             num;
-> -       int             cache_size;
+> - 	int		num;
+> - 	int		cache_size;
 > -@@ -597,8 +599,10 @@ static void reset_uuidd_cache(void)
-> -       memset(&uuidd_cache, 0, sizeof(uuidd_cache));
-> -       uuidd_cache.cache_size = CS_MIN;
+> - 	memset(&uuidd_cache, 0, sizeof(uuidd_cache));
+> - 	uuidd_cache.cache_size = CS_MIN;
 > - }
 > -+#endif /* HAVE_LIBPTHREAD */
-> -
+> - 
 > - static int uuid_generate_time_generic(uuid_t out) {
 > -+#ifdef HAVE_LIBPTHREAD
-> -       static volatile sig_atomic_t atfork_registered;
-> -       time_t  now;
-> -
+> - 	static volatile sig_atomic_t atfork_registered;
+> - 	time_t	now;
+> - 
 > -@@ -651,6 +655,14 @@ static int uuid_generate_time_generic(uuid_t out) {
-> -               return 0;
-> -       }
-> -
+> - 		return 0;
+> - 	}
+> - 
 > -+#else /* !HAVE_LIBPTHREAD */
-> -+      {
-> -+              int num = 1;
-> -+              if (get_uuid_via_daemon(UUIDD_OP_TIME_UUID, out, &num) == 0)
-> -+                      return 0;
-> -+      }
+> -+	{
+> -+		int num = 1;
+> -+		if (get_uuid_via_daemon(UUIDD_OP_TIME_UUID, out, &num) == 0)
+> -+			return 0;
+> -+	}
 > -+#endif /* HAVE_LIBPTHREAD */
 > -+
-> -       return __uuid_generate_time(out, NULL);
+> - 	return __uuid_generate_time(out, NULL);
 > - }
-> -
-> ---
+> - 
+> --- 
 > -2.48.1
 > -
 > diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
@@ -756,40 +685,40 @@ Op wo 2 apr 2025 om 10:26 schreef Thomas Devoogdt <thomas@devoogdt.com>:
 > @@ -7,8 +7,8 @@
 >  # When making changes to this file, please check if
 >  # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
->
+>  
 > -UTIL_LINUX_VERSION_MAJOR = 2.40
 > -UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
 > +UTIL_LINUX_VERSION_MAJOR = 2.41
 > +UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
 >  UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
 >  UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
->
+>  
 > @@ -24,18 +24,19 @@ UTIL_LINUX_LICENSE = \
->         ISC (rfkill) \
->         MIT (hardlink, flock)
+>  	ISC (rfkill) \
+>  	MIT (hardlink, flock)
 >  UTIL_LINUX_LICENSE_FILES = README.licensing \
-> +       Documentation/licenses/COPYING.BSD-2-Clause \
->         Documentation/licenses/COPYING.BSD-3-Clause \
->         Documentation/licenses/COPYING.BSD-4-Clause-UC \
-> +       Documentation/licenses/COPYING.EUPL-1.2 \
-> +       Documentation/licenses/COPYING.GPL-2.0-only \
->         Documentation/licenses/COPYING.GPL-2.0-or-later \
-> +       Documentation/licenses/COPYING.GPL-3.0-or-later \
->         Documentation/licenses/COPYING.ISC \
->         Documentation/licenses/COPYING.LGPL-2.1-or-later \
->         Documentation/licenses/COPYING.MIT
->
+> +	Documentation/licenses/COPYING.BSD-2-Clause \
+>  	Documentation/licenses/COPYING.BSD-3-Clause \
+>  	Documentation/licenses/COPYING.BSD-4-Clause-UC \
+> +	Documentation/licenses/COPYING.EUPL-1.2 \
+> +	Documentation/licenses/COPYING.GPL-2.0-only \
+>  	Documentation/licenses/COPYING.GPL-2.0-or-later \
+> +	Documentation/licenses/COPYING.GPL-3.0-or-later \
+>  	Documentation/licenses/COPYING.ISC \
+>  	Documentation/licenses/COPYING.LGPL-2.1-or-later \
+>  	Documentation/licenses/COPYING.MIT
+>  
 >  UTIL_LINUX_CPE_ID_VENDOR = kernel
->
+>  
 > -# 0001-libmount-ifdef-statx-call.patch
 > -UTIL_LINUX_AUTORECONF = YES
 > -
 >  UTIL_LINUX_INSTALL_STAGING = YES
 >  UTIL_LINUX_DEPENDENCIES = \
->         host-pkgconf \
-> --
+>  	host-pkgconf \
+> -- 
 > 2.43.0
->
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
