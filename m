@@ -1,79 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4BB4C28B20
-	for <buildroot@archiver.kernel.org>; Wed,  2 Apr 2025 06:46:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E57D9C28B20
+	for <buildroot@archiver.kernel.org>; Wed,  2 Apr 2025 07:28:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6C66A4126A;
-	Wed,  2 Apr 2025 06:46:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wsydj0Wy6QrN; Wed,  2 Apr 2025 06:46:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D3D541275
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D3D541275;
-	Wed,  2 Apr 2025 06:46:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4DB7C117
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 06:46:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E69B5836F1
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 06:46:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7DF8883A54;
+	Wed,  2 Apr 2025 07:28:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YGTs7t_vYN_z for <buildroot@buildroot.org>;
- Wed,  2 Apr 2025 06:46:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0E9678375B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E9678375B
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0E9678375B
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 06:46:07 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 4EBFC2003CE;
- Wed,  2 Apr 2025 08:46:01 +0200 (CEST)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:44912])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 02 Apr 2025 08:46:01 +0200
-MIME-Version: 1.0
-Date: Wed, 02 Apr 2025 08:46:01 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Meena Murthy <meena.murthy@amarulasolutions.com>
-Cc: buildroot@buildroot.org, linux-amarula@amarulasolutions.com, Michael
- Trimarchi <michael@amarulasolutions.com>
-In-Reply-To: <20250401095407.488618-2-meena.murthy@amarulasolutions.com>
-References: <20250401095407.488618-2-meena.murthy@amarulasolutions.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <ad2e0671b29d4631aa255bdf573eb2f8@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1743576364;
- bh=RwHOj0KS3GUjIQ0EL6GxDDPy6zIDdx12zRZLvaG/yv0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=QiMdU56wRHv3LA8aaB6SWJBDA28P3WEo2tEn0To54YG5sNB5abG2GU+MNaXMf9n6/
- 07G7u89tfIxqvv3rjDcN6D+iia+fI2FJZO3IAcYIIZQwXFgJLfWva0ulxke+WHMpHI
- f80DwTmjOrgmmI7QGTgdEs5zo/9IwDNzn4hZV0fOWsck+Iig2Jnmd3DkNJQ9bGKPlq
- XHCWVnSQ6cFlawlOBW/O7Pvg+VwO2SS+WdEfLcGU/OEMfJVCxcRAKi2pJUBcEtNljY
- E3TlpDWlfJvs1Qd3MQf+ZJApH+dYkI+M1bMoJtNET3zgfgvS3gO/8E4HJDs3acFeUK
- AZ9n4PL+qyQng==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=QiMdU56w
-Subject: Re: [Buildroot] [PATCH v4] configs/engicam_px30_core_defconfig: new
- defconfig
+ id ku-ySDkUTrLx; Wed,  2 Apr 2025 07:28:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A81DE83A45
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A81DE83A45;
+	Wed,  2 Apr 2025 07:28:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 792BA11F
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 07:28:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5FD03411EB
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 07:28:40 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6OEipAdzJkdI for <buildroot@buildroot.org>;
+ Wed,  2 Apr 2025 07:28:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6807D4126B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6807D4126B
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 07:28:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 557B083A80; Wed,  2 Apr 2025 07:28:39 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Wed, 2 Apr 2025 09:28:21 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6e6bd098c31cf981c1498f105cf35405e1518c4c
+X-Git-Newrev: 57647739576ca542bee6e05c5c839f48e86ce98b
+X-Patchwork-Hint: ignore
+Message-Id: <20250402072839.557B083A80@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/go: security bump to version 1.23.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,33 +58,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 01/04/2025 11:54, Meena Murthy wrote:
-> Add initial support for Engicam PX30 SOM board
-> with below features:
-> - U-Boot 2024.01
-> - Linux 6.4.16
-> - Default packages from buildroot
-> 
-> px30 ctouch2 with 10 inches display
-> 
-> https://www.engicam.com/vis-prod/C-Touch-2-0-Carrier-Board/ \
-> 	General-purpose-carrier-board-with-capacitive-touch-interface-EDIMM-20-compliant
-> 
-> Signed-off-by: Meena Murthy <meena.murthy@amarulasolutions.com>
-> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=57647739576ca542bee6e05c5c839f48e86ce98b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
-For info, I also made two minor corrections. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/6e6bd098c31cf981c1498f105cf35405e1518c4c
+go1.23.8 (released 2025-04-01) includes security fixes to the net/http package,
+as well as bug fixes to the runtime and the go command.
 
-Best regards,
+https://go.dev/doc/devel/release#go1.23.8
+https://github.com/golang/go/issues?q=milestone%3AGo1.23.8+label%3ACherryPickApproved
 
-Julien.
+Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/go/go.hash | 14 +++++++-------
+ package/go/go.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/package/go/go.hash b/package/go/go.hash
+index 8b9541642d..48ba6b7fd9 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,9 +1,9 @@
+ # sha256 checksum from https://go.dev/dl/
+-sha256  7cfabd46b73eb4c26b19d69515dd043d7183a6559acccd5cfdb25eb6b266a458  go1.23.7.src.tar.gz
+-sha256  9115f7d751efe5b17b63a7630d24cd0a2479976465eecb277b5deec8aa0f4143  go1.23.7.linux-386.tar.gz
+-sha256  4741525e69841f2e22f9992af25df0c1112b07501f61f741c12c6389fcb119f3  go1.23.7.linux-amd64.tar.gz
+-sha256  597acbd0505250d4d98c4c83adf201562a8c812cbcd7b341689a07087a87a541  go1.23.7.linux-arm64.tar.gz
+-sha256  c9e9ecd6a8cf1429f1c65d81115c450258258ac65833d95a82d5f4e5ad7d2d7a  go1.23.7.linux-armv6l.tar.gz
+-sha256  3ffc310bfd11fd0bcc713a764a0f7252c4d52d03f12abebfaebaaae77e027028  go1.23.7.linux-ppc64le.tar.gz
+-sha256  af1d4c5d01e32c2cf6e3cc00e44cb240e1a6cef539b28a64389b2b9ca284ac6c  go1.23.7.linux-s390x.tar.gz
++sha256  0ca1f1e37ea255e3ce283af3f4e628502fb444587da987a5bb96d6c6f15930d4  go1.23.8.src.tar.gz
++sha256  714b9d004063bfa27686f9ff0e5648bb190b3a5bc1e86b0aa16c134d8d8c315f  go1.23.8.linux-386.tar.gz
++sha256  45b87381172a58d62c977f27c4683c8681ef36580abecd14fd124d24ca306d3f  go1.23.8.linux-amd64.tar.gz
++sha256  9d6d938422724a954832d6f806d397cf85ccfde8c581c201673e50e634fdc992  go1.23.8.linux-arm64.tar.gz
++sha256  d14e0bea9fb25344a0460f395880d5589bbcd413ffd5555be48e46c0de084437  go1.23.8.linux-armv6l.tar.gz
++sha256  0cadab469e612b159f5f68b1a30d75aa7b7e1ed5292746005a6a3c8ff04e6f35  go1.23.8.linux-ppc64le.tar.gz
++sha256  cbe954ee534eb02aa782639716d8c25706dd171445f7c8336bd2fc0b8f6fe38e  go1.23.8.linux-s390x.tar.gz
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index da380483ef..d618a7a262 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.23.7
++GO_VERSION = 1.23.8
+ 
+ HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
+ HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
