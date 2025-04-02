@@ -4,49 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E026C3601B
-	for <buildroot@archiver.kernel.org>; Wed,  2 Apr 2025 19:15:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B8B0C36018
+	for <buildroot@archiver.kernel.org>; Wed,  2 Apr 2025 19:26:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A37B6FA2F;
-	Wed,  2 Apr 2025 19:15:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04A366F7A4;
+	Wed,  2 Apr 2025 19:26:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AtmDJvGCViMA; Wed,  2 Apr 2025 19:15:05 +0000 (UTC)
+ id hWzv-bcBVSi3; Wed,  2 Apr 2025 19:26:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 576CA6FA28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4E5056102A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 576CA6FA28;
-	Wed,  2 Apr 2025 19:15:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6CC9411F
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 19:15:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4E5056102A;
+	Wed,  2 Apr 2025 19:26:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 68D48123
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 19:26:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E86C60606
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 19:15:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 52DD840E48
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 19:26:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lksnr6uDVJok for <buildroot@buildroot.org>;
- Wed,  2 Apr 2025 19:15:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8642161AF9
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8642161AF9
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 19:15:02 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 73ADB83A96; Wed,  2 Apr 2025 19:15:02 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 2 Apr 2025 21:14:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e6418ecad427f509d71f6d62920b753cf754012a
-X-Git-Newrev: 0f4fef076f99fcfc7187223a6bc154d0a751e963
-X-Patchwork-Hint: ignore
-Message-Id: <20250402191502.73ADB83A96@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libfreeglut: add upstream security
- fix for CVE-2024-2425{8, 9}
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gSjJP-R7UQgl for <buildroot@buildroot.org>;
+ Wed,  2 Apr 2025 19:25:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
+ helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4B30D40E20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B30D40E20
+Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4B30D40E20
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 19:25:59 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 5429D1C106E; Wed,  2 Apr 2025 21:25:57 +0200 (CEST)
+Message-ID: <fbd8d037-99f7-40ac-bc1e-4e92550948a5@rnout.be>
+Date: Wed, 2 Apr 2025 21:25:55 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Waldemar Brodkorb <wbx@openadk.org>, buildroot@buildroot.org
+References: <Z7eHIpwpvMIoCk3I@waldemar-brodkorb.de>
+Content-Language: en-GB
+In-Reply-To: <Z7eHIpwpvMIoCk3I@waldemar-brodkorb.de>
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rnout.be; s=dkim; 
+ t=1743621957; h=from:subject:date:message-id:to:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=10Krlr/m/fNVddu2sTH1apufS/vLaZ2V9YT/T/G8UkI=;
+ b=S1JEXqH6xgEyqtvST5HTv+wwFplqmf+JmPONIFXtLv3d/RlYY1pjKyFB732Fzsj4W6dfS3
+ XNTCQOWvHteKAjZuS7F2ZPGVnel4f7kEeB8JrQ6j6BH/WEfJHFb45F+xtFrMb8ziUWnhAz
+ aUcLnbiEZexde3RXrarB59o6EEi/EBqteqsf7/wlv64hQIym2o+dPk8Ony6KaaVCRvuJJG
+ MaHLTSzZtfkcW/ZQmvD47AZFCh/dAsQoR59Uuv14pr5BlnoDNo55WOg2k/F+z2QJp74z9K
+ BuTtkB1bR+K4SyqUuMi7FULOtxMgJDbtSy4pc7M3pkL1uul7ArJ+wjT2BWySYA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+Subject: Re: [Buildroot] [PATCH] package/libjwt: update to 3.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,135 +74,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6738268824520810954=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6738268824520810954==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=0f4fef076f99fcfc7187223a6bc154d0a751e963
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes the following security issues:
-
-- CVE-2024-24258: freeglut 3.4.0 was discovered to contain a memory leak
-via the menuEntry variable in the glutAddSubMenu function.
-- CVE-2024-24259: freeglut through 3.4.0 was discovered to contain a
-memory leak via the menuEntry variable in the glutAddMenuEntry
-function.
-
-https://nvd.nist.gov/vuln/detail/CVE-2024-24258
-https://nvd.nist.gov/vuln/detail/CVE-2024-24259
-
-The CVEs are not technically reported for the libfreeglut package
-itself (which doesn't have a CPE identifier) but for mupdf.
-
-Note that mudpf provides its own (old) version of freeglut, but our
-mupdf package uses the Buildroot-provided freeglut (which now contains
-the fix).
-
-It also has to be noted that a more recent release of libfreeglut
-exists upstream, and it fixes the same CVEs.  Bumping our package
-version however requires more work that can be done separately.
-Including this patch first also has the advantage that it can easily
-be backported wherever it's needed.
-
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
----
- ...-Plug-memory-leak-that-happens-upon-error.patch | 54 ++++++++++++++++++++++
- package/mupdf/mupdf.mk                             |  6 +++
- 2 files changed, 60 insertions(+)
-
-diff --git a/package/libfreeglut/0001-Plug-memory-leak-that-happens-upon-error.patch b/package/libfreeglut/0001-Plug-memory-leak-that-happens-upon-error.patch
-new file mode 100644
-index 0000000000..d09e9befb3
---- /dev/null
-+++ b/package/libfreeglut/0001-Plug-memory-leak-that-happens-upon-error.patch
-@@ -0,0 +1,54 @@
-+From 9ad320c1ad1a25558998ddfe47674511567fec57 Mon Sep 17 00:00:00 2001
-+From: Sebastian Rasmussen <sebras@gmail.com>
-+Date: Mon, 12 Feb 2024 14:46:22 +0800
-+Subject: [PATCH] Plug memory leak that happens upon error.
-+
-+If fgStructure.CurrentMenu is set when glutAddMenuEntry() or
-+glutAddSubMenu() is called the allocated menuEntry variable will
-+leak. This commit postpones allocating menuEntry until after the
-+error checks, thereby plugging the memory leak.
-+
-+This fixes CVE-2024-24258 and CVE-2024-24259.
-+Upstream: https://github.com/freeglut/freeglut/commit/9ad320c1ad1a25558998ddfe47674511567fec57
-+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-+---
-+ src/fg_menu.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/fg_menu.c b/src/fg_menu.c
-+index 53112dc2..0da88901 100644
-+--- a/src/fg_menu.c
-++++ b/src/fg_menu.c
-+@@ -864,12 +864,12 @@ void FGAPIENTRY glutAddMenuEntry( const char* label, int value )
-+ {
-+     SFG_MenuEntry* menuEntry;
-+     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutAddMenuEntry" );
-+-    menuEntry = (SFG_MenuEntry *)calloc( sizeof(SFG_MenuEntry), 1 );
-+ 
-+     freeglut_return_if_fail( fgStructure.CurrentMenu );
-+     if (fgState.ActiveMenus)
-+         fgError("Menu manipulation not allowed while menus in use.");
-+ 
-++    menuEntry = (SFG_MenuEntry *)calloc( sizeof(SFG_MenuEntry), 1 );
-+     menuEntry->Text = strdup( label );
-+     menuEntry->ID   = value;
-+ 
-+@@ -888,7 +888,6 @@ void FGAPIENTRY glutAddSubMenu( const char *label, int subMenuID )
-+     SFG_Menu *subMenu;
-+ 
-+     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutAddSubMenu" );
-+-    menuEntry = ( SFG_MenuEntry * )calloc( sizeof( SFG_MenuEntry ), 1 );
-+     subMenu = fgMenuByID( subMenuID );
-+ 
-+     freeglut_return_if_fail( fgStructure.CurrentMenu );
-+@@ -897,6 +896,7 @@ void FGAPIENTRY glutAddSubMenu( const char *label, int subMenuID )
-+ 
-+     freeglut_return_if_fail( subMenu );
-+ 
-++    menuEntry = ( SFG_MenuEntry * )calloc( sizeof( SFG_MenuEntry ), 1 );
-+     menuEntry->Text    = strdup( label );
-+     menuEntry->SubMenu = subMenu;
-+     menuEntry->ID      = -1;
-+-- 
-+2.48.1
-+
-diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
-index 9eecb84232..6b666033eb 100644
---- a/package/mupdf/mupdf.mk
-+++ b/package/mupdf/mupdf.mk
-@@ -21,6 +21,12 @@ MUPDF_DEPENDENCIES = \
- 	lcms2 openjpeg \
- 	zlib
- 
-+# libfreeglut/0001-Plug-memory-leak-that-happens-upon-error.patch
-+# Fix is in libfreeglut, but CVE applied to mupdf.
-+MUPDF_IGNORE_CVES = \
-+	CVE-2024-24258 \
-+	CVE-2024-24259
-+
- # mupdf doesn't use CFLAGS and LIBS but XCFLAGS and XLIBS instead.
- # with USE_SYSTEM_LIBS it will try to use system libraries instead of the bundled ones.
- MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
-
---===============6738268824520810954==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6738268824520810954==--
+Ck9uIDIwLzAyLzIwMjUgMjA6NDgsIFdhbGRlbWFyIEJyb2Rrb3JiIHdyb3RlOgo+IEZvciBhIGNv
+bXBsZXRlIGNoYW5nZWxvZyBzZWUgaGVyZToKPiBodHRwczovL2dpdGh1Yi5jb20vYmVubWNvbGxp
+bnMvbGliand0L2NvbXBhcmUvdjEuMTcuMi4uLnYzLjIuMAo+Cj4gQ29udmVydCB0byBjbWFrZSBp
+bmZyYXN0cnVjdHVyZSBhcyBhdXRvdG9vbHMgd2VyZSByZW1vdmVkCj4gdXBzdHJlYW0uCj4KPiBT
+aWduZWQtb2ZmLWJ5OiBXYWxkZW1hciBCcm9ka29yYiA8d2J4QG9wZW5hZGsub3JnPgoKIMKgQXBw
+bGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KCltzbmlwXQo+ICAgaWZlcSAoJChCUjJfUEFDS0FHRV9P
+UEVOU1NMKSx5KQo+IC1MSUJKV1RfQ09ORl9PUFRTICs9IC0td2l0aC1vcGVuc3NsCj4gK0xJQkpX
+VF9DT05GX09QVFMgKz0gLURXSVRIX09QRU5TU0w9T04KPiAgIExJQkpXVF9ERVBFTkRFTkNJRVMg
+Kz0gb3BlbnNzbAo+ICAgZWxzZQo+IC1MSUJKV1RfQ09ORl9PUFRTICs9IC0td2l0aG91dC1vcGVu
+c3NsCj4gK0xJQkpXVF9DT05GX09QVFMgKz0gLURXSVRIX0dOVVRMUz1PTgo+ICAgTElCSldUX0RF
+UEVOREVOQ0lFUyArPSBnbnV0bHMKPiAgIGVuZGlmCj4gICAKPiAtJChldmFsICQoYXV0b3Rvb2xz
+LXBhY2thZ2UpKQo+ICsKCiDCoFlvdSBpbnRyb2R1Y2VkIGEgZG91YmxlIGVtcHR5IGxpbmUgaGVy
+ZS4gSSBmaXhlZCB0aGF0LgoKCiDCoFJlZ2FyZHMsCiDCoEFybm91dAoKCj4gKyQoZXZhbCAkKGNt
+YWtlLXBhY2thZ2UpKQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
+Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
