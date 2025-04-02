@@ -1,105 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F23BC28B20
-	for <buildroot@archiver.kernel.org>; Wed,  2 Apr 2025 18:36:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55B33C28B20
+	for <buildroot@archiver.kernel.org>; Wed,  2 Apr 2025 18:51:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 18C61812B7;
-	Wed,  2 Apr 2025 18:36:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F284460AB3;
+	Wed,  2 Apr 2025 18:51:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CcPc-mr4Tqfv; Wed,  2 Apr 2025 18:36:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5IMJHJaoKkxU; Wed,  2 Apr 2025 18:51:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45A89812E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E2886F755
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 45A89812E1;
-	Wed,  2 Apr 2025 18:36:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B035B117
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 18:36:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E2886F755;
+	Wed,  2 Apr 2025 18:51:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F4E0123
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 18:51:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96ED340257
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 18:36:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 30F514062A
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 18:51:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2EelMp7qHaoo for <buildroot@buildroot.org>;
- Wed,  2 Apr 2025 18:36:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::433; helo=mail-pf1-x433.google.com;
- envelope-from=charlie@rivosinc.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 05D7C4021A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05D7C4021A
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com
- [IPv6:2607:f8b0:4864:20::433])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 05D7C4021A
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 18:36:44 +0000 (UTC)
-Received: by mail-pf1-x433.google.com with SMTP id
- d2e1a72fcca58-7396f13b750so105660b3a.1
- for <buildroot@buildroot.org>; Wed, 02 Apr 2025 11:36:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1743619004; x=1744223804;
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=ZTpL1ZRPJWD/gQeHthVxq5VrQRWBBj3xxYA2xbgAQnU=;
- b=CiQAUVT1Kd8/YrtOa8m04MgU1VSo2FOu5nkSPLAUaBmb/59WVHfCylNrjCp9vr7lWT
- zqTT3mvuhGeqYHK7ib+j7XJEUV2vBOKyNyw//ZHox7EOpUkwXYj+zib+uCqW4JsIdGBe
- gZjRcYFM3VDVO72yH3gnKub1THFf1ezZnvRlPRulLcxDeAoe1i/jGg1sqkksxt9UF67b
- RbVszTQjhuex9g5hWjYCO1/mTslzvozM5MnJ7tw+2x1CvMYkeVcRDH2sZboMlqZnkPPM
- ApbVBncehJ1pvr1fMf1gMKBnZZ1AqL52hbkEgxa0yhsDxmLaKPrqvkeN/L1JbaE1+n0Q
- 9w1g==
-X-Gm-Message-State: AOJu0YwEk69p9YrGes7kW0XdNshvDBfyj0G2jnPH53oFAiG2qu7hPi0O
- 4SNUdLBIqVjUkvzePlr1s3Y8hXGyYJH0VpRhOwqQnwY5aksDjNsE+LLB4Mx2Jfp7UDHhiEJh9gI
- W
-X-Gm-Gg: ASbGncs0fZRUTsm5dy64HWRPAGHTztbzeSrTaShWRJrepgl8lXCbarmHcuCWLHMT9Qu
- jBk2z7vHvmjaqn0oX4kG9H+V43fhiHm8mbQehReW6SboWYPZTSfWdJ4zpwrc+WeQL4hhOkw2KpI
- T1f4CfIRxTo3P9Q0O7agpyYKTuRaJBIkgpWSh9RXmSM5JZw6C6yvC+wNaREAbYWzkqKoY1JegCF
- uXeXmRDAaKIJEzqLjcHnvEYxYTlEwVGC42+ZdhRoscimN0suTVYhwMbGZi2caUg5bJ4GmABErb3
- jXHc3sVANseswdIxSTRFEbDBbXk5oW/XB0E=
-X-Google-Smtp-Source: AGHT+IE0sBBXMXMTg1JFkMoaXeQ3uYXcw4Lvub67CeFoDq6Ur0htj9UReON1lQJA0Fd9j1tSWdrbdQ==
-X-Received: by 2002:a05:6a20:d704:b0:1f5:717b:46dc with SMTP id
- adf61e73a8af0-200e4ccd906mr4617686637.27.1743619004277; 
- Wed, 02 Apr 2025 11:36:44 -0700 (PDT)
-Received: from ghost ([50.145.13.30]) by smtp.gmail.com with ESMTPSA id
- 41be03b00d2f7-af93b6a0948sm8653937a12.31.2025.04.02.11.36.43
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Apr 2025 11:36:43 -0700 (PDT)
-Date: Wed, 2 Apr 2025 11:36:41 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Message-ID: <Z-2DuYT4ymI3vNBn@ghost>
-References: <20250331-bump_linux_pam_1-7-0-v1-1-dfc4b55a0dd8@rivosinc.com>
- <f0605945c9018fab7218ae831b193b3b@free.fr>
+ id SYEftubleeqo for <buildroot@buildroot.org>;
+ Wed,  2 Apr 2025 18:51:11 +0000 (UTC)
+X-Greylist: delayed 303 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 02 Apr 2025 18:51:10 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DDC564021A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DDC564021A
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
+ helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DDC564021A
+ for <buildroot@buildroot.org>; Wed,  2 Apr 2025 18:51:10 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 4DB911C10EB; Wed,  2 Apr 2025 20:46:05 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: Arnout Vandecappelle <arnout@rnout.be>
+Date: Wed,  2 Apr 2025 20:45:56 +0200
+Message-ID: <20250402184557.321089-1-arnout@rnout.be>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <f0605945c9018fab7218ae831b193b3b@free.fr>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1743619004; x=1744223804;
- darn=buildroot.org; 
- h=in-reply-to:content-disposition:mime-version:references:message-id
- :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
- bh=ZTpL1ZRPJWD/gQeHthVxq5VrQRWBBj3xxYA2xbgAQnU=;
- b=U5UKUgUKaPnA8Vxn6wCtDAe6dmFrTQqjjR4Vrwss4Vo2dxp0uTZ1hMMVqn519QekzI
- eHNCXk1CY9ptHm5dmygfpDcc4NTPfbInxz/2ISHZ6gXv9JH8PN8OryX+4UQggeJkio00
- eJl8WDnfqFNg5AnqVA50tfS/tZRwSueTNOILwsrwgs5jr4qvNSlmHSUrH29zDi5nvMk2
- NDatkwger4OiwFshHmEVZ4SIfJ4nZgHeZIP8c8sUDKQJvPIE8OgNZJN1eXsDc0zOouId
- CLLnFBY5TKXx8XbKdR10/wsdcEm2mrmGjAU6bNMVQ84v1MDUpvGb3yluSwrCgQFDrGxQ
- wPiA==
+ d=rnout.be; s=dkim; 
+ t=1743619565; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=GnEnybl2h9Kriy008fupV0WfodKSm5Z8VYsgU75afT0=;
+ b=mnSrlpWWcJQ3q1k5C3zlW0jfCxYzxTR2/bswS9yf+hExN50JkQE1S2JWAi1tmfkVk2FENW
+ Krcsqnyb7J8KFueIVgrARlGHijg5ldTAZdhXu4Cf767ExoipC288tj5qvln+DNVnycarxC
+ tG/8n6KFZHQ6nFdNFikIIiyFbPKIb12fNL68+Atp9eluN+0tlp9Mgsw1UW6VlnMpyG5y1B
+ tQRlRZWAf/8hLRDCnlZdXQG7j1Kjxa0dOEJIbFfaj+m5lCFGk/Z8k/kgk+H47M9WUlY9rb
+ 5ugc57hu1XFJr12NL2H8moDh0cvwktPO7S7eFRpCRHu+OQw3a48pRcRi/4WkUA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=rivosinc.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rivosinc-com.20230601.gappssmtp.com
- header.i=@rivosinc-com.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=U5UKUgUK
-Subject: Re: [Buildroot] [PATCH] package/linux-pam: bump to version 1.7.0
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+Subject: [Buildroot] [PATCH] DEVELOPERS: change arnout's address
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,65 +70,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, Apr 01, 2025 at 09:00:07PM +0200, Julien Olivain wrote:
-> Hi Charlies,
-> 
-> Thanks for the patch.
-> 
-> On 01/04/2025 04:57, Charlie Jenkins wrote:
-> > Bump to latest version. Remove patch included in release and fixup the
-> > configure options due to linux-pam migrating to the Meson build system.
-> > 
-> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> [...]
-> > diff --git a/package/linux-pam/linux-pam.mk
-> > b/package/linux-pam/linux-pam.mk
-> > index 23b09efbaea6a148924bc0eb7721e6cbec7f8e6b..4f18a12c2059e70498ecb0adb1b23dff2fa04388
-> > 100644
-> > --- a/package/linux-pam/linux-pam.mk
-> > +++ b/package/linux-pam/linux-pam.mk
-> > @@ -4,17 +4,15 @@
-> >  #
-> > ################################################################################
-> > 
-> > -LINUX_PAM_VERSION = 1.6.1
-> > +LINUX_PAM_VERSION = 1.7.0
-> 
-> This new version seems to introduce new build failures. See: [1]
-> 
-> Apparently, setting BR2_PACKAGE_LINUX_PAM_LASTLOG=y requires a libc
-> with the logwtmp() function. Maybe this option should depends on !musl.
-> See for example [2].
-> 
-> Also, the bootlin-microblazeel-uclibc toolchain is failing. It seems
-> to be due to linker warnings to be treated as errors. Maybe a fix
-> like [3] should be added.
-> 
-> Could you have a look to those issues and send an updated patch,
-> please?
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks! There's a third problem I am not sure how to resolve. The
-problem is:
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a26a4cbe68..1c84f95943 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -278,7 +278,7 @@ F:	package/espeak/
+ N:	Arno Messiaen <arnomessiaen@gmail.com>
+ F:	package/python-aiohttp-sse-client/
+ 
+-N:	Arnout Vandecappelle <arnout@mind.be>
++N:	Arnout Vandecappelle <arnout@rnout.be>
+ F:	package/arp-scan/
+ F:	package/dehydrated/
+ F:	package/dracut/
+-- 
+2.49.0
 
-<path to buildroot>/output/host/opt/ext-toolchain/bin/../lib/gcc/microblazeel-buildroot-linux-uclibc/13.3.0/../../../../microblazeel-buildroot-linux-uclibc/bin/ld: FDE encoding in <path to buildroot>/output/host/opt/ext-toolchain/bin/../lib/gcc/microblazeel-buildroot-linux-uclibc/13.3.0/libgcc.a(_umoddi3.o)(.eh_frame) prevents .eh_frame_hdr table being created
-
-Do you know how to resolve this?
-
-- Charlie
-
-> 
-> Best regards,
-> 
-> Julien.
-> 
-> [1] https://gitlab.com/jolivain/buildroot/-/pipelines/1747133176
-> [2] https://gitlab.com/buildroot.org/buildroot/-/commit/14532e4fc6e02a755b30e634fd60f53b92655bcd
-> [3] https://gitlab.com/buildroot.org/buildroot/-/commit/132eec5c47f5f9542d0c2e93d12341d624627de0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
