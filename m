@@ -4,50 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3795C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:45:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E3B1C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:45:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9354C60FAB;
-	Mon, 19 May 2025 10:45:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6BAFF60F9B;
+	Mon, 19 May 2025 10:45:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 39_XJ03yiak1; Mon, 19 May 2025 10:45:49 +0000 (UTC)
+ id bS4Y1GeG07df; Mon, 19 May 2025 10:45:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D530615F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6049761601
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D530615F9;
-	Mon, 19 May 2025 10:45:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6049761601;
+	Mon, 19 May 2025 10:45:52 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 15769193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A8B51BF
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D76E3411FD
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 054CA41204
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BpAH3gphwF09 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:51 +0000 (UTC)
+ id 1rCN0SKRytLn for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DE7240DF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0001E40E11
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4DE7240DF2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0001E40E11
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4A38784A21; Mon, 19 May 2025 10:39:46 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id EBF5283A2E; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 29 Mar 2025 16:55:32 +0100
+Date: Wed, 2 Apr 2025 21:17:22 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b974c91fe438541781c2df6f4fe0b8a48ab0a124
-X-Git-Newrev: 9a9580622545db56e97fb8e9778f3a17dab9cbc3
+X-Git-Oldrev: 0f4fef076f99fcfc7187223a6bc154d0a751e963
+X-Git-Newrev: 770f9154978c40ce5b7718174108b37c5310869d
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103946.4A38784A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/amazon-ecr-credential-helper: new package
+Message-Id: <20250519103946.EBF5283A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libjwt: update to 3.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,87 +57,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a9580622545db56e97fb8e9778f3a17dab9cbc3
+commit: https://git.buildroot.net/buildroot/commit/?id=770f9154978c40ce5b7718174108b37c5310869d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Christian Stewart <christian@aperture.us>
-[Julien: reflow Config.in help to fix check-package error]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/Config.in                                    |  1 +
- package/amazon-ecr-credential-helper/Config.in       |  9 +++++++++
- .../amazon-ecr-credential-helper.hash                |  2 ++
- .../amazon-ecr-credential-helper.mk                  | 20 ++++++++++++++++++++
- 4 files changed, 32 insertions(+)
+For a complete changelog see here:
+https://github.com/benmcollins/libjwt/compare/v1.17.2...v3.2.0
 
-diff --git a/package/Config.in b/package/Config.in
-index d8751fc19f..69bf526dc9 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2809,6 +2809,7 @@ endmenu
+Convert to cmake infrastructure as autotools were removed
+upstream.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+[Arnout: remove redundant empty line]
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ package/libjwt/libjwt.hash |  2 +-
+ package/libjwt/libjwt.mk   | 13 +++++++------
+ 2 files changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/package/libjwt/libjwt.hash b/package/libjwt/libjwt.hash
+index 0049772a78..8e59d2284b 100644
+--- a/package/libjwt/libjwt.hash
++++ b/package/libjwt/libjwt.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f11c4544f61a31f105720b8329409fea009d6f9ef41c9361f98c2de48152eeae  libjwt-1.17.2.tar.bz2
++sha256  17ee4e25adfbb91003946af967ff04068a5c93d6b51ad7ad892f1441736b71b9  libjwt-3.2.0.tar.xz
+ sha256  3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04  LICENSE
+diff --git a/package/libjwt/libjwt.mk b/package/libjwt/libjwt.mk
+index 9f94c8683e..29ca9cebf4 100644
+--- a/package/libjwt/libjwt.mk
++++ b/package/libjwt/libjwt.mk
+@@ -4,23 +4,24 @@
+ #
+ ################################################################################
  
- menu "System tools"
- 	source "package/acl/Config.in"
-+	source "package/amazon-ecr-credential-helper/Config.in"
- 	source "package/android-tools/Config.in"
- 	source "package/atop/Config.in"
- 	source "package/attr/Config.in"
-diff --git a/package/amazon-ecr-credential-helper/Config.in b/package/amazon-ecr-credential-helper/Config.in
-new file mode 100644
-index 0000000000..93bfb51e4a
---- /dev/null
-+++ b/package/amazon-ecr-credential-helper/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_AMAZON_ECR_CREDENTIAL_HELPER
-+	bool "amazon-ecr-credential-helper"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	help
-+	  The Amazon ECR Docker Credential Helper is a credential
-+	  helper for the Docker daemon that makes it easier to use
-+	  Amazon Elastic Container Registry.
+-LIBJWT_VERSION = 1.17.2
++LIBJWT_VERSION = 3.2.0
+ LIBJWT_SITE = https://github.com/benmcollins/libjwt/releases/download/v$(LIBJWT_VERSION)
+-LIBJWT_SOURCE = libjwt-$(LIBJWT_VERSION).tar.bz2
++LIBJWT_SOURCE = libjwt-$(LIBJWT_VERSION).tar.xz
+ LIBJWT_DEPENDENCIES = host-pkgconf jansson
+ LIBJWT_INSTALL_STAGING = YES
+ LIBJWT_LICENSE = MPL-2.0
+ LIBJWT_LICENSE_FILES = LICENSE
+ LIBJWT_CPE_ID_VENDOR = bencollins
+ LIBJWT_CPE_ID_PRODUCT = jwt_c_library
+-LIBJWT_CONF_OPTS = --without-examples
 +
-+	  https://github.com/awslabs/amazon-ecr-credential-helper
-diff --git a/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.hash b/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.hash
-new file mode 100644
-index 0000000000..6ebcd4e204
---- /dev/null
-+++ b/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.hash
-@@ -0,0 +1,2 @@
-+# Localy computed
-+sha256  53765b3e441a0e785131731d0cee4c0e2b2a22b90e523e9e4ec3e461c0ec5b05  amazon-ecr-credential-helper-v0.9.1-git4-go2.tar.gz
-diff --git a/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk b/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk
-new file mode 100644
-index 0000000000..acfeea16fb
---- /dev/null
-+++ b/package/amazon-ecr-credential-helper/amazon-ecr-credential-helper.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# amazon-ecr-credential-helper
-+#
-+################################################################################
-+
-+AMAZON_ECR_CREDENTIAL_HELPER_VERSION = v0.9.1
-+AMAZON_ECR_CREDENTIAL_HELPER_SITE = https://github.com/awslabs/amazon-ecr-credential-helper
-+AMAZON_ECR_CREDENTIAL_HELPER_SITE_METHOD = git
-+
-+AMAZON_ECR_CREDENTIAL_HELPER_LICENSE = Apache-2.0
-+AMAZON_ECR_CREDENTIAL_HELPER_LICENSE_FILES = LICENSE
-+
-+AMAZON_ECR_CREDENTIAL_HELPER_SUBDIR = ecr-login
-+
-+AMAZON_ECR_CREDENTIAL_HELPER_GOMOD = ./cli
-+AMAZON_ECR_CREDENTIAL_HELPER_BUILD_TARGETS = docker-credential-ecr-login
-+AMAZON_ECR_CREDENTIAL_HELPER_INSTALL_BINS = docker-credential-ecr-login
-+
-+$(eval $(golang-package))
++LIBJWT_CONF_OPTS += -DWITH_TESTS=OFF
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-LIBJWT_CONF_OPTS += --with-openssl
++LIBJWT_CONF_OPTS += -DWITH_OPENSSL=ON
+ LIBJWT_DEPENDENCIES += openssl
+ else
+-LIBJWT_CONF_OPTS += --without-openssl
++LIBJWT_CONF_OPTS += -DWITH_GNUTLS=ON
+ LIBJWT_DEPENDENCIES += gnutls
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
