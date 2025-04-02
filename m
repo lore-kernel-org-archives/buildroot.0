@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3A9DC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:45:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEA23C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:46:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D11B61603;
-	Mon, 19 May 2025 10:45:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8CD2E80DEC;
+	Mon, 19 May 2025 10:46:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bXylGwkIJFUS; Mon, 19 May 2025 10:45:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Fb2gH0M3FbAx; Mon, 19 May 2025 10:46:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D8BD061615
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9635F80E46
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8BD061615;
-	Mon, 19 May 2025 10:45:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 72244E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9635F80E46;
+	Mon, 19 May 2025 10:46:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1802F193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ADA3741802
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C76240664
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p9FL1N7HQVND for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QeHb8ii5WyPH for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3565B4111A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6F2B40E0E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3565B4111A
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E6F2B40E0E
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 32E1E873D4; Mon, 19 May 2025 10:39:54 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id E227B8725C; Mon, 19 May 2025 10:39:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 21 Apr 2025 16:24:44 +0200
+Date: Wed, 2 Apr 2025 21:14:34 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: aaf93ba27f58496e957155ade6213158f3114a34
-X-Git-Newrev: 104449d0cb8db537fa7d3dc0502e4dd7af7500b3
+X-Git-Oldrev: e6418ecad427f509d71f6d62920b753cf754012a
+X-Git-Newrev: 0f4fef076f99fcfc7187223a6bc154d0a751e963
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103954.32E1E873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/file: bump version to
- 5.46
+Message-Id: <20250519103946.E227B8725C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libfreeglut: add
+ upstream security fix for CVE-2024-2425{8, 9}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,83 +58,137 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2268110740501548537=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=104449d0cb8db537fa7d3dc0502e4dd7af7500b3
+--===============2268110740501548537==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=0f4fef076f99fcfc7187223a6bc154d0a751e963
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-See release announce [1].
+Fixes the following security issues:
 
-The src/mygetopt.h file license was updated from BSD-4-Clause to
-BSD-2-Clause in upstream commit [2]. This change makes this file using
-the same license as most other files. So this commit removes the
-license entry for this file and update the _LICENSE accordingly.
+- CVE-2024-24258: freeglut 3.4.0 was discovered to contain a memory leak
+via the menuEntry variable in the glutAddSubMenu function.
+- CVE-2024-24259: freeglut through 3.4.0 was discovered to contain a
+memory leak via the menuEntry variable in the glutAddMenuEntry
+function.
 
-This commit also replaces the mention "one file" on BSD-3-Clause, to
-the actual file name using it, which is "vasprintf.c".
+https://nvd.nist.gov/vuln/detail/CVE-2024-24258
+https://nvd.nist.gov/vuln/detail/CVE-2024-24259
 
-This commit also updates the Config.in package homepage URL,
-to use https.
+The CVEs are not technically reported for the libfreeglut package
+itself (which doesn't have a CPE identifier) but for mupdf.
 
-[1] https://mailman.astron.com/pipermail/file/2024-November/001435.html
-[2] https://github.com/file/file/commit/d605bb40478c4ce94aef88316d3a928b3da746f5
+Note that mudpf provides its own (old) version of freeglut, but our
+mupdf package uses the Buildroot-provided freeglut (which now contains
+the fix).
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Reviewed-by: Vincent Jardin <vjardin@free.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+It also has to be noted that a more recent release of libfreeglut
+exists upstream, and it fixes the same CVEs.  Bumping our package
+version however requires more work that can be done separately.
+Including this patch first also has the advantage that it can easily
+be backported wherever it's needed.
+
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/file/Config.in | 2 +-
- package/file/file.hash | 5 ++---
- package/file/file.mk   | 6 +++---
- 3 files changed, 6 insertions(+), 7 deletions(-)
+ ...-Plug-memory-leak-that-happens-upon-error.patch | 54 ++++++++++++++++++++++
+ package/mupdf/mupdf.mk                             |  6 +++
+ 2 files changed, 60 insertions(+)
 
-diff --git a/package/file/Config.in b/package/file/Config.in
-index edc4d874b2..6b5326f660 100644
---- a/package/file/Config.in
-+++ b/package/file/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_FILE
- 	  Program to identify a file's format by scanning binary data
- 	  for known patterns.
+diff --git a/package/libfreeglut/0001-Plug-memory-leak-that-happens-upon-error.patch b/package/libfreeglut/0001-Plug-memory-leak-that-happens-upon-error.patch
+new file mode 100644
+index 0000000000..d09e9befb3
+--- /dev/null
++++ b/package/libfreeglut/0001-Plug-memory-leak-that-happens-upon-error.patch
+@@ -0,0 +1,54 @@
++From 9ad320c1ad1a25558998ddfe47674511567fec57 Mon Sep 17 00:00:00 2001
++From: Sebastian Rasmussen <sebras@gmail.com>
++Date: Mon, 12 Feb 2024 14:46:22 +0800
++Subject: [PATCH] Plug memory leak that happens upon error.
++
++If fgStructure.CurrentMenu is set when glutAddMenuEntry() or
++glutAddSubMenu() is called the allocated menuEntry variable will
++leak. This commit postpones allocating menuEntry until after the
++error checks, thereby plugging the memory leak.
++
++This fixes CVE-2024-24258 and CVE-2024-24259.
++Upstream: https://github.com/freeglut/freeglut/commit/9ad320c1ad1a25558998ddfe47674511567fec57
++Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
++---
++ src/fg_menu.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/fg_menu.c b/src/fg_menu.c
++index 53112dc2..0da88901 100644
++--- a/src/fg_menu.c
+++++ b/src/fg_menu.c
++@@ -864,12 +864,12 @@ void FGAPIENTRY glutAddMenuEntry( const char* label, int value )
++ {
++     SFG_MenuEntry* menuEntry;
++     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutAddMenuEntry" );
++-    menuEntry = (SFG_MenuEntry *)calloc( sizeof(SFG_MenuEntry), 1 );
++ 
++     freeglut_return_if_fail( fgStructure.CurrentMenu );
++     if (fgState.ActiveMenus)
++         fgError("Menu manipulation not allowed while menus in use.");
++ 
+++    menuEntry = (SFG_MenuEntry *)calloc( sizeof(SFG_MenuEntry), 1 );
++     menuEntry->Text = strdup( label );
++     menuEntry->ID   = value;
++ 
++@@ -888,7 +888,6 @@ void FGAPIENTRY glutAddSubMenu( const char *label, int subMenuID )
++     SFG_Menu *subMenu;
++ 
++     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutAddSubMenu" );
++-    menuEntry = ( SFG_MenuEntry * )calloc( sizeof( SFG_MenuEntry ), 1 );
++     subMenu = fgMenuByID( subMenuID );
++ 
++     freeglut_return_if_fail( fgStructure.CurrentMenu );
++@@ -897,6 +896,7 @@ void FGAPIENTRY glutAddSubMenu( const char *label, int subMenuID )
++ 
++     freeglut_return_if_fail( subMenu );
++ 
+++    menuEntry = ( SFG_MenuEntry * )calloc( sizeof( SFG_MenuEntry ), 1 );
++     menuEntry->Text    = strdup( label );
++     menuEntry->SubMenu = subMenu;
++     menuEntry->ID      = -1;
++-- 
++2.48.1
++
+diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
+index 9eecb84232..6b666033eb 100644
+--- a/package/mupdf/mupdf.mk
++++ b/package/mupdf/mupdf.mk
+@@ -21,6 +21,12 @@ MUPDF_DEPENDENCIES = \
+ 	lcms2 openjpeg \
+ 	zlib
  
--	  http://www.darwinsys.com/file/
-+	  https://www.darwinsys.com/file/
-diff --git a/package/file/file.hash b/package/file/file.hash
-index 7c15569c09..53c4d5c4db 100644
---- a/package/file/file.hash
-+++ b/package/file/file.hash
-@@ -1,7 +1,6 @@
- # Locally calculated after verifying signature
--# https://astron.com/pub/file/file-5.45.tar.gz.asc
-+# https://astron.com/pub/file/file-5.46.tar.gz.asc
- # using key BE04995BA8F90ED0C0C176C471112AB16CB33B3A
--sha256  fc97f51029bb0e2c9f4e3bffefdaf678f0e039ee872b9de5c002a6d09c784d82  file-5.45.tar.gz
-+sha256  c9cc77c7c560c543135edc555af609d5619dbef011997e988ce40a3d75d86088  file-5.46.tar.gz
- sha256  0bfa856a9930bddadbef95d1be1cf4e163c0be618e76ea3275caaf255283e274  COPYING
--sha256  4ccb60d623884ef637af4a5bc16b2cb350163e2135e967655837336019a64462  src/mygetopt.h
- sha256  2e14b6fa9a74f952ebfde3c96527158df281c953cfaf35609eb854d4da30131c  src/vasprintf.c
-diff --git a/package/file/file.mk b/package/file/file.mk
-index 27d9181d76..a33b306c4c 100644
---- a/package/file/file.mk
-+++ b/package/file/file.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--FILE_VERSION = 5.45
-+FILE_VERSION = 5.46
- FILE_SITE = https://astron.com/pub/file
--FILE_LICENSE = BSD-2-Clause, BSD-4-Clause (one file), BSD-3-Clause (one file)
--FILE_LICENSE_FILES = COPYING src/mygetopt.h src/vasprintf.c
-+FILE_LICENSE = BSD-2-Clause, BSD-3-Clause (vasprintf.c)
-+FILE_LICENSE_FILES = COPYING src/vasprintf.c
- FILE_CPE_ID_VALID = YES
- 
- FILE_AUTORECONF = YES
++# libfreeglut/0001-Plug-memory-leak-that-happens-upon-error.patch
++# Fix is in libfreeglut, but CVE applied to mupdf.
++MUPDF_IGNORE_CVES = \
++	CVE-2024-24258 \
++	CVE-2024-24259
++
+ # mupdf doesn't use CFLAGS and LIBS but XCFLAGS and XLIBS instead.
+ # with USE_SYSTEM_LIBS it will try to use system libraries instead of the bundled ones.
+ MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
+
+--===============2268110740501548537==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2268110740501548537==--
