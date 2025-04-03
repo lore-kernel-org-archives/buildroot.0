@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B44BC2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:46:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 720F4C3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AF7D6166C;
-	Mon, 19 May 2025 10:46:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 44FF0615F7;
+	Mon, 19 May 2025 10:46:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MygzFIF7b0B7; Mon, 19 May 2025 10:46:28 +0000 (UTC)
+ id 8I1JFpNPvk3O; Mon, 19 May 2025 10:46:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B20D6165B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B6506137C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B20D6165B;
-	Mon, 19 May 2025 10:46:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id BAD12D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2B6506137C;
+	Mon, 19 May 2025 10:46:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F738D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5425B41836
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8702840D7A
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UH-8ESxSjb63 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f5t2fE1e1_XG for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 853E24101D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B33E40D59
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 853E24101D
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B33E40D59
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 82E02873D4; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+ id 496DF83A2E; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 4 May 2025 19:36:21 +0200
+Date: Thu, 3 Apr 2025 21:57:29 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 875f5670aa93a2a8559666985299aee6019bd902
-X-Git-Newrev: 7a07a9d155b8f601d68f07ee0ed1dc8d48907644
+X-Git-Oldrev: 8292b8fb89ba71d2b35d4596327b022741f18be4
+X-Git-Newrev: 43abcd4c7dd8ad65d2f2012f3d4292362550a3ed
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103958.82E02873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/m4: fix build failure
- with host-gcc 15
+Message-Id: <20250519103947.496DF83A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-smbus2: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,84 +65,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a07a9d155b8f601d68f07ee0ed1dc8d48907644
+commit: https://git.buildroot.net/buildroot/commit/?id=43abcd4c7dd8ad65d2f2012f3d4292362550a3ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When compiling host-m4 1.4.19 with a host gcc 15 (which is the version
-included in Fedora 42, released on 2025-04-15), compilation fails with
-error:
+Add python-smbus2 as an alternative for python-smbus-cffi as the latter
+has not seen updates in 8 years and was archived on Jan 4 2024.
 
-    In file included from gl_avltree_oset.h:21,
-                     from gl_avltree_oset.c:21:
-    gl_oset.h:275:1: warning: 'nodiscard' attribute ignored [-Wattributes]
-      275 | GL_OSET_INLINE _GL_ATTRIBUTE_NODISCARD int
-          | ^~~~~~~~~~~~~~
-    gl_oset.h:275:40: error: expected identifier or '(' before 'int'
-      275 | GL_OSET_INLINE _GL_ATTRIBUTE_NODISCARD int
-          |                                        ^~~
-
-This error is due to the gnulib copy included in m4 1.4.19, which does
-not detect properly the default C language standard of gcc 15 which
-has been changed from "gnu17" to "gnu23". See [1]. Note that m4 1.4.19
-is the latest version available at the time of this commit, and was
-released in May 2021. The issue is tracked upstream in [2].
-
-Upcoming m4 release is expected to fix this issue, by updating its
-gnulib copy. See [3], which states: "Update to comply with newer C
-standards, and inherit portability improvements from gnulib".
-
-Until this new m4 version is released, this commit fixes the issue by
-forcing the C langage standard to "-std=gnu17" (the previous gcc
-default) when host-gcc 15 is detected.
-
-Note that the "-std=gnu17" option was introduced in gcc 8. See [4].
-This is the reason why this patch adds this option only when the
-problematic gcc 15 version is detected.
-
-See also the discussions around this patch at [5].
-
-Fixes:
-https://autobuild.buildroot.org/results/1c33ef0a710cfae13e496485787b351c8f951217/
-(and many, many others)
-
-[1] https://gcc.gnu.org/gcc-15/changes.html#c
-[2] https://savannah.gnu.org/support/?111150
-[3] https://git.savannah.gnu.org/cgit/m4.git/commit/?h=branch-1.4&id=a22c9802dd7e724eaefb21dc21d84ac2d3a49c89
-[4] https://gcc.gnu.org/gcc-8/changes.html#c
-[5] https://lore.kernel.org/buildroot/CAPWx8vsoJUt8YMJG1aUqFRK1=yizNbgjVjGL1Q1+9ygjJGnZLA@mail.gmail.com/
-
-Signed-off-by: Joseph Zikusooka (ZIK) <zik@jambula.net>
-Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-[Julien:
- - change mail url to lore.kernel.org for stable link
- - reword, reflow and add extra info in the commit log
- - force -std=gnu17 only when host gcc-15 is detected
- - add a comment in .mk to remove the workaround at next bump
-]
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/m4/m4.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/Config.in                        |  1 +
+ package/python-smbus2/Config.in          |  7 +++++++
+ package/python-smbus2/python-smbus2.hash |  5 +++++
+ package/python-smbus2/python-smbus2.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
 
-diff --git a/package/m4/m4.mk b/package/m4/m4.mk
-index 39ad898b10..f5e1e27ad8 100644
---- a/package/m4/m4.mk
-+++ b/package/m4/m4.mk
-@@ -10,4 +10,14 @@ M4_SITE = $(BR2_GNU_MIRROR)/m4
- M4_LICENSE = GPL-3.0+
- M4_LICENSE_FILES = COPYING
- 
-+# gcc-15 defaults to -std=gnu23 which is incorrectly detected and
-+# generates build failures in the gnulib copy included in
-+# m4-1.4.19. We workaround this by forcing the previous gcc default
-+# standard, which is -std=gnu17 only when host gcc is >= 15. This
-+# workaround can be removed when m4 will be updated to a version
-+# including a fix for gcc-15.
-+ifeq ($(BR2_HOST_GCC_AT_LEAST_15),y)
-+HOST_M4_CONF_ENV = CFLAGS="$(HOST_CFLAGS) -std=gnu17"
-+endif
+diff --git a/package/Config.in b/package/Config.in
+index eb22c81d1d..291e784f26 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1403,6 +1403,7 @@ menu "External python modules"
+ 	source "package/python-slob/Config.in"
+ 	source "package/python-smbprotocol/Config.in"
+ 	source "package/python-smbus-cffi/Config.in"
++	source "package/python-smbus2/Config.in"
+ 	source "package/python-smmap2/Config.in"
+ 	source "package/python-snappy/Config.in"
+ 	source "package/python-sniffio/Config.in"
+diff --git a/package/python-smbus2/Config.in b/package/python-smbus2/Config.in
+new file mode 100644
+index 0000000000..fdacae6da1
+--- /dev/null
++++ b/package/python-smbus2/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_SMBUS2
++	bool "python-smbus2"
++	help
++	  smbus2 is a drop-in replacement for smbus-cffi/smbus-python
++	  in pure Python.
 +
- $(eval $(host-autotools-package))
++	  https://github.com/kplindegaard/smbus2
+diff --git a/package/python-smbus2/python-smbus2.hash b/package/python-smbus2/python-smbus2.hash
+new file mode 100644
+index 0000000000..65f9eefaf6
+--- /dev/null
++++ b/package/python-smbus2/python-smbus2.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/smbus2/json
++md5  5708a6cbf052f45a3ad6dd83c00902a6  smbus2-0.5.0.tar.gz
++sha256  4a5946fd82277870c2878befdb1a29bb28d15cda14ea4d8d2d54cf3d4bdcb035  smbus2-0.5.0.tar.gz
++# Locally computed sha256 checksums
++sha256  6ee9cf18c3a75dd76fb549a4b607ae34eedc31a796c48157895e2ad28d66ce79  LICENSE
+diff --git a/package/python-smbus2/python-smbus2.mk b/package/python-smbus2/python-smbus2.mk
+new file mode 100644
+index 0000000000..c416a55005
+--- /dev/null
++++ b/package/python-smbus2/python-smbus2.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-smbus2
++#
++################################################################################
++
++PYTHON_SMBUS2_VERSION = 0.5.0
++PYTHON_SMBUS2_SOURCE = smbus2-$(PYTHON_SMBUS2_VERSION).tar.gz
++PYTHON_SMBUS2_SITE = https://files.pythonhosted.org/packages/10/c9/6d85aa809e107adf85303010a59b340be109c8f815cbedc5c08c73bcffef
++PYTHON_SMBUS2_SETUP_TYPE = setuptools
++PYTHON_SMBUS2_LICENSE = MIT
++PYTHON_SMBUS2_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
