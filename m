@@ -4,76 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D853C3600C
-	for <buildroot@archiver.kernel.org>; Thu,  3 Apr 2025 07:33:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94F40C3600C
+	for <buildroot@archiver.kernel.org>; Thu,  3 Apr 2025 07:44:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A21160D65;
-	Thu,  3 Apr 2025 07:33:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 44763605DE;
+	Thu,  3 Apr 2025 07:44:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9BldMeUuBKqj; Thu,  3 Apr 2025 07:33:57 +0000 (UTC)
+ id IGMl8itFndQj; Thu,  3 Apr 2025 07:44:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 361C160675
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77022607C4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 361C160675;
-	Thu,  3 Apr 2025 07:33:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 69B621F4
- for <buildroot@buildroot.org>; Thu,  3 Apr 2025 07:33:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77022607C4;
+	Thu,  3 Apr 2025 07:44:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 678C9119
+ for <buildroot@buildroot.org>; Thu,  3 Apr 2025 07:44:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5031581FDA
- for <buildroot@buildroot.org>; Thu,  3 Apr 2025 07:33:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 590C983AFB
+ for <buildroot@buildroot.org>; Thu,  3 Apr 2025 07:44:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YV-1DEJCmyXg for <buildroot@buildroot.org>;
- Thu,  3 Apr 2025 07:33:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.249;
- helo=mslow3.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id r0zSYiJbCUqt for <buildroot@buildroot.org>;
+ Thu,  3 Apr 2025 07:44:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3CEA381F64
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CEA381F64
-Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3CEA381F64
- for <buildroot@buildroot.org>; Thu,  3 Apr 2025 07:33:55 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by mslow3.mail.gandi.net (Postfix) with ESMTP id 3324D58912D
- for <buildroot@buildroot.org>; Thu,  3 Apr 2025 07:13:05 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id A35544435B;
- Thu,  3 Apr 2025 07:12:59 +0000 (UTC)
-To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>
-Date: Thu,  3 Apr 2025 09:12:57 +0200
-Message-ID: <20250403071258.1995429-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.48.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 27ACB83AB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27ACB83AB9
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 27ACB83AB9
+ for <buildroot@buildroot.org>; Thu,  3 Apr 2025 07:44:34 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 487E8442B6;
+ Thu,  3 Apr 2025 07:44:31 +0000 (UTC)
+Date: Thu, 3 Apr 2025 09:44:30 +0200
+To: yegorslists@googlemail.com
+Cc: buildroot@buildroot.org
+Message-ID: <20250403094430.08d9b2f1@windsurf>
+In-Reply-To: <20250326080506.3467586-1-yegorslists@googlemail.com>
+References: <20250326080506.3467586-1-yegorslists@googlemail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeejleefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepteeltefhvdeuteegvddvjeejteffgefgvdeigeeuvedvueevtdeluedvgfeuuedtnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhorhhgnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopeifihhnughsuhhrfhdrrddpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehgmhgrihhlrdgtohhm
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeektddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeduueevhefhheelkefggeevvdffjeetvdetgefhgedtiedukedvfeeltdfgleeuvdenucffohhmrghinhepsghuihhlughrohhothdrohhrghdpsghuihhlughrohhothdrnhgvthdpsghoohhtlhhinhdrtghomhenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohephigvghhorhhslhhishhtshesghhoohhglhgvmhgrihhlrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1743664379;
+ d=bootlin.com; s=gm1; t=1743666271;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=llyZFUHkY5B77LXoOaeUqFl7cdSMkAOjaZb/OFkJJLc=;
- b=KMT/dGQamJDGbdVaVzNAywFfXqdMvpGbPVvoGDcDoPKVQv2bOuo8LpaORDmR6+zmjRa1XY
- R16hdjvXIYcHdAt9w+VbImbuVFlmjpyTA9tjVCyrQRqtygblUM61E0PX94yp9xFW5R2sJA
- hp5FMW7/21FdsAtDr1TbYSLIyf/QwViA4OSgsJLq1hWWbipbnoGzjoreah4VDujf6Z2PhK
- ecgZic/YG1ybCBokJ6wk8GUmRfsAvRx9Dnlp+XbA1ok0HpygHWGhHrQMzaJK1X43MA3AWu
- hNolHH5L3lCqgt8DcdboLd0OY5Yx2ea2k0oO4cwnvLacBkmXOoqNPqCQ9pIyFg==
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=0A1oLCYseCE+zTrVW7TZkNlLPHFhMuytHAphQNJYW+8=;
+ b=oDZwfgq4eqZXV7NXmPh32csVfv82RL5ftY0RmblWrbHCAkvRyvYWDYS7Hi17MmJiu4pkOS
+ DXix6C/1l7eCxzvvy+UoqSZKtGltTDafj/Y4osRI7A7RtHWsFXhklMhmJJ2Obd9BveaQPE
+ kbTxUGi+PXimS1Lr+9ktPo3wjM/8WNcWot2yv8zfCodMnep6myRF3Ys5lDTbdhYswpR/bl
+ tN/QESyet77+abL0yjwiYcr2KxfeczvIXpyHgmn56UJQRHbXnG7+QutN7EjzlVWMjOEE/k
+ Z+87T1VFbYDCbAR+tYHtOBg00FV/YBkfR5Hh071xI5dg06hFs4ZYRGrUjft5Iw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=KMT/dGQa
-Subject: [Buildroot] [PATCH] package/glibc: disable on RISC-V ilp32f and
- lp64f, not supported
+ header.s=gm1 header.b=oDZwfgq4
+Subject: Re: [Buildroot] [PATCH] package/ncftp: bump to version 3.2.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,42 +91,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-glibc fails to build on RISC-V 32-bit with the ilp32f ABI and on
-RISC-V 64-bit with the lp64f: both use single-point precision floating
-point, which glibc doesn't support, failing during the configure step
-with:
+Hello Yegor,
 
-  configure: error: glibc does not yet support the single floating-point ABI
+On Wed, 26 Mar 2025 09:05:06 +0100
+yegorslists@googlemail.com wrote:
 
-Fix that by disabling glibc support on those configurations.
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Remove upstreamed patches.
+> 
+> Autoreconf is broken. Hence, use the configure script directly.
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/60c3dbe02af354ff9820258ffd00eec088114d69/
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Fixes:
+This somehow breaks the build, but not your fault: it looks like
+upstream changed the tarball. Indeed, on sources.buildroot.net we know
+have in cache the tarball that matches the hash you have submitted in
+this patch. But the tarball available on the official website now has a
+different hash.
 
-  https://autobuild.buildroot.org/results/fe8d569cab507992978ef0da649278dd3a9e0b23/
+See the build failure at:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/glibc/Config.in | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+  https://autobuild.buildroot.net/results/d18/d18191dbb1fb8d7fe64ee547ca9b97c133434ea2/build-end.log
 
-diff --git a/package/glibc/Config.in b/package/glibc/Config.in
-index d464b3def8..52752e975e 100644
---- a/package/glibc/Config.in
-+++ b/package/glibc/Config.in
-@@ -22,7 +22,9 @@ config BR2_PACKAGE_GLIBC_ARCH_SUPPORTS
- 	default y if BR2_microblaze
- 	default y if BR2_arc && BR2_ARC_ATOMIC_EXT && !BR2_arc750d && !BR2_arc770d
- 	depends on !BR2_POWERPC_CPU_HAS_SPE
--	depends on BR2_RISCV_ISA_RVA || !BR2_riscv
-+	# glibc needs atomic instructions, and does not support
-+	# single-precision floating point ABIs (ilp32f and lp64f)
-+	depends on (BR2_RISCV_ISA_RVA && !BR2_RISCV_ABI_ILP32F && !BR2_RISCV_ABI_LP64F) || !BR2_riscv
- 	depends on BR2_USE_MMU
- 
- config BR2_PACKAGE_GLIBC_SUPPORTS
+Could you have a look perhaps?
+
+Best regards,
+
+Thomas
 -- 
-2.48.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
