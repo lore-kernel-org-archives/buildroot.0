@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91AAAC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DD38C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FA8F41A25;
-	Mon, 19 May 2025 10:42:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D42760F88;
+	Mon, 19 May 2025 10:42:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id isZP_J8VluWv; Mon, 19 May 2025 10:42:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 63dmlsfuCGc4; Mon, 19 May 2025 10:42:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D00F41A20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4EB1F610B1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D00F41A20;
-	Mon, 19 May 2025 10:42:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1BFCEE4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4EB1F610B1;
+	Mon, 19 May 2025 10:42:55 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 28BD5193
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 90FBD40E2C
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DD93A41797
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H5fZ01Aogw7D for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:46 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qP6w8SrMWNNg for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BFE140C80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 43268401AD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9BFE140C80
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 43268401AD
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9AB32872E7; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ id 3F5AD83B63; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 24 Mar 2025 21:03:10 +0100
+Date: Thu, 3 Apr 2025 21:52:02 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ee5ab880eca47d4608abc99bbd558005d8d57b67
-X-Git-Newrev: 4087461203c9788bc51c918d38a0ae9911499fa7
+X-Git-Oldrev: 8d3b1781f639c174de3b09e292179f6f81da61f1
+X-Git-Newrev: 8292b8fb89ba71d2b35d4596327b022741f18be4
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103944.9AB32872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/tinyxml2: security
- bump version to 11.0.0
+Message-Id: <20250519103947.3F5AD83B63@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/glibc: disable on
+ RISC-V ilp32f and lp64f, not supported
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4087461203c9788bc51c918d38a0ae9911499fa7
+commit: https://git.buildroot.net/buildroot/commit/?id=8292b8fb89ba71d2b35d4596327b022741f18be4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://github.com/leethomason/tinyxml2/releases/tag/10.1.0
-https://github.com/leethomason/tinyxml2/releases/tag/11.0.0
+glibc fails to build on RISC-V 32-bit with the ilp32f ABI and on
+RISC-V 64-bit with the lp64f: both use single-point precision floating
+point, which glibc doesn't support, failing during the configure step
+with:
 
-Fixes CVE-2024-50615: https://github.com/advisories/GHSA-884x-p7qm-gq3f
+  configure: error: glibc does not yet support the single floating-point ABI
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Fix that by disabling glibc support on those configurations.
+
+Fixes:
+
+  https://autobuild.buildroot.org/results/fe8d569cab507992978ef0da649278dd3a9e0b23/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/tinyxml2/tinyxml2.hash | 2 +-
- package/tinyxml2/tinyxml2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/glibc/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/tinyxml2/tinyxml2.hash b/package/tinyxml2/tinyxml2.hash
-index a131b8624d..6efe202b52 100644
---- a/package/tinyxml2/tinyxml2.hash
-+++ b/package/tinyxml2/tinyxml2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3bdf15128ba16686e69bce256cc468e76c7b94ff2c7f391cc5ec09e40bff3839  tinyxml2-10.0.0.tar.gz
-+sha256  5556deb5081fb246ee92afae73efd943c889cef0cafea92b0b82422d6a18f289  tinyxml2-11.0.0.tar.gz
- sha256  9332252e9b9e46db8285d4a3f0bf25f139bf1dca6781b956d57f2302efca6432  LICENSE.txt
-diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
-index 044b8f82db..ab04091753 100644
---- a/package/tinyxml2/tinyxml2.mk
-+++ b/package/tinyxml2/tinyxml2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index d464b3def8..52752e975e 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -22,7 +22,9 @@ config BR2_PACKAGE_GLIBC_ARCH_SUPPORTS
+ 	default y if BR2_microblaze
+ 	default y if BR2_arc && BR2_ARC_ATOMIC_EXT && !BR2_arc750d && !BR2_arc770d
+ 	depends on !BR2_POWERPC_CPU_HAS_SPE
+-	depends on BR2_RISCV_ISA_RVA || !BR2_riscv
++	# glibc needs atomic instructions, and does not support
++	# single-precision floating point ABIs (ilp32f and lp64f)
++	depends on (BR2_RISCV_ISA_RVA && !BR2_RISCV_ABI_ILP32F && !BR2_RISCV_ABI_LP64F) || !BR2_riscv
+ 	depends on BR2_USE_MMU
  
--TINYXML2_VERSION = 10.0.0
-+TINYXML2_VERSION = 11.0.0
- TINYXML2_SITE = $(call github,leethomason,tinyxml2,$(TINYXML2_VERSION))
- TINYXML2_LICENSE = Zlib
- TINYXML2_LICENSE_FILES = LICENSE.txt
+ config BR2_PACKAGE_GLIBC_SUPPORTS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
