@@ -1,101 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C77F9C3601E
-	for <buildroot@archiver.kernel.org>; Thu,  3 Apr 2025 06:48:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D853C3600C
+	for <buildroot@archiver.kernel.org>; Thu,  3 Apr 2025 07:33:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 70EB441222;
-	Thu,  3 Apr 2025 06:48:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A21160D65;
+	Thu,  3 Apr 2025 07:33:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2zsQE8jmBX6o; Thu,  3 Apr 2025 06:47:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9BldMeUuBKqj; Thu,  3 Apr 2025 07:33:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A28474127B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 361C160675
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A28474127B;
-	Thu,  3 Apr 2025 06:47:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id ABDB0117
- for <buildroot@buildroot.org>; Thu,  3 Apr 2025 06:47:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 361C160675;
+	Thu,  3 Apr 2025 07:33:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 69B621F4
+ for <buildroot@buildroot.org>; Thu,  3 Apr 2025 07:33:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9DD1C400AB
- for <buildroot@buildroot.org>; Thu,  3 Apr 2025 06:47:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5031581FDA
+ for <buildroot@buildroot.org>; Thu,  3 Apr 2025 07:33:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GXMO9DRjNKmI for <buildroot@buildroot.org>;
- Thu,  3 Apr 2025 06:47:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
- envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3DFB6401B7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DFB6401B7
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3DFB6401B7
- for <buildroot@buildroot.org>; Thu,  3 Apr 2025 06:47:56 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-38f2f391864so282858f8f.3
- for <buildroot@buildroot.org>; Wed, 02 Apr 2025 23:47:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1743662874; x=1744267674;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=WZwrOMMO9vKb0CD411X7VxneQP9tfVdP1ETR6maFkX8=;
- b=oJiXmUAMmadfv47clS6Z8g3iHZ28Mj9HlsOihQGAztuqroKr2tYjOaa/Vc6IGWJtsz
- E9EkqJKsumjfLNCRwJl2c2l71o8mOXKIf6/AWvHU/RtFelqj1pZRjNpi6Sw+XRVAJRre
- xDOEnvNgMCsY3RA/6jQj4gipeXwF4QCf1pnvlj7x8ZuDTjOXVXgZO4R/FediE4O55dUs
- 9HpNV4aHhIS+Bvs9IwQrwDfYrBF5/758QPCQxl2UNhsUPAR9nuwVeLtQkuxdgtGFh9BG
- kzusPa2Wy6zW5xs43gtCkrude1jMZWVCeVSDlQhD+09UhKlPm2DmrWL+LGk9Gduwu6F8
- fYQg==
-X-Gm-Message-State: AOJu0YwxYpjDxsJm3MTzdD8tUUPoboLr85TuBBCpeO9wXayx0Ke1SCnt
- LgvJ5bH8F9DILS7X20ChPa2urOPFGkJxu+u9EgeT7MpkCAcrqeXuq6oMCW9ZokPQvKpMRTK0tiI
- j
-X-Gm-Gg: ASbGnctH7PZEJz3r55QNhutN1MR+vMLXxTLfvV2pPJlB87xhbhGRLpJdDPz1U/xsyPH
- ak3kiPwwxlC8xhbN453K535a7PruXaltGfcduPEJX9HNmj9/zkknT5cbQXReJT+1WLh2maUmZ/s
- DJVa6T4pQr025w8x8ih3sPuqQBGRZppYOS4Y1LkldOxxrd3D43SMbbhmwm52CWIegpQWKlxy+NJ
- cXMlxUFrs+Vj+nBeOUb681SaoILCoou5VsTRva3XEG925vkZOt+ns7lx8cUFNiDLweG5F8DOEsa
- VoAXIa2GkXHuD/vJ9k/FwuWpdFdzWRkar+efHmcuEvdJV+eOhSyzlrEGSAea55QPUeW7YGITXO4
- 2jaxzhxyMkhRE/DZCJG+3cZSTzzhj1Kf5Lms5YbpVKmc=
-X-Google-Smtp-Source: AGHT+IFL88P33dClTwtV2ts1/XyMUMfHwhNiPXh25cekIFqPfzqRcHMl/CFV34krq8Lu3B9l3qGOuA==
-X-Received: by 2002:a05:6000:2913:b0:391:4674:b136 with SMTP id
- ffacd0b85a97d-39c120e21famr15883456f8f.29.1743662874322; 
- Wed, 02 Apr 2025 23:47:54 -0700 (PDT)
-Received: from P-NTS-Evian.home
- (2a01cb05949d5800c97d3b734a46d823.ipv6.abo.wanadoo.fr.
- [2a01:cb05:949d:5800:c97d:3b73:4a46:d823])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-39c30096401sm910740f8f.1.2025.04.02.23.47.53
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Apr 2025 23:47:54 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YV-1DEJCmyXg for <buildroot@buildroot.org>;
+ Thu,  3 Apr 2025 07:33:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.249;
+ helo=mslow3.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3CEA381F64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CEA381F64
+Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3CEA381F64
+ for <buildroot@buildroot.org>; Thu,  3 Apr 2025 07:33:55 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by mslow3.mail.gandi.net (Postfix) with ESMTP id 3324D58912D
+ for <buildroot@buildroot.org>; Thu,  3 Apr 2025 07:13:05 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id A35544435B;
+ Thu,  3 Apr 2025 07:12:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@smile.fr>
-Date: Thu,  3 Apr 2025 08:47:50 +0200
-Message-ID: <20250403064750.116910-1-romain.naour@smile.fr>
-X-Mailer: git-send-email 2.49.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>
+Date: Thu,  3 Apr 2025 09:12:57 +0200
+Message-ID: <20250403071258.1995429-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.48.1
 MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukeejleefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepteeltefhvdeuteegvddvjeejteffgefgvdeigeeuvedvueevtdeluedvgfeuuedtnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhorhhgnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopeifihhnughsuhhrfhdrrddpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehgmhgrihhlrdgtohhm
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1743662874; x=1744267674; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=WZwrOMMO9vKb0CD411X7VxneQP9tfVdP1ETR6maFkX8=;
- b=QX+NTjtoMDPp8GJzXqUyv+8/g1XeYlaaez3T3voCKDXVz1vH3CP/CV0yktI+e7GCN3
- UD8Ufm0SouxwpycRj50MKkMsTM/C+S5oyvgQqhM+kReC81QxNmmNX+TYuQURvvLfBBg+
- GWmnroDjbJX7by0wLTxlEtFTOkVga4cmXyYiI=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=bootlin.com; s=gm1; t=1743664379;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=llyZFUHkY5B77LXoOaeUqFl7cdSMkAOjaZb/OFkJJLc=;
+ b=KMT/dGQamJDGbdVaVzNAywFfXqdMvpGbPVvoGDcDoPKVQv2bOuo8LpaORDmR6+zmjRa1XY
+ R16hdjvXIYcHdAt9w+VbImbuVFlmjpyTA9tjVCyrQRqtygblUM61E0PX94yp9xFW5R2sJA
+ hp5FMW7/21FdsAtDr1TbYSLIyf/QwViA4OSgsJLq1hWWbipbnoGzjoreah4VDujf6Z2PhK
+ ecgZic/YG1ybCBokJ6wk8GUmRfsAvRx9Dnlp+XbA1ok0HpygHWGhHrQMzaJK1X43MA3AWu
+ hNolHH5L3lCqgt8DcdboLd0OY5Yx2ea2k0oO4cwnvLacBkmXOoqNPqCQ9pIyFg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=QX+NTjto
-Subject: [Buildroot] [PATCH] support/download/svn: use 'svn info' whith
- LC_ALL=C
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=KMT/dGQa
+Subject: [Buildroot] [PATCH] package/glibc: disable on RISC-V ilp32f and
+ lp64f, not supported
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,51 +85,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Romain Naour via buildroot <buildroot@buildroot.org>
-Reply-To: Romain Naour <romain.naour@smile.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VXNlIHRoZSAnQycgbG9jYWxlIHdoZW4gcmV0cmlldmluZyB0aGUgZGF0ZSBvZiB0aGUgbGFzdCBj
-aGFuZ2UgdXNpbmcKJ3N2biBpbmZvJyBzaW5jZSB0aGUgc3ZuIGRvd25sb2FkIGhlbHBlciBzY3Jp
-cHQgZXhwZWN0CiJMYXN0IENoYW5nZWQgRGF0ZSIgc3RyaW5nLgoKSWYgYW5vdGhlciBsb2NhbGUg
-aXMgdXNlZCwgdGhlICdkYXRlJyBpcyBlbXB0eSBzbyB0aGUgZ2VuZXJhdGVkCmFyY2hpdmUgKGJ5
-IG1rX3Rhcl9neikgd2lsbCBub3QgbWF0Y2ggdGhlIGV4cGVjdGVkIGhhc2ggc2luY2UKdGhlIGZp
-bGUgdGltZXN0YW1wIGlzIG5vdCBzZXQgcHJvcGVybHkuCgpJZiBMQU5HPWZyX0ZSLlVURi04IGlz
-IGRlZmluZWQgaW4gdGhlIGhvc3Qgc3lzdGVtLCBzdm4gcHJpbnQgc29tZQoiRnJlbmNoIGVuY3J5
-cHRlZCIgdGV4dDoKCiAgZXZhbCBzdm4gLS1ub24taW50ZXJhY3RpdmUgLS1jb25maWctb3B0aW9u
-IHNlcnZlcnM6Z2xvYmFsOmh0dHAtdGltZW91dD0xMCBpbmZvICcnXCcnaHR0cHM6Ly9zdm4uY29k
-ZS5zZi5uZXQvcC94bWxycGMtYy9jb2RlL2FkdmFuY2VkQHIzMTc2J1wnJycKICAuLi4KICBEYXRl
-IGRlIGxhIGRlcm5pw6hyZSBtb2RpZmljYXRpb246IDIwMjMtMDktMDIgMTk6MTM6MzUgKzAyMDAg
-KHNhbS4gMDIgc2VwdC4gMjAyMykKCmRpZmZvc2NvcGUgY29uZmlybSB0aGF0IHRoZSBmaWxlIHRp
-bWVzdGFtcCBpcyBub3Qgc2V0IGNvcnJlY3RseQppbiB0aGUgZ2VuZXJhdGVkIGFyY2hpdmU6Cgok
-IGRpZmZvc2NvcGUgTk9LL2xpYnhtbHJwYy1yMzE3Ni1zdm41LnRhci5neiBPSy9saWJ4bWxycGMt
-cjMxNzYtc3ZuNS50YXIuZ3oKLS0tIE5PSy9saWJ4bWxycGMtcjMxNzYtc3ZuNS50YXIuZ3oKKysr
-IE9LL2xpYnhtbHJwYy1yMzE3Ni1zdm41LnRhci5negrilJzilIDilIAgbGlieG1scnBjLXIzMTc2
-LXN2bjUudGFyCuKUgiDilJzilIDilIAgZmlsZSBsaXN0CuKUgiDilIIgQEAgLTEsNjI2ICsxLDYy
-NiBAQArilIIg4pSCIC0tcnctci0tci0tICAgMCAgICAgICAgMCAgICAgICAgMCAgICAgNjkzNyAy
-MDI1LTA0LTAyIDAwOjAwOjAwLjAwMDAwMCBsaWJ4bWxycGMtcjMxNzYvR05VbWFrZWZpbGUK4pSC
-IOKUgiArLXJ3LXItLXItLSAgIDAgICAgICAgIDAgICAgICAgIDAgICAgIDY5MzcgMjAyMy0wOS0w
-MiAxNzoxMzozNS4wMDAwMDAgbGlieG1scnBjLXIzMTc2L0dOVW1ha2VmaWxlCgpGaXggdGhpcyBp
-c3N1ZSB1c2luZyAnQycgbG9jYWxlOgoKICBMQ19BTEw9QyBldmFsIHN2biAtLW5vbi1pbnRlcmFj
-dGl2ZSAtLWNvbmZpZy1vcHRpb24gc2VydmVyczpnbG9iYWw6aHR0cC10aW1lb3V0PTEwIGluZm8g
-JydcJydodHRwczovL3N2bi5jb2RlLnNmLm5ldC9wL3htbHJwYy1jL2NvZGUvYWR2YW5jZWRAcjMx
-NzYnXCcnJwogIC4uLgogIExhc3QgQ2hhbmdlZCBEYXRlOiAyMDIzLTA5LTAyIDE5OjEzOjM1ICsw
-MjAwIChTYXQsIDAyIFNlcCAyMDIzKQoKRml4ZXM6IDg5ZjVlOTg5MzIzYWNlODE1YTMyZmNlZDI3
-ZWFlZmVlMmY0NjY2ZGUKClNpZ25lZC1vZmYtYnk6IFJvbWFpbiBOYW91ciA8cm9tYWluLm5hb3Vy
-QHNtaWxlLmZyPgotLS0KIHN1cHBvcnQvZG93bmxvYWQvc3ZuIHwgMiArLQogMSBmaWxlIGNoYW5n
-ZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pCgpkaWZmIC0tZ2l0IGEvc3VwcG9ydC9k
-b3dubG9hZC9zdm4gYi9zdXBwb3J0L2Rvd25sb2FkL3N2bgppbmRleCBmZjMzZjFmYTM5Li41NzZm
-ZDQ4MzAzIDEwMDc1NQotLS0gYS9zdXBwb3J0L2Rvd25sb2FkL3N2bgorKysgYi9zdXBwb3J0L2Rv
-d25sb2FkL3N2bgpAQCAtODEsNyArODEsNyBAQCBkb25lCiAjIEluIGNhc2UgdGhlcmUgaXMgYSBy
-ZWRpcmVjdGlvbiAoZS5nLiBodHRwIC0+IGh0dHBzKSwganVzdCBrZWVwIHRoZQogIyBsYXN0IGxp
-bmUgKHN2biBvdXRwdXRzIGV2ZXJ5dGhpbmcgb24gc3Rkb3V0KQogIyBzaGVsbGNoZWNrIGRpc2Fi
-bGU9U0MyMDg2ICMgY3JlZHMgbWF5IGJlIGVtcHR5Ci1kYXRlPSIkKCBfcGxhaW5fc3ZuIGluZm8g
-JHtjcmVkc30gIicke3VyaX1AJHtyZXZ9JyIgXAorZGF0ZT0iJCggTENfQUxMPUMgX3BsYWluX3N2
-biBpbmZvICR7Y3JlZHN9ICInJHt1cml9QCR7cmV2fSciIFwKICAgICAgICAgfHNlZCAtciAtZSAn
-L15MYXN0IENoYW5nZWQgRGF0ZTogLyFkOyBzLy8vJwogICAgICAgICkiCiAKLS0gCjIuNDkuMAoK
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+glibc fails to build on RISC-V 32-bit with the ilp32f ABI and on
+RISC-V 64-bit with the lp64f: both use single-point precision floating
+point, which glibc doesn't support, failing during the configure step
+with:
+
+  configure: error: glibc does not yet support the single floating-point ABI
+
+Fix that by disabling glibc support on those configurations.
+
+Fixes:
+
+  https://autobuild.buildroot.org/results/fe8d569cab507992978ef0da649278dd3a9e0b23/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/glibc/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index d464b3def8..52752e975e 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -22,7 +22,9 @@ config BR2_PACKAGE_GLIBC_ARCH_SUPPORTS
+ 	default y if BR2_microblaze
+ 	default y if BR2_arc && BR2_ARC_ATOMIC_EXT && !BR2_arc750d && !BR2_arc770d
+ 	depends on !BR2_POWERPC_CPU_HAS_SPE
+-	depends on BR2_RISCV_ISA_RVA || !BR2_riscv
++	# glibc needs atomic instructions, and does not support
++	# single-precision floating point ABIs (ilp32f and lp64f)
++	depends on (BR2_RISCV_ISA_RVA && !BR2_RISCV_ABI_ILP32F && !BR2_RISCV_ABI_LP64F) || !BR2_riscv
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_GLIBC_SUPPORTS
+-- 
+2.48.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
