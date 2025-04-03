@@ -4,67 +4,63 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99C6AC3600C
-	for <buildroot@archiver.kernel.org>; Thu,  3 Apr 2025 19:22:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAB1AC3600C
+	for <buildroot@archiver.kernel.org>; Thu,  3 Apr 2025 19:40:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E36441442;
-	Thu,  3 Apr 2025 19:22:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58C8F41717;
+	Thu,  3 Apr 2025 19:40:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yu8u6qzTRiAl; Thu,  3 Apr 2025 19:22:07 +0000 (UTC)
+ id CgvoYU-p3Piv; Thu,  3 Apr 2025 19:40:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F3934128B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 598A74119B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F3934128B;
-	Thu,  3 Apr 2025 19:22:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B6E34119
- for <buildroot@buildroot.org>; Thu,  3 Apr 2025 19:22:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 598A74119B;
+	Thu,  3 Apr 2025 19:40:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BCB2F117
+ for <buildroot@buildroot.org>; Thu,  3 Apr 2025 19:40:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9D5DD41364
- for <buildroot@buildroot.org>; Thu,  3 Apr 2025 19:22:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AE79E410E1
+ for <buildroot@buildroot.org>; Thu,  3 Apr 2025 19:40:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZJ-rI1QUgIHl for <buildroot@buildroot.org>;
- Thu,  3 Apr 2025 19:22:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 99294412C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99294412C9
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 99294412C9
- for <buildroot@buildroot.org>; Thu,  3 Apr 2025 19:22:05 +0000 (UTC)
-Received: from home.juju.sh (unknown [82.64.214.120])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 7B839B005C1;
- Thu,  3 Apr 2025 21:22:02 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+ id osg7J0gQM1xY for <buildroot@buildroot.org>;
+ Thu,  3 Apr 2025 19:40:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=162.248.234.2;
+ helo=mail.xes-mad.com; envelope-from=vfazio@xes-inc.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8727D4119B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8727D4119B
+Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8727D4119B
+ for <buildroot@buildroot.org>; Thu,  3 Apr 2025 19:40:24 +0000 (UTC)
+Received: from vfazio4.xes-mad.com (vfazio4.xes-mad.com [10.52.19.201])
+ by mail.xes-mad.com (Postfix) with ESMTP id ED41F20193;
+ Thu,  3 Apr 2025 14:40:22 -0500 (CDT)
+From: Vincent Fazio <vfazio@xes-inc.com>
 To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>
-Date: Thu,  3 Apr 2025 21:21:57 +0200
-Message-ID: <20250403192157.145639-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.49.0
+Date: Thu,  3 Apr 2025 14:40:21 -0500
+Message-Id: <20250403194021.823332-1-vfazio@xes-inc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1743708123;
- bh=J2WVTao+C8rKCQen0nHniIA1uYamlA7CxVoSDNA25vU=;
+ d=xes-inc.com; s=mail; 
+ t=1743709223; bh=cxBuLff1+J7O5itQ8d/7SIkGQ/1o8AEMdpWQ2ijIh/g=;
  h=From:To:Cc:Subject:Date:From;
- b=pGMYLVvzFGRkm9nOWTQDgFUPisTabucfxeA9/vRtKsAu+Aj8NIbKGDT0VvBo+t5hD
- tXx6hNiWW+x7aFg1HJadEJljZ5G/VlEghd59QXH1g3IEKHoRodPvHafIhmjgICwhUN
- 402ntuxe6d1UvEJCr274E4AgUA55jlb+EcByd0hGauKlfBrLyJTOcGfmqMfVPmC1iD
- MOxdQfbkqeZxifsoTq10bVhLDNPIQPlfEp5DidaLmN/DxzDe8wkhV99DKQO55slTnT
- 5ru2t5EHf647KxI9ZHl5yaB+6vOYkBAFX5YIHf2+BRbxT3V1DQPIDUgSyECMWFzuWI
- OFkfYv1Cs1Lng==
+ b=bRMOJBiZYbpbzNHzXaALygqvDgdgx2F3Iuk2sdmSdLavXfqkqrw9T8ryOw5LW7kEy
+ HrvTgn/efBZ0H8GYaH+DxpCRGuplAF4FsTsFwGG9hQDNyMziXcJQb4Fxzbqhd0Ejeq
+ TvbEiDz9j1Enljh0F7HBTs9+WPEOueO+csfrM6OU=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
+ header.from=xes-inc.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=pGMYLVvz
-Subject: [Buildroot] [PATCH 1/1] package/tmux: bump to version 3.5a
+ dkim=pass (1024-bit key,
+ unprotected) header.d=xes-inc.com header.i=@xes-inc.com header.a=rsa-sha256
+ header.s=mail header.b=bRMOJBiZ
+Subject: [Buildroot] [PATCH] package/python3: backport upstream fix for
+ mimalloc on armeb
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,68 +72,115 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Vincent Fazio <vfazio@xes-inc.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see [1].
+Python3 uses mimalloc by default, however, mimalloc did not compile for
+big-endian ARM and generated the wrong instructions for ARMv7+ targets.
 
-This commit adds the dependency to host-bison, which is needed since
-upstream commit [2], included since version 3.4. The optional dependency
-to jemalloc is also added, introduced since upstream commit [3],
-included since version 3.5.
+These issues have been fixed upstream in both mimalloc and CPython.
 
-[1] https://github.com/tmux/tmux/blob/3.5a/CHANGES
-[2] https://github.com/tmux/tmux/commit/00812c9053a0b1067f833925b726086a67d8528d
-[3] https://github.com/tmux/tmux/commit/3c2621b41b9e1466d2b06718a0a8514f5d10ded9
+Fixes: https://autobuild.buildroot.org/results/26b752738022e8b46e810a08e28d687120e5c4e3/
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
 ---
-Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/9619369240
----
- package/tmux/tmux.hash |  2 +-
- package/tmux/tmux.mk   | 11 +++++++++--
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ ...ix-mi_atomic_yield-in-mimalloc-on-32.patch | 80 +++++++++++++++++++
+ 1 file changed, 80 insertions(+)
+ create mode 100644 package/python3/0011-3.13-gh-131675-Fix-mi_atomic_yield-in-mimalloc-on-32.patch
 
-diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
-index b5c0fe58d0..c4eb508d78 100644
---- a/package/tmux/tmux.hash
-+++ b/package/tmux/tmux.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  e4fd347843bd0772c4f48d6dde625b0b109b7a380ff15db21e97c11a4dcdf93f  tmux-3.3a.tar.gz
-+sha256  16216bd0877170dfcc64157085ba9013610b12b082548c7c9542cc0103198951  tmux-3.5a.tar.gz
- sha256  c031bd37f464c534277814f6aa38686fa023d094261d57fd2545ad592bb53ccd  COPYING
-diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
-index 533a82bbad..4cceeabfc5 100644
---- a/package/tmux/tmux.mk
-+++ b/package/tmux/tmux.mk
-@@ -4,12 +4,19 @@
- #
- ################################################################################
- 
--TMUX_VERSION = 3.3a
-+TMUX_VERSION = 3.5a
- TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
- TMUX_LICENSE = ISC
- TMUX_LICENSE_FILES = COPYING
- TMUX_CPE_ID_VALID = YES
--TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
-+TMUX_DEPENDENCIES = host-bison libevent ncurses host-pkgconf
+diff --git a/package/python3/0011-3.13-gh-131675-Fix-mi_atomic_yield-in-mimalloc-on-32.patch b/package/python3/0011-3.13-gh-131675-Fix-mi_atomic_yield-in-mimalloc-on-32.patch
+new file mode 100644
+index 0000000000..b4ecde94ee
+--- /dev/null
++++ b/package/python3/0011-3.13-gh-131675-Fix-mi_atomic_yield-in-mimalloc-on-32.patch
+@@ -0,0 +1,80 @@
++From a9aae012b4ee83f1aba7c122943c63b69c5b9f97 Mon Sep 17 00:00:00 2001
++From: "Miss Islington (bot)"
++ <31488909+miss-islington@users.noreply.github.com>
++Date: Mon, 31 Mar 2025 20:58:29 +0200
++Subject: [PATCH] [3.13] gh-131675: Fix `mi_atomic_yield` in mimalloc on 32-bit
++ ARM (gh-131784) (gh-131954)
 +
-+ifeq ($(BR2_PACKAGE_JEMALLOC),y)
-+TMUX_DEPENDENCIES += jemalloc
-+TMUX_CONF_OPTS += --enable-jemalloc
-+else
-+TMUX_CONF_OPTS += --disable-jemalloc
-+endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- TMUX_DEPENDENCIES += systemd
++Use the standard `__ARM_ARCH` macro, which is supported by GCC and Clang.
++
++The branching logic for of `__ARMEL__` has been removed so if the target
++architecture supports v7+ instructions, a yield is emitted, otherwise a nop
++is emitted. This covers both big and little endian scenarios.
++(cherry picked from commit 03f6c8e239723637811fd8d278661f5292351197)
++
++Upstream: https://github.com/python/cpython/pull/131954
++
++Signed-off-by: Vincent Fazio <vfazio@gmail.com>
++Co-authored-by: Vincent Fazio <vfazio@gmail.com>
++Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
++---
++ Include/internal/mimalloc/mimalloc/atomic.h     | 17 ++++++++++-------
++ ...25-03-27-01-21-50.gh-issue-131675.l2zfOO.rst |  1 +
++ 2 files changed, 11 insertions(+), 7 deletions(-)
++ create mode 100644 Misc/NEWS.d/next/Build/2025-03-27-01-21-50.gh-issue-131675.l2zfOO.rst
++
++diff --git a/Include/internal/mimalloc/mimalloc/atomic.h b/Include/internal/mimalloc/mimalloc/atomic.h
++index 1093c540864..a46a7676ad2 100644
++--- a/Include/internal/mimalloc/mimalloc/atomic.h
+++++ b/Include/internal/mimalloc/mimalloc/atomic.h
++@@ -338,8 +338,9 @@ static inline void mi_atomic_yield(void) {
++   _mm_pause();
++ }
++ #elif (defined(__GNUC__) || defined(__clang__)) && \
++-      (defined(__x86_64__) || defined(__i386__) || defined(__arm__) || defined(__armel__) || defined(__ARMEL__) || \
++-       defined(__aarch64__) || defined(__powerpc__) || defined(__ppc__) || defined(__PPC__)) || defined(__POWERPC__)
+++      (defined(__x86_64__) || defined(__i386__) || \
+++       defined(__aarch64__) || defined(__arm__) || \
+++       defined(__powerpc__) || defined(__ppc__) || defined(__PPC__) || defined(__POWERPC__))
++ #if defined(__x86_64__) || defined(__i386__)
++ static inline void mi_atomic_yield(void) {
++   __asm__ volatile ("pause" ::: "memory");
++@@ -348,10 +349,16 @@ static inline void mi_atomic_yield(void) {
++ static inline void mi_atomic_yield(void) {
++   __asm__ volatile("wfe");
++ }
++-#elif (defined(__arm__) && __ARM_ARCH__ >= 7)
+++#elif defined(__arm__)
+++#if __ARM_ARCH >= 7
++ static inline void mi_atomic_yield(void) {
++   __asm__ volatile("yield" ::: "memory");
++ }
+++#else
+++static inline void mi_atomic_yield(void) {
+++  __asm__ volatile ("nop" ::: "memory");
+++}
+++#endif
++ #elif defined(__powerpc__) || defined(__ppc__) || defined(__PPC__) || defined(__POWERPC__)
++ #ifdef __APPLE__
++ static inline void mi_atomic_yield(void) {
++@@ -362,10 +369,6 @@ static inline void mi_atomic_yield(void) {
++   __asm__ __volatile__ ("or 27,27,27" ::: "memory");
++ }
++ #endif
++-#elif defined(__armel__) || defined(__ARMEL__)
++-static inline void mi_atomic_yield(void) {
++-  __asm__ volatile ("nop" ::: "memory");
++-}
++ #endif
++ #elif defined(__sun)
++ // Fallback for other archs
++diff --git a/Misc/NEWS.d/next/Build/2025-03-27-01-21-50.gh-issue-131675.l2zfOO.rst b/Misc/NEWS.d/next/Build/2025-03-27-01-21-50.gh-issue-131675.l2zfOO.rst
++new file mode 100644
++index 00000000000..be870a81df1
++--- /dev/null
+++++ b/Misc/NEWS.d/next/Build/2025-03-27-01-21-50.gh-issue-131675.l2zfOO.rst
++@@ -0,0 +1 @@
+++Fix mimalloc library builds for 32-bit ARM targets.
++-- 
++2.34.1
++
 -- 
-2.49.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
