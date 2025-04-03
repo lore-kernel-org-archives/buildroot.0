@@ -1,117 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96739C36018
-	for <buildroot@archiver.kernel.org>; Wed,  2 Apr 2025 21:46:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67027C36014
+	for <buildroot@archiver.kernel.org>; Thu,  3 Apr 2025 02:12:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 13ECC40907;
-	Wed,  2 Apr 2025 21:46:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8B5F960842;
+	Thu,  3 Apr 2025 02:12:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oXNQ21fsV7P9; Wed,  2 Apr 2025 21:46:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xs1bfVKs3ids; Thu,  3 Apr 2025 02:12:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E6D714091D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5ADCD607C9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E6D714091D;
-	Wed,  2 Apr 2025 21:46:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5ADCD607C9;
+	Thu,  3 Apr 2025 02:12:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8F064117
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 21:46:45 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id CFB12220
+ for <buildroot@buildroot.org>; Thu,  3 Apr 2025 02:12:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6C4DD40907
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 21:46:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B84564120E
+ for <buildroot@buildroot.org>; Thu,  3 Apr 2025 02:12:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id egU3E80CSM_B for <buildroot@buildroot.org>;
- Wed,  2 Apr 2025 21:46:44 +0000 (UTC)
+ id vl3AiXyWH-Qr for <buildroot@buildroot.org>;
+ Thu,  3 Apr 2025 02:12:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::42f; helo=mail-pf1-x42f.google.com;
- envelope-from=charlie@rivosinc.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D300340903
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D300340903
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com
- [IPv6:2607:f8b0:4864:20::42f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D300340903
- for <buildroot@buildroot.org>; Wed,  2 Apr 2025 21:46:43 +0000 (UTC)
-Received: by mail-pf1-x42f.google.com with SMTP id
- d2e1a72fcca58-7394945d37eso191828b3a.3
- for <buildroot@buildroot.org>; Wed, 02 Apr 2025 14:46:43 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::52f; helo=mail-pg1-x52f.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9B88840749
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B88840749
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com
+ [IPv6:2607:f8b0:4864:20::52f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9B88840749
+ for <buildroot@buildroot.org>; Thu,  3 Apr 2025 02:12:30 +0000 (UTC)
+Received: by mail-pg1-x52f.google.com with SMTP id
+ 41be03b00d2f7-af523f4511fso399582a12.0
+ for <buildroot@buildroot.org>; Wed, 02 Apr 2025 19:12:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1743630403; x=1744235203;
- h=cc:to:message-id:content-transfer-encoding:mime-version:subject
- :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1743646350; x=1744251150;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=re/rQZ5xk+L4U3B1YS4++xdq/efz0RGcU1b53t3+GpU=;
- b=p3FJjCCZMGrX5ErYzbXQWwBmFaFhp7/I2yRlHb1MqhQtNUBnTV8Kx8U5zjErILFYag
- rBMUy3RPVxjFrlS2VXwP+ntphqSsUZkBBE+7GB1B0hajEelcPB9ZF5XsNc9P45Ti1AdN
- 8ey/WkuRmNwLUns+i1s3GSxr0RudCFNpseHa88GayqeeYwtdanZex87LNG53pDqVzvUI
- U9sOGjpvcSXCUrOXwBCXCTB3u94mKH23UnYX0P/Swk5vmFbNOQO48uwQGrmT03sNjwO6
- /++BytKqKtrYT4qK6tXy139MNtQNR9zDMKlNszlggjizgTfg7Y/WjUdwS9mBkTM4pQ6z
- 7Dog==
-X-Gm-Message-State: AOJu0YwmD5iLVSWP3svOWORnl65VfNc/N2972W25RqCDKG+wnjwWNvwr
- 3DNv4l2UKS1E1KSvRta8NGZPj6gKtb1WCxwxX8mYcLmwQUv/CKfeK4H4X4QnToE=
-X-Gm-Gg: ASbGncsuf0cxXEpvGyB5wb8ByW9XVnM4RLnCZwjqJrToOD1Wb0ij3jYzvYOKarP2I1j
- Tq4Q1e6FT8jh9hoGJScno7LnYCT20GVFifL2QqxhCRVGryvQlbD0eq05hG2O0dNXyVeme7LogJF
- 2sosz0RoN2QYiO8PZKAleg5u8K1YEeh1jYG7t5hehpoEBp93atj/sayNSQ027mYtQrEeslGsxS8
- yYaIhBHngj91C4dDTgeV4Ii6XD9f67ZUBaAfErmefkCsTORr1rs6BX1jqD2doKYxbC01LYJUthZ
- v8cTpGEJXP7jP3/r9TQBlqnNLvmNg4I17nmgYPeN0IDbGNK3FGwx9NPb0tPG
-X-Google-Smtp-Source: AGHT+IHk5HgLpdAFnyLhycJfkgGVI+VidkO71LhekPlCa05cnTQ0LgsB7PLLM7pogicOJOCTeE8x0g==
-X-Received: by 2002:a17:90b:2d4b:b0:2ee:9b09:7d3d with SMTP id
- 98e67ed59e1d1-3057cc171a1mr381802a91.19.1743630403174; 
- Wed, 02 Apr 2025 14:46:43 -0700 (PDT)
-Received: from charlie.ba.rivosinc.com ([64.71.180.162])
+ bh=CpuHVgzzTu26XlEZRP1LIsAqAUttJlXZCrwNaf46yzU=;
+ b=bI6F0l+gI3TxhOA3tqhMlaWYSRjRdA0uILiGM2YXudhbJaDl7hdLAgMeKjkEccuaTc
+ xV9hDWsBcDfmOd+oMfpSLKO/5+0T2qn1vWkqDaSm8EDl00iMOv4bRUUGrc9GnRpn+HGl
+ 2YI0LpezmFE0uwsUGdcoE0Ncz3iiFGlagwilco+3gqZMfvH0Y6xseT4TD9z3i/CajKWu
+ 1jrsU+llNVZ7aUEWE5GxdwYBTEX4P/kohdZ6A1lK4cZn0kkTxmp46jrSvyN8//8pD5ja
+ IhAq/4dJIwYcUAZ52w61rPur3c4eWsH/RdtFwOz63mCU0quiIPJbkZv2j7685Iq0XurG
+ /R5Q==
+X-Gm-Message-State: AOJu0Yw9Rfd6ObPejEwA+CjtayMtPIXDm5gdFVh3Dh33qcAfXubPvORG
+ f0MIJsu/IxdsZEjyz9AmW1qesbbHCTtR84VQLq+4ilrL5DFF8jMQdmZMWfr33zQKmEqw6te47Or
+ U
+X-Gm-Gg: ASbGncv2aK4n6SvrXVjyRIDr5o85KZLWNbUladKwgtXKLRYFgUNF+CdwP21C+XcUZih
+ Gf01T//EE+ttepOZ70//jb4TNzUqqACyXYXouWUF7/pgwqydPBGORrH1lkloGPdLSJeAmRthSOf
+ 036WoAz/e1w1TirMrvatYrRS8/xsmtNLJ2U3uDeHTEeImny/Dn2vPFMgbCt1EWoBbNzbYqXHx4V
+ 9QtvUeB7ywT+e4oUa1CKKb28qHy8yReT2QbuoUnWRctABymIhhhcoxmcjMvRxEKrpW/3tFvOF00
+ 67lQhXEItkCI1OoKR5cXa1hzwzIHlh3A/vtiLtR8PliWgf31+EunX8Kl7F2/ZYDfzF5z9Q==
+X-Google-Smtp-Source: AGHT+IF9Ke49HlezgctV5DIhBctv+VvK4AQM2EQFhB47pYGj0yomdA/42CZwQ6oSgpTmE/ISfKFvRg==
+X-Received: by 2002:a17:902:8506:b0:223:5c33:56b4 with SMTP id
+ d9443c01a7336-2292f9629b3mr202442565ad.20.1743646349631; 
+ Wed, 02 Apr 2025 19:12:29 -0700 (PDT)
+Received: from localhost.localdomain ([185.228.19.20])
  by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-3056f83c9bcsm2214975a91.17.2025.04.02.14.46.41
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Apr 2025 14:46:42 -0700 (PDT)
-From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Wed, 02 Apr 2025 14:46:31 -0700
+ d9443c01a7336-2297866e267sm2880515ad.188.2025.04.02.19.12.28
+ (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+ Wed, 02 Apr 2025 19:12:29 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Wed,  2 Apr 2025 19:12:21 -0700
+Message-ID: <20250403021222.25741-1-christian@aperture.us>
+X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
-Message-Id: <20250402-bump_linux_pam_1-7-0-v2-1-c000177ea7f0@rivosinc.com>
-X-B4-Tracking: v=1; b=H4sIADaw7WcC/4WNWwqDMBBFtyLz3Sl5NFj61X0UEU3GOlATSWqwi
- Htv6gb6eQ7cczdIFJkS3KoNImVOHHwBdarAjp1/ErIrDEooI7SW2C/T3L7YL2s7d1MrsUaBrq4
- HTYacVgRlOkcaeD2yj6bwyOkd4ud4yfJn/wSzRIlusJfemE44d71HziGxt2cbJmj2ff8CBu0/5
- LsAAAA=
-X-Change-ID: 20250331-bump_linux_pam_1-7-0-d77f3e5ed32e
-To: buildroot@buildroot.org, Julien Olivain <ju.o@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, 
- Charlie Jenkins <charlie@rivosinc.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10725; i=charlie@rivosinc.com; 
- h=from:subject:message-id;
- bh=kn93gDtIJiOAZwVdd8MKYEdJNSwF1bKi8/j1LKAMqzQ=; 
- b=owGbwMvMwCXWx5hUnlvL8Y3xtFoSQ/rbDdZbT3/XVBN5oBWtxHsionB1TF/P93b75Vll/4Nsz
- HoEtj3oKGVhEONikBVTZOG51sDceke/7Kho2QSYOaxMIEMYuDgFYCKNjgz/NHcK2h2aUvbz4qqW
- nMdX5jyXP8V90ZuXZ7atVk6bQsyaFwz/rC6zrD3vaXw91O5ZURDjJkWPEvPZjVdnREq+1bxz0eA
- bGwA=
-X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
- fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1743630403; x=1744235203;
- darn=buildroot.org; 
- h=cc:to:message-id:content-transfer-encoding:mime-version:subject
- :date:from:from:to:cc:subject:date:message-id:reply-to;
- bh=re/rQZ5xk+L4U3B1YS4++xdq/efz0RGcU1b53t3+GpU=;
- b=2HulWMJhMhrhoYwOg205L+YeTuwA5bO1Z7cSnHpH/k5SD5RlVFl3OfHyxZiZ0uPAON
- qwdZX0PKCcy5w/hz6WQuG7C3/WjWXZDlpHAje5RFloAK2XTuFRNkcblH0YNW8z3SgHc0
- CH9izpOzeg51cJMZ8mqc6RGcc91G+0ki4arHk8hVyiajIP/AdNGNqYcoPMuzSimSFTJ0
- VH53YQeegAzoqRuGYxlcdyliW5/G+PgHZ90vk6rhXZqZHyJcJ0E3eAhqrAK75pLgFwwm
- 4/1nwZK9OczMXHXoJpY1/bZ4YToiO6Uf0ipxtTA4+NX1vb+Lp9bBibLdnMld8F1wn/5S
- /wUg==
+ d=aperture.us; s=google; t=1743646350; x=1744251150; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=CpuHVgzzTu26XlEZRP1LIsAqAUttJlXZCrwNaf46yzU=;
+ b=y7tVnDl+CCY6X644pRtd4vcopZ2ocmo6HG+SHIr/ZoHh6iNVjIRjBsaIyoYrAzn9Ha
+ tEz6OvYeLaAyOWC3kxHNr6DhN4eD9khRXlDfkfSdVtjklc7Om11fR+EB3eZHgsYbiRPo
+ PCExslzgUXf47as3e+u6GouSKr5XMUPQldDqCRI9rUVbE5LeM3M6t8bEP4j/pAtz6HjN
+ DXkKr70G7mFVgTE3YfH0/HP3dkDyfZePr3tgzKnZKw76DJUkt/L4bI15Em+wsFHzLWmK
+ CIKm49n0ARDwRb8qQZgvZKng1Rov0XasXULc9JCzLLDADa8exby+cKzpshd9uOlcHNE1
+ SE5w==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=rivosinc.com
+ dmarc=pass (p=reject dis=none)
+ header.from=aperture.us
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=rivosinc-com.20230601.gappssmtp.com
- header.i=@rivosinc-com.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=2HulWMJh
-Subject: [Buildroot] [PATCH v2] package/linux-pam: bump to version 1.7.0
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=y7tVnDl+
+Subject: [Buildroot] [PATCH v2 1/2] package/go-bootstrap-stage4: add stage4
+ for go1.24 support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,194 +106,204 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: Christian Stewart <christian@aperture.us>,
+ James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Perale <thomas.perale@mind.be>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QnVtcCB0byBsYXRlc3QgdmVyc2lvbi4gUmVtb3ZlIHBhdGNoIGluY2x1ZGVkIGluIHJlbGVhc2Ug
-YW5kIGZpeHVwIHRoZQpjb25maWd1cmUgb3B0aW9ucyBkdWUgdG8gbGludXgtcGFtIG1pZ3JhdGlu
-ZyB0byB0aGUgTWVzb24gYnVpbGQgc3lzdGVtLgoKU2lnbmVkLW9mZi1ieTogQ2hhcmxpZSBKZW5r
-aW5zIDxjaGFybGllQHJpdm9zaW5jLmNvbT4KLS0tCkNoYW5nZXMgaW4gdjI6Ci0gRml4IGRlcGVu
-ZHMKLSBMaW5rIHRvIHYxOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjUwMzMxLWJ1bXBf
-bGludXhfcGFtXzEtNy0wLXYxLTEtZGZjNGI1NWEwZGQ4QHJpdm9zaW5jLmNvbQotLS0KIC4uLmJ1
-aWxkLWNvbnNpc3RlbnRseS1pbmNsdWRlLWNvbmZpZy5oLWZpcnN0LnBhdGNoIHwgMTgwIC0tLS0t
-LS0tLS0tLS0tLS0tLS0tLQogcGFja2FnZS9saW51eC1wYW0vQ29uZmlnLmluICAgICAgICAgICAg
-ICAgICAgICAgICAgfCAgIDUgKy0KIHBhY2thZ2UvbGludXgtcGFtL2xpbnV4LXBhbS5oYXNoICAg
-ICAgICAgICAgICAgICAgIHwgICA2ICstCiBwYWNrYWdlL2xpbnV4LXBhbS9saW51eC1wYW0ubWsg
-ICAgICAgICAgICAgICAgICAgICB8ICAzMCArKy0tCiA0IGZpbGVzIGNoYW5nZWQsIDIxIGluc2Vy
-dGlvbnMoKyksIDIwMCBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpbnV4LXBh
-bS8wMDAxLWJ1aWxkLWNvbnNpc3RlbnRseS1pbmNsdWRlLWNvbmZpZy5oLWZpcnN0LnBhdGNoIGIv
-cGFja2FnZS9saW51eC1wYW0vMDAwMS1idWlsZC1jb25zaXN0ZW50bHktaW5jbHVkZS1jb25maWcu
-aC1maXJzdC5wYXRjaApkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggZTlmMzZiOGE2MDZk
-OTgzNzNkYzYxY2M0YjQ5YzFjNDBlZDlhMzM1YS4uMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
-MDAwMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdlL2xpbnV4LXBhbS8wMDAxLWJ1aWxkLWNvbnNpc3Rl
-bnRseS1pbmNsdWRlLWNvbmZpZy5oLWZpcnN0LnBhdGNoCisrKyAvZGV2L251bGwKQEAgLTEsMTgw
-ICswLDAgQEAKLUZyb20gY2RiYTJjOGNkYmE5YjM1MDA1OTU2MjRmYjM3NWMwZGRhMjY2NjMxYiBN
-b24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKLUZyb206ICJEbWl0cnkgVi4gTGV2aW4iIDxsZHZAc3Ry
-YWNlLmlvPgotRGF0ZTogRnJpLCAzMCBBdWcgMjAyNCAwODowMDowMCArMDAwMAotU3ViamVjdDog
-W1BBVENIXSBidWlsZDogY29uc2lzdGVudGx5IGluY2x1ZGUgY29uZmlnLmggZmlyc3QKLQotTWFr
-ZSBzdXJlIHRoYXQgY29uZmlnLmggaXMgaW5jbHVkZWQgYmVmb3JlIGFueSBzeXN0ZW0gaGVhZGVy
-LgotCi1VcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL2xpbnV4LXBhbS9saW51eC1wYW0vY29t
-bWl0LzVkN2VlZmIxODgzYzU1N2M3YTAyN2Y2OGU5NjZlMmZhZTI5NGE5YjYKLVNpZ25lZC1vZmYt
-Ynk6IFRob21hcyBQZXRhenpvbmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+Ci0tLS0K
-LSBsaWJwYW0vcGFtX3ByZWx1ZGUuYyAgICAgICAgICAgICAgICB8IDggKysrKy0tLS0KLSBtb2R1
-bGVzL3BhbV9uYW1lc3BhY2UvYXJndl9wYXJzZS5jICB8IDIgKysKLSBtb2R1bGVzL3BhbV9zZXRx
-dW90YS9wYW1fc2V0cXVvdGEuYyB8IDMgKystCi0gbW9kdWxlcy9wYW1fdGltZXN0YW1wL3NoYTEu
-YyAgICAgICAgfCAyICstCi0gbW9kdWxlcy9wYW1fdW5peC9hdWRpdC5jICAgICAgICAgICAgfCAz
-ICstLQotIG1vZHVsZXMvcGFtX3VuaXgvYmlnY3J5cHRfbWFpbi5jICAgIHwgMiArKwotIG1vZHVs
-ZXMvcGFtX3VuaXgvbWQ1LmMgICAgICAgICAgICAgIHwgNCArKy0tCi0gbW9kdWxlcy9wYW1fdW5p
-eC9tZDVfY3J5cHQuYyAgICAgICAgfCAyICstCi0gbW9kdWxlcy9wYW1fdW5peC95cHBhc3N3ZC5o
-ICAgICAgICAgfCAyICsrCi0gOSBmaWxlcyBjaGFuZ2VkLCAxNyBpbnNlcnRpb25zKCspLCAxMSBk
-ZWxldGlvbnMoLSkKLQotZGlmZiAtLWdpdCBhL2xpYnBhbS9wYW1fcHJlbHVkZS5jIGIvbGlicGFt
-L3BhbV9wcmVsdWRlLmMKLWluZGV4IDZjNzNiZjVkLi5jNjJlMmYyYyAxMDA2NDQKLS0tLSBhL2xp
-YnBhbS9wYW1fcHJlbHVkZS5jCi0rKysgYi9saWJwYW0vcGFtX3ByZWx1ZGUuYwotQEAgLTUsMTcg
-KzUsMTcgQEAKLSAgKiAoQykgU2ViYXN0aWVuIFRyaWNhdWQgMjAwNSA8dG9hZHlAZ3Njb3JlLm9y
-Zz4KLSAgKi8KLSAKLS0jaW5jbHVkZSA8c3RkaW8uaD4KLS0jaW5jbHVkZSA8c3lzbG9nLmg+Ci0t
-Ci0gI2lmZGVmIFBSRUxVREUKLSAKLSsjaW5jbHVkZSAicGFtX3ByaXZhdGUuaCIKLSsKLSsjaW5j
-bHVkZSA8c3RkaW8uaD4KLSsjaW5jbHVkZSA8c3lzbG9nLmg+Ci0gI2luY2x1ZGUgPGxpYnByZWx1
-ZGUvcHJlbHVkZS5oPgotICNpbmNsdWRlIDxsaWJwcmVsdWRlL3ByZWx1ZGUtbG9nLmg+Ci0gI2lu
-Y2x1ZGUgPGxpYnByZWx1ZGUvaWRtZWYtbWVzc2FnZS1wcmludC5oPgotIAotICNpbmNsdWRlICJw
-YW1fcHJlbHVkZS5oIgotLSNpbmNsdWRlICJwYW1fcHJpdmF0ZS5oIgotIAotIAotICNkZWZpbmUg
-QU5BTFlaRVJfQ0xBU1MgInBhbSIKLWRpZmYgLS1naXQgYS9tb2R1bGVzL3BhbV9uYW1lc3BhY2Uv
-YXJndl9wYXJzZS5jIGIvbW9kdWxlcy9wYW1fbmFtZXNwYWNlL2FyZ3ZfcGFyc2UuYwotaW5kZXgg
-YWM3YzlhZTAuLmNiYWU3ODMxIDEwMDY0NAotLS0tIGEvbW9kdWxlcy9wYW1fbmFtZXNwYWNlL2Fy
-Z3ZfcGFyc2UuYwotKysrIGIvbW9kdWxlcy9wYW1fbmFtZXNwYWNlL2FyZ3ZfcGFyc2UuYwotQEAg
-LTI4LDYgKzI4LDggQEAKLSAgKiBWZXJzaW9uIDEuMSwgbW9kaWZpZWQgMi8yNy8xOTk5Ci0gICov
-Ci0gCi0rI2luY2x1ZGUgImNvbmZpZy5oIgotKwotICNpbmNsdWRlIDxsaW1pdHMuaD4KLSAjaW5j
-bHVkZSA8c3RkbGliLmg+Ci0gI2luY2x1ZGUgPGN0eXBlLmg+Ci1kaWZmIC0tZ2l0IGEvbW9kdWxl
-cy9wYW1fc2V0cXVvdGEvcGFtX3NldHF1b3RhLmMgYi9tb2R1bGVzL3BhbV9zZXRxdW90YS9wYW1f
-c2V0cXVvdGEuYwotaW5kZXggYzE1ZmM2NjkuLjczNDQ1ZTI5IDEwMDY0NAotLS0tIGEvbW9kdWxl
-cy9wYW1fc2V0cXVvdGEvcGFtX3NldHF1b3RhLmMKLSsrKyBiL21vZHVsZXMvcGFtX3NldHF1b3Rh
-L3BhbV9zZXRxdW90YS5jCi1AQCAtOCw2ICs4LDggQEAKLSAgICBDb3B5cmlnaHQgwqkgMjAxNiBL
-ZWxsZXIgRnVjaHMgPGtlbGxlcmZ1Y2hzQGhhc2hiYW5nLnNoPgotICovCi0gCi0rI2luY2x1ZGUg
-InBhbV9pbmxpbmUuaCIKLSsKLSAjaW5jbHVkZSA8c3lzL3R5cGVzLmg+Ci0gI2luY2x1ZGUgPHN5
-cy9xdW90YS5oPgotICNpbmNsdWRlIDxsaW51eC9xdW90YS5oPgotQEAgLTIyLDcgKzI0LDYgQEAK
-LSAjaW5jbHVkZSA8c2VjdXJpdHkvX3BhbV9tYWNyb3MuaD4KLSAjaW5jbHVkZSA8c2VjdXJpdHkv
-cGFtX2V4dC5oPgotICNpbmNsdWRlIDxzZWN1cml0eS9wYW1fbW9kdXRpbC5oPgotLSNpbmNsdWRl
-ICJwYW1faW5saW5lLmgiCi0gCi0gI2lmbmRlZiBQQVRIX0xPR0lOX0RFRlMKLSAjIGRlZmluZSBQ
-QVRIX0xPR0lOX0RFRlMgIi9ldGMvbG9naW4uZGVmcyIKLWRpZmYgLS1naXQgYS9tb2R1bGVzL3Bh
-bV90aW1lc3RhbXAvc2hhMS5jIGIvbW9kdWxlcy9wYW1fdGltZXN0YW1wL3NoYTEuYwotaW5kZXgg
-ZGZmNDU0Y2YuLmYyMWIyODcwIDEwMDY0NAotLS0tIGEvbW9kdWxlcy9wYW1fdGltZXN0YW1wL3No
-YTEuYwotKysrIGIvbW9kdWxlcy9wYW1fdGltZXN0YW1wL3NoYTEuYwotQEAgLTM3LDYgKzM3LDcg
-QEAKLSAgKi8KLSAvKiBTZWUgaHR0cDovL3d3dy5pdGwubmlzdC5nb3YvZmlwc3B1YnMvZmlwMTgw
-LTEuaHRtIGZvciBkZXNjcmlwdGlvbnMuICovCi0gCi0rI2luY2x1ZGUgInBhbV9pbmxpbmUuaCIK
-LSAjaW5jbHVkZSA8c3lzL3R5cGVzLmg+Ci0gI2luY2x1ZGUgPHN5cy9zdGF0Lmg+Ci0gI2luY2x1
-ZGUgPG5ldGluZXQvaW4uaD4KLUBAIC00Nyw3ICs0OCw2IEBACi0gI2luY2x1ZGUgPGVuZGlhbi5o
-PgotICNpbmNsdWRlIDx1bmlzdGQuaD4KLSAjaW5jbHVkZSAic2hhMS5oIgotLSNpbmNsdWRlICJw
-YW1faW5saW5lLmgiCi0gCi0gc3RhdGljIGNvbnN0IHVuc2lnbmVkIGNoYXIKLSBwYWRkaW5nW1NI
-QTFfQkxPQ0tfU0laRV0gPSB7Ci1kaWZmIC0tZ2l0IGEvbW9kdWxlcy9wYW1fdW5peC9hdWRpdC5j
-IGIvbW9kdWxlcy9wYW1fdW5peC9hdWRpdC5jCi1pbmRleCAxNTQ3YTY1Mi4uOTUxM2FhYTkgMTAw
-NjQ0Ci0tLS0gYS9tb2R1bGVzL3BhbV91bml4L2F1ZGl0LmMKLSsrKyBiL21vZHVsZXMvcGFtX3Vu
-aXgvYXVkaXQuYwotQEAgLTEsNSArMSwzIEBACi0tI2luY2x1ZGUgImF1ZGl0LmgiCi0tCi0gI2lu
-Y2x1ZGUgImNvbmZpZy5oIgotIAotICNpZmRlZiBIQVZFX0xJQkFVRElUCi1AQCAtMTEsNiArOSw3
-IEBACi0gCi0gI2luY2x1ZGUgPHNlY3VyaXR5L19wYW1fdHlwZXMuaD4KLSAKLSsjaW5jbHVkZSAi
-YXVkaXQuaCIKLSAjaW5jbHVkZSAicGFzc3ZlcmlmeS5oIgotIAotIGludCBhdWRpdF9sb2coaW50
-IHR5cGUsIGNvbnN0IGNoYXIgKnVuYW1lLCBpbnQgcmV0dmFsKQotZGlmZiAtLWdpdCBhL21vZHVs
-ZXMvcGFtX3VuaXgvYmlnY3J5cHRfbWFpbi5jIGIvbW9kdWxlcy9wYW1fdW5peC9iaWdjcnlwdF9t
-YWluLmMKLWluZGV4IGZhYjIxMmQ5Li4yMmQzMjVkYSAxMDA2NDQKLS0tLSBhL21vZHVsZXMvcGFt
-X3VuaXgvYmlnY3J5cHRfbWFpbi5jCi0rKysgYi9tb2R1bGVzL3BhbV91bml4L2JpZ2NyeXB0X21h
-aW4uYwotQEAgLTEsMyArMSw1IEBACi0rI2luY2x1ZGUgImNvbmZpZy5oIgotKwotICNpbmNsdWRl
-IDxzdGRpby5oPgotICNpbmNsdWRlIDxzdHJpbmcuaD4KLSAKLWRpZmYgLS1naXQgYS9tb2R1bGVz
-L3BhbV91bml4L21kNS5jIGIvbW9kdWxlcy9wYW1fdW5peC9tZDUuYwotaW5kZXggOTViOGRlNGMu
-Ljc4ZTlhZjI3IDEwMDY0NAotLS0tIGEvbW9kdWxlcy9wYW1fdW5peC9tZDUuYwotKysrIGIvbW9k
-dWxlcy9wYW1fdW5peC9tZDUuYwotQEAgLTE4LDExICsxOCwxMSBAQAotICAqCi0gICovCi0gCi0r
-I2luY2x1ZGUgInBhbV9pbmxpbmUuaCIKLSsKLSAjaW5jbHVkZSA8c3RyaW5nLmg+Ci0gI2luY2x1
-ZGUgIm1kNS5oIgotIAotLSNpbmNsdWRlICJwYW1faW5saW5lLmgiCi0tCi0gI2lmbmRlZiBISUdI
-RklSU1QKLSAjZGVmaW5lIGJ5dGVSZXZlcnNlKGJ1ZiwgbGVuKQkvKiBOb3RoaW5nICovCi0gI2Vs
-c2UKLWRpZmYgLS1naXQgYS9tb2R1bGVzL3BhbV91bml4L21kNV9jcnlwdC5jIGIvbW9kdWxlcy9w
-YW1fdW5peC9tZDVfY3J5cHQuYwotaW5kZXggOWE2YmQ0ZjkuLjk0NTFmMzc2IDEwMDY0NAotLS0t
-IGEvbW9kdWxlcy9wYW1fdW5peC9tZDVfY3J5cHQuYwotKysrIGIvbW9kdWxlcy9wYW1fdW5peC9t
-ZDVfY3J5cHQuYwotQEAgLTEyLDExICsxMiwxMSBAQAotICAqCi0gICovCi0gCi0rI2luY2x1ZGUg
-InBhbV9pbmxpbmUuaCIKLSAjaW5jbHVkZSA8c3RyaW5nLmg+Ci0gI2luY2x1ZGUgPHN0ZGlvLmg+
-Ci0gI2luY2x1ZGUgPHN0ZGxpYi5oPgotICNpbmNsdWRlICJtZDUuaCIKLS0jaW5jbHVkZSAicGFt
-X2lubGluZS5oIgotIAotIHN0YXRpYyBjb25zdCB1bnNpZ25lZCBjaGFyIGl0b2E2NFtdID0JLyog
-MCAuLi4gNjMgPT4gYXNjaWkgLSA2NCAqLwotICIuLzAxMjM0NTY3ODlBQkNERUZHSElKS0xNTk9Q
-UVJTVFVWV1hZWmFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6IjsKLWRpZmYgLS1naXQgYS9tb2R1
-bGVzL3BhbV91bml4L3lwcGFzc3dkLmggYi9tb2R1bGVzL3BhbV91bml4L3lwcGFzc3dkLmgKLWlu
-ZGV4IGRjNjg2Y2Q3Li4zYTQwYzNlYSAxMDA2NDQKLS0tLSBhL21vZHVsZXMvcGFtX3VuaXgveXBw
-YXNzd2QuaAotKysrIGIvbW9kdWxlcy9wYW1fdW5peC95cHBhc3N3ZC5oCi1AQCAtNiw2ICs2LDgg
-QEAKLSAjaWZuZGVmIF9ZUFBBU1NXRF9IX1JQQ0dFTgotICNkZWZpbmUgX1lQUEFTU1dEX0hfUlBD
-R0VOCi0gCi0rI2luY2x1ZGUgImNvbmZpZy5oIgotKwotICNpbmNsdWRlIDxycGMvcnBjLmg+Ci0g
-Ci0gCi0tLSAKLTIuNDcuMQotCmRpZmYgLS1naXQgYS9wYWNrYWdlL2xpbnV4LXBhbS9Db25maWcu
-aW4gYi9wYWNrYWdlL2xpbnV4LXBhbS9Db25maWcuaW4KaW5kZXggNmIwOGE5YzRjMmE5ZmYxNGE5
-ZDQzYzk2ZWNjOTk4MjZjODJiZGFlNy4uNDFkZThmODMzYjE0MjQ3Yjg1Y2UxODQ5YzA4ZmFjNmE1
-MDc3MjdkNSAxMDA2NDQKLS0tIGEvcGFja2FnZS9saW51eC1wYW0vQ29uZmlnLmluCisrKyBiL3Bh
-Y2thZ2UvbGludXgtcGFtL0NvbmZpZy5pbgpAQCAtMyw2ICszLDcgQEAgY29uZmlnIEJSMl9QQUNL
-QUdFX0xJTlVYX1BBTQogCWRlcGVuZHMgb24gQlIyX0VOQUJMRV9MT0NBTEUKIAlkZXBlbmRzIG9u
-IEJSMl9VU0VfV0NIQVIKIAlkZXBlbmRzIG9uICFCUjJfU1RBVElDX0xJQlMKKwlkZXBlbmRzIG9u
-ICFCUjJfbWljcm9ibGF6ZSAjIFRvb2xjaGFpbiBkb2Vzbid0IHN1cHBvcnQgc2hhcmVkIGxpYnJh
-cmllcwogCWRlcGVuZHMgb24gQlIyX1VTRV9NTVUgIyBmb3JrKCkKIAlkZXBlbmRzIG9uIEJSMl9U
-T09MQ0hBSU5fR0NDX0FUX0xFQVNUXzRfOSAjIEMxMS9zdGRhdG9taWMuaAogCXNlbGVjdCBCUjJf
-UEFDS0FHRV9MSUJYQ1JZUFQgaWYgQlIyX1RPT0xDSEFJTl9VU0VTX0dMSUJDCkBAIC0xNiw4ICsx
-NywxMCBAQCBpZiBCUjJfUEFDS0FHRV9MSU5VWF9QQU0KIAogY29uZmlnIEJSMl9QQUNLQUdFX0xJ
-TlVYX1BBTV9MQVNUTE9HCiAJYm9vbCAicGFtX2xhc3Rsb2cuc28iCisJZGVwZW5kcyBvbiAhQlIy
-X1RPT0xDSEFJTl9VU0VTX01VU0wKIAloZWxwCi0JICBCdWlsZCBwYW1fbGFzdGxvZy5zbyBtb2R1
-bGUuCisJICBCdWlsZCBwYW1fbGFzdGxvZy5zbyBtb2R1bGUuIFJlcXVpcmVzIHRvb2xjaGFpbiBz
-dXBwb3J0IGZvciBzaGFyZWQgbGlicmFyaWVzCisJICB3aGljaCBtaWNyb2JsYXplIGRvZXMgbm90
-IGhhdmUuCiAKIGVuZGlmCiAKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGludXgtcGFtL2xpbnV4LXBh
-bS5oYXNoIGIvcGFja2FnZS9saW51eC1wYW0vbGludXgtcGFtLmhhc2gKaW5kZXggMzUzNjEzZTZl
-NmVhMzBkNDg2MTdmZDI0MDE4YTA5N2M3MzViODcxYy4uM2VkOTg1MTBkMDNmZmUzYTUwY2ZkZjI3
-NDVmYTcwYzg1MzI3NjlhZSAxMDA2NDQKLS0tIGEvcGFja2FnZS9saW51eC1wYW0vbGludXgtcGFt
-Lmhhc2gKKysrIGIvcGFja2FnZS9saW51eC1wYW0vbGludXgtcGFtLmhhc2gKQEAgLTEsNiArMSw2
-IEBACiAjIExvY2FsbHkgY29tcHV0ZWQgaGFzaGVzIGFmdGVyIGNoZWNraW5nIHNpZ25hdHVyZSBh
-dAotIyBodHRwczovL2dpdGh1Yi5jb20vbGludXgtcGFtL2xpbnV4LXBhbS9yZWxlYXNlcy9kb3du
-bG9hZC92MS42LjEvTGludXgtUEFNLTEuNi4xLnRhci54ei5hc2MKLSMgc2lnbmVkIHdpdGggdGhl
-IGtleSA4QzZCRkQ5MkVFMEY0MkVERjkxQTZBNzM2RDFBN0YwNTJFNTkyNEJCCi1zaGEyNTYgIGY4
-OTIzYzc0MDE1OTA1MmQ3MTlkYmZjMmEyZjgxOTQyZDY4ZGQzNGZjYWY2MWM3MDZhMDJjOWI4MGZl
-ZWVmOGUgIExpbnV4LVBBTS0xLjYuMS50YXIueHoKKyMgaHR0cHM6Ly9naXRodWIuY29tL2xpbnV4
-LXBhbS9saW51eC1wYW0vcmVsZWFzZXMvZG93bmxvYWQvdjEuNy4wL0xpbnV4LVBBTS0xLjcuMC50
-YXIueHouYXNjCisjIHNpZ25lZCB3aXRoIHRoZSBrZXkgMjk2RDZGMjlBMDIwODA4RTg3MTdBODg0
-MkRCNUJEODlBMzQwQUVCNworc2hhMjU2ICA1N2RjZDdhNmI5NjZlY2Q1YmJkOTVlMWQxMTE3Mzcz
-NDY5MWUxNmI2ODY5MmZhNTk2NjFjZGFlOWIxM2IxNjk3ICBMaW51eC1QQU0tMS43LjAudGFyLnh6
-CiAjIExvY2FsbHkgY29tcHV0ZWQKIHNoYTI1NiAgMTMzZDk4ZTdhMmFiM2ZmZDMzMGI0ZGViYjBi
-ZmMxMGZlYTIxZTRiMmI1YTViMDlkZTJlOTI0MjkzYmU1ZmYwOCAgQ29weXJpZ2h0CmRpZmYgLS1n
-aXQgYS9wYWNrYWdlL2xpbnV4LXBhbS9saW51eC1wYW0ubWsgYi9wYWNrYWdlL2xpbnV4LXBhbS9s
-aW51eC1wYW0ubWsKaW5kZXggMjNiMDllZmJhZWE2YTE0ODkyNGJjMGViNzcyMWU2Y2JlYzdmOGU2
-Yi4uNGYxOGExMmMyMDU5ZTcwNDk4ZWNiMGFkYjFiMjNkZmYyZmEwNDM4OCAxMDA2NDQKLS0tIGEv
-cGFja2FnZS9saW51eC1wYW0vbGludXgtcGFtLm1rCisrKyBiL3BhY2thZ2UvbGludXgtcGFtL2xp
-bnV4LXBhbS5tawpAQCAtNCwxNyArNCwxNSBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMK
-IAotTElOVVhfUEFNX1ZFUlNJT04gPSAxLjYuMQorTElOVVhfUEFNX1ZFUlNJT04gPSAxLjcuMAog
-TElOVVhfUEFNX1NPVVJDRSA9IExpbnV4LVBBTS0kKExJTlVYX1BBTV9WRVJTSU9OKS50YXIueHoK
-IExJTlVYX1BBTV9TSVRFID0gaHR0cHM6Ly9naXRodWIuY29tL2xpbnV4LXBhbS9saW51eC1wYW0v
-cmVsZWFzZXMvZG93bmxvYWQvdiQoTElOVVhfUEFNX1ZFUlNJT04pCiBMSU5VWF9QQU1fSU5TVEFM
-TF9TVEFHSU5HID0gWUVTCiBMSU5VWF9QQU1fQ09ORl9PUFRTID0gXAotCS0tZGlzYWJsZS1wcmVs
-dWRlIFwKLQktLWRpc2FibGUtaXNhZGlyIFwKLQktLWRpc2FibGUtbmlzIFwKLQktLWRpc2FibGUt
-ZGIgXAotCS0tZGlzYWJsZS1yZWdlbmVyYXRlLWRvY3UgXAotCS0tZW5hYmxlLXNlY3VyZWRpcj0v
-bGliL3NlY3VyaXR5IFwKKwktRG5pcz1kaXNhYmxlZCBcCisJLURwYW1fdXNlcmRiPWRpc2FibGVk
-IFwKKwktRGRvY3M9ZGlzYWJsZWQgXAorCS1Ec2VjdXJlZGlyPS9saWIvc2VjdXJpdHkgXAogCS0t
-bGliZGlyPS9saWIKIExJTlVYX1BBTV9ERVBFTkRFTkNJRVMgPSBob3N0LWZsZXggaG9zdC1wa2dj
-b25mIFwKIAkkKGlmICQoQlIyX1BBQ0tBR0VfTElCWENSWVBUKSxsaWJ4Y3J5cHQpIFwKQEAgLTMw
-LDM4ICsyOCwzOCBAQCBMSU5VWF9QQU1fTElCUyArPSAtbGF0b21pYwogZW5kaWYKIAogaWZlcSAo
-JChCUjJfUEFDS0FHRV9MSUJTRUxJTlVYKSx5KQotTElOVVhfUEFNX0NPTkZfT1BUUyArPSAtLWVu
-YWJsZS1zZWxpbnV4CitMSU5VWF9QQU1fQ09ORl9PUFRTICs9IC1Ec2VsaW51eD1lbmFibGVkCiBM
-SU5VWF9QQU1fREVQRU5ERU5DSUVTICs9IGxpYnNlbGludXgKIGRlZmluZSBMSU5VWF9QQU1fU0VM
-SU5VWF9QQU1GSUxFX1RXRUFLCiAJJChTRUQpICdzL14jIFwoLipwYW1fc2VsaW51eC5zby4qXCkk
-JC9cMS8nIFwKIAkJJChUQVJHRVRfRElSKS9ldGMvcGFtLmQvbG9naW4KIGVuZGVmCiBlbHNlCi1M
-SU5VWF9QQU1fQ09ORl9PUFRTICs9IC0tZGlzYWJsZS1zZWxpbnV4CitMSU5VWF9QQU1fQ09ORl9P
-UFRTICs9IC1Ec2VsaW51eD1kaXNhYmxlZAogZW5kaWYKIAogaWZlcSAoJChCUjJfUEFDS0FHRV9B
-VURJVCkseSkKLUxJTlVYX1BBTV9DT05GX09QVFMgKz0gLS1lbmFibGUtYXVkaXQKK0xJTlVYX1BB
-TV9DT05GX09QVFMgKz0gLURhdWRpdD1lbmFibGVkCiBMSU5VWF9QQU1fREVQRU5ERU5DSUVTICs9
-IGF1ZGl0CiBlbHNlCi1MSU5VWF9QQU1fQ09ORl9PUFRTICs9IC0tZGlzYWJsZS1hdWRpdAorTElO
-VVhfUEFNX0NPTkZfT1BUUyArPSAtRGF1ZGl0PWRpc2FibGVkCiBlbmRpZgogCiBpZmVxICgkKEJS
-Ml9QQUNLQUdFX09QRU5TU0wpLHkpCi1MSU5VWF9QQU1fQ09ORl9PUFRTICs9IC0tZW5hYmxlLW9w
-ZW5zc2wKK0xJTlVYX1BBTV9DT05GX09QVFMgKz0gLURvcGVuc3NsPWVuYWJsZWQKIExJTlVYX1BB
-TV9ERVBFTkRFTkNJRVMgKz0gb3BlbnNzbAogZWxzZQotTElOVVhfUEFNX0NPTkZfT1BUUyArPSAt
-LWRpc2FibGUtb3BlbnNzbAorTElOVVhfUEFNX0NPTkZfT1BUUyArPSAtRG9wZW5zc2w9ZGlzYWJs
-ZWQKIGVuZGlmCiAKIGlmZXEgKCQoQlIyX1BBQ0tBR0VfTElOVVhfUEFNX0xBU1RMT0cpLHkpCi1M
-SU5VWF9QQU1fQ09ORl9PUFRTICs9IC0tZW5hYmxlLWxhc3Rsb2cKK0xJTlVYX1BBTV9DT05GX09Q
-VFMgKz0gLURwYW1fbGFzdGxvZz1lbmFibGVkCiBkZWZpbmUgTElOVVhfUEFNX0xBU1RMT0dfUEFN
-RklMRV9UV0VBSwogCSQoU0VEKSAncy9eIyBcKC4qcGFtX2xhc3Rsb2cuc28uKlwpJCQvXDEvJyBc
-CiAJCSQoVEFSR0VUX0RJUikvZXRjL3BhbS5kL2xvZ2luCiBlbmRlZgogZWxzZQotTElOVVhfUEFN
-X0NPTkZfT1BUUyArPSAtLWRpc2FibGUtbGFzdGxvZworTElOVVhfUEFNX0NPTkZfT1BUUyArPSAt
-RHBhbV9sYXN0bG9nPWRpc2FibGVkCiBlbmRpZgogCiAjIEluc3RhbGwgZGVmYXVsdCBwYW0gY29u
-ZmlnIChkZW55IGV2ZXJ5dGhpbmcgZXhjZXB0IGxvZ2luKQpAQCAtNzYsNCArNzQsNCBAQCBlbmRl
-ZgogCiBMSU5VWF9QQU1fUE9TVF9JTlNUQUxMX1RBUkdFVF9IT09LUyArPSBMSU5VWF9QQU1fSU5T
-VEFMTF9DT05GSUcKIAotJChldmFsICQoYXV0b3Rvb2xzLXBhY2thZ2UpKQorJChldmFsICQobWVz
-b24tcGFja2FnZSkpCgotLS0KYmFzZS1jb21taXQ6IDY5NjcwM2RjNWFlN2MyYTVmYTYzN2M3NjE5
-MDY2NTc5MTg2OTY5MmEKY2hhbmdlLWlkOiAyMDI1MDMzMS1idW1wX2xpbnV4X3BhbV8xLTctMC1k
-NzdmM2U1ZWQzMmUKLS0gCi0gQ2hhcmxpZQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+This patch is in preparation for bumping the host-go package to go1.24, which
+requires a minimum of Go1.22.6 for bootstrap.
+
+See: https://go.dev/doc/go1.24#bootstrap
+
+Signed-off-by: Christian Stewart <christian@aperture.us>
+---
+ package/go/Config.in.host                     |  1 +
+ ...ldvcs-false-when-building-go-bootstr.patch | 71 +++++++++++++++++++
+ package/go/go-bootstrap-stage4/Config.in.host |  4 ++
+ .../go-bootstrap-stage4.hash                  |  3 +
+ .../go-bootstrap-stage4.mk                    | 54 ++++++++++++++
+ 5 files changed, 133 insertions(+)
+ create mode 100644 package/go/go-bootstrap-stage4/0001-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
+ create mode 100644 package/go/go-bootstrap-stage4/Config.in.host
+ create mode 100644 package/go/go-bootstrap-stage4/go-bootstrap-stage4.hash
+ create mode 100644 package/go/go-bootstrap-stage4/go-bootstrap-stage4.mk
+
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+index 7e354b3298..4fd98c2301 100644
+--- a/package/go/Config.in.host
++++ b/package/go/Config.in.host
+@@ -90,3 +90,4 @@ source "package/go/go-bin/Config.in.host"
+ source "package/go/go-bootstrap-stage1/Config.in.host"
+ source "package/go/go-bootstrap-stage2/Config.in.host"
+ source "package/go/go-bootstrap-stage3/Config.in.host"
++source "package/go/go-bootstrap-stage4/Config.in.host"
+diff --git a/package/go/go-bootstrap-stage4/0001-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch b/package/go/go-bootstrap-stage4/0001-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
+new file mode 100644
+index 0000000000..58f4581b02
+--- /dev/null
++++ b/package/go/go-bootstrap-stage4/0001-cmd-dist-set-buildvcs-false-when-building-go-bootstr.patch
+@@ -0,0 +1,71 @@
++From 6b05378097c6a386ed9912d2471976dc39504e86 Mon Sep 17 00:00:00 2001
++From: Christian Stewart <christian@aperture.us>
++Date: Thu, 27 Jul 2023 21:28:47 -0700
++Subject: [PATCH] cmd/dist: set buildvcs=false when building go-bootstrap
++
++When building go-bootstrap as part of the make.bash process, the cmd/dist
++invokes the bootstrap Go compiler to build the go_bootstrap tool:
++
++${GOROOT_BOOTSTRAP}/bin/go install -tags=math_big_pure_go compiler_bootstrap purego bootstrap/cmd/...
++
++If there is an invalid .git directory in a parent of ${GOROOT_BOOTSTRAP},
++make.bash will fail. Reproduction of the issue:
++
++  mkdir go-issue-61620
++  cd ./go-issue-61620
++  wget https://go.dev/dl/go1.19.11.src.tar.gz
++  mkdir go-bootstrap
++  tar -xf go1.19.11.src.tar.gz -C ./go-bootstrap --strip-components=1
++  cd ./go-bootstrap/src/
++  bash make.bash
++  cd ../../
++  wget https://go.dev/dl/go1.20.6.src.tar.gz
++  mkdir go
++  tar -xf go1.20.6.src.tar.gz -C ./go/ --strip-components=1
++  printf "gitdir: ../../does/not/exist/.git" > ./.git
++  cd ./go/src/
++  GOROOT_BOOTSTRAP=$(pwd)/../../go-bootstrap/ bash make.bash
++
++The build fails with the following error:
++
++  Building Go toolchain1 using [snip]/go-1.19.10.
++  error obtaining VCS status: exit status 128
++    Use -buildvcs=false to disable VCS stamping.
++  go tool dist: FAILED: [snip]/go-1.19.10/bin/go install -tags=math_big_pure_go \
++    compiler_bootstrap purego bootstrap/cmd/...: exit status 1
++
++This change unconditionally sets -buildvcs=false when compiling go-bootstrap. We
++don't need the revision information in those binaries anyway. Setting this flag
++was previously not done as we were unsure if the go-bootstrap compiler would be
++new enough to support the buildvcs build flag. Since Go 1.20.x, Go 1.19.x is the
++minimum version for go-bootstrap, and supports -buildvcs=false. We can now set
++-buildvcs=false without worrying about compatibility.
++
++Related: https://github.com/golang/go/issues/54852
++Fixes: https://github.com/golang/go/issues/61620
++
++Upstream: https://github.com/golang/go/pull/61621
++
++Signed-off-by: Christian Stewart <christian@aperture.us>
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ src/cmd/dist/buildtool.go | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/src/cmd/dist/buildtool.go b/src/cmd/dist/buildtool.go
++index a528d7aa76..3b411d6ebb 100644
++--- a/src/cmd/dist/buildtool.go
+++++ b/src/cmd/dist/buildtool.go
++@@ -221,6 +221,9 @@ func bootstrapBuildTools() {
++ 	cmd := []string{
++ 		pathf("%s/bin/go", goroot_bootstrap),
++ 		"install",
+++		// Fixes cases where an invalid .git is present in a parent of GOROOT_BOOTSTRAP.
+++		// See: https://github.com/golang/go/issues/61620
+++		"-buildvcs=false",
++ 		"-tags=math_big_pure_go compiler_bootstrap purego",
++ 	}
++ 	if vflag > 0 {
++--
++2.41.0
++
+diff --git a/package/go/go-bootstrap-stage4/Config.in.host b/package/go/go-bootstrap-stage4/Config.in.host
+new file mode 100644
+index 0000000000..292486582c
+--- /dev/null
++++ b/package/go/go-bootstrap-stage4/Config.in.host
+@@ -0,0 +1,4 @@
++config BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE4_ARCH_SUPPORTS
++	bool
++	default y
++	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS
+diff --git a/package/go/go-bootstrap-stage4/go-bootstrap-stage4.hash b/package/go/go-bootstrap-stage4/go-bootstrap-stage4.hash
+new file mode 100644
+index 0000000000..115dc10fc0
+--- /dev/null
++++ b/package/go/go-bootstrap-stage4/go-bootstrap-stage4.hash
+@@ -0,0 +1,3 @@
++# From https://go.dev/dl
++sha256  0ca1f1e37ea255e3ce283af3f4e628502fb444587da987a5bb96d6c6f15930d4  go1.23.8.src.tar.gz
++sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go-bootstrap-stage4/go-bootstrap-stage4.mk b/package/go/go-bootstrap-stage4/go-bootstrap-stage4.mk
+new file mode 100644
+index 0000000000..e532718e52
+--- /dev/null
++++ b/package/go/go-bootstrap-stage4/go-bootstrap-stage4.mk
+@@ -0,0 +1,54 @@
++################################################################################
++#
++# go-bootstrap-stage4
++#
++################################################################################
++
++# Use last Go version that go-bootstrap-stage3 can build: v1.23.x
++# See https://go.dev/doc/go1.23#bootstrap
++GO_BOOTSTRAP_STAGE4_VERSION = 1.23.8
++GO_BOOTSTRAP_STAGE4_SITE = https://storage.googleapis.com/golang
++GO_BOOTSTRAP_STAGE4_SOURCE = go$(GO_BOOTSTRAP_STAGE4_VERSION).src.tar.gz
++
++GO_BOOTSTRAP_STAGE4_LICENSE = BSD-3-Clause
++GO_BOOTSTRAP_STAGE4_LICENSE_FILES = LICENSE
++
++# Use go-bootstrap-stage3 to bootstrap.
++HOST_GO_BOOTSTRAP_STAGE4_DEPENDENCIES = host-go-bootstrap-stage3
++
++HOST_GO_BOOTSTRAP_STAGE4_ROOT = $(HOST_DIR)/lib/go-$(GO_BOOTSTRAP_STAGE4_VERSION)
++
++# The go build system is not compatible with ccache, so use
++# HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
++HOST_GO_BOOTSTRAP_STAGE4_MAKE_ENV = \
++	GO111MODULE=off \
++	GOCACHE=$(HOST_GO_HOST_CACHE) \
++	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_STAGE3_ROOT) \
++	GOROOT_FINAL=$(HOST_GO_BOOTSTRAP_STAGE4_ROOT) \
++	GOROOT="$(@D)" \
++	GOBIN="$(@D)/bin" \
++	GOOS=linux \
++	CC=$(HOSTCC_NOCCACHE) \
++	CXX=$(HOSTCXX_NOCCACHE) \
++	CGO_ENABLED=0
++
++define HOST_GO_BOOTSTRAP_STAGE4_BUILD_CMDS
++	cd $(@D)/src && \
++		$(HOST_GO_BOOTSTRAP_STAGE4_MAKE_ENV) ./make.bash $(if $(VERBOSE),-v)
++endef
++
++define HOST_GO_BOOTSTRAP_STAGE4_INSTALL_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/bin/go $(HOST_GO_BOOTSTRAP_STAGE4_ROOT)/bin/go
++	$(INSTALL) -D -m 0755 $(@D)/bin/gofmt $(HOST_GO_BOOTSTRAP_STAGE4_ROOT)/bin/gofmt
++
++	cp -a $(@D)/lib $(HOST_GO_BOOTSTRAP_STAGE4_ROOT)/
++
++	mkdir -p $(HOST_GO_BOOTSTRAP_STAGE4_ROOT)/pkg
++	cp -a $(@D)/pkg/include $(HOST_GO_BOOTSTRAP_STAGE4_ROOT)/pkg/
++	cp -a $(@D)/pkg/tool $(HOST_GO_BOOTSTRAP_STAGE4_ROOT)/pkg/
++
++	# The Go sources must be installed to the host/ tree for the Go stdlib.
++	cp -a $(@D)/src $(HOST_GO_BOOTSTRAP_STAGE4_ROOT)/
++endef
++
++$(eval $(host-generic-package))
+-- 
+2.39.5
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
