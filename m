@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1482C369A1
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85889C36010
 	for <buildroot@archiver.kernel.org>; Fri,  4 Apr 2025 16:55:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 78D6080E45;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14DDA60D93;
 	Fri,  4 Apr 2025 16:55:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ErXbSNanU1yu; Fri,  4 Apr 2025 16:55:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jLgPGVh8YDGd; Fri,  4 Apr 2025 16:55:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B042E8114A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F214260B3F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B042E8114A;
-	Fri,  4 Apr 2025 16:55:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F214260B3F;
+	Fri,  4 Apr 2025 16:55:15 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 17BF11C7
- for <buildroot@buildroot.org>; Fri,  4 Apr 2025 16:55:14 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 48A45117
+ for <buildroot@buildroot.org>; Fri,  4 Apr 2025 16:55:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 63271812ED
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2EEBC812EF
  for <buildroot@buildroot.org>; Fri,  4 Apr 2025 16:55:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1_L7YssJyq1g for <buildroot@buildroot.org>;
+ id YLeb0zDDRa3J for <buildroot@buildroot.org>;
  Fri,  4 Apr 2025 16:55:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.125.25.11;
- helo=smtp-190b.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.125.25.9;
+ helo=smtp-1909.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6A10C80B71
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A10C80B71
-Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch
- [185.125.25.11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6A10C80B71
- for <buildroot@buildroot.org>; Fri,  4 Apr 2025 16:55:12 +0000 (UTC)
-Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch
- [10.7.10.108])
- by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4ZTl0V5tXPz2y;
- Fri,  4 Apr 2025 18:48:10 +0200 (CEST)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2DE82812ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DE82812ED
+Received: from smtp-1909.mail.infomaniak.ch (smtp-1909.mail.infomaniak.ch
+ [185.125.25.9])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2DE82812ED
+ for <buildroot@buildroot.org>; Fri,  4 Apr 2025 16:55:11 +0000 (UTC)
+Received: from smtp-4-0001.mail.infomaniak.ch (unknown
+ [IPv6:2001:1600:7:10:40ca:feff:fe05:1])
+ by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4ZTl0X4V9hzxhl;
+ Fri,  4 Apr 2025 18:48:12 +0200 (CEST)
 Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA
- id 4ZTl0V1stZzl3w; Fri,  4 Apr 2025 18:48:10 +0200 (CEST)
+ id 4ZTl0X0vnWzlFp; Fri,  4 Apr 2025 18:48:12 +0200 (CEST)
 From: Quentin Schulz <foss+buildroot@0leil.net>
-Date: Fri, 04 Apr 2025 18:47:35 +0200
+Date: Fri, 04 Apr 2025 18:47:39 +0200
 MIME-Version: 1.0
-Message-Id: <20250404-libcamera-0-5-0-v1-4-e2ca9d029aeb@cherry.de>
+Message-Id: <20250404-libcamera-0-5-0-v1-8-e2ca9d029aeb@cherry.de>
 References: <20250404-libcamera-0-5-0-v1-0-e2ca9d029aeb@cherry.de>
 In-Reply-To: <20250404-libcamera-0-5-0-v1-0-e2ca9d029aeb@cherry.de>
 To: buildroot@buildroot.org
@@ -60,8 +60,7 @@ X-Infomaniak-Routing: alpha
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=0leil.net
-Subject: [Buildroot] [PATCH 4/9] package/libcamera: improve future
- reproducibility by forcing auto features to disabled
+Subject: [Buildroot] [PATCH 8/9] package/libpisp: add new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,94 +79,120 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Quentin Schulz <quentin.schulz@cherry.de>
 
-meson allows to force all features set to "auto" to default to disabled
-except if explicitly enabled via the auto_features argument, c.f.
-https://mesonbuild.com/Build-options.html#features
+A helper library to generate run-time configuration for the Raspberry Pi
+ISP (PiSP), consisting of the Frontend and Backend hardware components.
 
-"""
-If the value of a feature option is set to auto, that value is
-overridden by the global auto_features option (which defaults to auto).
-This is intended to be used by packagers who want to have full control
-on which dependencies are required and which are disabled, and not rely
-on build-deps being installed (at the right version) to get a feature
-enabled.
-"""
+This PiSP is found on the Raspberry Pi 5.
 
-The only auto feature that we hadn't disabled explicitly is the
-gstreamer plugin. It is however expected that this wasn't a mistake as
-the dependencies for the gstreamer pluging wouldn't have been met
-thanks to the explicit LIBCAMERA_DEPENDENCIES we have based on the
-presence of the gstreamer symbols in the global config.
+This will be a dependency of the PiSP pipeline in libcamera in a future
+commit.
 
-This should make it less likely for future releases of libcamera to
-regress in terms of reproducibility because of "auto" features (though
-changes from "auto" to "enabled" wouldn't be caught and would be
-susceptible to race conditions with their dependencies in case they
-aren't properly specified and built after libcamera is).
+https://github.com/raspberrypi/libpisp
 
 Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 ---
- package/libcamera/libcamera.mk | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+ package/Config.in            |  1 +
+ package/libpisp/Config.in    | 22 ++++++++++++++++++++++
+ package/libpisp/libpisp.hash | 11 +++++++++++
+ package/libpisp/libpisp.mk   | 33 +++++++++++++++++++++++++++++++++
+ 4 files changed, 67 insertions(+)
 
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 0f52f08e39ab885a4989d337aec13fc3f88d654f..ac5c12ff72d34ec04fba8511bfcb492df17ec284 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -16,9 +16,9 @@ LIBCAMERA_DEPENDENCIES = \
- 	libyaml \
- 	gnutls
- LIBCAMERA_CONF_OPTS = \
-+	-Dauto_features=disabled \
- 	-Dandroid=disabled \
- 	-Ddocumentation=disabled \
--	-Dqcam=disabled \
- 	-Dtest=false \
- 	-Dwerror=false
- LIBCAMERA_INSTALL_STAGING = YES
-@@ -48,8 +48,6 @@ endif
- ifeq ($(BR2_PACKAGE_LIBCAMERA_PYTHON),y)
- LIBCAMERA_DEPENDENCIES += python3 python-pybind
- LIBCAMERA_CONF_OPTS += -Dpycamera=enabled
--else
--LIBCAMERA_CONF_OPTS += -Dpycamera=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBCAMERA_V4L2),y)
-@@ -71,8 +69,6 @@ LIBCAMERA_CONF_OPTS += -Dpipelines=$(subst $(space),$(comma),$(LIBCAMERA_PIPELIN
- ifeq ($(BR2_PACKAGE_LIBCAMERA_COMPLIANCE),y)
- LIBCAMERA_DEPENDENCIES += gtest libevent
- LIBCAMERA_CONF_OPTS += -Dlc-compliance=enabled
--else
--LIBCAMERA_CONF_OPTS += -Dlc-compliance=disabled
- endif
- 
- # gstreamer-video-1.0, gstreamer-allocators-1.0
-@@ -84,8 +80,6 @@ endif
- ifeq ($(BR2_PACKAGE_LIBEVENT),y)
- LIBCAMERA_CONF_OPTS += -Dcam=enabled
- LIBCAMERA_DEPENDENCIES += libevent
--else
--LIBCAMERA_CONF_OPTS += -Dcam=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_TIFF),y)
-@@ -95,15 +89,11 @@ endif
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- LIBCAMERA_CONF_OPTS += -Dudev=enabled
- LIBCAMERA_DEPENDENCIES += udev
--else
--LIBCAMERA_CONF_OPTS += -Dudev=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
- LIBCAMERA_CONF_OPTS += -Dtracing=enabled
- LIBCAMERA_DEPENDENCIES += lttng-libust
--else
--LIBCAMERA_CONF_OPTS += -Dtracing=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
+diff --git a/package/Config.in b/package/Config.in
+index 291e784f269c90d4b88fdebeba8f4add101c113a..d704e9d6b099e1832fbe574c571be6106c93b700 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1987,6 +1987,7 @@ menu "Multimedia"
+ 	source "package/libopenaptx/Config.in"
+ 	source "package/libopenh264/Config.in"
+ 	source "package/libopusenc/Config.in"
++	source "package/libpisp/Config.in"
+ 	source "package/libtheora/Config.in"
+ 	source "package/libudfread/Config.in"
+ 	source "package/libvpx/Config.in"
+diff --git a/package/libpisp/Config.in b/package/libpisp/Config.in
+new file mode 100644
+index 0000000000000000000000000000000000000000..8586c31f42914a219538e04fe93b62de38e0daab
+--- /dev/null
++++ b/package/libpisp/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_LIBPISP
++	bool "libpisp"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_PACKAGE_JSON_FOR_MODERN_CPP
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0 # V4L2_BUF_TYPE_META_OUTPUT
++	help
++	  A helper library to generate run-time configuration for the
++	  Raspberry Pi ISP (PiSP), consisting of the Frontend and
++	  Backend hardware components.
++
++	  https://github.com/raspberrypi/libpisp
++
++if BR2_PACKAGE_LIBPISP
++
++config BR2_PACKAGE_LIBPISP_LOGGING
++	bool "enable logging"
++	depends on BR2_PACKAGE_BOOST_LOG
++	help
++	  Enable logging
++endif
+diff --git a/package/libpisp/libpisp.hash b/package/libpisp/libpisp.hash
+new file mode 100644
+index 0000000000000000000000000000000000000000..3ec1628651cb17c96625b519901d4e156816e4dc
+--- /dev/null
++++ b/package/libpisp/libpisp.hash
+@@ -0,0 +1,11 @@
++# Locally computed
++sha256  13862de722511f202ea204644504ca5e6bd616b6a463932e7bc114767a68224d  libpisp-1.2.0.tar.xz
++
++# license files
++sha256  8e68f95d973a272ea3da17d6542ba3991cc012f55ff1263af1e5b24d849c11a2  LICENSE
++sha256  8e68f95d973a272ea3da17d6542ba3991cc012f55ff1263af1e5b24d849c11a2  LICENSES/BSD-2-Clause.txt
++sha256  6a573fb2f9082662978cf21fb153096df0a1981deaea7dbc10a11046fe005d9f  LICENSES/CC0-1.0.txt
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
++sha256  606aa26338f69ce178f1cbc648b7574aec4b5bbaeb20f4df36ff49010cb8fbbd  LICENSES/GPL-2.0-or-later.txt
++sha256  e5bcf7b9fdd1313047e4edb2160d5bcb928e211b4ed311b8c543e70764739945  LICENSES/Linux-syscall-note.txt
++sha256  364ad36bdcd4c01dbd8c230a07ae6e8bdee7b4418a7d16c42205d3f2b6fceefd  LICENSES/MIT.txt
+diff --git a/package/libpisp/libpisp.mk b/package/libpisp/libpisp.mk
+new file mode 100644
+index 0000000000000000000000000000000000000000..66a44c0d14c52bf64cecd8eea77b7c3237a815a4
+--- /dev/null
++++ b/package/libpisp/libpisp.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# libpisp
++#
++################################################################################
++
++LIBPISP_VERSION = 1.2.0
++# The manually generated tarball has version.gen in it which is required for
++# version detection outside of git repos
++LIBPISP_SITE = https://github.com/raspberrypi/libpisp/releases/download/v$(LIBPISP_VERSION)
++LIBPISP_SOURCE = libpisp-$(LIBPISP_VERSION).tar.xz
++LIBPISP_LICENSE = BSD-2-Clause
++LIBPISP_LICENSE_FILES = \
++	LICENSE \
++	LICENSES/BSD-2-Clause.txt \
++	LICENSES/CC0-1.0.txt \
++	LICENSES/GPL-2.0-only.txt \
++	LICENSES/GPL-2.0-or-later.txt \
++	LICENSES/Linux-syscall-note.txt \
++	LICENSES/MIT.txt
++LIBPISP_CONF_OPTS = \
++	-Dauto_features=disabled
++LIBPISP_INSTALL_STAGING = YES
++LIBPISP_DEPENDENCIES = \
++	host-pkgconf \
++	json-for-modern-cpp
++
++ifeq ($(BR2_PACKAGE_LIBPISP_LOGGING),y)
++LIBPISP_CONF_OPTS += -Dlogging=enabled
++LIBPISP_DEPENDENCIES += boost
++endif
++
++$(eval $(meson-package))
 
 -- 
 2.49.0
