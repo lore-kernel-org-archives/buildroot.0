@@ -1,75 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EAC27C36010
-	for <buildroot@archiver.kernel.org>; Fri,  4 Apr 2025 20:30:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93B28C36010
+	for <buildroot@archiver.kernel.org>; Fri,  4 Apr 2025 21:33:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0AD766084C;
-	Fri,  4 Apr 2025 20:30:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F21DD40BBD;
+	Fri,  4 Apr 2025 21:33:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TeFu0oRIYtTo; Fri,  4 Apr 2025 20:30:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8nfkk1dxMbbm; Fri,  4 Apr 2025 21:33:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0891E60699
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08ED140C42
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0891E60699;
-	Fri,  4 Apr 2025 20:30:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7EA5A5E
- for <buildroot@buildroot.org>; Fri,  4 Apr 2025 20:30:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 08ED140C42;
+	Fri,  4 Apr 2025 21:33:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 08D951C7
+ for <buildroot@buildroot.org>; Fri,  4 Apr 2025 21:33:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5C1AC41E65
- for <buildroot@buildroot.org>; Fri,  4 Apr 2025 20:30:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EDF7940C42
+ for <buildroot@buildroot.org>; Fri,  4 Apr 2025 21:33:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FYSkDDo4cpBl for <buildroot@buildroot.org>;
- Fri,  4 Apr 2025 20:30:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.116;
- helo=smtpdh17-1.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0A73D4033F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A73D4033F
-Received: from smtpdh17-1.aruba.it (smtpdh17-1.aruba.it [62.149.155.116])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0A73D4033F
- for <buildroot@buildroot.org>; Fri,  4 Apr 2025 20:30:34 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id 0ngNu49qotfOn0ngNuDw44; Fri, 04 Apr 2025 22:30:31 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Julien Olivain <ju.o@free.fr>
-Date: Fri,  4 Apr 2025 22:30:30 +0200
-Message-Id: <20250404203030.2805323-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <83efa708da680e88394c89f786e661be@free.fr>
-References: <83efa708da680e88394c89f786e661be@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h3c2-exmretJ for <buildroot@buildroot.org>;
+ Fri,  4 Apr 2025 21:33:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::42e; helo=mail-pf1-x42e.google.com;
+ envelope-from=charlie@rivosinc.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9E6C940BBD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E6C940BBD
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com
+ [IPv6:2607:f8b0:4864:20::42e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9E6C940BBD
+ for <buildroot@buildroot.org>; Fri,  4 Apr 2025 21:33:53 +0000 (UTC)
+Received: by mail-pf1-x42e.google.com with SMTP id
+ d2e1a72fcca58-7370a2d1981so2140441b3a.2
+ for <buildroot@buildroot.org>; Fri, 04 Apr 2025 14:33:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1743802433; x=1744407233;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=mkM+aokQkBTSR+puUf4drzGoTJFa8zrs225wCbgvsQc=;
+ b=t0yeUNXz5nOWP+ngIxmtLtgTUsF0ui2j+tL73NhWm8ieZpJk2VcMPUvU5knGsgT5gK
+ V8PA3eZjg2T4sbmgKc1WEN7ZKRrlPFcIo7/vFKr/1VPGPd8oyb1MmQECu9EJyYEGBjYg
+ WXNOtCqe438V44kX+ntZCckFqP/IQGFJ+LvaUZVRmrRZal843mpreeJ8m6sFQnEI0ZsD
+ BCoCpgMY3aVq1viuKNtu73Xw18dEV3AKsO3WAinvUqv5yB10hItSfYBnZGQqtckvQ9EY
+ vDaS9329r4OONbQrLs1CPLNNm/VXAeGJ+9y3yJeGVzHZax4OljXO21e6UhQBMfvvEywd
+ +Xtg==
+X-Gm-Message-State: AOJu0YzCkSZImgavvCW6T9KSPU1waVAjCy16UJvQ9VU5ygoKkpUT1XIG
+ aoVAdPU/WiQqAdgKoUF65VZz+EKTlNuGCEnY2wlE7APZ2gYYrnVLk7WAl3cy+Do=
+X-Gm-Gg: ASbGnctK451qtS2kb446hazdX97Y++kgUiEzT5ESKqsUxs2Sl3UsL49SKP3umRLusRA
+ UBFUTC4qi1qVfoWuDmVb02aTDmWFnZGnN4DayPku25MOGjFJNyAIAfIBQFBLHJ0VgwpxpqczGq6
+ SF5BSbXa0qcQPNqsq6CtR/umRh9LGrpeNsEaBsfUE40aWUuqrdPLnDwn4Jvenci0hUQzqw06MUv
+ Da34ySZovk8Y1FEh9+/Y5GKo30W1Yzt8TdM8K2WLYogc/dl2wvRALelvs+7g1mOwpuMzFss9dZW
+ lqD7jZQ7U9EXH+lwVE//25qgbZsWP0TMKZH5fZGyXEFKnU2sxaNENUZC6qgD2p3V/FKlosE=
+X-Google-Smtp-Source: AGHT+IFUR/FROo58m4WAoldfKu6RqRs1NLAaP0jUN5jO7bQmMJcnGfiEEqdLZkkW/YjwcOcgv28o5Q==
+X-Received: by 2002:a05:6a00:1813:b0:736:3ea8:4805 with SMTP id
+ d2e1a72fcca58-739e48165a4mr7580715b3a.7.1743802432689; 
+ Fri, 04 Apr 2025 14:33:52 -0700 (PDT)
+Received: from charlie.ba.rivosinc.com ([64.71.180.162])
+ by smtp.gmail.com with ESMTPSA id
+ d2e1a72fcca58-739da0b41f1sm4009699b3a.147.2025.04.04.14.33.51
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 04 Apr 2025 14:33:51 -0700 (PDT)
+From: Charlie Jenkins <charlie@rivosinc.com>
+Date: Fri, 04 Apr 2025 14:33:39 -0700
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfG3edsWgFidkEZS4LskCGsqygstm0RiQAtY9T1+Hxc+4GRjLU18zMwv06KNwo3zZpRpoHIYbnPC8O3XzHKBHv4xZWRbB3p79rOy3mhIosJ30d/skqRV6
- vz7vxfGyOnBeIyUxZnNSCfewtLppPoGqp02zxmr/2rNoYyjq1is0gpWdwtEYkuNpuk9+c5A+z/IISxqm413zUfRO5y+/zf8PA7RyRTjepus6N0wyXZXghrnu
- oskr8DP10/H+z7Cj13egpiCXHv+UcYbd83nsjTcZ301ISnS812s4Wid+ZKOB3+Ov
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1743798631; bh=Fzd8Dxgm6ktlS36qkn94VgMahLNcfKKvlOfFz7rd8JM=;
- h=From:To:Subject:Date:MIME-Version;
- b=TclZEehrqeMrLGwJ7ctsZYyH9r4vE7JtwTcUtQ1hErY9Uq52L/SVmPh/n9pWCi6Rx
- FiSMI4j+2ahtHSe85lxBW5AP9RvF3cZmug9btKdBr7Dh4+Hg+SVP9erjgRqOMhIT9J
- FEnZvzEUuxNTIxZDGr3QMjVUb4K9+Gs3pbZkTXsS6fh466QsRSwCM9N4TgBj+LHefx
- awIRHHgzwMM3eybhjnz61rywPv332RVaw3SqKEUB72z2/mBbivbdICzxr9mpX0YOQL
- KrITfwqNBc7ZjrJTK+Rp+5STJGZ8HEvYxcupTnw7R0uHlkqPcP9eHQo2bcZr5w3efC
- Gci2Z4RZwYHUA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=TclZEehr
-Subject: [Buildroot] [PATCH v3] package/libfuse3: bump to version 3.17.1
+Message-Id: <20250404-dhrystone_gcc15-v1-1-23d36daa079f@rivosinc.com>
+X-B4-Tracking: v=1; b=H4sIADJQ8GcC/x3MTQqAIBBA4avIrBP8LegqERE26Ww0NKKQ7p60/
+ BbvVSiYCQuMrELGiwql2CA7Bi6s0SOnrRmUUFYYYfgW8lPOFHHxzknLcUDZayO0URpadWTc6f6
+ P0/y+H8rt5nFhAAAA
+X-Change-ID: 20250404-dhrystone_gcc15-e7e163403423
+To: buildroot@buildroot.org
+Cc: Charlie Jenkins <charlie@rivosinc.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7815; i=charlie@rivosinc.com; 
+ h=from:subject:message-id;
+ bh=WB9uu2rUIVjvyEk+O0fRh4pTx0eLJKZZTH9ldpw9rJ8=; 
+ b=owGbwMvMwCXWx5hUnlvL8Y3xtFoSQ/qHACsdllcyvYlLe3INtjWFvv7i8vHVa+HU0oCLqQlez
+ bv/uBzvKGVhEONikBVTZOG51sDceke/7Kho2QSYOaxMIEMYuDgFYCIfHjEyrOB5e//mZbMnIqav
+ lMM+ai1cvep+MOeK0LTc45uXG3k9MWf4X5T5b4P1gt2G5puTEq+s0m6zWXlOz6bs9dTkGOnXWdJ
+ LuAA=
+X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
+ fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1743802433; x=1744407233;
+ darn=buildroot.org; 
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=mkM+aokQkBTSR+puUf4drzGoTJFa8zrs225wCbgvsQc=;
+ b=t187ygzppvZpLwiU2CAFXuumBuEXaHW5PKQWhsOcRbOGN8h+JkUkSzAXqcMERos+DI
+ QqubUgwMZV428a5zijVSe/NMpYa5LNeVSjCnKm/fwrtKswlhqRkiQbTLzYy9I+7kk3R4
+ Al57omE02LF0Co4r639wi9yA/NKDeZ/Sb0vRX6qRDqQWt93fN5WmPwTfzq2wRPvnUWFq
+ MuILGo2b/KSUqIKPh0PXm7rUYDj0QJOREPMmynZW9kJ0GiqqDGqmIGPipWU5CuquQ5rX
+ N5ckPcyqMgZKBpYm7ged4V60fZBiVyaw2ZmqD2S5N+zZ3kSvx/jyn9K8ew28t/JRS9gP
+ rCjQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=rivosinc.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rivosinc-com.20230601.gappssmtp.com
+ header.i=@rivosinc-com.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=t187ygzp
+Subject: [Buildroot] [PATCH] package/dhrystone: Fix function definitions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,199 +126,239 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/libfuse/libfuse/releases/tag/fuse-3.17.1
+GCC-15 requires function definitions to have proper arguments. Add them
+to dhrystone.
 
-Add 2 local patches pending upstream, one to fix build with linux version
-< 5.9 and one to fix presence checking of static_assert() on C++ version <
-11. Let's also fix a linker failure due to missing -latomic if toolchain
-has atomic.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 ---
-V1->V2:
-* fix linux version < 5.9 build failure by adding local patch pending upstream
-V2->V3:
-* fix static_assert() missing function by adding local patch pending upstream
-* fix link failure due to missing -latomic if toolchain has atomic
+GCC-15 hasn't been released yet but I was starting to look at what needs
+to be done to run Buildroot. Here's a patch to fix dhrystone.
 ---
- .../0001-Fix-build-with-kernel-5.9.patch      | 72 +++++++++++++++++++
- ...sert-build-failure-with-C-version-11.patch | 49 +++++++++++++
- package/libfuse3/libfuse3.hash                |  2 +-
- package/libfuse3/libfuse3.mk                  |  7 +-
- 4 files changed, 128 insertions(+), 2 deletions(-)
- create mode 100644 package/libfuse3/0001-Fix-build-with-kernel-5.9.patch
- create mode 100644 package/libfuse3/0002-Fix-static_assert-build-failure-with-C-version-11.patch
+ .../0007-Fix-function-definitions-for-gcc15.patch  | 210 +++++++++++++++++++++
+ 1 file changed, 210 insertions(+)
 
-diff --git a/package/libfuse3/0001-Fix-build-with-kernel-5.9.patch b/package/libfuse3/0001-Fix-build-with-kernel-5.9.patch
+diff --git a/package/dhrystone/0007-Fix-function-definitions-for-gcc15.patch b/package/dhrystone/0007-Fix-function-definitions-for-gcc15.patch
 new file mode 100644
-index 0000000000..f47af0ecc7
+index 0000000000000000000000000000000000000000..6aa569b7b2e99464eda4008a058a65550a9dd4ca
 --- /dev/null
-+++ b/package/libfuse3/0001-Fix-build-with-kernel-5.9.patch
-@@ -0,0 +1,72 @@
-+From 714fcf4123ae5512893019d2c205aad94b6afea6 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Tue, 1 Apr 2025 00:53:07 +0200
-+Subject: [PATCH] Fix build with kernel < 5.9
++++ b/package/dhrystone/0007-Fix-function-definitions-for-gcc15.patch
+@@ -0,0 +1,210 @@
++From b929daf9a5d61d8581e04b0a0c27252d3fe7b7a9 Mon Sep 17 00:00:00 2001
++From: Charlie Jenkins <charlie@rivosinc.com>
++Date: Fri, 4 Apr 2025 14:22:35 -0700
++Subject: [PATCH] Fix function definitions for gcc15
 +
-+linux/close_range.h is only available since kernel 5.9 and
-+https://github.com/torvalds/linux/commit/60997c3d45d9a67daf01c56d805ae4fec37e0bd8
-+resulting in the following build failure:
++Correct function declarations to contain args.
 +
-+../util/fusermount.c:40:10: fatal error: linux/close_range.h: No such file or directory
++Fixes:
 +
-+So let's check for header presence and emit HAVE_LINUX_CLOSE_RANGE_H
-+accordingly and check for it when including <linux/close_range.h> and
-+calling close_range() instead of checking for close_range() function in
-+meson and check against HAVE_CLOSE_RANGE.
++dhry_1.c:176:19: error: too many arguments to function 'Func_2'; expected 0, have 2
++  176 |     Bool_Glob = ! Func_2 (Str_1_Loc, Str_2_Loc);
++      |                   ^~~~~~  ~~~~~~~~~
++dhry_1.c:35:17: note: declared here
++   35 | Boolean         Func_2 ();
++      |                 ^~~~~~
++dhry_1.c:182:7: error: too many arguments to function 'Proc_7'; expected 0, have 3
++  182 |       Proc_7 (Int_1_Loc, Int_2_Loc, &Int_3_Loc);
++      |       ^~~~~~  ~~~~~~~~~
 +
-+Upstream: https://github.com/libfuse/libfuse/pull/1185
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Upstream: dead
++Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 +---
-+ meson.build       | 6 +++++-
-+ util/fusermount.c | 4 ++--
-+ 2 files changed, 7 insertions(+), 3 deletions(-)
++ dhry_1.c | 26 +++++++++++---------------
++ dhry_2.c | 30 +++++++-----------------------
++ 2 files changed, 18 insertions(+), 38 deletions(-)
 +
-+diff --git a/meson.build b/meson.build
-+index cbcd70d..96c655c 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -72,7 +72,7 @@ private_cfg.set_quoted('PACKAGE_VERSION', meson.project_version())
-+ # Test for presence of some functions
-+ test_funcs = [ 'fork', 'fstatat', 'openat', 'readlinkat', 'pipe2',
-+                'splice', 'vmsplice', 'posix_fallocate', 'fdatasync',
-+-               'utimensat', 'copy_file_range', 'fallocate', 'close_range' ]
-++               'utimensat', 'copy_file_range', 'fallocate' ]
-+ foreach func : test_funcs
-+     private_cfg.set('HAVE_' + func.to_upper(),
-+         cc.has_function(func, prefix: include_default, args: args_default))
-+@@ -84,6 +84,10 @@ private_cfg.set('HAVE_ICONV',
-+ private_cfg.set('HAVE_BACKTRACE',
-+         cc.has_function('backtrace', prefix: '#include <execinfo.h>'))
-+ 
-++# Test if headers exist
-++private_cfg.set('HAVE_LINUX_CLOSE_RANGE_H',
-++        cc.check_header('#include <linux/close_range.h>'))
-++
-+ # Test if structs have specific member
-+ private_cfg.set('HAVE_STRUCT_STAT_ST_ATIM',
-+          cc.has_member('struct stat', 'st_atim',
-+diff --git a/util/fusermount.c b/util/fusermount.c
-+index dbd947c..da6d5f2 100644
-+--- a/util/fusermount.c
-++++ b/util/fusermount.c
-+@@ -36,7 +36,7 @@
-+ #include <stdbool.h>
-+ #include <sys/vfs.h>
-+ 
-+-#ifdef HAVE_CLOSE_RANGE
-++#ifdef HAVE_LINUX_CLOSE_RANGE_H
-+ #include <linux/close_range.h>
++diff --git a/dhry_1.c b/dhry_1.c
++index cad5840..b02ff08 100644
++--- a/dhry_1.c
+++++ b/dhry_1.c
++@@ -31,8 +31,8 @@ int             Arr_2_Glob [50] [50];
++ #ifndef NO_PROTOTYPES
++ extern char     *malloc ();
 + #endif
++-Enumeration     Func_1 ();
++-Boolean         Func_2 ();
+++Enumeration Func_1 (Capital_Letter Ch_1_Par_Val, Capital_Letter Ch_2_Par_Val);
+++Boolean Func_2 (Str_30 Str_1_Par_Ref, Str_30 Str_2_Par_Ref);
++   /* forward declaration necessary since Enumeration may not simply be int */
 + 
-+@@ -1477,7 +1477,7 @@ static int close_inherited_fds(int cfd)
-+ 	if (cfd <= STDERR_FILENO)
-+ 		return -EINVAL;
++ #ifndef REG
++@@ -73,14 +73,14 @@ float           Microseconds,
++ /* end of variables for time measurement */
 + 
-+-#ifdef HAVE_CLOSE_RANGE
-++#ifdef HAVE_LINUX_CLOSE_RANGE_H
-+ 	if (cfd < STDERR_FILENO + 2) {
-+ 		close_range_loop(STDERR_FILENO + 1, cfd - 1, cfd);
-+ 	} else {
++ /* forward declarations */
++-void Proc_1 ();
++-void Proc_2 ();
++-void Proc_3 ();
+++void Proc_1 (REG Rec_Pointer Ptr_Val_Par);
+++void Proc_2 (One_Fifty *Int_Par_Ref);
+++void Proc_3 (Rec_Pointer *Ptr_Ref_Par);
++ void Proc_4 ();
++ void Proc_5 ();
++-void Proc_6 ();
++-void Proc_7 ();
++-void Proc_8 ();
+++void Proc_6 (Enumeration  Enum_Val_Par, Enumeration *Enum_Ref_Par);
+++void Proc_7 (One_Fifty Int_1_Par_Val, One_Fifty Int_2_Par_Val, One_Fifty *Int_Par_Ref);
+++void Proc_8 (Arr_1_Dim Arr_1_Par_Ref, Arr_2_Dim Arr_2_Par_Ref, int Int_1_Par_Val, int Int_2_Par_Val);
++ 
++ int main(int argc, char *argv[])
++ /*****/
++@@ -305,10 +305,9 @@ int main(int argc, char *argv[])
++ }
++ 
++ 
++-void Proc_1 (Ptr_Val_Par)
+++void Proc_1 (REG Rec_Pointer Ptr_Val_Par)
++ /******************/
++ 
++-REG Rec_Pointer Ptr_Val_Par;
++     /* executed once */
++ {
++   REG Rec_Pointer Next_Record = Ptr_Val_Par->Ptr_Comp;  
++@@ -339,12 +338,11 @@ REG Rec_Pointer Ptr_Val_Par;
++ } /* Proc_1 */
++ 
++ 
++-void Proc_2 (Int_Par_Ref)
+++void Proc_2 (One_Fifty   *Int_Par_Ref)
++ /******************/
++     /* executed once */
++     /* *Int_Par_Ref == 1, becomes 4 */
++ 
++-One_Fifty   *Int_Par_Ref;
++ {
++   One_Fifty  Int_Loc;  
++   Enumeration   Enum_Loc;
++@@ -362,13 +360,11 @@ One_Fifty   *Int_Par_Ref;
++ } /* Proc_2 */
++ 
++ 
++-void Proc_3 (Ptr_Ref_Par)
+++void Proc_3 (Rec_Pointer *Ptr_Ref_Par)
++ /******************/
++     /* executed once */
++     /* Ptr_Ref_Par becomes Ptr_Glob */
++ 
++-Rec_Pointer *Ptr_Ref_Par;
++-
++ {
++   if (Ptr_Glob != Null)
++     /* then, executed */
++diff --git a/dhry_2.c b/dhry_2.c
++index 25051e7..b1c9d8f 100644
++--- a/dhry_2.c
+++++ b/dhry_2.c
++@@ -26,15 +26,13 @@
++ extern  int     Int_Glob;
++ extern  char    Ch_1_Glob;
++ 
++-Boolean Func_3 ();
+++Boolean Func_3 (Enumeration Enum_Par_Val);
++ 
++-void Proc_6 (Enum_Val_Par, Enum_Ref_Par)
+++void Proc_6 (Enumeration  Enum_Val_Par, Enumeration *Enum_Ref_Par)
++ /*********************************/
++     /* executed once */
++     /* Enum_Val_Par == Ident_3, Enum_Ref_Par becomes Ident_2 */
++ 
++-Enumeration  Enum_Val_Par;
++-Enumeration *Enum_Ref_Par;
++ {
++   *Enum_Ref_Par = Enum_Val_Par;
++   if (! Func_3 (Enum_Val_Par))
++@@ -62,7 +60,7 @@ Enumeration *Enum_Ref_Par;
++ } /* Proc_6 */
++ 
++ 
++-void Proc_7 (Int_1_Par_Val, Int_2_Par_Val, Int_Par_Ref)
+++void Proc_7 (One_Fifty Int_1_Par_Val, One_Fifty Int_2_Par_Val, One_Fifty *Int_Par_Ref)
++ /**********************************************/
++     /* executed three times                                      */ 
++     /* first call:      Int_1_Par_Val == 2, Int_2_Par_Val == 3,  */
++@@ -71,9 +69,6 @@ void Proc_7 (Int_1_Par_Val, Int_2_Par_Val, Int_Par_Ref)
++     /*                  Int_Par_Ref becomes 17                   */
++     /* third call:      Int_1_Par_Val == 6, Int_2_Par_Val == 10, */
++     /*                  Int_Par_Ref becomes 18                   */
++-One_Fifty       Int_1_Par_Val;
++-One_Fifty       Int_2_Par_Val;
++-One_Fifty      *Int_Par_Ref;
++ {
++   One_Fifty Int_Loc;
++ 
++@@ -82,15 +77,11 @@ One_Fifty      *Int_Par_Ref;
++ } /* Proc_7 */
++ 
++ 
++-void Proc_8 (Arr_1_Par_Ref, Arr_2_Par_Ref, Int_1_Par_Val, Int_2_Par_Val)
+++void Proc_8 (Arr_1_Dim Arr_1_Par_Ref, Arr_2_Dim Arr_2_Par_Ref, int Int_1_Par_Val, int Int_2_Par_Val)
++ /*********************************************************************/
++     /* executed once      */
++     /* Int_Par_Val_1 == 3 */
++     /* Int_Par_Val_2 == 7 */
++-Arr_1_Dim       Arr_1_Par_Ref;
++-Arr_2_Dim       Arr_2_Par_Ref;
++-int             Int_1_Par_Val;
++-int             Int_2_Par_Val;
++ {
++   REG One_Fifty Int_Index;
++   REG One_Fifty Int_Loc;
++@@ -107,15 +98,12 @@ int             Int_2_Par_Val;
++ } /* Proc_8 */
++ 
++ 
++-Enumeration Func_1 (Ch_1_Par_Val, Ch_2_Par_Val)
+++Enumeration Func_1 (Capital_Letter Ch_1_Par_Val, Capital_Letter Ch_2_Par_Val)
++ /*************************************************/
++     /* executed three times                                         */
++     /* first call:      Ch_1_Par_Val == 'H', Ch_2_Par_Val == 'R'    */
++     /* second call:     Ch_1_Par_Val == 'A', Ch_2_Par_Val == 'C'    */
++     /* third call:      Ch_1_Par_Val == 'B', Ch_2_Par_Val == 'C'    */
++-
++-Capital_Letter   Ch_1_Par_Val;
++-Capital_Letter   Ch_2_Par_Val;
++ {
++   Capital_Letter        Ch_1_Loc;
++   Capital_Letter        Ch_2_Loc;
++@@ -133,14 +121,11 @@ Capital_Letter   Ch_2_Par_Val;
++ } /* Func_1 */
++ 
++ 
++-Boolean Func_2 (Str_1_Par_Ref, Str_2_Par_Ref)
+++Boolean Func_2 (Str_30 Str_1_Par_Ref, Str_30 Str_2_Par_Ref)
++ /*************************************************/
++     /* executed once */
++     /* Str_1_Par_Ref == "DHRYSTONE PROGRAM, 1'ST STRING" */
++     /* Str_2_Par_Ref == "DHRYSTONE PROGRAM, 2'ND STRING" */
++-
++-Str_30  Str_1_Par_Ref;
++-Str_30  Str_2_Par_Ref;
++ {
++   REG One_Thirty        Int_Loc;
++       Capital_Letter    Ch_Loc;
++@@ -175,11 +160,10 @@ Str_30  Str_2_Par_Ref;
++ } /* Func_2 */
++ 
++ 
++-Boolean Func_3 (Enum_Par_Val)
+++Boolean Func_3 (Enumeration Enum_Par_Val)
++ /***************************/
++     /* executed once        */
++     /* Enum_Par_Val == Ident_3 */
++-Enumeration Enum_Par_Val;
++ {
++   Enumeration Enum_Loc;
++ 
 +-- 
-+2.39.5
++2.43.0
 +
-diff --git a/package/libfuse3/0002-Fix-static_assert-build-failure-with-C-version-11.patch b/package/libfuse3/0002-Fix-static_assert-build-failure-with-C-version-11.patch
-new file mode 100644
-index 0000000000..3bcff3d256
---- /dev/null
-+++ b/package/libfuse3/0002-Fix-static_assert-build-failure-with-C-version-11.patch
-@@ -0,0 +1,49 @@
-+From 5fafd1a33e9442811074604eeaa060578e589730 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Fri, 4 Apr 2025 22:17:49 +0200
-+Subject: [PATCH] Fix static_assert build failure with C++ version < 11
-+
-+At the moment build fails due to lack of static_assert:
-+https://gitlab.com/jolivain/buildroot/-/jobs/9606292537
-+this means that the check per date is not enough, so let's use meson to
-+check if static_assert() is present or not and simplify
-+fuse_static_assert() definition by only checking HAVE_STATIC_ASSERT.
-+
-+Upstream: https://github.com/libfuse/libfuse/pull/1189
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ include/fuse_common.h | 4 +---
-+ meson.build           | 2 +-
-+ 2 files changed, 2 insertions(+), 4 deletions(-)
-+
-+diff --git a/include/fuse_common.h b/include/fuse_common.h
-+index 77efc5d..582505f 100644
-+--- a/include/fuse_common.h
-++++ b/include/fuse_common.h
-+@@ -30,9 +30,7 @@
-+ #define FUSE_MAKE_VERSION(maj, min)  ((maj) * 100 + (min))
-+ #define FUSE_VERSION FUSE_MAKE_VERSION(FUSE_MAJOR_VERSION, FUSE_MINOR_VERSION)
-+ 
-+-#if (defined(__cplusplus) && __cplusplus >= 201103L) ||        \
-+-	(!defined(__cplusplus) && defined(__STDC_VERSION__) && \
-+-	 __STDC_VERSION__ >= 201112L)
-++#ifdef HAVE_STATIC_ASSERT
-+ #define fuse_static_assert(condition, message) static_assert(condition, message)
-+ #else
-+ #define fuse_static_assert(condition, message)
-+diff --git a/meson.build b/meson.build
-+index 96c655c..bab98da 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -72,7 +72,7 @@ private_cfg.set_quoted('PACKAGE_VERSION', meson.project_version())
-+ # Test for presence of some functions
-+ test_funcs = [ 'fork', 'fstatat', 'openat', 'readlinkat', 'pipe2',
-+                'splice', 'vmsplice', 'posix_fallocate', 'fdatasync',
-+-               'utimensat', 'copy_file_range', 'fallocate' ]
-++               'utimensat', 'copy_file_range', 'fallocate', 'static_assert' ]
-+ foreach func : test_funcs
-+     private_cfg.set('HAVE_' + func.to_upper(),
-+         cc.has_function(func, prefix: include_default, args: args_default))
-+-- 
-+2.39.5
-+
-diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
-index 6f3b3ce122..b6e919d56b 100644
---- a/package/libfuse3/libfuse3.hash
-+++ b/package/libfuse3/libfuse3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated sha256 checksums
--sha256  1bc306be1a1f4f6c8965fbdd79c9ccca021fdc4b277d501483a711cbd7dbcd6c  libfuse3-3.16.2.tar.gz
-+sha256  b81027fc8f444fb574de7f13edf0cf9810643d2935670c4fe19f140354241208  libfuse3-3.17.1.tar.gz
- sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
-diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-index f5c9dae8f7..768179797b 100644
---- a/package/libfuse3/libfuse3.mk
-+++ b/package/libfuse3/libfuse3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBFUSE3_VERSION = 3.16.2
-+LIBFUSE3_VERSION = 3.17.1
- LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
- LIBFUSE3_LICENSE = LGPL-2.1
- LIBFUSE3_LICENSE_FILES = LICENSE
-@@ -18,6 +18,11 @@ LIBFUSE3_CONF_OPTS = \
- 	-Duseroot=false \
- 	-Dtests=false
- 
-+# Uses __atomic_fetch_sub_4
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+LIBFUSE3_LDFLAGS += -latomic
-+endif
-+
- define LIBFUSE3_DEVICES
- 	/dev/fuse c 666 0 0 10 229 0 0 -
- endef
+
+---
+base-commit: a3b4ae2eaca9791c7c184e49a04a348dd35185c3
+change-id: 20250404-dhrystone_gcc15-e7e163403423
 -- 
-2.39.5
+- Charlie
 
 _______________________________________________
 buildroot mailing list
