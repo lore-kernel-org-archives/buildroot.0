@@ -4,73 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5273DC36010
-	for <buildroot@archiver.kernel.org>; Fri,  4 Apr 2025 17:06:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4BD0C36010
+	for <buildroot@archiver.kernel.org>; Fri,  4 Apr 2025 18:24:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE28082B1E;
-	Fri,  4 Apr 2025 17:06:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D082B83750;
+	Fri,  4 Apr 2025 18:24:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oD7IWPD5H0-k; Fri,  4 Apr 2025 17:06:34 +0000 (UTC)
+ id k3vfl-BuT0O3; Fri,  4 Apr 2025 18:24:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B6B482376
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C77AD82C1E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B6B482376;
-	Fri,  4 Apr 2025 17:06:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C77AD82C1E;
+	Fri,  4 Apr 2025 18:24:22 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8FC505E
- for <buildroot@buildroot.org>; Fri,  4 Apr 2025 17:06:32 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 24977117
+ for <buildroot@buildroot.org>; Fri,  4 Apr 2025 18:24:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8198882223
- for <buildroot@buildroot.org>; Fri,  4 Apr 2025 17:06:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0354582BFD
+ for <buildroot@buildroot.org>; Fri,  4 Apr 2025 18:24:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lpT4kDf6memf for <buildroot@buildroot.org>;
- Fri,  4 Apr 2025 17:06:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8719D82375
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8719D82375
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8719D82375
- for <buildroot@buildroot.org>; Fri,  4 Apr 2025 17:06:30 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPA id E1A1513F8C2;
- Fri,  4 Apr 2025 19:06:26 +0200 (CEST)
-Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:47992])
- via 82-64-214-120.subs.proxad.net ([82.64.214.120])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 04 Apr 2025 19:06:26 +0200
+ id 6Axgn-nR_sxo for <buildroot@buildroot.org>;
+ Fri,  4 Apr 2025 18:24:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::629; helo=mail-pl1-x629.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 33B2A82A53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33B2A82A53
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com
+ [IPv6:2607:f8b0:4864:20::629])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 33B2A82A53
+ for <buildroot@buildroot.org>; Fri,  4 Apr 2025 18:24:20 +0000 (UTC)
+Received: by mail-pl1-x629.google.com with SMTP id
+ d9443c01a7336-2260c915749so18025805ad.3
+ for <buildroot@buildroot.org>; Fri, 04 Apr 2025 11:24:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1743791059; x=1744395859;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=PQRAS5zkEa099EKwvA9/kjYCSRuL5h0xsU+EcoZWXcM=;
+ b=iPAa/5a3gmphGK4JFDOLVoOgRsiIFndt+tJTqlNoBhIh7kLwXah+wy6go+YAdmWYMD
+ CqyBbYMxXzhY7ifyvyL1P6ZptH6SIgDhj/wyWmhnNwMypzdmCiDG0/3/Dj7MSvYVSeWQ
+ t4OHHcucfVtM+yRA3nvxlFgDPUnCAWYXNtiNnJg2M/FYLlU+HpvXmViW9M/RYQGMEsKy
+ q7i2tl7d+KubRjbFqEWYdjjKxtju/vv+hw1Tj5EdVaBqTO3xBSmVJHOVxQ7BBwgeQkZ6
+ wiOuz2kJ7DzSrWBEdUTAvSk8VWY5K6QDzhP0mkECqjPU7+zawdSVBByxCwHiEOUj370/
+ qB6w==
+X-Gm-Message-State: AOJu0Ywd9TrPfNvtuoYuhlydI/6rW/QlOa6GHqm8FCaRE2kTmtDclf3m
+ jyBLuJeAsTLm50lT3CdUIUOjKAIdCOgCmM+Lq+jwF3h59/lk4oggrshCqJh6fWFob3vYhZ9dnMs
+ c
+X-Gm-Gg: ASbGncsG1nCqHeJmiDTABV8yelzs9sasqP5biVfAsFgiTTIXRQ3DRouj5WhdWvrhx0N
+ C6dvo0xQddlaPY1+jF2XUB5UD85j6Ln509hDolr2G69Ao+TpS8vE3aZj8FrQ0MQPY1vq7BEnR/V
+ 9JcaZM6OKm5EuMiEeR9mhrbWX1xNzk5FugPOqJt4MyiPZkyQpQIxf5pUhAJzHtcPVZRU68zwYE1
+ 4/lRHsdxz2Oi2f4XkVgwuMt8VQPFKiJmG7Kcc4HuKpZJSF/ZnFr5mTnrQrGtplQMjkfbEpFoczK
+ D0rI2raIm5A0hgMxSoodq8al5e+QIzeh/LZ9PmISnmppS3Y2aIqQltmSWoLfNlrr+xBy
+X-Google-Smtp-Source: AGHT+IEQNcD2M+HoIxDLtJwpSRD9UVGE7oQ6GG6aMD6S4HQEdOAjr0Ti1LTQrYilfpiQ2sQCJ5pIVw==
+X-Received: by 2002:a17:903:1b2d:b0:216:7926:8d69 with SMTP id
+ d9443c01a7336-22a8a8dd69emr47122215ad.47.1743791059313; 
+ Fri, 04 Apr 2025 11:24:19 -0700 (PDT)
+Received: from localhost.localdomain ([45.143.82.66])
+ by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-229785c30cbsm35689495ad.101.2025.04.04.11.24.18
+ (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+ Fri, 04 Apr 2025 11:24:18 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>, Bernd Kuhls <bernd@kuhls.net>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Christian Stewart <christian@aperture.us>
+Date: Fri,  4 Apr 2025 11:24:07 -0700
+Message-ID: <20250404182407.45244-1-christian@aperture.us>
+X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
-Date: Fri, 04 Apr 2025 19:06:26 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250404154044.49664-1-thomas.perale@mind.be>
-References: <20250404154044.49664-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <04f02cf0f76dadbd83015207f63fd64f@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1743786388;
- bh=BjO3JNQw8WSFcFMQD/+LZEuGLHPFM/+6MD+lpe9WRsA=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=YNT3+UVxLOM6VvBRpV7gvqieOqJmdLZbr8aebvv1gsifwJLkJW5s8wdgEkK0HwW81
- outsmGWXqR3Rvn/dlQ6gx94BhX9DQghC5M2R1KkjwZGXSYxIy4mb41tiLQz8+ppI5D
- rBzDL/NO2tNA0bmXkkyfqj8XTs64GXbL1SkaLMFfL332+pnBm3Vu41GxIMV5L1gOui
- a7YuTzL+Fvpltay/tPBm5naeJC44Z5ILSVjUrBU1fTu49qkk/bZ02GGm/JKiTwLFzn
- NgXM21LQL7vgyRrUWcKsIQul77h1by882C5oZ3i0UPiISBN5xUizI8VB93jcLsh4yg
- bsXcd530DMJaA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=aperture.us; s=google; t=1743791059; x=1744395859; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=PQRAS5zkEa099EKwvA9/kjYCSRuL5h0xsU+EcoZWXcM=;
+ b=XLYa4CBIPmrkgoa1LgX86pneuWZZB+BmbAdCrLJRSlCNoBDlYZqShHRXvkdt3UVos9
+ 6ii845ZZFOz5oCR3XO7fFgZOCnght4DH7YX7NwsQYp1zI2J+kRrb89Z/JRrap90P7bvK
+ PG7UBG91MdhAPhiE+LWBdCLOxG8zCL9P/fXi0hi6lc5+WGCNwYt28b1NPteh4iJcxrRR
+ ipZ2HaTJilf+/kt3i4F1XPIcGo75pfOq/OzqJ20c2JGQVSPhuLdjZgoqhA78InbxzUCF
+ wjBJK0ewLVxMP5eodx5K8n93wdvXgVFfn2Wzb1TYLP3G5rJOWXJBdJxvVp7xoeSxrcpJ
+ 749Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=reject dis=none)
+ header.from=aperture.us
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=YNT3+UVx
-Subject: Re: [Buildroot] [PATCH 1/1] package/dillo: remove trailing slash
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=XLYa4CBI
+Subject: [Buildroot] [PATCH v1 1/1] package/pkg-cmake.mk: force config
+ version >=3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,30 +110,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 04/04/2025 17:40, Thomas Perale via buildroot wrote:
-> Commit f2a862fe60 (package/dillo: move to github) changed the source
-> site for the Dillo package. This change introduced a trailing slash at
-> the end of the URL.
-> 
-> This cause an error when running `make show-info` with 
-> `BR2_PACKAGE_DILLO=y`:
-> 
-> ```
-> package/dillo/dillo.mk:46: *** DILLO_SITE 
-> (https://github.com/dillo-browser/dillo/releases/download/v3.0.5/) 
-> cannot have a trailing slash.  Stop.
-> ```
-> 
-> This commit removes the trailing slash.
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Some packages have CMakeLists.txt requiring CMake <3.5.
 
-Applied to master, thanks.
+Newer CMake forces at minimum version 3.5, leading to build failures:
+
+https://github.com/skiffos/SkiffOS/actions/runs/14208988354/job/39812576139#step:8:638
+https://github.com/skiffos/SkiffOS/actions/runs/14211566256/job/39819600184#step:8:26664
+
+Add the suggested build flag to force version 3.5.x and fix the error:
+
+  -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+
+This is applied to all cmake packages to force 3.5 as a minimum.
+
+Signed-off-by: Christian Stewart <christian@aperture.us>
+---
+ package/pkg-cmake.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
+index c7032312fb..7bff3851cf 100644
+--- a/package/pkg-cmake.mk
++++ b/package/pkg-cmake.mk
+@@ -53,6 +53,10 @@ define inner-cmake-package
+ 
+ $(3)_SUPPORTS_IN_SOURCE_BUILD ?= YES
+ 
++# Some packages requires CMake 3.0.0 but latest CMake requires >=3.5
++# Set the policy version minimum to force these packages to 3.5 or greater.
++$(2)_CONF_OPTS += -DCMAKE_POLICY_VERSION_MINIMUM=3.5
++
+ # The default backend, unless specified by the package
+ $(3)_CMAKE_BACKEND ?= make
+ 
+-- 
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
