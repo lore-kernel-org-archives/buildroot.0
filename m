@@ -4,97 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF79FC36010
-	for <buildroot@archiver.kernel.org>; Fri,  4 Apr 2025 15:42:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D49ACC36010
+	for <buildroot@archiver.kernel.org>; Fri,  4 Apr 2025 16:48:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 71F5A40884;
-	Fri,  4 Apr 2025 15:42:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4750140BFC;
+	Fri,  4 Apr 2025 16:48:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8pW7b1YyQv5r; Fri,  4 Apr 2025 15:42:19 +0000 (UTC)
+ id 0l-7wW7bDKDf; Fri,  4 Apr 2025 16:48:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82367409DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E00240B8C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82367409DA;
-	Fri,  4 Apr 2025 15:42:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E08531C7
- for <buildroot@buildroot.org>; Fri,  4 Apr 2025 15:42:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5E00240B8C;
+	Fri,  4 Apr 2025 16:48:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E1AA7117
+ for <buildroot@buildroot.org>; Fri,  4 Apr 2025 16:48:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C72EF40F98
- for <buildroot@buildroot.org>; Fri,  4 Apr 2025 15:42:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C65F040B98
+ for <buildroot@buildroot.org>; Fri,  4 Apr 2025 16:48:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wtk5-2OI7lem for <buildroot@buildroot.org>;
- Fri,  4 Apr 2025 15:42:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4C3CD40F3B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C3CD40F3B
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4C3CD40F3B
- for <buildroot@buildroot.org>; Fri,  4 Apr 2025 15:42:16 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id
- a640c23a62f3a-ac345bd8e13so359540066b.0
- for <buildroot@buildroot.org>; Fri, 04 Apr 2025 08:42:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1743781334; x=1744386134;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=/6ydVhVR5l+ZO2/mAol962GkZtoXyS7hmJiKR1tw6v8=;
- b=IRHsrLq4HuMVUyozAbUiYv5yTovw9qsU7RoM6o38SnhfNiRU2xGZ9jK9WwlqUIWMqk
- vgk80KdsAGM7DI3myLYqNnuuA50WV+GU4/GgxYuuDLYF+7mbKdtit5PMEYkYe3+mRlSm
- ZCRilLrC+RoXNWo4Fq09qhmqWZZglPyM22TwYmN0PjzGfJYva4M+hYGLb7pvXzQTsvKP
- 3+XyLbDgpuQBFU7/Y8hQYRXq8Bf0UvRwZhVlDddiYbJrKg9HyL9ydD4ech5zvBKKsLg5
- w6enn9zM7i3nVIBXnHNL/qgERsr8zDS4ONzbVnpGuQ5U4X3cpugKXBGWAMeRlHgEarGU
- jIHg==
-X-Gm-Message-State: AOJu0Yy5Z/2XWxQzkA1x9onBof/TOavUKvG+3KgbgEIa1sdXPFxdBBpl
- sWiRwyqcE96WLothKicJ97GyMR7u3PK9kCzK4O/VNVhAR7IF/RRWeQ15T/E03qRKybeb8puooUR
- n
-X-Gm-Gg: ASbGncvI/J4JQa3kKaiNCruUBKHsSzwEi1NEx9YZ8O3E+PCP6eN3sa+6X075IIeCYay
- 3LhRj/5nGA/u7/1nsmK5r41akr2MskJH2G7FgJW/OQdiHlWJeKuheaUQV98kZcjDcWLNhbzOB5B
- mEqCyUv1/MA3GVA3krpK5jieSDGek+MFo8LZ9577S5H3a6PaiT534bDY84uUjlDj61MSShtsr4u
- rBGtAFwQ5dg0jMfyYnnyIt6xFkr2ICCh+EMImL4LtgN7eP3YJZzHe5+hdi6NpmSOJD0NSeT/HIx
- 6I3m8BLJkh/fjbK9fBb3dmGZ/Yw+O7ylS7eigUwUsyDlJU5r/aPooyZg7v4=
-X-Google-Smtp-Source: AGHT+IFuOkN15YKjUX1vsnfCIQPy+VwlOFnQzf5YP45iTUYemOofiCaDgg9F/7A1XDAGCHR2QM1fEQ==
-X-Received: by 2002:a17:907:2ce3:b0:abf:6f87:c732 with SMTP id
- a640c23a62f3a-ac7e7226254mr4133766b.20.1743781334456; 
- Fri, 04 Apr 2025 08:42:14 -0700 (PDT)
-Received: from localhost.localdomain ([79.132.233.61])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-ac7bfe5c5d0sm274050466b.35.2025.04.04.08.42.13
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 04 Apr 2025 08:42:14 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: Thomas Perale <thomas.perale@mind.be>
-Date: Fri,  4 Apr 2025 17:40:44 +0200
-Message-ID: <20250404154044.49664-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.48.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ANBZcwTKubsS for <buildroot@buildroot.org>;
+ Fri,  4 Apr 2025 16:48:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=83.166.143.171;
+ helo=smtp-8fab.mail.infomaniak.ch; envelope-from=foss+buildroot@0leil.net;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0169F40BBD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0169F40BBD
+Received: from smtp-8fab.mail.infomaniak.ch (smtp-8fab.mail.infomaniak.ch
+ [83.166.143.171])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0169F40BBD
+ for <buildroot@buildroot.org>; Fri,  4 Apr 2025 16:48:11 +0000 (UTC)
+Received: from smtp-4-0001.mail.infomaniak.ch (smtp-4-0001.mail.infomaniak.ch
+ [10.7.10.108])
+ by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4ZTl0S60Zhzjq;
+ Fri,  4 Apr 2025 18:48:08 +0200 (CEST)
+Received: from unknown by smtp-4-0001.mail.infomaniak.ch (Postfix) with ESMTPA
+ id 4ZTl0S2Mq3zjj5; Fri,  4 Apr 2025 18:48:08 +0200 (CEST)
+From: Quentin Schulz <foss+buildroot@0leil.net>
+Date: Fri, 04 Apr 2025 18:47:31 +0200
+Message-Id: <20250404-libcamera-0-5-0-v1-0-e2ca9d029aeb@cherry.de>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1743781334; x=1744386134; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=/6ydVhVR5l+ZO2/mAol962GkZtoXyS7hmJiKR1tw6v8=;
- b=Bu1btShO5M8HibwjypJ7TEPOwnxu+YG5NSsZKLh/bCp3fxA2eptp8TOdAahhbt++22
- b0KFQWAhBqQmvv1dsRdNQ9mUGZfXmbX2NVTW6UO/seR+ZtQRr8U1lUNUMZONrmheevrR
- 5sznOhk1+3LHFMxzgXLhHg7oYHNtak8c9TbDVCDafM8xA+fP+PmTKRx4gxXKcBUlNLXI
- 6npt0eHukEqQbBumAfUi7DzOgDPKjCvF4ATfeodPctBFoBrl1HTzkGe9KTIAxIV2ZAHR
- zzbqBpN5Na+xAwrjPsVzEdimmMI4hOVl5rJ7BUuyHlMNPp2cX+rXMss2UdwVs8OD0PSK
- WtxA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=Bu1btShO
-Subject: [Buildroot] [PATCH 1/1] package/dillo: remove trailing slash
+X-B4-Tracking: v=1; b=H4sIACMN8GcC/x2MSwqAIBQAryJvnWCikF0lWvh51oOyUIhAvHvSY
+ hazmKlQMBMWmFmFjA8VulKXcWDgd5s25BS6gxRSCyUUP8h5e2K2XHDdcQZ9nIwJwSno1Z0x0vs
+ fl7W1D7LBPjdhAAAA
+X-Change-ID: 20250404-libcamera-0-5-0-b9ecf899ddb4
+To: buildroot@buildroot.org
+Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>, 
+ Marcus Folkesson <marcus.folkesson@gmail.com>, 
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>, 
+ Quentin Schulz <quentin.schulz@cherry.de>
+X-Mailer: b4 0.14.2
+X-Infomaniak-Routing: alpha
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=0leil.net
+Subject: [Buildroot] [PATCH 0/9] package/libcamera: bump v0.5.0,
+ new pipelines, misc improvements and bug fixing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,45 +75,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit f2a862fe60 (package/dillo: move to github) changed the source
-site for the Dillo package. This change introduced a trailing slash at
-the end of the URL.
+This bumps libcamera to v0.5.0, its latest release.
 
-This cause an error when running `make show-info` with `BR2_PACKAGE_DILLO=y`:
+This removes the boost dependency for the VC4 pipeline which hasn't been
+needed for a while already.
 
-```
-package/dillo/dillo.mk:46: *** DILLO_SITE (https://github.com/dillo-browser/dillo/releases/download/v3.0.5/) cannot have a trailing slash.  Stop.
-```
+This improves current reproducibility by adding optional dependencies to
+the list of package dependencies whenever their symbols are enabled.
 
-This commit removes the trailing slash.
+This improves future reproducibility by making all "auto" features
+"disabled" so that new auto features aren't detected by meson when
+building libcamera as a missing optional dependency in the package mk
+file will introduce a reproducibility issue due to build order of
+packages.
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+This adds knobs for Mali-C55 and PiSP pipelines as well as a package for
+libpisp, a dependency for the latter pipeline in libcamera.
+
+This also fixes documentation being built regardless of the
+"documentation" feature being disabled, if sphinx-build-3 is available
+on the host system.
+
+Finally, this fixes a crash when running on Linux kernel predating 6.4.
+
+Note this was only build tested.
+
+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 ---
- package/dillo/dillo.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Quentin Schulz (9):
+      package/libcamera: remove dependency on boost for rpi/vc4 pipeline
+      package/libcamera: fix documentation being built even if disabled
+      package/libcamera: fix crash on Rockchip with kernels before 6.4
+      package/libcamera: improve future reproducibility by forcing auto features to disabled
+      package/libcamera: improve reproducibility for optional dependencies
+      package/libcamera: add support for Arm Mali-C55 ISP pipeline
+      package/libcamera: bump to 0.5.0
+      package/libpisp: add new package
+      package/libcamera: add support for PiSP pipeline
 
-diff --git a/package/dillo/dillo.mk b/package/dillo/dillo.mk
-index 5a823aa4a3..802be84717 100644
---- a/package/dillo/dillo.mk
-+++ b/package/dillo/dillo.mk
-@@ -6,7 +6,7 @@
- 
- DILLO_VERSION = 3.0.5
- DILLO_SOURCE = dillo-$(DILLO_VERSION).tar.bz2
--DILLO_SITE = https://github.com/dillo-browser/dillo/releases/download/v$(DILLO_VERSION)/
-+DILLO_SITE = https://github.com/dillo-browser/dillo/releases/download/v$(DILLO_VERSION)
- DILLO_LICENSE = GPL-3.0+
- DILLO_LICENSE_FILES = COPYING
- # configure.ac gets patched, so autoreconf is necessary
+ package/Config.in                                  |   1 +
+ ...amera-rkisp1-Eliminate-hard-coded-resizer.patch | 110 +++++++++++++++++++++
+ ...t-automatically-build-documentation-if-sp.patch |  42 ++++++++
+ package/libcamera/Config.in                        |  18 +++-
+ package/libcamera/libcamera.hash                   |   2 +-
+ package/libcamera/libcamera.mk                     |  47 +++++----
+ package/libpisp/Config.in                          |  22 +++++
+ package/libpisp/libpisp.hash                       |  11 +++
+ package/libpisp/libpisp.mk                         |  33 +++++++
+ 9 files changed, 265 insertions(+), 21 deletions(-)
+---
+base-commit: 43abcd4c7dd8ad65d2f2012f3d4292362550a3ed
+change-id: 20250404-libcamera-0-5-0-b9ecf899ddb4
+
+Best regards,
 -- 
-2.48.1
+Quentin Schulz <quentin.schulz@cherry.de>
 
 _______________________________________________
 buildroot mailing list
