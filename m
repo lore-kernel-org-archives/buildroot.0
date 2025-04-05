@@ -4,49 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A933C36010
-	for <buildroot@archiver.kernel.org>; Sat,  5 Apr 2025 19:45:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A3D3C36010
+	for <buildroot@archiver.kernel.org>; Sat,  5 Apr 2025 19:45:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 00ACB60B56;
-	Sat,  5 Apr 2025 19:45:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 589B360631;
+	Sat,  5 Apr 2025 19:45:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kKxhBrv3yXt0; Sat,  5 Apr 2025 19:45:22 +0000 (UTC)
+ id Hjgty4jN7Diu; Sat,  5 Apr 2025 19:45:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2AA30608C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6BB56088E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AA30608C3;
-	Sat,  5 Apr 2025 19:45:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 42B1E5E
- for <buildroot@buildroot.org>; Sat,  5 Apr 2025 19:45:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A6BB56088E;
+	Sat,  5 Apr 2025 19:45:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D74455E
+ for <buildroot@buildroot.org>; Sat,  5 Apr 2025 19:45:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 34CAC40A0C
- for <buildroot@buildroot.org>; Sat,  5 Apr 2025 19:45:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B37E16088E
+ for <buildroot@buildroot.org>; Sat,  5 Apr 2025 19:45:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H6FkEWLkD7Pk for <buildroot@buildroot.org>;
- Sat,  5 Apr 2025 19:45:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AEF840579
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5AEF840579
- for <buildroot@buildroot.org>; Sat,  5 Apr 2025 19:45:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 47F9983B84; Sat,  5 Apr 2025 19:45:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dQzzHKXTOt6E for <buildroot@buildroot.org>;
+ Sat,  5 Apr 2025 19:45:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C6CB660631
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6CB660631
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C6CB660631
+ for <buildroot@buildroot.org>; Sat,  5 Apr 2025 19:45:43 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id BFEC85FFC0;
+ Sat,  5 Apr 2025 21:45:39 +0200 (CEST)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:35610])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 05 Apr 2025 21:45:39 +0200
+MIME-Version: 1.0
+Date: Sat, 05 Apr 2025 21:45:39 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 5 Apr 2025 21:32:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a4430578aeb6ca460813f4ff7d833cdd839a3249
-X-Git-Newrev: e22b828db6622e3c4263086c70cd7d84756b653e
-X-Patchwork-Hint: ignore
-Message-Id: <20250405194520.47F9983B84@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/esp-hosted: fix build failure with
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250404224700.3410215-1-giulio.benetti@benettiengineering.com>
+References: <20250404224700.3410215-1-giulio.benetti@benettiengineering.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <dba724c32d2420d365c2f2d2035ab694@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1743882341;
+ bh=Xc+XFiD4fNzmQCTan6dJTRnFo7EXtNaO1aj7+ZBuA4I=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=DUcJufcnlcCMeXCeU/1OOzcppqOeKOZNz5bH2noJEGQNAX7fyqUUaKo227aXBxd3B
+ 1Oxk5Xx5DJQQKXvfTl8VYV2k/kXGyBuoP65AxiGwQfMRlUOU6zYYfIoUI4iO1vGxgO
+ 7USHC7FBUWyTG7LGiGKXvYlB/mu3+3lIChlh9pIUWIXLwKeQ6QOkzp8ys5JZ043uPs
+ D0z2oEDD9RGiMcahAazjsyqOOcimdWtMQVegaSdShdb79IzyLmFyqh3t5CMd0M+Kin
+ OpsG1dQ5V8QFdnQ1OU+vbdJrFWLQ9iRtO5gAK3/GTCF5QCcYSRTLRmcmYRBk71sfHb
+ eMy7dKOAMBmjQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=DUcJufcn
+Subject: Re: [Buildroot] [PATCH] package/esp-hosted: fix build failure with
  Linux 6.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,67 +84,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e22b828db6622e3c4263086c70cd7d84756b653e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 05/04/2025 00:47, Giulio Benetti wrote:
+> Add local patch pending upstream to fix renaming of spi_alloc_master() 
+> into
+> spi_alloc_host() during Linux version 6.13.0.
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/68ce3721475d259a0db42b7ab84ef08ed7fba00c/
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Add local patch pending upstream to fix renaming of spi_alloc_master() into
-spi_alloc_host() during Linux version 6.13.0.
-
-Fixes:
-https://autobuild.buildroot.org/results/68ce3721475d259a0db42b7ab84ef08ed7fba00c/
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/esp-hosted/0001-Fix-Linux-6.13.patch | 35 ++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
-
-diff --git a/package/esp-hosted/0001-Fix-Linux-6.13.patch b/package/esp-hosted/0001-Fix-Linux-6.13.patch
-new file mode 100644
-index 0000000000..98f86e8a8f
---- /dev/null
-+++ b/package/esp-hosted/0001-Fix-Linux-6.13.patch
-@@ -0,0 +1,35 @@
-+From f41f4a55e7787c9517ca6ac72f83dc244b4011e4 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Sat, 5 Apr 2025 00:35:23 +0200
-+Subject: [PATCH] Fix Linux 6.13
-+
-+With Linux commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0809a9ccac4a2ffdfd1561bb551aec6099775545
-+spi_alloc_master() has been renamed to spi_alloc_host() so let's rename it
-+accordingly checking for Linux version 6.13.0.
-+
-+Upstream: https://github.com/espressif/esp-hosted/pull/589
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ esp_hosted_ng/host/spi/esp_spi.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/esp_hosted_ng/host/spi/esp_spi.c b/esp_hosted_ng/host/spi/esp_spi.c
-+index 51df26d8d7..fc63487821 100644
-+--- a/esp_hosted_ng/host/spi/esp_spi.c
-++++ b/esp_hosted_ng/host/spi/esp_spi.c
-+@@ -394,7 +394,11 @@ static struct spi_controller *spi_busnum_to_master(u16 bus_num)
-+ 	pdev->num_resources = 0;
-+ 	platform_device_add(pdev);
-+ 
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0))
-++	master = spi_alloc_host(&pdev->dev, sizeof(void *));
-++#else
-+ 	master = spi_alloc_master(&pdev->dev, sizeof(void *));
-++#endif
-+ 	if (!master) {
-+ 		pr_err("Error: failed to allocate SPI master device\n");
-+ 		platform_device_del(pdev);
-+-- 
-+2.39.5
-+
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
