@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D82EAC54756
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:46:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D70ABC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:46:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AE08B81208;
-	Mon, 19 May 2025 10:46:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A6948616BB;
+	Mon, 19 May 2025 10:46:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kFTyPOvXRZYc; Mon, 19 May 2025 10:46:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DzU9PX_l_wwV; Mon, 19 May 2025 10:46:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B9C3D81310
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64987616C1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9C3D81310;
-	Mon, 19 May 2025 10:46:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 02DB0D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64987616C1;
+	Mon, 19 May 2025 10:46:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 03AC7E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0DEFE4185B
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37A4841239
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y92y4bWgNSSp for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pfKOlyIuhOp8 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99E6041825
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4B3840C80
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99E6041825
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A4B3840C80
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 97572873D6; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+ id 9F29E83B63; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 5 May 2025 21:23:48 +0200
+Date: Sun, 6 Apr 2025 22:10:41 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 11c7d00a59bd263d1234086d8b769a4be397bde8
-X-Git-Newrev: 1ed23e2089f21b32d5a75aaba49d259d8aec6dae
+X-Git-Oldrev: 01895663d37a821ec8d94b52f4d4384b967787e1
+X-Git-Newrev: 53eae986a5c15afd0ade74875ce96a1b70e7c53b
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103958.97572873D6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rtl8822cs bump driver
- version to latest with support kernel 6.13/6.14
+Message-Id: <20250519103947.9F29E83B63@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/uclibc: fix NPTL
+ alignment on m68k
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,48 +60,146 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2719334790332631558=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ed23e2089f21b32d5a75aaba49d259d8aec6dae
+--===============2719334790332631558==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=53eae986a5c15afd0ade74875ce96a1b70e7c53b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-- Update driver for kernel 6.13+
-- Fix warning/errors on build
+Tested on QEMU using the qemu_m68k_q800_defconfig configuration, with a
+switch of  the toolchain to uclibc-ng and enabling rsyslog.
 
-Fixes: https://autobuild.buildroot.org/results/464780b85739f323a21f9205634f6b51e3f2b916
+This patch addresses an issue where rsyslog’s pthread_cond_wait was
+busy-looping due to futex_time64 repeatedly returning EINVAL. The
+correction in NPTL alignment resolves the 100% CPU usage problem.
 
-Signed-off-by: Viacheslav Bocharov <adeep@lexina.in>
+This patch is fixed upstream [1] so apply it until it is tagged.
+
+[1]: 278ac6b30 ("m68k: fix alignment in NPTL code")
+
+Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+[Julien:
+ - rename patch to 0002
+ - add "Upstream:" tag in patch to fix check-package error
+ - add "Signed-off-by:" in patch
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/rtl8822cs/rtl8822cs.hash | 2 +-
- package/rtl8822cs/rtl8822cs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0002-m68k-fix-alignment-in-NPTL-code.patch     | 92 ++++++++++++++++++++++
+ 1 file changed, 92 insertions(+)
 
-diff --git a/package/rtl8822cs/rtl8822cs.hash b/package/rtl8822cs/rtl8822cs.hash
-index 53fc06cca5..1d7c074ff1 100644
---- a/package/rtl8822cs/rtl8822cs.hash
-+++ b/package/rtl8822cs/rtl8822cs.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  9aea86233848e9edb497b27614c78680f7bb1962579d4b05333d9c1a189c62fe  rtl8822cs-40450f759c8a930d271b5f0a663685f412debc72.tar.gz
-+sha256  6150edd8e5d5812831597d4f49a6631a503468c512f85cbe449d853b6caea261  rtl8822cs-0986d5734e7630efea218dae9c16d11a10231819.tar.gz
-diff --git a/package/rtl8822cs/rtl8822cs.mk b/package/rtl8822cs/rtl8822cs.mk
-index 223d232c8d..345e4a0c48 100644
---- a/package/rtl8822cs/rtl8822cs.mk
-+++ b/package/rtl8822cs/rtl8822cs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8822CS_VERSION = 40450f759c8a930d271b5f0a663685f412debc72
-+RTL8822CS_VERSION = 0986d5734e7630efea218dae9c16d11a10231819
- RTL8822CS_SITE = $(call github,jethome-ru,rtl88x2cs,$(RTL8822CS_VERSION))
- RTL8822CS_LICENSE = GPL-2.0
- 
+diff --git a/package/uclibc/0002-m68k-fix-alignment-in-NPTL-code.patch b/package/uclibc/0002-m68k-fix-alignment-in-NPTL-code.patch
+new file mode 100644
+index 0000000000..fbd9934376
+--- /dev/null
++++ b/package/uclibc/0002-m68k-fix-alignment-in-NPTL-code.patch
+@@ -0,0 +1,92 @@
++From 278ac6b3098315cddec8f71f27bd8de22e53ca6c Mon Sep 17 00:00:00 2001
++From: Thorsten Glaser <tg@debian.org>
++Date: Wed, 12 Mar 2025 22:11:51 +0100
++Subject: [PATCH] m68k: fix alignment in NPTL code
++
++Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/278ac6b3098315cddec8f71f27bd8de22e53ca6c
++Signed-off-by: Thorsten Glaser <tg@debian.org>
++Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
++---
++ .../unix/sysv/linux/m68k/bits/pthreadtypes.h   | 18 +++++++++---------
++ 1 file changed, 9 insertions(+), 9 deletions(-)
++
++diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/m68k/bits/pthreadtypes.h b/libpthread/nptl/sysdeps/unix/sysv/linux/m68k/bits/pthreadtypes.h
++index 2a90a0b90..d2f22caee 100644
++--- a/libpthread/nptl/sysdeps/unix/sysv/linux/m68k/bits/pthreadtypes.h
+++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/m68k/bits/pthreadtypes.h
++@@ -39,7 +39,7 @@ typedef unsigned long int pthread_t;
++ typedef union
++ {
++   char __size[__SIZEOF_PTHREAD_ATTR_T];
++-  long int __align;
+++  long int __align __attribute__((__aligned__(4)));
++ } pthread_attr_t;
++ 
++ 
++@@ -69,13 +69,13 @@ typedef union
++     };
++   } __data;
++   char __size[__SIZEOF_PTHREAD_MUTEX_T];
++-  long int __align;
+++  long int __align __attribute__((__aligned__(4)));
++ } pthread_mutex_t;
++ 
++ typedef union
++ {
++   char __size[__SIZEOF_PTHREAD_MUTEXATTR_T];
++-  long int __align;
+++  long int __align __attribute__((__aligned__(4)));
++ } pthread_mutexattr_t;
++ 
++ 
++@@ -95,13 +95,13 @@ typedef union
++     unsigned int __broadcast_seq;
++   } __data;
++   char __size[__SIZEOF_PTHREAD_COND_T];
++-  __extension__ long long int __align;
+++  __extension__ long long int __align __attribute__((__aligned__(8)));
++ } pthread_cond_t;
++ 
++ typedef union
++ {
++   char __size[__SIZEOF_PTHREAD_CONDATTR_T];
++-  long int __align;
+++  long int __align __attribute__((__aligned__(4)));
++ } pthread_condattr_t;
++ 
++ 
++@@ -144,13 +144,13 @@ typedef union
++     int __writer;
++   } __data;
++   char __size[__SIZEOF_PTHREAD_RWLOCK_T];
++-  long int __align;
+++  long int __align __attribute__((__aligned__(4)));
++ } pthread_rwlock_t;
++ 
++ typedef union
++ {
++   char __size[__SIZEOF_PTHREAD_RWLOCKATTR_T];
++-  long int __align;
+++  long int __align __attribute__((__aligned__(4)));
++ } pthread_rwlockattr_t;
++ #endif
++ 
++@@ -165,13 +165,13 @@ typedef volatile int pthread_spinlock_t;
++ typedef union
++ {
++   char __size[__SIZEOF_PTHREAD_BARRIER_T];
++-  long int __align;
+++  long int __align __attribute__((__aligned__(4)));
++ } pthread_barrier_t;
++ 
++ typedef union
++ {
++   char __size[__SIZEOF_PTHREAD_BARRIERATTR_T];
++-  int __align;
+++  int __align __attribute__((__aligned__(4)));
++ } pthread_barrierattr_t;
++ #endif
++ 
++-- 
++2.39.5
++
+
+--===============2719334790332631558==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2719334790332631558==--
