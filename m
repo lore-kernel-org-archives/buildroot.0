@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57E73C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4747FC3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:42:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1AFE061062;
-	Mon, 19 May 2025 10:42:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 05C4D82B1A;
+	Mon, 19 May 2025 10:42:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PBpYFdqJAvGc; Mon, 19 May 2025 10:42:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bj7Vif7AqJYY; Mon, 19 May 2025 10:42:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A77361071
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E60E82AC6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A77361071;
-	Mon, 19 May 2025 10:42:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 118AAD4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E60E82AC6;
+	Mon, 19 May 2025 10:42:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2B082D4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 136C540E13
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DB8564172A
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OINokhwH6KRv for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j4vGHn2JsHAT for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EA4240D6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 985CE410B6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6EA4240D6C
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 985CE410B6
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6D07B8725C; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ id 966B18725C; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 22 Mar 2025 13:51:40 +0100
+Date: Sun, 6 Apr 2025 21:59:54 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7a55e82cb80c971370010df6a5513a7e565f1a72
-X-Git-Newrev: cf4f2f858d13aa8be1fc3d3215df66e64e7b57e6
+X-Git-Oldrev: 34424432baedba4d9f9acdcfb8dd68f8075f94af
+X-Git-Newrev: 01895663d37a821ec8d94b52f4d4384b967787e1
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103944.6D07B8725C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mesa3d-demos: fix
- build failure on musl
+Message-Id: <20250519103947.966B18725C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/uclibc: add patch to
+ fix reallocarray() definition
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,109 +60,146 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7380182642418477027=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cf4f2f858d13aa8be1fc3d3215df66e64e7b57e6
+--===============7380182642418477027==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=01895663d37a821ec8d94b52f4d4384b967787e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Patch has been on upstream main for close to 2 years.
+uClibc-ng unconditionally exposes a reallocarray() prototype, but only
+provides the implementation when the malloc-standard implementation is
+selected in the configuration.
 
-The "uint" use was introduced with [1] and [2], released with
-mesa3d-demos 9.0.0 from March 2023, and added to Buildroot with commit
-80304d9911 "package/mesa3d-demos: bump version to 9.0.0". The affected
-code is built only if Wayland and Vulkan support are enabled, that is:
+As noMMU configurations can't use malloc-standard, they use malloc or
+malloc-simple that don't provide reallocarray().
 
-BR2_PACKAGE_LIBDECOR=y
-BR2_PACKAGE_VULKAN_LOADER=y
-BR2_PACKAGE_WAYLAND=y
+As a result of reallocarray() being missing, some packages such as
+util-linux provide their own replacement implementation... but its
+prototype clashes with the one provided by uClibc, causing build
+failures such as:
 
-[1] https://gitlab.freedesktop.org/mesa/demos/-/commit/813ebef7671f0e54d1b55be9e15ae5586b2b9eb1
-[2] https://gitlab.freedesktop.org/mesa/demos/-/commit/5aaa7faeb4de9497535738830e6ebb8f10071877
+In file included from lib/color-names.c:7:
+./include/c.h:586:21: error: static declaration of ‘reallocarray’ follows non-static declaration
+  586 | static inline void *reallocarray(void *ptr, size_t nmemb, size_t size)
+      |                     ^~~~~~~~~~~~
+In file included from ./include/c.h:16:
+/home/thomas/projets/buildroot/output/host/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/include/stdlib.h:898:14: note: previous declaration of ‘reallocarray’ with type ‘void *(void *, size_t,  size_t)’ {aka ‘void *(void *, unsigned int,  unsigned int)’}
+  898 | extern void *reallocarray (void *__ptr, size_t __m, size_t __n);
+      |              ^~~~~~~~~~~~
+make[3]: *** [Makefile:12354: lib/libtcolors_la-color-names.lo] Error 1
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+This is addressed by a patch on uClibc, submitted upstream, which
+makes sure the prototype is only exposed when the implementation is
+provided.
+
+The issue can be reproduced with commands:
+
+    cat <<EOF >.config
+    BR2_arm=y
+    BR2_cortex_m4=y
+    BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
+    BR2_PACKAGE_UTIL_LINUX=y
+    BR2_PACKAGE_UTIL_LINUX_KILL=y
+    EOF
+    make olddefconfig
+    make util-linux
+
+Fixes:
+
+  https://autobuild.buildroot.net/results/157aa82aa4cd57eacc4defe6cace16e464261e9a/ (RISC-V noMMU)
+  https://autobuild.buildroot.net/results/ce1a24c1465b82686ae375ac688a553fb65df5ea/ (ARM noMMU)
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Julien: add commands to reproduce the issue in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...3-vulkan-wsi-use-unsigned-instead-of-uint.patch | 68 ++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ ...lib.h-only-expose-reallocarray-prototype-.patch | 64 ++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
 
-diff --git a/package/mesa3d-demos/0003-vulkan-wsi-use-unsigned-instead-of-uint.patch b/package/mesa3d-demos/0003-vulkan-wsi-use-unsigned-instead-of-uint.patch
+diff --git a/package/uclibc/0001-include-stdlib.h-only-expose-reallocarray-prototype-.patch b/package/uclibc/0001-include-stdlib.h-only-expose-reallocarray-prototype-.patch
 new file mode 100644
-index 0000000000..160dc9010d
+index 0000000000..867e3645cc
 --- /dev/null
-+++ b/package/mesa3d-demos/0003-vulkan-wsi-use-unsigned-instead-of-uint.patch
-@@ -0,0 +1,68 @@
-+From 3f4d5ff34e061f3d47b9cf28bff2fc588d8c5326 Mon Sep 17 00:00:00 2001
-+From: psykose <alice@ayaya.dev>
-+Date: Thu, 23 Mar 2023 21:18:56 +0000
-+Subject: [PATCH] vulkan/wsi: use unsigned instead of uint
++++ b/package/uclibc/0001-include-stdlib.h-only-expose-reallocarray-prototype-.patch
+@@ -0,0 +1,64 @@
++From bbb1a4f197624b0040e3228505eb2a725a8846f8 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Thu, 3 Apr 2025 22:56:49 +0200
++Subject: [PATCH] include/stdlib.h: only expose reallocarray() prototype when
++ implementation is available
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+uint is not a standard type name and fails to build against musl libc
++The reallocarray() primitive is only provided by the malloc-standard
++implementation: neither malloc nor malloc-simple provide it. This
++causes issues when building for example util-linux on noMMU platforms
++as:
 +
-+Reviewed-by: Erik Faye-Lund <erik.faye-lund@collabora.com>
-+Upstream: https://gitlab.freedesktop.org/mesa/demos/-/commit/3f4d5ff34e061f3d47b9cf28bff2fc588d8c5326
-+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
++- noMMU platforms can't use malloc-standard, so either malloc or
++  malloc-simple are used, which means reallocarray() is not
++  implemented
++
++- util-linux detects the absence of reallocarray(), and provides its
++  own implementation, but the prototype clashes with the prototype in
++  uClibc's <stdlib.h>
++
++The combination of which causes the following build failure:
++
++In file included from lib/color-names.c:7:
++./include/c.h:586:21: error: static declaration of ‘reallocarray’ follows non-static declaration
++  586 | static inline void *reallocarray(void *ptr, size_t nmemb, size_t size)
++      |                     ^~~~~~~~~~~~
++In file included from ./include/c.h:16:
++/home/thomas/projets/buildroot/output/host/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/include/stdlib.h:898:14: note: previous declaration of ‘reallocarray’ with type ‘void *(void *, size_t,  size_t)’ {aka ‘void *(void *, unsigned int,  unsigned int)’}
++  898 | extern void *reallocarray (void *__ptr, size_t __m, size_t __n);
++      |              ^~~~~~~~~~~~
++make[3]: *** [Makefile:12354: lib/libtcolors_la-color-names.lo] Error 1
++
++To fix this, let's not expose the prototype of reallocarray() if we
++don't provide the implementation for it.
++
++Upstream: https://mailman.openadk.org/mailman3/hyperkitty/list/devel@uclibc-ng.org/thread/BX4ENNZYO23YQJQF5XITW7TETSJHEFK5/
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ src/vulkan/wsi/wayland.c | 14 +++++++-------
-+ 1 file changed, 7 insertions(+), 7 deletions(-)
++ include/stdlib.h | 4 ++++
++ 1 file changed, 4 insertions(+)
 +
-+diff --git a/src/vulkan/wsi/wayland.c b/src/vulkan/wsi/wayland.c
-+index 444d2bb81..5958d283a 100644
-+--- a/src/vulkan/wsi/wayland.c
-++++ b/src/vulkan/wsi/wayland.c
-+@@ -128,7 +128,7 @@ dispatch_key(xkb_keycode_t xkb_key, enum wl_keyboard_key_state state)
-+ }
++diff --git a/include/stdlib.h b/include/stdlib.h
++index d4e0b75e7..448c5e336 100644
++--- a/include/stdlib.h
+++++ b/include/stdlib.h
++@@ -986,9 +986,13 @@ extern int getpt (void);
++ extern int getloadavg (double __loadavg[], int __nelem)
++      __THROW __nonnull ((1));
 + 
-+ static void
-+-handle_key(uint key, enum wl_keyboard_key_state state)
-++handle_key(unsigned key, enum wl_keyboard_key_state state)
-+ {
-+    xkb_keycode_t xkb_key = key + 8;
-+    struct itimerspec timer = {0};
-+@@ -151,15 +151,15 @@ handle_key(uint key, enum wl_keyboard_key_state state)
-+ }
+++/* reallocarray() only provided by the malloc-standard implementation */
+++#if defined(__MALLOC_STANDARD__)
++ extern void *reallocarray (void *__ptr, size_t __m, size_t __n);
++ #endif
 + 
-+ static void
-+-key(void *data, struct wl_keyboard *keyboard, uint serial,
-+-    uint time, uint key, enum wl_keyboard_key_state state)
-++key(void *data, struct wl_keyboard *keyboard, unsigned serial,
-++    unsigned time, unsigned key, enum wl_keyboard_key_state state)
-+ {
-+    handle_key(key, state);
-+ }
+++#endif
+++
++ #ifdef _LIBC
++ extern int __drand48_iterate (unsigned short int xsubi[3], struct drand48_data *buffer) attribute_hidden;
 + 
-+ static void
-+-modifiers(void *data, struct wl_keyboard *keyboard, uint serial,
-+-    uint mods_depressed, uint mods_latched, uint mods_locked, uint group)
-++modifiers(void *data, struct wl_keyboard *keyboard, unsigned serial,
-++    unsigned mods_depressed, unsigned mods_latched, unsigned mods_locked, unsigned group)
-+ {
-+    xkb_state_update_mask(keyboard_data.xkb_state, mods_depressed, mods_latched,
-+                          mods_locked, 0, 0, group);
-+@@ -184,7 +184,7 @@ keymap(void *data, struct wl_keyboard *keyboard,
-+ }
-+ 
-+ static void
-+-enter(void *data, struct wl_keyboard *keyboard, uint serial,
-++enter(void *data, struct wl_keyboard *keyboard, unsigned serial,
-+       struct wl_surface *surface, struct wl_array *keys)
-+ {
-+    uint32_t *key;
-+@@ -194,7 +194,7 @@ enter(void *data, struct wl_keyboard *keyboard, uint serial,
-+ }
-+ 
-+ static void
-+-leave(void *data, struct wl_keyboard *keyboard, uint serial,
-++leave(void *data, struct wl_keyboard *keyboard, unsigned serial,
-+       struct wl_surface *surface)
-+ {
-+    struct itimerspec timer = {0};
 +-- 
-+GitLab
++2.48.1
 +
+
+--===============7380182642418477027==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7380182642418477027==--
