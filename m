@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C914C3601A
-	for <buildroot@archiver.kernel.org>; Sun,  6 Apr 2025 01:14:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DE17C3601A
+	for <buildroot@archiver.kernel.org>; Sun,  6 Apr 2025 01:14:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E9B081F38;
-	Sun,  6 Apr 2025 01:14:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 51AF181EC4;
+	Sun,  6 Apr 2025 01:14:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ILvN75K3vDzY; Sun,  6 Apr 2025 01:14:29 +0000 (UTC)
+ id DHX0FKPVO_Ds; Sun,  6 Apr 2025 01:14:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D8B181F68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0900481F78
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D8B181F68;
-	Sun,  6 Apr 2025 01:14:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 624C41C7
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0900481F78;
+	Sun,  6 Apr 2025 01:14:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7E7211C7
  for <buildroot@buildroot.org>; Sun,  6 Apr 2025 01:14:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 546D040794
+ by smtp1.osuosl.org (Postfix) with ESMTP id 649F281E6C
  for <buildroot@buildroot.org>; Sun,  6 Apr 2025 01:14:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hyMfj_bUtv5A for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AB8udwgUOJvF for <buildroot@buildroot.org>;
  Sun,  6 Apr 2025 01:14:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.249;
  helo=mslow3.mail.gandi.net; envelope-from=thomas.bonnefille@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5CD0340856
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5CD0340856
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5C45481E20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C45481E20
 Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5CD0340856
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5C45481E20
  for <buildroot@buildroot.org>; Sun,  6 Apr 2025 01:14:17 +0000 (UTC)
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by mslow3.mail.gandi.net (Postfix) with ESMTP id DD3935845FF
- for <buildroot@buildroot.org>; Sun,  6 Apr 2025 00:49:14 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C2ECD443F5;
- Sun,  6 Apr 2025 00:49:10 +0000 (UTC)
-Date: Sun, 06 Apr 2025 02:49:00 +0200
+ [217.70.183.201])
+ by mslow3.mail.gandi.net (Postfix) with ESMTP id E29C658462B
+ for <buildroot@buildroot.org>; Sun,  6 Apr 2025 00:49:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3D62B443F9;
+ Sun,  6 Apr 2025 00:49:12 +0000 (UTC)
+Date: Sun, 06 Apr 2025 02:49:04 +0200
 MIME-Version: 1.0
-Message-Id: <20250406-fix_zxing-v2-7-0bce0e835a60@bootlin.com>
+Message-Id: <20250406-fix_zxing-v2-11-0bce0e835a60@bootlin.com>
 References: <20250406-fix_zxing-v2-0-0bce0e835a60@bootlin.com>
 In-Reply-To: <20250406-fix_zxing-v2-0-0bce0e835a60@bootlin.com>
 To: buildroot@buildroot.org
@@ -56,26 +56,26 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduleehkeehucetufdoteggode
  hhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepfhhhuhhnlhgvthhhsehtrhhoohguohhnqdhsohhfthifrghrvgdrtghomhdprhgtphhtthhopehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhm
 X-GND-Sasl: thomas.bonnefille@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1743900551;
+ d=bootlin.com; s=gm1; t=1743900552;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=wSatHr8SgT+U53Sa0Ylo+jSTESXDqehjwTXtfxHaRgM=;
- b=KPHYDsSduQN9o7fMZV0ZQz5Ypicq0wuEVrELFCumSpGwCrGZliY2A0BAzt4gvTgNrNAzod
- 1QWEuDJzAZ4OMJ+p05c0FKng2CFLoOfFshpQiEm/NBiJSfkKrZwvK0VI3npiDF31GhWUTt
- FwCU+l4IcLXGLKVLY2mC+lzDm2e1slx6Cdh4xgELaaWpPzQECU2mv6CAKTDpjIH9+NN+jx
- nnmk+8grruNS6OkycMs7Z0sFeotm4w5OwMk11b6tsDwiYJM+Z1jBMZP5KzVp1PJdZedIvY
- Nk/MxS0fjc4OfbH3k8bkgLIqN6t47M+bTCklQULR6PFmqzV8v5Elh0Kbs7y+uQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=Y8Tof0RANXZi16qk6Rrs29EndSKfmY+NjEckLvFUN0g=;
+ b=gMRrmZAkk2Hjew/lX+7psBsgileJCLgKEIWmKntqamSZ8QXK5+7ZLjIR6bqFS68IbeTsET
+ zBII9ccRR56nUGiBVU8Hd/EzmfxPNoaCLibKAf4aC6Z7iRBFSIub6TsR8bQz3Umt5wDdTm
+ 9qPLOQcYn/qaNkw2mKzv6U/mOoUmrWaSvSUf2C6DPO6xyCMhNkub65hfWoIsGfVRm30JQd
+ XcvygVpDsb0bwwiMCTieUsZKAsLXOrlie4R5C9mSpxdjAIOBqj/mkbUhFbhT1Viiat+MtW
+ R0o6esO7wREsJMTwj3jgxIaycpn1qQdg6/pA6gXlhKRg+e6OVNK4VOfX6AZG5Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=KPHYDsSd
-Subject: [Buildroot] [PATCH v2 07/11]
- package/gstreamer1/gstreamer1-editing-services: bump version to 1.24.11
+ header.s=gm1 header.b=gMRrmZAk
+Subject: [Buildroot] [PATCH v2 11/11] package/gstreamer1/gst1-plugins-ugly:
+ bump version to 1.24.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,42 +97,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-No functional change, but bump for consistency. For details, see the
-release notes:
+AMR NB and WB have been moved from ugly to good.
+For more details, see the release notes:
 
     https://gstreamer.freedesktop.org/releases/1.24/
 
 Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 ---
- .../gstreamer1-editing-services/gstreamer1-editing-services.hash      | 4 ++--
- .../gstreamer1-editing-services/gstreamer1-editing-services.mk        | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk   | 4 +---
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index e6bba2072472f69273e725f73e1683d0cb47e038..584d235451d30e720cc52018f394e2b8089df9f9 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.22.12.tar.xz.sha256sum
--sha256  792339135ce713088663cc5d44e0aea8217793e88fabfd11571e7abf4a429f2c  gst-editing-services-1.22.12.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.24.11.tar.xz.sha256sum
-+sha256  85fd74dab259e137a95ab4427e009dd853f4ca82874500cb5493c33bcef1ef08  gst-editing-services-1.24.11.tar.xz
- 
- # Hashes for license files:
- sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index 75c660f31d2295e0f74f49d1857699f3513e8c95..0832cfa30f4f8a248f50b1d4e39914380d3075c4 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+index 497b5ae95ed30aa2656089d34b295363277bdae3..731e2ff7749e090b0b83742b0788f16a6c71728a 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.22.12.tar.xz.sha256sum
+-sha256  d59a1aaf8dd2cc416dc5b5c0b7aecd02b1811bf1229aa724e6c2a503d3799083  gst-plugins-ugly-1.22.12.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.24.11.tar.xz.sha256sum
++sha256  3a1f58a33aee8d13522865bcb564007a6837ef5711d7dfff8ce4260921013f8a  gst-plugins-ugly-1.24.11.tar.xz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index 6542ca9ffe12129d9e089785c767fb1a8eceb832..e2c0939bd6e9ccaf60e1b96a55e8f6e9448cdfed 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.22.12
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.24.11
- GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
+-GST1_PLUGINS_UGLY_VERSION = 1.22.12
++GST1_PLUGINS_UGLY_VERSION = 1.24.11
+ GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
+ GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
+ GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
+@@ -19,8 +19,6 @@ GST1_PLUGINS_UGLY_CONF_OPTS += \
+ 
+ GST1_PLUGINS_UGLY_CONF_OPTS += \
+ 	-Da52dec=disabled \
+-	-Damrnb=disabled \
+-	-Damrwbdec=disabled \
+ 	-Dcdio=disabled \
+ 	-Dsidplay=disabled
+ 
 
 -- 
 2.49.0
