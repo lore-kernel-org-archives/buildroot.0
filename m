@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A2DCC36002
-	for <buildroot@archiver.kernel.org>; Sun,  6 Apr 2025 20:01:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7882C36002
+	for <buildroot@archiver.kernel.org>; Sun,  6 Apr 2025 20:02:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 90EE281E28;
-	Sun,  6 Apr 2025 20:01:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CA2260F1B;
+	Sun,  6 Apr 2025 20:02:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fvQqQT1eDFdc; Sun,  6 Apr 2025 20:01:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LDuiBAGX75im; Sun,  6 Apr 2025 20:02:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83B9481E42
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8930660DEF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 83B9481E42;
-	Sun,  6 Apr 2025 20:01:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id ABA041DE
- for <buildroot@buildroot.org>; Sun,  6 Apr 2025 20:01:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8930660DEF;
+	Sun,  6 Apr 2025 20:02:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 47462DA
+ for <buildroot@buildroot.org>; Sun,  6 Apr 2025 20:02:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8ECF74103A
- for <buildroot@buildroot.org>; Sun,  6 Apr 2025 20:01:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 391D740BFA
+ for <buildroot@buildroot.org>; Sun,  6 Apr 2025 20:02:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Er-3QRn47hfb for <buildroot@buildroot.org>;
- Sun,  6 Apr 2025 20:01:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B946241012
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B946241012
- for <buildroot@buildroot.org>; Sun,  6 Apr 2025 20:01:34 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AFD1B83C52; Sun,  6 Apr 2025 20:01:34 +0000 (UTC)
+ id 12kV7lVWVy_X for <buildroot@buildroot.org>;
+ Sun,  6 Apr 2025 20:02:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 526C740B87
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 526C740B87
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 526C740B87
+ for <buildroot@buildroot.org>; Sun,  6 Apr 2025 20:02:11 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id B1554780389;
+ Sun,  6 Apr 2025 22:02:06 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 06 Apr 2025 22:02:06 +0200
+MIME-Version: 1.0
+Date: Sun, 06 Apr 2025 22:02:06 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 6 Apr 2025 21:59:54 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 34424432baedba4d9f9acdcfb8dd68f8075f94af
-X-Git-Newrev: 01895663d37a821ec8d94b52f4d4384b967787e1
-X-Patchwork-Hint: ignore
-Message-Id: <20250406200134.AFD1B83C52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uclibc: add patch to fix
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250403213634.2412177-1-thomas.petazzoni@bootlin.com>
+References: <20250403213634.2412177-1-thomas.petazzoni@bootlin.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <069561f818635b5be4c0506077a72244@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1743969727;
+ bh=wQTB0ODivi1EtzzGsB9a4uyJqVLcaTsc+QUSyKYW+ZI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=l1oO6NVm2+125mDcMpbFWJQgh8k0VSVudf29v9uM0/+iu5mXWybmQJkwiWhP0U8M/
+ MXFHlx4+tlWVUh6hkM/0vZjmCBW9dD0w2dhAeb9fzT3SUzfwLpjNeIakPVa6V0rzcF
+ TSo0FZUJZxm2/TYKaQ7uwe16SwWf+WpfvYZooxYSw3sVpApIeWrdxujs1NtEIf+8f4
+ /CQ9CbyMJ/SXSS4H+D+oauJqW61xSZAtlZlHHGE2o6Ei36m8Wwu76l9EXjxJYrnYu4
+ KDuhFzDLS88ReVMwaZhRYII8cIY0bP+sXiRtGVovcO8E7/cmH8UsexfKl7ce4smCmH
+ Hbwc8d9y4zwPQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=l1oO6NVm
+Subject: Re: [Buildroot] [PATCH] package/uclibc: add patch to fix
  reallocarray() definition
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,147 +82,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7046516507581225519=="
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7046516507581225519==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=01895663d37a821ec8d94b52f4d4384b967787e1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-uClibc-ng unconditionally exposes a reallocarray() prototype, but only
-provides the implementation when the malloc-standard implementation is
-selected in the configuration.
-
-As noMMU configurations can't use malloc-standard, they use malloc or
-malloc-simple that don't provide reallocarray().
-
-As a result of reallocarray() being missing, some packages such as
-util-linux provide their own replacement implementation... but its
-prototype clashes with the one provided by uClibc, causing build
-failures such as:
-
-In file included from lib/color-names.c:7:
-./include/c.h:586:21: error: static declaration of ‘reallocarray’ follows non-static declaration
-  586 | static inline void *reallocarray(void *ptr, size_t nmemb, size_t size)
-      |                     ^~~~~~~~~~~~
-In file included from ./include/c.h:16:
-/home/thomas/projets/buildroot/output/host/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/include/stdlib.h:898:14: note: previous declaration of ‘reallocarray’ with type ‘void *(void *, size_t,  size_t)’ {aka ‘void *(void *, unsigned int,  unsigned int)’}
-  898 | extern void *reallocarray (void *__ptr, size_t __m, size_t __n);
-      |              ^~~~~~~~~~~~
-make[3]: *** [Makefile:12354: lib/libtcolors_la-color-names.lo] Error 1
-
-This is addressed by a patch on uClibc, submitted upstream, which
-makes sure the prototype is only exposed when the implementation is
-provided.
-
-The issue can be reproduced with commands:
-
-    cat <<EOF >.config
-    BR2_arm=y
-    BR2_cortex_m4=y
-    BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-    BR2_PACKAGE_UTIL_LINUX=y
-    BR2_PACKAGE_UTIL_LINUX_KILL=y
-    EOF
-    make olddefconfig
-    make util-linux
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/157aa82aa4cd57eacc4defe6cace16e464261e9a/ (RISC-V noMMU)
-  https://autobuild.buildroot.net/results/ce1a24c1465b82686ae375ac688a553fb65df5ea/ (ARM noMMU)
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Julien: add commands to reproduce the issue in commit log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...lib.h-only-expose-reallocarray-prototype-.patch | 64 ++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
-
-diff --git a/package/uclibc/0001-include-stdlib.h-only-expose-reallocarray-prototype-.patch b/package/uclibc/0001-include-stdlib.h-only-expose-reallocarray-prototype-.patch
-new file mode 100644
-index 0000000000..867e3645cc
---- /dev/null
-+++ b/package/uclibc/0001-include-stdlib.h-only-expose-reallocarray-prototype-.patch
-@@ -0,0 +1,64 @@
-+From bbb1a4f197624b0040e3228505eb2a725a8846f8 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Thu, 3 Apr 2025 22:56:49 +0200
-+Subject: [PATCH] include/stdlib.h: only expose reallocarray() prototype when
-+ implementation is available
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+The reallocarray() primitive is only provided by the malloc-standard
-+implementation: neither malloc nor malloc-simple provide it. This
-+causes issues when building for example util-linux on noMMU platforms
-+as:
-+
-+- noMMU platforms can't use malloc-standard, so either malloc or
-+  malloc-simple are used, which means reallocarray() is not
-+  implemented
-+
-+- util-linux detects the absence of reallocarray(), and provides its
-+  own implementation, but the prototype clashes with the prototype in
-+  uClibc's <stdlib.h>
-+
-+The combination of which causes the following build failure:
-+
-+In file included from lib/color-names.c:7:
-+./include/c.h:586:21: error: static declaration of ‘reallocarray’ follows non-static declaration
-+  586 | static inline void *reallocarray(void *ptr, size_t nmemb, size_t size)
-+      |                     ^~~~~~~~~~~~
-+In file included from ./include/c.h:16:
-+/home/thomas/projets/buildroot/output/host/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/include/stdlib.h:898:14: note: previous declaration of ‘reallocarray’ with type ‘void *(void *, size_t,  size_t)’ {aka ‘void *(void *, unsigned int,  unsigned int)’}
-+  898 | extern void *reallocarray (void *__ptr, size_t __m, size_t __n);
-+      |              ^~~~~~~~~~~~
-+make[3]: *** [Makefile:12354: lib/libtcolors_la-color-names.lo] Error 1
-+
-+To fix this, let's not expose the prototype of reallocarray() if we
-+don't provide the implementation for it.
-+
-+Upstream: https://mailman.openadk.org/mailman3/hyperkitty/list/devel@uclibc-ng.org/thread/BX4ENNZYO23YQJQF5XITW7TETSJHEFK5/
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ include/stdlib.h | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/include/stdlib.h b/include/stdlib.h
-+index d4e0b75e7..448c5e336 100644
-+--- a/include/stdlib.h
-++++ b/include/stdlib.h
-+@@ -986,9 +986,13 @@ extern int getpt (void);
-+ extern int getloadavg (double __loadavg[], int __nelem)
-+      __THROW __nonnull ((1));
-+ 
-++/* reallocarray() only provided by the malloc-standard implementation */
-++#if defined(__MALLOC_STANDARD__)
-+ extern void *reallocarray (void *__ptr, size_t __m, size_t __n);
-+ #endif
-+ 
-++#endif
-++
-+ #ifdef _LIBC
-+ extern int __drand48_iterate (unsigned short int xsubi[3], struct drand48_data *buffer) attribute_hidden;
-+ 
-+-- 
-+2.48.1
-+
-
---===============7046516507581225519==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7046516507581225519==--
+T24gMDMvMDQvMjAyNSAyMzozNiwgVGhvbWFzIFBldGF6em9uaSB2aWEgYnVpbGRyb290IHdyb3Rl
+Ogo+IHVDbGliYy1uZyB1bmNvbmRpdGlvbmFsbHkgZXhwb3NlcyBhIHJlYWxsb2NhcnJheSgpIHBy
+b3RvdHlwZSwgYnV0IG9ubHkKPiBwcm92aWRlcyB0aGUgaW1wbGVtZW50YXRpb24gd2hlbiB0aGUg
+bWFsbG9jLXN0YW5kYXJkIGltcGxlbWVudGF0aW9uIGlzCj4gc2VsZWN0ZWQgaW4gdGhlIGNvbmZp
+Z3VyYXRpb24uCj4gCj4gQXMgbm9NTVUgY29uZmlndXJhdGlvbnMgY2FuJ3QgdXNlIG1hbGxvYy1z
+dGFuZGFyZCwgdGhleSB1c2UgbWFsbG9jIG9yCj4gbWFsbG9jLXNpbXBsZSB0aGF0IGRvbid0IHBy
+b3ZpZGUgcmVhbGxvY2FycmF5KCkuCj4gCj4gQXMgYSByZXN1bHQgb2YgcmVhbGxvY2FycmF5KCkg
+YmVpbmcgbWlzc2luZywgc29tZSBwYWNrYWdlcyBzdWNoIGFzCj4gdXRpbC1saW51eCBwcm92aWRl
+IHRoZWlyIG93biByZXBsYWNlbWVudCBpbXBsZW1lbnRhdGlvbi4uLiBidXQgaXRzCj4gcHJvdG90
+eXBlIGNsYXNoZXMgd2l0aCB0aGUgb25lIHByb3ZpZGVkIGJ5IHVDbGliYywgY2F1c2luZyBidWls
+ZAo+IGZhaWx1cmVzIHN1Y2ggYXM6Cj4gCj4gSW4gZmlsZSBpbmNsdWRlZCBmcm9tIGxpYi9jb2xv
+ci1uYW1lcy5jOjc6Cj4gLi9pbmNsdWRlL2MuaDo1ODY6MjE6IGVycm9yOiBzdGF0aWMgZGVjbGFy
+YXRpb24gb2Yg4oCYcmVhbGxvY2FycmF54oCZIAo+IGZvbGxvd3Mgbm9uLXN0YXRpYyBkZWNsYXJh
+dGlvbgo+ICAgNTg2IHwgc3RhdGljIGlubGluZSB2b2lkICpyZWFsbG9jYXJyYXkodm9pZCAqcHRy
+LCBzaXplX3Qgbm1lbWIsIAo+IHNpemVfdCBzaXplKQo+ICAgICAgIHwgICAgICAgICAgICAgICAg
+ICAgICBefn5+fn5+fn5+fn4KPiBJbiBmaWxlIGluY2x1ZGVkIGZyb20gLi9pbmNsdWRlL2MuaDox
+NjoKPiAvaG9tZS90aG9tYXMvcHJvamV0cy9idWlsZHJvb3Qvb3V0cHV0L2hvc3QvYXJtLWJ1aWxk
+cm9vdC11Y2xpbnV4LXVjbGliY2dudWVhYmkvc3lzcm9vdC91c3IvaW5jbHVkZS9zdGRsaWIuaDo4
+OTg6MTQ6IAo+IG5vdGU6IHByZXZpb3VzIGRlY2xhcmF0aW9uIG9mIOKAmHJlYWxsb2NhcnJheeKA
+mSB3aXRoIHR5cGUg4oCYdm9pZCAqKHZvaWQgKiwgCj4gc2l6ZV90LCAgc2l6ZV90KeKAmSB7YWth
+IOKAmHZvaWQgKih2b2lkICosIHVuc2lnbmVkIGludCwgIHVuc2lnbmVkIGludCnigJl9Cj4gICA4
+OTggfCBleHRlcm4gdm9pZCAqcmVhbGxvY2FycmF5ICh2b2lkICpfX3B0ciwgc2l6ZV90IF9fbSwg
+c2l6ZV90IAo+IF9fbik7Cj4gICAgICAgfCAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+Cj4gbWFr
+ZVszXTogKioqIFtNYWtlZmlsZToxMjM1NDogbGliL2xpYnRjb2xvcnNfbGEtY29sb3ItbmFtZXMu
+bG9dIEVycm9yIDEKPiAKPiBUaGlzIGlzIGFkZHJlc3NlZCBieSBhIHBhdGNoIG9uIHVDbGliYywg
+c3VibWl0dGVkIHVwc3RyZWFtLCB3aGljaAo+IG1ha2VzIHN1cmUgdGhlIHByb3RvdHlwZSBpcyBv
+bmx5IGV4cG9zZWQgd2hlbiB0aGUgaW1wbGVtZW50YXRpb24gaXMKPiBwcm92aWRlZC4KPiAKPiBG
+aXhlczoKPiAKPiAgIAo+IGh0dHBzOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy8x
+NTdhYTgyYWE0Y2Q1N2VhY2M0ZGVmZTZjYWNlMTZlNDY0MjYxZTlhLyAKPiAoUklTQy1WIG5vTU1V
+KQo+ICAgCj4gaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzL2NlMWEyNGMx
+NDY1YjgyNjg2YWUzNzVhYzY4OGE1NTNmYjY1ZGY1ZWEvIAo+IChBUk0gbm9NTVUpCj4gCj4gU2ln
+bmVkLW9mZi1ieTogVGhvbWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNv
+bT4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
+aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
+YnVpbGRyb290Cg==
