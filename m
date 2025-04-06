@@ -1,54 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 853E4C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35029C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4F9AD83EB4;
-	Mon, 19 May 2025 10:47:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 08B3360F80;
+	Mon, 19 May 2025 10:47:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JS-nkkG8Q_sL; Mon, 19 May 2025 10:47:08 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3BrxsOYkoO43; Mon, 19 May 2025 10:47:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 76BB683EAC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29FB1616EA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 76BB683EAC;
-	Mon, 19 May 2025 10:47:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5043BE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29FB1616EA;
+	Mon, 19 May 2025 10:47:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0BC1AE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CB3104188A
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 844BA41246
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CG83xmRsF59y for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 12AbjP8skOku for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C17FB417EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8131D40DB2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C17FB417EA
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8131D40DB2
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BE5BA873D4; Mon, 19 May 2025 10:39:56 +0000 (UTC)
+ id 7DE0383B63; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 23 Apr 2025 21:31:16 +0200
+Date: Sun, 6 Apr 2025 11:23:00 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3abc3b97bad9b4bbd436015cce029f25ee627f6a
-X-Git-Newrev: 3150b0abc407e4ae8a5dc093f2692afaa6582e1c
+X-Git-Oldrev: 280162a468dd6bc88e428636a4c3c47d58b0042e
+X-Git-Newrev: 70035cbb1e9223a703317c6e466a7216158bcf2f
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103956.BE5BA873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- configs/olimex_a20_olinuxino_lime*: switch to Bootlin glibc stable
- toolchain
+Message-Id: <20250519103947.7DE0383B63@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/optee-examples: bump
+ to 4.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +65,51 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3150b0abc407e4ae8a5dc093f2692afaa6582e1c
+commit: https://git.buildroot.net/buildroot/commit/?id=70035cbb1e9223a703317c6e466a7216158bcf2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Update optee-examples to the latest tagged release
+
+Signed-off-by: Nayab Sayed <nayabbasha.sayed@microchip.com>
+[Julien: move package archive hash to the "Locally computed" section]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/olimex_a20_olinuxino_lime2_defconfig | 4 +++-
- configs/olimex_a20_olinuxino_lime_defconfig  | 4 +++-
- 2 files changed, 6 insertions(+), 2 deletions(-)
+ package/optee-examples/Config.in           | 4 ++--
+ package/optee-examples/optee-examples.hash | 3 +--
+ 2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index fde3473847..0d54e6ca98 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -1,6 +1,8 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
- BR2_GLOBAL_PATCH_DIR="board/olimex/a20_olinuxino/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 9275b5fbfc..05d311ad4e 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -1,6 +1,8 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
- BR2_GLOBAL_PATCH_DIR="board/olimex/a20_olinuxino/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_HOSTNAME="a20-olinuxino"
+diff --git a/package/optee-examples/Config.in b/package/optee-examples/Config.in
+index 5c5b0ce5ba..222beb2af1 100644
+--- a/package/optee-examples/Config.in
++++ b/package/optee-examples/Config.in
+@@ -42,7 +42,7 @@ config BR2_PACKAGE_OPTEE_EXAMPLES_AS_OS
+ 	depends on BR2_TARGET_OPTEE_OS_CUSTOM_VERSION
+ 
+ config BR2_PACKAGE_OPTEE_EXAMPLES_LATEST
+-	bool "4.3.0"
++	bool "4.5.0"
+ 	help
+ 	  Use the latest release tag from the optee-examples official
+ 	  Git repository.
+@@ -72,7 +72,7 @@ config BR2_PACKAGE_OPTEE_EXAMPLES_VERSION
+ 	string
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_VERSION_VALUE \
+ 				if BR2_PACKAGE_OPTEE_EXAMPLES_AS_OS
+-	default "4.3.0"		if BR2_PACKAGE_OPTEE_EXAMPLES_LATEST
++	default "4.5.0"		if BR2_PACKAGE_OPTEE_EXAMPLES_LATEST
+ 	default "custom"	if BR2_PACKAGE_OPTEE_EXAMPLES_CUSTOM_TARBALL
+ 
+ endif # BR2_PACKAGE_OPTEE_EXAMPLES
+diff --git a/package/optee-examples/optee-examples.hash b/package/optee-examples/optee-examples.hash
+index a6ecd2caec..5a12bb22ba 100644
+--- a/package/optee-examples/optee-examples.hash
++++ b/package/optee-examples/optee-examples.hash
+@@ -1,4 +1,3 @@
+-# From https://github.com/linaro-swg/optee_examples/archive/4.3.0/optee-examples-4.3.0.tar.gz
+-sha256  ee1576617365b5fe9d20d72c16cf6b39159eb79b1401189bd37a91ef03371820  optee-examples-4.3.0.tar.gz
+ # Locally computed
++sha256  3fcf1f9eab8d094f898bbb3e2a69a0ca321765f39c832749fdb571a21063bcfc  optee-examples-4.5.0.tar.gz
+ sha256  6f1ef8449cb82ae79d2155605f7985bdf0f08e7ab5007de9b4362e8bf28733b9  LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
