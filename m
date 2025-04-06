@@ -4,67 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C5B4C36002
-	for <buildroot@archiver.kernel.org>; Sun,  6 Apr 2025 16:27:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 119A3C3601A
+	for <buildroot@archiver.kernel.org>; Sun,  6 Apr 2025 16:27:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7AF160749;
-	Sun,  6 Apr 2025 16:26:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB44460F4E;
+	Sun,  6 Apr 2025 16:27:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NAUz98l7Lu4b; Sun,  6 Apr 2025 16:26:59 +0000 (UTC)
+ id SlXf1x9GezUe; Sun,  6 Apr 2025 16:27:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E10760D4B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0CF7061005
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E10760D4B;
-	Sun,  6 Apr 2025 16:26:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 655C6DA
- for <buildroot@buildroot.org>; Sun,  6 Apr 2025 16:26:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0CF7061005;
+	Sun,  6 Apr 2025 16:27:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 52BE5DA
+ for <buildroot@buildroot.org>; Sun,  6 Apr 2025 16:27:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 57FB581146
- for <buildroot@buildroot.org>; Sun,  6 Apr 2025 16:26:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 39DAC40286
+ for <buildroot@buildroot.org>; Sun,  6 Apr 2025 16:27:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6Sev_iZUUZ6p for <buildroot@buildroot.org>;
- Sun,  6 Apr 2025 16:26:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1PjNd2-INE6z for <buildroot@buildroot.org>;
+ Sun,  6 Apr 2025 16:27:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
  helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5238C81144
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5238C81144
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5238C81144
- for <buildroot@buildroot.org>; Sun,  6 Apr 2025 16:26:57 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 47A4B40A2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 47A4B40A2F
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 47A4B40A2F
+ for <buildroot@buildroot.org>; Sun,  6 Apr 2025 16:27:03 +0000 (UTC)
 Received: from home.juju.sh (unknown
  [IPv6:2a01:e0a:485:b220:656e:cf44:475c:a8d2])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id A8A74B00583;
- Sun,  6 Apr 2025 18:26:49 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id C5DE3B00539;
+ Sun,  6 Apr 2025 18:26:55 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun,  6 Apr 2025 18:26:38 +0200
-Message-ID: <20250406162641.521533-1-ju.o@free.fr>
+Date: Sun,  6 Apr 2025 18:26:39 +0200
+Message-ID: <20250406162641.521533-2-ju.o@free.fr>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250406162641.521533-1-ju.o@free.fr>
+References: <20250406162641.521533-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1743956814;
- bh=6S9wSxUhbkiUESVJPuoNekkEG/rY2+bWE3YiwF+LFG0=;
- h=From:To:Cc:Subject:Date:From;
- b=vbGq25caCggFbpHJmUf8h6UYZ/s0zWUgYRjwQ0g/f/Jz2aMzs/lnuWPhDUzT92BN2
- RWbo+dVLaQlX8Vpyb1xzae3s47Ae7QN4JmrpKTuW0q0Z5vmEA4wSPLFo4MjAGaVaBu
- wMxyx5p+orlLm8S72km2p5hz15RV0b6jnPEKjTBB0IsF0tQ8tUZTcULsSy47DcsSC9
- Dmq2l1z0xfNln0htMXu/SRL0xn7VOEdoXuLfgrhJrCfXGXrEqB+0sFVYY/EbiaEVqX
- i/wmGn7o93xFulUR29fdq95Wyx4lkJ244JHZRaOZheHNuq1AQ3vwjX7AJYca4hnxMr
- 0w6PF5bimbRzg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1743956821;
+ bh=oPpbHhr7z747i519s3+z8DQwu/fo+eruV4TD4QUb7zk=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=YFqskrbKtjLzI+69FdUOXRBlorRK0/xBb88PMWLALVYLC0MGxPSdVt5LgDrq9TG//
+ R24bbB0JAC2v2VGkMxpbqKicwnfcrV2UVxpavHt1iTte5DqOJ8H6uL6ay0RZDmoWeY
+ 5rPH3ag7xqQdTGciG/9QaXQOr7VcN836Tqe1epypEPpdxJ9v/JLMFyx9WD9k+RsW3p
+ vlcq9om9Jpn9KeqEycZXpcVAIbNtxMwe1dR8qZiEUbFm3cgQonPYT+k+9yffnu8HKy
+ wQje/Nz4qh20BG0YfZpPxuhh58Tvya0dvSWb1TQBXSpqkp3EZyig40FahMsSIcmh+O
+ xantPhyXbfz7A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=vbGq25ca
-Subject: [Buildroot] [PATCH 1/4] configs/ls1028ardb: linux needs host-openssl
+ header.s=smtp-20201208 header.b=YFqskrbK
+Subject: [Buildroot] [PATCH 2/4] configs/ls1046a-frwy: linux needs
+ host-openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,33 +99,29 @@ The issue can be reproduced in the Buildroot Docker reference image,
 using the commands:
 
     utils/docker-run
-    make ls1028ardb_defconfig
+    make ls1046a-frwy_defconfig
     make linux
 
 This commit fixes the issue by explicitly adding
 BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y to the defconfig.
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/7cbc240ac2c3a5d7cbbec9826fb99854bdd156a7
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/0344e5dae647c5cc23eea11fcbeddd7fec776d75
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-Note: I found those issues while reviewing and testing patches in:
-https://patchwork.ozlabs.org/project/buildroot/list/?series=450442
-So I recommend to apply this series first.
----
- configs/ls1028ardb_defconfig | 1 +
+ configs/ls1046a-frwy_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/configs/ls1028ardb_defconfig b/configs/ls1028ardb_defconfig
-index 0d1843bf5f..7b24a41cd9 100644
---- a/configs/ls1028ardb_defconfig
-+++ b/configs/ls1028ardb_defconfig
+diff --git a/configs/ls1046a-frwy_defconfig b/configs/ls1046a-frwy_defconfig
+index 52d8f0cc07..f2fac6590f 100644
+--- a/configs/ls1046a-frwy_defconfig
++++ b/configs/ls1046a-frwy_defconfig
 @@ -18,6 +18,7 @@ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.con
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-rdb"
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1046a-frwy freescale/fsl-ls1046a-frwy-sdk"
  BR2_LINUX_KERNEL_INSTALL_TARGET=y
 +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_PACKAGE_QORIQ_CADENCE_DP_FIRMWARE=y
+ BR2_PACKAGE_QORIQ_FM_UCODE=y
  BR2_TARGET_ROOTFS_EXT2=y
  BR2_TARGET_ROOTFS_EXT2_4=y
 -- 
