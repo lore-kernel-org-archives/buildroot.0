@@ -4,69 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB89CC3601A
-	for <buildroot@archiver.kernel.org>; Sun,  6 Apr 2025 16:27:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 907D5C36002
+	for <buildroot@archiver.kernel.org>; Sun,  6 Apr 2025 16:33:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BDA1F60F48;
-	Sun,  6 Apr 2025 16:27:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4433660E9A;
+	Sun,  6 Apr 2025 16:33:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l41oFy7KJyiW; Sun,  6 Apr 2025 16:27:20 +0000 (UTC)
+ id 5_R7ecQaAykY; Sun,  6 Apr 2025 16:33:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0747860F58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 78DA560EBF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0747860F58;
-	Sun,  6 Apr 2025 16:27:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E4001DE
- for <buildroot@buildroot.org>; Sun,  6 Apr 2025 16:27:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 78DA560EBF;
+	Sun,  6 Apr 2025 16:33:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6300EDA
+ for <buildroot@buildroot.org>; Sun,  6 Apr 2025 16:33:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E800981147
- for <buildroot@buildroot.org>; Sun,  6 Apr 2025 16:27:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 54D2660EBF
+ for <buildroot@buildroot.org>; Sun,  6 Apr 2025 16:33:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G2IlwfUCqn1X for <buildroot@buildroot.org>;
- Sun,  6 Apr 2025 16:27:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 19F9881146
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19F9881146
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 19F9881146
- for <buildroot@buildroot.org>; Sun,  6 Apr 2025 16:27:17 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:656e:cf44:475c:a8d2])
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Lq8utGWQXdN8 for <buildroot@buildroot.org>;
+ Sun,  6 Apr 2025 16:33:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 48FE260E9A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48FE260E9A
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 48FE260E9A
+ for <buildroot@buildroot.org>; Sun,  6 Apr 2025 16:33:20 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 21E39B00539;
- Sun,  6 Apr 2025 18:27:10 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun,  6 Apr 2025 18:26:41 +0200
-Message-ID: <20250406162641.521533-4-ju.o@free.fr>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250406162641.521533-1-ju.o@free.fr>
-References: <20250406162641.521533-1-ju.o@free.fr>
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 116A35FF95;
+ Sun,  6 Apr 2025 18:33:14 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 06 Apr 2025 18:33:14 +0200
 MIME-Version: 1.0
+Date: Sun, 06 Apr 2025 18:33:14 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>,
+ linux-amarula@amarulasolutions.com
+In-Reply-To: <20250406150929.691964-1-dario.binacchi@amarulasolutions.com>
+References: <20250406150929.691964-1-dario.binacchi@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <d10a750a5def10f302ff558ff84f4b3d@free.fr>
+X-Sender: ju.o@free.fr
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1743956836;
- bh=kJpEpLG9NTA0ASbtg+c7japlXn8b1D53gEbataQC8BM=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=X07AXhRL/faYkhjkLzGRjSIDFSG3gbNeq9wG9ErjbX2JiVNEk1ASseYFuIEwjUcSw
- sAgJv4vowOUu1miXppu+KiH0VomBurE8acRn3qJ/Aqwg0rQGA9nERpGV0kjMbZDurz
- UroHXlNlyhU1RKVpn+k+YKztwMh9N+5bWIIOXzUwxUpSZvx2QxyRlCQYuyt71RWklx
- /sWdEymJ02qMnPc6WAGScxPMng9sreAsp/E5/iSqxzLFuCJ08ZoUieUGh+H4UYTnZH
- j5ZYY65FHqXtX8f6FawifpqO6lnXsn/2u5TcsRC+8LOWEUWV16/YefrPaV4QjHLdsP
- snQfFS7YH2/Hw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1743957198;
+ bh=Kp4RAJUdRmCzKwTNW3ilxphYMc8UZlc7+Em9wNiEykE=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=aqx4NYWO+rHqvFFVW/KdEiyDgxxCZAqNtuw7CiuD76fxGizv/GILmMuMOh0lnTGM9
+ k3Q+sV63+n3aQmN4Cs1WlNHPnTum7lSenfU0jFEhsX4W/Kk7kedK4S2SH1PmvafR7J
+ ZL9B3zsPyhwsbHs2zhuqUDmhkgLEZpWYXfhAQo36bZPF4iZOvlYfy6Ic5GraHagMuj
+ vzEvGpUO3HmC9YuJAdd/R6mTTpVfNeP89D1IX3uo7rMUAxvYS1mSoUF/Zb7j8Xi+8P
+ BEqq+IGaPejFeed8EyBhMm2jl3wG4AiKf7A+lro6IOO1+9/O1WgyzEJAIr8rZTEDQd
+ 9Er0Mfc5hKYBg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=X07AXhRL
-Subject: [Buildroot] [PATCH 4/4] configs/ls1043a-rdb: linux needs
- host-openssl
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=aqx4NYWO
+Subject: Re: [Buildroot] [PATCH 1/1] package/apr: bump to version 1.7.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,54 +83,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, Akhilesh Nema <nemaakhilesh@gmail.com>,
- Brandon Maier <brandon.maier@collins.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since Buildroot commit [1] which introduced this defconfig using a
-Kernel 6.6.x series, the build can fail with error:
+Hi Dario,
 
-    certs/extract-cert.c:21:10: fatal error: openssl/bio.h: No such file or directory
+Thanks for the patch.
 
-The issue is generally masked by the build order, as
-arm-trusted-firmware selects BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-which requires host-openssl.
+This apr version seems to break the test_apache runtime test:
+https://gitlab.com/jolivain/buildroot/-/jobs/9637031124
 
-The issue can be reproduced in the Buildroot Docker reference image,
-using the commands:
+The failure seems to happen in the apr-utils package.
 
-    utils/docker-run
-    make ls1043a-rdb_defconfig
-    make linux
+Without this bump, the test succeeds. See for example:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/9569779578
 
-This commit fixes the issue by explicitly adding
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y to the defconfig.
+On 06/04/2025 17:09, Dario Binacchi wrote:
+> Release notes:
+> https://downloads.apache.org/apr/CHANGES-APR-1.7
+> 
+> The removal of patches:
+> 
+> - 0003-Revert-Add-the-ability-to-cross-compile-APR.patch
+> - 0004-Merge-r1920082-from-1.8.x.patch
+> 
+> is respectively related to commits [1] and [2] included in the new
+> release.
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/34b047a442b1b3c64713972fc54d98c05a672c7c
+Also, could you add a note in the commit log explaining why this bump
+is not flagged as "security". For example:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- configs/ls1043a-rdb_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+"""
+Note: the upstream release note mention v1.7.5 is a security update.
+The package patch 0004-Merge-r1920082-from-1.8.x.patch in Buildroot
+was already fixing this security issue. This is why this commit is
+not marked as a security bump.
+"""
 
-diff --git a/configs/ls1043a-rdb_defconfig b/configs/ls1043a-rdb_defconfig
-index d70e8692ab..fb0f781b44 100644
---- a/configs/ls1043a-rdb_defconfig
-+++ b/configs/ls1043a-rdb_defconfig
-@@ -17,6 +17,7 @@ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.con
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1043a-rdb freescale/fsl-ls1043a-rdb-sdk"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_PACKAGE_QORIQ_FM_UCODE=y
- BR2_PACKAGE_QORIQ_FM_UCODE_PLATFORM="ls1043"
- BR2_TARGET_ROOTFS_EXT2=y
--- 
-2.49.0
+> [1] 
+> https://github.com/apache/apr/commit/6ab04292969c5d85f0b51f3c9eba9aabf4c44ab0
+> [2] 
+> https://github.com/apache/apr/commit/36ea6d5a2bfc480dd8032cc8651e6793552bc2aa
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
+Could you have a look at the apache runtime test failure, please?
+
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
