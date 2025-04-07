@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA8CBC54756
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E549C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D4F861730;
-	Mon, 19 May 2025 10:47:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E20A8616E4;
+	Mon, 19 May 2025 10:47:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NqmNVVH9XAFC; Mon, 19 May 2025 10:47:29 +0000 (UTC)
+ id HMaKkBhbOe8D; Mon, 19 May 2025 10:47:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1533613EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC86461744
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1533613EC;
-	Mon, 19 May 2025 10:47:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 46A7AD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC86461744;
+	Mon, 19 May 2025 10:47:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EFC0E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 848CA41807
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 182FC4125B
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5wkCin2LD4r4 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N9QHrkdySgiB for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA8564187A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2C6940DB7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BA8564187A
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F2C6940DB7
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8A47873D5; Mon, 19 May 2025 10:40:00 +0000 (UTC)
+ id E95C383B63; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 10 May 2025 19:09:19 +0200
+Date: Mon, 7 Apr 2025 20:14:08 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1799cfebfd5ea1312cce74b3807d4aad044bce67
-X-Git-Newrev: 07eb63935aa566864cae08daeef83bb9bd113a47
+X-Git-Oldrev: fb0e3ad9ef74246804e46f3e68cbf2ddc59fab8f
+X-Git-Newrev: 0b9123cd641c0d9f0d673a3b637aefd877640536
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104000.B8A47873D5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/tpm2-pkcs11: bump to
- version 1.9.1
+Message-Id: <20250519103947.E95C383B63@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/gstreamer1/gst1-rtsp-server: bump version to 1.24.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,50 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07eb63935aa566864cae08daeef83bb9bd113a47
+commit: https://git.buildroot.net/buildroot/commit/?id=0b9123cd641c0d9f0d673a3b637aefd877640536
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-1.9.0..1.9.1 changes described at:
+No functional change, but bump for consistency. For details, see the
+release notes:
 
-  https://github.com/tpm2-software/tpm2-pkcs11/releases/tag/1.9.1
+    https://gstreamer.freedesktop.org/releases/1.24/
 
-Update suggested by https://gitlab.com/magerkraut at
-https://gitlab.com/buildroot.org/buildroot/-/issues/109 as "There is a
-issue with the database LOCK file".
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/issues/109
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/tpm2-pkcs11/tpm2-pkcs11.hash | 2 +-
- package/tpm2-pkcs11/tpm2-pkcs11.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 4 ++--
+ package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/tpm2-pkcs11/tpm2-pkcs11.hash b/package/tpm2-pkcs11/tpm2-pkcs11.hash
-index 797955a69b..5f5abfbbe8 100644
---- a/package/tpm2-pkcs11/tpm2-pkcs11.hash
-+++ b/package/tpm2-pkcs11/tpm2-pkcs11.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  35bf06c30cfa76fc0eba2c5f503cf7dd0d34a66afb2d292fee896b90362f633b  tpm2-pkcs11-1.9.0.tar.gz
-+sha256  ce24aa5ec2471545576e892b6f64fd873a424371bbf9be4ca3a0e689ea11c9b7  tpm2-pkcs11-1.9.1.tar.gz
- sha256  793aa007f793458434d7cc60b1c827053a399308658b32fcaa6023802adc22e1  LICENSE
-diff --git a/package/tpm2-pkcs11/tpm2-pkcs11.mk b/package/tpm2-pkcs11/tpm2-pkcs11.mk
-index c6218d772e..b26f53de27 100644
---- a/package/tpm2-pkcs11/tpm2-pkcs11.mk
-+++ b/package/tpm2-pkcs11/tpm2-pkcs11.mk
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+index 98b211f7a2..cabd77b058 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
+@@ -1,4 +1,4 @@
+-# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.22.12.tar.xz.sha256sum
+-sha256  bf6c7871e7cf3528e4ec87ddc2f2949691cd269f98e536482ae744c1405cf451  gst-rtsp-server-1.22.12.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.24.11.tar.xz.sha256sum
++sha256  d147ff75bc445235fe0a4a4714c26d6b7bf9a485a1ae3a722bd530ab28f98bd3  gst-rtsp-server-1.24.11.tar.xz
+ sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
+ sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING.LIB
+diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
+index a8c382e115..6a1cca016e 100644
+--- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
++++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TPM2_PKCS11_VERSION = 1.9.0
-+TPM2_PKCS11_VERSION = 1.9.1
- TPM2_PKCS11_SITE = https://github.com/tpm2-software/tpm2-pkcs11/releases/download/$(TPM2_PKCS11_VERSION)
- TPM2_PKCS11_LICENSE = BSD-2-Clause
- TPM2_PKCS11_LICENSE_FILES = LICENSE
+-GST1_RTSP_SERVER_VERSION = 1.22.12
++GST1_RTSP_SERVER_VERSION = 1.24.11
+ GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
+ GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
+ GST1_RTSP_SERVER_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
