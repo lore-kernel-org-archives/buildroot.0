@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B682C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD6BFC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6BB66616DF;
-	Mon, 19 May 2025 10:47:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CBD4613E6;
+	Mon, 19 May 2025 10:47:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JTYWKyc0qyZN; Mon, 19 May 2025 10:47:04 +0000 (UTC)
+ id X0N_jXbIYiSk; Mon, 19 May 2025 10:47:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80E22616E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94E54616EA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80E22616E5;
-	Mon, 19 May 2025 10:47:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4E146E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 94E54616EA;
+	Mon, 19 May 2025 10:47:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EDF4E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7F63B417E9
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5DCDC41240
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id je7c0JSgfZVn for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CH9ht50YHjZb for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A9B33417F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB6A640D94
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A9B33417F5
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CB6A640D94
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A7EF0873D5; Mon, 19 May 2025 10:39:59 +0000 (UTC)
+ id C4DAA83B63; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 7 May 2025 19:18:06 +0200
+Date: Mon, 7 Apr 2025 20:13:53 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 74c4dd41502384a797829ae16167c28f50a24e3e
-X-Git-Newrev: 31569bcc1b0762636d704baad0b35fc37aedb386
+X-Git-Oldrev: 9e7e255a09eb6175d9d085e5cbae63ef4ea08e0f
+X-Git-Newrev: f28d1678695ce84be4fd6af37e4aa736eba95dfb
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103959.A7EF0873D5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gmp: add patch to fix
- build with gcc-15
+Message-Id: <20250519103947.C4DAA83B63@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gstreamer1/gstreamer1:
+ bump version to 1.24.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,126 +60,45 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7881470676577910479=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7881470676577910479==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=31569bcc1b0762636d704baad0b35fc37aedb386
+commit: https://git.buildroot.net/buildroot/commit/?id=f28d1678695ce84be4fd6af37e4aa736eba95dfb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-When using host gcc 15, host-gmp fails at configure time with
-error message:
-
-    configure: error: could not find a working compiler, see config.log for details
-
-The error is due to the macro GMP_PROG_CC_WORKS in the file
-acinclude.m4 containing C-code declaring functions without declaring
-its parameters. This construct is now an error in C23, which is the
-new default in gcc 15. See:
-https://gcc.gnu.org/gcc-15/porting_to.html#c23
-
-This commit fixes the issue by adding a package patch from
-upstream changesets, not yet published in a release.
-
-Even if gcc 15 is not yet included in Buildroot, this commit also
-sets _AUTORECONF = YES for the target package in order to have this
-package already fixed.
-
-Fixes:
-https://autobuild.buildroot.org/results/623634fa7bbeceeb6d90b15ce0abb1b9b4b24045/
-
-Tested-by: Brigham Campbell <me@brighamcampbell.com>
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...nction-prototype-in-acinclude.m4-for-C23-.patch | 51 ++++++++++++++++++++++
- package/gmp/gmp.mk                                 |  4 ++
- 2 files changed, 55 insertions(+)
+ package/gstreamer1/gstreamer1/gstreamer1.hash | 4 ++--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gmp/0001-Complete-function-prototype-in-acinclude.m4-for-C23-.patch b/package/gmp/0001-Complete-function-prototype-in-acinclude.m4-for-C23-.patch
-new file mode 100644
-index 0000000000..129a4a88e0
---- /dev/null
-+++ b/package/gmp/0001-Complete-function-prototype-in-acinclude.m4-for-C23-.patch
-@@ -0,0 +1,51 @@
-+From 9cd0c36d0110191a5f42e268d7bd21a95a2aa883 Mon Sep 17 00:00:00 2001
-+From: Marc Glisse <marc.glisse@inria.fr>
-+Date: Wed, 29 Jan 2025 22:38:02 +0100
-+Subject: [PATCH] Complete function prototype in acinclude.m4 for C23
-+ compatibility
-+
-+Add parameter names to function prototype
-+
-+Upstream: https://gmplib.org/repo/gmp/rev/d66d66d82dbb
-+Upstream: https://gmplib.org/repo/gmp/rev/8e7bb4ae7a18
-+Signed-off-by: Marc Glisse <marc.glisse@inria.fr>
-+[Julien: git patch adapted from two upstream mercurial changesets]
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+---
-+ ChangeLog    | 9 +++++++++
-+ acinclude.m4 | 2 +-
-+ 2 files changed, 10 insertions(+), 1 deletion(-)
-+
-+diff --git a/ChangeLog b/ChangeLog
-+index 2902cd2..d808a8b 100644
-+--- a/ChangeLog
-++++ b/ChangeLog
-+@@ -1,3 +1,12 @@
-++2025-03-15  Khem Raj <raj.khem@gmail.com>
-++
-++	* acinclude.m4: Add parameter names to function prototype.
-++
-++2025-01-29  Rudi Heitbaum <rudi@heitbaum.com>
-++	    Marc Glisse <marc.glisse@inria.fr>
-++
-++	* acinclude.m4: Complete function prototype.
-++
-+ 2023-07-29  Torbjörn Granlund  <tg@gmplib.org>
-+ 
-+ 	* Version 6.3.0 released.
-+diff --git a/acinclude.m4 b/acinclude.m4
-+index 9cf9483..b79a431 100644
-+--- a/acinclude.m4
-++++ b/acinclude.m4
-+@@ -609,7 +609,7 @@ GMP_PROG_CC_WORKS_PART([$1], [long long reliability test 1],
-+ 
-+ #if defined (__GNUC__) && ! defined (__cplusplus)
-+ typedef unsigned long long t1;typedef t1*t2;
-+-void g(){}
-++void g(int a,t1 const*b,t1 c,t2 d,t1 const*e,int f){}
-+ void h(){}
-+ static __inline__ t1 e(t2 rp,t2 up,int n,t1 v0)
-+ {t1 c,x,r;int i;if(v0){c=1;for(i=1;i<n;i++){x=up[i];r=x+1;rp[i]=r;}}return c;}
-+-- 
-+2.49.0
-+
-diff --git a/package/gmp/gmp.mk b/package/gmp/gmp.mk
-index 7e8da9025c..07aa4aefdf 100644
---- a/package/gmp/gmp.mk
-+++ b/package/gmp/gmp.mk
-@@ -14,6 +14,10 @@ GMP_CPE_ID_VENDOR = gmplib
- GMP_DEPENDENCIES = host-m4
- HOST_GMP_DEPENDENCIES = host-m4
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index 445f1c15f4..7cc992a5cb 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.22.12.tar.xz.sha256sum
+-sha256  ac352f3d02caa67f3b169daa9aa78b04dea0fc08a727de73cb28d89bd54c6f61  gstreamer-1.22.12.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.24.11.tar.xz.sha256sum
++sha256  093a379602a250d5cd33b88e723757c80198317efde33893edf3c87b6e53b907  gstreamer-1.24.11.tar.xz
+ sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index 1577994248..e06309beb4 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0001-Complete-function-prototype-in-acinclude.m4-for-C23-.patch
-+GMP_AUTORECONF = YES
-+HOST_GMP_AUTORECONF = YES
-+
- GMP_CONF_ENV += CC_FOR_BUILD="$(HOSTCC) -std=c99"
- 
- # GMP doesn't support assembly for coldfire or mips r6 ISA yet
-
---===============7881470676577910479==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-GSTREAMER1_VERSION = 1.22.12
++GSTREAMER1_VERSION = 1.24.11
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7881470676577910479==--
