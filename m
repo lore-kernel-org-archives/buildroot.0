@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82592C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBB83C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5264F60F96;
-	Mon, 19 May 2025 10:47:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 61D7783F6F;
+	Mon, 19 May 2025 10:47:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ehg7Muh_S3Wf; Mon, 19 May 2025 10:47:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DEA7fq9a89l4; Mon, 19 May 2025 10:47:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 502D56167A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8145183F81
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 502D56167A;
-	Mon, 19 May 2025 10:47:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7CEE0D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8145183F81;
+	Mon, 19 May 2025 10:47:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 14DAAD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 25171410B2
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 820B54126D
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nTC9LdDVvY3F for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rV4f-ZlcD_AS for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6850541155
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0A1140E3F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6850541155
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E0A1140E3F
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6630E82A2E; Mon, 19 May 2025 10:40:00 +0000 (UTC)
+ id D7E5C872E7; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 May 2025 15:46:00 +0200
+Date: Mon, 7 Apr 2025 20:14:00 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fff2ef63be708ce5dbfed6f62179ea52c0bab274
-X-Git-Newrev: 89c7c6b6a8019a79376b0de85e7d1c04beaf0764
+X-Git-Oldrev: a4c1f3228ddd4740f144cbdf98d9cf02f7326eb5
+X-Git-Newrev: c188884d72411119bdab1f1b6a8e373c0d807427
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104000.6630E82A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pcre2: bump version to
- 10.45
+Message-Id: <20250519103947.D7E5C872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gstreamer1/gst-python:
+ bump version to 1.24.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,74 +60,50 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0028299319983268796=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0028299319983268796==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=89c7c6b6a8019a79376b0de85e7d1c04beaf0764
+commit: https://git.buildroot.net/buildroot/commit/?id=c188884d72411119bdab1f1b6a8e373c0d807427
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://github.com/PCRE2Project/pcre2/releases/tag/pcre2-10.45
-https://github.com/PCRE2Project/pcre2/blob/pcre2-10.45/NEWS#L4
+No functional change, but bump for consistency. For details, see the
+release notes:
 
-Changelog:
-https://github.com/PCRE2Project/pcre2/blob/release/pcre2-10.45/ChangeLog#L10
+    https://gstreamer.freedesktop.org/releases/1.24/
 
-LICENCE file renamed to ‎LICENCE.md.
-Update hash of the ‎LICENCE.md. (Addition of details on new maintainership).
-
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/pcre2/pcre2.hash | 6 +++---
- package/pcre2/pcre2.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/gstreamer1/gst1-python/gst1-python.hash | 4 ++--
+ package/gstreamer1/gst1-python/gst1-python.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
-index 8b22040ba7..35b87ad854 100644
---- a/package/pcre2/pcre2.hash
-+++ b/package/pcre2/pcre2.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature:
--# https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.44/pcre2-10.44.tar.bz2.sig
--sha256  d34f02e113cf7193a1ebf2770d3ac527088d485d4e047ed10e5d217c6ef5de96  pcre2-10.44.tar.bz2
-+# https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.45/pcre2-10.45.tar.bz2.sig
-+sha256  21547f3516120c75597e5b30a992e27a592a31950b5140e7b8bfde3f192033c4  pcre2-10.45.tar.bz2
- # Locally computed
--sha256  030087e2e8dd7c1bdd26057d25d4ded8f45bbf01ad458d68665ad04b8b0fbedf  LICENCE
-+sha256  9cf7ac6976099a1d856826d3ef1b093bd6b84489dc6100628ac79e740cf9885a  LICENCE.md
-diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
-index 191596181a..6d2b729dfe 100644
---- a/package/pcre2/pcre2.mk
-+++ b/package/pcre2/pcre2.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/gstreamer1/gst1-python/gst1-python.hash b/package/gstreamer1/gst1-python/gst1-python.hash
+index b28ad5975f..44bf778fd7 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.hash
++++ b/package/gstreamer1/gst1-python/gst1-python.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.22.12.tar.xz.sha256sum
+-sha256  d98d3226efea20d5c440a28988a20319a953f7c594895df2bba4538633108e9f  gst-python-1.22.12.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.24.11.tar.xz.sha256sum
++sha256  f4c8761bfee98508f57e2efd738ef36a99e2f7644860877d54d235a7092cf056  gst-python-1.24.11.tar.xz
+ sha256  ea3ad127610e5ded2210b3a86a46314f2b3b28e438eccffdae19a4d6fbcdb0c2  COPYING
+diff --git a/package/gstreamer1/gst1-python/gst1-python.mk b/package/gstreamer1/gst1-python/gst1-python.mk
+index f5f4d713a2..18e03d4b06 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.mk
++++ b/package/gstreamer1/gst1-python/gst1-python.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PCRE2_VERSION = 10.44
-+PCRE2_VERSION = 10.45
- PCRE2_SITE = https://github.com/PCRE2Project/pcre2/releases/download/pcre2-$(PCRE2_VERSION)
- PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
- PCRE2_LICENSE = BSD-3-Clause
--PCRE2_LICENSE_FILES = LICENCE
-+PCRE2_LICENSE_FILES = LICENCE.md
- PCRE2_CPE_ID_VENDOR = pcre
- PCRE2_INSTALL_STAGING = YES
- PCRE2_CONFIG_SCRIPTS = pcre2-config
-
---===============0028299319983268796==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-GST1_PYTHON_VERSION = 1.22.12
++GST1_PYTHON_VERSION = 1.24.11
+ GST1_PYTHON_SOURCE = gst-python-$(GST1_PYTHON_VERSION).tar.xz
+ GST1_PYTHON_SITE = https://gstreamer.freedesktop.org/src/gst-python
+ GST1_PYTHON_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============0028299319983268796==--
