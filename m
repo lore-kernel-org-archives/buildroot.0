@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B243AC3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83C95C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FD60612DB;
-	Mon, 19 May 2025 10:43:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4EEE68322A;
+	Mon, 19 May 2025 10:43:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DpHj1ZTfYHOy; Mon, 19 May 2025 10:43:09 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E5KmAMHsvvq1; Mon, 19 May 2025 10:43:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9850560F4D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 750FC831F8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9850560F4D;
-	Mon, 19 May 2025 10:43:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B847E4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 750FC831F8;
+	Mon, 19 May 2025 10:43:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B387FD4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2907640D81
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 62A1F41005
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R2ED5EH6Xqsp for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pBlp8JHWnjtM for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4FDE40C99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1027416ED
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A4FDE40C99
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C1027416ED
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A3672873D1; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ id BBCC48725C; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 24 Mar 2025 21:08:34 +0100
+Date: Mon, 7 Apr 2025 19:57:19 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4087461203c9788bc51c918d38a0ae9911499fa7
-X-Git-Newrev: 3b4048c132254717a9ffc2428afe798b8d8b8dfd
+X-Git-Oldrev: 051392a878d6231f17770153da7bed25713dae27
+X-Git-Newrev: 9e7e255a09eb6175d9d085e5cbae63ef4ea08e0f
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103944.A3672873D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ccache: bump version
- to 4.11.2
+Message-Id: <20250519103947.BBCC48725C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mali-driver: bump to
+ version 2025-04-06
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,69 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b4048c132254717a9ffc2428afe798b8d8b8dfd
+commit: https://git.buildroot.net/buildroot/commit/?id=9e7e255a09eb6175d9d085e5cbae63ef4ea08e0f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For release note, see:
-https://ccache.dev/releasenotes.html#_ccache_4_11_2
+This version builds up to Linux version 6.13.
 
-Updated license hash due to copyright year and version bumps:
-https://github.com/ccache/ccache/commits/v4.11.2/LICENSE.adoc
-
-Follow upstream rename of Config.cpp to config.cpp:
-https://github.com/ccache/ccache/commit/d805b66b0f1ffdfc7035537fbca677d7463d2782
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: add link to release note]
+Fixes:
+https://autobuild.buildroot.org/results/e71/e71a5b46affe5948c16a0c83534d8f56f69b6e91/
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/ccache/ccache.hash |  4 ++--
- package/ccache/ccache.mk   | 14 +++++++-------
- 2 files changed, 9 insertions(+), 9 deletions(-)
+ package/mali-driver/mali-driver.hash | 2 +-
+ package/mali-driver/mali-driver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ccache/ccache.hash b/package/ccache/ccache.hash
-index 6624fdef65..259041d2e9 100644
---- a/package/ccache/ccache.hash
-+++ b/package/ccache/ccache.hash
-@@ -1,4 +1,4 @@
- # sha256 computed locally
--sha256  c0b85ddfc1a3e77b105ec9ada2d24aad617fa0b447c6a94d55890972810f0f5a  ccache-4.10.2.tar.xz
-+sha256  319390f276123968cfa565acc3da0b1e18414374b40ff25274230e6860352125  ccache-4.11.2.tar.xz
- sha256  80b5112739a423dfac7bed1ca8a1df3cccda3d794425441997d4462b83db4dd5  GPL-3.0.txt
--sha256  de4684f5251a0a2c58f3a7ab94d6a8d3443822cbd01abcdadd9250d3d1e0bfe1  LICENSE.adoc
-+sha256  115fd61246934e8581b1ef9263017cae89e61b5f11599d7f7d6b98f69a700e66  LICENSE.adoc
-diff --git a/package/ccache/ccache.mk b/package/ccache/ccache.mk
-index f3f675586d..f452bb40af 100644
---- a/package/ccache/ccache.mk
-+++ b/package/ccache/ccache.mk
+diff --git a/package/mali-driver/mali-driver.hash b/package/mali-driver/mali-driver.hash
+index ddde56b55c..bc406e270f 100644
+--- a/package/mali-driver/mali-driver.hash
++++ b/package/mali-driver/mali-driver.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3111757a411ba216a4b8e3d88c29eb3be3182a7f0d5f8b9cfe10f85ec6693bc9  mali-driver-d40c57d81c9cf4bc6fefeaf47153fde8eed19ef2.tar.gz
++sha256  c1a9ad5dfa0d4b7978a1a6dd02d7eabd4bc65e7d6a06eda749cae720749a741c  mali-driver-4f5282b305cb0956fe2485c9e9dab0021d5538f6.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/mali-driver/mali-driver.mk b/package/mali-driver/mali-driver.mk
+index fa5a8d94d9..ccb56de81f 100644
+--- a/package/mali-driver/mali-driver.mk
++++ b/package/mali-driver/mali-driver.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--CCACHE_VERSION = 4.10.2
-+CCACHE_VERSION = 4.11.2
- CCACHE_SITE = https://github.com/ccache/ccache/releases/download/v$(CCACHE_VERSION)
- CCACHE_SOURCE = ccache-$(CCACHE_VERSION).tar.xz
- CCACHE_LICENSE = GPL-3.0+, others
-@@ -43,12 +43,12 @@ HOST_CCACHE_CONF_OPTS += \
- HOST_CCACHE_DEFAULT_CCACHE_DIR = $(patsubst $(HOME)/%,%,$(BR_CACHE_DIR))
- 
- define HOST_CCACHE_PATCH_CONFIGURATION
--	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/src/ccache/Config.cpp
--	sed -i 's,".ccache","$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/src/ccache/Config.cpp
--	sed -i 's,"/.cache/ccache","/$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/src/ccache/Config.cpp
--	sed -i 's,"/.config/ccache","/$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/src/ccache/Config.cpp
--	sed -i 's,getenv("XDG_CACHE_HOME"),nullptr,' $(@D)/src/ccache/Config.cpp
--	sed -i 's,getenv("XDG_CONFIG_HOME"),nullptr,' $(@D)/src/ccache/Config.cpp
-+	sed -i 's,getenv("CCACHE_DIR"),getenv("BR_CACHE_DIR"),' $(@D)/src/ccache/config.cpp
-+	sed -i 's,".ccache","$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/src/ccache/config.cpp
-+	sed -i 's,"/.cache/ccache","/$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/src/ccache/config.cpp
-+	sed -i 's,"/.config/ccache","/$(HOST_CCACHE_DEFAULT_CCACHE_DIR)",' $(@D)/src/ccache/config.cpp
-+	sed -i 's,getenv("XDG_CACHE_HOME"),nullptr,' $(@D)/src/ccache/config.cpp
-+	sed -i 's,getenv("XDG_CONFIG_HOME"),nullptr,' $(@D)/src/ccache/config.cpp
- endef
- 
- HOST_CCACHE_POST_PATCH_HOOKS += HOST_CCACHE_PATCH_CONFIGURATION
+-MALI_DRIVER_VERSION = d40c57d81c9cf4bc6fefeaf47153fde8eed19ef2
++MALI_DRIVER_VERSION = 4f5282b305cb0956fe2485c9e9dab0021d5538f6
+ MALI_DRIVER_SITE = $(call github,bootlin,mali-driver,$(MALI_DRIVER_VERSION))
+ MALI_DRIVER_DEPENDENCIES = linux
+ MALI_DRIVER_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
