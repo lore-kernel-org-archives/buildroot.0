@@ -4,73 +4,112 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 638F5C36018
-	for <buildroot@archiver.kernel.org>; Mon,  7 Apr 2025 19:19:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3293AC36010
+	for <buildroot@archiver.kernel.org>; Mon,  7 Apr 2025 23:28:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2698640CD0;
-	Mon,  7 Apr 2025 19:19:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A48D840D4F;
+	Mon,  7 Apr 2025 23:28:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OBgbfgZnwYgI; Mon,  7 Apr 2025 19:19:18 +0000 (UTC)
+ id 3-z7pkVt23ec; Mon,  7 Apr 2025 23:28:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 04DA840C9A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CED3E40D51
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 04DA840C9A;
-	Mon,  7 Apr 2025 19:19:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8E1EBDA
- for <buildroot@buildroot.org>; Mon,  7 Apr 2025 19:19:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CED3E40D51;
+	Mon,  7 Apr 2025 23:28:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B79631F1
+ for <buildroot@buildroot.org>; Mon,  7 Apr 2025 23:28:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8A232810BA
- for <buildroot@buildroot.org>; Mon,  7 Apr 2025 19:19:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A14E040D4F
+ for <buildroot@buildroot.org>; Mon,  7 Apr 2025 23:28:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5wJnFgJiP0ch for <buildroot@buildroot.org>;
- Mon,  7 Apr 2025 19:19:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.146;
- helo=smtpcmd13146.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3A82C81D4F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A82C81D4F
-Received: from smtpcmd13146.aruba.it (smtpcmd13146.aruba.it [62.149.156.146])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3A82C81D4F
- for <buildroot@buildroot.org>; Mon,  7 Apr 2025 19:19:11 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id 1rzwuTK0X6z5Z1rzxuceNX; Mon, 07 Apr 2025 21:19:09 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Joseph Kogut <joseph.kogut@gmail.com>, Petr Vorel <petr.vorel@gmail.com>
-Date: Mon,  7 Apr 2025 21:19:08 +0200
-Message-Id: <20250407191908.260835-2-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250407191908.260835-1-giulio.benetti@benettiengineering.com>
-References: <20250407191908.260835-1-giulio.benetti@benettiengineering.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 02nzP7wR7JPQ for <buildroot@buildroot.org>;
+ Mon,  7 Apr 2025 23:28:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::102c; helo=mail-pj1-x102c.google.com;
+ envelope-from=charlie@rivosinc.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7498840D6C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7498840D6C
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com
+ [IPv6:2607:f8b0:4864:20::102c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7498840D6C
+ for <buildroot@buildroot.org>; Mon,  7 Apr 2025 23:28:05 +0000 (UTC)
+Received: by mail-pj1-x102c.google.com with SMTP id
+ 98e67ed59e1d1-301918a4e1bso3451162a91.1
+ for <buildroot@buildroot.org>; Mon, 07 Apr 2025 16:28:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1744068485; x=1744673285;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=T/lX9slMR374RyOB4OJJN2MjDOqDrBtYpjPHvqFOjXU=;
+ b=rwuVxgSvGP0kiEuAxYyEnFnm3OoDCLEIUJAcw3YUlhdylKBskJh23riH8LMkFpEZoX
+ nWBsC2YXstv8N+e4/b+vXzhZ2jAuPZlTUJTbj6NgyQMXTeKJwF0PvwnpcE0UqdQFUeqq
+ McefB9XK9hbZs2adUOSBBkfuTB6bvT6aGEGgjrmJtXmfWv9q2U3erHlA5zOTDKRGxWl0
+ iFBdDBG4Yiuy4zLHxgyp9/CW6IiP3osijcLaK4zRiI+NIeKxzUelIGesHSkXovyUcEX0
+ tSsYl1iO7HTchZ9qBKvSaGnKPhJ7CGSIto0ce0qJhYRIsbZZ+EOJBzXdfCht6aaIDdpB
+ exzA==
+X-Gm-Message-State: AOJu0YxyUB8AuR9VGZN6nCqsDvViM2zc5mA5nMeWDRu+KRQc+zF2Yd2Q
+ hUWb4MT3iDDdMzQLxDYE6a8amaMBAdRaQblMgl3mvMIWbBzmiYaRWRijTFraDms=
+X-Gm-Gg: ASbGncsmXvnH19rAZK34jEoTsHJlFj5rgzVPVqimDjMxBs8421ZVJZwVXeEVajlSUd6
+ 7eVp4CKMPcchGJT4/+LLqBhxG+y80TH0Afm9bJgalGHPMogagedraDdd0f4GjyHPl4O/++WfxtD
+ 2gBjekbxYHQdXyZ1al+utzwF8g+bYb7bNQscWVz/H9PDvHTnZm4XWUFBj8ZmJNFt6E3SV4mb97D
+ bAVozaL5JF7yxTe1KTUCQU7031ih68KTUXK1cgq59Bq1R1h6DeBD9rUi3R7Fyn0NvO7oXDwgCJI
+ V8+1BDPbvAAw/E1YlKfAT5eFZddZf9faPnBARar8KjX+epdu8417N+zfMX1v
+X-Google-Smtp-Source: AGHT+IHPxXFwIL27rdWrbwyp6Mej4AhZU9IhfrggSQgSRQg5OOAEuEewH51KeR3pTQ2rOssyAf8TJQ==
+X-Received: by 2002:a17:90b:5385:b0:2f2:ab09:c256 with SMTP id
+ 98e67ed59e1d1-306a621086amr21812146a91.33.1744068484623; 
+ Mon, 07 Apr 2025 16:28:04 -0700 (PDT)
+Received: from charlie.ba.rivosinc.com ([64.71.180.162])
+ by smtp.gmail.com with ESMTPSA id
+ 98e67ed59e1d1-3057ca47f57sm10848631a91.11.2025.04.07.16.28.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 07 Apr 2025 16:28:03 -0700 (PDT)
+From: Charlie Jenkins <charlie@rivosinc.com>
+Date: Mon, 07 Apr 2025 16:27:54 -0700
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfJ8VZucdr8sTLUA8gZnT3WhC9d5GjE4+JJux5LZEz4MLoFvksZoDUZBpbUWM4p/U99Ka+KPcUm1QpWWJRAU+qdDS9PApM6IpnZ9ZQPdAt2KsDpKuRmi2
- cB0HRuh8t06j0iLFHSbIGYTuBRmhSZrUoepa7TOnqMYJslHeLFXyvBhT8uqcEGkik1FV1xRQSmhHlZ/mkWzrzG3Jsk7ctcvX/Ynbe8BWW8UphAPJDZNbufUT
- ZENPanR6mvMZsSzkbdZLAYBJ9i5dq830hV/4KQMdSz6NraGSd62iEv92hcYy+qCfFnJ1hIDaF6d3kwgd77CvykI5pVN2Q6hF1uRlAUaC2g2gY6YMw8pKeF2m
- OJR7ixMn
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1744053549; bh=PKvOLrsjCzFwFCrRC6P0h9OSI1mG78l0rPkCIyjDG+M=;
- h=From:To:Subject:Date:MIME-Version;
- b=fFj7cQdIMt2KDKkc9hrAvU4ikHA+XHIPTS2yq2XZZsfpT6axDGcwi0IinGz6vtNWe
- 4YTXiOwWtu67xIMTDU6abihzxfqECf0eYhaDHMtE6B5GPlEwJCdV1B2uuiq5+tGFZV
- BhJv8Wb730j+RlF1iCfuCPw0mIU019U7zchH1ccO2gJ0YukZn6dr40jTua5cqqK9IP
- J4fug5WUOvCceBwaayk00EcN/0D4f5kMB8ZSs2VWRXqS61GX4XCcdZELQKwKVH9PFL
- JwA7VVO2W6SxArVnjEhSyu3emhca+hrlWASKkL/2r3803yp2U/SRj40w15wVz8Jr+M
- /9/D0FQS0Qm9Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=fFj7cQdI
-Subject: [Buildroot] [PATCH] package/nfs-utils: bump version to 2.8.3
+Message-Id: <20250407-fixup_bzip2-v1-1-12442cbc4b03@rivosinc.com>
+X-B4-Tracking: v=1; b=H4sIAHpf9GcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDEwNz3bTMitKC+KSqzAIjXeO0pDSz1KSUVPPUVCWgjoKiVKA02LTo2Np
+ aALfxry9dAAAA
+X-Change-ID: 20250407-fixup_bzip2-3fbf6ebde7ee
+To: buildroot@buildroot.org
+Cc: Charlie Jenkins <charlie@rivosinc.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3077; i=charlie@rivosinc.com; 
+ h=from:subject:message-id;
+ bh=ZjuHQmKA4JxMeDn2zja6W1rfAemASYNnVLtkiygrRVs=; 
+ b=owGbwMvMwCXWx5hUnlvL8Y3xtFoSQ/qX+Fqbtytn5M4LM2wRkgw6oD2dzaykdcHfzPqq4Loma
+ 6tJ4V86SlkYxLgYZMUUWXiuNTC33tEvOypaNgFmDisTyBAGLk4BmMjvQEaGOUlK03Ku6hS2SVwV
+ 7hdb86xh2bu9M72ExdQbJ4o/2RVtwshw9p2GbE+lG6fbl0nHDoYnvNghsLTiaqHPxEkRdy9pvVz
+ EDwA=
+X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
+ fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1744068485; x=1744673285;
+ darn=buildroot.org; 
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=T/lX9slMR374RyOB4OJJN2MjDOqDrBtYpjPHvqFOjXU=;
+ b=Wb+NkO3QYDYdEk1q327hd2rp27A1AExeaerV11YQIyVX0qPZJRCx+7HLue4jTNSaMD
+ Cd8lBmSK5iBffRSaHMvcIkdE1HVapotz8GuHOzcTh7pDsJ6LKqBm+yjWJlfWRJJTJUvQ
+ obfsx5DBmpU0+quhouQjJoJWv6HgCRNA0znadIR9jZbJY1ZtANmpRLnhVOQXiGhae0Pc
+ J3wHh9GM+u+5sis3G0WEpy3+aolt0JpjZqOdKYeh22DgIpMSfErekRRkzD+Wia9KJqC5
+ gu0rP/Q5wniTqpbiRed5vZYAcvXefCccq/c94OFRhSjCNMTXg+t1dHj3fuaCS5PShrNX
+ RAlg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=rivosinc.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rivosinc-com.20230601.gappssmtp.com
+ header.i=@rivosinc-com.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=Wb+NkO3Q
+Subject: [Buildroot] [PATCH] package/bzip2: Remove stale patch file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,38 +126,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/nfs-utils/nfs-utils.hash | 4 ++--
- package/nfs-utils/nfs-utils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Since bzip2 has been bumped to 1.0.8, the patch file that only affects
+1.06 hasn't been relevant so remove it.
 
-diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
-index ff3f03799d..af5fc8bd73 100644
---- a/package/nfs-utils/nfs-utils.hash
-+++ b/package/nfs-utils/nfs-utils.hash
-@@ -1,4 +1,4 @@
--# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.2/sha256sums.asc
--sha256  a39bbea76ac0ab9e6e8699caf3c308b6b310c20d458e8fa8606196d358e7fb15  nfs-utils-2.8.2.tar.xz
-+# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.3/sha256sums.asc
-+sha256  11e7c5847a8423a72931c865bd9296e7fd56ff270a795a849183900961711725  nfs-utils-2.8.3.tar.xz
- # Locally computed
- sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 60e9c26695..0af0254d3f 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NFS_UTILS_VERSION = 2.8.2
-+NFS_UTILS_VERSION = 2.8.3
- NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
- NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
- NFS_UTILS_LICENSE = GPL-2.0+
+Fixes: 7ae14d201e14 ("package/bzip2: security bump version to 1.0.8")
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+---
+ package/bzip2/0001-build-objects-twice.patch       | 58 ----------------------
+ ...ystem.patch => 0001-improve-build-system.patch} |  0
+ 2 files changed, 58 deletions(-)
+
+diff --git a/package/bzip2/0001-build-objects-twice.patch b/package/bzip2/0001-build-objects-twice.patch
+deleted file mode 100644
+index 52b234f65a8eb1a9aa3c907e9a4718b577401eb1..0000000000000000000000000000000000000000
+--- a/package/bzip2/0001-build-objects-twice.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-Build objects twice for shared and static libraries
+-
+-The existing Makefile causes problems on MIPS because the same object
+-files (not compiled with -fPIC) are used in static and shared libraries.
+-MIPS will refuce to link non-pic objects in shared libraries.
+-We fix this problems by creating a new rule for the shared library
+-and build the shared objects as *.sho instead of *.o.
+-Then, we use these objects to create the shared library.
+-
+-Signed-off-by: Markos Chandras <markos.chandras@imgtec.com>
+-[Dario: make the patch to be applied with fuzz factor 0]
+-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+-
+-Index: bzip2-1.0.6/Makefile-libbz2_so
+-===================================================================
+---- bzip2-1.0.6.orig/Makefile-libbz2_so
+-+++ bzip2-1.0.6/Makefile-libbz2_so
+-@@ -26,13 +26,13 @@ CC=gcc
+- BIGFILES=-D_FILE_OFFSET_BITS=64
+- CFLAGS=-fpic -fPIC -Wall -Winline -O2 -g $(BIGFILES)
+- 
+--OBJS= blocksort.o  \
+--      huffman.o    \
+--      crctable.o   \
+--      randtable.o  \
+--      compress.o   \
+--      decompress.o \
+--      bzlib.o
+-+OBJS= blocksort.sho  \
+-+      huffman.sho    \
+-+      crctable.sho   \
+-+      randtable.sho  \
+-+      compress.sho   \
+-+      decompress.sho \
+-+      bzlib.sho
+- 
+- all: $(OBJS)
+- 	$(CC) -shared -Wl,-soname -Wl,libbz2.so.1.0 -o libbz2.so.1.0.8 $(OBJS)
+-@@ -43,17 +43,5 @@ all: $(OBJS)
+- clean: 
+- 	rm -f $(OBJS) bzip2.o libbz2.so.1.0.8 libbz2.so.1.0 bzip2-shared
+- 
+--blocksort.o: blocksort.c
+--	$(CC) $(CFLAGS) -c blocksort.c
+--huffman.o: huffman.c
+--	$(CC) $(CFLAGS) -c huffman.c
+--crctable.o: crctable.c
+--	$(CC) $(CFLAGS) -c crctable.c
+--randtable.o: randtable.c
+--	$(CC) $(CFLAGS) -c randtable.c
+--compress.o: compress.c
+--	$(CC) $(CFLAGS) -c compress.c
+--decompress.o: decompress.c
+--	$(CC) $(CFLAGS) -c decompress.c
+--bzlib.o: bzlib.c
+--	$(CC) $(CFLAGS) -c bzlib.c
+-+%.sho: %.c
+-+	$(CC) $(CFLAGS) -o $@ -c $<
+diff --git a/package/bzip2/0002-improve-build-system.patch b/package/bzip2/0001-improve-build-system.patch
+similarity index 100%
+rename from package/bzip2/0002-improve-build-system.patch
+rename to package/bzip2/0001-improve-build-system.patch
+
+---
+base-commit: af094ed137d6967afb6270b69c516a22eb9d8091
+change-id: 20250407-fixup_bzip2-3fbf6ebde7ee
 -- 
-2.39.5
+- Charlie
 
 _______________________________________________
 buildroot mailing list
