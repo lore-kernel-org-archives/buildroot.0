@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF7DEC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:44:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B41EC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:44:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A2A9661467;
-	Mon, 19 May 2025 10:44:19 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yg0Up1WDUDfu; Mon, 19 May 2025 10:44:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FCA86146B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5FCA86146B;
-	Mon, 19 May 2025 10:44:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F92BE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F0E84115B
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 20BDA41264;
+	Mon, 19 May 2025 10:44:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sheRvPr7sIsD for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:50 +0000 (UTC)
+ id VnomsDuSTYjq; Mon, 19 May 2025 10:44:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5722142D12
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5722142D12;
+	Mon, 19 May 2025 10:44:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A9739D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:47 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6FA704179E
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:53 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XMRBF31KGG7u for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F314340DB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D0FB41083
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F314340DB3
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1D0FB41083
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EFE2F8725C; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+ id 1A980873A7; Mon, 19 May 2025 10:39:48 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 29 Mar 2025 11:08:35 +0100
+Date: Mon, 7 Apr 2025 20:14:22 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0a5a0772c238d1bd9acc61cd0017ce1ef305195c
-X-Git-Newrev: 5d85d23e16fdf9e6574e2a3cbdf4d27d17cd6942
+X-Git-Oldrev: 906249f4a8a535e70a6f89284327c3dfa64a25e1
+X-Git-Newrev: 82846474fe07be00d0ed931c1832e75f95d13e7c
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103945.EFE2F8725C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/v4l2loopback: fix
- v4l2loopback-ctl compile/install
+Message-Id: <20250519103948.1A980873A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/gstreamer1/gst1-plugins-good: bump version to 1.24.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,81 +65,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d85d23e16fdf9e6574e2a3cbdf4d27d17cd6942
+commit: https://git.buildroot.net/buildroot/commit/?id=82846474fe07be00d0ed931c1832e75f95d13e7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since upstream commit [1] the original v4l2loopback-ctl bash script was
-replaced by a C version, so add a proper compile step (and remove bash
-runtime dependency) to fix '[help] v4l2loopback package build fails for
-raspberrypi5' [2].
+AMR NB and WB have been moved from ugly to good.
+For more details, see the release notes:
 
-The issue can be reproduced with the commands:
+    https://gstreamer.freedesktop.org/releases/1.24/
 
-    cat <<EOF >.config
-    BR2_aarch64=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_LINUX_KERNEL=y
-    BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-    BR2_PACKAGE_V4L2LOOPBACK=y
-    BR2_PACKAGE_V4L2LOOPBACK_UTILS=y
-    EOF
-    make olddefconfig
-    make v4l2loopback
-
-Note: upstream commit [1] was introduced in version v0.13.0.
-Buildroot bumped v4l2loopback to v0.13.2 in [3].
-
-Fixes:
-
-  /usr/bin/install: cannot stat
-  '.../build/v4l2loopback-0.13.2/utils/v4l2loopback-ctl':
-  No such file or directory
-
-[1] https://github.com/v4l2loopback/v4l2loopback/commit/33922fa4e9965d400edcc2761e55fedf84bbb22a
-[2] https://lists.busybox.net/pipermail/buildroot/2025-March/775911.html
-[3] https://gitlab.com/buildroot.org/buildroot/-/commit/02540771bccf7b10c7daecce5f0e1e41a73c1e07
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[Julien:
- - add commands to reproduce the issue
- - add reference to buildroot commit introducing the issue
-]
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/v4l2loopback/Config.in       | 4 ----
- package/v4l2loopback/v4l2loopback.mk | 4 ++++
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 6 +++++-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/package/v4l2loopback/Config.in b/package/v4l2loopback/Config.in
-index d8ca31e577..4bfa9a4fdd 100644
---- a/package/v4l2loopback/Config.in
-+++ b/package/v4l2loopback/Config.in
-@@ -14,10 +14,6 @@ if BR2_PACKAGE_V4L2LOOPBACK
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+index 1e1b83e115..0c5192c515 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.22.12.tar.xz.sha256sum
+-sha256  9c1913f981900bd8867182639b20907b28ed78ef7a222cfbf2d8ba9dab992fa7  gst-plugins-good-1.22.12.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.24.11.tar.xz.sha256sum
++sha256  94bf3b5118dd4213af66048faac830569cc9a94a8c8e59e8a6d33b315f518462  gst-plugins-good-1.24.11.tar.xz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 7ba2667792..a7ab9a0326 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_V4L2LOOPBACK_UTILS
- 	bool "utils"
--	depends on BR2_USE_MMU # bash
--	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
--	select BR2_PACKAGE_BASH # runtime dependency
--	select BR2_PACKAGE_SUDO # runtime dependency
- 	help
- 	  Install applications to interact with v4l2-loopback devices
- 	  ("virtual video devices").  Currently there is only a single
-diff --git a/package/v4l2loopback/v4l2loopback.mk b/package/v4l2loopback/v4l2loopback.mk
-index 0e1d20c0cc..a4ddf5e2d9 100644
---- a/package/v4l2loopback/v4l2loopback.mk
-+++ b/package/v4l2loopback/v4l2loopback.mk
-@@ -11,6 +11,10 @@ V4L2LOOPBACK_LICENSE_FILES = COPYING
- V4L2LOOPBACK_CPE_ID_PREFIX = cpe:2.3:o
+-GST1_PLUGINS_GOOD_VERSION = 1.22.12
++GST1_PLUGINS_GOOD_VERSION = 1.24.11
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
+@@ -27,6 +27,10 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
+ 	-Dosxvideo=disabled \
+ 	-Daalib=disabled \
+ 	-Dlibcaca=disabled \
++	-Damrnb=disabled \
++	-Damrwbdec=disabled \
++	-Dsoup=disabled \
++	-Dximagesrc-navigation=disabled \
+ 	-Ddoc=disabled
  
- ifeq ($(BR2_PACKAGE_V4L2LOOPBACK_UTILS),y)
-+define V4L2LOOPBACK_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) utils
-+endef
-+
- define V4L2LOOPBACK_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/utils/v4l2loopback-ctl $(TARGET_DIR)/usr/bin/v4l2loopback-ctl
- endef
+ # Options which require currently unpackaged libraries
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
