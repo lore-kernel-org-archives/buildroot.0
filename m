@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A9F3C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D66CC3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BF31783EE9;
-	Mon, 19 May 2025 10:47:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9AC960FDC;
+	Mon, 19 May 2025 10:47:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1WeNPtVysJkf; Mon, 19 May 2025 10:47:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4NGBLJ9UXvoD; Mon, 19 May 2025 10:47:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA3CF83B04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0863061702
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA3CF83B04;
-	Mon, 19 May 2025 10:47:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D908D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0863061702;
+	Mon, 19 May 2025 10:47:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FDA5E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 43B7E418AC
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E4EF341255
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a69MQDqbfm_P for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UlOln0-5vbJJ for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA1A7417C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F3FCC40E43
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CA1A7417C4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F3FCC40E43
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C38E3873D4; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+ id F19D084A21; Mon, 19 May 2025 10:39:47 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 5 May 2025 22:20:41 +0200
+Date: Mon, 7 Apr 2025 20:14:11 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 50c7542326aed41fc558fc7b4969ea747861f7bb
-X-Git-Newrev: a36d5fd2f8283b849d7b0837cefdb2c2ed1dff51
+X-Git-Oldrev: 0b9123cd641c0d9f0d673a3b637aefd877640536
+X-Git-Newrev: 939f524d77b83d47d2be018dea02d7182fda522e
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103958.C38E3873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/xilinx-fpgautil: new
- package
+Message-Id: <20250519103947.F19D084A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gstreamer1/gst1-vaapi:
+ bump version to 1.24.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,120 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a36d5fd2f8283b849d7b0837cefdb2c2ed1dff51
+commit: https://git.buildroot.net/buildroot/commit/?id=939f524d77b83d47d2be018dea02d7182fda522e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add a new package to Buildroot called xilinx-fpgautil which builds the
-Xilinx fpgautil script which can be used for loading FPGA bitstreams
-on zynq, zynqmp and versal products at run-time.  This is a handy
-application for loading FPGA bitstreams and their corresponding device
-tree overlays.
+The va plugin (gst-plugins-bad) is now preffered over gst1-vaapi.
+For details, see the release notes:
 
-An explanation of how this script can be used for each type of product
-can be found on the wiki pages below.
+    https://gstreamer.freedesktop.org/releases/1.24/
 
-https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841645/Solution+Zynq+PL+Programming+With+FPGA+Manager
-https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841847/Solution+ZynqMP+PL+Programming
-https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1188397412/Solution+Versal+PL+Programming
-
-In addition, the source code for xilinx-fpgautil can be found here:
-https://github.com/Xilinx/meta-xilinx/blob/master/meta-xilinx-core/recipes-bsp/fpga-manager-script/files/fpgautil.c
-
-The Xilinx fpgautil script can be used hand in hand with the Versal
-Segmented Configuration with the following example command for
-programming the pld.pdi file to the Versal FPGA:
-
-    fpgautil -b /lib/firmware/xilinx/<design-name>_pld.pdi -o /lib/firmware/xilinx/<dtbo-name>.dtbo
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-[Luca: build-tested only]
-Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-[Julien: reflow commit log]
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/xilinx-fpgautil/Config.in            |  8 ++++++++
- package/xilinx-fpgautil/xilinx-fpgautil.hash |  3 +++
- package/xilinx-fpgautil/xilinx-fpgautil.mk   | 22 ++++++++++++++++++++++
- 5 files changed, 35 insertions(+)
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.hash | 4 ++--
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8c26ee3f22..5bb81ad149 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2492,6 +2492,7 @@ F:	package/binutils-bare-metal/
- F:	package/bootgen/
- F:	package/gcc-bare-metal/
- F:	package/newlib-bare-metal/
-+F:	package/xilinx-fpgautil/
- F:	toolchain/toolchain-bare-metal-buildroot/
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+index c6e0048ee7..d53a962150 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.22.12.tar.xz.sha256sum
+-sha256  013ad729b2fe4fccda559bddc626bcb14230cfb90a2271049f8466bfec5d80df  gstreamer-vaapi-1.22.12.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.24.11.tar.xz.sha256sum
++sha256  e85904a47d9ecb41d7f76b1d3fe887fa18c0b81a3793e7d7f61361ea7e90420d  gstreamer-vaapi-1.24.11.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+index 0cdec46f35..1bd3dbf12e 100644
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
++++ b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
-diff --git a/package/Config.in b/package/Config.in
-index 167965d64b..59ac4ad070 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -461,6 +461,7 @@ menu "Firmware"
- 	source "package/ux500-firmware/Config.in"
- 	source "package/wilc-firmware/Config.in"
- 	source "package/wilink-bt-firmware/Config.in"
-+	source "package/xilinx-fpgautil/Config.in"
- 	source "package/zd1211-firmware/Config.in"
- endmenu
- 	source "package/18xx-ti-utils/Config.in"
-diff --git a/package/xilinx-fpgautil/Config.in b/package/xilinx-fpgautil/Config.in
-new file mode 100644
-index 0000000000..29245c0c5e
---- /dev/null
-+++ b/package/xilinx-fpgautil/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_XILINX_FPGAUTIL
-+	bool "xilinx-fpgautil"
-+	depends on BR2_arm || BR2_aarch64
-+	help
-+	  Xilinx FPGA Manager Utility for zynq, zynqmp
-+	  and versal products.
-+
-+	  https://github.com/Xilinx/meta-xilinx/blob/master/meta-xilinx-core/recipes-bsp/fpga-manager-script/files/fpgautil.c
-diff --git a/package/xilinx-fpgautil/xilinx-fpgautil.hash b/package/xilinx-fpgautil/xilinx-fpgautil.hash
-new file mode 100644
-index 0000000000..1329b9ad70
---- /dev/null
-+++ b/package/xilinx-fpgautil/xilinx-fpgautil.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  439a3681d8efa9641ab39c7645836b9ac78b2fdb36242f9bc94c1f3dfb2d9c4e  xilinx-fpgautil-xlnx-rel-v2024.2_update3.tar.gz
-+sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  COPYING.MIT
-diff --git a/package/xilinx-fpgautil/xilinx-fpgautil.mk b/package/xilinx-fpgautil/xilinx-fpgautil.mk
-new file mode 100644
-index 0000000000..6f42b4799f
---- /dev/null
-+++ b/package/xilinx-fpgautil/xilinx-fpgautil.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# xilinx-fpgautil
-+#
-+################################################################################
-+
-+XILINX_FPGAUTIL_VERSION = xlnx-rel-v2024.2_update3
-+XILINX_FPGAUTIL_SITE = $(call github,Xilinx,meta-xilinx,$(XILINX_FPGAUTIL_VERSION))
-+XILINX_FPGAUTIL_LICENSE = MIT
-+XILINX_FPGAUTIL_LICENSE_FILES = COPYING.MIT
-+
-+define XILINX_FPGAUTIL_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_LDFLAGS) \
-+		$(@D)/meta-xilinx-core/recipes-bsp/fpga-manager-script/files/fpgautil.c \
-+		-o $(@D)/fpgautil
-+endef
-+
-+define XILINX_FPGAUTIL_INSTALL_TARGET_CMDS
-+	$(INSTALL) -m 0755 -D $(@D)/fpgautil $(TARGET_DIR)/usr/bin/fpgautil
-+endef
-+
-+$(eval $(generic-package))
+-GST1_VAAPI_VERSION = 1.22.12
++GST1_VAAPI_VERSION = 1.24.11
+ GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
+ GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
+ GST1_VAAPI_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
