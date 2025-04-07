@@ -4,102 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B9D2C36010
-	for <buildroot@archiver.kernel.org>; Mon,  7 Apr 2025 19:03:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DBC6C36010
+	for <buildroot@archiver.kernel.org>; Mon,  7 Apr 2025 19:04:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4316D40499;
-	Mon,  7 Apr 2025 19:03:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E643C40CBD;
+	Mon,  7 Apr 2025 19:04:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bzTeAImmBhUA; Mon,  7 Apr 2025 19:03:54 +0000 (UTC)
+ id fv1ACWOCvdgf; Mon,  7 Apr 2025 19:04:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DBE2408C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 974D140499
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6DBE2408C5;
-	Mon,  7 Apr 2025 19:03:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 39E6F1DE
- for <buildroot@buildroot.org>; Mon,  7 Apr 2025 19:03:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 974D140499;
+	Mon,  7 Apr 2025 19:04:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 885311DE
+ for <buildroot@buildroot.org>; Mon,  7 Apr 2025 19:04:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2BCD661095
- for <buildroot@buildroot.org>; Mon,  7 Apr 2025 19:03:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CFFF881460
+ for <buildroot@buildroot.org>; Mon,  7 Apr 2025 19:04:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MzbCgrPMi7bo for <buildroot@buildroot.org>;
- Mon,  7 Apr 2025 19:03:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LpkRdgQ21Djs for <buildroot@buildroot.org>;
+ Mon,  7 Apr 2025 19:04:11 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
  envelope-from=maxime.leroys@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5055761076
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5055761076
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5055761076
- for <buildroot@buildroot.org>; Mon,  7 Apr 2025 19:03:52 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-43d04ea9d9aso22886635e9.3
- for <buildroot@buildroot.org>; Mon, 07 Apr 2025 12:03:52 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C85CE81CEF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C85CE81CEF
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C85CE81CEF
+ for <buildroot@buildroot.org>; Mon,  7 Apr 2025 19:04:10 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-43cf034d4abso51666295e9.3
+ for <buildroot@buildroot.org>; Mon, 07 Apr 2025 12:04:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1744052630; x=1744657430;
+ d=1e100.net; s=20230601; t=1744052649; x=1744657449;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=qexkl5J60mhg3HwwlxQVNJQWmsK6dtU3r+wS6my1Zlw=;
- b=EiHl9i5TfOK5FhVj0hNd52H/3WbifdTeOUZCZn4tm7xPnWaaIvqEFgibn8ki1dra/V
- M1q6pcU71IdMrzUCkibcu/fzuyebWhCR/ewUakUij0RjiL9lUcMhLwDvvor/gbUUmd4W
- XY34jU5wsN5A4f7bdXJrlXkP1idrQ+o7g6WT4XREHaNWQxtRX76oFcGxHrRX4ITt8/cr
- /qppFOWXRdlf0xMxgFlf2gK2ln7sqm++g/TcBU5iYJuTG7pY85tcl1GySJWurH54UWn1
- lgEqg+cCyT9//kQHf1eAnZutgcWUsk9bnW8118BLM8EEdD6PKeMCQH0tptvrVVLRlG8k
- EwJw==
-X-Gm-Message-State: AOJu0YzbGzoFaoaBlE8PYawMcUQRg8Zj0DYn9fzLxLNYN/inKYbov0Ok
- bu3/YQEZKyDb9B2NG8Dr1TzEc/ls5AzsDGecEQlJFag53DWkU84oU9nSHcA+
-X-Gm-Gg: ASbGnctPrlJJi9YHSOQ7fPZpUAGT+HY1BgFDiwm/jn2ls78mU1J/J5/LsRsWG6Nttuh
- ofdMWHETE5dOqxmR1rnhJ4k1HIuhfdfT4UrEYRAw6MWnNgiEWT91RQdXruJlxb4OZe+EFnW6KeS
- 4k0IuPPd5lXfj7UXY1vTFRuG/+XAgEmroJ5bkTZ9bC98Unrula21u9ahhfrH0I9dAXyEjKyFnRB
- 3Zf0gTk1oolVOFpYxz+/IBiHGbu1IYpIcws00Re5d96YcgXTVPxXzeb3NOqzcsXcNfH/0koJx6S
- +W9LGTzbHk4YNkTPeWtbYIntQrS8rRrJNnOh5g==
-X-Google-Smtp-Source: AGHT+IEaGY664xhxF08JLcOun5zZYr5JxfDv1inV+rtHkOSgWjjbByERYGx6LMAiWalkGPzB7Yoxyw==
-X-Received: by 2002:a05:600c:3487:b0:43c:f3e4:d6f6 with SMTP id
- 5b1f17b1804b1-43ecfa19260mr143219375e9.31.1744052630078; 
- Mon, 07 Apr 2025 12:03:50 -0700 (PDT)
+ bh=+IT5l7PeH26mbeykRiIDnHEZiscHDJ1JLYGZ2l3CR80=;
+ b=LXQXUISwwZzPYv+j+TG868djbawYnNoc6yCaV1ngF7DN7uHYx/AFQhH384gUb93nwL
+ hf8OJLeVYSR2TYXdo4IXCQyIan6krDS5ct9jHIc/GU6k/ykSWAr2/eRtB1FPfEjydJrm
+ 83G6mSP0MEnCkWik82bbo4yXM5UtDI1O7uf764ybKgLbK5CRD3pDhQQmu6PYBp/XzZh0
+ cjARgd5C2VlrgDKFddeWvZ2uZh0WWufGy3lzDY3VREfRWwQoSJlkLjAKMJSlGJ9uMz59
+ x5U0gfrIPMLshrKP6dDjVDz4rz/i1TP4kT/5AS39a0eu2UILF4cUt2R1HFlfZEaSg3zS
+ BxsA==
+X-Gm-Message-State: AOJu0YyrcQHJJcS9cxL39CCs0Kia4fGX1s6Lv0QIAHShrBNdfPVuygmY
+ hV/mYA4sWuHQQYh5vSBbsELv+bSAO4Zc5LVLVNPlf8+JZ8WoTlR+MALEUtQg
+X-Gm-Gg: ASbGncvFHKDw5DaE9fPtEzkRlNesVrH8Pcn4xZgugCJ0hj/0rZ7L5EMJOnknwzgN7S8
+ Ob6YwroKzMdppz7Km4oybI1bwxm25cA+X9J2BDxOgN1P2LF7i/qqiIPKnWT6G2wuA3KytUPikUv
+ CwzDqtij0fd/gDjaHotzrfu3Q5MmCL9z+DTQ1jRlRvJ2z6AbmCOBnVFiAr81hT9OJBot3JI2UYq
+ gfmiIUpMG8ukrQLB2s8di/oFu2B/qSXLlM2E+D1hpjok03lpW7pTayEM+PrROS9kb8diygrXMRY
+ voCikfE4Bjjse8XHVcXvRraqD2bJpFunSKEHkw==
+X-Google-Smtp-Source: AGHT+IFBDG4jgp21fCwl22HudzDu6fbeaYoo20jvhqWegcuf/MrpGGt2nVibnVOREJtpT+Pm54iOTQ==
+X-Received: by 2002:a05:600c:1e8f:b0:43c:f78d:82eb with SMTP id
+ 5b1f17b1804b1-43ee0698c8cmr110064165e9.15.1744052648501; 
+ Mon, 07 Apr 2025 12:04:08 -0700 (PDT)
 Received: from freepad.. ([2a01:e0a:6f:bdf0:2962:9e9d:9c98:77f5])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-43ec169b4e4sm142036785e9.20.2025.04.07.12.03.49
+ 5b1f17b1804b1-43ec169b4e4sm142036785e9.20.2025.04.07.12.04.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 07 Apr 2025 12:03:49 -0700 (PDT)
+ Mon, 07 Apr 2025 12:04:07 -0700 (PDT)
 From: Maxime Leroy <maxime@leroys.fr>
 To: buildroot@buildroot.org
 Cc: Vadim Kochan <vadim4j@gmail.com>, Julien Olivain <ju.o@free.fr>,
  Maxime Leroy <maxime@leroys.fr>
-Date: Mon,  7 Apr 2025 21:03:36 +0200
-Message-ID: <20250407190338.7436-2-maxime@leroys.fr>
+Date: Mon,  7 Apr 2025 21:03:37 +0200
+Message-ID: <20250407190338.7436-3-maxime@leroys.fr>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250407190338.7436-1-maxime@leroys.fr>
 References: <20250403190705.14994-1-maxime@leroys.fr>
  <20250407190338.7436-1-maxime@leroys.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1744052630; x=1744657430; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1744052649; x=1744657449; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=qexkl5J60mhg3HwwlxQVNJQWmsK6dtU3r+wS6my1Zlw=;
- b=j896bNWwhM5/YCRnETQLhP39tofVGqgpyb8jKyoJBOSYtNIDR3fg7lPFvoa0DenltV
- qQP85B7bOdqD5tle7lJXpDa/Jc5xN4aOe9uq0FZTy/vfbPTe4c3re/YxIsdWJJWjMgkN
- MRChfqtgSrJYjgFhPpw+LXwhab2cLtoq6lgnNC76yi0SN3o1YEoopZKl83Z/WE98qKYl
- Wz3vhKwDlSRnmeRIe8b5DTtGhBw605JCnp/dB94lLdAX19Q5dN4diz2dY1FK/R2z9/Q9
- 58WHZWp++xfRk9fyc9mYAtfbn/JzWjKolBPDw63+uET90gqVlBBmX0503ouUJNVK+uw5
- slMQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=+IT5l7PeH26mbeykRiIDnHEZiscHDJ1JLYGZ2l3CR80=;
+ b=QTsBJ38lEAQS5HvDYwL0cYQktsuRRP8LF2nOnyDMJMKhLe74qNsubZRqNA4SB8mdFK
+ RQ73/KLedq8o+9pfnoTPZfMeDooRuFaxv/o3d3srAQPkOeKI64AF0zhObtr0phPzOqTQ
+ 1BkXH9mzICWrzF6nCKob4fQo+l4bkAgdHSJwADVLKQG3+3B8MywR+OyoOpsihbuf2bvS
+ i+yDpSwOTl7ZX5AE5Hu7VCHHA5OlEX3W3pHtPSav920J69uRFjzyZwLQ+AOo93CjTYVG
+ LFMBh7DcC3hUXSN6aYEKD1PlZq1Xh3sc24cD2fuFUNQD0nPDvwqex804CuPC8+qIko0P
+ JxgA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=leroys.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=j896bNWw
-Subject: [Buildroot] [PATCH v2 0/1] package/frr: security bump to version
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=QTsBJ38l
+Subject: [Buildroot] [PATCH v2 1/1] package/frr: security bump to version
  10.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -117,27 +116,103 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thanks to Julien Olivain for the review.
+Update FRR to the latest stable version (10.3, see [1]).
 
-Changes in v2:
- - Fixed a CI compilation regression by adding a dependency on the kernel headers version [1]
- - Added a link to the FRR 10.3 release notes
- - Updated the commit title to include the "security" keyword
- - Included CVE references
+A new package option `BR2_PACKAGE_FRR_BFD` to enable or disable the
+compilation of the BFD daemon. This one has now a dependencies with the
+kernel headers 4.10 (i.e. IPV6_SRCRT_TYPE_4 from linux/ipv6.h [2]).
 
-[1] https://gitlab.com/maxime-leroy/buildroot/-/pipelines/1756279015 (CI build for FRR 10.3)
+The configure options have been updated accordingly:
+- Versions of FRR before 9.2 used `sysconfdir` and `localstatedir` as-is,
+  without appending `/frr`. The `/frr` suffix had to be passed explicitly
+  to `./configure`, which did not align with standard conventions.
+  This behavior has since been fixed upstream [3]. As `sysconfdir` and
+  `localstatedir` are already set by `pkg-autotools.mk`, they can now
+  be removed from `frr.mk`.
+- The `--enable-shell-access` option has been removed as of FRR 10 [4].
 
-For reference, the CI build for the previous version (9.1.3) is available at:
-https://gitlab.com/jolivain/buildroot/-/pipelines/1751537318
-
-Maxime Leroy (1):
-  package/frr: security bump to version 10.3
-
+[1] https://frrouting.org/release/10.3/
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1ababeba4a21f
+[3] https://github.com/FRRouting/frr/commit/ff62df2e4484
+[4] https://github.com/FRRouting/frr/commit/afb034b0bb42
+Fixes: https://www.cve.org/CVERecord?id=CVE-2024-55553
+Signed-off-by: Maxime Leroy <maxime@leroys.fr>
+---
  package/frr/Config.in |  7 +++++++
  package/frr/frr.hash  |  2 +-
  package/frr/frr.mk    | 11 +++++++----
  3 files changed, 15 insertions(+), 5 deletions(-)
 
+diff --git a/package/frr/Config.in b/package/frr/Config.in
+index c26b160b2a..211eb83419 100644
+--- a/package/frr/Config.in
++++ b/package/frr/Config.in
+@@ -24,6 +24,13 @@ config BR2_PACKAGE_FRR
+ 
+ if BR2_PACKAGE_FRR
+ 
++config BR2_PACKAGE_FRR_BFD
++	bool "BFD protocol"
++	default y
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
++	help
++	  Build Bidirectional Forwarding Detection daemon.
++
+ config BR2_PACKAGE_FRR_BMP
+ 	bool "BMP protocol"
+ 	select BR2_PACKAGE_C_ARES
+diff --git a/package/frr/frr.hash b/package/frr/frr.hash
+index aa13ed5625..7786cc8009 100644
+--- a/package/frr/frr.hash
++++ b/package/frr/frr.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  5323e5ec236346860301e57f6845443855e8f2508d7ccd87ead395a9991c01c2  frr-9.1.3.tar.gz
++sha256  0f10aca9074c773c12be8a07382c7560d625d4a2c842d82261d18bb8f4b26f6c  frr-10.3.tar.gz
+ sha256  7bf053957d6c38e39a06a112c60ff35b228d3bd03edbe8c9a03508b051128d16  COPYING
+ sha256  f9e0c21faf738da586281c0beaad3cd56204c19085a10fe05e4d3d7f8b5863d2  doc/licenses/BSD-2-Clause
+ sha256  aca297b8fd3a43e3bb200f1e2e043c0db6c897325f5ff7f23f7530302a6bf713  doc/licenses/BSD-3-Clause
+diff --git a/package/frr/frr.mk b/package/frr/frr.mk
+index 5391bcb265..78979e2beb 100644
+--- a/package/frr/frr.mk
++++ b/package/frr/frr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FRR_VERSION = 9.1.3
++FRR_VERSION = 10.3
+ FRR_SITE = $(call github,FRRouting,frr,frr-$(FRR_VERSION))
+ FRR_LICENSE = GPL-2.0+
+ FRR_LICENSE_FILES = \
+@@ -38,14 +38,11 @@ FRR_CONF_ENV = \
+ # Do not enable -fplugin=frr-format for production, see doc/developer/workflow.rst,
+ # it is only intended for FRR's developments
+ FRR_CONF_OPTS = --with-clippy=$(HOST_DIR)/bin/clippy \
+-	--sysconfdir=/etc/frr \
+-	--localstatedir=/var/run/frr \
+ 	--with-moduledir=/usr/lib/frr/modules \
+ 	--enable-configfile-mask=0640 \
+ 	--enable-logfile-mask=0640 \
+ 	--enable-multipath=256 \
+ 	--disable-ospfclient \
+-	--enable-shell-access \
+ 	--enable-user=frr \
+ 	--enable-group=frr \
+ 	--enable-vty-group=frrvty \
+@@ -86,6 +83,12 @@ else
+ FRR_CONF_OPTS += --disable-zeromq
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FRR_BFD),y)
++FRR_CONF_OPTS += --enable-bfdd
++else
++FRR_CONF_OPTS += --disable-bfdd
++endif
++
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ FRR_CONF_ENV += LIBS=-latomic
+ endif
 -- 
 2.43.0
 
