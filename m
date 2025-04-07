@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6866CC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D65CC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11C41423B3;
-	Mon, 19 May 2025 10:43:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 701C74277D;
+	Mon, 19 May 2025 10:43:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PlAmI1xQaQCZ; Mon, 19 May 2025 10:43:39 +0000 (UTC)
+ id iLIj_ng6pTTE; Mon, 19 May 2025 10:43:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 10BA7426A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9842041213
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 10BA7426A9;
-	Mon, 19 May 2025 10:43:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9842041213;
+	Mon, 19 May 2025 10:43:42 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1FAD0193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:36 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2D28CE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 70D374108D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D81E41082
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nOS0LSTbCHLj for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:49 +0000 (UTC)
+ id V1D2Wlhs_lGZ for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4BD741082
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0864A41028
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4BD741082
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0864A41028
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B2AA8872E7; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+ id 067BC8725C; Mon, 19 May 2025 10:39:48 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 10 Apr 2025 22:24:18 +0200
+Date: Mon, 7 Apr 2025 20:14:14 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e863acaa1aa64e52ae313cc51a46eb910c92c0bf
-X-Git-Newrev: f2b14baf2576b54cca43e6f2aebbb4a19fae3bd9
+X-Git-Oldrev: 939f524d77b83d47d2be018dea02d7182fda522e
+X-Git-Newrev: fd00502ee0816218a8d2bd3e5428872bcca2cc98
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103948.B2AA8872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-django:
- security bump to version 5.1.8
+Message-Id: <20250519103948.067BC8725C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/gstreamer1/gstreamer1-editing-services: bump version to 1.24.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,69 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2b14baf2576b54cca43e6f2aebbb4a19fae3bd9
+commit: https://git.buildroot.net/buildroot/commit/?id=fd00502ee0816218a8d2bd3e5428872bcca2cc98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following security issues:
+No functional change, but bump for consistency. For details, see the
+release notes:
 
-- CVE-2025-26699: Potential denial-of-service vulnerability in
-    django.utils.text.wrap()
+    https://gstreamer.freedesktop.org/releases/1.24/
 
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-26699
-  - https://github.com/django/django/commit/8dbb44d34271637099258391dfc79df33951b841
-
-- CVE-2025-27556: Potential denial-of-service vulnerability in
-    LoginView, LogoutView, and set_language() on Windows
-
-This CVE isn't related to buildroot has it is only applicable on
-Windows but this package version bump fix it.
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-27556
-  - https://github.com/django/django/commit/edc2716d01a6fdd84b173c02031695231bcee1f8
-
-For more details on the version bump, see the release notes:
-  - https://docs.djangoproject.com/en/5.1/releases/5.1.8/
-  - https://docs.djangoproject.com/en/5.1/releases/5.1.7/
-  - https://docs.djangoproject.com/en/5.1/releases/5.1.6/
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../gstreamer1-editing-services/gstreamer1-editing-services.hash      | 4 ++--
+ .../gstreamer1-editing-services/gstreamer1-editing-services.mk        | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 6632246af8..1e197004d0 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
+diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
+index e6bba20724..584d235451 100644
+--- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
++++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  272e951dbc4ccb7854c5a69aa5650749  Django-5.1.5.tar.gz
--sha256  19bbca786df50b9eca23cee79d495facf55c8f5c54c529d9bf1fe7b5ea086af3  Django-5.1.5.tar.gz
-+md5  80247a8b48cdac55e5ad3fb682ab71a3  Django-5.1.8.tar.gz
-+sha256  42e92a1dd2810072bcc40a39a212b693f94406d0ba0749e68eb642f31dc770b4  Django-5.1.8.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 81d526ca35..b64d8e4cd1 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.22.12.tar.xz.sha256sum
+-sha256  792339135ce713088663cc5d44e0aea8217793e88fabfd11571e7abf4a429f2c  gst-editing-services-1.22.12.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.24.11.tar.xz.sha256sum
++sha256  85fd74dab259e137a95ab4427e009dd853f4ca82874500cb5493c33bcef1ef08  gst-editing-services-1.24.11.tar.xz
+ 
+ # Hashes for license files:
+ sha256  f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a  COPYING
+diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+index 75c660f31d..0832cfa30f 100644
+--- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
++++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 5.1.5
-+PYTHON_DJANGO_VERSION = 5.1.8
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/e4/17/834e3e08d590dcc27d4cc3c5cd4e2fb757b7a92bab9de8ee402455732952
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/00/40/45adc1b93435d1b418654a734b68351bb6ce0a0e5e37b2f0e9aeb1a2e233
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+-GSTREAMER1_EDITING_SERVICES_VERSION = 1.22.12
++GSTREAMER1_EDITING_SERVICES_VERSION = 1.24.11
+ GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
+ GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
+ GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
