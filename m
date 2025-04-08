@@ -4,49 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83894C369A5
-	for <buildroot@archiver.kernel.org>; Tue,  8 Apr 2025 17:33:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D749C369A2
+	for <buildroot@archiver.kernel.org>; Tue,  8 Apr 2025 17:35:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 68FA760B33;
-	Tue,  8 Apr 2025 17:33:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B11D60585;
+	Tue,  8 Apr 2025 17:35:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U29rrMcghKpD; Tue,  8 Apr 2025 17:33:28 +0000 (UTC)
+ id FaH96Js70U0Y; Tue,  8 Apr 2025 17:35:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F2CE60D5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85B47605AD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F2CE60D5D;
-	Tue,  8 Apr 2025 17:33:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 85B47605AD;
+	Tue,  8 Apr 2025 17:35:58 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 98559254
- for <buildroot@buildroot.org>; Tue,  8 Apr 2025 17:33:24 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 87B2BD6
+ for <buildroot@buildroot.org>; Tue,  8 Apr 2025 17:35:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 89BA682AC8
- for <buildroot@buildroot.org>; Tue,  8 Apr 2025 17:33:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 739D0820C6
+ for <buildroot@buildroot.org>; Tue,  8 Apr 2025 17:35:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C-4J0wrsRDGG for <buildroot@buildroot.org>;
- Tue,  8 Apr 2025 17:33:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B39A982BD6
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B39A982BD6
- for <buildroot@buildroot.org>; Tue,  8 Apr 2025 17:33:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9F8BE83E93; Tue,  8 Apr 2025 17:33:23 +0000 (UTC)
+ id dlAcOR50Raqo for <buildroot@buildroot.org>;
+ Tue,  8 Apr 2025 17:35:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CC071820C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC071820C4
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CC071820C4
+ for <buildroot@buildroot.org>; Tue,  8 Apr 2025 17:35:56 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id B96966013C;
+ Tue,  8 Apr 2025 19:35:51 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 08 Apr 2025 19:35:51 +0200
+MIME-Version: 1.0
+Date: Tue, 08 Apr 2025 19:35:51 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 8 Apr 2025 19:16:57 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: af094ed137d6967afb6270b69c516a22eb9d8091
-X-Git-Newrev: bdffdcfdac3e8f7f99556765ef0226a8bb10c506
-X-Patchwork-Hint: ignore
-Message-Id: <20250408173323.9F8BE83E93@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/frr: security bump to version 10.3
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>, Petr
+ Vorel <petr.vorel@gmail.com>
+In-Reply-To: <20250407191908.260835-2-giulio.benetti@benettiengineering.com>
+References: <20250407191908.260835-1-giulio.benetti@benettiengineering.com>
+ <20250407191908.260835-2-giulio.benetti@benettiengineering.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <edcc6aebfa3d02572076ff14170c712b@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1744133755;
+ bh=ao6LLxp27r5OXTm3CRb6zfwh+ltyq0rwt60zxLF2lDI=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=DtGRo65ndrW/448OOATBfYllVwxo9v2WLL/1t/RsWv0qpONN7lFj6S8dNsH1uCDrQ
+ BFeTNmvqbsBJ4whKJNjbtksDcciyPsGLmNiGtankv43KY9gFpQHhg0P/NEw/Rq7tyV
+ hqYrfvcoH/SanAa4nkPSwuMdrJ0YG2KWlUFiOQFyw1p1OKzs/76Ss4rIlzG4cbErSP
+ ypH1D94xnVNYGxs/v2cBM7WSBN0xE1otZG0VJ933CyH/tHXZBs/E19hggvCsowt8Do
+ Kb71pzOzgWNidOYDaCEvwc7hYEoftjEGtWJk1kZUa7VomarV70vuWRGKFfj152mvoe
+ 9pAW8Fslgz4fg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=DtGRo65n
+Subject: Re: [Buildroot] [PATCH] package/nfs-utils: bump version to 2.8.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,113 +84,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bdffdcfdac3e8f7f99556765ef0226a8bb10c506
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 07/04/2025 21:19, Giulio Benetti wrote:
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Update FRR to the latest stable version (10.3, see [1]).
+Applied to master, thanks.
 
-A new package option `BR2_PACKAGE_FRR_BFD` to enable or disable the
-compilation of the BFD daemon. This one has now a dependencies with the
-kernel headers 4.10 (i.e. IPV6_SRCRT_TYPE_4 from linux/ipv6.h [2]).
+I added a link to the release announce email in the commit log.
 
-The configure options have been updated accordingly:
-- Versions of FRR before 9.2 used `sysconfdir` and `localstatedir` as-is,
-  without appending `/frr`. The `/frr` suffix had to be passed explicitly
-  to `./configure`, which did not align with standard conventions.
-  This behavior has since been fixed upstream [3]. As `sysconfdir` and
-  `localstatedir` are already set by `pkg-autotools.mk`, they can now
-  be removed from `frr.mk`.
-- The `--enable-shell-access` option has been removed as of FRR 10 [4].
+Best regards,
 
-[1] https://frrouting.org/release/10.3/
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1ababeba4a21f
-[3] https://github.com/FRRouting/frr/commit/ff62df2e4484
-[4] https://github.com/FRRouting/frr/commit/afb034b0bb42
-Fixes: https://www.cve.org/CVERecord?id=CVE-2024-55553
-Signed-off-by: Maxime Leroy <maxime@leroys.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/frr/Config.in |  7 +++++++
- package/frr/frr.hash  |  2 +-
- package/frr/frr.mk    | 11 +++++++----
- 3 files changed, 15 insertions(+), 5 deletions(-)
-
-diff --git a/package/frr/Config.in b/package/frr/Config.in
-index c26b160b2a..211eb83419 100644
---- a/package/frr/Config.in
-+++ b/package/frr/Config.in
-@@ -24,6 +24,13 @@ config BR2_PACKAGE_FRR
- 
- if BR2_PACKAGE_FRR
- 
-+config BR2_PACKAGE_FRR_BFD
-+	bool "BFD protocol"
-+	default y
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_10
-+	help
-+	  Build Bidirectional Forwarding Detection daemon.
-+
- config BR2_PACKAGE_FRR_BMP
- 	bool "BMP protocol"
- 	select BR2_PACKAGE_C_ARES
-diff --git a/package/frr/frr.hash b/package/frr/frr.hash
-index aa13ed5625..7786cc8009 100644
---- a/package/frr/frr.hash
-+++ b/package/frr/frr.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  5323e5ec236346860301e57f6845443855e8f2508d7ccd87ead395a9991c01c2  frr-9.1.3.tar.gz
-+sha256  0f10aca9074c773c12be8a07382c7560d625d4a2c842d82261d18bb8f4b26f6c  frr-10.3.tar.gz
- sha256  7bf053957d6c38e39a06a112c60ff35b228d3bd03edbe8c9a03508b051128d16  COPYING
- sha256  f9e0c21faf738da586281c0beaad3cd56204c19085a10fe05e4d3d7f8b5863d2  doc/licenses/BSD-2-Clause
- sha256  aca297b8fd3a43e3bb200f1e2e043c0db6c897325f5ff7f23f7530302a6bf713  doc/licenses/BSD-3-Clause
-diff --git a/package/frr/frr.mk b/package/frr/frr.mk
-index 5391bcb265..78979e2beb 100644
---- a/package/frr/frr.mk
-+++ b/package/frr/frr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FRR_VERSION = 9.1.3
-+FRR_VERSION = 10.3
- FRR_SITE = $(call github,FRRouting,frr,frr-$(FRR_VERSION))
- FRR_LICENSE = GPL-2.0+
- FRR_LICENSE_FILES = \
-@@ -38,14 +38,11 @@ FRR_CONF_ENV = \
- # Do not enable -fplugin=frr-format for production, see doc/developer/workflow.rst,
- # it is only intended for FRR's developments
- FRR_CONF_OPTS = --with-clippy=$(HOST_DIR)/bin/clippy \
--	--sysconfdir=/etc/frr \
--	--localstatedir=/var/run/frr \
- 	--with-moduledir=/usr/lib/frr/modules \
- 	--enable-configfile-mask=0640 \
- 	--enable-logfile-mask=0640 \
- 	--enable-multipath=256 \
- 	--disable-ospfclient \
--	--enable-shell-access \
- 	--enable-user=frr \
- 	--enable-group=frr \
- 	--enable-vty-group=frrvty \
-@@ -86,6 +83,12 @@ else
- FRR_CONF_OPTS += --disable-zeromq
- endif
- 
-+ifeq ($(BR2_PACKAGE_FRR_BFD),y)
-+FRR_CONF_OPTS += --enable-bfdd
-+else
-+FRR_CONF_OPTS += --disable-bfdd
-+endif
-+
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- FRR_CONF_ENV += LIBS=-latomic
- endif
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
