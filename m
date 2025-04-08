@@ -4,49 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CE57C369A4
-	for <buildroot@archiver.kernel.org>; Tue,  8 Apr 2025 17:48:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ECD8C36010
+	for <buildroot@archiver.kernel.org>; Tue,  8 Apr 2025 19:48:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 04BEE61125;
-	Tue,  8 Apr 2025 17:48:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64502611AF;
+	Tue,  8 Apr 2025 19:48:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SzP44KpeV0Je; Tue,  8 Apr 2025 17:48:44 +0000 (UTC)
+ id fu7W462gecvu; Tue,  8 Apr 2025 19:48:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3E7D61004
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FC9B6116D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C3E7D61004;
-	Tue,  8 Apr 2025 17:48:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B3C921F1
- for <buildroot@buildroot.org>; Tue,  8 Apr 2025 17:48:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7FC9B6116D;
+	Tue,  8 Apr 2025 19:48:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A29EDDA
+ for <buildroot@buildroot.org>; Tue,  8 Apr 2025 19:48:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9A3B941006
- for <buildroot@buildroot.org>; Tue,  8 Apr 2025 17:48:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 943B140531
+ for <buildroot@buildroot.org>; Tue,  8 Apr 2025 19:48:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gBUSjWvqxFuv for <buildroot@buildroot.org>;
- Tue,  8 Apr 2025 17:48:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dM1uottoE_YQ for <buildroot@buildroot.org>;
+ Tue,  8 Apr 2025 19:48:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.221;
+ helo=smtpcmd01-s.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E080B40182
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E080B40182
- for <buildroot@buildroot.org>; Tue,  8 Apr 2025 17:48:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CFAF083EF8; Tue,  8 Apr 2025 17:48:39 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D588040580
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D588040580
+Received: from smtpcmd01-s.aruba.it (smtpcmd01-s.aruba.it [62.149.158.221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D588040580
+ for <buildroot@buildroot.org>; Tue,  8 Apr 2025 19:48:12 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id 2EvYuQLmHRBkH2EvZumOB8; Tue, 08 Apr 2025 21:48:09 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Tue, 8 Apr 2025 19:36:15 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bd6e78103825c6aaed125fa0a67814775dc63b9d
-X-Git-Newrev: 7336c5fa93a896130511d661f0d42359a046ec9a
-X-Patchwork-Hint: ignore
-Message-Id: <20250408174839.CFAF083EF8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libnss: bump version to 3.110
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Tue,  8 Apr 2025 21:48:08 +0200
+Message-Id: <20250408194808.53576-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.39.5
+MIME-Version: 1.0
+X-CMAE-Envelope: MS4xfKggk/BjsXHvBdyjoAibg89ApB4gHjvR9kLyr83zokauaWOH0NqAAp1XA9lDLI8evpbsi0GYt0gCiLS2mtFd7xskVjmTWqaGVz1FUdT+ckwPz2PeutMV
+ h53WVxzv+2S7rz+X/NG5I9LwmqPoBUj1PMIBPfnSUmzl5yjUurLCJvyirkxpghLp0senCo4XpRCyx8KSf4k5xPoRO3SX3CEd7Jd0n69QvLyKtfj6ifHZEZfb
+ 48ydRZoxR3875uLG01VltmQmn4Df0xOdt+kP1ltRJa8=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1744141689; bh=OZ1QkNIvwI2NukYLSJmpdsQASbSDZc5CPPq+Em1RDww=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=iIvhB6mQAtEHfEdj2PxZ/fJhBFWseu1cLQ6vmYbonRpb1nWMGF9yoZ4fQGbkD40Vt
+ CcfrrDOKEWmf6twL2p5TscLznPiQZp/jt4m3Hr10baH5Jjoea65eJ869FL1lH4YzR4
+ FEgknE+FNGmZNyMzycDEM/myATALXWUE/67k++Oz983RaBSvTv5Zi6dEt/WapFg1MK
+ 6NCD7R4xBeeiNAZTCQU7BLk0ju+Fcyi8O9Cmey19Fw5uZ2n+WWl2/XYID3IgAb5tLt
+ kHiBKf4NIYMdBcHjkj3fblf+GbCZ0cwhB7j9xl6rwHRuSJfEWZagIbe5JoyRgjh/d1
+ E1qQJP9nmvK0g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=iIvhB6mQ
+Subject: [Buildroot] [PATCH] package/esp-hosted: bump to version 2025-04-08
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,49 +78,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7336c5fa93a896130511d661f0d42359a046ec9a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-For release note, see:
-https://hg.mozilla.org/projects/nss/diff/997c76f8a94c85b05ce85c9ae0ba3b3d600c26f3/doc/rst/releases/nss_3_110.rst
+This version add support for esp32c5 and local patch has been committed so
+drop it.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/esp-hosted/0001-Fix-Linux-6.13.patch | 35 --------------------
+ package/esp-hosted/esp-hosted.hash           |  2 +-
+ package/esp-hosted/esp-hosted.mk             |  2 +-
+ 3 files changed, 2 insertions(+), 37 deletions(-)
+ delete mode 100644 package/esp-hosted/0001-Fix-Linux-6.13.patch
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 9244a0000d..9b9252e77f 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_109_RTM/src/SHA256SUMS
--sha256  bea46c256118cd8910202f05339627d75291f13b80054527df58419b9d29c18b  nss-3.109.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_110_RTM/src/SHA256SUMS
-+sha256  9cd610c40422a07771b9b45166be2d052ea2f00b605a7928129e1f2071b3ae27  nss-3.110.tar.gz
+diff --git a/package/esp-hosted/0001-Fix-Linux-6.13.patch b/package/esp-hosted/0001-Fix-Linux-6.13.patch
+deleted file mode 100644
+index 98f86e8a8f..0000000000
+--- a/package/esp-hosted/0001-Fix-Linux-6.13.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From f41f4a55e7787c9517ca6ac72f83dc244b4011e4 Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Sat, 5 Apr 2025 00:35:23 +0200
+-Subject: [PATCH] Fix Linux 6.13
+-
+-With Linux commit:
+-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0809a9ccac4a2ffdfd1561bb551aec6099775545
+-spi_alloc_master() has been renamed to spi_alloc_host() so let's rename it
+-accordingly checking for Linux version 6.13.0.
+-
+-Upstream: https://github.com/espressif/esp-hosted/pull/589
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- esp_hosted_ng/host/spi/esp_spi.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/esp_hosted_ng/host/spi/esp_spi.c b/esp_hosted_ng/host/spi/esp_spi.c
+-index 51df26d8d7..fc63487821 100644
+---- a/esp_hosted_ng/host/spi/esp_spi.c
+-+++ b/esp_hosted_ng/host/spi/esp_spi.c
+-@@ -394,7 +394,11 @@ static struct spi_controller *spi_busnum_to_master(u16 bus_num)
+- 	pdev->num_resources = 0;
+- 	platform_device_add(pdev);
+- 
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0))
+-+	master = spi_alloc_host(&pdev->dev, sizeof(void *));
+-+#else
+- 	master = spi_alloc_master(&pdev->dev, sizeof(void *));
+-+#endif
+- 	if (!master) {
+- 		pr_err("Error: failed to allocate SPI master device\n");
+- 		platform_device_del(pdev);
+--- 
+-2.39.5
+-
+diff --git a/package/esp-hosted/esp-hosted.hash b/package/esp-hosted/esp-hosted.hash
+index ac0164c38c..8de3c00190 100644
+--- a/package/esp-hosted/esp-hosted.hash
++++ b/package/esp-hosted/esp-hosted.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index bcd08b8b12..541edf185f 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+-sha256  7fd95a9b47c203a8bd0fdcab21f15c9d4cf1cad936f0206a94da0d932dd42206  esp-hosted-927a34f99724bb744efaf865a7c75cc1615f59a2.tar.gz
++sha256  66c07e2f69d8a10fb111b6df27fbe3558734d660207a54391c46eea3e12b29ee  esp-hosted-9a2312b0b2630e41bacb3091faaba489cb43b0ab.tar.gz
+ sha256  ed57d96d27be775b22f9571d3724ef84e0d0b8f24b805ec7f87a32189de19a9c  LICENSE
+diff --git a/package/esp-hosted/esp-hosted.mk b/package/esp-hosted/esp-hosted.mk
+index f4382e7fee..4c249eec46 100644
+--- a/package/esp-hosted/esp-hosted.mk
++++ b/package/esp-hosted/esp-hosted.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.109
-+LIBNSS_VERSION = 3.110
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-ESP_HOSTED_VERSION = 927a34f99724bb744efaf865a7c75cc1615f59a2
++ESP_HOSTED_VERSION = 9a2312b0b2630e41bacb3091faaba489cb43b0ab
+ ESP_HOSTED_SITE = $(call github,espressif,esp-hosted,$(ESP_HOSTED_VERSION))
+ ESP_HOSTED_DEPENDENCIES = linux
+ ESP_HOSTED_LICENSE = GPL-2.0
+-- 
+2.39.5
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
