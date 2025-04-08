@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29A4EC369A2
-	for <buildroot@archiver.kernel.org>; Tue,  8 Apr 2025 17:48:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CE57C369A4
+	for <buildroot@archiver.kernel.org>; Tue,  8 Apr 2025 17:48:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6FA660B4A;
-	Tue,  8 Apr 2025 17:48:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04BEE61125;
+	Tue,  8 Apr 2025 17:48:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jokDytFzwKd2; Tue,  8 Apr 2025 17:48:42 +0000 (UTC)
+ id SzP44KpeV0Je; Tue,  8 Apr 2025 17:48:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2CB6060B7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3E7D61004
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2CB6060B7D;
-	Tue,  8 Apr 2025 17:48:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8AFA71F1
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3E7D61004;
+	Tue,  8 Apr 2025 17:48:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B3C921F1
  for <buildroot@buildroot.org>; Tue,  8 Apr 2025 17:48:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 881D940C26
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A3B941006
  for <buildroot@buildroot.org>; Tue,  8 Apr 2025 17:48:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fHQ34nrlJtAa for <buildroot@buildroot.org>;
- Tue,  8 Apr 2025 17:48:39 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gBUSjWvqxFuv for <buildroot@buildroot.org>;
+ Tue,  8 Apr 2025 17:48:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA43840B35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E080B40182
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA43840B35
+ by smtp2.osuosl.org (Postfix) with ESMTP id E080B40182
  for <buildroot@buildroot.org>; Tue,  8 Apr 2025 17:48:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C50DB83EF5; Tue,  8 Apr 2025 17:48:39 +0000 (UTC)
+ id CFAF083EF8; Tue,  8 Apr 2025 17:48:39 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 8 Apr 2025 19:33:12 +0200
+Date: Tue, 8 Apr 2025 19:36:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c14ce5346d969e660cc788f2f4d8619b27c805a2
-X-Git-Newrev: bd6e78103825c6aaed125fa0a67814775dc63b9d
+X-Git-Oldrev: bd6e78103825c6aaed125fa0a67814775dc63b9d
+X-Git-Newrev: 7336c5fa93a896130511d661f0d42359a046ec9a
 X-Patchwork-Hint: ignore
-Message-Id: <20250408174839.C50DB83EF5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nfs-utils: bump version to 2.8.3
+Message-Id: <20250408174839.CFAF083EF8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnss: bump version to 3.110
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,44 +64,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd6e78103825c6aaed125fa0a67814775dc63b9d
+commit: https://git.buildroot.net/buildroot/commit/?id=7336c5fa93a896130511d661f0d42359a046ec9a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release announce:
-https://lore.kernel.org/linux-nfs/64a11de6-ca85-40ce-9235-954890b3a483@redhat.com/
+For release note, see:
+https://hg.mozilla.org/projects/nss/diff/997c76f8a94c85b05ce85c9ae0ba3b3d600c26f3/doc/rst/releases/nss_3_110.rst
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Julien: add link to release announce]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/nfs-utils/nfs-utils.hash | 4 ++--
- package/nfs-utils/nfs-utils.mk   | 2 +-
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
-index ff3f03799d..af5fc8bd73 100644
---- a/package/nfs-utils/nfs-utils.hash
-+++ b/package/nfs-utils/nfs-utils.hash
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 9244a0000d..9b9252e77f 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
 @@ -1,4 +1,4 @@
--# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.2/sha256sums.asc
--sha256  a39bbea76ac0ab9e6e8699caf3c308b6b310c20d458e8fa8606196d358e7fb15  nfs-utils-2.8.2.tar.xz
-+# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.3/sha256sums.asc
-+sha256  11e7c5847a8423a72931c865bd9296e7fd56ff270a795a849183900961711725  nfs-utils-2.8.3.tar.xz
- # Locally computed
- sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 60e9c26695..0af0254d3f 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_109_RTM/src/SHA256SUMS
+-sha256  bea46c256118cd8910202f05339627d75291f13b80054527df58419b9d29c18b  nss-3.109.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_110_RTM/src/SHA256SUMS
++sha256  9cd610c40422a07771b9b45166be2d052ea2f00b605a7928129e1f2071b3ae27  nss-3.110.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index bcd08b8b12..541edf185f 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NFS_UTILS_VERSION = 2.8.2
-+NFS_UTILS_VERSION = 2.8.3
- NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
- NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
- NFS_UTILS_LICENSE = GPL-2.0+
+-LIBNSS_VERSION = 3.109
++LIBNSS_VERSION = 3.110
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
