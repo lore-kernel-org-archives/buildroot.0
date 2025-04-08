@@ -1,179 +1,177 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F73EC3600C
-	for <buildroot@archiver.kernel.org>; Tue,  8 Apr 2025 12:19:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF69BC3600C
+	for <buildroot@archiver.kernel.org>; Tue,  8 Apr 2025 12:43:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 417D482C2E;
-	Tue,  8 Apr 2025 12:19:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3182A403A5;
+	Tue,  8 Apr 2025 12:43:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LkPK4wWWDMtS; Tue,  8 Apr 2025 12:19:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F5fp_2MNVMkr; Tue,  8 Apr 2025 12:43:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4046F829BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26B944090F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4046F829BB;
-	Tue,  8 Apr 2025 12:19:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 26B944090F;
+	Tue,  8 Apr 2025 12:43:19 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id A53E21F1
- for <buildroot@buildroot.org>; Tue,  8 Apr 2025 12:19:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 12EFB1F1
+ for <buildroot@buildroot.org>; Tue,  8 Apr 2025 12:43:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9661C60655
- for <buildroot@buildroot.org>; Tue,  8 Apr 2025 12:19:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ECD8960B71
+ for <buildroot@buildroot.org>; Tue,  8 Apr 2025 12:43:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uIATcW_CUBdg for <buildroot@buildroot.org>;
- Tue,  8 Apr 2025 12:19:19 +0000 (UTC)
+ id cdyXIulvKD3m for <buildroot@buildroot.org>;
+ Tue,  8 Apr 2025 12:43:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2407::60e;
- helo=nam02-bn1-obe.outbound.protection.outlook.com;
+ client-ip=2a01:111:f403:2415::617;
+ helo=nam11-dm6-obe.outbound.protection.outlook.com;
  envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D902B606BD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D902B606BD
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com
- (mail-bn1nam02on2060e.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2407::60e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D902B606BD
- for <buildroot@buildroot.org>; Tue,  8 Apr 2025 12:19:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4C6936071E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C6936071E
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam11on20617.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2415::617])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4C6936071E
+ for <buildroot@buildroot.org>; Tue,  8 Apr 2025 12:43:16 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=kp5xS5PRE25dwdOxKm+gT8oRFANNCKEI4se/W6Yy+xYQXfvzGLKFH0a6+I9PUmBC/Vql+5UlUENyz9aAq9o9/lHoGLxTWD4ED7ht04ag6+cg7LHb0Zhpn/zivJiibw1qcEjiHCv2g67fwZbvAuBzJnggqWvGohpduYI9GP3s4OedmDC820AuCadPm11aEurfv2figAXvQllf6c9iPvQYm2rEZD/qXXB+vJa13OUD6CRpcyEsOXmxykZ8kYkY9J8osvjZ3k49WEKjbtkXHfE6Vaa15Kxk/GGN388KLj0gC4iSPTirc/cOyi7JXvfDhTs7w0X+ObC7lRJqDSFTPXj95A==
+ b=LSn7U3jyF8AZtPkTTaO5rBPtm+8P6UZ754EB2f2mWmcaeosPHkfZvDytmL4hVl0M89vdEl1+UYbzuP3jNfbubqYAZD9EuUrnXg6LdGHo6F3KXIQ1hxYJjx6PmSiRAbLiQQSnscZjkFjv7PR/X2eO/P5qugGthbb5K+lGwRWu+QG7rflPxBCoYYdQOZ6mXjhA8VWUjfSxHicBFkciC6L0sRENhDkrCEKpb7Up6L2Ghqt8WjX38hh5gFQgEzSmcOsOAk6HgFbevwOxxfFBj6VOT2Ge/m6rFdh+QP8zsZrNji0Hsjh5/fJfhIhoKD2qReCVXgfL8h1UOJFvCvOKL5rgqA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=INAKVj21opJ94MVtYC9mLLP1s93OjEnYrgikeOcIFmQ=;
- b=nT6P2wfq9hHGG/FZsZdPPAqXVRhFaqW8t29UlkAnL+pas6sEDfYo6HiaVY13r6pIdM2y1J0Eh2kqlSHdzRYtleYviVEYhcgxBNfjbOhoHVQOlNREuSmd/sKGHeX3aNDzioZi6iq078NbsZ0a3AElZTGLzt+nqQLAtDgoXNpj1i7Cs9/3aF9vzZHym7+qVeamoAuWVwAAtF4E0jOC3QqaUhj1Xsm3EIx4hLoc0n3o4ybQZSh4yy7MK8Ngz3P0gXjf5Sm05/xfEh4mQDAUtIbu5WfzHbMeD8FNQ0XQ/ShQVI9ljmN9mPbDAncJCdIzPLS8Vaz00p/XaY3AB4YfAhTZwQ==
+ bh=3/LPWSv00c+KTRyeuoiyQehcKLmOJ0GCaBIU5o1VVGc=;
+ b=k8UpZvBPc9X4kPnWPc2y0oAtUdItpe+6NGP5X5B6ODf4+fQznsgifu2zNBOMTKKj1XQz8LyPART+mMpjVDzmIfvZvC5TQxa7wEc0muD6+AXYBQ+okYI6ZptzXGM39Zcjjz9QaDBf61j9bdSr6axolYh83ajdbd04ZyccBQWWfs18HzQH08j/j884xojTOI5r2HPhvrBkormHwsb162jRc/XI/BEJBAI3aZypK9vD8HTakC2+DtmKMz81JYTL2cCRiBtASLIhLu95kItIZIy8+rvFVif5npX3crPrK9p5vE3VLx9S2eQDGS723GrkZ/Yec7QVWkyusXFgHvligI0/XQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 Received: from SA1PR12MB5615.namprd12.prod.outlook.com (2603:10b6:806:229::17)
- by MN0PR12MB6077.namprd12.prod.outlook.com (2603:10b6:208:3cb::9)
+ by CH3PR12MB7691.namprd12.prod.outlook.com (2603:10b6:610:151::18)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8606.34; Tue, 8 Apr
- 2025 12:19:15 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8606.33; Tue, 8 Apr
+ 2025 12:43:12 +0000
 Received: from SA1PR12MB5615.namprd12.prod.outlook.com
  ([fe80::7557:587c:4ec:1913]) by SA1PR12MB5615.namprd12.prod.outlook.com
  ([fe80::7557:587c:4ec:1913%5]) with mapi id 15.20.8606.029; Tue, 8 Apr 2025
- 12:19:14 +0000
+ 12:43:12 +0000
 To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Thread-Topic: [PATCH v4 1/3] boot/xilinx-embeddedsw: rename toolchain vendor
- to buildroot
-Thread-Index: AQHbnwnAsyh9xYkhAkKBH0vOKDydwbOZYqaAgAAAvBCAADsVAIAAIzpA
-Date: Tue, 8 Apr 2025 12:19:14 +0000
-Message-ID: <SA1PR12MB56159A09F9E41551CEA142C4F0B52@SA1PR12MB5615.namprd12.prod.outlook.com>
-References: <20250327111645.1430919-1-neal.frager@amd.com>
- <20250408083505.0a7ecfda@booty>
- <SA1PR12MB56151490BEC4B0D5D05E8991F0B52@SA1PR12MB5615.namprd12.prod.outlook.com>
- <20250408120910.5dc50b98@booty>
-In-Reply-To: <20250408120910.5dc50b98@booty>
+Thread-Topic: [PATCH v2 1/3] boot/xilinx-prebuilt: add segmented config support
+Thread-Index: AQHbp9HXcZkvyKDjIkac7A2tCA12TLOZnYYAgAAUaxA=
+Date: Tue, 8 Apr 2025 12:43:12 +0000
+Message-ID: <SA1PR12MB5615AC9ED8BB739D5EDA63EDF0B52@SA1PR12MB5615.namprd12.prod.outlook.com>
+References: <20250407152911.3790939-1-neal.frager@amd.com>
+ <20250408130840.212f3163@booty>
+In-Reply-To: <20250408130840.212f3163@booty>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ActionId=06bb9fb8-a8d1-4874-ad1a-5d698bd8fe46;
+msip_labels: MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ActionId=e19ac34d-1567-41f9-a4f3-f64761b4b49f;
  MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=0;
  MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=true;
  MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard;
  MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
  Internal Distribution Only;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2025-04-08T12:15:14Z;
+ MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2025-04-08T12:21:44Z;
  MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
  MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Tag=10, 3, 0, 1;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR12MB5615:EE_|MN0PR12MB6077:EE_
-x-ms-office365-filtering-correlation-id: 3cc0270f-ba77-4b75-a000-08dd769793c3
+x-ms-traffictypediagnostic: SA1PR12MB5615:EE_|CH3PR12MB7691:EE_
+x-ms-office365-filtering-correlation-id: c7cfc18f-9ef0-498c-4e30-08dd769aec8b
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
- ARA:13230040|376014|366016|1800799024|38070700018|41080700001; 
-x-microsoft-antispam-message-info: =?us-ascii?Q?qXQ0FVp1O+F3sJa3VuChgLXDva7Ha0aCoBQH6i7ek/6SwSQk2mZV4uARzO6E?=
- =?us-ascii?Q?ihl13gnuAmCnJLasCayciTOMTcvj3NJ3zwS0XuIGerl3m8xQlVcumYaEk9JE?=
- =?us-ascii?Q?QZ08JEM15oV8bWJ/2TrJxMrweKY9QhRmZeqBG6CH38TfBJzZS7xSe1WwdeRF?=
- =?us-ascii?Q?k4oy/mhYPqmr/hdgLrOIKjyCP9JFEM6u64M0EF4w1FEeVOqeSpeoKD29Y6P/?=
- =?us-ascii?Q?7a7K5hO/CRbWs4gR7PWBhz+zZMTgFrFA5ZCZFJPl6SToQ1U7mVOz6S+AL/fG?=
- =?us-ascii?Q?AWSCa8BO0qOaanpZ+etpisLaIDrz7ugS1SNkYzPcGMaU8yw4sdP/FjNYGka8?=
- =?us-ascii?Q?ODzJ5n6ByJv6TBkoAjhSrpkNx/V/gQOffr6LMjHNyUJQ4SDnTgoa0gmsksM/?=
- =?us-ascii?Q?b+il5ovsGCV1IjbYk/qfl2sMMsNJCLwtMKIy3xMwuKRinvOWvwDdWGRk9Pmd?=
- =?us-ascii?Q?YOI54+GLV0s5Ek0a9T4Ibs9c3hE36IjPdV09zbcuf93Nt2XopuJyJOlNfL5e?=
- =?us-ascii?Q?IblkDtMhGwFxFNf46VrEcfDXrc09NtHd6VvcR6AkxDwgfy/YyGsexMGO9xdz?=
- =?us-ascii?Q?gt/FdOyuUmWX6jiGVpd+36O4j83Vnx5VAZFa8EKyhSsPsjusFW7If5tg/rPZ?=
- =?us-ascii?Q?lke4zOWBtuOQNhHjFrxFzDAmQl+kXRVEumbLUg54ORBANWWRnzWrNoahgxJy?=
- =?us-ascii?Q?Z2cDFs1vGJAzhKAsECKm3BsRyou/LV3AFftchys1EF0wGeCUiUvFXPsj8m8k?=
- =?us-ascii?Q?NzGhP1ODT1CuM9TW5mwQKoPGNvneOsMeOJsV+26sQzt3URp1dj7Llsu6xpHS?=
- =?us-ascii?Q?2nk67QwzKBM7L/KgsOFBr8zxnHB02+Qlmf+8p6RS1xIIf0Oq8NF+NeiqhUy1?=
- =?us-ascii?Q?PpYmao4YXm7qSfeo8BY8OtmdbLmJ0TgQAFs4GUJK+cdQG5TCyhnWqcyiV9QR?=
- =?us-ascii?Q?eOE5ezgAaa+iU0lwyoov/UU5mCSF5bL/2aoWG4Sp3MMW7SJ5RectHxp6sUmN?=
- =?us-ascii?Q?zNsY/3Sftk2imz4Vva6XEgc0+l1sxmYMxAoE0aHYVYKzZKqAg0fOhYMjL2yt?=
- =?us-ascii?Q?z34ukCJUh3HLlLtN6vszw8qHjj3bGAAKXGZxi1t8GqYTMYzMpJzbeTvICIbZ?=
- =?us-ascii?Q?07m2ulxvIzmovpf2EGXyrpTjVceNMrtSdCUkACBnI1jXxxrqS8oVvnm9b5o9?=
- =?us-ascii?Q?sg2U2rmaJxfLvy/dcj4Qlgk/J2FU6mI+fOPsZiPcmQ3+SEcowLaPwzMBoA2G?=
- =?us-ascii?Q?wGVOBfj9iC6hssG1kjnNkEV0Uljc+rt4LigU+5zV4+wwZaGG3vK6e7OhI97W?=
- =?us-ascii?Q?ulr3d5j5LABYIXrlJ6J6CDn2iLNuOxX7vGvbO7jXhiv12hZcAfHF6bhb2oIA?=
- =?us-ascii?Q?GpGxK5csuOHWB13QHbxGW0lR0CQA52r6zzbOYOPcLa9DeOYtwogyx3zi77Yk?=
- =?us-ascii?Q?vcM8AEQ6ro5zX5lm1sIPqAvInW0jLeODem+x6mXWCNvK8PAiiCZNIg=3D=3D?=
+ ARA:13230040|1800799024|366016|376014|38070700018|41080700001; 
+x-microsoft-antispam-message-info: =?us-ascii?Q?FjVzhQ/CdDkKf6Whdx1UrhqEox+9tp2wNL2E1YI0ZgSPCzKDxrLN/VXgVsyY?=
+ =?us-ascii?Q?OEnsqUnXnNNXk/eC/O+cK0yUaimewwQRrYE+2cZJt3VGDg3puWIw9g4+4Rbg?=
+ =?us-ascii?Q?/xtQ99YqulN6JuomBjOLDRW+Ml0JujJ5bap0wlcnGMxUg/TEftnTmJv7JnU1?=
+ =?us-ascii?Q?X4AeAUy1NOVwJ7GHrMUaXA7cDUpQt3ZYUm4pHr1UPg3JsO0NIPeb7UfW9BIU?=
+ =?us-ascii?Q?UwlyNOhV8DHKgWUgMaVWuRNBT9qmf7bevUaa9KFdlMg4Xtk1GhbPC6yZEnxE?=
+ =?us-ascii?Q?fOxS/MJE1GFtYR6wXZATmUK8AOlsxkaRppbn+dQky4glUs4Ak/RvwwHrmjCo?=
+ =?us-ascii?Q?FJnlHCDd/bU70wLXfhyZy5afR8UZKOF5NxgHtXnEpyP89xL2etDY37BwGVqu?=
+ =?us-ascii?Q?ZnKmlcQs6ZvSDQjYFPtc0C1lUqGeKAWVlEojSuG9pJIjQxSwJKYjeBzm/oli?=
+ =?us-ascii?Q?rQu3oSqCmgOPS65d6zeUYT5iTzdObt6Q5n9ohTEwcgIn/sWeEbzfk8vqhc+d?=
+ =?us-ascii?Q?yYG6yf5uq6mm612YX+g8eNzDQYS2k521XO4DMMustiVpIejnaUH/C4RWBlMN?=
+ =?us-ascii?Q?MpBN3Q41RsXBvZgg69+h1EVUxuogo8SqYO8FX4Y9hl7DXSejPG7Kbe9hlnPU?=
+ =?us-ascii?Q?LlayaUgq0Q3Wi0Z0HJo6xvLa1i2eiO8VCR3o2qGcQEHnbsFln80Xa8JSN0G4?=
+ =?us-ascii?Q?pjLRbB7LWcLBk6PD1vNJeKsZp1KkfgSMEehGMDu8cMUZ/dWhzFveuhiyXEbZ?=
+ =?us-ascii?Q?/wZvkIRxweDKPquSYo6kHKmRiGufUqTOTf7TK4i1tC/SFsCrxv9TKXL3/cax?=
+ =?us-ascii?Q?Y0VyZcZ2VlAgHBWI84pkY5J9IFoMjt9A8CxvFOiBka/nYWbxfrALeleh1ROq?=
+ =?us-ascii?Q?inaGRF3Y5z3sq0/C/Oqq1kt6US661dDFz66mL9OIgcHpHm1sNLPkss0NMJ2r?=
+ =?us-ascii?Q?e9aBgzwn8VjlrSNDKD+L5XbieJdJXkea9KCCnqOcTxa4Xli9tRH0U3OP2tzW?=
+ =?us-ascii?Q?ymU6siULa49Lx0tBzz89RBZOcl4Cab4G/wZsQ0meKzdw+5nuMkzHDE7/+pHf?=
+ =?us-ascii?Q?KECqd5GISQNKM/zEhZHKWwlk1wogCgnVd7IUfcY+t1wW/WUFCD313RM7wIZt?=
+ =?us-ascii?Q?tmmD1uQ4lc2i5gw3L50ikigujjAOKnyvVaj+gMipPqDWDOcKMH2Z2LAPq3NU?=
+ =?us-ascii?Q?D+wtc3aRK0Evf5c3GGnbK9zpsHUlzwsDr3zGzyhgliX14JL4Am/+3nKyKVsT?=
+ =?us-ascii?Q?jAFUVl8y5SKxJqbqt18xCn/EPsghSD+AZh/kJgHQeedm9ehI7ZmzAeE0rHvd?=
+ =?us-ascii?Q?qXOdAyewXvF/dx+m+vZsikk1oZsuxI39zwHjEc9QUEzr5uFSl1WIV7gC+IzX?=
+ =?us-ascii?Q?lzJLE1jkH/1Ii/lMJkwkI3S1PfLYVHuj9D3wZAqGJu1o+ZD+j781tYxE8GEl?=
+ =?us-ascii?Q?wShT1cS6vUbrR4pQUaZdV2+aLPHd/C6uU/+J+MRZXmQKQB7k7ZXBGNXzzWSy?=
+ =?us-ascii?Q?jY0uBalsdv+bUAk=3D?=
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:SA1PR12MB5615.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(366016)(1800799024)(38070700018)(41080700001); DIR:OUT;
+ SFS:(13230040)(1800799024)(366016)(376014)(38070700018)(41080700001); DIR:OUT;
  SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?v8JeCzaKOTGojP2Ff3y3rQiMEobeRkF6tg45nIT3osj5p5J1Ad3e9JJ5O8Ya?=
- =?us-ascii?Q?qz8DXNa2dxe/E3kIRQAfzZ8H32mAzhYQPIgwEnQEbNoiXiJkUBAD4dndTDte?=
- =?us-ascii?Q?7DS+VHdiyS2KHOwzcFSfjZMfEJd2i71aywlATrknX43LA30d7YFOp2isBHOG?=
- =?us-ascii?Q?UfHUjyV5fRFlqTEC34IIXlhS22cfFKDLq6LrpbyA3JGoV2YMLKU6DW3RNJo9?=
- =?us-ascii?Q?zpf3mw9+eH7eZuanACLaEx8R368eVGTXQ7RVjuAZgqZQp5eQPapJi/34flcs?=
- =?us-ascii?Q?PvZpUrp4jm1ZhjdEXhGYyARfoLHf8cPAmhFrgPCa4BMjcTQqqco1nH4SNRxB?=
- =?us-ascii?Q?RheFnPbhnQGfqBMgeHkNbzE0va1m4Ms1IWVEhnxkbRzu/MLERVbbZePvSe7Z?=
- =?us-ascii?Q?iD7gBJOrx+JVWyaM8RIcRCy0PjZSngTynDK/HfMnJM1Le2k19hP6gI0z/MqJ?=
- =?us-ascii?Q?2LeJwarRZJu1rt2GBiryss0L9GnnU9CihL0BY+uxSpuPfP0BFs1b0VP1ocv8?=
- =?us-ascii?Q?YT5AcYi+9AhjUBWJual3sD2V5NfuHHfQhg7AFlqdgdjv/b6nKj4PAGi5QI3h?=
- =?us-ascii?Q?t7uBYFhxMy8O6MOHZ7qPDEOI+h6UinuvUgohM56z+Ng10ge1vmtuYYuU4v9a?=
- =?us-ascii?Q?dgWAKi3nr4ifo9if9islg6kNT7hqhjXP/a2y2HgKe68dgDuP3AvzPp5Pg860?=
- =?us-ascii?Q?Sx7Nx1AwMAFRJnV9C271HWnMEEkznobsxasY2OY0suwLrjMLaCDalYTtv9Df?=
- =?us-ascii?Q?2ZKZK6HplmcWe4UVfzdw6stVSXV3X+JdncnLSr1dDgJDJeSif98StrHIC0iT?=
- =?us-ascii?Q?cnspHg6MR4vlu43aGDZzQgHnq9V71GKIPomd97y3EIBCs41qgjo2ryDeryCb?=
- =?us-ascii?Q?hYRyH4Ye461mkvKrlxlEOfbulaZq6K77xnv9+4C549zNU2Ld4l+x3JHEf4UW?=
- =?us-ascii?Q?axYVwkiRH6fkbVHEeRyWARF2BtdyikWSJfQHg0G3486YvVfixCciEmX2I/0v?=
- =?us-ascii?Q?I/eK/JHIJ5s38JOGWRHkSpvGrBGcPu5Fp0aIlhgpZXDcdtwu3F82RX5mmNEu?=
- =?us-ascii?Q?e1PInAnAgSOTBAB2jRd88iUBQbZJraYB47LbYf2DW5oiXfPCe/dSt4Tsz0cY?=
- =?us-ascii?Q?NB45E4JBh/jC1UZRySE01Rr+m7qzICVcN5xSYVuJFrCyvWe0WsvUEaHpM89K?=
- =?us-ascii?Q?Ys8ZbPKcVGsCYwe6dY2GEn+G7dcbia3fpbgaFoD82XnfV+zvM6gCKScuPwQb?=
- =?us-ascii?Q?ClicZ9pnvSebRf0UcJ4msDW4WsxYPVIQ1SlCIaP6Cpk7njHDz37Vf/n/zHY5?=
- =?us-ascii?Q?V6Nfu96l39etUh6A2ivOwz4rkyAQMEeLFislWk+d9LoHx7SslBSo4tPuE/Iq?=
- =?us-ascii?Q?J6WBKLT+ESBkPh++SnXDIvYBzH0vQ6s65apRDs5v0BsXgqb3y0FptikyvGx5?=
- =?us-ascii?Q?qCO3bYF/GjUC+XCiQZYJBtN5sZBIw1yNNEfuVlKgtn8S11Gx150ZfHKkXqgj?=
- =?us-ascii?Q?foLtHxWrXDtdKBxRA13pqoY9oweUpmpzKWUxPoFMhQexHdIPfCJFXBK6F3hE?=
- =?us-ascii?Q?0m/Ei3S1pR/ZTc/BSCo=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YVGLoxPa3iP8G4Jg0LUQBGTwjkzKyVtJBmYAmlqeU5Ralxiv0PDCKghRndYA?=
+ =?us-ascii?Q?lmEHbRte7vneqF/wt62yzimTlX0FTseO9TQmecBP2c/v+lD630aRV4SVRMc2?=
+ =?us-ascii?Q?m/AzOGDrfstLyBmdF7T8EqdBf+emz3qlq3TsG6qCxPQsWok1NG/u1FubYOw/?=
+ =?us-ascii?Q?9wBxvpMYfBuCgjypnbwbwF2awGtIZ7SQqa8vJwLVzP2dUqW/wIpj2TNhPYrT?=
+ =?us-ascii?Q?vznG4qPxTQgh6Szt3uAaSSR/D5U6nlV0LdHBrPA1owa9omFq917QH122RwbR?=
+ =?us-ascii?Q?33XGVsEQQpnovjUltNiTgBHX8IFuXCY9yZTIT4VJZHFo7ZgGr7CkdTc87pcO?=
+ =?us-ascii?Q?YqQjR+LSLOBA85Zwoj6wd+y85x/pEvr4DPnDjWbl0f04Ws4iOcTpV/AoA/7D?=
+ =?us-ascii?Q?veC9xMFRPSpm5MwhezAm+ZqdUZvD+D2zV4Mq29zIywWqp+jRXVFooZEwg85d?=
+ =?us-ascii?Q?gykpx6vxtepoX7mTg+sigaY17rMzVTOjelTAbppfMgsFM2h9blGYp8I+eFzY?=
+ =?us-ascii?Q?vfLUE3Rbadp36ElDWb9lTV2Tk6Felpk811ktxbSn81oOtXspRRYgNfyB6UIz?=
+ =?us-ascii?Q?fwO51DYkFVIiwKdg9u3dqpcs6kTpYhBAGWWC/N839DxJ4WjBr2FzOvLFsHMK?=
+ =?us-ascii?Q?LJFXNIEfHUrh2T1MJmTfVu4WBdzpA30q+IzkryNze/3oZ24gZ3aL/MMvwdRr?=
+ =?us-ascii?Q?fyvz2SbBp7lGNc9jsO4199qTf53PNvsah+kOaAP1F60wlwadG/v7h5uVchHp?=
+ =?us-ascii?Q?lnuwQ3PCzdYfwzIkaVER8TUVzOLlSTt+e9pxEaUqL4Q4XXsRf2tVYTn1qXGN?=
+ =?us-ascii?Q?3fXvLgk3uXJlW7SU/N9eAGIp1By6GqcImlDJl7oDm19BN/skvY+BfQegwEdX?=
+ =?us-ascii?Q?vNIUqSJtOYyIwTBMMwHV49bIVG8bQU6GMYoMCaIwaaFVgMSJjJzIHRUhFlZv?=
+ =?us-ascii?Q?ZmGm2b/EV/mM2OazCdNfvvykPfoBvyCSE8OvLqOSnJsEtNdfUWtBZaBnXnZx?=
+ =?us-ascii?Q?iig0fTqsoUvdu1P61+TrCPnrveUV8gY1BHGGn2uVeUach24xeRxdwYxEPtDx?=
+ =?us-ascii?Q?LTArS63rywDL/NNeBvueoqQy+J+iaAsyOiM45yJcozaJG3jEYv/Rg5J9JG7N?=
+ =?us-ascii?Q?c+9Jpt/ak6Ezs0cxdKYa9UogNSBlYjCf+LpMoUNNmprW32dkEQesGeD4oLXZ?=
+ =?us-ascii?Q?JnIGkcEWZ5R0uT8qoh6BMhmy+iXe+ycKLCwmcrtOqT5cfZ6XKU/MuucnhtTf?=
+ =?us-ascii?Q?8UsK82dZCQYqcNq+qpj9tGFJLWWgEC9G5zM6dxiRx3+/saxpO6Z0oI7z07H1?=
+ =?us-ascii?Q?Gd5cFu6zVvFg9WqBpsrZuAXLLdO0N1cVb5wdC3uzBwSGkvGwugPkl46xY/LY?=
+ =?us-ascii?Q?cCpg9LS1GlM6FwdxjewD4B0fyRPe0x5ZMdNflWC+gmR/HjdwrbT0d93pIIzQ?=
+ =?us-ascii?Q?I0dqisgfaFpalGkQmZ9K+Hx2Q2478PjxeTB4WpCZHfs7xxEAjXHrjPm4by6o?=
+ =?us-ascii?Q?bzlHNUrcDA/dE1gwL8RcFBXywmvZ0wbWOv31c+WVISj7zc5zpbJzMUqEp8rc?=
+ =?us-ascii?Q?4b2EKEWzC07CK8Do+8U=3D?=
 MIME-Version: 1.0
 X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SA1PR12MB5615.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3cc0270f-ba77-4b75-a000-08dd769793c3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2025 12:19:14.7570 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7cfc18f-9ef0-498c-4e30-08dd769aec8b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Apr 2025 12:43:12.1857 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nbrNk38F+LWpXtY88TcyhsOBqa/irqLBXVnF29RDJ5hCBifDNcnGqJbEIYDLRpT1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6077
+X-MS-Exchange-CrossTenant-userprincipalname: DwtPGPYJhpwF5Gwb6eg/hUdw7Cw1WQh1LQIwHNUeoJEOUCztkc1BiOexzsad1rMB
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7691
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=amd.com; s=selector1; 
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=INAKVj21opJ94MVtYC9mLLP1s93OjEnYrgikeOcIFmQ=;
- b=Rr8eyHZQLcq4XQGx7P38DFo5P+1DCLejugg+V/4RKP8TPfrxLVlX8t+GCrOipOaPneEmv3Y7tMH8NNLUCA5uTHV/tAA6L1G5KMNxuPClwJqxUlcyH0dOzUqonv0Sp/qc5ZzEIKAUzSGKAwTmUU4G7B844VkgqdrgUmYE+CXksaA=
+ bh=3/LPWSv00c+KTRyeuoiyQehcKLmOJ0GCaBIU5o1VVGc=;
+ b=H6+yjRsq1EYzE/lWwmoPnXE2bt5BjI5JNq6fwgKX1Tcg3C754VjxRcj98ygXb9FA0vGlrVgR7l/JQIpTGZ0ola7s/utVIyJ2E/vI6d6gGqCkqyTfnYjcxPg+ARgz9Fby9KPhwduHUiDyilJjIHY/Gv9ZSuma+3bVueyotW8HVxE=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=amd.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=Rr8eyHZQ
+ header.s=selector1 header.b=H6+yjRsq
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v4 1/3] boot/xilinx-embeddedsw: rename
- toolchain vendor to buildroot
+Subject: Re: [Buildroot] [PATCH v2 1/3] boot/xilinx-prebuilt: add segmented
+ config support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -192,7 +190,8 @@ Cc: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>,
  "brandon.maier@collins.com" <brandon.maier@collins.com>,
  "ju.o@free.fr" <ju.o@free.fr>,
  "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>, "Caccamo,
+ Fabio" <fabio.caccamo@amd.com>,
  "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek,
  Michal" <michal.simek@amd.com>
 Content-Type: text/plain; charset="us-ascii"
@@ -202,63 +201,133 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 [AMD Official Use Only - AMD Internal Distribution Only]
 
-Hi Luca,
+Hello Luca,
 
+> AMD has created a new segmented configuration for Versal products.  It splits
+> the Vivado hardware design into two PDI files, one containing the minimal
+> required configuration for the DDR and booting the processors, and a second PDI
+> file which contains the rest of the FPGA design and can be loaded at run-time
+> via U-boot or Linux.
 >
-> Hi Luca,
+> The file names generated when using the Vivado Segmented Configuration are as
+> follows:
 >
-> > This patch renames the bare-metal toolchain vendor used by the
-> > xilinx-embeddedsw package from Xilinx to Buildroot to be consistent with all
-> > other toolchains built by Buildroot.
-> >
-> > To build the Microblaze applications available with the xilinx-embeddedsw
-> > package, the following config is now needed:
-> >
-> > BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
-> >
-> > This change keeps backwards compatibility for users already using the
-> > following architecture tuple:
-> >
-> > BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
-> >
-> > Either vendor name is now valid, but the documentation will describe using
-> > the Buildroot vendor name.
-> >
-> > Signed-off-by: Neal Frager <neal.frager@amd.com>
+> <design>_boot.pdi - Minimal DDR and PS config for booting
+> <design>_pld.pdi - Remainder of FPGA design to be loaded at run-time
 >
-> > I don't have a strong opinion about this series. Definitely the
-> > "buildroot" vendor name is more appropriate than "xilinx", and the
-> > patches look clean enough, but I'll let the maintainers decide whether
-> > it's worth the extra effort.
+> Since two PDI files will be included in the XSA file when using Segmented
+> Configuration, the xilinx-prebuilt package needs to be updated to support
+> this feature.
 >
-> > If this is accepted, however, I think we should remove the "xilinx"
-> > vendor support after 1y~1.5y and not carry the maintenance burden
-> > indefinitely. Do you think this can be handled by Config.in.legacy, so
-> > in the transition phase users of the old tuple are notified?
+> For Buildroot purposes, the <design>_boot.pdi is the file that needs to be
+> included in the boot.bin for booting the processors, so this patch checks
+> for a file named *boot*.pdi which will indicate that Segmented Configuration
+> is being used and will make sure to use the <design>_boot.pdi file and not
+> the <design>_pld.pdi file when generating the boot.bin image.
 >
-> Yes, I agree with this.  Probably the sooner we transition over the better,
-> in order to limit the number of users of the xilinx vendor name.
+> If no pdi files contain the word "boot" in the filename, it can be assumed
+> that Segmented Configuration is not being used, so the single file *.pdi
+> method is the appropriate one for this case, and this patch is thus
+> backwards compatible with prior designs not using Segmented Configuration.
+>
+> Also, Segmented Configuration is going to become the default mode for Versal
+> products, so the xilinx-prebuilt github location will also soon have two PDI
+> files for each board.  For this reason, this patch is also handling Segmented
+> Configuration for files downloaded from the xilinx-prebuilt repo.
+>
+> For further information about the AMD Segmented Configuration, please see the
+> github tutorial below.
+>
+> https://github.com/Xilinx/Vivado-Design-Tutorials/tree/2024.2/Versal/Boot_and_Config/Segmented_Configuration
+>
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
-> I don't think the number of users is very relevant, and we cannot
-> control or even know that anyway. If a kconfig value was valid in a
-> Buildroot release, then we need to handle the transition before it is
-> made invalid.
+> Thank you for the very good explanation, it's very helpful!
 
-> Config.in.legacy is the primary tool for this, but I'm not sure it will
-> work for this specific change which is not removing a kconfig symbol
-> but rather one of the possible entries within its value.
+And thank you (as always) for reviewing this patch set!
 
-Good point.  Yes, I agree.
+> ---
+> V1->V2:
+> - $(@D) is not available in time for wildcard evaluation outside of shell
+>   script, so moved the wildcard functions into the install scripts
+> ---
+>  boot/xilinx-prebuilt/xilinx-prebuilt.mk | 36 ++++++++++++++++++-------
+>  1 file changed, 26 insertions(+), 10 deletions(-)
+>
+> diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.mk b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
+> index d0817d3cc7..448c71a3fb 100644
+> --- a/boot/xilinx-prebuilt/xilinx-prebuilt.mk
+> +++ b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
+> @@ -28,9 +28,6 @@ XILINX_PREBUILT_BOARD = $(call qstrip,$(BR2_TARGET_XILINX_PREBUILT_BOARD))
+>  XILINX_PREBUILT_BOARD_DIR = $(@D)/$(XILINX_PREBUILT_BOARD)-$(XILINX_PREBUILT_FAMILY)
+>
+>  ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL),y)
+> -# We need the *.pdi glob, because the file has different names for the
+> -# different boards, but there is only one, and it has to be named
+> -# vpl_gen_fixed.pdi when installed.
+>  ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA),y)
+>  XILINX_PREBUILT_PLM = $(@D)/pdi_files/gen_files/plm.elf
+>  # Unlike the psmfw.elf file for Xilinx development boards,
+> @@ -39,11 +36,33 @@ XILINX_PREBUILT_PLM = $(@D)/pdi_files/gen_files/plm.elf
+>  # so to support current and future AMD Vivado versions, the filename
+>  # psm*fw.elf is used.
+>  XILINX_PREBUILT_PSMFW = $(@D)/pdi_files/static_files/psm*fw.elf
+> -XILINX_PREBUILT_PDI = $(@D)/*.pdi
+> +# We need the *.pdi glob, because the file has different names for the
+> +# different boards, and it has to be named vpl_gen_fixed.pdi when installed.
+> +# If Segmented Configuration is used, there will be two pdi files and we need
+> +# the file that has "boot" in the filename.
+> +define XILINX_PREBUILT_INSTALL_VERSAL_XSA_BOOT_PDI
+> +     $(if $(wildcard $(@D)/*boot*.pdi),
 
-> Maybe you could emit a warning in case the old vendor string is used,
-> suggesting to switch to the new vendor string, and after 1y+ make it an
-> error.
+> According to your commit message, a more specific wildcard can be used:
+> "$(@D)/*_boot.pdi".
 
-Yes, I could already add a build time warning message with v5 that emits
-whenever someone uses the xilinx vendor name.  This is a good idea.
+Yes, you are correct.  It is probably best to be as specific as possible.
 
-Would it be standard practice to add a deprecation date in this warning
-message?
+It will help with corner cases when users have the word "boot" in their Vivado
+project design name.  With my current solution, if someone had the word "boot"
+in their Vivado design name while using Segmented Configuration, both pdi
+files would have the "*boot*.pdi" wild card, so the install command would
+fail when trying to copy two files into a single file.
+
+Your solution protects for this, leaving the only corner case being a non
+Segmented Configuration case with "_boot" as the end of the Vivado project
+design name.  This should not be an issue because there would only be one
+pdi file in this case, and it would be the one we want to include in the
+boot.bin.
+
+> +             $(INSTALL) -D -m 0755 $(@D)/*boot*.pdi \
+> +                     $(BINARIES_DIR)/vpl_gen_fixed.pdi,
+> +             $(INSTALL) -D -m 0755 $(@D)/*.pdi \
+> +                     $(BINARIES_DIR)/vpl_gen_fixed.pdi
+> +     )
+
+> It's very unfortunate that you are adding all this code, and in two
+> places (here and below). The code in v1 was looking a lot nicer, but
+> I'm not sure there is a way to make it work. If there is none, I think
+> you can at least improve by using the $(if) only for the filename, not
+> the whole command, as in this example (untested):
+
+Yes, I was getting a false success with v1, but I caught the issue with the
+$(@D) variable after doing more testing.  I agree having multiple install
+shells is definitely not ideal, but I haven't thought of a better way yet.
+
+> define XILINX_PREBUILT_INSTALL_VERSAL_XSA_BOOT_PDI
+>       $(INSTALL) -D -m 0755 \
+>               $(if $(wildcard $(@D)/*_boot.pdi), $(@D)/*_boot.pdi, $(@D)/*.pdi) \
+>               $(BINARIES_DIR)/vpl_gen_fixed.pdi
+> #endef
+
+This is very good!  I will definitely adopt it.
+
+> Also, do you need 0755 permissions for this file? Is that an
+> executable? If it isn't, that should be fixed as a preliminary patch.
+
+Good catch.  PDI files are indeed not ARM executable files.  This has been
+an issue for a while as the current solution on master uses 0755 for the pdi.
+
+I will make sure to fix it with v3.
 
 Best regards,
 Neal Frager
