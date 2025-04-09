@@ -4,99 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA465C36002
-	for <buildroot@archiver.kernel.org>; Wed,  9 Apr 2025 07:39:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED02FC36002
+	for <buildroot@archiver.kernel.org>; Wed,  9 Apr 2025 08:51:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7AF09408F6;
-	Wed,  9 Apr 2025 07:39:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93911411CD;
+	Wed,  9 Apr 2025 08:51:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pLnyxtjGpHOq; Wed,  9 Apr 2025 07:39:26 +0000 (UTC)
+ id Fvf4qtrfq_Fb; Wed,  9 Apr 2025 08:51:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1A9C4076D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDA30412CB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1A9C4076D;
-	Wed,  9 Apr 2025 07:39:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A0ECE1F1
- for <buildroot@buildroot.org>; Wed,  9 Apr 2025 07:39:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BDA30412CB;
+	Wed,  9 Apr 2025 08:51:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2FF85108
+ for <buildroot@buildroot.org>; Wed,  9 Apr 2025 08:51:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 925EF40519
- for <buildroot@buildroot.org>; Wed,  9 Apr 2025 07:39:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 153D683ADA
+ for <buildroot@buildroot.org>; Wed,  9 Apr 2025 08:51:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ENS4o_BOiGMU for <buildroot@buildroot.org>;
- Wed,  9 Apr 2025 07:39:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c_QolOEQJEEj for <buildroot@buildroot.org>;
+ Wed,  9 Apr 2025 08:51:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::533; helo=mail-pg1-x533.google.com;
- envelope-from=meena.murthy@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AE1C040496
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE1C040496
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com
- [IPv6:2607:f8b0:4864:20::533])
- by smtp2.osuosl.org (Postfix) with ESMTPS id AE1C040496
- for <buildroot@buildroot.org>; Wed,  9 Apr 2025 07:39:24 +0000 (UTC)
-Received: by mail-pg1-x533.google.com with SMTP id
- 41be03b00d2f7-aee773df955so344949a12.1
- for <buildroot@buildroot.org>; Wed, 09 Apr 2025 00:39:24 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::62b; helo=mail-pl1-x62b.google.com;
+ envelope-from=charlie@rivosinc.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2017883AD8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2017883AD8
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
+ [IPv6:2607:f8b0:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2017883AD8
+ for <buildroot@buildroot.org>; Wed,  9 Apr 2025 08:51:04 +0000 (UTC)
+Received: by mail-pl1-x62b.google.com with SMTP id
+ d9443c01a7336-224341bbc1dso57339615ad.3
+ for <buildroot@buildroot.org>; Wed, 09 Apr 2025 01:51:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1744184364; x=1744789164;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1744188664; x=1744793464;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=tFOdb9jdChrWH2TQ7V/Ymq0M040keiQ81oFAMJOR/e0=;
- b=Yugxm9pAZikdxJU+Ex3dVRzVfzeBC3MbjmP76KsyGm9LKYDQLtrQqawQjCjMd0VFV8
- fKZ1IHa7xJxYtkxHrKmlaQtdbD5QutAe8TYQU9FaAK4QsZNZUVnkQaZwPvXpn+Q3T8Q8
- qu82M5Lj/gQIrpmWESFDyPcCyQH4ZuZq5JHOgfKKm9VMQWjKawfztNz9TbTcY++FveIp
- 0PvIjwzXUfk9U6vpBpcEbucCgP8ZYUa2ylljaWg0MzcLHWhm2+LTLYW0nDJ1HWkEZuu1
- r3Eq6FITIENnxWASvPZ6IYsfioKXVbk4sRrrW2kY6HMtuVunAsi+Dm+0WglZ3UhE+tBD
- 54xQ==
-X-Gm-Message-State: AOJu0Yx4jfXRlxD/w7BZxrD0RzBvencYv3WxJnY6qkBDVuFEqfP5QL0E
- UxAoGwi8Hm+N6ph+UsPXI8VdJ8g2R4q64hfgP4zY0QFyiXCQ69JfqCsdec2mMLycdIVquLcAVxQ
- =
-X-Gm-Gg: ASbGncsIn1JeS00/bklZo40nAd1z3SH4wTH2owcbdyNGsInqN9kdDO3/tTOtKzZ8jM/
- jXSSAYg4DG5Vk/c4NyAqcC8o0lYzwShDj65Wtcwkn9vhdLhYyjXW1j1Q0NszwPThzpBcSW9emUZ
- BIwQgQAk7Irzct8Z1I0og63bzn03UmOGaIHhA0EzY6fznhkdAe9OLidCJxiEi5P+wl55qjlWjo2
- ji4A66BtZh7qeRTkJAMpdg78l9mHjCxba7shdrwMQgTHVWSL7VcPLF0cNGjVnrQ/7Awy9t/9rH3
- kWNB3/0sA7fE+hnwkzNzOqzoPqBGRkdPnYKPHM9uJ8570oOJLm7P7ocKLO0NiUfEJIvz3h+IwWu
- qMEFlXqZDqgU1IECe45oR39StMA==
-X-Google-Smtp-Source: AGHT+IHXOqWs77UKGZPp8Y9tEWMVAD1CMUERiuXc9aUZlnsb/7nAwtFmHFsaVjTU96h/GZeBgzhdGA==
-X-Received: by 2002:a17:902:ebc1:b0:221:1356:10c5 with SMTP id
- d9443c01a7336-22ab5e0fc51mr86442895ad.9.1744184363733; 
- Wed, 09 Apr 2025 00:39:23 -0700 (PDT)
-Received: from meena-ThinkPad-E14-Gen-3.amarulasolutions.com ([49.207.50.235])
+ bh=B5saEHM123cdM0qgx09Eo5Z8mtzQvL96Bqj7rKGw8JU=;
+ b=bna+SF4hQKViZdgllKki+RF99o2k5F64j1DS0k4ZxqF1ssZ7jCLkh5FWYOLFm24O8O
+ OYj5GCUJMLnD4WxAV+z89WMSFaXXxWsl+GHpWOQN6IFbteA2MdVfTKpstylFzcMIOw1I
+ mzk9AH4zyp0jThOcw+kJAl0pWV7A+FCLGAatpvPFcqUVG6C4K6x7PI8zQZ5n768EhwJO
+ B5d0mm54DRUwU+MMXbd7J0ByF4zCNuo58omK501NauLsRSOlUGemzsNC4dWc0YlXL/kS
+ +APKULb7ggMTQlMJmLbYO40qIfgC8bg3Hbt2JqfnJwZrWTFKrHY38FW3eG96AK3TqBhL
+ A56Q==
+X-Gm-Message-State: AOJu0Yw3MdzfOBQwGrEPFGLzt8V+/CDZNzqdR/U1pdlLfU1sW5Bl8pQc
+ ncnFgjOwuh0UweXomvyRBhzWry3Aa1sJVZ2M6MI2fAHTVh/V76wMyvb3guTx/o4oYz3t4/7uzzq
+ l
+X-Gm-Gg: ASbGncsQh+87u4QH1PrE/duN6nOr8jy8c0eSnY6u+YFDlNLNt/LvOe9FWQSXDYFfWVM
+ Bksm2ZlRyhOJR05xO1lSDT4F4z1npQE7yv2R8G3U6WnFNNv2r0B3v6qohzrEjneJrUBzJC1a0cc
+ LIFdhIhy6+n7v1etLaMYMnRdBYCaHJ3GZHxUOUqHMD400k7tqVlteqSHtPeoih4UZbJeKX3aoxT
+ nli7Spb+xbCSMDtqaVdH1wT7W5Nc5Xng7SQ5FlXr8SH1JR4gLQz2iLLBqh8eC4asmvCbU2+Y6rS
+ 5UU79XY/AeybNO3PiYZdQN2jZnMJE+F5b+YDjxgpBCNuvxWm06wiVEmzRs7l5aGDCLU=
+X-Google-Smtp-Source: AGHT+IFjZA//errOlc+BDKZeB9NHBNn/e5xNdUi9c6Y0k099rugRhlhz7sckEDSzB59+CNxjN7XECQ==
+X-Received: by 2002:a17:902:f681:b0:223:3396:15e8 with SMTP id
+ d9443c01a7336-22ac29a8302mr32188615ad.22.1744188664125; 
+ Wed, 09 Apr 2025 01:51:04 -0700 (PDT)
+Received: from charlie.ba.rivosinc.com ([64.71.180.162])
  by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-73bb1e51f7dsm638592b3a.144.2025.04.09.00.39.21
+ d9443c01a7336-22ac7c97207sm6491045ad.129.2025.04.09.01.51.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 09 Apr 2025 00:39:23 -0700 (PDT)
-From: Meena Murthy <meena.murthy@amarulasolutions.com>
-To: Meena Murthy <meena.murthy@amarulasolutions.com>
-Cc: buildroot@buildroot.org,
-	linux-amarula@amarulasolutions.com
-Date: Wed,  9 Apr 2025 13:07:51 +0530
-Message-ID: <20250409073750.1561127-2-meena.murthy@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+ Wed, 09 Apr 2025 01:51:03 -0700 (PDT)
+From: Charlie Jenkins <charlie@rivosinc.com>
+Date: Wed, 09 Apr 2025 01:51:00 -0700
 MIME-Version: 1.0
+Message-Id: <20250409-fix_linux_tools_parallel-v1-1-14135d77acf1@rivosinc.com>
+X-B4-Tracking: v=1; b=H4sIAPM09mcC/x2MQQqAIBAAvxJ7TrC1oPpKhEhttbBoaEUQ/T3pO
+ DAzDySKTAn64oFIFycOPkNVFjBtzq+keM4MqLHRte7UwrcV9udtjxAk2d1FJ0Ki0KBpsZvc0iL
+ kfI+U3X89jO/7AWnhEulqAAAA
+X-Change-ID: 20250409-fix_linux_tools_parallel-2323829caf82
+To: buildroot@buildroot.org
+Cc: Charlie Jenkins <charlie@rivosinc.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1775; i=charlie@rivosinc.com; 
+ h=from:subject:message-id;
+ bh=IJxUlLrWxGIzugFYHuihh2KXgDdhp5Hq/Ljd3/B8GrU=; 
+ b=owGbwMvMwCXWx5hUnlvL8Y3xtFoSQ/o3k2935N1nCB8TOXR1Sume9q8y66erZJzd9nDLr+uC0
+ 6W61sVwd5SyMIhxMciKKbLwXGtgbr2jX3ZUtGwCzBxWJpAhDFycAjARPR5GhlmVp6ednvLx6z2N
+ l2smcz13vfK75KxbwpMf52Jr/3rxmAYz/JXOf9pctt9jEedSxljvJYcuzVc+dHHKLrYo2X4B7de
+ srYwA
+X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
+ fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1744184364; x=1744789164;
+ d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1744188664; x=1744793464;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=tFOdb9jdChrWH2TQ7V/Ymq0M040keiQ81oFAMJOR/e0=;
- b=UI55U1aHOAYf5PJjdv9sRPWfbaLOmY2sieUwjzmQOR+LGfTf2mCgrxz4EwX77O6f8n
- muBm3YEkDnHkJk3E3dlpDjBMQ4BEWKbjj2sbvyf7JZ7dYaDodJyu+pOhOfKSUeNAHuGc
- ju+GJh8OFKVMS8pm1ZcoAgGWHhpzTHuWZ22a4=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=UI55U1aH
-Subject: [Buildroot] [PATCH] configs/engicam_px30_core: bump Linux to
- 6.12.22 and U-Boot to 2025.04
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=B5saEHM123cdM0qgx09Eo5Z8mtzQvL96Bqj7rKGw8JU=;
+ b=gVuL2XJlyJMh71qnl5ASJf3B+8AzZnL1xBGWqxENiaJqHq7XHIO6+iqaaGgySviCVT
+ wQkO1ICHBaq3zp5otB7Vdg4hbI66ZvWFr7yZQfBmTNAc4GKDY8iEoiZiOTSEtue6vrhw
+ 61AOPZGERHPXB2zmEzI4AU/I5oPnsWmVOV98SoIGwMqVCwMCDH0qReT1q4+3JOo+9RHp
+ DQvGH+D/483TIddx1krc5vNOlvg7Vstc7f4CBA+8xjyXalMvaCO1T56y/G61FwXJBWxN
+ Sn11z7+KiXBuw9AsmKMxBa+GNaKDSVObX/NPfybSNpnYCAV6BoDAMCI7Baf18d1MsbBc
+ YliA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=rivosinc.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rivosinc-com.20230601.gappssmtp.com
+ header.i=@rivosinc-com.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=gVuL2XJl
+Subject: [Buildroot] [PATCH] package/linux-tools: Fix parallel compilation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,56 +127,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch bumps the Linux kernel to version 6.12.22 and U-Boot to
-version 2025.04.
+linux-tools opportunistically set linux as only a patch dependency. This
+unfortunately introduces a race condition in the shared linux scripts
+when using PER_PACKAGE_DIRECTORIES and using top level parallelism.  The
+race manifests as the error "/bin/sh: 1: scripts/basic/fixdep:
+Permission denied". This happens when the linux package and the
+linux-tools package are being compiled in parallel. During the setup,
+each of these tools ends up compiling scripts/basic/fixdep. When the
+timing is correct, one of these packages will try to use fixdep while
+the other is compiling it, resulting in fixdep being briefly not
+available.
 
-Signed-off-by: Meena Murthy <meena.murthy@amarulasolutions.com>
+To fix this, set linux as a hard dependency instead of a patch
+dependency.
+
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 ---
- board/engicam/px30core/patches/linux/linux.hash | 2 +-
- board/engicam/px30core/patches/uboot/uboot.hash | 2 +-
- configs/engicam_px30_core_defconfig             | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+While the timing of this seems like it should very rarely be triggered,
+on my build server I hit this issue nearly 100% of the time.
+---
+ package/linux-tools/linux-tools.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/board/engicam/px30core/patches/linux/linux.hash b/board/engicam/px30core/patches/linux/linux.hash
-index 2fb158b70c..b8704508bc 100644
---- a/board/engicam/px30core/patches/linux/linux.hash
-+++ b/board/engicam/px30core/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  d73bf057bec04434b169d1b61641936f7d0c97ceb923a281f32e35dd4dcc6531  linux-6.12.19.tar.xz
-+sha256  ab48800ab49985a78d2318ae8ac5f28fd3e123ea17357ef21498105a53337336  linux-6.12.22.tar.xz
-diff --git a/board/engicam/px30core/patches/uboot/uboot.hash b/board/engicam/px30core/patches/uboot/uboot.hash
-index bc999536af..80ea21b7cb 100644
---- a/board/engicam/px30core/patches/uboot/uboot.hash
-+++ b/board/engicam/px30core/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
-+sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
-diff --git a/configs/engicam_px30_core_defconfig b/configs/engicam_px30_core_defconfig
-index feaa8b3302..be5c56e19f 100644
---- a/configs/engicam_px30_core_defconfig
-+++ b/configs/engicam_px30_core_defconfig
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS="-c board/engicam/px30core/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.19"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.22"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/px30-engicam-px30-core-ctouch2-of10"
-@@ -28,7 +28,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="px30-core-ctouch2-of10-px30"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+diff --git a/package/linux-tools/linux-tools.mk b/package/linux-tools/linux-tools.mk
+index 81b1fbc17605d6f003558d113143b64b5af6714d..a5d4a66f761fc44b156a92edaaf21774529f52d5 100644
+--- a/package/linux-tools/linux-tools.mk
++++ b/package/linux-tools/linux-tools.mk
+@@ -20,7 +20,7 @@
+ include $(sort $(wildcard package/linux-tools/*.mk.in))
+ 
+ # We only need the kernel to be extracted, not actually built
+-LINUX_TOOLS_PATCH_DEPENDENCIES = linux
++LINUX_TOOLS_DEPENDENCIES = linux
+ 
+ # Install Linux kernel tools in the staging directory since some tools
+ # may install shared libraries and headers (e.g. cpupower).
+
+---
+base-commit: 7336c5fa93a896130511d661f0d42359a046ec9a
+change-id: 20250409-fix_linux_tools_parallel-2323829caf82
 -- 
-2.43.0
+- Charlie
 
 _______________________________________________
 buildroot mailing list
