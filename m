@@ -1,68 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C090EC369A5
-	for <buildroot@archiver.kernel.org>; Wed,  9 Apr 2025 20:04:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 810F3C36002
+	for <buildroot@archiver.kernel.org>; Wed,  9 Apr 2025 20:04:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 900A783F83;
-	Wed,  9 Apr 2025 20:04:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 501CE413DA;
+	Wed,  9 Apr 2025 20:04:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qnnMIBkJgC8L; Wed,  9 Apr 2025 20:04:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N7PUswA1FcxE; Wed,  9 Apr 2025 20:04:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C0E4083FBA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8672A413B8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0E4083FBA;
-	Wed,  9 Apr 2025 20:04:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9A491D6
- for <buildroot@buildroot.org>; Wed,  9 Apr 2025 20:03:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8672A413B8;
+	Wed,  9 Apr 2025 20:04:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 09FD7220
+ for <buildroot@buildroot.org>; Wed,  9 Apr 2025 20:03:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8F8DF40BAE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 31FBE60B7C
  for <buildroot@buildroot.org>; Wed,  9 Apr 2025 20:03:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id psrSpBjffUpa for <buildroot@buildroot.org>;
- Wed,  9 Apr 2025 20:03:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pGCaEKUFtb82 for <buildroot@buildroot.org>;
+ Wed,  9 Apr 2025 20:03:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E4BA640A24
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4BA640A24
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E4BA640A24
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7557060EAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7557060EAA
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7557060EAA
  for <buildroot@buildroot.org>; Wed,  9 Apr 2025 20:03:52 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-43ed8d32a95so867925e9.3
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-39ac8e7688aso5213129f8f.2
  for <buildroot@buildroot.org>; Wed, 09 Apr 2025 13:03:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1744229031; x=1744833831;
+ d=1e100.net; s=20230601; t=1744229030; x=1744833830;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to;
- bh=a1nuEzThm+xv67opt2YnxJ4Vrj1e5XVu0k/e5vhWELc=;
- b=vqROG82mwJAUcOA30d2r81ldsj2U0zAmPUJJlNU3MX6kSUGUSXiYpbz2XMahTt3u0V
- k3LR1aagSf/1AMemhyY1eUDE9HeJ+tiU9Day042bx7HAO7KTFJB99He8qgV8K6iHGMv4
- kAcBjscxwRw/OuOVN0y06e2dc5XuXFNpyzrKOJINHbf5R63tDeLY5nVR02JfmqM98LN4
- O4/PxSEewJBg7UQdE1SFlVo73Ok0pyyUuovXqdM2cr8DsXWMhlPgtiEAf33n4apSl/Dk
- XoYTUcD3D1lwLGMga2Hs5XoPivDDjzyJbvLbAllolQ5ru759uLBZyDGyvsw38Qom8t41
- Bbhg==
-X-Gm-Message-State: AOJu0YyY9uwYFzPL93EgdOoj0qk0v6zrkUbgy35fZP9tjbTiIJoe1vt3
- S/arYA25tOJgLKvZQe0LVI0ZrDbGZ0z4Y57eX2Awe7s4Jg2z/e98WmQgcg==
-X-Gm-Gg: ASbGncufRbvWCg/308OmK+b2yrT+VqWikx4PBLeCqJL16SPDavQL77LGm0x91/K8q21
- KMjUbwel2scVLh0Eyybxnm+JVEoOHeiVQdEf/At+M+sShOZ5aJ74wKlBvNqoVys/g8ScG0Pr55c
- DiEfDmMEWtMYSgoJ/2026SPEgrIemvqC7Gl9fl0+RHCiA/ORL3IpcdEV3KtTA4iQja/gLC8+KWW
- 5NO8s0AaboZiMWiExXlrh/chMpaHuQWGjTtji5zy1ve0p5jYz9TYLcKqzvSpDFVBCIkK2mQjsgy
- DfxQXF3a20t8iaGfeXSb+uJU7afoa2hDWqXxdCTDxz6lY3oqIO8=
-X-Google-Smtp-Source: AGHT+IF/LJRZGxtaOiQ9c1tcNDYsaqtBVeLypHe5Hq1J4rtL5y35LAy4ojGuCciLMtmvfTgUJu/wrw==
-X-Received: by 2002:a05:600c:3c91:b0:43b:cc3c:60bc with SMTP id
- 5b1f17b1804b1-43f2d7d6f10mr3247295e9.15.1744229030821; 
+ bh=CkAZM17LgbFTiWDeBv0vA6Squb6bJtdQJ7Eq2BiEMEU=;
+ b=u9A12UA90RWN/Rvn9FZur0uNrpZwAG6hmdQqbapXfwhJ6zqlfw6DUKc8LCR68GG+ZH
+ MZqs0xXT63dfswEyNFhidFE7OZArLNOx53DjY+gC1KDH6Kj2HbxU+tNFOOBfAyqswUPS
+ wAVl9FzvxZcp5yTb2ByZQUWps2C1eoj4a7BG4jK7xv4GK2r9BYZGQf51JKais1GpkGFF
+ pHLtcdFgl6pWjOVkxtSfbsgT4AKazYeXfZ0tdyISJyvyxhhXn06jhhcrTv7+ndpHiHDL
+ W2fIhEedBdTnmJAwdnoDNrdcPg2NJpOzP+DY93VVZzXEe0V2B/oilytRghHnup9k2VhW
+ Cldg==
+X-Gm-Message-State: AOJu0YzkaD1K3Qhp+kG2X2eXKpuRroOVakPMbcESfrqpVfFQjE8WkvUT
+ vyWcPv9WfsvPFGIGwCCU1UBYT7tpjp0dil5xrsvPSqyA6WwYqq15amqVoQ==
+X-Gm-Gg: ASbGnctfr0mVYmsMB0+tSnKyhiKPRsxA8MW2ZUDOmI9bzNMvQrFfyhx29gagTlqR4Kc
+ gn1dI+BU86YlhZV0hZNlUOEy7+Fy7oQHFCzqA8dIc3g2pxeLCqWw9MEISL18D64hNYOCOGmf4mZ
+ q7AlxcOemWYnkagx7OU26r8zS1ZjTOI0VX/1XABhhmQTilwhGujODgAvgu2ToDvbDMHFjRvx5W/
+ aXuuWbpI9ocPvQAcsYagedrddlDw2au5HYykwNndi383p5FJvCPxZII9kBC+7Bc6DPE+Lp5QT2g
+ 1fSTdTYI5qN5eamOXSm4HHOPOomXCbAnpFxoMf9DXhQvid7Cbus=
+X-Google-Smtp-Source: AGHT+IFQu99Yvyq7hmhn3uVPDQB+hFFcQY506KjP+bw4KDyh8wLOb7muW6l2vNNNA/xs4s7NUgUe1g==
+X-Received: by 2002:a05:6000:4203:b0:39c:1f02:449f with SMTP id
+ ffacd0b85a97d-39d8f272aa3mr64210f8f.2.1744229030397; 
  Wed, 09 Apr 2025 13:03:50 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
  by smtp.gmail.com with ESMTPSA id
@@ -71,34 +71,33 @@ Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
  Wed, 09 Apr 2025 13:03:50 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
-	Julien Olivain <ju.o@free.fr>
-Date: Wed,  9 Apr 2025 22:03:29 +0200
-Message-ID: <552592df3604c5fc2d601f4d1a837db562193bb6.1744229017.git.yann.morin.1998@free.fr>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Date: Wed,  9 Apr 2025 22:03:28 +0200
+Message-ID: <efd3391384b774b82378ecc49ef4ba7e93785395.1744229017.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.47.0
 In-Reply-To: <cover.1744229017.git.yann.morin.1998@free.fr>
 References: <cover.1744229017.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1744229031; x=1744833831; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1744229030; x=1744833830; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
  :message-id:reply-to;
- bh=a1nuEzThm+xv67opt2YnxJ4Vrj1e5XVu0k/e5vhWELc=;
- b=ih54HE0J14wxy/xoJY58qdGmprneAqp1Gxk64hLciQ8QRaXxCzckuNNSZJMhZ1DbNb
- 4iwELMWuFJLz8NeSnT4URYwqISW4nNAFVqqdeJLPpbx3Ab9LfB1HvCMM0enzNwuT7Bbu
- XiXy9ZOpHiV5kyz1R58kB16cwEzcviaT3BIOxSXla6jK8Pq2D2BOWseBjHSzV1KhHGxo
- 5ZeysTTX6es4K28spKbaF1cY6zut7LTjYSHQHbOOg9KXIvYDu+8jMwWr6vYBwmaN76xI
- hZuNydksPX6c5/ME6zvp1JL4pnfR067CjPB+slYi2KI1Fg64Wm/vFnj2PkloKsm3+/np
- cWQQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=CkAZM17LgbFTiWDeBv0vA6Squb6bJtdQJ7Eq2BiEMEU=;
+ b=HTBpDamDaYEQ/T/4jVydcmUW/YlLo3Rk2Saah8xGXJodxopmX1btP03w+76whQLD6D
+ VjrlnbR2HXqukLZdy76pNIG+8FiOPQ2ajAQXYEQ/2cVSdHaYZv8oD8X/MoTc8kQHtJkI
+ qu9T3slyU7bgArEPzNTo481nFJ8sP/Na/MrW7a2MC/XelfHEWvQKxPkSy7wqkuiI1+PB
+ 23A1SMe+7oE1lhmbGP84t0N7Bo3XIulIgSjgCmgHlLisG2FU3OcvzkVYeLe7GOKWSZ2J
+ 74gHm8QmZkve3HfCbXFGpIGX/fB/qDLuesDpHqEH5SDE89J6e8EXabvYShxQstsvOPph
+ tFCQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ih54HE0J
-Subject: [Buildroot] [PATCH 14/29 v2] package/riscv-isa-sim: afirm
- host-boost dependency
+ header.a=rsa-sha256 header.s=20230601 header.b=HTBpDamD
+Subject: [Buildroot] [PATCH 13/29 v2] package/thrift: afirm host-boost
+ dependency for host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,23 +115,33 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Julien Olivain <ju.o@free.fr>
 ---
- package/riscv-isa-sim/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
+ package/thrift/Config.in      | 1 +
+ package/thrift/Config.in.host | 3 +++
+ 2 files changed, 4 insertions(+)
+ create mode 100644 package/thrift/Config.in.host
 
-diff --git a/package/riscv-isa-sim/Config.in.host b/package/riscv-isa-sim/Config.in.host
-index 4ccf6e9546..eb28d5b063 100644
---- a/package/riscv-isa-sim/Config.in.host
-+++ b/package/riscv-isa-sim/Config.in.host
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_HOST_RISCV_ISA_SIM
- 	bool "host riscv-isa-sim"
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # C++11
+diff --git a/package/thrift/Config.in b/package/thrift/Config.in
+index 2fa04705a8..dbe7585ea3 100644
+--- a/package/thrift/Config.in
++++ b/package/thrift/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_THRIFT
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_HOST_THRIFT
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_LIBEVENT
+ 	select BR2_PACKAGE_OPENSSL
+diff --git a/package/thrift/Config.in.host b/package/thrift/Config.in.host
+new file mode 100644
+index 0000000000..5e92365587
+--- /dev/null
++++ b/package/thrift/Config.in.host
+@@ -0,0 +1,3 @@
++config BR2_PACKAGE_HOST_THRIFT
++	bool
 +	select BR2_PACKAGE_HOST_BOOST
- 	help
- 	  Spike, the RISC-V ISA Simulator, implements a functional
- 	  model of one or more RISC-V harts.
 -- 
 2.47.0
 
