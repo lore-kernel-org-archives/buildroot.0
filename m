@@ -1,105 +1,152 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4F8AC36002
-	for <buildroot@archiver.kernel.org>; Wed,  9 Apr 2025 06:17:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F801C36002
+	for <buildroot@archiver.kernel.org>; Wed,  9 Apr 2025 06:47:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33E8F406AA;
-	Wed,  9 Apr 2025 06:17:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E341A612AA;
+	Wed,  9 Apr 2025 06:47:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1UaJo1q9zTKz; Wed,  9 Apr 2025 06:17:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OW0n7lUH8SvA; Wed,  9 Apr 2025 06:47:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6811240DE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9853661062
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6811240DE1;
-	Wed,  9 Apr 2025 06:17:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 41205108
- for <buildroot@buildroot.org>; Wed,  9 Apr 2025 06:17:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9853661062;
+	Wed,  9 Apr 2025 06:47:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E8A671F1
+ for <buildroot@buildroot.org>; Wed,  9 Apr 2025 06:47:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1E8D880FA7
- for <buildroot@buildroot.org>; Wed,  9 Apr 2025 06:17:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BE1B640B27
+ for <buildroot@buildroot.org>; Wed,  9 Apr 2025 06:47:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nHB21DW9ibB8 for <buildroot@buildroot.org>;
- Wed,  9 Apr 2025 06:17:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TjRgA0ieHg5s for <buildroot@buildroot.org>;
+ Wed,  9 Apr 2025 06:47:28 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::533; helo=mail-ed1-x533.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 126DE80E28
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 126DE80E28
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 126DE80E28
- for <buildroot@buildroot.org>; Wed,  9 Apr 2025 06:17:42 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id
- 4fb4d7f45d1cf-5e614da8615so785839a12.1
- for <buildroot@buildroot.org>; Tue, 08 Apr 2025 23:17:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1744179460; x=1744784260;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=iMjBSG3WErI57rGF9Q3GacNkdqhqvNGEc9B8sWYLL5M=;
- b=gGjTVxQYjhfQm5eySCm2ejqrjST1PjSj8TKWyk1fk7ECFSDWdcVRsvJB74SYOPtgTd
- E0fPi/MWzwvjS1GObRuNNTziJJMT/bSr0f43KkHnVtCXdQgpGMXBVxKXID6m1Sz1oBZx
- NPZXs0a+5+EjPLiYFWenk5Wb+MVMo2HVzKuV916m/WZ+EkzPewyH5bdw7fSQzdcpNuid
- ssiGsr5fu1l1iqxXmi1sCnGwf8I224aSHcNiSKHonRV3L8sHIUrEJIe4xm8gXIgz/pLn
- uChsRarGOCqWGotXZJCSH9iVfoWaX+Ito1e5zG5Ljc/bnMfLv3Am0Bo4ONVtYWBH+eKL
- m7Bg==
-X-Gm-Message-State: AOJu0Yzw8gClI0z4R2r3y6x2vJGchp8n2K3FRCT7rfpwnTeMlilUuWtd
- m9Ys7OcLFa5MDHKY37tNjfuM1A0oVKNAx4KpFRbVZqJldlmJ9IaqfetqLf6zFfjlWCwVMvU/twt
- g
-X-Gm-Gg: ASbGncuQHRtqYI5ZKqFjNlPcDx4nJB5EA6erkTfJTRr96oqT89vZaLLuRZ4gxJgMqFF
- 8n2jz984Oza+rIsj/t9wYo4KrEJkPi9q2JejaD0gzloL2omRcrmLaUuDNeEQI10JNgt4izhZnz6
- PCoNPGLCX77Yc7daI/cX6E49k/IUlTDY1goxYtcWsy1m2g82R8ZDmyf+V3bZHbM1cZPMJXpdwYy
- 6yFYoXRdz9lZ5gqlM2n+ZrRVlxaIXYzHF+uySf6KuiPyal5kBF0q2HfyzNUQ4cfa9jgK8sVQMkq
- I/t0ligvmjb3WsT/DZH8V2rLjglE4khHeo6ZgAnP4kbXWpC6WoN1T34T+g7ALhbtbIzkIqvkIfy
- B/Hsb94VFbPu+Gim4eVOihb88HCXkFUSdXm3zz4Q8F4vducAe5snARk9gg4nQTwMrCBUcPUf1v2
- uMb5LfuBQ=
-X-Google-Smtp-Source: AGHT+IHTlx0f2t0+ARLfMdmG0+DDfPF1E5MW94NbMyKx7IirLNDFcK+7HBHjBL2UzqTQ9xw8UOVnrw==
-X-Received: by 2002:a05:6402:51d1:b0:5ec:8a77:7f2d with SMTP id
- 4fb4d7f45d1cf-5f2f766a81cmr1495586a12.5.1744179460557; 
- Tue, 08 Apr 2025 23:17:40 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-79-25-86-232.retail.telecomitalia.it. [79.25.86.232])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5f2fbc0673dsm289258a12.19.2025.04.08.23.17.38
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 08 Apr 2025 23:17:39 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>,
- linux-amarula@amarulasolutions.com,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Wed,  9 Apr 2025 08:17:36 +0200
-Message-ID: <20250409061736.2335242-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+ client-ip=2a01:111:f403:200a::60a;
+ helo=nam12-mw2-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0C08E40496
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C08E40496
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com
+ (mail-mw2nam12on2060a.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:200a::60a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0C08E40496
+ for <buildroot@buildroot.org>; Wed,  9 Apr 2025 06:47:27 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=w3bqkPLHf0J4H6Ud5BmWnoZB4waTFtEPXwhPfOlkxHhnGgSqjoAWqp2l59GAmqfRnth0EYtndZCi+jz4Kgb6uy1pUKa+/xJrYtzI2hPSKm8w1WD5YiphuClGHGhpxDPdFKgTyhIaLmVEFg1TYDHn6HTvr4dk5Ix/IFungaWAVzu/Ue+MctJP7cVxMroRUXiePB7eGZLTTtkN6gms752/ZhrFdOBsIkR05mn7BmLMqOgdjuyEKEuzuH8eMb4OTZRZByEZZWmo53O9QuS9+xM9O6lqXJ0UEOqQyhujEYN0iCPswqzDfPxBVrU7NW1J3ljQJzWWBXZroKBgD8TCc/3JCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EYYE+hyxn3iV5ZX5cuhcfQb11dv3AxvP9bhwYFpx1Wk=;
+ b=yL1mwkUHaEYrymG4Li2XktG+oBMDqeowlpEZ5q15OnHxXOuPQF1RpRk6QqYgveUXpfgLwDOGOMCKmActSESaW7VF1lZ2RC1yOpac1W4jKjkc9kVaq+reuKeqROH2wGUXlaJRywHihKjwZsMz2IhCZtYeHgEUIXwZfmkIff3FY+9ty52mcrKsR8mGdXbsthqfJOUYrQhRI+r9NjMGPkRNqaH24Yzz1HXEg1CJvd9B/7U2adSTCijPao3sB9ZfRvA60j+v3tNcIG1hrUq2jEn6iC6oMM2+N1A0mlmaLkHCYJdfrSHF3Q6IWKm4xqXzXfYoAj7yNjGarDnZoo5vmlm/qA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+Received: from BY3PR04CA0001.namprd04.prod.outlook.com (2603:10b6:a03:217::6)
+ by IA1PR12MB8334.namprd12.prod.outlook.com (2603:10b6:208:3ff::11)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.20; Wed, 9 Apr
+ 2025 06:47:22 +0000
+Received: from SJ5PEPF00000204.namprd05.prod.outlook.com
+ (2603:10b6:a03:217:cafe::ed) by BY3PR04CA0001.outlook.office365.com
+ (2603:10b6:a03:217::6) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8606.34 via Frontend Transport; Wed,
+ 9 Apr 2025 06:47:22 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ SJ5PEPF00000204.mail.protection.outlook.com (10.167.244.37) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8632.13 via Frontend Transport; Wed, 9 Apr 2025 06:47:21 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 9 Apr
+ 2025 01:47:20 -0500
+Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Wed, 9 Apr 2025 01:47:18 -0500
+To: <buildroot@buildroot.org>
+Date: Wed, 9 Apr 2025 07:47:09 +0100
+Message-ID: <20250409064711.3024937-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Received-SPF: None (SATLEXMB03.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF00000204:EE_|IA1PR12MB8334:EE_
+X-MS-Office365-Filtering-Correlation-Id: c6192573-1a78-4af0-00f6-08dd773260fd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|82310400026|376014|36860700013|1800799024|41080700001; 
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?ZkLr8fXneF8qetOy10ICjZdnY/ZhOOu9bNWHC9sKoTqopCKTaK2xFhcncaM7?=
+ =?us-ascii?Q?w1f7KGlyh3+YjJIr3ejULQuzkZ6RgAhwC3u0sIX2dwBAI8FohjYkEvbdPnXV?=
+ =?us-ascii?Q?/v5vxFYnhyx/eXSoEi9gKIEbKkqevqfVM+RJampL9qp/LSb98a7EBqKNq0Cf?=
+ =?us-ascii?Q?nRubObSB5+mP5KF8l0r9AmJCP+jNSyT3WAmGhdpgIFwymhvQQNL6zBbOV9qB?=
+ =?us-ascii?Q?sZ+yzsgsMWhcBirjz5bdYVVSL/Whvcv5BrX+wFC2LpE8Qw9P3EtXFAnn5Xtl?=
+ =?us-ascii?Q?g7G9eWZ0ZCWtI4pDFxKzGFZUz2YPlLJaLgYgxjbc3u9IjHGBFm8LjF/NYppo?=
+ =?us-ascii?Q?9d48NJnbbffMk6xU/5l8KYtPYC2JRGd7cn9iqo5Lf/YpXYJd5XJ8+9hhT/TL?=
+ =?us-ascii?Q?GyhbuYKIJrb3+ek74Nx5HdtCCjUNpcSHv62XKCUDjSfNWQP7e5IHRbfbUqCD?=
+ =?us-ascii?Q?gTsEQHTzAfEPPZqLmr1DxhcvuBZswiXuTUNKIXol3OqCidWottR1fxKm75lS?=
+ =?us-ascii?Q?aUK1bfpWZFqj0AibW9p1xetdEitf0DF7EMCV9IlQ7fAqvD4Y4QktxNXDs6yl?=
+ =?us-ascii?Q?M7Sprm2uE6KOXB5/POkpcX8ANjFwV4iICnaPniI+XJiHEWr1Q7BhMzVTmjo/?=
+ =?us-ascii?Q?p36iCrIs+Naz6F8tRDEKV1v9x1i8pxekN1TpX1oXSfhrjKgWyLa/4grSMvab?=
+ =?us-ascii?Q?WQd1DbDjT3rye/0uznNzHrsbbRBI7M8gGFHtsDgCsTJeikMKAtJhSdCqiwXO?=
+ =?us-ascii?Q?s14O8nmFF/bFCq/QZPEAZfnIrsb90KQMABCkGtjFmGl3+II36iV/ejTLj4ic?=
+ =?us-ascii?Q?kQGnHkQzHKihg02zlDFBZ4V4EyPIcpU6q22V7Y+Jn5LWA5P92X/B5dTKFVd8?=
+ =?us-ascii?Q?+x7iy0jETFFyKjcucY8cHQRa5kDU+zXiz6em1TyKdQ6zs1ZnsPZD7eobI3ta?=
+ =?us-ascii?Q?dUg2VpOySYfeKnGAOVPi6DsAyG2ISIIaDkZ14acGDZnG3SQROhXtzP40HA0A?=
+ =?us-ascii?Q?5m6Ap6lBRcfYqlN+p7oFSi6lnwGooBn7aIZN4S2oHoq4CvkxhiA2JYIqaUKO?=
+ =?us-ascii?Q?7Sr/8ywMEws5qdgRZqgCTLC8VUl9/W8WmvNWWkl9B+2ciUggThGI6KWa2e9q?=
+ =?us-ascii?Q?fIRBMG31TASCqyc2QqV86JcarNtBKFwEn84ansV8Do/Tnb7N5od7DhjoTtsX?=
+ =?us-ascii?Q?MI3fKEYu9JEft2T3d3imUI+U7JGJjmD/JV1NSJcJDUtWdMbBMhnSJ+qV9IX8?=
+ =?us-ascii?Q?GOKEX/Du3iWuOnQtq3ePbfO3jwRa2mJn31K2/oevgotcPbr4V6cE2JkgHoKX?=
+ =?us-ascii?Q?aHVyUC1NZbEBOBuDiqqSWL37tjiye7sqK5nH9GVf17awUvCtmv7JehDAr5+U?=
+ =?us-ascii?Q?kxGI0/9dWj2AEY+SL2/dw3+g578Baibj+99E43oe7Ys+ar52pQO5CknroQLY?=
+ =?us-ascii?Q?q81Mz4w4Fxl08/HnP5X7V+AA/C+7XVSnyp9C2mqgLiU0OaiejbBgL3eWj7ng?=
+ =?us-ascii?Q?o2X+jHiAl/k/wUB29Tg6g2rOylspfEp1AG+r?=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(82310400026)(376014)(36860700013)(1800799024)(41080700001);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Apr 2025 06:47:21.4179 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6192573-1a78-4af0-00f6-08dd773260fd
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: SJ5PEPF00000204.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8334
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1744179460; x=1744784260;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=iMjBSG3WErI57rGF9Q3GacNkdqhqvNGEc9B8sWYLL5M=;
- b=EEK62lPQjYeDFawvt/QQiGNyKV+8u2J03S031I596WO35AIiuiY0ErJWejkAxiDuYV
- M9aQhVHoRDx1ZSzMDmaae0bvtnl6VNKYuPz4az/BL/L6Z8pwB6PdneRuADMI0B3vd9jy
- SXmqKWKbQjkR4c6NGGtsHRTa1I40g9EolFXmI=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EYYE+hyxn3iV5ZX5cuhcfQb11dv3AxvP9bhwYFpx1Wk=;
+ b=VSw67iil43iG/rLvAcasf5P9zKyKZcsoCxl90fSVx2lJUb5RZ8v624ybilTWV9HyoTX2Wp7b624tAA7VI8v+c0d4Fp2JHYt4zdpt7J3TNC1y2AWEXxD5v90pQaVnMuLxPaQ2zjUi2K1ysEjqu+wL9NtqKyTYmD6PH791MYpCBJo=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=EEK62lPQ
-Subject: [Buildroot] [PATCH 1/1] configs/stm32f469_disco_{sd,
- xip}: bump Linux to 5.15.179
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=VSw67iil
+Subject: [Buildroot] [PATCH v5 1/3] boot/xilinx-embeddedsw: rename toolchain
+ vendor to buildroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,75 +158,124 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ brandon.maier@collins.com, ju.o@free.fr, thomas.petazzoni@bootlin.com,
+ Neal Frager <neal.frager@amd.com>, romain.naour@smile.fr, michal.simek@amd.com,
+ arnout@mind.be
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch bumps the Linux kernel to version 5.15.179 and, for the SD
-configuration, also updates U-Boot to version 2025.04.
+This patch renames the bare-metal toolchain vendor used by the
+xilinx-embeddedsw package from Xilinx to Buildroot to be consistent with all
+other toolchains built by Buildroot.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To build the Microblaze applications available with the xilinx-embeddedsw
+package, the following config is now needed:
+
+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
+
+This change keeps backwards compatibility for users already using the
+following architecture tuple:
+
+BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
+
+Either vendor name is now valid, but the documentation will describe using
+the Buildroot vendor name.
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 ---
- .../stm32f469-disco/patches/linux/linux.hash                  | 2 +-
- .../stm32f469-disco/patches/uboot/uboot.hash                  | 2 +-
- configs/stm32f469_disco_sd_defconfig                          | 4 ++--
- configs/stm32f469_disco_xip_defconfig                         | 2 +-
- 4 files changed, 5 insertions(+), 5 deletions(-)
+V1->V2:
+- xilinx-embeddedsw is now backwards compatible with either vendor name
+V2->V3:
+- split patch into series
+V3->V4:
+- rebase patch
+V4->V5:
+- add deprecation warning for microblazeel-xilinx-elf tuple
+---
+ boot/xilinx-embeddedsw/Config.in            |  3 ++-
+ boot/xilinx-embeddedsw/xilinx-embeddedsw.mk | 30 ++++++++++++++-------
+ 2 files changed, 23 insertions(+), 10 deletions(-)
 
-diff --git a/board/stmicroelectronics/stm32f469-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f469-disco/patches/linux/linux.hash
-index 57c69adb36ce..4e0aeb77d880 100644
---- a/board/stmicroelectronics/stm32f469-disco/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/stm32f469-disco/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  a84ab5328c8a5a0e5c4a39a06b07479a7769c73af49a4c9ce59eeb644829d3b1  linux-5.15.176.tar.xz
-+sha256  9319a47b1e9b5d344ff6015431856d0c9640e4faedc527c87f9129061a27136f  linux-5.15.179.tar.xz
-diff --git a/board/stmicroelectronics/stm32f469-disco/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32f469-disco/patches/uboot/uboot.hash
-index 50674352d71d..80ea21b7cb4c 100644
---- a/board/stmicroelectronics/stm32f469-disco/patches/uboot/uboot.hash
-+++ b/board/stmicroelectronics/stm32f469-disco/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
-+sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
-diff --git a/configs/stm32f469_disco_sd_defconfig b/configs/stm32f469_disco_sd_defconfig
-index 3aa27f10ad02..6193855bd25c 100644
---- a/configs/stm32f469_disco_sd_defconfig
-+++ b/configs/stm32f469_disco_sd_defconfig
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32f469-disco/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.176"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.179"
- BR2_LINUX_KERNEL_DEFCONFIG="stm32"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0x00000000.config board/stmicroelectronics/stm32f469-disco/linux-sd.fragment"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f469-discovery"
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_PACKAGE_HOST_GENIMAGE=y
-diff --git a/configs/stm32f469_disco_xip_defconfig b/configs/stm32f469_disco_xip_defconfig
-index 67db22f9332f..f014f77d7653 100644
---- a/configs/stm32f469_disco_xip_defconfig
-+++ b/configs/stm32f469_disco_xip_defconfig
-@@ -8,7 +8,7 @@ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.176"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.179"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f469-disco/linux-xip.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+diff --git a/boot/xilinx-embeddedsw/Config.in b/boot/xilinx-embeddedsw/Config.in
+index a27253d594..31b12baaf2 100644
+--- a/boot/xilinx-embeddedsw/Config.in
++++ b/boot/xilinx-embeddedsw/Config.in
+@@ -1,4 +1,5 @@
+-comment "xilinx-embeddedsw needs a bare metal toolchain for tuple microblazeel-xilinx-elf"
++comment "xilinx-embeddedsw needs a bare metal toolchain for tuple microblazeel-buildroot-elf"
++	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH != "microblazeel-buildroot-elf"
+ 	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH != "microblazeel-xilinx-elf"
+ 
+ menuconfig BR2_TARGET_XILINX_EMBEDDEDSW
+diff --git a/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk b/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk
+index 7d4fcf8b8f..6e37dc48bd 100644
+--- a/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk
++++ b/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk
+@@ -12,6 +12,18 @@ XILINX_EMBEDDEDSW_INSTALL_TARGET = NO
+ XILINX_EMBEDDEDSW_INSTALL_IMAGES = YES
+ XILINX_EMBEDDEDSW_DEPENDENCIES = toolchain-bare-metal-buildroot
+ 
++ifneq ("$(wildcard $(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc)","")
++$(warning BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf" \
++	will soon be deprecated!)
++$(warning Please migrate to new bare-metal toolchain config below)
++$(warning BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf")
++XILINX_EMBEDDEDSW_MICROBLAZE_CC = $(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc
++XILINX_EMBEDDEDSW_MICROBLAZE_AR = $(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc-ar
++else
++XILINX_EMBEDDEDSW_MICROBLAZE_CC = $(HOST_DIR)/bin/microblazeel-buildroot-elf-gcc
++XILINX_EMBEDDEDSW_MICROBLAZE_AR = $(HOST_DIR)/bin/microblazeel-buildroot-elf-gcc-ar
++endif
++
+ # ZYNQMP_PMUFW application allows users to add cflags
+ XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS = \
+ 	$(call qstrip,$(BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_USER_CFLAGS))
+@@ -23,9 +35,9 @@ XILINX_EMBEDDEDSW_CFLAGS = "-Os -flto -ffat-lto-objects"
+ ifeq ($(BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM),y)
+ define XILINX_EMBEDDEDSW_BUILD_VERSAL_PLM
+ 	$(MAKE) -C $(@D)/lib/sw_apps/versal_plm/src/versal \
+-		COMPILER=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc \
+-		ARCHIVER=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc-ar \
+-		CC=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc \
++		COMPILER=$(XILINX_EMBEDDEDSW_MICROBLAZE_CC) \
++		ARCHIVER=$(XILINX_EMBEDDEDSW_MICROBLAZE_AR) \
++		CC=$(XILINX_EMBEDDEDSW_MICROBLAZE_CC) \
+ 		CFLAGS=$(XILINX_EMBEDDEDSW_CFLAGS)
+ endef
+ 
+@@ -38,9 +50,9 @@ endif # BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PLM
+ ifeq ($(BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW),y)
+ define XILINX_EMBEDDEDSW_BUILD_VERSAL_PSMFW
+ 	$(MAKE) -C $(@D)/lib/sw_apps/versal_psmfw/src/versal \
+-		COMPILER=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc \
+-		ARCHIVER=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc-ar \
+-		CC=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc \
++		COMPILER=$(XILINX_EMBEDDEDSW_MICROBLAZE_CC) \
++		ARCHIVER=$(XILINX_EMBEDDEDSW_MICROBLAZE_AR) \
++		CC=$(XILINX_EMBEDDEDSW_MICROBLAZE_CC) \
+ 		CFLAGS=$(XILINX_EMBEDDEDSW_CFLAGS)
+ endef
+ 
+@@ -53,9 +65,9 @@ endif # BR2_TARGET_XILINX_EMBEDDEDSW_VERSAL_PSMFW
+ ifeq ($(BR2_TARGET_XILINX_EMBEDDEDSW_ZYNQMP_PMUFW),y)
+ define XILINX_EMBEDDEDSW_BUILD_ZYNQMP_PMUFW
+ 	$(MAKE) -C $(@D)/lib/sw_apps/zynqmp_pmufw/src \
+-		COMPILER=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc \
+-		ARCHIVER=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc-ar \
+-		CC=$(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc \
++		COMPILER=$(XILINX_EMBEDDEDSW_MICROBLAZE_CC) \
++		ARCHIVER=$(XILINX_EMBEDDEDSW_MICROBLAZE_AR) \
++		CC=$(XILINX_EMBEDDEDSW_MICROBLAZE_CC) \
+ 		CFLAGS=$(XILINX_EMBEDDEDSW_ZYNQMP_PMUFW_CFLAGS)
+ endef
+ 
 -- 
-2.43.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
