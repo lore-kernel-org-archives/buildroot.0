@@ -1,53 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A98F3C36002
-	for <buildroot@archiver.kernel.org>; Wed,  9 Apr 2025 19:38:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B69E0C36002
+	for <buildroot@archiver.kernel.org>; Wed,  9 Apr 2025 19:41:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 52B5C617B8;
-	Wed,  9 Apr 2025 19:38:19 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EdK0JW5rU-f3; Wed,  9 Apr 2025 19:38:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FD4E617B9
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7FD4E617B9;
-	Wed,  9 Apr 2025 19:38:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 348C2201
- for <buildroot@buildroot.org>; Wed,  9 Apr 2025 19:38:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1AE82412E2
- for <buildroot@buildroot.org>; Wed,  9 Apr 2025 19:38:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6249D40DA1;
+	Wed,  9 Apr 2025 19:41:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FA0JX4TUIpfw for <buildroot@buildroot.org>;
- Wed,  9 Apr 2025 19:38:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2983B40C92
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2983B40C92
- for <buildroot@buildroot.org>; Wed,  9 Apr 2025 19:38:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 164AE83F32; Wed,  9 Apr 2025 19:38:16 +0000 (UTC)
+ id Leq9ZbgVXNKe; Wed,  9 Apr 2025 19:41:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93B04412BD
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 93B04412BD;
+	Wed,  9 Apr 2025 19:41:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F0C2108
+ for <buildroot@buildroot.org>; Wed,  9 Apr 2025 19:41:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2476B41282
+ for <buildroot@buildroot.org>; Wed,  9 Apr 2025 19:41:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FeNKMMvAnVym for <buildroot@buildroot.org>;
+ Wed,  9 Apr 2025 19:41:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7678A40DA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7678A40DA1
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7678A40DA1
+ for <buildroot@buildroot.org>; Wed,  9 Apr 2025 19:41:03 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 7DCBB5FFB7;
+ Wed,  9 Apr 2025 21:40:58 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 09 Apr 2025 21:40:58 +0200
+MIME-Version: 1.0
+Date: Wed, 09 Apr 2025 21:40:58 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Wed, 9 Apr 2025 21:33:52 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7336c5fa93a896130511d661f0d42359a046ec9a
-X-Git-Newrev: 49c73215d327b7bb2fdfd3ecb72d196050b0f9f6
-X-Patchwork-Hint: ignore
-Message-Id: <20250409193816.164AE83F32@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libndp: security bump to version
- 1.9
+To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: buildroot@buildroot.org, Marcus Hoffmann <marcus.hoffmann@othermo.de>
+In-Reply-To: <20250409122713.2711739-1-buildroot@bubu1.eu>
+References: <20250409122713.2711739-1-buildroot@bubu1.eu>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <5bec52de9bd9ddd399f7401e8541edc3@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1744227660;
+ bh=hB2F2tXrpzlyfAydmzIVx1N+UfNuUFttpCkjHYIb7rE=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=by37B99w4DPUmbE5Qsrpu5cClMQsQuKqzWNhbl7/pHjv1x3YlYmDLpzVbLIUw6pui
+ ArAgriv70TZJcIIfPdwqqoW2ea1xJOVttNvs39iZKa8q4SVjS6rYyQF001uRDZhUeG
+ vhfbzTzQsnv4SazwIs4KpWCSOWQxc2nOmbii4r8eQaMId5J4zOF+AGX/nPVJi+RzD9
+ h27TAlFARUwaUSh8jbZg2K3P/0R9SVZ978jPJV5wblpLIVn41eNnbILf7FZrrjbwDc
+ sRYWfLzLjxaCNYE1NdpZUPHZamUYrS9/BuSyDXKn82jkI67VQhE+BITFiTAVQ74MBD
+ VTd1z6BwPe9hA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=by37B99w
+Subject: Re: [Buildroot] [PATCH] package/libndp: security bump to version 1.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,49 +82,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49c73215d327b7bb2fdfd3ecb72d196050b0f9f6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 09/04/2025 14:27, Marcus Hoffmann via buildroot wrote:
+> From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
+> 
+> Fixes: CVE-2024-5564 [1][2]
+> 
+> [1] https://www.cve.org/CVERecord?id=CVE-2024-5564
+> [2] 
+> https://github.com/jpirko/libndp/commit/05e4ba7b0d126eea4c04387dcf40596059ee24af
+> 
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
-Fixes: CVE-2024-5564 [1][2]
-
-[1] https://www.cve.org/CVERecord?id=CVE-2024-5564
-[2] https://github.com/jpirko/libndp/commit/05e4ba7b0d126eea4c04387dcf40596059ee24af
-
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libndp/libndp.hash | 2 +-
- package/libndp/libndp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libndp/libndp.hash b/package/libndp/libndp.hash
-index 389e0ba5fc..ee2b758919 100644
---- a/package/libndp/libndp.hash
-+++ b/package/libndp/libndp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c3ea76e253def89869651686a827da75b56896fe94fabd87d8c14b1d4588fd05  libndp-1.8.tar.gz
-+sha256  e564f5914a6b1b799c3afa64c258824a801c1b79a29e2fe6525b682249c65261  libndp-1.9.tar.gz
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libndp/libndp.mk b/package/libndp/libndp.mk
-index db1de7b81c..30281627af 100644
---- a/package/libndp/libndp.mk
-+++ b/package/libndp/libndp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNDP_VERSION = 1.8
-+LIBNDP_VERSION = 1.9
- LIBNDP_SITE = $(call github,jpirko,libndp,v$(LIBNDP_VERSION))
- LIBNDP_LICENSE = LGPL-2.1+
- LIBNDP_LICENSE_FILES = COPYING
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
