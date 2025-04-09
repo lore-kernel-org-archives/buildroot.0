@@ -1,72 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ECD8C36010
-	for <buildroot@archiver.kernel.org>; Tue,  8 Apr 2025 19:48:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67D5BC36010
+	for <buildroot@archiver.kernel.org>; Wed,  9 Apr 2025 00:03:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64502611AF;
-	Tue,  8 Apr 2025 19:48:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E9D21831F8;
+	Wed,  9 Apr 2025 00:03:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fu7W462gecvu; Tue,  8 Apr 2025 19:48:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5kHO3ZJeOg0p; Wed,  9 Apr 2025 00:03:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FC9B6116D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1490783083
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7FC9B6116D;
-	Tue,  8 Apr 2025 19:48:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A29EDDA
- for <buildroot@buildroot.org>; Tue,  8 Apr 2025 19:48:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1490783083;
+	Wed,  9 Apr 2025 00:03:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id DA44D256
+ for <buildroot@buildroot.org>; Wed,  9 Apr 2025 00:03:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 943B140531
- for <buildroot@buildroot.org>; Tue,  8 Apr 2025 19:48:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C086E401FE
+ for <buildroot@buildroot.org>; Wed,  9 Apr 2025 00:03:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dM1uottoE_YQ for <buildroot@buildroot.org>;
- Tue,  8 Apr 2025 19:48:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.221;
- helo=smtpcmd01-s.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D588040580
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D588040580
-Received: from smtpcmd01-s.aruba.it (smtpcmd01-s.aruba.it [62.149.158.221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D588040580
- for <buildroot@buildroot.org>; Tue,  8 Apr 2025 19:48:12 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id 2EvYuQLmHRBkH2EvZumOB8; Tue, 08 Apr 2025 21:48:09 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Tue,  8 Apr 2025 21:48:08 +0200
-Message-Id: <20250408194808.53576-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.39.5
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n7Uat1FLr6Ft for <buildroot@buildroot.org>;
+ Wed,  9 Apr 2025 00:03:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::530; helo=mail-pg1-x530.google.com;
+ envelope-from=charlie@rivosinc.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A52B740125
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A52B740125
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com
+ [IPv6:2607:f8b0:4864:20::530])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A52B740125
+ for <buildroot@buildroot.org>; Wed,  9 Apr 2025 00:03:15 +0000 (UTC)
+Received: by mail-pg1-x530.google.com with SMTP id
+ 41be03b00d2f7-afc857702d1so3479531a12.3
+ for <buildroot@buildroot.org>; Tue, 08 Apr 2025 17:03:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1744156994; x=1744761794;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=wTB3TjLuu+UsBksyfBUS47PceWtvbBrTFr0FGPrqS/k=;
+ b=B8lHtZIswxHYhtGka9/WM+D5GxNCPK0MVhnNECdY0lyx+rmKPKlRNgkFWNUDfxCch0
+ CHDoABf78KLd+Xcj3C+OpX3u3uK81MYq4mLCBbGHtPjLRpgdS5NF2abfmjw5jUlWpGb/
+ 8YHC7YmMb0bDDJ4a2idf9CEu6mg2/UsEFVME2x6WTdl9fhIOS0YpjkPT+dJxr4PliYh0
+ QNiJxqsY3T0Zo+S7vmQrSspcuI9S6Dcp65OlswDqP5IYWk8wsx5RFlEyR1Z4LyCwV72Q
+ pbwiJfSr8TKt+1lO5EDb75xM35pvnTCGEZIBX3wI4x4m//YwigQ3uQwOins1LVM03vXh
+ Bsrg==
+X-Gm-Message-State: AOJu0YyuAm4YhK4iTKcn6ssToVxKLZ6b4bzlouD0T3pXmDjtxyWXeEDO
+ I7L5xJpwHjgBpOAgVK7vGpgGJ9RgstlJsbaDxR7unzG3N5JZWpw5A8BTbJ0DP+T4vmKJD6qRoDS
+ W
+X-Gm-Gg: ASbGnct82q3JQoHbep7XlM25+h/GPqYdrA78qrzDQi7wP2HyWF+T+dG3GGyY7unBOiN
+ 51Y4CGN+4JLJuZi66c0zKK+EEa/P70hfVP0FLFKGyWgvSUXoPOVqVM5q1qCW5OW6ZwYPizM8RSv
+ 5uuYSNWSpZlFXZxnWutRDTtOuMsiggHW94BGmx3XbtobgRnc5KrXRgIt8w0Z+YwHA6igTwxcN58
+ KMlWlwgKR763FkU+vKNA3OHg5vl+zXBG8K5WLxiRBD6ii4utBX1Hywi5TfGqZi9TSj4JVLBFuvW
+ 15C0RlczJZfC36jd+yG6k0orbJgBwDMNG7N7R99aaxkSArvlewjhncXXU/y6
+X-Google-Smtp-Source: AGHT+IEyTtuZqbjFQXnPOHHQG0Pf03a0HXdBejWZEXeWkRdx6EsyCW12Ri7XizuqCHI+nx1UJRz+nQ==
+X-Received: by 2002:a17:902:ccce:b0:216:644f:bc0e with SMTP id
+ d9443c01a7336-22ac29bc06dmr17467765ad.24.1744156994081; 
+ Tue, 08 Apr 2025 17:03:14 -0700 (PDT)
+Received: from charlie.ba.rivosinc.com ([64.71.180.162])
+ by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-229787764e9sm107191465ad.243.2025.04.08.17.03.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 08 Apr 2025 17:03:13 -0700 (PDT)
+From: Charlie Jenkins <charlie@rivosinc.com>
+Date: Tue, 08 Apr 2025 17:03:05 -0700
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfKggk/BjsXHvBdyjoAibg89ApB4gHjvR9kLyr83zokauaWOH0NqAAp1XA9lDLI8evpbsi0GYt0gCiLS2mtFd7xskVjmTWqaGVz1FUdT+ckwPz2PeutMV
- h53WVxzv+2S7rz+X/NG5I9LwmqPoBUj1PMIBPfnSUmzl5yjUurLCJvyirkxpghLp0senCo4XpRCyx8KSf4k5xPoRO3SX3CEd7Jd0n69QvLyKtfj6ifHZEZfb
- 48ydRZoxR3875uLG01VltmQmn4Df0xOdt+kP1ltRJa8=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1744141689; bh=OZ1QkNIvwI2NukYLSJmpdsQASbSDZc5CPPq+Em1RDww=;
- h=From:To:Subject:Date:MIME-Version;
- b=iIvhB6mQAtEHfEdj2PxZ/fJhBFWseu1cLQ6vmYbonRpb1nWMGF9yoZ4fQGbkD40Vt
- CcfrrDOKEWmf6twL2p5TscLznPiQZp/jt4m3Hr10baH5Jjoea65eJ869FL1lH4YzR4
- FEgknE+FNGmZNyMzycDEM/myATALXWUE/67k++Oz983RaBSvTv5Zi6dEt/WapFg1MK
- 6NCD7R4xBeeiNAZTCQU7BLk0ju+Fcyi8O9Cmey19Fw5uZ2n+WWl2/XYID3IgAb5tLt
- kHiBKf4NIYMdBcHjkj3fblf+GbCZ0cwhB7j9xl6rwHRuSJfEWZagIbe5JoyRgjh/d1
- E1qQJP9nmvK0g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=iIvhB6mQ
-Subject: [Buildroot] [PATCH] package/esp-hosted: bump to version 2025-04-08
+Message-Id: <20250408-fix_e2fsprogs-v1-1-cc814171907a@rivosinc.com>
+X-B4-Tracking: v=1; b=H4sIADi59WcC/x2MQQqAIBAAvyJ7TrDFMvpKRISutpcKFyIQ/550H
+ JiZAkKZSWBWBTI9LHydDfpOgT/2M5Hm0BjQ4GCscTryuxFGufOVRI+TdSYihskHaM2dqQn/b1l
+ r/QAdQBXOXwAAAA==
+X-Change-ID: 20250407-fix_e2fsprogs-68470f22d8cd
+To: buildroot@buildroot.org
+Cc: Charlie Jenkins <charlie@rivosinc.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1293; i=charlie@rivosinc.com; 
+ h=from:subject:message-id;
+ bh=TvaTbkFBdpCOUWUgX7ZQvsl1SCUFSQjozOpbkomCHGU=; 
+ b=owGbwMvMwCXWx5hUnlvL8Y3xtFoSQ/rXndYaOj1hk27uyThqteCJaQZPhHTrDKV5QjPKFGQVz
+ 2q8PbK4o5SFQYyLQVZMkYXnWgNz6x39sqOiZRNg5rAygQxh4OIUgInErWBkOP3Ws1cj1Pwsk+Kz
+ E3F/qmRk66de2fcoUzB81+Tt8peuHWRkeHte9cLfdZEKb3TXmt1fzs3A/HEbT9FGfuH2mPlzvY/
+ rsQEA
+X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
+ fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1744156994; x=1744761794;
+ darn=buildroot.org; 
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=wTB3TjLuu+UsBksyfBUS47PceWtvbBrTFr0FGPrqS/k=;
+ b=JSx+CeiNJVboSVgbSkm3Z91AFf9aYfFvTzRkRlfF8aA7ppL1TJlKbr/4Mu7rltomeP
+ HmsFFmm9KVPbay71fJbK4pFuGpFpc1LXoJWUrPV/gxouT+JYX/Q8Q3I4LKwg5/QW1cKE
+ BpsjvZ1VBO5lTqVzYaYMWYTgLQjKotawC4lsoj8t75AbuSEMKS5f+m1GbgZot1A0wnB0
+ InMtE6HFs6n+afJBE/pUiYZKAJXemFVhVbgrm93PwuqivR+7VjTbWOTNqXq7woiWGOzX
+ JvfzWCniciqLHJPawzCVOP946X/hAxIE+ojywuM4VBn5yT9LiZg6QGM4C+Adt6mPSQCU
+ 9NNA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=rivosinc.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rivosinc-com.20230601.gappssmtp.com
+ header.i=@rivosinc-com.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=JSx+CeiN
+Subject: [Buildroot] [PATCH] package/e2fsprogs: Don't build docs for host
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,82 +127,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This version add support for esp32c5 and local patch has been committed so
-drop it.
+texinfo isn't provided for the host in buildroot, but e2fsprogs always
+attempts to build the documentation. The error that gets printed is as
+follows:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+/usr/bin/install: cannot stat 'libext2fs.info*': No such file or directory
+make[3]: [Makefile:363: install-doc-libs] Error 1 (ignored)
+
+This error is ignored but it is unnecessary.
+
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 ---
- package/esp-hosted/0001-Fix-Linux-6.13.patch | 35 --------------------
- package/esp-hosted/esp-hosted.hash           |  2 +-
- package/esp-hosted/esp-hosted.mk             |  2 +-
- 3 files changed, 2 insertions(+), 37 deletions(-)
- delete mode 100644 package/esp-hosted/0001-Fix-Linux-6.13.patch
+ package/e2fsprogs/e2fsprogs.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/esp-hosted/0001-Fix-Linux-6.13.patch b/package/esp-hosted/0001-Fix-Linux-6.13.patch
-deleted file mode 100644
-index 98f86e8a8f..0000000000
---- a/package/esp-hosted/0001-Fix-Linux-6.13.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From f41f4a55e7787c9517ca6ac72f83dc244b4011e4 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Sat, 5 Apr 2025 00:35:23 +0200
--Subject: [PATCH] Fix Linux 6.13
--
--With Linux commit:
--https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0809a9ccac4a2ffdfd1561bb551aec6099775545
--spi_alloc_master() has been renamed to spi_alloc_host() so let's rename it
--accordingly checking for Linux version 6.13.0.
--
--Upstream: https://github.com/espressif/esp-hosted/pull/589
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- esp_hosted_ng/host/spi/esp_spi.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/esp_hosted_ng/host/spi/esp_spi.c b/esp_hosted_ng/host/spi/esp_spi.c
--index 51df26d8d7..fc63487821 100644
----- a/esp_hosted_ng/host/spi/esp_spi.c
--+++ b/esp_hosted_ng/host/spi/esp_spi.c
--@@ -394,7 +394,11 @@ static struct spi_controller *spi_busnum_to_master(u16 bus_num)
-- 	pdev->num_resources = 0;
-- 	platform_device_add(pdev);
-- 
--+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0))
--+	master = spi_alloc_host(&pdev->dev, sizeof(void *));
--+#else
-- 	master = spi_alloc_master(&pdev->dev, sizeof(void *));
--+#endif
-- 	if (!master) {
-- 		pr_err("Error: failed to allocate SPI master device\n");
-- 		platform_device_del(pdev);
---- 
--2.39.5
--
-diff --git a/package/esp-hosted/esp-hosted.hash b/package/esp-hosted/esp-hosted.hash
-index ac0164c38c..8de3c00190 100644
---- a/package/esp-hosted/esp-hosted.hash
-+++ b/package/esp-hosted/esp-hosted.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  7fd95a9b47c203a8bd0fdcab21f15c9d4cf1cad936f0206a94da0d932dd42206  esp-hosted-927a34f99724bb744efaf865a7c75cc1615f59a2.tar.gz
-+sha256  66c07e2f69d8a10fb111b6df27fbe3558734d660207a54391c46eea3e12b29ee  esp-hosted-9a2312b0b2630e41bacb3091faaba489cb43b0ab.tar.gz
- sha256  ed57d96d27be775b22f9571d3724ef84e0d0b8f24b805ec7f87a32189de19a9c  LICENSE
-diff --git a/package/esp-hosted/esp-hosted.mk b/package/esp-hosted/esp-hosted.mk
-index f4382e7fee..4c249eec46 100644
---- a/package/esp-hosted/esp-hosted.mk
-+++ b/package/esp-hosted/esp-hosted.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index 7f33b256c2626430a4578a9d8ffd8258df364a43..ad65d5189e75808af011ec87f0bee9d252f53767 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -56,6 +56,12 @@ E2FSPROGS_CONF_OPTS = \
+ 	--disable-rpath \
+ 	--enable-symlink-install
  
--ESP_HOSTED_VERSION = 927a34f99724bb744efaf865a7c75cc1615f59a2
-+ESP_HOSTED_VERSION = 9a2312b0b2630e41bacb3091faaba489cb43b0ab
- ESP_HOSTED_SITE = $(call github,espressif,esp-hosted,$(ESP_HOSTED_VERSION))
- ESP_HOSTED_DEPENDENCIES = linux
- ESP_HOSTED_LICENSE = GPL-2.0
++# docs will fail to build for the host because buildroot doesn't provide texinfo
++define HOST_E2FSPROGS_REMOVE_DOCS
++	rm -rf $(@D)/doc
++endef
++HOST_E2FSPROGS_PRE_INSTALL_HOOKS += HOST_E2FSPROGS_REMOVE_DOCS
++
+ ifeq ($(BR2_PACKAGE_E2FSPROGS_FUSE2FS),y)
+ E2FSPROGS_CONF_OPTS += --enable-fuse2fs
+ E2FSPROGS_DEPENDENCIES += libfuse
+
+---
+base-commit: af094ed137d6967afb6270b69c516a22eb9d8091
+change-id: 20250407-fix_e2fsprogs-68470f22d8cd
 -- 
-2.39.5
+- Charlie
 
 _______________________________________________
 buildroot mailing list
