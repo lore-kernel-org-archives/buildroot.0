@@ -1,76 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B69E0C36002
-	for <buildroot@archiver.kernel.org>; Wed,  9 Apr 2025 19:41:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CA78C36002
+	for <buildroot@archiver.kernel.org>; Wed,  9 Apr 2025 19:51:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6249D40DA1;
-	Wed,  9 Apr 2025 19:41:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17A92607D9;
+	Wed,  9 Apr 2025 19:51:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Leq9ZbgVXNKe; Wed,  9 Apr 2025 19:41:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eG5jRzDrlh25; Wed,  9 Apr 2025 19:51:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93B04412BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35B5360D65
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93B04412BD;
-	Wed,  9 Apr 2025 19:41:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F0C2108
- for <buildroot@buildroot.org>; Wed,  9 Apr 2025 19:41:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 35B5360D65;
+	Wed,  9 Apr 2025 19:51:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0BE6F201
+ for <buildroot@buildroot.org>; Wed,  9 Apr 2025 19:51:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2476B41282
- for <buildroot@buildroot.org>; Wed,  9 Apr 2025 19:41:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F160560D65
+ for <buildroot@buildroot.org>; Wed,  9 Apr 2025 19:51:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FeNKMMvAnVym for <buildroot@buildroot.org>;
- Wed,  9 Apr 2025 19:41:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7678A40DA1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7678A40DA1
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7678A40DA1
- for <buildroot@buildroot.org>; Wed,  9 Apr 2025 19:41:03 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 7DCBB5FFB7;
- Wed,  9 Apr 2025 21:40:58 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 09 Apr 2025 21:40:58 +0200
-MIME-Version: 1.0
-Date: Wed, 09 Apr 2025 21:40:58 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iR9kflvTXDYP for <buildroot@buildroot.org>;
+ Wed,  9 Apr 2025 19:51:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 400EC607D9
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 400EC607D9
+ for <buildroot@buildroot.org>; Wed,  9 Apr 2025 19:51:10 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 397E883F61; Wed,  9 Apr 2025 19:51:10 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: buildroot@buildroot.org, Marcus Hoffmann <marcus.hoffmann@othermo.de>
-In-Reply-To: <20250409122713.2711739-1-buildroot@bubu1.eu>
-References: <20250409122713.2711739-1-buildroot@bubu1.eu>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <5bec52de9bd9ddd399f7401e8541edc3@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1744227660;
- bh=hB2F2tXrpzlyfAydmzIVx1N+UfNuUFttpCkjHYIb7rE=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=by37B99w4DPUmbE5Qsrpu5cClMQsQuKqzWNhbl7/pHjv1x3YlYmDLpzVbLIUw6pui
- ArAgriv70TZJcIIfPdwqqoW2ea1xJOVttNvs39iZKa8q4SVjS6rYyQF001uRDZhUeG
- vhfbzTzQsnv4SazwIs4KpWCSOWQxc2nOmbii4r8eQaMId5J4zOF+AGX/nPVJi+RzD9
- h27TAlFARUwaUSh8jbZg2K3P/0R9SVZ978jPJV5wblpLIVn41eNnbILf7FZrrjbwDc
- sRYWfLzLjxaCNYE1NdpZUPHZamUYrS9/BuSyDXKn82jkI67VQhE+BITFiTAVQ74MBD
- VTd1z6BwPe9hA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=by37B99w
-Subject: Re: [Buildroot] [PATCH] package/libndp: security bump to version 1.9
+To: buildroot@buildroot.org
+Date: Wed, 9 Apr 2025 21:42:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 49c73215d327b7bb2fdfd3ecb72d196050b0f9f6
+X-Git-Newrev: 2c18a7d235dda7a91604c19fdba8d57de4fadd71
+X-Patchwork-Hint: ignore
+Message-Id: <20250409195110.397E883F61@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/liblinear: bump to 2.48
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,23 +58,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 09/04/2025 14:27, Marcus Hoffmann via buildroot wrote:
-> From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
-> 
-> Fixes: CVE-2024-5564 [1][2]
-> 
-> [1] https://www.cve.org/CVERecord?id=CVE-2024-5564
-> [2] 
-> https://github.com/jpirko/libndp/commit/05e4ba7b0d126eea4c04387dcf40596059ee24af
-> 
-> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+commit: https://git.buildroot.net/buildroot/commit/?id=2c18a7d235dda7a91604c19fdba8d57de4fadd71
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Rebase patch for new version.
+Soname changed, so updating accordingly in the mk file.
+COPYRIGHT year got updated[2]
+
+[1] https://github.com/cjlin1/liblinear/commit/818442728081980e9786cd3e87034d4e2912f0c4
+[2] https://github.com/cjlin1/liblinear/commit/6c0108dcf3f84262530b909c53e778007235bff5
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/liblinear/0001-build-static-lib.patch | 27 ++++++++++++++++++++-------
+ package/liblinear/liblinear.hash              |  4 ++--
+ package/liblinear/liblinear.mk                |  6 +++---
+ 3 files changed, 25 insertions(+), 12 deletions(-)
+
+diff --git a/package/liblinear/0001-build-static-lib.patch b/package/liblinear/0001-build-static-lib.patch
+index f3497b767e..69769a8005 100644
+--- a/package/liblinear/0001-build-static-lib.patch
++++ b/package/liblinear/0001-build-static-lib.patch
+@@ -1,14 +1,24 @@
+-Makefile: add a rule to build a static library
++From 43a6b4c7b3a63b1cd7f1ed2772a1147be892560f Mon Sep 17 00:00:00 2001
++From: Marcus Hoffmann <marcus.hoffmann@othermo.de>
++Date: Wed, 9 Apr 2025 16:03:59 +0200
++Subject: [PATCH] Makefile: add a rule to build a static library
+ 
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ [Fabrice: update for 2.43]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-diff -durN liblinear-1.96.orig/Makefile liblinear-1.96/Makefile
+---- liblinear-1.96.orig/Makefile	2014-11-15 07:50:23.000000000 +0100
+-+++ liblinear-1.96/Makefile	2014-12-14 00:23:00.135893956 +0100
+-@@ -16,6 +16,11 @@
+- 	fi; \
+- 	$(CXX) $${SHARED_LIB_FLAG} linear.o newton.o blas/blas.a -o liblinear.so.$(SHVER)
++[Marcus: update for 2.48]
++Signed-off-by: Marcus Hoffmann <marcus.hoffmann@othermo.de>
++---
++ Makefile | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/Makefile b/Makefile
++index 4f22d17..5cf9b26 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -16,6 +16,11 @@ all: train predict
++ lib: linear.o newton.o blas/blas.a
++ 	$(CXX) $(SHARED_LIB_FLAG) linear.o newton.o blas/blas.a -o liblinear.so.$(SHVER)
+  
+ +# Keeping blas/blas.a as a pre-requisite, to ensure all .o files are built
+ +static-lib: linear.o newton.o blas/blas.a
+@@ -18,3 +28,6 @@ diff -durN liblinear-1.96.orig/Makefile liblinear-1.96/Makefile
+  train: newton.o linear.o train.c blas/blas.a
+  	$(CXX) $(CFLAGS) -o train train.c newton.o linear.o $(LIBS)
+  
++-- 
++2.43.0
++
+diff --git a/package/liblinear/liblinear.hash b/package/liblinear/liblinear.hash
+index 6bc72909d0..01c7254df6 100644
+--- a/package/liblinear/liblinear.hash
++++ b/package/liblinear/liblinear.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3c64eec45c01943a656baac7aeb8ffd782fe0aea53629aa9f5fdb8eec177c92f  liblinear-2.45.tar.gz
+-sha256  d49b7898fd9ea7c29f0478e8c409ee7c0f621533d5eca7b7912e80391dc564e3  COPYRIGHT
++sha256  72ea3853a9fb430b49c3196177d8acdffd2dadb5901832ee323465792087e8cc  liblinear-2.48.tar.gz
++sha256  684e76f565a31ab057790c612bdacc2ee542f8a90b69f922377a92334771488c  COPYRIGHT
+diff --git a/package/liblinear/liblinear.mk b/package/liblinear/liblinear.mk
+index 134673a230..fb3dfdd38c 100644
+--- a/package/liblinear/liblinear.mk
++++ b/package/liblinear/liblinear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBLINEAR_VERSION = 2.45
++LIBLINEAR_VERSION = 2.48
+ LIBLINEAR_SITE = https://www.csie.ntu.edu.tw/~cjlin/liblinear/oldfiles
+ LIBLINEAR_LICENSE = BSD-3-Clause
+ LIBLINEAR_LICENSE_FILES = COPYRIGHT
+@@ -14,8 +14,8 @@ LIBLINEAR_CFLAGS = $(TARGET_CFLAGS)
+ ifeq ($(BR2_SHARED_LIBS)$(BR2_SHARED_STATIC_LIBS),y)
+ # $1: destination directory
+ define LIBLINEAR_INSTALL_SHARED
+-	$(INSTALL) -m 0644 -D $(@D)/liblinear.so.5 $(1)/usr/lib/liblinear.so.5
+-	ln -sf liblinear.so.5 $(1)/usr/lib/liblinear.so
++	$(INSTALL) -m 0644 -D $(@D)/liblinear.so.6 $(1)/usr/lib/liblinear.so.6
++	ln -sf liblinear.so.6 $(1)/usr/lib/liblinear.so
+ endef
+ LIBLINEAR_CFLAGS += -fPIC
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
