@@ -4,100 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E983C3601E
-	for <buildroot@archiver.kernel.org>; Thu, 10 Apr 2025 16:16:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C659FC3601E
+	for <buildroot@archiver.kernel.org>; Thu, 10 Apr 2025 18:01:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CAF283FAC;
-	Thu, 10 Apr 2025 16:16:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A374820F3;
+	Thu, 10 Apr 2025 18:01:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cM108BlCXdNA; Thu, 10 Apr 2025 16:16:32 +0000 (UTC)
+ id XKr_7FPpVZBV; Thu, 10 Apr 2025 18:01:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DC7B83FFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6FC281163
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6DC7B83FFE;
-	Thu, 10 Apr 2025 16:16:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2EEA4138
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 16:16:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E6FC281163;
+	Thu, 10 Apr 2025 18:01:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A56F8108
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 18:01:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E520660BBF
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 16:16:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8B0E080D62
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 18:01:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z7Ve5bJBfWXh for <buildroot@buildroot.org>;
- Thu, 10 Apr 2025 16:16:29 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KFhr_SrntYo2 for <buildroot@buildroot.org>;
+ Thu, 10 Apr 2025 18:01:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 169A461B04
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 169A461B04
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 169A461B04
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 16:16:28 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-39c13fa05ebso635244f8f.0
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 09:16:28 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B871C80E35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B871C80E35
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B871C80E35
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 18:01:47 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-39129fc51f8so890302f8f.0
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 11:01:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1744301787; x=1744906587;
+ d=1e100.net; s=20230601; t=1744308105; x=1744912905;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=HKLgOGKckIjt8IBk2XgVR1ckxKE8PB0y19W5RFG6UZM=;
- b=RMzbQ2INtMHXwYZKK7xAsCJ6o0i944b/KtnbmON6bwWgVjRdwAra9omscWCuwtbq4E
- by0W/9dBDIwtNrysXPaF9WgVPCGf0rUwNtsCR7zmJEqWtStCi1TDzEhcZeGLoCOrDDG4
- K3tkzLuNp1d0n/NE3lU8P7J5lSjH5y8RWXyXtlmJrtmQS/ip5g0jK+HihCaSHWhQ4ahS
- +yl1UR92oYxjtigW32Sblgkxw/VgTjGYaZnMJ2kSJoxAgwbQUZcwUBeprQHgjEsGuuVW
- r3pZjDEHwFy9m624jFLY7NarVvCD366rnEarKwe9WU6ndlv21e06YDhl2QEJ2UMl4Ziu
- LblA==
-X-Gm-Message-State: AOJu0YxKSqy1aFDFa+zExRvD0ajshp97QINFIQKZddTbY4n24vlcGPSQ
- hZ8JSPyEDvDfohjg15QWHaAOE5IKOUqYO01s8Azy4tHYlxYrFMexZQ1ALysaWQF2B/qcs2vLTy4
- L
-X-Gm-Gg: ASbGncvw1NaGjrccNLSpMkl5AeUPmTP+/5XbqQmf6QcoBDntcGlGZWnhSmN4rWxihOm
- jOD3k5fZ3GZVyZG+tDokt2s7EdUJtMb6qI6SCA1YFys5cLXgJNPFUVL73sRnc9990YQejHtmBjd
- 5xQKDgusbzuQq07sDsR4TXjOiChtTYiKCLT+jd1dRUXLW1n2Yin21o/amzVJw09b3scJVkforHv
- MJ6FUDE0f03CbAWyjXtnue/kJPm2EiumqQEV4OWJBbIm3XQw+9f7OQQZ2NIzlAxoEWHGAr0she7
- xBHvd1pCzEFJWk5lVEv3AmGJqZ7CO0pFhHA39onqucMhDQBBTRX/WUGfbTK+BpL6zeOuWpRERHM
- nBQBy9GXUWKQrWa02YyHoWKZTQBbybQ==
-X-Google-Smtp-Source: AGHT+IHlezFL1KHXJhr5tO8UP59BPEdEa/wU6r2z1pSL0fcorsxFaTBwMnUQN2uv7sqW92PE1BnnHQ==
-X-Received: by 2002:a05:6000:40cc:b0:38f:3c01:fb1f with SMTP id
- ffacd0b85a97d-39d8f498aa8mr2875411f8f.30.1744301786682; 
- Thu, 10 Apr 2025 09:16:26 -0700 (PDT)
+ bh=jvgc1EM5oA5NbsFU1M5oml3wQwMvy9SGOr97KAD703s=;
+ b=iG2Wo7aYuq+2GRCZUqxis3GPX3o31NcW+sdQLB6Fa6DMYW+ejBq9b9lUEF4gQAsUuB
+ 5qKsn7+2K3ng3T60sag0IXOkuJf6T75Lar07XNnMgEuEpmbkluJDDrJPgAnKrVRz+W6v
+ mHFTvvxS47oA9pJNIlmqu4mOLagzy3JR6OPWlcjimcUomhFthDLy++1KEy0p/LLHqBmb
+ BeE135ZTdDD50UnOvNoyjZykGCVneOcuoEcIqDLFoevuJfQek1TxxJ66y4gqVk+KazHi
+ vUU8HhR2XIUoHU+A3YFAs1NRn334I76AGYROuOy3Rs/ZAl40uTiLQu8G0uF0E3uE+aP4
+ GYPg==
+X-Gm-Message-State: AOJu0YwHRzICK0Lrkg37TgENKbkZ++heU6vqR9CZZHDQwPOqUMfFcrs6
+ 2SY1VGeLsoB5hjFHxv8M6Sm2nBx75OGeCbF+GwYrrdqIhzQJMy6/Xh8Y+Atp8x9vp+ex2kTMvGH
+ B
+X-Gm-Gg: ASbGncvPwdLUvGJGYiIdQGOxHHWEk12ZR9bvUHcsHZYhHKqy7Wgf4jJ5cPmk79wN6bq
+ l+Avr41w539iLYexyIuF8sVJ4fLDhZ1wNxvZJA5rIjWOWIxBjcg8l3eLGS/KaM+hri4icZewgqq
+ J2VDHk+YohIMXJ/me3Z+PbhFHgd5bpFOTxhVKW0vKoG5t/kBrpn2fmQ8GzfN4yZtC/6SGSUvOgh
+ yg7xxN2tATEpVvwYm6g5bQKH+15YPtJt+JGsWiEp1Jz/6y5YfA9OgsoAGRd/Iz43rEI5UdfYcu/
+ TjnBM19/xTzOj4Ea4S/imZH4WkYfIwjV8Y3daQSFbYMyrTepRNJDc4GX76YaDSoBA1a2SfPlPK9
+ WwuWx/IFNKSZHtHmCgnRNtEa/TqtmVsN4FcDTuSdv
+X-Google-Smtp-Source: AGHT+IG0/pYPvmoo8oWUxntir0bs60pnvNcVbRy37U1PbWetujZXs6DfFCvi+psFS966PUbh4BzmvA==
+X-Received: by 2002:a5d:64cb:0:b0:39c:cc7:3c62 with SMTP id
+ ffacd0b85a97d-39d8fdec16emr3311895f8f.51.1744308105160; 
+ Thu, 10 Apr 2025 11:01:45 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.43.44])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-39d893fdfcesm5134539f8f.87.2025.04.10.09.16.25
+ ffacd0b85a97d-39d8936115asm5627624f8f.12.2025.04.10.11.01.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 10 Apr 2025 09:16:26 -0700 (PDT)
+ Thu, 10 Apr 2025 11:01:44 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>,
- linux-amarula@amarulasolutions.com,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Thu, 10 Apr 2025 18:16:23 +0200
-Message-ID: <20250410161623.1940341-1-dario.binacchi@amarulasolutions.com>
+Date: Thu, 10 Apr 2025 20:01:41 +0200
+Message-ID: <20250410180141.2194321-1-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1744301787; x=1744906587;
+ d=amarulasolutions.com; s=google; t=1744308105; x=1744912905;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=HKLgOGKckIjt8IBk2XgVR1ckxKE8PB0y19W5RFG6UZM=;
- b=o0cuch06EmpnudBoItkby+4Kn1arNX4rk9AgZJ0RwhQk3sV81rI0VHAJDH7gG9Zt7i
- 17+he/WM6f1aBeyNb3RvNz2z5hGIjiEQ4W+b7xpBSJfR2Mxft0UQRJAzNEAx/BtZEwMN
- hE1qDP/A6U9GKJaLT7r42FRhvDT6Vb80TaZWA=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=jvgc1EM5oA5NbsFU1M5oml3wQwMvy9SGOr97KAD703s=;
+ b=eom73Ns1Hfv/6gp4P225NopYw3yRDHyNdaNWUtTLwThqZIvuVxsJMsoO7VaV91+GDe
+ BCYGsPu7iGCAI9vlH+ldEfNgJaafZRmYsnRfe0TlwhyyL3gD+efTeCex6z+bMcL/eu0M
+ k1pBL3r5p13/Qq4iPRUYkmOApP2GFaib769yE=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=o0cuch06
-Subject: [Buildroot] [PATCH 1/1] configs/stm32f429_disco_xip: bump Linux to
- 6.1.133
+ header.a=rsa-sha256 header.s=google header.b=eom73Ns1
+Subject: [Buildroot] [PATCH 1/1] configs/stm32f746_disco_sd: bump Linux to
+ 5.15.179 and U-Boot to 2025.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,42 +106,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch bumps the Linux kernel to version 6.1.133. The size of xipImage
-has increased by only 22 bytes (1671804 bytes compared to 1671782 in
-version 6.1.126).
+The patch bumps the Linux kernel to version 5.15.179 and U-Boot to
+version 2025.04.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- .../stmicroelectronics/stm32f429-disco/patches/linux/linux.hash | 2 +-
- configs/stm32f429_disco_xip_defconfig                           | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../stm32f746-disco/patches/linux/linux.hash                  | 2 +-
+ .../stm32f746-disco/patches/uboot/uboot.hash                  | 2 +-
+ configs/stm32f746_disco_sd_defconfig                          | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-index 9330b9749e76..7855de012d5c 100644
---- a/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
+diff --git a/board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash
+index 57c69adb36ce..4e0aeb77d880 100644
+--- a/board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash
++++ b/board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256  c91920b34aec412fa6deb6ae3f22ffb41879bf07115a5e224edf4f2778be1790  linux-6.1.126.tar.xz
-+sha256  97b59faf3f1925f296442a73a64439a447366f1d434be579803877097c5abe70  linux-6.1.133.tar.xz
-diff --git a/configs/stm32f429_disco_xip_defconfig b/configs/stm32f429_disco_xip_defconfig
-index 7ba5d4ee3f12..69266f567ea9 100644
---- a/configs/stm32f429_disco_xip_defconfig
-+++ b/configs/stm32f429_disco_xip_defconfig
-@@ -8,7 +8,7 @@ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
+-sha256  a84ab5328c8a5a0e5c4a39a06b07479a7769c73af49a4c9ce59eeb644829d3b1  linux-5.15.176.tar.xz
++sha256  9319a47b1e9b5d344ff6015431856d0c9640e4faedc527c87f9129061a27136f  linux-5.15.179.tar.xz
+diff --git a/board/stmicroelectronics/stm32f746-disco/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32f746-disco/patches/uboot/uboot.hash
+index 50674352d71d..80ea21b7cb4c 100644
+--- a/board/stmicroelectronics/stm32f746-disco/patches/uboot/uboot.hash
++++ b/board/stmicroelectronics/stm32f746-disco/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
++sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
+diff --git a/configs/stm32f746_disco_sd_defconfig b/configs/stm32f746_disco_sd_defconfig
+index e72e5122b001..71004ef82315 100644
+--- a/configs/stm32f746_disco_sd_defconfig
++++ b/configs/stm32f746_disco_sd_defconfig
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32f746-disco/genimage.cfg"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.126"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.133"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f429-disco/linux.config"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.176"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.179"
+ BR2_LINUX_KERNEL_DEFCONFIG="stm32"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32f746-disco/linux.fragment"
  BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f746-disco"
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 -- 
 2.43.0
 
