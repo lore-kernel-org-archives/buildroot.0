@@ -1,52 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B974C3601E
-	for <buildroot@archiver.kernel.org>; Thu, 10 Apr 2025 19:38:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43016C3601E
+	for <buildroot@archiver.kernel.org>; Thu, 10 Apr 2025 19:39:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73B3C4179F;
-	Thu, 10 Apr 2025 19:38:28 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bE3RwAPcEWFG; Thu, 10 Apr 2025 19:38:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8689240586
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8689240586;
-	Thu, 10 Apr 2025 19:38:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 79B8C108
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 19:38:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 70EF560903
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 19:38:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D6F1605D2;
+	Thu, 10 Apr 2025 19:39:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CARRyLMEtXGf for <buildroot@buildroot.org>;
- Thu, 10 Apr 2025 19:38:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD339608F4
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BD339608F4
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 19:38:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B6E0083FFC; Thu, 10 Apr 2025 19:38:25 +0000 (UTC)
+ id a3oz2tYly_de; Thu, 10 Apr 2025 19:39:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4201F608C3
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4201F608C3;
+	Thu, 10 Apr 2025 19:39:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 43415138
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 19:39:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 26D49608C3
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 19:39:32 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bdKHjAzpRlkm for <buildroot@buildroot.org>;
+ Thu, 10 Apr 2025 19:39:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 27488605D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27488605D2
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 27488605D2
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 19:39:31 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 20D5E2003C1;
+ Thu, 10 Apr 2025 21:39:27 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Thu, 10 Apr 2025 21:39:27 +0200
+MIME-Version: 1.0
+Date: Thu, 10 Apr 2025 21:39:27 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 10 Apr 2025 21:35:31 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2d5903769ff00d0104b9e945c0e13a8094c7a6dd
-X-Git-Newrev: 4df4d1d31240aa4d1c49dcbcb9694ce32eb626ba
-X-Patchwork-Hint: ignore
-Message-Id: <20250410193825.B6E0083FFC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcoap: bump version to 4.3.5
+To: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org, Joris Lijssens <joris.lijssens@gmail.com>
+In-Reply-To: <20250409163334.687686-1-thomas.perale@mind.be>
+References: <20250409163334.687686-1-thomas.perale@mind.be>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <b5d39a52c443ed5364e6d6a728e34f94@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1744313969;
+ bh=czu16FgLH/7AYGIpQbH+arjcEOtXv6eovMDfvhKvsz8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=ECeTw7XuXvsKX2It+2cxkrPqGyzvpyI3dOtaMv/Rd4KoVwn3pC1G8kr4j8yU7p52H
+ PYAKSsNo1wDAKZOmjJJ1ZqUOn0SDnCukjpapVrTbnwjkdUGZ/ohx2W2DCVj+ACdZrx
+ MIrQP4TRttkM5wJcTzhZOyxJ5wNbCuZteOl3Qsnsfp8LWZkubOWYwOoQ2mq+KYYQdp
+ xBG0i0++Gd+s9GNs11/Q93mv6xBAOLC70O2Zt4ihPS2zcc/9VvVM+M2l2xmxbYjh6M
+ Xx9AShxGw+GbqiNLS5lfdk/sFvgaWNDEotz2qP9YfqoPqEWP3fxWo6iVBjTcKnTjMv
+ UtPW+pObBHtCA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=ECeTw7Xu
+Subject: Re: [Buildroot] [v2 PATCH 1/1] package/libcoap: bump version to
+ 4.3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,115 +83,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4df4d1d31240aa4d1c49dcbcb9694ce32eb626ba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 09/04/2025 18:33, Thomas Perale via buildroot wrote:
+> The patch introduced in [1] that fixed the CVE-2024-0962 is now
+> available upstream in the 4.3.5 release [2].
+> 
+> For more details see the release note:
+> 
+> https://github.com/obgm/libcoap/blob/v4.3.5/ChangeLog
+> 
+> [1] 9002b818be package/libcoap: fix CVE-2024-0962
+> [2] 
+> https://github.com/obgm/libcoap/commit/2b28d8b0e9607e71a145345b4fe49517e052b7d9
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-The patch introduced in [1] that fixed the CVE-2024-0962 is now
-available upstream in the 4.3.5 release [2].
+Applied to master, thanks.
 
-This commit also updates the LICENSE file hash, after adding reference
-to wolfSSL in [3].
+For info, I also fixed the LICENSE file hash. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/4df4d1d31240aa4d1c49dcbcb9694ce32eb626ba
 
-For more details see the release note:
-https://github.com/obgm/libcoap/blob/v4.3.5/ChangeLog
+Best regards,
 
-[1] 9002b818be package/libcoap: fix CVE-2024-0962
-[2] https://github.com/obgm/libcoap/commit/2b28d8b0e9607e71a145345b4fe49517e052b7d9
-[3] https://github.com/obgm/libcoap/commit/e3a662a934ae9e2854f50eb4cf420009a90fe1df
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-[Julien: fix LICENSE file hash]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...-parsing-OSCORE-configuration-information.patch | 38 ----------------------
- package/libcoap/libcoap.hash                       |  4 +--
- package/libcoap/libcoap.mk                         |  5 +--
- 3 files changed, 3 insertions(+), 44 deletions(-)
-
-diff --git a/package/libcoap/0001-coap_oscore-c-Fix-parsing-OSCORE-configuration-information.patch b/package/libcoap/0001-coap_oscore-c-Fix-parsing-OSCORE-configuration-information.patch
-deleted file mode 100644
-index e75250d613..0000000000
---- a/package/libcoap/0001-coap_oscore-c-Fix-parsing-OSCORE-configuration-information.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 2b28d8b0e9607e71a145345b4fe49517e052b7d9 Mon Sep 17 00:00:00 2001
--From: Jon Shallow <supjps-libcoap@jpshallow.com>
--Date: Thu, 25 Jan 2024 18:03:17 +0000
--Subject: [PATCH] coap_oscore.c: Fix parsing OSCORE configuration information
--
--Upstream: https://github.com/obgm/libcoap/commit/2b28d8b0e9607e71a145345b4fe49517e052b7d9
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/coap_oscore.c | 5 +++--
-- 1 file changed, 3 insertions(+), 2 deletions(-)
--
--diff --git a/src/coap_oscore.c b/src/coap_oscore.c
--index 83f785c92..e0fb22947 100644
----- a/src/coap_oscore.c
--+++ b/src/coap_oscore.c
--@@ -1678,11 +1678,12 @@ get_split_entry(const char **start,
--                 oscore_value_t *value) {
--   const char *begin = *start;
--   const char *end;
--+  const char *kend;
--   const char *split;
--   size_t i;
-- 
-- retry:
---  end = memchr(begin, '\n', size);
--+  kend = end = memchr(begin, '\n', size);
--   if (end == NULL)
--     return 0;
-- 
--@@ -1693,7 +1694,7 @@ get_split_entry(const char **start,
-- 
--   if (begin[0] == '#' || (end - begin) == 0) {
--     /* Skip comment / blank line */
---    size -= end - begin + 1;
--+    size -= kend - begin + 1;
--     begin = *start;
--     goto retry;
--   }
-diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
-index 20abb94f8f..fc618fef52 100644
---- a/package/libcoap/libcoap.hash
-+++ b/package/libcoap/libcoap.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  ae61a48c21f7b40e1442c9e1da9aab9e6f2cf0deccb02f3fed4de232a0b0522e  libcoap-4.3.4.tar.gz
-+sha256  a417ed26ec6c95c041b42353b5b6fad1602e2bf42a6e26c09863450e227b7b5f  libcoap-4.3.5.tar.gz
- sha256  09dd86a017bad210527085008cbf706609c58210897b69845af14099577e7eb7  COPYING
--sha256  bdd94ddd8e75010aebd045ead1c951110788003395c708811d6960248acb3891  LICENSE
-+sha256  ecff7aa3af994b008dbb57c180753bd2a6c53fa6f8265a2486740f4cfd45280c  LICENSE
-diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
-index 29161142f6..c5e5f85c62 100644
---- a/package/libcoap/libcoap.mk
-+++ b/package/libcoap/libcoap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCOAP_VERSION = 4.3.4
-+LIBCOAP_VERSION = 4.3.5
- LIBCOAP_SITE = $(call github,obgm,libcoap,v$(LIBCOAP_VERSION))
- LIBCOAP_INSTALL_STAGING = YES
- LIBCOAP_LICENSE = BSD-2-Clause
-@@ -15,9 +15,6 @@ LIBCOAP_CONF_OPTS = \
- 	--disable-examples --disable-examples-source --without-tinydtls
- LIBCOAP_AUTORECONF = YES
- 
--# 0001-coap_oscore-c-Fix-parsing-OSCORE-configuration-information.patch
--LIBCOAP_IGNORE_CVES += CVE-2024-0962
--
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- LIBCOAP_DEPENDENCIES += gnutls
- LIBCOAP_CONF_OPTS += \
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
