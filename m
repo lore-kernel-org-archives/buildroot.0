@@ -4,79 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF555C369A2
-	for <buildroot@archiver.kernel.org>; Thu, 10 Apr 2025 19:09:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F55CC3601E
+	for <buildroot@archiver.kernel.org>; Thu, 10 Apr 2025 19:23:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4FC3F61AFE;
-	Thu, 10 Apr 2025 19:09:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD36C60AA2;
+	Thu, 10 Apr 2025 19:23:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j_aDCLT6p_Ef; Thu, 10 Apr 2025 19:09:45 +0000 (UTC)
+ id TqCzbd_g83ZF; Thu, 10 Apr 2025 19:23:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AAD361063
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E66E461B12
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9AAD361063;
-	Thu, 10 Apr 2025 19:09:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id DA4D9138
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 19:09:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E66E461B12;
+	Thu, 10 Apr 2025 19:23:46 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 16097138
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 19:23:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C016741EED
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 19:09:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EFEE781209
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 19:23:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X7B3vpOoQJnd for <buildroot@buildroot.org>;
- Thu, 10 Apr 2025 19:09:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
- helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HkeRe1c6pIVZ for <buildroot@buildroot.org>;
+ Thu, 10 Apr 2025 19:23:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D6F0D41C7F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6F0D41C7F
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [147.173.1.68])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D6F0D41C7F
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 19:09:41 +0000 (UTC)
-Received: from [IPV6:2a01:e0a:12:eba0:bd57:30f1:1d64:83b3] (unknown
- [IPv6:2a01:e0a:12:eba0:bd57:30f1:1d64:83b3])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 2E12EC1697;
- Thu, 10 Apr 2025 21:09:38 +0200 (CEST)
-Message-ID: <0cccf469-e371-4ace-b70d-10831bc520c8@grenoble.cnrs.fr>
-Date: Thu, 10 Apr 2025 21:09:37 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: =?UTF-8?Q?Micka=C3=ABl_Tansorier?= <mickael.tansorier@smile.fr>,
- buildroot@buildroot.org
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20250410154115.3786295-1-mickael.tansorier@smile.fr>
-Content-Language: en-US, fr
-From: Edgar Bonet <bonet@grenoble.cnrs.fr>
-In-Reply-To: <20250410154115.3786295-1-mickael.tansorier@smile.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1744312178;
- bh=blNzRuAVNhucX5L8DFfaSm4RhywmHTascX6fGwlImf4=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
- b=rSl/6/ZE+ecu/g3TnHzJWDkZ0cMU1SCmNLW/TtO2JeK+X8Jwo5ll+zYzKvG/QK/Qx
- lElsl/U5U5A6VqMrx/KsvANvhhzrKBN+W02I60P7tm1i7Wy0CSR2juquSXNvwAop1c
- MI2Uavjtqw7lxwtqQJy41phI+KVqsWkJbF9NsT+z+o5mRbnLgM7e9tdD72RCypYwip
- xnSDPVg2gyT7z7Bb2vWHA/Dq4xmOLkMYDqpjpSklabbJcPaoTZhoPRJj6YzqPyi7VH
- 5PQ/DPwNFYceVZvLp4D/oTNUPXdxNZCo1w1oaD7yq2XlRIF+pgLDbYKAfS3AToDz4C
- u26phWeNfk0eA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=grenoble.cnrs.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=rSl/6/ZE
-Subject: Re: [Buildroot] [PATCH] package/{minetest,
- luanti}: Rename package minetest to luanti
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B33C80EFA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9B33C80EFA
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 19:23:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 996EF83FDF; Thu, 10 Apr 2025 19:23:43 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Thu, 10 Apr 2025 21:13:18 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ed408d6fdefb80b9b8d019014b1a9b0558329a3c
+X-Git-Newrev: 5468334bb000118664ecf3b495f20f841fcc2708
+X-Patchwork-Hint: ignore
+Message-Id: <20250410192343.996EF83FDF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python3: bump to 3.13.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,258 +58,368 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8hCgpNaWNrYcOrbCBUYW5zb3JpZXIgd3JvdGU6Cj4gTWluZXRlc3QgaGFzIGJlZW4gcmVu
-YW1lZCB0byBMdWFudGkgc2luY2UgdmVyc2lvbiA1LjEwLjA6Cj4gaHR0cHM6Ly9naXRodWIuY29t
-L2x1YW50aS1vcmcvbHVhbnRpL3JlbGVhc2VzL3RhZy81LjEwLjAKPiAKPiBCdW1wIGx1YW50aSBk
-aXJlY3RseSB0byB0aGUgbGF0ZXN0IHZlcnNpb24gYXZhaWxhYmxlLCA1LjExLgo+IAo+IEFkZCB0
-aGUgYEVYRUNVVEFCTEVfT1VUUFVUX1BBVEhgIG9wdGlvbiB0byBgbHVhbnRpLm1rYCBkdWUgdG8g
-YSBtaXNzaW5nIGRlZmluaXRpb24gbmVlZGVkIHRvIGNyZWF0ZSB0aGUgbGVnYWN5IGFsaWFzIG9m
-IGBtaW5ldGVzdHNlcnZlcmAuIFRoaXMgaXNzdWUgYXBwZWFyZWQgYWZ0ZXIgY29tbWl0IGA0Yjkw
-ZTU4MmI0MmM0ODgxODYwMTAwYjEwYTk1NzJkOGQzM2EzOWRhYC4KPiAKPiBTaWduZWQtb2ZmLWJ5
-OiBNaWNrYcOrbCBUYW5zb3JpZXIgPG1pY2thZWwudGFuc29yaWVyQHNtaWxlLmZyPgo+IC0tLQo+
-ICBwYWNrYWdlL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICB8ICAyICstCj4gIHBhY2th
-Z2Uve21pbmV0ZXN0ID0+IGx1YW50aX0vQ29uZmlnLmluIHwgMjggKysrKy0tLS0KPiAgcGFja2Fn
-ZS9sdWFudGkvbHVhbnRpLmhhc2ggICAgICAgICAgICAgfCAgNSArKwo+ICBwYWNrYWdlL2x1YW50
-aS9sdWFudGkubWsgICAgICAgICAgICAgICB8IDkyICsrKysrKysrKysrKysrKysrKysrKysrKysr
-Cj4gIHBhY2thZ2UvbWluZWNsb25pYS9Db25maWcuaW4gICAgICAgICAgIHwgIDIgKy0KPiAgcGFj
-a2FnZS9taW5lY2xvbmlhL21pbmVjbG9uaWEubWsgICAgICAgfCAgNCArLQo+ICBwYWNrYWdlL21p
-bmV0ZXN0LWdhbWUvQ29uZmlnLmluICAgICAgICB8ICA0ICstCj4gIHBhY2thZ2UvbWluZXRlc3Qt
-Z2FtZS9taW5ldGVzdC1nYW1lLm1rIHwgIDYgKy0KPiAgcGFja2FnZS9taW5ldGVzdC9taW5ldGVz
-dC5oYXNoICAgICAgICAgfCAgNCAtLQo+ICBwYWNrYWdlL21pbmV0ZXN0L21pbmV0ZXN0Lm1rICAg
-ICAgICAgICB8IDg3IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+ICAxMCBmaWxlcyBjaGFuZ2Vk
-LCAxMjAgaW5zZXJ0aW9ucygrKSwgMTE0IGRlbGV0aW9ucygtKQo+ICByZW5hbWUgcGFja2FnZS97
-bWluZXRlc3QgPT4gbHVhbnRpfS9Db25maWcuaW4gKDcxJSkKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0
-IHBhY2thZ2UvbHVhbnRpL2x1YW50aS5oYXNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdl
-L2x1YW50aS9sdWFudGkubWsKPiAgZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvbWluZXRlc3Qv
-bWluZXRlc3QuaGFzaAo+ICBkZWxldGUgbW9kZSAxMDA2NDQgcGFja2FnZS9taW5ldGVzdC9taW5l
-dGVzdC5tawo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL0NvbmZpZy5pbiBiL3BhY2thZ2UvQ29u
-ZmlnLmluCj4gaW5kZXggMWViNWUxZTAyMC4uMTllZTIxMTljZSAxMDA2NDQKPiAtLS0gYS9wYWNr
-YWdlL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2UvQ29uZmlnLmluCj4gQEAgLTI5Niw4ICsyOTYs
-OCBAQCBtZW51ICJHYW1lcyIKPiAgCXNvdXJjZSAicGFja2FnZS9nbnVjaGVzcy9Db25maWcuaW4i
-Cj4gIAlzb3VyY2UgInBhY2thZ2UvbGJyZWFrb3V0Mi9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBh
-Y2thZ2UvbHRyaXMvQ29uZmlnLmluIgo+ICsJc291cmNlICJwYWNrYWdlL2x1YW50aS9Db25maWcu
-aW4iCj4gIAlzb3VyY2UgInBhY2thZ2UvbHVnYXJ1L0NvbmZpZy5pbiIKPiAtCXNvdXJjZSAicGFj
-a2FnZS9taW5ldGVzdC9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2UvbWluZXRlc3QtZ2Ft
-ZS9Db25maWcuaW4iCj4gIAlzb3VyY2UgInBhY2thZ2Uvb3BlbnR5cmlhbi9Db25maWcuaW4iCj4g
-IAlzb3VyY2UgInBhY2thZ2Uvb3BlbnR5cmlhbi1kYXRhL0NvbmZpZy5pbiIKPiBkaWZmIC0tZ2l0
-IGEvcGFja2FnZS9taW5ldGVzdC9Db25maWcuaW4gYi9wYWNrYWdlL2x1YW50aS9Db25maWcuaW4K
-PiBzaW1pbGFyaXR5IGluZGV4IDcxJQo+IHJlbmFtZSBmcm9tIHBhY2thZ2UvbWluZXRlc3QvQ29u
-ZmlnLmluCj4gcmVuYW1lIHRvIHBhY2thZ2UvbHVhbnRpL0NvbmZpZy5pbgo+IGluZGV4IGMxNDc2
-ODAxNmIuLjZlYzhiN2I5NjggMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9taW5ldGVzdC9Db25maWcu
-aW4KPiArKysgYi9wYWNrYWdlL2x1YW50aS9Db25maWcuaW4KPiBAQCAtMSw1ICsxLDUgQEAKPiAt
-Y29uZmlnIEJSMl9QQUNLQUdFX01JTkVURVNUCj4gLQlib29sICJtaW5ldGVzdCIKPiArY29uZmln
-IEJSMl9QQUNLQUdFX0xVQU5USQo+ICsJYm9vbCAibHVhbnRpIgo+ICAJZGVwZW5kcyBvbiBCUjJf
-VE9PTENIQUlOX0dDQ19BVF9MRUFTVF81ICMgQysrMTEKPiAgCWRlcGVuZHMgb24gQlIyX1RPT0xD
-SEFJTl9IQVNfVEhSRUFEUwo+ICAJZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9MVUFKSVQKPiBAQCAt
-OSwxOCArOSwxOCBAQCBjb25maWcgQlIyX1BBQ0tBR0VfTUlORVRFU1QKPiAgCXNlbGVjdCBCUjJf
-UEFDS0FHRV9aTElCCj4gIAlzZWxlY3QgQlIyX1BBQ0tBR0VfWlNURAo+ICAJIyBBdCBsZWFzdCBv
-bmUgb3B0aW9uIG11c3QgYmUgZW5hYmxlZAo+IC0Jc2VsZWN0IEJSMl9QQUNLQUdFX01JTkVURVNU
-X0NMSUVOVCBpZiAhQlIyX1BBQ0tBR0VfTUlORVRFU1RfU0VSVkVSCj4gKwlzZWxlY3QgQlIyX1BB
-Q0tBR0VfTFVBTlRJX0NMSUVOVCBpZiAhQlIyX1BBQ0tBR0VfTFVBTlRJX1NFUlZFUgo+ICAJaGVs
-cAo+ICAJICBNaW5ldGVzdCBpcyBhIG5lYXItaW5maW5pdGUtd29ybGQgYmxvY2sgc2FuZGJveCBn
-YW1lIGFuZCBhCgpUaGlzIHNob3VsZCBwcm9iYWJseSBiZSDigJxMdWFudGkgKGZvcm1lcmx5IE1p
-bmV0ZXN0KSBpcyBhIOKApuKAnS4KCj4gIAkgIGdhbWUgZW5naW5lLCBpbnNwaXJlZCBieSBJbmZp
-bmlNaW5lciwgTWluZWNyYWZ0LCBhbmQgdGhlCj4gIAkgIGxpa2UuCj4gIAo+IC0JICBodHRwOi8v
-d3d3Lm1pbmV0ZXN0Lm5ldAo+ICsJICBodHRwczovL3d3dy5sdWFudGkub3JnLwo+ICAKPiAtaWYg
-QlIyX1BBQ0tBR0VfTUlORVRFU1QKPiAraWYgQlIyX1BBQ0tBR0VfTFVBTlRJCj4gIAo+IC1jb25m
-aWcgQlIyX1BBQ0tBR0VfTUlORVRFU1RfQ0xJRU5UCj4gLQlib29sICJtaW5ldGVzdCBjbGllbnQi
-Cj4gK2NvbmZpZyBCUjJfUEFDS0FHRV9MVUFOVElfQ0xJRU5UCj4gKwlib29sICJsdWFudGkgY2xp
-ZW50Igo+ICAJc2VsZWN0IEJSMl9QQUNLQUdFX0JaSVAyCj4gIAlzZWxlY3QgQlIyX1BBQ0tBR0Vf
-RlJFRVRZUEUKPiAgCXNlbGVjdCBCUjJfUEFDS0FHRV9MSUJQTkcKPiBAQCAtMjksMzMgKzI5LDMz
-IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9NSU5FVEVTVF9DTElFTlQKPiAgCWhlbHAKPiAgCSAgQnVp
-bGQgTWluZXRlc3QgY2xpZW50LgoKQW4gdGhpcyDigJxCdWlsZCBMdWFudGkgY2xpZW50LuKAnQoK
-PiAgCj4gLWNvbmZpZyBCUjJfUEFDS0FHRV9NSU5FVEVTVF9TRVJWRVIKPiAtCWJvb2wgIm1pbmV0
-ZXN0IHNlcnZlciIKPiArY29uZmlnIEJSMl9QQUNLQUdFX0xVQU5USV9TRVJWRVIKPiArCWJvb2wg
-Imx1YW50aSBzZXJ2ZXIiCj4gIAloZWxwCj4gIAkgIEJ1aWxkIE1pbmV0ZXN0IHNlcnZlci4KCuKA
-nEJ1aWxkIEx1YW50aSBzZXJ2ZXLigJ0uCgo+ICAKPiAtY29uZmlnIEJSMl9QQUNLQUdFX01JTkVU
-RVNUX1NPVU5ECj4gK2NvbmZpZyBCUjJfUEFDS0FHRV9MVUFOVElfU09VTkQKPiAgCWJvb2wgImVu
-YWJsZSBzb3VuZCIKPiAtCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfTUlORVRFU1RfQ0xJRU5UCj4g
-KwlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0xVQU5USV9DTElFTlQKPiAgCWRlcGVuZHMgb24gQlIy
-X1BBQ0tBR0VfT1BFTkFMX0FSQ0hfU1VQUE9SVFMKPiAgCWRlcGVuZHMgb24gQlIyX1RPT0xDSEFJ
-Tl9IQVNfVEhSRUFEU19OUFRMICMgb3BlbmFsCj4gIAlzZWxlY3QgQlIyX1BBQ0tBR0VfTElCVk9S
-QklTCj4gIAlzZWxlY3QgQlIyX1BBQ0tBR0VfT1BFTkFMCj4gIAo+ICBjb21tZW50ICJzb3VuZCBz
-dXBwb3J0IG5lZWRzIGEgdG9vbGNoYWluIHcvIHRocmVhZHMgTlBUTCIKPiAtCWRlcGVuZHMgb24g
-QlIyX1BBQ0tBR0VfTUlORVRFU1RfQ0xJRU5UCj4gKwlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0xV
-QU5USV9DTElFTlQKPiAgCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfT1BFTkFMX0FSQ0hfU1VQUE9S
-VFMKPiAgCWRlcGVuZHMgb24gIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFNfTlBUTAo+ICAKPiAg
-ZW5kaWYKPiAgCj4gLWNvbW1lbnQgIm1pbmV0ZXN0IG5lZWRzIGEgdG9vbGNoYWluIHcvIEMrKywg
-Z2NjID49IDUuMSwgdGhyZWFkcyIKPiArY29tbWVudCAibHVhbnRpIG5lZWRzIGEgdG9vbGNoYWlu
-IHcvIEMrKywgZ2NjID49IDUuMSwgdGhyZWFkcyIKPiAgCWRlcGVuZHMgb24gQlIyX1BBQ0tBR0Vf
-TFVBSklUX0FSQ0hfU1VQUE9SVFMKPiAgCWRlcGVuZHMgb24gIUJSMl9JTlNUQUxMX0xJQlNURENQ
-UCBcCj4gIAkJfHwgIUJSMl9UT09MQ0hBSU5fR0NDX0FUX0xFQVNUXzUgXAo+ICAJCXx8ICFCUjJf
-VE9PTENIQUlOX0hBU19USFJFQURTCj4gIAo+IC1jb21tZW50ICJtaW5ldGVzdCBuZWVkcyBYMTEg
-YW5kIGFuIE9wZW5HTCBwcm92aWRlciIKPiArY29tbWVudCAibHVhbnRpIG5lZWRzIFgxMSBhbmQg
-YW4gT3BlbkdMIHByb3ZpZGVyIgo+ICAJZGVwZW5kcyBvbiAoQlIyX0lOU1RBTExfTElCU1REQ1BQ
-IFwKPiAgCQkmJiBCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF81IFwKPiAgCQkmJiBCUjJfVE9P
-TENIQUlOX0hBU19USFJFQURTKQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2x1YW50aS9sdWFudGku
-aGFzaCBiL3BhY2thZ2UvbHVhbnRpL2x1YW50aS5oYXNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQK
-PiBpbmRleCAwMDAwMDAwMDAwLi5hM2UyMTFjZDY2Cj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3Bh
-Y2thZ2UvbHVhbnRpL2x1YW50aS5oYXNoCj4gQEAgLTAsMCArMSw1IEBACj4gKyMgTG9jYWxseSBj
-YWxjdWxhdGVkCj4gK3NoYTI1NiAgNzBlNTMxZDA3NzY5ODhjZTZlNTc5ZWE1NDkwZmRmNmJlM2Uz
-NDlhNGFkZTUyODFmNTExMWFhNGZkZDhlZTUxMCAgbHVhbnRpLTUuMTEuMC50YXIuZ3oKPiArCj4g
-K3NoYTI1NiAgYjM4YzhkNDI4Y2VkZGY4ZTliNDlkY2E2MzYxMGM3NDQ5OWQ5NTI4OTVkNzU2Yjdl
-YWI1ZjVkNGNlZjI5NTRmNiAgTElDRU5TRS50eHQKPiArc2hhMjU2ICAyYzk0MzQ4ODZkMzE0NGVh
-ZDYwNmI5NTljZjYxZGM0MTkzNWQxNzU0YzA3NGY0NzM1NDFkYTRhM2RkNDA0ZWZhICBpcnIvTElD
-RU5TRQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2x1YW50aS9sdWFudGkubWsgYi9wYWNrYWdlL2x1
-YW50aS9sdWFudGkubWsKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAu
-LjRmMmRhNDFhMjEKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9sdWFudGkvbHVhbnRp
-Lm1rCj4gQEAgLTAsMCArMSw5MiBAQAo+ICsjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+ICsjCj4g
-KyMgbHVhbnRpCj4gKyMKPiArIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKPiArCj4gK0xVQU5USV9W
-RVJTSU9OID0gNS4xMS4wCj4gK0xVQU5USV9TT1VSQ0UgPSBsdWFudGktJChMVUFOVElfVkVSU0lP
-TikudGFyLmd6ICMgUmVtb3ZlIGFmdGVyIHJlbmFtZWQgcGFja2FnZQo+ICtMVUFOVElfU0lURSA9
-ICQoY2FsbCBnaXRodWIsbHVhbnRpLW9yZyxsdWFudGksJChMVUFOVElfVkVSU0lPTikpCj4gK0xV
-QU5USV9MSUNFTlNFID0gTEdQTC0yLjErIChjb2RlKSwgQ0MtQlktU0EtMy4wICh0ZXh0dXJlcyBh
-bmQgc291bmRzKSwgWmxpYiAoaXJybGljaHQpCj4gK0xVQU5USV9MSUNFTlNFX0ZJTEVTID0gTElD
-RU5TRS50eHQKPiArTFVBTlRJX0NQRV9JRF9WRU5ET1IgPSBsdWFudGkKPiArCj4gK0xVQU5USV9E
-RVBFTkRFTkNJRVMgPSBnbXAganNvbmNwcCBsdWFqaXQgc3FsaXRlIHpsaWIgenN0ZAo+ICsKPiAr
-TFVBTlRJX0NPTkZfT1BUUyA9IFwKPiArCS1EREVGQVVMVF9SVU5fSU5fUExBQ0U9T0ZGIFwKPiAr
-CS1ERU5BQkxFX0dMRVM9T0ZGIFwKPiArCS1ERU5BQkxFX0xVQUpJVD1PTiBcCj4gKwktREVOQUJM
-RV9DVVJTRVM9T0ZGIFwKPiArCS1EQVBQTFlfTE9DQUxFX0JMQUNLTElTVD1PRkYgXAo+ICsJLURF
-TkFCTEVfU1lTVEVNX0dNUD1PTiBcCj4gKwktREVOQUJMRV9TWVNURU1fSlNPTkNQUD1PTiBcCj4g
-KwktREJVSUxEX1VOSVRURVNUUz1PRkYKPiArCj4gKyMgRml4IHdyb25nIGNyb3NzIGNvbXBpbGlu
-ZyBjb25kaXRpb24gaW50byBgc3JjL0NNYWtlTGlzdGUudHh0YAo+ICtMVUFOVElfQ09ORl9PUFRT
-ICs9IFwKPiArCS1ERVhFQ1VUQUJMRV9PVVRQVVRfUEFUSD0iJChMVUFOVElfQlVJTERESVIpL2Jp
-biIKPiArCj4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfTFVBTlRJX0NMSUVOVCkseSkKPiArTFVBTlRJ
-X0RFUEVOREVOQ0lFUyArPSBiemlwMiBmcmVldHlwZSBqcGVnIGxpYmdsIGxpYnBuZyB4bGliX2xp
-YlhpCj4gK0xVQU5USV9DT05GX09QVFMgKz0gLURCVUlMRF9DTElFTlQ9T04KPiArZWxzZQo+ICtM
-VUFOVElfQ09ORl9PUFRTICs9IC1EQlVJTERfQ0xJRU5UPU9GRgo+ICtlbmRpZgo+ICsKPiAraWZl
-cSAoJChCUjJfUEFDS0FHRV9MVUFOVElfU0VSVkVSKSx5KQo+ICtMVUFOVElfQ09ORl9PUFRTICs9
-IC1EQlVJTERfU0VSVkVSPU9OCj4gK2Vsc2UKPiArTFVBTlRJX0NPTkZfT1BUUyArPSAtREJVSUxE
-X1NFUlZFUj1PRkYKPiArZW5kaWYKPiArCj4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfTFVBTlRJX1NP
-VU5EKSx5KQo+ICtMVUFOVElfREVQRU5ERU5DSUVTICs9IGxpYnZvcmJpcyBvcGVuYWwKPiArTFVB
-TlRJX0NPTkZfT1BUUyArPSAtREVOQUJMRV9TT1VORD1PTgo+ICtlbHNlCj4gK0xVQU5USV9DT05G
-X09QVFMgKz0gLURFTkFCTEVfU09VTkQ9T0ZGCj4gK2VuZGlmCj4gKwo+ICtpZmVxICgkKEJSMl9Q
-QUNLQUdFX0hJUkVESVMpLHkpCj4gK0xVQU5USV9ERVBFTkRFTkNJRVMgKz0gaGlyZWRpcwo+ICtM
-VUFOVElfQ09ORl9PUFRTICs9IC1ERU5BQkxFX1JFRElTPU9OCj4gK2Vsc2UKPiArTFVBTlRJX0NP
-TkZfT1BUUyArPSAtREVOQUJMRV9SRURJUz1PRkYKPiArZW5kaWYKPiArCj4gK2lmZXEgKCQoQlIy
-X1BBQ0tBR0VfTEVWRUxEQikseSkKPiArTFVBTlRJX0RFUEVOREVOQ0lFUyArPSBsZXZlbGRiCj4g
-K0xVQU5USV9DT05GX09QVFMgKz0gLURFTkFCTEVfTEVWRUxEQj1PTgo+ICtlbHNlCj4gK0xVQU5U
-SV9DT05GX09QVFMgKz0gLURFTkFCTEVfTEVWRUxEQj1PRkYKPiArZW5kaWYKPiArCj4gK2lmZXEg
-KCQoQlIyX1BBQ0tBR0VfTElCQ1VSTCkseSkKPiArTFVBTlRJX0RFUEVOREVOQ0lFUyArPSBsaWJj
-dXJsCj4gK0xVQU5USV9DT05GX09QVFMgKz0gLURFTkFCTEVfQ1VSTD1PTgo+ICtlbHNlCj4gK0xV
-QU5USV9DT05GX09QVFMgKz0gLURFTkFCTEVfQ1VSTD1PRkYKPiArZW5kaWYKPiArCj4gK2lmZXEg
-KCQoQlIyX1BBQ0tBR0VfTElCU1BBVElBTElOREVYKSx5KQo+ICtMVUFOVElfREVQRU5ERU5DSUVT
-ICs9IGxpYnNwYXRpYWxpbmRleAo+ICtMVUFOVElfQ09ORl9PUFRTICs9IC1ERU5BQkxFX1NQQVRJ
-QUw9T04KPiArZWxzZQo+ICtMVUFOVElfQ09ORl9PUFRTICs9IC1ERU5BQkxFX1NQQVRJQUw9T0ZG
-Cj4gK2VuZGlmCj4gKwo+ICtpZmVxICgkKEJSMl9QQUNLQUdFX1BPU1RHUkVTUUwpLHkpCj4gK0xV
-QU5USV9ERVBFTkRFTkNJRVMgKz0gcG9zdGdyZXNxbAo+ICtMVUFOVElfQ09ORl9PUFRTICs9IC1E
-RU5BQkxFX1BPU1RHUkVTUUw9T04KPiArZWxzZQo+ICtMVUFOVElfQ09ORl9PUFRTICs9IC1ERU5B
-QkxFX1BPU1RHUkVTUUw9T0ZGCj4gK2VuZGlmCj4gKwo+ICtpZmVxICgkKEJSMl9TWVNURU1fRU5B
-QkxFX05MUykseSkKPiArTFVBTlRJX0RFUEVOREVOQ0lFUyArPSAkKFRBUkdFVF9OTFNfREVQRU5E
-RU5DSUVTKQo+ICtMVUFOVElfQ09ORl9PUFRTICs9IC1ERU5BQkxFX0dFVFRFWFQ9T04KPiArZWxz
-ZQo+ICtMVUFOVElfQ09ORl9PUFRTICs9IC1ERU5BQkxFX0dFVFRFWFQ9T0ZGCj4gK2VuZGlmCj4g
-Kwo+ICskKGV2YWwgJChjbWFrZS1wYWNrYWdlKSkKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9taW5l
-Y2xvbmlhL0NvbmZpZy5pbiBiL3BhY2thZ2UvbWluZWNsb25pYS9Db25maWcuaW4KPiBpbmRleCAw
-M2NhMTE3YTgyLi5kYjRlYjkyM2MwIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbWluZWNsb25pYS9D
-b25maWcuaW4KPiArKysgYi9wYWNrYWdlL21pbmVjbG9uaWEvQ29uZmlnLmluCj4gQEAgLTEsNiAr
-MSw2IEBACj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9NSU5FQ0xPTklBCj4gIAlib29sICJtaW5lY2xv
-bmlhIgo+IC0JZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9NSU5FVEVTVAo+ICsJZGVwZW5kcyBvbiBC
-UjJfUEFDS0FHRV9MVUFOVEkKPiAgCWhlbHAKPiAgCSAgVGhlIG1haW4gc3ViZ2FtZSBmb3IgdGhl
-IE1pbmV0ZXN0IGVuZ2luZS4KCuKAnOKApiBmb3IgdGhlIEx1YW50aSBlbmdpbmXigJ0uCgo+ICAK
-PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9taW5lY2xvbmlhL21pbmVjbG9uaWEubWsgYi9wYWNrYWdl
-L21pbmVjbG9uaWEvbWluZWNsb25pYS5tawo+IGluZGV4IGVhM2NjOTk2ZDAuLmViNjllZWFhYjkg
-MTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9taW5lY2xvbmlhL21pbmVjbG9uaWEubWsKPiArKysgYi9w
-YWNrYWdlL21pbmVjbG9uaWEvbWluZWNsb25pYS5tawo+IEBAIC00NSw4ICs0NSw4IEBAIE1JTkVD
-TE9OSUFfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UudHh0IFwKPiAgCW1vZHMveHBhbmVzL2xpY2Vu
-c2UudHh0Cj4gIAo+ICBkZWZpbmUgTUlORUNMT05JQV9JTlNUQUxMX1RBUkdFVF9DTURTCj4gLQlt
-a2RpciAtcCAkKFRBUkdFVF9ESVIpL3Vzci9zaGFyZS9taW5ldGVzdC9nYW1lcy9taW5lY2xvbmlh
-Cj4gLQljcCAtZHBmciAkKEBEKS8qICQoVEFSR0VUX0RJUikvdXNyL3NoYXJlL21pbmV0ZXN0L2dh
-bWVzL21pbmVjbG9uaWEKPiArCW1rZGlyIC1wICQoVEFSR0VUX0RJUikvdXNyL3NoYXJlL2x1YW50
-aS9nYW1lcy9taW5lY2xvbmlhCj4gKwljcCAtZHBmciAkKEBEKS8qICQoVEFSR0VUX0RJUikvdXNy
-L3NoYXJlL2x1YW50aS9nYW1lcy9taW5lY2xvbmlhCj4gIGVuZGVmCj4gIAo+ICAkKGV2YWwgJChn
-ZW5lcmljLXBhY2thZ2UpKQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL21pbmV0ZXN0LWdhbWUvQ29u
-ZmlnLmluIGIvcGFja2FnZS9taW5ldGVzdC1nYW1lL0NvbmZpZy5pbgo+IGluZGV4IGNmOTJlYTUy
-NDEuLjJiODgzMWJlZDUgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9taW5ldGVzdC1nYW1lL0NvbmZp
-Zy5pbgo+ICsrKyBiL3BhY2thZ2UvbWluZXRlc3QtZ2FtZS9Db25maWcuaW4KPiBAQCAtMSw3ICsx
-LDcgQEAKPiAgY29uZmlnIEJSMl9QQUNLQUdFX01JTkVURVNUX0dBTUUKPiAgCWJvb2wgIm1pbmV0
-ZXN0LWdhbWUiCj4gLQlkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX01JTkVURVNUCj4gKwlkZXBlbmRz
-IG9uIEJSMl9QQUNLQUdFX0xVQU5USQo+ICAJaGVscAo+ICAJICBUaGUgbWFpbiBzdWJnYW1lIGZv
-ciB0aGUgTWluZXRlc3QgZW5naW5lLgoK4oCddGhlIEx1YW50aSBlbmdpbmXigJ0uCgpSZWdhcmRz
-LAoKRWRnYXIuCgo+ICAKPiAtCSAgaHR0cHM6Ly9naXRodWIuY29tL21pbmV0ZXN0L21pbmV0ZXN0
-X2dhbWUKPiArCSAgaHR0cHM6Ly9naXRodWIuY29tL2x1YW50aS1vcmcvbWluZXRlc3RfZ2FtZQo+
-IGRpZmYgLS1naXQgYS9wYWNrYWdlL21pbmV0ZXN0LWdhbWUvbWluZXRlc3QtZ2FtZS5tayBiL3Bh
-Y2thZ2UvbWluZXRlc3QtZ2FtZS9taW5ldGVzdC1nYW1lLm1rCj4gaW5kZXggNmI2MTFiZTBiNy4u
-NDFiMDMyZTk0NyAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL21pbmV0ZXN0LWdhbWUvbWluZXRlc3Qt
-Z2FtZS5tawo+ICsrKyBiL3BhY2thZ2UvbWluZXRlc3QtZ2FtZS9taW5ldGVzdC1nYW1lLm1rCj4g
-QEAgLTUsNyArNSw3IEBACj4gICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gIAo+ICBNSU5FVEVT
-VF9HQU1FX1ZFUlNJT04gPSA1LjguMAo+IC1NSU5FVEVTVF9HQU1FX1NJVEUgPSAkKGNhbGwgZ2l0
-aHViLG1pbmV0ZXN0LG1pbmV0ZXN0X2dhbWUsJChNSU5FVEVTVF9HQU1FX1ZFUlNJT04pKQo+ICtN
-SU5FVEVTVF9HQU1FX1NJVEUgPSAkKGNhbGwgZ2l0aHViLGx1YW50aS1vcmcsbWluZXRlc3RfZ2Ft
-ZSwkKE1JTkVURVNUX0dBTUVfVkVSU0lPTikpCj4gIE1JTkVURVNUX0dBTUVfTElDRU5TRSA9IExH
-UEwtMi4xKyAoY29kZSksIENDLUJZLVNBLTIuMCwgQ0MtQlktU0EtMy4wLCBcCj4gIAlDQy1CWS1T
-QS00LjAsIE1JVCwgQ0MwIDEuMCwgQ0MtQlktMi4wIChtb2RzKQo+ICBNSU5FVEVTVF9HQU1FX0xJ
-Q0VOU0VfRklMRVMgPSBMSUNFTlNFLnR4dCBcCj4gQEAgLTQ1LDggKzQ1LDggQEAgTUlORVRFU1Rf
-R0FNRV9MSUNFTlNFX0ZJTEVTID0gTElDRU5TRS50eHQgXAo+ICAJbW9kcy94cGFuZXMvbGljZW5z
-ZS50eHQKPiAgCj4gIGRlZmluZSBNSU5FVEVTVF9HQU1FX0lOU1RBTExfVEFSR0VUX0NNRFMKPiAt
-CW1rZGlyIC1wICQoVEFSR0VUX0RJUikvdXNyL3NoYXJlL21pbmV0ZXN0L2dhbWVzL21pbmV0ZXN0
-X2dhbWUKPiAtCWNwIC1kcGZyICQoQEQpLyogJChUQVJHRVRfRElSKS91c3Ivc2hhcmUvbWluZXRl
-c3QvZ2FtZXMvbWluZXRlc3RfZ2FtZQo+ICsJbWtkaXIgLXAgJChUQVJHRVRfRElSKS91c3Ivc2hh
-cmUvbHVhbnRpL2dhbWVzL21pbmV0ZXN0X2dhbWUKPiArCWNwIC1kcGZyICQoQEQpLyogJChUQVJH
-RVRfRElSKS91c3Ivc2hhcmUvbHVhbnRpL2dhbWVzL21pbmV0ZXN0X2dhbWUKPiAgZW5kZWYKPiAg
-Cj4gICQoZXZhbCAkKGdlbmVyaWMtcGFja2FnZSkpCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbWlu
-ZXRlc3QvbWluZXRlc3QuaGFzaCBiL3BhY2thZ2UvbWluZXRlc3QvbWluZXRlc3QuaGFzaAo+IGRl
-bGV0ZWQgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDVkODU5Mzg0Y2EuLjAwMDAwMDAwMDAKPiAt
-LS0gYS9wYWNrYWdlL21pbmV0ZXN0L21pbmV0ZXN0Lmhhc2gKPiArKysgL2Rldi9udWxsCj4gQEAg
-LTEsNCArMCwwIEBACj4gLSMgTG9jYWxseSBjYWxjdWxhdGVkCj4gLXNoYTI1NiAgZjgxNzM0MzY3
-ODJiNWEyNTQ0YWExOWM1NGY1NzJhODE4MzFiNmNmYzg5NDgwNzM3Y2NmNjc2ODk5MmM2NTFlYSAg
-bWluZXRlc3QtNS45LjEudGFyLmd6Cj4gLQo+IC1zaGEyNTYgIGIzOGM4ZDQyOGNlZGRmOGU5YjQ5
-ZGNhNjM2MTBjNzQ0OTlkOTUyODk1ZDc1NmI3ZWFiNWY1ZDRjZWYyOTU0ZjYgIExJQ0VOU0UudHh0
-Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbWluZXRlc3QvbWluZXRlc3QubWsgYi9wYWNrYWdlL21p
-bmV0ZXN0L21pbmV0ZXN0Lm1rCj4gZGVsZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggYjA3
-ZWE1N2VhNy4uMDAwMDAwMDAwMAo+IC0tLSBhL3BhY2thZ2UvbWluZXRlc3QvbWluZXRlc3QubWsK
-PiArKysgL2Rldi9udWxsCj4gQEAgLTEsODcgKzAsMCBAQAo+IC0jIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIwo+IC0jCj4gLSMgbWluZXRlc3QKPiAtIwo+IC0jIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+
-IC0KPiAtTUlORVRFU1RfVkVSU0lPTiA9IDUuOS4xCj4gLU1JTkVURVNUX1NJVEUgPSAkKGNhbGwg
-Z2l0aHViLG1pbmV0ZXN0LG1pbmV0ZXN0LCQoTUlORVRFU1RfVkVSU0lPTikpCj4gLU1JTkVURVNU
-X0xJQ0VOU0UgPSBMR1BMLTIuMSsgKGNvZGUpLCBDQy1CWS1TQS0zLjAgKHRleHR1cmVzIGFuZCBz
-b3VuZHMpCj4gLU1JTkVURVNUX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFLnR4dAo+IC1NSU5FVEVT
-VF9DUEVfSURfVkVORE9SID0gbWluZXRlc3QKPiAtCj4gLU1JTkVURVNUX0RFUEVOREVOQ0lFUyA9
-IGdtcCBqc29uY3BwIGx1YWppdCBzcWxpdGUgemxpYiB6c3RkCj4gLQo+IC1NSU5FVEVTVF9DT05G
-X09QVFMgPSBcCj4gLQktRERFRkFVTFRfUlVOX0lOX1BMQUNFPU9GRiBcCj4gLQktREVOQUJMRV9H
-TEVTPU9GRiBcCj4gLQktREVOQUJMRV9MVUFKSVQ9T04gXAo+IC0JLURFTkFCTEVfQ1VSU0VTPU9G
-RiBcCj4gLQktREFQUExZX0xPQ0FMRV9CTEFDS0xJU1Q9T0ZGIFwKPiAtCS1ERU5BQkxFX1NZU1RF
-TV9HTVA9T04gXAo+IC0JLURFTkFCTEVfU1lTVEVNX0pTT05DUFA9T04gXAo+IC0JLURCVUlMRF9V
-TklUVEVTVFM9T0ZGCj4gLQo+IC1pZmVxICgkKEJSMl9QQUNLQUdFX01JTkVURVNUX0NMSUVOVCks
-eSkKPiAtTUlORVRFU1RfREVQRU5ERU5DSUVTICs9IGJ6aXAyIGZyZWV0eXBlIGpwZWcgbGliZ2wg
-bGlicG5nIHhsaWJfbGliWGkKPiAtTUlORVRFU1RfQ09ORl9PUFRTICs9IC1EQlVJTERfQ0xJRU5U
-PU9OCj4gLWVsc2UKPiAtTUlORVRFU1RfQ09ORl9PUFRTICs9IC1EQlVJTERfQ0xJRU5UPU9GRgo+
-IC1lbmRpZgo+IC0KPiAtaWZlcSAoJChCUjJfUEFDS0FHRV9NSU5FVEVTVF9TRVJWRVIpLHkpCj4g
-LU1JTkVURVNUX0NPTkZfT1BUUyArPSAtREJVSUxEX1NFUlZFUj1PTgo+IC1lbHNlCj4gLU1JTkVU
-RVNUX0NPTkZfT1BUUyArPSAtREJVSUxEX1NFUlZFUj1PRkYKPiAtZW5kaWYKPiAtCj4gLWlmZXEg
-KCQoQlIyX1BBQ0tBR0VfTUlORVRFU1RfU09VTkQpLHkpCj4gLU1JTkVURVNUX0RFUEVOREVOQ0lF
-UyArPSBsaWJ2b3JiaXMgb3BlbmFsCj4gLU1JTkVURVNUX0NPTkZfT1BUUyArPSAtREVOQUJMRV9T
-T1VORD1PTgo+IC1lbHNlCj4gLU1JTkVURVNUX0NPTkZfT1BUUyArPSAtREVOQUJMRV9TT1VORD1P
-RkYKPiAtZW5kaWYKPiAtCj4gLWlmZXEgKCQoQlIyX1BBQ0tBR0VfSElSRURJUykseSkKPiAtTUlO
-RVRFU1RfREVQRU5ERU5DSUVTICs9IGhpcmVkaXMKPiAtTUlORVRFU1RfQ09ORl9PUFRTICs9IC1E
-RU5BQkxFX1JFRElTPU9OCj4gLWVsc2UKPiAtTUlORVRFU1RfQ09ORl9PUFRTICs9IC1ERU5BQkxF
-X1JFRElTPU9GRgo+IC1lbmRpZgo+IC0KPiAtaWZlcSAoJChCUjJfUEFDS0FHRV9MRVZFTERCKSx5
-KQo+IC1NSU5FVEVTVF9ERVBFTkRFTkNJRVMgKz0gbGV2ZWxkYgo+IC1NSU5FVEVTVF9DT05GX09Q
-VFMgKz0gLURFTkFCTEVfTEVWRUxEQj1PTgo+IC1lbHNlCj4gLU1JTkVURVNUX0NPTkZfT1BUUyAr
-PSAtREVOQUJMRV9MRVZFTERCPU9GRgo+IC1lbmRpZgo+IC0KPiAtaWZlcSAoJChCUjJfUEFDS0FH
-RV9MSUJDVVJMKSx5KQo+IC1NSU5FVEVTVF9ERVBFTkRFTkNJRVMgKz0gbGliY3VybAo+IC1NSU5F
-VEVTVF9DT05GX09QVFMgKz0gLURFTkFCTEVfQ1VSTD1PTgo+IC1lbHNlCj4gLU1JTkVURVNUX0NP
-TkZfT1BUUyArPSAtREVOQUJMRV9DVVJMPU9GRgo+IC1lbmRpZgo+IC0KPiAtaWZlcSAoJChCUjJf
-UEFDS0FHRV9MSUJTUEFUSUFMSU5ERVgpLHkpCj4gLU1JTkVURVNUX0RFUEVOREVOQ0lFUyArPSBs
-aWJzcGF0aWFsaW5kZXgKPiAtTUlORVRFU1RfQ09ORl9PUFRTICs9IC1ERU5BQkxFX1NQQVRJQUw9
-T04KPiAtZWxzZQo+IC1NSU5FVEVTVF9DT05GX09QVFMgKz0gLURFTkFCTEVfU1BBVElBTD1PRkYK
-PiAtZW5kaWYKPiAtCj4gLWlmZXEgKCQoQlIyX1BBQ0tBR0VfUE9TVEdSRVNRTCkseSkKPiAtTUlO
-RVRFU1RfREVQRU5ERU5DSUVTICs9IHBvc3RncmVzcWwKPiAtTUlORVRFU1RfQ09ORl9PUFRTICs9
-IC1ERU5BQkxFX1BPU1RHUkVTUUw9T04KPiAtZWxzZQo+IC1NSU5FVEVTVF9DT05GX09QVFMgKz0g
-LURFTkFCTEVfUE9TVEdSRVNRTD1PRkYKPiAtZW5kaWYKPiAtCj4gLWlmZXEgKCQoQlIyX1NZU1RF
-TV9FTkFCTEVfTkxTKSx5KQo+IC1NSU5FVEVTVF9ERVBFTkRFTkNJRVMgKz0gJChUQVJHRVRfTkxT
-X0RFUEVOREVOQ0lFUykKPiAtTUlORVRFU1RfQ09ORl9PUFRTICs9IC1ERU5BQkxFX0dFVFRFWFQ9
-T04KPiAtZWxzZQo+IC1NSU5FVEVTVF9DT05GX09QVFMgKz0gLURFTkFCTEVfR0VUVEVYVD1PRkYK
-PiAtZW5kaWYKPiAtCj4gLSQoZXZhbCAkKGNtYWtlLXBhY2thZ2UpKQoKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=5468334bb000118664ecf3b495f20f841fcc2708
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+For change log, see:
+https://docs.python.org/release/3.13.3/whatsnew/changelog.html#python-3-13-3-final
+
+Drop backported patches which have been included in the release.
+
+Fixup the tk module patch to apply cleanly on 3.13.3
+
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+[Julien: add link to change log]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...06-Add-an-option-to-disable-the-tk-module.patch |  12 +--
+ ...-thread-identifiers-on-32-bit-musl-builds.patch | 100 ---------------------
+ ...296-Fix-pyatomic.h-include-paths-GH-12932.patch |  63 -------------
+ ...675-Fix-mi_atomic_yield-in-mimalloc-on-32.patch |  80 -----------------
+ package/python3/python3.hash                       |   6 +-
+ package/python3/python3.mk                         |   2 +-
+ 6 files changed, 11 insertions(+), 252 deletions(-)
+
+diff --git a/package/python3/0006-Add-an-option-to-disable-the-tk-module.patch b/package/python3/0006-Add-an-option-to-disable-the-tk-module.patch
+index 6dc5d9f837..054a676b03 100644
+--- a/package/python3/0006-Add-an-option-to-disable-the-tk-module.patch
++++ b/package/python3/0006-Add-an-option-to-disable-the-tk-module.patch
+@@ -1,4 +1,4 @@
+-From 0b04847e1007f5d34b986eb12ae63f140d14b01e Mon Sep 17 00:00:00 2001
++From bd14e6f232232c11b67477a5d8f0caf174a089d0 Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ Date: Wed, 22 Feb 2017 17:23:42 -0800
+ Subject: [PATCH] Add an option to disable the tk module
+@@ -17,13 +17,15 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+ [ Vincent Fazio: ported to Python 3.13.2 ]
+ Signed-off-by: Vincent Fazio <vfazio@gmail.com>
++[ Vincent Fazio: fix Python 3.13.3 conflict ]
++Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+ ---
+  Makefile.pre.in | 8 +++++---
+  configure.ac    | 7 +++++++
+  2 files changed, 12 insertions(+), 3 deletions(-)
+ 
+ diff --git a/Makefile.pre.in b/Makefile.pre.in
+-index 88a48eb5333..6d6631cbe31 100644
++index 0f394d6ece4..a44307a0fb1 100644
+ --- a/Makefile.pre.in
+ +++ b/Makefile.pre.in
+ @@ -2331,7 +2331,6 @@ LIBSUBDIRS=	asyncio \
+@@ -42,15 +44,15 @@ index 88a48eb5333..6d6631cbe31 100644
+  		test/test_tomllib \
+  		test/test_tomllib/data \
+  		test/test_tomllib/data/invalid \
+-@@ -2460,7 +2458,6 @@ TESTSUBDIRS=	idlelib/idle_test \
+- 		test/test_tomllib/data/valid/multiline-basic-str \
++@@ -2461,7 +2459,6 @@ TESTSUBDIRS=	idlelib/idle_test \
+  		test/test_tools \
+  		test/test_tools/i18n_data \
++ 		test/test_tools/msgfmt_data \
+ -		test/test_ttk \
+  		test/test_unittest \
+  		test/test_unittest/testmock \
+  		test/test_warnings \
+-@@ -2482,6 +2479,11 @@ TESTSUBDIRS=	idlelib/idle_test \
++@@ -2483,6 +2480,11 @@ TESTSUBDIRS=	idlelib/idle_test \
+  		test/xmltestdata/c14n-20 \
+  		test/zipimport_data
+  
+diff --git a/package/python3/0009-Fix-thread-identifiers-on-32-bit-musl-builds.patch b/package/python3/0009-Fix-thread-identifiers-on-32-bit-musl-builds.patch
+deleted file mode 100644
+index cb5a67ad6e..0000000000
+--- a/package/python3/0009-Fix-thread-identifiers-on-32-bit-musl-builds.patch
++++ /dev/null
+@@ -1,100 +0,0 @@
+-From 8a8f8d72212d043469ef33549e8edc3bce244516 Mon Sep 17 00:00:00 2001
+-From: Vincent Fazio <vfazio@gmail.com>
+-Date: Sat, 22 Feb 2025 19:43:26 -0600
+-Subject: [PATCH] Fix thread identifiers on 32-bit musl builds
+-
+-CPython's pthread-based thread identifier relies on pthread_t being able
+-to be represented as an unsigned integer type.
+-
+-This is true in most Linux libc implementations where it's defined as an
+-unsigned long, however musl typedefs it as a struct *.
+-
+-If the pointer has the high bit set and is cast to PyThread_ident_t, the
+-resultant value can be sign-extended [0]. This can cause issues when
+-comparing against threading._MainThread's identifier. The main thread's
+-identifier value is retrieved via _get_main_thread_ident which is backed
+-by an unsigned long which truncates sign extended bits.
+-
+-  >>> hex(threading.main_thread().ident)
+-  '0xb6f33f3c'
+-  >>> hex(threading.current_thread().ident)
+-  '0xffffffffb6f33f3c'
+-
+-Fix this by compiling in code targeting non-glibc based Linux platforms
+-to cast the pthread_t to a uintptr and then to PyThread_ident_t.
+-
+-Upstream: https://github.com/python/cpython/pull/130391
+-[0]: https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/Arrays-and-pointers-implementation.html
+-
+-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+----
+- Python/thread_pthread.h | 31 ++++++++++++++++++++++---------
+- 1 file changed, 22 insertions(+), 9 deletions(-)
+-
+-diff --git a/Python/thread_pthread.h b/Python/thread_pthread.h
+-index f588b4620da..84900c86401 100644
+---- a/Python/thread_pthread.h
+-+++ b/Python/thread_pthread.h
+-@@ -307,6 +307,25 @@ do_start_joinable_thread(void (*func)(void *), void *arg, pthread_t* out_id)
+-     return 0;
+- }
+- 
+-+/* Helper to convert pthread_t to PyThread_ident_t. POSIX allows pthread_t to be
+-+   non-arithmetic, e.g., musl typedefs it as a pointer */
+-+static PyThread_ident_t
+-+_pthread_t_to_ident(pthread_t value) {
+-+#if SIZEOF_PTHREAD_T > SIZEOF_LONG
+-+    return (PyThread_ident_t) *(unsigned long *) &value;
+-+#else
+-+    PyThread_ident_t ident;
+-+#if defined(__linux__) && !defined(__GLIBC__)
+-+    ident = (PyThread_ident_t) (uintptr_t) value;
+-+    assert(pthread_equal(value, (pthread_t) (uintptr_t) ident));
+-+#else
+-+    ident = (PyThread_ident_t) value;
+-+    assert(pthread_equal(value, (pthread_t) ident));
+-+#endif
+-+    return ident;
+-+#endif  // SIZEOF_PTHREAD_T > SIZEOF_LONG
+-+}
+-+
+- int
+- PyThread_start_joinable_thread(void (*func)(void *), void *arg,
+-                                PyThread_ident_t* ident, PyThread_handle_t* handle) {
+-@@ -314,9 +333,8 @@ PyThread_start_joinable_thread(void (*func)(void *), void *arg,
+-     if (do_start_joinable_thread(func, arg, &th)) {
+-         return -1;
+-     }
+--    *ident = (PyThread_ident_t) th;
+-+    *ident = _pthread_t_to_ident(th);
+-     *handle = (PyThread_handle_t) th;
+--    assert(th == (pthread_t) *ident);
+-     assert(th == (pthread_t) *handle);
+-     return 0;
+- }
+-@@ -329,11 +347,7 @@ PyThread_start_new_thread(void (*func)(void *), void *arg)
+-         return PYTHREAD_INVALID_THREAD_ID;
+-     }
+-     pthread_detach(th);
+--#if SIZEOF_PTHREAD_T <= SIZEOF_LONG
+--    return (unsigned long) th;
+--#else
+--    return (unsigned long) *(unsigned long *) &th;
+--#endif
+-+    return (unsigned long) _pthread_t_to_ident(th);;
+- }
+- 
+- int
+-@@ -358,8 +372,7 @@ PyThread_get_thread_ident_ex(void) {
+-     if (!initialized)
+-         PyThread_init_thread();
+-     threadid = pthread_self();
+--    assert(threadid == (pthread_t) (PyThread_ident_t) threadid);
+--    return (PyThread_ident_t) threadid;
+-+    return _pthread_t_to_ident(threadid);
+- }
+- 
+- unsigned long
+--- 
+-2.34.1
+-
+diff --git a/package/python3/0010-3.13-gh-129296-Fix-pyatomic.h-include-paths-GH-12932.patch b/package/python3/0010-3.13-gh-129296-Fix-pyatomic.h-include-paths-GH-12932.patch
+deleted file mode 100644
+index 00451af9bf..0000000000
+--- a/package/python3/0010-3.13-gh-129296-Fix-pyatomic.h-include-paths-GH-12932.patch
++++ /dev/null
+@@ -1,63 +0,0 @@
+-From 0ee012224447b6ec7f6f20d316b24449fdcc0d4b Mon Sep 17 00:00:00 2001
+-From: "Miss Islington (bot)"
+- <31488909+miss-islington@users.noreply.github.com>
+-Date: Fri, 28 Feb 2025 09:22:15 +0100
+-Subject: [PATCH] [3.13] gh-129296: Fix `pyatomic.h` include paths (GH-129320)
+- (#130667)
+-
+-gh-129296: Fix `pyatomic.h` include paths (GH-129320)
+-
+-Use relative includes in Include/cpython/pyatomic.h for
+-pyatomic_gcc.h, pyatomic_std.h and pyatomic_msc.h.
+-
+-Do a similar change in Include/cpython/pythread.h for
+-pthread_stubs.h include.
+-(cherry picked from commit 3a974e39d54902699f360bc4db2fd351a6baf3ef)
+-
+-Co-authored-by: Zanie Blue <contact@zanie.dev>
+-Upstream: 125ca028664ce72556e3983b57f521a118c4e677
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- Include/cpython/pyatomic.h | 6 +++---
+- Include/cpython/pythread.h | 2 +-
+- 2 files changed, 4 insertions(+), 4 deletions(-)
+-
+-diff --git a/Include/cpython/pyatomic.h b/Include/cpython/pyatomic.h
+-index 4ecef4f56ed..28029859d3d 100644
+---- a/Include/cpython/pyatomic.h
+-+++ b/Include/cpython/pyatomic.h
+-@@ -529,15 +529,15 @@ static inline void _Py_atomic_fence_release(void);
+- 
+- #if _Py_USE_GCC_BUILTIN_ATOMICS
+- #  define Py_ATOMIC_GCC_H
+--#  include "cpython/pyatomic_gcc.h"
+-+#  include "pyatomic_gcc.h"
+- #  undef Py_ATOMIC_GCC_H
+- #elif __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_ATOMICS__)
+- #  define Py_ATOMIC_STD_H
+--#  include "cpython/pyatomic_std.h"
+-+#  include "pyatomic_std.h"
+- #  undef Py_ATOMIC_STD_H
+- #elif defined(_MSC_VER)
+- #  define Py_ATOMIC_MSC_H
+--#  include "cpython/pyatomic_msc.h"
+-+#  include "pyatomic_msc.h"
+- #  undef Py_ATOMIC_MSC_H
+- #else
+- #  error "no available pyatomic implementation for this platform/compiler"
+-diff --git a/Include/cpython/pythread.h b/Include/cpython/pythread.h
+-index 03f710a9f7e..e658b35bd90 100644
+---- a/Include/cpython/pythread.h
+-+++ b/Include/cpython/pythread.h
+-@@ -22,7 +22,7 @@ PyAPI_DATA(const long long) PY_TIMEOUT_MAX;
+-     */
+- #   define NATIVE_TSS_KEY_T     unsigned long
+- #elif defined(HAVE_PTHREAD_STUBS)
+--#   include "cpython/pthread_stubs.h"
+-+#   include "pthread_stubs.h"
+- #   define NATIVE_TSS_KEY_T     pthread_key_t
+- #else
+- #   error "Require native threads. See https://bugs.python.org/issue31370"
+--- 
+-2.48.1
+-
+diff --git a/package/python3/0011-3.13-gh-131675-Fix-mi_atomic_yield-in-mimalloc-on-32.patch b/package/python3/0011-3.13-gh-131675-Fix-mi_atomic_yield-in-mimalloc-on-32.patch
+deleted file mode 100644
+index b4ecde94ee..0000000000
+--- a/package/python3/0011-3.13-gh-131675-Fix-mi_atomic_yield-in-mimalloc-on-32.patch
++++ /dev/null
+@@ -1,80 +0,0 @@
+-From a9aae012b4ee83f1aba7c122943c63b69c5b9f97 Mon Sep 17 00:00:00 2001
+-From: "Miss Islington (bot)"
+- <31488909+miss-islington@users.noreply.github.com>
+-Date: Mon, 31 Mar 2025 20:58:29 +0200
+-Subject: [PATCH] [3.13] gh-131675: Fix `mi_atomic_yield` in mimalloc on 32-bit
+- ARM (gh-131784) (gh-131954)
+-
+-Use the standard `__ARM_ARCH` macro, which is supported by GCC and Clang.
+-
+-The branching logic for of `__ARMEL__` has been removed so if the target
+-architecture supports v7+ instructions, a yield is emitted, otherwise a nop
+-is emitted. This covers both big and little endian scenarios.
+-(cherry picked from commit 03f6c8e239723637811fd8d278661f5292351197)
+-
+-Upstream: https://github.com/python/cpython/pull/131954
+-
+-Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+-Co-authored-by: Vincent Fazio <vfazio@gmail.com>
+-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+----
+- Include/internal/mimalloc/mimalloc/atomic.h     | 17 ++++++++++-------
+- ...25-03-27-01-21-50.gh-issue-131675.l2zfOO.rst |  1 +
+- 2 files changed, 11 insertions(+), 7 deletions(-)
+- create mode 100644 Misc/NEWS.d/next/Build/2025-03-27-01-21-50.gh-issue-131675.l2zfOO.rst
+-
+-diff --git a/Include/internal/mimalloc/mimalloc/atomic.h b/Include/internal/mimalloc/mimalloc/atomic.h
+-index 1093c540864..a46a7676ad2 100644
+---- a/Include/internal/mimalloc/mimalloc/atomic.h
+-+++ b/Include/internal/mimalloc/mimalloc/atomic.h
+-@@ -338,8 +338,9 @@ static inline void mi_atomic_yield(void) {
+-   _mm_pause();
+- }
+- #elif (defined(__GNUC__) || defined(__clang__)) && \
+--      (defined(__x86_64__) || defined(__i386__) || defined(__arm__) || defined(__armel__) || defined(__ARMEL__) || \
+--       defined(__aarch64__) || defined(__powerpc__) || defined(__ppc__) || defined(__PPC__)) || defined(__POWERPC__)
+-+      (defined(__x86_64__) || defined(__i386__) || \
+-+       defined(__aarch64__) || defined(__arm__) || \
+-+       defined(__powerpc__) || defined(__ppc__) || defined(__PPC__) || defined(__POWERPC__))
+- #if defined(__x86_64__) || defined(__i386__)
+- static inline void mi_atomic_yield(void) {
+-   __asm__ volatile ("pause" ::: "memory");
+-@@ -348,10 +349,16 @@ static inline void mi_atomic_yield(void) {
+- static inline void mi_atomic_yield(void) {
+-   __asm__ volatile("wfe");
+- }
+--#elif (defined(__arm__) && __ARM_ARCH__ >= 7)
+-+#elif defined(__arm__)
+-+#if __ARM_ARCH >= 7
+- static inline void mi_atomic_yield(void) {
+-   __asm__ volatile("yield" ::: "memory");
+- }
+-+#else
+-+static inline void mi_atomic_yield(void) {
+-+  __asm__ volatile ("nop" ::: "memory");
+-+}
+-+#endif
+- #elif defined(__powerpc__) || defined(__ppc__) || defined(__PPC__) || defined(__POWERPC__)
+- #ifdef __APPLE__
+- static inline void mi_atomic_yield(void) {
+-@@ -362,10 +369,6 @@ static inline void mi_atomic_yield(void) {
+-   __asm__ __volatile__ ("or 27,27,27" ::: "memory");
+- }
+- #endif
+--#elif defined(__armel__) || defined(__ARMEL__)
+--static inline void mi_atomic_yield(void) {
+--  __asm__ volatile ("nop" ::: "memory");
+--}
+- #endif
+- #elif defined(__sun)
+- // Fallback for other archs
+-diff --git a/Misc/NEWS.d/next/Build/2025-03-27-01-21-50.gh-issue-131675.l2zfOO.rst b/Misc/NEWS.d/next/Build/2025-03-27-01-21-50.gh-issue-131675.l2zfOO.rst
+-new file mode 100644
+-index 00000000000..be870a81df1
+---- /dev/null
+-+++ b/Misc/NEWS.d/next/Build/2025-03-27-01-21-50.gh-issue-131675.l2zfOO.rst
+-@@ -0,0 +1 @@
+-+Fix mimalloc library builds for 32-bit ARM targets.
+--- 
+-2.34.1
+-
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index 4f4f67c8cb..b13f5cc742 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,5 +1,5 @@
+-# From https://www.python.org/downloads/release/python-3132/
+-md5  4c2d9202ab4db02c9d0999b14655dfe5  Python-3.13.2.tar.xz
++# From https://www.python.org/downloads/release/python-3133/
++md5  8bb5f0b8c9d9d7b87d7d98510e8d58e5  Python-3.13.3.tar.xz
+ # Locally computed
+-sha256  d984bcc57cd67caab26f7def42e523b1c015bbc5dc07836cf4f0b63fa159eb56  Python-3.13.2.tar.xz
++sha256  40f868bcbdeb8149a3149580bb9bfd407b3321cd48f0be631af955ac92c0e041  Python-3.13.3.tar.xz
+ sha256  78b12c3a81360b357002334f0e70ea0e92eebf7a9b358805c03c48484945f3bb  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 806617b8b6..3e6273a773 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ PYTHON3_VERSION_MAJOR = 3.13
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).2
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).3
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
