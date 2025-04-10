@@ -1,53 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC5CEC3601E
-	for <buildroot@archiver.kernel.org>; Thu, 10 Apr 2025 20:46:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB6D7C3601E
+	for <buildroot@archiver.kernel.org>; Thu, 10 Apr 2025 21:05:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03B776F521;
-	Thu, 10 Apr 2025 20:46:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D11C4171A;
+	Thu, 10 Apr 2025 21:05:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7H4KSA0AJlY3; Thu, 10 Apr 2025 20:46:15 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u_YQilUGqLaY; Thu, 10 Apr 2025 21:05:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AE3D61B3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB05F4173B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0AE3D61B3A;
-	Thu, 10 Apr 2025 20:46:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 930ED193
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 20:46:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB05F4173B;
+	Thu, 10 Apr 2025 21:05:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 00CE0138
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 21:05:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 792D441C90
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 20:46:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D39764173B
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 21:05:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 42-eNKpUGpkB for <buildroot@buildroot.org>;
- Thu, 10 Apr 2025 20:46:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A605640F88
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A605640F88
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 20:46:13 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9A2D684087; Thu, 10 Apr 2025 20:46:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RyiFd7g2ER3R for <buildroot@buildroot.org>;
+ Thu, 10 Apr 2025 21:05:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0533140883
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0533140883
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0533140883
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 21:05:27 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:656e:cf44:475c:a8d2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 908FEB0053D;
+ Thu, 10 Apr 2025 23:05:23 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 10 Apr 2025 22:37:41 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f2b14baf2576b54cca43e6f2aebbb4a19fae3bd9
-X-Git-Newrev: c497e5fcc7b5d6b0877ba0dc557c604dcd194260
-X-Patchwork-Hint: ignore
-Message-Id: <20250410204613.9A2D684087@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/augeas: add upstream security fix
- for CVE-2025-2588
+Cc: Alistair Francis <alistair@alistair23.me>,
+	Julien Olivain <ju.o@free.fr>
+Date: Thu, 10 Apr 2025 23:05:12 +0200
+Message-ID: <20250410210513.1511537-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.49.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1744319126;
+ bh=zdkce8kotm4tWUi1faF0H+bZVyDe7JElR5D1hslk4io=;
+ h=From:To:Cc:Subject:Date:From;
+ b=bSUOQG9c+khT3OcjI/MMTFDTLb6AVn/uW4BL9y8BkoHALJmuJw1F0yhKxgq/LQ8Vi
+ 645gUNkXSLPhtmLSlHvTBA0t1PrAGjCEStyGFpidphIiJFWx7B19OMl/KaOQ2yukSy
+ +CQzwZaHxVWXv6RWwO4o1RtjY1iUo8XtKySEaLmjNznBo43vF4q/ChJoq/H+TE/pnJ
+ RNvMiQSIhWeEvKBkK84McLuBZ8XQbBlN3QNl7tunmkVxpkE3A8ZE/K4sXYPqzMMnbq
+ LFnnt0Y5YnJbptjuoLwzPnxzeGptRxcx8GdQJxuTyfFuAPN7lIDBatICmliYHxaJt5
+ ih5rjrMCoaGgQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=bSUOQG9c
+Subject: [Buildroot] [PATCH 1/2] configs/hifive_unleashed: add missing uboot
+ custom hash file
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,130 +78,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c497e5fcc7b5d6b0877ba0dc557c604dcd194260
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Commit [1] enabled BR2_DOWNLOAD_FORCE_CHECK_HASHES for
+hifive_unleashed_defconfig and added custom hash files. But it forgot
+to add the custom hash for uboot. It was not detected at that time
+because the U-Boot version was the same as the default "latest"
+version and was providing its hash.
 
-Fixes the following security issue:
+This defconfig fails to build since the default "latest" was bumped
+in commit [2].
 
-- CVE-2025-2588: This vulnerability affects the function
-    re_case_expand of the file src/fa.c. The manipulation of the
-    argument re leads to null pointer dereference
+This commit fixes the issue by adding the missing uboot hash.
 
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-2588
-  - https://github.com/hercules-team/augeas/commit/af2aa88ab37fc48167d8c5e43b1770a4ba2ff403
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/9677167050
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-[Julien: add patch name in comment near _IGNORE_CVES]
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/1ba1055d3da2d98874aae1eedf1983a2ed933605
+[2] https://gitlab.com/buildroot.org/buildroot/-/commit/c14ce5346d969e660cc788f2f4d8619b27c805a2
+
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...fic-error-was-set-yet-parse_regexp-failed.patch | 77 ++++++++++++++++++++++
- package/augeas/augeas.mk                           |  3 +
- 2 files changed, 80 insertions(+)
+ board/sifive/hifive-unleashed/patches/uboot/uboot.hash | 2 ++
+ 1 file changed, 2 insertions(+)
+ create mode 100644 board/sifive/hifive-unleashed/patches/uboot/uboot.hash
 
-diff --git a/package/augeas/0001-CVE-2025-2588-return-_REG_ENOSYS-if-no-specific-error-was-set-yet-parse_regexp-failed.patch b/package/augeas/0001-CVE-2025-2588-return-_REG_ENOSYS-if-no-specific-error-was-set-yet-parse_regexp-failed.patch
+diff --git a/board/sifive/hifive-unleashed/patches/uboot/uboot.hash b/board/sifive/hifive-unleashed/patches/uboot/uboot.hash
 new file mode 100644
-index 0000000000..0716211387
+index 0000000000..50674352d7
 --- /dev/null
-+++ b/package/augeas/0001-CVE-2025-2588-return-_REG_ENOSYS-if-no-specific-error-was-set-yet-parse_regexp-failed.patch
-@@ -0,0 +1,77 @@
-+From af2aa88ab37fc48167d8c5e43b1770a4ba2ff403 Mon Sep 17 00:00:00 2001
-+From: Alexander Bokovoy <abbra@users.noreply.github.com>
-+Date: Sun, 30 Mar 2025 12:27:04 +0300
-+Subject: [PATCH] CVE-2025-2588: return _REG_ENOSYS if no specific error was
-+ set yet parse_regexp failed (#854)
-+
-+parse_regexp() supposed to set an error on the parser state in case of a
-+failure. If no specific error was set, return _REG_ENOSYS to indicate a
-+generic failure.
-+
-+Fixes: https://github.com/hercules-team/augeas/issues/671
-+Fixes: https://github.com/hercules-team/augeas/issues/778
-+Fixes: https://github.com/hercules-team/augeas/issues/852
-+
-+Signed-off-by: Alexander Bokovoy <abokovoy@redhat.com>
-+
-+Upstream: https://github.com/hercules-team/augeas/commit/af2aa88ab37fc48167d8c5e43b1770a4ba2ff403
-+CVE: CVE-2025-2588
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+
-+---
-+ src/fa.c       | 2 ++
-+ src/fa.h       | 3 ++-
-+ tests/fatest.c | 6 ++++++
-+ 3 files changed, 10 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/fa.c b/src/fa.c
-+index 66ac70784..4de5675b9 100644
-+--- a/src/fa.c
-++++ b/src/fa.c
-+@@ -3550,6 +3550,8 @@ static struct re *parse_regexp(struct re_parse *parse) {
-+     return re;
-+ 
-+  error:
-++    if (re == NULL && parse->error == REG_NOERROR)
-++        parse->error = _REG_ENOSYS;
-+     re_unref(re);
-+     return NULL;
-+ }
-+diff --git a/src/fa.h b/src/fa.h
-+index 1fd754ad0..89c9b17e9 100644
-+--- a/src/fa.h
-++++ b/src/fa.h
-+@@ -81,7 +81,8 @@ extern int fa_minimization_algorithm;
-+  *
-+  * On success, FA points to the newly allocated automaton constructed for
-+  * RE, and the function returns REG_NOERROR. Otherwise, FA is NULL, and the
-+- * return value indicates the error.
-++ * return value indicates the error. Special value _REG_ENOSYS indicates
-++ * fa_compile() couldn't identify the syntax issue with regexp.
-+  *
-+  * The FA is case sensitive. Call FA_NOCASE to switch it to
-+  * case-insensitive.
-+diff --git a/tests/fatest.c b/tests/fatest.c
-+index 0c9ca7696..6717af8f4 100644
-+--- a/tests/fatest.c
-++++ b/tests/fatest.c
-+@@ -589,6 +589,7 @@ static void testExpandNoCase(CuTest *tc) {
-+     const char *p1 = "aB";
-+     const char *p2 = "[a-cUV]";
-+     const char *p3 = "[^a-z]";
-++    const char *wrong_regexp = "{&.{";
-+     char *s;
-+     size_t len;
-+     int r;
-+@@ -607,6 +608,11 @@ static void testExpandNoCase(CuTest *tc) {
-+     CuAssertIntEquals(tc, 0, r);
-+     CuAssertStrEquals(tc, "[^A-Za-z]", s);
-+     free(s);
-++
-++    /* Test that fa_expand_nocase does return _REG_ENOSYS */
-++    r = fa_expand_nocase(wrong_regexp, strlen(wrong_regexp), &s, &len);
-++    CuAssertIntEquals(tc, _REG_ENOSYS, r);
-++    free(s);
-+ }
-+ 
-+ static void testNoCaseComplement(CuTest *tc) {
-diff --git a/package/augeas/augeas.mk b/package/augeas/augeas.mk
-index ac4bc7d0be..e47c485147 100644
---- a/package/augeas/augeas.mk
-+++ b/package/augeas/augeas.mk
-@@ -14,6 +14,9 @@ AUGEAS_DEPENDENCIES = host-pkgconf readline libxml2
- 
- AUGEAS_CONF_OPTS = --disable-gnulib-tests
- 
-+# 0001-CVE-2025-2588-return-_REG_ENOSYS-if-no-specific-error-was-set-yet-parse_regexp-failed.patch
-+AUGEAS_IGNORE_CVES += CVE-2025-2588
-+
- # Remove the test lenses which occupy about 1.4 MB on the target
- define AUGEAS_REMOVE_TEST_LENSES
- 	rm -rf $(TARGET_DIR)/usr/share/augeas/lenses/dist/tests
++++ b/board/sifive/hifive-unleashed/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
+-- 
+2.49.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
