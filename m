@@ -4,62 +4,118 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BF5DC3601E
-	for <buildroot@archiver.kernel.org>; Thu, 10 Apr 2025 13:42:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AE1BC369A6
+	for <buildroot@archiver.kernel.org>; Thu, 10 Apr 2025 13:49:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3862660ACC;
-	Thu, 10 Apr 2025 13:42:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BDBF3608A7;
+	Thu, 10 Apr 2025 13:49:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JKQC58OX5Ky5; Thu, 10 Apr 2025 13:42:32 +0000 (UTC)
+ id DTO7CWZz66iS; Thu, 10 Apr 2025 13:49:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6F4360C20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C7F3560ABA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6F4360C20;
-	Thu, 10 Apr 2025 13:42:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E8B7B108
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 13:42:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7F3560ABA;
+	Thu, 10 Apr 2025 13:49:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3475B108
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 13:49:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C2DD641727
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 13:42:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1996A80C67
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 13:49:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GgkUIfBMj_iZ for <buildroot@buildroot.org>;
- Thu, 10 Apr 2025 13:42:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=162.248.234.2;
- helo=mail.xes-mad.com; envelope-from=vfazio@xes-inc.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4A34140554
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A34140554
-Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4A34140554
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 13:42:27 +0000 (UTC)
-Received: from vfazio4.xes-mad.com (vfazio4.xes-mad.com [10.52.19.201])
- by mail.xes-mad.com (Postfix) with ESMTP id 02BD1202B0;
- Thu, 10 Apr 2025 08:42:26 -0500 (CDT)
-From: Vincent Fazio <vfazio@xes-inc.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Cfpi-kr59D65 for <buildroot@buildroot.org>;
+ Thu, 10 Apr 2025 13:49:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CB90F802EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB90F802EB
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CB90F802EB
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 13:49:36 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.home.arpa ([85.22.125.230]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MpDJd-1tGep739e3-00eTFo; Thu, 10
+ Apr 2025 15:49:34 +0200
 To: buildroot@buildroot.org
-Date: Thu, 10 Apr 2025 08:42:22 -0500
-Message-Id: <20250410134222.3928051-1-vfazio@xes-inc.com>
-X-Mailer: git-send-email 2.34.1
+Date: Thu, 10 Apr 2025 15:49:11 +0200
+Message-ID: <20250410134914.916804-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=xes-inc.com; s=mail; 
- t=1744292546; bh=tq/nbZ/dJW1LqEtlaVvlZeP7iYqCvgUJoa+SGn40W2I=;
- h=From:To:Cc:Subject:Date:From;
- b=Ovibas3UVIAwxXEGuUAnG0kVpZ3qqpupviR5ilfH+RIX5ZwJAYcHHstJeT/SKbir4
- WBz8hpOo42o+6dO8gXwH5ee0e0pQKJWIdYk+mZqd6ksfGz3S5/22tEKpAiZWB3kYhP
- Uqpx6Vn3wpvNCNp08BVH72NpThJzgpmaxfX/mVKI=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=xes-inc.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=xes-inc.com header.i=@xes-inc.com header.a=rsa-sha256
- header.s=mail header.b=Ovibas3U
-Subject: [Buildroot] [PATCH] package/python3: bump to 3.13.3
+X-Provags-ID: V03:K1:FaGG7mwdkqlghkPumeA4ZTX84UzbS35vuviBk/pPLEoE63kN6Tf
+ lzxBoenKW8Dll2MRJ1EY019pFbSg38LwHeH04B3hc5dRDxLhJBno15yA0mNSxznRpvFawZM
+ 23f+pDfVOb4dhQIdxtNKc8xmaNUH7jXIcIEMwLE9NuHQ/VdqXJLZIiDmCtARgCzWuuomyGP
+ NNbS1Qb/ZziD04r43bz4Q==
+UI-OutboundReport: notjunk:1;M01:P0:w3gYLMQe0Lc=;Vk2uCibwdV3E1+XIR2uEVOPu4zG
+ 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
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmx.de; 
+ s=s31663417; t=1744292974; x=1744897774; i=fiona.klute@gmx.de;
+ bh=MySOe1GvBUS+gVH1XMPRQm7JyV65K8+rpZaH/7+mepM=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=SfNqPdPHMSEoOVbhQRI0FFuXx0WcPh4LTsKEqRSY0Yz2FyCwJU7chGpEwDCv8X5+
+ m0ZQvNUxpL7w2OCSzHOYgi+QtC4gT+Jo8hDvUZR8P8tOsrP3S3pBRfcLaim6sryye
+ DU8nxkve3wFJloxBs/TF96x7m4f0vsAiKW7NTv3R2svYL4Pms/4REJfQwz/azHqq6
+ 4/MbgQWUmUOI5tviIewFv5pH1uKS474yv6SkJU5amJ+CeKwTHW5XDmhQ+mIVd3T7A
+ T9K+lrbOzXkbuycYzrO7uJo0XNWd09RZOjjphviZMbFSTHogDspDMZquPHki/iwJv
+ Jm3uwCOIJYqlSDiOkA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=SfNqPdPH
+Subject: [Buildroot] [PATCH v3 1/4] package/python-gobject: bump version to
+ 3.52.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -71,366 +127,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Cc: James Hilliard <james.hilliard1@gmail.com>,
- Vincent Fazio <vfazio@xes-inc.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ "Fiona Klute \(WIWA\)" <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop backported patches which have been included in the release.
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-Fixup the tk module patch to apply cleanly on 3.13.3
+Upstream changelog:
+https://gitlab.gnome.org/GNOME/pygobject/-/blob/3.52.3/NEWS?ref_type=tags
 
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
- ...d-an-option-to-disable-the-tk-module.patch |  12 ++-
- ...ad-identifiers-on-32-bit-musl-builds.patch | 100 ------------------
- ...ix-pyatomic.h-include-paths-GH-12932.patch |  63 -----------
- ...ix-mi_atomic_yield-in-mimalloc-on-32.patch |  80 --------------
- package/python3/python3.hash                  |   6 +-
- package/python3/python3.mk                    |   2 +-
- 6 files changed, 11 insertions(+), 252 deletions(-)
- delete mode 100644 package/python3/0009-Fix-thread-identifiers-on-32-bit-musl-builds.patch
- delete mode 100644 package/python3/0010-3.13-gh-129296-Fix-pyatomic.h-include-paths-GH-12932.patch
- delete mode 100644 package/python3/0011-3.13-gh-131675-Fix-mi_atomic_yield-in-mimalloc-on-32.patch
+ package/python-gobject/python-gobject.hash | 4 ++--
+ package/python-gobject/python-gobject.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python3/0006-Add-an-option-to-disable-the-tk-module.patch b/package/python3/0006-Add-an-option-to-disable-the-tk-module.patch
-index 6dc5d9f837..054a676b03 100644
---- a/package/python3/0006-Add-an-option-to-disable-the-tk-module.patch
-+++ b/package/python3/0006-Add-an-option-to-disable-the-tk-module.patch
-@@ -1,4 +1,4 @@
--From 0b04847e1007f5d34b986eb12ae63f140d14b01e Mon Sep 17 00:00:00 2001
-+From bd14e6f232232c11b67477a5d8f0caf174a089d0 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Wed, 22 Feb 2017 17:23:42 -0800
- Subject: [PATCH] Add an option to disable the tk module
-@@ -17,13 +17,15 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
- [ Vincent Fazio: ported to Python 3.13.2 ]
- Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-+[ Vincent Fazio: fix Python 3.13.3 conflict ]
-+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
- ---
-  Makefile.pre.in | 8 +++++---
-  configure.ac    | 7 +++++++
-  2 files changed, 12 insertions(+), 3 deletions(-)
- 
- diff --git a/Makefile.pre.in b/Makefile.pre.in
--index 88a48eb5333..6d6631cbe31 100644
-+index 0f394d6ece4..a44307a0fb1 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
- @@ -2331,7 +2331,6 @@ LIBSUBDIRS=	asyncio \
-@@ -42,15 +44,15 @@ index 88a48eb5333..6d6631cbe31 100644
-  		test/test_tomllib \
-  		test/test_tomllib/data \
-  		test/test_tomllib/data/invalid \
--@@ -2460,7 +2458,6 @@ TESTSUBDIRS=	idlelib/idle_test \
-- 		test/test_tomllib/data/valid/multiline-basic-str \
-+@@ -2461,7 +2459,6 @@ TESTSUBDIRS=	idlelib/idle_test \
-  		test/test_tools \
-  		test/test_tools/i18n_data \
-+ 		test/test_tools/msgfmt_data \
- -		test/test_ttk \
-  		test/test_unittest \
-  		test/test_unittest/testmock \
-  		test/test_warnings \
--@@ -2482,6 +2479,11 @@ TESTSUBDIRS=	idlelib/idle_test \
-+@@ -2483,6 +2480,11 @@ TESTSUBDIRS=	idlelib/idle_test \
-  		test/xmltestdata/c14n-20 \
-  		test/zipimport_data
-  
-diff --git a/package/python3/0009-Fix-thread-identifiers-on-32-bit-musl-builds.patch b/package/python3/0009-Fix-thread-identifiers-on-32-bit-musl-builds.patch
-deleted file mode 100644
-index cb5a67ad6e..0000000000
---- a/package/python3/0009-Fix-thread-identifiers-on-32-bit-musl-builds.patch
-+++ /dev/null
-@@ -1,100 +0,0 @@
--From 8a8f8d72212d043469ef33549e8edc3bce244516 Mon Sep 17 00:00:00 2001
--From: Vincent Fazio <vfazio@gmail.com>
--Date: Sat, 22 Feb 2025 19:43:26 -0600
--Subject: [PATCH] Fix thread identifiers on 32-bit musl builds
--
--CPython's pthread-based thread identifier relies on pthread_t being able
--to be represented as an unsigned integer type.
--
--This is true in most Linux libc implementations where it's defined as an
--unsigned long, however musl typedefs it as a struct *.
--
--If the pointer has the high bit set and is cast to PyThread_ident_t, the
--resultant value can be sign-extended [0]. This can cause issues when
--comparing against threading._MainThread's identifier. The main thread's
--identifier value is retrieved via _get_main_thread_ident which is backed
--by an unsigned long which truncates sign extended bits.
--
--  >>> hex(threading.main_thread().ident)
--  '0xb6f33f3c'
--  >>> hex(threading.current_thread().ident)
--  '0xffffffffb6f33f3c'
--
--Fix this by compiling in code targeting non-glibc based Linux platforms
--to cast the pthread_t to a uintptr and then to PyThread_ident_t.
--
--Upstream: https://github.com/python/cpython/pull/130391
--[0]: https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/Arrays-and-pointers-implementation.html
--
--Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-----
-- Python/thread_pthread.h | 31 ++++++++++++++++++++++---------
-- 1 file changed, 22 insertions(+), 9 deletions(-)
--
--diff --git a/Python/thread_pthread.h b/Python/thread_pthread.h
--index f588b4620da..84900c86401 100644
----- a/Python/thread_pthread.h
--+++ b/Python/thread_pthread.h
--@@ -307,6 +307,25 @@ do_start_joinable_thread(void (*func)(void *), void *arg, pthread_t* out_id)
--     return 0;
-- }
-- 
--+/* Helper to convert pthread_t to PyThread_ident_t. POSIX allows pthread_t to be
--+   non-arithmetic, e.g., musl typedefs it as a pointer */
--+static PyThread_ident_t
--+_pthread_t_to_ident(pthread_t value) {
--+#if SIZEOF_PTHREAD_T > SIZEOF_LONG
--+    return (PyThread_ident_t) *(unsigned long *) &value;
--+#else
--+    PyThread_ident_t ident;
--+#if defined(__linux__) && !defined(__GLIBC__)
--+    ident = (PyThread_ident_t) (uintptr_t) value;
--+    assert(pthread_equal(value, (pthread_t) (uintptr_t) ident));
--+#else
--+    ident = (PyThread_ident_t) value;
--+    assert(pthread_equal(value, (pthread_t) ident));
--+#endif
--+    return ident;
--+#endif  // SIZEOF_PTHREAD_T > SIZEOF_LONG
--+}
--+
-- int
-- PyThread_start_joinable_thread(void (*func)(void *), void *arg,
--                                PyThread_ident_t* ident, PyThread_handle_t* handle) {
--@@ -314,9 +333,8 @@ PyThread_start_joinable_thread(void (*func)(void *), void *arg,
--     if (do_start_joinable_thread(func, arg, &th)) {
--         return -1;
--     }
---    *ident = (PyThread_ident_t) th;
--+    *ident = _pthread_t_to_ident(th);
--     *handle = (PyThread_handle_t) th;
---    assert(th == (pthread_t) *ident);
--     assert(th == (pthread_t) *handle);
--     return 0;
-- }
--@@ -329,11 +347,7 @@ PyThread_start_new_thread(void (*func)(void *), void *arg)
--         return PYTHREAD_INVALID_THREAD_ID;
--     }
--     pthread_detach(th);
---#if SIZEOF_PTHREAD_T <= SIZEOF_LONG
---    return (unsigned long) th;
---#else
---    return (unsigned long) *(unsigned long *) &th;
---#endif
--+    return (unsigned long) _pthread_t_to_ident(th);;
-- }
-- 
-- int
--@@ -358,8 +372,7 @@ PyThread_get_thread_ident_ex(void) {
--     if (!initialized)
--         PyThread_init_thread();
--     threadid = pthread_self();
---    assert(threadid == (pthread_t) (PyThread_ident_t) threadid);
---    return (PyThread_ident_t) threadid;
--+    return _pthread_t_to_ident(threadid);
-- }
-- 
-- unsigned long
---- 
--2.34.1
--
-diff --git a/package/python3/0010-3.13-gh-129296-Fix-pyatomic.h-include-paths-GH-12932.patch b/package/python3/0010-3.13-gh-129296-Fix-pyatomic.h-include-paths-GH-12932.patch
-deleted file mode 100644
-index 00451af9bf..0000000000
---- a/package/python3/0010-3.13-gh-129296-Fix-pyatomic.h-include-paths-GH-12932.patch
-+++ /dev/null
-@@ -1,63 +0,0 @@
--From 0ee012224447b6ec7f6f20d316b24449fdcc0d4b Mon Sep 17 00:00:00 2001
--From: "Miss Islington (bot)"
-- <31488909+miss-islington@users.noreply.github.com>
--Date: Fri, 28 Feb 2025 09:22:15 +0100
--Subject: [PATCH] [3.13] gh-129296: Fix `pyatomic.h` include paths (GH-129320)
-- (#130667)
--
--gh-129296: Fix `pyatomic.h` include paths (GH-129320)
--
--Use relative includes in Include/cpython/pyatomic.h for
--pyatomic_gcc.h, pyatomic_std.h and pyatomic_msc.h.
--
--Do a similar change in Include/cpython/pythread.h for
--pthread_stubs.h include.
--(cherry picked from commit 3a974e39d54902699f360bc4db2fd351a6baf3ef)
--
--Co-authored-by: Zanie Blue <contact@zanie.dev>
--Upstream: 125ca028664ce72556e3983b57f521a118c4e677
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- Include/cpython/pyatomic.h | 6 +++---
-- Include/cpython/pythread.h | 2 +-
-- 2 files changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/Include/cpython/pyatomic.h b/Include/cpython/pyatomic.h
--index 4ecef4f56ed..28029859d3d 100644
----- a/Include/cpython/pyatomic.h
--+++ b/Include/cpython/pyatomic.h
--@@ -529,15 +529,15 @@ static inline void _Py_atomic_fence_release(void);
-- 
-- #if _Py_USE_GCC_BUILTIN_ATOMICS
-- #  define Py_ATOMIC_GCC_H
---#  include "cpython/pyatomic_gcc.h"
--+#  include "pyatomic_gcc.h"
-- #  undef Py_ATOMIC_GCC_H
-- #elif __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_ATOMICS__)
-- #  define Py_ATOMIC_STD_H
---#  include "cpython/pyatomic_std.h"
--+#  include "pyatomic_std.h"
-- #  undef Py_ATOMIC_STD_H
-- #elif defined(_MSC_VER)
-- #  define Py_ATOMIC_MSC_H
---#  include "cpython/pyatomic_msc.h"
--+#  include "pyatomic_msc.h"
-- #  undef Py_ATOMIC_MSC_H
-- #else
-- #  error "no available pyatomic implementation for this platform/compiler"
--diff --git a/Include/cpython/pythread.h b/Include/cpython/pythread.h
--index 03f710a9f7e..e658b35bd90 100644
----- a/Include/cpython/pythread.h
--+++ b/Include/cpython/pythread.h
--@@ -22,7 +22,7 @@ PyAPI_DATA(const long long) PY_TIMEOUT_MAX;
--     */
-- #   define NATIVE_TSS_KEY_T     unsigned long
-- #elif defined(HAVE_PTHREAD_STUBS)
---#   include "cpython/pthread_stubs.h"
--+#   include "pthread_stubs.h"
-- #   define NATIVE_TSS_KEY_T     pthread_key_t
-- #else
-- #   error "Require native threads. See https://bugs.python.org/issue31370"
---- 
--2.48.1
--
-diff --git a/package/python3/0011-3.13-gh-131675-Fix-mi_atomic_yield-in-mimalloc-on-32.patch b/package/python3/0011-3.13-gh-131675-Fix-mi_atomic_yield-in-mimalloc-on-32.patch
-deleted file mode 100644
-index b4ecde94ee..0000000000
---- a/package/python3/0011-3.13-gh-131675-Fix-mi_atomic_yield-in-mimalloc-on-32.patch
-+++ /dev/null
-@@ -1,80 +0,0 @@
--From a9aae012b4ee83f1aba7c122943c63b69c5b9f97 Mon Sep 17 00:00:00 2001
--From: "Miss Islington (bot)"
-- <31488909+miss-islington@users.noreply.github.com>
--Date: Mon, 31 Mar 2025 20:58:29 +0200
--Subject: [PATCH] [3.13] gh-131675: Fix `mi_atomic_yield` in mimalloc on 32-bit
-- ARM (gh-131784) (gh-131954)
--
--Use the standard `__ARM_ARCH` macro, which is supported by GCC and Clang.
--
--The branching logic for of `__ARMEL__` has been removed so if the target
--architecture supports v7+ instructions, a yield is emitted, otherwise a nop
--is emitted. This covers both big and little endian scenarios.
--(cherry picked from commit 03f6c8e239723637811fd8d278661f5292351197)
--
--Upstream: https://github.com/python/cpython/pull/131954
--
--Signed-off-by: Vincent Fazio <vfazio@gmail.com>
--Co-authored-by: Vincent Fazio <vfazio@gmail.com>
--Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-----
-- Include/internal/mimalloc/mimalloc/atomic.h     | 17 ++++++++++-------
-- ...25-03-27-01-21-50.gh-issue-131675.l2zfOO.rst |  1 +
-- 2 files changed, 11 insertions(+), 7 deletions(-)
-- create mode 100644 Misc/NEWS.d/next/Build/2025-03-27-01-21-50.gh-issue-131675.l2zfOO.rst
--
--diff --git a/Include/internal/mimalloc/mimalloc/atomic.h b/Include/internal/mimalloc/mimalloc/atomic.h
--index 1093c540864..a46a7676ad2 100644
----- a/Include/internal/mimalloc/mimalloc/atomic.h
--+++ b/Include/internal/mimalloc/mimalloc/atomic.h
--@@ -338,8 +338,9 @@ static inline void mi_atomic_yield(void) {
--   _mm_pause();
-- }
-- #elif (defined(__GNUC__) || defined(__clang__)) && \
---      (defined(__x86_64__) || defined(__i386__) || defined(__arm__) || defined(__armel__) || defined(__ARMEL__) || \
---       defined(__aarch64__) || defined(__powerpc__) || defined(__ppc__) || defined(__PPC__)) || defined(__POWERPC__)
--+      (defined(__x86_64__) || defined(__i386__) || \
--+       defined(__aarch64__) || defined(__arm__) || \
--+       defined(__powerpc__) || defined(__ppc__) || defined(__PPC__) || defined(__POWERPC__))
-- #if defined(__x86_64__) || defined(__i386__)
-- static inline void mi_atomic_yield(void) {
--   __asm__ volatile ("pause" ::: "memory");
--@@ -348,10 +349,16 @@ static inline void mi_atomic_yield(void) {
-- static inline void mi_atomic_yield(void) {
--   __asm__ volatile("wfe");
-- }
---#elif (defined(__arm__) && __ARM_ARCH__ >= 7)
--+#elif defined(__arm__)
--+#if __ARM_ARCH >= 7
-- static inline void mi_atomic_yield(void) {
--   __asm__ volatile("yield" ::: "memory");
-- }
--+#else
--+static inline void mi_atomic_yield(void) {
--+  __asm__ volatile ("nop" ::: "memory");
--+}
--+#endif
-- #elif defined(__powerpc__) || defined(__ppc__) || defined(__PPC__) || defined(__POWERPC__)
-- #ifdef __APPLE__
-- static inline void mi_atomic_yield(void) {
--@@ -362,10 +369,6 @@ static inline void mi_atomic_yield(void) {
--   __asm__ __volatile__ ("or 27,27,27" ::: "memory");
-- }
-- #endif
---#elif defined(__armel__) || defined(__ARMEL__)
---static inline void mi_atomic_yield(void) {
---  __asm__ volatile ("nop" ::: "memory");
---}
-- #endif
-- #elif defined(__sun)
-- // Fallback for other archs
--diff --git a/Misc/NEWS.d/next/Build/2025-03-27-01-21-50.gh-issue-131675.l2zfOO.rst b/Misc/NEWS.d/next/Build/2025-03-27-01-21-50.gh-issue-131675.l2zfOO.rst
--new file mode 100644
--index 00000000000..be870a81df1
----- /dev/null
--+++ b/Misc/NEWS.d/next/Build/2025-03-27-01-21-50.gh-issue-131675.l2zfOO.rst
--@@ -0,0 +1 @@
--+Fix mimalloc library builds for 32-bit ARM targets.
---- 
--2.34.1
--
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 4f4f67c8cb..b13f5cc742 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-3132/
--md5  4c2d9202ab4db02c9d0999b14655dfe5  Python-3.13.2.tar.xz
-+# From https://www.python.org/downloads/release/python-3133/
-+md5  8bb5f0b8c9d9d7b87d7d98510e8d58e5  Python-3.13.3.tar.xz
- # Locally computed
--sha256  d984bcc57cd67caab26f7def42e523b1c015bbc5dc07836cf4f0b63fa159eb56  Python-3.13.2.tar.xz
-+sha256  40f868bcbdeb8149a3149580bb9bfd407b3321cd48f0be631af955ac92c0e041  Python-3.13.3.tar.xz
- sha256  78b12c3a81360b357002334f0e70ea0e92eebf7a9b358805c03c48484945f3bb  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 806617b8b6..3e6273a773 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/python-gobject/python-gobject.hash b/package/python-gobject/python-gobject.hash
+index 1dbd40d038..e49c7ddd08 100644
+--- a/package/python-gobject/python-gobject.hash
++++ b/package/python-gobject/python-gobject.hash
+@@ -1,3 +1,3 @@
+-# from https://download.gnome.org/sources/pygobject/3.50/pygobject-3.50.0.sha256sum
+-sha256  8d836e75b5a881d457ee1622cae4a32bcdba28a0ba562193adb3bbb472472212  pygobject-3.50.0.tar.xz
++# from https://download.gnome.org/sources/pygobject/3.52/pygobject-3.52.3.sha256sum
++sha256  00e427d291e957462a8fad659a9f9c8be776ff82a8b76bdf402f1eaeec086d82  pygobject-3.52.3.tar.gz
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+diff --git a/package/python-gobject/python-gobject.mk b/package/python-gobject/python-gobject.mk
+index 001f355844..3021937887 100644
+--- a/package/python-gobject/python-gobject.mk
++++ b/package/python-gobject/python-gobject.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- PYTHON3_VERSION_MAJOR = 3.13
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).2
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).3
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+-PYTHON_GOBJECT_VERSION_MAJOR = 3.50
+-PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).0
+-PYTHON_GOBJECT_SOURCE = pygobject-$(PYTHON_GOBJECT_VERSION).tar.xz
++PYTHON_GOBJECT_VERSION_MAJOR = 3.52
++PYTHON_GOBJECT_VERSION = $(PYTHON_GOBJECT_VERSION_MAJOR).3
++PYTHON_GOBJECT_SOURCE = pygobject-$(PYTHON_GOBJECT_VERSION).tar.gz
+ PYTHON_GOBJECT_SITE = https://download.gnome.org/sources/pygobject/$(PYTHON_GOBJECT_VERSION_MAJOR)
+ PYTHON_GOBJECT_LICENSE = LGPL-2.1+
+ PYTHON_GOBJECT_LICENSE_FILES = COPYING
 -- 
-2.34.1
+2.49.0
 
 _______________________________________________
 buildroot mailing list
