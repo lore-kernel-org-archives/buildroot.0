@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ACE8C2D0CD
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28AF1C3ABD8
 	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:48:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BF6478404A;
-	Mon, 19 May 2025 10:48:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE1D96F6E2;
+	Mon, 19 May 2025 10:48:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rxSkkI3YcSEd; Mon, 19 May 2025 10:48:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id z_G_A5ylbU51; Mon, 19 May 2025 10:48:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2D4884049
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C6EF6F6AD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2D4884049;
-	Mon, 19 May 2025 10:48:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 740AEE4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C6EF6F6AD;
+	Mon, 19 May 2025 10:48:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 146E8E4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9589841927
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D5D0740F4A
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZcAO2SjEGCU2 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:04 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DZbIhbLf0eO1 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8DDC74191F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C335340EC8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8DDC74191F
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C335340EC8
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 85633873D4; Mon, 19 May 2025 10:40:04 +0000 (UTC)
+ id BC0CC83B63; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 16:19:46 +0200
+Date: Thu, 10 Apr 2025 22:37:41 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 0468aae90a0124b79febf8705d9779e7a8a2ce4c
-X-Git-Newrev: 9b6e7bf7ee2fb03fae040853a3c12a8e1b46a532
+X-Git-Oldrev: f2b14baf2576b54cca43e6f2aebbb4a19fae3bd9
+X-Git-Newrev: c497e5fcc7b5d6b0877ba0dc557c604dcd194260
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104004.85633873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/python-typing-inspection: new package
+Message-Id: <20250519103948.BC0CC83B63@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/augeas: add upstream
+ security fix for CVE-2025-2588
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,98 +59,130 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b6e7bf7ee2fb03fae040853a3c12a8e1b46a532
+commit: https://git.buildroot.net/buildroot/commit/?id=c497e5fcc7b5d6b0877ba0dc557c604dcd194260
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add python-typing-inspection as a newly introduced dependency of
-pydantic.
+Fixes the following security issue:
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+- CVE-2025-2588: This vulnerability affects the function
+    re_case_expand of the file src/fa.c. The manipulation of the
+    argument re leads to null pointer dereference
+
+For more information, see:
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-2588
+  - https://github.com/hercules-team/augeas/commit/af2aa88ab37fc48167d8c5e43b1770a4ba2ff403
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+[Julien: add patch name in comment near _IGNORE_CVES]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                                 |  1 +
- package/Config.in                                          |  1 +
- package/python-typing-inspection/Config.in                 |  7 +++++++
- .../python-typing-inspection/python-typing-inspection.hash |  5 +++++
- .../python-typing-inspection/python-typing-inspection.mk   | 14 ++++++++++++++
- 5 files changed, 28 insertions(+)
+ ...fic-error-was-set-yet-parse_regexp-failed.patch | 77 ++++++++++++++++++++++
+ package/augeas/augeas.mk                           |  3 +
+ 2 files changed, 80 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 16b15c2238..b4f2bad865 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2276,6 +2276,7 @@ F:	package/picotool/
- F:	package/python-immutabledict/
- F:	package/python-jc/
- F:	package/python-ruamel-yaml-clib/
-+F:	package/python-typing-inspection/
- F:	package/python-tzlocal/
- F:	package/python-waitress/
- F:	support/testing/tests/package/test_python_fastapi.py
-diff --git a/package/Config.in b/package/Config.in
-index a9074ac405..2991b47548 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1466,6 +1466,7 @@ menu "External python modules"
- 	source "package/python-types-python-dateutil/Config.in"
- 	source "package/python-typing-extensions/Config.in"
- 	source "package/python-typing-inspect/Config.in"
-+	source "package/python-typing-inspection/Config.in"
- 	source "package/python-tzlocal/Config.in"
- 	source "package/python-u-msgpack/Config.in"
- 	source "package/python-ubjson/Config.in"
-diff --git a/package/python-typing-inspection/Config.in b/package/python-typing-inspection/Config.in
+diff --git a/package/augeas/0001-CVE-2025-2588-return-_REG_ENOSYS-if-no-specific-error-was-set-yet-parse_regexp-failed.patch b/package/augeas/0001-CVE-2025-2588-return-_REG_ENOSYS-if-no-specific-error-was-set-yet-parse_regexp-failed.patch
 new file mode 100644
-index 0000000000..bedfb21fbc
+index 0000000000..0716211387
 --- /dev/null
-+++ b/package/python-typing-inspection/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_TYPING_INSPECTION
-+	bool "python-typing-inspection"
-+	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
-+	help
-+	  Runtime typing introspection tools.
++++ b/package/augeas/0001-CVE-2025-2588-return-_REG_ENOSYS-if-no-specific-error-was-set-yet-parse_regexp-failed.patch
+@@ -0,0 +1,77 @@
++From af2aa88ab37fc48167d8c5e43b1770a4ba2ff403 Mon Sep 17 00:00:00 2001
++From: Alexander Bokovoy <abbra@users.noreply.github.com>
++Date: Sun, 30 Mar 2025 12:27:04 +0300
++Subject: [PATCH] CVE-2025-2588: return _REG_ENOSYS if no specific error was
++ set yet parse_regexp failed (#854)
 +
-+	  https://github.com/pydantic/typing-inspection
-diff --git a/package/python-typing-inspection/python-typing-inspection.hash b/package/python-typing-inspection/python-typing-inspection.hash
-new file mode 100644
-index 0000000000..2ed08c1d35
---- /dev/null
-+++ b/package/python-typing-inspection/python-typing-inspection.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/typing-inspection/json
-+md5  694cee9b0518959cd4b2b7ce2dc5cf2e  typing_inspection-0.4.0.tar.gz
-+sha256  9765c87de36671694a67904bf2c96e395be9c6439bb6c87b5142569dcdd65122  typing_inspection-0.4.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  4e40cba793a388dd456577b8657175bbe95e4ded2970534b3c59cccc2661a708  LICENSE
-diff --git a/package/python-typing-inspection/python-typing-inspection.mk b/package/python-typing-inspection/python-typing-inspection.mk
-new file mode 100644
-index 0000000000..043ee12090
---- /dev/null
-+++ b/package/python-typing-inspection/python-typing-inspection.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-typing-inspection
-+#
-+################################################################################
++parse_regexp() supposed to set an error on the parser state in case of a
++failure. If no specific error was set, return _REG_ENOSYS to indicate a
++generic failure.
 +
-+PYTHON_TYPING_INSPECTION_VERSION = 0.4.0
-+PYTHON_TYPING_INSPECTION_SOURCE = typing_inspection-$(PYTHON_TYPING_INSPECTION_VERSION).tar.gz
-+PYTHON_TYPING_INSPECTION_SITE = https://files.pythonhosted.org/packages/82/5c/e6082df02e215b846b4b8c0b887a64d7d08ffaba30605502639d44c06b82
-+PYTHON_TYPING_INSPECTION_SETUP_TYPE = hatch
-+PYTHON_TYPING_INSPECTION_LICENSE = MIT
-+PYTHON_TYPING_INSPECTION_LICENSE_FILES = LICENSE
++Fixes: https://github.com/hercules-team/augeas/issues/671
++Fixes: https://github.com/hercules-team/augeas/issues/778
++Fixes: https://github.com/hercules-team/augeas/issues/852
 +
-+$(eval $(python-package))
++Signed-off-by: Alexander Bokovoy <abokovoy@redhat.com>
++
++Upstream: https://github.com/hercules-team/augeas/commit/af2aa88ab37fc48167d8c5e43b1770a4ba2ff403
++CVE: CVE-2025-2588
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++
++---
++ src/fa.c       | 2 ++
++ src/fa.h       | 3 ++-
++ tests/fatest.c | 6 ++++++
++ 3 files changed, 10 insertions(+), 1 deletion(-)
++
++diff --git a/src/fa.c b/src/fa.c
++index 66ac70784..4de5675b9 100644
++--- a/src/fa.c
+++++ b/src/fa.c
++@@ -3550,6 +3550,8 @@ static struct re *parse_regexp(struct re_parse *parse) {
++     return re;
++ 
++  error:
+++    if (re == NULL && parse->error == REG_NOERROR)
+++        parse->error = _REG_ENOSYS;
++     re_unref(re);
++     return NULL;
++ }
++diff --git a/src/fa.h b/src/fa.h
++index 1fd754ad0..89c9b17e9 100644
++--- a/src/fa.h
+++++ b/src/fa.h
++@@ -81,7 +81,8 @@ extern int fa_minimization_algorithm;
++  *
++  * On success, FA points to the newly allocated automaton constructed for
++  * RE, and the function returns REG_NOERROR. Otherwise, FA is NULL, and the
++- * return value indicates the error.
+++ * return value indicates the error. Special value _REG_ENOSYS indicates
+++ * fa_compile() couldn't identify the syntax issue with regexp.
++  *
++  * The FA is case sensitive. Call FA_NOCASE to switch it to
++  * case-insensitive.
++diff --git a/tests/fatest.c b/tests/fatest.c
++index 0c9ca7696..6717af8f4 100644
++--- a/tests/fatest.c
+++++ b/tests/fatest.c
++@@ -589,6 +589,7 @@ static void testExpandNoCase(CuTest *tc) {
++     const char *p1 = "aB";
++     const char *p2 = "[a-cUV]";
++     const char *p3 = "[^a-z]";
+++    const char *wrong_regexp = "{&.{";
++     char *s;
++     size_t len;
++     int r;
++@@ -607,6 +608,11 @@ static void testExpandNoCase(CuTest *tc) {
++     CuAssertIntEquals(tc, 0, r);
++     CuAssertStrEquals(tc, "[^A-Za-z]", s);
++     free(s);
+++
+++    /* Test that fa_expand_nocase does return _REG_ENOSYS */
+++    r = fa_expand_nocase(wrong_regexp, strlen(wrong_regexp), &s, &len);
+++    CuAssertIntEquals(tc, _REG_ENOSYS, r);
+++    free(s);
++ }
++ 
++ static void testNoCaseComplement(CuTest *tc) {
+diff --git a/package/augeas/augeas.mk b/package/augeas/augeas.mk
+index ac4bc7d0be..e47c485147 100644
+--- a/package/augeas/augeas.mk
++++ b/package/augeas/augeas.mk
+@@ -14,6 +14,9 @@ AUGEAS_DEPENDENCIES = host-pkgconf readline libxml2
+ 
+ AUGEAS_CONF_OPTS = --disable-gnulib-tests
+ 
++# 0001-CVE-2025-2588-return-_REG_ENOSYS-if-no-specific-error-was-set-yet-parse_regexp-failed.patch
++AUGEAS_IGNORE_CVES += CVE-2025-2588
++
+ # Remove the test lenses which occupy about 1.4 MB on the target
+ define AUGEAS_REMOVE_TEST_LENSES
+ 	rm -rf $(TARGET_DIR)/usr/share/augeas/lenses/dist/tests
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
