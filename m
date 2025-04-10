@@ -1,124 +1,124 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9527C3601E
-	for <buildroot@archiver.kernel.org>; Thu, 10 Apr 2025 13:49:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65256C369A6
+	for <buildroot@archiver.kernel.org>; Thu, 10 Apr 2025 13:49:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F37F813CB;
-	Thu, 10 Apr 2025 13:49:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CAC4240DE0;
+	Thu, 10 Apr 2025 13:49:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NuOliiVpy25X; Thu, 10 Apr 2025 13:49:43 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XDfrIjp82IJ7; Thu, 10 Apr 2025 13:49:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4EB01802EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6721414ED
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4EB01802EB;
-	Thu, 10 Apr 2025 13:49:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D7D8C193
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 13:49:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6721414ED;
+	Thu, 10 Apr 2025 13:49:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id AC3C2108
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 13:49:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C7D3C41ED8
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 13:49:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8ECC760D80
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 13:49:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ohgG5_RiMHBq for <buildroot@buildroot.org>;
- Thu, 10 Apr 2025 13:49:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MIvDUSupm91R for <buildroot@buildroot.org>;
+ Thu, 10 Apr 2025 13:49:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4A3C941EC5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A3C941EC5
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4A3C941EC5
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 13:49:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 366B36077E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 366B36077E
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 366B36077E
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 13:49:40 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.home.arpa ([85.22.125.230]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mr9Fs-1tEjwd0lvi-00gO81; Thu, 10
- Apr 2025 15:49:37 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MKbkM-1tmIH839HY-00QdTf; Thu, 10
+ Apr 2025 15:49:38 +0200
 To: buildroot@buildroot.org
-Date: Thu, 10 Apr 2025 15:49:12 +0200
-Message-ID: <20250410134914.916804-2-fiona.klute@gmx.de>
+Date: Thu, 10 Apr 2025 15:49:13 +0200
+Message-ID: <20250410134914.916804-3-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250410134914.916804-1-fiona.klute@gmx.de>
 References: <20250410134914.916804-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:v1iViOb/rlTHRL48GUewUojD/4CL4zc7hcPU60pHhdlFH1QQ7/h
- VAhlqaGfUp57QGDngnfphrBe6W4EEzN4blI6rUWPewy9kwg7BLv64C1mzb8CXMlrLaV1eat
- 43rB8z8kK4k3rIBoj9jNLLeD1dcLeW1IZKakguiH0J5S4X4aKC9zE9ektrmb8M0KcvjXxhN
- zZeWBmyqomxDaOsYBxdSQ==
-UI-OutboundReport: notjunk:1;M01:P0:zF63NURcyJI=;uHPZQ2Wgn79gnlZbI+H0RKUzd/8
- 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
- O/iG1qc/l1kCmR4lfiy0wuZC3u72W6cPSF
+X-Provags-ID: V03:K1:itYU31FxbfUtj5y8lLJicDMSrANsPnVPRPwqd7pg47KXBSK3mjd
+ TBStYu02HTu7zvgaYXbB0SXBozL4q9xXjpKW+KehfZrE3kQE9U2bKuqe9HyKam85mGZ0Sqk
+ 44uZjERgTa8GPQBUsjISxa5+nGG+5g58Tc36UIeht+IwESs+rilRHU2JEShKApj/DQNfQZN
+ tCQVii+5kf1p9XtM2MHrQ==
+UI-OutboundReport: notjunk:1;M01:P0:68XOldGO83I=;k7lX+JjtU0p24SWQ5xsFtBe65w1
+ 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
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1744292977; x=1744897777; i=fiona.klute@gmx.de;
- bh=ZiIXU2JsOzU3M14ErTvAJsrMIObu2x7WLOFRTXFLw6w=;
+ s=s31663417; t=1744292979; x=1744897779; i=fiona.klute@gmx.de;
+ bh=+/KVb2nAvEtCxfPzM0JNV+e/5lbuvetWpmMjQjzhXHI=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
  References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=nVjn6pJaPGh0ZxYRCbvuFyrOHqqlWAF5nFBiywf8a3TcKwMw3xbfIL5Fmdh30rFv
- 63+oZgInyASfhamlrK/DyD/Im+NU8kSYK+JRyGQfOlX212i2GJDskD6asoqOgt5fF
- On5fYkh7Bl5PmMbLnBBrCUCmgagSgGHM0hoL5y1HfAaxHi5PKCx/sdpRGsBqpUKbI
- vKnuRfcPnJ2qmOw8XG9xZTFU3+P81FiqeRyVpZV4ChpkhuCDS7YT1taemUEQsbkuR
- sYaLd8AQ5ePondz2Z8sSItM7RLWlGbW3m1hVstsMgXcBk1Cc2wi63CvbMTGVT2H52
- ebm+33/W0a4kf8rFFw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=ZY/5BbZVXPBxE1obYcVyW85zb6GGTE55so6Nh3vUkYvjkwjVdcjJ3Hc2CF0dBJLy
+ RJIohF4mxPED0JEyyL+wR6Cz0CQhgB+6nPcWmVb3r/BgyaeJNPpH1yKcbXuTF+0Pk
+ ogyHAorktg7DszPTjC/8b9Lt7G/QVhox/oPfAZXPvweM7WxsGxSEg7fCX0BF/KSJY
+ 32rqDTwEKWfVfJicFqb+NNPnMLeD0RuLEKI4+lqu42MGL76a6QaFqbCWufNkg6Bv2
+ 8+4usUInHY/N06at6tGc6XCNLEXYITMzfzPC0MspsTkrSc7PFx6t5TwPBjT8ZooIu
+ jz7YujQYPW7mcqpa5w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=nVjn6pJa
-Subject: [Buildroot] [PATCH v3 2/4] package/python-gobject: fix event source
- registration with Python 3.13
+ header.s=s31663417 header.b=ZY/5BbZV
+Subject: [Buildroot] [PATCH v3 3/4] package/gobject-introspection: bump
+ version to 1.84.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -142,205 +142,122 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-Since Python 3.13 BaseSelectorEventLoop.add_reader() and
-BaseSelectorEventLoop.add_writer() use the mapping returned by
-selector.get_map() to detect if a file object is already
-registered. This fails with the implementation in gi.events._Selector
-if some calls use a file object, and others the raw file descriptor.
+GOI now has a build option to disable tests [1], so use that and drop
+the "disable tests" patch. Hash for giscanner/scannerlexer.l changed
+due to small code additions.
 
-Full upstream bug report:
-https://gitlab.gnome.org/GNOME/pygobject/-/issues/689
+Upstream changelog:
+https://gitlab.gnome.org/GNOME/gobject-introspection/-/blob/1.84.0/NEWS?ref_type=tags
 
-This bug breaks package/python-aiomqtt, because its client object uses
-file objects in some places for the connection socket, and the file
-descriptor in others. The result is that the connection attempt times
-out because source registration fails, and the Future that marks
-successful connection never resolves.
+[1] https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/3e41addbd0f22024f63cc9c3fbef04ca16f05364
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
-The bug fixed by this patch is present in 3.50.0 and 3.52.3 alike, the
-reason for applying the update first is simply that the patch doesn't
-apply with 3.50.0, and backporting would be unnecessary effort when
-the update is due anyway.
+ .checkpackageignore                           |  3 +-
+ ...> 0001-Add-rpath-links-to-ccompiler.patch} |  0
+ .../0001-disable-tests.patch                  | 34 -------------------
+ .../gobject-introspection.hash                |  6 ++--
+ .../gobject-introspection.mk                  |  7 ++--
+ 5 files changed, 9 insertions(+), 41 deletions(-)
+ rename package/gobject-introspection/{0002-Add-rpath-links-to-ccompiler.patch => 0001-Add-rpath-links-to-ccompiler.patch} (100%)
+ delete mode 100644 package/gobject-introspection/0001-disable-tests.patch
 
-Change v1 -> v2: Patch has been merged, switch upstream URL from MR to
-commit on main branch.
-
- ...tor.get_map-look-up-file-objects-by-.patch | 164 ++++++++++++++++++
- 1 file changed, 164 insertions(+)
- create mode 100644 package/python-gobject/0001-gi.events._Selector.get_map-look-up-file-objects-by-.patch
-
-diff --git a/package/python-gobject/0001-gi.events._Selector.get_map-look-up-file-objects-by-.patch b/package/python-gobject/0001-gi.events._Selector.get_map-look-up-file-objects-by-.patch
-new file mode 100644
-index 0000000000..a275abd9c7
---- /dev/null
-+++ b/package/python-gobject/0001-gi.events._Selector.get_map-look-up-file-objects-by-.patch
-@@ -0,0 +1,164 @@
-+From 4b97688d527276fc1e835fed71dbb73bbd09ac11 Mon Sep 17 00:00:00 2001
-+From: Fiona Klute <fiona.klute@gmx.de>
-+Date: Tue, 25 Mar 2025 13:29:04 +0100
-+Subject: [PATCH] gi.events._Selector.get_map(): look up file objects by file
-+ descriptor
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 4c7834f20f..2f9c65c8a3 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -523,8 +523,7 @@ package/gnupg/0001-build-Always-use-EXTERN_UNLESS_MAIN_MODULE-pattern.patch lib_
+ package/gnuplot/0001-configure-add-without-demo-option.patch lib_patch.Upstream
+ package/go/go-src/0001-build.go-explicit-option-for-crosscompilation.patch lib_patch.Upstream
+ package/gob2/0001-dont-include-from-prefix.patch lib_patch.Upstream
+-package/gobject-introspection/0001-disable-tests.patch lib_patch.Upstream
+-package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch lib_patch.Upstream
++package/gobject-introspection/0001-Add-rpath-links-to-ccompiler.patch lib_patch.Upstream
+ package/gpsd/S50gpsd Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch lib_patch.Upstream
+ package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch lib_patch.Upstream
+diff --git a/package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch b/package/gobject-introspection/0001-Add-rpath-links-to-ccompiler.patch
+similarity index 100%
+rename from package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch
+rename to package/gobject-introspection/0001-Add-rpath-links-to-ccompiler.patch
+diff --git a/package/gobject-introspection/0001-disable-tests.patch b/package/gobject-introspection/0001-disable-tests.patch
+deleted file mode 100644
+index a39f51617b..0000000000
+--- a/package/gobject-introspection/0001-disable-tests.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From c87faf380ddf44da9d624dabd28178c9065f0f76 Mon Sep 17 00:00:00 2001
+-From: Adam Duskett <aduskett@gmail.com>
+-Date: Mon, 3 Feb 2020 10:07:15 -0800
+-Subject: [PATCH] disable tests
+-
+-If introspection data on the host is not built, meson throws the error:
+-"Unknown variable "typelibs". Because tests are not required, removing
+-the subdir tests altogether fixes this issue.
+-
+-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+----
+- meson.build | 6 ------
+- 1 file changed, 6 deletions(-)
+-
+-diff --git a/meson.build b/meson.build
+-index c2cb577f..65ce7adf 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -237,12 +237,6 @@ else
+- endif
+- subdir('docs')
+- 
+--# The tests will also run, which is not possible if they
+--# were built for a different architecture.
+--if not meson.is_cross_build()
+--  subdir('tests')
+--endif
+--
+- install_data('Makefile.introspection', install_dir: join_paths(get_option('datadir'), 'gobject-introspection-1.0'))
+- install_data('m4/introspection.m4', install_dir: join_paths(get_option('datadir'), 'aclocal'))
+- 
+--- 
+-2.25.1
+-
+diff --git a/package/gobject-introspection/gobject-introspection.hash b/package/gobject-introspection/gobject-introspection.hash
+index c39c06d102..044216c65f 100644
+--- a/package/gobject-introspection/gobject-introspection.hash
++++ b/package/gobject-introspection/gobject-introspection.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/gobject-introspection/1.82/gobject-introspection-1.82.0.sha256sum
+-sha256  0f5a4c1908424bf26bc41e9361168c363685080fbdb87a196c891c8401ca2f09  gobject-introspection-1.82.0.tar.xz
++# From https://download.gnome.org/sources/gobject-introspection/1.84/gobject-introspection-1.84.0.sha256sum
++sha256  945b57da7ec262e5c266b89e091d14be800cc424277d82a02872b7d794a84779  gobject-introspection-1.84.0.tar.xz
+ sha256  faa2e414bd5f91d2d2c39e85c7cc3f2ccde05c3306f96b404f8ed8cf0266c279  COPYING.LGPL
+ sha256  4c1cedcbb4a12ea964f1160dbbf36099e5a59b96129a99a1a1a61f2cb09271fb  COPYING.GPL
+-sha256  fb538e24d22de4f8dab6b48b862be84469bcc089e1cf98f6f46d6f74f6f44655  giscanner/scannerlexer.l
++sha256  60cf20b6532aa2f5622f753a55672630b789c04174acca361033e6f1ad29f8ab  giscanner/scannerlexer.l
+diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+index eb46fb61c1..12e527378f 100644
+--- a/package/gobject-introspection/gobject-introspection.mk
++++ b/package/gobject-introspection/gobject-introspection.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GOBJECT_INTROSPECTION_VERSION_MAJOR = 1.82
++GOBJECT_INTROSPECTION_VERSION_MAJOR = 1.84
+ GOBJECT_INTROSPECTION_VERSION = $(GOBJECT_INTROSPECTION_VERSION_MAJOR).0
+ GOBJECT_INTROSPECTION_SITE = https://download.gnome.org/sources/gobject-introspection/$(GOBJECT_INTROSPECTION_VERSION_MAJOR)
+ GOBJECT_INTROSPECTION_SOURCE = gobject-introspection-$(GOBJECT_INTROSPECTION_VERSION).tar.xz
+@@ -51,7 +51,10 @@ GOBJECT_INTROSPECTION_CONF_OPTS = \
+ 	-Dgi_cross_ldd_wrapper="$(STAGING_DIR)/usr/bin/g-ir-scanner-lddwrapper" \
+ 	-Dbuild_introspection_data=true \
+ 	-Ddoctool=disabled \
+-	-Dcairo=disabled
++	-Dcairo=disabled \
++	-Dtests=false
 +
-+File objects and their underlying file descriptors must be treated as
-+equivalent for lookup, or one may incorrectly be treated as not
-+registered when the other was used for the registration, leading to
-+bugs.
-+
-+Fixes: #689
-+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-+Upstream: https://gitlab.gnome.org/GNOME/pygobject/-/commit/4b97688d527276fc1e835fed71dbb73bbd09ac11
-+---
-+ gi/events.py         | 36 +++++++++++++++++++++-----
-+ tests/test_events.py | 61 ++++++++++++++++++++++++++++++++++++++++++++
-+ 2 files changed, 90 insertions(+), 7 deletions(-)
-+
-+diff --git a/gi/events.py b/gi/events.py
-+index da4775dc..9eba1629 100644
-+--- a/gi/events.py
-++++ b/gi/events.py
-+@@ -28,6 +28,7 @@ import threading
-+ import selectors
-+ import weakref
-+ import warnings
-++from collections.abc import Mapping
-+ from contextlib import contextmanager
-+ from . import _ossighelper
-+ 
-+@@ -508,9 +509,33 @@ if sys.platform != 'win32':
-+         # Subclass to attach _tag
-+         pass
-+ 
-++    class _FileObjectMapping(Mapping):
-++        def __init__(self, fd_dict):
-++            self.fd_dict = fd_dict
-++
-++        def __len__(self):
-++            return len(self.fd_dict)
-++
-++        def get(self, fileobj, default=None):
-++            fd = _fileobj_to_fd(fileobj)
-++            return self.fd_dict.get(fd, default)
-++
-++        def __getitem__(self, fileobj):
-++            value = self.get(fileobj)
-++            if value is None:
-++                raise KeyError("{!r} is not registered".format(fileobj))
-++            return value
-++
-++        def __iter__(self):
-++            return iter(self.fd_dict)
-++
-+     class _Selector(_SelectorMixin, selectors.BaseSelector):
-+         """A Selector for gi.events.GLibEventLoop registering python IO with GLib."""
-+ 
-++        def __init__(self, context, loop):
-++            super().__init__(context, loop)
-++            self._map = _FileObjectMapping(self._fd_to_key)
-++
-+         def attach(self):
-+             self._source.attach(self._loop._context)
-+ 
-+@@ -559,15 +584,12 @@ if sys.platform != 'win32':
-+         # We could override modify, but it is only slightly when the "events" change.
-+ 
-+         def get_key(self, fileobj):
-+-            fd = _fileobj_to_fd(fileobj)
-+-            return self._fd_to_key[fd]
-++            return self._map[fileobj]
-+ 
-+         def get_map(self):
-+-            """Return a mapping of file objects to selector keys."""
-+-            # Horribly inefficient
-+-            # It should never be called and exists just to prevent issues if e.g.
-+-            # python decides to use it for debug purposes.
-+-            return {k.fileobj: k for k in self._fd_to_key.values()}
-++            """Return a mapping of file objects or file descriptors to
-++            selector keys."""
-++            return self._map
-+ 
-+ 
-+ else:
-+diff --git a/tests/test_events.py b/tests/test_events.py
-+index a6585468..9dbf3827 100644
-+--- a/tests/test_events.py
-++++ b/tests/test_events.py
-+@@ -46,6 +46,7 @@ import sys
-+ import gi
-+ import gi.events
-+ import asyncio
-++import socket
-+ import threading
-+ from gi.repository import GLib, Gio
-+ 
-+@@ -344,3 +345,63 @@ class GLibEventLoopPolicyTests(unittest.TestCase):
-+         self.assertEqual(order, [GLib.PRIORITY_HIGH] * 3 +
-+                                 [GLib.PRIORITY_DEFAULT] * 3 +
-+                                 [GLib.PRIORITY_DEFAULT_IDLE] * 3)
-++
-++    @unittest.skipIf(sys.platform == 'win32', 'add reader/writer not implemented')
-++    def test_source_fileobj_fd(self):
-++        """Regression test for
-++        https://gitlab.gnome.org/GNOME/pygobject/-/issues/689
-++        """
-++        class Echo:
-++            def __init__(self, sock, expect_bytes):
-++                self.sock = sock
-++                self.sent_bytes = 0
-++                self.expect_bytes = expect_bytes
-++                self.done = asyncio.Future()
-++                self.data = bytes()
-++
-++            def send(self):
-++                if self.done.done():
-++                    return
-++                if self.sent_bytes < len(self.data):
-++                    self.sent_bytes += self.sock.send(
-++                        self.data[self.sent_bytes:])
-++                    print('sent', self.data)
-++                if self.sent_bytes >= self.expect_bytes:
-++                    self.done.set_result(None)
-++                    self.sock.shutdown(socket.SHUT_WR)
-++
-++            def recv(self):
-++                if self.done.done():
-++                    return
-++                self.data += self.sock.recv(self.expect_bytes)
-++                print('received', self.data)
-++                if len(self.data) >= self.expect_bytes:
-++                    self.sock.shutdown(socket.SHUT_RD)
-++
-++        async def run():
-++            loop = asyncio.get_running_loop()
-++            s1, s2 = socket.socketpair()
-++            sample = b'Hello!'
-++            e = Echo(s1, len(sample))
-++            # register using file object and file descriptor
-++            loop.add_reader(s1, e.recv)
-++            loop.add_writer(s1.fileno(), e.send)
-++            s2.sendall(sample)
-++            await asyncio.wait_for(e.done, timeout=2.0)
-++            echo = bytes()
-++            for _ in range(len(sample)):
-++                echo += s2.recv(len(sample))
-++                if len(echo) == len(sample):
-++                    break
-++            # remove using file object and file descriptor
-++            loop.remove_reader(s1)
-++            loop.remove_writer(s1.fileno())
-++            s1.close()
-++            s2.close()
-++            # check if the data was echoed correctly
-++            self.assertEqual(sample, echo)
-++
-++        policy = self.create_policy()
-++        loop = policy.get_event_loop()
-++        loop.run_until_complete(run())
-++        loop.close()
-+-- 
-+2.49.0
-+
++HOST_GOBJECT_INTROSPECTION_CONF_OPTS = -Dtests=false
+ 
+ # GI_SCANNER_DISABLE_CACHE=1 prevents g-ir-scanner from writing cache data to ${HOME}
+ GOBJECT_INTROSPECTION_CONF_ENV = \
 -- 
 2.49.0
 
