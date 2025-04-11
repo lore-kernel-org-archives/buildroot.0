@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 643B2C369A8
-	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:42:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7E0EC36010
+	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:42:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BCC2960DFE;
-	Fri, 11 Apr 2025 10:42:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 633746F5B5;
+	Fri, 11 Apr 2025 10:42:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T9VDh1CBFSGr; Fri, 11 Apr 2025 10:42:08 +0000 (UTC)
+ id sMW2XR57oUOP; Fri, 11 Apr 2025 10:42:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 096446F759
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E5A76F7B8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 096446F759;
-	Fri, 11 Apr 2025 10:42:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2D59C1BA
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E5A76F7B8;
+	Fri, 11 Apr 2025 10:42:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4807E138
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:41:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E4395403FB
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:41:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9406781320
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:41:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2YlufHeFoU0t for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YNgRYLBmYW72 for <buildroot@buildroot.org>;
  Fri, 11 Apr 2025 10:41:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B727403FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1156C81259
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B727403FC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1156C81259
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:41:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 38D4E842A0; Fri, 11 Apr 2025 10:41:48 +0000 (UTC)
+ id 0CC0D842A1; Fri, 11 Apr 2025 10:41:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 11 Apr 2025 12:40:31 +0200
+Date: Fri, 11 Apr 2025 12:40:27 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 3c43141521e415ad2a1887e58cc923737fb6541f
-X-Git-Newrev: 1acf0e216158bec82e9bc365bff6ba3e8b14e6bb
+X-Git-Oldrev: f68a7d397fbc20370a0545bd06612a2847a61ab6
+X-Git-Newrev: c4670e879e9a83057b2f6c6b7355b8e8c6228c40
 X-Patchwork-Hint: ignore
-Message-Id: <20250411104148.38D4E842A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/mbedtls: security
- bump to version 2.8.10
+Message-Id: <20250411104148.0CC0D842A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] {linux,
+ linux-headers}: bump 6.6.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,64 +66,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1acf0e216158bec82e9bc365bff6ba3e8b14e6bb
+commit: https://git.buildroot.net/buildroot/commit/?id=c4670e879e9a83057b2f6c6b7355b8e8c6228c40
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Fixes the following security issues:
-
-- CVE-2025-27809: Note that TLS clients should generally call
-  mbedtls_ssl_set_hostname() if they use certificate authentication (i.e.
-  not pre-shared keys).  Otherwise, in many scenarios, the server could be
-  impersonated.  The library will now prevent the handshake and return
-  MBEDTLS_ERR_SSL_CERTIFICATE_VERIFICATION_WITHOUT_HOSTNAME if
-  mbedtls_ssl_set_hostname() has not been called.
-
-  https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2025-03-1/
-
-- CVE-2025-27810: Zeroize temporary heap buffers used in PSA operations.
-  Fix a vulnerability in the TLS 1.2 handshake.  If memory allocation
-  failed or there was a cryptographic hardware failure when calculating the
-  Finished message, it could be calculated incorrectly.  This would break
-  the security guarantees of the TLS handshake.
-
-  https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2025-03-2/
-
-For more details, see the release notes:
-https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-2.28.10
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 91bfce113e895fc9637707e73567e5d13da3f169)
+(cherry picked from commit 7491f5fabcf7b8192cd689c352eccc04e5c72188)
+[Thomas: don't update 6.{12,13}.x, not in 2024.02.x]
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 2 +-
+ package/linux-headers/Config.in.host | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 9de7f731da..6fc68ddac6 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.9:
--sha256  e85ea97aaf78dd6c0a5ba2e54dd5932ffa15f39abfc189c26beef7684630c02b  mbedtls-2.28.9.tar.bz2
-+# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.10:
-+sha256  19e5b81fdac0fe22009b9e2bdcd52d7dcafbf62bc67fc59cf0a76b5b5540d149  mbedtls-2.28.10.tar.bz2
- # Locally calculated
- sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 2faa6dff55..fd6682fbfd 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/linux/Config.in b/linux/Config.in
+index 06c137caf3..d88a41e636 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -128,7 +128,7 @@ endif
  
--MBEDTLS_VERSION = 2.28.9
-+MBEDTLS_VERSION = 2.28.10
- MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(MBEDTLS_VERSION)
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION).tar.bz2
- MBEDTLS_CONF_OPTS = \
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.6.83" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.6.84" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 1a11a00fea..4eff42b60b 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  894bbbe63b7484a0bc576a1e11a8dbc090fbd476d6424431bdc8435e03c2c208  linux-6.6.83.tar.xz
++sha256  7fd20721551a61db347c5ac6ca05818e24058682be4e4389dc51e88d4ac17ba7  linux-6.6.84.tar.xz
+ sha256  44caf510603b4cbbe78ef828620099d200536d666e909ddb73bb2938c7de5b16  linux-6.1.131.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  9319a47b1e9b5d344ff6015431856d0c9640e4faedc527c87f9129061a27136f  linux-5.15.179.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2de97896da..ae2c9f9c5a 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -408,7 +408,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.10.235"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.179"	if BR2_KERNEL_HEADERS_5_15
+ 	default "6.1.131"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.83"	if BR2_KERNEL_HEADERS_6_6
++	default "6.6.84"	if BR2_KERNEL_HEADERS_6_6
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
