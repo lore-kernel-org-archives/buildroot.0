@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DD6FC36010
-	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:45:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71B4CC369A9
+	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:45:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 554E96FA17;
-	Fri, 11 Apr 2025 10:45:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 43FE1414FA;
+	Fri, 11 Apr 2025 10:45:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2OFp34qv7Rkx; Fri, 11 Apr 2025 10:45:13 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XhRx0IMvCn4M; Fri, 11 Apr 2025 10:45:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49E726FA72
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A4AA4167C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 49E726FA72;
-	Fri, 11 Apr 2025 10:45:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 02D88108
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A4AA4167C;
+	Fri, 11 Apr 2025 10:45:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 14A281BA
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 92C8360C30
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1C973822EA
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CjYgCtVZ1L2q for <buildroot@buildroot.org>;
- Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c0JZRDrAoLgr for <buildroot@buildroot.org>;
+ Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8225761AF3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2425781C56
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8225761AF3
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2425781C56
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7CD31843A6; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
+ id 222C1843A1; Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 11 Apr 2025 12:42:29 +0200
+Date: Fri, 11 Apr 2025 12:42:45 +0200
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 7578af8defa6f825a451ac71feb32d3da97559dc
-X-Git-Newrev: 1c2bf818aa16abbbe8bfcbc588a595e20d28ccf9
+X-Git-Oldrev: ee7c227b1607db81ceca0727f63202515ffb0024
+X-Git-Newrev: 0800072403b7ad198e6f346e98592986b50ae7d5
 X-Patchwork-Hint: ignore
-Message-Id: <20250411104450.7CD31843A6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/tinyxml2:
- security bump version to 11.0.0
+Message-Id: <20250411104451.222C1843A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/python-twisted:
+ fix cpe id vendor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,46 +66,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c2bf818aa16abbbe8bfcbc588a595e20d28ccf9
+commit: https://git.buildroot.net/buildroot/commit/?id=0800072403b7ad198e6f346e98592986b50ae7d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-Release notes:
-https://github.com/leethomason/tinyxml2/releases/tag/10.1.0
-https://github.com/leethomason/tinyxml2/releases/tag/11.0.0
+twistedmatrix is deprecated, twisted is the current cpe id vendor
+for python-twisted.
 
-Fixes CVE-2024-50615: https://github.com/advisories/GHSA-884x-p7qm-gq3f
+See:
+https://nvd.nist.gov/products/cpe/detail/A38171CB-8F75-4CE2-8C00-229D4A8F1C0E
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Gilles Bardoux <gilles.bardoux@sagemcom.com>
+[Julien: reformat patch and add nvd link]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 4087461203c9788bc51c918d38a0ae9911499fa7)
+(cherry picked from commit 1747ebf29b577f4b1ef03b0633bedd525ce9947d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/tinyxml2/tinyxml2.hash | 2 +-
- package/tinyxml2/tinyxml2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-twisted/python-twisted.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tinyxml2/tinyxml2.hash b/package/tinyxml2/tinyxml2.hash
-index a131b8624d..6efe202b52 100644
---- a/package/tinyxml2/tinyxml2.hash
-+++ b/package/tinyxml2/tinyxml2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3bdf15128ba16686e69bce256cc468e76c7b94ff2c7f391cc5ec09e40bff3839  tinyxml2-10.0.0.tar.gz
-+sha256  5556deb5081fb246ee92afae73efd943c889cef0cafea92b0b82422d6a18f289  tinyxml2-11.0.0.tar.gz
- sha256  9332252e9b9e46db8285d4a3f0bf25f139bf1dca6781b956d57f2302efca6432  LICENSE.txt
-diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
-index 044b8f82db..ab04091753 100644
---- a/package/tinyxml2/tinyxml2.mk
-+++ b/package/tinyxml2/tinyxml2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TINYXML2_VERSION = 10.0.0
-+TINYXML2_VERSION = 11.0.0
- TINYXML2_SITE = $(call github,leethomason,tinyxml2,$(TINYXML2_VERSION))
- TINYXML2_LICENSE = Zlib
- TINYXML2_LICENSE_FILES = LICENSE.txt
+diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
+index 424efdadba..90b74bc9a3 100644
+--- a/package/python-twisted/python-twisted.mk
++++ b/package/python-twisted/python-twisted.mk
+@@ -10,7 +10,7 @@ PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/b2/0f/2d0b0dcd52a8
+ PYTHON_TWISTED_SETUP_TYPE = hatch
+ PYTHON_TWISTED_LICENSE = MIT
+ PYTHON_TWISTED_LICENSE_FILES = LICENSE
+-PYTHON_TWISTED_CPE_ID_VENDOR = twistedmatrix
++PYTHON_TWISTED_CPE_ID_VENDOR = twisted
+ PYTHON_TWISTED_CPE_ID_PRODUCT = twisted
+ PYTHON_TWISTED_DEPENDENCIES = \
+ 	host-python-hatch-fancy-pypi-readme \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
