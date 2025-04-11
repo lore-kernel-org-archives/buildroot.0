@@ -1,115 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC2FBC3601E
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE1FAC369A6
 	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 02:35:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6A38E60721;
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2634380CA0;
 	Fri, 11 Apr 2025 02:35:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kol-Q_8VFnOV; Fri, 11 Apr 2025 02:35:36 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1-c_aMait6gj; Fri, 11 Apr 2025 02:35:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 949346072A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E931F82CD3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 949346072A;
-	Fri, 11 Apr 2025 02:35:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A9BE6138
+	by smtp1.osuosl.org (Postfix) with ESMTP id E931F82CD3;
+	Fri, 11 Apr 2025 02:35:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 208B3193
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 02:35:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A6C004094F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 05EA182768
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 02:35:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lXvSs-fEtE92 for <buildroot@buildroot.org>;
- Fri, 11 Apr 2025 02:35:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SPG_EkkqRnfc for <buildroot@buildroot.org>;
+ Fri, 11 Apr 2025 02:35:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::536; helo=mail-pg1-x536.google.com;
+ client-ip=2607:f8b0:4864:20::102f; helo=mail-pj1-x102f.google.com;
  envelope-from=charlie@rivosinc.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0A14D40C1D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A14D40C1D
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com
- [IPv6:2607:f8b0:4864:20::536])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0A14D40C1D
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 02:35:33 +0000 (UTC)
-Received: by mail-pg1-x536.google.com with SMTP id
- 41be03b00d2f7-ad51f427054so1155664a12.1
- for <buildroot@buildroot.org>; Thu, 10 Apr 2025 19:35:33 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A1ACD80B2B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1ACD80B2B
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com
+ [IPv6:2607:f8b0:4864:20::102f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A1ACD80B2B
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 02:35:32 +0000 (UTC)
+Received: by mail-pj1-x102f.google.com with SMTP id
+ 98e67ed59e1d1-30384072398so1357335a91.0
+ for <buildroot@buildroot.org>; Thu, 10 Apr 2025 19:35:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1744338933; x=1744943733;
- h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
- :mime-version:subject:date:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=PzQOoXt9HsRILhvjZ+8mC5jPkHuZsTuT98Saj6Nse7E=;
- b=F+viHMv2vkIhZW1djd4bBR/eAFLfRIExAH54YlFMRkACYUDiGriBRo+W6RtTBmsL3X
- V+eGLE7D8BtMWbAAX1bvMoYNVsouD1CpCGjn4oKZ2SOUdnE+rJDfaPOfMh74U1Oz43lo
- +GhfWZKMVuNFOBFfenUqjaqTp09GWiVjF1dZb5a5D6AjfRIik7EZXeHNrzv2h66DtFEH
- KcbBne0sIyspmG2Y+XORvJFXJ600gQbb8kOe6cVLd47l1QjWkaqN4YJY6MzuSncqWuPg
- gJaPhQ6CU3WK/fwx3WF+DhI2pKANhyijUlx1qEhP8JHDowsjhwQHnmlc9fs5wJmXX5zo
- BKQw==
-X-Gm-Message-State: AOJu0YzEdvnH79YHxQR7I0+q8jo5m7gLwcUrhnsHaimHDvBsSowT6frS
- JoA0eKF9P64IWsvAc93/PUuWrFzzsE5dGWwuGYc7YBRYLVT0h+gyiDbqFO/9bTU=
-X-Gm-Gg: ASbGncsChaeIx9jb2aMBy1h9SuNNghRmglnQwiQ9xLyvNAu6UqDucSJKffIE63Z0feh
- ZGKfLPHO9QwStnZr8EtEVMzbQJPntcaVnPzyXgN6QbQSuwaftpZlsBa6kEkrWBrBWveXW6dZP2X
- i0Bap0I49yun2xqvbH/v1FoVFP7ryDTilypsIVjrCeqwGHHOhShJ3Trkw0FkcUoML5SDuwsc7VF
- nmva1b2JqvnOc/qAfIZ2x4cixXsJNHSFxsm11iCUevOTnpy8A1FTa+mgQUz4RBAPZxm8SAgU4vL
- 8VVpsxJ0ih1HtsSeZKJXotpybpUkl7aqZ5fkz+lqLGr7y9fTTUK6rP57
-X-Google-Smtp-Source: AGHT+IHRe8SA0qaNwkJBRYiLwd3ywxbnSuj4jotCZ8xk2hNHbCdGVonmcglxrQ3NyEqhOCmqUnjzPQ==
-X-Received: by 2002:a17:90b:3806:b0:2ee:e113:815d with SMTP id
- 98e67ed59e1d1-30823662bf6mr1979163a91.8.1744338933350; 
- Thu, 10 Apr 2025 19:35:33 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1744338932; x=1744943732;
+ h=cc:to:content-transfer-encoding:mime-version:message-id:date
+ :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=n8eLUr58aGaW1nWs+nDOnxmnieYuGNln2Ce2UMoziE0=;
+ b=sO30I39rM9m4mIfAi3HaILyMbYFVbwGRv9pFEale/Vl9UCNSOKX9PBGu0dyruCOPz+
+ jHhpcEfmQjAUd2ijZipruJRfiImUcNCSgPvQjz/EP3lGgnWkgWbgyfLk+PKbV3ty05tA
+ G5jy82gFIRLBsOspcHizUY/SgNxlRo1GtpHb348kS3vvetswX3O7CobYm++QCRRiYNMp
+ 4ILVSKgeN5VpiHXAsoNwHbaVsz3ZCwt+9rBmRt03c72ZbwV/O1f+oTx197JqRLcoA9yE
+ DdBD05jC+IX+Xa1+9SerK9OVNKXjv1I5TV6IXMH5tTEHcy0do9TsXwyGoFZ9WFVN+lFh
+ UDpw==
+X-Gm-Message-State: AOJu0YxiCGBm99oPbKfLl2aFjw1qoIkRFmlFxpCHrwtI0bqE1mg5jnLG
+ 25mYl/mpdFOVJeX+lZp7UcfFb+89HAzVjgueqhz+kBTmNMjuatHvZHCpkAX/aF4w4VkOhEY7biI
+ k
+X-Gm-Gg: ASbGncsw5c7C8NAdhyZJR+Qx+TJ+NnwR22/bu397k0o6djv74BUC1+VX3A4uqr9YrVg
+ 7gXtqbxdOIVJKOeTQiA7SNaGYsFJOCWorwWdjrFYuEOKdWiJ3PKdNanRO7kGCbuoqMFuWyoLc7/
+ UQAtPE99JsmtQi4e7Fvgv/3aEV2MHIsFZX2Zs10Ezp6cmNxYRVqtKbGT/1tfpReGK/u2830NOAN
+ RS8vjBrEm6jWmWVInA7dfKJQKn34J6+hararwtjC5W19xDd5SI9cTB738wXzST9ggXaiGNT8E/F
+ c1adzy2rTl+HQqIJH3LPOP9qM/QfbFpsPn1sB4qvh/QcdzFZdDNiw6r/
+X-Google-Smtp-Source: AGHT+IFidU3HEfp4pfM4BKPh4YeAleFyOvGaJQZWcy86RicVUZpZJFJ2cIG6U4dxaV/N570wezIV2Q==
+X-Received: by 2002:a17:90b:2dc2:b0:2ee:90a1:5d42 with SMTP id
+ 98e67ed59e1d1-308235fc4demr2372129a91.0.1744338932019; 
+ Thu, 10 Apr 2025 19:35:32 -0700 (PDT)
 Received: from charlie.ba.rivosinc.com ([64.71.180.162])
  by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-308218fecf2sm900117a91.7.2025.04.10.19.35.32
+ 98e67ed59e1d1-308218fecf2sm900117a91.7.2025.04.10.19.35.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 10 Apr 2025 19:35:32 -0700 (PDT)
+ Thu, 10 Apr 2025 19:35:31 -0700 (PDT)
 From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Thu, 10 Apr 2025 19:35:18 -0700
+Date: Thu, 10 Apr 2025 19:35:17 -0700
+Message-Id: <20250410-improve_merge_config-v1-0-13805f34defd@rivosinc.com>
 MIME-Version: 1.0
-Message-Id: <20250410-improve_merge_config-v1-1-13805f34defd@rivosinc.com>
-References: <20250410-improve_merge_config-v1-0-13805f34defd@rivosinc.com>
-In-Reply-To: <20250410-improve_merge_config-v1-0-13805f34defd@rivosinc.com>
+X-B4-Tracking: v=1; b=H4sIAOV/+GcC/x3MTQqAIBBA4avIrBNU+qGuEhFlo80ilREiCO+et
+ PwW772QkQkzTOIFxpsyxVChGwH23IJHSUc1GGU61Wol6Uocb1wvZI+rjcGRl7ofDqNHs7uxhZo
+ mRkfPv52XUj4O0XjSZgAAAA==
+X-Change-ID: 20250410-improve_merge_config-167d2192bf94
 To: buildroot@buildroot.org
 Cc: Petr Vorel <petr.vorel@gmail.com>, Charlie Jenkins <charlie@rivosinc.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1607; i=charlie@rivosinc.com; 
- h=from:subject:message-id;
- bh=r40KIEG29vKO1cCpWbxZXsttja7Dk7zNcfDIH3SnYVI=; 
- b=owGbwMvMwCXWx5hUnlvL8Y3xtFoSQ/qP+k/f98jsTMxZcfnzrNYniy6HRjV18kU3BacdFXZP2
- WzEeoijo5SFQYyLQVZMkYXnWgNz6x39sqOiZRNg5rAygQxh4OIUgIlcYGX4X3H03/HlNpbTkl0/
- 7dKbKyxcxPjzBM/cJ/cfeLrPDrzzZQrD/9QH/dxWQRLVJu8v/7x6pklGp2qHz/z/JgkrjbbIsbH
- 8YAAA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=714; i=charlie@rivosinc.com;
+ h=from:subject:message-id; bh=x8qQMN1msVYHSwWMSdCFd+rNfRGCp07aRn0nMB2XtHA=;
+ b=owGbwMvMwCXWx5hUnlvL8Y3xtFoSQ/qP+ud73hcHzL3qzavKmb458qMKiyDzycl8dsuW3QzZm
+ SQinbW6o5SFQYyLQVZMkYXnWgNz6x39sqOiZRNg5rAygQxh4OIUgIkckWL4n2vW1c37/PHqn86X
+ H2wL+LtD6veG+A2uj91Cd6dPEffNSWRk+KiuYGzKcbPnuve/TouaEO96sXWiL/weHMidrDlX7ac
+ 2IwA=
 X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
  fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1744338933; x=1744943733;
+ d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1744338932; x=1744943732;
  darn=buildroot.org; 
- h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
- :mime-version:subject:date:from:from:to:cc:subject:date:message-id
- :reply-to;
- bh=PzQOoXt9HsRILhvjZ+8mC5jPkHuZsTuT98Saj6Nse7E=;
- b=FO406uSvoI8U6sYbW+vjcfHamb3auprNG4+2O3ypCs7vG0tTVH17pSFjdgsTUCBVrP
- Jk72m/G9Lut5ASq/6UZqAKbi+yEKLmyiVsmvKaSxpEwjh8Wx2AMJlSVZLqmcvM2bqBYJ
- Nq/hInQEYHCS89mkfUAGa0qMEuXI7LofXSTLYGNENRhZZBjamemneUcTb8X7fCH2q4Me
- mE+GeEWD4gtGPhX95CW9Xnv1QXBd8r9NmpnT2QlDEwKAcg6ull0DrbK7T9STgRDglQR6
- zbfhCzTvxu7UaHUULUwu74RCL85xR/Np5vpO9se53O4P4Dknre3TJaQRn+OEoHsA+rPm
- h8Mw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=cc:to:content-transfer-encoding:mime-version:message-id:date
+ :subject:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=n8eLUr58aGaW1nWs+nDOnxmnieYuGNln2Ce2UMoziE0=;
+ b=lKmms7B1NalU7zxDQ9iW7dnVCdNOR1+umeMubB2jw0Nkk8NammV+5T/N9Z12i8DTI1
+ rG9A6CO7HYqm8SQ6BQ0AmjwXuQz8lPBaeekKZttLvTwg33ZXsnqPuqpEvRWxmXN+FwX4
+ brSZFWGvWKaZxc/YgcwfB2abvQL7eMm0UJ6ETvWg3XX+SoMt1CvEjE1Ha7xi5nrpHewc
+ qwmcG8ZOfd78fKkoKyA4SjY6YN2NJQ1Q+t0KJtFac9DbiC25HZRhKYDun385Sh/n/wb6
+ DLYvQWOYjhoVhUqI4iN0bOCgeH4TQDTfjc0PmNxhu1Tehg/z8sbJBB1iRJ5oM8T6xoig
+ Er8g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=rivosinc.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=rivosinc-com.20230601.gappssmtp.com
  header.i=@rivosinc-com.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=FO406uSv
-Subject: [Buildroot] [PATCH 1/3] support/kconfig: Support running
- merge_config.sh from a different directory
+ header.s=20230601 header.b=lKmms7B1
+Subject: [Buildroot] [PATCH 0/3] support/kconfig: various merge_config.sh
+ improvements
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -126,63 +127,24 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Use the "-C" option to cd into a directory before merging, similar to
-the "-C" option to make.
+I am using merge_config.sh along with config fragments in some automated
+build testing. There are three features here in three patches to aid in
+this.
 
 Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 ---
- support/kconfig/merge_config.sh | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Charlie Jenkins (3):
+      support/kconfig: Support running merge_config.sh from a different directory
+      support/kconfig: Allow appending to config
+      support/kconfig: Add option to fail merge_config.sh on invalid configs
 
-diff --git a/support/kconfig/merge_config.sh b/support/kconfig/merge_config.sh
-index 14917806a391a386240b41f585baa68ca3bd99bc..daaa055b70dbe790578148255b490b6010815c30 100755
---- a/support/kconfig/merge_config.sh
-+++ b/support/kconfig/merge_config.sh
-@@ -34,6 +34,7 @@ usage() {
- 	echo "  -r    list redundant entries when merging fragments"
- 	echo "  -O    dir to put generated output files.  Consider setting \$KCONFIG_CONFIG instead."
- 	echo "  -e    colon-separated list of br2-external trees to use (optional)"
-+	echo "  -C    change to directory before doing anything else"
- 	echo
- 	echo "Used prefix: '$CONFIG_PREFIX'. You can redefine it with \$CONFIG_
- 	environment variable."
-@@ -81,6 +82,11 @@ while true; do
- 		shift 2
- 		continue
- 		;;
-+	"-C")
-+		BASE_DIRECTORY=$2
-+		shift 2
-+		continue
-+		;;
- 	*)
- 		break
- 		;;
-@@ -92,6 +98,12 @@ if [ "$#" -lt 1 ] ; then
- 	exit
- fi
- 
-+ORIGINAL_DIR=$PWD
-+
-+if [ ! -z "$BASE_DIRECTORY" ]; then
-+	cd "$BASE_DIRECTORY" || exit
-+fi
-+
- if [ -z "$KCONFIG_CONFIG" ]; then
- 	if [ "$OUTPUT" != . ]; then
- 		KCONFIG_CONFIG=$(readlink -m -- "$OUTPUT/.config")
-@@ -179,4 +191,8 @@ for CFG in $(sed -n -e "$SED_CONFIG_EXP1" -e "$SED_CONFIG_EXP2" $TMP_FILE); do
- 	fi
- done
- 
-+if [ -z "$BASE_DIRECTORY" ]; then
-+	cd "$ORIGINAL_DIR" || clean_up
-+fi
-+
- clean_up
-
+ support/kconfig/merge_config.sh | 50 +++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 48 insertions(+), 2 deletions(-)
+---
+base-commit: c497e5fcc7b5d6b0877ba0dc557c604dcd194260
+change-id: 20250410-improve_merge_config-167d2192bf94
 -- 
-2.43.0
+- Charlie
 
 _______________________________________________
 buildroot mailing list
