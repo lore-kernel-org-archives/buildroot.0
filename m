@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D450FC369A9
-	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:42:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E3D7C369A8
+	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:42:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A37B740844;
-	Fri, 11 Apr 2025 10:42:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B4576FA34;
+	Fri, 11 Apr 2025 10:42:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pswnfEG72KRT; Fri, 11 Apr 2025 10:42:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id b9dDAzADJerc; Fri, 11 Apr 2025 10:42:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4C4440B67
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EB6C6FA41
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D4C4440B67;
-	Fri, 11 Apr 2025 10:42:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6EB6C6FA41;
+	Fri, 11 Apr 2025 10:42:41 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 529E4108
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:41:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4BE82108
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:41:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A7C181211
+ by smtp1.osuosl.org (Postfix) with ESMTP id D3CBE81320
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:41:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sj0Z90M3zMoS for <buildroot@buildroot.org>;
+ id 6XRsWjDw6taj for <buildroot@buildroot.org>;
  Fri, 11 Apr 2025 10:41:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 862F281370
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 90A208146A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 862F281370
+ by smtp1.osuosl.org (Postfix) with ESMTP id 90A208146A
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:41:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7EFF28429F; Fri, 11 Apr 2025 10:41:48 +0000 (UTC)
+ id 8EE99842A0; Fri, 11 Apr 2025 10:41:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 11 Apr 2025 12:40:38 +0200
+Date: Fri, 11 Apr 2025 12:40:41 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 8fc12cb424a6eed209c7845efb373fcc73c41a0c
-X-Git-Newrev: 8dc877800db26aa846fc8210cbc8043d64297752
+X-Git-Oldrev: d76c69a46e196c966c4f28e7e2a66e8126465bc0
+X-Git-Newrev: 7dafd0cb1ff9baf1eff7045eb9aad84ff4676e95
 X-Patchwork-Hint: ignore
-Message-Id: <20250411104148.7EFF28429F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] support/download/svn: use
- 'svn info' whith LC_ALL=C
+Message-Id: <20250411104148.8EE99842A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/dillo: remove
+ trailing slash in _SITE url
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,66 +61,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2553163845854494996=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2553163845854494996==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=8dc877800db26aa846fc8210cbc8043d64297752
+commit: https://git.buildroot.net/buildroot/commit/?id=7dafd0cb1ff9baf1eff7045eb9aad84ff4676e95
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Use the 'C' locale when retrieving the date of the last change using
-'svn info' since the svn download helper script expect
-"Last Changed Date" string.
+Commit f2a862fe60 (package/dillo: move to github) changed the source
+site for the Dillo package. This change introduced a trailing slash at
+the end of the URL.
 
-If another locale is used, the 'date' is empty so the generated
-archive (by mk_tar_gz) will not match the expected hash since
-the file timestamp is not set properly.
+This cause an error when running `make show-info` with `BR2_PACKAGE_DILLO=y`:
 
-If LANG=fr_FR.UTF-8 is defined in the host system, svn print some
-"French encrypted" text:
+```
+package/dillo/dillo.mk:46: *** DILLO_SITE (https://github.com/dillo-browser/dillo/releases/download/v3.0.5/) cannot have a trailing slash.  Stop.
+```
 
-  eval svn --non-interactive --config-option servers:global:http-timeout=10 info ''\''https://svn.code.sf.net/p/xmlrpc-c/code/advanced@r3176'\'''
-  ...
-  Date de la dernière modification: 2023-09-02 19:13:35 +0200 (sam. 02 sept. 2023)
+This commit removes the trailing slash.
 
-diffoscope confirm that the file timestamp is not set correctly
-in the generated archive:
-
-$ diffoscope NOK/libxmlrpc-r3176-svn5.tar.gz OK/libxmlrpc-r3176-svn5.tar.gz
-
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 8d3b1781f639c174de3b09e292179f6f81da61f1)
+(cherry picked from commit a3b4ae2eaca9791c7c184e49a04a348dd35185c3)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/download/svn | 2 +-
+ package/dillo/dillo.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/download/svn b/support/download/svn
-index 1decb2310b..d7c7a686de 100755
---- a/support/download/svn
-+++ b/support/download/svn
-@@ -79,7 +79,7 @@ done
- # In case there is a redirection (e.g. http -> https), just keep the
- # last line (svn outputs everything on stdout)
- # shellcheck disable=SC2086 # creds may be empty
--date="$( _plain_svn info ${creds} "'${uri}@${rev}'" \
-+date="$( LC_ALL=C _plain_svn info ${creds} "'${uri}@${rev}'" \
-         |sed -r -e '/^Last Changed Date: /!d; s///'
-        )"
+diff --git a/package/dillo/dillo.mk b/package/dillo/dillo.mk
+index 5a823aa4a3..802be84717 100644
+--- a/package/dillo/dillo.mk
++++ b/package/dillo/dillo.mk
+@@ -6,7 +6,7 @@
  
-
---===============2553163845854494996==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ DILLO_VERSION = 3.0.5
+ DILLO_SOURCE = dillo-$(DILLO_VERSION).tar.bz2
+-DILLO_SITE = https://github.com/dillo-browser/dillo/releases/download/v$(DILLO_VERSION)/
++DILLO_SITE = https://github.com/dillo-browser/dillo/releases/download/v$(DILLO_VERSION)
+ DILLO_LICENSE = GPL-3.0+
+ DILLO_LICENSE_FILES = COPYING
+ # configure.ac gets patched, so autoreconf is necessary
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2553163845854494996==--
