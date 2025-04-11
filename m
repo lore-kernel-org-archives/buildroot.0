@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F975C36010
-	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:42:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D450FC369A9
+	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:42:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2751A60E14;
-	Fri, 11 Apr 2025 10:42:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A37B740844;
+	Fri, 11 Apr 2025 10:42:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jF8YuHovO4VV; Fri, 11 Apr 2025 10:42:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pswnfEG72KRT; Fri, 11 Apr 2025 10:42:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A75886FA58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4C4440B67
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A75886FA58;
-	Fri, 11 Apr 2025 10:42:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 15882108
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4C4440B67;
+	Fri, 11 Apr 2025 10:42:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 529E4108
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:41:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 20D0E60D54
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A7C181211
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:41:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DJNHSyP8G8Vm for <buildroot@buildroot.org>;
- Fri, 11 Apr 2025 10:41:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sj0Z90M3zMoS for <buildroot@buildroot.org>;
+ Fri, 11 Apr 2025 10:41:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE9B860E1A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 862F281370
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EE9B860E1A
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:41:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 862F281370
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:41:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DC68D842A0; Fri, 11 Apr 2025 10:41:47 +0000 (UTC)
+ id 7EFF28429F; Fri, 11 Apr 2025 10:41:48 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 11 Apr 2025 12:40:23 +0200
+Date: Fri, 11 Apr 2025 12:40:38 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 8b854bc10ac89a1b469210ecab6791f2f28d2887
-X-Git-Newrev: de60d2c38af376248bacbe8830951958be8852e4
+X-Git-Oldrev: 8fc12cb424a6eed209c7845efb373fcc73c41a0c
+X-Git-Newrev: 8dc877800db26aa846fc8210cbc8043d64297752
 X-Patchwork-Hint: ignore
-Message-Id: <20250411104147.DC68D842A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/tor: bump version
- to 0.4.8.15
+Message-Id: <20250411104148.7EFF28429F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] support/download/svn: use
+ 'svn info' whith LC_ALL=C
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,52 +61,66 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2553163845854494996=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de60d2c38af376248bacbe8830951958be8852e4
+--===============2553163845854494996==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=8dc877800db26aa846fc8210cbc8043d64297752
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Release notes:
-https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
-https://forum.torproject.org/t/stable-release-0-4-8-15/17998
+Use the 'C' locale when retrieving the date of the last change using
+'svn info' since the svn download helper script expect
+"Last Changed Date" string.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+If another locale is used, the 'date' is empty so the generated
+archive (by mk_tar_gz) will not match the expected hash since
+the file timestamp is not set properly.
+
+If LANG=fr_FR.UTF-8 is defined in the host system, svn print some
+"French encrypted" text:
+
+  eval svn --non-interactive --config-option servers:global:http-timeout=10 info ''\''https://svn.code.sf.net/p/xmlrpc-c/code/advanced@r3176'\'''
+  ...
+  Date de la dernière modification: 2023-09-02 19:13:35 +0200 (sam. 02 sept. 2023)
+
+diffoscope confirm that the file timestamp is not set correctly
+in the generated archive:
+
+$ diffoscope NOK/libxmlrpc-r3176-svn5.tar.gz OK/libxmlrpc-r3176-svn5.tar.gz
+
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit f9a02e7b80b24c3f71e69f149169fac556c6a63e)
+(cherry picked from commit 8d3b1781f639c174de3b09e292179f6f81da61f1)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/tor/tor.hash | 4 ++--
- package/tor/tor.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/download/svn | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/tor/tor.hash b/package/tor/tor.hash
-index def488d516..d2e3cc533d 100644
---- a/package/tor/tor.hash
-+++ b/package/tor/tor.hash
-@@ -1,4 +1,4 @@
--# From https://dist.torproject.org/tor-0.4.8.14.tar.gz.sha256sum
--sha256  5047e1ded12d9aac4eb858f7634a627714dd58ce99053d517691a4b304a66d10  tor-0.4.8.14.tar.gz
-+# From https://dist.torproject.org/tor-0.4.8.15.tar.gz.sha256sum
-+sha256  5d5d99e21992c4c71af1afcef16c70f4c5e7ee021633ac138b2a2761be75064b  tor-0.4.8.15.tar.gz
- # Locally computed
- sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
-diff --git a/package/tor/tor.mk b/package/tor/tor.mk
-index f4e1efb051..e8e769bdef 100644
---- a/package/tor/tor.mk
-+++ b/package/tor/tor.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/download/svn b/support/download/svn
+index 1decb2310b..d7c7a686de 100755
+--- a/support/download/svn
++++ b/support/download/svn
+@@ -79,7 +79,7 @@ done
+ # In case there is a redirection (e.g. http -> https), just keep the
+ # last line (svn outputs everything on stdout)
+ # shellcheck disable=SC2086 # creds may be empty
+-date="$( _plain_svn info ${creds} "'${uri}@${rev}'" \
++date="$( LC_ALL=C _plain_svn info ${creds} "'${uri}@${rev}'" \
+         |sed -r -e '/^Last Changed Date: /!d; s///'
+        )"
  
--TOR_VERSION = 0.4.8.14
-+TOR_VERSION = 0.4.8.15
- TOR_SITE = https://dist.torproject.org
- TOR_LICENSE = BSD-3-Clause
- TOR_LICENSE_FILES = LICENSE
+
+--===============2553163845854494996==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2553163845854494996==--
