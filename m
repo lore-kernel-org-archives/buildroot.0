@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11E50C36010
-	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:45:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E872C369A9
+	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:45:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD4136FB02;
-	Fri, 11 Apr 2025 10:45:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D3D66F7FC;
+	Fri, 11 Apr 2025 10:45:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uzEWVb8DqNS6; Fri, 11 Apr 2025 10:45:22 +0000 (UTC)
+ id UapoBltMj3Ot; Fri, 11 Apr 2025 10:45:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BBC136FB80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 068436FBD1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BBC136FB80;
-	Fri, 11 Apr 2025 10:45:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2BB1D1BA
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 068436FBD1;
+	Fri, 11 Apr 2025 10:45:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0547D138
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B8F2F81D4F
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E304B6F5FE
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DJjJ2_R-a82H for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2WF6Nl8Pdd5O for <buildroot@buildroot.org>;
  Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFBC18218F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4E8F6F638
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BFBC18218F
+ by smtp3.osuosl.org (Postfix) with ESMTP id D4E8F6F638
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BC9E8843A2; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
+ id D2858843A1; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 11 Apr 2025 12:42:36 +0200
+Date: Fri, 11 Apr 2025 12:42:38 +0200
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 1211e4125e7cb7fd1b39f6f916d16c37f5044d3c
-X-Git-Newrev: cd29193cc19eb32b84741b09bc0e0a15b64c99da
+X-Git-Oldrev: ed273e241f0b2c01014c1ed2386ee9e96ebe4838
+X-Git-Newrev: 66273b5e1015541fffb80f1044094e00a4a5fd3a
 X-Patchwork-Hint: ignore
-Message-Id: <20250411104450.BC9E8843A2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/v4l2loopback: fix
- v4l2loopback-ctl compile/install
+Message-Id: <20250411104450.D2858843A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/freeswitch: fix
+ build with GCC 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,83 +66,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd29193cc19eb32b84741b09bc0e0a15b64c99da
+commit: https://git.buildroot.net/buildroot/commit/?id=66273b5e1015541fffb80f1044094e00a4a5fd3a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-Since upstream commit [1] the original v4l2loopback-ctl bash script was
-replaced by a C version, so add a proper compile step (and remove bash
-runtime dependency) to fix '[help] v4l2loopback package build fails for
-raspberrypi5' [2].
-
-The issue can be reproduced with the commands:
-
-    cat <<EOF >.config
-    BR2_aarch64=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_LINUX_KERNEL=y
-    BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-    BR2_PACKAGE_V4L2LOOPBACK=y
-    BR2_PACKAGE_V4L2LOOPBACK_UTILS=y
-    EOF
-    make olddefconfig
-    make v4l2loopback
-
-Note: upstream commit [1] was introduced in version v0.13.0.
-Buildroot bumped v4l2loopback to v0.13.2 in [3].
-
 Fixes:
+https://autobuild.buildroot.org/results/33c/33c41d8da8190933d863ed6f75e5d586d1c22a2f/
 
-  /usr/bin/install: cannot stat
-  '.../build/v4l2loopback-0.13.2/utils/v4l2loopback-ctl':
-  No such file or directory
+Build error is also present on the 2024.11.x branch:
+https://autobuild.buildroot.org/results/7eef69e6587783307cd9231abdc4a2fee60c075f/
 
-[1] https://github.com/v4l2loopback/v4l2loopback/commit/33922fa4e9965d400edcc2761e55fedf84bbb22a
-[2] https://lists.busybox.net/pipermail/buildroot/2025-March/775911.html
-[3] https://gitlab.com/buildroot.org/buildroot/-/commit/02540771bccf7b10c7daecce5f0e1e41a73c1e07
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[Julien:
- - add commands to reproduce the issue
- - add reference to buildroot commit introducing the issue
-]
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 5d85d23e16fdf9e6574e2a3cbdf4d27d17cd6942)
+(cherry picked from commit 8c439db4a14bd67267505623c5b3e20fc96a878c)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/v4l2loopback/Config.in       | 4 ----
- package/v4l2loopback/v4l2loopback.mk | 4 ++++
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...xml_int-mod_xml_rpc-const-compiler-errors.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/v4l2loopback/Config.in b/package/v4l2loopback/Config.in
-index d8ca31e577..4bfa9a4fdd 100644
---- a/package/v4l2loopback/Config.in
-+++ b/package/v4l2loopback/Config.in
-@@ -14,10 +14,6 @@ if BR2_PACKAGE_V4L2LOOPBACK
- 
- config BR2_PACKAGE_V4L2LOOPBACK_UTILS
- 	bool "utils"
--	depends on BR2_USE_MMU # bash
--	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
--	select BR2_PACKAGE_BASH # runtime dependency
--	select BR2_PACKAGE_SUDO # runtime dependency
- 	help
- 	  Install applications to interact with v4l2-loopback devices
- 	  ("virtual video devices").  Currently there is only a single
-diff --git a/package/v4l2loopback/v4l2loopback.mk b/package/v4l2loopback/v4l2loopback.mk
-index 0e1d20c0cc..a4ddf5e2d9 100644
---- a/package/v4l2loopback/v4l2loopback.mk
-+++ b/package/v4l2loopback/v4l2loopback.mk
-@@ -11,6 +11,10 @@ V4L2LOOPBACK_LICENSE_FILES = COPYING
- V4L2LOOPBACK_CPE_ID_PREFIX = cpe:2.3:o
- 
- ifeq ($(BR2_PACKAGE_V4L2LOOPBACK_UTILS),y)
-+define V4L2LOOPBACK_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) utils
-+endef
+diff --git a/package/freeswitch/0003-xml_int-mod_xml_rpc-const-compiler-errors.patch b/package/freeswitch/0003-xml_int-mod_xml_rpc-const-compiler-errors.patch
+new file mode 100644
+index 0000000000..0cd5283a14
+--- /dev/null
++++ b/package/freeswitch/0003-xml_int-mod_xml_rpc-const-compiler-errors.patch
+@@ -0,0 +1,35 @@
++From 475b64d1c5707e1302cf9f7cfe3c385b7339c6c4 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?=D0=94=D0=B8=D0=BB=D1=8F=D0=BD=20=D0=9F=D0=B0=D0=BB=D0=B0?=
++ =?UTF-8?q?=D1=83=D0=B7=D0=BE=D0=B2?= <git-dpa@aegee.org>
++Date: Sat, 22 Jun 2024 14:58:52 +0200
++Subject: [PATCH] xml_int/mod_xml_rpc: const compiler errors
 +
- define V4L2LOOPBACK_INSTALL_TARGET_CMDS
- 	$(INSTALL) -D -m 0755 $(@D)/utils/v4l2loopback-ctl $(TARGET_DIR)/usr/bin/v4l2loopback-ctl
- endef
++Upstream: https://github.com/signalwire/freeswitch/pull/2496
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/mod/xml_int/mod_xml_rpc/mod_xml_rpc.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/mod/xml_int/mod_xml_rpc/mod_xml_rpc.c b/src/mod/xml_int/mod_xml_rpc/mod_xml_rpc.c
++index 8e49462d2c2..0a4e5e1e449 100644
++--- a/src/mod/xml_int/mod_xml_rpc/mod_xml_rpc.c
+++++ b/src/mod/xml_int/mod_xml_rpc/mod_xml_rpc.c
++@@ -321,7 +321,7 @@ static abyss_bool user_attributes(const char *user, const char *domain_name,
++ static abyss_bool is_authorized(const TSession * r, const char *command)
++ {
++ 	char *user = NULL, *domain_name = NULL;
++-	char *allowed_commands = NULL;
+++	const char *allowed_commands = NULL;
++ 	char *dp;
++ 	char *dup = NULL;
++ 	char *argv[256] = { 0 };
++@@ -922,7 +922,7 @@ abyss_bool handler_hook(TSession * r)
++ 				if (len > 0) {
++ 					int succeeded = TRUE;
++ 					char *qp = qbuf;
++-					char *readError;
+++					const char *readError;
++ 
++ 					do {
++ 						int blen = r->connP->buffersize - r->connP->bufferpos;
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
