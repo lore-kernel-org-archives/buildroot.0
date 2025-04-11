@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B52ABC369A8
-	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:45:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF6EBC36010
+	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:45:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8632B6FA2E;
-	Fri, 11 Apr 2025 10:45:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78737410AF;
+	Fri, 11 Apr 2025 10:45:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1vXn4bLF1NQU; Fri, 11 Apr 2025 10:45:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LyIYo6ppxL7H; Fri, 11 Apr 2025 10:45:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 583E76FBE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A99EB41432
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 583E76FBE3;
-	Fri, 11 Apr 2025 10:45:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A99EB41432;
+	Fri, 11 Apr 2025 10:45:38 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 19563108
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:45:03 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 12B95108
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:45:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6471B60733
+ by smtp3.osuosl.org (Postfix) with ESMTP id 822C161AF3
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id snWziYngf71e for <buildroot@buildroot.org>;
- Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
+ id oXZXOnWOlyGI for <buildroot@buildroot.org>;
+ Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B31660BEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3ED0060D78
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8B31660BEA
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3ED0060D78
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 876588439F; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
+ id 376DC843A9; Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 11 Apr 2025 12:42:31 +0200
+Date: Fri, 11 Apr 2025 12:42:47 +0200
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 1c2bf818aa16abbbe8bfcbc588a595e20d28ccf9
-X-Git-Newrev: b60166acf16e24d6369d2ae8085d54fec96fd4c2
+X-Git-Oldrev: e2d0b5b9bfbef8a76ccb718d094f710db1ce613d
+X-Git-Newrev: ed5c6f3625fe5a3d622c8a4d696824e1f1640dab
 X-Patchwork-Hint: ignore
-Message-Id: <20250411104450.876588439F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] {linux,
- linux-headers}: bump 6.6.x series
+Message-Id: <20250411104451.376DC843A9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/glibc: disable on
+ RISC-V ilp32f and lp64f, not supported
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,44 +66,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b60166acf16e24d6369d2ae8085d54fec96fd4c2
+commit: https://git.buildroot.net/buildroot/commit/?id=ed5c6f3625fe5a3d622c8a4d696824e1f1640dab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+glibc fails to build on RISC-V 32-bit with the ilp32f ABI and on
+RISC-V 64-bit with the lp64f: both use single-point precision floating
+point, which glibc doesn't support, failing during the configure step
+with:
+
+  configure: error: glibc does not yet support the single floating-point ABI
+
+Fix that by disabling glibc support on those configurations.
+
+Fixes:
+
+  https://autobuild.buildroot.org/results/fe8d569cab507992978ef0da649278dd3a9e0b23/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 7491f5fabcf7b8192cd689c352eccc04e5c72188)
-[Thomas: don't update 6.{12,13}.x, not in 2024.11.x]
+(cherry picked from commit 8292b8fb89ba71d2b35d4596327b022741f18be4)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- linux/linux.hash                     | 2 +-
- package/linux-headers/Config.in.host | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/glibc/Config.in | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index ba6853d84c..277ab8617f 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
- sha256  62148e7e17f54c4a5ab5e75ad4882682c54bee818948be61a5963234fc0849fc  linux-6.11.11.tar.xz
--sha256  894bbbe63b7484a0bc576a1e11a8dbc090fbd476d6424431bdc8435e03c2c208  linux-6.6.83.tar.xz
-+sha256  7fd20721551a61db347c5ac6ca05818e24058682be4e4389dc51e88d4ac17ba7  linux-6.6.84.tar.xz
- sha256  44caf510603b4cbbe78ef828620099d200536d666e909ddb73bb2938c7de5b16  linux-6.1.131.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  9319a47b1e9b5d344ff6015431856d0c9640e4faedc527c87f9129061a27136f  linux-5.15.179.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index f1d9bcfd78..48d7f9f4ca 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -433,7 +433,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.10.235"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.179"	if BR2_KERNEL_HEADERS_5_15
- 	default "6.1.131"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.83"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.6.84"	if BR2_KERNEL_HEADERS_6_6
- 	default "6.11.11"	if BR2_KERNEL_HEADERS_6_11
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 6075d28874..577404aff5 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -23,7 +23,9 @@ config BR2_PACKAGE_GLIBC_ARCH_SUPPORTS
+ 	default y if BR2_nios2
+ 	default y if BR2_arc && BR2_ARC_ATOMIC_EXT && !BR2_arc750d && !BR2_arc770d
+ 	depends on !BR2_POWERPC_CPU_HAS_SPE
+-	depends on BR2_RISCV_ISA_RVA || !BR2_riscv
++	# glibc needs atomic instructions, and does not support
++	# single-precision floating point ABIs (ilp32f and lp64f)
++	depends on (BR2_RISCV_ISA_RVA && !BR2_RISCV_ABI_ILP32F && !BR2_RISCV_ABI_LP64F) || !BR2_riscv
+ 	depends on BR2_USE_MMU
+ 
+ config BR2_PACKAGE_GLIBC_SUPPORTS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
