@@ -1,103 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BCC8C36010
-	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 14:47:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8212C36010
+	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 14:56:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 462F080B9F;
-	Fri, 11 Apr 2025 14:47:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u1q_RiEb6LWA; Fri, 11 Apr 2025 14:47:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8029380CA5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8029380CA5;
-	Fri, 11 Apr 2025 14:47:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8A2A5138
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 14:47:45 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6377460EA2
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 14:47:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA22160803;
+	Fri, 11 Apr 2025 14:56:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4qyFSAZr2z-i for <buildroot@buildroot.org>;
- Fri, 11 Apr 2025 14:47:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 52CB960857
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52CB960857
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 52CB960857
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 14:47:44 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-39129fc51f8so1682778f8f.0
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 07:47:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1744382862; x=1744987662;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=wG4A4PkIh/ien4e2D1uA/D1/3CHWPKhjirFBz5TBZm4=;
- b=TYK02TM8FYJIthwFLyayN7WVCPpr59rJPRMUU/9Uq9EWv3lIkQiEkgCbODrMNis8f1
- j5hQwfQDGCcoKElMs5vRKCmh8f6Ys26Cn/Go70Ito2l6saMlU6gFE6ZszY8NTsLXsyG0
- ybvY32t0Rxmunz/0TZmdQOJsmu0XsGtFAgaAL1LK57GiIHGPgh2e5faBxpQnjwbRsEg/
- UA26rpeZYIc70MbXztM+l4fqtCceFKI2Dpe0oaKKJO+wG07oY8OyQ2Zh7GiexAT5+qlx
- n7CS2QTYcakc27Hk5I2+SqUMhv7xN5jtZNTA6v9xL6XY9RcqFh67sk534VttLHEQm1kt
- 8xDw==
-X-Gm-Message-State: AOJu0Yx49u7w0hoszfaH/s4d5GtcmpD9C9F595P8oqPt4NouDSq2mhMP
- tSBtRZ6HJ3vGzlpsi9/0my5zv4KZW+RADv/T5mScFTA/MwTFZYewcFNW5Gnvvr1AyubQdF5jVYo
- 7
-X-Gm-Gg: ASbGnct82ulssKYe5lvNydosanGfH3P4CPOBBMdY//yBn5u301fsC5Q9yLH1fFV+o6e
- EMKn45xWyFRNBKYkAuEpHoRQavzi5vubrEZbdEAOILLVdk/YXmkYbw0n1yj9JskK2dgEF75TrxC
- wgxm5tRCYMfQf/vHgXLA6TFhtqzRDh+r9rWH9DZfklecP3UxmUtIa88mybHxulghHTWozlEwSJI
- 4K8pRBcGX7x/DyWG4RBdUjek9BF591bhS1EXfGN4YEhySXpwkcyvPXxPVnd32xciGqM/uqkIRfT
- liMkSwqlsMEhSIDg5/zkajw9WC4RRaeLLbmL/UPE5acvQWYD1wrb97PTfv9cuK9vll8K5C1UlsV
- +mh6TCxZC77vQSZrmPcHRIgzTUPfEyXC3fXggovOZ
-X-Google-Smtp-Source: AGHT+IGclhq4OmZPRFrkn5ktOMiTlrABlCfLBQY8KQtzy7nTHorqlXIrluTARaIbNqM1zk/hX29P7w==
-X-Received: by 2002:a5d:64e2:0:b0:39d:724f:a8a0 with SMTP id
- ffacd0b85a97d-39eaaecd6d6mr2579985f8f.58.1744382861950; 
- Fri, 11 Apr 2025 07:47:41 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.43.64])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-39eae979663sm2271804f8f.51.2025.04.11.07.47.41
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 11 Apr 2025 07:47:41 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Cc: Sergio Prado <sergio.prado@e-labworks.com>,
- linux-amarula@amarulasolutions.com,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Fri, 11 Apr 2025 16:47:38 +0200
-Message-ID: <20250411144739.3957036-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+ id ZWl3Oo_8yjCe; Fri, 11 Apr 2025 14:56:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E04CB607E0
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id E04CB607E0;
+	Fri, 11 Apr 2025 14:56:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D6784138
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 14:56:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B491180EEA
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 14:56:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nn_cVK5TV4gR for <buildroot@buildroot.org>;
+ Fri, 11 Apr 2025 14:56:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
+ helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AA16680C38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA16680C38
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AA16680C38
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 14:56:54 +0000 (UTC)
+X-CSE-ConnectionGUID: VYcmBf+xTzmPprO7bsdEtw==
+X-CSE-MsgGUID: NrWYvUTCS3ieTF+WJqLEMQ==
+Received: from unknown (HELO opfedv3rlp0f.nor.fr.ftgroup) ([x.x.x.x]) by
+ smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 11 Apr 2025 16:56:51 +0200
+Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
+ ([x.x.x.x]) by opfedv3rlp0f.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Apr 2025 16:56:52 +0200
+Received: from yd-6wlzhs3 [x.x.x.x] by
+ OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
+ Fri, 11 Apr 2025 16:56:50 +0200
+Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
+ Fri, 11 Apr 2025 16:56:49 +0200
+From: yann.morin@orange.com
+X-CSE-ConnectionGUID: ZaoVlE0oQViYRUiAXxEy0g==
+X-CSE-MsgGUID: Z12outZ4RT2cQJa5vAzMkg==
+X-IronPort-AV: E=Sophos;i="6.15,205,1739833200"; d="scan'208";a="278639200"
+Date: Fri, 11 Apr 2025 16:56:49 +0200
+To: TIAN Yuanhao <tianyuanhao3@163.com>
+CC: <buildroot@buildroot.org>, James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <Z/ktsWj+ng6Z5pyA@yd-6wlzhs3>
+References: <20250411113731.4804-1-tianyuanhao3@163.com>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20250411113731.4804-1-tianyuanhao3@163.com>
+X-Originating-IP: [10.115.26.52]
+X-ClientProxiedBy: OPE16NORMBX107.corporate.adroot.infra.ftgroup (10.115.27.4)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1744382862; x=1744987662;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=wG4A4PkIh/ien4e2D1uA/D1/3CHWPKhjirFBz5TBZm4=;
- b=V9dYL5l3jHrVO0veatmiMF8IXk7KCkP8tQvfAk2ss6GiBsujCbp+ZRCBVh5SsFSYQn
- w+gRqJ7uf8ISn59lu78asV96kRJ+qbiypYhdcpVEto3CQrEhc0v/oL5uB600O6iLeRU7
- LgYtoVPf1FfEzGYdu0p+e8Q51+n8dBT+xYQ3o=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
+ t=1744383415; x=1775919415;
+ h=date:to:cc:subject:message-id:references:mime-version:
+ in-reply-to:content-transfer-encoding:from;
+ bh=Nrd4o2P1aFr46kU4p/cYLMn/NDvvo3IIhHKi7tMybWE=;
+ b=dEh5hC1iCUpvO+vlp0nxIJvmiTYACa5vdcFwZQ6EgFriiE4v4HuypPrS
+ drE+O2lno8GNg1MbCM2qq7/gW35jNM3XaFByTET5yXM8xsOmKF+uVgOM8
+ o/oGaOUr+cntb9kTVTwM58nYw/0ccSea+O9DhtKShjveHYfqE67l8Qy9+
+ fsmK/cyqDjA2dBjD+dmo2FDTr6hJ+e5eZkB2EhhOULttgoGEHDNXT/iSH
+ NrePz9FDonO2jM5UyCOQ/fyynLdzVxrhMTD4PX9qoXk++0XjkSMsjwZO4
+ b/scBI0kfzOGkzNk1Rz6Ethh+sJ/308SPyT92pkSRp/un70e+TS+Xk7Nl
+ w==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=V9dYL5l3
-Subject: [Buildroot] [PATCH 1/1] package/azure-iot-sdk-c: bump to version
- LTS_03_2025
+ header.from=orange.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=dEh5hC1i
+Subject: Re: [Buildroot] [PATCH 1/1] package/tailscale: install service files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,42 +105,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/Azure/azure-iot-sdk-c/releases/tag/LTS_03_2025
+Yuanhao, All,
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- package/azure-iot-sdk-c/azure-iot-sdk-c.hash | 2 +-
- package/azure-iot-sdk-c/azure-iot-sdk-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 2025-04-11 04:37 -0700, TIAN Yuanhao spake thusly:
+> Install tailscaled to /usr/sbin, as the service file references that
+> location.
+> 
+> Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+> Cc: James Hilliard <james.hilliard1@gmail.com>
+> ---
+[--SNIP--]
+> +define TAILSCALE_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/tailscale \
+> +		$(TARGET_DIR)/usr/bin/tailscale
+> +	$(INSTALL) -D -m 0755 $(@D)/bin/tailscaled \
+> +		$(TARGET_DIR)/usr/sbin/tailscaled
+> +endef
 
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.hash b/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
-index cc6b6589adf3..d1170f7e4c16 100644
---- a/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  3dbb005bfadc6162906d4ba3c8599b4ec39025d474fc5337546f7447584041bc  azure-iot-sdk-c-LTS_08_2024-git4.tar.gz
-+sha256  28d4d79239fb278932cc1cb7118733e2c923a1ac95e91d541a1259e9c8a5beb9  azure-iot-sdk-c-LTS_03_2025-git4.tar.gz
- 
- # Hash for license files:
- sha256  be2e9913fad9ff33607287c728f392579e2a6cc83e51b203ef6274c41db02ee7  LICENSE
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-index 909b3d6b83ce..ecbd49b4ba6c 100644
---- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AZURE_IOT_SDK_C_VERSION = LTS_08_2024
-+AZURE_IOT_SDK_C_VERSION = LTS_03_2025
- AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
- AZURE_IOT_SDK_C_SITE_METHOD = git
- AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
+I would suggest that, rather than override the default _CMDS, you
+provide a post-install hook that does a symlink in sbin.
+
+> +define TAILSCALE_INSTALL_INIT_OPENRC
+[--SNIP--]
+> +define TAILSCALE_INSTALL_INIT_SYSTEMD
+[--SNIP--]
+
+What about TAILSCALE_INSTALL_INIT_SYSV ?
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.43.0
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
 
+____________________________________________________________________________________________________________
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
