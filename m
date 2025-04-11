@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FA40C369A9
-	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:45:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1712FC369A8
+	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:45:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 520216F6A7;
-	Fri, 11 Apr 2025 10:45:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF049412ED;
+	Fri, 11 Apr 2025 10:45:21 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2MRv85zbnx4e; Fri, 11 Apr 2025 10:45:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C77141721
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C77141721;
+	Fri, 11 Apr 2025 10:45:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F9D5108
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CF0F96F5BE
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5Y2C5y67-95S; Fri, 11 Apr 2025 10:45:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BA2F6F6B5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1BA2F6F6B5;
-	Fri, 11 Apr 2025 10:45:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 43531138
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3B4CD81C56
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2skKGSROC6it for <buildroot@buildroot.org>;
- Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
+ id 7cxbS466xW0e for <buildroot@buildroot.org>;
+ Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 526C181170
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4BAE6F5FE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 526C181170
+ by smtp3.osuosl.org (Postfix) with ESMTP id B4BAE6F5FE
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 42659843A1; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
+ id B2E74843A1; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 11 Apr 2025 12:42:24 +0200
+Date: Fri, 11 Apr 2025 12:42:35 +0200
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 8cb5263d3802da6cd22eb384ed6b0bb4bff7f103
-X-Git-Newrev: 79494bba2936434e047da73aec6754b4fdb9cbd0
+X-Git-Oldrev: 03dd6842790f2e1d1d70806a2dc28bf5a9ca3ee9
+X-Git-Newrev: 1211e4125e7cb7fd1b39f6f916d16c37f5044d3c
 X-Patchwork-Hint: ignore
-Message-Id: <20250411104450.42659843A1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/linux-tools:
- selftests: Add path containing BPF binary to _BIN_ARCH_EXCLUDE
+Message-Id: <20250411104450.B2E74843A1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/tor: bump version
+ to 0.4.8.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,42 +66,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79494bba2936434e047da73aec6754b4fdb9cbd0
+commit: https://git.buildroot.net/buildroot/commit/?id=1211e4125e7cb7fd1b39f6f916d16c37f5044d3c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-Enabling BR2_PACKAGE_LINUX_TOOLS_SELFTESTS (on rock5b_defconfig,
-which uses kernel 6.12 at the time of writing), results in:
+Release notes:
+https://gitlab.torproject.org/tpo/core/tor/-/raw/release-0.4.8/ReleaseNotes
+https://forum.torproject.org/t/stable-release-0-4-8-16/18062
 
-make[1]: Leaving directory '/br/output/build/linux-endpoint-test/tools/testing/selftests'
-ERROR: architecture for "/usr/lib/kselftests/tc-testing/action-ebpf" is "Linux BPF", should be "AArch64"
-make: *** [package/pkg-generic.mk:402: /br/output/build/linux-tools/.stamp_installed] Error 1
-
-To solve this, add /usr/lib/kselftests/tc-testing/ to
-LINUX_TOOLS_BIN_ARCH_EXCLUDE.
-
-Signed-off-by: Niklas Cassel <cassel@kernel.org>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 3a03cb2ad61e78544e5aa1ee64790e356c692713)
+(cherry picked from commit fed4ccb18184c6e2f11a76e0c922cbf72cdd2c26)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/linux-tools/linux-tool-selftests.mk.in | 3 +++
- 1 file changed, 3 insertions(+)
+ package/tor/tor.hash | 4 ++--
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-tools/linux-tool-selftests.mk.in b/package/linux-tools/linux-tool-selftests.mk.in
-index 0bcc47af0a..db7e4fa1a3 100644
---- a/package/linux-tools/linux-tool-selftests.mk.in
-+++ b/package/linux-tools/linux-tool-selftests.mk.in
-@@ -26,6 +26,9 @@ SELFTESTS_MAKE_FLAGS = \
- 	ARCH=$(SELFTESTS_ARCH) \
- 	KHDR_DIR=$(LINUX_DIR)/usr/include
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index d2e3cc533d..34c7c0f097 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,4 +1,4 @@
+-# From https://dist.torproject.org/tor-0.4.8.15.tar.gz.sha256sum
+-sha256  5d5d99e21992c4c71af1afcef16c70f4c5e7ee021633ac138b2a2761be75064b  tor-0.4.8.15.tar.gz
++# From https://dist.torproject.org/tor-0.4.8.16.tar.gz.sha256sum
++sha256  6540dd377a120fb8e7d27530aa3b7ff72a0fa5b4f670fe1d64c987c1cfd390cb  tor-0.4.8.16.tar.gz
+ # Locally computed
+ sha256  47b54ed17e8fdcab3c44729a1789a09b208f9a63a845a7e50def9df729eebad0  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index e8e769bdef..5f376d136f 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+LINUX_TOOLS_BIN_ARCH_EXCLUDE += \
-+	/usr/lib/kselftests/tc-testing/
-+
- # O must be redefined here to overwrite the one used by Buildroot for
- # out of tree build. We build the selftests in $(LINUX_DIR)/tools/selftests and
- # not just $(LINUX_DIR) so that it isn't built in the root directory of the kernel
+-TOR_VERSION = 0.4.8.15
++TOR_VERSION = 0.4.8.16
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
