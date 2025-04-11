@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 395F7C369A8
-	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:45:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2B6DC36010
+	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:45:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0777440DB3;
-	Fri, 11 Apr 2025 10:45:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC4C160C2E;
+	Fri, 11 Apr 2025 10:45:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jUpMwwJEhUbP; Fri, 11 Apr 2025 10:45:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BAeJd2TR8J7i; Fri, 11 Apr 2025 10:45:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D09F41988
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D86906F716
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D09F41988;
-	Fri, 11 Apr 2025 10:45:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D86906F716;
+	Fri, 11 Apr 2025 10:45:28 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 18098108
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:58 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1658D138
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 348016F6A9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 42A6B6F641
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FHed4X6Qc0uG for <buildroot@buildroot.org>;
+ id 9ORdkiBLMi-f for <buildroot@buildroot.org>;
  Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E11A86F641
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21D1660640
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E11A86F641
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 21D1660640
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE7C58439F; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
+ id 187CB821F0; Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 11 Apr 2025 12:42:39 +0200
+Date: Fri, 11 Apr 2025 12:42:44 +0200
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 66273b5e1015541fffb80f1044094e00a4a5fd3a
-X-Git-Newrev: c76f11bffe1d3a7c4452221c098c1ed1cfd6b799
+X-Git-Oldrev: d1f9d9ca5f41920721892cac326b60a36da9dd32
+X-Git-Newrev: ee7c227b1607db81ceca0727f63202515ffb0024
 X-Patchwork-Hint: ignore
-Message-Id: <20250411104450.DE7C58439F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/libsoup3: bump to
- 3.6.5
+Message-Id: <20250411104451.187CB821F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/python-fastapi:
+ fix cpe id vendor
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,62 +66,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c76f11bffe1d3a7c4452221c098c1ed1cfd6b799
+commit: https://git.buildroot.net/buildroot/commit/?id=ee7c227b1607db81ceca0727f63202515ffb0024
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-News:
-- https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.3.news
-- https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.4.news
-- https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.5.news
+fastapi_project is deprecated, tiangolo is the current cpe id vendor
+for python-fastapi.
 
-Also drop the krb5_config, which was dropped in commit
-https://gitlab.gnome.org/GNOME/libsoup/-/commit/123eb029bf3fa08f3c45678c0a43ae4b930e6631.
+See:
+https://nvd.nist.gov/products/cpe/detail/4339522D-F85C-4C37-966F-A5CFF72D1D04
 
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Gilles Bardoux <gilles.bardoux@sagemcom.com>
+[Julien: reformat patch and add nvd link]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit b896dca532929530eb74c6daf3e2fedcbba6c53b)
+(cherry picked from commit 6a1eca91b950aa7ad38d39fe1738ea68b0614729)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libsoup3/libsoup3.hash | 4 ++--
- package/libsoup3/libsoup3.mk   | 6 ++----
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ package/python-fastapi/python-fastapi.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libsoup3/libsoup3.hash b/package/libsoup3/libsoup3.hash
-index 23af347903..32aa7382fa 100644
---- a/package/libsoup3/libsoup3.hash
-+++ b/package/libsoup3/libsoup3.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.1.sha256sum
--sha256  ceb1f1aa2bdd73b2cd8159d3998c96c55ef097ef15e4b4f36029209fa18af838  libsoup-3.6.1.tar.xz
-+# From https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.5.sha256sum
-+sha256  6891765aac3e949017945c3eaebd8cc8216df772456dc9f460976fbdb7ada234  libsoup-3.6.5.tar.xz
- # Locally calculated
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libsoup3/libsoup3.mk b/package/libsoup3/libsoup3.mk
-index f2f96c2def..0db587a93a 100644
---- a/package/libsoup3/libsoup3.mk
-+++ b/package/libsoup3/libsoup3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
+index 95eb565b23..100f285385 100644
+--- a/package/python-fastapi/python-fastapi.mk
++++ b/package/python-fastapi/python-fastapi.mk
+@@ -10,7 +10,7 @@ PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/a9/db/5781f19bd307
+ PYTHON_FASTAPI_SETUP_TYPE = pep517
+ PYTHON_FASTAPI_LICENSE = MIT
+ PYTHON_FASTAPI_LICENSE_FILES = LICENSE
+-PYTHON_FASTAPI_CPE_ID_VENDOR = fastapi_project
++PYTHON_FASTAPI_CPE_ID_VENDOR = tiangolo
+ PYTHON_FASTAPI_CPE_ID_PRODUCT = fastapi
+ PYTHON_FASTAPI_DEPENDENCIES = host-python-pdm-backend
  
- LIBSOUP3_VERSION_MAJOR = 3.6
--LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).1
-+LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).5
- LIBSOUP3_SOURCE = libsoup-$(LIBSOUP3_VERSION).tar.xz
- LIBSOUP3_SITE = https://download.gnome.org/sources/libsoup/$(LIBSOUP3_VERSION_MAJOR)
- LIBSOUP3_LICENSE = LGPL-2.0+
-@@ -45,9 +45,7 @@ LIBSOUP3_CONF_OPTS += -Dintrospection=disabled -Dvapi=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBKRB5),y)
--LIBSOUP3_CONF_OPTS += \
--	-Dgssapi=enabled \
--	-Dkrb5_config=$(STAGING_DIR)/usr/bin/krb5-config
-+LIBSOUP3_CONF_OPTS += -Dgssapi=enabled
- LIBSOUP3_DEPENDENCIES += libkrb5
- else
- LIBSOUP3_CONF_OPTS += -Dgssapi=disabled
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
