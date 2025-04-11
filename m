@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B4F8C3ABD8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BFB0C2D0CD
 	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:48:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D52E96F67E;
-	Mon, 19 May 2025 10:48:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CAE6284038;
+	Mon, 19 May 2025 10:48:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k_RACJBwzZSr; Mon, 19 May 2025 10:48:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Rujn1qvMk8aB; Mon, 19 May 2025 10:48:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D645661B24
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD36182ADD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D645661B24;
-	Mon, 19 May 2025 10:48:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5F281D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD36182ADD;
+	Mon, 19 May 2025 10:48:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 16A1D193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2E28A41904
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C7E2D40DBC
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xXmpuYMU1JVz for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1R9jXqbwGPau for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5047241812
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C939040F4A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5047241812
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C939040F4A
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4E587873D4; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+ id C521984A21; Mon, 19 May 2025 10:39:48 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 29 Apr 2025 22:33:45 +0200
+Date: Fri, 11 Apr 2025 19:52:19 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4e271e6dccdd9b712077c12a4aa5aa8d82527531
-X-Git-Newrev: 9c0eee07c7107fa2beb7644f4e3612d702b4588c
+X-Git-Oldrev: c497e5fcc7b5d6b0877ba0dc557c604dcd194260
+X-Git-Newrev: fde0b3fe1c99207436fd0c25a94c09856d1ee552
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103958.4E587873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mmc-utils: bump
- version to c515ea2e1ceb
+Message-Id: <20250519103948.C521984A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libarchive: security
+ bump to version 3.7.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,51 +65,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c0eee07c7107fa2beb7644f4e3612d702b4588c
+commit: https://git.buildroot.net/buildroot/commit/?id=fde0b3fe1c99207436fd0c25a94c09856d1ee552
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Change log since last version bump:
+Fixes the following security issues:
 
-  c515ea2e1ceb mmc-utils: Doc: new secure write protect commands
-  3fc7643ac148 mmc-utils: Secure Write Protect Mode Read
-  bd51a271de9d mmc-utils: Enable/Disable write protect
-  5d3a04e70b05 mmc-utils: Add secure write-protect mode enable/disable
-  05051e40351c mmc-utils: Refactor RPMB key handling into a separate function
-  f4247f56085f mmc-utils: Add SECURE_WP_INFO field in ext_csd register
-  50a30df1b74d mmc-utils: Add byte offset comments to rpmb_frame structure
-  88e956459a79 mmc-utils: Pack rpmb_frame structure to avoid padding bytes
-  d4d3eb24f560 mmc-utils: Reduce scope of nargs for RPMB commands
-  437d369cd9d9 mmc-utils: Initialize RPMB frame_out structures to zero
+- CVE-2024-57970: libarchive through 3.7.7 has a heap-based buffer
+    over-read in header_gnu_longlink in archive_read_support_format_tar.c
+    via a TAR archive because it mishandles truncation in the middle of a
+    GNU long linkname.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+For more information, see:
+  - https://nvd.nist.gov/vuln/detail/CVE-2024-57970
+  - https://github.com/libarchive/libarchive/commit/82912103214506316bd9990d73f33d743d55f570
+
+- CVE-2025-1632: This affects the function list of the file bsdunzip.c.
+    The manipulation leads to null pointer dereference. It is possible
+    to launch the attack on the local host.
+
+For more information, see:
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-1632
+  - https://github.com/libarchive/libarchive/commit/c9bc934e7e91d302e0feca6e713ccc38d6d01532
+
+- CVE-2025-25724: list_item_verbose in tar/util.c in libarchive through 3.7.7
+    does not check an strftime return value, which can lead to a denial of
+    service or unspecified other impact via a crafted TAR archive that is read
+    with a verbose value of 2.
+    For example, the 100-byte buffer may not be sufficient for a custom locale.
+
+For more information, see:
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-25724
+  - https://github.com/libarchive/libarchive/commit/c9bc934e7e91d302e0feca6e713ccc38d6d01532
+
+The patch added in [1] are still needed for this version bump.
+
+For more details on the version bump, see the release notes:
+  - https://github.com/libarchive/libarchive/releases/tag/v3.7.8
+  - https://github.com/libarchive/libarchive/releases/tag/v3.7.9
+
+[1] 9ac63a3360 package/libarchive: fix uclibc build with libiconv (again)
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/mmc-utils/mmc-utils.hash | 2 +-
- package/mmc-utils/mmc-utils.mk   | 2 +-
+ package/libarchive/libarchive.hash | 2 +-
+ package/libarchive/libarchive.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mmc-utils/mmc-utils.hash b/package/mmc-utils/mmc-utils.hash
-index 17dedad2b7..685952a615 100644
---- a/package/mmc-utils/mmc-utils.hash
-+++ b/package/mmc-utils/mmc-utils.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  e9630d911bcf59e235a349d862700fa7ccea7545eb314da48431dcb4da125023  mmc-utils-2aef4cd9a84ddc76349fc0d7e10d675e7fa596fa-git4.tar.gz
-+sha256  e10cd7fded5f248d515fe40e35f73fe491e87e4b608ca857afa40fcb8cda1ae2  mmc-utils-c515ea2e1cebfbf9d81aa6a5c1bf67a79d2a7e58-git4.tar.gz
- sha256  49cd65f67b516078ff7e0dbe639972dad21ed3858246e3969fc8a8fc2a4dca66  README
-diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
-index 0036a775ee..b439c84d47 100644
---- a/package/mmc-utils/mmc-utils.mk
-+++ b/package/mmc-utils/mmc-utils.mk
+diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
+index c0b04b0f4b..d132664e17 100644
+--- a/package/libarchive/libarchive.hash
++++ b/package/libarchive/libarchive.hash
+@@ -1,4 +1,4 @@
+ # From https://www.libarchive.de/downloads/sha256sums
+-sha256  879acd83c3399c7caaee73fe5f7418e06087ab2aaf40af3e99b9e29beb29faee  libarchive-3.7.7.tar.xz
++sha256  ed8b5732e4cd6e30fae909fb945cad8ff9cb7be5c6cdaa3944ec96e4a200c04c  libarchive-3.7.9.tar.xz
+ # Locally computed:
+ sha256  b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba  COPYING
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 70123ee2b1..7fec01a040 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MMC_UTILS_VERSION = 2aef4cd9a84ddc76349fc0d7e10d675e7fa596fa
-+MMC_UTILS_VERSION = c515ea2e1cebfbf9d81aa6a5c1bf67a79d2a7e58
- MMC_UTILS_SITE = https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git
- MMC_UTILS_SITE_METHOD = git
- MMC_UTILS_LICENSE = GPL-2.0
+-LIBARCHIVE_VERSION = 3.7.7
++LIBARCHIVE_VERSION = 3.7.9
+ LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
+ LIBARCHIVE_SITE = https://www.libarchive.de/downloads
+ LIBARCHIVE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
