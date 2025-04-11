@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 213BFC369A9
-	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:44:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40ED3C369A8
+	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:45:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E276360C30;
-	Fri, 11 Apr 2025 10:44:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 071A86F641;
+	Fri, 11 Apr 2025 10:45:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qz1Dl8Dt8aMP; Fri, 11 Apr 2025 10:44:58 +0000 (UTC)
+ id ATAmob4NPJZF; Fri, 11 Apr 2025 10:45:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2912C60679
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D221F6F738
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2912C60679;
-	Fri, 11 Apr 2025 10:44:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4FDFA138
+	by smtp3.osuosl.org (Postfix) with ESMTP id D221F6F738;
+	Fri, 11 Apr 2025 10:44:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5FC9C1BA
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 30D9382116
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E038407CC
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O30-ngbbMoGH for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cAxsE-Pc4HZO for <buildroot@buildroot.org>;
  Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7318C81FB8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70385413B3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7318C81FB8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 70385413B3
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7116E843A1; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
+ id 2DC4F843A2; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 11 Apr 2025 12:42:28 +0200
+Date: Fri, 11 Apr 2025 12:42:22 +0200
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 611c49acf3513d910dc156878b6456661e3eb71d
-X-Git-Newrev: 7578af8defa6f825a451ac71feb32d3da97559dc
+X-Git-Oldrev: 6dd9b8c196861f66ab21d91399a7b91da803792f
+X-Git-Newrev: fee4b78429c8181b29393cd3fea381723d7b5b01
 X-Patchwork-Hint: ignore
-Message-Id: <20250411104450.7116E843A1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/mc: bump version
- to 4.8.33
+Message-Id: <20250411104450.2DC4F843A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] support/kconfig: handle
+ backspace (^H) key
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,50 +61,168 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8700660755060017126=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7578af8defa6f825a451ac71feb32d3da97559dc
+--===============8700660755060017126==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=fee4b78429c8181b29393cd3fea381723d7b5b01
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-Changelog: https://github.com/MidnightCommander/mc/blob/master/doc/NEWS
+This is in the mainline kernel since v5.1-rc3:
+9c38f1f04408 ("kconfig/[mn]conf: handle backspace (^H) key")
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Quoting the commit's log:
+
+"
+Backspace is not working on some terminal emulators which do not send the
+key code defined by terminfo. Terminals either send '^H' (8) or '^?' (127).
+But currently only '^?' is handled. Let's also handle '^H' for those
+terminals.
+"
+
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 9494da280d13c24b655337f1fbc1361446cca022)
+(cherry picked from commit d65c10c20add58f17cf1d7b6de8e7903b0aa9ddc)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/mc/mc.hash | 4 ++--
- package/mc/mc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/kconfig/lxdialog/inputbox.c                |  3 +-
+ support/kconfig/nconf.c                            |  2 +-
+ support/kconfig/nconf.gui.c                        |  3 +-
+ ...23-kconfig-mn-conf-handle-backspace-H-key.patch | 62 ++++++++++++++++++++++
+ support/kconfig/patches/series                     |  1 +
+ 5 files changed, 68 insertions(+), 3 deletions(-)
 
-diff --git a/package/mc/mc.hash b/package/mc/mc.hash
-index 01c0f61b44..09fdcd24a5 100644
---- a/package/mc/mc.hash
-+++ b/package/mc/mc.hash
-@@ -1,4 +1,4 @@
--# Hash from http://ftp.midnight-commander.org/mc-4.8.32.sha256
--sha256  4ddc83d1ede9af2363b3eab987f54b87cf6619324110ce2d3a0e70944d1359fe  mc-4.8.32.tar.xz
-+# Hash from http://ftp.midnight-commander.org/mc-4.8.33.sha256
-+sha256  cae149d42f844e5185d8c81d7db3913a8fa214c65f852200a9d896b468af164c  mc-4.8.33.tar.xz
- # sha256 locally computed:
- sha256  5576bbec76296e1c8e081f7037ebd01bdada388635f58d844a2f20d37bbe4284  COPYING
-diff --git a/package/mc/mc.mk b/package/mc/mc.mk
-index b7e7e107c7..9401b8a191 100644
---- a/package/mc/mc.mk
-+++ b/package/mc/mc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MC_VERSION = 4.8.32
-+MC_VERSION = 4.8.33
- MC_SOURCE = mc-$(MC_VERSION).tar.xz
- MC_SITE = http://ftp.midnight-commander.org
- MC_LICENSE = GPL-3.0+
+diff --git a/support/kconfig/lxdialog/inputbox.c b/support/kconfig/lxdialog/inputbox.c
+index d58de1dc53..510049a7bd 100644
+--- a/support/kconfig/lxdialog/inputbox.c
++++ b/support/kconfig/lxdialog/inputbox.c
+@@ -126,7 +126,8 @@ do_resize:
+ 			case KEY_DOWN:
+ 				break;
+ 			case KEY_BACKSPACE:
+-			case 127:
++			case 8:   /* ^H */
++			case 127: /* ^? */
+ 				if (pos) {
+ 					wattrset(dialog, dlg.inputbox.atr);
+ 					if (input_x == 0) {
+diff --git a/support/kconfig/nconf.c b/support/kconfig/nconf.c
+index 0031147798..e8e1944fa0 100644
+--- a/support/kconfig/nconf.c
++++ b/support/kconfig/nconf.c
+@@ -1048,7 +1048,7 @@ static int do_match(int key, struct match_state *state, int *ans)
+ 		state->match_direction = FIND_NEXT_MATCH_UP;
+ 		*ans = get_mext_match(state->pattern,
+ 				state->match_direction);
+-	} else if (key == KEY_BACKSPACE || key == 127) {
++	} else if (key == KEY_BACKSPACE || key == 8 || key == 127) {
+ 		state->pattern[strlen(state->pattern)-1] = '\0';
+ 		adj_match_dir(&state->match_direction);
+ 	} else
+diff --git a/support/kconfig/nconf.gui.c b/support/kconfig/nconf.gui.c
+index 88874acfda..820fc92565 100644
+--- a/support/kconfig/nconf.gui.c
++++ b/support/kconfig/nconf.gui.c
+@@ -440,7 +440,8 @@ int dialog_inputbox(WINDOW *main_window,
+ 		case KEY_F(F_EXIT):
+ 		case KEY_F(F_BACK):
+ 			break;
+-		case 127:
++		case 8:   /* ^H */
++		case 127: /* ^? */
+ 		case KEY_BACKSPACE:
+ 			if (cursor_position > 0) {
+ 				memmove(&result[cursor_position-1],
+diff --git a/support/kconfig/patches/23-kconfig-mn-conf-handle-backspace-H-key.patch b/support/kconfig/patches/23-kconfig-mn-conf-handle-backspace-H-key.patch
+new file mode 100644
+index 0000000000..6e32115f70
+--- /dev/null
++++ b/support/kconfig/patches/23-kconfig-mn-conf-handle-backspace-H-key.patch
+@@ -0,0 +1,62 @@
++From 9c38f1f044080392603c497ecca4d7d09876ff99 Mon Sep 17 00:00:00 2001
++From: Changbin Du <changbin.du@gmail.com>
++Date: Mon, 25 Mar 2019 15:16:47 +0000
++Subject: [PATCH 23/23] kconfig/[mn]conf: handle backspace (^H) key
++
++Backspace is not working on some terminal emulators which do not send the
++key code defined by terminfo. Terminals either send '^H' (8) or '^?' (127).
++But currently only '^?' is handled. Let's also handle '^H' for those
++terminals.
++
++Signed-off-by: Changbin Du <changbin.du@gmail.com>
++Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
++---
++ kconfig/lxdialog/inputbox.c | 3 ++-
++ kconfig/nconf.c             | 2 +-
++ kconfig/nconf.gui.c         | 3 ++-
++ 3 files changed, 5 insertions(+), 3 deletions(-)
++
++diff --git a/kconfig/lxdialog/inputbox.c b/kconfig/lxdialog/inputbox.c
++index 611945611bf8..1dcfb288ee63 100644
++--- a/kconfig/lxdialog/inputbox.c
+++++ b/kconfig/lxdialog/inputbox.c
++@@ -113,7 +113,8 @@ int dialog_inputbox(const char *title, const char *prompt, int height, int width
++ 			case KEY_DOWN:
++ 				break;
++ 			case KEY_BACKSPACE:
++-			case 127:
+++			case 8:   /* ^H */
+++			case 127: /* ^? */
++ 				if (pos) {
++ 					wattrset(dialog, dlg.inputbox.atr);
++ 					if (input_x == 0) {
++diff --git a/kconfig/nconf.c b/kconfig/nconf.c
++index a4670f4e825a..ac92c0ded6c5 100644
++--- a/kconfig/nconf.c
+++++ b/kconfig/nconf.c
++@@ -1048,7 +1048,7 @@ static int do_match(int key, struct match_state *state, int *ans)
++ 		state->match_direction = FIND_NEXT_MATCH_UP;
++ 		*ans = get_mext_match(state->pattern,
++ 				state->match_direction);
++-	} else if (key == KEY_BACKSPACE || key == 127) {
+++	} else if (key == KEY_BACKSPACE || key == 8 || key == 127) {
++ 		state->pattern[strlen(state->pattern)-1] = '\0';
++ 		adj_match_dir(&state->match_direction);
++ 	} else
++diff --git a/kconfig/nconf.gui.c b/kconfig/nconf.gui.c
++index 7be620a1fcdb..77f525a8617c 100644
++--- a/kconfig/nconf.gui.c
+++++ b/kconfig/nconf.gui.c
++@@ -439,7 +439,8 @@ int dialog_inputbox(WINDOW *main_window,
++ 		case KEY_F(F_EXIT):
++ 		case KEY_F(F_BACK):
++ 			break;
++-		case 127:
+++		case 8:   /* ^H */
+++		case 127: /* ^? */
++ 		case KEY_BACKSPACE:
++ 			if (cursor_position > 0) {
++ 				memmove(&result[cursor_position-1],
++-- 
++2.48.1
++
+diff --git a/support/kconfig/patches/series b/support/kconfig/patches/series
+index f120e323b7..cc176035be 100644
+--- a/support/kconfig/patches/series
++++ b/support/kconfig/patches/series
+@@ -11,3 +11,4 @@
+ 20-merge_config.sh-Allow-to-define-config-prefix.patch
+ 21-Avoid-false-positive-matches-from-comment-lines.patch
+ 22-kconfig-lxdialog-fix-check-with-GCC14.patch
++23-kconfig-mn-conf-handle-backspace-H-key.patch
+
+--===============8700660755060017126==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8700660755060017126==--
