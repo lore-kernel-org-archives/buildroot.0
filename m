@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E872C369A9
-	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:45:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 395F7C369A8
+	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 10:45:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D3D66F7FC;
-	Fri, 11 Apr 2025 10:45:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0777440DB3;
+	Fri, 11 Apr 2025 10:45:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UapoBltMj3Ot; Fri, 11 Apr 2025 10:45:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jUpMwwJEhUbP; Fri, 11 Apr 2025 10:45:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 068436FBD1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D09F41988
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 068436FBD1;
-	Fri, 11 Apr 2025 10:45:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2D09F41988;
+	Fri, 11 Apr 2025 10:45:27 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0547D138
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:57 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 18098108
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E304B6F5FE
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 348016F6A9
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2WF6Nl8Pdd5O for <buildroot@buildroot.org>;
+ id FHed4X6Qc0uG for <buildroot@buildroot.org>;
  Fri, 11 Apr 2025 10:44:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4E8F6F638
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E11A86F641
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D4E8F6F638
+ by smtp3.osuosl.org (Postfix) with ESMTP id E11A86F641
  for <buildroot@buildroot.org>; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D2858843A1; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
+ id DE7C58439F; Fri, 11 Apr 2025 10:44:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 11 Apr 2025 12:42:38 +0200
+Date: Fri, 11 Apr 2025 12:42:39 +0200
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: ed273e241f0b2c01014c1ed2386ee9e96ebe4838
-X-Git-Newrev: 66273b5e1015541fffb80f1044094e00a4a5fd3a
+X-Git-Oldrev: 66273b5e1015541fffb80f1044094e00a4a5fd3a
+X-Git-Newrev: c76f11bffe1d3a7c4452221c098c1ed1cfd6b799
 X-Patchwork-Hint: ignore
-Message-Id: <20250411104450.D2858843A1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/freeswitch: fix
- build with GCC 14.x
+Message-Id: <20250411104450.DE7C58439F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/libsoup3: bump to
+ 3.6.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,64 +66,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=66273b5e1015541fffb80f1044094e00a4a5fd3a
+commit: https://git.buildroot.net/buildroot/commit/?id=c76f11bffe1d3a7c4452221c098c1ed1cfd6b799
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-Fixes:
-https://autobuild.buildroot.org/results/33c/33c41d8da8190933d863ed6f75e5d586d1c22a2f/
+News:
+- https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.3.news
+- https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.4.news
+- https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.5.news
 
-Build error is also present on the 2024.11.x branch:
-https://autobuild.buildroot.org/results/7eef69e6587783307cd9231abdc4a2fee60c075f/
+Also drop the krb5_config, which was dropped in commit
+https://gitlab.gnome.org/GNOME/libsoup/-/commit/123eb029bf3fa08f3c45678c0a43ae4b930e6631.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 8c439db4a14bd67267505623c5b3e20fc96a878c)
+(cherry picked from commit b896dca532929530eb74c6daf3e2fedcbba6c53b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...xml_int-mod_xml_rpc-const-compiler-errors.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/libsoup3/libsoup3.hash | 4 ++--
+ package/libsoup3/libsoup3.mk   | 6 ++----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/freeswitch/0003-xml_int-mod_xml_rpc-const-compiler-errors.patch b/package/freeswitch/0003-xml_int-mod_xml_rpc-const-compiler-errors.patch
-new file mode 100644
-index 0000000000..0cd5283a14
---- /dev/null
-+++ b/package/freeswitch/0003-xml_int-mod_xml_rpc-const-compiler-errors.patch
-@@ -0,0 +1,35 @@
-+From 475b64d1c5707e1302cf9f7cfe3c385b7339c6c4 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?=D0=94=D0=B8=D0=BB=D1=8F=D0=BD=20=D0=9F=D0=B0=D0=BB=D0=B0?=
-+ =?UTF-8?q?=D1=83=D0=B7=D0=BE=D0=B2?= <git-dpa@aegee.org>
-+Date: Sat, 22 Jun 2024 14:58:52 +0200
-+Subject: [PATCH] xml_int/mod_xml_rpc: const compiler errors
-+
-+Upstream: https://github.com/signalwire/freeswitch/pull/2496
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/mod/xml_int/mod_xml_rpc/mod_xml_rpc.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/mod/xml_int/mod_xml_rpc/mod_xml_rpc.c b/src/mod/xml_int/mod_xml_rpc/mod_xml_rpc.c
-+index 8e49462d2c2..0a4e5e1e449 100644
-+--- a/src/mod/xml_int/mod_xml_rpc/mod_xml_rpc.c
-++++ b/src/mod/xml_int/mod_xml_rpc/mod_xml_rpc.c
-+@@ -321,7 +321,7 @@ static abyss_bool user_attributes(const char *user, const char *domain_name,
-+ static abyss_bool is_authorized(const TSession * r, const char *command)
-+ {
-+ 	char *user = NULL, *domain_name = NULL;
-+-	char *allowed_commands = NULL;
-++	const char *allowed_commands = NULL;
-+ 	char *dp;
-+ 	char *dup = NULL;
-+ 	char *argv[256] = { 0 };
-+@@ -922,7 +922,7 @@ abyss_bool handler_hook(TSession * r)
-+ 				if (len > 0) {
-+ 					int succeeded = TRUE;
-+ 					char *qp = qbuf;
-+-					char *readError;
-++					const char *readError;
-+ 
-+ 					do {
-+ 						int blen = r->connP->buffersize - r->connP->bufferpos;
+diff --git a/package/libsoup3/libsoup3.hash b/package/libsoup3/libsoup3.hash
+index 23af347903..32aa7382fa 100644
+--- a/package/libsoup3/libsoup3.hash
++++ b/package/libsoup3/libsoup3.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.1.sha256sum
+-sha256  ceb1f1aa2bdd73b2cd8159d3998c96c55ef097ef15e4b4f36029209fa18af838  libsoup-3.6.1.tar.xz
++# From https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.5.sha256sum
++sha256  6891765aac3e949017945c3eaebd8cc8216df772456dc9f460976fbdb7ada234  libsoup-3.6.5.tar.xz
+ # Locally calculated
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libsoup3/libsoup3.mk b/package/libsoup3/libsoup3.mk
+index f2f96c2def..0db587a93a 100644
+--- a/package/libsoup3/libsoup3.mk
++++ b/package/libsoup3/libsoup3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBSOUP3_VERSION_MAJOR = 3.6
+-LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).1
++LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).5
+ LIBSOUP3_SOURCE = libsoup-$(LIBSOUP3_VERSION).tar.xz
+ LIBSOUP3_SITE = https://download.gnome.org/sources/libsoup/$(LIBSOUP3_VERSION_MAJOR)
+ LIBSOUP3_LICENSE = LGPL-2.0+
+@@ -45,9 +45,7 @@ LIBSOUP3_CONF_OPTS += -Dintrospection=disabled -Dvapi=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBKRB5),y)
+-LIBSOUP3_CONF_OPTS += \
+-	-Dgssapi=enabled \
+-	-Dkrb5_config=$(STAGING_DIR)/usr/bin/krb5-config
++LIBSOUP3_CONF_OPTS += -Dgssapi=enabled
+ LIBSOUP3_DEPENDENCIES += libkrb5
+ else
+ LIBSOUP3_CONF_OPTS += -Dgssapi=disabled
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
