@@ -1,105 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F945C36010
-	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 08:58:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DCFDC36010
+	for <buildroot@archiver.kernel.org>; Fri, 11 Apr 2025 09:51:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D816B846E1;
-	Fri, 11 Apr 2025 08:58:27 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZPMhAW3qi_cz; Fri, 11 Apr 2025 08:58:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00889847A7
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00889847A7;
-	Fri, 11 Apr 2025 08:58:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 702B2138
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 08:58:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6130741528
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 08:58:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0DBD340870;
+	Fri, 11 Apr 2025 09:51:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p5K5CNwDiyca for <buildroot@buildroot.org>;
- Fri, 11 Apr 2025 08:58:24 +0000 (UTC)
+ id 9FxnYRLM54Ha; Fri, 11 Apr 2025 09:50:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E9854070A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2E9854070A;
+	Fri, 11 Apr 2025 09:50:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E91E0138
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 09:50:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D705E40A0E
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 09:50:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IPXyfw_1-8Ce for <buildroot@buildroot.org>;
+ Fri, 11 Apr 2025 09:50:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 760E340575
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 760E340575
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 760E340575
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 08:58:24 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-43edb40f357so14448205e9.0
- for <buildroot@buildroot.org>; Fri, 11 Apr 2025 01:58:24 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::62a; helo=mail-ej1-x62a.google.com;
+ envelope-from=heiko.thiery@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8CDE1403F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CDE1403F3
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
+ [IPv6:2a00:1450:4864:20::62a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8CDE1403F3
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 09:50:56 +0000 (UTC)
+Received: by mail-ej1-x62a.google.com with SMTP id
+ a640c23a62f3a-ac34257295dso347011866b.2
+ for <buildroot@buildroot.org>; Fri, 11 Apr 2025 02:50:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1744361902; x=1744966702;
+ d=1e100.net; s=20230601; t=1744365054; x=1744969854;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=F6UPiMTlKJ+wJj2MBB4mO4ndOj6fy8QaigOI7Yg1h9g=;
- b=jsLyF+AYIk8uZREsoK2PA8KXR5j55OAQKLBKP0RwfaRg/XYkHhqc65PsDJr8/XHyYA
- yj6e1MnUybgUyh4sfv8QPjfwD4ddUa5N86AQ0Bqp70aLW2GQEahQHyw5x0iZxwIyEXd4
- 3/KbwjVdWVyhcjq205toB/HQmj6/PdgndN8FnTYnEnyIKmxsP+G9TyVVvr4nTIRFeDJ8
- FAP4ApiBGoS+fQBQNMHmCeVVBdZjKK1e2TNcPNnjHgdoLpJvq3ZJ+TEwjreab+yep/7j
- U0B5uIaJIcYRJvUKK5tDo3HChjZ80Us20vv8/+EklU+SuOg0+60Ac+bE1pe19Xu6miSb
- 8rBw==
-X-Gm-Message-State: AOJu0Yw8pJnHQ36015/wRX51TaAM9B9+dAOwwZYis5ICSXgzvpQqomW8
- a6aLHRK8dhrcVpw8bBgDABsXHbDO0VZEah+MSWXEZUr/VrBJ6hoFNA3b9/VpUzMcN24gTNXcsA2
- R
-X-Gm-Gg: ASbGncuODyCgomYplRx5bqHfQgPYkEcawQEKP97aAj6kcrZR7zkYXQRDau5OfxSc7AA
- HGAiyyO14oozQRrgqjTXyjA4JqZ+HvxNE2N/8NMT431pLG653yqo6l8FheJNbHvaclv+PkLw1jt
- A/KLpMukW+XbzlodgBEH/zo42n/u3PL6Ulz4glTjoFdK77GJu+6/Mm6N5m0OVmEnF31nGdopUX7
- 5IVJbwedGtEoFr3RMepZTVQ2rJs9oWIIjHhaLGsQDnIrvDR2rHi2yncxjqXB8Ao1ngvM53kHxZj
- E+0D6jzKgRnG5FFL3YziPbSQKOPL3ZXSBZ7QfcnVbA2jUoN0DuO/gIb4nZS2BO7IByH+vP6nmP2
- rOQR8/gcF36loUzBVC29CjXnKkPnn+BkIrqXkSD1b
-X-Google-Smtp-Source: AGHT+IHhhc3TGuhXK5UhVr0/YI18Olasg5dTbGino7nK9cU9SBFW7qfxVRrNUr9413dwyzb1hlCr+w==
-X-Received: by 2002:a05:600c:8519:b0:43d:300f:fa51 with SMTP id
- 5b1f17b1804b1-43f3a93ebb3mr15118945e9.9.1744361902075; 
- Fri, 11 Apr 2025 01:58:22 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.43.64])
+ bh=+TuiBuZowhryHwqiFUau1cdhwxzwa1doR3dqDv+jyZs=;
+ b=jZBg27G70TTdpCimh6da4Eb/sO1ZxvhTpComK5x+1cTWglgtLksMld2e4WTfMF6uzI
+ 6GzlIq+pLfQQvYqhPXbMwb6B7/6WsA0/egZdElrHz1oJnzGWXKVtoHniC7X0KCaKns/e
+ WjeqYiZUgeJo1+BtCOrtXBpOJKtNLuYBWJC8WT1eyCjcv2u10Gxqx/LYTCDDGkJL24oy
+ TIEoZxIauRyGDclozysxe6Ya4GZ1Z7sT13XR+fsYpCNAyOZ4+6Lodcd1+yL9qmjuUinv
+ uCZ7UClvomST/7ecbikjL55HACJ8CASaCvpUAWdsQoCScfQZZyxY2+JLpSbGUMsMgtJv
+ K49Q==
+X-Gm-Message-State: AOJu0YxlU9JmhYFBDAK5I6HnlTcZd05Rx3YU857OiBqirFjiweGcQX3V
+ ZJA92G/H6hUzqE5UZaeprUx5qdvGaPj0IK+kF2EoKij2Lqx7fYYHCmgz6g==
+X-Gm-Gg: ASbGnctAKfAJjXguS14LbhjOCifel/UeAmcg1teFyxubKxqh/P7k8pbsagiB4ssx8s/
+ 4N2AbjBBxf4be0KsaAldRjAuK3czmstVuj9iShnQPcNvxh5QA3ZhlmDHhhjC6NYkyGB8Q+2FH2x
+ lmmAy9nKGv7+OoTCvASNKihnhkgJzzj3QsRlr0taL4psDlANaA/xp0rPEZJvs3AAxV1RFw0XDR3
+ 4yVqxPAv083Wd44imwpvgVwGLHVJgR540VQ6ovc4OoVro9D6x8Mgn4x2BqHYiVOdmkr1HlDZdiD
+ A1qehgLTXT2jEk29YE/K8rGLtaqb+RzJ59BY/T9XMWTQZVTy1H7zdS/Df38AW0ocBYoN
+X-Google-Smtp-Source: AGHT+IFmw4x6X9CKsyF/fnN2tRR4GUjYvZTHY4H9TV+FUqPGbIAPu8YpvRnqkKOsmw84rbv0HLZvJA==
+X-Received: by 2002:a17:907:9621:b0:ac2:9093:6856 with SMTP id
+ a640c23a62f3a-acad36d904cmr167897966b.54.1744365053574; 
+ Fri, 11 Apr 2025 02:50:53 -0700 (PDT)
+Received: from hthiery.kontron.local ([213.135.10.150])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-43f20a0bf4esm38833065e9.1.2025.04.11.01.58.20
+ a640c23a62f3a-acaa1be98b6sm419724966b.52.2025.04.11.02.50.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 11 Apr 2025 01:58:21 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ Fri, 11 Apr 2025 02:50:52 -0700 (PDT)
+From: Heiko Thiery <heiko.thiery@gmail.com>
 To: buildroot@buildroot.org
-Cc: Bartosz Bilas <b.bilas@grinn-global.com>,
- Marleen Vos <marleen.vos@mind.be>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- linux-amarula@amarulasolutions.com,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Fri, 11 Apr 2025 10:58:17 +0200
-Message-ID: <20250411085817.3269572-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Cc: Anand Gadiyar <gadiyar@ti.com>, Bryan Brattlof <bb@ti.com>,
+ Xuanhao Shi <X15000177@gmail.com>, Andreas Dannenberg <dannenberg@ti.com>,
+ Michael Walle <michael@walle.cc>, Heiko Thiery <heiko.thiery@gmail.com>
+Date: Fri, 11 Apr 2025 11:50:41 +0200
+Message-Id: <20250411095040.2276825-1-heiko.thiery@gmail.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1744361902; x=1744966702;
- darn=buildroot.org; 
+ d=gmail.com; s=20230601; t=1744365054; x=1744969854; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=F6UPiMTlKJ+wJj2MBB4mO4ndOj6fy8QaigOI7Yg1h9g=;
- b=GkVFV9ZmMeQREmY8ObI8zCXJKXJC+UgUv5lZAlFZ7R18dWY6+nBkKKZL7IQuUm+6yD
- BCwqwFxYIaWGtyemgkE06dht/sZE83q7MHqzyc5qgEW/XX6DBoPyHZgz2N85Ua46FkAw
- iMFbONeXVbiygoXE3w+ALGBY958uwBYvibV0E=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=+TuiBuZowhryHwqiFUau1cdhwxzwa1doR3dqDv+jyZs=;
+ b=HjcJy0ZYt7rCRJOLy7Aewvl+4yVqnrcsB28Ns2ULIggyLdsF1D0cHIslUs4jzj0nmi
+ iolM/kbPEq9Z0QfW1dRe6ZBV9l8B5WdszA2ynrRLFl8a3+5YoK57qv7ArWTV8Kz7f5lP
+ +dGEl9snwONlRgr+WcWDUyoWdf5UrNPhh66onPJ1jyBnAbW6+Tt9xP3UBClxIaeHRjm8
+ hos77eYnGg4HjVx/nknCpTTI/pHiRWBRNwpjN+P1cvztJMlYMy8LRoXQ96GQlI755+76
+ 5+HnEkXY2j1bNHm+sZFph/wGZ4R8ghjxX2TRyEuTndYU3YM/XXI7UEGq2IoNVYXTknIk
+ d9OA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=GkVFV9Zm
-Subject: [Buildroot] [PATCH v2 1/1] configs/stm32mp157*_dk*: bump TF-A to
- 2.10, Linux to 6.12.22 and U-Boot to 2025.04
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=HjcJy0ZY
+Subject: [Buildroot] [PATCH] boot/ti-k3-boot-firmware: bump to version
+ 11.00.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,141 +114,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch bumps Arm Trusted Firmware (TF-A) to version 2.10 LTS the Linux
-kernel to version 6.12.22 and U-Boot to version 2025.04.
-The new version of U-Boot has added EFI Capsule support, which depends on
-GnuTLS, thus requiring the activation of BR2_TARGET_UBOOT_NEEDS_GNUTLS.
+Update to latest available version from TI.
 
-Tested on STM32MP157C-DK2 Discovery Board.
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 ---
+ boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash | 2 +-
+ boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Changes v1 -> v2:
- - Update U-Boot from 2025.01 to 2025.04
- - Update Linux from 6.12.13 to 6.12.22
-
- .../arm-trusted-firmware/arm-trusted-firmware.hash     |  2 --
- .../common/stm32mp1xx/patches/linux/linux.hash         |  2 +-
- .../common/stm32mp1xx/patches/uboot/uboot.hash         |  1 +
- configs/stm32mp157a_dk1_defconfig                      | 10 +++++-----
- configs/stm32mp157c_dk2_defconfig                      | 10 +++++-----
- 5 files changed, 12 insertions(+), 13 deletions(-)
- delete mode 100644 board/stmicroelectronics/common/stm32mp1xx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-
-diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-deleted file mode 100644
-index 2bc5030cf2ff..000000000000
---- a/board/stmicroelectronics/common/stm32mp1xx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally calculated
--sha256  72df0928138de111bf5e75fae47f88a4d1b4930ad52b7902e2b53e117be650c8  arm-trusted-firmware-v2.9-git4.tar.gz
-diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-index f6a5f5e1c90c..fa57bd7a20cb 100644
---- a/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
+diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
+index 2398d02da2..d9cb66cd6a 100644
+--- a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
++++ b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  f048267b7b88316c9ca708c68d15a9ae802dcfc943c3188c1273eb958c433281  linux-6.9.8.tar.xz
- sha256  c954f60197008f1e1f32a1e77293903cf3801d2543ec4bf521f5651eb7f133ce  linux-6.11.6.tar.xz
-+sha256  ab48800ab49985a78d2318ae8ac5f28fd3e123ea17357ef21498105a53337336  linux-6.12.22.tar.xz
-diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
-index fe9b4f53dc63..e70b2966558e 100644
---- a/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
-+++ b/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
-+sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
-diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
-index c1ecbd22c198..d96ff54dc9f3 100644
---- a/configs/stm32mp157a_dk1_defconfig
-+++ b/configs/stm32mp157a_dk1_defconfig
-@@ -1,13 +1,13 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_9=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/common/stm32mp1xx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157a-dk1/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.9.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.22"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157a-dk1/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -18,8 +18,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-@@ -31,10 +30,11 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index c35d75853f06..183e3ab8621f 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -1,13 +1,13 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_9=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/common/stm32mp1xx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.9.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.22"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -18,8 +18,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-@@ -31,10 +30,11 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ sha256  ab20ffbe7bba7e94be246b3417d33a914b3f07c16c47ef5a7f7602349a666a61  LICENSE.ti
+-sha256  ae888a0a22f8c5b8fe841236d6e40bb2f821d9a4161dab6924fd989e1467ef0e  ti-linux-firmware-09.02.00.009.tar.xz
++sha256  884c454b1a518e6d31304acb201493156685fb8ff111383c842bb292a1b35c9b  ti-linux-firmware-11.00.10.tar.xz
+diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
+index 9332732ad4..e04165edd1 100644
+--- a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
++++ b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TI_K3_BOOT_FIRMWARE_VERSION = 09.02.00.009
++TI_K3_BOOT_FIRMWARE_VERSION = 11.00.10
+ TI_K3_BOOT_FIRMWARE_SITE = https://git.ti.com/cgit/processor-firmware/ti-linux-firmware/snapshot
+ TI_K3_BOOT_FIRMWARE_SOURCE = ti-linux-firmware-$(TI_K3_BOOT_FIRMWARE_VERSION).tar.xz
+ TI_K3_BOOT_FIRMWARE_INSTALL_IMAGES = YES
 -- 
-2.43.0
+2.39.5
 
 _______________________________________________
 buildroot mailing list
