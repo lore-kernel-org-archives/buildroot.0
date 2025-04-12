@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AE1AC2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:49:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A291C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:49:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1CB59821B1;
-	Mon, 19 May 2025 10:49:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A27AD613FE;
+	Mon, 19 May 2025 10:49:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QAOEAUItYYmY; Mon, 19 May 2025 10:49:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FMU11CRghohO; Mon, 19 May 2025 10:49:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D1ED840AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5BA86F628
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D1ED840AF;
-	Mon, 19 May 2025 10:49:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 178F4193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C5BA86F628;
+	Mon, 19 May 2025 10:49:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EF33E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6C33541932
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4FFB3412E5
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KeL8IJvhUi4x for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eDF7C7uCW8JX for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9929D41829
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36F08410B2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9929D41829
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 36F08410B2
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 911D1873D4; Mon, 19 May 2025 10:40:03 +0000 (UTC)
+ id 3293C83B63; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 12:49:35 +0200
+Date: Sat, 12 Apr 2025 14:14:05 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 20246264e5ef8a20a1cc0f2b223854ff8517f225
-X-Git-Newrev: 9d0e9e07a8d4a5a51594f5f0db89d22ba2a5972e
+X-Git-Oldrev: 726150b0e666bd6ce052bb631ac6034c6a2dd13e
+X-Git-Newrev: ac87a435765c13d65a700b97eabd8bdba25cfc15
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104003.911D1873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/freescale-imx/firmware-ele-imx: bump to version 2.0.1
+Message-Id: <20250519103949.3293C83B63@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/ls1046a-frwy: enable
+ the fmc package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,66 +60,55 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6451098262453043453=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6451098262453043453==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=9d0e9e07a8d4a5a51594f5f0db89d22ba2a5972e
+commit: https://git.buildroot.net/buildroot/commit/?id=ac87a435765c13d65a700b97eabd8bdba25cfc15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This version is aligned with NXP Linux BSP version "lf-6.12.3-1.0.0".
+Since LS1046A-FRWY uses the Linux Factory-supplied lsdk.config, it
+disables the upstream DPAA1 kernel networking drivers and enables their
+SDK counterparts. These SDK kernel drivers are configured using the fmc
+tool to do basic things such as apply a default PCD, so it seems a
+reasonable idea to enable this package by default.
 
-License hashes changed because the LA_OPT_NXP_Software_License changed
-from "v57 July 2024" to "v58 November 2024".
+Since fmc uses C++, we need to add the standard library for that, which
+also seems to increase the rootfs size.
 
-Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+[Julien: regenerate with "make savedefconfig"]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash | 6 +++---
- package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ configs/ls1046a-frwy_defconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
-index 6182dc57be..55e1864e31 100644
---- a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
-+++ b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  8791109824767346237e53ac2c712824e54608e2092859161e6bb3e5385a7595  firmware-ele-imx-1.3.0-17945fc.bin
--sha256  601fa790c5b4d03579bd182fb4d65a6f329a32faf49db22f98e4608221e861f7  COPYING
--sha256  c3d9a7b2a5a7db5da690e9c1081b98b665802c3efbbba7fb237339395a92f607  EULA
-+sha256  a2f16e43e8aff9cf018d0962b70313940f77079b314331ab3980c4c5f44249cb  firmware-ele-imx-2.0.1-0a66c34.bin
-+sha256  3f4a12c82a84bd1c3578c9c986d6371a61d3399525e76288ecbbae01daf0ae26  COPYING
-+sha256  38f1408d6e935c564efd9119c313269e643c1a85cab1d930c3c5bd70bc261769  EULA
- sha256  8721a617a5d4c7f366aaf857ebda21eb4c9fc9175dc92b70f627c611d403ec8e  SCR.txt
-diff --git a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
-index 4225805d50..8f25f4b5b5 100644
---- a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
-+++ b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--FIRMWARE_ELE_IMX_VERSION = 1.3.0
--FIRMWARE_ELE_IMX_REVISION = 17945fc
-+FIRMWARE_ELE_IMX_VERSION = 2.0.1
-+FIRMWARE_ELE_IMX_REVISION = 0a66c34
- FIRMWARE_ELE_IMX_SITE = $(FREESCALE_IMX_SITE)
- FIRMWARE_ELE_IMX_SOURCE = firmware-ele-imx-$(FIRMWARE_ELE_IMX_VERSION)-$(FIRMWARE_ELE_IMX_REVISION).bin
- 
-
---===============6451098262453043453==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/configs/ls1046a-frwy_defconfig b/configs/ls1046a-frwy_defconfig
+index f2fac6590f..cc3333c684 100644
+--- a/configs/ls1046a-frwy_defconfig
++++ b/configs/ls1046a-frwy_defconfig
+@@ -1,6 +1,7 @@
+ BR2_aarch64=y
+ BR2_cortex_a72=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ BR2_GLOBAL_PATCH_DIR="board/freescale/ls1046a-frwy/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="ls1046afrwy"
+@@ -20,9 +21,10 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1046a-frwy freescale/fsl-ls104
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_PACKAGE_QORIQ_FM_UCODE=y
++BR2_PACKAGE_FMC=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
++BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6451098262453043453==--
