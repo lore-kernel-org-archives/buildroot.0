@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34367C54756
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:48:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F51CC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:48:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C31061062;
-	Mon, 19 May 2025 10:48:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D3EC6F797;
+	Mon, 19 May 2025 10:48:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DwbnPhkX2c39; Mon, 19 May 2025 10:48:48 +0000 (UTC)
+ id cth83CdEIJlb; Mon, 19 May 2025 10:48:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 454C460FEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DCC76F773
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 454C460FEE;
-	Mon, 19 May 2025 10:48:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 19E0F193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2DCC76F773;
+	Mon, 19 May 2025 10:48:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F638E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3E3B341923
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B0975412A8
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f09GasHnXVkX for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:05 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9CZ9wab5saCo for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D24341910
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3054F410B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D24341910
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3054F410B1
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8B419873D4; Mon, 19 May 2025 10:40:05 +0000 (UTC)
+ id 2B15B81E90; Mon, 19 May 2025 10:39:49 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 18:46:24 +0200
+Date: Sat, 12 Apr 2025 14:09:47 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e9498b4faa28c494c064728d564b43c07b1b0689
-X-Git-Newrev: 432aef053e6471ec8570b31aecbd8377bb666053
+X-Git-Oldrev: 11315d478782ef89a621518acaad9c2c39ad3b81
+X-Git-Newrev: 726150b0e666bd6ce052bb631ac6034c6a2dd13e
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104005.8B419873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/{rust,
- rust-bin}: fix license
+Message-Id: <20250519103949.2B15B81E90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/optee-test: fix
+ license hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,57 +59,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=432aef053e6471ec8570b31aecbd8377bb666053
+commit: https://git.buildroot.net/buildroot/commit/?id=726150b0e666bd6ce052bb631ac6034c6a2dd13e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The bump of rust and rust-bin from 1.82 to 1.86 in commit
-072f3bc8c61bd68ed75eb4419f938f718c79ac3f forgot to update the hash of
-the license files. The LICENSE-MIT file has changed with the following
-diff:
+Commit [1] updated optee-test version but forgot to update
+the license hash which was changed upstream in [2] to include
+copies of the GPL-2.0 and BSD-2-Clause license files. While at
+it, this commit also include those two new files in the license
+hash file.
 
-+Copyright (c) The Rust Project Contributors
-+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/8c2b2314df768a0add1fe45a9ad7dbcf2192d26f
+[2] https://github.com/OP-TEE/optee_test/commit/a748f5fcd9ec8a574dc86a5aa56d05bc6ac174e7
 
-So no change to the license terms.
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/382489b3f5c931451bead7e232af07b70c3e29bb/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/rust-bin/rust-bin.hash | 2 +-
- package/rust/rust.hash         | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/optee-test/optee-test.hash | 4 +++-
+ package/optee-test/optee-test.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/rust-bin/rust-bin.hash b/package/rust-bin/rust-bin.hash
-index d5a3c02071..ca7a4fe894 100644
---- a/package/rust-bin/rust-bin.hash
-+++ b/package/rust-bin/rust-bin.hash
-@@ -67,4 +67,4 @@ sha256  67be7184ea388d8ce0feaf7fdea46f1775cfc2970930264343b3089898501d37  rust-s
- sha256  8313c108da105181d27a5a0190ab46d1ac5b3e32bb5b2e7e0a41b7b5d353cba6  rust-std-1.86.0-x86_64-unknown-linux-musl.tar.xz
- # Locally generated
- sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
--sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-+sha256  b71bd43a069ca0641a9ecfe585ca7b3c53b5cc1608f8b68321168698e28b5ea1  LICENSE-MIT
-diff --git a/package/rust/rust.hash b/package/rust/rust.hash
-index bfccc2502a..314d1aff5e 100644
---- a/package/rust/rust.hash
-+++ b/package/rust/rust.hash
-@@ -5,4 +5,4 @@
- sha256  d939eada065dc827a9d4dbb55bd48533ad14c16e7f0a42e70147029c82a7707b  rustc-1.86.0-src.tar.xz
- # Locally generated
- sha256  62c7a1e35f56406896d7aa7ca52d0cc0d272ac022b5d2796e7d6905db8a3636a  LICENSE-APACHE
--sha256  23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-+sha256  b71bd43a069ca0641a9ecfe585ca7b3c53b5cc1608f8b68321168698e28b5ea1  LICENSE-MIT
+diff --git a/package/optee-test/optee-test.hash b/package/optee-test/optee-test.hash
+index ba2cbaaa15..3192c72b93 100644
+--- a/package/optee-test/optee-test.hash
++++ b/package/optee-test/optee-test.hash
+@@ -1,3 +1,5 @@
+ # Locally computed
+ sha256  cda3a4280a919cc6cd3cd3060e8c176cd42b968a9008305a6881e1fd433a6f1e  optee-test-4.5.0.tar.gz
+-sha256  6e6810981f0ddab9e0d44399d0700a15d9f760a3c2843cc866659c2074139ae7  LICENSE.md
++sha256  2b36458cd0292200e406a608efe7dfda17aae39646a86b730a2776b61d0fa410  LICENSE-BSD
++sha256  a094472b51f57d0403953d087e410793519cb6f3a7cea2be34eb44e09a426a73  LICENSE-GPL
++sha256  a562ab14c307d0e02b7bf6f1bdb0d1cf789409e6375a500e15dc7a0503e5c2c3  LICENSE.md
+diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
+index c250639d06..23874b51b9 100644
+--- a/package/optee-test/optee-test.mk
++++ b/package/optee-test/optee-test.mk
+@@ -6,7 +6,7 @@
+ 
+ OPTEE_TEST_VERSION = $(call qstrip,$(BR2_PACKAGE_OPTEE_TEST_VERSION))
+ OPTEE_TEST_LICENSE = GPL-2.0, BSD-2-Clause,
+-OPTEE_TEST_LICENSE_FILES = LICENSE.md
++OPTEE_TEST_LICENSE_FILES = LICENSE-BSD LICENSE-GPL LICENSE.md
+ 
+ ifeq ($(BR2_PACKAGE_OPTEE_TEST_CUSTOM_TARBALL),y)
+ OPTEE_TEST_TARBALL = $(call qstrip,$(BR2_PACKAGE_OPTEE_TEST_CUSTOM_TARBALL_LOCATION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
