@@ -4,50 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21679C369AF
-	for <buildroot@archiver.kernel.org>; Sat, 12 Apr 2025 12:01:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96236C369A1
+	for <buildroot@archiver.kernel.org>; Sat, 12 Apr 2025 12:01:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DC71A84059;
-	Sat, 12 Apr 2025 12:01:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CEE78054C;
+	Sat, 12 Apr 2025 12:01:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3MGJt-7Okqo2; Sat, 12 Apr 2025 12:01:00 +0000 (UTC)
+ id TpVJavLlZb4H; Sat, 12 Apr 2025 12:01:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D9BE83EF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DC31A8148B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D9BE83EF2;
-	Sat, 12 Apr 2025 12:01:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id CDF3D193
- for <buildroot@buildroot.org>; Sat, 12 Apr 2025 12:00:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC31A8148B;
+	Sat, 12 Apr 2025 12:01:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7796E108
+ for <buildroot@buildroot.org>; Sat, 12 Apr 2025 12:01:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BFA84606EA
- for <buildroot@buildroot.org>; Sat, 12 Apr 2025 12:00:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 68DCE8054C
+ for <buildroot@buildroot.org>; Sat, 12 Apr 2025 12:01:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CellJb-8xQZE for <buildroot@buildroot.org>;
- Sat, 12 Apr 2025 12:00:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 105DF60617
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 105DF60617
- for <buildroot@buildroot.org>; Sat, 12 Apr 2025 12:00:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0BF53843C9; Sat, 12 Apr 2025 12:00:57 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 12 Apr 2025 13:59:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cac028add66c046b8f93137dbcc41138938e29ea
-X-Git-Newrev: 7d890426bcef037a5d09624913d9c22d91ed9c94
-X-Patchwork-Hint: ignore
-Message-Id: <20250412120057.0BF53843C9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/hifive_unmatched: add missing
- uboot custom hash file
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Z6Jib9UZL0Qd for <buildroot@buildroot.org>;
+ Sat, 12 Apr 2025 12:01:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.60.130.6;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 072EF8148B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 072EF8148B
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 072EF8148B
+ for <buildroot@buildroot.org>; Sat, 12 Apr 2025 12:01:27 +0000 (UTC)
+Received: from [91.116.116.48] (helo=momiji)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1u3ZY4-00FZDq-RA; Sat, 12 Apr 2025 14:01:24 +0200
+Received: from localhost (momiji [local])
+ by momiji (OpenSMTPD) with ESMTPA id 89a31735;
+ Sat, 12 Apr 2025 12:01:10 +0000 (UTC)
+Date: Sat, 12 Apr 2025 15:01:06 +0300
+Message-ID: <20250412150106.GI2424943@igalia.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: Julien Olivain <ju.o@free.fr>
+Cc: buildroot@buildroot.org
+In-Reply-To: <c29cf2115e9b79b8d18a79af0bddbea6@free.fr>
+References: <20250320172543.2490556-1-aperez@igalia.com>
+ <c29cf2115e9b79b8d18a79af0bddbea6@free.fr>
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=vhZlQCxA2qNY8+FxvhtWTWoGOH2hz7Hq0eff2fvWtaM=; b=QPmlz/nVPcf0Hs+3+LMhPoFL1J
+ 0aTC3upzsWufT/IEgEXHW/rQCeIi6R24Iq1sQ+BgAZlwiMOs6v+I+drWKEaqo5RftaMRt81QlBGtG
+ fHAV75x800j692BBeQg/fOJ1D4TrVgir+Zx5xRoqaRhNic/EsAHomz0TwP1UJDe5DAW/Xl/0JMd1I
+ EZrdRbDhGaJHITkHzHJfnV5NSaNw1tu5HN6a2vBJJcHl4Xx2EwMeiLAdrwHee6eIgSSDU/6Id1HF+
+ bwpffsNO/hwXwEzBD3PU2E9b9blRZrzGbz3ehg1PISVRLAA0bCgao2waoNOLOPDYdIpEBACptCMKM
+ CLEFItRg==;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=igalia.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=QPmlz/nV
+Subject: Re: [Buildroot] [PATCH 1/1] package/libmanette: bump to version
+ 0.2.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,46 +85,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3788069064731858024=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d890426bcef037a5d09624913d9c22d91ed9c94
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit [1] introduced the hifive_unmatched_defconfig with
-BR2_DOWNLOAD_FORCE_CHECK_HASH enabled and with custom hash files.
-But it forgot to add the custom hash for uboot. It was not detected
-at that time because the U-Boot version was the same as the default
-"latest" version and was providing its hash.
+--===============3788069064731858024==
+Content-Type: multipart/signed; boundary="qVspykWByexeE7VW"; micalg="pgp-ripemd160"; protocol="application/pgp-signature"
 
-This defconfig fails to build since the default "latest" was bumped
-in commit [2].
 
-This commit fixes the issue by adding the missing uboot hash.
+--qVspykWByexeE7VW
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/9677167053
+SGkgSnVsaWVuLAoKT24gU2F0LCAxMiBBcHIgMjAyNSAxMjo1NzoyOCArMDIwMCBKdWxpZW4gT2xp
+dmFpbiA8anUub0BmcmVlLmZyPiB3cm90ZToKPiBIaSBBZHJpYW4sCj4gCj4gT24gMjAvMDMvMjAy
+NSAxODoyNSwgQWRyaWFuIFBlcmV6IGRlIENhc3RybyB3cm90ZToKPiA+IEJ1Z2ZpeCByZWxlYXNl
+IHdpdGggYSBudW1iZXIgb2YgZml4ZXMsIGl0IGFsc28gYWRkcyBzdXBwb3J0IGZvciB0aGUKPiA+
+IFN0ZWFtIERlY2sgZ2FtZXBhZC4gUmVsZWFzZSBub3RlczoKPiA+IAo+ID4gICAKPiA+IGh0dHBz
+Oi8vZ2l0bGFiLmdub21lLm9yZy9HTk9NRS9saWJtYW5ldHRlLy0vYmxvYi8xYWNiNDY5NDNkNGQ5
+NzBhYmU1OTRiNjM0YTA1OGM5M2IzMDIxMjU4L05FV1MKPiA+IAo+ID4gVGhpcyB2ZXJzaW9uIGlu
+dHJvZHVjZXMgYSBkZXBlbmRlbmN5IG9uIHRoZSBoaWRhcGkgcGFja2FnZS4KPiA+IAo+ID4gU2ln
+bmVkLW9mZi1ieTogQWRyaWFuIFBlcmV6IGRlIENhc3RybyA8YXBlcmV6QGlnYWxpYS5jb20+Cj4g
+Cj4gSSBhcHBsaWVkIHRoaXMgcGF0Y2ggdG8gbWFzdGVyLCB0aGFua3MuCj4gSSBhbHNvIHByb3Bh
+Z2F0ZWQgdGhlIG1pc3NpbmcgaGlkYXBpIGRlcGVuZGVuY2llcy4gU2VlOgo+IGh0dHBzOi8vZ2l0
+bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2NvbW1pdC8zYTNhYjcwZmMyZjRjMjZj
+NGQ5NDNkZTAxNzQ4YjBmYTJjMGNkYWNkCgpXb25kZXJmdWwsIHRoYW5rcyEgQnkgbm93IEkgc2hv
+dWxkIGJlIGFibGUgdG8gZG8gdGhlIGRlcGVuZGVuY3kKcHJvcGFnYXRpb24gYnkgbXlzZWxmIGNv
+cnJlY3RseSwgYnV0IEkga2VlcCBtYWtpbmcgc2lsbHkgbWlzdGFrZXMsCnNvcnJ5IGFib3V0IHRo
+YXQuCiAKQ2hlZXJzLArigJRBZHJpw6FuCg==
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/f9cc5dbd453c80790c1f2f7e9b19a85ded5979be
-[2] https://gitlab.com/buildroot.org/buildroot/-/commit/c14ce5346d969e660cc788f2f4d8619b27c805a2
+--qVspykWByexeE7VW
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- board/sifive/hifive-unmatched/patches/uboot/uboot.hash | 2 ++
- 1 file changed, 2 insertions(+)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/board/sifive/hifive-unmatched/patches/uboot/uboot.hash b/board/sifive/hifive-unmatched/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..50674352d7
---- /dev/null
-+++ b/board/sifive/hifive-unmatched/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
+iF0EABEDAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCZ/pWAgAKCRCRxVnb5MkS
+O4J5AJ9qMaaGqkmLrUT8WDmiOOwqWkJ7nACfeTlxTQ9vzvhvymRhvTW6BeQGv4g=
+=p6jw
+-----END PGP SIGNATURE-----
+
+--qVspykWByexeE7VW--
+
+--===============3788069064731858024==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3788069064731858024==--
