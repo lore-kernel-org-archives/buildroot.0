@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4727C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:44:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A292C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:44:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A33BE61447;
-	Mon, 19 May 2025 10:44:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EDB8A6144F;
+	Mon, 19 May 2025 10:44:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sWQX75rIXLFZ; Mon, 19 May 2025 10:44:10 +0000 (UTC)
+ id dxzEnVAr7fxo; Mon, 19 May 2025 10:44:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DC9361446
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06E2F6144B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7DC9361446;
-	Mon, 19 May 2025 10:44:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 16274193
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06E2F6144B;
+	Mon, 19 May 2025 10:44:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8D533D4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9FD25410F6
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2913C417B2
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZucEJ1_t8jHv for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k9itYNl36plx for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96DA640DD4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0DD5341731
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 96DA640DD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0DD5341731
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9066D84A21; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+ id 0BB0281E90; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 26 Mar 2025 20:58:31 +0100
+Date: Sat, 12 Apr 2025 14:06:12 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 01ef4c44108a60479fd72416d89d90cd68091736
-X-Git-Newrev: f8bc27111531e9607f79121414f61c0c2d5f83c0
+X-Git-Oldrev: 7d890426bcef037a5d09624913d9c22d91ed9c94
+X-Git-Newrev: 5d0ec3b6a43b0bf803233a4d07fbe3466442bd13
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103945.9066D84A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ncftp: bump to version
- 3.2.9
+Message-Id: <20250519103949.0BB0281E90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/ls1028ardb: linux
+ needs host-openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,168 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8bc27111531e9607f79121414f61c0c2d5f83c0
+commit: https://git.buildroot.net/buildroot/commit/?id=5d0ec3b6a43b0bf803233a4d07fbe3466442bd13
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Remove upstreamed patches.
+Since Buildroot commit [1] updating the defconfig to use Kernel 6.6.x
+series, the build can fail with error:
 
-Autoreconf is broken. Hence, use the configure script directly.
+    certs/extract-cert.c:21:10: fatal error: openssl/bio.h: No such file or directory
 
-Fixes:
-https://autobuild.buildroot.org/results/60c3dbe02af354ff9820258ffd00eec088114d69/
+The issue is generally masked by the build order, as
+arm-trusted-firmware selects BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+which requires host-openssl.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+The issue can be reproduced in the Buildroot Docker reference image,
+using the commands:
+
+    utils/docker-run
+    make ls1028ardb_defconfig
+    make linux
+
+This commit fixes the issue by explicitly adding
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y to the defconfig.
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/7cbc240ac2c3a5d7cbbec9826fb99854bdd156a7
+
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/ncftp/0001-ncftp-3.2.7-fix-gcc14.patch | 19 -------
- package/ncftp/0002-ncftp-3.2.7-fix-clang.patch | 72 --------------------------
- package/ncftp/ncftp.hash                       |  2 +-
- package/ncftp/ncftp.mk                         | 13 +----
- 4 files changed, 3 insertions(+), 103 deletions(-)
+ configs/ls1028ardb_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ncftp/0001-ncftp-3.2.7-fix-gcc14.patch b/package/ncftp/0001-ncftp-3.2.7-fix-gcc14.patch
-deleted file mode 100644
-index e2cda631d4..0000000000
---- a/package/ncftp/0001-ncftp-3.2.7-fix-gcc14.patch
-+++ /dev/null
-@@ -1,19 +0,0 @@
--fix select arg detection
--
--Reference:
-- https://bugs.gentoo.org/921487
--
--Upstream: N/A, unresponsive contact email address.
--
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----- a/autoconf_local/aclocal.m4
--+++ b/autoconf_local/aclocal.m4
--@@ -4196,7 +4196,7 @@
-- #include <sys/select.h>
-- #endif
-- #include <sys/socket.h>	/* MG: always incl */
---extern select ($ac_cv_func_select_arg1,$ac_cv_func_select_arg234,$ac_cv_func_select_arg234,$ac_cv_func_select_arg234,$ac_cv_func_select_arg5);],,dnl
--+extern int select ($ac_cv_func_select_arg1,$ac_cv_func_select_arg234,$ac_cv_func_select_arg234,$ac_cv_func_select_arg234,$ac_cv_func_select_arg5);],,dnl
--         [ac_not_found=no ; break 3],ac_not_found=yes)
--       done
--      done
-diff --git a/package/ncftp/0002-ncftp-3.2.7-fix-clang.patch b/package/ncftp/0002-ncftp-3.2.7-fix-clang.patch
-deleted file mode 100644
-index bed103609c..0000000000
---- a/package/ncftp/0002-ncftp-3.2.7-fix-clang.patch
-+++ /dev/null
-@@ -1,72 +0,0 @@
--Fix compilation with clang-16
--
--aclocal.m4 contains code that no longer compiles: missing headers and missing
--return types.
--
--Reference:
-- https://gitweb.gentoo.org/repo/gentoo.git/tree/net-ftp/ncftp/files/ncftp-3.2.7-fix-clang.patch
--
--Upstream: N/A, unresponsive contact email address.
--
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----- a/autoconf_local/aclocal.m4
--+++ b/autoconf_local/aclocal.m4
--@@ -3057,6 +3057,7 @@
-- #include <sys/uio.h>
-- #include <sys/socket.h>
-- #include <sys/un.h>
--+#include <string.h>
-- ],[
-- struct sockaddr_un uaddr;
-- 
--@@ -3285,6 +3286,7 @@
-- #ifdef HAVE_RESOLV_H
-- #	include <resolv.h>
-- #endif
--+#include <string.h>
-- ],[
-- 	/* function-body */
-- 	int len;
--@@ -3363,6 +3365,7 @@
-- #include <stdio.h>
-- #include <stdlib.h>
-- 		 
--+			int
-- 			main(int argc, char **argv)
-- 			{
-- 				/* Note:  don't actually call readline,
--@@ -5145,6 +5148,7 @@
-- #ifdef HAVE_STDLIB_H
-- #	include <stdlib.h>
-- #endif
--+#include <string.h>
-- 
-- #ifdef HAVE_NCURSES_H
-- #	define NCURSES_OPAQUE 0
--@@ -5176,6 +5180,7 @@
-- #endif
-- 
--  
--+int
-- main(int argc, char **argv)
-- {
-- 	/* Note:  don't actually call curses, since it may block;
--@@ -6510,7 +6515,6 @@
-- #endif
-- #endif			/* MG */
-- 
---int
-- int  main(void)
-- {
-- 	char *data, *data2, *data3;
--@@ -6607,8 +6611,9 @@
-- 	AC_CACHE_CHECK(whether setvbuf arguments are reversed,
-- 	  ac_cv_func_setvbuf_reversed,
-- 	[AC_TRY_RUN([#include <stdio.h>
--+	$include <stdlib.h>
-- 	/* If setvbuf has the reversed format, exit 0. */
---	main () {
--+	int main (void) {
-- 	  /* This call has the arguments reversed.
-- 	     A reversed system may check and see that the address of main
-- 	     is not _IOLBF, _IONBF, or _IOFBF, and return nonzero.  */
-diff --git a/package/ncftp/ncftp.hash b/package/ncftp/ncftp.hash
-index 3e390b1015..a9414d62f5 100644
---- a/package/ncftp/ncftp.hash
-+++ b/package/ncftp/ncftp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  d41c5c4d6614a8eae2ed4e4d7ada6b6d3afcc9fb65a4ed9b8711344bef24f7e8  ncftp-3.2.7-src.tar.xz
-+sha256  f1108e77782376f8aec691f68297a3364a9a7c2d9bb12e326f550ff9770f47a7  ncftp-3.2.9-src.tar.gz
- sha256  4fe2f063d25d79c49712a272ebb68e050c703eed9c66c80108427edfe3285580  doc/LICENSE.txt
-diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
-index 57c3a5d08b..fa46bc3339 100644
---- a/package/ncftp/ncftp.mk
-+++ b/package/ncftp/ncftp.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--NCFTP_VERSION = 3.2.7
--NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.xz
-+NCFTP_VERSION = 3.2.9
-+NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.gz
- NCFTP_SITE = https://www.ncftp.com/public_ftp/ncftp
- NCFTP_TARGET_BINS = ncftp
- NCFTP_LICENSE = ClArtistic
-@@ -14,15 +14,6 @@ NCFTP_LICENSE_FILES = doc/LICENSE.txt
- NCFTP_DEPENDENCIES = host-autoconf
- NCFTP_CONF_OPTS = --disable-ccdv
- 
--# The bundled configure script is generated by autoconf 2.13 and doesn't
--# detect cross-compilation correctly. Therefore, we have to regenerate it.
--# We need to pass -I because of the non-standard m4 directory name, and
--# none of the other autotools are used, so the below is the easiest.
--define NCFTP_RUN_AUTOCONF
--	(cd $(@D); $(AUTOCONF) -I$(@D)/autoconf_local/)
--endef
--NCFTP_PRE_CONFIGURE_HOOKS += NCFTP_RUN_AUTOCONF
--
- ifeq ($(BR2_PACKAGE_NCFTP_GET),y)
- NCFTP_TARGET_BINS += ncftpget
- endif
+diff --git a/configs/ls1028ardb_defconfig b/configs/ls1028ardb_defconfig
+index 0d1843bf5f..7b24a41cd9 100644
+--- a/configs/ls1028ardb_defconfig
++++ b/configs/ls1028ardb_defconfig
+@@ -18,6 +18,7 @@ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.con
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1028a-rdb"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_PACKAGE_QORIQ_CADENCE_DP_FIRMWARE=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
