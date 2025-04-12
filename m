@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C882C369A1
-	for <buildroot@archiver.kernel.org>; Sat, 12 Apr 2025 12:12:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2718CC369B4
+	for <buildroot@archiver.kernel.org>; Sat, 12 Apr 2025 14:19:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 92B7160B91;
-	Sat, 12 Apr 2025 12:12:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B292B6074D;
+	Sat, 12 Apr 2025 14:19:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ARMS6ZGnvIvt; Sat, 12 Apr 2025 12:12:21 +0000 (UTC)
+ id vYJm4T7jel6W; Sat, 12 Apr 2025 14:19:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A43B46071A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7533607EE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A43B46071A;
-	Sat, 12 Apr 2025 12:12:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6DB57108
- for <buildroot@buildroot.org>; Sat, 12 Apr 2025 12:12:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E7533607EE;
+	Sat, 12 Apr 2025 14:19:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 95698193
+ for <buildroot@buildroot.org>; Sat, 12 Apr 2025 14:19:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F96640F5E
- for <buildroot@buildroot.org>; Sat, 12 Apr 2025 12:12:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 86AF68131D
+ for <buildroot@buildroot.org>; Sat, 12 Apr 2025 14:19:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zvlu1nlX8mr7 for <buildroot@buildroot.org>;
- Sat, 12 Apr 2025 12:12:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XOru_f4DaS2p for <buildroot@buildroot.org>;
+ Sat, 12 Apr 2025 14:19:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9592040FAC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B30E081045
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9592040FAC
- for <buildroot@buildroot.org>; Sat, 12 Apr 2025 12:12:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B30E081045
+ for <buildroot@buildroot.org>; Sat, 12 Apr 2025 14:19:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 83F6384460; Sat, 12 Apr 2025 12:12:19 +0000 (UTC)
+ id A2F6884495; Sat, 12 Apr 2025 14:19:37 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 12 Apr 2025 14:09:47 +0200
+Date: Sat, 12 Apr 2025 14:14:05 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 11315d478782ef89a621518acaad9c2c39ad3b81
-X-Git-Newrev: 726150b0e666bd6ce052bb631ac6034c6a2dd13e
+X-Git-Oldrev: ac87a435765c13d65a700b97eabd8bdba25cfc15
+X-Git-Newrev: a35529c0afe6f307c79ee0c069668653ab9c9c17
 X-Patchwork-Hint: ignore
-Message-Id: <20250412121219.83F6384460@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/optee-test: fix license hash
+Message-Id: <20250412141937.A2F6884495@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/ls1046a-rdb: enable the fmc package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,48 +64,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=726150b0e666bd6ce052bb631ac6034c6a2dd13e
+commit: https://git.buildroot.net/buildroot/commit/?id=a35529c0afe6f307c79ee0c069668653ab9c9c17
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit [1] updated optee-test version but forgot to update
-the license hash which was changed upstream in [2] to include
-copies of the GPL-2.0 and BSD-2-Clause license files. While at
-it, this commit also include those two new files in the license
-hash file.
+Since LS1046A-RDB uses the Linux Factory-supplied lsdk.config, it
+disables the upstream DPAA1 kernel networking drivers and enables their
+SDK counterparts. These SDK kernel drivers are configured using the fmc
+tool to do basic things such as apply a default PCD, so it seems a
+reasonable idea to enable this package by default.
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/8c2b2314df768a0add1fe45a9ad7dbcf2192d26f
-[2] https://github.com/OP-TEE/optee_test/commit/a748f5fcd9ec8a574dc86a5aa56d05bc6ac174e7
+Since fmc uses C++, we need to add the standard library for that, which
+also seems to increase the rootfs size.
 
+Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+[Julien: regenerate with "make savedefconfig"]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/optee-test/optee-test.hash | 4 +++-
- package/optee-test/optee-test.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ configs/ls1046a-rdb_defconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/optee-test/optee-test.hash b/package/optee-test/optee-test.hash
-index ba2cbaaa15..3192c72b93 100644
---- a/package/optee-test/optee-test.hash
-+++ b/package/optee-test/optee-test.hash
-@@ -1,3 +1,5 @@
- # Locally computed
- sha256  cda3a4280a919cc6cd3cd3060e8c176cd42b968a9008305a6881e1fd433a6f1e  optee-test-4.5.0.tar.gz
--sha256  6e6810981f0ddab9e0d44399d0700a15d9f760a3c2843cc866659c2074139ae7  LICENSE.md
-+sha256  2b36458cd0292200e406a608efe7dfda17aae39646a86b730a2776b61d0fa410  LICENSE-BSD
-+sha256  a094472b51f57d0403953d087e410793519cb6f3a7cea2be34eb44e09a426a73  LICENSE-GPL
-+sha256  a562ab14c307d0e02b7bf6f1bdb0d1cf789409e6375a500e15dc7a0503e5c2c3  LICENSE.md
-diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
-index c250639d06..23874b51b9 100644
---- a/package/optee-test/optee-test.mk
-+++ b/package/optee-test/optee-test.mk
-@@ -6,7 +6,7 @@
- 
- OPTEE_TEST_VERSION = $(call qstrip,$(BR2_PACKAGE_OPTEE_TEST_VERSION))
- OPTEE_TEST_LICENSE = GPL-2.0, BSD-2-Clause,
--OPTEE_TEST_LICENSE_FILES = LICENSE.md
-+OPTEE_TEST_LICENSE_FILES = LICENSE-BSD LICENSE-GPL LICENSE.md
- 
- ifeq ($(BR2_PACKAGE_OPTEE_TEST_CUSTOM_TARBALL),y)
- OPTEE_TEST_TARBALL = $(call qstrip,$(BR2_PACKAGE_OPTEE_TEST_CUSTOM_TARBALL_LOCATION))
+diff --git a/configs/ls1046a-rdb_defconfig b/configs/ls1046a-rdb_defconfig
+index bd20baeea9..92045487f9 100644
+--- a/configs/ls1046a-rdb_defconfig
++++ b/configs/ls1046a-rdb_defconfig
+@@ -1,6 +1,7 @@
+ BR2_aarch64=y
+ BR2_cortex_a72=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ BR2_GLOBAL_PATCH_DIR="board/freescale/ls1046a-rdb/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="ls1046ardb"
+@@ -20,9 +21,10 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1046a-rdb freescale/fsl-ls1046
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_PACKAGE_QORIQ_FM_UCODE=y
++BR2_PACKAGE_FMC=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+-BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
++BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
