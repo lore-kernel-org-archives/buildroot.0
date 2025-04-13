@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BB7CC369B4
-	for <buildroot@archiver.kernel.org>; Sun, 13 Apr 2025 09:42:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A211C369AE
+	for <buildroot@archiver.kernel.org>; Sun, 13 Apr 2025 09:42:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CEF2E607B0;
-	Sun, 13 Apr 2025 09:42:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C91328118B;
+	Sun, 13 Apr 2025 09:42:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ahbBAoJMOWCJ; Sun, 13 Apr 2025 09:42:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0QEElrQoz0ZE; Sun, 13 Apr 2025 09:42:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEF56606EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1FE38195C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CEF56606EB;
-	Sun, 13 Apr 2025 09:42:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1FE38195C;
+	Sun, 13 Apr 2025 09:42:27 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 32A84108
- for <buildroot@buildroot.org>; Sun, 13 Apr 2025 09:42:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 19543DE
+ for <buildroot@buildroot.org>; Sun, 13 Apr 2025 09:42:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5A20B82CEC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8CC1981F17
  for <buildroot@buildroot.org>; Sun, 13 Apr 2025 09:42:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Av6rBJEtbEnM for <buildroot@buildroot.org>;
+ id QuY7-s_4rVLd for <buildroot@buildroot.org>;
  Sun, 13 Apr 2025 09:42:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FB4782C8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89CFF82CE5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6FB4782C8F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 89CFF82CE5
  for <buildroot@buildroot.org>; Sun, 13 Apr 2025 09:42:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5EA7384558; Sun, 13 Apr 2025 09:42:17 +0000 (UTC)
+ id 86AC484558; Sun, 13 Apr 2025 09:42:17 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
 Date: Sun, 13 Apr 2025 11:33:49 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 06f3d593f65cc52baddadf2c55e582f7310b2ede
-X-Git-Newrev: 3358c3e8a8e9cdd06ff93d174e4b674af69fa50a
+X-Git-Oldrev: c3b9add8a5280b00350532ab771bee4a85abf9be
+X-Git-Newrev: c7c59e18effa92bf3e41e2bb53ca8abf563ccb37
 X-Patchwork-Hint: ignore
-Message-Id: <20250413094217.5EA7384558@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fmlib: bump version to
- lf-6.12.3-1.0.0-3-g7a58eca
+Message-Id: <20250413094217.86AC484558@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/ls1028ardb: bump BSP tag to
+ lf-6.12.3-1.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,152 +60,134 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7233429615075118064=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7233429615075118064==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=3358c3e8a8e9cdd06ff93d174e4b674af69fa50a
+commit: https://git.buildroot.net/buildroot/commit/?id=c7c59e18effa92bf3e41e2bb53ca8abf563ccb37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is technically the master branch, a few commits post release tag.
-Change log:
-
-7a58ecaf0d90 fm_lib: explicit conversion to ioc_fm_pcd_exceptions in FM_PCD_SetException()
-22a0d3f1867e fm_lib: make REPORT_ERROR() definition more function-like
-08ac8b3112a8 fm_lib: fix conversion warnings between e_FmPcdEngine and enum ioc_fm_pcd_engine
-168eae74fd8a fm_lib: fix integer-to-pointer conversion build warning in GetDeviceId()
-
-The build fix patch from Buildroot is no longer necessary, remove it.
+Update the kernel, U-Boot, ATF tags, as well as documentation, used by
+the LS1028A-RDB to the latest Linux Factory release.
 
 Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
-[Julien: switch _VERSION to use git describe syntax]
+[Julien: reword commit one liner title for consistency]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...eger-conversion-error-and-enum-compare-wa.patch | 79 ----------------------
- package/fmlib/fmlib.hash                           |  2 +-
- package/fmlib/fmlib.mk                             |  2 +-
- 3 files changed, 2 insertions(+), 81 deletions(-)
+ .../arm-trusted-firmware/arm-trusted-firmware.hash |  2 +-
+ .../freescale/ls1028ardb/patches/linux/linux.hash  |  2 +-
+ .../freescale/ls1028ardb/patches/uboot/uboot.hash  |  2 +-
+ board/freescale/ls1028ardb/readme.txt              | 28 ++++++++++++++--------
+ configs/ls1028ardb_defconfig                       |  8 +++----
+ 5 files changed, 25 insertions(+), 17 deletions(-)
 
-diff --git a/package/fmlib/0001-Fix-the-integer-conversion-error-and-enum-compare-wa.patch b/package/fmlib/0001-Fix-the-integer-conversion-error-and-enum-compare-wa.patch
-deleted file mode 100644
-index e38b36128f..0000000000
---- a/package/fmlib/0001-Fix-the-integer-conversion-error-and-enum-compare-wa.patch
-+++ /dev/null
-@@ -1,79 +0,0 @@
--From 3a1962a70cec74b3dac979e52a2cbcaa8897b9c8 Mon Sep 17 00:00:00 2001
--From: Akhilesh Nema <nemaakhilesh@gmail.com>
--Date: Fri, 10 Jan 2025 20:20:50 -0800
--Subject: [PATCH] Fix the integer conversion error and enum compare
-- warnings on build under gcc-14
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Error:
--src/fm_lib.c: In function ‘GetDeviceId’:
--src/fm_lib.c:139:21: error: returning ‘uintptr_t’ {aka ‘long unsigned int’} from a function with return type ‘t_Handle’ {aka ‘void *’} makes pointer from integer without a cast [-Wint-conversion]
--  139 |         return p_Dev->id;
--      |                ~~~~~^~~~
--
--Warnings:
--
--src/fm_lib.c: In function ‘FM_PCD_CcRootModifyNextEngine’:
--src/fm_lib.c:997:51: warning: comparison between ‘e_FmPcdEngine’ and ‘enum ioc_fm_pcd_engine’ [-Wenum-compare]
--  997 |         if (p_FmPcdCcNextEngineParams->nextEngine == e_IOC_FM_PCD_FR) {
--      |                                                   ^~
--src/fm_lib.c: In function ‘FM_PCD_MatchTableAddKey’:
--src/fm_lib.c:1103:57: warning: comparison between ‘e_FmPcdEngine’ and ‘enum ioc_fm_pcd_engine’ [-Wenum-compare]
-- 1103 |     else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
--      |                                                         ^~
--src/fm_lib.c: In function ‘FM_PCD_MatchTableModifyKeyAndNextEngine’:
--src/fm_lib.c:1174:57: warning: comparison between ‘e_FmPcdEngine’ and ‘enum ioc_fm_pcd_engine’ [-Wenum-compare]
-- 1174 |     else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
--
--Upstream: https://github.com/nxp-qoriq/fmlib/pull/1
--
--Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-----
-- src/fm_lib.c | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/src/fm_lib.c b/src/fm_lib.c
--index 4ea40ff..85b4a66 100644
----- a/src/fm_lib.c
--+++ b/src/fm_lib.c
--@@ -136,7 +136,7 @@ t_Handle GetDeviceId(t_Handle h_Dev)
-- {
-- 	t_Device *p_Dev = (t_Device*)h_Dev;
-- 
---	return p_Dev->id;
--+	return (t_Handle) p_Dev->id;
-- }
-- 
-- 
--@@ -994,7 +994,7 @@ t_Error FM_PCD_CcRootModifyNextEngine(t_Handle                  h_CcTree,
--     }
-- 
-- #if (DPAA_VERSION >= 11)
---	if (p_FmPcdCcNextEngineParams->nextEngine == e_IOC_FM_PCD_FR) {
--+	if (p_FmPcdCcNextEngineParams->nextEngine == e_FM_PCD_FR) {
--         t_Device *p_NextDev = (t_Device*) p_FmPcdCcNextEngineParams->params.frParams.h_FrmReplic;
--         params.cc_next_engine_params.params.fr_params.frm_replic_id = UINT_TO_PTR(p_NextDev->id);
--     }
--@@ -1100,7 +1100,7 @@ t_Error FM_PCD_MatchTableAddKey(t_Handle            h_CcNode,
--     	params.key_params.cc_next_engine_params.params.kg_params.p_direct_scheme = UINT_TO_PTR(p_NextDev->id);
--     }
-- #if (DPAA_VERSION >= 11)
---    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
--+    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_FM_PCD_FR) {
--     	t_Device *p_NextDev = (t_Device*) p_KeyParams->ccNextEngineParams.params.frParams.h_FrmReplic;
--     	params.key_params.cc_next_engine_params.params.fr_params.frm_replic_id = UINT_TO_PTR(p_NextDev->id);
--     }
--@@ -1171,7 +1171,7 @@ t_Error FM_PCD_MatchTableModifyKeyAndNextEngine(t_Handle            h_CcNode,
--     	params.key_params.cc_next_engine_params.params.kg_params.p_direct_scheme = UINT_TO_PTR(p_NextDev->id);
--     }
-- #if (DPAA_VERSION >= 11)
---    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
--+    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_FM_PCD_FR) {
--     	t_Device *p_NextDev = (t_Device*) p_KeyParams->ccNextEngineParams.params.frParams.h_FrmReplic;
--     	params.key_params.cc_next_engine_params.params.fr_params.frm_replic_id = UINT_TO_PTR(p_NextDev->id);
--     }
---- 
--2.25.1
--
-diff --git a/package/fmlib/fmlib.hash b/package/fmlib/fmlib.hash
-index edf87426df..2d63a615c0 100644
---- a/package/fmlib/fmlib.hash
-+++ b/package/fmlib/fmlib.hash
-@@ -1,3 +1,3 @@
+diff --git a/board/freescale/ls1028ardb/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/ls1028ardb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index f9af28ab3c..41c7ad4068 100644
+--- a/board/freescale/ls1028ardb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/freescale/ls1028ardb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  4f4dc78bfb5b7391a65ae0f83856661071f666ac2bf6a9380fddbe376a8bdaaa  atf-lf-6.6.23-2.0.0.tar.gz
++sha256  2751fcd3eb9080c34531f68ca2e1f571a60f4220853df53a5ebed9835abf8c13  atf-lf-6.12.3-1.0.0.tar.gz
+diff --git a/board/freescale/ls1028ardb/patches/linux/linux.hash b/board/freescale/ls1028ardb/patches/linux/linux.hash
+index e038c22862..43dbe074c2 100644
+--- a/board/freescale/ls1028ardb/patches/linux/linux.hash
++++ b/board/freescale/ls1028ardb/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
  # Locally computed
--sha256  173f1c41207e50dd3908c7dad192962240fd1a9269bca6e368f401134b3503bf  fmlib-lf-6.6.52-2.2.0.tar.gz
-+sha256  087e1be3584a390cf0a75fa3730589edf76aa9a4832fa012a67c381cbf5b57a3  fmlib-lf-6.12.3-1.0.0-3-g7a58eca.tar.gz
- sha256  5d7770fa9f70f0c6f0b4784bbca8401811259a4b1e03455dbd863ffd0d34d2ca  LICENSE
-diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
-index 601a3e16ef..2d25c0845c 100644
---- a/package/fmlib/fmlib.mk
-+++ b/package/fmlib/fmlib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-sha256  6d592722e004516309f8ce33e654f1322e4d1f0f33567acb86ca19229176fd9e  linux-lf-6.6.23-2.0.0.tar.gz
++sha256  9e2fff1014f1b196be8149c63a6054e40b1b36b222e53db3f445c96c856066e0  linux-lf-6.12.3-1.0.0.tar.gz
+diff --git a/board/freescale/ls1028ardb/patches/uboot/uboot.hash b/board/freescale/ls1028ardb/patches/uboot/uboot.hash
+index a5ccd82b2b..5e36d93487 100644
+--- a/board/freescale/ls1028ardb/patches/uboot/uboot.hash
++++ b/board/freescale/ls1028ardb/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  a2bcd7a34d4908ffbadfea731d0f0fd20f19a31cff6ff6310980e7f6743ceb24  u-boot-lf-6.6.23-2.0.0.tar.gz
++sha256  8708fc95844d020f79b87f954f29073ae9b230de3e41117e7fb379294da946ac  u-boot-lf-6.12.3-1.0.0.tar.gz
+diff --git a/board/freescale/ls1028ardb/readme.txt b/board/freescale/ls1028ardb/readme.txt
+index 6633d60b90..8be720a803 100644
+--- a/board/freescale/ls1028ardb/readme.txt
++++ b/board/freescale/ls1028ardb/readme.txt
+@@ -4,19 +4,27 @@ NXP LS1028ARDB
  
--FMLIB_VERSION = lf-6.6.52-2.2.0
-+FMLIB_VERSION = lf-6.12.3-1.0.0-3-g7a58eca
- FMLIB_SITE = $(call github,nxp-qoriq,fmlib,$(FMLIB_VERSION))
- FMLIB_LICENSE = BSD-3-Clause
- FMLIB_LICENSE_FILES = LICENSE
-
---===============7233429615075118064==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ This file documents the Buildroot support for the LS1028A Reference Design Board.
+ 
+-for more details about the board and the QorIQ Layerscape SoC, see the following pages:
++For more details about the board and the QorIQ Layerscape SoC, see the following pages:
+   - https://www.nxp.com/design/qoriq-developer-resources/layerscape-ls1028a-reference-design-board:LS1028ARDB
+   - https://www.nxp.com/LS1028A
+ 
+-for the software NXP LSDK (Layerscape Software Development Kit), see
+-  - https://www.nxp.com/docs/en/user-guide/LSDKUG_Rev21.08.pdf
+-
+-the components from NXP are:
+-  - rcw, lf-6.6.23-2.0.0
+-  - atf (fork), lf-6.6.23-2.0.0
+-  - uboot (fork), lf-6.6.23-2.0.0
+-  - cadence-dp-firmware (blob), LSDK 20.12
+-  - linux (fork), lf-6.6.23-2.0.0
++Layerscape platforms are officially supported by NXP under the Layerscape
++Debian Linux SDK (LDLSDK). This uses components from Linux Factory (project
++common with i.MX), currently tag lf-6.6.36-2.1.0, two releases behind the
++latest lf-6.12.3-1.0.0.  In Buildroot, the latest Linux Factory release tag
++is used, which may be considered pre-release software, as it may contain
++features which are not yet documented, and it generally undergoes less testing.
++
++For the software Layerscape Debian Linux SDK User Guide, see:
++  - https://docs.nxp.com/bundle/UG10143/page/topics/about_this_document.html
++  - https://www.nxp.com/docs/en/user-guide/UG10143.pdf
++
++The components from NXP are:
++  - rcw, lf-6.12.3-1.0.0
++  - atf (fork), lf-6.12.3-1.0.0
++  - uboot (fork), lf-6.12.3-1.0.0
++  - cadence-dp-firmware (blob), 8.16
++  - linux (fork), lf-6.12.3-1.0.0
+ 
+ Build
+ =====
+diff --git a/configs/ls1028ardb_defconfig b/configs/ls1028ardb_defconfig
+index 7b24a41cd9..aaba73faa8 100644
+--- a/configs/ls1028ardb_defconfig
++++ b/configs/ls1028ardb_defconfig
+@@ -1,6 +1,6 @@
+ BR2_aarch64=y
+ BR2_cortex_a72=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/freescale/ls1028ardb/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="ls1028a"
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/ls1028ardb/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.6.23-2.0.0)/linux-lf-6.6.23-2.0.0.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.12.3-1.0.0)/linux-lf-6.12.3-1.0.0.tar.gz"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -26,7 +26,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.6.23-2.0.0)/atf-lf-6.6.23-2.0.0.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.12.3-1.0.0)/atf-lf-6.12.3-1.0.0.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1028ardb"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+@@ -36,7 +36,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.6.23-2.0.0)/u-boot-lf-6.6.23-2.0.0.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.12.3-1.0.0)/u-boot-lf-6.12.3-1.0.0.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ls1028ardb_tfa"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7233429615075118064==--
