@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F469C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:49:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5376CC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:49:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4771A6140B;
-	Mon, 19 May 2025 10:49:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF07B6FC18;
+	Mon, 19 May 2025 10:49:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dOdHnrcN6TG5; Mon, 19 May 2025 10:49:37 +0000 (UTC)
+ id zD4yEFivKRMB; Mon, 19 May 2025 10:49:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1C246FC04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86E4560FCF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1C246FC04;
-	Mon, 19 May 2025 10:49:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 412A1D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 86E4560FCF;
+	Mon, 19 May 2025 10:49:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 37E3DD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C45C841930
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0934B4143D
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MqzRPN_3A3LP for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AzMUYY2sbKjc for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC64841918
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8AAA7410C1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC64841918
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8AAA7410C1
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DA062872E7; Mon, 19 May 2025 10:40:07 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 8878084A21; Mon, 19 May 2025 10:39:49 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 16:04:41 +0200
+Date: Sun, 13 Apr 2025 11:33:49 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 15cfdf4915f32e8dffc3eae65d3b406ed219ebe9
-X-Git-Newrev: db3324bae3ef39cd0a64f2fdf866c92de790fe76
+X-Git-Oldrev: e3c8525089adf5ca2f7f0ebfc7b4267bdac63dba
+X-Git-Newrev: 2f6f1035a1c7f44741ab81c07dc33dd1c41ecded
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104007.DA062872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/kodi-inputstream-adaptive: bump version to 21.5.14-Omega
+Message-Id: <20250519103949.8878084A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/ls1046a-rdb: bump BSP
+ tag to lf-6.12.3-1.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,40 +65,128 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db3324bae3ef39cd0a64f2fdf866c92de790fe76
+commit: https://git.buildroot.net/buildroot/commit/?id=2f6f1035a1c7f44741ab81c07dc33dd1c41ecded
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The latest Linux Factory tag is lf-6.12.3-1.0.0 (Q1 2025), update to
+that.
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 98e3416f03..c22fa3df83 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,5 +1,5 @@
+The LS1046A-RDB board is currently supported by NXP through a BSP
+called LDLSDK. That isn't what we use, so update the documentation to
+reflect that for awareness, and provide a link.
+
+Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../arm-trusted-firmware/arm-trusted-firmware.hash |  2 +-
+ .../freescale/ls1046a-rdb/patches/linux/linux.hash |  2 +-
+ .../freescale/ls1046a-rdb/patches/uboot/uboot.hash |  2 +-
+ board/freescale/ls1046a-rdb/readme.txt             | 28 +++++++++++++++-------
+ configs/ls1046a-rdb_defconfig                      |  8 +++----
+ 5 files changed, 26 insertions(+), 16 deletions(-)
+
+diff --git a/board/freescale/ls1046a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/ls1046a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index 344a6299d8..41c7ad4068 100644
+--- a/board/freescale/ls1046a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/freescale/ls1046a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  f03dad74e5c3df8059554def03e9298b6fbd4ffdd3e940a18b7e84a60b12a37a  atf-lf-6.6.52-2.2.0.tar.gz
++sha256  2751fcd3eb9080c34531f68ca2e1f571a60f4220853df53a5ebed9835abf8c13  atf-lf-6.12.3-1.0.0.tar.gz
+diff --git a/board/freescale/ls1046a-rdb/patches/linux/linux.hash b/board/freescale/ls1046a-rdb/patches/linux/linux.hash
+index fa38fb1f75..43dbe074c2 100644
+--- a/board/freescale/ls1046a-rdb/patches/linux/linux.hash
++++ b/board/freescale/ls1046a-rdb/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
  # Locally computed
--sha256  2cde7954b0a73d353edc2af14306e4e42e6bf9e7f26100a54b937cb80c1309a8  kodi-inputstream-adaptive-21.5.13-Omega.tar.gz
-+sha256  3b6ce9a4ea586dd6ca9384ec78729d13e579e629f93d44d582c1b264b8e59502  kodi-inputstream-adaptive-21.5.14-Omega.tar.gz
- sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
- sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
- sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 4cdb7fe2af..03c440e4c2 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-sha256  5665b927616a7e27e69f3f8fface6dd693b01f35d42ae4f9a0f0a10be3621487  linux-lf-6.6.52-2.2.0.tar.gz
++sha256  9e2fff1014f1b196be8149c63a6054e40b1b36b222e53db3f445c96c856066e0  linux-lf-6.12.3-1.0.0.tar.gz
+diff --git a/board/freescale/ls1046a-rdb/patches/uboot/uboot.hash b/board/freescale/ls1046a-rdb/patches/uboot/uboot.hash
+index a1e3b69376..5e36d93487 100644
+--- a/board/freescale/ls1046a-rdb/patches/uboot/uboot.hash
++++ b/board/freescale/ls1046a-rdb/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  00fc7bd053de19d02c990b3aa214a27c6103f4306e756f3f6d4afb12314556e4  u-boot-lf-6.6.52-2.2.0.tar.gz
++sha256  8708fc95844d020f79b87f954f29073ae9b230de3e41117e7fb379294da946ac  u-boot-lf-6.12.3-1.0.0.tar.gz
+diff --git a/board/freescale/ls1046a-rdb/readme.txt b/board/freescale/ls1046a-rdb/readme.txt
+index 1dc419d3b1..72005b20d9 100644
+--- a/board/freescale/ls1046a-rdb/readme.txt
++++ b/board/freescale/ls1046a-rdb/readme.txt
+@@ -8,15 +8,25 @@ for more details about the board and the QorIQ Layerscape SoC, see the following
+   - https://www.nxp.com/design/design-center/development-boards-and-designs/LS1046A-RDB
+   - https://www.nxp.com/products/LS1046A
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.13-Omega
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.14-Omega
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
- 	BSD-2-Clause-Views \
+-for the NXP LDP (Linux Distribution POC), see
+-  - https://www.nxp.com/design/design-center/software/embedded-software/linux-software-and-development-tools/layerscape-linux-distribution-poc:LAYERSCAPE-SDK
+-
+-the components provided by NXP are:
+-  - rcw, lf-6.6.52-2.2.0
+-  - atf (fork), lf-6.6.52-2.2.0
+-  - uboot (fork), lf-6.6.52-2.2.0
+-  - qoriq-fm-ucode (blob), lf-6.6.52-2.2.0
+-  - linux (fork), lf-6.6.52-2.2.0
++Layerscape platforms are officially supported by NXP under the Layerscape
++Debian Linux SDK (LDLSDK). This uses components from Linux Factory (project
++common with i.MX), currently tag lf-6.6.36-2.1.0, two releases behind the
++latest lf-6.12.3-1.0.0.  In Buildroot, the latest Linux Factory release tag
++is used, which may be considered pre-release software, as it may contain
++features which are not yet documented, and it generally undergoes less testing.
++
++For the software Layerscape Debian Linux SDK User Guide, see:
++  - https://docs.nxp.com/bundle/UG10143/page/topics/about_this_document.html
++  - https://www.nxp.com/docs/en/user-guide/UG10143.pdf
++
++The components from NXP are:
++  - rcw, lf-6.12.3-1.0.0
++  - atf (fork), lf-6.12.3-1.0.0
++  - uboot (fork), lf-6.12.3-1.0.0
++  - qoriq-fm-ucode (blob), lf-6.12.3-1.0.0
++  - linux (fork), lf-6.12.3-1.0.0
++  - fmlib, lf-6.12.3-1.0.0
++  - fmc, lf-6.12.3-1.0.0
+ 
+ Build
+ =====
+diff --git a/configs/ls1046a-rdb_defconfig b/configs/ls1046a-rdb_defconfig
+index 92045487f9..dfa7536617 100644
+--- a/configs/ls1046a-rdb_defconfig
++++ b/configs/ls1046a-rdb_defconfig
+@@ -1,6 +1,6 @@
+ BR2_aarch64=y
+ BR2_cortex_a72=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ BR2_GLOBAL_PATCH_DIR="board/freescale/ls1046a-rdb/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+@@ -13,7 +13,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/ls1046a-rdb/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.6.52-2.2.0)/linux-lf-6.6.52-2.2.0.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.12.3-1.0.0)/linux-lf-6.12.3-1.0.0.tar.gz"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -28,7 +28,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.6.52-2.2.0)/atf-lf-6.6.52-2.2.0.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.12.3-1.0.0)/atf-lf-6.12.3-1.0.0.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1046ardb"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+@@ -38,7 +38,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.6.52-2.2.0)/u-boot-lf-6.6.52-2.2.0.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.12.3-1.0.0)/u-boot-lf-6.12.3-1.0.0.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ls1046ardb_tfa"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
