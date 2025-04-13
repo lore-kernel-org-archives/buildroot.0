@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D84C8C3601E
-	for <buildroot@archiver.kernel.org>; Sun, 13 Apr 2025 09:42:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BB7CC369B4
+	for <buildroot@archiver.kernel.org>; Sun, 13 Apr 2025 09:42:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8FF1F40569;
-	Sun, 13 Apr 2025 09:42:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEF2E607B0;
+	Sun, 13 Apr 2025 09:42:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NnA-eYkOMJZG; Sun, 13 Apr 2025 09:42:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ahbBAoJMOWCJ; Sun, 13 Apr 2025 09:42:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AEF13405A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CEF56606EB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AEF13405A5;
-	Sun, 13 Apr 2025 09:42:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B77A108
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEF56606EB;
+	Sun, 13 Apr 2025 09:42:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 32A84108
  for <buildroot@buildroot.org>; Sun, 13 Apr 2025 09:42:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 472E840415
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5A20B82CEC
  for <buildroot@buildroot.org>; Sun, 13 Apr 2025 09:42:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QnxcLVg_fz0j for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Av6rBJEtbEnM for <buildroot@buildroot.org>;
  Sun, 13 Apr 2025 09:42:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4BB8C4014E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FB4782C8F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4BB8C4014E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6FB4782C8F
  for <buildroot@buildroot.org>; Sun, 13 Apr 2025 09:42:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 40DBB84553; Sun, 13 Apr 2025 09:42:17 +0000 (UTC)
+ id 5EA7384558; Sun, 13 Apr 2025 09:42:17 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 13 Apr 2025 11:31:04 +0200
+Date: Sun, 13 Apr 2025 11:33:49 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 11b93ef2081316e37613902944b60e4c799e6314
-X-Git-Newrev: 88e4af822effd3877efea7534c8941fb7b8986da
+X-Git-Oldrev: 06f3d593f65cc52baddadf2c55e582f7310b2ede
+X-Git-Newrev: 3358c3e8a8e9cdd06ff93d174e4b674af69fa50a
 X-Patchwork-Hint: ignore
-Message-Id: <20250413094217.40DBB84553@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qoriq-cadence-dp-firmware: bump
- version aligned to 6.12.3-1.0.0 BSP
+Message-Id: <20250413094217.5EA7384558@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fmlib: bump version to
+ lf-6.12.3-1.0.0-3-g7a58eca
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,107 +60,152 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7233429615075118064=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88e4af822effd3877efea7534c8941fb7b8986da
+--===============7233429615075118064==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=3358c3e8a8e9cdd06ff93d174e4b674af69fa50a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit updates the qoriq-cadence-dp-firmware to the version
-included in the 6.12.3-1.0.0 QorIQ BSP.
+This is technically the master branch, a few commits post release tag.
+Change log:
 
-The firmware archive was refactored and its location has changed.
-Those qoriq firmware files are now reused from the firmware-imx
-archive, which is also included in Buildroot in the directory
-"package/freescale-imx/firmware-imx". This commit keeps the Buildroot
-package name qoriq-cadence-dp-firmware, first to keep compatibility
-or Buildroot configs, and also because QorIQ BSP uses a different
-version of the firmware-imx package, compared to the i.MX BSP (at a
-same BSP version).
+7a58ecaf0d90 fm_lib: explicit conversion to ioc_fm_pcd_exceptions in FM_PCD_SetException()
+22a0d3f1867e fm_lib: make REPORT_ERROR() definition more function-like
+08ac8b3112a8 fm_lib: fix conversion warnings between e_FmPcdEngine and enum ioc_fm_pcd_engine
+168eae74fd8a fm_lib: fix integer-to-pointer conversion build warning in GetDeviceId()
 
-This commit updates the archive name, the archive version and the
-download URL following the NXP Yocto BSP at [1]. More precisely,
-the information was taken from the recipe at [2].
-
-Note that regarding this qoriq-cadence-dp-firmware version:
-- the QorIQ BSP version is: 6.12.3-1.0.0
-- the Yocto dp-firmware-cadence package version is: 22.04
-- the firmware-imx archive version is: 8.16
-
-The important version we want to align with the rest of other QorIQ
-components is indeed the BSP version "6.12.3-1.0.0".
-
-This commit also updates license hashes. The license was updated from:
-LA_OPT_NXP_Software_License v17 October 2020
-to:
-LA_OPT_NXP_Software_License v35 May 2022
-Also, the license file EULA.txt was removed, so _LICENSE_FILES is
-updated accordingly.
-
-[1] https://github.com/nxp-qoriq/yocto-sdk
-[2] https://github.com/Freescale/meta-freescale/blob/6fb8816cb32db4ba9391157036fa97914cc7d103/recipes-bsp/dp-firmware-cadence/dp-firmware-cadence_22.04.bb
+The build fix patch from Buildroot is no longer necessary, remove it.
 
 Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
-[Julien:
- - reword commit log to add info on different version schemes
- - fix license hashes
-]
+[Julien: switch _VERSION to use git describe syntax]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash |  7 +++----
- .../qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk   | 12 ++++++------
- 2 files changed, 9 insertions(+), 10 deletions(-)
+ ...eger-conversion-error-and-enum-compare-wa.patch | 79 ----------------------
+ package/fmlib/fmlib.hash                           |  2 +-
+ package/fmlib/fmlib.mk                             |  2 +-
+ 3 files changed, 2 insertions(+), 81 deletions(-)
 
-diff --git a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-index 6e5c761463..261401467c 100644
---- a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-+++ b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.hash
-@@ -1,5 +1,4 @@
- # Locally calculated
--sha256  e267655a47fbe118f6960bca7994bd6b8986ef955344fe006a424be96f868602  firmware-cadence-lsdk2012.bin
--sha256  9c16421e7c702f56756650b8ac954d34556327e598a8666e6e8f4eb3a1aa95f1  COPYING
--sha256  72edc2072c86d93aa1993d15d4d19d96270af3749b0108995ad50c81d1461f52  EULA
--sha256  53e3eb0b2bd81c171fa04c17514e20b39b7bb1fe1224c593f7717f615fb9d52b  EULA.txt
-+sha256  65f829a9e2597bffc58a680aaefa638122144a083633d1ae09b3aec1d9f8ab84  firmware-imx-8.16.bin
-+sha256  4c89574f9a76e861919f80fef84bac30e4ba7fb8732b0fcda4b26d400239f517  COPYING
-+sha256  423c76762d50b82fedd3e15c48e436d7272a7e130f9ebb910f76489345707cf6  EULA
-diff --git a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-index 4f75287269..3f92bd24c2 100644
---- a/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-+++ b/package/qoriq-cadence-dp-firmware/qoriq-cadence-dp-firmware.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/fmlib/0001-Fix-the-integer-conversion-error-and-enum-compare-wa.patch b/package/fmlib/0001-Fix-the-integer-conversion-error-and-enum-compare-wa.patch
+deleted file mode 100644
+index e38b36128f..0000000000
+--- a/package/fmlib/0001-Fix-the-integer-conversion-error-and-enum-compare-wa.patch
++++ /dev/null
+@@ -1,79 +0,0 @@
+-From 3a1962a70cec74b3dac979e52a2cbcaa8897b9c8 Mon Sep 17 00:00:00 2001
+-From: Akhilesh Nema <nemaakhilesh@gmail.com>
+-Date: Fri, 10 Jan 2025 20:20:50 -0800
+-Subject: [PATCH] Fix the integer conversion error and enum compare
+- warnings on build under gcc-14
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Error:
+-src/fm_lib.c: In function ‘GetDeviceId’:
+-src/fm_lib.c:139:21: error: returning ‘uintptr_t’ {aka ‘long unsigned int’} from a function with return type ‘t_Handle’ {aka ‘void *’} makes pointer from integer without a cast [-Wint-conversion]
+-  139 |         return p_Dev->id;
+-      |                ~~~~~^~~~
+-
+-Warnings:
+-
+-src/fm_lib.c: In function ‘FM_PCD_CcRootModifyNextEngine’:
+-src/fm_lib.c:997:51: warning: comparison between ‘e_FmPcdEngine’ and ‘enum ioc_fm_pcd_engine’ [-Wenum-compare]
+-  997 |         if (p_FmPcdCcNextEngineParams->nextEngine == e_IOC_FM_PCD_FR) {
+-      |                                                   ^~
+-src/fm_lib.c: In function ‘FM_PCD_MatchTableAddKey’:
+-src/fm_lib.c:1103:57: warning: comparison between ‘e_FmPcdEngine’ and ‘enum ioc_fm_pcd_engine’ [-Wenum-compare]
+- 1103 |     else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
+-      |                                                         ^~
+-src/fm_lib.c: In function ‘FM_PCD_MatchTableModifyKeyAndNextEngine’:
+-src/fm_lib.c:1174:57: warning: comparison between ‘e_FmPcdEngine’ and ‘enum ioc_fm_pcd_engine’ [-Wenum-compare]
+- 1174 |     else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
+-
+-Upstream: https://github.com/nxp-qoriq/fmlib/pull/1
+-
+-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+----
+- src/fm_lib.c | 8 ++++----
+- 1 file changed, 4 insertions(+), 4 deletions(-)
+-
+-diff --git a/src/fm_lib.c b/src/fm_lib.c
+-index 4ea40ff..85b4a66 100644
+---- a/src/fm_lib.c
+-+++ b/src/fm_lib.c
+-@@ -136,7 +136,7 @@ t_Handle GetDeviceId(t_Handle h_Dev)
+- {
+- 	t_Device *p_Dev = (t_Device*)h_Dev;
+- 
+--	return p_Dev->id;
+-+	return (t_Handle) p_Dev->id;
+- }
+- 
+- 
+-@@ -994,7 +994,7 @@ t_Error FM_PCD_CcRootModifyNextEngine(t_Handle                  h_CcTree,
+-     }
+- 
+- #if (DPAA_VERSION >= 11)
+--	if (p_FmPcdCcNextEngineParams->nextEngine == e_IOC_FM_PCD_FR) {
+-+	if (p_FmPcdCcNextEngineParams->nextEngine == e_FM_PCD_FR) {
+-         t_Device *p_NextDev = (t_Device*) p_FmPcdCcNextEngineParams->params.frParams.h_FrmReplic;
+-         params.cc_next_engine_params.params.fr_params.frm_replic_id = UINT_TO_PTR(p_NextDev->id);
+-     }
+-@@ -1100,7 +1100,7 @@ t_Error FM_PCD_MatchTableAddKey(t_Handle            h_CcNode,
+-     	params.key_params.cc_next_engine_params.params.kg_params.p_direct_scheme = UINT_TO_PTR(p_NextDev->id);
+-     }
+- #if (DPAA_VERSION >= 11)
+--    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
+-+    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_FM_PCD_FR) {
+-     	t_Device *p_NextDev = (t_Device*) p_KeyParams->ccNextEngineParams.params.frParams.h_FrmReplic;
+-     	params.key_params.cc_next_engine_params.params.fr_params.frm_replic_id = UINT_TO_PTR(p_NextDev->id);
+-     }
+-@@ -1171,7 +1171,7 @@ t_Error FM_PCD_MatchTableModifyKeyAndNextEngine(t_Handle            h_CcNode,
+-     	params.key_params.cc_next_engine_params.params.kg_params.p_direct_scheme = UINT_TO_PTR(p_NextDev->id);
+-     }
+- #if (DPAA_VERSION >= 11)
+--    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_IOC_FM_PCD_FR) {
+-+    else if (p_KeyParams->ccNextEngineParams.nextEngine == e_FM_PCD_FR) {
+-     	t_Device *p_NextDev = (t_Device*) p_KeyParams->ccNextEngineParams.params.frParams.h_FrmReplic;
+-     	params.key_params.cc_next_engine_params.params.fr_params.frm_replic_id = UINT_TO_PTR(p_NextDev->id);
+-     }
+--- 
+-2.25.1
+-
+diff --git a/package/fmlib/fmlib.hash b/package/fmlib/fmlib.hash
+index edf87426df..2d63a615c0 100644
+--- a/package/fmlib/fmlib.hash
++++ b/package/fmlib/fmlib.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  173f1c41207e50dd3908c7dad192962240fd1a9269bca6e368f401134b3503bf  fmlib-lf-6.6.52-2.2.0.tar.gz
++sha256  087e1be3584a390cf0a75fa3730589edf76aa9a4832fa012a67c381cbf5b57a3  fmlib-lf-6.12.3-1.0.0-3-g7a58eca.tar.gz
+ sha256  5d7770fa9f70f0c6f0b4784bbca8401811259a4b1e03455dbd863ffd0d34d2ca  LICENSE
+diff --git a/package/fmlib/fmlib.mk b/package/fmlib/fmlib.mk
+index 601a3e16ef..2d25c0845c 100644
+--- a/package/fmlib/fmlib.mk
++++ b/package/fmlib/fmlib.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QORIQ_CADENCE_DP_FIRMWARE_VERSION = lsdk2012
--QORIQ_CADENCE_DP_FIRMWARE_SITE = http://www.nxp.com/lgfiles/sdk/$(QORIQ_CADENCE_DP_FIRMWARE_VERSION)
--QORIQ_CADENCE_DP_FIRMWARE_SOURCE = firmware-cadence-$(QORIQ_CADENCE_DP_FIRMWARE_VERSION).bin
-+QORIQ_CADENCE_DP_FIRMWARE_VERSION = 8.16
-+QORIQ_CADENCE_DP_FIRMWARE_SITE = https://www.nxp.com/lgfiles/NMG/MAD/YOCTO
-+QORIQ_CADENCE_DP_FIRMWARE_SOURCE = firmware-imx-$(QORIQ_CADENCE_DP_FIRMWARE_VERSION).bin
- QORIQ_CADENCE_DP_FIRMWARE_LICENSE = NXP Semiconductor Software License Agreement
--QORIQ_CADENCE_DP_FIRMWARE_LICENSE_FILES = COPYING EULA EULA.txt
-+QORIQ_CADENCE_DP_FIRMWARE_LICENSE_FILES = COPYING EULA
- QORIQ_CADENCE_DP_FIRMWARE_REDISTRIBUTE = NO
- QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES = YES
- ifeq ($(BR2_LINUX_KERNEL_INSTALL_TARGET),)
-@@ -20,11 +20,11 @@ define QORIQ_CADENCE_DP_FIRMWARE_EXTRACT_CMDS
- endef
- 
- define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin $(TARGET_DIR)/boot/ls1028a-dp-fw.bin
-+	$(INSTALL) -D -m 0644 $(@D)/firmware/hdmi/cadence/dp_ls1028a.bin $(TARGET_DIR)/boot/ls1028a-dp-fw.bin
- endef
- 
- define QORIQ_CADENCE_DP_FIRMWARE_INSTALL_IMAGES_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/dp/ls1028a-dp-fw.bin $(BINARIES_DIR)/ls1028a-dp-fw.bin
-+	$(INSTALL) -D -m 0644 $(@D)/firmware/hdmi/cadence/dp_ls1028a.bin $(BINARIES_DIR)/ls1028a-dp-fw.bin
- endef
- 
- $(eval $(generic-package))
+-FMLIB_VERSION = lf-6.6.52-2.2.0
++FMLIB_VERSION = lf-6.12.3-1.0.0-3-g7a58eca
+ FMLIB_SITE = $(call github,nxp-qoriq,fmlib,$(FMLIB_VERSION))
+ FMLIB_LICENSE = BSD-3-Clause
+ FMLIB_LICENSE_FILES = LICENSE
+
+--===============7233429615075118064==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7233429615075118064==--
