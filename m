@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 246D1C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FF82C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:44:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E54FF60F6F;
-	Mon, 19 May 2025 10:43:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E4E2C83AEE;
+	Mon, 19 May 2025 10:43:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WOSJdONEBiqn; Mon, 19 May 2025 10:43:57 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nmNrUouvVJCP; Mon, 19 May 2025 10:43:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19E1B60FEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4CD283AD0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19E1B60FEB;
-	Mon, 19 May 2025 10:43:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A574193
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4CD283AD0;
+	Mon, 19 May 2025 10:43:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F4FF193
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4185B410E1
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A816F4175D
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c4kuWaMPEhs6 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7GW9_H3Z4Q_9 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B85C940DDA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78D29411C6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B85C940DDA
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 78D29411C6
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B344184A21; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+ id 76D18872E7; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 28 Mar 2025 19:39:45 +0100
+Date: Sun, 13 Apr 2025 11:33:49 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e242a5908cf882e7f692dbc32415de2cfa5ec9f2
-X-Git-Newrev: 91bfce113e895fc9637707e73567e5d13da3f169
+X-Git-Oldrev: c3b9add8a5280b00350532ab771bee4a85abf9be
+X-Git-Newrev: c7c59e18effa92bf3e41e2bb53ca8abf563ccb37
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103945.B344184A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mbedtls: security bump
- to version 2.8.10
+Message-Id: <20250519103949.76D18872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/ls1028ardb: bump BSP
+ tag to lf-6.12.3-1.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,62 +65,128 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91bfce113e895fc9637707e73567e5d13da3f169
+commit: https://git.buildroot.net/buildroot/commit/?id=c7c59e18effa92bf3e41e2bb53ca8abf563ccb37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following security issues:
+Update the kernel, U-Boot, ATF tags, as well as documentation, used by
+the LS1028A-RDB to the latest Linux Factory release.
 
-- CVE-2025-27809: Note that TLS clients should generally call
-  mbedtls_ssl_set_hostname() if they use certificate authentication (i.e.
-  not pre-shared keys).  Otherwise, in many scenarios, the server could be
-  impersonated.  The library will now prevent the handshake and return
-  MBEDTLS_ERR_SSL_CERTIFICATE_VERIFICATION_WITHOUT_HOSTNAME if
-  mbedtls_ssl_set_hostname() has not been called.
-
-  https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2025-03-1/
-
-- CVE-2025-27810: Zeroize temporary heap buffers used in PSA operations.
-  Fix a vulnerability in the TLS 1.2 handshake.  If memory allocation
-  failed or there was a cryptographic hardware failure when calculating the
-  Finished message, it could be calculated incorrectly.  This would break
-  the security guarantees of the TLS handshake.
-
-  https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2025-03-2/
-
-For more details, see the release notes:
-https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-2.28.10
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+[Julien: reword commit one liner title for consistency]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../arm-trusted-firmware/arm-trusted-firmware.hash |  2 +-
+ .../freescale/ls1028ardb/patches/linux/linux.hash  |  2 +-
+ .../freescale/ls1028ardb/patches/uboot/uboot.hash  |  2 +-
+ board/freescale/ls1028ardb/readme.txt              | 28 ++++++++++++++--------
+ configs/ls1028ardb_defconfig                       |  8 +++----
+ 5 files changed, 25 insertions(+), 17 deletions(-)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 9de7f731da..6fc68ddac6 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.9:
--sha256  e85ea97aaf78dd6c0a5ba2e54dd5932ffa15f39abfc189c26beef7684630c02b  mbedtls-2.28.9.tar.bz2
-+# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.10:
-+sha256  19e5b81fdac0fe22009b9e2bdcd52d7dcafbf62bc67fc59cf0a76b5b5540d149  mbedtls-2.28.10.tar.bz2
+diff --git a/board/freescale/ls1028ardb/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/ls1028ardb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index f9af28ab3c..41c7ad4068 100644
+--- a/board/freescale/ls1028ardb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/freescale/ls1028ardb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
- sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 2faa6dff55..fd6682fbfd 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-sha256  4f4dc78bfb5b7391a65ae0f83856661071f666ac2bf6a9380fddbe376a8bdaaa  atf-lf-6.6.23-2.0.0.tar.gz
++sha256  2751fcd3eb9080c34531f68ca2e1f571a60f4220853df53a5ebed9835abf8c13  atf-lf-6.12.3-1.0.0.tar.gz
+diff --git a/board/freescale/ls1028ardb/patches/linux/linux.hash b/board/freescale/ls1028ardb/patches/linux/linux.hash
+index e038c22862..43dbe074c2 100644
+--- a/board/freescale/ls1028ardb/patches/linux/linux.hash
++++ b/board/freescale/ls1028ardb/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  6d592722e004516309f8ce33e654f1322e4d1f0f33567acb86ca19229176fd9e  linux-lf-6.6.23-2.0.0.tar.gz
++sha256  9e2fff1014f1b196be8149c63a6054e40b1b36b222e53db3f445c96c856066e0  linux-lf-6.12.3-1.0.0.tar.gz
+diff --git a/board/freescale/ls1028ardb/patches/uboot/uboot.hash b/board/freescale/ls1028ardb/patches/uboot/uboot.hash
+index a5ccd82b2b..5e36d93487 100644
+--- a/board/freescale/ls1028ardb/patches/uboot/uboot.hash
++++ b/board/freescale/ls1028ardb/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  a2bcd7a34d4908ffbadfea731d0f0fd20f19a31cff6ff6310980e7f6743ceb24  u-boot-lf-6.6.23-2.0.0.tar.gz
++sha256  8708fc95844d020f79b87f954f29073ae9b230de3e41117e7fb379294da946ac  u-boot-lf-6.12.3-1.0.0.tar.gz
+diff --git a/board/freescale/ls1028ardb/readme.txt b/board/freescale/ls1028ardb/readme.txt
+index 6633d60b90..8be720a803 100644
+--- a/board/freescale/ls1028ardb/readme.txt
++++ b/board/freescale/ls1028ardb/readme.txt
+@@ -4,19 +4,27 @@ NXP LS1028ARDB
  
--MBEDTLS_VERSION = 2.28.9
-+MBEDTLS_VERSION = 2.28.10
- MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(MBEDTLS_VERSION)
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION).tar.bz2
- MBEDTLS_CONF_OPTS = \
+ This file documents the Buildroot support for the LS1028A Reference Design Board.
+ 
+-for more details about the board and the QorIQ Layerscape SoC, see the following pages:
++For more details about the board and the QorIQ Layerscape SoC, see the following pages:
+   - https://www.nxp.com/design/qoriq-developer-resources/layerscape-ls1028a-reference-design-board:LS1028ARDB
+   - https://www.nxp.com/LS1028A
+ 
+-for the software NXP LSDK (Layerscape Software Development Kit), see
+-  - https://www.nxp.com/docs/en/user-guide/LSDKUG_Rev21.08.pdf
+-
+-the components from NXP are:
+-  - rcw, lf-6.6.23-2.0.0
+-  - atf (fork), lf-6.6.23-2.0.0
+-  - uboot (fork), lf-6.6.23-2.0.0
+-  - cadence-dp-firmware (blob), LSDK 20.12
+-  - linux (fork), lf-6.6.23-2.0.0
++Layerscape platforms are officially supported by NXP under the Layerscape
++Debian Linux SDK (LDLSDK). This uses components from Linux Factory (project
++common with i.MX), currently tag lf-6.6.36-2.1.0, two releases behind the
++latest lf-6.12.3-1.0.0.  In Buildroot, the latest Linux Factory release tag
++is used, which may be considered pre-release software, as it may contain
++features which are not yet documented, and it generally undergoes less testing.
++
++For the software Layerscape Debian Linux SDK User Guide, see:
++  - https://docs.nxp.com/bundle/UG10143/page/topics/about_this_document.html
++  - https://www.nxp.com/docs/en/user-guide/UG10143.pdf
++
++The components from NXP are:
++  - rcw, lf-6.12.3-1.0.0
++  - atf (fork), lf-6.12.3-1.0.0
++  - uboot (fork), lf-6.12.3-1.0.0
++  - cadence-dp-firmware (blob), 8.16
++  - linux (fork), lf-6.12.3-1.0.0
+ 
+ Build
+ =====
+diff --git a/configs/ls1028ardb_defconfig b/configs/ls1028ardb_defconfig
+index 7b24a41cd9..aaba73faa8 100644
+--- a/configs/ls1028ardb_defconfig
++++ b/configs/ls1028ardb_defconfig
+@@ -1,6 +1,6 @@
+ BR2_aarch64=y
+ BR2_cortex_a72=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/freescale/ls1028ardb/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="ls1028a"
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/ls1028ardb/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.6.23-2.0.0)/linux-lf-6.6.23-2.0.0.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.12.3-1.0.0)/linux-lf-6.12.3-1.0.0.tar.gz"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -26,7 +26,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.6.23-2.0.0)/atf-lf-6.6.23-2.0.0.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.12.3-1.0.0)/atf-lf-6.12.3-1.0.0.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1028ardb"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+@@ -36,7 +36,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.6.23-2.0.0)/u-boot-lf-6.6.23-2.0.0.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.12.3-1.0.0)/u-boot-lf-6.12.3-1.0.0.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ls1028ardb_tfa"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
