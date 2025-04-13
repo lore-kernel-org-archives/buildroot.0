@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48859C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:49:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58399C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:49:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ECC0E6FC27;
-	Mon, 19 May 2025 10:49:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4339D6FC33;
+	Mon, 19 May 2025 10:49:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ftnvepEUkkAz; Mon, 19 May 2025 10:49:43 +0000 (UTC)
+ id Vl364E9IDdMP; Mon, 19 May 2025 10:49:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD4BE60FCF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 49A9D6FC2F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD4BE60FCF;
-	Mon, 19 May 2025 10:49:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 49A9D6FC2F;
+	Mon, 19 May 2025 10:49:46 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 187E4193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:06 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 116FEE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 14EB440DA2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 361F441448
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 16ymtpLlaZNP for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:51 +0000 (UTC)
+ id TLt-0QKbCyJi for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7CA0540DF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94D39410C3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7CA0540DF8
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 94D39410C3
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7998D8725C; Mon, 19 May 2025 10:39:46 +0000 (UTC)
+ id 90B6E81E90; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 30 Mar 2025 11:09:55 +0200
+Date: Sun, 13 Apr 2025 11:33:49 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8c439db4a14bd67267505623c5b3e20fc96a878c
-X-Git-Newrev: 0879359c0a226aad3a6cc6776509baaa3215fb8d
+X-Git-Oldrev: 2f6f1035a1c7f44741ab81c07dc33dd1c41ecded
+X-Git-Newrev: f81bb4a2ca3d9c545b97cffbc344afd9ad92ac38
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103946.7998D8725C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libsrtp: bump to 2.7.0
+Message-Id: <20250519103949.90B6E81E90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/ls1043a-rdb: bump BSP
+ tag to lf-6.12.3-1.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,40 +65,127 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0879359c0a226aad3a6cc6776509baaa3215fb8d
+commit: https://git.buildroot.net/buildroot/commit/?id=f81bb4a2ca3d9c545b97cffbc344afd9ad92ac38
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://github.com/cisco/libsrtp/releases/tag/v2.7.0
+The latest Linux Factory tag is lf-6.12.3-1.0.0 (Q1 2025), update to
+that.
 
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+The LS1043A-RDB board is currently supported by NXP through a BSP
+called LDLSDK. That isn't what we use, so update the documentation to
+reflect that for awareness, and provide a link.
+
+Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libsrtp/libsrtp.hash | 2 +-
- package/libsrtp/libsrtp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../arm-trusted-firmware/arm-trusted-firmware.hash |  2 +-
+ .../freescale/ls1043a-rdb/patches/linux/linux.hash |  2 +-
+ .../freescale/ls1043a-rdb/patches/uboot/uboot.hash |  2 +-
+ board/freescale/ls1043a-rdb/readme.txt             | 28 +++++++++++++++-------
+ configs/ls1043a-rdb_defconfig                      |  8 +++----
+ 5 files changed, 26 insertions(+), 16 deletions(-)
 
-diff --git a/package/libsrtp/libsrtp.hash b/package/libsrtp/libsrtp.hash
-index 95daf0d792..232c106387 100644
---- a/package/libsrtp/libsrtp.hash
-+++ b/package/libsrtp/libsrtp.hash
-@@ -1,3 +1,3 @@
+diff --git a/board/freescale/ls1043a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/ls1043a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index 344a6299d8..41c7ad4068 100644
+--- a/board/freescale/ls1043a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/freescale/ls1043a-rdb/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
--sha256  bf641aa654861be10570bfc137d1441283822418e9757dc71ebb69a6cf84ea6b  libsrtp-2.6.0.tar.gz
-+sha256  54facb1727a557c2a76b91194dcb2d0a453aaf8e2d0cbbf1e3c2848c323e28ad  libsrtp-2.7.0.tar.gz
- sha256  8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  LICENSE
-diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
-index 269c1ae3f8..ba58b900d4 100644
---- a/package/libsrtp/libsrtp.mk
-+++ b/package/libsrtp/libsrtp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-sha256  f03dad74e5c3df8059554def03e9298b6fbd4ffdd3e940a18b7e84a60b12a37a  atf-lf-6.6.52-2.2.0.tar.gz
++sha256  2751fcd3eb9080c34531f68ca2e1f571a60f4220853df53a5ebed9835abf8c13  atf-lf-6.12.3-1.0.0.tar.gz
+diff --git a/board/freescale/ls1043a-rdb/patches/linux/linux.hash b/board/freescale/ls1043a-rdb/patches/linux/linux.hash
+index fa38fb1f75..43dbe074c2 100644
+--- a/board/freescale/ls1043a-rdb/patches/linux/linux.hash
++++ b/board/freescale/ls1043a-rdb/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  5665b927616a7e27e69f3f8fface6dd693b01f35d42ae4f9a0f0a10be3621487  linux-lf-6.6.52-2.2.0.tar.gz
++sha256  9e2fff1014f1b196be8149c63a6054e40b1b36b222e53db3f445c96c856066e0  linux-lf-6.12.3-1.0.0.tar.gz
+diff --git a/board/freescale/ls1043a-rdb/patches/uboot/uboot.hash b/board/freescale/ls1043a-rdb/patches/uboot/uboot.hash
+index a1e3b69376..5e36d93487 100644
+--- a/board/freescale/ls1043a-rdb/patches/uboot/uboot.hash
++++ b/board/freescale/ls1043a-rdb/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  00fc7bd053de19d02c990b3aa214a27c6103f4306e756f3f6d4afb12314556e4  u-boot-lf-6.6.52-2.2.0.tar.gz
++sha256  8708fc95844d020f79b87f954f29073ae9b230de3e41117e7fb379294da946ac  u-boot-lf-6.12.3-1.0.0.tar.gz
+diff --git a/board/freescale/ls1043a-rdb/readme.txt b/board/freescale/ls1043a-rdb/readme.txt
+index 2770cc5573..1b6f25904a 100644
+--- a/board/freescale/ls1043a-rdb/readme.txt
++++ b/board/freescale/ls1043a-rdb/readme.txt
+@@ -8,15 +8,25 @@ for more details about the board and the QorIQ Layerscape SoC, see the following
+   - https://www.nxp.com/design/design-center/development-boards-and-designs/LS1043A-RDB
+   - https://www.nxp.com/products/LS1043A
  
--LIBSRTP_VERSION = 2.6.0
-+LIBSRTP_VERSION = 2.7.0
- LIBSRTP_SITE = $(call github,cisco,libsrtp,v$(LIBSRTP_VERSION))
- LIBSRTP_INSTALL_STAGING = YES
- LIBSRTP_LICENSE = BSD-3-Clause
+-for the NXP LDP (Linux Distribution POC), see
+-  - https://www.nxp.com/design/design-center/software/embedded-software/linux-software-and-development-tools/layerscape-linux-distribution-poc:LAYERSCAPE-SDK
+-
+-the components provided by NXP are:
+-  - rcw, lf-6.6.52-2.2.0
+-  - atf (fork), lf-6.6.52-2.2.0
+-  - uboot (fork), lf-6.6.52-2.2.0
+-  - qoriq-fm-ucode (blob), lf-6.6.52-2.2.0
+-  - linux (fork), lf-6.6.52-2.2.0
++Layerscape platforms are officially supported by NXP under the Layerscape
++Debian Linux SDK (LDLSDK). This uses components from Linux Factory (project
++common with i.MX), currently tag lf-6.6.36-2.1.0, two releases behind the
++latest lf-6.12.3-1.0.0.  In Buildroot, the latest Linux Factory release tag
++is used, which may be considered pre-release software, as it may contain
++features which are not yet documented, and it generally undergoes less testing.
++
++For the software Layerscape Debian Linux SDK User Guide, see:
++  - https://docs.nxp.com/bundle/UG10143/page/topics/about_this_document.html
++  - https://www.nxp.com/docs/en/user-guide/UG10143.pdf
++
++The components from NXP are:
++  - rcw, lf-6.12.3-1.0.0
++  - atf (fork), lf-6.12.3-1.0.0
++  - uboot (fork), lf-6.12.3-1.0.0
++  - qoriq-fm-ucode (blob), lf-6.12.3-1.0.0
++  - linux (fork), lf-6.12.3-1.0.0
++  - fmlib, lf-6.12.3-1.0.0
++  - fmc, lf-6.12.3-1.0.0
+ 
+ Build
+ =====
+diff --git a/configs/ls1043a-rdb_defconfig b/configs/ls1043a-rdb_defconfig
+index f05113129e..e5a8a00c87 100644
+--- a/configs/ls1043a-rdb_defconfig
++++ b/configs/ls1043a-rdb_defconfig
+@@ -1,5 +1,5 @@
+ BR2_aarch64=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ BR2_GLOBAL_PATCH_DIR="board/freescale/ls1043a-rdb/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/freescale/ls1043a-rdb/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.6.52-2.2.0)/linux-lf-6.6.52-2.2.0.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,linux,lf-6.12.3-1.0.0)/linux-lf-6.12.3-1.0.0.tar.gz"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -28,7 +28,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.6.52-2.2.0)/atf-lf-6.6.52-2.2.0.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,atf,lf-6.12.3-1.0.0)/atf-lf-6.12.3-1.0.0.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="ls1043ardb"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
+@@ -38,7 +38,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="fip.bin bl2_sd.pbl"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.6.52-2.2.0)/u-boot-lf-6.6.52-2.2.0.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-qoriq,u-boot,lf-6.12.3-1.0.0)/u-boot-lf-6.12.3-1.0.0.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="ls1043ardb_tfa"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
