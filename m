@@ -4,49 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 551C2C3601E
-	for <buildroot@archiver.kernel.org>; Sun, 13 Apr 2025 14:03:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C0AEC3601E
+	for <buildroot@archiver.kernel.org>; Sun, 13 Apr 2025 14:04:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED13181EEA;
-	Sun, 13 Apr 2025 14:03:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D5C0180AD8;
+	Sun, 13 Apr 2025 14:04:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5ro5ItkRZiG9; Sun, 13 Apr 2025 14:03:37 +0000 (UTC)
+ id WViEOMowYFYs; Sun, 13 Apr 2025 14:04:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A83681E9E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 195A780E26
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0A83681E9E;
-	Sun, 13 Apr 2025 14:03:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 648D4DE
- for <buildroot@buildroot.org>; Sun, 13 Apr 2025 14:03:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 195A780E26;
+	Sun, 13 Apr 2025 14:04:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id AFEBADE
+ for <buildroot@buildroot.org>; Sun, 13 Apr 2025 14:04:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4A78D40588
- for <buildroot@buildroot.org>; Sun, 13 Apr 2025 14:03:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 96665404B6
+ for <buildroot@buildroot.org>; Sun, 13 Apr 2025 14:04:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WtGT9KdkIxRI for <buildroot@buildroot.org>;
- Sun, 13 Apr 2025 14:03:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69B0A40420
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 69B0A40420
- for <buildroot@buildroot.org>; Sun, 13 Apr 2025 14:03:34 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 58151839BC; Sun, 13 Apr 2025 14:03:34 +0000 (UTC)
+ id xIA1DoGYdZVl for <buildroot@buildroot.org>;
+ Sun, 13 Apr 2025 14:04:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AE70F409B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE70F409B4
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AE70F409B4
+ for <buildroot@buildroot.org>; Sun, 13 Apr 2025 14:04:55 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 932155FFB4;
+ Sun, 13 Apr 2025 16:04:45 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 13 Apr 2025 16:04:45 +0200
+MIME-Version: 1.0
+Date: Sun, 13 Apr 2025 16:04:45 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 13 Apr 2025 15:11:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 637eead755ebb1b89aafd9345f2c6dee8412fb19
-X-Git-Newrev: a9fe5ac03c0bd215beb286ceca389a95fb99c6e0
-X-Patchwork-Hint: ignore
-Message-Id: <20250413140334.58151839BC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qoriq-ddr-phy-binary: new package
+To: Vladimir Oltean <olteanv@gmail.com>
+Cc: buildroot@buildroot.org, Ioana Ciornei <ciorneiioana@gmail.com>, Brandon
+ Maier <Brandon.Maier@collins.com>, Vincent Jardin <vjardin@free.fr>, Romain
+ Naour <romain.naour@smile.fr>, Akhilesh Nema <nemaakhilesh@gmail.com>
+In-Reply-To: <20250328180427.3434693-14-olteanv@gmail.com>
+References: <20250328180427.3434693-1-olteanv@gmail.com>
+ <20250328180427.3434693-14-olteanv@gmail.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <b027bb6f7346983bc0f93966d04e8fd8@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1744553092;
+ bh=S995PRlJW+gEWSw1CdhFILaIIKePs9CO6YYT7etD4u8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=DoHNXFwEJkjjE4Gtw6qs0N2vK6vCN4WUUwtm0aHvBQIRBfEK+mw5cg2WXlDJd5NXo
+ L7auJ9haot6QnjHFTKGH5sU01HiDapt1jj7MAEcDp9MeLE04upKfCmbYqN1Eu0fd8D
+ yoCI5nubc427ATKbuPArTZpAmDiwgBoLpNpNChZFc+cA+t2MY055F2GZpcbIWc3wBN
+ Uff/ueYZVASxKgtVX6NZyUd09MuxPqG38UsL0boTi1VeStYwLCCtI6SXC/GnCa1FjZ
+ Ufv3DPJXWX0oY9nEcW1vlaClfsDaHjjhaRJoC3IpVVd6flZdqhUccecCXpTG8jgJXT
+ DXymsOOWr2qbg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DoHNXFwE
+Subject: Re: [Buildroot] [PATCH v2 13/18] package/qoriq-ddr-phy-binary: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,109 +85,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9fe5ac03c0bd215beb286ceca389a95fb99c6e0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 28/03/2025 19:04, Vladimir Oltean wrote:
+> The DDR PHY on the NXP LX2160A SoC needs firmware. This is distributed
+> as prebuilt binaries by NXP through GitHub.
+> 
+> There have been discussions and other opinions on previous revisions of
+> the patch on how it should be integrated:
+> https://lore.kernel.org/buildroot/20250318163228.9989-1-vjardin@free.fr/
+> 
+> But I haven't integrated any of that feedback. It is a simple package
+> which copies the pre-built FIP image containing DDR PHY firmware files
+> to the images/ folder, to be used by post-image scripts.
+> 
+> Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+> Reviewed-by: Romain Naour <romain.naour@smile.fr>
+> Reviewed-by: Vincent Jardin <vjardin@free.fr>
 
-The DDR PHY on the NXP LX2160A SoC needs firmware. This is distributed
-as prebuilt binaries by NXP through GitHub.
-
-There have been discussions and other opinions on previous revisions of
-the patch on how it should be integrated:
-https://lore.kernel.org/buildroot/20250318163228.9989-1-vjardin@free.fr/
-
-But I haven't integrated any of that feedback. It is a simple package
-which copies the pre-built FIP image containing DDR PHY firmware files
-to the images/ folder, to be used by post-image scripts.
-
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-Reviewed-by: Vincent Jardin <vjardin@free.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                             |  3 +++
- package/Config.in                                      |  1 +
- package/qoriq-ddr-phy-binary/Config.in                 |  6 ++++++
- package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash |  3 +++
- package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk   | 18 ++++++++++++++++++
- 5 files changed, 31 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0d7841eb94..5ac9a477ec 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3375,6 +3375,9 @@ N:	Vivien Didelot <vivien.didelot@gmail.com>
- F:	board/technologic/ts5500/
- F:	configs/ts5500_defconfig
- 
-+N:	Vladimir Oltean <olteanv@gmail.com>
-+F:	package/qoriq-ddr-phy-binary/
-+
- N:	Volkov Viacheslav <sv99@inbox.ru>
- F:	package/v4l2grab/
- F:	package/zbar/
-diff --git a/package/Config.in b/package/Config.in
-index 291e784f26..46e8a5c8e3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -449,6 +449,7 @@ menu "Firmware"
- 	source "package/odroidc2-firmware/Config.in"
- 	source "package/panel-mipi-dbi-firmware/Config.in"
- 	source "package/qcom-db410c-firmware/Config.in"
-+	source "package/qoriq-ddr-phy-binary/Config.in"
- 	source "package/qoriq-fm-ucode/Config.in"
- 	source "package/rcw-smarc-sal28/Config.in"
- 	source "package/rpi-firmware/Config.in"
-diff --git a/package/qoriq-ddr-phy-binary/Config.in b/package/qoriq-ddr-phy-binary/Config.in
-new file mode 100644
-index 0000000000..301a2c1974
---- /dev/null
-+++ b/package/qoriq-ddr-phy-binary/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_QORIQ_DDR_PHY_BINARY
-+	bool "qoriq-ddr-phy-binary"
-+	help
-+	  Firmware binary for DDR PHY of NXP LX2160A family of SoCs.
-+
-+	  https://github.com/nxp-qoriq/ddr-phy-binary
-diff --git a/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
-new file mode 100644
-index 0000000000..7a689d42a5
---- /dev/null
-+++ b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  475bca55d8b05463e75f6d47a8ea7e3def8505a614170b0a3976bd342ca3d759  qoriq-ddr-phy-binary-lf-6.12.3-1.0.0.tar.gz
-+sha256  e7e5f4949f7ac9f9a5d4d68b8f835f3ddc93ad47b594a11de699d90b9175413f  NXP-Binary-EULA.txt
-diff --git a/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk
-new file mode 100644
-index 0000000000..5ce990b75b
---- /dev/null
-+++ b/package/qoriq-ddr-phy-binary/qoriq-ddr-phy-binary.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# qoriq-ddr-phy-binary
-+#
-+################################################################################
-+
-+QORIQ_DDR_PHY_BINARY_VERSION = lf-6.12.3-1.0.0
-+QORIQ_DDR_PHY_BINARY_SITE = $(call github,nxp-qoriq,ddr-phy-binary,$(QORIQ_DDR_PHY_BINARY_VERSION))
-+QORIQ_DDR_PHY_BINARY_LICENSE = NXP Binary EULA
-+QORIQ_DDR_PHY_BINARY_LICENSE_FILES = NXP-Binary-EULA.txt
-+QORIQ_DDR_PHY_BINARY_INSTALL_IMAGES = YES
-+QORIQ_DDR_PHY_BINARY_INSTALL_TARGET = NO
-+
-+define QORIQ_DDR_PHY_BINARY_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -D $(@D)/lx2160a/fip_ddr.bin $(BINARIES_DIR)/fip_ddr.bin
-+endef
-+
-+$(eval $(generic-package))
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
