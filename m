@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3831DC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:50:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33E6AC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:50:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 545EB70369;
-	Mon, 19 May 2025 10:50:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B8947036D;
+	Mon, 19 May 2025 10:50:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bJuDAWf1HQpl; Mon, 19 May 2025 10:50:39 +0000 (UTC)
+ id l6lFVrO_na5u; Mon, 19 May 2025 10:50:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F67170351
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B00F70370
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F67170351;
-	Mon, 19 May 2025 10:50:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B00F70370;
+	Mon, 19 May 2025 10:50:41 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 17D90E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:21 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2459BE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 84DCC4147E
+ by smtp4.osuosl.org (Postfix) with ESMTP id B51104148D
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a3O3JX8KUDVD for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:59 +0000 (UTC)
+ id ifIqM8FZx8mN for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F63A40C40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D64AE410CB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F63A40C40
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D64AE410CB
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B71A83B63; Mon, 19 May 2025 10:39:50 +0000 (UTC)
+ id D21ED8725C; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 15 Apr 2025 19:16:25 +0200
+Date: Mon, 14 Apr 2025 20:15:46 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3db7e675d5c13b3e64abc0f1934d307f0a8c67b3
-X-Git-Newrev: 770c1525e6deb580ef5b36466319dd444d07fc16
+X-Git-Oldrev: 3cfc8e7c6ffe2fbdfd729eeca3d15725278805ff
+X-Git-Newrev: 68468e5e7f5ab2e9237e377bbcd3c70a8b8f1489
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103950.5B71A83B63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/wireless-regdb: bump
- version to 2025.02.20
+Message-Id: <20250519103949.D21ED8725C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/linux-firmware: add
+ support for amd-ucode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,42 +65,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=770c1525e6deb580ef5b36466319dd444d07fc16
+commit: https://git.buildroot.net/buildroot/commit/?id=68468e5e7f5ab2e9237e377bbcd3c70a8b8f1489
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-See release announce:
-https://lists.infradead.org/pipermail/wireless-regdb/2025-February/001686.html
+This "amd-ucode" directory has been present in linux-firmware since
+version 20190312.
 
-Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
+Signed-off-by: Christian Stewart <christian@aperture.us>
+[Julien: add comment about version in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/wireless-regdb/wireless-regdb.hash | 2 +-
- package/wireless-regdb/wireless-regdb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/linux-firmware/Config.in           | 9 +++++++++
+ package/linux-firmware/linux-firmware.hash | 1 +
+ package/linux-firmware/linux-firmware.mk   | 5 +++++
+ 3 files changed, 15 insertions(+)
 
-diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
-index a3b5973bad..cb915c4415 100644
---- a/package/wireless-regdb/wireless-regdb.hash
-+++ b/package/wireless-regdb/wireless-regdb.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
--sha256  f76f2bd79a653e9f9dd50548d99d03a4a4eb157da056dfd5892f403ec28fb3d5  wireless-regdb-2024.10.07.tar.xz
-+sha256  57f8e7721cf5a880c13ae0c202edbb21092a060d45f9e9c59bcd2a8272bfa456  wireless-regdb-2025.02.20.tar.xz
- # Locally computed
- sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
-diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
-index 2aec19c507..999a986de2 100644
---- a/package/wireless-regdb/wireless-regdb.mk
-+++ b/package/wireless-regdb/wireless-regdb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 83da3676db..34f3fb7691 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -17,6 +17,15 @@ config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_SST_DSP
  
--WIRELESS_REGDB_VERSION = 2024.10.07
-+WIRELESS_REGDB_VERSION = 2025.02.20
- WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
- WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
- WIRELESS_REGDB_LICENSE = ISC
+ endmenu # Audio
+ 
++menu "CPU Microcode"
++
++config BR2_PACKAGE_LINUX_FIRMWARE_AMD_UCODE
++	bool "amd-ucode"
++	help
++	  Firmware blobs for AMD CPUs (amd-ucode).
++
++endmenu # CPU Microcode
++
+ menu "Video firmware"
+ 
+ config BR2_PACKAGE_LINUX_FIRMWARE_AMDGPU
+diff --git a/package/linux-firmware/linux-firmware.hash b/package/linux-firmware/linux-firmware.hash
+index df0888618c..eb86aec00b 100644
+--- a/package/linux-firmware/linux-firmware.hash
++++ b/package/linux-firmware/linux-firmware.hash
+@@ -3,6 +3,7 @@ sha256  b1083a36f19aea46f661dcfd4cd462d13933dcb4e7f0dc809525552dd5c3541d  linux-
+ 
+ # Hash for license files
+ sha256  8116433f4004fc0c24d72b3d9e497808b724aa0e5e1cd63fc1bf66b715b1e2e9  LICENCE.Abilis
++sha256  27907ae1d74b94fd6f1159971158ed3199e472f129ea1ff748ea13aded2a59d5  LICENSE.amd-ucode
+ sha256  572872598565dc3513470de971a32bf9db301f47afeef3636345eadae33b2eee  LICENSE.amdgpu
+ sha256  2d6062d63b91eb750bf741498691604f75184b9fee97608ec537cd09bd6a42b4  LICENCE.Marvell
+ sha256  802b7014b26c606cf6248ae8b0ab1ce6d2d1b0db236d38dd269e676cd70710f2  LICENCE.atheros_firmware
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index 3d6c2b624c..cfce1707d7 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -15,6 +15,11 @@ LINUX_FIRMWARE_FILES += intel/fw_sst_0f28.bin-48kHz_i2s_master
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.fw_sst_0f28
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_AMD_UCODE),y)
++LINUX_FIRMWARE_DIRS += amd-ucode
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.amd-ucode
++endif
++
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_AMDGPU),y)
+ LINUX_FIRMWARE_DIRS += amdgpu
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.amdgpu
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
