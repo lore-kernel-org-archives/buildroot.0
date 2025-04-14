@@ -4,84 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E168C3601E
-	for <buildroot@archiver.kernel.org>; Mon, 14 Apr 2025 06:10:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E12EDC3601E
+	for <buildroot@archiver.kernel.org>; Mon, 14 Apr 2025 06:30:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 34862402D1;
-	Mon, 14 Apr 2025 06:10:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A96224052C;
+	Mon, 14 Apr 2025 06:30:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0MgqwfHOJbnK; Mon, 14 Apr 2025 06:10:32 +0000 (UTC)
+ id ie6P0ZjGUXEv; Mon, 14 Apr 2025 06:30:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6793B40325
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DE28A4053F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6793B40325;
-	Mon, 14 Apr 2025 06:10:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DE28A4053F;
+	Mon, 14 Apr 2025 06:30:53 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7091B250
- for <buildroot@buildroot.org>; Mon, 14 Apr 2025 06:10:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id A7392108
+ for <buildroot@buildroot.org>; Mon, 14 Apr 2025 06:30:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6170040325
- for <buildroot@buildroot.org>; Mon, 14 Apr 2025 06:10:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 89B8C40548
+ for <buildroot@buildroot.org>; Mon, 14 Apr 2025 06:30:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ntUCoBOXDNTO for <buildroot@buildroot.org>;
- Mon, 14 Apr 2025 06:10:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=95.163.59.36;
- helo=send197.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0B4AB402D1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B4AB402D1
-Received: from send197.i.mail.ru (send197.i.mail.ru [95.163.59.36])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0B4AB402D1
- for <buildroot@buildroot.org>; Mon, 14 Apr 2025 06:10:27 +0000 (UTC)
-Received: by exim-smtp-7f9dfcd4bd-xgw92 with esmtpa (envelope-from
- <fido_max@inbox.ru>)
- id 1u4D1U-000000008lp-0elj; Mon, 14 Apr 2025 09:10:24 +0300
-Message-ID: <c7ebfb35-d471-440e-b00f-e753f025d7a7@inbox.ru>
-Date: Mon, 14 Apr 2025 09:10:23 +0300
+ id 62FOKy2-tPva for <buildroot@buildroot.org>;
+ Mon, 14 Apr 2025 06:30:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::435; helo=mail-pf1-x435.google.com;
+ envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B21B64052C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B21B64052C
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com
+ [IPv6:2607:f8b0:4864:20::435])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B21B64052C
+ for <buildroot@buildroot.org>; Mon, 14 Apr 2025 06:30:51 +0000 (UTC)
+Received: by mail-pf1-x435.google.com with SMTP id
+ d2e1a72fcca58-736ad42dfd6so3077779b3a.3
+ for <buildroot@buildroot.org>; Sun, 13 Apr 2025 23:30:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1744612250; x=1745217050;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=gmV3zfQDsttE1JYLUOroGkgB71sXRJjxRH/aJ+MpVqk=;
+ b=FJvOHKV+yaPWUqbg0rGBlD2NBiiOz+oUyNlFrMdPP9S3WLcZ0DgZYvZCFWQFSwRaUt
+ rExe+jA86Ro75ppmMKDd3NC/AbCbzbXjp9NCoMCJaSJ+K1Ip6GIeLKXjSS+H/cZvl65q
+ Eb/+TAZnd+Fjbc2J/dCYjdfzGwH0CUb0Lssjs5H13iWT3Jv/zOQf5a/Wm50O/E3qp/yX
+ ITIeqrpDe3h52J+Pk7LCWTzayCrlOIMwBZ6jebz5IZLmPSgWOSdM+n1ZfyEY/1Qbokxk
+ JyzenRc/E9GUGjHeo7p16Qfp3MULvZ8rwR8EDUfpbf59VC65VFGE3oPIcyu1HBSR9Mle
+ MFaQ==
+X-Gm-Message-State: AOJu0Yzh/RTMyInvtqKILI1RRjnCAEtSQ/G6CBm0S2GfL6E8gTnWS3qQ
+ Rrii/AZu6AkCD3HEb3599ys4zX3OSMe+o3Au9+mI+AZIyxiAjn2dRgYe7g==
+X-Gm-Gg: ASbGnctSFpifQuHTirjn9EjS4YDTyQiXeDsqrEmdm25KfzdZ5UVpXYe7HFfsr/CgP+v
+ mG57g064lUyOM9lAtOm6xDgteZ6FTiqCHnyc+nKAn4fNKgkD7WWMPy4rUV3TO6NgePpdJFKQ9DG
+ ZHksi/w6UE51/8IbFHeY21hzTnr2yuwot1TQ1QNJt28oEwWNJPslz8FTVYKbR43ldJo+JQKbqRj
+ 92schKPpFZROdcdJdoSpSKKip7xO8BVTEJHjdpBJto5sTTeqo5/I6wEwBf0UD2PpdBkKTEL/ktj
+ EdMrE1tRPKgOq62Tj+bn08q1AY53/YcUPFPXtg==
+X-Google-Smtp-Source: AGHT+IHknk0MOL/8YHMCAYV5DS5gxCUeK9CLYAlzzDfleOF71QoU6dTO4jRv1zV+q8yIXHGdBFZ8Bg==
+X-Received: by 2002:a05:6a00:ace:b0:736:46b4:beef with SMTP id
+ d2e1a72fcca58-73bd119ea08mr17442104b3a.3.1744612250260; 
+ Sun, 13 Apr 2025 23:30:50 -0700 (PDT)
+Received: from localhost ([66.112.214.180]) by smtp.gmail.com with ESMTPSA id
+ d2e1a72fcca58-73bd2198ac2sm5910874b3a.8.2025.04.13.23.30.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 13 Apr 2025 23:30:49 -0700 (PDT)
+From: Scott Fan <fancp2007@gmail.com>
+To: buildroot@buildroot.org
+Cc: Scott Fan <fancp2007@gmail.com>,
+	Bernd Kuhls <bernd@kuhls.net>
+Date: Mon, 14 Apr 2025 14:30:39 +0800
+Message-ID: <20250414063041.3385071-1-fancp2007@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Scott Fan <fancp2007@gmail.com>, buildroot@buildroot.org
-References: <20250414035423.1856226-1-fancp2007@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20250414035423.1856226-1-fancp2007@gmail.com>
-X-Mailru-Src: smtp
-X-4EC0790: 10
-X-7564579A: 646B95376F6C166E
-X-77F55803: 4F1203BC0FB41BD9A2289E787AC5D91148CD3EC071CD04839824EFDA8C039625182A05F538085040286BADFA8ADBC03C3DE06ABAFEAF67056097AFD5133FBC3978761AB79451C628261E30AE1A3D84FE
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE728F774C865CF4B07EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637AC83A81C8FD4AD23D82A6BABE6F325AC2E85FA5F3EDFCBAA7353EFBB55337566F7393C1401261EF16D3AB909EB0195321EC0AA3542903DA97854A2967452E7F48EEF46B7454FC60B9742502CCDD46D0D2FFDA4F57982C5F4F6B57BC7E64490618DEB871D839B73339E8FC8737B5C224992B0BE0DA6BB795DCC7F00164DA146DAFE8445B8C89999729449624AB7ADAF37F6B57BC7E64490611E7FA7ABCAF51C92176DF2183F8FC7C07C37DE3F426B52F18941B15DA834481F9449624AB7ADAF372E808ACE2090B5E14AD6D5ED66289B5278DA827A17800CE76631511D42670FFE2EB15956EA79C166176DF2183F8FC7C0E4A630A5B664A4FF725E5C173C3A84C3FB9365559B687AC835872C767BF85DA2F004C90652538430E4A6367B16DE6309
-X-C1DE0DAB: 0D63561A33F958A501B630F5DE80C16A5002B1117B3ED69682E0B2022E627B51108A05421C070DB8823CB91A9FED034534781492E4B8EEAD17AEC49845D0B908
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF3FED46C3ACD6F73ED3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CFB6A744B35CF25C0B8A55C61E9817727BB63C203EC7CDA720316905D3FD6882F480BEFAEC9D272008F8F060CAED0E7FB75E9AF09E60F0ACB100374BAAECF801E67D97AEDDE502EABE111DC66A97D0BFE2913E6812662D5F2A17D6C1CDD2003EB8E03787203701020945C72C348FB7EED3
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+ObcCpyrx6l7KImUglyhkEat/+ysWwi0gdhEs0JGjl6ggRWTy1haxBpVdbIX1nthFXMZebaIdHP2ghjoIc/363UZI6Kf1ptIMVS2bpaGes9W5SM7d9ZguQ8A=
-X-Mailru-Sender: 689FA8AB762F7393FE9E42A757851DB673AA3B551BFF1C7EB05FC6B3E28BA0303762A315C7A0AD6790DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
-X-Mras: Ok
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=inbox.ru; 
- s=mail4; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References
- :To:Subject:MIME-Version:Date:Message-ID:From:Sender:Reply-To:To:Cc:
- Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
- List-Archive:X-Cloud-Ids:Disposition-Notification-To;
- bh=SWTqR5C3KEUj16rMP+PVBM/9+ZSvfM7oKq9qJYP8hfM=; t=1744611029; x=1744701029; 
- b=rgbMOsGvYfrPce5l2/wyAKLcK5CiBfHoV2eH1mw142LUrgVFetKwe8xaSrxCMgxrxAIt1qYiBA+
- pvrhOkBNokIN7JbMHx+p0e+eiIXuwI4P4BnWw8b6zZYU2u4fMygJvyjbX/nlzLRygPfNTisqpxhTv
- IlZTWaxI882pHsW2RsIsDSxaOYN0rwJJjoq4oq5Xg8oADtQkHVx5u/HMu1tHmLIa+Um8u8WUrHO7U
- yf78PL+rBgPDGI5jo1CFW2aSB5c6gzjko4XI+M3C1jk/KupjmOHYhE9Yszk4rLi+KWyvhXm17ttEG
- Hya+J1kKkx6bz+ocnm1BZg8I9GQmNf7vRiMQ==;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1744612250; x=1745217050; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=gmV3zfQDsttE1JYLUOroGkgB71sXRJjxRH/aJ+MpVqk=;
+ b=RQ09MFAwaVGK3yaHIC2rvq8ujI9ZOePu54WMraATDlOp6w/BaVsBZSlfDNRkdn4R/7
+ ie7qEGG3oWxVJM1uKdDLDYEXcVj18GySNimTWXFaq9JwPHTT2WMjTUY2SO3oikPFYuRB
+ lo9VIqLnWea5Q1HGMw6dZzi1+KPwIQkLhnNRKj8tcf5AbF1hUC1LzLhG0jZpf9gxp49/
+ L9qNA69n4Z7WYV2AmUqeAjEgUbEi9TJOmzaBuhOgD+4iNd4uTqVWk86HZObmNi0uvsUm
+ 7kNgYu1OX5nk/OLcdOmZDXa1nN7oM+Np0NzbutFKa+zbCrNcWd2bx3IWBJmD6WnGa9p7
+ s5dA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=inbox.ru
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
- header.s=mail4 header.b=rgbMOsGv
-X-Mailman-Original-Authentication-Results: exim-smtp-7f9dfcd4bd-xgw92;
- auth=pass
- smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-Subject: Re: [Buildroot] [PATCH] package/timescaledb: bump version to 2.19.2
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=RQ09MFAw
+Subject: [Buildroot] [PATCH] package/openvpn: security bump version to 2.6.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,20 +106,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
-Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-14.04.2025 06:54, Scott Fan wrote:
-> Release notes: https://github.com/timescale/timescaledb/blob/2.19.2/CHANGELOG.md
-> 
-> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Fixes CVE-2025-2704.
 
-Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
+Release notes:
+https://sourceforge.net/p/openvpn/mailman/message/59169015/
 
+Changelog:
+https://github.com/OpenVPN/openvpn/blob/release/2.6/ChangeLog
+https://github.com/OpenVPN/openvpn/blob/release/2.6/Changes.rst
+
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+---
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 3c95ff4965..432b1c2afb 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking signature
+-sha256  1af10b86922bd7c99827cc0f151dfe9684337b8e5ebdb397539172841ac24a6a  openvpn-2.6.13.tar.gz
++sha256  9eb6a6618352f9e7b771a9d38ae1631b5edfeed6d40233e243e602ddf2195e7a  openvpn-2.6.14.tar.gz
+ sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index e484a4e80f..ce916dba04 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENVPN_VERSION = 2.6.13
++OPENVPN_VERSION = 2.6.14
+ OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
+ OPENVPN_LICENSE = GPL-2.0
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
