@@ -1,100 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8CFEC369B2
-	for <buildroot@archiver.kernel.org>; Mon, 14 Apr 2025 16:16:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E6D2C369A2
+	for <buildroot@archiver.kernel.org>; Mon, 14 Apr 2025 17:09:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A3B8681751;
-	Mon, 14 Apr 2025 16:16:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 369CD40CF2;
+	Mon, 14 Apr 2025 17:09:30 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dX9Aq2_4HIGI; Mon, 14 Apr 2025 17:09:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 545E14069B
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 545E14069B;
+	Mon, 14 Apr 2025 17:09:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A4E951F7
+ for <buildroot@buildroot.org>; Mon, 14 Apr 2025 17:09:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 95009810CA
+ for <buildroot@buildroot.org>; Mon, 14 Apr 2025 17:09:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4tW8kl2ClVgM; Mon, 14 Apr 2025 16:16:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66C6F82C91
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 66C6F82C91;
-	Mon, 14 Apr 2025 16:16:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 109E3108
- for <buildroot@buildroot.org>; Mon, 14 Apr 2025 16:16:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 328D26066F
- for <buildroot@buildroot.org>; Mon, 14 Apr 2025 16:16:10 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DIcrx2ikOtfg for <buildroot@buildroot.org>;
- Mon, 14 Apr 2025 16:16:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 71F80608EB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71F80608EB
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 71F80608EB
- for <buildroot@buildroot.org>; Mon, 14 Apr 2025 16:16:05 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.home.arpa ([85.22.122.10]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mz9Ux-1t9dE83god-00ySz4; Mon, 14
- Apr 2025 18:16:04 +0200
+ id CCEcMPbi5Apd for <buildroot@buildroot.org>;
+ Mon, 14 Apr 2025 17:09:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7B80180562
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B80180562
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7B80180562
+ for <buildroot@buildroot.org>; Mon, 14 Apr 2025 17:09:27 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-43ed8d32a95so39443655e9.3
+ for <buildroot@buildroot.org>; Mon, 14 Apr 2025 10:09:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1744650565; x=1745255365;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=JzpiJermTbjOL0lorkVe7TgfEr9RU3OFTk7LOS6QE7U=;
+ b=p/24hJW0B+F0TP92O/NlKubD4MHPFfSky46gY7ADR2DyUhg8WZ7oxk8KHS5HtZpJO0
+ MkwoVYs7YXR4wLKDJ1G8MlLsG7EJjdBomBRIYmUIsLl64cy0L+/GAbuQ+SDpr+HGceno
+ VMIoINlbgZr9RmWyPsMQq6bQ/UueJuqJUwVNO52G7CzXUrp2VJdO0HMRb1FRez1g/LDd
+ yK8prINiRHWUzqf5WLVYFHJAVq74IYCQahjMlN9GRRiY/RRW4dDo/y3Ga7pm1AlSZbW7
+ XpFObeonatKoW5/KYzAVXCU8ztmZDb5J0y3GNuqF1uqYIksRfzzVmuxzYEODiTM4a1kO
+ BSVw==
+X-Gm-Message-State: AOJu0Yz0FX6IkEL/KwvOtfo74m5mGbA6eayctbmxgHj0RDfdvEmHf/iq
+ VJJiU61/Inel+xjL4kIo1PhAR73EouxAzLSptea3dDz0Cyc1+2DU7Ss3NMVZuz4hnOBCZ0NT6VM
+ WkGeAJA==
+X-Gm-Gg: ASbGncv8ltNbCfErg0y8x5P0EuZa2dW4ZXylR0SelwI1aW3foDsaf6a2527ql2F6SDd
+ NjgKCMgl027Rvsbpqg+bdWEZZguzb6SHRtqg2R+W5WlyyR0mIuzKwPv5DjmCj/jGCVqSMHYdvzg
+ NHokyTksJayRwMjioKYuHbALgAXf77uKaiu0CrNohgA8zqRRtWAW4a6p4KpDl/IO9DL4Onz+Uoc
+ H9ESbOTrf4te/EJCrLXYFSLEdoQ7tT5hMNRPNe0QxC6JL8NO4g+ey76RdLguxEIfUTL0dkzbYwJ
+ PAPN97SrIhbe1zl9ElV8zK/QPdZ0Pwk4zQMxC6ye+XHJYBDMvu94q8nFZzCT
+X-Google-Smtp-Source: AGHT+IFCyzLXu6n4INMDNmg8dmLicajMhBgHqPreYusEQt7iFKQpxzneU3yPqKF9MLkgYG4jZf0KPQ==
+X-Received: by 2002:a05:600c:1e1c:b0:43c:f8fc:f687 with SMTP id
+ 5b1f17b1804b1-43f3a9adc61mr133850955e9.27.1744650565131; 
+ Mon, 14 Apr 2025 10:09:25 -0700 (PDT)
+Received: from debian-hp-1.fritz.box ([213.211.140.212])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-39eae978023sm11608529f8f.47.2025.04.14.10.09.24
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 14 Apr 2025 10:09:24 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Mon, 14 Apr 2025 18:15:43 +0200
-Message-ID: <20250414161545.2863615-2-fiona.klute@gmx.de>
+Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
+Date: Mon, 14 Apr 2025 19:09:18 +0200
+Message-ID: <20250414170922.1230348-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250414161545.2863615-1-fiona.klute@gmx.de>
-References: <20250414161545.2863615-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:WslWPZq1VS19t4Fjfg0y7Bq1/EoIRNZypKbwjAJHXn5jxDOgEKa
- Fe/RKqsn+4J7efraBr5mzPt57Ey+qioiP4TyLAbsJH1vJaU5QRUKma+L28M90CEdPfYFxt6
- tvrdFkhuFnWoAX3WS+jQdc8PQsYq9sETazBCODN6dZ8Kt46rptgo3tR2EhqYUnNphA0Ryp1
- JaBy65Qvm1QzSEgvqJfjw==
-UI-OutboundReport: notjunk:1;M01:P0:WcS6D94fjnA=;aJ/ndngybUL7NKks1Z0Ps+UVTxB
- c8TWIZ9QCWMp+PWAyVg1MrZDJPT8cyomR+eK6Ny9yodtB0GKJ/DBaPLvDlsiJnrzrY7caHfJA
- Y3VRIucMNqo/sTtniR6q1KGSk4QIxuFMHMUpXtxFWi+IYclGKOYDmaRMEbhwidXbE5ihc/6Bi
- d0XPS1ainwsOrU45dV2coc2UvJVgMi1c3TtjCsNQSbNAj3R5iOllGGCaTEwRob2bLvLNGdU0+
- AjFGREJ4PQcF0I9Zaf92zuiQTBgGSUrR3L6GETiYhk60eGZN0GKsYrQSVah/SDuipA9Ugp9K0
- ty3VMQHiEtrfRESnK7Xv8GafEGh9ftKpFIDzyCcp6aPVB3we9tvu42oAxCepWpjp1+sDiWrjI
- fq/tR2YEWld/nA9dW0miA40KUhTkyiVNfLQ4RGHReiev7yIIZh0yepbBm3UNWQDLB142dHY4M
- UbhFOaoenH1aM18Vsr6hI1efqUV6wNi17oFUjTB5H1gp6MyQErYUL1xkgyjdOUgSKRlz16fb/
- oBW5Llikgylkgz0N2my2Q3/WgAkOwiFJgUYySWptqrs18RxjQ8Z+2c7QdIXwNG20WzlXIEig5
- eFgbaFFMPcmTuU9J4RngAaGOA3MsgztOfS0s5//Rkxeoj6DATMTGqM0CK2S+UTEZnZkdm/jrk
- f92x67MJ0IWJ3WLJOvgA3+CQlGvhKyFqCfEtGYFKTZ23KMPJmW1Dl2i6x1/t1cTeVivJv7HTr
- udIuKVCzoE3rxOpuhRl/BJQ1KYqwSGXmPEiDH0ZNTS8m67w5n4SvjJYd2J0Kd/LrKuUeqTjQA
- F3B3Qj9UtFjbZQJq+wl5IyNHO+PAr8K2A6ZpFQazf+0ZjWT8kghDBc/qSWYCOE/QPIbiYqiY0
- ugig01T7gHhV8uboNgl1PKhL/qb8zG6yB5gfo93GB8YUUDhm3eJ+6v+StZGBD6+Wo1Bt3OTS5
- jdiiezaiPammKPf2NGFe7/KHfmaFYf5mj9w7cYmnzJ77eqV+/w/hg65dGcPeWt+m1SS5euPNj
- aljLmS7CFWIe6rVqGSm00aZptSrKrgUKSChFfRbhq1oXhXrzUZonJTPOThEdKebKhkfADqFbK
- f33D2JyM0KAPO1PnTAEmaF3rCGTarZdWNCfvKS9Mz6jhqMbht07yf6S8Gi68Yv5h8GVI8GYmJ
- gWFppCahTIFO+wq72F8rh0Oz1/NB7JMronztkD/LCYFlr5xA22qqeNAFuSEHOCfry+0h/0rw8
- gsi3QcQVLMcPgCpY8gKi3qbIRIkwHP5/2AaHyhYkf2DBH4F1KY/Na4ge82iN8FIW4bfXONCXA
- u/FRexCtRsAir3SWXXCkLEQ8B8NdCrDcfdW+yziPPhvjAOgLWmgTOORtgmimJagwY0rNz7QL/
- 2BtMTMjF3qcU8bDty4OJCI0bUvLfntxhLyFs1zPjukqOekdzpg0fRIfLW8V3c2DWPXrBgBuLa
- Pjf2qV33p8CsakhII+pxK8MFM9C4=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1744647364; x=1745252164; i=fiona.klute@gmx.de;
- bh=ZiIXU2JsOzU3M14ErTvAJsrMIObu2x7WLOFRTXFLw6w=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
- References:MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=Xv758kSdYbp/bjXsjYYZVfRA8NHRX2UL9/tMQ+VcXt4edOqMByO8uxusUZgBS9mc
- nsKMKEpO5Ldw6ZDqXRqEpRiz0DC9jq24Zgpvuped6UtR+krJQgyddjzhkCP8Ntkxb
- duZWQAv00q1qIQKS3pFVuZXDQoV38xAK2lDa8EfNG5Q6VlNOuv62yLHiBhaayaiW8
- 5/FPIQBNzzGTIyrQ3bGHIHu5HXx5N2Dt8x5RrO2st9SA+w07BmuN5CAQfjFhLeYMI
- zkRGgeYcQfMvmujzTR2XnxCh3fwMvYntnxJGRDrFIRvy5Ad5rLtanlLVX15XyNLn1
- zptXe33VIOgwefXjDQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=mind.be; s=google; t=1744650565; x=1745255365; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=JzpiJermTbjOL0lorkVe7TgfEr9RU3OFTk7LOS6QE7U=;
+ b=JcEzTgRSPo898TlHWa/BYYocy6srgKfXE6C5Q7lWhPReMtVOtlW815QjdtX1B4027Y
+ 6DBw85DaTF1Q6EuA7Jg7l7Mdrb22Jiq9hLp0i5b9AZYyKzX/mXlZ+LY17ep08bwTNVle
+ N4tLgH9N7t/DkLXLH3e+E2MAaFT73CK4D1tRrJ5SSwBOGnbStLrf/lv2O5uuBpJU41dC
+ +CZSQmxnUMGGZl7L0/JluBd71T8Qc0h978opU79GMqz4t5QJl1Z4ej880xayTqbcuzPD
+ /Ed9c/DgNTY6QDhE09jSK9IFknnwt6lSnwnGY9ej15mCwc2z9Lv1I+8+nigyV92KvpCz
+ V9bQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=Xv758kSd
-Subject: [Buildroot] [PATCH v4 2/4] package/python-gobject: fix event source
- registration with Python 3.13
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=JcEzTgRS
+Subject: [Buildroot] [PATCH 1/2] support/testing: add new test for
+ python-urllib3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,221 +106,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- "Fiona Klute \(WIWA\)" <fiona.klute@gmx.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Rapha=C3=ABl_M=C3=A9lotte_via_buildroot?=
+ <buildroot@buildroot.org>
+Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-
-Since Python 3.13 BaseSelectorEventLoop.add_reader() and
-BaseSelectorEventLoop.add_writer() use the mapping returned by
-selector.get_map() to detect if a file object is already
-registered. This fails with the implementation in gi.events._Selector
-if some calls use a file object, and others the raw file descriptor.
-
-Full upstream bug report:
-https://gitlab.gnome.org/GNOME/pygobject/-/issues/689
-
-This bug breaks package/python-aiomqtt, because its client object uses
-file objects in some places for the connection socket, and the file
-descriptor in others. The result is that the connection attempt times
-out because source registration fails, and the Future that marks
-successful connection never resolves.
-
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
----
-The bug fixed by this patch is present in 3.50.0 and 3.52.3 alike, the
-reason for applying the update first is simply that the patch doesn't
-apply with 3.50.0, and backporting would be unnecessary effort when
-the update is due anyway.
-
-Change v1 -> v2: Patch has been merged, switch upstream URL from MR to
-commit on main branch.
-
- ...tor.get_map-look-up-file-objects-by-.patch | 164 ++++++++++++++++++
- 1 file changed, 164 insertions(+)
- create mode 100644 package/python-gobject/0001-gi.events._Selector.get_map-look-up-file-objects-by-.patch
-
-diff --git a/package/python-gobject/0001-gi.events._Selector.get_map-look-up-file-objects-by-.patch b/package/python-gobject/0001-gi.events._Selector.get_map-look-up-file-objects-by-.patch
-new file mode 100644
-index 0000000000..a275abd9c7
---- /dev/null
-+++ b/package/python-gobject/0001-gi.events._Selector.get_map-look-up-file-objects-by-.patch
-@@ -0,0 +1,164 @@
-+From 4b97688d527276fc1e835fed71dbb73bbd09ac11 Mon Sep 17 00:00:00 2001
-+From: Fiona Klute <fiona.klute@gmx.de>
-+Date: Tue, 25 Mar 2025 13:29:04 +0100
-+Subject: [PATCH] gi.events._Selector.get_map(): look up file objects by file
-+ descriptor
-+
-+File objects and their underlying file descriptors must be treated as
-+equivalent for lookup, or one may incorrectly be treated as not
-+registered when the other was used for the registration, leading to
-+bugs.
-+
-+Fixes: #689
-+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-+Upstream: https://gitlab.gnome.org/GNOME/pygobject/-/commit/4b97688d527276fc1e835fed71dbb73bbd09ac11
-+---
-+ gi/events.py         | 36 +++++++++++++++++++++-----
-+ tests/test_events.py | 61 ++++++++++++++++++++++++++++++++++++++++++++
-+ 2 files changed, 90 insertions(+), 7 deletions(-)
-+
-+diff --git a/gi/events.py b/gi/events.py
-+index da4775dc..9eba1629 100644
-+--- a/gi/events.py
-++++ b/gi/events.py
-+@@ -28,6 +28,7 @@ import threading
-+ import selectors
-+ import weakref
-+ import warnings
-++from collections.abc import Mapping
-+ from contextlib import contextmanager
-+ from . import _ossighelper
-+ 
-+@@ -508,9 +509,33 @@ if sys.platform != 'win32':
-+         # Subclass to attach _tag
-+         pass
-+ 
-++    class _FileObjectMapping(Mapping):
-++        def __init__(self, fd_dict):
-++            self.fd_dict = fd_dict
-++
-++        def __len__(self):
-++            return len(self.fd_dict)
-++
-++        def get(self, fileobj, default=None):
-++            fd = _fileobj_to_fd(fileobj)
-++            return self.fd_dict.get(fd, default)
-++
-++        def __getitem__(self, fileobj):
-++            value = self.get(fileobj)
-++            if value is None:
-++                raise KeyError("{!r} is not registered".format(fileobj))
-++            return value
-++
-++        def __iter__(self):
-++            return iter(self.fd_dict)
-++
-+     class _Selector(_SelectorMixin, selectors.BaseSelector):
-+         """A Selector for gi.events.GLibEventLoop registering python IO with GLib."""
-+ 
-++        def __init__(self, context, loop):
-++            super().__init__(context, loop)
-++            self._map = _FileObjectMapping(self._fd_to_key)
-++
-+         def attach(self):
-+             self._source.attach(self._loop._context)
-+ 
-+@@ -559,15 +584,12 @@ if sys.platform != 'win32':
-+         # We could override modify, but it is only slightly when the "events" change.
-+ 
-+         def get_key(self, fileobj):
-+-            fd = _fileobj_to_fd(fileobj)
-+-            return self._fd_to_key[fd]
-++            return self._map[fileobj]
-+ 
-+         def get_map(self):
-+-            """Return a mapping of file objects to selector keys."""
-+-            # Horribly inefficient
-+-            # It should never be called and exists just to prevent issues if e.g.
-+-            # python decides to use it for debug purposes.
-+-            return {k.fileobj: k for k in self._fd_to_key.values()}
-++            """Return a mapping of file objects or file descriptors to
-++            selector keys."""
-++            return self._map
-+ 
-+ 
-+ else:
-+diff --git a/tests/test_events.py b/tests/test_events.py
-+index a6585468..9dbf3827 100644
-+--- a/tests/test_events.py
-++++ b/tests/test_events.py
-+@@ -46,6 +46,7 @@ import sys
-+ import gi
-+ import gi.events
-+ import asyncio
-++import socket
-+ import threading
-+ from gi.repository import GLib, Gio
-+ 
-+@@ -344,3 +345,63 @@ class GLibEventLoopPolicyTests(unittest.TestCase):
-+         self.assertEqual(order, [GLib.PRIORITY_HIGH] * 3 +
-+                                 [GLib.PRIORITY_DEFAULT] * 3 +
-+                                 [GLib.PRIORITY_DEFAULT_IDLE] * 3)
-++
-++    @unittest.skipIf(sys.platform == 'win32', 'add reader/writer not implemented')
-++    def test_source_fileobj_fd(self):
-++        """Regression test for
-++        https://gitlab.gnome.org/GNOME/pygobject/-/issues/689
-++        """
-++        class Echo:
-++            def __init__(self, sock, expect_bytes):
-++                self.sock = sock
-++                self.sent_bytes = 0
-++                self.expect_bytes = expect_bytes
-++                self.done = asyncio.Future()
-++                self.data = bytes()
-++
-++            def send(self):
-++                if self.done.done():
-++                    return
-++                if self.sent_bytes < len(self.data):
-++                    self.sent_bytes += self.sock.send(
-++                        self.data[self.sent_bytes:])
-++                    print('sent', self.data)
-++                if self.sent_bytes >= self.expect_bytes:
-++                    self.done.set_result(None)
-++                    self.sock.shutdown(socket.SHUT_WR)
-++
-++            def recv(self):
-++                if self.done.done():
-++                    return
-++                self.data += self.sock.recv(self.expect_bytes)
-++                print('received', self.data)
-++                if len(self.data) >= self.expect_bytes:
-++                    self.sock.shutdown(socket.SHUT_RD)
-++
-++        async def run():
-++            loop = asyncio.get_running_loop()
-++            s1, s2 = socket.socketpair()
-++            sample = b'Hello!'
-++            e = Echo(s1, len(sample))
-++            # register using file object and file descriptor
-++            loop.add_reader(s1, e.recv)
-++            loop.add_writer(s1.fileno(), e.send)
-++            s2.sendall(sample)
-++            await asyncio.wait_for(e.done, timeout=2.0)
-++            echo = bytes()
-++            for _ in range(len(sample)):
-++                echo += s2.recv(len(sample))
-++                if len(echo) == len(sample):
-++                    break
-++            # remove using file object and file descriptor
-++            loop.remove_reader(s1)
-++            loop.remove_writer(s1.fileno())
-++            s1.close()
-++            s2.close()
-++            # check if the data was echoed correctly
-++            self.assertEqual(sample, echo)
-++
-++        policy = self.create_policy()
-++        loop = policy.get_event_loop()
-++        loop.run_until_complete(run())
-++        loop.close()
-+-- 
-+2.49.0
-+
--- 
-2.49.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SW1wb3J0aW5nIHVybGxpYjMgYWxyZWFkeSBhbGxvd3MgdXMgdG8gY2hlY2sgdGhhdCBmb3IgZXhh
+bXBsZSB6bGliIGNhbgpiZSBsb2FkZWQgYXQgcnVudGltZS4KCkZvciBnb29kIG1lYXN1cmUsIGFs
+c28gY3JlYXRlIHRoZSBQb29sTWFuYWdlciBvYmplY3QgbWVudGlvbmVkIGluIHRoZQp1c2VyIGd1
+aWRlIChbMV0pLCBhbmQgY2hlY2sgdGhhdCB3ZSBjYW4gbm9ybWFsaXplIGEgVVJMIGxpa2UgaXQg
+aXMKZG9uZSBpbiB1cmxsaWIzJ3MgJ3Rlc3QvdGVzdF91dGlsLnB5Jy4KClsxXTogaHR0cHM6Ly91
+cmxsaWIzLnJlYWR0aGVkb2NzLmlvL2VuL3N0YWJsZS91c2VyLWd1aWRlLmh0bWwKClNpZ25lZC1v
+ZmYtYnk6IFJhcGhhw6tsIE3DqWxvdHRlIDxyYXBoYWVsLm1lbG90dGVAbWluZC5iZT4KLS0tCiBE
+RVZFTE9QRVJTICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDIg
+KysKIC4uLi90ZXN0aW5nL3Rlc3RzL3BhY2thZ2Uvc2FtcGxlX3B5dGhvbl91cmxsaWIzLnB5ICAg
+fCAxMSArKysrKysrKysrKwogc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9weXRo
+b25fdXJsbGliMy5weSB8IDEyICsrKysrKysrKysrKwogMyBmaWxlcyBjaGFuZ2VkLCAyNSBpbnNl
+cnRpb25zKCspCiBjcmVhdGUgbW9kZSAxMDA2NDQgc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2th
+Z2Uvc2FtcGxlX3B5dGhvbl91cmxsaWIzLnB5CiBjcmVhdGUgbW9kZSAxMDA2NDQgc3VwcG9ydC90
+ZXN0aW5nL3Rlc3RzL3BhY2thZ2UvdGVzdF9weXRob25fdXJsbGliMy5weQoKZGlmZiAtLWdpdCBh
+L0RFVkVMT1BFUlMgYi9ERVZFTE9QRVJTCmluZGV4IDBkNzg0MWViOTQuLjU1NGMxODk4NDYgMTAw
+NjQ0Ci0tLSBhL0RFVkVMT1BFUlMKKysrIGIvREVWRUxPUEVSUwpAQCAtMjgxNywxMiArMjgxNywx
+NCBAQCBGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS9zYW1wbGVfcHl0aG9uX3JzYS5w
+eQogRjoJc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2thZ2Uvc2FtcGxlX3B5dGhvbl9zM3RyYW5z
+ZmVyLnB5CiBGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS9zYW1wbGVfcHl0aG9uX3Nk
+YnVzLnB5CiBGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS9zYW1wbGVfcHl0aG9uX3Nk
+YnVzX25ldHdvcmttYW5hZ2VyLnB5CitGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS9z
+YW1wbGVfcHl0aG9uX3VybGxpYjMucHkKIEY6CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdl
+L3Rlc3RfcHl0aG9uX2ptZXNwYXRoLnB5CiBGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2Fn
+ZS90ZXN0X3B5dGhvbl9weW11cGRmLnB5CiBGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2Fn
+ZS90ZXN0X3B5dGhvbl9yc2EucHkKIEY6CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rl
+c3RfcHl0aG9uX3MzdHJhbnNmZXIucHkKIEY6CXN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdl
+L3Rlc3RfcHl0aG9uX3NkYnVzLnB5CiBGOglzdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90
+ZXN0X3B5dGhvbl9zZGJ1c19uZXR3b3JrbWFuYWdlci5weQorRjoJc3VwcG9ydC90ZXN0aW5nL3Rl
+c3RzL3BhY2thZ2UvdGVzdF9weXRob25fdXJsbGliMy5weQogCiBOOglSYXBoYWVsIFBhdmxpZGlz
+IDxyYXBoYWVsLnBhdmxpZGlzQGdtYWlsLmNvbT4KIEY6CXBhY2thZ2UvbnZpZGlhLXBlcnNpc3Rl
+bmNlZC8KZGlmZiAtLWdpdCBhL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3NhbXBsZV9w
+eXRob25fdXJsbGliMy5weSBiL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3NhbXBsZV9w
+eXRob25fdXJsbGliMy5weQpuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi43
+ZmMwZjY4MDgzCi0tLSAvZGV2L251bGwKKysrIGIvc3VwcG9ydC90ZXN0aW5nL3Rlc3RzL3BhY2th
+Z2Uvc2FtcGxlX3B5dGhvbl91cmxsaWIzLnB5CkBAIC0wLDAgKzEsMTEgQEAKKyMgQ2hlY2sgdGhh
+dCB3ZSBjYW4gaW1wb3J0IHVybGxpYjMgZXZlbiBpZiB3ZSBkb24ndCB1c2UgYWxsIG9mIGl0Ogor
+aW1wb3J0IHVybGxpYjMKKworZnJvbSB1cmxsaWIucGFyc2UgaW1wb3J0IHVybHBhcnNlCisKKyMg
+SnVzdCBjaGVjayB0aGF0IHdlIGNhbiBjcmVhdGUgYSBQb29sTWFuYWdlcjoKK2h0dHAgPSB1cmxs
+aWIzLlBvb2xNYW5hZ2VyKCkKKworIyBDaGVjayBpZiB3ZSBjYW4gbm9ybWFsaXplIFVSTHM6Cith
+c3NlcnQgdXJsbGliMy51dGlsLnVybC5wYXJzZV91cmwoIkhUVFBTOi8vRXhhbXBsZS5Db20vP0tl
+eT1WYWx1ZSIpLnVybCBcCisgICAgPT0gImh0dHBzOi8vZXhhbXBsZS5jb20vP0tleT1WYWx1ZSIK
+ZGlmZiAtLWdpdCBhL3N1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfcHl0aG9uX3Vy
+bGxpYjMucHkgYi9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3B5dGhvbl91cmxs
+aWIzLnB5Cm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAuLjU0YTk0ZDVlNjUK
+LS0tIC9kZXYvbnVsbAorKysgYi9zdXBwb3J0L3Rlc3RpbmcvdGVzdHMvcGFja2FnZS90ZXN0X3B5
+dGhvbl91cmxsaWIzLnB5CkBAIC0wLDAgKzEsMTIgQEAKK2Zyb20gdGVzdHMucGFja2FnZS50ZXN0
+X3B5dGhvbiBpbXBvcnQgVGVzdFB5dGhvblBhY2thZ2VCYXNlCisKKworY2xhc3MgVGVzdFB5dGhv
+blB5M1VybGxpYjMoVGVzdFB5dGhvblBhY2thZ2VCYXNlKToKKyAgICBfX3Rlc3RfXyA9IFRydWUK
+KyAgICBjb25maWcgPSBUZXN0UHl0aG9uUGFja2FnZUJhc2UuY29uZmlnICsgXAorICAgICAgICAi
+IiIKKyAgICAgICAgQlIyX1BBQ0tBR0VfUFlUSE9OMz15CisgICAgICAgIEJSMl9QQUNLQUdFX1BZ
+VEhPTl9VUkxMSUIzPXkKKyAgICAgICAgIiIiCisgICAgc2FtcGxlX3NjcmlwdHMgPSBbInRlc3Rz
+L3BhY2thZ2Uvc2FtcGxlX3B5dGhvbl91cmxsaWIzLnB5Il0KKyAgICB0aW1lb3V0ID0gMjAKLS0g
+CjIuNDkuMAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
