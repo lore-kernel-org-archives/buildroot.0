@@ -4,86 +4,184 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5614C369B2
-	for <buildroot@archiver.kernel.org>; Mon, 14 Apr 2025 09:03:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECE69C369B2
+	for <buildroot@archiver.kernel.org>; Mon, 14 Apr 2025 09:08:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D92B408C7;
-	Mon, 14 Apr 2025 09:03:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89A9C4089C;
+	Mon, 14 Apr 2025 09:08:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yrHYWgJ77IEI; Mon, 14 Apr 2025 09:03:54 +0000 (UTC)
+ id 5GBlr-7naJuL; Mon, 14 Apr 2025 09:08:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20D71407C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5F91407DE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 20D71407C0;
-	Mon, 14 Apr 2025 09:03:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 33ADB108
- for <buildroot@buildroot.org>; Mon, 14 Apr 2025 09:03:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5F91407DE;
+	Mon, 14 Apr 2025 09:08:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 657EC250
+ for <buildroot@buildroot.org>; Mon, 14 Apr 2025 09:08:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1612C407C0
- for <buildroot@buildroot.org>; Mon, 14 Apr 2025 09:03:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 56F404011D
+ for <buildroot@buildroot.org>; Mon, 14 Apr 2025 09:08:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MIw8XwnbU_JF for <buildroot@buildroot.org>;
- Mon, 14 Apr 2025 09:03:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.51;
- helo=mail-wr1-f51.google.com; envelope-from=thomas.devoogdt@gmail.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1024440703
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1024440703
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com
- [209.85.221.51])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1024440703
- for <buildroot@buildroot.org>; Mon, 14 Apr 2025 09:03:51 +0000 (UTC)
-Received: by mail-wr1-f51.google.com with SMTP id
- ffacd0b85a97d-391342fc0b5so3151780f8f.3
- for <buildroot@buildroot.org>; Mon, 14 Apr 2025 02:03:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1744621430; x=1745226230;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=X+zijvR0mDNwyv/XjnjH5a7uruw8r0Q12G948UYPcbg=;
- b=ewHbhbm8cUJzS4fc51LQkOjhUd7wS0+ZVJzubGXZwjGHvFia5yA1BxTOTcbL4Wda2F
- aUCZYCrnNdpG3HEZxyjh6JOkm2yuW0udZ47zqWQ2MNIG+vKA8oql+BvWRl1uUB43mAEg
- 0ejw+LzxOnkQRE9WWpTp7aMuyptVBr9ot6WOr7yQyLbCyckH8GxL0bEEMIqkeDR/gS/k
- FFUzfEL/oFqbHRMblCkstHlSzimXP0qncdpWbz4V3ygIYON/OMYng4Z3lTjqVLVfXGyz
- Tb8CfoI59tLtmmYJqiTmCGO6jrIXCOSbWpFCDKikP8n4Kbp+i3LVIecAVjB9xpreYGiN
- RshQ==
-X-Gm-Message-State: AOJu0YxsYaL0K998AYn8Jr3kFlE13+hoVCAfekHBUgkWyzg6meoXhd15
- whziBy4gloXVEVD7MZru9VKqE8Rq3X0A1T7LQP0HytYjgt5af2dZ3SjGcBxY
-X-Gm-Gg: ASbGncs5Qr351C1y68mKW2nzETBQ8VNpKnn9vAs3/1W3ARyyI+6JRBPQRCYxO7txLw7
- TmtfFJ6xeq99bZpVbQtIgZo2Ss8dVddEpUYaicP68IpbxmKbVtgsbjhukp+bpqhUzYOf/vG9P2c
- RCsCiMboZqoExhzHTMK4vTrEkZS4XaPAKMuJ/CEKdqa0UO/Z/VXi48JaFQluf4mHxmXT5d80i17
- UTRUPPzwmDV+ArgrMwq1Lu46J+XXTxF2V8N39UIZm3gl1bSLRrJOWMJ/pEd3upkTHy7dQ9AV5QM
- 0WrIePUXw17xGttu3tTARFlnz/VXTQfk+T6+0Cy/M6TmKSizTvJgEynnCVDlOnzDWttoD4KmEuK
- bf+MM43LlZdh5annIvEsKk9e8rrBt
-X-Google-Smtp-Source: AGHT+IF5f7YLDGKba7+Qswv93XVJrvlyRBeYUevIh2TbCRThPt23LTp6aSIdMkcylRyVcWqfOlkwjw==
-X-Received: by 2002:a05:6000:400a:b0:38f:3e1c:211d with SMTP id
- ffacd0b85a97d-39ea5206db4mr9285861f8f.14.1744621429777; 
- Mon, 14 Apr 2025 02:03:49 -0700 (PDT)
-Received: from thomas-Precision-7670.barco.com (d528f5fde.static.telenet.be.
- [82.143.95.222]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-39eaf445713sm10208476f8f.85.2025.04.14.02.03.49
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 14 Apr 2025 02:03:49 -0700 (PDT)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: thomas@devoogdt.com
-Cc: buildroot@buildroot.org,
-	Thomas Devoogdt <thomas.devoogdt@barco.com>
-Date: Mon, 14 Apr 2025 11:03:47 +0200
-Message-ID: <20250414090347.1895205-1-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <CACXRmJi+iFhaxBHSDB1V8edSxzsJL6jpMXV+AC+c=TGYkaJCfw@mail.gmail.com>
-References: <CACXRmJi+iFhaxBHSDB1V8edSxzsJL6jpMXV+AC+c=TGYkaJCfw@mail.gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jq-VgaH4x3CA for <buildroot@buildroot.org>;
+ Mon, 14 Apr 2025 09:08:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:2612::60f;
+ helo=eur05-am6-obe.outbound.protection.outlook.com;
+ envelope-from=quentin.schulz@cherry.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 288D040530
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 288D040530
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com
+ (mail-am6eur05on2060f.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2612::60f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 288D040530
+ for <buildroot@buildroot.org>; Mon, 14 Apr 2025 09:08:11 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=e5tEWZq4hXwCGPpqgtZkCzQ+X61iLwqxRldLYb95QAm7m2GGfkcrmL7us6wIKj47Wt1DMi6n+8m+F5DIAMKlT8geObzluCzeUef7ISL4Smfwo2n9oKN0fVGDf2AIT0XgTQoaBpQfW07eSnK8r46NvNFIqPTMjOXe2s7KraAFK+S6KOSBXvHO+7qbQF3tyKjA2D4RqOXwSnCyE6IFDZ+kWYd21ibExK2WHjKNuvxP8TjjXl2GasRojWiqubq3hWuandk61A9pnoPcxyYSDAXZwvBaNCrp7R7/CML9h67CToM+v/+E1zkrt9D1OHDVjXQBak2KpAMsv+L+1oMzb+03nQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nEFp4owdqn0tOmLNw4UiIr8IDwisO1QIce+WSsotdLU=;
+ b=n+oLxTKdK795AMPoz63aXB4wNlQ1HPqPNF7Kfhf0Kx02PXyX6S29Wi2HZRlDop2aMu+k3oqv47frducXkYITz3g/6/Pu/ngSAEtNr2MoZfUGMwNdUCKmzaiL6HAKVvKHYHBhRABoR7wHjWPhEmGVkhkFUmGwmeQvwEI4yDh+l9cJdTEdOR//HibARfM89PBcfhfIN6os02heLIf+Jry8QLa2zAZRmnbPhCYm5W6GWeCs1THtaU+2u5H3FuKQRvekfqTSnx1joFGW7gReZNnDY7jjozslYqoJxDHE8CVr8oelw5x4HndEmUtmosu40vThKosChnOvEx2PYtNZWuwl3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cherry.de; dmarc=pass action=none header.from=cherry.de;
+ dkim=pass header.d=cherry.de; arc=none
+Received: from AS8PR04MB8897.eurprd04.prod.outlook.com (2603:10a6:20b:42c::20)
+ by GVXPR04MB10247.eurprd04.prod.outlook.com (2603:10a6:150:1c2::19)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8632.29; Mon, 14 Apr
+ 2025 09:08:06 +0000
+Received: from AS8PR04MB8897.eurprd04.prod.outlook.com
+ ([fe80::35f6:bc7d:633:369a]) by AS8PR04MB8897.eurprd04.prod.outlook.com
+ ([fe80::35f6:bc7d:633:369a%6]) with mapi id 15.20.8632.030; Mon, 14 Apr 2025
+ 09:08:06 +0000
+Message-ID: <f04f3434-1f87-4b9b-b5b6-1c61cb874faf@cherry.de>
+Date: Mon, 14 Apr 2025 11:08:04 +0200
+User-Agent: Mozilla Thunderbird
+To: Peter Seiderer <ps.report@gmx.net>,
+ Quentin Schulz <foss+buildroot@0leil.net>
+Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Kieran Bingham <kieran.bingham@ideasonboard.com>,
+ Marcus Folkesson <marcus.folkesson@gmail.com>
+References: <20250408-libcamera-qcam-v1-0-680c8a48dc17@cherry.de>
+ <20250410155431.2a343129@gmx.net>
+Content-Language: en-US
+In-Reply-To: <20250410155431.2a343129@gmx.net>
+X-ClientProxiedBy: FR3P281CA0157.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a2::13) To AS8PR04MB8897.eurprd04.prod.outlook.com
+ (2603:10a6:20b:42c::20)
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v2] package/libfcgi: update to 2.4.4
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AS8PR04MB8897:EE_|GVXPR04MB10247:EE_
+X-MS-Office365-Filtering-Correlation-Id: de233e1f-649c-4aa1-a365-08dd7b33ddcc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0; ARA:13230040|366016|376014|1800799024|41080700001;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?Z01FYkE2Yi8vWWRDUmV2Tk1UeWkvdmhFdjJOWHpjWWNELzNmd25WREtGdERF?=
+ =?utf-8?B?Zzd0OWxRVk5YcUlOZXUvS2U3WjYxMmg4cE5uVEIyZjVCaFk1RHFiVENGcCtn?=
+ =?utf-8?B?REJ1eHY4WXpIR0E4Vy9oc3ZySm5kVzQvWkJhekEyU3BFMlhyZmpGQ1AxTmlC?=
+ =?utf-8?B?N3hzRmZmWkdzMW9Dai9LSTlRS0dmMis4ZUxEMU9xTEdRODdmb25NenQ4d1BY?=
+ =?utf-8?B?TkhYTEJSTHdXUDNmUWlDVXh2QVRDelBwMGRlVFVrMlM4WGJSaWhGRDRzTlNX?=
+ =?utf-8?B?alpMUk5qZzBUN0lWTkN1NWdxVTc0QzZNUHdqZ29VUlB6YytiT3R6Uy9KaExv?=
+ =?utf-8?B?amduaUdWM2E3dGpjbWhqQlk1b3pzWFk3OHhVc0o4Q1V0YkE2NGpUVjluS1cr?=
+ =?utf-8?B?aTh0aytpNlFBd0hSeEY1TmRlUzdNWTNCNTRIaHZWYit1V1Jld1dBYVIzSGV3?=
+ =?utf-8?B?U0Fjb0k0ZEg4eURiNjEwQmVjY00zNTZ3RThGZ3VkOHFrQk5qcWFFb2VYd2xi?=
+ =?utf-8?B?OXJsR0pOelk3eGhvcWt1elJrWG1mZ20zUDRQeHIxZTBueVFHLy9oemtEU3h4?=
+ =?utf-8?B?N2JVL3VpZ21sVi9uV09sK3FyZWFFRjVYWHE5cXgrVUtzdTl5S1YrL0cxSTNJ?=
+ =?utf-8?B?dFFtNTJrYUNuRmlZV1IxYlBPbGdQM2U3dkFZZnB6ZTJmSkNpQkFEWFdzenBv?=
+ =?utf-8?B?bGtrYmE2cVprbytuN3dKSzZJS2FtZGdnQ0NaWjY4YWNOcDZ5T3NZMERVNEts?=
+ =?utf-8?B?cW1TdGVmVzYxMlg5VlRnYUtSVldud0hXTEJ1OGZwQ1BNYXIxQ3R6LytsenZT?=
+ =?utf-8?B?cmRIR1BLcW8xcTk1QTR1TStvVFRacXo3M0NpcDE3U3h2YzVCZGVOZWJTemg5?=
+ =?utf-8?B?UmFuMS8wOTFsd1pkWWRBVU1aSE42MGxCVEZJNjg3bnc0VVFNMGNNelNyckpm?=
+ =?utf-8?B?K1lZWjdRWmxZb1U4RUJ4c2F4Zmd1Y1dFWEVUeURmRUdDQk1ZeVlJSURKc01t?=
+ =?utf-8?B?RzFsbzN6ZHA3VjdmUlZOenRZd1BvQlRkL1d6M21UR0ZJVm9wK2JMQW9GMHFF?=
+ =?utf-8?B?NjRNLzIyYXMxNDJ3LzhLaWM3ckk5bW01UUIzNkdxYi9DK2pXOUxhSHJhK3ZU?=
+ =?utf-8?B?OG03US9Xb0pvVWN1Y2Rkcy9kZmNDbUJ6SytFQ1pBaFp1V2VsSDVXSnA1QU1s?=
+ =?utf-8?B?OTNHU0Z1UEttS21LUnNvUEtYWmxwaXlJTk9NaktsUEdkUUk0MjVrZVlkblB2?=
+ =?utf-8?B?RWtpcUJzRUhRc2tSTmkrNEt2allYTzNkam9iTWZGYnB3cm5lYjNtZWIzVmpi?=
+ =?utf-8?B?WnV3MzFUOFQxVW0xMzEyenhFVkVBckhQSDAvYzV0ZktuZDVubmVQVnhwMUJ2?=
+ =?utf-8?B?V05wREZTTjJCcWdOa0U0OExVMzFVL3BrZld6TlllZnhvMlZSR09sTU1UYlUy?=
+ =?utf-8?B?QnFiQVorN0tDK2FPUFNIK1d4MXpBVjRrcktqVEVOKzA0QVlXUDNnVUFqeDll?=
+ =?utf-8?B?bytROEdvc25OTGtjZml0Ukc0UE1rN3J4SDRnMVVCSjRzU2xZMFArMDM3NENY?=
+ =?utf-8?B?YzB3ZFlkeC92b2RFblRDZ1J5M1Y3NThTQzd6VGt1NTZwR0hvQzQreUhYOFlT?=
+ =?utf-8?B?b3QwbmhyMjg4S3dlbmRwQ3d0RkZUSWdHbmljWEFrSURZZHc4VmpxcmpsMzFn?=
+ =?utf-8?B?UzBORTNuN3Nhd2lVaFdRSmZnTjNBNG4yNXhlRExQOFQwTkhtNzBWZCtaRW5K?=
+ =?utf-8?B?RE15dXpUSFpRM3JMSEVOU3VjSXIyQmNhZnkwR09SRUtjeGtNbzNicy9ESDJ0?=
+ =?utf-8?B?N0RnK1p0SVpqSHdMTWJiNjdBKytaaWhTcmJOUS9YWWlicHVHT1g2eVFwam16?=
+ =?utf-8?B?eERxOUtoMEc4dTlTY1czdDAzdU5GYy9pVnFHT3hCRldBWFlEUDJITVdtSWcy?=
+ =?utf-8?B?V2o2dUtkTmFicEJwOHM5UVZvMjZFV0pEZVBOR2VseUtuSTBnM2wzVzJFU3hq?=
+ =?utf-8?B?c0hPMG5wNXJRPT0=?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:AS8PR04MB8897.eurprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(366016)(376014)(1800799024)(41080700001); DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R2VNRmxsNWhYV2h3NjBqajVINXFzN2xXb0M3ak9FcFhIeFpGQVNqMytkYjc0?=
+ =?utf-8?B?eHZocTdlT1J2SzZKcU1ySFJKUmM5S29jY0dyMVFzN2M3SFdhdnVsMjF4WmtK?=
+ =?utf-8?B?N2VmeEZENktqM2hNcFdJSmlwdGY2d0t3blc0Q09ITUw5dUtMenUrUG1mLzlP?=
+ =?utf-8?B?dEFxQVhVc3VMcEYwcWxIdHdaOEpER1psUmR5eWlwMjJ0TGJaSlNiSlpINlhO?=
+ =?utf-8?B?U0VhanRpRTEzQjJUMHdYeXZsUUlITFFKQXFneGx5YzVlWGpwNTdDZmlxcFZS?=
+ =?utf-8?B?YngxNmNPNTBPUDNMaGhWSHlMSWlqME1UL2R0ZmJEOU9mTTh2QXhYY2F2Um5K?=
+ =?utf-8?B?MHk3cEM2SU55dXNta0RERFF1eVJJZ1VPRDYzNWt6UDRNdnRJMzM3bTZTUDdJ?=
+ =?utf-8?B?SlBZVlZ0dGxkQ0Jtay9uVnhpTnB1QWljb3YwQXpaUkoyYkpraFJ0ZmhWTW1K?=
+ =?utf-8?B?OStzNnlXcEs3TElTS0RQMjY4a1BmKzNYVGhTN3R2U1VPTmVtUnAxeVBqamlH?=
+ =?utf-8?B?QXNwQ3M1cmcwbkZLRUlZa05DVUdLQktKRktZMHFZQk9PcnBNdW5xZWllTWVR?=
+ =?utf-8?B?MW9tK3JEbG14NFNKMWZmMDdVVENTVXNmRUJpZXNLSEp6TmV6emRpT0FsTkxB?=
+ =?utf-8?B?NUxNZlp3NzZmTkQwa08rSXBOWmJzUmt1OHZGOUdBZHMvYTZjclRWRHIybkRG?=
+ =?utf-8?B?ejVkUkhBOEtQSi9DS1RRQytRcDE2R1REalZWZTNDV2RlUzR3dUYvY1RidTNy?=
+ =?utf-8?B?cDBVT2x3NmV2eEkvL3JmZExxcHgwS1h3blVWNHVaSHRPTGpKOHVsNGFsbERH?=
+ =?utf-8?B?TmFFZS9UbjNhNjlTT2p0blRiK0tpbnhqQzUxRkIzMzRtclRuVWkxMDJMTVZJ?=
+ =?utf-8?B?azEyN1IzRld6MkNKWTgyRHlDdEE5WkVjdTg3UkRka0kxbVF2cUF1MVRtaDFp?=
+ =?utf-8?B?WEFXUTlEUDI3VlV6dGllaW1PK2hmVGtQUFBXSzE2emtLNDl2U2h4WUhvZ2lv?=
+ =?utf-8?B?VHBMSUNMVzVQc1cyeXpCLzJzVEhOaCtkMkcwL2lDcXc2ekZZQXN6TEVzODRQ?=
+ =?utf-8?B?Uy81cUhMMUMwbkh5aHBqY3R6Zm9OV0g0SzJGWHF3RUFXQUlwQ2xHL3VzeGxI?=
+ =?utf-8?B?S1JFc0dQWUIxcWZzdXZ6Ly81bzRIZW5XSW1MeDB4SkdQZGRpOEdSeWk5eEpp?=
+ =?utf-8?B?NVpjdVc4Qi9XOC93dXhFRFhBWEVYaTEwUyt3Q0lzWkZyS3RFQldWNEpMeFRo?=
+ =?utf-8?B?Ky96Rk1UaTE0cW9jZkNSYTlTK0hlNDhxbkdHaXkzTEhjTU9wTUNRREpjU1RQ?=
+ =?utf-8?B?dmgwR0U4dXVwVnJGQTRSYTBneFF2V25hMDhNbkV2Y2lvTWUyeEdUY1dCTmdD?=
+ =?utf-8?B?RFBjU203Z0VvTUw3aGZyQ3lEN28vZmFkY0hOY29QUWZCVXI5ajJnOFR6ZGgx?=
+ =?utf-8?B?STFxa0pHRlIrdzVhWEtWbWozUjNSVFpYVWEyaHlaQzFZcnFTNmllK0hwOGlt?=
+ =?utf-8?B?N2orK2g4L0hEakdMZStwQlpJak9weXBxUkNFMjI1YnA1c1dZUzhtamp6ZTVl?=
+ =?utf-8?B?Tm80TnVIV29rbXNZclZGekhkdXRCVEFseDRKSUpZYnNrMG01Z0g5ZktvWTl0?=
+ =?utf-8?B?Ull1TmJpaHBtRnp4MVpvV3ZQUHdUWmtKWHdZVUVzZnpaSkNUU3Z6dDN3Y1Bq?=
+ =?utf-8?B?SHl3R1I3TENFbTR3WTBYTVdGRnNkU0Y5K250YUJYVTFNaWxheHByL3BLc2VZ?=
+ =?utf-8?B?MzNmYzNoclFteUhWL0ZhNlVuL2dNMWhvaUo5ZWF1enZMSlB0WVhMK1hZL21a?=
+ =?utf-8?B?UkU4cGFqL1c3S1AzYmFYTm1tOElhODVUTUR2bFBRZGZ3Mittd0RXV2VsSDZG?=
+ =?utf-8?B?Mit6N1NtNnorWTlyVDlmZThOQzhoMmx3RENJalRLVGxLZnRGTGJtMFB2WDZD?=
+ =?utf-8?B?M0lnTG96cDVFZjRTSWN3Tld6QW9MSXhlbkhMeVNjdlJ2Qkk2b1IzNlp2bzhU?=
+ =?utf-8?B?a2IzcTVKdFA0RjM2emdabC82cGdKMUpnL2hHRVNYZ1ZEcEozMnA0VDAvTmJi?=
+ =?utf-8?B?SXNzeDNjVE5xWXZkN0k4Vk9rc0ZRY2ZuNmFjYTJVK1BIVXFCOE81ZHNpK1Vr?=
+ =?utf-8?B?TUNuRXpnMVdlaC8wTFZYTElITGpJTDlPM1F2amYzT3VUYng0MGtscXJTMTFT?=
+ =?utf-8?B?NEE9PQ==?=
+X-OriginatorOrg: cherry.de
+X-MS-Exchange-CrossTenant-Network-Message-Id: de233e1f-649c-4aa1-a365-08dd7b33ddcc
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8897.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2025 09:08:06.0573 (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: F0iIAvZZkLUJrlqDflkfTPoSqQYbpa/ZblForkOp0BRmRLPnizHIdwgPfTjInTNGBTUE8H2rL0dEPXDQ4SNQI7T80Q7AF9/4WIk8xsuXjBg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB10247
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=cherry.de; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nEFp4owdqn0tOmLNw4UiIr8IDwisO1QIce+WSsotdLU=;
+ b=IthcTzmRDlpXUO959GhYwoMghTIZsZa5IZkfTNbNpxKxf3srGsdZMbUItrsfxsYuh+FzDl39861ptdqdyEM3478me9II+T+2jO6Q5ScTuFR82mUoSUXr7YtyuCMJud0AGgJf8b5re7pHm7OciLhJBO+jbHFzM875IvKD2ccatPQ=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=cherry.de
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=cherry.de header.i=@cherry.de header.a=rsa-sha256
+ header.s=selector1 header.b=IthcTzmR
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=cherry.de;
+Subject: Re: [Buildroot] [PATCH RFC 0/2] add initial support for libcamera's
+ qcam
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,123 +193,154 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Quentin Schulz via buildroot <buildroot@buildroot.org>
+Reply-To: Quentin Schulz <quentin.schulz@cherry.de>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Hi Peter,
 
-Announcement:
-- https://github.com/FastCGI-Archives/fcgi2/releases/tag/2.4.3
-- https://github.com/FastCGI-Archives/fcgi2/releases/tag/2.4.4
+On 4/10/25 3:54 PM, Peter Seiderer wrote:
+> Hello Quentin,
+> 
+> On Tue, 08 Apr 2025 17:16:39 +0200, Quentin Schulz <foss+buildroot@0leil.net> wrote:
+> 
+>> This adds initial support for qcam example GUI from libcamera. It is
+>> based on Qt6 and uses openGL.
+>>
+>> Sadly, the qt module from meson is currently broken (see first patch in
+>> the series) and requires patching. Upstream isn't really happy with what
+>> I suggested but I haven't understood what they don't like about it so
+>> cannot currently suggest anything better, hence the RFC.
+> 
+> The following buildroot patch works for me (for the qcam case):
+> 
+> diff --git a/Makefile b/Makefile
+> index 5bf5abfe3b..8787a9065f 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -468,7 +468,7 @@ $(STAGING_DIR_SYMLINK): | $(BASE_DIR)
+>          ln -snf $(STAGING_DIR) $(STAGING_DIR_SYMLINK)
+> 
+>   # Quotes are needed for spaces and all in the original PATH content.
+> -BR_PATH = "$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
+> +BR_PATH = "$(HOST_DIR)/libexec:$(HOST_DIR)/bin:$(HOST_DIR)/sbin:$(PATH)"
+> 
+>   # Location of a file giving a big fat warning that output/target
+>   # should not be used as the root filesystem.
+> 
 
-Notes:
-- drop 0001-link-against-math.patch as it is upstream [1] (by @ffontaine)
-- drop 0002-disable-examples.patch as it is upstream [2] (by @ffontaine), add --disable-examples now
-- update LICENSE as the name has been changed [3]
+OK so this "works".
 
-[1] https://github.com/FastCGI-Archives/fcgi2/commit/214a7bc4da57ccbb0e8840a2f595cd99701b19f6
-[2] https://github.com/FastCGI-Archives/fcgi2/commit/aa74aa7dcec5905de3bdee7f8f5a0a6d62c86cad
-[3] https://github.com/FastCGI-Archives/fcgi2/commit/65571daaa538e9193fab5935e3ae69ff123da19d
+The issue is that meson still believes it's looking for a runtime 
+dependency (though it finds the binaries and runs them on Buildroot host 
+machine).
 
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
----
-v2: fix patch format
----
- package/libfcgi/0001-link-against-math.patch | 20 -----------------
- package/libfcgi/0002-disable-examples.patch  | 23 --------------------
- package/libfcgi/libfcgi.hash                 |  4 ++--
- package/libfcgi/libfcgi.mk                   |  4 ++--
- 4 files changed, 4 insertions(+), 47 deletions(-)
- delete mode 100644 package/libfcgi/0001-link-against-math.patch
- delete mode 100644 package/libfcgi/0002-disable-examples.patch
+I guess this is possibly more acceptable for Buildroot (and in any case 
+not exclusive with the meson patch) as /libexec stores binaries that 
+could be executed? Though [1] says "internal binaries that are not 
+intended to be executed directly by users or shell scripts".
 
-diff --git a/package/libfcgi/0001-link-against-math.patch b/package/libfcgi/0001-link-against-math.patch
-deleted file mode 100644
-index 909a295bd6..0000000000
---- a/package/libfcgi/0001-link-against-math.patch
-+++ /dev/null
-@@ -1,20 +0,0 @@
--Link libfcgi against the math library.
--
--Signed-off-by: Thomas Claveirole <thomas.claveirole@green-communications.fr>
--[Louis: rebase on top of 2.4.2]
--Signed-off-by: Louis Rannou <louis.rannou@smile.fr>
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
--
--Index: b/libfcgi/Makefile.am
--===================================================================
----- a/libfcgi/Makefile.am
--+++ b/libfcgi/Makefile.am
--@@ -19,6 +19,7 @@
--                      os_@SYSTEM@.c
-- libfcgi_la_CC      = @PTHREAD_CC@
-- libfcgi_la_CFLAGS  = @PTHREAD_CFLAGS@
--+libfcgi_la_LIBADD  = -lm
-- libfcgi_la_LDFLAGS = @EXTRA_LIBS@ -no-undefined
--
-- libfcgi___la_SOURCES = $(INCLUDE_FILES)       \
-diff --git a/package/libfcgi/0002-disable-examples.patch b/package/libfcgi/0002-disable-examples.patch
-deleted file mode 100644
-index ccd01c0ce0..0000000000
---- a/package/libfcgi/0002-disable-examples.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
--Common subdirectories: libfcgi-2.4.0.orig/cgi-fcgi and libfcgi-2.4.0/cgi-fcgi
--Common subdirectories: libfcgi-2.4.0.orig/doc and libfcgi-2.4.0/doc
--Common subdirectories: libfcgi-2.4.0.orig/examples and libfcgi-2.4.0/examples
--Common subdirectories: libfcgi-2.4.0.orig/images and libfcgi-2.4.0/images
--Common subdirectories: libfcgi-2.4.0.orig/include and libfcgi-2.4.0/include
--Common subdirectories: libfcgi-2.4.0.orig/java and libfcgi-2.4.0/java
--Common subdirectories: libfcgi-2.4.0.orig/libfcgi and libfcgi-2.4.0/libfcgi
--diff -du libfcgi-2.4.0.orig/Makefile.am libfcgi-2.4.0/Makefile.am
----- libfcgi-2.4.0.orig/Makefile.am	2001-12-22 14:05:39.000000000 +0100
--+++ libfcgi-2.4.0/Makefile.am	2014-07-19 16:56:21.935216540 +0200
--@@ -10,7 +10,7 @@
-- 		aclocal.m4 m4/libtool.m4 m4/lt*.m4 Makefile.in install-sh missing ltmain.sh \
-- 		COPYING INSTALL
-- 
---SUBDIRS = libfcgi cgi-fcgi examples include
--+SUBDIRS = libfcgi cgi-fcgi include
-- 
-- include_HEADERS = fcgi_config.h
-- 
--Common subdirectories: libfcgi-2.4.0.orig/perl and libfcgi-2.4.0/perl
--Common subdirectories: libfcgi-2.4.0.orig/Win32 and libfcgi-2.4.0/Win32
-diff --git a/package/libfcgi/libfcgi.hash b/package/libfcgi/libfcgi.hash
-index 83860a4f3d..ca660c6ebd 100644
---- a/package/libfcgi/libfcgi.hash
-+++ b/package/libfcgi/libfcgi.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  1fe83501edfc3a7ec96bb1e69db3fd5ea1730135bd73ab152186fd0b437013bc  libfcgi-2.4.2.tar.gz
--sha256  f0a8fe4513a43e8eebb24cdcf9d2e7efc52e4d8259178c6d76d3d84418397d81  LICENSE.TERMS
-+sha256  c0e0d9cc7d1e456d7278c974e2826f593ef5ca555783eba81e7e9c1a07ae0ecc  libfcgi-2.4.4.tar.gz
-+sha256  f0a8fe4513a43e8eebb24cdcf9d2e7efc52e4d8259178c6d76d3d84418397d81  LICENSE
-diff --git a/package/libfcgi/libfcgi.mk b/package/libfcgi/libfcgi.mk
-index ee61c22c45..21dc65f460 100644
---- a/package/libfcgi/libfcgi.mk
-+++ b/package/libfcgi/libfcgi.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--LIBFCGI_VERSION = 2.4.2
-+LIBFCGI_VERSION = 2.4.4
- LIBFCGI_SITE = $(call github,FastCGI-Archives,fcgi2,$(LIBFCGI_VERSION))
- LIBFCGI_LICENSE = OML
--LIBFCGI_LICENSE_FILES = LICENSE.TERMS
-+LIBFCGI_LICENSE_FILES = LICENSE
- LIBFCGI_CPE_ID_VENDOR = fastcgi
- LIBFCGI_CPE_ID_PRODUCT = fcgi
- LIBFCGI_INSTALL_STAGING = YES
--- 
-2.43.0
+[1] https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch04s07.html
 
+> 
+>>
+>> While qcam currently renders the camera liveview, all characters of the
+>> GUI are squares. I have enabled fontconfig and UTF-8 locales but after
+>> building everything (though I dircleaned qt6base once), so not entirely
+>> sure what's missing or if it's PEBKAC, hence the RFC. Though that may be
+>> acceptable? Do not know. Would appreciate pointers on how to debug this
+>> (assumed) font issue.
+> 
+> Font rendering (and video output from a cheap USB cam) seems to work with
+> the following RPi4 defconfig (and additional 'dtoverlay=vc4-kms-v3d-pi4'):
+> 
+> BR2_arm=y
+> BR2_cortex_a72=y
+> BR2_ARM_FPU_NEON_VFPV4=y
+> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+> BR2_PACKAGE_GLIBC_UTILS=y
+> BR2_BINUTILS_VERSION_2_44_X=y
+> BR2_GCC_VERSION_14_X=y
+> BR2_TOOLCHAIN_BUILDROOT_CXX=y
+> BR2_PACKAGE_HOST_GDB=y
+> BR2_GDB_VERSION_16=y
+> BR2_ENABLE_DEBUG=y
+> BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
+> BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+> BR2_SYSTEM_DHCP="eth0"
+> BR2_GENERATE_LOCALE="C en_US"
+> BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4/post-build.sh"
+> BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4/post-image.sh"
+> BR2_LINUX_KERNEL=y
+> BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,576cc10e1ed50a9eacffc7a05c796051d7343ea4)/linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz"
+> BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
+> BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-4-b broadcom/bcm2711-rpi-400 broadcom/bcm2711-rpi-cm4 broadcom/bcm2711-rpi-cm4s"
+> BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+> BR2_PACKAGE_XZ=y
+> BR2_PACKAGE_STRACE=y
+> BR2_PACKAGE_DEJAVU=y
+> BR2_PACKAGE_MESA3D=y
+> BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_V3D=y
+> BR2_PACKAGE_MESA3D_OPENGL_ES=y
+> BR2_PACKAGE_QT6=y
+> BR2_PACKAGE_QT6BASE_GUI=y
+> BR2_PACKAGE_QT6BASE_EGLFS=y
+> BR2_PACKAGE_QT6BASE_DEFAULT_QPA="eglfs"
+> BR2_PACKAGE_QT6BASE_FONTCONFIG=y
+> BR2_PACKAGE_QT6BASE_HARFBUZZ=y
+> BR2_PACKAGE_QT6BASE_GIF=y
+> BR2_PACKAGE_QT6BASE_JPEG=y
+> BR2_PACKAGE_QT6BASE_PNG=y
+> BR2_PACKAGE_QT6BASE_WIDGETS=y
+> BR2_PACKAGE_QT6BASE_NETWORK=y
+> BR2_PACKAGE_RPI_FIRMWARE=y
+> BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
+> BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE="board/raspberrypi4/config_4.txt"
+> BR2_PACKAGE_LIBEXIF=y
+> BR2_PACKAGE_TIFF=y
+> BR2_PACKAGE_LIBV4L=y
+> BR2_PACKAGE_LIBV4L_UTILS=y
+> BR2_PACKAGE_LIBXKBCOMMON=y
+> BR2_PACKAGE_LIBCAMERA=y
+> BR2_PACKAGE_OPENSSH=y
+> BR2_PACKAGE_BASH=y
+> BR2_PACKAGE_SUDO=y
+> BR2_PACKAGE_KMOD_TOOLS=y
+> BR2_TARGET_ROOTFS_EXT2=y
+> BR2_TARGET_ROOTFS_EXT2_4=y
+> BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
+> # BR2_TARGET_ROOTFS_TAR is not set
+> BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> BR2_PACKAGE_HOST_GENIMAGE=y
+> BR2_PACKAGE_HOST_KMOD_XZ=y
+> BR2_PACKAGE_HOST_MTOOLS=y
+> 
+> The UTF-8 locale warning vanishes if I start qcam with
+> 
+> 	$ LANG=C.UTF-8 qcam
+> 
+> or
+> 
+> 	$ LANG=en_US.UTF-8 qcam
+> 
+
+Removed all the BSP parts and could generate a rootfs for my PX30 
+Ringneck that displayed everything...
+
+Looking into which exact package/symbol is actually required to make 
+this work so I can add it as a dependency. Or... is that expected from 
+the user to figure out what exactly is needed and compile the app with 
+broken font-rendering (though working camera preview)?
+
+Thanks for the hints,
+Quentin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
