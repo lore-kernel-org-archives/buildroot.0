@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36882C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:51:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F40CC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:51:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CE23F703BF;
-	Mon, 19 May 2025 10:51:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1B68703ED;
+	Mon, 19 May 2025 10:51:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xl-wcfYx8d48; Mon, 19 May 2025 10:51:06 +0000 (UTC)
+ id R_wh5c1U_LoL; Mon, 19 May 2025 10:51:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F8A6703B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9CE78703CE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F8A6703B3;
-	Mon, 19 May 2025 10:51:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CE78703CE;
+	Mon, 19 May 2025 10:51:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F8F6E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F0B3E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 96AA2414C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9CDC540D52
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o8FAdz6vNUdZ for <buildroot@buildroot.org>;
+ id VyT7sxcAwtrw for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:39:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 165AB40D52
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC9CB410D0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 165AB40D52
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC9CB410D0
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0EEE383B63; Mon, 19 May 2025 10:39:50 +0000 (UTC)
+ id DB18A81E90; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 14 Apr 2025 21:29:19 +0200
+Date: Mon, 14 Apr 2025 20:15:46 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b1ebc686d316a0ab3eaebc50880a6e420afbe220
-X-Git-Newrev: db481210e99321f4f0ab6599aab28f39b5b7fd50
+X-Git-Oldrev: 68468e5e7f5ab2e9237e377bbcd3c70a8b8f1489
+X-Git-Newrev: 1d2f135ef1fc722d61d0b3df193eb5986aea397f
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103950.0EEE383B63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sqlite: revert
- upstream change causing build issue
+Message-Id: <20250519103949.DB18A81E90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/timescaledb: bump
+ version to 2.19.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,86 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db481210e99321f4f0ab6599aab28f39b5b7fd50
+commit: https://git.buildroot.net/buildroot/commit/?id=1d2f135ef1fc722d61d0b3df193eb5986aea397f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Upstream did a change in sqlite3.pc.in that does work with their
-default build system, but not with the autoconf-based amalgamation
-that we use. This issue has been reported and fixed upstream, but the
-fix is not yet in any new release.
+Release notes: https://github.com/timescale/timescaledb/blob/2.19.2/CHANGELOG.md
 
-For the time being, we just revert the upstream change. We don't do a
-direct revert ("git revert") as multiple upstream commits touched this
-very line, so we simply revert to what it was prior to the different
-changes, and to what the upstream fix ends up doing.
-
-This issue is causing build issue for all packages that use sqlite's
-pkg-config file, in a static-linking configuration.
-
-Fixes:
-
-  https://autobuild.buildroot.org/results/1824a76eee4a877a2f19c1fd19a710ef9f059168/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...in-revert-upstream-commits-causing-build-.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ package/timescaledb/timescaledb.hash | 2 +-
+ package/timescaledb/timescaledb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sqlite/0001-sqlite3.pc.in-revert-upstream-commits-causing-build-.patch b/package/sqlite/0001-sqlite3.pc.in-revert-upstream-commits-causing-build-.patch
-new file mode 100644
-index 0000000000..f35c8b8ddd
---- /dev/null
-+++ b/package/sqlite/0001-sqlite3.pc.in-revert-upstream-commits-causing-build-.patch
-@@ -0,0 +1,48 @@
-+From f70123a40193c2056755117aa291582f42db5f35 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 13 Apr 2025 17:47:53 +0200
-+Subject: [PATCH] sqlite3.pc.in: revert upstream commits causing build issues
-+
-+This reverts upstream commit a2d88f6a03c9ebde3d037b0e297f47216c685381
-+and a number of following commits related to the same commit. The
-+sqlite build system is indeed upstream not based on autoconf, but the
-+project "generates" an "autoconf-based amalgamation":
-+
-+  https://www3.sqlite.org/src/dir?ci=tip&name=autoconf
-+
-+Unfortunately commit a2d88f6a03c9ebde3d037b0e297f47216c685381 broke
-+the build with the autoconf amalgamation because while @LIBS@ gets
-+replaced by the autoconf machinery, @LDFLAGS_*@ do not, causing build
-+failures such as:
-+
-+output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/13.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: cannot find @LDFLAGS_MATH@: No such file or directory
-+output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/13.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: cannot find @LDFLAGS_ZLIB@: No such file or directory
-+output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/13.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: cannot find @LDFLAGS_ICU@: No such file or directory
-+
-+This issue has been reported at
-+https://sqlite.org/forum/info/e40b9b424a, and upstream says that the
-+issue has been fixed in the amalgamation script by basically doing the
-+same as what this commit does:
-+
-+  https://sqlite.org/src/info/fe47154799bfe
-+
-+Upstream: https://sqlite.org/forum/info/e40b9b424a
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ sqlite3.pc.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/sqlite3.pc.in b/sqlite3.pc.in
-+index a9f941b1e4..3799671e61 100644
-+--- a/sqlite3.pc.in
-++++ b/sqlite3.pc.in
-+@@ -9,5 +9,5 @@ Name: SQLite
-+ Description: SQL database engine
-+ Version: @PACKAGE_VERSION@
-+ Libs: -L${libdir} -lsqlite3
-+-Libs.private: @LDFLAGS_MATH@ @LDFLAGS_ZLIB@ @LDFLAGS_ICU@
-++Libs.private: @LIBS@
-+ Cflags: -I${includedir}
-+-- 
-+2.49.0
-+
+diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
+index 4e4cb16858..bfef2757fa 100644
+--- a/package/timescaledb/timescaledb.hash
++++ b/package/timescaledb/timescaledb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  783bfcb6513523827127304d3e51c27e95644f59446bef80d4a96d5de58ae5ee  timescaledb-2.19.0.tar.gz
++sha256  727e15da6dba48cdcc22df8af23ccc2c3a8e7def9e4575e478d03031f8f637ba  timescaledb-2.19.2.tar.gz
+ sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
+diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
+index 584c73925b..4be3508a5b 100644
+--- a/package/timescaledb/timescaledb.mk
++++ b/package/timescaledb/timescaledb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TIMESCALEDB_VERSION = 2.19.0
++TIMESCALEDB_VERSION = 2.19.2
+ TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
+ TIMESCALEDB_LICENSE = Apache-2.0
+ TIMESCALEDB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
