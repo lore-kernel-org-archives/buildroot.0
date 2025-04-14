@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41A05C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:50:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54B7BC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:50:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0580D6FC0E;
-	Mon, 19 May 2025 10:50:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5CCF6FCD3;
+	Mon, 19 May 2025 10:50:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ML5E9nyrqBrS; Mon, 19 May 2025 10:50:31 +0000 (UTC)
+ id CF792NoYmW2R; Mon, 19 May 2025 10:50:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 480BB6FCD5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D91786FCD4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 480BB6FCD5;
-	Mon, 19 May 2025 10:50:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D91786FCD4;
+	Mon, 19 May 2025 10:50:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 110B5193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E434D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 68C2A4147F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7BFA740E05
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dtBsI7NFN1T9 for <buildroot@buildroot.org>;
+ id Q3LCoKVTLNoC for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:39:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E80640DDA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4450B410E4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4E80640DDA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4450B410E4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4797781E90; Mon, 19 May 2025 10:39:50 +0000 (UTC)
+ id 3F10D84A21; Mon, 19 May 2025 10:39:50 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 15 Apr 2025 19:16:25 +0200
+Date: Mon, 14 Apr 2025 23:40:33 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d759f8a4bd90b50b5ff839dace58fe140ed2e539
-X-Git-Newrev: 50c1331720ec388e7a7cf9876ee55dadd8626090
+X-Git-Oldrev: 9abf662cfd35c101b2c4c0e191adc3b949846663
+X-Git-Newrev: d759f8a4bd90b50b5ff839dace58fe140ed2e539
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103950.4797781E90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pahole: bump to
- version 1.28
+Message-Id: <20250519103950.3F10D84A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libfcgi: security bump
+ to 2.4.5 to fix CVE-2025-23016
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,88 +60,52 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3789834107299315858=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3789834107299315858==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=50c1331720ec388e7a7cf9876ee55dadd8626090
+commit: https://git.buildroot.net/buildroot/commit/?id=d759f8a4bd90b50b5ff839dace58fe140ed2e539
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On hosts with a recent version of cmake (eg: 4.0.0), builds involving
-host-pahole fail with the following error:
+Announcement:
+- https://github.com/FastCGI-Archives/fcgi2/releases/tag/2.4.5
 
-CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
-  Compatibility with CMake < 3.5 will be removed from a future version of
-  CMake.
+See:
+- https://nvd.nist.gov/vuln/detail/CVE-2025-23016
+- https://github.com/advisories/GHSA-9825-56cx-cfg6
+- https://github.com/FastCGI-Archives/fcgi2/issues/67
 
-  Update the VERSION argument <min> value or use a ...<max> suffix to tell
-  CMake that the project does not need compatibility with older versions.
-
-The issue can be reproduced on hosts with cmake >= 4.0.0 with commands:
-
-    cat <<EOF >.config
-    BR2_arm=y
-    BR2_cortex_a7=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-    BR2_LINUX_KERNEL=y
-    BR2_LINUX_KERNEL_DEFCONFIG="versatile"
-    BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE=y
-    EOF
-    make olddefconfig
-    make
-
-The issue has already fixed in the upstream project with commit
-12ca11281912 ("CMakeLists.txt: Require cmake 3.5 or higher"), which is
-part of version 1.28.
-
-Upgrade pahole to get rid of this error.
-
-https://git.kernel.org/pub/scm/devel/pahole/pahole.git/tree/NEWS?h=v1.28
-
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-[Julien: add commands to reproduce the issue in commit log]
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/pahole/pahole.hash | 2 +-
- package/pahole/pahole.mk   | 2 +-
+ package/libfcgi/libfcgi.hash | 2 +-
+ package/libfcgi/libfcgi.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pahole/pahole.hash b/package/pahole/pahole.hash
-index a2d3d044da..efa1218468 100644
---- a/package/pahole/pahole.hash
-+++ b/package/pahole/pahole.hash
+diff --git a/package/libfcgi/libfcgi.hash b/package/libfcgi/libfcgi.hash
+index ca660c6ebd..371dba8939 100644
+--- a/package/libfcgi/libfcgi.hash
++++ b/package/libfcgi/libfcgi.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  87223298d4f8f9ada9b3cc5cef1bedd7aeb447cd8295abc466e009a26accff13  pahole-1.27.tar.gz
-+sha256  9a319c214b38554be8430a672043d85735564e8e1e78db5a41cba7a03d038056  pahole-1.28.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/pahole/pahole.mk b/package/pahole/pahole.mk
-index ffbe4ff925..150373fd7e 100644
---- a/package/pahole/pahole.mk
-+++ b/package/pahole/pahole.mk
+ # Locally calculated
+-sha256  c0e0d9cc7d1e456d7278c974e2826f593ef5ca555783eba81e7e9c1a07ae0ecc  libfcgi-2.4.4.tar.gz
++sha256  92b0111a98d8636e06c128444a3d4d7a720bdd54e6ee4dd0c7b67775b1b0abff  libfcgi-2.4.5.tar.gz
+ sha256  f0a8fe4513a43e8eebb24cdcf9d2e7efc52e4d8259178c6d76d3d84418397d81  LICENSE
+diff --git a/package/libfcgi/libfcgi.mk b/package/libfcgi/libfcgi.mk
+index 3c90b30e39..2348af843b 100644
+--- a/package/libfcgi/libfcgi.mk
++++ b/package/libfcgi/libfcgi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PAHOLE_VERSION = 1.27
-+PAHOLE_VERSION = 1.28
- PAHOLE_SITE = https://git.kernel.org/pub/scm/devel/pahole/pahole.git/snapshot
- HOST_PAHOLE_DEPENDENCIES = \
- 	host-elfutils \
-
---===============3789834107299315858==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-LIBFCGI_VERSION = 2.4.4
++LIBFCGI_VERSION = 2.4.5
+ LIBFCGI_SITE = $(call github,FastCGI-Archives,fcgi2,$(LIBFCGI_VERSION))
+ LIBFCGI_LICENSE = OML
+ LIBFCGI_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3789834107299315858==--
