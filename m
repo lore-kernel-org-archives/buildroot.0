@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31E4CC2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:51:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53ED2C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:51:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EADCF6144C;
-	Mon, 19 May 2025 10:51:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A6A38424C;
+	Mon, 19 May 2025 10:51:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FwR-blCSbBzA; Mon, 19 May 2025 10:51:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3XEBhG7Dzi2H; Mon, 19 May 2025 10:51:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8981770433
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEB8084273
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8981770433;
-	Mon, 19 May 2025 10:51:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AEB8084273;
+	Mon, 19 May 2025 10:51:31 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B92DD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:40 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 04244D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2BE814175E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 481974110F
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rAC849-qq33g for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:01 +0000 (UTC)
+ id DgYvQ1Y72Ivx for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D93D74110F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4986410CA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D93D74110F
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C4986410CA
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D5CDD84A21; Mon, 19 May 2025 10:39:50 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id BFC8E84A21; Mon, 19 May 2025 10:39:49 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 15 Apr 2025 22:37:53 +0200
+Date: Mon, 14 Apr 2025 16:50:10 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e2eb2ee58b9f70ebb83231537cca19bd28fa48de
-X-Git-Newrev: 36b0a3ef9c088117a32227df20226a86d1568465
+X-Git-Oldrev: 72657c6f57dd0c2c14cf2033a1e6c77fdc83ee8f
+X-Git-Newrev: 203e9def71bd49f228ef87f7749deadfbfe4e23c
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103950.D5CDD84A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libopenssl: add
- (proposed) upstream fix for parallel installation
+Message-Id: <20250519103949.BFC8E84A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/scripts/pkg-stats: add
+ -v/--verbose option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,72 +65,148 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36b0a3ef9c088117a32227df20226a86d1568465
+commit: https://git.buildroot.net/buildroot/commit/?id=203e9def71bd49f228ef87f7749deadfbfe4e23c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The openssl developers have proposed a fix for the parallel installation
-issue worked around by commit 27ab880ebb9a (package/libopenssl do not build
-in parallel).
+Running pkg-stats is currently quite verbose, as it shows one line per
+package when checking for the upstream URL, and another one line per
+package when checking for the latest version on
+release-monitoring.org.
 
-Add the fix here so the workaround can dropped again.
+This noisy output is a bit annoying when pkg-stats is run in a
+cronjob, like we do to update https://autobuild.buildroot.net/stats/
+every day. This commit adds a -v/--verbose option, off by default, to
+have a less noisy output.
 
+Suggested-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...nstall-process-to-avoid-multiple-make-dep.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ support/scripts/pkg-stats | 38 +++++++++++++++++++++++---------------
+ 1 file changed, 23 insertions(+), 15 deletions(-)
 
-diff --git a/package/libopenssl/0004-Serialize-install-process-to-avoid-multiple-make-dep.patch b/package/libopenssl/0004-Serialize-install-process-to-avoid-multiple-make-dep.patch
-new file mode 100644
-index 0000000000..feb0e21ef7
---- /dev/null
-+++ b/package/libopenssl/0004-Serialize-install-process-to-avoid-multiple-make-dep.patch
-@@ -0,0 +1,44 @@
-+From 4562b002366535b3d387fae7fa1dbd8e315ae142 Mon Sep 17 00:00:00 2001
-+From: Neil Horman <nhorman@openssl.org>
-+Date: Mon, 14 Apr 2025 12:23:15 -0400
-+Subject: [PATCH] Serialize install process to avoid multiple make depend
-+ operations
-+
-+If make install is run with a large -j value (make install -j N , where
-+N > 1)
-+
-+We can run into a situation in which the install fails because multiple
-+make depend operations are running in parallel, which will fail due to
-+makefile rewriting.
-+
-+Serialize the install process to guarantee that those operations don't
-+step on one another
-+
-+Fixes # 27074
-+
-+Upstream: https://github.com/openssl/openssl/pull/27388
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ Configurations/unix-Makefile.tmpl | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/Configurations/unix-Makefile.tmpl b/Configurations/unix-Makefile.tmpl
-+index e85763ccf8..b671723813 100644
-+--- a/Configurations/unix-Makefile.tmpl
-++++ b/Configurations/unix-Makefile.tmpl
-+@@ -650,7 +650,11 @@ depend: Makefile
-+ # Install helper targets #############################################
-+ ##@ Installation
-+ 
-+-install: install_sw install_ssldirs {- "install_docs" if !$disabled{docs}; -} {- $disabled{fips} ? "" : "install_fips" -} ## Install software and documentation, create OpenSSL directories
-++install: Makefile ## Install software and documentation, create OpenSSL directories
-++	$(MAKE) install_sw
-++	$(MAKE) install_ssldirs
-++	{- "\$(MAKE) install_docs" if !$disabled{docs} -}
-++	{- "\$(MAKE) install_fips" if !$disabled{fips} -}
-+ 
-+ uninstall: {- "uninstall_docs" if !$disabled{docs}; -} uninstall_sw {- $disabled{fips} ? "" : "uninstall_fips" -} ## Uninstall software and documentation
-+ 
-+-- 
-+2.39.5
-+
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 33c21e77b4..c134e1ec06 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -464,7 +464,7 @@ def package_init_make_info():
+ check_url_count = 0
+ 
+ 
+-async def check_url_status(session, pkg, npkgs, retry=True):
++async def check_url_status(session, pkg, npkgs, retry=True, verbose=False):
+     global check_url_count
+ 
+     try:
+@@ -472,30 +472,33 @@ async def check_url_status(session, pkg, npkgs, retry=True):
+             if resp.status >= 400:
+                 pkg.status['url'] = ("error", "invalid {}".format(resp.status))
+                 check_url_count += 1
+-                print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
++                if verbose:
++                    print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
+                 return
+     except (aiohttp.ClientError, asyncio.TimeoutError):
+         if retry:
+-            return await check_url_status(session, pkg, npkgs, retry=False)
++            return await check_url_status(session, pkg, npkgs, retry=False, verbose=verbose)
+         else:
+             pkg.status['url'] = ("error", "invalid (err)")
+             check_url_count += 1
+-            print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
++            if verbose:
++                print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
+             return
+ 
+     pkg.status['url'] = ("ok", "valid")
+     check_url_count += 1
+-    print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
++    if verbose:
++        print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
+ 
+ 
+-async def check_package_urls(packages):
++async def check_package_urls(packages, verbose=False):
+     tasks = []
+     connector = aiohttp.TCPConnector(limit_per_host=5)
+     async with aiohttp.ClientSession(connector=connector, trust_env=True,
+                                      timeout=aiohttp.ClientTimeout(total=15)) as sess:
+         packages = [p for p in packages if p.status['url'][0] == 'ok']
+         for pkg in packages:
+-            tasks.append(asyncio.ensure_future(check_url_status(sess, pkg, len(packages))))
++            tasks.append(asyncio.ensure_future(check_url_status(sess, pkg, len(packages), verbose=verbose)))
+         await asyncio.wait(tasks)
+ 
+ 
+@@ -580,27 +583,30 @@ async def check_package_get_latest_version_by_guess(session, pkg, retry=True):
+ check_latest_count = 0
+ 
+ 
+-async def check_package_latest_version_get(session, pkg, npkgs):
++async def check_package_latest_version_get(session, pkg, npkgs, verbose=False):
+     global check_latest_count
+ 
+     if await check_package_get_latest_version_by_distro(session, pkg):
+         check_latest_count += 1
+-        print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
++        if verbose:
++            print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
+         return
+ 
+     if await check_package_get_latest_version_by_guess(session, pkg):
+         check_latest_count += 1
+-        print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
++        if verbose:
++            print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
+         return
+ 
+     check_package_latest_version_set_status(pkg,
+                                             RM_API_STATUS_NOT_FOUND,
+                                             None, None)
+     check_latest_count += 1
+-    print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
++    if verbose:
++        print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
+ 
+ 
+-async def check_package_latest_version(packages):
++async def check_package_latest_version(packages, verbose=False):
+     """
+     Fills in the .latest_version field of all Package objects
+ 
+@@ -623,7 +629,7 @@ async def check_package_latest_version(packages):
+     async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
+         packages = [p for p in packages if p.is_actual_package]
+         for pkg in packages:
+-            tasks.append(asyncio.ensure_future(check_package_latest_version_get(sess, pkg, len(packages))))
++            tasks.append(asyncio.ensure_future(check_package_latest_version_get(sess, pkg, len(packages), verbose=verbose)))
+         await asyncio.wait(tasks)
+ 
+ 
+@@ -1272,6 +1278,8 @@ def parse_args():
+     parser.add_argument('--disable', type=list_str,
+                         help='Features to disable, comma-separated (cve, upstream, url, warning)',
+                         default=[])
++    parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
++                        help='Increase verbosity')
+     args = parser.parse_args()
+     if not args.html and not args.json:
+         parser.error('at least one of --html or --json (or both) is required')
+@@ -1325,11 +1333,11 @@ def __main__():
+     if "url" not in args.disable:
+         print("Checking URL status")
+         loop = asyncio.get_event_loop()
+-        loop.run_until_complete(check_package_urls(packages))
++        loop.run_until_complete(check_package_urls(packages, verbose=args.verbose))
+     if "upstream" not in args.disable:
+         print("Getting latest versions ...")
+         loop = asyncio.get_event_loop()
+-        loop.run_until_complete(check_package_latest_version(packages))
++        loop.run_until_complete(check_package_latest_version(packages, verbose=args.verbose))
+     if "cve" not in args.disable and args.nvd_path:
+         print("Checking packages CVEs")
+         check_package_cves(args.nvd_path, packages)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
