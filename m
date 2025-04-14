@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40AFFC2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:50:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DD0CC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:50:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EAE856FC88;
-	Mon, 19 May 2025 10:50:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 221E86FC89;
+	Mon, 19 May 2025 10:50:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iiXof4p48L2b; Mon, 19 May 2025 10:50:11 +0000 (UTC)
+ id CswXr19wwkq0; Mon, 19 May 2025 10:50:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA8A26FC7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 024B86FC8B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA8A26FC7B;
-	Mon, 19 May 2025 10:50:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E4F0193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 024B86FC8B;
+	Mon, 19 May 2025 10:50:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0630DE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 44CA741089
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 20DC941463
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zny3xnBFvnux for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h5eoljYgWwWO for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6616841190
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A200410DB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6616841190
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0A200410DB
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 623E2873D4; Mon, 19 May 2025 10:40:10 +0000 (UTC)
+ id 06ACF81E90; Mon, 19 May 2025 10:39:50 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 18 May 2025 16:00:31 +0200
+Date: Mon, 14 Apr 2025 20:59:02 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5ba3e0d8a716b25cce5fc3b0570476d9f72f2690
-X-Git-Newrev: 3dbbfdeb8e82d5412b8435341772b8cf30998b3b
+X-Git-Oldrev: 76b4fd159bcdba97eefdbc4299a7ae9b0a4cd423
+X-Git-Newrev: b1ebc686d316a0ab3eaebc50880a6e420afbe220
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104010.623E2873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/{execline, mdevd, s6-*,
- skalibs}: remove --prefix=/
+Message-Id: <20250519103950.06ACF81E90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/mpd: update to version
+ 0.24.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,167 +59,158 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1421430011180864346=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1421430011180864346==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=3dbbfdeb8e82d5412b8435341772b8cf30998b3b
+commit: https://git.buildroot.net/buildroot/commit/?id=b1ebc686d316a0ab3eaebc50880a6e420afbe220
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The prefix already defaults to /, so --prefix=/ is unnecessary. An
-alternative course of action would be to start setting --prefix=/usr.
+Since version 0.24.0, support for SoundCloud was removed and
+yajl replaced with with json-for-modern-cpp.
 
-Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Consolidated list of changes:
+
+* decoder
+  - ffmpeg: support WMA
+  - mpg123: fix trailing space in tag values
+  - flac: enable chained Ogg decoding
+* input
+  - qobuz: use nlohmann_json instead of yajl
+  - io_uring: fix stuck seek after I/O error
+  - curl: fix malformed "Range" header
+* log: include year in time stamp
+* output
+  - oss: fix error "Resource temporarily unavailable"
+  - shout: fix hang on activating shout output
+  - snapcast: use nlohmann_json instead of yajl to generate JSON tags
+  - sndio: fix rounding error in volume calculation
+* player
+  - fix stalled playback after queue modification
+  - fix deadlock with "single" mode
+* playlist
+  - soundcloud: remove defunct plugin
+* tags
+  - libid3tag: fix Meson subproject configure error
+  - libid3tag: add missing zlib dependency to Meson subproject
+  - fix build failure in the "id3tag" Meson subproject
+* Linux
+  - allow using io_uring on Linux kernels older than 6.0
+  - fix build failure with ancient kernel headers
+  - add configure-time check for openat2()
+  - fix use-after-free bug on io_uring shutdown
+* DSD: support channel conversion
+
+Change log:
+  https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.24.3/NEWS
+
+Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+[Julien:
+ - remove test logs from commit log
+ - add the removed config entry in Config.in.legacy
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/execline/execline.mk                   | 1 -
- package/mdevd/mdevd.mk                         | 1 -
- package/s6-dns/s6-dns.mk                       | 1 -
- package/s6-linux-init/s6-linux-init.mk         | 1 -
- package/s6-linux-utils/s6-linux-utils.mk       | 1 -
- package/s6-networking/s6-networking.mk         | 1 -
- package/s6-portable-utils/s6-portable-utils.mk | 1 -
- package/s6-rc/s6-rc.mk                         | 1 -
- package/s6/s6.mk                               | 1 -
- package/skalibs/skalibs.mk                     | 1 -
- 10 files changed, 10 deletions(-)
+ Config.in.legacy      |  6 ++++++
+ package/mpd/Config.in |  9 +--------
+ package/mpd/mpd.hash  |  2 +-
+ package/mpd/mpd.mk    | 16 +++++-----------
+ 4 files changed, 13 insertions(+), 20 deletions(-)
 
-diff --git a/package/execline/execline.mk b/package/execline/execline.mk
-index 922fc7b5af..45d6b9294f 100644
---- a/package/execline/execline.mk
-+++ b/package/execline/execline.mk
-@@ -13,7 +13,6 @@ EXECLINE_DEPENDENCIES = skalibs
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 298476f495..79f7a33a23 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,12 @@ endif
  
- EXECLINE_CONF_OPTS = \
- 	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
--	--prefix=/ \
- 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
-diff --git a/package/mdevd/mdevd.mk b/package/mdevd/mdevd.mk
-index a1d9e17cef..b8d527f1ca 100644
---- a/package/mdevd/mdevd.mk
-+++ b/package/mdevd/mdevd.mk
-@@ -12,7 +12,6 @@ MDEVD_INSTALL_STAGING = YES
- MDEVD_DEPENDENCIES = skalibs
+ comment "Legacy options removed in 2025.05"
  
- MDEVD_CONF_OPTS = \
--	--prefix=/ \
- 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
-diff --git a/package/s6-dns/s6-dns.mk b/package/s6-dns/s6-dns.mk
-index 8e175431a4..4184110096 100644
---- a/package/s6-dns/s6-dns.mk
-+++ b/package/s6-dns/s6-dns.mk
-@@ -12,7 +12,6 @@ S6_DNS_INSTALL_STAGING = YES
- S6_DNS_DEPENDENCIES = skalibs
++config BR2_PACKAGE_MPD_SOUNDCLOUD
++	bool "mpd soundcloud support has been removed"
++	select BR2_LEGACY
++	help
++	  MPD SoundCloud support has been removed.
++
+ # BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT is still referenced in docker-engine
+ config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT
+ 	bool "docker-engine init support is now a choice"
+diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+index 7ce0d8b7eb..48b8c914fa 100644
+--- a/package/mpd/Config.in
++++ b/package/mpd/Config.in
+@@ -48,17 +48,10 @@ config BR2_PACKAGE_MPD_QOBUZ
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_MPD_CURL
+ 	select BR2_PACKAGE_LIBGCRYPT
+-	select BR2_PACKAGE_YAJL
++	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
+ 	help
+ 	  Play songs from the commercial streaming service Qobuz.
  
- S6_DNS_CONF_OPTS = \
--	--prefix=/ \
- 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
-diff --git a/package/s6-linux-init/s6-linux-init.mk b/package/s6-linux-init/s6-linux-init.mk
-index ae2bcdb8d8..73f49c49ef 100644
---- a/package/s6-linux-init/s6-linux-init.mk
-+++ b/package/s6-linux-init/s6-linux-init.mk
-@@ -11,7 +11,6 @@ S6_LINUX_INIT_LICENSE_FILES = COPYING
- S6_LINUX_INIT_DEPENDENCIES = s6 s6-linux-utils s6-portable-utils
+-config BR2_PACKAGE_MPD_SOUNDCLOUD
+-	bool "soundcloud"
+-	select BR2_PACKAGE_MPD_CURL
+-	select BR2_PACKAGE_YAJL
+-	help
+-	  Enable soundcloud.com playlist support.
+-
+ comment "Converter plugins"
  
- S6_LINUX_INIT_CONF_OPTS = \
--	--prefix=/ \
- 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
-diff --git a/package/s6-linux-utils/s6-linux-utils.mk b/package/s6-linux-utils/s6-linux-utils.mk
-index 04e08c3d43..cb1b86c370 100644
---- a/package/s6-linux-utils/s6-linux-utils.mk
-+++ b/package/s6-linux-utils/s6-linux-utils.mk
-@@ -11,7 +11,6 @@ S6_LINUX_UTILS_LICENSE_FILES = COPYING
- S6_LINUX_UTILS_DEPENDENCIES = skalibs
+ config BR2_PACKAGE_MPD_LIBSAMPLERATE
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index a8d2b31b3e..ef13e27033 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  1c828a290816d540fb2dec90f78044b55ff5ef8b49dd47a639ac34e3e5226bc5  mpd-0.24.tar.xz
++sha256  4225680e068b2ad87e3c2de414ec3209758de93d671f89fa3bae90b70af478a2  mpd-0.24.3.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 0f5c07ae71..6cae2845e3 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- S6_LINUX_UTILS_CONF_OPTS = \
--	--prefix=/ \
- 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
-diff --git a/package/s6-networking/s6-networking.mk b/package/s6-networking/s6-networking.mk
-index 212fae7361..5302ad8ec6 100644
---- a/package/s6-networking/s6-networking.mk
-+++ b/package/s6-networking/s6-networking.mk
-@@ -12,7 +12,6 @@ S6_NETWORKING_INSTALL_STAGING = YES
- S6_NETWORKING_DEPENDENCIES = s6-dns s6
+ MPD_VERSION_MAJOR = 0.24
+-MPD_VERSION = $(MPD_VERSION_MAJOR)
++MPD_VERSION = $(MPD_VERSION_MAJOR).3
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf fmt
+@@ -44,11 +44,11 @@ else
+ MPD_CONF_OPTS += -Dicu=disabled
+ endif
  
- S6_NETWORKING_CONF_OPTS = \
--	--prefix=/ \
- 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
-diff --git a/package/s6-portable-utils/s6-portable-utils.mk b/package/s6-portable-utils/s6-portable-utils.mk
-index 826750f387..bd617ee640 100644
---- a/package/s6-portable-utils/s6-portable-utils.mk
-+++ b/package/s6-portable-utils/s6-portable-utils.mk
-@@ -11,7 +11,6 @@ S6_PORTABLE_UTILS_LICENSE_FILES = COPYING
- S6_PORTABLE_UTILS_DEPENDENCIES = skalibs
+-ifeq ($(BR2_PACKAGE_YAJL),y)
+-MPD_DEPENDENCIES += yajl
+-MPD_CONF_OPTS += -Dyajl=enabled
++ifeq ($(BR2_PACKAGE_JSON_FOR_MODERN_CPP),y)
++MPD_DEPENDENCIES += json-for-modern-cpp
++MPD_CONF_OPTS += -Dnlohmann_json=enabled
+ else
+-MPD_CONF_OPTS += -Dyajl=disabled
++MPD_CONF_OPTS += -Dnlohmann_json=disabled
+ endif
  
- S6_PORTABLE_UTILS_CONF_OPTS = \
--	--prefix=/ \
- 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
-diff --git a/package/s6-rc/s6-rc.mk b/package/s6-rc/s6-rc.mk
-index 301c705910..8eddee9c9e 100644
---- a/package/s6-rc/s6-rc.mk
-+++ b/package/s6-rc/s6-rc.mk
-@@ -12,7 +12,6 @@ S6_RC_INSTALL_STAGING = YES
- S6_RC_DEPENDENCIES = s6
+ ifeq ($(BR2_PACKAGE_MPD_ALSA),y)
+@@ -285,12 +285,6 @@ else
+ MPD_CONF_OPTS += -Dsidplay=disabled
+ endif
  
- S6_RC_CONF_OPTS = \
--	--prefix=/ \
- 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
-diff --git a/package/s6/s6.mk b/package/s6/s6.mk
-index 7e02c26d03..b2451e8454 100644
---- a/package/s6/s6.mk
-+++ b/package/s6/s6.mk
-@@ -12,7 +12,6 @@ S6_INSTALL_STAGING = YES
- S6_DEPENDENCIES = execline
- 
- S6_CONF_OPTS = \
--	--prefix=/ \
- 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
-diff --git a/package/skalibs/skalibs.mk b/package/skalibs/skalibs.mk
-index 45f3e15a7b..32f7aae864 100644
---- a/package/skalibs/skalibs.mk
-+++ b/package/skalibs/skalibs.mk
-@@ -11,7 +11,6 @@ SKALIBS_LICENSE_FILES = COPYING
- SKALIBS_INSTALL_STAGING = YES
- 
- SKALIBS_CONF_OPTS = \
--	--prefix=/ \
- 	--with-default-path=/sbin:/usr/sbin:/bin:/usr/bin \
- 	--with-sysdep-devurandom=yes \
- 	$(SHARED_STATIC_LIBS_OPTS)
-
---===============1421430011180864346==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-ifeq ($(BR2_PACKAGE_MPD_SOUNDCLOUD),y)
+-MPD_CONF_OPTS += -Dsoundcloud=enabled
+-else
+-MPD_CONF_OPTS += -Dsoundcloud=disabled
+-endif
+-
+ ifeq ($(BR2_PACKAGE_MPD_SQLITE),y)
+ MPD_DEPENDENCIES += sqlite
+ MPD_CONF_OPTS += -Dsqlite=enabled
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1421430011180864346==--
