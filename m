@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B1EAC369A2
-	for <buildroot@archiver.kernel.org>; Mon, 14 Apr 2025 19:02:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC09EC369A2
+	for <buildroot@archiver.kernel.org>; Mon, 14 Apr 2025 19:03:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B259980C5F;
-	Mon, 14 Apr 2025 19:02:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 752FB4093C;
+	Mon, 14 Apr 2025 19:03:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mpcme8mIxyTc; Mon, 14 Apr 2025 19:02:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Xs45fvL2us01; Mon, 14 Apr 2025 19:03:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B153380F5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A15A240BA1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B153380F5C;
-	Mon, 14 Apr 2025 19:02:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id D5501205
- for <buildroot@buildroot.org>; Mon, 14 Apr 2025 19:02:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A15A240BA1;
+	Mon, 14 Apr 2025 19:03:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A36D1205
+ for <buildroot@buildroot.org>; Mon, 14 Apr 2025 19:03:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C644B80F5C
- for <buildroot@buildroot.org>; Mon, 14 Apr 2025 19:02:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 94DC441080
+ for <buildroot@buildroot.org>; Mon, 14 Apr 2025 19:03:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zD6LoS_CV8dn for <buildroot@buildroot.org>;
- Mon, 14 Apr 2025 19:02:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7E2B80C5F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C7E2B80C5F
- for <buildroot@buildroot.org>; Mon, 14 Apr 2025 19:02:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B223D846C5; Mon, 14 Apr 2025 19:02:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hBD6CWmDT0-C for <buildroot@buildroot.org>;
+ Mon, 14 Apr 2025 19:03:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9565040C53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9565040C53
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9565040C53
+ for <buildroot@buildroot.org>; Mon, 14 Apr 2025 19:03:47 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPA id 986E8B005AA;
+ Mon, 14 Apr 2025 21:03:43 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 14 Apr 2025 21:03:43 +0200
+MIME-Version: 1.0
+Date: Mon, 14 Apr 2025 21:03:43 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 14 Apr 2025 20:59:02 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 76b4fd159bcdba97eefdbc4299a7ae9b0a4cd423
-X-Git-Newrev: b1ebc686d316a0ab3eaebc50880a6e420afbe220
-X-Patchwork-Hint: ignore
-Message-Id: <20250414190217.B223D846C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpd: update to version 0.24.3
+To: Andreas Ziegler <br015@umbiko.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250413112836.789291-1-br015@umbiko.net>
+References: <20250413112836.789291-1-br015@umbiko.net>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <f29796a5bf2b5a05c8b4a9252136e6c4@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1744657424;
+ bh=EKF4XHthZLE/layic2IDtl1fO1kCLi0HNmTHTqJNFyE=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=OndCfdRaOcP52VBOyidjPuVihFJ8hwThDYJ5mBG/Aap98SUu1wGB8gMznD7sZDUZT
+ WkzOYGNSBMDDd0J62uMSp94pvECN7PsJ7agEOCrP3z9P/zUyuwLrc1AJ/fXaEoZgbh
+ klnVGHGqNVilEhoonqxMnYnEweFP43DhBHFCksZfJnFRRNJIy5j4B7gBw3yvv7d7rP
+ /1bzDMd2/uGmQqxwNCOwC1853eYBRrmyE9kZg6w6cbWzQo2QN9e4WJqw6fu8W709v2
+ CH0UBk//+kqZ963Q4D5/v9RcNWYgRQBTKpGUYEbjzVRPblVXZ2NiQUWihMA9r+EDZt
+ +GALc4tTLAISQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=OndCfdRa
+Subject: Re: [Buildroot] [PATCH 1/1] package/mpd: update to version 0.24.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,157 +82,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1ebc686d316a0ab3eaebc50880a6e420afbe220
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 13/04/2025 13:28, Andreas Ziegler wrote:
+> Since version 0.24.0, support for SoundCloud was removed and
+> yajl replaced with with json-for-modern-cpp.
+[...]
+> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
 
-Since version 0.24.0, support for SoundCloud was removed and
-yajl replaced with with json-for-modern-cpp.
+Applied to master, thanks.
+For info, I added the missing entry in Config.in.legacy. See:
+https://gitlab.com/buildroot.org/buildroot/-/commit/b1ebc686d316a0ab3eaebc50880a6e420afbe220
 
-Consolidated list of changes:
+Best regards,
 
-* decoder
-  - ffmpeg: support WMA
-  - mpg123: fix trailing space in tag values
-  - flac: enable chained Ogg decoding
-* input
-  - qobuz: use nlohmann_json instead of yajl
-  - io_uring: fix stuck seek after I/O error
-  - curl: fix malformed "Range" header
-* log: include year in time stamp
-* output
-  - oss: fix error "Resource temporarily unavailable"
-  - shout: fix hang on activating shout output
-  - snapcast: use nlohmann_json instead of yajl to generate JSON tags
-  - sndio: fix rounding error in volume calculation
-* player
-  - fix stalled playback after queue modification
-  - fix deadlock with "single" mode
-* playlist
-  - soundcloud: remove defunct plugin
-* tags
-  - libid3tag: fix Meson subproject configure error
-  - libid3tag: add missing zlib dependency to Meson subproject
-  - fix build failure in the "id3tag" Meson subproject
-* Linux
-  - allow using io_uring on Linux kernels older than 6.0
-  - fix build failure with ancient kernel headers
-  - add configure-time check for openat2()
-  - fix use-after-free bug on io_uring shutdown
-* DSD: support channel conversion
-
-Change log:
-  https://raw.githubusercontent.com/MusicPlayerDaemon/MPD/v0.24.3/NEWS
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-[Julien:
- - remove test logs from commit log
- - add the removed config entry in Config.in.legacy
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- Config.in.legacy      |  6 ++++++
- package/mpd/Config.in |  9 +--------
- package/mpd/mpd.hash  |  2 +-
- package/mpd/mpd.mk    | 16 +++++-----------
- 4 files changed, 13 insertions(+), 20 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 298476f495..79f7a33a23 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,12 @@ endif
- 
- comment "Legacy options removed in 2025.05"
- 
-+config BR2_PACKAGE_MPD_SOUNDCLOUD
-+	bool "mpd soundcloud support has been removed"
-+	select BR2_LEGACY
-+	help
-+	  MPD SoundCloud support has been removed.
-+
- # BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT is still referenced in docker-engine
- config BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT
- 	bool "docker-engine init support is now a choice"
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 7ce0d8b7eb..48b8c914fa 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -48,17 +48,10 @@ config BR2_PACKAGE_MPD_QOBUZ
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
- 	select BR2_PACKAGE_MPD_CURL
- 	select BR2_PACKAGE_LIBGCRYPT
--	select BR2_PACKAGE_YAJL
-+	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
- 	help
- 	  Play songs from the commercial streaming service Qobuz.
- 
--config BR2_PACKAGE_MPD_SOUNDCLOUD
--	bool "soundcloud"
--	select BR2_PACKAGE_MPD_CURL
--	select BR2_PACKAGE_YAJL
--	help
--	  Enable soundcloud.com playlist support.
--
- comment "Converter plugins"
- 
- config BR2_PACKAGE_MPD_LIBSAMPLERATE
-diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
-index a8d2b31b3e..ef13e27033 100644
---- a/package/mpd/mpd.hash
-+++ b/package/mpd/mpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  1c828a290816d540fb2dec90f78044b55ff5ef8b49dd47a639ac34e3e5226bc5  mpd-0.24.tar.xz
-+sha256  4225680e068b2ad87e3c2de414ec3209758de93d671f89fa3bae90b70af478a2  mpd-0.24.3.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
-index 0f5c07ae71..6cae2845e3 100644
---- a/package/mpd/mpd.mk
-+++ b/package/mpd/mpd.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- MPD_VERSION_MAJOR = 0.24
--MPD_VERSION = $(MPD_VERSION_MAJOR)
-+MPD_VERSION = $(MPD_VERSION_MAJOR).3
- MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
- MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
- MPD_DEPENDENCIES = host-pkgconf fmt
-@@ -44,11 +44,11 @@ else
- MPD_CONF_OPTS += -Dicu=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_YAJL),y)
--MPD_DEPENDENCIES += yajl
--MPD_CONF_OPTS += -Dyajl=enabled
-+ifeq ($(BR2_PACKAGE_JSON_FOR_MODERN_CPP),y)
-+MPD_DEPENDENCIES += json-for-modern-cpp
-+MPD_CONF_OPTS += -Dnlohmann_json=enabled
- else
--MPD_CONF_OPTS += -Dyajl=disabled
-+MPD_CONF_OPTS += -Dnlohmann_json=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_MPD_ALSA),y)
-@@ -285,12 +285,6 @@ else
- MPD_CONF_OPTS += -Dsidplay=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_MPD_SOUNDCLOUD),y)
--MPD_CONF_OPTS += -Dsoundcloud=enabled
--else
--MPD_CONF_OPTS += -Dsoundcloud=disabled
--endif
--
- ifeq ($(BR2_PACKAGE_MPD_SQLITE),y)
- MPD_DEPENDENCIES += sqlite
- MPD_CONF_OPTS += -Dsqlite=enabled
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
