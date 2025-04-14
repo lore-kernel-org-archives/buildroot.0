@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 460E9C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68C51C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:43:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12A63429AF;
-	Mon, 19 May 2025 10:43:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCB1261350;
+	Mon, 19 May 2025 10:43:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lhQaNNHr3ijS; Mon, 19 May 2025 10:43:49 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FxlPgRpSmlsU; Mon, 19 May 2025 10:43:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC771423C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C066B60F15
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CC771423C1;
-	Mon, 19 May 2025 10:43:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 103FCD4
+	by smtp3.osuosl.org (Postfix) with ESMTP id C066B60F15;
+	Mon, 19 May 2025 10:43:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E99EE4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF054410D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 119F141775
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I2JgInudphva for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Hav_ScU7MLGk for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3C3C040DC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FDDE410D8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3C3C040DC5
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2FDDE410D8
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 38C8E8725C; Mon, 19 May 2025 10:39:45 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 2D81E8725C; Mon, 19 May 2025 10:39:50 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 25 Mar 2025 19:23:48 +0100
+Date: Mon, 14 Apr 2025 21:43:19 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b4d259727e16a4a3352a20c085f787c783c9f53c
-X-Git-Newrev: 64b7774fc5c3e74616d41848991be633a31587a0
+X-Git-Oldrev: d39d9b53ec3a718b2b684739e1585352577b3f1f
+X-Git-Newrev: efdf0cdbcb2cf11d54ef8eee123529f264fe8ce9
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103945.38C8E8725C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ruby: update to 3.4.2
+Message-Id: <20250519103950.2D81E8725C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/cifs-utils: bump to
+ version 7.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,57 +60,115 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2795845248781904723=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64b7774fc5c3e74616d41848991be633a31587a0
+--===============2795845248781904723==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=efdf0cdbcb2cf11d54ef8eee123529f264fe8ce9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-See here for a changelog:
-https://github.com/ruby/ruby/releases/tag/v3_4_2
+Changes 7.1..7.2:
 
-This commit also update the LEGAL license hash:
-https://github.com/ruby/ruby/commit/8a86e52fb5fc49367e79f8f49fb451ab74e089bb
+- Security enhancements including support for password rotation,
+  better credential management, and namespaces
+- Various improvements to man pages
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-[Julien: fix LEGAL license hash]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Changes 7.2..7.3:
+
+- Three fixes, including a fix for "guest" mount problem introduced
+  with version 7.2
+
+Our patch is upstream as of 7.2, so we can drop it.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ruby/ruby.hash | 6 +++---
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...ap_ping.c-add-missing-sys-types.h-include.patch | 38 ----------------------
+ package/cifs-utils/cifs-utils.hash                 |  2 +-
+ package/cifs-utils/cifs-utils.mk                   |  2 +-
+ 3 files changed, 2 insertions(+), 40 deletions(-)
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index be3e380a55..81c9f9c9db 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,7 +1,7 @@
--# https://www.ruby-lang.org/en/news/2024/12/25/ruby-3-4-1-released/
--sha512  8d2e34117696f9debf463ae1eed288fdbb5c1a12e32800e901b69218e3b7302a0066052077e2ebca851e3a635296199bd5a10437eea1d6f787f69a77bb865680  ruby-3.4.1.tar.xz
-+# https://www.ruby-lang.org/en/news/2025/02/14/ruby-3-4-2-released/
-+sha512  cb8b5023bce316393716548c5f0a44c7d0240724ff79b995517641266af30bedc6f402c1c8fa27368ea607e2aa6d36bbb201e00c6e9dd2a80d837431d32343b5  ruby-3.4.2.tar.xz
+diff --git a/package/cifs-utils/0001-cldap_ping.c-add-missing-sys-types.h-include.patch b/package/cifs-utils/0001-cldap_ping.c-add-missing-sys-types.h-include.patch
+deleted file mode 100644
+index bf7864e01a..0000000000
+--- a/package/cifs-utils/0001-cldap_ping.c-add-missing-sys-types.h-include.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 62297e906149f9d2ca7b187a60f7c5ab99ef5dd5 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Thu, 26 Dec 2024 21:39:05 +0100
+-Subject: [PATCH] cldap_ping.c: add missing <sys/types.h> include
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Fixes:
+-
+-cldap_ping.c: In function ‘read_dns_string’:
+-cldap_ping.c:72:37: error: ‘u_char’ undeclared (first use in this function)
+-
+-when building with the musl C library, but even with glibc u_char is
+-defined in <sys/types.h>, it happens to work with glibc <sys/types.h>
+-gets included by another header.
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Upstream: https://lore.kernel.org/linux-cifs/20241226204235.2311371-1-thomas.petazzoni@bootlin.com/
+----
+- cldap_ping.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/cldap_ping.c b/cldap_ping.c
+-index 9183b27..a603be3 100644
+---- a/cldap_ping.c
+-+++ b/cldap_ping.c
+-@@ -20,6 +20,7 @@
+- #include <talloc.h>
+- #include <string.h>
+- #include <sys/socket.h>
+-+#include <sys/types.h>
+- #include <arpa/inet.h>
+- #include <unistd.h>
+- #include <resolv.h>
+--- 
+-2.47.0
+-
+diff --git a/package/cifs-utils/cifs-utils.hash b/package/cifs-utils/cifs-utils.hash
+index 942f8aaa39..ea32d4dca7 100644
+--- a/package/cifs-utils/cifs-utils.hash
++++ b/package/cifs-utils/cifs-utils.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  a21123f76a4a6a36c9653189ba4918ebdf3cfcd3f9092730a47ff3450b5b5b2a  cifs-utils-7.1.tar.bz2
++sha256  c4e1eb5f4ad880d96e16d95a1cdbc7ec978ab51c5b6d8a20ae09dac638f36dd5  cifs-utils-7.3.tar.bz2
  
- # License files, Locally calculated
--sha256  39917f453428cba1f1054c6a1973f74599a30b8d92e752da94e205a213ef8f92  LEGAL
-+sha256  a2021e52d5d6adf7e3f45aab9d2b860ce03cdf6153776853e11d5668193eecfd  LEGAL
- sha256  967586d538a28955ec2541910cf63c5ac345fcdea94bfb1f1705a1f6eb36bcbb  COPYING
- sha256  36a9a6e7347214bbba599a412617204e65bff065dcbe5c46f5cb454c80de9eb0  BSDL
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index be1b38ae59..891fd78d4b 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
+ # Hash for license file:
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/cifs-utils/cifs-utils.mk b/package/cifs-utils/cifs-utils.mk
+index e8eefde275..9c029342eb 100644
+--- a/package/cifs-utils/cifs-utils.mk
++++ b/package/cifs-utils/cifs-utils.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- RUBY_VERSION_MAJOR = 3.4
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
- RUBY_VERSION_EXT = 3.4.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+-CIFS_UTILS_VERSION = 7.1
++CIFS_UTILS_VERSION = 7.3
+ CIFS_UTILS_SOURCE = cifs-utils-$(CIFS_UTILS_VERSION).tar.bz2
+ CIFS_UTILS_SITE = http://ftp.samba.org/pub/linux-cifs/cifs-utils
+ CIFS_UTILS_LICENSE = GPL-3.0+
+
+--===============2795845248781904723==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2795845248781904723==--
