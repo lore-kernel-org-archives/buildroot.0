@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31414C369BA
-	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 17:22:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E293C369BD
+	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 17:22:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED0B0611AE;
-	Tue, 15 Apr 2025 17:22:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 69D6683AFB;
+	Tue, 15 Apr 2025 17:22:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NIfyffLbwF3k; Tue, 15 Apr 2025 17:22:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jCxMzelD6vnA; Tue, 15 Apr 2025 17:22:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F12B611A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DB8681DE6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F12B611A3;
-	Tue, 15 Apr 2025 17:22:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 49525200
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DB8681DE6;
+	Tue, 15 Apr 2025 17:22:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6220F200
  for <buildroot@buildroot.org>; Tue, 15 Apr 2025 17:22:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CA2BB412AE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 89A1A83B3A
  for <buildroot@buildroot.org>; Tue, 15 Apr 2025 17:22:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KufoEpnwaRr3 for <buildroot@buildroot.org>;
- Tue, 15 Apr 2025 17:22:02 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0JI-KfCmgZY8 for <buildroot@buildroot.org>;
+ Tue, 15 Apr 2025 17:22:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1291A41293
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD53D83409
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1291A41293
+ by smtp1.osuosl.org (Postfix) with ESMTP id BD53D83409
  for <buildroot@buildroot.org>; Tue, 15 Apr 2025 17:22:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B9888847F4; Tue, 15 Apr 2025 17:22:01 +0000 (UTC)
+ id B8FE784709; Tue, 15 Apr 2025 17:22:01 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
 Date: Tue, 15 Apr 2025 19:16:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bdb5809adfcff3a47d7117b5c856a400c7432273
-X-Git-Newrev: cebfadde9ba7b26eaea51448cb425f878eb31885
+X-Git-Oldrev: 770c1525e6deb580ef5b36466319dd444d07fc16
+X-Git-Newrev: 164c84ee9b820f5b21e79b4d52c07a613925d3f2
 X-Patchwork-Hint: ignore
-Message-Id: <20250415172201.B9888847F4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libv4l: disable some options when
- BR2_STATIC_LIBS
+Message-Id: <20250415172201.B8FE784709@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl: security bump to version
+ 5.40.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,41 +65,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cebfadde9ba7b26eaea51448cb425f878eb31885
+commit: https://git.buildroot.net/buildroot/commit/?id=164c84ee9b820f5b21e79b4d52c07a613925d3f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since libv4l was bumped to 1.28.1 and converted to use the meson build
-system in Buildroot commit 41ce1cc690b0837a1822079317bf317ddaeac17b,
-the build started failing on BR2_STATIC_LIBS=y configurations due to
-compiling code that isn't compatible with static linking.
+fix CVE-2024-56406: A heap buffer overflow vulnerability
 
-This commit fixes that by disabling the plugin code and the wrappers.
-
-Fixes:
-
-  https://autobuild.buildroot.org/results/89c6c7c0fd991d777ac7cd2b2322424099fa89cc/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Julien: fix check-package error in hash file]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libv4l/libv4l.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/perl/perl.hash | 12 ++++++------
+ package/perl/perl.mk   |  4 ++--
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
-index e8bcc2bdfc..a535b8e8a6 100644
---- a/package/libv4l/libv4l.mk
-+++ b/package/libv4l/libv4l.mk
-@@ -16,6 +16,10 @@ LIBV4L_LDFLAGS = $(TARGET_LDFLAGS)
- LIBV4L_LICENSE = GPL-2.0+ (utilities), LGPL-2.1+ (libraries)
- LIBV4L_LICENSE_FILES = COPYING COPYING.libv4l lib/libv4l1/libv4l1-kernelcode-license.txt
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 04ebf83b33..d581054bb5 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -1,10 +1,10 @@
+-# Hashes from: https://www.cpan.org/src/5.0/perl-5.40.1.tar.xz.{md5,sha1,sha256}.txt
+-md5  bab3547a5cdf2302ee0396419d74a42e  perl-5.40.1.tar.xz
+-sha1  4ffe5246c791df884363aed05ba81ba41cb02084  perl-5.40.1.tar.xz
+-sha256  dfa20c2eef2b4af133525610bbb65dd13777ecf998c9c5b1ccf0d308e732ee3f  perl-5.40.1.tar.xz
++# Hashes from: https://www.cpan.org/src/5.0/perl-5.40.2.tar.xz.{md5,sha1,sha256}.txt
++md5  9ad7a269dc4053cdbeecd4fde444291b  perl-5.40.2.tar.xz
++sha1  661fe9ee085ca0aec8ddd65e055bee922af12663  perl-5.40.2.tar.xz
++sha256  0551c717458e703ef7972307ab19385edfa231198d88998df74e12226abf563b  perl-5.40.2.tar.xz
  
-+ifeq ($(BR2_STATIC_LIBS),y)
-+LIBV4L_CONF_OPTS += -Dv4l-plugins=false -Dv4l-wrappers=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
- LIBV4L_DEPENDENCIES += alsa-lib
- endif
+-# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.1/perl-cross-1.6.1.hash
+-sha256  b5f4b4457bbd7be37adac8ee423beedbcdba8963a85f79770f5e701dabc5550f  perl-cross-1.6.1.tar.gz
++# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.2/perl-cross-1.6.2.hash
++sha256  131f7496152ee32067dbac2bc9b44b2f582fc778140e545701b3b2faee782f1d  perl-cross-1.6.2.tar.gz
+ 
+ # Locally calculated
+ sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 37b9fe185d..34abb734d6 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version here, also update utils/scancpan
+ PERL_VERSION_MAJOR = 40
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
+ PERL_SITE = https://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPL-1.0+
+@@ -15,7 +15,7 @@ PERL_CPE_ID_VENDOR = perl
+ PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.6.1
++PERL_CROSS_VERSION = 1.6.2
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
