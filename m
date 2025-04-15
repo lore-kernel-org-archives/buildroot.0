@@ -4,99 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D713C369AB
-	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 03:59:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5506CC369AB
+	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 07:19:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 83BB980F95;
-	Tue, 15 Apr 2025 03:59:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0215F83295;
+	Tue, 15 Apr 2025 07:19:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zvfyHjivKZ3b; Tue, 15 Apr 2025 03:59:04 +0000 (UTC)
+ id xdWQpDoCTGcC; Tue, 15 Apr 2025 07:19:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7DEFC81444
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 221BE83386
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7DEFC81444;
-	Tue, 15 Apr 2025 03:59:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 18679445
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 03:59:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 221BE83386;
+	Tue, 15 Apr 2025 07:19:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AB43A108
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 07:19:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0934A404DD
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 03:59:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9B0F183231
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 07:19:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WLPbo_X1PykT for <buildroot@buildroot.org>;
- Tue, 15 Apr 2025 03:59:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1136; helo=mail-yw1-x1136.google.com;
- envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9B01D400E0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B01D400E0
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com
- [IPv6:2607:f8b0:4864:20::1136])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9B01D400E0
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 03:59:01 +0000 (UTC)
-Received: by mail-yw1-x1136.google.com with SMTP id
- 00721157ae682-6ff37565154so46089557b3.3
- for <buildroot@buildroot.org>; Mon, 14 Apr 2025 20:59:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1744689540; x=1745294340;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=xia2iE8DMAF+H5ZncAy+PXASWpU96oj+vqLrMBgS4kY=;
- b=AWnjWFAYQdmSmZtRrS5a/uhnONkcX4G/TjjgBCUJh/dLxR1qhuHg5VjYpglKQ2KURQ
- ZnMEZIW9sTDau3XjzMmTda6gKveREe3pHG3+AST5t/gcJifLqoRTaU2uocGQLSOiclgZ
- lrinpjXmFn+tjQD71wD8iV+ewOXUMqnvroQjtrvgpaIr5C+lz+CbcXNf5hWEhhn9f8ne
- ZhQPH6bfYpRYNuFr3OaYZbrH5sNz2GjOa9JYSVs6fCVxJffmm1f5Pq73ABLf/HutUBCP
- GWz3w+mU7GSe1x/1jIODtv97nZxUXT3Ml8p5fxpr901VDfpbKUy9wqLWCMsYi7Lt2+4p
- t/Ow==
-X-Gm-Message-State: AOJu0YwOZ4pqS/fBmRR6fCgv02C3J1MJEMKDam180bSU7e6XQICpXnAm
- c0Hjb0/Lwy0HtE+6xMVet7lrcZ727gHmrOBlrHPKOQo8s1XMwU5amoy50Q==
-X-Gm-Gg: ASbGncum3fp5doRskupgpJ+pChhsJ7Uj/e0EpuTGZ1hnoCSI6KYHtMG8Z3GG3P+BhLd
- ZVrIkGgWNa9F2cPYMMNOhvmnkzSMg4wMNuSHv530468w00i1qTkC8urQEcOvdRgVxnxqsC0pVBd
- t44HUV2IJni8Wk4mxpjoS7z255+Z1/C5Yn1Wx0546pNBD0ZuNo815efjqVkC5UcCiB/yVdNoSRR
- QAQBHFryOCoSJiskfRgXW2ClyRq334sk6O4VB0maXdpcTvIIAErJXhnECUE8rhR0fLcCXFwdodw
- ZCFUfsrBSEYWW7zTxcCC3tHIUT4UmHdYj6y7Vg==
-X-Google-Smtp-Source: AGHT+IE6srKsr5LyJdlBXFRlcCEntWDnMnKZ+9qr9LQFFh6Peyn+1OVrPVuEDVogI2D3w89mGkY2pw==
-X-Received: by 2002:a05:690c:6103:b0:6fe:b7ed:9715 with SMTP id
- 00721157ae682-705599d310emr280073697b3.11.1744689539716; 
- Mon, 14 Apr 2025 20:58:59 -0700 (PDT)
-Received: from localhost ([66.112.214.180]) by smtp.gmail.com with ESMTPSA id
- 00721157ae682-7053e0e79f0sm34448407b3.18.2025.04.14.20.58.58
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 14 Apr 2025 20:58:59 -0700 (PDT)
-From: Scott Fan <fancp2007@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 15 Apr 2025 11:58:03 +0800
-Message-ID: <20250415035805.643946-1-fancp2007@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250414060233.3292625-1-fancp2007@gmail.com>
-References: <20250414060233.3292625-1-fancp2007@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bo2dloPCDxUS for <buildroot@buildroot.org>;
+ Tue, 15 Apr 2025 07:19:33 +0000 (UTC)
+X-Greylist: delayed 43222 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 15 Apr 2025 07:19:33 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7E3708322E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E3708322E
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=alexis.lothore@bootlin.com;
+ receiver=<UNKNOWN> 
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7E3708322E
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 07:19:33 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 355541FCE6;
+ Tue, 15 Apr 2025 07:19:28 +0000 (UTC)
+Date: Tue, 15 Apr 2025 09:19:22 +0200
 MIME-Version: 1.0
+Message-Id: <20250415-bump_pahole-v1-1-6c6df3ff497f@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAHkI/mcC/23MQQ6CMBCF4auQWVvTgVrBlfcwxNAyyiRAmxaJh
+ vTuVtYu/5e8b4NIgSnCpdgg0MqR3ZwDDwXYoZufJLjPDaUsT1KhEuY1+bvvBjeSaHqNqlZNZaS
+ B/PCBHvzetVube+C4uPDZ8RV/639nRYGiph61rZpOnvXVOLeMPB+tm6BNKX0BovgrD6gAAAA=
+X-Change-ID: 20250414-bump_pahole-9d6148493b0b
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Francis Laniel <flaniel@linux.microsoft.com>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvddvkeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkvfevofesthekredtredtjeenucfhrhhomheptehlvgigihhsucfnohhthhhorhoruceorghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedukeevfedtieefvdefgfdvgfejudeiveduledtueelhfehgfeivdfhtefhgfffgeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopegludelvddrudeikedrtddrvddungdpmhgrihhlfhhrohhmpegrlhgvgihishdrlhhothhhohhrvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopehflhgrnhhivghlsehlihhnuhigrdhmihgtrhhoshhofhhtrdgtohhmpdhrtghpthhtoheprghlvgigihhsrdhlohhthhhorhgvsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehthhhomhgrs
+ hdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomh
+X-GND-Sasl: alexis.lothore@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1744689540; x=1745294340; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=xia2iE8DMAF+H5ZncAy+PXASWpU96oj+vqLrMBgS4kY=;
- b=GWMtemqXcTcS2mx4/50ffbt9dPEP/iZRWEuU+D2N/OslyVqYDEj77ePoAeO4GcJwMv
- WyLsi1dJAxgh+uFdU80V0ulue+ArvsjcCM8yTJOFQ62SB5o4jbDqWJI/fE9Gv9x/TUpZ
- 4osgSeDx2CNEoTT4mcQs9QacFhi1rapXt1DjO8dzqY8SGD1CwR7wa4M7PbO2V7eDoEVP
- dRa8lI7cXduHRxZnihi8Gp4xktjfFGk+1rQxhPsUAPIvtSJ6gRPhfi8nxT3Bf+3UR+Pu
- V3mqhmmlbB9JofFf08lpwaf6QW/UCNMYk4CQZ+t9R8kiO3tVu+f9tIvjmbhuIFHWr6a+
- MlAw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=bootlin.com; s=gm1; t=1744701568;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=tN+NgH0koTacEYMxEZZxg0kNKrsMKeO+VmerIIU5H/g=;
+ b=gj+bnZkZZzlkgJHHFSXxEaP/0JVD/CVYTVxMiiY2f1ZvBvXBKaLrPRNU4TKKenj/BxjF+s
+ d2md8cnDB4QdTJ3krqfydDUo6RQP3Hga/xQwE+ljNOHv3IkY39R6+5fibUUj9KulQ5VId0
+ KIfQQMMhsoZ07vn8AXJmBisE4ywaNhIUtZ6sOaHhggmKG95ZPyip6C4+/jVPXmz/tZ+IZA
+ EzJPlYw+302EjbdBSJGSzu9a0A63P+cQocQhLO8Q5wBEqwOOHilRo3Hc5W5WEAlznu/btQ
+ 1ei8ERi8z1sUkaHsNijvb/tZOohR1yG18VJXWUidvZMUruV7jeA5gj5sr9hcgg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=GWMtemqX
-Subject: [Buildroot] [PATCH v2] package/mosquitto: security bump to version
- 2.0.21
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=gj+bnZkZ
+Subject: [Buildroot] [PATCH] package/pahole: bump to version 1.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,517 +89,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Titouan Christophe <titouanchristophe@gmail.com>,
- Scott Fan <fancp2007@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following security issues:
-
-- Fix leak on malicious SUBSCRIBE by authenticated client.
-  Closes eclipse #248.
-- Further fix for CVE-2023-28366.
-
-Also drop the patch that was fixed in the v2.0.21, see the closed issues:
-https://github.com/eclipse-mosquitto/mosquitto/issues/3183
-https://github.com/eclipse-mosquitto/mosquitto/issues/3193
-
-However, the new version introduced a new issue, when WITH_TLS is off, the
-compilation will fail. It is already reported upstream with the issue:
-https://github.com/eclipse-mosquitto/mosquitto/issues/3246
-
-However, the upstream received two identical PRs, we quote the patch file
-of the earlier PR (#3227) here.
-https://github.com/eclipse-mosquitto/mosquitto/pull/3227
-https://github.com/eclipse-mosquitto/mosquitto/pull/3252
-
-For more details of v2.0.21, see the changelog:
-https://github.com/eclipse-mosquitto/mosquitto/blob/v2.0.21/ChangeLog.txt
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-
----
-Changes v1 -> v2:
-- add a new patch from upstream PR (#3227)
-- update the commit log
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
----
- .../0001-Revert-Fix-NetBSD-build.patch        | 390 ------------------
- ...-compile-failed-when-WITH_TLS-is-off.patch |  33 ++
- package/mosquitto/mosquitto.hash              |   4 +-
- package/mosquitto/mosquitto.mk                |   2 +-
- 4 files changed, 36 insertions(+), 393 deletions(-)
- delete mode 100644 package/mosquitto/0001-Revert-Fix-NetBSD-build.patch
- create mode 100644 package/mosquitto/0001-fix-compile-failed-when-WITH_TLS-is-off.patch
-
-diff --git a/package/mosquitto/0001-Revert-Fix-NetBSD-build.patch b/package/mosquitto/0001-Revert-Fix-NetBSD-build.patch
-deleted file mode 100644
-index 180a23565c..0000000000
---- a/package/mosquitto/0001-Revert-Fix-NetBSD-build.patch
-+++ /dev/null
-@@ -1,390 +0,0 @@
--From 18d41744338d6e291612e66e8baace4faaad7b2e Mon Sep 17 00:00:00 2001
--From: Peter Korsgaard <peter@korsgaard.com>
--Date: Fri, 6 Dec 2024 08:27:53 +0100
--Subject: [PATCH] Revert "Fix NetBSD build"
--
--This reverts commit 88b7bb3521cc51cb1e80630395ae736040cc8ff8.
--
--This unfortunately broke non-thread builds, so revert it until fixed
--upstream.
--
--Upstream: https://github.com/eclipse-mosquitto/mosquitto/issues/3183
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- lib/dummypthread.h       | 14 ++++++++++++
-- lib/handle_pubackcomp.c  |  4 ++--
-- lib/mosquitto_internal.h |  6 +++++-
-- lib/packet_mosq.c        | 46 ++++++++++++++++++++--------------------
-- lib/pthread_compat.h     | 28 ------------------------
-- lib/util_mosq.c          | 32 ++++++++++++++--------------
-- 6 files changed, 60 insertions(+), 70 deletions(-)
-- create mode 100644 lib/dummypthread.h
-- delete mode 100644 lib/pthread_compat.h
--
--diff --git a/lib/dummypthread.h b/lib/dummypthread.h
--new file mode 100644
--index 00000000..c0eb2c15
----- /dev/null
--+++ b/lib/dummypthread.h
--@@ -0,0 +1,14 @@
--+#ifndef DUMMYPTHREAD_H
--+#define DUMMYPTHREAD_H
--+
--+#define pthread_create(A, B, C, D)
--+#define pthread_join(A, B)
--+#define pthread_cancel(A)
--+#define pthread_testcancel()
--+
--+#define pthread_mutex_init(A, B)
--+#define pthread_mutex_destroy(A)
--+#define pthread_mutex_lock(A)
--+#define pthread_mutex_unlock(A)
--+
--+#endif
--diff --git a/lib/handle_pubackcomp.c b/lib/handle_pubackcomp.c
--index d70d602d..4568bb40 100644
----- a/lib/handle_pubackcomp.c
--+++ b/lib/handle_pubackcomp.c
--@@ -57,9 +57,9 @@ int handle__pubackcomp(struct mosquitto *mosq, const char *type)
-- 		}
-- 	}
-- 
---	COMPAT_pthread_mutex_lock(&mosq->msgs_out.mutex);
--+	pthread_mutex_lock(&mosq->msgs_out.mutex);
-- 	util__increment_send_quota(mosq);
---	COMPAT_pthread_mutex_unlock(&mosq->msgs_out.mutex);
--+	pthread_mutex_unlock(&mosq->msgs_out.mutex);
-- 
-- 	rc = packet__read_uint16(&mosq->in_packet, &mid);
-- 	if(rc) return rc;
--diff --git a/lib/mosquitto_internal.h b/lib/mosquitto_internal.h
--index 31120258..ac71ffbf 100644
----- a/lib/mosquitto_internal.h
--+++ b/lib/mosquitto_internal.h
--@@ -33,7 +33,11 @@ Contributors:
-- #endif
-- #include <stdlib.h>
-- 
---#include <pthread_compat.h>
--+#if defined(WITH_THREADING) && !defined(WITH_BROKER)
--+#  include <pthread.h>
--+#else
--+#  include <dummypthread.h>
--+#endif
-- 
-- #ifdef WITH_SRV
-- #  include <ares.h>
--diff --git a/lib/packet_mosq.c b/lib/packet_mosq.c
--index b063eb71..fd716baf 100644
----- a/lib/packet_mosq.c
--+++ b/lib/packet_mosq.c
--@@ -129,13 +129,13 @@ void packet__cleanup_all_no_locks(struct mosquitto *mosq)
-- 
-- void packet__cleanup_all(struct mosquitto *mosq)
-- {
---	COMPAT_pthread_mutex_lock(&mosq->current_out_packet_mutex);
---	COMPAT_pthread_mutex_lock(&mosq->out_packet_mutex);
--+	pthread_mutex_lock(&mosq->current_out_packet_mutex);
--+	pthread_mutex_lock(&mosq->out_packet_mutex);
-- 
-- 	packet__cleanup_all_no_locks(mosq);
-- 
---	COMPAT_pthread_mutex_unlock(&mosq->out_packet_mutex);
---	COMPAT_pthread_mutex_unlock(&mosq->current_out_packet_mutex);
--+	pthread_mutex_unlock(&mosq->out_packet_mutex);
--+	pthread_mutex_unlock(&mosq->current_out_packet_mutex);
-- }
-- 
-- 
--@@ -151,7 +151,7 @@ int packet__queue(struct mosquitto *mosq, struct mosquitto__packet *packet)
-- 	packet->to_process = packet->packet_length;
-- 
-- 	packet->next = NULL;
---	COMPAT_pthread_mutex_lock(&mosq->out_packet_mutex);
--+	pthread_mutex_lock(&mosq->out_packet_mutex);
-- 
-- #ifdef WITH_BROKER
-- 	if(db.config->max_queued_messages > 0 && mosq->out_packet_count >= db.config->max_queued_messages){
--@@ -174,7 +174,7 @@ int packet__queue(struct mosquitto *mosq, struct mosquitto__packet *packet)
-- 	}
-- 	mosq->out_packet_last = packet;
-- 	mosq->out_packet_count++;
---	COMPAT_pthread_mutex_unlock(&mosq->out_packet_mutex);
--+	pthread_mutex_unlock(&mosq->out_packet_mutex);
-- #ifdef WITH_BROKER
-- #  ifdef WITH_WEBSOCKETS
-- 	if(mosq->wsi){
--@@ -232,8 +232,8 @@ int packet__write(struct mosquitto *mosq)
-- 	if(!mosq) return MOSQ_ERR_INVAL;
-- 	if(mosq->sock == INVALID_SOCKET) return MOSQ_ERR_NO_CONN;
-- 
---	COMPAT_pthread_mutex_lock(&mosq->current_out_packet_mutex);
---	COMPAT_pthread_mutex_lock(&mosq->out_packet_mutex);
--+	pthread_mutex_lock(&mosq->current_out_packet_mutex);
--+	pthread_mutex_lock(&mosq->out_packet_mutex);
-- 	if(mosq->out_packet && !mosq->current_out_packet){
-- 		mosq->current_out_packet = mosq->out_packet;
-- 		mosq->out_packet = mosq->out_packet->next;
--@@ -242,7 +242,7 @@ int packet__write(struct mosquitto *mosq)
-- 		}
-- 		mosq->out_packet_count--;
-- 	}
---	COMPAT_pthread_mutex_unlock(&mosq->out_packet_mutex);
--+	pthread_mutex_unlock(&mosq->out_packet_mutex);
-- 
-- #ifdef WITH_BROKER
-- 	if(mosq->current_out_packet){
--@@ -252,7 +252,7 @@ int packet__write(struct mosquitto *mosq)
-- 
-- 	state = mosquitto__get_state(mosq);
-- 	if(state == mosq_cs_connect_pending){
---		COMPAT_pthread_mutex_unlock(&mosq->current_out_packet_mutex);
--+		pthread_mutex_unlock(&mosq->current_out_packet_mutex);
-- 		return MOSQ_ERR_SUCCESS;
-- 	}
-- 
--@@ -274,10 +274,10 @@ int packet__write(struct mosquitto *mosq)
-- 						|| errno == WSAENOTCONN
-- #endif
-- 						){
---					COMPAT_pthread_mutex_unlock(&mosq->current_out_packet_mutex);
--+					pthread_mutex_unlock(&mosq->current_out_packet_mutex);
-- 					return MOSQ_ERR_SUCCESS;
-- 				}else{
---					COMPAT_pthread_mutex_unlock(&mosq->current_out_packet_mutex);
--+					pthread_mutex_unlock(&mosq->current_out_packet_mutex);
-- 					switch(errno){
-- 						case COMPAT_ECONNRESET:
-- 							return MOSQ_ERR_CONN_LOST;
--@@ -296,7 +296,7 @@ int packet__write(struct mosquitto *mosq)
-- 		if(((packet->command)&0xF6) == CMD_PUBLISH){
-- 			G_PUB_MSGS_SENT_INC(1);
-- #ifndef WITH_BROKER
---			COMPAT_pthread_mutex_lock(&mosq->callback_mutex);
--+			pthread_mutex_lock(&mosq->callback_mutex);
-- 			if(mosq->on_publish){
-- 				/* This is a QoS=0 message */
-- 				mosq->in_callback = true;
--@@ -309,7 +309,7 @@ int packet__write(struct mosquitto *mosq)
-- 				mosq->on_publish_v5(mosq, mosq->userdata, packet->mid, 0, NULL);
-- 				mosq->in_callback = false;
-- 			}
---			COMPAT_pthread_mutex_unlock(&mosq->callback_mutex);
--+			pthread_mutex_unlock(&mosq->callback_mutex);
-- 		}else if(((packet->command)&0xF0) == CMD_DISCONNECT){
-- 			do_client_disconnect(mosq, MOSQ_ERR_SUCCESS, NULL);
-- 			packet__cleanup(packet);
--@@ -321,7 +321,7 @@ int packet__write(struct mosquitto *mosq)
-- 		}
-- 
-- 		/* Free data and reset values */
---		COMPAT_pthread_mutex_lock(&mosq->out_packet_mutex);
--+		pthread_mutex_lock(&mosq->out_packet_mutex);
-- 		mosq->current_out_packet = mosq->out_packet;
-- 		if(mosq->out_packet){
-- 			mosq->out_packet = mosq->out_packet->next;
--@@ -330,7 +330,7 @@ int packet__write(struct mosquitto *mosq)
-- 			}
-- 			mosq->out_packet_count--;
-- 		}
---		COMPAT_pthread_mutex_unlock(&mosq->out_packet_mutex);
--+		pthread_mutex_unlock(&mosq->out_packet_mutex);
-- 
-- 		packet__cleanup(packet);
-- 		mosquitto__free(packet);
--@@ -338,9 +338,9 @@ int packet__write(struct mosquitto *mosq)
-- #ifdef WITH_BROKER
-- 		mosq->next_msg_out = db.now_s + mosq->keepalive;
-- #else
---		COMPAT_pthread_mutex_lock(&mosq->msgtime_mutex);
--+		pthread_mutex_lock(&mosq->msgtime_mutex);
-- 		mosq->next_msg_out = mosquitto_time() + mosq->keepalive;
---		COMPAT_pthread_mutex_unlock(&mosq->msgtime_mutex);
--+		pthread_mutex_unlock(&mosq->msgtime_mutex);
-- #endif
-- 	}
-- #ifdef WITH_BROKER
--@@ -348,7 +348,7 @@ int packet__write(struct mosquitto *mosq)
-- 		mux__remove_out(mosq);
-- 	}
-- #endif
---	COMPAT_pthread_mutex_unlock(&mosq->current_out_packet_mutex);
--+	pthread_mutex_unlock(&mosq->current_out_packet_mutex);
-- 	return MOSQ_ERR_SUCCESS;
-- }
-- 
--@@ -536,9 +536,9 @@ int packet__read(struct mosquitto *mosq)
-- #ifdef WITH_BROKER
-- 					keepalive__update(mosq);
-- #else
---					COMPAT_pthread_mutex_lock(&mosq->msgtime_mutex);
--+					pthread_mutex_lock(&mosq->msgtime_mutex);
-- 					mosq->last_msg_in = mosquitto_time();
---					COMPAT_pthread_mutex_unlock(&mosq->msgtime_mutex);
--+					pthread_mutex_unlock(&mosq->msgtime_mutex);
-- #endif
-- 				}
-- 				return MOSQ_ERR_SUCCESS;
--@@ -571,9 +571,9 @@ int packet__read(struct mosquitto *mosq)
-- #ifdef WITH_BROKER
-- 	keepalive__update(mosq);
-- #else
---	COMPAT_pthread_mutex_lock(&mosq->msgtime_mutex);
--+	pthread_mutex_lock(&mosq->msgtime_mutex);
-- 	mosq->last_msg_in = mosquitto_time();
---	COMPAT_pthread_mutex_unlock(&mosq->msgtime_mutex);
--+	pthread_mutex_unlock(&mosq->msgtime_mutex);
-- #endif
-- 	return rc;
-- }
--diff --git a/lib/pthread_compat.h b/lib/pthread_compat.h
--deleted file mode 100644
--index ca1f27dc..00000000
----- a/lib/pthread_compat.h
--+++ /dev/null
--@@ -1,28 +0,0 @@
---#ifndef PTHREAD_COMPAT_
---#define PTHREAD_COMPAT_
---
---#if defined(WITH_THREADING) && !defined(WITH_BROKER)
---#  include <pthread.h>
---
---#  define COMPAT_pthread_create(A, B, C, D) pthread_create((A), (B), (C), (D))
---#  define COMPAT_pthread_join(A, B) pthread_join((A), (B))
---#  define COMPAT_pthread_cancel(A) pthread_cancel((A))
---#  define COMPAT_pthread_testcancel() pthread_testcancel()
---
---#  define COMPAT_pthread_mutex_init(A, B) pthread_mutex_init((A), (B))
---#  define COMPAT_pthread_mutex_destroy(A) pthread_mutex_init((A))
---#  define COMPAT_pthread_mutex_lock(A) pthread_mutex_lock((A))
---#  define COMPAT_pthread_mutex_unlock(A) pthread_mutex_unlock((A))
---#else
---#  define COMPAT_pthread_create(A, B, C, D)
---#  define COMPAT_pthread_join(A, B)
---#  define COMPAT_pthread_cancel(A)
---#  define COMPAT_pthread_testcancel()
---
---#  define COMPAT_pthread_mutex_init(A, B)
---#  define COMPAT_pthread_mutex_destroy(A)
---#  define COMPAT_pthread_mutex_lock(A)
---#  define COMPAT_pthread_mutex_unlock(A)
---#endif
---
---#endif
--diff --git a/lib/util_mosq.c b/lib/util_mosq.c
--index 4bebcbd0..22f8c4d5 100644
----- a/lib/util_mosq.c
--+++ b/lib/util_mosq.c
--@@ -87,10 +87,10 @@ int mosquitto__check_keepalive(struct mosquitto *mosq)
-- 		return MOSQ_ERR_SUCCESS;
-- 	}
-- #endif
---	COMPAT_pthread_mutex_lock(&mosq->msgtime_mutex);
--+	pthread_mutex_lock(&mosq->msgtime_mutex);
-- 	next_msg_out = mosq->next_msg_out;
-- 	last_msg_in = mosq->last_msg_in;
---	COMPAT_pthread_mutex_unlock(&mosq->msgtime_mutex);
--+	pthread_mutex_unlock(&mosq->msgtime_mutex);
-- 	if(mosq->keepalive && mosq->sock != INVALID_SOCKET &&
-- 			(now >= next_msg_out || now - last_msg_in >= mosq->keepalive)){
-- 
--@@ -98,10 +98,10 @@ int mosquitto__check_keepalive(struct mosquitto *mosq)
-- 		if(state == mosq_cs_active && mosq->ping_t == 0){
-- 			send__pingreq(mosq);
-- 			/* Reset last msg times to give the server time to send a pingresp */
---			COMPAT_pthread_mutex_lock(&mosq->msgtime_mutex);
--+			pthread_mutex_lock(&mosq->msgtime_mutex);
-- 			mosq->last_msg_in = now;
-- 			mosq->next_msg_out = now + mosq->keepalive;
---			COMPAT_pthread_mutex_unlock(&mosq->msgtime_mutex);
--+			pthread_mutex_unlock(&mosq->msgtime_mutex);
-- 		}else{
-- #ifdef WITH_BROKER
-- #  ifdef WITH_BRIDGE
--@@ -118,7 +118,7 @@ int mosquitto__check_keepalive(struct mosquitto *mosq)
-- 			}else{
-- 				rc = MOSQ_ERR_KEEPALIVE;
-- 			}
---			COMPAT_pthread_mutex_lock(&mosq->callback_mutex);
--+			pthread_mutex_lock(&mosq->callback_mutex);
-- 			if(mosq->on_disconnect){
-- 				mosq->in_callback = true;
-- 				mosq->on_disconnect(mosq, mosq->userdata, rc);
--@@ -129,7 +129,7 @@ int mosquitto__check_keepalive(struct mosquitto *mosq)
-- 				mosq->on_disconnect_v5(mosq, mosq->userdata, rc, NULL);
-- 				mosq->in_callback = false;
-- 			}
---			COMPAT_pthread_mutex_unlock(&mosq->callback_mutex);
--+			pthread_mutex_unlock(&mosq->callback_mutex);
-- 
-- 			return rc;
-- #endif
--@@ -150,11 +150,11 @@ uint16_t mosquitto__mid_generate(struct mosquitto *mosq)
-- 	uint16_t mid;
-- 	assert(mosq);
-- 
---	COMPAT_pthread_mutex_lock(&mosq->mid_mutex);
--+	pthread_mutex_lock(&mosq->mid_mutex);
-- 	mosq->last_mid++;
-- 	if(mosq->last_mid == 0) mosq->last_mid++;
-- 	mid = mosq->last_mid;
---	COMPAT_pthread_mutex_unlock(&mosq->mid_mutex);
--+	pthread_mutex_unlock(&mosq->mid_mutex);
-- 
-- 	return mid;
-- }
--@@ -280,14 +280,14 @@ int util__random_bytes(void *bytes, int count)
-- 
-- int mosquitto__set_state(struct mosquitto *mosq, enum mosquitto_client_state state)
-- {
---	COMPAT_pthread_mutex_lock(&mosq->state_mutex);
--+	pthread_mutex_lock(&mosq->state_mutex);
-- #ifdef WITH_BROKER
-- 	if(mosq->state != mosq_cs_disused)
-- #endif
-- 	{
-- 		mosq->state = state;
-- 	}
---	COMPAT_pthread_mutex_unlock(&mosq->state_mutex);
--+	pthread_mutex_unlock(&mosq->state_mutex);
-- 
-- 	return MOSQ_ERR_SUCCESS;
-- }
--@@ -296,9 +296,9 @@ enum mosquitto_client_state mosquitto__get_state(struct mosquitto *mosq)
-- {
-- 	enum mosquitto_client_state state;
-- 
---	COMPAT_pthread_mutex_lock(&mosq->state_mutex);
--+	pthread_mutex_lock(&mosq->state_mutex);
-- 	state = mosq->state;
---	COMPAT_pthread_mutex_unlock(&mosq->state_mutex);
--+	pthread_mutex_unlock(&mosq->state_mutex);
-- 
-- 	return state;
-- }
--@@ -306,18 +306,18 @@ enum mosquitto_client_state mosquitto__get_state(struct mosquitto *mosq)
-- #ifndef WITH_BROKER
-- void mosquitto__set_request_disconnect(struct mosquitto *mosq, bool request_disconnect)
-- {
---	COMPAT_pthread_mutex_lock(&mosq->state_mutex);
--+	pthread_mutex_lock(&mosq->state_mutex);
-- 	mosq->request_disconnect = request_disconnect;
---	COMPAT_pthread_mutex_unlock(&mosq->state_mutex);
--+	pthread_mutex_unlock(&mosq->state_mutex);
-- }
-- 
-- bool mosquitto__get_request_disconnect(struct mosquitto *mosq)
-- {
-- 	bool request_disconnect;
-- 
---	COMPAT_pthread_mutex_lock(&mosq->state_mutex);
--+	pthread_mutex_lock(&mosq->state_mutex);
-- 	request_disconnect = mosq->request_disconnect;
---	COMPAT_pthread_mutex_unlock(&mosq->state_mutex);
--+	pthread_mutex_unlock(&mosq->state_mutex);
-- 
-- 	return request_disconnect;
-- }
---- 
--2.39.5
--
-diff --git a/package/mosquitto/0001-fix-compile-failed-when-WITH_TLS-is-off.patch b/package/mosquitto/0001-fix-compile-failed-when-WITH_TLS-is-off.patch
-new file mode 100644
-index 0000000000..1f7d2396fc
---- /dev/null
-+++ b/package/mosquitto/0001-fix-compile-failed-when-WITH_TLS-is-off.patch
-@@ -0,0 +1,33 @@
-+From 47c015e0d3fb5c5c71a68fe21c8e5eb2a5fbfc1d Mon Sep 17 00:00:00 2001
-+From: "chunbo.bai" <chunbo.bai@tcl.com>
-+Date: Fri, 7 Mar 2025 14:16:45 +0800
-+Subject: [PATCH] fix: compile failed when WITH_TLS is off
-+
-+Upstream: https://github.com/eclipse-mosquitto/mosquitto/pull/3227
-+---
-+ src/conf.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/src/conf.c b/src/conf.c
-+index 74ca66fcb..bfccf729c 100644
-+--- a/src/conf.c
-++++ b/src/conf.c
-+@@ -2313,6 +2313,7 @@ static int config__check(struct mosquitto__config *config)
-+ 		}
-+ 	}
-+ 
-++#ifdef WITH_TLS
-+ 	/* Check for missing TLS cafile/capath/certfile/keyfile */
-+ 	for(int i=0; i<config->listener_count; i++){
-+ 		 bool cafile = !!config->listeners[i].cafile;
-+@@ -2333,6 +2334,7 @@ static int config__check(struct mosquitto__config *config)
-+ 			 return MOSQ_ERR_INVAL;
-+ 		 }
-+ 	}
-++#endif
-+ 	return MOSQ_ERR_SUCCESS;
-+ }
-+ 
-+-- 
-+2.43.0
-+
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index f644f688b9..ff74d9c534 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking gpg signature
--# from https://mosquitto.org/files/source/mosquitto-2.0.20.tar.gz.asc
--sha256  ebd07d89d2a446a7f74100ad51272e4a8bf300b61634a7812e19f068f2759de8  mosquitto-2.0.20.tar.gz
-+# from https://mosquitto.org/files/source/mosquitto-2.0.21.tar.gz.asc
-+sha256  7ad5e84caeb8d2bb6ed0c04614b2a7042def961af82d87f688ba33db857b899d  mosquitto-2.0.21.tar.gz
- 
- # License files
- sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 727dd4ff4c..900d1e65cb 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 2.0.20
-+MOSQUITTO_VERSION = 2.0.21
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gaG9zdHMgd2l0aCBhIHJlY2VudCB2ZXJzaW9uIG9mIGNtYWtlIChlZzogNC4wLjApLCBidWls
+ZHMgaW52b2x2aW5nCmhvc3QtcGFob2xlIGZhaWwgd2l0aCB0aGUgZm9sbG93aW5nIGVycm9yOgoK
+Q01ha2UgRGVwcmVjYXRpb24gV2FybmluZyBhdCBDTWFrZUxpc3RzLnR4dDoxIChjbWFrZV9taW5p
+bXVtX3JlcXVpcmVkKToKICBDb21wYXRpYmlsaXR5IHdpdGggQ01ha2UgPCAzLjUgd2lsbCBiZSBy
+ZW1vdmVkIGZyb20gYSBmdXR1cmUgdmVyc2lvbiBvZgogIENNYWtlLgoKICBVcGRhdGUgdGhlIFZF
+UlNJT04gYXJndW1lbnQgPG1pbj4gdmFsdWUgb3IgdXNlIGEgLi4uPG1heD4gc3VmZml4IHRvIHRl
+bGwKICBDTWFrZSB0aGF0IHRoZSBwcm9qZWN0IGRvZXMgbm90IG5lZWQgY29tcGF0aWJpbGl0eSB3
+aXRoIG9sZGVyIHZlcnNpb25zLgoKVGhlIGlzc3VlIGhhcyBhbHJlYWR5IGZpeGVkIGluIHRoZSB1
+cHN0cmVhbSBwcm9qZWN0IHdpdGggY29tbWl0CjEyY2ExMTI4MTkxMiAoIkNNYWtlTGlzdHMudHh0
+OiBSZXF1aXJlIGNtYWtlIDMuNSBvciBoaWdoZXIiKSwgd2hpY2ggaXMKcGFydCBvZiB2ZXJzaW9u
+IDEuMjguCgpVcGdyYWRlIHBhaG9sZSB0byBnZXQgcmlkIG9mIHRoaXMgZXJyb3IuCgpodHRwczov
+L2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vZGV2ZWwvcGFob2xlL3BhaG9sZS5naXQvdHJlZS9ORVdT
+P2g9djEuMjgKClNpZ25lZC1vZmYtYnk6IEFsZXhpcyBMb3Rob3LDqSA8YWxleGlzLmxvdGhvcmVA
+Ym9vdGxpbi5jb20+Ci0tLQpUaGUgaXNzdWUgaXMgcmVwcm9kdWNpYmxlIHdpdGggdGhpcyBkZWZj
+b25maWc6CgpCUjJfYXJtPXkKQlIyX2NvcnRleF9hNz15CkJSMl9UT09MQ0hBSU5fRVhURVJOQUw9
+eQpCUjJfVE9PTENIQUlOX0VYVEVSTkFMX0JPT1RMSU49eQpCUjJfTElOVVhfS0VSTkVMPXkKQlIy
+X0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9InZlcnNhdGlsZSIKQlIyX0xJTlVYX0tFUk5FTF9ORUVE
+U19IT1NUX1BBSE9MRT15CgpJdCBoYXMgb3JpZ2luYWx5IGJlZW4gZGV0ZWN0ZWQgb24gYW4gb2xk
+ZXIgYnVpbGRyb290IHJlbGVhc2UgYnJhbmNoLiBUaGUKaXNzdWUgaXMgYWxzbyBwcmVzZW50IG9u
+IDIwMjUuMDIueCwgZG8geW91IHdhbnQgbWUgdG8gc2VuZCB0aGUgcGF0Y2gKYmFja3BvcnQgZml4
+aW5nIHRoZSBpc3N1ZSBvbiB0aGUgY3VycmVudCByZWxlYXNlIGJyYW5jaCA/Ci0tLQogcGFja2Fn
+ZS9wYWhvbGUvcGFob2xlLmhhc2ggfCAyICstCiBwYWNrYWdlL3BhaG9sZS9wYWhvbGUubWsgICB8
+IDIgKy0KIDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoK
+ZGlmZiAtLWdpdCBhL3BhY2thZ2UvcGFob2xlL3BhaG9sZS5oYXNoIGIvcGFja2FnZS9wYWhvbGUv
+cGFob2xlLmhhc2gKaW5kZXggYTJkM2QwNDRkYTg1ZmVmYTM2NWEyOTczYmMzNzAzZmEzY2IzZTFk
+YS4uZWZhMTIxODQ2ODdlNWZhYWU1MDkyNTE1ZGIxNDg5YmI1MmY3ZGI1MCAxMDA2NDQKLS0tIGEv
+cGFja2FnZS9wYWhvbGUvcGFob2xlLmhhc2gKKysrIGIvcGFja2FnZS9wYWhvbGUvcGFob2xlLmhh
+c2gKQEAgLTEsMyArMSwzIEBACiAjIExvY2FsbHkgY29tcHV0ZWQKLXNoYTI1NiAgODcyMjMyOThk
+NGY4ZjlhZGE5YjNjYzVjZWYxYmVkZDdhZWI0NDdjZDgyOTVhYmM0NjZlMDA5YTI2YWNjZmYxMyAg
+cGFob2xlLTEuMjcudGFyLmd6CitzaGEyNTYgIDlhMzE5YzIxNGIzODU1NGJlODQzMGE2NzIwNDNk
+ODU3MzU1NjRlOGUxZTc4ZGI1YTQxY2JhN2EwM2QwMzgwNTYgIHBhaG9sZS0xLjI4LnRhci5negog
+c2hhMjU2ICBhYjE1ZmQ1MjZiZDhkZDE4YTllNzdlYmMxMzk2NTZiZjRkMzNlOTdmYzcyMzhjZDEx
+YmY2MGUyYjliODY2NmM2ICBDT1BZSU5HCmRpZmYgLS1naXQgYS9wYWNrYWdlL3BhaG9sZS9wYWhv
+bGUubWsgYi9wYWNrYWdlL3BhaG9sZS9wYWhvbGUubWsKaW5kZXggZmZiZTRmZjkyNTg3MWQzMWMz
+MGVmNWI0MDYxMDNjYWFlOTQ2MWRkOS4uMTUwMzczZmQ3ZTE3OTk5ZDUyYjM2ZTk5ODM3ZjM0OTQ3
+NmM2MTE2ZiAxMDA2NDQKLS0tIGEvcGFja2FnZS9wYWhvbGUvcGFob2xlLm1rCisrKyBiL3BhY2th
+Z2UvcGFob2xlL3BhaG9sZS5tawpAQCAtNCw3ICs0LDcgQEAKICMKICMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjCiAKLVBBSE9MRV9WRVJTSU9OID0gMS4yNworUEFIT0xFX1ZFUlNJT04gPSAxLjI4CiBQ
+QUhPTEVfU0lURSA9IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9kZXZlbC9wYWhvbGUv
+cGFob2xlLmdpdC9zbmFwc2hvdAogSE9TVF9QQUhPTEVfREVQRU5ERU5DSUVTID0gXAogCWhvc3Qt
+ZWxmdXRpbHMgXAoKLS0tCmJhc2UtY29tbWl0OiA3NmI0ZmQxNTliY2RiYTk3ZWVmZGJjNDI5OWE3
+YWU5YjBhNGNkNDIzCmNoYW5nZS1pZDogMjAyNTA0MTQtYnVtcF9wYWhvbGUtOWQ2MTQ4NDkzYjBi
+CgpCZXN0IHJlZ2FyZHMsCi0tIApBbGV4aXMgTG90aG9yw6ksIEJvb3RsaW4KRW1iZWRkZWQgTGlu
+dXggYW5kIEtlcm5lbCBlbmdpbmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCgpfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
+aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
+YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
