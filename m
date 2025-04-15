@@ -1,78 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2C4EC369AB
-	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 19:47:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7A5EC369AB
+	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 19:51:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C27441223;
-	Tue, 15 Apr 2025 19:47:06 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RR-dH92VCJUE; Tue, 15 Apr 2025 19:47:05 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 914B74121B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 914B74121B;
-	Tue, 15 Apr 2025 19:47:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7DF95109
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 19:47:03 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C3996178F
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 19:47:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5D51A612A6;
+	Tue, 15 Apr 2025 19:51:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ISi3W2DwciEl for <buildroot@buildroot.org>;
- Tue, 15 Apr 2025 19:47:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ id zaxo5Lz2yOcr; Tue, 15 Apr 2025 19:51:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7718D61299
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7718D61299;
+	Tue, 15 Apr 2025 19:51:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2A91B108
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 19:51:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 19751404BD
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 19:51:56 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PUcf00XY4CVg for <buildroot@buildroot.org>;
+ Tue, 15 Apr 2025 19:51:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5C7006129B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C7006129B
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5C7006129B
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 19:47:02 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 6028919F734;
- Tue, 15 Apr 2025 21:46:57 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 15 Apr 2025 21:46:57 +0200
-Date: Tue, 15 Apr 2025 21:46:57 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: buildroot@buildroot.org
-Message-ID: <Z_63sTGxwXvJJhEp@landeda>
-References: <cover.1744229017.git.yann.morin.1998@free.fr>
- <7fec02abce143ebc20b3656c6cdcdf803c7dd760.1744229017.git.yann.morin.1998@free.fr>
- <56bc8-67fe2d80-1-26168cc0@111660538>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <56bc8-67fe2d80-1-26168cc0@111660538>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1744746420;
- bh=2B2fb1qmumZYuSe4oOS/CO7iWcgJ+KtXlIFMTaA3y7Q=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=kMM/sZKIZ+3apVPBUdzIq++2zltd1SUrUw52gShnImnAuqnlY4XSuMjF8fYMWrWDH
- z7vmaglEbet6NQn/JhmI2BQQNwGmGXBQWNZVRf2b3f4OCzS62SegdjYLaH/TCvG0Ec
- cHJHA9crgpy1TmZAn4p0KG2EWfwoonMZKIsy4AmB3uVfSuvtwkhKleYpyCaHnA1ZB9
- POMRD8R2XuiBL6mRpmgNKaRumcFaBCDlnWZMKOu7yAwYBuhnV90/HPpIBMWfKT2oxZ
- gyP+MD57k1C65N2a8RyVCt0avMa13enpTh2v9PNHCIxcXwloSrCq7haPS2slEnlG67
- 2jIT04gQAtYmQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=kMM/sZKI
-Subject: Re: [Buildroot] [PATCH 23/29 v2] package/boost: bump to version
- 1.87.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45428405BF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 45428405BF
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 19:51:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2FD5484925; Tue, 15 Apr 2025 19:51:55 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Tue, 15 Apr 2025 21:34:03 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: fd02add21b4d79f1dc7ac03c6a804858de15774b
+X-Git-Newrev: 7361a155ef420a58ebe1f8f360b141a926b6d8b2
+X-Patchwork-Hint: ignore
+Message-Id: <20250415195155.2FD5484925@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/edk2: drop dependency on tf-a for
+ macchiatobin
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,73 +59,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============2759704226215024996=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Michael, All,
+--===============2759704226215024996==
+Content-Type: text/plain
 
-On 2025-04-15 11:56 +0200, Michael Nosthoff spake thusly:
-> On Wednesday, April 09, 2025 22:03 CEST, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> Great that you took the time to clean up the boost package and bump it.
+commit: https://git.buildroot.net/buildroot/commit/?id=7361a155ef420a58ebe1f8f360b141a926b6d8b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And just right after I sent the series, they released boost 1.88.0!
+When building a firmware for the MACCHIATObin with edk2 and
+arm-trusted-firmware, the build can randomly fail with the
+following make error:
 
-I guess I'll have to eat my own dog food to prove that my cleanups and
-rework do indeed make it easier to bump. ;-]
+    make[1]: Circular output/build/edk2-edk2-stable202411/.stamp_configured <- arm-trusted-firmware dependency dropped.
 
-> I had the bumping on my list for some time now but didn't manage to
-> finish it due to the many C++03 deprecations in the last releases.
-> I discovered some issues with some boost internal dependencies.
-> Especially troublesome was using a gcc < 6.0 where C++11 is not
-> set as default mode and the package pulling in the header dependency
-> that required C++11 wasn't setting C++11 mode.
-> 
-> As I don't see any new BR2_TOOLCHAIN_GCC_AT_LEAST_* lines in the
-> patch I assume you didn't look at this?
+The message appears also when the build is not failing, depending on
+the number of parallel jobs and the build order.
 
-Indeed I did not.
+The issue can be observed with the following commands:
 
-I first wanted to make it easier to test boost, but this package is just
-insane.
+    cat >.config <<EOF
+    BR2_aarch64=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
+    BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33=y
+    BR2_TARGET_BINARIES_MARVELL=y
+    BR2_TARGET_EDK2=y
+    BR2_TARGET_EDK2_PLATFORM_SOLIDRUN_ARMADA80X0MCBIN=y
+    BR2_TARGET_MV_DDR_MARVELL=y
+    EOF
+    make olddefconfig
+    utils/brmake
+    grep -FC5 'dependency dropped' br.log
 
-Currently, to update the dependencies of libraries is very difficult,
-especially to drop no-longer needed dependencies. For example, since
-1.72.0, contract no longer needs system. With the current Config.in,
-this is totally impossible to detect, so much so that it has lingered in
-Buildroot up until now.
+The circular dependency happen due to [1] and [2].
 
-To properly detect that, we need to manually edit the Config.in, remove
-all dependencies, and build (configure is enough) libs one by one until
-one breaks, at which point we can add the required dependencies, and so
-on and so forth until all libs are covered. Given the amount of libs in
-1.87 and beyond, this is just an insane work...
+In fact, only TF-A depends on EDK II (passed as BL33) for building and
+not vice versa. See [3]. The EDK II "SolidRun MacchiatoBin" platform
+build does not need any TF-A image, compared to some other platforms
+such as "Socionext DeveloperBox" or "QEMU SBSA" which are referencing
+TF-A images in a hook added in EDK2_PRE_BUILD_HOOKS.
 
-And when we have a solution for that problem, then it becomes easier to
-pass boost through the ./utils/test-pkg harness, to test-build libs one
-by one to check whether they get new toolchain dependencies...
+Drop the false dependency on TF-A to fix the build.
 
-> Here my list of packages that now require a newer C++ version (taken
-> from the release notes):
-[--SNIP--]
+This issue has been present since the EDK2 introduction in commit [4].
 
-Thanks, that's very useful information! I'll have a look at 1.88.0 to
-update that list...
+[1] https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02/boot/arm-trusted-firmware/arm-trusted-firmware.mk#L121
+[2] https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02/boot/edk2/edk2.mk#L118
+[3] https://github.com/Semihalf/edk2-platforms/wiki/Build_firmware
+[4] https://gitlab.com/buildroot.org/buildroot/-/commit/1074a37e783b023bd0491ba4f4f7acab7f289e1d
 
-Thanks for the feedback! :-)
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Dick Olsson <hi@senzilla.io>
+[Julien: add extra info in commit log]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ boot/edk2/edk2.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Yann E. MORIN.
+diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
+index 3941d01883..bc4049b2de 100644
+--- a/boot/edk2/edk2.mk
++++ b/boot/edk2/edk2.mk
+@@ -115,7 +115,7 @@ endef
+ 
+ else ifeq ($(BR2_TARGET_EDK2_PLATFORM_SOLIDRUN_ARMADA80X0MCBIN),y)
+ EDK2_ARCH = AARCH64
+-EDK2_DEPENDENCIES += host-dtc arm-trusted-firmware edk2-non-osi
++EDK2_DEPENDENCIES += host-dtc edk2-non-osi
+ EDK2_PACKAGE_NAME = Platform/SolidRun/Armada80x0McBin
+ EDK2_PLATFORM_NAME = Armada80x0McBin
+ EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)-$(EDK2_ARCH)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+--===============2759704226215024996==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2759704226215024996==--
