@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58645C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:50:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42F84C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:50:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 080EC60F91;
-	Mon, 19 May 2025 10:50:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 025287038F;
+	Mon, 19 May 2025 10:50:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JsuN28WM44TC; Mon, 19 May 2025 10:50:45 +0000 (UTC)
+ id Q-kVjFVCeLNA; Mon, 19 May 2025 10:50:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3276061003
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 039F970387
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3276061003;
-	Mon, 19 May 2025 10:50:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 039F970387;
+	Mon, 19 May 2025 10:50:46 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 11E7F193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:24 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 045E9E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CBC2A41490
+ by smtp4.osuosl.org (Postfix) with ESMTP id E4AA54149B
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WyqjrVcc9BwW for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:56 +0000 (UTC)
+ id yvk1Z0R60Oe8 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1413D410AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 76D83410E8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1413D410AF
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 76D83410E8
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 12B1083B63; Mon, 19 May 2025 10:39:49 +0000 (UTC)
+ id 7540981E90; Mon, 19 May 2025 10:39:50 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 12 Apr 2025 14:06:17 +0200
+Date: Tue, 15 Apr 2025 19:16:25 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5d0ec3b6a43b0bf803233a4d07fbe3466442bd13
-X-Git-Newrev: 094f7a5b868ba6395d1e5d71d29c9e8baf886a46
+X-Git-Oldrev: 5c87c9aa0a94a647a59b280682ac285d01857091
+X-Git-Newrev: bdb5809adfcff3a47d7117b5c856a400c7432273
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103949.12B1083B63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/ls1046a-frwy: linux
- needs host-openssl
+Message-Id: <20250519103950.7540981E90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libv4l: backport
+ upstream patch to fix time_t issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,47 +65,74 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=094f7a5b868ba6395d1e5d71d29c9e8baf886a46
+commit: https://git.buildroot.net/buildroot/commit/?id=bdb5809adfcff3a47d7117b5c856a400c7432273
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since Buildroot commit [1] updating the defconfig to use Kernel 6.6.x
-series, the build can fail with error:
+libv4l has some really special code that is built explicitly with
+_FILE_OFFSET_BITS=32, which doesn't work with _TIME_BITS=64, causing
+build failures when BR2_TIME_BITS_64=y. This build issue has been
+fixed upstream. While how the upstream patch exactly works is unclear,
+it's the patch that upstream has decided to implement to resolve the
+build issue, so we simply backport it.
 
-    certs/extract-cert.c:21:10: fatal error: openssl/bio.h: No such file or directory
+The issue exists since at least upstream commit
+99f245f5e2826c7ae3ac8de530bc2fbd906eb62b, which was merged in
+v4l-utils 1.26.0.
 
-The issue is generally masked by the build order, as
-arm-trusted-firmware selects BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-which requires host-openssl.
+Fixes:
 
-The issue can be reproduced in the Buildroot Docker reference image,
-using the commands:
+  https://autobuild.buildroot.org/results/616608ef2a44efff67fa21b3263b341da82744c4/
 
-    utils/docker-run
-    make ls1046a-frwy_defconfig
-    make linux
-
-This commit fixes the issue by explicitly adding
-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y to the defconfig.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/0344e5dae647c5cc23eea11fcbeddd7fec776d75
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Julien: add upstream commit url in patch]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/ls1046a-frwy_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ ...1-meson.build-fix-arm-_TIME_BITS-64-error.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/configs/ls1046a-frwy_defconfig b/configs/ls1046a-frwy_defconfig
-index 52d8f0cc07..f2fac6590f 100644
---- a/configs/ls1046a-frwy_defconfig
-+++ b/configs/ls1046a-frwy_defconfig
-@@ -18,6 +18,7 @@ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm64/configs/lsdk.con
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-ls1046a-frwy freescale/fsl-ls1046a-frwy-sdk"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_PACKAGE_QORIQ_FM_UCODE=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
+diff --git a/package/libv4l/0001-meson.build-fix-arm-_TIME_BITS-64-error.patch b/package/libv4l/0001-meson.build-fix-arm-_TIME_BITS-64-error.patch
+new file mode 100644
+index 0000000000..43fe9b2721
+--- /dev/null
++++ b/package/libv4l/0001-meson.build-fix-arm-_TIME_BITS-64-error.patch
+@@ -0,0 +1,37 @@
++From 6faf5e963eadeab8b7d47d5b3c14f06e0ae1da01 Mon Sep 17 00:00:00 2001
++From: Hans Verkuil <hverkuil@xs4all.nl>
++Date: Sat, 12 Apr 2025 12:30:13 +0200
++Subject: [PATCH] meson.build: fix arm _TIME_BITS=64 error
++
++Undefine _TIME_BITS to avoid this error on 32-bit arm:
++
++/usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
++
++Signed-off-by: Hans Verkuil <hverkuil@xs4all.nl>
++Upstream: https://git.linuxtv.org/v4l-utils.git/commit/?id=d517cfdcdc16533ab7e06e97c07ca089cf261aef
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ meson.build | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 269a9da7..31927cda 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -53,8 +53,12 @@ v4l2_wrapper_args = [
++     # As the library needs to provide both 32-bit and 64-bit versions
++     # of file operations, disable transparent large file support (fixes
++     # 'Error: symbol `open64/mmap64' is already defined' compile failure
++-    # otherwise)
+++    # otherwise).
+++    #
+++    # Also disable _TIME_BITS=64 since this is allowed only with
+++    # _FILE_OFFSET_BITS=64, which is now 32.
++     '-U_FILE_OFFSET_BITS',
+++    '-U_TIME_BITS',
++     '-D_FILE_OFFSET_BITS=32',
++     '-D_LARGEFILE64_SOURCE',
++ ]
++-- 
++2.49.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
