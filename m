@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E3C0C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:44:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E33A6C3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:44:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C277E42A17;
-	Mon, 19 May 2025 10:44:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AFBD761461;
+	Mon, 19 May 2025 10:44:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jRKrAPjXwElc; Mon, 19 May 2025 10:44:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rE55FJa7yq2n; Mon, 19 May 2025 10:44:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED35742425
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CF9F6144A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED35742425;
-	Mon, 19 May 2025 10:44:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 12FEED4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CF9F6144A;
+	Mon, 19 May 2025 10:44:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9B48AE4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 04D8441137
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E09E41731
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hyOuvN2ucY75 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 30nLnh2IPkTh for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8049640D56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66F894179E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8049640D56
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 66F894179E
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7EF0183A2E; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+ id 63B67872E7; Mon, 19 May 2025 10:39:50 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 25 Mar 2025 23:02:14 +0100
+Date: Tue, 15 Apr 2025 19:16:25 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 84ab3e3d6e37ee4572888a143f3a04c53260ef6e
-X-Git-Newrev: 7d987b72c553c2ba54203f79ae60a026ba373551
+X-Git-Oldrev: 770c1525e6deb580ef5b36466319dd444d07fc16
+X-Git-Newrev: 164c84ee9b820f5b21e79b4d52c07a613925d3f2
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103945.7EF0183A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/tvheadend: bump version
+Message-Id: <20250519103950.63B67872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/perl: security bump to
+ version 5.40.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,38 +65,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d987b72c553c2ba54203f79ae60a026ba373551
+commit: https://git.buildroot.net/buildroot/commit/?id=164c84ee9b820f5b21e79b4d52c07a613925d3f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+fix CVE-2024-56406: A heap buffer overflow vulnerability
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+[Julien: fix check-package error in hash file]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/tvheadend/tvheadend.hash | 2 +-
- package/tvheadend/tvheadend.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/perl/perl.hash | 12 ++++++------
+ package/perl/perl.mk   |  4 ++--
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-index 3f86b3ff3b..7b47e9ae71 100644
---- a/package/tvheadend/tvheadend.hash
-+++ b/package/tvheadend/tvheadend.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f31cf06dcc40313e9b77331827201e74ed75c4d18156394581ca1a4ae55aa888  tvheadend-26ec161fb3c903f8b0d0be8b54d1b67c596fb829.tar.gz
-+sha256  9c2e13a70f97cf4c9b37cd93bfd03a7a1e0b7f3b18080c40ef99b8917642dbd7  tvheadend-653bd0400b4413db96b80c807f0f7524f9248adb.tar.gz
- sha256  16aaf037a2d00e6e7804de64619887fc7539f1ede99e3282c86dfbc61c2af63e  LICENSE.md
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index 812ab4e9ab..a9bd98ebea 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 04ebf83b33..d581054bb5 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -1,10 +1,10 @@
+-# Hashes from: https://www.cpan.org/src/5.0/perl-5.40.1.tar.xz.{md5,sha1,sha256}.txt
+-md5  bab3547a5cdf2302ee0396419d74a42e  perl-5.40.1.tar.xz
+-sha1  4ffe5246c791df884363aed05ba81ba41cb02084  perl-5.40.1.tar.xz
+-sha256  dfa20c2eef2b4af133525610bbb65dd13777ecf998c9c5b1ccf0d308e732ee3f  perl-5.40.1.tar.xz
++# Hashes from: https://www.cpan.org/src/5.0/perl-5.40.2.tar.xz.{md5,sha1,sha256}.txt
++md5  9ad7a269dc4053cdbeecd4fde444291b  perl-5.40.2.tar.xz
++sha1  661fe9ee085ca0aec8ddd65e055bee922af12663  perl-5.40.2.tar.xz
++sha256  0551c717458e703ef7972307ab19385edfa231198d88998df74e12226abf563b  perl-5.40.2.tar.xz
  
--TVHEADEND_VERSION = 26ec161fb3c903f8b0d0be8b54d1b67c596fb829
-+TVHEADEND_VERSION = 653bd0400b4413db96b80c807f0f7524f9248adb
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPL-3.0+
- TVHEADEND_LICENSE_FILES = LICENSE.md
+-# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.1/perl-cross-1.6.1.hash
+-sha256  b5f4b4457bbd7be37adac8ee423beedbcdba8963a85f79770f5e701dabc5550f  perl-cross-1.6.1.tar.gz
++# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.2/perl-cross-1.6.2.hash
++sha256  131f7496152ee32067dbac2bc9b44b2f582fc778140e545701b3b2faee782f1d  perl-cross-1.6.2.tar.gz
+ 
+ # Locally calculated
+ sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 37b9fe185d..34abb734d6 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version here, also update utils/scancpan
+ PERL_VERSION_MAJOR = 40
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
+ PERL_SITE = https://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPL-1.0+
+@@ -15,7 +15,7 @@ PERL_CPE_ID_VENDOR = perl
+ PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.6.1
++PERL_CROSS_VERSION = 1.6.2
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
