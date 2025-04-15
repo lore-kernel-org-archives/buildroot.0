@@ -4,97 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 914E6C369B4
-	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 14:17:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B7F8C369AB
+	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 14:22:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 490A48154D;
-	Tue, 15 Apr 2025 14:17:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 284A982B5E;
+	Tue, 15 Apr 2025 14:22:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I8JISph5xuzL; Tue, 15 Apr 2025 14:17:22 +0000 (UTC)
+ id mJy5qEvMWy8R; Tue, 15 Apr 2025 14:22:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6602B81065
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57C5E8221D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6602B81065;
-	Tue, 15 Apr 2025 14:17:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 280D3108
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 14:17:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 57C5E8221D;
+	Tue, 15 Apr 2025 14:22:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 39C8E109
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 14:22:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 193AA837BC
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 14:17:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C762411F5
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 14:22:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Odhxg1TJNAzN for <buildroot@buildroot.org>;
- Tue, 15 Apr 2025 14:17:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::434; helo=mail-pf1-x434.google.com;
- envelope-from=lancethepants@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4C1308130C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C1308130C
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com
- [IPv6:2607:f8b0:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4C1308130C
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 14:17:20 +0000 (UTC)
-Received: by mail-pf1-x434.google.com with SMTP id
- d2e1a72fcca58-73c17c770a7so667114b3a.2
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 07:17:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1744726639; x=1745331439;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Wwi20q/k0z8LrsaXehbV3ofpOSoEfVzJfTs13MXcxtw=;
- b=hkcMkVZaD94dnI2QrKL5rtvoQ+qw/m3PQNEaqN2SGb+vm01wFAafaK7rBNp8SebNz6
- tBUbyuHde6sVRshYxVJtJW0PBarqzA2Si2gBHfLyXC1lnEf6JiL60aJTJC95ULvHLySn
- mQtq4R5iUIgljOc0Ik8n6olB1zHwkKYCpMNU8+6UL8pRnTSk9bKf0eWhvG3OT4gzbbL4
- w4T/I9fOx8t0B7vMdjsXCyOMDBujvKYeG1/6Ea8K5ANdogkxtTjNfgbpiOMNS0zs12Mr
- zg9HfzhukghXZo5QGWO0qfkR25taR6lOIqgXpocGRtECw6l30k0F0xBbLV7x6tlbx7d0
- EtTw==
-X-Gm-Message-State: AOJu0Yw2bg8EnM1mG7X8PqKvLxENKSpQS0VPviBLXRDglok08sjxVG10
- F7sA95Bo6Gn/DGiovV7SN2ETp7ed3nltuvL3J1HLG58XS2whPVWYvR0xLw==
-X-Gm-Gg: ASbGnctJ5ixXtP1v425G66TX8PLzx4qBzvmcfSSNWfQI25BuGiq17f6JeluBjkubMXm
- 4LbXTOg1G9Lvf9w2anhohv5wjDoXazYvVSAkdyfVGxgM1IPGv9G2MCZxJa1aKorgwSyT65GosFq
- Xefhrl9O82QuqH+0G7Ta8NlrcjpmriHMv9iaKjGSOt2ZNIvAcLmZjUG87eic+b1Nwa8yNm4ZQwH
- akzyUnmUbTEJ6ngwQS816evmoytN2PQ+P9CmsjWC+pIsg+FKZl56DB+ZsEnsduJhRNPjblM2vVV
- bs03/HxEeK29UPRY6dQcvQ==
-X-Google-Smtp-Source: AGHT+IHbubiOP7L6psXJrvynUIJpHPr8Q3lqV5262QuC2GdOGYjFo6svX3UysH+KehShs6II4FQ8eg==
-X-Received: by 2002:a05:6a20:cf82:b0:1f5:9431:46e7 with SMTP id
- adf61e73a8af0-201799984fcmr23814776637.42.1744726639280; 
- Tue, 15 Apr 2025 07:17:19 -0700 (PDT)
-Received: from ProgramPC.bm.local ([76.8.199.226])
- by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-73bd2198ac2sm8535238b3a.8.2025.04.15.07.17.18
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 15 Apr 2025 07:17:19 -0700 (PDT)
-From: Lance Fredrickson <lancethepants@gmail.com>
-X-Google-Original-From: Lance Fredrickson
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8KV_9xzmWXWt for <buildroot@buildroot.org>;
+ Tue, 15 Apr 2025 14:22:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=188.165.44.123;
+ helo=mail1.insia.net; envelope-from=guillaume.chaye@zeetim.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 333AF40BF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 333AF40BF2
+Received: from mail1.insia.net (mail1.insia.net [188.165.44.123])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 333AF40BF2
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 14:22:46 +0000 (UTC)
+Received: from smtp.insia.net (unknown [192.168.1.24])
+ by mail1.insia.net (Postfix) with ESMTP id 09EEA3FA8C;
+ Tue, 15 Apr 2025 16:22:39 +0200 (CEST)
+Received: from UDERZO.insia.net (unknown [192.168.1.35])
+ by smtp.insia.net (Postfix) with ESMTP id CFC5C5F497;
+ Tue, 15 Apr 2025 16:24:22 +0200 (CEST)
+From: Guillaume Chaye <guillaume.chaye@zeetim.com>
 To: buildroot@buildroot.org
-Cc: Lance Fredrickson <lancethepants@gmail.com>, Bernd Kuhls <bernd@kuhls.net>
-Date: Tue, 15 Apr 2025 08:17:11 -0600
-Message-Id: <20250415141711.1940219-1-lancethepants@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>, Guillaume Chaye <guillaume.chaye@zeetim.com>
+Date: Tue, 15 Apr 2025 10:22:08 -0400
+Message-Id: <20250415142208.165435-1-guillaume.chaye@zeetim.com>
 X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1744726639; x=1745331439; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Wwi20q/k0z8LrsaXehbV3ofpOSoEfVzJfTs13MXcxtw=;
- b=PElkZWP9XvXWsxT2Ng2JIjSu3Dx/Jqx41tehV3zhnEq7mU9wDO+xcEIuASaFWMCv8y
- U0W52tEE47Ypw2DkTEQ1seuJyvPpCXqLhsmnC7GwN+eQW0k6gLxjJuI3G3MRoHeftTxL
- C8WkAS5DOiW3eGFdeTirI8UOJurAH2DDDcmnDeL1K8GB6k2KnVvBVFNkYi3eprXnf66Y
- JdtWEjarvzmfLnNX7cuZmX+1ywGpQLfMk4gG05VrPC97zgqemApLKbSHOuCV1OPYyxoQ
- b+Y2n5p6hDwmZbP/8cHjcs0G7M61GGYb8jbyHIEphuojbkV15Oe9Ni6yQi93VRdyG9nY
- ewNw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=PElkZWP9
-Subject: [Buildroot] [PATCH] package/dnsmasq: bump version to 2.91
+ d=zeetim.com; s=mail1; t=1744726959;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=p90eBFKdiegisYTfu0orHOKA3Uol9jcBwgvGu1Id6u0=;
+ b=dWemx4wMaXiEEsTgsamONn80I3bl/gjij4iRwhsv7tQOeJneyvPwDIGLrlnW/UcU/om/h/
+ 4V658qmLMUkhT76igiPhylP5YfcsHd17CmZVId3CGWWxmubE6V3EbLoYpzQi/rOAMx3NR+
+ ZlcPAv5Mu2LZ1bRyp0Wwj+KO2tCdbJytlczlQH+fn/AVfONq0P13Dlnq8u0EDopS8cUdEB
+ sy8QfJj/fo2jrSINnZ6FPpiQ+GyjtW+9GUdaO1A0NgomA7YPyPgl+/wpdZjVt0TvHjP3yM
+ IzjaddRpCgOtyKSwxG/1xaZIcK2R4XKTCKJH5J8BPiFB84lRFB95FOSpbZ5jrQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=zeetim.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=zeetim.com header.i=@zeetim.com header.a=rsa-sha256
+ header.s=mail1 header.b=dWemx4wM
+Subject: [Buildroot] [PATCH 1/1] support/download/smb: Add basic support for
+ smb download.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,45 +86,115 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Lance Fredrickson <lancethepants@gmail.com>
+This method requires samba to be installed on the host machine since it uses smbget command to fetch remote files.
+Curl also support basic smb download but currently the curl script does not support -u option.
 
-Changelog: https://thekelleys.org.uk/dnsmasq/CHANGELOG
-
-Release notes:
-https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q1/018079.html
-
-Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
+Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
 ---
- package/dnsmasq/dnsmasq.hash | 4 ++--
- package/dnsmasq/dnsmasq.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Config.in                   |  4 +++
+ package/pkg-download.mk     |  1 +
+ support/download/dl-wrapper |  2 +-
+ support/download/smb        | 51 +++++++++++++++++++++++++++++++++++++
+ 4 files changed, 57 insertions(+), 1 deletion(-)
+ create mode 100755 support/download/smb
 
-diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
-index d11e8af590..212774cd10 100644
---- a/package/dnsmasq/dnsmasq.hash
-+++ b/package/dnsmasq/dnsmasq.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.90.tar.xz.asc
--sha256  8e50309bd837bfec9649a812e066c09b6988b73d749b7d293c06c57d46a109e4  dnsmasq-2.90.tar.xz
-+# https://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.91.tar.xz.asc
-+sha256  f622682848b33677adb2b6ad08264618a2ae0a01da486a93fd8cd91186b3d153  dnsmasq-2.91.tar.xz
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING-v3
-diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
-index 5dd7ed5c21..abeee36ce4 100644
---- a/package/dnsmasq/dnsmasq.mk
-+++ b/package/dnsmasq/dnsmasq.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/Config.in b/Config.in
+index a543091d4f..c562310c2b 100644
+--- a/Config.in
++++ b/Config.in
+@@ -144,6 +144,10 @@ config BR2_SCP
+ 	string "Secure copy (scp) command"
+ 	default "scp -o ConnectTimeout=10"
  
--DNSMASQ_VERSION = 2.90
-+DNSMASQ_VERSION = 2.91
- DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
- DNSMASQ_SITE = https://thekelleys.org.uk/dnsmasq
- DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
++config BR2_SMBGET
++	string "Server Message Block (smbget) command"
++	default "smbget"
++
+ config BR2_SFTP
+ 	string "Secure file transfer (sftp) command"
+ 	default "sftp -o ConnectTimeout=10"
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index cf5959ea95..e1f64eb392 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -114,6 +114,7 @@ define DOWNLOAD
+ 	LOCALFILES="$(call qstrip,$(BR2_LOCALFILES))" \
+ 	SCP="$(call qstrip,$(BR2_SCP))" \
+ 	SFTP="$(call qstrip,$(BR2_SFTP))" \
++	SMBGET="$(call qstrip,$(BR2_SMBGET))" \
+ 	SVN="$(call qstrip,$(BR2_SVN))" \
+ 	WGET="$(call qstrip,$(BR2_WGET))" \
+ 	BR_NO_CHECK_HASH_FOR="$(if $(BR2_DOWNLOAD_FORCE_CHECK_HASHES),,$(BR_NO_CHECK_HASH_FOR))" \
+diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
+index 5445aad5a7..f7aa82fb9f 100755
+--- a/support/download/dl-wrapper
++++ b/support/download/dl-wrapper
+@@ -95,7 +95,7 @@ main() {
+         backend_urlencode="${uri%%+*}"
+         backend="${backend_urlencode%|*}"
+         case "${backend}" in
+-            git|svn|cvs|bzr|file|scp|hg|sftp) ;;
++            git|svn|cvs|bzr|file|scp|hg|sftp|smb) ;;
+             ftp|ftps) backend="curl" ;;
+             *) backend="wget" ;;
+         esac
+diff --git a/support/download/smb b/support/download/smb
+new file mode 100755
+index 0000000000..98136081d6
+--- /dev/null
++++ b/support/download/smb
+@@ -0,0 +1,51 @@
++#!/usr/bin/env bash
++
++# We want to catch any unexpected failure, and exit immediately
++set -e
++
++# Download helper for smbget, to be called from the download wrapper script
++#
++# Options:
++#   -q          Be quiet.
++#   -o FILE     Save into file FILE.
++#   -f FILENAME The filename of the tarball to get at URL.
++#   -u URL      Download file at URL (up to the directory).
++#
++# Environment:
++#   SMBGET   : the smbget command to call (default: smbget)
++#   SMBUSER  : the SMB username (default: guest)
++#   SMBPASS  : the SMB password (default: empty)
++
++quiet=
++while getopts "${BR_BACKEND_DL_GETOPTS}" OPT; do
++    case "${OPT}" in
++    q)  quiet=-q;;
++    o)  output="${OPTARG}";;
++    f)  filename="${OPTARG}";;
++    u)  url="${OPTARG}";;
++    :)  printf "option '%s' expects a mandatory argument\n" "${OPTARG}"; exit 1;;
++    \?) printf "unknown option '%s'\n" "${OPTARG}" >&2; exit 1;;
++    esac
++done
++
++shift $((OPTIND-1)) # Get rid of our options
++
++SMBUSER="${SMBUSER:-guest}"
++SMBPASS="${SMBPASS:-}"
++
++_smbget() {
++    if [ -z "${quiet}" ]; then
++        printf '%s ' "${SMBGET}" -U "${SMBUSER}%***" -o "${output}" "${url%/}/${filename}"
++        printf '\n'
++    fi
++    _plain_smbget "$@"
++}
++
++_plain_smbget() {
++    full_url="${url%/}/${filename}"
++
++    # shellcheck disable=SC2086
++    eval ${SMBGET} ${quiet} -U "'${SMBUSER}%${SMBPASS}'" -o "'${output}'" "'${full_url}'"
++}
++
++_smbget "$@"
 -- 
 2.39.5
 
