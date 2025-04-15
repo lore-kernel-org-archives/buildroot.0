@@ -1,78 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EBDEC369BA
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AF4DC369AB
 	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 19:56:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14F0D83342;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06F85610F2;
 	Tue, 15 Apr 2025 19:56:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kiDc5eSzhkbp; Tue, 15 Apr 2025 19:56:27 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9gZlTqSZazB8; Tue, 15 Apr 2025 19:56:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39AC1837BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FFAB611D7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 39AC1837BC;
-	Tue, 15 Apr 2025 19:56:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 169B1108
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 19:56:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3FFAB611D7;
+	Tue, 15 Apr 2025 19:56:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C5BDF109
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 19:56:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F33B5836D5
+ by smtp4.osuosl.org (Postfix) with ESMTP id B3694411C4
  for <buildroot@buildroot.org>; Tue, 15 Apr 2025 19:56:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OuFca7Olnoan for <buildroot@buildroot.org>;
- Tue, 15 Apr 2025 19:56:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Dby54exso5WU for <buildroot@buildroot.org>;
+ Tue, 15 Apr 2025 19:56:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 09ACD835F2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 09ACD835F2
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 09ACD835F2
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 19:56:16 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-399749152b4so3483536f8f.3
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 12:56:16 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B18EC403BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B18EC403BE
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B18EC403BE
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 19:56:17 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-4394a823036so59739765e9.0
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 12:56:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1744746975; x=1745351775;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=JwbueKYZmvrOsFTWOlN2wYjTxIUrFgXXaHkZQ6H03lw=;
- b=t5WhjpXIp7fCdIJxxgDe2xjVNFF7Til4aIGVXSvNSNsg4XWuLh4t3hg99q2aAuwP/A
- BunlwaYku8ZDN8up3ch5g6TlDqqmbCiJX+ejkxJ3eFltRqjtdbdfw1uZhrCb2aDr+R7t
- sBWjuQp9+E7Kqk9YzR9urJ6gO2bp+wkgSG9s1VNUpYsqHlcT7o/oTQg35Cj/u/X8HVjo
- ESPvgRFJEk304OrqOqmYob2ahemE4WO/voRcZQaZlM5IuEkf8eYqb8dpgtpkq1rij/vP
- Khw9IfNX1ukmBRNwKIJddDyeJG4bG/jJUyJWh26kUaAsvOKlDZtcO5lyLdH2WGHYTScr
- mjFw==
-X-Gm-Message-State: AOJu0Yx6qRmsiBbmLjxJuOccK75dzvV3zxSUMk+eztKz7XByrZK+Q+PU
- LkFE5xnkWr1Mn+S6Z7cTububq8BcXGD1IbtqL9oH9frOiRkFv2sfUNOnZa14MDClNj4gTLSXakw
- l
-X-Gm-Gg: ASbGncsb7iFL1GLIEFUPakv711tp5U5PJS31oYCdh7pjNPlkgC1P13605v8c7JG4kXR
- 4EJE7qZ9XqBm/reU1NKXwx2Av/9O041G7YgfhxBum/oEY5KwQtkOLbP35ZL/e6jKgudU2liVjsa
- 4wlSKDGj0ZdtvK1AK6AM1gRANgOe7C3RKh8QFdACrjsuuPhrjrYSrLWAWiv9vt7VozEhCuMwpb7
- XGh8AE4OCguAzzZUXX+NyQu+sUXXreXtj8rCMLIUFtA87/lqWu2+Wr8pUqrDvKfBpLMlj/nMLV5
- 9Viimh+Rejlpdj+OoqvrG/d5Q5qyoWxRVDl35yEveaTXcIznpCPs+rM=
-X-Google-Smtp-Source: AGHT+IHVF3iY+sLTNSMYbH+vCbMCnvWmK7lD29/VhpXW3zSh5xIS69nVlM8Fp9LJzP9I+fW56UgNFQ==
-X-Received: by 2002:a05:6000:290d:b0:391:3aaf:1d5d with SMTP id
- ffacd0b85a97d-39ee274fc63mr566780f8f.27.1744746974783; 
- Tue, 15 Apr 2025 12:56:14 -0700 (PDT)
+ bh=Avyp2IMTo3bmPRrcmtlne5do3DqtWnXrKIBeSIxbEQ8=;
+ b=KHZRu8zz2KliOVX4spS82hBfdKHiucr4NLccWcfdhQ8Xyrf1zmQWXioHwUfKvSon+Z
+ PgXmpQzEU4I/XRuAFtPoGXOn5iwrqwWgQGSkCxp/G6c3A3NA5xt0RFREnrYvwGXVORJ0
+ d1bBtLJr+lY2W8ig4gY/8B0to1FkCL9sOyizDFweaUw5er8ItigXFvWNPI24Y51Az/3O
+ h3NXd33uPQOF4R7Mqhs+k3kDo1oUMCb2K2jCdxy/ljqyTVTYIKUjChgGip6HyMdEUBnc
+ CtRamybKhQIewdY1O4AwftShZluMy4kAD2fqptIA660P/6OUwGAoxpG1SltgG5ZYC5Kr
+ KbbA==
+X-Gm-Message-State: AOJu0Yz+f5D2ujM+DRpLf103AfGlEYEboOKUxWwpiHcByFhsnFuIwxT6
+ GnzfHoVwhtk+GDfWEKxx4eHp76GhyWSOyIFi3ibtuGJoAbzC/PfWVOB32Nw2+rDTLlu2kZtVca6
+ y
+X-Gm-Gg: ASbGnctPCc+okmtRrLpQCi2++ndAFVV4xudsQNU3T5is3vbl2gkiIbb0PTqTM+Z7IcI
+ XYoF3vyBqqSaomz3wg9FPiH1LxpuWBj78bwjD79KAx1vxPDaGE+82hPlqYFmKWpL8Y6Zt2I1eeI
+ 51/n1wvEw0g8iRWJK5Ir3e2Mtjg2g5w7GkFGvbXfg8pmDLi1K7LQW1vsh4J/bvmETdKEiHJuLh6
+ MgDT4UpA4kWXtUfKnJcuayEs44LOHrCv3RwvHQdzWkSQpoLguE8L5f5Uv8aFlG3Q/jQsEECwEWu
+ p+LYCA88YRuyBBUeR1+D2OwHmXOLScmS3rL+4makFXlfHTNZmAFThVtFA/7WEI/ieA==
+X-Google-Smtp-Source: AGHT+IHCxu5P8a6aKuUpCeCt6iM7fXPaTTj+OjMMI92kBIE9kGAAB6Y0eaHBubb5wga4qlDy4oQz6A==
+X-Received: by 2002:a05:600c:a4b:b0:43d:49eb:9675 with SMTP id
+ 5b1f17b1804b1-4405a0f54f8mr2086295e9.22.1744746975470; 
+ Tue, 15 Apr 2025 12:56:15 -0700 (PDT)
 Received: from localhost.localdomain ([79.132.233.61])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-39eaf447777sm14957366f8f.100.2025.04.15.12.56.13
+ ffacd0b85a97d-39eaf447777sm14957366f8f.100.2025.04.15.12.56.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 15 Apr 2025 12:56:14 -0700 (PDT)
+ Tue, 15 Apr 2025 12:56:15 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Tue, 15 Apr 2025 21:55:38 +0200
-Message-ID: <20250415195547.199428-6-thomas.perale@mind.be>
+Date: Tue, 15 Apr 2025 21:55:39 +0200
+Message-ID: <20250415195547.199428-7-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250415195547.199428-1-thomas.perale@mind.be>
 References: <20250415195547.199428-1-thomas.perale@mind.be>
@@ -82,21 +82,21 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=JwbueKYZmvrOsFTWOlN2wYjTxIUrFgXXaHkZQ6H03lw=;
- b=EgBISXJ8blj32Pbn6zy/iveoFyr+b2cbpeT3q1VHrNpjGY87NXyipxA1QuVLlzL6oa
- w3Pa0Ce1l6afki4HnbGyZ7y/G7Uinj/23LkV57NvBu0jkTrVqTlX+v9ZZ6JcT7SJCDRz
- KcgtsA3KQ+KB8/PPjoidtEiMrUKQLpADmTa1Ir5QE8tgSBEh9jV3tkOhHQxJ0yJL8k1l
- o1hE5hW4h6wlM9HaWKMqyWPHjng+TqomhGPGjsG0AYE6dFbDhKNpDv4gIBhnhkud4BjP
- OjJczXnrvwm/WyYr8jRoRoemqIIZceSSA1w5WgM482IhnSzjzjf6soircXLzyZbNz+Zc
- 97/A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=Avyp2IMTo3bmPRrcmtlne5do3DqtWnXrKIBeSIxbEQ8=;
+ b=c3/GRO5l0Y2e2LsAGMCLR82qRn+vEPNWhyxhqlWNc6oL609PMcohPpdcNyAKec3LhC
+ SaR19dEhcHuB5PZ3SLr6TeWPaOKe9cqTWGhPuu1FiM3vVpVLYFPax/7fSjsIKlDva471
+ QQpm0ZwUi+trTeGQT6+KCdzyzpoh5VSjMhg6qOMOsb2gIotkYsepjLBlxNi4nqJ83dUP
+ /h+IRyg/xg225YbeFXtefvCsgT/PE3LEPXIX/ekRAhB5Y1hoUbga9lTdysPn0tHfexr3
+ Cl8eF8jgVQGzCULIwz80Bhq6SSu32VRtwyRGKHfCEClrbDOSJ4Zjs6/zYrzdfw7TcTEC
+ ycKw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=EgBISXJ8
-Subject: [Buildroot] [PATCH 4/7] package/pkg-cargo: support PURL generation
+ header.s=google header.b=c3/GRO5l
+Subject: [Buildroot] [PATCH 5/7] package/pkg-perl: support PURL generation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,24 +119,25 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The PURL specification for Cargo packages follows the coordinates from
-the sonatype ossindex:
+The PURL specification for CPAN packages follows the coordinates from
+the following:
 
-https://ossindex.sonatype.org/ecosystem/cargo
+https://github.com/giterlizzi/perl-URI-PackageURL
 
-- The type is defined as 'cargo'.
-- The name is the package name
+ - The PURL type is defined as 'cpan'.
+ - The PURL namespace is the author of the package.
+ - The PURL name is '<pkg>_DISTNAME' variable
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/pkg-cargo.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/pkg-perl.mk | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
-index 47a6353f25..6fb3cb8bc2 100644
---- a/package/pkg-cargo.mk
-+++ b/package/pkg-cargo.mk
-@@ -306,6 +306,14 @@ define $(2)_INSTALL_CMDS
+diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
+index 1ecf31eff9..1e10d21274 100644
+--- a/package/pkg-perl.mk
++++ b/package/pkg-perl.mk
+@@ -193,6 +193,30 @@ define $(2)_INSTALL_TARGET_CMDS
  endef
  endif
  
@@ -144,7 +145,23 @@ index 47a6353f25..6fb3cb8bc2 100644
 + ifdef $(3)_PURL_TYPE
 +  $(2)_PURL_TYPE = $$($(3)_PURL_TYPE)
 + else
-+  $(2)_PURL_TYPE = cargo
++  $(2)_PURL_TYPE = cpan
++ endif
++endif
++
++ifndef $(2)_PURL_NAMESPACE
++ ifdef $(3)_PURL_NAMESPACE
++  $(2)_PURL_NAMESPACE = $$($(3)_PURL_NAMESPACE)
++ else
++  $(2)_PURL_NAMESPACE = $(notdir $($(3)_SITE))
++ endif
++endif
++
++ifndef $(2)_PURL_NAME
++ ifdef $(3)_PURL_NAME
++  $(2)_PURL_NAME = $$($(3)_PURL_NAME)
++ else
++  $(2)_PURL_NAME = $$($$(3)_DISTNAME)
 + endif
 +endif
 +
