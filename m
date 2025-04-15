@@ -4,73 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EF1B9C369AB
-	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 20:09:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31C47C369AB
+	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 20:10:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A07F8608BE;
-	Tue, 15 Apr 2025 20:09:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 94AD761072;
+	Tue, 15 Apr 2025 20:10:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 79eAZxAe-ha8; Tue, 15 Apr 2025 20:09:20 +0000 (UTC)
+ id bM3AUYgGH4jw; Tue, 15 Apr 2025 20:10:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6A8E610F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D9F560E83
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C6A8E610F2;
-	Tue, 15 Apr 2025 20:09:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7F4BA109
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 20:09:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D9F560E83;
+	Tue, 15 Apr 2025 20:10:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7CE27108
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 20:10:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 64EF940333
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 20:09:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6238A80BC9
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 20:10:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E-KnbpkgMuIm for <buildroot@buildroot.org>;
- Tue, 15 Apr 2025 20:09:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D1ijYJb9H5y7 for <buildroot@buildroot.org>;
+ Tue, 15 Apr 2025 20:10:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5147340DD3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5147340DD3
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5147340DD3
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 20:09:17 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 3E6524340C;
- Tue, 15 Apr 2025 20:09:14 +0000 (UTC)
-To: buildroot@buildroot.org
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Bernd Kuhls <bernd@kuhls.net>
-Date: Tue, 15 Apr 2025 22:09:13 +0200
-Message-ID: <20250415200913.2219800-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.49.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 46AED80301
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46AED80301
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 46AED80301
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 20:10:01 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 389C419F57B;
+ Tue, 15 Apr 2025 22:09:57 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 15 Apr 2025 22:09:56 +0200
+Date: Tue, 15 Apr 2025 22:09:56 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org
+Message-ID: <Z_69FJoxJcpxeL7f@landeda>
+References: <20250415200047.2256467-1-peter@korsgaard.com>
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -51
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvdeggeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuuhhsphgvtghtffhomhgrihhnucdlgeelmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepfeeludfgteegfedvkeevudehudejffejieehvdfgieetkeduteejudegkedutddvnecuffhomhgrihhnpehgohhoghhlvgdrtghomhdpkhgvrhhnvghlrdhorhhgnecukfhppedvrgdtvdemkeegfeegmeelfhdtleemvdektddumeefsgelmeejsggtfhemheehleehmegvfhefvgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegfeegmeelfhdtleemvdektddumeefsgelmeejsggtfhemheehleehmegvfhefvgdphhgvlhhopeifihhnughsuhhrfhdrrddpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepthhhohhmr
- ghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepsggvrhhnugeskhhuhhhlshdrnhgvth
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1744747755;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=hHjT59K5Gz2UwpmdIoqVBVm0CkvOsVmmT1rFPxYHJrE=;
- b=nZgkiDlOxbu6LnJLJcWhTvCIDjHZDVioZkgNvm2Dt0I/0A15Fo/XxLYkzaWHq7pbsLEwf0
- IB/yDO/OwaDf5EwjUIOviH8r5oI2DpG3LXfEuco8IbRv8ZjdGLvLbBoT4x+NVicFLyxOqb
- jtVGpdrOLSgDZknZIBHut/5RCYZwOVIZ2FHqcNAOqj17DQ5R7j7XaxKJ2mECrvSpFuKGJ8
- Jst07z7XFqbvbqDLFaJcf4xPCn/AgSEFGPlCIxAaZiZM1CUcyrOvdsHQlQtrCpNZhMos7w
- HLKhKi3KT+IKI3LCJ+1xnZ63d+6eWqnLENYHBU7RXxgkLnJzFhYhKD70BYpITw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=nZgkiDlO
-Subject: [Buildroot] [PATCH] package/libcap: bump to version 2.76
+Content-Disposition: inline
+In-Reply-To: <20250415200047.2256467-1-peter@korsgaard.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1744747799;
+ bh=Hlb2q4okcNlHoHVALhB9KqddQQJg+X8X306f2Z4uHp4=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=P3rYq/mCUcHTIqn7/q4UGD3VBRporLiaY2emryEXE8VHdTMJtN3xEcJy7cAhXePRX
+ XDogGq4RS8H2uQTPVKjd9aii1xcO9k1KMZ4do8kJNRzrd249pVr7XaqZGVEh5ReQL3
+ PdwNw/A0zoKjyziUoU6UzDHFtYyOoadZ2SdvR+kcUvNb53H9hjRD1GAMc6SnVCizlX
+ /POhjqSuvILLLURmdyJFNpJtwVDB3HxviHF8it2YIukzyRuj/RTxjSQ0Q3+K4QZQ9/
+ KszdMiOIWsBnF31bSNY3davXMmTJUJZFX21VUBYNUmNN8JpfUijmep7T2lbgE4MA+q
+ xqyeKEI7U2Z3Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=P3rYq/mC
+Subject: Re: [Buildroot] [PATCH 1/2] package/libopenssl: add (proposed)
+ upstream fix for parallel installation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,89 +82,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog 2.73 -> 2.74:
+Peter, All,
 
-- ERRATA: Bug 219838  the psx go package fails to build standalone.
-- This release addresses Bug 219687 reported by David Runge.
-- Group syntax parsing bugfix for pam_cap from Tianjia Zhang.
-- Doc typo fix for cap_get_proc.3 from Tianjia Zhang.
-- Fix transitive include in capsh.c from Leo.
-- Go package documentation updates, including more cap examples.
+On 2025-04-15 22:00 +0200, Peter Korsgaard spake thusly:
+> The openssl developers have proposed a fix for the parallel installation
+> issue worked around by commit 27ab880ebb9a (package/libopenssl do not build
+> in parallel).
+> 
+> Add the fix here so the workaround can dropped again.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Changelog 2.74 -> 2.75:
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-- This release is devoted to a fix for Bug 219838 reported by Frank.
+Regards,
+Yann E. MORIN.
 
-Changelog 2.75 -> 2.76:
+> ---
+>  ...l-process-to-avoid-multiple-make-dep.patch | 44 +++++++++++++++++++
+>  1 file changed, 44 insertions(+)
+>  create mode 100644 package/libopenssl/0004-Serialize-install-process-to-avoid-multiple-make-dep.patch
+> 
+> diff --git a/package/libopenssl/0004-Serialize-install-process-to-avoid-multiple-make-dep.patch b/package/libopenssl/0004-Serialize-install-process-to-avoid-multiple-make-dep.patch
+> new file mode 100644
+> index 0000000000..feb0e21ef7
+> --- /dev/null
+> +++ b/package/libopenssl/0004-Serialize-install-process-to-avoid-multiple-make-dep.patch
+> @@ -0,0 +1,44 @@
+> +From 4562b002366535b3d387fae7fa1dbd8e315ae142 Mon Sep 17 00:00:00 2001
+> +From: Neil Horman <nhorman@openssl.org>
+> +Date: Mon, 14 Apr 2025 12:23:15 -0400
+> +Subject: [PATCH] Serialize install process to avoid multiple make depend
+> + operations
+> +
+> +If make install is run with a large -j value (make install -j N , where
+> +N > 1)
+> +
+> +We can run into a situation in which the install fails because multiple
+> +make depend operations are running in parallel, which will fail due to
+> +makefile rewriting.
+> +
+> +Serialize the install process to guarantee that those operations don't
+> +step on one another
+> +
+> +Fixes # 27074
+> +
+> +Upstream: https://github.com/openssl/openssl/pull/27388
+> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> +---
+> + Configurations/unix-Makefile.tmpl | 6 +++++-
+> + 1 file changed, 5 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/Configurations/unix-Makefile.tmpl b/Configurations/unix-Makefile.tmpl
+> +index e85763ccf8..b671723813 100644
+> +--- a/Configurations/unix-Makefile.tmpl
+> ++++ b/Configurations/unix-Makefile.tmpl
+> +@@ -650,7 +650,11 @@ depend: Makefile
+> + # Install helper targets #############################################
+> + ##@ Installation
+> + 
+> +-install: install_sw install_ssldirs {- "install_docs" if !$disabled{docs}; -} {- $disabled{fips} ? "" : "install_fips" -} ## Install software and documentation, create OpenSSL directories
+> ++install: Makefile ## Install software and documentation, create OpenSSL directories
+> ++	$(MAKE) install_sw
+> ++	$(MAKE) install_ssldirs
+> ++	{- "\$(MAKE) install_docs" if !$disabled{docs} -}
+> ++	{- "\$(MAKE) install_fips" if !$disabled{fips} -}
+> + 
+> + uninstall: {- "uninstall_docs" if !$disabled{docs}; -} uninstall_sw {- $disabled{fips} ? "" : "uninstall_fips" -} ## Uninstall software and documentation
+> + 
+> +-- 
+> +2.39.5
+> +
+> -- 
+> 2.39.5
+> 
 
-- More libpsx and psx Go package mechanism fixes (many thanks to
-Christial Kastner for helping dive into the off-piste
-architectures. See Bug 219915.)
-
-- To make the various .so files continue to be runnable as standalone
-programs added another workaround for glibc. (Bug 219880 reported by
-Christian Kastner.)
-
-- Made a new man page cap_text_formats(7). This makes it possible to
-separate the tool man pages from the developer man pages. I believe
-this was the second time this was requested, by Carlos
-Rodriguez-Fernandez this time (can't find the former request in my
-email).
-
-- Dropped Make.Rules definition of SYSTEM_HEADERS Thanks to Ross
-Burton for reporting.
-
-- Removed a spurious debugging printf() from setcap tool.
-
-- Removed cap_ workarounds for go.dev cap package examples. The
-website bugs have been resolved: go/issues/70611; go/issues/70630.
-
-- Added a Makefile to the contrib/seccomp example.
-
-See
-https://sites.google.com/site/fullycapable/release-notes-for-libcap
-for all release notes.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libcap/libcap.hash | 2 +-
- package/libcap/libcap.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libcap/libcap.hash b/package/libcap/libcap.hash
-index ec59f224bb..68c331f2b4 100644
---- a/package/libcap/libcap.hash
-+++ b/package/libcap/libcap.hash
-@@ -1,5 +1,5 @@
- # https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2/sha256sums.asc
--sha256  6405f6089cf4cdd8c271540cd990654d78dd0b1989b2d9bda20f933a75a795a5  libcap-2.73.tar.xz
-+sha256  629da4ab29900d0f7fcc36227073743119925fd711c99a1689bbf5c9b40c8e6f  libcap-2.76.tar.xz
- 
- # Hash for license file:
- sha256  68467e731f4744bd6e0bb69e8df9c3a994e09cd6b203d0c41327ac6d079c581d  License
-diff --git a/package/libcap/libcap.mk b/package/libcap/libcap.mk
-index 25b3a46c44..b4158a5be8 100644
---- a/package/libcap/libcap.mk
-+++ b/package/libcap/libcap.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCAP_VERSION = 2.73
-+LIBCAP_VERSION = 2.76
- LIBCAP_SITE = https://www.kernel.org/pub/linux/libs/security/linux-privs/libcap2
- LIBCAP_SOURCE = libcap-$(LIBCAP_VERSION).tar.xz
- LIBCAP_LICENSE = GPL-2.0 or BSD-3-Clause
 -- 
-2.49.0
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
