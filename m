@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6BA89C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:51:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31E4CC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9F70F7042F;
-	Mon, 19 May 2025 10:51:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EADCF6144C;
+	Mon, 19 May 2025 10:51:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B5a31J5dyhBP; Mon, 19 May 2025 10:51:27 +0000 (UTC)
+ id FwR-blCSbBzA; Mon, 19 May 2025 10:51:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C54467041E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8981770433
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C54467041E;
-	Mon, 19 May 2025 10:51:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8981770433;
+	Mon, 19 May 2025 10:51:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0844FD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:39 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4B92DD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2FFC641764
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2BE814175E
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 400PPh0iCIgy for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:02 +0000 (UTC)
+ id rAC849-qq33g for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FA6F40DB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D93D74110F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1FA6F40DB3
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D93D74110F
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1E33081517; Mon, 19 May 2025 10:39:51 +0000 (UTC)
+ id D5CDD84A21; Mon, 19 May 2025 10:39:50 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 16 Apr 2025 21:14:15 +0200
+Date: Tue, 15 Apr 2025 22:37:53 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 28851289475c4475ab2de9abcf062095e42731b8
-X-Git-Newrev: c7ea55f040b6d74314961e433c3879ef1ac61748
+X-Git-Oldrev: e2eb2ee58b9f70ebb83231537cca19bd28fa48de
+X-Git-Newrev: 36b0a3ef9c088117a32227df20226a86d1568465
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103951.1E33081517@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] board/raspberrypi/readme.txt:
- add note for bootcode.bin
+Message-Id: <20250519103950.D5CDD84A21@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libopenssl: add
+ (proposed) upstream fix for parallel installation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,78 +60,78 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7660850717754822078=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7660850717754822078==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=c7ea55f040b6d74314961e433c3879ef1ac61748
+commit: https://git.buildroot.net/buildroot/commit/?id=36b0a3ef9c088117a32227df20226a86d1568465
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The second-stage bootloader is contained in the onboard EEPROM[1] since
-the Raspberry Pi 4 (i.e. for pi4, pi400, cm4, cm4s and pi5).
+The openssl developers have proposed a fix for the parallel installation
+issue worked around by commit 27ab880ebb9a (package/libopenssl do not build
+in parallel).
 
-Therefore, the file bootcode.bin[2] is needed for the former Raspberry
-Pi only (i.e. pi1, pi2, pi3, pi0, pi0w and pizero2w).
+Add the fix here so the workaround can dropped again.
 
-This adds a note precising the file bootcode.bin is present for the
-former versions of the Raspberry Pi.
-
-[1]: https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#raspberry-pi-boot-eeprom
-[2]: https://www.raspberrypi.com/documentation/computers/configuration.html#bootcode-bin
-
-Signed-off-by: Gaël PORTAY <gael.portay+rtone@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/raspberrypi/readme.txt | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ ...nstall-process-to-avoid-multiple-make-dep.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index 64f0e2a26f..5f6b1c3e7d 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -112,14 +112,14 @@ After building, you should obtain this tree:
-     +-- boot.vfat
-     +-- rootfs.ext4
-     +-- rpi-firmware/
--    |   +-- bootcode.bin
-+    |   +-- bootcode.bin            [2]
-     |   +-- cmdline.txt
-     |   +-- config.txt
-     |   +-- fixup.dat               [1]
-     |   +-- fixup4.dat              [1]
-     |   +-- start.elf               [1]
-     |   +-- start4.elf              [1]
--    |   `-- overlays/               [2]
-+    |   `-- overlays/               [3]
-     +-- sdcard.img
-     +-- Image                       [1]
-     `-- zImage                      [1]
-@@ -127,7 +127,11 @@ After building, you should obtain this tree:
- [1] Not all of them will be present, depending on the RaspberryPi
-     model you are using.
- 
--[2] Only for the Raspberry Pi 3/4 Models (overlay miniuart-bt is needed
-+[2] Only for the Raspberry Pi 1, 2, 3, Zero, Zero W and Zero 2 W. The Raspberry
-+    Pi 4, 400, 5 and the Compute Module 4, 4s and 5 load the second stage
-+    bootloader from a SPI flash EEPROM.
+diff --git a/package/libopenssl/0004-Serialize-install-process-to-avoid-multiple-make-dep.patch b/package/libopenssl/0004-Serialize-install-process-to-avoid-multiple-make-dep.patch
+new file mode 100644
+index 0000000000..feb0e21ef7
+--- /dev/null
++++ b/package/libopenssl/0004-Serialize-install-process-to-avoid-multiple-make-dep.patch
+@@ -0,0 +1,44 @@
++From 4562b002366535b3d387fae7fa1dbd8e315ae142 Mon Sep 17 00:00:00 2001
++From: Neil Horman <nhorman@openssl.org>
++Date: Mon, 14 Apr 2025 12:23:15 -0400
++Subject: [PATCH] Serialize install process to avoid multiple make depend
++ operations
 +
-+[3] Only for the Raspberry Pi 3/4 Models (overlay miniuart-bt is needed
-     to enable the RPi3 serial console otherwise occupied by the bluetooth
-     chip). Alternative would be to disable the serial console in cmdline.txt
-     and /etc/inittab.
-
---===============7660850717754822078==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++If make install is run with a large -j value (make install -j N , where
++N > 1)
++
++We can run into a situation in which the install fails because multiple
++make depend operations are running in parallel, which will fail due to
++makefile rewriting.
++
++Serialize the install process to guarantee that those operations don't
++step on one another
++
++Fixes # 27074
++
++Upstream: https://github.com/openssl/openssl/pull/27388
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Configurations/unix-Makefile.tmpl | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/Configurations/unix-Makefile.tmpl b/Configurations/unix-Makefile.tmpl
++index e85763ccf8..b671723813 100644
++--- a/Configurations/unix-Makefile.tmpl
+++++ b/Configurations/unix-Makefile.tmpl
++@@ -650,7 +650,11 @@ depend: Makefile
++ # Install helper targets #############################################
++ ##@ Installation
++ 
++-install: install_sw install_ssldirs {- "install_docs" if !$disabled{docs}; -} {- $disabled{fips} ? "" : "install_fips" -} ## Install software and documentation, create OpenSSL directories
+++install: Makefile ## Install software and documentation, create OpenSSL directories
+++	$(MAKE) install_sw
+++	$(MAKE) install_ssldirs
+++	{- "\$(MAKE) install_docs" if !$disabled{docs} -}
+++	{- "\$(MAKE) install_fips" if !$disabled{fips} -}
++ 
++ uninstall: {- "uninstall_docs" if !$disabled{docs}; -} uninstall_sw {- $disabled{fips} ? "" : "uninstall_fips" -} ## Uninstall software and documentation
++ 
++-- 
++2.39.5
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7660850717754822078==--
