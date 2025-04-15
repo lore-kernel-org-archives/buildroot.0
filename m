@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E672DC369B9
-	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 21:48:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7944DC369AB
+	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 21:49:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACF76617AB;
-	Tue, 15 Apr 2025 21:48:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4987A40E38;
+	Tue, 15 Apr 2025 21:49:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6uf6TQvXLX51; Tue, 15 Apr 2025 21:48:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7ERh9v5HU6X7; Tue, 15 Apr 2025 21:49:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1CF561782
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BA98410DC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1CF561782;
-	Tue, 15 Apr 2025 21:48:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 324F46B
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 21:48:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BA98410DC;
+	Tue, 15 Apr 2025 21:49:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AC6376B
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 21:49:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 178E360EC4
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 21:48:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9BE7F410DC
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 21:49:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jaWEwAHlfcrC for <buildroot@buildroot.org>;
- Tue, 15 Apr 2025 21:48:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5DB5A607CF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5DB5A607CF
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 21:48:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4C27484BC9; Tue, 15 Apr 2025 21:48:47 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5shM10BH_pnb for <buildroot@buildroot.org>;
+ Tue, 15 Apr 2025 21:49:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 067DE40D95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 067DE40D95
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 067DE40D95
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 21:49:21 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 075022003CC;
+ Tue, 15 Apr 2025 23:49:17 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 15 Apr 2025 23:49:17 +0200
+MIME-Version: 1.0
+Date: Tue, 15 Apr 2025 23:49:17 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 15 Apr 2025 23:46:08 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 86f173a74408a35536429198ec10970ee762bafb
-X-Git-Newrev: 83f865963a47b4706209997650f7dc053696b6a9
-X-Patchwork-Hint: ignore
-Message-Id: <20250415214847.4C27484BC9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-qrcode: bump to 8.1
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <20250415205643.2526615-1-thomas.petazzoni@bootlin.com>
+References: <20250415205643.2526615-1-thomas.petazzoni@bootlin.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <c689685fa2a779620a5e1f55f6120175@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1744753760;
+ bh=xzah4fzjNMPvga0vPUSqZSVj1hDWW6nkjJYBZnP9wZo=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=OXgWOrf8Obx/oo/nQ8T1GtJOJOzlQRxu4ve9SsiZtK8dkIHuhSk2aukVb4cq7ubPL
+ kn/BNCTlSFsOfmyJsfb99hq3hIx5n1/EXlNroVmiMc0Pl0ArBwPlipdf2YMrgxk/au
+ 6Lj8rOevEabDIQLOr/dG7v3eMAiKawZV0hIXBCkwfgKIuVuZgwCwzczlq+uG4RaWQl
+ AiU+lnK68FVnzZ7lWdVYNG6ASIeoFAocqR1rgkeLOLh9+IeTHD9+J2HFDQJu7FT7QS
+ RftTtFUY2Ll6cVzF2LSrcfM6EyFzIL4qtyD5GfSR5oX/cvucClpYF95XJrBPmQLnmK
+ RuPhux08p+P+Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=OXgWOrf8
+Subject: Re: [Buildroot] [PATCH] package/python-qrcode: bump to 8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,55 +81,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83f865963a47b4706209997650f7dc053696b6a9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 15/04/2025 22:56, Thomas Petazzoni via buildroot wrote:
+> Changes since 8.0:
+> 
+> - Added support for Python 3.13
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Changes since 8.0:
+Applied to master, thanks.
 
-- Added support for Python 3.13
+For info, I also fixed the _SITE url.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Julien: fix _SITE url]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-qrcode/python-qrcode.hash | 4 ++--
- package/python-qrcode/python-qrcode.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Best regards,
 
-diff --git a/package/python-qrcode/python-qrcode.hash b/package/python-qrcode/python-qrcode.hash
-index ceeaf05f49..549e077c2b 100644
---- a/package/python-qrcode/python-qrcode.hash
-+++ b/package/python-qrcode/python-qrcode.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/qrcode/json
--md5  29561c9082864010f884d2fc5b3e62de  qrcode-8.0.tar.gz
--sha256  025ce2b150f7fe4296d116ee9bad455a6643ab4f6e7dce541613a4758cbce347  qrcode-8.0.tar.gz
-+md5  71039efd5939238780bcd6861bf0bc50  qrcode-8.1.tar.gz
-+sha256  e8df73caf72c3bace3e93d9fa0af5aa78267d4f3f5bc7ab1b208f271605a5e48  qrcode-8.1.tar.gz
- # Locally computed sha256 checksums
- sha256  40dfb903c94ee3f789500131311186548ecba5cefd3557623d7700e2522ab994  LICENSE
-diff --git a/package/python-qrcode/python-qrcode.mk b/package/python-qrcode/python-qrcode.mk
-index 8222ceac8e..f50d49704f 100644
---- a/package/python-qrcode/python-qrcode.mk
-+++ b/package/python-qrcode/python-qrcode.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_QRCODE_VERSION = 8.0
-+PYTHON_QRCODE_VERSION = 8.1
- PYTHON_QRCODE_SOURCE = qrcode-$(PYTHON_QRCODE_VERSION).tar.gz
--PYTHON_QRCODE_SITE = https://files.pythonhosted.org/packages/d7/db/6fc9631cac1327f609d2c8ae3680ecd987a2e97472437f2de7ead1235156
-+PYTHON_QRCODE_SITE = https://files.pythonhosted.org/packages/61/d4/d222d00f65c81945b55e8f64011c33cb11a2931957ba3e2845fb0874fffe
- PYTHON_QRCODE_SETUP_TYPE = poetry
- PYTHON_QRCODE_LICENSE = BSD-3-Clause
- PYTHON_QRCODE_LICENSE_FILES = LICENSE
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
