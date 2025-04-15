@@ -4,98 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54218C369AB
-	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 20:15:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 865E0C369BA
+	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 20:15:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7FAE61087;
-	Tue, 15 Apr 2025 20:15:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5410460E4B;
+	Tue, 15 Apr 2025 20:15:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5ROZ5gB-glUW; Tue, 15 Apr 2025 20:15:46 +0000 (UTC)
+ id kPqdMGlM0pQM; Tue, 15 Apr 2025 20:15:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 057656076A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 749EE61102
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 057656076A;
-	Tue, 15 Apr 2025 20:15:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EBC22109
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 20:15:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 749EE61102;
+	Tue, 15 Apr 2025 20:15:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 67A78108
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 20:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DCF1640290
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 20:15:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 586DA40B8A
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 20:15:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vDsPBWmgdTlw for <buildroot@buildroot.org>;
- Tue, 15 Apr 2025 20:15:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::431; helo=mail-pf1-x431.google.com;
- envelope-from=lancethepants@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1962340C4C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1962340C4C
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com
- [IPv6:2607:f8b0:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1962340C4C
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 20:15:43 +0000 (UTC)
-Received: by mail-pf1-x431.google.com with SMTP id
- d2e1a72fcca58-739525d4e12so5557941b3a.3
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 13:15:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1744748143; x=1745352943;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=fFLq734U74fyfNj1utm6xNrPBEgII4B4qHw/ltdkkv4=;
- b=mKeG9y3kRZZl8acCe9KQuE7yhg2EQRA9bKBAdrrqEBB/EMPh5j6rY4SfkaW4W7fQEE
- 6rrOjffDmD6DARBJRDE0oUXUJKwv5WvvugVrRYDBUIZ5vuL6hSjLxX/lNobnS8uL9JJK
- MJQDFbv/wVDkNqS4dlsbW9ELYNU8dRq2+MUeOBjmcRUyWpHBwqCpMKPOGo5sXd63r/E4
- ab+618cHZ5YErSkPUymphoR9h82zRua4Xj0F54xfp7V5/0z2voghV3RMdDE3GKibwG+G
- MQfLHiflc+9SL+ic0UStc7/AV/sKM9Qk5W3LbIRULaPaBJ21ypBIHRdp+PZyzMcpwiUo
- Hz6w==
-X-Gm-Message-State: AOJu0YzF6S/mGbmLomdxFsnlnYbh1TPMxba2Lu0eJ/EJit+ELl9Qyfdt
- jcg0i9kWH0QnObX6Q1LkeRJ39/lsiFb4XPtEqcMKbL60ABjWLhwv6AgTtA==
-X-Gm-Gg: ASbGncv8ru7UBH8/IYnPymYvafkb+oQUCk2Cg8ByrGs50n2uGqrak5++iMB2J/ZlUGY
- C33uUESHVrTIMXVgZV7xotsZCEckphLna0mfDFAMt8vqsMvdjwoYLTOY9JipyRxIOrfUT+3omVv
- FTdl+JvAdwJSfLZ6Nl38l31kT4he+nIukP82/5Dm0/RWOiSMVkfoPLkJOC33pjGd8NXsVkJzaz9
- 4hQaQkHTcDGZRqSS+QxKEH9vl8g16pU6e48ptfJfhTxMSbu4tlcpPBZTmW7HGUPx8h3yL+rEuWQ
- 8yezAS5Otua0IMyIyJRa3w==
-X-Google-Smtp-Source: AGHT+IFcPXjZ9v9WiYxF7p4S8IalIBfwoAB8/1u6msox7OXkls7vX23Ok9JmK7IKfpYQaKB/gAvnGA==
-X-Received: by 2002:a05:6a20:c707:b0:1f3:3690:bf32 with SMTP id
- adf61e73a8af0-203adfdf29dmr521938637.18.1744748143025; 
- Tue, 15 Apr 2025 13:15:43 -0700 (PDT)
-Received: from ProgramPC.bm.local ([76.8.199.226])
- by smtp.gmail.com with ESMTPSA id
- 41be03b00d2f7-b02a0de8926sm9593462a12.30.2025.04.15.13.15.42
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 15 Apr 2025 13:15:42 -0700 (PDT)
-From: Lance Fredrickson <lancethepants@gmail.com>
-X-Google-Original-From: Lance Fredrickson
-To: buildroot@buildroot.org
-Cc: Lance Fredrickson <lancethepants@gmail.com>,
- Pierre-Jean Texier <texier.pj2@gmail.com>
-Date: Tue, 15 Apr 2025 14:15:27 -0600
-Message-Id: <20250415201527.2035915-1-lancethepants@gmail.com>
-X-Mailer: git-send-email 2.39.5
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AsXcnwyelBTI for <buildroot@buildroot.org>;
+ Tue, 15 Apr 2025 20:15:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6FCE340BED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FCE340BED
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6FCE340BED
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 20:15:48 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 68DE819F73B;
+ Tue, 15 Apr 2025 22:15:44 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 15 Apr 2025 22:15:44 +0200
+Date: Tue, 15 Apr 2025 22:15:44 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Peter Korsgaard <peter@korsgaard.com>
+Cc: buildroot@buildroot.org
+Message-ID: <Z_6-cAmygof3BN5v@landeda>
+References: <20250415200047.2256467-1-peter@korsgaard.com>
+ <20250415200047.2256467-2-peter@korsgaard.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1744748143; x=1745352943; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=fFLq734U74fyfNj1utm6xNrPBEgII4B4qHw/ltdkkv4=;
- b=LA4/9CP7WjjBqZW5ROxJGaKxvHOdI0yhYcLPxWLJG/beiKDIp7XA1pcE8Z+HJX5aJf
- mBDf68TjRV4S8LE3QvK0c5FO5k2+dNAenws7XFB5pOTBwsN3jdf6kQhSus7KWVeDEqhR
- 19cKSINIOzKfdTIgxpYh75LDQfKPHAwEJww3gxX4boQuPhGj3sYdScgW4ydEKXOHFeDv
- gSEc68e6QbAXPF08KC3ZKlL+rqvnQbD0cVMURyTCQ7JyzIPE0E6ShG3yQha/X7yt1BbZ
- 1wyWCPpX5Pl8VBPlJQTKD+hMbGvNndrGVPIkNkeIYLj/XUq/ql1tSEDnS/s+4nCaB8jA
- xoQQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <20250415200047.2256467-2-peter@korsgaard.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1744748146;
+ bh=m4NADRyUunA/ranFXSEre4MbYiRUzJ4SfRSygXb4Czw=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=dVbVsehj1/xXY+WkvVZg2VX8bmn7xMOi4uimQWZBUs2NjH0pf4kUJBvSrAhOdoU5l
+ iHi3hWros+lCLgXHvaD9Fnttbl3Pq2Bed6u7HWWzu+ebjLNjJ03GTTW3r0lWVqkQgx
+ 2kWkoMHar+aY9Jij3vaS/DGkoJfC+CJ9s7p5J4jgqPO8lZO8MwUQsWmmNG/2SQ3pF0
+ MfYvPlVjuJNTJjyVWyVnGYQty71YNZgJSpDVLb9Dmtf/8u5qIePZu8NH1wR0W31X66
+ 95T2iyyOp/ZZE98AbPiW6zUF3R2K245EccdVFdKWV3HoBDKKWCCV3quPZr8VswKIND
+ Qp+CbfXfMO82w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=LA4/9CP7
-Subject: [Buildroot] [PATCH] package/ipset: bump to version 7.23
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=dVbVsehj
+Subject: Re: [Buildroot] [PATCH 2/2] Revert "package/libopenssl do not build
+ in parallel"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,43 +88,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Lance Fredrickson <lancethepants@gmail.com>
+Pter, All,
 
-https://ipset.netfilter.org/changelog.html
+On 2025-04-15 22:00 +0200, Peter Korsgaard spake thusly:
+> This reverts commit 27ab880ebb9a3efdec15733841f7b88063604247.
 
-Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
----
- package/ipset/ipset.hash | 4 ++--
- package/ipset/ipset.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+I don't think this really is a "revert". Reverting a commit is for when
+that commit was wrong when it was applied. But here, the commit was not
+wrong, so it should not be "reverted". Even if the change is technically
+undone, that's semantically a different thing. But oh well... ;-)
 
-diff --git a/package/ipset/ipset.hash b/package/ipset/ipset.hash
-index fb9b8c40d2..7be4b368c2 100644
---- a/package/ipset/ipset.hash
-+++ b/package/ipset/ipset.hash
-@@ -1,4 +1,4 @@
--# From https://ipset.netfilter.org/ipset-7.16.tar.bz2.sha512sum.txt
--sha512  e69ddee956f0922c8e08e7e5d358d6b5b24178a9f08151b20957cc3465baaba9ecd6aa938ae157f2cd286ccd7f0b7a279cfd89cec2393a00b43e4d945c275307  ipset-7.16.tar.bz2
-+# From https://ipset.netfilter.org/ipset-7.23.tar.bz2.sha512sum.txt
-+sha512  5a43c790abf157a55db5a9a22cb5f28a225f5c7969beda81566a2259aa82c9d852979eb805b11b4347f47c6a0c2cc4de6f14e4733bee5b562844422a45fb9dab  ipset-7.23.tar.bz2
- # Locally calculated
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/ipset/ipset.mk b/package/ipset/ipset.mk
-index 9832d8fd30..ba53c1f8bd 100644
---- a/package/ipset/ipset.mk
-+++ b/package/ipset/ipset.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPSET_VERSION = 7.16
-+IPSET_VERSION = 7.23
- IPSET_SOURCE = ipset-$(IPSET_VERSION).tar.bz2
- IPSET_SITE = http://ipset.netfilter.org
- IPSET_DEPENDENCIES = libmnl host-pkgconf
+> With the (proposed) fix from the openssl developers added as
+> 0004-Serialize-install-process-to-avoid-multiple-make-dep.patch, the
+> workaround can now be dropped so openssl can again be built and installed in
+> parallel, significantly speeding up builds.
+
+Yes, that was a shame that we had to lose parallelism...
+
+Note that I also hit a hihly-parallel highly-loaded build (not install)
+issue that is still not fixed. Alas, that one is also very, very
+difficult to hit. We can probably ignore it until I get bitten again and
+get more traces to inspect...
+
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/libopenssl/libopenssl.mk | 12 +++++-------
+>  1 file changed, 5 insertions(+), 7 deletions(-)
+> 
+> diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+> index 663e8d9b9f..c1c5b818d7 100644
+> --- a/package/libopenssl/libopenssl.mk
+> +++ b/package/libopenssl/libopenssl.mk
+> @@ -132,26 +132,24 @@ endef
+>  LIBOPENSSL_POST_CONFIGURE_HOOKS += LIBOPENSSL_FIXUP_STATIC_MAKEFILE
+>  endif
+>  
+> -# Parallel build broken: https://github.com/openssl/openssl/issues/27074
+>  define HOST_LIBOPENSSL_BUILD_CMDS
+> -	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
+>  endef
+>  
+> -# Parallel build broken: https://github.com/openssl/openssl/issues/27074
+>  define LIBOPENSSL_BUILD_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D)
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
+>  endef
+>  
+>  define LIBOPENSSL_INSTALL_STAGING_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(STAGING_DIR) install
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) install
+>  endef
+>  
+>  define HOST_LIBOPENSSL_INSTALL_CMDS
+> -	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D) install
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
+>  endef
+>  
+>  define LIBOPENSSL_INSTALL_TARGET_CMDS
+> -	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) DESTDIR=$(TARGET_DIR) install
+> +	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+>  	$(RM) -rf $(TARGET_DIR)/usr/lib/ssl
+>  	$(RM) -f $(TARGET_DIR)/usr/bin/c_rehash
+>  endef
+> -- 
+> 2.39.5
+> 
+
 -- 
-2.39.5
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
