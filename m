@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E014C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:50:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41A05C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:50:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4A583841E3;
-	Mon, 19 May 2025 10:50:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0580D6FC0E;
+	Mon, 19 May 2025 10:50:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v1oXSwAGlATu; Mon, 19 May 2025 10:50:32 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ML5E9nyrqBrS; Mon, 19 May 2025 10:50:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71BBD841DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 480BB6FCD5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 71BBD841DE;
-	Mon, 19 May 2025 10:50:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F749D4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 480BB6FCD5;
+	Mon, 19 May 2025 10:50:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 110B5193
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 852C441939
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 68C2A4147F
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XoROFzGKbE51 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dtBsI7NFN1T9 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 697234193D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E80640DDA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 697234193D
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E80640DDA
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 66D47873D4; Mon, 19 May 2025 10:40:08 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 4797781E90; Mon, 19 May 2025 10:39:50 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 17 May 2025 17:33:18 +0200
+Date: Tue, 15 Apr 2025 19:16:25 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d0a7a468130bcae54d40a6e9f3c7c72664803324
-X-Git-Newrev: a2356a9e0a1a6d24c11bb74dd8ca3136c5c1c6cb
+X-Git-Oldrev: d759f8a4bd90b50b5ff839dace58fe140ed2e539
+X-Git-Newrev: 50c1331720ec388e7a7cf9876ee55dadd8626090
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104008.66D47873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/go-bootstrap-stage1:
- fix builds on GCC 15
+Message-Id: <20250519103950.4797781E90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pahole: bump to
+ version 1.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,48 +60,88 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3789834107299315858=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2356a9e0a1a6d24c11bb74dd8ca3136c5c1c6cb
+--===============3789834107299315858==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=50c1331720ec388e7a7cf9876ee55dadd8626090
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-GCC 15 defaults to -std=gnu23, which adds the bool keyword, causing
-conflicts with stage1:
+On hosts with a recent version of cmake (eg: 4.0.0), builds involving
+host-pahole fail with the following error:
 
-https://gcc.gnu.org/gcc-15/porting_to.html#c23-new-keywords
+CMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 3.5 will be removed from a future version of
+  CMake.
 
-As a workaround, force the build to use -std=gnu99 mode.
+  Update the VERSION argument <min> value or use a ...<max> suffix to tell
+  CMake that the project does not need compatibility with older versions.
 
-Signed-off-by: Felicitas Pojtinger <felicitas@pojtinger.com>
-[Peter: extend commit message]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+The issue can be reproduced on hosts with cmake >= 4.0.0 with commands:
+
+    cat <<EOF >.config
+    BR2_arm=y
+    BR2_cortex_a7=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+    BR2_LINUX_KERNEL=y
+    BR2_LINUX_KERNEL_DEFCONFIG="versatile"
+    BR2_LINUX_KERNEL_NEEDS_HOST_PAHOLE=y
+    EOF
+    make olddefconfig
+    make
+
+The issue has already fixed in the upstream project with commit
+12ca11281912 ("CMakeLists.txt: Require cmake 3.5 or higher"), which is
+part of version 1.28.
+
+Upgrade pahole to get rid of this error.
+
+https://git.kernel.org/pub/scm/devel/pahole/pahole.git/tree/NEWS?h=v1.28
+
+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+[Julien: add commands to reproduce the issue in commit log]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/pahole/pahole.hash | 2 +-
+ package/pahole/pahole.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk b/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk
-index 3e4ee57432..83cb278f68 100644
---- a/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk
-+++ b/package/go/go-bootstrap-stage1/go-bootstrap-stage1.mk
-@@ -17,12 +17,13 @@ HOST_GO_BOOTSTRAP_STAGE1_ROOT = $(HOST_DIR)/lib/go-$(GO_BOOTSTRAP_STAGE1_VERSION
+diff --git a/package/pahole/pahole.hash b/package/pahole/pahole.hash
+index a2d3d044da..efa1218468 100644
+--- a/package/pahole/pahole.hash
++++ b/package/pahole/pahole.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  87223298d4f8f9ada9b3cc5cef1bedd7aeb447cd8295abc466e009a26accff13  pahole-1.27.tar.gz
++sha256  9a319c214b38554be8430a672043d85735564e8e1e78db5a41cba7a03d038056  pahole-1.28.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/pahole/pahole.mk b/package/pahole/pahole.mk
+index ffbe4ff925..150373fd7e 100644
+--- a/package/pahole/pahole.mk
++++ b/package/pahole/pahole.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # The go build system is not compatible with ccache, so use
- # HOSTCC_NOCCACHE. See https://github.com/golang/go/issues/11685.
-+# CFLAGS and GO_CCFLAGS have no effect, so overwrite CC directly.
- HOST_GO_BOOTSTRAP_STAGE1_MAKE_ENV = \
- 	GOOS=linux \
- 	GOROOT_FINAL="$(HOST_GO_BOOTSTRAP_STAGE1_ROOT)" \
- 	GOROOT="$(@D)" \
- 	GOBIN="$(@D)/bin" \
--	CC=$(HOSTCC_NOCCACHE) \
-+	CC="$(HOSTCC_NOCCACHE) -std=gnu99" \
- 	CGO_ENABLED=0
- 
- define HOST_GO_BOOTSTRAP_STAGE1_BUILD_CMDS
+-PAHOLE_VERSION = 1.27
++PAHOLE_VERSION = 1.28
+ PAHOLE_SITE = https://git.kernel.org/pub/scm/devel/pahole/pahole.git/snapshot
+ HOST_PAHOLE_DEPENDENCIES = \
+ 	host-elfutils \
+
+--===============3789834107299315858==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3789834107299315858==--
