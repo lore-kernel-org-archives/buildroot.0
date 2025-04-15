@@ -1,101 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A5C9C369B4
-	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 13:55:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BCB1C369AB
+	for <buildroot@archiver.kernel.org>; Tue, 15 Apr 2025 14:05:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C31E240527;
-	Tue, 15 Apr 2025 13:55:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4A90605D0;
+	Tue, 15 Apr 2025 14:05:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id emTcnhG7vR5w; Tue, 15 Apr 2025 13:55:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q3NQhcJKM-_k; Tue, 15 Apr 2025 14:05:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C94140833
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1753060767
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C94140833;
-	Tue, 15 Apr 2025 13:55:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0D031200
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 13:55:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1753060767;
+	Tue, 15 Apr 2025 14:05:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5BBC3200
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 14:05:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F1BEA40527
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 13:55:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4CB6E61190
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 14:05:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v0kPzCbwNPPE for <buildroot@buildroot.org>;
- Tue, 15 Apr 2025 13:55:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kj_NMwNMvHck for <buildroot@buildroot.org>;
+ Tue, 15 Apr 2025 14:05:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::42e; helo=mail-pf1-x42e.google.com;
+ client-ip=2607:f8b0:4864:20::636; helo=mail-pl1-x636.google.com;
  envelope-from=lancethepants@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6A4F340833
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A4F340833
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com
- [IPv6:2607:f8b0:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6A4F340833
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 13:55:30 +0000 (UTC)
-Received: by mail-pf1-x42e.google.com with SMTP id
- d2e1a72fcca58-736c3e7b390so4669616b3a.2
- for <buildroot@buildroot.org>; Tue, 15 Apr 2025 06:55:30 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B157B605D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B157B605D0
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com
+ [IPv6:2607:f8b0:4864:20::636])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B157B605D0
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 14:05:23 +0000 (UTC)
+Received: by mail-pl1-x636.google.com with SMTP id
+ d9443c01a7336-22409077c06so73553865ad.1
+ for <buildroot@buildroot.org>; Tue, 15 Apr 2025 07:05:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1744725329; x=1745330129;
+ d=1e100.net; s=20230601; t=1744725922; x=1745330722;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=f16+2vJDna8MnWNitLABhka15QyvaYbaXmnjGzG3Kvk=;
- b=ZOuzwS4DOGUd8WNhd8DIyzGSGBbbAgRV4Cg2WKFfJBKwbBPhicMPvqJnK+VjKKl6UE
- FzNGrLsK8WX4hWO6bqiPdd8ozmao/62POOmdzkW4KDOmwOMORVUD2cLa2KFYHBdEEbqg
- 7BA76KkyU3pt3GMjiSDgV9DmOREzWJlW5ZW/edkXFfE5GtbNHeTCreZal7FawbJ4p93Z
- JjDpOV2sVeLnmjsYd1Sr7pC6rHbDnrvazXb3Iw7uaOTme5/SGoeMMt9hI2BdD50cLB1u
- apwfJ+8KaGIWsHOf+qgM9DRuXWJuJkMZgwMUo3ekKYTCLSEbBUvhyDqcnlWVXivhP9Lm
- RbFg==
-X-Gm-Message-State: AOJu0Yyq303Liakc2Mb2IwyDPm5XFUVSG9opFFnaG8dQo1bFxEZRl7zA
- idwGvDC/k3IWn577lLIK43tjlpZCxaY7ktie6p0MtdLERKf8T7A41RS3QQ==
-X-Gm-Gg: ASbGnctdYH/Qgp5+4LwKSNgHQtS2XCNw2xEBtHvW8Ke8ST9TkfBaiVAK38onoVwQXTh
- qnRYm6l/aZ6xlk8bmzPNOuXXUFM0Oa5caayMf0M46gGoZBtYqj4Zhrnd+7ngBzVKpERwCJEpcO7
- 23L6u1cRSaUM7TdgVxbEdH7I+Tim+NkVyHcP27Si52cNA3u2oMFl3v+V7fStS2FRHJEhF7VmpBp
- Hz2xSNcTgKPSUlH+dvXb7B8qevNNC5j5WdXfsK5t79hiqOI/GYuC0BIDoLBO0EEKDniHV/WrKR7
- Zk1sBigLqLLBROC3vhWHNPs5nwpvH5G/
-X-Google-Smtp-Source: AGHT+IFVGkaaRvjeE88H5XBaVfOfvVsBodcqHFbdVjjFh55NQDEJw1XfoZIJxTtv9bV75Ur8rkocQA==
-X-Received: by 2002:a05:6a00:390a:b0:736:fff2:9ac with SMTP id
- d2e1a72fcca58-73bd12a82dbmr20174036b3a.23.1744725329338; 
- Tue, 15 Apr 2025 06:55:29 -0700 (PDT)
+ bh=ZSXMLr3XCx2CLiKjaHLWat72ddvAMVURSnEArEHaSCQ=;
+ b=sFzZQZllGZm2idhUDUQa9IK4DkXwA5rBy0VtSHF2RkqFVKwhLE8QEy46FUmAg0bez/
+ eFPrPlpxoR8Wt630jlJGFzN42RLnqzeVTduVhaxTA5L0ThzXanqGZh2lI4cs5JTgABmB
+ 5VnJmC14PRgjkjF7drz/eICkUovoGaDRFBWYryixToThxrVnKWZLcyUUK71HOE8Tlldh
+ rcTG0hUS5ePiYC/WhTw/k5epjgSYrTn2dCMv8xWMs95eW+Uf0DDqRbYRtZqAA8oQUQKU
+ hBPzwieNWWqvFkeBzjiobY8raPN4U7kQ2zAf2tQIJ2MKh9xFktb8b71daYJP2i8l4huc
+ Z/OA==
+X-Gm-Message-State: AOJu0YwF2FVdGiPddrpAmd9Bc4GDA5xTStcyExL+JeKCNZCWrkR8+FMV
+ aJcTN7/72eUHNGTfksgB1FF1CaJ7K8Iv6cyrgnYSpO+kp7NywjGz4oCUvg==
+X-Gm-Gg: ASbGncvpVLN7aVlh5eCGgXHnxm9HzOSTXF1q5ICIAjpiH1nEqlnL2Ufo5dVAe3PBxvG
+ OEtiuSoS0sPyrt+lLa/V4kOFLwP2p92pBTmq7pIEzDPNUdLKlM1ga/YwG/Que2yYHpp37Xj7d5I
+ lr3VnHALJxlGMsBRaV+i/uWoOabEWKFkknn4i/AV8XTzRf9x6T+y2xirPwvykxeUBszDF0/5QzN
+ ugWP3zNNFgn6LvqynVt9xJllxgnlB3sTfSor9pZHfW1XrEsPcMCJTfCl9uikLPl5egJaLl4EZr6
+ YtVtjPmWEr9YqzMhoF5PyA==
+X-Google-Smtp-Source: AGHT+IGpMRGPplXee5sYIwdI90qeL+lMQZT7RkEFQs2zYlkHrBcPQpPCyD/Y+TyRRV4C1zUE15P+mA==
+X-Received: by 2002:a17:902:ea05:b0:223:f7ec:f834 with SMTP id
+ d9443c01a7336-22bea4bd7damr242241995ad.31.1744725922434; 
+ Tue, 15 Apr 2025 07:05:22 -0700 (PDT)
 Received: from ProgramPC.bm.local ([76.8.199.226])
  by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-73bd22f1012sm8792800b3a.96.2025.04.15.06.55.28
+ d9443c01a7336-22ac7c93ad2sm118043735ad.115.2025.04.15.07.05.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 15 Apr 2025 06:55:28 -0700 (PDT)
+ Tue, 15 Apr 2025 07:05:21 -0700 (PDT)
 From: Lance Fredrickson <lancethepants@gmail.com>
 X-Google-Original-From: Lance Fredrickson
 To: buildroot@buildroot.org
 Cc: Lance Fredrickson <lancethepants@gmail.com>, Bernd Kuhls <bernd@kuhls.net>,
  Dimitrios Siganos <dimitris@siganos.org>
-Date: Tue, 15 Apr 2025 07:54:59 -0600
-Message-Id: <20250415135459.1939063-1-lancethepants@gmail.com>
+Date: Tue, 15 Apr 2025 08:05:18 -0600
+Message-Id: <20250415140519.1939298-1-lancethepants@gmail.com>
 X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1744725329; x=1745330129; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1744725922; x=1745330722; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=f16+2vJDna8MnWNitLABhka15QyvaYbaXmnjGzG3Kvk=;
- b=M0to75JPsVEajbqqLhdqeRvjvZ5Cl1SsIxql2XEov3deVT/cdLTfatFr9xYzpJ/QK8
- 71kfcQq1gzJ6/p9UrIyrBfXmGz6N/UxoXUhSgfPflk8rwuJ5XM67H/o+1mND+STvxlK3
- BHf90DTCONE/oVZLzalVgaxiW2C+E1aayyGJCrQ/ZoI7mRx7ohrnr+mRRZjbkQl5H3se
- cn49XrHqZPJ9hhLAeyzzVRxwyM3bon0fO1qeVRJaZMgWs45EnJAU7ud2e6raA2Ghh/5K
- fPiQjs82/iBLfejn9uztlIzM2ZUFitg6Gz+oKT7VorykTkBTdLOg3Fi9CK4KzWNVW+SC
- bK+g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=ZSXMLr3XCx2CLiKjaHLWat72ddvAMVURSnEArEHaSCQ=;
+ b=fj+IvDWHw/E/UgBiTJUyec+Iage5QSEbRbDhCfOsZ+csYt1vUXQfz2DvwH8HeM9JxS
+ kgtXW8bv6x92Dh9sK1HbPcsOc9d5LMpZ0GAJX3+MzPZ9OhC0lbuCIR3+17HuCyOozxXi
+ l1+hAZtTgi94zCYoWl8aWLPFEDiy312t54Bkbts0RrMuwODTdPZ0gZJIMg0v4Zu7karM
+ POgRSH6OFMH4zlSolZm6mFsNo+IOGHlT5JSdDkASV4Zz1COw4OMG7y6wV8ByyONuKIgD
+ kaBShgw57cb2RZzCBXlp5cw7wr6j5jtPxOvssIQn+GhHwI7hlCk7nXkapQ/N4+xQxLYB
+ BuMQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=M0to75JP
+ header.s=20230601 header.b=fj+IvDWH
 Subject: [Buildroot] [PATCH] package/wireless-regdb: bump version to
  2025.02.20
 X-BeenThere: buildroot@buildroot.org
@@ -118,6 +118,8 @@ From: Lance Fredrickson <lancethepants@gmail.com>
 
 See release announce:
 https://lists.infradead.org/pipermail/wireless-regdb/2025-February/001686.html
+
+Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
 ---
  package/wireless-regdb/wireless-regdb.hash | 2 +-
  package/wireless-regdb/wireless-regdb.mk   | 2 +-
