@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0389C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:51:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 904F0C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:51:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6E487046A;
-	Mon, 19 May 2025 10:51:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3574781080;
+	Mon, 19 May 2025 10:51:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9E16w7p2G6E9; Mon, 19 May 2025 10:51:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d7fwMLkL_y7e; Mon, 19 May 2025 10:51:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1DFC7046B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8A69810E4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1DFC7046B;
-	Mon, 19 May 2025 10:51:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E8A69810E4;
+	Mon, 19 May 2025 10:51:44 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0564CE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FCC6D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E4D4B417DE
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 27A744180F
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n9ogxDFgTmto for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:03 +0000 (UTC)
+ id aG3b3nPtB_m6 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31BA341173
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05F1541157
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 31BA341173
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05F1541157
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3017E83B63; Mon, 19 May 2025 10:39:51 +0000 (UTC)
+ id 0493581517; Mon, 19 May 2025 10:39:51 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 16 Apr 2025 21:14:21 +0200
+Date: Wed, 16 Apr 2025 19:18:23 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a642bed09afdfce42a7063e38c2e10beddbed5ef
-X-Git-Newrev: 7ebcfe3cb99ba536b5dcce7704956aeb11b6a57b
+X-Git-Oldrev: 2f1c46b6cb36867201134abe0a91502128fc428e
+X-Git-Newrev: 51c58d7c0dcdd6d6a81f5227259a80b8cb684418
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103951.3017E83B63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] board/raspberrypi/readme.txt:
- add videocore note
+Message-Id: <20250519103951.0493581517@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/socat: bump to version
+ 1.8.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,83 +60,81 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3899587930470851667=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3899587930470851667==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=7ebcfe3cb99ba536b5dcce7704956aeb11b6a57b
+commit: https://git.buildroot.net/buildroot/commit/?id=51c58d7c0dcdd6d6a81f5227259a80b8cb684418
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The VideoCore blobs for the Raspberry Pi 1, 2, 3, Zero, Zero W and Zero
-2 W are differents from the ones for the Raspberry Pi 4 and the Compute
-Module 4.
+List of changes in this release:
+http://www.dest-unreach.org/socat/CHANGES
 
-The VideoCore blobs for the Raspberry Pi 4 are named with a 4[1] (i.e.
-start4.elf, start4x.elf, start4db.elf and start4cd.elf).
+Refresh patch.
 
-This precises which VideoCore firmware blob files are present on the
-Raspberry Pi 1, 2, 3, Zero W, Zero 2 W and which files are present on
-the the Rapsberry Pi 4 and the Compute Module 4.
+Update README hash for changes that are unrelated to license.
 
-Note: The VideoCore blobs for the Raspberry Pi 5 are self-contained in
-its bootloader EEPROM[1][2]; there is no additional files for pi5.
-
-[1]: https://www.raspberrypi.com/documentation/computers/configuration.html#start-elf
-[2]: https://www.raspberrypi.com/documentation/computers/config_txt.html#start_file-fixup_file
-
-Signed-off-by: Gaël PORTAY <gael.portay+rtone@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/raspberrypi/readme.txt | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+ package/socat/0001-no-documentation.patch | 4 ++--
+ package/socat/socat.hash                  | 6 +++---
+ package/socat/socat.mk                    | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index 0f3ec9d8bb..c12a8969f1 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -115,11 +115,11 @@ After building, you should obtain this tree:
-     |   +-- bootcode.bin            [2]
-     |   +-- cmdline.txt
-     |   +-- config.txt
--    |   +-- fixup.dat               [1]
--    |   +-- fixup4.dat              [1]
--    |   +-- start.elf               [1]
--    |   +-- start4.elf              [1]
--    |   `-- overlays/               [3]
-+    |   +-- fixup.dat               [3]
-+    |   +-- fixup4.dat              [4]
-+    |   +-- start.elf               [3]
-+    |   +-- start4.elf              [4]
-+    |   `-- overlays/               [5]
-     +-- sdcard.img
-     +-- Image                       [1]
-     `-- zImage                      [1]
-@@ -131,7 +131,11 @@ After building, you should obtain this tree:
-     Pi 4, 400, 5 and the Compute Module 4, 4s and 5 load the second stage
-     bootloader from a SPI flash EEPROM.
+diff --git a/package/socat/0001-no-documentation.patch b/package/socat/0001-no-documentation.patch
+index b4c3e1ffde..5dbce0576e 100644
+--- a/package/socat/0001-no-documentation.patch
++++ b/package/socat/0001-no-documentation.patch
+@@ -10,7 +10,7 @@ the package Makefile.in to not build/install its documentation.
  
--[3] Only for the Raspberry Pi installing device-tree overlays. The Raspberry Pi
-+[3] Only for the Raspberry Pi 1, 2, 3, Zero and Zero 2.
-+
-+[4] Only for the Raspberry Pi 4, 400, Compute Module 4 and 4s.
-+
-+[5] Only for the Raspberry Pi installing device-tree overlays. The Raspberry Pi
-     with Bluetooth connectivity (Zero W, Zero 2 W, 3, 4, 400, Compute Module 4
-     and 4s) use the miniuart-bt overlay to enable UART0 for the serial console;
-     the Bluetooth uses the mini-UART instead. Alternative would be to disable
-
---===============3899587930470851667==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ Upstream: N/A
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-[baruch: update for 1.8.0.0; git patch format]
++[baruch: update for 1.8.0.0 and 1.8.0.3; git patch format]
+ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ ---
+  Makefile.in | 7 ++-----
+@@ -22,7 +22,7 @@ index c01b1a4a2306..fd89acb06f3c 100644
+ +++ b/Makefile.in
+ @@ -82,7 +82,7 @@ SHFILES = socat-chain.sh socat-mux.sh socat-broker.sh \
+  TESTFILES = test.sh socks4echo.sh proxyecho.sh readline-test.sh \
+- 	proxy.sh socks4a-echo.sh
++ 	proxy.sh socks4a-echo.sh socks5server-echo.sh
+  
+ -all: progs doc
+ +all: progs
+diff --git a/package/socat/socat.hash b/package/socat/socat.hash
+index 136dce4a71..b1c3d3cd11 100644
+--- a/package/socat/socat.hash
++++ b/package/socat/socat.hash
+@@ -1,8 +1,8 @@
+ # From http://www.dest-unreach.org/socat/download.md5sum
+-md5  7272fe53d51c63ca0e08e0339681803a  socat-1.8.0.2.tar.bz2
++md5  8ef0bc4f602636797917f8574c3b249e  socat-1.8.0.3.tar.bz2
+ # From http://www.dest-unreach.org/socat/download.sha256sum
+-sha256  adc07a9c2723527cf6568d2fb96559794cf9c254a4bc2edd36f7f3789e9f7625  socat-1.8.0.2.tar.bz2
++sha256  01eb017361d95bb3a6941e840b59e4463a3fabf92df4154ed02b16a2ed6a0095  socat-1.8.0.3.tar.bz2
+ # Locally calculated
+-sha256  a18cf021c6380e8ef212c7a95460aff2d96fe9e2146bb09058651bc3b86f4d43  README
++sha256  f51653b61cf2516c39e8f2edefc11604d0f9d14f0c6ae988bef228a1f0283ad2  README
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  fd9e48ca316a5032069b9521f4f4b4d9b1c60365012bae1e62286bcd5bd2e761  COPYING.OpenSSL
+diff --git a/package/socat/socat.mk b/package/socat/socat.mk
+index aa9a94aec4..69f8f40452 100644
+--- a/package/socat/socat.mk
++++ b/package/socat/socat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SOCAT_VERSION = 1.8.0.2
++SOCAT_VERSION = 1.8.0.3
+ SOCAT_SOURCE = socat-$(SOCAT_VERSION).tar.bz2
+ SOCAT_SITE = http://www.dest-unreach.org/socat/download
+ SOCAT_LICENSE = GPL-2.0 with OpenSSL exception
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3899587930470851667==--
