@@ -1,96 +1,88 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FBD6C369BD
-	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 12:07:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93282C369BD
+	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 12:32:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83DB841D94;
-	Wed, 16 Apr 2025 12:07:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5A4B26FA21;
+	Wed, 16 Apr 2025 12:32:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wOtVzkE_Yqa4; Wed, 16 Apr 2025 12:32:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B05A6FC06
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8B05A6FC06;
+	Wed, 16 Apr 2025 12:32:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 67960E83
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 12:32:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 64D43416B5
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 12:32:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vhKCQKYgoaCw; Wed, 16 Apr 2025 12:07:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3CD4641A3E
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3CD4641A3E;
-	Wed, 16 Apr 2025 12:07:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B7EE2E83
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 12:07:00 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B2ED1832D9
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 12:07:00 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AG0inIt3u5GD for <buildroot@buildroot.org>;
- Wed, 16 Apr 2025 12:07:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.236;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 91C2480BD6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 91C2480BD6
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.236])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 91C2480BD6
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 12:06:59 +0000 (UTC)
-X-CSE-ConnectionGUID: Ia8pI/8NR8OcrmDRP+2cXQ==
-X-CSE-MsgGUID: p3z4lPQLQROlIuqzAnPwsg==
-Received: from unknown (HELO opfedv1rlp0e.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 16 Apr 2025 14:06:57 +0200
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0e.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Apr 2025 14:06:56 +0200
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Wed, 16 Apr 2025 14:06:55 +0200
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Wed, 16 Apr 2025 14:06:54 +0200
-From: yann.morin@orange.com
-X-CSE-ConnectionGUID: XfV50DfNTbGxFazoBhypFw==
-X-CSE-MsgGUID: Xd9eUjcfTVWTWpYbdw7m/Q==
-X-IronPort-AV: E=Sophos;i="6.15,216,1739833200"; d="scan'208";a="276515100"
-Date: Wed, 16 Apr 2025 14:06:54 +0200
-To: TIAN Yuanhao <tianyuanhao3@163.com>
-CC: <buildroot@buildroot.org>, James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <Z/+dXkdC1jEpIF9g@yd-6wlzhs3>
-References: <20250411113731.4804-1-tianyuanhao3@163.com>
- <Z/ktsWj+ng6Z5pyA@yd-6wlzhs3>
- <490223b3.2688.196294762bd.Coremail.tianyuanhao3@163.com>
+ id bTvTqzmiE9Og for <buildroot@buildroot.org>;
+ Wed, 16 Apr 2025 12:32:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.221.237.131;
+ helo=send36.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3ED7F41434
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3ED7F41434
+Received: from send36.i.mail.ru (send36.i.mail.ru [89.221.237.131])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3ED7F41434
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 12:32:49 +0000 (UTC)
+Received: by exim-smtp-5c5f4778f6-dtrjq with esmtpa (envelope-from
+ <fido_max@inbox.ru>)
+ id 1u51wc-00000000Ed3-3E6Y; Wed, 16 Apr 2025 15:32:47 +0300
+Message-ID: <2ba91570-321f-48c6-8f9a-90750d8742d9@inbox.ru>
+Date: Wed, 16 Apr 2025 15:32:46 +0300
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <490223b3.2688.196294762bd.Coremail.tianyuanhao3@163.com>
-X-Originating-IP: [10.115.26.50]
-X-ClientProxiedBy: OPE16NORMBX208.corporate.adroot.infra.ftgroup (10.115.27.9)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1744805220; x=1776341220;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=udMkxYvXEiyPVV2utoSClJTCIMvS4D2Sp701jdC9sjM=;
- b=ZMwzR/sGScmrnfwuy8ot4F775CnGA8+3xF9k3rnI2QI3fgeysKdkjyEq
- hdQlR4SY7u/O+xMD1t7p58wmMY8zMuR5RUl8PUXvak1ZKu+6LR7bEOHJX
- KtmTYUUj//9zUMLZags0+oA4bsmGTxtHyLcxRK0KDrLluAhmQ+ikEz9YT
- 9PejpTf1fosziMMfhgxz6ACPHIJWMj2wce/InaEm4UnsoQ9t4+y82i8lS
- w4Kuwv62Fiz9uxTIJs4c5jUUFIyrrKhgRJpOraBG+8RCLHWD6C/zWCP3J
- GXfbKpifxFQpOrS675LfNpNi26IQ+Yfbvkt/q+f5PUb7h6kNvEooGPIb0
- w==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+User-Agent: Mozilla Thunderbird
+To: Scott Fan <fancp2007@gmail.com>, buildroot@buildroot.org
+References: <20250416114620.140463-1-fancp2007@gmail.com>
+Content-Language: en-US
+From: Maxim Kochetkov <fido_max@inbox.ru>
+In-Reply-To: <20250416114620.140463-1-fancp2007@gmail.com>
+X-Mailru-Src: smtp
+X-4EC0790: 10
+X-7564579A: B8F34718100C35BD
+X-77F55803: 4F1203BC0FB41BD9979B9587D9DF8E23C68751CB9F52C74C9F5B0E08A57F8D4CCD62213F67905E7AD6AAA3595414B19486E0A5E766B157E51253A749ACEBA1276462D4F4853E44F851CE0648C9E8651D
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7C42AF033AFE07300EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637AC83A81C8FD4AD23D82A6BABE6F325AC2E85FA5F3EDFCBAA7353EFBB55337566018564DF7FD8E215A4154EE1B28AEEB1899ECBEDE9986E84F23FE3F78AC5FDDC8EEF46B7454FC60B9742502CCDD46D0DEDCF5861DED71B2F389733CBF5DBD5E913377AFFFEAFD269176DF2183F8FC7C0998E19D2343267C68941B15DA834481FCF19DD082D7633A0EF3E4896CB9E6436389733CBF5DBD5E9D5E8D9A59859A8B6668FBEE05F116134CC7F00164DA146DA6F5DAA56C3B73B237318B6A418E8EAB86D1867E19FE14079C09775C1D3CA48CF17B107DEF921CE791DD303D21008E298D5E8D9A59859A8B6957A4DEDD2346B4275ECD9A6C639B01B78DA827A17800CE75A9E79F66F1C28F3731C566533BA786AA5CC5B56E945C8DA
+X-C1DE0DAB: 0D63561A33F958A5A452077ADDDC6BF15002B1117B3ED6966AA43F1FD573446FCCE9A60C8CB01D7C823CB91A9FED034534781492E4B8EEAD17AEC49845D0B908
+X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF3FED46C3ACD6F73ED3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CFB2BAFE1DB55BB0BC8D7C5F53884CC56A95B9096A99F8E93E71B21597316839F190F5B3B6BD0F620EAE3C13A4B731FE03686CF6928E1D2483A438659904AF687AD8C27E43474E07E4111DC66A97D0BFE2913E6812662D5F2A17D6C1CDD2003EB8E03787203701020945C72C348FB7EED3
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+ObcCpyrx6l7KImUglyhkEat/+ysWwi0gdhEs0JGjl6ggRWTy1haxBpVdbIX1nthFXMZebaIdHP2ghjoIc/363UZI6Kf1ptIMVS2bpaGes9W5EdiHYUPvZ5I=
+X-Mailru-Sender: 689FA8AB762F7393FE9E42A757851DB6D404F9D397A47551B117F010B27ABF18C7EC5CDF42C0241F90DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
+X-Mras: Ok
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=inbox.ru; 
+ s=mail4; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References
+ :To:Subject:MIME-Version:Date:Message-ID:From:Sender:Reply-To:To:Cc:
+ Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+ List-Archive:X-Cloud-Ids:Disposition-Notification-To;
+ bh=F8UI7j4rDyd4eRpuQvVCKgf2wPbW6n9qZU5dIpzgS0g=; t=1744806771; x=1744896771; 
+ b=dxXlk68sssiR767dIcp1HB73C0f4FUICu7BnwVnhmUiE42irhoKrRYclpyxgm61k5s0vK7WOVef
+ eQ76OYJIqve5UaMZf9b5GpREeQvduDJXlZaYlPHLuo26dN52dGsHuxdX87LlNPECmQmzwBFZsFVC6
+ B0kWAaoADLOXPfLp5kKjzAB5TV06Fk6xuFXuxOOkjGlAdyK4au+qqL8FF6PI6eqQ3S/Bb54fiuGll
+ ffh2g9jctl51ZUUK1R8ZIB/AvDDvr0ucSTtdvRPs9kOKAMZdr+W9ZrTMXgqcNtAmMoHRwBQOTEpga
+ HG2CL3nYOhSHqUIpceblXjMolhuph7hRcUnQ==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=inbox.ru
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=ZMwzR/sG
-Subject: Re: [Buildroot] [PATCH 1/1] package/tailscale: install service files
+ unprotected) header.d=inbox.ru header.i=@inbox.ru header.a=rsa-sha256
+ header.s=mail4 header.b=dxXlk68s
+X-Mailman-Original-Authentication-Results: exim-smtp-5c5f4778f6-dtrjq;
+ auth=pass
+ smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
+Subject: Re: [Buildroot] [PATCH] package/timescaledb: bump version to 2.19.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -102,69 +94,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Yuanhao, All,
+16.04.2025 14:46, Scott Fan wrote:
+> Release notes: https://github.com/timescale/timescaledb/blob/2.19.3/CHANGELOG.md
+> 
+> Signed-off-by: Scott Fan <fancp2007@gmail.com>
 
-On 2025-04-12 17:14 +0800, TIAN Yuanhao spake thusly:
-> At 2025-04-11 22:56:49, yann.morin@orange.com wrote:
-> >Yuanhao, All,>>On 2025-04-11 04:37 -0700, TIAN Yuanhao spake thusly:
-> >> Install tailscaled to /usr/sbin, as the service file references that
-> >> location.>> >> Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
-> >> Cc: James Hilliard <james.hilliard1@gmail.com>
-> >> --->[--SNIP--]>> +define TAILSCALE_INSTALL_TARGET_CMDS
-> >> +    $(INSTALL) -D -m 0755 $(@D)/bin/tailscale \
-> >> +            $(TARGET_DIR)/usr/bin/tailscale
-> >> +    $(INSTALL) -D -m 0755 $(@D)/bin/tailscaled \
-> >> +            $(TARGET_DIR)/usr/sbin/tailscaled
-> >> +endef>>I would suggest that, rather than override the default _CMDS, you
-> >provide a post-install hook that does a symlink in sbin.
-> How about creating this symbolic link in TAILSCALE_INSTALL_INIT_***?
-
-You'd have to replicate that for all the _INIT_* commands, so better do
-it once and for all.
-
-Afterall, adding the symlink is not due to the init system in use; it's
-due to a limitation in Buildroot's golang-package infra, which does not
-allow specifying the destination for each individual executable, and
-forcibly shoves all in /usr/bin/. So, adding the symlink should just be
-done unconditionally, as a post-install hook.
-
-> >>> +define TAILSCALE_INSTALL_INIT_OPENRC
-> >[--SNIP--]>> +define TAILSCALE_INSTALL_INIT_SYSTEMD
-> >[--SNIP--]>
-> >What about TAILSCALE_INSTALL_INIT_SYSV ?
-> The upstream repository does not provide a sysv init script, and I
-> am not familiar with sysv init either.
-
-Fair enough.
-
-Regards,
-Yann E. MORIN.
-
--- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
