@@ -1,70 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EB60C369C5
-	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 19:44:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1142C369C7
+	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 19:56:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DD20F81EBF;
-	Wed, 16 Apr 2025 19:44:51 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dsT1nzNfEIuM; Wed, 16 Apr 2025 19:44:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED73C83661
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ED73C83661;
-	Wed, 16 Apr 2025 19:44:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 831D46B
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 19:44:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 68B33416B5
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 19:44:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 562794134A;
+	Wed, 16 Apr 2025 19:56:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TaBYyJsvMOw7 for <buildroot@buildroot.org>;
- Wed, 16 Apr 2025 19:44:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
- helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7A815414F4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A815414F4
-Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7A815414F4
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 19:44:48 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id EFF521C1049; Wed, 16 Apr 2025 21:44:45 +0200 (CEST)
-Message-ID: <cef1ab8c-3b09-4433-934c-23b532a5c700@rnout.be>
-Date: Wed, 16 Apr 2025 21:44:44 +0200
+ id 4Xwoo8kviFWV; Wed, 16 Apr 2025 19:56:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7734241391
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7734241391;
+	Wed, 16 Apr 2025 19:56:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F2E166B
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 19:56:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D8A6A60765
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 19:56:42 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LVMOuMh30fnX for <buildroot@buildroot.org>;
+ Wed, 16 Apr 2025 19:56:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.148;
+ helo=smtpdh19-1.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3F803605CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F803605CD
+Received: from smtpdh19-1.aruba.it (smtpdh19-1.aruba.it [62.149.155.148])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3F803605CD
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 19:56:40 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id 58s9ulLXLvoVF58s9up9uM; Wed, 16 Apr 2025 21:56:37 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>
+Date: Wed, 16 Apr 2025 21:56:36 +0200
+Message-Id: <20250416195636.3131473-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Peter Korsgaard <peter@korsgaard.com>,
- Robert Smigielski <ptdropper@gmail.com>,
- Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org
-References: <CABWt4euwWJ=D11Rm4rkXhccnm7x7EguHeyy2AmBJRNMnrneziA@mail.gmail.com>
- <87plhdanus.fsf@dell.be.48ers.dk>
-Content-Language: en-GB
-In-Reply-To: <87plhdanus.fsf@dell.be.48ers.dk>
-X-Last-TLS-Session-Version: TLSv1.3
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rnout.be; s=dkim; 
- t=1744832686; h=from:subject:date:message-id:to:cc:mime-version:content-type:
- content-transfer-encoding:in-reply-to:references;
- bh=bCUJJXQSkXSIAcVMzM1cOchaygsUSf2/NLiNgnu5cKs=;
- b=Z6iJ/TS9miL3wMGHp1AN/2umFgtKX3qvxFrFoGY5ByXDNOlFVhh6CaJWX6DzaBNH/0hWZi
- xzYOSXDXgg+sHpNIg5Rhb/qwPGrJ9mPbN/MSy+zlPlLqfSWZ4j6eXFX/uaE6AyPQnxFEUj
- qr3kBDB+Za7AMb6DUoFVzgXT3Z9Ju+u0nBbAvNYL4FvqQtGM5z5cbSU85a6lCzIytZPxeW
- vfkhA0m/qki8jE9GA9Cu9UAIpdJzPOHSJM2jn/ZYyShfIdlGy07iyAClrslkEF9O1Fqn6q
- 0ZLILoM86Fe9I2JsgQJIWKhVWjitu7WGOdpMjK8Eo1mRzuIIZbvo50Rg3fr87Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=rnout.be
-Subject: Re: [Buildroot] Buildroot 2025.02 released
+X-CMAE-Envelope: MS4xfDbll8geXI4gQ7E5asl1gSJDjiTM6yiIUqZdpKpv+J4FKhZRcr2Fj+Lkr3AAqE9W5/ph2W2KAFlfY8UoP7D73RYmU9AtDVbUUjpEKUsTrAHRfsgJtFas
+ A6+oanBOmY/cfrEWrzm81Bqw2MrcOkGXt9uTcuU4fm21fDeN01h5jUFeoKDFnIvsVc+bcac6fN9ku7B4ex2uYFvkjCBRo364MGDkD1MZ61S9PYnmsoayVd9M
+ 3sOn1QNu2WQt8YSmWnHTpVjCY8H2e572uSsCbSB15GmQcC60oQkzGPjdIVkx0HHQdnhToc4U81dbi7q87ujhdA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1744833397; bh=eBOwkTWzGBdD98mYnRoPqiugfHA9qJWRbCy9iQhcVFk=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=P8KBQ8dGxpCp8Rxdnf2XsGghLKQ5CT3+lG6lf3uYwX3gw4Pl0U/DhTwrVs10nZPZO
+ zELlNu5iSQ1yjZVnEURU5CIfdE10TaJTMvGl3lU2O7CYnduQ2JvuJrrSfpKIhfLB7a
+ ysh2yP3681Ys/RNMPHHNjjaxTdPx17MfsJnIRawPgRO7sffOo7y6nDJFY4ZEk08Fi4
+ 1kOxXtjRh5YMPGAtcYYuukdjiDSENHg0BNyTU686aYl/ZW/6+5ythkE+aRBLPH8EUL
+ wvmAGAdys/CUReiO/RBRDGb4mIoEFGv5aPz1jnJfTy2x9oNexPf/rK9ZxKAjSnQlci
+ 0LbX0Er2i5WLQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=P8KBQ8dG
+Subject: [Buildroot] [PATCH] package/rtl8188eu: fix build failure with Linux
+ 6.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,45 +80,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Ck9uIDE1LzA0LzIwMjUgMDk6MjQsIFBldGVyIEtvcnNnYWFyZCB3cm90ZToKPj4+Pj4+ICJSb2Jl
-cnQiID09IFJvYmVydCBTbWlnaWVsc2tpIDxwdGRyb3BwZXJAZ21haWwuY29tPiB3cml0ZXM6Cj4g
-SGkgUm9iZXJ0LAo+Cj4gICA+IEhpIEJ1aWxkcm9vdCB0ZWFtCj4gICA+IEkgcnVuIGEgdGlueSBv
-cGVuIHNvdXJjZSBwcm9qZWN0IHRoYXQgYWxzbyBzdXBwb3J0cyBDeWNsb25lRFggU0JPTQo+ICAg
-PiBnZW5lcmF0aW9uIGZvciBCdWlsZHJvb3QuIEkgd2FzIHBhcnQgb2YgdGhpcyBlbWFpbCBjaGFu
-bmVsIGJ1dCBoYWQgdG8KPiAgID4gZHJvcCBmb3Igd29yayByZWFzb25zLgo+ICAgPiBHbGFkIHRv
-IGJlIGJhY2sgYW5kIG9mZmVyIHN1cHBvcnQuIFRoZSBwcm9qZWN0IEkgcGFydGljaXBhdGUgd2l0
-aCBpcwo+ICAgPiBodHRwczovL2dpdGh1Yi5jb20vQ3ljbG9uZURYL2N5Y2xvbmVkeC1idWlsZHJv
-b3QvIGFuZCB3b3VsZCBsaWtlIHRvCj4gICA+IGNvb3JkaW5hdGUgd2l0aCB5b3UuCj4KPiBTb3Jy
-eSBmb3IgdGhlIHNsb3cgcmVzcG9uc2UsIHRoaW5ncyBoYXZlIGJlZW4ga2luZCBvZiBidXN5IGhl
-cmUuCj4KPiBUaGFua3MgZm9yIHJlYWNoaW5nIG91dCEgSSBoYXZlIHVzZWQgY3ljbG9uZWR4LWJ1
-aWxkcm9vdCBpbiB0aGUgcGFzdAo+IG15c2VsZi4gUmVnYXJkaW5nIGNvb3JkaW5hdGlvbiwgY2Fu
-IHlvdSBnaXZlIGFuIG92ZXJ2aWV3IG9mIHdoYXQgdGhlCj4gZGVsdGEgaXMgaW4gdGhlIG91dHB1
-dCBmcm9tIGN5Y2xvbmVkeC1idWlsZHJvb3QgYW5kIG91cgo+IHV0aWxzL2dlbmVyYXRlLWN5Y2xv
-bmVkeCBzY3JpcHQ/IEkgaGF2ZSBhZGRlZCBUaG9tYXMsIGF1dGhvciBvZgo+IGdlbmVyYXRlLWN5
-Y2xvbmVkeCBoZXJlIGFzIHdlbGwuCgogwqBJIGNvbXBhcmVkIHRoZSB0d28gYmVmb3JlIGFwcGx5
-aW5nIHRoZSBnZW5lcmF0ZS1jeWNsb25lZHggY29kZS4gVGhlIHVzYWdlIGlzIApzbGlnaHRseSBk
-aWZmZXJlbnQgLSBnZW5lcmF0ZS1jeWNsb25lZHggZXhwZWN0cyBzaG93LWluZm8gb3V0cHV0IGFz
-IGlucHV0LCB3aGlsZSAKY3ljbG9uZWR4LWJ1aWxkcm9vdCBjYWxscyBpdCBpbnRlcm5hbGx5LgoK
-IMKgSUlSQywgdGhlIG1haW4gZGlmZmVyZW5jZXMgaW4gdGhlIG91dHB1dCBhcmU6CgotIENWRSBl
-eGNsdXNpb25zIGFyZSBoYW5kbGVkIGRpZmZlcmVudGx5IChvciBub3QgYXQgYWxsIGluIGN5Y2xv
-bmVkeC1idWlsZHJvb3Q/KQoKLSBnZW5lcmF0ZS1jeWNsb25lZHggaW5jbHVkZXMgdGhlIHBhdGNo
-IGNvbnRlbnRzLCBjeWNsb25lZHgtYnVpbGRyb290IGp1c3QgbmFtZXMgCnRoZW0KCi0gZ2VuZXJh
-dGUtY3ljbG9uZWR4IGRvZXNuJ3QgYWRkIGEgUFVSTCAoYnV0IFRob21hcyBwb3N0ZWQgYSBzZXJp
-ZXMgZm9yIHRoYXQpLgoKCj4KPiBGb3IgQnVpbGRyb290LCBoYXZpbmcgYSBzb2xpZCBTQk9NIHN0
-b3J5IG91dCBvZiB0aGUgYm94IGlzIHF1aXRlIG5pY2UsCj4gc28gSSB3b3VsZCBwZXJzb25hbGx5
-IHByZWZlciB0byBleHRlbmQgZ2VuZXJhdGUtY3ljbG9uZWR4IGlmIGFueXRoaW5nIGlzCj4gbWlz
-c2luZy4KCiDCoFllcywgSSBhbHNvIGxvb2tlZCBhdCBqdXN0IGludGVncmF0aW5nIGN5Y2xvbmVk
-eC1idWlsZHJvb3QuIEhvd2V2ZXIsIHRoYXQgaGFzIApxdWl0ZSBhIGZldyBQeVBJIGRlcGVuZGVu
-Y2llcywgd2hpY2ggd2UgZG9uJ3QgbGlrZSB0byBoYXZlIGZvciBpbi10cmVlIHRvb2xzLiAKZ2Vu
-ZXJhdGUtY3ljbG9uZWR4IHdvcmtzIHdpdGggcHVyZSBKU09OIGluc3RlYWQgb2YgdGhlIGN5Y2xv
-bmVkeCBweXRob24gbGlicmFyeS4KCgogwqBSZWdhcmRzLAogwqBBcm5vdXQKCgpfX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
-aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
-YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Add local patch pending upstream to fix build failure with Linux 6.13
+
+Fixes:
+https://autobuild.buildroot.org/results/4a0ebbcd62a2bfc59a7f6183f100f0e111cee750
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ .../0001-Fix-build-with-Linux-6.13.patch      | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/rtl8188eu/0001-Fix-build-with-Linux-6.13.patch
+
+diff --git a/package/rtl8188eu/0001-Fix-build-with-Linux-6.13.patch b/package/rtl8188eu/0001-Fix-build-with-Linux-6.13.patch
+new file mode 100644
+index 0000000000..3594283ff1
+--- /dev/null
++++ b/package/rtl8188eu/0001-Fix-build-with-Linux-6.13.patch
+@@ -0,0 +1,35 @@
++From 408ac4abdd1e187624ebef9f6a45ecc437525de5 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Wed, 16 Apr 2025 17:34:54 +0200
++Subject: [PATCH] Fix build with Linux 6.13
++
++Commit:
++https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9c4f830927750a2bf9fd9426a5257f0fdce3b662
++adds struct net_device *dev as argument to set_monitor_channel(), so let's
++add it to cfg80211_rtw_set_monitor_channel() according to Linux version.
++
++Upstream: https://github.com/lwfinger/rtl8188eu/pull/463
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ ioctl_cfg80211.c | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/ioctl_cfg80211.c b/ioctl_cfg80211.c
++index c6ae5aa..270cfce 100644
++--- a/ioctl_cfg80211.c
+++++ b/ioctl_cfg80211.c
++@@ -4404,7 +4404,10 @@ static int	cfg80211_rtw_set_channel(struct wiphy *wiphy
++ }
++ 
++ static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
++-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0))
+++	, struct net_device *dev
+++	, struct cfg80211_chan_def *chandef
+++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
++ 	, struct cfg80211_chan_def *chandef
++ #else
++ 	, struct ieee80211_channel *chan
++-- 
++2.39.5
++
+-- 
+2.39.5
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
