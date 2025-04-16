@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48B09C369CA
-	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 21:45:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3D19C369CB
+	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 21:45:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1B8E6FA14;
-	Wed, 16 Apr 2025 21:45:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A799E6F614;
+	Wed, 16 Apr 2025 21:45:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8Z_mNhvZixjb; Wed, 16 Apr 2025 21:45:51 +0000 (UTC)
+ id Zhh8Ga_z1zaS; Wed, 16 Apr 2025 21:45:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7408617BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEDF66F5A9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E7408617BB;
-	Wed, 16 Apr 2025 21:45:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6CD5B159
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:45:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DEDF66F5A9;
+	Wed, 16 Apr 2025 21:45:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2997620E7
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:45:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5EB7040164
+ by smtp2.osuosl.org (Postfix) with ESMTP id 697D240607
  for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:45:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id noxVyAYW0PjN for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M105FdUgkRfa for <buildroot@buildroot.org>;
  Wed, 16 Apr 2025 21:45:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0744406FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB1BA40BE7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B0744406FB
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB1BA40BE7
  for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:45:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A25FC85538; Wed, 16 Apr 2025 21:45:39 +0000 (UTC)
+ id B722585536; Wed, 16 Apr 2025 21:45:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 16 Apr 2025 10:52:17 +0200
+Date: Wed, 16 Apr 2025 13:41:55 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 9ea9fd72c28e3275e95adb1fc9da756023d7ff92
-X-Git-Newrev: 1b69735ae1b9d1854bb477ee91bf7c87f3a8e914
+X-Git-Oldrev: e1ff37952219d132674e0564a383a5f5fe2c7c0c
+X-Git-Newrev: 6f208150ea250b19627443881fd7972de427daa9
 X-Patchwork-Hint: ignore
-Message-Id: <20250416214539.A25FC85538@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libarchive:
- security bump to version 3.7.9
+Message-Id: <20250416214539.B722585536@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libfreeglut: add
+ upstream security fix for CVE-2024-2425{8, 9}
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,84 +61,136 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0815930769334987626=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b69735ae1b9d1854bb477ee91bf7c87f3a8e914
+--===============0815930769334987626==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=6f208150ea250b19627443881fd7972de427daa9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Fixes the following security issues:
 
-- CVE-2024-57970: libarchive through 3.7.7 has a heap-based buffer
-    over-read in header_gnu_longlink in archive_read_support_format_tar.c
-    via a TAR archive because it mishandles truncation in the middle of a
-    GNU long linkname.
+- CVE-2024-24258: freeglut 3.4.0 was discovered to contain a memory leak
+via the menuEntry variable in the glutAddSubMenu function.
+- CVE-2024-24259: freeglut through 3.4.0 was discovered to contain a
+memory leak via the menuEntry variable in the glutAddMenuEntry
+function.
 
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2024-57970
-  - https://github.com/libarchive/libarchive/commit/82912103214506316bd9990d73f33d743d55f570
+https://nvd.nist.gov/vuln/detail/CVE-2024-24258
+https://nvd.nist.gov/vuln/detail/CVE-2024-24259
 
-- CVE-2025-1632: This affects the function list of the file bsdunzip.c.
-    The manipulation leads to null pointer dereference. It is possible
-    to launch the attack on the local host.
+The CVEs are not technically reported for the libfreeglut package
+itself (which doesn't have a CPE identifier) but for mupdf.
 
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-1632
-  - https://github.com/libarchive/libarchive/commit/c9bc934e7e91d302e0feca6e713ccc38d6d01532
+Note that mudpf provides its own (old) version of freeglut, but our
+mupdf package uses the Buildroot-provided freeglut (which now contains
+the fix).
 
-- CVE-2025-25724: list_item_verbose in tar/util.c in libarchive through 3.7.7
-    does not check an strftime return value, which can lead to a denial of
-    service or unspecified other impact via a crafted TAR archive that is read
-    with a verbose value of 2.
-    For example, the 100-byte buffer may not be sufficient for a custom locale.
+It also has to be noted that a more recent release of libfreeglut
+exists upstream, and it fixes the same CVEs.  Bumping our package
+version however requires more work that can be done separately.
+Including this patch first also has the advantage that it can easily
+be backported wherever it's needed.
 
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-25724
-  - https://github.com/libarchive/libarchive/commit/c9bc934e7e91d302e0feca6e713ccc38d6d01532
-
-The patch added in [1] are still needed for this version bump.
-
-For more details on the version bump, see the release notes:
-  - https://github.com/libarchive/libarchive/releases/tag/v3.7.8
-  - https://github.com/libarchive/libarchive/releases/tag/v3.7.9
-
-[1] 9ac63a3360 package/libarchive: fix uclibc build with libiconv (again)
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit fde0b3fe1c99207436fd0c25a94c09856d1ee552)
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 0f4fef076f99fcfc7187223a6bc154d0a751e963)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libarchive/libarchive.hash | 2 +-
- package/libarchive/libarchive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-Plug-memory-leak-that-happens-upon-error.patch | 54 ++++++++++++++++++++++
+ package/mupdf/mupdf.mk                             |  6 +++
+ 2 files changed, 60 insertions(+)
 
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index c0b04b0f4b..d132664e17 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
-@@ -1,4 +1,4 @@
- # From https://www.libarchive.de/downloads/sha256sums
--sha256  879acd83c3399c7caaee73fe5f7418e06087ab2aaf40af3e99b9e29beb29faee  libarchive-3.7.7.tar.xz
-+sha256  ed8b5732e4cd6e30fae909fb945cad8ff9cb7be5c6cdaa3944ec96e4a200c04c  libarchive-3.7.9.tar.xz
- # Locally computed:
- sha256  b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba  COPYING
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 70123ee2b1..7fec01a040 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libfreeglut/0001-Plug-memory-leak-that-happens-upon-error.patch b/package/libfreeglut/0001-Plug-memory-leak-that-happens-upon-error.patch
+new file mode 100644
+index 0000000000..d09e9befb3
+--- /dev/null
++++ b/package/libfreeglut/0001-Plug-memory-leak-that-happens-upon-error.patch
+@@ -0,0 +1,54 @@
++From 9ad320c1ad1a25558998ddfe47674511567fec57 Mon Sep 17 00:00:00 2001
++From: Sebastian Rasmussen <sebras@gmail.com>
++Date: Mon, 12 Feb 2024 14:46:22 +0800
++Subject: [PATCH] Plug memory leak that happens upon error.
++
++If fgStructure.CurrentMenu is set when glutAddMenuEntry() or
++glutAddSubMenu() is called the allocated menuEntry variable will
++leak. This commit postpones allocating menuEntry until after the
++error checks, thereby plugging the memory leak.
++
++This fixes CVE-2024-24258 and CVE-2024-24259.
++Upstream: https://github.com/freeglut/freeglut/commit/9ad320c1ad1a25558998ddfe47674511567fec57
++Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
++---
++ src/fg_menu.c | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/fg_menu.c b/src/fg_menu.c
++index 53112dc2..0da88901 100644
++--- a/src/fg_menu.c
+++++ b/src/fg_menu.c
++@@ -864,12 +864,12 @@ void FGAPIENTRY glutAddMenuEntry( const char* label, int value )
++ {
++     SFG_MenuEntry* menuEntry;
++     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutAddMenuEntry" );
++-    menuEntry = (SFG_MenuEntry *)calloc( sizeof(SFG_MenuEntry), 1 );
++ 
++     freeglut_return_if_fail( fgStructure.CurrentMenu );
++     if (fgState.ActiveMenus)
++         fgError("Menu manipulation not allowed while menus in use.");
++ 
+++    menuEntry = (SFG_MenuEntry *)calloc( sizeof(SFG_MenuEntry), 1 );
++     menuEntry->Text = strdup( label );
++     menuEntry->ID   = value;
++ 
++@@ -888,7 +888,6 @@ void FGAPIENTRY glutAddSubMenu( const char *label, int subMenuID )
++     SFG_Menu *subMenu;
++ 
++     FREEGLUT_EXIT_IF_NOT_INITIALISED ( "glutAddSubMenu" );
++-    menuEntry = ( SFG_MenuEntry * )calloc( sizeof( SFG_MenuEntry ), 1 );
++     subMenu = fgMenuByID( subMenuID );
++ 
++     freeglut_return_if_fail( fgStructure.CurrentMenu );
++@@ -897,6 +896,7 @@ void FGAPIENTRY glutAddSubMenu( const char *label, int subMenuID )
++ 
++     freeglut_return_if_fail( subMenu );
++ 
+++    menuEntry = ( SFG_MenuEntry * )calloc( sizeof( SFG_MenuEntry ), 1 );
++     menuEntry->Text    = strdup( label );
++     menuEntry->SubMenu = subMenu;
++     menuEntry->ID      = -1;
++-- 
++2.48.1
++
+diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
+index d813d9b7de..63615cacaf 100644
+--- a/package/mupdf/mupdf.mk
++++ b/package/mupdf/mupdf.mk
+@@ -21,6 +21,12 @@ MUPDF_DEPENDENCIES = \
+ 	lcms2 openjpeg \
+ 	zlib
  
--LIBARCHIVE_VERSION = 3.7.7
-+LIBARCHIVE_VERSION = 3.7.9
- LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
- LIBARCHIVE_SITE = https://www.libarchive.de/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
++# libfreeglut/0001-Plug-memory-leak-that-happens-upon-error.patch
++# Fix is in libfreeglut, but CVE applied to mupdf.
++MUPDF_IGNORE_CVES = \
++	CVE-2024-24258 \
++	CVE-2024-24259
++
+ # mupdf doesn't use CFLAGS and LIBS but XCFLAGS and XLIBS instead.
+ # with USE_SYSTEM_LIBS it will try to use system libraries instead of the bundled ones.
+ MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
+
+--===============0815930769334987626==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0815930769334987626==--
