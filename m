@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA89FC369C7
-	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 21:40:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7537C369CB
+	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 21:41:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A1A6B6F808;
-	Wed, 16 Apr 2025 21:40:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9E48960C1E;
+	Wed, 16 Apr 2025 21:41:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m8P5kSynApt1; Wed, 16 Apr 2025 21:40:53 +0000 (UTC)
+ id URwjCGvKKp2o; Wed, 16 Apr 2025 21:40:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 85EA16F5A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2E2B6F67E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 85EA16F5A9;
-	Wed, 16 Apr 2025 21:40:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 238EA20E6
+	by smtp3.osuosl.org (Postfix) with ESMTP id E2E2B6F67E;
+	Wed, 16 Apr 2025 21:40:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4299820E6
  for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:40:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EBF8D607A7
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:40:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A771C82F8B
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:40:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cubGeqUxOTdb for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XRoBXHpjhDEY for <buildroot@buildroot.org>;
  Wed, 16 Apr 2025 21:40:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87E8D60857
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D30F084013
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 87E8D60857
+ by smtp1.osuosl.org (Postfix) with ESMTP id D30F084013
  for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:40:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 821DA8458F; Wed, 16 Apr 2025 21:40:40 +0000 (UTC)
+ id D12468408D; Wed, 16 Apr 2025 21:40:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 16 Apr 2025 10:44:34 +0200
+Date: Wed, 16 Apr 2025 10:44:46 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: e318e5c54bb4f2b5618cd88d54ddef6737f7b45c
-X-Git-Newrev: c0839ab823246cc97b1aae62e07469cbb7b5adc4
+X-Git-Oldrev: 56a065c54c2844e93b2166e4365c0ab36a69f371
+X-Git-Newrev: 1648e43e293e75bd104225052f88336c999f2fc0
 X-Patchwork-Hint: ignore
-Message-Id: <20250416214040.821DA8458F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/uclibc: fix NPTL
- alignment on m68k
+Message-Id: <20250416214040.D12468408D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ package/gstreamer1/gst-python: bump version to 1.24.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,148 +61,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5375192224965163173=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5375192224965163173==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=c0839ab823246cc97b1aae62e07469cbb7b5adc4
+commit: https://git.buildroot.net/buildroot/commit/?id=1648e43e293e75bd104225052f88336c999f2fc0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Tested on QEMU using the qemu_m68k_q800_defconfig configuration, with a
-switch of  the toolchain to uclibc-ng and enabling rsyslog.
+No functional change, but bump for consistency. For details, see the
+release notes:
 
-This patch addresses an issue where rsyslog’s pthread_cond_wait was
-busy-looping due to futex_time64 repeatedly returning EINVAL. The
-correction in NPTL alignment resolves the 100% CPU usage problem.
+    https://gstreamer.freedesktop.org/releases/1.24/
 
-This patch is fixed upstream [1] so apply it until it is tagged.
-
-[1]: 278ac6b30 ("m68k: fix alignment in NPTL code")
-
-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-[Julien:
- - rename patch to 0002
- - add "Upstream:" tag in patch to fix check-package error
- - add "Signed-off-by:" in patch
-]
+Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 53eae986a5c15afd0ade74875ce96a1b70e7c53b)
+(cherry picked from commit c188884d72411119bdab1f1b6a8e373c0d807427)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0002-m68k-fix-alignment-in-NPTL-code.patch     | 92 ++++++++++++++++++++++
- 1 file changed, 92 insertions(+)
+ package/gstreamer1/gst1-python/gst1-python.hash | 4 ++--
+ package/gstreamer1/gst1-python/gst1-python.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/uclibc/0002-m68k-fix-alignment-in-NPTL-code.patch b/package/uclibc/0002-m68k-fix-alignment-in-NPTL-code.patch
-new file mode 100644
-index 0000000000..fbd9934376
---- /dev/null
-+++ b/package/uclibc/0002-m68k-fix-alignment-in-NPTL-code.patch
-@@ -0,0 +1,92 @@
-+From 278ac6b3098315cddec8f71f27bd8de22e53ca6c Mon Sep 17 00:00:00 2001
-+From: Thorsten Glaser <tg@debian.org>
-+Date: Wed, 12 Mar 2025 22:11:51 +0100
-+Subject: [PATCH] m68k: fix alignment in NPTL code
-+
-+Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/278ac6b3098315cddec8f71f27bd8de22e53ca6c
-+Signed-off-by: Thorsten Glaser <tg@debian.org>
-+Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-+---
-+ .../unix/sysv/linux/m68k/bits/pthreadtypes.h   | 18 +++++++++---------
-+ 1 file changed, 9 insertions(+), 9 deletions(-)
-+
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/m68k/bits/pthreadtypes.h b/libpthread/nptl/sysdeps/unix/sysv/linux/m68k/bits/pthreadtypes.h
-+index 2a90a0b90..d2f22caee 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/m68k/bits/pthreadtypes.h
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/m68k/bits/pthreadtypes.h
-+@@ -39,7 +39,7 @@ typedef unsigned long int pthread_t;
-+ typedef union
-+ {
-+   char __size[__SIZEOF_PTHREAD_ATTR_T];
-+-  long int __align;
-++  long int __align __attribute__((__aligned__(4)));
-+ } pthread_attr_t;
-+ 
-+ 
-+@@ -69,13 +69,13 @@ typedef union
-+     };
-+   } __data;
-+   char __size[__SIZEOF_PTHREAD_MUTEX_T];
-+-  long int __align;
-++  long int __align __attribute__((__aligned__(4)));
-+ } pthread_mutex_t;
-+ 
-+ typedef union
-+ {
-+   char __size[__SIZEOF_PTHREAD_MUTEXATTR_T];
-+-  long int __align;
-++  long int __align __attribute__((__aligned__(4)));
-+ } pthread_mutexattr_t;
-+ 
-+ 
-+@@ -95,13 +95,13 @@ typedef union
-+     unsigned int __broadcast_seq;
-+   } __data;
-+   char __size[__SIZEOF_PTHREAD_COND_T];
-+-  __extension__ long long int __align;
-++  __extension__ long long int __align __attribute__((__aligned__(8)));
-+ } pthread_cond_t;
-+ 
-+ typedef union
-+ {
-+   char __size[__SIZEOF_PTHREAD_CONDATTR_T];
-+-  long int __align;
-++  long int __align __attribute__((__aligned__(4)));
-+ } pthread_condattr_t;
-+ 
-+ 
-+@@ -144,13 +144,13 @@ typedef union
-+     int __writer;
-+   } __data;
-+   char __size[__SIZEOF_PTHREAD_RWLOCK_T];
-+-  long int __align;
-++  long int __align __attribute__((__aligned__(4)));
-+ } pthread_rwlock_t;
-+ 
-+ typedef union
-+ {
-+   char __size[__SIZEOF_PTHREAD_RWLOCKATTR_T];
-+-  long int __align;
-++  long int __align __attribute__((__aligned__(4)));
-+ } pthread_rwlockattr_t;
-+ #endif
-+ 
-+@@ -165,13 +165,13 @@ typedef volatile int pthread_spinlock_t;
-+ typedef union
-+ {
-+   char __size[__SIZEOF_PTHREAD_BARRIER_T];
-+-  long int __align;
-++  long int __align __attribute__((__aligned__(4)));
-+ } pthread_barrier_t;
-+ 
-+ typedef union
-+ {
-+   char __size[__SIZEOF_PTHREAD_BARRIERATTR_T];
-+-  int __align;
-++  int __align __attribute__((__aligned__(4)));
-+ } pthread_barrierattr_t;
-+ #endif
-+ 
-+-- 
-+2.39.5
-+
-
---===============5375192224965163173==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/gstreamer1/gst1-python/gst1-python.hash b/package/gstreamer1/gst1-python/gst1-python.hash
+index b28ad5975f..44bf778fd7 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.hash
++++ b/package/gstreamer1/gst1-python/gst1-python.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.22.12.tar.xz.sha256sum
+-sha256  d98d3226efea20d5c440a28988a20319a953f7c594895df2bba4538633108e9f  gst-python-1.22.12.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-python/gst-python-1.24.11.tar.xz.sha256sum
++sha256  f4c8761bfee98508f57e2efd738ef36a99e2f7644860877d54d235a7092cf056  gst-python-1.24.11.tar.xz
+ sha256  ea3ad127610e5ded2210b3a86a46314f2b3b28e438eccffdae19a4d6fbcdb0c2  COPYING
+diff --git a/package/gstreamer1/gst1-python/gst1-python.mk b/package/gstreamer1/gst1-python/gst1-python.mk
+index f5f4d713a2..18e03d4b06 100644
+--- a/package/gstreamer1/gst1-python/gst1-python.mk
++++ b/package/gstreamer1/gst1-python/gst1-python.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GST1_PYTHON_VERSION = 1.22.12
++GST1_PYTHON_VERSION = 1.24.11
+ GST1_PYTHON_SOURCE = gst-python-$(GST1_PYTHON_VERSION).tar.xz
+ GST1_PYTHON_SITE = https://gstreamer.freedesktop.org/src/gst-python
+ GST1_PYTHON_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5375192224965163173==--
