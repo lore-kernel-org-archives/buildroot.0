@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DB23C369C7
-	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 21:48:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66577C369C7
+	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 21:48:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 437006FA21;
-	Wed, 16 Apr 2025 21:48:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A5F16FBCD;
+	Wed, 16 Apr 2025 21:48:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jj870_oY57Oa; Wed, 16 Apr 2025 21:48:44 +0000 (UTC)
+ id L0iq-YPhTJIZ; Wed, 16 Apr 2025 21:48:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 705A36FAA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B5716FBDC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 705A36FAA8;
-	Wed, 16 Apr 2025 21:48:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6D504159
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B5716FBDC;
+	Wed, 16 Apr 2025 21:48:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id DB6E920E6
  for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:48:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B1BCC81F9A
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:48:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC87061AB2
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:48:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BQ3Y09CH1JdK for <buildroot@buildroot.org>;
- Wed, 16 Apr 2025 21:48:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WB8Jb4KooRbq for <buildroot@buildroot.org>;
+ Wed, 16 Apr 2025 21:48:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 239F681F89
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1A2B1611F6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 239F681F89
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:48:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1A2B1611F6
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:48:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14ACB83C3D; Wed, 16 Apr 2025 21:48:23 +0000 (UTC)
+ id CF602856CA; Wed, 16 Apr 2025 21:48:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 16 Apr 2025 10:51:19 +0200
+Date: Wed, 16 Apr 2025 10:51:12 +0200
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: eed32987322b58365bf0c75440bd22b03232ab63
-X-Git-Newrev: 4cbce8e3d11dd80b6ac7f39b22819fe5fb3f8d08
+X-Git-Oldrev: 3e10b465be6bddf6903dc04d8c6226f0d6146e84
+X-Git-Newrev: 553b89d8952a1dd4c82c85feb332fa9aa8f7012a
 X-Patchwork-Hint: ignore
-Message-Id: <20250416214823.14ACB83C3D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/augeas: add
- upstream security fix for CVE-2025-2588
+Message-Id: <20250416214822.CF602856CA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/mali-driver: bump
+ to version 2025-04-06
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,126 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cbce8e3d11dd80b6ac7f39b22819fe5fb3f8d08
+commit: https://git.buildroot.net/buildroot/commit/?id=553b89d8952a1dd4c82c85feb332fa9aa8f7012a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-Fixes the following security issue:
+This version builds up to Linux version 6.13.
 
-- CVE-2025-2588: This vulnerability affects the function
-    re_case_expand of the file src/fa.c. The manipulation of the
-    argument re leads to null pointer dereference
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-2588
-  - https://github.com/hercules-team/augeas/commit/af2aa88ab37fc48167d8c5e43b1770a4ba2ff403
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-[Julien: add patch name in comment near _IGNORE_CVES]
+Fixes:
+https://autobuild.buildroot.org/results/e71/e71a5b46affe5948c16a0c83534d8f56f69b6e91/
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit c497e5fcc7b5d6b0877ba0dc557c604dcd194260)
+(cherry picked from commit 9e7e255a09eb6175d9d085e5cbae63ef4ea08e0f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...fic-error-was-set-yet-parse_regexp-failed.patch | 77 ++++++++++++++++++++++
- package/augeas/augeas.mk                           |  3 +
- 2 files changed, 80 insertions(+)
+ package/mali-driver/mali-driver.hash | 2 +-
+ package/mali-driver/mali-driver.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/augeas/0001-CVE-2025-2588-return-_REG_ENOSYS-if-no-specific-error-was-set-yet-parse_regexp-failed.patch b/package/augeas/0001-CVE-2025-2588-return-_REG_ENOSYS-if-no-specific-error-was-set-yet-parse_regexp-failed.patch
-new file mode 100644
-index 0000000000..0716211387
---- /dev/null
-+++ b/package/augeas/0001-CVE-2025-2588-return-_REG_ENOSYS-if-no-specific-error-was-set-yet-parse_regexp-failed.patch
-@@ -0,0 +1,77 @@
-+From af2aa88ab37fc48167d8c5e43b1770a4ba2ff403 Mon Sep 17 00:00:00 2001
-+From: Alexander Bokovoy <abbra@users.noreply.github.com>
-+Date: Sun, 30 Mar 2025 12:27:04 +0300
-+Subject: [PATCH] CVE-2025-2588: return _REG_ENOSYS if no specific error was
-+ set yet parse_regexp failed (#854)
-+
-+parse_regexp() supposed to set an error on the parser state in case of a
-+failure. If no specific error was set, return _REG_ENOSYS to indicate a
-+generic failure.
-+
-+Fixes: https://github.com/hercules-team/augeas/issues/671
-+Fixes: https://github.com/hercules-team/augeas/issues/778
-+Fixes: https://github.com/hercules-team/augeas/issues/852
-+
-+Signed-off-by: Alexander Bokovoy <abokovoy@redhat.com>
-+
-+Upstream: https://github.com/hercules-team/augeas/commit/af2aa88ab37fc48167d8c5e43b1770a4ba2ff403
-+CVE: CVE-2025-2588
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+
-+---
-+ src/fa.c       | 2 ++
-+ src/fa.h       | 3 ++-
-+ tests/fatest.c | 6 ++++++
-+ 3 files changed, 10 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/fa.c b/src/fa.c
-+index 66ac70784..4de5675b9 100644
-+--- a/src/fa.c
-++++ b/src/fa.c
-+@@ -3550,6 +3550,8 @@ static struct re *parse_regexp(struct re_parse *parse) {
-+     return re;
-+ 
-+  error:
-++    if (re == NULL && parse->error == REG_NOERROR)
-++        parse->error = _REG_ENOSYS;
-+     re_unref(re);
-+     return NULL;
-+ }
-+diff --git a/src/fa.h b/src/fa.h
-+index 1fd754ad0..89c9b17e9 100644
-+--- a/src/fa.h
-++++ b/src/fa.h
-+@@ -81,7 +81,8 @@ extern int fa_minimization_algorithm;
-+  *
-+  * On success, FA points to the newly allocated automaton constructed for
-+  * RE, and the function returns REG_NOERROR. Otherwise, FA is NULL, and the
-+- * return value indicates the error.
-++ * return value indicates the error. Special value _REG_ENOSYS indicates
-++ * fa_compile() couldn't identify the syntax issue with regexp.
-+  *
-+  * The FA is case sensitive. Call FA_NOCASE to switch it to
-+  * case-insensitive.
-+diff --git a/tests/fatest.c b/tests/fatest.c
-+index 0c9ca7696..6717af8f4 100644
-+--- a/tests/fatest.c
-++++ b/tests/fatest.c
-+@@ -589,6 +589,7 @@ static void testExpandNoCase(CuTest *tc) {
-+     const char *p1 = "aB";
-+     const char *p2 = "[a-cUV]";
-+     const char *p3 = "[^a-z]";
-++    const char *wrong_regexp = "{&.{";
-+     char *s;
-+     size_t len;
-+     int r;
-+@@ -607,6 +608,11 @@ static void testExpandNoCase(CuTest *tc) {
-+     CuAssertIntEquals(tc, 0, r);
-+     CuAssertStrEquals(tc, "[^A-Za-z]", s);
-+     free(s);
-++
-++    /* Test that fa_expand_nocase does return _REG_ENOSYS */
-++    r = fa_expand_nocase(wrong_regexp, strlen(wrong_regexp), &s, &len);
-++    CuAssertIntEquals(tc, _REG_ENOSYS, r);
-++    free(s);
-+ }
-+ 
-+ static void testNoCaseComplement(CuTest *tc) {
-diff --git a/package/augeas/augeas.mk b/package/augeas/augeas.mk
-index ac4bc7d0be..e47c485147 100644
---- a/package/augeas/augeas.mk
-+++ b/package/augeas/augeas.mk
-@@ -14,6 +14,9 @@ AUGEAS_DEPENDENCIES = host-pkgconf readline libxml2
+diff --git a/package/mali-driver/mali-driver.hash b/package/mali-driver/mali-driver.hash
+index ddde56b55c..bc406e270f 100644
+--- a/package/mali-driver/mali-driver.hash
++++ b/package/mali-driver/mali-driver.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  3111757a411ba216a4b8e3d88c29eb3be3182a7f0d5f8b9cfe10f85ec6693bc9  mali-driver-d40c57d81c9cf4bc6fefeaf47153fde8eed19ef2.tar.gz
++sha256  c1a9ad5dfa0d4b7978a1a6dd02d7eabd4bc65e7d6a06eda749cae720749a741c  mali-driver-4f5282b305cb0956fe2485c9e9dab0021d5538f6.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/mali-driver/mali-driver.mk b/package/mali-driver/mali-driver.mk
+index fa5a8d94d9..ccb56de81f 100644
+--- a/package/mali-driver/mali-driver.mk
++++ b/package/mali-driver/mali-driver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- AUGEAS_CONF_OPTS = --disable-gnulib-tests
- 
-+# 0001-CVE-2025-2588-return-_REG_ENOSYS-if-no-specific-error-was-set-yet-parse_regexp-failed.patch
-+AUGEAS_IGNORE_CVES += CVE-2025-2588
-+
- # Remove the test lenses which occupy about 1.4 MB on the target
- define AUGEAS_REMOVE_TEST_LENSES
- 	rm -rf $(TARGET_DIR)/usr/share/augeas/lenses/dist/tests
+-MALI_DRIVER_VERSION = d40c57d81c9cf4bc6fefeaf47153fde8eed19ef2
++MALI_DRIVER_VERSION = 4f5282b305cb0956fe2485c9e9dab0021d5538f6
+ MALI_DRIVER_SITE = $(call github,bootlin,mali-driver,$(MALI_DRIVER_VERSION))
+ MALI_DRIVER_DEPENDENCIES = linux
+ MALI_DRIVER_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
