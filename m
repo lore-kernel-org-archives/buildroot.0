@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49912C369CA
-	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 21:41:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B561C369C9
+	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 21:41:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1CEEE6FA17;
-	Wed, 16 Apr 2025 21:41:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 515F381312;
+	Wed, 16 Apr 2025 21:41:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M3b9pk6KlIto; Wed, 16 Apr 2025 21:41:30 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WSBGBlXNlxp1; Wed, 16 Apr 2025 21:41:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 778ED6FA2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5FFE984896
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 778ED6FA2C;
-	Wed, 16 Apr 2025 21:41:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5FFE984896;
+	Wed, 16 Apr 2025 21:41:33 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 04370159
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:40:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FA2E20E6
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:41:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 44685607AD
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:40:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2ABA76101C
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:40:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VU7l3n21hgWw for <buildroot@buildroot.org>;
- Wed, 16 Apr 2025 21:40:45 +0000 (UTC)
+ id K1KzoEzvTrQ4 for <buildroot@buildroot.org>;
+ Wed, 16 Apr 2025 21:40:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58FD860E78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A80B0611F6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 58FD860E78
+ by smtp3.osuosl.org (Postfix) with ESMTP id A80B0611F6
  for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:40:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 554028408D; Wed, 16 Apr 2025 21:40:41 +0000 (UTC)
+ id A60138408D; Wed, 16 Apr 2025 21:40:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 16 Apr 2025 10:45:05 +0200
+Date: Wed, 16 Apr 2025 10:45:17 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 0afaf231cdd8ed98c9df223c02d75f8f580773b7
-X-Git-Newrev: bd9f6cf0f2b346c9ba8d50ed792c09a3565193fc
+X-Git-Oldrev: c39f68310214a9604674e7311aa9fa56d1e457a8
+X-Git-Newrev: 0d543e1cb4a816b5db3aa2d2341ac69a43caa41c
 X-Patchwork-Hint: ignore
-Message-Id: <20250416214041.554028408D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/ethtool: bump
- version to 6.14
+Message-Id: <20250416214041.A60138408D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libarchive:
+ security bump to version 3.7.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,63 +61,84 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6642676884379924198=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6642676884379924198==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=bd9f6cf0f2b346c9ba8d50ed792c09a3565193fc
+commit: https://git.buildroot.net/buildroot/commit/?id=0d543e1cb4a816b5db3aa2d2341ac69a43caa41c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Changelog:
-https://web.git.kernel.org/pub/scm/network/ethtool/ethtool.git/tree/NEWS?h=v6.14
+Fixes the following security issues:
 
-Signed-off-by: Mattias Walström <lazzer@gmail.com>
+- CVE-2024-57970: libarchive through 3.7.7 has a heap-based buffer
+    over-read in header_gnu_longlink in archive_read_support_format_tar.c
+    via a TAR archive because it mishandles truncation in the middle of a
+    GNU long linkname.
+
+For more information, see:
+  - https://nvd.nist.gov/vuln/detail/CVE-2024-57970
+  - https://github.com/libarchive/libarchive/commit/82912103214506316bd9990d73f33d743d55f570
+
+- CVE-2025-1632: This affects the function list of the file bsdunzip.c.
+    The manipulation leads to null pointer dereference. It is possible
+    to launch the attack on the local host.
+
+For more information, see:
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-1632
+  - https://github.com/libarchive/libarchive/commit/c9bc934e7e91d302e0feca6e713ccc38d6d01532
+
+- CVE-2025-25724: list_item_verbose in tar/util.c in libarchive through 3.7.7
+    does not check an strftime return value, which can lead to a denial of
+    service or unspecified other impact via a crafted TAR archive that is read
+    with a verbose value of 2.
+    For example, the 100-byte buffer may not be sufficient for a custom locale.
+
+For more information, see:
+  - https://nvd.nist.gov/vuln/detail/CVE-2025-25724
+  - https://github.com/libarchive/libarchive/commit/c9bc934e7e91d302e0feca6e713ccc38d6d01532
+
+The patch added in [1] are still needed for this version bump.
+
+For more details on the version bump, see the release notes:
+  - https://github.com/libarchive/libarchive/releases/tag/v3.7.8
+  - https://github.com/libarchive/libarchive/releases/tag/v3.7.9
+
+[1] 9ac63a3360 package/libarchive: fix uclibc build with libiconv (again)
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit ebd2a810a75fd71b279f4b0710f73739832284d8)
+(cherry picked from commit fde0b3fe1c99207436fd0c25a94c09856d1ee552)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/ethtool/ethtool.hash | 3 ++-
- package/ethtool/ethtool.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/libarchive/libarchive.hash | 2 +-
+ package/libarchive/libarchive.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 6fc0c13d3b..95cc14c490 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,5 +1,6 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256  8d91f5c72ae3f25b7e88d4781279dcb320f71e30058914370b1c574c96b31202  ethtool-6.11.tar.xz
-+sha256  9338bb00e492878d3bbe3cd2894e60db35813634c208db0b20f5c7ee84da69b1  ethtool-6.14.tar.xz
-+
- # Locally calculated
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index fc0622c04a..654fc401b7 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
+diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
+index c0b04b0f4b..d132664e17 100644
+--- a/package/libarchive/libarchive.hash
++++ b/package/libarchive/libarchive.hash
+@@ -1,4 +1,4 @@
+ # From https://www.libarchive.de/downloads/sha256sums
+-sha256  879acd83c3399c7caaee73fe5f7418e06087ab2aaf40af3e99b9e29beb29faee  libarchive-3.7.7.tar.xz
++sha256  ed8b5732e4cd6e30fae909fb945cad8ff9cb7be5c6cdaa3944ec96e4a200c04c  libarchive-3.7.9.tar.xz
+ # Locally computed:
+ sha256  b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba  COPYING
+diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
+index 70123ee2b1..7fec01a040 100644
+--- a/package/libarchive/libarchive.mk
++++ b/package/libarchive/libarchive.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ETHTOOL_VERSION = 6.11
-+ETHTOOL_VERSION = 6.14
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
-
---===============6642676884379924198==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-LIBARCHIVE_VERSION = 3.7.7
++LIBARCHIVE_VERSION = 3.7.9
+ LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
+ LIBARCHIVE_SITE = https://www.libarchive.de/downloads
+ LIBARCHIVE_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6642676884379924198==--
