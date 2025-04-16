@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECB1AC369C7
-	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 21:48:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66AA0C369CA
+	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 21:48:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BFF5260608;
-	Wed, 16 Apr 2025 21:48:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 39BB881EEB;
+	Wed, 16 Apr 2025 21:48:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uethTZxCNXjN; Wed, 16 Apr 2025 21:48:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y74CKX4kmR-n; Wed, 16 Apr 2025 21:48:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AAE096071F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72A1A83026
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AAE096071F;
-	Wed, 16 Apr 2025 21:48:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id EC70D20E6
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:48:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72A1A83026;
+	Wed, 16 Apr 2025 21:48:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 39749159
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:48:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DDA0A60BBA
+ by smtp2.osuosl.org (Postfix) with ESMTP id D6FBD40473
  for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:48:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZPN2j9gg7NL9 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aW-TzRLwW7jB for <buildroot@buildroot.org>;
  Wed, 16 Apr 2025 21:48:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 38C3660B94
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23DE840C23
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 38C3660B94
+ by smtp2.osuosl.org (Postfix) with ESMTP id 23DE840C23
  for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:48:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 26B63856EE; Wed, 16 Apr 2025 21:48:23 +0000 (UTC)
+ id 03682856C9; Wed, 16 Apr 2025 21:48:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 16 Apr 2025 10:51:21 +0200
+Date: Wed, 16 Apr 2025 10:51:16 +0200
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 4cbce8e3d11dd80b6ac7f39b22819fe5fb3f8d08
-X-Git-Newrev: e1a65c261dee4f2aee7e88d5856dd4d4254fa84a
+X-Git-Oldrev: da7d91df29294a81890a34270b449a0518e66cfb
+X-Git-Newrev: eed32987322b58365bf0c75440bd22b03232ab63
 X-Patchwork-Hint: ignore
-Message-Id: <20250416214823.26B63856EE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] package/libarchive:
- security bump to version 3.7.9
+Message-Id: <20250416214823.03682856C9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x] package/libcoap: bump
+ version to 4.3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,78 +66,111 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e1a65c261dee4f2aee7e88d5856dd4d4254fa84a
+commit: https://git.buildroot.net/buildroot/commit/?id=eed32987322b58365bf0c75440bd22b03232ab63
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-Fixes the following security issues:
+The patch introduced in [1] that fixed the CVE-2024-0962 is now
+available upstream in the 4.3.5 release [2].
 
-- CVE-2024-57970: libarchive through 3.7.7 has a heap-based buffer
-    over-read in header_gnu_longlink in archive_read_support_format_tar.c
-    via a TAR archive because it mishandles truncation in the middle of a
-    GNU long linkname.
+This commit also updates the LICENSE file hash, after adding reference
+to wolfSSL in [3].
 
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2024-57970
-  - https://github.com/libarchive/libarchive/commit/82912103214506316bd9990d73f33d743d55f570
+For more details see the release note:
+https://github.com/obgm/libcoap/blob/v4.3.5/ChangeLog
 
-- CVE-2025-1632: This affects the function list of the file bsdunzip.c.
-    The manipulation leads to null pointer dereference. It is possible
-    to launch the attack on the local host.
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-1632
-  - https://github.com/libarchive/libarchive/commit/c9bc934e7e91d302e0feca6e713ccc38d6d01532
-
-- CVE-2025-25724: list_item_verbose in tar/util.c in libarchive through 3.7.7
-    does not check an strftime return value, which can lead to a denial of
-    service or unspecified other impact via a crafted TAR archive that is read
-    with a verbose value of 2.
-    For example, the 100-byte buffer may not be sufficient for a custom locale.
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-25724
-  - https://github.com/libarchive/libarchive/commit/c9bc934e7e91d302e0feca6e713ccc38d6d01532
-
-The patch added in [1] are still needed for this version bump.
-
-For more details on the version bump, see the release notes:
-  - https://github.com/libarchive/libarchive/releases/tag/v3.7.8
-  - https://github.com/libarchive/libarchive/releases/tag/v3.7.9
-
-[1] 9ac63a3360 package/libarchive: fix uclibc build with libiconv (again)
+[1] 9002b818be package/libcoap: fix CVE-2024-0962
+[2] https://github.com/obgm/libcoap/commit/2b28d8b0e9607e71a145345b4fe49517e052b7d9
+[3] https://github.com/obgm/libcoap/commit/e3a662a934ae9e2854f50eb4cf420009a90fe1df
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+[Julien: fix LICENSE file hash]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit fde0b3fe1c99207436fd0c25a94c09856d1ee552)
+(cherry picked from commit 4df4d1d31240aa4d1c49dcbcb9694ce32eb626ba)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libarchive/libarchive.hash | 2 +-
- package/libarchive/libarchive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...-parsing-OSCORE-configuration-information.patch | 38 ----------------------
+ package/libcoap/libcoap.hash                       |  4 +--
+ package/libcoap/libcoap.mk                         |  5 +--
+ 3 files changed, 3 insertions(+), 44 deletions(-)
 
-diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-index c0b04b0f4b..d132664e17 100644
---- a/package/libarchive/libarchive.hash
-+++ b/package/libarchive/libarchive.hash
+diff --git a/package/libcoap/0001-coap_oscore-c-Fix-parsing-OSCORE-configuration-information.patch b/package/libcoap/0001-coap_oscore-c-Fix-parsing-OSCORE-configuration-information.patch
+deleted file mode 100644
+index e75250d613..0000000000
+--- a/package/libcoap/0001-coap_oscore-c-Fix-parsing-OSCORE-configuration-information.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From 2b28d8b0e9607e71a145345b4fe49517e052b7d9 Mon Sep 17 00:00:00 2001
+-From: Jon Shallow <supjps-libcoap@jpshallow.com>
+-Date: Thu, 25 Jan 2024 18:03:17 +0000
+-Subject: [PATCH] coap_oscore.c: Fix parsing OSCORE configuration information
+-
+-Upstream: https://github.com/obgm/libcoap/commit/2b28d8b0e9607e71a145345b4fe49517e052b7d9
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/coap_oscore.c | 5 +++--
+- 1 file changed, 3 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/coap_oscore.c b/src/coap_oscore.c
+-index 83f785c92..e0fb22947 100644
+---- a/src/coap_oscore.c
+-+++ b/src/coap_oscore.c
+-@@ -1678,11 +1678,12 @@ get_split_entry(const char **start,
+-                 oscore_value_t *value) {
+-   const char *begin = *start;
+-   const char *end;
+-+  const char *kend;
+-   const char *split;
+-   size_t i;
+- 
+- retry:
+--  end = memchr(begin, '\n', size);
+-+  kend = end = memchr(begin, '\n', size);
+-   if (end == NULL)
+-     return 0;
+- 
+-@@ -1693,7 +1694,7 @@ get_split_entry(const char **start,
+- 
+-   if (begin[0] == '#' || (end - begin) == 0) {
+-     /* Skip comment / blank line */
+--    size -= end - begin + 1;
+-+    size -= kend - begin + 1;
+-     begin = *start;
+-     goto retry;
+-   }
+diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
+index 20abb94f8f..fc618fef52 100644
+--- a/package/libcoap/libcoap.hash
++++ b/package/libcoap/libcoap.hash
 @@ -1,4 +1,4 @@
- # From https://www.libarchive.de/downloads/sha256sums
--sha256  879acd83c3399c7caaee73fe5f7418e06087ab2aaf40af3e99b9e29beb29faee  libarchive-3.7.7.tar.xz
-+sha256  ed8b5732e4cd6e30fae909fb945cad8ff9cb7be5c6cdaa3944ec96e4a200c04c  libarchive-3.7.9.tar.xz
- # Locally computed:
- sha256  b2cdf763345de2de34cebf54394df3c61a105c3b71288603c251f2fa638200ba  COPYING
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 70123ee2b1..7fec01a040 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
+ # Locally calculated
+-sha256  ae61a48c21f7b40e1442c9e1da9aab9e6f2cf0deccb02f3fed4de232a0b0522e  libcoap-4.3.4.tar.gz
++sha256  a417ed26ec6c95c041b42353b5b6fad1602e2bf42a6e26c09863450e227b7b5f  libcoap-4.3.5.tar.gz
+ sha256  09dd86a017bad210527085008cbf706609c58210897b69845af14099577e7eb7  COPYING
+-sha256  bdd94ddd8e75010aebd045ead1c951110788003395c708811d6960248acb3891  LICENSE
++sha256  ecff7aa3af994b008dbb57c180753bd2a6c53fa6f8265a2486740f4cfd45280c  LICENSE
+diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
+index 29161142f6..c5e5f85c62 100644
+--- a/package/libcoap/libcoap.mk
++++ b/package/libcoap/libcoap.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBARCHIVE_VERSION = 3.7.7
-+LIBARCHIVE_VERSION = 3.7.9
- LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
- LIBARCHIVE_SITE = https://www.libarchive.de/downloads
- LIBARCHIVE_INSTALL_STAGING = YES
+-LIBCOAP_VERSION = 4.3.4
++LIBCOAP_VERSION = 4.3.5
+ LIBCOAP_SITE = $(call github,obgm,libcoap,v$(LIBCOAP_VERSION))
+ LIBCOAP_INSTALL_STAGING = YES
+ LIBCOAP_LICENSE = BSD-2-Clause
+@@ -15,9 +15,6 @@ LIBCOAP_CONF_OPTS = \
+ 	--disable-examples --disable-examples-source --without-tinydtls
+ LIBCOAP_AUTORECONF = YES
+ 
+-# 0001-coap_oscore-c-Fix-parsing-OSCORE-configuration-information.patch
+-LIBCOAP_IGNORE_CVES += CVE-2024-0962
+-
+ ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ LIBCOAP_DEPENDENCIES += gnutls
+ LIBCOAP_CONF_OPTS += \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
