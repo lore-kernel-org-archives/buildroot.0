@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9D16C369C9
-	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 21:41:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49912C369CA
+	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 21:41:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C03E68406B;
-	Wed, 16 Apr 2025 21:41:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tfUmUHBB8DLr; Wed, 16 Apr 2025 21:41:27 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC4038486F
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AC4038486F;
-	Wed, 16 Apr 2025 21:41:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F26920E6
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:41:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E2AE60F4E
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:40:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1CEEE6FA17;
+	Wed, 16 Apr 2025 21:41:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aTDYeerGDgku for <buildroot@buildroot.org>;
+ id M3b9pk6KlIto; Wed, 16 Apr 2025 21:41:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 778ED6FA2C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 778ED6FA2C;
+	Wed, 16 Apr 2025 21:41:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 04370159
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:40:54 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 44685607AD
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:40:49 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VU7l3n21hgWw for <buildroot@buildroot.org>;
  Wed, 16 Apr 2025 21:40:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 901A06114F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58FD860E78
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 901A06114F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 58FD860E78
  for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:40:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8DEA58408D; Wed, 16 Apr 2025 21:40:41 +0000 (UTC)
+ id 554028408D; Wed, 16 Apr 2025 21:40:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 16 Apr 2025 10:45:13 +0200
+Date: Wed, 16 Apr 2025 10:45:05 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 3e88e16e033e3b70c0159912e4c438491917a69d
-X-Git-Newrev: 5c86cfb222fce767b4aa4e96ae0b93f1a941e4dd
+X-Git-Oldrev: 0afaf231cdd8ed98c9df223c02d75f8f580773b7
+X-Git-Newrev: bd9f6cf0f2b346c9ba8d50ed792c09a3565193fc
 X-Patchwork-Hint: ignore
-Message-Id: <20250416214041.8DEA58408D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-django:
- security bump to version 5.1.8
+Message-Id: <20250416214041.554028408D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/ethtool: bump
+ version to 6.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,77 +61,63 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6642676884379924198=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c86cfb222fce767b4aa4e96ae0b93f1a941e4dd
+--===============6642676884379924198==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=bd9f6cf0f2b346c9ba8d50ed792c09a3565193fc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes the following security issues:
+Changelog:
+https://web.git.kernel.org/pub/scm/network/ethtool/ethtool.git/tree/NEWS?h=v6.14
 
-- CVE-2025-26699: Potential denial-of-service vulnerability in
-    django.utils.text.wrap()
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-26699
-  - https://github.com/django/django/commit/8dbb44d34271637099258391dfc79df33951b841
-
-- CVE-2025-27556: Potential denial-of-service vulnerability in
-    LoginView, LogoutView, and set_language() on Windows
-
-This CVE isn't related to buildroot has it is only applicable on
-Windows but this package version bump fix it.
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-27556
-  - https://github.com/django/django/commit/edc2716d01a6fdd84b173c02031695231bcee1f8
-
-For more details on the version bump, see the release notes:
-  - https://docs.djangoproject.com/en/5.1/releases/5.1.8/
-  - https://docs.djangoproject.com/en/5.1/releases/5.1.7/
-  - https://docs.djangoproject.com/en/5.1/releases/5.1.6/
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Mattias Walström <lazzer@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit f2b14baf2576b54cca43e6f2aebbb4a19fae3bd9)
+(cherry picked from commit ebd2a810a75fd71b279f4b0710f73739832284d8)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/ethtool/ethtool.hash | 3 ++-
+ package/ethtool/ethtool.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 6632246af8..1e197004d0 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  272e951dbc4ccb7854c5a69aa5650749  Django-5.1.5.tar.gz
--sha256  19bbca786df50b9eca23cee79d495facf55c8f5c54c529d9bf1fe7b5ea086af3  Django-5.1.5.tar.gz
-+md5  80247a8b48cdac55e5ad3fb682ab71a3  Django-5.1.8.tar.gz
-+sha256  42e92a1dd2810072bcc40a39a212b693f94406d0ba0749e68eb642f31dc770b4  Django-5.1.8.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 81d526ca35..b64d8e4cd1 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index 6fc0c13d3b..95cc14c490 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,5 +1,6 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256  8d91f5c72ae3f25b7e88d4781279dcb320f71e30058914370b1c574c96b31202  ethtool-6.11.tar.xz
++sha256  9338bb00e492878d3bbe3cd2894e60db35813634c208db0b20f5c7ee84da69b1  ethtool-6.14.tar.xz
++
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index fc0622c04a..654fc401b7 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 5.1.5
-+PYTHON_DJANGO_VERSION = 5.1.8
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/e4/17/834e3e08d590dcc27d4cc3c5cd4e2fb757b7a92bab9de8ee402455732952
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/00/40/45adc1b93435d1b418654a734b68351bb6ce0a0e5e37b2f0e9aeb1a2e233
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+-ETHTOOL_VERSION = 6.11
++ETHTOOL_VERSION = 6.14
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
+
+--===============6642676884379924198==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6642676884379924198==--
