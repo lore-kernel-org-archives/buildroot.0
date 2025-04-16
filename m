@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB9C2C369C7
-	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 21:46:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B371C369C7
+	for <buildroot@archiver.kernel.org>; Wed, 16 Apr 2025 21:46:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BFDE1846C3;
-	Wed, 16 Apr 2025 21:46:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41ED760E50;
+	Wed, 16 Apr 2025 21:46:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZRuxVbV73g95; Wed, 16 Apr 2025 21:45:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aCIMoGODnIrr; Wed, 16 Apr 2025 21:46:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E56E583FA3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AF356F69C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E56E583FA3;
-	Wed, 16 Apr 2025 21:45:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4AF356F69C;
+	Wed, 16 Apr 2025 21:46:00 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 16564159
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:45:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 17E79159
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:45:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4223F60B0C
+ by smtp3.osuosl.org (Postfix) with ESMTP id EDBB560F2F
  for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:45:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MFpectLX8RQX for <buildroot@buildroot.org>;
+ id y-3CWQ1nznwe for <buildroot@buildroot.org>;
  Wed, 16 Apr 2025 21:45:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A72D160785
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D26F60C1E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A72D160785
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3D26F60C1E
  for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:45:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8EFD484297; Wed, 16 Apr 2025 21:45:39 +0000 (UTC)
+ id 2444685518; Wed, 16 Apr 2025 21:45:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 16 Apr 2025 10:52:13 +0200
+Date: Wed, 16 Apr 2025 10:52:06 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: ee80a723e4774388224d7944764302fb0c4e493c
-X-Git-Newrev: 8fc2c22378b71c290c788cd90dd298b7214a958b
+X-Git-Oldrev: 7dafd0cb1ff9baf1eff7045eb9aad84ff4676e95
+X-Git-Newrev: 44c590314d240f3dacd7d92654fde029ac8110b4
 X-Patchwork-Hint: ignore
-Message-Id: <20250416214539.8EFD484297@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libcoap: bump
- version to 4.3.5
+Message-Id: <20250416214539.2444685518@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/apr: bump to
+ version 1.7.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,111 +66,272 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fc2c22378b71c290c788cd90dd298b7214a958b
+commit: https://git.buildroot.net/buildroot/commit/?id=44c590314d240f3dacd7d92654fde029ac8110b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-The patch introduced in [1] that fixed the CVE-2024-0962 is now
-available upstream in the 4.3.5 release [2].
+Release notes:
+https://downloads.apache.org/apr/CHANGES-APR-1.7
 
-This commit also updates the LICENSE file hash, after adding reference
-to wolfSSL in [3].
+Note: the upstream release note mention v1.7.5 is a security update.
+The package patch 0004-Merge-r1920082-from-1.8.x.patch in Buildroot
+was already fixing this security issue. This is why this commit is
+not marked as a security bump.
 
-For more details see the release note:
-https://github.com/obgm/libcoap/blob/v4.3.5/ChangeLog
-
-[1] 9002b818be package/libcoap: fix CVE-2024-0962
-[2] https://github.com/obgm/libcoap/commit/2b28d8b0e9607e71a145345b4fe49517e052b7d9
-[3] https://github.com/obgm/libcoap/commit/e3a662a934ae9e2854f50eb4cf420009a90fe1df
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-[Julien: fix LICENSE file hash]
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 4df4d1d31240aa4d1c49dcbcb9694ce32eb626ba)
+(cherry picked from commit 051392a878d6231f17770153da7bed25713dae27)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...-parsing-OSCORE-configuration-information.patch | 38 ----------------------
- package/libcoap/libcoap.hash                       |  4 +--
- package/libcoap/libcoap.mk                         |  5 +--
- 3 files changed, 3 insertions(+), 44 deletions(-)
+ ...vert-Add-the-ability-to-cross-compile-APR.patch | 52 ++++++++--------
+ package/apr/0004-Merge-r1920082-from-1.8.x.patch   | 71 ----------------------
+ package/apr/apr.hash                               |  4 +-
+ package/apr/apr.mk                                 |  5 +-
+ 4 files changed, 30 insertions(+), 102 deletions(-)
 
-diff --git a/package/libcoap/0001-coap_oscore-c-Fix-parsing-OSCORE-configuration-information.patch b/package/libcoap/0001-coap_oscore-c-Fix-parsing-OSCORE-configuration-information.patch
-deleted file mode 100644
-index e75250d613..0000000000
---- a/package/libcoap/0001-coap_oscore-c-Fix-parsing-OSCORE-configuration-information.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 2b28d8b0e9607e71a145345b4fe49517e052b7d9 Mon Sep 17 00:00:00 2001
--From: Jon Shallow <supjps-libcoap@jpshallow.com>
--Date: Thu, 25 Jan 2024 18:03:17 +0000
--Subject: [PATCH] coap_oscore.c: Fix parsing OSCORE configuration information
--
--Upstream: https://github.com/obgm/libcoap/commit/2b28d8b0e9607e71a145345b4fe49517e052b7d9
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/coap_oscore.c | 5 +++--
-- 1 file changed, 3 insertions(+), 2 deletions(-)
--
--diff --git a/src/coap_oscore.c b/src/coap_oscore.c
--index 83f785c92..e0fb22947 100644
----- a/src/coap_oscore.c
--+++ b/src/coap_oscore.c
--@@ -1678,11 +1678,12 @@ get_split_entry(const char **start,
--                 oscore_value_t *value) {
--   const char *begin = *start;
--   const char *end;
--+  const char *kend;
--   const char *split;
--   size_t i;
-- 
-- retry:
---  end = memchr(begin, '\n', size);
--+  kend = end = memchr(begin, '\n', size);
--   if (end == NULL)
--     return 0;
-- 
--@@ -1693,7 +1694,7 @@ get_split_entry(const char **start,
-- 
--   if (begin[0] == '#' || (end - begin) == 0) {
--     /* Skip comment / blank line */
---    size -= end - begin + 1;
--+    size -= kend - begin + 1;
--     begin = *start;
--     goto retry;
--   }
-diff --git a/package/libcoap/libcoap.hash b/package/libcoap/libcoap.hash
-index 20abb94f8f..fc618fef52 100644
---- a/package/libcoap/libcoap.hash
-+++ b/package/libcoap/libcoap.hash
+diff --git a/package/apr/0003-Revert-Add-the-ability-to-cross-compile-APR.patch b/package/apr/0003-Revert-Add-the-ability-to-cross-compile-APR.patch
+index ad250d4427..9d8fad1362 100644
+--- a/package/apr/0003-Revert-Add-the-ability-to-cross-compile-APR.patch
++++ b/package/apr/0003-Revert-Add-the-ability-to-cross-compile-APR.patch
 @@ -1,4 +1,4 @@
+-From ed1daed074fba0dabff825e63525d751b6bb7b8d Mon Sep 17 00:00:00 2001
++From a8fd928dfab693278205e73286e3a6b622624aeb Mon Sep 17 00:00:00 2001
+ From: Graham Leggett <minfrin@apache.org>
+ Date: Tue, 31 Dec 2019 21:26:02 +0000
+ Subject: [PATCH] Revert: Add the ability to cross compile APR.
+@@ -7,16 +7,18 @@ git-svn-id: https://svn.apache.org/repos/asf/apr/apr/branches/1.7.x@1872147 13f7
+ 
+ [Revert upstream commit https://github.com/apache/apr/commit/b6dbbc77da35a7b46754c99f465827f2a583e23c]
+ Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++[Dario: adapt to 1.7.5]
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ ---
+  CHANGES       |  2 --
+  apr-config.in | 22 ----------------------
+  2 files changed, 24 deletions(-)
+ 
+ diff --git a/CHANGES b/CHANGES
+-index 71b2f0e..e751c90 100644
++index 793b0b6a46a4..4705b8476ff3 100644
+ --- a/CHANGES
+ +++ b/CHANGES
+-@@ -56,8 +56,6 @@ Changes for APR 1.7.1
++@@ -119,8 +119,6 @@ Changes for APR 1.7.5
+    *) Don't try to use PROC_PTHREAD by default when cross compiling.
+       [Yann Ylavic]
+  
+@@ -26,25 +28,25 @@ index 71b2f0e..e751c90 100644
+       be executed at build time, use AX_PROG_CC_FOR_BUILD to
+       build native tools/gen_test_char
+ diff --git a/apr-config.in b/apr-config.in
+-index 4873fc0..84b4073 100644
++index 1203d9a0d38e..bcd4a0c10399 100644
+ --- a/apr-config.in
+ +++ b/apr-config.in
+-@@ -48,14 +48,6 @@ APR_LIBNAME="@APR_LIBNAME@"
+- # NOTE: the following line is modified during 'make install': alter with care!
+- location=@APR_CONFIG_LOCATION@
++@@ -61,14 +61,6 @@ if test "$cross_compiling" != "no"; then
++     # Remove trailing '/'
++     normalized_bindir=${normalized_bindir%/}
++ 
++-    # absolute path, but not installed path - we're cross compiling
++-    case "$normalized_command" in
++-      "${normalized_bindir}/"*) ;;
++-      "/"*)                     location=crosscompile;
++-                                APR_TARGET_DIR=${normalized_command%${normalized_bindir}/apr-${APR_MAJOR_VERSION}-config};
++-                                ;;
++-      *)                        ;;
++-    esac
++ fi
+  
+--# absolute path, but not installed path - we're cross compiling
+--case "$0" in
+--  "${bindir}/"*) ;;
+--  "/"*)         location=crosscompile;
+--                APR_TARGET_DIR=${0%${bindir}/apr-${APR_MAJOR_VERSION}-config} ;;
+--  *)            ;;
+--esac
+--
+  show_usage()
+- {
+-     cat << EOF
+-@@ -101,8 +93,6 @@ fi
++@@ -116,8 +108,6 @@ fi
+  
+  if test "$location" = "installed"; then
+      LA_FILE="$libdir/lib${APR_LIBNAME}.la"
+@@ -53,7 +55,7 @@ index 4873fc0..84b4073 100644
+  else
+      LA_FILE="$APR_BUILD_DIR/lib${APR_LIBNAME}.la"
+  fi
+-@@ -132,8 +122,6 @@ while test $# -gt 0; do
++@@ -147,8 +137,6 @@ while test $# -gt 0; do
+      --includedir)
+      if test "$location" = "installed"; then
+          flags="$includedir"
+@@ -62,7 +64,7 @@ index 4873fc0..84b4073 100644
+      elif test "$location" = "source"; then
+          flags="$APR_SOURCE_DIR/include"
+      else
+-@@ -166,8 +154,6 @@ while test $# -gt 0; do
++@@ -181,8 +169,6 @@ while test $# -gt 0; do
+      --includes)
+      if test "$location" = "installed"; then
+          flags="$flags -I$includedir $EXTRA_INCLUDES"
+@@ -71,7 +73,7 @@ index 4873fc0..84b4073 100644
+      elif test "$location" = "source"; then
+          flags="$flags -I$APR_SOURCE_DIR/include $EXTRA_INCLUDES"
+      else
+-@@ -182,8 +168,6 @@ while test $# -gt 0; do
++@@ -197,8 +183,6 @@ while test $# -gt 0; do
+      --installbuilddir)
+      if test "$location" = "installed"; then
+          echo "${installbuilddir}"
+@@ -80,7 +82,7 @@ index 4873fc0..84b4073 100644
+      elif test "$location" = "source"; then
+          echo "$APR_SOURCE_DIR/build"
+      else
+-@@ -200,8 +184,6 @@ while test $# -gt 0; do
++@@ -215,8 +199,6 @@ while test $# -gt 0; do
+      if test "$location" = "installed"; then
+          ### avoid using -L if libdir is a "standard" location like /usr/lib
+          flags="$flags -L$libdir -l${APR_LIBNAME}"
+@@ -89,7 +91,7 @@ index 4873fc0..84b4073 100644
+      else
+          ### this surely can't work since the library is in .libs?
+          flags="$flags -L$APR_BUILD_DIR -l${APR_LIBNAME}"
+-@@ -219,8 +201,6 @@ while test $# -gt 0; do
++@@ -234,8 +216,6 @@ while test $# -gt 0; do
+          # Since the user is specifying they are linking with libtool, we
+          # *know* that -R will be recognized by libtool.
+          flags="$flags -L$libdir -R$libdir -l${APR_LIBNAME}"
+@@ -98,7 +100,7 @@ index 4873fc0..84b4073 100644
+      else
+          flags="$flags $LA_FILE"
+      fi
+-@@ -245,8 +225,6 @@ while test $# -gt 0; do
++@@ -260,8 +240,6 @@ while test $# -gt 0; do
+      --apr-libtool)
+      if test "$location" = "installed"; then
+          echo "${installbuilddir}/libtool"
+@@ -108,5 +110,5 @@ index 4873fc0..84b4073 100644
+          echo "$APR_BUILD_DIR/libtool"
+      fi
+ -- 
+-2.39.2
++2.43.0
+ 
+diff --git a/package/apr/0004-Merge-r1920082-from-1.8.x.patch b/package/apr/0004-Merge-r1920082-from-1.8.x.patch
+deleted file mode 100644
+index 5d198def34..0000000000
+--- a/package/apr/0004-Merge-r1920082-from-1.8.x.patch
++++ /dev/null
+@@ -1,71 +0,0 @@
+-From 36ea6d5a2bfc480dd8032cc8651e6793552bc2aa Mon Sep 17 00:00:00 2001
+-From: Eric Covener <covener@apache.org>
+-Date: Tue, 20 Aug 2024 21:50:42 +0000
+-Subject: [PATCH] Merge r1920082 from 1.8.x:
+-
+-use 0600 perms for named shared mem consistently
+-
+-
+-
+-
+-git-svn-id: https://svn.apache.org/repos/asf/apr/apr/branches/1.7.x@1920083 13f79535-47bb-0310-9956-ffa450edef68
+-Upstream: https://github.com/apache/apr/commit/36ea6d5a2bfc480dd8032cc8651e6793552bc2aa
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- shmem/unix/shm.c | 18 +++++++-----------
+- 1 file changed, 7 insertions(+), 11 deletions(-)
+-
+-diff --git a/shmem/unix/shm.c b/shmem/unix/shm.c
+-index 096884d99..ea9b94277 100644
+---- a/shmem/unix/shm.c
+-+++ b/shmem/unix/shm.c
+-@@ -287,10 +287,9 @@ APR_DECLARE(apr_status_t) apr_shm_create(apr_shm_t **m,
+-         status = APR_SUCCESS;
+-     
+- #if APR_USE_SHMEM_MMAP_TMP
+--        /* FIXME: Is APR_OS_DEFAULT sufficient? */
+--        status = apr_file_open(&file, filename, 
+--                               APR_READ | APR_WRITE | APR_CREATE | APR_EXCL,
+--                               APR_OS_DEFAULT, pool);
+-+        status = apr_file_open(&file, filename,
+-+                               APR_FOPEN_READ | APR_FOPEN_WRITE | APR_FOPEN_CREATE | APR_FOPEN_EXCL,
+-+                               APR_FPROT_UREAD | APR_FPROT_UWRITE, pool);
+-         if (status != APR_SUCCESS) {
+-             return status;
+-         }
+-@@ -319,8 +318,7 @@ APR_DECLARE(apr_status_t) apr_shm_create(apr_shm_t **m,
+-         }
+- #endif /* APR_USE_SHMEM_MMAP_TMP */
+- #if APR_USE_SHMEM_MMAP_SHM
+--        /* FIXME: SysV uses 0600... should we? */
+--        tmpfd = shm_open(shm_name, O_RDWR | O_CREAT | O_EXCL, 0644);
+-+        tmpfd = shm_open(shm_name, O_RDWR | O_CREAT | O_EXCL, 0600);
+-         if (tmpfd == -1) {
+-             return errno;
+-         }
+-@@ -361,10 +359,9 @@ APR_DECLARE(apr_status_t) apr_shm_create(apr_shm_t **m,
+- #elif APR_USE_SHMEM_SHMGET
+-         new_m->realsize = reqsize;
+- 
+--        /* FIXME: APR_OS_DEFAULT is too permissive, switch to 600 I think. */
+--        status = apr_file_open(&file, filename, 
+-+        status = apr_file_open(&file, filename,
+-                                APR_FOPEN_WRITE | APR_FOPEN_CREATE | APR_FOPEN_EXCL,
+--                               APR_OS_DEFAULT, pool);
+-+                               APR_FPROT_UREAD | APR_FPROT_UWRITE, pool);
+-         if (status != APR_SUCCESS) {
+-             return status;
+-         }
+-@@ -555,8 +552,7 @@ APR_DECLARE(apr_status_t) apr_shm_attach(apr_shm_t **m,
+- #if APR_USE_SHMEM_MMAP_SHM
+-         const char *shm_name = make_shm_open_safe_name(filename, pool);
+- 
+--        /* FIXME: SysV uses 0600... should we? */
+--        tmpfd = shm_open(shm_name, O_RDWR, 0644);
+-+        tmpfd = shm_open(shm_name, O_RDWR, 0600);
+-         if (tmpfd == -1) {
+-             return errno;
+-         }
+--- 
+-2.39.5
+-
+diff --git a/package/apr/apr.hash b/package/apr/apr.hash
+index 96f43d3710..7d231ee7cc 100644
+--- a/package/apr/apr.hash
++++ b/package/apr/apr.hash
+@@ -1,4 +1,4 @@
+-# From https://archive.apache.org/dist/apr/apr-1.7.2.tar.bz2.sha256
+-sha256  75e77cc86776c030c0a5c408dfbd0bf2a0b75eed5351e52d5439fa1e5509a43e  apr-1.7.2.tar.bz2
++# From https://archive.apache.org/dist/apr/apr-1.7.5.tar.bz2.sha256
++sha256  cd0f5d52b9ab1704c72160c5ee3ed5d3d4ca2df4a7f8ab564e3cb352b67232f2  apr-1.7.5.tar.bz2
  # Locally calculated
--sha256  ae61a48c21f7b40e1442c9e1da9aab9e6f2cf0deccb02f3fed4de232a0b0522e  libcoap-4.3.4.tar.gz
-+sha256  a417ed26ec6c95c041b42353b5b6fad1602e2bf42a6e26c09863450e227b7b5f  libcoap-4.3.5.tar.gz
- sha256  09dd86a017bad210527085008cbf706609c58210897b69845af14099577e7eb7  COPYING
--sha256  bdd94ddd8e75010aebd045ead1c951110788003395c708811d6960248acb3891  LICENSE
-+sha256  ecff7aa3af994b008dbb57c180753bd2a6c53fa6f8265a2486740f4cfd45280c  LICENSE
-diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
-index 29161142f6..c5e5f85c62 100644
---- a/package/libcoap/libcoap.mk
-+++ b/package/libcoap/libcoap.mk
+ sha256  f854aeef66ecd55a126226e82b3f26793fc3b1c584647f6a0edc5639974c38ad  LICENSE
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index 29aedbf1e8..731fac77e1 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCOAP_VERSION = 4.3.4
-+LIBCOAP_VERSION = 4.3.5
- LIBCOAP_SITE = $(call github,obgm,libcoap,v$(LIBCOAP_VERSION))
- LIBCOAP_INSTALL_STAGING = YES
- LIBCOAP_LICENSE = BSD-2-Clause
-@@ -15,9 +15,6 @@ LIBCOAP_CONF_OPTS = \
- 	--disable-examples --disable-examples-source --without-tinydtls
- LIBCOAP_AUTORECONF = YES
+-APR_VERSION = 1.7.2
++APR_VERSION = 1.7.5
+ APR_SOURCE = apr-$(APR_VERSION).tar.bz2
+ APR_SITE = https://archive.apache.org/dist/apr
+ APR_LICENSE = Apache-2.0
+@@ -16,9 +16,6 @@ APR_INSTALL_STAGING = YES
+ # so we need to autoreconf:
+ APR_AUTORECONF = YES
  
--# 0001-coap_oscore-c-Fix-parsing-OSCORE-configuration-information.patch
--LIBCOAP_IGNORE_CVES += CVE-2024-0962
+-# 0004-Merge-r1920082-from-1.8.x.patch
+-APR_IGNORE_CVES += CVE-2023-49582
 -
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
- LIBCOAP_DEPENDENCIES += gnutls
- LIBCOAP_CONF_OPTS += \
+ APR_CONF_OPTS = --disable-sctp
+ 
+ # avoid apr_hints.m4 by setting apr_preload_done=yes and set
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
