@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F181C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32685C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D967C83F69;
-	Mon, 19 May 2025 10:52:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3EC66146D;
+	Mon, 19 May 2025 10:52:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4ZSkV82ugu74; Mon, 19 May 2025 10:52:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jfP9ZmUYy8G3; Mon, 19 May 2025 10:52:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2E3982186
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 250676156B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E2E3982186;
-	Mon, 19 May 2025 10:52:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 250676156B;
+	Mon, 19 May 2025 10:52:12 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 12CF9D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:00 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 03152E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6A0B141A45
+ by smtp4.osuosl.org (Postfix) with ESMTP id 731CF411C8
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zlUsrmOhtxa5 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:04 +0000 (UTC)
+ id fH8msTlKFbKi for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBBCF411C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8422940C49
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DBBCF411C8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8422940C49
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D4DE781E90; Mon, 19 May 2025 10:39:51 +0000 (UTC)
+ id 8285284BBD; Mon, 19 May 2025 10:39:51 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 19 Apr 2025 16:01:53 +0200
+Date: Wed, 16 Apr 2025 22:13:40 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5621fe94afd766ca09f65789ced4ce4e8a6bdbe0
-X-Git-Newrev: 8fd537ae0550c3f66e575cfd380cad5334821046
+X-Git-Oldrev: c3f41a4a79ed0287eb800fdb210ea2b44e617ebd
+X-Git-Newrev: ace394e91143dfb9d069eaff878e7db3170e36b2
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103951.D4DE781E90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- support/scripts/gen-bootlin-toolchains: allows armv8-a CPU to use armv7-a
- toolchains
+Message-Id: <20250519103951.8285284BBD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/raspberrypi5: install
+ Raspberry Pi 500 device-tree blob
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,188 +59,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0608282909082695075=="
+Content-Type: multipart/mixed; boundary="===============6516341960568106221=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0608282909082695075==
+--===============6516341960568106221==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fd537ae0550c3f66e575cfd380cad5334821046
+commit: https://git.buildroot.net/buildroot/commit/?id=ace394e91143dfb9d069eaff878e7db3170e36b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The ARMV7-A toolchains are capable to compile binaries for ARMv8-A CPU
-in AArch32 execution state.
-
-This adds the BR2_ARM_CPU_ARMV8A option in the 'conditions' to allow
-ARMV8-A CPU such as Cortex-A53 or Cortex-A72 to use ARMV7-A toolchains.
+This installs the device-tree blob for the Raspberry Pi 500.
 
 Signed-off-by: Gaël PORTAY <gael.portay+rtone@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- support/scripts/gen-bootlin-toolchains             |  4 +--
- .../toolchain-external-bootlin/Config.in.options   | 40 ++++++++--------------
- 2 files changed, 16 insertions(+), 28 deletions(-)
+ board/raspberrypi/readme.txt   | 4 +++-
+ configs/raspberrypi5_defconfig | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
-index 9ba5827cf6..502411d4cc 100755
---- a/support/scripts/gen-bootlin-toolchains
-+++ b/support/scripts/gen-bootlin-toolchains
-@@ -52,12 +52,12 @@ arches = {
-         'prefix': 'arm',
-     },
-     'armv7-eabihf': {
--        'conditions': ['BR2_arm', 'BR2_ARM_CPU_ARMV7A', 'BR2_ARM_EABIHF'],
-+        'conditions': ['BR2_arm', '(BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A'],
-         'test_options': ['BR2_arm', 'BR2_cortex_a8', 'BR2_ARM_EABIHF'],
-         'prefix': 'arm',
-     },
-     'armebv7-eabihf': {
--        'conditions': ['BR2_armeb', 'BR2_ARM_CPU_ARMV7A', 'BR2_ARM_EABIHF'],
-+        'conditions': ['BR2_armeb', '(BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A'],
-         'test_options': ['BR2_armeb', 'BR2_cortex_a8', 'BR2_ARM_EABIHF'],
-         'prefix': 'armeb',
-     },
-diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-index 471dc55f44..ef3d23d026 100644
---- a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-@@ -8,8 +8,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
- 	default y if BR2_arcle && BR2_archs38
- 	default y if BR2_arm && BR2_ARM_CPU_ARMV5 && BR2_ARM_EABI
- 	default y if BR2_arm && BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF
--	default y if BR2_arm && BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF
--	default y if BR2_armeb && BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF
-+	default y if BR2_arm && (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
-+	default y if BR2_armeb && (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
- 	default y if BR2_arm && BR2_ARM_CPU_ARMV7M && BR2_BINFMT_FLAT
- 	default y if BR2_m68k_m68k
- 	default y if BR2_m68k_cf
-@@ -816,8 +816,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_UCLIBC_STABLE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_BLEEDING_EDGE
- 	bool "armv7-eabihf glibc bleeding-edge 2024.05-1"
- 	depends on BR2_arm
--	depends on BR2_ARM_CPU_ARMV7A
--	depends on BR2_ARM_EABIHF
-+	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
-@@ -843,8 +842,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_BLEEDING_EDGE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE
- 	bool "armv7-eabihf glibc stable 2024.05-1"
- 	depends on BR2_arm
--	depends on BR2_ARM_CPU_ARMV7A
--	depends on BR2_ARM_EABIHF
-+	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_14
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
-@@ -869,8 +867,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_BLEEDING_EDGE
- 	bool "armv7-eabihf musl bleeding-edge 2024.05-1"
- 	depends on BR2_arm
--	depends on BR2_ARM_CPU_ARMV7A
--	depends on BR2_ARM_EABIHF
-+	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
-@@ -896,8 +893,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_BLEEDING_EDGE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_STABLE
- 	bool "armv7-eabihf musl stable 2024.05-1"
- 	depends on BR2_arm
--	depends on BR2_ARM_CPU_ARMV7A
--	depends on BR2_ARM_EABIHF
-+	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_14
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
-@@ -922,8 +918,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_STABLE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_UCLIBC_BLEEDING_EDGE
- 	bool "armv7-eabihf uclibc bleeding-edge 2024.05-1"
- 	depends on BR2_arm
--	depends on BR2_ARM_CPU_ARMV7A
--	depends on BR2_ARM_EABIHF
-+	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
-@@ -949,8 +944,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_UCLIBC_BLEEDING_EDGE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_UCLIBC_STABLE
- 	bool "armv7-eabihf uclibc stable 2024.05-1"
- 	depends on BR2_arm
--	depends on BR2_ARM_CPU_ARMV7A
--	depends on BR2_ARM_EABIHF
-+	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_14
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
-@@ -975,8 +969,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_UCLIBC_STABLE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_GLIBC_BLEEDING_EDGE
- 	bool "armebv7-eabihf glibc bleeding-edge 2024.05-1"
- 	depends on BR2_armeb
--	depends on BR2_ARM_CPU_ARMV7A
--	depends on BR2_ARM_EABIHF
-+	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
-@@ -1002,8 +995,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_GLIBC_BLEEDING_EDGE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_GLIBC_STABLE
- 	bool "armebv7-eabihf glibc stable 2024.05-1"
- 	depends on BR2_armeb
--	depends on BR2_ARM_CPU_ARMV7A
--	depends on BR2_ARM_EABIHF
-+	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_14
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
-@@ -1028,8 +1020,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_GLIBC_STABLE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_MUSL_BLEEDING_EDGE
- 	bool "armebv7-eabihf musl bleeding-edge 2024.05-1"
- 	depends on BR2_armeb
--	depends on BR2_ARM_CPU_ARMV7A
--	depends on BR2_ARM_EABIHF
-+	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
-@@ -1055,8 +1046,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_MUSL_BLEEDING_EDGE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_MUSL_STABLE
- 	bool "armebv7-eabihf musl stable 2024.05-1"
- 	depends on BR2_armeb
--	depends on BR2_ARM_CPU_ARMV7A
--	depends on BR2_ARM_EABIHF
-+	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_14
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
-@@ -1081,8 +1071,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_MUSL_STABLE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_UCLIBC_BLEEDING_EDGE
- 	bool "armebv7-eabihf uclibc bleeding-edge 2024.05-1"
- 	depends on BR2_armeb
--	depends on BR2_ARM_CPU_ARMV7A
--	depends on BR2_ARM_EABIHF
-+	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
-@@ -1108,8 +1097,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_UCLIBC_BLEEDING_EDGE
- config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_UCLIBC_STABLE
- 	bool "armebv7-eabihf uclibc stable 2024.05-1"
- 	depends on BR2_armeb
--	depends on BR2_ARM_CPU_ARMV7A
--	depends on BR2_ARM_EABIHF
-+	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_14
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index a110934ec1..47814736bd 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -19,6 +19,7 @@ These instructions apply to all models of the Raspberry Pi:
+   - the model CM4 (aka Raspberry Pi Compute Module 4 and IO Board).
+   - the model CM4s (aka Raspberry Pi Compute Module 4s).
+   - the model B5 (aka Raspberry Pi 5).
++  - the model 500 (aka Raspberry Pi 500).
+ 
+ How to build it
+ ===============
+@@ -77,7 +78,7 @@ or for CM4 (on IO Board - 64 bit):
+ 
+   $ make raspberrypicm4io_64_defconfig
+ 
+-For model 5 B:
++For model 5 B and 500:
+ 
+   $ make raspberrypi5_defconfig
+ 
+@@ -117,6 +118,7 @@ After building, you should obtain this tree:
+     +-- bcm2711-rpi-cm4s.dtb        [1]
+     +-- bcm2712-rpi-5-b.dtb         [1]
+     +-- bcm2712d0-rpi-5-b.dtb       [1]
++    +-- bcm2712-rpi-500.dtb         [1]
+     +-- boot.vfat
+     +-- rootfs.ext4
+     +-- rpi-firmware/
+diff --git a/configs/raspberrypi5_defconfig b/configs/raspberrypi5_defconfig
+index 5fa1d779e5..358f9e9506 100644
+--- a/configs/raspberrypi5_defconfig
++++ b/configs/raspberrypi5_defconfig
+@@ -13,7 +13,7 @@ BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d
+ BR2_LINUX_KERNEL_DEFCONFIG="bcm2712"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/linux-4k-page-size.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2712-rpi-5-b broadcom/bcm2712d0-rpi-5-b"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2712-rpi-5-b broadcom/bcm2712d0-rpi-5-b broadcom/bcm2712-rpi-500"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+ BR2_PACKAGE_XZ=y
 
---===============0608282909082695075==
+--===============6516341960568106221==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -251,4 +133,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0608282909082695075==--
+--===============6516341960568106221==--
