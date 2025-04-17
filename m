@@ -4,162 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E5C8C369B2
-	for <buildroot@archiver.kernel.org>; Thu, 17 Apr 2025 13:33:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B661C369B2
+	for <buildroot@archiver.kernel.org>; Thu, 17 Apr 2025 15:24:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C70E384AB6;
-	Thu, 17 Apr 2025 13:33:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D3A2B80C83;
+	Thu, 17 Apr 2025 15:24:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4LLaemNmSiYP; Thu, 17 Apr 2025 13:33:32 +0000 (UTC)
+ id 7T7who7Dfi0e; Thu, 17 Apr 2025 15:24:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E775D832E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FF4A80C4C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E775D832E6;
-	Thu, 17 Apr 2025 13:33:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BE1171F3
- for <buildroot@buildroot.org>; Thu, 17 Apr 2025 13:33:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0FF4A80C4C;
+	Thu, 17 Apr 2025 15:24:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id E3DE811F
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 15:24:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AF78381ED6
- for <buildroot@buildroot.org>; Thu, 17 Apr 2025 13:33:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C95E440251
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 15:24:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uLVgI3iHSFdJ for <buildroot@buildroot.org>;
- Thu, 17 Apr 2025 13:33:30 +0000 (UTC)
-Received-SPF: Permerror (mailfrom) identity=mailfrom;
- client-ip=2001:489a:2202:c::602;
- helo=usg02-bn3-obe.outbound.protection.office365.us;
- envelope-from=vfazio@xes-inc.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A9FC0819B4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9FC0819B4
-Received: from USG02-BN3-obe.outbound.protection.office365.us
- (mail-bn3usg02on0602.outbound.protection.office365.us
- [IPv6:2001:489a:2202:c::602])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A9FC0819B4
- for <buildroot@buildroot.org>; Thu, 17 Apr 2025 13:33:28 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector5401; d=microsoft.com; cv=none;
- b=eQL8LQ813GMXsjyAvwDA3Mu8Cg6Yrp++x8WplIwU/QRo4cfOa5mr1oQ4zZDslExXsBClAU1q6KKyIuETe3pZ9Z3/4NdK/2Je/5RYxhk1c3WuKk40hv977uQJUHHim3RY/ikYyvCFjpDCqEzTBokRthwtg6yMm1kTw6ulLMAk3i80wb2mUkQCEH28ZzNOP2llj7lNn5wiyAQ23hKebhPINvltJ6pyWbX+Xt1XrP9XMpe3QDuy681ufyLhb+MKnW4hXiwW2MyrJZs5qxSaKYf7SDZGov403UBaRTIXKRedA7mAs7U4m+Vs5rXwz6z9WDS3krJHc9xO/4/8dvSuGayC7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector5401;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Q2FypynILNCMnb58tvw9vUNMkOMayN8fjEgrCTS+cKA=;
- b=uGVijJNBD4jwFlIG82D4xv5kdp6FSL1fx49IkftZpOerr7fcIG3WlI6zJUS18sfBJnNjSt8c5r6a+F+AdOK3/m9IH/FwkU5maLkj4RwmHLOsMTnQ2+zF/b0oxGFbSC3uXEHi6WqhgWnPyBrMLif4Y3NQXzD+z4cPdkOBbOVv/F0YQk80s8iaiL95PhGFO0/jOOGG3+GhxeQzFXWuCYNriPRvsmqQy0nEhCipl79s+kQp15ljbqopUMlBYXms4g7+nUIbSa2uUudNGGN1lYvifHkfLfJzBnlDF/NJCZ8Hl2zrXdx917m6r7TF8NAShZ2B7pRFB5gJ7oRgVqadU/nfiw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=xes-inc.com; dmarc=pass action=none header.from=xes-inc.com;
- dkim=pass header.d=xes-inc.com; arc=none
-Received: from PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:18b::15)
- by SA1P110MB1310.NAMP110.PROD.OUTLOOK.COM (2001:489a:200:194::15)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.31; Thu, 17 Apr
- 2025 13:33:23 +0000
-Received: from PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
- ([fe80::71c7:106d:6bd3:fa2e]) by PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
- ([fe80::71c7:106d:6bd3:fa2e%4]) with mapi id 15.20.8511.031; Thu, 17 Apr 2025
- 13:33:22 +0000
-From: Vincent Fazio <vfazio@xes-inc.com>
-To: Buildroot Notifications <buildroot.notifications@gmail.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>, James Hilliard
- <james.hilliard1@gmail.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Thread-Topic: [Buildroot] [autobuild.buildroot.org] Daily results for
- 2025-04-16
-Thread-Index: Aduvmvvn5gMXXZm7QDyNhgH2YdunVw==
-Date: Thu, 17 Apr 2025 13:33:22 +0000
-Message-ID: <PH1P110MB16036167354B3CDFDC1D66BA9FBCA@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH1P110MB1603:EE_|SA1P110MB1310:EE_
-x-ms-office365-filtering-correlation-id: c8230081-3778-40bc-f4e6-08dd7db46cc9
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
- ARA:13230040|41320700013|1800799024|366016|38070700018; 
-x-microsoft-antispam-message-info: =?us-ascii?Q?4w//2WVWRN5Trt1pDdg3J7kXFGdK2/+5MJsNp/SjP+3dDipB4ZQOZCxz8HHc?=
- =?us-ascii?Q?JVI3GWRwNO0JLcw8+4ljg1aF1YEZdUFT/N+ZsjQUBENCOU3M22XVnbjr0y/Z?=
- =?us-ascii?Q?6xhAzEa4T4AebrnvVAbr732qWpKCFqGfemA7FD1MFQyIC7sMWt6iV71yzxOk?=
- =?us-ascii?Q?9NemwO0yXD/xUAn0And8qX8NCXorGchTi2TLolCO7Qhivf8x+iEJDOQUZUqM?=
- =?us-ascii?Q?iHCz9xCCKQ3KSbsLs6/TIApIVcyl9+zdYcYaAD71p4dfzUk01UN1M1OlHNuw?=
- =?us-ascii?Q?2YkIgrxbrKxFnNHucT3l2mG+hEv0Tx1Q09Qgwnk7V/8gUtb49NeNiTUag3wi?=
- =?us-ascii?Q?tfRsNqrhYs8m70RL+rszi/MzfSsU3u2nBTryp9ocZjJYYwIL2rMHHWEmrVrr?=
- =?us-ascii?Q?2KHIBtrR4kCTav6jKIVXDoWoFsh3PN2yoIzvmNsDbHDhJNQsZFfJ6fsSKoun?=
- =?us-ascii?Q?/TIhZeI28ggvB60qo7gk/3lRepCsCQJoZg1gGjVeGDOER9W/twlEPnR7If+k?=
- =?us-ascii?Q?gm/f1OHwpNzqMCS5JhbdKHovHaaPeezewwzJmh6Yx5wvrVDn84DvZiFnIIP4?=
- =?us-ascii?Q?rfp62m9yDwEIEef7uBf7bRAPCLdEB9CBOSyKoGBSmDJ9YNNDPBssfHqRFwX+?=
- =?us-ascii?Q?vcdgLwxrjzPZLEc7Ko7g2iTGroOSK6xTToUdPU/UwIehyQFxnQr+Eu1+l7UE?=
- =?us-ascii?Q?BVT8q3CaOye6uSqBRJ0clY+RarVqIZmRDeBN5zC0yrUqFmezIX8UJyUUHUtY?=
- =?us-ascii?Q?4XnIhApF2/kpVf1jC2AqBnz2uPTwiT59VrW6E9XWgp28wt0g1UUxDEwI5tWa?=
- =?us-ascii?Q?ZaeVO2kQJot5gGKAmsSFTWKaV2Mwo+n9gn93Thbd0ug1v9X0NrFVhVMeFcrI?=
- =?us-ascii?Q?iiEf+re3NyhFBSOH3fi/r/Q4mDpWI8byidsIgpJcbKDgvJB4VxOta3KqqDHP?=
- =?us-ascii?Q?ofKE3GXlahUTGXBarBRhBO8WOPySazEcH4PmK4ajNy3R/ZKWuOhkqIzg8r5F?=
- =?us-ascii?Q?9xdbKDF9H0hnfv1arne7Hwwdchcu18me/QXfdHJp8wMLqV4FgS71kZHLgIxi?=
- =?us-ascii?Q?c1a1iCbDdEPbI1HbQah94ve9NiHePhiNVDmHwMF/YofHCoPK2Ko/hAC5QHjh?=
- =?us-ascii?Q?/YP7Iwj92YFUO8f9hRnsjy6kGthe8RBf5IDa1xuyycRHu0fuPaO9UnWGRpnF?=
- =?us-ascii?Q?vYvS27jrPSnSgNPFZD8YyC/WKKNov6UAy28huYXNOf1o7mwMWYTmNAw79Vs+?=
- =?us-ascii?Q?JtNv9CZwbeP24AJTIgeY6ciVRul9XiF5QZ6Jsq03XpeUCegOkjuTDyTZZV+e?=
- =?us-ascii?Q?AsPTi/d+3fCUmctcUkRh6H0EKUi6TD8a8N6G3A14liOkLMdMo5b3OmDEw3ey?=
- =?us-ascii?Q?UVTizlpoIt1q+x3iTJt1ZDs55u3znjIhMTDM29g4dJvNe9DbOUZGUcJFbbAw?=
- =?us-ascii?Q?OcHzy098Ykoyc27EYp9YFQtycq6GXno7UBoUKjtxftzgw3qh7Fy4rlbxr2uB?=
- =?us-ascii?Q?z/8WnO5pVIjozfM=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM; PTR:; CAT:NONE;
- SFS:(13230040)(41320700013)(1800799024)(366016)(38070700018); DIR:OUT;
- SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?yJtufF55FscCzK74Evpg2sQT9IsXSSa71WhSCOlYvVod8X1HLliEpkfU64AG?=
- =?us-ascii?Q?3fIUHrq9T7+7w9cpPc0Mu4+0YtjgIU/9ulTghH2VNC4FAod+uCRk3hVGPNf3?=
- =?us-ascii?Q?NGavfO/Ksb32DCXZgoZmwMAvhmmGYut91C3HmCOHynCGpVygZKeqi/unj8xP?=
- =?us-ascii?Q?9BlpSycj5tbdmkgn3GZ7gbvhXt5OHzltFcMjf4HlT8btzfEZ3vh2XsCq8YuW?=
- =?us-ascii?Q?SoIkpYiloL6gTb999PiVbQOUfnix2fdPUNpTv68qTAVSs/gWAo2BElHpiy15?=
- =?us-ascii?Q?YqFA/hZkYsbG8rl8Oo+TlSZGtx2UOvs40o/FGpz9D1ExqNbEjOvLyhhB1XZ4?=
- =?us-ascii?Q?GVyXd7reAgc2nSwxE0pKVC9Fm5E/HFFXVHkDyVNI/jZBo6VivIq4VwUomTyK?=
- =?us-ascii?Q?wqLFlsf7A6/pAQ5jLVn8P6Os+05nc4+ebv4u0PpnNyBtIFEKnSlew9NVua4u?=
- =?us-ascii?Q?qrmC16o3+gX3ksAqR5pifZZIknOIwsEFvNcIKZjFp4grG6dFYm2riP+ONFmx?=
- =?us-ascii?Q?6oCxo3IeHSAv51Ci3do12Xk+97T6TF0D2eWHClQxadKUgVSaO6lsCah30nDq?=
- =?us-ascii?Q?kLCaTCjTgnLNAVtAXvZlXN1Ca6NuPVLVJKDnEjqqq/uwGlMfSydwdCEpBP7M?=
- =?us-ascii?Q?qkZBNaCmloFaAnQPmEypemk+ZHRJHb6lzFpoDzvTq8PgVzfyZunp9QUXfljq?=
- =?us-ascii?Q?1ho2y7U1wlfYU+tMtOaaXUH2qMLljYGQjijNMusgrL1xkjZT4lXRNe24qVgt?=
- =?us-ascii?Q?7fya0p+l2T7ssJdhN092nZSekbQgZo0pkEuaAB/5ODANiBrAvpK4wK1YJqr5?=
- =?us-ascii?Q?djHpET12pTkOR207yPIkqEiXnnep0nKgGkFwKNgiFom0nVhHkPlUhWqmhrNS?=
- =?us-ascii?Q?X7GV4YGwfMzwdEx9oFN0H9LYlF+sNza0pLNfrHtpJI0h5e8HH7upeQ95H/o+?=
- =?us-ascii?Q?kVQlgw+/UxtNpTlBbHCoWMNrp+iXpMR2gkQWRuxa5YQtBNxxR9Y5X4bQwa8c?=
- =?us-ascii?Q?K5WDhcdEx5rvV1h/tkCTD6DHA9JYEg/wQLSAnd9nWISnkqX4ZH8vGgwl8zrR?=
- =?us-ascii?Q?dwNBFUazZpO4f2fORtajinTjDHYgRvvWpYXMQqmO8GRTb16gAf1xON871ZWu?=
- =?us-ascii?Q?u8kuTx659MNzaC3JGEQGHuvEe2NrRQaJCTrxWMaWLjkOmHNXHYowE3SejyV9?=
- =?us-ascii?Q?JXolypETUHm058iGWtQu84Zozswjn3eXLqC5XM9Sw2G2Mr50tzby0c+nJX2u?=
- =?us-ascii?Q?zNiDhzmWyNys/WL/Vlm8uoCakYXxMUzFNb6pYIn2+V72zgsaeB7XRskXqs7K?=
- =?us-ascii?Q?hw4qTv/07/vthotaZaWx95TnCT/U0JG+bvQ0OhPPh7POh9/HmnkOeZA99tGw?=
- =?us-ascii?Q?sXtW1mDW4OaO8o6lHzaZg90gEaBtR/FN5uQZb8TANPwK2iRlXaAS1PIvws/9?=
- =?us-ascii?Q?SB2106vtrx7cR7t4yPTMBQEH3GdQ4Yks+Ffuii9W5xSSxABeEElM2bqigAXT?=
- =?us-ascii?Q?vHZ8aEcbULuwhGU=3D?=
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4m00clPlqEER for <buildroot@buildroot.org>;
+ Thu, 17 Apr 2025 15:24:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::52a; helo=mail-ed1-x52a.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C521640173
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C521640173
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
+ [IPv6:2a00:1450:4864:20::52a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C521640173
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 15:24:32 +0000 (UTC)
+Received: by mail-ed1-x52a.google.com with SMTP id
+ 4fb4d7f45d1cf-5e6ff035e9aso1710813a12.0
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 08:24:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1744903470; x=1745508270;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=at69FeOgJBPdPhf5j2e4W+j7L+3GiZCRX08wJguv1JM=;
+ b=mBHVM6ue6kEIOJ3BC5GqbVqZwt08J44E5X2njMrryF4FLZxcfe0JMIo0HfjQLgWnny
+ 3gjJz/o1MGa09pRUvEwJ6Lw1BLPWWTOu1bUM7uYyVVpQSdmU/4ECJZOXKl2h7+3+wQGg
+ HujE87T0RcStiubPLzdKUzJuPhSbThsxdBdTiBvCoiuiruBbF09StSgiTmEaL8Ow0g+B
+ QIfVXLS5GrFiS+8QBYo062NeIoqROaKlX3cwBiecewTLT+lWnEirncCDElWulbs8guK+
+ /6wP4yMyy722CL9vT6ZlAvW0pgm/yGHJsRORoejMuadiJhbqiDcwnDt4DPM8kZXovQfl
+ ekdQ==
+X-Gm-Message-State: AOJu0YyPUyT4L6KuE2YDwxQbjhkB/1jYNYUMZ7YE7jmVURfau0UUY45j
+ /2zz8YT5y9yosdqg/RyZFIP/VjyPuxM86SyFJPcDygQgb/v0fGcVMvk3Hw5xj8rHNcD5mdejlFN
+ T
+X-Gm-Gg: ASbGncuuvAQwpcKJRUh0ewD3l2UfVUdRtpV3ppsgOQ3cbPrA6KwyK6Als3CdzdXQphK
+ MiZTKK8yfamVTehphBFJ66NgdIo3zKys1tU2o1U0u/G6Kw3oD3wkvZQ2/zPwVnRk1yaCkCymlPt
+ l1nMMZHZEDwUVVZgpM0Dg0DKyxTVfO+pZL1yywlxFqibfLoG6EymrMcgfe6TmZ7MMpiOYs3edhW
+ 3h6MB88akVM45n2uteiUNkqeaiuydw6EcPUuUWqCGOPdUsJnn9AawbCk5DqnXzR6jqpZzspByxO
+ /+4SZeG/i+j0K/4p0jp5uOobjIpSmr3OC8Rv0P1aJ3Y/D0L0DwLdwQUo4XsA9Du5LPq1UHJ9v+J
+ oToXfw6vE093a87yiFRwKr5Gukb+Ngg==
+X-Google-Smtp-Source: AGHT+IE+XCLNOJB1oom426HfSsZ9RmwbPt8A0DTECXgv/jjjnH/KrQgBKZUa1zchnpUy5bX3CUdDtg==
+X-Received: by 2002:a05:6402:51cb:b0:5e5:e836:71f3 with SMTP id
+ 4fb4d7f45d1cf-5f4b75ee22dmr4494913a12.29.1744903470595; 
+ Thu, 17 Apr 2025 08:24:30 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.41.62])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-5f36f06a2cesm10056960a12.39.2025.04.17.08.24.29
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 17 Apr 2025 08:24:30 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Michael Trimarchi <michael@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
+Date: Thu, 17 Apr 2025 17:24:25 +0200
+Message-ID: <20250417152425.3248986-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-OriginatorOrg: xes-inc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: c8230081-3778-40bc-f4e6-08dd7db46cc9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Apr 2025 13:33:22.9187 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 2925f1cd-bdc3-4a76-bb38-6159e20a17f1
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1P110MB1310
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xes-inc.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q2FypynILNCMnb58tvw9vUNMkOMayN8fjEgrCTS+cKA=;
- b=a2vHfjxG6ZB6rcy5aJxwmJYnZUvp/3CD1WOwyZR5v02HNtqiCGMCcJ8WDQtFxCiAtaZI6YiLLrIwcOLGgYxulZAsK8Q0+ihDnUeiwLVH9liSBxaSd3WmJHqxCtzxzknK1ZJb7r3FDjTUDmA7DpqUL32SfI3DOMhGIMJMY9YepEAlGQzOtSnakju5ZJAtCb5TgV3gIAxWGy6KG7efHb78ScHHKeKY01gDhMXB3T8Jf6zyjWd76+1F+My6EOJTnNWUYFrh4b7CX4dhoYSCUzo/epi0BI5oCvexOdKNc+mSFWYabE0tbqdKRhJ4kDExKElkAcHQQ7/0MCZQkGwKZ0Pwtg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=amarulasolutions.com; s=google; t=1744903470; x=1745508270;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=at69FeOgJBPdPhf5j2e4W+j7L+3GiZCRX08wJguv1JM=;
+ b=pch+G2ZlcTxSDYchBQfLTWRvl3dl2snnL3ICsHE4MVFkcGoy3irD4hgN3gcFRrNIlj
+ sJaK20tAU2B38m1nUF9+zacwpagPMr0/e12BW1OHcBOR295DRiR+6o3puB3dTLvsolmU
+ R/H24vbsZKtkjX5rmcwUY+aYhhOJiQM9b/icM=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=xes-inc.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=xes-inc.com header.i=@xes-inc.com header.a=rsa-sha256
- header.s=selector1 header.b=a2vHfjxG
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=xes-inc.com;
-Subject: Re: [Buildroot] [autobuild.buildroot.org] Daily results for
- 2025-04-16
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=pch+G2Zl
+Subject: [Buildroot] [PATCH 1/1] configs/imx6ulz_bsh_smm_m2: bump Linux to
+ 6.1.134 and U-Boot to 2025.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -176,41 +114,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, Thomas
+The patch bumps the Linux kernel to version 6.1.134 and U-Boot to
+version 2025.04.
 
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash | 2 +-
+ board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash | 2 +-
+ configs/imx6ulz_bsh_smm_m2_defconfig                  | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-> -----Original Message-----
-> From: buildroot <buildroot-bounces@buildroot.org> On Behalf Of
-> Buildroot Notifications
-> Sent: Wednesday, April 16, 2025 10:20 PM
-> To: buildroot@buildroot.org
-> Subject: [External] - [Buildroot] [autobuild.buildroot.org] Daily
-> results for 2025-04-16
-> 
-> Hello,
-> 
-> Autobuild statistics for 2025-04-16
-> ===================================
-> 
->       branch |  OK | NOK | TIM | TOT |
->   2024.02.x  |  1  |  1  |  0  |  2  |
->   2024.11.x  |  5  |  2  |  0  |  7  |
->   2025.02.x  |  5  |  6  |  0  | 11  |
->     master   | 11  | 54  |  0  | 65  |
-> 
-> Classification of failures by reason for master
-> -----------------------------------------------
-> 
->                    libcap-2.76 | 8
->            at-spi2-core-2.50.0 | 4
->                    perl-5.40.2 | 3
->              dahdi-linux-3.3.0 | 2
->                    eza-0.20.19 | 2
->     host-python-greenlet-3.1.1 | 2
+diff --git a/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash b/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
+index 6d69eabbd6a4..e300dfeb824c 100644
+--- a/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
++++ b/board/bsh/imx6ulz-bsh-smm-m2/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  61c997b8acbbb8ab184565e96f476ecbb7e773cb35b98a1a4c832d809b2bf719  linux-6.1.120.tar.xz
++sha256  60c70cdd70ddee384c004242e67844e3dd1fe28f75b26b3586859fff0a07bd23  linux-6.1.134.tar.xz
+diff --git a/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash b/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash
+index 904fa56c02a3..80ea21b7cb4c 100644
+--- a/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash
++++ b/board/bsh/imx6ulz-bsh-smm-m2/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
++sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
+diff --git a/configs/imx6ulz_bsh_smm_m2_defconfig b/configs/imx6ulz_bsh_smm_m2_defconfig
+index f12dc8383d80..2169ab446581 100644
+--- a/configs/imx6ulz_bsh_smm_m2_defconfig
++++ b/configs/imx6ulz_bsh_smm_m2_defconfig
+@@ -9,7 +9,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/bsh/imx6ulz-bsh-smm-m2/post-build.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.120"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.134"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/bsh/imx6ulz-bsh-smm-m2/linux.config"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -28,7 +28,7 @@ BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx6ulz_smm_m2"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+-- 
+2.43.0
 
-For host-python-greenlet, I'm think the failure is https://github.com/pypa/distutils/issues/355 which affects Setuptools as it copies in distutils.
-
-We may be able to patch setuptools' copy to work around this for now. If I get free time I'll try it out.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
