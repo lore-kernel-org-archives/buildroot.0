@@ -4,96 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74882C369C9
-	for <buildroot@archiver.kernel.org>; Thu, 17 Apr 2025 19:05:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7963DC369C9
+	for <buildroot@archiver.kernel.org>; Thu, 17 Apr 2025 19:22:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBB5C8302F;
-	Thu, 17 Apr 2025 19:05:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 15B5082F9B;
+	Thu, 17 Apr 2025 19:22:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1C1M2KtZDp4F; Thu, 17 Apr 2025 19:05:54 +0000 (UTC)
+ id iGx76a9SVKif; Thu, 17 Apr 2025 19:22:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A73983B57
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 45AD183B57
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A73983B57;
-	Thu, 17 Apr 2025 19:05:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0ACA41F3
- for <buildroot@buildroot.org>; Thu, 17 Apr 2025 19:05:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 45AD183B57;
+	Thu, 17 Apr 2025 19:22:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F193C11F
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 19:22:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E4A158302F
- for <buildroot@buildroot.org>; Thu, 17 Apr 2025 19:05:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E2D8061018
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 19:22:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ePIOosK8gDfR for <buildroot@buildroot.org>;
- Thu, 17 Apr 2025 19:05:51 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2IhAzBuxkq3e for <buildroot@buildroot.org>;
+ Thu, 17 Apr 2025 19:22:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::436; helo=mail-pf1-x436.google.com;
+ client-ip=2607:f8b0:4864:20::633; helo=mail-pl1-x633.google.com;
  envelope-from=lancethepants@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6652F830C5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6652F830C5
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com
- [IPv6:2607:f8b0:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6652F830C5
- for <buildroot@buildroot.org>; Thu, 17 Apr 2025 19:05:51 +0000 (UTC)
-Received: by mail-pf1-x436.google.com with SMTP id
- d2e1a72fcca58-7399838db7fso1292609b3a.0
- for <buildroot@buildroot.org>; Thu, 17 Apr 2025 12:05:51 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3084E60A8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3084E60A8E
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com
+ [IPv6:2607:f8b0:4864:20::633])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3084E60A8E
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 19:22:55 +0000 (UTC)
+Received: by mail-pl1-x633.google.com with SMTP id
+ d9443c01a7336-22409077c06so18154545ad.1
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 12:22:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1744916750; x=1745521550;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=u6jSsgCG2i5PgL46RdjQBtA5FIlMPR+peURvivd4fd8=;
- b=v9lqoI1dqXr7y6pkYms/kZ/5GEvO9F4NrZ5RIOkcqw9MJJhY4Bu9+3vc0i80Nt4eNQ
- MAbOiDunJGHzg/pme0UgvqoBtWUPWyvs68BPNb2U5EVphG5+EEzldaCQ0d5sBqxgsUmA
- PvjeoAn+MuSbYomYCtLCnf0cmtAmCYrmT6/7+fPJ5yKLDfDyd95E6km5DpRxEzSXcezH
- chVKUlVzzuaq/lhElaFb4J56XKGcM9lRvh6dOFup73WdM+W40GS89Ag2OrfgvjQQtCpU
- jXNSDMkG1BoGtn2xHlkFNkFUpMutSyUDOEN63xGAC+rVee55VU0EfG7S+PqXRp2qHSZE
- Yt3g==
-X-Gm-Message-State: AOJu0YzpDwZkk2C7YnYicPAks1wFPmdLtzY3qN3kiLl66VE/vRiqrwli
- e14LPRzy/wSWykE8TKU2Pkm1dCDBljNiIxd579gujr0GLKaXMMDWIHOEvA==
-X-Gm-Gg: ASbGncsuxx7Wcw8a2xlbGJDWJ87FbT7u8nCgjCULx1qGd0qehW2uSYWmwP2r/c0JIHl
- gshc4QoDG762uDEcBP292HiUUo9fgQB6LEWH5hrdYWSVBeQS7JaUMcbRoXnsJglrbVAcHHtXO1r
- m9ChH6K5Q1lhvrFhD1Wltfe1blQ/2bI7815JYBuDN1uZ9aXf1mlaJRDbEBZ9lpnV7AuQqwcJzi4
- lwteVzphvG3uwdJ14viY7Rp8CKkLzpr8q1GIDprBPWTsahxTPixsNyg1171Mbj2O1OpqpbK+bsL
- AKaDZjgpmwob07TDGPl1aQ==
-X-Google-Smtp-Source: AGHT+IEcmFmPaj6EwhMJTWx1NRJ7AkBVTZiVxYtnrRpaeX3u7GEQrobAQaJ8SyQrvy8Gn3dGzbuPCw==
-X-Received: by 2002:a05:6a00:3cc3:b0:730:9637:b2ff with SMTP id
- d2e1a72fcca58-73dbe958121mr1164692b3a.7.1744916750421; 
- Thu, 17 Apr 2025 12:05:50 -0700 (PDT)
-Received: from ProgramPC.bm.local ([76.8.199.226])
- by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-73dbfa588d4sm217076b3a.96.2025.04.17.12.05.49
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 17 Apr 2025 12:05:50 -0700 (PDT)
-From: Lance Fredrickson <lancethepants@gmail.com>
-X-Google-Original-From: Lance Fredrickson
-To: buildroot@buildroot.org
-Date: Thu, 17 Apr 2025 13:05:43 -0600
-Message-Id: <20250417190544.1075310-1-lancethepants@gmail.com>
-X-Mailer: git-send-email 2.39.5
+ d=1e100.net; s=20230601; t=1744917774; x=1745522574;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=LA/Qmb0K50+kaavHMB8nLx91CelTzcWsHBF3+nwRgPE=;
+ b=ImzSfCVNk9rgUYYgug9LJN7+nAH0orUnSatAYFVJTzdramQ2oHx0AjDUUpSR5tEMyS
+ Zn/hKiQljX0bArxAUAqayxbn/Ik9SgQq9jRVsKMStBwa/NhUCvqMP1V3ZsY/3cGok0BE
+ YJGBvi2I8SoLNzD6B0W04/NV4ZW8lGZDkF8EdcF5C/1xrRSuQkUbwr1LbupmHa2O1a3h
+ FTLFEIQlDmuLotARlLa0x6Ws6ZW0WLHBC/0JNjOlggKmf11vpwlZ4+OzSmSUmnGVZHuq
+ dxm1ussYaiaMTFRqqQlt3G+yRug1qzff8Q0hF9NSWakznfA6WK0JXeR6rRuAImSFDiSm
+ bclw==
+X-Gm-Message-State: AOJu0Yy9IdOmreKOOPqLS4Q04g/a3OsiAF2mApitsz5WBHosBd3xsV/7
+ f94tFXpNPb9EXjxX82pI0/Csf9gtfAJEW77YeqOnLIQ0tLmHn24XrPxTCA==
+X-Gm-Gg: ASbGncsjeTJmnPVGkQC5QsPxtATbZ35QG4/A1sMcj6TAvWSeeVBt0ssSQXiI5efM/C3
+ CGcXeqgo+GSrxloznPjBfWCRyoAfNydfC02o4Xbt0jRNVKyjrJdHDekTQzTfviB0QZZSUifSaJU
+ 4yGQOVypolF09XKOgQc0lrpR5y96Xh0MTr8cOcyP3P223A2uZNCnvuxlqyyyCbI01QM7kC/aIAp
+ yfYa2r6P+s6tOPBvcaWTTUU4KSe7/NtzajJq4nIYBzmR2GXX0DAyCFykTAAaV86DchG1JDCAi/f
+ KZvOgTVFq4NoCRqsb6W9nbHpmI+uIuOpzkXvFWnnry2TRhxPCJZI+g==
+X-Google-Smtp-Source: AGHT+IFF6Js2AZaKyvL+VtwYOpeexUctceatgAXECmL8BTzcipJSCBNL5f2E0rbojFpM/rMxS/BjGw==
+X-Received: by 2002:a17:903:40cc:b0:223:5c33:56b4 with SMTP id
+ d9443c01a7336-22c53583807mr2210655ad.20.1744917774124; 
+ Thu, 17 Apr 2025 12:22:54 -0700 (PDT)
+Received: from [10.0.0.72] ([76.8.199.226]) by smtp.gmail.com with ESMTPSA id
+ d2e1a72fcca58-73dbfaad42fsm223697b3a.121.2025.04.17.12.22.53
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 17 Apr 2025 12:22:53 -0700 (PDT)
+Message-ID: <7a6751bd-c005-4b85-9b53-0f12fd9d383b@gmail.com>
+Date: Thu, 17 Apr 2025 13:22:54 -0600
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: buildroot@buildroot.org
+References: <20250417190544.1075310-1-lancethepants@gmail.com>
+Content-Language: en-US
+From: Lance Fredrickson <lancethepants@gmail.com>
+In-Reply-To: <20250417190544.1075310-1-lancethepants@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1744916750; x=1745521550; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=u6jSsgCG2i5PgL46RdjQBtA5FIlMPR+peURvivd4fd8=;
- b=fXUYXn4spnkpFVbKxmKA2DijepxjqQvl5EUzS/NtL+9eUSp70q7Q7Bjsi6T4sbZNad
- AWa7BKWuqfvbgyud+RCMiLSRw0jNKjpSKAB6gXY87MxzDLkRKFv9QC3lBp0ts3WUpBc/
- Jy3WNYprSdG0IOzzD/xST6Ivt+cy3l5liRh0E9a4qeAT3UtLOzRI3XTmcknedXqixMtW
- 6Xr8oBAiIk547yvgXn4aB57T1xLmEZox7q/qwZuTkEeTgTLSa/1QmA4/orW35RaScZSA
- 4lTxdaH/wm/hGTp3ywzOyhECNSoc/Y6gsgKhUNynuoRv7BIwAXN4L006qO0urOO7ALuQ
- TMog==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1744917774; x=1745522574; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=LA/Qmb0K50+kaavHMB8nLx91CelTzcWsHBF3+nwRgPE=;
+ b=lZWsVHsngf5euFb/N7BmMIqxqk3nd8BTMvyTC6HW1cwL4LdLiy8vnTwVQJqto0CTXm
+ PiKxAmBVwYtnAvgKB5SaFe46RBmvm+0XZYD+9v40tlxssX2vtKy1etY4Ah8Wl2e7Obrj
+ Aiouzhkd3s87brAjzCy4C1aRkMM4T72tJ2r/O5kvM8FGgGCAIoaMiM12XHyogt2orZ3G
+ tXJBhQJM0C6VLu58WzSUE9CNuEdNQq6W8/LU2tcWXA8MlGWkoADRKbNaH3yFbWIK3tBJ
+ F1LWA5dinI2WD+fKQ7QxJDeqTsPjJgftq3iOVu+DCT5pgkti+ISzMpPrJqWeKmIM8jKV
+ 73aw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=fXUYXn4s
-Subject: [Buildroot] [PATCH] package/libcurl: Also specify the CA bundle
+ header.a=rsa-sha256 header.s=20230601 header.b=lZWsVHsn
+Subject: Re: [Buildroot] [PATCH] package/libcurl: Also specify the CA bundle
  location
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -106,35 +108,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Lance Fredrickson <lancethepants@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Lance Fredrickson <lancethepants@gmail.com>
+This is a patch I've carried for my project where I only keep the ca 
+bundle. The ca-certificates package does install the bundle and distros 
+like debian do specify a ca path & a ca bundle when configuring.
 
-Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
----
- package/libcurl/libcurl.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+https://salsa.debian.org/debian/curl/-/blob/debian/unstable/debian/rules?ref_type=heads#L20 
 
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 2066ba0388..509feeab64 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -67,7 +67,8 @@ endif
- ifeq ($(BR2_PACKAGE_LIBCURL_OPENSSL),y)
- LIBCURL_DEPENDENCIES += openssl
- LIBCURL_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr \
--	--with-ca-path=/etc/ssl/certs
-+	--with-ca-path=/etc/ssl/certs \
-+	--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt
- else
- LIBCURL_CONF_OPTS += --without-openssl
- endif
--- 
-2.39.5
+
+Lance
+
+On 4/17/2025 1:05 PM, Lance Fredrickson wrote:
+> From: Lance Fredrickson <lancethepants@gmail.com>
+>
+> Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
+> ---
+>   package/libcurl/libcurl.mk | 3 ++-
+>   1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+> index 2066ba0388..509feeab64 100644
+> --- a/package/libcurl/libcurl.mk
+> +++ b/package/libcurl/libcurl.mk
+> @@ -67,7 +67,8 @@ endif
+>   ifeq ($(BR2_PACKAGE_LIBCURL_OPENSSL),y)
+>   LIBCURL_DEPENDENCIES += openssl
+>   LIBCURL_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr \
+> -	--with-ca-path=/etc/ssl/certs
+> +	--with-ca-path=/etc/ssl/certs \
+> +	--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt
+>   else
+>   LIBCURL_CONF_OPTS += --without-openssl
+>   endif
 
 _______________________________________________
 buildroot mailing list
