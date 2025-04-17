@@ -1,66 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46A52C369C9
-	for <buildroot@archiver.kernel.org>; Thu, 17 Apr 2025 19:43:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A91EFC369CB
+	for <buildroot@archiver.kernel.org>; Thu, 17 Apr 2025 19:43:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DCF3E60D5B;
-	Thu, 17 Apr 2025 19:43:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A45281F62;
+	Thu, 17 Apr 2025 19:43:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ltJ9C9khxbth; Thu, 17 Apr 2025 19:43:27 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PAoJekeiyP9f; Thu, 17 Apr 2025 19:43:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31D946F66A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 975DB81412
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 31D946F66A;
-	Thu, 17 Apr 2025 19:43:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7C2E81F3
- for <buildroot@buildroot.org>; Thu, 17 Apr 2025 19:43:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 975DB81412;
+	Thu, 17 Apr 2025 19:43:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7D63D11F
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 19:43:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6CC23407E7
- for <buildroot@buildroot.org>; Thu, 17 Apr 2025 19:43:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 631F082071
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 19:43:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dHA7u8Qhlh2C for <buildroot@buildroot.org>;
- Thu, 17 Apr 2025 19:43:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fIESbSGmsqad for <buildroot@buildroot.org>;
+ Thu, 17 Apr 2025 19:43:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0BE9E40176
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BE9E40176
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0BE9E40176
- for <buildroot@buildroot.org>; Thu, 17 Apr 2025 19:43:23 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0E36B43409;
- Thu, 17 Apr 2025 19:43:19 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1u5V8p-00GcR1-0x;
- Thu, 17 Apr 2025 21:43:19 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE3F681F62
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE3F681F62
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 19:43:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6147A857B3; Thu, 17 Apr 2025 19:43:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Heiko Thiery <heiko.thiery@gmail.com>
-Cc: buildroot@buildroot.org,  Andrey Yurovsky <yurovsky@gmail.com>
-References: <20250417064808.1597218-1-heiko.thiery@gmail.com>
-Date: Thu, 17 Apr 2025 21:43:19 +0200
-In-Reply-To: <20250417064808.1597218-1-heiko.thiery@gmail.com> (Heiko Thiery's
- message of "Thu, 17 Apr 2025 08:48:09 +0200")
-Message-ID: <87jz7ivajs.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfedtudefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepkeegffdtieevkeejheevteeludetveeffedutedvkeefjeehiedtvdfhkeffueetnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohephhgvihhkohdrthhhihgvrhihsehgmhgrihhlrdgtohhmpdhrtghpthhtohephihurhhovhhskhihsehgmhgrihhlrdgtohhm
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/rauc: bump to 1.14
+To: buildroot@buildroot.org
+Date: Thu, 17 Apr 2025 21:43:03 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ace394e91143dfb9d069eaff878e7db3170e36b2
+X-Git-Newrev: d350aa4bee88006003069672f3c1a8c787091098
+X-Patchwork-Hint: ignore
+Message-Id: <20250417194349.6147A857B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rauc: bump to 1.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -72,20 +58,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d350aa4bee88006003069672f3c1a8c787091098
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Changelog: https://github.com/rauc/rauc/releases/tag/v1.14
- > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Changelog: https://github.com/rauc/rauc/releases/tag/v1.14
 
-Committed, thanks.
+Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/rauc/rauc.hash | 2 +-
+ package/rauc/rauc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+index ff3e0e72e4..6795bc9485 100644
+--- a/package/rauc/rauc.hash
++++ b/package/rauc/rauc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  1ddb218a5d713c8dbd6e04d5501d96629f1c8e2521576fbd9e7751edb7da113e  rauc-1.13.tar.xz
++sha256  f48c85573d82bf9378e907f6eba0cbe4f2021839a1e9fe3f8431f61dd54ef42c  rauc-1.14.tar.xz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 92f58c6139..6bed5ec129 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RAUC_VERSION = 1.13
++RAUC_VERSION = 1.14
+ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+ RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+ RAUC_LICENSE = LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
