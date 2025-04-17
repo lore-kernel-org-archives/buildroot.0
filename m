@@ -1,105 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E98DC369C7
-	for <buildroot@archiver.kernel.org>; Thu, 17 Apr 2025 04:39:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 071E4C369C7
+	for <buildroot@archiver.kernel.org>; Thu, 17 Apr 2025 04:39:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F19AC60C21;
-	Thu, 17 Apr 2025 04:39:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 929DB849E3;
+	Thu, 17 Apr 2025 04:39:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NWxtY-KWFFmt; Thu, 17 Apr 2025 04:39:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MQaqQnmCsMOi; Thu, 17 Apr 2025 04:39:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 391AC61263
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACE13849E7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 391AC61263;
-	Thu, 17 Apr 2025 04:39:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C5FD9444
- for <buildroot@buildroot.org>; Thu, 17 Apr 2025 04:39:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ACE13849E7;
+	Thu, 17 Apr 2025 04:39:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 65A5BB01
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 04:39:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B6BAC417B0
- for <buildroot@buildroot.org>; Thu, 17 Apr 2025 04:39:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4BA9540D4B
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 04:39:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wQLFtzIjdvyB for <buildroot@buildroot.org>;
- Thu, 17 Apr 2025 04:39:10 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zxqzMGbGm0fH for <buildroot@buildroot.org>;
+ Thu, 17 Apr 2025 04:39:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::532; helo=mail-pg1-x532.google.com;
+ client-ip=2607:f8b0:4864:20::436; helo=mail-pf1-x436.google.com;
  envelope-from=lancethepants@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E104740C23
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E104740C23
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com
- [IPv6:2607:f8b0:4864:20::532])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E104740C23
- for <buildroot@buildroot.org>; Thu, 17 Apr 2025 04:39:09 +0000 (UTC)
-Received: by mail-pg1-x532.google.com with SMTP id
- 41be03b00d2f7-ae727e87c26so234403a12.0
- for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:39:09 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7937B41336
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7937B41336
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com
+ [IPv6:2607:f8b0:4864:20::436])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7937B41336
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 04:39:12 +0000 (UTC)
+Received: by mail-pf1-x436.google.com with SMTP id
+ d2e1a72fcca58-736b0c68092so254965b3a.0
+ for <buildroot@buildroot.org>; Wed, 16 Apr 2025 21:39:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1744864749; x=1745469549;
+ d=1e100.net; s=20230601; t=1744864752; x=1745469552;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=o+c4UhyO1aTFg20vecLyO9OF1Ivy+oTWKbvOHLWAsV4=;
- b=VqDxXyk9Ja+4y62iisvyLbBsbqb+Lxjp6+55UefMi9LeAYSoz0PZ8qOGy4hSSIHOox
- ZGC38Nnwg7AkmBlipECA1Lf0CDVZQiuB9xp3HW4m4wic4YLAhW/Pa8CzA9fGk4UUOt8x
- eWRNvrqPCdtVWBnpNXqHfNO9uGePWcbQLqrWb98gsOD2EHSu/vF0a1Y4x8lSdDjsa6Tm
- lr9kbf7zw4dZl9wLsWWICcisMsvd73CBuACdSCfR35Cr51t5cMuQjrVg+xPcU9EF5LJv
- xHO7/7OzAHbQxrghqgP8p9a1v6qZbgHCWk+gpdZfs3/1XU2735+/4BohVwEAPiwm3f4T
- dfNg==
-X-Gm-Message-State: AOJu0Yy3Nlo923JMtYgcY2VpTIAf/ddaU3zfQ4LrJp0vnuCuZs7W022D
- BvROG+qi/CRQP3/3zPv3QJ7TiTNoc8l8wClum0KikJCzNs0C3KjlmnPlQw==
-X-Gm-Gg: ASbGncsvn8Z1fELXLJdb0d71laf96VuxQOIEzVqHKSnah9aEI9RCMJrIL86unB6edhp
- p0FSmocg/2l1f7AHBGQjX354I9ALm0hxw6XkflIKWAM4YOQe1JWUq5xvaSTPXob3vSNLhJtDg0a
- VEuovQAV01mE1XbFpvUW4D4H3V2IQLZ3sJPmtlfBfF+o1ZC/oWdzun6mXVyrElohk/u6bDmq1SI
- 0mvQjERaP/h4nz8hjCP1RtgeMlHyV3XbSSt8BqiOOUGrIZuy2uFWBLkcsHU03hBLSMuvfc0Tdl0
- NG1AcNOm/j8fvy4UYKJIrA==
-X-Google-Smtp-Source: AGHT+IFZIYuKiIyHRWvUotfMzBzYiYNIBFZT2EFepF50EV8tiwbGkz5wTTC7L0dbYB5s9DL/Y/w/TQ==
-X-Received: by 2002:a05:6a20:d707:b0:1f5:6abb:7cbb with SMTP id
- adf61e73a8af0-203b3ee91a7mr6158139637.23.1744864748917; 
- Wed, 16 Apr 2025 21:39:08 -0700 (PDT)
+ bh=v3zhghLgENolJw0MsS3C/0MaRNeNVn3pL8ZAvfViG/k=;
+ b=YvoiaL4yYuVLzkPlbsjtcWT4lpwzACno41fq/T90JZ5/y3zOZnvhQy3Hlkm//Vk6F3
+ 5zNEIEJorhE/2ksa+oKGqnhB5pipJ4hd8hDCiuOFyewRZB8ACsYIgUfGT1TAcXGkB5l6
+ ZKAJtO5as9a+J6ZZJ1catCe9gTxS/o3Byhao8ZRG29D2PaLEJSdmr8TBoEJCoSC6kLQK
+ o9KCw2r06lyEv44WDfjf55DE15R5IFVqw9izWRGK9JrRcY2naXfhOyzS8RWO5ZVjn+7k
+ RFwQ3Jmpt9/EQfZZ16OJ8wAw4N4jiQWXx1Is/lKQgeOqZZI/6ypsaSs1zKIga2zvYANT
+ FERA==
+X-Gm-Message-State: AOJu0Yy2dr3biWyeaaq16dB6VARGmseLDsb9PbcP/oSv5R3xltXtOhpe
+ pWD7Nvbh93OXpE4/VC624WI2dt0ERRbMcktmTC9gL77vG+QtNAqza/W8Xw==
+X-Gm-Gg: ASbGncv/93Oy9/Uw5pon9VVMUib6DePcegeYtq2N5j7g7XelNDGInHtdCIodoE6Gv4H
+ AbmnlHNLgvGh9bUIIQqPB6KpkfzDKfCQeDTdxLMZ3tv/Dvbhz/afoOZkUadYwvJc2IirkzUJk1x
+ cQSWzApUaZSq4wJwgabIZD+yPk0LwJ+re4r11XoKNuG5pL+5koaG6LSz14VASIguqrmEebPnBg3
+ Wh6/xk9Y5Wy3yZA26Flg9fiAHr5LAV8vPRm3q8LbS9HabEdVMvNVBDMh6dEDTnYwPPkfXWRQDiX
+ qLoTwZxDRGtSuihdMuZUgw==
+X-Google-Smtp-Source: AGHT+IHHy0fu5V4o2O4MRg5s3M59dpMB1/i2J8n8vBGNGG5kEWVajSwlZZ6gKqIbmzqII/sMxV3t0Q==
+X-Received: by 2002:a05:6a00:aca:b0:736:5504:e8b4 with SMTP id
+ d2e1a72fcca58-73c267d2f23mr6291114b3a.19.1744864751578; 
+ Wed, 16 Apr 2025 21:39:11 -0700 (PDT)
 Received: from ProgramPC.bm.local ([76.8.199.226])
  by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-73bd22f0ffcsm11299205b3a.117.2025.04.16.21.39.08
+ d2e1a72fcca58-73bd22f0ffcsm11299205b3a.117.2025.04.16.21.39.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 16 Apr 2025 21:39:08 -0700 (PDT)
+ Wed, 16 Apr 2025 21:39:11 -0700 (PDT)
 From: Lance Fredrickson <lancethepants@gmail.com>
 X-Google-Original-From: Lance Fredrickson
 To: buildroot@buildroot.org
-Cc: Lance Fredrickson <lancethepants@gmail.com>,
- Sergio Prado <sergio.prado@e-labworks.com>
-Date: Wed, 16 Apr 2025 22:38:43 -0600
-Message-Id: <20250417043845.2171938-2-lancethepants@gmail.com>
+Date: Wed, 16 Apr 2025 22:38:44 -0600
+Message-Id: <20250417043845.2171938-3-lancethepants@gmail.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250417043845.2171938-1-lancethepants@gmail.com>
 References: <20250417043845.2171938-1-lancethepants@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1744864749; x=1745469549; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1744864752; x=1745469552; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=o+c4UhyO1aTFg20vecLyO9OF1Ivy+oTWKbvOHLWAsV4=;
- b=S0fNwf/i60laXgfWgshP0gppKhUMcZ60p/fT8miaBkr9akNAAy2L4BlFFccV6utku+
- yGN3lmgw9O1BRH0Nordm8EhQAC4PKphnna4V+7Lxukwm5VrklFfNNv+8cgKxG2IlaiAy
- g8jmfHkfvjmRXRovXn1XwgY/2tJzgQsqCpviW1S0/f4EdM3b0TY8NKm6dQKLSeavYTgT
- PRQo3u2U2KBCNWF4G9vJJwn5ZrLzp8dBqbhyFlG29pQb5yqvjxZDQWk2CcheUsUSJv2s
- tqMlKtRESZZ3hKa6XbBB6gZEdlDPuLhbQzjcQgsFoksQM1WLUJSIbLq6E6KK34OMSPTk
- 5cTA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=v3zhghLgENolJw0MsS3C/0MaRNeNVn3pL8ZAvfViG/k=;
+ b=NxEv9b5bn6RfnJXgCbyM2p1B5sXjS5vM4J1p/pGZQPk5ITyAFxOsLugBPFILrxeosq
+ cqta9BATSdpZSdX+K2qtf7SItRvBJzRTbqaeruZe/g1V/Bd2Ba3RoCFOz5YyAI+LrM1V
+ pwEtiIdeY729rn1i9GQUxsNyzRC9KTwEpcd6Nk+SZyCX7jVjrJGDM5Mp8Gdw/PTwXqnP
+ zZZwpaT6BR8I3B79FNOoFMex0Wp6GDdRgTKN7S0WZ9ffxAcIAMiTU4CvYHlsl3zqP65Y
+ XEaG2lyoXLZituSUiu5BScWp7Rni9LDTkOZ+7sdIFF+9pwqij5ZsA8nACyLlAZY2PJy/
+ 2a5g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=S0fNwf/i
-Subject: [Buildroot] [PATCH 2/3] package/ubus: bump version to afa57cc
+ header.s=20230601 header.b=NxEv9b5b
+Subject: [Buildroot] [PATCH 3/3] package/libuci: bump version to f3fc0b7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,6 +109,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Lance Fredrickson <lancethepants@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -120,42 +119,57 @@ From: Lance Fredrickson <lancethepants@gmail.com>
 
 Changelog:
 
- - afa57cc libubus: add support for using channels
- - d996988 libubus: close file descriptor after sending it from a request
- - 252a9b0 libubus: Make UBUS_* macros work cleanly in C++
- - 65bb027 CMakeLists.txt: bump minimum cmake version
- - f84eb59 libubus: fix initial subscribe with autosubscribe
- - 2b39a27 libubus: fix reconnect with auto subscribe
- - b3e8c4e Add auto subscribe support
+ - f3fc0b7 libuci: fix false positive warning on older gcc versions
+ - 16ff0ba CMakeLists: add support for including ABIVERSION in the library version number
+ - 047b2ef CMakeLists.txt: bump minimum cmake version
+ - fb3c234 add support for an override config directory
+ - 10f7996 file: Ignore config file with '.' in name
+ - 5781664 remove internal usage of redundant uci_ptr.last
+ - 3cda251 file: Fix uci -m import command
+ - 04d0c46 uci: macro uci_alloc_element not in uci.h
+ - ae61e1c uci: optimize update section in uci_set
+ - 16e8a3b uci: fix memory leak uci_set on update section
+ - b2f3417 uci: maintain option position in uci_add_list
+ - 74f2797 uci: fix atomicity of uci_add_list
+ - 47697e6 uci: fix use-after-free uci_add_list
+ - 7e01d66 uci: optimize update option in uci_set
+ - b7ceda9 uci: maintain option position in uci_set
+ - 9b6605e uci: fix use-after-free uci_set on update option
+ - f49a2fd delta: simplify uci_load_delta() by using a helper
+ - 5de3871 cli: drop redundant uci_add_delta_path() call for -P
+ - f84f49f cmake: Allow override of install directories
 
 Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
 ---
- package/ubus/ubus.hash | 2 +-
- package/ubus/ubus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libuci/libuci.hash | 6 +++---
+ package/libuci/libuci.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ubus/ubus.hash b/package/ubus/ubus.hash
-index af70e86e46..e35f37b03d 100644
---- a/package/ubus/ubus.hash
-+++ b/package/ubus/ubus.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0020c808d0ba74b1f4c9514e2b3dfa98ec13a142c97b86b9c229479c560aca19  ubus-f787c97b34894a38b15599886cacbca01271684f-git4.tar.gz
-+sha256  ba7602c660cb2c15c0e04942414e4cf3d96622622406c5fc3b88895694aebb9f  ubus-afa57cce0aff82f4a7a0e509d4387ebc23dd3be7-git4.tar.gz
- sha256  a3caa6c0e90c87b7c97c2ac3d0c0d416082ef777215faec2e9b24ea6e68f6988  ubusd_acl.h
-diff --git a/package/ubus/ubus.mk b/package/ubus/ubus.mk
-index cc2ed81786..913c0e3e39 100644
---- a/package/ubus/ubus.mk
-+++ b/package/ubus/ubus.mk
+diff --git a/package/libuci/libuci.hash b/package/libuci/libuci.hash
+index cc04320331..1e429f8160 100644
+--- a/package/libuci/libuci.hash
++++ b/package/libuci/libuci.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  d095dc7ff4714e33aa18ef3ea5d30f525a202d6997d7b13bd952da53818988d6  libuci-4b3db1179747b6a6779029407984bacef851325c-git4.tar.gz
+-sha256  39e1cc18a36172fb80d9b37f0af77d78ae935bd8a020978a7895d9e76a24e112  cli.c
+-sha256  69d4eea4de19d27014f3d6ed723081b4039700bfd73cd0a5e39e2c4f19a58c66  libuci.c
++sha256  d3b12df54f9faa69f0ff6d2a239fdcc30d64eda5269ddc882cf97677ea8cb066  libuci-f3fc0b76040685829191debc03edf72f486ae8ae-git4.tar.gz
++sha256  5bb12361838b588bb263ade8537f5ae1a5e62d54b0a8f0640489db8cc29831d8  cli.c
++sha256  bbc34ea5f391abc3b27416dc3c96b0f71f852c44210faf1cde0990218f68b13a  libuci.c
+diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
+index 81e87aa5be..3c7e12baae 100644
+--- a/package/libuci/libuci.mk
++++ b/package/libuci/libuci.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UBUS_VERSION = f787c97b34894a38b15599886cacbca01271684f
-+UBUS_VERSION = afa57cce0aff82f4a7a0e509d4387ebc23dd3be7
- UBUS_SITE = https://git.openwrt.org/project/ubus.git
- UBUS_SITE_METHOD = git
- 
+-LIBUCI_VERSION = 4b3db1179747b6a6779029407984bacef851325c
++LIBUCI_VERSION = f3fc0b76040685829191debc03edf72f486ae8ae
+ LIBUCI_SITE = https://git.openwrt.org/project/uci.git
+ LIBUCI_SITE_METHOD = git
+ LIBUCI_LICENSE = LGPL-2.1, GPL-2.0 (tools)
 -- 
 2.39.5
 
