@@ -1,74 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 788E3C369CA
-	for <buildroot@archiver.kernel.org>; Thu, 17 Apr 2025 17:13:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A028C369C9
+	for <buildroot@archiver.kernel.org>; Thu, 17 Apr 2025 17:41:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1BF52600C4;
-	Thu, 17 Apr 2025 17:13:49 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m8qi4Ktx890l; Thu, 17 Apr 2025 17:13:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C0496080F
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3C0496080F;
-	Thu, 17 Apr 2025 17:13:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id BF0451F3
- for <buildroot@buildroot.org>; Thu, 17 Apr 2025 17:13:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A4CB784911
- for <buildroot@buildroot.org>; Thu, 17 Apr 2025 17:13:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5FA2849DB;
+	Thu, 17 Apr 2025 17:41:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7mPp6vub6i3H for <buildroot@buildroot.org>;
- Thu, 17 Apr 2025 17:13:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.176;
- helo=smtpcmd15176.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5F335848F2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F335848F2
-Received: from smtpcmd15176.aruba.it (smtpcmd15176.aruba.it [62.149.156.176])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5F335848F2
- for <buildroot@buildroot.org>; Thu, 17 Apr 2025 17:13:43 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id 5So0uMSFczl8E5So0uOjpQ; Thu, 17 Apr 2025 19:13:40 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ id 0cjjpBJssPtp; Thu, 17 Apr 2025 17:41:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBA58849D0
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBA58849D0;
+	Thu, 17 Apr 2025 17:41:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CC3E71F3
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 17:41:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C925441C11
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 17:41:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IU7KuQzBLJQT for <buildroot@buildroot.org>;
+ Thu, 17 Apr 2025 17:41:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::52d; helo=mail-ed1-x52d.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8FE4341266
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FE4341266
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8FE4341266
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 17:41:14 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id
+ 4fb4d7f45d1cf-5edc07c777eso1382638a12.3
+ for <buildroot@buildroot.org>; Thu, 17 Apr 2025 10:41:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1744911672; x=1745516472;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=jCvKxcyK4TI3mXh3lc5dNZCJcAGj6/Dvhm5xl6Uzlcw=;
+ b=aJ5e8Qns27qa446ozCXtdUxIttr0Sr5qII8OOoxBRob85II5TksvGQ7rT9RRML2dtr
+ Qq+7HURR/3CwjGhDxTv4v0EwTKdeKuFDc1E/96vep/yB+FuEKlGjo4JGBDDEvGm1Mies
+ lNgYqENKOtYXTklHx2lIc/KeM8l2pNigmIwm5gc5afssZVqU8+7rBRNRwkWCEryUwkkC
+ EiANYQQZ67w2O+W2vg6vJfyoBQwl0ix9rXVxdig9LMMxlgiCcEkmTPqsVyyrqWw/VRiy
+ EadKWlyDG9qVbQU6ZTG/MNUD/OwU54amCDG7jaEf113tvjgS/G7FDEkMuflyNEMlqR2B
+ WuFg==
+X-Gm-Message-State: AOJu0YzhgDWM/U+k76yasx/wIu1TGl7Wk9qRksTEtHOWPTd4WJ7J/Qky
+ NMWNXQapcpxN71B/xqn8U4tSdZGJzD2258X7ynak+6DMXqyqWmM6lKhP9b2m3jRcu3QHPTqNurR
+ h
+X-Gm-Gg: ASbGncsaRGpYsnW4SxylaV7wuP/esw97F2MUmLfhAn/1H9+ED4AGew8zkbPxLVHZAcA
+ 8hOskyEs/0a+vSbsPu4sP2x9T4y+oz1NBBxlGEioam3cFetLk1GNn5WyppPcQ2Ic2+e5yldwGeY
+ SbiXOjsk6eeEew7niHYa4QmjVH5UFiHFwUDeVtCBMDy/Z1dLS7To7qllW72sPEDW7yfeXIw+esk
+ agfuygRbXFA4coNBUh61m0OV7S4zs7oJ2GACGCuID5OrAS7fSIdY5ctvdqZ+bHi9tcUitjjzaSv
+ CpGcYTJWMZwCYfWXbJlzHx2Jvfw2oi9qsxQ30GyimhIp01dHQtSCq1v1JKf5CYG7gCXS5gIUon+
+ UlAg3BhRGTP8baCpQmnbYMyS4WibD9g==
+X-Google-Smtp-Source: AGHT+IHe00xtu0XnOWImhrYovmuiRmvFa2kR49uDojwJrR+kzMQ7eorpinOWYzXesUpRr32dPxAYYQ==
+X-Received: by 2002:a17:907:968f:b0:ac8:1798:f57 with SMTP id
+ a640c23a62f3a-acb42ad581emr645059866b.38.1744911672080; 
+ Thu, 17 Apr 2025 10:41:12 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.41.94])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-acb6ec0b711sm22044766b.9.2025.04.17.10.41.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 17 Apr 2025 10:41:11 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Kris Bahnsen <kris@embeddedTS.com>
-Date: Thu, 17 Apr 2025 19:13:39 +0200
-Message-Id: <20250417171339.3718898-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.39.5
+Date: Thu, 17 Apr 2025 19:41:06 +0200
+Message-ID: <20250417174106.4091085-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfAt1mlD7gUy11+VGScr8ZmtZ70SsYZYteXe/NQbf0r9DHS4x7SU7pj+o7sH4bGrFAZiPOYtJOJiajarrwyi1I1NDQwaf5xjyJLcraiWOXAcH0CxZLYXj
- 2tzB1dxe/mnydMnOlBTyhO1fnZCcNxErZ4guzpIsgQ/xYPd71icSqB8ac8dgWFZkNs14pys6y6d6kRjg++7h4lwik6Uyta/aemwdtMnJuMgwMJJtuIf5QT93
- Np11RDEx4LQuhKo9d4s5J8cJfd5yedFcx+hCEsmy2+YREkxD7eqOWXyJnDcrnJouLQbyBaQ1HC/izj07m3lYgg==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1744910020; bh=+r5RGxAKvOyvPV8rYlKRmz641GB0z5TkwyWL/P/iWfA=;
- h=From:To:Subject:Date:MIME-Version;
- b=i/BanIiPc2zzIZp4MHIWDGxzSPzF5f3OmZdZRaEVCtf2+ubXJupX9wfn7L1YJwKaN
- gT7F35kroWhdCuiKrJHQUdjj63ZgzHxEEcE5eT6Z+6JngxtoIVIw/vhZRlhaC2OkB8
- hOZUmZeV8v/HxSrClsa5jAVhbs9/uC8ZYxzRHsehkNlHjFSod8LvM7ZzT0D4VylTHZ
- 2UoQkTbKKCmabX1bKXJqAauoZMQMw1zy3e1Tdk2awREh+wzY6WNeOttrg1o3m0c1pr
- twB3WJX27hQhXS5ZSphGEDjp/cmhudr6JESPZ48LZolcifYshA7KfLu6CRIJRL490E
- IFnvK/635nZ1Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1744911672; x=1745516472;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=jCvKxcyK4TI3mXh3lc5dNZCJcAGj6/Dvhm5xl6Uzlcw=;
+ b=SdBnSHOBaCHQdntslwd9XLdenLkaj1SjJuODwF+CkgzT1HwxUa/OdkHzwtBUafi5h9
+ QhC5Ku7QVOUxrh6q3VQ2sSkWT56AeJWPX8IwC4WSJv0oz7JFW1tdws1KMmrLu/Ev3Vmh
+ JRYfgBd4hf0zzfaLtifvEGkVO8YYudMjbG2jQ=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=i/BanIiP
-Subject: [Buildroot] [PATCH] package/wilc-driver: fix build failure with
- Linux 6.10
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=SdBnSHOB
+Subject: [Buildroot] [PATCH 1/1] configs/beaglebone: bump Linux to
+ 6.12.17-ti-arm32-r9 and U-Boot to 2025.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,182 +106,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com, Lothar Felten <lothar.felten@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add local patches pending upstream to fix 3 different API changes
-throughout Linux 6.7, 6.8, 6.10.
+The patch bumps the Linux kernel to version 6.12.17-ti-arm32-r9 and
+U-Boot to version 2025.04.
 
-Fixes:
-https://autobuild.buildroot.org/results/e001f70dab4c9cebdbde0443f4f8bb6b42ae5561/
+Tested on beaglebone black.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Link: https://github.com/beagleboard/linux/releases/tag/6.12.17-ti-arm32-r9
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- .../0008-Fix-build-with-Linux-6.7.patch       | 46 ++++++++++++++++
- .../0009-Fix-build-with-Linux-6.8.patch       | 34 ++++++++++++
- .../0010-Fix-build-with-Linux-6.10.patch      | 55 +++++++++++++++++++
- 3 files changed, 135 insertions(+)
- create mode 100644 package/wilc-driver/0008-Fix-build-with-Linux-6.7.patch
- create mode 100644 package/wilc-driver/0009-Fix-build-with-Linux-6.8.patch
- create mode 100644 package/wilc-driver/0010-Fix-build-with-Linux-6.10.patch
+ board/beagleboard/beaglebone/patches/linux/linux.hash | 2 +-
+ board/beagleboard/beaglebone/patches/uboot/uboot.hash | 2 +-
+ configs/beaglebone_defconfig                          | 6 +++---
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/wilc-driver/0008-Fix-build-with-Linux-6.7.patch b/package/wilc-driver/0008-Fix-build-with-Linux-6.7.patch
-new file mode 100644
-index 0000000000..9714a828eb
---- /dev/null
-+++ b/package/wilc-driver/0008-Fix-build-with-Linux-6.7.patch
-@@ -0,0 +1,46 @@
-+From c2024eb93f6d7ec605226d5d8a29ea17fbc71b5d Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Thu, 17 Apr 2025 19:06:48 +0200
-+Subject: [PATCH] Fix build with Linux 6.7
-+
-+During commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bb55441c57ccc5cc2eab44e1a97698b9d708871d
-+struct cfg80211_ap_settings has been split into multiple structs including
-+beacon. So is Linux version is 6.7+ let's use &info->beacon in place of
-+beacon.
-+
-+Upstream: https://github.com/embeddedTS/wilc3000-external-module/pull/8
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ cfg80211.c | 8 ++++++++
-+ 1 file changed, 8 insertions(+)
-+
-+diff --git a/cfg80211.c b/cfg80211.c
-+index 5c92062..25da3a1 100644
-+--- a/cfg80211.c
-++++ b/cfg80211.c
-+@@ -1822,13 +1822,21 @@ static int start_ap(struct wiphy *wiphy, struct net_device *dev,
-+ }
-+ 
-+ static int change_beacon(struct wiphy *wiphy, struct net_device *dev,
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,7,0))
-++			 struct cfg80211_ap_update *info)
-++#else
-+ 			 struct cfg80211_beacon_data *beacon)
-++#endif
-+ {
-+ 	struct wilc_vif *vif = netdev_priv(dev);
-+ 
-+ 	PRINT_INFO(vif->ndev, HOSTAPD_DBG, "Setting beacon\n");
-+ 
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,7,0))
-++	return wilc_add_beacon(vif, 0, 0, &info->beacon);
-++#else
-+ 	return wilc_add_beacon(vif, 0, 0, beacon);
-++#endif
-+ }
-+ 
-+ static int stop_ap(struct wiphy *wiphy, struct net_device *dev
-+-- 
-+2.39.5
-+
-diff --git a/package/wilc-driver/0009-Fix-build-with-Linux-6.8.patch b/package/wilc-driver/0009-Fix-build-with-Linux-6.8.patch
-new file mode 100644
-index 0000000000..2bafd53a9a
---- /dev/null
-+++ b/package/wilc-driver/0009-Fix-build-with-Linux-6.8.patch
-@@ -0,0 +1,34 @@
-+From 90e679f1b7caad02e68fa8672be6569eb1b2b76f Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Thu, 17 Apr 2025 18:56:55 +0200
-+Subject: [PATCH] Fix build with Linux 6.8
-+
-+With commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d26270061ae66b915138af7cd73ca6f8b85e6b44
-+strlcpy() has been superseded in favor of strscpy() so let's #define
-+strlcpy as strscpy if Linux version 6.8+
-+
-+Upstream: https://github.com/embeddedTS/wilc3000-external-module/pull/8
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ mon.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/mon.c b/mon.c
-+index 2c9c2d9..20b7e20 100644
-+--- a/mon.c
-++++ b/mon.c
-+@@ -6,6 +6,10 @@
-+ 
-+ #include "cfg80211.h"
-+ 
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 8, 0))
-++#define strlcpy strscpy
-++#endif
-++
-+ struct wilc_wfi_radiotap_hdr {
-+ 	struct ieee80211_radiotap_header hdr;
-+ 	u8 rate;
-+-- 
-+2.39.5
-+
-diff --git a/package/wilc-driver/0010-Fix-build-with-Linux-6.10.patch b/package/wilc-driver/0010-Fix-build-with-Linux-6.10.patch
-new file mode 100644
-index 0000000000..08444b06e2
---- /dev/null
-+++ b/package/wilc-driver/0010-Fix-build-with-Linux-6.10.patch
-@@ -0,0 +1,55 @@
-+From 684eb3e40c88ee7a2cd4417a12b9b27a35e86655 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Thu, 17 Apr 2025 18:41:07 +0200
-+Subject: [PATCH] Fix build with Linux 6.10
-+
-+During commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9b163e0d330debbf7dcc14b2c3e2dc19a3b50a1d
-+is_dma_mapped member has been dropped since it was not used anymore. The
-+DMA mapping is done directly in single spi drivers in case it's supported
-+so having is_dma_mapped set to 1 lead to code breakage. So we can consider
-+it always as 0 and basically guard it if Linux version is 6.10+
-+
-+Upstream: https://github.com/embeddedTS/wilc3000-external-module/pull/8
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ spi.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/spi.c b/spi.c
-+index f7b43e2..be616f4 100644
-+--- a/spi.c
-++++ b/spi.c
-+@@ -338,7 +338,9 @@ static int wilc_spi_tx(struct wilc *wilc, u8 *b, u32 len)
-+ 		memset(&msg, 0, sizeof(msg));
-+ 		spi_message_init(&msg);
-+ 		msg.spi = spi;
-++#if KERNEL_VERSION(6, 10, 0) > LINUX_VERSION_CODE
-+ 		msg.is_dma_mapped = USE_SPI_DMA;
-++#endif
-+ 		spi_message_add_tail(&tr, &msg);
-+ 
-+ 		ret = spi_sync(spi, &msg);
-+@@ -385,7 +387,9 @@ static int wilc_spi_rx(struct wilc *wilc, u8 *rb, u32 rlen)
-+ 		memset(&msg, 0, sizeof(msg));
-+ 		spi_message_init(&msg);
-+ 		msg.spi = spi;
-++#if KERNEL_VERSION(6, 10, 0) > LINUX_VERSION_CODE
-+ 		msg.is_dma_mapped = USE_SPI_DMA;
-++#endif
-+ 		spi_message_add_tail(&tr, &msg);
-+ 
-+ 		ret = spi_sync(spi, &msg);
-+@@ -427,7 +431,9 @@ static int wilc_spi_tx_rx(struct wilc *wilc, u8 *wb, u8 *rb, u32 rlen)
-+ 		memset(&msg, 0, sizeof(msg));
-+ 		spi_message_init(&msg);
-+ 		msg.spi = spi;
-++#if KERNEL_VERSION(6, 10, 0) > LINUX_VERSION_CODE
-+ 		msg.is_dma_mapped = USE_SPI_DMA;
-++#endif
-+ 
-+ 		spi_message_add_tail(&tr, &msg);
-+ 		ret = spi_sync(spi, &msg);
-+-- 
-+2.39.5
-+
+diff --git a/board/beagleboard/beaglebone/patches/linux/linux.hash b/board/beagleboard/beaglebone/patches/linux/linux.hash
+index b7d44129410e..5f6bd2bec165 100644
+--- a/board/beagleboard/beaglebone/patches/linux/linux.hash
++++ b/board/beagleboard/beaglebone/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  c6ee813cc48fe7e308c149798100d621514e832da507e34d1dfd8247ef9ae39f  linux-6.6.58-ti-arm32-r10.tar.gz
++sha256  203743e32c9fba3bb9f965c1b3799977961a9d25071d6d482d96d74adfdbaadb  linux-6.12.17-ti-arm32-r9.tar.gz
+diff --git a/board/beagleboard/beaglebone/patches/uboot/uboot.hash b/board/beagleboard/beaglebone/patches/uboot/uboot.hash
+index 50674352d71d..80ea21b7cb4c 100644
+--- a/board/beagleboard/beaglebone/patches/uboot/uboot.hash
++++ b/board/beagleboard/beaglebone/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
++sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index ddeb221e8641..b4035215dea1 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -1,7 +1,7 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ BR2_ARM_FPU_VFPV3=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/beagleboard/beaglebone/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beagleboard/beaglebone/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.6.58-ti-arm32-r10)/linux-6.6.58-ti-arm32-r10.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.12.17-ti-arm32-r9)/linux-6.12.17-ti-arm32-r9.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/omap/am335x-evm ti/omap/am335x-bone ti/omap/am335x-boneblack ti/omap/am335x-bonegreen ti/omap/am335x-evmsk ti/omap/am335x-boneblue ti/omap/am335x-boneblack-wireless ti/omap/am335x-bonegreen-wireless"
+@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 -- 
-2.39.5
+2.43.0
 
 _______________________________________________
 buildroot mailing list
