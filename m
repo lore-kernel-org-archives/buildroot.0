@@ -4,82 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F9FEC369AB
-	for <buildroot@archiver.kernel.org>; Fri, 18 Apr 2025 10:40:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABF09C369AB
+	for <buildroot@archiver.kernel.org>; Fri, 18 Apr 2025 14:14:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 139CD41E3B;
-	Fri, 18 Apr 2025 10:40:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24E0E40550;
+	Fri, 18 Apr 2025 14:14:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FPimfNWzRiLV; Fri, 18 Apr 2025 10:40:07 +0000 (UTC)
+ id G7jXfBvHAA2W; Fri, 18 Apr 2025 14:14:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D3A741E74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5344640561
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2D3A741E74;
-	Fri, 18 Apr 2025 10:40:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6313E228
- for <buildroot@buildroot.org>; Fri, 18 Apr 2025 10:40:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5344640561;
+	Fri, 18 Apr 2025 14:14:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 42E05228
+ for <buildroot@buildroot.org>; Fri, 18 Apr 2025 14:14:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 48C4F617B4
- for <buildroot@buildroot.org>; Fri, 18 Apr 2025 10:40:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3F84984C59
+ for <buildroot@buildroot.org>; Fri, 18 Apr 2025 14:14:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fw52x4PUkPgt for <buildroot@buildroot.org>;
- Fri, 18 Apr 2025 10:40:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 41680607FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41680607FE
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 41680607FE
- for <buildroot@buildroot.org>; Fri, 18 Apr 2025 10:40:04 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C954643280;
- Fri, 18 Apr 2025 10:40:00 +0000 (UTC)
-Date: Fri, 18 Apr 2025 12:39:59 +0200
-To: Thomas Perale <thomas.perale@mind.be>
-Message-ID: <20250418123959.3307e037@windsurf>
-In-Reply-To: <221f0412-b320-4ade-8936-9ae8d941ebf7@mind.be>
-References: <20250415195547.199428-1-thomas.perale@mind.be>
- <87tt6o3oxx.fsf@dell.be.48ers.dk>
- <065809af-e4b6-4bd8-9f53-49d39fab38af@rnout.be>
- <4b029329-2258-428d-80c9-315dbd6335be@essensium.com>
- <20250416215812.6a8ae1a5@windsurf>
- <b864a02f-c98a-48f5-863a-a7bd800809f6@mind.be>
- <20250416224034.3eb04598@windsurf>
- <221f0412-b320-4ade-8936-9ae8d941ebf7@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ArylQ2ISIo_6 for <buildroot@buildroot.org>;
+ Fri, 18 Apr 2025 14:14:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::b30; helo=mail-yb1-xb30.google.com;
+ envelope-from=josephzik@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 41D8B84C61
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41D8B84C61
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com
+ [IPv6:2607:f8b0:4864:20::b30])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 41D8B84C61
+ for <buildroot@buildroot.org>; Fri, 18 Apr 2025 14:14:15 +0000 (UTC)
+Received: by mail-yb1-xb30.google.com with SMTP id
+ 3f1490d57ef6-e728740b637so205394276.0
+ for <buildroot@buildroot.org>; Fri, 18 Apr 2025 07:14:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1744985654; x=1745590454;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=5YWDVjSu4uPxrbbHe/DFBv7OlBsgTNA+3xrQgAOoryU=;
+ b=R3+OmWlPbO9FBCTJHxb5o+ghcWhh5VCoWgoBQpuT+4EO43tSB0qv4ZKwvjHkzyurAO
+ zHi1RHYhVWcKZMV+rvDeK00b5max46pzsbItJiDiJDfdcw9pVZgKj+vUeIGKe2av2SjN
+ Wdun5zdGEgYin7QP321lDc1KrK/+7YdH462wlS1+BE0Xn3NKKNYf+SsDyhHI3hINDjYM
+ XfReHNBOXvRQfRbx1RZeB/6EK8DJjFFjLpH0+JCYPM3BAVHv6VSwnFjW8knHQg6a9f+U
+ qBQyTmpo3ReS62gnWkZYxYlQWC2Ph/AK7AO2C7QZjtt4KIuFaobEfREdc5j3nDbUEjbD
+ Zkzg==
+X-Gm-Message-State: AOJu0YwNKyqGy4k8gX33ZfUfum+rCGFxtS/OX0hGsqBxsGMLXAtBdoBp
+ DVE94L9GRO1ev8S9cgiqLETnhP+Gj7MgyNOCxY4zI9c6nxKxZCuFep+iibNEgGtSzsgPaU4tTxD
+ JEqvrF9c/QM0HeUXlmqvGSQB0P/0N2F9UmyE=
+X-Gm-Gg: ASbGncvxx8uN3qSFyR/VROxUlfGFA9JWF0FupHcHGliLQ5C/e4RgX9dihE7w0/d5sBR
+ 1RvlYqiZvJ6J0D6jKOTSR+mpvo6TtAPnbGm/WzTQWFXHTQ4iluRmBCRlcbeBKA9n16hwsaIGrkO
+ PuUoVX/sWE29szqPWlyfAm
+X-Google-Smtp-Source: AGHT+IErON0pp4PDWmSIgTMIDfSoHQxHpG/Lzw3DjzOJBgb0rSWda4Ss0Sz/z4x4IjElJgWV6CPS90dn1qo3XF3CzuM=
+X-Received: by 2002:a05:6902:480e:b0:e6d:ebdf:d849 with SMTP id
+ 3f1490d57ef6-e7297e98e9cmr1555384276.5.1744985653860; Fri, 18 Apr 2025
+ 07:14:13 -0700 (PDT)
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeduleefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepffeujedtheegtddvgfekkefggedugfeihfefvdeulefghfdtvdelgeevhefggfeknecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhnvghtpdhgihhthhhusgdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepledvrddufeegrddvtdekrddufeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledvrddufeegrddvtdekrddufeegpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeipdhrtghpthhtohepthhhohhmrghsrdhpvghrrghlvgesmhhinhgurdgsvgdprhgtphhtthhopehthhhomhgrshdrphgvrhgrlhgvsegvshhsvghnshhiuhhmrdgtohhmpdhrtghpthhtoheprghrnhhouhhtsehrnhhouhhtrdgsvgdprhgtphhtthhop
- ehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegthhhrihhsthhirghnsegrphgvrhhtuhhrvgdruhhs
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+From: Joseph Zikusooka <josephzik@gmail.com>
+Date: Fri, 18 Apr 2025 17:14:02 +0300
+X-Gm-Features: ATxdqUHNkwbb-jV4XnEj079vASEUhLxkVF2KV6S0_yfglsW6nLI6O3almPQZSQQ
+Message-ID: <CAPWx8vsoJUt8YMJG1aUqFRK1=yizNbgjVjGL1Q1+9ygjJGnZLA@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1744972801;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=rirNFAZe7+9uEZeUW4gRTorLoC8fALgp+jRkkxviXnc=;
- b=jqsAACzK9kcbsmHrq2i56pXVrnf5Mfx8jmt+NS1O1ONNSxGXnOYruGQ16woHjUPgMErKFL
- p+2t/SpsAX1MM+abc7IqYxSjiHxrCqeqRU3WDkSf9uxlk1E7xtObuy7RzWjGhcQ4J/gzv5
- MCF6an7OWPC9ezjldwesFQc9QbP+m97eDu/9AtCyXqqlqfehrob1vyZryPGOasLlzvZpeR
- X/ydEaI4o2nA5v5OvzwM1FmNnAA0nrON1jpKbpIkwdRCnQD+iRMftDUMiNHm1KKopvhTVK
- 7w5hEvkbhCowjggcdFt6b+Z/sxJ37YPVj+ZVf80TtFBpzmuqtc0zntaiqZSFBg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1744985654; x=1745590454; darn=buildroot.org;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=5YWDVjSu4uPxrbbHe/DFBv7OlBsgTNA+3xrQgAOoryU=;
+ b=GHtPH1YiFxAOGDFGOHHxBeJP0y1efcRvjpxf2KR8WhA9piMyn7HoFjInAfB6INvNsF
+ C317mAwEPnoWgrxWmXINpGtenADcM6UF0BET30nteBQGTsJ18JO/R+PlIJFoQpIqjgso
+ LyX0N7UVnjM7VrdBearmQqGYel2vQ4kZCU9baz2++fQR+R1GDlfU4Hrrd5/3WNY9O8hm
+ Yz1U/bqmH+rfsnh7rYbkDV/tgpgLqwS8Geg+6urXXpmYgYrG+sBdrJFrnyPf4j3CgfiV
+ ALkFN1C+HRlaI4VB/+3R9pk5z7adm8X8P9C8PXRDCgI1pnLh1HF9nXXz/h9lGvqrMz1M
+ NjHQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jqsAACzK
-Subject: Re: [Buildroot] [PATCH 0/7] Add PURL support
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=GHtPH1Yi
+Subject: [Buildroot] host-m4 build on Fedora 42 fails
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,48 +98,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Perale via buildroot <buildroot@buildroot.org>,
- Christian Stewart <christian@aperture.us>,
- Thomas Perale <thomas.perale@essensium.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Recently upgraded to Fedora 42 and since then I am unable to compile
+buildroot.  Make fails at the host-m4 package.
+I looked up several sources and found this:
+https://lists.gnu.org/archive/html/m4-discuss/2025-02/msg00000.html
 
-On Wed, 16 Apr 2025 22:49:15 +0200
-Thomas Perale <thomas.perale@mind.be> wrote:
+The work around on Fedora 42 was to build m4 with the environment
+flags as follows:
+CFLAGS='-std=gnu17' ./configure && make
 
-> Just to say that with the PURL added to the Django package I got 
-> notified for the CVE.
+I tried to patch m4.mk as follows, but the build is still failing.  Any ideas?
 
-But with what tool? Right now our "reference" tool to track CVEs in
-Buildroot is support/scripts/pkg-stats, which renders:
+--- a/m4.mk     2025-04-18 17:02:01.174923317 +0300
++++ b/m4.mk     2025-04-18 17:03:29.285694673 +0300
+@@ -10,4 +10,7 @@
+ M4_LICENSE = GPL-3.0+
+ M4_LICENSE_FILES = COPYING
 
-  http://autobuild.buildroot.net/stats/master.html
++M4_CONF_ENV = CFLAGS="-std=gnu17"
++M4_MAKE_ENV = CFLAGS="-std=gnu17"
++
+ $(eval $(host-autotools-package))
 
-And which uses the CVE database from
-https://github.com/fkie-cad/nvd-json-data-feeds/.
-
-So I'm still not sure to understand your "DependencyTrack uses NVD
-annotation unfortunately". Could you clarify?
-
-Right now, packages have a CPE ID, which we use to match
-against https://github.com/fkie-cad/nvd-json-data-feeds/ as part
-of the pkg-stats tool. If we want to add more identifiers in packages,
-it has to be clear with which CVE database this works, and how this is
-going to interact with pkg-stats (and if it doesn't interact, why).
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Joseph Zikusooka (ZIK)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
