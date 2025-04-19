@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D589C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:44:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01FD7C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:44:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0E837614A2;
-	Mon, 19 May 2025 10:44:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A90F614D7;
+	Mon, 19 May 2025 10:44:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sf1uGC9g--R6; Mon, 19 May 2025 10:44:43 +0000 (UTC)
+ id La6dJu5tThKf; Mon, 19 May 2025 10:44:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30E8A614C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41C2D614CB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 30E8A614C2;
-	Mon, 19 May 2025 10:44:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41C2D614CB;
+	Mon, 19 May 2025 10:44:45 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C070E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:52 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 16D741BF
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 64DFC4103B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 88C45417D8
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uiBcsbLPQ6mq for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:53 +0000 (UTC)
+ id NS1FUgLRPFWs for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C03041083
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFC534179D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7C03041083
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DFC534179D
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 79BC28652C; Mon, 19 May 2025 10:39:53 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id DDD25872E7; Mon, 19 May 2025 10:39:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 20 Apr 2025 18:44:09 +0200
+Date: Sat, 19 Apr 2025 16:08:07 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a4f0d6ed0c979dec52a93dd8b895a92af7fdc709
-X-Git-Newrev: 18630db8e822120d0d4b9f37fa7c0d901f55d8e9
+X-Git-Oldrev: 8fd537ae0550c3f66e575cfd380cad5334821046
+X-Git-Newrev: f5e7cefe778dc65b6e36a4b2af94018ed9005d0c
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103953.79BC28652C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/syslog-ng: bump to
- 4.8.1
+Message-Id: <20250519103951.DDD25872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/iptables: backport fix
+ for interface comparisons in `-C` commands
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,62 +58,224 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4332535196411215908=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18630db8e822120d0d4b9f37fa7c0d901f55d8e9
+--===============4332535196411215908==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=f5e7cefe778dc65b6e36a4b2af94018ed9005d0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Announcement:
- - https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-4.8.0
- - https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-4.8.1
+Since iptables v1.8.11, `iptables -C` commands return unexpected zero status
+even for cases when the rules don't exist. This breaks e.g. standard Docker
+operation, where checking for existing rules is used extensively when creating
+networks.
 
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+The patch fixing the behavior is available upstream - apply it to v1.8.11
+before a newer version is available.
+
+Signed-off-by: Jan Čermák <sairon@sairon.cz>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/syslog-ng/syslog-ng.conf | 2 +-
- package/syslog-ng/syslog-ng.hash | 2 +-
- package/syslog-ng/syslog-ng.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ ...t-fix-interface-comparisons-in-C-commands.patch | 175 +++++++++++++++++++++
+ 1 file changed, 175 insertions(+)
 
-diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
-index bab628f521..f6d0e83433 100644
---- a/package/syslog-ng/syslog-ng.conf
-+++ b/package/syslog-ng/syslog-ng.conf
-@@ -1,4 +1,4 @@
--@version: 4.7
-+@version: 4.8
- 
- source s_sys {
- 	file("/proc/kmsg" program_override("kernel"));
-diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
-index 7f829c8b13..4ca6a3e33e 100644
---- a/package/syslog-ng/syslog-ng.hash
-+++ b/package/syslog-ng/syslog-ng.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  5477189a2d12325aa4faebfcf59f5bdd9084234732f0c3ec16dd253847dacf1c  syslog-ng-4.7.1.tar.gz
-+sha256  e8b8b98c60a5b68b25e3462c4104c35d05b975e6778d38d8a81b8ff7c0e64c5b  syslog-ng-4.8.1.tar.gz
- sha256  d7d51f8d0f6ee9757a371080e7f5fa19ac73afbef14db6e981705cf1ec813d6b  COPYING
- sha256  ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 57ee46ce05..6f608eed0d 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, please check at runtime if the version in
- # syslog-ng.conf header needs to be updated
--SYSLOG_NG_VERSION = 4.7.1
-+SYSLOG_NG_VERSION = 4.8.1
- SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
- SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
- SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
+diff --git a/package/iptables/0001-nft-fix-interface-comparisons-in-C-commands.patch b/package/iptables/0001-nft-fix-interface-comparisons-in-C-commands.patch
+new file mode 100644
+index 0000000000..308f75bbd8
+--- /dev/null
++++ b/package/iptables/0001-nft-fix-interface-comparisons-in-C-commands.patch
+@@ -0,0 +1,175 @@
++From 1f11d1004923eb941c9b4b33c8021dd9c4a2f3da Mon Sep 17 00:00:00 2001
++From: Jeremy Sowden <jeremy@azazel.net>
++Date: Mon, 18 Nov 2024 13:56:50 +0000
++Subject: [PATCH] nft: fix interface comparisons in `-C` commands
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Commit 9ccae6397475 ("nft: Leave interface masks alone when parsing from
++kernel") removed code which explicitly set interface masks to all ones.  The
++result of this is that they are zero.  However, they are used to mask interfaces
++in `is_same_interfaces`.  Consequently, the masked values are alway zero, the
++comparisons are always true, and check commands which ought to fail succeed:
++
++  # iptables -N test
++  # iptables -A test -i lo \! -o lo -j REJECT
++  # iptables -v -L test
++  Chain test (0 references)
++   pkts bytes target     prot opt in     out     source               destination
++      0     0 REJECT     all  --  lo     !lo     anywhere             anywhere             reject-with icmp-port-unreachable
++  # iptables -v -C test -i abcdefgh \! -o abcdefgh -j REJECT
++  REJECT  all opt -- in lo out !lo  0.0.0.0/0  -> 0.0.0.0/0   reject-with icmp-port-unreachable
++
++Remove the mask parameters from `is_same_interfaces`.  Add a test-case.
++
++Fixes: 9ccae6397475 ("nft: Leave interface masks alone when parsing from kernel")
++Signed-off-by: Jeremy Sowden <jeremy@azazel.net>
++Signed-off-by: Phil Sutter <phil@nwl.cc>
++
++Upstream: https://git.netfilter.org/iptables/commit/?id=40406dbfaefbc204134452b2747bae4f6a122848
++Signed-off-by: Jan Čermák <sairon@sairon.cz>
++---
++ iptables/nft-arp.c                            | 10 ++----
++ iptables/nft-ipv4.c                           |  4 +--
++ iptables/nft-ipv6.c                           |  6 +---
++ iptables/nft-shared.c                         | 36 +++++--------------
++ iptables/nft-shared.h                         |  6 +---
++ .../nft-only/0020-compare-interfaces_0        |  9 +++++
++ 6 files changed, 22 insertions(+), 49 deletions(-)
++ create mode 100755 iptables/tests/shell/testcases/nft-only/0020-compare-interfaces_0
++
++diff --git a/iptables/nft-arp.c b/iptables/nft-arp.c
++index 264864c3..c11d64c3 100644
++--- a/iptables/nft-arp.c
+++++ b/iptables/nft-arp.c
++@@ -385,14 +385,8 @@ static bool nft_arp_is_same(const struct iptables_command_state *cs_a,
++ 		return false;
++ 	}
++ 
++-	return is_same_interfaces(a->arp.iniface,
++-				  a->arp.outiface,
++-				  (unsigned char *)a->arp.iniface_mask,
++-				  (unsigned char *)a->arp.outiface_mask,
++-				  b->arp.iniface,
++-				  b->arp.outiface,
++-				  (unsigned char *)b->arp.iniface_mask,
++-				  (unsigned char *)b->arp.outiface_mask);
+++	return is_same_interfaces(a->arp.iniface, a->arp.outiface,
+++				  b->arp.iniface, b->arp.outiface);
++ }
++ 
++ static void nft_arp_save_chain(const struct nftnl_chain *c, const char *policy)
++diff --git a/iptables/nft-ipv4.c b/iptables/nft-ipv4.c
++index 74092875..0c8bd291 100644
++--- a/iptables/nft-ipv4.c
+++++ b/iptables/nft-ipv4.c
++@@ -113,9 +113,7 @@ static bool nft_ipv4_is_same(const struct iptables_command_state *a,
++ 	}
++ 
++ 	return is_same_interfaces(a->fw.ip.iniface, a->fw.ip.outiface,
++-				  a->fw.ip.iniface_mask, a->fw.ip.outiface_mask,
++-				  b->fw.ip.iniface, b->fw.ip.outiface,
++-				  b->fw.ip.iniface_mask, b->fw.ip.outiface_mask);
+++				  b->fw.ip.iniface, b->fw.ip.outiface);
++ }
++ 
++ static void nft_ipv4_set_goto_flag(struct iptables_command_state *cs)
++diff --git a/iptables/nft-ipv6.c b/iptables/nft-ipv6.c
++index b184f8af..4dbb2af2 100644
++--- a/iptables/nft-ipv6.c
+++++ b/iptables/nft-ipv6.c
++@@ -99,11 +99,7 @@ static bool nft_ipv6_is_same(const struct iptables_command_state *a,
++ 	}
++ 
++ 	return is_same_interfaces(a->fw6.ipv6.iniface, a->fw6.ipv6.outiface,
++-				  a->fw6.ipv6.iniface_mask,
++-				  a->fw6.ipv6.outiface_mask,
++-				  b->fw6.ipv6.iniface, b->fw6.ipv6.outiface,
++-				  b->fw6.ipv6.iniface_mask,
++-				  b->fw6.ipv6.outiface_mask);
+++				  b->fw6.ipv6.iniface, b->fw6.ipv6.outiface);
++ }
++ 
++ static void nft_ipv6_set_goto_flag(struct iptables_command_state *cs)
++diff --git a/iptables/nft-shared.c b/iptables/nft-shared.c
++index 6775578b..2c29e68f 100644
++--- a/iptables/nft-shared.c
+++++ b/iptables/nft-shared.c
++@@ -220,36 +220,16 @@ void add_l4proto(struct nft_handle *h, struct nftnl_rule *r,
++ }
++ 
++ bool is_same_interfaces(const char *a_iniface, const char *a_outiface,
++-			unsigned const char *a_iniface_mask,
++-			unsigned const char *a_outiface_mask,
++-			const char *b_iniface, const char *b_outiface,
++-			unsigned const char *b_iniface_mask,
++-			unsigned const char *b_outiface_mask)
+++			const char *b_iniface, const char *b_outiface)
++ {
++-	int i;
++-
++-	for (i = 0; i < IFNAMSIZ; i++) {
++-		if (a_iniface_mask[i] != b_iniface_mask[i]) {
++-			DEBUGP("different iniface mask %x, %x (%d)\n",
++-			a_iniface_mask[i] & 0xff, b_iniface_mask[i] & 0xff, i);
++-			return false;
++-		}
++-		if ((a_iniface[i] & a_iniface_mask[i])
++-		    != (b_iniface[i] & b_iniface_mask[i])) {
++-			DEBUGP("different iniface\n");
++-			return false;
++-		}
++-		if (a_outiface_mask[i] != b_outiface_mask[i]) {
++-			DEBUGP("different outiface mask\n");
++-			return false;
++-		}
++-		if ((a_outiface[i] & a_outiface_mask[i])
++-		    != (b_outiface[i] & b_outiface_mask[i])) {
++-			DEBUGP("different outiface\n");
++-			return false;
++-		}
+++	if (strncmp(a_iniface, b_iniface, IFNAMSIZ)) {
+++		DEBUGP("different iniface\n");
+++		return false;
+++	}
+++	if (strncmp(a_outiface, b_outiface, IFNAMSIZ)) {
+++		DEBUGP("different outiface\n");
+++		return false;
++ 	}
++-
++ 	return true;
++ }
++ 
++diff --git a/iptables/nft-shared.h b/iptables/nft-shared.h
++index 51d1e460..b57aee1f 100644
++--- a/iptables/nft-shared.h
+++++ b/iptables/nft-shared.h
++@@ -105,11 +105,7 @@ void add_l4proto(struct nft_handle *h, struct nftnl_rule *r, uint8_t proto, uint
++ void add_compat(struct nftnl_rule *r, uint32_t proto, bool inv);
++ 
++ bool is_same_interfaces(const char *a_iniface, const char *a_outiface,
++-			unsigned const char *a_iniface_mask,
++-			unsigned const char *a_outiface_mask,
++-			const char *b_iniface, const char *b_outiface,
++-			unsigned const char *b_iniface_mask,
++-			unsigned const char *b_outiface_mask);
+++			const char *b_iniface, const char *b_outiface);
++ 
++ void __get_cmp_data(struct nftnl_expr *e, void *data, size_t dlen, uint8_t *op);
++ void get_cmp_data(struct nftnl_expr *e, void *data, size_t dlen, bool *inv);
++diff --git a/iptables/tests/shell/testcases/nft-only/0020-compare-interfaces_0 b/iptables/tests/shell/testcases/nft-only/0020-compare-interfaces_0
++new file mode 100755
++index 00000000..278cd648
++--- /dev/null
+++++ b/iptables/tests/shell/testcases/nft-only/0020-compare-interfaces_0
++@@ -0,0 +1,9 @@
+++#!/bin/bash
+++
+++[[ $XT_MULTI == *xtables-nft-multi ]] || { echo "skip $XT_MULTI"; exit 0; }
+++
+++$XT_MULTI iptables -N test
+++$XT_MULTI iptables -A test -i lo \! -o lo -j REJECT
+++$XT_MULTI iptables -C test -i abcdefgh \! -o abcdefgh -j REJECT 2>/dev/null && exit 1
+++
+++exit 0
+
+--===============4332535196411215908==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4332535196411215908==--
