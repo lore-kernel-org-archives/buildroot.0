@@ -1,52 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21316C369BD
-	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 14:47:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21BCDC369BD
+	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 15:01:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D31BE6069F;
-	Sat, 19 Apr 2025 14:47:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CEE7C81253;
+	Sat, 19 Apr 2025 15:01:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zvSQ0N7bNx-K; Sat, 19 Apr 2025 14:47:18 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OWX9kOK6Ob93; Sat, 19 Apr 2025 15:01:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 138CB60706
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD4D08122C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 138CB60706;
-	Sat, 19 Apr 2025 14:47:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AD4D08122C;
+	Sat, 19 Apr 2025 15:01:25 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 49A5922F
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 14:47:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 917E0228
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 15:01:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3A91440620
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 14:47:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 778B1406C1
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 15:01:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RQqzB2PwnwnZ for <buildroot@buildroot.org>;
- Sat, 19 Apr 2025 14:47:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id eOauPPHG4UEf for <buildroot@buildroot.org>;
+ Sat, 19 Apr 2025 15:01:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83AAA4061F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 83AAA4061F
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 14:47:16 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6B89885B76; Sat, 19 Apr 2025 14:47:16 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 19 Apr 2025 16:44:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3e2e59340912a6788586a7216ac34df4de5ca1db
-X-Git-Newrev: d0994fd66d9bfa18e3ab3b8fc634ae084621e1ba
-X-Patchwork-Hint: ignore
-Message-Id: <20250419144716.6B89885B76@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/stm32f769_disco_sd: bump Linux to
- 5.15.179 and U-Boot to 2025.04
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 77155406B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77155406B8
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 77155406B8
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 15:01:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 37C3B439D8;
+ Sat, 19 Apr 2025 15:01:20 +0000 (UTC)
+Date: Sat, 19 Apr 2025 17:01:19 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, linux-amarula@amarulasolutions.com
+Message-ID: <20250419170119.6e4490ea@windsurf>
+In-Reply-To: <20250411061818.2643355-1-dario.binacchi@amarulasolutions.com>
+References: <20250411061818.2643355-1-dario.binacchi@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeehfeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegurghrihhordgsihhnrggttghhihesrghmrghruhhlrghsohhluhhtihhonhhsrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdro
+ hhrghdprhgtphhtthhopehlihhnuhigqdgrmhgrrhhulhgrsegrmhgrrhhulhgrshholhhuthhiohhnshdrtghomh
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1745074880;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=jMFFohE8jDEtcJpbbATakHy1wnWzumZ3X5uHLMhuV5o=;
+ b=oHwsKK66vyQ8p8CNQibD+N/ifjYrXPGVdVSd6i27P92zY6j0AQybaNpbanAgsIpfnno3Mn
+ NW3CD+b5LT8evadjjcQ45dCHKbQ6r5XCPRCHdrkyTGIgPNl8+mGKIZ9BGSBQP1eZ+gYNNj
+ L2lz4AGJe3LUfGMJQ8FB7ZiP4xTItRvJ7pV8FjHn8dFuWQQWWL60ZmaK3ABEl38D49zYCy
+ sZmZLJ7UMnzY0SleovQQxBgp6LtcuGoGR9FZNuQ2wvgxwkXz3yFuFlobLd3kRnq3kwJVfC
+ rNWYMzpCo5tAnhNkOsy82OJ9WzTt9kc9HOwKlrMjlk1bkcralYmYYwkl4NFqdg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=oHwsKK66
+Subject: Re: [Buildroot] [PATCH 1/1] configs/stm32f769_disco_sd: bump Linux
+ to 5.15.179 and U-Boot to 2025.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,64 +88,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d0994fd66d9bfa18e3ab3b8fc634ae084621e1ba
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 11 Apr 2025 08:18:18 +0200
+Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
 
-The patch bumps the Linux kernel to version 5.15.179 and U-Boot to
-version 2025.04.
+> The patch bumps the Linux kernel to version 5.15.179 and U-Boot to
+> version 2025.04.
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ---
+>  .../stm32f769-disco/patches/linux/linux.hash                  | 2 +-
+>  .../stm32f769-disco/patches/uboot/uboot.hash                  | 2 +-
+>  configs/stm32f769_disco_sd_defconfig                          | 4 ++--
+>  3 files changed, 4 insertions(+), 4 deletions(-)
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash | 2 +-
- board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash | 2 +-
- configs/stm32f769_disco_sd_defconfig                              | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Applied to master, thanks.
 
-diff --git a/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
-index 57c69adb36..4e0aeb77d8 100644
---- a/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  a84ab5328c8a5a0e5c4a39a06b07479a7769c73af49a4c9ce59eeb644829d3b1  linux-5.15.176.tar.xz
-+sha256  9319a47b1e9b5d344ff6015431856d0c9640e4faedc527c87f9129061a27136f  linux-5.15.179.tar.xz
-diff --git a/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
-index 50674352d7..80ea21b7cb 100644
---- a/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
-+++ b/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
-+sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
-diff --git a/configs/stm32f769_disco_sd_defconfig b/configs/stm32f769_disco_sd_defconfig
-index 25b79f0de1..e0c592ad82 100644
---- a/configs/stm32f769_disco_sd_defconfig
-+++ b/configs/stm32f769_disco_sd_defconfig
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32f769-disco/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.176"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.179"
- BR2_LINUX_KERNEL_DEFCONFIG="stm32"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0xc0000000.config board/stmicroelectronics/stm32f769-disco/linux-sd.fragment"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-@@ -23,7 +23,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f769-disco"
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_PACKAGE_HOST_GENIMAGE=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
