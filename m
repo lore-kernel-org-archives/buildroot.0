@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D43F4C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:53:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A63EC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:53:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14C8E70762;
-	Mon, 19 May 2025 10:53:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5C72784340;
+	Mon, 19 May 2025 10:53:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KAYwdC17IHlM; Mon, 19 May 2025 10:53:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Wm6P7DZKolSG; Mon, 19 May 2025 10:53:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 292877075D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F94E8433C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 292877075D;
-	Mon, 19 May 2025 10:53:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F94E8433C;
+	Mon, 19 May 2025 10:53:04 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 095E2D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:26 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FD21D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ED65441E5D
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0D76941E60
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ncJrqCV1Nu2N for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:06 +0000 (UTC)
+ id qHTE-CpUm00p for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A915240E07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 26C95411D0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A915240E07
+ by smtp4.osuosl.org (Postfix) with ESMTP id 26C95411D0
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A7D0A84BBD; Mon, 19 May 2025 10:39:52 +0000 (UTC)
+ id 1FAA281E90; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 19 Apr 2025 22:14:59 +0200
+Date: Sat, 19 Apr 2025 16:34:59 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9e627c1628438818ec3bd8638bd1e3400541a85e
-X-Git-Newrev: 6a47aa648a15b5c0b3d47767e423ccd10f13d3af
+X-Git-Oldrev: 2ef9e7ff57e86e410c6b638bf74c5bf5f414a31d
+X-Git-Newrev: 7b9a021dfd7f3ea9c17f2ce354c509659adfa099
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103952.A7D0A84BBD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/webkitgtk: bump to
- 2.48.1
+Message-Id: <20250519103952.1FAA281E90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rtl8723ds: fix build
+ failure with Linux 6.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,110 +66,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a47aa648a15b5c0b3d47767e423ccd10f13d3af
+commit: https://git.buildroot.net/buildroot/commit/?id=7b9a021dfd7f3ea9c17f2ce354c509659adfa099
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This bumps webkit to the 2.48 stable series.
+Add local patch pending upstream to fix build failure with Linux 6.13
 
-WebKitGTK+ 2.48 highlights:
-https://webkitgtk.org/2025/04/08/webkitgtk-2.48.html
+Fixes:
+https://autobuild.buildroot.org/results/940e7f95fff017b8c7cffb778911ae0386980fa3
 
-News:
-- https://webkitgtk.org/2025/03/14/webkitgtk2.48.0-released.html
-- https://webkitgtk.org/2025/04/02/webkitgtk2.48.1-released.html
-
-And brings some security fixes:
-- https://webkitgtk.org/security/WSA-2025-0002.html
-- https://webkitgtk.org/security/WSA-2025-0003.html
-
-Also,
-
-- Raise the minimal GCC requirement [1],
-which should have been raised by the 2.46.4 bump.
-
-- Handle SPEECH_SYNTHESIS, which has been enabled
-by default in commit [2].
-
-[1] https://github.com/WebKit/WebKit/commit/682ac4ba74c53d0cd488c7a595096224a9abb036
-[2] https://github.com/WebKit/WebKit/commit/10381a8de938024f31935184af470ccbce0b22d9
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/webkitgtk/Config.in      | 6 +++---
- package/webkitgtk/webkitgtk.hash | 6 +++---
- package/webkitgtk/webkitgtk.mk   | 9 ++++++++-
- 3 files changed, 14 insertions(+), 7 deletions(-)
+ .../rtl8723ds/0001-Fix-build-with-Linux-6.13.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 3594299314..bcb4b12fa3 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -16,12 +16,12 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- 
--comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 10, host gcc >= 4.9"
-+comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 11, host gcc >= 4.9"
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_11 || \
- 		!BR2_HOST_GCC_AT_LEAST_4_9
- 	depends on BR2_USE_MMU
- 
-@@ -33,7 +33,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	depends on BR2_USE_WCHAR # icu, libsoup3
- 	depends on BR2_PACKAGE_LIBGTK3
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 96100d4c7c..fd9420bad9 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,6 +1,6 @@
--# From https://www.webkitgtk.org/releases/webkitgtk-2.46.4.tar.xz.sums
--sha1  10d4dbd222acec30b1d20ee3b7d02c0d9727c5a9  webkitgtk-2.46.4.tar.xz
--sha256  0eff5f0ab0a2872ec87df62bc32e3289c8af625716ac71e94b298d74e0374176  webkitgtk-2.46.4.tar.xz
-+# From https://www.webkitgtk.org/releases/webkitgtk-2.48.1.tar.xz.sums
-+sha1  f7939f920f92f6b1395b8573f069d3fb9c085b3f  webkitgtk-2.48.1.tar.xz
-+sha256  98efdf21c4cdca0fe0b73ab5a8cb52093b5aa52d9b1b016a93f71dbfa1eb258f  webkitgtk-2.48.1.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index ec63d093b7..2c22bfb607 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.46.4
-+WEBKITGTK_VERSION = 2.48.1
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
-@@ -73,6 +73,13 @@ else
- WEBKITGTK_CONF_OPTS += -DENABLE_MINIBROWSER=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_FLITE),y)
-+WEBKITGTK_CONF_OPTS += -DENABLE_SPEECH_SYNTHESIS=ON
-+WEBKITGTK_DEPENDENCIES += flite
-+else
-+WEBKITGTK_CONF_OPTS += -DENABLE_SPEECH_SYNTHESIS=OFF
-+endif
+diff --git a/package/rtl8723ds/0001-Fix-build-with-Linux-6.13.patch b/package/rtl8723ds/0001-Fix-build-with-Linux-6.13.patch
+new file mode 100644
+index 0000000000..2350dc2e5e
+--- /dev/null
++++ b/package/rtl8723ds/0001-Fix-build-with-Linux-6.13.patch
+@@ -0,0 +1,35 @@
++From d71ab09447d9c3043203b5c3b5868e99bc4e0ca8 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Wed, 16 Apr 2025 22:00:59 +0200
++Subject: [PATCH] Fix build with Linux 6.13
 +
- ifeq ($(BR2_PACKAGE_LCMS2),y)
- WEBKITGTK_CONF_OPTS += -DUSE_LCMS=ON
- WEBKITGTK_DEPENDENCIES += lcms2
++Commit:
++https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9c4f830927750a2bf9fd9426a5257f0fdce3b662
++adds struct net_device *dev as argument to set_monitor_channel(), so let's
++add it to cfg80211_rtw_set_monitor_channel() according to Linux version.
++
++Upstream: https://github.com/lwfinger/rtl8723ds/pull/51
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ os_dep/linux/ioctl_cfg80211.c | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
++index 53ccef4..75391e7 100644
++--- a/os_dep/linux/ioctl_cfg80211.c
+++++ b/os_dep/linux/ioctl_cfg80211.c
++@@ -4520,7 +4520,10 @@ static int	cfg80211_rtw_set_channel(struct wiphy *wiphy
++ }
++ 
++ static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
++-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0))
+++	, struct net_device *dev
+++	, struct cfg80211_chan_def *chandef
+++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
++ 	, struct cfg80211_chan_def *chandef
++ #else
++ 	, struct ieee80211_channel *chan
++-- 
++2.39.5
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
