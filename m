@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22CE1C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:46:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E46B8C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:46:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF09283E16;
-	Mon, 19 May 2025 10:46:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ACFCC6164C;
+	Mon, 19 May 2025 10:46:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6iiGE6w1UDK0; Mon, 19 May 2025 10:46:15 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qQTrFmZF5kqZ; Mon, 19 May 2025 10:46:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 194D483E18
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE21E61636
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 194D483E18;
-	Mon, 19 May 2025 10:46:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 168F1D4
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE21E61636;
+	Mon, 19 May 2025 10:46:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 369A8D4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3824741207
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF84F405C8
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DxVLgVxSG9xn for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zYsBKE0zSxKr for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1518840E16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2996C417C4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1518840E16
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2996C417C4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 139B884A21; Mon, 19 May 2025 10:39:47 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 254AC84BBD; Mon, 19 May 2025 10:39:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 2 Apr 2025 21:27:39 +0200
+Date: Sat, 19 Apr 2025 23:41:08 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a7b88938eac47aa05f591a63c687aef6f646b92c
-X-Git-Newrev: 68d0da4ba76fe016d0683fbe92b3def67c769745
+X-Git-Oldrev: 55718ca3cfe5f7c317b03f70e353e2712c656dff
+X-Git-Newrev: 19c43de34f86565678206f49796c8500ab187602
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103947.139B884A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/linux-firmware: add
- option for Intel NPU firmware
+Message-Id: <20250519103953.254AC84BBD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/tmux: bump to version
+ 3.5a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,63 +58,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68d0da4ba76fe016d0683fbe92b3def67c769745
+commit: https://git.buildroot.net/buildroot/commit/?id=19c43de34f86565678206f49796c8500ab187602
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add an option to install the firmware files for Intel Neural Processing
-Unit (NPU) device.
+For change log, see [1].
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+This commit adds the dependency to host-bison, which is needed since
+upstream commit [2], included since version 3.4. The optional dependency
+to jemalloc is also added, introduced since upstream commit [3],
+included since version 3.5.
+
+[1] https://github.com/tmux/tmux/blob/3.5a/CHANGES
+[2] https://github.com/tmux/tmux/commit/00812c9053a0b1067f833925b726086a67d8528d
+[3] https://github.com/tmux/tmux/commit/3c2621b41b9e1466d2b06718a0a8514f5d10ded9
+
 Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/linux-firmware/Config.in         | 13 +++++++++++++
- package/linux-firmware/linux-firmware.mk |  5 +++++
- 2 files changed, 18 insertions(+)
+ package/tmux/tmux.hash |  2 +-
+ package/tmux/tmux.mk   | 11 +++++++++--
+ 2 files changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 2daeeb53b4..83da3676db 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -732,4 +732,17 @@ config BR2_PACKAGE_LINUX_FIRMWARE_RP2
+diff --git a/package/tmux/tmux.hash b/package/tmux/tmux.hash
+index b5c0fe58d0..c4eb508d78 100644
+--- a/package/tmux/tmux.hash
++++ b/package/tmux/tmux.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  e4fd347843bd0772c4f48d6dde625b0b109b7a380ff15db21e97c11a4dcdf93f  tmux-3.3a.tar.gz
++sha256  16216bd0877170dfcc64157085ba9013610b12b082548c7c9542cc0103198951  tmux-3.5a.tar.gz
+ sha256  c031bd37f464c534277814f6aa38686fa023d094261d57fd2545ad592bb53ccd  COPYING
+diff --git a/package/tmux/tmux.mk b/package/tmux/tmux.mk
+index 533a82bbad..4cceeabfc5 100644
+--- a/package/tmux/tmux.mk
++++ b/package/tmux/tmux.mk
+@@ -4,12 +4,19 @@
+ #
+ ################################################################################
  
- endmenu
- 
-+menu "NPU Firmware"
+-TMUX_VERSION = 3.3a
++TMUX_VERSION = 3.5a
+ TMUX_SITE = https://github.com/tmux/tmux/releases/download/$(TMUX_VERSION)
+ TMUX_LICENSE = ISC
+ TMUX_LICENSE_FILES = COPYING
+ TMUX_CPE_ID_VALID = YES
+-TMUX_DEPENDENCIES = libevent ncurses host-pkgconf
++TMUX_DEPENDENCIES = host-bison libevent ncurses host-pkgconf
 +
-+config BR2_PACKAGE_LINUX_FIRMWARE_INTEL_NPU
-+	bool "Intel NPU firmware"
-+	help
-+	  Firmware files for Intel NPU device. Intel NPU device is an
-+	  AI inference accelerator integrated with Intel client CPUs.
-+	  The full device name is Neural Processing Unit, but the
-+	  Linux kernel driver uses the older name Versatile Processing
-+	  Unit (VPU).
-+
-+endmenu
-+
- endif
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 0c0a2d5c4e..e5e1b32dfd 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -932,6 +932,11 @@ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_RP2),y)
- LINUX_FIRMWARE_FILES += rp2.fw
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_INTEL_NPU),y)
-+LINUX_FIRMWARE_FILES += intel/vpu/vpu_*.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.intel_vpu
++ifeq ($(BR2_PACKAGE_JEMALLOC),y)
++TMUX_DEPENDENCIES += jemalloc
++TMUX_CONF_OPTS += --enable-jemalloc
++else
++TMUX_CONF_OPTS += --disable-jemalloc
 +endif
-+
- ifneq ($(LINUX_FIRMWARE_FILES)$(LINUX_FIRMWARE_DIRS),)
  
- define LINUX_FIRMWARE_BUILD_CMDS
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ TMUX_DEPENDENCIES += systemd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
