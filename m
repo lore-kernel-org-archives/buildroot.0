@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF192C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38393C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5FAA7071D;
-	Mon, 19 May 2025 10:52:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D03A70460;
+	Mon, 19 May 2025 10:52:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sSt0tTJ7MYOS; Mon, 19 May 2025 10:52:48 +0000 (UTC)
+ id Cff1krie0dhq; Mon, 19 May 2025 10:52:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BD667072B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3EAB37072B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4BD667072B;
-	Mon, 19 May 2025 10:52:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3EAB37072B;
+	Mon, 19 May 2025 10:52:54 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4282CD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0F325E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 457B541E35
+ by smtp4.osuosl.org (Postfix) with ESMTP id A92DE41E52
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z5jrRDZH-Q3d for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:06 +0000 (UTC)
+ id 7-jn6KGXQXSu for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6DB3411F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D95F411DF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C6DB3411F6
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6D95F411DF
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3EE584BBD; Mon, 19 May 2025 10:39:52 +0000 (UTC)
+ id 66BF78348A; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 19 Apr 2025 22:20:36 +0200
+Date: Sat, 19 Apr 2025 17:05:29 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 569272be91ec02b35a94c545188a879dc78a7851
-X-Git-Newrev: ef3c3bc9b17dad16e63d6519c0f037e7ec65e976
+X-Git-Oldrev: 70bcb7655bc1893c76e682cbb7c750b84c70ca64
+X-Git-Newrev: 1e83f01b519911148d5dd6a88ad2ba5b9e8a3123
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103952.C3EE584BBD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libcamera: improve
- future reproducibility by forcing auto features to disabled
+Message-Id: <20250519103952.66BF78348A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/boost: move host
+ variables closer together
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,98 +66,108 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef3c3bc9b17dad16e63d6519c0f037e7ec65e976
+commit: https://git.buildroot.net/buildroot/commit/?id=1e83f01b519911148d5dd6a88ad2ba5b9e8a3123
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-meson allows to force all features set to "auto" to default to disabled
-except if explicitly enabled via the auto_features argument, c.f.
-https://mesonbuild.com/Build-options.html#features
+Also, one item per line (chrono, container) in the list of libraries.
 
-"""
-If the value of a feature option is set to auto, that value is
-overridden by the global auto_features option (which defaults to auto).
-This is intended to be used by packagers who want to have full control
-on which dependencies are required and which are disabled, and not rely
-on build-deps being installed (at the right version) to get a feature
-enabled.
-"""
-
-The only auto feature that we hadn't disabled explicitly is the
-gstreamer plugin. It is however expected that this wasn't a mistake as
-the dependencies for the gstreamer pluging wouldn't have been met
-thanks to the explicit LIBCAMERA_DEPENDENCIES we have based on the
-presence of the gstreamer symbols in the global config.
-
-This should make it less likely for future releases of libcamera to
-regress in terms of reproducibility because of "auto" features (though
-changes from "auto" to "enabled" wouldn't be caught and would be
-susceptible to race conditions with their dependencies in case they
-aren't properly specified and built after libcamera is).
-
-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Michael Nosthoff <buildroot@heine.tech>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libcamera/libcamera.mk | 12 +-----------
- 1 file changed, 1 insertion(+), 11 deletions(-)
+ package/boost/boost.mk | 71 +++++++++++++++++++++++++-------------------------
+ 1 file changed, 36 insertions(+), 35 deletions(-)
 
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 0f52f08e39..ac5c12ff72 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -16,9 +16,9 @@ LIBCAMERA_DEPENDENCIES = \
- 	libyaml \
- 	gnutls
- LIBCAMERA_CONF_OPTS = \
-+	-Dauto_features=disabled \
- 	-Dandroid=disabled \
- 	-Ddocumentation=disabled \
--	-Dqcam=disabled \
- 	-Dtest=false \
- 	-Dwerror=false
- LIBCAMERA_INSTALL_STAGING = YES
-@@ -48,8 +48,6 @@ endif
- ifeq ($(BR2_PACKAGE_LIBCAMERA_PYTHON),y)
- LIBCAMERA_DEPENDENCIES += python3 python-pybind
- LIBCAMERA_CONF_OPTS += -Dpycamera=enabled
--else
--LIBCAMERA_CONF_OPTS += -Dpycamera=disabled
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index c0d17f7670..044dd275b3 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -12,41 +12,6 @@ BOOST_LICENSE = BSL-1.0
+ BOOST_LICENSE_FILES = LICENSE_1_0.txt
+ BOOST_CPE_ID_VENDOR = boost
+ 
+-# keep host variant as minimal as possible
+-# regex & system are needed by host-riscv-isa-sim
+-HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
+-	--without-libraries=$(subst $(space),$(comma),\
+-	atomic \
+-	chrono container \
+-	context \
+-	contract \
+-	coroutine \
+-	date_time \
+-	exception \
+-	fiber \
+-	filesystem \
+-	graph \
+-	graph_parallel \
+-	iostreams \
+-	json \
+-	locale \
+-	log \
+-	math \
+-	mpi \
+-	nowide \
+-	program_options \
+-	python \
+-	random \
+-	serialization \
+-	stacktrace \
+-	test \
+-	thread \
+-	timer \
+-	type_erasure \
+-	url \
+-	wave\
+-	)
+-
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTAINER),,container)
+@@ -103,6 +68,42 @@ BOOST_TARGET_CXXFLAGS += -I$(STAGING_DIR)/usr/include/python$(PYTHON3_VERSION_MA
+ BOOST_DEPENDENCIES += python3
  endif
  
- ifeq ($(BR2_PACKAGE_LIBCAMERA_V4L2),y)
-@@ -71,8 +69,6 @@ LIBCAMERA_CONF_OPTS += -Dpipelines=$(subst $(space),$(comma),$(LIBCAMERA_PIPELIN
- ifeq ($(BR2_PACKAGE_LIBCAMERA_COMPLIANCE),y)
- LIBCAMERA_DEPENDENCIES += gtest libevent
- LIBCAMERA_CONF_OPTS += -Dlc-compliance=enabled
--else
--LIBCAMERA_CONF_OPTS += -Dlc-compliance=disabled
- endif
- 
- # gstreamer-video-1.0, gstreamer-allocators-1.0
-@@ -84,8 +80,6 @@ endif
- ifeq ($(BR2_PACKAGE_LIBEVENT),y)
- LIBCAMERA_CONF_OPTS += -Dcam=enabled
- LIBCAMERA_DEPENDENCIES += libevent
--else
--LIBCAMERA_CONF_OPTS += -Dcam=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_TIFF),y)
-@@ -95,15 +89,11 @@ endif
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
- LIBCAMERA_CONF_OPTS += -Dudev=enabled
- LIBCAMERA_DEPENDENCIES += udev
--else
--LIBCAMERA_CONF_OPTS += -Dudev=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LTTNG_LIBUST),y)
- LIBCAMERA_CONF_OPTS += -Dtracing=enabled
- LIBCAMERA_DEPENDENCIES += lttng-libust
--else
--LIBCAMERA_CONF_OPTS += -Dtracing=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
++# keep host variant as minimal as possible
++# regex & system are needed by host-riscv-isa-sim
++HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
++	--without-libraries=$(subst $(space),$(comma),\
++	atomic \
++	chrono \
++	container \
++	context \
++	contract \
++	coroutine \
++	date_time \
++	exception \
++	fiber \
++	filesystem \
++	graph \
++	graph_parallel \
++	iostreams \
++	json \
++	locale \
++	log \
++	math \
++	mpi \
++	nowide \
++	program_options \
++	python \
++	random \
++	serialization \
++	stacktrace \
++	test \
++	thread \
++	timer \
++	type_erasure \
++	url \
++	wave\
++	)
++
+ HOST_BOOST_OPTS += toolset=gcc threading=multi \
+ 	variant=release link=shared runtime-link=shared -j$(PARALLEL_JOBS) -q \
+ 	--ignore-site-config --layout=system --prefix=$(HOST_DIR) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
