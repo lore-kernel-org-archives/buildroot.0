@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 643F5C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 549D7C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D876782D96;
-	Mon, 19 May 2025 10:52:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 073ED706BD;
+	Mon, 19 May 2025 10:52:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HlTicui82bOW; Mon, 19 May 2025 10:52:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lZLEeyBqSs8n; Mon, 19 May 2025 10:52:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 98C7D82ED2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 170F270690
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98C7D82ED2;
-	Mon, 19 May 2025 10:52:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 170F270690;
+	Mon, 19 May 2025 10:52:18 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0448D193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:03 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 02AFAD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9BA8241A54
+ by smtp4.osuosl.org (Postfix) with ESMTP id B9B5841A5B
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ItLTMPAQxPON for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:03 +0000 (UTC)
+ id EBAlehK88C8t for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7722640DED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1605B40D92
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7722640DED
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1605B40D92
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 759AE81517; Mon, 19 May 2025 10:39:51 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 137F583B63; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 16 Apr 2025 22:11:34 +0200
+Date: Sat, 19 Apr 2025 16:34:54 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 80ccb3e6678575b650f601cb196d10083d6822d6
-X-Git-Newrev: c3f41a4a79ed0287eb800fdb210ea2b44e617ebd
+X-Git-Oldrev: 3012fbdec745640f7ef9f52f4ee9d94d07c82eb6
+X-Git-Newrev: 2ef9e7ff57e86e410c6b638bf74c5bf5f414a31d
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103951.759AE81517@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/raspberrypi*: bump
- kernel version to cd231d4 (6.12.20)
+Message-Id: <20250519103952.137F583B63@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rtl8188eu: fix build
+ failure with Linux 6.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,351 +58,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1461727601833294875=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1461727601833294875==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=c3f41a4a79ed0287eb800fdb210ea2b44e617ebd
+commit: https://git.buildroot.net/buildroot/commit/?id=2ef9e7ff57e86e410c6b638bf74c5bf5f414a31d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Now based on 6.12.20 (from 6.6.30).
+Add local patch pending upstream to fix build failure with Linux 6.13
 
-Signed-off-by: Gaël PORTAY <gael.portay+rtone@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Fixes:
+https://autobuild.buildroot.org/results/4a0ebbcd62a2bfc59a7f6183f100f0e111cee750
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/raspberrypi/patches/linux/linux.hash | 2 +-
- configs/raspberrypi0_defconfig             | 4 ++--
- configs/raspberrypi0w_defconfig            | 4 ++--
- configs/raspberrypi2_defconfig             | 4 ++--
- configs/raspberrypi3_64_defconfig          | 4 ++--
- configs/raspberrypi3_defconfig             | 4 ++--
- configs/raspberrypi3_qt5we_defconfig       | 4 ++--
- configs/raspberrypi4_64_defconfig          | 4 ++--
- configs/raspberrypi4_defconfig             | 4 ++--
- configs/raspberrypi5_defconfig             | 4 ++--
- configs/raspberrypi_defconfig              | 4 ++--
- configs/raspberrypicm4io_64_defconfig      | 4 ++--
- configs/raspberrypicm4io_defconfig         | 4 ++--
- configs/raspberrypizero2w_64_defconfig     | 2 +-
- configs/raspberrypizero2w_defconfig        | 4 ++--
- 15 files changed, 28 insertions(+), 28 deletions(-)
+ .../rtl8188eu/0001-Fix-build-with-Linux-6.13.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/board/raspberrypi/patches/linux/linux.hash b/board/raspberrypi/patches/linux/linux.hash
-index 8d43c25151..3f278cb885 100644
---- a/board/raspberrypi/patches/linux/linux.hash
-+++ b/board/raspberrypi/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  dab3052783c68c46a5bc645b1c38d9705da995ab42823566518b62eb1fa1ef97  linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz
-+sha256  e7b484dc66565e8ea7b2792eea864c7c5ba6d8d0f6ea65288e701e03befec33f  linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz
-diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-index dc4f1ea86c..22b255e9d3 100644
---- a/configs/raspberrypi0_defconfig
-+++ b/configs/raspberrypi0_defconfig
-@@ -1,6 +1,6 @@
- BR2_arm=y
- BR2_arm1176jzf_s=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi0/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi0/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,576cc10e1ed50a9eacffc7a05c796051d7343ea4)/linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2708-rpi-zero"
-diff --git a/configs/raspberrypi0w_defconfig b/configs/raspberrypi0w_defconfig
-index 2c1e42543f..dd7c2dc2a0 100644
---- a/configs/raspberrypi0w_defconfig
-+++ b/configs/raspberrypi0w_defconfig
-@@ -1,6 +1,6 @@
- BR2_arm=y
- BR2_arm1176jzf_s=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi0w/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi0w/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,576cc10e1ed50a9eacffc7a05c796051d7343ea4)/linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2708-rpi-zero-w"
-diff --git a/configs/raspberrypi2_defconfig b/configs/raspberrypi2_defconfig
-index ce19a7fd5d..eb6bfefa00 100644
---- a/configs/raspberrypi2_defconfig
-+++ b/configs/raspberrypi2_defconfig
-@@ -1,7 +1,7 @@
- BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi2/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi2/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,576cc10e1ed50a9eacffc7a05c796051d7343ea4)/linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2709-rpi-2-b broadcom/bcm2710-rpi-2-b"
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index 9efc5e07e6..3b99865636 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -1,6 +1,6 @@
- BR2_aarch64=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3-64/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3-64/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,576cc10e1ed50a9eacffc7a05c796051d7343ea4)/linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2710-rpi-3-b-plus broadcom/bcm2710-rpi-cm3"
-diff --git a/configs/raspberrypi3_defconfig b/configs/raspberrypi3_defconfig
-index 38c680d541..ed59f199a6 100644
---- a/configs/raspberrypi3_defconfig
-+++ b/configs/raspberrypi3_defconfig
-@@ -1,7 +1,7 @@
- BR2_arm=y
- BR2_cortex_a53=y
- BR2_ARM_FPU_NEON_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,576cc10e1ed50a9eacffc7a05c796051d7343ea4)/linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2710-rpi-3-b-plus broadcom/bcm2710-rpi-cm3"
-diff --git a/configs/raspberrypi3_qt5we_defconfig b/configs/raspberrypi3_qt5we_defconfig
-index da3f657734..40a0fb004a 100644
---- a/configs/raspberrypi3_qt5we_defconfig
-+++ b/configs/raspberrypi3_qt5we_defconfig
-@@ -1,7 +1,7 @@
- BR2_arm=y
- BR2_cortex_a53=y
- BR2_ARM_FPU_NEON_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,576cc10e1ed50a9eacffc7a05c796051d7343ea4)/linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2710-rpi-3-b-plus broadcom/bcm2710-rpi-cm3"
-diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
-index 66ed5f0045..c1c8581ed0 100644
---- a/configs/raspberrypi4_64_defconfig
-+++ b/configs/raspberrypi4_64_defconfig
-@@ -1,7 +1,7 @@
- BR2_aarch64=y
- BR2_cortex_a72=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4-64/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4-64/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,576cc10e1ed50a9eacffc7a05c796051d7343ea4)/linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-4-b broadcom/bcm2711-rpi-400 broadcom/bcm2711-rpi-cm4 broadcom/bcm2711-rpi-cm4s"
-diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
-index 89cfd58a90..97f2f9e416 100644
---- a/configs/raspberrypi4_defconfig
-+++ b/configs/raspberrypi4_defconfig
-@@ -1,7 +1,7 @@
- BR2_arm=y
- BR2_cortex_a72=y
- BR2_ARM_FPU_NEON_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,576cc10e1ed50a9eacffc7a05c796051d7343ea4)/linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-4-b broadcom/bcm2711-rpi-400 broadcom/bcm2711-rpi-cm4 broadcom/bcm2711-rpi-cm4s"
-diff --git a/configs/raspberrypi5_defconfig b/configs/raspberrypi5_defconfig
-index 8cbd533eee..5fa1d779e5 100644
---- a/configs/raspberrypi5_defconfig
-+++ b/configs/raspberrypi5_defconfig
-@@ -1,6 +1,6 @@
- BR2_aarch64=y
- BR2_cortex_a76=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi5/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi5/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,576cc10e1ed50a9eacffc7a05c796051d7343ea4)/linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2712"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/raspberrypi/linux-4k-page-size.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
-index 694b7925af..0d325ced8f 100644
---- a/configs/raspberrypi_defconfig
-+++ b/configs/raspberrypi_defconfig
-@@ -1,6 +1,6 @@
- BR2_arm=y
- BR2_arm1176jzf_s=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,576cc10e1ed50a9eacffc7a05c796051d7343ea4)/linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2708-rpi-b-rev1 broadcom/bcm2708-rpi-b broadcom/bcm2708-rpi-b-plus broadcom/bcm2708-rpi-cm"
-diff --git a/configs/raspberrypicm4io_64_defconfig b/configs/raspberrypicm4io_64_defconfig
-index 44c625a4d4..e2bb5cb526 100644
---- a/configs/raspberrypicm4io_64_defconfig
-+++ b/configs/raspberrypicm4io_64_defconfig
-@@ -1,7 +1,7 @@
- BR2_aarch64=y
- BR2_cortex_a72=y
- BR2_ARM_FPU_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypicm4io-64/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypicm4io-64/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,576cc10e1ed50a9eacffc7a05c796051d7343ea4)/linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-cm4"
-diff --git a/configs/raspberrypicm4io_defconfig b/configs/raspberrypicm4io_defconfig
-index d52eae82a4..c9a1cfe28d 100644
---- a/configs/raspberrypicm4io_defconfig
-+++ b/configs/raspberrypicm4io_defconfig
-@@ -1,7 +1,7 @@
- BR2_arm=y
- BR2_cortex_a72=y
- BR2_ARM_FPU_NEON_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypicm4io/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypicm4io/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,576cc10e1ed50a9eacffc7a05c796051d7343ea4)/linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-cm4"
-diff --git a/configs/raspberrypizero2w_64_defconfig b/configs/raspberrypizero2w_64_defconfig
-index 3f4031a7ec..a3c5b586a3 100644
---- a/configs/raspberrypizero2w_64_defconfig
-+++ b/configs/raspberrypizero2w_64_defconfig
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypizero2w-64/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypizero2w-64/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,576cc10e1ed50a9eacffc7a05c796051d7343ea4)/linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-zero-2-w"
-diff --git a/configs/raspberrypizero2w_defconfig b/configs/raspberrypizero2w_defconfig
-index 796fcf9ab3..a57c919b51 100644
---- a/configs/raspberrypizero2w_defconfig
-+++ b/configs/raspberrypizero2w_defconfig
-@@ -1,7 +1,7 @@
- BR2_arm=y
- BR2_cortex_a53=y
- BR2_ARM_FPU_NEON_VFPV4=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TOOLCHAIN_BUILDROOT_CXX=y
- BR2_GLOBAL_PATCH_DIR="board/raspberrypi/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypizero2w/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypizero2w/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,576cc10e1ed50a9eacffc7a05c796051d7343ea4)/linux-576cc10e1ed50a9eacffc7a05c796051d7343ea4.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,cd231d4775b14f228606c09f219b48308f6ab3aa)/linux-cd231d4775b14f228606c09f219b48308f6ab3aa.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-zero-2-w"
-
---===============1461727601833294875==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/rtl8188eu/0001-Fix-build-with-Linux-6.13.patch b/package/rtl8188eu/0001-Fix-build-with-Linux-6.13.patch
+new file mode 100644
+index 0000000000..3594283ff1
+--- /dev/null
++++ b/package/rtl8188eu/0001-Fix-build-with-Linux-6.13.patch
+@@ -0,0 +1,35 @@
++From 408ac4abdd1e187624ebef9f6a45ecc437525de5 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Wed, 16 Apr 2025 17:34:54 +0200
++Subject: [PATCH] Fix build with Linux 6.13
++
++Commit:
++https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9c4f830927750a2bf9fd9426a5257f0fdce3b662
++adds struct net_device *dev as argument to set_monitor_channel(), so let's
++add it to cfg80211_rtw_set_monitor_channel() according to Linux version.
++
++Upstream: https://github.com/lwfinger/rtl8188eu/pull/463
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ ioctl_cfg80211.c | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/ioctl_cfg80211.c b/ioctl_cfg80211.c
++index c6ae5aa..270cfce 100644
++--- a/ioctl_cfg80211.c
+++++ b/ioctl_cfg80211.c
++@@ -4404,7 +4404,10 @@ static int	cfg80211_rtw_set_channel(struct wiphy *wiphy
++ }
++ 
++ static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
++-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0))
+++	, struct net_device *dev
+++	, struct cfg80211_chan_def *chandef
+++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
++ 	, struct cfg80211_chan_def *chandef
++ #else
++ 	, struct ieee80211_channel *chan
++-- 
++2.39.5
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1461727601833294875==--
