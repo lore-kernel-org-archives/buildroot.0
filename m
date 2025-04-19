@@ -1,78 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74628C369BD
-	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 14:44:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21316C369BD
+	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 14:47:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 45D6781A23;
-	Sat, 19 Apr 2025 14:44:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D31BE6069F;
+	Sat, 19 Apr 2025 14:47:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VOO7Hh6f_Xq2; Sat, 19 Apr 2025 14:44:13 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zvSQ0N7bNx-K; Sat, 19 Apr 2025 14:47:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75B5681A8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 138CB60706
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75B5681A8E;
-	Sat, 19 Apr 2025 14:44:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F451230
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 14:44:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 138CB60706;
+	Sat, 19 Apr 2025 14:47:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 49A5922F
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 14:47:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 30BB181A24
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 14:44:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3A91440620
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 14:47:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kI86494wCdt4 for <buildroot@buildroot.org>;
- Sat, 19 Apr 2025 14:44:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RQqzB2PwnwnZ for <buildroot@buildroot.org>;
+ Sat, 19 Apr 2025 14:47:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 155F781A23
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 155F781A23
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 155F781A23
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 14:44:10 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CD7AD432C1;
- Sat, 19 Apr 2025 14:44:08 +0000 (UTC)
-Date: Sat, 19 Apr 2025 16:44:08 +0200
-To: Lance Fredrickson <lancethepants@gmail.com>
-Cc: buildroot@buildroot.org
-Message-ID: <20250419164408.1c659d83@windsurf>
-In-Reply-To: <20250417043845.2171938-1-lancethepants@gmail.com>
-References: <20250417043845.2171938-1-lancethepants@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeehfedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeltdegvdejheegtefgueffgfelhfekvdefudevieeileetleeitdefgfeugffghfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheplhgrnhgtvghthhgvphgrnhhtshesghhmrghilhdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1745073849;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=MxqgjD3e4ROwHTcWj/DUjIN5SoOsrNr7B2Jpv3QQ/8c=;
- b=kgKktguNR8DIHIVsQSmcEdSxNuOjweo2PHqLePb/OQZ1TNyNM/L+AdvJLllYceVdTX3a/R
- PAPwLUQPvPSbQHy0aXGdDYPqdncPIb1iLL/WNfgrVShaM3/V4v8vKC/jRVzEF8HJ9IMzbo
- MTVLOZPjrLt9VS72p98qMSsGfBbvuzC648iYLMsEey/h8jc9BSL0Mvt+ocNeMuyvwHMWvE
- 8uixDXIHGOl54c87FrJ6QBJZwmIbf4cl9GnpO8cA0JxMeNgh4appKekRMpDboyMD9dfL0f
- +aHuM7Zpcopbc1EqxnAuFzwouZxhVMbhLSIkco13ywu2xczQaTwUZz54+nwJNQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kgKktguN
-Subject: Re: [Buildroot] [PATCH 1/3] package/libubox: bump version to 3868f47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83AAA4061F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83AAA4061F
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 14:47:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6B89885B76; Sat, 19 Apr 2025 14:47:16 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 19 Apr 2025 16:44:26 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3e2e59340912a6788586a7216ac34df4de5ca1db
+X-Git-Newrev: d0994fd66d9bfa18e3ab3b8fc634ae084621e1ba
+X-Patchwork-Hint: ignore
+Message-Id: <20250419144716.6B89885B76@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/stm32f769_disco_sd: bump Linux to
+ 5.15.179 and U-Boot to 2025.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,53 +60,64 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 16 Apr 2025 22:38:42 -0600
-Lance Fredrickson <lancethepants@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d0994fd66d9bfa18e3ab3b8fc634ae084621e1ba
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Lance Fredrickson <lancethepants@gmail.com>
-> 
-> Changelog:
-> 
->  - 3868f47 blob: constify attr argument to blob_memdup
->  - eb9bcb6 ustream: prevent recursive calls to the read callback
->  - 12bda4b CI: add CodeQL workflow tests
->  - a2fce00 CI: add build test run
->  - c1be505 udebug: fix crash in udebug_entry_vprintf with longer strings
->  - 6339204 CMakeLists.txt: bump minimum cmake version
->  - ca3f6d0 udebug: fix file descriptor initialization for __udebug_buf_map
->  - df5b714 udebug: add mips specific quirk
->  - d27acfe udebug: add more checks for uninitialized buffers
->  - 40acbe3 udebug: wait for response after buffer add/remove
->  - e84c000 udebug: add inline helper function to test if a buffer is allocated
->  - 325fea5 udebug: add functions for manipulating entry length
->  - e80dc00 link librt if needed for shm_open
->  - 260ad5b udebug: add ulog support
->  - b77f2a4 uloop: fix build using C++ compilers
->  - d4c3066 udebug: add udebug library code
->  - b3fa3d9 uloop: reset flags after __uloop_fd_delete call
->  - 8a5a431 uloop: fix typo in signal handling rework
->  - f7d1569 uloop: properly initialize signal handler mask
->  - 13d9b04 uloop: add support for user defined signal handlers
->  - 82fa648 uloop: add support for interval timers
-> 
-> Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
-> ---
->  package/libubox/libubox.hash | 2 +-
->  package/libubox/libubox.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+The patch bumps the Linux kernel to version 5.15.179 and U-Boot to
+version 2025.04.
 
-Thanks, series applied to master!
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash | 2 +-
+ board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash | 2 +-
+ configs/stm32f769_disco_sd_defconfig                              | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
+index 57c69adb36..4e0aeb77d8 100644
+--- a/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
++++ b/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  a84ab5328c8a5a0e5c4a39a06b07479a7769c73af49a4c9ce59eeb644829d3b1  linux-5.15.176.tar.xz
++sha256  9319a47b1e9b5d344ff6015431856d0c9640e4faedc527c87f9129061a27136f  linux-5.15.179.tar.xz
+diff --git a/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
+index 50674352d7..80ea21b7cb 100644
+--- a/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
++++ b/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
++sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
+diff --git a/configs/stm32f769_disco_sd_defconfig b/configs/stm32f769_disco_sd_defconfig
+index 25b79f0de1..e0c592ad82 100644
+--- a/configs/stm32f769_disco_sd_defconfig
++++ b/configs/stm32f769_disco_sd_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32f769-disco/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.176"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.179"
+ BR2_LINUX_KERNEL_DEFCONFIG="stm32"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0xc0000000.config board/stmicroelectronics/stm32f769-disco/linux-sd.fragment"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+@@ -23,7 +23,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f769-disco"
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
