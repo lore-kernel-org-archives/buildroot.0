@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BA03C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:53:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D43F4C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:53:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A8DD60F23;
-	Mon, 19 May 2025 10:52:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14C8E70762;
+	Mon, 19 May 2025 10:53:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B9kGPg8ECQQU; Mon, 19 May 2025 10:52:56 +0000 (UTC)
+ id KAYwdC17IHlM; Mon, 19 May 2025 10:53:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD43270748
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 292877075D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD43270748;
-	Mon, 19 May 2025 10:52:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 292877075D;
+	Mon, 19 May 2025 10:53:00 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 12DBAD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:24 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 095E2D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C43EA41E59
+ by smtp4.osuosl.org (Postfix) with ESMTP id ED65441E5D
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Md7CG4DM0epZ for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:07 +0000 (UTC)
+ id ncJrqCV1Nu2N for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 054A341201
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A915240E07
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 054A341201
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A915240E07
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 036A684BBD; Mon, 19 May 2025 10:39:53 +0000 (UTC)
+ id A7D0A84BBD; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 19 Apr 2025 23:25:39 +0200
+Date: Sat, 19 Apr 2025 22:14:59 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6fd3e498af1bf837f3318eb0d47f27ac6901e7dc
-X-Git-Newrev: cb6729d21410278a70d8064326ab706bef4c2b95
+X-Git-Oldrev: 9e627c1628438818ec3bd8638bd1e3400541a85e
+X-Git-Newrev: 6a47aa648a15b5c0b3d47767e423ccd10f13d3af
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103953.036A684BBD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/stm32f429_disco_xip:
- bump Linux to 6.1.133
+Message-Id: <20250519103952.A7D0A84BBD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/webkitgtk: bump to
+ 2.48.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,41 +66,110 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cb6729d21410278a70d8064326ab706bef4c2b95
+commit: https://git.buildroot.net/buildroot/commit/?id=6a47aa648a15b5c0b3d47767e423ccd10f13d3af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The patch bumps the Linux kernel to version 6.1.133. The size of xipImage
-has increased by only 22 bytes (1671804 bytes compared to 1671782 in
-version 6.1.126).
+This bumps webkit to the 2.48 stable series.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+WebKitGTK+ 2.48 highlights:
+https://webkitgtk.org/2025/04/08/webkitgtk-2.48.html
+
+News:
+- https://webkitgtk.org/2025/03/14/webkitgtk2.48.0-released.html
+- https://webkitgtk.org/2025/04/02/webkitgtk2.48.1-released.html
+
+And brings some security fixes:
+- https://webkitgtk.org/security/WSA-2025-0002.html
+- https://webkitgtk.org/security/WSA-2025-0003.html
+
+Also,
+
+- Raise the minimal GCC requirement [1],
+which should have been raised by the 2.46.4 bump.
+
+- Handle SPEECH_SYNTHESIS, which has been enabled
+by default in commit [2].
+
+[1] https://github.com/WebKit/WebKit/commit/682ac4ba74c53d0cd488c7a595096224a9abb036
+[2] https://github.com/WebKit/WebKit/commit/10381a8de938024f31935184af470ccbce0b22d9
+
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash | 2 +-
- configs/stm32f429_disco_xip_defconfig                             | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/webkitgtk/Config.in      | 6 +++---
+ package/webkitgtk/webkitgtk.hash | 6 +++---
+ package/webkitgtk/webkitgtk.mk   | 9 ++++++++-
+ 3 files changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-index 9330b9749e..7855de012d 100644
---- a/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  c91920b34aec412fa6deb6ae3f22ffb41879bf07115a5e224edf4f2778be1790  linux-6.1.126.tar.xz
-+sha256  97b59faf3f1925f296442a73a64439a447366f1d434be579803877097c5abe70  linux-6.1.133.tar.xz
-diff --git a/configs/stm32f429_disco_xip_defconfig b/configs/stm32f429_disco_xip_defconfig
-index 7ba5d4ee3f..69266f567e 100644
---- a/configs/stm32f429_disco_xip_defconfig
-+++ b/configs/stm32f429_disco_xip_defconfig
-@@ -8,7 +8,7 @@ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.126"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.133"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f429-disco/linux.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 3594299314..bcb4b12fa3 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -16,12 +16,12 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 
+-comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 10, host gcc >= 4.9"
++comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 11, host gcc >= 4.9"
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_11 || \
+ 		!BR2_HOST_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_MMU
+ 
+@@ -33,7 +33,7 @@ config BR2_PACKAGE_WEBKITGTK
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 	depends on BR2_USE_WCHAR # icu, libsoup3
+ 	depends on BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 96100d4c7c..fd9420bad9 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,6 +1,6 @@
+-# From https://www.webkitgtk.org/releases/webkitgtk-2.46.4.tar.xz.sums
+-sha1  10d4dbd222acec30b1d20ee3b7d02c0d9727c5a9  webkitgtk-2.46.4.tar.xz
+-sha256  0eff5f0ab0a2872ec87df62bc32e3289c8af625716ac71e94b298d74e0374176  webkitgtk-2.46.4.tar.xz
++# From https://www.webkitgtk.org/releases/webkitgtk-2.48.1.tar.xz.sums
++sha1  f7939f920f92f6b1395b8573f069d3fb9c085b3f  webkitgtk-2.48.1.tar.xz
++sha256  98efdf21c4cdca0fe0b73ab5a8cb52093b5aa52d9b1b016a93f71dbfa1eb258f  webkitgtk-2.48.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index ec63d093b7..2c22bfb607 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.46.4
++WEBKITGTK_VERSION = 2.48.1
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
+@@ -73,6 +73,13 @@ else
+ WEBKITGTK_CONF_OPTS += -DENABLE_MINIBROWSER=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FLITE),y)
++WEBKITGTK_CONF_OPTS += -DENABLE_SPEECH_SYNTHESIS=ON
++WEBKITGTK_DEPENDENCIES += flite
++else
++WEBKITGTK_CONF_OPTS += -DENABLE_SPEECH_SYNTHESIS=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_LCMS2),y)
+ WEBKITGTK_CONF_OPTS += -DUSE_LCMS=ON
+ WEBKITGTK_DEPENDENCIES += lcms2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
