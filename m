@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 537F7C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7051AC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F8F870687;
-	Mon, 19 May 2025 10:52:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C57B770678;
+	Mon, 19 May 2025 10:52:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uPYgWaLxuvkQ; Mon, 19 May 2025 10:52:05 +0000 (UTC)
+ id T9CwExYPI1Pc; Mon, 19 May 2025 10:52:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D29470688
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BDAFE70699
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D29470688;
-	Mon, 19 May 2025 10:52:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BDAFE70699;
+	Mon, 19 May 2025 10:52:07 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 036B7D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:58 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 12849193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:42:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 536C441A3D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B02440DBB
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Owa2_7mKqwli for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:03 +0000 (UTC)
+ id jlsk9Mhd-N_T for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2AA9840DBB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBE4F411CB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2AA9840DBB
+ by smtp4.osuosl.org (Postfix) with ESMTP id EBE4F411CB
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 274FD81E90; Mon, 19 May 2025 10:39:51 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id E660084BBD; Mon, 19 May 2025 10:39:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 16 Apr 2025 21:14:18 +0200
+Date: Sat, 19 Apr 2025 16:11:49 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c7ea55f040b6d74314961e433c3879ef1ac61748
-X-Git-Newrev: a642bed09afdfce42a7063e38c2e10beddbed5ef
+X-Git-Oldrev: f5e7cefe778dc65b6e36a4b2af94018ed9005d0c
+X-Git-Newrev: c298c0971b154c4489cad2c511df1b89ecb6e663
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103951.274FD81E90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] board/raspberrypi/readme.txt:
- reword overlays note
+Message-Id: <20250519103951.E660084BBD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ca-certificates: bump
+ to 20241223
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,72 +58,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4449622259674894971=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4449622259674894971==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=a642bed09afdfce42a7063e38c2e10beddbed5ef
+commit: https://git.buildroot.net/buildroot/commit/?id=c298c0971b154c4489cad2c511df1b89ecb6e663
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Any Raspberry Pi may use device-tree overlays; it is not restricted to
-Raspberry Pi 3 and 4.
-
-The defconfigs for the Raspberry Pi 3, 4, 400, Zero W, Zero 2 W, Compute
-Module 4 and 4s use the miniuart-bt dtoverlay to switch the Bluetooth to
-the mini-UART (ttyS0) and restore UART0 (ttyAMA0) over GPIOs 14 and 15
-to enable the serial console (like the Raspberry Pi 1 and 2 that have no
-Bluetooth)[1][2].
-
-As a consequence, the Raspberry Pi Zero W, Zero 2 W, 400, Compute Module
-4 and 4s install the device-tree overlays as well.
-
-This rewords the note by adding the three missing hardwares installing
-the images/rpi-firmware/overlays directory. It rewords the miniuart note
-at the same time.
-
-[1]: https://www.raspberrypi.com/documentation/computers/configuration.html#uarts-and-device-tree
-[2]: https://github.com/raspberrypi/linux/blob/rpi-6.6.y/arch/arm/boot/dts/overlays/miniuart-bt-overlay.dts#L4-L6
-
-Signed-off-by: Gaël PORTAY <gael.portay+rtone@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/raspberrypi/readme.txt | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ package/ca-certificates/ca-certificates.hash | 2 +-
+ package/ca-certificates/ca-certificates.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index 5f6b1c3e7d..0f3ec9d8bb 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -131,10 +131,11 @@ After building, you should obtain this tree:
-     Pi 4, 400, 5 and the Compute Module 4, 4s and 5 load the second stage
-     bootloader from a SPI flash EEPROM.
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index 8a5b48dd79..363f43e13a 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,4 +1,4 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha256  83de934afa186e279d1ed08ea0d73f5cf43a6fbfb5f00874b6db3711c64576f3  ca-certificates_20230311.tar.xz
++sha256  dd8286d0a9dd35c756fea5f1df3fed1510fb891f376903891b003cd9b1ad7e03  ca-certificates_20241223.tar.xz
+ # Locally computed
+ sha256  e85e1bcad3a915dc7e6f41412bc5bdeba275cadd817896ea0451f2140a93967c  debian/copyright
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index fe115209a7..c354eb037e 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
--[3] Only for the Raspberry Pi 3/4 Models (overlay miniuart-bt is needed
--    to enable the RPi3 serial console otherwise occupied by the bluetooth
--    chip). Alternative would be to disable the serial console in cmdline.txt
--    and /etc/inittab.
-+[3] Only for the Raspberry Pi installing device-tree overlays. The Raspberry Pi
-+    with Bluetooth connectivity (Zero W, Zero 2 W, 3, 4, 400, Compute Module 4
-+    and 4s) use the miniuart-bt overlay to enable UART0 for the serial console;
-+    the Bluetooth uses the mini-UART instead. Alternative would be to disable
-+    the serial console in cmdline.txt and /etc/inittab.
- 
- How to write the SD card
- ========================
-
---===============4449622259674894971==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-CA_CERTIFICATES_VERSION = 20230311
++CA_CERTIFICATES_VERSION = 20241223
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20230317T205011Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_SITE = https://snapshot.debian.org/archive/debian/20241223T143500Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl host-python3
+ CA_CERTIFICATES_LICENSE = GPL-2.0+ (script), MPL-2.0 (data)
+ CA_CERTIFICATES_LICENSE_FILES = debian/copyright
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4449622259674894971==--
