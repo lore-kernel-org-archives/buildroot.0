@@ -1,80 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDED1C369BD
-	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 16:31:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A6B1C369CA
+	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 16:36:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48F354058F;
-	Sat, 19 Apr 2025 16:31:19 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uMX8bohhXpf4; Sat, 19 Apr 2025 16:31:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1753E405A5
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1753E405A5;
-	Sat, 19 Apr 2025 16:31:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id AA273230
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 16:31:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F8CE606DA
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 16:31:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EABED60705;
+	Sat, 19 Apr 2025 16:36:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fX2euJRuS4DU for <buildroot@buildroot.org>;
- Sat, 19 Apr 2025 16:31:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 0pbg6i1KhQc1; Sat, 19 Apr 2025 16:36:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2929A606BE
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2929A606BE;
+	Sat, 19 Apr 2025 16:36:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AB6B122F
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 16:36:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9190D405DC
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 16:36:28 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CljNSei38430 for <buildroot@buildroot.org>;
+ Sat, 19 Apr 2025 16:36:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E94DC606BA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E94DC606BA
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E94DC606BA
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 16:31:14 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8F9864387D;
- Sat, 19 Apr 2025 16:31:10 +0000 (UTC)
-Date: Sat, 19 Apr 2025 18:31:09 +0200
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Cc: Adrian Perez de Castro <aperez@igalia.com>, Arnout Vandecappelle via
- buildroot <buildroot@buildroot.org>
-Message-ID: <20250419183109.0286277d@windsurf>
-In-Reply-To: <CACXRmJgW8m7jNxfo_n=QoLfMz-ROgc=N2Ms7GcWh=UQOsnUBQQ@mail.gmail.com>
-References: <CACXRmJgW8m7jNxfo_n=QoLfMz-ROgc=N2Ms7GcWh=UQOsnUBQQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeehhedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepkeekudeuueeiudevhefhgefhueffffeigeeljeevteegffethfejieeijeeitdffnecuffhomhgrihhnpeifvggskhhithhgthhkrdhorhhgpdhgihhthhhusgdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefpdhrtghpthhtohepthhhohhmrghsseguvghvohhoghguthdrtghomhdprhgtphhtthhopegrphgvrhgviiesihhgrghli
- hgrrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1745080271;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ht0LVOyUg/G2Ppyj/ixBnmuqUmYrtE9j+m5k1P2CB18=;
- b=IB4GN9cZmE5/c92vgvPr9Q1fArLYYIIJgA/VJTByNvZX9H/vnnX0fS5vxGtA/L/A1IL4RH
- nOp2+4kTM0l5bZl+9xkX1TTCdz9nM2zKgVnj5jyqS0gAl/yMIHhOtmHCMkCm1ONgal2Ub7
- zI1uxvUKbKplsO1IEEtEe179OEQpsQpd6X7rNxdloDjAocqqszyKYtqWxVC/BWaXnn7yKi
- z44I5rojpxTb4W5g+uOwzqHzDopjQ8KR996B/SzLpFn9b6XPSHXlCycUGPNcvZFLink5PL
- j+1PnS+7S4UXot6kMtVMAZ/2Ib/WgUcdsvIBjIl5MDrMNE2wfYWc6sDS79LYDQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=IB4GN9cZ
-Subject: Re: [Buildroot] [PATCH v2] package/webkitgtk: bump to 2.48.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF95E405F6
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id CF95E405F6
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 16:36:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BAE1085C5F; Sat, 19 Apr 2025 16:36:27 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 19 Apr 2025 18:34:53 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a1012b363a286125978de529eacf9d187d95907f
+X-Git-Newrev: 038826aad67241da74325f42c5dc83f4c7d5dc0f
+X-Patchwork-Hint: ignore
+Message-Id: <20250419163627.BAE1085C5F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/stm32mp135f_dk: fix optee hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,61 +59,62 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1399591568990849517=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+--===============1399591568990849517==
+Content-Type: text/plain
 
-On Thu, 10 Apr 2025 10:23:09 +0200
-Thomas Devoogdt <thomas@devoogdt.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=038826aad67241da74325f42c5dc83f4c7d5dc0f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This bumps webkit to the 2.48 stable series.
-> 
-> WebKitGTK+ 2.48 highlights:
-> https://webkitgtk.org/2025/04/08/webkitgtk-2.48.html
-> 
-> News:
-> - https://webkitgtk.org/2025/03/14/webkitgtk2.48.0-released.html
-> - https://webkitgtk.org/2025/04/02/webkitgtk2.48.1-released.html
-> 
-> And brings some security fixes:
-> - https://webkitgtk.org/security/WSA-2025-0002.html
-> - https://webkitgtk.org/security/WSA-2025-0003.html
-> 
-> Also,
-> 
-> - Raise the minimal GCC requirement [1],
-> which should have been raised by the 2.46.4 bump.
-> 
-> - Handle SPEECH_SYNTHESIS, which has been enabled
-> by default in commit [2].
-> 
-> [1] https://github.com/WebKit/WebKit/commit/682ac4ba74c53d0cd488c7a595096224a9abb036
-> [2] https://github.com/WebKit/WebKit/commit/10381a8de938024f31935184af470ccbce0b22d9
-> 
-> Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-> ---
-> v2: added additional security report and a link to the release highlights
-> ---
->  package/webkitgtk/Config.in      | 6 +++---
->  package/webkitgtk/webkitgtk.hash | 6 +++---
->  package/webkitgtk/webkitgtk.mk   | 9 ++++++++-
->  3 files changed, 14 insertions(+), 7 deletions(-)
+The build command:
 
-Thanks for your patch. However, it has been damaged by your e-mail
-client making it impossible to apply. Could you resend using git
-send-email?
+make stm32mp135f_dk_defconfig
 
-Thanks a lot!
+fails with the errors:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ERROR: No hash found for optee-client-4.3.0.tar.gz
+ERROR: No hash found for optee-os-4.3.0.tar.gz
+
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/9690369624
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Reviewed-by: Raphaël Gallais-Pou <rgallaispou@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../common/stm32mp1xx/patches/optee-client/optee-client.hash            | 2 ++
+ .../stmicroelectronics/common/stm32mp1xx/patches/optee-os/optee-os.hash | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/optee-client/optee-client.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/optee-client/optee-client.hash
+new file mode 100644
+index 0000000000..5423bf93a5
+--- /dev/null
++++ b/board/stmicroelectronics/common/stm32mp1xx/patches/optee-client/optee-client.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  a9a91bdb433df795c87a6d15198effbd648e3671ae611f2a3f8b41229d61cce0  optee-client-4.3.0.tar.gz
+diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/optee-os/optee-os.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/optee-os/optee-os.hash
+index 73d4e2c4da..2e12a5cdea 100644
+--- a/board/stmicroelectronics/common/stm32mp1xx/patches/optee-os/optee-os.hash
++++ b/board/stmicroelectronics/common/stm32mp1xx/patches/optee-os/optee-os.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  03b91fd7dfdf890e3966f931f07634a2b6a2911bbee2a02ecc48d4a40cf6a9b8  optee-os-4.3.0-git4.tar.gz
++sha256  390b271905c828d6def9fa6a77bbaa425f3b434d733c8eb18f582ccbc6896096  optee-os-4.3.0.tar.gz
+
+--===============1399591568990849517==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1399591568990849517==--
