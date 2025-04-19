@@ -1,51 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA8ADC2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B8F8C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 797CD84039;
-	Mon, 19 May 2025 10:52:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1A7960F33;
+	Mon, 19 May 2025 10:52:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4VTf0G43SvbR; Mon, 19 May 2025 10:52:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AhAo6BUo-sn7; Mon, 19 May 2025 10:52:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5AF18431D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF87270737
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5AF18431D;
-	Mon, 19 May 2025 10:52:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF87270737;
+	Mon, 19 May 2025 10:52:50 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 10F00E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:21 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 19588E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9FB5241E50
+ by smtp4.osuosl.org (Postfix) with ESMTP id 643CA41503
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DbOFMCc82u-a for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:05 +0000 (UTC)
+ id iODAS9QGiJux for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 581B4411DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E187B40DF2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 581B4411DA
+ by smtp4.osuosl.org (Postfix) with ESMTP id E187B40DF2
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 546528652C; Mon, 19 May 2025 10:39:52 +0000 (UTC)
+ id DDC9984BBD; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 19 Apr 2025 17:02:18 +0200
+Date: Sat, 19 Apr 2025 22:21:47 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9d6ab1244a3d8b9c4934caf9cf7810086de7c82f
-X-Git-Newrev: 93ffe1a088b0f0be957dba9a33ad6c97279bb995
+X-Git-Oldrev: 3913cebc51f547fed924f51d1df2999696d71122
+X-Git-Newrev: 45087a0188d8b50ac888d5f2b728090ccb8c8806
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103952.546528652C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dejavu: update homepage
+Message-Id: <20250519103952.DDC9984BBD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libcamera: bump to
+ 0.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,31 +66,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93ffe1a088b0f0be957dba9a33ad6c97279bb995
+commit: https://git.buildroot.net/buildroot/commit/?id=45087a0188d8b50ac888d5f2b728090ccb8c8806
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The currently referenced homepage is a cyber-squatter. Switch to the new
-official homepage.
+Release notes:
+https://lists.libcamera.org/pipermail/libcamera-devel/2025-April/049672.html
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+There's now a pipeline for the Raspberry Pi 5 ISP (PiSP), that can be
+added later on in a separate patch.
+
+v4l2 compatibility layer is now a feature and not a boolean anymore. The
+former takes "enabled", "disabled" or "auto"[1] while the latter takes
+"true" or "false"[2] so we need to update how we configure the project to
+match those expectations.
+
+[1] https://mesonbuild.com/Build-options.html#features
+[2] https://mesonbuild.com/Build-options.html#booleans
+
+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/dejavu/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libcamera/libcamera.hash | 2 +-
+ package/libcamera/libcamera.mk   | 6 ++----
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/dejavu/Config.in b/package/dejavu/Config.in
-index 5d21e56088..ca549d30e4 100644
---- a/package/dejavu/Config.in
-+++ b/package/dejavu/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_DEJAVU
- 	  maintaining the original look and feel through the process
- 	  of collaborative development, under a Free license.
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+index 8c845d0e21..9f897e023f 100644
+--- a/package/libcamera/libcamera.hash
++++ b/package/libcamera/libcamera.hash
+@@ -1,4 +1,4 @@
+-sha256  0b45861dc0430074bf10aaa78a69439b319e9df4ed041496fd5f95e546c8f575  libcamera-v0.4.0-git4.tar.gz
++sha256  cea3b5eebc01aa97930ae64989447ca00bad42ff1e0ce71d90d337650dd9e374  libcamera-v0.5.0-git4.tar.gz
  
--	  http://dejavu-fonts.org
-+	  https://dejavu-fonts.github.io/
+ # license files
+ sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index 449f66ee36..d732424015 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- if BR2_PACKAGE_DEJAVU
+ LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+-LIBCAMERA_VERSION = v0.4.0
++LIBCAMERA_VERSION = v0.5.0
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = \
+ 	host-openssl \
+@@ -51,9 +51,7 @@ LIBCAMERA_CONF_OPTS += -Dpycamera=enabled
+ endif
  
+ ifeq ($(BR2_PACKAGE_LIBCAMERA_V4L2),y)
+-LIBCAMERA_CONF_OPTS += -Dv4l2=true
+-else
+-LIBCAMERA_CONF_OPTS += -Dv4l2=false
++LIBCAMERA_CONF_OPTS += -Dv4l2=enabled
+ endif
+ 
+ LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_IMX8_ISI) += imx8-isi
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
