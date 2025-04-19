@@ -1,79 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86B3EC369D2
-	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 21:45:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7532FC369C9
+	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 21:47:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 556AF80B80;
-	Sat, 19 Apr 2025 21:45:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 343C24050A;
+	Sat, 19 Apr 2025 21:47:45 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4UazyDigN-rT; Sat, 19 Apr 2025 21:47:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62A834056F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 62A834056F;
+	Sat, 19 Apr 2025 21:47:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6472E22F
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:47:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4A6F881364
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:47:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HPpJs35uRTva; Sat, 19 Apr 2025 21:45:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81E5C80BCD
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81E5C80BCD;
-	Sat, 19 Apr 2025 21:45:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 164CE230
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:45:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F121E403FE
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:45:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1kMneS022z47 for <buildroot@buildroot.org>;
- Sat, 19 Apr 2025 21:45:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 13aPNlPzQ6nu for <buildroot@buildroot.org>;
+ Sat, 19 Apr 2025 21:47:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 06D9B4064A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06D9B4064A
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 06D9B4064A
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:45:51 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3C6E943150;
- Sat, 19 Apr 2025 21:45:50 +0000 (UTC)
-Date: Sat, 19 Apr 2025 23:45:49 +0200
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-Message-ID: <20250419234549.4a3a0e04@windsurf>
-In-Reply-To: <20250331202513.296233-1-ju.o@free.fr>
-References: <20250331202513.296233-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeeiudegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeetieeftedvhedvfeelgfefffevhffftdekueektdfhhedugeejheejtdegieetieenucffohhmrghinhepuggvsghirghnrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopehjuhdrohesfhhrvggvrdhfrhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1745099150;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=5tZrbEq5LId4YzrvUZcfkwwHXy3XAP+XGQ7gclUbB/c=;
- b=GhuXX/3z/W3S0cPYEZxph+Tyj/6y/+6HfFtkP1SGu7EPAE/1uMUU3yETXInrYYPkESwdIF
- RedwbxjL5kuAPDtUoHisiYsJCBt4K1U8OAk1QYMaI08e1ICmcmDjvosLqVbg1k2XF+eLu3
- peABMkWuR4Brwiv71ejAnow90UtZGmxwXiRSXjjqb0mDDuFgP3LMnb1HYsRsNIoHxbsP/2
- hqGmnpg5CqO33yEmd1+G2o/uGF1DIGJykmxpR+5AhKKXCe2QsFp+76X3k0KAlzDn4f7dYu
- rQWxyiKHFc0IcdApyVeJdbY58IKO84jx9XHo8IPTHtXaTILtfc/Ftc2zb6JCNQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=GhuXX/3z
-Subject: Re: [Buildroot] [PATCH 1/1] package/fakeroot: bump to version
- 1.37.1.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 783FB81366
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 783FB81366
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:47:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 643EA85D6D; Sat, 19 Apr 2025 21:47:41 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 19 Apr 2025 23:46:37 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: eb685196cdf557e6e7554852be31b6189ede368e
+X-Git-Newrev: 09bf1365f138ea22f2b9b64fc317ce6808d73d9a
+X-Patchwork-Hint: ignore
+Message-Id: <20250419214741.643EA85D6D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cachelib: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,36 +59,98 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 31 Mar 2025 22:25:13 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=09bf1365f138ea22f2b9b64fc317ce6808d73d9a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> For change log, see:
-> https://salsa.debian.org/clint/fakeroot/-/blob/debian/1.37.1.1-1/debian/changelog
-> 
-> This commit removes the package patch, included in upstream version.
-> HOST_FAKEROOT_AUTORECONF = YES is also removed, because it is no longer
-> needed.
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
->  .../0001-Makefile.am-fix-parallel-build.patch | 97 -------------------
->  package/fakeroot/fakeroot.hash                |  6 +-
->  package/fakeroot/fakeroot.mk                  |  6 +-
->  3 files changed, 5 insertions(+), 104 deletions(-)
->  delete mode 100644 package/fakeroot/0001-Makefile.am-fix-parallel-build.patch
+Provides caching APIs.
+https://cachelib.readthedocs.io/en/stable/
 
-Applied to master, thanks.
+Signed-off-by: Daniel Crowe <daniel.crowe@maxmine.com.au>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                   |  3 +++
+ package/Config.in                            |  1 +
+ package/python-cachelib/Config.in            |  6 ++++++
+ package/python-cachelib/python-cachelib.hash |  6 ++++++
+ package/python-cachelib/python-cachelib.mk   | 14 ++++++++++++++
+ 5 files changed, 30 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3a2797d7ec..d0561a10de 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -728,6 +728,9 @@ F:	configs/odroidc2_defconfig
+ F:	package/meson-tools/
+ F:	package/odroidc2-firmware/
+ 
++N:	Daniel Crowe <daniel.crowe@maxmine.com.au>
++F:	package/python-cachelib/
++
+ N:	Daniel J. Leach <dleach@belcan.com>
+ F:	package/dacapo/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 46e8a5c8e3..2d4ef81a2c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1037,6 +1037,7 @@ menu "External python modules"
+ 	source "package/python-brotli/Config.in"
+ 	source "package/python-bsdiff4/Config.in"
+ 	source "package/python-cached-property/Config.in"
++	source "package/python-cachelib/Config.in"
+ 	source "package/python-cachetools/Config.in"
+ 	source "package/python-can/Config.in"
+ 	source "package/python-canopen/Config.in"
+diff --git a/package/python-cachelib/Config.in b/package/python-cachelib/Config.in
+new file mode 100644
+index 0000000000..c17454c4be
+--- /dev/null
++++ b/package/python-cachelib/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_CACHELIB
++	bool "python-cachelib"
++	help
++	  A collection of cache libraries in the same API interface.
++
++	  https://github.com/pallets-eco/cachelib/
+diff --git a/package/python-cachelib/python-cachelib.hash b/package/python-cachelib/python-cachelib.hash
+new file mode 100644
+index 0000000000..6a50350aa1
+--- /dev/null
++++ b/package/python-cachelib/python-cachelib.hash
+@@ -0,0 +1,6 @@
++# md5, sha256 from https://pypi.org/pypi/cachelib/json
++md5  fc25e9c9165cd5fd42ce282c2ba540fd  cachelib-0.13.0.tar.gz
++sha256  209d8996e3c57595bee274ff97116d1d73c4980b2fd9a34c7846cd07fd2e1a48  cachelib-0.13.0.tar.gz
++# Locally computed sha256 checksums
++sha256  cd418120812dc2626281ae027e81b648229d166b5aca7472cecd510038d36e7d  LICENSE.rst
++sha256  c9362a7258a11c84a8f7e825ccbbb5c425c6fc02368d3aee6494533fb99ba1f4  docs/license.rst
+diff --git a/package/python-cachelib/python-cachelib.mk b/package/python-cachelib/python-cachelib.mk
+new file mode 100644
+index 0000000000..7361a21f4f
+--- /dev/null
++++ b/package/python-cachelib/python-cachelib.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-cachelib
++#
++################################################################################
++
++PYTHON_CACHELIB_VERSION = 0.13.0
++PYTHON_CACHELIB_SOURCE = cachelib-$(PYTHON_CACHELIB_VERSION).tar.gz
++PYTHON_CACHELIB_SITE = https://files.pythonhosted.org/packages/1d/69/0b5c1259e12fbcf5c2abe5934b5c0c1294ec0f845e2b4b2a51a91d79a4fb
++PYTHON_CACHELIB_SETUP_TYPE = setuptools
++PYTHON_CACHELIB_LICENSE = BSD-3-Clause
++PYTHON_CACHELIB_LICENSE_FILES = LICENSE.rst docs/license.rst
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
