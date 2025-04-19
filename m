@@ -4,94 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED78CC369CA
-	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 16:56:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BFF0C369CA
+	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 18:38:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9EE04402DE;
-	Sat, 19 Apr 2025 16:56:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE5D240678;
+	Sat, 19 Apr 2025 18:38:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y3m9fCzB60k0; Sat, 19 Apr 2025 16:56:58 +0000 (UTC)
+ id k0yB8WNq2Gda; Sat, 19 Apr 2025 18:38:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9E02A40471
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1270140653
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E02A40471;
-	Sat, 19 Apr 2025 16:56:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6C43D22F
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 16:56:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1270140653;
+	Sat, 19 Apr 2025 18:38:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id B923A230
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 18:38:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5D289804EE
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 16:56:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A96806067A
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 18:38:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dH0tdH3PY-qe for <buildroot@buildroot.org>;
- Sat, 19 Apr 2025 16:56:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::b34; helo=mail-yb1-xb34.google.com;
- envelope-from=josephzik@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 34604804EF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 34604804EF
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com
- [IPv6:2607:f8b0:4864:20::b34])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 34604804EF
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 16:56:56 +0000 (UTC)
-Received: by mail-yb1-xb34.google.com with SMTP id
- 3f1490d57ef6-e70a6ece644so377620276.0
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 09:56:56 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a_Tz6dwT8SSA for <buildroot@buildroot.org>;
+ Sat, 19 Apr 2025 18:38:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.53;
+ helo=mail-wm1-f53.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9ACDA6065F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9ACDA6065F
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com
+ [209.85.128.53])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9ACDA6065F
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 18:38:06 +0000 (UTC)
+Received: by mail-wm1-f53.google.com with SMTP id
+ 5b1f17b1804b1-43cf05f0c3eso20527835e9.0
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 11:38:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1745081815; x=1745686615;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=YvaggpwSlSVhmBgYlEdlBvZLQwWarvcbH4t6+FkxRzA=;
- b=XrRnb/19n+9kJBL92MIFk2PR/ZA/zODwCgD1DlCnblWa5BC0r08Y6nsASPOgFNSpJB
- S7ZLWOKvzj+BUOTlCe8qAg9GyDGNC96PXCXnbZCaP5SK0xUuFRaw74TFo5XAZ28uPlMN
- avi2eHoq2Fn0sjdhov6B4I3etDsQ6VWQUFL5L5T0eXmm/B9UNauIe8j0Bo5zY4kF0Jr9
- d0V4VrKMsZV+OBiO6gOo3uCFPJoTO8mirRfYnbyt3AY8hYXN0+Z5Ryxs2kC1wi5oaeiT
- jXEPwSAbql/Cd4pVgKyc9DzLo05ODyPsY29E+62pZA6Qjqg7A1inzIivcFeCvyCc+IVs
- ISUw==
-X-Gm-Message-State: AOJu0YyuZi4idoKSaNh0xWBvd381Jx4AObKIfl47fIxWHh1p9eC5RiEm
- 70yybWnhLM0KrU8yvhVyYKPnfev3j8X+15mRMpSd0CHyqYHHGLF7AkX5CqYno8C78Tfu8JTk2CM
- Bu7yf5bj4B1XsdTJnICPk8wtsRWJAosB+
-X-Gm-Gg: ASbGncutrzGzv5uYIgHam5FKfPW+hOwbxwa1aB0DzfrY4GEsITyAUL01N6zeIcqZoFj
- Sk4I2ZVSsZVyk8FDLWDa6YyWnCA/kuoEkCtWkOviJ1eAwxquzNDsTTt+c2Wq/HT7oWaae9tsUo+
- 6HBi4fBvb7X4QTGH9DOqpr
-X-Google-Smtp-Source: AGHT+IFWl7rV2cBEh0tjtp+ZE0QScP2f+/LXDsittZ6NzGmNQoZX/Il5YFKsuJ45dH5gRNQuNjrxriSik4AnnTLSx1E=
-X-Received: by 2002:a05:6902:140b:b0:e5d:afd7:643b with SMTP id
- 3f1490d57ef6-e7297eae16dmr3279581276.5.1745081814859; Sat, 19 Apr 2025
- 09:56:54 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1745087884; x=1745692684;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=juf5WmX+D7p2SVpOfdSNQnwdJqLeU3182uC/amMVD5I=;
+ b=ef1xPKc7kLb476wkSazURhnErrHbAiv6OQ0HGTL1pXwurf1IQSagJuXI4w/PSyNuBX
+ qiPHm/Wm171tRvrYheEaACTBkK1QuPnFatAf0gwN/JA8pyHkRL9UDRveIz07228FLclI
+ AdjEwM4yuid0lZglxIVETc47hj3qfzkUtekjzISU9wxL4Ye9ynEs2troZeI4TETKhUuX
+ jUivd8Sk8ZrGnVWaZ1Qbd2cYkwtOh+xThFQrcEt1EnCCyib3Z+YU7fWu3YrlBAcBhQ1T
+ 5nCydfSqO5NkdCpVFQ2aqDXRpUtAqBKRdwHGD8oXewW6XBjCue0nMORb3Dqi4/MfcHnt
+ sdQQ==
+X-Gm-Message-State: AOJu0YwDGbTMfQo5yRvu1/3v4HcIkFPIb1RbFU6jxgesSHsFM5pkJI/Z
+ i2Xx31wgObcJbbZiGR/Dydn4s+YmZvDXYlRElGfmxjKRvgyLJYNRrhKrzg==
+X-Gm-Gg: ASbGncs2QbV7xGNwcEPmxwEvK25yy/pHJ/C6UfYU+gMmAp9dDdvp32CZ8JMauRUp9zR
+ VDbvFBsQbPbKKUxtCYtnkXrQLaDYvEeQoc6Wlfeu8/Eu9ibRvflhZ1uV3Ydl4eXa7bmM4NvPVJt
+ NEVJYOpYh7lmgv5+Ji67oO/TnrIzeUNeUhzsziV/mcmyFrw/3ZvU/GbwGFdCdL44MGseyJiilge
+ WngoFWJv9snepCpg04WRiVhpLRp86fiFpC2aholalx4YibYtoGfdGyMOeprtoRAjuAqktAKfojY
+ v6+ezjKsZ+8EinUU4YaaUGf5BUpZ+XRZdcdgvR2+cf4LiXDs1ur9
+X-Google-Smtp-Source: AGHT+IELON6Bp4j4S3HXJss3yiHHnbG9HSTz1EYKQtOe9dVcSnX2KygsZLVajuIjvko9EM5omkqbrA==
+X-Received: by 2002:a05:600c:1d02:b0:439:86fb:7340 with SMTP id
+ 5b1f17b1804b1-4406ac412c4mr63800675e9.30.1745087883763; 
+ Sat, 19 Apr 2025 11:38:03 -0700 (PDT)
+Received: from localhost.localdomain ([87.66.230.131])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-39efa4207dbsm6557602f8f.4.2025.04.19.11.38.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 19 Apr 2025 11:38:02 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+To: buildroot@buildroot.org
+Cc: aperez@igalia.com,
+	thomas.petazzoni@bootlin.com,
+	thomas@devoogdt.com
+Date: Sat, 19 Apr 2025 20:38:00 +0200
+Message-ID: <20250419183800.93602-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250419183109.0286277d@windsurf>
+References: <20250419183109.0286277d@windsurf>
 MIME-Version: 1.0
-References: <CAPWx8vsoJUt8YMJG1aUqFRK1=yizNbgjVjGL1Q1+9ygjJGnZLA@mail.gmail.com>
- <dfe20dbb0429ce970599a992005b9ffa@free.fr>
-In-Reply-To: <dfe20dbb0429ce970599a992005b9ffa@free.fr>
-From: Joseph Zikusooka <josephzik@gmail.com>
-Date: Sat, 19 Apr 2025 19:56:42 +0300
-X-Gm-Features: ATxdqUEQ0m3K30UsyMkNdlGnaTq1axhMmuzxd2kNgWxPpG0Q6RxSaG6nzgCF0PI
-Message-ID: <CAPWx8vtcjfVZJLydqyUAJ_8WbOHkrfJm2DG-qS5TO+msfa4uBQ@mail.gmail.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1745081815; x=1745686615; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=YvaggpwSlSVhmBgYlEdlBvZLQwWarvcbH4t6+FkxRzA=;
- b=XEuviPAYj6IfU7Ka/c6WoRVZNyRjySUf+RuWdC1MniYFR8emWBWNAYFEOnMPyPfdHG
- oz7IO5oTzoUafNlyW6iFHftMENR43WiX8K6WxQjkRPb8Ad5/Xf099mdoqhY8dAXEH6UB
- riQMQ5qYzFuQIxLesAJiBZ7pfSMu4TxSrcqqRapQ/ZBWD4g8zF0fJbRYYFS5fT2hF09D
- AB17MAnnPvEs/22Ttn4xOvOqU4PDL7DF/6x7NRwervNbJ50WPWk7qZ92aL2l+hdeJH/B
- xensKnIZZWd6eBmuChoO2bKRgmomt1ecUz5MLG0PuEQBkULzqEYq3kHomo02eDHzyaC8
- hMVA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=XEuviPAY
-Subject: Re: [Buildroot] host-m4 build on Fedora 42 fails
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=devoogdt.com
+Subject: [Buildroot] [PATCH v3] package/webkitgtk: bump to 2.48.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,184 +95,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============8069528490614796072=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8069528490614796072==
-Content-Type: multipart/alternative; boundary="000000000000adc9ad06332485ca"
+This bumps webkit to the 2.48 stable series.
 
---000000000000adc9ad06332485ca
-Content-Type: text/plain; charset="UTF-8"
+WebKitGTK+ 2.48 highlights:
+https://webkitgtk.org/2025/04/08/webkitgtk-2.48.html
 
-Hi Julien,
+News:
+- https://webkitgtk.org/2025/03/14/webkitgtk2.48.0-released.html
+- https://webkitgtk.org/2025/04/02/webkitgtk2.48.1-released.html
 
-Thanks for the info and the workaround tip!
+And brings some security fixes:
+- https://webkitgtk.org/security/WSA-2025-0002.html
+- https://webkitgtk.org/security/WSA-2025-0003.html
 
-I updated my patch to use CFLAGS="$(HOST_CFLAGS) -std=gnu17" like you
-suggested, but the build still fails with GCC 15 and m4 1.4.19 - same
-errors as before. Strangely, if I build m4 outside the buildroot
-environment with those flags, it works fine.
+Also,
 
-Any idea what else could be causing the workaround to fail in buildroot?
-Are there other flags or tweaks I could try in m4.mk until the new m4
-release is out?
+- Raise the minimal GCC requirement [1],
+which should have been raised by the 2.46.4 bump.
 
-Regards,
-Joseph Zikusooka (ZIK)
+- Handle SPEECH_SYNTHESIS, which has been enabled
+by default in commit [2].
 
-On Sat, Apr 19, 2025, 3:29 PM Julien Olivain <ju.o@free.fr> wrote:
+[1] https://github.com/WebKit/WebKit/commit/682ac4ba74c53d0cd488c7a595096224a9abb036
+[2] https://github.com/WebKit/WebKit/commit/10381a8de938024f31935184af470ccbce0b22d9
 
-> Hi Joseph,
->
-> Thanks for reporting the issue.
->
-> On 18/04/2025 16:14, Joseph Zikusooka wrote:
-> > Recently upgraded to Fedora 42 and since then I am unable to compile
-> > buildroot.  Make fails at the host-m4 package.
-> > I looked up several sources and found this:
-> > https://lists.gnu.org/archive/html/m4-discuss/2025-02/msg00000.html
-> >
-> > The work around on Fedora 42 was to build m4 with the environment
-> > flags as follows:
-> > CFLAGS='-std=gnu17' ./configure && make
-> >
-> > I tried to patch m4.mk as follows, but the build is still failing.  Any
-> > ideas?
-> >
-> > --- a/m4.mk     2025-04-18 17:02:01.174923317 +0300
-> > +++ b/m4.mk     2025-04-18 17:03:29.285694673 +0300
-> > @@ -10,4 +10,7 @@
-> >  M4_LICENSE = GPL-3.0+
-> >  M4_LICENSE_FILES = COPYING
-> >
-> > +M4_CONF_ENV = CFLAGS="-std=gnu17"
-> > +M4_MAKE_ENV = CFLAGS="-std=gnu17"
-> > +
->
-> To workaround this gcc15 issue with the current m4
-> version 1.4.19, you should probably pass the CFLAGS as:
->
-> HOST_M4_CONF_ENV = CFLAGS="$(HOST_CFLAGS) -std=gnu17"
->
-> Also, there is an upcoming m4 release which will fix
-> this gcc 15 issue. See:
->
-> https://git.savannah.gnu.org/cgit/m4.git/commit/?h=branch-1.4&id=a22c9802dd7e724eaefb21dc21d84ac2d3a49c89
->
-> More specifically:
-> "
-> ** Update to comply with newer C standards, and inherit portability
->     improvements from gnulib.
-> "
->
-> If this new m4 release is not published in the coming days/weeks
-> please submit an updated version of this patch to fix this issue.
-> Please also add a comment that this CFLAGS modification is needed
-> for m4-1.4.19 and host-gcc15 and should be removed in the next
-> bump to 1.4.20.
->
-> Best regards,
->
-> Julien.
->
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+---
+v2: added additional security report and a link to the release highlights
+v3: resend using git send-email
+---
+ package/webkitgtk/Config.in      | 6 +++---
+ package/webkitgtk/webkitgtk.hash | 6 +++---
+ package/webkitgtk/webkitgtk.mk   | 9 ++++++++-
+ 3 files changed, 14 insertions(+), 7 deletions(-)
 
---000000000000adc9ad06332485ca
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto"><p dir=3D"ltr">Hi Julien,</p>
-<p dir=3D"ltr">Thanks for the info and the workaround tip! </p>
-<p dir=3D"ltr">I updated my patch to use CFLAGS=3D&quot;$(HOST_CFLAGS) -std=
-=3Dgnu17&quot; like you suggested, but the build still fails with GCC 15 an=
-d m4 1.4.19 - same errors as before. Strangely, if I build m4 outside the b=
-uildroot environment with those flags, it works fine.</p>
-<p dir=3D"ltr">Any idea what else could be causing the workaround to fail i=
-n buildroot? Are there other flags or tweaks I could try in <a href=3D"http=
-://m4.mk" target=3D"_blank" rel=3D"noreferrer">m4.mk</a> until the new m4 r=
-elease is out?</p><p dir=3D"ltr">Regards,</p><div data-smartmail=3D"gmail_s=
-ignature"><div dir=3D"ltr">Joseph Zikusooka (ZIK)</div></div></div>
-<br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Sat=
-, Apr 19, 2025, 3:29 PM Julien Olivain &lt;<a href=3D"mailto:ju.o@free.fr" =
-target=3D"_blank" rel=3D"noreferrer">ju.o@free.fr</a>&gt; wrote:<br></div><=
-blockquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px=
- #ccc solid;padding-left:1ex">Hi Joseph,<br>
-<br>
-Thanks for reporting the issue.<br>
-<br>
-On 18/04/2025 16:14, Joseph Zikusooka wrote:<br>
-&gt; Recently upgraded to Fedora 42 and since then I am unable to compile<b=
-r>
-&gt; buildroot.=C2=A0 Make fails at the host-m4 package.<br>
-&gt; I looked up several sources and found this:<br>
-&gt; <a href=3D"https://lists.gnu.org/archive/html/m4-discuss/2025-02/msg00=
-000.html" rel=3D"noreferrer noreferrer noreferrer" target=3D"_blank">https:=
-//lists.gnu.org/archive/html/m4-discuss/2025-02/msg00000.html</a><br>
-&gt; <br>
-&gt; The work around on Fedora 42 was to build m4 with the environment<br>
-&gt; flags as follows:<br>
-&gt; CFLAGS=3D&#39;-std=3Dgnu17&#39; ./configure &amp;&amp; make<br>
-&gt; <br>
-&gt; I tried to patch <a href=3D"http://m4.mk" rel=3D"noreferrer noreferrer=
- noreferrer" target=3D"_blank">m4.mk</a> as follows, but the build is still=
- failing.=C2=A0 Any <br>
-&gt; ideas?<br>
-&gt; <br>
-&gt; --- a/<a href=3D"http://m4.mk" rel=3D"noreferrer noreferrer noreferrer=
-" target=3D"_blank">m4.mk</a>=C2=A0 =C2=A0 =C2=A02025-04-18 17:02:01.174923=
-317 +0300<br>
-&gt; +++ b/<a href=3D"http://m4.mk" rel=3D"noreferrer noreferrer noreferrer=
-" target=3D"_blank">m4.mk</a>=C2=A0 =C2=A0 =C2=A02025-04-18 17:03:29.285694=
-673 +0300<br>
-&gt; @@ -10,4 +10,7 @@<br>
-&gt;=C2=A0 M4_LICENSE =3D GPL-3.0+<br>
-&gt;=C2=A0 M4_LICENSE_FILES =3D COPYING<br>
-&gt; <br>
-&gt; +M4_CONF_ENV =3D CFLAGS=3D&quot;-std=3Dgnu17&quot;<br>
-&gt; +M4_MAKE_ENV =3D CFLAGS=3D&quot;-std=3Dgnu17&quot;<br>
-&gt; +<br>
-<br>
-To workaround this gcc15 issue with the current m4<br>
-version 1.4.19, you should probably pass the CFLAGS as:<br>
-<br>
-HOST_M4_CONF_ENV =3D CFLAGS=3D&quot;$(HOST_CFLAGS) -std=3Dgnu17&quot;<br>
-<br>
-Also, there is an upcoming m4 release which will fix<br>
-this gcc 15 issue. See:<br>
-<a href=3D"https://git.savannah.gnu.org/cgit/m4.git/commit/?h=3Dbranch-1.4&=
-amp;id=3Da22c9802dd7e724eaefb21dc21d84ac2d3a49c89" rel=3D"noreferrer norefe=
-rrer noreferrer" target=3D"_blank">https://git.savannah.gnu.org/cgit/m4.git=
-/commit/?h=3Dbranch-1.4&amp;id=3Da22c9802dd7e724eaefb21dc21d84ac2d3a49c89</=
-a><br>
-<br>
-More specifically:<br>
-&quot;<br>
-** Update to comply with newer C standards, and inherit portability<br>
-=C2=A0 =C2=A0 improvements from gnulib.<br>
-&quot;<br>
-<br>
-If this new m4 release is not published in the coming days/weeks<br>
-please submit an updated version of this patch to fix this issue.<br>
-Please also add a comment that this CFLAGS modification is needed<br>
-for m4-1.4.19 and host-gcc15 and should be removed in the next<br>
-bump to 1.4.20.<br>
-<br>
-Best regards,<br>
-<br>
-Julien.<br>
-</blockquote></div>
-
---000000000000adc9ad06332485ca--
-
---===============8069528490614796072==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 3594299314..bcb4b12fa3 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -16,12 +16,12 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 
+-comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 10, host gcc >= 4.9"
++comment "webkitgtk needs libgtk3 and a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 11, host gcc >= 4.9"
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT
+ 	depends on !BR2_PACKAGE_LIBGTK3 || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_11 || \
+ 		!BR2_HOST_GCC_AT_LEAST_4_9
+ 	depends on BR2_USE_MMU
+ 
+@@ -33,7 +33,7 @@ config BR2_PACKAGE_WEBKITGTK
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
+ 	depends on BR2_USE_WCHAR # icu, libsoup3
+ 	depends on BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 96100d4c7c..fd9420bad9 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,6 +1,6 @@
+-# From https://www.webkitgtk.org/releases/webkitgtk-2.46.4.tar.xz.sums
+-sha1  10d4dbd222acec30b1d20ee3b7d02c0d9727c5a9  webkitgtk-2.46.4.tar.xz
+-sha256  0eff5f0ab0a2872ec87df62bc32e3289c8af625716ac71e94b298d74e0374176  webkitgtk-2.46.4.tar.xz
++# From https://www.webkitgtk.org/releases/webkitgtk-2.48.1.tar.xz.sums
++sha1  f7939f920f92f6b1395b8573f069d3fb9c085b3f  webkitgtk-2.48.1.tar.xz
++sha256  98efdf21c4cdca0fe0b73ab5a8cb52093b5aa52d9b1b016a93f71dbfa1eb258f  webkitgtk-2.48.1.tar.xz
+ 
+ # Hashes for license files:
+ sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index ec63d093b7..2c22bfb607 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.46.4
++WEBKITGTK_VERSION = 2.48.1
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
+@@ -73,6 +73,13 @@ else
+ WEBKITGTK_CONF_OPTS += -DENABLE_MINIBROWSER=OFF
+ endif
+ 
++ifeq ($(BR2_PACKAGE_FLITE),y)
++WEBKITGTK_CONF_OPTS += -DENABLE_SPEECH_SYNTHESIS=ON
++WEBKITGTK_DEPENDENCIES += flite
++else
++WEBKITGTK_CONF_OPTS += -DENABLE_SPEECH_SYNTHESIS=OFF
++endif
++
+ ifeq ($(BR2_PACKAGE_LCMS2),y)
+ WEBKITGTK_CONF_OPTS += -DUSE_LCMS=ON
+ WEBKITGTK_DEPENDENCIES += lcms2
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8069528490614796072==--
