@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 814D0C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:45:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B00E0C3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:45:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5091D61547;
-	Mon, 19 May 2025 10:45:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 709E66154F;
+	Mon, 19 May 2025 10:45:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cb3t7RGFTF27; Mon, 19 May 2025 10:45:03 +0000 (UTC)
+ id TuLRI0w7OIzD; Mon, 19 May 2025 10:45:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 129626153B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 611126154A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 129626153B;
-	Mon, 19 May 2025 10:45:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 08146E4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 611126154A;
+	Mon, 19 May 2025 10:45:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5DED1E4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F113040DE9
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1AC524122D
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GnbSbJLeX78g for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TMzjydDU6eRh for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A49B40DF6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D7A8410D8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6A49B40DF6
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3D7A8410D8
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6735184A21; Mon, 19 May 2025 10:39:46 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 3ADB4872E7; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 29 Mar 2025 21:24:21 +0100
+Date: Sat, 19 Apr 2025 16:38:43 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e679cd4974a9f58a211447f6903084f955f2820b
-X-Git-Newrev: 8a402952a7447e2125ef326752f412711fb425d5
+X-Git-Oldrev: 9af9b4b304a38a28d6f81ba209f0ff63f528b571
+X-Git-Newrev: 3e2e59340912a6788586a7216ac34df4de5ca1db
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103946.6735184A21@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/lighttpd: bump to
- 1.4.78
+Message-Id: <20250519103952.3ADB4872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libuci: bump version
+ to f3fc0b7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,53 +58,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a402952a7447e2125ef326752f412711fb425d5
+commit: https://git.buildroot.net/buildroot/commit/?id=3e2e59340912a6788586a7216ac34df4de5ca1db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-News:
-- https://www.lighttpd.net/2025/3/22/1.4.78/
+Changelog:
 
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+ - f3fc0b7 libuci: fix false positive warning on older gcc versions
+ - 16ff0ba CMakeLists: add support for including ABIVERSION in the library version number
+ - 047b2ef CMakeLists.txt: bump minimum cmake version
+ - fb3c234 add support for an override config directory
+ - 10f7996 file: Ignore config file with '.' in name
+ - 5781664 remove internal usage of redundant uci_ptr.last
+ - 3cda251 file: Fix uci -m import command
+ - 04d0c46 uci: macro uci_alloc_element not in uci.h
+ - ae61e1c uci: optimize update section in uci_set
+ - 16e8a3b uci: fix memory leak uci_set on update section
+ - b2f3417 uci: maintain option position in uci_add_list
+ - 74f2797 uci: fix atomicity of uci_add_list
+ - 47697e6 uci: fix use-after-free uci_add_list
+ - 7e01d66 uci: optimize update option in uci_set
+ - b7ceda9 uci: maintain option position in uci_set
+ - 9b6605e uci: fix use-after-free uci_set on update option
+ - f49a2fd delta: simplify uci_load_delta() by using a helper
+ - 5de3871 cli: drop redundant uci_add_delta_path() call for -P
+ - f84f49f cmake: Allow override of install directories
+
+Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lighttpd/lighttpd.hash | 8 ++++----
- package/lighttpd/lighttpd.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libuci/libuci.hash | 6 +++---
+ package/libuci/libuci.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
-index d4742b5746..4834e2e947 100644
---- a/package/lighttpd/lighttpd.hash
-+++ b/package/lighttpd/lighttpd.hash
-@@ -1,6 +1,6 @@
--# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.77.sha512sum
--sha512  696fd4fd8486a6c3fd1131c7e8a935a02b5384882b74ddc19bf79d085e2a0abed9184a30f97e3a7aafb816d3589e110e8d70115daa15cdc52cf61aa4129e3565  lighttpd-1.4.77.tar.xz
--# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.77.sha256sum
--sha256  acafabdbfa2267d8b6452d03d85fdd2a66525f3f05a36a79b6645c017f1562ce  lighttpd-1.4.77.tar.xz
-+# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.78.sha512sum
-+sha512  40559e676da38b7b4742d7140ab1afe6b69a10ececc5ab1e18c1ea0e4b1c3f13f8058e8e005cbad3df8c008b6b80511afbd0bde9c8094848f3db4d5a29961181  lighttpd-1.4.78.tar.xz
-+# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.78.sha256sum
-+sha256  3c0739e8bc75c9e9fc1cfa89e1c304dd4b0e4abb87adc646a1d20bc6a2db2a3e  lighttpd-1.4.78.tar.xz
- # Locally calculated
- sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
-diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
-index 609fe3e3be..5f38637857 100644
---- a/package/lighttpd/lighttpd.mk
-+++ b/package/lighttpd/lighttpd.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libuci/libuci.hash b/package/libuci/libuci.hash
+index cc04320331..1e429f8160 100644
+--- a/package/libuci/libuci.hash
++++ b/package/libuci/libuci.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  d095dc7ff4714e33aa18ef3ea5d30f525a202d6997d7b13bd952da53818988d6  libuci-4b3db1179747b6a6779029407984bacef851325c-git4.tar.gz
+-sha256  39e1cc18a36172fb80d9b37f0af77d78ae935bd8a020978a7895d9e76a24e112  cli.c
+-sha256  69d4eea4de19d27014f3d6ed723081b4039700bfd73cd0a5e39e2c4f19a58c66  libuci.c
++sha256  d3b12df54f9faa69f0ff6d2a239fdcc30d64eda5269ddc882cf97677ea8cb066  libuci-f3fc0b76040685829191debc03edf72f486ae8ae-git4.tar.gz
++sha256  5bb12361838b588bb263ade8537f5ae1a5e62d54b0a8f0640489db8cc29831d8  cli.c
++sha256  bbc34ea5f391abc3b27416dc3c96b0f71f852c44210faf1cde0990218f68b13a  libuci.c
+diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
+index 81e87aa5be..3c7e12baae 100644
+--- a/package/libuci/libuci.mk
++++ b/package/libuci/libuci.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIGHTTPD_VERSION_MAJOR = 1.4
--LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).77
-+LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).78
- LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
- LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
- LIGHTTPD_LICENSE = BSD-3-Clause
+-LIBUCI_VERSION = 4b3db1179747b6a6779029407984bacef851325c
++LIBUCI_VERSION = f3fc0b76040685829191debc03edf72f486ae8ae
+ LIBUCI_SITE = https://git.openwrt.org/project/uci.git
+ LIBUCI_SITE_METHOD = git
+ LIBUCI_LICENSE = LGPL-2.1, GPL-2.0 (tools)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
