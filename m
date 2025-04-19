@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F6C0C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F24AC3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED48770719;
-	Mon, 19 May 2025 10:52:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1295970726;
+	Mon, 19 May 2025 10:52:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dnJ0Ou0-rXOc; Mon, 19 May 2025 10:52:43 +0000 (UTC)
+ id nFCa5mMsVkeX; Mon, 19 May 2025 10:52:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD3927070F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D668C7071D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD3927070F;
-	Mon, 19 May 2025 10:52:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D668C7071D;
+	Mon, 19 May 2025 10:52:44 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F463E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:16 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1301AE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 138A941E1C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1E0D340E0D
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oi8tdQ7zdPCI for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:06 +0000 (UTC)
+ id Ha73gXgIquht for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE21840E0D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45BC8411D8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE21840E0D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 45BC8411D8
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BB4648652C; Mon, 19 May 2025 10:39:52 +0000 (UTC)
+ id 42C8081E90; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 19 Apr 2025 22:18:23 +0200
+Date: Sat, 19 Apr 2025 16:44:26 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 65721c6e0a5efe1a4fff1bdab44ff55c27f1ca68
-X-Git-Newrev: 569272be91ec02b35a94c545188a879dc78a7851
+X-Git-Oldrev: 3e2e59340912a6788586a7216ac34df4de5ca1db
+X-Git-Newrev: d0994fd66d9bfa18e3ab3b8fc634ae084621e1ba
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103952.BB4648652C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libcamera: fix
- documentation being built even if disabled
+Message-Id: <20250519103952.42C8081E90@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/stm32f769_disco_sd:
+ bump Linux to 5.15.179 and U-Boot to 2025.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,73 +66,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=569272be91ec02b35a94c545188a879dc78a7851
+commit: https://git.buildroot.net/buildroot/commit/?id=d0994fd66d9bfa18e3ab3b8fc634ae084621e1ba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-We currently disable building the documentation via the "documentation"
-feature, but it is enabled nonetheless by meson if sphinx-build-3 is
-found on the host.
+The patch bumps the Linux kernel to version 5.15.179 and U-Boot to
+version 2025.04.
 
-This makes sure it doesn't happen by making the sphinx-build-3 check
-only happen when the "documentation" feature is "auto" or "enabled",
-which isn't the case for Buildroot.
-
-The bug seems to have been introduced in v0.0.1 release.
-
-Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...t-automatically-build-documentation-if-sp.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash | 2 +-
+ board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash | 2 +-
+ configs/stm32f769_disco_sd_defconfig                              | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libcamera/0001-meson-do-not-automatically-build-documentation-if-sp.patch b/package/libcamera/0001-meson-do-not-automatically-build-documentation-if-sp.patch
-new file mode 100644
-index 0000000000..d8975a86cb
---- /dev/null
-+++ b/package/libcamera/0001-meson-do-not-automatically-build-documentation-if-sp.patch
-@@ -0,0 +1,42 @@
-+From 1e4db1f9792e4343231a1cf36aa553404a534828 Mon Sep 17 00:00:00 2001
-+From: Quentin Schulz <quentin.schulz@cherry.de>
-+Date: Fri, 4 Apr 2025 18:01:33 +0200
-+Subject: [PATCH] meson: do not automatically build documentation if
-+ sphinx-build-3 is found
-+
-+Commit aba567338b25 ("Documentation: Move all dependencies into
-+features") did an incomplete migration of the documentation boolean
-+option into a documentation feature.
-+
-+If sphinx-build-3 binary is found on the host system, the documentation
-+is built, regardless of the value of the feature option.
-+
-+This makes sure that sphinx-build-3 presence is only checked if the
-+documentation feature is not disabled (which is the default, as it's
-+"auto" by default).
-+
-+This is essential for reproducibility for build systems where
-+sphinx-build-3 may or may not be present when libcamera is built, and
-+also to declutter the generated package if documentation isn't desired.
-+
-+Fixes: aba567338b25 ("Documentation: Move all dependencies into features")
-+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
-+Upstream: https://lists.libcamera.org/pipermail/libcamera-devel/2025-April/049705.html
-+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
-+---
-+ Documentation/meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Documentation/meson.build b/Documentation/meson.build
-+index 6158320e..c59849f6 100644
-+--- a/Documentation/meson.build
-++++ b/Documentation/meson.build
-+@@ -116,7 +116,7 @@ endif
-+ # Sphinx
-+ #
-+ 
-+-sphinx = find_program('sphinx-build-3', required : false)
-++sphinx = find_program('sphinx-build-3', required : get_option('documentation'))
-+ if not sphinx.found()
-+     sphinx = find_program('sphinx-build', required : get_option('documentation'))
-+ endif
+diff --git a/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
+index 57c69adb36..4e0aeb77d8 100644
+--- a/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
++++ b/board/stmicroelectronics/stm32f769-disco/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  a84ab5328c8a5a0e5c4a39a06b07479a7769c73af49a4c9ce59eeb644829d3b1  linux-5.15.176.tar.xz
++sha256  9319a47b1e9b5d344ff6015431856d0c9640e4faedc527c87f9129061a27136f  linux-5.15.179.tar.xz
+diff --git a/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
+index 50674352d7..80ea21b7cb 100644
+--- a/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
++++ b/board/stmicroelectronics/stm32f769-disco/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
++sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
+diff --git a/configs/stm32f769_disco_sd_defconfig b/configs/stm32f769_disco_sd_defconfig
+index 25b79f0de1..e0c592ad82 100644
+--- a/configs/stm32f769_disco_sd_defconfig
++++ b/configs/stm32f769_disco_sd_defconfig
+@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32f769-disco/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.176"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.179"
+ BR2_LINUX_KERNEL_DEFCONFIG="stm32"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0xc0000000.config board/stmicroelectronics/stm32f769-disco/linux-sd.fragment"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+@@ -23,7 +23,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f769-disco"
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
