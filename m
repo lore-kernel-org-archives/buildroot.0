@@ -1,81 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 064C0C369C9
-	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 21:29:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5D3AC369C9
+	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 21:30:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6F2F812A3;
-	Sat, 19 Apr 2025 21:29:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97C8F406F7;
+	Sat, 19 Apr 2025 21:30:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WctJhDwr-WVc; Sat, 19 Apr 2025 21:29:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3DQwfj1xYJ3D; Sat, 19 Apr 2025 21:30:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AD0A812A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE2DA4052A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AD0A812A5;
-	Sat, 19 Apr 2025 21:29:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 18F54230
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:29:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE2DA4052A;
+	Sat, 19 Apr 2025 21:30:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id ABB4C230
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:30:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 993B66085B
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:29:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D28F4052A
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:30:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CyqqzXZLWDU2 for <buildroot@buildroot.org>;
- Sat, 19 Apr 2025 21:29:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bpJL0hgv6Bt8 for <buildroot@buildroot.org>;
+ Sat, 19 Apr 2025 21:30:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A8B986067C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8B986067C
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A8B986067C
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:29:12 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9F46C439F2;
- Sat, 19 Apr 2025 21:29:09 +0000 (UTC)
-Date: Sat, 19 Apr 2025 23:29:08 +0200
-To: Ian Merin via buildroot <buildroot@buildroot.org>
-Cc: Ian Merin <Ian.Merin@entrust.com>, "angelo.compagnucci@gmail.com"
- <angelo.compagnucci@gmail.com>
-Message-ID: <20250419232908.3009a704@windsurf>
-In-Reply-To: <BN7PR11MB2788A512245CC5396C83CD8CFFB52@BN7PR11MB2788.namprd11.prod.outlook.com>
-References: <BN7PR11MB2788A512245CC5396C83CD8CFFB52@BN7PR11MB2788.namprd11.prod.outlook.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9135740527
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9135740527
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9135740527
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:30:29 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 945721FCEA;
+ Sat, 19 Apr 2025 21:30:27 +0000 (UTC)
+Date: Sat, 19 Apr 2025 23:30:26 +0200
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: buildroot@buildroot.org
+Message-ID: <20250419233026.2a04c201@windsurf>
+In-Reply-To: <20250408-fix_e2fsprogs-v1-1-cc814171907a@rivosinc.com>
+References: <20250408-fix_e2fsprogs-v1-1-cc814171907a@rivosinc.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeeiudduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepkfgrnhdrofgvrhhinhesvghnthhruhhsthdrtghomhdprhgtphhtthhopegrnhhgv
- ghlohdrtghomhhprghgnhhutggtihesghhmrghilhdrtghomh
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeeiudduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthhgrrhhlihgvsehrihhvohhsihhntgdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1745098150;
+ d=bootlin.com; s=gm1; t=1745098227;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=VCL8SBP5QhO97+2QAAVxAW/NCMFF9JxqXJCmFPIdOhc=;
- b=jUajpAhLeRiCWTKN+2+pGpXq7Et3JF3iKjfwG+f7z+nCPFqFj7NP6ODley6IPBQOboHnb4
- 2pL+O3F6pxQKPh9dhoH1EPvOiBh6/G+gt0qpmn3vgSNdQjAeMShV1sbnzWe5pJaPgNRX4X
- VKOebtU7hUMlCquVtaldtpXFksnUoY0mDDii5uO/wd3QzV44KHglKGAzxPWRVf1tc7Fs2e
- bZ5I2qGyO62jRlwcsuHUXAteKrjK0dFsbxr9MWEwBbJ25PQzhBIrCzpq32CmkaVOCT4OuF
- Fj7EZpuvBQV0BW74jKl+f6UChJQSdlJHBacr3qR1HjCGWbSciPTz8t3e7/DLhw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=f7YvfVGQq6CwieGTvYK/0uibDTSK2TJWOK+d5HKUW3M=;
+ b=IjXIZlIgdNXvTChjFDGcX0nGd8pZwHBjPepboNG+TYWvAOACwNzFjMuFKM9tTi133NawAk
+ cBnV4LXYfMiYcTnTeL8Hbnrt0GCSH6eveTyy7PH1iDtuEOhKl1+iCSC3CWSbN+3OjeSEiO
+ DKozUuf5fYkUame97fNBVMj3Ln1nR7RHMNB44Svls9d0GxHO5aX/J4548UW/HQpI3WTdql
+ C0sZe6aR1EJF5JF89JsM/AwrEeLZVLruSJ+aVnjidPmbsmIeRTrzzLIFIoQ2uAM9bhh4OV
+ kuonvsCBupQuq2RI5WORdGmL3EhCxOg5OQmmxqvNNYpec7xzbO+4qyQuL8YRGQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jUajpAhL
-Subject: Re: [Buildroot] [PATCH] package/apparmor don't reference
- libapparmor variables
+ header.s=gm1 header.b=IjXIZlIg
+Subject: Re: [Buildroot] [PATCH] package/e2fsprogs: Don't build docs for host
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,15 +91,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 8 Apr 2025 17:47:58 +0000
-Ian Merin via buildroot <buildroot@buildroot.org> wrote:
+Hello Charlie,
 
-> Signed-off-by: Ian Merin <Ian.Merin@ncipher.com>
+On Tue, 08 Apr 2025 17:03:05 -0700
+Charlie Jenkins <charlie@rivosinc.com> wrote:
+
+> texinfo isn't provided for the host in buildroot, but e2fsprogs always
+> attempts to build the documentation. The error that gets printed is as
+> follows:
+> 
+> /usr/bin/install: cannot stat 'libext2fs.info*': No such file or directory
+> make[3]: [Makefile:363: install-doc-libs] Error 1 (ignored)
+> 
+> This error is ignored but it is unnecessary.
+> 
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 > ---
->  package/apparmor/apparmor.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  package/e2fsprogs/e2fsprogs.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-Applied to master, thanks.
+But why is that an issue for the host variant of e2fsprogs and not the
+target variant?
 
 Thomas
 -- 
