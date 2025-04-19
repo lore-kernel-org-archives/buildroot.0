@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C558C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E68D9C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 356EB842A7;
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6C32706C7;
 	Mon, 19 May 2025 10:52:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LMtnRrDdeWI5; Mon, 19 May 2025 10:52:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LOpfq9CsQ_DC; Mon, 19 May 2025 10:52:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CBAF842A0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD8D0706D8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5CBAF842A0;
-	Mon, 19 May 2025 10:52:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD8D0706D8;
+	Mon, 19 May 2025 10:52:24 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0EB9CD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:06 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 120D4D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0CAF541C0D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1B58341C12
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x3NjwUj8LLjc for <buildroot@buildroot.org>;
+ id bFRsvC1Sfdxo for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3385D411D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E4D940D71
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3385D411D2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4E4D940D71
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3227E83B63; Mon, 19 May 2025 10:39:52 +0000 (UTC)
+ id 4C8ED84BBD; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 19 Apr 2025 16:38:32 +0200
+Date: Sat, 19 Apr 2025 17:01:49 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 44c11a6862aa41ae025aa0cf248e2e7236b46d21
-X-Git-Newrev: 9af9b4b304a38a28d6f81ba209f0ff63f528b571
+X-Git-Oldrev: d0994fd66d9bfa18e3ab3b8fc634ae084621e1ba
+X-Git-Newrev: 9d6ab1244a3d8b9c4934caf9cf7810086de7c82f
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103952.3227E83B63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ubus: bump version to
- afa57cc
+Message-Id: <20250519103952.4C8ED84BBD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libsigrokdecode: needs
+ python3 w/ zlib support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,48 +66,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9af9b4b304a38a28d6f81ba209f0ff63f528b571
+commit: https://git.buildroot.net/buildroot/commit/?id=9d6ab1244a3d8b9c4934caf9cf7810086de7c82f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog:
+Some protocol decoders in libsigrokdecode need the zlib module:
 
- - afa57cc libubus: add support for using channels
- - d996988 libubus: close file descriptor after sending it from a request
- - 252a9b0 libubus: Make UBUS_* macros work cleanly in C++
- - 65bb027 CMakeLists.txt: bump minimum cmake version
- - f84eb59 libubus: fix initial subscribe with autosubscribe
- - 2b39a27 libubus: fix reconnect with auto subscribe
- - b3e8c4e Add auto subscribe support
+    srd: ModuleNotFoundError: Failed to load decoder usb_power_delivery: import by name failed: No module named 'zlib'
+    srd: Traceback (most recent call last):
+      File "/usr/share/libsigrokdecode/decoders/usb_power_delivery/__init__.py", line 24, in <module>
+        from .pd import *
+      File "/usr/share/libsigrokdecode/decoders/usb_power_delivery/pd.py", line 24, in <module>
+        import zlib   # for crc32
+        ^^^^^^^^^^^
+    ModuleNotFoundError: No module named 'zlib'
 
-Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ubus/ubus.hash | 2 +-
- package/ubus/ubus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libsigrokdecode/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ubus/ubus.hash b/package/ubus/ubus.hash
-index af70e86e46..e35f37b03d 100644
---- a/package/ubus/ubus.hash
-+++ b/package/ubus/ubus.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0020c808d0ba74b1f4c9514e2b3dfa98ec13a142c97b86b9c229479c560aca19  ubus-f787c97b34894a38b15599886cacbca01271684f-git4.tar.gz
-+sha256  ba7602c660cb2c15c0e04942414e4cf3d96622622406c5fc3b88895694aebb9f  ubus-afa57cce0aff82f4a7a0e509d4387ebc23dd3be7-git4.tar.gz
- sha256  a3caa6c0e90c87b7c97c2ac3d0c0d416082ef777215faec2e9b24ea6e68f6988  ubusd_acl.h
-diff --git a/package/ubus/ubus.mk b/package/ubus/ubus.mk
-index cc2ed81786..913c0e3e39 100644
---- a/package/ubus/ubus.mk
-+++ b/package/ubus/ubus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UBUS_VERSION = f787c97b34894a38b15599886cacbca01271684f
-+UBUS_VERSION = afa57cce0aff82f4a7a0e509d4387ebc23dd3be7
- UBUS_SITE = https://git.openwrt.org/project/ubus.git
- UBUS_SITE_METHOD = git
- 
+diff --git a/package/libsigrokdecode/Config.in b/package/libsigrokdecode/Config.in
+index b58c8a2a29..463cb25f28 100644
+--- a/package/libsigrokdecode/Config.in
++++ b/package/libsigrokdecode/Config.in
+@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBSIGROKDECODE
+ 	depends on !BR2_STATIC_LIBS # python3
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_PYTHON3
++	select BR2_PACKAGE_PYTHON3_ZLIB  # runtime
+ 	help
+ 	  Libsigrokdecode is a shared library written in C, which
+ 	  provides (streaming) protocol decoding functionality. Say
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
