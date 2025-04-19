@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 549D7C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AB7CDC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 073ED706BD;
-	Mon, 19 May 2025 10:52:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4AF85706C4;
+	Mon, 19 May 2025 10:52:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lZLEeyBqSs8n; Mon, 19 May 2025 10:52:18 +0000 (UTC)
+ id 35eRwWHqUDzK; Mon, 19 May 2025 10:52:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 170F270690
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 41DCC706C8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 170F270690;
-	Mon, 19 May 2025 10:52:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41DCC706C8;
+	Mon, 19 May 2025 10:52:20 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 02AFAD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 04DDED4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B9B5841A5B
+ by smtp4.osuosl.org (Postfix) with ESMTP id DE5924111F
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EBAlehK88C8t for <buildroot@buildroot.org>;
+ id 40ORvQMzydAK for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1605B40D92
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C2AF40DEE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1605B40D92
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C2AF40DEE
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 137F583B63; Mon, 19 May 2025 10:39:52 +0000 (UTC)
+ id 27C9184BBD; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 19 Apr 2025 16:34:54 +0200
+Date: Sat, 19 Apr 2025 16:38:28 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3012fbdec745640f7ef9f52f4ee9d94d07c82eb6
-X-Git-Newrev: 2ef9e7ff57e86e410c6b638bf74c5bf5f414a31d
+X-Git-Oldrev: 7b9a021dfd7f3ea9c17f2ce354c509659adfa099
+X-Git-Newrev: 44c11a6862aa41ae025aa0cf248e2e7236b46d21
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103952.137F583B63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rtl8188eu: fix build
- failure with Linux 6.13
+Message-Id: <20250519103952.27C9184BBD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libubox: bump version
+ to 3868f47
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,61 +66,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ef9e7ff57e86e410c6b638bf74c5bf5f414a31d
+commit: https://git.buildroot.net/buildroot/commit/?id=44c11a6862aa41ae025aa0cf248e2e7236b46d21
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add local patch pending upstream to fix build failure with Linux 6.13
+Changelog:
 
-Fixes:
-https://autobuild.buildroot.org/results/4a0ebbcd62a2bfc59a7f6183f100f0e111cee750
+ - 3868f47 blob: constify attr argument to blob_memdup
+ - eb9bcb6 ustream: prevent recursive calls to the read callback
+ - 12bda4b CI: add CodeQL workflow tests
+ - a2fce00 CI: add build test run
+ - c1be505 udebug: fix crash in udebug_entry_vprintf with longer strings
+ - 6339204 CMakeLists.txt: bump minimum cmake version
+ - ca3f6d0 udebug: fix file descriptor initialization for __udebug_buf_map
+ - df5b714 udebug: add mips specific quirk
+ - d27acfe udebug: add more checks for uninitialized buffers
+ - 40acbe3 udebug: wait for response after buffer add/remove
+ - e84c000 udebug: add inline helper function to test if a buffer is allocated
+ - 325fea5 udebug: add functions for manipulating entry length
+ - e80dc00 link librt if needed for shm_open
+ - 260ad5b udebug: add ulog support
+ - b77f2a4 uloop: fix build using C++ compilers
+ - d4c3066 udebug: add udebug library code
+ - b3fa3d9 uloop: reset flags after __uloop_fd_delete call
+ - 8a5a431 uloop: fix typo in signal handling rework
+ - f7d1569 uloop: properly initialize signal handler mask
+ - 13d9b04 uloop: add support for user defined signal handlers
+ - 82fa648 uloop: add support for interval timers
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../rtl8188eu/0001-Fix-build-with-Linux-6.13.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ package/libubox/libubox.hash | 2 +-
+ package/libubox/libubox.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtl8188eu/0001-Fix-build-with-Linux-6.13.patch b/package/rtl8188eu/0001-Fix-build-with-Linux-6.13.patch
-new file mode 100644
-index 0000000000..3594283ff1
---- /dev/null
-+++ b/package/rtl8188eu/0001-Fix-build-with-Linux-6.13.patch
-@@ -0,0 +1,35 @@
-+From 408ac4abdd1e187624ebef9f6a45ecc437525de5 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 16 Apr 2025 17:34:54 +0200
-+Subject: [PATCH] Fix build with Linux 6.13
-+
-+Commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9c4f830927750a2bf9fd9426a5257f0fdce3b662
-+adds struct net_device *dev as argument to set_monitor_channel(), so let's
-+add it to cfg80211_rtw_set_monitor_channel() according to Linux version.
-+
-+Upstream: https://github.com/lwfinger/rtl8188eu/pull/463
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ ioctl_cfg80211.c | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/ioctl_cfg80211.c b/ioctl_cfg80211.c
-+index c6ae5aa..270cfce 100644
-+--- a/ioctl_cfg80211.c
-++++ b/ioctl_cfg80211.c
-+@@ -4404,7 +4404,10 @@ static int	cfg80211_rtw_set_channel(struct wiphy *wiphy
-+ }
-+ 
-+ static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
-+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0))
-++	, struct net_device *dev
-++	, struct cfg80211_chan_def *chandef
-++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
-+ 	, struct cfg80211_chan_def *chandef
-+ #else
-+ 	, struct ieee80211_channel *chan
-+-- 
-+2.39.5
-+
+diff --git a/package/libubox/libubox.hash b/package/libubox/libubox.hash
+index 7738caf223..eb37d33230 100644
+--- a/package/libubox/libubox.hash
++++ b/package/libubox/libubox.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  918acc85199117ef109f2a204020f6fe4d5a1724a09888f45b70b6474345d6fe  libubox-75a3b870cace1171faf57bd55e5a9a2f1564f757-git4.tar.gz
++sha256  df6e1350fd11016ef30242a279cec195d91e6748c11c40e0991593718c46fa52  libubox-3868f47c8f6c6570e62a3cdf8a7f26ffb1a67e6a-git4.tar.gz
+diff --git a/package/libubox/libubox.mk b/package/libubox/libubox.mk
+index d6da078c7b..00ae2b0595 100644
+--- a/package/libubox/libubox.mk
++++ b/package/libubox/libubox.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUBOX_VERSION = 75a3b870cace1171faf57bd55e5a9a2f1564f757
++LIBUBOX_VERSION = 3868f47c8f6c6570e62a3cdf8a7f26ffb1a67e6a
+ LIBUBOX_SITE = https://git.openwrt.org/project/libubox.git
+ LIBUBOX_SITE_METHOD = git
+ LIBUBOX_LICENSE = ISC, BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
