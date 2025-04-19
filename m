@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27F9FC2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44382C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EDF6C842B2;
-	Mon, 19 May 2025 10:52:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 08720706F2;
+	Mon, 19 May 2025 10:52:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d_su1vZJrY-P; Mon, 19 May 2025 10:52:29 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l_L2RCZdhsG7; Mon, 19 May 2025 10:52:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10DED83FE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEFBB706DC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 10DED83FE6;
-	Mon, 19 May 2025 10:52:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DEFBB706DC;
+	Mon, 19 May 2025 10:52:30 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0763CE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1603BD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4576A41D6D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 787AA40D8E
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JtmDYd3cP2BO for <buildroot@buildroot.org>;
+ id 0od-pMXpybHi for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F6F440D8E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FD2040DF5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F6F440D8E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FD2040DF5
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5D67B872E7; Mon, 19 May 2025 10:39:52 +0000 (UTC)
+ id 790568652C; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 19 Apr 2025 17:04:57 +0200
+Date: Sat, 19 Apr 2025 17:10:07 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 93ffe1a088b0f0be957dba9a33ad6c97279bb995
-X-Git-Newrev: 70bcb7655bc1893c76e682cbb7c750b84c70ca64
+X-Git-Oldrev: a14ae70918764d8c85555767b5de6040133242b6
+X-Git-Newrev: a1012b363a286125978de529eacf9d187d95907f
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103952.5D67B872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/pulseview: fix, update,
- and reorganise dependencies
+Message-Id: <20250519103952.790568652C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/download/git: use
+ FOO_DL_OPTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,91 +66,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70bcb7655bc1893c76e682cbb7c750b84c70ca64
+commit: https://git.buildroot.net/buildroot/commit/?id=a1012b363a286125978de529eacf9d187d95907f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The dependencies for pulseview are not entirely clean:
-  - arch deps are not first;
-  - second-level inherited deps are listed;
-  - deps are not alphabetically ordered (for deps on packages);
-  - the comment is hidden even when the arch deps are met, because of an
-    incorrect dependency on Qt5;
-  - qt5 is a depends-on when it could be a select.
+The manual states that FOO_DL_OPTS are valid for all the different
+download backends, but that is not the case: at least the git backend
+does not use them (it does not fail, it just ignores them).
 
-Update the dependencies to fix all the points above.
+Accept FOO_DL_OPTS in the git backend, and pass them to 'git fetch'.
+There is no way that we can pass such options to submodules or lfs,
+though.
+
+Update the manual accordingly.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/pulseview/Config.in | 42 +++++++++++++++++++++---------------------
- 1 file changed, 21 insertions(+), 21 deletions(-)
+ docs/manual/adding-packages-generic.adoc | 4 +++-
+ support/download/git                     | 6 +++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/pulseview/Config.in b/package/pulseview/Config.in
-index f122551b9f..b1f9dc25d7 100644
---- a/package/pulseview/Config.in
-+++ b/package/pulseview/Config.in
-@@ -1,40 +1,40 @@
- config BR2_PACKAGE_PULSEVIEW
- 	bool "pulseview"
--	depends on BR2_PACKAGE_QT5
--	# libsigrok->libglib2:
--	depends on BR2_USE_WCHAR
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
-+	depends on BR2_USE_WCHAR  # libsigrok, qt5
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL  # qt5
- 	depends on BR2_INSTALL_LIBSTDCPP
--	# libsigrok->libzip
--	depends on !BR2_STATIC_LIBS
--	# libsigrok
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
--	depends on BR2_HOST_GCC_AT_LEAST_4_9
- 	depends on BR2_ENABLE_LOCALE
-+	depends on !BR2_STATIC_LIBS # libsigrok, qt5
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # libsigrok
-+	depends on BR2_HOST_GCC_AT_LEAST_5  # qt5
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_FILESYSTEM
-+	select BR2_PACKAGE_BOOST_SERIALIZATION
-+	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_LIBSIGROK
- 	select BR2_PACKAGE_LIBSIGROKCXX
--	select BR2_PACKAGE_QT5BASE_WIDGETS
-+	select BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT5BASE
- 	select BR2_PACKAGE_QT5BASE_PNG
-+	select BR2_PACKAGE_QT5BASE_WIDGETS
- 	select BR2_PACKAGE_QT5SVG
- 	select BR2_PACKAGE_QT5TOOLS
- 	select BR2_PACKAGE_QT5TOOLS_LINGUIST_TOOLS
--	select BR2_PACKAGE_BOOST
--	select BR2_PACKAGE_BOOST_FILESYSTEM
--	select BR2_PACKAGE_BOOST_SYSTEM
--	select BR2_PACKAGE_BOOST_SERIALIZATION
- 	help
- 	  PulseView is a Qt based logic analyzer, oscilloscope
- 	  and MSO GUI for sigrok.
+diff --git a/docs/manual/adding-packages-generic.adoc b/docs/manual/adding-packages-generic.adoc
+index f0b0508f53..7e2e066c16 100644
+--- a/docs/manual/adding-packages-generic.adoc
++++ b/docs/manual/adding-packages-generic.adoc
+@@ -270,7 +270,9 @@ not and can not work as people would expect it should:
+   server-side checking for user logins and passwords, or to use a proxy.
+   All download methods valid for +LIBFOO_SITE_METHOD+ are supported;
+   valid options depend on the download method (consult the man page
+-  for the respective download utilities).
++  for the respective download utilities). For git, +FOO_DL_OPTS+ will
++  only be passed to `git fetch` and no other git command (esp. not to
++  `git lfs fetch` or `git submodule update`).
  
- 	  http://sigrok.org/wiki/PulseView
+ * +LIBFOO_EXTRA_DOWNLOADS+ is a space-separated list of additional
+   files that Buildroot should download. If an entry contains +://+
+diff --git a/support/download/git b/support/download/git
+index 8123bc3153..fdc00607cc 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -133,8 +133,8 @@ fi
+ _git remote set-url origin "'${uri}'"
  
--comment "pulseview needs a toolchain w/ locale, wchar, threads, dynamic library, C++, gcc >= 7, host gcc >= 4.9"
-+comment "pulseview needs a toolchain w/ locale, wchar, threads, dynamic library, C++, gcc >= 7, host gcc >= 5"
- 	depends on BR2_USE_MMU
--	depends on BR2_PACKAGE_QT5
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_USE_WCHAR \
--		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
--		|| BR2_STATIC_LIBS || !BR2_ENABLE_LOCALE || \
--		!BR2_HOST_GCC_AT_LEAST_4_9
-+	depends on !BR2_USE_WCHAR \
-+		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
-+		|| !BR2_INSTALL_LIBSTDCPP \
-+		|| !BR2_ENABLE_LOCALE \
-+		|| BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_7 \
-+		|| !BR2_HOST_GCC_AT_LEAST_5
+ printf "Fetching all references\n"
+-_git fetch origin
+-_git fetch origin -t -f
++_git fetch "${@}" origin
++_git fetch "${@}" origin -t -f
+ 
+ # Try to get the special refs exposed by some forges (pull-requests for
+ # github, changes for gerrit...). There is no easy way to know whether
+@@ -143,7 +143,7 @@ _git fetch origin -t -f
+ # below, if there is an issue anyway. Since most of the cset we're gonna
+ # have to clone are not such special refs, consign the output to oblivion
+ # so as not to alarm unsuspecting users, but still trace it as a warning.
+-if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
++if ! _git fetch "${@}" origin "'${cset}:${cset}'" >/dev/null 2>&1; then
+     printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
+ fi
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
