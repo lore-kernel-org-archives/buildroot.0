@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22243C369C9
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A16C8C369D2
 	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 21:05:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE4BB8154F;
-	Sat, 19 Apr 2025 21:05:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5389660643;
+	Sat, 19 Apr 2025 21:05:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qCRRBOJCi20h; Sat, 19 Apr 2025 21:05:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QqVMk4JTVJIe; Sat, 19 Apr 2025 21:05:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64809811FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2967607EC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 64809811FD;
-	Sat, 19 Apr 2025 21:05:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 00136230
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:05:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2967607EC;
+	Sat, 19 Apr 2025 21:05:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 08622232
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:05:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D873E406AE
+ by smtp2.osuosl.org (Postfix) with ESMTP id E3508403FE
  for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:05:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KpPjNKYaJ8GT for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HdDBrQBpF-vt for <buildroot@buildroot.org>;
  Sat, 19 Apr 2025 21:05:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD9E840690
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D9824064D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DD9E840690
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1D9824064D
  for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:05:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C72437FD52; Sat, 19 Apr 2025 21:05:19 +0000 (UTC)
+ id D63E285CD1; Sat, 19 Apr 2025 21:05:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 19 Apr 2025 22:48:38 +0200
+Date: Sat, 19 Apr 2025 22:50:07 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 45087a0188d8b50ac888d5f2b728090ccb8c8806
-X-Git-Newrev: fd914e9e4c23237fc7681eff86889916f81d478e
+X-Git-Oldrev: fd914e9e4c23237fc7681eff86889916f81d478e
+X-Git-Newrev: 6fd3e498af1bf837f3318eb0d47f27ac6901e7dc
 X-Patchwork-Hint: ignore
-Message-Id: <20250419210519.C72437FD52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lmbench: fix build with recent gcc
- versions
+Message-Id: <20250419210519.D63E285CD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lmbench: prepare for GCC 15.x
+ compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,260 +61,286 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1980483329955618142=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1980483329955618142==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=fd914e9e4c23237fc7681eff86889916f81d478e
+commit: https://git.buildroot.net/buildroot/commit/?id=6fd3e498af1bf837f3318eb0d47f27ac6901e7dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-lmbench dependency discovery relies on implicit return types for
-main().  This causes compiler errors when -Wimplicit-int is enabled,
-which has become the default with recent gcc versions. The failure of
-the dependcy discovery causes lmbench to redifine typedefs the
-compiler already has in an incompatible manner. Add a patch to fix the
-discovery.
-
-Fixes:
-bench.h:81:13: error: conflicting types for ‘socklen_t’; have ‘int’
-   81 | typedef int socklen_t;
-
-bench.h:85:15: error: conflicting types for ‘off64_t’; have ‘int64’ {aka ‘long long int’}
-   85 | typedef int64 off64_t;
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/33cf97a79125c20f67f620eb6a7b5ad2206b2503/
+GCC-15 requires function definitions to have proper arguments.
 
 Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0006-scripts-build-int-return-type-main.patch  | 204 +++++++++++++++++++++
- 1 file changed, 204 insertions(+)
+ .../0006-Add-signum-param-to-signal-handlers.patch | 130 +++++++++++++++++++++
+ ... 0007-scripts-build-int-return-type-main.patch} |   0
+ .../lmbench/0008-Fixup-function-declarations.patch | 115 ++++++++++++++++++
+ 3 files changed, 245 insertions(+)
 
-diff --git a/package/lmbench/0006-scripts-build-int-return-type-main.patch b/package/lmbench/0006-scripts-build-int-return-type-main.patch
+diff --git a/package/lmbench/0006-Add-signum-param-to-signal-handlers.patch b/package/lmbench/0006-Add-signum-param-to-signal-handlers.patch
 new file mode 100644
-index 0000000000..17a4517f72
+index 0000000000..261a2bf8f9
 --- /dev/null
-+++ b/package/lmbench/0006-scripts-build-int-return-type-main.patch
-@@ -0,0 +1,204 @@
-+From 3340c9552cc6e7d77adf39becbc6be52233d80c0 Mon Sep 17 00:00:00 2001
++++ b/package/lmbench/0006-Add-signum-param-to-signal-handlers.patch
+@@ -0,0 +1,130 @@
++From ed4f31bb09bc6355b2b642a89a1f1017de46f26e Mon Sep 17 00:00:00 2001
 +From: Charlie Jenkins <charlie@rivosinc.com>
-+Date: Thu, 10 Apr 2025 13:25:07 -0700
-+Subject: [PATCH] scripts/build: int return type main()
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++Date: Fri, 4 Apr 2025 15:35:08 -0700
++Subject: [PATCH] Add signum param to signal handlers
 +
-+Some compilers (such as the bootlin riscv64-lp64d glibc bleeding-edge
-+2024.05-1 toolchain) fail to run the dependency checking scripts and
-+error at "return type defaults to ‘int’ [-Wimplicit-int]". Add types
-+to these main() functions to allow this dependency tracking to work.
++A signal handler is required to have a signum parameter that is an
++integer.
 +
 +Upstream: dead
 +Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 +---
-+ scripts/build | 42 +++++++++++++++++++++---------------------
-+ 1 file changed, 21 insertions(+), 21 deletions(-)
++ src/lat_udp.c |  4 ++--
++ src/lmdd.c    | 14 +++++++-------
++ src/lmhttp.c  |  4 ++--
++ 3 files changed, 11 insertions(+), 11 deletions(-)
 +
-+diff --git a/scripts/build b/scripts/build
-+index 4820d80..2c8a50a 100755
-+--- a/scripts/build
-++++ b/scripts/build
-+@@ -51,14 +51,14 @@ fi
++diff --git a/src/lat_udp.c b/src/lat_udp.c
++index cdd2e9b..4b4441b 100644
++--- a/src/lat_udp.c
+++++ b/src/lat_udp.c
++@@ -19,7 +19,7 @@ char	*id = "$Id$\n";
 + 
-+ # check for bcopy (optionally set the SYS5 flag)
-+ echo "#include <string.h>" > ${BASE}$$.c
-+-echo "main() { char a[256], b[256]; bcopy(a, b, 256); }" >> ${BASE}$$.c
-++echo "int main() { char a[256], b[256]; bcopy(a, b, 256); }" >> ${BASE}$$.c
-+ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
-+ 	|| CFLAGS="${CFLAGS} -DSYS5"
-+ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++ void	client_main(int ac, char **av);
++ void	server_main();
++-void	timeout();
+++void	timeout(int signum);
++ void	init(iter_t iterations, void* cookie);
++ void	cleanup(iter_t iterations, void* cookie);
++ void    doit(iter_t iterations, void* cookie);
++@@ -164,7 +164,7 @@ cleanup(iter_t iterations, void* cookie)
++ }
 + 
-+ # check for valloc
-+ echo "#include <stdlib.h>" > ${BASE}$$.c
-+-echo "main() { char* buf = valloc(123); }" >> ${BASE}$$.c
-++echo "int main() { char* buf = valloc(123); }" >> ${BASE}$$.c
-+ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
-+ 	|| CFLAGS="${CFLAGS} -Dvalloc=malloc"
-+ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+@@ -67,7 +67,7 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+ echo "#include <stdlib.h>" > ${BASE}$$.c
-+ echo "#include <sys/types.h>" >> ${BASE}$$.c
-+ echo "#include <unistd.h>" >> ${BASE}$$.c
-+-echo "main() { off64_t off; }" >> ${BASE}$$.c
-++echo "int main() { off64_t off; }" >> ${BASE}$$.c
-+ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
-+ 	&& CFLAGS="${CFLAGS} -DHAVE_off64_t"
-+ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+@@ -76,7 +76,7 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+ echo "#include <stdlib.h>" > ${BASE}$$.c
-+ echo "#include <sys/types.h>" >> ${BASE}$$.c
-+ echo "#include <unistd.h>" >> ${BASE}$$.c
-+-echo "main() { int fd = 0; off64_t off = 0; off = lseek64(fd, off, SEEK_SET); }" >> ${BASE}$$.c
-++echo "int main() { int fd = 0; off64_t off = 0; off = lseek64(fd, off, SEEK_SET); }" >> ${BASE}$$.c
-+ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
-+ 	&& CFLAGS="${CFLAGS} -DHAVE_lseek64"
-+ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+@@ -88,7 +88,7 @@ echo "#include <sys/resource.h>" >> ${BASE}$$.c
-+ echo "#ifndef RUSAGE_SELF" >> ${BASE}$$.c
-+ echo "#define RUSAGE_SELF 0" >> ${BASE}$$.c
-+ echo "#endif /* RUSAGE_SELF */" >> ${BASE}$$.c
-+-echo "main() { struct rusage ru; getrusage(RUSAGE_SELF, &ru); }" >> ${BASE}$$.c
-++echo "int main() { struct rusage ru; getrusage(RUSAGE_SELF, &ru); }" >> ${BASE}$$.c
-+ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
-+ 	&& CFLAGS="${CFLAGS} -DRUSAGE"
-+ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+@@ -136,13 +136,13 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++ void
++-timeout()
+++timeout(int signum)
++ {
++ 	fprintf(stderr, "Recv timed out\n");
++ 	exit(1);
++diff --git a/src/lmdd.c b/src/lmdd.c
++index dee37b4..529ae21 100644
++--- a/src/lmdd.c
+++++ b/src/lmdd.c
++@@ -148,7 +148,7 @@ char   *cmds[] = {
 + 
-+ # check for OSs that have S_IFFIFO instead of S_IFIFO
-+ echo "#include <sys/stat.h>" > ${BASE}$$.c
-+-echo "main() { return (S_IFIFO); }" >> ${BASE}$$.c
-++echo "int main() { return (S_IFIFO); }" >> ${BASE}$$.c
-+ if ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL}; then
-+ 	true;
-+ else
-+ 	rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+ 	echo "#include <sys/stat.h>" > ${BASE}$$.c
-+-	echo "main() { return (S_IFFIFO); }" >> ${BASE}$$.c
-++	echo "int main() { return (S_IFFIFO); }" >> ${BASE}$$.c
-+ 	${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
-+ 		|| CFLAGS="${CFLAGS} -DS_IFIFO=S_IFFIFO"
-+ fi
-+@@ -151,7 +151,7 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+ # check that we have uint
-+ echo "#include <stdlib.h>" > ${BASE}$$.c
-+ echo "#include <sys/types.h>" >> ${BASE}$$.c
-+-echo "main() { uint i = 0; return (i); }" >> ${BASE}$$.c
-++echo "int main() { uint i = 0; return (i); }" >> ${BASE}$$.c
-+ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
-+ 	&& CFLAGS="${CFLAGS} -DHAVE_uint=1";
-+ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+@@ -161,7 +161,7 @@ HAVE_uint64=0
-+ echo "#include <stdlib.h>" > ${BASE}$$.c
-+ echo "#include <sys/types.h>" >> ${BASE}$$.c
-+ echo "#include <rpc/types.h>" >> ${BASE}$$.c
-+-echo "main() { uint64 i = 0; return (int)(i); }" >> ${BASE}$$.c
-++echo "int main() { uint64 i = 0; return (int)(i); }" >> ${BASE}$$.c
-+ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
-+ 	&& CFLAGS="${CFLAGS} -DHAVE_uint64=1" && HAVE_uint64=1;
-+ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+@@ -170,7 +170,7 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+ if [ ${HAVE_uint64} = 0 ]; then
-+     echo "#include <stdlib.h>" > ${BASE}$$.c
-+     echo "#include <sys/types.h>" >> ${BASE}$$.c
-+-    echo "main() { uint64_t i = 0; return (int)(i); }" >> ${BASE}$$.c
-++    echo "int main() { uint64_t i = 0; return (int)(i); }" >> ${BASE}$$.c
-+     ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
-+ 	&& CFLAGS="${CFLAGS} -DHAVE_uint64_t=1";
-+     rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+@@ -181,7 +181,7 @@ HAVE_int64=0
-+ echo "#include <stdlib.h>" > ${BASE}$$.c
-+ echo "#include <sys/types.h>" >> ${BASE}$$.c
-+ echo "#include <rpc/types.h>" >> ${BASE}$$.c
-+-echo "main() { int64 i = 0; return (int)(i); }" >> ${BASE}$$.c
-++echo "int main() { int64 i = 0; return (int)(i); }" >> ${BASE}$$.c
-+ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
-+ 	&& CFLAGS="${CFLAGS} -DHAVE_int64=1" && HAVE_int64=1;
-+ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+@@ -190,7 +190,7 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+ if [ ${HAVE_int64} = 0 ]; then
-+     echo "#include <stdlib.h>" > ${BASE}$$.c
-+     echo "#include <sys/types.h>" >> ${BASE}$$.c
-+-    echo "main() { int64_t i = 0; return (int)(i); }" >> ${BASE}$$.c
-++    echo "int main() { int64_t i = 0; return (int)(i); }" >> ${BASE}$$.c
-+     ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
-+ 	&& CFLAGS="${CFLAGS} -DHAVE_int64_t=1";
-+     rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+@@ -209,15 +209,15 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+ echo "#include <stdlib.h>" > ${BASE}$$.c
-+ echo "#include <sys/types.h>" >> ${BASE}$$.c
-+ echo "#include <sys/socket.h>" >> ${BASE}$$.c
-+-echo "main() { int s; struct sockaddr dest; socklen_t len; getsockname(s, &dest, &len); }" >> ${BASE}$$.c
-+-${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
-++echo "int main() { int s; struct sockaddr dest; socklen_t len; getsockname(s, &dest, &len); }" >> ${BASE}$$.c
-++${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} \
-+ 	&& CFLAGS="${CFLAGS} -DHAVE_socklen_t"
-+ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
 + 
-+ # check that we have drand48 and srand48
-+ HAVE_RANDOM=0
-+ echo "#include <stdlib.h>" > ${BASE}$$.c
-+-echo "main() { srand48(973); return (int)(1.0E9 * drand48()); }" >> ${BASE}$$.c
-++echo "int main() { srand48(973); return (int)(1.0E9 * drand48()); }" >> ${BASE}$$.c
-+ if ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL}; then
-+ 	CFLAGS="${CFLAGS} -DHAVE_DRAND48"
-+ 	HAVE_RANDOM=1
-+@@ -226,7 +226,7 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++ void error(char *);
++-void    done();
+++void    done(int signum);
++ #ifdef	DBG
++ extern int dbg;
++ #endif
++@@ -332,7 +332,7 @@ main(int ac, char **av)
++ 		register int moved;
 + 
-+ if [ ${HAVE_RANDOM} -eq 0 ]; then
-+     echo "#include <stdlib.h>" > ${BASE}$$.c
-+-    echo "main() { srand(973); return (10 * rand()) / RAND_MAX; }" >> ${BASE}$$.c
-++    echo "int main() { srand(973); return (10 * rand()) / RAND_MAX; }" >> ${BASE}$$.c
-+     if ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL}; then
-+ 	CFLAGS="${CFLAGS} -DHAVE_RAND"
-+ 	HAVE_RANDOM=1
-+@@ -236,7 +236,7 @@ fi
++ 		if (gotcnt && count-- <= 0) {
++-			done();
+++			done(0);
++ 		}
 + 
-+ if [ ${HAVE_RANDOM} -eq 0 ]; then
-+     echo "#include <stdlib.h>" > ${BASE}$$.c
-+-    echo "main() { srandom(973); return (10 * random()) / RAND_MAX; }" >> ${BASE}$$.c
-++    echo "int main() { srandom(973); return (10 * random()) / RAND_MAX; }" >> ${BASE}$$.c
-+     if ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL}; then
-+ 	CFLAGS="${CFLAGS} -DHAVE_RANDOM"
-+ 	HAVE_RANDOM=1
-+@@ -247,7 +247,7 @@ fi
-+ # check that we have sysmp
-+ echo "#include <sys/types.h>" > ${BASE}$$.c
-+ echo "#include <sys/sysmp.h>" >> ${BASE}$$.c
-+-echo "main() { return (int)sysmp(MP_NPROCS); }" >> ${BASE}$$.c
-++echo "int main() { return (int)sysmp(MP_NPROCS); }" >> ${BASE}$$.c
-+ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
-+ 	&& CFLAGS="${CFLAGS} -DHAVE_SYSMP=1";
-+ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+@@ -257,7 +257,7 @@ echo "#include <stdlib.h>" > ${BASE}$$.c
-+ echo "#include <unistd.h>" >> ${BASE}$$.c
-+ echo "#include <sys/types.h>" >> ${BASE}$$.c
-+ echo "#include <sys/processor.h>" >> ${BASE}$$.c
-+-echo "main() { return bindprocessor(BINDPROCESS, getpid(), 0); }" >> ${BASE}$$.c
-++echo "int main() { return bindprocessor(BINDPROCESS, getpid(), 0); }" >> ${BASE}$$.c
-+ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
-+ 	&& CFLAGS="${CFLAGS} -DHAVE_BINDPROCESSOR=1";
-+ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+@@ -267,7 +267,7 @@ echo "#include <stdlib.h>" > ${BASE}$$.c
-+ echo "#include <sys/types.h>" >> ${BASE}$$.c
-+ echo "#include <sys/processor.h>" >> ${BASE}$$.c
-+ echo "#include <sys/procset.h>" >> ${BASE}$$.c
-+-echo "main() { return processor(P_PID, P_MYPID, 0, NULL); }" >> ${BASE}$$.c
-++echo "int main() { return processor(P_PID, P_MYPID, 0, NULL); }" >> ${BASE}$$.c
-+ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
-+ 	&& CFLAGS="${CFLAGS} -DHAVE_BINDPROCESSOR=1";
-+ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+@@ -276,7 +276,7 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
-+ echo "#include <stdlib.h>" > ${BASE}$$.c
-+ echo "#include <unistd.h>" >> ${BASE}$$.c
-+ echo "#include <sched.h>" >> ${BASE}$$.c
-+-echo "main() { unsigned long mask = 1; return sched_setaffinity(0, sizeof(unsigned long), &mask); }" >> ${BASE}$$.c
-++echo "int main() { unsigned long mask = 1; return sched_setaffinity(0, sizeof(unsigned long), &mask); }" >> ${BASE}$$.c
-+ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
-+ 	&& CFLAGS="${CFLAGS} -DHAVE_SCHED_SETAFFINITY=1";
-+ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++ 		/*
++@@ -445,7 +445,7 @@ main(int ac, char **av)
++ 			perror("read");
++ 		}
++ 		if (moved <= 0) {
++-			done();
+++			done(0);
++ 		}
++ 		if (inpat != -1) {
++ 			register int foo, cnt;
++@@ -458,7 +458,7 @@ main(int ac, char **av)
++ 					    (uint)(off + foo*sizeof(int)),
++ 					    buf[foo]);
++ 					if (mismatch != -1 && --misses == 0) {
++-						done();
+++						done(0);
++ 					}
++ 				}
++ 			}
++@@ -523,7 +523,7 @@ main(int ac, char **av)
++ 			if (moved2 != moved) {
++ 				fprintf(stderr, "write: wanted=%d got=%d\n",
++ 				    moved, moved2);
++-				done();
+++				done(0);
++ 			}
++ 			if ((Wtmax != -1) || (Wtmin != -1)) {
++ 				int mics = stop(&start_tv, &stop_tv);
++@@ -560,7 +560,7 @@ main(int ac, char **av)
++ 				perror("write");
++ 			}
++ 			if (moved2 != moved) {
++-				done();
+++				done(0);
++ 			}
++ 
++ 			if (touch) {
++@@ -626,7 +626,7 @@ chkarg(char *arg)
++ }
++ 
++ void 
++-done(void)
+++done(int signum)
++ {
++ 	int	i;
++ 	int	step;
++diff --git a/src/lmhttp.c b/src/lmhttp.c
++index 41d9949..9b5d665 100644
++--- a/src/lmhttp.c
+++++ b/src/lmhttp.c
++@@ -26,7 +26,7 @@ char	*buf;
++ char	*bufs[3];
++ int	Dflg, dflg, nflg, lflg, fflg, zflg;
++ int	data, logfile;
++-void	die();
+++void	die(int signum);
++ void	worker();
++ char	*http_time(void);
++ char	*date(time_t *tt);
++@@ -387,7 +387,7 @@ logit(int sock, char *name, int size)
++ 	nbytes += len;
++ }
++ 
++-void die()
+++void die(int signum)
++ {
++ 	if (nbytes) {
++ 		write(logfile, logbuf, nbytes);
 +-- 
 +2.43.0
 +
-
---===============1980483329955618142==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/lmbench/0006-scripts-build-int-return-type-main.patch b/package/lmbench/0007-scripts-build-int-return-type-main.patch
+similarity index 100%
+rename from package/lmbench/0006-scripts-build-int-return-type-main.patch
+rename to package/lmbench/0007-scripts-build-int-return-type-main.patch
+diff --git a/package/lmbench/0008-Fixup-function-declarations.patch b/package/lmbench/0008-Fixup-function-declarations.patch
+new file mode 100644
+index 0000000000..03c14a3490
+--- /dev/null
++++ b/package/lmbench/0008-Fixup-function-declarations.patch
+@@ -0,0 +1,115 @@
++From 6255495abf4ea516aad3b447cc32d1b244229878 Mon Sep 17 00:00:00 2001
++From: Charlie Jenkins <charlie@rivosinc.com>
++Date: Fri, 4 Apr 2025 15:48:07 -0700
++Subject: [PATCH] Fixup function declarations
++
++GCC-15 requires function declarations to be properly typed.
++
++Upstream: dead
++Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
++---
++ src/bench.h   |  4 ++--
++ src/lat_rpc.c | 18 +++++++-----------
++ src/lmdd.c    |  4 ++--
++ 3 files changed, 11 insertions(+), 15 deletions(-)
++
++diff --git a/src/bench.h b/src/bench.h
++index 597d068..b1624c5 100644
++--- a/src/bench.h
+++++ b/src/bench.h
++@@ -345,7 +345,7 @@ extern int sched_pin(int cpu);
++ #define XACT_VERS ((u_long)1)
++ #define RPC_XACT ((u_long)1)
++ #define RPC_EXIT ((u_long)2)
++-extern char *rpc_xact_1();
++-extern char *client_rpc_xact_1();
+++extern char *rpc_xact_1(char *msg, register SVCXPRT *transp);
+++extern char *client_rpc_xact_1(char *argp, CLIENT *clnt);
++ 
++ #endif /* _BENCH_H */
++diff --git a/src/lat_rpc.c b/src/lat_rpc.c
++index ff4380f..dcc24df 100644
++--- a/src/lat_rpc.c
+++++ b/src/lat_rpc.c
++@@ -187,16 +187,14 @@ client_rpc_xact_1(char *argp, CLIENT *clnt)
++  */
++ /* ARGSUSED */
++ char	*
++-rpc_xact_1(msg, transp)
++-     	char	*msg;
++-	register SVCXPRT *transp;
+++rpc_xact_1(char *msg, register SVCXPRT *transp)
++ {
++ 	static char r = 123;
++ 
++ 	return &r;
++ }
++ 
++-static void xact_prog_1();
+++static void xact_prog_1(struct svc_req *rqstp, register SVCXPRT *transp);
++ 
++ void
++ server_main()
++@@ -234,16 +232,14 @@ server_main()
++ }
++ 
++ static void
++-xact_prog_1(rqstp, transp)
++-	struct svc_req *rqstp;
++-	register SVCXPRT *transp;
+++xact_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
++ {
++ 	union {
++ 		char rpc_xact_1_arg;
++ 	} argument;
++ 	char *result;
++-	bool_t (*xdr_argument)(), (*xdr_result)();
++-	char *(*local)();
+++	bool_t (*xdr_argument)(XDR *, char *), (*xdr_result)(XDR *, char *);
+++	char *(*local)(char *, struct svc_req *);
++ 
++ 	switch (rqstp->rq_proc) {
++ 	case NULLPROC:
++@@ -253,7 +249,7 @@ xact_prog_1(rqstp, transp)
++ 	case RPC_XACT:
++ 		xdr_argument = xdr_char;
++ 		xdr_result = xdr_char;
++-		local = (char *(*)()) rpc_xact_1;
+++		local = (char *(*)(char *, struct svc_req *)) rpc_xact_1;
++ 		break;
++ 
++ 	case RPC_EXIT:
++@@ -270,7 +266,7 @@ xact_prog_1(rqstp, transp)
++ 		svcerr_decode(transp);
++ 		return;
++ 	}
++-	result = (*local)(&argument, rqstp);
+++	result = (*local)((char *)&argument, rqstp);
++ 	if (result != NULL && !svc_sendreply(transp, (xdrproc_t)xdr_result, result)) {
++ 		svcerr_systemerr(transp);
++ 	}
++diff --git a/src/lmdd.c b/src/lmdd.c
++index 529ae21..197ac46 100644
++--- a/src/lmdd.c
+++++ b/src/lmdd.c
++@@ -76,7 +76,7 @@ int	norepeats = -1;
++ 	bds_msg	*m1, *m2;
++ #endif
++ 
++-uint64	getarg();
+++uint64	getarg(char *s, int ac, char **av);
++ int	been_there(uint64 off);
++ int	getfile(char *s, int ac, char **av);
++ 
++@@ -162,7 +162,7 @@ main(int ac, char **av)
++ 	int     Fork, misses, mismatch, outpat, inpat, in, timeopen, gotcnt;
++ 	int	slp;
++ 	uint64	skip, size, count;
++-	void	chkarg();
+++	void	chkarg(char *arg);
++ 	int     i;
++ 	uint64	off = 0;
++ 	int	touch;
++-- 
++2.43.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1980483329955618142==--
