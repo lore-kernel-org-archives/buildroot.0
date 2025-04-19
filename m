@@ -1,79 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC680C369C9
-	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 20:39:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22243C369C9
+	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 21:05:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7B08860711;
-	Sat, 19 Apr 2025 20:39:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE4BB8154F;
+	Sat, 19 Apr 2025 21:05:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2oo1s2diwiRc; Sat, 19 Apr 2025 20:39:16 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qCRRBOJCi20h; Sat, 19 Apr 2025 21:05:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A7D7C607FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 64809811FD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A7D7C607FC;
-	Sat, 19 Apr 2025 20:39:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 85D0068
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 20:39:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 64809811FD;
+	Sat, 19 Apr 2025 21:05:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 00136230
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:05:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 776624015A
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 20:39:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D873E406AE
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:05:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7fnrvqFUM6hZ for <buildroot@buildroot.org>;
- Sat, 19 Apr 2025 20:39:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KpPjNKYaJ8GT for <buildroot@buildroot.org>;
+ Sat, 19 Apr 2025 21:05:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7143540190
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7143540190
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7143540190
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 20:39:14 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7A4D31FCE8;
- Sat, 19 Apr 2025 20:39:11 +0000 (UTC)
-Date: Sat, 19 Apr 2025 22:39:10 +0200
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: buildroot@buildroot.org
-Message-ID: <20250419223910.63f7bc85@windsurf>
-In-Reply-To: <20250410-pixman_riscv_dependency-v1-1-25d44d225acc@rivosinc.com>
-References: <20250410-pixman_riscv_dependency-v1-1-25d44d225acc@rivosinc.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeeitdduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhephfeklefhieefhefftdfhhefhvdetuedvteevuddvkefhffdvtdegiefgkeelkeetnecuffhomhgrihhnpegsuhhilhgurhhoohhtrdhnvghtpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthhgrrhhlihgvsehrihhvohhsihhntgdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhor
- hhg
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1745095151;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=NCMNkrC2AhTJUdjDJPiskWTqStvUT6nTrZwYtUysQSM=;
- b=dMqpxrWB76QLacjqOuR4FaJAQztq8o/glPmPHEJ+JHIrI1OYNOEvWcabyLyU3vRJXZHBC7
- Xj1BdX46ADOgoU2/YdO6VgFaen7BbAgdqJ0AUTL+7FK+55h3jnKfBdm+VW9uTlm64hiQdH
- 0cGQ3ua5A4Jd7LaTuU7acKtBNvk4eSHeDxgw/J8e63ee0wVm8m4LVDlzHG3ib/QqbjydKm
- dkRCsg+CKijf/ua8IXKlceWkWIqWkUkGDAGBEocN7lNeLOPr71WyWSauuwX4OVjuTpkMXZ
- Av1tgPuvvgyAuy081lUjCjWMvXh56KDFglqTzn+GEnIuwwmBgc7D2x/Wku2Lgg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dMqpxrWB
-Subject: Re: [Buildroot] [PATCH] package/pixman: Specify riscv dependency
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD9E840690
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id DD9E840690
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:05:19 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C72437FD52; Sat, 19 Apr 2025 21:05:19 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 19 Apr 2025 22:48:38 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 45087a0188d8b50ac888d5f2b728090ccb8c8806
+X-Git-Newrev: fd914e9e4c23237fc7681eff86889916f81d478e
+X-Patchwork-Hint: ignore
+Message-Id: <20250419210519.C72437FD52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/lmbench: fix build with recent gcc
+ versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,67 +60,261 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1980483329955618142=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Charlie,
+--===============1980483329955618142==
+Content-Type: text/plain
 
-On Thu, 10 Apr 2025 18:08:26 -0700
-Charlie Jenkins <charlie@rivosinc.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=fd914e9e4c23237fc7681eff86889916f81d478e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> riscv Pixman depends on COMPAT_HWCAP_ISA_V which is available in Linux
-> 6.4+, so make Pixman dependent on headers that are at least 6.4.
-> 
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+lmbench dependency discovery relies on implicit return types for
+main().  This causes compiler errors when -Wimplicit-int is enabled,
+which has become the default with recent gcc versions. The failure of
+the dependcy discovery causes lmbench to redifine typedefs the
+compiler already has in an incompatible manner. Add a patch to fix the
+discovery.
 
-Thanks for this patch! Do you have a reference/explanation?
+Fixes:
+bench.h:81:13: error: conflicting types for ‘socklen_t’; have ‘int’
+   81 | typedef int socklen_t;
 
-One issue with adding such a dependency is that it needs to be
-propagated to ALL reverse dependencies of pixman, and there are a LOT
-of them. Like doing this:
-
-diff --git a/pixman/pixman-riscv.c b/pixman/pixman-riscv.c
-index 1f0440f..7b44ece 100644
---- a/pixman/pixman-riscv.c
-+++ b/pixman/pixman-riscv.c
-@@ -44,7 +44,7 @@ detect_cpu_features (void)
- {
-     riscv_cpu_features_t features = 0;
- 
--#if defined(__linux__)
-+#if defined(__linux__) && defined(COMPAT_HWCAP_ISA_V)
-     if (getauxval (AT_HWCAP) & COMPAT_HWCAP_ISA_V)
-     {
-        features |= RVV;
-
-In the pixman code base would resolve the build issue, and is I believe
-acceptable upstream.
-
-But apparently, the issue is that <sys/auxv.h> doesn't exist at all. In
-this case, you can add a meson check for this header file.
-
-Also, it would be nice to indicate in the commit message which version
-of pixman introduced the issue, apparently pixman-0.44.0.
-
-Could you respin an updated version, that uses a patch against pixman,
-and make sure that patch gets submitted upstream?
-
-Also, indicate in your commit message:
+bench.h:85:15: error: conflicting types for ‘off64_t’; have ‘int64’ {aka ‘long long int’}
+   85 | typedef int64 off64_t;
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/4ecdf5320716ec8b39f09fde3fcbbdcdb557f8ab/
+  http://autobuild.buildroot.net/results/33cf97a79125c20f67f620eb6a7b5ad2206b2503/
 
-Thanks a lot!
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0006-scripts-build-int-return-type-main.patch  | 204 +++++++++++++++++++++
+ 1 file changed, 204 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/lmbench/0006-scripts-build-int-return-type-main.patch b/package/lmbench/0006-scripts-build-int-return-type-main.patch
+new file mode 100644
+index 0000000000..17a4517f72
+--- /dev/null
++++ b/package/lmbench/0006-scripts-build-int-return-type-main.patch
+@@ -0,0 +1,204 @@
++From 3340c9552cc6e7d77adf39becbc6be52233d80c0 Mon Sep 17 00:00:00 2001
++From: Charlie Jenkins <charlie@rivosinc.com>
++Date: Thu, 10 Apr 2025 13:25:07 -0700
++Subject: [PATCH] scripts/build: int return type main()
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Some compilers (such as the bootlin riscv64-lp64d glibc bleeding-edge
++2024.05-1 toolchain) fail to run the dependency checking scripts and
++error at "return type defaults to ‘int’ [-Wimplicit-int]". Add types
++to these main() functions to allow this dependency tracking to work.
++
++Upstream: dead
++Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
++---
++ scripts/build | 42 +++++++++++++++++++++---------------------
++ 1 file changed, 21 insertions(+), 21 deletions(-)
++
++diff --git a/scripts/build b/scripts/build
++index 4820d80..2c8a50a 100755
++--- a/scripts/build
+++++ b/scripts/build
++@@ -51,14 +51,14 @@ fi
++ 
++ # check for bcopy (optionally set the SYS5 flag)
++ echo "#include <string.h>" > ${BASE}$$.c
++-echo "main() { char a[256], b[256]; bcopy(a, b, 256); }" >> ${BASE}$$.c
+++echo "int main() { char a[256], b[256]; bcopy(a, b, 256); }" >> ${BASE}$$.c
++ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
++ 	|| CFLAGS="${CFLAGS} -DSYS5"
++ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++ 
++ # check for valloc
++ echo "#include <stdlib.h>" > ${BASE}$$.c
++-echo "main() { char* buf = valloc(123); }" >> ${BASE}$$.c
+++echo "int main() { char* buf = valloc(123); }" >> ${BASE}$$.c
++ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
++ 	|| CFLAGS="${CFLAGS} -Dvalloc=malloc"
++ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++@@ -67,7 +67,7 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++ echo "#include <stdlib.h>" > ${BASE}$$.c
++ echo "#include <sys/types.h>" >> ${BASE}$$.c
++ echo "#include <unistd.h>" >> ${BASE}$$.c
++-echo "main() { off64_t off; }" >> ${BASE}$$.c
+++echo "int main() { off64_t off; }" >> ${BASE}$$.c
++ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
++ 	&& CFLAGS="${CFLAGS} -DHAVE_off64_t"
++ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++@@ -76,7 +76,7 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++ echo "#include <stdlib.h>" > ${BASE}$$.c
++ echo "#include <sys/types.h>" >> ${BASE}$$.c
++ echo "#include <unistd.h>" >> ${BASE}$$.c
++-echo "main() { int fd = 0; off64_t off = 0; off = lseek64(fd, off, SEEK_SET); }" >> ${BASE}$$.c
+++echo "int main() { int fd = 0; off64_t off = 0; off = lseek64(fd, off, SEEK_SET); }" >> ${BASE}$$.c
++ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
++ 	&& CFLAGS="${CFLAGS} -DHAVE_lseek64"
++ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++@@ -88,7 +88,7 @@ echo "#include <sys/resource.h>" >> ${BASE}$$.c
++ echo "#ifndef RUSAGE_SELF" >> ${BASE}$$.c
++ echo "#define RUSAGE_SELF 0" >> ${BASE}$$.c
++ echo "#endif /* RUSAGE_SELF */" >> ${BASE}$$.c
++-echo "main() { struct rusage ru; getrusage(RUSAGE_SELF, &ru); }" >> ${BASE}$$.c
+++echo "int main() { struct rusage ru; getrusage(RUSAGE_SELF, &ru); }" >> ${BASE}$$.c
++ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
++ 	&& CFLAGS="${CFLAGS} -DRUSAGE"
++ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++@@ -136,13 +136,13 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++ 
++ # check for OSs that have S_IFFIFO instead of S_IFIFO
++ echo "#include <sys/stat.h>" > ${BASE}$$.c
++-echo "main() { return (S_IFIFO); }" >> ${BASE}$$.c
+++echo "int main() { return (S_IFIFO); }" >> ${BASE}$$.c
++ if ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL}; then
++ 	true;
++ else
++ 	rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++ 	echo "#include <sys/stat.h>" > ${BASE}$$.c
++-	echo "main() { return (S_IFFIFO); }" >> ${BASE}$$.c
+++	echo "int main() { return (S_IFFIFO); }" >> ${BASE}$$.c
++ 	${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
++ 		|| CFLAGS="${CFLAGS} -DS_IFIFO=S_IFFIFO"
++ fi
++@@ -151,7 +151,7 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++ # check that we have uint
++ echo "#include <stdlib.h>" > ${BASE}$$.c
++ echo "#include <sys/types.h>" >> ${BASE}$$.c
++-echo "main() { uint i = 0; return (i); }" >> ${BASE}$$.c
+++echo "int main() { uint i = 0; return (i); }" >> ${BASE}$$.c
++ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
++ 	&& CFLAGS="${CFLAGS} -DHAVE_uint=1";
++ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++@@ -161,7 +161,7 @@ HAVE_uint64=0
++ echo "#include <stdlib.h>" > ${BASE}$$.c
++ echo "#include <sys/types.h>" >> ${BASE}$$.c
++ echo "#include <rpc/types.h>" >> ${BASE}$$.c
++-echo "main() { uint64 i = 0; return (int)(i); }" >> ${BASE}$$.c
+++echo "int main() { uint64 i = 0; return (int)(i); }" >> ${BASE}$$.c
++ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
++ 	&& CFLAGS="${CFLAGS} -DHAVE_uint64=1" && HAVE_uint64=1;
++ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++@@ -170,7 +170,7 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++ if [ ${HAVE_uint64} = 0 ]; then
++     echo "#include <stdlib.h>" > ${BASE}$$.c
++     echo "#include <sys/types.h>" >> ${BASE}$$.c
++-    echo "main() { uint64_t i = 0; return (int)(i); }" >> ${BASE}$$.c
+++    echo "int main() { uint64_t i = 0; return (int)(i); }" >> ${BASE}$$.c
++     ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
++ 	&& CFLAGS="${CFLAGS} -DHAVE_uint64_t=1";
++     rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++@@ -181,7 +181,7 @@ HAVE_int64=0
++ echo "#include <stdlib.h>" > ${BASE}$$.c
++ echo "#include <sys/types.h>" >> ${BASE}$$.c
++ echo "#include <rpc/types.h>" >> ${BASE}$$.c
++-echo "main() { int64 i = 0; return (int)(i); }" >> ${BASE}$$.c
+++echo "int main() { int64 i = 0; return (int)(i); }" >> ${BASE}$$.c
++ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
++ 	&& CFLAGS="${CFLAGS} -DHAVE_int64=1" && HAVE_int64=1;
++ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++@@ -190,7 +190,7 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++ if [ ${HAVE_int64} = 0 ]; then
++     echo "#include <stdlib.h>" > ${BASE}$$.c
++     echo "#include <sys/types.h>" >> ${BASE}$$.c
++-    echo "main() { int64_t i = 0; return (int)(i); }" >> ${BASE}$$.c
+++    echo "int main() { int64_t i = 0; return (int)(i); }" >> ${BASE}$$.c
++     ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
++ 	&& CFLAGS="${CFLAGS} -DHAVE_int64_t=1";
++     rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++@@ -209,15 +209,15 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++ echo "#include <stdlib.h>" > ${BASE}$$.c
++ echo "#include <sys/types.h>" >> ${BASE}$$.c
++ echo "#include <sys/socket.h>" >> ${BASE}$$.c
++-echo "main() { int s; struct sockaddr dest; socklen_t len; getsockname(s, &dest, &len); }" >> ${BASE}$$.c
++-${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
+++echo "int main() { int s; struct sockaddr dest; socklen_t len; getsockname(s, &dest, &len); }" >> ${BASE}$$.c
+++${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} \
++ 	&& CFLAGS="${CFLAGS} -DHAVE_socklen_t"
++ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++ 
++ # check that we have drand48 and srand48
++ HAVE_RANDOM=0
++ echo "#include <stdlib.h>" > ${BASE}$$.c
++-echo "main() { srand48(973); return (int)(1.0E9 * drand48()); }" >> ${BASE}$$.c
+++echo "int main() { srand48(973); return (int)(1.0E9 * drand48()); }" >> ${BASE}$$.c
++ if ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL}; then
++ 	CFLAGS="${CFLAGS} -DHAVE_DRAND48"
++ 	HAVE_RANDOM=1
++@@ -226,7 +226,7 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++ 
++ if [ ${HAVE_RANDOM} -eq 0 ]; then
++     echo "#include <stdlib.h>" > ${BASE}$$.c
++-    echo "main() { srand(973); return (10 * rand()) / RAND_MAX; }" >> ${BASE}$$.c
+++    echo "int main() { srand(973); return (10 * rand()) / RAND_MAX; }" >> ${BASE}$$.c
++     if ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL}; then
++ 	CFLAGS="${CFLAGS} -DHAVE_RAND"
++ 	HAVE_RANDOM=1
++@@ -236,7 +236,7 @@ fi
++ 
++ if [ ${HAVE_RANDOM} -eq 0 ]; then
++     echo "#include <stdlib.h>" > ${BASE}$$.c
++-    echo "main() { srandom(973); return (10 * random()) / RAND_MAX; }" >> ${BASE}$$.c
+++    echo "int main() { srandom(973); return (10 * random()) / RAND_MAX; }" >> ${BASE}$$.c
++     if ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL}; then
++ 	CFLAGS="${CFLAGS} -DHAVE_RANDOM"
++ 	HAVE_RANDOM=1
++@@ -247,7 +247,7 @@ fi
++ # check that we have sysmp
++ echo "#include <sys/types.h>" > ${BASE}$$.c
++ echo "#include <sys/sysmp.h>" >> ${BASE}$$.c
++-echo "main() { return (int)sysmp(MP_NPROCS); }" >> ${BASE}$$.c
+++echo "int main() { return (int)sysmp(MP_NPROCS); }" >> ${BASE}$$.c
++ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
++ 	&& CFLAGS="${CFLAGS} -DHAVE_SYSMP=1";
++ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++@@ -257,7 +257,7 @@ echo "#include <stdlib.h>" > ${BASE}$$.c
++ echo "#include <unistd.h>" >> ${BASE}$$.c
++ echo "#include <sys/types.h>" >> ${BASE}$$.c
++ echo "#include <sys/processor.h>" >> ${BASE}$$.c
++-echo "main() { return bindprocessor(BINDPROCESS, getpid(), 0); }" >> ${BASE}$$.c
+++echo "int main() { return bindprocessor(BINDPROCESS, getpid(), 0); }" >> ${BASE}$$.c
++ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
++ 	&& CFLAGS="${CFLAGS} -DHAVE_BINDPROCESSOR=1";
++ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++@@ -267,7 +267,7 @@ echo "#include <stdlib.h>" > ${BASE}$$.c
++ echo "#include <sys/types.h>" >> ${BASE}$$.c
++ echo "#include <sys/processor.h>" >> ${BASE}$$.c
++ echo "#include <sys/procset.h>" >> ${BASE}$$.c
++-echo "main() { return processor(P_PID, P_MYPID, 0, NULL); }" >> ${BASE}$$.c
+++echo "int main() { return processor(P_PID, P_MYPID, 0, NULL); }" >> ${BASE}$$.c
++ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
++ 	&& CFLAGS="${CFLAGS} -DHAVE_BINDPROCESSOR=1";
++ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++@@ -276,7 +276,7 @@ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++ echo "#include <stdlib.h>" > ${BASE}$$.c
++ echo "#include <unistd.h>" >> ${BASE}$$.c
++ echo "#include <sched.h>" >> ${BASE}$$.c
++-echo "main() { unsigned long mask = 1; return sched_setaffinity(0, sizeof(unsigned long), &mask); }" >> ${BASE}$$.c
+++echo "int main() { unsigned long mask = 1; return sched_setaffinity(0, sizeof(unsigned long), &mask); }" >> ${BASE}$$.c
++ ${CC} ${CFLAGS} -o ${BASE}$$ ${BASE}$$.c ${LDLIBS} 1>${NULL} 2>${NULL} \
++ 	&& CFLAGS="${CFLAGS} -DHAVE_SCHED_SETAFFINITY=1";
++ rm -f ${BASE}$$ ${BASE}$$.o ${BASE}$$.c
++-- 
++2.43.0
++
+
+--===============1980483329955618142==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1980483329955618142==--
