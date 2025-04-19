@@ -1,51 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81A67C369C9
-	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 21:52:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E4A9C369C9
+	for <buildroot@archiver.kernel.org>; Sat, 19 Apr 2025 21:53:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 490A6404BB;
-	Sat, 19 Apr 2025 21:52:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DCCA26084C;
+	Sat, 19 Apr 2025 21:53:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gkC_Dx2DZtyY; Sat, 19 Apr 2025 21:52:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iXvT8oE1W9yV; Sat, 19 Apr 2025 21:53:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59746404C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1649D60861
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 59746404C4;
-	Sat, 19 Apr 2025 21:52:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E7BD230
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:52:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1649D60861;
+	Sat, 19 Apr 2025 21:53:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E990622F
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:53:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5095C403FE
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:52:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB27A813D5
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:53:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UqN2jQQ17vcM for <buildroot@buildroot.org>;
- Sat, 19 Apr 2025 21:52:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id psxVFk8V-ejd for <buildroot@buildroot.org>;
+ Sat, 19 Apr 2025 21:53:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84051404D4
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 84051404D4
- for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:52:50 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6F8E085D80; Sat, 19 Apr 2025 21:52:50 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 19 Apr 2025 23:52:03 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 09bf1365f138ea22f2b9b64fc317ce6808d73d9a
-X-Git-Newrev: da142cf50305af66c9fa8bbabbc0587be661f269
-X-Patchwork-Hint: ignore
-Message-Id: <20250419215250.6F8E085D80@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-flask-caching: new package
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BE190813CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE190813CC
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BE190813CC
+ for <buildroot@buildroot.org>; Sat, 19 Apr 2025 21:53:25 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B7C3B4326B;
+ Sat, 19 Apr 2025 21:53:23 +0000 (UTC)
+Date: Sat, 19 Apr 2025 23:53:22 +0200
+To: Daniel Crowe <daniel.crowe@maxmine.com.au>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20250419235322.373a205b@windsurf>
+In-Reply-To: <20250331233726.3730509-2-daniel.crowe@maxmine.com.au>
+References: <20250331233726.3730509-1-daniel.crowe@maxmine.com.au>
+ <20250331233726.3730509-2-daniel.crowe@maxmine.com.au>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvfeeiudeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepffegheffjeekgeduhffhveevffetueejiefftdffvdejffffiedukeevveevuddvnecuffhomhgrihhnpehrvggrughthhgvughotghsrdhiohdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefpdhrtghpthhtohepuggrnhhivghlrdgtrhhofigvsehmrgigmhhinhgvrdgtohhmrdgruhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhil
+ hgurhhoohhtrdhorhhgpdhrtghpthhtohepjhgrmhgvshdrhhhilhhlihgrrhguudesghhmrghilhdrtghomh
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1745099603;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=icutK2e3APYF9Xlr1bIXYvE+VxivTXwkSJ9uEMp7rEI=;
+ b=F4bVMXP9pMrfjKF8kqMFNc/09x/i9tyZ+2pRSJft7xWwfCjkBghqnuhV/xa0u0Ngy586z4
+ EppfJGJnXjh9w613pjr7QOOHlvG+30Fe+fltmhVlrDRrSv//kngbP50+nYP83JmDAwKf1S
+ WbbvL33+WY7KOpu92fCG1L401UcEo914TTMPVaqQ9RVmXtd90m0nMJeijQOEkn9KKMWFlW
+ c1bWmKFesVbOuv5KemofYbHCfJ9SBpxG07PI9u2vE7jXvHqZEGohvbTszt06wbl+d+pSpB
+ vG5IsHDpAY+54d/Y/fReKKmGkytVfj0Ah+JON0CTS2ruN2QXrxjSZn10z17EWg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=F4bVMXP9
+Subject: Re: [Buildroot] [PATCH 2/5] package/flask-caching: add version 2.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,98 +88,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da142cf50305af66c9fa8bbabbc0587be661f269
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Daniel,
 
-Provides caching for python Flask applications
-https://flask-caching.readthedocs.io/en/latest/
+On Tue,  1 Apr 2025 10:07:23 +1030
+Daniel Crowe <daniel.crowe@maxmine.com.au> wrote:
 
-Signed-off-by: Daniel Crowe <daniel.crowe@maxmine.com.au>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                             |  1 +
- package/Config.in                                      |  1 +
- package/python-flask-caching/Config.in                 |  8 ++++++++
- package/python-flask-caching/python-flask-caching.hash |  6 ++++++
- package/python-flask-caching/python-flask-caching.mk   | 14 ++++++++++++++
- 5 files changed, 30 insertions(+)
+> Provides caching for python Flask applications
+> https://flask-caching.readthedocs.io/en/latest/
+> 
+> Signed-off-by: Daniel Crowe <daniel.crowe@maxmine.com.au>
+> ---
+>  package/Config.in                                  |  1 +
+>  package/python-flask-caching/Config.in             |  8 ++++++++
+>  .../python-flask-caching/python-flask-caching.hash |  6 ++++++
+>  .../python-flask-caching/python-flask-caching.mk   | 14 ++++++++++++++
+>  4 files changed, 29 insertions(+)
+>  create mode 100644 package/python-flask-caching/Config.in
+>  create mode 100644 package/python-flask-caching/python-flask-caching.hash
+>  create mode 100644 package/python-flask-caching/python-flask-caching.mk
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d0561a10de..73b24ca60a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -730,6 +730,7 @@ F:	package/odroidc2-firmware/
- 
- N:	Daniel Crowe <daniel.crowe@maxmine.com.au>
- F:	package/python-cachelib/
-+F:	package/python-flask-caching/
- 
- N:	Daniel J. Leach <dleach@belcan.com>
- F:	package/dacapo/
-diff --git a/package/Config.in b/package/Config.in
-index 2d4ef81a2c..c29109aa7e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1117,6 +1117,7 @@ menu "External python modules"
- 	source "package/python-fire/Config.in"
- 	source "package/python-flask/Config.in"
- 	source "package/python-flask-babel/Config.in"
-+	source "package/python-flask-caching/Config.in"
- 	source "package/python-flask-cors/Config.in"
- 	source "package/python-flask-expects-json/Config.in"
- 	source "package/python-flask-jsonrpc/Config.in"
-diff --git a/package/python-flask-caching/Config.in b/package/python-flask-caching/Config.in
-new file mode 100644
-index 0000000000..ad8c617f7a
---- /dev/null
-+++ b/package/python-flask-caching/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_FLASK_CACHING
-+	bool "python-flask-caching"
-+	select BR2_PACKAGE_PYTHON_CACHELIB # runtime
-+	select BR2_PACKAGE_PYTHON_FLASK # runtime
-+	help
-+	  Adds caching support to Flask applications.
-+
-+	  https://github.com/pallets-eco/flask-caching
-diff --git a/package/python-flask-caching/python-flask-caching.hash b/package/python-flask-caching/python-flask-caching.hash
-new file mode 100644
-index 0000000000..ee3f669934
---- /dev/null
-+++ b/package/python-flask-caching/python-flask-caching.hash
-@@ -0,0 +1,6 @@
-+# md5, sha256 from https://pypi.org/pypi/flask-caching/json
-+md5  026d06167ba7353ac65c861950ad5696  flask_caching-2.3.1.tar.gz
-+sha256  65d7fd1b4eebf810f844de7de6258254b3248296ee429bdcb3f741bcbf7b98c9  flask_caching-2.3.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  1f3c445faa26eb32d90291228510e2d8594bd1fe15463f5d70c87d44f38872fd  LICENSE
-+sha256  7729328f7b1ce664dbf630f077581cdfe97379b58b49e9a4f20c63912a5e5c09  docs/license.rst
-diff --git a/package/python-flask-caching/python-flask-caching.mk b/package/python-flask-caching/python-flask-caching.mk
-new file mode 100644
-index 0000000000..db305d3dde
---- /dev/null
-+++ b/package/python-flask-caching/python-flask-caching.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-flask-caching
-+#
-+################################################################################
-+
-+PYTHON_FLASK_CACHING_VERSION = 2.3.1
-+PYTHON_FLASK_CACHING_SOURCE = flask_caching-$(PYTHON_FLASK_CACHING_VERSION).tar.gz
-+PYTHON_FLASK_CACHING_SITE = https://files.pythonhosted.org/packages/e2/80/74846c8af58ed60972d64f23a6cd0c3ac0175677d7555dff9f51bf82c294
-+PYTHON_FLASK_CACHING_SETUP_TYPE = setuptools
-+PYTHON_FLASK_CACHING_LICENSE = BSD-3-Clause
-+PYTHON_FLASK_CACHING_LICENSE_FILES = LICENSE docs/license.rst
-+
-+$(eval $(python-package))
+Same comments as the previous patch: the commit title wasn't entirely
+correct, and the entry in the DEVELOPERS file was missing. Aside from
+that, looked good, so: applied to master, thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
