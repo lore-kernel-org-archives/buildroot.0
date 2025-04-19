@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34011C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40938C3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:52:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A5E960FCA;
-	Mon, 19 May 2025 10:52:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 810A570704;
+	Mon, 19 May 2025 10:52:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q4JUrPMQvApU; Mon, 19 May 2025 10:52:36 +0000 (UTC)
+ id SZr06WlkCq4W; Mon, 19 May 2025 10:52:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D9CA7041E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D3FE7070A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8D9CA7041E;
-	Mon, 19 May 2025 10:52:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D3FE7070A;
+	Mon, 19 May 2025 10:52:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0CE48E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1DF7FD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B947441DDC
+ by smtp4.osuosl.org (Postfix) with ESMTP id D30D641DEA
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 14cPqAwCTjmp for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:05 +0000 (UTC)
+ id plRDlgWB6j9R for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FB91411E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A249C40F4E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8FB91411E3
+ by smtp4.osuosl.org (Postfix) with ESMTP id A249C40F4E
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 89C0984BBD; Mon, 19 May 2025 10:39:52 +0000 (UTC)
+ id 9F79E8652C; Mon, 19 May 2025 10:39:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 19 Apr 2025 18:36:02 +0200
+Date: Sat, 19 Apr 2025 18:39:01 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 038826aad67241da74325f42c5dc83f4c7d5dc0f
-X-Git-Newrev: 4e125357ddd2d8e8e23d120367bbdee7dd204b1c
+X-Git-Oldrev: 4f7e3f0bdd9200303f5dfc717d9dc45e8c1875d3
+X-Git-Newrev: 9e627c1628438818ec3bd8638bd1e3400541a85e
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103952.89C0984BBD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/stm32mp1*_dk*: bump
- TF-A to 2.10, Linux to 6.12.22 and U-Boot to 2025.04
+Message-Id: <20250519103952.9F79E8652C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/qt5/qt5webengine-chromium: fix python 3.13 issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,192 +61,119 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2400884559289232609=="
+Content-Type: multipart/mixed; boundary="===============7624061860579162331=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2400884559289232609==
+--===============7624061860579162331==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e125357ddd2d8e8e23d120367bbdee7dd204b1c
+commit: https://git.buildroot.net/buildroot/commit/?id=9e627c1628438818ec3bd8638bd1e3400541a85e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The patch bumps Arm Trusted Firmware (TF-A) to version 2.10 LTS for
+Python was bumped from 3.12.x to 3.13.x since the commit
+d63e207eb869063f82c867658676c2903beb08cb.
 
-- stm32mp157a_dk1_defconfig
-- stm32mp157c_dk2_defconfig
+The module pipes is no longer part of the Python standard library. It
+was removed in Python 3.13 after being deprecated in Python 3.11. The
+last version of Python that provided the pipes module was Python 3.12.
 
-the Linux kernel to version 6.12.22 and U-Boot to version 2025.04 for
+See[1].
 
-- stm32mp135f_dk_defconfig
-- stm32mp157a_dk1_defconfig
-- stm32mp157c_dk2_defconfig
+The chromium project in qt5webengine-chromium is very old (87-based[2]).
 
-The new version of U-Boot has added EFI Capsule support, which depends on
-GnuTLS, thus requiring the activation of BR2_TARGET_UBOOT_NEEDS_GNUTLS
-for stm32mp135f_dk_defconfig.
+This backports a change removing the use of pipes that was first
+introduced in 114.0.5696.0[3] to fix the error below:
 
-Tested on STM32MP157C-DK2 Discovery Board.
+	[174/23445] ACTION //components/resources:about_credits(/builds/buildroot.org/buildroot/output/build/qt5webengine-5.15.14/src/toolchain:target)
+	FAILED: gen/components/resources/about_credits.html
+	/builds/buildroot.org/buildroot/output/build/qt5webengine-5.15.14/host-bin/python ../../3rdparty/chromium/tools/licenses.py --target-os=linux --depfile gen/components/resources/about_credits.d credits gen/components/resources/about_credits.html
+	/builds/buildroot.org/buildroot/output/build/qt5webengine-5.15.14/src/3rdparty/chromium/build/android/gyp/util/build_utils.py:628: SyntaxWarning: invalid escape sequence '\('
+	  r = re.compile('@FileArg\((.*?)\)')
+	Traceback (most recent call last):
+	  File "/builds/buildroot.org/buildroot/output/build/qt5webengine-5.15.14/src/core/release/../../3rdparty/chromium/tools/licenses.py", line 37, in <module>
+	    from util import build_utils
+	  File "/builds/buildroot.org/buildroot/output/build/qt5webengine-5.15.14/src/3rdparty/chromium/build/android/gyp/util/build_utils.py", line 15, in <module>
+	    import pipes
+	ModuleNotFoundError: No module named 'pipes'
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Reviewed-by: Raphaël Gallais-Pou <rgallaispou@gmail.com>
+[1]: https://docs.python.org/3/library/pipes.html
+[2]: https://github.com/qt/qtwebengine/blob/v5.15.14-lts-lgpl/CHROMIUM_VERSION
+[3]: https://github.com/chromium/chromium/commit/4c6fc1984970af4b2b1765014c9ddcd957ad7dda
+
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/9677167367
+
+Signed-off-by: Gaël PORTAY <gael.portay+rtone@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash     |  2 --
- .../common/stm32mp1xx/patches/linux/linux.hash                 |  3 +--
- .../common/stm32mp1xx/patches/uboot/uboot.hash                 |  2 +-
- configs/stm32mp135f_dk_defconfig                               |  8 +++++---
- configs/stm32mp157a_dk1_defconfig                              | 10 +++++-----
- configs/stm32mp157c_dk2_defconfig                              | 10 +++++-----
- 6 files changed, 17 insertions(+), 18 deletions(-)
+ ...orted-printed-cmd-when-long-commands-fail.patch | 57 ++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-deleted file mode 100644
-index 2bc5030cf2..0000000000
---- a/board/stmicroelectronics/common/stm32mp1xx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally calculated
--sha256  72df0928138de111bf5e75fae47f88a4d1b4930ad52b7902e2b53e117be650c8  arm-trusted-firmware-v2.9-git4.tar.gz
-diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-index f6a5f5e1c9..df103b8199 100644
---- a/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-@@ -1,3 +1,2 @@
- # Locally calculated
--sha256  f048267b7b88316c9ca708c68d15a9ae802dcfc943c3188c1273eb958c433281  linux-6.9.8.tar.xz
--sha256  c954f60197008f1e1f32a1e77293903cf3801d2543ec4bf521f5651eb7f133ce  linux-6.11.6.tar.xz
-+sha256  ab48800ab49985a78d2318ae8ac5f28fd3e123ea17357ef21498105a53337336  linux-6.12.22.tar.xz
-diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
-index fe9b4f53dc..80ea21b7cb 100644
---- a/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
-+++ b/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
-+sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
-diff --git a/configs/stm32mp135f_dk_defconfig b/configs/stm32mp135f_dk_defconfig
-index 387fe3a414..3ba1acac81 100644
---- a/configs/stm32mp135f_dk_defconfig
-+++ b/configs/stm32mp135f_dk_defconfig
-@@ -1,6 +1,6 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/common/stm32mp1xx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-@@ -8,7 +8,7 @@ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp135f-dk/overlay"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.11.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.22"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp135f-dk/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -40,9 +40,11 @@ BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR="135F_DK"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp13"
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin u-boot.dtb"
-diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
-index c1ecbd22c1..d96ff54dc9 100644
---- a/configs/stm32mp157a_dk1_defconfig
-+++ b/configs/stm32mp157a_dk1_defconfig
-@@ -1,13 +1,13 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_9=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/common/stm32mp1xx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157a-dk1/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.9.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.22"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157a-dk1/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -18,8 +18,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-@@ -31,10 +30,11 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index c35d75853f..183e3ab862 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -1,13 +1,13 @@
- BR2_arm=y
- BR2_cortex_a7=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_9=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/common/stm32mp1xx/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.9.8"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.22"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -18,8 +18,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.9"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_10_VERSION=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="stm32mp1"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
-@@ -31,10 +30,11 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_DTB=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+diff --git a/package/qt5/qt5webengine-chromium/0011-Shorted-printed-cmd-when-long-commands-fail.patch b/package/qt5/qt5webengine-chromium/0011-Shorted-printed-cmd-when-long-commands-fail.patch
+new file mode 100644
+index 0000000000..46349abc50
+--- /dev/null
++++ b/package/qt5/qt5webengine-chromium/0011-Shorted-printed-cmd-when-long-commands-fail.patch
+@@ -0,0 +1,57 @@
++From 1a713c6e4861f0672252425a1ccbfa9f45834d5d Mon Sep 17 00:00:00 2001
++From: Mohamed Heikal <mheikal@chromium.org>
++Date: Tue, 4 Apr 2023 17:04:04 +0000
++Subject: [PATCH] Shorted printed cmd when long commands fail
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Some commands (eg: javac) are very long and when they fail most of the
++screen/log is filled with the actual cmd vs the error message output.
++Shorten printed CMDs to 200 chars unless an environment variable is set.
++
++Bug: None
++Change-Id: I92809a7e4a2b1204931a74fd6239803feddd430e
++Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/4395905
++Reviewed-by: Andrew Grieve <agrieve@chromium.org>
++Commit-Queue: Mohamed Heikal <mheikal@chromium.org>
++Cr-Commit-Position: refs/heads/main@{#1126065}
++Upstream: Backport [https://github.com/chromium/chromium/commit/4c6fc1984970af4b2b1765014c9ddcd957ad7dda]
++Signed-off-by: Gaël PORTAY <gael.portay@rtone.fr>
++[gportay: remove import pipes]
++---
++ chromium/build/android/gyp/util/build_utils.py | 10 +++++++---
++ 1 file changed, 7 insertions(+), 3 deletions(-)
++
++diff --git a/chromium/build/android/gyp/util/build_utils.py b/chromium/build/android/gyp/util/build_utils.py
++index 02298051702..5fa753af459 100644
++--- a/chromium/build/android/gyp/util/build_utils.py
+++++ b/chromium/build/android/gyp/util/build_utils.py
++@@ -12,7 +12,6 @@ import fnmatch
++ import json
++ import logging
++ import os
++-import pipes
++ import re
++ import shutil
++ import stat
++@@ -196,9 +195,14 @@ class CalledProcessError(Exception):
++ 
++   def __str__(self):
++     # A user should be able to simply copy and paste the command that failed
++-    # into their shell.
+++    # into their shell (unless it is more than 200 chars).
+++    # User can set PRINT_FULL_COMMAND=1 to always print the full command.
+++    print_full = os.environ.get('PRINT_FULL_COMMAND', '0') != '0'
+++    full_cmd = shlex.join(self.args)
+++    short_cmd = textwrap.shorten(full_cmd, width=200)
+++    printed_cmd = full_cmd if print_full else short_cmd
++     copyable_command = '( cd {}; {} )'.format(os.path.abspath(self.cwd),
++-        ' '.join(map(pipes.quote, self.args)))
+++                                              printed_cmd)
++     return 'Command failed: {}\n{}'.format(copyable_command, self.output)
++ 
++ 
++-- 
++2.39.5
++
 
---===============2400884559289232609==
+--===============7624061860579162331==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -257,4 +184,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2400884559289232609==--
+--===============7624061860579162331==--
