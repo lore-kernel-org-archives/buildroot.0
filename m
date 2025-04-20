@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FE83C369C2
-	for <buildroot@archiver.kernel.org>; Sun, 20 Apr 2025 15:35:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 939E2C369C2
+	for <buildroot@archiver.kernel.org>; Sun, 20 Apr 2025 15:36:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 71E2A4048E;
-	Sun, 20 Apr 2025 15:35:47 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OPklE6EqBG7t; Sun, 20 Apr 2025 15:35:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF01840493
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF01840493;
-	Sun, 20 Apr 2025 15:35:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id DD6DF1A0
- for <buildroot@buildroot.org>; Sun, 20 Apr 2025 15:35:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CEC2980F89
- for <buildroot@buildroot.org>; Sun, 20 Apr 2025 15:35:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30B638111F;
+	Sun, 20 Apr 2025 15:36:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GnuInV__4cpI for <buildroot@buildroot.org>;
- Sun, 20 Apr 2025 15:35:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80E3A80F47
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 80E3A80F47
- for <buildroot@buildroot.org>; Sun, 20 Apr 2025 15:35:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7906585DC7; Sun, 20 Apr 2025 15:35:42 +0000 (UTC)
+ id 1Pc74Uy6l1cq; Sun, 20 Apr 2025 15:36:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4034D80F8A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4034D80F8A;
+	Sun, 20 Apr 2025 15:36:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 471BB1A0
+ for <buildroot@buildroot.org>; Sun, 20 Apr 2025 15:36:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37AB94048E
+ for <buildroot@buildroot.org>; Sun, 20 Apr 2025 15:36:21 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qc3B0n-pP48i for <buildroot@buildroot.org>;
+ Sun, 20 Apr 2025 15:36:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B9CAA404D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B9CAA404D8
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B9CAA404D8
+ for <buildroot@buildroot.org>; Sun, 20 Apr 2025 15:36:19 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 416F319F58A;
+ Sun, 20 Apr 2025 17:36:14 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 20 Apr 2025 17:36:14 +0200
+MIME-Version: 1.0
+Date: Sun, 20 Apr 2025 17:36:14 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 20 Apr 2025 16:16:33 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f2c15f00d4a42042c54010e10aca773fea72c56b
-X-Git-Newrev: 4567c35d066ea75050367a364ecdfca6548f4f87
-X-Patchwork-Hint: ignore
-Message-Id: <20250420153542.7906585DC7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/visionfive2: bump OpenSBI to 1.6,
+To: Scott Fan <fancp2007@gmail.com>
+Cc: buildroot@buildroot.org, Francois Dugast <francois.dugast.foss@gmail.com>
+In-Reply-To: <20250420132648.611706-1-fancp2007@gmail.com>
+References: <20250420132648.611706-1-fancp2007@gmail.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <94284f78b05cb0cd9b0c2aadc63393c1@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1745163376;
+ bh=Scuv3ZxOMRVv1WFfM78az9EE2c2NKRRietGTp3oKU2c=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=gJ5d+7AOH/AR5S47j2xAir3htZ3MzkCEIZ8FWw1t17XFYiO3fUXxPCSk6wIrWoAtv
+ R1YKLi6tajnJJfKniEIV7dJ/ii2gV1T53l2v9ba3TAgBcPKLDJ7CvutJOs40uuXHMI
+ olNNlS5LCfwojDEYY4y3IiSy+1Gy43eeKOFcFBYrS9f+tT89cgzgT84lMKmtGkGH5d
+ ymjYm5oaquE4Y1LMkcT5Ic/rE4nHfRcy+qxG24jXjsZB3LKXSoPM4SsC/M6+hYRSBV
+ hNNyD0JipxU7YibozYW/XuHdb6qJQgh66ZZMD1pX3j8WAjs6vRyiU5zx3U6H9GxrpP
+ V2j6fIThR3Pqw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=gJ5d+7AO
+Subject: Re: [Buildroot] [PATCH] configs/visionfive2: bump OpenSBI to 1.6,
  Linux to 6.12.24 and U-Boot to 2025.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,760 +82,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4567c35d066ea75050367a364ecdfca6548f4f87
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 20/04/2025 15:26, Scott Fan wrote:
+> The updated linux configuration is based on the defconfig from the
+> JH7110_VisionFive2_6.12.y_devel branch of the starfive kernel fork [1].
+> 
+> [1] 
+> https://github.com/starfive-tech/linux/blob/e0ef35bfe6683a541b57a0b73a5b95c97e3f93c3/arch/riscv/configs/starfive_visionfive2_defconfig
+> 
+> Signed-off-by: Scott Fan <fancp2007@gmail.com>
 
-The updated linux configuration is based on the defconfig from the
-JH7110_VisionFive2_6.12.y_devel branch of the starfive kernel fork [1].
-
-[1] https://github.com/starfive-tech/linux/blob/e0ef35bfe6683a541b57a0b73a5b95c97e3f93c3/arch/riscv/configs/starfive_visionfive2_defconfig
-
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- board/visionfive2/linux_defconfig              | 514 ++++++++++++++++++++-----
- board/visionfive2/patches/linux/linux.hash     |   2 +-
- board/visionfive2/patches/opensbi/opensbi.hash |   2 +-
- board/visionfive2/patches/uboot/uboot.hash     |   2 +-
- configs/visionfive2_defconfig                  |   9 +-
- 5 files changed, 433 insertions(+), 96 deletions(-)
-
-diff --git a/board/visionfive2/linux_defconfig b/board/visionfive2/linux_defconfig
-index d6d1a65247..06942928b5 100644
---- a/board/visionfive2/linux_defconfig
-+++ b/board/visionfive2/linux_defconfig
-@@ -1,104 +1,181 @@
-+CONFIG_COMPILE_TEST=y
-+# CONFIG_WERROR is not set
-+CONFIG_DEFAULT_HOSTNAME="StarFive"
- CONFIG_SYSVIPC=y
--# CONFIG_CROSS_MEMORY_ATTACH is not set
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_USELIB=y
- CONFIG_NO_HZ_IDLE=y
- CONFIG_HIGH_RES_TIMERS=y
--CONFIG_PSI=y
--# CONFIG_CPU_ISOLATION is not set
-+CONFIG_BPF_SYSCALL=y
- CONFIG_IKCONFIG=y
- CONFIG_IKCONFIG_PROC=y
- CONFIG_CGROUPS=y
- CONFIG_CGROUP_SCHED=y
--CONFIG_CGROUP_PIDS=y
--CONFIG_CGROUP_CPUACCT=y
-+CONFIG_CFS_BANDWIDTH=y
-+CONFIG_CGROUP_BPF=y
- CONFIG_NAMESPACES=y
-+CONFIG_USER_NS=y
-+CONFIG_CHECKPOINT_RESTORE=y
- CONFIG_BLK_DEV_INITRD=y
--# CONFIG_RD_BZIP2 is not set
--# CONFIG_RD_LZMA is not set
--# CONFIG_RD_XZ is not set
--# CONFIG_RD_LZO is not set
--# CONFIG_RD_LZ4 is not set
- CONFIG_EXPERT=y
--# CONFIG_SYSFS_SYSCALL is not set
- CONFIG_PERF_EVENTS=y
- CONFIG_SOC_STARFIVE=y
--CONFIG_ERRATA_SIFIVE=y
- CONFIG_NONPORTABLE=y
- CONFIG_SMP=y
--# CONFIG_RISCV_ISA_SVPBMT is not set
--# CONFIG_COMPAT is not set
-+CONFIG_RISCV_AMP=y
-+CONFIG_HZ_100=y
- CONFIG_HIBERNATION=y
-+CONFIG_PM_STD_PARTITION="PARTLABEL=hibernation"
-+CONFIG_PM_DEBUG=y
-+CONFIG_PM_ADVANCED_DEBUG=y
-+CONFIG_PM_TEST_SUSPEND=y
- CONFIG_CPU_IDLE=y
- CONFIG_RISCV_SBI_CPUIDLE=y
- CONFIG_CPU_FREQ=y
-+CONFIG_CPU_FREQ_STAT=y
- CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=y
- CONFIG_CPU_FREQ_GOV_POWERSAVE=y
- CONFIG_CPU_FREQ_GOV_USERSPACE=y
- CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
- CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
- CONFIG_CPUFREQ_DT=y
--CONFIG_JUMP_LABEL=y
--# CONFIG_STACKPROTECTOR is not set
--# CONFIG_GCC_PLUGINS is not set
-+# CONFIG_SECCOMP is not set
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
--CONFIG_MODULE_COMPRESS_ZSTD=y
--# CONFIG_BLOCK_LEGACY_AUTOLOAD is not set
--CONFIG_BLK_WBT=y
--# CONFIG_BLK_DEBUG_FS is not set
--CONFIG_PARTITION_ADVANCED=y
--# CONFIG_MQ_IOSCHED_DEADLINE is not set
--# CONFIG_MQ_IOSCHED_KYBER is not set
--CONFIG_KSM=y
--# CONFIG_VM_EVENT_COUNTERS is not set
-+CONFIG_BINFMT_MISC=y
-+CONFIG_PAGE_REPORTING=y
- CONFIG_NET=y
- CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
-+CONFIG_IP_MULTICAST=y
- CONFIG_IP_ADVANCED_ROUTER=y
--CONFIG_IP_MULTIPLE_TABLES=y
- CONFIG_IP_PNP=y
--CONFIG_INET_DIAG=m
--# CONFIG_IPV6_SIT is not set
--CONFIG_IPV6_MULTIPLE_TABLES=y
--# CONFIG_WIRELESS is not set
--# CONFIG_ETHTOOL_NETLINK is not set
-+CONFIG_IP_PNP_DHCP=y
-+CONFIG_IP_PNP_BOOTP=y
-+CONFIG_IP_PNP_RARP=y
-+CONFIG_NETFILTER=y
-+CONFIG_NETFILTER_NETLINK_ACCT=y
-+CONFIG_NETFILTER_NETLINK_QUEUE=y
-+CONFIG_NF_CONNTRACK=y
-+CONFIG_NF_TABLES=y
-+CONFIG_NFT_CT=y
-+CONFIG_NFT_COMPAT=y
-+CONFIG_NETFILTER_XT_MATCH_CONNTRACK=y
-+CONFIG_NETFILTER_XT_MATCH_IPCOMP=y
-+CONFIG_NETFILTER_XT_MATCH_IPRANGE=y
-+CONFIG_NETFILTER_XT_MATCH_MAC=y
-+CONFIG_NETFILTER_XT_MATCH_MARK=y
-+CONFIG_NETFILTER_XT_MATCH_MULTIPORT=y
-+CONFIG_NETFILTER_XT_MATCH_SOCKET=y
-+CONFIG_NETFILTER_XT_MATCH_STATE=y
-+CONFIG_NETFILTER_XT_MATCH_STRING=y
-+CONFIG_NETFILTER_XT_MATCH_U32=y
-+CONFIG_NF_TABLES_IPV4=y
-+CONFIG_NFT_DUP_IPV4=y
-+CONFIG_NFT_FIB_IPV4=y
-+CONFIG_IP_NF_IPTABLES=y
-+CONFIG_IP_NF_FILTER=y
-+CONFIG_IP_NF_TARGET_REJECT=y
-+CONFIG_IP_NF_NAT=y
-+CONFIG_IP_NF_TARGET_MASQUERADE=y
-+CONFIG_IP_NF_TARGET_NETMAP=y
-+CONFIG_IP_NF_TARGET_REDIRECT=y
-+CONFIG_NETLINK_DIAG=y
-+CONFIG_CAN=y
-+CONFIG_BT=y
-+CONFIG_BT_RFCOMM=y
-+CONFIG_BT_RFCOMM_TTY=y
-+CONFIG_BT_BNEP=y
-+CONFIG_BT_BNEP_MC_FILTER=y
-+CONFIG_BT_BNEP_PROTO_FILTER=y
-+CONFIG_BT_AICUSB=y
-+CONFIG_CFG80211=y
-+CONFIG_MAC80211=y
-+CONFIG_RFKILL=y
-+CONFIG_NET_9P=y
-+CONFIG_NET_9P_VIRTIO=y
- CONFIG_PCI=y
--CONFIG_PCIEPORTBUS=y
--CONFIG_PCI_HOST_GENERIC=y
-+# CONFIG_PCIEASPM is not set
-+CONFIG_PCIE_STARFIVE_HOST=y
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
--# CONFIG_STANDALONE is not set
--# CONFIG_PREVENT_FIRMWARE_BUILD is not set
--CONFIG_FW_LOADER=m
- CONFIG_SIFIVE_CCACHE=y
--CONFIG_EFI_DISABLE_RUNTIME=y
- CONFIG_MTD=y
-+CONFIG_MTD_BLOCK=y
-+CONFIG_MTD_CFI=y
-+CONFIG_MTD_CFI_ADV_OPTIONS=y
- CONFIG_MTD_SPI_NOR=y
--CONFIG_ZRAM=y
--CONFIG_ZRAM_MEMORY_TRACKING=y
-+CONFIG_OF_CONFIGFS=y
- CONFIG_BLK_DEV_LOOP=y
--CONFIG_BLK_DEV_LOOP_MIN_COUNT=1
-+CONFIG_VIRTIO_BLK=y
- CONFIG_BLK_DEV_NVME=y
--CONFIG_SCSI=y
-+CONFIG_EEPROM_AT24=y
- CONFIG_BLK_DEV_SD=y
- CONFIG_BLK_DEV_SR=y
-+CONFIG_SCSI_VIRTIO=y
-+CONFIG_ATA=y
-+CONFIG_SATA_AHCI=y
-+CONFIG_MD=y
-+CONFIG_BLK_DEV_DM=m
- CONFIG_NETDEVICES=y
-+CONFIG_VIRTIO_NET=y
-+# CONFIG_NET_VENDOR_ALACRITECH is not set
-+# CONFIG_NET_VENDOR_AMAZON is not set
-+# CONFIG_NET_VENDOR_AQUANTIA is not set
-+# CONFIG_NET_VENDOR_ARC is not set
-+# CONFIG_NET_VENDOR_BROADCOM is not set
-+# CONFIG_NET_VENDOR_CADENCE is not set
-+# CONFIG_NET_VENDOR_CAVIUM is not set
-+# CONFIG_NET_VENDOR_CORTINA is not set
-+# CONFIG_NET_VENDOR_EZCHIP is not set
-+# CONFIG_NET_VENDOR_GOOGLE is not set
-+# CONFIG_NET_VENDOR_HUAWEI is not set
-+# CONFIG_NET_VENDOR_INTEL is not set
-+# CONFIG_NET_VENDOR_MARVELL is not set
-+# CONFIG_NET_VENDOR_MELLANOX is not set
-+# CONFIG_NET_VENDOR_MICREL is not set
-+# CONFIG_NET_VENDOR_MICROCHIP is not set
-+# CONFIG_NET_VENDOR_MICROSEMI is not set
-+# CONFIG_NET_VENDOR_NI is not set
-+# CONFIG_NET_VENDOR_NATSEMI is not set
-+# CONFIG_NET_VENDOR_NETRONOME is not set
-+# CONFIG_NET_VENDOR_PENSANDO is not set
-+# CONFIG_NET_VENDOR_QUALCOMM is not set
-+CONFIG_R8169=y
-+# CONFIG_NET_VENDOR_RENESAS is not set
-+# CONFIG_NET_VENDOR_ROCKER is not set
-+# CONFIG_NET_VENDOR_SAMSUNG is not set
-+# CONFIG_NET_VENDOR_SEEQ is not set
-+# CONFIG_NET_VENDOR_SOLARFLARE is not set
-+# CONFIG_NET_VENDOR_SOCIONEXT is not set
- CONFIG_STMMAC_ETH=y
-+CONFIG_STMMAC_SELFTESTS=y
- CONFIG_DWMAC_DWC_QOS_ETH=y
--# CONFIG_DWMAC_GENERIC is not set
- CONFIG_DWMAC_STARFIVE=y
-+# CONFIG_NET_VENDOR_SYNOPSYS is not set
-+# CONFIG_NET_VENDOR_VIA is not set
-+# CONFIG_NET_VENDOR_WIZNET is not set
-+# CONFIG_NET_VENDOR_XILINX is not set
-+CONFIG_MARVELL_PHY=y
-+CONFIG_MICREL_PHY=y
- CONFIG_MICROCHIP_PHY=y
- CONFIG_MOTORCOMM_PHY=y
--# CONFIG_WLAN is not set
-+CONFIG_IPMS_CAN=y
-+CONFIG_IWLWIFI=y
-+CONFIG_IWLDVM=y
-+CONFIG_IWLMVM=y
-+# CONFIG_RTL_CARDS is not set
-+CONFIG_USB_WIFI_ECR6600U=y
-+CONFIG_AIC_WLAN_SUPPORT=y
-+CONFIG_AIC8800_WLAN_SUPPORT=m
-+CONFIG_AIC_LOADFW_SUPPORT=m
-+CONFIG_INPUT_EVDEV=y
- # CONFIG_INPUT_KEYBOARD is not set
- # CONFIG_INPUT_MOUSE is not set
--# CONFIG_SERIO is not set
--# CONFIG_VT is not set
--# CONFIG_LEGACY_PTYS is not set
--# CONFIG_LDISC_AUTOLOAD is not set
-+CONFIG_INPUT_TOUCHSCREEN=y
-+CONFIG_TOUCHSCREEN_GOODIX=y
-+CONFIG_TOUCHSCREEN_TINKER_FT5406=y
-+CONFIG_SERIO_LIBPS2=y
- CONFIG_SERIAL_8250=y
--# CONFIG_SERIAL_8250_DEPRECATED_OPTIONS is not set
--# CONFIG_SERIAL_8250_16550A_VARIANTS is not set
- CONFIG_SERIAL_8250_CONSOLE=y
- CONFIG_SERIAL_8250_NR_UARTS=6
- CONFIG_SERIAL_8250_RUNTIME_UARTS=6
-@@ -106,51 +183,220 @@ CONFIG_SERIAL_8250_EXTENDED=y
- CONFIG_SERIAL_8250_MANY_PORTS=y
- CONFIG_SERIAL_8250_DW=y
- CONFIG_SERIAL_OF_PLATFORM=y
-+CONFIG_TTY_PRINTK=y
-+CONFIG_VIRTIO_CONSOLE=y
- CONFIG_HW_RANDOM=y
- CONFIG_HW_RANDOM_JH7110=y
--# CONFIG_I2C_COMPAT is not set
- CONFIG_I2C_CHARDEV=y
--# CONFIG_I2C_HELPER_AUTO is not set
--CONFIG_I2C_DESIGNWARE_PLATFORM=y
-+CONFIG_I2C_DESIGNWARE_CORE=y
- CONFIG_SPI=y
- CONFIG_SPI_CADENCE_QUADSPI=y
- CONFIG_SPI_PL022=y
-+CONFIG_SPI_SIFIVE=y
- CONFIG_SPI_SPIDEV=y
- # CONFIG_PTP_1588_CLOCK is not set
--CONFIG_GPIOLIB_FASTPATH_LIMIT=128
- CONFIG_GPIO_SYSFS=y
- CONFIG_POWER_RESET=y
- CONFIG_POWER_RESET_GPIO_RESTART=y
-+CONFIG_POWER_RESET_SYSCON=y
-+CONFIG_POWER_RESET_SYSCON_POWEROFF=y
- CONFIG_SENSORS_SFCTEMP=y
- CONFIG_THERMAL=y
- CONFIG_CPU_THERMAL=y
-+CONFIG_DEVFREQ_THERMAL=y
- CONFIG_THERMAL_EMULATION=y
-+# CONFIG_HISI_THERMAL is not set
- CONFIG_WATCHDOG=y
-+CONFIG_WATCHDOG_SYSFS=y
- CONFIG_MFD_AXP20X_I2C=y
- CONFIG_REGULATOR=y
--CONFIG_REGULATOR_FIXED_VOLTAGE=y
- CONFIG_REGULATOR_AXP20X=y
-+CONFIG_REGULATOR_GPIO=y
-+CONFIG_REGULATOR_RASPBERRYPI_TOUCHSCREEN_ATTINY=y
-+# CONFIG_MEDIA_CEC_SUPPORT is not set
- CONFIG_MEDIA_SUPPORT=y
-+CONFIG_MEDIA_USB_SUPPORT=y
-+CONFIG_USB_VIDEO_CLASS=y
- CONFIG_V4L_PLATFORM_DRIVERS=y
-+CONFIG_V4L_MEM2MEM_DRIVERS=y
- CONFIG_VIDEO_CADENCE_CSI2RX=y
-+CONFIG_VIDEO_WAVE_VPU=m
-+CONFIG_VIN_SENSOR_OV4689=y
-+CONFIG_VIDEO_STF_VIN=y
- CONFIG_VIDEO_IMX219=y
-+CONFIG_VIDEO_IMX708=y
-+# CONFIG_CXD2880_SPI_DRV is not set
-+# CONFIG_MEDIA_TUNER_E4000 is not set
-+# CONFIG_MEDIA_TUNER_FC0011 is not set
-+# CONFIG_MEDIA_TUNER_FC0012 is not set
-+# CONFIG_MEDIA_TUNER_FC0013 is not set
-+# CONFIG_MEDIA_TUNER_FC2580 is not set
-+# CONFIG_MEDIA_TUNER_IT913X is not set
-+# CONFIG_MEDIA_TUNER_M88RS6000T is not set
-+# CONFIG_MEDIA_TUNER_MAX2165 is not set
-+# CONFIG_MEDIA_TUNER_MC44S803 is not set
-+# CONFIG_MEDIA_TUNER_MSI001 is not set
-+# CONFIG_MEDIA_TUNER_MT2060 is not set
-+# CONFIG_MEDIA_TUNER_MT2063 is not set
-+# CONFIG_MEDIA_TUNER_MT20XX is not set
-+# CONFIG_MEDIA_TUNER_MT2131 is not set
-+# CONFIG_MEDIA_TUNER_MT2266 is not set
-+# CONFIG_MEDIA_TUNER_MXL301RF is not set
-+# CONFIG_MEDIA_TUNER_MXL5005S is not set
-+# CONFIG_MEDIA_TUNER_MXL5007T is not set
-+# CONFIG_MEDIA_TUNER_QM1D1B0004 is not set
-+# CONFIG_MEDIA_TUNER_QM1D1C0042 is not set
-+# CONFIG_MEDIA_TUNER_QT1010 is not set
-+# CONFIG_MEDIA_TUNER_R820T is not set
-+# CONFIG_MEDIA_TUNER_SI2157 is not set
-+# CONFIG_MEDIA_TUNER_SIMPLE is not set
-+# CONFIG_MEDIA_TUNER_TDA18212 is not set
-+# CONFIG_MEDIA_TUNER_TDA18218 is not set
-+# CONFIG_MEDIA_TUNER_TDA18250 is not set
-+# CONFIG_MEDIA_TUNER_TDA18271 is not set
-+# CONFIG_MEDIA_TUNER_TDA827X is not set
-+# CONFIG_MEDIA_TUNER_TDA8290 is not set
-+# CONFIG_MEDIA_TUNER_TDA9887 is not set
-+# CONFIG_MEDIA_TUNER_TEA5761 is not set
-+# CONFIG_MEDIA_TUNER_TEA5767 is not set
-+# CONFIG_MEDIA_TUNER_TUA9001 is not set
-+# CONFIG_MEDIA_TUNER_XC2028 is not set
-+# CONFIG_MEDIA_TUNER_XC4000 is not set
-+# CONFIG_MEDIA_TUNER_XC5000 is not set
-+# CONFIG_DVB_MXL5XX is not set
-+# CONFIG_DVB_STB0899 is not set
-+# CONFIG_DVB_STB6100 is not set
-+# CONFIG_DVB_STV090x is not set
-+# CONFIG_DVB_STV0910 is not set
-+# CONFIG_DVB_STV6110x is not set
-+# CONFIG_DVB_STV6111 is not set
-+# CONFIG_DVB_DRXK is not set
-+# CONFIG_DVB_MN88472 is not set
-+# CONFIG_DVB_MN88473 is not set
-+# CONFIG_DVB_SI2165 is not set
-+# CONFIG_DVB_TDA18271C2DD is not set
-+# CONFIG_DVB_CX24110 is not set
-+# CONFIG_DVB_CX24116 is not set
-+# CONFIG_DVB_CX24117 is not set
-+# CONFIG_DVB_CX24120 is not set
-+# CONFIG_DVB_CX24123 is not set
-+# CONFIG_DVB_DS3000 is not set
-+# CONFIG_DVB_MB86A16 is not set
-+# CONFIG_DVB_MT312 is not set
-+# CONFIG_DVB_S5H1420 is not set
-+# CONFIG_DVB_SI21XX is not set
-+# CONFIG_DVB_STB6000 is not set
-+# CONFIG_DVB_STV0288 is not set
-+# CONFIG_DVB_STV0299 is not set
-+# CONFIG_DVB_STV0900 is not set
-+# CONFIG_DVB_STV6110 is not set
-+# CONFIG_DVB_TDA10071 is not set
-+# CONFIG_DVB_TDA10086 is not set
-+# CONFIG_DVB_TDA8083 is not set
-+# CONFIG_DVB_TDA8261 is not set
-+# CONFIG_DVB_TDA826X is not set
-+# CONFIG_DVB_TS2020 is not set
-+# CONFIG_DVB_TUA6100 is not set
-+# CONFIG_DVB_TUNER_CX24113 is not set
-+# CONFIG_DVB_TUNER_ITD1000 is not set
-+# CONFIG_DVB_VES1X93 is not set
-+# CONFIG_DVB_ZL10036 is not set
-+# CONFIG_DVB_ZL10039 is not set
-+# CONFIG_DVB_CX22700 is not set
-+# CONFIG_DVB_CX22702 is not set
-+# CONFIG_DVB_CXD2820R is not set
-+# CONFIG_DVB_CXD2841ER is not set
-+# CONFIG_DVB_DIB3000MB is not set
-+# CONFIG_DVB_DIB3000MC is not set
-+# CONFIG_DVB_DIB7000M is not set
-+# CONFIG_DVB_DIB7000P is not set
-+# CONFIG_DVB_DIB9000 is not set
-+# CONFIG_DVB_DRXD is not set
-+# CONFIG_DVB_EC100 is not set
-+# CONFIG_DVB_L64781 is not set
-+# CONFIG_DVB_MT352 is not set
-+# CONFIG_DVB_NXT6000 is not set
-+# CONFIG_DVB_S5H1432 is not set
-+# CONFIG_DVB_SP887X is not set
-+# CONFIG_DVB_STV0367 is not set
-+# CONFIG_DVB_TDA10048 is not set
-+# CONFIG_DVB_TDA1004X is not set
-+# CONFIG_DVB_ZD1301_DEMOD is not set
-+# CONFIG_DVB_ZL10353 is not set
-+# CONFIG_DVB_CXD2880 is not set
-+# CONFIG_DVB_STV0297 is not set
-+# CONFIG_DVB_TDA10021 is not set
-+# CONFIG_DVB_TDA10023 is not set
-+# CONFIG_DVB_VES1820 is not set
-+# CONFIG_DVB_AU8522_DTV is not set
-+# CONFIG_DVB_AU8522_V4L is not set
-+# CONFIG_DVB_BCM3510 is not set
-+# CONFIG_DVB_LG2160 is not set
-+# CONFIG_DVB_LGDT3305 is not set
-+# CONFIG_DVB_LGDT330X is not set
-+# CONFIG_DVB_MXL692 is not set
-+# CONFIG_DVB_NXT200X is not set
-+# CONFIG_DVB_OR51132 is not set
-+# CONFIG_DVB_OR51211 is not set
-+# CONFIG_DVB_S5H1409 is not set
-+# CONFIG_DVB_S5H1411 is not set
-+# CONFIG_DVB_DIB8000 is not set
-+# CONFIG_DVB_MB86A20S is not set
-+# CONFIG_DVB_S921 is not set
-+# CONFIG_DVB_MN88443X is not set
-+# CONFIG_DVB_TC90522 is not set
-+# CONFIG_DVB_PLL is not set
-+# CONFIG_DVB_TUNER_DIB0070 is not set
-+# CONFIG_DVB_TUNER_DIB0090 is not set
-+# CONFIG_DVB_A8293 is not set
-+# CONFIG_DVB_AF9033 is not set
-+# CONFIG_DVB_ASCOT2E is not set
-+# CONFIG_DVB_ATBM8830 is not set
-+# CONFIG_DVB_HELENE is not set
-+# CONFIG_DVB_HORUS3A is not set
-+# CONFIG_DVB_ISL6405 is not set
-+# CONFIG_DVB_ISL6421 is not set
-+# CONFIG_DVB_ISL6423 is not set
-+# CONFIG_DVB_IX2505V is not set
-+# CONFIG_DVB_LGS8GL5 is not set
-+# CONFIG_DVB_LGS8GXX is not set
-+# CONFIG_DVB_LNBH25 is not set
-+# CONFIG_DVB_LNBH29 is not set
-+# CONFIG_DVB_LNBP21 is not set
-+# CONFIG_DVB_LNBP22 is not set
-+# CONFIG_DVB_M88RS2000 is not set
-+# CONFIG_DVB_TDA665x is not set
-+# CONFIG_DVB_DRX39XYJ is not set
-+# CONFIG_DVB_CXD2099 is not set
-+# CONFIG_DVB_SP2 is not set
- CONFIG_DRM=y
-+CONFIG_DRM_PANEL_JADARD_JD9365DA_H3=y
-+CONFIG_DRM_PANEL_STARFIVE_JADARD=y
-+CONFIG_DRM_PANEL_SIMPLE=y
-+CONFIG_DRM_TOSHIBA_TC358762=y
-+CONFIG_DRM_VERISILICON=y
-+CONFIG_STARFIVE_INNO_HDMI=y
-+CONFIG_STARFIVE_DSI=y
-+CONFIG_DRM_IMG_ROGUE=y
-+CONFIG_FB=y
- CONFIG_BACKLIGHT_CLASS_DEVICE=y
- CONFIG_SOUND=y
- CONFIG_SND=y
-+CONFIG_SND_USB_AUDIO=y
- CONFIG_SND_SOC=y
- CONFIG_SND_DESIGNWARE_I2S=y
-+CONFIG_SND_SOC_RZ=m
- CONFIG_SND_SOC_STARFIVE=y
- CONFIG_SND_SOC_JH7110_PWMDAC=y
- CONFIG_SND_SOC_JH7110_TDM=y
-+CONFIG_SND_SOC_AC108=y
- CONFIG_SND_SOC_WM8960=y
- CONFIG_SND_SIMPLE_CARD=y
-+CONFIG_UHID=y
- CONFIG_USB=y
-+CONFIG_USB_OTG=y
- CONFIG_USB_XHCI_HCD=y
--CONFIG_USB_EHCI_HCD=y
--CONFIG_USB_EHCI_HCD_PLATFORM=y
--CONFIG_USB_OHCI_HCD=y
--CONFIG_USB_OHCI_HCD_PLATFORM=y
-+CONFIG_USB_RENESAS_USBHS=y
- CONFIG_USB_STORAGE=y
- CONFIG_USB_UAS=y
- CONFIG_USB_CDNS_SUPPORT=y
-@@ -158,77 +404,167 @@ CONFIG_USB_CDNS3=y
- CONFIG_USB_CDNS3_GADGET=y
- CONFIG_USB_CDNS3_HOST=y
- CONFIG_USB_CDNS3_STARFIVE=y
-+CONFIG_USB_SERIAL=m
-+CONFIG_USB_SERIAL_GENERIC=y
-+CONFIG_USB_SERIAL_AIRCABLE=m
-+CONFIG_USB_SERIAL_ARK3116=m
-+CONFIG_USB_SERIAL_BELKIN=m
-+CONFIG_USB_SERIAL_CH341=m
-+CONFIG_USB_SERIAL_WHITEHEAT=m
-+CONFIG_USB_SERIAL_DIGI_ACCELEPORT=m
-+CONFIG_USB_SERIAL_CP210X=m
-+CONFIG_USB_SERIAL_CYPRESS_M8=m
-+CONFIG_USB_SERIAL_EMPEG=m
-+CONFIG_USB_SERIAL_FTDI_SIO=m
-+CONFIG_USB_SERIAL_VISOR=m
-+CONFIG_USB_SERIAL_IPAQ=m
-+CONFIG_USB_SERIAL_IR=m
-+CONFIG_USB_SERIAL_EDGEPORT=m
-+CONFIG_USB_SERIAL_EDGEPORT_TI=m
-+CONFIG_USB_SERIAL_F81232=m
-+CONFIG_USB_SERIAL_GARMIN=m
-+CONFIG_USB_SERIAL_IPW=m
-+CONFIG_USB_SERIAL_IUU=m
-+CONFIG_USB_SERIAL_KEYSPAN_PDA=m
-+CONFIG_USB_SERIAL_KEYSPAN=m
-+CONFIG_USB_SERIAL_KLSI=m
-+CONFIG_USB_SERIAL_KOBIL_SCT=m
-+CONFIG_USB_SERIAL_MCT_U232=m
-+CONFIG_USB_SERIAL_METRO=m
-+CONFIG_USB_SERIAL_MOS7720=m
-+CONFIG_USB_SERIAL_MOS7840=m
-+CONFIG_USB_SERIAL_NAVMAN=m
-+CONFIG_USB_SERIAL_PL2303=m
-+CONFIG_USB_SERIAL_OTI6858=m
-+CONFIG_USB_SERIAL_QCAUX=m
-+CONFIG_USB_SERIAL_QUALCOMM=m
-+CONFIG_USB_SERIAL_SPCP8X5=m
-+CONFIG_USB_SERIAL_SAFE=m
-+CONFIG_USB_SERIAL_SIERRAWIRELESS=m
-+CONFIG_USB_SERIAL_SYMBOL=m
-+CONFIG_USB_SERIAL_TI=m
-+CONFIG_USB_SERIAL_CYBERJACK=m
-+CONFIG_USB_SERIAL_OMNINET=m
-+CONFIG_USB_SERIAL_OPTICON=m
-+CONFIG_USB_SERIAL_XSENS_MT=m
-+CONFIG_USB_SERIAL_WISHBONE=m
-+CONFIG_USB_SERIAL_SSU100=m
-+CONFIG_USB_SERIAL_DEBUG=m
- CONFIG_USB_GADGET=y
-+CONFIG_USB_RENESAS_USBHS_UDC=m
- CONFIG_USB_CONFIGFS=y
-+CONFIG_USB_CONFIGFS_SERIAL=y
-+CONFIG_USB_CONFIGFS_ACM=y
-+CONFIG_USB_CONFIGFS_OBEX=y
-+CONFIG_USB_CONFIGFS_NCM=y
-+CONFIG_USB_CONFIGFS_ECM=y
-+CONFIG_USB_CONFIGFS_ECM_SUBSET=y
-+CONFIG_USB_CONFIGFS_RNDIS=y
-+CONFIG_USB_CONFIGFS_EEM=y
-+CONFIG_USB_CONFIGFS_MASS_STORAGE=y
- CONFIG_USB_CONFIGFS_F_FS=y
- CONFIG_MMC=y
--# CONFIG_PWRSEQ_EMMC is not set
--# CONFIG_PWRSEQ_SIMPLE is not set
-+CONFIG_MMC_DEBUG=y
- CONFIG_MMC_SDHCI=y
- CONFIG_MMC_SDHCI_PLTFM=y
- CONFIG_MMC_SDHCI_OF_DWCMSHC=y
-+CONFIG_MMC_SPI=y
-+CONFIG_MMC_SDHI=y
- CONFIG_MMC_DW=y
- CONFIG_MMC_DW_STARFIVE=y
-+CONFIG_NEW_LEDS=y
-+CONFIG_LEDS_CLASS=y
-+CONFIG_LEDS_GPIO=y
-+CONFIG_LEDS_TRIGGER_HEARTBEAT=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_STARFIVE=y
-+CONFIG_RTC_DRV_GOLDFISH=y
- CONFIG_DMADEVICES=y
- CONFIG_AMBA_PL08X=y
- CONFIG_DW_AXI_DMAC=y
- CONFIG_DMATEST=y
- # CONFIG_VIRTIO_MENU is not set
- # CONFIG_VHOST_MENU is not set
--CONFIG_STAGING=y
--CONFIG_STAGING_MEDIA=y
--CONFIG_VIDEO_STARFIVE_CAMSS=y
-+CONFIG_GOLDFISH=y
-+# CONFIG_CLK_STARFIVE_JH7100_AUDIO is not set
- CONFIG_CLK_STARFIVE_JH7110_AON=y
- CONFIG_CLK_STARFIVE_JH7110_STG=y
- CONFIG_CLK_STARFIVE_JH7110_ISP=y
- CONFIG_CLK_STARFIVE_JH7110_VOUT=y
-+CONFIG_MAILBOX=y
-+CONFIG_STARFIVE_IPI_MBOX=y
-+CONFIG_STARFIVE_MBOX=m
-+CONFIG_STARFIVE_MBOX_TEST=m
- # CONFIG_IOMMU_SUPPORT is not set
-+CONFIG_RPMSG_CHAR=y
-+CONFIG_RPMSG_CTRL=y
-+CONFIG_RPMSG_STARFIVE=m
-+CONFIG_RPMSG_VIRTIO=y
-+CONFIG_PM_DEVFREQ=y
-+CONFIG_IIO=y
-+CONFIG_IIO_ST_ACCEL_3AXIS=y
- CONFIG_PWM=y
--CONFIG_PHY_STARFIVE_JH7110_DPHY_RX=y
-+CONFIG_PWM_OCORES=y
- CONFIG_PHY_STARFIVE_JH7110_PCIE=y
- CONFIG_PHY_STARFIVE_JH7110_USB=y
-+CONFIG_PHY_M31_DPHY_RX0=y
-+CONFIG_RAS=y
- CONFIG_EXT4_FS=y
--CONFIG_BTRFS_FS=y
-+CONFIG_EXT4_FS_POSIX_ACL=y
-+CONFIG_BTRFS_FS=m
- CONFIG_BTRFS_FS_POSIX_ACL=y
--# CONFIG_DNOTIFY is not set
--CONFIG_FANOTIFY=y
- CONFIG_AUTOFS_FS=y
-+CONFIG_FUSE_FS=y
-+CONFIG_CUSE=y
-+CONFIG_VIRTIO_FS=y
-+CONFIG_FSCACHE=y
-+CONFIG_FSCACHE_STATS=y
- CONFIG_MSDOS_FS=y
- CONFIG_VFAT_FS=y
- CONFIG_FAT_DEFAULT_UTF8=y
- CONFIG_EXFAT_FS=y
- CONFIG_NTFS_FS=y
--CONFIG_NTFS_RW=y
--CONFIG_PROC_KCORE=y
--CONFIG_PROC_CHILDREN=y
- CONFIG_TMPFS=y
- CONFIG_TMPFS_POSIX_ACL=y
--CONFIG_EFIVAR_FS=y
-+CONFIG_HUGETLBFS=y
- CONFIG_JFFS2_FS=y
- CONFIG_NFS_FS=y
- CONFIG_NFS_V4=y
- CONFIG_NFS_V4_1=y
- CONFIG_NFS_V4_2=y
- CONFIG_ROOT_NFS=y
--CONFIG_NLS_DEFAULT="iso8859-15"
-+CONFIG_CIFS=m
-+# CONFIG_CIFS_STATS2 is not set
-+CONFIG_CIFS_UPCALL=y
-+CONFIG_CIFS_XATTR=y
-+CONFIG_CIFS_POSIX=y
-+# CONFIG_CIFS_DEBUG is not set
-+CONFIG_CIFS_DFS_UPCALL=y
-+CONFIG_CIFS_FSCACHE=y
-+CONFIG_SMB_SERVER=m
- CONFIG_NLS_CODEPAGE_437=y
--CONFIG_NLS_ISO8859_15=y
--CONFIG_LSM=""
--CONFIG_CRYPTO_ZSTD=y
--# CONFIG_RAID6_PQ_BENCHMARK is not set
--# CONFIG_DEBUG_MISC is not set
--CONFIG_STRIP_ASM_SYMS=y
--CONFIG_DEBUG_SECTION_MISMATCH=y
--# CONFIG_SECTION_MISMATCH_WARN_ONLY is not set
-+CONFIG_NLS_ISO8859_1=y
-+CONFIG_INIT_STACK_NONE=y
-+CONFIG_CRYPTO_USER=y
-+CONFIG_CRYPTO_TEST=m
-+CONFIG_CRYPTO_USER_API_HASH=y
-+CONFIG_CRYPTO_USER_API_SKCIPHER=y
-+CONFIG_CRYPTO_USER_API_RNG=y
-+CONFIG_CRYPTO_USER_API_AEAD=y
-+CONFIG_CRYPTO_DEV_VIRTIO=y
-+CONFIG_CRYPTO_DEV_JH7110=y
-+CONFIG_PRINTK_TIME=y
- CONFIG_DEBUG_FS=y
--# CONFIG_SLUB_DEBUG is not set
--CONFIG_DEBUG_RODATA_TEST=y
--CONFIG_DEBUG_WX=y
- CONFIG_SOFTLOCKUP_DETECTOR=y
- CONFIG_WQ_WATCHDOG=y
--# CONFIG_SCHED_DEBUG is not set
--CONFIG_STACKTRACE=y
--CONFIG_RCU_CPU_STALL_TIMEOUT=60
-+CONFIG_DEBUG_RT_MUTEXES=y
-+CONFIG_DEBUG_SPINLOCK=y
-+CONFIG_DEBUG_RWSEMS=y
-+CONFIG_DEBUG_LIST=y
-+CONFIG_DEBUG_PLIST=y
-+CONFIG_DEBUG_SG=y
- # CONFIG_RCU_TRACE is not set
-+CONFIG_RCU_EQS_DEBUG=y
- # CONFIG_FTRACE is not set
- # CONFIG_RUNTIME_TESTING_MENU is not set
-+CONFIG_MEMTEST=y
-diff --git a/board/visionfive2/patches/linux/linux.hash b/board/visionfive2/patches/linux/linux.hash
-index ccad8068dd..1213da86b1 100644
---- a/board/visionfive2/patches/linux/linux.hash
-+++ b/board/visionfive2/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  9ac322d85bcf98a04667d929f5c2666b15bd58c6c2d68dd512c72acbced07d04  linux-6.8.2.tar.xz
-+sha256  643142c1b5991560dd12f950825cc19e4497b95b82641918ecff1177f4130c1d  linux-6.12.24.tar.xz
-diff --git a/board/visionfive2/patches/opensbi/opensbi.hash b/board/visionfive2/patches/opensbi/opensbi.hash
-index bc4058abe6..d7893a1dee 100644
---- a/board/visionfive2/patches/opensbi/opensbi.hash
-+++ b/board/visionfive2/patches/opensbi/opensbi.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  319b62a4186fbce9b81a0c5f0ec9f003a10c808397a72138bc9745d9b87b1eb1  opensbi-1.4.tar.gz
-+sha256  d11702103f177a2914e94eec57ce5ed820296d874f6b6525c4482e55d71a3667  opensbi-1.6.tar.gz
-diff --git a/board/visionfive2/patches/uboot/uboot.hash b/board/visionfive2/patches/uboot/uboot.hash
-index 97a2b4eaf9..80ea21b7cb 100644
---- a/board/visionfive2/patches/uboot/uboot.hash
-+++ b/board/visionfive2/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
-+sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
-diff --git a/configs/visionfive2_defconfig b/configs/visionfive2_defconfig
-index fb0bc94d15..8223e6faa1 100644
---- a/configs/visionfive2_defconfig
-+++ b/configs/visionfive2_defconfig
-@@ -1,5 +1,5 @@
- BR2_riscv=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_GLOBAL_PATCH_DIR="board/visionfive2/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_SYSTEM_DHCP="eth0"
-@@ -7,7 +7,7 @@ BR2_ROOTFS_OVERLAY="board/visionfive2/overlay"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/visionfive2/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.8.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.24"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/visionfive2/linux_defconfig"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -19,18 +19,19 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_OPENSBI=y
- BR2_TARGET_OPENSBI_CUSTOM_VERSION=y
--BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.4"
-+BR2_TARGET_OPENSBI_CUSTOM_VERSION_VALUE="1.6"
- BR2_TARGET_OPENSBI_PLAT="generic"
- # BR2_TARGET_OPENSBI_INSTALL_JUMP_IMG is not set
- BR2_TARGET_OPENSBI_ADDITIONAL_VARIABLES="FW_TEXT_START=0x40000000 FW_OPTIONS=0"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="starfive_visionfive2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
- BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
