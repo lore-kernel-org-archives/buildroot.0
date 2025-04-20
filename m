@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B82BC2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:53:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FF1AC3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:53:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5C11A707C3;
-	Mon, 19 May 2025 10:53:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A740A707E1;
+	Mon, 19 May 2025 10:53:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ha3RY2RCQ8vp; Mon, 19 May 2025 10:53:30 +0000 (UTC)
+ id EgQeO-5mfzKa; Mon, 19 May 2025 10:53:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6BE59707C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A18C6707DC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6BE59707C7;
-	Mon, 19 May 2025 10:53:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A18C6707DC;
+	Mon, 19 May 2025 10:53:32 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 10B7FD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E064E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7851A411FB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9DAEF4239C
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DeSMFVhrAYBi for <buildroot@buildroot.org>;
+ id F7Rok4jdlMCc for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD1F64121D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 870AC41213
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BD1F64121D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 870AC41213
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B968882A2E; Mon, 19 May 2025 10:39:53 +0000 (UTC)
+ id 8314A8348A; Mon, 19 May 2025 10:39:53 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 21 Apr 2025 10:44:29 +0200
+Date: Sun, 20 Apr 2025 19:35:54 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e984d89e1980b0bfc8d4fc0a7a3584ba5120bd93
-X-Git-Newrev: 898b6b9638ecce60c06d1afef1694b72d2b31ce3
+X-Git-Oldrev: 18630db8e822120d0d4b9f37fa7c0d901f55d8e9
+X-Git-Newrev: 8181727e23603bc717fd9551ce0bbc97d17231aa
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103953.B968882A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/atkmm2_28: bump to
- version 2.28.4
+Message-Id: <20250519103953.8314A8348A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/fluent-bit: bump to
+ 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,43 +65,135 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=898b6b9638ecce60c06d1afef1694b72d2b31ce3
+commit: https://git.buildroot.net/buildroot/commit/?id=8181727e23603bc717fd9551ce0bbc97d17231aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-https://gitlab.gnome.org/GNOME/atkmm/-/blob/2.28.4/NEWS
+News:
+- https://fluentbit.io/announcements/v4.0.0/
 
-Signed-off-by: Daniel Lang <dalang@gmx.at>
+FLB_UNICODE_ENCODER was added, and enabled by default in commit [1],
+which requires LIBSTDCPP, disable it if BR2_INSTALL_LIBSTDCPP is not set.
+
+Also add two more patches to drop the LIBSTDCPP requirement.
+
+[1] https://github.com/fluent/fluent-bit/commit/3b04755e99fa500e98dcd1318f9b12f6863d31e4
+
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/atkmm2_28/atkmm2_28.hash | 4 ++--
- package/atkmm2_28/atkmm2_28.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...ly-enable-CXX-support-if-tests-are-requir.patch | 34 ++++++++++++++++++++++
+ .../0007-lib-miniz-only-require-a-C-compiler.patch | 27 +++++++++++++++++
+ package/fluent-bit/fluent-bit.hash                 |  2 +-
+ package/fluent-bit/fluent-bit.mk                   |  7 ++++-
+ 4 files changed, 68 insertions(+), 2 deletions(-)
 
-diff --git a/package/atkmm2_28/atkmm2_28.hash b/package/atkmm2_28/atkmm2_28.hash
-index 776c9851b8..b7c106d2d0 100644
---- a/package/atkmm2_28/atkmm2_28.hash
-+++ b/package/atkmm2_28/atkmm2_28.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/atkmm/2.28/atkmm-2.28.3.sha256sum
--sha256  7c2088b486a909be8da2b18304e56c5f90884d1343c8da7367ea5cd3258b9969  atkmm-2.28.3.tar.xz
-+# From https://download.gnome.org/sources/atkmm/2.28/atkmm-2.28.4.sha256sum
-+sha256  0a142a8128f83c001efb8014ee463e9a766054ef84686af953135e04d28fdab3  atkmm-2.28.4.tar.xz
- # locally computed
- sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.tools
-diff --git a/package/atkmm2_28/atkmm2_28.mk b/package/atkmm2_28/atkmm2_28.mk
-index b56da61ec0..47924e64b6 100644
---- a/package/atkmm2_28/atkmm2_28.mk
-+++ b/package/atkmm2_28/atkmm2_28.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/fluent-bit/0006-lib-zstd-only-enable-CXX-support-if-tests-are-requir.patch b/package/fluent-bit/0006-lib-zstd-only-enable-CXX-support-if-tests-are-requir.patch
+new file mode 100644
+index 0000000000..f7b282165c
+--- /dev/null
++++ b/package/fluent-bit/0006-lib-zstd-only-enable-CXX-support-if-tests-are-requir.patch
+@@ -0,0 +1,34 @@
++From b6d898185d441e00acad867c0c80aadf4d7b0d37 Mon Sep 17 00:00:00 2001
++From: Thomas Devoogdt <thomas@devoogdt.com>
++Date: Tue, 1 Apr 2025 22:43:30 +0200
++Subject: [PATCH] lib: zstd: only enable CXX support if tests are required
++
++Upstream: https://github.com/facebook/zstd/pull/4357/files
++Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
++---
++ lib/zstd-1.5.7/build/cmake/CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/zstd-1.5.7/build/cmake/CMakeLists.txt b/lib/zstd-1.5.7/build/cmake/CMakeLists.txt
++index 347d41c0f..70e233df3 100644
++--- a/lib/zstd-1.5.7/build/cmake/CMakeLists.txt
+++++ b/lib/zstd-1.5.7/build/cmake/CMakeLists.txt
++@@ -37,7 +37,6 @@ project(zstd
++   VERSION "${ZSTD_FULL_VERSION}"
++   LANGUAGES C   # Main library is in C
++             ASM # And ASM
++-            CXX # Testing contributed code also utilizes CXX
++   )
++ 
++ message(STATUS "ZSTD VERSION: ${zstd_VERSION}")
++@@ -170,6 +169,7 @@ if (ZSTD_BUILD_PROGRAMS)
++ endif ()
++ 
++ if (ZSTD_BUILD_TESTS)
+++    enable_language(CXX)
++     enable_testing()
++     if (NOT ZSTD_BUILD_STATIC)
++         message(SEND_ERROR "You need to build static library to build tests")
++-- 
++2.43.0
++
+diff --git a/package/fluent-bit/0007-lib-miniz-only-require-a-C-compiler.patch b/package/fluent-bit/0007-lib-miniz-only-require-a-C-compiler.patch
+new file mode 100644
+index 0000000000..bfd32d6b68
+--- /dev/null
++++ b/package/fluent-bit/0007-lib-miniz-only-require-a-C-compiler.patch
+@@ -0,0 +1,27 @@
++From 3732cea4bb3dd9b79732da7bfbf60258bc418195 Mon Sep 17 00:00:00 2001
++From: Thomas Devoogdt <thomas@devoogdt.com>
++Date: Tue, 1 Apr 2025 23:01:13 +0200
++Subject: [PATCH] lib: miniz: only require a C compiler
++
++Upstream: https://github.com/richgel999/miniz/pull/338
++Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
++---
++ lib/miniz/CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/miniz/CMakeLists.txt b/lib/miniz/CMakeLists.txt
++index ce6ade1c0..91012b36a 100644
++--- a/lib/miniz/CMakeLists.txt
+++++ b/lib/miniz/CMakeLists.txt
++@@ -7,7 +7,7 @@ if(DEFINED PROJECT_NAME)
++ endif()
++ 
++ if(CMAKE_MINOR_VERSION LESS 12)
++-  project(miniz)
+++  project(miniz C)
++   # see issue https://gitlab.kitware.com/cmake/cmake/merge_requests/1799
++ else()
++   project(miniz C)
++-- 
++2.43.0
++
+diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
+index 9abf13698a..e4394f69d1 100644
+--- a/package/fluent-bit/fluent-bit.hash
++++ b/package/fluent-bit/fluent-bit.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f86ecbe208ae152841909a063f28ca250b8a6771c5e43dcb1786ef310f927904  fluent-bit-3.2.10.tar.gz
++sha256  ef9a479c8cc12e01de6682e0cfd21a0a5d335a0ab9be14bbca37211fbf428cad  fluent-bit-4.0.0.tar.gz
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+index 276bfd540a..915ec692b3 100644
+--- a/package/fluent-bit/fluent-bit.mk
++++ b/package/fluent-bit/fluent-bit.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- ATKMM2_28_VERSION_MAJOR = 2.28
--ATKMM2_28_VERSION = $(ATKMM2_28_VERSION_MAJOR).3
-+ATKMM2_28_VERSION = $(ATKMM2_28_VERSION_MAJOR).4
- ATKMM2_28_SOURCE = atkmm-$(ATKMM2_28_VERSION).tar.xz
- ATKMM2_28_SITE = https://download.gnome.org/sources/atkmm/$(ATKMM2_28_VERSION_MAJOR)
- ATKMM2_28_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+-FLUENT_BIT_VERSION = 3.2.10
++FLUENT_BIT_VERSION = 4.0.0
+ FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
+ FLUENT_BIT_LICENSE = Apache-2.0
+ FLUENT_BIT_LICENSE_FILES = LICENSE
+@@ -23,6 +23,11 @@ FLUENT_BIT_CONF_OPTS += \
+ 	-DFLB_PREFER_SYSTEM_LIB_CARES=Yes \
+ 	-DFLB_PREFER_SYSTEM_LIB_NGHTTP2=Yes
+ 
++ifeq ($(BR2_INSTALL_LIBSTDCPP),)
++FLUENT_BIT_CONF_OPTS += \
++	-DFLB_UNICODE_ENCODER=No
++endif
++
+ ifeq ($(BR2_PACKAGE_FLUENT_BIT_WASM),y)
+ FLUENT_BIT_WAMR_ARCH = $(call qstrip,$(BR2_PACKAGE_FLUENT_BIT_WASM_ARCH))
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
