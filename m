@@ -1,86 +1,85 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE5BCC369C2
-	for <buildroot@archiver.kernel.org>; Sun, 20 Apr 2025 11:39:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 781C6C369CF
+	for <buildroot@archiver.kernel.org>; Sun, 20 Apr 2025 11:40:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C0C681141;
-	Sun, 20 Apr 2025 11:39:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2CF524065C;
+	Sun, 20 Apr 2025 11:40:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ykXIxDUTTzLj; Sun, 20 Apr 2025 11:39:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GqIZrztyBOvt; Sun, 20 Apr 2025 11:40:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D12981122
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5627740689
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D12981122;
-	Sun, 20 Apr 2025 11:39:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B5D911C0
- for <buildroot@buildroot.org>; Sun, 20 Apr 2025 11:39:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5627740689;
+	Sun, 20 Apr 2025 11:40:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 36C591C0
+ for <buildroot@buildroot.org>; Sun, 20 Apr 2025 11:40:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9BC4D6062E
- for <buildroot@buildroot.org>; Sun, 20 Apr 2025 11:39:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1D17C40690
+ for <buildroot@buildroot.org>; Sun, 20 Apr 2025 11:40:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PTUSVjJfo-3X for <buildroot@buildroot.org>;
- Sun, 20 Apr 2025 11:39:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.48;
- helo=mail-wr1-f48.google.com; envelope-from=thomas.devoogdt@gmail.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N6r5GqlIV60c for <buildroot@buildroot.org>;
+ Sun, 20 Apr 2025 11:40:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.54;
+ helo=mail-wm1-f54.google.com; envelope-from=thomas.devoogdt@gmail.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 81F0D607E8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81F0D607E8
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com
- [209.85.221.48])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 81F0D607E8
- for <buildroot@buildroot.org>; Sun, 20 Apr 2025 11:39:36 +0000 (UTC)
-Received: by mail-wr1-f48.google.com with SMTP id
- ffacd0b85a97d-39c266c1389so2277610f8f.1
- for <buildroot@buildroot.org>; Sun, 20 Apr 2025 04:39:36 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 094C8405DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 094C8405DE
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com
+ [209.85.128.54])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 094C8405DE
+ for <buildroot@buildroot.org>; Sun, 20 Apr 2025 11:39:59 +0000 (UTC)
+Received: by mail-wm1-f54.google.com with SMTP id
+ 5b1f17b1804b1-43cfecdd8b2so23748865e9.2
+ for <buildroot@buildroot.org>; Sun, 20 Apr 2025 04:39:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1745149174; x=1745753974;
+ d=1e100.net; s=20230601; t=1745149198; x=1745753998;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=nlBWgaBB9TtHaa+/FGh9aupLjuSwzOy1mfafLwerXfU=;
- b=M48u6lhaMj+RJhiiNqjXDO3HmwmM9ap3jCK6NL54RTQMkC4Bwz3Cb2zjfTEky5wu1h
- Ygj/a3xaip+ie419sF4tSEz/G7egC6PqQrczCDXw5BY2IVsuwCuAa06fWVW4NykbZBGi
- 2yCv1031K867F1cFZ3PnHl2Rw7WfXS1yddteLuLqNwE0Jk82HCMBcmTTi36Mff/YgfD0
- 9EHoQhhcpIMytjJzMnj69bj5HCYu02WGw2fZtwr88pK+RzABks8m5TZKEb/4gSwRgwL5
- sDQ46rB+xJpvcuxjQ0EuIvOCudfiOovIh1AHmgq5mXulgDUN6CyHa0CdYdG1wQh9VFPM
- CWMg==
-X-Gm-Message-State: AOJu0YxMYOs2zsSCGs+OXCO/6RgZQod7a2H05Co5owmQa3lTvAbOmrCn
- xv7IQQrDTV2hJH8mps4ttVRaz4fuCSOei8m9TsPlHi/iKnfv7JsKnWcmMptD
-X-Gm-Gg: ASbGncunEzQnOF/82LdhCwpAIsDPlq8DnNUrqznHix0qQFy8SeJJSVF9XuWj69c4L0Y
- PV7sthYnCmU7vl831U8QVXitOIG9C4VcekAzZAvekaFCL8nHL5CNGUErwXGppqsDUCapveuI4oU
- DTYqs2M23fKw4aovhiZoZBX9ZmVMXe6yvhITPEQR0PWeesH8XU/ohe8yp7MISue0+P8UrrXm8lD
- KHajSak2fHAuFd2b1QHu4ixUcwrnJbvw76dN+hG91CFovWm+iaivpx8M2UTAlJvjs5bVLJI0MoI
- NL/xPK4TygFhVpg0NmSEMaFwMHlDD3mCDbm5GFMz2x+pKzzpQN5ZXlZ52D6wT4M=
-X-Google-Smtp-Source: AGHT+IEK/Ut8niNrbqW3enJ1qq1RmfY4VKW5XQWTlJA1BwTzUqJxIf9eMwbvWkJXvxKD2J4rb70wLA==
-X-Received: by 2002:a5d:6488:0:b0:391:3207:2e6f with SMTP id
- ffacd0b85a97d-39efbace3e3mr5753971f8f.42.1745149173727; 
- Sun, 20 Apr 2025 04:39:33 -0700 (PDT)
+ bh=uyMe6+wtERfH3Thk1BuSaNhRgvFzpMdz9JRDLqcA+7A=;
+ b=g8hmwUJY5m/2/UTg1xnFcnw/2FFM/uQ3WFnAiVLUPsWNKydHf+Wj5/JZM0f0WttdBB
+ 6pOgQC/0B8rbCfJ+efHfrCMRbEplo4IACUmwy5WHarR7u0gQTNJvRAtYpQ1iAdd2kp8x
+ c+WBJaacJfc93fMaSntozRarDzb/Qdy5WjR8TjqVWyuTFAWu2kAVN7yFkGN80iNjcF+T
+ akp94Zq4TnL80XkK3bqcaJufO2sMfGIu9/T3qSLxnIjM8dBM6g0s55Lk1c6Jcuydg/D3
+ umwGdbntkIy1Ft00rCRE738os5h2XfBOS636Ts2zj7GbLK1Zea4sTaUllAx9/KmwuuoL
+ LZIA==
+X-Gm-Message-State: AOJu0YyOgF1Wvwj4lxtLvDiewDHAnjkicW+elHQUgOtk6pAjEzSr+KW7
+ ziHMujL2MI1NPA3z7s480/9E3AIIWqrF1Ey/lsNcbV0440Ya5ivBDBVVRbWC
+X-Gm-Gg: ASbGncvPUqmjDJ4qnZ7ufgOScUFBeZB+mQg8LtqSuHSfAvtt9f+ZV2MYKN0+D7OLmGp
+ 563EH7hrgm1G7I8pPxnB2FHiRQQ5mXjFhwkVVUcMdXkIr7nEtg2jLP2nAU5znWsigM6EcROy7RS
+ JY2/FV9aHxX5WAwTbwdFoWeyhH1j6JrWtO1WrH7P5GcpfnWz2hVtomwX+nNzjT/IbzIsv4m4ZHE
+ 8zMoWENxFQB+1Mn95v46IP4YrM/tVCUGNb6Jqro0Bwz3fOsfZpioiCkMA2/RGU9lFzI4Lcz5g2z
+ IAcnIA/Cl9Fb2DqLYixFtWWyMKl5sMNtU03sp6y9uSmHP/WV3ZXIJqYCmTAaFrk=
+X-Google-Smtp-Source: AGHT+IHxruzCgD86Z9JE+2ygCXwOIgzChBTmNS6Q9UGxf19xO05YZ74BR7qSY+jYiLGyxf0c+tM0LQ==
+X-Received: by 2002:a05:600c:3154:b0:43c:f513:9585 with SMTP id
+ 5b1f17b1804b1-4406ab9432fmr79736525e9.13.1745149197586; 
+ Sun, 20 Apr 2025 04:39:57 -0700 (PDT)
 Received: from localhost.localdomain ([87.66.230.131])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-39efa4931acsm8697424f8f.72.2025.04.20.04.39.32
+ 5b1f17b1804b1-4406d6e05d6sm97494385e9.40.2025.04.20.04.39.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 20 Apr 2025 04:39:33 -0700 (PDT)
+ Sun, 20 Apr 2025 04:39:57 -0700 (PDT)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Cc: Chris Packham <judge.packham@gmail.com>,
- Thomas Devoogdt <thomas@devoogdt.com>
-Date: Sun, 20 Apr 2025 13:39:30 +0200
-Message-ID: <20250420113930.1137446-1-thomas@devoogdt.com>
+Cc: Thomas Devoogdt <thomas@devoogdt.com>
+Date: Sun, 20 Apr 2025 13:39:55 +0200
+Message-ID: <20250420113955.1143070-1-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v1] package/syslog-ng: bump to 4.8.1
+Subject: [Buildroot] [PATCH v1] package/lighttpd: bump to 1.4.79
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -97,51 +96,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Announcement:
- - https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-4.8.0
- - https://github.com/syslog-ng/syslog-ng/releases/tag/syslog-ng-4.8.1
+News:
+- https://www.lighttpd.net/2025/4/4/1.4.79/
 
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 ---
- package/syslog-ng/syslog-ng.conf | 2 +-
- package/syslog-ng/syslog-ng.hash | 2 +-
- package/syslog-ng/syslog-ng.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/lighttpd/lighttpd.hash | 8 ++++----
+ package/lighttpd/lighttpd.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/syslog-ng/syslog-ng.conf b/package/syslog-ng/syslog-ng.conf
-index bab628f521..f6d0e83433 100644
---- a/package/syslog-ng/syslog-ng.conf
-+++ b/package/syslog-ng/syslog-ng.conf
-@@ -1,4 +1,4 @@
--@version: 4.7
-+@version: 4.8
+diff --git a/package/lighttpd/lighttpd.hash b/package/lighttpd/lighttpd.hash
+index 4834e2e947..4adbd08648 100644
+--- a/package/lighttpd/lighttpd.hash
++++ b/package/lighttpd/lighttpd.hash
+@@ -1,6 +1,6 @@
+-# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.78.sha512sum
+-sha512  40559e676da38b7b4742d7140ab1afe6b69a10ececc5ab1e18c1ea0e4b1c3f13f8058e8e005cbad3df8c008b6b80511afbd0bde9c8094848f3db4d5a29961181  lighttpd-1.4.78.tar.xz
+-# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.78.sha256sum
+-sha256  3c0739e8bc75c9e9fc1cfa89e1c304dd4b0e4abb87adc646a1d20bc6a2db2a3e  lighttpd-1.4.78.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.79.sha512sum
++sha512  e0f1bb2cfca5e81001ea30d13f088425dfc7acbec924ecddf438eb6326ab3158a61c6c4aaee0b68a90666d1cb987ce94b1f6a48afd92485cc995db5b58265f83  lighttpd-1.4.79.tar.xz
++# From https://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.79.sha256sum
++sha256  3b29a625b3ad88702d1fea4f5f42bb7d87488f2e4efc977d7f185329ca6084bd  lighttpd-1.4.79.tar.xz
+ # Locally calculated
+ sha256  5c98cad2fbaf5c5e2562bcbab401a7c557c1bb1bac9914ecc63730925052fb13  COPYING
+diff --git a/package/lighttpd/lighttpd.mk b/package/lighttpd/lighttpd.mk
+index 5f38637857..5337042340 100644
+--- a/package/lighttpd/lighttpd.mk
++++ b/package/lighttpd/lighttpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- source s_sys {
- 	file("/proc/kmsg" program_override("kernel"));
-diff --git a/package/syslog-ng/syslog-ng.hash b/package/syslog-ng/syslog-ng.hash
-index 7f829c8b13..4ca6a3e33e 100644
---- a/package/syslog-ng/syslog-ng.hash
-+++ b/package/syslog-ng/syslog-ng.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  5477189a2d12325aa4faebfcf59f5bdd9084234732f0c3ec16dd253847dacf1c  syslog-ng-4.7.1.tar.gz
-+sha256  e8b8b98c60a5b68b25e3462c4104c35d05b975e6778d38d8a81b8ff7c0e64c5b  syslog-ng-4.8.1.tar.gz
- sha256  d7d51f8d0f6ee9757a371080e7f5fa19ac73afbef14db6e981705cf1ec813d6b  COPYING
- sha256  ce3324c9f22299cfc7c281e5a6ab40fbe9c2ea1a67cee87226cb8cd39db1e1d2  GPL.txt
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LGPL.txt
-diff --git a/package/syslog-ng/syslog-ng.mk b/package/syslog-ng/syslog-ng.mk
-index 91d2dd5269..d97e2f7b3d 100644
---- a/package/syslog-ng/syslog-ng.mk
-+++ b/package/syslog-ng/syslog-ng.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, please check at runtime if the version in
- # syslog-ng.conf header needs to be updated
--SYSLOG_NG_VERSION = 4.7.1
-+SYSLOG_NG_VERSION = 4.8.1
- SYSLOG_NG_SITE = https://github.com/balabit/syslog-ng/releases/download/syslog-ng-$(SYSLOG_NG_VERSION)
- SYSLOG_NG_LICENSE = LGPL-2.1+ (syslog-ng core), GPL-2.0+ (modules)
- SYSLOG_NG_LICENSE_FILES = COPYING GPL.txt LGPL.txt
+ LIGHTTPD_VERSION_MAJOR = 1.4
+-LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).78
++LIGHTTPD_VERSION = $(LIGHTTPD_VERSION_MAJOR).79
+ LIGHTTPD_SOURCE = lighttpd-$(LIGHTTPD_VERSION).tar.xz
+ LIGHTTPD_SITE = http://download.lighttpd.net/lighttpd/releases-$(LIGHTTPD_VERSION_MAJOR).x
+ LIGHTTPD_LICENSE = BSD-3-Clause
 -- 
 2.43.0
 
