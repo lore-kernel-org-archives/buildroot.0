@@ -4,96 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FA58C369C2
-	for <buildroot@archiver.kernel.org>; Sun, 20 Apr 2025 13:27:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FE83C369C2
+	for <buildroot@archiver.kernel.org>; Sun, 20 Apr 2025 15:35:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C62B403C9;
-	Sun, 20 Apr 2025 13:27:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 71E2A4048E;
+	Sun, 20 Apr 2025 15:35:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AVRMeJWHyhYG; Sun, 20 Apr 2025 13:27:03 +0000 (UTC)
+ id OPklE6EqBG7t; Sun, 20 Apr 2025 15:35:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31ABD403DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DF01840493
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 31ABD403DA;
-	Sun, 20 Apr 2025 13:27:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id DB2DB1C0
- for <buildroot@buildroot.org>; Sun, 20 Apr 2025 13:27:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF01840493;
+	Sun, 20 Apr 2025 15:35:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DD6DF1A0
+ for <buildroot@buildroot.org>; Sun, 20 Apr 2025 15:35:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D7B1180B41
- for <buildroot@buildroot.org>; Sun, 20 Apr 2025 13:27:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CEC2980F89
+ for <buildroot@buildroot.org>; Sun, 20 Apr 2025 15:35:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sre-FsE1xYOh for <buildroot@buildroot.org>;
- Sun, 20 Apr 2025 13:27:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::535; helo=mail-pg1-x535.google.com;
- envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 815F080B28
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 815F080B28
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com
- [IPv6:2607:f8b0:4864:20::535])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 815F080B28
- for <buildroot@buildroot.org>; Sun, 20 Apr 2025 13:27:00 +0000 (UTC)
-Received: by mail-pg1-x535.google.com with SMTP id
- 41be03b00d2f7-af52a624283so2704404a12.0
- for <buildroot@buildroot.org>; Sun, 20 Apr 2025 06:27:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1745155619; x=1745760419;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=YtSHIAnkbRbpCvuIM56QDXE112uI7er9mshnhzewSd4=;
- b=sR/jd5gmt0gkuH/4Jdhwbi2F55CIPOOcvgeLMkDYgD35tpEtJbA9Ka/QunsjkfhNBZ
- OWUAidPgawOBIvOGkiCtWpOyETEh3dwGLCCVpwBYe8z99rUh0x593fLVUP4nNv9q6ctR
- fzGYBUn7tuvKcx3XBwsCJK2lMOYvN91qf1gXCkBFBB/7Y7AuUV+oVGZvz23mwqsy8QJT
- YiboXGwvVhWgzTEoEgcQrSFPndFODUzVHbMK765DeoV5tx8LXTOICns28a/5t+zAzwQe
- xtSN01mp4D+gP6XyzwxCbIzoptJj/ufUVVRoe0EZAe0D0oyazgEOE/XFYWNiCXGlfvEa
- Ok+Q==
-X-Gm-Message-State: AOJu0YzvF8I1Y8pRk7hxJMNXgOLm6N/pbLRYoYCZf8LIZoBbH4Pf5I+j
- iC4IzkVxuja8Tyik7oaLlLrnJdhawV7XD6x/deARI2mR7DVEvWOSvS7Udg==
-X-Gm-Gg: ASbGncsD6BDrz27X9RXukfMLhgLTVYxKd/Jm8SwQrh00ojGPefB1Zsyh78HhG/rg6es
- OQydkr46ecAPdLi6kVc26KM2hLy1DyoY0vBwP1ybhT0uOwuRRoZVIE69YN9WwntiEiFnO1A/0Jo
- c81uN5TTVP3KnGwwN+ZVfZOO8voT/ORIp22fuInBVPdoQl9Pqch3e1Npa3/od7oYfMoHD/ehjjg
- tt2Qte4C1x2vwRe/X9vreHo9avPCxNyDVsMCMhXBIYcmDizo4rxNljzxw8qcPqtMCcSYIPq0Ons
- XLs11yxrvCqasoUioWglshRQirfxyOZa+oVEMA==
-X-Google-Smtp-Source: AGHT+IHKYOg0+qlXiaQYz87rtylXKIc9XWRUbLtGYu766rsEjbddJHgjxMG5PLCUmUYdpCv4LF8WgA==
-X-Received: by 2002:a17:90a:fc46:b0:302:fc48:4f0a with SMTP id
- 98e67ed59e1d1-3087c1c120dmr12605587a91.0.1745155618602; 
- Sun, 20 Apr 2025 06:26:58 -0700 (PDT)
-Received: from localhost ([66.112.214.180]) by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-3087e1149bcsm4636639a91.41.2025.04.20.06.26.56
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 20 Apr 2025 06:26:58 -0700 (PDT)
-From: Scott Fan <fancp2007@gmail.com>
+ id GnuInV__4cpI for <buildroot@buildroot.org>;
+ Sun, 20 Apr 2025 15:35:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 80E3A80F47
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 80E3A80F47
+ for <buildroot@buildroot.org>; Sun, 20 Apr 2025 15:35:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7906585DC7; Sun, 20 Apr 2025 15:35:42 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: Scott Fan <fancp2007@gmail.com>,
- Francois Dugast <francois.dugast.foss@gmail.com>
-Date: Sun, 20 Apr 2025 21:26:47 +0800
-Message-ID: <20250420132648.611706-1-fancp2007@gmail.com>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1745155619; x=1745760419; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=YtSHIAnkbRbpCvuIM56QDXE112uI7er9mshnhzewSd4=;
- b=GHKqogCT35BFsgykNGi8WlwBM811Pw5u54eAGB4Fdqe8QFOdg3qR1U5o+nfVgokqU1
- ZnMFFc2AmNcmYoMT2We3gElCxLiH8LWiW8SuRsQPSYPgClDt/frSVD0Ri5yHKoO3krND
- 26iFcLVABb2ZUcIg3Qdv3nzW8HZ6ZGRQuUGA9Lyl1eV7YfBNbs4mClsZESfUZ5BgX6KQ
- 0r6LG+2p+7reJ3PfJTVyT2SeubtrrhSkTMZazQULLC3ibidDXrzlxuHtfaGmw9nuaCZM
- ED/9RkpzPz9WKCvETa7UmLnWwIBguoVi+bKcUA9fJLxk8G/1hdkcCPw0J3aa8CKjFfOg
- WLrQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=GHKqogCT
-Subject: [Buildroot] [PATCH] configs/visionfive2: bump OpenSBI to 1.6,
+Date: Sun, 20 Apr 2025 16:16:33 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f2c15f00d4a42042c54010e10aca773fea72c56b
+X-Git-Newrev: 4567c35d066ea75050367a364ecdfca6548f4f87
+X-Patchwork-Hint: ignore
+Message-Id: <20250420153542.7906585DC7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/visionfive2: bump OpenSBI to 1.6,
  Linux to 6.12.24 and U-Boot to 2025.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -106,10 +59,14 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+commit: https://git.buildroot.net/buildroot/commit/?id=4567c35d066ea75050367a364ecdfca6548f4f87
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 The updated linux configuration is based on the defconfig from the
 JH7110_VisionFive2_6.12.y_devel branch of the starfive kernel fork [1].
@@ -117,12 +74,13 @@ JH7110_VisionFive2_6.12.y_devel branch of the starfive kernel fork [1].
 [1] https://github.com/starfive-tech/linux/blob/e0ef35bfe6683a541b57a0b73a5b95c97e3f93c3/arch/riscv/configs/starfive_visionfive2_defconfig
 
 Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/visionfive2/linux_defconfig             | 514 +++++++++++++++---
- board/visionfive2/patches/linux/linux.hash    |   2 +-
- .../visionfive2/patches/opensbi/opensbi.hash  |   2 +-
- board/visionfive2/patches/uboot/uboot.hash    |   2 +-
- configs/visionfive2_defconfig                 |   9 +-
+ board/visionfive2/linux_defconfig              | 514 ++++++++++++++++++++-----
+ board/visionfive2/patches/linux/linux.hash     |   2 +-
+ board/visionfive2/patches/opensbi/opensbi.hash |   2 +-
+ board/visionfive2/patches/uboot/uboot.hash     |   2 +-
+ configs/visionfive2_defconfig                  |   9 +-
  5 files changed, 433 insertions(+), 96 deletions(-)
 
 diff --git a/board/visionfive2/linux_defconfig b/board/visionfive2/linux_defconfig
@@ -855,9 +813,6 @@ index fb0bc94d15..8223e6faa1 100644
  BR2_TARGET_UBOOT_NEEDS_OPENSBI=y
  # BR2_TARGET_UBOOT_FORMAT_BIN is not set
  BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
--- 
-2.43.0
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
