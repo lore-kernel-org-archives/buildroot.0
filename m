@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F6D7C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:54:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A7D1C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:54:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E909770893;
-	Mon, 19 May 2025 10:54:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4274884414;
+	Mon, 19 May 2025 10:54:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YwzsOimwdzPk; Mon, 19 May 2025 10:54:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id I-wRHEnELzCz; Mon, 19 May 2025 10:54:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A9C570768
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65070843FF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A9C570768;
-	Mon, 19 May 2025 10:54:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 65070843FF;
+	Mon, 19 May 2025 10:54:23 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 15D92E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:05 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 040D1D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C70F54124B
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2936540E1C
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U70Yo1wEdrxc for <buildroot@buildroot.org>;
+ id KinPADm-b9BY for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DDD8840E2D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F3C141242
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DDD8840E2D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5F3C141242
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DC84082A2E; Mon, 19 May 2025 10:39:54 +0000 (UTC)
+ id 5CAC5873D4; Mon, 19 May 2025 10:39:54 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 21 Apr 2025 19:07:50 +0200
+Date: Mon, 21 Apr 2025 16:25:24 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3d0fbaf1134ccbb89393e496c9281cb829aaeee1
-X-Git-Newrev: 58d616e6875102194fbf8cfcc8c2b4e0faf78935
+X-Git-Oldrev: c6db02cff4f13dc74669a7cd17fc48a14d94e4ed
+X-Git-Newrev: bee46bf38de7df119af0664e7dfb2b5de521900d
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103954.DC84082A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ivi-homescreen: bump
- to version a038ce00031ed5a9a89b4d8dd7dbde5e3d7ade6e
+Message-Id: <20250519103954.5CAC5873D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rdma-core: bump to
+ version v56.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,48 +59,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58d616e6875102194fbf8cfcc8c2b4e0faf78935
+commit: https://git.buildroot.net/buildroot/commit/?id=bee46bf38de7df119af0664e7dfb2b5de521900d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+For change log since v55.0, see:
+https://github.com/linux-rdma/rdma-core/releases/tag/v56.0
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/ivi-homescreen/ivi-homescreen.hash | 2 +-
- package/ivi-homescreen/ivi-homescreen.mk   | 2 +-
+ package/rdma-core/rdma-core.hash | 2 +-
+ package/rdma-core/rdma-core.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ivi-homescreen/ivi-homescreen.hash b/package/ivi-homescreen/ivi-homescreen.hash
-index 60b9281abc..484ecfb128 100644
---- a/package/ivi-homescreen/ivi-homescreen.hash
-+++ b/package/ivi-homescreen/ivi-homescreen.hash
+diff --git a/package/rdma-core/rdma-core.hash b/package/rdma-core/rdma-core.hash
+index 9e6844e1df..6037a2409a 100644
+--- a/package/rdma-core/rdma-core.hash
++++ b/package/rdma-core/rdma-core.hash
 @@ -1,5 +1,5 @@
  # Locally calculated
--sha256  733a95a9b50875e8b45b0b69118656edba3ba88ecc65e3c0d76ea5df9761c433  ivi-homescreen-5ab78a19e95c88cc5d6b173ab1260a211e78cf0a-git4.tar.gz
-+sha256  aba31437dd90eca1fc5723619c269394e475b3000309eda86efcfd252452a85e  ivi-homescreen-a038ce00031ed5a9a89b4d8dd7dbde5e3d7ade6e-git4.tar.gz
- 
- # Apache-2.0
- sha256  6b96fa0a3def85caaf466caa2bd82d4ca4f22d106ff88f97a00c537c00cc714b  LICENSE
-diff --git a/package/ivi-homescreen/ivi-homescreen.mk b/package/ivi-homescreen/ivi-homescreen.mk
-index 4293b2bc35..525fb4e11b 100644
---- a/package/ivi-homescreen/ivi-homescreen.mk
-+++ b/package/ivi-homescreen/ivi-homescreen.mk
+-sha256  a02d128974055ffa92577e4d3889213ac180a79f05b077aeb884bafb6b46e957  rdma-core-55.0.tar.gz
++sha256  f09c73f89e0bdcd6b794ebd888021755835eba0c1e1e6b8c66a68d2f8952c468  rdma-core-56.0.tar.gz
+ sha256  99e0df1d009a21d0dfb031600c550fd8f4efc0c6b2a4ef8b34a995aa6f79c9f4  COPYING.BSD_MIT
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL2
+ sha256  c46a557f25b8ef9bec76526c4e593fc13e6cba27e7ba30d73b6497a689cf06f6  COPYING.md
+diff --git a/package/rdma-core/rdma-core.mk b/package/rdma-core/rdma-core.mk
+index 4d427103b9..5b688df423 100644
+--- a/package/rdma-core/rdma-core.mk
++++ b/package/rdma-core/rdma-core.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IVI_HOMESCREEN_VERSION = 5ab78a19e95c88cc5d6b173ab1260a211e78cf0a
-+IVI_HOMESCREEN_VERSION = a038ce00031ed5a9a89b4d8dd7dbde5e3d7ade6e
- IVI_HOMESCREEN_SITE = https://github.com/toyota-connected/ivi-homescreen.git
- IVI_HOMESCREEN_SITE_METHOD = git
- IVI_HOMESCREEN_LICENSE = Apache-2.0, BSD-3-Clause, BSD-Style, BSL-1.0, MIT
+-RDMA_CORE_VERSION = 55.0
++RDMA_CORE_VERSION = 56.0
+ RDMA_CORE_SITE = $(call github,linux-rdma,rdma-core,v$(RDMA_CORE_VERSION))
+ RDMA_CORE_LICENSE = GPL-2.0 or BSD-2-Clause
+ RDMA_CORE_LICENSE_FILES = COPYING.GPL2 COPYING.BSD_MIT COPYING.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
