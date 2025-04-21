@@ -1,76 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 221D5C369AB
-	for <buildroot@archiver.kernel.org>; Mon, 21 Apr 2025 16:09:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F002C369D3
+	for <buildroot@archiver.kernel.org>; Mon, 21 Apr 2025 17:07:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DB888403E5;
-	Mon, 21 Apr 2025 16:09:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC37A607C7;
+	Mon, 21 Apr 2025 17:07:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S0-8Q8zhq_mp; Mon, 21 Apr 2025 17:07:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB82E6075A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB82E6075A;
+	Mon, 21 Apr 2025 17:07:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A116C68
+ for <buildroot@buildroot.org>; Mon, 21 Apr 2025 17:07:24 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9DDA240405
+ for <buildroot@buildroot.org>; Mon, 21 Apr 2025 17:07:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lf8XIwpZBEam; Mon, 21 Apr 2025 16:09:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C110403FB
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2C110403FB;
-	Mon, 21 Apr 2025 16:09:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3DEB51A0
- for <buildroot@buildroot.org>; Mon, 21 Apr 2025 16:09:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B5F940445
- for <buildroot@buildroot.org>; Mon, 21 Apr 2025 16:09:51 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xQoKRSJh6e9q for <buildroot@buildroot.org>;
- Mon, 21 Apr 2025 16:09:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 922FC403D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 922FC403D7
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 922FC403D7
- for <buildroot@buildroot.org>; Mon, 21 Apr 2025 16:09:50 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 9D0BF2003CE;
- Mon, 21 Apr 2025 18:09:46 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 21 Apr 2025 18:09:46 +0200
-MIME-Version: 1.0
-Date: Mon, 21 Apr 2025 18:09:46 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: =?UTF-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= <raphael.melotte@mind.be>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
-In-Reply-To: <20250415151755.865635-1-raphael.melotte@mind.be>
-References: <20250415151755.865635-1-raphael.melotte@mind.be>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <fea1263b8a3561813b4beb18f1681da3@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1745251788;
- bh=LBTaZV0xqS0yBJj4zWDmiWSdAIkKgmeeDomgwUi776U=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=JsII+41VilHYv1srvkY6uuzmammBqszUqhlrAz1SOf09qPH30aRMlPw3NTh/Cv+SQ
- yBPdkIAqanhku6/MV2LSyWwUw45201MnsIiIevNp+dhhS/nPNx/z5DJSCp+aQoa0N1
- I4cBsrhKDbfAUmwJ1KKqv6gqCMSZ8831Fd9qFEm4UoZYkHStsRs2Bn00h5y7ReAPms
- 5tMOHxTsg9DETHmmI9LXOE8svAnvIg2Tt8NqjvhW5+iOTuroJBmvN4ot3tYrGkzrkd
- JE7J77sJPcMJvO10rhOf+RHEr3rewisme0lKlknCgBpD6juoJUMQ4Pf7Ay8ZiubFdg
- 8xf5hk1BcM/7w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=JsII+41V
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-s3transfer: bump to
- version 0.11.4
+ id k57naYccyuYe for <buildroot@buildroot.org>;
+ Mon, 21 Apr 2025 17:07:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9202403EF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E9202403EF
+ for <buildroot@buildroot.org>; Mon, 21 Apr 2025 17:07:23 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E1FBB85FF0; Mon, 21 Apr 2025 17:07:23 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 21 Apr 2025 19:05:01 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 140d2f5ab9e2df1899d3f2d6d0498c5e9e679da3
+X-Git-Newrev: 3d0fbaf1134ccbb89393e496c9281cb829aaeee1
+X-Patchwork-Hint: ignore
+Message-Id: <20250421170723.E1FBB85FF0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mender-grubenv: bump version to
+ e4cdd9db213de15e79576b40fd3f07736ac85709
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,14 +58,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMTUvMDQvMjAyNSAxNzoxNywgUmFwaGHDq2wgTcOpbG90dGUgdmlhIGJ1aWxkcm9vdCB3cm90
-ZToKPiBTaWduZWQtb2ZmLWJ5OiBSYXBoYcOrbCBNw6lsb3R0ZSA8cmFwaGFlbC5tZWxvdHRlQG1p
-bmQuYmU+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=3d0fbaf1134ccbb89393e496c9281cb829aaeee1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+- Update License hash due to year change.
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mender-grubenv/mender-grubenv.hash | 4 ++--
+ package/mender-grubenv/mender-grubenv.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/mender-grubenv/mender-grubenv.hash b/package/mender-grubenv/mender-grubenv.hash
+index d7f784493c..f3083e5d39 100644
+--- a/package/mender-grubenv/mender-grubenv.hash
++++ b/package/mender-grubenv/mender-grubenv.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0bac59698165a8dafdd282610246addd7bebf41612efa88c77b779f8ffb5ed9d  mender-grubenv-38e5043a215f696d126a2d707c9db9aeb93cfb2d.tar.gz
+-sha256  d0f406b04e7901e6b4076bdf5fd20f9d7f04fc41681069fd8954413ac6295688  LICENSE
++sha256  bdb055332952f471d36d30cf8148d1d34eae16b8671cfd98200eaab5bc392a7f  mender-grubenv-e4cdd9db213de15e79576b40fd3f07736ac85709.tar.gz
++sha256  38791d93beae962b266e11ac888ea2af4f07578b272c2f9dcb05f54f32960a76  LICENSE
+diff --git a/package/mender-grubenv/mender-grubenv.mk b/package/mender-grubenv/mender-grubenv.mk
+index a47531fe58..cf2f7520c0 100644
+--- a/package/mender-grubenv/mender-grubenv.mk
++++ b/package/mender-grubenv/mender-grubenv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MENDER_GRUBENV_VERSION = 38e5043a215f696d126a2d707c9db9aeb93cfb2d
++MENDER_GRUBENV_VERSION = e4cdd9db213de15e79576b40fd3f07736ac85709
+ MENDER_GRUBENV_SITE = $(call github,mendersoftware,grub-mender-grubenv,$(MENDER_GRUBENV_VERSION))
+ MENDER_GRUBENV_LICENSE = Apache-2.0
+ MENDER_GRUBENV_LICENSE_FILES = LICENSE
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
