@@ -4,97 +4,110 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FE6CC369AB
-	for <buildroot@archiver.kernel.org>; Mon, 21 Apr 2025 19:02:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A233BC369AB
+	for <buildroot@archiver.kernel.org>; Mon, 21 Apr 2025 20:19:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C653E810A5;
-	Mon, 21 Apr 2025 19:02:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 473B9812E5;
+	Mon, 21 Apr 2025 20:19:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z_S0xjQV4Nyg; Mon, 21 Apr 2025 19:02:33 +0000 (UTC)
+ id j7zeVIv4kkhg; Mon, 21 Apr 2025 20:19:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA70081091
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60EAC812DC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EA70081091;
-	Mon, 21 Apr 2025 19:02:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BA0E01A0
- for <buildroot@buildroot.org>; Mon, 21 Apr 2025 19:02:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 60EAC812DC;
+	Mon, 21 Apr 2025 20:19:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3DFBF68
+ for <buildroot@buildroot.org>; Mon, 21 Apr 2025 20:19:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AA30E81066
- for <buildroot@buildroot.org>; Mon, 21 Apr 2025 19:02:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 242C040A44
+ for <buildroot@buildroot.org>; Mon, 21 Apr 2025 20:19:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3V4X5zpLzaDH for <buildroot@buildroot.org>;
- Mon, 21 Apr 2025 19:02:31 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BbOrwmAvPbws for <buildroot@buildroot.org>;
+ Mon, 21 Apr 2025 20:19:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::b2c; helo=mail-yb1-xb2c.google.com;
- envelope-from=josephzik@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F0C6E81064
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0C6E81064
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com
- [IPv6:2607:f8b0:4864:20::b2c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F0C6E81064
- for <buildroot@buildroot.org>; Mon, 21 Apr 2025 19:02:30 +0000 (UTC)
-Received: by mail-yb1-xb2c.google.com with SMTP id
- 3f1490d57ef6-e7271b39a4fso517611276.3
- for <buildroot@buildroot.org>; Mon, 21 Apr 2025 12:02:30 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5450A40270
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5450A40270
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5450A40270
+ for <buildroot@buildroot.org>; Mon, 21 Apr 2025 20:19:23 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-4394a0c65fcso48166755e9.1
+ for <buildroot@buildroot.org>; Mon, 21 Apr 2025 13:19:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1745262150; x=1745866950;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=R6PSTjh8Nicae4cFdLm+jwsvBhDnQBfBFFhqgcMSIwg=;
- b=tczBKa3bFPnDUtJWbHrQfH5mYYYmNe6vyX0/OdFwG1pHYBJodzbbwv6cIwBgTiDCXm
- 8dyfu5BJfFRHxStW09uNmk7L1yBdMykkIFpKDH89ti93c4BS7A0lJ1kI0nStpysqokC3
- JqYOMLlhxwlqxTFdpWHBO3zx/abe/Cvyd3jY4ZK9FmIUVK04lx/O/mJC3NhIGB8iZy5r
- FPmcjbbvIq5+PX/dwJ8tUj5auLW5frdjs4nZKearJ7hgM/W6DChJuFr3ZDNH2Iun7xbf
- e2SzuTKRRUeg0vdr0/XCrg3ETpEK5HnBA/RBQCxSKN26GwNl+0aH1uX4AsrHHnp8S7qo
- w4Cg==
-X-Gm-Message-State: AOJu0YxRqUmNcFwUzzHM/BMwl+GqJRCeUN+izd9taqPHav+BM1arKbUA
- SziDrR71KrsrWv7w6SDhdBHc9nunBJ5ZFOVEEQdoNVWQiRJ+tDxjKsTfZVlXMAEv4xcxfLnmyTA
- m8v3Sb932CSLjhr34I80yPNFTXwSvaNlJsb4=
-X-Gm-Gg: ASbGncvO6GFYNcc1rgi3oErARd32j21/1ggb9t4V8nfXLyoCnlreTdc6Srbm0p4OWf3
- kGuio1Zueg5vhD20CqlVEpNurBEDUQsGCJ/gvmcovNfYc5N5taP9/Rg1CtCgtH+vrAZMp/EWm8U
- HbNVfyYSE0/BWH0xnhtUa+
-X-Google-Smtp-Source: AGHT+IFlHJUiS2tI8GJ+HGxiZE7qPqbSI6LNgKSJrWrW2ILBPBdtmGXV3lf81eC7sWqd+Y6h/RjBg0S6MpdGlAkHax8=
-X-Received: by 2002:a05:6902:1209:b0:e60:9fb1:1f9f with SMTP id
- 3f1490d57ef6-e7297d9e564mr7399149276.1.1745262149711; Mon, 21 Apr 2025
- 12:02:29 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1745266761; x=1745871561;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=nPNAMjrwOp4OZr1+TFQ2ZpJ/fB1HqH5rF7Gpod9PLcw=;
+ b=O9jK2ZWjkFVKN+1K5xTopwp0UfBxIWZX8EnvJWEbPEe8cbjyGsvx2cKIQI/sTkA2/j
+ 6jBzs21RU/YvjcRkocr4yx4KwwjPpOVp2GkZ5/JrWDgMj+8JLXpkBf0va9tSrIpYLAco
+ rxx/2Cgnx9YPLx7P9LJIzMoB2gfORLMeJt76byA0bdz3i0vZN6/vna6ZJKMMTfFCv+l8
+ l1/iAtkzzhGyp7bRdjw81ruMqhdkqiJnlcm54pyfLNfV3+231PEqRqw8S2SBxRkaVz0w
+ 0P2q45J9qJSJk9HzL+P2GkKYivhOv68UGUPNY1jtB6i7VSD3o1jeUYMFE36YACaOEZgR
+ sBUQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUcTGkR1NBnFCeSo46Kw638tT00fZGBOwYAV+h8tLTXVgquZMsWFB94zCcDUX4czCXF1rW/+FPjqD8=@buildroot.org
+X-Gm-Message-State: AOJu0YzR76YsS6C8qqJW+X/mPzz4cIYtC9Ajcdb6BsHe4An1vpSQNfpd
+ F6huc13+Cqcgc1K3UKNKtnAPkX8eJEL4qeJ+c/+53gvDms/tqO2oecoJMEdkd84bsPWXZp3H1MC
+ m
+X-Gm-Gg: ASbGncvvyZRz/8GcSO+kaWWKMC4eaPZZlBWQNuHVGajI9B9K891zWLlmMsgHvHKjw1Q
+ SxR6+/7lY0NMSsZ0AiIJ0UAaQ5o81cfxQbQ2e4WIDGBv4cgQReVDncUaekoSfIzwOqri6nW9VpS
+ c/EL+2GdW5s1Ff/4H5ZGaeBZ/hgLYr5XPagPiU0mLvZ2xWf/aop/C9wViOJfAQb48ixfBF7odmf
+ 6rJ2byWr6LaRS9SJcJ8GGS6Lbc7LPQe5zTRc3cr7GQ596dxh3YEpPQEnOAvyVxmOO1ubG6/GJPj
+ xhr6tdYmXvZMLFvGls3tQvQqojNTKbAJMV6Y2lHq1EK5zw==
+X-Google-Smtp-Source: AGHT+IGdIhnP9pJD4tci8mF9DsQ5LRzbVYgjIUIrsd4B2B/LN+CpHF14hn0joX3XqoDd3BffXMl0bA==
+X-Received: by 2002:a05:600c:5490:b0:43c:fd72:f039 with SMTP id
+ 5b1f17b1804b1-44072c876d8mr79471785e9.11.1745266761397; 
+ Mon, 21 Apr 2025 13:19:21 -0700 (PDT)
+Received: from [192.168.4.20] ([79.132.233.61])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4406d5aa100sm148341965e9.7.2025.04.21.13.19.20
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 21 Apr 2025 13:19:20 -0700 (PDT)
+Message-ID: <bab05300-a70d-4f03-bb15-57bef52edac7@mind.be>
+Date: Mon, 21 Apr 2025 22:19:19 +0200
 MIME-Version: 1.0
-References: <CAPWx8vsoJUt8YMJG1aUqFRK1=yizNbgjVjGL1Q1+9ygjJGnZLA@mail.gmail.com>
- <dfe20dbb0429ce970599a992005b9ffa@free.fr>
- <CAPWx8vtcjfVZJLydqyUAJ_8WbOHkrfJm2DG-qS5TO+msfa4uBQ@mail.gmail.com>
- <e07d34b22ea6c85e2d50249f1b06ccd9@free.fr>
- <CAPWx8vtHtH0iCM4yUEnjA+J6oqirBGmwGYTg_VMHsex95iHOrQ@mail.gmail.com>
-In-Reply-To: <CAPWx8vtHtH0iCM4yUEnjA+J6oqirBGmwGYTg_VMHsex95iHOrQ@mail.gmail.com>
-From: Joseph Zikusooka <josephzik@gmail.com>
-Date: Mon, 21 Apr 2025 22:02:16 +0300
-X-Gm-Features: ATxdqUGf_VYnQsyENs5MzsGYJjnz3n829VzGGV4ntM8m7FQ8L_XVZUKetKduHJU
-Message-ID: <CAPWx8vvq0BgguhEfUnLt7-qm2kqTU4VCKjb7i2L+sXG9HbeOMQ@mail.gmail.com>
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20250415195547.199428-1-thomas.perale@mind.be>
+ <87tt6o3oxx.fsf@dell.be.48ers.dk>
+ <065809af-e4b6-4bd8-9f53-49d39fab38af@rnout.be>
+ <4b029329-2258-428d-80c9-315dbd6335be@essensium.com>
+ <20250416215812.6a8ae1a5@windsurf>
+ <b864a02f-c98a-48f5-863a-a7bd800809f6@mind.be>
+ <20250416224034.3eb04598@windsurf>
+ <221f0412-b320-4ade-8936-9ae8d941ebf7@mind.be>
+ <20250418123959.3307e037@windsurf>
+Content-Language: en-US
+In-Reply-To: <20250418123959.3307e037@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1745262150; x=1745866950; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=R6PSTjh8Nicae4cFdLm+jwsvBhDnQBfBFFhqgcMSIwg=;
- b=JVudWIW5SRIvYtoIqmBBxMCpDxCzB3NOxp3c3dbBhwQTHUVXpVzeAmiZOTYfRQJsmg
- n7FarWhrHlS54JhQgBpyONrwiwlBdRjp2nDuqigFioNsh1h1HututhSIqVzRxQiyx7YZ
- TDDQZ8EFzVerR5IYl/KlMi4t/zpISB9jSEH3jH2bb4aIXGm8qUUNBmtylPjPUTd0jwLs
- cs7d4OejZoFg3Hkve7TKdSN9rmNp4xFXWRCRJJtgczXQQ+vUWZRDqmxx0WNalQRVauvk
- 8Co9xbLw+nUFaYXQx2rfHZWp/e9LNpFwkugqrjVBAcgzH3n3gRVvMPFf+mwaa4RadxDd
- KDvg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=JVudWIW5
-Subject: Re: [Buildroot] host-m4 build on Fedora 42 fails
+ d=mind.be; s=google; t=1745266761; x=1745871561; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=nPNAMjrwOp4OZr1+TFQ2ZpJ/fB1HqH5rF7Gpod9PLcw=;
+ b=a8nOhqDfwOhhFmrfiMXPBNbmfkTCOme+2wdfmVsY8wfrVTIovaFTtkye7G5IR8kefb
+ KE98RlIqzFTyJUP6j6djsM6dyOi/TcR2nH9nK9Qo78K92urKaun56RGQWdiCoU6Zt0Vk
+ YpcIn8X5Tz0BGWyZM5ltf9dooTVZYCz9sXNjUt9gy/dQHiP5laFUP4eI/N9ARlOm/aYa
+ 4eKlCDgCmeRGc+rIebgEICch+HewLEBrtwlmCzA7TNLutjY2kfVEW75EbhM+uYeJH6rG
+ FVBaWA9XCCIdLnzx5Ix+pMzsYfT36xbOVo1e6TBaTRyy4wcKS7UXKhzzI0BScA7PDDny
+ gj8Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=a8nOhqDf
+Subject: Re: [Buildroot] [PATCH 0/7] Add PURL support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,51 +119,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+Cc: Thomas Perale via buildroot <buildroot@buildroot.org>,
+ Christian Stewart <christian@aperture.us>,
+ Thomas Perale <thomas.perale@essensium.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SSB0aGluayBJIHJ1c2hlZCB0aGUgcHJldmlvdXMgcGF0Y2ggLSBoZXJl4oCZcyB0aGUgY29ycmVj
-dGVkIHZlcnNpb24uCgoKLS0tIGEvcGFja2FnZS9tNC9tNC5tayAgICAyMDI1LTA0LTAzIDEzOjU5
-OjI3LjIyNDI1NDMzOCArMDMwMAorKysgYi9wYWNrYWdlL200L200Lm1rICAgICAyMDI1LTA0LTIx
-IDIxOjQxOjQ1LjU4OTcxNzMwMiArMDMwMApAQCAtMTAsNCArMTAsNiBAQAogTTRfTElDRU5TRSA9
-IEdQTC0zLjArCiBNNF9MSUNFTlNFX0ZJTEVTID0gQ09QWUlORwoKK0hPU1RfTTRfQ09ORl9FTlYg
-PSBDRkxBR1M9IiQoSE9TVF9DRkxBR1MpIC1zdGQ9Z251MTciCisKICQoZXZhbCAkKGhvc3QtYXV0
-b3Rvb2xzLXBhY2thZ2UpKQoKT24gTW9uLCBBcHIgMjEsIDIwMjUgYXQgOToyMeKAr1BNIEpvc2Vw
-aCBaaWt1c29va2EgPGpvc2VwaHppa0BnbWFpbC5jb20+IHdyb3RlOgo+Cj4gSGkgSnVsaWVuLAo+
-Cj4gVGhhbmtzLCB0aGF0IHNvbHZlZCB0aGUgcHJvYmxlbSEgSSBuZWVkZWQgdG8gcnVuICJtYWtl
-IGRpc3RjbGVhbiIKPiBiZWZvcmUgYnVpbGRpbmcgd2l0aCB0aGUgdXBkYXRlZCBtNC5tayBmaWxl
-LiBXaGlsZSB3ZSB3YWl0IGZvciBhIG5ldwo+IG00IHJlbGVhc2UgZnJvbSB1cHN0cmVhbSwgSeKA
-mW0gc2hhcmluZyB0aGUgcGF0Y2ggdGhhdCB3b3JrZWQgZm9yIG1lIGluCj4gY2FzZSBhbnlvbmUg
-ZWxzZSBlbmNvdW50ZXJzIHRoaXMgaXNzdWUuCj4KPiAtLS0gYS9wYWNrYWdlL200L200Lm1rICAg
-IDIwMjUtMDQtMDMgMTM6NTk6MjcuMjI0MjU0MzM4ICswMzAwCj4gKysrIGIvcGFja2FnZS9tNC9t
-NC5tayAgICAyMDI1LTA0LTIxIDIxOjA0OjIyLjEwNzU0NjI2MiArMDMwMAo+IEBAIC0xMCw0ICsx
-MCw4IEBACj4gIE00X0xJQ0VOU0UgPSBHUEwtMy4wKwo+ICBNNF9MSUNFTlNFX0ZJTEVTID0gQ09Q
-WUlORwo+Cj4gK0hPU1RfTTRfQ09ORl9FTlYgPSBDRkxBR1M9IiQoSE9TVF9DRkxBR1MpIC1zdGQ9
-Z251MTciCj4gKwo+ICtIT1NUX000X0NPTkZfRU5WID0gQ0ZMQUdTPSIkKEhPU1RfQ0ZMQUdTKSAt
-c3RkPWdudTE3Igo+ICsKPiAgJChldmFsICQoaG9zdC1hdXRvdG9vbHMtcGFja2FnZSkpCj4KPiBP
-biBNb24sIEFwciAyMSwgMjAyNSBhdCA1OjAw4oCvUE0gSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJl
-ZS5mcj4gd3JvdGU6Cj4gPgo+ID4gSGkgSm9zZXBoLAo+ID4KPiA+IE9uIDE5LzA0LzIwMjUgMTg6
-NTYsIEpvc2VwaCBaaWt1c29va2Egd3JvdGU6Cj4gPiA+IEhpIEp1bGllbiwKPiA+ID4KPiA+ID4g
-VGhhbmtzIGZvciB0aGUgaW5mbyBhbmQgdGhlIHdvcmthcm91bmQgdGlwIQo+ID4gPgo+ID4gPiBJ
-IHVwZGF0ZWQgbXkgcGF0Y2ggdG8gdXNlIENGTEFHUz0iJChIT1NUX0NGTEFHUykgLXN0ZD1nbnUx
-NyIgbGlrZSB5b3UKPiA+ID4gc3VnZ2VzdGVkLCBidXQgdGhlIGJ1aWxkIHN0aWxsIGZhaWxzIHdp
-dGggR0NDIDE1IGFuZCBtNCAxLjQuMTkgLSBzYW1lCj4gPiA+IGVycm9ycyBhcyBiZWZvcmUuIFN0
-cmFuZ2VseSwgaWYgSSBidWlsZCBtNCBvdXRzaWRlIHRoZSBidWlsZHJvb3QKPiA+ID4gZW52aXJv
-bm1lbnQgd2l0aCB0aG9zZSBmbGFncywgaXQgd29ya3MgZmluZS4KPiA+ID4KPiA+ID4gQW55IGlk
-ZWEgd2hhdCBlbHNlIGNvdWxkIGJlIGNhdXNpbmcgdGhlIHdvcmthcm91bmQgdG8gZmFpbCBpbgo+
-ID4gPiBidWlsZHJvb3Q/IEFyZSB0aGVyZSBvdGhlciBmbGFncyBvciB0d2Vha3MgSSBjb3VsZCB0
-cnkgaW4gbTQubWsgWzFdCj4gPiA+IHVudGlsIHRoZSBuZXcgbTQgcmVsZWFzZSBpcyBvdXQ/Cj4g
-Pgo+ID4gSSBqdXN0IHRyaWVkIGFkZGluZyB0aGUgbGluZSBJIHN1Z2dlc3RlZCBpbiBwYWNrYWdl
-L200L200Lm1rOgo+ID4gSE9TVF9NNF9DT05GX0VOViA9IENGTEFHUz0iJChIT1NUX0NGTEFHUykg
-LXN0ZD1nbnUxNyIKPiA+Cj4gPiBPbiBhIEZlZG9yYSA0MiBob3N0IHN5c3RlbSAodXBkYXRlZCBh
-cyBvZiBub3cpLCBpdCBzb2x2ZXMgdGhlCj4gPiBob3N0LW00IGJ1aWxkIGlzc3VlLiBZb3UgbmVl
-ZCB0byByZXN0YXJ0IGZyb20gYSBjbGVhbiBidWlsZCwKPiA+IHRob3VnaC4KPiA+Cj4gPiBJIHRl
-c3RlZCB3aXRoIHRoZSBjb21tYW5kczoKPiA+Cj4gPiAgICAgIG1ha2UgcWVtdV9hYXJjaDY0X3Zp
-cnRfZGVmY29uZmlnCj4gPiAgICAgIG1ha2UgY2xlYW4KPiA+ICAgICAgbWFrZQo+ID4KPiA+IENv
-dWxkIHlvdSBjaGVjayBvbiB5b3VyIHNpZGUsIHBsZWFzZT8KPiA+Cj4gPiBCZXN0IHJlZ2FyZHMs
-Cj4gPgo+ID4gSnVsaWVuLgo+Cj4KPgo+IC0tCj4gSm9zZXBoIFppa3Vzb29rYQoKCgotLSAKSm9z
-ZXBoIFppa3Vzb29rYQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
-Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hi Thomas,
+
+> But with what tool?
+
+> So I'm still not sure to understand your "DependencyTrack uses NVD
+> annotation unfortunately". Could you clarify?
+
+The tool is called DependencyTrack (https://dependencytrack.org/), sorry 
+if the name was misleading. It uses the annotation downloaded from NVD 
+to internally do the matching with the CPE ID.
+
+Adding PURL definition the SBOM allows DependencyTrack to rely on 
+https://ossindex.sonatype.org/ to match CVE to packages.
+
+> it has to be clear with which CVE database this works, and how this is
+> going to interact with pkg-stats (and if it doesn't interact, why).
+My series is more about improving the SBOM contents with information 
+that can be consumed by other software rather than improving 'pkg-stats' 
+right now. But, it could be used as a fallback for packages without a 
+CPE ID manually assigned.
+
+Regards
+Thomas
+
+On 4/18/25 12:39 PM, Thomas Petazzoni wrote:
+> Hello,
+>
+> On Wed, 16 Apr 2025 22:49:15 +0200
+> Thomas Perale <thomas.perale@mind.be> wrote:
+>
+>> Just to say that with the PURL added to the Django package I got
+>> notified for the CVE.
+> But with what tool? Right now our "reference" tool to track CVEs in
+> Buildroot is support/scripts/pkg-stats, which renders:
+>
+>    http://autobuild.buildroot.net/stats/master.html
+>
+> And which uses the CVE database from
+> https://github.com/fkie-cad/nvd-json-data-feeds/.
+>
+> So I'm still not sure to understand your "DependencyTrack uses NVD
+> annotation unfortunately". Could you clarify?
+>
+> Right now, packages have a CPE ID, which we use to match
+> against https://github.com/fkie-cad/nvd-json-data-feeds/ as part
+> of the pkg-stats tool. If we want to add more identifiers in packages,
+> it has to be clear with which CVE database this works, and how this is
+> going to interact with pkg-stats (and if it doesn't interact, why).
+>
+> Best regards,
+>
+> Thomas
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
