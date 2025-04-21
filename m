@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6812BC369D2
-	for <buildroot@archiver.kernel.org>; Mon, 21 Apr 2025 15:36:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABBFDC369D2
+	for <buildroot@archiver.kernel.org>; Mon, 21 Apr 2025 15:36:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B4F16059E;
-	Mon, 21 Apr 2025 15:36:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FB3A40812;
+	Mon, 21 Apr 2025 15:36:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QUgIfm8Z4d_Z; Mon, 21 Apr 2025 15:36:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFD894082A
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFD894082A;
+	Mon, 21 Apr 2025 15:36:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 17CCB68
+ for <buildroot@buildroot.org>; Mon, 21 Apr 2025 15:36:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 74FA760AEE
+ for <buildroot@buildroot.org>; Mon, 21 Apr 2025 15:36:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MdqGqObXr7DM; Mon, 21 Apr 2025 15:36:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A83860AF3
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A83860AF3;
-	Mon, 21 Apr 2025 15:36:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 6C6081C0
- for <buildroot@buildroot.org>; Mon, 21 Apr 2025 15:36:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 50BA6400D2
- for <buildroot@buildroot.org>; Mon, 21 Apr 2025 15:36:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j1S5u6TcDTIx for <buildroot@buildroot.org>;
+ id CAP8vGGwN5-K for <buildroot@buildroot.org>;
  Mon, 21 Apr 2025 15:36:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C0E340445
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BFF3A6059E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C0E340445
+ by smtp3.osuosl.org (Postfix) with ESMTP id BFF3A6059E
  for <buildroot@buildroot.org>; Mon, 21 Apr 2025 15:36:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3235E85FA5; Mon, 21 Apr 2025 15:36:10 +0000 (UTC)
+ id BD2E685FA6; Mon, 21 Apr 2025 15:36:10 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 21 Apr 2025 16:23:55 +0200
+Date: Mon, 21 Apr 2025 16:25:56 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1223b4b702cc92602f1abdf3d1210bb05a02d4d1
-X-Git-Newrev: aaf93ba27f58496e957155ade6213158f3114a34
+X-Git-Oldrev: 7f104812bf494bab7eb0287daaa1175a5fff1025
+X-Git-Newrev: b910646a86c81c0e9969a2c80b43055494b68401
 X-Patchwork-Hint: ignore
-Message-Id: <20250421153610.3235E85FA5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: new openocd runtime test
+Message-Id: <20250421153610.BD2E685FA6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fwts: bump to version 25.03.00
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,70 +64,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aaf93ba27f58496e957155ade6213158f3114a34
+commit: https://git.buildroot.net/buildroot/commit/?id=b910646a86c81c0e9969a2c80b43055494b68401
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+See release announce:
+https://lists.ubuntu.com/archives/fwts-devel/2025-March/013974.html
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                    |  1 +
- support/testing/tests/package/test_openocd.py | 37 +++++++++++++++++++++++++++
- 2 files changed, 38 insertions(+)
+ package/fwts/fwts.hash | 2 +-
+ package/fwts/fwts.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 11c490806c..1dfe0eaa02 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1983,6 +1983,7 @@ F:	support/testing/tests/package/test_octave.py
- F:	support/testing/tests/package/test_ola.py
- F:	support/testing/tests/package/test_ola/
- F:	support/testing/tests/package/test_openblas.py
-+F:	support/testing/tests/package/test_openocd.py
- F:	support/testing/tests/package/test_parted.py
- F:	support/testing/tests/package/test_patch.py
- F:	support/testing/tests/package/test_patch/
-diff --git a/support/testing/tests/package/test_openocd.py b/support/testing/tests/package/test_openocd.py
-new file mode 100644
-index 0000000000..fe4d203073
---- /dev/null
-+++ b/support/testing/tests/package/test_openocd.py
-@@ -0,0 +1,37 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestOpenOCD(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_OPENOCD=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # We check the program can run.
-+        self.assertRunOk("openocd --version")
-+
-+        msg = "Buildroot"
-+
-+        # We check openocd can run, load a "dummy" driver in the
-+        # standard search path, and use some of its TCL commands. See:
-+        # https://github.com/openocd-org/openocd/blob/v0.12.0/doc/manual/primer/commands.txt#L117
-+        # https://github.com/openocd-org/openocd/blob/v0.12.0/src/jtag/drivers/dummy.c
-+        cmd = "openocd"
-+        cmd += " -f interface/dummy.cfg"
-+        cmd += f" -c 'dummy hello {msg}'"
-+        cmd += " -c shutdown"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        expected_str = f"Greetings {msg}!"
-+        self.assertIn(expected_str, out)
+diff --git a/package/fwts/fwts.hash b/package/fwts/fwts.hash
+index 97b13b3db0..b578b96778 100644
+--- a/package/fwts/fwts.hash
++++ b/package/fwts/fwts.hash
+@@ -1,5 +1,5 @@
+ # Hash from: https://fwts.ubuntu.com/release/SHA256SUMS
+-sha256  c8bbf62f4bd80f17bb768bab3863ee93e195b2047d10637a3d03fe2086291bd7  fwts-V25.01.00.tar.gz
++sha256  6e4f795a7b5c7e549515901e197fedba200ee9fd06c8a62f9f49db24301f280b  fwts-V25.03.00.tar.gz
+ 
+ # Hash for license file
+ sha256  77a5f0ea48e53ee8d67aecc7759cf468bcd340c1caca711ed4307b477a93fb47  debian/copyright
+diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
+index 410ce063aa..dd1c16317f 100644
+--- a/package/fwts/fwts.mk
++++ b/package/fwts/fwts.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FWTS_VERSION = 25.01.00
++FWTS_VERSION = 25.03.00
+ FWTS_SOURCE = fwts-V$(FWTS_VERSION).tar.gz
+ FWTS_SITE = https://fwts.ubuntu.com/release
+ FWTS_STRIP_COMPONENTS = 0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
