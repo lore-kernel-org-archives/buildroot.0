@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30783C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:54:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27D62C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:54:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 39CC4708A2;
-	Mon, 19 May 2025 10:54:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEA2A708BC;
+	Mon, 19 May 2025 10:54:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nslpN57LJjeC; Mon, 19 May 2025 10:54:30 +0000 (UTC)
+ id dJdDzhTyT7i7; Mon, 19 May 2025 10:54:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3AAB6708AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB491708B3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3AAB6708AA;
-	Mon, 19 May 2025 10:54:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB491708B3;
+	Mon, 19 May 2025 10:54:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 19E23D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 03D57E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3912142412
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8285641221
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2IqRcXAaoiza for <buildroot@buildroot.org>;
+ id mcR8AQ2fySaD for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21C084125D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3571F40D9B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 21C084125D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3571F40D9B
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1D1ED8348A; Mon, 19 May 2025 10:39:55 +0000 (UTC)
+ id 3363C82A2E; Mon, 19 May 2025 10:39:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 21 Apr 2025 23:27:36 +0200
+Date: Mon, 21 Apr 2025 23:34:49 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1956e4e43459dfa0bfe936a6bfb74f5530abf5bf
-X-Git-Newrev: dd9c6907c79bf180a9e0ce8674ffa2e48c1d4439
+X-Git-Oldrev: 340a4bd4f80f71c975f10bee575e8e7cb93131b9
+X-Git-Newrev: e954dd0a212a00744c537e8cba2eb6604cf16e0a
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103955.1D1ED8348A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mmc-utils: bump to
- 2aef4cd9a84d
+Message-Id: <20250519103955.3363C82A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/httping: bump to
+ version a1c5fdcf289cf7d1d8245579150bcf670f90d248
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,74 +61,73 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1451588400237714996=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1451588400237714996==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=dd9c6907c79bf180a9e0ce8674ffa2e48c1d4439
+commit: https://git.buildroot.net/buildroot/commit/?id=e954dd0a212a00744c537e8cba2eb6604cf16e0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Among the various changes, it's worth noting the extension of the
-register read functionality, allowing also to get its value as an
-argument [1].
-Moreover, commit [2] fixes the conditional invocation of sparse
-properly handling the corresponding 'C' option. Hence, the related
-change in the Buildroot compilation command (i.e. C=0).
+Enable gettext support.
 
-[1] https://web.git.kernel.org/pub/scm/utils/mmc/mmc-utils.git/commit/?id=21e0fa6420736830a90e13b4a807ec3475df5e65
-[2] https://web.git.kernel.org/pub/scm/utils/mmc/mmc-utils.git/commit/?id=a89cba2a0f8c6a19aa6b804877241170f5b6bdd2
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Reviewed-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
+Make all options configurable.
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mmc-utils/mmc-utils.hash | 2 +-
- package/mmc-utils/mmc-utils.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/httping/httping.hash |  2 +-
+ package/httping/httping.mk   | 16 ++++++++++++++--
+ 2 files changed, 15 insertions(+), 3 deletions(-)
 
-diff --git a/package/mmc-utils/mmc-utils.hash b/package/mmc-utils/mmc-utils.hash
-index 3da95d8070..17dedad2b7 100644
---- a/package/mmc-utils/mmc-utils.hash
-+++ b/package/mmc-utils/mmc-utils.hash
+diff --git a/package/httping/httping.hash b/package/httping/httping.hash
+index a55febb15f..cfdd7670b3 100644
+--- a/package/httping/httping.hash
++++ b/package/httping/httping.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  1ae5706ce56bfedda94a01e87c5151ac750fb849987aeb74ff89d70f43556131  mmc-utils-523d8f3cfb219d800f45860892e742e3a355f1bb-git4.tar.gz
-+sha256  e9630d911bcf59e235a349d862700fa7ccea7545eb314da48431dcb4da125023  mmc-utils-2aef4cd9a84ddc76349fc0d7e10d675e7fa596fa-git4.tar.gz
- sha256  49cd65f67b516078ff7e0dbe639972dad21ed3858246e3969fc8a8fc2a4dca66  README
-diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
-index 28ac62678b..0036a775ee 100644
---- a/package/mmc-utils/mmc-utils.mk
-+++ b/package/mmc-utils/mmc-utils.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256  22c794df06a1c680e923891a445a3745fc88e01b24854af1be8457a37be19fe6  httping-ffb9201042813c58d020df41697f6445df96f438-git4.tar.gz
++sha256  07b6b36e88506810ef19eb987a7ca477a88fb15fa6beccc509ed8f4a06bd64c1  httping-a1c5fdcf289cf7d1d8245579150bcf670f90d248-git4.tar.gz
+ sha256  8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef  LICENSE
+diff --git a/package/httping/httping.mk b/package/httping/httping.mk
+index 3759f9fb76..8ba124f673 100644
+--- a/package/httping/httping.mk
++++ b/package/httping/httping.mk
+@@ -4,19 +4,31 @@
  #
  ################################################################################
  
--MMC_UTILS_VERSION = 523d8f3cfb219d800f45860892e742e3a355f1bb
-+MMC_UTILS_VERSION = 2aef4cd9a84ddc76349fc0d7e10d675e7fa596fa
- MMC_UTILS_SITE = https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git
- MMC_UTILS_SITE_METHOD = git
- MMC_UTILS_LICENSE = GPL-2.0
-@@ -25,7 +25,7 @@ endif
- # let's do this here otherwise it won't be automatically set and build
- # will fail
- define MMC_UTILS_BUILD_CMDS
--	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) C= \
-+	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) C=0 \
- 		CFLAGS="$(MMC_UTILS_CFLAGS)" \
- 		AM_CFLAGS='-DVERSION=\"$(shell echo $(MMC_UTILS_VERSION) | head -c 6)\"'
- endef
-
---===============1451588400237714996==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-HTTPING_VERSION = ffb9201042813c58d020df41697f6445df96f438
++HTTPING_VERSION = a1c5fdcf289cf7d1d8245579150bcf670f90d248
+ HTTPING_SITE = https://github.com/folkertvanheusden/HTTPing
+ HTTPING_SITE_METHOD = git
+ HTTPING_LICENSE = AGPL-3.0
+ HTTPING_LICENSE_FILES = LICENSE
++HTTPING_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ 
+ ifeq ($(BR2_PACKAGE_HTTPING_TUI),y)
+ HTTPING_DEPENDENCIES += ncurses fftw-double
+-HTTPING_CONF_OPTS += -DUSE_TUI=1
++HTTPING_CONF_OPTS += -DUSE_TUI=ON -DUSE_FFTW3=ON
++else
++HTTPING_CONF_OPTS += -DUSE_TUI=OFF -DUSE_FFTW3=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HTTPING_SSL),y)
+ HTTPING_DEPENDENCIES += openssl
++HTTPING_CONF_OPTS += -DUSE_SSL=ON
++else
++HTTPING_CONF_OPTS += -DUSE_SSL=OFF
++endif
++
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
++HTTPING_CONF_OPTS += -DUSE_GETTEXT=ON
++else
++HTTPING_CONF_OPTS += -DUSE_GETTEXT=OFF
+ endif
+ 
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1451588400237714996==--
