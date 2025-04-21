@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A865C3ABD8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A114FC2D0CD
 	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:53:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7C7136161A;
-	Mon, 19 May 2025 10:53:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7120882CB7;
+	Mon, 19 May 2025 10:53:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pl2dTH8RdoMi; Mon, 19 May 2025 10:53:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H0WRuN9OlSQx; Mon, 19 May 2025 10:53:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71E4D70839
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B760840F5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71E4D70839;
-	Mon, 19 May 2025 10:53:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9B760840F5;
+	Mon, 19 May 2025 10:53:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 034F9D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 02D4DD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A062A423E0
+ by smtp4.osuosl.org (Postfix) with ESMTP id B456F41232
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nxt7tBaLkeIg for <buildroot@buildroot.org>;
+ id WLgvenE2RZQ6 for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21B4441232
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49AB440DD9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 21B4441232
+ by smtp4.osuosl.org (Postfix) with ESMTP id 49AB440DD9
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1F52182A2E; Mon, 19 May 2025 10:39:54 +0000 (UTC)
+ id 479FE8348A; Mon, 19 May 2025 10:39:54 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 21 Apr 2025 14:03:21 +0200
+Date: Mon, 21 Apr 2025 16:25:02 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 377e7f289ab5170b8b82a9329ca674d622a49cdb
-X-Git-Newrev: 1223b4b702cc92602f1abdf3d1210bb05a02d4d1
+X-Git-Oldrev: d51b4c7fd43bb580a057b17e31ae2080169354f7
+X-Git-Newrev: ae4bf5a4fedf9b2283719cf024c5f70f76e32684
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103954.1F52182A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/cubieboard2: bump
- Linux to 6.12.24 and U-Boot to 2025.04
+Message-Id: <20250519103954.479FE8348A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/opencsd: bump to
+ version 1.5.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,55 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1223b4b702cc92602f1abdf3d1210bb05a02d4d1
+commit: https://git.buildroot.net/buildroot/commit/?id=ae4bf5a4fedf9b2283719cf024c5f70f76e32684
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+For change log, see:
+https://github.com/Linaro/OpenCSD/blob/v1.5.6/README.md?plain=1#L348
+
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/cubietech/cubieboard2/patches/linux/linux.hash | 2 +-
- board/cubietech/cubieboard2/patches/uboot/uboot.hash | 2 +-
- configs/cubieboard2_defconfig                        | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/opencsd/opencsd.hash | 2 +-
+ package/opencsd/opencsd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/cubietech/cubieboard2/patches/linux/linux.hash b/board/cubietech/cubieboard2/patches/linux/linux.hash
-index 2e30d90bb1..1213da86b1 100644
---- a/board/cubietech/cubieboard2/patches/linux/linux.hash
-+++ b/board/cubietech/cubieboard2/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  9423f4bfb4d875417e39cb0b017b5499fea47da56119f0cd28a201735d898f14  linux-6.12.14.tar.xz
-+sha256  643142c1b5991560dd12f950825cc19e4497b95b82641918ecff1177f4130c1d  linux-6.12.24.tar.xz
-diff --git a/board/cubietech/cubieboard2/patches/uboot/uboot.hash b/board/cubietech/cubieboard2/patches/uboot/uboot.hash
-index 50674352d7..80ea21b7cb 100644
---- a/board/cubietech/cubieboard2/patches/uboot/uboot.hash
-+++ b/board/cubietech/cubieboard2/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
-+sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
-diff --git a/configs/cubieboard2_defconfig b/configs/cubieboard2_defconfig
-index 6161e3a559..180677923a 100644
---- a/configs/cubieboard2_defconfig
-+++ b/configs/cubieboard2_defconfig
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/cubietech/cubieboard2/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.14"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.24"
- BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun7i-a20-cubieboard2"
-@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/package/opencsd/opencsd.hash b/package/opencsd/opencsd.hash
+index 865580968b..d33f96af8a 100644
+--- a/package/opencsd/opencsd.hash
++++ b/package/opencsd/opencsd.hash
+@@ -1,3 +1,3 @@
+ # Locally Computed:
+-sha256  1df9b61656ac96bc5cca082d8c32a9f25ed07ef684d7d666911280cf162b7d93  opencsd-1.5.5.tar.gz
++sha256  82f584572c4e3f1d8255be135768bea80b48c4fe731cb8c5877a7389dfd445a6  opencsd-1.5.6.tar.gz
+ sha256  980eef4b0744e63834e3ec0d50c2a4ff6d81d7ec62dd8ba8c66acae0ec5a2e88  LICENSE
+diff --git a/package/opencsd/opencsd.mk b/package/opencsd/opencsd.mk
+index 9714bb970a..2e8747df22 100644
+--- a/package/opencsd/opencsd.mk
++++ b/package/opencsd/opencsd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENCSD_VERSION = 1.5.5
++OPENCSD_VERSION = 1.5.6
+ OPENCSD_SITE = $(call github,Linaro,OpenCSD,v$(OPENCSD_VERSION))
+ OPENCSD_LICENSE = BSD-3-Clause
+ OPENCSD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
