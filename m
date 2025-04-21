@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31C3CC3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:54:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9066BC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:54:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2775570856;
-	Mon, 19 May 2025 10:54:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7702970872;
+	Mon, 19 May 2025 10:54:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MB8Zy583cj2z; Mon, 19 May 2025 10:54:02 +0000 (UTC)
+ id R1ETvEUMl_-0; Mon, 19 May 2025 10:54:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BE417084C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACBE77085F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0BE417084C;
-	Mon, 19 May 2025 10:54:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ACBE77085F;
+	Mon, 19 May 2025 10:54:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 19DF8D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:57 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0483DE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:43:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA370423ED
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3189F41245
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2SpNIoF_2RIz for <buildroot@buildroot.org>;
+ id 4vExT31D3uM5 for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D6D24123F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95A0640DB2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5D6D24123F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 95A0640DB2
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5238B872E7; Mon, 19 May 2025 10:39:54 +0000 (UTC)
+ id 89F2282A2E; Mon, 19 May 2025 10:39:54 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 21 Apr 2025 16:25:14 +0200
+Date: Mon, 21 Apr 2025 16:26:05 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ae4bf5a4fedf9b2283719cf024c5f70f76e32684
-X-Git-Newrev: c6db02cff4f13dc74669a7cd17fc48a14d94e4ed
+X-Git-Oldrev: b910646a86c81c0e9969a2c80b43055494b68401
+X-Git-Newrev: a9b0e551afa04c347761d0b9459a106f2c9b8e5e
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103954.5238B872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libopenmpt: bump to
- version 0.7.13
+Message-Id: <20250519103954.89F2282A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] support/testing: new hyperfine
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,45 +65,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6db02cff4f13dc74669a7cd17fc48a14d94e4ed
+commit: https://git.buildroot.net/buildroot/commit/?id=a9b0e551afa04c347761d0b9459a106f2c9b8e5e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-For release note since 0.7.11, see:
-https://lib.openmpt.org/libopenmpt/2024/12/01/releases-0.7.12-0.6.21-0.5.35-0.4.47/
-https://lib.openmpt.org/libopenmpt/2025/01/06/releases-0.7.13-0.6.22-0.5.36-0.4.48/
-
-License file hash changed after year update:
-https://github.com/OpenMPT/openmpt/commit/97f0c59cda82ff92d905fb1af8d55a89997a6a8b
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/libopenmpt/libopenmpt.hash | 4 ++--
- package/libopenmpt/libopenmpt.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                                      |  1 +
+ support/testing/tests/package/test_hyperfine.py | 25 +++++++++++++++++++++++++
+ 2 files changed, 26 insertions(+)
 
-diff --git a/package/libopenmpt/libopenmpt.hash b/package/libopenmpt/libopenmpt.hash
-index 0289393024..f23956536d 100644
---- a/package/libopenmpt/libopenmpt.hash
-+++ b/package/libopenmpt/libopenmpt.hash
-@@ -1,3 +1,3 @@
- # computed locally
--sha256  53a798b8c6e2e1f695e8ad05e93a0c1b53199e5aa9981837c41696b370520767  libopenmpt-0.7.11+release.autotools.tar.gz
--sha256  e3d7e76c6b441ddd9fff0a397e7b5e055a11678bd7c3b246a0ce13e352eb15e8  LICENSE
-+sha256  dcd7cde4f9c498eb496c4556e1c1b81353e2a74747e8270a42565117ea42e1f1  libopenmpt-0.7.13+release.autotools.tar.gz
-+sha256  d173856a870d3f6d0603060c615f5e3b145d79a008576e8efd2e5eab8b843430  LICENSE
-diff --git a/package/libopenmpt/libopenmpt.mk b/package/libopenmpt/libopenmpt.mk
-index 57c45c6ea1..e8c4ace2db 100644
---- a/package/libopenmpt/libopenmpt.mk
-+++ b/package/libopenmpt/libopenmpt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOPENMPT_VERSION = 0.7.11
-+LIBOPENMPT_VERSION = 0.7.13
- LIBOPENMPT_SITE = https://lib.openmpt.org/files/libopenmpt/src
- LIBOPENMPT_SOURCE = libopenmpt-$(LIBOPENMPT_VERSION)+release.autotools.tar.gz
- LIBOPENMPT_LICENSE = BSD-3-Clause
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1dfe0eaa02..6608b30f16 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1921,6 +1921,7 @@ F:	support/testing/tests/package/test_gstreamer1.py
+ F:	support/testing/tests/package/test_gzip.py
+ F:	support/testing/tests/package/test_highway.py
+ F:	support/testing/tests/package/test_hwloc.py
++F:	support/testing/tests/package/test_hyperfine.py
+ F:	support/testing/tests/package/test_iozone.py
+ F:	support/testing/tests/package/test_iperf.py
+ F:	support/testing/tests/package/test_iperf3.py
+diff --git a/support/testing/tests/package/test_hyperfine.py b/support/testing/tests/package/test_hyperfine.py
+new file mode 100644
+index 0000000000..4db62c7116
+--- /dev/null
++++ b/support/testing/tests/package/test_hyperfine.py
+@@ -0,0 +1,25 @@
++import os
++
++import infra.basetest
++
++
++class TestHyperfine(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_HYPERFINE=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv7",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        self.assertRunOk("hyperfine --version")
++
++        test_cmd = "sleep 0.1"
++        cmd = f"hyperfine --style basic --runs 10 '{test_cmd}'"
++        self.assertRunOk(cmd, timeout=15)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
