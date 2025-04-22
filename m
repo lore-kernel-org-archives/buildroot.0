@@ -4,174 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F255DC369C2
-	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 10:30:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E393BC369C2
+	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 10:34:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6275F81CE1;
-	Tue, 22 Apr 2025 10:30:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CC55E81E47;
+	Tue, 22 Apr 2025 10:34:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j-MAv1yh_xLy; Tue, 22 Apr 2025 10:30:15 +0000 (UTC)
+ id m3VkErgz6VYj; Tue, 22 Apr 2025 10:34:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 81EC581DE7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B6DF81036
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81EC581DE7;
-	Tue, 22 Apr 2025 10:30:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CA33E1A0
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 10:30:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B6DF81036;
+	Tue, 22 Apr 2025 10:34:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 04E761BC
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 10:34:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BB41B81D16
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 10:30:14 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DEA2240B73
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 10:34:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C34QDAzvMcT9 for <buildroot@buildroot.org>;
- Tue, 22 Apr 2025 10:30:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 66DB381CD0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66DB381CD0
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 66DB381CD0
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 10:30:13 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.7.2] ([85.22.113.168]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MC34h-1uGkbG1Anl-005wzT; Tue, 22
- Apr 2025 12:30:11 +0200
-Message-ID: <ca62699d-5cde-4072-922b-b83346d42eff@gmx.de>
-Date: Tue, 22 Apr 2025 12:30:03 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tkVykyitPYxw for <buildroot@buildroot.org>;
+ Tue, 22 Apr 2025 10:34:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
+ envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E396440B70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E396440B70
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E396440B70
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 10:34:29 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-ace358c4d35so2727166b.1
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 03:34:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1745318067; x=1745922867;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=/sSRbUCNfoXceXWum9151iIgooHdkk22LN2KyS9uExQ=;
+ b=AylWwUpibFR54By9gaWvt6cUALAvfEJg2R0ngVyQ9x635aiv5MPyQKqvX7YwAyPwpB
+ HVxfsPfudawNFYx0F9daf2Iue6VcEpqXjpjHo0HyEitX0aiSVgBhisjxXWNVkZ+ad+Sl
+ NElbHBjECiaxhAMaBa5wx+x6BB6TIQDzOyBrzX6vJKj1XIcm5+9Hm51qOVcbI9E0acur
+ lq8zEp2jh0aL+3CPtldXcbMJiM+bmiMQCrgxxJ9LEAGOu90ejC37nvsvyPkPd1CibibS
+ oXqgLmJpc197Hrb+6tYofLMZHrsXe12TL0mCo88W9ndgwrnW/PvKNwEZFdmFFKGcxnru
+ 75Ow==
+X-Gm-Message-State: AOJu0YzADAPH/oxUwcQnt64gcF1t/1u82EbLQK/tUeV4nDjXo1PR6u2z
+ G4WNMANfu5GzNU7ytLAl9HGECj9ED8aPhMvP1yeZx8DaiDjipMmV+tCg8fKllGnG0twkqpst25W
+ S
+X-Gm-Gg: ASbGncs/b1tat1RntzySsdJ1o1vsDy/xDl6v+ukO7ss1yUVTTjd7tlt0d929r2rcpUm
+ UBqJ7cyjI8SwZoNOs9NelQN0IHMv1IEXPu+TXx3HSslRU3uiQqgUETwbhF+56q8NUuLusZrTOE5
+ EnJQjPTGBZZMfSH80v8pg1/5RXaBXBlgZv5ptM9W+H85p31Gsupvq/AQHm/pcrhEfhrRHeZaXqb
+ cx3xEmVmqJWQwwlZXCMkbrsRntTm8FqUXwRynSbGZuLDGq2SB26pIoNapo2acq+oHVX4ArtNcRi
+ hw7e5Qq2MVQV1UTmX8ScqGov29Vgwn4mnQtr7f6NE86Vj8ossbZtcK1MrfDJ/vOAHF5NufYajOR
+ ekJB1zQJ/gsxXk+zN2FRs2oU++QQmLqUtlvpUuLijITCHan+pF/2LQsRqJcXIiCZv9bwGoZCDxh
+ 8CfwjcdyE9X9fCkc0=
+X-Google-Smtp-Source: AGHT+IFSbxE7CgiknUadlzMKL1/dSNabacWBVLe/KBjL/SizC5FQkhC7A9bA1nE/srFoiMYd8MGbyQ==
+X-Received: by 2002:a17:906:6a0f:b0:ac3:66fb:b197 with SMTP id
+ a640c23a62f3a-acb74ad333dmr388340366b.3.1745318067119; 
+ Tue, 22 Apr 2025 03:34:27 -0700 (PDT)
+Received: from fedora.arnhem.chello.nl
+ (2001-1c00-8182-4700-3d78-0c42-7f3a-1345.cable.dynamic.v6.ziggo.nl.
+ [2001:1c00:8182:4700:3d78:c42:7f3a:1345])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-acb6efadd68sm636770166b.185.2025.04.22.03.34.26
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 22 Apr 2025 03:34:26 -0700 (PDT)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+To: buildroot@buildroot.org
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Tue, 22 Apr 2025 12:34:24 +0200
+Message-ID: <20250422103424.3928-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: El Mehdi YOUNES <elmehdi.younes@smile.fr>, buildroot@buildroot.org
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Joseph Kogut <joseph.kogut@gmail.com>, David Pierret
- <david.pierret@smile.fr>, Danilo Bargen <mail@dbrgn.ch>,
- Graeme Smecher <gsmecher@threespeedlogic.com>,
- James Hilliard <james.hilliard1@gmail.com>, Sam Voss <sam.voss@gmail.com>,
- Torben Voltmer <mail@t-voltmer.net>, Saeed Kazemi <kazemi.ms@gmail.com>,
- Alex Michel <alex.michel@wiedemann-group.com>,
- Leo Yu-Chi Liang <ycliang@andestech.com>,
- Mika Westerberg <mika.westerberg@linux.intel.com>
-References: <20250422074738.821755-1-elmehdi.younes@smile.fr>
-Content-Language: en-US, de-DE-1901, de-DE
-Autocrypt: addr=fiona.klute@gmx.de; keydata=
- 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
-In-Reply-To: <20250422074738.821755-1-elmehdi.younes@smile.fr>
-X-Provags-ID: V03:K1:QqHi3+mrR/xX1W/vrfEcjZ55wOx1nzpfVr04e9QFzxO8Be50bKW
- cAgNK9LcktVD8Fu+DoVHwMKgyuQlIYvLfWcCJaVAOmoRs+WMLEPrTEzijHWZwvvz8z6M+xw
- TTFGziz0iBdFc3CowFcq6Vl6FK3rg/uV21Pkxz8yQf6990gB73Lq3DM3qgu3tQA3nKa7bOz
- LPnA/XJSIffLIRlshsyQA==
-UI-OutboundReport: notjunk:1;M01:P0:8lObYIQwhxM=;pPXf6yFluIE8Jkm12682h+1yiCw
- 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
- w==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1745317811; x=1745922611; i=fiona.klute@gmx.de;
- bh=2wFLL8NIO6MrSqqmX5zl+So9Wi7CHcvFAO6pQLeuuUg=;
- h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
- References:From:In-Reply-To:Content-Type:
- Content-Transfer-Encoding:cc:content-transfer-encoding:
- content-type:date:from:message-id:mime-version:reply-to:subject:
- to;
- b=ocl6+dvWC6TNUu0ze620fTKi0GjH3zEoLcYIoOZ/1vJctloCRu2CxHWRkrzQn+UV
- sXzfVca4ZymBd1YykGdGMR1JngHKAe4bytA9+5U/ehXAh5tKT004Tx7Onp4qVYKWC
- Jat3SpJfdp3t4HVBWJItbnr2XLz6wNAsH+zzVtR3+PrdZbmjg820jzt1bcPP87rCq
- T4kh6nM1su7XgBz4sizXiDVHMBwV+IblP2T9n9UbxCg35SZDNrqz9//UzHM4Cxvfj
- 7LAx6Xs2BlUTWVbEBIdHNaonGH0ILByZuFTna1+tf/AIAXnBDOEjVFhAHp2pMt76B
- 1BWQ+IyaMBYykJMLsg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=ocl6+dvW
-Subject: Re: [Buildroot] [PATCH 0/4] package/rust: rust upgrade to version
- 1.86.0
+ d=amarulasolutions.com; s=google; t=1745318067; x=1745922867;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=/sSRbUCNfoXceXWum9151iIgooHdkk22LN2KyS9uExQ=;
+ b=d5//D6J9QyPkyCwjjgGdMPu+tf/x/R75585Lz4o94M5HyeRQqw6cI9maFvmsVZIKZk
+ JcpQaoBWNX7xSbehzc4aW9l9brde6qKfRRMadxecN0FRHIZMqOJIbvbm+DmZkAyEzGuv
+ uh4aQjrV8lYI+bwFPz1AcBzIbukVBaCUONrz4=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=d5//D6J9
+Subject: [Buildroot] [PATCH 1/1] package/mender-artifact: bump to version
+ 4.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -183,69 +110,325 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QW0gMjIuMDQuMjUgdW0gMDk6NDcgc2NocmllYiBFbCBNZWhkaSBZT1VORVMgdmlhIGJ1aWxkcm9v
-dDoKPiBUaGlzIHBhdGNoZXMgc2VyaWVzIGJ1bXBzIHJ1c3QgdG8gdmVyc2lvbiAxLjg2LjAgYW5k
-IHVwZGF0ZXMgYWxsCj4gY2FyZ28tcmVsYXRlZCBwYWNrYWdlcyB0byB1c2UgdGhlIGNhcmZvMyBu
-YW1pbmcgc2NoZW1lLgo+IFBhdGNoZXMgMiwgMyBhbmQgNCBzaG91bGQgYmUgc3F1YXNoZWQgaW50
-byBhIHNpbmdsZSBjb21taXQsCj4gYXMgdGhleSBsb2dpY2FsbHkgYmVsb25nIHRvZ2V0aGVyLgo+
-IEkgdXNlZCBtdWx0aXBsZSBjb21taXRzIG9ubHkgZm9yIGJldHRlciBjbGFyaXR5Lgo+IAo+IEVs
-IE1laGRpIFlPVU5FUyAoNCk6Cj4gICAgcGFja2FnZS9ydXN0OiBmaXggYm9vdHN0cmFwIHdpdGgg
-UnVzdOKJpTEuODMKPiAgICBwYWNrYWdlL3J1c3Q6IGJ1bXAgdG8gdmVyc2lvbiAxLjg2LjAKPiAg
-ICBwYWNrYWdlL3BrZy1kb3dubG9hZDogc3dpdGNoIGZyb20gY2FyZ28yIHRvIGNhcmdvMwo+ICAg
-IHBhY2thZ2U6IHVwZGF0ZSBhbGwgaGFzaGVzIGFmdGVyIGNhcmdvMyBzd2l0Y2gKClRlc3RlZC1i
-eTogIkZpb25hIEtsdXRlIChXSVdBKSIgPGZpb25hLmtsdXRlQGdteC5kZT4KClRoYW5rcyBmb3Ig
-eW91ciB3b3JrIG9uIHRoaXMhCgpJJ3ZlIGp1c3Qgc2VudCBhbm90aGVyIHBhdGNoIHRoYXQgSSB0
-aGluayBzaG91bGQgYmUgaW50ZWdyYXRlZCBpbnRvIHRoaXMgCnNlcmllcywgdG8gcmVwbGFjZSBk
-ZXByZWNhdGVkIC5jYXJnby9jb25maWcgd2l0aCAuY2FyZ28vY29uZmlnLnRvbWwgaW4gCnRoZSBn
-ZW5lcmF0ZWQgYXJjaGl2ZXMgWzFdLiBCeSBtYWtpbmcgdGhhdCBjaGFuZ2UgdG9nZXRoZXIgd2l0
-aCB0aGlzIApSdXN0IHVwZGF0ZSB3ZSBjYW4gZ2V0IHJpZCBvZiB0aGUgZGVwcmVjYXRpb24gd2Fy
-bmluZyB3aXRoIG9ubHkgb25lIAphcmNoaXZlIHZlcnNpb24gKGFuZCBwYWNrYWdlIGhhc2hlcykg
-YnVtcC4KCkJlc3QgcmVnYXJkcywKRmlvbmEKClsxXSAKaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJz
-Lm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDI1MDQyMjEwMjQ1MS4zOTg3NTE1LTEtZmlv
-bmEua2x1dGVAZ214LmRlLwoKPiAgIHBhY2thZ2UvYWFyZHZhcmstZG5zL2FhcmR2YXJrLWRucy5o
-YXNoICAgICAgICB8ICAgMiArLQo+ICAgcGFja2FnZS9iYXQvYmF0Lmhhc2ggICAgICAgICAgICAg
-ICAgICAgICAgICAgIHwgICAyICstCj4gICBwYWNrYWdlL2R1c3QvZHVzdC5oYXNoICAgICAgICAg
-ICAgICAgICAgICAgICAgfCAgIDIgKy0KPiAgIHBhY2thZ2UvZXNwZmxhc2gvZXNwZmxhc2guaGFz
-aCAgICAgICAgICAgICAgICB8ICAgMiArLQo+ICAgcGFja2FnZS9lemEvZXphLmhhc2ggICAgICAg
-ICAgICAgICAgICAgICAgICAgIHwgICAyICstCj4gICBwYWNrYWdlL2ZkL2ZkLmhhc2ggICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgfCAgIDIgKy0KPiAgIHBhY2thZ2UvaHlwZXJmaW5lL2h5cGVy
-ZmluZS5oYXNoICAgICAgICAgICAgICB8ICAgMiArLQo+ICAgcGFja2FnZS9rbW9uL2ttb24uaGFz
-aCAgICAgICAgICAgICAgICAgICAgICAgIHwgICAyICstCj4gICBwYWNrYWdlL2xpYnplbm9oLWMv
-bGliemVub2gtYy5oYXNoICAgICAgICAgICAgfCAgIDIgKy0KPiAgIHBhY2thZ2UvbmV0YXZhcmsv
-bmV0YXZhcmsuaGFzaCAgICAgICAgICAgICAgICB8ICAgMiArLQo+ICAgcGFja2FnZS9udXNoZWxs
-L251c2hlbGwuaGFzaCAgICAgICAgICAgICAgICAgIHwgICAyICstCj4gICBwYWNrYWdlL3BhcnNl
-Yy10b29sL3BhcnNlYy10b29sLmhhc2ggICAgICAgICAgfCAgIDIgKy0KPiAgIHBhY2thZ2UvcGFy
-c2VjL3BhcnNlYy5oYXNoICAgICAgICAgICAgICAgICAgICB8ICAgMiArLQo+ICAgcGFja2FnZS9w
-a2ctZG93bmxvYWQubWsgICAgICAgICAgICAgICAgICAgICAgIHwgICAyICstCj4gICBwYWNrYWdl
-L3Byb2NzL3Byb2NzLmhhc2ggICAgICAgICAgICAgICAgICAgICAgfCAgIDIgKy0KPiAgIHBhY2th
-Z2UvcHl0aG9uLWJjcnlwdC9weXRob24tYmNyeXB0Lmhhc2ggICAgICB8ICAgMiArLQo+ICAgLi4u
-L3B5dGhvbi1jcnlwdG9ncmFwaHkuaGFzaCAgICAgICAgICAgICAgICAgIHwgICAyICstCj4gICBw
-YWNrYWdlL3B5dGhvbi1tYXR1cmluL3B5dGhvbi1tYXR1cmluLmhhc2ggICAgfCAgIDIgKy0KPiAg
-IHBhY2thZ2UvcHl0aG9uLW9yanNvbi9weXRob24tb3Jqc29uLmhhc2ggICAgICB8ICAgMiArLQo+
-ICAgLi4uL3B5dGhvbi1weWRhbnRpYy1jb3JlLmhhc2ggICAgICAgICAgICAgICAgIHwgICAyICst
-Cj4gICBwYWNrYWdlL3B5dGhvbi1ycGRzLXB5L3B5dGhvbi1ycGRzLXB5Lmhhc2ggICAgfCAgIDIg
-Ky0KPiAgIHBhY2thZ2UvcHl0aG9uLXJ0b21sL3B5dGhvbi1ydG9tbC5oYXNoICAgICAgICB8ICAg
-MiArLQo+ICAgcGFja2FnZS9weXRob24tc2VsZW5pdW0vcHl0aG9uLXNlbGVuaXVtLmhhc2ggIHwg
-ICAyICstCj4gICBwYWNrYWdlL3JpcGdyZXAvcmlwZ3JlcC5oYXNoICAgICAgICAgICAgICAgICAg
-fCAgIDIgKy0KPiAgIHBhY2thZ2UvcnVzdC1iaW4vcnVzdC1iaW4uaGFzaCAgICAgICAgICAgICAg
-ICB8IDEyOCArKysrKysrKystLS0tLS0tLS0KPiAgIHBhY2thZ2UvcnVzdC1iaW4vcnVzdC1iaW4u
-bWsgICAgICAgICAgICAgICAgICB8ICAgMiArLQo+ICAgcGFja2FnZS9ydXN0LWJpbmRnZW4vcnVz
-dC1iaW5kZ2VuLmhhc2ggICAgICAgIHwgICAyICstCj4gICBwYWNrYWdlL3J1c3QvcnVzdC5oYXNo
-ICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDQgKy0KPiAgIHBhY2thZ2UvcnVzdC9ydXN0Lm1r
-ICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMyArLQo+ICAgcGFja2FnZS9zZW50cnktY2xp
-L3NlbnRyeS1jbGkuaGFzaCAgICAgICAgICAgIHwgICAyICstCj4gICBwYWNrYWdlL3RidG9vbHMv
-dGJ0b29scy5oYXNoICAgICAgICAgICAgICAgICAgfCAgIDIgKy0KPiAgIHBhY2thZ2UvdGVhbGRl
-ZXIvdGVhbGRlZXIuaGFzaCAgICAgICAgICAgICAgICB8ICAgMiArLQo+ICAgcGFja2FnZS91ZWZp
-c2V0dGluZ3MvdWVmaXNldHRpbmdzLmhhc2ggICAgICAgIHwgICAyICstCj4gICBwYWNrYWdlL3pv
-eGlkZS96b3hpZGUuaGFzaCAgICAgICAgICAgICAgICAgICAgfCAgIDIgKy0KPiAgIDM0IGZpbGVz
-IGNoYW5nZWQsIDk5IGluc2VydGlvbnMoKyksIDk4IGRlbGV0aW9ucygtKQo+IAoKX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcg
-bGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
-bWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Changelog:
+https://docs.mender.io/release-information/release-notes-changelog/mender-artifact
+
+License changes:
+New:
+    Apache 2.0:
+        LICENSE: 2024 -> 2025
+        vendor/cloud.google.com/go/auth/LICENSE
+        vendor/cloud.google.com/go/auth/oauth2adapt/LICENSE
+        vendor/github.com/kylelemons/godebug/LICENSE
+        vendor/go.opentelemetry.io/otel/trace/LICENSE
+        vendor/go.opentelemetry.io/otel/LICENSE
+        vendor/go.opentelemetry.io/otel/metric/LICENSE
+        vendor/go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LICENSE
+        vendor/go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc/LICENSE
+        vendor/go.opentelemetry.io/auto/sdk/LICENSE
+        vendor/github.com/go-logr/logr/LICENSE
+        vendor/github.com/go-logr/stdr/LICENSE
+
+    BSD 2 clause:
+        vendor/github.com/pkg/browser/LICENSE
+
+    BSD 3 clause:
+        vendor/golang.org/x/sync/LICENSE
+        vendor/github.com/google/uuid/LICENSE
+
+    ISC:
+        vendor/github.com/decred/dcrd/dcrec/secp256k1/v4/LICENSE
+
+    MIT:
+        vendor/github.com/Azure/azure-sdk-for-go/sdk/internal/LICENSE.txt
+        vendor/github.com/Azure/azure-sdk-for-go/sdk/azidentity/LICENSE.txt
+        vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal/LICENSE.txt
+        vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys/LICENSE.txt
+        vendor/github.com/Azure/azure-sdk-for-go/sdk/azcore/LICENSE.txt
+        vendor/github.com/AzureAD/microsoft-authentication-library-for-go/LICENSE
+        vendor/github.com/goccy/go-json/LICENSE
+        vendor/github.com/golang-jwt/jwt/v5/LICENSE
+        vendor/github.com/lestrrat-go/iter/LICENSE
+        vendor/github.com/lestrrat-go/blackmagic/LICENSE
+        vendor/github.com/lestrrat-go/backoff/v2/LICENSE
+        vendor/github.com/lestrrat-go/httpcc/LICENSE
+        vendor/github.com/lestrrat-go/option/LICENSE
+        vendor/github.com/lestrrat-go/jwx/LICENSE
+
+    MPL-2.0:
+        vendor/github.com/felixge/httpsnoop/LICENSE.txt
+
+Modified:
+    Apache 2.0:
+        vendor/github.com/mendersoftware/progressbar/LICENSE: 2021 -> 2025
+
+    BSD 3:
+        vendor/golang.org/x/net/LICENSE: Google INC -> Google LLC
+        vendor/golang.org/x/oauth2/LICENSE: Google INC -> Google LLC
+        vendor/golang.org/x/text/LICENSE: Google INC -> Google LLC
+        vendor/golang.org/x/crypto/LICENSE: Google INC -> Google LLC
+        vendor/golang.org/x/time/LICENSE: Google INC -> Google LLC
+
+Removed:
+
+    Apache 2.0:
+        vendor/google.golang.org/appengine/LICENSE
+        vendor/cloud.google.com/go/compute/LICENSE
+        vendor/go.opencensus.io/LICENSE
+        vendor/github.com/golang/groupcache/LICENSE
+
+    BSD 3 Clause:
+        vendor/github.com/golang/protobuf/LICENSE
+        vendor/golang.org/x/crypto/LICENSE
+        vendor/golang.org/x/time/LICENSE
+
+Tested with ./support/testing/run-tests tests.package.test_mender
+08:48:07 TestMenderSystemd                        Starting
+08:48:35 TestMenderSystemd                        Cleaning up
+08:48:35 TestMenderRW                             Starting
+08:48:46 TestMenderRW                             Cleaning up
+08:48:46 TestMenderRO                             Starting
+08:48:46 TestMenderRO                             Building
+08:55:02 TestMenderRO                             Building done
+08:55:13 TestMenderRO                             Cleaning up
+----------------------------------------------------------------------
+Ran 3 tests in 425.930s
+OK
+        
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ package/mender-artifact/mender-artifact.hash | 56 ++++++++++++++------
+ package/mender-artifact/mender-artifact.mk   | 44 +++++++++++----
+ 2 files changed, 73 insertions(+), 27 deletions(-)
+
+diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
+index c4209f44a0..914c210b77 100644
+--- a/package/mender-artifact/mender-artifact.hash
++++ b/package/mender-artifact/mender-artifact.hash
+@@ -1,6 +1,6 @@
+ # Locally computed:
+-sha256  fc11754f12d9104fce5b62738739d07514b4bd975f5e87d411d4e381533a2c6d  mender-artifact-4.0.0-go2.tar.gz
+-sha256  d4f369175698aa60b6e0a99413663af3212dc4c539de42ee8a9cda15d4ace40f  LIC_FILES_CHKSUM.sha256
++sha256  d82cd2f802033d53f2e947ed8d9d6cdd7a036fadbd92a2696b72122bd2070039  mender-artifact-4.1.0-go2.tar.gz
++sha256  a99c495576ecc6d6e137e471c515d38757179240ff6cc41bd481e29d3504f334  LIC_FILES_CHKSUM.sha256
+ 
+ # License hash extracted from LIC_FILES_CHKSUM.sha256 using the
+ # following command:
+@@ -8,53 +8,60 @@ sha256  d4f369175698aa60b6e0a99413663af3212dc4c539de42ee8a9cda15d4ace40f  LIC_FI
+ #     sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
+ 
+ # Apache 2.0 licenses.
+-sha256  d0f406b04e7901e6b4076bdf5fd20f9d7f04fc41681069fd8954413ac6295688  LICENSE
++sha256  38791d93beae962b266e11ac888ea2af4f07578b272c2f9dcb05f54f32960a76  LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/minio/sha256-simd/LICENSE
+-sha256  8f5d89b47d7a05a199b77b7e0f362dad391d451ebda4ef48ba11c50c071564c7  vendor/github.com/mendersoftware/progressbar/LICENSE
++sha256  132fb47b89947cd5f98e380186bc412af5561c70669d37d3a83b36f03a0ddae5  vendor/github.com/mendersoftware/progressbar/LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/genproto/LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/genproto/googleapis/api/LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/genproto/googleapis/rpc/LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/grpc/LICENSE
+-sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/appengine/LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/kms/LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/iam/LICENSE
+-sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/compute/LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/compute/metadata/LICENSE
+-sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  vendor/go.opencensus.io/LICENSE
+-sha256  73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68  vendor/github.com/golang/groupcache/LICENSE
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/auth/LICENSE
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/auth/oauth2adapt/LICENSE
+ sha256  73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68  vendor/github.com/mendersoftware/openssl/LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/googleapis/enterprise-certificate-proxy/LICENSE
+ sha256  dd26a7abddd02e2d0aba97805b31f248ef7835d9e10da289b22e3b8ab78b324d  vendor/github.com/go-jose/go-jose/v3/json/LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/go-jose/go-jose/v3/LICENSE
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/google/s2a-go/LICENSE.md
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/github.com/Keyfactor/signserver-go-client-sdk/LICENSE
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/kylelemons/godebug/LICENSE
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/otel/trace/LICENSE
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/otel/LICENSE
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/otel/metric/LICENSE
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LICENSE
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc/LICENSE
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/auto/sdk/LICENSE
++sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  vendor/github.com/go-logr/logr/LICENSE
++sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/github.com/go-logr/stdr/LICENSE
+ #
+ # BSD 2 Clause licenses.
+ sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
++sha256  4801bb0c5d70b980b3e1f63d1d2df8d84fec22548e3d73f03a68df1fb808791f  vendor/github.com/pkg/browser/LICENSE
+ #
+ # BSD 3 Clause licenses.
+ sha256  2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
+ sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/sys/LICENSE
+ sha256  0d9e582ee4bff57bf1189c9e514e6da7ce277f9cd3bc2d488b22fbb39a6d87cf  vendor/github.com/klauspost/compress/LICENSE
+ sha256  75e1ca97a84a9da6051dee0114333388216f2c4a5a028296b882ff3d57274735  vendor/github.com/russross/blackfriday/v2/LICENSE.txt
+-sha256  17b5d209ba8f9684257ecfcff87df6ceda6194143a8fbd074f29727cff6f0c40  vendor/github.com/google/go-cmp/LICENSE
+-sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/net/LICENSE
+-sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/oauth2/LICENSE
+-sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/text/LICENSE
+-sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/crypto/LICENSE
+-sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/time/LICENSE
++sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/net/LICENSE
++sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/oauth2/LICENSE
++sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/text/LICENSE
++sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/crypto/LICENSE
++sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/time/LICENSE
++sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/sync/LICENSE
+ sha256  110244b02140866ee37d17fa7449436a377ec3b85a481fbb208f4c87964382de  vendor/google.golang.org/api/LICENSE
+ sha256  fc0a2f71df4e8f047902da53d1f85301be43e0f360fc167057a2d04658ed2ba9  vendor/google.golang.org/api/internal/third_party/uritemplates/LICENSE
+ sha256  4835612df0098ca95f8e7d9e3bffcb02358d435dbb38057c844c99d7f725eb20  vendor/google.golang.org/protobuf/LICENSE
+-sha256  8778a9fc1eaffb03ab873caae251df2d224f6b5502be8777d3cd573a4dd43903  vendor/github.com/golang/protobuf/LICENSE
+ sha256  b95218cd9607855a6536384c0262922b30a0c2bf56e4ced790240f3a3bac4722  vendor/github.com/googleapis/gax-go/v2/LICENSE
+-sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/crypto/LICENSE
+-sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/time/LICENSE
+ sha256  f69f157b0be75da373605dbc8bbf142e8924ee82d8f44f11bcaf351335bf98cf  vendor/github.com/klauspost/compress/internal/snapref/LICENSE
+ sha256  701cbcc144a7c865b072f27547e66ddbf17ac44a3bd21f71149ace02518f107c  vendor/github.com/ulikunitz/xz/LICENSE
++sha256  0a8d61ed3cbfd5312326e8126c31ce9c627a283adc99131b56896d29ada04b2d  vendor/github.com/google/uuid/LICENSE
+ #
+ # ISC licenses.
+ sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
++sha256  480be5fb1be03ff19fd71d863f453f16262e98d4e568f5bccfcb7aa3ccf8cf0d  vendor/github.com/decred/dcrd/dcrec/secp256k1/v4/LICENSE
+ #
+ # MIT licenses.
+ sha256  f8e536c1c7b695810427095dc85f5f80d44ff7c10535e8a9486cf393e2599189  vendor/github.com/stretchr/testify/LICENSE
+@@ -70,6 +77,20 @@ sha256  22adc4abdece712a737573672f082fd61ac2b21df878efb87ffcff4354a07f26  vendor
+ sha256  38049e50b486f5394e40b786388f4a006401996e46c7c1cd18925afe7c3b4e34  vendor/github.com/ryanuber/go-glob/LICENSE
+ sha256  5c0476add4c38b55d0ed5ac11b85e00c38f26e1caee20dfe3ab58190103d1fbc  vendor/github.com/cenkalti/backoff/v3/LICENSE
+ sha256  f566a9f97bacdaf00d9f21dd991e81dc11201c4e016c86b470799429a1c9a79c  vendor/github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt
++sha256  646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2  vendor/github.com/Azure/azure-sdk-for-go/sdk/internal/LICENSE.txt
++sha256  646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2  vendor/github.com/Azure/azure-sdk-for-go/sdk/azidentity/LICENSE.txt
++sha256  a096a435e19bb6b631da46992c011a39be563e97ce7366879ad516c772904632  vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal/LICENSE.txt
++sha256  a096a435e19bb6b631da46992c011a39be563e97ce7366879ad516c772904632  vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys/LICENSE.txt
++sha256  646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2  vendor/github.com/Azure/azure-sdk-for-go/sdk/azcore/LICENSE.txt
++sha256  9906940f61b1f0b533fa7d99baf55178b2808fbe113ea51dfbfad8572ccd5f2b  vendor/github.com/AzureAD/microsoft-authentication-library-for-go/LICENSE
++sha256  a707cd425201945d57500566c47c74dc9fb8cd02ef91b9a761abddeb2401e6a7  vendor/github.com/goccy/go-json/LICENSE
++sha256  fe26ca41577b9b2b4448050a24b25e5753af66b5d5945d5d36094e7790bfcb2f  vendor/github.com/golang-jwt/jwt/v5/LICENSE
++sha256  d5c8d4935994cfcfbc53d12fe756b28316858736d6e0a61acaff5fe4a84fca12  vendor/github.com/lestrrat-go/iter/LICENSE
++sha256  b9b5b03485eb7446da7ecad22178664a53c7fcecceb74d69f905819a807d710e  vendor/github.com/lestrrat-go/blackmagic/LICENSE
++sha256  e148deed982672627e875fe0cb03b9aa0d3e315e0f59992973c3c34dbcf5f322  vendor/github.com/lestrrat-go/backoff/v2/LICENSE
++sha256  d5c8d4935994cfcfbc53d12fe756b28316858736d6e0a61acaff5fe4a84fca12  vendor/github.com/lestrrat-go/httpcc/LICENSE
++sha256  b9b5b03485eb7446da7ecad22178664a53c7fcecceb74d69f905819a807d710e  vendor/github.com/lestrrat-go/option/LICENSE
++sha256  0c4868a07b1c2dbb67c75767b4f1b2936c392d02ca2c7ee9827cac1a9d60ab1d  vendor/github.com/lestrrat-go/jwx/LICENSE
+ #
+ # MPL-2.0 licenses.
+ sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/github.com/hashicorp/go-secure-stdlib/strutil/LICENSE
+@@ -82,3 +103,4 @@ sha256  d6b1a865f1c8c697d343bd4e0ce61025f91898486a1f00d727f32e8644af77d3  vendor
+ sha256  1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5  vendor/github.com/hashicorp/go-sockaddr/LICENSE
+ sha256  d6b1a865f1c8c697d343bd4e0ce61025f91898486a1f00d727f32e8644af77d3  vendor/github.com/hashicorp/vault/api/LICENSE
+ sha256  a830016911a348a54e89bd54f2f8b0d8fffdeac20aecfba8e36ebbf38a03f5ff  vendor/github.com/hashicorp/go-multierror/LICENSE
++sha256  8108e14b5cb2b6bcd51583d3849ef0c2b5c4de61758256c20308bc70d1775dbb  vendor/github.com/felixge/httpsnoop/LICENSE.txt
+diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
+index 4c6fa272ec..bcab91890a 100644
+--- a/package/mender-artifact/mender-artifact.mk
++++ b/package/mender-artifact/mender-artifact.mk
+@@ -4,9 +4,11 @@
+ #
+ ################################################################################
+ 
+-HOST_MENDER_ARTIFACT_VERSION = 4.0.0
++HOST_MENDER_ARTIFACT_VERSION = 4.1.0
+ HOST_MENDER_ARTIFACT_SITE = $(call github,mendersoftware,mender-artifact,$(HOST_MENDER_ARTIFACT_VERSION))
+ HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, MPL-2.0
++# Vendor license paths generated with:
++#    awk '{print $2}' LIC_FILES_CHKSUM.sha256 | grep vendor
+ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
+ 	LICENSE \
+ 	LIC_FILES_CHKSUM.sha256 \
+@@ -16,40 +18,47 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
+ 	vendor/google.golang.org/genproto/googleapis/api/LICENSE \
+ 	vendor/google.golang.org/genproto/googleapis/rpc/LICENSE \
+ 	vendor/google.golang.org/grpc/LICENSE \
+-	vendor/google.golang.org/appengine/LICENSE \
+ 	vendor/cloud.google.com/go/kms/LICENSE \
+ 	vendor/cloud.google.com/go/iam/LICENSE \
+-	vendor/cloud.google.com/go/compute/LICENSE \
+ 	vendor/cloud.google.com/go/compute/metadata/LICENSE \
+-	vendor/go.opencensus.io/LICENSE \
+-	vendor/github.com/golang/groupcache/LICENSE \
++	vendor/cloud.google.com/go/auth/LICENSE \
++	vendor/cloud.google.com/go/auth/oauth2adapt/LICENSE \
+ 	vendor/github.com/mendersoftware/openssl/LICENSE \
+ 	vendor/github.com/googleapis/enterprise-certificate-proxy/LICENSE \
+ 	vendor/github.com/go-jose/go-jose/v3/json/LICENSE \
+ 	vendor/github.com/go-jose/go-jose/v3/LICENSE \
+ 	vendor/github.com/google/s2a-go/LICENSE.md \
+ 	vendor/github.com/Keyfactor/signserver-go-client-sdk/LICENSE \
++	vendor/github.com/kylelemons/godebug/LICENSE \
++	vendor/go.opentelemetry.io/otel/trace/LICENSE \
++	vendor/go.opentelemetry.io/otel/LICENSE \
++	vendor/go.opentelemetry.io/otel/metric/LICENSE \
++	vendor/go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LICENSE \
++	vendor/go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc/LICENSE \
++	vendor/go.opentelemetry.io/auto/sdk/LICENSE \
++	vendor/github.com/go-logr/logr/LICENSE \
++	vendor/github.com/go-logr/stdr/LICENSE \
+ 	vendor/github.com/pkg/errors/LICENSE \
++	vendor/github.com/pkg/browser/LICENSE \
+ 	vendor/github.com/pmezard/go-difflib/LICENSE \
+ 	vendor/golang.org/x/sys/LICENSE \
+ 	vendor/github.com/klauspost/compress/LICENSE \
+ 	vendor/github.com/russross/blackfriday/v2/LICENSE.txt \
+-	vendor/github.com/google/go-cmp/LICENSE \
+ 	vendor/golang.org/x/net/LICENSE \
+ 	vendor/golang.org/x/oauth2/LICENSE \
+ 	vendor/golang.org/x/text/LICENSE \
+ 	vendor/golang.org/x/crypto/LICENSE \
+ 	vendor/golang.org/x/time/LICENSE \
++	vendor/golang.org/x/sync/LICENSE \
+ 	vendor/google.golang.org/api/LICENSE \
+ 	vendor/google.golang.org/api/internal/third_party/uritemplates/LICENSE \
+ 	vendor/google.golang.org/protobuf/LICENSE \
+-	vendor/github.com/golang/protobuf/LICENSE \
+ 	vendor/github.com/googleapis/gax-go/v2/LICENSE \
+-	vendor/golang.org/x/crypto/LICENSE \
+-	vendor/golang.org/x/time/LICENSE \
+ 	vendor/github.com/klauspost/compress/internal/snapref/LICENSE \
+ 	vendor/github.com/ulikunitz/xz/LICENSE \
++	vendor/github.com/google/uuid/LICENSE \
+ 	vendor/github.com/davecgh/go-spew/LICENSE \
++	vendor/github.com/decred/dcrd/dcrec/secp256k1/v4/LICENSE \
+ 	vendor/github.com/stretchr/testify/LICENSE \
+ 	vendor/github.com/urfave/cli/LICENSE \
+ 	vendor/github.com/sirupsen/logrus/LICENSE \
+@@ -63,6 +72,20 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
+ 	vendor/github.com/ryanuber/go-glob/LICENSE \
+ 	vendor/github.com/cenkalti/backoff/v3/LICENSE \
+ 	vendor/github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt \
++	vendor/github.com/Azure/azure-sdk-for-go/sdk/internal/LICENSE.txt \
++	vendor/github.com/Azure/azure-sdk-for-go/sdk/azidentity/LICENSE.txt \
++	vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal/LICENSE.txt \
++	vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys/LICENSE.txt \
++	vendor/github.com/Azure/azure-sdk-for-go/sdk/azcore/LICENSE.txt \
++	vendor/github.com/AzureAD/microsoft-authentication-library-for-go/LICENSE \
++	vendor/github.com/goccy/go-json/LICENSE \
++	vendor/github.com/golang-jwt/jwt/v5/LICENSE \
++	vendor/github.com/lestrrat-go/iter/LICENSE \
++	vendor/github.com/lestrrat-go/blackmagic/LICENSE \
++	vendor/github.com/lestrrat-go/backoff/v2/LICENSE \
++	vendor/github.com/lestrrat-go/httpcc/LICENSE \
++	vendor/github.com/lestrrat-go/option/LICENSE \
++	vendor/github.com/lestrrat-go/jwx/LICENSE \
+ 	vendor/github.com/hashicorp/go-secure-stdlib/strutil/LICENSE \
+ 	vendor/github.com/hashicorp/go-secure-stdlib/parseutil/LICENSE \
+ 	vendor/github.com/hashicorp/errwrap/LICENSE \
+@@ -72,7 +95,8 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
+ 	vendor/github.com/hashicorp/go-retryablehttp/LICENSE \
+ 	vendor/github.com/hashicorp/go-sockaddr/LICENSE \
+ 	vendor/github.com/hashicorp/vault/api/LICENSE \
+-	vendor/github.com/hashicorp/go-multierror/LICENSE
++	vendor/github.com/hashicorp/go-multierror/LICENSE \
++	vendor/github.com/felixge/httpsnoop/LICENSE.txt
+ 
+ HOST_MENDER_ARTIFACT_DEPENDENCIES = host-pkgconf host-openssl host-xz
+ 
+-- 
+2.49.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
