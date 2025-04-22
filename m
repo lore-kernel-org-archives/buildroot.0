@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 397E7C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:54:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54858C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:54:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E07370910;
-	Mon, 19 May 2025 10:54:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 290B27091B;
+	Mon, 19 May 2025 10:54:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BNe6Rn13Ljs3; Mon, 19 May 2025 10:54:52 +0000 (UTC)
+ id 3QUgEwxIA47O; Mon, 19 May 2025 10:54:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1744070908
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15F8570911
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1744070908;
-	Mon, 19 May 2025 10:54:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 15F8570911;
+	Mon, 19 May 2025 10:54:56 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A3CFE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:22 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EB87193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B99BA42438
+ by smtp4.osuosl.org (Postfix) with ESMTP id DAAF4410F0
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ss0WsxLSekfV for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:11 +0000 (UTC)
+ id 1DStEAFbS3Nh for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 416A041264
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBD5441271
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 416A041264
+ by smtp4.osuosl.org (Postfix) with ESMTP id BBD5441271
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3D9A38348A; Mon, 19 May 2025 10:39:55 +0000 (UTC)
+ id B81968348A; Mon, 19 May 2025 10:39:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 21 Apr 2025 23:50:50 +0200
+Date: Tue, 22 Apr 2025 21:39:44 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e954dd0a212a00744c537e8cba2eb6604cf16e0a
-X-Git-Newrev: cca8d68461e6b49b4751dd4134fb8d574e5192db
+X-Git-Oldrev: 386e6bb4799471acc61c085fdc6472b2e43b0554
+X-Git-Newrev: ffc154197dfff627b58f83267c2ef8c3c38cdadc
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103955.3D9A38348A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Config.in: introduce
- BR2_HOST_GCC_AT_LEAST_{12..15}
+Message-Id: <20250519103955.B81968348A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pixman: fix pixman
+ compilation on riscv
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,73 +66,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cca8d68461e6b49b4751dd4134fb8d574e5192db
+commit: https://git.buildroot.net/buildroot/commit/?id=ffc154197dfff627b58f83267c2ef8c3c38cdadc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fedora 42 is planned to be released on 2025-04-22 [1].
-It is also planned to include the upcoming gcc 15 release.
-Gcc 15 is changing the default C language from -std=gnu17
-to -std=gnu23 [2].
+When the riscv vector extension is enabled for pixman, it assumes that
+the kernel headers also support riscv vector. Apply a patch that
+disables riscv vector in pixman if the Linux headers do not support
+COMPAT_HWCAP_ISA_V which pixman requires for vector runtime detection.
 
-This change is expected to possibly introduce build failures [3].
-In order to be prepared to fix those, this commit introduces the
-BR2_HOST_GCC_AT_LEAST_{12..15} symbols.
+This issue exists since pixman 0.44.0, which Buildroot started using
+in commit ba2fb599cd002b57fa70e978d91884c98d8aad05.
 
-[1] https://fedorapeople.org/groups/schedule/f-42/f-42-key-tasks.html
-[2] https://gcc.gnu.org/gcc-15/changes.html#c
-[3] https://savannah.gnu.org/support/?111150
+Fixes:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+  http://autobuild.buildroot.net/results/4ecdf5320716ec8b39f09fde3fcbbdcdb557f8ab/
+
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in | 20 ++++++++++++++++++++
- Makefile  |  2 +-
- 2 files changed, 21 insertions(+), 1 deletion(-)
+ ...-enable-RVV-on-linux-if-hwcap-headers-are.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/Config.in b/Config.in
-index a543091d4f..d730f2034b 100644
---- a/Config.in
-+++ b/Config.in
-@@ -74,6 +74,26 @@ config BR2_HOST_GCC_AT_LEAST_11
- 	default y if BR2_HOST_GCC_VERSION = "11"
- 	select BR2_HOST_GCC_AT_LEAST_10
- 
-+config BR2_HOST_GCC_AT_LEAST_12
-+	bool
-+	default y if BR2_HOST_GCC_VERSION = "12"
-+	select BR2_HOST_GCC_AT_LEAST_11
+diff --git a/package/pixman/0001-RISC-V-Only-enable-RVV-on-linux-if-hwcap-headers-are.patch b/package/pixman/0001-RISC-V-Only-enable-RVV-on-linux-if-hwcap-headers-are.patch
+new file mode 100644
+index 0000000000..ad1a0902e2
+--- /dev/null
++++ b/package/pixman/0001-RISC-V-Only-enable-RVV-on-linux-if-hwcap-headers-are.patch
+@@ -0,0 +1,44 @@
++From d0045f1fc32635d9629ea9e361631b07d9ca4140 Mon Sep 17 00:00:00 2001
++From: Charlie Jenkins <charlie@rivosinc.com>
++Date: Mon, 21 Apr 2025 13:08:50 -0700
++Subject: [PATCH] RISC-V: Only enable RVV on linux if hwcap headers are
++ available
 +
-+config BR2_HOST_GCC_AT_LEAST_13
-+	bool
-+	default y if BR2_HOST_GCC_VERSION = "13"
-+	select BR2_HOST_GCC_AT_LEAST_12
++Linux 6.4 introduced COMPAT_HWCAP_ISA_V. When trying to compile pixman
++against linux headers older than this, pixman will fail to compile
++because it assumes COMPAT_HWCAP_ISA_V exists.
 +
-+config BR2_HOST_GCC_AT_LEAST_14
-+	bool
-+	default y if BR2_HOST_GCC_VERSION = "14"
-+	select BR2_HOST_GCC_AT_LEAST_13
++During meson configuration, do not enable have_rvv if the platform is
++Linux and COMPAT_HWCAP_ISA_V doesn't exist.
 +
-+config BR2_HOST_GCC_AT_LEAST_15
-+	bool
-+	default y if BR2_HOST_GCC_VERSION = "15"
-+	select BR2_HOST_GCC_AT_LEAST_14
++Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
++Fixes: 0e424031bda2 ("RISC-V floating point operations")
++Upstream: https://gitlab.freedesktop.org/pixman/pixman/-/merge_requests/149
++---
++ meson.build | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
 +
- # When adding new entries above, be sure to update
- # the HOSTCC_MAX_VERSION variable in the Makefile.
- 
-diff --git a/Makefile b/Makefile
-index 5bf5abfe3b..411e1de515 100644
---- a/Makefile
-+++ b/Makefile
-@@ -353,7 +353,7 @@ export HOSTARCH := $(shell LC_ALL=C $(HOSTCC_NOCCACHE) -v 2>&1 | \
- 
- # When adding a new host gcc version in Config.in,
- # update the HOSTCC_MAX_VERSION variable:
--HOSTCC_MAX_VERSION := 11
-+HOSTCC_MAX_VERSION := 15
- 
- HOSTCC_VERSION := $(shell V=$$($(HOSTCC_NOCCACHE) --version | \
- 	sed -n -r 's/^.* ([0-9]*)\.([0-9]*)\.([0-9]*)[ ]*.*/\1 \2/p'); \
++diff --git a/meson.build b/meson.build
++index fdea28f..cb10931 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -379,7 +379,15 @@ if not use_rvv.disabled()
++         }
++       ''',
++       args : rvv_flags,
++-      name : 'RISC-V Vector Intrinsic Support')
+++      name : 'RISC-V Vector Intrinsic Support') and cc.compiles('''
+++      #if defined(__linux__)
+++      #include <asm/hwcap.h>
+++      #include <sys/auxv.h>
+++      COMPAT_HWCAP_ISA_V
+++      #endif
+++      ''',
+++      args : rvv_flags,
+++      name: 'RISC-V Vector Linux HWCAP Support')
++       have_rvv = true
++     endif
++   endif
++-- 
++2.43.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
