@@ -4,80 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EC6AC369C2
-	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 21:45:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64292C369D1
+	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 21:47:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19C7840BDC;
-	Tue, 22 Apr 2025 21:45:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3157840C0E;
+	Tue, 22 Apr 2025 21:47:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jVm9BY5FLued; Tue, 22 Apr 2025 21:45:25 +0000 (UTC)
+ id 6nJ6-IrIprtk; Tue, 22 Apr 2025 21:47:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3EEAE40BF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5403840C31
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3EEAE40BF4;
-	Tue, 22 Apr 2025 21:45:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5403840C31;
+	Tue, 22 Apr 2025 21:47:22 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7A5131BC
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:45:24 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 009D71A0
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:47:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6C499411C7
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:45:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DAD61411AB
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:47:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OaZhFprmvSan for <buildroot@buildroot.org>;
- Tue, 22 Apr 2025 21:45:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id IuK2GwoRrqfH for <buildroot@buildroot.org>;
+ Tue, 22 Apr 2025 21:47:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 62E73411AB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 62E73411AB
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 62E73411AB
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:45:23 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9D09742E7E;
- Tue, 22 Apr 2025 21:45:19 +0000 (UTC)
-Date: Tue, 22 Apr 2025 23:45:18 +0200
-To: Vladimir Oltean <olteanv@gmail.com>
-Cc: buildroot@buildroot.org, Ioana Ciornei <ciorneiioana@gmail.com>, Brandon
- Maier <Brandon.Maier@collins.com>, Vincent Jardin <vjardin@free.fr>, Julien
- Olivain <ju.o@free.fr>, Romain Naour <romain.naour@smile.fr>, Akhilesh Nema
- <nemaakhilesh@gmail.com>
-Message-ID: <20250422234518.2422983e@windsurf>
-In-Reply-To: <20250328180427.3434693-19-olteanv@gmail.com>
-References: <20250328180427.3434693-1-olteanv@gmail.com>
- <20250328180427.3434693-19-olteanv@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgeegkeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepkedprhgtphhtthhopeholhhtvggrnhhvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegtihhorhhnvghii
- hhorghnrgesghhmrghilhdrtghomhdprhgtphhtthhopeeurhgrnhguohhnrdforghivghrsegtohhllhhinhhsrdgtohhmpdhrtghpthhtohepvhhjrghrughinhesfhhrvggvrdhfrhdprhgtphhtthhopehjuhdrohesfhhrvggvrdhfrhdprhgtphhtthhopehrohhmrghinhdrnhgrohhurhesshhmihhlvgdrfhhrpdhrtghpthhtohepnhgvmhgrrghkhhhilhgvshhhsehgmhgrihhlrdgtohhm
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1745358320;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=4o1AsYAER/OucBpFfXx9HIgGqvXQzDgy602u79+4IOY=;
- b=PRSsNKLDMFLUJdAQTXE0ZZEkcd+OVKdytES+FrtfhEqhBO8PcWTpe31d/yn+FS981eLkUv
- xdz2hyYfKKNIH0tbfE9LHjDmgtQ+3xYr2AaeHoFP0MK6f3zVub1vvXSiOJluSpSwVr6i80
- Hx/qC/1nR/16zvMef7ti0gnIpjri2wRBjsjxVEoHXi88AgUvV9j2RQpNmcyFZNg35tnc2D
- JatQGz7TbIZMES1FUoQevc6rVOUz3ehN2vciUJ3qecMgd6p3vVUdaszYYeZ1KZya6sWZpw
- NciMLdljcfV7qrHt/KuXNyn2vI4/AqeiSIQPJT3yEMj45z0+2F73O0X2nqeszg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=PRSsNKLD
-Subject: Re: [Buildroot] [PATCH v2 18/18] board/lx2160ardb: new platform
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1FF88411A1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1FF88411A1
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:47:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0DC1B861A3; Tue, 22 Apr 2025 21:47:20 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 22 Apr 2025 23:38:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: af34a630d0be0581043212e423cdbb0f4224e515
+X-Git-Newrev: 87d5d63983cb8fb967cebcf0c82b107efbb9506c
+X-Patchwork-Hint: ignore
+Message-Id: <20250422214720.0DC1B861A3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/website/news.html: Update for
+ 2024.02.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,48 +58,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Vlad,
+commit: https://git.buildroot.net/buildroot/commit/?id=87d5d63983cb8fb967cebcf0c82b107efbb9506c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 28 Mar 2025 20:04:26 +0200
-Vladimir Oltean <olteanv@gmail.com> wrote:
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ docs/website/news.html | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
-
-> +The components from NXP are:
-> +  - rcw, lf-6.12.3-1.0.0
-> +  - atf (fork), lf-6.12.3-1.0.0
-> +  - uboot (fork), lf-6.12.3-1.0.0
-> +  - cadence-dp-firmware (blob), lf-6.12.3-1.0.0
-
-So this line should be dropped, if I understand correctly?
-
-> diff --git a/board/freescale/lx2160ardb/uboot-env.txt b/board/freescale/lx2160ardb/uboot-env.txt
-> new file mode 100644
-> index 000000000000..ad1e5882dd9e
-> --- /dev/null
-> +++ b/board/freescale/lx2160ardb/uboot-env.txt
-
-I agree with Vincent that it would be nice to have a simpler U-Boot
-environment if possible.
-
-> +BR2_PACKAGE_QORIQ_RESTOOL=y
-
-Due to restool not being applied (build issues), I can't apply this
-defconfig just yet. Can you send a v3 with restool fixed? Thanks!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 0f9d56dd83..305bb86418 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -13,7 +13,29 @@
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
+       <div class="timeline-heading">
+-	<h4 class="timeline-title">2024.11.3 released, 2024.11.x series EOL</h4>
++	<h4 class="timeline-title">2024.02.13 released, 2024.02.x series EOL</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>22 April 2025</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2024.02.13 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2024.02.12 release. See the
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2024.02.13/CHANGES">CHANGES</a>
++	  file for more details, read the
++	  <a href="https://lore.kernel.org/buildroot/4a1839ca-f072-4529-bbf7-1e47e8e9a9f2@rnout.be/T/#u">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2024.02.13.tar.xz">2024.02.13 release</a>.</p>
++
++	  <p>Notice that the 2024.02.x series is now end of life. Please migrate to
++	  the 2025.02.x series instead.</p>
++      </div>
++    </div>
++  </li>
++
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2024.11.4 released, 2024.11.x series EOL</h4>
+ 	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>22 April 2025</small></p>
+       </div>
+       <div class="timeline-body">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
