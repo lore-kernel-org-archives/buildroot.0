@@ -4,48 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F576C369C2
-	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 21:52:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 744D6C369D1
+	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 21:53:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9EA140BD5;
-	Tue, 22 Apr 2025 21:52:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2958C40CCF;
+	Tue, 22 Apr 2025 21:53:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NJKxALZQdXwL; Tue, 22 Apr 2025 21:52:32 +0000 (UTC)
+ id y0ZFmoooW5fA; Tue, 22 Apr 2025 21:53:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA65040A04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B8B3406D9
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA65040A04;
-	Tue, 22 Apr 2025 21:52:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D108D1A0
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:52:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B8B3406D9;
+	Tue, 22 Apr 2025 21:53:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7D96E1A0
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:53:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BCC7D406D9
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:52:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 639BE8207E
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:53:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8LR_WfW-JYtJ for <buildroot@buildroot.org>;
- Tue, 22 Apr 2025 21:52:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38C4D40654
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 38C4D40654
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:52:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 021B280E3F; Tue, 22 Apr 2025 21:52:26 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bs6WDgWOCiFb for <buildroot@buildroot.org>;
+ Tue, 22 Apr 2025 21:53:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D8A738207C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8A738207C
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D8A738207C
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:53:01 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-43cf848528aso42412845e9.2
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 14:53:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1745358779; x=1745963579;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=0z2iR36lkfdUx3UQeWL3DVxjuShMwBeYYL6EHlixgug=;
+ b=bT8DfipgOV4+/L5jdWqsq//3/8uvThtfM2wxXDrmjw0Np1jOayI4MdsiHoSH1/OMOC
+ aYO2GObibvoqLf7ukFt2IvgybY1eWoSxBesGHoFrhC1gNnI5a7Xb87XCrm7SE1mF0PFd
+ SSczGVvM/fvXEYxaGIlJcMXF0i8+o6llpWgOuVmzHxggQhzPz+S58L8s4S064bbwcjdY
+ w/jq0uUc8m7FssmR8Dft0FWTvSbeOaP3cJ3sW2Cj6NFcw8Cu/oXdpeRjyjcIetrJFXmQ
+ yzl5tZqGF8pL9ioXURiyKE5+BMijY3q+4J/odHxN0n4EUbexr6Iuq9pTY141dp2bfNqW
+ vLTg==
+X-Gm-Message-State: AOJu0Yzz3enDPTJECsXYVUaHz8VZN8ct32EX0znbTKi75PLGyTiRkgjd
+ s7CquTq0ryFICS0pdCntaa6MJgHbGC92AM0hrhyGZFiUX7N/CXGuigO/jFrkg4WI8MAKybRjrUs
+ sqjI=
+X-Gm-Gg: ASbGncvrjBLdJ2J23b1IATGfdJ0n3hz3jEEmEQw8VpjIMWMkyr/9e6nt829bBYOsIJ3
+ NILl1p6jotrq7qqWGUDb3fYA56/vALjwmD4UC6T+20NJS5vaD3YKHZUVOH6ALiB4CrPIDFVcAHq
+ i0pukebmAbTLqsWWTwZnmHxcYpYeLHrwfXMtVqSgbma9YTx7ohagAMn8DI5bpEY4tgVyiU7YYsS
+ i601YQIC4eZUx3oZXfx6XRfHm+75Ec0mGWtTCXG9t/21MYERZAftq9z8mKW0yiQBLElMgzF03eF
+ afoiEM0sYC65mS1stcxckDwPxAgoKylcK4ddSRxDIKrNWlWRHY4pJe6fKj+VWkxatQ==
+X-Google-Smtp-Source: AGHT+IEWybctIWXe/vDJpEaUSg4xYtXUtjF944oAj4MezrNZfjFhZy2hD7IC9S41/DOMTiz6XbC6DA==
+X-Received: by 2002:a05:600c:3482:b0:43c:ec0a:ddfd with SMTP id
+ 5b1f17b1804b1-4406ab7fe91mr143011505e9.6.1745358779450; 
+ Tue, 22 Apr 2025 14:52:59 -0700 (PDT)
+Received: from localhost.localdomain ([79.132.233.61])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-44092d23262sm2604085e9.16.2025.04.22.14.52.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 22 Apr 2025 14:52:59 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Tue, 22 Apr 2025 23:52:13 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4440f8a24521c91a80cbff6166d9afe98d8190e2
-X-Git-Newrev: d2f5f519ece82257e760e1470f3b0674cedd77a8
-X-Patchwork-Hint: ignore
-Message-Id: <20250422215228.021B280E3F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qoriq-firmware-inphi: new package
+Cc: Thomas Perale <thomas.perale@mind.be>,
+ Joris Lijssens <joris.lijssens@gmail.com>
+Date: Tue, 22 Apr 2025 23:52:49 +0200
+Message-ID: <20250422215249.2222735-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.49.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1745358779; x=1745963579; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=0z2iR36lkfdUx3UQeWL3DVxjuShMwBeYYL6EHlixgug=;
+ b=iSeOtRGfJ5X+k/4tpt2padCzxq1PRSZ1UaNCHuisAv1kaqO9U+iV+5/l+TxzOz2vB2
+ eoF8+tG8WLFBiyjgFMhODC2/fg/IjJOsSM2QJ3tDJcUs2V0Ayr/R9iqsJCE2T1eX6Y1G
+ pA7SGAbv5pbL2pe8vBFtI74xst7W4YeXBZ+qiKUMn+iM5BXPi+gRRixsTkFAAatYwC7Y
+ XTLhCFxcm8RXlGBLy3Rsx+YjRvL9BI9yr56uxPwV0GftlrE59YJzsgmiIhWORpbwQJR1
+ xjylV17p/dXZTjMnrWP1YTuWkfiIRC8kKFDzeTgc3vJG/j0ojBsBS4RSgqs3L68pTZjH
+ 5NUA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=iSeOtRGf
+Subject: [Buildroot] [PATCH 1/1] package/libcoap: fix build for toolchains
+ w/o threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,107 +108,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2f5f519ece82257e760e1470f3b0674cedd77a8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The version bump in [1] introduced the upstream commit [2] which made
+builds using toolchain without thread support fail to build libcoap.
 
-The NXP BSPs have custom support for a 25G Ethernet retimer
-(drivers/net/phy/in112525.c in U-Boot) for the LX2160A-RDB board.
-That driver requires a text file to be located at a given offset in the
-same storage device as U-Boot itself. The text file contains a list of
-register addresses and values which are programmed into the retimer.
+This patch adds an option check in the libcoap.mk file to verify
+the toolchain has thread support and passes the correct configuration
+options introduced in [2] as well.
 
-All in all, a pretty convoluted mechanism, but the driver is
-non-upstreamable, and to support the board we need this "firmware" file
-deployed.
+The build can be tested with the following config.
 
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+```
+BR2_armeb=y
+BR2_cortex_a76_a55=y
+BR2_ARM_EABI=y
+BR2_ARM_SOFT_FLOAT=y
+BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
+BR2_PTHREADS_NONE=y
+BR2_PACKAGE_LIBCOAP=y
+```
+
+Fixes:
+https://autobuild.buildroot.org/results/9c0/9c0b675a64fb2576bc34457043f118cffe5fe555//
+
+[1] 4df4d1d312 package/libcoap: bump version to 4.3.5
+[2] https://github.com/obgm/libcoap/commit/c69c5d5af0a30859e90756f535e2ca21cdeda0b2
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- DEVELOPERS                                             |  1 +
- package/Config.in                                      |  1 +
- package/qoriq-firmware-inphi/Config.in                 |  7 +++++++
- package/qoriq-firmware-inphi/qoriq-firmware-inphi.hash |  3 +++
- package/qoriq-firmware-inphi/qoriq-firmware-inphi.mk   | 18 ++++++++++++++++++
- 5 files changed, 30 insertions(+)
+ package/libcoap/libcoap.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2862dd7b49..6c71aacc5e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3388,6 +3388,7 @@ F:	configs/ts5500_defconfig
+diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
+index c5e5f85c62..d7c2a78944 100644
+--- a/package/libcoap/libcoap.mk
++++ b/package/libcoap/libcoap.mk
+@@ -31,4 +31,10 @@ else
+ LIBCOAP_CONF_OPTS += --disable-dtls
+ endif
  
- N:	Vladimir Oltean <olteanv@gmail.com>
- F:	package/qoriq-ddr-phy-binary/
-+F:	package/qoriq-firmware-inphi/
- F:	package/qoriq-mc-binary/
- F:	package/qoriq-mc-utils/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 27ee4b4c32..1bdbbd28fd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -450,6 +450,7 @@ menu "Firmware"
- 	source "package/panel-mipi-dbi-firmware/Config.in"
- 	source "package/qcom-db410c-firmware/Config.in"
- 	source "package/qoriq-ddr-phy-binary/Config.in"
-+	source "package/qoriq-firmware-inphi/Config.in"
- 	source "package/qoriq-fm-ucode/Config.in"
- 	source "package/qoriq-mc-binary/Config.in"
- 	source "package/qoriq-mc-utils/Config.in"
-diff --git a/package/qoriq-firmware-inphi/Config.in b/package/qoriq-firmware-inphi/Config.in
-new file mode 100644
-index 0000000000..88ae96c075
---- /dev/null
-+++ b/package/qoriq-firmware-inphi/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_QORIQ_FIRMWARE_INPHI
-+	bool "qoriq-firmware-inphi"
-+	help
-+	  Firmware image for the Inphi IN112525 2x 25GbE SFP+
-+	  retimer, exclusively for use on the NXP LX2160A-RDB.
++ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
++LIBCOAP_CONF_OPTS += --enable-thread-safe
++else
++LIBCOAP_CONF_OPTS += --disable-thread-safe
++endif
 +
-+	  https://github.com/nxp-qoriq/qoriq-firmware-inphi
-diff --git a/package/qoriq-firmware-inphi/qoriq-firmware-inphi.hash b/package/qoriq-firmware-inphi/qoriq-firmware-inphi.hash
-new file mode 100644
-index 0000000000..df860e47a0
---- /dev/null
-+++ b/package/qoriq-firmware-inphi/qoriq-firmware-inphi.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  bc04d6b7ca578ad4bba053a8ec3929af305f296f23c32557dc290540cb49ac18  qoriq-firmware-inphi-f22e9ff3bfed8342da6efb699e473b11fbad5695.tar.gz
-+sha256  53e3eb0b2bd81c171fa04c17514e20b39b7bb1fe1224c593f7717f615fb9d52b  EULA.txt
-diff --git a/package/qoriq-firmware-inphi/qoriq-firmware-inphi.mk b/package/qoriq-firmware-inphi/qoriq-firmware-inphi.mk
-new file mode 100644
-index 0000000000..630c6634fd
---- /dev/null
-+++ b/package/qoriq-firmware-inphi/qoriq-firmware-inphi.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# qoriq-firmware-inphi
-+#
-+################################################################################
-+
-+# Unlikely to ever be updated, keep a fixed version instead of following BSP tags
-+QORIQ_FIRMWARE_INPHI_VERSION = f22e9ff3bfed8342da6efb699e473b11fbad5695
-+QORIQ_FIRMWARE_INPHI_SITE = $(call github,nxp,qoriq-firmware-inphi,$(QORIQ_FIRMWARE_INPHI_VERSION))
-+QORIQ_FIRMWARE_INPHI_LICENSE = NXP Binary EULA
-+QORIQ_FIRMWARE_INPHI_LICENSE_FILES = EULA.txt
-+QORIQ_FIRMWARE_INPHI_INSTALL_IMAGES = YES
-+
-+define QORIQ_FIRMWARE_INPHI_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -D $(@D)/in112525-phy-ucode.txt $(BINARIES_DIR)/in112525-phy-ucode.txt
-+endef
-+
-+$(eval $(generic-package))
+ $(eval $(autotools-package))
+-- 
+2.49.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
