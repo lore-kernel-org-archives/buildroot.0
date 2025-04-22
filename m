@@ -1,53 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E357EC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:55:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3615BC3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:55:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B94CF841FF;
-	Mon, 19 May 2025 10:55:07 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hOuZW56_-YCq; Mon, 19 May 2025 10:55:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFD6584466
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EFD6584466;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 314647093E;
 	Mon, 19 May 2025 10:55:06 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8fUgLmUCm1XG; Mon, 19 May 2025 10:55:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26ABD70935
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 26ABD70935;
+	Mon, 19 May 2025 10:55:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0C76D193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 211FDD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F78C40D4F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4773742440
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id frSao8tl93uQ for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:12 +0000 (UTC)
+ id 8YcnJj95Zz4n for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FDEB40E3F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F9D240D4F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8FDEB40E3F
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1F9D240D4F
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8E8DF872E7; Mon, 19 May 2025 10:39:55 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 1DE3E82A2E; Mon, 19 May 2025 10:39:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 22 Apr 2025 21:06:21 +0200
+Date: Tue, 22 Apr 2025 23:33:41 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a6b702a3f6268cbdacfe6a86872d43d1ce375d27
-X-Git-Newrev: a5f0551d28304b7365bf96b2900fce7e93f1032f
+X-Git-Oldrev: 3ea8757fa59c0c9112b16ec1b20eaaf24c9c9c34
+X-Git-Newrev: af34a630d0be0581043212e423cdbb0f4224e515
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103955.8E8DF872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libtracefs: bump to
- version 1.8.2
+Message-Id: <20250519103956.1DE3E82A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] Update for 2024.02.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,48 +57,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5f0551d28304b7365bf96b2900fce7e93f1032f
+commit: https://git.buildroot.net/buildroot/commit/?id=af34a630d0be0581043212e423cdbb0f4224e515
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/tag/?h=libtracefs-1.8.2
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Colin Evrard <colin.evrard@mind.be>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit e687e3815f76c1c5ea9fb52b6558bedfe53ab117)
+[Arnout: drop Makefile changes]
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/libtracefs/libtracefs.hash | 2 +-
- package/libtracefs/libtracefs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ CHANGES | 44 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/libtracefs/libtracefs.hash b/package/libtracefs/libtracefs.hash
-index e728e6431f..17036c3f00 100644
---- a/package/libtracefs/libtracefs.hash
-+++ b/package/libtracefs/libtracefs.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  d295aa20d711c313a9e229dbd15ba14026f0c1a50d57ae8b0823cc561b23745f  libtracefs-1.8.1.tar.gz
-+sha256  255980e1da5648fbbc32777ed8457b485b2b96f3449674610b46d9c437271209  libtracefs-1.8.2.tar.gz
- sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
- sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSES/LGPL-2.1
-diff --git a/package/libtracefs/libtracefs.mk b/package/libtracefs/libtracefs.mk
-index 86baa5d9cd..d24763fa7d 100644
---- a/package/libtracefs/libtracefs.mk
-+++ b/package/libtracefs/libtracefs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/CHANGES b/CHANGES
+index 92c976fb97..3694c1d93f 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -680,6 +680,50 @@
+         #16036: android-tools version is too old
+         #16075: Cannot use linux kernel extensions from external tree..
  
--LIBTRACEFS_VERSION = 1.8.1
-+LIBTRACEFS_VERSION = 1.8.2
- LIBTRACEFS_SITE = https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot
- LIBTRACEFS_INSTALL_STAGING = YES
- LIBTRACEFS_LICENSE = GPL-2.0, LGPL-2.1
++2024.02.13, released April 22nd, 2025
++
++	Important / security related fixes:
++
++	- xserver_xorg-server & xwayland: CVE-2024-9632, CVE-2025-26594,
++	    CVE-2025-26595, CVE-2025-26596, CVE-2025-26597,  CVE-2025-26598,
++	    CVE-2025-26599, CVE-2025-26600, CVE-2025-26601.
++	- exim: CVE-2025-30232.
++	- mbedtls: CVE-2025-27809, CVE-2025-27810.
++	- augeas: CVE-2025-2588.
++	- libarchive: CVE-2024-57970, CVE-2025-1632, CVE-2025-25724.
++	- libopenh264: CVE-2025-27091.
++	- libmodsecurity: CVE-2025-27110.
++	- tinyxml2: CVE-2024-50615.
++	- libndp: CVE-2024-5564.
++	- xwayland: CVE-2024-31080, CVE-2024-31081, CVE-2024-31083,
++	    CVE-2024-9632, CVE-2025-26594, CVE-2025-26595,
++	    CVE-2025-26596, CVE-2025-26597, CVE-2025-26598,
++	    CVE-2025-26599, CVE-2025-26600, CVE-2025-26601.
++	- libfreeglut: CVE-2024-24258, CVE-2024-24259.
++
++	Updated/fixed packages:
++
++	libsoup3, linux, apr, mali-driver,
++	libcoap, python-fastapi, python-twisted, tor, linux-header,
++	linux-tools, libmodsecurity
++
++	Test Improvements:
++
++	- linux-tools: selftests: Add path containing BPF binary.
++	- testing: add git runtime test.
++
++	Infrastructure updates/fixes:
++
++	- DEVELOPERS: change arnout's address.
++	- DEVELOPERS: add Dario Binacchi for ti-k3-boot-firmware.
++	- support/download/svn: use 'svn info' whith LC_ALL=C.
++	- dillo: Fix an issue related to _SITE url for make show-info.
++	- kconfig: Handle backspace (^H) key.
++	- pkg-stats: add -v/--verbose option
++
++	Build issues/problems solved for:
++	glibc, mesa3d-demos.
++
+ 2024.02.12, released March 24st, 2025
+ 
+ 	Important / security related fixes.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
