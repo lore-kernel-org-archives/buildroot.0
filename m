@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30BABC2D0CD
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78909C3DA6D
 	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:55:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 61AB260F9A;
-	Mon, 19 May 2025 10:55:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FCF1844BC;
+	Mon, 19 May 2025 10:55:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n-SmEPRXYFKY; Mon, 19 May 2025 10:55:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3Ndc235MgPhJ; Mon, 19 May 2025 10:55:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 56FBA7099B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 719AF844B6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56FBA7099B;
-	Mon, 19 May 2025 10:55:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 719AF844B6;
+	Mon, 19 May 2025 10:55:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1073CD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:40 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 11BA4D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8DFAD41283
+ by smtp4.osuosl.org (Postfix) with ESMTP id CCA8941288
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HawtEbC8K2Zm for <buildroot@buildroot.org>;
+ id Lv-OxwmwZXhN for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A43554128D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E74341281
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A43554128D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5E74341281
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A0DE682A2E; Mon, 19 May 2025 10:39:56 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 5C1B782A2E; Mon, 19 May 2025 10:39:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 23 Apr 2025 21:21:25 +0200
+Date: Tue, 22 Apr 2025 23:52:13 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e7a00fd93a09bbb1adb91e03e1e9ca3a8acec600
-X-Git-Newrev: 055547ff126fb359d94c5c0d8e838320deff84f2
+X-Git-Oldrev: 4440f8a24521c91a80cbff6166d9afe98d8190e2
+X-Git-Newrev: d2f5f519ece82257e760e1470f3b0674cedd77a8
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103956.A0DE682A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/graphicsmagick:
- security bump to version 1.3.45
+Message-Id: <20250519103956.5C1B782A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qoriq-firmware-inphi:
+ new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,71 +58,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=055547ff126fb359d94c5c0d8e838320deff84f2
+commit: https://git.buildroot.net/buildroot/commit/?id=d2f5f519ece82257e760e1470f3b0674cedd77a8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-1.3.44 added the following security fixes:
+The NXP BSPs have custom support for a 25G Ethernet retimer
+(drivers/net/phy/in112525.c in U-Boot) for the LX2160A-RDB board.
+That driver requires a text file to be located at a given offset in the
+same storage device as U-Boot itself. The text file contains a list of
+register addresses and values which are programmed into the retimer.
 
-* TIFF: Fixed multiple heap and stack buffer overflows (directed by
-  the source EXIF profile) while writing EXIF into the native TIFF
-  IFD.
+All in all, a pretty convoluted mechanism, but the driver is
+non-upstreamable, and to support the board we need this "firmware" file
+deployed.
 
-* FITS: Fix problem that the FITS reader could return invalid image
-  frames with rows or columns set to zero. Other code in the library
-  crashes, or even asserts, if invalid image frames with rows or
-  columns set to zero are returned.
-
-* Coverity fixes: Various fixes for Coverity issues raised after the
-  update to version 2023.12.2.
-
-* Clang Analyzer (scan-build) fixes: Various fixes for new issues
-  discovered by Clang Analyzer.
-
-https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/7046c344273c263a9b6e4901b910508aea3804b5
-
-In addition 1.3.45 fixes a off-by-one issue introduced in 1.3.44:
-https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/96f765a2e3cebf0b70094da34d03b73c50c3aa63
-
-Update the Copyright.txt hash for a change in copyright years:
-https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/f0bba104ee3859286ea8adfc2ff603fd64be5624
-https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/26fce892769e4a26247dd2db5b8dc0719ce20953
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/graphicsmagick/graphicsmagick.hash | 4 ++--
- package/graphicsmagick/graphicsmagick.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                                             |  1 +
+ package/Config.in                                      |  1 +
+ package/qoriq-firmware-inphi/Config.in                 |  7 +++++++
+ package/qoriq-firmware-inphi/qoriq-firmware-inphi.hash |  3 +++
+ package/qoriq-firmware-inphi/qoriq-firmware-inphi.mk   | 18 ++++++++++++++++++
+ 5 files changed, 30 insertions(+)
 
-diff --git a/package/graphicsmagick/graphicsmagick.hash b/package/graphicsmagick/graphicsmagick.hash
-index a894aedf11..044214c8fc 100644
---- a/package/graphicsmagick/graphicsmagick.hash
-+++ b/package/graphicsmagick/graphicsmagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  97dc1a9d4e89c77b25a3b24505e7ff1653b88f9bfe31f189ce10804b8efa7746  GraphicsMagick-1.3.40.tar.xz
--sha256  0a20e661de942ebe115a354d0ec6d1d42b93856ea765f813f350a5ce5024cdb7  Copyright.txt
-+sha256  dcea5167414f7c805557de2d7a47a9b3147bcbf617b91f5f0f4afe5e6543026b  GraphicsMagick-1.3.45.tar.xz
-+sha256  27d121f97ad71ff506ac5a6a9539e969154f3a66f3da24fd5b6f268acd106295  Copyright.txt
-diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
-index 76b826ceef..baaa9bcb02 100644
---- a/package/graphicsmagick/graphicsmagick.mk
-+++ b/package/graphicsmagick/graphicsmagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 2862dd7b49..6c71aacc5e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3388,6 +3388,7 @@ F:	configs/ts5500_defconfig
  
--GRAPHICSMAGICK_VERSION = 1.3.40
-+GRAPHICSMAGICK_VERSION = 1.3.45
- GRAPHICSMAGICK_SOURCE = GraphicsMagick-$(GRAPHICSMAGICK_VERSION).tar.xz
- GRAPHICSMAGICK_SITE = https://downloads.sourceforge.net/project/graphicsmagick/graphicsmagick/$(GRAPHICSMAGICK_VERSION)
- GRAPHICSMAGICK_LICENSE = MIT
+ N:	Vladimir Oltean <olteanv@gmail.com>
+ F:	package/qoriq-ddr-phy-binary/
++F:	package/qoriq-firmware-inphi/
+ F:	package/qoriq-mc-binary/
+ F:	package/qoriq-mc-utils/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 27ee4b4c32..1bdbbd28fd 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -450,6 +450,7 @@ menu "Firmware"
+ 	source "package/panel-mipi-dbi-firmware/Config.in"
+ 	source "package/qcom-db410c-firmware/Config.in"
+ 	source "package/qoriq-ddr-phy-binary/Config.in"
++	source "package/qoriq-firmware-inphi/Config.in"
+ 	source "package/qoriq-fm-ucode/Config.in"
+ 	source "package/qoriq-mc-binary/Config.in"
+ 	source "package/qoriq-mc-utils/Config.in"
+diff --git a/package/qoriq-firmware-inphi/Config.in b/package/qoriq-firmware-inphi/Config.in
+new file mode 100644
+index 0000000000..88ae96c075
+--- /dev/null
++++ b/package/qoriq-firmware-inphi/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_QORIQ_FIRMWARE_INPHI
++	bool "qoriq-firmware-inphi"
++	help
++	  Firmware image for the Inphi IN112525 2x 25GbE SFP+
++	  retimer, exclusively for use on the NXP LX2160A-RDB.
++
++	  https://github.com/nxp-qoriq/qoriq-firmware-inphi
+diff --git a/package/qoriq-firmware-inphi/qoriq-firmware-inphi.hash b/package/qoriq-firmware-inphi/qoriq-firmware-inphi.hash
+new file mode 100644
+index 0000000000..df860e47a0
+--- /dev/null
++++ b/package/qoriq-firmware-inphi/qoriq-firmware-inphi.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  bc04d6b7ca578ad4bba053a8ec3929af305f296f23c32557dc290540cb49ac18  qoriq-firmware-inphi-f22e9ff3bfed8342da6efb699e473b11fbad5695.tar.gz
++sha256  53e3eb0b2bd81c171fa04c17514e20b39b7bb1fe1224c593f7717f615fb9d52b  EULA.txt
+diff --git a/package/qoriq-firmware-inphi/qoriq-firmware-inphi.mk b/package/qoriq-firmware-inphi/qoriq-firmware-inphi.mk
+new file mode 100644
+index 0000000000..630c6634fd
+--- /dev/null
++++ b/package/qoriq-firmware-inphi/qoriq-firmware-inphi.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# qoriq-firmware-inphi
++#
++################################################################################
++
++# Unlikely to ever be updated, keep a fixed version instead of following BSP tags
++QORIQ_FIRMWARE_INPHI_VERSION = f22e9ff3bfed8342da6efb699e473b11fbad5695
++QORIQ_FIRMWARE_INPHI_SITE = $(call github,nxp,qoriq-firmware-inphi,$(QORIQ_FIRMWARE_INPHI_VERSION))
++QORIQ_FIRMWARE_INPHI_LICENSE = NXP Binary EULA
++QORIQ_FIRMWARE_INPHI_LICENSE_FILES = EULA.txt
++QORIQ_FIRMWARE_INPHI_INSTALL_IMAGES = YES
++
++define QORIQ_FIRMWARE_INPHI_INSTALL_IMAGES_CMDS
++	$(INSTALL) -D $(@D)/in112525-phy-ucode.txt $(BINARIES_DIR)/in112525-phy-ucode.txt
++endef
++
++$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
