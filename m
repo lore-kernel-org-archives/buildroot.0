@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 603D7C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:55:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E357EC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:55:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E416E70924;
-	Mon, 19 May 2025 10:55:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B94CF841FF;
+	Mon, 19 May 2025 10:55:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xp7RlX83MR0A; Mon, 19 May 2025 10:55:03 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hOuZW56_-YCq; Mon, 19 May 2025 10:55:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 197DE70926
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFD6584466
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 197DE70926;
-	Mon, 19 May 2025 10:55:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFD6584466;
+	Mon, 19 May 2025 10:55:06 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 03279E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:28 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0C76D193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2394A4243F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F78C40D4F
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xA99fxDWpA2M for <buildroot@buildroot.org>;
+ id frSao8tl93uQ for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A24F40E09
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FDEB40E3F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6A24F40E09
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8FDEB40E3F
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 64E018348A; Mon, 19 May 2025 10:39:55 +0000 (UTC)
+ id 8E8DF872E7; Mon, 19 May 2025 10:39:55 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 22 Apr 2025 19:33:23 +0200
+Date: Tue, 22 Apr 2025 21:06:21 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 531adf23c49151181326e459fcef4daa765c7f3e
-X-Git-Newrev: 6240b75d0cd2d602e8449a093c6a0499b3e66733
+X-Git-Oldrev: a6b702a3f6268cbdacfe6a86872d43d1ce375d27
+X-Git-Newrev: a5f0551d28304b7365bf96b2900fce7e93f1032f
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103955.64E018348A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/warp7: Improve Wifi
- instructions
+Message-Id: <20250519103955.8E8DF872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libtracefs: bump to
+ version 1.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,46 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6240b75d0cd2d602e8449a093c6a0499b3e66733
+commit: https://git.buildroot.net/buildroot/commit/?id=a5f0551d28304b7365bf96b2900fce7e93f1032f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The "modprobe brcmfmac" command is not necessary because this driver
-is automatically loaded.
+Release notes:
+https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/tag/?h=libtracefs-1.8.2
 
-Remove the "iwconfig" line as it is considered deprecated:
-
-warning: `iwconfig' uses wireless extensions which will stop working for Wi-Fi 7 hardware; use nl80211
-
-Remove the "-Dwext" parameter as it is not supported by the default kernel
-configuration:
-
-wlan0: Unsupported driver 'wext'
-
-Tested Wifi by following the updated commands.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/warp7/readme.txt | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/libtracefs/libtracefs.hash | 2 +-
+ package/libtracefs/libtracefs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/warp7/readme.txt b/board/warp7/readme.txt
-index aff7a601e5..39d845bd32 100644
---- a/board/warp7/readme.txt
-+++ b/board/warp7/readme.txt
-@@ -107,11 +107,9 @@ To boot your newly created system:
- Using Wifi
- ==========
+diff --git a/package/libtracefs/libtracefs.hash b/package/libtracefs/libtracefs.hash
+index e728e6431f..17036c3f00 100644
+--- a/package/libtracefs/libtracefs.hash
++++ b/package/libtracefs/libtracefs.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  d295aa20d711c313a9e229dbd15ba14026f0c1a50d57ae8b0823cc561b23745f  libtracefs-1.8.1.tar.gz
++sha256  255980e1da5648fbbc32777ed8457b485b2b96f3449674610b46d9c437271209  libtracefs-1.8.2.tar.gz
+ sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
+ sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSES/LGPL-2.1
+diff --git a/package/libtracefs/libtracefs.mk b/package/libtracefs/libtracefs.mk
+index 86baa5d9cd..d24763fa7d 100644
+--- a/package/libtracefs/libtracefs.mk
++++ b/package/libtracefs/libtracefs.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# modprobe brcmfmac
--# iwconfig wlan0 essid ACCESSPOINTNAME
- # wpa_passphrase ACCESSPOINTNAME > /etc/wpa.conf
- (enter the wifi password and press enter)
--# wpa_supplicant -Dwext -iwlan0 -c /etc/wpa.conf &
-+# wpa_supplicant -iwlan0 -c /etc/wpa.conf &
- # udhcpc -i wlan0
- # ping buildroot.org
- 
+-LIBTRACEFS_VERSION = 1.8.1
++LIBTRACEFS_VERSION = 1.8.2
+ LIBTRACEFS_SITE = https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot
+ LIBTRACEFS_INSTALL_STAGING = YES
+ LIBTRACEFS_LICENSE = GPL-2.0, LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
