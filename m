@@ -4,101 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E393BC369C2
-	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 10:34:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBCB9C369D3
+	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 11:05:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC55E81E47;
-	Tue, 22 Apr 2025 10:34:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 76EBA80E9F;
+	Tue, 22 Apr 2025 11:05:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m3VkErgz6VYj; Tue, 22 Apr 2025 10:34:33 +0000 (UTC)
+ id t4atYBh-mm9f; Tue, 22 Apr 2025 11:04:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B6DF81036
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 543C780BB0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B6DF81036;
-	Tue, 22 Apr 2025 10:34:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 04E761BC
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 10:34:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 543C780BB0;
+	Tue, 22 Apr 2025 11:04:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 12FFC1BC
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 11:04:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DEA2240B73
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 10:34:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EC9EE80E78
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 11:04:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tkVykyitPYxw for <buildroot@buildroot.org>;
- Tue, 22 Apr 2025 10:34:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
- envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E396440B70
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E396440B70
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E396440B70
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 10:34:29 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id
- a640c23a62f3a-ace358c4d35so2727166b.1
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 03:34:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1745318067; x=1745922867;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=/sSRbUCNfoXceXWum9151iIgooHdkk22LN2KyS9uExQ=;
- b=AylWwUpibFR54By9gaWvt6cUALAvfEJg2R0ngVyQ9x635aiv5MPyQKqvX7YwAyPwpB
- HVxfsPfudawNFYx0F9daf2Iue6VcEpqXjpjHo0HyEitX0aiSVgBhisjxXWNVkZ+ad+Sl
- NElbHBjECiaxhAMaBa5wx+x6BB6TIQDzOyBrzX6vJKj1XIcm5+9Hm51qOVcbI9E0acur
- lq8zEp2jh0aL+3CPtldXcbMJiM+bmiMQCrgxxJ9LEAGOu90ejC37nvsvyPkPd1CibibS
- oXqgLmJpc197Hrb+6tYofLMZHrsXe12TL0mCo88W9ndgwrnW/PvKNwEZFdmFFKGcxnru
- 75Ow==
-X-Gm-Message-State: AOJu0YzADAPH/oxUwcQnt64gcF1t/1u82EbLQK/tUeV4nDjXo1PR6u2z
- G4WNMANfu5GzNU7ytLAl9HGECj9ED8aPhMvP1yeZx8DaiDjipMmV+tCg8fKllGnG0twkqpst25W
- S
-X-Gm-Gg: ASbGncs/b1tat1RntzySsdJ1o1vsDy/xDl6v+ukO7ss1yUVTTjd7tlt0d929r2rcpUm
- UBqJ7cyjI8SwZoNOs9NelQN0IHMv1IEXPu+TXx3HSslRU3uiQqgUETwbhF+56q8NUuLusZrTOE5
- EnJQjPTGBZZMfSH80v8pg1/5RXaBXBlgZv5ptM9W+H85p31Gsupvq/AQHm/pcrhEfhrRHeZaXqb
- cx3xEmVmqJWQwwlZXCMkbrsRntTm8FqUXwRynSbGZuLDGq2SB26pIoNapo2acq+oHVX4ArtNcRi
- hw7e5Qq2MVQV1UTmX8ScqGov29Vgwn4mnQtr7f6NE86Vj8ossbZtcK1MrfDJ/vOAHF5NufYajOR
- ekJB1zQJ/gsxXk+zN2FRs2oU++QQmLqUtlvpUuLijITCHan+pF/2LQsRqJcXIiCZv9bwGoZCDxh
- 8CfwjcdyE9X9fCkc0=
-X-Google-Smtp-Source: AGHT+IFSbxE7CgiknUadlzMKL1/dSNabacWBVLe/KBjL/SizC5FQkhC7A9bA1nE/srFoiMYd8MGbyQ==
-X-Received: by 2002:a17:906:6a0f:b0:ac3:66fb:b197 with SMTP id
- a640c23a62f3a-acb74ad333dmr388340366b.3.1745318067119; 
- Tue, 22 Apr 2025 03:34:27 -0700 (PDT)
-Received: from fedora.arnhem.chello.nl
- (2001-1c00-8182-4700-3d78-0c42-7f3a-1345.cable.dynamic.v6.ziggo.nl.
- [2001:1c00:8182:4700:3d78:c42:7f3a:1345])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-acb6efadd68sm636770166b.185.2025.04.22.03.34.26
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 22 Apr 2025 03:34:26 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
-To: buildroot@buildroot.org
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
-Date: Tue, 22 Apr 2025 12:34:24 +0200
-Message-ID: <20250422103424.3928-1-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.49.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wSINtlUO1-tC for <buildroot@buildroot.org>;
+ Tue, 22 Apr 2025 11:04:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0193580B60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0193580B60
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0193580B60
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 11:04:56 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 6224F5FF88;
+ Tue, 22 Apr 2025 13:04:51 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 22 Apr 2025 13:04:51 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1745318067; x=1745922867;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=/sSRbUCNfoXceXWum9151iIgooHdkk22LN2KyS9uExQ=;
- b=d5//D6J9QyPkyCwjjgGdMPu+tf/x/R75585Lz4o94M5HyeRQqw6cI9maFvmsVZIKZk
- JcpQaoBWNX7xSbehzc4aW9l9brde6qKfRRMadxecN0FRHIZMqOJIbvbm+DmZkAyEzGuv
- uh4aQjrV8lYI+bwFPz1AcBzIbukVBaCUONrz4=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+Date: Tue, 22 Apr 2025 13:04:51 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: =?UTF-8?Q?Vincent_Stehl=C3=A9?= <vincent.stehle@arm.com>
+Cc: buildroot@buildroot.org, Dick Olsson <hi@senzilla.io>
+In-Reply-To: <20250422085947.687912-1-vincent.stehle@arm.com>
+References: <20250422085947.687912-1-vincent.stehle@arm.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <b7d07ef62d9f41bdacd38970085c5359@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1745319893;
+ bh=Mbm4QF40Glpo0OnLbdJ1TWTvKUyMoJBBLHDha5P3P/4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=H8U+FQsqOW/xuVqjvxx5YBvj00BCUlW6/ez/EulvaKz0hOOL/vgf67dUwRH/unF4f
+ VLANfSDBKI+crkz1rhDOx+BSTx8c5O+brcPXbyhJNZWqCDWBaTcwrkr+Sh6Yqk5q+/
+ f/sQGhI9dhXKVKk5qT+p0W35ThBbTsi2Kg2Fi6PW3E8X9+NTgeVw4IfLIsu81w21Ao
+ BTVvXGDbnC+stzCLNVXnfiSg5lswyuSHAx7fdw35iBT+794rW8w5LkOiOkkz84/H/4
+ zUf2wzHqHZ/dcMHET9jhbzWBMCuCqGa1v12JkdWR9Xgsz9T+0MVnmK9NvvQTXlsLsz
+ 4m+ZElZFs31bw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=d5//D6J9
-Subject: [Buildroot] [PATCH 1/1] package/mender-artifact: bump to version
- 4.1.0
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=H8U+FQsq
+Subject: Re: [Buildroot] [PATCH] support/testing: test_edk2: add
+ macchiatobin build test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,325 +83,16 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://docs.mender.io/release-information/release-notes-changelog/mender-artifact
-
-License changes:
-New:
-    Apache 2.0:
-        LICENSE: 2024 -> 2025
-        vendor/cloud.google.com/go/auth/LICENSE
-        vendor/cloud.google.com/go/auth/oauth2adapt/LICENSE
-        vendor/github.com/kylelemons/godebug/LICENSE
-        vendor/go.opentelemetry.io/otel/trace/LICENSE
-        vendor/go.opentelemetry.io/otel/LICENSE
-        vendor/go.opentelemetry.io/otel/metric/LICENSE
-        vendor/go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LICENSE
-        vendor/go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc/LICENSE
-        vendor/go.opentelemetry.io/auto/sdk/LICENSE
-        vendor/github.com/go-logr/logr/LICENSE
-        vendor/github.com/go-logr/stdr/LICENSE
-
-    BSD 2 clause:
-        vendor/github.com/pkg/browser/LICENSE
-
-    BSD 3 clause:
-        vendor/golang.org/x/sync/LICENSE
-        vendor/github.com/google/uuid/LICENSE
-
-    ISC:
-        vendor/github.com/decred/dcrd/dcrec/secp256k1/v4/LICENSE
-
-    MIT:
-        vendor/github.com/Azure/azure-sdk-for-go/sdk/internal/LICENSE.txt
-        vendor/github.com/Azure/azure-sdk-for-go/sdk/azidentity/LICENSE.txt
-        vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal/LICENSE.txt
-        vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys/LICENSE.txt
-        vendor/github.com/Azure/azure-sdk-for-go/sdk/azcore/LICENSE.txt
-        vendor/github.com/AzureAD/microsoft-authentication-library-for-go/LICENSE
-        vendor/github.com/goccy/go-json/LICENSE
-        vendor/github.com/golang-jwt/jwt/v5/LICENSE
-        vendor/github.com/lestrrat-go/iter/LICENSE
-        vendor/github.com/lestrrat-go/blackmagic/LICENSE
-        vendor/github.com/lestrrat-go/backoff/v2/LICENSE
-        vendor/github.com/lestrrat-go/httpcc/LICENSE
-        vendor/github.com/lestrrat-go/option/LICENSE
-        vendor/github.com/lestrrat-go/jwx/LICENSE
-
-    MPL-2.0:
-        vendor/github.com/felixge/httpsnoop/LICENSE.txt
-
-Modified:
-    Apache 2.0:
-        vendor/github.com/mendersoftware/progressbar/LICENSE: 2021 -> 2025
-
-    BSD 3:
-        vendor/golang.org/x/net/LICENSE: Google INC -> Google LLC
-        vendor/golang.org/x/oauth2/LICENSE: Google INC -> Google LLC
-        vendor/golang.org/x/text/LICENSE: Google INC -> Google LLC
-        vendor/golang.org/x/crypto/LICENSE: Google INC -> Google LLC
-        vendor/golang.org/x/time/LICENSE: Google INC -> Google LLC
-
-Removed:
-
-    Apache 2.0:
-        vendor/google.golang.org/appengine/LICENSE
-        vendor/cloud.google.com/go/compute/LICENSE
-        vendor/go.opencensus.io/LICENSE
-        vendor/github.com/golang/groupcache/LICENSE
-
-    BSD 3 Clause:
-        vendor/github.com/golang/protobuf/LICENSE
-        vendor/golang.org/x/crypto/LICENSE
-        vendor/golang.org/x/time/LICENSE
-
-Tested with ./support/testing/run-tests tests.package.test_mender
-08:48:07 TestMenderSystemd                        Starting
-08:48:35 TestMenderSystemd                        Cleaning up
-08:48:35 TestMenderRW                             Starting
-08:48:46 TestMenderRW                             Cleaning up
-08:48:46 TestMenderRO                             Starting
-08:48:46 TestMenderRO                             Building
-08:55:02 TestMenderRO                             Building done
-08:55:13 TestMenderRO                             Cleaning up
-----------------------------------------------------------------------
-Ran 3 tests in 425.930s
-OK
-        
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
----
- package/mender-artifact/mender-artifact.hash | 56 ++++++++++++++------
- package/mender-artifact/mender-artifact.mk   | 44 +++++++++++----
- 2 files changed, 73 insertions(+), 27 deletions(-)
-
-diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
-index c4209f44a0..914c210b77 100644
---- a/package/mender-artifact/mender-artifact.hash
-+++ b/package/mender-artifact/mender-artifact.hash
-@@ -1,6 +1,6 @@
- # Locally computed:
--sha256  fc11754f12d9104fce5b62738739d07514b4bd975f5e87d411d4e381533a2c6d  mender-artifact-4.0.0-go2.tar.gz
--sha256  d4f369175698aa60b6e0a99413663af3212dc4c539de42ee8a9cda15d4ace40f  LIC_FILES_CHKSUM.sha256
-+sha256  d82cd2f802033d53f2e947ed8d9d6cdd7a036fadbd92a2696b72122bd2070039  mender-artifact-4.1.0-go2.tar.gz
-+sha256  a99c495576ecc6d6e137e471c515d38757179240ff6cc41bd481e29d3504f334  LIC_FILES_CHKSUM.sha256
- 
- # License hash extracted from LIC_FILES_CHKSUM.sha256 using the
- # following command:
-@@ -8,53 +8,60 @@ sha256  d4f369175698aa60b6e0a99413663af3212dc4c539de42ee8a9cda15d4ace40f  LIC_FI
- #     sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
- 
- # Apache 2.0 licenses.
--sha256  d0f406b04e7901e6b4076bdf5fd20f9d7f04fc41681069fd8954413ac6295688  LICENSE
-+sha256  38791d93beae962b266e11ac888ea2af4f07578b272c2f9dcb05f54f32960a76  LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/minio/sha256-simd/LICENSE
--sha256  8f5d89b47d7a05a199b77b7e0f362dad391d451ebda4ef48ba11c50c071564c7  vendor/github.com/mendersoftware/progressbar/LICENSE
-+sha256  132fb47b89947cd5f98e380186bc412af5561c70669d37d3a83b36f03a0ddae5  vendor/github.com/mendersoftware/progressbar/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/genproto/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/genproto/googleapis/api/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/genproto/googleapis/rpc/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/grpc/LICENSE
--sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/appengine/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/kms/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/iam/LICENSE
--sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/compute/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/compute/metadata/LICENSE
--sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  vendor/go.opencensus.io/LICENSE
--sha256  73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68  vendor/github.com/golang/groupcache/LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/auth/LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/auth/oauth2adapt/LICENSE
- sha256  73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68  vendor/github.com/mendersoftware/openssl/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/googleapis/enterprise-certificate-proxy/LICENSE
- sha256  dd26a7abddd02e2d0aba97805b31f248ef7835d9e10da289b22e3b8ab78b324d  vendor/github.com/go-jose/go-jose/v3/json/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/go-jose/go-jose/v3/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/google/s2a-go/LICENSE.md
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/github.com/Keyfactor/signserver-go-client-sdk/LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/kylelemons/godebug/LICENSE
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/otel/trace/LICENSE
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/otel/LICENSE
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/otel/metric/LICENSE
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LICENSE
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc/LICENSE
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/auto/sdk/LICENSE
-+sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  vendor/github.com/go-logr/logr/LICENSE
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/github.com/go-logr/stdr/LICENSE
- #
- # BSD 2 Clause licenses.
- sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
-+sha256  4801bb0c5d70b980b3e1f63d1d2df8d84fec22548e3d73f03a68df1fb808791f  vendor/github.com/pkg/browser/LICENSE
- #
- # BSD 3 Clause licenses.
- sha256  2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
- sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/sys/LICENSE
- sha256  0d9e582ee4bff57bf1189c9e514e6da7ce277f9cd3bc2d488b22fbb39a6d87cf  vendor/github.com/klauspost/compress/LICENSE
- sha256  75e1ca97a84a9da6051dee0114333388216f2c4a5a028296b882ff3d57274735  vendor/github.com/russross/blackfriday/v2/LICENSE.txt
--sha256  17b5d209ba8f9684257ecfcff87df6ceda6194143a8fbd074f29727cff6f0c40  vendor/github.com/google/go-cmp/LICENSE
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/net/LICENSE
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/oauth2/LICENSE
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/text/LICENSE
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/crypto/LICENSE
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/time/LICENSE
-+sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/net/LICENSE
-+sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/oauth2/LICENSE
-+sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/text/LICENSE
-+sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/crypto/LICENSE
-+sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/time/LICENSE
-+sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/sync/LICENSE
- sha256  110244b02140866ee37d17fa7449436a377ec3b85a481fbb208f4c87964382de  vendor/google.golang.org/api/LICENSE
- sha256  fc0a2f71df4e8f047902da53d1f85301be43e0f360fc167057a2d04658ed2ba9  vendor/google.golang.org/api/internal/third_party/uritemplates/LICENSE
- sha256  4835612df0098ca95f8e7d9e3bffcb02358d435dbb38057c844c99d7f725eb20  vendor/google.golang.org/protobuf/LICENSE
--sha256  8778a9fc1eaffb03ab873caae251df2d224f6b5502be8777d3cd573a4dd43903  vendor/github.com/golang/protobuf/LICENSE
- sha256  b95218cd9607855a6536384c0262922b30a0c2bf56e4ced790240f3a3bac4722  vendor/github.com/googleapis/gax-go/v2/LICENSE
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/crypto/LICENSE
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/time/LICENSE
- sha256  f69f157b0be75da373605dbc8bbf142e8924ee82d8f44f11bcaf351335bf98cf  vendor/github.com/klauspost/compress/internal/snapref/LICENSE
- sha256  701cbcc144a7c865b072f27547e66ddbf17ac44a3bd21f71149ace02518f107c  vendor/github.com/ulikunitz/xz/LICENSE
-+sha256  0a8d61ed3cbfd5312326e8126c31ce9c627a283adc99131b56896d29ada04b2d  vendor/github.com/google/uuid/LICENSE
- #
- # ISC licenses.
- sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
-+sha256  480be5fb1be03ff19fd71d863f453f16262e98d4e568f5bccfcb7aa3ccf8cf0d  vendor/github.com/decred/dcrd/dcrec/secp256k1/v4/LICENSE
- #
- # MIT licenses.
- sha256  f8e536c1c7b695810427095dc85f5f80d44ff7c10535e8a9486cf393e2599189  vendor/github.com/stretchr/testify/LICENSE
-@@ -70,6 +77,20 @@ sha256  22adc4abdece712a737573672f082fd61ac2b21df878efb87ffcff4354a07f26  vendor
- sha256  38049e50b486f5394e40b786388f4a006401996e46c7c1cd18925afe7c3b4e34  vendor/github.com/ryanuber/go-glob/LICENSE
- sha256  5c0476add4c38b55d0ed5ac11b85e00c38f26e1caee20dfe3ab58190103d1fbc  vendor/github.com/cenkalti/backoff/v3/LICENSE
- sha256  f566a9f97bacdaf00d9f21dd991e81dc11201c4e016c86b470799429a1c9a79c  vendor/github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt
-+sha256  646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2  vendor/github.com/Azure/azure-sdk-for-go/sdk/internal/LICENSE.txt
-+sha256  646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2  vendor/github.com/Azure/azure-sdk-for-go/sdk/azidentity/LICENSE.txt
-+sha256  a096a435e19bb6b631da46992c011a39be563e97ce7366879ad516c772904632  vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal/LICENSE.txt
-+sha256  a096a435e19bb6b631da46992c011a39be563e97ce7366879ad516c772904632  vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys/LICENSE.txt
-+sha256  646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2  vendor/github.com/Azure/azure-sdk-for-go/sdk/azcore/LICENSE.txt
-+sha256  9906940f61b1f0b533fa7d99baf55178b2808fbe113ea51dfbfad8572ccd5f2b  vendor/github.com/AzureAD/microsoft-authentication-library-for-go/LICENSE
-+sha256  a707cd425201945d57500566c47c74dc9fb8cd02ef91b9a761abddeb2401e6a7  vendor/github.com/goccy/go-json/LICENSE
-+sha256  fe26ca41577b9b2b4448050a24b25e5753af66b5d5945d5d36094e7790bfcb2f  vendor/github.com/golang-jwt/jwt/v5/LICENSE
-+sha256  d5c8d4935994cfcfbc53d12fe756b28316858736d6e0a61acaff5fe4a84fca12  vendor/github.com/lestrrat-go/iter/LICENSE
-+sha256  b9b5b03485eb7446da7ecad22178664a53c7fcecceb74d69f905819a807d710e  vendor/github.com/lestrrat-go/blackmagic/LICENSE
-+sha256  e148deed982672627e875fe0cb03b9aa0d3e315e0f59992973c3c34dbcf5f322  vendor/github.com/lestrrat-go/backoff/v2/LICENSE
-+sha256  d5c8d4935994cfcfbc53d12fe756b28316858736d6e0a61acaff5fe4a84fca12  vendor/github.com/lestrrat-go/httpcc/LICENSE
-+sha256  b9b5b03485eb7446da7ecad22178664a53c7fcecceb74d69f905819a807d710e  vendor/github.com/lestrrat-go/option/LICENSE
-+sha256  0c4868a07b1c2dbb67c75767b4f1b2936c392d02ca2c7ee9827cac1a9d60ab1d  vendor/github.com/lestrrat-go/jwx/LICENSE
- #
- # MPL-2.0 licenses.
- sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/github.com/hashicorp/go-secure-stdlib/strutil/LICENSE
-@@ -82,3 +103,4 @@ sha256  d6b1a865f1c8c697d343bd4e0ce61025f91898486a1f00d727f32e8644af77d3  vendor
- sha256  1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5  vendor/github.com/hashicorp/go-sockaddr/LICENSE
- sha256  d6b1a865f1c8c697d343bd4e0ce61025f91898486a1f00d727f32e8644af77d3  vendor/github.com/hashicorp/vault/api/LICENSE
- sha256  a830016911a348a54e89bd54f2f8b0d8fffdeac20aecfba8e36ebbf38a03f5ff  vendor/github.com/hashicorp/go-multierror/LICENSE
-+sha256  8108e14b5cb2b6bcd51583d3849ef0c2b5c4de61758256c20308bc70d1775dbb  vendor/github.com/felixge/httpsnoop/LICENSE.txt
-diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
-index 4c6fa272ec..bcab91890a 100644
---- a/package/mender-artifact/mender-artifact.mk
-+++ b/package/mender-artifact/mender-artifact.mk
-@@ -4,9 +4,11 @@
- #
- ################################################################################
- 
--HOST_MENDER_ARTIFACT_VERSION = 4.0.0
-+HOST_MENDER_ARTIFACT_VERSION = 4.1.0
- HOST_MENDER_ARTIFACT_SITE = $(call github,mendersoftware,mender-artifact,$(HOST_MENDER_ARTIFACT_VERSION))
- HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, MPL-2.0
-+# Vendor license paths generated with:
-+#    awk '{print $2}' LIC_FILES_CHKSUM.sha256 | grep vendor
- HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	LICENSE \
- 	LIC_FILES_CHKSUM.sha256 \
-@@ -16,40 +18,47 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	vendor/google.golang.org/genproto/googleapis/api/LICENSE \
- 	vendor/google.golang.org/genproto/googleapis/rpc/LICENSE \
- 	vendor/google.golang.org/grpc/LICENSE \
--	vendor/google.golang.org/appengine/LICENSE \
- 	vendor/cloud.google.com/go/kms/LICENSE \
- 	vendor/cloud.google.com/go/iam/LICENSE \
--	vendor/cloud.google.com/go/compute/LICENSE \
- 	vendor/cloud.google.com/go/compute/metadata/LICENSE \
--	vendor/go.opencensus.io/LICENSE \
--	vendor/github.com/golang/groupcache/LICENSE \
-+	vendor/cloud.google.com/go/auth/LICENSE \
-+	vendor/cloud.google.com/go/auth/oauth2adapt/LICENSE \
- 	vendor/github.com/mendersoftware/openssl/LICENSE \
- 	vendor/github.com/googleapis/enterprise-certificate-proxy/LICENSE \
- 	vendor/github.com/go-jose/go-jose/v3/json/LICENSE \
- 	vendor/github.com/go-jose/go-jose/v3/LICENSE \
- 	vendor/github.com/google/s2a-go/LICENSE.md \
- 	vendor/github.com/Keyfactor/signserver-go-client-sdk/LICENSE \
-+	vendor/github.com/kylelemons/godebug/LICENSE \
-+	vendor/go.opentelemetry.io/otel/trace/LICENSE \
-+	vendor/go.opentelemetry.io/otel/LICENSE \
-+	vendor/go.opentelemetry.io/otel/metric/LICENSE \
-+	vendor/go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LICENSE \
-+	vendor/go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc/LICENSE \
-+	vendor/go.opentelemetry.io/auto/sdk/LICENSE \
-+	vendor/github.com/go-logr/logr/LICENSE \
-+	vendor/github.com/go-logr/stdr/LICENSE \
- 	vendor/github.com/pkg/errors/LICENSE \
-+	vendor/github.com/pkg/browser/LICENSE \
- 	vendor/github.com/pmezard/go-difflib/LICENSE \
- 	vendor/golang.org/x/sys/LICENSE \
- 	vendor/github.com/klauspost/compress/LICENSE \
- 	vendor/github.com/russross/blackfriday/v2/LICENSE.txt \
--	vendor/github.com/google/go-cmp/LICENSE \
- 	vendor/golang.org/x/net/LICENSE \
- 	vendor/golang.org/x/oauth2/LICENSE \
- 	vendor/golang.org/x/text/LICENSE \
- 	vendor/golang.org/x/crypto/LICENSE \
- 	vendor/golang.org/x/time/LICENSE \
-+	vendor/golang.org/x/sync/LICENSE \
- 	vendor/google.golang.org/api/LICENSE \
- 	vendor/google.golang.org/api/internal/third_party/uritemplates/LICENSE \
- 	vendor/google.golang.org/protobuf/LICENSE \
--	vendor/github.com/golang/protobuf/LICENSE \
- 	vendor/github.com/googleapis/gax-go/v2/LICENSE \
--	vendor/golang.org/x/crypto/LICENSE \
--	vendor/golang.org/x/time/LICENSE \
- 	vendor/github.com/klauspost/compress/internal/snapref/LICENSE \
- 	vendor/github.com/ulikunitz/xz/LICENSE \
-+	vendor/github.com/google/uuid/LICENSE \
- 	vendor/github.com/davecgh/go-spew/LICENSE \
-+	vendor/github.com/decred/dcrd/dcrec/secp256k1/v4/LICENSE \
- 	vendor/github.com/stretchr/testify/LICENSE \
- 	vendor/github.com/urfave/cli/LICENSE \
- 	vendor/github.com/sirupsen/logrus/LICENSE \
-@@ -63,6 +72,20 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	vendor/github.com/ryanuber/go-glob/LICENSE \
- 	vendor/github.com/cenkalti/backoff/v3/LICENSE \
- 	vendor/github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt \
-+	vendor/github.com/Azure/azure-sdk-for-go/sdk/internal/LICENSE.txt \
-+	vendor/github.com/Azure/azure-sdk-for-go/sdk/azidentity/LICENSE.txt \
-+	vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal/LICENSE.txt \
-+	vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys/LICENSE.txt \
-+	vendor/github.com/Azure/azure-sdk-for-go/sdk/azcore/LICENSE.txt \
-+	vendor/github.com/AzureAD/microsoft-authentication-library-for-go/LICENSE \
-+	vendor/github.com/goccy/go-json/LICENSE \
-+	vendor/github.com/golang-jwt/jwt/v5/LICENSE \
-+	vendor/github.com/lestrrat-go/iter/LICENSE \
-+	vendor/github.com/lestrrat-go/blackmagic/LICENSE \
-+	vendor/github.com/lestrrat-go/backoff/v2/LICENSE \
-+	vendor/github.com/lestrrat-go/httpcc/LICENSE \
-+	vendor/github.com/lestrrat-go/option/LICENSE \
-+	vendor/github.com/lestrrat-go/jwx/LICENSE \
- 	vendor/github.com/hashicorp/go-secure-stdlib/strutil/LICENSE \
- 	vendor/github.com/hashicorp/go-secure-stdlib/parseutil/LICENSE \
- 	vendor/github.com/hashicorp/errwrap/LICENSE \
-@@ -72,7 +95,8 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	vendor/github.com/hashicorp/go-retryablehttp/LICENSE \
- 	vendor/github.com/hashicorp/go-sockaddr/LICENSE \
- 	vendor/github.com/hashicorp/vault/api/LICENSE \
--	vendor/github.com/hashicorp/go-multierror/LICENSE
-+	vendor/github.com/hashicorp/go-multierror/LICENSE \
-+	vendor/github.com/felixge/httpsnoop/LICENSE.txt
- 
- HOST_MENDER_ARTIFACT_DEPENDENCIES = host-pkgconf host-openssl host-xz
- 
--- 
-2.49.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gMjIvMDQvMjAyNSAxMDo1OSwgVmluY2VudCBTdGVobMOpIHdyb3RlOgo+IEFkZCBhbiBFREsg
+SUkgYnVpbGQgdGVzdCBmb3IgdGhlIE1BQ0NISUFUT2JpbiBwbGF0Zm9ybS4KPiAKPiBTaWduZWQt
+b2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGFybS5jb20+Cj4gQ2M6IERp
+Y2sgT2xzc29uIDxoaUBzZW56aWxsYS5pbz4KPiBDYzogSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJl
+ZS5mcj4KCkFwcGxpZWQgdG8gbWFzdGVyLCB0aGFua3MuCl9fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
+QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
+Zm8vYnVpbGRyb290Cg==
