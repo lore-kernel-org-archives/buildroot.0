@@ -1,77 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5745C369C2
-	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 18:46:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1F45C369C2
+	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 18:52:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8459C60E86;
-	Tue, 22 Apr 2025 18:46:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DA2A80E6E;
+	Tue, 22 Apr 2025 18:52:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E_SEnPcEKvTF; Tue, 22 Apr 2025 18:46:05 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PbUr2446v0eU; Tue, 22 Apr 2025 18:52:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B157E60F07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 980B180E8F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B157E60F07;
-	Tue, 22 Apr 2025 18:46:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2FC6019F
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 18:46:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 980B180E8F;
+	Tue, 22 Apr 2025 18:52:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 697D51BC
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 18:52:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 69E1260F12
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 18:46:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4F5E14098C
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 18:52:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EliVGs-8DloI for <buildroot@buildroot.org>;
- Tue, 22 Apr 2025 18:46:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8C10560E86
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C10560E86
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8C10560E86
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 18:46:01 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id BCFC919F5C2;
- Tue, 22 Apr 2025 20:45:56 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 22 Apr 2025 20:45:56 +0200
-MIME-Version: 1.0
-Date: Tue, 22 Apr 2025 20:45:56 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xNGfes0loerh for <buildroot@buildroot.org>;
+ Tue, 22 Apr 2025 18:52:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BDCD4096D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9BDCD4096D
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 18:52:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 93CED860C8; Tue, 22 Apr 2025 18:52:47 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Fabio Estevam <festevam@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250422131054.1115455-1-festevam@gmail.com>
-References: <20250422131054.1115455-1-festevam@gmail.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <eed6bd9db217808f2944a82dcec09515@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1745347558;
- bh=lflYlCPPRXN4Uh74z/g2nprX5qsuDyPRLbQrCMYh+aw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=pGh06JwTWSW8/4sjN8ptAqUELqxmpCLE3Sx7kupNlrWCi2rtaaqwIJtpfSc2jzAeh
- dS3S7IaWpxP460hYDv2e7bbW3TDZ1NUPXIYhMPliyGFuoC+XxlPoMuqHfXFogPNYmB
- PHSg3ghoVeQV3/UcnqdAu7s7jPKYj9ZbWiihDGpDpFjU0kERsQjV2sjuo6gVTaZ547
- QxdjB347FGlMMb/w50pEQqphk768dMncPYvsrF10gULaFAMfYNuYigL/7hyK3Gtr3i
- WgIOU04OyfQ29dtq7R6L1OkHVqy/UVDVl0iIKVowsX5XpgBI8GZU0d1ANQEy9WWtl6
- lm6Bq6L5FrakA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=pGh06JwT
-Subject: Re: [Buildroot] [PATCH 1/2] configs/warp7: Bump U-Boot and kernel
- versions
+To: buildroot@buildroot.org
+Date: Tue, 22 Apr 2025 20:46:42 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6240b75d0cd2d602e8449a093c6a0499b3e66733
+X-Git-Newrev: 47232b4f621ea101b3de817e9b1eb753631bca45
+X-Patchwork-Hint: ignore
+Message-Id: <20250422185247.93CED860C8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmdbx: bump version to 0.13.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,44 +58,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1956297239254869676=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fabio,
+--===============1956297239254869676==
+Content-Type: text/plain
 
-On 22/04/2025 15:10, Fabio Estevam wrote:
-> Bump U-Boot to 2025.04 and kernel to version 6.12.24.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=47232b4f621ea101b3de817e9b1eb753631bca45
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+This release called "Бузина" (Elderberry) of the stable libmdbx branch.
 
-For info, I added a missing BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
-(build was failing in the docker image).
+Please visit https://libmdbx.dqdkfa.ru for more information, changelog,
+credits and acknowledgments, documentation, C++ API description and
+links to the original git repo with the source code. Questions, feedback
+and suggestions are welcome to the Telegram' group https://t.me/libmdbx.
 
-As followup maintenance patches, could you also add
-custom hashes (i.e. add BR2_DOWNLOAD_FORCE_CHECK_HASHES=y and
-remove the .checkpackageignore entry). See for example commit [1].
+Since 0.13.x libmdbx is licensed under the Apache 2.0 License.
+For notes about the license change, please refer to the COPYRIGHT file
+within original libmdbx source code repository
+https://gitflic.ru/project/erthink/libmdbx
 
-Also, there was a decision last year to move defconfigs toward using
-Bootlin external toolchains. See [2]. To make sure this compiler
-change will not prevent the board to boot, a test with an actual
-board is preferable. Doing so while updating defconfig kernel/uboot
-is a good time to do so. See for example commit [3].
+Signed-off-by: Леонид Юрьев (Leonid Yuriev) <leo@yuriev.ru>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/libmdbx/libmdbx.hash | 4 ++--
+ package/libmdbx/libmdbx.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Best regards,
+diff --git a/package/libmdbx/libmdbx.hash b/package/libmdbx/libmdbx.hash
+index 202937e7be..ae5266716b 100644
+--- a/package/libmdbx/libmdbx.hash
++++ b/package/libmdbx/libmdbx.hash
+@@ -1,6 +1,6 @@
+ # Hashes from: https://libmdbx.dqdkfa.ru/release/SHA256SUMS
+-sha256  86df30ca2231c9b3ad71424bb829dca9041947f5539d4295030c653d4982c1be  libmdbx-amalgamated-0.13.4.tar.xz
++sha256  57db987de6f7ccc66a66ae28a7bda9f9fbb48ac5fb9279bcca92fd5de13075d1  libmdbx-amalgamated-0.13.6.tar.xz
+ 
+ # Locally calculated
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+-sha256  699a62986b6c8d31124646dffd4b15872c7d3bc5eecea5994edb1f5195df49d1  NOTICE
++sha256  651f71b46c6bb0046d2122df7f9def9cb24f4dc28c5b11cef059f66565cda30f  NOTICE
+diff --git a/package/libmdbx/libmdbx.mk b/package/libmdbx/libmdbx.mk
+index 204815e688..f461d98397 100644
+--- a/package/libmdbx/libmdbx.mk
++++ b/package/libmdbx/libmdbx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMDBX_VERSION = 0.13.4
++LIBMDBX_VERSION = 0.13.6
+ LIBMDBX_SOURCE = libmdbx-amalgamated-$(LIBMDBX_VERSION).tar.xz
+ LIBMDBX_SITE = https://libmdbx.dqdkfa.ru/release
+ LIBMDBX_SUPPORTS_IN_SOURCE_BUILD = NO
 
-Julien.
+--===============1956297239254869676==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-[1] 
-https://gitlab.com/buildroot.org/buildroot/-/commit/b71d7eae59f82683e547b60f06538c4a2af8c5d3
-[2] 
-https://elinux.org/Buildroot:DeveloperDaysELCE2024#Rules_for_defconfigs
-[3] 
-https://gitlab.com/buildroot.org/buildroot/-/commit/310ab7d53393288aba5c574c49a6cae1bf1e1a1d
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1956297239254869676==--
