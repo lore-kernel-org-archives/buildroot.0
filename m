@@ -1,52 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3A19C369D7
-	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 19:40:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CB3FC369C2
+	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 19:41:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 57232608B8;
-	Tue, 22 Apr 2025 19:40:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 58C6480EA0;
+	Tue, 22 Apr 2025 19:41:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dvXY9IJtmsfL; Tue, 22 Apr 2025 19:41:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9611C80EF4
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9611C80EF4;
+	Tue, 22 Apr 2025 19:41:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F2A931BC
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:41:11 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D711560AB1
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:41:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SuALpMpx2pOy; Tue, 22 Apr 2025 19:40:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 769AF6081B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 769AF6081B;
-	Tue, 22 Apr 2025 19:40:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1C0FA1BC
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:39:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 194244051C
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:39:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f-ehKqohlas5 for <buildroot@buildroot.org>;
- Tue, 22 Apr 2025 19:39:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id Isl8pZLmb5GQ for <buildroot@buildroot.org>;
+ Tue, 22 Apr 2025 19:41:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 331BF410D0
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 331BF410D0
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:39:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2248286144; Tue, 22 Apr 2025 19:39:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 22 Apr 2025 21:39:44 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 386e6bb4799471acc61c085fdc6472b2e43b0554
-X-Git-Newrev: ffc154197dfff627b58f83267c2ef8c3c38cdadc
-X-Patchwork-Hint: ignore
-Message-Id: <20250422193957.2248286144@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pixman: fix pixman compilation on
- riscv
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E6CD56081B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6CD56081B
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E6CD56081B
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:41:07 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9A13641CFD;
+ Tue, 22 Apr 2025 19:41:04 +0000 (UTC)
+Date: Tue, 22 Apr 2025 21:41:03 +0200
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: buildroot@buildroot.org
+Message-ID: <20250422214103.149c90dd@windsurf>
+In-Reply-To: <20250421-pixman_riscv_dependency-v2-0-7209dd6f2485@rivosinc.com>
+References: <20250421-pixman_riscv_dependency-v2-0-7209dd6f2485@rivosinc.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgeegheelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepledtgedvjeehgeetgfeufffglefhkedvfeduveeiieelteeliedtfefguefggffhnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegthhgrrhhlihgvsehrihhvohhsihhntgdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1745350865;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=a7ZfYrwGRLLliu1A02TYDsAErufyCBlx+TF0gf6/FOU=;
+ b=mf8NcvN6q+uEUQsXRP7/FJ25uo4M6P7y6IIkmkSPpbozK6bL5VdZyiFD+LhA/DLO9FljB5
+ g+VV50SMBqUDvHJ+w/FqmZJaM5V1p3I3S3CnaP/qYC2TEvFAx91/XnAUzahjQXfS6l+VT0
+ tm2iX2d2b/ENE4m/LFyCbIwpFEbKHdoucQPgyPj/9w2bcYq6PyUdliOj8ART5h5Fn/9zrx
+ ey799F7g1KW/GiqufPHMRcuyzGzhxjb8d7fdQn9sdGhpInQ8si4/xR9onpyc8BB9gqQEb0
+ tmPLqa/2JDBJGyNNdk/F5xirLnHOkJ8F3XAwtcknXWwY7TcF3+nDOSxf8zepXQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=mf8NcvN6
+Subject: Re: [Buildroot] [PATCH v2 0/2] package/pixman: Fix riscv vector
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,83 +87,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ffc154197dfff627b58f83267c2ef8c3c38cdadc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Charlie,
 
-When the riscv vector extension is enabled for pixman, it assumes that
-the kernel headers also support riscv vector. Apply a patch that
-disables riscv vector in pixman if the Linux headers do not support
-COMPAT_HWCAP_ISA_V which pixman requires for vector runtime detection.
+On Mon, 21 Apr 2025 14:37:02 -0700
+Charlie Jenkins <charlie@rivosinc.com> wrote:
 
-This issue exists since pixman 0.44.0, which Buildroot started using
-in commit ba2fb599cd002b57fa70e978d91884c98d8aad05.
+> Charlie Jenkins (2):
+>       package/pixman: Only compile with riscv vector support when selected
+>       package/pixman: Fix pixman compilation on riscv
 
-Fixes:
+Thanks, both applied.
 
-  http://autobuild.buildroot.net/results/4ecdf5320716ec8b39f09fde3fcbbdcdb557f8ab/
+Aside from the Upstream: link on the second patch, one thing that was
+missing for the commit messages was since *when* the issue existed in
+Buildroot, which helps the people who maintain our LTS/stable branches
+to understand if those patches should be backported or not. So I've
+added that information, but it would be great to include it in your
+future contributions.
 
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...-enable-RVV-on-linux-if-hwcap-headers-are.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+Thanks a lot!
 
-diff --git a/package/pixman/0001-RISC-V-Only-enable-RVV-on-linux-if-hwcap-headers-are.patch b/package/pixman/0001-RISC-V-Only-enable-RVV-on-linux-if-hwcap-headers-are.patch
-new file mode 100644
-index 0000000000..ad1a0902e2
---- /dev/null
-+++ b/package/pixman/0001-RISC-V-Only-enable-RVV-on-linux-if-hwcap-headers-are.patch
-@@ -0,0 +1,44 @@
-+From d0045f1fc32635d9629ea9e361631b07d9ca4140 Mon Sep 17 00:00:00 2001
-+From: Charlie Jenkins <charlie@rivosinc.com>
-+Date: Mon, 21 Apr 2025 13:08:50 -0700
-+Subject: [PATCH] RISC-V: Only enable RVV on linux if hwcap headers are
-+ available
-+
-+Linux 6.4 introduced COMPAT_HWCAP_ISA_V. When trying to compile pixman
-+against linux headers older than this, pixman will fail to compile
-+because it assumes COMPAT_HWCAP_ISA_V exists.
-+
-+During meson configuration, do not enable have_rvv if the platform is
-+Linux and COMPAT_HWCAP_ISA_V doesn't exist.
-+
-+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-+Fixes: 0e424031bda2 ("RISC-V floating point operations")
-+Upstream: https://gitlab.freedesktop.org/pixman/pixman/-/merge_requests/149
-+---
-+ meson.build | 10 +++++++++-
-+ 1 file changed, 9 insertions(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index fdea28f..cb10931 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -379,7 +379,15 @@ if not use_rvv.disabled()
-+         }
-+       ''',
-+       args : rvv_flags,
-+-      name : 'RISC-V Vector Intrinsic Support')
-++      name : 'RISC-V Vector Intrinsic Support') and cc.compiles('''
-++      #if defined(__linux__)
-++      #include <asm/hwcap.h>
-++      #include <sys/auxv.h>
-++      COMPAT_HWCAP_ISA_V
-++      #endif
-++      ''',
-++      args : rvv_flags,
-++      name: 'RISC-V Vector Linux HWCAP Support')
-+       have_rvv = true
-+     endif
-+   endif
-+-- 
-+2.43.0
-+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
