@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E78CC369C2
-	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 19:20:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65045C369D1
+	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 19:20:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1CAB607AB;
-	Tue, 22 Apr 2025 19:20:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 67A4261009;
+	Tue, 22 Apr 2025 19:20:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sYV_6IV94baw; Tue, 22 Apr 2025 19:20:52 +0000 (UTC)
+ id tLPd4OgyX8RI; Tue, 22 Apr 2025 19:20:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C58660E62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 108D06100C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C58660E62;
-	Tue, 22 Apr 2025 19:20:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 06FD41BC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 108D06100C;
+	Tue, 22 Apr 2025 19:20:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1070A1CB
  for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:20:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E149860E62
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:20:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 01EBA40BC4
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:20:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pZRSwDA8GOCD for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GgB2J3HqV4XP for <buildroot@buildroot.org>;
  Tue, 22 Apr 2025 19:20:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44D1960D62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2513840759
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 44D1960D62
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2513840759
  for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:20:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 364E386115; Tue, 22 Apr 2025 19:20:50 +0000 (UTC)
+ id 13A2286114; Tue, 22 Apr 2025 19:20:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 22 Apr 2025 21:11:43 +0200
+Date: Tue, 22 Apr 2025 21:05:51 +0200
 X-Git-Refname: refs/heads/2024.11.x
-X-Git-Oldrev: 361c6d14f00e092b88a1142f4a08b4440e75b193
-X-Git-Newrev: c9e65c2cd7d81f775bf17b2e480c7e86fe419c3b
+X-Git-Oldrev: eda2d934ae02c0ba05dd7aee97758a453a0fa2d3
+X-Git-Newrev: 361c6d14f00e092b88a1142f4a08b4440e75b193
 X-Patchwork-Hint: ignore
-Message-Id: <20250422192050.364E386115@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.11.x] CHANGES: Add changes for
- 2024.11.4
+Message-Id: <20250422192050.13A2286114@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.11.x]
+ support/scripts/pkg-stats: add -v/--verbose option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,84 +66,150 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9e65c2cd7d81f775bf17b2e480c7e86fe419c3b
+commit: https://git.buildroot.net/buildroot/commit/?id=361c6d14f00e092b88a1142f4a08b4440e75b193
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.11.x
 
-Signed-off-by: Colin Evrard <colin.evrard@mind.be>
+Running pkg-stats is currently quite verbose, as it shows one line per
+package when checking for the upstream URL, and another one line per
+package when checking for the latest version on
+release-monitoring.org.
+
+This noisy output is a bit annoying when pkg-stats is run in a
+cronjob, like we do to update https://autobuild.buildroot.net/stats/
+every day. This commit adds a -v/--verbose option, off by default, to
+have a less noisy output.
+
+Suggested-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 203e9def71bd49f228ef87f7749deadfbfe4e23c)
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- CHANGES  | 44 ++++++++++++++++++++++++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 46 insertions(+), 2 deletions(-)
+ support/scripts/pkg-stats | 38 +++++++++++++++++++++++---------------
+ 1 file changed, 23 insertions(+), 15 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 9cc41fd14d..3f2644f624 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,47 @@
-+2024.11.4, released April 22nd, 2025
-+
-+	Important / security related fixes:
-+
-+	- xserver_xorg-server & xwayland: CVE-2024-9632, CVE-2025-26594,
-+	    CVE-2025-26595, CVE-2025-26596, CVE-2025-26597,  CVE-2025-26598
-+	    CVE-2025-26599, CVE-2025-26600, CVE-2025-26601.
-+	- exim: CVE-2025-30232.
-+	- mbedtls: CVE-2025-27809, CVE-2025-27810.
-+	- augeas: CVE-2025-2588.
-+	- libarchive: CVE-2024-57970, CVE-2025-1632, CVE-2025-25724.
-+	- xwayland: CVE-2024-31081, CVE-2024-31083, CVE-2024-9632,
-+	    CVE-2025-26594, CVE-2025-26595, CVE-2025-26596,
-+	    CVE-2025-26597, CVE-2025-26598, CVE-2025-26599,
-+	    CVE-2025-26600, CVE-2025-26601
-+	- libopenh264: CVE-2025-27091.
-+	- libmodsecurity: CVE-2025-27110.
-+	- tinyxml2: CVE-2024-50615.
-+
-+	Updated/fixed packages:
-+
-+	libgeos, freerdp, libsoup3, cairo, linux, apr, mali-driver,
-+	libcoap, python-fastapi, python-twisted, tor, mc, linux-header,
-+	linux-tools.
-+
-+	Test Improvements:
-+
-+	- linux-tools: selftests: Add path containing BPF binary.
-+	- testing: add git runtime test.
-+
-+	Infrastructure updates/fixes:
-+
-+	- DEVELOPERS: change arnout's address.
-+	- DEVELOPERS: add Dario Binacchi for ti-k3-boot-firmware.
-+	- support/download/svn: use 'svn info' whith LC_ALL=C**.
-+	- dillo: Fix an issue related to _SITE url for make show-info.
-+	- kconfig: Handle backspace (^H) key.
-+	- pkg-stats: add -v/--verbose option
-+
-+	Build issues/problems solved for:
-+
-+	freeswitch, glibc, v4l2loopback, ls1028ardb, ls1028ardb,
-+	mesa3d-demos.
-+
- 2024.11.3, released March 24st, 2025
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 33c21e77b4..c134e1ec06 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -464,7 +464,7 @@ def package_init_make_info():
+ check_url_count = 0
  
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index c0a8aa3c02..68fee2eb40 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
  
- # Set and export the version string
--export BR2_VERSION := 2024.11.3
-+export BR2_VERSION := 2024.11.4
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1742834500
-+BR2_VERSION_EPOCH = 1745347000
+-async def check_url_status(session, pkg, npkgs, retry=True):
++async def check_url_status(session, pkg, npkgs, retry=True, verbose=False):
+     global check_url_count
  
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+     try:
+@@ -472,30 +472,33 @@ async def check_url_status(session, pkg, npkgs, retry=True):
+             if resp.status >= 400:
+                 pkg.status['url'] = ("error", "invalid {}".format(resp.status))
+                 check_url_count += 1
+-                print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
++                if verbose:
++                    print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
+                 return
+     except (aiohttp.ClientError, asyncio.TimeoutError):
+         if retry:
+-            return await check_url_status(session, pkg, npkgs, retry=False)
++            return await check_url_status(session, pkg, npkgs, retry=False, verbose=verbose)
+         else:
+             pkg.status['url'] = ("error", "invalid (err)")
+             check_url_count += 1
+-            print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
++            if verbose:
++                print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
+             return
+ 
+     pkg.status['url'] = ("ok", "valid")
+     check_url_count += 1
+-    print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
++    if verbose:
++        print("[%04d/%04d] %s" % (check_url_count, npkgs, pkg.name))
+ 
+ 
+-async def check_package_urls(packages):
++async def check_package_urls(packages, verbose=False):
+     tasks = []
+     connector = aiohttp.TCPConnector(limit_per_host=5)
+     async with aiohttp.ClientSession(connector=connector, trust_env=True,
+                                      timeout=aiohttp.ClientTimeout(total=15)) as sess:
+         packages = [p for p in packages if p.status['url'][0] == 'ok']
+         for pkg in packages:
+-            tasks.append(asyncio.ensure_future(check_url_status(sess, pkg, len(packages))))
++            tasks.append(asyncio.ensure_future(check_url_status(sess, pkg, len(packages), verbose=verbose)))
+         await asyncio.wait(tasks)
+ 
+ 
+@@ -580,27 +583,30 @@ async def check_package_get_latest_version_by_guess(session, pkg, retry=True):
+ check_latest_count = 0
+ 
+ 
+-async def check_package_latest_version_get(session, pkg, npkgs):
++async def check_package_latest_version_get(session, pkg, npkgs, verbose=False):
+     global check_latest_count
+ 
+     if await check_package_get_latest_version_by_distro(session, pkg):
+         check_latest_count += 1
+-        print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
++        if verbose:
++            print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
+         return
+ 
+     if await check_package_get_latest_version_by_guess(session, pkg):
+         check_latest_count += 1
+-        print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
++        if verbose:
++            print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
+         return
+ 
+     check_package_latest_version_set_status(pkg,
+                                             RM_API_STATUS_NOT_FOUND,
+                                             None, None)
+     check_latest_count += 1
+-    print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
++    if verbose:
++        print("[%04d/%04d] %s" % (check_latest_count, npkgs, pkg.name))
+ 
+ 
+-async def check_package_latest_version(packages):
++async def check_package_latest_version(packages, verbose=False):
+     """
+     Fills in the .latest_version field of all Package objects
+ 
+@@ -623,7 +629,7 @@ async def check_package_latest_version(packages):
+     async with aiohttp.ClientSession(connector=connector, trust_env=True) as sess:
+         packages = [p for p in packages if p.is_actual_package]
+         for pkg in packages:
+-            tasks.append(asyncio.ensure_future(check_package_latest_version_get(sess, pkg, len(packages))))
++            tasks.append(asyncio.ensure_future(check_package_latest_version_get(sess, pkg, len(packages), verbose=verbose)))
+         await asyncio.wait(tasks)
+ 
+ 
+@@ -1272,6 +1278,8 @@ def parse_args():
+     parser.add_argument('--disable', type=list_str,
+                         help='Features to disable, comma-separated (cve, upstream, url, warning)',
+                         default=[])
++    parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
++                        help='Increase verbosity')
+     args = parser.parse_args()
+     if not args.html and not args.json:
+         parser.error('at least one of --html or --json (or both) is required')
+@@ -1325,11 +1333,11 @@ def __main__():
+     if "url" not in args.disable:
+         print("Checking URL status")
+         loop = asyncio.get_event_loop()
+-        loop.run_until_complete(check_package_urls(packages))
++        loop.run_until_complete(check_package_urls(packages, verbose=args.verbose))
+     if "upstream" not in args.disable:
+         print("Getting latest versions ...")
+         loop = asyncio.get_event_loop()
+-        loop.run_until_complete(check_package_latest_version(packages))
++        loop.run_until_complete(check_package_latest_version(packages, verbose=args.verbose))
+     if "cve" not in args.disable and args.nvd_path:
+         print("Checking packages CVEs")
+         check_package_cves(args.nvd_path, packages)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
