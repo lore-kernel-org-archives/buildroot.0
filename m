@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3615BC3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:55:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B7FBC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:55:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 314647093E;
-	Mon, 19 May 2025 10:55:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7012F70939;
+	Mon, 19 May 2025 10:55:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8fUgLmUCm1XG; Mon, 19 May 2025 10:55:05 +0000 (UTC)
+ id RzWAtzxbzSws; Mon, 19 May 2025 10:55:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26ABD70935
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9534670948
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26ABD70935;
-	Mon, 19 May 2025 10:55:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9534670948;
+	Mon, 19 May 2025 10:55:08 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 211FDD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0EF94193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4773742440
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9AE9C40E3F
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8YcnJj95Zz4n for <buildroot@buildroot.org>;
+ id VPTVPdrhnIMW for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F9D240D4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C1EF4127D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F9D240D4F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C1EF4127D
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1DE3E82A2E; Mon, 19 May 2025 10:39:56 +0000 (UTC)
+ id 2A6DC8348A; Mon, 19 May 2025 10:39:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 22 Apr 2025 23:33:41 +0200
+Date: Tue, 22 Apr 2025 23:38:41 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3ea8757fa59c0c9112b16ec1b20eaaf24c9c9c34
-X-Git-Newrev: af34a630d0be0581043212e423cdbb0f4224e515
+X-Git-Oldrev: af34a630d0be0581043212e423cdbb0f4224e515
+X-Git-Newrev: 87d5d63983cb8fb967cebcf0c82b107efbb9506c
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103956.1DE3E82A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] Update for 2024.02.13
+Message-Id: <20250519103956.2A6DC8348A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] docs/website/news.html: Update
+ for 2024.02.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,73 +66,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=af34a630d0be0581043212e423cdbb0f4224e515
+commit: https://git.buildroot.net/buildroot/commit/?id=87d5d63983cb8fb967cebcf0c82b107efbb9506c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Colin Evrard <colin.evrard@mind.be>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit e687e3815f76c1c5ea9fb52b6558bedfe53ab117)
-[Arnout: drop Makefile changes]
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- CHANGES | 44 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ docs/website/news.html | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
-diff --git a/CHANGES b/CHANGES
-index 92c976fb97..3694c1d93f 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -680,6 +680,50 @@
-         #16036: android-tools version is too old
-         #16075: Cannot use linux kernel extensions from external tree..
- 
-+2024.02.13, released April 22nd, 2025
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 0f9d56dd83..305bb86418 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -13,7 +13,29 @@
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
+       <div class="timeline-heading">
+-	<h4 class="timeline-title">2024.11.3 released, 2024.11.x series EOL</h4>
++	<h4 class="timeline-title">2024.02.13 released, 2024.02.x series EOL</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>22 April 2025</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2024.02.13 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2024.02.12 release. See the
++	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2024.02.13/CHANGES">CHANGES</a>
++	  file for more details, read the
++	  <a href="https://lore.kernel.org/buildroot/4a1839ca-f072-4529-bbf7-1e47e8e9a9f2@rnout.be/T/#u">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2024.02.13.tar.xz">2024.02.13 release</a>.</p>
 +
-+	Important / security related fixes:
++	  <p>Notice that the 2024.02.x series is now end of life. Please migrate to
++	  the 2025.02.x series instead.</p>
++      </div>
++    </div>
++  </li>
 +
-+	- xserver_xorg-server & xwayland: CVE-2024-9632, CVE-2025-26594,
-+	    CVE-2025-26595, CVE-2025-26596, CVE-2025-26597,  CVE-2025-26598,
-+	    CVE-2025-26599, CVE-2025-26600, CVE-2025-26601.
-+	- exim: CVE-2025-30232.
-+	- mbedtls: CVE-2025-27809, CVE-2025-27810.
-+	- augeas: CVE-2025-2588.
-+	- libarchive: CVE-2024-57970, CVE-2025-1632, CVE-2025-25724.
-+	- libopenh264: CVE-2025-27091.
-+	- libmodsecurity: CVE-2025-27110.
-+	- tinyxml2: CVE-2024-50615.
-+	- libndp: CVE-2024-5564.
-+	- xwayland: CVE-2024-31080, CVE-2024-31081, CVE-2024-31083,
-+	    CVE-2024-9632, CVE-2025-26594, CVE-2025-26595,
-+	    CVE-2025-26596, CVE-2025-26597, CVE-2025-26598,
-+	    CVE-2025-26599, CVE-2025-26600, CVE-2025-26601.
-+	- libfreeglut: CVE-2024-24258, CVE-2024-24259.
-+
-+	Updated/fixed packages:
-+
-+	libsoup3, linux, apr, mali-driver,
-+	libcoap, python-fastapi, python-twisted, tor, linux-header,
-+	linux-tools, libmodsecurity
-+
-+	Test Improvements:
-+
-+	- linux-tools: selftests: Add path containing BPF binary.
-+	- testing: add git runtime test.
-+
-+	Infrastructure updates/fixes:
-+
-+	- DEVELOPERS: change arnout's address.
-+	- DEVELOPERS: add Dario Binacchi for ti-k3-boot-firmware.
-+	- support/download/svn: use 'svn info' whith LC_ALL=C.
-+	- dillo: Fix an issue related to _SITE url for make show-info.
-+	- kconfig: Handle backspace (^H) key.
-+	- pkg-stats: add -v/--verbose option
-+
-+	Build issues/problems solved for:
-+	glibc, mesa3d-demos.
-+
- 2024.02.12, released March 24st, 2025
- 
- 	Important / security related fixes.
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2024.11.4 released, 2024.11.x series EOL</h4>
+ 	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>22 April 2025</small></p>
+       </div>
+       <div class="timeline-body">
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
