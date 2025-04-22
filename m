@@ -4,84 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF1A1C369C2
-	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 12:53:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25794C369C2
+	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 13:11:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF8BC409EF;
-	Tue, 22 Apr 2025 12:53:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C57BA40B78;
+	Tue, 22 Apr 2025 13:11:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5yuW5Q4E0WFu; Tue, 22 Apr 2025 12:53:32 +0000 (UTC)
+ id ZNw3-2ywxKYm; Tue, 22 Apr 2025 13:11:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5EA51409A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF04240B70
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5EA51409A3;
-	Tue, 22 Apr 2025 12:53:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 47EE068
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 12:53:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF04240B70;
+	Tue, 22 Apr 2025 13:11:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9BB291BC
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 13:11:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3980D80C9D
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 12:53:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8D06840A64
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 13:11:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jhs66EV9bD0E for <buildroot@buildroot.org>;
- Tue, 22 Apr 2025 12:53:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 26AE780EC6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 26AE780EC6
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 26AE780EC6
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 12:53:28 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BC90C43989;
- Tue, 22 Apr 2025 12:53:25 +0000 (UTC)
-Date: Tue, 22 Apr 2025 14:53:24 +0200
-To: Thomas Perale <thomas.perale@mind.be>
-Message-ID: <20250422145324.01ae9635@windsurf>
-In-Reply-To: <bab05300-a70d-4f03-bb15-57bef52edac7@mind.be>
-References: <20250415195547.199428-1-thomas.perale@mind.be>
- <87tt6o3oxx.fsf@dell.be.48ers.dk>
- <065809af-e4b6-4bd8-9f53-49d39fab38af@rnout.be>
- <4b029329-2258-428d-80c9-315dbd6335be@essensium.com>
- <20250416215812.6a8ae1a5@windsurf>
- <b864a02f-c98a-48f5-863a-a7bd800809f6@mind.be>
- <20250416224034.3eb04598@windsurf>
- <221f0412-b320-4ade-8936-9ae8d941ebf7@mind.be>
- <20250418123959.3307e037@windsurf>
- <bab05300-a70d-4f03-bb15-57bef52edac7@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Z1fYCy5MPI1H for <buildroot@buildroot.org>;
+ Tue, 22 Apr 2025 13:11:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::631; helo=mail-pl1-x631.google.com;
+ envelope-from=festevam@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1AAD840AB6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AAD840AB6
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com
+ [IPv6:2607:f8b0:4864:20::631])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1AAD840AB6
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 13:11:04 +0000 (UTC)
+Received: by mail-pl1-x631.google.com with SMTP id
+ d9443c01a7336-2240b4de12bso74730265ad.2
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 06:11:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1745327463; x=1745932263;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8AkdqHzdJ44pyJtwS6EMcxEAQW6g4Gr+oMIAS3CTAvk=;
+ b=v5hlvLgd7zsEjagLuOIxFTljWbs8YCcTBK7XIjO6Kep3N4nsnI+DdDj90kEXA9iT0i
+ bWOcYN6SKjDM9YdAGcVgGN0gadkoQ8RriBccMt7dC1eUeAHGXP9HYC1If/ZAC5SxWPq3
+ ugYwerKabhT/aMHXiwR8REmmxpOvDuaUp9okq/p0ioRHkJkn3vdPQFngKSslaGYAGjT/
+ +e8n0fKHIUArfjgOdtz0pvUW55Rq5MCOsWpbSQ2rvjKzUFzbtVi/ctTrKq7osCvUIRZK
+ 5qW5gnkisj3kjv1uRWDWSqxcIW3SuynWQvhw5g49Z0iBdeVPIjiFsOXrolcIl+ivU6te
+ LAqA==
+X-Gm-Message-State: AOJu0YwVRJNnLFP2cPkOOPxOkiTGxO606JBSfwk3hTb6u0pxpxtb+G/t
+ JRejT/8KLgOESXYpNtccFwlkt9r4K9aElRxI5FSTYeajSYwfZH0vqQWxdw==
+X-Gm-Gg: ASbGncttZPBLI2KiHUoT4pAgcQRMomxruPZ14NNcLLk6GPuTUS5fwrz1yZSWMWZnCvG
+ qwjnyWJLLoxC9NXt7/NgSLEvjxUOpTcqYLMJWOYCzeclVmRmqEAi3tJ9hGTSZIy7WfyWM0OAh3u
+ TbQBwg7oA04uehQ0npa7B1YpO7iDE5X757PTxpOUxQ5bfhIZkUG24I8Kv0ctCz3DZR/Y1zxL9sB
+ 53TM0r+QNz3hxlenZyLoq9HwoO0ZIpkuzZgQa5TWKl9r4bYNLdq967U65A9MIK2fjgd6Tq/W60s
+ 4Zbxcbs2VfRSuE7HOxtJHs3xNU27weYIYmZfq/eRcxP8GPo8u/dQrQ==
+X-Google-Smtp-Source: AGHT+IHI6ccUR9R2fe3eWGXQlvAntRMyhKbQGUaVOqWej4RK3N14oykZlvX6/aSI/bCLbTWa40zY9w==
+X-Received: by 2002:a17:902:e847:b0:22c:36d1:7a49 with SMTP id
+ d9443c01a7336-22c53620609mr243963285ad.53.1745327463229; 
+ Tue, 22 Apr 2025 06:11:03 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:b78:b23c:5a7f:772d])
+ by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-22c50bdda51sm84940345ad.30.2025.04.22.06.11.01
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 22 Apr 2025 06:11:02 -0700 (PDT)
+From: Fabio Estevam <festevam@gmail.com>
+To: buildroot@buildroot.org
+Cc: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 22 Apr 2025 10:10:53 -0300
+Message-Id: <20250422131054.1115455-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgeefjeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepieejiedvfffhuedtjeffgeejgffffeetlefghfeivdehvddvuddvleffleethfffnecuffhomhgrihhnpeguvghpvghnuggvnhgthihtrhgrtghkrdhorhhgpdhsohhnrghthihpvgdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeipdhrtghpthhtohepthhhohhmrghsrdhpvghrrghlvgesmhhinhgurdgsvgdprhgtphhtthhopehth
- hhomhgrshdrphgvrhgrlhgvsegvshhsvghnshhiuhhmrdgtohhmpdhrtghpthhtoheprghrnhhouhhtsehrnhhouhhtrdgsvgdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegthhhrihhsthhirghnsegrphgvrhhtuhhrvgdruhhs
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1745326406;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=XJKx2liZ9mbQoYY7Kd7KfpxLh8dTRqNfvFyiRniH+DM=;
- b=Oc7LojiM9qsewu4KHuv315qm7AKLF78WJaxNIGgRKaR0vaRctcUUm+0k3kQ4jsxykpJ074
- G8TcccZVGtoJ1PChWW2YGZx8tTYtvDSq10ttIQalT8fvElIOEd/+u/xAkAZXpl+yDxX6/S
- zsGTAij8vPxRXTwQyA4TToN5odWkd4LAXW0BBf3sjhgmoR9ql6yDw5smoeICD3+ZWiKvwu
- NmT0YXcN6d4L+4c/kbB3m/m1Ia6xUWJcuQLJyUm5TWA+clUxGvNxe4aWWHS+t8Am2qw8LP
- p8LKLgFBYCuXG29tJXxOMv+5PD9l99+7iwyPwAlN4YGtJ+awrqEh2bnJBN6xtA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Oc7LojiM
-Subject: Re: [Buildroot] [PATCH 0/7] Add PURL support
+ d=gmail.com; s=20230601; t=1745327463; x=1745932263; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8AkdqHzdJ44pyJtwS6EMcxEAQW6g4Gr+oMIAS3CTAvk=;
+ b=Pa3ZkvcJ7MadpTezHP6AOIY0qXFjWMcppxi2Mk9i0lIS/xO603dsVNaRcqzIJ0h36y
+ bCmP/SOJC+SY0ddyZw8243Hq5uuSnIAu9dZNifxijTL2zqSCyFOh47BMzx6dwLBERW4Z
+ KucJDQIjs6j+hxqHGGfwvWVp3aXHcQGY0iJOLeeqm8q6eKy9t65WneJj1t1GjlZqCAuC
+ SaAHBPbNFiYHkygXGJoBKk36obXpm/3vKvWUJhIOtOG5GfSRK1qyoSVWPCaux7B0qlhH
+ mm/7G4OyAKHYK/ITQfTHcqV4XNqdqapFV/Ix7c39rxmpyjUjZjBzBXqlVL3vP57omN7S
+ jFWQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Pa3ZkvcJ
+Subject: [Buildroot] [PATCH 1/2] configs/warp7: Bump U-Boot and kernel
+ versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,52 +106,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Perale via buildroot <buildroot@buildroot.org>,
- Christian Stewart <christian@aperture.us>,
- Thomas Perale <thomas.perale@essensium.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+Bump U-Boot to 2025.04 and kernel to version 6.12.24.
 
-On Mon, 21 Apr 2025 22:19:19 +0200
-Thomas Perale <thomas.perale@mind.be> wrote:
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/warp7_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> > So I'm still not sure to understand your "DependencyTrack uses NVD
-> > annotation unfortunately". Could you clarify?  
-> 
-> The tool is called DependencyTrack (https://dependencytrack.org/), sorry 
-> if the name was misleading.
-
-OK.
-
-> It uses the annotation downloaded from NVD to internally do the
-> matching with the CPE ID.
-
-Sorry, but I'm not able to parse that. Could you explain?
-
-> Adding PURL definition the SBOM allows DependencyTrack to rely on 
-> https://ossindex.sonatype.org/ to match CVE to packages.
-
-OK.
-
-> My series is more about improving the SBOM contents with information 
-> that can be consumed by other software rather than improving
-> 'pkg-stats' right now. But, it could be used as a fallback for
-> packages without a CPE ID manually assigned.
-
-And so DependencyTrack doesn't use CPEs at all? Or uses either CPEs or
-PURLs, depending on the CVE?
-
-Thomas
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index 9b0e01d38a..68a87789f9 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -1,14 +1,14 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.24"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx7s-warp"
+@@ -23,7 +23,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="warp7"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
