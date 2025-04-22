@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCEE4C369C2
-	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 19:15:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DDD7C369C2
+	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 19:16:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A78A5607AB;
-	Tue, 22 Apr 2025 19:15:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CC4B81F8F;
+	Tue, 22 Apr 2025 19:16:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZNurcEvEWCvH; Tue, 22 Apr 2025 19:15:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QngVEaKnatPH; Tue, 22 Apr 2025 19:16:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBF4B60E62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C14481F8E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBF4B60E62;
-	Tue, 22 Apr 2025 19:15:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5050C19F
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:15:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C14481F8E;
+	Tue, 22 Apr 2025 19:16:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AB6091A0
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:16:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 35D2340F61
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:15:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9CB5040BFA
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:16:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ew9regjRSi3G for <buildroot@buildroot.org>;
- Tue, 22 Apr 2025 19:15:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82AB340259
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 82AB340259
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:15:45 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 78397860F5; Tue, 22 Apr 2025 19:15:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zXJrT3HWVxxE for <buildroot@buildroot.org>;
+ Tue, 22 Apr 2025 19:16:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C1C7840BF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1C7840BF4
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C1C7840BF4
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:16:13 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 7DF9319F5C6;
+ Tue, 22 Apr 2025 21:16:09 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 22 Apr 2025 21:16:09 +0200
+MIME-Version: 1.0
+Date: Tue, 22 Apr 2025 21:16:09 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 22 Apr 2025 21:06:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a6b702a3f6268cbdacfe6a86872d43d1ce375d27
-X-Git-Newrev: a5f0551d28304b7365bf96b2900fce7e93f1032f
-X-Patchwork-Hint: ignore
-Message-Id: <20250422191545.78397860F5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libtracefs: bump to version 1.8.2
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: buildroot@buildroot.org, Maxime Chevallier <maxime.chevallier@bootlin.com>
+In-Reply-To: <20250421202418.919598-1-giulio.benetti@benettiengineering.com>
+References: <20250421202418.919598-1-giulio.benetti@benettiengineering.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <a3187d66d4be6611d948c260fd80ec54@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1745349371;
+ bh=0RjjSe1ZOm4j3VGtZDND05mLQxwu2k1utrScBF9R+bg=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=pwWhMZ9AyWGxLZOPgXOEbsrxKZf/HkmGHTHbW6MRrYMFEnGBPS7bPROZBSkvnd9eF
+ qY0GSHVCLf09NvoG/pVrIzWTuI5/95zZarxASFVJtAjIvDjqcvgpKZaX3GQjTDhlcj
+ wA6sxsqzIa0toQqyq+cBkhnBfh1WAbc7BZeWJLN/7ua6BsrCQapBhOhdlEmZWekb4c
+ A9urPF1/R7hmTV6Q/HbqqvIkk3aUVv21o7aKPETK07crimxIC7X4Gqynh8T8fpVziX
+ o2/QBKfgGHeI9eBZjlexzL1I8o0ybvyHY+v2DTvyRM3gJddezu2ubDzoPU3kWLPUaX
+ v47c9x1MJEUqg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=pwWhMZ9A
+Subject: Re: [Buildroot] [PATCH] package/libtracefs: bump to version 1.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,48 +81,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5f0551d28304b7365bf96b2900fce7e93f1032f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 21/04/2025 22:24, Giulio Benetti wrote:
+> Release notes:
+> https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/tag/?h=libtracefs-1.8.2
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 
-Release notes:
-https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/tag/?h=libtracefs-1.8.2
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libtracefs/libtracefs.hash | 2 +-
- package/libtracefs/libtracefs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/libtracefs/libtracefs.hash b/package/libtracefs/libtracefs.hash
-index e728e6431f..17036c3f00 100644
---- a/package/libtracefs/libtracefs.hash
-+++ b/package/libtracefs/libtracefs.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  d295aa20d711c313a9e229dbd15ba14026f0c1a50d57ae8b0823cc561b23745f  libtracefs-1.8.1.tar.gz
-+sha256  255980e1da5648fbbc32777ed8457b485b2b96f3449674610b46d9c437271209  libtracefs-1.8.2.tar.gz
- sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
- sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSES/LGPL-2.1
-diff --git a/package/libtracefs/libtracefs.mk b/package/libtracefs/libtracefs.mk
-index 86baa5d9cd..d24763fa7d 100644
---- a/package/libtracefs/libtracefs.mk
-+++ b/package/libtracefs/libtracefs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTRACEFS_VERSION = 1.8.1
-+LIBTRACEFS_VERSION = 1.8.2
- LIBTRACEFS_SITE = https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot
- LIBTRACEFS_INSTALL_STAGING = YES
- LIBTRACEFS_LICENSE = GPL-2.0, LGPL-2.1
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
