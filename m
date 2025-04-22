@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58C8DC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B379AC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:54:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A7F0960EE1;
-	Mon, 19 May 2025 10:54:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D65C6707C7;
+	Mon, 19 May 2025 10:54:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Kbfku9HLKBqB; Mon, 19 May 2025 10:54:44 +0000 (UTC)
+ id TV7wrhjn5Hww; Mon, 19 May 2025 10:54:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C68ED707C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93AA5708EF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C68ED707C7;
-	Mon, 19 May 2025 10:54:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93AA5708EF;
+	Mon, 19 May 2025 10:54:46 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 12081E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 17A0BD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 18A6942429
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1EBED40E43
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HogxCiVG23nX for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:10 +0000 (UTC)
+ id N9N6CWl_Q08H for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC9AB4124A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C6624126B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BC9AB4124A
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7C6624126B
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B3D1F82A2E; Mon, 19 May 2025 10:39:54 +0000 (UTC)
+ id 792C082A2E; Mon, 19 May 2025 10:39:55 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 21 Apr 2025 17:38:18 +0200
+Date: Tue, 22 Apr 2025 20:53:46 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: dff7ead0453fc8f9f55067b48427c0ba88886310
-X-Git-Newrev: e1500712e32413dd694ca6e35dd445a27eaf06ff
+X-Git-Oldrev: 47232b4f621ea101b3de817e9b1eb753631bca45
+X-Git-Newrev: 12cd212b51f59a4d5f92e08ec94a3dd92aa0d99a
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103954.B3D1F82A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-botocore: bump
- to version 1.37.33
+Message-Id: <20250519103955.792C082A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/strace: bump version
+ to 6.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,62 +60,50 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6140931011138562202=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6140931011138562202==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=e1500712e32413dd694ca6e35dd445a27eaf06ff
+commit: https://git.buildroot.net/buildroot/commit/?id=12cd212b51f59a4d5f92e08ec94a3dd92aa0d99a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+Release notes:
+https://github.com/strace/strace/releases/tag/v6.14
+
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-botocore/python-botocore.hash | 4 ++--
- package/python-botocore/python-botocore.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/strace/strace.hash | 4 ++--
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-botocore/python-botocore.hash b/package/python-botocore/python-botocore.hash
-index 1b69f254aa..6ed1cc42c4 100644
---- a/package/python-botocore/python-botocore.hash
-+++ b/package/python-botocore/python-botocore.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/botocore/json
--md5  9d12679ec90f7e7185006dd0535595a6  botocore-1.36.3.tar.gz
--sha256  775b835e979da5c96548ed1a0b798101a145aec3cd46541d62e27dda5a94d7f8  botocore-1.36.3.tar.gz
-+md5  3819c8575d792c79bc1232174e249fae  botocore-1.37.33.tar.gz
-+sha256  09b213b0d0500040f85c7daee912ea767c724e43ed61909e624c803ff6925222  botocore-1.37.33.tar.gz
- # Locally computed sha256 checksums
- sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.txt
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  tests/unit/auth/aws4_testsuite/LICENSE
-diff --git a/package/python-botocore/python-botocore.mk b/package/python-botocore/python-botocore.mk
-index e000700c1e..d25e34eb69 100644
---- a/package/python-botocore/python-botocore.mk
-+++ b/package/python-botocore/python-botocore.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index 9ab5715e32..10de7e7563 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+-# https://strace.io/files/6.13/strace-6.13.tar.xz.asc
+-sha256  e209daf0ee038ca5adcc4c277e9273b4d51f46a2ff86da575d36742ac3508a17  strace-6.13.tar.xz
++# https://strace.io/files/6.14/strace-6.14.tar.xz.asc
++sha256  244f3b5c20a32854ca9b7ca7a3ee091dd3d4bd20933a171ecee8db486c77d3c9  strace-6.14.tar.xz
+ sha256  ca2a0994c57e48b16828008c80cdb626e471b6b59116a8443b2ce4e3c77ddc3b  COPYING
+ sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 7bf1c24c1a..ee0e7dcf4a 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_BOTOCORE_VERSION = 1.36.3
-+PYTHON_BOTOCORE_VERSION = 1.37.33
- PYTHON_BOTOCORE_SOURCE = botocore-$(PYTHON_BOTOCORE_VERSION).tar.gz
--PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/3a/61/69eb06a803c83e0da733b60b2bc65880c18ef2dee19ee10cf8732794a3c1
-+PYTHON_BOTOCORE_SITE = https://files.pythonhosted.org/packages/f4/1d/0c539ae261d2f8fe8b47c358b369ec58645bf0ea96b78825365e48675b67
- PYTHON_BOTOCORE_SETUP_TYPE = setuptools
- PYTHON_BOTOCORE_LICENSE = Apache-2.0
- PYTHON_BOTOCORE_LICENSE_FILES = LICENSE.txt tests/unit/auth/aws4_testsuite/LICENSE
-
---===============6140931011138562202==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-STRACE_VERSION = 6.13
++STRACE_VERSION = 6.14
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6140931011138562202==--
