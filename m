@@ -4,77 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0673C369C2
-	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 20:31:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69C5AC369C2
+	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 20:36:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2C7A480D54;
-	Tue, 22 Apr 2025 20:31:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1FE6580CB5;
+	Tue, 22 Apr 2025 20:36:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ahkO5DUKMoCL; Tue, 22 Apr 2025 20:31:46 +0000 (UTC)
+ id rxz8QeNyyihe; Tue, 22 Apr 2025 20:36:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43D2280D87
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 53DF682034
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43D2280D87;
-	Tue, 22 Apr 2025 20:31:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id DAB4B1A0
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 20:31:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 53DF682034;
+	Tue, 22 Apr 2025 20:36:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4610F19F
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 20:36:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C059540BC9
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 20:31:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2BD8682034
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 20:36:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ay0mQv0plSCe for <buildroot@buildroot.org>;
- Tue, 22 Apr 2025 20:31:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u35Fz7VbYXAD for <buildroot@buildroot.org>;
+ Tue, 22 Apr 2025 20:36:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5814740B8A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5814740B8A
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5814740B8A
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 20:31:42 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0D7171FCEB;
- Tue, 22 Apr 2025 20:31:39 +0000 (UTC)
-Date: Tue, 22 Apr 2025 22:31:38 +0200
-To: Adam Duskett <adam.duskett@amarulasolutions.com>
-Cc: buildroot@buildroot.org
-Message-ID: <20250422223138.59438863@windsurf>
-In-Reply-To: <20250422103424.3928-1-adam.duskett@amarulasolutions.com>
-References: <20250422103424.3928-1-adam.duskett@amarulasolutions.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 199B280CB5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 199B280CB5
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 199B280CB5
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 20:36:06 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6F3F843226;
+ Tue, 22 Apr 2025 20:36:03 +0000 (UTC)
+Date: Tue, 22 Apr 2025 22:36:01 +0200
+To: Neal Frager via buildroot <buildroot@buildroot.org>
+Cc: Neal Frager <neal.frager@amd.com>, ibai.erkiaga-elorza@amd.com,
+ luca.ceresoli@bootlin.com, brandon.maier@collins.com, ju.o@free.fr,
+ fabio.caccamo@amd.com, romain.naour@smile.fr, michal.simek@amd.com,
+ arnout@mind.be
+Message-ID: <20250422223601.1ca5077b@windsurf>
+In-Reply-To: <20250408114834.733285-1-neal.frager@amd.com>
+References: <20250408114834.733285-1-neal.frager@amd.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgeegieelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeeftdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnheptdeutdejtddvieefkeejveeivdejteffveekhfefkedtudduueejtdfguddtfeefnecuffhomhgrihhnpehmvghnuggvrhdrihhopdhgihhthhhusgdrtghomhdpohhpvghnthgvlhgvmhgvthhrhidrihhopdhgohhlrghnghdrohhrghdpohhpvghntggvnhhsuhhsrdhiohdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepr
- ggurghmrdguuhhskhgvthhtsegrmhgrrhhulhgrshholhhuthhiohhnshdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
+X-GND-Score: -51
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgeegjeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenogfuuhhsphgvtghtffhomhgrihhnucdlgeelmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgefhkeevhefhkefgkedtudejjedufefhleeitdehtdetgffftdffkefgleduteegnecuffhomhgrihhnpegrthhlrghsshhirghnrdhnvghtpdhgihhthhhusgdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedutddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoo
+ hhtrdhorhhgpdhrtghpthhtohepnhgvrghlrdhfrhgrghgvrhesrghmugdrtghomhdprhgtphhtthhopehisggrihdrvghrkhhirghgrgdqvghlohhriigrsegrmhgurdgtohhmpdhrtghpthhtoheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegsrhgrnhguohhnrdhmrghivghrsegtohhllhhinhhsrdgtohhmpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhrpdhrtghpthhtohepfhgrsghiohdrtggrtggtrghmohesrghmugdrtghomhdprhgtphhtthhopehrohhmrghinhdrnhgrohhurhesshhmihhlvgdrfhhr
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1745353900;
+ d=bootlin.com; s=gm1; t=1745354164;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=fIILWDBpQ4TP91eJPS0gxfsI2lItAld5oeoVV0i/iHQ=;
- b=enEIjpi2L8A1pfKM0dqdep81tMvlYS5zshWu7GncG6EIHdD5y44tT4fQbQuTwyHgZtR6ck
- BnDU3WrW+SIOy7MfxLxSLPE39IHk5gqLhf10jIRuLXGZH2cymio8o11piaFTmIC+YBfz4J
- 7dAnCQLKgoeFkDmH8UHnA6wHIq9f1bnMqvpsmATACLYCfEuMyfqblPh+0xAm3atmQzpf5P
- NWKnaLO5x1C7a4OFCWiuHhyID6St+j/VEG4u8RIIng6hSd/IMJiCFdPxekR/oZkWak/xRH
- YqwLTWX/Lo/9FfFLp/ur3GlYXmEoHgikZWwZeEgF/nopCTDHJSnxsqmo+9MFxw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=j8+L9koc9twKFZtXb04W7Jv1ws0Va4Cal68fsv8aPxA=;
+ b=ca7jNQ0WsUeLkEn4BvD/HecXktsK82Mwd3rutK7SHR0gimDq3c70yflbwcP4RQ7z2/MKn0
+ XfxkKpXk7O9oqoY+Q2980t19ZUL0r4an1kBsanLhuC06PnZvBo4WfSbYIWEvHzSXWO1yJO
+ ULkwYpbrMZVZgAAUNdviyeNGS0Quy+aGcQGF4lVmI3K0BSofw9WWPx6HmhUoENpzb2/I2o
+ CYqKTBlIHnhaiLG3GapEqwx72yv0JjA+lgPSTVA4VtVhlRCCfx3PFCE0hCUOySfNCr6Cof
+ 4U4mcl8hHCy93NDhbP2Dv655Crnn5cThbDVR+kh0JzYdYKi8xAmZQ9TwqYLWRQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=enEIjpi2
-Subject: Re: [Buildroot] [PATCH 1/1] package/mender-artifact: bump to
- version 4.1.0
+ header.s=gm1 header.b=ca7jNQ0W
+Subject: Re: [Buildroot] [PATCH v1 1/2] package/fpgautil: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,106 +95,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 22 Apr 2025 12:34:24 +0200
-Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
+Hello Neal,
 
-> Changelog:
-> https://docs.mender.io/release-information/release-notes-changelog/mender-artifact
-> 
-> License changes:
-> New:
->     Apache 2.0:
->         LICENSE: 2024 -> 2025
->         vendor/cloud.google.com/go/auth/LICENSE
->         vendor/cloud.google.com/go/auth/oauth2adapt/LICENSE
->         vendor/github.com/kylelemons/godebug/LICENSE
->         vendor/go.opentelemetry.io/otel/trace/LICENSE
->         vendor/go.opentelemetry.io/otel/LICENSE
->         vendor/go.opentelemetry.io/otel/metric/LICENSE
->         vendor/go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LICENSE
->         vendor/go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc/LICENSE
->         vendor/go.opentelemetry.io/auto/sdk/LICENSE
->         vendor/github.com/go-logr/logr/LICENSE
->         vendor/github.com/go-logr/stdr/LICENSE
-> 
->     BSD 2 clause:
->         vendor/github.com/pkg/browser/LICENSE
-> 
->     BSD 3 clause:
->         vendor/golang.org/x/sync/LICENSE
->         vendor/github.com/google/uuid/LICENSE
-> 
->     ISC:
->         vendor/github.com/decred/dcrd/dcrec/secp256k1/v4/LICENSE
-> 
->     MIT:
->         vendor/github.com/Azure/azure-sdk-for-go/sdk/internal/LICENSE.txt
->         vendor/github.com/Azure/azure-sdk-for-go/sdk/azidentity/LICENSE.txt
->         vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal/LICENSE.txt
->         vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys/LICENSE.txt
->         vendor/github.com/Azure/azure-sdk-for-go/sdk/azcore/LICENSE.txt
->         vendor/github.com/AzureAD/microsoft-authentication-library-for-go/LICENSE
->         vendor/github.com/goccy/go-json/LICENSE
->         vendor/github.com/golang-jwt/jwt/v5/LICENSE
->         vendor/github.com/lestrrat-go/iter/LICENSE
->         vendor/github.com/lestrrat-go/blackmagic/LICENSE
->         vendor/github.com/lestrrat-go/backoff/v2/LICENSE
->         vendor/github.com/lestrrat-go/httpcc/LICENSE
->         vendor/github.com/lestrrat-go/option/LICENSE
->         vendor/github.com/lestrrat-go/jwx/LICENSE
-> 
->     MPL-2.0:
->         vendor/github.com/felixge/httpsnoop/LICENSE.txt
-> 
-> Modified:
->     Apache 2.0:
->         vendor/github.com/mendersoftware/progressbar/LICENSE: 2021 -> 2025
-> 
->     BSD 3:
->         vendor/golang.org/x/net/LICENSE: Google INC -> Google LLC
->         vendor/golang.org/x/oauth2/LICENSE: Google INC -> Google LLC
->         vendor/golang.org/x/text/LICENSE: Google INC -> Google LLC
->         vendor/golang.org/x/crypto/LICENSE: Google INC -> Google LLC
->         vendor/golang.org/x/time/LICENSE: Google INC -> Google LLC
-> 
-> Removed:
-> 
->     Apache 2.0:
->         vendor/google.golang.org/appengine/LICENSE
->         vendor/cloud.google.com/go/compute/LICENSE
->         vendor/go.opencensus.io/LICENSE
->         vendor/github.com/golang/groupcache/LICENSE
-> 
->     BSD 3 Clause:
->         vendor/github.com/golang/protobuf/LICENSE
->         vendor/golang.org/x/crypto/LICENSE
->         vendor/golang.org/x/time/LICENSE
-> 
-> Tested with ./support/testing/run-tests tests.package.test_mender
-> 08:48:07 TestMenderSystemd                        Starting
-> 08:48:35 TestMenderSystemd                        Cleaning up
-> 08:48:35 TestMenderRW                             Starting
-> 08:48:46 TestMenderRW                             Cleaning up
-> 08:48:46 TestMenderRO                             Starting
-> 08:48:46 TestMenderRO                             Building
-> 08:55:02 TestMenderRO                             Building done
-> 08:55:13 TestMenderRO                             Cleaning up
-> ----------------------------------------------------------------------
-> Ran 3 tests in 425.930s
-> OK
->         
-> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-> ---
->  package/mender-artifact/mender-artifact.hash | 56 ++++++++++++++------
->  package/mender-artifact/mender-artifact.mk   | 44 +++++++++++----
->  2 files changed, 73 insertions(+), 27 deletions(-)
+On Tue, 8 Apr 2025 12:48:33 +0100
+Neal Frager via buildroot <buildroot@buildroot.org> wrote:
 
-Applied to master, thanks.
+> Add a new package to Buildroot called fpgautil which builds the Xilinx
+> fpgautil script which can be used for loading FPGA bitstreams on zynq, zynqmp
+> and versal products at run-time.  This is a handy application for loading
+> FPGA bitstreams and their corresponding device tree overlays.
+> 
+> An explanation of how this script can be used for each type of product can be
+> found on the wiki pages below.
+> 
+> https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841645/Solution+Zynq+PL+Programming+With+FPGA+Manager
+> https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841847/Solution+ZynqMP+PL+Programming
+> https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1188397412/Solution+Versal+PL+Programming
+> 
+> In addition, the source code for fpgautil can be found here:
+> https://github.com/Xilinx/meta-xilinx/blob/master/meta-xilinx-core/recipes-bsp/fpga-manager-script/files/fpgautil.c
+> 
+> The fpgautil script can be used hand in hand with the Versal Segmented
+> Configuration with the following example command for programming the pld.pdi
+> file to the Versal FPGA:
+> 
+> fpgautil -b /lib/firmware/<design-name>_pld.pdi -o /lib/firmware/<dtbo-name>.dtbo
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+
+Thanks for this new package.
+
+I think we should probably name this xilinx-fpgautil, because it's
+really very specific to Xilinx platforms if I understand correctly.
+
+
+> diff --git a/package/fpgautil/Config.in b/package/fpgautil/Config.in
+> new file mode 100644
+> index 0000000000..8a1f557f7e
+> --- /dev/null
+> +++ b/package/fpgautil/Config.in
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_FPGAUTIL
+> +	bool "fpgautil script"
+
+This should only contain the package name, i.e "fpgautil", or if we
+rename it "xilinx-fpgautil".
+
+> +FPGAUTIL_VERSION = xlnx-rel-v2024.2_update3
+> +FPGAUTIL_SITE = $(call github,Xilinx,meta-xilinx,$(FPGAUTIL_VERSION))
+
+I was going to suggest that we download only the source file, but that
+doesn't work because it doesn't contain the version in its file name.
+So we have to download the whole Yocto layer just to grab one source
+file. Sigh.
+
+What about using the vendor-agnostic OpenFPGALoader instead, packaged
+as package/openfpgaloader/ ?
+
+Best regards,
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
