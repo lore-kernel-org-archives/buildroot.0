@@ -4,49 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2118C369D1
-	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 21:47:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9E8AC369C2
+	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 21:48:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC7E640D0D;
-	Tue, 22 Apr 2025 21:47:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 725C140B6B;
+	Tue, 22 Apr 2025 21:48:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id osBZsPv1Y20u; Tue, 22 Apr 2025 21:47:29 +0000 (UTC)
+ id 5VAqidhCMAgQ; Tue, 22 Apr 2025 21:48:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 048E040CF7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A7CA40BF6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 048E040CF7;
-	Tue, 22 Apr 2025 21:47:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9A7CA40BF6;
+	Tue, 22 Apr 2025 21:48:42 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B65A31BC
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:47:23 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B7EDD1BC
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:48:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F00D24116C
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:47:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9E6544116C
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:48:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jvt2kvDhxVjB for <buildroot@buildroot.org>;
- Tue, 22 Apr 2025 21:47:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id ylGQaOJJQ-Xi for <buildroot@buildroot.org>;
+ Tue, 22 Apr 2025 21:48:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4AF1E411A7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4AF1E411A7
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:47:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3C304861A3; Tue, 22 Apr 2025 21:47:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 22 Apr 2025 23:46:45 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 17cdfb94a1f6944bfbab96b9c483e537d7b160a2
-X-Git-Newrev: 3154fd8ee1b51b245d63bbab06c71bf8185819a2
-X-Patchwork-Hint: ignore
-Message-Id: <20250422214720.3C304861A3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website/news.html: Update for
- 2025.02.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 29830401A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 29830401A2
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 29830401A2
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:48:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0775B1FCEB;
+ Tue, 22 Apr 2025 21:48:35 +0000 (UTC)
+Date: Tue, 22 Apr 2025 23:48:34 +0200
+To: Vincent Jardin <vjardin@free.fr>
+Cc: Vladimir Oltean <olteanv@gmail.com>, Ioana Ciornei
+ <ciorneiioana@gmail.com>, Brandon Maier <Brandon.Maier@collins.com>, Julien
+ Olivain <ju.o@free.fr>, buildroot@buildroot.org, Romain Naour
+ <romain.naour@smile.fr>, Akhilesh Nema <nemaakhilesh@gmail.com>
+Message-ID: <20250422234834.0f36b6a9@windsurf>
+In-Reply-To: <lsefn7ciqjh4vcjresnslswex7o4y67hyewwv324gqkmhaw5tx@s43mnee24je2>
+References: <20250328180427.3434693-1-olteanv@gmail.com>
+ <20250328180427.3434693-19-olteanv@gmail.com>
+ <7rnjce73dhujdnipfea5e2qg7z7g7moczlzbkzsrxzggse2rkb@lpmauc2r4qc6>
+ <20250331103956.tdwjd3xl7jaihse7@skbuf>
+ <lsefn7ciqjh4vcjresnslswex7o4y67hyewwv324gqkmhaw5tx@s43mnee24je2>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgeegkeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepjedvjedvgfffveetieffudegieevleeigfffteefhefhtefhueelfeekjefgfedvnecuffhomhgrihhnpehgihhthhhusgdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeekpdhrtghpthhtohepvhhjrghrughinhesfhhrvggvrdhfrhdprhgtphhtthhopeholhhtvggrnhhvsehgmhgrihhlrdgtohhmpdhrtghpthhtoheptghiohhrn
+ hgvihhiohgrnhgrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepuehrrghnughonhdrofgrihgvrhestgholhhlihhnshdrtghomhdprhgtphhtthhopehjuhdrohesfhhrvggvrdhfrhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehsmhhilhgvrdhfrhdprhgtphhtthhopehnvghmrggrkhhhihhlvghshhesghhmrghilhdrtghomh
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1745358516;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Hwp4lMGLBiBA95x6LkLfEtZ2tc410z6ckjWYy/ExQlk=;
+ b=i/bG6RMgEFaG/Txk1djFoBCiQUAFZXs5DE5dS2SArABNx8lK69ZF62QLh1UIPqWm9XgaG2
+ 6htwULv97zZRgPQaC2VJOT42xLPKIxMQtT85OK700kxr63unFpXay/PKJImctJvFtBRuls
+ WXbbj6IabP6ft0Zo8idIKbSE8t1MLf3frgR1yJSwgLGQfRRWkHMC2cXcaXtuVesLA+OnmO
+ ptbXmTTuuDixNRcQ2IMXSZcO3QlM3rI9x/erQjLsFYUFUtO+9p4YTA+IIjop0xaTte+PvO
+ en6yOS15+kMisxxIHZAHufW5mvNyXbG9ap6Qr7vP8PYS0Z3xXJHjLVngjGR7JQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=i/bG6RMg
+Subject: Re: [Buildroot] [PATCH v2 18/18] board/lx2160ardb: new platform
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,52 +92,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3154fd8ee1b51b245d63bbab06c71bf8185819a2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Vincent,
 
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
----
- docs/website/news.html | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+On Mon, 31 Mar 2025 23:11:41 +0200
+Vincent Jardin <vjardin@free.fr> wrote:
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 305bb86418..e9efd8ba07 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2025.02.01 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>22 April 2025</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2025.02.1 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2025.02 release. See the
-+	  <a href="https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02.1/CHANGES">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="https://lore.kernel.org/buildroot/60b8483c-b717-41ce-a406-bceb71c3a089@rnout.be/T/#u">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2025.02.1.tar.xz">2025.02.1 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+> Of course, I do understand NXP willingness to control theirs, but here
+> it is about Buildroot, not NXP's Flexbuild. I'd like to read the views
+> of Buildroot's maintainers since I am a novice with Buildroot.
+
+Of course, we do care about upstream, but we also want defconfigs that
+are "useful", which sometimes means we have to use vendor trees. For
+example all the configs/freescale_* configurations use the NXP vendor
+trees. On the other hand, the configs/imx_* configurations, sometimes
+for the same platforms, use upstream trees.
+
+In another case, for STM32MP platforms, Buildroot has defconfigs that
+use upstream trees, and a separate BR2_EXTERNAL
+(https://github.com/bootlin/buildroot-external-st) has defconfigs that
+use ST vendor trees, because some people want to use what's supported
+by the vendor, to get vendor's support.
+
+So I'm not shocked by Vlad's defconfig using NXP's vendor tree overall.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
