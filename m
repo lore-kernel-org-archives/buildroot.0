@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACBFEC369C2
-	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 19:04:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B3DEC369C2
+	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 19:04:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6403A81EDF;
-	Tue, 22 Apr 2025 19:04:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D4C4E8111E;
+	Tue, 22 Apr 2025 19:04:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2LOKxl1zOH6W; Tue, 22 Apr 2025 19:04:10 +0000 (UTC)
+ id OxPNQoQ-8uOb; Tue, 22 Apr 2025 19:04:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8727881EE0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D4D781EE2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8727881EE0;
-	Tue, 22 Apr 2025 19:04:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E072819F
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:04:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D4D781EE2;
+	Tue, 22 Apr 2025 19:04:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5CFE119F
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:04:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D1D6681EE2
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:04:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 42ED060F1B
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:04:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s4dQnnx_k4ec for <buildroot@buildroot.org>;
- Tue, 22 Apr 2025 19:04:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 241A08111E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 241A08111E
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:04:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14D6D860F7; Tue, 22 Apr 2025 19:04:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ICEiixzM5Yio for <buildroot@buildroot.org>;
+ Tue, 22 Apr 2025 19:04:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7A88560EF5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A88560EF5
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7A88560EF5
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 19:04:18 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 9484B780331;
+ Tue, 22 Apr 2025 21:04:15 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 22 Apr 2025 21:04:15 +0200
+MIME-Version: 1.0
+Date: Tue, 22 Apr 2025 21:04:15 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 22 Apr 2025 21:01:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 12cd212b51f59a4d5f92e08ec94a3dd92aa0d99a
-X-Git-Newrev: a6b702a3f6268cbdacfe6a86872d43d1ce375d27
-X-Patchwork-Hint: ignore
-Message-Id: <20250422190409.14D6D860F7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ustreamer: bump version to 6.36
+To: Kadambini Nema <kadambini.nema@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250422025138.781779-1-kadambini.nema@gmail.com>
+References: <20250422025138.781779-1-kadambini.nema@gmail.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <1d273eeb07f4a7a56372dc237aab8cc9@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1745348656;
+ bh=aEef4bbldc2TFbS5k+PpxUKX6jXmMjXoF8zrIqWmbVs=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=C8Mg3p3nM/SuLe18IFFio5n1eCO/9fxFbGUbhMYWgLSeSUJTHXHDJ6PK9UlrE4TxM
+ kVHUVj4NjNyj74HSyw3I2obUO7gtl3pYeEN4qC8fXqxsJFsqjN93EVMQEk4iv/fLej
+ jWh0qKOJ1e0g+mS098+sNkRXJIh2Ebg+YloYAxnVyJ9WH0avyW2aRJ7H/A0i/+SLeT
+ Oq6TmAH4s8zw78/66RMONYcVkSPHxnf2Q/Q/4mb7q3k5Vxza800Ow6Ogred4mswhLq
+ nFsGnrNxW053jIj8AQx/KASJuQmFivf1zp8pBTTt+wZ8A9t0nYy5DtofXxdBAU51RL
+ ecaz7b6J8ZeFQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=C8Mg3p3n
+Subject: Re: [Buildroot] [PATCH 1/1] package/ustreamer: bump version to 6.36
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,54 +81,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6b702a3f6268cbdacfe6a86872d43d1ce375d27
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 22/04/2025 04:51, Kadambini Nema wrote:
+> Changelog - https://github.com/pikvm/ustreamer/compare/v6.29...v6.36
+> 
+> Add host-pkgconf to dependencies.
+> https://github.com/pikvm/ustreamer/commit/4e3f873f0d8795eadbc70ff59933103b17fffbfd
+> 
+> Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 
-Changelog - https://github.com/pikvm/ustreamer/compare/v6.29...v6.36
-
-Add host-pkgconf to dependencies.
-https://github.com/pikvm/ustreamer/commit/4e3f873f0d8795eadbc70ff59933103b17fffbfd
-
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/ustreamer/ustreamer.hash | 2 +-
- package/ustreamer/ustreamer.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/ustreamer/ustreamer.hash b/package/ustreamer/ustreamer.hash
-index 02b317bc33..98d2d4b60a 100644
---- a/package/ustreamer/ustreamer.hash
-+++ b/package/ustreamer/ustreamer.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  34572c241f65866caf458fa1526eaf9510656412f34d41a54bcd7aae0ba55630  ustreamer-6.29.tar.gz
-+sha256  71aaba1427e8bb690500f1ae940aa64c3b3f7253750448c1331fad3b31500f3e  ustreamer-6.36.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/ustreamer/ustreamer.mk b/package/ustreamer/ustreamer.mk
-index 107f647f47..dd1369c121 100644
---- a/package/ustreamer/ustreamer.mk
-+++ b/package/ustreamer/ustreamer.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--USTREAMER_VERSION = 6.29
-+USTREAMER_VERSION = 6.36
- USTREAMER_SITE = $(call github,pikvm,ustreamer,v$(USTREAMER_VERSION))
- USTREAMER_LICENSE = GPL-3.0+
- USTREAMER_LICENSE_FILES = LICENSE
--USTREAMER_DEPENDENCIES = jpeg libevent libbsd
-+USTREAMER_DEPENDENCIES = jpeg libevent libbsd host-pkgconf
- 
- USTREAMER_MAKE_OPTS = \
- 	$(TARGET_CONFIGURE_OPTS) \
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
