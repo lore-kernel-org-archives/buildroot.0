@@ -1,52 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA81AC369C2
-	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 20:40:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34AC7C369C2
+	for <buildroot@archiver.kernel.org>; Tue, 22 Apr 2025 21:15:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F250C4062E;
-	Tue, 22 Apr 2025 20:40:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VyP-u3MMc3DH; Tue, 22 Apr 2025 20:40:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 82D4740645
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82D4740645;
-	Tue, 22 Apr 2025 20:40:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 782961CB
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 20:40:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 69BCC60FE0
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 20:40:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C025A6102F;
+	Tue, 22 Apr 2025 21:15:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RrX_7OxIiiv4 for <buildroot@buildroot.org>;
- Tue, 22 Apr 2025 20:40:39 +0000 (UTC)
+ id 1HbO9cmBM-iB; Tue, 22 Apr 2025 21:15:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2A2D61025
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A2A2D61025;
+	Tue, 22 Apr 2025 21:15:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C5FC319F
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:15:37 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B4F7340861
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:15:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2efvQN1mz6te for <buildroot@buildroot.org>;
+ Tue, 22 Apr 2025 21:15:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4062860753
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D394040CC4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4062860753
- for <buildroot@buildroot.org>; Tue, 22 Apr 2025 20:40:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D394040CC4
+ for <buildroot@buildroot.org>; Tue, 22 Apr 2025 21:15:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 27BA186159; Tue, 22 Apr 2025 20:40:39 +0000 (UTC)
+ id B9F718617B; Tue, 22 Apr 2025 21:15:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 22 Apr 2025 22:40:28 +0200
+Date: Tue, 22 Apr 2025 23:15:11 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 259af5589ccdd722295395d120875f4b8cd667cf
-X-Git-Newrev: 631ab85437d2a3a7291eae687da2f5c5af21caa4
+X-Git-Oldrev: 631ab85437d2a3a7291eae687da2f5c5af21caa4
+X-Git-Newrev: b59d64c50d3d8bd486ac72a4c71bc3a9dd08e420
 X-Patchwork-Hint: ignore
-Message-Id: <20250422204039.27BA186159@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mender-artifact: bump to version
- 4.1.0
+Message-Id: <20250422211536.B9F718617B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qoriq-mc-binary: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,320 +65,194 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=631ab85437d2a3a7291eae687da2f5c5af21caa4
+commit: https://git.buildroot.net/buildroot/commit/?id=b59d64c50d3d8bd486ac72a4c71bc3a9dd08e420
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://docs.mender.io/release-information/release-notes-changelog/mender-artifact
+Add a package which deploys the NXP MC (Management Complex) firmware
+to the target. This is necessary for NXP DPAA2 SoCs (LS1088A, LS2080A,
+LS2088A, LX2160A).
 
-License changes:
-New:
-    Apache 2.0:
-        LICENSE: 2024 -> 2025
-        vendor/cloud.google.com/go/auth/LICENSE
-        vendor/cloud.google.com/go/auth/oauth2adapt/LICENSE
-        vendor/github.com/kylelemons/godebug/LICENSE
-        vendor/go.opentelemetry.io/otel/trace/LICENSE
-        vendor/go.opentelemetry.io/otel/LICENSE
-        vendor/go.opentelemetry.io/otel/metric/LICENSE
-        vendor/go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LICENSE
-        vendor/go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc/LICENSE
-        vendor/go.opentelemetry.io/auto/sdk/LICENSE
-        vendor/github.com/go-logr/logr/LICENSE
-        vendor/github.com/go-logr/stdr/LICENSE
+The MC firmware is deployed by default to the $O/images/ folder, where
+it can be used by post-build scripts. Additionally, if
+BR2_PACKAGE_QORIQ_MC_BINARY_TARGET_INSTALL_PATH is specified and if the
+board mcinitcmd is written as such as to pick it up, it is optionally
+deployed to the filesystem.
 
-    BSD 2 clause:
-        vendor/github.com/pkg/browser/LICENSE
+The API exposed by the MC firmware respects backwards compatibility
+principles, which means that the latest firmware version can always be
+(and should always be) used on a platform, irrespective of the Linux,
+U-Boot, RCW and restool versions, even though the latest features might
+not be used by older API consumers.
 
-    BSD 3 clause:
-        vendor/golang.org/x/sync/LICENSE
-        vendor/github.com/google/uuid/LICENSE
+In terms of forwards compatibility, old MC firmware versions can be
+used as long as the qoriq-restool package is built with a
+MC_VERSION_COMPATIBLE variable (located in its Makefile, signifying
+"minimum compatible version") older than, or equal to it.
 
-    ISC:
-        vendor/github.com/decred/dcrd/dcrec/secp256k1/v4/LICENSE
+If the use of qoriq-restool is not desired (networking objects are
+statically created by the DPL), old MC firmware versions are supported
+by U-Boot and the Linux kernel with a limited feature set. Thus, it
+is still possible to an extent to use firmware versions older than
+MC_VERSION_COMPATIBLE.
 
-    MIT:
-        vendor/github.com/Azure/azure-sdk-for-go/sdk/internal/LICENSE.txt
-        vendor/github.com/Azure/azure-sdk-for-go/sdk/azidentity/LICENSE.txt
-        vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal/LICENSE.txt
-        vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys/LICENSE.txt
-        vendor/github.com/Azure/azure-sdk-for-go/sdk/azcore/LICENSE.txt
-        vendor/github.com/AzureAD/microsoft-authentication-library-for-go/LICENSE
-        vendor/github.com/goccy/go-json/LICENSE
-        vendor/github.com/golang-jwt/jwt/v5/LICENSE
-        vendor/github.com/lestrrat-go/iter/LICENSE
-        vendor/github.com/lestrrat-go/blackmagic/LICENSE
-        vendor/github.com/lestrrat-go/backoff/v2/LICENSE
-        vendor/github.com/lestrrat-go/httpcc/LICENSE
-        vendor/github.com/lestrrat-go/option/LICENSE
-        vendor/github.com/lestrrat-go/jwx/LICENSE
+According to the upstream maintainer, the latest MC firmware version
+is identified by the fact that it is always located at the HEAD of the
+"master" branch:
+https://lore.kernel.org/buildroot/482493f17e63d2b4cb285b50049ed8e6@free.fr/T/#m62c3ec04ba546ac9b0a194d13bc35fedeaa9deb0
+Currently, the latest MC firmware version is 10.39.0. This version
+should be in sync with the qoriq-mc-utils package.
 
-    MPL-2.0:
-        vendor/github.com/felixge/httpsnoop/LICENSE.txt
+At this stage, the latest lf-6.12.3-1.0.0 NXP BSP has qoriq-restool with
+an MC_VERSION_COMPATIBLE='10.32.0', which means that it supports this MC
+firmware version.
+https://github.com/nxp-qoriq/restool/blob/lf-6.12.3-1.0.0/Makefile#L23
 
-Modified:
-    Apache 2.0:
-        vendor/github.com/mendersoftware/progressbar/LICENSE: 2021 -> 2025
+Note that the MC firmware also used to be distributed through
+linux-firmware:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/tree/dpaa2/mc?h=20250311
+I don't know what was the reason for doing that, but it stopped being
+updated and the versions there are quite old.
 
-    BSD 3:
-        vendor/golang.org/x/net/LICENSE: Google INC -> Google LLC
-        vendor/golang.org/x/oauth2/LICENSE: Google INC -> Google LLC
-        vendor/golang.org/x/text/LICENSE: Google INC -> Google LLC
-        vendor/golang.org/x/crypto/LICENSE: Google INC -> Google LLC
-        vendor/golang.org/x/time/LICENSE: Google INC -> Google LLC
-
-Removed:
-
-    Apache 2.0:
-        vendor/google.golang.org/appengine/LICENSE
-        vendor/cloud.google.com/go/compute/LICENSE
-        vendor/go.opencensus.io/LICENSE
-        vendor/github.com/golang/groupcache/LICENSE
-
-    BSD 3 Clause:
-        vendor/github.com/golang/protobuf/LICENSE
-        vendor/golang.org/x/crypto/LICENSE
-        vendor/golang.org/x/time/LICENSE
-
-Tested with ./support/testing/run-tests tests.package.test_mender
-08:48:07 TestMenderSystemd                        Starting
-08:48:35 TestMenderSystemd                        Cleaning up
-08:48:35 TestMenderRW                             Starting
-08:48:46 TestMenderRW                             Cleaning up
-08:48:46 TestMenderRO                             Starting
-08:48:46 TestMenderRO                             Building
-08:55:02 TestMenderRO                             Building done
-08:55:13 TestMenderRO                             Cleaning up
-----------------------------------------------------------------------
-Ran 3 tests in 425.930s
-OK
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mender-artifact/mender-artifact.hash | 56 +++++++++++++++++++---------
- package/mender-artifact/mender-artifact.mk   | 44 +++++++++++++++++-----
- 2 files changed, 73 insertions(+), 27 deletions(-)
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/qoriq-mc-binary/Config.in            | 55 ++++++++++++++++++++++++++++
+ package/qoriq-mc-binary/qoriq-mc-binary.hash |  3 ++
+ package/qoriq-mc-binary/qoriq-mc-binary.mk   | 30 +++++++++++++++
+ 5 files changed, 90 insertions(+)
 
-diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
-index c4209f44a0..914c210b77 100644
---- a/package/mender-artifact/mender-artifact.hash
-+++ b/package/mender-artifact/mender-artifact.hash
-@@ -1,6 +1,6 @@
- # Locally computed:
--sha256  fc11754f12d9104fce5b62738739d07514b4bd975f5e87d411d4e381533a2c6d  mender-artifact-4.0.0-go2.tar.gz
--sha256  d4f369175698aa60b6e0a99413663af3212dc4c539de42ee8a9cda15d4ace40f  LIC_FILES_CHKSUM.sha256
-+sha256  d82cd2f802033d53f2e947ed8d9d6cdd7a036fadbd92a2696b72122bd2070039  mender-artifact-4.1.0-go2.tar.gz
-+sha256  a99c495576ecc6d6e137e471c515d38757179240ff6cc41bd481e29d3504f334  LIC_FILES_CHKSUM.sha256
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9cfdbcc662..9496feaaf1 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3388,6 +3388,7 @@ F:	configs/ts5500_defconfig
  
- # License hash extracted from LIC_FILES_CHKSUM.sha256 using the
- # following command:
-@@ -8,53 +8,60 @@ sha256  d4f369175698aa60b6e0a99413663af3212dc4c539de42ee8a9cda15d4ace40f  LIC_FI
- #     sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
+ N:	Vladimir Oltean <olteanv@gmail.com>
+ F:	package/qoriq-ddr-phy-binary/
++F:	package/qoriq-mc-binary/
  
- # Apache 2.0 licenses.
--sha256  d0f406b04e7901e6b4076bdf5fd20f9d7f04fc41681069fd8954413ac6295688  LICENSE
-+sha256  38791d93beae962b266e11ac888ea2af4f07578b272c2f9dcb05f54f32960a76  LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/minio/sha256-simd/LICENSE
--sha256  8f5d89b47d7a05a199b77b7e0f362dad391d451ebda4ef48ba11c50c071564c7  vendor/github.com/mendersoftware/progressbar/LICENSE
-+sha256  132fb47b89947cd5f98e380186bc412af5561c70669d37d3a83b36f03a0ddae5  vendor/github.com/mendersoftware/progressbar/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/genproto/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/genproto/googleapis/api/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/genproto/googleapis/rpc/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/grpc/LICENSE
--sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/appengine/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/kms/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/iam/LICENSE
--sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/compute/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/compute/metadata/LICENSE
--sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  vendor/go.opencensus.io/LICENSE
--sha256  73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68  vendor/github.com/golang/groupcache/LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/auth/LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/auth/oauth2adapt/LICENSE
- sha256  73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68  vendor/github.com/mendersoftware/openssl/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/googleapis/enterprise-certificate-proxy/LICENSE
- sha256  dd26a7abddd02e2d0aba97805b31f248ef7835d9e10da289b22e3b8ab78b324d  vendor/github.com/go-jose/go-jose/v3/json/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/go-jose/go-jose/v3/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/google/s2a-go/LICENSE.md
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/github.com/Keyfactor/signserver-go-client-sdk/LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/kylelemons/godebug/LICENSE
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/otel/trace/LICENSE
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/otel/LICENSE
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/otel/metric/LICENSE
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LICENSE
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc/LICENSE
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/go.opentelemetry.io/auto/sdk/LICENSE
-+sha256  b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  vendor/github.com/go-logr/logr/LICENSE
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/github.com/go-logr/stdr/LICENSE
- #
- # BSD 2 Clause licenses.
- sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
-+sha256  4801bb0c5d70b980b3e1f63d1d2df8d84fec22548e3d73f03a68df1fb808791f  vendor/github.com/pkg/browser/LICENSE
- #
- # BSD 3 Clause licenses.
- sha256  2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
- sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/sys/LICENSE
- sha256  0d9e582ee4bff57bf1189c9e514e6da7ce277f9cd3bc2d488b22fbb39a6d87cf  vendor/github.com/klauspost/compress/LICENSE
- sha256  75e1ca97a84a9da6051dee0114333388216f2c4a5a028296b882ff3d57274735  vendor/github.com/russross/blackfriday/v2/LICENSE.txt
--sha256  17b5d209ba8f9684257ecfcff87df6ceda6194143a8fbd074f29727cff6f0c40  vendor/github.com/google/go-cmp/LICENSE
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/net/LICENSE
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/oauth2/LICENSE
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/text/LICENSE
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/crypto/LICENSE
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/time/LICENSE
-+sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/net/LICENSE
-+sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/oauth2/LICENSE
-+sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/text/LICENSE
-+sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/crypto/LICENSE
-+sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/time/LICENSE
-+sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/sync/LICENSE
- sha256  110244b02140866ee37d17fa7449436a377ec3b85a481fbb208f4c87964382de  vendor/google.golang.org/api/LICENSE
- sha256  fc0a2f71df4e8f047902da53d1f85301be43e0f360fc167057a2d04658ed2ba9  vendor/google.golang.org/api/internal/third_party/uritemplates/LICENSE
- sha256  4835612df0098ca95f8e7d9e3bffcb02358d435dbb38057c844c99d7f725eb20  vendor/google.golang.org/protobuf/LICENSE
--sha256  8778a9fc1eaffb03ab873caae251df2d224f6b5502be8777d3cd573a4dd43903  vendor/github.com/golang/protobuf/LICENSE
- sha256  b95218cd9607855a6536384c0262922b30a0c2bf56e4ced790240f3a3bac4722  vendor/github.com/googleapis/gax-go/v2/LICENSE
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/crypto/LICENSE
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/time/LICENSE
- sha256  f69f157b0be75da373605dbc8bbf142e8924ee82d8f44f11bcaf351335bf98cf  vendor/github.com/klauspost/compress/internal/snapref/LICENSE
- sha256  701cbcc144a7c865b072f27547e66ddbf17ac44a3bd21f71149ace02518f107c  vendor/github.com/ulikunitz/xz/LICENSE
-+sha256  0a8d61ed3cbfd5312326e8126c31ce9c627a283adc99131b56896d29ada04b2d  vendor/github.com/google/uuid/LICENSE
- #
- # ISC licenses.
- sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
-+sha256  480be5fb1be03ff19fd71d863f453f16262e98d4e568f5bccfcb7aa3ccf8cf0d  vendor/github.com/decred/dcrd/dcrec/secp256k1/v4/LICENSE
- #
- # MIT licenses.
- sha256  f8e536c1c7b695810427095dc85f5f80d44ff7c10535e8a9486cf393e2599189  vendor/github.com/stretchr/testify/LICENSE
-@@ -70,6 +77,20 @@ sha256  22adc4abdece712a737573672f082fd61ac2b21df878efb87ffcff4354a07f26  vendor
- sha256  38049e50b486f5394e40b786388f4a006401996e46c7c1cd18925afe7c3b4e34  vendor/github.com/ryanuber/go-glob/LICENSE
- sha256  5c0476add4c38b55d0ed5ac11b85e00c38f26e1caee20dfe3ab58190103d1fbc  vendor/github.com/cenkalti/backoff/v3/LICENSE
- sha256  f566a9f97bacdaf00d9f21dd991e81dc11201c4e016c86b470799429a1c9a79c  vendor/github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt
-+sha256  646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2  vendor/github.com/Azure/azure-sdk-for-go/sdk/internal/LICENSE.txt
-+sha256  646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2  vendor/github.com/Azure/azure-sdk-for-go/sdk/azidentity/LICENSE.txt
-+sha256  a096a435e19bb6b631da46992c011a39be563e97ce7366879ad516c772904632  vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal/LICENSE.txt
-+sha256  a096a435e19bb6b631da46992c011a39be563e97ce7366879ad516c772904632  vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys/LICENSE.txt
-+sha256  646f8936b8ddcd14e13e578ff6857e368780b0d1a4f6066bee89211923a373e2  vendor/github.com/Azure/azure-sdk-for-go/sdk/azcore/LICENSE.txt
-+sha256  9906940f61b1f0b533fa7d99baf55178b2808fbe113ea51dfbfad8572ccd5f2b  vendor/github.com/AzureAD/microsoft-authentication-library-for-go/LICENSE
-+sha256  a707cd425201945d57500566c47c74dc9fb8cd02ef91b9a761abddeb2401e6a7  vendor/github.com/goccy/go-json/LICENSE
-+sha256  fe26ca41577b9b2b4448050a24b25e5753af66b5d5945d5d36094e7790bfcb2f  vendor/github.com/golang-jwt/jwt/v5/LICENSE
-+sha256  d5c8d4935994cfcfbc53d12fe756b28316858736d6e0a61acaff5fe4a84fca12  vendor/github.com/lestrrat-go/iter/LICENSE
-+sha256  b9b5b03485eb7446da7ecad22178664a53c7fcecceb74d69f905819a807d710e  vendor/github.com/lestrrat-go/blackmagic/LICENSE
-+sha256  e148deed982672627e875fe0cb03b9aa0d3e315e0f59992973c3c34dbcf5f322  vendor/github.com/lestrrat-go/backoff/v2/LICENSE
-+sha256  d5c8d4935994cfcfbc53d12fe756b28316858736d6e0a61acaff5fe4a84fca12  vendor/github.com/lestrrat-go/httpcc/LICENSE
-+sha256  b9b5b03485eb7446da7ecad22178664a53c7fcecceb74d69f905819a807d710e  vendor/github.com/lestrrat-go/option/LICENSE
-+sha256  0c4868a07b1c2dbb67c75767b4f1b2936c392d02ca2c7ee9827cac1a9d60ab1d  vendor/github.com/lestrrat-go/jwx/LICENSE
- #
- # MPL-2.0 licenses.
- sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/github.com/hashicorp/go-secure-stdlib/strutil/LICENSE
-@@ -82,3 +103,4 @@ sha256  d6b1a865f1c8c697d343bd4e0ce61025f91898486a1f00d727f32e8644af77d3  vendor
- sha256  1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5  vendor/github.com/hashicorp/go-sockaddr/LICENSE
- sha256  d6b1a865f1c8c697d343bd4e0ce61025f91898486a1f00d727f32e8644af77d3  vendor/github.com/hashicorp/vault/api/LICENSE
- sha256  a830016911a348a54e89bd54f2f8b0d8fffdeac20aecfba8e36ebbf38a03f5ff  vendor/github.com/hashicorp/go-multierror/LICENSE
-+sha256  8108e14b5cb2b6bcd51583d3849ef0c2b5c4de61758256c20308bc70d1775dbb  vendor/github.com/felixge/httpsnoop/LICENSE.txt
-diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
-index 4c6fa272ec..bcab91890a 100644
---- a/package/mender-artifact/mender-artifact.mk
-+++ b/package/mender-artifact/mender-artifact.mk
-@@ -4,9 +4,11 @@
- #
- ################################################################################
- 
--HOST_MENDER_ARTIFACT_VERSION = 4.0.0
-+HOST_MENDER_ARTIFACT_VERSION = 4.1.0
- HOST_MENDER_ARTIFACT_SITE = $(call github,mendersoftware,mender-artifact,$(HOST_MENDER_ARTIFACT_VERSION))
- HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, MPL-2.0
-+# Vendor license paths generated with:
-+#    awk '{print $2}' LIC_FILES_CHKSUM.sha256 | grep vendor
- HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	LICENSE \
- 	LIC_FILES_CHKSUM.sha256 \
-@@ -16,40 +18,47 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	vendor/google.golang.org/genproto/googleapis/api/LICENSE \
- 	vendor/google.golang.org/genproto/googleapis/rpc/LICENSE \
- 	vendor/google.golang.org/grpc/LICENSE \
--	vendor/google.golang.org/appengine/LICENSE \
- 	vendor/cloud.google.com/go/kms/LICENSE \
- 	vendor/cloud.google.com/go/iam/LICENSE \
--	vendor/cloud.google.com/go/compute/LICENSE \
- 	vendor/cloud.google.com/go/compute/metadata/LICENSE \
--	vendor/go.opencensus.io/LICENSE \
--	vendor/github.com/golang/groupcache/LICENSE \
-+	vendor/cloud.google.com/go/auth/LICENSE \
-+	vendor/cloud.google.com/go/auth/oauth2adapt/LICENSE \
- 	vendor/github.com/mendersoftware/openssl/LICENSE \
- 	vendor/github.com/googleapis/enterprise-certificate-proxy/LICENSE \
- 	vendor/github.com/go-jose/go-jose/v3/json/LICENSE \
- 	vendor/github.com/go-jose/go-jose/v3/LICENSE \
- 	vendor/github.com/google/s2a-go/LICENSE.md \
- 	vendor/github.com/Keyfactor/signserver-go-client-sdk/LICENSE \
-+	vendor/github.com/kylelemons/godebug/LICENSE \
-+	vendor/go.opentelemetry.io/otel/trace/LICENSE \
-+	vendor/go.opentelemetry.io/otel/LICENSE \
-+	vendor/go.opentelemetry.io/otel/metric/LICENSE \
-+	vendor/go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp/LICENSE \
-+	vendor/go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc/LICENSE \
-+	vendor/go.opentelemetry.io/auto/sdk/LICENSE \
-+	vendor/github.com/go-logr/logr/LICENSE \
-+	vendor/github.com/go-logr/stdr/LICENSE \
- 	vendor/github.com/pkg/errors/LICENSE \
-+	vendor/github.com/pkg/browser/LICENSE \
- 	vendor/github.com/pmezard/go-difflib/LICENSE \
- 	vendor/golang.org/x/sys/LICENSE \
- 	vendor/github.com/klauspost/compress/LICENSE \
- 	vendor/github.com/russross/blackfriday/v2/LICENSE.txt \
--	vendor/github.com/google/go-cmp/LICENSE \
- 	vendor/golang.org/x/net/LICENSE \
- 	vendor/golang.org/x/oauth2/LICENSE \
- 	vendor/golang.org/x/text/LICENSE \
- 	vendor/golang.org/x/crypto/LICENSE \
- 	vendor/golang.org/x/time/LICENSE \
-+	vendor/golang.org/x/sync/LICENSE \
- 	vendor/google.golang.org/api/LICENSE \
- 	vendor/google.golang.org/api/internal/third_party/uritemplates/LICENSE \
- 	vendor/google.golang.org/protobuf/LICENSE \
--	vendor/github.com/golang/protobuf/LICENSE \
- 	vendor/github.com/googleapis/gax-go/v2/LICENSE \
--	vendor/golang.org/x/crypto/LICENSE \
--	vendor/golang.org/x/time/LICENSE \
- 	vendor/github.com/klauspost/compress/internal/snapref/LICENSE \
- 	vendor/github.com/ulikunitz/xz/LICENSE \
-+	vendor/github.com/google/uuid/LICENSE \
- 	vendor/github.com/davecgh/go-spew/LICENSE \
-+	vendor/github.com/decred/dcrd/dcrec/secp256k1/v4/LICENSE \
- 	vendor/github.com/stretchr/testify/LICENSE \
- 	vendor/github.com/urfave/cli/LICENSE \
- 	vendor/github.com/sirupsen/logrus/LICENSE \
-@@ -63,6 +72,20 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	vendor/github.com/ryanuber/go-glob/LICENSE \
- 	vendor/github.com/cenkalti/backoff/v3/LICENSE \
- 	vendor/github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt \
-+	vendor/github.com/Azure/azure-sdk-for-go/sdk/internal/LICENSE.txt \
-+	vendor/github.com/Azure/azure-sdk-for-go/sdk/azidentity/LICENSE.txt \
-+	vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal/LICENSE.txt \
-+	vendor/github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys/LICENSE.txt \
-+	vendor/github.com/Azure/azure-sdk-for-go/sdk/azcore/LICENSE.txt \
-+	vendor/github.com/AzureAD/microsoft-authentication-library-for-go/LICENSE \
-+	vendor/github.com/goccy/go-json/LICENSE \
-+	vendor/github.com/golang-jwt/jwt/v5/LICENSE \
-+	vendor/github.com/lestrrat-go/iter/LICENSE \
-+	vendor/github.com/lestrrat-go/blackmagic/LICENSE \
-+	vendor/github.com/lestrrat-go/backoff/v2/LICENSE \
-+	vendor/github.com/lestrrat-go/httpcc/LICENSE \
-+	vendor/github.com/lestrrat-go/option/LICENSE \
-+	vendor/github.com/lestrrat-go/jwx/LICENSE \
- 	vendor/github.com/hashicorp/go-secure-stdlib/strutil/LICENSE \
- 	vendor/github.com/hashicorp/go-secure-stdlib/parseutil/LICENSE \
- 	vendor/github.com/hashicorp/errwrap/LICENSE \
-@@ -72,7 +95,8 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	vendor/github.com/hashicorp/go-retryablehttp/LICENSE \
- 	vendor/github.com/hashicorp/go-sockaddr/LICENSE \
- 	vendor/github.com/hashicorp/vault/api/LICENSE \
--	vendor/github.com/hashicorp/go-multierror/LICENSE
-+	vendor/github.com/hashicorp/go-multierror/LICENSE \
-+	vendor/github.com/felixge/httpsnoop/LICENSE.txt
- 
- HOST_MENDER_ARTIFACT_DEPENDENCIES = host-pkgconf host-openssl host-xz
- 
+ N:	Volkov Viacheslav <sv99@inbox.ru>
+ F:	package/v4l2grab/
+diff --git a/package/Config.in b/package/Config.in
+index 413d30174f..6b4011a2b5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -451,6 +451,7 @@ menu "Firmware"
+ 	source "package/qcom-db410c-firmware/Config.in"
+ 	source "package/qoriq-ddr-phy-binary/Config.in"
+ 	source "package/qoriq-fm-ucode/Config.in"
++	source "package/qoriq-mc-binary/Config.in"
+ 	source "package/rcw-smarc-sal28/Config.in"
+ 	source "package/rpi-firmware/Config.in"
+ 	source "package/sunxi-boards/Config.in"
+diff --git a/package/qoriq-mc-binary/Config.in b/package/qoriq-mc-binary/Config.in
+new file mode 100644
+index 0000000000..6008b6c456
+--- /dev/null
++++ b/package/qoriq-mc-binary/Config.in
+@@ -0,0 +1,55 @@
++config BR2_PACKAGE_QORIQ_MC_BINARY
++	bool "qoriq-mc-binary"
++	help
++	  The Management Complex (MC) is a key component of the
++	  networking subsystem named DPAA2 (Data Path Acceleration
++	  Architecture, second version) in some NXP Layerscape SoCs.
++
++	  The MC coprocessor runs a closed-source, NXP-supplied
++	  firmware image that simplifies and abstracts the allocation
++	  and configuration of the networking hardware primitives into
++	  DPAA2 "objects".
++
++	  https://github.com/nxp-qoriq/qoriq-mc-binary
++
++if BR2_PACKAGE_QORIQ_MC_BINARY
++choice
++	prompt "QorIQ MC firmware target"
++	help
++	  Select the target SoC for the QorIQ MC firmware.
++
++config BR2_PACKAGE_QORIQ_MC_BINARY_TARGET_LS1088A
++	bool "ls1088a"
++
++config BR2_PACKAGE_QORIQ_MC_BINARY_TARGET_LS2080A
++	bool "ls2080a"
++
++config BR2_PACKAGE_QORIQ_MC_BINARY_TARGET_LS2088A
++	bool "ls2088a"
++
++config BR2_PACKAGE_QORIQ_MC_BINARY_TARGET_LX2160A
++	bool "lx2160a"
++
++endchoice
++
++config BR2_QORIQ_MC_BINARY_PLATFORM
++	string
++	default "ls1088a" if BR2_PACKAGE_QORIQ_MC_BINARY_TARGET_LS1088A
++	default "ls2080a" if BR2_PACKAGE_QORIQ_MC_BINARY_TARGET_LS2080A
++	default "ls2088a" if BR2_PACKAGE_QORIQ_MC_BINARY_TARGET_LS2088A
++	default "lx2160a" if BR2_PACKAGE_QORIQ_MC_BINARY_TARGET_LX2160A
++
++config BR2_QORIQ_MC_BINARY_SUBDIR
++	string
++	default "lx216xa" if BR2_PACKAGE_QORIQ_MC_BINARY_TARGET_LX2160A
++	default BR2_QORIQ_MC_BINARY_PLATFORM
++
++config BR2_PACKAGE_QORIQ_MC_BINARY_TARGET_INSTALL_PATH
++	string "Path on target to install MC firmware"
++	help
++	  The MC firmware can optionally be deployed to the target
++	  filesystem at the path specified here. This is useful if
++	  the mcinitcmd U-Boot environment variable is configured
++	  to load the MC firmware from the filesystem.
++
++endif
+diff --git a/package/qoriq-mc-binary/qoriq-mc-binary.hash b/package/qoriq-mc-binary/qoriq-mc-binary.hash
+new file mode 100644
+index 0000000000..ccddff28cd
+--- /dev/null
++++ b/package/qoriq-mc-binary/qoriq-mc-binary.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  912ad8effd5c7b08eb277719b1e021b8b1fe4022dc3d961b419562e1d2d7a860  qoriq-mc-binary-10.39.0.tar.gz
++sha256  7733839334c6c820f01f76bff7ee9b60411effdcee8b6017e1d5bcacbdb432f6  LICENSE
+diff --git a/package/qoriq-mc-binary/qoriq-mc-binary.mk b/package/qoriq-mc-binary/qoriq-mc-binary.mk
+new file mode 100644
+index 0000000000..68f00eda20
+--- /dev/null
++++ b/package/qoriq-mc-binary/qoriq-mc-binary.mk
+@@ -0,0 +1,30 @@
++################################################################################
++#
++# qoriq-mc-binary
++#
++################################################################################
++
++QORIQ_MC_BINARY_VERSION = 10.39.0
++QORIQ_MC_BINARY_SITE = $(call github,nxp-qoriq,qoriq-mc-binary,mc_release_$(QORIQ_MC_BINARY_VERSION))
++QORIQ_MC_BINARY_LICENSE = NXP Binary EULA
++QORIQ_MC_BINARY_LICENSE_FILES = LICENSE
++QORIQ_MC_BINARY_INSTALL_IMAGES = YES
++
++QORIQ_MC_BINARY_PLATFORM = $(call qstrip,$(BR2_QORIQ_MC_BINARY_PLATFORM))
++QORIQ_MC_BINARY_SUBDIR = $(call qstrip,$(BR2_QORIQ_MC_BINARY_SUBDIR))
++QORIQ_MC_BINARY_BIN = mc_$(QORIQ_MC_BINARY_PLATFORM)_$(QORIQ_MC_BINARY_VERSION).itb
++QORIQ_MC_BINARY_INSTALL_PATH = $(call qstrip,$(BR2_PACKAGE_QORIQ_MC_BINARY_TARGET_INSTALL_PATH))
++
++ifeq ($(QORIQ_MC_BINARY_TARGET_INSTALL_PATH),)
++QORIQ_MC_BINARY_INSTALL_TARGET = NO
++endif
++
++define QORIQ_MC_BINARY_INSTALL_IMAGES_CMDS
++	$(INSTALL) -D $(@D)/$(QORIQ_MC_BINARY_SUBDIR)/$(QORIQ_MC_BINARY_BIN) $(BINARIES_DIR)/mc.itb
++endef
++
++define QORIQ_MC_BINARY_INSTALL_TARGET_CMDS
++	$(INSTALL) -D $(@D)/$(QORIQ_MC_BINARY_SUBDIR)/$(QORIQ_MC_BINARY_BIN) $(TARGET_DIR)/$(QORIQ_MC_BINARY_INSTALL_PATH)/mc.itb
++endef
++
++$(eval $(generic-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
