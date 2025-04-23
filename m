@@ -1,53 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 234F5C369D7
-	for <buildroot@archiver.kernel.org>; Wed, 23 Apr 2025 20:09:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACE3EC369CB
+	for <buildroot@archiver.kernel.org>; Wed, 23 Apr 2025 20:10:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A64E583716;
-	Wed, 23 Apr 2025 20:09:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 467064123B;
+	Wed, 23 Apr 2025 20:10:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 07bMAqbswi1o; Wed, 23 Apr 2025 20:09:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uEcIt95eBiVi; Wed, 23 Apr 2025 20:10:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8E9FB836F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6804240E1F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E9FB836F1;
-	Wed, 23 Apr 2025 20:09:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id EAA462A6
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:09:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6804240E1F;
+	Wed, 23 Apr 2025 20:10:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E32BE19F
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:10:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D0DF9836D5
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:09:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C94A0836FE
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:10:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id acxYLFejSuRq for <buildroot@buildroot.org>;
- Wed, 23 Apr 2025 20:09:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFF5283440
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EFF5283440
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:09:25 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C55EA86266; Wed, 23 Apr 2025 20:09:25 +0000 (UTC)
+ id MYMYyIahZgDp for <buildroot@buildroot.org>;
+ Wed, 23 Apr 2025 20:10:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 24B60836F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24B60836F1
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 24B60836F1
+ for <buildroot@busybox.net>; Wed, 23 Apr 2025 20:10:09 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 4DC672003D6;
+ Wed, 23 Apr 2025 22:10:05 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 23 Apr 2025 22:10:05 +0200
+MIME-Version: 1.0
+Date: Wed, 23 Apr 2025 22:10:05 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Wed, 23 Apr 2025 21:31:20 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3150b0abc407e4ae8a5dc093f2692afaa6582e1c
-X-Git-Newrev: e42da630d0c1f3aca8ecc6d0d35a777f202270ed
-X-Patchwork-Hint: ignore
-Message-Id: <20250423200925.C55EA86266@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/olimex_a20_olinuxino_lime*: bump
- Linux and U-Boot
+To: Francois Perrad <francois.perrad@gadz.org>
+Cc: buildroot@busybox.net
+In-Reply-To: <20250423082506.1879122-1-francois.perrad@gadz.org>
+References: <20250423082506.1879122-1-francois.perrad@gadz.org>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <3194a0545013948eb93b533dda73385a@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1745439006;
+ bh=sqvRjiUj4n9bpGeD8hwOxaxsymfxw7gr6vmq38F4AeM=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=KkE2E3rP5Pl77KhqMvkQJK7Kn1iHihPA7gl6iI8ZcBpij3rFGd9ke6CHTGYwTb/FK
+ B4hBlCH0Q3sN5A/RBIzclOMCaVn7XKzsOhpjECIX97lvMQ0sgw85TfkqueoGt843ez
+ WGpCNqoMcKMNz65OrclotwrdaRVP9jdZOPFuDFqV/08mveocRAhyecgmCG5XGiVQd7
+ paSw2ynYuwbnhU+XYoSiQquktBkqOJt7YjlJjyIbbA3zQIJJqqxr8B7gPjQR1xUsWF
+ PZDGadPOv7puLUsd6cI6cw1LiZC+xJGzLqxxXAOpHoj//slXSaLCgwJ4hDF92npM5l
+ rEHR0Co3ZWSHw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=KkE2E3rP
+Subject: Re: [Buildroot] [PATCH 1/2] configs/olimex_a20_olinuxino_lime*:
+ switch to Bootlin glibc stable toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,84 +82,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e42da630d0c1f3aca8ecc6d0d35a777f202270ed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 23/04/2025 10:25, Francois Perrad via buildroot wrote:
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- board/olimex/a20_olinuxino/patches/linux/linux.hash | 2 +-
- board/olimex/a20_olinuxino/patches/uboot/uboot.hash | 2 +-
- configs/olimex_a20_olinuxino_lime2_defconfig        | 4 ++--
- configs/olimex_a20_olinuxino_lime_defconfig         | 4 ++--
- 4 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/board/olimex/a20_olinuxino/patches/linux/linux.hash b/board/olimex/a20_olinuxino/patches/linux/linux.hash
-index 0bc60586f5..023d244994 100644
---- a/board/olimex/a20_olinuxino/patches/linux/linux.hash
-+++ b/board/olimex/a20_olinuxino/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  9c6305567b75d99514cde6eb9de39973f3d5c857a75bd9dcdfca57041f8d4f34  linux-6.6.69.tar.xz
-+sha256  49e3ad7423e40735faada0cd39665c071d47efd84ec3548acf119c9704f13e68  linux-6.6.86.tar.xz
-diff --git a/board/olimex/a20_olinuxino/patches/uboot/uboot.hash b/board/olimex/a20_olinuxino/patches/uboot/uboot.hash
-index 2f55c44ba2..ef267a2cb2 100644
---- a/board/olimex/a20_olinuxino/patches/uboot/uboot.hash
-+++ b/board/olimex/a20_olinuxino/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
-+sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index 0d54e6ca98..9d22683ab8 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -14,7 +14,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.69"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.86"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -28,7 +28,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 05d311ad4e..b3a5fdf4e4 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -14,7 +14,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.69"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.86"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -28,7 +28,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
