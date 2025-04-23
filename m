@@ -1,80 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C37DC369CB
-	for <buildroot@archiver.kernel.org>; Wed, 23 Apr 2025 20:50:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 696B1C369CB
+	for <buildroot@archiver.kernel.org>; Wed, 23 Apr 2025 21:37:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2C29760C34;
-	Wed, 23 Apr 2025 20:50:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CB7CB410E6;
+	Wed, 23 Apr 2025 21:37:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mzep5xPxMlg7; Wed, 23 Apr 2025 20:50:33 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fPRgz2-zID8X; Wed, 23 Apr 2025 21:37:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4201B60870
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7F78410BE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4201B60870;
-	Wed, 23 Apr 2025 20:50:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7F78410BE;
+	Wed, 23 Apr 2025 21:37:34 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9D91319F
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:50:31 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 78DF719F
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 21:37:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F48660870
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:50:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6896C60722
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 21:37:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7Y9Cp52smi6Z for <buildroot@buildroot.org>;
- Wed, 23 Apr 2025 20:50:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 8-bXIQ1c8X-k for <buildroot@buildroot.org>;
+ Wed, 23 Apr 2025 21:37:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 34113607AB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34113607AB
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 34113607AB
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:50:29 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B0E1B441B2;
- Wed, 23 Apr 2025 20:50:26 +0000 (UTC)
-Date: Wed, 23 Apr 2025 22:50:25 +0200
-To: Guillaume Chaye <guillaume.chaye@zeetim.com>
-Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Julien Olivain <ju.o@free.fr>
-Message-ID: <20250423225025.21b3125f@windsurf>
-In-Reply-To: <20250325131136.572799-1-guillaume.chaye@zeetim.com>
-References: <20250325131136.572799-1-guillaume.chaye@zeetim.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgeejiedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepjedvjedvgfffveetieffudegieevleeigfffteefhefhtefhueelfeekjefgfedvnecuffhomhgrihhnpehgihhthhhusgdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegpdhrtghpthhtohepghhuihhllhgruhhmvgdrtghhrgihvgesiigvvghtihhmrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhot
- hdrohhrghdprhgtphhtthhopegvrhhitgdrlhgvrdgsihhhrghnrdguvghvsehfrhgvvgdrfhhrpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhr
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1745441427;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=lHmeeu3DRj0xBrL4yc/kX7qQaAQYlsQeZarIfUG/qJM=;
- b=SgEjNPRGZjnExTedve95L1YD55AThMczKGV5fHI0NAIFduz5Nf/zHUaP+xVmw7viGPaDiA
- uRbSt49ol0hd6MNK8xFwouUf1dqvsCZ+ivWFjhctdynxPjUaq9/eGXwuR7WB4hgkwHS3Dt
- Gt52r4o6j6EdApxX7zZTltVge8hHaIwoXv2+ZZrDmCr6IgGSXzIl5IEzEcWc0puNgzvjYg
- WClrlQKsllKKS/defEoWEmGXtbuDSgOw1fE4tp+WIPmRuGeXTqJlXISUjlfces84h87toT
- nkmcXGKJOuCyw3zdpopOqZhPjhdOzhEn2XMUQG2izWOx2nTGxBKcJLtA+zJ2/w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=SgEjNPRG
-Subject: Re: [Buildroot] [PATCH 1/1] package/sane-airscan: add new package.
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72D40606E9
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 72D40606E9
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 21:37:32 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 243AC86250; Wed, 23 Apr 2025 21:37:32 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 23 Apr 2025 23:36:55 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f78280bf262ceb1c1abbdade9de77fcc4add74ae
+X-Git-Newrev: d12d1a7f5ec00ef0f42855bb6edd04e8a95edce8
+X-Patchwork-Hint: ignore
+Message-Id: <20250423213732.243AC86250@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libcamera: fix crash on Rockchip
+ with kernels before 6.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,97 +60,149 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Guillaume,
+commit: https://git.buildroot.net/buildroot/commit/?id=d12d1a7f5ec00ef0f42855bb6edd04e8a95edce8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I have applied your patch, after doing a few fixes. See below.
+libcamera migrated to use an ioctl for detecting frame sizes which is
+only available in kernels 6.4 and later. If it doesn't exist, default
+frame sizes are used. However the min and max resolutions supported by
+the pipeline weren't initialized for kernels where that ioctl isn't
+available and ended up creating invalid configuration that later
+crashed.
 
-On Tue, 25 Mar 2025 09:11:36 -0400
-Guillaume Chaye <guillaume.chaye@zeetim.com> wrote:
+The introducing commit was part of the v0.4.0 release.
 
-> Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...amera-rkisp1-Eliminate-hard-coded-resizer.patch | 113 +++++++++++++++++++++
+ 1 file changed, 113 insertions(+)
 
-First, I have changed the commit title to:
-
-	package/sane-airscan: new package
-
-which is our canonical commit title when new packages are introduced.
-Also no final dot at the end of the commit title.
-
-
-> diff --git a/package/sane-airscan/Config.in b/package/sane-airscan/Config.in
-> new file mode 100644
-> index 0000000000..4f4a0ac7cc
-> --- /dev/null
-> +++ b/package/sane-airscan/Config.in
-> @@ -0,0 +1,20 @@
-> +config BR2_PACKAGE_SANE_AIRSCAN
-> +	bool "sane-airscan"
-> +	select BR2_PACKAGE_DBUS
-> +	select BR2_PACKAGE_SANE_BACKENDS
-> +	select BR2_PACKAGE_AVAHI
-> +	select BR2_PACKAGE_GNUTLS
-> +	select BR2_PACKAGE_LIBXML2
-> +	select BR2_PACKAGE_JPEG
-> +	select BR2_PACKAGE_LIBPNG
-> +	select BR2_PACKAGE_TIFF
-
-I've sorted alphabetically. Also, I added a comment on dbus dependency,
-because it wasn't clear why it was needed, and I selected
-BR2_PACKAGE_AVAHI_DAEMON which is needed to get the avahi-client
-library, which in turn is a requirement for sane-airscan.
-
-> +
-> +	help
-> +	  SANE backend for AirScan (eSCL) and WSD document scanners
-> +
-> +	  https://github.com/alexpevzner/sane-airscan
-
-This URL should be the last line of the help text, so I fixed that.
-
-> +
-> +	  Similar to how most modern network printers support
-> +	  "driverless" printing, using the universal vendor-neutral
-> +	  printing protocol, many modern network scanners and MFPs
-> +	  support "driverless" scanning.
-> diff --git a/package/sane-airscan/sane-airscan.mk b/package/sane-airscan/sane-airscan.mk
-> new file mode 100644
-> index 0000000000..d5d86d9145
-> --- /dev/null
-> +++ b/package/sane-airscan/sane-airscan.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# sane-airscan
-> +#
-> +################################################################################
-> +
-> +SANE_AIRSCAN_VERSION = 0.99.33
-> +SANE_AIRSCAN_SITE = $(call github,alexpevzner,sane-airscan,$(SANE_AIRSCAN_VERSION))
-> +SANE_AIRSCAN_DEPENDENCIES=  dbus sane-backends avahi gnutls libxml2 jpeg libpng tiff
-
-I sorted this alphabetically, and dropped dbus, which isn't a build
-time dependency of sane-airscan. Enabling dbus is needed to get avahi
-to build avahi-client, but that's avahi's business.
-
-> +SANE_AIRSCAN_LICENSE = GPLv2
-
-GPLv2 isn't a valid license code in Buildroot, it's GPL-2.0. But the
-license is actually GPL-2.0+, and with some exception, so I changed to:
-
-SANE_AIRSCAN_LICENSE = GPL-2.0+-with-exception
-
-and applied. Thanks for your contribution!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/libcamera/0002-Revert-libcamera-rkisp1-Eliminate-hard-coded-resizer.patch b/package/libcamera/0002-Revert-libcamera-rkisp1-Eliminate-hard-coded-resizer.patch
+new file mode 100644
+index 0000000000..062736be77
+--- /dev/null
++++ b/package/libcamera/0002-Revert-libcamera-rkisp1-Eliminate-hard-coded-resizer.patch
+@@ -0,0 +1,113 @@
++From 6e24360d3fc91cbeecb4f5cf432cd194bc098618 Mon Sep 17 00:00:00 2001
++From: Quentin Schulz <quentin.schulz@cherry.de>
++Date: Thu, 3 Apr 2025 20:09:00 +0200
++Subject: [PATCH] Revert "libcamera: rkisp1: Eliminate hard-coded resizer
++ limits"
++
++This reverts commit e85c7ddd38ce8456ab01c2a73baf9e788f6a462e.
++
++Linux kernel predating 6.4 (specifically commit 7cfb35d3a800 ("media:
++rkisp1: Implement ENUM_FRAMESIZES") do not have the ioctl in rkisp1
++driver required to dynamically query the resizer limits.
++
++Because of that, maxResolution and minResolution are both {0, 0}
++(default value for Size objects) which means filterSensorResolution()
++will create an entry for the sensor in sensorSizesMap_ but because the
++sensor resolution cannot fit inside the min and max resolution of the
++rkisp1, no size is put into this entry in sensorSizesMap_.
++On the next call to filterSensorResolution(),
++sensorSizesMap_.find(sensor) will return the entry but when attempting
++to call back() on iter->second, it'll trigger an assert because the size
++array is empty.
++
++Linux kernel 6.1 is supported until December 2027, so it seems premature
++to get rid of those hard-coded resizer limits before this happens.
++
++Let's restore the hard-coded resizer limits as fallbacks, actual limits
++are still queried from the driver on recent enough kernels.
++
++Fixes: 761545407c76 ("pipeline: rkisp1: Filter out sensor sizes not supported by the pipeline")
++Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
++Reviewed-by: Jacopo Mondi <jacopo.mondi@ideasonboard.com>
++Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
++Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
++Upstream: https://git.libcamera.org/libcamera/libcamera.git/commit/?id=6e24360d3fc91cbeecb4f5cf432cd194bc098618
++Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
++---
++ src/libcamera/pipeline/rkisp1/rkisp1_path.cpp | 21 +++++++++++++------
++ src/libcamera/pipeline/rkisp1/rkisp1_path.h   |  3 ++-
++ 2 files changed, 17 insertions(+), 7 deletions(-)
++
++diff --git a/src/libcamera/pipeline/rkisp1/rkisp1_path.cpp b/src/libcamera/pipeline/rkisp1/rkisp1_path.cpp
++index eee5b09e..64018dc5 100644
++--- a/src/libcamera/pipeline/rkisp1/rkisp1_path.cpp
+++++ b/src/libcamera/pipeline/rkisp1/rkisp1_path.cpp
++@@ -54,8 +54,11 @@ const std::map<PixelFormat, uint32_t> formatToMediaBus = {
++ 
++ } /* namespace */
++ 
++-RkISP1Path::RkISP1Path(const char *name, const Span<const PixelFormat> &formats)
++-	: name_(name), running_(false), formats_(formats), link_(nullptr)
+++RkISP1Path::RkISP1Path(const char *name, const Span<const PixelFormat> &formats,
+++		       const Size &minResolution, const Size &maxResolution)
+++	: name_(name), running_(false), formats_(formats),
+++	  minResolution_(minResolution), maxResolution_(maxResolution),
+++	  link_(nullptr)
++ {
++ }
++ 
++@@ -517,10 +520,12 @@ void RkISP1Path::stop()
++ }
++ 
++ /*
++- * \todo Remove the hardcoded formats once all users will have migrated to a
++- * recent enough kernel.
+++ * \todo Remove the hardcoded resolutions and formats once kernels older than
+++ * v6.4 will stop receiving LTS support (scheduled for December 2027 for v6.1).
++  */
++ namespace {
+++constexpr Size RKISP1_RSZ_MP_SRC_MIN{ 32, 16 };
+++constexpr Size RKISP1_RSZ_MP_SRC_MAX{ 4416, 3312 };
++ constexpr std::array<PixelFormat, 18> RKISP1_RSZ_MP_FORMATS{
++ 	formats::YUYV,
++ 	formats::NV16,
++@@ -542,6 +547,8 @@ constexpr std::array<PixelFormat, 18> RKISP1_RSZ_MP_FORMATS{
++ 	formats::SRGGB12,
++ };
++ 
+++constexpr Size RKISP1_RSZ_SP_SRC_MIN{ 32, 16 };
+++constexpr Size RKISP1_RSZ_SP_SRC_MAX{ 1920, 1920 };
++ constexpr std::array<PixelFormat, 8> RKISP1_RSZ_SP_FORMATS{
++ 	formats::YUYV,
++ 	formats::NV16,
++@@ -555,12 +562,14 @@ constexpr std::array<PixelFormat, 8> RKISP1_RSZ_SP_FORMATS{
++ } /* namespace */
++ 
++ RkISP1MainPath::RkISP1MainPath()
++-	: RkISP1Path("main", RKISP1_RSZ_MP_FORMATS)
+++	: RkISP1Path("main", RKISP1_RSZ_MP_FORMATS,
+++		     RKISP1_RSZ_MP_SRC_MIN, RKISP1_RSZ_MP_SRC_MAX)
++ {
++ }
++ 
++ RkISP1SelfPath::RkISP1SelfPath()
++-	: RkISP1Path("self", RKISP1_RSZ_SP_FORMATS)
+++	: RkISP1Path("self", RKISP1_RSZ_SP_FORMATS,
+++		     RKISP1_RSZ_SP_SRC_MIN, RKISP1_RSZ_SP_SRC_MAX)
++ {
++ }
++ 
++diff --git a/src/libcamera/pipeline/rkisp1/rkisp1_path.h b/src/libcamera/pipeline/rkisp1/rkisp1_path.h
++index 2a1ef0ab..430181d3 100644
++--- a/src/libcamera/pipeline/rkisp1/rkisp1_path.h
+++++ b/src/libcamera/pipeline/rkisp1/rkisp1_path.h
++@@ -34,7 +34,8 @@ struct V4L2SubdeviceFormat;
++ class RkISP1Path
++ {
++ public:
++-	RkISP1Path(const char *name, const Span<const PixelFormat> &formats);
+++	RkISP1Path(const char *name, const Span<const PixelFormat> &formats,
+++		   const Size &minResolution, const Size &maxResolution);
++ 
++ 	bool init(MediaDevice *media);
++ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
