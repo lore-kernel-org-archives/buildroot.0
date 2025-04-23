@@ -1,104 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15567C369D7
-	for <buildroot@archiver.kernel.org>; Wed, 23 Apr 2025 08:25:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82128C369CB
+	for <buildroot@archiver.kernel.org>; Wed, 23 Apr 2025 12:06:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A337682CEC;
-	Wed, 23 Apr 2025 08:25:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1F2C6410CF;
+	Wed, 23 Apr 2025 12:06:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z9FQKHNSkXg6; Wed, 23 Apr 2025 08:25:19 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iCOcU3xpClap; Wed, 23 Apr 2025 12:06:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF06A82BFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3074F410CB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF06A82BFD;
-	Wed, 23 Apr 2025 08:25:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3074F410CB;
+	Wed, 23 Apr 2025 12:06:25 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2F31919F
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 08:25:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E53161BC
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 12:06:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EFB5D82BFD
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 08:25:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D68B882108
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 12:06:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gqqld9Zo4kZ7 for <buildroot@buildroot.org>;
- Wed, 23 Apr 2025 08:25:16 +0000 (UTC)
+ id 7ohNdPOFpkrS for <buildroot@buildroot.org>;
+ Wed, 23 Apr 2025 12:06:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
- envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0575582D7C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0575582D7C
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0575582D7C
- for <buildroot@busybox.net>; Wed, 23 Apr 2025 08:25:15 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-43cf06eabdaso58358555e9.2
- for <buildroot@busybox.net>; Wed, 23 Apr 2025 01:25:15 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::c35; helo=mail-oo1-xc35.google.com;
+ envelope-from=ct.clmsn@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 10C6982107
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10C6982107
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com
+ [IPv6:2607:f8b0:4864:20::c35])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 10C6982107
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 12:06:22 +0000 (UTC)
+Received: by mail-oo1-xc35.google.com with SMTP id
+ 006d021491bc7-603fd257386so1315160eaf.1
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 05:06:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1745396714; x=1746001514;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=fywW4ozpGvjIW4ts/YfqCCZwQLPRPl8lNG2mDMXfpV8=;
- b=uGqVrBkNwgUPzOg+lkKS7P6lRAnEQzToDbaoDpdhJFTzJ5wBYthfDbl4HXY3eWQh2W
- 1ujOFpr/P/k9C1pKoxCpiRCs6IiUfr7FUMhpR9le8ZTPTPd7WYUfTBMzkNtcuFYqplIp
- lbSZDJ0wp5KWtct0bI4Y+cEXKwX9fsPYeC5qXwQpjX4kcxoesDcu4+ASC+B5nQ8XyFLh
- KLl9d11/7Q9HF1WlanUSfLvhHRisgJYZHuMNwLEGFgRschnZ2y5rJMlGjodHgBKFD9B2
- VdmcgPDQXA7eAgatu2s/0n3hIWNXsezLMuLkU2D2V8pMic0BlV/MSyvUbuzXgr/SXQWx
- Ss9g==
-X-Gm-Message-State: AOJu0YxdxvgscTiBcJF1HBceSPpDgu9hq/k9ZEAPHLQOw0aDfcf6vUzD
- vO8s3ug2PLRUjCubxuKb7rDz0oovnGEzqfgLcqEf7xbjpsRHBtFIsg35EMmB09gW+vj7jX3zW4M
- h5g==
-X-Gm-Gg: ASbGnct3I3nY1671vvYp1mNx4Svont4TG+gJG31gU4lB79XoEZqKejq+cXa0otokq6i
- MVJbXhw489xqn/c22poRmAxkk+/uNpUU2PxqnF8eVO363dXMTY5w9csEBI4uZESQJse8WipmXo9
- SElQNQVwKHyTi53JkFGji4RR+j36m5I59J85d2+giEoCcDrjF/g1/4WC/l1c/kPAlyBFQ8aVOal
- wM+e1bCIjEcA7fE8QZc87JqdDzGNWuLVTDF1kflmsAHZb3R6tOPGG2Neq+y0XxLehHxlXYlEEwY
- PjI+B6kHSFfE+U8jjlis3WB2bMOBPzr5hJK9VZGnu5jKytEDmtB4lANgz9Rb2gaUIi6fWBXqk9S
- 4jQuC+sD/NbND
-X-Google-Smtp-Source: AGHT+IFuhtM1L7qbQYXqwlresjDpB7abVWE/cWIctRCFcFVCbxOm22CwH5erY44Wq9/EDwsMUUDjGw==
-X-Received: by 2002:a05:600c:3b8c:b0:43d:1f1:8cd with SMTP id
- 5b1f17b1804b1-4406abfa4d0mr149641205e9.24.1745396714073; 
- Wed, 23 Apr 2025 01:25:14 -0700 (PDT)
-Received: from vm-2404.. (151.187.66.37.rev.sfr.net. [37.66.187.151])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-44092d16b67sm17152015e9.5.2025.04.23.01.25.13
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 23 Apr 2025 01:25:13 -0700 (PDT)
-To: buildroot@busybox.net
-Date: Wed, 23 Apr 2025 10:25:05 +0200
-Message-ID: <20250423082506.1879122-2-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250423082506.1879122-1-francois.perrad@gadz.org>
-References: <20250423082506.1879122-1-francois.perrad@gadz.org>
+ d=1e100.net; s=20230601; t=1745409981; x=1746014781;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=hJReO8Owrb3GV1spkeW41PpVlUsdFVzS9IyZM4+atjk=;
+ b=RZyvioaCOVKcIeh8OLFUu4ZOvgTNLEcro/cMVj5jziUchCkHL3PlXDeay72q9VtsYD
+ crwsoablxop6KPcnI5diNNFkumjJkayY8zhRKfHMp4wdDt3e+uFqmpL73rG3/a6wWPPR
+ mBiKumoI2tawiMIwSJqnIi2PS6tEWv2tm7iG3tuKD35u8D3bSCm23rKvW+ZlU0p63j7V
+ vFsJolIb0an/L5m2XDPQznnAxxmFAlpgTNjcnHUI2EQFPo7tXOs4crshhuJSC1OsIGik
+ BIL8jkx7FkaOdKSx49TZH2VWKzWLaRmnCoHpiMnoOjc+3tmzhHMEaHKf0zc6lZpDympj
+ n+gg==
+X-Gm-Message-State: AOJu0YyuBh/7mgEtABEai3JhTi40MrFOqj8PeLlyMU1I36sODsjHeoXk
+ JvI0qmsorJetoCx44vh2PI/JpMGbo2PZxdrNgNRHBP1ws/pxRCcr+lBaZGD6zLnPPX2AHecoP2M
+ yVR/p9IlrZU5aZgRLBT67uHGAymkYvg==
+X-Gm-Gg: ASbGncsDoS/aENWDUOE8NaXytwyFiQ8qJW3Gir4h6FcVtt82LBaLvz15QUxhKHsnVvS
+ zDWNjf36pqkRMuf9L54C/z8jMUYU5F89TwkcDKoBy43xVD0inWiUJ8EoF5RLaTpblWStj3F22DL
+ vqSEh+hLFnu+Qd005t+fp7LZ/QLzlC89Z8BCid5C9fs0YaCoIEJPveLg==
+X-Google-Smtp-Source: AGHT+IF4Ou+vr8m35HP0DVOovwj3UNG+HFkRXttAyKVGVZYq9oGrJDf0QDKfbpoplFOXPIMRKX83GFMcR+Mfr1FBRek=
+X-Received: by 2002:a05:6870:e998:b0:2d4:e101:13eb with SMTP id
+ 586e51a60fabf-2d526e67af7mr13077144fac.28.1745409981530; Wed, 23 Apr 2025
+ 05:06:21 -0700 (PDT)
 MIME-Version: 1.0
+References: <mailman.3.1745064001.375107.buildroot@buildroot.org>
+ <6c0f8202ef17cd38940edb4e518a218d@umbiko.net>
+ <CAN4Cwatp=c58JzpGD3SZS8692m0TtYd879jON2B7D_vn=PqJcA@mail.gmail.com>
+ <cf10fd11d7fe76e4614eb2a6d401fd4c@umbiko.net>
+In-Reply-To: <cf10fd11d7fe76e4614eb2a6d401fd4c@umbiko.net>
+From: ct clmsn <ct.clmsn@gmail.com>
+Date: Wed, 23 Apr 2025 08:06:10 -0400
+X-Gm-Features: ATxdqUGnLM4hZAHZjuQZg3m0rm-ouISbX2_hfhGKqkY69coA9N8ohXzAgKJ06xk
+Message-ID: <CAN4CwasnPJg0uViXFxAuZembvx-HPJVEG-f9q7aD8QLM6A8SOw@mail.gmail.com>
+To: Andreas Ziegler <br015@umbiko.net>
+Cc: buildroot <buildroot@buildroot.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1745396714; x=1746001514; darn=busybox.net;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=fywW4ozpGvjIW4ts/YfqCCZwQLPRPl8lNG2mDMXfpV8=;
- b=OS0XNOrnh/nzWlN2LYW75g7xWFRVn77+7KGirRgcN8MA6j6COgjAyo8ARgNXgTu5rN
- YHYr8OaXHJuW0XC498wDICNSGYkOsfSmxXRMJAKkOCpE3lC8B43PiRzJ8SGSo800vAZi
- cltPzbVXmUOgChIwz5yOhprvD4w9SzIgWHI+XaFrwvsflQq9Jnc/Gp+1HRdxafV2IOkf
- /TpEq/tL/EVuQBgJehA3IQ/EwoXSXqyM//2PqWVoHYCPGDDEthXCQp8SYW6F9ysJ35IZ
- WLuDbIBcTPcLTwoD9b6xDToIOtgIoHi3BneCEkdhXpvDqBfIR/9XXBFs8fQ2MpJ+kONh
- ngog==
+ d=gmail.com; s=20230601; t=1745409981; x=1746014781; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=hJReO8Owrb3GV1spkeW41PpVlUsdFVzS9IyZM4+atjk=;
+ b=j8r6jbsIktoMqPzfzAxpxptoIn6qHt3K9BVI4hN5EAaKttVVisqFYLRHd0qbds5vP2
+ K06xuI5mvEAU7Pk2VPKp4jI0t/qqICJzYcUQiygMm6X2MSdqIvlmimTRJ3grPxG2nUMD
+ r6XqmDOFlBfhKQhqIAbCUVIxmTnN875oxMpuZ67IirzB9wKI6f/nUxVcSVnX49rk5wH8
+ jJJNCVc18P7mfgXgV4VVedUX23ojvmZwIsNYZL/4sZycVg40uVCnOeWD4g2SA8R5WQLd
+ XAZiWfnngHpd+XWy9POMGai5C0l1feIk9cbvIKPvwEhNwzXl+8590Ztr/ocgoGU4nhwo
+ 150A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=gadz.org
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
- header.s=google header.b=OS0XNOrn
-Subject: [Buildroot] [PATCH 2/2] configs/olimex_a20_olinuxino_lime*: bump
- Linux and U-Boot
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=j8r6jbsI
+Subject: Re: [Buildroot] kernel install from buildroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,85 +105,208 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Francois Perrad via buildroot <buildroot@buildroot.org>
-Reply-To: Francois Perrad <francois.perrad@gadz.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6454532252882955297=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- board/olimex/a20_olinuxino/patches/linux/linux.hash | 2 +-
- board/olimex/a20_olinuxino/patches/uboot/uboot.hash | 2 +-
- configs/olimex_a20_olinuxino_lime2_defconfig        | 4 ++--
- configs/olimex_a20_olinuxino_lime_defconfig         | 4 ++--
- 4 files changed, 6 insertions(+), 6 deletions(-)
+--===============6454532252882955297==
+Content-Type: multipart/alternative; boundary="000000000000efc736063370edd7"
 
-diff --git a/board/olimex/a20_olinuxino/patches/linux/linux.hash b/board/olimex/a20_olinuxino/patches/linux/linux.hash
-index 0bc60586f..023d24499 100644
---- a/board/olimex/a20_olinuxino/patches/linux/linux.hash
-+++ b/board/olimex/a20_olinuxino/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  9c6305567b75d99514cde6eb9de39973f3d5c857a75bd9dcdfca57041f8d4f34  linux-6.6.69.tar.xz
-+sha256  49e3ad7423e40735faada0cd39665c071d47efd84ec3548acf119c9704f13e68  linux-6.6.86.tar.xz
-diff --git a/board/olimex/a20_olinuxino/patches/uboot/uboot.hash b/board/olimex/a20_olinuxino/patches/uboot/uboot.hash
-index 2f55c44ba..ef267a2cb 100644
---- a/board/olimex/a20_olinuxino/patches/uboot/uboot.hash
-+++ b/board/olimex/a20_olinuxino/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
-+sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index 0d54e6ca9..9d22683ab 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -14,7 +14,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.69"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.86"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -28,7 +28,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 05d311ad4..b3a5fdf4e 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -14,7 +14,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.69"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.86"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -28,7 +28,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--- 
-2.43.0
+--000000000000efc736063370edd7
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Excellent, just like the standard routine I'm familiar with - thanks!
+
+ct
+
+On Wed, Apr 23, 2025, 1:15 AM Andreas Ziegler <br015@umbiko.net> wrote:
+
+> Hi Chris,
+>
+> [re-added the mailing list]
+>
+> On 2025-04-22 14:07, ct clmsn wrote:
+> > Andreas,
+> >
+> > Thanks for the prompt response; looks like I miscommunicated the
+> > situation.
+> > I've build the kernel on the nvme-ssd that is running the kernel I'm
+> > hoping
+> > to replace with the buildroot compiled kernel. I'm expecting to just
+> > copy
+> > the portions from /boot, /lib/modules, and /lib/firmware from the
+> > `buildroot/output/target` directory into the appropriate places in the
+> > nvme-sdd's '/' (root) directory. Hope this clarifies the situation.
+>
+> lib/firmware is nice-to-have, but not mandatory; you can update
+> linux-firmware independently of the kernel.
+>
+> For a new kernel, you need bzImage and lib/modules/$(uname -r). The
+> location of lib/modules is on the root partition. Depending on the boot
+> configuration, bzImage may reside in /boot or on a separate boot
+> partition. Check your grub.cfg.
+>
+> If you keep the old kernel and create an additional boot entry for the
+> new one, you have a fallback solution.
+>
+> Kind regards,
+> Andreas
+>
+> > v/r,
+> > Chris
+> >
+> > On Sat, Apr 19, 2025 at 11:26=E2=80=AFAM Andreas Ziegler <br015@umbiko.=
+net>
+> > wrote:
+> >
+> >> Hi ct,
+> >>
+> >> On 2025-04-18 16:03, ct clmsn wrote:
+> >> >
+> >> > Hello,
+> >> >
+> >> > This should be a pretty trivial question mostly asking to make sure =
+my
+> >> > assumptions are correct.
+> >> >
+> >> > I'm doing hardware testing with an SBC. I have an SBC that is
+> >> > configured to
+> >> > boot from an NVME-SSD. A vendor encouraged me to use buildroot to
+> >> > compile a
+> >> > new kernel. My preference would be to just update the existing
+> >> > environment
+> >> > on my SBC's NVME-SSD.
+> >> >
+> >> > Given `buildroot/output/target` contains the compiled linux kernel
+> with
+> >> > firmware, which directories or files should I be concerned with
+> copying
+> >> > over on the NVME-SSD?
+> >>
+> >> Buildroot copies the final kernel image to output/images. In addition
+> >> you need the content of output/target/lib/modules.
+> >>
+> >> Kind regards,
+> >> Andreas
+> >>
+> >> > Thanks in advance for the assistance and confirming my
+> >> > back-of-the-envelope
+> >> > verification.
+> >> >
+> >> > v/r,
+> >> > ct
+> >>
+>
+
+--000000000000efc736063370edd7
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto">Excellent, just like the standard routine I&#39;m familia=
+r with - thanks!<div dir=3D"auto"><br></div><div dir=3D"auto">ct</div></div=
+><br><div class=3D"gmail_quote gmail_quote_container"><div dir=3D"ltr" clas=
+s=3D"gmail_attr">On Wed, Apr 23, 2025, 1:15 AM Andreas Ziegler &lt;<a href=
+=3D"mailto:br015@umbiko.net">br015@umbiko.net</a>&gt; wrote:<br></div><bloc=
+kquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #cc=
+c solid;padding-left:1ex">Hi Chris,<br>
+<br>
+[re-added the mailing list]<br>
+<br>
+On 2025-04-22 14:07, ct clmsn wrote:<br>
+&gt; Andreas,<br>
+&gt; <br>
+&gt; Thanks for the prompt response; looks like I miscommunicated the <br>
+&gt; situation.<br>
+&gt; I&#39;ve build the kernel on the nvme-ssd that is running the kernel I=
+&#39;m <br>
+&gt; hoping<br>
+&gt; to replace with the buildroot compiled kernel. I&#39;m expecting to ju=
+st <br>
+&gt; copy<br>
+&gt; the portions from /boot, /lib/modules, and /lib/firmware from the<br>
+&gt; `buildroot/output/target` directory into the appropriate places in the=
+<br>
+&gt; nvme-sdd&#39;s &#39;/&#39; (root) directory. Hope this clarifies the s=
+ituation.<br>
+<br>
+lib/firmware is nice-to-have, but not mandatory; you can update <br>
+linux-firmware independently of the kernel.<br>
+<br>
+For a new kernel, you need bzImage and lib/modules/$(uname -r). The <br>
+location of lib/modules is on the root partition. Depending on the boot <br=
+>
+configuration, bzImage may reside in /boot or on a separate boot <br>
+partition. Check your grub.cfg.<br>
+<br>
+If you keep the old kernel and create an additional boot entry for the <br>
+new one, you have a fallback solution.<br>
+<br>
+Kind regards,<br>
+Andreas<br>
+<br>
+&gt; v/r,<br>
+&gt; Chris<br>
+&gt; <br>
+&gt; On Sat, Apr 19, 2025 at 11:26=E2=80=AFAM Andreas Ziegler &lt;<a href=
+=3D"mailto:br015@umbiko.net" target=3D"_blank" rel=3D"noreferrer">br015@umb=
+iko.net</a>&gt; <br>
+&gt; wrote:<br>
+&gt; <br>
+&gt;&gt; Hi ct,<br>
+&gt;&gt; <br>
+&gt;&gt; On 2025-04-18 16:03, ct clmsn wrote:<br>
+&gt;&gt; &gt;<br>
+&gt;&gt; &gt; Hello,<br>
+&gt;&gt; &gt;<br>
+&gt;&gt; &gt; This should be a pretty trivial question mostly asking to mak=
+e sure my<br>
+&gt;&gt; &gt; assumptions are correct.<br>
+&gt;&gt; &gt;<br>
+&gt;&gt; &gt; I&#39;m doing hardware testing with an SBC. I have an SBC tha=
+t is<br>
+&gt;&gt; &gt; configured to<br>
+&gt;&gt; &gt; boot from an NVME-SSD. A vendor encouraged me to use buildroo=
+t to<br>
+&gt;&gt; &gt; compile a<br>
+&gt;&gt; &gt; new kernel. My preference would be to just update the existin=
+g<br>
+&gt;&gt; &gt; environment<br>
+&gt;&gt; &gt; on my SBC&#39;s NVME-SSD.<br>
+&gt;&gt; &gt;<br>
+&gt;&gt; &gt; Given `buildroot/output/target` contains the compiled linux k=
+ernel with<br>
+&gt;&gt; &gt; firmware, which directories or files should I be concerned wi=
+th copying<br>
+&gt;&gt; &gt; over on the NVME-SSD?<br>
+&gt;&gt; <br>
+&gt;&gt; Buildroot copies the final kernel image to output/images. In addit=
+ion<br>
+&gt;&gt; you need the content of output/target/lib/modules.<br>
+&gt;&gt; <br>
+&gt;&gt; Kind regards,<br>
+&gt;&gt; Andreas<br>
+&gt;&gt; <br>
+&gt;&gt; &gt; Thanks in advance for the assistance and confirming my<br>
+&gt;&gt; &gt; back-of-the-envelope<br>
+&gt;&gt; &gt; verification.<br>
+&gt;&gt; &gt;<br>
+&gt;&gt; &gt; v/r,<br>
+&gt;&gt; &gt; ct<br>
+&gt;&gt; <br>
+</blockquote></div>
+
+--000000000000efc736063370edd7--
+
+--===============6454532252882955297==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6454532252882955297==--
