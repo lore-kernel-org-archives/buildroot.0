@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E962C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:56:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 326C7C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:56:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C63E70A0C;
-	Mon, 19 May 2025 10:56:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19D2970A1E;
+	Mon, 19 May 2025 10:56:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2p5jZdQzk9fH; Mon, 19 May 2025 10:55:59 +0000 (UTC)
+ id RJjeSdWCakm2; Mon, 19 May 2025 10:56:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10A9770A08
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2568B70A19
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 10A9770A08;
-	Mon, 19 May 2025 10:55:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2568B70A19;
+	Mon, 19 May 2025 10:56:03 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 054F0E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:53 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 130BED4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C48E84244F
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 02D5E40F4B
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p7N4MNmgyUvf for <buildroot@buildroot.org>;
+ id oOZjEwI74env for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AFEBF40E48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B94A041291
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AFEBF40E48
+ by smtp4.osuosl.org (Postfix) with ESMTP id B94A041291
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AB6178348A; Mon, 19 May 2025 10:39:56 +0000 (UTC)
+ id B43F8872E7; Mon, 19 May 2025 10:39:56 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 23 Apr 2025 21:21:31 +0200
+Date: Wed, 23 Apr 2025 21:25:41 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 055547ff126fb359d94c5c0d8e838320deff84f2
-X-Git-Newrev: 1dc1a05d945de53e59dde6dd8e651ca82c0bfc1a
+X-Git-Oldrev: 1dc1a05d945de53e59dde6dd8e651ca82c0bfc1a
+X-Git-Newrev: 3abc3b97bad9b4bbd436015cce029f25ee627f6a
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103956.AB6178348A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/graphicsmagick: add
- post-1.3.45 security fixes
+Message-Id: <20250519103956.B43F8872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/dust: bump to version
+ 1.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,149 +65,78 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1dc1a05d945de53e59dde6dd8e651ca82c0bfc1a
+commit: https://git.buildroot.net/buildroot/commit/?id=3abc3b97bad9b4bbd436015cce029f25ee627f6a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following security issues:
+Release:
+https://github.com/bootandy/dust/releases/tag/v1.1.2
 
-- CVE-2025-27795: ReadJXLImage in JXL in GraphicsMagick before 1.3.46 lacks
-  image dimension resource limits
-  https://nvd.nist.gov/vuln/detail/CVE-2025-27795
+Note: version 0.9.0 of dust fails to build when running
+the runtime test on the armv7 architecture due to an
+unconditional import of Atomicu64.
 
-- CVE-2025-32460: GraphicsMagick before 8e56520 has a heap-based buffer
-  over-read in ReadJXLImage in coders/jxl.c, related to an
-  ImportViewPixelArea call.
-  https://nvd.nist.gov/vuln/detail/CVE-2025-32460
+	error:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Compiling config-file v0.2.3
+error[E0432]: unresolved import `std::sync::atomic::AtomicU64`
+ --> src/progress.rs:6:18
+  |
+6 |         atomic::{AtomicU64, AtomicU8, AtomicUsize, Ordering},
+  |                  ^^^^^^^^^
+  |                  |
+  |                  no `AtomicU64` in `sync::atomic`
+  |                  help: a similar name exists in the module: `AtomicU32`
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `du-dust` (bin "dust") due to 1 previous error
+
+This issue was discovered while writing a runtime test
+for dust. upgrading to version 1.1.2 resolves the issue.
+
+More details available in the following issue:
+https://github.com/bootandy/dust/issues/423
+
+For now, we bump to the latest compatible version
+which builds and runs correctly. We can't bump to the latest
+version 1.2.0 since it requires a cargo version newer than
+1.82.0.
+
+	error:
+--  The package requires the Cargo feature called `edition2024`, but that feature is not stabilized in this version of Cargo (1.82.0 (8f40fc59f 2024-08-21)).
+  Consider trying a newer version of Cargo (this may require the nightly release).
+
+The upgrade to 1.2.0 will be considered once the patch for
+Rust 1.86.0 is accepted.
+
+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...age-Apply-image-dimension-resource-limits.patch | 32 ++++++++++++
- ...age-pixel_format-num_channels-needs-to-be.patch | 60 ++++++++++++++++++++++
- package/graphicsmagick/graphicsmagick.mk           |  6 +++
- 3 files changed, 98 insertions(+)
+ package/dust/dust.hash | 2 +-
+ package/dust/dust.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch b/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
-new file mode 100644
-index 0000000000..275738a71a
---- /dev/null
-+++ b/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
-@@ -0,0 +1,32 @@
-+# HG changeset patch
-+# User Bob Friesenhahn <bfriesen@GraphicsMagick.org>
-+# Date 1725886903 18000
-+#      Mon Sep 09 08:01:43 2024 -0500
-+# Node ID 9bbae7314e3c3b19b830591010ed90bb136b9c42
-+# Parent  db3ff8d00c28c38895e1600a28706ce251dac570
-+ReadJXLImage(): Apply image dimension resource limits. Addresses oss-fuzz Issue 69728
-+
-+Upstream: https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/9bbae7314e3c3b19b830591010ed90bb136b9c42
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+[Peter: drop ChangeLog/version changes]
-+diff --git a/coders/jxl.c b/coders/jxl.c
-+--- a/coders/jxl.c
-++++ b/coders/jxl.c
-+@@ -571,6 +571,7 @@
-+                                       basic_info.alpha_bits, basic_info.num_color_channels,
-+                                       basic_info.have_animation == JXL_FALSE ? "False" : "True");
-+               }
-++
-+             if (basic_info.num_extra_channels)
-+               {
-+                 size_t index;
-+@@ -637,6 +638,9 @@
-+ 
-+             image->orientation=convert_orientation(basic_info.orientation);
-+ 
-++            if (CheckImagePixelLimits(image, exception) != MagickPass)
-++              ThrowJXLReaderException(ResourceLimitError,ImagePixelLimitExceeded,image);
-++
-+             pixel_format.endianness=JXL_NATIVE_ENDIAN;
-+             pixel_format.align=0;
-+             if (basic_info.num_color_channels == 1)
-diff --git a/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch b/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
-new file mode 100644
-index 0000000000..d1cc795b4c
---- /dev/null
-+++ b/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
-@@ -0,0 +1,60 @@
-+# HG changeset patch
-+# User Bob Friesenhahn <bfriesen@GraphicsMagick.org>
-+# Date 1743004970 18000
-+#      Wed Mar 26 11:02:50 2025 -0500
-+# Node ID 8e56520435df50f618a03f2721a39a70a515f1cb
-+# Parent  036a1376a2a6dc9504c5148249cbd8feaef72de6
-+ReadJXLImage(): pixel_format.num_channels needs to be 2 for grayscale matte.
-+
-+Upstream: https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/8e56520435df50f618a03f2721a39a70a515f1cb
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+[Peter: drop ChangeLog/version changes]
-+
-+diff --git a/coders/jxl.c b/coders/jxl.c
-+--- a/coders/jxl.c
-++++ b/coders/jxl.c
-+@@ -658,7 +658,7 @@
-+                       ThrowJXLReaderException(ResourceLimitError,MemoryAllocationFailed,image);
-+                   }
-+                 grayscale=MagickTrue;
-+-                pixel_format.num_channels=1;
-++                pixel_format.num_channels=image->matte ? 2 : 1;
-+                 pixel_format.data_type=(basic_info.bits_per_sample <= 8 ? JXL_TYPE_UINT8 :
-+                                         (basic_info.bits_per_sample <= 16 ? JXL_TYPE_UINT16 :
-+                                          JXL_TYPE_FLOAT));
-+@@ -843,6 +843,24 @@
-+             size_t
-+               out_len;
-+ 
-++            if (image->logging)
-++              (void) LogMagickEvent(CoderEvent,GetMagickModule(),
-++                                    "JxlPixelFormat:\n"
-++                                    "    num_channels: %u\n"
-++                                    "    data_type: %s\n"
-++                                    "    endianness: %s\n"
-++                                    "    align: %" MAGICK_SIZE_T_F "u",
-++                                    pixel_format.num_channels,
-++                                    pixel_format.data_type == JXL_TYPE_FLOAT ? "float" :
-++                                    (pixel_format.data_type == JXL_TYPE_UINT8 ? "uint8" :
-++                                     (pixel_format.data_type == JXL_TYPE_UINT16 ? "uint16" :
-++                                      (pixel_format.data_type == JXL_TYPE_FLOAT16 ? "float16" :
-++                                       "unknown"))) ,
-++                                    pixel_format.endianness == JXL_NATIVE_ENDIAN ? "native" :
-++                                    (pixel_format.endianness == JXL_LITTLE_ENDIAN ? "little" :
-++                                     (pixel_format.endianness == JXL_BIG_ENDIAN ? "big" : "unknown")),
-++                                    pixel_format.align);
-++
-+             status=JxlDecoderImageOutBufferSize(jxl_decoder,&pixel_format,&out_len);
-+             if (status != JXL_DEC_SUCCESS)
-+               {
-+@@ -852,6 +870,10 @@
-+                 break;
-+               }
-+ 
-++            if (image->logging)
-++              (void) LogMagickEvent(CoderEvent,GetMagickModule(),
-++                                    "JxlDecoderImageOutBufferSize() returns %" MAGICK_SIZE_T_F "u",
-++                                    (MAGICK_SIZE_T) out_len);
-+             out_buf=MagickAllocateResourceLimitedArray(unsigned char *,out_len,sizeof(*out_buf));
-+             if (out_buf == (unsigned char *) NULL)
-+               ThrowJXLReaderException(ResourceLimitError,MemoryAllocationFailed,image);
-diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
-index baaa9bcb02..4b9f3bd23c 100644
---- a/package/graphicsmagick/graphicsmagick.mk
-+++ b/package/graphicsmagick/graphicsmagick.mk
-@@ -11,6 +11,12 @@ GRAPHICSMAGICK_LICENSE = MIT
- GRAPHICSMAGICK_LICENSE_FILES = Copyright.txt
- GRAPHICSMAGICK_CPE_ID_VENDOR = graphicsmagick
+diff --git a/package/dust/dust.hash b/package/dust/dust.hash
+index 975ec9664d..be80a84166 100644
+--- a/package/dust/dust.hash
++++ b/package/dust/dust.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ace29e85647e7079f9eaa066da9b1368c7200233eb0814442499948b5adeb028  dust-0.9.0-cargo2.tar.gz
++sha256  01f4796a27e916e7fab77fbf12685da9fb1422dd3dcfdf736a146ad05ebc3c39  dust-1.1.2-cargo2.tar.gz
+ sha256  aee6e2d13d3a55c7881630c09b41ca7b3b44bb1437b5d36695d22decc3655160  LICENSE
+diff --git a/package/dust/dust.mk b/package/dust/dust.mk
+index c566723c1c..a6b6f43c40 100644
+--- a/package/dust/dust.mk
++++ b/package/dust/dust.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
-+GRAPHICSMAGICK_IGNORE_CVES += CVE-2025-27795
-+
-+# 0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
-+GRAPHICSMAGICK_IGNORE_CVES += CVE-2025-32460
-+
- GRAPHICSMAGICK_INSTALL_STAGING = YES
- GRAPHICSMAGICK_CONFIG_SCRIPTS = GraphicsMagick-config GraphicsMagickWand-config
- 
+-DUST_VERSION = 0.9.0
++DUST_VERSION = 1.1.2
+ DUST_SITE = $(call github,bootandy,dust,v$(DUST_VERSION))
+ DUST_LICENSE = APACHE-2.0
+ DUST_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
