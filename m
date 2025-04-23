@@ -4,72 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 515ADC369CB
-	for <buildroot@archiver.kernel.org>; Wed, 23 Apr 2025 18:46:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A78F3C369CB
+	for <buildroot@archiver.kernel.org>; Wed, 23 Apr 2025 18:52:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01002401CA;
-	Wed, 23 Apr 2025 18:46:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7262B40830;
+	Wed, 23 Apr 2025 18:52:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FbOpH5ILlemF; Wed, 23 Apr 2025 18:46:45 +0000 (UTC)
+ id 2MdjU6YjtAeL; Wed, 23 Apr 2025 18:52:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 93B5E41296
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 868B340719
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 93B5E41296;
-	Wed, 23 Apr 2025 18:46:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 48DE419F
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 18:46:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 868B340719;
+	Wed, 23 Apr 2025 18:52:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 632FE19F
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 18:52:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A87680C29
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 18:46:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 601B1607C8
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 18:52:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xxb6gfk8WdDI for <buildroot@buildroot.org>;
- Wed, 23 Apr 2025 18:46:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8EB5D80C1D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8EB5D80C1D
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8EB5D80C1D
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 18:46:40 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 7897E5FFC0;
- Wed, 23 Apr 2025 20:46:37 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 23 Apr 2025 20:46:37 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nk1lGFvugdPd for <buildroot@buildroot.org>;
+ Wed, 23 Apr 2025 18:52:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.148;
+ helo=smtpdh19-1.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CD8DC607C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD8DC607C6
+Received: from smtpdh19-1.aruba.it (smtpdh19-1.aruba.it [62.149.155.148])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CD8DC607C6
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 18:52:30 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba SMTP with ESMTPSA
+ id 7fCuuMDJjvoVF7fCuuZpTu; Wed, 23 Apr 2025 20:52:28 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Pierre Floury <pierre.floury@gmail.com>
+Date: Wed, 23 Apr 2025 20:52:27 +0200
+Message-Id: <20250423185227.1313667-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
-Date: Wed, 23 Apr 2025 20:46:37 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: =?UTF-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= <raphael.melotte@mind.be>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250423132539.836773-1-raphael.melotte@mind.be>
-References: <20250423132539.836773-1-raphael.melotte@mind.be>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <24211f86f115d02fd350918191b509ae@free.fr>
-X-Sender: ju.o@free.fr
+X-CMAE-Envelope: MS4xfNl3WPjeXloQ1/t/dmLa/G4cVrrmwuwlA76CkoQASpDCSkFBWo0iifl4rsGc9GfOX8sBNz/pimsdF56GLy2PTIRzjIKS7yIZ8CAXvXMV7lcW8WAf0tm7
+ 2RvGGIDBLFHa5RipP3pZDsFlwXup4twuHangQ4paOTg9rC/9T0l0ox3lvxNUaeJLuFn+rDNY5P/ghDyny6dMj3cUu1E2ND6re6H7+f4Cj7qOxvbPwEUmoP1T
+ 0uYBN5bIQnM2KQGYLcY8UtAeOntUeXScWWItNxU+1N8wxrppuyZL5Y+2Xe/wilCNet0YCe5aI/PH6cFq9bF3pg==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1745433998;
- bh=qSDqBsmcAVXT5c38d3kB0GKNwhyhdkWSogGObAxekTc=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ctSITovJXVaxXGjRuPmNyxe+GNXQl/mIXlKg7S2GJM81/mMjjH4K1wlv+j0fBN/rV
- q7SOzfbj9l8a6wBf3bmLNmsISpHZ5Y/dnvK5qKJxA9QYyjbrf/qEiYvUQXUMeqgFn3
- k33uROM0a0BnSPcNBKAFQ5HqEUSJ1QQqwEcDTwo6OlPJ9ZPwTmaE9lpD+WF4Tgir/F
- 7GTiL/zwSJcF7rcth4DAlrV/n+CWqlo5AJBKTSNSYLGr/B4M6fjmzM1OCGyGOiU1aH
- nx6Qsd+Taw3ktZnSrjYZDxndSUGRHURbPuf6ELqUMRrd0srBgUn7KQtoWCf68PjHyu
- dq3KsQvyJnr1A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=aruba.it; s=a1; 
+ t=1745434348; bh=fuZH4OpjlOeBrbVkFRMBiKuhOEZCVdV7vjSGVPho4Aw=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=K+/K868mykhj98TcdRkGFJ0DNQwrM8XZB5is1VnaEXjJ4aRD5mj8ESfhfdBwF+Lfq
+ jxdBcW9dTSHpnGbYYjiQIt+kavIq0TMExMkUx25XrojVA9tJ453uY0BWRnTZbG9dUK
+ UJwkqr9Kp7Rc5+YSzLLEFiQL4Wg2MdVHLhacCKda/fg4RvptZvez3D31eAwFVfywnt
+ 93c1Yt4aRteSx7L6jdSMvfNiHfQWsmG3BYKdt8vbejuto1N8p6wmZoLWtcIuCDrgVy
+ T0Bl3ZJik/fCA24Cc1bzRNWPrb9lhrB6l1ipZ2ArfGSfN7SXradMHM9FSYORc7gofr
+ S8poeWY89DKgw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ctSITovJ
-Subject: Re: [Buildroot] [PATCH 1/1] DEVELOPERS: remove Jugurtha BELKALEM
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=K+/K868m
+Subject: [Buildroot] [PATCH] package/trace-cmd: bump to version 3.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,20 +79,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMjMvMDQvMjAyNSAxNToyNSwgUmFwaGHDq2wgTcOpbG90dGUgdmlhIGJ1aWxkcm9vdCB3cm90
-ZToKPiBKdWd1cnRoYSdzIGVtYWlsIGFkZHJlc3MgaXMgYm91bmRpbmc6Cj4gCj4gIDU1MCA1LjEu
-MSBUaGUgZW1haWwgYWNjb3VudCB0aGF0IHlvdSB0cmllZCB0byByZWFjaCBkb2VzIG5vdCBleGlz
-dC4gCj4gUGxlYXNlIHRyeSBkb3VibGUtY2hlY2tpbmcgdGhlIHJlY2lwaWVudCdzIGVtYWlsIGFk
-ZHJlc3MgZm9yIHR5cG9zIG9yIAo+IHVubmVjZXNzYXJ5IHNwYWNlcy4KPiAKPiBSZW1vdmUgaXQg
-ZnJvbSB0aGUgREVWRUxPUEVSUyBmaWxlIHNvIHRoYXQgdXRpbHMvZ2V0LWRldmVsb3BlcnMKPiBk
-b2Vzbid0IHNlbmQgZW1haWxzIHRvIG5vbi1leGlzdGVudCBhZGRyZXNzZXMuCj4gCj4gU2lnbmVk
-LW9mZi1ieTogUmFwaGHDq2wgTcOpbG90dGUgPHJhcGhhZWwubWVsb3R0ZUBtaW5kLmJlPgoKQXBw
-bGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
-Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
-b3QK
+Release notes:
+https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/tag/?h=trace-cmd-v3.3.2
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/trace-cmd/trace-cmd.hash | 2 +-
+ package/trace-cmd/trace-cmd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
+index c1b52a5195..832dae693e 100644
+--- a/package/trace-cmd/trace-cmd.hash
++++ b/package/trace-cmd/trace-cmd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  2efe103389367e93c764c4a788880ba51018a65dec21b0411965a5f06a6338c1  trace-cmd-v3.3.1.tar.gz
++sha256  cf16c91c0c49893499710ab2f722fd7c5ffce27485d2f7509370836b168ecd45  trace-cmd-v3.3.2.tar.gz
+ sha256  b1d04b850c1c7471b0f0896f6c6f0fcfc9f07e2dd183a5f5826af269fe9e88fb  COPYING
+ sha256  70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
+ sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index cf16ddcb17..ec8f5c4b59 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TRACE_CMD_VERSION = 3.3.1
++TRACE_CMD_VERSION = 3.3.2
+ TRACE_CMD_SOURCE = trace-cmd-v$(TRACE_CMD_VERSION).tar.gz
+ TRACE_CMD_SITE = \
+ 	https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot
+-- 
+2.39.5
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
