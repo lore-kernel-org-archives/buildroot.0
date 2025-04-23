@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9A02C369CB
-	for <buildroot@archiver.kernel.org>; Wed, 23 Apr 2025 19:24:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B529C369CB
+	for <buildroot@archiver.kernel.org>; Wed, 23 Apr 2025 19:24:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8F126612A9;
-	Wed, 23 Apr 2025 19:24:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F937612B2;
+	Wed, 23 Apr 2025 19:24:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hpIQVyP-dfF3; Wed, 23 Apr 2025 19:24:06 +0000 (UTC)
+ id oKL62RA7eBzE; Wed, 23 Apr 2025 19:24:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21561610F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8120612AD
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 21561610F8;
-	Wed, 23 Apr 2025 19:24:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8F0DC1BC
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8120612AD;
+	Wed, 23 Apr 2025 19:24:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C2C901BC
  for <buildroot@buildroot.org>; Wed, 23 Apr 2025 19:24:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 513A740288
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2D77D41275
  for <buildroot@buildroot.org>; Wed, 23 Apr 2025 19:24:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ak6ziMyjvqDb for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BRGXjkrlT2fS for <buildroot@buildroot.org>;
  Wed, 23 Apr 2025 19:24:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 693E440AE8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68F0241276
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 693E440AE8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 68F0241276
  for <buildroot@buildroot.org>; Wed, 23 Apr 2025 19:24:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 625C486237; Wed, 23 Apr 2025 19:24:03 +0000 (UTC)
+ id 529D686230; Wed, 23 Apr 2025 19:24:03 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 23 Apr 2025 21:21:31 +0200
+Date: Wed, 23 Apr 2025 21:21:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 055547ff126fb359d94c5c0d8e838320deff84f2
-X-Git-Newrev: 1dc1a05d945de53e59dde6dd8e651ca82c0bfc1a
+X-Git-Oldrev: e7a00fd93a09bbb1adb91e03e1e9ca3a8acec600
+X-Git-Newrev: 055547ff126fb359d94c5c0d8e838320deff84f2
 X-Patchwork-Hint: ignore
-Message-Id: <20250423192403.625C486237@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/graphicsmagick: add post-1.3.45
- security fixes
+Message-Id: <20250423192403.529D686230@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/graphicsmagick: security bump to
+ version 1.3.45
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,149 +65,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1dc1a05d945de53e59dde6dd8e651ca82c0bfc1a
+commit: https://git.buildroot.net/buildroot/commit/?id=055547ff126fb359d94c5c0d8e838320deff84f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+1.3.44 added the following security fixes:
 
-- CVE-2025-27795: ReadJXLImage in JXL in GraphicsMagick before 1.3.46 lacks
-  image dimension resource limits
-  https://nvd.nist.gov/vuln/detail/CVE-2025-27795
+* TIFF: Fixed multiple heap and stack buffer overflows (directed by
+  the source EXIF profile) while writing EXIF into the native TIFF
+  IFD.
 
-- CVE-2025-32460: GraphicsMagick before 8e56520 has a heap-based buffer
-  over-read in ReadJXLImage in coders/jxl.c, related to an
-  ImportViewPixelArea call.
-  https://nvd.nist.gov/vuln/detail/CVE-2025-32460
+* FITS: Fix problem that the FITS reader could return invalid image
+  frames with rows or columns set to zero. Other code in the library
+  crashes, or even asserts, if invalid image frames with rows or
+  columns set to zero are returned.
+
+* Coverity fixes: Various fixes for Coverity issues raised after the
+  update to version 2023.12.2.
+
+* Clang Analyzer (scan-build) fixes: Various fixes for new issues
+  discovered by Clang Analyzer.
+
+https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/7046c344273c263a9b6e4901b910508aea3804b5
+
+In addition 1.3.45 fixes a off-by-one issue introduced in 1.3.44:
+https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/96f765a2e3cebf0b70094da34d03b73c50c3aa63
+
+Update the Copyright.txt hash for a change in copyright years:
+https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/f0bba104ee3859286ea8adfc2ff603fd64be5624
+https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/26fce892769e4a26247dd2db5b8dc0719ce20953
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...age-Apply-image-dimension-resource-limits.patch | 32 ++++++++++++
- ...age-pixel_format-num_channels-needs-to-be.patch | 60 ++++++++++++++++++++++
- package/graphicsmagick/graphicsmagick.mk           |  6 +++
- 3 files changed, 98 insertions(+)
+ package/graphicsmagick/graphicsmagick.hash | 4 ++--
+ package/graphicsmagick/graphicsmagick.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch b/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
-new file mode 100644
-index 0000000000..275738a71a
---- /dev/null
-+++ b/package/graphicsmagick/0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
-@@ -0,0 +1,32 @@
-+# HG changeset patch
-+# User Bob Friesenhahn <bfriesen@GraphicsMagick.org>
-+# Date 1725886903 18000
-+#      Mon Sep 09 08:01:43 2024 -0500
-+# Node ID 9bbae7314e3c3b19b830591010ed90bb136b9c42
-+# Parent  db3ff8d00c28c38895e1600a28706ce251dac570
-+ReadJXLImage(): Apply image dimension resource limits. Addresses oss-fuzz Issue 69728
-+
-+Upstream: https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/9bbae7314e3c3b19b830591010ed90bb136b9c42
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+[Peter: drop ChangeLog/version changes]
-+diff --git a/coders/jxl.c b/coders/jxl.c
-+--- a/coders/jxl.c
-++++ b/coders/jxl.c
-+@@ -571,6 +571,7 @@
-+                                       basic_info.alpha_bits, basic_info.num_color_channels,
-+                                       basic_info.have_animation == JXL_FALSE ? "False" : "True");
-+               }
-++
-+             if (basic_info.num_extra_channels)
-+               {
-+                 size_t index;
-+@@ -637,6 +638,9 @@
-+ 
-+             image->orientation=convert_orientation(basic_info.orientation);
-+ 
-++            if (CheckImagePixelLimits(image, exception) != MagickPass)
-++              ThrowJXLReaderException(ResourceLimitError,ImagePixelLimitExceeded,image);
-++
-+             pixel_format.endianness=JXL_NATIVE_ENDIAN;
-+             pixel_format.align=0;
-+             if (basic_info.num_color_channels == 1)
-diff --git a/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch b/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
-new file mode 100644
-index 0000000000..d1cc795b4c
---- /dev/null
-+++ b/package/graphicsmagick/0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
-@@ -0,0 +1,60 @@
-+# HG changeset patch
-+# User Bob Friesenhahn <bfriesen@GraphicsMagick.org>
-+# Date 1743004970 18000
-+#      Wed Mar 26 11:02:50 2025 -0500
-+# Node ID 8e56520435df50f618a03f2721a39a70a515f1cb
-+# Parent  036a1376a2a6dc9504c5148249cbd8feaef72de6
-+ReadJXLImage(): pixel_format.num_channels needs to be 2 for grayscale matte.
-+
-+Upstream: https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/8e56520435df50f618a03f2721a39a70a515f1cb
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+[Peter: drop ChangeLog/version changes]
-+
-+diff --git a/coders/jxl.c b/coders/jxl.c
-+--- a/coders/jxl.c
-++++ b/coders/jxl.c
-+@@ -658,7 +658,7 @@
-+                       ThrowJXLReaderException(ResourceLimitError,MemoryAllocationFailed,image);
-+                   }
-+                 grayscale=MagickTrue;
-+-                pixel_format.num_channels=1;
-++                pixel_format.num_channels=image->matte ? 2 : 1;
-+                 pixel_format.data_type=(basic_info.bits_per_sample <= 8 ? JXL_TYPE_UINT8 :
-+                                         (basic_info.bits_per_sample <= 16 ? JXL_TYPE_UINT16 :
-+                                          JXL_TYPE_FLOAT));
-+@@ -843,6 +843,24 @@
-+             size_t
-+               out_len;
-+ 
-++            if (image->logging)
-++              (void) LogMagickEvent(CoderEvent,GetMagickModule(),
-++                                    "JxlPixelFormat:\n"
-++                                    "    num_channels: %u\n"
-++                                    "    data_type: %s\n"
-++                                    "    endianness: %s\n"
-++                                    "    align: %" MAGICK_SIZE_T_F "u",
-++                                    pixel_format.num_channels,
-++                                    pixel_format.data_type == JXL_TYPE_FLOAT ? "float" :
-++                                    (pixel_format.data_type == JXL_TYPE_UINT8 ? "uint8" :
-++                                     (pixel_format.data_type == JXL_TYPE_UINT16 ? "uint16" :
-++                                      (pixel_format.data_type == JXL_TYPE_FLOAT16 ? "float16" :
-++                                       "unknown"))) ,
-++                                    pixel_format.endianness == JXL_NATIVE_ENDIAN ? "native" :
-++                                    (pixel_format.endianness == JXL_LITTLE_ENDIAN ? "little" :
-++                                     (pixel_format.endianness == JXL_BIG_ENDIAN ? "big" : "unknown")),
-++                                    pixel_format.align);
-++
-+             status=JxlDecoderImageOutBufferSize(jxl_decoder,&pixel_format,&out_len);
-+             if (status != JXL_DEC_SUCCESS)
-+               {
-+@@ -852,6 +870,10 @@
-+                 break;
-+               }
-+ 
-++            if (image->logging)
-++              (void) LogMagickEvent(CoderEvent,GetMagickModule(),
-++                                    "JxlDecoderImageOutBufferSize() returns %" MAGICK_SIZE_T_F "u",
-++                                    (MAGICK_SIZE_T) out_len);
-+             out_buf=MagickAllocateResourceLimitedArray(unsigned char *,out_len,sizeof(*out_buf));
-+             if (out_buf == (unsigned char *) NULL)
-+               ThrowJXLReaderException(ResourceLimitError,MemoryAllocationFailed,image);
+diff --git a/package/graphicsmagick/graphicsmagick.hash b/package/graphicsmagick/graphicsmagick.hash
+index a894aedf11..044214c8fc 100644
+--- a/package/graphicsmagick/graphicsmagick.hash
++++ b/package/graphicsmagick/graphicsmagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  97dc1a9d4e89c77b25a3b24505e7ff1653b88f9bfe31f189ce10804b8efa7746  GraphicsMagick-1.3.40.tar.xz
+-sha256  0a20e661de942ebe115a354d0ec6d1d42b93856ea765f813f350a5ce5024cdb7  Copyright.txt
++sha256  dcea5167414f7c805557de2d7a47a9b3147bcbf617b91f5f0f4afe5e6543026b  GraphicsMagick-1.3.45.tar.xz
++sha256  27d121f97ad71ff506ac5a6a9539e969154f3a66f3da24fd5b6f268acd106295  Copyright.txt
 diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
-index baaa9bcb02..4b9f3bd23c 100644
+index 76b826ceef..baaa9bcb02 100644
 --- a/package/graphicsmagick/graphicsmagick.mk
 +++ b/package/graphicsmagick/graphicsmagick.mk
-@@ -11,6 +11,12 @@ GRAPHICSMAGICK_LICENSE = MIT
- GRAPHICSMAGICK_LICENSE_FILES = Copyright.txt
- GRAPHICSMAGICK_CPE_ID_VENDOR = graphicsmagick
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# 0001-ReadJXLImage-Apply-image-dimension-resource-limits.patch
-+GRAPHICSMAGICK_IGNORE_CVES += CVE-2025-27795
-+
-+# 0002-ReadJXLImage-pixel_format-num_channels-needs-to-be.patch
-+GRAPHICSMAGICK_IGNORE_CVES += CVE-2025-32460
-+
- GRAPHICSMAGICK_INSTALL_STAGING = YES
- GRAPHICSMAGICK_CONFIG_SCRIPTS = GraphicsMagick-config GraphicsMagickWand-config
- 
+-GRAPHICSMAGICK_VERSION = 1.3.40
++GRAPHICSMAGICK_VERSION = 1.3.45
+ GRAPHICSMAGICK_SOURCE = GraphicsMagick-$(GRAPHICSMAGICK_VERSION).tar.xz
+ GRAPHICSMAGICK_SITE = https://downloads.sourceforge.net/project/graphicsmagick/graphicsmagick/$(GRAPHICSMAGICK_VERSION)
+ GRAPHICSMAGICK_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
