@@ -4,70 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFAADC369D1
-	for <buildroot@archiver.kernel.org>; Wed, 23 Apr 2025 12:34:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A55DC369D7
+	for <buildroot@archiver.kernel.org>; Wed, 23 Apr 2025 13:20:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4131A82160;
-	Wed, 23 Apr 2025 12:34:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3AFAD830C5;
+	Wed, 23 Apr 2025 13:20:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6xr2JRN5xrrg; Wed, 23 Apr 2025 12:34:24 +0000 (UTC)
+ id kqLFfWdL7uhc; Wed, 23 Apr 2025 13:19:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6391382163
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 51117830C2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6391382163;
-	Wed, 23 Apr 2025 12:34:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 51117830C2;
+	Wed, 23 Apr 2025 13:19:58 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 818D31A0
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 12:34:23 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5579B19F
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 13:19:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 72C8D6006A
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 12:34:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B00561183
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 13:19:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UhVTjudKJGLo for <buildroot@buildroot.org>;
- Wed, 23 Apr 2025 12:34:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.146;
- helo=smtpweb146.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6FF526116B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FF526116B
-Received: from smtpweb146.aruba.it (smtpweb146.aruba.it [62.149.158.146])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6FF526116B
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 12:34:20 +0000 (UTC)
-Received: from localhost.localdomain ([212.103.203.10])
- by Aruba SMTP with ESMTPSA
- id 7ZIvus8iU2QPu7ZIwujSwf; Wed, 23 Apr 2025 14:34:18 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ id ChD4b2gIFCge for <buildroot@buildroot.org>;
+ Wed, 23 Apr 2025 13:19:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
+ envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 315656106D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 315656106D
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 315656106D
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 13:19:55 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id
+ ffacd0b85a97d-39c1ef4acf2so4222294f8f.0
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 06:19:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1745414394; x=1746019194;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=CdKIoKrw9y2EpbcrVu8+qJTjwcxdfpMTXMad68ZjhNk=;
+ b=TygtIWo+dfVSoktgaJQdLPfnsoSz0pd6IH7HNwP++dpbSgysCO/v4iqKmkIQc/Sun0
+ LnZpZuPycqg2rSh+nRNJyUtKtIJTpiHo25IPDCv3c/M0CzS2mpbY+kEvChXNKpSvwrTn
+ XrSloCEFu7htXyQIRmUWOOGtxRQ9ObE2yKuqQmurJNbTPoUA8D+RjPApqrIckc90uXgS
+ aw/aXSxWZvkOOD0FOq5+lb34RUiknn6Ip+kXNeLc0byYzWwjCHYQlk0SvNwFetiD3Gqz
+ AhLfA8clQ+Ef0mXAcEzmf2zgWfW2TOoGICfnYc7W/sWMYy1hgSXNPeLF2sgCUtQPymI+
+ 9P3A==
+X-Gm-Message-State: AOJu0YxwcJP/4RRFj8lbWIQAkXBjqUTRNyVL0MDzuhVTVcVEZRJ3ewI2
+ rk6t3Ufcs1ht8csfN19dzSX+Hkbktr3hBacsiOmtxUTPIJNRdgRbIe79257M5PDNIgI9wF7rQAQ
+ k
+X-Gm-Gg: ASbGncvIpNZ+EuY2o04Q8Styu/uuO+yO+dP0EEFl05SRfil8Sh7/1Ru/+AuvnzX7NHH
+ aUHkQVab2bJDiympMUetangBHAj7282agd2QfPvd4e5/84cy/AEGNZYFLXBmt+8S1cGRMwJwOBa
+ bZ4Zgzdb2h4x07lENLe6BUHY456Nqc3l/E0XmFZt4/F+ikaloX4fKukIXdVyegdkrV959F6aWFW
+ bFIAUt54dKicaJn6ROcpczpDhkrT6miOoHPxyhm+GrMVElfOFxMDjUOUqKtqkoIc9KirA3tFqrq
+ V8Thjp0NdvXCZiL3yPik162yfijjexNZrUEQTdM7S6KFKBj86pud1ijkCbYCO3a6eBIpfxM3/BT
+ XzSCEgtpeCIlnUHhB2AW8bgn9cC7N6HiqwPaR
+X-Google-Smtp-Source: AGHT+IHtZO+ST/YtkZotWLEj7qUK4EO2fMrdg8lAUu3MztaT9Q1vfkOB7DIAR6C9xGoCX6QiVh5q+A==
+X-Received: by 2002:a05:6000:178d:b0:39c:c64e:cf58 with SMTP id
+ ffacd0b85a97d-39efbaf20ccmr14900983f8f.55.1745414393648; 
+ Wed, 23 Apr 2025 06:19:53 -0700 (PDT)
+Received: from debian-hp-1.local.essensium.com
+ (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-44092d23262sm25494235e9.16.2025.04.23.06.19.53
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 23 Apr 2025 06:19:53 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 23 Apr 2025 14:34:16 +0200
-Message-Id: <20250423123416.310182-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.39.5
+Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
+Date: Wed, 23 Apr 2025 15:19:28 +0200
+Message-ID: <20250423131933.834900-1-raphael.melotte@mind.be>
+X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfP4xu8VrQhrySUM9yOYIppSXK1Ncp2c0glzPkIw+LLC9i1aA3/1FF/8oVn1/Mljy+ZAwvZrko5P/+OPeUNWHAKj4eWFFcfPwyQwyxg+oxEZc3OC9U9wc
- s6byJorpaO8muBDyfSwCDiTQiWathPO+HgftcvarOcSDErxRdJDU3yxfOQ1GTqsXwxSTKeSXwtRoxgX2lu6aWUPWP+YJmlnT+Eyl5Zmc4DC7N6qPbKqvO6d/
- MBqukM8s/4fLPn/6zVmwshnMkGOqH71PPL6mzfTUp3juxZX7ezWUYU6KFInJA63y
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1745411658; bh=cX55nDVHnO9dkkOBb2ADCspHPaKfbXOQ2vnjXDpdwzQ=;
- h=From:To:Subject:Date:MIME-Version;
- b=lYhCDHSN5GsLSvLY0dORmAV9SG6W7KThfgtxICG8uv/rFiYQ/FLMuIlb/vuCI1h61
- eTxuT3UT/CnQOW474Olo8p5cNMMIyTgfxmFQQYj7MyvX6xTO3iOvx0wGSqOj6qKsOZ
- eC/dQRZs4I1QdShYxjf5DemETgwwHrziNg4TimhyMGhi/NIgF146Jb/CG4kj9T8Obu
- HnPGs+E/OI4neAUgTyD5yDDqR0DMzp3ODPdZI7y0zdWDEdSP9cwpXyQTbjpN3/xbFH
- djRlzOxn+zN8XuaEzVCCtK+FGHJCBWsZ2NBskevjgdodEqQHnV4xnrT2OoCKSnJvL3
- I5Jo4dkEUVtVg==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1745414394; x=1746019194; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=CdKIoKrw9y2EpbcrVu8+qJTjwcxdfpMTXMad68ZjhNk=;
+ b=Swj9lGvH/WMy1Btzx1iwDlJ/UuBwmdauXBtFRyQO+7GLzWq5is40IdDa15c4D0Kibt
+ KJlcvApGaI8Jb1HBk21cb7PwBWkCM0Ts2q1IXNvEB1u5I/IxMqsfp7ejd/8sVYV7fJwu
+ cPrVg4svDxOQs5DAzmLpEoQ9EwtsLsXwjyeWazYq2pQmiW0eRzpFi7POwVDHUiGNKWfr
+ +0mM3JI+gos/sOvtrjLtTqyPxOZ2agY3n3hFDAdhaoPzCCsMmqo27znkszQA8QaZazg2
+ noKqwSx0z33jkkZ7HWlPBEoMQCjuO+/8BP6QlZUqHpttNF/pj5/KfRjatcQhKjMD5cJr
+ iW8g==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=lYhCDHSN
-Subject: [Buildroot] [PATCH] package/libfuse3: fix build failure with
- missing pthread_setname_np()
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=Swj9lGvH
+Subject: [Buildroot] [RFC PATCH 0/2] support/scripts/pkg-stats: add support
+ for version prefixes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,95 +109,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Rapha=C3=ABl_M=C3=A9lotte_via_buildroot?=
+ <buildroot@buildroot.org>
+Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add local patch pending upstream to guard for pthread_setname_np() presence
-
-Fixes:
-https://autobuild.buildroot.net/results/f3c/f3cfaa8ed63483858ffa32b719ea4be68ba6c4f3//
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ...read_setname_np-exists-before-use-it.patch | 63 +++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 package/libfuse3/0003-Check-if-pthread_setname_np-exists-before-use-it.patch
-
-diff --git a/package/libfuse3/0003-Check-if-pthread_setname_np-exists-before-use-it.patch b/package/libfuse3/0003-Check-if-pthread_setname_np-exists-before-use-it.patch
-new file mode 100644
-index 0000000000..8266e8872d
---- /dev/null
-+++ b/package/libfuse3/0003-Check-if-pthread_setname_np-exists-before-use-it.patch
-@@ -0,0 +1,63 @@
-+From 27582a0f4672f8a770e73d6a05002dea86169906 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 23 Apr 2025 14:28:29 +0200
-+Subject: [PATCH] Check if pthread_setname_np() exists before use it
-+
-+Since pthread_setname_np() is the only pthread function that requires NPTL
-+and it basically only set thread name, let's check if pthread_setname_np()
-+does exist, otherwise let's not call pthread_setname_np() to shrink
-+dependencies.
-+
-+Upstream: https://github.com/libfuse/libfuse/pull/1202
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ lib/fuse.c         | 2 ++
-+ lib/fuse_loop_mt.c | 2 ++
-+ meson.build        | 3 ++-
-+ 3 files changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/lib/fuse.c b/lib/fuse.c
-+index 136f0c2..49f5711 100644
-+--- a/lib/fuse.c
-++++ b/lib/fuse.c
-+@@ -4917,7 +4917,9 @@ static void *fuse_prune_nodes(void *fuse)
-+ 	struct fuse *f = fuse;
-+ 	int sleep_time;
-+ 
-++#ifdef HAVE_PTHREAD_SETNAME_NP
-+ 	pthread_setname_np(pthread_self(), "fuse_prune_nodes");
-++#endif
-+ 
-+ 	while(1) {
-+ 		sleep_time = fuse_clean_cache(f);
-+diff --git a/lib/fuse_loop_mt.c b/lib/fuse_loop_mt.c
-+index 95316f7..d6be998 100644
-+--- a/lib/fuse_loop_mt.c
-++++ b/lib/fuse_loop_mt.c
-+@@ -132,7 +132,9 @@ static void *fuse_do_work(void *data)
-+ 	struct fuse_worker *w = (struct fuse_worker *) data;
-+ 	struct fuse_mt *mt = w->mt;
-+ 
-++#ifdef HAVE_PTHREAD_SETNAME_NP
-+ 	pthread_setname_np(pthread_self(), "fuse_worker");
-++#endif
-+ 
-+ 	while (!fuse_session_exited(mt->se)) {
-+ 		int isforget = 0;
-+diff --git a/meson.build b/meson.build
-+index f28df3d..a3aa735 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -72,7 +72,8 @@ private_cfg.set_quoted('PACKAGE_VERSION', meson.project_version())
-+ # Test for presence of some functions
-+ test_funcs = [ 'fork', 'fstatat', 'openat', 'readlinkat', 'pipe2',
-+                'splice', 'vmsplice', 'posix_fallocate', 'fdatasync',
-+-               'utimensat', 'copy_file_range', 'fallocate', 'static_assert' ]
-++               'utimensat', 'copy_file_range', 'fallocate', 'static_assert',
-++               'pthread_setname_np' ]
-+ foreach func : test_funcs
-+     private_cfg.set('HAVE_' + func.to_upper(),
-+         cc.has_function(func, prefix: include_default, args: args_default))
-+-- 
-+2.39.5
-+
--- 
-2.39.5
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SSBzdGFydGVkIHRoaXMgc2VyaWVzIGFzIGFuIGF0dGVtcHQgYXQgc29sdmluZyBwa2ctc3RhdHMn
+IGlzc3VlIHdpdGgKcGFja2FnZXMgdXNpbmcgdmVyc2lvbiBwcmVmaXhlcy4KQ3VycmVudGx5IHBr
+Zy1zdGF0cyByZXBvcnRzIHRoZXNlIHBhY2thZ2VzIGFzIG91dGRhdGVkLCBldmVuIHdoZW4gdGhl
+eQphY3R1YWxseSBhcmUgdXAgdG8gZGF0ZS4KCkluIHRoZSBtZWFudGltZSBJIHJlYWxpemVkIHRo
+YXQgYSBkaWZmZXJlbnQgYXBwcm9hY2ggd2FzIHRha2VuIGluIDIwMTkKKHNlZSBbMV0pLCBzbyBp
+dCdzIHByb2JhYmx5IGEgZ29vZCBpZGVhIHRvIGZvbGxvdyB0aGF0IHJvdXRlCmluc3RlYWQuIEkn
+bSBzdGlsbCBzZW5kaW5nIHRoZSBzZXJpZXMgaW4gY2FzZSBpbiBjYW4gYmUgb2YgYW55IHVzZSBp
+bgp0aGUgZnV0dXJlIG9yIHNlcnZlIGFzIGEgYmFzaXMgZm9yIG5ldyBkaXNjdXNzaW9ucy4KCkEg
+bmV3IHBlci1wYWNrYWdlIHZhcmlhYmxlIGlzIGludHJvZHVjZWQgdG8gY29uZmlndXJlIHRoZSBw
+cmVmaXggZm9yCmVhY2ggcGFja2FnZSwgYW5kIGEgc2Vjb25kIGNvbW1pdCBjb25maWd1cmVzIGl0
+IGZvciBldmVyeSBwYWNrYWdlcwp0aGF0IHVzZXMgJ3YnIGFzIGEgcHJlZml4LgoKVGhpcyBhcHBy
+b2FjaCBpcyBub3QgaWRlYWwgYXMgaXQgcmVxdWlyZXMgYSBuZXcgcGVyLXBhY2thZ2UgdmFyaWFi
+bGUKdG8gYmUgaW50cm9kdWNlZCwgYnV0IGl0IGdpdmVzIHVzIHRoZSBmbGV4aWJpbGl0eSB0byBj
+b25maWd1cmUKZGlmZmVyZW50IHByZWZpeGVzIGZvciBkaWZmZXJlbnQgcGFja2FnZXMgaWYgbmVl
+ZGVkIHdoaWxlIGF2b2lkaW5nIHRoZQp0d28gY29waWVzIGluIERMX0RJUiBtZW50aW9uZWQgaW4g
+WzJdLgoKWzFdOiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvcGlwZXJtYWlsL2J1aWxkcm9v
+dC8yMDE5LUp1bmUvNjE3MjE3Lmh0bWwKWzJdOiBodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcv
+cGlwZXJtYWlsL2J1aWxkcm9vdC8yMDE5LUp1bmUvNjE3NTc1Lmh0bWwKClJhcGhhw6tsIE3DqWxv
+dHRlICgyKToKICBzdXBwb3J0L3NjcmlwdHMvcGtnLXN0YXRzOiBhZGQgc3VwcG9ydCBmb3IgdmVy
+c2lvbiBwcmVmaXhlcwogIHBhY2thZ2U6IGFkZCAqX1ZFUlNJT05fUFJFRklYIHRvIHBhY2thZ2Vz
+IHVzaW5nIHByZWZpeCAndicKCiBkb2NzL21hbnVhbC9hZGRpbmctcGFja2FnZXMtZ2VuZXJpYy5h
+ZG9jICAgICAgICAgfCAgNSArKysrKwogcGFja2FnZS9hYXJkdmFyay1kbnMvYWFyZHZhcmstZG5z
+Lm1rICAgICAgICAgICAgIHwgIDEgKwogLi4uL2FtYXpvbi1lY3ItY3JlZGVudGlhbC1oZWxwZXIu
+bWsgICAgICAgICAgICAgIHwgIDEgKwogcGFja2FnZS9iY2MvYmNjLm1rICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIHwgIDEgKwogcGFja2FnZS9icGZ0b29sL2JwZnRvb2wubWsgICAgICAg
+ICAgICAgICAgICAgICAgIHwgIDEgKwogcGFja2FnZS9icmlja2QvYnJpY2tkLm1rICAgICAgICAg
+ICAgICAgICAgICAgICAgIHwgIDEgKwogcGFja2FnZS9jdXRla2V5Ym9hcmQvY3V0ZWtleWJvYXJk
+Lm1rICAgICAgICAgICAgIHwgIDEgKwogLi4uL2RvY2tlci1jcmVkZW50aWFsLWdjci5tayAgICAg
+ICAgICAgICAgICAgICAgIHwgIDEgKwogcGFja2FnZS9lbWJpZ2dlbi1kaXNrL2VtYmlnZ2VuLWRp
+c2subWsgICAgICAgICAgIHwgIDEgKwogLi4uL2dzdHJlYW1lcjEvZ3N0MS1pbnRlcnBpcGUvZ3N0
+MS1pbnRlcnBpcGUubWsgIHwgIDEgKwogcGFja2FnZS9nc3RyZWFtZXIxL2dzdDEtc2hhcmsvZ3N0
+MS1zaGFyay5tayAgICAgIHwgIDEgKwogcGFja2FnZS9saWJjYW1lcmEvbGliY2FtZXJhLm1rICAg
+ICAgICAgICAgICAgICAgIHwgIDEgKwogcGFja2FnZS9uZXRhdmFyay9uZXRhdmFyay5tayAgICAg
+ICAgICAgICAgICAgICAgIHwgIDEgKwogcGFja2FnZS9vZ3JlL29ncmUubWsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIHwgIDEgKwogcGFja2FnZS9vcGVuNjI1NDEvb3BlbjYyNTQxLm1rICAg
+ICAgICAgICAgICAgICAgIHwgIDEgKwogcGFja2FnZS9wb2RtYW4vcG9kbWFuLm1rICAgICAgICAg
+ICAgICAgICAgICAgICAgIHwgIDEgKwogcGFja2FnZS9weXRob24td2ViMnB5L3B5dGhvbi13ZWIy
+cHkubWsgICAgICAgICAgIHwgIDEgKwogcGFja2FnZS9zaWduYWwtZXN0aW1hdG9yL3NpZ25hbC1l
+c3RpbWF0b3IubWsgICAgIHwgIDEgKwogLi4uL3NwaXJ2LWxsdm0tdHJhbnNsYXRvci5tayAgICAg
+ICAgICAgICAgICAgICAgIHwgIDEgKwogcGFja2FnZS90bC1leHBlY3RlZC90bC1leHBlY3RlZC5t
+ayAgICAgICAgICAgICAgIHwgIDEgKwogc3VwcG9ydC9zY3JpcHRzL3BrZy1zdGF0cyAgICAgICAg
+ICAgICAgICAgICAgICAgIHwgMTYgKysrKysrKysrKysrKystLQogMjEgZmlsZXMgY2hhbmdlZCwg
+MzggaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKCi0tIAoyLjQ5LjAKCl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
+aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
