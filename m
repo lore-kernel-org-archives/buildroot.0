@@ -4,78 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B1AAC369D5
-	for <buildroot@archiver.kernel.org>; Wed, 23 Apr 2025 20:38:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C37DC369CB
+	for <buildroot@archiver.kernel.org>; Wed, 23 Apr 2025 20:50:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D9D6260BBC;
-	Wed, 23 Apr 2025 20:38:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C29760C34;
+	Wed, 23 Apr 2025 20:50:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 20fv-GqwRAZG; Wed, 23 Apr 2025 20:38:32 +0000 (UTC)
+ id mzep5xPxMlg7; Wed, 23 Apr 2025 20:50:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D4457607E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4201B60870
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D4457607E4;
-	Wed, 23 Apr 2025 20:38:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 72E9C19F
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:38:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4201B60870;
+	Wed, 23 Apr 2025 20:50:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9D91319F
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:50:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 583264121E
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:38:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8F48660870
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:50:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1IVyS_1IdslP for <buildroot@buildroot.org>;
- Wed, 23 Apr 2025 20:38:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7Y9Cp52smi6Z for <buildroot@buildroot.org>;
+ Wed, 23 Apr 2025 20:50:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1968D411FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1968D411FE
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1968D411FE
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:38:28 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6D6C4439E8;
- Wed, 23 Apr 2025 20:38:24 +0000 (UTC)
-Date: Wed, 23 Apr 2025 22:38:22 +0200
-To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= via buildroot
- <buildroot@buildroot.org>
-Message-ID: <20250423223822.6bc7ae4e@windsurf>
-In-Reply-To: <20250423131933.834900-3-raphael.melotte@mind.be>
-References: <20250423131933.834900-1-raphael.melotte@mind.be>
- <20250423131933.834900-3-raphael.melotte@mind.be>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 34113607AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 34113607AB
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 34113607AB
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:50:29 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B0E1B441B2;
+ Wed, 23 Apr 2025 20:50:26 +0000 (UTC)
+Date: Wed, 23 Apr 2025 22:50:25 +0200
+To: Guillaume Chaye <guillaume.chaye@zeetim.com>
+Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Julien Olivain <ju.o@free.fr>
+Message-ID: <20250423225025.21b3125f@windsurf>
+In-Reply-To: <20250325131136.572799-1-guillaume.chaye@zeetim.com>
+References: <20250325131136.572799-1-guillaume.chaye@zeetim.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgeejheekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtqhertdertdejnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepueetjeejveetheekvdfhheetjedvueeuueeiheeuvedvkeehuefhvddtteetuedvnecuffhomhgrihhnpehgihhtlhgrsgdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedufedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtoheprhgrphhhrggvlhdrmhgvlhhothhtvgesmhhinhgur
- dgsvgdprhgtphhtthhopehmrghrtghushdrfhholhhkvghsshhonhesghhmrghilhdrtghomhdprhgtphhtthhopegrnhhgvghlohdrtghomhhprghgnhhutggtihesghhmrghilhdrtghomhdprhgtphhtthhopehkihgvrhgrnhdrsghinhhghhgrmhesihguvggrshhonhgsohgrrhgurdgtohhmpdhrtghpthhtohepjhgrmhgvshdrhhhilhhlihgrrhguudesghhmrghilhdrtghomhdprhgtphhtthhopegthhhrihhsthhirghnsegrphgvrhhtuhhrvgdruhhspdhrtghpthhtohepthhirghnhihurghnhhgrohefseduieefrdgtohhm
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgeejiedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepjedvjedvgfffveetieffudegieevleeigfffteefhefhtefhueelfeekjefgfedvnecuffhomhgrihhnpehgihhthhhusgdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggsnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdukeemkeeigegumedvuddttdemrgdttdhfmeehlegsfeemgehfvdemieefuggspdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegpdhrtghpthhtohepghhuihhllhgruhhmvgdrtghhrgihvgesiigvvghtihhmrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhot
+ hdrohhrghdprhgtphhtthhopegvrhhitgdrlhgvrdgsihhhrghnrdguvghvsehfrhgvvgdrfhhrpdhrtghpthhtohepjhhurdhosehfrhgvvgdrfhhr
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1745440705;
+ d=bootlin.com; s=gm1; t=1745441427;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=nNze5wE8fDQzhIs1NzYJtD/nh93ABm1rtMzZvg/oT6I=;
- b=o5kzrxRIKSBgRSkaYHk0OEbRrXQD4MjmKAIotzRAeee8VBNF910fZl1cT0WeE0jBWEGmGa
- VfALBnVZuhWyhDqWBSS22XdFfYpLvK3DRAMZlCoGQIA3czgaIH6F6cdga7PpHs1boO9tjs
- gNo82LL62o4ICeIOQRJDwDd7eMYWK+mnRSI+nB3nsKM+Dpv9+oHPahwSx5p6hcmHDxtxUJ
- RXnRMqMlEh6Et/S13Jx7LY1Okyn+26EjGJWlz8GdQEr/Sf9ciryDA4egKdKlKKP6y4QuKT
- E3dfpZChpPv2Rbzz9v6DJFkKTEYtboUBvMMi2kNKoq+gwoKNEaG3Dxv0jeRKaQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=lHmeeu3DRj0xBrL4yc/kX7qQaAQYlsQeZarIfUG/qJM=;
+ b=SgEjNPRGZjnExTedve95L1YD55AThMczKGV5fHI0NAIFduz5Nf/zHUaP+xVmw7viGPaDiA
+ uRbSt49ol0hd6MNK8xFwouUf1dqvsCZ+ivWFjhctdynxPjUaq9/eGXwuR7WB4hgkwHS3Dt
+ Gt52r4o6j6EdApxX7zZTltVge8hHaIwoXv2+ZZrDmCr6IgGSXzIl5IEzEcWc0puNgzvjYg
+ WClrlQKsllKKS/defEoWEmGXtbuDSgOw1fE4tp+WIPmRuGeXTqJlXISUjlfces84h87toT
+ nkmcXGKJOuCyw3zdpopOqZhPjhdOzhEn2XMUQG2izWOx2nTGxBKcJLtA+zJ2/w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=o5kzrxRI
-Subject: Re: [Buildroot] [RFC PATCH 2/2] package: add *_VERSION_PREFIX to
- packages using prefix 'v'
+ header.s=gm1 header.b=SgEjNPRG
+Subject: Re: [Buildroot] [PATCH 1/1] package/sane-airscan: add new package.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -89,52 +88,98 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Kieran Bingham <kieran.bingham@ideasonboard.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Christian Stewart <christian@aperture.us>, TIAN Yuanhao <tianyuanhao3@163.com>,
- Romain Naour <romain.naour@gmail.com>, Chris Packham <judge.packham@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- David Lechner <david@lechnology.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gUmFwaGHDq2wsCgorWWFubiwgQXJub3V0IGluIENjLgoKT24gV2VkLCAyMyBBcHIgMjAy
-NSAxNToxOTozMCArMDIwMApSYXBoYcOrbCBNw6lsb3R0ZSB2aWEgYnVpbGRyb290IDxidWlsZHJv
-b3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2FhcmR2YXJr
-LWRucy9hYXJkdmFyay1kbnMubWsgYi9wYWNrYWdlL2FhcmR2YXJrLWRucy9hYXJkdmFyay1kbnMu
-bWsKPiBpbmRleCBhMmU3NGE3MmJmLi4wMmZkZmFjYjg0IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uv
-YWFyZHZhcmstZG5zL2FhcmR2YXJrLWRucy5tawo+ICsrKyBiL3BhY2thZ2UvYWFyZHZhcmstZG5z
-L2FhcmR2YXJrLWRucy5tawo+IEBAIC02LDYgKzYsNyBAQAo+ICAKPiAgIyBXaGVuIHVwZGF0aW5n
-IHRoZSB2ZXJzaW9uIGhlcmUsIGFsc28gdXBkYXRlIG5ldGF2YXJrIGluIGxvY2tzdGVwCj4gIEFB
-UkRWQVJLX0ROU19WRVJTSU9OID0gdjEuMTQuMAo+ICtBQVJEVkFSS19ETlNfVkVSU0lPTl9QUkVG
-SVggPSB2CgpUaGFua3MgZm9yIHRoaXMgcHJvcG9zZWQgY2hhbmdlLiBXZSBrbm93IHRoaXMgaGFz
-IGJlZW4gYW4gaXNzdWUgZm9yCnF1aXRlIHNvbWUgdGltZSwgYnV0IEknbSBub3Qgc3VyZSB5b3Vy
-IHByb3Bvc2VkIHNvbHV0aW9uIGlzIHRoZSBvbmUgd2UKd2FudCAoaWRlYWxseSwgb2YgY291cnNl
-KS4KCkluZGVlZCwgdGhlcmUgaXMgYWxyZWFkeSBhIDxwa2c+X0RMX1ZFUlNJT04gdmFyaWFibGUg
-ZGVmaW5lZCBieSB0aGUKcGFja2FnZSBpbmZyYXN0cnVjdHVyZSwgd2hpY2ggd2UgaWRlYWxseSB3
-b3VsZCBsaWtlIHRvIGxldmVyYWdlLCBzbwp0aGF0IHdlIGNvdWxkIHdyaXRlOgoKPGZvbz5fVkVS
-U0lPTiA9IDEuMTQuMAo8Zm9vPl9ETF9WRVJTSU9OID0gdiQoPGZvbz5fVkVSU0lPTikKCkFuZCBv
-ZiBjb3Vyc2UsIHdoZW4gPGZvbz5fRExfVkVSU0lPTiBpcyB1bmRlZmluZWQsIHRoZSBpbmZyYSBh
-c3N1bWVzCnRoYXQgaXRzIHZhbHVlIGlzIHRoZSBvbmUgb2YgPGZvbz5fVkVSU0lPTi4KCkkgdHJp
-ZWQgaW1wbGVtZW50aW5nIHRoaXMgYSBsb25nIHRpbWUgYWdvOgoKICBodHRwczovL2dpdGxhYi5j
-b20vdHBldGF6em9uaS9idWlsZHJvb3QvLS9jb21taXQvYTBiNzAwZmIwOGNhODRiMzczMjQ3ZjNh
-NTI3NTVmZDRlODk5N2QyMgoKQW5kIEkgd3JvdGUgc29tZSB0ZXN0cyB0byB2ZXJpZnkgdGhlIGNv
-cnJlY3QgYmVoYXZpb3I6CgogIGh0dHBzOi8vZ2l0bGFiLmNvbS90cGV0YXp6b25pL2J1aWxkcm9v
-dC8tL2NvbW1pdC8zZTMyZmViNjQxMzVkNWU0MzQ3ZjJhMThlMTY0ODM5OGVmYzFhNmIxCgpidXQg
-bm8gbWF0dGVyIHdoYXQgSSB0cmllZCwgSSBjb3VsZG4ndCBmaW5kIGEgc29sdXRpb24gdGhhdCB3
-YXMgcGFzc2luZwphbGwgdGVzdHMuCgpJIHJlbWVtYmVyIHdlIGRpc2N1c3NlZCB3aXRoIHdpdGgg
-WWFubiBhbmQvb3IgQXJub3V0IHF1aXRlIHNvbWUgdGltZQphZ28sIGFuZCBJIGJlbGlldmUgd2Ug
-cmVhY2hlZCBzb21lIGNvbmNsdXNpb24gb24gaG93IGl0IHNob3VsZCBiZQppbXBsZW1lbnRlZCwg
-YnV0IG9mIGNvdXJzZSBJIGZvcmdvdCB3aGF0IHRoaXMgY29uY2x1c2lvbiB3YXMuIE1heWJlCllh
-bm4gYW5kL29yIEFybm91dCB3aWxsIGhhdmUgYSBiZXR0ZXIgbWVtb3J5IHRoYW4gSSBkbz8KCkJl
-c3QgcmVnYXJkcywKClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENF
-TywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nIGFuZCB0cmFp
-bmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290Cg==
+Hello Guillaume,
+
+I have applied your patch, after doing a few fixes. See below.
+
+On Tue, 25 Mar 2025 09:11:36 -0400
+Guillaume Chaye <guillaume.chaye@zeetim.com> wrote:
+
+> Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
+
+First, I have changed the commit title to:
+
+	package/sane-airscan: new package
+
+which is our canonical commit title when new packages are introduced.
+Also no final dot at the end of the commit title.
+
+
+> diff --git a/package/sane-airscan/Config.in b/package/sane-airscan/Config.in
+> new file mode 100644
+> index 0000000000..4f4a0ac7cc
+> --- /dev/null
+> +++ b/package/sane-airscan/Config.in
+> @@ -0,0 +1,20 @@
+> +config BR2_PACKAGE_SANE_AIRSCAN
+> +	bool "sane-airscan"
+> +	select BR2_PACKAGE_DBUS
+> +	select BR2_PACKAGE_SANE_BACKENDS
+> +	select BR2_PACKAGE_AVAHI
+> +	select BR2_PACKAGE_GNUTLS
+> +	select BR2_PACKAGE_LIBXML2
+> +	select BR2_PACKAGE_JPEG
+> +	select BR2_PACKAGE_LIBPNG
+> +	select BR2_PACKAGE_TIFF
+
+I've sorted alphabetically. Also, I added a comment on dbus dependency,
+because it wasn't clear why it was needed, and I selected
+BR2_PACKAGE_AVAHI_DAEMON which is needed to get the avahi-client
+library, which in turn is a requirement for sane-airscan.
+
+> +
+> +	help
+> +	  SANE backend for AirScan (eSCL) and WSD document scanners
+> +
+> +	  https://github.com/alexpevzner/sane-airscan
+
+This URL should be the last line of the help text, so I fixed that.
+
+> +
+> +	  Similar to how most modern network printers support
+> +	  "driverless" printing, using the universal vendor-neutral
+> +	  printing protocol, many modern network scanners and MFPs
+> +	  support "driverless" scanning.
+> diff --git a/package/sane-airscan/sane-airscan.mk b/package/sane-airscan/sane-airscan.mk
+> new file mode 100644
+> index 0000000000..d5d86d9145
+> --- /dev/null
+> +++ b/package/sane-airscan/sane-airscan.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# sane-airscan
+> +#
+> +################################################################################
+> +
+> +SANE_AIRSCAN_VERSION = 0.99.33
+> +SANE_AIRSCAN_SITE = $(call github,alexpevzner,sane-airscan,$(SANE_AIRSCAN_VERSION))
+> +SANE_AIRSCAN_DEPENDENCIES=  dbus sane-backends avahi gnutls libxml2 jpeg libpng tiff
+
+I sorted this alphabetically, and dropped dbus, which isn't a build
+time dependency of sane-airscan. Enabling dbus is needed to get avahi
+to build avahi-client, but that's avahi's business.
+
+> +SANE_AIRSCAN_LICENSE = GPLv2
+
+GPLv2 isn't a valid license code in Buildroot, it's GPL-2.0. But the
+license is actually GPL-2.0+, and with some exception, so I changed to:
+
+SANE_AIRSCAN_LICENSE = GPL-2.0+-with-exception
+
+and applied. Thanks for your contribution!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
