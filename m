@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B558C3ABD8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67321C2D0CD
 	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:55:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F118D709CB;
-	Mon, 19 May 2025 10:55:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20E7784280;
+	Mon, 19 May 2025 10:55:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sjizv_veSOKT; Mon, 19 May 2025 10:55:47 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id krXLSlaQfwBP; Mon, 19 May 2025 10:55:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC577709CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1BD0A84265
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC577709CF;
-	Mon, 19 May 2025 10:55:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1BD0A84265;
+	Mon, 19 May 2025 10:55:49 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1FF26D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:47 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 08DF2E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4A8A5419AE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7C15B412A2
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F2cdGneONSIN for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:15 +0000 (UTC)
+ id MnScd-nceV1I for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BC49412A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7EE041295
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4BC49412A2
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D7EE041295
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 496CE873D4; Mon, 19 May 2025 10:39:57 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id D4AEB872E7; Mon, 19 May 2025 10:39:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 25 Apr 2025 18:09:37 +0200
+Date: Wed, 23 Apr 2025 22:30:42 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3672945a8da3d5f464448f9c5abdb6dba09085c5
-X-Git-Newrev: dacf8e3c39652c595519ab6d424009962d8ae9ba
+X-Git-Oldrev: e42da630d0c1f3aca8ecc6d0d35a777f202270ed
+X-Git-Newrev: f78280bf262ceb1c1abbdade9de77fcc4add74ae
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103957.496CE873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/test: new bat runtime
- test
+Message-Id: <20250519103956.D4AEB872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sane-airscan: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,60 +58,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dacf8e3c39652c595519ab6d424009962d8ae9ba
+commit: https://git.buildroot.net/buildroot/commit/?id=f78280bf262ceb1c1abbdade9de77fcc4add74ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add a runtime test for the 'bat' package to verify that the binary executes
-correctly in a minimal Buildroot rootfs.The test cheks that:
-- 'bat --version' runs without error
-- 'bat' can read and display a text file
-- the displayed content matches the expected string
-
-Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/testing/tests/package/test_bat.py | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ DEVELOPERS                             |  3 +++
+ package/Config.in                      |  1 +
+ package/sane-airscan/Config.in         | 20 ++++++++++++++++++++
+ package/sane-airscan/sane-airscan.hash |  3 +++
+ package/sane-airscan/sane-airscan.mk   | 13 +++++++++++++
+ 5 files changed, 40 insertions(+)
 
-diff --git a/support/testing/tests/package/test_bat.py b/support/testing/tests/package/test_bat.py
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a692a9779c..1f0fc1903c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1361,6 +1361,9 @@ F:	package/python-rpi-ws281x/
+ F:	package/python-wtforms/
+ F:	package/rpi-rgb-led-matrix/
+ 
++N:	Guillaume Chaye
++F:	package/sane-airscan/
++
+ N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
+ F:	package/libnids/
+ F:	package/libxcrypt/
+diff --git a/package/Config.in b/package/Config.in
+index 1bdbbd28fd..93bb99c2d7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -615,6 +615,7 @@ endmenu
+ 	source "package/rtl8821au/Config.in"
+ 	source "package/rtl8821cu/Config.in"
+ 	source "package/rtl8822cs/Config.in"
++	source "package/sane-airscan/Config.in"
+ 	source "package/sane-backends/Config.in"
+ 	source "package/sdparm/Config.in"
+ 	source "package/sedutil/Config.in"
+diff --git a/package/sane-airscan/Config.in b/package/sane-airscan/Config.in
 new file mode 100644
-index 0000000000..018d0e002f
+index 0000000000..f35e244ea6
 --- /dev/null
-+++ b/support/testing/tests/package/test_bat.py
-@@ -0,0 +1,27 @@
-+import os
-+import infra.basetest
++++ b/package/sane-airscan/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_SANE_AIRSCAN
++	bool "sane-airscan"
++	select BR2_PACKAGE_AVAHI
++	select BR2_PACKAGE_AVAHI_DAEMON # needed to get avahi-client
++	select BR2_PACKAGE_DBUS # needed by avahi to get avahi-client
++	select BR2_PACKAGE_GNUTLS
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBPNG
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_SANE_BACKENDS
++	select BR2_PACKAGE_TIFF
++	help
++	  SANE backend for AirScan (eSCL) and WSD document scanners
 +
++	  Similar to how most modern network printers support
++	  "driverless" printing, using the universal vendor-neutral
++	  printing protocol, many modern network scanners and MFPs
++	  support "driverless" scanning.
 +
-+class TestBat(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+            """
-+            BR2_PACKAGE_BAT=y
-+            BR2_TARGET_ROOTFS_CPIO=y
-+            # BR2_TARGET_ROOTFS_TAR is not set
-+            """
++	  https://github.com/alexpevzner/sane-airscan
+diff --git a/package/sane-airscan/sane-airscan.hash b/package/sane-airscan/sane-airscan.hash
+new file mode 100644
+index 0000000000..40fb84e32d
+--- /dev/null
++++ b/package/sane-airscan/sane-airscan.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  647f41f84f9bce743c796ca84c1fda67e519968fab407490c28fd0cc6d7ac485  sane-airscan-0.99.33.tar.gz
++sha256  a2631c1b81992bd6f66db6be8b009ed7e3e998d1e2db4de497fa82d65011d373  LICENSE
+diff --git a/package/sane-airscan/sane-airscan.mk b/package/sane-airscan/sane-airscan.mk
+new file mode 100644
+index 0000000000..168430e3e3
+--- /dev/null
++++ b/package/sane-airscan/sane-airscan.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# sane-airscan
++#
++################################################################################
 +
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
++SANE_AIRSCAN_VERSION = 0.99.33
++SANE_AIRSCAN_SITE = $(call github,alexpevzner,sane-airscan,$(SANE_AIRSCAN_VERSION))
++SANE_AIRSCAN_DEPENDENCIES = avahi gnutls jpeg libpng libxml2 sane-backends tiff
++SANE_AIRSCAN_LICENSE = GPL-2.0+-with-exception
++SANE_AIRSCAN_LICENSE_FILES = LICENSE
 +
-+        # Check the programs can execute
-+        self.assertRunOk("bat --version")
-+        self.assertRunOk("echo 'hello test' > test.txt")
-+
-+        # Run bat and capture output
-+        output, exit_code = self.emulator.run("bat test.txt", timeout=10)
-+        self.assertEqual(exit_code, 0)
-+        self.assertIn("hello test", "\n".join(output))
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
