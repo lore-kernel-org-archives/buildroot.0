@@ -4,73 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACE3EC369CB
-	for <buildroot@archiver.kernel.org>; Wed, 23 Apr 2025 20:10:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CA6BC369CB
+	for <buildroot@archiver.kernel.org>; Wed, 23 Apr 2025 20:31:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 467064123B;
-	Wed, 23 Apr 2025 20:10:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 472B6411AB;
+	Wed, 23 Apr 2025 20:31:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uEcIt95eBiVi; Wed, 23 Apr 2025 20:10:12 +0000 (UTC)
+ id JC_a02dC9Wfm; Wed, 23 Apr 2025 20:31:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6804240E1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50B17411AF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6804240E1F;
-	Wed, 23 Apr 2025 20:10:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E32BE19F
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:10:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50B17411AF;
+	Wed, 23 Apr 2025 20:31:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8CE702A6
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:31:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C94A0836FE
- for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:10:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 72587411AB
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:31:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MYMYyIahZgDp for <buildroot@buildroot.org>;
- Wed, 23 Apr 2025 20:10:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 24B60836F1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24B60836F1
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 24B60836F1
- for <buildroot@busybox.net>; Wed, 23 Apr 2025 20:10:09 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 4DC672003D6;
- Wed, 23 Apr 2025 22:10:05 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 23 Apr 2025 22:10:05 +0200
-MIME-Version: 1.0
-Date: Wed, 23 Apr 2025 22:10:05 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Francois Perrad <francois.perrad@gadz.org>
-Cc: buildroot@busybox.net
-In-Reply-To: <20250423082506.1879122-1-francois.perrad@gadz.org>
-References: <20250423082506.1879122-1-francois.perrad@gadz.org>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <3194a0545013948eb93b533dda73385a@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1745439006;
- bh=sqvRjiUj4n9bpGeD8hwOxaxsymfxw7gr6vmq38F4AeM=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=KkE2E3rP5Pl77KhqMvkQJK7Kn1iHihPA7gl6iI8ZcBpij3rFGd9ke6CHTGYwTb/FK
- B4hBlCH0Q3sN5A/RBIzclOMCaVn7XKzsOhpjECIX97lvMQ0sgw85TfkqueoGt843ez
- WGpCNqoMcKMNz65OrclotwrdaRVP9jdZOPFuDFqV/08mveocRAhyecgmCG5XGiVQd7
- paSw2ynYuwbnhU+XYoSiQquktBkqOJt7YjlJjyIbbA3zQIJJqqxr8B7gPjQR1xUsWF
- PZDGadPOv7puLUsd6cI6cw1LiZC+xJGzLqxxXAOpHoj//slXSaLCgwJ4hDF92npM5l
- rEHR0Co3ZWSHw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=KkE2E3rP
-Subject: Re: [Buildroot] [PATCH 1/2] configs/olimex_a20_olinuxino_lime*:
- switch to Bootlin glibc stable toolchain
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id z6Ek1sNr4cEr for <buildroot@buildroot.org>;
+ Wed, 23 Apr 2025 20:31:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5B543411AF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5B543411AF
+ for <buildroot@buildroot.org>; Wed, 23 Apr 2025 20:31:12 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3C82586270; Wed, 23 Apr 2025 20:31:12 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 23 Apr 2025 22:30:42 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e42da630d0c1f3aca8ecc6d0d35a777f202270ed
+X-Git-Newrev: f78280bf262ceb1c1abbdade9de77fcc4add74ae
+X-Patchwork-Hint: ignore
+Message-Id: <20250423203112.3C82586270@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sane-airscan: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,15 +57,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 23/04/2025 10:25, Francois Perrad via buildroot wrote:
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+commit: https://git.buildroot.net/buildroot/commit/?id=f78280bf262ceb1c1abbdade9de77fcc4add74ae
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Series applied to master, thanks.
+Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                             |  3 +++
+ package/Config.in                      |  1 +
+ package/sane-airscan/Config.in         | 20 ++++++++++++++++++++
+ package/sane-airscan/sane-airscan.hash |  3 +++
+ package/sane-airscan/sane-airscan.mk   | 13 +++++++++++++
+ 5 files changed, 40 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a692a9779c..1f0fc1903c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1361,6 +1361,9 @@ F:	package/python-rpi-ws281x/
+ F:	package/python-wtforms/
+ F:	package/rpi-rgb-led-matrix/
+ 
++N:	Guillaume Chaye
++F:	package/sane-airscan/
++
+ N:	Guillaume William Brs <guillaume.bressaix@gmail.com>
+ F:	package/libnids/
+ F:	package/libxcrypt/
+diff --git a/package/Config.in b/package/Config.in
+index 1bdbbd28fd..93bb99c2d7 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -615,6 +615,7 @@ endmenu
+ 	source "package/rtl8821au/Config.in"
+ 	source "package/rtl8821cu/Config.in"
+ 	source "package/rtl8822cs/Config.in"
++	source "package/sane-airscan/Config.in"
+ 	source "package/sane-backends/Config.in"
+ 	source "package/sdparm/Config.in"
+ 	source "package/sedutil/Config.in"
+diff --git a/package/sane-airscan/Config.in b/package/sane-airscan/Config.in
+new file mode 100644
+index 0000000000..f35e244ea6
+--- /dev/null
++++ b/package/sane-airscan/Config.in
+@@ -0,0 +1,20 @@
++config BR2_PACKAGE_SANE_AIRSCAN
++	bool "sane-airscan"
++	select BR2_PACKAGE_AVAHI
++	select BR2_PACKAGE_AVAHI_DAEMON # needed to get avahi-client
++	select BR2_PACKAGE_DBUS # needed by avahi to get avahi-client
++	select BR2_PACKAGE_GNUTLS
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_LIBPNG
++	select BR2_PACKAGE_LIBXML2
++	select BR2_PACKAGE_SANE_BACKENDS
++	select BR2_PACKAGE_TIFF
++	help
++	  SANE backend for AirScan (eSCL) and WSD document scanners
++
++	  Similar to how most modern network printers support
++	  "driverless" printing, using the universal vendor-neutral
++	  printing protocol, many modern network scanners and MFPs
++	  support "driverless" scanning.
++
++	  https://github.com/alexpevzner/sane-airscan
+diff --git a/package/sane-airscan/sane-airscan.hash b/package/sane-airscan/sane-airscan.hash
+new file mode 100644
+index 0000000000..40fb84e32d
+--- /dev/null
++++ b/package/sane-airscan/sane-airscan.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  647f41f84f9bce743c796ca84c1fda67e519968fab407490c28fd0cc6d7ac485  sane-airscan-0.99.33.tar.gz
++sha256  a2631c1b81992bd6f66db6be8b009ed7e3e998d1e2db4de497fa82d65011d373  LICENSE
+diff --git a/package/sane-airscan/sane-airscan.mk b/package/sane-airscan/sane-airscan.mk
+new file mode 100644
+index 0000000000..168430e3e3
+--- /dev/null
++++ b/package/sane-airscan/sane-airscan.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# sane-airscan
++#
++################################################################################
++
++SANE_AIRSCAN_VERSION = 0.99.33
++SANE_AIRSCAN_SITE = $(call github,alexpevzner,sane-airscan,$(SANE_AIRSCAN_VERSION))
++SANE_AIRSCAN_DEPENDENCIES = avahi gnutls jpeg libpng libxml2 sane-backends tiff
++SANE_AIRSCAN_LICENSE = GPL-2.0+-with-exception
++SANE_AIRSCAN_LICENSE_FILES = LICENSE
++
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
