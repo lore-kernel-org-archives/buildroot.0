@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 720F4C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:46:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67BAFC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:46:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44FF0615F7;
-	Mon, 19 May 2025 10:46:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A6CC6167E;
+	Mon, 19 May 2025 10:46:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8I1JFpNPvk3O; Mon, 19 May 2025 10:46:30 +0000 (UTC)
+ id VSqD5F2E2eZz; Mon, 19 May 2025 10:46:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B6506137C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5970761674
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B6506137C;
-	Mon, 19 May 2025 10:46:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F738D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5970761674;
+	Mon, 19 May 2025 10:46:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0BEE4E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8702840D7A
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8EC3441786
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f5t2fE1e1_XG for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RrGrT4UJHGsa for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B33E40D59
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01D37417E9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4B33E40D59
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 01D37417E9
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 496DF83A2E; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ id F41C4873D4; Mon, 19 May 2025 10:39:56 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 3 Apr 2025 21:57:29 +0200
+Date: Thu, 24 Apr 2025 00:09:00 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8292b8fb89ba71d2b35d4596327b022741f18be4
-X-Git-Newrev: 43abcd4c7dd8ad65d2f2012f3d4292362550a3ed
+X-Git-Oldrev: 0f2249a4844ab87496643998921b5c763286b9c3
+X-Git-Newrev: 1fc51abc27d37c2874823ab864db0f32ae774eb6
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103947.496DF83A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-smbus2: new
- package
+Message-Id: <20250519103956.F41C4873D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/trace-cmd: bump to
+ version 3.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,77 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43abcd4c7dd8ad65d2f2012f3d4292362550a3ed
+commit: https://git.buildroot.net/buildroot/commit/?id=1fc51abc27d37c2874823ab864db0f32ae774eb6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add python-smbus2 as an alternative for python-smbus-cffi as the latter
-has not seen updates in 8 years and was archived on Jan 4 2024.
+Release notes:
+https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/tag/?h=trace-cmd-v3.3.2
 
-Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/Config.in                        |  1 +
- package/python-smbus2/Config.in          |  7 +++++++
- package/python-smbus2/python-smbus2.hash |  5 +++++
- package/python-smbus2/python-smbus2.mk   | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
+ package/trace-cmd/trace-cmd.hash | 2 +-
+ package/trace-cmd/trace-cmd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index eb22c81d1d..291e784f26 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1403,6 +1403,7 @@ menu "External python modules"
- 	source "package/python-slob/Config.in"
- 	source "package/python-smbprotocol/Config.in"
- 	source "package/python-smbus-cffi/Config.in"
-+	source "package/python-smbus2/Config.in"
- 	source "package/python-smmap2/Config.in"
- 	source "package/python-snappy/Config.in"
- 	source "package/python-sniffio/Config.in"
-diff --git a/package/python-smbus2/Config.in b/package/python-smbus2/Config.in
-new file mode 100644
-index 0000000000..fdacae6da1
---- /dev/null
-+++ b/package/python-smbus2/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_SMBUS2
-+	bool "python-smbus2"
-+	help
-+	  smbus2 is a drop-in replacement for smbus-cffi/smbus-python
-+	  in pure Python.
-+
-+	  https://github.com/kplindegaard/smbus2
-diff --git a/package/python-smbus2/python-smbus2.hash b/package/python-smbus2/python-smbus2.hash
-new file mode 100644
-index 0000000000..65f9eefaf6
---- /dev/null
-+++ b/package/python-smbus2/python-smbus2.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/smbus2/json
-+md5  5708a6cbf052f45a3ad6dd83c00902a6  smbus2-0.5.0.tar.gz
-+sha256  4a5946fd82277870c2878befdb1a29bb28d15cda14ea4d8d2d54cf3d4bdcb035  smbus2-0.5.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  6ee9cf18c3a75dd76fb549a4b607ae34eedc31a796c48157895e2ad28d66ce79  LICENSE
-diff --git a/package/python-smbus2/python-smbus2.mk b/package/python-smbus2/python-smbus2.mk
-new file mode 100644
-index 0000000000..c416a55005
---- /dev/null
-+++ b/package/python-smbus2/python-smbus2.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-smbus2
-+#
-+################################################################################
-+
-+PYTHON_SMBUS2_VERSION = 0.5.0
-+PYTHON_SMBUS2_SOURCE = smbus2-$(PYTHON_SMBUS2_VERSION).tar.gz
-+PYTHON_SMBUS2_SITE = https://files.pythonhosted.org/packages/10/c9/6d85aa809e107adf85303010a59b340be109c8f815cbedc5c08c73bcffef
-+PYTHON_SMBUS2_SETUP_TYPE = setuptools
-+PYTHON_SMBUS2_LICENSE = MIT
-+PYTHON_SMBUS2_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
+index c1b52a5195..832dae693e 100644
+--- a/package/trace-cmd/trace-cmd.hash
++++ b/package/trace-cmd/trace-cmd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  2efe103389367e93c764c4a788880ba51018a65dec21b0411965a5f06a6338c1  trace-cmd-v3.3.1.tar.gz
++sha256  cf16c91c0c49893499710ab2f722fd7c5ffce27485d2f7509370836b168ecd45  trace-cmd-v3.3.2.tar.gz
+ sha256  b1d04b850c1c7471b0f0896f6c6f0fcfc9f07e2dd183a5f5826af269fe9e88fb  COPYING
+ sha256  70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
+ sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
+diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
+index cf16ddcb17..ec8f5c4b59 100644
+--- a/package/trace-cmd/trace-cmd.mk
++++ b/package/trace-cmd/trace-cmd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TRACE_CMD_VERSION = 3.3.1
++TRACE_CMD_VERSION = 3.3.2
+ TRACE_CMD_SOURCE = trace-cmd-v$(TRACE_CMD_VERSION).tar.gz
+ TRACE_CMD_SITE = \
+ 	https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
