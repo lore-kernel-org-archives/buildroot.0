@@ -4,100 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C050DC369AB
-	for <buildroot@archiver.kernel.org>; Thu, 24 Apr 2025 10:25:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FCE2C369AB
+	for <buildroot@archiver.kernel.org>; Thu, 24 Apr 2025 11:22:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7094483AE4;
-	Thu, 24 Apr 2025 10:25:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD375813D7;
+	Thu, 24 Apr 2025 11:22:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GXLMBtcS7SGe; Thu, 24 Apr 2025 10:25:11 +0000 (UTC)
+ id C-L2Wf1Xu9Bc; Thu, 24 Apr 2025 11:22:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B475983AE5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1621B810A3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B475983AE5;
-	Thu, 24 Apr 2025 10:25:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 98B46EC
- for <buildroot@buildroot.org>; Thu, 24 Apr 2025 10:25:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1621B810A3;
+	Thu, 24 Apr 2025 11:22:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C8CCEC
+ for <buildroot@buildroot.org>; Thu, 24 Apr 2025 11:22:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7B359405BF
- for <buildroot@buildroot.org>; Thu, 24 Apr 2025 10:25:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61C4840A19
+ for <buildroot@buildroot.org>; Thu, 24 Apr 2025 11:22:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a8E1l_UtrIpb for <buildroot@buildroot.org>;
- Thu, 24 Apr 2025 10:25:09 +0000 (UTC)
+ id kHTP2cLZTxGg for <buildroot@buildroot.org>;
+ Thu, 24 Apr 2025 11:22:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
- envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1D2D04012A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1D2D04012A
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1D2D04012A
- for <buildroot@buildroot.org>; Thu, 24 Apr 2025 10:25:08 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-39ee682e0ddso515971f8f.1
- for <buildroot@buildroot.org>; Thu, 24 Apr 2025 03:25:08 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=elmehdi.younes@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 65534400F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 65534400F6
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 65534400F6
+ for <buildroot@buildroot.org>; Thu, 24 Apr 2025 11:22:19 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-43cf034d4abso8320425e9.3
+ for <buildroot@buildroot.org>; Thu, 24 Apr 2025 04:22:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1745490307; x=1746095107;
+ d=1e100.net; s=20230601; t=1745493737; x=1746098537;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=uT+ckNvh22Im0a25mAQwK3u8x8df8MNKRbRGiRXYTfQ=;
- b=HSo7TMQX8YXPPwPM2/fL5GBIU9vsO8X2DhCO/GTh/8FpnuPLdCj+nXfgtGNpsmdE0g
- KvApS8Ra3Op0eUo9+3QzdyUkTyvGVwrYIBrjmm6oc8sDKBpkHdlJpWuSKyPHmPYPNDZL
- bVmfPphyIik7VQuAUQMtjZIgxzgflOmIDHgWTvOhKIvNqXfGCNhWyuzRW0dWT10+JwXt
- NtGlACBG/3gw1yUxj//JwcKGBvlxV1gHOEH8YpyYTE4PYrEEomeIiasaZx7VYqu2OcR8
- i/OiQgp1ATZNmMu7O4ezw5xf97teRFz6emrCVrKt47B5dssSKJe2d0fYtIBS9bMA5ZwJ
- h0kQ==
-X-Gm-Message-State: AOJu0YynxdUPTBgebofdSW/lnrnwVIs20tb63w81qBGMwvtYZ9k4Orze
- y40mclLvIVWuR6+cFsttF+tehF6JnD9Jwq4SAhYsKCWurkKGj1B//dW2f5hJoLCMFeCP6Cri6E4
- qRO4=
-X-Gm-Gg: ASbGncvnVT8ClpAny4HIZVfXhGU28MrY87bM1qDxgZErJmG0C809h8L0ToqSmmLu3m3
- Ng1Z6gNAF9FcKm7kt+0dTOVCP4WwAl838TkF3Cy+excE32gP5+hqB3g7e71Qg0/r5h9mMBK78c+
- 8DIFVqsFlxJFNswx1Mm5QG3cNV2yAuGKDXV8+SUUr38wvOSnPf6wBvYzj8oJ2LUvqPgBSP3jzTK
- RZ/adVlSdXuh/tqHtn1tfvjtx2/mSxPbLZbxFG6/jmfeC0ACPh1brL0C8xtR3L2jGiy2DMwy/WK
- foJDOV1wZKIu5WmaUFov0M8hcX4DlConvY2IPpy+AxsdNFajCBrFEwTUp5Pjk/Ixpg6i5ILWph6
- grtQHC7v/mGO2keS63xBgtdXdc7U=
-X-Google-Smtp-Source: AGHT+IHS+FjuTXGGoSbyM3zbeasMnmdGRB9WWltKJUiCAxV5LQTppW0DuZxzfps2B6ROBbMFJZ3qnA==
-X-Received: by 2002:a05:6000:228a:b0:39a:c6c1:3408 with SMTP id
- ffacd0b85a97d-3a06cfa2eeamr1419149f8f.37.1745490306818; 
- Thu, 24 Apr 2025 03:25:06 -0700 (PDT)
-Received: from mind2.local.ess-mail.com (ip-94-140-185-241.reverse.destiny.be.
- [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3a06d4be673sm1587087f8f.23.2025.04.24.03.25.06
+ bh=qTf4JhYpveXYYLTeKpwo5wW6zENeChTRgGhtR6jHiYs=;
+ b=WmYwJN/Cff3Ldv/lR54yPtdKaeZJWIeo8l1vZQb8VdqAmC+WD6YHtruPlZeeuW0kTR
+ jwgRFTNzf3axNv3hCLWg98CKGWaotgXpneDpoU/1QCrp4lC0Z91quXIEh6L7gKM9aDEK
+ iFGyLwIxFbeZnsHh0ZASGP3uHOyp6o0euqzQAuPrnCVAlhyqTuMMCKLjbIJqqJDKAq4s
+ gWFTZ+0CjeHj3Igf07ocIyoDO3gJBcbHv2yc9paki1NSBdK2vwAdNOSp93tkGzkCuvmj
+ mp3R5xPB3mOvFIWKUTQV9N8nlL3tlRvVR+7p/6JzOAgfHPbTFc1aBR4CWOwrxi/41Y+Q
+ OoaQ==
+X-Gm-Message-State: AOJu0Ywdrl3yu18yS44eoIFeB+Yz5lF9lXagqJUNhRmm/ecs9Nk2E7bh
+ 2l7kJJUWUgJTFPH4s/rUbmq1qLkF/cgkRFZhIzDKN//SL26KOWYcH0PV7jO7Q4m2gLxI/HZtSad
+ iGjo=
+X-Gm-Gg: ASbGnct0Y8imrltobDrSPUxg8kDaurLahxorIuj5X7WXO6kftIX3CLdS9kNBvf1KKbI
+ dvYPSeifvnNwFeLk938Ssed4RAwiIvvDEPWylJpUcg0fL7v/b3qYjNwrpuMFTJp+z11NWv2Hmiq
+ B8FqWQzDZH78YyyBo4pBXjt10/nZIN7iHErYyZOUnyWslOFEfV1WAz9hLE57LbLttWivLVuT74m
+ Ll3WYGpGbKcyx12TM+Cg+DOhqTZwIIVGR2qd9uZlrVU5CPH/odN89sirz1ET3L77caaNXnOe+sL
+ rmJPNQ/VtTX/APZBk5jamfEwcoPNQCNKM2PngWoa051PIkZbN9M7qZBNSj9pSPuXzxXPP1SSvZp
+ PKEDeuB0gQCPjaXeYhRbiNpQVV6y7mHV+LY8=
+X-Google-Smtp-Source: AGHT+IFO71YB+uvVwA0j2tglWRNM92r2N3y83M6xs3xVUds+H2+zA2nUxIKPmLfMb6D+qKcA6tvc2w==
+X-Received: by 2002:a05:600c:3149:b0:439:9e13:2dd7 with SMTP id
+ 5b1f17b1804b1-4409bcfa3a6mr20071745e9.2.1745493737636; 
+ Thu, 24 Apr 2025 04:22:17 -0700 (PDT)
+Received: from P-NAN-ABRICOT..
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4409d2bf8dbsm17408385e9.35.2025.04.24.04.22.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 24 Apr 2025 03:25:06 -0700 (PDT)
+ Thu, 24 Apr 2025 04:22:17 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
- Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>,
- Romain Naour <romain.naour@gmail.com>
-Date: Thu, 24 Apr 2025 10:24:32 +0000
-Message-Id: <20250424102435.963312-1-raphael.melotte@mind.be>
-X-Mailer: git-send-email 2.34.1
+Cc: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+Date: Thu, 24 Apr 2025 13:22:02 +0200
+Message-ID: <20250424112203.2858147-1-elmehdi.younes@smile.fr>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1745490307; x=1746095107; darn=buildroot.org;
+ d=smile.fr; s=google; t=1745493737; x=1746098537; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=uT+ckNvh22Im0a25mAQwK3u8x8df8MNKRbRGiRXYTfQ=;
- b=QsaPasB4TEPfQfl8A+oOjgZadVLcsKRh6bWKKqMp24UPcCMH7N48dP+Ov36PMZln4n
- IXU/NIlMGo2J3R1DX067IOMw12prY1wlnPIRHTpTOjeA+qxshWiDAgMuwv5hAdZ4/fis
- bIQND6WbgazjKmD6MEcfOeU2MQhVDiZP1xWSiAHWZjUHMZjN3yNhFQJkNZ5oGEhdfEyc
- 8i6eA+7PSzfLqJcEyoBXJOGwcToh/zSy5D26e00fOGxsqiHkwWGjy78llnUgh77Fq4S9
- 3gVGlcdtf9dcFaWXeadAxpbcs/UDb0vwZ+owjS4J8SBur6zznHk5NGHPofykKdA4yhpl
- FPWg==
+ bh=qTf4JhYpveXYYLTeKpwo5wW6zENeChTRgGhtR6jHiYs=;
+ b=jIdmKXGQCoMBe9mYZBJdD//cilo9+o7b2eaQsZBochFBFPVQRUoSQ+ZZ7aNJwENdBE
+ Q+o7PW03tc6nq80OKchg0yCkA9Sh6l/4K1RmGUnM86T+Yf14RLPygnw+SRJVy1qeRKVD
+ D7pmfZOM+wtaQhoWZrp2lLSIGP0YraQlgxL4g=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=QsaPasB4
-Subject: [Buildroot] [PATCH 1/1] package/bcc: bump to version 0.34.0
+ dkim=pass (1024-bit key) header.d=smile.fr header.i=@smile.fr
+ header.a=rsa-sha256 header.s=google header.b=jIdmKXGQ
+Subject: [Buildroot] [PATCH v2] support/test: new dust runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,34 +104,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Rapha=C3=ABl_M=C3=A9lotte_via_buildroot?=
- <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: El Mehdi YOUNES via buildroot <buildroot@buildroot.org>
+Reply-To: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-UmVsZWFzZSBub3RlczogaHR0cHM6Ly9naXRodWIuY29tL2lvdmlzb3IvYmNjL3JlbGVhc2VzL3Rh
-Zy92MC4zNC4wCgpUaGUgJ3Rlc3RzLnBhY2thZ2UudGVzdF9iY2MnIHRlc3Qocykgd2VyZSBydW4g
-YW5kIHBhc3NlZC4KClNpZ25lZC1vZmYtYnk6IFJhcGhhw6tsIE3DqWxvdHRlIDxyYXBoYWVsLm1l
-bG90dGVAbWluZC5iZT4KLS0tCiBwYWNrYWdlL2JjYy9iY2MuaGFzaCB8IDIgKy0KIHBhY2thZ2Uv
-YmNjL2JjYy5tayAgIHwgMiArLQogMiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIg
-ZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9iY2MvYmNjLmhhc2ggYi9wYWNrYWdl
-L2JjYy9iY2MuaGFzaAppbmRleCA3ZWQxNjRlZGEwLi5lMDUzZDdjMzY3IDEwMDY0NAotLS0gYS9w
-YWNrYWdlL2JjYy9iY2MuaGFzaAorKysgYi9wYWNrYWdlL2JjYy9iY2MuaGFzaApAQCAtMSwzICsx
-LDMgQEAKICMgbG9jYWxseSBjYWxjdWxhdGVkCi1zaGEyNTYgIDU2NDFiMWRiMGI5ZWM2MGE2YWZk
-NjdiNDYwN2M3OTBmNDllNTgwYzIwNzYzOGJiNGViY2VhMjgwNWM2ZjM3M2IgIGJjYy12MC4zMS4w
-LWdpdDQudGFyLmd6CitzaGEyNTYgIDU4ZTYzNGI4ZGNkZGYxZjhmMzU4ZTZlNGU1MTgyYWQ1Nzk5
-OWMzYWIxN2NjOTEzZTBiZjg2YWYxNTcwODk1NDQgIGJjYy12MC4zNC4wLWdpdDQudGFyLmd6CiBz
-aGEyNTYgIGI0MDkzMGJiY2Y4MDc0NGM4NmM0NmExMmJjOWRhMDU2NjQxZDcyMjcxNmMzNzhmNTY1
-OWI5ZTU1NWVmODMzZTEgIExJQ0VOU0UudHh0CmRpZmYgLS1naXQgYS9wYWNrYWdlL2JjYy9iY2Mu
-bWsgYi9wYWNrYWdlL2JjYy9iY2MubWsKaW5kZXggZDVkNzJhYTljMC4uZjMzZmJjYmQzOCAxMDA2
-NDQKLS0tIGEvcGFja2FnZS9iY2MvYmNjLm1rCisrKyBiL3BhY2thZ2UvYmNjL2JjYy5tawpAQCAt
-NCw3ICs0LDcgQEAKICMKICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCiAKLUJDQ19WRVJTSU9OID0g
-djAuMzEuMAorQkNDX1ZFUlNJT04gPSB2MC4zNC4wCiBCQ0NfU0lURSA9IGh0dHBzOi8vZ2l0aHVi
-LmNvbS9pb3Zpc29yL2JjYwogQkNDX1NJVEVfTUVUSE9EID0gZ2l0CiBCQ0NfR0lUX1NVQk1PRFVM
-RVMgPSBZRVMKLS0gCjIuMzQuMQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
-ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Add a runtime test for the 'dust' package to verify that the binary
+executes correctly in a minimal buildroot rootfs. The test checks that:
+- 'dust --version' runs without error
+- 'dust' can analyze a directory structure with files
+- The output includes the expected directory names
+
+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+
+---
+Changes v1 -> v2:
+  - split output and exit_code from emulator.run()
+  - check exit code with assertEqual()
+  - join output using "\n"
+
+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+---
+ support/testing/tests/package/test_dust.py | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 support/testing/tests/package/test_dust.py
+
+diff --git a/support/testing/tests/package/test_dust.py b/support/testing/tests/package/test_dust.py
+new file mode 100644
+index 0000000000..8243024981
+--- /dev/null
++++ b/support/testing/tests/package/test_dust.py
+@@ -0,0 +1,32 @@
++import os
++import infra.basetest
++
++
++class TestDust(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_DUST=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv7",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check that dust is installed and can be executed
++        self.assertRunOk("dust --version")
++
++        # Create a test directory structure with some files
++        self.assertRunOk("mkdir -p testdir/subdir")
++        self.assertRunOk("dd if=/dev/zero of=testdir/a bs=1K count=10")
++        self.assertRunOk("dd if=/dev/zero of=testdir/subdir/b bs=1K count=5")
++
++        # Run dust on the test directory and capture the output
++        output, exit_code = self.emulator.run("dust testdir", timeout=10)
++        self.assertEqual(exit_code, 0)
++        self.assertIn("testdir", "\n".join(output))
++        self.assertIn("subdir", "\n".join(output))
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
