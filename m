@@ -1,101 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE107C369AB
-	for <buildroot@archiver.kernel.org>; Thu, 24 Apr 2025 07:38:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 285ACC369D1
+	for <buildroot@archiver.kernel.org>; Thu, 24 Apr 2025 07:38:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 644BC40C61;
-	Thu, 24 Apr 2025 07:38:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E914E81F72;
+	Thu, 24 Apr 2025 07:38:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EUhuYNDYkRm2; Thu, 24 Apr 2025 07:38:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e7ubmOUZ_Alo; Thu, 24 Apr 2025 07:38:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 90E8640C64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B39481F7B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 90E8640C64;
-	Thu, 24 Apr 2025 07:38:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2D4E419F
- for <buildroot@buildroot.org>; Thu, 24 Apr 2025 07:38:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2B39481F7B;
+	Thu, 24 Apr 2025 07:38:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4AC6719F
+ for <buildroot@buildroot.org>; Thu, 24 Apr 2025 07:38:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 123F581FB6
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3354781FB6
  for <buildroot@buildroot.org>; Thu, 24 Apr 2025 07:38:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xktc3PBPDKdY for <buildroot@buildroot.org>;
+ id ECXvJSdSAveu for <buildroot@buildroot.org>;
  Thu, 24 Apr 2025 07:38:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
  envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D96A38201B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D96A38201B
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D96A38201B
- for <buildroot@busybox.net>; Thu, 24 Apr 2025 07:38:19 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-43cf05f0c3eso4004745e9.0
- for <buildroot@busybox.net>; Thu, 24 Apr 2025 00:38:19 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8114481F7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8114481F7B
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8114481F7B
+ for <buildroot@busybox.net>; Thu, 24 Apr 2025 07:38:20 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-43d04dc73b7so5493625e9.3
+ for <buildroot@busybox.net>; Thu, 24 Apr 2025 00:38:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1745480298; x=1746085098;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=/CyxBdGid+Uj6i26+UpPPYcc/HE41InCnlkPvq2feBI=;
- b=AFHMpmblfmdgWj76r55BYSENfaN3BQH6sXu6xIKqrpkCVoZp1JoqzrUt3OvF2BiZEE
- +iJ8RTZ3YLhp44C+qB8sOg1yK7MSPcZsn3VNekjLgnod0P+/khhjKEF2MZq2TCQZvJAl
- pbUOu5rCOKDMamewYc3HNx5Qk6ERrVYIQ/IpcS+e2QhHo/3Qtng95uPEyEqgvh4mwdL7
- KETBwqKd8bhtip38dDsTBVPGQHn7ZoEhklE8fdJTE35CMqbA9LVCiW8/DOVWRuGa3bZH
- GspGSemNOL+8O8DyanYsT7XFcs4fCMZ1ZJoljxmjqt6ISQyeRPiZ/qHGamNq0KxgD+sf
- n25w==
-X-Gm-Message-State: AOJu0YyyRnIteIy9YHJTwi6paozmFoWSagAfox3BWcHs+rk+GhhIwrdv
- dMxUbVY6EJzdGnMdkTry8VNvD4nnHENg2rR8Gqun9msaFk17KNloLwB8PoWHlQJLSslaGYFipxY
- rag==
-X-Gm-Gg: ASbGncu1wbeStPr7T1S3hXS8l3poFgksHSLZeEesn0Qm1zuV5vLAdsK6/DOCaTJ4X/F
- HOlYfyMaAFlQ0xg8e8GAJvG5vQ1CDtHRlreXjRhQWRxl1aZaTN8j00GmJHLV7biWZSUQkNrtI58
- /YwHOhLvLvRKGGmUxIujmBJgvZarYrixVE0CEBVGlyhhLnN51q80rSRx/2ODC9lFPpQx8Cs6ncF
- osXF8uhPsQhUZb+aadUnUM0DMzqxyshlH9AyoHmG/1n/BUrP4pC5n/HutEKd631qa18F8hc2Re8
- IDU7Q0m41E8tVz0czUwddRdI8s8wtde3YLHnIvPv562ft606GG6OS5z/1PBdx/clmIVUp5JhD7v
- nKw==
-X-Google-Smtp-Source: AGHT+IFOwyiyC/Jye4a9b9b1mQZG9V+ykvMoFScHSjS077lR7LTAWuL9DboST1VTr4LMKWR6D/luKw==
-X-Received: by 2002:a05:600c:3d14:b0:43e:afca:808f with SMTP id
- 5b1f17b1804b1-4409bd909famr15500845e9.31.1745480297603; 
- Thu, 24 Apr 2025 00:38:17 -0700 (PDT)
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=ul87wzERAGqU8+x11rROhRO4tLl1efLmsexIXXGq9E0=;
+ b=vWQ3qw+NoSpoH0cjJUx6LEVh5RapMa3S31GT+aYWXwar3Xf/gt6ptZWSgcb13sWCNc
+ EuwQ7Lj0xf+r7Kst4j8eqq2fdkOPANo5tFl9pjWQzthe7W4A0IBuQELTszpWjN4FkeW5
+ 19Ymuz+qXb6GzjXQHNAqurpCsXxBNTHtebTp9+5b7TOqhNyOjvy8/AP1/EtnEBuBSZ2Y
+ hqEeKT+W9/pFDPr7J7D0UxTyB6lYZAWNfqfQS11LCsztP/6WyZCnJ8O/ew5qa3pY9p/f
+ ziqyuLB0gbLp2Z8w/+Q/Cfgdkna7r3aTHn5qsUoSITWAPX4/PkgYHZmIA8dFzSSNauGF
+ akNg==
+X-Gm-Message-State: AOJu0Yx8ZqBFr/23rby7jgzLh3h1kIGyG9+ZzVxwtDvr/Y1pdXhMXYIx
+ Hbxlu9YgYddgpIJymx9oh++lk7A6qPD2w5hcbBJu+3x+7p0+TIEP0QB/DMBGLOpOEapmq/dVvGM
+ ihg==
+X-Gm-Gg: ASbGnctWTL0+o6Jh0/RGXFDl+squQIwymTmaoX/n7EqPvO7cr0U9fd4hyPYPyMSX3gO
+ njdZv/z+g0a2pCXwHV4g/JsgICfGdnuOVaX+B/1Wwkvz4NZZxTZrLLxo9BWnKOsHUO/+P9KdgNq
+ l8d/w1H82eC0yZLwDUZfv9rJhhlLnczvFvVgpYIIhDfJUStbmAom9FEZLGH07yDUQ07zig0AMe/
+ A5rZoHN2tzi/16MAycHe8h1KtBmLKkpfOBQF6EcqNVc6hy54HSu4ApUOW/UIZceFwQs6rSLlI6F
+ 5V8ftKMUg6i3vpFeBcOGLlc1Tmc/BnX89amGFz3CSXtOzKmHCtFAfFeifgelkWP2FlaJ4Y0nVox
+ dkZGbkz7V7bI+
+X-Google-Smtp-Source: AGHT+IGadTt7LZ/rqAiGrqV0Kwk1TNhCxZH6PXj82ANfpa5kKa0//SLum64TMHlZSbEXZqrOYKpzwQ==
+X-Received: by 2002:a05:600c:a405:b0:43c:fda5:41e9 with SMTP id
+ 5b1f17b1804b1-4409d1e67a6mr9799915e9.31.1745480298515; 
+ Thu, 24 Apr 2025 00:38:18 -0700 (PDT)
 Received: from vm-2404.. (151.187.66.37.rev.sfr.net. [37.66.187.151])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4409d2a2e43sm9509335e9.10.2025.04.24.00.38.16
+ 5b1f17b1804b1-4409d2a2e43sm9509335e9.10.2025.04.24.00.38.17
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 24 Apr 2025 00:38:17 -0700 (PDT)
+ Thu, 24 Apr 2025 00:38:18 -0700 (PDT)
 To: buildroot@busybox.net
-Date: Thu, 24 Apr 2025 09:38:13 +0200
-Message-ID: <20250424073814.1880903-1-francois.perrad@gadz.org>
+Date: Thu, 24 Apr 2025 09:38:14 +0200
+Message-ID: <20250424073814.1880903-2-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250424073814.1880903-1-francois.perrad@gadz.org>
+References: <20250424073814.1880903-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gadz.org; s=google; t=1745480298; x=1746085098; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=/CyxBdGid+Uj6i26+UpPPYcc/HE41InCnlkPvq2feBI=;
- b=PF87khLAowYosDW2Lt56mCEubsmRm8/f9aANbHju07u/KU+5lz+ifBSTtOCi5o8C87
- fo4RlPOtUUT1HsqdhojOxz4XXWKugqzVf6QU1C+I/ROHpSSF1vnn+Ki7mXY37Vez7ZeC
- rWFOGcAmEaOAtmrKb2sPmpbgvaqOc32xtdkfvlm98p7Zfohu+2EOvxxhnsW6tEqPXzhG
- lPu8KSGhChbhtaZL2sTSMf2VeWZYVvdUHwjfKaLCOCti8vPdqqRcz57ERbzWm0lmvAH7
- sS+h2a6K8IupKoRIqFtfn2aGrgSsg3CCZnLmo4G8xLGkKSas6zillDJlrk3fYdwy5XIH
- rIhg==
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=ul87wzERAGqU8+x11rROhRO4tLl1efLmsexIXXGq9E0=;
+ b=QzdUSdkwcr5byV7+gJ3ykDhyTkeb4g2JtT/mTV0ExLLd3Q8iiK7yi5Wia55NL+WNB5
+ YOYW3LEQwmWZkAhqVD/GoM+5BWLnueytWgLjqzqdxcShwOPSTcEI6qPWFGiPq16PgzEe
+ ksHWpjWT89Oj2uqq5y99outm7SxSrOQ3huQt0K63LOpvbCfZrLeCT4WEALu+nXpQpYw8
+ fxrPh5NPsTF/pqBCVTUaLOrmez0ZwYCP2CpdZaWNT+CdzgZgZB8yzXDQ2Cpfthndru29
+ UDtwi3fG91z59jEQuP+ZEGMhv3ed9SmXpP2RXlOGzH+JY+jhby+9dyZ0CX0bEK+Ry2Pl
+ mUKA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=gadz.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
- header.s=google header.b=PF87khLA
-Subject: [Buildroot] [PATCH 1/2] configs/olimex_stmp157: bump Linux and
- U-Boot
+ dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
+ header.a=rsa-sha256 header.s=google header.b=QzdUSdkw
+Subject: [Buildroot] [PATCH 2/2] configs/olimex_stmp157: switch to Bootlin
+ glibc stable toolchain
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -116,51 +118,23 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- board/olimex/stmp1_olinuxino/patches/linux/linux.hash | 2 +-
- board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash | 2 +-
- configs/olimex_stmp157_olinuxino_lime_defconfig       | 6 ++++--
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ configs/olimex_stmp157_olinuxino_lime_defconfig | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/board/olimex/stmp1_olinuxino/patches/linux/linux.hash b/board/olimex/stmp1_olinuxino/patches/linux/linux.hash
-index 8691d5ffd..48b74dae9 100644
---- a/board/olimex/stmp1_olinuxino/patches/linux/linux.hash
-+++ b/board/olimex/stmp1_olinuxino/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  5d3ca43b81056305860d7407c871eac4f8eafa603029ee67816574a31444fd93  linux-fc74113e14d76aea9482264ff42e07397b94553d-git4.tar.gz
-+sha256  58c00229e95817918f9310f5c9adb0e3d1cfa7f28377aa7292431a110b6111a9  linux-e9b70672e21c96c02d9a731a9379baa897ea2ac7-git4.tar.gz
-diff --git a/board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash b/board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash
-index a991a1922..153acf382 100644
---- a/board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash
-+++ b/board/olimex/stmp1_olinuxino/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  6aaa18a9023db29ceaad5bca240605990b68a6bf348aaefad0bee8be8d37648e  uboot-efadf793a0a5924e2c96362dc1df3e56622ebb97-git4.tar.gz
-+sha256  1b99d3fd4fc778562c011de42193f9c29b3f2d0d7717ba22ac0c412446186382  uboot-23d8f769a94ae230b7a68fa812cc3c4dc0cbf1c9-git4.tar.gz
 diff --git a/configs/olimex_stmp157_olinuxino_lime_defconfig b/configs/olimex_stmp157_olinuxino_lime_defconfig
-index b1f9b7645..efd267fcb 100644
+index efd267fcb..29381ec20 100644
 --- a/configs/olimex_stmp157_olinuxino_lime_defconfig
 +++ b/configs/olimex_stmp157_olinuxino_lime_defconfig
-@@ -12,7 +12,8 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/stmp1_olinuxino/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_GIT=y
- BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/OLIMEX/linux-olimex.git"
--BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="fc74113e14d76aea9482264ff42e07397b94553d"
-+# branch release-20231222-v5.10.180
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="e9b70672e21c96c02d9a731a9379baa897ea2ac7"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/olimex/stmp1_olinuxino/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -25,7 +26,8 @@ BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_GIT=y
- BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/OLIMEX/u-boot-olinuxino.git"
--BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="efadf793a0a5924e2c96362dc1df3e56622ebb97"
-+# branch release-20250305, based on 2021.04
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="23d8f769a94ae230b7a68fa812cc3c4dc0cbf1c9"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="STM32-OLinuXino-LIME"
- # BR2_TARGET_UBOOT_FORMAT_BIN is not set
- BR2_TARGET_UBOOT_FORMAT_IMG=y
+@@ -1,6 +1,8 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE=y
+ BR2_GLOBAL_PATCH_DIR="board/olimex/stmp1_olinuxino/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_HOSTNAME="stmp1-olinuxino"
 -- 
 2.43.0
 
