@@ -1,159 +1,116 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44BDFC369AB
-	for <buildroot@archiver.kernel.org>; Thu, 24 Apr 2025 06:36:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54682C369D1
+	for <buildroot@archiver.kernel.org>; Thu, 24 Apr 2025 07:30:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DECCD410BE;
-	Thu, 24 Apr 2025 06:36:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 004EE80A4D;
+	Thu, 24 Apr 2025 07:30:01 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TBd5FjlCbzKW; Thu, 24 Apr 2025 07:30:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25B4280CDE
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 25B4280CDE;
+	Thu, 24 Apr 2025 07:30:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1B34A28C
+ for <buildroot@buildroot.org>; Thu, 24 Apr 2025 07:29:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0B9C940DF2
+ for <buildroot@buildroot.org>; Thu, 24 Apr 2025 07:29:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HR7RSWs_Isxu; Thu, 24 Apr 2025 06:36:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9A2340E02
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9A2340E02;
-	Thu, 24 Apr 2025 06:36:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B86C8EC
- for <buildroot@buildroot.org>; Thu, 24 Apr 2025 06:36:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9C89960756
- for <buildroot@buildroot.org>; Thu, 24 Apr 2025 06:36:40 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1J_vem2ddq1t for <buildroot@buildroot.org>;
- Thu, 24 Apr 2025 06:36:38 +0000 (UTC)
+ id mgLs7V1PPt0t for <buildroot@buildroot.org>;
+ Thu, 24 Apr 2025 07:29:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2413::617;
- helo=nam10-dm6-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7D2F6607A4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D2F6607A4
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam10on20617.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2413::617])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7D2F6607A4
- for <buildroot@buildroot.org>; Thu, 24 Apr 2025 06:36:38 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=pxldHn6VEPa0aYFfXiIQDEs5rNuUcfEsxaNzNGmilt96DWLmMkCv5tsLYgd/9qFzbgoTOOIxboWuQz1L+t5q6ji5o3bf+CeRMvL1ysDTMLizafRkFPR+7/4KiQSzMJPsLYr/f3dBPPgqKlfEFcJVjnD4VEcRXtrHtvW8jOXNo95ntzqKZ7khrYZ/rChbv9jMpnHOro5FBgoaI6BBlM8srb23ul5x1D1+Z9Xfp1kklRi8/+DqRexhchPGRWEUy88TeFuovVdn5dLV5+hmHkYq0OdxLgwLOSk4n8t+jPtVWSR0raR7XOEhm/xgjagBRudesPmSuPQ0cC5A3YlZtO9rMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sb5mRhIuhjfl7VqwPwEGj2Eys9tW6gk3GcFY1Gqfkcg=;
- b=uGuQKi0HXibCCOCKH2Xzrk45305UTB2+Gx36R+k1b3bY8QimPP7HL0ej9WNUdrOLNS3unUwnVWCOZYLpJwjJBrX/VOT0vl9b+wIEKXnvjBXo3kIwrzq+93oDoxcdDIuyLbyYvBF/ZSlitMOFqUbczwXOlbVp6f8G0/Z+YVqxUrEi4ghyTbp41L1N6B4ZPdOynYEPxdRrs0VDXIdrIM39XQEA/LlHw3HNSt0RmA51ASw73Q1TQRijp9tt8eabSFFiRAe0bdE5vTCjLDuT5jDir2henT/g3JuK9DnZVRK6McaSGddqUiPtMzAwlbHu7b3mToeWLbq48IQbhLmiK74BlQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from MN0PR02CA0020.namprd02.prod.outlook.com (2603:10b6:208:530::31)
- by DS5PPFDB3A23D1A.namprd12.prod.outlook.com (2603:10b6:f:fc00::663)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8655.35; Thu, 24 Apr
- 2025 06:36:30 +0000
-Received: from BN2PEPF0000449D.namprd02.prod.outlook.com
- (2603:10b6:208:530:cafe::99) by MN0PR02CA0020.outlook.office365.com
- (2603:10b6:208:530::31) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8655.37 via Frontend Transport; Thu,
- 24 Apr 2025 06:36:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- BN2PEPF0000449D.mail.protection.outlook.com (10.167.243.148) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8655.12 via Frontend Transport; Thu, 24 Apr 2025 06:36:29 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 24 Apr
- 2025 01:36:28 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 24 Apr
- 2025 01:36:28 -0500
-Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Thu, 24 Apr 2025 01:36:25 -0500
-To: <buildroot@buildroot.org>
-Date: Thu, 24 Apr 2025 07:36:19 +0100
-Message-ID: <20250424063619.789456-2-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250424063619.789456-1-neal.frager@amd.com>
-References: <20250424063619.789456-1-neal.frager@amd.com>
+ client-ip=2607:f8b0:4864:20::42e; helo=mail-pf1-x42e.google.com;
+ envelope-from=charlie@rivosinc.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7AC3140DD4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AC3140DD4
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com
+ [IPv6:2607:f8b0:4864:20::42e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7AC3140DD4
+ for <buildroot@buildroot.org>; Thu, 24 Apr 2025 07:29:57 +0000 (UTC)
+Received: by mail-pf1-x42e.google.com with SMTP id
+ d2e1a72fcca58-736e52948ebso728702b3a.1
+ for <buildroot@buildroot.org>; Thu, 24 Apr 2025 00:29:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1745479797; x=1746084597;
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=b46SiaE0SnWXJV/CJvgjFHR/7jBwHZt98e0MVK+aHEY=;
+ b=V6dXWUY8RxZhOk5UTi+ya5YzCiZKjkdLrxQOt55vQWwXWAyLGD1esO4TLdjEbThHsD
+ xRdgrECOQ9DmTuurbJgC1mFO53z6mVGIyyEM1U5BTIH3hiUbX+s+LexiEz/Kb6RnfuHg
+ Tw7+anAgEuiJDz7xUaJn4sM4hsJ/VzOcW3HrfOHut0YSMV9M8HzJRyOwIrA6jYiKZ6v8
+ mjlAl+nr/0lxQQNCe4dW9uodUT0sSz+rN09q+IKywHtfnDCiFqzX1mJ1xpq5KdJA8chK
+ l3facH3HMzLbX230T1n4jR4N6vOr5W71xSC2wG89+a3JqId06uq2Jvqe8m9rrb9foO8M
+ E9hw==
+X-Gm-Message-State: AOJu0YwNn3qN8fQdPBHEY1GgVvCVHt0t/3uTPKJtY7cXW/UwMaWSN8RC
+ zzDH905KATcE4kXLcghNIHftobdCEkxJQurz5p2Qgi6iaucspMlXkxi7se1SgLvJW+Q1/X0TgN1
+ 5
+X-Gm-Gg: ASbGncuqzj8bo+qvfVdpvknWW4ENwvkDbQsjPjfs90bUJwWmhVtY8QDJk+Iuw3PzbK2
+ jXXuKSdXK2cIIu0i6s7EEkxhul89m5mOcrf2N8SlcF0SKb/lFKXFDpJDL/ak+ZWnfV46ULQPpm1
+ rsySe4Xvs3oueEK+8r7BplpBA5ZERE0LjzevHUXCyuAfVOM9wkvAqZciUPDGxAVuxlnowSF78ZF
+ bgP4DNjBgsfclNE0e9JazVuAkN7+guHpq6jtXdNim4qT13E+489AvdeURXWjCKCXQuFYDgdkWbE
+ ug4c8XfN708Coe9x993WVVebZ4wyIhYume0T9EcfylJFq7GLRgzij97T
+X-Google-Smtp-Source: AGHT+IFn2Qt/EGMxkgjWIQ6R1U4qz1usplgXPwMBWLL/lROd7LI5m7FHsgZuNusPqXLQHXyCz33QPw==
+X-Received: by 2002:a05:6a21:6f87:b0:1f5:8655:3287 with SMTP id
+ adf61e73a8af0-20444fc53f7mr2620461637.40.1745479796709; 
+ Thu, 24 Apr 2025 00:29:56 -0700 (PDT)
+Received: from charlie.ba.rivosinc.com ([64.71.180.162])
+ by smtp.gmail.com with ESMTPSA id
+ d2e1a72fcca58-73e25a9feb9sm725663b3a.154.2025.04.24.00.29.55
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 24 Apr 2025 00:29:55 -0700 (PDT)
+From: Charlie Jenkins <charlie@rivosinc.com>
+Date: Thu, 24 Apr 2025 00:29:44 -0700
 MIME-Version: 1.0
-Received-SPF: None (SATLEXMB05.amd.com: neal.frager@amd.com does not designate
- permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF0000449D:EE_|DS5PPFDB3A23D1A:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7aa6749c-5bbe-4361-e1b0-08dd82fa5870
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|376014|36860700013|1800799024|82310400026|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?PZ+zcDhHxk8jEP5apRwpBg5ac1cw9KzAQ6nT1XF4xAGnTi8VwwWX6tL9TTR7?=
- =?us-ascii?Q?TdRikTx3kBSjvQ3Sk41ysMRf+PDeLaqc55ZYKIBdYDnlDKfrpbkPUbvQAxVC?=
- =?us-ascii?Q?RNDrHI27ifdiUqqBgUsOoJN+Ys/0b4+d5Da/UIukVkB5zdPl5VycVmYCTtBf?=
- =?us-ascii?Q?FCiqF+YjMxduNRZfAN1/N0vF3MTMpJ09Wa+zvBc4tbfvs1yLyMj81L2dwQ9b?=
- =?us-ascii?Q?/yeo2h9B9gpLmpMqavKI2o0v2VBfy/D9k9g3iUQHorNC/tHVBGWeAamS4wu2?=
- =?us-ascii?Q?ZYrAydJknJbXUm7bJFocanmjjTRfkllYeEl8iLT2qcf48N5FWKvU+5xmrL1z?=
- =?us-ascii?Q?Y/YUJiHqnjFlqGTdzgRXB+x17rD7zDmcsd4X97T39KaAM9+g/d2Lg9hZML3u?=
- =?us-ascii?Q?GJgxUixI//NKDLd8pp5eqIjAsBsrhabB/Ty3Aa4Oqqj2q2beMhTO+OXqOKR5?=
- =?us-ascii?Q?cHATUeQsKgdNZfHUd3rrBdqr1I+blCw8CdF/IicjopNMLGG06/E0TtFV6Yo5?=
- =?us-ascii?Q?wiUUF07u7MlQPNoT2j796kfk/gpwf8XaI+mUcdFuVh0WpIzSmyqrWwvK+i8p?=
- =?us-ascii?Q?3OejRpGVf7xBoM3SYtJ3vmNDvFHLGPKS4iyLBazQQ5iWyr7cn26Va03HDuO6?=
- =?us-ascii?Q?HL0yGVJ1szWgCWrxfwfLkKCZ2WaJXVYOMT8HUYiK+dJ2QQJB0xLOZVBWi26G?=
- =?us-ascii?Q?WiFUW4RITnQr0mvk9om0rEUaJQkvpFk+Teeqc11Dfh/LwkS2ZoUYjHF9njMl?=
- =?us-ascii?Q?WPJM7y84WZapF5Uqcdh9UI7uSdFqRUBpQO7G6cdlSax43b2Iy2y8bPs65uzN?=
- =?us-ascii?Q?0JeIQuncujYttJ0rNuQ8tFonWa7uR/IzPkfUjEmbrAzYWLIDCLq1GEQf5s85?=
- =?us-ascii?Q?QoCkMvSJ2yDzWg0uF0YBnxPmsDLpkrKUb8z5q9RZJiMtQ5I6M96QHwyi0WNo?=
- =?us-ascii?Q?NgMSsd3cVgdhAwi9ls7X4AiQ/Y5phySMEvwr+5lx+QbQeOFW+qkHTWkOJayW?=
- =?us-ascii?Q?/7EPZg6oLuY0WAL9LrSTOhPuDkOeEiAua2phf/CvjGo2QwmJobOnam30irc6?=
- =?us-ascii?Q?9CCNTKnrDxYjQiU8Mp1sieGFt7spm2m1nS5IXBxNDg5vHTv6gfX90OcI9iYR?=
- =?us-ascii?Q?l6itXb+ToBundKF3Lo7ZzuTNLXh8hU0dV006TIhWCbBwx/qkTDTs2GqmdyUk?=
- =?us-ascii?Q?8C1hPs18E4X87BVrWc6fCRPtnCGJJnXwrV1fhiC3iuUA3BNe8f8HnnRbyFKF?=
- =?us-ascii?Q?pD7OuH8lxf2FmoWRtD+J8O5pAMFUkjvxfoZhsb05sizCYH2FWyLTO7vwIwxH?=
- =?us-ascii?Q?joVWZBjZLGCNmDVmp+Sd+5hc4inbNIV1ICqha7aejEsPFmlemFTegwkstGW4?=
- =?us-ascii?Q?afacOzD7Choh6ep0W88H1Ejrk75ntpOGopKmIedaQE0SLitH678XznaRluKy?=
- =?us-ascii?Q?DtuocF9WelYTj8bjDJYFQwNCfeTSFcGJ9YhtYIcK63lop/mXlvCqzIaURfdk?=
- =?us-ascii?Q?+FAiog0lwT5i3c/6rVr59N/E1uwRmxarvP9lRERL17pfsJuwn53Z/fXXvWNy?=
- =?us-ascii?Q?dVfydEZmo33BV+a1lIA=3D?=
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(376014)(36860700013)(1800799024)(82310400026)(41080700001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Apr 2025 06:36:29.3282 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7aa6749c-5bbe-4361-e1b0-08dd82fa5870
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN2PEPF0000449D.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS5PPFDB3A23D1A
+Message-Id: <20250424-fix_gmp_c23-v1-1-b2474a9585b6@rivosinc.com>
+X-B4-Tracking: v=1; b=H4sIAGfoCWgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDEyMT3bTMivj03IL4ZCNj3WRjc5NUSxODJAMTUyWgjoKiVKA02LTo2Np
+ aADLtcXhdAAAA
+X-Change-ID: 20250424-fix_gmp_c23-c374e940b045
+To: buildroot@buildroot.org
+Cc: Charlie Jenkins <charlie@rivosinc.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4525; i=charlie@rivosinc.com; 
+ h=from:subject:message-id;
+ bh=sJTjcDG8ov37MmLd2MzoKq1dvoQGjmLoHqaLS5H+LE0=; 
+ b=owGbwMvMwCXWx5hUnlvL8Y3xtFoSQwbni5y0XeLV+1NM239oOj0Jt9573UpP+Px5Dy754xI/2
+ FiZnkd1lLIwiHExyIopsvBca2BuvaNfdlS0bALMHFYmkCEMXJwCMBEBDkaGDnbe/b7rl2jFs1yf
+ Yj4ltcIw/ua2ifpMNfO5/2zcbeE+hZFhSvnFwP2ySy5M/MKRtTebZa26csmFvqN9usae7LMbczc
+ xAAA=
+X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
+ fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sb5mRhIuhjfl7VqwPwEGj2Eys9tW6gk3GcFY1Gqfkcg=;
- b=2yxU7rdpBITccCZre90anjZMoHvxS5nAmdT+cbIhwh8JSQBXY9RAFbR/lPgGdBGOS9xxbyKyfAHfDZoGDCx9Nw11TzgnRVOY1om4i6pm1Aqy2NRpTAQzWnPZLiOvsDtrn2w3r/6KvKh9TY1Egi5/Bw0Y49bw31fTkWwImJWVO7g=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=2yxU7rdp
-Subject: [Buildroot] [PATCH v2 2/2] configs/xilinx: add xilinx-fpgautil to
- xilinx defconfigs
+ d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1745479797; x=1746084597;
+ darn=buildroot.org; 
+ h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+ :date:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=b46SiaE0SnWXJV/CJvgjFHR/7jBwHZt98e0MVK+aHEY=;
+ b=k74CW8wOsLNPVedO29tkk6pys5Ba/wrh3iYlf9k5ff9L7bnSxRJSys3bi6TDIP/3w4
+ cWb7pTkzLMwUclNAt7fyTWGCVTqrH0UbvpLmhFZQpq1gtzUW4fRhvfwe0XobyhO4xyEP
+ U9HcEt4C7J6aSweppUv1EfboDPnpeELCCfGdDM8RR6OiBeWxuQIjy9atxH9eTOIjx3xt
+ W1mf1DOGLqo/t2pDvF6Zde3oGflc/BxCz/Ks0eDsbrkEhy1kAHY5EZ+xLCmp3ga1h0RZ
+ DtOCnrZj+jhuioeoavF4B+XCDJvzRVTauewLlgg38dZk8XXvP0hODbCNNi/vNBJZionU
+ c8Mw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=rivosinc.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rivosinc-com.20230601.gappssmtp.com
+ header.i=@rivosinc-com.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=k74CW8wO
+Subject: [Buildroot] [PATCH] package/gmp: Fix for c23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -165,200 +122,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
- brandon.maier@collins.com, ju.o@free.fr, thomas.petazzoni@bootlin.com,
- Neal Frager <neal.frager@amd.com>, fabio.caccamo@amd.com,
- romain.naour@smile.fr, michal.simek@amd.com, arnout@mind.be
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This adds the xilinx-fpgautil application to all Xilinx zynq, zynqmp and
-versal defconfigs.
-
-Signed-off-by: Neal Frager <neal.frager@amd.com>
----
-V1->V2:
-- use new xilinx-fpgautil package name
----
- configs/versal_vck190_defconfig     | 1 +
- configs/versal_vek280_defconfig     | 1 +
- configs/versal_vpk180_defconfig     | 1 +
- configs/zynq_microzed_defconfig     | 1 +
- configs/zynq_zc702_defconfig        | 1 +
- configs/zynq_zc706_defconfig        | 1 +
- configs/zynq_zed_defconfig          | 1 +
- configs/zynqmp_kria_kd240_defconfig | 1 +
- configs/zynqmp_kria_kr260_defconfig | 1 +
- configs/zynqmp_kria_kv260_defconfig | 1 +
- configs/zynqmp_zcu102_defconfig     | 1 +
- configs/zynqmp_zcu104_defconfig     | 1 +
- configs/zynqmp_zcu106_defconfig     | 1 +
- 13 files changed, 13 insertions(+)
-
-diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
-index 2f40c210a8..368133e916 100644
---- a/configs/versal_vck190_defconfig
-+++ b/configs/versal_vck190_defconfig
-@@ -15,6 +15,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vck190-rev1.1"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
-index af8bed884f..1d83e55499 100644
---- a/configs/versal_vek280_defconfig
-+++ b/configs/versal_vek280_defconfig
-@@ -15,6 +15,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vek280-revB"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/versal_vpk180_defconfig b/configs/versal_vpk180_defconfig
-index afa606ec8c..7729c655c3 100644
---- a/configs/versal_vpk180_defconfig
-+++ b/configs/versal_vpk180_defconfig
-@@ -15,6 +15,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vpk180-revA"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index b9b2da3849..f9be297b99 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
-@@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynq-microzed"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
-diff --git a/configs/zynq_zc702_defconfig b/configs/zynq_zc702_defconfig
-index ab42abe655..4c6361a9b7 100644
---- a/configs/zynq_zc702_defconfig
-+++ b/configs/zynq_zc702_defconfig
-@@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynq-zc702"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index d7ce9cf11a..bc853f522d 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
-@@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynq-zc706"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
-diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
-index c9e8e7ea2c..d0fbaf2ea5 100644
---- a/configs/zynq_zed_defconfig
-+++ b/configs/zynq_zed_defconfig
-@@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynq-zed"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
-diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
-index 261b73d6cf..4ba4be861f 100644
---- a/configs/zynqmp_kria_kd240_defconfig
-+++ b/configs/zynqmp_kria_kd240_defconfig
-@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k24-revA-sck-kd-g-revA"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
-index 2cf2b98aa5..fdd868bbb5 100644
---- a/configs/zynqmp_kria_kr260_defconfig
-+++ b/configs/zynqmp_kria_kr260_defconfig
-@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kr-g-revB"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-index ef6a23f2a2..ff03f87b54 100644
---- a/configs/zynqmp_kria_kv260_defconfig
-+++ b/configs/zynqmp_kria_kv260_defconfig
-@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kv-g-revB"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
-index 762a54d968..856c1d896d 100644
---- a/configs/zynqmp_zcu102_defconfig
-+++ b/configs/zynqmp_zcu102_defconfig
-@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
-index 92e0d41736..c21058be74 100644
---- a/configs/zynqmp_zcu104_defconfig
-+++ b/configs/zynqmp_zcu104_defconfig
-@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu104-revC"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-index 51287fdffb..5e13c39a1a 100644
---- a/configs/zynqmp_zcu106_defconfig
-+++ b/configs/zynqmp_zcu106_defconfig
-@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
--- 
-2.25.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+R01QIHdpbGwgbm90IGJ1aWxkIGZvciBhIEMgY29tcGlsZXIgY29uZmlndXJlZCBmb3IgYzIzIGJl
+Y2F1c2UgaXRzCmF1dG9jb25mIHNjcmlwdHMgdXNlIGRlcHJlY2F0ZWQgZnVuY3Rpb24gcHJvdG90
+eXBlcy4gSW5jbHVkZSBhbiB1cHN0cmVhbQpwYXRjaCB0aGF0IGZpeGVzIHRoaXMgaXNzdWUuCgpT
+aWduZWQtb2ZmLWJ5OiBDaGFybGllIEplbmtpbnMgPGNoYXJsaWVAcml2b3NpbmMuY29tPgotLS0K
+IC4uLm00LUFkZC1wYXJhbWV0ZXItbmFtZXMtaW4tcHJvdG90eXBlLWZvci1nLnBhdGNoIHwgNTYg
+KysrKysrKysrKysrKysrKysrKysrKwogLi4uYXRjaC1jb25maWd1cmUtc2NyaXB0LWZvci1jMjMt
+ZnVuY3Rpb24tcHIucGF0Y2ggfCAzOSArKysrKysrKysrKysrKysKIDIgZmlsZXMgY2hhbmdlZCwg
+OTUgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvZ21wLzAwMDEtYWNpbmNsdWRl
+Lm00LUFkZC1wYXJhbWV0ZXItbmFtZXMtaW4tcHJvdG90eXBlLWZvci1nLnBhdGNoIGIvcGFja2Fn
+ZS9nbXAvMDAwMS1hY2luY2x1ZGUubTQtQWRkLXBhcmFtZXRlci1uYW1lcy1pbi1wcm90b3R5cGUt
+Zm9yLWcucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMDAwMDAwMDAw
+MDAwMDAwMDAwMDAwMDAwMDAwMDAwMC4uMzM5NzE4ODg4ZDBlMWRkNmJmMGMzNjAxNjMyZmNlZWU0
+ZWZmNWY4MQotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvZ21wLzAwMDEtYWNpbmNsdWRlLm00
+LUFkZC1wYXJhbWV0ZXItbmFtZXMtaW4tcHJvdG90eXBlLWZvci1nLnBhdGNoCkBAIC0wLDAgKzEs
+NTYgQEAKK0Zyb206IEtoZW0gUmFqIDxyYWoua2hlbUBnbWFpbC5jb20+CitEYXRlOiBTYXQsIDE1
+IE1hciAyMDI1IDE3OjU4OjQwICswMTAwCitTdWJqZWN0OiBbUEFUQ0hdIGFjaW5jbHVkZS5tNDog
+QWRkIHBhcmFtZXRlciBuYW1lcyBpbiBwcm90b3R5cGUgZm9yIGcoKS4KKworVGhpcyBhbGxvd3Mg
+aXQgdG8gY29tcGlsZSB3aXRoIG9sZGVyIGdjYyBlLmcuIGdjYy0xMAord2hpY2ggZG9lcyBub3Qg
+aGF2ZSBhbGxvdyBwYXJhbWV0ZXIgbmFtZSBvbWlzc2lvbiwgaXQgcmVzdWx0cworaW4KKworYS5j
+OiBJbiBmdW5jdGlvbiDigJhn4oCZOgorYS5jOjM6ODogZXJyb3I6IHBhcmFtZXRlciBuYW1lIG9t
+aXR0ZWQKKyAgICAzIHwgdm9pZCBnKGludCx0MSBjb25zdCosdDEsdDIsdDEgY29uc3QqLGludCl7
+fQorICAgICAgfCAgICAgICAgXn5+CisKK3RoaXMgd2FzIGFkZGVkIHRvIGdjYyB2aWEgWzFdIHRo
+YXRzIHdoeSBpdCBpcyBzdXBwb3J0ZWQgaW4KK25ld2VyIGdjYy4KKworQWRkaW5nIHRoZSBwYXJh
+bWV0ZXIgbmFtZXMgbWFrZSBpdCBjb21wYXRpYmxlIHdpdGgKK29sZCBhbmQgbmV3IGdjYworCitb
+MV0gaHR0cHM6Ly9nY2MuZ251Lm9yZy9waXBlcm1haWwvZ2NjLWN2cy8yMDIwLU9jdG9iZXIvMzM2
+MDY4Lmh0bWwKKworU2lnbmVkLW9mZi1ieTogS2hlbSBSYWogPHJhai5raGVtIGF0IGdtYWlsLmNv
+bT4KK1Vwc3RyZWFtOiBodHRwczovL2dtcGxpYi5vcmcvbGlzdC1hcmNoaXZlcy9nbXAtZGV2ZWwv
+MjAyNS1NYXJjaC8wMDYyOTQuaHRtbAorLS0tCisgQ2hhbmdlTG9nICAgIHwgNCArKysrCisgYWNp
+bmNsdWRlLm00IHwgMiArLQorIDIgZmlsZXMgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCAxIGRl
+bGV0aW9uKC0pCisKK2RpZmYgLS1naXQgYS9DaGFuZ2VMb2cgYi9DaGFuZ2VMb2cKK2luZGV4IDI5
+MDJjZDIuLmRmNDIwNzYgMTAwNjQ0CistLS0gYS9DaGFuZ2VMb2cKKysrKyBiL0NoYW5nZUxvZwor
+QEAgLTEsMyArMSw3IEBACisrMjAyNS0wMy0xNSAgS2hlbSBSYWogPHJhai5raGVtIGF0IGdtYWls
+LmNvbT4KKysKKysJKiBhY2luY2x1ZGUubTQ6IEFkZCBwYXJhbWV0ZXIgbmFtZXMgdG8gZnVuY3Rp
+b24gcHJvdG90eXBlLgorKworIDIwMjMtMDctMjkgIFRvcmJqw7ZybiBHcmFubHVuZCAgPHRnQGdt
+cGxpYi5vcmc+CisgCisgCSogVmVyc2lvbiA2LjMuMCByZWxlYXNlZC4KK2RpZmYgLS1naXQgYS9h
+Y2luY2x1ZGUubTQgYi9hY2luY2x1ZGUubTQKK2luZGV4IDljZjk0ODMuLjFmZDBkNGYgMTAwNjQ0
+CistLS0gYS9hY2luY2x1ZGUubTQKKysrKyBiL2FjaW5jbHVkZS5tNAorQEAgLTYwOSw3ICs2MDks
+NyBAQCBHTVBfUFJPR19DQ19XT1JLU19QQVJUKFskMV0sIFtsb25nIGxvbmcgcmVsaWFiaWxpdHkg
+dGVzdCAxXSwKKyAKKyAjaWYgZGVmaW5lZCAoX19HTlVDX18pICYmICEgZGVmaW5lZCAoX19jcGx1
+c3BsdXMpCisgdHlwZWRlZiB1bnNpZ25lZCBsb25nIGxvbmcgdDE7dHlwZWRlZiB0MSp0MjsKKy12
+b2lkIGcoKXt9Cisrdm9pZCBnKGludCBhLHQxIGNvbnN0KiBiLHQxIGMsdDIgZCx0MSBjb25zdCog
+ZSxpbnQgZil7fQorIHZvaWQgaCgpe30KKyBzdGF0aWMgX19pbmxpbmVfXyB0MSBlKHQyIHJwLHQy
+IHVwLGludCBuLHQxIHYwKQorIHt0MSBjLHgscjtpbnQgaTtpZih2MCl7Yz0xO2ZvcihpPTE7aTxu
+O2krKyl7eD11cFtpXTtyPXgrMTtycFtpXT1yO319cmV0dXJuIGM7fQorLS0gCisyLjQzLjAKKwpk
+aWZmIC0tZ2l0IGEvcGFja2FnZS9nbXAvMDAwMi1jb25maWd1cmUtUGF0Y2gtY29uZmlndXJlLXNj
+cmlwdC1mb3ItYzIzLWZ1bmN0aW9uLXByLnBhdGNoIGIvcGFja2FnZS9nbXAvMDAwMi1jb25maWd1
+cmUtUGF0Y2gtY29uZmlndXJlLXNjcmlwdC1mb3ItYzIzLWZ1bmN0aW9uLXByLnBhdGNoCm5ldyBm
+aWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
+MDAwMDAuLmQ2MGM0ZDM5ZjY3MGQ4YzRmOWRjOTM3YjE0NjU5Njk1ZTNjYzM2YTMKLS0tIC9kZXYv
+bnVsbAorKysgYi9wYWNrYWdlL2dtcC8wMDAyLWNvbmZpZ3VyZS1QYXRjaC1jb25maWd1cmUtc2Ny
+aXB0LWZvci1jMjMtZnVuY3Rpb24tcHIucGF0Y2gKQEAgLTAsMCArMSwzOSBAQAorRnJvbTogQ2hh
+cmxpZSBKZW5raW5zIDxjaGFybGllQHJpdm9zaW5jLmNvbT4KK0RhdGU6IFdlZCwgMjMgQXByIDIw
+MjUgMjM6NTU6MjUgLTA3MDAKK1N1YmplY3Q6IFtQQVRDSF0gY29uZmlndXJlOiBQYXRjaCBjb25m
+aWd1cmUgc2NyaXB0IGZvciBjMjMgZnVuY3Rpb24gcHJvdG90eXBlCisKK1RoZSBkaXN0cmlidXRl
+ZCBjb25maWd1cmUgc2NyaXB0IGlzIHByZS1nZW5lcmF0ZWQgc28gaXQgd2lsbCBub3QgYmUKK3Vw
+ZGF0ZWQgYnkgYWNpbmNsdWRlLm00LiBQYXRjaCB0aGUgY29uZmlndXJlIHNjcmlwdCB0byBhbGxv
+dyBnbXAgdG8KK2NvbXBpbGUgd2l0aCBjMjMuCisKK1NpZ25lZC1vZmYtYnk6IENoYXJsaWUgSmVu
+a2lucyA8Y2hhcmxpZUByaXZvc2luYy5jb20+CitVcHN0cmVhbTogTi9BIChwYXRjaGluZyBnZW5l
+cmF0ZWQgYXV0b2NvbmYgZmlsZXMpCistLS0KKyBjb25maWd1cmUgfCA0ICsrLS0KKyAxIGZpbGUg
+Y2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQorCitkaWZmIC0tZ2l0IGEv
+Y29uZmlndXJlIGIvY29uZmlndXJlCitpbmRleCA3OTEwYWEwLi4yNTlmN2M4IDEwMDc1NQorLS0t
+IGEvY29uZmlndXJlCisrKysgYi9jb25maWd1cmUKK0BAIC02NTY4LDcgKzY1NjgsNyBAQCBpZiB0
+ZXN0ICIkZ21wX3Byb2dfY2Nfd29ya3MiID0geWVzOyB0aGVuCisgCisgI2lmIGRlZmluZWQgKF9f
+R05VQ19fKSAmJiAhIGRlZmluZWQgKF9fY3BsdXNwbHVzKQorIHR5cGVkZWYgdW5zaWduZWQgbG9u
+ZyBsb25nIHQxO3R5cGVkZWYgdDEqdDI7Cistdm9pZCBnKCl7fQorK3ZvaWQgZyhpbnQgYSx0MSBj
+b25zdCogYix0MSBjLHQyIGQsdDEgY29uc3QqIGUsaW50IGYpe30KKyB2b2lkIGgoKXt9Cisgc3Rh
+dGljIF9faW5saW5lX18gdDEgZSh0MiBycCx0MiB1cCxpbnQgbix0MSB2MCkKKyB7dDEgYyx4LHI7
+aW50IGk7aWYodjApe2M9MTtmb3IoaT0xO2k8bjtpKyspe3g9dXBbaV07cj14KzE7cnBbaV09cjt9
+fXJldHVybiBjO30KK0BAIC04MTg3LDcgKzgxODcsNyBAQCBpZiB0ZXN0ICIkZ21wX3Byb2dfY2Nf
+d29ya3MiID0geWVzOyB0aGVuCisgCisgI2lmIGRlZmluZWQgKF9fR05VQ19fKSAmJiAhIGRlZmlu
+ZWQgKF9fY3BsdXNwbHVzKQorIHR5cGVkZWYgdW5zaWduZWQgbG9uZyBsb25nIHQxO3R5cGVkZWYg
+dDEqdDI7Cistdm9pZCBnKCl7fQorK3ZvaWQgZyhpbnQgYSx0MSBjb25zdCogYix0MSBjLHQyIGQs
+dDEgY29uc3QqIGUsaW50IGYpe30KKyB2b2lkIGgoKXt9Cisgc3RhdGljIF9faW5saW5lX18gdDEg
+ZSh0MiBycCx0MiB1cCxpbnQgbix0MSB2MCkKKyB7dDEgYyx4LHI7aW50IGk7aWYodjApe2M9MTtm
+b3IoaT0xO2k8bjtpKyspe3g9dXBbaV07cj14KzE7cnBbaV09cjt9fXJldHVybiBjO30KKy0tIAor
+Mi40My4wCisKCi0tLQpiYXNlLWNvbW1pdDogMWZjNTFhYmMyN2QzN2MyODc0ODIzYWI4NjRkYjBm
+MzJhZTc3NGViNgpjaGFuZ2UtaWQ6IDIwMjUwNDI0LWZpeF9nbXBfYzIzLWMzNzRlOTQwYjA0NQot
+LSAKLSBDaGFybGllCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBz
+Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
