@@ -1,72 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F54DC369AB
-	for <buildroot@archiver.kernel.org>; Thu, 24 Apr 2025 13:21:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6889FC369C2
+	for <buildroot@archiver.kernel.org>; Thu, 24 Apr 2025 18:17:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF9DF40C25;
-	Thu, 24 Apr 2025 13:21:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BFEA380AAA;
+	Thu, 24 Apr 2025 18:17:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 24ccYwXxqn9j; Thu, 24 Apr 2025 13:21:08 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K2pTgVkbF7V7; Thu, 24 Apr 2025 18:17:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A1D4C40C3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A524180A87
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A1D4C40C3A;
-	Thu, 24 Apr 2025 13:21:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id D34322A6
- for <buildroot@buildroot.org>; Thu, 24 Apr 2025 13:21:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A524180A87;
+	Thu, 24 Apr 2025 18:17:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D02A8127
+ for <buildroot@buildroot.org>; Thu, 24 Apr 2025 18:17:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C4C9A40135
- for <buildroot@buildroot.org>; Thu, 24 Apr 2025 13:21:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B503060E43
+ for <buildroot@buildroot.org>; Thu, 24 Apr 2025 18:17:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WGfFmXBLsPEQ for <buildroot@buildroot.org>;
- Thu, 24 Apr 2025 13:21:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.56;
- helo=smtpcmd0756.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 19097400CB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 19097400CB
-Received: from smtpcmd0756.aruba.it (smtpcmd0756.aruba.it [62.149.156.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 19097400CB
- for <buildroot@buildroot.org>; Thu, 24 Apr 2025 13:21:03 +0000 (UTC)
-Received: from localhost.localdomain ([151.79.164.54])
- by Aruba SMTP with ESMTPSA
- id 7wVhutqvP3ojc7wVhuMnYu; Thu, 24 Apr 2025 15:21:01 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sZOBFYk8HaiV for <buildroot@buildroot.org>;
+ Thu, 24 Apr 2025 18:17:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=162.248.234.2;
+ helo=mail.xes-mad.com; envelope-from=vfazio@xes-inc.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D185860E5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D185860E5D
+Received: from mail.xes-mad.com (mail.xes-mad.com [162.248.234.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D185860E5D
+ for <buildroot@buildroot.org>; Thu, 24 Apr 2025 18:17:08 +0000 (UTC)
+Received: from vfazio4.xes-mad.com (vfazio4.xes-mad.com [10.52.19.201])
+ by mail.xes-mad.com (Postfix) with ESMTP id 9ECB120631;
+ Thu, 24 Apr 2025 13:17:07 -0500 (CDT)
+From: Vincent Fazio <vfazio@xes-inc.com>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Thu, 24 Apr 2025 15:16:54 +0200
-Message-Id: <20250424131654.136749-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.39.5
+Date: Thu, 24 Apr 2025 13:17:06 -0500
+Message-Id: <20250424181706.3990060-1-vfazio@xes-inc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfGdyXVlG98tK22y2wyWUPUVUTXUmUUnCp+NSyRwwDa4ivjb+EBpkOfZrhwChNYzcK2RClgZSZTdKafct0pZIyrUQaHxeL0dE1Okb43fJxOFN8QNbVcwP
- ZZ8kY5mbEI4KIaPq9fg3qeJCLF8LMVJFTquTuJI6OSbS5pEtKJEmeP69n23QezHSsmtzEyulkUaYrRi2c7kpTgaf/6AN4/NC8x6NK8mY4/mRJsJ2iDiFhdTn
- jBwKn/Kt799gxUZmIkH8fVb7ygLRdNL0OwIyoyro4ijyjcYy8yRmuulDhqKU+0/5
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1745500861; bh=yYnTrW+POUPS0EiAsai4ffXeXhdt6AMVg0XVPWgG/NM=;
- h=From:To:Subject:Date:MIME-Version;
- b=WFhJiiBRd5/erA+NhLev6/0K/mP7vp1ViBxswcvkTFj11PThvM5dAtOrZ/pjsapqB
- xSZ5N2FrX3z9VY3V85Tg2O5gZl8Tk5v4sFsTQLZxTPWjPt6H6nXyJaBzlujaEe7G3v
- 8hejp9epv33SjMmnRYo8/VM969zE4XQRqYXRxwqZhsHWZVkph0Ez2gFOIoBus3DC8f
- vo7IMX/ZWBH+6cDwf+mWMn2XAlolKP0oqagW29wf6tkkuNFQ5JTDfdcVs9H46qAXTJ
- VlkQFl8f1cTx6gOnHhA50/hxwrRX9quupV+zn1mBwnsya7MkVuTeLwjdIgxq2SUTaa
- O+Fh1jW/qVljA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=xes-inc.com; s=mail; 
+ t=1745518627; bh=+golqKm+KgYDnMgOcFEo52jfngERnbkxEuWYoWoQNmc=;
+ h=From:To:Cc:Subject:Date:From;
+ b=GftI7xe6+QkzKQtolv9KIwU7IUUcA78gD0NUoxOJPc8QzBF/2dh5oGqvgUE5mJE+h
+ KWKSyj7qYFKUvbLz2hNvdeWjABNyxyJFtwqmtGHM5fIA36LclBW4fzsQpfHiZesM9W
+ SSFEqOGXWOvCveB+FM5xifDeRmB8NmU2Xk2JIS+Y=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=WFhJiiBR
-Subject: [Buildroot] [PATCH] package/libfuse3: bump to version 3.17.2
+ header.from=xes-inc.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=xes-inc.com header.i=@xes-inc.com header.a=rsa-sha256
+ header.s=mail header.b=GftI7xe6
+Subject: [Buildroot] [PATCH] package/python-setuptools: bump to 79.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -78,186 +71,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Vincent Fazio <vfazio@xes-inc.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/libfuse/libfuse/releases/tag/fuse-3.17.2
+This version of setuptools includes an update to distutils [0] which
+fixes an issue with determining the linker command for C++ targets when
+a wrapper, such as ccache, is in the command.
 
-Drop local patches that are upstreamed now.
+Fixes: https://autobuild.buildroot.org/results/5f017fca3d708388c9f66afea39b090f0976d496/
 
-Fixes:
-https://autobuild.buildroot.net/results/f3c/f3cfaa8ed63483858ffa32b719ea4be68ba6c4f3//
+[0]: https://github.com/pypa/distutils/commit/b8c06fffe4b118f3c549fc23d196c2f3d41aa17c
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
 ---
- .../0001-Fix-build-with-kernel-5.9.patch      | 72 -------------------
- ...sert-build-failure-with-C-version-11.patch | 49 -------------
- package/libfuse3/libfuse3.hash                |  2 +-
- package/libfuse3/libfuse3.mk                  |  2 +-
- 4 files changed, 2 insertions(+), 123 deletions(-)
- delete mode 100644 package/libfuse3/0001-Fix-build-with-kernel-5.9.patch
- delete mode 100644 package/libfuse3/0002-Fix-static_assert-build-failure-with-C-version-11.patch
+ package/python-setuptools/python-setuptools.hash | 4 ++--
+ package/python-setuptools/python-setuptools.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libfuse3/0001-Fix-build-with-kernel-5.9.patch b/package/libfuse3/0001-Fix-build-with-kernel-5.9.patch
-deleted file mode 100644
-index f47af0ecc7..0000000000
---- a/package/libfuse3/0001-Fix-build-with-kernel-5.9.patch
-+++ /dev/null
-@@ -1,72 +0,0 @@
--From 714fcf4123ae5512893019d2c205aad94b6afea6 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Tue, 1 Apr 2025 00:53:07 +0200
--Subject: [PATCH] Fix build with kernel < 5.9
--
--linux/close_range.h is only available since kernel 5.9 and
--https://github.com/torvalds/linux/commit/60997c3d45d9a67daf01c56d805ae4fec37e0bd8
--resulting in the following build failure:
--
--../util/fusermount.c:40:10: fatal error: linux/close_range.h: No such file or directory
--
--So let's check for header presence and emit HAVE_LINUX_CLOSE_RANGE_H
--accordingly and check for it when including <linux/close_range.h> and
--calling close_range() instead of checking for close_range() function in
--meson and check against HAVE_CLOSE_RANGE.
--
--Upstream: https://github.com/libfuse/libfuse/pull/1185
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- meson.build       | 6 +++++-
-- util/fusermount.c | 4 ++--
-- 2 files changed, 7 insertions(+), 3 deletions(-)
--
--diff --git a/meson.build b/meson.build
--index cbcd70d..96c655c 100644
----- a/meson.build
--+++ b/meson.build
--@@ -72,7 +72,7 @@ private_cfg.set_quoted('PACKAGE_VERSION', meson.project_version())
-- # Test for presence of some functions
-- test_funcs = [ 'fork', 'fstatat', 'openat', 'readlinkat', 'pipe2',
--                'splice', 'vmsplice', 'posix_fallocate', 'fdatasync',
---               'utimensat', 'copy_file_range', 'fallocate', 'close_range' ]
--+               'utimensat', 'copy_file_range', 'fallocate' ]
-- foreach func : test_funcs
--     private_cfg.set('HAVE_' + func.to_upper(),
--         cc.has_function(func, prefix: include_default, args: args_default))
--@@ -84,6 +84,10 @@ private_cfg.set('HAVE_ICONV',
-- private_cfg.set('HAVE_BACKTRACE',
--         cc.has_function('backtrace', prefix: '#include <execinfo.h>'))
-- 
--+# Test if headers exist
--+private_cfg.set('HAVE_LINUX_CLOSE_RANGE_H',
--+        cc.check_header('#include <linux/close_range.h>'))
--+
-- # Test if structs have specific member
-- private_cfg.set('HAVE_STRUCT_STAT_ST_ATIM',
--          cc.has_member('struct stat', 'st_atim',
--diff --git a/util/fusermount.c b/util/fusermount.c
--index dbd947c..da6d5f2 100644
----- a/util/fusermount.c
--+++ b/util/fusermount.c
--@@ -36,7 +36,7 @@
-- #include <stdbool.h>
-- #include <sys/vfs.h>
-- 
---#ifdef HAVE_CLOSE_RANGE
--+#ifdef HAVE_LINUX_CLOSE_RANGE_H
-- #include <linux/close_range.h>
-- #endif
-- 
--@@ -1477,7 +1477,7 @@ static int close_inherited_fds(int cfd)
-- 	if (cfd <= STDERR_FILENO)
-- 		return -EINVAL;
-- 
---#ifdef HAVE_CLOSE_RANGE
--+#ifdef HAVE_LINUX_CLOSE_RANGE_H
-- 	if (cfd < STDERR_FILENO + 2) {
-- 		close_range_loop(STDERR_FILENO + 1, cfd - 1, cfd);
-- 	} else {
---- 
--2.39.5
--
-diff --git a/package/libfuse3/0002-Fix-static_assert-build-failure-with-C-version-11.patch b/package/libfuse3/0002-Fix-static_assert-build-failure-with-C-version-11.patch
-deleted file mode 100644
-index 3bcff3d256..0000000000
---- a/package/libfuse3/0002-Fix-static_assert-build-failure-with-C-version-11.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 5fafd1a33e9442811074604eeaa060578e589730 Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Fri, 4 Apr 2025 22:17:49 +0200
--Subject: [PATCH] Fix static_assert build failure with C++ version < 11
--
--At the moment build fails due to lack of static_assert:
--https://gitlab.com/jolivain/buildroot/-/jobs/9606292537
--this means that the check per date is not enough, so let's use meson to
--check if static_assert() is present or not and simplify
--fuse_static_assert() definition by only checking HAVE_STATIC_ASSERT.
--
--Upstream: https://github.com/libfuse/libfuse/pull/1189
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-----
-- include/fuse_common.h | 4 +---
-- meson.build           | 2 +-
-- 2 files changed, 2 insertions(+), 4 deletions(-)
--
--diff --git a/include/fuse_common.h b/include/fuse_common.h
--index 77efc5d..582505f 100644
----- a/include/fuse_common.h
--+++ b/include/fuse_common.h
--@@ -30,9 +30,7 @@
-- #define FUSE_MAKE_VERSION(maj, min)  ((maj) * 100 + (min))
-- #define FUSE_VERSION FUSE_MAKE_VERSION(FUSE_MAJOR_VERSION, FUSE_MINOR_VERSION)
-- 
---#if (defined(__cplusplus) && __cplusplus >= 201103L) ||        \
---	(!defined(__cplusplus) && defined(__STDC_VERSION__) && \
---	 __STDC_VERSION__ >= 201112L)
--+#ifdef HAVE_STATIC_ASSERT
-- #define fuse_static_assert(condition, message) static_assert(condition, message)
-- #else
-- #define fuse_static_assert(condition, message)
--diff --git a/meson.build b/meson.build
--index 96c655c..bab98da 100644
----- a/meson.build
--+++ b/meson.build
--@@ -72,7 +72,7 @@ private_cfg.set_quoted('PACKAGE_VERSION', meson.project_version())
-- # Test for presence of some functions
-- test_funcs = [ 'fork', 'fstatat', 'openat', 'readlinkat', 'pipe2',
--                'splice', 'vmsplice', 'posix_fallocate', 'fdatasync',
---               'utimensat', 'copy_file_range', 'fallocate' ]
--+               'utimensat', 'copy_file_range', 'fallocate', 'static_assert' ]
-- foreach func : test_funcs
--     private_cfg.set('HAVE_' + func.to_upper(),
--         cc.has_function(func, prefix: include_default, args: args_default))
---- 
--2.39.5
--
-diff --git a/package/libfuse3/libfuse3.hash b/package/libfuse3/libfuse3.hash
-index b6e919d56b..8b04af83d0 100644
---- a/package/libfuse3/libfuse3.hash
-+++ b/package/libfuse3/libfuse3.hash
-@@ -1,3 +1,3 @@
- # Locally calculated sha256 checksums
--sha256  b81027fc8f444fb574de7f13edf0cf9810643d2935670c4fe19f140354241208  libfuse3-3.17.1.tar.gz
-+sha256  9d34adf5bd979cd62479340d9854e6a424a7ead7ee632e4a6da104ec0796f923  libfuse3-3.17.2.tar.gz
- sha256  b8832d9caaa075bbbd2aef24efa09f8b7ab66a832812d88c602da0c7b4397fad  LICENSE
-diff --git a/package/libfuse3/libfuse3.mk b/package/libfuse3/libfuse3.mk
-index 768179797b..fbffc536ba 100644
---- a/package/libfuse3/libfuse3.mk
-+++ b/package/libfuse3/libfuse3.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
+index d2aa961b04..b5bac10fe2 100644
+--- a/package/python-setuptools/python-setuptools.hash
++++ b/package/python-setuptools/python-setuptools.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/setuptools/json
+-md5  a15701d19326a1d4132fce56f2861a60  setuptools-76.0.0.tar.gz
+-sha256  43b4ee60e10b0d0ee98ad11918e114c70701bc6051662a9a675a0496c1a158f4  setuptools-76.0.0.tar.gz
++md5  652d999eca1412525c01e4c5b6e2275b  setuptools-79.0.1.tar.gz
++sha256  128ce7b8f33c3079fd1b067ecbb4051a66e8526e7b65f6cec075dfc650ddfa88  setuptools-79.0.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index 7157b1c771..1ee5448100 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBFUSE3_VERSION = 3.17.1
-+LIBFUSE3_VERSION = 3.17.2
- LIBFUSE3_SITE = $(call github,libfuse,libfuse,fuse-$(LIBFUSE3_VERSION))
- LIBFUSE3_LICENSE = LGPL-2.1
- LIBFUSE3_LICENSE_FILES = LICENSE
+-PYTHON_SETUPTOOLS_VERSION = 76.0.0
++PYTHON_SETUPTOOLS_VERSION = 79.0.1
+ PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/32/d2/7b171caf085ba0d40d8391f54e1c75a1cda9255f542becf84575cfd8a732
++PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/bb/71/b6365e6325b3290e14957b2c3a804a529968c77a049b2ed40c095f749707
+ PYTHON_SETUPTOOLS_LICENSE = MIT
+ PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
 -- 
-2.39.5
+2.34.1
 
 _______________________________________________
 buildroot mailing list
