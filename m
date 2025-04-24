@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78909C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:55:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF487C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:55:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3FCF1844BC;
-	Mon, 19 May 2025 10:55:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E4830709A2;
+	Mon, 19 May 2025 10:55:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3Ndc235MgPhJ; Mon, 19 May 2025 10:55:37 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QNjCf-NNE36V; Mon, 19 May 2025 10:55:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 719AF844B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 048C5709B0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 719AF844B6;
-	Mon, 19 May 2025 10:55:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 048C5709B0;
+	Mon, 19 May 2025 10:55:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 11BA4D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:41 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1BC3AE4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CCA8941288
+ by smtp4.osuosl.org (Postfix) with ESMTP id D586F4128D
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lv-OxwmwZXhN for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:14 +0000 (UTC)
+ id NATis1lmS641 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E74341281
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1724440D9F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5E74341281
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1724440D9F
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5C1B782A2E; Mon, 19 May 2025 10:39:56 +0000 (UTC)
+ id 098DC872E7; Mon, 19 May 2025 10:39:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 22 Apr 2025 23:52:13 +0200
+Date: Thu, 24 Apr 2025 22:53:54 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4440f8a24521c91a80cbff6166d9afe98d8190e2
-X-Git-Newrev: d2f5f519ece82257e760e1470f3b0674cedd77a8
+X-Git-Oldrev: 1fc51abc27d37c2874823ab864db0f32ae774eb6
+X-Git-Newrev: 1896f8c7583f40652c212d2c5ded8c91b98873c4
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103956.5C1B782A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/qoriq-firmware-inphi:
- new package
+Message-Id: <20250519103957.098DC872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/wpa_supplicant: add
+ Smart card option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,99 +66,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2f5f519ece82257e760e1470f3b0674cedd77a8
+commit: https://git.buildroot.net/buildroot/commit/?id=1896f8c7583f40652c212d2c5ded8c91b98873c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The NXP BSPs have custom support for a 25G Ethernet retimer
-(drivers/net/phy/in112525.c in U-Boot) for the LX2160A-RDB board.
-That driver requires a text file to be located at a given offset in the
-same storage device as U-Boot itself. The text file contains a list of
-register addresses and values which are programmed into the retimer.
+CONFIG_SMARTCARD was unconditionally disabled which has meant that
+even if OpenSSL is compiled with engine support and the supplicant is
+configured to use an engine it would warn that it was compiled without
+engine support.
 
-All in all, a pretty convoluted mechanism, but the driver is
-non-upstreamable, and to support the board we need this "firmware" file
-deployed.
+This mechanism is used to enable the more secure forms of 802.1x
+networking authentication such as EAP-TLS with hardware-delegated
+cryptography and private keys protected in hardware.
 
-Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+Enabling the option will allow delegating private key access to TPM2,
+ARM TrustZone and other specialized secure hardware for establishing a
+network connection.
+
+Signed-off-by: Lars Wikman <lars@underjord.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                             |  1 +
- package/Config.in                                      |  1 +
- package/qoriq-firmware-inphi/Config.in                 |  7 +++++++
- package/qoriq-firmware-inphi/qoriq-firmware-inphi.hash |  3 +++
- package/qoriq-firmware-inphi/qoriq-firmware-inphi.mk   | 18 ++++++++++++++++++
- 5 files changed, 30 insertions(+)
+ package/wpa_supplicant/Config.in         | 8 ++++++++
+ package/wpa_supplicant/wpa_supplicant.mk | 9 ++++++---
+ 2 files changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2862dd7b49..6c71aacc5e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3388,6 +3388,7 @@ F:	configs/ts5500_defconfig
+diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
+index 92953f69f0..e385d762e6 100644
+--- a/package/wpa_supplicant/Config.in
++++ b/package/wpa_supplicant/Config.in
+@@ -175,4 +175,12 @@ config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION
+ 	help
+ 	  Add introspection support for the DBus control interface.
  
- N:	Vladimir Oltean <olteanv@gmail.com>
- F:	package/qoriq-ddr-phy-binary/
-+F:	package/qoriq-firmware-inphi/
- F:	package/qoriq-mc-binary/
- F:	package/qoriq-mc-utils/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 27ee4b4c32..1bdbbd28fd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -450,6 +450,7 @@ menu "Firmware"
- 	source "package/panel-mipi-dbi-firmware/Config.in"
- 	source "package/qcom-db410c-firmware/Config.in"
- 	source "package/qoriq-ddr-phy-binary/Config.in"
-+	source "package/qoriq-firmware-inphi/Config.in"
- 	source "package/qoriq-fm-ucode/Config.in"
- 	source "package/qoriq-mc-binary/Config.in"
- 	source "package/qoriq-mc-utils/Config.in"
-diff --git a/package/qoriq-firmware-inphi/Config.in b/package/qoriq-firmware-inphi/Config.in
-new file mode 100644
-index 0000000000..88ae96c075
---- /dev/null
-+++ b/package/qoriq-firmware-inphi/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_QORIQ_FIRMWARE_INPHI
-+	bool "qoriq-firmware-inphi"
++config BR2_PACKAGE_WPA_SUPPLICANT_SMARTCARD
++	bool "Smartcard support"
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
 +	help
-+	  Firmware image for the Inphi IN112525 2x 25GbE SFP+
-+	  retimer, exclusively for use on the NXP LX2160A-RDB.
++	  Enable the smart card support. Required for OpenSSL engines
++	  to work using PKCS11 and 802.1x
 +
-+	  https://github.com/nxp-qoriq/qoriq-firmware-inphi
-diff --git a/package/qoriq-firmware-inphi/qoriq-firmware-inphi.hash b/package/qoriq-firmware-inphi/qoriq-firmware-inphi.hash
-new file mode 100644
-index 0000000000..df860e47a0
---- /dev/null
-+++ b/package/qoriq-firmware-inphi/qoriq-firmware-inphi.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  bc04d6b7ca578ad4bba053a8ec3929af305f296f23c32557dc290540cb49ac18  qoriq-firmware-inphi-f22e9ff3bfed8342da6efb699e473b11fbad5695.tar.gz
-+sha256  53e3eb0b2bd81c171fa04c17514e20b39b7bb1fe1224c593f7717f615fb9d52b  EULA.txt
-diff --git a/package/qoriq-firmware-inphi/qoriq-firmware-inphi.mk b/package/qoriq-firmware-inphi/qoriq-firmware-inphi.mk
-new file mode 100644
-index 0000000000..630c6634fd
---- /dev/null
-+++ b/package/qoriq-firmware-inphi/qoriq-firmware-inphi.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# qoriq-firmware-inphi
-+#
-+################################################################################
+ endif
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 44cfed495b..9de536b943 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -24,9 +24,6 @@ WPA_SUPPLICANT_CONFIG_ENABLE = \
+ 	CONFIG_INTERNAL_LIBTOMMATH \
+ 	CONFIG_MATCH_IFACE
+ 
+-WPA_SUPPLICANT_CONFIG_DISABLE = \
+-	CONFIG_SMARTCARD
+-
+ # libnl-3 needs -lm (for rint) and -lpthread if linking statically
+ # And library order matters hence stick -lnl-3 first since it's appended
+ # in the wpa_supplicant Makefiles as in LIBS+=-lnl-3 ... thus failing
+@@ -191,6 +188,12 @@ WPA_SUPPLICANT_DEPENDENCIES += readline
+ WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_READLINE
+ endif
+ 
++ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_SMARTCARD),y)
++WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_SMARTCARD
++else
++WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_SMARTCARD
++endif
 +
-+# Unlikely to ever be updated, keep a fixed version instead of following BSP tags
-+QORIQ_FIRMWARE_INPHI_VERSION = f22e9ff3bfed8342da6efb699e473b11fbad5695
-+QORIQ_FIRMWARE_INPHI_SITE = $(call github,nxp,qoriq-firmware-inphi,$(QORIQ_FIRMWARE_INPHI_VERSION))
-+QORIQ_FIRMWARE_INPHI_LICENSE = NXP Binary EULA
-+QORIQ_FIRMWARE_INPHI_LICENSE_FILES = EULA.txt
-+QORIQ_FIRMWARE_INPHI_INSTALL_IMAGES = YES
-+
-+define QORIQ_FIRMWARE_INPHI_INSTALL_IMAGES_CMDS
-+	$(INSTALL) -D $(@D)/in112525-phy-ucode.txt $(BINARIES_DIR)/in112525-phy-ucode.txt
-+endef
-+
-+$(eval $(generic-package))
+ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE),y)
+ define WPA_SUPPLICANT_ENABLE_CTRL_IFACE
+ 	sed -i '/ctrl_interface/s/^#//g' $(TARGET_DIR)/etc/wpa_supplicant.conf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
