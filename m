@@ -4,66 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CFF8C369C2
-	for <buildroot@archiver.kernel.org>; Fri, 25 Apr 2025 16:42:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 649E9C369C2
+	for <buildroot@archiver.kernel.org>; Fri, 25 Apr 2025 16:48:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 08CF480AAF;
-	Fri, 25 Apr 2025 16:42:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 26F5383B2B;
+	Fri, 25 Apr 2025 16:48:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hKnXYPyGR7jA; Fri, 25 Apr 2025 16:42:02 +0000 (UTC)
+ id CFWDkxFegR5n; Fri, 25 Apr 2025 16:48:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D11B80AF0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 486DD83B21
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D11B80AF0;
-	Fri, 25 Apr 2025 16:42:02 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EB265159
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 16:42:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 486DD83B21;
+	Fri, 25 Apr 2025 16:48:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 72B9131
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 16:48:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D145D4038D
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 16:42:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 647DA40274
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 16:48:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JjFHVG0tne1R for <buildroot@buildroot.org>;
- Fri, 25 Apr 2025 16:42:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0BC9F4034E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BC9F4034E
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0BC9F4034E
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 16:42:00 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:656e:cf44:475c:a8d2])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id AA956B00583;
- Fri, 25 Apr 2025 18:41:56 +0200 (CEST)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f2o2al4zjCfE for <buildroot@buildroot.org>;
+ Fri, 25 Apr 2025 16:48:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA387400C7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BA387400C7
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 16:48:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B3EFF863AD; Fri, 25 Apr 2025 16:48:33 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 25 Apr 2025 18:41:46 +0200
-Message-ID: <20250425164146.1723966-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.49.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1745599319;
- bh=+8Kb8onO5r8RncDHjMFAo2yB7quuqDuFYSIo30/njpE=;
- h=From:To:Cc:Subject:Date:From;
- b=DVdbGQqeBi7be3cEZ128q7+Fann7rj8WeYlxAAUugX7LZ97HNOnnLzKJNoNMdJ5sa
- setQabaTxZ7yvzlWw+8pvJK+/3BLuCB8O4M9GCIiPLzjniOVxG30N0CIrA5+IZbOxa
- po/peEO6p06Z8wtH/u200tNvl9ocLnJXUafk80vxRB8AjwDla0CslfoKR7XzcgIVCC
- awdvC4c51Q/81AaeAplbXE6faMcSiezr+qbOpwGTIMFzukcRUTsDF7CpyYBy8fUkgR
- cyON5P5TTcnel7EOoFybqFZhBbba2yc8d1zSGteHzgzJLo2cfR+r60He9xtqMy0N2D
- 5iPeII9T8wPAA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=DVdbGQqe
-Subject: [Buildroot] [PATCH 1/1] package/libdmtx: bump to version 0.7.8
+Date: Fri, 25 Apr 2025 18:43:39 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 460da6d4b4b189a8a0fc512f6ccd2d642e610c66
+X-Git-Newrev: 294e3a40bb7e0fe3af8fb4689529e595d6895099
+X-Patchwork-Hint: ignore
+Message-Id: <20250425164833.B3EFF863AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/micropython: bump to version 1.22.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,49 +58,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see:
-https://github.com/dmtx/libdmtx/compare/v0.7.7...v0.7.8
+commit: https://git.buildroot.net/buildroot/commit/?id=294e3a40bb7e0fe3af8fb4689529e595d6895099
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This version bump removes CVE-2023-7152, which was incorrectly associated
+with the micropython package in pkg-stats.
+
+Although the CVE fix was already present in 1.22.0 the CVE only applied
+to the preview version of 1.22.0. The CPE ID of the 1.22.0 matched with the
+CPE ID of the 1.22.0 preview version as well.
+
+This patch bumps to the latest patch-level version available in the 1.22.x
+series to include additional fixes, rather than just adding the CVE to the
+'MICROPYTHON_IGNORE_CVES' list.
+
+The LICENSE hash has been updated, as the licenses used for the ports and
+libraries have also been updated in the LICENSE file.
+
+For more details on the version bump, see the release notes:
+  - https://github.com/micropython/micropython/releases/tag/v1.22.2
+  - https://github.com/micropython/micropython/releases/tag/v1.22.1
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/pipelines/1786739544
----
- package/libdmtx/libdmtx.hash | 2 +-
- package/libdmtx/libdmtx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/micropython/micropython.hash | 4 ++--
+ package/micropython/micropython.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libdmtx/libdmtx.hash b/package/libdmtx/libdmtx.hash
-index 8b176d737a..5ae4557db0 100644
---- a/package/libdmtx/libdmtx.hash
-+++ b/package/libdmtx/libdmtx.hash
+diff --git a/package/micropython/micropython.hash b/package/micropython/micropython.hash
+index 43551866b9..bbfde0e89f 100644
+--- a/package/micropython/micropython.hash
++++ b/package/micropython/micropython.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  7aa62adcefdd6e24bdabeb82b3ce41a8d35f4a0c95ab0c4438206aecafd6e1a1  libdmtx-0.7.7.tar.gz
-+sha256  2394bf1d1d693a5a4ca3cfcc1bb28a4d878bdb831ea9ca8f3d5c995d274bdc39  libdmtx-0.7.8.tar.gz
- sha256  fcc277b7302645322c63de22b9b0bdae2df3dfa7d6cbc0d5bed7a4d3f1a9af79  LICENSE
-diff --git a/package/libdmtx/libdmtx.mk b/package/libdmtx/libdmtx.mk
-index 00d37fb94e..dd691a4af5 100644
---- a/package/libdmtx/libdmtx.mk
-+++ b/package/libdmtx/libdmtx.mk
+ #locally computed
+-sha256  a042764f0b6f6d92b267454c5bd5afcb83fc3900119f2583672aac571e661924  micropython-1.22.0.tar.xz
+-sha256  d9e0e0395867c899090e150213bc2b417e970c17355a8d48300089875b3c8037  LICENSE
++sha256  bb3ba34848a7620663b6a7cba22af45d3056fc79328c2ceb943874b5478d8756  micropython-1.22.2.tar.xz
++sha256  fe63a3fbd0731f6530e0783224763bceef972e516cab4b8513ca4d7b05be9713  LICENSE
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index 125a0edcfb..558ef86534 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBDMTX_VERSION = 0.7.7
-+LIBDMTX_VERSION = 0.7.8
- LIBDMTX_SITE = $(call github,dmtx,libdmtx,v$(LIBDMTX_VERSION))
- LIBDMTX_LICENSE = BSD-2-Clause or Special Permission
- LIBDMTX_LICENSE_FILES = LICENSE
--- 
-2.49.0
-
+-MICROPYTHON_VERSION = 1.22.0
++MICROPYTHON_VERSION = 1.22.2
+ MICROPYTHON_SITE = https://micropython.org/resources/source
+ MICROPYTHON_SOURCE = micropython-$(MICROPYTHON_VERSION).tar.xz
+ # Micropython has a lot of code copied from other projects, and also a number
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
