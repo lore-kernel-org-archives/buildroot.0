@@ -1,50 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACDB2C369D1
-	for <buildroot@archiver.kernel.org>; Fri, 25 Apr 2025 07:45:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06762C369D1
+	for <buildroot@archiver.kernel.org>; Fri, 25 Apr 2025 07:52:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 23EC440548;
-	Fri, 25 Apr 2025 07:45:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A7A40820BA;
+	Fri, 25 Apr 2025 07:52:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rD3aYyBPn-Mx; Fri, 25 Apr 2025 07:52:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D178D820E2
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D178D820E2;
+	Fri, 25 Apr 2025 07:52:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id EDC8AC1
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 07:52:56 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D4CE44297D
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 07:52:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mLtmXJuj2Dmr; Fri, 25 Apr 2025 07:45:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 39FF742E2B
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 39FF742E2B;
-	Fri, 25 Apr 2025 07:45:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6A858C1
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 07:45:25 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 504F960B2C
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 07:45:25 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id brdwmmM2t0OQ for <buildroot@buildroot.org>;
- Fri, 25 Apr 2025 07:45:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id Vu_WXhpX5tD4 for <buildroot@buildroot.org>;
+ Fri, 25 Apr 2025 07:52:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2E48D608C0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E48D608C0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2E48D608C0
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 07:45:23 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 610FC43B55;
- Fri, 25 Apr 2025 07:45:20 +0000 (UTC)
-Date: Fri, 25 Apr 2025 09:45:19 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 054384296B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 054384296B
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 054384296B
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 07:52:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2E5CD43A5F;
+ Fri, 25 Apr 2025 07:52:52 +0000 (UTC)
+Date: Fri, 25 Apr 2025 09:52:50 +0200
 To: =?UTF-8?B?R2HDq2w=?= PORTAY <gael.portay+rtone@gmail.com>
 Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>, Romain Naour
  <romain.naour@gmail.com>
-Message-ID: <20250425094519.3883d298@windsurf>
+Message-ID: <20250425095250.65932b54@windsurf>
 In-Reply-To: <20250425020634.2474835-1-gael.portay+rtone@gmail.com>
 References: <20250425020634.2474835-1-gael.portay+rtone@gmail.com>
 Organization: Bootlin
@@ -52,28 +52,28 @@ X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvhedujeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtqhertdertdejnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepheduteeufeekieevieegueegiefgvdevhefggfdutdeiuedvtdfgledvgeevleeinecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopehgrggvlhdrphhorhhtrgihodhrthhonhgvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtt
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvhedujeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtqhertdertdejnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepheduteeufeekieevieegueegiefgvdevhefggfdutdeiuedvtdfgledvgeevleeinecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdpmhgrihhlfhhrohhmpehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgedprhgtphhtthhopehgrggvlhdrphhorhhtrgihodhrthhonhgvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtt
  hhopegsvghrnhgusehkuhhhlhhsrdhnvghtpdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehgmhgrihhlrdgtohhm
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1745567120;
+ d=bootlin.com; s=gm1; t=1745567572;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
  bh=vJEgqm197b8wcBmC3Dv4jx8jjxcqVKiIWOWUSxCLTXc=;
- b=EuHlXtZBkcmotx6uZLfcEyM4K3sOk2dmYuBNZBBGkxpAZRdh/iJJJ2vPGB8IhKviaqiW7n
- MRgA/RYpIhiWXzS6r96XmvQrP8k4PBgH9iQu91RQSsb7GXW/kXKF+JW2WallHMA67mdEDr
- 3cxrN62oOFPqWOI1dds0EruZpeST+5/EAF/Qqw4O5aKTUz6YHrhGnJ95eS44LsdCn6/pXw
- 3zMfoAdAoORDSwoTvStkrrExJUlCC5J1i6g0Tym+X+RLJ0H9X1FHb7i0sXERCGn+1h7ORF
- MgrNyfuyCoY5PxMlC0s7brlVZCubqdpkNLR+qprhoFBc7oaQg6ECaH5YB+W7Jw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=DOzLp/Zil3FyaL7Gvi0DUZJR4BxV6//pDjlXLnMpJU6Pnk84dMCIAxwZvxLUZUyEGy+qd5
+ dDOLIi4ejW+0vIaVty8mczzinZuepsVWr7uAV8pZevRmkAC4t6lEoUc+SqRQxEewWHlb5j
+ Mp8bRX2rcelq8HY8G0g4OPHDGe+zwO4pm2t+NkqxicTu56KdOy4sil/rgx1h/RCo7FDjHw
+ IMpUoePPhhOOHiUAQa94KHRi6+ye+7fvJAui4QNs3blGGW/xpJH9RZjrK64lI4qA/tFCN2
+ JGqpRbHgzAa1tOtlegtEv2D0u3Ulk9fLs6hYFX7uLgsjhbpPvgMYH0BCu/rp5Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=EuHlXtZB
+ header.s=gm1 header.b=DOzLp/Zi
 Subject: Re: [Buildroot] [PATCH 1/1] Revert "package/mesa3d: Gallium VC4
  driver depends on NEON"
 X-BeenThere: buildroot@buildroot.org
