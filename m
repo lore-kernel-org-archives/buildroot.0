@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3437C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28776C54756
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:41:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 65D3D60EF8;
-	Mon, 19 May 2025 10:41:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF78482064;
+	Mon, 19 May 2025 10:41:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ugxvhTJLRPl1; Mon, 19 May 2025 10:41:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cPJT9c97XeOW; Mon, 19 May 2025 10:41:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81B7860F3F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3900A8210D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81B7860F3F;
-	Mon, 19 May 2025 10:41:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F53D1BF
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3900A8210D;
+	Mon, 19 May 2025 10:41:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9774EE4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7BF144111C
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7D5CD81E86
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BSuLHjdBNXNs for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:44 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fyUUFc7U0xdt for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58AF841038
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9718D81F55
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 58AF841038
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9718D81F55
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4EC1683A2E; Mon, 19 May 2025 10:39:44 +0000 (UTC)
+ id 869A4873DA; Mon, 19 May 2025 10:39:57 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 21 Mar 2025 22:13:01 +0100
+Date: Fri, 25 Apr 2025 18:21:26 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f9a02e7b80b24c3f71e69f149169fac556c6a63e
-X-Git-Newrev: 486672da0243f5f397d91ff50bc0ed23cec96348
+X-Git-Oldrev: 40d37d98b790680b975f5af0039e07e9f0150ef4
+X-Git-Newrev: 72661cb424c18399ce1f352d15416a71b746712b
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103944.4EC1683A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-emailproxy: new
- package
+Message-Id: <20250519103957.869A4873DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libubootenv: bump to
+ version 0.3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,93 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=486672da0243f5f397d91ff50bc0ed23cec96348
+commit: https://git.buildroot.net/buildroot/commit/?id=72661cb424c18399ce1f352d15416a71b746712b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-[Julien: fix Config.in order found by "make check-package"]
+For release note, see:
+https://github.com/sbabic/libubootenv/releases/tag/v0.3.6
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Julien: add link to release note]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                       |  1 +
- package/Config.in                                |  1 +
- package/python-emailproxy/Config.in              | 12 ++++++++++++
- package/python-emailproxy/python-emailproxy.hash |  5 +++++
- package/python-emailproxy/python-emailproxy.mk   | 14 ++++++++++++++
- 5 files changed, 33 insertions(+)
+ package/libubootenv/libubootenv.hash | 2 +-
+ package/libubootenv/libubootenv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c1bcceda9b..026670cece 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -494,6 +494,7 @@ F:	package/privoxy/
- F:	package/pure-ftpd/
- F:	package/python-couchdb/
- F:	package/python-cssutils/
-+F:	package/python-emailproxy/
- F:	package/python-glslang/
- F:	package/python-mako/
- F:	package/python-mwclient/
-diff --git a/package/Config.in b/package/Config.in
-index 5c6e334a75..120a71dd2d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1100,6 +1100,7 @@ menu "External python modules"
- 	source "package/python-dtschema/Config.in"
- 	source "package/python-ecdsa/Config.in"
- 	source "package/python-email-validator/Config.in"
-+	source "package/python-emailproxy/Config.in"
- 	source "package/python-engineio/Config.in"
- 	source "package/python-entrypoints/Config.in"
- 	source "package/python-esptool/Config.in"
-diff --git a/package/python-emailproxy/Config.in b/package/python-emailproxy/Config.in
-new file mode 100644
-index 0000000000..f1a349ce94
---- /dev/null
-+++ b/package/python-emailproxy/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_EMAILPROXY
-+	bool "python-emailproxy"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
-+	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
-+	select BR2_PACKAGE_PYTHON_PROMPT_TOOLKIT # runtime
-+	select BR2_PACKAGE_PYTHON_PYASYNCORE # runtime
-+	help
-+	  An IMAP/POP/SMTP proxy that transparently adds OAuth 2.0
-+	  authentication for email clients that don't support this
-+	  method.
-+
-+	  https://github.com/simonrob/email-oauth2-proxy
-diff --git a/package/python-emailproxy/python-emailproxy.hash b/package/python-emailproxy/python-emailproxy.hash
-new file mode 100644
-index 0000000000..886173234b
---- /dev/null
-+++ b/package/python-emailproxy/python-emailproxy.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/emailproxy/json
-+md5  f216dea4437131103b1d658cfa1a9bc0  emailproxy-2025.3.14.tar.gz
-+sha256  e406478ed86eca2005ed1e17221358a0c37ddaeccfd991d42d2df93febb279a0  emailproxy-2025.3.14.tar.gz
-+# Locally computed sha256 checksums
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/python-emailproxy/python-emailproxy.mk b/package/python-emailproxy/python-emailproxy.mk
-new file mode 100644
-index 0000000000..fd73110597
---- /dev/null
-+++ b/package/python-emailproxy/python-emailproxy.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-emailproxy
-+#
-+################################################################################
-+
-+PYTHON_EMAILPROXY_VERSION = 2025.3.14
-+PYTHON_EMAILPROXY_SOURCE = emailproxy-$(PYTHON_EMAILPROXY_VERSION).tar.gz
-+PYTHON_EMAILPROXY_SITE = https://files.pythonhosted.org/packages/15/b9/b2864ab1da9fdf7409589de99501b227352c9a6b8fa1178660debf0a2ad6
-+PYTHON_EMAILPROXY_SETUP_TYPE = setuptools
-+PYTHON_EMAILPROXY_LICENSE = Apache-2.0
-+PYTHON_EMAILPROXY_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+index 887ad6843d..986b651e42 100644
+--- a/package/libubootenv/libubootenv.hash
++++ b/package/libubootenv/libubootenv.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  dc27ddcb377e259d898256e90449bc3128437660cacc33dc75f6630d3e52c44e  libubootenv-0.3.5.tar.gz
++sha256  7946006781ad518aac1f06e2ad7e0281e4ece3d59e9616cccb01fd0c169a3e0b  libubootenv-0.3.6.tar.gz
+ sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1-or-later.txt
+ sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSES/MIT.txt
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+index e5f5e9b15a..5c2c36e90b 100644
+--- a/package/libubootenv/libubootenv.mk
++++ b/package/libubootenv/libubootenv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUBOOTENV_VERSION = 0.3.5
++LIBUBOOTENV_VERSION = 0.3.6
+ LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,v$(LIBUBOOTENV_VERSION))
+ LIBUBOOTENV_LICENSE = LGPL-2.1+, MIT, CC0-1.0
+ LIBUBOOTENV_LICENSE_FILES = LICENSES/CC0-1.0.txt \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
