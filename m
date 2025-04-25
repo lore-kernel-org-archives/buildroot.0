@@ -4,78 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04D5FC369D5
-	for <buildroot@archiver.kernel.org>; Fri, 25 Apr 2025 20:18:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D564C369D7
+	for <buildroot@archiver.kernel.org>; Fri, 25 Apr 2025 20:18:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB56681EB3;
-	Fri, 25 Apr 2025 20:18:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0C4C820D7;
+	Fri, 25 Apr 2025 20:18:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1ZzbkA-opmsF; Fri, 25 Apr 2025 20:18:37 +0000 (UTC)
+ id TRuyuVbnktoQ; Fri, 25 Apr 2025 20:18:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1293E81F76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B06B082207
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1293E81F76;
-	Fri, 25 Apr 2025 20:18:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9FE53127
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 20:18:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B06B082207;
+	Fri, 25 Apr 2025 20:18:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 19BAF31
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 20:18:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 870AA40DC6
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 20:18:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C6AB40DED
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 20:18:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v96EvhrSpeeJ for <buildroot@buildroot.org>;
- Fri, 25 Apr 2025 20:18:31 +0000 (UTC)
+ id PKUgxjsiYeYJ for <buildroot@buildroot.org>;
+ Fri, 25 Apr 2025 20:18:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
  helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B714F40DC0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B714F40DC0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1B1A740DC6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B1A740DC6
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::224])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B714F40DC0
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 20:18:30 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 8247F443C1;
- Fri, 25 Apr 2025 20:18:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1B1A740DC6
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 20:18:31 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 300E3443C7;
+ Fri, 25 Apr 2025 20:18:30 +0000 (UTC)
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Romain Naour <romain.naour@gmail.com>
-Date: Fri, 25 Apr 2025 22:18:17 +0200
-Message-ID: <20250425201824.141234-4-thomas.petazzoni@bootlin.com>
+Date: Fri, 25 Apr 2025 22:18:19 +0200
+Message-ID: <20250425201824.141234-6-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250425201824.141234-1-thomas.petazzoni@bootlin.com>
 References: <20250425201824.141234-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvheefvdekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnheptedtgedutdfghfetfeelhfdtteevvdeludekkeeiudegjeehgfevudeuudeutefhnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdrhhhomhgvpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehgihhulhhiohdrsggvnhgvthhti
- hessggvnhgvthhtihgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehgmhgrihhlrdgtohhm
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvheefvdekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepjedvteejffeiteekfedthfdvfffgueektddtveevhffgudfgieekleeiudefheelnecuffhomhgrihhnpehgnhhurdhorhhgnecukfhppedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudekmeekieegugemvddutddtmegrtddtfhemheelsgefmeegfhdvmeeifegusgdphhgvlhhopeifihhnughsuhhrfhdrhhhomhgvpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeegpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtt
+ hhopehgihhulhhiohdrsggvnhgvthhtihessggvnhgvthhtihgvnhhgihhnvggvrhhinhhgrdgtohhmpdhrtghpthhtoheprhhomhgrihhnrdhnrghouhhrsehgmhgrihhlrdgtohhm
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1745612308;
+ d=bootlin.com; s=gm1; t=1745612310;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=SBCBugJPuQPdr5C0BMpv6qgSpzqfvuBoyTvcnL26Tcw=;
- b=mRrm+BiivTgHXIeoStlfHSJn8qmY+sEsE184al4TodzNX3elL91EizQg4g8EcEDdRdLyd+
- AEEgWe6IMUEkyRUHbnfIgF/kmDGTQm96Xd9FCzRm50X4fUpAmNqXT9+0rTMuxEyaQN+sIQ
- lwHtx2kCchnR7ldlIWyW/DxkeRtUw/AdwMG+ctU3L2lm5n0t7aJ2ck7ZxmMvvlAFv48JqV
- azhGq5/biogZfiRI+QVN6duVguisGoerpDaVw9GQ1F8FroJqEonUG5QuoNsmg7XCfAyw8s
- EJLfSyqKh07eJy2Yu1YqDk68jVhR0E3nw5QSMawRrZcKBBBEpyZIK/fgtFmJBQ==
+ bh=hbZFi1ilmE308l+ClkkYF4FLwYsVWEJuoHvcJFVYbPA=;
+ b=kaDcSnclqqj5SWssSl7IwJqOhX7c444dxI7hA1fDEQtxS7oDrYFUGCvncrKb4ofuBrwjqW
+ vzuYbn7mrykGhARrnJ6xO3fVvhHuvUuXBHJWBmdPdilnC479Uv6aMFbhMJHjcoVxdswwDj
+ WwWLpvO6/3L7Vn2cWqzNWp/c7nvfygx0vCXitnhMZmqaf9NiQYirpkgZi+cizaXTMLa3sz
+ pQJpSlfJfNE71fFkUqDJiLcEKuoBzhbKse5TQLHo/IiB4ofD9En+Kgdh149qFmDTJweD5r
+ CM8vmRt9OVyL/6Hza2LssUzHmA1WUx8S9D3+BBmHt8/5XC7e47mw25wDspVp0w==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=mRrm+Bii
-Subject: [Buildroot] [PATCH 3/7] package/gcc: switch to GCC 14.x as the
- default
+ header.s=gm1 header.b=kaDcSncl
+Subject: [Buildroot] [PATCH 5/7] package/gcc: drop stale hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,27 +93,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Now that GCC 15.x support has been added, follow our usual strategy of
-making GCC 14.x the default GCC version.
+The hash for the GCC 10.4.0 tarball should have been removed a long
+time ago, when support for GCC 10.x has been removed.
 
+Fixes: d37a8f3a2e2a387b102f2982d51aca78bcc09727 ("package/gcc: remove gcc 10.x")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gcc/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gcc/gcc.hash | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 68ffa793e4..9239149cf0 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -5,7 +5,7 @@ choice
- 	default BR2_GCC_VERSION_ARC if BR2_GCC_VERSION_4_8_ARC # legacy
- 	default BR2_GCC_VERSION_ARC if BR2_arc
- 	default BR2_GCC_VERSION_POWERPC_SPE if BR2_POWERPC_CPU_HAS_SPE
--	default BR2_GCC_VERSION_13_X
-+	default BR2_GCC_VERSION_14_X
- 	help
- 	  Select the version of gcc you wish to use.
- 
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index 7a473cdc02..00da7dd49b 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -1,7 +1,5 @@
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-8.4.0/sha512.sum
+ sha512  6de904f552a02de33b11ef52312bb664396efd7e1ce3bbe37bfad5ef617f133095b3767b4804bc7fe78df335cb53bc83f1ac055baed40979ce4c2c3e46b70280  gcc-8.4.0.tar.xz
+-# From https://gcc.gnu.org/pub/gcc/releases/gcc-10.4.0/sha512.sum
+-sha512  440c08ca746da450d9a1b35e8fd2305cb27e7e6987cd9d0f7d375f3b1fc9e4b0bd7acb3cd7bf795e72fcbead59cdef5b6c152862f5d35cd9fbfe6902101ce648  gcc-10.4.0.tar.xz
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-13.3.0/sha512.sum
+ sha512  ed5f2f4c6ed2c796fcf2c93707159e9dbd3ddb1ba063d549804dd68cdabbb6d550985ae1c8465ae9a336cfe29274a6eb0f42e21924360574ebd8e5d5c7c9a801  gcc-13.3.0.tar.xz
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-14.2.0/sha512.sum
 -- 
 2.49.0
 
