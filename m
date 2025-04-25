@@ -4,74 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E08A7C369C2
-	for <buildroot@archiver.kernel.org>; Fri, 25 Apr 2025 16:49:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E931C369C2
+	for <buildroot@archiver.kernel.org>; Fri, 25 Apr 2025 17:01:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A935A42461;
-	Fri, 25 Apr 2025 16:49:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DB35E40631;
+	Fri, 25 Apr 2025 17:01:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g576FK4x4jhb; Fri, 25 Apr 2025 16:49:38 +0000 (UTC)
+ id PFs1D5Vkh1Wf; Fri, 25 Apr 2025 17:01:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D83E2424AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6C1B403FF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D83E2424AA;
-	Fri, 25 Apr 2025 16:49:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 427A331
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 16:49:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D6C1B403FF;
+	Fri, 25 Apr 2025 17:01:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2C56D159
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 17:01:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2913983B54
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 16:49:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1E455612EF
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 17:01:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vW_Mvau4tVx9 for <buildroot@buildroot.org>;
- Fri, 25 Apr 2025 16:49:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=188.165.44.123;
- helo=mail1.insia.net; envelope-from=guillaume.chaye@zeetim.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 10CDA83BEA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 10CDA83BEA
-Received: from mail1.insia.net (mail1.insia.net [188.165.44.123])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 10CDA83BEA
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 16:49:34 +0000 (UTC)
-Received: from smtp.insia.net (unknown [192.168.1.24])
- by mail1.insia.net (Postfix) with ESMTP id 13D5F3FA2B;
- Fri, 25 Apr 2025 18:49:28 +0200 (CEST)
-Received: from UDERZO.insia.net (unknown [192.168.1.35])
- by smtp.insia.net (Postfix) with ESMTP id 1EFFD5F497;
- Fri, 25 Apr 2025 18:51:21 +0200 (CEST)
-From: Guillaume Chaye <guillaume.chaye@zeetim.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hQw7Nkmt5lwF for <buildroot@buildroot.org>;
+ Fri, 25 Apr 2025 17:01:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::532; helo=mail-ed1-x532.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9EDA8612E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EDA8612E4
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9EDA8612E4
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 17:01:32 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id
+ 4fb4d7f45d1cf-5f4d0da2d2cso4751807a12.3
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 10:01:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1745600490; x=1746205290;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8yxvKJXIVigyDg2BmW+AkCIvIavxZpvwKXS0v0nF680=;
+ b=rPresgu1gj98yIjobfI3BY+doUR3wYM6SXof2auXGeKAzeFEL8SP6Kzi/Sh9XLTzZY
+ FgnUkU3hXoMZM125H3d5+Yn+0lpH409+0wLDRhJ7mDKmNFGDtyHRz78PDfrpSVPXaVBd
+ RQZ2C4W7xfOJ1AJ3+OR4LpAmHcofcsvKfG8JRb9cPFNqxNX9o70Xxi5s6L3kSis18Mxf
+ nN6ek3F08au3iw7OzWs3gHbY96PFFw6uTnnVASM0q/juuz6AUcXnaHFVcg/z7jOYnIhL
+ z1Ym3tGydmEGqedY1VEF82gxSqMky/CatoelRRomn5vnzPQiWVGDcJG0LifPw2h9Hiam
+ KYzA==
+X-Gm-Message-State: AOJu0YxYK5owgF7ReFBxJKi/heKTQXOYYpNQ04tq4vS6o2QJYJtYlk9v
+ m+6EmDoSZiL0fIpA7ipMSkn7fxfqBn9KIVooOKX3gi/GKK3VJlIdBhXSxo0tKVom73KkdXbHnSi
+ F/aUY5Q==
+X-Gm-Gg: ASbGnct7jllbqSj3wGF4fAeMt3gKiuMr3EOLMtHYCngK1sMc8j86mWQZTif594/iua+
+ fAtRc4BgSr1072/v1LZNZlDRtBOi8BVmoKeZlJQezbCe5k/spM/K5oNgogDJOhVWZ+xf/AVLCHg
+ fu+3NwTPy2sCEqa7IvVOBA6rLnv7Yulkvy4jxy7Nsa7iBFTzaWU6Ty05ZeytZFI76svnvhDAZ8k
+ cuiio9ZvgPKUA8FZdfAa4Us9DnOw5+Le2pzmvgkesdgIRlDWECak3kvuDZrJGlp5VQhl2BVWnKa
+ PfL3cTbIRG2T1hOO3sVr1+5O5K16iTnujzoXBC3X80fsD5acG48LdljPZybHxIDrMw==
+X-Google-Smtp-Source: AGHT+IFAbVPDrLkIUSu2DhSeOqQ2lPXXXnRDgu1M8kmqaJW1dxbEKa4vhF6xlpleZFeLIgvoq3YDRg==
+X-Received: by 2002:a05:6402:d08:b0:5f6:25d6:71e1 with SMTP id
+ 4fb4d7f45d1cf-5f7394d88famr225433a12.0.1745600489870; 
+ Fri, 25 Apr 2025 10:01:29 -0700 (PDT)
+Received: from localhost.localdomain ([79.132.233.61])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-5f703833c8csm1480438a12.72.2025.04.25.10.01.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 25 Apr 2025 10:01:29 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Guillaume Chaye <guillaume.chaye@zeetim.com>
-Date: Fri, 25 Apr 2025 12:49:25 -0400
-Message-Id: <20250425164925.314461-1-guillaume.chaye@zeetim.com>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+ =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>
+Date: Fri, 25 Apr 2025 19:01:07 +0200
+Message-Id: <20250425170107.1110426-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=zeetim.com; s=mail1; t=1745599768;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=9xWSL43XjARZ52zEPS7fUPZiHgnTLY5jyQy87YSyA3M=;
- b=rvb/rf++Z0KwxZ4tYf8LlbbpllXyhg96zk6PSoasmwOlJJ7nKcVrXQyENmjqcPIcxyarhV
- QA2guGQQJQr197qT/gGdcNRahS8qqfN+1bLH1G2BzT+Apmf6RmjUO84uqtDza8xcu8lYxo
- YgeakCPlle9wxK3/kLZCh4FkznGZM3rHjOg5muZ2JjMVJVyU1lWph7dbC9UvSQ4Zlpa9yV
- 21KiQUhC+ZulM8cUcjBkeE+DHMkHx5vPlWW38vn4J9wYGbbHy9zDkICbURyirZJmKlH3PX
- kfIuZ9FRthgkV6muZub4Q+pxKZb72UaLxUMnBbTadXOYC2cvfxiiHPJWCbQ9dg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=zeetim.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=mind.be; s=google; t=1745600490; x=1746205290; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=8yxvKJXIVigyDg2BmW+AkCIvIavxZpvwKXS0v0nF680=;
+ b=SDkj4I1mvdzgPlMLG4s9UqyYb6VqZqSbgvlq4Hdz1UE6rhTGEkSP5bXYnzUkJ6LhGS
+ yRLTckn/PcKgumaDB+p6C3qYwf5CvLkyLFKfzDeMvH+qWJFGgKOUAVO3708HxFGBfnVc
+ +5ZMtvHWwi4m4GiRr0TmbHtmicc0dfJ658svwjkpQ0V/E0AEPJUm/gv70/sKDcFWTW2F
+ XzRddAkTm4SLz9lKixEN9D9qMuniYr7zA33E+74IivCYBv4dOGOl8/H7p96onWgrNq45
+ 02wOZeC4NvwnpSBXe6MKneHWnnza9IVz2vmaxMAS3I8D39fQbohxH0gXmJ6ixcOPy0Gm
+ eOqQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=zeetim.com header.i=@zeetim.com header.a=rsa-sha256
- header.s=mail1 header.b=rvb/rf++
-Subject: [Buildroot] [PATCHv2 1/1] support/download/dl-wrapper: add basic
- support for smb file download using curl
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=SDkj4I1m
+Subject: [Buildroot] [PATCH 1/1] package/strongswan: fix build w/ wolfssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,65 +107,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-It allows to download files from smb share in buildroot packages.
-Usage is specified in manual.
+The package strongswan relies on the `wc_RsaKeyToDer` & `wc_MakeRsaKey`
+functions of WolfSSL. Building this package with the WolfSSL backend
+by selecting the variable `BR2_PACKAGE_STRONGSWAN_WOLFSSL` would give
+the following error:
 
-Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
+```
+libtool: compile:  /home/buildroot/instance-0/output-1/host/bin/sparc-linux-gcc -DHAVE_CONFIG_H -I. -I../../../.. -I../../../../src/libstrongswan -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DWC_NO_RNG -rdynamic -Wno-format -Wno-format-security -Wno-implicit-fallthrough -Wno-missing-field-initializers -Wno-pointer-sign -Wno-sign-compare -Wno-type-limits -Wno-unused-parameter -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Og -g0 -include /home/buildroot/instance-0/output-1/build/strongswan-5.9.14/config.h -c wolfssl_ed_public_key.c -o wolfssl_ed_public_key.o >/dev/null 2>&1
+wolfssl_rsa_private_key.c: In function 'get_encoding':
+wolfssl_rsa_private_key.c:366:31: error: implicit declaration of function 'wc_RsaKeyToDer'; did you mean 'wc_EccKeyToDer'? [-Wimplicit-function-declaration]
+  366 |                         len = wc_RsaKeyToDer(&this->rsa, encoding->ptr, len);
+      |                               ^~~~~~~~~~~~~~
+      |                               wc_EccKeyToDer
+libtool: compile:  /home/buildroot/instance-0/output-1/host/bin/sparc-linux-gcc -DHAVE_CONFIG_H -I. -I../../../.. -I../../../../src/libstrongswan -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DWC_NO_RNG -rdynamic -Wno-format -Wno-format-security -Wno-implicit-fallthrough -Wno-missing-field-initializers -Wno-pointer-sign -Wno-sign-compare -Wno-type-limits -Wno-unused-parameter -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Og -g0 -include /home/buildroot/instance-0/output-1/build/strongswan-5.9.14/config.h -c wolfssl_ec_private_key.c -o wolfssl_ec_private_key.o >/dev/null 2>&1
+wolfssl_rsa_private_key.c: In function 'wolfssl_rsa_private_key_gen':
+wolfssl_rsa_private_key.c:490:13: error: implicit declaration of function 'wc_MakeRsaKey'; did you mean 'wc_FreeRsaKey'? [-Wimplicit-function-declaration]
+  490 |         if (wc_MakeRsaKey(&this->rsa, key_size, WC_RSA_EXPONENT, &this->rng) < 0)
+      |             ^~~~~~~~~~~~~
+      |             wc_FreeRsaKey
+```
+
+Those functions are only present when building the WolfSSL library with
+the keygen supports (`--enable-keygen`).
+
+This patch change the selected package to enable all the option of
+WolfSSL, which include the keygen as well.
+
+Fixes:
+  - https://autobuild.buildroot.org/results/d0e/d0e94f501ad1afd25ae4112443f9af101dfa5dea
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- docs/manual/adding-packages-generic.adoc | 7 +++++++
- package/pkg-generic.mk                   | 2 +-
- support/download/dl-wrapper              | 2 +-
- 3 files changed, 9 insertions(+), 2 deletions(-)
+ package/strongswan/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/docs/manual/adding-packages-generic.adoc b/docs/manual/adding-packages-generic.adoc
-index 7e2e066c16..881beab6e1 100644
---- a/docs/manual/adding-packages-generic.adoc
-+++ b/docs/manual/adding-packages-generic.adoc
-@@ -337,6 +337,13 @@ not and can not work as people would expect it should:
-      for +local+ packages, no patches are applied. If you need to
-      still patch the source code, use +LIBFOO_POST_RSYNC_HOOKS+, see
-      xref:hooks-rsync[].
-+  ** +smb+ for retrieving source code from SMB share. Used by default
-+     when +LIBFOO_SITE+ begins with +smb://+.
-+	 It uses +curl+ as download backend.
-+	 Syntax expected: +LIBFOO_SITE=smb://<server>/<share>/<path>+.
-+	 This method might require to define -u option in +LIBFOO_DL_OPTS+
-+	 For more informations, please refer to the curl documentation in
-+	 +https://curl.se/docs/tutorial.html+
+diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
+index a62688f9c3..22caa2a573 100644
+--- a/package/strongswan/Config.in
++++ b/package/strongswan/Config.in
+@@ -59,6 +59,7 @@ config BR2_PACKAGE_STRONGSWAN_GMP
+ config BR2_PACKAGE_STRONGSWAN_WOLFSSL
+ 	bool "wolfssl"
+ 	select BR2_PACKAGE_WOLFSSL
++	select BR2_PACKAGE_WOLFSSL_ALL
  
- * +LIBFOO_GIT_SUBMODULES+ can be set to +YES+ to create an archive
-   with the git submodules in the repository.  This is only available
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index f22b6e981a..95ff9135bd 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1260,7 +1260,7 @@ else ifeq ($$($(2)_SITE_METHOD),hg)
- DL_TOOLS_DEPENDENCIES += hg
- else ifeq ($$($(2)_SITE_METHOD),cvs)
- DL_TOOLS_DEPENDENCIES += cvs
--else ifneq ($(filter ftp ftps,$$($(2)_SITE_METHOD)),)
-+else ifneq ($(filter ftp ftps smb,$$($(2)_SITE_METHOD)),)
- DL_TOOLS_DEPENDENCIES += curl
- endif # SITE_METHOD
+ endchoice
  
-diff --git a/support/download/dl-wrapper b/support/download/dl-wrapper
-index 5445aad5a7..b70c8edbd9 100755
---- a/support/download/dl-wrapper
-+++ b/support/download/dl-wrapper
-@@ -96,7 +96,7 @@ main() {
-         backend="${backend_urlencode%|*}"
-         case "${backend}" in
-             git|svn|cvs|bzr|file|scp|hg|sftp) ;;
--            ftp|ftps) backend="curl" ;;
-+            ftp|ftps|smb) backend="curl" ;;
-             *) backend="wget" ;;
-         esac
-         uri=${uri#*+}
 -- 
 2.39.5
 
