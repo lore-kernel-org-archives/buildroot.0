@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04EC3C369D3
-	for <buildroot@archiver.kernel.org>; Fri, 25 Apr 2025 19:17:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C664C369C2
+	for <buildroot@archiver.kernel.org>; Fri, 25 Apr 2025 19:22:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A81C640949;
-	Fri, 25 Apr 2025 19:17:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38B9140D86;
+	Fri, 25 Apr 2025 19:22:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rUDJ196zpiPC; Fri, 25 Apr 2025 19:17:15 +0000 (UTC)
+ id iXqCXUxehikG; Fri, 25 Apr 2025 19:22:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D55C840847
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5FB4940D92
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D55C840847;
-	Fri, 25 Apr 2025 19:17:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id AA5C8159
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 19:17:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5FB4940D92;
+	Fri, 25 Apr 2025 19:22:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3909331
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 19:22:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 912EF80F8B
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 19:17:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2B1726086A
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 19:22:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1oXFA9TiBQio for <buildroot@buildroot.org>;
- Fri, 25 Apr 2025 19:17:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F40E680F48
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F40E680F48
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F40E680F48
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 19:17:11 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id A393278034D;
- Fri, 25 Apr 2025 21:17:06 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 25 Apr 2025 21:17:06 +0200
-MIME-Version: 1.0
-Date: Fri, 25 Apr 2025 21:17:06 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hJVJwd16U30e for <buildroot@buildroot.org>;
+ Fri, 25 Apr 2025 19:22:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 707AC60811
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 707AC60811
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 19:22:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2DE71863C9; Fri, 25 Apr 2025 19:22:33 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org, =?UTF-8?Q?J=C3=A9r=C3=B4me_Pouiller?=
- <jezz@sysmic.org>
-In-Reply-To: <20250425170107.1110426-1-thomas.perale@mind.be>
-References: <20250425170107.1110426-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <b662304d7c9b5999876aba7cd8b28b43@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1745608629;
- bh=QGffThR/wLgW9vo5hweSgKep6nCYRI66OpIAo/QEtto=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=iPXWmQnvCkPpFZcLLnHuc6JQWtT1tAgLCnB2D+mYR/GGlYP+0JSQllORUcqJLBVBm
- gpCq2Wu0JvKpU3VipKQ0IIXpazZ3FdtrRFM7TrzER1ZUPb3PZGxTOq0Uihj3Uvtxj2
- jaXdAzxJQj+3WmZjuZuLRVTYlFF5zoV2EZ/QKhwFUrMo6s2UuEl08tW56duP63BZIG
- PBTvZGQMKqrQ1x4DaUb6MXosCLhk0V/ACFNWXx8hl8WhizsoGeVcwOTMGGq4JCWO1E
- 8gZK8pwJv4MlmSvWkKqE+gmk7rPTRDF7Wg17ImdRtco1Ej6NVLWIkxVT9XiObp7rwI
- 1kNqiY6C50A3w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=iPXWmQnv
-Subject: Re: [Buildroot] [PATCH 1/1] package/strongswan: fix build w/ wolfssl
+To: buildroot@buildroot.org
+Date: Fri, 25 Apr 2025 21:18:19 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6c183754342e6bb73aeab3c8731789c73fcae4ad
+X-Git-Newrev: 94659ff7d44c724dd4e6e8a24646897fc8c176e2
+X-Patchwork-Hint: ignore
+Message-Id: <20250425192233.2DE71863C9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/shadow: bump to version 4.17.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,20 +58,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 25/04/2025 19:01, Thomas Perale via buildroot wrote:
-> The package strongswan relies on the `wc_RsaKeyToDer` & `wc_MakeRsaKey`
-> functions of WolfSSL. Building this package with the WolfSSL backend
-> by selecting the variable `BR2_PACKAGE_STRONGSWAN_WOLFSSL` would give
-> the following error:
-[...]
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+commit: https://git.buildroot.net/buildroot/commit/?id=94659ff7d44c724dd4e6e8a24646897fc8c176e2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+Changelog: [1].
+
+[1]: https://github.com/shadow-maint/shadow/releases/tag/4.17.4
+
+Signed-off-by: Raphael Pavlidis <raphael.pavlidis@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/shadow/shadow.hash | 4 ++--
+ package/shadow/shadow.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/shadow/shadow.hash b/package/shadow/shadow.hash
+index 6e7fdb4603..985d8eced0 100644
+--- a/package/shadow/shadow.hash
++++ b/package/shadow/shadow.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://github.com/shadow-maint/shadow/releases/download/4.17.3/shadow-4.17.3.tar.xz.asc
++# Verified from https://github.com/shadow-maint/shadow/releases/download/4.17.4/shadow-4.17.4.tar.xz.asc
+ # with key 66D0387DB85D320F8408166DB175CFA98F192AF2
+-sha256  09e896c7b01c97ba4be2d6be332c55a3e478b4893cd3c3466d8224e622bd4943  shadow-4.17.3.tar.xz
++sha256  554801054694ff7d8a7abdf0d6ece34e2f16e111673cc01b8c9ee1278451181e  shadow-4.17.4.tar.xz
+ sha256  3d25ab8f43fdc14624296a56ff8dc3e72e499ad35f32ae0c803f4959cfe17c0a  COPYING
+diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
+index c598ad88fd..41b0122f62 100644
+--- a/package/shadow/shadow.mk
++++ b/package/shadow/shadow.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHADOW_VERSION = 4.17.3
++SHADOW_VERSION = 4.17.4
+ SHADOW_SITE = https://github.com/shadow-maint/shadow/releases/download/$(SHADOW_VERSION)
+ SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.xz
+ SHADOW_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
