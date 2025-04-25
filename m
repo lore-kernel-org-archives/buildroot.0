@@ -1,52 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE1ABC369C2
-	for <buildroot@archiver.kernel.org>; Fri, 25 Apr 2025 16:23:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CA36C369D3
+	for <buildroot@archiver.kernel.org>; Fri, 25 Apr 2025 16:23:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8D80B42EE6;
-	Fri, 25 Apr 2025 16:23:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0D1F583DAA;
+	Fri, 25 Apr 2025 16:23:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jcf7EiYgJOU2; Fri, 25 Apr 2025 16:23:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nuZwxd_eNoQn; Fri, 25 Apr 2025 16:23:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BADEE42EE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5130083DE6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BADEE42EE4;
-	Fri, 25 Apr 2025 16:23:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A25ECC1
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 16:23:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5130083DE6;
+	Fri, 25 Apr 2025 16:23:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 69C84127
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 16:23:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9435342EE4
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 16:23:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5058683DE7
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 16:23:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TW6MNRJ7LSGb for <buildroot@buildroot.org>;
- Fri, 25 Apr 2025 16:23:16 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F060342ED4
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F060342ED4
- for <buildroot@buildroot.org>; Fri, 25 Apr 2025 16:23:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E51608637D; Fri, 25 Apr 2025 16:23:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Fb74CLoenifU for <buildroot@buildroot.org>;
+ Fri, 25 Apr 2025 16:23:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B5FF983DAA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5FF983DAA
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B5FF983DAA
+ for <buildroot@buildroot.org>; Fri, 25 Apr 2025 16:23:52 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id A520919F74A;
+ Fri, 25 Apr 2025 18:23:48 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 25 Apr 2025 18:23:48 +0200
+MIME-Version: 1.0
+Date: Fri, 25 Apr 2025 18:23:48 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 25 Apr 2025 18:21:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 40d37d98b790680b975f5af0039e07e9f0150ef4
-X-Git-Newrev: 72661cb424c18399ce1f352d15416a71b746712b
-X-Patchwork-Hint: ignore
-Message-Id: <20250425162315.E51608637D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libubootenv: bump to version 0.3.6
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org, Pierre-Jean Texier <texier.pj2@gmail.com>
+In-Reply-To: <20250425004243.218301-1-james.hilliard1@gmail.com>
+References: <20250425004243.218301-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <e96c8b79ec1665b3156a13ca92f420f9@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1745598230;
+ bh=4lgwdR+x4Onmzs3g6I0IFrpHcAwJqsg+Wwb1ChmxDP4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=gso75Dgc5KEZxeR7xIUhqYI6LM9LOCPv0XKG/2NYJjl8ualzRz1kRvYueU4x0L08U
+ tbWSvOm1+Zr6jrZ6w0QCtF8SgUmTu0TNfV3v+04+i9wzX+onzL8W5/hXtZblTmO79Y
+ Z1YIniSbfnU/U0auCmJ0r32RsfB9Nk0qPSC4UPUUKRbGwMQ4GWG/dMjAJl3WMTFlyC
+ fHR4gSp+8U6O0r3KRze3V387u4j0MysG7+xZBUNdpTcdADr+eIc82H0VvZGwGoTWi1
+ mokBAZp2N65lvXx3a/03OFxHmTf7xPKix/E0joGgmvi0IhayjKVLMxEgA6FAIn1RFx
+ YOoL+NT1WQsMg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=gso75Dgc
+Subject: Re: [Buildroot] [PATCH 1/1] package/libubootenv: bump to version
+ 0.3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,50 +82,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72661cb424c18399ce1f352d15416a71b746712b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 25/04/2025 02:42, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-For release note, see:
-https://github.com/sbabic/libubootenv/releases/tag/v0.3.6
+Applied to master, thanks.
+For info, I added a link to the release note.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Julien: add link to release note]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libubootenv/libubootenv.hash | 2 +-
- package/libubootenv/libubootenv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Best regards,
 
-diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
-index 887ad6843d..986b651e42 100644
---- a/package/libubootenv/libubootenv.hash
-+++ b/package/libubootenv/libubootenv.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  dc27ddcb377e259d898256e90449bc3128437660cacc33dc75f6630d3e52c44e  libubootenv-0.3.5.tar.gz
-+sha256  7946006781ad518aac1f06e2ad7e0281e4ece3d59e9616cccb01fd0c169a3e0b  libubootenv-0.3.6.tar.gz
- sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSES/LGPL-2.1-or-later.txt
- sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSES/MIT.txt
-diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
-index e5f5e9b15a..5c2c36e90b 100644
---- a/package/libubootenv/libubootenv.mk
-+++ b/package/libubootenv/libubootenv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUBOOTENV_VERSION = 0.3.5
-+LIBUBOOTENV_VERSION = 0.3.6
- LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,v$(LIBUBOOTENV_VERSION))
- LIBUBOOTENV_LICENSE = LGPL-2.1+, MIT, CC0-1.0
- LIBUBOOTENV_LICENSE_FILES = LICENSES/CC0-1.0.txt \
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
