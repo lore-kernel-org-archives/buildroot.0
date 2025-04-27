@@ -1,101 +1,99 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 596E4C369CB
-	for <buildroot@archiver.kernel.org>; Sat, 26 Apr 2025 21:04:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2B35C369D8
+	for <buildroot@archiver.kernel.org>; Sun, 27 Apr 2025 03:10:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BABC4607B0;
-	Sat, 26 Apr 2025 21:04:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8aeb2YGR5ghD; Sat, 26 Apr 2025 21:04:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE94560794
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE94560794;
-	Sat, 26 Apr 2025 21:04:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6E8001C4
- for <buildroot@buildroot.org>; Sat, 26 Apr 2025 21:04:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6085041711
- for <buildroot@buildroot.org>; Sat, 26 Apr 2025 21:04:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4225440C55;
+	Sun, 27 Apr 2025 03:10:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GjuzJWxgaMaf for <buildroot@buildroot.org>;
- Sat, 26 Apr 2025 21:04:30 +0000 (UTC)
+ id CQS-VJStqJES; Sun, 27 Apr 2025 03:10:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D83B40B55
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6D83B40B55;
+	Sun, 27 Apr 2025 03:10:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C69191C4
+ for <buildroot@buildroot.org>; Sun, 27 Apr 2025 03:10:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B8B14404FE
+ for <buildroot@buildroot.org>; Sun, 27 Apr 2025 03:10:42 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K1Gs4epH9u05 for <buildroot@buildroot.org>;
+ Sun, 27 Apr 2025 03:10:42 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
- envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4F9C641707
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F9C641707
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4F9C641707
- for <buildroot@buildroot.org>; Sat, 26 Apr 2025 21:04:28 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-391342fc0b5so2656538f8f.3
- for <buildroot@buildroot.org>; Sat, 26 Apr 2025 14:04:28 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
+ envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A970F400D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A970F400D0
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A970F400D0
+ for <buildroot@buildroot.org>; Sun, 27 Apr 2025 03:10:41 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id
+ a640c23a62f3a-acb5ec407b1so592258666b.1
+ for <buildroot@buildroot.org>; Sat, 26 Apr 2025 20:10:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1745701466; x=1746306266;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1745723440; x=1746328240;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=mNnF2ILbkC3kVaEoGC/AuSfu138kfMeN2iev9ZgWnYM=;
- b=g+EGbgwHy1h/thYTHoKGQm8NASWzjrjRN0IceDyZ3rGVnIhMKdj4YrqaroQTdpA3UR
- R1YAvfMqK8uy4CQWpEoIQSFAXFL1zebVZiOYvlKJvcjS/OGc3e3Q4JBAOsalXOi0wC2C
- YhLLzJgcrENJCEB8iMHC9te2YebbVqlp1B517Wi2NKth0gV0Vjs4DMVTs2bQIIaU2DkD
- j0OU4E688b7XfL80wwzN1QBvhW85eO4ZZCkBeBpOapaV8Y7rvQMI4D/Cp0AkdrjUV+M/
- V8MgmAOgAGpvLxWjD2siVzyqkVFL5Ugh7q94sD1QmK1oYAZ7PTGc06zJ21noXy/9Vu4y
- In2w==
-X-Gm-Message-State: AOJu0YydJbTvittxPRaCmV0WI32Ni3V/9YUL+0Mb6BgG7qddMLWnWYJ5
- SPoNboahbrg5lzUcD8HsKU4Sl9NHRsbjcjnclP5cSOB3u+KtC6hj6A7Wq9PLeIOkEGdI67Pg24D
- V
-X-Gm-Gg: ASbGncvhnQCGzkrmUnlr+h1I3U8jVtJmh97Vw780kJURVgttaDg+cRr4uA5jAn0H39v
- 4a3adKHBRdKET709XQN8HyiECrV9NTNGq8AcGIO4+wU8KAfc4L+o+gDkBKWBjkFLM7uvAgg+600
- OT9fo3l1gV7cSYvOVBO21ytOrpx6IS5oGY0GEWZvpoLUFeUV9Ji2cS3oBBusFYidbttZxsFJgEx
- XoO9rI85nkDmGLRRFQEqjCXcXz42a/OOXAythqccGp502uQTRLNsIKnN+v+dacCNnHeIPXRwDl+
- eO5UKmSdPYJHmxRxCZzLU4nvcbddQdaUzs43RmZmlOVQki/kOO5phjKgSluf
-X-Google-Smtp-Source: AGHT+IE72aEzI8gDYp2A9uI4nQPzumbxrN63C+lW7A0MOSb9WXtfhOVOgazCpwMsGtWh6/JDPRBRMg==
-X-Received: by 2002:a05:6000:250f:b0:39b:fa24:950a with SMTP id
- ffacd0b85a97d-3a07ab8172bmr3090689f8f.36.1745701466452; 
- Sat, 26 Apr 2025 14:04:26 -0700 (PDT)
-Received: from debian-hp-1.fritz.box ([213.211.140.212])
+ bh=5DJ3yXDh29AJBGsxHO0YNIVAtyxiSbCb4lMPEkVoqVM=;
+ b=kbFcVhy+GzngufKviQ+mEvejx5/zmMl2UDJrSSGrbPtgGI1eceQeAgcD4fcasxyElD
+ NHjivm6ZqZcXBqNYllDDZy6KM7ridJTopd+5FWj5lRevlaqg0MMbrFrZpW9MsCx4EqZD
+ zu3fnyKLK4kxcljUMwsZg+ybjblWnTKyFMtgMKNiM/KFodw4jYaDtCher5+L4mT7nk+N
+ b+/ShtS32Mn1BsKY2QkBUe2H83YEbVVc6fSmDR7AJzC9pfR982E1LaAjCHCWIqHRh+Go
+ ixV3leePgcIlABEiU4Udi4gFxgKn+CF1PU0GveswegiXk4PBNdlGsIizFLzjGcLTBsj1
+ rBPg==
+X-Gm-Message-State: AOJu0YwCtvZ4RzYwyNdnarUeGj0wWdLgUGV2r9b7u8YzgoS9i14VmhA/
+ LVKq0+40k5OaCVPVHFlN4xtuswFaT+1JRyFTayjG50DysfLLxDb4QFa2Ow==
+X-Gm-Gg: ASbGncuLQGgaDZS7befAUB5P9kzJwtJoWsNONtl1I9Cv/PKva+MV5zd5hyEnNWyyA5/
+ +/fpItsXc9Psz2GGyhIoWbkNVY4Bp/MNUXbbN7NDrNcDE6VuXdshRSYQifqAa57FnI65UChdQnW
+ pXYaS5I/ZNoAKS94loJRTPzR3YnrfBEjpOwUGSCwz98FsmzwJt6DU8KG260HzblMxZjYr02r3wJ
+ FxWERV/NsE/goZlakn5SoY91P3diEaW536X3cKU6Y7EMwsMqwKzOFGLvESX+Yz1zkvott4GfpqA
+ vumSh+/DO2nq6amuzY6JUyUD+NfcpVrrzmZkdMId25BU
+X-Google-Smtp-Source: AGHT+IELcLITJV8hWGcpQ3oMdzvTYnsielHpDmwDcdtWSSXct9g9srWwvdqVFKWMtwzqfhTUzlBraw==
+X-Received: by 2002:a17:907:3dac:b0:ac7:ecfc:e5fa with SMTP id
+ a640c23a62f3a-ace84af6a61mr458081666b.54.1745723439370; 
+ Sat, 26 Apr 2025 20:10:39 -0700 (PDT)
+Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3a073c8c7fesm6610889f8f.6.2025.04.26.14.04.25
+ a640c23a62f3a-ace6ed704bdsm379729566b.148.2025.04.26.20.10.39
+ for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 26 Apr 2025 14:04:26 -0700 (PDT)
-To: buildroot@buildroot.org
-Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Sat, 26 Apr 2025 23:04:09 +0200
-Message-ID: <20250426210411.1120310-1-raphael.melotte@mind.be>
-X-Mailer: git-send-email 2.49.0
+ Sat, 26 Apr 2025 20:10:39 -0700 (PDT)
+Message-ID: <680da02f.170a0220.2512cd.ae73@mx.google.com>
 MIME-Version: 1.0
+To: buildroot@buildroot.org
+From: Buildroot Notifications <buildroot.notifications@gmail.com>
+Date: Sun, 27 Apr 2025 03:10:39 -0000
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1745701466; x=1746306266; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=mNnF2ILbkC3kVaEoGC/AuSfu138kfMeN2iev9ZgWnYM=;
- b=KHvfpDh+kJEIgl956ajI5jGN/hHITVjjwU4nJQaWwUytMEZEXSxlyzxPsSofkESF/m
- nj9gyiLf9pMWPWqJZfGRWLCX5RAoHKqmd0J2tABaynOMCKXFXiFfcyEcOn7sjvDCfUZ2
- AwrZSWLvuq3tLPHW930WvVEL5qSwHT+4taULI69uWNWrHeQbBDNWASt+VYwyPtIbGOfl
- rEkBehDA18XIfsEiGR72bRCd34GmplQjUKDTg1r3DvwqGrINV57CgQA8fZYDB4ey2b9U
- 2Se13U9obmdCTRRPLstlAcvgMWZgDRMqQNfL/y0g0W2IetOwdVt2aHoTVogCNU6m+fwK
- xumw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1745723440; x=1746328240; darn=buildroot.org;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :message-id:from:to:cc:subject:date:message-id:reply-to;
+ bh=5DJ3yXDh29AJBGsxHO0YNIVAtyxiSbCb4lMPEkVoqVM=;
+ b=AYA9sDMNlMsoDBe0yd7VZ93LbgbfIIyYbpOjwDMGifLxVt4JyjiLYnF4Hh9I9sppCe
+ h7DbtFwAM98PlaZMJPQnI6ytcMKRlTO8DEgRPFWyMQhje9UH2FHUIbk+52vWb22kRmKO
+ 0cXebdr0dsk/itYVLy2QO1Lt5kwTRR+zQZ6sjNCR1qL/P5ebhQK5tsvc66R6CTIfkGqe
+ Eb5ujWnXqP13UxC9g1FqQb8HV3nqkBhkNJia28fgcOd0cHhbOybKb+Z0nyyKPTo9O51M
+ GXaDWw+HbpKUa8hYEEz+DOxFSVNJQMA4xfHNnt0aP9yGY6UkMaE0sLM5iok76BtIPjKC
+ clrQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=KHvfpDh+
-Subject: [Buildroot] [PATCH 1/1] support/scripts/cve.py: remove unused
- each_product()
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=AYA9sDMN
+Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2025-04-26
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,32 +105,104 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Rapha=C3=ABl_M=C3=A9lotte_via_buildroot?=
- <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhlIGxhc3QgdXNhZ2Ugb2YgZWFjaF9wcm9kdWN0KCkgd2FzIHJlbW92ZWQgaW4gY29tbWl0CjUy
-YWUwOTIwNDY2OTZmMDk5Mzk3ZDNiMGE4MjA2MjYyZTgyMDNmNDAgKCJzdXBwb3J0L3NjcmlwdHMv
-Y3ZlLnB5OiB1c2UKdGhlIEpTT04gZGF0YSBpbiAxLjEgc2NoZW1hIikuCgpTaW5jZSBpdCdzIG5v
-dyB1bnVzZWQsIHJlbW92ZSBpdC4KClNpZ25lZC1vZmYtYnk6IFJhcGhhw6tsIE3DqWxvdHRlIDxy
-YXBoYWVsLm1lbG90dGVAbWluZC5iZT4KLS0tCiBzdXBwb3J0L3NjcmlwdHMvY3ZlLnB5IHwgNiAt
-LS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCA2IGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3N1cHBv
-cnQvc2NyaXB0cy9jdmUucHkgYi9zdXBwb3J0L3NjcmlwdHMvY3ZlLnB5CmluZGV4IDVhZjZlMGM0
-M2YuLjE4ZmRhOGUxYTEgMTAwNzU1Ci0tLSBhL3N1cHBvcnQvc2NyaXB0cy9jdmUucHkKKysrIGIv
-c3VwcG9ydC9zY3JpcHRzL2N2ZS5weQpAQCAtMTExLDEyICsxMTEsNiBAQCBjbGFzcyBDVkU6CiAg
-ICAgICAgICAgICAgICAgICAgIHdpdGggb3Blbihvcy5wYXRoLmpvaW4oZGlycGF0aCwgZmlsZW5h
-bWUpLCAicmIiKSBhcyBmOgogICAgICAgICAgICAgICAgICAgICAgICAgeWllbGQgY2xzKGpzb24u
-bG9hZChmKSkKIAotICAgIGRlZiBlYWNoX3Byb2R1Y3Qoc2VsZik6Ci0gICAgICAgICIiIkl0ZXJh
-dGUgb3ZlciBlYWNoIHByb2R1Y3Qgc2VjdGlvbiBvZiB0aGlzIGN2ZSIiIgotICAgICAgICBmb3Ig
-dmVuZG9yIGluIHNlbGYubnZkX2N2ZVsnY3ZlJ11bJ2FmZmVjdHMnXVsndmVuZG9yJ11bJ3ZlbmRv
-cl9kYXRhJ106Ci0gICAgICAgICAgICBmb3IgcHJvZHVjdCBpbiB2ZW5kb3JbJ3Byb2R1Y3QnXVsn
-cHJvZHVjdF9kYXRhJ106Ci0gICAgICAgICAgICAgICAgeWllbGQgcHJvZHVjdAotCiAgICAgZGVm
-IHBhcnNlX25vZGUoc2VsZiwgbm9kZSk6CiAgICAgICAgICIiIgogICAgICAgICBQYXJzZSB0aGUg
-bm9kZSBpbnNpZGUgdGhlIGNvbmZpZ3VyYXRpb25zIHNlY3Rpb24gdG8gZXh0cmFjdCB0aGUKLS0g
-CjIuNDkuMAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
-YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
-c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+Hello,
+
+Autobuild statistics for 2025-04-26
+===================================
+
+      branch |  OK | NOK | TIM | TOT |
+  2025.02.x  |  8  |  9  |  0  | 17  |
+    master   | 14  | 20  |  0  | 34  |
+
+Classification of failures by reason for master
+-----------------------------------------------
+
+              asterisk-20.11.1 | 2 
+          sane-airscan-0.99.33 | 2 
+                   bird-2.15.1 | 1 
+                  ffmpeg-6.1.2 | 1 
+            gettext-gnu-0.22.4 | 1 
+  gobject-introspection-1.82.0 | 1 
+                 host-gdb-14.2 | 1 
+              host-rust-1.82.0 | 1 
+ host-softether-4.30-9700-beta | 1 
+              json-glib-1.10.6 | 1 
+libdbi-drivers-0bfae6c43134... | 1 
+                libressl-3.9.2 | 1 
+                    mpv-0.35.1 | 1 
+   nxp-mwifiex-lf-6.6.52_2.2.0 | 1 
+      passt-2025_02_17.a1e48a0 | 1 
+         python-remi-2022.7.27 | 1 
+                    uftp-5.0.3 | 1 
+                       unknown | 1 
+
+
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+ aarch64_be  |        asterisk-20.11.1        | NOK | https://autobuild.buildroot.org/results/b2a088710d1c1aaf7f1fbfeec369c1a8d1559d5e |     
+ aarch64_be  |        asterisk-20.11.1        | NOK | https://autobuild.buildroot.org/results/c07173e12ba3b861cd4e493080662c2d47e0b29f |     
+  aarch64    |          bird-2.15.1           | NOK | https://autobuild.buildroot.org/results/1fff248995107a69a5eff85beb610d502a94a096 |     
+    arc      |          ffmpeg-6.1.2          | NOK | https://autobuild.buildroot.org/results/8763f7261d37a85fe451e662063b40de9216dbe2 |     
+    arc      |       gettext-gnu-0.22.4       | NOK | https://autobuild.buildroot.org/results/ad60b679702a50b0035ab7df48a2424095caa354 | ORPH
+  sparc64    |  gobject-introspection-1.82.0  | NOK | https://autobuild.buildroot.org/results/7ebea5c175e83cf255311a1bd0cbee473f67428b | ORPH
+   armeb     |         host-gdb-14.2          | NOK | https://autobuild.buildroot.org/results/bc35ed292c935759f8bcc1e58543ba775da99cdd | ORPH
+   s390x     |        host-rust-1.82.0        | NOK | https://autobuild.buildroot.org/results/c291f06e23b11cdf8db8a7f1f881622417dd1f59 |     
+   sh4aeb    | host-softether-4.30-9700-beta  | NOK | https://autobuild.buildroot.org/results/f93040196bf495c4b1ebb9bd4f1636fd6f96b19c | ORPH
+    or1k     |        json-glib-1.10.6        | NOK | https://autobuild.buildroot.org/results/bd2528ca42f4f18699639b10b9bb522f99f5255a | ORPH
+   arceb     | libdbi-drivers-0bfae6c43134... | NOK | https://autobuild.buildroot.org/results/16f8d88603e55195103bc1c938a9077a2e0e57e0 |     
+    mips     |         libressl-3.9.2         | NOK | https://autobuild.buildroot.org/results/6c46fc536375ff5a7610a5529f5a38e6fce6b204 | ORPH
+  sparc64    |           mpv-0.35.1           | NOK | https://autobuild.buildroot.org/results/6ccb9caa227e94a31d1e2012a8ba6a44df6bca9a |     
+    arc      |  nxp-mwifiex-lf-6.6.52_2.2.0   | NOK | https://autobuild.buildroot.org/results/3b45d7388778edd801e281ce9d7a3cdafbaeeb94 |     
+   sh4eb     |    passt-2025_02_17.a1e48a0    | NOK | https://autobuild.buildroot.org/results/16f3d80d3b6fff82cf3e326ab3779a03a0daaa9d | ORPH
+   mips64    |     python-remi-2022.7.27      | NOK | https://autobuild.buildroot.org/results/5e8a84fba078030abcc65eee8fdd635271cf5e04 |     
+   armeb     |      sane-airscan-0.99.33      | NOK | https://autobuild.buildroot.org/results/94395060323c8c5ecc410312e98fdcc43333bee1 |     
+   armeb     |      sane-airscan-0.99.33      | NOK | https://autobuild.buildroot.org/results/15ece6698dc2eafd12787b559ee52d9bfe59aebd |     
+powerpc64le  |           uftp-5.0.3           | NOK | https://autobuild.buildroot.org/results/06553e40f4782ca3334bfdc0f5a83ca6ff5dea0c | ORPH
+   x86_64    |            unknown             | NOK | https://autobuild.buildroot.org/results/f6b2516c6062270ea9c332901bb443da31f20663 |     
+
+
+Classification of failures by reason for 2025.02.x
+--------------------------------------------------
+
+             bluez5_utils-5.79 | 1 
+                    brltty-6.6 | 1 
+                 c-ares-1.34.2 | 1 
+          cloudflared-2025.1.0 | 1 
+ host-softether-4.30-9700-beta | 1 
+               ipmitool-1_8_19 | 1 
+          linux-5.10.162-cip24 | 1 
+                 openssh-9.9p2 | 1 
+                       unknown | 1 
+
+
+Detail of failures for 2025.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   x86_64    |       bluez5_utils-5.79        | NOK | https://autobuild.buildroot.org/results/78ed7664f3a2dd5858fd71bd63836c822c106cc0 |     
+microblazeel |           brltty-6.6           | NOK | https://autobuild.buildroot.org/results/ba197991cab95d761eeed4adb7b5292fce5db4a2 |     
+    mips     |         c-ares-1.34.2          | NOK | https://autobuild.buildroot.org/results/d25c0b01af8b12dbfaaa874e22d97d4ecea8d79b | ORPH
+powerpc64le  |      cloudflared-2025.1.0      | NOK | https://autobuild.buildroot.org/results/1764915c6065216de400d8e746ef514730911a23 |     
+powerpc64le  | host-softether-4.30-9700-beta  | NOK | https://autobuild.buildroot.org/results/3b988087d1e4635e5bcace1af2d1ab1da6646641 | ORPH
+    or1k     |        ipmitool-1_8_19         | NOK | https://autobuild.buildroot.org/results/1ca0a8ab616d1ff08a60f50943ded7ba77783a1f |     
+   x86_64    |      linux-5.10.162-cip24      | NOK | https://autobuild.buildroot.org/results/96cf3daf71ab22005b83865532f289fe9ca7354a | ORPH
+   mips64    |         openssh-9.9p2          | NOK | https://autobuild.buildroot.org/results/7269c10fdda1800860f31708bbdeb606bf1618d2 | ORPH
+   sparc     |            unknown             | NOK | https://autobuild.buildroot.org/results/9dc2d7e641e23c146b87abaa5542e44f733f05b0 |     
+
+
+
+-- 
+https://autobuild.buildroot.org
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
