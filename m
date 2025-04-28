@@ -4,98 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E23CEC369D5
-	for <buildroot@archiver.kernel.org>; Mon, 28 Apr 2025 12:20:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27FE5C369D5
+	for <buildroot@archiver.kernel.org>; Mon, 28 Apr 2025 13:29:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 742C9606F3;
-	Mon, 28 Apr 2025 12:20:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E4B860B57;
+	Mon, 28 Apr 2025 13:29:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2Lr0I5Fucu_n; Mon, 28 Apr 2025 12:20:12 +0000 (UTC)
+ id F-MLPAHeDBzk; Mon, 28 Apr 2025 13:29:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 99E9E60701
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABF70608A6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 99E9E60701;
-	Mon, 28 Apr 2025 12:20:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 32A45194
- for <buildroot@buildroot.org>; Mon, 28 Apr 2025 12:20:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ABF70608A6;
+	Mon, 28 Apr 2025 13:29:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E1EDB31
+ for <buildroot@buildroot.org>; Mon, 28 Apr 2025 13:29:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 234F981222
- for <buildroot@buildroot.org>; Mon, 28 Apr 2025 12:20:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C81FB608A6
+ for <buildroot@buildroot.org>; Mon, 28 Apr 2025 13:29:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 18x4b_agXMRK for <buildroot@buildroot.org>;
- Mon, 28 Apr 2025 12:20:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eEzJGhQKeLVz for <buildroot@buildroot.org>;
+ Mon, 28 Apr 2025 13:29:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::530; helo=mail-ed1-x530.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1195880B25
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1195880B25
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1195880B25
- for <buildroot@buildroot.org>; Mon, 28 Apr 2025 12:20:09 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id
- 4fb4d7f45d1cf-5edc07c777eso5889074a12.3
- for <buildroot@buildroot.org>; Mon, 28 Apr 2025 05:20:09 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ envelope-from=titouanchristophe@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7647D60794
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7647D60794
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7647D60794
+ for <buildroot@buildroot.org>; Mon, 28 Apr 2025 13:29:37 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-39c1efbefc6so3270309f8f.1
+ for <buildroot@buildroot.org>; Mon, 28 Apr 2025 06:29:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1745842808; x=1746447608;
+ d=1e100.net; s=20230601; t=1745846975; x=1746451775;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=rwyajz4Nb1YrNYwxqko/s0JaKFw2AWH21DYrDwdVpUc=;
- b=qlqgwfAVzcPoSIGdSYioabVeedrefs4lSdiJ+EejpOCRUOqYqHhrYFsixrcrjBxoTF
- 3KStLIbzmR3TPlGCmj3ppIfCjRsdf5fLZVmnWPCm63K15lQlA+r/R8/JEZ/ZBifQEvyC
- QRf6JwivtqaVDLhUQ8TE7zrYLD3CIpmbKE0WygXLC5XRanDzTeWbnzu/cszcB+bd75Er
- 5E1qhnW+fr2Nvp+w9GNVWmesZOv8dJMY6jqHIYleRsSPCm760K0Fit9T31eIVMS2AOD+
- ERm36xeK1mDU6i+5xEIoJhJqLWZgh8OjlYlzUPDO1REyyG9UKy112b4UbgoXd0/DmJ9X
- xEaw==
-X-Gm-Message-State: AOJu0YxLb+RqjwRttUdpoPdd2Gv5rG0soQVwwPbsevLS3IXEynDrLeLJ
- MGX4bBUqTX6ZZmOG2vjgTWc0v/KdSzPfQzkQRG/UhAuxUfqMGL2l9WuvMMXirUBiLbowYSi61jR
- v
-X-Gm-Gg: ASbGnctU4iYld+TLo6bba8iq1kbyjW370bfsBkRxlz3NywS0miDMOkfLZrP5Di1c/YQ
- KeHeK5zoY7HAtAvDAj4rXc9gojl5Ti25tSaOjFLlgjJ4Msc2JubqfHJXs9EoOQWxII7ysZmXB9X
- IgAt99oUw6gM35o1JJNRfiFaY0tKmjqnD6Ki5p5yeL2YeL6gEZTiY/eujPRYJdAtT1gBR1TQaTq
- GUl1niM1fu4twkq5b/FzmqteNd5yZmyf3gC5IgE8I3RN3s9hUWn181c2eEddlY4VF+ZKcB4uNaJ
- OuGosG1th4UNfhfwCN013Czbc1ZWUnn38yFoA4wq0TbUBr4uobdlGFBxTFViUqTVzg5L4YHMlNy
- 2YzVmnw==
-X-Google-Smtp-Source: AGHT+IGf9SjOxsofJPTza5x+6YNvn3jdV3t5/CB3JUYTD83ihWyvMWGf+ai0XNOqihb3f2+XDuzfxA==
-X-Received: by 2002:a05:6402:e9b:b0:5f6:4a5b:9309 with SMTP id
- 4fb4d7f45d1cf-5f72297e1e7mr9153719a12.20.1745842807850; 
- Mon, 28 Apr 2025 05:20:07 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.. ([2.196.40.204])
+ bh=cJR6oKo1BhK+y+j8Cx0UCZNkQTxlD4nrNJCMg7BiWs0=;
+ b=hOvJRioGLlkrGDRKdcjNgrIKWY0oKPayOOYZp3la472eSGUN9aN6j1gYDTsAlCjhZ3
+ +t6RDDX41RdGU2WusmRN4g4bgumyU0/3PeSJ7K6VNS10GVGgImRBj+9rbY/B9HH6rQ3A
+ kSYpsYFSQv1eYGpUgwLMrkaOc2hk5kJnUrk7JTCkTvIuXWTugy9EEr3266rARZdsEHBj
+ WKkQl2kZoy4GEr0G3DjkbzRH82Mb1RBbvaOvuLyGGYY+AZsZiqvTeqtk79qV2d9TkjWp
+ JdzsoApRAFVbuY1ER7M2x791KEI/Z3c2+RhMzuTY/qtstGnefSNJBkHO8M6D5yDf1k4B
+ a7DQ==
+X-Gm-Message-State: AOJu0YxbRQIBB6Lk7b0kc9iq3B9BvzKzh3OnPLBBoxPlGKtDSHaJPmSv
+ uq2LmzsnZonyz4k/ZC4H94hVGOiHAUw3giP/JahwYuC6jHnUj/oDkNsjIGh9
+X-Gm-Gg: ASbGncv/5COgivqsP85JWivT3QOosat1UKoSngzBhfdKgv7+JCjtN3+ovitR/ckcb+9
+ r9Vq2tr/4+TMpNAOXW740inz0nERvT1cVkb1xiM2O/nAxSMd9dnJQMqUI3drdH3l7ESxCKANARD
+ +QUasXD7heaJeReeP7O6Y7LdjJBYetRMYuXho6TfvfcHe4lxxWW930safQzKA7Lo+4eqFFSa3Or
+ wXDa5Ji/5ckoy0V9Wc9TrIVV6FY0pth93umbgNiLP9dZrts8wWz3Mm8Qa9Vv/VOPBR9zGXR9MO6
+ EKD2Jb5l0an66sBjV0Ji6KGUCWWr4gKsqPpBxmVmaLNJ9NNF99JfpMTg2NaP9T6f5ND1ut+syKr
+ GZjur0VCEdD4/fRmIAnEMWhWsmAuRe/xOSlsTgA==
+X-Google-Smtp-Source: AGHT+IGWMk7i9XAwoMUt404jc8Ogdh7csBpV4qG8OX+wwMIpU0OhKTpnofdSfRhryWWRLDbMCBZO7w==
+X-Received: by 2002:a05:6000:1889:b0:39c:3107:c503 with SMTP id
+ ffacd0b85a97d-3a074e373ebmr9769504f8f.31.1745846975128; 
+ Mon, 28 Apr 2025 06:29:35 -0700 (PDT)
+Received: from smartron.local.essensium.com
+ (ip-94-140-185-241.reverse.destiny.be. [94.140.185.241])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5f7011fbcbfsm5748233a12.9.2025.04.28.05.20.07
+ ffacd0b85a97d-3a073ca556bsm11237079f8f.37.2025.04.28.06.29.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 28 Apr 2025 05:20:07 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ Mon, 28 Apr 2025 06:29:34 -0700 (PDT)
+From: Titouan Christophe <titouanchristophe@gmail.com>
 To: buildroot@buildroot.org
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
-Date: Mon, 28 Apr 2025 14:20:05 +0200
-Message-ID: <20250428122005.3952218-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Cc: Titouan Christophe <titouan.christophe@mind.be>,
+ Titouan Christophe <titouanchristophe@gmail.com>
+Date: Mon, 28 Apr 2025 15:29:09 +0200
+Message-ID: <20250428132909.878530-1-titouanchristophe@gmail.com>
+X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1745842808; x=1746447608;
- darn=buildroot.org; 
+ d=gmail.com; s=20230601; t=1745846975; x=1746451775; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=rwyajz4Nb1YrNYwxqko/s0JaKFw2AWH21DYrDwdVpUc=;
- b=o1MHWiDC9mHbU/ojKMgDDKKhdMikyWocLHXPkQcD6jEclVJoWP5km0jUBJSW1imRGq
- pn6yQqrw4XpdKCXQlb+Z5/SmVTlHPkGsHgLk9fBlY5ZpD3aIuk0OeBg/msseIoxmshit
- ogI/pS+K/m/VXEj11EsoT8imlVIS3ZygaH9y0=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=cJR6oKo1BhK+y+j8Cx0UCZNkQTxlD4nrNJCMg7BiWs0=;
+ b=bMKlRzHWu/+kL4Fhyk2f+huYVnze1AFQ6+Mhmzd1J8ue/O2IQNugS0TCvzJ5mwi3o6
+ PxZLhf1GomVABfnz3pzyNCQpE5WayxBZb+KdGX11EjcjJPJNeui3MS+A7o+2oAJcazEI
+ 2WlqsqytZDLOL1RkzOX3qECERT+oxjAbC83xUSRjX4LiLy/8Pc34PVF5ydKR6gvZogLB
+ QToaj0X0qsF4qW8rjlWGvQgVkzQBvERZIchUpU6BQ8iEWQax4qZ2KQOmwfm8zTyMoMH+
+ dS/8G+2GllFwAVDeo0c6ypwT0DfL6saST3oJHRJ44gQX00JVEkTDa9/w7k3ftsr5sBfo
+ Iryw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=o1MHWiDC
-Subject: [Buildroot] [PATCH 1/1] package/armadillo: bump to version 14.4.2
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=bMKlRzHW
+Subject: [Buildroot] [PATCH 1/1] package/waf: bump to v2.1.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,40 +114,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://arma.sourceforge.net/docs.html#changelog
+From: Titouan Christophe <titouan.christophe@mind.be>
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Tested with `./utils/test-pkg -p ntpsec` (ntpsec is a waf-package)
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
 ---
- package/armadillo/armadillo.hash | 2 +-
- package/armadillo/armadillo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/waf/waf.hash | 6 +++---
+ package/waf/waf.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
-index 3161d2df8797..61ed4d85283d 100644
---- a/package/armadillo/armadillo.hash
-+++ b/package/armadillo/armadillo.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  26ce272bfdc8246c278e6f8cfa53777a1efb14ef196e88082fee05da1a463491  armadillo-14.4.1.tar.xz
-+sha256  6dfddcfbd91e70679d7c11e94a5963a7efda002fec351e6f4875ac8e245c5117  armadillo-14.4.2.tar.xz
- # License files, locally calculated
- sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index c41e60625e2f..3ebec29cf3b6 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
+diff --git a/package/waf/waf.hash b/package/waf/waf.hash
+index 543bea5d7b..8255ed4f60 100644
+--- a/package/waf/waf.hash
++++ b/package/waf/waf.hash
+@@ -1,7 +1,7 @@
+ # Locally computed
+-sha1  9ee587d802ffd15a2e7cae579560d00754db4fad  waf-2.1.1
+-sha256  2e66e01fd564f09106419389119c78143327c89a35f26ee3ed376f0ee410a14d  waf-2.1.1
++sha1  523f645690747501b19e0d107a044de514ba80b4  waf-2.1.5
++sha256  9d0b5d13e85f781b6976cfefb909b76cbc94a07419fa95d34216dca744257786  waf-2.1.5
+ 
+ # The waf script also contains its license, but is renamed `waf` in the extract
+ # step, so this is a synonym for the above, to check WAF_LICENSE
+-sha256  2e66e01fd564f09106419389119c78143327c89a35f26ee3ed376f0ee410a14d  waf
++sha256  9d0b5d13e85f781b6976cfefb909b76cbc94a07419fa95d34216dca744257786  waf
+diff --git a/package/waf/waf.mk b/package/waf/waf.mk
+index a12d15a228..88b8d9096e 100644
+--- a/package/waf/waf.mk
++++ b/package/waf/waf.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ARMADILLO_VERSION = 14.4.1
-+ARMADILLO_VERSION = 14.4.2
- ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
- ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
- ARMADILLO_INSTALL_STAGING = YES
+-WAF_VERSION = 2.1.1
++WAF_VERSION = 2.1.5
+ WAF_SOURCE = waf-$(WAF_VERSION)
+ WAF_SITE = https://waf.io
+ WAF_LICENSE = BSD-3-Clause
 -- 
-2.43.0
+2.49.0
 
 _______________________________________________
 buildroot mailing list
