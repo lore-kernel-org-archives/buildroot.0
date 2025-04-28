@@ -1,102 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E38CC36005
-	for <buildroot@archiver.kernel.org>; Mon, 28 Apr 2025 07:35:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0CA6FC36005
+	for <buildroot@archiver.kernel.org>; Mon, 28 Apr 2025 09:13:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD20360B89;
-	Mon, 28 Apr 2025 07:35:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YgsCvxlRNv3U; Mon, 28 Apr 2025 07:35:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFF6F60B93
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFF6F60B93;
-	Mon, 28 Apr 2025 07:35:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 80E0931
- for <buildroot@buildroot.org>; Mon, 28 Apr 2025 07:35:29 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67A7F408D1
- for <buildroot@buildroot.org>; Mon, 28 Apr 2025 07:35:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58458405A1;
+	Mon, 28 Apr 2025 09:13:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id swKKeiolVh8M for <buildroot@buildroot.org>;
- Mon, 28 Apr 2025 07:35:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::636; helo=mail-pl1-x636.google.com;
- envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9FD2140851
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FD2140851
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com
- [IPv6:2607:f8b0:4864:20::636])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9FD2140851
- for <buildroot@buildroot.org>; Mon, 28 Apr 2025 07:35:28 +0000 (UTC)
-Received: by mail-pl1-x636.google.com with SMTP id
- d9443c01a7336-22423adf751so44980805ad.2
- for <buildroot@buildroot.org>; Mon, 28 Apr 2025 00:35:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1745825727; x=1746430527;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=IdCY4+xVPziynCbnLFnpLUPUPksP7i+GsNnn7DTqEoI=;
- b=Z5diIO8GWPNm5jehUSa6pv7o31pw0VvGitRPs3wDHNXDCreT+KahI7YJKGTf48jN12
- 2SKsNhw7HrJavnSdkqCb55GW331iuSUzKnr967sWHdN/3bz9maHDjsqs4PLi6YfaW6M3
- Q0EGMRMKUNedclnFD1rEXW/hY3MiQChc8dmYqVSlVtWI/VU7ruC9hwhWqeKJpzNrsSWD
- PhzxlGE4ck4uDAhxxvHhxNmKAuTacpbKznACUnZ4UTV2t1iqqJfi1SG06/qPSkmNZMEQ
- WxPqeGvAfwL0UxjC8viJMS5gh8n4XEMX1n0WDAcjrfPj1LVrok2/Izs9AdxF+pyijPLi
- La/A==
-X-Gm-Message-State: AOJu0YwybGGHStqHZON1H7rNycN/rETr+s4PdGTl0ERRs/YmLRdDVAW+
- ORZ/Z0UxQo54RSPa/C8qTaeIqE7h3NTCV239RuG0hx5YsLu20bvVhdFzvp3k
-X-Gm-Gg: ASbGncuyZZeL6/ol+24Tatnd9R5RBGmEXh/BlNkvL80OAqQF5TfwGgDJpHaW0jJtzlV
- tYmW4+uBL+Y3HI9+sdj02uhLL620bhzwptB9LkeBjBg0KI8Fnc7jKbJoCwcFGuZTUqpkJXedKvN
- tnAqKknD0FtKj93bxPsa+U/CwRpoSISCpgjkEAfNxnPxzzWW3NfB8i45Vm7sSm7TTvQck9p9cag
- qO2KfO3W7J6rpS54EvE3KIn5cIZjGcAGqTz1mSD+5IOv7RHwpbiJX0r7d1Qc+n4WRjfJCHfl9EK
- 6CF5dBC0rNtqutes7RaZj9AA0y1nSh09grBTBS0FUqNQu1FoSuFtZjdMZr5gwErb3s4QFQDctt8
- cVpmdZzDOhd4lnbGyDB5yH52vGyg=
-X-Google-Smtp-Source: AGHT+IHJbUZu09JOSLsYMCdiT24a8NJBGD2shBHj9CZEGNw4ZEwL4HQwpLeJeHZRbQ5GjgyTFegiLw==
-X-Received: by 2002:a17:902:f684:b0:220:c911:3f60 with SMTP id
- d9443c01a7336-22dbf743566mr150721915ad.47.1745825727222; 
- Mon, 28 Apr 2025 00:35:27 -0700 (PDT)
-Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
- [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-22db51017b2sm75614615ad.176.2025.04.28.00.35.26
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 28 Apr 2025 00:35:26 -0700 (PDT)
-From: Kadambini Nema <kadambini.nema@gmail.com>
+ id SfN7p0t3zjcH; Mon, 28 Apr 2025 09:13:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6140B405C9
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6140B405C9;
+	Mon, 28 Apr 2025 09:13:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7DA78C5
+ for <buildroot@buildroot.org>; Mon, 28 Apr 2025 09:12:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6F7D9811DC
+ for <buildroot@buildroot.org>; Mon, 28 Apr 2025 09:12:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7rZFxGkMaPvK for <buildroot@buildroot.org>;
+ Mon, 28 Apr 2025 09:12:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=163.172.193.142;
+ helo=mail0.insia.net; envelope-from=guillaume.chaye@zeetim.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E02D6811E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E02D6811E0
+Received: from mail0.insia.net (mail0.insia.net [163.172.193.142])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E02D6811E0
+ for <buildroot@buildroot.org>; Mon, 28 Apr 2025 09:12:57 +0000 (UTC)
+Received: from smtp.insia.net (unknown [192.168.1.24])
+ by mail0.insia.net (Postfix) with ESMTP id 2BE2A1FD20;
+ Mon, 28 Apr 2025 11:12:51 +0200 (CEST)
+Received: from UDERZO.insia.net (unknown [192.168.1.35])
+ by smtp.insia.net (Postfix) with ESMTP id 9C43D5F497;
+ Mon, 28 Apr 2025 11:14:46 +0200 (CEST)
+From: Guillaume Chaye <guillaume.chaye@zeetim.com>
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Kadambini Nema <kadambini.nema@gmail.com>
-Date: Mon, 28 Apr 2025 00:35:22 -0700
-Message-Id: <20250428073522.126422-1-kadambini.nema@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Date: Mon, 28 Apr 2025 05:12:48 -0400
+Message-Id: <20250428091248.406943-1-guillaume.chaye@zeetim.com>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1745825727; x=1746430527; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=IdCY4+xVPziynCbnLFnpLUPUPksP7i+GsNnn7DTqEoI=;
- b=isXP8rqnfQEtbKU3moVqY/h47Lb9pvWdQXtzuIlUtj+nvaPYAQEEOmNpvRuuN0amrQ
- qGWN4R1IKefnjpW01y2onrt8xTii7HnHwBzvJdCid8UXQ1wJdcFRdqgFT+FXok8y59eb
- rOLJDBsdirpKsgBhqJoHK6UpptH9ub3YUaNbV9meb8txVJMjDN7dUzLl4MW8af2u8v+R
- I3RrwAQL/hZsZgKf+pQmC4l8SPnpIS7Y8unV72A/iGdFdiOxyDHemQx9cgv4KuMLkrkj
- 3fWOuyEPgW4dHv7PnJMLw1cJHajfM7WgmMfe1VAw49PPWMzMJnrBHkh0vO/2SJFsvd8E
- fBTg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=zeetim.com; s=mail0; t=1745831571;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=Elvw0zX+eJi/SpI0WHY24Z4H+SD7ATJ5WVHB4DUmLyY=;
+ b=v4rn0dBYjH3CROlvodHrvtQNlDfWLlgbCaYW7LKMY9lQvu/lYGEaK+dQrxUK3+Yw80nT+s
+ WXh4DsM8K/oAbRfQ6BK84E0sS75Z7naDTYdER2LxOeyRC0+sfC5Aj0wzKgsR1r0rl7iuYI
+ 8r6yqNtfQPgGPWy4W/21osaBNbiYflhu6tgG9B7VYjci9JbouVl5BlAdCJB+QYWN20sxpJ
+ JVnMQBQiM0GajXsrsPu8DZAoTHqRamTAmvzzwkADRARevEjjfB5V0IpnBl/rryPD2glO0f
+ T4O5yCAHo2cucBsaCJyLt6uOIt77g3WhgUF1eT1eE88itey6EVumnresOiWWqg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=zeetim.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=isXP8rqn
-Subject: [Buildroot] [PATCH 1/1] package/expat: bump to version 2.7.1
+ unprotected) header.d=zeetim.com header.i=@zeetim.com header.a=rsa-sha256
+ header.s=mail0 header.b=v4rn0dBY
+Subject: [Buildroot] [PATCHv2 1/1] package/cjson: add a patch to allow
+ cross-compilation with sysroot.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,48 +80,223 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://github.com/libexpat/libexpat/blob/R_2_7_1/expat/Changes
+From: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
 
-Update hash of the COPYING file (year updated):
-https://github.com/libexpat/libexpat/commit/2b2a24691a9888e0f3c179b8f05cbacb19f460ef
+The current generated cJSONConfig.cmake holds hard coded path of libraries and makes it impossible to use in SDKs.
+Use CMakePackageConfigHelpers and @PACKAGE_INIT@ to make them suit for real environment dynamically.
 
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+Signed-off-by: Guillaume Chaye <guillaume.chaye@zeetim.com>
 ---
- package/expat/expat.hash | 4 ++--
- package/expat/expat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...nfigHelpers-to-generate-config.cmake.patch | 191 ++++++++++++++++++
+ 1 file changed, 191 insertions(+)
+ create mode 100644 package/cjson/0001-Use-CMakePackageConfigHelpers-to-generate-config.cmake.patch
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 4975d0f864..87bbf86e1a 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  25df13dd2819e85fb27a1ce0431772b7047d72af81ae78dc26b4c6e0805f48d1  expat-2.7.0.tar.xz
--sha256  122f2c27000472a201d337b9b31f7eb2b52d091b02857061a8880371612d9534  COPYING
-+sha256  354552544b8f99012e5062f7d570ec77f14b412a3ff5c7d8d0dae62c0d217c30  expat-2.7.1.tar.xz
-+sha256  31b15de82aa19a845156169a17a5488bf597e561b2c318d159ed583139b25e87  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 5d40133f08..51b45b01bb 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXPAT_VERSION = 2.7.0
-+EXPAT_VERSION = 2.7.1
- EXPAT_SITE = https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
+diff --git a/package/cjson/0001-Use-CMakePackageConfigHelpers-to-generate-config.cmake.patch b/package/cjson/0001-Use-CMakePackageConfigHelpers-to-generate-config.cmake.patch
+new file mode 100644
+index 0000000000..04248afbd9
+--- /dev/null
++++ b/package/cjson/0001-Use-CMakePackageConfigHelpers-to-generate-config.cmake.patch
+@@ -0,0 +1,191 @@
++From 2b0a994b5832439cf704147c5b485b9a4c7fbc24 Mon Sep 17 00:00:00 2001
++From: Charles Chan <charles@zeerd.com>
++Date: Fri, 22 Dec 2023 11:14:36 +0800
++Subject: [PATCH] Use CMakePackageConfigHelpers to generate config.cmake
++Signed-off-by: Charles Chan <charles@zeerd.com>
++Upstream: https://github.com/DaveGamble/cJSON/pull/812/commits/2b0a994b5832439cf704147c5b485b9a4c7fbc24
++
++---
++ CMakeLists.txt                                | 72 ++++++++++---------
++ .../{cJSONConfig.cmake.in => Config.cmake.in} | 15 ++--
++ library_config/cJSONConfigVersion.cmake.in    | 11 ---
++ 3 files changed, 48 insertions(+), 50 deletions(-)
++ rename library_config/{cJSONConfig.cmake.in => Config.cmake.in} (57%)
++ delete mode 100644 library_config/cJSONConfigVersion.cmake.in
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index f23ec631..fe10d6fe 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -142,25 +142,25 @@ endif()
++ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/library_config/libcjson.pc.in"
++     "${CMAKE_CURRENT_BINARY_DIR}/libcjson.pc" @ONLY)
++ 
++-install(FILES cJSON.h DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/cjson")
++-install (FILES "${CMAKE_CURRENT_BINARY_DIR}/libcjson.pc" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig")
+++install(FILES cJSON.h DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/cjson")
+++install (FILES "${CMAKE_CURRENT_BINARY_DIR}/libcjson.pc" DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
++ install(TARGETS "${CJSON_LIB}"
++-    EXPORT "${CJSON_LIB}"
++-    ARCHIVE DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}"
++-    LIBRARY DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}"
++-    RUNTIME DESTINATION "${CMAKE_INSTALL_FULL_BINDIR}"
++-    INCLUDES DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}"
+++    EXPORT "${CJSON_LIB}-targets"
+++    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+++    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+++    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+++    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
++ )
++ if (BUILD_SHARED_AND_STATIC_LIBS)
++     install(TARGETS "${CJSON_LIB}-static"
++-    EXPORT "${CJSON_LIB}" 
++-    ARCHIVE DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}"
++-    INCLUDES DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}"
+++    EXPORT "${CJSON_LIB}-targets"
+++    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+++    INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
++ )
++ endif()
++ if(ENABLE_TARGET_EXPORT)
++     # export library information for CMake projects
++-    install(EXPORT "${CJSON_LIB}" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/cmake/cJSON")
+++    install(EXPORT "${CJSON_LIB}-targets" DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cJSON")
++ endif()
++ 
++ if(ENABLE_CJSON_VERSION_SO)
++@@ -194,24 +194,24 @@ if(ENABLE_CJSON_UTILS)
++         "${CMAKE_CURRENT_BINARY_DIR}/libcjson_utils.pc" @ONLY)
++ 
++     install(TARGETS "${CJSON_UTILS_LIB}"
++-        EXPORT "${CJSON_UTILS_LIB}"
++-        ARCHIVE DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}"
++-        LIBRARY DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}"
++-        RUNTIME DESTINATION "${CMAKE_INSTALL_FULL_BINDIR}"
++-        INCLUDES DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}"
+++        EXPORT "${CJSON_UTILS_LIB}-targets"
+++        ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+++        LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+++        RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+++        INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
++     )
++     if (BUILD_SHARED_AND_STATIC_LIBS)
++-        install(TARGETS "${CJSON_UTILS_LIB}-static" 
++-        EXPORT "${CJSON_UTILS_LIB}" 
++-        ARCHIVE DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}"
++-        INCLUDES DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}"
+++        install(TARGETS "${CJSON_UTILS_LIB}-static"
+++        EXPORT "${CJSON_UTILS_LIB}-targets"
+++        ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+++        INCLUDES DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
++         )
++     endif()
++-    install(FILES cJSON_Utils.h DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/cjson")
++-    install (FILES "${CMAKE_CURRENT_BINARY_DIR}/libcjson_utils.pc" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig")
+++    install(FILES cJSON_Utils.h DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/cjson")
+++    install (FILES "${CMAKE_CURRENT_BINARY_DIR}/libcjson_utils.pc" DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
++     if(ENABLE_TARGET_EXPORT)
++-      # export library information for CMake projects
++-      install(EXPORT "${CJSON_UTILS_LIB}" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/cmake/cJSON")
+++        # export library information for CMake projects
+++        install(EXPORT "${CJSON_UTILS_LIB}-targets" DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cJSON")
++     endif()
++ 
++     if(ENABLE_CJSON_VERSION_SO)
++@@ -223,18 +223,22 @@ if(ENABLE_CJSON_UTILS)
++ endif()
++ 
++ # create the other package config files
++-configure_file(
++-    "${CMAKE_CURRENT_SOURCE_DIR}/library_config/cJSONConfig.cmake.in"
++-    ${PROJECT_BINARY_DIR}/cJSONConfig.cmake @ONLY)
++-configure_file(
++-    "${CMAKE_CURRENT_SOURCE_DIR}/library_config/cJSONConfigVersion.cmake.in"
++-    ${PROJECT_BINARY_DIR}/cJSONConfigVersion.cmake @ONLY)
++-
++ if(ENABLE_TARGET_EXPORT)
++-    # Install package config files
++-    install(FILES ${PROJECT_BINARY_DIR}/cJSONConfig.cmake
+++    include(CMakePackageConfigHelpers)
+++    write_basic_package_version_file(
++         ${PROJECT_BINARY_DIR}/cJSONConfigVersion.cmake
++-        DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/cmake/cJSON")
+++        VERSION ${NCHL_VERSION}
+++        COMPATIBILITY AnyNewerVersion)
+++
+++    configure_package_config_file(
+++        "${PROJECT_SOURCE_DIR}/library_config/Config.cmake.in"
+++        "${PROJECT_BINARY_DIR}/cJSONConfig.cmake"
+++        INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cJSON"
+++        )
+++    install(FILES
+++            ${PROJECT_BINARY_DIR}/cJSONConfigVersion.cmake
+++            ${PROJECT_BINARY_DIR}/cJSONConfig.cmake
+++        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cJSON")
++ endif()
++ 
++ option(ENABLE_CJSON_TEST "Enable building cJSON test" ON)
++diff --git a/library_config/cJSONConfig.cmake.in b/library_config/Config.cmake.in
++similarity index 57%
++rename from library_config/cJSONConfig.cmake.in
++rename to library_config/Config.cmake.in
++index 909f7a9a..2784b7ab 100644
++--- a/library_config/cJSONConfig.cmake.in
+++++ b/library_config/Config.cmake.in
++@@ -1,9 +1,12 @@
+++@PACKAGE_INIT@
+++include(CMakeFindDependencyMacro)
+++
++ # Whether the utils lib was build.
++ set(CJSON_UTILS_FOUND @ENABLE_CJSON_UTILS@)
++ 
++ # The include directories used by cJSON
++-set(CJSON_INCLUDE_DIRS "@CMAKE_INSTALL_FULL_INCLUDEDIR@")
++-set(CJSON_INCLUDE_DIR "@CMAKE_INSTALL_FULL_INCLUDEDIR@")
+++set(CJSON_INCLUDE_DIRS "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_INCLUDEDIR@")
+++set(CJSON_INCLUDE_DIR "${PACKAGE_PREFIX_DIR}/@CMAKE_INSTALL_INCLUDEDIR@")
++ 
++ get_filename_component(_dir "${CMAKE_CURRENT_LIST_FILE}" PATH)
++ 
++@@ -11,19 +14,21 @@ get_filename_component(_dir "${CMAKE_CURRENT_LIST_FILE}" PATH)
++ set(CJSON_LIBRARY "@CJSON_LIB@")
++ if(@ENABLE_TARGET_EXPORT@)
++   # Include the target
++-  include("${_dir}/cjson.cmake")
+++    include("${CMAKE_CURRENT_LIST_DIR}/cjson-targets.cmake")
++ endif()
++ 
++ if(CJSON_UTILS_FOUND)
++   # The cJSON utils library
++-  set(CJSON_UTILS_LIBRARY @CJSON_UTILS_LIB@)
+++  set(CJSON_UTILS_LIBRARY "@CJSON_UTILS_LIB@")
++   # All cJSON libraries
++   set(CJSON_LIBRARIES "@CJSON_UTILS_LIB@" "@CJSON_LIB@")
++   if(@ENABLE_TARGET_EXPORT@)
++     # Include the target
++-    include("${_dir}/cjson_utils.cmake")
+++    include("${CMAKE_CURRENT_LIST_DIR}/cjson_utils-targets.cmake")
++   endif()
++ else()
++   # All cJSON libraries
++   set(CJSON_LIBRARIES "@CJSON_LIB@")
++ endif()
+++
+++check_required_components("@CMAKE_PROJECT_NAME@")
++diff --git a/library_config/cJSONConfigVersion.cmake.in b/library_config/cJSONConfigVersion.cmake.in
++deleted file mode 100644
++index 22ffec0f..00000000
++--- a/library_config/cJSONConfigVersion.cmake.in
+++++ /dev/null
++@@ -1,11 +0,0 @@
++-set(PACKAGE_VERSION "@PROJECT_VERSION@")
++-
++-# Check whether the requested PACKAGE_FIND_VERSION is compatible
++-if("${PACKAGE_VERSION}" VERSION_LESS "${PACKAGE_FIND_VERSION}")
++-  set(PACKAGE_VERSION_COMPATIBLE FALSE)
++-else()
++-  set(PACKAGE_VERSION_COMPATIBLE TRUE)
++-  if ("${PACKAGE_VERSION}" VERSION_EQUAL "${PACKAGE_FIND_VERSION}")
++-    set(PACKAGE_VERSION_EXACT TRUE)
++-  endif()
++-endif()
 -- 
-2.25.1
+2.39.5
 
 _______________________________________________
 buildroot mailing list
