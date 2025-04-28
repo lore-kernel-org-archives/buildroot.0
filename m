@@ -4,76 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E73B4C369D5
-	for <buildroot@archiver.kernel.org>; Mon, 28 Apr 2025 19:52:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B49DC369D5
+	for <buildroot@archiver.kernel.org>; Mon, 28 Apr 2025 20:00:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF26F60812;
-	Mon, 28 Apr 2025 19:52:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E614660AF2;
+	Mon, 28 Apr 2025 20:00:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U-p0fv800QjH; Mon, 28 Apr 2025 19:52:57 +0000 (UTC)
+ id ZRjGy5Pl3MIH; Mon, 28 Apr 2025 20:00:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EEC3660B6D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D73360D91
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EEC3660B6D;
-	Mon, 28 Apr 2025 19:52:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 688A1C5
- for <buildroot@buildroot.org>; Mon, 28 Apr 2025 19:52:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D73360D91;
+	Mon, 28 Apr 2025 20:00:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 85A8A13D
+ for <buildroot@buildroot.org>; Mon, 28 Apr 2025 20:00:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5A75B40436
- for <buildroot@buildroot.org>; Mon, 28 Apr 2025 19:52:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6BF9281327
+ for <buildroot@buildroot.org>; Mon, 28 Apr 2025 20:00:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IeksvZ_hT1jU for <buildroot@buildroot.org>;
- Mon, 28 Apr 2025 19:52:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C0F4A40288
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0F4A40288
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C0F4A40288
- for <buildroot@buildroot.org>; Mon, 28 Apr 2025 19:52:54 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 5DDDA78035E;
- Mon, 28 Apr 2025 21:52:46 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Mon, 28 Apr 2025 21:52:46 +0200
-MIME-Version: 1.0
-Date: Mon, 28 Apr 2025 21:52:46 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rBnS5muZX3wU for <buildroot@buildroot.org>;
+ Mon, 28 Apr 2025 20:00:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B228D812C3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B228D812C3
+ for <buildroot@buildroot.org>; Mon, 28 Apr 2025 20:00:11 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9E7DC8636E; Mon, 28 Apr 2025 20:00:11 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-Cc: buildroot@buildroot.org, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, =?UTF-8?Q?Miqu=C3=A8l_Raynal?=
- <miquel.raynal@bootlin.com>, Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- Eric Le Bihan <eric.le.bihan.dev@free.fr>, =?UTF-8?Q?J=2E_Neusch=C3=A4?=
- =?UTF-8?Q?fer?= <j.ne@posteo.net>
-In-Reply-To: <20250419-fix_mpv-v3-1-579a46da5c72@bootlin.com>
-References: <20250419-fix_mpv-v3-1-579a46da5c72@bootlin.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <79080cfeb59d83b3fa0d7edd390dd7ea@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1745869972;
- bh=lcSD+7NKs3IQaSo2Pn0HwMEiNMjgkSzQBe9SvpWPEno=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=NkVwJZRAg0i0f675ByzmhiR2q3M/vAdUYFnyfesHtRovIbpm4ryhH5FdBwL5wEBcY
- ztH12jwu3Dre3LSAIB5r3FsTOogwXreQwpVbPWBvRHV/kJUzCatq/YqfO0putz0fs6
- wd9JJO0ppNBvq9jAJoiVcxsB0kDaldHNyOeNrBsLBXVcMPTr60DHw81TzH5bWRViMa
- 9bYAY4lfxKEsD6egNQRb3IsZcvDe9G8KGKi3ZzkMjAM5x96x3ARcfvisjDFu8N2Eua
- M+RJ1Z/Gllh5NWnnV8PsjUaRZLIGFLYN+QWgKtNEdy2PB1eT0lHmvYknKKBYked9zP
- Bc+rr0P2goNjg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=NkVwJZRA
-Subject: Re: [Buildroot] [PATCH v3] package/mpv: switch to meson from waf
+To: buildroot@buildroot.org
+Date: Mon, 28 Apr 2025 21:53:27 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8f69974c20fbc7dc642be62a0ef3fb2941f5bb35
+X-Git-Newrev: 609ea9789f1b714c182424a3f18aa402c9766e80
+X-Patchwork-Hint: ignore
+Message-Id: <20250428200011.9E7DC8636E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/armadillo: bump to version 14.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,18 +58,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gMTkvMDQvMjAyNSAxNzo1NiwgVGhvbWFzIEJvbm5lZmlsbGUgdmlhIGJ1aWxkcm9vdCB3cm90
-ZToKPiBTaW5jZSBjb21taXQgZmQ1NjIzMTUsIHdoaWNoIHVwZGF0ZWQgd2FmIHRvIHYyLjEuMSwg
-QnVpbGRyb290IGhhcwo+IGVuY291bnRlcmVkIGlzc3VlcyBidWlsZGluZyBtcHYsIGxpa2VseSBk
-dWUgdG8gYW4gb3V0ZGF0ZWQgdmVyc2lvbiBvZgo+IHRoZSB3YWYgYnVpbGQgc3lzdGVtLgpbLi4u
-XQo+IFNpZ25lZC1vZmYtYnk6IFRob21hcyBCb25uZWZpbGxlIDx0aG9tYXMuYm9ubmVmaWxsZUBi
-b290bGluLmNvbT4KPiBUZXN0ZWQtYnk6IEouIE5ldXNjaMOkZmVyIDxqLm5lQHBvc3Rlby5uZXQ+
-CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
-ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
-aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=609ea9789f1b714c182424a3f18aa402c9766e80
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Release notes:
+https://arma.sourceforge.net/docs.html#changelog
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/armadillo/armadillo.hash | 2 +-
+ package/armadillo/armadillo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index 3161d2df87..61ed4d8528 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  26ce272bfdc8246c278e6f8cfa53777a1efb14ef196e88082fee05da1a463491  armadillo-14.4.1.tar.xz
++sha256  6dfddcfbd91e70679d7c11e94a5963a7efda002fec351e6f4875ac8e245c5117  armadillo-14.4.2.tar.xz
+ # License files, locally calculated
+ sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index c41e60625e..3ebec29cf3 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ARMADILLO_VERSION = 14.4.1
++ARMADILLO_VERSION = 14.4.2
+ ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
+ ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+ ARMADILLO_INSTALL_STAGING = YES
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
