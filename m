@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2940C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:56:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 552B7C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:56:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75CE08454B;
-	Mon, 19 May 2025 10:56:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DBDB361495;
+	Mon, 19 May 2025 10:56:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3-she4Mf6QMS; Mon, 19 May 2025 10:56:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id js_Oghz9MLvf; Mon, 19 May 2025 10:56:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A77E684542
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05F2561687
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A77E684542;
-	Mon, 19 May 2025 10:56:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 05F2561687;
+	Mon, 19 May 2025 10:56:22 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B104E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:03 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 107DED4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0FE85410AE
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1BE7640E13
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NeR6hhajDe6W for <buildroot@buildroot.org>;
+ id CFRgI5ExlEZn for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2C8240E61
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D82EB412AE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C2C8240E61
+ by smtp4.osuosl.org (Postfix) with ESMTP id D82EB412AE
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BE2EB8348A; Mon, 19 May 2025 10:39:57 +0000 (UTC)
+ id D328782A2E; Mon, 19 May 2025 10:39:57 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 28 Apr 2025 21:46:20 +0200
+Date: Mon, 28 Apr 2025 21:53:27 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 94659ff7d44c724dd4e6e8a24646897fc8c176e2
-X-Git-Newrev: 3d90ae79a8c2dbe2c1b525876bfdf7f285bb7b0d
+X-Git-Oldrev: 8f69974c20fbc7dc642be62a0ef3fb2941f5bb35
+X-Git-Newrev: 609ea9789f1b714c182424a3f18aa402c9766e80
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103957.BE2EB8348A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/waf: bump to v2.1.5
+Message-Id: <20250519103957.D328782A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/armadillo: bump to
+ version 14.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,51 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d90ae79a8c2dbe2c1b525876bfdf7f285bb7b0d
+commit: https://git.buildroot.net/buildroot/commit/?id=609ea9789f1b714c182424a3f18aa402c9766e80
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For change log, see:
-https://gitlab.com/ita1024/waf/-/blob/waf-2.1.5/ChangeLog
+Release notes:
+https://arma.sourceforge.net/docs.html#changelog
 
-Tested with `./utils/test-pkg -p ntpsec` (ntpsec is a waf-package)
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-Signed-off-by: Titouan Christophe <titouanchristophe@gmail.com>
-[Julien: add link to change log]
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/waf/waf.hash | 6 +++---
- package/waf/waf.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/armadillo/armadillo.hash | 2 +-
+ package/armadillo/armadillo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/waf/waf.hash b/package/waf/waf.hash
-index 543bea5d7b..8255ed4f60 100644
---- a/package/waf/waf.hash
-+++ b/package/waf/waf.hash
-@@ -1,7 +1,7 @@
- # Locally computed
--sha1  9ee587d802ffd15a2e7cae579560d00754db4fad  waf-2.1.1
--sha256  2e66e01fd564f09106419389119c78143327c89a35f26ee3ed376f0ee410a14d  waf-2.1.1
-+sha1  523f645690747501b19e0d107a044de514ba80b4  waf-2.1.5
-+sha256  9d0b5d13e85f781b6976cfefb909b76cbc94a07419fa95d34216dca744257786  waf-2.1.5
- 
- # The waf script also contains its license, but is renamed `waf` in the extract
- # step, so this is a synonym for the above, to check WAF_LICENSE
--sha256  2e66e01fd564f09106419389119c78143327c89a35f26ee3ed376f0ee410a14d  waf
-+sha256  9d0b5d13e85f781b6976cfefb909b76cbc94a07419fa95d34216dca744257786  waf
-diff --git a/package/waf/waf.mk b/package/waf/waf.mk
-index a12d15a228..88b8d9096e 100644
---- a/package/waf/waf.mk
-+++ b/package/waf/waf.mk
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index 3161d2df87..61ed4d8528 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  26ce272bfdc8246c278e6f8cfa53777a1efb14ef196e88082fee05da1a463491  armadillo-14.4.1.tar.xz
++sha256  6dfddcfbd91e70679d7c11e94a5963a7efda002fec351e6f4875ac8e245c5117  armadillo-14.4.2.tar.xz
+ # License files, locally calculated
+ sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index c41e60625e..3ebec29cf3 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAF_VERSION = 2.1.1
-+WAF_VERSION = 2.1.5
- WAF_SOURCE = waf-$(WAF_VERSION)
- WAF_SITE = https://waf.io
- WAF_LICENSE = BSD-3-Clause
+-ARMADILLO_VERSION = 14.4.1
++ARMADILLO_VERSION = 14.4.2
+ ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
+ ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+ ARMADILLO_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
