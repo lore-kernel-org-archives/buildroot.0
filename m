@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 326C7C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:56:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D138C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:56:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19D2970A1E;
-	Mon, 19 May 2025 10:56:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C62DE70A27;
+	Mon, 19 May 2025 10:56:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RJjeSdWCakm2; Mon, 19 May 2025 10:56:03 +0000 (UTC)
+ id j5GKYA8z_p_3; Mon, 19 May 2025 10:56:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2568B70A19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F56270A19
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2568B70A19;
-	Mon, 19 May 2025 10:56:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3F56270A19;
+	Mon, 19 May 2025 10:56:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 130BED4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:55 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 29566D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:44:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 02D5E40F4B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1854540E0A
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oOZjEwI74env for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:14 +0000 (UTC)
+ id lyKLABhbnh1X for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B94A041291
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA328412B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B94A041291
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA328412B1
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B43F8872E7; Mon, 19 May 2025 10:39:56 +0000 (UTC)
+ id DE2B18348A; Mon, 19 May 2025 10:39:57 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 23 Apr 2025 21:25:41 +0200
+Date: Mon, 28 Apr 2025 22:06:42 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1dc1a05d945de53e59dde6dd8e651ca82c0bfc1a
-X-Git-Newrev: 3abc3b97bad9b4bbd436015cce029f25ee627f6a
+X-Git-Oldrev: 609ea9789f1b714c182424a3f18aa402c9766e80
+X-Git-Newrev: 78d38611730942db4636fd8a57b71521369faa0a
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103956.B43F8872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dust: bump to version
- 1.1.2
+Message-Id: <20250519103957.DE2B18348A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ncftp: bump to version
+ 3.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,78 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3abc3b97bad9b4bbd436015cce029f25ee627f6a
+commit: https://git.buildroot.net/buildroot/commit/?id=78d38611730942db4636fd8a57b71521369faa0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release:
-https://github.com/bootandy/dust/releases/tag/v1.1.2
+For change log, see:
+https://www.ncftp.com/ncftp/doc/changelog.html
 
-Note: version 0.9.0 of dust fails to build when running
-the runtime test on the armv7 architecture due to an
-unconditional import of Atomicu64.
+Fixes:
+https://autobuild.buildroot.org/results/103b86c5473077cd95a245a762059a23f78c1a44/build-end.log
 
-	error:
-
-Compiling config-file v0.2.3
-error[E0432]: unresolved import `std::sync::atomic::AtomicU64`
- --> src/progress.rs:6:18
-  |
-6 |         atomic::{AtomicU64, AtomicU8, AtomicUsize, Ordering},
-  |                  ^^^^^^^^^
-  |                  |
-  |                  no `AtomicU64` in `sync::atomic`
-  |                  help: a similar name exists in the module: `AtomicU32`
-
-For more information about this error, try `rustc --explain E0432`.
-error: could not compile `du-dust` (bin "dust") due to 1 previous error
-
-This issue was discovered while writing a runtime test
-for dust. upgrading to version 1.1.2 resolves the issue.
-
-More details available in the following issue:
-https://github.com/bootandy/dust/issues/423
-
-For now, we bump to the latest compatible version
-which builds and runs correctly. We can't bump to the latest
-version 1.2.0 since it requires a cargo version newer than
-1.82.0.
-
-	error:
---  The package requires the Cargo feature called `edition2024`, but that feature is not stabilized in this version of Cargo (1.82.0 (8f40fc59f 2024-08-21)).
-  Consider trying a newer version of Cargo (this may require the nightly release).
-
-The upgrade to 1.2.0 will be considered once the patch for
-Rust 1.86.0 is accepted.
-
-Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+[Julien: add link to change log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/dust/dust.hash | 2 +-
- package/dust/dust.mk   | 2 +-
+ package/ncftp/ncftp.hash | 2 +-
+ package/ncftp/ncftp.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dust/dust.hash b/package/dust/dust.hash
-index 975ec9664d..be80a84166 100644
---- a/package/dust/dust.hash
-+++ b/package/dust/dust.hash
+diff --git a/package/ncftp/ncftp.hash b/package/ncftp/ncftp.hash
+index a9414d62f5..029e4c6d43 100644
+--- a/package/ncftp/ncftp.hash
++++ b/package/ncftp/ncftp.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  ace29e85647e7079f9eaa066da9b1368c7200233eb0814442499948b5adeb028  dust-0.9.0-cargo2.tar.gz
-+sha256  01f4796a27e916e7fab77fbf12685da9fb1422dd3dcfdf736a146ad05ebc3c39  dust-1.1.2-cargo2.tar.gz
- sha256  aee6e2d13d3a55c7881630c09b41ca7b3b44bb1437b5d36695d22decc3655160  LICENSE
-diff --git a/package/dust/dust.mk b/package/dust/dust.mk
-index c566723c1c..a6b6f43c40 100644
---- a/package/dust/dust.mk
-+++ b/package/dust/dust.mk
+ # Locally computed:
+-sha256  f1108e77782376f8aec691f68297a3364a9a7c2d9bb12e326f550ff9770f47a7  ncftp-3.2.9-src.tar.gz
++sha256  7920f884c2adafc82c8e41c46d6f3d22698785c7b3f56f5677a8d5c866396386  ncftp-3.3.0-src.tar.gz
+ sha256  4fe2f063d25d79c49712a272ebb68e050c703eed9c66c80108427edfe3285580  doc/LICENSE.txt
+diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
+index fa46bc3339..c56fc86848 100644
+--- a/package/ncftp/ncftp.mk
++++ b/package/ncftp/ncftp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DUST_VERSION = 0.9.0
-+DUST_VERSION = 1.1.2
- DUST_SITE = $(call github,bootandy,dust,v$(DUST_VERSION))
- DUST_LICENSE = APACHE-2.0
- DUST_LICENSE_FILES = LICENSE
+-NCFTP_VERSION = 3.2.9
++NCFTP_VERSION = 3.3.0
+ NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.gz
+ NCFTP_SITE = https://www.ncftp.com/public_ftp/ncftp
+ NCFTP_TARGET_BINS = ncftp
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
