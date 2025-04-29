@@ -1,104 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11CD2C3ABAA
-	for <buildroot@archiver.kernel.org>; Tue, 29 Apr 2025 10:16:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 763D4C3ABA9
+	for <buildroot@archiver.kernel.org>; Tue, 29 Apr 2025 10:16:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8458660645;
-	Tue, 29 Apr 2025 10:16:15 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h-wpBrIJjX9G; Tue, 29 Apr 2025 10:16:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B59DF60761
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B59DF60761;
-	Tue, 29 Apr 2025 10:16:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 666E0E4
- for <buildroot@buildroot.org>; Tue, 29 Apr 2025 10:16:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 63E7840504
- for <buildroot@buildroot.org>; Tue, 29 Apr 2025 10:16:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C1FA640C1B;
+	Tue, 29 Apr 2025 10:16:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hs0TthHOlZqJ for <buildroot@buildroot.org>;
- Tue, 29 Apr 2025 10:16:13 +0000 (UTC)
+ id S3DBeFnlWLVV; Tue, 29 Apr 2025 10:16:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6FA7940504
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FA7940504;
+	Tue, 29 Apr 2025 10:16:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F29B1E3
+ for <buildroot@buildroot.org>; Tue, 29 Apr 2025 10:16:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 25C0260C24
+ for <buildroot@buildroot.org>; Tue, 29 Apr 2025 10:16:15 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7GiH2VepnhQe for <buildroot@buildroot.org>;
+ Tue, 29 Apr 2025 10:16:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
+ client-ip=2a00:1450:4864:20::532; helo=mail-ed1-x532.google.com;
  envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9FCB640425
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FCB640425
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9FCB640425
- for <buildroot@buildroot.org>; Tue, 29 Apr 2025 10:16:12 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id
- a640c23a62f3a-acb94bf7897so62064266b.3
- for <buildroot@buildroot.org>; Tue, 29 Apr 2025 03:16:12 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 11CA260729
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11CA260729
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com
+ [IPv6:2a00:1450:4864:20::532])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 11CA260729
+ for <buildroot@buildroot.org>; Tue, 29 Apr 2025 10:16:13 +0000 (UTC)
+Received: by mail-ed1-x532.google.com with SMTP id
+ 4fb4d7f45d1cf-5f8619031f1so20786a12.1
+ for <buildroot@buildroot.org>; Tue, 29 Apr 2025 03:16:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1745921769; x=1746526569;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=/XvgH6VketGhIwxb+TU7WKM0IKt73oTmzBZxE5iTVWc=;
- b=tfoKuZTSsgcPRzNEgA60uSpmgMjaLNMuOPPEjVPKQMZqd0gRSv10bMcvQCp2kkiXpd
- dwM8zLg5t4T1GjDeFfHztrUMYvUXoyLaSxdIaw/RU55pdOGr0uv5XCiiIW7rQSDR2qcl
- 2clnBpFeAPH6jpBCrsjMKVT+PXDbpJ6o7MjPqZRDl5HNR4GAVCrIrVnv2o9bkqC1eQo8
- nMfXCrafgsME64U4PpDUqim7gJcm4Tmab8yBQeJg2QEkBtMcusn9qh9neh0RjOJO6pA5
- KWKK2+pnVWNvuuyBL6T21mQVsHLcp152DxlgPYQCvvAoKWPJ9NDUI2abZMuHfmZWchQD
- du3g==
-X-Gm-Message-State: AOJu0Yw0MeoyEhqUaZoTZSX1C2AHHDoAmmRCkJ7NA43i7laIwmbPwAjV
- JQiGoGbMOLdmVGfsTXfmyFFmF7xrLOAgnis8PtipPaLswa522Hq+3kcSwceej3QjxryEXPxiUGQ
- J
-X-Gm-Gg: ASbGncscwvR8YLz6PN7cJbX03BmB7McmpxwQFDwHYUWMnyye2O41zqNf7F+5XkAb3xU
- P5phoH4k2tVVDTRNKfPUm9bmGbp9/ECiDfz9xYHud4aUEWR7VYu+iTmn6YCfeJMCeIc2QFefYIr
- 5N9dzGtihHcpB0XkqyNsLq03oENsQcu4G3xhAOGt0XTSxbwAHTcG10SYcj+yq2PrtczVGr4Mm2N
- lfrjx0cvalxBLHGdGTm+hJaXHG8jwg+MkS9MD3zi0AJct2hIC4fCBwAWEa8hJYGo4LjQUciIwDi
- oLoXBcPoMfzQ/iFgaAlBKIfVGQo/dKUmrA6gahe3ZnNcSHioQjqWX1jowrSGKJOL0xh6hmqOKQH
- VKkdJOoz3usAioW9xhAxckWxuAs7TLiKDoXSUgxq23voWePYLj/+57iikB0OIeeYVsZrDI7bXtt
- MqBkB3
-X-Google-Smtp-Source: AGHT+IH583AWhpqSXlsp5h0IoArFMblo7UPMk1qYm9xNk39EufeqwN3DCw1yMDym7mzEYxWp7bokXw==
-X-Received: by 2002:a17:907:da17:b0:acb:583:c63a with SMTP id
- a640c23a62f3a-acec6d2e05fmr80362066b.15.1745921769539; 
- Tue, 29 Apr 2025 03:16:09 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1745921772; x=1746526572;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=8rK2NvfSGXWFyrtsyPZ47tNTqFTMxDsulOphhz9iCNE=;
+ b=doc//CjD6IGBTolBHOYvLpcP1fyr7qwf7vZtDOps4Yoyb22m8YuUDQ/DLzn3HJvVqt
+ L9RFI0Pjm6q5pXN40+KFEmP6DdzejpyK3i5nwLIGNY2enfSW2hd8v/XvhxNPgeN7Y0Eb
+ FKgLGT6OWSZUjLPf5+RH9TqEHhkgI6PFKjuuFoP5NGt+z5jwjfuijYxDK9oRvUKw7qpE
+ +QNn7nixyhzQPYCnuyB//KuUIKfOo8ceaSM649y5TPfdDVyGvyQgWodsE/S2A4Jfs1NP
+ 1LYoaZ0rKIKprZDg/jSs2d+akrKrWzvbjks7a+pa7ZwyMiyD9OzD7Mv2er9itLEkHgxr
+ i/Zw==
+X-Gm-Message-State: AOJu0YxLqw+W9vB6GaMGD4fiB8RtiuIhIqj2ZISabQSYy7gNysInxhvu
+ 3Oe8j/VFHoR0d3njwCyadC7gd1QWb9b0ejlhPm4j66V4B+iNDoHQMw04qfiMSA1mvsTQa3PD4Ik
+ f
+X-Gm-Gg: ASbGnctkJMdI9c3qvR2xVgiz2f0yyn3Ip91FjTGSldSYgx0v1oUed7XN807iUvMooRw
+ 7KEUiyB0zU9XKgB0fJTOx0VfTpPqHaBAtbscBGDOLhW4lNyA4AtwdEirpY3x+035nIq8fD6wWMy
+ gXDRqK1Q30pGcEVAbjLUDmwMLAh/c4p+/RMBfBj0DrIbYCi35Zp01KqpXob4NqrlGscz7VFW0Vt
+ GjJOBwCZ3PjwG0R+sARUWLoOTynZQFyk0UXCEL81Gw044W6shAvCR1SKm9gPA17GUAQKBdLfcS6
+ iRo4Z3i4aPneC6VnYyNyuc/BpDbwY23VOXWrxEU45wkmYiiL0YGKdQdHNqqvfPVkXILd/qMorEC
+ w7UISJp3QeYtPfcEv/2t8SD52f2WIrwl2JnpHU7nUh6TjA0CU2B2d49Hn6XPkNBbkV+oj3OgMU9
+ eyCESp
+X-Google-Smtp-Source: AGHT+IGguntZOXlCCeukdg+1kcjlRoWBbIZv0STC3T50LqkUQCnP0G4FsEiXycyIDVrn8us+H+8WtA==
+X-Received: by 2002:a17:907:3da5:b0:ac7:390f:e36a with SMTP id
+ a640c23a62f3a-ace71425ad4mr506555666b.14.1745921771726; 
+ Tue, 29 Apr 2025 03:16:11 -0700 (PDT)
 Received: from fedora.arnhem.chello.nl
  (2001-1c00-8182-4700-3d78-0c42-7f3a-1345.cable.dynamic.v6.ziggo.nl.
  [2001:1c00:8182:4700:3d78:c42:7f3a:1345])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-ace6e4f8835sm768254166b.67.2025.04.29.03.16.08
+ a640c23a62f3a-ace6e4f8835sm768254166b.67.2025.04.29.03.16.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 29 Apr 2025 03:16:09 -0700 (PDT)
+ Tue, 29 Apr 2025 03:16:10 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
 Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
-Date: Tue, 29 Apr 2025 12:16:05 +0200
-Message-ID: <20250429101607.864604-1-adam.duskett@amarulasolutions.com>
+Date: Tue, 29 Apr 2025 12:16:07 +0200
+Message-ID: <20250429101607.864604-3-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250429101607.864604-1-adam.duskett@amarulasolutions.com>
+References: <20250429101607.864604-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1745921769; x=1746526569;
+ d=amarulasolutions.com; s=google; t=1745921772; x=1746526572;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=/XvgH6VketGhIwxb+TU7WKM0IKt73oTmzBZxE5iTVWc=;
- b=UvoTWnGUtvdKyhdEn0cdWEvM3XIFp5Ob4fx1Yz4tcH51l4o01XcNh8Mm7ydO/WVabr
- iv/UzwUM4S5b9ac41QaLdo4+hQOujvNLxXw12VUkA4pzzq1DQKdZ3cLnflIrHSg6rCUq
- n0iI0xJXapXsCfCiThrBSr6Ehp2Or41+zhrl4=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=8rK2NvfSGXWFyrtsyPZ47tNTqFTMxDsulOphhz9iCNE=;
+ b=aedTLkrk+iYtI7YRuL+twWdLU4VSHbTBdbICKfyiA6YsJhTk5p5qZAy1HbZwROYwAg
+ HvW3mt/8P3dBfk21sbTk8y7an4Ab1SjaI3gqQcjzkwrZIXO0UcbCuXl2ganQBxTbSr6Z
+ GI16ro1H0bqaieWM8gieSXCG2l7e9WbgH23Xw=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=UvoTWnGU
-Subject: [Buildroot] [PATCH v2 1/3] configs/mender_x86_64_efi_defconfig:
- bump kernel to 6.12.25
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=aedTLkrk
+Subject: [Buildroot] [PATCH v2 3/3] package/mender-update-modules: enable
+ docker, rpm, and script modules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,24 +118,136 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Starting with mender 5.x, the docker, rpm and script modules provided by
+the mender package now reside in the mender-update-modules repository.
+
+Even though the mender package provided by Buildroot is not updated yet to 5.x,
+it is best to enable the modules here to help facilitate the future update of
+the mender package to 5.x, and to ensure that any future modifications or bug
+fixes to these modules are easy to apply by simply bumping the upstream package
+version.
+
+Script is enabled by default to preserve the existing behavior of the mender
+package.
+
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- configs/mender_x86_64_efi_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+V1 -> v2: script is always installed
 
-diff --git a/configs/mender_x86_64_efi_defconfig b/configs/mender_x86_64_efi_defconfig
-index d0e0d8a364..2e124ba211 100644
---- a/configs/mender_x86_64_efi_defconfig
-+++ b/configs/mender_x86_64_efi_defconfig
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/mender/x86_64/post-image-efi.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="--data-part-size=32M --device-type=buildroot-x86_64 --artifact-name=1.0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.49"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.25"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/mender/x86_64/linux.config"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ package/mender-update-modules/Config.in       | 39 +++++++++++++++++++
+ .../mender-update-modules.mk                  |  9 +++++
+ package/mender/mender.mk                      |  7 +---
+ 3 files changed, 49 insertions(+), 6 deletions(-)
+
+diff --git a/package/mender-update-modules/Config.in b/package/mender-update-modules/Config.in
+index b789a0a00c..4ea0bce6c3 100644
+--- a/package/mender-update-modules/Config.in
++++ b/package/mender-update-modules/Config.in
+@@ -78,6 +78,23 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_DIRTY
+ 
+ 	  https://github.com/mendersoftware/mender-update-modules/tree/master/dirty
+ 
++config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
++	bool "docker"
++	depends on BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_DOCKER
++	help
++	  The Docker Update Module handles the Docker images that shall
++	  be running in the device. A deployment with this module will
++	  stop all currently running Docker containers in the device,
++	  and start new containers with the provided list of Docker
++	  images in the Mender Artifact.
++
++	  In case of an unforeseen error during the process, the module
++	  will use the rollback mechanism of the Mender client to
++	  restore the previously running Docker containers.
++
++	  https://github.com/mendersoftware/mender-update-modules/tree/master/docker
++
+ config BR2_PACKAGE_MENDER_UPDATE_MODULES_IPK
+ 	bool "ipk"
+ 	select BR2_PACKAGE_OPKG
+@@ -160,6 +177,28 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_ROOTFS_VERSION_CHECK
+ comment "rootfs version check needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 
++config BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM
++	bool "rpm"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
++	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++	depends on BR2_PACKAGE_LUA && !BR2_PACKAGE_LUA_5_1
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_RPM
++	help
++	  The Rpm Update Module updates software on the device using
++	  the native local package manager.
++
++	  A Mender Artifact containing one or more software packages
++	  is sent to the device, where the Update Module will call
++	  the package manager to install them in alphabetical order.
++
++	  https://github.com/mendersoftware/mender-update-modules/tree/master/rpm
++
++comment "rpm needs a toolchain w/ dynamic library, threads and lua >= 5.3"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
++		|| !BR2_PACKAGE_LUA || BR2_PACKAGE_LUA_5_1
++	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
++
+ config BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU
+ 	bool "swupdate"
+ 	depends on !BR2_STATIC_LIBS
+diff --git a/package/mender-update-modules/mender-update-modules.mk b/package/mender-update-modules/mender-update-modules.mk
+index b66505060a..a8429d9929 100644
+--- a/package/mender-update-modules/mender-update-modules.mk
++++ b/package/mender-update-modules/mender-update-modules.mk
+@@ -10,6 +10,8 @@ MENDER_UPDATE_MODULES_LICENSE = Apache-2.0
+ MENDER_UPDATE_MODULES_LICENSE_FILES = LICENSE
+ MENDER_UPDATE_MODULES_DEPENDENCIES = host-mender-artifact mender
+ 
++MENDER_UPDATE_MODULES_MODULES = script
++
+ ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_DFU),y)
+ MENDER_UPDATE_MODULES_MODULES += dfu
+ endif
+@@ -22,6 +24,9 @@ ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_DIRTY),y)
+ MENDER_UPDATE_MODULES_MODULES += dirty
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER),y)
++MENDER_UPDATE_MODULES_MODULES += docker
++endif
+ 
+ ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_IPK),y)
+ MENDER_UPDATE_MODULES_MODULES += ipk
+@@ -50,6 +55,10 @@ endef
+ MENDER_UPDATE_MODULES_POST_INSTALL_TARGET_HOOKS += MENDER_UPDATE_MODULES_INSTALL_MENDER_COMPARE_VERSIONS
+ endif
+ 
++ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM),y)
++MENDER_UPDATE_MODULES_MODULES += rpm
++endif
++
+ ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU),y)
+ MENDER_UPDATE_MODULES_MODULES += swu
+ endif
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+index 146e6b2b73..770589390f 100644
+--- a/package/mender/mender.mk
++++ b/package/mender/mender.mk
+@@ -45,12 +45,7 @@ MENDER_DEPENDENCIES = host-pkgconf openssl
+ 
+ MENDER_LDFLAGS = -X github.com/mendersoftware/mender/conf.Version=$(MENDER_VERSION)
+ 
+-MENDER_UPDATE_MODULES_FILES = \
+-	directory \
+-	script \
+-	single-file \
+-	$(if $(BR2_PACKAGE_DOCKER_CLI),docker) \
+-	$(if $(BR2_PACKAGE_RPM),rpm)
++MENDER_UPDATE_MODULES_FILES = directory single-file
+ 
+ define MENDER_INSTALL_CONFIG_FILES
+ 	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/mender/scripts
 -- 
 2.49.0
 
