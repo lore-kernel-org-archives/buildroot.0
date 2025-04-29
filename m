@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 552B7C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:56:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 304ECC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:56:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DBDB361495;
-	Mon, 19 May 2025 10:56:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E254F616A9;
+	Mon, 19 May 2025 10:56:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id js_Oghz9MLvf; Mon, 19 May 2025 10:56:22 +0000 (UTC)
+ id JRA8ZWbh8Kuw; Mon, 19 May 2025 10:56:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 05F2561687
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A28B470A67
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 05F2561687;
-	Mon, 19 May 2025 10:56:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A28B470A67;
+	Mon, 19 May 2025 10:56:23 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 107DED4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 145BCD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1BE7640E13
+ by smtp4.osuosl.org (Postfix) with ESMTP id 26B8B412AE
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CFRgI5ExlEZn for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:17 +0000 (UTC)
+ id CFgnNLSF43CT for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D82EB412AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 46E5F412E1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D82EB412AE
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 46E5F412E1
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D328782A2E; Mon, 19 May 2025 10:39:57 +0000 (UTC)
+ id 4529082A2E; Mon, 19 May 2025 10:39:58 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 28 Apr 2025 21:53:27 +0200
+Date: Tue, 29 Apr 2025 21:50:39 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8f69974c20fbc7dc642be62a0ef3fb2941f5bb35
-X-Git-Newrev: 609ea9789f1b714c182424a3f18aa402c9766e80
+X-Git-Oldrev: 972bbabdcb785932c94a2908368a3e0473aef8bf
+X-Git-Newrev: 4e271e6dccdd9b712077c12a4aa5aa8d82527531
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103957.D328782A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/armadillo: bump to
- version 14.4.2
+Message-Id: <20250519103958.4529082A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/optee-client: bump to
+ 4.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,42 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=609ea9789f1b714c182424a3f18aa402c9766e80
+commit: https://git.buildroot.net/buildroot/commit/?id=4e271e6dccdd9b712077c12a4aa5aa8d82527531
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://arma.sourceforge.net/docs.html#changelog
+Bump to the latest version of optee-client
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Nayab Sayed <nayabbasha.sayed@microchip.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/armadillo/armadillo.hash | 2 +-
- package/armadillo/armadillo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/optee-client/Config.in         | 4 ++--
+ package/optee-client/optee-client.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
-index 3161d2df87..61ed4d8528 100644
---- a/package/armadillo/armadillo.hash
-+++ b/package/armadillo/armadillo.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  26ce272bfdc8246c278e6f8cfa53777a1efb14ef196e88082fee05da1a463491  armadillo-14.4.1.tar.xz
-+sha256  6dfddcfbd91e70679d7c11e94a5963a7efda002fec351e6f4875ac8e245c5117  armadillo-14.4.2.tar.xz
- # License files, locally calculated
- sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index c41e60625e..3ebec29cf3 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
+index 865b0d8f31..ac3b680743 100644
+--- a/package/optee-client/Config.in
++++ b/package/optee-client/Config.in
+@@ -30,7 +30,7 @@ config BR2_PACKAGE_OPTEE_CLIENT_AS_OS
+ 	depends on BR2_TARGET_OPTEE_OS_CUSTOM_VERSION
  
--ARMADILLO_VERSION = 14.4.1
-+ARMADILLO_VERSION = 14.4.2
- ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
- ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
- ARMADILLO_INSTALL_STAGING = YES
+ config BR2_PACKAGE_OPTEE_CLIENT_LATEST
+-	bool "4.5.0"
++	bool "4.6.0"
+ 	help
+ 	  Use the latest release tag from the optee-client official Git
+ 	  repository.
+@@ -60,7 +60,7 @@ config BR2_PACKAGE_OPTEE_CLIENT_VERSION
+ 	string
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_VERSION_VALUE \
+ 				if BR2_PACKAGE_OPTEE_CLIENT_AS_OS
+-	default "4.5.0"		if BR2_PACKAGE_OPTEE_CLIENT_LATEST
++	default "4.6.0"		if BR2_PACKAGE_OPTEE_CLIENT_LATEST
+ 	default "custom"	if BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_TARBALL
+ 
+ config BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH
+diff --git a/package/optee-client/optee-client.hash b/package/optee-client/optee-client.hash
+index 2ef793c9d6..a5d98521a3 100644
+--- a/package/optee-client/optee-client.hash
++++ b/package/optee-client/optee-client.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  ac6dc2c0c253ea228ea230e537211a45475771050faf4e66fe64321de3a0a652  optee-client-4.5.0.tar.gz
++sha256  a970338c9f69861901336716d89684646e4480b9970996a5b3581ae7d49fdaa3  optee-client-4.6.0.tar.gz
+ sha256  fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
