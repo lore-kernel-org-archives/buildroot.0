@@ -4,49 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DA2CC369DC
-	for <buildroot@archiver.kernel.org>; Tue, 29 Apr 2025 20:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BCD09C369DC
+	for <buildroot@archiver.kernel.org>; Tue, 29 Apr 2025 20:36:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F11CA81F5E;
-	Tue, 29 Apr 2025 20:35:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 774B181F51;
+	Tue, 29 Apr 2025 20:36:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SKB5tgrKiCxr; Tue, 29 Apr 2025 20:35:46 +0000 (UTC)
+ id Pk_IHg7shNcN; Tue, 29 Apr 2025 20:36:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0354081F56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E22381F59
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0354081F56;
-	Tue, 29 Apr 2025 20:35:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C7FC71C4
- for <buildroot@buildroot.org>; Tue, 29 Apr 2025 20:35:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E22381F59;
+	Tue, 29 Apr 2025 20:36:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B62C61C4
+ for <buildroot@buildroot.org>; Tue, 29 Apr 2025 20:36:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ADE89407B5
- for <buildroot@buildroot.org>; Tue, 29 Apr 2025 20:35:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A88CD40B33
+ for <buildroot@buildroot.org>; Tue, 29 Apr 2025 20:36:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ax7mJUf49_jL for <buildroot@buildroot.org>;
- Tue, 29 Apr 2025 20:35:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08214407CC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 08214407CC
- for <buildroot@buildroot.org>; Tue, 29 Apr 2025 20:35:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B69C1864A0; Tue, 29 Apr 2025 20:35:43 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M4OJzy2s-Yq0 for <buildroot@buildroot.org>;
+ Tue, 29 Apr 2025 20:36:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4F7D340BFA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F7D340BFA
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4F7D340BFA
+ for <buildroot@buildroot.org>; Tue, 29 Apr 2025 20:36:02 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id EBB0E19F5C3;
+ Tue, 29 Apr 2025 22:35:55 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 29 Apr 2025 22:35:55 +0200
+MIME-Version: 1.0
+Date: Tue, 29 Apr 2025 22:35:55 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 29 Apr 2025 22:33:45 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4e271e6dccdd9b712077c12a4aa5aa8d82527531
-X-Git-Newrev: 9c0eee07c7107fa2beb7644f4e3612d702b4588c
-X-Patchwork-Hint: ignore
-Message-Id: <20250429203543.B69C1864A0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mmc-utils: bump version to
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: buildroot@buildroot.org, Giulio Benetti
+ <giulio.benetti@benettiengineering.com>, linux-amarula@amarulasolutions.com
+In-Reply-To: <20250429195337.566859-1-dario.binacchi@amarulasolutions.com>
+References: <20250429195337.566859-1-dario.binacchi@amarulasolutions.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <4661eeb2a2a5988d914d52ff25d0463d@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1745958959;
+ bh=dl6vBbBPNue/WMIPavYj2fZkp6bdDBbmAZPNXY3UNjs=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=Mt1/DQqd5keFJ/4SrKCIOt3Y591a1kjtsqFLMT+RQSTuaC8ghU9D6mQ0Coa05hBU3
+ icW0Huf7xHv2nhMOq1MGGU36nvCF2BpOc2CQF19O5pb/gWh86AbzrOUdoXuyldflrj
+ KTpnkQ2V/pCeN2NeIYgg2oldrfTMuLAJ/tQhY55xwnDz0rmpKYF6TElI7rTN+7Hnpk
+ nwMCazK1HVa5N2Ce99RWD9BmkT1iPWB0bYoEJJtRRr4RDA0G3h6ZS2ViHTPLwGTwjS
+ bGuXxaamdf7inUVWszW7lucFgSq1fQPvTvzQYVbzqPFS0haTncBwp7k0h6ldZfF+MD
+ OK5hJ5QjspEYg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=Mt1/DQqd
+Subject: Re: [Buildroot] [PATCH 1/1] package/mmc-utils: bump version to
  c515ea2e1ceb
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,57 +84,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c0eee07c7107fa2beb7644f4e3612d702b4588c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 29/04/2025 21:53, Dario Binacchi wrote:
+> Change log since last version bump:
+> 
+>   c515ea2e1ceb mmc-utils: Doc: new secure write protect commands
+>   3fc7643ac148 mmc-utils: Secure Write Protect Mode Read
+>   bd51a271de9d mmc-utils: Enable/Disable write protect
+>   5d3a04e70b05 mmc-utils: Add secure write-protect mode enable/disable
+>   05051e40351c mmc-utils: Refactor RPMB key handling into a separate 
+> function
+>   f4247f56085f mmc-utils: Add SECURE_WP_INFO field in ext_csd register
+>   50a30df1b74d mmc-utils: Add byte offset comments to rpmb_frame 
+> structure
+>   88e956459a79 mmc-utils: Pack rpmb_frame structure to avoid padding 
+> bytes
+>   d4d3eb24f560 mmc-utils: Reduce scope of nargs for RPMB commands
+>   437d369cd9d9 mmc-utils: Initialize RPMB frame_out structures to zero
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-Change log since last version bump:
-
-  c515ea2e1ceb mmc-utils: Doc: new secure write protect commands
-  3fc7643ac148 mmc-utils: Secure Write Protect Mode Read
-  bd51a271de9d mmc-utils: Enable/Disable write protect
-  5d3a04e70b05 mmc-utils: Add secure write-protect mode enable/disable
-  05051e40351c mmc-utils: Refactor RPMB key handling into a separate function
-  f4247f56085f mmc-utils: Add SECURE_WP_INFO field in ext_csd register
-  50a30df1b74d mmc-utils: Add byte offset comments to rpmb_frame structure
-  88e956459a79 mmc-utils: Pack rpmb_frame structure to avoid padding bytes
-  d4d3eb24f560 mmc-utils: Reduce scope of nargs for RPMB commands
-  437d369cd9d9 mmc-utils: Initialize RPMB frame_out structures to zero
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/mmc-utils/mmc-utils.hash | 2 +-
- package/mmc-utils/mmc-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/mmc-utils/mmc-utils.hash b/package/mmc-utils/mmc-utils.hash
-index 17dedad2b7..685952a615 100644
---- a/package/mmc-utils/mmc-utils.hash
-+++ b/package/mmc-utils/mmc-utils.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  e9630d911bcf59e235a349d862700fa7ccea7545eb314da48431dcb4da125023  mmc-utils-2aef4cd9a84ddc76349fc0d7e10d675e7fa596fa-git4.tar.gz
-+sha256  e10cd7fded5f248d515fe40e35f73fe491e87e4b608ca857afa40fcb8cda1ae2  mmc-utils-c515ea2e1cebfbf9d81aa6a5c1bf67a79d2a7e58-git4.tar.gz
- sha256  49cd65f67b516078ff7e0dbe639972dad21ed3858246e3969fc8a8fc2a4dca66  README
-diff --git a/package/mmc-utils/mmc-utils.mk b/package/mmc-utils/mmc-utils.mk
-index 0036a775ee..b439c84d47 100644
---- a/package/mmc-utils/mmc-utils.mk
-+++ b/package/mmc-utils/mmc-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MMC_UTILS_VERSION = 2aef4cd9a84ddc76349fc0d7e10d675e7fa596fa
-+MMC_UTILS_VERSION = c515ea2e1cebfbf9d81aa6a5c1bf67a79d2a7e58
- MMC_UTILS_SITE = https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git
- MMC_UTILS_SITE_METHOD = git
- MMC_UTILS_LICENSE = GPL-2.0
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
