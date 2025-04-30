@@ -1,114 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4546EC3ABAC
-	for <buildroot@archiver.kernel.org>; Wed, 30 Apr 2025 19:11:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B39D2C369D9
+	for <buildroot@archiver.kernel.org>; Wed, 30 Apr 2025 20:06:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D31CC40CBD;
-	Wed, 30 Apr 2025 19:11:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4D9D182105;
+	Wed, 30 Apr 2025 20:06:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qg2Jpf3TMjIb; Wed, 30 Apr 2025 19:11:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j7xV-1p2Lh7g; Wed, 30 Apr 2025 20:06:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA03C40C38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 415EF820FF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BA03C40C38;
-	Wed, 30 Apr 2025 19:11:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7B60BE4
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 19:10:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 415EF820FF;
+	Wed, 30 Apr 2025 20:06:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id F07C4236
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 20:06:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5FCA360B94
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 19:10:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D6889400EA
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 20:06:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l1SwlDOQGjna for <buildroot@buildroot.org>;
- Wed, 30 Apr 2025 19:10:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::530; helo=mail-pg1-x530.google.com;
- envelope-from=charlie@rivosinc.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 115AD60905
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 115AD60905
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com
- [IPv6:2607:f8b0:4864:20::530])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 115AD60905
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 19:10:56 +0000 (UTC)
-Received: by mail-pg1-x530.google.com with SMTP id
- 41be03b00d2f7-b0da25f5216so154737a12.1
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 12:10:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1746040256; x=1746645056;
- h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
- :mime-version:subject:date:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=upWW+yYUzH6lpHRJ4FMK/cr2TBvWGV/X72D0Hcvxq1Y=;
- b=nwKxgrjQOsKg+1pVzCGYVbTf/o+e/SaA3aVMgYn6ZbLgoILO/vqeNBDNe6IsOayDsF
- f+LlUu+OqxApeDxa/7Qt9O8bo+iPik7yHDCpfQVhLPWK0ba5rpELPPkDe1UV+VxH7K6G
- R4ZykH8xRd+kzcvYUUWU2hl31EY0SsxWHZ+0GaUm0P0Ftv0RQzUlcsfixQmLqEOlfU7C
- csZGxIjhFUDc7kA55G3tftex9MWSB0FjTqB711W0X7IlvvCvVun2/NcO6OP+1c0LBoY4
- 6Nxau96aNcpm/guO3dRC0bpkEYVasFuG3jrMcjmQyhlnf2UlzukDaUOQeIAbd/kxbaFQ
- Md2A==
-X-Gm-Message-State: AOJu0YyEOowGFsO0spZx2eHHUHIFDVHkE83XQ2V3pEHuVNNowaZcBRs/
- /tFPnRyYLV3qSfbj3DneOMYrEFvEjzskTLX0PIpIiV9rfzSRYLe58EYoC/zQA+s=
-X-Gm-Gg: ASbGncvZ9DYWCvXq0hT8+jgYtgC2vcI9SCIyvAF79GT46S3y8ZXndkURppz1L++g9b6
- ZELHOS++iQ3DaTwj2N0GHRNz+rhNeOkY5rOJWbrO8+yhidqz4EgjoMS3E1ENnFGAPHg6RKSgG4B
- quAj9XFjH7h4JVc7hjD1c9sQJasGFUu88xVAXwprT2KH69Hmh1kEEaq35ZKF+8E/dSCylChPe8W
- xGO3lYqMqxLJfTI+JEXphN6Bz+cnZLLCOgl1jQ2Rml877w3bUWdspgW3XR+6y140kd3B1JbLJSa
- 3SI0JHppt2aF9L8RORPlLYw+oLw5tOwWw/cLx7n7/gQmOsOnq78hgX/6
-X-Google-Smtp-Source: AGHT+IFKd2OqWQndwz97kjIPqCvoaQ3Q8UsIK9kyocrn4Yum50uJ3yddGv7xNrV9TowqAIqOVOIDEg==
-X-Received: by 2002:a05:6a20:a114:b0:1f5:55b7:1bb2 with SMTP id
- adf61e73a8af0-20ba6a20238mr579780637.6.1746040256470; 
- Wed, 30 Apr 2025 12:10:56 -0700 (PDT)
-Received: from charlie.ba.rivosinc.com ([64.71.180.162])
- by smtp.gmail.com with ESMTPSA id
- 41be03b00d2f7-b15f76f42a8sm11111304a12.3.2025.04.30.12.10.55
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 30 Apr 2025 12:10:55 -0700 (PDT)
-From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Wed, 30 Apr 2025 12:10:36 -0700
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 83jNZk04IQxI for <buildroot@buildroot.org>;
+ Wed, 30 Apr 2025 20:06:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.235;
+ helo=lelvem-ot02.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D1D2A40199
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1D2A40199
+Received: from lelvem-ot02.ext.ti.com (lelvem-ot02.ext.ti.com [198.47.23.235])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D1D2A40199
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 20:06:11 +0000 (UTC)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+ by lelvem-ot02.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 53UK69dY020507
+ (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Wed, 30 Apr 2025 15:06:09 -0500
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+ by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 53UK69R5059679
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Wed, 30 Apr 2025 15:06:09 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 30
+ Apr 2025 15:06:08 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 30 Apr 2025 15:06:08 -0500
+Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
+ by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 53UK68Qd039910;
+ Wed, 30 Apr 2025 15:06:08 -0500
+Date: Wed, 30 Apr 2025 15:06:08 -0500
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+CC: <buildroot@buildroot.org>, Anand Gadiyar <gadiyar@ti.com>, Xuanhao Shi
+ <X15000177@gmail.com>, <linux-amarula@amarulasolutions.com>
+Message-ID: <20250430200608.y6l5qvlswb2cq6dp@bryanbrattlof.com>
+X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
+References: <20250429222236.823478-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-Message-Id: <20250430-uprev_pixman_46-v1-2-c1608b4d4bd7@rivosinc.com>
-References: <20250430-uprev_pixman_46-v1-0-c1608b4d4bd7@rivosinc.com>
-In-Reply-To: <20250430-uprev_pixman_46-v1-0-c1608b4d4bd7@rivosinc.com>
-To: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Charlie Jenkins <charlie@rivosinc.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3714; i=charlie@rivosinc.com; 
- h=from:subject:message-id;
- bh=j+d5wdtWdcRostOaLZs60oX+OZvxcg35A6uI7iGn0ws=; 
- b=owGbwMvMwCXWx5hUnlvL8Y3xtFoSQ4ZQ6Z7Xr7tLH0166dk52Z1h756P26UOekxcc6Hx9YFi4
- QUVBbfPd5SyMIhxMciKKbLwXGtgbr2jX3ZUtGwCzBxWJpAhDFycAjARP1eGf5Z75ylJz8zfvsXo
- 7rMU9bmrd057FLqqXMw2UrKa+yBbQScjw4oJIXfCw/82lXxbvSd4B5OlCaue0oNDdrN0jG+8Xn+
- uhQUA
-X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
- fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
+Content-Disposition: inline
+In-Reply-To: <20250429222236.823478-1-dario.binacchi@amarulasolutions.com>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1746040256; x=1746645056;
- darn=buildroot.org; 
- h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
- :mime-version:subject:date:from:from:to:cc:subject:date:message-id
- :reply-to;
- bh=upWW+yYUzH6lpHRJ4FMK/cr2TBvWGV/X72D0Hcvxq1Y=;
- b=LRDSlZuPks3mLUnByY+sFzyh2dbeOc6X/eb1C15guypz7e0jtehaiRazPPkGP6svGk
- ywxeqaIWwpDEMkAG3iCV2ENaeU9reifGtZoUgQq+9VWlR/gspJ+lYCKCKNlv6QX7BOHH
- Xd3kIW0qPhc6tOzDDmiY79KAtXnXMiyEYV5OEedfbxU5wS26hedQp6GIUJn0cODAjFzm
- XnG4fPj20t3HSOHbY8d+WCOVn4qMdrCxdEq9V1ypKl1O5ndHBkYTNF2A0iFoLKHmNgYM
- +gMsZSOs1cmHHGPcg7U5pNghROxjivux1j7YR2O9JiLF0PYxs6f4fOjJe46EsRnegxU0
- V2qg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=rivosinc.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rivosinc-com.20230601.gappssmtp.com
- header.i=@rivosinc-com.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=LRDSlZuP
-Subject: [Buildroot] [PATCH 2/2] package/pixman: Uprev to 0.46.0
+ d=ti.com; s=ti-com-17Q1; t=1746043569;
+ bh=9IzHnG0zJ01vQ+u1Yh9A9dSMRLUV0Ll/hH8SXFsVjoM=;
+ h=Date:From:To:CC:Subject:References:In-Reply-To;
+ b=ikeyHkgvu4ZpfO/5cNYFzZqle0Zl5QtDRDV8pK/mNNrdu7lIku+VfR4VMQSnoX/aY
+ 7pEUXdx0J+GkkCHdcnhTiKPX5JGHNVjZUFrH0/JXmGRsNZoURN5XT0TeJtFXxqSK8k
+ gmVjUXD/lGFMJFFKZaFb8d1zSxTAkhrJYOuTWEH0=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=ti.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=ikeyHkgv
+Subject: Re: [Buildroot] [PATCH 1/1] boot/ti-k3-boot-firmware: bump to
+ version 11.00.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,100 +93,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
+Reply-To: Bryan Brattlof <bb@ti.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Version 0.46.0 includes the patch to fix building on riscv without
-vector support so drop the patch from the tree.
+On April 30, 2025 thus sayeth Dario Binacchi:
+> Release-notes:
+> https://git.ti.com/cgit/processor-firmware/ti-linux-firmware/tag/?h=11.00.11
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
----
- ...-enable-RVV-on-linux-if-hwcap-headers-are.patch | 44 ----------------------
- package/pixman/pixman.hash                         |  4 +-
- package/pixman/pixman.mk                           |  2 +-
- 3 files changed, 3 insertions(+), 47 deletions(-)
+Reviewed-by: Bryan Brattlof <bb@ti.com>
 
-diff --git a/package/pixman/0001-RISC-V-Only-enable-RVV-on-linux-if-hwcap-headers-are.patch b/package/pixman/0001-RISC-V-Only-enable-RVV-on-linux-if-hwcap-headers-are.patch
-deleted file mode 100644
-index ad1a0902e2aad712a2a6fc73650401ee8ad31f1a..0000000000000000000000000000000000000000
---- a/package/pixman/0001-RISC-V-Only-enable-RVV-on-linux-if-hwcap-headers-are.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From d0045f1fc32635d9629ea9e361631b07d9ca4140 Mon Sep 17 00:00:00 2001
--From: Charlie Jenkins <charlie@rivosinc.com>
--Date: Mon, 21 Apr 2025 13:08:50 -0700
--Subject: [PATCH] RISC-V: Only enable RVV on linux if hwcap headers are
-- available
--
--Linux 6.4 introduced COMPAT_HWCAP_ISA_V. When trying to compile pixman
--against linux headers older than this, pixman will fail to compile
--because it assumes COMPAT_HWCAP_ISA_V exists.
--
--During meson configuration, do not enable have_rvv if the platform is
--Linux and COMPAT_HWCAP_ISA_V doesn't exist.
--
--Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
--Fixes: 0e424031bda2 ("RISC-V floating point operations")
--Upstream: https://gitlab.freedesktop.org/pixman/pixman/-/merge_requests/149
-----
-- meson.build | 10 +++++++++-
-- 1 file changed, 9 insertions(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index fdea28f..cb10931 100644
----- a/meson.build
--+++ b/meson.build
--@@ -379,7 +379,15 @@ if not use_rvv.disabled()
--         }
--       ''',
--       args : rvv_flags,
---      name : 'RISC-V Vector Intrinsic Support')
--+      name : 'RISC-V Vector Intrinsic Support') and cc.compiles('''
--+      #if defined(__linux__)
--+      #include <asm/hwcap.h>
--+      #include <sys/auxv.h>
--+      COMPAT_HWCAP_ISA_V
--+      #endif
--+      ''',
--+      args : rvv_flags,
--+      name: 'RISC-V Vector Linux HWCAP Support')
--       have_rvv = true
--     endif
--   endif
---- 
--2.43.0
--
-diff --git a/package/pixman/pixman.hash b/package/pixman/pixman.hash
-index c49b9c9e76aa6ea2b38c94717f934a1c3fe051b7..b74f8cc64891a92c98ddd60b05478fd8be117988 100644
---- a/package/pixman/pixman.hash
-+++ b/package/pixman/pixman.hash
-@@ -1,5 +1,5 @@
--# From https://lists.cairographics.org/archives/cairo/2024-December/029586.html
--sha512  b24907f9a0bf6a9aa3278d31986c562c5f2d68f8c178021497c8648aca9f91e4c6f1ecfacf93eb01ba4f03ce4cfc5970fc40bb0fe6724bac9210fc57da09cba4  pixman-0.44.2.tar.xz
-+# From https://lists.cairographics.org/archives/cairo/2025-April/029612.html
-+sha512  c7ef987b7db89c58278c537f862bc9eb17c19f8288a3b7e88f8501a0486662f1e2cb6a2c0b81d4bf0464310475192428d6e29d05a6ae3cfc1d2c0941fbb0b9a3  pixman-0.46.0.tar.xz
- 
- # Locally computed
- sha256  fac9270f0987b96ff4533fca3548c633e02083cbba4a0172a3b149b2e4019793  COPYING
-diff --git a/package/pixman/pixman.mk b/package/pixman/pixman.mk
-index 78ab20da5915f2b7b9d5710b46b5ca8011e32240..0611a0b732fabe00ea5fb454875e28d27a58eaa2 100644
---- a/package/pixman/pixman.mk
-+++ b/package/pixman/pixman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PIXMAN_VERSION = 0.44.2
-+PIXMAN_VERSION = 0.46.0
- PIXMAN_SOURCE = pixman-$(PIXMAN_VERSION).tar.xz
- PIXMAN_SITE = https://xorg.freedesktop.org/releases/individual/lib
- PIXMAN_LICENSE = MIT
+I'll have to ask around internally if someone got anywhere with finding 
+a better way of doing this. The TI firmware needed for U-Boot are not 
+updated this often but because it's based off linux-firmware we add a 
+weekly tag to it to keep everything in sync.
 
--- 
-2.43.0
+~Bryan
 
+> ---
+>  boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash | 2 +-
+>  boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
+> index d9cb66cd6a27..571bbf121949 100644
+> --- a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
+> +++ b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+>  sha256  ab20ffbe7bba7e94be246b3417d33a914b3f07c16c47ef5a7f7602349a666a61  LICENSE.ti
+> -sha256  884c454b1a518e6d31304acb201493156685fb8ff111383c842bb292a1b35c9b  ti-linux-firmware-11.00.10.tar.xz
+> +sha256  f9e09b84e206d605a9fb5691a325dcd4a7d6a3e6bf70a69cbc169d1a5c617804  ti-linux-firmware-11.00.11.tar.xz
+> diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
+> index e04165edd1e0..117c0a9a5ade 100644
+> --- a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
+> +++ b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -TI_K3_BOOT_FIRMWARE_VERSION = 11.00.10
+> +TI_K3_BOOT_FIRMWARE_VERSION = 11.00.11
+>  TI_K3_BOOT_FIRMWARE_SITE = https://git.ti.com/cgit/processor-firmware/ti-linux-firmware/snapshot
+>  TI_K3_BOOT_FIRMWARE_SOURCE = ti-linux-firmware-$(TI_K3_BOOT_FIRMWARE_VERSION).tar.xz
+>  TI_K3_BOOT_FIRMWARE_INSTALL_IMAGES = YES
+> -- 
+> 2.43.0
+> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
