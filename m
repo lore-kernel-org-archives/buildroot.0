@@ -1,100 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6E9BC369D9
-	for <buildroot@archiver.kernel.org>; Wed, 30 Apr 2025 20:42:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F31E3C369D9
+	for <buildroot@archiver.kernel.org>; Wed, 30 Apr 2025 21:32:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 648BF60A74;
-	Wed, 30 Apr 2025 20:42:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nqf70Il4ziX0; Wed, 30 Apr 2025 20:42:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCAC76088D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CCAC76088D;
-	Wed, 30 Apr 2025 20:42:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 07F60E4
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 20:42:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 050BC80E79
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 20:42:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C05E80E9D;
+	Wed, 30 Apr 2025 21:32:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qxz0M2uQUA7T for <buildroot@buildroot.org>;
- Wed, 30 Apr 2025 20:42:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E03C780DC4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E03C780DC4
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E03C780DC4
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 20:42:15 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-39129fc51f8so165168f8f.0
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 13:42:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1746045733; x=1746650533;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=/vJP2jvuwb36ewnSZ/XowK6qJpOlIJJwHTIMgLjgplU=;
- b=OcJLnNRhCd6/PReHrATcg74ENVHf+ihxAymRPxq21dVe89ku4ev64OALHTSgurZpW9
- DDvMd/pg7Ps4yqiyoj2vfqs2mLCHx/lmmMGhjUXgug05hUTRtIfNGZ/bJg+kutHz32Bw
- 6quX+151p6UadOaHCVQ9rS8YNkGZqGVL8NfB0YBTzkgEBtfMQhdzMMcM44NhrZSkaSVM
- Z8a51J02pc5YqORvmT4CKeDu6C0AResOKCzAfOYKi/g7xvwFAj/29n0TPiDhyflxrnji
- ZsMf3kGAMlcsoQyVOT3UYcXroYW2CP0lIQ5ND7Y2X2Fl+jtBG1hzuv+wFGJEWsKgZjXG
- AwtA==
-X-Gm-Message-State: AOJu0YzO+IUE3y/S02/Aox1LvcjdAsSAhW/tpfljkyu26eZ0eYoWsi1o
- gEGX1dNLsFmllQjlKmMeAiy3pxImxKb1ka/b2wiPAo4PpqaYRk7L2chr2BX2IZtrpxDoGYQp0A2
- lXoU=
-X-Gm-Gg: ASbGncsvkW+wNqazuiQfK4BUhQ37q0Xi2Hp2Q59uFD+Is9N94U1MSj0bgJs2a6D1kbC
- QXwgD1/Ou3urgQTh1+gOn2XVmw7ag9at6BqC9y3foJ5xtGbSGk/xpFmhlRVum6okSXpiflqEXNz
- EkksXAUy79GUrr5ZMyPC5fRZCqnHFuTT5n5yNTnW+6naJqsMcQtHPZkME7urfmpd1ZY1opccCwc
- 5MezMMNY/QxR2x4zlVqUT/rkfIyReIB/Ie9pbxX3pCgdXV5t6EQE+A1xLile5LwGbLiZLAUD8GT
- ubHyMQjdxIpCZKzY0COOD2zL0gIyzdfW6lrjHDgjY6J4E7CDX8Bd/3k=
-X-Google-Smtp-Source: AGHT+IG5LPEUPTa/7spxKpIELBo72e/29xd1d50+bxlvsmfbIHCjs2ZtmotPxZMGOt25wDqGrELQSQ==
-X-Received: by 2002:a5d:5c84:0:b0:39c:1257:ccae with SMTP id
- ffacd0b85a97d-3a08f7b7c0bmr4465998f8f.57.1746045733067; 
- Wed, 30 Apr 2025 13:42:13 -0700 (PDT)
-Received: from localhost.localdomain ([79.132.233.61])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3a073ca556bsm18043816f8f.37.2025.04.30.13.42.12
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 30 Apr 2025 13:42:12 -0700 (PDT)
+ id glP3bM0d0MlJ; Wed, 30 Apr 2025 21:32:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D612180EC7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id D612180EC7;
+	Wed, 30 Apr 2025 21:32:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 001C0E4
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 21:32:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id F1BE140156
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 21:32:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CjJoo0H2WBLB for <buildroot@buildroot.org>;
+ Wed, 30 Apr 2025 21:32:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AE4040010
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1AE4040010
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 21:32:38 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1041F8645D; Wed, 30 Apr 2025 21:32:38 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Cc: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>,
- Thomas Perale <thomas.perale@mind.be>
-Date: Wed, 30 Apr 2025 22:41:37 +0200
-Message-ID: <20250430204137.1071918-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.49.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1746045733; x=1746650533; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=/vJP2jvuwb36ewnSZ/XowK6qJpOlIJJwHTIMgLjgplU=;
- b=L+XagcyQ9+yq5B3SWl8gEsbBRtc1n7V9c1QfeU4KhKDRtMKK8I/H4XIk+apwMASqrv
- cp8cndhgSLkErG0KsNjQn3AgACzYx/S0pfOv2LPt4YPVIy8pr/ZNwJSn4BE7SoYhOFOf
- 841KCTFK/rL4LZQ0OCnmCJpkB5fJ27UO+m3leJaUwas3Hi0kKx1qElF+fFK32r74u8f0
- mmU1em8zvYOlFb5c1t0ddSgQc3ig0uyiGcGKD2kv2DbcidxiDLwW1lfJEFkr90qJbEZV
- ZeTI4HCpX8t4cuZ3IHY456PRTzM3Hzkjnmm2n0d+yBXVJ3wTkbiAjrXbui2TyIWy9Amx
- Kgww==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=L+XagcyQ
-Subject: [Buildroot] [PATCH 1/1] package/bird: fix build failure with bfd
+Date: Wed, 30 Apr 2025 23:19:59 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8e1ad23f2a43d860a27208c69d2e8f424324dd84
+X-Git-Newrev: 032b2688909a1621aa8ae1397ee0c785423b6455
+X-Patchwork-Hint: ignore
+Message-Id: <20250430213238.1041F8645D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wireshark: security bump to v4.2.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,78 +58,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The 'bird' package with only the `BR2_PACKAGE_BIRD_BFD=y` protocol
-enabled fails to build with the following error
+commit: https://git.buildroot.net/buildroot/commit/?id=032b2688909a1621aa8ae1397ee0c785423b6455
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-```
-bison  -Dparse.lac=full -Dparse.error=verbose -dv -pcf_ -b obj/conf/cf-parse obj/conf/cf-parse.y
-proto/bfd/config.Y:204.27-33: error: symbol 'ADDRESS' is used, but is not defined as a token and has no rules
-  204 |  | bfd_show_sessions_args ADDRESS net_or_ipa { net_copy(&($$->address...
-      |                           ^~~~~~~
-```
+This fixes the following CVE:
 
-The `ADDRESS` token is defined only when certain protocols (e.g. OSPF,
-RIP, RPKI, or BGP) are enabled. As a result, builds including any of
-these protocols do not encounter the issue.
+- CVE-2025-1492: The Bundle Protocol and CBOR dissectors could crash
 
-This patch backports upstream commits that define the `ADDRESS` token
-for the BFD protocol.
+    It may be possible to make Wireshark crash by injecting a malformed
+    packet onto the wire or by convincing someone to read a malformed
+    packet trace file.
 
-Fixes: https://autobuild.buildroot.org/results/68c/68c5dd84585a7018ad57ea3e7134748c08858ef7/
+See https://www.wireshark.org/security/wnpa-sec-2025-01
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...BFD-Fix-missing-keyword-declarations.patch | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/bird/0002-BFD-Fix-missing-keyword-declarations.patch
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/bird/0002-BFD-Fix-missing-keyword-declarations.patch b/package/bird/0002-BFD-Fix-missing-keyword-declarations.patch
-new file mode 100644
-index 0000000000..29ec8abf7b
---- /dev/null
-+++ b/package/bird/0002-BFD-Fix-missing-keyword-declarations.patch
-@@ -0,0 +1,31 @@
-+From e5b582868c5fa7e185a12023784adc8df7b8c7a2 Mon Sep 17 00:00:00 2001
-+From: Ondrej Zajicek <santiago@crfreenet.org>
-+Date: Thu, 9 Jan 2025 00:30:37 +0100
-+Subject: [PATCH] BFD: Fix missing keyword declarations
-+
-+Some keywords were missing for BFD-only build.
-+
-+Upstream: https://gitlab.nic.cz/labs/bird/-/commit/c386369645e584facaad88ec292f2fe0bc70d974
-+[tperale: backport v2.15.1]
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ proto/bfd/config.Y | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/proto/bfd/config.Y b/proto/bfd/config.Y
-+index 1a7474b0..70b09ad8 100644
-+--- a/proto/bfd/config.Y
-++++ b/proto/bfd/config.Y
-+@@ -21,8 +21,8 @@ extern struct bfd_config *bfd_cf;
-+ 
-+ CF_DECLS
-+ 
-+-CF_KEYWORDS(BFD, MIN, IDLE, RX, TX, INTERVAL, MULTIPLIER, PASSIVE,
-+-	INTERFACE, MULTIHOP, NEIGHBOR, DEV, LOCAL, AUTHENTICATION,
-++CF_KEYWORDS(BFD, MIN, IDLE, RX, TX, INTERVAL, MULTIPLIER, PASSIVE, ADDRESS,
-++	INTERFACE, MULTIHOP, NEIGHBOR, DEV, ALL, LOCAL, AUTHENTICATION,
-+ 	NONE, SIMPLE, METICULOUS, KEYED, MD5, SHA1, IPV4, IPV6, DIRECT,
-+ 	STRICT, BIND)
-+ 
-+-- 
-+2.49.0
--- 
-2.49.0
-
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 642bc5866d..8b3245551a 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.2.9.txt
+-sha1  d1abbe110451dab9e57c9ee1fe0892e0d6a7d515  wireshark-4.2.9.tar.xz
+-sha256  62c2b6652d7f9a50668867bd57b21609c9a9b6950f26e7f30a24b2de0e72ded3  wireshark-4.2.9.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.2.11.txt
++sha1  f4e908e73ab90982e7f712e0a9b5f4cce85ca058  wireshark-4.2.11.tar.xz
++sha256  dd80f30e9853105dacb5357e5832d960437160bbb4b147e8f1a7ead168afaa18  wireshark-4.2.11.tar.xz
+ 
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index bade68f258..72415448c4 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRESHARK_VERSION = 4.2.9
++WIRESHARK_VERSION = 4.2.11
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
