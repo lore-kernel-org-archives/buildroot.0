@@ -4,74 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3A43C369D9
-	for <buildroot@archiver.kernel.org>; Wed, 30 Apr 2025 15:15:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD184C3ABA9
+	for <buildroot@archiver.kernel.org>; Wed, 30 Apr 2025 17:21:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75045402FD;
-	Wed, 30 Apr 2025 15:15:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6717340D3E;
+	Wed, 30 Apr 2025 17:21:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k2ik-DnAaJJ9; Wed, 30 Apr 2025 15:15:54 +0000 (UTC)
+ id mSZBYA-ajGZJ; Wed, 30 Apr 2025 17:21:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AD4CD40B45
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9300640D61
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AD4CD40B45;
-	Wed, 30 Apr 2025 15:15:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5B76FE4
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 15:15:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9300640D61;
+	Wed, 30 Apr 2025 17:21:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C346236
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 17:21:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4263980E95
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 15:15:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6E95182013
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 17:21:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ORsKfRj--6Ft for <buildroot@buildroot.org>;
- Wed, 30 Apr 2025 15:15:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.249;
- helo=mslow3.mail.gandi.net; envelope-from=francois.foltete@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 483DB80C75
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 483DB80C75
-Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 483DB80C75
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 15:15:52 +0000 (UTC)
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by mslow3.mail.gandi.net (Postfix) with ESMTP id 1CCA75857E6
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 15:00:57 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 83B0743A3F;
- Wed, 30 Apr 2025 15:00:51 +0000 (UTC)
-Message-ID: <778708a8-e1c9-4f09-8c93-4349f53d401c@bootlin.com>
-Date: Wed, 30 Apr 2025 17:00:51 +0200
+ id YhjihvL6NqIY for <buildroot@buildroot.org>;
+ Wed, 30 Apr 2025 17:21:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::1136; helo=mail-yw1-x1136.google.com;
+ envelope-from=josephzik@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8490D81F8B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8490D81F8B
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com
+ [IPv6:2607:f8b0:4864:20::1136])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8490D81F8B
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 17:21:32 +0000 (UTC)
+Received: by mail-yw1-x1136.google.com with SMTP id
+ 00721157ae682-703f3830906so63207b3.3
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 10:21:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1746033691; x=1746638491;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=5XRqFGwS5d0y0Aj1fWOY8XFttT9DPJoX6rtuh5YLKKI=;
+ b=fgpNQ0fLfflOIRAhfjy9Ok5knrwFQDdeETdClXvIec+rhlbmo04eroJE60iq30QlHV
+ F/ex5e6ShRwzzlpcsmckT/8F9RNkJYeJFp/l64OtbhhhpRRzjHlYmkHYW5Pbtaw0D7aW
+ EyIncSq3H9hjn34FzvOx9EPEr7tNlsAs8gFBqra17AB30nO315vEOO8SHS7E52YPm9MW
+ AApp3PuLKo3X9cLc6I+I8W1d0QTlog9vNFA5VIUHIjTQepkS3wByVb6Dp4wLuw006RRJ
+ EI6EQc0Ran2f0Nhc6lZs/r0OXQuDXBxcKf6+DeLLx01J/G389DeJwh1IzJGks45pnEii
+ +IMw==
+X-Gm-Message-State: AOJu0Yy88uy6j/7BsdgcHiaGxRzeeBKguEJcaFUxcYTiKr8sABcZxZAx
+ 80hSFcKvk6KMEJuy7rDCw9IyUM712a8w/wfe4DopYIlPKVzD1/Y8668SD+95jQ4Ydy2R6E9+5i3
+ HtZIpZnM+9mKXjHo3ZC9LqVMf66A=
+X-Gm-Gg: ASbGncuXVmcwsA6v11brADfDmoyHiDgndXtcla3dOYmHKxFDjOYhoCUuG6kyZkjw0tS
+ QqaaFIsv4E4fhobhdaacbe6R99PYV+PwIEmVr+WjZIzltgBbhq9Fu/oTPzoyXF0zIdaBUQPSZfM
+ PIpfQVeQuSQG6E79pvXgQ1
+X-Google-Smtp-Source: AGHT+IFI1HwrxhFgP7yAArBzU5l2Jv21/8gVTcCp91yCLI0u/or4hPJQO4dJMfSq3pwCAVQKKqT125KVhKiOlqLfStM=
+X-Received: by 2002:a05:690c:81:b0:700:a4e1:630e with SMTP id
+ 00721157ae682-708b7015005mr10206287b3.0.1746033690966; Wed, 30 Apr 2025
+ 10:21:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US, fr
-To: Joseph Zikusooka <josephzik@gmail.com>
-Cc: buildroot@buildroot.org, thomas.petazzoni@bootlin.com
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvieejtddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfvvefhufgtgfesthekredttddvjeenucfhrhhomhephfhrrghnpohoihhsucfhohhlthosthgvuceofhhrrghntghoihhsrdhfohhlthgvthgvsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegvdefteevueelteefudduteekkefhtdetvdeuveeihfethfeuhfffieefgeelvdenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghloheplgduledvrdduieekrddtrddvgeefngdpmhgrihhlfhhrohhmpehfrhgrnhgtohhishdrfhholhhtvghtvgessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopehjohhsvghphhiiihhksehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomh
-X-GND-Sasl: francois.foltete@bootlin.com
+References: <778708a8-e1c9-4f09-8c93-4349f53d401c@bootlin.com>
+In-Reply-To: <778708a8-e1c9-4f09-8c93-4349f53d401c@bootlin.com>
+From: Joseph Zikusooka <josephzik@gmail.com>
+Date: Wed, 30 Apr 2025 20:21:18 +0300
+X-Gm-Features: ATxdqUEA4pANcaK1JDGqUS_nLCqL-_uMh8Bc0y5XT2XOH3mb1FWiVzi_IkjA6mg
+Message-ID: <CAPWx8vtMMacV-dMN86T=oi0+5nnjavWmktzn11sb6v+2CaVxTA@mail.gmail.com>
+To: =?UTF-8?B?RnJhbsOnb2lzIEZvbHTDqnRl?= <francois.foltete@bootlin.com>
+Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1746025251;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=nZoJrHM22I/qZgCGiYunwQpJbVpQFtqi7mV0h9+zeUk=;
- b=CFAAqanoY4zdkZrnk2aQhkxBLDwJt1XFABDDgnuf4kVrX/ZoGz+5CgdSU/EgRuSDSWyjFH
- 2OmRm1/fB1cQGO5KjUbCudd2T2Xv4ncfjxd/qZpg2HorDO5sT65S2Tt/zLbVQYr9Rn9LRG
- uw3O1OqlOhGE7roF+efwYJepDHA6+mJgfMEDULxZgmt7LYxIfKM8Yt2cAi9YMzIgvOD6Tw
- PIP+xM0/f5BHkOx+SKbQdoT+JXnJX/KeTG17CpanA4NQuIsS3OFXoDH8FhPUY7FnQuSXn9
- 28RtMN0uJcNc2K1CYS/sVFeRPPErO5DBsIl1K+H78RI4eLRR9I6XnY+ZkaoiSQ==
+ d=gmail.com; s=20230601; t=1746033691; x=1746638491; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=5XRqFGwS5d0y0Aj1fWOY8XFttT9DPJoX6rtuh5YLKKI=;
+ b=Kzm54OgDyIR5IvAhIkqiz4AnEEnHQxKShUZxrO6Lyz0AhwR5f2GzDvayM9BcPtbDku
+ 9pxNm8JMjB3nJ4mT/l/m2RCJmioG7AUBk82yc2785i7KMU4hKryOUihQLX24n+40L1Tt
+ mVPWONp+5FddbCEzl6lEYyRc+yl67XZFmaY0G63OuCRRobLOJn8Te7g22O+TiYxS2hTr
+ FeRRJMbVT2jOj9vcZ6D0qaWpe473nILr3gdYPW5QLrJQglE5y7qbJpWqhXigchxQBnpb
+ 7uvNOXuPG5tjRGqfD6GY9oBtQ3cJot04T/j9ZcZ+E1AanbotyV3Gx5TQNX4dYbyyXKWQ
+ wAXA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CFAAqano
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Kzm54OgD
 Subject: Re: [Buildroot] [PATCH] package/m4: fix build failure with gcc 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -84,18 +102,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Fran=C3=A7ois_Folt=C3=AAte_via_buildroot?=
- <buildroot@buildroot.org>
-Reply-To: =?UTF-8?B?RnJhbsOnb2lzIEZvbHTDqnRl?= <francois.foltete@bootlin.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: multipart/mixed; boundary="===============0531896306697236651=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSm9zZXBoLAoKdGhhbmtzIGZvciB0aGUgcGF0Y2gsIGl0IHdvcmtlZCBmb3IgbWUuCgpU
-ZXN0ZWQtYnk6IEZyYW5jb2lzIEZvbHRldGUgPGZyYW5jb2lzLmZvbHRldGVAYm9vdGxpbi5jb20+
-CgotLSAKRnJhbsOnb2lzIEZvbHTDqnRlLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJu
-ZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+--===============0531896306697236651==
+Content-Type: multipart/alternative; boundary="000000000000ea87b70634022514"
+
+--000000000000ea87b70634022514
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Glad it worked for you - Thanks for letting me know!
+
+Joseph Zikusooka (ZIK)
+
+On Wed, Apr 30, 2025, 6:00 PM Fran=C3=A7ois Folt=C3=AAte <francois.foltete@=
+bootlin.com>
+wrote:
+
+> Hello Joseph,
+>
+> thanks for the patch, it worked for me.
+>
+> Tested-by: Francois Foltete <francois.foltete@bootlin.com>
+>
+> --
+> Fran=C3=A7ois Folt=C3=AAte, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+
+--000000000000ea87b70634022514
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto"><div>Glad it worked for you - Thanks for letting me know!=
+</div><div><br></div><div data-smartmail=3D"gmail_signature"><div dir=3D"lt=
+r">Joseph Zikusooka (ZIK)</div></div></div><br><div class=3D"gmail_quote gm=
+ail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">On Wed, Apr 30, =
+2025, 6:00 PM Fran=C3=A7ois Folt=C3=AAte &lt;<a href=3D"mailto:francois.fol=
+tete@bootlin.com">francois.foltete@bootlin.com</a>&gt; wrote:<br></div><blo=
+ckquote class=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #c=
+cc solid;padding-left:1ex">Hello Joseph,<br>
+<br>
+thanks for the patch, it worked for me.<br>
+<br>
+Tested-by: Francois Foltete &lt;<a href=3D"mailto:francois.foltete@bootlin.=
+com" target=3D"_blank" rel=3D"noreferrer">francois.foltete@bootlin.com</a>&=
+gt;<br>
+<br>
+-- <br>
+Fran=C3=A7ois Folt=C3=AAte, Bootlin<br>
+Embedded Linux and Kernel engineering<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer noreferrer" target=3D"_bl=
+ank">https://bootlin.com</a><br>
+</blockquote></div>
+
+--000000000000ea87b70634022514--
+
+--===============0531896306697236651==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0531896306697236651==--
