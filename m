@@ -1,87 +1,100 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B39D2C369D9
-	for <buildroot@archiver.kernel.org>; Wed, 30 Apr 2025 20:06:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6E9BC369D9
+	for <buildroot@archiver.kernel.org>; Wed, 30 Apr 2025 20:42:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D9D182105;
-	Wed, 30 Apr 2025 20:06:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 648BF60A74;
+	Wed, 30 Apr 2025 20:42:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nqf70Il4ziX0; Wed, 30 Apr 2025 20:42:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCAC76088D
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCAC76088D;
+	Wed, 30 Apr 2025 20:42:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 07F60E4
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 20:42:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 050BC80E79
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 20:42:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j7xV-1p2Lh7g; Wed, 30 Apr 2025 20:06:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 415EF820FF
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 415EF820FF;
-	Wed, 30 Apr 2025 20:06:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id F07C4236
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 20:06:12 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D6889400EA
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 20:06:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 83jNZk04IQxI for <buildroot@buildroot.org>;
- Wed, 30 Apr 2025 20:06:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.235;
- helo=lelvem-ot02.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D1D2A40199
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1D2A40199
-Received: from lelvem-ot02.ext.ti.com (lelvem-ot02.ext.ti.com [198.47.23.235])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D1D2A40199
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 20:06:11 +0000 (UTC)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
- by lelvem-ot02.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 53UK69dY020507
- (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Wed, 30 Apr 2025 15:06:09 -0500
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
- by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 53UK69R5059679
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Wed, 30 Apr 2025 15:06:09 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 30
- Apr 2025 15:06:08 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 30 Apr 2025 15:06:08 -0500
-Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
- by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 53UK68Qd039910;
- Wed, 30 Apr 2025 15:06:08 -0500
-Date: Wed, 30 Apr 2025 15:06:08 -0500
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-CC: <buildroot@buildroot.org>, Anand Gadiyar <gadiyar@ti.com>, Xuanhao Shi
- <X15000177@gmail.com>, <linux-amarula@amarulasolutions.com>
-Message-ID: <20250430200608.y6l5qvlswb2cq6dp@bryanbrattlof.com>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
-References: <20250429222236.823478-1-dario.binacchi@amarulasolutions.com>
+ id Qxz0M2uQUA7T for <buildroot@buildroot.org>;
+ Wed, 30 Apr 2025 20:42:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E03C780DC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E03C780DC4
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E03C780DC4
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 20:42:15 +0000 (UTC)
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-39129fc51f8so165168f8f.0
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 13:42:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1746045733; x=1746650533;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=/vJP2jvuwb36ewnSZ/XowK6qJpOlIJJwHTIMgLjgplU=;
+ b=OcJLnNRhCd6/PReHrATcg74ENVHf+ihxAymRPxq21dVe89ku4ev64OALHTSgurZpW9
+ DDvMd/pg7Ps4yqiyoj2vfqs2mLCHx/lmmMGhjUXgug05hUTRtIfNGZ/bJg+kutHz32Bw
+ 6quX+151p6UadOaHCVQ9rS8YNkGZqGVL8NfB0YBTzkgEBtfMQhdzMMcM44NhrZSkaSVM
+ Z8a51J02pc5YqORvmT4CKeDu6C0AResOKCzAfOYKi/g7xvwFAj/29n0TPiDhyflxrnji
+ ZsMf3kGAMlcsoQyVOT3UYcXroYW2CP0lIQ5ND7Y2X2Fl+jtBG1hzuv+wFGJEWsKgZjXG
+ AwtA==
+X-Gm-Message-State: AOJu0YzO+IUE3y/S02/Aox1LvcjdAsSAhW/tpfljkyu26eZ0eYoWsi1o
+ gEGX1dNLsFmllQjlKmMeAiy3pxImxKb1ka/b2wiPAo4PpqaYRk7L2chr2BX2IZtrpxDoGYQp0A2
+ lXoU=
+X-Gm-Gg: ASbGncsvkW+wNqazuiQfK4BUhQ37q0Xi2Hp2Q59uFD+Is9N94U1MSj0bgJs2a6D1kbC
+ QXwgD1/Ou3urgQTh1+gOn2XVmw7ag9at6BqC9y3foJ5xtGbSGk/xpFmhlRVum6okSXpiflqEXNz
+ EkksXAUy79GUrr5ZMyPC5fRZCqnHFuTT5n5yNTnW+6naJqsMcQtHPZkME7urfmpd1ZY1opccCwc
+ 5MezMMNY/QxR2x4zlVqUT/rkfIyReIB/Ie9pbxX3pCgdXV5t6EQE+A1xLile5LwGbLiZLAUD8GT
+ ubHyMQjdxIpCZKzY0COOD2zL0gIyzdfW6lrjHDgjY6J4E7CDX8Bd/3k=
+X-Google-Smtp-Source: AGHT+IG5LPEUPTa/7spxKpIELBo72e/29xd1d50+bxlvsmfbIHCjs2ZtmotPxZMGOt25wDqGrELQSQ==
+X-Received: by 2002:a5d:5c84:0:b0:39c:1257:ccae with SMTP id
+ ffacd0b85a97d-3a08f7b7c0bmr4465998f8f.57.1746045733067; 
+ Wed, 30 Apr 2025 13:42:13 -0700 (PDT)
+Received: from localhost.localdomain ([79.132.233.61])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3a073ca556bsm18043816f8f.37.2025.04.30.13.42.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 30 Apr 2025 13:42:12 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: =?UTF-8?q?Adrien=20Gallou=C3=ABt?= <adrien@gallouet.fr>,
+ Thomas Perale <thomas.perale@mind.be>
+Date: Wed, 30 Apr 2025 22:41:37 +0200
+Message-ID: <20250430204137.1071918-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20250429222236.823478-1-dario.binacchi@amarulasolutions.com>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1746043569;
- bh=9IzHnG0zJ01vQ+u1Yh9A9dSMRLUV0Ll/hH8SXFsVjoM=;
- h=Date:From:To:CC:Subject:References:In-Reply-To;
- b=ikeyHkgvu4ZpfO/5cNYFzZqle0Zl5QtDRDV8pK/mNNrdu7lIku+VfR4VMQSnoX/aY
- 7pEUXdx0J+GkkCHdcnhTiKPX5JGHNVjZUFrH0/JXmGRsNZoURN5XT0TeJtFXxqSK8k
- gmVjUXD/lGFMJFFKZaFb8d1zSxTAkhrJYOuTWEH0=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=mind.be; s=google; t=1746045733; x=1746650533; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=/vJP2jvuwb36ewnSZ/XowK6qJpOlIJJwHTIMgLjgplU=;
+ b=L+XagcyQ9+yq5B3SWl8gEsbBRtc1n7V9c1QfeU4KhKDRtMKK8I/H4XIk+apwMASqrv
+ cp8cndhgSLkErG0KsNjQn3AgACzYx/S0pfOv2LPt4YPVIy8pr/ZNwJSn4BE7SoYhOFOf
+ 841KCTFK/rL4LZQ0OCnmCJpkB5fJ27UO+m3leJaUwas3Hi0kKx1qElF+fFK32r74u8f0
+ mmU1em8zvYOlFb5c1t0ddSgQc3ig0uyiGcGKD2kv2DbcidxiDLwW1lfJEFkr90qJbEZV
+ ZeTI4HCpX8t4cuZ3IHY456PRTzM3Hzkjnmm2n0d+yBXVJ3wTkbiAjrXbui2TyIWy9Amx
+ Kgww==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=ti.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=ikeyHkgv
-Subject: Re: [Buildroot] [PATCH 1/1] boot/ti-k3-boot-firmware: bump to
- version 11.00.11
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=L+XagcyQ
+Subject: [Buildroot] [PATCH 1/1] package/bird: fix build failure with bfd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -93,58 +106,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
-Reply-To: Bryan Brattlof <bb@ti.com>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On April 30, 2025 thus sayeth Dario Binacchi:
-> Release-notes:
-> https://git.ti.com/cgit/processor-firmware/ti-linux-firmware/tag/?h=11.00.11
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+The 'bird' package with only the `BR2_PACKAGE_BIRD_BFD=y` protocol
+enabled fails to build with the following error
 
-Reviewed-by: Bryan Brattlof <bb@ti.com>
+```
+bison  -Dparse.lac=full -Dparse.error=verbose -dv -pcf_ -b obj/conf/cf-parse obj/conf/cf-parse.y
+proto/bfd/config.Y:204.27-33: error: symbol 'ADDRESS' is used, but is not defined as a token and has no rules
+  204 |  | bfd_show_sessions_args ADDRESS net_or_ipa { net_copy(&($$->address...
+      |                           ^~~~~~~
+```
 
-I'll have to ask around internally if someone got anywhere with finding 
-a better way of doing this. The TI firmware needed for U-Boot are not 
-updated this often but because it's based off linux-firmware we add a 
-weekly tag to it to keep everything in sync.
+The `ADDRESS` token is defined only when certain protocols (e.g. OSPF,
+RIP, RPKI, or BGP) are enabled. As a result, builds including any of
+these protocols do not encounter the issue.
 
-~Bryan
+This patch backports upstream commits that define the `ADDRESS` token
+for the BFD protocol.
 
-> ---
->  boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash | 2 +-
->  boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
-> index d9cb66cd6a27..571bbf121949 100644
-> --- a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
-> +++ b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
->  sha256  ab20ffbe7bba7e94be246b3417d33a914b3f07c16c47ef5a7f7602349a666a61  LICENSE.ti
-> -sha256  884c454b1a518e6d31304acb201493156685fb8ff111383c842bb292a1b35c9b  ti-linux-firmware-11.00.10.tar.xz
-> +sha256  f9e09b84e206d605a9fb5691a325dcd4a7d6a3e6bf70a69cbc169d1a5c617804  ti-linux-firmware-11.00.11.tar.xz
-> diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
-> index e04165edd1e0..117c0a9a5ade 100644
-> --- a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
-> +++ b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -TI_K3_BOOT_FIRMWARE_VERSION = 11.00.10
-> +TI_K3_BOOT_FIRMWARE_VERSION = 11.00.11
->  TI_K3_BOOT_FIRMWARE_SITE = https://git.ti.com/cgit/processor-firmware/ti-linux-firmware/snapshot
->  TI_K3_BOOT_FIRMWARE_SOURCE = ti-linux-firmware-$(TI_K3_BOOT_FIRMWARE_VERSION).tar.xz
->  TI_K3_BOOT_FIRMWARE_INSTALL_IMAGES = YES
-> -- 
-> 2.43.0
-> 
+Fixes: https://autobuild.buildroot.org/results/68c/68c5dd84585a7018ad57ea3e7134748c08858ef7/
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ ...BFD-Fix-missing-keyword-declarations.patch | 31 +++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+ create mode 100644 package/bird/0002-BFD-Fix-missing-keyword-declarations.patch
+
+diff --git a/package/bird/0002-BFD-Fix-missing-keyword-declarations.patch b/package/bird/0002-BFD-Fix-missing-keyword-declarations.patch
+new file mode 100644
+index 0000000000..29ec8abf7b
+--- /dev/null
++++ b/package/bird/0002-BFD-Fix-missing-keyword-declarations.patch
+@@ -0,0 +1,31 @@
++From e5b582868c5fa7e185a12023784adc8df7b8c7a2 Mon Sep 17 00:00:00 2001
++From: Ondrej Zajicek <santiago@crfreenet.org>
++Date: Thu, 9 Jan 2025 00:30:37 +0100
++Subject: [PATCH] BFD: Fix missing keyword declarations
++
++Some keywords were missing for BFD-only build.
++
++Upstream: https://gitlab.nic.cz/labs/bird/-/commit/c386369645e584facaad88ec292f2fe0bc70d974
++[tperale: backport v2.15.1]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ proto/bfd/config.Y | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/proto/bfd/config.Y b/proto/bfd/config.Y
++index 1a7474b0..70b09ad8 100644
++--- a/proto/bfd/config.Y
+++++ b/proto/bfd/config.Y
++@@ -21,8 +21,8 @@ extern struct bfd_config *bfd_cf;
++ 
++ CF_DECLS
++ 
++-CF_KEYWORDS(BFD, MIN, IDLE, RX, TX, INTERVAL, MULTIPLIER, PASSIVE,
++-	INTERFACE, MULTIHOP, NEIGHBOR, DEV, LOCAL, AUTHENTICATION,
+++CF_KEYWORDS(BFD, MIN, IDLE, RX, TX, INTERVAL, MULTIPLIER, PASSIVE, ADDRESS,
+++	INTERFACE, MULTIHOP, NEIGHBOR, DEV, ALL, LOCAL, AUTHENTICATION,
++ 	NONE, SIMPLE, METICULOUS, KEYED, MD5, SHA1, IPV4, IPV6, DIRECT,
++ 	STRICT, BIND)
++ 
++-- 
++2.49.0
+-- 
+2.49.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
