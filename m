@@ -4,98 +4,103 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2925C369D9
-	for <buildroot@archiver.kernel.org>; Wed, 30 Apr 2025 12:21:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 491D2C3ABA9
+	for <buildroot@archiver.kernel.org>; Wed, 30 Apr 2025 13:01:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7BDE2402F3;
-	Wed, 30 Apr 2025 12:21:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CAA0B40484;
+	Wed, 30 Apr 2025 13:01:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zGgGrYQUhTzl; Wed, 30 Apr 2025 12:21:46 +0000 (UTC)
+ id JSqmi2W1MwiA; Wed, 30 Apr 2025 13:01:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B6773402FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03C33403EB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B6773402FD;
-	Wed, 30 Apr 2025 12:21:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1F38E943
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 12:21:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03C33403EB;
+	Wed, 30 Apr 2025 13:01:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 56DEDE4
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 13:01:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0564340162
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 12:21:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3DCB2608B7
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 13:01:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D2sMWykJ2bv2 for <buildroot@buildroot.org>;
- Wed, 30 Apr 2025 12:21:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52a; helo=mail-ed1-x52a.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E0B5F404CF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0B5F404CF
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com
- [IPv6:2a00:1450:4864:20::52a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E0B5F404CF
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 12:21:43 +0000 (UTC)
-Received: by mail-ed1-x52a.google.com with SMTP id
- 4fb4d7f45d1cf-5f861d16622so2753654a12.2
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 05:21:43 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HqGEIDM9nt-Z for <buildroot@buildroot.org>;
+ Wed, 30 Apr 2025 13:01:54 +0000 (UTC)
+Received-SPF: Permerror (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ envelope-from=amer.alshanawany@openpixelsystems.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AB58E60690
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB58E60690
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AB58E60690
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 13:01:51 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-43ce71582e9so53887285e9.1
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 06:01:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1746015701; x=1746620501;
+ d=1e100.net; s=20230601; t=1746018109; x=1746622909;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=WowrPBvc5IVDq9eOqpB1lSiRMaJ3g9UJH2dGJ5rFuAs=;
- b=jaUwgi9R72W6CUcB+pOm9nm/OiHIf7mBf4LNOVolUs852BRkZ1owmsDpZ3AiaMjzN8
- hg0R7fzSvK/k9tbOk5BD8ekPTmQ2Z6ymgf5M6Dt2TkVRATEn38u3e1F3rr0gF+NTnra4
- 90DkkbG0hvkVqCXiocm+o2gEbcJMokJ/8zBVpS/AMPDBX81aESdAMicPHrshcR6TOrOD
- JFUSGpeW9CZnpx6VIWJmRInCZA+DL/l14HMfzPMlB2NRKYji2mGP4Dww9tt7DzdziNuL
- h/MPUtvzBo4josTKlyUIuDvuiM5fhI5fgXTgm4ZV2wa6i4XCcmYQlkFFYQUpiyWB5rGa
- wA9Q==
-X-Gm-Message-State: AOJu0YxZI1YEvbVZSk4N2vlYXM+hG1emFU/dPopouWILQ1zFk8RRSWl2
- lVlwcKus8a+KgQYlYll0C6i3M9gl73ElTdG7lqDJiQ6cfW2tM/GyWv7olXBfGG/4BuhlZ1BUT7J
- z
-X-Gm-Gg: ASbGncsUJP51L9RlOw0vs7gfA6wjpyXHa/VYmVb8IYEC+NAuRwzcBDMsiV0tmqgowZz
- Cgw3kQfIx+WO6cdI14iIAMojV5l6o5GkQQ0hT2A00k8t57FzrYsokVisfRyVk98cjRq2JlViTIQ
- TGMN4bpwfLODDuC7jrVFe4+LAbTHtDW8YOqtaTC1HUEgU7Vn3cxv9ErdksMkpmbDkwfT93D85hR
- tnBCPK1OYw/lYZJ5r15GZx/94g2Jr43Yzxqc4WSUErG4mE7PpVBpGi/+C0NZg2rXagAaZf/XFYv
- ZHqB1/Z6CTlFVly8XFU9/QAZcqx/dFgA0Np7E8dy4TkZHcK4MaBJNVwRE5qC7/18bRpOix5QKGB
- qklKi
-X-Google-Smtp-Source: AGHT+IH8vvKvc88452DzJTvTtX1iUDlmnxhX/xCvWO7YEYtBIoxP6jGKE2kg8uETEGSimw5g4EdvUA==
-X-Received: by 2002:a17:907:6d15:b0:acb:4cd7:2963 with SMTP id
- a640c23a62f3a-acee241c417mr256414866b.33.1746015701430; 
- Wed, 30 Apr 2025 05:21:41 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.. ([2.196.42.66])
+ bh=IUCY3IAbBCHPMvYGgmlUj8KRvtmHPlhXYGiuoCFSPys=;
+ b=D+k1oDUjuBnItLnqDu8IDCHb5KQVtheIz45msKoRnTi30rpq1EiW9sy65kUMekuRHA
+ Njo0LF/mRFIVHHNjKsWvRRjkRGev/+WkNjx5/rqBdGCNq7bKbC26tevMJkZmXdYjLEJP
+ ldfkI5dK8HUsEAvbnVqhY+Bnjfrk1CFAr75hLbaFb/cyYWdNpG7hfWU0MqujYdb4AFHr
+ 6WsGPOPF/58usmqe4tPf49jRw/HaQYHq1d1oSzTD0tDB3MdIkzBTNZ3/fTMEyrn6hI1A
+ 2kSuyvZhG59VF9Kxg2AlCHRF+Bun/U+M1Xy18aU/a+cR/4yslVOg3gKc5kJ4NVUPksrv
+ 64xA==
+X-Gm-Message-State: AOJu0Yy+Jxe6B8h1HbXRFne1M1Pq24PmgyO4D2SvVwP5J5gR/Ml4vQWZ
+ 4Wd/fg7VGvlR8dhc7itHEYMmVTSrY2pN7h4s+XCDofPOZVLeJqWKKuMlc5llG0HsgJLYEXEKWEV
+ LlmQ=
+X-Gm-Gg: ASbGncuMK3DtbTjOsNHBuMx4NocGSQnAyC8Q/2mznLqgg4pq8X9T+PhQfDZF43iuxGP
+ MD3rUuMIWvE6kFLjUDof1wUA15sT1SPXLEnjyI1DKMwjkpSNrgsAN/ojI+OlHmwuVajJh0ogWsH
+ fUOQPcuTS4PDpc2P8vnCVVkrxtBAAZrYRBuwCZwlVToXv0HrXndir0s874aFcRWBIfyKmpWX7L+
+ 8w2IJ5ylETp09AewEk8V6pOoB3v3Lw7i8dDd4PveprQg6rSmJbmObusx4ZiJsELO5IJoZGeMBrQ
+ Xvdx3rtA2OvOIBbcs/qgsEuje59mOcM+4wMHPy87opYEx2FTH2R0kxYS7iTNnaJwx53RNfe7HMR
+ pjvLomi2yt1a1nsiZ3ioj9iK9li5vBuiIukFLAIp4vajbVM2EuIKlexmYWA==
+X-Google-Smtp-Source: AGHT+IEtJmm9zli4mQjfBaFYTZYu07H3WQsQmK+AOWnt2VV4OrGcAgq3OrsH1ykOg6bxyP7tThAD7A==
+X-Received: by 2002:a05:600c:35d2:b0:43c:fffc:786c with SMTP id
+ 5b1f17b1804b1-441b1f3ab0fmr23556005e9.19.1746018108760; 
+ Wed, 30 Apr 2025 06:01:48 -0700 (PDT)
+Received: from ips5-amer.tailda1017.ts.net
+ (253.124-78-194.adsl-static.isp.belgacom.be. [194.78.124.253])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-ace6e41b2fcsm913975166b.26.2025.04.30.05.21.40
+ ffacd0b85a97d-3a073e46454sm17052344f8f.78.2025.04.30.06.01.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 30 Apr 2025 05:21:40 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ Wed, 30 Apr 2025 06:01:48 -0700 (PDT)
+From: Amer Alshanawany <amer.alshanawany@openpixelsystems.org>
 To: buildroot@buildroot.org
 Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
-Date: Wed, 30 Apr 2025 14:21:31 +0200
-Message-ID: <20250430122131.2795844-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+ Amer Alshanawany <amer.alshanawany@openpixelsystems.org>
+Date: Wed, 30 Apr 2025 15:01:42 +0200
+Message-ID: <20250430130142.47069-1-amer.alshanawany@openpixelsystems.org>
+X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1746015701; x=1746620501;
- darn=buildroot.org; 
+ d=openpixelsystems-org.20230601.gappssmtp.com; s=20230601; t=1746018109;
+ x=1746622909; darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=WowrPBvc5IVDq9eOqpB1lSiRMaJ3g9UJH2dGJ5rFuAs=;
- b=d05gDbfmeTkX3cGXb3bJSZ6+NGxuCyqcHLbZXzU/r+HYFZoTUrQ3kN20S9lggl00pL
- AkqZtS62MjW76Tb5ZIOyqAUn6znG4C7+qYZdYFNx3pK6VWQtc36ZMsCOxTHwqu70SSJV
- N4ZAK5p0bF5zK/VrcrEA+HduUzqW38HTaJmic=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=d05gDbfm
-Subject: [Buildroot] [PATCH 1/1] package/ufs-utils: bump to version 6.13.11
+ bh=IUCY3IAbBCHPMvYGgmlUj8KRvtmHPlhXYGiuoCFSPys=;
+ b=Jgs8R75xPUEdJURWFU+T59ogH3PDStIM2kKEq7t/BJiRZFfFbh83TCK5RS49j7jhgi
+ c1rTmUag2jqkUDIvuXp498qUf+vzJdwBF//Y2AI7opNxjAxoI5blpDBFACDMZivh591N
+ /pltgrXp/0wLsxRIED6nkg+qkshM9Y4HfqZ4oouZmcFnqQHcE3IMeNLspfpil1wV1B4r
+ PzkwJXN33dZ5+vycrAFjzqzHYhO6ilmyzovBAhTqQmnypx6neM13bqbcNBzZwcUQKS1F
+ frEfCWCDBNdO2ROFXo0tIgjQvov4QrfI47lYCyLtXvXtkHmg4RZkg7qlqHZgiStGBt9x
+ ACew==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openpixelsystems.org
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=openpixelsystems-org.20230601.gappssmtp.com
+ header.i=@openpixelsystems-org.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=Jgs8R75x
+Subject: [Buildroot] [PATCH 1/1] package/uuu: add target support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,39 +117,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/SanDisk-Open-Source/ufs-utils/releases/tag/v6.13.11
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Amer Alshanawany <amer.alshanawany@openpixelsystems.org>
 ---
- package/ufs-utils/ufs-utils.hash | 2 +-
- package/ufs-utils/ufs-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/Config.in     |  1 +
+ package/uuu/Config.in | 19 +++++++++++++++++++
+ package/uuu/uuu.mk    |  2 ++
+ 3 files changed, 22 insertions(+)
+ create mode 100644 package/uuu/Config.in
 
-diff --git a/package/ufs-utils/ufs-utils.hash b/package/ufs-utils/ufs-utils.hash
-index c6ef91a025b1..f825bf5af7c9 100644
---- a/package/ufs-utils/ufs-utils.hash
-+++ b/package/ufs-utils/ufs-utils.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  66259581b13e33edeccb08edd2389627121adf9b425ba4545f6a84d7292ef4fa  ufs-utils-4.13.5.tar.gz
-+sha256  e79c879a80936c497fd41a61b6da5e34fb848625453e3ca9e0f6e2398f3609bf  ufs-utils-6.13.11.tar.gz
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/ufs-utils/ufs-utils.mk b/package/ufs-utils/ufs-utils.mk
-index 504f87f375d6..60fb2f56ea26 100644
---- a/package/ufs-utils/ufs-utils.mk
-+++ b/package/ufs-utils/ufs-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/Config.in b/package/Config.in
+index 167965d64b..1730898247 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2809,6 +2809,7 @@ comment "Utilities"
+ 	source "package/tini/Config.in"
+ 	source "package/tmux/Config.in"
+ 	source "package/ttyd/Config.in"
++	source "package/uuu/Config.in"
+ 	source "package/which/Config.in"
+ 	source "package/wlr-randr/Config.in"
+ 	source "package/wtfutil/Config.in"
+diff --git a/package/uuu/Config.in b/package/uuu/Config.in
+new file mode 100644
+index 0000000000..bccb96bb13
+--- /dev/null
++++ b/package/uuu/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_UUU
++	bool "uuu"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR # libuuu
++	select BR2_PACKAGE_BZIP2
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBUSB
++	select BR2_PACKAGE_TINYXML2
++	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_ZSTD
++	help
++	  UUU (Universal Update Utility) is Freescale/NXP I.MX Chip
++	  image deploy tool. UUU is an evolution of MFGTools
++	  (aka MFGTools v3).
++
++	  https://github.com/nxp-imx/mfgtools
++
++comment "uuu needs a toolchain w/ C++, wchar"
++	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
+index 4683cbeec1..9c27c4c1d6 100644
+--- a/package/uuu/uuu.mk
++++ b/package/uuu/uuu.mk
+@@ -9,6 +9,7 @@ UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
+ UUU_SITE = https://github.com/nxp-imx/mfgtools/releases/download/uuu_$(UUU_VERSION)
+ UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
+ UUU_LICENSE_FILES = LICENSE
++UUU_DEPENDENCIES = bzip2 libusb openssl tinyxml2 zlib zstd
+ HOST_UUU_DEPENDENCIES = \
+ 	host-bzip2 \
+ 	host-libusb \
+@@ -17,4 +18,5 @@ HOST_UUU_DEPENDENCIES = \
+ 	host-zlib \
+ 	host-zstd
  
--UFS_UTILS_VERSION = 4.13.5
-+UFS_UTILS_VERSION = 6.13.11
- UFS_UTILS_SITE = $(call github,SanDisk-Open-Source,ufs-utils,v$(UFS_UTILS_VERSION))
- UFS_UTILS_LICENSE = GPL-2.0
- UFS_UTILS_LICENSE_FILES = COPYING
++$(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 -- 
-2.43.0
+2.49.0
 
 _______________________________________________
 buildroot mailing list
