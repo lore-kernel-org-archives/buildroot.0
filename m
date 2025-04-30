@@ -4,49 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10644C369DC
-	for <buildroot@archiver.kernel.org>; Wed, 30 Apr 2025 10:08:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2252BC369D9
+	for <buildroot@archiver.kernel.org>; Wed, 30 Apr 2025 10:08:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 88B7D817D3;
-	Wed, 30 Apr 2025 10:08:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA4508118A;
+	Wed, 30 Apr 2025 10:08:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ievwsyt32KED; Wed, 30 Apr 2025 10:08:24 +0000 (UTC)
+ id Jz6_jb0VyKcu; Wed, 30 Apr 2025 10:08:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FC59813AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 756D681187
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9FC59813AB;
-	Wed, 30 Apr 2025 10:08:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 74C28943
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 10:08:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 756D681187;
+	Wed, 30 Apr 2025 10:08:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DC9E5943
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 10:08:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B7D3813AB
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 10:08:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DA28A81495
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 10:08:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ld61wUuR2Qz6 for <buildroot@buildroot.org>;
- Wed, 30 Apr 2025 10:08:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7502E81187
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7502E81187
- for <buildroot@buildroot.org>; Wed, 30 Apr 2025 10:08:22 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C84386488; Wed, 30 Apr 2025 10:08:22 +0000 (UTC)
+ id q1YL0CmoT5Kw for <buildroot@buildroot.org>;
+ Wed, 30 Apr 2025 10:08:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B588E8118A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B588E8118A
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B588E8118A
+ for <buildroot@buildroot.org>; Wed, 30 Apr 2025 10:08:42 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 6D79519F5A7;
+ Wed, 30 Apr 2025 12:08:36 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 30 Apr 2025 12:08:36 +0200
+MIME-Version: 1.0
+Date: Wed, 30 Apr 2025 12:08:36 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Wed, 30 Apr 2025 12:05:17 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9c0eee07c7107fa2beb7644f4e3612d702b4588c
-X-Git-Newrev: 8e1ad23f2a43d860a27208c69d2e8f424324dd84
-X-Patchwork-Hint: ignore
-Message-Id: <20250430100822.6C84386488@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libxml2: security bump to version
+To: Christian Hitz <christian@klarinett.li>
+Cc: buildroot@buildroot.org, Christian Hitz <christian.hitz@bbv.ch>,
+ Pierre-Jean Texier <texier.pj2@gmail.com>
+In-Reply-To: <20250430080623.2391295-1-christian@klarinett.li>
+References: <20250430080623.2391295-1-christian@klarinett.li>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <2306451f32fd615e406aea5f3aca82d2@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1746007719;
+ bh=YQJnWZH9rYhNUCwAew6uQGwdsy3XWgYajKawQ9oDi00=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=JjqCsWUSZFx0szPhmAJ5SGqgJLg1Z+uyKZ0lDjyKDDfIOp/S90SvGjT+JZ8CSG2JN
+ 5q+FdZjPbp81VO7Euv43zv8JFVDYcuN8pv1z6umVvkXP1QZii1qVhSREiCUkLh+uTV
+ faz9/mSX9cgK1S7MDNoHhihhJ8S2wRAJJ98erkkKjWKoVubHC+JGovR5NtETvIEBTl
+ osk0eXTVrBevloOjwDuC/+Z6eUgpI2vzC2gg5JW/ry5Wc1cHcM7at9pmGcCg6SUspO
+ jHmSsEpA/dus2xk6fXhuKIawL+vY4zosAevzvKn8DAkagfsSbKYtqGHcX5vGtU+Vu4
+ xtI2MYhUONKGg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=JjqCsWUS
+Subject: Re: [Buildroot] [PATCH] package/libxml2: security bump to version
  2.13.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,61 +84,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e1ad23f2a43d860a27208c69d2e8f424324dd84
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 30/04/2025 10:06, Christian Hitz via buildroot wrote:
+> From: Christian Hitz <christian.hitz@bbv.ch>
+> 
+> Fixes the following security vulnerabilities:
+> 
+> [CVE-2025-32414] Buffer overflow when parsing text streams with Python 
+> API
+> https://gitlab.gnome.org/GNOME/libxml2/-/issues/889
+> 
+> [CVE-2025-32415] Heap-based Buffer Overflow in 
+> xmlSchemaIDCFillNodeTables
+> https://gitlab.gnome.org/GNOME/libxml2/-/issues/890
+> 
+> https://www.openwall.com/lists/oss-security/2025/04/17/3
+> 
+> Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
 
-Fixes the following security vulnerabilities:
-
-[CVE-2025-32414] Buffer overflow when parsing text streams with Python API
-https://gitlab.gnome.org/GNOME/libxml2/-/issues/889
-
-[CVE-2025-32415] Heap-based Buffer Overflow in xmlSchemaIDCFillNodeTables
-https://gitlab.gnome.org/GNOME/libxml2/-/issues/890
-
-https://www.openwall.com/lists/oss-security/2025/04/17/3
-
-For release notes since 2.13.6, see:
-https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.7.news
-https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.8.news
-
-Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
-[Julien: add links to release notes]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libxml2/libxml2.hash | 4 ++--
- package/libxml2/libxml2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
-index 88c7f5b9ff..3f53b51b33 100644
---- a/package/libxml2/libxml2.hash
-+++ b/package/libxml2/libxml2.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.6.sha256sum
--sha256  f453480307524968f7a04ec65e64f2a83a825973bcd260a2e7691be82ae70c96  libxml2-2.13.6.tar.xz
-+# From https://download.gnome.org/sources/libxml2/2.13/libxml2-2.13.8.sha256sum
-+sha256  277294cb33119ab71b2bc81f2f445e9bc9435b893ad15bb2cd2b0e859a0ee84a  libxml2-2.13.8.tar.xz
- # License files, locally calculated
- sha256  c99aae1afe013e50b8b3701e089222b351258043c3025b64053a233fd25b4be7  Copyright
-diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
-index 148fcd8762..789c6a297e 100644
---- a/package/libxml2/libxml2.mk
-+++ b/package/libxml2/libxml2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBXML2_VERSION_MAJOR = 2.13
--LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).6
-+LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).8
- LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
- LIBXML2_SITE = \
- 	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
