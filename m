@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F48CC3ABA3
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:11:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66CBEC3ABA3
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:11:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D076780A75;
-	Fri,  2 May 2025 11:11:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20FEF81ABB;
+	Fri,  2 May 2025 11:11:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 81ORM9bJDfQB; Fri,  2 May 2025 11:11:38 +0000 (UTC)
+ id b2nP43XNTQll; Fri,  2 May 2025 11:11:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAB5C83DF7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F3AC8112B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EAB5C83DF7;
-	Fri,  2 May 2025 11:11:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 066DF22A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F3AC8112B;
+	Fri,  2 May 2025 11:11:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1770F229
  for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E985F611FE
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13D4842113
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PBV6za5GWq2X for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n9Du1HrPnKrC for <buildroot@buildroot.org>;
  Fri,  2 May 2025 11:11:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CDB260B9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2431140E1E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3CDB260B9F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2431140E1E
  for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2BE69864AD; Fri,  2 May 2025 11:11:35 +0000 (UTC)
+ id 106C8863AE; Fri,  2 May 2025 11:11:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 1 May 2025 18:57:25 +0200
+Date: Thu, 1 May 2025 18:57:03 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 7ae0284847395f70d34ac45e5f55902bebd16bd5
-X-Git-Newrev: 071432a29e95896918b11fd548f94507a600cecb
+X-Git-Oldrev: 3815d578c5759fa824322ea3d95ad51b55ab888e
+X-Git-Newrev: b3e390bd2a5b7bb10598a5d61089a204a606a511
 X-Patchwork-Hint: ignore
-Message-Id: <20250502111135.2BE69864AD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/sysklogd: bump to
- v2.7.2
+Message-Id: <20250502111135.106C8863AE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/openvpn: security
+ bump version to 2.6.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,48 +66,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=071432a29e95896918b11fd548f94507a600cecb
+commit: https://git.buildroot.net/buildroot/commit/?id=b3e390bd2a5b7bb10598a5d61089a204a606a511
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-From https://github.com/troglobit/sysklogd/releases/tag/v2.7.2
+Fixes CVE-2025-2704.
 
- - logger: improved error handling for invalid arguments to -p and -o
- - Fix regression in v2.7.1,  allow '.' in tag names, eg. in.tftpd
- - Fix various typos in the documentation
+Release notes:
+https://sourceforge.net/p/openvpn/mailman/message/59169015/
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 81b049f829181b0bfef08db6f5c17e2482b4e5be)
+Changelog:
+https://github.com/OpenVPN/openvpn/blob/release/2.6/ChangeLog
+https://github.com/OpenVPN/openvpn/blob/release/2.6/Changes.rst
+
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 72657c6f57dd0c2c14cf2033a1e6c77fdc83ee8f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/sysklogd/sysklogd.hash | 4 ++--
- package/sysklogd/sysklogd.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/openvpn/openvpn.hash | 2 +-
+ package/openvpn/openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
-index 645bc6a0ae..c74d7f9ba6 100644
---- a/package/sysklogd/sysklogd.hash
-+++ b/package/sysklogd/sysklogd.hash
-@@ -1,4 +1,4 @@
--# Upstream .sha256 from https://github.com/troglobit/sysklogd/releases/tag/v2.7.1
--sha256  69944b2227647bf47ee01c9f482d19a79dbf2b53b8ce8ded0486b08db8c68c40  sysklogd-2.7.1.tar.gz
-+# Upstream .sha256 from https://github.com/troglobit/sysklogd/releases/tag/v2.7.2
-+sha256  bc410ca64551a11fac6518b418fb6b8afbd888a70af2c5eb353334a706727bca  sysklogd-2.7.2.tar.gz
- # Locally calculated
- sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index a3e27fd17b..baafc38083 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
+diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
+index 3c95ff4965..432b1c2afb 100644
+--- a/package/openvpn/openvpn.hash
++++ b/package/openvpn/openvpn.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking signature
+-sha256  1af10b86922bd7c99827cc0f151dfe9684337b8e5ebdb397539172841ac24a6a  openvpn-2.6.13.tar.gz
++sha256  9eb6a6618352f9e7b771a9d38ae1631b5edfeed6d40233e243e602ddf2195e7a  openvpn-2.6.14.tar.gz
+ sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
+diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
+index e484a4e80f..ce916dba04 100644
+--- a/package/openvpn/openvpn.mk
++++ b/package/openvpn/openvpn.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SYSKLOGD_VERSION = 2.7.1
-+SYSKLOGD_VERSION = 2.7.2
- SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
- SYSKLOGD_LICENSE = BSD-3-Clause
- SYSKLOGD_LICENSE_FILES = LICENSE
+-OPENVPN_VERSION = 2.6.13
++OPENVPN_VERSION = 2.6.14
+ OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
+ OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
+ OPENVPN_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
