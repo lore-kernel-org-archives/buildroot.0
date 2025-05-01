@@ -4,98 +4,99 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12F3CC3ABA3
-	for <buildroot@archiver.kernel.org>; Thu,  1 May 2025 07:38:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 465A0C3ABA3
+	for <buildroot@archiver.kernel.org>; Thu,  1 May 2025 08:09:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F94683DF4;
-	Thu,  1 May 2025 07:38:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD889838D3;
+	Thu,  1 May 2025 08:09:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kydXMizSOpgn; Thu,  1 May 2025 07:38:20 +0000 (UTC)
+ id f_y_sPPHbCmV; Thu,  1 May 2025 08:09:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CEB6783DF7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 23CD9838E6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CEB6783DF7;
-	Thu,  1 May 2025 07:38:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F90F113
- for <buildroot@buildroot.org>; Thu,  1 May 2025 07:38:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 23CD9838E6;
+	Thu,  1 May 2025 08:09:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2C1C022D
+ for <buildroot@buildroot.org>; Thu,  1 May 2025 08:09:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3D05E42445
- for <buildroot@buildroot.org>; Thu,  1 May 2025 07:38:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1299F838E6
+ for <buildroot@buildroot.org>; Thu,  1 May 2025 08:09:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RMarwYFgZT2R for <buildroot@buildroot.org>;
- Thu,  1 May 2025 07:38:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bsPsNC8d9isF for <buildroot@buildroot.org>;
+ Thu,  1 May 2025 08:09:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::534; helo=mail-pg1-x534.google.com;
+ client-ip=2607:f8b0:4864:20::62a; helo=mail-pl1-x62a.google.com;
  envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8285F42441
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8285F42441
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com
- [IPv6:2607:f8b0:4864:20::534])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8285F42441
- for <buildroot@buildroot.org>; Thu,  1 May 2025 07:38:19 +0000 (UTC)
-Received: by mail-pg1-x534.google.com with SMTP id
- 41be03b00d2f7-b1396171fb1so397466a12.2
- for <buildroot@buildroot.org>; Thu, 01 May 2025 00:38:19 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 492BA838D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 492BA838D3
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com
+ [IPv6:2607:f8b0:4864:20::62a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 492BA838D3
+ for <buildroot@buildroot.org>; Thu,  1 May 2025 08:09:29 +0000 (UTC)
+Received: by mail-pl1-x62a.google.com with SMTP id
+ d9443c01a7336-227d6b530d8so7039955ad.3
+ for <buildroot@buildroot.org>; Thu, 01 May 2025 01:09:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1746085098; x=1746689898;
+ d=1e100.net; s=20230601; t=1746086967; x=1746691767;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=gcNgOn0HxR+UF6GtNJPdlGOTWbk3+vZ4s/BkKgXZfgA=;
- b=jTF0R2atAecUCGJ9cbe9MQ7dYpjz05fKJaGqfEntdSj5zHnBhJI8bA86w0s5OcE9fI
- KDX9TUmSuEsl8varqvPiGT7Xa61mmGzDSn0fUeV0Lr1KsceYgOhDWzn0SpCgbaKaHnc9
- eMR1O1c7kxnsixOqeuTSqXoqQxIJBdXeDd3a5UpKIfCoNsLRyDzQija4Z1vrUd4fl0Dq
- VdGcroP7X1RvDXK6r7wp1VPmenfiJZlzLLNstomPqA/IpUIDZCmBN9xKayjmrhk78pIf
- fxgd5VYzawKxlBZSninFTf/Y4iwEeuzZskKyD6OBPOuCwltu/mLPh+dsTcom7UcLqRLE
- 2NrQ==
-X-Gm-Message-State: AOJu0Yy8GBU9++p7+5/O5ZBGrdDTtuTKxeuuQBCeyC/MOd3l6BDT/Ro3
- dOs0laXIz5I09i3B+ukJT5fMsfCe3+oSIheqsmBCl4uI6SCWwG8hPO1jCAz4
-X-Gm-Gg: ASbGncvJ/Hf26vFFYKxhLPgkI7MKs1wGvAM1XuphhN4fcE3lucIZBw46ovPMIrf/t8k
- 0wr2WvxzpwAN0RrP0n5CJagv7vx++3j0TOQbwpK7rrP0sEXFjfvEHrAIm67N57Ga8pSF+OTmRLK
- AaDll0TPDcDUND8t+ol10lj9AAaXociR7yqOvwdkSDABpYQiEqG8y4kNxFoYBTLQfTAW1A8IZ+X
- JkdTg96DGeBtTCo2+23J/9A/faNgPHd7bPcH6/NHYFJq2Mv1GHY6hvMmzpROKW2BQ0dIab4umnt
- rk8GPtpvEDYmkBGUvyrc9cLY8fKcYOl2OLst/wtmI+yRcdTB6drZnoyFs+o6kvDiZeBG0Bg+t2e
- CylGfZ2lXEFXOwXTtZKJzIlDSEVk=
-X-Google-Smtp-Source: AGHT+IFij7AN5yIJ1l+2v5CIyEF8CHSikGj05gycDvER9fYfkti9HWevXfAhZQ1c0z58FL5dZBJhcg==
-X-Received: by 2002:a17:90b:384b:b0:2fe:7f40:420a with SMTP id
- 98e67ed59e1d1-30a41e66d4cmr3081985a91.17.1746085097715; 
- Thu, 01 May 2025 00:38:17 -0700 (PDT)
+ bh=KYyKwNSco+pOskCgkX7vBnnq3KCKREZ5YfiCrzwSHXg=;
+ b=W3A8nQgFXWhq0KCx2hyzGkNx+YSY0DtQjgqKofFfnRenY+l5V6MTCyE0h6y+adevpr
+ MlT5SFdZc94RSXQW/yoeyN0hMx5QIb5ETkT+1gs0T6D4FEmHsIlk3Xzqj4sJ21VmnspW
+ iklr/q8pFO6HnsghHaiCEr9HkKsxqoGD3/t3auwpUtyN4YLqkf/SeRGI08Du9WpPX6vN
+ Zb3L04ffr+33p93JZ3OR9X/BnVoW81O8CQMwjotNNYPGW9ebRffIDkHO6pMC1Q24NK74
+ 5Qg7NZysk2ieavuoa7neGtXsOFprupFxJvON+RT+GE/K3XJi7P4gwdYW0DedOylbgspf
+ oyCg==
+X-Gm-Message-State: AOJu0YzSDAv5F7/FfewM12HhBLSlKDngStgSeWphlSrvj2wnD7S+857N
+ AOyAtxG1Vqu+BMAqWBfSeyOzmZv8w4hnXtEwwZI5y6hhHVFb2GjTt/snoLBp
+X-Gm-Gg: ASbGncs5ib+16Onch7sR4kDaJsh0tqFgfiWeD5BNtH9fciHI9coFXifmVwDiKrfNosW
+ kDqoGrljCu1BfTRWYDewarkAk+Xx8efuO1LV/aoZSzDff+GNBrhGKUUDo4aQW+APXr/kuP96kDN
+ Gmjst4kqbTwvsauxA3iQ+LbTCP4oKzJCgTuNN7S7/G7Jo+xA3QjbvRHjKtBqUl3w1bhve+VzSfa
+ XKz2j5J6OBqriGV69ecRryovzeHMjFvcoO6jygKoAMbD1tE30D8Oji6j83dK1mpZgRudyo0OCap
+ +U8zRMRyfdvDBc6Ryg7pR5HsvMF3jyzAbXAg3ezSeImjp2NkzWT8eApeRXbMCJVrrOltTBTJu1v
+ YgN5i8OGo2YXR3jlj3uM6De9+pvM=
+X-Google-Smtp-Source: AGHT+IGeeML9P2Tz0n73NafMx+TNqKCzK4gi1UgtwGr4NwSTV+jnRuuZWPbd6fN/vPQfKQ87dggK9A==
+X-Received: by 2002:a17:902:d2d2:b0:221:7eae:163b with SMTP id
+ d9443c01a7336-22e0864a4e9mr24967385ad.46.1746086967539; 
+ Thu, 01 May 2025 01:09:27 -0700 (PDT)
 Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
  [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-22e0bb04d25sm1363795ad.44.2025.05.01.00.38.16
+ d9443c01a7336-22e0bc6d6b1sm1671475ad.134.2025.05.01.01.09.26
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 01 May 2025 00:38:17 -0700 (PDT)
+ Thu, 01 May 2025 01:09:27 -0700 (PDT)
 From: Kadambini Nema <kadambini.nema@gmail.com>
 To: buildroot@buildroot.org
-Cc: Kadambini Nema <kadambini.nema@gmail.com>
-Date: Thu,  1 May 2025 00:37:27 -0700
-Message-Id: <20250501073727.12431-1-kadambini.nema@gmail.com>
+Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
+ Kadambini Nema <kadambini.nema@gmail.com>
+Date: Thu,  1 May 2025 01:09:24 -0700
+Message-Id: <20250501080924.18726-1-kadambini.nema@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1746085098; x=1746689898; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1746086967; x=1746691767; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=gcNgOn0HxR+UF6GtNJPdlGOTWbk3+vZ4s/BkKgXZfgA=;
- b=KdkdmZv3EMSqUAh4UVSXVUKDu+4LaZB5DN/7A3letxLZQF7uFjge3+CYXjUZjezz2B
- ZM2sWHDmQ2WpsACKQxNoJ3c4HILs8RRIuKMhBwdCFHU9+1U8MUyJHG5x5nfEphIiXOeG
- sfgE8QW6GgHShzlPR5l36hePLVbk9N/LKMv+IfLV/W/QZFI20+D4+cyERFt0SCjpAdXN
- yRMcHeTbXw0pPG+RSgGGRFo4+Iu9CZL9+pGSZE3t97sI9e74qVOyi3VP5TPCLfgaUMZ4
- tnsValf1vEHyO/EpUHp8NFDea5PpxL+OpVO+Wq8zwlf9PrpsxIBCbTM2AagJSyHRD47b
- nf/g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=KYyKwNSco+pOskCgkX7vBnnq3KCKREZ5YfiCrzwSHXg=;
+ b=UWSoVTmJZa25ZajVwmCvhbjU0FnNYkj9dBhsvwNUsbFCIQ7cziyKs60kdXK+zjL8iI
+ yW0Ds1oQ62h074ldzgixh3yWs03txlRn1FHpuD9PqkbsPsbzjUjIUJe5L+QadPjWATH3
+ 48padV+LoEtYqu+DJWwsSW7xMnVJYlSbXX0PxsJNZBY+WBmVavV9CzUm8L7nLHSsmQV0
+ Wh2PtK8w9OYfRESsrdKMdPAv9Lg4TysAmRh5TgFEvgfMSnTyUFnZ79pNc/vJf/Z4t+95
+ Mnx+r+rkoz/uF6apbXaZKpBlWKwghCDx5ldP8gmAEgWdcrsazFcAFRPawuqJVI5Dp8gE
+ 5Now==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=KdkdmZv3
-Subject: [Buildroot] [PATCH 1/1] package/hwdata: bump version to 0.394
+ header.s=20230601 header.b=UWSoVTmJ
+Subject: [Buildroot] [PATCH 1/1] package/libusb: bump version to 1.0.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,40 +114,39 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://github.com/vcrhonek/hwdata/releases/tag/v0.394
+https://github.com/libusb/libusb/releases/tag/v1.0.28
 
 Changelog:
-https://github.com/vcrhonek/hwdata/compare/v0.392...v0.394
+https://github.com/libusb/libusb/blob/a61afe5f75d969c4561a1d0ad753aa23cee6329a/ChangeLog#L4
 
 Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 ---
- package/hwdata/hwdata.hash | 2 +-
- package/hwdata/hwdata.mk   | 2 +-
+ package/libusb/libusb.hash | 2 +-
+ package/libusb/libusb.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
-index 9c8d37323d..eb4ecc191d 100644
---- a/package/hwdata/hwdata.hash
-+++ b/package/hwdata/hwdata.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  1f472d8f2ec824d4efe6a75480767c4ce240fa5d91b6428d9f8775035da3ba1f  hwdata-0.392.tar.gz
-+sha256  b7c3fd7214a3b7c49d2661db127a712dc11cffd1799f793947aa1cb20aaf3298  hwdata-0.394.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
-diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
-index eb9166dc72..f47df2ebb8 100644
---- a/package/hwdata/hwdata.mk
-+++ b/package/hwdata/hwdata.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libusb/libusb.hash b/package/libusb/libusb.hash
+index 8ca68f03ba..3d51244b2c 100644
+--- a/package/libusb/libusb.hash
++++ b/package/libusb/libusb.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  ffaa41d741a8a3bee244ac8e54a72ea05bf2879663c098c82fc5757853441575  libusb-1.0.27.tar.bz2
++sha256  966bb0d231f94a474eaae2e67da5ec844d3527a1f386456394ff432580634b29  libusb-1.0.28.tar.bz2
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/libusb/libusb.mk b/package/libusb/libusb.mk
+index 15649a2ab1..3d809bfb6e 100644
+--- a/package/libusb/libusb.mk
++++ b/package/libusb/libusb.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--HWDATA_VERSION = 0.392
-+HWDATA_VERSION = 0.394
- HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
- HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
- HWDATA_LICENSE_FILES = COPYING LICENSE
+ LIBUSB_VERSION_MAJOR = 1.0
+-LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).27
++LIBUSB_VERSION = $(LIBUSB_VERSION_MAJOR).28
+ LIBUSB_SOURCE = libusb-$(LIBUSB_VERSION).tar.bz2
+ LIBUSB_SITE = https://github.com/libusb/libusb/releases/download/v$(LIBUSB_VERSION)
+ LIBUSB_LICENSE = LGPL-2.1+
 -- 
 2.25.1
 
