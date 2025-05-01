@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2AFF2C3ABAC
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:11:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76BE7C3ABAA
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:11:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DF250417CA;
-	Fri,  2 May 2025 11:11:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 35DB381F7E;
+	Fri,  2 May 2025 11:11:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id faSrMN-jBbDY; Fri,  2 May 2025 11:11:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y1oS3IwvUSj5; Fri,  2 May 2025 11:11:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 070CD41A5A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49F4C81E4C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 070CD41A5A;
-	Fri,  2 May 2025 11:11:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 35E78229
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 49F4C81E4C;
+	Fri,  2 May 2025 11:11:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0BC96EE
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B235419DB
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0168B60B9F
  for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1LzJIbh52rvw for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pji1-nDgxrXv for <buildroot@buildroot.org>;
  Fri,  2 May 2025 11:11:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50FEF4161A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 312BA60AE6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 50FEF4161A
+ by smtp3.osuosl.org (Postfix) with ESMTP id 312BA60AE6
  for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 43592863AE; Fri,  2 May 2025 11:11:35 +0000 (UTC)
+ id 20DB186406; Fri,  2 May 2025 11:11:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 1 May 2025 18:58:25 +0200
+Date: Thu, 1 May 2025 18:57:16 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f7e2b2c9daa0b1321bebfed33a0bd61d9df00034
-X-Git-Newrev: ca5f3492fc3f034c1ce7dd9e5c24bdc13966b41f
+X-Git-Oldrev: b3e390bd2a5b7bb10598a5d61089a204a606a511
+X-Git-Newrev: 7ae0284847395f70d34ac45e5f55902bebd16bd5
 X-Patchwork-Hint: ignore
-Message-Id: <20250502111135.43592863AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/sqlite: revert
- upstream change causing build issue
+Message-Id: <20250502111135.20DB186406@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/sysklogd: bump to
+ v2.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,88 +66,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca5f3492fc3f034c1ce7dd9e5c24bdc13966b41f
+commit: https://git.buildroot.net/buildroot/commit/?id=7ae0284847395f70d34ac45e5f55902bebd16bd5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Upstream did a change in sqlite3.pc.in that does work with their
-default build system, but not with the autoconf-based amalgamation
-that we use. This issue has been reported and fixed upstream, but the
-fix is not yet in any new release.
+- Update syslogd -T documentation, it applies to messages originating
+   both locally and from remote syslog servers
+ - Fix hostname filtering support, introduced in v2.7.0, broken
+ - Fix parsing of userspace messages in /dev/kmsg, inserted an
+   extra space before the message payload
 
-For the time being, we just revert the upstream change. We don't do a
-direct revert ("git revert") as multiple upstream commits touched this
-very line, so we simply revert to what it was prior to the different
-changes, and to what the upstream fix ends up doing.
+From https://github.com/troglobit/sysklogd/releases/tag/v2.7.1
 
-This issue is causing build issue for all packages that use sqlite's
-pkg-config file, in a static-linking configuration.
-
-Fixes:
-
-  https://autobuild.buildroot.org/results/1824a76eee4a877a2f19c1fd19a710ef9f059168/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit db481210e99321f4f0ab6599aab28f39b5b7fd50)
+(cherry picked from commit 7a0725723b80ebf5fb0984410f7b4b665f9ee49d)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...in-revert-upstream-commits-causing-build-.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ package/sysklogd/sysklogd.hash | 4 ++--
+ package/sysklogd/sysklogd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/sqlite/0001-sqlite3.pc.in-revert-upstream-commits-causing-build-.patch b/package/sqlite/0001-sqlite3.pc.in-revert-upstream-commits-causing-build-.patch
-new file mode 100644
-index 0000000000..f35c8b8ddd
---- /dev/null
-+++ b/package/sqlite/0001-sqlite3.pc.in-revert-upstream-commits-causing-build-.patch
-@@ -0,0 +1,48 @@
-+From f70123a40193c2056755117aa291582f42db5f35 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sun, 13 Apr 2025 17:47:53 +0200
-+Subject: [PATCH] sqlite3.pc.in: revert upstream commits causing build issues
-+
-+This reverts upstream commit a2d88f6a03c9ebde3d037b0e297f47216c685381
-+and a number of following commits related to the same commit. The
-+sqlite build system is indeed upstream not based on autoconf, but the
-+project "generates" an "autoconf-based amalgamation":
-+
-+  https://www3.sqlite.org/src/dir?ci=tip&name=autoconf
-+
-+Unfortunately commit a2d88f6a03c9ebde3d037b0e297f47216c685381 broke
-+the build with the autoconf amalgamation because while @LIBS@ gets
-+replaced by the autoconf machinery, @LDFLAGS_*@ do not, causing build
-+failures such as:
-+
-+output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/13.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: cannot find @LDFLAGS_MATH@: No such file or directory
-+output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/13.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: cannot find @LDFLAGS_ZLIB@: No such file or directory
-+output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/13.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: cannot find @LDFLAGS_ICU@: No such file or directory
-+
-+This issue has been reported at
-+https://sqlite.org/forum/info/e40b9b424a, and upstream says that the
-+issue has been fixed in the amalgamation script by basically doing the
-+same as what this commit does:
-+
-+  https://sqlite.org/src/info/fe47154799bfe
-+
-+Upstream: https://sqlite.org/forum/info/e40b9b424a
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ sqlite3.pc.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/sqlite3.pc.in b/sqlite3.pc.in
-+index a9f941b1e4..3799671e61 100644
-+--- a/sqlite3.pc.in
-++++ b/sqlite3.pc.in
-+@@ -9,5 +9,5 @@ Name: SQLite
-+ Description: SQL database engine
-+ Version: @PACKAGE_VERSION@
-+ Libs: -L${libdir} -lsqlite3
-+-Libs.private: @LDFLAGS_MATH@ @LDFLAGS_ZLIB@ @LDFLAGS_ICU@
-++Libs.private: @LIBS@
-+ Cflags: -I${includedir}
-+-- 
-+2.49.0
-+
+diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
+index 4024965e23..645bc6a0ae 100644
+--- a/package/sysklogd/sysklogd.hash
++++ b/package/sysklogd/sysklogd.hash
+@@ -1,4 +1,4 @@
+-# Upstream .sha256 from https://github.com/troglobit/sysklogd/releases/tag/v2.7.0
+-sha256  6ab74ab5001121bb32697fd2f7ab3cc4b4452c3f721677e06e5b60982a04d0cc  sysklogd-2.7.0.tar.gz
++# Upstream .sha256 from https://github.com/troglobit/sysklogd/releases/tag/v2.7.1
++sha256  69944b2227647bf47ee01c9f482d19a79dbf2b53b8ce8ded0486b08db8c68c40  sysklogd-2.7.1.tar.gz
+ # Locally calculated
+ sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index e8b7fe2062..a3e27fd17b 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SYSKLOGD_VERSION = 2.7.0
++SYSKLOGD_VERSION = 2.7.1
+ SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
+ SYSKLOGD_LICENSE = BSD-3-Clause
+ SYSKLOGD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
