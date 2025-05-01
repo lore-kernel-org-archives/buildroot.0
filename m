@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A907C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:57:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31E64C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:57:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5DEF370AFD;
-	Mon, 19 May 2025 10:57:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 422F360FFE;
+	Mon, 19 May 2025 10:57:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0gWu86jLjnp5; Mon, 19 May 2025 10:57:18 +0000 (UTC)
+ id Cluy7A8m362B; Mon, 19 May 2025 10:57:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 958DF70B08
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6400B70B14
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 958DF70B08;
-	Mon, 19 May 2025 10:57:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6400B70B14;
+	Mon, 19 May 2025 10:57:20 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9DE2CE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:25 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E065E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5870B4127B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 68158412ED
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CqaClYsfn9dd for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:20 +0000 (UTC)
+ id KSJq83zJNGao for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 700D241456
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7FD914130A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 700D241456
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FD914130A
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6CB938348A; Mon, 19 May 2025 10:39:59 +0000 (UTC)
+ id 792F78348A; Mon, 19 May 2025 10:39:58 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 6 May 2025 22:48:05 +0200
+Date: Thu, 1 May 2025 21:34:12 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a8b7e28c812ebca65f8284b5931ade44d1b5e645
-X-Git-Newrev: f3a8ff1af9f3a5b4c8872e0009e819183e23fe05
+X-Git-Oldrev: b8e8cf6ea0f65161510debbe4de53a6efb5568b1
+X-Git-Newrev: 875f5670aa93a2a8559666985299aee6019bd902
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103959.6CB938348A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rtl8192eu: bump to
- 2025-04-10 version
+Message-Id: <20250519103958.792F78348A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/yasm: add patch for
+ CVE-2021-33454
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,50 +65,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3a8ff1af9f3a5b4c8872e0009e819183e23fe05
+commit: https://git.buildroot.net/buildroot/commit/?id=875f5670aa93a2a8559666985299aee6019bd902
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This version allows to build with Linux 6.15. Makefile hase been refactored
-and variable USER_EXTRA_CFLAGS has been renamed to USER_ccflags-y so let's
-rename it accordingly.
+This fixes a potential NULL pointer dereference
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+As a side note, this package has many opened CVEs, but upstream doesn't seem
+to really consider them as security issues, see their disclaimer here:
+https://github.com/yasm/yasm/blob/master/SECURITY.md
+
+We could speculate that this disclaimer has been written as a consequence of
+the many small CVEs opened in a short time, that don't have a substantial
+security impact (besides the command line tool crashing). All of these small
+CVEs have been opened for bug reports issued by a third party who used a
+fuzzy tester to manipulate the assembler input
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/rtl8192eu/rtl8192eu.hash | 2 +-
- package/rtl8192eu/rtl8192eu.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...inter-dereference-in-yasm_expr_get_intnum.patch | 32 ++++++++++++++++++++++
+ package/yasm/yasm.mk                               |  3 ++
+ 2 files changed, 35 insertions(+)
 
-diff --git a/package/rtl8192eu/rtl8192eu.hash b/package/rtl8192eu/rtl8192eu.hash
-index de2c55cf4c..0c6009f05e 100644
---- a/package/rtl8192eu/rtl8192eu.hash
-+++ b/package/rtl8192eu/rtl8192eu.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256  b5568e5a48e99839ec76359e11da29705e80cbfcae210c68eaea4bf433760f6d  rtl8192eu-c56c37f7ce8b8f1fd17c9719a9ea668dc1e45965.tar.gz
-+sha256  04cd204046bae15cfd64643d1f2d15d215acc0bd0b6b3da2404f001d5e172557  rtl8192eu-c014d0970c8052e8b2306e24ccc92f6fe738458d.tar.gz
-diff --git a/package/rtl8192eu/rtl8192eu.mk b/package/rtl8192eu/rtl8192eu.mk
-index de54f03bc9..48c1217300 100644
---- a/package/rtl8192eu/rtl8192eu.mk
-+++ b/package/rtl8192eu/rtl8192eu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/yasm/0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch b/package/yasm/0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch
+new file mode 100644
+index 0000000000..976c2f7a13
+--- /dev/null
++++ b/package/yasm/0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch
+@@ -0,0 +1,32 @@
++From 48ced849ed621a05cec4c04d4567323af3a76e81 Mon Sep 17 00:00:00 2001
++From: dataisland <dataisland@outlook.com>
++Date: Fri, 15 Sep 2023 18:20:49 +0000
++Subject: [PATCH] Fix null-pointer-dereference in yasm_expr_get_intnum
++
++Fixes the following CVE:
++  - CVE-2021-33454: NULL pointer dereference in yasm_expr_get_intnum() in libyasm/expr.c
++
++For more info see:
++  - https://nvd.nist.gov/vuln/detail/CVE-2021-33454
++  - https://github.com/yasm/yasm/pull/244
++
++Upstream: https://github.com/yasm/yasm/pull/244
++
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ libyasm/expr.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libyasm/expr.c b/libyasm/expr.c
++index c2c868ede..6838eca56 100644
++--- a/libyasm/expr.c
+++++ b/libyasm/expr.c
++@@ -1260,7 +1260,7 @@ yasm_expr_get_intnum(yasm_expr **ep, int calc_bc_dist)
++ {
++     *ep = yasm_expr_simplify(*ep, calc_bc_dist);
++ 
++-    if ((*ep)->op == YASM_EXPR_IDENT && (*ep)->terms[0].type == YASM_EXPR_INT)
+++    if (*ep && (*ep)->op == YASM_EXPR_IDENT && (*ep)->terms[0].type == YASM_EXPR_INT)
++         return (*ep)->terms[0].data.intn;
++     else
++         return (yasm_intnum *)NULL;
+diff --git a/package/yasm/yasm.mk b/package/yasm/yasm.mk
+index cdb8e15bee..766d29df3b 100644
+--- a/package/yasm/yasm.mk
++++ b/package/yasm/yasm.mk
+@@ -10,6 +10,9 @@ YASM_LICENSE = BSD-2-Clause, BSD-3-Clause, Artistic, GPL-2.0, LGPL-2.0
+ YASM_LICENSE_FILES = COPYING BSD.txt Artistic.txt GNU_GPL-2.0 GNU_LGPL-2.0
+ YASM_CPE_ID_VENDOR = tortall
  
--RTL8192EU_VERSION = c56c37f7ce8b8f1fd17c9719a9ea668dc1e45965
-+RTL8192EU_VERSION = c014d0970c8052e8b2306e24ccc92f6fe738458d
- RTL8192EU_SITE = $(call github,clnhub,rtl8192eu-linux,$(RTL8192EU_VERSION))
- RTL8192EU_LICENSE = GPL-2.0
- 
-@@ -16,7 +16,7 @@ RTL8192EU_USER_EXTRA_CFLAGS = -DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN \
- RTL8192EU_MODULE_MAKE_OPTS = \
- 	CONFIG_PLATFORM_I386_PC=n \
- 	CONFIG_RTL8192EU=m \
--	USER_EXTRA_CFLAGS="$(RTL8192EU_USER_EXTRA_CFLAGS)"
-+	USER_ccflags-y="$(RTL8192EU_USER_EXTRA_CFLAGS)"
- 
- define RTL8192EU_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
++# 0001-fix-null-pointer-dereference-in-yasm_expr_get_intnum.patch
++YASM_IGNORE_CVES += CVE-2021-33454
++
+ # This sed prevents it compiling 2 programs (vsyasm and ytasm)
+ # that are only of use on Microsoft Windows.
+ define YASM_PRE_CONFIGURE_FIXUP
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
