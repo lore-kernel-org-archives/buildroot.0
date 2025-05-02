@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04B9BC3ABAC
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:12:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3870FC3ABA3
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:12:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA30883A64;
-	Fri,  2 May 2025 11:12:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09281414BA;
+	Fri,  2 May 2025 11:12:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TWKd2pvQ3WGx; Fri,  2 May 2025 11:12:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q7cbscv7tyIW; Fri,  2 May 2025 11:12:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63FD6839E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30CD741465
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 63FD6839E6;
-	Fri,  2 May 2025 11:11:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 205DE22A
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30CD741465;
+	Fri,  2 May 2025 11:12:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 28390229
  for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C2756121A
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 628C240E1E
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8Uc6gsKl8jOy for <buildroot@buildroot.org>;
- Fri,  2 May 2025 11:11:35 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yPI8P1ap5Snu for <buildroot@buildroot.org>;
+ Fri,  2 May 2025 11:11:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9577561151
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9381F40AAB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9577561151
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9381F40AAB
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 93B7686406; Fri,  2 May 2025 11:11:35 +0000 (UTC)
+ id 9148C864AF; Fri,  2 May 2025 11:11:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 2 May 2025 12:10:44 +0200
+Date: Fri, 2 May 2025 12:12:28 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9c28c060aa9d929d7491c512d0d99346f007d5e4
-X-Git-Newrev: 29556eb61b6bd2c1b7c666fdd33048094e2a8088
+X-Git-Oldrev: cc5b7c833749a99a3a9238a90fd3af7b0f24e8c7
+X-Git-Newrev: fa997919481b589e4028fc6af7e8fc76c0e17f90
 X-Patchwork-Hint: ignore
-Message-Id: <20250502111135.93B7686406@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] boot/edk2: drop
- dependency on tf-a for macchiatobin
+Message-Id: <20250502111136.9148C864AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/boost: move
+ target library selection variables closer together
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,92 +61,109 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7746316977806064295=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7746316977806064295==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=29556eb61b6bd2c1b7c666fdd33048094e2a8088
+commit: https://git.buildroot.net/buildroot/commit/?id=fa997919481b589e4028fc6af7e8fc76c0e17f90
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-When building a firmware for the MACCHIATObin with edk2 and
-arm-trusted-firmware, the build can randomly fail with the
-following make error:
-
-    make[1]: Circular output/build/edk2-edk2-stable202411/.stamp_configured <- arm-trusted-firmware dependency dropped.
-
-The message appears also when the build is not failing, depending on
-the number of parallel jobs and the build order.
-
-The issue can be observed with the following commands:
-
-    cat >.config <<EOF
-    BR2_aarch64=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
-    BR2_TARGET_ARM_TRUSTED_FIRMWARE_EDK2_AS_BL33=y
-    BR2_TARGET_BINARIES_MARVELL=y
-    BR2_TARGET_EDK2=y
-    BR2_TARGET_EDK2_PLATFORM_SOLIDRUN_ARMADA80X0MCBIN=y
-    BR2_TARGET_MV_DDR_MARVELL=y
-    EOF
-    make olddefconfig
-    utils/brmake
-    grep -FC5 'dependency dropped' br.log
-
-The circular dependency happen due to [1] and [2].
-
-In fact, only TF-A depends on EDK II (passed as BL33) for building and
-not vice versa. See [3]. The EDK II "SolidRun MacchiatoBin" platform
-build does not need any TF-A image, compared to some other platforms
-such as "Socionext DeveloperBox" or "QEMU SBSA" which are referencing
-TF-A images in a hook added in EDK2_PRE_BUILD_HOOKS.
-
-Drop the false dependency on TF-A to fix the build.
-
-This issue has been present since the EDK2 introduction in commit [4].
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02/boot/arm-trusted-firmware/arm-trusted-firmware.mk#L121
-[2] https://gitlab.com/buildroot.org/buildroot/-/blob/2025.02/boot/edk2/edk2.mk#L118
-[3] https://github.com/Semihalf/edk2-platforms/wiki/Build_firmware
-[4] https://gitlab.com/buildroot.org/buildroot/-/commit/1074a37e783b023bd0491ba4f4f7acab7f289e1d
-
-Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
-Cc: Dick Olsson <hi@senzilla.io>
-[Julien: add extra info in commit log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 7361a155ef420a58ebe1f8f360b141a926b6d8b2)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Michael Nosthoff <buildroot@heine.tech>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a14ae70918764d8c85555767b5de6040133242b6)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- boot/edk2/edk2.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/boost/boost.mk | 66 +++++++++++++++++++++++++-------------------------
+ 1 file changed, 33 insertions(+), 33 deletions(-)
 
-diff --git a/boot/edk2/edk2.mk b/boot/edk2/edk2.mk
-index 3941d01883..bc4049b2de 100644
---- a/boot/edk2/edk2.mk
-+++ b/boot/edk2/edk2.mk
-@@ -115,7 +115,7 @@ endef
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index 044dd275b3..1dcc4a4b3a 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -12,39 +12,6 @@ BOOST_LICENSE = BSL-1.0
+ BOOST_LICENSE_FILES = LICENSE_1_0.txt
+ BOOST_CPE_ID_VENDOR = boost
  
- else ifeq ($(BR2_TARGET_EDK2_PLATFORM_SOLIDRUN_ARMADA80X0MCBIN),y)
- EDK2_ARCH = AARCH64
--EDK2_DEPENDENCIES += host-dtc arm-trusted-firmware edk2-non-osi
-+EDK2_DEPENDENCIES += host-dtc edk2-non-osi
- EDK2_PACKAGE_NAME = Platform/SolidRun/Armada80x0McBin
- EDK2_PLATFORM_NAME = Armada80x0McBin
- EDK2_BUILD_DIR = $(EDK2_PLATFORM_NAME)-$(EDK2_ARCH)
-
---===============7746316977806064295==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTAINER),,container)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTRACT),,contract)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COROUTINE),,coroutine)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FIBER),,fiber)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_GRAPH),,graph)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_GRAPH_PARALLEL),,graph_parallel)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_IOSTREAMS),,iostreams)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_JSON),,json)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_LOCALE),,locale)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_LOG),,log)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MATH),,math)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MPI),,mpi)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_NOWIDE),,nowide)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PROGRAM_OPTIONS),,program_options)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PYTHON),,python)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_RANDOM),,random)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_REGEX),,regex)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_SERIALIZATION),,serialization)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_STACKTRACE),,stacktrace)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_SYSTEM),,system)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TEST),,test)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_THREAD),,thread)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TIMER),,timer)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TYPE_ERASURE),,type_erasure)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_URL),,url)
+-BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_WAVE),,wave)
+-
+ BOOST_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
+ BOOST_FLAGS = --with-toolset=gcc
+@@ -152,6 +119,39 @@ endif
+ BOOST_DEPENDENCIES += $(if $(BR2_ENABLE_LOCALE),,libiconv)
+ endif
+ 
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTAINER),,container)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTRACT),,contract)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COROUTINE),,coroutine)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_DATE_TIME),,date_time)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_EXCEPTION),,exception)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FIBER),,fiber)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_FILESYSTEM),,filesystem)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_GRAPH),,graph)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_GRAPH_PARALLEL),,graph_parallel)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_IOSTREAMS),,iostreams)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_JSON),,json)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_LOCALE),,locale)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_LOG),,log)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MATH),,math)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_MPI),,mpi)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_NOWIDE),,nowide)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PROGRAM_OPTIONS),,program_options)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_PYTHON),,python)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_RANDOM),,random)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_REGEX),,regex)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_SERIALIZATION),,serialization)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_STACKTRACE),,stacktrace)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_SYSTEM),,system)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TEST),,test)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_THREAD),,thread)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TIMER),,timer)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_TYPE_ERASURE),,type_erasure)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_URL),,url)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_WAVE),,wave)
++
+ BOOST_WITHOUT_FLAGS_COMMASEPARATED += $(subst $(space),$(comma),$(strip $(BOOST_WITHOUT_FLAGS)))
+ BOOST_FLAGS += $(if $(BOOST_WITHOUT_FLAGS_COMMASEPARATED), --without-libraries=$(BOOST_WITHOUT_FLAGS_COMMASEPARATED))
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7746316977806064295==--
