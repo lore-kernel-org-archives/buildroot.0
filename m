@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79B57C3ABA3
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:12:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40F2CC3ABAC
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:12:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3558584035;
-	Fri,  2 May 2025 11:12:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M0lf7SkXfuMg; Fri,  2 May 2025 11:12:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7FC8B84027
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7FC8B84027;
-	Fri,  2 May 2025 11:12:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 11789EE
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B09341DE3
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 12DBF41206;
+	Fri,  2 May 2025 11:12:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0hMLN2hv3vys for <buildroot@buildroot.org>;
+ id UHbkBvQjo6jQ; Fri,  2 May 2025 11:12:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 451EA41E64
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 451EA41E64;
+	Fri,  2 May 2025 11:12:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5A65AEE
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:49 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3798B6158C
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3XMV9-zxKKQF for <buildroot@buildroot.org>;
  Fri,  2 May 2025 11:11:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C99B419E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 411A660C0D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C99B419E7
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 411A660C0D
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 194B0864AE; Fri,  2 May 2025 11:11:36 +0000 (UTC)
+ id 3F56D864AD; Fri,  2 May 2025 11:11:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 2 May 2025 12:11:38 +0200
+Date: Fri, 2 May 2025 12:13:39 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: fa0ee12fcc20a63fb3f8ee2f462d14a41ccab086
-X-Git-Newrev: 9654e8d6e303f38ef250438fec9b9d4b589ee5f0
+X-Git-Oldrev: 9a8bc0cb379ac008aa7fd2e930f26b28ff3d0a54
+X-Git-Newrev: e34e58191d51648c00de7b6df8d77382d6fd4444
 X-Patchwork-Hint: ignore
-Message-Id: <20250502111136.194B0864AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/c-ares: security
- bump to version 1.34.5
+Message-Id: <20250502111137.3F56D864AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/pangomm2_46: bump
+ to version 2.46.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,52 +66,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9654e8d6e303f38ef250438fec9b9d4b589ee5f0
+commit: https://git.buildroot.net/buildroot/commit/?id=e34e58191d51648c00de7b6df8d77382d6fd4444
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes the following security issue:
+https://gitlab.gnome.org/GNOME/pangomm/-/blob/2.46.4/NEWS
 
-- CVE-2025-31498: Use after free in read_answers()
-  https://github.com/c-ares/c-ares/security/advisories/GHSA-6hxc-62jh-p29v
-
-For more details, see the announcement:
-https://github.com/c-ares/c-ares/releases/tag/v1.34.5
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Daniel Lang <dalang@gmx.at>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit f85aea1b96ff865ad2981566cfa64f5140f30753)
+(cherry picked from commit 24ef1c083e973575166e9477499a69db83996a7e)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/c-ares/c-ares.hash | 2 +-
- package/c-ares/c-ares.mk   | 4 ++--
+ package/pangomm2_46/pangomm2_46.hash | 4 ++--
+ package/pangomm2_46/pangomm2_46.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
-index 8dc84ada89..1c28d91e97 100644
---- a/package/c-ares/c-ares.hash
-+++ b/package/c-ares/c-ares.hash
+diff --git a/package/pangomm2_46/pangomm2_46.hash b/package/pangomm2_46/pangomm2_46.hash
+index 8d05dbc2ff..eb4e1c58e9 100644
+--- a/package/pangomm2_46/pangomm2_46.hash
++++ b/package/pangomm2_46/pangomm2_46.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  35410aa625cc9ee95b66475f54aea7c81c673fb63d75fad5eee267711503b72a  c-ares-1.34.2.tar.gz
-+sha256  7d935790e9af081c25c495fd13c2cfcda4792983418e96358ef6e7320ee06346  c-ares-1.34.5.tar.gz
- 
- # Hash for license file
- sha256  460f5e768fda3752ca2169a95df062578a10fb126bfd65f3b9b1a1bed2f84807  LICENSE.md
-diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-index 6685ade9d6..090147d0e9 100644
---- a/package/c-ares/c-ares.mk
-+++ b/package/c-ares/c-ares.mk
-@@ -4,8 +4,8 @@
- #
+-# From https://download.gnome.org/sources/pangomm/2.46/pangomm-2.46.3.sha256sum
+-sha256  410fe04d471a608f3f0273d3a17d840241d911ed0ff2c758a9859c66c6f24379  pangomm-2.46.3.tar.xz
++# From https://download.gnome.org/sources/pangomm/2.46/pangomm-2.46.4.sha256sum
++sha256  b92016661526424de4b9377f1512f59781f41fb16c9c0267d6133ba1cd68db22  pangomm-2.46.4.tar.xz
+ # Locally computed
+ sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.tools
+diff --git a/package/pangomm2_46/pangomm2_46.mk b/package/pangomm2_46/pangomm2_46.mk
+index 1725158491..3640641af1 100644
+--- a/package/pangomm2_46/pangomm2_46.mk
++++ b/package/pangomm2_46/pangomm2_46.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--C_ARES_VERSION = 1.34.2
--C_ARES_SITE = https://github.com/c-ares/c-ares/releases/download/v1.34.2
-+C_ARES_VERSION = 1.34.5
-+C_ARES_SITE = https://github.com/c-ares/c-ares/releases/download/v$(C_ARES_VERSION)
- C_ARES_INSTALL_STAGING = YES
- C_ARES_CONF_OPTS = --with-random=/dev/urandom
- C_ARES_LICENSE = MIT
+ PANGOMM2_46_VERSION_MAJOR = 2.46
+-PANGOMM2_46_VERSION = $(PANGOMM2_46_VERSION_MAJOR).3
++PANGOMM2_46_VERSION = $(PANGOMM2_46_VERSION_MAJOR).4
+ PANGOMM2_46_SOURCE = pangomm-$(PANGOMM2_46_VERSION).tar.xz
+ PANGOMM2_46_SITE = https://download.gnome.org/sources/pangomm/$(PANGOMM2_46_VERSION_MAJOR)
+ PANGOMM2_46_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
