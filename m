@@ -1,71 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3816AC3ABA3
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 10:24:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17F5AC3ABA3
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 10:24:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DB01F811AD;
-	Fri,  2 May 2025 10:24:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBEC8416F8;
+	Fri,  2 May 2025 10:24:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oqoPHusadE4c; Fri,  2 May 2025 10:24:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96B624115B
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96B624115B;
+	Fri,  2 May 2025 10:24:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E5FA229
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:24:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 24722839D8
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:24:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oyl2UPPZ2igE; Fri,  2 May 2025 10:24:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E671583A15
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E671583A15;
-	Fri,  2 May 2025 10:24:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id CF1DA22A
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:24:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C090B60B05
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:24:31 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9SehbyxtfpcL for <buildroot@buildroot.org>;
- Fri,  2 May 2025 10:24:31 +0000 (UTC)
+ id L5xSYRivNx3J for <buildroot@buildroot.org>;
+ Fri,  2 May 2025 10:24:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E43D360B79
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E43D360B79
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D5B91839CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5B91839CF
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E43D360B79
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:24:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D5B91839CF
+ for <buildroot@busybox.net>; Fri,  2 May 2025 10:24:53 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id E36261C0D8C; Fri,  2 May 2025 12:24:28 +0200 (CEST)
-Message-ID: <3265ff1a-837e-47d2-959e-5361f64f7d79@rnout.be>
-Date: Fri, 2 May 2025 12:24:27 +0200
+ with ESMTPSA id B0DBF1C0FD5; Fri,  2 May 2025 12:24:51 +0200 (CEST)
+Message-ID: <1b69b05a-68c8-4c7e-b712-99a08bf030b4@rnout.be>
+Date: Fri, 2 May 2025 12:24:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
-Cc: Thomas Devoogdt <thomas.devoogdt@barco.com>
-References: <20250414212453.2903952-1-thomas@devoogdt.com>
+To: Francois Perrad <francois.perrad@gadz.org>, buildroot@busybox.net
+References: <20250415090638.319859-1-francois.perrad@gadz.org>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250414212453.2903952-1-thomas@devoogdt.com>
+In-Reply-To: <20250415090638.319859-1-francois.perrad@gadz.org>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1746181469; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1746181491; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=N15Hi+jPAxuX24J5tC3zCe9VgpHKAfaA9+xe7Jdr1dE=;
- b=XCzF72O/KYa7fA2ZNXKlJtXiBtKt5PvQ7d/5vtiJVXOHYe+ba35+nCaYtqrczqJodqqHB/
- MaywhDJEU1nfRaQg2afyy9Ui0Eh4tlQRMtQP+EuEpDBLu+H6ozZWLLxFO2e6Cc+i6YlZdt
- J5WZTf0zfbPPwyvSCjpYfDaoHHUB1idW8ra6fJjdEqsJl98us2K9vohORIWHvbizIC2AVO
- Zi1rGhPFKHr4XqdK2gNMYF0VZAU115jng6aAL1PdnYx9vo2efDzd6IwYD/a1EYY3tDVlQ3
- WA6/ifyed12rQkLMfIkDQfk8Cy4wmgFGUIlFLpW0Uv18puajY1s+4tlTv7IAyA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=CVp9p0Y0N62d1xPgSiY4+RYj3VRn2FHErcotcX4Jyx8=;
+ b=Kligd98B05l0FU3UVmXn40Cf07MaVzAk7wp8qqllrkUaDSKy1Ly2IE9dAx1UxskRnuWRW7
+ rPjZtnR2L6RnEofEVvV5Dxj7E+w7/DrRzlepltQKa8528Etj60u8bLXpLmJuT/C+tpLLzT
+ 2b7tVt6AI/zPYSxzmE3jNJbK4qfE7uqcYaFAXNN954huqiDFNCHtCTruzQF1bx/Z0dVxlx
+ Ed/hxgP+inrUgJOg21Kk5+/A8nle24YVYtzScngPqiL/+7inTqqemNmH9jUQESDsWZrlhi
+ PD5HOhMHODInjJV089m07tQJQVYjAHoEcK6Hzew5mgcSqJMJMKSSeXo74uM+CA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=XCzF72O/
-Subject: Re: [Buildroot] [PATCH v1] package/libfcgi: bump to 2.4.5 to fix
- CVE-2025-23016
+ header.a=rsa-sha256 header.s=dkim header.b=Kligd98B
+Subject: Re: [Buildroot] [PATCH] package/perl: security bump to version
+ 5.40.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,18 +85,10 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/04/2025 23:24, Thomas Devoogdt wrote:
-> From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+On 15/04/2025 11:06, Francois Perrad via buildroot wrote:
+> fix CVE-2024-56406: A heap buffer overflow vulnerability
 > 
-> Announcement:
-> - https://github.com/FastCGI-Archives/fcgi2/releases/tag/2.4.5
-> 
-> See:
-> - https://nvd.nist.gov/vuln/detail/CVE-2025-23016
-> - https://github.com/advisories/GHSA-9825-56cx-cfg6
-> - https://github.com/FastCGI-Archives/fcgi2/issues/67
-> 
-> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
   Applied to 2025.02.x, thanks.
 
@@ -105,32 +96,53 @@ On 14/04/2025 23:24, Thomas Devoogdt wrote:
   Arnout
 
 > ---
->   package/libfcgi/libfcgi.hash | 2 +-
->   package/libfcgi/libfcgi.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+>   package/perl/perl.hash | 12 ++++++------
+>   package/perl/perl.mk   |  4 ++--
+>   2 files changed, 8 insertions(+), 8 deletions(-)
 > 
-> diff --git a/package/libfcgi/libfcgi.hash b/package/libfcgi/libfcgi.hash
-> index ca660c6ebd..371dba8939 100644
-> --- a/package/libfcgi/libfcgi.hash
-> +++ b/package/libfcgi/libfcgi.hash
-> @@ -1,3 +1,3 @@
->   # Locally calculated
-> -sha256  c0e0d9cc7d1e456d7278c974e2826f593ef5ca555783eba81e7e9c1a07ae0ecc  libfcgi-2.4.4.tar.gz
-> +sha256  92b0111a98d8636e06c128444a3d4d7a720bdd54e6ee4dd0c7b67775b1b0abff  libfcgi-2.4.5.tar.gz
->   sha256  f0a8fe4513a43e8eebb24cdcf9d2e7efc52e4d8259178c6d76d3d84418397d81  LICENSE
-> diff --git a/package/libfcgi/libfcgi.mk b/package/libfcgi/libfcgi.mk
-> index 3c90b30e39..2348af843b 100644
-> --- a/package/libfcgi/libfcgi.mk
-> +++ b/package/libfcgi/libfcgi.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
+> diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+> index 04ebf83b3..308f58605 100644
+> --- a/package/perl/perl.hash
+> +++ b/package/perl/perl.hash
+> @@ -1,10 +1,10 @@
+> -# Hashes from: https://www.cpan.org/src/5.0/perl-5.40.1.tar.xz.{md5,sha1,sha256}.txt
+> -md5  bab3547a5cdf2302ee0396419d74a42e  perl-5.40.1.tar.xz
+> -sha1  4ffe5246c791df884363aed05ba81ba41cb02084  perl-5.40.1.tar.xz
+> -sha256  dfa20c2eef2b4af133525610bbb65dd13777ecf998c9c5b1ccf0d308e732ee3f  perl-5.40.1.tar.xz
+> +# Hashes from: https://www.cpan.org/src/5.0/perl-5.40.2.tar.xz.{md5,sha1,sha256}.txt
+> +md5  9ad7a269dc4053cdbeecd4fde444291b  perl-5.40.2.tar.xz
+> +sha1  661fe9ee085ca0aec8ddd65e055bee922af12663  perl-5.40.2.tar.xz
+> +sha256  0551c717458e703ef7972307ab19385edfa231198d88998df74e12226abf563b  perl-5.40.2.tar.xz
 >   
-> -LIBFCGI_VERSION = 2.4.4
-> +LIBFCGI_VERSION = 2.4.5
->   LIBFCGI_SITE = $(call github,FastCGI-Archives,fcgi2,$(LIBFCGI_VERSION))
->   LIBFCGI_LICENSE = OML
->   LIBFCGI_LICENSE_FILES = LICENSE
+> -# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.1/perl-cross-1.6.1.hash
+> -sha256  b5f4b4457bbd7be37adac8ee423beedbcdba8963a85f79770f5e701dabc5550f  perl-cross-1.6.1.tar.gz
+> +# Hash from: https://github.com/arsv/perl-cross/releases/download/1.6.2/perl-cross-1.6.2.hash
+> +sha256	131f7496152ee32067dbac2bc9b44b2f582fc778140e545701b3b2faee782f1d  perl-cross-1.6.2.tar.gz
+>   
+>   # Locally calculated
+>   sha256  dd90d4f42e4dcadf5a7c09eea0189d93c7b37ae560c91f0f6d5233ed3b9292a2  Artistic
+> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+> index 37b9fe185..34abb734d 100644
+> --- a/package/perl/perl.mk
+> +++ b/package/perl/perl.mk
+> @@ -6,7 +6,7 @@
+>   
+>   # When updating the version here, also update utils/scancpan
+>   PERL_VERSION_MAJOR = 40
+> -PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
+> +PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
+>   PERL_SITE = https://www.cpan.org/src/5.0
+>   PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+>   PERL_LICENSE = Artistic or GPL-1.0+
+> @@ -15,7 +15,7 @@ PERL_CPE_ID_VENDOR = perl
+>   PERL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+>   PERL_INSTALL_STAGING = YES
+>   
+> -PERL_CROSS_VERSION = 1.6.1
+> +PERL_CROSS_VERSION = 1.6.2
+>   # DO NOT refactor with the github helper (the result is not the same)
+>   PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+>   PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
 
 _______________________________________________
 buildroot mailing list
