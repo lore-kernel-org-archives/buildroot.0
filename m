@@ -1,74 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACF60C3ABAA
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 10:34:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60217C3ABA3
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 10:34:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 803AB81F10;
-	Fri,  2 May 2025 10:34:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 245DF41861;
+	Fri,  2 May 2025 10:34:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6TWu71arf_dd; Fri,  2 May 2025 10:34:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T_meuWKPyBlU; Fri,  2 May 2025 10:34:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B884A83D7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5011A414E2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B884A83D7B;
-	Fri,  2 May 2025 10:34:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7746CEE
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:34:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5011A414E2;
+	Fri,  2 May 2025 10:34:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 70B1AEE
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:34:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5CD39605D1
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:34:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 62136414E2
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:34:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dc9YgrHm7bMH for <buildroot@buildroot.org>;
- Fri,  2 May 2025 10:34:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QoP0BIu0f63P for <buildroot@buildroot.org>;
+ Fri,  2 May 2025 10:34:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AF54060B27
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF54060B27
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6E56B401BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E56B401BA
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AF54060B27
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:34:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6E56B401BA
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:34:50 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id CE7521C1113; Fri,  2 May 2025 12:34:14 +0200 (CEST)
-Message-ID: <3ac94fca-866f-49b8-83c4-d9880d9fbb49@rnout.be>
-Date: Fri, 2 May 2025 12:34:13 +0200
+ with ESMTPSA id DC4B51C1112; Fri,  2 May 2025 12:34:47 +0200 (CEST)
+Message-ID: <0c1484c4-bb3b-4c67-8602-b15f9cf409fa@rnout.be>
+Date: Fri, 2 May 2025 12:34:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: =?UTF-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
- buildroot@buildroot.org
-Cc: Julien Olivain <ju.o@free.fr>, Bernd Kuhls <bernd@kuhls.net>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-References: <20250418-ffmpt-v1-0-5540e2621486@gmx.net>
- <20250418-ffmpt-v1-1-5540e2621486@gmx.net>
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20250310200610.12201-1-ju.o@free.fr>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250418-ffmpt-v1-1-5540e2621486@gmx.net>
+In-Reply-To: <20250310200610.12201-1-ju.o@free.fr>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1746182055; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1746182088; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=GpP9pu9Dq05e7yzXD2Q1uKPHpW+m99SElgSMpD4XdL8=;
- b=kIOvEZm7HcEriir2NMa0XroRDHu1DJbQEDP86/FFAe0dJhP42GfHmY7L1L/QvzOISxZDmM
- Cyd+ttHPHRT/03e2XwuCnvzIKoxf+l91fA61YyO2QV0xl+MLbjdQMhw8fW9uAtLaILnYwx
- 3bZ1+CxHMHHg38+12ucDcKYTf2wYp9q4rktMq4oNdbiotckY9l1PMvbqSr3sdpTUQgswkm
- c4PdkjQUbBhtNO2nQ82bFr53MPsJyU1Hkakf7oXwv9EbLqmRq5izw5P8dqPrwcfPX4gNcF
- QdTZITZFWsGJkGScZcrK/Qifug4fRuqeT04n7U7RqqiStRx5qI7cfBnDRRNgaA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=7P69xV/9gV9TgM9Ed8bDPeEGw+NnzxwQ0OZZsYfX+r8=;
+ b=Li/tAI/Vwpy7Qu3eupKQ0cr9t+A1HeOvM153VF6yetZKF2A8OjEBJ6N5VYsyrUVEWA7zcS
+ 35tpcuGFnmRXzd6c2jjXvH3t6p5iVpuh6yZ59alpaHk6OErdgXU8gyAWvVfILedFw03s2P
+ eI6nul8z1HetBfdfZe7hZhrjayA9WKStl+73uv6m6JtkzxgOX0wPdArKD9jhCxGQVbsr2K
+ Hpb1eBbftkLxd+VE2jbJ0ErwyO6x7ToXn5DWxtOnu3F4a3wCv9Fm7LhbPzTDKTM+oFS17s
+ 9FjJXfMEg2wTX6cOqBgwfw/MRfr5KKsxfqe5xvn9qYRavJYFWAtNEd1uShaQnw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=kIOvEZm7
-Subject: Re: [Buildroot] [PATCH 1/2] package/libopenmpt: install to staging
- to fix pkg-config
+ header.a=rsa-sha256 header.s=dkim header.b=Li/tAI/V
+Subject: Re: [Buildroot] [PATCH next 1/1] package/libopenmpt: bump to
+ version 0.7.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,28 +78,58 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAxOC8wNC8yMDI1IDEwOjAzLCBKLiBOZXVzY2jDpGZlciB2aWEgYnVpbGRyb290IHdyb3Rl
-Ogo+IFdpdGhvdXQgdGhpcywgZmZtcGVnIGlzIG5vdCBhYmxlIHRvIGZpbmQgdGhlIGxpYm9wZW5t
-cHQgZGVwZW5kZW5jeSwKPiBhdCBsZWFzdCB3aXRoIEJSMl9QRVJfUEFDS0FHRV9ESVJFQ1RPUklF
-UyBlbmFibGVkLgo+IAo+IFNpZ25lZC1vZmYtYnk6IEouIE5ldXNjaMOkZmVyIDxqLm5ldXNjaGFl
-ZmVyQGdteC5uZXQ+CgogIEFwcGxpZWQgdG8gMjAyNS4wMi54LCB0aGFua3MuCgogIFJlZ2FyZHMs
-CiAgQXJub3V0Cgo+IC0tLQo+ICAgcGFja2FnZS9saWJvcGVubXB0L2xpYm9wZW5tcHQubWsgfCAx
-ICsKPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQo+IAo+IGRpZmYgLS1naXQgYS9w
-YWNrYWdlL2xpYm9wZW5tcHQvbGlib3Blbm1wdC5tayBiL3BhY2thZ2UvbGlib3Blbm1wdC9saWJv
-cGVubXB0Lm1rCj4gaW5kZXggNzRmZmJkYmJkNDIxNDA3ZWU3NGI0NDA3ODJmY2IxY2JlNDNmNGE3
-Ni4uNTdjNDVjNmVhMTExOTE2MDNkNDgxMjAxN2U4YzE1Yjk1OWUxZGNiYiAxMDA2NDQKPiAtLS0g
-YS9wYWNrYWdlL2xpYm9wZW5tcHQvbGlib3Blbm1wdC5tawo+ICsrKyBiL3BhY2thZ2UvbGlib3Bl
-bm1wdC9saWJvcGVubXB0Lm1rCj4gQEAgLTExLDYgKzExLDcgQEAgTElCT1BFTk1QVF9MSUNFTlNF
-ID0gQlNELTMtQ2xhdXNlCj4gICBMSUJPUEVOTVBUX0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCj4g
-ICBMSUJPUEVOTVBUX0NQRV9JRF9WRU5ET1IgPSBvcGVubXB0Cj4gICBMSUJPUEVOTVBUX0RFUEVO
-REVOQ0lFUyA9IGhvc3QtcGtnY29uZgo+ICtMSUJPUEVOTVBUX0lOU1RBTExfU1RBR0lORyA9IFlF
-Uwo+ICAgCj4gICBpZmVxICgkKEJSMl9QQUNLQUdFX0xJQk9QRU5NUFRfT1BFTk1QVDEyMykseSkK
-PiAgIExJQk9QRU5NUFRfQ09ORl9PUFRTICs9IC0tZW5hYmxlLW9wZW5tcHQxMjMKPiAKCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
-aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
-b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+
+
+On 10/03/2025 21:06, Julien Olivain wrote:
+> For release note since 0.7.11, see:
+> https://lib.openmpt.org/libopenmpt/2024/12/01/releases-0.7.12-0.6.21-0.5.35-0.4.47/
+> https://lib.openmpt.org/libopenmpt/2025/01/06/releases-0.7.13-0.6.22-0.5.36-0.4.48/
+> 
+> License file hash changed after year update:
+> https://github.com/OpenMPT/openmpt/commit/97f0c59cda82ff92d905fb1af8d55a89997a6a8b
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+
+  Applied to 2025.02.x, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/libopenmpt/libopenmpt.hash | 4 ++--
+>   package/libopenmpt/libopenmpt.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/libopenmpt/libopenmpt.hash b/package/libopenmpt/libopenmpt.hash
+> index 0289393024..f23956536d 100644
+> --- a/package/libopenmpt/libopenmpt.hash
+> +++ b/package/libopenmpt/libopenmpt.hash
+> @@ -1,3 +1,3 @@
+>   # computed locally
+> -sha256  53a798b8c6e2e1f695e8ad05e93a0c1b53199e5aa9981837c41696b370520767  libopenmpt-0.7.11+release.autotools.tar.gz
+> -sha256  e3d7e76c6b441ddd9fff0a397e7b5e055a11678bd7c3b246a0ce13e352eb15e8  LICENSE
+> +sha256  dcd7cde4f9c498eb496c4556e1c1b81353e2a74747e8270a42565117ea42e1f1  libopenmpt-0.7.13+release.autotools.tar.gz
+> +sha256  d173856a870d3f6d0603060c615f5e3b145d79a008576e8efd2e5eab8b843430  LICENSE
+> diff --git a/package/libopenmpt/libopenmpt.mk b/package/libopenmpt/libopenmpt.mk
+> index 74ffbdbbd4..561d395ebb 100644
+> --- a/package/libopenmpt/libopenmpt.mk
+> +++ b/package/libopenmpt/libopenmpt.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -LIBOPENMPT_VERSION = 0.7.11
+> +LIBOPENMPT_VERSION = 0.7.13
+>   LIBOPENMPT_SITE = https://lib.openmpt.org/files/libopenmpt/src
+>   LIBOPENMPT_SOURCE = libopenmpt-$(LIBOPENMPT_VERSION)+release.autotools.tar.gz
+>   LIBOPENMPT_LICENSE = BSD-3-Clause
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
