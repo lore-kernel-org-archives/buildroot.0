@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4248C3ABAA
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:13:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DE50C3ABAA
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:13:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 88B09840F7;
-	Fri,  2 May 2025 11:13:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BBE0B419BE;
+	Fri,  2 May 2025 11:13:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0JO0myA7Xz_C; Fri,  2 May 2025 11:13:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fjVRi7xGRCuN; Fri,  2 May 2025 11:13:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 706AB840EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C988742462
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 706AB840EC;
-	Fri,  2 May 2025 11:13:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C988742462;
+	Fri,  2 May 2025 11:13:26 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 249E722A
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:56 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 10442229
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E0E4E70369
+ by smtp3.osuosl.org (Postfix) with ESMTP id EC13F60C0D
  for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D1x2UcOrkKIg for <buildroot@buildroot.org>;
+ id tVweofH48K4o for <buildroot@buildroot.org>;
  Fri,  2 May 2025 11:11:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4163760C0D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D8FC60AE6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4163760C0D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1D8FC60AE6
  for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3FA71864AD; Fri,  2 May 2025 11:11:38 +0000 (UTC)
+ id 17AC9863AE; Fri,  2 May 2025 11:11:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 2 May 2025 13:01:10 +0200
+Date: Fri, 2 May 2025 13:01:05 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 430648647389fd08b116e4391c7fb09a2ecaf38b
-X-Git-Newrev: 5b4541600f73c75b115037dc5aa9eb7f7c85816d
+X-Git-Oldrev: 21be6420f1d9dba6355e2afdb7f4417d47004513
+X-Git-Newrev: 4c80e9cd3e1aad53697a7985cbf81ce7ff252753
 X-Patchwork-Hint: ignore
-Message-Id: <20250502111138.3FA71864AD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libcoap: fix
- build for toolchains w/o threads
+Message-Id: <20250502111138.17AC9863AE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/pixman: fix
+ pixman compilation on riscv
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,57 +66,79 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b4541600f73c75b115037dc5aa9eb7f7c85816d
+commit: https://git.buildroot.net/buildroot/commit/?id=4c80e9cd3e1aad53697a7985cbf81ce7ff252753
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-The version bump in [1] introduced the upstream commit [2] which made
-builds using toolchain without thread support fail to build libcoap.
+When the riscv vector extension is enabled for pixman, it assumes that
+the kernel headers also support riscv vector. Apply a patch that
+disables riscv vector in pixman if the Linux headers do not support
+COMPAT_HWCAP_ISA_V which pixman requires for vector runtime detection.
 
-This patch adds an option check in the libcoap.mk file to verify
-the toolchain has thread support and passes the correct configuration
-options introduced in [2] as well.
-
-The build can be tested with the following config.
-
-```
-BR2_armeb=y
-BR2_cortex_a76_a55=y
-BR2_ARM_EABI=y
-BR2_ARM_SOFT_FLOAT=y
-BR2_TOOLCHAIN_BUILDROOT_UCLIBC=y
-BR2_PTHREADS_NONE=y
-BR2_PACKAGE_LIBCOAP=y
-```
+This issue exists since pixman 0.44.0, which Buildroot started using
+in commit ba2fb599cd002b57fa70e978d91884c98d8aad05.
 
 Fixes:
-https://autobuild.buildroot.org/results/9c0/9c0b675a64fb2576bc34457043f118cffe5fe555//
 
-[1] 4df4d1d312 package/libcoap: bump version to 4.3.5
-[2] https://github.com/obgm/libcoap/commit/c69c5d5af0a30859e90756f535e2ca21cdeda0b2
+  http://autobuild.buildroot.net/results/4ecdf5320716ec8b39f09fde3fcbbdcdb557f8ab/
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 70ca62fb499903a17ce0b109909693b9b31054ad)
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ffc154197dfff627b58f83267c2ef8c3c38cdadc)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/libcoap/libcoap.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ ...-enable-RVV-on-linux-if-hwcap-headers-are.patch | 44 ++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/package/libcoap/libcoap.mk b/package/libcoap/libcoap.mk
-index c5e5f85c62..d7c2a78944 100644
---- a/package/libcoap/libcoap.mk
-+++ b/package/libcoap/libcoap.mk
-@@ -31,4 +31,10 @@ else
- LIBCOAP_CONF_OPTS += --disable-dtls
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
-+LIBCOAP_CONF_OPTS += --enable-thread-safe
-+else
-+LIBCOAP_CONF_OPTS += --disable-thread-safe
-+endif
+diff --git a/package/pixman/0001-RISC-V-Only-enable-RVV-on-linux-if-hwcap-headers-are.patch b/package/pixman/0001-RISC-V-Only-enable-RVV-on-linux-if-hwcap-headers-are.patch
+new file mode 100644
+index 0000000000..ad1a0902e2
+--- /dev/null
++++ b/package/pixman/0001-RISC-V-Only-enable-RVV-on-linux-if-hwcap-headers-are.patch
+@@ -0,0 +1,44 @@
++From d0045f1fc32635d9629ea9e361631b07d9ca4140 Mon Sep 17 00:00:00 2001
++From: Charlie Jenkins <charlie@rivosinc.com>
++Date: Mon, 21 Apr 2025 13:08:50 -0700
++Subject: [PATCH] RISC-V: Only enable RVV on linux if hwcap headers are
++ available
 +
- $(eval $(autotools-package))
++Linux 6.4 introduced COMPAT_HWCAP_ISA_V. When trying to compile pixman
++against linux headers older than this, pixman will fail to compile
++because it assumes COMPAT_HWCAP_ISA_V exists.
++
++During meson configuration, do not enable have_rvv if the platform is
++Linux and COMPAT_HWCAP_ISA_V doesn't exist.
++
++Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
++Fixes: 0e424031bda2 ("RISC-V floating point operations")
++Upstream: https://gitlab.freedesktop.org/pixman/pixman/-/merge_requests/149
++---
++ meson.build | 10 +++++++++-
++ 1 file changed, 9 insertions(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index fdea28f..cb10931 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -379,7 +379,15 @@ if not use_rvv.disabled()
++         }
++       ''',
++       args : rvv_flags,
++-      name : 'RISC-V Vector Intrinsic Support')
+++      name : 'RISC-V Vector Intrinsic Support') and cc.compiles('''
+++      #if defined(__linux__)
+++      #include <asm/hwcap.h>
+++      #include <sys/auxv.h>
+++      COMPAT_HWCAP_ISA_V
+++      #endif
+++      ''',
+++      args : rvv_flags,
+++      name: 'RISC-V Vector Linux HWCAP Support')
++       have_rvv = true
++     endif
++   endif
++-- 
++2.43.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
