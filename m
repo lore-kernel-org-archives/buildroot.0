@@ -1,71 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A95C5C3ABA3
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 10:55:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80124C3ABAA
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 10:55:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5BB0181289;
-	Fri,  2 May 2025 10:55:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F3EB415E9;
+	Fri,  2 May 2025 10:55:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H_9VTT64cVyv; Fri,  2 May 2025 10:55:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U6SqJyY4dqXg; Fri,  2 May 2025 10:55:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B53A81B69
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E128411E6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B53A81B69;
-	Fri,  2 May 2025 10:55:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 14EADEE
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:55:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4E128411E6;
+	Fri,  2 May 2025 10:55:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id AE74A229
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:55:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EF58360727
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:55:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 951FE6074F
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:55:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UMg5nH6ptWi1 for <buildroot@buildroot.org>;
- Fri,  2 May 2025 10:55:10 +0000 (UTC)
+ id Xc2UyMVTJ1Hs for <buildroot@buildroot.org>;
+ Fri,  2 May 2025 10:55:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 342C7606D6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 342C7606D6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C00B1606D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C00B1606D6
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 342C7606D6
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:55:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C00B1606D6
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:55:37 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id E1B501C0F8A; Fri,  2 May 2025 12:55:07 +0200 (CEST)
-Message-ID: <7a4a86b2-3cb2-423f-8a50-bc64949a301b@rnout.be>
-Date: Fri, 2 May 2025 12:55:06 +0200
+ with ESMTPSA id A6F231C00E6; Fri,  2 May 2025 12:55:35 +0200 (CEST)
+Message-ID: <adc29595-672d-4ca9-b1d6-5fdaededc342@rnout.be>
+Date: Fri, 2 May 2025 12:55:34 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Scott Fan <fancp2007@gmail.com>, buildroot@buildroot.org
-Cc: Alexey Brodkin <alexey.brodkin@synopsys.com>
-References: <20250421110935.6973-1-fancp2007@gmail.com>
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20241126183012.39202-1-ju.o@free.fr>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250421110935.6973-1-fancp2007@gmail.com>
+In-Reply-To: <20241126183012.39202-1-ju.o@free.fr>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1746183308; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1746183335; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=CcBgrXUhRiv1nCJIG3gmO25PseFXbMC/iKzD6K0j2kw=;
- b=lzu0hYbh9ZF35V0w/+2g8a3j+UdMXCSDBEwK1ZRa7MVKcdVhEzObsgrxggk8Sf1N5qhr90
- 0uSkEc/Z+GZJaFEg/c3hY7QN0RehW2uJ+jGaLBdnfvrknS9KzIh2P+dxEXAHU7Ggn6VSA4
- ka9d2cL/BvjDI6U7NkQPzAFkd1cL1Jz+U/JF0IBetMJMKAx1DRO3PDunM+0bM3tV3SBldd
- QFGwHhb300nn4pds03PkQOEgY8L13gQ2Weq1NPLc6fTQUys9dWdcJiO8z5Z1VfRyuJQUcl
- VGareVfWNvJRp2HdTYA+ftrfupw3nqbQFklab0pNFK02Oxzs5qySB7md6hzYXQ==
+ bh=wOE9AjRhZk2w5hemYexmVn+xjbHL+PuPHp6mtCkHQNU=;
+ b=a7xy9qwoYsc3lbqE3ZAg28lX6U8MOisVDzdXSAheBEIH/unQGuFCH9nUinAG97M6CrV1E7
+ EcB36iTgtCFrra37g9uw0DE1hDpWAJ4BKvw2Z2LGXpO4EMDrXAqBX0eXNqZYbLLjAP07rZ
+ VoQe6LRdXucoqSc1If1zNhGgbFOOZyHoxbdQ7j4VC/npObDU0q66SvqIRW6CBDrglL6Qga
+ 0+Lk015j7mLX8HA6sv2UyqHrsxWtVsI3+LBQrBpDqbKsOQqebYnFiVH/0FJJXGZDuPoY5y
+ /DWaMyw/9Z9IVTtxfaUbiwP3/cIL3uHDkmcT3IP40+nKADdiyziYWFSmnET1Gg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=lzu0hYbh
-Subject: Re: [Buildroot] [PATCH] configs/cubieboard2: bump Linux to 6.12.24
- and U-Boot to 2025.04
+ header.a=rsa-sha256 header.s=dkim header.b=a7xy9qwo
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: new openocd runtime
+ test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,58 +85,78 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 21/04/2025 13:09, Scott Fan wrote:
-> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+On 26/11/2024 19:30, Julien Olivain wrote:
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-  Applied to 2025.02.x (only Linux, not U-Boot), thanks.
+  Applied to 2025.02.x, thanks.
 
   Regards,
   Arnout
 
 > ---
->   board/cubietech/cubieboard2/patches/linux/linux.hash | 2 +-
->   board/cubietech/cubieboard2/patches/uboot/uboot.hash | 2 +-
->   configs/cubieboard2_defconfig                        | 4 ++--
->   3 files changed, 4 insertions(+), 4 deletions(-)
+> Patch tested in:
+> https://gitlab.com/jolivain/buildroot/-/jobs/8477140333
+> ---
+>   DEVELOPERS                                    |  1 +
+>   support/testing/tests/package/test_openocd.py | 37 +++++++++++++++++++
+>   2 files changed, 38 insertions(+)
+>   create mode 100644 support/testing/tests/package/test_openocd.py
 > 
-> diff --git a/board/cubietech/cubieboard2/patches/linux/linux.hash b/board/cubietech/cubieboard2/patches/linux/linux.hash
-> index 2e30d90bb1..1213da86b1 100644
-> --- a/board/cubietech/cubieboard2/patches/linux/linux.hash
-> +++ b/board/cubietech/cubieboard2/patches/linux/linux.hash
-> @@ -1,2 +1,2 @@
->   # Locally calculated
-> -sha256  9423f4bfb4d875417e39cb0b017b5499fea47da56119f0cd28a201735d898f14  linux-6.12.14.tar.xz
-> +sha256  643142c1b5991560dd12f950825cc19e4497b95b82641918ecff1177f4130c1d  linux-6.12.24.tar.xz
-> diff --git a/board/cubietech/cubieboard2/patches/uboot/uboot.hash b/board/cubietech/cubieboard2/patches/uboot/uboot.hash
-> index 50674352d7..80ea21b7cb 100644
-> --- a/board/cubietech/cubieboard2/patches/uboot/uboot.hash
-> +++ b/board/cubietech/cubieboard2/patches/uboot/uboot.hash
-> @@ -1,2 +1,2 @@
->   # Locally calculated
-> -sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
-> +sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
-> diff --git a/configs/cubieboard2_defconfig b/configs/cubieboard2_defconfig
-> index 6161e3a559..180677923a 100644
-> --- a/configs/cubieboard2_defconfig
-> +++ b/configs/cubieboard2_defconfig
-> @@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
->   BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/cubietech/cubieboard2/genimage.cfg"
->   BR2_LINUX_KERNEL=y
->   BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.14"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.24"
->   BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
->   BR2_LINUX_KERNEL_DTS_SUPPORT=y
->   BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun7i-a20-cubieboard2"
-> @@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
->   BR2_TARGET_UBOOT=y
->   BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
->   BR2_TARGET_UBOOT_BOARD_DEFCONFIG="Cubieboard2"
->   BR2_TARGET_UBOOT_NEEDS_DTC=y
->   BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index d75df5cc55..1045324a52 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1953,6 +1953,7 @@ F:	support/testing/tests/package/test_octave.py
+>   F:	support/testing/tests/package/test_ola.py
+>   F:	support/testing/tests/package/test_ola/
+>   F:	support/testing/tests/package/test_openblas.py
+> +F:	support/testing/tests/package/test_openocd.py
+>   F:	support/testing/tests/package/test_parted.py
+>   F:	support/testing/tests/package/test_pciutils.py
+>   F:	support/testing/tests/package/test_perftest.py
+> diff --git a/support/testing/tests/package/test_openocd.py b/support/testing/tests/package/test_openocd.py
+> new file mode 100644
+> index 0000000000..fe4d203073
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_openocd.py
+> @@ -0,0 +1,37 @@
+> +import os
+> +
+> +import infra.basetest
+> +
+> +
+> +class TestOpenOCD(infra.basetest.BRTest):
+> +    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+> +        """
+> +        BR2_PACKAGE_OPENOCD=y
+> +        BR2_TARGET_ROOTFS_CPIO=y
+> +        # BR2_TARGET_ROOTFS_TAR is not set
+> +        """
+> +
+> +    def test_run(self):
+> +        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
+> +        self.emulator.boot(arch="armv5",
+> +                           kernel="builtin",
+> +                           options=["-initrd", cpio_file])
+> +        self.emulator.login()
+> +
+> +        # We check the program can run.
+> +        self.assertRunOk("openocd --version")
+> +
+> +        msg = "Buildroot"
+> +
+> +        # We check openocd can run, load a "dummy" driver in the
+> +        # standard search path, and use some of its TCL commands. See:
+> +        # https://github.com/openocd-org/openocd/blob/v0.12.0/doc/manual/primer/commands.txt#L117
+> +        # https://github.com/openocd-org/openocd/blob/v0.12.0/src/jtag/drivers/dummy.c
+> +        cmd = "openocd"
+> +        cmd += " -f interface/dummy.cfg"
+> +        cmd += f" -c 'dummy hello {msg}'"
+> +        cmd += " -c shutdown"
+> +        out, ret = self.emulator.run(cmd)
+> +        self.assertEqual(ret, 0)
+> +        expected_str = f"Greetings {msg}!"
+> +        self.assertIn(expected_str, out)
 
 _______________________________________________
 buildroot mailing list
