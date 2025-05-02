@@ -1,71 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36C48C3ABA3
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 10:42:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1ADEC3ABAA
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 10:43:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 093E783D53;
-	Fri,  2 May 2025 10:42:42 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DCHtcZmnX3qG; Fri,  2 May 2025 10:42:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B031820B7
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B031820B7;
-	Fri,  2 May 2025 10:42:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C71EEE
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:42:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 29A8D417F4
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:42:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5076411A7;
+	Fri,  2 May 2025 10:43:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id awAv5ziwvdkd for <buildroot@buildroot.org>;
- Fri,  2 May 2025 10:42:35 +0000 (UTC)
+ id eUvZQYUcc2km; Fri,  2 May 2025 10:43:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1EC1411C8
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1EC1411C8;
+	Fri,  2 May 2025 10:43:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 18DAEEE
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:43:25 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id F306340B0E
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:43:24 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JipdXNeCLBr3 for <buildroot@buildroot.org>;
+ Fri,  2 May 2025 10:43:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E4A6E415A5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4A6E415A5
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2101740BFE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2101740BFE
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E4A6E415A5
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:42:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2101740BFE
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:43:24 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id D563A1C1113; Fri,  2 May 2025 12:42:32 +0200 (CEST)
-Message-ID: <9de40e6e-9c51-4a61-976a-707d3b45e63a@rnout.be>
-Date: Fri, 2 May 2025 12:42:31 +0200
+ with ESMTPSA id EB62B1C111C; Fri,  2 May 2025 12:43:21 +0200 (CEST)
+Message-ID: <d816129a-6e72-453f-9cd1-7d6a8b8004cc@rnout.be>
+Date: Fri, 2 May 2025 12:43:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-References: <cover.1744229017.git.yann.morin.1998@free.fr>
- <574e9d889ce1afba12af992365310070f3e2cffe.1744229017.git.yann.morin.1998@free.fr>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ buildroot@buildroot.org
+Cc: Bartosz Bilas <b.bilas@grinn-global.com>,
+ Marleen Vos <marleen.vos@mind.be>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Raphael Gallais-Pou <rgallaispou@gmail.com>,
+ linux-amarula@amarulasolutions.com
+References: <20250413164708.1943803-1-dario.binacchi@amarulasolutions.com>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <574e9d889ce1afba12af992365310070f3e2cffe.1744229017.git.yann.morin.1998@free.fr>
+In-Reply-To: <20250413164708.1943803-1-dario.binacchi@amarulasolutions.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1746182553; h=from:subject:date:message-id:to:mime-version:content-type:
+ t=1746182602; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=PrwPZKXKA8MfM4MzHUultFkJdbLnvEUkbKcXyGRLgn0=;
- b=U1lXCf48wTWHj5/bg8eJjepHp7wxD0qXRBUV1iysklK+4BNPcsHb36WojxgwQklZoA3ngo
- p8vm4xoWMWntutNVKEros8FyCEuOZ5wy+SWCg5C58jpu8duyXmr57wAxueFGyURh2OeZAe
- IYtPbKG60SCdwhnfF+E6r61+mD0AzS9ZH518z/fDrrycAy7MPB2v+J6RD+CVy+6SpzIq16
- VlrOE8MWGycf8wPStqFBaKB5J8EDhGtxX/DNIz6qLVBpqBFUV7sQDH3io0RLvjHilu/WGG
- EJWG3vAnXoqrMQF1sW72iA4FzxoYltwVnxj00qGgW8B7ckobcDrG9BM093TzHA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=V1+OIn8ChZcnJY2cDDxux2HX2LeO5s8b9+BLH4xUaFY=;
+ b=OT+BvjmYnDhreG0vrsImnjmTRZ3XyiNOBJGHf2nHTq+bz6xBHdjxjtp1sYItVEBccOI6+3
+ EcQJ4c5xw37Fe6dTikdd2W4Fyb53oooCh8P2TC86eS8tVBdVHDAv7y5sApKin7ct7w1eys
+ 4lHbiXBAO4slavlTere9vD7TtTciqYTQ171MuJ5U2hjnRPay+zKM/FoRkuHku2lFMyTDMN
+ TuuXirS77OOHgL2YlYTuH7OO1bG3inggxeR/oBbeHiT/YPXqKn0iIWc+KAbSECU0IhISBk
+ DgAxdar/ufJMd17VvwsgRQmatKlFKRt4D+BZhNsUKzclNWeP97GREa3TMHVOgw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=U1lXCf48
-Subject: Re: [Buildroot] [PATCH 28/29 v2] support/download/git: use
- FOO_DL_OPTS
+ header.a=rsa-sha256 header.s=dkim header.b=OT+BvjmY
+Subject: Re: [Buildroot] [PATCH v4 1/2] configs/stm32mp135f_dk: fix optee
+ hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -86,68 +91,56 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 09/04/2025 22:03, Yann E. MORIN wrote:
-> The manual states that FOO_DL_OPTS are valid for all the different
-> download backends, but that is not the case: at least the git backend
-> does not use them (it does not fail, it just ignores them).
+On 13/04/2025 18:47, Dario Binacchi wrote:
+> The build command:
 > 
-> Accept FOO_DL_OPTS in the git backend, and pass them to 'git fetch'.
-> There is no way that we can pass such options to submodules or lfs,
-> though.
+> make stm32mp135f_dk_defconfig
 > 
-> Update the manual accordingly.
+> fails with the errors:
 > 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> ERROR: No hash found for optee-client-4.3.0.tar.gz
+> ERROR: No hash found for optee-os-4.3.0.tar.gz
+> 
+> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/9690369624
+> 
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
   Applied to 2025.02.x, thanks.
 
   Regards,
   Arnout
 
-> ---
->   docs/manual/adding-packages-generic.adoc | 4 +++-
->   support/download/git                     | 6 +++---
->   2 files changed, 6 insertions(+), 4 deletions(-)
 > 
-> diff --git a/docs/manual/adding-packages-generic.adoc b/docs/manual/adding-packages-generic.adoc
-> index f0b0508f53..7e2e066c16 100644
-> --- a/docs/manual/adding-packages-generic.adoc
-> +++ b/docs/manual/adding-packages-generic.adoc
-> @@ -270,7 +270,9 @@ not and can not work as people would expect it should:
->     server-side checking for user logins and passwords, or to use a proxy.
->     All download methods valid for +LIBFOO_SITE_METHOD+ are supported;
->     valid options depend on the download method (consult the man page
-> -  for the respective download utilities).
-> +  for the respective download utilities). For git, +FOO_DL_OPTS+ will
-> +  only be passed to `git fetch` and no other git command (esp. not to
-> +  `git lfs fetch` or `git submodule update`).
->   
->   * +LIBFOO_EXTRA_DOWNLOADS+ is a space-separated list of additional
->     files that Buildroot should download. If an entry contains +://+
-> diff --git a/support/download/git b/support/download/git
-> index 8123bc3153..fdc00607cc 100755
-> --- a/support/download/git
-> +++ b/support/download/git
-> @@ -133,8 +133,8 @@ fi
->   _git remote set-url origin "'${uri}'"
->   
->   printf "Fetching all references\n"
-> -_git fetch origin
-> -_git fetch origin -t -f
-> +_git fetch "${@}" origin
-> +_git fetch "${@}" origin -t -f
->   
->   # Try to get the special refs exposed by some forges (pull-requests for
->   # github, changes for gerrit...). There is no easy way to know whether
-> @@ -143,7 +143,7 @@ _git fetch origin -t -f
->   # below, if there is an issue anyway. Since most of the cset we're gonna
->   # have to clone are not such special refs, consign the output to oblivion
->   # so as not to alarm unsuspecting users, but still trace it as a warning.
-> -if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
-> +if ! _git fetch "${@}" origin "'${cset}:${cset}'" >/dev/null 2>&1; then
->       printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
->   fi
->   
+> ---
+> 
+> Changes v3 -> v4:
+>   - Add Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/9690369624
+>     in the commit message
+> 
+> Changes v2 -> v3:
+>   - Added in v3
+> 
+>   .../common/stm32mp1xx/patches/optee-client/optee-client.hash    | 2 ++
+>   .../common/stm32mp1xx/patches/optee-os/optee-os.hash            | 2 +-
+>   2 files changed, 3 insertions(+), 1 deletion(-)
+>   create mode 100644 board/stmicroelectronics/common/stm32mp1xx/patches/optee-client/optee-client.hash
+> 
+> diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/optee-client/optee-client.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/optee-client/optee-client.hash
+> new file mode 100644
+> index 000000000000..5423bf93a580
+> --- /dev/null
+> +++ b/board/stmicroelectronics/common/stm32mp1xx/patches/optee-client/optee-client.hash
+> @@ -0,0 +1,2 @@
+> +# Locally calculated
+> +sha256  a9a91bdb433df795c87a6d15198effbd648e3671ae611f2a3f8b41229d61cce0  optee-client-4.3.0.tar.gz
+> diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/optee-os/optee-os.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/optee-os/optee-os.hash
+> index 73d4e2c4dafb..2e12a5cdea78 100644
+> --- a/board/stmicroelectronics/common/stm32mp1xx/patches/optee-os/optee-os.hash
+> +++ b/board/stmicroelectronics/common/stm32mp1xx/patches/optee-os/optee-os.hash
+> @@ -1,2 +1,2 @@
+>   # Locally calculated
+> -sha256  03b91fd7dfdf890e3966f931f07634a2b6a2911bbee2a02ecc48d4a40cf6a9b8  optee-os-4.3.0-git4.tar.gz
+> +sha256  390b271905c828d6def9fa6a77bbaa425f3b434d733c8eb18f582ccbc6896096  optee-os-4.3.0.tar.gz
 
 _______________________________________________
 buildroot mailing list
