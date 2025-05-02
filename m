@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E255AC3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:22:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60471C3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:22:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A807E41E87;
-	Fri, 16 May 2025 11:22:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D87C4082D;
+	Fri, 16 May 2025 11:22:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OBbPhHCKjFW8; Fri, 16 May 2025 11:22:46 +0000 (UTC)
+ id zb3rcbuPtrfl; Fri, 16 May 2025 11:22:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8355341E8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C8A941E9A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8355341E8D;
-	Fri, 16 May 2025 11:22:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 21A2A185
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C8A941E9A;
+	Fri, 16 May 2025 11:22:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 09C1A13D
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9E21040AEA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 549416123A
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dIAgQ_Ig4mIo for <buildroot@buildroot.org>;
- Fri, 16 May 2025 11:21:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BxOBBcP0p3Kk for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 11:21:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A041740AF1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F6FB60B0B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A041740AF1
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1F6FB60B0B
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9DCBE86A10; Fri, 16 May 2025 11:21:55 +0000 (UTC)
+ id 0FA7686A17; Fri, 16 May 2025 11:21:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 May 2025 17:06:49 +0200
+Date: Fri, 2 May 2025 17:32:34 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 1c7120d159582da0be8b249aac573c16455eb6e1
-X-Git-Newrev: b628d4a9d74d38b66e28c2e925f059edec589a27
+X-Git-Oldrev: 7872c76641658eb445800e4d280aaa4e6208dbba
+X-Git-Newrev: d22837db90acb90d3942f125fad77ffe16ea6d66
 X-Patchwork-Hint: ignore
-Message-Id: <20250516112155.9DCBE86A10@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/gdb: add patches
- for GCC 15.x compatibility
+Message-Id: <20250516112154.0FA7686A17@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libuci: bump
+ version to f3fc0b7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,196 +66,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b628d4a9d74d38b66e28c2e925f059edec589a27
+commit: https://git.buildroot.net/buildroot/commit/?id=d22837db90acb90d3942f125fad77ffe16ea6d66
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This commit backports an upstream patch fixing the bundled readline
-library so that it builds with GCC 15.x.
+Changelog:
 
+ - f3fc0b7 libuci: fix false positive warning on older gcc versions
+ - 16ff0ba CMakeLists: add support for including ABIVERSION in the library version number
+ - 047b2ef CMakeLists.txt: bump minimum cmake version
+ - fb3c234 add support for an override config directory
+ - 10f7996 file: Ignore config file with '.' in name
+ - 5781664 remove internal usage of redundant uci_ptr.last
+ - 3cda251 file: Fix uci -m import command
+ - 04d0c46 uci: macro uci_alloc_element not in uci.h
+ - ae61e1c uci: optimize update section in uci_set
+ - 16e8a3b uci: fix memory leak uci_set on update section
+ - b2f3417 uci: maintain option position in uci_add_list
+ - 74f2797 uci: fix atomicity of uci_add_list
+ - 47697e6 uci: fix use-after-free uci_add_list
+ - 7e01d66 uci: optimize update option in uci_set
+ - b7ceda9 uci: maintain option position in uci_set
+ - 9b6605e uci: fix use-after-free uci_set on update option
+ - f49a2fd delta: simplify uci_load_delta() by using a helper
+ - 5de3871 cli: drop redundant uci_add_delta_path() call for -P
+ - f84f49f cmake: Allow override of install directories
+
+Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 56c834400eefb25ed2ea9b49aaf8fd89efa5f617)
+(cherry picked from commit 3e2e59340912a6788586a7216ac34df4de5ca1db)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...eadline-tcap.h-Update-definitions-for-C23.patch | 52 ++++++++++++++++++++++
- ...eadline-tcap.h-Update-definitions-for-C23.patch | 52 ++++++++++++++++++++++
- ...eadline-tcap.h-Update-definitions-for-C23.patch | 52 ++++++++++++++++++++++
- 3 files changed, 156 insertions(+)
+ package/libuci/libuci.hash | 6 +++---
+ package/libuci/libuci.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gdb/14.2/0010-readline-tcap.h-Update-definitions-for-C23.patch b/package/gdb/14.2/0010-readline-tcap.h-Update-definitions-for-C23.patch
-new file mode 100644
-index 0000000000..50100d8bfc
---- /dev/null
-+++ b/package/gdb/14.2/0010-readline-tcap.h-Update-definitions-for-C23.patch
-@@ -0,0 +1,52 @@
-+From 0f81e47dff4bddc6ba9c45402821f857251f2b0f Mon Sep 17 00:00:00 2001
-+From: Chris Packham <judge.packham@gmail.com>
-+Date: Wed, 30 Apr 2025 16:49:44 +1200
-+Subject: [PATCH] readline/tcap.h: Update definitions for C23
-+
-+C23 changes how function definitions like int `int tputs ()` are
-+interpreted. In older standards this meant that the function arguments
-+are unknown. In C23 this is interpreted as `int tputs (void)` so now
-+when we compile with GCC15 (which defaults to -std=gnu23) we get an
-+error such as
-+
-+  readline/display.c:2839:17: error: too many arguments to function 'tputs'; expected 0, have 3
-+
-+Add the function arguments for tgetent(), tgetflag(), tgetnum(),
-+tgetstr(), tputs() and tgoto().
-+
-+Signed-off-by: Chris Packham <judge.packham@gmail.com>
-+Approved-By: Tom Tromey <tom@tromey.com>
-+Upstream: 5c87b330e910f8be1443c881fd16a70e685f1f2f
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ readline/readline/tcap.h | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/readline/readline/tcap.h b/readline/readline/tcap.h
-+index 859e6eed5aa..9e2ed124e49 100644
-+--- a/readline/readline/tcap.h
-++++ b/readline/readline/tcap.h
-+@@ -46,14 +46,14 @@ extern char *UP, *BC;
-+ 
-+ extern short ospeed;
-+ 
-+-extern int tgetent ();
-+-extern int tgetflag ();
-+-extern int tgetnum ();
-+-extern char *tgetstr ();
-++extern int tgetent (char *bp, const char *name);
-++extern int tgetflag (char *id);
-++extern int tgetnum (char *id);
-++extern char *tgetstr (char *id, char **area);
-+ 
-+-extern int tputs ();
-++extern int tputs (const char *str, int affcnt, int (*putc)(int));
-+ 
-+-extern char *tgoto ();
-++extern char *tgoto (const char *cap, int col, int row);
-+ 
-+ #endif /* HAVE_TERMCAP_H */
-+ 
-+-- 
-+2.49.0
-+
-diff --git a/package/gdb/15.2/0010-readline-tcap.h-Update-definitions-for-C23.patch b/package/gdb/15.2/0010-readline-tcap.h-Update-definitions-for-C23.patch
-new file mode 100644
-index 0000000000..64f741fe75
---- /dev/null
-+++ b/package/gdb/15.2/0010-readline-tcap.h-Update-definitions-for-C23.patch
-@@ -0,0 +1,52 @@
-+From 130750cf9607fc1c4bcbead820a27bee6ee60f04 Mon Sep 17 00:00:00 2001
-+From: Chris Packham <judge.packham@gmail.com>
-+Date: Wed, 30 Apr 2025 16:49:44 +1200
-+Subject: [PATCH] readline/tcap.h: Update definitions for C23
-+
-+C23 changes how function definitions like int `int tputs ()` are
-+interpreted. In older standards this meant that the function arguments
-+are unknown. In C23 this is interpreted as `int tputs (void)` so now
-+when we compile with GCC15 (which defaults to -std=gnu23) we get an
-+error such as
-+
-+  readline/display.c:2839:17: error: too many arguments to function 'tputs'; expected 0, have 3
-+
-+Add the function arguments for tgetent(), tgetflag(), tgetnum(),
-+tgetstr(), tputs() and tgoto().
-+
-+Signed-off-by: Chris Packham <judge.packham@gmail.com>
-+Approved-By: Tom Tromey <tom@tromey.com>
-+Upstream: 5c87b330e910f8be1443c881fd16a70e685f1f2f
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ readline/readline/tcap.h | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/readline/readline/tcap.h b/readline/readline/tcap.h
-+index 859e6eed5aa..9e2ed124e49 100644
-+--- a/readline/readline/tcap.h
-++++ b/readline/readline/tcap.h
-+@@ -46,14 +46,14 @@ extern char *UP, *BC;
-+ 
-+ extern short ospeed;
-+ 
-+-extern int tgetent ();
-+-extern int tgetflag ();
-+-extern int tgetnum ();
-+-extern char *tgetstr ();
-++extern int tgetent (char *bp, const char *name);
-++extern int tgetflag (char *id);
-++extern int tgetnum (char *id);
-++extern char *tgetstr (char *id, char **area);
-+ 
-+-extern int tputs ();
-++extern int tputs (const char *str, int affcnt, int (*putc)(int));
-+ 
-+-extern char *tgoto ();
-++extern char *tgoto (const char *cap, int col, int row);
-+ 
-+ #endif /* HAVE_TERMCAP_H */
-+ 
-+-- 
-+2.49.0
-+
-diff --git a/package/gdb/16.3/0010-readline-tcap.h-Update-definitions-for-C23.patch b/package/gdb/16.3/0010-readline-tcap.h-Update-definitions-for-C23.patch
-new file mode 100644
-index 0000000000..c9a34e9a89
---- /dev/null
-+++ b/package/gdb/16.3/0010-readline-tcap.h-Update-definitions-for-C23.patch
-@@ -0,0 +1,52 @@
-+From f37d1bbe334c751b9bd77fa3a9d9accd93614677 Mon Sep 17 00:00:00 2001
-+From: Chris Packham <judge.packham@gmail.com>
-+Date: Wed, 30 Apr 2025 16:49:44 +1200
-+Subject: [PATCH] readline/tcap.h: Update definitions for C23
-+
-+C23 changes how function definitions like int `int tputs ()` are
-+interpreted. In older standards this meant that the function arguments
-+are unknown. In C23 this is interpreted as `int tputs (void)` so now
-+when we compile with GCC15 (which defaults to -std=gnu23) we get an
-+error such as
-+
-+  readline/display.c:2839:17: error: too many arguments to function 'tputs'; expected 0, have 3
-+
-+Add the function arguments for tgetent(), tgetflag(), tgetnum(),
-+tgetstr(), tputs() and tgoto().
-+
-+Signed-off-by: Chris Packham <judge.packham@gmail.com>
-+Approved-By: Tom Tromey <tom@tromey.com>
-+Upstream: 5c87b330e910f8be1443c881fd16a70e685f1f2f
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ readline/readline/tcap.h | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/readline/readline/tcap.h b/readline/readline/tcap.h
-+index 859e6eed5aa..9e2ed124e49 100644
-+--- a/readline/readline/tcap.h
-++++ b/readline/readline/tcap.h
-+@@ -46,14 +46,14 @@ extern char *UP, *BC;
-+ 
-+ extern short ospeed;
-+ 
-+-extern int tgetent ();
-+-extern int tgetflag ();
-+-extern int tgetnum ();
-+-extern char *tgetstr ();
-++extern int tgetent (char *bp, const char *name);
-++extern int tgetflag (char *id);
-++extern int tgetnum (char *id);
-++extern char *tgetstr (char *id, char **area);
-+ 
-+-extern int tputs ();
-++extern int tputs (const char *str, int affcnt, int (*putc)(int));
-+ 
-+-extern char *tgoto ();
-++extern char *tgoto (const char *cap, int col, int row);
-+ 
-+ #endif /* HAVE_TERMCAP_H */
-+ 
-+-- 
-+2.49.0
-+
+diff --git a/package/libuci/libuci.hash b/package/libuci/libuci.hash
+index cc04320331..1e429f8160 100644
+--- a/package/libuci/libuci.hash
++++ b/package/libuci/libuci.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  d095dc7ff4714e33aa18ef3ea5d30f525a202d6997d7b13bd952da53818988d6  libuci-4b3db1179747b6a6779029407984bacef851325c-git4.tar.gz
+-sha256  39e1cc18a36172fb80d9b37f0af77d78ae935bd8a020978a7895d9e76a24e112  cli.c
+-sha256  69d4eea4de19d27014f3d6ed723081b4039700bfd73cd0a5e39e2c4f19a58c66  libuci.c
++sha256  d3b12df54f9faa69f0ff6d2a239fdcc30d64eda5269ddc882cf97677ea8cb066  libuci-f3fc0b76040685829191debc03edf72f486ae8ae-git4.tar.gz
++sha256  5bb12361838b588bb263ade8537f5ae1a5e62d54b0a8f0640489db8cc29831d8  cli.c
++sha256  bbc34ea5f391abc3b27416dc3c96b0f71f852c44210faf1cde0990218f68b13a  libuci.c
+diff --git a/package/libuci/libuci.mk b/package/libuci/libuci.mk
+index 81e87aa5be..3c7e12baae 100644
+--- a/package/libuci/libuci.mk
++++ b/package/libuci/libuci.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUCI_VERSION = 4b3db1179747b6a6779029407984bacef851325c
++LIBUCI_VERSION = f3fc0b76040685829191debc03edf72f486ae8ae
+ LIBUCI_SITE = https://git.openwrt.org/project/uci.git
+ LIBUCI_SITE_METHOD = git
+ LIBUCI_LICENSE = LGPL-2.1, GPL-2.0 (tools)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
