@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CFC9C3ABA3
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:14:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF255C3ABAC
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:14:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD78760AE6;
-	Fri,  2 May 2025 11:14:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9193D84257;
+	Fri,  2 May 2025 11:14:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZH95aZuBkCx5; Fri,  2 May 2025 11:14:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FZpsW0CtLihl; Fri,  2 May 2025 11:14:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2636E60ACA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7F8A83F57
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2636E60ACA;
-	Fri,  2 May 2025 11:14:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B7F8A83F57;
+	Fri,  2 May 2025 11:14:51 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 10A31229
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:12:27 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 15C64EE
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:12:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 695B5417C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 73058417BF
  for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EjIKvpbw373L for <buildroot@buildroot.org>;
+ id ypwEIcL2lRLE for <buildroot@buildroot.org>;
  Fri,  2 May 2025 11:11:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C7A6417BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DE0E41E5A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C7A6417BF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6DE0E41E5A
  for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7995481776; Fri,  2 May 2025 11:11:38 +0000 (UTC)
+ id 6B4C5812BB; Fri,  2 May 2025 11:11:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 2 May 2025 13:01:15 +0200
+Date: Fri, 2 May 2025 13:01:14 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: fbb5433a44fe071691194154eb3f01f3c2c3499b
-X-Git-Newrev: a9b358eeaa197fddeb14218e93922a7de9416f6d
+X-Git-Oldrev: 82b624fecaa6a14f22f436050edbbeecf1b40163
+X-Git-Newrev: fbb5433a44fe071691194154eb3f01f3c2c3499b
 X-Patchwork-Hint: ignore
-Message-Id: <20250502111138.7995481776@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- configs/olimex_a20_olinuxino_lime*: bump Linux
+Message-Id: <20250502111138.6B4C5812BB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/dust: bump to
+ version 1.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,54 +66,80 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9b358eeaa197fddeb14218e93922a7de9416f6d
+commit: https://git.buildroot.net/buildroot/commit/?id=fbb5433a44fe071691194154eb3f01f3c2c3499b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Release:
+https://github.com/bootandy/dust/releases/tag/v1.1.2
+
+Note: version 0.9.0 of dust fails to build when running
+the runtime test on the armv7 architecture due to an
+unconditional import of Atomicu64.
+
+	error:
+
+Compiling config-file v0.2.3
+error[E0432]: unresolved import `std::sync::atomic::AtomicU64`
+ --> src/progress.rs:6:18
+  |
+6 |         atomic::{AtomicU64, AtomicU8, AtomicUsize, Ordering},
+  |                  ^^^^^^^^^
+  |                  |
+  |                  no `AtomicU64` in `sync::atomic`
+  |                  help: a similar name exists in the module: `AtomicU32`
+
+For more information about this error, try `rustc --explain E0432`.
+error: could not compile `du-dust` (bin "dust") due to 1 previous error
+
+This issue was discovered while writing a runtime test
+for dust. upgrading to version 1.1.2 resolves the issue.
+
+More details available in the following issue:
+https://github.com/bootandy/dust/issues/423
+
+For now, we bump to the latest compatible version
+which builds and runs correctly. We can't bump to the latest
+version 1.2.0 since it requires a cargo version newer than
+1.82.0.
+
+	error:
+--  The package requires the Cargo feature called `edition2024`, but that feature is not stabilized in this version of Cargo (1.82.0 (8f40fc59f 2024-08-21)).
+  Consider trying a newer version of Cargo (this may require the nightly release).
+
+The upgrade to 1.2.0 will be considered once the patch for
+Rust 1.86.0 is accepted.
+
+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit e42da630d0c1f3aca8ecc6d0d35a777f202270ed)
-[Thomas: only bump linux]
+(cherry picked from commit 3abc3b97bad9b4bbd436015cce029f25ee627f6a)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- board/olimex/a20_olinuxino/patches/linux/linux.hash | 2 +-
- configs/olimex_a20_olinuxino_lime2_defconfig        | 2 +-
- configs/olimex_a20_olinuxino_lime_defconfig         | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/dust/dust.hash | 2 +-
+ package/dust/dust.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/olimex/a20_olinuxino/patches/linux/linux.hash b/board/olimex/a20_olinuxino/patches/linux/linux.hash
-index 0bc60586f5..023d244994 100644
---- a/board/olimex/a20_olinuxino/patches/linux/linux.hash
-+++ b/board/olimex/a20_olinuxino/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/dust/dust.hash b/package/dust/dust.hash
+index 975ec9664d..be80a84166 100644
+--- a/package/dust/dust.hash
++++ b/package/dust/dust.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  9c6305567b75d99514cde6eb9de39973f3d5c857a75bd9dcdfca57041f8d4f34  linux-6.6.69.tar.xz
-+sha256  49e3ad7423e40735faada0cd39665c071d47efd84ec3548acf119c9704f13e68  linux-6.6.86.tar.xz
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index fde3473847..3778539f17 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.69"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.86"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 9275b5fbfc..7ffd308757 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.69"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.86"
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-sha256  ace29e85647e7079f9eaa066da9b1368c7200233eb0814442499948b5adeb028  dust-0.9.0-cargo2.tar.gz
++sha256  01f4796a27e916e7fab77fbf12685da9fb1422dd3dcfdf736a146ad05ebc3c39  dust-1.1.2-cargo2.tar.gz
+ sha256  aee6e2d13d3a55c7881630c09b41ca7b3b44bb1437b5d36695d22decc3655160  LICENSE
+diff --git a/package/dust/dust.mk b/package/dust/dust.mk
+index c566723c1c..a6b6f43c40 100644
+--- a/package/dust/dust.mk
++++ b/package/dust/dust.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DUST_VERSION = 0.9.0
++DUST_VERSION = 1.1.2
+ DUST_SITE = $(call github,bootandy,dust,v$(DUST_VERSION))
+ DUST_LICENSE = APACHE-2.0
+ DUST_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
