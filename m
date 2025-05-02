@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40F2CC3ABAC
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:12:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F34EBC3ABA3
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:12:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 12DBF41206;
-	Fri,  2 May 2025 11:12:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B43DE83F3B;
+	Fri,  2 May 2025 11:12:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UHbkBvQjo6jQ; Fri,  2 May 2025 11:12:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4mstmTv3Mb2Y; Fri,  2 May 2025 11:12:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 451EA41E64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C89DC8374F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 451EA41E64;
-	Fri,  2 May 2025 11:12:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C89DC8374F;
+	Fri,  2 May 2025 11:12:54 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5A65AEE
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:49 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D297EE
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3798B6158C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4596D6158F
  for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3XMV9-zxKKQF for <buildroot@buildroot.org>;
- Fri,  2 May 2025 11:11:37 +0000 (UTC)
+ id 4HMrswPxZT7c for <buildroot@buildroot.org>;
+ Fri,  2 May 2025 11:11:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 411A660C0D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B818C61369
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 411A660C0D
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B818C61369
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3F56D864AD; Fri,  2 May 2025 11:11:37 +0000 (UTC)
+ id AFA0A864AE; Fri,  2 May 2025 11:11:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 2 May 2025 12:13:39 +0200
+Date: Fri, 2 May 2025 12:12:42 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9a8bc0cb379ac008aa7fd2e930f26b28ff3d0a54
-X-Git-Newrev: e34e58191d51648c00de7b6df8d77382d6fd4444
+X-Git-Oldrev: e50c617e6c6b2b554fdce0a89bb42940570e4c7d
+X-Git-Newrev: 73d998ec58584478aeaf46e9172abbced1caa5b0
 X-Patchwork-Hint: ignore
-Message-Id: <20250502111137.3F56D864AD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/pangomm2_46: bump
- to version 2.46.4
+Message-Id: <20250502111136.AFA0A864AE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libcamera: remove
+ dependency on boost for rpi/vc4 pipeline
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,45 +66,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e34e58191d51648c00de7b6df8d77382d6fd4444
+commit: https://git.buildroot.net/buildroot/commit/?id=73d998ec58584478aeaf46e9172abbced1caa5b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-https://gitlab.gnome.org/GNOME/pangomm/-/blob/2.46.4/NEWS
+Commit c1597f989654 ("ipa: raspberrypi: Use YamlParser to replace
+dependency on boost"), part of the v0.0.1 release, removed the
+dependency on boost, so let's remove it from the pipeline option and
+dependency for Buildroot.
 
-Signed-off-by: Daniel Lang <dalang@gmx.at>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 24ef1c083e973575166e9477499a69db83996a7e)
+Signed-off-by: Quentin Schulz <quentin.schulz@cherry.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 65721c6e0a5efe1a4fff1bdab44ff55c27f1ca68)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/pangomm2_46/pangomm2_46.hash | 4 ++--
- package/pangomm2_46/pangomm2_46.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libcamera/Config.in    | 2 --
+ package/libcamera/libcamera.mk | 5 +----
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/package/pangomm2_46/pangomm2_46.hash b/package/pangomm2_46/pangomm2_46.hash
-index 8d05dbc2ff..eb4e1c58e9 100644
---- a/package/pangomm2_46/pangomm2_46.hash
-+++ b/package/pangomm2_46/pangomm2_46.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/pangomm/2.46/pangomm-2.46.3.sha256sum
--sha256  410fe04d471a608f3f0273d3a17d840241d911ed0ff2c758a9859c66c6f24379  pangomm-2.46.3.tar.xz
-+# From https://download.gnome.org/sources/pangomm/2.46/pangomm-2.46.4.sha256sum
-+sha256  b92016661526424de4b9377f1512f59781f41fb16c9c0267d6133ba1cd68db22  pangomm-2.46.4.tar.xz
- # Locally computed
- sha256  5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509  COPYING
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING.tools
-diff --git a/package/pangomm2_46/pangomm2_46.mk b/package/pangomm2_46/pangomm2_46.mk
-index 1725158491..3640641af1 100644
---- a/package/pangomm2_46/pangomm2_46.mk
-+++ b/package/pangomm2_46/pangomm2_46.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PANGOMM2_46_VERSION_MAJOR = 2.46
--PANGOMM2_46_VERSION = $(PANGOMM2_46_VERSION_MAJOR).3
-+PANGOMM2_46_VERSION = $(PANGOMM2_46_VERSION_MAJOR).4
- PANGOMM2_46_SOURCE = pangomm-$(PANGOMM2_46_VERSION).tar.xz
- PANGOMM2_46_SITE = https://download.gnome.org/sources/pangomm/$(PANGOMM2_46_VERSION_MAJOR)
- PANGOMM2_46_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (tools)
+diff --git a/package/libcamera/Config.in b/package/libcamera/Config.in
+index 1df97edc41..086a5b3758 100644
+--- a/package/libcamera/Config.in
++++ b/package/libcamera/Config.in
+@@ -63,8 +63,6 @@ config BR2_PACKAGE_LIBCAMERA_PIPELINE_RKISP1
+ config BR2_PACKAGE_LIBCAMERA_PIPELINE_RPI_VC4
+ 	bool "rpi/vc4 pipeline"
+ 	depends on BR2_arm || BR2_aarch64
+-	depends on BR2_USE_WCHAR # boost (already enforced for gnutls)
+-	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_LIBCAMERA_HAS_PIPELINE
+ 	help
+ 	  Pipeline for Raspberry Pi devices.
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index b3132dc016..0f52f08e39 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -61,10 +61,7 @@ endif
+ LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_IMX8_ISI) += imx8-isi
+ LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_IPU3) += ipu3
+ LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_RKISP1) += rkisp1
+-ifeq ($(BR2_PACKAGE_LIBCAMERA_PIPELINE_RPI_VC4),y)
+-LIBCAMERA_PIPELINES-y += rpi/vc4
+-LIBCAMERA_DEPENDENCIES += boost
+-endif
++LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_RPI_VC4) += rpi/vc4
+ LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_SIMPLE) += simple
+ LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_UVCVIDEO) += uvcvideo
+ LIBCAMERA_PIPELINES-$(BR2_PACKAGE_LIBCAMERA_PIPELINE_VIMC) += vimc
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
