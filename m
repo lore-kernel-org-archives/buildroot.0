@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E70E7C3ABDD
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:22:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15CF3C3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:22:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8ECA419D9;
-	Fri, 16 May 2025 11:22:10 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gHfXVGBz5Iol; Fri, 16 May 2025 11:22:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 703FF419BC
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 703FF419BC;
-	Fri, 16 May 2025 11:22:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0277A1AB
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 530286114E
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D567161242;
+	Fri, 16 May 2025 11:22:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N1vDUcXdoWXO for <buildroot@buildroot.org>;
+ id dq7kcVFqBLZ2; Fri, 16 May 2025 11:22:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0BD6C61263
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0BD6C61263;
+	Fri, 16 May 2025 11:22:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 547111AB
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5D2B58356E
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 61q0ZFKr6v_0 for <buildroot@buildroot.org>;
  Fri, 16 May 2025 11:21:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E84E60E3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0771681168
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8E84E60E3C
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0771681168
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8C30686A00; Fri, 16 May 2025 11:21:54 +0000 (UTC)
+ id EB30886A00; Fri, 16 May 2025 11:21:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 14 May 2025 21:03:31 +0200
+Date: Fri, 2 May 2025 17:23:13 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: c1e2a6e2519ec8cf67bd8d2d624d99f990903de3
-X-Git-Newrev: 5ca8d709073459225b48140238ac740eeecb5d3f
+X-Git-Oldrev: f62d80c3e7f879895eee423ef15281149159384d
+X-Git-Newrev: 1a407c28e569aa172712680aef9a5f8563ada162
 X-Patchwork-Hint: ignore
-Message-Id: <20250516112154.8C30686A00@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/zfs: add upstream
- patch to fix musl
+Message-Id: <20250516112153.EB30886A00@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/wireless-regdb:
+ bump version to 2025.02.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,79 +61,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5502186140721394103=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5502186140721394103==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=5ca8d709073459225b48140238ac740eeecb5d3f
+commit: https://git.buildroot.net/buildroot/commit/?id=1a407c28e569aa172712680aef9a5f8563ada162
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This patch fixes the `S_IFMT` undeclared error in `statx.c` when musl
-is used.
+See release announce:
+https://lists.infradead.org/pipermail/wireless-regdb/2025-February/001686.html
 
-Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 9a672635a1f6055a022084d45885a9078bbde0d0)
+(cherry picked from commit 770c1525e6deb580ef5b36466319dd444d07fc16)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../0001-fix-S_IFMT-undeclared-at-statx_c.patch    | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ package/wireless-regdb/wireless-regdb.hash | 2 +-
+ package/wireless-regdb/wireless-regdb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/zfs/0001-fix-S_IFMT-undeclared-at-statx_c.patch b/package/zfs/0001-fix-S_IFMT-undeclared-at-statx_c.patch
-new file mode 100644
-index 0000000000..233118f7f6
---- /dev/null
-+++ b/package/zfs/0001-fix-S_IFMT-undeclared-at-statx_c.patch
-@@ -0,0 +1,36 @@
-+From 8e9fcdac6f7bbc4ec92e89b8cdce1dcc404f1999 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Jos=C3=A9=20Luis=20Salvador=20Rufo?=
-+ <salvador.joseluis@gmail.com>
-+Date: Fri, 2 May 2025 08:10:08 +0200
-+Subject: [PATCH] tests: fix `S_IFMT` undeclared at `statx.c`
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+`S_IFMT` is declared in `sys/stat.h`, but we cannot include this header
-+because it redeclares the `statx` function with different argument
-+types. Therefore, we define `S_IFMT` ourselves, in the same way as the
-+other definitions.
-+
-+Closes: #17293
-+
-+Upstream: https://github.com/openzfs/zfs/commit/634c172ee89f5303493a75dc7ff55e0a355b503a
-+Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
-+---
-+ tests/zfs-tests/cmd/statx.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/tests/zfs-tests/cmd/statx.c b/tests/zfs-tests/cmd/statx.c
-+index 89939f6efb40..1acc7e58c5ce 100644
-+--- a/tests/zfs-tests/cmd/statx.c
-++++ b/tests/zfs-tests/cmd/statx.c
-+@@ -109,6 +109,9 @@ _statx(int fd, const char *path, int flags, unsigned int mask, void *stx)
-+ #ifndef STATX_DIOALIGN
-+ #define	STATX_DIOALIGN	(1<<13)
-+ #endif
-++#ifndef S_IFMT
-++#define	S_IFMT 0170000
-++#endif
-+ 
-+ typedef struct {
-+ 	int64_t		tv_sec;
-
---===============5502186140721394103==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/wireless-regdb/wireless-regdb.hash b/package/wireless-regdb/wireless-regdb.hash
+index a3b5973bad..cb915c4415 100644
+--- a/package/wireless-regdb/wireless-regdb.hash
++++ b/package/wireless-regdb/wireless-regdb.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/network/wireless-regdb/sha256sums.asc
+-sha256  f76f2bd79a653e9f9dd50548d99d03a4a4eb157da056dfd5892f403ec28fb3d5  wireless-regdb-2024.10.07.tar.xz
++sha256  57f8e7721cf5a880c13ae0c202edbb21092a060d45f9e9c59bcd2a8272bfa456  wireless-regdb-2025.02.20.tar.xz
+ # Locally computed
+ sha256  678b0df753c86198fc496d1f1033429bbd57f101472132ee7eaaf9f5e0a7fae1  LICENSE
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index 2aec19c507..999a986de2 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WIRELESS_REGDB_VERSION = 2024.10.07
++WIRELESS_REGDB_VERSION = 2025.02.20
+ WIRELESS_REGDB_SOURCE = wireless-regdb-$(WIRELESS_REGDB_VERSION).tar.xz
+ WIRELESS_REGDB_SITE = $(BR2_KERNEL_MIRROR)/software/network/wireless-regdb
+ WIRELESS_REGDB_LICENSE = ISC
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5502186140721394103==--
