@@ -1,175 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 028F9C3ABA3
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 07:33:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24B91C3ABA3
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 10:14:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E97141755;
-	Fri,  2 May 2025 07:33:45 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wj7b9QVW_qQc; Fri,  2 May 2025 07:33:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A31B141752
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A31B141752;
-	Fri,  2 May 2025 07:33:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4E72B1A4
- for <buildroot@buildroot.org>; Fri,  2 May 2025 07:33:43 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F7046079F
- for <buildroot@buildroot.org>; Fri,  2 May 2025 07:33:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8126760B56;
+	Fri,  2 May 2025 10:14:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ncQgCt3h6yas for <buildroot@buildroot.org>;
- Fri,  2 May 2025 07:33:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:200a::60a;
- helo=nam12-mw2-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4ECF16077E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4ECF16077E
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam12on2060a.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:200a::60a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4ECF16077E
- for <buildroot@buildroot.org>; Fri,  2 May 2025 07:33:42 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ow08JsEBpxqWwaOnCdZEPgo0dLKCyTHCXjhk9HfP+vNdHVbJdneft+1nVrbbK28JwGybE6ZP2ngh7PJC3Pfptj5rV1I06fogJVp0wBPe58KKdgtYZplGuzsgsrikgfMukjGziPfHczvHEeJdXZH46ec9bck4Ntkzhc5+UiaQDxZBsM8dt+AbIOJ+9lbdoCpcbt8m7rVawjMg1LFRpVKYagrMOlaW+/G+k62pQsEUqcQ4GxHhcFR41Lgylx2c4hdrS+hs0ItrB4wSLkXi1BCiuduS/DM8zAM/pXK1gUFx2HRf8UceREHVDictLH9N15kYuh592EEITpQiA6Y7XQUYoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=97DRpBIvfRc2amwyfKoLsYxEtd0rwIMocGne+Ql5Sc4=;
- b=UVez2lEXbCIn6+R2tcfuvn5mGXQkdVmTQ0JEZrdlq1OTpziN9x97WnRaAfiQsenc1iQ5aP4yr0HE7THSiegmi+C8TmCZuG2jWBM+UVaB3fttFHr2D8AmXJE5SCiEYhmQ862AB6xglkIRre24vvDUjLxCDegZAJERpF3iT9IUt2rsv9ZOyZoxAkspkAJb5U27HaAQf7LAujGfeSsms6wEOwGGBnhPLRh4rO88V/VgFXmBSoXHYNFzCJaQrCBfZccdbKZVxLJiUx8NpTrjsCGEKwlagmraB+oxd9KH5SzuWhgiYFdvmBr4bsiH8ZpP0EbrcDREjBZOzz7ObASCPO5hoA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from SA1PR12MB5615.namprd12.prod.outlook.com (2603:10b6:806:229::17)
- by SN7PR12MB7154.namprd12.prod.outlook.com (2603:10b6:806:2a5::16)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.27; Fri, 2 May
- 2025 07:33:36 +0000
-Received: from SA1PR12MB5615.namprd12.prod.outlook.com
- ([fe80::7557:587c:4ec:1913]) by SA1PR12MB5615.namprd12.prod.outlook.com
- ([fe80::7557:587c:4ec:1913%5]) with mapi id 15.20.8699.012; Fri, 2 May 2025
- 07:33:36 +0000
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Thread-Topic: [PATCH v2 1/2] package/xilinx-fpgautil: new package
-Thread-Index: AQHbtOM3l/cHhDVJS0akcnp6falvMbO8N3KAgALHcfA=
-Date: Fri, 2 May 2025 07:33:36 +0000
-Message-ID: <SA1PR12MB56155B732CA8C04333BD21EDF08D2@SA1PR12MB5615.namprd12.prod.outlook.com>
-References: <20250424063619.789456-1-neal.frager@amd.com>
- <20250430150557.4f8e7efe@booty>
-In-Reply-To: <20250430150557.4f8e7efe@booty>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ActionId=895a9a9f-9fde-4e02-8e15-49cf6591e2d0;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_ContentBits=0;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Enabled=true;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Method=Standard;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Name=AMD
- Internal Distribution Only;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SetDate=2025-05-02T07:32:17Z;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_dce362fe-1558-4fb5-9f64-8a6240d76441_Tag=10, 3, 0, 1;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR12MB5615:EE_|SN7PR12MB7154:EE_
-x-ms-office365-filtering-correlation-id: 334ba9ca-e8af-4438-1966-08dd894ba688
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230040|1800799024|366016|376014|38070700018|41080700001; 
-x-microsoft-antispam-message-info: =?us-ascii?Q?uQBOQVllxVDdGfPZ42cWLTgi9SSU+CdOg1PbF/wcMGcSutDgPtfflQ3aZzVn?=
- =?us-ascii?Q?T90UYOaXsjqLa8Ps2WMZqxw7sCnEbxw0iu098U29gGjZkL6ySYzM8NbXUYfR?=
- =?us-ascii?Q?0SDy3zl2nBdxQATHbyecQ3owF9kDvoKWs0TvdNredOQmsZ/g2xnijpph/l4R?=
- =?us-ascii?Q?9zLUgxOhR344BQ0vJMeNsHf2o37y/xhKvguAKQVTmU/QNiPIQFXaNUQhw3Tz?=
- =?us-ascii?Q?KwztoNC64uJ+fj/Owbq9LRTZKCm6aQIPECALPFAPg3yCtNUHl8kOM9azlARW?=
- =?us-ascii?Q?gv5Th5RTGp2pqzOM+1LJqd3XSEBWNRIgvOkqB8C2U5JjgobLcpSy62wZ7arx?=
- =?us-ascii?Q?bdaQPh2RASdIANTsV4SQgBKiZu1dKhQlvEX2BX+iuOStKoBj7JbrE7/QeeaE?=
- =?us-ascii?Q?4HLp1H+quLSBfAy5kDebR/9odGINTKbSPNauaJpQBWV6z99gU7mama+zXlbC?=
- =?us-ascii?Q?F00ePG7UlrxBygIdbyrXNnSGGTgy5qiq6OHRZNixE+YWJlf2L7cm1e8oHPkB?=
- =?us-ascii?Q?+WrsQGRemmuXHG77XsMFEYv5LTqoJa1nDWifxyY2zQjE5CTT8kQRV/5QBdMW?=
- =?us-ascii?Q?bAQsMJKJxKy579GGSBsdkEX28RPKxbM4IkKvmCLNWzZ/6oBsnng/dlAxIJ1e?=
- =?us-ascii?Q?YTQKWgRzmqdl9C/PoFz27K7kDK5R/EXnVdxy4t7hPBYFZkU8fPpV+hEOSzDQ?=
- =?us-ascii?Q?tODmtWZgpmGGKGsXqhD9wpJtCFSh+q3mrJ3lZNjCWD4JkcajB+TtQS16z2nz?=
- =?us-ascii?Q?GgYOs6N3LCpzQ1nQ/TA/Uf+HncPwvTZZu6jBb5inYNZPjHN7LfF+G5+Rtwox?=
- =?us-ascii?Q?ys+GsBrt+psBLSwuv3QiHkJSSXVMk7s9AIRSLGZXGbno5qewOB1P/jzqOJaa?=
- =?us-ascii?Q?U1FSdexKR8FpyeAm7OXL8mLN9QDQH/heyWngqFu9Kbf3qoOPkr7NuAqfSNDX?=
- =?us-ascii?Q?N3mO6Bn6fB1YAA8QXfD/hSeQLm6SIzFxdsjXfSeg1b4ED7/NKlHH7Zic+m0D?=
- =?us-ascii?Q?NqUJIOZGIOJqn5GO58rIhAP8mrtssV6uQ0hapBfyPDxV61KMcaP2ttJDgtKU?=
- =?us-ascii?Q?6ZZFMWeqbUwe8gJEvIsC3z3iUxk8yohehTi9FqORNOJX7R39Je/dJB+klVhT?=
- =?us-ascii?Q?ChfUNyNJQcssc5Et+M7/lKV3xljllGZzypGopftPRU7QrWLTFrFTDGygRrQQ?=
- =?us-ascii?Q?rtGK0ewZHkxuxNSAB/y6/5ZWwuAzz8mj9MC/H0yFj2jmKQC1ZKAFYdNbdHJT?=
- =?us-ascii?Q?5drNV9WNNZq4ybZk4TBAnf9oJ50c92+nJvtEIpPN/vVQ+W9CF8kfqn88S9Rt?=
- =?us-ascii?Q?lQpzJstZ/vJ16p6sUWyfvjfHq32GsAiqMQf1RvSJEIIxLQ4vlHFoP9TZ8BH8?=
- =?us-ascii?Q?yF0eEQaZT/pEyzGbbmdryku3Q748QlSApMk3Urp504c5gw1AuVUWrx7qaHKh?=
- =?us-ascii?Q?mmmnHDpf3MGYfhz3+6nU7kGjmOOT6V9vhsQXso/ifT5Wwk6+naP6PA=3D=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:SA1PR12MB5615.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(1800799024)(366016)(376014)(38070700018)(41080700001); DIR:OUT;
- SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?lfI01Q4d5IlHWPo1Ap5B3KuZS72SkfHw7+KzaK4ds+64RSEtuFDWLyB6g4Mp?=
- =?us-ascii?Q?ekcIfX/OiVbLK7SxKwE8aVoH7RiKvdlSML33zHMShMIwbjjbGmGR/prxycmv?=
- =?us-ascii?Q?niXMWwOGEUuOOaoLGJS8yWFomveXhVHpc4FC91WwnNcLRuMY1xk9S2PPU/dK?=
- =?us-ascii?Q?NEww+guw7vyiFO54yvdeJoQHBQ5pPV3pVHD9ddc3mCw06biVmtFUI8Uwuhox?=
- =?us-ascii?Q?sH+3veaaVlBoeNzupM16FhZWHcPVSk5npNn2J4Fozi8y/m7N4h5i1b0EKA14?=
- =?us-ascii?Q?mMY5fKJ35tW0CLcaJ/Q5KZZhs0HmFM53EPC+UfEbRBvE5QplAN1G/oaBoP0A?=
- =?us-ascii?Q?0omaE0wQ/TcXMLdyA5tPiKNMQib/MMHpXdVrpEQ42QeVMoblHTkAX8eUyF2H?=
- =?us-ascii?Q?eJ/9vIU0N9nyjtZQc1ybwAGHbyiLacJKl6GbICmuHSScljfyvhaFVSF2z1EN?=
- =?us-ascii?Q?dfk8YBHEFfl9eNJJVZ6qi6jQvh+h8xgL+ksNa3wDYZEpha8dsXdksS5Lidvt?=
- =?us-ascii?Q?OetUDChOGfTae4C0+r5VZaNyrmHj1GqQv01CDl3yUvWKDdOpyGsFZBUIPKUF?=
- =?us-ascii?Q?SzbMWiTSmHNazeV6CWMun88gv72fsHPmwubBen7+TgbMR+o7pnkjgYPuX6wM?=
- =?us-ascii?Q?0o+rx8D2Tu1v6cyLEkebFWyIk5ijrTW8t/XuJz55rUz8gfDKNJfuxnlN5oSB?=
- =?us-ascii?Q?rYI1nHEyUyBl800OrapI0AKJjs1dzKDcwDa6OOByhpaHrqINfth65TXYOzSI?=
- =?us-ascii?Q?RFhiRVhX4lGQeIlQKb2WIkJSjtpI0XWKrdTBFI+CKHKS9RfC/znHoYhFygY6?=
- =?us-ascii?Q?QWmY0u4F5gDU5evZKgzK4ICC41DJXlaYdPZ3utzD3FxVN3glAEc1UnBD3vGb?=
- =?us-ascii?Q?yPS2gEA61pNz+aDP2c8nOgTAmPElYpAuvrcnpAeWtNznQVGmPgbPpS3hq9Bs?=
- =?us-ascii?Q?NrJHgCQl4w52D8mBvOejmLpBMiZJIvWnKlUUuwl/1H3s5uzOpRhdXbIYiS+h?=
- =?us-ascii?Q?2f3O0H3vCY7W9BNXbVqfmIZmiRIUrK+z9WKV+y3K99Qik5GxbpCNckZJZ+9O?=
- =?us-ascii?Q?UJr6xMY6OWpipEQxI1w1oYrpsh96fJ4Yh4hBWYGIou2+1iTkCqQmEKnagA9U?=
- =?us-ascii?Q?38SEkQ0CY1iwDn3wa4oUFXq5bDbn946A9p/A3YCw5i1VKXldlPUe0voj0ZIY?=
- =?us-ascii?Q?xioJ1egWMddySu+AvBGlJMG0OjwlLvzjHQyw+DZWXmNvrCUeepjy6o4YJEpM?=
- =?us-ascii?Q?eQELk+euvPvB8Jb/edmmtmR2wETRUaPFus0rKpg+OyHqx5EpzfbUhDQrPPHL?=
- =?us-ascii?Q?z1tE/77wFOE22Nkn74cHAwq6Pw7XbfkncPOoz1f0KqU9DS8QGj4PsZVrgQq4?=
- =?us-ascii?Q?Wphf/yAKECsHBuLh/cxtgKrvjF7LCAJMZUuStYMxjtbE2Na0ZEdNN4kLI0GA?=
- =?us-ascii?Q?8R8/c1X+wmjC0cYKVdtjyRBW5HMUFY8gV8RjdEfo2r7WFb81pCMallQsy3ch?=
- =?us-ascii?Q?LtGtHfyLUR3RLCKcfq22SWeBVCflpa50aI+vLBZb7+sIR0H187S/OmUNmF6H?=
- =?us-ascii?Q?xfyjp4ioIVfesP0FxGE=3D?=
+ id o6FzlwQuW4bj; Fri,  2 May 2025 10:14:38 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9533360AF5
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9533360AF5;
+	Fri,  2 May 2025 10:14:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id AFCCCEE
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:14:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9091460AF5
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:14:36 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id b22bHlrw_jh8 for <buildroot@buildroot.org>;
+ Fri,  2 May 2025 10:14:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
+ helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6E4F5605E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E4F5605E9
+Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6E4F5605E9
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:14:34 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 471971C0D89; Fri,  2 May 2025 12:14:31 +0200 (CEST)
+Message-ID: <32ffeac4-1e90-413a-b221-a1f8b0f326e2@rnout.be>
+Date: Fri, 2 May 2025 12:14:26 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR12MB5615.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 334ba9ca-e8af-4438-1966-08dd894ba688
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 May 2025 07:33:36.5444 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: n6f0q1aiBqnKj4aBcUjFupw+ETh7c1xHZlpPIgoaXMeO1zbK12RmhDBHgOmlQrPV
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7154
+User-Agent: Mozilla Thunderbird
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Francis Laniel <flaniel@linux.microsoft.com>
+References: <20250427-patch_pahole-v1-1-b8cc84bd5a51@bootlin.com>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20250427-patch_pahole-v1-1-b8cc84bd5a51@bootlin.com>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=97DRpBIvfRc2amwyfKoLsYxEtd0rwIMocGne+Ql5Sc4=;
- b=2ErT11QlLMc6D5xikSAGtavsE3MrcHx2uxebVGrt9lu2ucBEt92yVGMHh5ovYIZB3sMSrN1Z0tsk+KP3AY1XCTZ9zYAuhPHel196VorN7wXrrKcblhxu1AVDyLeBpyunWuvXsKZmcd1C9gZ/r/T//HBizXOiDyWOS2ak9quYQe8=
+ d=rnout.be; s=dkim; 
+ t=1746180871; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=QmV8Ar4Y1an0cK62UYr2mziGu+shCaHMJIdxlbQfEZw=;
+ b=Fq4olFa51PyyGBgu+2orumuIwA0ZxTzCgA5k/4WnhaqaG16JPSMiF9bw2wbx8dzV7YRSkQ
+ BNJUJBgv4IMc53CXyDZQqNMKLyBZA1jnkCMSYutiNZ/iAF9h/CD4OxBoURaFN6kHF2alTM
+ nlIYasGSJBwTlqgHzdfa8j5xzLBXmboFRT1DF1XWSKbZzWSVbtAl+MNQHGo1dDG2EoZLmH
+ lOPiNY8hZFvV9XAJWyx5Eh+H5h6IW/AliMaxuJAkZJTUti+ROixQqCW0EtyBahv3pt4HXL
+ c6rxA+T37XqqA2dPF2050s2PJnGbZdtyh3MEEDncrGe+5nn9hlSi2PlOse4owQ==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=2ErT11Ql
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/xilinx-fpgautil: new package
+ dkim=pass (2048-bit key,
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=Fq4olFa5
+Subject: Re: [Buildroot] [PATCH 2025.02.x] package/pahole: fix build with
+ host-cmake 4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -181,93 +80,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>,
- "arnout@mind.be" <arnout@mind.be>,
- "brandon.maier@collins.com" <brandon.maier@collins.com>,
- "ju.o@free.fr" <ju.o@free.fr>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>, "Caccamo,
- Fabio" <fabio.caccamo@amd.com>,
- "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek,
- Michal" <michal.simek@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-[AMD Official Use Only - AMD Internal Distribution Only]
-
-Hello Luca,
-
-> Add a new package to Buildroot called xilinx-fpgautil which builds the Xilinx
-> fpgautil script which can be used for loading FPGA bitstreams on zynq, zynqmp
-> and versal products at run-time.  This is a handy application for loading
-> FPGA bitstreams and their corresponding device tree overlays.
->
-> An explanation of how this script can be used for each type of product can be
-> found on the wiki pages below.
->
-> https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841645/Solution+Zynq+PL+Programming+With+FPGA+Manager
-> https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841847/Solution+ZynqMP+PL+Programming
-> https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1188397412/Solution+Versal+PL+Programming
->
-> In addition, the source code for xilinx-fpgautil can be found here:
-> https://github.com/Xilinx/meta-xilinx/blob/master/meta-xilinx-core/recipes-bsp/fpga-manager-script/files/fpgautil.c
->
-> The Xilinx fpgautil script can be used hand in hand with the Versal Segmented
-> Configuration with the following example command for programming the pld.pdi
-> file to the Versal FPGA:
->
-> fpgautil -b /lib/firmware/xilinx/<design-name>_pld.pdi -o /lib/firmware/xilinx/<dtbo-name>.dtbo
->
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-
-> [...]
-
-> --- /dev/null
-> +++ b/package/xilinx-fpgautil/xilinx-fpgautil.mk
-> @@ -0,0 +1,22 @@
-> +################################################################################
-> +#
-> +# xilinx-fpgautil
-> +#
-> +################################################################################
-> +
-> +XILINX_FPGAUTIL_VERSION = xlnx-rel-v2024.2_update3
-> +XILINX_FPGAUTIL_SITE = $(call github,Xilinx,meta-xilinx,$(XILINX_FPGAUTIL_VERSION))
-> +XILINX_FPGAUTIL_LICENSE = MIT
-> +XILINX_FPGAUTIL_LICENSE_FILES = COPYING.MIT
-> +
-> +define XILINX_FPGAUTIL_BUILD_CMDS
-> +     $(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_LDFLAGS) \
-> +             $(@D)/meta-xilinx-core/recipes-bsp/fpga-manager-script/files/fpgautil.c \
-> +             -o $(@D)/fpgautil
-> +endef
-> +
-> +define XILINX_FPGAUTIL_INSTALL_TARGET_CMDS
-> +     $(INSTALL) -m 0755 -D $(@D)/fpgautil $(TARGET_DIR)/bin/fpgautil
-                                                          ^^^^
-
-> Are you installing in /bin for some reason? /usr/bin seems the right
-> place.
-
-Thanks for catching this.  I made the change in v3.
-
-> Otherwise looks good, so in case you send v3 with only the /usr/bin
-> change, you can add:
-
-> [build-tested only]
-> Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-
-Added to commit message.  Thanks again!
-
-Best regards,
-Neal Frager
-AMD
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAyNy8wNC8yMDI1IDIxOjQxLCBBbGV4aXMgTG90aG9yw6kgdmlhIGJ1aWxkcm9vdCB3cm90
+ZToKPiBob3N0LXBhaG9sZSBidWlsZCBmYWlscyB3aXRoIHJlY2VudCBob3N0LWNtYWtlIHZlcnNp
+b25zLCBwcm9kdWNpbmcgdGhlCj4gZm9sbG93aW5nIGVycm9yOgo+IAo+IENNYWtlIERlcHJlY2F0
+aW9uIFdhcm5pbmcgYXQgQ01ha2VMaXN0cy50eHQ6MSAoY21ha2VfbWluaW11bV9yZXF1aXJlZCk6
+Cj4gICAgQ29tcGF0aWJpbGl0eSB3aXRoIENNYWtlIDwgMy41IHdpbGwgYmUgcmVtb3ZlZCBmcm9t
+IGEgZnV0dXJlIHZlcnNpb24KPiBvZgo+ICAgIENNYWtlLgo+IAo+ICAgIFVwZGF0ZSB0aGUgVkVS
+U0lPTiBhcmd1bWVudCA8bWluPiB2YWx1ZSBvciB1c2UgYSAuLi48bWF4PiBzdWZmaXggdG8KPiB0
+ZWxsCj4gICAgQ01ha2UgdGhhdCB0aGUgcHJvamVjdCBkb2VzIG5vdCBuZWVkIGNvbXBhdGliaWxp
+dHkgd2l0aCBvbGRlcgo+IHZlcnNpb25zLgo+IAo+IFRoZSBpc3N1ZSBjYW4gYmUgcmVwcm9kdWNl
+ZCB3aXRoIGEgbWluaW1hbCBkZWZjb25maWc6Cj4gICAgQlIyX2FybT15Cj4gICAgQlIyX2NvcnRl
+eF9hNz15Cj4gICAgQlIyX1RPT0xDSEFJTl9FWFRFUk5BTD15Cj4gICAgQlIyX1RPT0xDSEFJTl9F
+WFRFUk5BTF9CT09UTElOPXkKPiAgICBCUjJfTElOVVhfS0VSTkVMPXkKPiAgICBCUjJfTElOVVhf
+S0VSTkVMX0RFRkNPTkZJRz0idmVyc2F0aWxlIgo+ICAgIEJSMl9MSU5VWF9LRVJORUxfTkVFRFNf
+SE9TVF9QQUhPTEU9eQo+IEFuZCBob3N0LWNtYWtlID49IDQuMC4wCj4gCj4gVGhlIGlzc3VlIGhh
+cyBhbHJlYWR5IGJlZW4gZml4ZWQgaW4gdGhlIHVwc3RyZWFtIHBhaG9sZSBwcm9qZWN0IGFuZCBp
+cwo+IGluY2x1ZGVkIGluIHZlcnNpb25zID49IDEuMjguCj4gCj4gRml4IHRoZSBpc3N1ZSBvbiB0
+aGUgY3VycmVudCBMVFMgYnJhbmNoIGJ5IGJyaW5naW5nIHRoZSBmaXhpbmcgY29tbWl0Cj4gZnJv
+bSB1cHN0cmVhbS4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBBbGV4aXMgTG90aG9yw6kgPGFsZXhpcy5s
+b3Rob3JlQGJvb3RsaW4uY29tPgoKICBBcHBsaWVkIHRvIDIwMjUuMDIueCwgdGhhbmtzLgoKICBS
+ZWdhcmRzLAogIEFybm91dAoKPiAtLS0KPiBUaGUgaXNzdWUgaGFzIGFscmVhZHkgYmVlbiBmaXhl
+ZCBvbiBidWlsZHJvb3QgbWFzdGVyIGJyYW5jaCAoWzFdKSBieQo+IGJ1bXBpbmcgdGhlIHBhY2th
+Z2Ugb24gYSBuZXdlciB2ZXJzaW9uIHRvIG1ha2Ugc3VyZSB0byBpbmNsdWRlIHRoZQo+IGNvcnJl
+c3BvbmRpbmcgZml4Lgo+IAo+IFsxXSBodHRwczovL2xvcmUua2VybmVsLm9yZy9idWlsZHJvb3Qv
+MjAyNTA0MTUtYnVtcF9wYWhvbGUtdjEtMS02YzZkZjNmZjQ5N2ZAYm9vdGxpbi5jb20vCj4gLS0t
+Cj4gICAuLi5NYWtlTGlzdHMudHh0LVJlcXVpcmUtY21ha2UtMy41LW9yLWhpZ2hlci5wYXRjaCB8
+IDQ1ICsrKysrKysrKysrKysrKysrKysrKysKPiAgIDEgZmlsZSBjaGFuZ2VkLCA0NSBpbnNlcnRp
+b25zKCspCj4gCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcGFob2xlLzAwMDEtQ01ha2VMaXN0cy50
+eHQtUmVxdWlyZS1jbWFrZS0zLjUtb3ItaGlnaGVyLnBhdGNoIGIvcGFja2FnZS9wYWhvbGUvMDAw
+MS1DTWFrZUxpc3RzLnR4dC1SZXF1aXJlLWNtYWtlLTMuNS1vci1oaWdoZXIucGF0Y2gKPiBuZXcg
+ZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAw
+MDAwMDAwMDAuLjAxZjk4ZmNiODgyMTQ4ZjNhMGJhOWIwZTZjODlmM2ZkOWQ1NTg4NTEKPiAtLS0g
+L2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9wYWhvbGUvMDAwMS1DTWFrZUxpc3RzLnR4dC1SZXF1
+aXJlLWNtYWtlLTMuNS1vci1oaWdoZXIucGF0Y2gKPiBAQCAtMCwwICsxLDQ1IEBACj4gK0Zyb20g
+MTJjYTExMjgxOTEyYzI3MmY5MzFlODM2YjkxNjBlZTgyNzI1MDcxNiBNb24gU2VwIDE3IDAwOjAw
+OjAwIDIwMDEKPiArRnJvbTogQXJuYWxkbyBDYXJ2YWxobyBkZSBNZWxvIDxhY21lQHJlZGhhdC5j
+b20+Cj4gK0RhdGU6IFR1ZSwgMjYgTm92IDIwMjQgMTQ6MTk6MTYgLTAzMDAKPiArU3ViamVjdDog
+W1BBVENIXSBDTWFrZUxpc3RzLnR4dDogUmVxdWlyZSBjbWFrZSAzLjUgb3IgaGlnaGVyCj4gKwo+
+ICtUbyBhZGRyZXNzIHRoaXMgd2FybmluZyBmcm9tIGNtYWtlOgo+ICsKPiArQ01ha2UgRGVwcmVj
+YXRpb24gV2FybmluZyBhdCBDTWFrZUxpc3RzLnR4dDoxIChjbWFrZV9taW5pbXVtX3JlcXVpcmVk
+KToKPiArICBDb21wYXRpYmlsaXR5IHdpdGggQ01ha2UgPCAzLjUgd2lsbCBiZSByZW1vdmVkIGZy
+b20gYSBmdXR1cmUgdmVyc2lvbiBvZgo+ICsgIENNYWtlLgo+ICsKPiArICBVcGRhdGUgdGhlIFZF
+UlNJT04gYXJndW1lbnQgPG1pbj4gdmFsdWUgb3IgdXNlIGEgLi4uPG1heD4gc3VmZml4IHRvIHRl
+bGwKPiArICBDTWFrZSB0aGF0IHRoZSBwcm9qZWN0IGRvZXMgbm90IG5lZWQgY29tcGF0aWJpbGl0
+eSB3aXRoIG9sZGVyIHZlcnNpb25zLgo+ICsKPiArQ2M6IEFsYW4gTWFndWlyZSA8YWxhbi5tYWd1
+aXJlQG9yYWNsZS5jb20+Cj4gK0NjOiBBbmRyaWkgTmFrcnlpa28gPGFuZHJpaS5uYWtyeWlrb0Bn
+bWFpbC5jb20+Cj4gK0NjOiBEb21lbmljbyBBbmRyZW9saSA8Y2F2b2tAZGViaWFuLm9yZz4KPiAr
+Q2M6IERvbWluaXF1ZSBMZXVlbmJlcmdlciA8ZGltc3RhckBvcGVuc3VzZS5vcmc+Cj4gK0NjOiBE
+b21pbmlxdWUgTWFydGluZXQgPGFzbWFkZXVzQGNvZGV3cmVjay5vcmc+Cj4gK0NjOiBFZHVhcmQg
+WmluZ2VybWFuIDxlZGR5ejg3QGdtYWlsLmNvbT4KPiArQ2M6IEd1aWxoZXJtZSBBbWFkaW8gPGFt
+YWRpb0BnZW50b28ub3JnPgo+ICtDYzogSmFuIEFsZXhhbmRlciBTdGVmZmVucyA8aGVmdGlnQGFy
+Y2hsaW51eC5vcmc+Cj4gK0NjOiBKaXJpIE9sc2EgPGpvbHNhQGtlcm5lbC5vcmc+Cj4gK0NjOiBN
+YXR0aGlhcyBTY2h3YXJ6b3R0IDx6emFtQGdlbnRvby5vcmc+Cj4gK0xpbms6IGh0dHBzOi8vbG9y
+ZS5rZXJuZWwub3JnL2FsbC9aMFlFRkFCUWVqZkdUeXJqQHgxCj4gK1NpZ25lZC1vZmYtYnk6IEFy
+bmFsZG8gQ2FydmFsaG8gZGUgTWVsbyA8YWNtZUByZWRoYXQuY29tPgo+ICtVcHN0cmVhbTogaHR0
+cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2RldmVsL3BhaG9sZS9wYWhvbGUuZ2l0L2NvbW1p
+dC8/aWQ9MTJjYTExMjgxOTEyYzI3MmY5MzFlODM2YjkxNjBlZTgyNzI1MDcxNgo+ICtTaWduZWQt
+b2ZmLWJ5OiBBbGV4aXMgTG90aG9yw6kgPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29tPgo+ICst
+LS0KPiArIENNYWtlTGlzdHMudHh0IHwgMiArLQo+ICsgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0
+aW9uKCspLCAxIGRlbGV0aW9uKC0pCj4gKwo+ICtkaWZmIC0tZ2l0IGEvQ01ha2VMaXN0cy50eHQg
+Yi9DTWFrZUxpc3RzLnR4dAo+ICtpbmRleCAxZDBkYWRmNmVlYTcuLjkwZmE2NWMzOTFiNiAxMDA2
+NDQKPiArLS0tIGEvQ01ha2VMaXN0cy50eHQKPiArKysrIGIvQ01ha2VMaXN0cy50eHQKPiArQEAg
+LTEsNCArMSw0IEBACj4gKy1jbWFrZV9taW5pbXVtX3JlcXVpcmVkKFZFUlNJT04gMi44LjEyKQo+
+ICsrY21ha2VfbWluaW11bV9yZXF1aXJlZChWRVJTSU9OIDMuNSkKPiArIHByb2plY3QocGFob2xl
+IEMpCj4gKyBjbWFrZV9wb2xpY3koU0VUIENNUDAwMDUgTkVXKQo+ICsKPiArLS0KPiArMi40OS4w
+Cj4gKwo+IAo+IC0tLQo+IGJhc2UtY29tbWl0OiA4M2I1ZTYxMDVjYWY2ODFkNzdlOTZmZTVmNzM4
+Y2NlOWEwMTRjZDg0Cj4gY2hhbmdlLWlkOiAyMDI1MDQyNy1wYXRjaF9wYWhvbGUtZjY3NmVlYTY2
+NDQ3Cj4gCj4gQmVzdCByZWdhcmRzLAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
+Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
+b3QK
