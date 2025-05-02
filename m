@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47605C3ABAA
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:11:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21E95C3ABAA
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:11:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E0FB83EE5;
-	Fri,  2 May 2025 11:11:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DBEF0415E3;
+	Fri,  2 May 2025 11:11:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id majJ_htTdrVz; Fri,  2 May 2025 11:11:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eqWzkPyKbgbR; Fri,  2 May 2025 11:11:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EED683EEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03FFB416CE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2EED683EEA;
-	Fri,  2 May 2025 11:11:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B704CEE
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 03FFB416CE;
+	Fri,  2 May 2025 11:11:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id AC5DFEE
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A7D5542113
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 923EF61151
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cY52LdO5pyiW for <buildroot@buildroot.org>;
- Fri,  2 May 2025 11:11:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nqZb7whknIqF for <buildroot@buildroot.org>;
+ Fri,  2 May 2025 11:11:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EF15D40AAB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF15D40AAB
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9297A60E49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9297A60E49
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EF15D40AAB
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9297A60E49
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:14 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 549631C0FC1; Fri,  2 May 2025 13:10:59 +0200 (CEST)
-Message-ID: <89adcb2c-b84c-4cdf-b80e-c5b85476d763@rnout.be>
-Date: Fri, 2 May 2025 13:10:58 +0200
+ with ESMTPSA id A08CB1C0FC1; Fri,  2 May 2025 13:11:12 +0200 (CEST)
+Message-ID: <3e2303f9-405a-4bc0-9a23-7bfd9afdef20@rnout.be>
+Date: Fri, 2 May 2025 13:11:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
-Cc: =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?= <jezz@sysmic.org>
-References: <20250425170107.1110426-1-thomas.perale@mind.be>
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20250217114853.1883872-1-james.hilliard1@gmail.com>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250425170107.1110426-1-thomas.perale@mind.be>
+In-Reply-To: <20250217114853.1883872-1-james.hilliard1@gmail.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1746184259; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1746184272; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=tEZQF2l040Ev1KYndyLeKlIZnxGctKYoVPevHMe+aXM=;
- b=hjiKxUV4jPyFgOSqfNcc1u3umXHv2YyaxG7e4bMJVHQ4UjCnU+dkp3a0Kcek3Kadoz339u
- nX+o+xH3i0qZu58aQAG+G/3K1j1xukLjwG3qGQu2sPwGKTSNylyFJxQ4803F7MiPxNg29e
- 4VR0w1NBsz3CieJZvAC8Sr8DIpXhTAAwglx/gFcUb5AUt7q487S2HkJnGbKytUuN6P9dAJ
- 1JxvI3WKtoaXW7dMogdGj7fusaYQF12sy4ab/OBKaRzf8R5+vume2K6ZzLz6zMUeAS121v
- LuYpVV6ZkNZkIYZgU8qB8SpjeZ0ZfBc6gD2FC7Pug32+M+uOKkGtMftTvf/VTA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=3pNw36M3EkgclF5VeHmRfa6ztXaBL5McTZH4GRoQhes=;
+ b=LjT2oiCaiqkK/YGScGMu3i2NMFe+dTaqWZeC3Pjdx6F9QWjiA/JFK4nKUvYDaBlCrRECEA
+ 3Tk1IYTW6JJNFuRSXa+D1mTqskuFPmtbnUONhWsqPmFxW9liSXsZvvA4db7TSlubmKJaH1
+ 8YzwzeyruIGCCrfxrTlHqQgdqzwAJDhG5kII07Ha3ojjTT3ts2pnM4gCCz9FNSF+PuCyb8
+ 2Fb5nTGoPH4/vB2qfnvukDfaQv2iH6QgKRQN5dNXC603m/vrMb+9h3hX4tt/27uZ64eJen
+ tcLv2xusypRkxYU2pCqPNM9SamV5ZFTNqUizMl2tOSRs4FDhEj3dcONr2XqRkw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=hjiKxUV4
-Subject: Re: [Buildroot] [PATCH 1/1] package/strongswan: fix build w/ wolfssl
+ header.a=rsa-sha256 header.s=dkim header.b=LjT2oiCa
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-cryptography: bump to
+ version 44.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,37 +85,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 25/04/2025 19:01, Thomas Perale via buildroot wrote:
-> The package strongswan relies on the `wc_RsaKeyToDer` & `wc_MakeRsaKey`
-> functions of WolfSSL. Building this package with the WolfSSL backend
-> by selecting the variable `BR2_PACKAGE_STRONGSWAN_WOLFSSL` would give
-> the following error:
-> 
-> ```
-> libtool: compile:  /home/buildroot/instance-0/output-1/host/bin/sparc-linux-gcc -DHAVE_CONFIG_H -I. -I../../../.. -I../../../../src/libstrongswan -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DWC_NO_RNG -rdynamic -Wno-format -Wno-format-security -Wno-implicit-fallthrough -Wno-missing-field-initializers -Wno-pointer-sign -Wno-sign-compare -Wno-type-limits -Wno-unused-parameter -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Og -g0 -include /home/buildroot/instance-0/output-1/build/strongswan-5.9.14/config.h -c wolfssl_ed_public_key.c -o wolfssl_ed_public_key.o >/dev/null 2>&1
-> wolfssl_rsa_private_key.c: In function 'get_encoding':
-> wolfssl_rsa_private_key.c:366:31: error: implicit declaration of function 'wc_RsaKeyToDer'; did you mean 'wc_EccKeyToDer'? [-Wimplicit-function-declaration]
->    366 |                         len = wc_RsaKeyToDer(&this->rsa, encoding->ptr, len);
->        |                               ^~~~~~~~~~~~~~
->        |                               wc_EccKeyToDer
-> libtool: compile:  /home/buildroot/instance-0/output-1/host/bin/sparc-linux-gcc -DHAVE_CONFIG_H -I. -I../../../.. -I../../../../src/libstrongswan -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DWC_NO_RNG -rdynamic -Wno-format -Wno-format-security -Wno-implicit-fallthrough -Wno-missing-field-initializers -Wno-pointer-sign -Wno-sign-compare -Wno-type-limits -Wno-unused-parameter -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Og -g0 -include /home/buildroot/instance-0/output-1/build/strongswan-5.9.14/config.h -c wolfssl_ec_private_key.c -o wolfssl_ec_private_key.o >/dev/null 2>&1
-> wolfssl_rsa_private_key.c: In function 'wolfssl_rsa_private_key_gen':
-> wolfssl_rsa_private_key.c:490:13: error: implicit declaration of function 'wc_MakeRsaKey'; did you mean 'wc_FreeRsaKey'? [-Wimplicit-function-declaration]
->    490 |         if (wc_MakeRsaKey(&this->rsa, key_size, WC_RSA_EXPONENT, &this->rng) < 0)
->        |             ^~~~~~~~~~~~~
->        |             wc_FreeRsaKey
-> ```
-> 
-> Those functions are only present when building the WolfSSL library with
-> the keygen supports (`--enable-keygen`).
-> 
-> This patch change the selected package to enable all the option of
-> WolfSSL, which include the keygen as well.
-> 
-> Fixes:
->    - https://autobuild.buildroot.org/results/d0e/d0e94f501ad1afd25ae4112443f9af101dfa5dea
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+On 17/02/2025 12:48, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
   Applied to 2025.02.x, thanks.
 
@@ -123,21 +94,37 @@ On 25/04/2025 19:01, Thomas Perale via buildroot wrote:
   Arnout
 
 > ---
->   package/strongswan/Config.in | 1 +
->   1 file changed, 1 insertion(+)
+>   package/python-cryptography/python-cryptography.hash | 2 +-
+>   package/python-cryptography/python-cryptography.mk   | 4 ++--
+>   2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/strongswan/Config.in b/package/strongswan/Config.in
-> index a62688f9c3..22caa2a573 100644
-> --- a/package/strongswan/Config.in
-> +++ b/package/strongswan/Config.in
-> @@ -59,6 +59,7 @@ config BR2_PACKAGE_STRONGSWAN_GMP
->   config BR2_PACKAGE_STRONGSWAN_WOLFSSL
->   	bool "wolfssl"
->   	select BR2_PACKAGE_WOLFSSL
-> +	select BR2_PACKAGE_WOLFSSL_ALL
+> diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
+> index aa7e16a043..909b702d16 100644
+> --- a/package/python-cryptography/python-cryptography.hash
+> +++ b/package/python-cryptography/python-cryptography.hash
+> @@ -1,5 +1,5 @@
+>   # Locally calculated after vendoring
+> -sha256  09a765af8da172785de52631fe6c626508fdc8e451b7fb01d52f58b7841a813b  python-cryptography-44.0.0-cargo2.tar.gz
+> +sha256  85cb9d02cf5237881d0b62abab086acd1149d972f6f8c5aece4f8e10a37c944c  python-cryptography-44.0.1-cargo2.tar.gz
+>   # Locally computed sha256 checksums
+>   sha256  3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb  LICENSE
+>   sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
+> diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
+> index 9ae1fdbd83..fd2c3d7a50 100644
+> --- a/package/python-cryptography/python-cryptography.mk
+> +++ b/package/python-cryptography/python-cryptography.mk
+> @@ -4,9 +4,9 @@
+>   #
+>   ################################################################################
 >   
->   endchoice
->   
+> -PYTHON_CRYPTOGRAPHY_VERSION = 44.0.0
+> +PYTHON_CRYPTOGRAPHY_VERSION = 44.0.1
+>   PYTHON_CRYPTOGRAPHY_SOURCE_PYPI = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
+> -PYTHON_CRYPTOGRAPHY_SITE_PYPI = https://files.pythonhosted.org/packages/91/4c/45dfa6829acffa344e3967d6006ee4ae8be57af746ae2eba1c431949b32c
+> +PYTHON_CRYPTOGRAPHY_SITE_PYPI = https://files.pythonhosted.org/packages/c7/67/545c79fe50f7af51dbad56d16b23fe33f63ee6a5d956b3cb68ea110cbe64
+>   PYTHON_CRYPTOGRAPHY_SITE = $(PYTHON_CRYPTOGRAPHY_SITE_PYPI)/$(PYTHON_CRYPTOGRAPHY_SOURCE_PYPI)?buildroot-path=filename
+>   PYTHON_CRYPTOGRAPHY_SETUP_TYPE = maturin
+>   PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
 
 _______________________________________________
 buildroot mailing list
