@@ -1,72 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 249D6C3ABAA
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 10:51:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B557CC3ABA3
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 10:52:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8951813F9;
-	Fri,  2 May 2025 10:51:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 84C0540784;
+	Fri,  2 May 2025 10:52:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cboQnqVsJLS4; Fri,  2 May 2025 10:51:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2w9xX6iy8XM1; Fri,  2 May 2025 10:52:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B8250813FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA32C407BB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B8250813FB;
-	Fri,  2 May 2025 10:51:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 91CF5EE
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:51:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AA32C407BB;
+	Fri,  2 May 2025 10:52:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A556AEE
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:52:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 82AF68133D
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:51:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 97208420F6
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:52:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1ueuw6G41W0i for <buildroot@buildroot.org>;
- Fri,  2 May 2025 10:51:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WJhSqcFHWt9n for <buildroot@buildroot.org>;
+ Fri,  2 May 2025 10:52:08 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A53908134B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A53908134B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 418D540E21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 418D540E21
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A53908134B
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:51:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 418D540E21
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:52:07 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 84FE91C0D57; Fri,  2 May 2025 12:51:50 +0200 (CEST)
-Message-ID: <8f9024aa-36df-4b24-a9a1-4b19e5a12f1e@rnout.be>
-Date: Fri, 2 May 2025 12:51:46 +0200
+ with ESMTPSA id D6AB81C0D57; Fri,  2 May 2025 12:52:05 +0200 (CEST)
+Message-ID: <4276f356-52b2-460d-83c0-a70bde9e47aa@rnout.be>
+Date: Fri, 2 May 2025 12:52:04 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
- buildroot@buildroot.org
-Cc: James Hilliard <james.hilliard1@gmail.com>
-References: <20250417125251.301268-1-raphael.melotte@mind.be>
+To: Daniel Lang <dalang@gmx.at>, buildroot@buildroot.org
+References: <20250418143730.23712-2-dalang@gmx.at>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250417125251.301268-1-raphael.melotte@mind.be>
+In-Reply-To: <20250418143730.23712-2-dalang@gmx.at>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1746183110; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1746183126; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=MlB1lI95RjzM6NG74f1TMfcxtWkMAN0lYi0R9/CwjTc=;
- b=YJHRrgPD5zTF2xtZMGvkEh6UciHhHE4t15ae3/52m5YAqSHdc/MBLJCk9AuG7G1mBffjNz
- 1AabiV2/Fs3ipnwZQQLOb3o0F05xutPcfwHi2jwVV3MdDPCVavTeE0ydhz+xWdKfHTPmSu
- AJ6UnZz2Qrbnkav/UzC4HUD+rKjZR3G88I46JNEgHZtqAu80cALw3CUFaq0XJW8Ad1vWxX
- cMs9WIVzaCg0Mje6/3HvkX/2vAuXqd+aEOaaYzaPdj+hzEcbRnC6shvdrbdk09kODCHCVO
- LeaAm6hBqaejar7jtnPqiQKIf38cvhED1QiOUZeOOD5FYFtWfonvqo4yLqdCsw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=ku/gpJK+OK545J9GLG2PLwdUwyhDa4oDzn7fW5fuczY=;
+ b=ZdcyP7hPIAOieqa97k34jT43ZuQu5FHNZD1y4xZ6KLXenV81grE3OusitrlRw1jbr5WytM
+ kBnD4llD6zk6QOAaTQVS48rO1SDTUIlFyIU35Eti93L2i+hkfAL7D0m7+6neoTqByZp+HT
+ +mRVhEZ7gnm+adDJWNkZYFa50G6AMzaa9HWdLm2i0aT74SueguWRLLkqZ39oLXoAZyEt1f
+ 6vyKT5PaMgSQSxgoAvfvkfjj4olHt/V4BzTuqyckLv5pdOdB/4U5yeoHL4E2I5+DrhxPi5
+ AXxBA64jSaNW1pmF7sUwn1h856bif6LQN+6Bjzb9KcXGfwu7U9f7+p7fjC5w+Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=YJHRrgPD
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-sdbus: bump to version
- 0.14.0
+ header.a=rsa-sha256 header.s=dkim header.b=ZdcyP7hP
+Subject: Re: [Buildroot] [PATCH] package/dbus-cxx: bump to version 2.5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -80,57 +77,66 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAxNy8wNC8yMDI1IDE0OjUyLCBSYXBoYcOrbCBNw6lsb3R0ZSB2aWEgYnVpbGRyb290IHdy
-b3RlOgo+IFRoZSB1cHN0cmVhbSBVUkwgaGFzIGNoYW5nZWQgc28gd2hpbGUgYXQgaXQgYWxzbyB1
-cGRhdGUgaXQuCj4gCj4gU2lnbmVkLW9mZi1ieTogUmFwaGHDq2wgTcOpbG90dGUgPHJhcGhhZWwu
-bWVsb3R0ZUBtaW5kLmJlPgo+IC0tLQo+ICAgcGFja2FnZS9weXRob24tc2RidXMvQ29uZmlnLmlu
-ICAgICAgICAgfCAyICstCj4gICBwYWNrYWdlL3B5dGhvbi1zZGJ1cy9weXRob24tc2RidXMuaGFz
-aCB8IDQgKystLQo+ICAgcGFja2FnZS9weXRob24tc2RidXMvcHl0aG9uLXNkYnVzLm1rICAgfCA0
-ICsrLS0KPiAgIDMgZmlsZXMgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCA1IGRlbGV0aW9ucygt
-KQo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbi1zZGJ1cy9Db25maWcuaW4gYi9wYWNr
-YWdlL3B5dGhvbi1zZGJ1cy9Db25maWcuaW4KPiBpbmRleCBiMmQzOTkwYWI0Li43NjY3NWU0YTI1
-IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvcHl0aG9uLXNkYnVzL0NvbmZpZy5pbgo+ICsrKyBiL3Bh
-Y2thZ2UvcHl0aG9uLXNkYnVzL0NvbmZpZy5pbgo+IEBAIC01LDcgKzUsNyBAQCBjb25maWcgQlIy
-X1BBQ0tBR0VfUFlUSE9OX1NEQlVTCj4gICAJICBNb2Rlcm4gUHl0aG9uIEQtQnVzIGxpYnJhcnku
-IEJhc2VkIG9uIHNkLWJ1cyBmcm9tCj4gICAJICBsaWJzeXN0ZW1kLgo+ICAgCj4gLQkgIGh0dHBz
-Oi8vZ2l0aHViLmNvbS9pZ285NTg2Mi9weXRob24tc2RidXMKPiArCSAgaHR0cHM6Ly9naXRodWIu
-Y29tL3B5dGhvbi1zZGJ1cy9weXRob24tc2RidXMvCgoKICBBcHBsaWVkIHRoaXMgcGFydCB0byAy
-MDI1LjAyLngsIHRoYW5rcy4gSXQgd291bGQgaGF2ZSBiZWVuIG5pY2UgaWYgdGhpcyBoYWQgCmJl
-ZW4gYSBzZXBhcmF0ZSBjb21taXQuCgogIFJlZ2FyZHMsCiAgQXJub3V0Cgo+ICAgCj4gICBjb21t
-ZW50ICJweXRob24tc2RidXMgbmVlZHMgc3lzdGVtZCIKPiAgIAlkZXBlbmRzIG9uICFCUjJfUEFD
-S0FHRV9TWVNURU1ECj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLXNkYnVzL3B5dGhvbi1z
-ZGJ1cy5oYXNoIGIvcGFja2FnZS9weXRob24tc2RidXMvcHl0aG9uLXNkYnVzLmhhc2gKPiBpbmRl
-eCA2MmE0NTg3NjI4Li41NDQyNjJkNDhmIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvcHl0aG9uLXNk
-YnVzL3B5dGhvbi1zZGJ1cy5oYXNoCj4gKysrIGIvcGFja2FnZS9weXRob24tc2RidXMvcHl0aG9u
-LXNkYnVzLmhhc2gKPiBAQCAtMSw1ICsxLDUgQEAKPiAgICMgbWQ1LCBzaGEyNTYgZnJvbSBodHRw
-czovL3B5cGkub3JnL3B5cGkvc2RidXMvanNvbgo+IC1tZDUgIGVhNjNlYmZkMDQ5OTk0MGRjMzI4
-NzhiMGZmYjk2MDFjICBzZGJ1cy0wLjEzLjAudGFyLmd6Cj4gLXNoYTI1NiAgODAxYmQ0NjYwOGVl
-ODI2MTRkNDI5NjBjOGJhOGFlOTMwMGVkYjFiZjViYmViNTM0YmM4ZmQyMWYxM2QyYzIwZSAgc2Ri
-dXMtMC4xMy4wLnRhci5nego+ICttZDUgIDY5YTI1NmVhMWMyNTEwNTQ2MWEzOTU1YWM2OGUzZWE3
-ICBzZGJ1cy0wLjE0LjAudGFyLmd6Cj4gK3NoYTI1NiAgNDFkNjFiNzZjYzA1YTllYTQxZDEwZDcw
-YTExZTlmOWE4NmVkOTVmNDBmNzEzNjMwYzVlMTgzNDBlMGU0Yzc2ZiAgc2RidXMtMC4xNC4wLnRh
-ci5nego+ICAgIyBMb2NhbGx5IGNvbXB1dGVkIHNoYTI1NiBjaGVja3N1bXMKPiAgIHNoYTI1NiAg
-ODE3N2Y5NzUxMzIxMzUyNmRmMmNmNjE4NGQ4ZmY5ODZjNjc1YWZiNTE0ZDRlNjhhNDA0MDEwNTIx
-Yjg4MDY0MyAgQ09QWUlORwo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3B5dGhvbi1zZGJ1cy9weXRo
-b24tc2RidXMubWsgYi9wYWNrYWdlL3B5dGhvbi1zZGJ1cy9weXRob24tc2RidXMubWsKPiBpbmRl
-eCAxMTFjNGJkNjQ4Li41NjBhNWYwMmFlIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvcHl0aG9uLXNk
-YnVzL3B5dGhvbi1zZGJ1cy5tawo+ICsrKyBiL3BhY2thZ2UvcHl0aG9uLXNkYnVzL3B5dGhvbi1z
-ZGJ1cy5tawo+IEBAIC00LDkgKzQsOSBAQAo+ICAgIwo+ICAgIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMKPiAgIAo+IC1QWVRIT05fU0RCVVNfVkVSU0lPTiA9IDAuMTMuMAo+ICtQWVRIT05fU0RCVVNf
-VkVSU0lPTiA9IDAuMTQuMAo+ICAgUFlUSE9OX1NEQlVTX1NPVVJDRSA9IHNkYnVzLSQoUFlUSE9O
-X1NEQlVTX1ZFUlNJT04pLnRhci5nego+IC1QWVRIT05fU0RCVVNfU0lURSA9IGh0dHBzOi8vZmls
-ZXMucHl0aG9uaG9zdGVkLm9yZy9wYWNrYWdlcy80Zi9jNy84NzQwZmY3OGU5ZmZkYmI5YTI4ZTc3
-MjJlMTQ1Nzk1MDE1YzYyZWE3Y2U4MTIyNDJmNTk2ODA3MzUxMWMKPiArUFlUSE9OX1NEQlVTX1NJ
-VEUgPSBodHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvMTcvOWEvMWRjMDEw
-NDI4ZmExZjQ0NDgwOWQ5YWExYWRiM2NlMjMxZGFlODkxYjVmMzM2MzVkOGY0ZDdhOGUzM2ZkCj4g
-ICBQWVRIT05fU0RCVVNfU0VUVVBfVFlQRSA9IHNldHVwdG9vbHMKPiAgIFBZVEhPTl9TREJVU19M
-SUNFTlNFID0gTEdQTC0yLjErCj4gICBQWVRIT05fU0RCVVNfTElDRU5TRV9GSUxFUyA9IENPUFlJ
-TkcKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxk
-cm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5i
-dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+
+
+On 18/04/2025 16:37, Daniel Lang via buildroot wrote:
+> https://github.com/dbus-cxx/dbus-cxx/releases/tag/2.5.2
+> 
+> Signed-off-by: Daniel Lang <dalang@gmx.at>
+
+  Applied to 2025.02.x, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/dbus-cxx/dbus-cxx.hash | 2 +-
+>   package/dbus-cxx/dbus-cxx.mk   | 9 ++++++++-
+>   2 files changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/dbus-cxx/dbus-cxx.hash b/package/dbus-cxx/dbus-cxx.hash
+> index 4ed9d73bac..56dfcbae82 100644
+> --- a/package/dbus-cxx/dbus-cxx.hash
+> +++ b/package/dbus-cxx/dbus-cxx.hash
+> @@ -1,5 +1,5 @@
+>   # Locally computed:
+> -sha256  c38456ed70023d93e6e689087e4bbe030f1650bbda9de7c035d6f4ebac788379  dbus-cxx-2.4.0.tar.gz
+> +sha256  a739a29efc9ad42ba6518b38e13bb44c12947d4f7503d211c12823233e277987  dbus-cxx-2.5.2.tar.gz
+>   sha256  99e5d0ad951d96567a6f9a17f3f17ac000c0582f53357c7f3601851c2dcbb786  COPYING
+>   sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  cmake-modules/LICENSE_1_0.txt
+>   sha256  c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08  tools/libcppgenerate/LICENSE
+> diff --git a/package/dbus-cxx/dbus-cxx.mk b/package/dbus-cxx/dbus-cxx.mk
+> index 8e2b4f70fa..e6aae036bb 100644
+> --- a/package/dbus-cxx/dbus-cxx.mk
+> +++ b/package/dbus-cxx/dbus-cxx.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -DBUS_CXX_VERSION = 2.4.0
+> +DBUS_CXX_VERSION = 2.5.2
+>   DBUS_CXX_SITE = $(call github,dbus-cxx,dbus-cxx,$(DBUS_CXX_VERSION))
+>   DBUS_CXX_LICENSE = LGPL-3.0+ or BSD-3-Clause, Boost license (cmake-modules), Apache 2.0 (libcppgenerate)
+>   DBUS_CXX_LICENSE_FILES = COPYING cmake-modules/LICENSE_1_0.txt tools/libcppgenerate/LICENSE
+> @@ -25,4 +25,11 @@ else
+>   DBUS_CXX_CONF_OPTS += -DENABLE_GLIB_SUPPORT=OFF
+>   endif
+>   
+> +ifeq ($(BR2_PACKAGE_LIBUV),y)
+> +DBUS_CXX_CONF_OPTS += -DENABLE_UV_SUPPORT=ON
+> +DBUS_CXX_DEPENDENCIES += libuv
+> +else
+> +DBUS_CXX_CONF_OPTS += -DENABLE_UV_SUPPORT=OFF
+> +endif
+> +
+>   $(eval $(cmake-package))
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
