@@ -4,70 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF2ACC3ABAA
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 10:39:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D192C3ABAA
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 10:40:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C85783D7C;
-	Fri,  2 May 2025 10:39:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 18E45820D7;
+	Fri,  2 May 2025 10:40:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2RM5dDFqRgBd; Fri,  2 May 2025 10:39:57 +0000 (UTC)
+ id CYJw-ouuYCC5; Fri,  2 May 2025 10:40:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F84183DB5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5300483D0F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9F84183DB5;
-	Fri,  2 May 2025 10:39:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id C27D6229
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:39:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5300483D0F;
+	Fri,  2 May 2025 10:40:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2C357EE
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:40:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B0BDA83D31
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:39:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1DD95415B9
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:40:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zmJq57CJQWPW for <buildroot@buildroot.org>;
- Fri,  2 May 2025 10:39:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EPjJcNtqhwKa for <buildroot@buildroot.org>;
+ Fri,  2 May 2025 10:40:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F2DC983963
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2DC983963
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7103E41591
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7103E41591
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F2DC983963
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:39:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7103E41591
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:40:21 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id EFF6C1C111C; Fri,  2 May 2025 12:39:53 +0200 (CEST)
-Message-ID: <e6ecfa5d-5813-4510-b242-fd181d5ddb97@rnout.be>
-Date: Fri, 2 May 2025 12:39:52 +0200
+ with ESMTPSA id A850E1C1120; Fri,  2 May 2025 12:40:19 +0200 (CEST)
+Message-ID: <6888c9a5-2a77-4698-8e78-3124357a9334@rnout.be>
+Date: Fri, 2 May 2025 12:40:18 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- buildroot@buildroot.org
-Cc: Christophe Priouzeau <christophe.priouzeau@foss.st.com>,
- linux-amarula@amarulasolutions.com
-References: <20250409061736.2335242-1-dario.binacchi@amarulasolutions.com>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+References: <cover.1744229017.git.yann.morin.1998@free.fr>
+ <f89b12cd7480ceb378067d5088717357615293ec.1744229017.git.yann.morin.1998@free.fr>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250409061736.2335242-1-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <f89b12cd7480ceb378067d5088717357615293ec.1744229017.git.yann.morin.1998@free.fr>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1746182394; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1746182419; h=from:subject:date:message-id:to:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=JeH41BIGu9eGCVS3VVDlUKgEZydvkN/VWMkjniISNRo=;
- b=lZ3VowQQfPijXcB6IyVKpHrlTekgt4X1p5bHnHgVezu8SiNv1RsVTWa6jrT442U9MmQEHp
- iZ+JnI7OUNsrgDTP0VeCtvIUYaKNryi8N/wW8eX1guhov3No2kbLDFURJZcYatywLwRXiU
- im2HUzmJTNJEpWNLpM8SIpgobqIXNqqpO4IGjZ0GyZ9iAv7a9TmXj73gi1GjCUP3NdVAQt
- d7ID/bw8uhFyhHWmbzmrlcrvw00PHk4WeSRKq6PYTyKDt67ROglRxUmvuv+8Y39hxUZyVu
- bY166yBu8E81PhpUulRNFnborwQUz7WlGhbf9lItxr9bKqLF14eKcQiIflFNRg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=7SiEOd04wP2jF9cdexl+3p/0S+1DhIaScd4wjqF6JY0=;
+ b=cPmv7KwGw09NcBM2YBWYoBmaTSsTudKF6STtddpf5nzbmJaLBYZlyT5/Yc1EVilTVqN0lQ
+ 0vHDjvHQEMbjc9WbH3Rxwz22HGYotqTDLLj23MbN3GGWT6KbJmuzICv4ymQLDgfDc+3fQf
+ gMlzZXF5Z9sQ2SnJuJmsYKSbVood/MDB3h4KQ+euyaBrTL5WLwnu61k+Uh6UW7ywc53lQM
+ drO6HB4aZkWc79u9FPOaDL5Y5ZtP3uHwCyD6+megjIvpnJLf5H89ev+uBYr8PVUhzVPPT5
+ /qGq1+h3YxAeNpWgaJQgyPjl9oXoVJYgHujBirlrpqC2T78EMoj+kgPXYZBUBg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=lZ3VowQQ
-Subject: Re: [Buildroot] [PATCH 1/1] configs/stm32f469_disco_{sd,
- xip}: bump Linux to 5.15.179
+ header.a=rsa-sha256 header.s=dkim header.b=cPmv7KwG
+Subject: Re: [Buildroot] [PATCH 01/29 v2] package/libsigrokdecode: needs
+ python3 w/ zlib support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,75 +86,41 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 09/04/2025 08:17, Dario Binacchi wrote:
-> The patch bumps the Linux kernel to version 5.15.179 and, for the SD
-> configuration, also updates U-Boot to version 2025.04.
+On 09/04/2025 22:03, Yann E. MORIN wrote:
+> Some protocol decoders in libsigrokdecode need the zlib module:
 > 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+>      srd: ModuleNotFoundError: Failed to load decoder usb_power_delivery: import by name failed: No module named 'zlib'
+>      srd: Traceback (most recent call last):
+>        File "/usr/share/libsigrokdecode/decoders/usb_power_delivery/__init__.py", line 24, in <module>
+>          from .pd import *
+>        File "/usr/share/libsigrokdecode/decoders/usb_power_delivery/pd.py", line 24, in <module>
+>          import zlib   # for crc32
+>          ^^^^^^^^^^^
+>      ModuleNotFoundError: No module named 'zlib'
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-  Applied to 2025.02.x (only Linux, not U-Boot), thanks.
+  Applied to 2025.02.x, thanks.
 
   Regards,
   Arnout
 
 > ---
->   .../stm32f469-disco/patches/linux/linux.hash                  | 2 +-
->   .../stm32f469-disco/patches/uboot/uboot.hash                  | 2 +-
->   configs/stm32f469_disco_sd_defconfig                          | 4 ++--
->   configs/stm32f469_disco_xip_defconfig                         | 2 +-
->   4 files changed, 5 insertions(+), 5 deletions(-)
+>   package/libsigrokdecode/Config.in | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/board/stmicroelectronics/stm32f469-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f469-disco/patches/linux/linux.hash
-> index 57c69adb36ce..4e0aeb77d880 100644
-> --- a/board/stmicroelectronics/stm32f469-disco/patches/linux/linux.hash
-> +++ b/board/stmicroelectronics/stm32f469-disco/patches/linux/linux.hash
-> @@ -1,2 +1,2 @@
->   # Locally calculated
-> -sha256  a84ab5328c8a5a0e5c4a39a06b07479a7769c73af49a4c9ce59eeb644829d3b1  linux-5.15.176.tar.xz
-> +sha256  9319a47b1e9b5d344ff6015431856d0c9640e4faedc527c87f9129061a27136f  linux-5.15.179.tar.xz
-> diff --git a/board/stmicroelectronics/stm32f469-disco/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32f469-disco/patches/uboot/uboot.hash
-> index 50674352d71d..80ea21b7cb4c 100644
-> --- a/board/stmicroelectronics/stm32f469-disco/patches/uboot/uboot.hash
-> +++ b/board/stmicroelectronics/stm32f469-disco/patches/uboot/uboot.hash
-> @@ -1,2 +1,2 @@
->   # Locally calculated
-> -sha256  cdef7d507c93f1bbd9f015ea9bc21fa074268481405501945abc6f854d5b686f  u-boot-2025.01.tar.bz2
-> +sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
-> diff --git a/configs/stm32f469_disco_sd_defconfig b/configs/stm32f469_disco_sd_defconfig
-> index 3aa27f10ad02..6193855bd25c 100644
-> --- a/configs/stm32f469_disco_sd_defconfig
-> +++ b/configs/stm32f469_disco_sd_defconfig
-> @@ -8,7 +8,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
->   BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32f469-disco/genimage.cfg"
->   BR2_LINUX_KERNEL=y
->   BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.176"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.179"
->   BR2_LINUX_KERNEL_DEFCONFIG="stm32"
->   BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="$(LINUX_DIR)/arch/arm/configs/dram_0x00000000.config board/stmicroelectronics/stm32f469-disco/linux-sd.fragment"
->   BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-> @@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
->   BR2_TARGET_UBOOT=y
->   BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
->   BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f469-discovery"
->   BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
->   BR2_PACKAGE_HOST_GENIMAGE=y
-> diff --git a/configs/stm32f469_disco_xip_defconfig b/configs/stm32f469_disco_xip_defconfig
-> index 67db22f9332f..f014f77d7653 100644
-> --- a/configs/stm32f469_disco_xip_defconfig
-> +++ b/configs/stm32f469_disco_xip_defconfig
-> @@ -8,7 +8,7 @@ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
->   BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
->   BR2_LINUX_KERNEL=y
->   BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.176"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.179"
->   BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->   BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f469-disco/linux-xip.config"
->   BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+> diff --git a/package/libsigrokdecode/Config.in b/package/libsigrokdecode/Config.in
+> index b58c8a2a29..463cb25f28 100644
+> --- a/package/libsigrokdecode/Config.in
+> +++ b/package/libsigrokdecode/Config.in
+> @@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBSIGROKDECODE
+>   	depends on !BR2_STATIC_LIBS # python3
+>   	select BR2_PACKAGE_LIBGLIB2
+>   	select BR2_PACKAGE_PYTHON3
+> +	select BR2_PACKAGE_PYTHON3_ZLIB  # runtime
+>   	help
+>   	  Libsigrokdecode is a shared library written in C, which
+>   	  provides (streaming) protocol decoding functionality. Say
 
 _______________________________________________
 buildroot mailing list
