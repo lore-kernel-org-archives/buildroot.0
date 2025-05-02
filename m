@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82865C3ABAC
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:12:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41718C3ABAD
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:12:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4C3B983F57;
-	Fri,  2 May 2025 11:12:41 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q_IKtWFMbeDd; Fri,  2 May 2025 11:12:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A51183FA6
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A51183FA6;
-	Fri,  2 May 2025 11:12:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0DF4C229
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B74CD41D7D
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 13D584173D;
+	Fri,  2 May 2025 11:12:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pF4EH1F4PSFK for <buildroot@buildroot.org>;
+ id VbLZLG6g5fXm; Fri,  2 May 2025 11:12:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 41A6D41D96
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41A6D41D96;
+	Fri,  2 May 2025 11:12:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 18CC522A
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:46 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D7E1D6130C
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Cu3uJwY5WP_F for <buildroot@buildroot.org>;
  Fri,  2 May 2025 11:11:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E9440419B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2A3F6149F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E9440419B7
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E2A3F6149F
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E72DE863AE; Fri,  2 May 2025 11:11:35 +0000 (UTC)
+ id E07AF863AE; Fri,  2 May 2025 11:11:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 2 May 2025 12:11:20 +0200
+Date: Fri, 2 May 2025 12:13:02 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5d15476ee3f9457697c7048b0a31ba19e8cf1786
-X-Git-Newrev: e70f30f4b47029f62e96f16b7bea99ba7d84738c
+X-Git-Oldrev: eab4cccc47c1aef607698e31eb8e7cb6c0b396e1
+X-Git-Newrev: b79eae89cdb820326c47748f3ac63753123a2aa2
 X-Patchwork-Hint: ignore
-Message-Id: <20250502111135.E72DE863AE@busybox.osuosl.org>
+Message-Id: <20250502111136.E07AF863AE@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2025.02.x]
- board/raspberrypi/readme.txt: add pi 400 and cm{, 3, 4, 4s} hints
+ configs/stm32f746_disco_sd: bump Linux to 5.15.179
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,102 +61,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9118512928026815152=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9118512928026815152==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=e70f30f4b47029f62e96f16b7bea99ba7d84738c
+commit: https://git.buildroot.net/buildroot/commit/?id=b79eae89cdb820326c47748f3ac63753123a2aa2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-This adds hints for the Raspberry Pi 400, Compute Module 1, 3, 4, and
-4s.
+The patch bumps the Linux kernel to version 5.15.179
 
-Signed-off-by: Gaël PORTAY <gael.portay+rtone@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 649daadbecfa832ab218cb5a9e2f71adfa755ce3)
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Tested-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 1ad7f7dc6b313eb6b43a4ca40f75b3441161b27d)
+[Thomas: only bump linux]
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- board/raspberrypi/readme.txt | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+ board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash | 2 +-
+ configs/stm32f746_disco_sd_defconfig                              | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index 4a0903578b..4703d0adb1 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -6,13 +6,18 @@ Intro
- These instructions apply to all models of the Raspberry Pi:
-   - the original models A and B,
-   - the "enhanced" models A+ and B+,
-+  - the model CM (aka Raspberry Pi Compute Module).
-   - the model Zero (aka Raspberry Pi Zero)
-   - the model Zero W (aka Raspberry Pi Zero W)
-   - the model Zero 2 W (aka Raspberry Pi Zero 2 W)
-   - the model B2 (aka Raspberry Pi 2)
-   - the model B3 (aka Raspberry Pi 3).
-+  - the model CM3 (aka Raspberry Pi Compute Module 3).
-+  - the model CM3+ (aka Raspberry Pi Compute Module 3+).
-   - the model B4 (aka Raspberry Pi 4).
-+  - the model 400 (aka Raspberry Pi 400).
-   - the model CM4 (aka Raspberry Pi Compute Module 4 and IO Board).
-+  - the model CM4s (aka Raspberry Pi Compute Module 4s).
-   - the model B5 (aka Raspberry Pi 5).
- 
- How to build it
-@@ -24,7 +29,7 @@ Configure Buildroot
- There are several Raspberry Pi defconfig files in Buildroot, one for
- each major variant, which you should base your work on:
- 
--For models A, B, A+ or B+:
-+For models A, B, A+, B+ and CM:
- 
-   $ make raspberrypi_defconfig
- 
-@@ -40,7 +45,7 @@ For model Zero 2 W (model B3 in smaller form factor):
- 
-   $ make raspberrypizero2w_defconfig
- 
--For model Zero 2 W (model B3 in smaller form factor, 64-bit):
-+or for model Zero 2 W (model B3 in smaller form factor, 64-bit):
- 
-   $ make raspberrypizero2w_64_defconfig
- 
-@@ -48,19 +53,19 @@ For model 2 B:
- 
-   $ make raspberrypi2_defconfig
- 
--For model 3 B and B+:
-+For model 3 B, B+, CM3 and CM3+:
- 
-   $ make raspberrypi3_defconfig
- 
--or for model 3 B and B+ (64 bit):
-+or for model 3 B, B+, CM3 and CM3+ (64 bit):
- 
-   $ make raspberrypi3_64_defconfig
- 
--For model 4 B:
-+For model 4 B, 400, CM4 and CM4s:
- 
-   $ make raspberrypi4_defconfig
- 
--or for model 4 B (64 bit):
-+or for model 4 B, 400, CM4 and CM4s (64 bit):
- 
-   $ make raspberrypi4_64_defconfig
- 
-
---===============9118512928026815152==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash
+index 57c69adb36..4e0aeb77d8 100644
+--- a/board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash
++++ b/board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  a84ab5328c8a5a0e5c4a39a06b07479a7769c73af49a4c9ce59eeb644829d3b1  linux-5.15.176.tar.xz
++sha256  9319a47b1e9b5d344ff6015431856d0c9640e4faedc527c87f9129061a27136f  linux-5.15.179.tar.xz
+diff --git a/configs/stm32f746_disco_sd_defconfig b/configs/stm32f746_disco_sd_defconfig
+index e72e5122b0..f5f9a9550a 100644
+--- a/configs/stm32f746_disco_sd_defconfig
++++ b/configs/stm32f746_disco_sd_defconfig
+@@ -10,7 +10,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32f746-disco/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.176"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.179"
+ BR2_LINUX_KERNEL_DEFCONFIG="stm32"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32f746-disco/linux.fragment"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9118512928026815152==--
