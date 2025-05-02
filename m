@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2488C3ABA3
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:13:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9860C3ABAA
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:13:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 72CA18409C;
-	Fri,  2 May 2025 11:13:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 74E23424A8;
+	Fri,  2 May 2025 11:13:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XRrdtJSKc29t; Fri,  2 May 2025 11:13:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6CJoEyJYwkxU; Fri,  2 May 2025 11:13:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A28A840A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9746E423B5
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6A28A840A6;
-	Fri,  2 May 2025 11:13:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5951D22D
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9746E423B5;
+	Fri,  2 May 2025 11:13:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E03F229
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 94DF67035F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 77E9741521
  for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sw2agluJ-KMX for <buildroot@buildroot.org>;
- Fri,  2 May 2025 11:11:37 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BwpFvQGlCmzQ for <buildroot@buildroot.org>;
+ Fri,  2 May 2025 11:11:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA43E70362
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2319417BF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id BA43E70362
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E2319417BF
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B7AD7864AE; Fri,  2 May 2025 11:11:37 +0000 (UTC)
+ id E02F9864AE; Fri,  2 May 2025 11:11:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 2 May 2025 12:14:21 +0200
+Date: Fri, 2 May 2025 12:11:16 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: bb43b6d126b2c3d7d881933af6a07f5c0669d980
-X-Git-Newrev: fb9716a81bfc91d3007cde807bfa8684ccb15782
+X-Git-Oldrev: 0d3ad6c583bcda5497a08c17ce3fceb43f4d5c17
+X-Git-Newrev: 5d15476ee3f9457697c7048b0a31ba19e8cf1786
 X-Patchwork-Hint: ignore
-Message-Id: <20250502111137.B7AD7864AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] support/testing: new
- hyperfine runtime test
+Message-Id: <20250502111135.E02F9864AE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ board/raspberrypi/readme.txt: add missing Raspberry Pi Zero models
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,66 +61,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8160466182902378144=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb9716a81bfc91d3007cde807bfa8684ccb15782
+--===============8160466182902378144==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=5d15476ee3f9457697c7048b0a31ba19e8cf1786
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
+This adds the missing Raspberry Pi Zero models to the list.
+
+Signed-off-by: Gaël PORTAY <gael.portay+rtone@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit a9b0e551afa04c347761d0b9459a106f2c9b8e5e)
+(cherry picked from commit dc00f366b8c1e1d54c00cf1aa9f7adae4e2fdd1b)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- DEVELOPERS                                      |  1 +
- support/testing/tests/package/test_hyperfine.py | 25 +++++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+ board/raspberrypi/readme.txt | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 8d52249db2..8b78eecac8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1912,6 +1912,7 @@ F:	support/testing/tests/package/test_gstreamer1.py
- F:	support/testing/tests/package/test_gzip.py
- F:	support/testing/tests/package/test_highway.py
- F:	support/testing/tests/package/test_hwloc.py
-+F:	support/testing/tests/package/test_hyperfine.py
- F:	support/testing/tests/package/test_iozone.py
- F:	support/testing/tests/package/test_iperf.py
- F:	support/testing/tests/package/test_iperf3.py
-diff --git a/support/testing/tests/package/test_hyperfine.py b/support/testing/tests/package/test_hyperfine.py
-new file mode 100644
-index 0000000000..4db62c7116
---- /dev/null
-+++ b/support/testing/tests/package/test_hyperfine.py
-@@ -0,0 +1,25 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestHyperfine(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_HYPERFINE=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        self.assertRunOk("hyperfine --version")
-+
-+        test_cmd = "sleep 0.1"
-+        cmd = f"hyperfine --style basic --runs 10 '{test_cmd}'"
-+        self.assertRunOk(cmd, timeout=15)
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index c12a8969f1..4a0903578b 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -6,6 +6,9 @@ Intro
+ These instructions apply to all models of the Raspberry Pi:
+   - the original models A and B,
+   - the "enhanced" models A+ and B+,
++  - the model Zero (aka Raspberry Pi Zero)
++  - the model Zero W (aka Raspberry Pi Zero W)
++  - the model Zero 2 W (aka Raspberry Pi Zero 2 W)
+   - the model B2 (aka Raspberry Pi 2)
+   - the model B3 (aka Raspberry Pi 3).
+   - the model B4 (aka Raspberry Pi 4).
+
+--===============8160466182902378144==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8160466182902378144==--
