@@ -1,70 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 714B7C3ABAA
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:06:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 730DCC3ABA3
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:06:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 13CB24160D;
-	Fri,  2 May 2025 11:06:34 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wsBjbbTTCPse; Fri,  2 May 2025 11:06:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4079440906
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4079440906;
-	Fri,  2 May 2025 11:06:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9FE30EE
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:06:32 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 85ADA83D36
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:06:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3C0A1815C1;
+	Fri,  2 May 2025 11:06:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3Ila7JmqDNvM for <buildroot@buildroot.org>;
- Fri,  2 May 2025 11:06:31 +0000 (UTC)
+ id wzHPHHd-KqEz; Fri,  2 May 2025 11:06:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D6A481778
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D6A481778;
+	Fri,  2 May 2025 11:06:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D8893EE
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:06:55 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C9C54407F4
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:06:55 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OxeoWq75wRli for <buildroot@buildroot.org>;
+ Fri,  2 May 2025 11:06:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4DBAB815C1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DBAB815C1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 566F64064B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 566F64064B
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4DBAB815C1
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:06:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 566F64064B
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:06:54 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 56B171C0D8C; Fri,  2 May 2025 13:06:29 +0200 (CEST)
-Message-ID: <93051350-5e59-46ae-b95c-e1e86a1e592f@rnout.be>
-Date: Fri, 2 May 2025 13:06:28 +0200
+ with ESMTPSA id 22CD81C0D8C; Fri,  2 May 2025 13:06:52 +0200 (CEST)
+Message-ID: <03c1ec12-88a7-4517-964f-76a1d792e9af@rnout.be>
+Date: Fri, 2 May 2025 13:06:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: El Mehdi YOUNES <elmehdi.younes@smile.fr>, buildroot@buildroot.org
-Cc: David Pierret <david.pierret@smile.fr>
-References: <20250422085337.901025-1-elmehdi.younes@smile.fr>
+To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org
+Cc: Grzegorz Blach <grzegorz@blach.pl>
+References: <20250423190643.3526208-1-peter@korsgaard.com>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250422085337.901025-1-elmehdi.younes@smile.fr>
+In-Reply-To: <20250423190643.3526208-1-peter@korsgaard.com>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1746183989; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1746184012; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=DGEHVpxl4qRj2rF0DSrGzvGt4nS2bmnK+FETspx254w=;
- b=hq9+0HWme3Xwtdf24cSO34G5lJoFnB0fyrO1wV3evyV4ZMmlMMW8AoivWJTGKBaQaiRLx/
- kNTFElTYqexN2FtCGj+lnGIAECHx3a32Uz+vJglcladd506FGKteU322vojY1bNon/nLOZ
- 2Ef+bzq8E/pin+1gfUjjVct9PgQRj4vH0jWpr9W33CZr+dJmiwql5btZ48LeXuCEZH3ada
- cMUIzQNlGCB1qQBOO9+xFxsiBaIGc5qB/AyVUXkH7sFs1fcUbOXOPBp534bWGgu/ZlJPC1
- 9WJhCNIa0yYoMmTfEvfYNBz7P0LHjN3Mt/CPOIzak1CHGD00AjUGzTNBkVzdjw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=eKbT5M0adkewsMMwYXsbZ3ABAPQrt19mPwiRfzmYkXc=;
+ b=BOKdw7pWrVDK6+fiTHn3CaLUSXDYxDfl+WWy3E+LEQodpQUuqvFtrok3GSJODYJXkIJNm2
+ ZElA5mmrcv9UywrCVB7xe8tqE4Rv3xAUw8Fdp6805ZXN3n+XjdV2Edd3Z1egXQvuTFjEP+
+ uAEQfONRSDGUXIaRdWNzQAaffA+XYq6I/g3GQvCcH5SpwhdjXoyM5FeZsBOX8YhHwJVfGI
+ cfiXffn+wRsXGQfpZylsDXD2Y6L/bLhs5cO8XxhIxZniABzc1iSITrbAZWZBC1Yhmw2yxq
+ XgkmU2j2ZT/BjnA47Ik0OLtwjSnhuEzZrV2UKMJ6CCRrWKCybFgP929g7wFTyA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=hq9+0HWm
-Subject: Re: [Buildroot] [PATCH 1/2] package/bat:bump to version 0.25.0
+ header.a=rsa-sha256 header.s=dkim header.b=BOKdw7pW
+Subject: Re: [Buildroot] [PATCH 1/2] package/graphicsmagick: security bump
+ to version 1.3.45
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,45 +86,68 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 22/04/2025 10:53, El Mehdi YOUNES via buildroot wrote:
-> Changelog:
-> https://github.com/sharkdp/bat/blob/master/CHANGELOG.md
+On 23/04/2025 21:06, Peter Korsgaard wrote:
+> 1.3.44 added the following security fixes:
 > 
-> Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+> * TIFF: Fixed multiple heap and stack buffer overflows (directed by
+>    the source EXIF profile) while writing EXIF into the native TIFF
+>    IFD.
+> 
+> * FITS: Fix problem that the FITS reader could return invalid image
+>    frames with rows or columns set to zero. Other code in the library
+>    crashes, or even asserts, if invalid image frames with rows or
+>    columns set to zero are returned.
+> 
+> * Coverity fixes: Various fixes for Coverity issues raised after the
+>    update to version 2023.12.2.
+> 
+> * Clang Analyzer (scan-build) fixes: Various fixes for new issues
+>    discovered by Clang Analyzer.
+> 
+> https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/7046c344273c263a9b6e4901b910508aea3804b5
+> 
+> In addition 1.3.45 fixes a off-by-one issue introduced in 1.3.44:
+> https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/96f765a2e3cebf0b70094da34d03b73c50c3aa63
+> 
+> Update the Copyright.txt hash for a change in copyright years:
+> https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/f0bba104ee3859286ea8adfc2ff603fd64be5624
+> https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/26fce892769e4a26247dd2db5b8dc0719ce20953
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-  Applied to 2025.02.x, thanks.
+  Applied both to 2025.02.x, thanks.
 
   Regards,
   Arnout
 
 > ---
->   package/bat/bat.hash | 2 +-
->   package/bat/bat.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+>   package/graphicsmagick/graphicsmagick.hash | 4 ++--
+>   package/graphicsmagick/graphicsmagick.mk   | 2 +-
+>   2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/bat/bat.hash b/package/bat/bat.hash
-> index e80301ff49..f3050f6354 100644
-> --- a/package/bat/bat.hash
-> +++ b/package/bat/bat.hash
-> @@ -1,4 +1,4 @@
->   # Locally generated
-> -sha256  45fcdd6076dc1b45698a7b6c0f4d1f5d9ae676f3ca3b155402ad24680d5b4df6  bat-0.24.0-cargo2.tar.gz
-> +sha256  d793a8f3a6e47b96ee81d624d2b4b470f005b6823ef6b0f38c0cc10726d35fdc  bat-0.25.0-cargo2.tar.gz
->   sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
->   sha256  dccda9eb9533f5c65624a1106536c6cfde46008d58e60b3faf154e8b9fd5b46e  LICENSE-MIT
-> diff --git a/package/bat/bat.mk b/package/bat/bat.mk
-> index b95cdb25ac..7e89d361af 100644
-> --- a/package/bat/bat.mk
-> +++ b/package/bat/bat.mk
+> diff --git a/package/graphicsmagick/graphicsmagick.hash b/package/graphicsmagick/graphicsmagick.hash
+> index a894aedf11..044214c8fc 100644
+> --- a/package/graphicsmagick/graphicsmagick.hash
+> +++ b/package/graphicsmagick/graphicsmagick.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed:
+> -sha256  97dc1a9d4e89c77b25a3b24505e7ff1653b88f9bfe31f189ce10804b8efa7746  GraphicsMagick-1.3.40.tar.xz
+> -sha256  0a20e661de942ebe115a354d0ec6d1d42b93856ea765f813f350a5ce5024cdb7  Copyright.txt
+> +sha256  dcea5167414f7c805557de2d7a47a9b3147bcbf617b91f5f0f4afe5e6543026b  GraphicsMagick-1.3.45.tar.xz
+> +sha256  27d121f97ad71ff506ac5a6a9539e969154f3a66f3da24fd5b6f268acd106295  Copyright.txt
+> diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
+> index 76b826ceef..baaa9bcb02 100644
+> --- a/package/graphicsmagick/graphicsmagick.mk
+> +++ b/package/graphicsmagick/graphicsmagick.mk
 > @@ -4,7 +4,7 @@
 >   #
 >   ################################################################################
 >   
-> -BAT_VERSION = 0.24.0
-> +BAT_VERSION = 0.25.0
->   BAT_SITE = $(call github,sharkdp,bat,v$(BAT_VERSION))
->   BAT_LICENSE = Apache-2.0 or MIT
->   BAT_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
+> -GRAPHICSMAGICK_VERSION = 1.3.40
+> +GRAPHICSMAGICK_VERSION = 1.3.45
+>   GRAPHICSMAGICK_SOURCE = GraphicsMagick-$(GRAPHICSMAGICK_VERSION).tar.xz
+>   GRAPHICSMAGICK_SITE = https://downloads.sourceforge.net/project/graphicsmagick/graphicsmagick/$(GRAPHICSMAGICK_VERSION)
+>   GRAPHICSMAGICK_LICENSE = MIT
 
 _______________________________________________
 buildroot mailing list
