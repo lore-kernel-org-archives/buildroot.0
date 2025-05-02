@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 39F8CC3ABAD
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:14:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CFC9C3ABA3
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:14:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0BDB6419D0;
-	Fri,  2 May 2025 11:14:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD78760AE6;
+	Fri,  2 May 2025 11:14:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kJ1gHxbGaQh6; Fri,  2 May 2025 11:14:48 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZH95aZuBkCx5; Fri,  2 May 2025 11:14:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 21868424BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2636E60ACA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 21868424BF;
-	Fri,  2 May 2025 11:14:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2636E60ACA;
+	Fri,  2 May 2025 11:14:50 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 14A6CEE
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:12:26 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 10A31229
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:12:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5909541A51
+ by smtp4.osuosl.org (Postfix) with ESMTP id 695B5417C0
  for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ptJP6EYny21b for <buildroot@buildroot.org>;
+ id EjIKvpbw373L for <buildroot@buildroot.org>;
  Fri,  2 May 2025 11:11:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 530D8417C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C7A6417BF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 530D8417C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7C7A6417BF
  for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 50575812BB; Fri,  2 May 2025 11:11:38 +0000 (UTC)
+ id 7995481776; Fri,  2 May 2025 11:11:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 2 May 2025 13:01:12 +0200
+Date: Fri, 2 May 2025 13:01:15 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 83140189de30fb4d2a2941bb0b0ab30381882a2a
-X-Git-Newrev: 5a3d022d3e8c56c32307bb032177c2c8437f0226
+X-Git-Oldrev: fbb5433a44fe071691194154eb3f01f3c2c3499b
+X-Git-Newrev: a9b358eeaa197fddeb14218e93922a7de9416f6d
 X-Patchwork-Hint: ignore
-Message-Id: <20250502111138.50575812BB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/graphicsmagick:
- security bump to version 1.3.45
+Message-Id: <20250502111138.7995481776@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ configs/olimex_a20_olinuxino_lime*: bump Linux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,67 +66,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5a3d022d3e8c56c32307bb032177c2c8437f0226
+commit: https://git.buildroot.net/buildroot/commit/?id=a9b358eeaa197fddeb14218e93922a7de9416f6d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-1.3.44 added the following security fixes:
-
-* TIFF: Fixed multiple heap and stack buffer overflows (directed by
-  the source EXIF profile) while writing EXIF into the native TIFF
-  IFD.
-
-* FITS: Fix problem that the FITS reader could return invalid image
-  frames with rows or columns set to zero. Other code in the library
-  crashes, or even asserts, if invalid image frames with rows or
-  columns set to zero are returned.
-
-* Coverity fixes: Various fixes for Coverity issues raised after the
-  update to version 2023.12.2.
-
-* Clang Analyzer (scan-build) fixes: Various fixes for new issues
-  discovered by Clang Analyzer.
-
-https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/7046c344273c263a9b6e4901b910508aea3804b5
-
-In addition 1.3.45 fixes a off-by-one issue introduced in 1.3.44:
-https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/96f765a2e3cebf0b70094da34d03b73c50c3aa63
-
-Update the Copyright.txt hash for a change in copyright years:
-https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/f0bba104ee3859286ea8adfc2ff603fd64be5624
-https://foss.heptapod.net/graphicsmagick/graphicsmagick/-/commit/26fce892769e4a26247dd2db5b8dc0719ce20953
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 055547ff126fb359d94c5c0d8e838320deff84f2)
+(cherry picked from commit e42da630d0c1f3aca8ecc6d0d35a777f202270ed)
+[Thomas: only bump linux]
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/graphicsmagick/graphicsmagick.hash | 4 ++--
- package/graphicsmagick/graphicsmagick.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ board/olimex/a20_olinuxino/patches/linux/linux.hash | 2 +-
+ configs/olimex_a20_olinuxino_lime2_defconfig        | 2 +-
+ configs/olimex_a20_olinuxino_lime_defconfig         | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/graphicsmagick/graphicsmagick.hash b/package/graphicsmagick/graphicsmagick.hash
-index a894aedf11..044214c8fc 100644
---- a/package/graphicsmagick/graphicsmagick.hash
-+++ b/package/graphicsmagick/graphicsmagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  97dc1a9d4e89c77b25a3b24505e7ff1653b88f9bfe31f189ce10804b8efa7746  GraphicsMagick-1.3.40.tar.xz
--sha256  0a20e661de942ebe115a354d0ec6d1d42b93856ea765f813f350a5ce5024cdb7  Copyright.txt
-+sha256  dcea5167414f7c805557de2d7a47a9b3147bcbf617b91f5f0f4afe5e6543026b  GraphicsMagick-1.3.45.tar.xz
-+sha256  27d121f97ad71ff506ac5a6a9539e969154f3a66f3da24fd5b6f268acd106295  Copyright.txt
-diff --git a/package/graphicsmagick/graphicsmagick.mk b/package/graphicsmagick/graphicsmagick.mk
-index 76b826ceef..baaa9bcb02 100644
---- a/package/graphicsmagick/graphicsmagick.mk
-+++ b/package/graphicsmagick/graphicsmagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GRAPHICSMAGICK_VERSION = 1.3.40
-+GRAPHICSMAGICK_VERSION = 1.3.45
- GRAPHICSMAGICK_SOURCE = GraphicsMagick-$(GRAPHICSMAGICK_VERSION).tar.xz
- GRAPHICSMAGICK_SITE = https://downloads.sourceforge.net/project/graphicsmagick/graphicsmagick/$(GRAPHICSMAGICK_VERSION)
- GRAPHICSMAGICK_LICENSE = MIT
+diff --git a/board/olimex/a20_olinuxino/patches/linux/linux.hash b/board/olimex/a20_olinuxino/patches/linux/linux.hash
+index 0bc60586f5..023d244994 100644
+--- a/board/olimex/a20_olinuxino/patches/linux/linux.hash
++++ b/board/olimex/a20_olinuxino/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  9c6305567b75d99514cde6eb9de39973f3d5c857a75bd9dcdfca57041f8d4f34  linux-6.6.69.tar.xz
++sha256  49e3ad7423e40735faada0cd39665c071d47efd84ec3548acf119c9704f13e68  linux-6.6.86.tar.xz
+diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
+index fde3473847..3778539f17 100644
+--- a/configs/olimex_a20_olinuxino_lime2_defconfig
++++ b/configs/olimex_a20_olinuxino_lime2_defconfig
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.69"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.86"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
+index 9275b5fbfc..7ffd308757 100644
+--- a/configs/olimex_a20_olinuxino_lime_defconfig
++++ b/configs/olimex_a20_olinuxino_lime_defconfig
+@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.69"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.86"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/olimex/a20_olinuxino/linux-disable-lima.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
