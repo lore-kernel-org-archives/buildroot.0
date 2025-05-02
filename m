@@ -1,71 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDC75C3ABA3
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 10:23:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91283C3ABAA
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 10:23:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9F9D983CC4;
-	Fri,  2 May 2025 10:23:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 601C2410B6;
+	Fri,  2 May 2025 10:23:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y_wTf0ItIbxM; Fri,  2 May 2025 10:23:00 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5TKIAAqW771A; Fri,  2 May 2025 10:23:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5DC683979
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B0C34115B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5DC683979;
-	Fri,  2 May 2025 10:23:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3B754229
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:22:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B0C34115B;
+	Fri,  2 May 2025 10:23:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2CA74EE
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:23:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2131760B70
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:22:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1DC4D409C7
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:23:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KWuqVNS4gDJE for <buildroot@buildroot.org>;
- Fri,  2 May 2025 10:22:58 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tWZBi2xulOdP for <buildroot@buildroot.org>;
+ Fri,  2 May 2025 10:23:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 25BA460B5C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25BA460B5C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 440C540519
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 440C540519
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 25BA460B5C
- for <buildroot@buildroot.org>; Fri,  2 May 2025 10:22:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 440C540519
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 10:23:50 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 266361C0FC1; Fri,  2 May 2025 12:22:56 +0200 (CEST)
-Message-ID: <c8cf629b-0d50-4457-95f4-fd0e8329c157@rnout.be>
-Date: Fri, 2 May 2025 12:22:54 +0200
+ with ESMTPSA id 35FCF1C0D8C; Fri,  2 May 2025 12:23:48 +0200 (CEST)
+Message-ID: <ae09be80-c40c-44be-a36a-b6b2a4f62e50@rnout.be>
+Date: Fri, 2 May 2025 12:23:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
+ buildroot@buildroot.org
 Cc: Bernd Kuhls <bernd@kuhls.net>
-References: <20250413162533.1737077-1-thomas.petazzoni@bootlin.com>
+References: <20250414133235.987304-1-raphael.melotte@mind.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250413162533.1737077-1-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250414133235.987304-1-raphael.melotte@mind.be>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1746181376; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1746181428; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=0O7AH6YBqfHpAcb2XwzH+1VDseO/PmkMCNoa+Ygc2cg=;
- b=TIn+UzBoUv7AEkcSeKBkAT67g17nHg2XkHzGG2mt8+2bVDxD751fRTWVhlRzMI8LsdR/NA
- GbnCuk903gdbjiyUxve+RWR6b4xkIKCtuNZuPWQQrbAHr67h3cFSyOpCj2WwCfGNMxmq2u
- PX/cCqddmLfRjFEv0Ol8pvqNmBlZ/D7jj0La3u/tLcWrFyfqnqs2DmMkrUxtejsvGs43Y6
- c1Jhhg00P6gJJvILFvWWlfte1OcdDW4+IjBKk5kASHvtUIKYfscRgR+9lmwwdnM5+oskim
- PtOd5bsUzJbki3pBg/O1O6qqYbEqoHmSACIpWmthSqxQjzVIcUukm0kzjZWOrQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=1YBu70g1IFnP/06CY2zaVL7XqKD389BQV8evOSKeS0A=;
+ b=izurXg19aogFG3pCOOEGA2BjDwLGoLor49Do8aFmxO/AV8+bm9HaIJM6ixCxreRY8WMM/G
+ 76r1Y34rVdbnlu3V9jV/b7jRv/g6vSg4Kg4PHT96gBwI3F9nm2U3yHdvo91hrzpEe52T2g
+ d1+VCi4y2ah4y3fJhrKwiiUWlrQW3NGl5Ab9UpJbOcw5DPNH4P5MlfcisKULxj9EVNuyZ5
+ LroNjCXb3S5zg08IO6hOmLORRgBD7GPsSwXAgAa+9yJNe17wQQCm05IeuI9EdRmTnK8Z5x
+ lHF4KrMJG+JWHlf1lpgkV6x3lCXZrNpJjxLVCLCIg0VdbHinJyytSmqHIdyOlw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
- header.a=rsa-sha256 header.s=dkim header.b=TIn+UzBo
-Subject: Re: [Buildroot] [PATCH] package/sqlite: revert upstream change
- causing build issue
+ header.a=rsa-sha256 header.s=dkim header.b=izurXg19
+Subject: Re: [Buildroot] [PATCH 1/1] package/libopenh264: ignore
+ CVE-2025-27091
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,99 +80,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 13/04/2025 18:25, Thomas Petazzoni via buildroot wrote:
-> Upstream did a change in sqlite3.pc.in that does work with their
-> default build system, but not with the autoconf-based amalgamation
-> that we use. This issue has been reported and fixed upstream, but the
-> fix is not yet in any new release.
-> 
-> For the time being, we just revert the upstream change. We don't do a
-> direct revert ("git revert") as multiple upstream commits touched this
-> very line, so we simply revert to what it was prior to the different
-> changes, and to what the upstream fix ends up doing.
-> 
-> This issue is causing build issue for all packages that use sqlite's
-> pkg-config file, in a static-linking configuration.
-> 
-> Fixes:
-> 
->    https://autobuild.buildroot.org/results/1824a76eee4a877a2f19c1fd19a710ef9f059168/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-  Applied to 2025.02.x, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   ...vert-upstream-commits-causing-build-.patch | 48 +++++++++++++++++++
->   1 file changed, 48 insertions(+)
->   create mode 100644 package/sqlite/0001-sqlite3.pc.in-revert-upstream-commits-causing-build-.patch
-> 
-> diff --git a/package/sqlite/0001-sqlite3.pc.in-revert-upstream-commits-causing-build-.patch b/package/sqlite/0001-sqlite3.pc.in-revert-upstream-commits-causing-build-.patch
-> new file mode 100644
-> index 0000000000..f35c8b8ddd
-> --- /dev/null
-> +++ b/package/sqlite/0001-sqlite3.pc.in-revert-upstream-commits-causing-build-.patch
-> @@ -0,0 +1,48 @@
-> +From f70123a40193c2056755117aa291582f42db5f35 Mon Sep 17 00:00:00 2001
-> +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +Date: Sun, 13 Apr 2025 17:47:53 +0200
-> +Subject: [PATCH] sqlite3.pc.in: revert upstream commits causing build issues
-> +
-> +This reverts upstream commit a2d88f6a03c9ebde3d037b0e297f47216c685381
-> +and a number of following commits related to the same commit. The
-> +sqlite build system is indeed upstream not based on autoconf, but the
-> +project "generates" an "autoconf-based amalgamation":
-> +
-> +  https://www3.sqlite.org/src/dir?ci=tip&name=autoconf
-> +
-> +Unfortunately commit a2d88f6a03c9ebde3d037b0e297f47216c685381 broke
-> +the build with the autoconf amalgamation because while @LIBS@ gets
-> +replaced by the autoconf machinery, @LDFLAGS_*@ do not, causing build
-> +failures such as:
-> +
-> +output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/13.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: cannot find @LDFLAGS_MATH@: No such file or directory
-> +output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/13.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: cannot find @LDFLAGS_ZLIB@: No such file or directory
-> +output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/13.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: cannot find @LDFLAGS_ICU@: No such file or directory
-> +
-> +This issue has been reported at
-> +https://sqlite.org/forum/info/e40b9b424a, and upstream says that the
-> +issue has been fixed in the amalgamation script by basically doing the
-> +same as what this commit does:
-> +
-> +  https://sqlite.org/src/info/fe47154799bfe
-> +
-> +Upstream: https://sqlite.org/forum/info/e40b9b424a
-> +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> +---
-> + sqlite3.pc.in | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/sqlite3.pc.in b/sqlite3.pc.in
-> +index a9f941b1e4..3799671e61 100644
-> +--- a/sqlite3.pc.in
-> ++++ b/sqlite3.pc.in
-> +@@ -9,5 +9,5 @@ Name: SQLite
-> + Description: SQL database engine
-> + Version: @PACKAGE_VERSION@
-> + Libs: -L${libdir} -lsqlite3
-> +-Libs.private: @LDFLAGS_MATH@ @LDFLAGS_ZLIB@ @LDFLAGS_ICU@
-> ++Libs.private: @LIBS@
-> + Cflags: -I${includedir}
-> +--
-> +2.49.0
-> +
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAxNC8wNC8yMDI1IDE1OjMyLCBSYXBoYcOrbCBNw6lsb3R0ZSB2aWEgYnVpbGRyb290IHdy
+b3RlOgo+IEJvdGggb3BlbmgyNjQgMi42LjAgYW5kIDIuNS4xIGNvbnRhaW4gdGhlIGZpeCBmb3Ig
+dGhpcyBDVkUgKHNlZSB0aGUKPiByZWxlYXNlIG5vdGVzIGF0IFsxXSkuCj4gCj4gSW4gb3RoZXIg
+d29yZHMgdGhlIHZlcnNpb24gd2UgaGF2ZSBpcyBubyBsb25nZXIgdnVsbmVyYWJsZSBzaW5jZQo+
+IGE3YWViNWE0NmVhYWY4YTM5NTYwYzg2NjQ1OTMwMThjZjI1MzgzNWEgKCJwYWNrYWdlL2xpYm9w
+ZW5oMjY0Ogo+IHNlY3VyaXR5IGJ1bXAgdG8gdmVyc2lvbiAyLjUuMSIpIGJ1dCBwa2ctc3RhdHMg
+c3RpbGwgcmVwb3J0cyBpdC4KPiAKPiBBbiBlbWFpbCB3YXMgc2VudCB0byB0aGUgTlZEIHRvIGZp
+eCB0aGUgQ1BFIHZlcnNpb24gbnVtYmVyLCBidXQgaW4gdGhlCj4gbWVhbnRpbWUgbGV0J3MgaWdu
+b3JlIGl0IHRvIHJlZHVjZSB0aGUgbm9pc2UgaW4gb3VyIENWRSBjaGVja2VyLgo+IAo+IFsxXTog
+aHR0cHM6Ly9naXRodWIuY29tL2Npc2NvL29wZW5oMjY0L3JlbGVhc2VzL3RhZy8yLjUuMQo+IAo+
+IFNpZ25lZC1vZmYtYnk6IFJhcGhhw6tsIE3DqWxvdHRlIDxyYXBoYWVsLm1lbG90dGVAbWluZC5i
+ZT4KCiAgQXBwbGllZCB0byAyMDI1LjAyLngsIHRoYW5rcy4KCiAgUmVnYXJkcywKICBBcm5vdXQK
+Cj4gLS0tCj4gICBwYWNrYWdlL2xpYm9wZW5oMjY0L2xpYm9wZW5oMjY0Lm1rIHwgMyArKysKPiAg
+IDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKykKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2Fn
+ZS9saWJvcGVuaDI2NC9saWJvcGVuaDI2NC5tayBiL3BhY2thZ2UvbGlib3BlbmgyNjQvbGlib3Bl
+bmgyNjQubWsKPiBpbmRleCBmOWE1MGU0YzYxLi45YWU5OTZmZWUxIDEwMDY0NAo+IC0tLSBhL3Bh
+Y2thZ2UvbGlib3BlbmgyNjQvbGlib3BlbmgyNjQubWsKPiArKysgYi9wYWNrYWdlL2xpYm9wZW5o
+MjY0L2xpYm9wZW5oMjY0Lm1rCj4gQEAgLTEyLDYgKzEyLDkgQEAgTElCT1BFTkgyNjRfQ1BFX0lE
+X1ZFTkRPUiA9IGNpc2NvCj4gICBMSUJPUEVOSDI2NF9DUEVfSURfUFJPRFVDVCA9IG9wZW5oMjY0
+Cj4gICBMSUJPUEVOSDI2NF9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKPiAgIAo+ICsjIFRoZSBmb2xs
+b3dpbmcgQ1ZFIGlzIGZpeGVkIGluIDIuNS4xLCB0aGUgTlZEIENQRSBpcyBub3QgdXAgdG8gZGF0
+ZQo+ICtMSUJPUEVOSDI2NF9JR05PUkVfQ1ZFUyArPSBDVkUtMjAyNS0yNzA5MQo+ICsKPiAgIGlm
+ZXEgKCQoQlIyX2FhcmNoNjQpLHkpCj4gICBMSUJPUEVOSDI2NF9BUkNIID0gYWFyY2g2NAo+ICAg
+ZWxzZSBpZmVxICgkKEJSMl9hcm0pJChCUjJfYXJtZWIpLHkpCgpfX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
+cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
+c3RpbmZvL2J1aWxkcm9vdAo=
