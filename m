@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29565C3ABAC
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:15:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E31B0C3ABAA
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:15:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6791703C0;
-	Fri,  2 May 2025 11:15:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B094C842C2;
+	Fri,  2 May 2025 11:15:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0IGS0qlw5_li; Fri,  2 May 2025 11:15:22 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WiK-E1yA7gCn; Fri,  2 May 2025 11:15:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C79A7038C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D92DE842C0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C79A7038C;
-	Fri,  2 May 2025 11:15:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D92DE842C0;
+	Fri,  2 May 2025 11:15:23 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0606AEE
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:12:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1203B22A
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:12:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 33A9B41E6B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8FE9041A4B
  for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sq87DssoFPq3 for <buildroot@buildroot.org>;
- Fri,  2 May 2025 11:11:40 +0000 (UTC)
+ id ZFD2lOtl07Ug for <buildroot@buildroot.org>;
+ Fri,  2 May 2025 11:11:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38314416FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD78D419BE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 38314416FF
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD78D419BE
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 363C7863AE; Fri,  2 May 2025 11:11:38 +0000 (UTC)
+ id CA52C81E82; Fri,  2 May 2025 11:11:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 2 May 2025 13:01:09 +0200
+Date: Fri, 2 May 2025 13:00:58 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 6364ed5c3e4f0e086dcc58d27dda7152a7d4e74c
-X-Git-Newrev: 430648647389fd08b116e4391c7fb09a2ecaf38b
+X-Git-Oldrev: ca2ff29ba6db647941d90ed7c65721ede1231dc6
+X-Git-Newrev: bd6342e3b529a1bdecf3a8fe09db1a22c9810b95
 X-Patchwork-Hint: ignore
-Message-Id: <20250502111138.363C7863AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] DEVELOPERS: remove
- Jugurtha BELKALEM
+Message-Id: <20250502111137.CA52C81E82@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/mosquitto: fix
+ init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,61 +61,140 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2006149142161097878=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2006149142161097878==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=430648647389fd08b116e4391c7fb09a2ecaf38b
+commit: https://git.buildroot.net/buildroot/commit/?id=bd6342e3b529a1bdecf3a8fe09db1a22c9810b95
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Jugurtha's email address is bounding:
+Restart would regularly fail because it did not wait for the old
+process to be gone before starting the new one. Rewrite the script
+according to current style to fix that, and add reload support (see
+mosquitto docs for limitations of reload).
 
- 550 5.1.1 The email account that you tried to reach does not exist. Please try double-checking the recipient's email address for typos or unnecessary spaces.
-
-Remove it from the DEVELOPERS file so that utils/get-developers
-doesn't send emails to non-existent addresses.
-
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit cd6141ab150e504283791730fad35cb31123d002)
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 340a4bd4f80f71c975f10bee575e8e7cb93131b9)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- DEVELOPERS | 9 ---------
- 1 file changed, 9 deletions(-)
+ .checkpackageignore            |  1 -
+ package/mosquitto/S50mosquitto | 79 +++++++++++++++++++++++++++++++-----------
+ 2 files changed, 59 insertions(+), 21 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index fce7e968bf..8f0fcbca0a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1759,15 +1759,6 @@ F:	package/unclutter-xfixes/
- N:	Joshua Henderson <joshua.henderson@microchip.com>
- F:	package/qt5/qt5wayland/
+diff --git a/.checkpackageignore b/.checkpackageignore
+index b2951fdfbb..0ff4d78ec1 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -826,7 +826,6 @@ package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch lib_
+ package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch lib_patch.Upstream
+ package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch lib_patch.Upstream
+ package/mono/0002-Ongoing-work-on-the-cmake-build.patch lib_patch.Upstream
+-package/mosquitto/S50mosquitto Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/motion/S99motion Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/mpir/0001-mpn-arm-udiv.asm-workaround-binutils-bug-14887.patch lib_patch.Upstream
+ package/mpv/0001-fix-powerpc64-altivec.patch lib_patch.Upstream
+diff --git a/package/mosquitto/S50mosquitto b/package/mosquitto/S50mosquitto
+index 5241a071d7..89989179c1 100644
+--- a/package/mosquitto/S50mosquitto
++++ b/package/mosquitto/S50mosquitto
+@@ -1,35 +1,74 @@
+ #!/bin/sh
  
--N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
--F:	package/bcc/
--F:	package/python-aiofiles/
--F:	package/python-crayons/
--F:	package/python-cycler/
--F:	package/python-matplotlib/
--F:	package/python-opcua-asyncio/
--F:	package/python-piexif/
--
- N:	Juha Rantanen <juha@codercoded.com>
- F:	package/acsccid/
++DAEMON="mosquitto"
++PIDFILE="/var/run/$DAEMON.pid"
++MOSQUITTO_CONF="/etc/mosquitto/mosquitto.conf"
++
++[ -f "$MOSQUITTO_CONF" ] || exit 0
++
+ start() {
+-	printf "Starting mosquitto: "
+-	start-stop-daemon -S -q -m -b -p /var/run/mosquitto.pid \
+-		--exec /usr/sbin/mosquitto \
+-		-- -c /etc/mosquitto/mosquitto.conf
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
++	printf "Starting %s: " "$DAEMON"
++	start-stop-daemon --start --background --make-pidfile \
++		--pidfile "$PIDFILE" --exec "/usr/sbin/$DAEMON" \
++		-- -c "$MOSQUITTO_CONF"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
+ }
++
+ stop() {
+-	printf "Stopping mosquitto: "
+-	start-stop-daemon -K -q -p /var/run/mosquitto.pid
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
++	printf "Stopping %s: " "$DAEMON"
++	start-stop-daemon --stop --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++		return "$status"
++	fi
++	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON"; do
++		sleep 0.1
++	done
++	rm -f "$PIDFILE"
++	return "$status"
+ }
++
+ restart() {
+ 	stop
+ 	start
+ }
  
-
---===============2006149142161097878==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++reload() {
++	printf "Reloading %s config: " "$DAEMON"
++	start-stop-daemon --stop --signal HUP -q --pidfile "$PIDFILE" \
++		--exec "/usr/sbin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
+ case "$1" in
+-  start)
+-	start
+-	;;
+-  stop)
+-	stop
+-	;;
+-  restart|reload)
+-	restart
+-	;;
+-  *)
+-	echo "Usage: $0 {start|stop|restart}"
+-	exit 1
++	start)
++		start;;
++	stop)
++		stop;;
++	restart)
++		restart;;
++	reload)
++		reload;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
+ esac
+ 
+ exit $?
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2006149142161097878==--
