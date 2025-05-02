@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51C05C3ABAD
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:12:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B618C3ABA3
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 11:12:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A93D83F31;
-	Fri,  2 May 2025 11:12:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E097783F4A;
+	Fri,  2 May 2025 11:12:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JHizrmWrJjbH; Fri,  2 May 2025 11:12:22 +0000 (UTC)
+ id wft1aRG-jAoO; Fri,  2 May 2025 11:12:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41ECA83F33
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 317CC83F3A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 41ECA83F33;
-	Fri,  2 May 2025 11:12:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 317CC83F3A;
+	Fri,  2 May 2025 11:12:24 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4AF00EE
- for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:43 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 04B89229
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E7FC615A3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7F06F61151
  for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pzu5_QAgS4kG for <buildroot@buildroot.org>;
+ id 6cJAR087ljT4 for <buildroot@buildroot.org>;
  Fri,  2 May 2025 11:11:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 657EC61151
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A955F61325
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 657EC61151
+ by smtp3.osuosl.org (Postfix) with ESMTP id A955F61325
  for <buildroot@buildroot.org>; Fri,  2 May 2025 11:11:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 63B67864AE; Fri,  2 May 2025 11:11:36 +0000 (UTC)
+ id A7575864B1; Fri,  2 May 2025 11:11:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 2 May 2025 12:12:08 +0200
+Date: Fri, 2 May 2025 12:12:38 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: c7d1a5cde8f58b91260ee075b4ee55d5ccc9d0ad
-X-Git-Newrev: e8c3ea31d4a85ab2cf947ccec364985b22de1263
+X-Git-Oldrev: 8baf448c9fd83d2f7ef4f51579bb7cc6ad8a0f4e
+X-Git-Newrev: e50c617e6c6b2b554fdce0a89bb42940570e4c7d
 X-Patchwork-Hint: ignore
-Message-Id: <20250502111136.63B67864AE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/rtl8723ds: fix
- build failure with Linux 6.13
+Message-Id: <20250502111136.A7575864B1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] support/testing:
+ test_edk2: add a few build tests
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,69 +61,167 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1260003625562025334=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e8c3ea31d4a85ab2cf947ccec364985b22de1263
+--===============1260003625562025334==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=e50c617e6c6b2b554fdce0a89bb42940570e4c7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Add local patch pending upstream to fix build failure with Linux 6.13
+Some EDK II configurations have complex dependencies on several packages
+and additional build options; build tests help keeping track of those
+more easily.
 
-Fixes:
-https://autobuild.buildroot.org/results/940e7f95fff017b8c7cffb778911ae0386980fa3
+Factorize some code common to all the build tests into a new
+TestEdk2BuildBase class, which defines a base configuration and a method
+to assert that binaries do indeed exist after the build.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+While at it, add myself in DEVELOPERS.
+
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Dick Olsson <hi@senzilla.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7b9a021dfd7f3ea9c17f2ce354c509659adfa099)
+(cherry picked from commit 4f7e3f0bdd9200303f5dfc717d9dc45e8c1875d3)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .../rtl8723ds/0001-Fix-build-with-Linux-6.13.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ DEVELOPERS                              |   1 +
+ support/testing/tests/boot/test_edk2.py | 101 ++++++++++++++++++++++++++++++++
+ 2 files changed, 102 insertions(+)
 
-diff --git a/package/rtl8723ds/0001-Fix-build-with-Linux-6.13.patch b/package/rtl8723ds/0001-Fix-build-with-Linux-6.13.patch
-new file mode 100644
-index 0000000000..2350dc2e5e
---- /dev/null
-+++ b/package/rtl8723ds/0001-Fix-build-with-Linux-6.13.patch
-@@ -0,0 +1,35 @@
-+From d71ab09447d9c3043203b5c3b5868e99bc4e0ca8 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Wed, 16 Apr 2025 22:00:59 +0200
-+Subject: [PATCH] Fix build with Linux 6.13
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b639558250..3d4674eebe 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3334,6 +3334,7 @@ F:	configs/arm_fvp_ebbr_defconfig
+ F:	configs/qemu_aarch64_ebbr_defconfig
+ F:	configs/qemu_arm_ebbr_defconfig
+ F:	package/edk2-non-osi/
++F:	support/testing/tests/boot/test_edk2.py
+ 
+ N:	Vincent Stehlé <vincent.stehle@laposte.net>
+ F:	board/arm/foundation-v8/
+diff --git a/support/testing/tests/boot/test_edk2.py b/support/testing/tests/boot/test_edk2.py
+index 90583b56fe..4e0942b3a4 100644
+--- a/support/testing/tests/boot/test_edk2.py
++++ b/support/testing/tests/boot/test_edk2.py
+@@ -48,3 +48,104 @@ class TestEdk2(infra.basetest.BRTest):
+                                     "-pflash", flash1,
+                                     "-hda", hda])
+         self.emulator.login()
 +
-+Commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9c4f830927750a2bf9fd9426a5257f0fdce3b662
-+adds struct net_device *dev as argument to set_monitor_channel(), so let's
-+add it to cfg80211_rtw_set_monitor_channel() according to Linux version.
 +
-+Upstream: https://github.com/lwfinger/rtl8723ds/pull/51
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ os_dep/linux/ioctl_cfg80211.c | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
++class TestEdk2BuildBase(infra.basetest.BRTest):
++    """A class to test the build of various edk2 platforms."""
++    base_config = \
++        """
++        # BR2_PACKAGE_BUSYBOX is not set
++        # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
++        # BR2_TARGET_ROOTFS_TAR is not set
++        BR2_INIT_NONE=y
++        BR2_SYSTEM_BIN_SH_NONE=y
++        BR2_TARGET_EDK2=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        """
 +
-+diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
-+index 53ccef4..75391e7 100644
-+--- a/os_dep/linux/ioctl_cfg80211.c
-++++ b/os_dep/linux/ioctl_cfg80211.c
-+@@ -4520,7 +4520,10 @@ static int	cfg80211_rtw_set_channel(struct wiphy *wiphy
-+ }
-+ 
-+ static int cfg80211_rtw_set_monitor_channel(struct wiphy *wiphy
-+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 13, 0))
-++	, struct net_device *dev
-++	, struct cfg80211_chan_def *chandef
-++#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
-+ 	, struct cfg80211_chan_def *chandef
-+ #else
-+ 	, struct ieee80211_channel *chan
-+-- 
-+2.39.5
++    def assertBinariesExist(self, *binaries: str) -> None:
++        """Assert that the binaries passed as argument exist
++        under the images folder.
++        We print a message to the emulator logfile for each binary found.
++        """
++        for binary in binaries:
++            binpath = os.path.join(self.builddir, "images", binary)
++            self.assertTrue(os.path.exists(binpath), f"Missing {binpath}!")
++            print(f"{binary} exists: {binpath}", file=self.emulator.logfile,
++                  flush=True)
 +
++
++class TestEdk2BuildArmVirtQemu(TestEdk2BuildBase):
++    config = TestEdk2BuildBase.base_config + \
++        """
++        BR2_aarch64=y
++        BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU=y
++        """
++
++    def test_run(self) -> None:
++        self.assertBinariesExist("QEMU_EFI.fd", "QEMU_VARS.fd")
++
++
++class TestEdk2BuildArmVirtQemuKernel(TestEdk2BuildBase):
++    config = TestEdk2BuildBase.base_config + \
++        """
++        BR2_aarch64=y
++        BR2_TARGET_EDK2_PLATFORM_ARM_VIRT_QEMU_KERNEL=y
++        """
++
++    def test_run(self) -> None:
++        self.assertBinariesExist("QEMU_EFI.fd", "QEMU_VARS.fd")
++
++
++class TestEdk2BuildArmSgi575(TestEdk2BuildBase):
++    config = TestEdk2BuildBase.base_config + \
++        """
++        BR2_aarch64=y
++        BR2_TARGET_EDK2_PLATFORM_ARM_SGI575=y
++        """
++
++    def test_run(self) -> None:
++        self.assertBinariesExist("BL33_AP_UEFI.fd")
++
++
++class TestEdk2BuildArmVexpressFvpAarch64(TestEdk2BuildBase):
++    config = TestEdk2BuildBase.base_config + \
++        """
++        BR2_aarch64=y
++        BR2_TARGET_EDK2_PLATFORM_ARM_VEXPRESS_FVP_AARCH64=y
++        """
++
++    def test_run(self) -> None:
++        self.assertBinariesExist("FVP_AARCH64_EFI.fd")
++
++
++class TestEdk2BuildSocionextDeveloperbox(TestEdk2BuildBase):
++    config = TestEdk2BuildBase.base_config + \
++        """
++        BR2_aarch64=y
++        BR2_TARGET_EDK2_PLATFORM_SOCIONEXT_DEVELOPERBOX=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="synquacer"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_TARGETS="PRELOADED_BL33_BASE=0x8200000"
++        """
++
++    def test_run(self) -> None:
++        self.assertBinariesExist("SPI_NOR_IMAGE.fd", "fip.bin")
++
++
++class TestEdk2BuildQemuSbsa(TestEdk2BuildBase):
++    # This configuration is not exactly identical to the configuration built
++    # during TestEdk2, as we use the latest arm-trusted-firmware version, among
++    # other things.
++    config = TestEdk2BuildBase.base_config + \
++        """
++        BR2_aarch64=y
++        BR2_TARGET_EDK2_PLATFORM_QEMU_SBSA=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="qemu_sbsa"
++        BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
++        """
++
++    def test_run(self) -> None:
++        self.assertBinariesExist("SBSA_FLASH0.fd", "SBSA_FLASH1.fd", "fip.bin")
+
+--===============1260003625562025334==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1260003625562025334==--
