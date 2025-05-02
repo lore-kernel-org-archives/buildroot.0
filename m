@@ -4,95 +4,152 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8315C369DC
-	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 03:10:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65205C3ABA3
+	for <buildroot@archiver.kernel.org>; Fri,  2 May 2025 07:31:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7539160AC9;
-	Fri,  2 May 2025 03:10:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E28D6107C;
+	Fri,  2 May 2025 07:31:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rsZShJpj20as; Fri,  2 May 2025 03:10:21 +0000 (UTC)
+ id Kl_VIEGZYWTq; Fri,  2 May 2025 07:31:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A9E7607D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B80460ACA
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8A9E7607D3;
-	Fri,  2 May 2025 03:10:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id BAED822A
- for <buildroot@buildroot.org>; Fri,  2 May 2025 03:10:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B80460ACA;
+	Fri,  2 May 2025 07:31:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2BD80229
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 07:31:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DDF6C83294
- for <buildroot@buildroot.org>; Fri,  2 May 2025 03:10:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1B56A83984
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 07:31:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3CK0ptym3893 for <buildroot@buildroot.org>;
- Fri,  2 May 2025 03:10:14 +0000 (UTC)
+ id 6ndy6y84Tmis for <buildroot@buildroot.org>;
+ Fri,  2 May 2025 07:31:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
- envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7035B83D06
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7035B83D06
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7035B83D06
- for <buildroot@buildroot.org>; Fri,  2 May 2025 03:10:14 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-43cf0d787eeso13994845e9.3
- for <buildroot@buildroot.org>; Thu, 01 May 2025 20:10:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1746155412; x=1746760212;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=W5LkuGSv6G1RbyUs14zyD6T9WuroAsLE5dIW6l/eOt8=;
- b=ptS8deXi5ItpF6Tf044n53ANbNlbs7lRWUtInj94zafcr9fsjBp/n4t4UOQqz0h3fG
- P8D57ntF49EeA3ek3aQSztzTJnziiFAx2/AQ9S4HQ/Q/xr3/c13CsqW3ryzLeQ9pG2h5
- aK0WRS4bgz58QoMBtfhinkNBlyT33z48mtCTKrEdSxXNkS36+41n3GHHMotTUjI0wsi5
- xc9snh2zafRnKDZYfCAtBa/D4TNc4u2Xhmj44aeNhXq0/GtL7d2xXdRJlFRxTxVI91h4
- lXA2YN6N7kAyJvBfEaJAyr6fo6+r9tcY6NbllY0IOJu8gcVpd8gq5vWIypBvKsePcR/D
- Es+Q==
-X-Gm-Message-State: AOJu0Ywy87qUwsqdPuLdcqnaFIFUgvIHuW6LJ7p++vQiRgj6R2DWQg2d
- TzvgaziFr2pwpvozA0s6YgJ2NBdQFk4Fikhgw4o+V4v2JQ/GvPr/izglwg==
-X-Gm-Gg: ASbGncuQisRoAzbem0ej6E9IlQ7MsTC0js1CUSB07WlYMxdGgoyjVFwdjDALH0I5cVF
- xTSGv6IDHAsDNAZ/hm3vPQdmi59U6PbmmTqazPlQ+6V33vgsaxJAdSUeAE3ZSQTtaK1ifrmwK3d
- r6eKG67x+DhYU3lzLXhJkmKSey1iQfiEql4iqAvYnKQ86n9mgZwr04X11TONW5hobTx2ZVeiQfx
- w/A/AnIlGZycEu3VINlfFFkriCLTruwAXuwqVn7HSkN7NGLqbV3uPoF+GVUyMRVRhS2LvyIKLz/
- UV1Ywt2i8fnWZq1P7CHx5RjUXTCdxgOgzNPsf0BdvCeA
-X-Google-Smtp-Source: AGHT+IGbmxWAbp9vd2/YJ9sMPzmxsngiMIquvfaTbBdGreZbJQc45udVNBvkpd9HlszbYAsVdSRHOQ==
-X-Received: by 2002:a05:600c:3e10:b0:43c:f895:cb4e with SMTP id
- 5b1f17b1804b1-441bbedbc5amr8086475e9.17.1746155412198; 
- Thu, 01 May 2025 20:10:12 -0700 (PDT)
-Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-441b89d15dasm29337925e9.16.2025.05.01.20.10.11
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 01 May 2025 20:10:12 -0700 (PDT)
-Message-ID: <68143794.7b0a0220.35b317.b07a@mx.google.com>
+ client-ip=2a01:111:f403:2417::617;
+ helo=nam12-dm6-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ED654838FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED654838FE
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam12on20617.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2417::617])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ED654838FE
+ for <buildroot@buildroot.org>; Fri,  2 May 2025 07:31:30 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=S2eevAFMlNVyaA8yrfWvWy+I9UTxSpwkdpFxelbGiekuaxbRteeO1Y8UcfbMBs4gdh54uZcIS+0QLOzro2fxh9QvorLkZ1e4MZHPqizWXNwJdvWrm0WQITAfFYshYuBhSp5mefJYpASlsMTXSFg6eoBt3v/ChLR1yLZDqcz0WHInpkenGclg+bupksGs5C0Qc30jVgrYqQxZe/uKSYtukjCt8d1TxD/AqnmnfTRbDq10mwC6p0JHwQpDT0glAbxy7lJrd2UAoWHAtxCQ5yvinYDp8xl3GhXCuJhg8TVu99x4uTHEDv7CrW7GW34NAeE9UPSyX9+r0xzbPG5HrAydHA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2VQ5pcQtD3xjR52yQFnYS8HGhW5X0bno0dGK9mC5Fj8=;
+ b=L1VtA/W7s/KYRgHEa2C9QfKUt8EADgdA0HSjKd8qHyCh6bq8Lv2ndlVuWsMBvn17wHSv7CiLQulRhTcFHGJVaQjVVY9zNMOAt/LyFEInxOoG/103RXeWwkkHrY4AkJ3gnklsd1YaoiTA2dbL/Bp8g+vkwRtHM+d2MRxfRuVO1ojIleJo9J7m83Kkj9wmUO2SKsmfjv26RS1E4MxJFXjt57iS9kMNzKVaMAcNqrCVyuCKS5CdYHETYN3iVH64eAlqmRK8IlQI0Pc0V9ZsoKCIe26n5DLHsti2cOi8WRaNNSPk7HmYVnDg6KN6GiM+JtCPaioXdb5c2U7xl9QTuj055A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+Received: from PH8PR05CA0021.namprd05.prod.outlook.com (2603:10b6:510:2cc::9)
+ by BY5PR12MB4209.namprd12.prod.outlook.com (2603:10b6:a03:20d::22)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8699.23; Fri, 2 May
+ 2025 07:31:24 +0000
+Received: from CY4PEPF0000FCC0.namprd03.prod.outlook.com
+ (2603:10b6:510:2cc:cafe::e0) by PH8PR05CA0021.outlook.office365.com
+ (2603:10b6:510:2cc::9) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8699.12 via Frontend Transport; Fri,
+ 2 May 2025 07:31:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000FCC0.mail.protection.outlook.com (10.167.242.102) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8699.20 via Frontend Transport; Fri, 2 May 2025 07:31:23 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 2 May
+ 2025 02:31:22 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 2 May
+ 2025 02:31:22 -0500
+Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Fri, 2 May 2025 02:31:20 -0500
+To: <buildroot@buildroot.org>
+Date: Fri, 2 May 2025 08:31:11 +0100
+Message-ID: <20250502073112.376985-1-neal.frager@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-From: Buildroot Notifications <buildroot.notifications@gmail.com>
-Date: Fri, 02 May 2025 03:10:11 -0000
+Received-SPF: None (SATLEXMB05.amd.com: neal.frager@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000FCC0:EE_|BY5PR12MB4209:EE_
+X-MS-Office365-Filtering-Correlation-Id: c277f637-071b-4088-2b70-08dd894b5755
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|82310400026|376014|36860700013|1800799024|13003099007|41080700001;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?9NJ201c3pk6G+swQQ8+l/2fVtMaf+LI3VS7b3QtoJbIqqwH6saV61hOtlp9V?=
+ =?us-ascii?Q?WCz9pR54S648RSvPNQhcgBo2Gv95GBUXtAd6j9smvkZAPCzypOe2izq3eZnD?=
+ =?us-ascii?Q?dnH5FB48fAL2miSkSFySgQshR/1BXmyPrQxSm+pI2+NMp2OL56ScE8sO57rZ?=
+ =?us-ascii?Q?v8JlY+efdkWH0oIDM/Hu/zBRcP3++TscwE+kFHcdLubvBHLrYNMe0O7wUQhE?=
+ =?us-ascii?Q?dDgBXuVY24V4Qt018MAuN9wC7ohvA6TJxrxK1WQQjK/L4VJ4uyRinMX5PnGK?=
+ =?us-ascii?Q?9oQSJ/BM7ASDDA+8Sd89f8S4ZCYSTl70gpA05g8tHRO+0BwJGauxXcmJ0SXP?=
+ =?us-ascii?Q?lsjuu3bYcHxMCbn3bx/NSgI2WfYQ12mTp4XC7Ml7EbHa0fAbXqM6g/kqZfOm?=
+ =?us-ascii?Q?uAlbF7V4Bt7/i8CRY4Yh8gOtB3flA5SoRBzqi7jGVIfz4A999Rl1uFdIhANu?=
+ =?us-ascii?Q?v6Z0a9FsNav07HtUzWhdfrj2MlXfa0dTqK/cMRh/6bZ5xA/wY6Efk3mP+Lj7?=
+ =?us-ascii?Q?km0mg7QnLMjaXkF1FcmHI2fR4aJyAD3MO1Kjn6TtaoAKTQPlj5HuxU2lM1P+?=
+ =?us-ascii?Q?fAehiqm2YWQwZgANUjTetgGy7M3YyflUrnpQl8KkcmaXPcwMjc8zugaOdP43?=
+ =?us-ascii?Q?l3fjybyOOCzNGxBDYIcUKaIM79CRioIhQI0lunZdA92kghcg1tt4evUZwaiY?=
+ =?us-ascii?Q?KxNQTzuBye2roCPnPDcml9Fr+VkV2xmZD1FBggVRA5g0vzpoQuZebSmjgv6I?=
+ =?us-ascii?Q?Rex0oEqUpCpI2IcIC4Q5CHb1BL5Muq4sPtS6b6M328Jic+cFiRAKsQH2QSVD?=
+ =?us-ascii?Q?ueByiFII5XFXFcSEmRyaX2PEf7esxOWIjNH6FyXwuPCNj4Q7hXgYRGP3D1YW?=
+ =?us-ascii?Q?TwaopXCXj0Rrov3nj5Yy9A3LZgptsfYDOp3i2vd5DMhvJ15qMWu6TUaDso25?=
+ =?us-ascii?Q?r23mE9KDUMqjFyQJSf95R/Z5Ag8tH4Z03xOXMsjBZ/Eco0dwtzX7HtUN4OtE?=
+ =?us-ascii?Q?oVdU0M3KN/9N2RYqGkvNaQIhjEaJwrSrmZuNODtXhEkDH6P3pt4KPVVJkXVF?=
+ =?us-ascii?Q?IbDFOk3h7ptOBpyImzzbS/I41f6VU++thfoKo9GIjO1JhvBlo4nzL6PRiAY6?=
+ =?us-ascii?Q?O9vBSDEH0QkjZTbAyoow+Ba003MKehYDErB5PhQ8cbbuJHRzYfCjgsgE9Xqz?=
+ =?us-ascii?Q?QE6gEwozTPpdF+6zEmagKAx674pz6+AtDRSD6sMk/u4yMw/Gr2JYNFE3Vmm2?=
+ =?us-ascii?Q?y/ZuMCD7d8Ge8SndFIWHWIlfmzCLUjFpTIQy82R24UAHtSROEjBO4QrdMPwi?=
+ =?us-ascii?Q?RVOsd/NpfHaYw/D1qw2iQx/Zis6bRlZ4reUm0+Pxwl3tPhW5bY59Mlog5b+q?=
+ =?us-ascii?Q?QxrkhI4+K8ND3APF1umf3dHxKSe6HxVmaWwb2kg6/aa9IdwgX6+OqsuZ9t1b?=
+ =?us-ascii?Q?+Tl67gKs/wDVb6xahSvzE6tjigsZobjDcLO6374Epuk7fULLHqQRKspP1qQj?=
+ =?us-ascii?Q?N2JVWvSN8KFULRGGM9PGLKEnGfYFeYfxxrBB?=
+X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
+ SFS:(13230040)(82310400026)(376014)(36860700013)(1800799024)(13003099007)(41080700001);
+ DIR:OUT; SFP:1101; 
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2025 07:31:23.5672 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c277f637-071b-4088-2b70-08dd894b5755
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
+ Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000FCC0.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4209
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1746155412; x=1746760212; darn=buildroot.org;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:from:to:cc:subject:date:message-id:reply-to;
- bh=W5LkuGSv6G1RbyUs14zyD6T9WuroAsLE5dIW6l/eOt8=;
- b=Fnw2NR9jZVl15ACIEQw3v7yboULdJqnQc5c8L8z52CWCNi0lh4YosO4Iy9H39a3FaO
- LJQCyF0U05oM/Vo7QAA5za7mBR+XUyPWqpCwNQvH0+qI71zHXpZPVp6K6pE2OnRyuuJG
- p5F+MddJzAi8plIZyAUpOr2d8TwmuAF1WOtLYniJHfra2hpXf1fOGnqtEWJKwg3FUe29
- 4fV1JkZO7lNlE8tSr7YbgDp7XAjA8RWRHNmpdp4+DoVquPOOUmYBFof4KDslPzCii4ju
- aKkxsEEA7c6FMnl76+0G3Q2E8d+QtxvgkSAPuDK6jca+YJSuRMwpzHz9A0fcXHT/G1Cx
- KC5Q==
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2VQ5pcQtD3xjR52yQFnYS8HGhW5X0bno0dGK9mC5Fj8=;
+ b=p/KCss6jYeHjJ3vb2OG69ywMNChaJ6Z9ezUwYQRegZg6dATRZhOJ7V0L+TLW4ZSWmROS9z6hugbarw6RS/Zw9ejhMp90oQt2OpfPOB0UNqxsyNAaBqxsWHT0NSGAqA3ug1ZNL2QxmOvcDEEkSYaHeMuED+JxrCIrqlQJe+dpPtk=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Fnw2NR9j
-Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2025-05-01
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=p/KCss6j
+Subject: [Buildroot] [PATCH v3 1/2] package/xilinx-fpgautil: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,165 +161,136 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Neal Frager via buildroot <buildroot@buildroot.org>
+Reply-To: Neal Frager <neal.frager@amd.com>
+Cc: ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ brandon.maier@collins.com, ju.o@free.fr, thomas.petazzoni@bootlin.com,
+ Neal Frager <neal.frager@amd.com>, fabio.caccamo@amd.com,
+ romain.naour@smile.fr, michal.simek@amd.com, arnout@mind.be
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Add a new package to Buildroot called xilinx-fpgautil which builds the Xilinx
+fpgautil script which can be used for loading FPGA bitstreams on zynq, zynqmp
+and versal products at run-time.  This is a handy application for loading
+FPGA bitstreams and their corresponding device tree overlays.
 
-Autobuild statistics for 2025-05-01
-===================================
+An explanation of how this script can be used for each type of product can be
+found on the wiki pages below.
 
-      branch |  OK | NOK | TIM | TOT |
-  2025.02.x  |  1  |  5  |  0  |  6  |
-    master   | 17  | 69  |  0  | 86  |
+https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841645/Solution+Zynq+PL+Programming+With+FPGA+Manager
+https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/18841847/Solution+ZynqMP+PL+Programming
+https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/1188397412/Solution+Versal+PL+Programming
 
-Classification of failures by reason for master
------------------------------------------------
+In addition, the source code for xilinx-fpgautil can be found here:
+https://github.com/Xilinx/meta-xilinx/blob/master/meta-xilinx-core/recipes-bsp/fpga-manager-script/files/fpgautil.c
 
-                       unknown | 9 
-          sane-airscan-0.99.33 | 5 
-             dahdi-linux-3.3.0 | 4 
-                elfutils-0.192 | 4 
-                 libmbus-0.8.0 | 4 
-             libqrencode-4.1.1 | 4 
-             libopenmpt-0.7.13 | 3 
-           at-spi2-core-2.50.0 | 2 
-              dropbear-2024.86 | 2 
-                  ffmpeg-6.1.2 | 2 
-                openvpn-2.6.14 | 2 
-              asterisk-20.11.1 | 1 
-                     avahi-0.8 | 1 
-                  bcusdk-0.0.5 | 1 
-                   bird-2.15.1 | 1 
-cegui-00b4e1fe174da53b7ed72... | 1 
-                cifs-utils-7.3 | 1 
-                 coreutils-9.5 | 1 
-                   cvs-1.12.13 | 1 
-fs/axfs/axfs.mk:32: /home/b... | 1 
-                   fwupd-2.0.4 | 1 
-                    gdal-3.8.2 | 1 
-                 hddtemp-0.4.3 | 1 
-                 host-gdb-14.2 | 1 
-               iproute2-6.14.0 | 1 
-                 lapack-3.12.1 | 1 
-                   libcap-2.76 | 1 
-                 libgee-0.20.6 | 1 
-     libphidget-2.1.9.20190409 | 1 
-libuci-f3fc0b76040685829191... | 1 
-        ltp-testsuite-20250130 | 1 
-                memtest86-7.20 | 1 
-            netstat-nat-1.4.10 | 1 
-newlib-bare-metal-4.5.0.202... | 1 
-   nxp-mwifiex-lf-6.6.52_2.2.0 | 1 
-           oath-toolkit-2.6.12 | 1 
-               openblas-0.3.29 | 1 
-               procps-ng-4.0.5 | 1 
-                   trinity-1.9 | 1 
+The Xilinx fpgautil script can be used hand in hand with the Versal Segmented
+Configuration with the following example command for programming the pld.pdi
+file to the Versal FPGA:
 
+fpgautil -b /lib/firmware/xilinx/<design-name>_pld.pdi -o /lib/firmware/xilinx/<dtbo-name>.dtbo
 
-Detail of failures for master
------------------------------
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+[build-tested only]
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+---
+V1->V2:
+- renamed package to xilinx-fpgautil
+V2->V3:
+- changed install directory to /usr/bin
+---
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/xilinx-fpgautil/Config.in            |  8 +++++++
+ package/xilinx-fpgautil/xilinx-fpgautil.hash |  3 +++
+ package/xilinx-fpgautil/xilinx-fpgautil.mk   | 22 ++++++++++++++++++++
+ 5 files changed, 35 insertions(+)
+ create mode 100644 package/xilinx-fpgautil/Config.in
+ create mode 100644 package/xilinx-fpgautil/xilinx-fpgautil.hash
+ create mode 100644 package/xilinx-fpgautil/xilinx-fpgautil.mk
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-    m68k     |        asterisk-20.11.1        | NOK | https://autobuild.buildroot.org/results/688faded5f6d6898f545b07d6e08ad55199dab8c |     
-   mipsel    |      at-spi2-core-2.50.0       | NOK | https://autobuild.buildroot.org/results/05ae4c0dc41ebd61b6e9e9d62f10637c535e5110 |     
-  mips64el   |      at-spi2-core-2.50.0       | NOK | https://autobuild.buildroot.org/results/a1c4ac1329c9becfdce3bf2ed52705db4829264b |     
-   sparc     |           avahi-0.8            | NOK | https://autobuild.buildroot.org/results/f7e617d8c8d7098114363ee5c34821b7694718f6 | ORPH
-    arm      |          bcusdk-0.0.5          | NOK | https://autobuild.buildroot.org/results/d6b8f7992fbfbe175b58b3dcfc016b51f8f57344 |     
- microblaze  |          bird-2.15.1           | NOK | https://autobuild.buildroot.org/results/5d7cd83ef8bbddba90accc37e20e0c76be87dd51 |     
-    arc      | cegui-00b4e1fe174da53b7ed72... | NOK | https://autobuild.buildroot.org/results/8b1064ed2448aa16fbb93dfc7c58b1e767e8aa04 | ORPH
-   s390x     |         cifs-utils-7.3         | NOK | https://autobuild.buildroot.org/results/dc1091ddf5a7ea33d58dafa12470110479e6c022 |     
-   sparc     |         coreutils-9.5          | NOK | https://autobuild.buildroot.org/results/85b93a894181b40fce8889519f096d9e880277e0 | ORPH
-   x86_64    |          cvs-1.12.13           | NOK | https://autobuild.buildroot.org/results/673cae9454c24936bf702d0904e409c6831aac1a | ORPH
-   x86_64    |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/8855fefc4665f6c3319c25bfb99c49845fdb5b32 | ORPH
-   s390x     |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/ed33135c134ea159f0f9fb26b1f9f296019a3cab | ORPH
-   s390x     |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/ad98d2a353665b5631b284ec78b424cecf42d09a | ORPH
-   s390x     |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/cf1178a08be03ac167a6796f5cbb5662561bba76 | ORPH
-   sparc     |        dropbear-2024.86        | NOK | https://autobuild.buildroot.org/results/93d9769a7affdafb84bb514b2040f1779e45c4d8 |     
- powerpc64   |        dropbear-2024.86        | NOK | https://autobuild.buildroot.org/results/21a77582d8a40f8c45e332d199ad591aecb57c7b |     
-  riscv64    |         elfutils-0.192         | NOK | https://autobuild.buildroot.org/results/bfa9a6961825f5a69bf30f8f96e8bf4ba1359987 | ORPH
-   mipsel    |         elfutils-0.192         | NOK | https://autobuild.buildroot.org/results/fc750441e82640482b0fc9aa3670220cb7d27913 | ORPH
- powerpc64   |         elfutils-0.192         | NOK | https://autobuild.buildroot.org/results/1409db03671909e1f1754db651d98050c94b75a5 | ORPH
- powerpc64   |         elfutils-0.192         | NOK | https://autobuild.buildroot.org/results/a31d74da007bb29ba25d0db97b094d9464f56e5b | ORPH
-   arceb     |          ffmpeg-6.1.2          | NOK | https://autobuild.buildroot.org/results/6261437561bb9f68756ff25ad44d59fcc7de97bb |     
-    arc      |          ffmpeg-6.1.2          | NOK | https://autobuild.buildroot.org/results/3825394717e109315419a5008cec71860e3b3b91 |     
-microblazeel | fs/axfs/axfs.mk:32: /home/b... | NOK | https://autobuild.buildroot.org/results/8931f775827e7c1134dd2bc1ae0675ccbbe5c529 |     
-microblazeel |          fwupd-2.0.4           | NOK | https://autobuild.buildroot.org/results/2b4fdbf5ab4ec9902fe3f07c220441ce5113825b |     
-microblazeel |           gdal-3.8.2           | NOK | https://autobuild.buildroot.org/results/8065a8b2592e5e1dd39abeb1c239325909da21bc |     
- aarch64_be  |         hddtemp-0.4.3          | NOK | https://autobuild.buildroot.org/results/1bd7861c3d15597e82dc040ba5d6b7d88ad37698 |     
-  powerpc    |         host-gdb-14.2          | NOK | https://autobuild.buildroot.org/results/16ae87dcd5d66fca81026fe52a792ace10297a0b | ORPH
-    arc      |        iproute2-6.14.0         | NOK | https://autobuild.buildroot.org/results/1b8092db1e2e43343cd1342555825075152fe157 |     
-   xtensa    |         lapack-3.12.1          | NOK | https://autobuild.buildroot.org/results/1b197cbd498dc252ccd99e3b3d60fc69945c64ea |     
-   xtensa    |          libcap-2.76           | NOK | https://autobuild.buildroot.org/results/0246ce6b979ae8556d2a09f39fcf01fa2421a2dd |     
-    mips     |         libgee-0.20.6          | NOK | https://autobuild.buildroot.org/results/b5b0a9f4f67465b8c34503dfae83c3f577609877 |     
-  sparc64    |         libmbus-0.8.0          | NOK | https://autobuild.buildroot.org/results/de1d43c304f0965fecf08367f039b8704f2b45a3 | ORPH
-   mips64    |         libmbus-0.8.0          | NOK | https://autobuild.buildroot.org/results/256a48dd785c47f983abe33b2f7686d5165a43aa | ORPH
-   mips64    |         libmbus-0.8.0          | NOK | https://autobuild.buildroot.org/results/e9fa045f4962d2f7050f848c7360078777d4e167 | ORPH
-   x86_64    |         libmbus-0.8.0          | NOK | https://autobuild.buildroot.org/results/d72072496555119d5a487c40267ee91158dde5a2 | ORPH
-   s390x     |       libopenmpt-0.7.13        | NOK | https://autobuild.buildroot.org/results/e8cc1eca3e76648405a470b6f388d69b06ca033d |     
-microblazeel |       libopenmpt-0.7.13        | NOK | https://autobuild.buildroot.org/results/6df3b4d5aa4832b3fceac8b098bfc2e341c7f296 |     
-  aarch64    |       libopenmpt-0.7.13        | NOK | https://autobuild.buildroot.org/results/3a5aae2ab7e7f12cf0c839c22b176a7ddc7836ec |     
- aarch64_be  |   libphidget-2.1.9.20190409    | NOK | https://autobuild.buildroot.org/results/6d17923665f192e06802d1c2ec415d66ab1d8ff8 |     
-   mipsel    |       libqrencode-4.1.1        | NOK | https://autobuild.buildroot.org/results/4c117c6cd35575de44cb7518783ad05ff99d59fe |     
-   mips64    |       libqrencode-4.1.1        | NOK | https://autobuild.buildroot.org/results/fc6eab65325ef97e59f3a68645dcfd8dadce50f4 |     
- powerpc64   |       libqrencode-4.1.1        | NOK | https://autobuild.buildroot.org/results/8eab11868e2bb9aeabf4ab19a9ebb5343f40fd97 |     
- microblaze  |       libqrencode-4.1.1        | NOK | https://autobuild.buildroot.org/results/307112be781b2f2d82b50ffff52eb58518303843 |     
-   arceb     | libuci-f3fc0b76040685829191... | NOK | https://autobuild.buildroot.org/results/e2b689ae6f65fb392bda6840b4b970b502c488e5 |     
-   arceb     |     ltp-testsuite-20250130     | NOK | https://autobuild.buildroot.org/results/882897361d46d7898c591bc5f47ac2eb7fb4b339 |     
-    i686     |         memtest86-7.20         | NOK | https://autobuild.buildroot.org/results/20525c2cd02fd4535111cd77fbc81c615605d635 |     
-   armeb     |       netstat-nat-1.4.10       | NOK | https://autobuild.buildroot.org/results/35e18e24a26e40a8d20a0390cec193d2db78bbcb | ORPH
- microblaze  | newlib-bare-metal-4.5.0.202... | NOK | https://autobuild.buildroot.org/results/a76d01ae5fe5173f1b99bb7c4c5495f65fa6a3a7 |     
-   sh4eb     |  nxp-mwifiex-lf-6.6.52_2.2.0   | NOK | https://autobuild.buildroot.org/results/6d44d06e7a1338df8787bca9e10ced55362237d4 |     
-    m68k     |      oath-toolkit-2.6.12       | NOK | https://autobuild.buildroot.org/results/70cc0b3cb35a95a7e6076c328bd3db6871f99ee3 |     
-   mips64    |        openblas-0.3.29         | NOK | https://autobuild.buildroot.org/results/cbafd4c44aeab3dafaf19535184343534a9e3c20 |     
-    sh4a     |         openvpn-2.6.14         | NOK | https://autobuild.buildroot.org/results/b8b0ca78e0d8e7da9198880ecb57cec3603c6bf6 |     
-  mips64el   |         openvpn-2.6.14         | NOK | https://autobuild.buildroot.org/results/ed3d4f4a60cecbe10dc4c317819e001e7ad88047 |     
-   arceb     |        procps-ng-4.0.5         | NOK | https://autobuild.buildroot.org/results/af8d0a23e8b54ea17ac06a9d794a4ab143f4c3c2 | ORPH
-    arm      |      sane-airscan-0.99.33      | NOK | https://autobuild.buildroot.org/results/6475be35c497f566fc7bd051e5fcb18ef35e5010 |     
-   armeb     |      sane-airscan-0.99.33      | NOK | https://autobuild.buildroot.org/results/71ee3f5569b93c43d284c89f046f0e4f872863b0 |     
-   mipsel    |      sane-airscan-0.99.33      | NOK | https://autobuild.buildroot.org/results/81c1ca5bfb251913dbed2be33259fed6ab9d4cbd |     
-  riscv64    |      sane-airscan-0.99.33      | NOK | https://autobuild.buildroot.org/results/45458b80c3a2fc95ee7e6989e0133a3054a2bebb |     
-  powerpc    |      sane-airscan-0.99.33      | NOK | https://autobuild.buildroot.org/results/04ceeb2b6f46bddf03521f8ef15906e0a1f143b2 |     
-    i686     |          trinity-1.9           | NOK | https://autobuild.buildroot.org/results/96f66f96ab12a5c5935aab62133f28053c6feddb | ORPH
-   mipsel    |            unknown             | NOK | https://autobuild.buildroot.org/results/3a1a0e8664fbf4e5e8d21a8c0fc702b5376bbfc1 |     
-  riscv64    |            unknown             | NOK | https://autobuild.buildroot.org/results/27dda2a5759401f9758486a4e0c8e7786bd23887 |     
-   xtensa    |            unknown             | NOK | https://autobuild.buildroot.org/results/dc0ed9a1639c452b5c42ba03294c0b1d537b3a8d |     
- aarch64_be  |            unknown             | NOK | https://autobuild.buildroot.org/results/256ae4a496ce0bcae34f2c5e7e0c2626f8578938 |     
-   arceb     |            unknown             | NOK | https://autobuild.buildroot.org/results/7b22e0a2094da88f2e9eded6c10fa890a55be7e8 |     
-   arceb     |            unknown             | NOK | https://autobuild.buildroot.org/results/7af12674aa2fc5554872786bbc905c98e3803f51 |     
-  riscv64    |            unknown             | NOK | https://autobuild.buildroot.org/results/8e2089c48a907e2c199dbaf265a6aa0eae34c631 |     
-   s390x     |            unknown             | NOK | https://autobuild.buildroot.org/results/898a49e2bc4e5c4a5d5d353296f5ebe4c699b7fd |     
-    mips     |            unknown             | NOK | https://autobuild.buildroot.org/results/c402dc5820b017fda0fccba9fb79563d2c6334c3 |     
-
-
-Classification of failures by reason for 2025.02.x
---------------------------------------------------
-
-                  bcusdk-0.0.5 | 1 
-                elfutils-0.192 | 1 
-            netstat-nat-1.4.10 | 1 
-              tinyssh-20240101 | 1 
-               valgrind-3.24.0 | 1 
-
-
-Detail of failures for 2025.02.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-  sparc64    |          bcusdk-0.0.5          | NOK | https://autobuild.buildroot.org/results/ffb145a0b1bd8132ce793070b6d9c4fe55136138 |     
-  sparc64    |         elfutils-0.192         | NOK | https://autobuild.buildroot.org/results/cc29ce1bab9b7f0722fa50c592ed456e8a601990 | ORPH
-   arceb     |       netstat-nat-1.4.10       | NOK | https://autobuild.buildroot.org/results/3540c7e9e74105ba530fff15f534c7b334d6d61a | ORPH
-  sparc64    |        tinyssh-20240101        | NOK | https://autobuild.buildroot.org/results/5d435ee9ed16a7db5a00dd0dee060b85c111697e |     
-  powerpc    |        valgrind-3.24.0         | NOK | https://autobuild.buildroot.org/results/ff75cbdc328cfe9ebb28e39c98be3950a19c264f | ORPH
-
-
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1c84f95943..86375afa4a 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2486,6 +2486,7 @@ F:	package/binutils-bare-metal/
+ F:	package/bootgen/
+ F:	package/gcc-bare-metal/
+ F:	package/newlib-bare-metal/
++F:	package/xilinx-fpgautil/
+ F:	toolchain/toolchain-bare-metal-buildroot/
+ 
+ N:	Nicola Di Lieto <nicola.dilieto@gmail.com>
+diff --git a/package/Config.in b/package/Config.in
+index 291e784f26..690bb9618e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -457,6 +457,7 @@ menu "Firmware"
+ 	source "package/ux500-firmware/Config.in"
+ 	source "package/wilc-firmware/Config.in"
+ 	source "package/wilink-bt-firmware/Config.in"
++	source "package/xilinx-fpgautil/Config.in"
+ 	source "package/zd1211-firmware/Config.in"
+ endmenu
+ 	source "package/18xx-ti-utils/Config.in"
+diff --git a/package/xilinx-fpgautil/Config.in b/package/xilinx-fpgautil/Config.in
+new file mode 100644
+index 0000000000..29245c0c5e
+--- /dev/null
++++ b/package/xilinx-fpgautil/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_XILINX_FPGAUTIL
++	bool "xilinx-fpgautil"
++	depends on BR2_arm || BR2_aarch64
++	help
++	  Xilinx FPGA Manager Utility for zynq, zynqmp
++	  and versal products.
++
++	  https://github.com/Xilinx/meta-xilinx/blob/master/meta-xilinx-core/recipes-bsp/fpga-manager-script/files/fpgautil.c
+diff --git a/package/xilinx-fpgautil/xilinx-fpgautil.hash b/package/xilinx-fpgautil/xilinx-fpgautil.hash
+new file mode 100644
+index 0000000000..1329b9ad70
+--- /dev/null
++++ b/package/xilinx-fpgautil/xilinx-fpgautil.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  439a3681d8efa9641ab39c7645836b9ac78b2fdb36242f9bc94c1f3dfb2d9c4e  xilinx-fpgautil-xlnx-rel-v2024.2_update3.tar.gz
++sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  COPYING.MIT
+diff --git a/package/xilinx-fpgautil/xilinx-fpgautil.mk b/package/xilinx-fpgautil/xilinx-fpgautil.mk
+new file mode 100644
+index 0000000000..6f42b4799f
+--- /dev/null
++++ b/package/xilinx-fpgautil/xilinx-fpgautil.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# xilinx-fpgautil
++#
++################################################################################
++
++XILINX_FPGAUTIL_VERSION = xlnx-rel-v2024.2_update3
++XILINX_FPGAUTIL_SITE = $(call github,Xilinx,meta-xilinx,$(XILINX_FPGAUTIL_VERSION))
++XILINX_FPGAUTIL_LICENSE = MIT
++XILINX_FPGAUTIL_LICENSE_FILES = COPYING.MIT
++
++define XILINX_FPGAUTIL_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CC) $(TARGET_LDFLAGS) \
++		$(@D)/meta-xilinx-core/recipes-bsp/fpga-manager-script/files/fpgautil.c \
++		-o $(@D)/fpgautil
++endef
++
++define XILINX_FPGAUTIL_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/fpgautil $(TARGET_DIR)/usr/bin/fpgautil
++endef
++
++$(eval $(generic-package))
 -- 
-https://autobuild.buildroot.org
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
