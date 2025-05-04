@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11AA3C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:46:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B44BC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:46:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C60F81176;
-	Mon, 19 May 2025 10:46:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2AF7D6166C;
+	Mon, 19 May 2025 10:46:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tZswx_CAD-rQ; Mon, 19 May 2025 10:46:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MygzFIF7b0B7; Mon, 19 May 2025 10:46:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF31B83E43
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B20D6165B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AF31B83E43;
-	Mon, 19 May 2025 10:46:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B652D4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3B20D6165B;
+	Mon, 19 May 2025 10:46:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BAD12D4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7943341212
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5425B41836
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rWOf71Drhhwp for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UH-8ESxSjb63 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31F1140D7A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 853E24101D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 31F1140D7A
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 853E24101D
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E1A6872E7; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ id 82E02873D4; Mon, 19 May 2025 10:39:58 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 3 Apr 2025 21:14:42 +0200
+Date: Sun, 4 May 2025 19:36:21 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1747ebf29b577f4b1ef03b0633bedd525ce9947d
-X-Git-Newrev: 06803b1eb6f32a9ece4838853c5fe0effd7cb7b9
+X-Git-Oldrev: 875f5670aa93a2a8559666985299aee6019bd902
+X-Git-Newrev: 7a07a9d155b8f601d68f07ee0ed1dc8d48907644
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103947.2E1A6872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python3: backport
- upstream patch to fix pyatomic.h headers
+Message-Id: <20250519103958.82E02873D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/m4: fix build failure
+ with host-gcc 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,93 +65,84 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06803b1eb6f32a9ece4838853c5fe0effd7cb7b9
+commit: https://git.buildroot.net/buildroot/commit/?id=7a07a9d155b8f601d68f07ee0ed1dc8d48907644
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since the bump of Python to 3.13.2, cracklib fails to build when
-Python support is enabled, due to an issue in the Python headers. This
-issue has been fixed upstream in the 3.13.x branch, and this commit
-simply backports the upstream fix.
+When compiling host-m4 1.4.19 with a host gcc 15 (which is the version
+included in Fedora 42, released on 2025-04-15), compilation fails with
+error:
+
+    In file included from gl_avltree_oset.h:21,
+                     from gl_avltree_oset.c:21:
+    gl_oset.h:275:1: warning: 'nodiscard' attribute ignored [-Wattributes]
+      275 | GL_OSET_INLINE _GL_ATTRIBUTE_NODISCARD int
+          | ^~~~~~~~~~~~~~
+    gl_oset.h:275:40: error: expected identifier or '(' before 'int'
+      275 | GL_OSET_INLINE _GL_ATTRIBUTE_NODISCARD int
+          |                                        ^~~
+
+This error is due to the gnulib copy included in m4 1.4.19, which does
+not detect properly the default C language standard of gcc 15 which
+has been changed from "gnu17" to "gnu23". See [1]. Note that m4 1.4.19
+is the latest version available at the time of this commit, and was
+released in May 2021. The issue is tracked upstream in [2].
+
+Upcoming m4 release is expected to fix this issue, by updating its
+gnulib copy. See [3], which states: "Update to comply with newer C
+standards, and inherit portability improvements from gnulib".
+
+Until this new m4 version is released, this commit fixes the issue by
+forcing the C langage standard to "-std=gnu17" (the previous gcc
+default) when host-gcc 15 is detected.
+
+Note that the "-std=gnu17" option was introduced in gcc 8. See [4].
+This is the reason why this patch adds this option only when the
+problematic gcc 15 version is detected.
+
+See also the discussions around this patch at [5].
 
 Fixes:
+https://autobuild.buildroot.org/results/1c33ef0a710cfae13e496485787b351c8f951217/
+(and many, many others)
 
-  https://autobuild.buildroot.org/results/26f6fe75f75c65bb9d58bbdbec733ebfe9b8565c/
+[1] https://gcc.gnu.org/gcc-15/changes.html#c
+[2] https://savannah.gnu.org/support/?111150
+[3] https://git.savannah.gnu.org/cgit/m4.git/commit/?h=branch-1.4&id=a22c9802dd7e724eaefb21dc21d84ac2d3a49c89
+[4] https://gcc.gnu.org/gcc-8/changes.html#c
+[5] https://lore.kernel.org/buildroot/CAPWx8vsoJUt8YMJG1aUqFRK1=yizNbgjVjGL1Q1+9ygjJGnZLA@mail.gmail.com/
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Joseph Zikusooka (ZIK) <zik@jambula.net>
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+[Julien:
+ - change mail url to lore.kernel.org for stable link
+ - reword, reflow and add extra info in the commit log
+ - force -std=gnu17 only when host gcc-15 is detected
+ - add a comment in .mk to remove the workaround at next bump
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...296-Fix-pyatomic.h-include-paths-GH-12932.patch | 63 ++++++++++++++++++++++
- 1 file changed, 63 insertions(+)
+ package/m4/m4.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/python3/0010-3.13-gh-129296-Fix-pyatomic.h-include-paths-GH-12932.patch b/package/python3/0010-3.13-gh-129296-Fix-pyatomic.h-include-paths-GH-12932.patch
-new file mode 100644
-index 0000000000..00451af9bf
---- /dev/null
-+++ b/package/python3/0010-3.13-gh-129296-Fix-pyatomic.h-include-paths-GH-12932.patch
-@@ -0,0 +1,63 @@
-+From 0ee012224447b6ec7f6f20d316b24449fdcc0d4b Mon Sep 17 00:00:00 2001
-+From: "Miss Islington (bot)"
-+ <31488909+miss-islington@users.noreply.github.com>
-+Date: Fri, 28 Feb 2025 09:22:15 +0100
-+Subject: [PATCH] [3.13] gh-129296: Fix `pyatomic.h` include paths (GH-129320)
-+ (#130667)
+diff --git a/package/m4/m4.mk b/package/m4/m4.mk
+index 39ad898b10..f5e1e27ad8 100644
+--- a/package/m4/m4.mk
++++ b/package/m4/m4.mk
+@@ -10,4 +10,14 @@ M4_SITE = $(BR2_GNU_MIRROR)/m4
+ M4_LICENSE = GPL-3.0+
+ M4_LICENSE_FILES = COPYING
+ 
++# gcc-15 defaults to -std=gnu23 which is incorrectly detected and
++# generates build failures in the gnulib copy included in
++# m4-1.4.19. We workaround this by forcing the previous gcc default
++# standard, which is -std=gnu17 only when host gcc is >= 15. This
++# workaround can be removed when m4 will be updated to a version
++# including a fix for gcc-15.
++ifeq ($(BR2_HOST_GCC_AT_LEAST_15),y)
++HOST_M4_CONF_ENV = CFLAGS="$(HOST_CFLAGS) -std=gnu17"
++endif
 +
-+gh-129296: Fix `pyatomic.h` include paths (GH-129320)
-+
-+Use relative includes in Include/cpython/pyatomic.h for
-+pyatomic_gcc.h, pyatomic_std.h and pyatomic_msc.h.
-+
-+Do a similar change in Include/cpython/pythread.h for
-+pthread_stubs.h include.
-+(cherry picked from commit 3a974e39d54902699f360bc4db2fd351a6baf3ef)
-+
-+Co-authored-by: Zanie Blue <contact@zanie.dev>
-+Upstream: 125ca028664ce72556e3983b57f521a118c4e677
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ Include/cpython/pyatomic.h | 6 +++---
-+ Include/cpython/pythread.h | 2 +-
-+ 2 files changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/Include/cpython/pyatomic.h b/Include/cpython/pyatomic.h
-+index 4ecef4f56ed..28029859d3d 100644
-+--- a/Include/cpython/pyatomic.h
-++++ b/Include/cpython/pyatomic.h
-+@@ -529,15 +529,15 @@ static inline void _Py_atomic_fence_release(void);
-+ 
-+ #if _Py_USE_GCC_BUILTIN_ATOMICS
-+ #  define Py_ATOMIC_GCC_H
-+-#  include "cpython/pyatomic_gcc.h"
-++#  include "pyatomic_gcc.h"
-+ #  undef Py_ATOMIC_GCC_H
-+ #elif __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_ATOMICS__)
-+ #  define Py_ATOMIC_STD_H
-+-#  include "cpython/pyatomic_std.h"
-++#  include "pyatomic_std.h"
-+ #  undef Py_ATOMIC_STD_H
-+ #elif defined(_MSC_VER)
-+ #  define Py_ATOMIC_MSC_H
-+-#  include "cpython/pyatomic_msc.h"
-++#  include "pyatomic_msc.h"
-+ #  undef Py_ATOMIC_MSC_H
-+ #else
-+ #  error "no available pyatomic implementation for this platform/compiler"
-+diff --git a/Include/cpython/pythread.h b/Include/cpython/pythread.h
-+index 03f710a9f7e..e658b35bd90 100644
-+--- a/Include/cpython/pythread.h
-++++ b/Include/cpython/pythread.h
-+@@ -22,7 +22,7 @@ PyAPI_DATA(const long long) PY_TIMEOUT_MAX;
-+     */
-+ #   define NATIVE_TSS_KEY_T     unsigned long
-+ #elif defined(HAVE_PTHREAD_STUBS)
-+-#   include "cpython/pthread_stubs.h"
-++#   include "pthread_stubs.h"
-+ #   define NATIVE_TSS_KEY_T     pthread_key_t
-+ #else
-+ #   error "Require native threads. See https://bugs.python.org/issue31370"
-+-- 
-+2.48.1
-+
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
