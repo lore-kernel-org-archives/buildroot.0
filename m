@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 598E2C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:56:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 317EFC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:56:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4BCAC70A97;
-	Mon, 19 May 2025 10:56:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFB6D80FB0;
+	Mon, 19 May 2025 10:56:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nENJk4gCec8W; Mon, 19 May 2025 10:56:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8N-1ISwv7Xba; Mon, 19 May 2025 10:56:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79CC470A98
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DD3680F6B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 79CC470A98;
-	Mon, 19 May 2025 10:56:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DD3680F6B;
+	Mon, 19 May 2025 10:56:52 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0AB89D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:10 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 10934D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A030841261
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 19BB740E19
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mMWUVtB2OstE for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:18 +0000 (UTC)
+ id SclKf14Jdu2I for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F365412C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFE33410B3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F365412C2
+ by smtp4.osuosl.org (Postfix) with ESMTP id EFE33410B3
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1D5D7872E7; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+ id EE81982A2E; Mon, 19 May 2025 10:39:58 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 29 Apr 2025 21:45:08 +0200
+Date: Mon, 5 May 2025 23:44:27 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b6f33b248a677c91e05f4c670671b79ec5c6a05a
-X-Git-Newrev: 92e7ab78d6546d822dbeff7282feae4a42e6cbb5
+X-Git-Oldrev: ee595c95ae954aecf8e07cb53267b1678d054dbd
+X-Git-Newrev: b18f95c1557e64e11f66ceedaff9d44059b86d70
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103958.1D5D7872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] support/scripts/pkg-stats: fix
- typo in --disable help text
+Message-Id: <20250519103958.EE81982A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/hwdata: bump version
+ to 0.394
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,52 +60,51 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4394426187362795491=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4394426187362795491==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=92e7ab78d6546d822dbeff7282feae4a42e6cbb5
+commit: https://git.buildroot.net/buildroot/commit/?id=b18f95c1557e64e11f66ceedaff9d44059b86d70
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Annoyingly, using "--disable warning" does not disable the warnings
-checks.
+Release notes:
+https://github.com/vcrhonek/hwdata/releases/tag/v0.394
 
-It turns out that we look for "warnings" (i.e. with an 's') to know if
-we should disable the warnings check, so update the help text
-accordingly.
+Changelog:
+https://github.com/vcrhonek/hwdata/compare/v0.392...v0.394
 
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- support/scripts/pkg-stats | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/hwdata/hwdata.hash | 2 +-
+ package/hwdata/hwdata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index c134e1ec06..46b12cd992 100755
---- a/support/scripts/pkg-stats
-+++ b/support/scripts/pkg-stats
-@@ -1276,7 +1276,7 @@ def parse_args():
-     parser.add_argument('--nvd-path', dest='nvd_path',
-                         help='Path to the local NVD database', type=resolvepath)
-     parser.add_argument('--disable', type=list_str,
--                        help='Features to disable, comma-separated (cve, upstream, url, warning)',
-+                        help='Features to disable, comma-separated (cve, upstream, url, warnings)',
-                         default=[])
-     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
-                         help='Increase verbosity')
-
---===============4394426187362795491==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
+index 9c8d37323d..eb4ecc191d 100644
+--- a/package/hwdata/hwdata.hash
++++ b/package/hwdata/hwdata.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  1f472d8f2ec824d4efe6a75480767c4ce240fa5d91b6428d9f8775035da3ba1f  hwdata-0.392.tar.gz
++sha256  b7c3fd7214a3b7c49d2661db127a712dc11cffd1799f793947aa1cb20aaf3298  hwdata-0.394.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index eb9166dc72..f47df2ebb8 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HWDATA_VERSION = 0.392
++HWDATA_VERSION = 0.394
+ HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
+ HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
+ HWDATA_LICENSE_FILES = COPYING LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4394426187362795491==--
