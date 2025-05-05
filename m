@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CCE0C2D0CD
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 381DFC3ABD8
 	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:57:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3C21B84008;
-	Mon, 19 May 2025 10:57:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B90370B27;
+	Mon, 19 May 2025 10:57:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8Sbr7Ux6UFHo; Mon, 19 May 2025 10:57:31 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4260bEJFf_pL; Mon, 19 May 2025 10:57:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5974D84003
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C862670B2B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5974D84003;
-	Mon, 19 May 2025 10:57:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C862670B2B;
+	Mon, 19 May 2025 10:57:28 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 13B60D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:31 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 56A2DD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C6CAE41297
+ by smtp4.osuosl.org (Postfix) with ESMTP id BBF8F41270
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DANijejqveKW for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:21 +0000 (UTC)
+ id Fod3hPbAuHzs for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B5E7240E62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D33AA413BE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B5E7240E62
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D33AA413BE
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B126982A2E; Mon, 19 May 2025 10:39:59 +0000 (UTC)
+ id CE0B782A2E; Mon, 19 May 2025 10:39:58 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 7 May 2025 19:25:58 +0200
+Date: Mon, 5 May 2025 22:23:01 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 31569bcc1b0762636d704baad0b35fc37aedb386
-X-Git-Newrev: e3cae9e1ca4765da825c9ee94760e12f5c6c142a
+X-Git-Oldrev: a36d5fd2f8283b849d7b0837cefdb2c2ed1dff51
+X-Git-Newrev: 299f803cad1cec354529224a721c598b3d2fb3fb
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103959.B126982A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/cpio: fix build with
- GCC 15
+Message-Id: <20250519103958.CE0B782A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/xilinx: add
+ xilinx-fpgautil to xilinx defconfigs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,91 +65,189 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3cae9e1ca4765da825c9ee94760e12f5c6c142a
+commit: https://git.buildroot.net/buildroot/commit/?id=299f803cad1cec354529224a721c598b3d2fb3fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On systems running GCC 15, host-cpio will fail to build with errors like
+This adds the xilinx-fpgautil application to all Xilinx zynq, zynqmp and
+versal defconfigs.
 
-  copyout.c:646:12: error: too many arguments to function 'xstat'; expected 0, have 2
-
-and
-
-  main.c:407:13: error: assignment to 'int (*)(void)' from incompatible pointer type 'int (*)(const char * restrict,  struct stat * restrict)' [-Wincompatible-pointer-types]
-
-This was reported[1] and fixed upstream, but there is no new release
-yet. Import the upstream patch for now.
-
-Fixes:
-https://autobuild.buildroot.org/results/a10c5f2b0f9cb05b2550fe97f1133deaaac97277/
-(and many more)
-
-[1] https://lists.gnu.org/archive/html/bug-cpio/2025-05/msg00000.html
-
-Signed-off-by: Florian Larysch <fl@n621.de>
-[Julien:
- - add missing "Signed-off-by:" in patch to fix check-package error
- - change "Upstream:" link to use the commitdiff in patch
- - add "Fixes:" in commit log
-]
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+[Luca: build-tested only]
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/cpio/0001-Fix-c23-conformity.patch | 48 ++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ configs/versal_vck190_defconfig     | 1 +
+ configs/versal_vek280_defconfig     | 1 +
+ configs/versal_vpk180_defconfig     | 1 +
+ configs/zynq_microzed_defconfig     | 1 +
+ configs/zynq_zc702_defconfig        | 1 +
+ configs/zynq_zc706_defconfig        | 1 +
+ configs/zynq_zed_defconfig          | 1 +
+ configs/zynqmp_kria_kd240_defconfig | 1 +
+ configs/zynqmp_kria_kr260_defconfig | 1 +
+ configs/zynqmp_kria_kv260_defconfig | 1 +
+ configs/zynqmp_zcu102_defconfig     | 1 +
+ configs/zynqmp_zcu104_defconfig     | 1 +
+ configs/zynqmp_zcu106_defconfig     | 1 +
+ 13 files changed, 13 insertions(+)
 
-diff --git a/package/cpio/0001-Fix-c23-conformity.patch b/package/cpio/0001-Fix-c23-conformity.patch
-new file mode 100644
-index 0000000000..9421f28507
---- /dev/null
-+++ b/package/cpio/0001-Fix-c23-conformity.patch
-@@ -0,0 +1,48 @@
-+From f42137f5ab9cf07d1e62edc05e0212688d3ebaa2 Mon Sep 17 00:00:00 2001
-+From: Sergey Poznyakoff <gray@gnu.org>
-+Date: Tue, 6 May 2025 21:02:43 +0300
-+Subject: [PATCH] Fix c23 conformity
-+
-+Upstream: https://git.savannah.gnu.org/gitweb/?p=cpio.git;a=commitdiff;h=f42137f5ab9cf07d1e62edc05e0212688d3ebaa2
-+Signed-off-by: Sergey Poznyakoff <gray@gnu.org>
-+Signed-off-by: Florian Larysch <fl@n621.de>
-+---
-+ src/extern.h | 4 ++--
-+ src/global.c | 4 ++--
-+ 2 files changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/extern.h b/src/extern.h
-+index bf3d5b3..455119b 100644
-+--- a/src/extern.h
-++++ b/src/extern.h
-+@@ -96,8 +96,8 @@ extern char input_is_special;
-+ extern char output_is_special;
-+ extern char input_is_seekable;
-+ extern char output_is_seekable;
-+-extern int (*xstat) ();
-+-extern void (*copy_function) ();
-++extern int (*xstat) (const char *, struct stat *);
-++extern void (*copy_function) (void);
-+ extern char *change_directory_option;
-+ 
-+ #define STRINGIFY_BIGINT(i, b) umaxtostr (i, b)
-+diff --git a/src/global.c b/src/global.c
-+index 66686f2..5c6ab16 100644
-+--- a/src/global.c
-++++ b/src/global.c
-+@@ -184,10 +184,10 @@ bool to_stdout_option = false;
-+ 
-+ /* A pointer to either lstat or stat, depending on whether
-+    dereferencing of symlinks is done for input files.  */
-+-int (*xstat) ();
-++int (*xstat) (const char *, struct stat *);
-+ 
-+ /* Which copy operation to perform. (-i, -o, -p) */
-+-void (*copy_function) () = 0;
-++void (*copy_function) (void) = 0;
-+ 
-+ char *change_directory_option;
-+ 
-+-- 
-+2.49.0
-+
+diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
+index 2f40c210a8..368133e916 100644
+--- a/configs/versal_vck190_defconfig
++++ b/configs/versal_vck190_defconfig
+@@ -15,6 +15,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vck190-rev1.1"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_XILINX_FPGAUTIL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
+index af8bed884f..1d83e55499 100644
+--- a/configs/versal_vek280_defconfig
++++ b/configs/versal_vek280_defconfig
+@@ -15,6 +15,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vek280-revB"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_XILINX_FPGAUTIL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/configs/versal_vpk180_defconfig b/configs/versal_vpk180_defconfig
+index afa606ec8c..7729c655c3 100644
+--- a/configs/versal_vpk180_defconfig
++++ b/configs/versal_vpk180_defconfig
+@@ -15,6 +15,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vpk180-revA"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_XILINX_FPGAUTIL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
+index b9b2da3849..f9be297b99 100644
+--- a/configs/zynq_microzed_defconfig
++++ b/configs/zynq_microzed_defconfig
+@@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynq-microzed"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_XILINX_FPGAUTIL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+diff --git a/configs/zynq_zc702_defconfig b/configs/zynq_zc702_defconfig
+index ab42abe655..4c6361a9b7 100644
+--- a/configs/zynq_zc702_defconfig
++++ b/configs/zynq_zc702_defconfig
+@@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynq-zc702"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_XILINX_FPGAUTIL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
+index d7ce9cf11a..bc853f522d 100644
+--- a/configs/zynq_zc706_defconfig
++++ b/configs/zynq_zc706_defconfig
+@@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynq-zc706"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_XILINX_FPGAUTIL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
+index c9e8e7ea2c..d0fbaf2ea5 100644
+--- a/configs/zynq_zed_defconfig
++++ b/configs/zynq_zed_defconfig
+@@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynq-zed"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_XILINX_FPGAUTIL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
+index 261b73d6cf..4ba4be861f 100644
+--- a/configs/zynqmp_kria_kd240_defconfig
++++ b/configs/zynqmp_kria_kd240_defconfig
+@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k24-revA-sck-kd-g-revA"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_XILINX_FPGAUTIL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
+index 2cf2b98aa5..fdd868bbb5 100644
+--- a/configs/zynqmp_kria_kr260_defconfig
++++ b/configs/zynqmp_kria_kr260_defconfig
+@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kr-g-revB"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_XILINX_FPGAUTIL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index ef6a23f2a2..ff03f87b54 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kv-g-revB"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_XILINX_FPGAUTIL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+index 762a54d968..856c1d896d 100644
+--- a/configs/zynqmp_zcu102_defconfig
++++ b/configs/zynqmp_zcu102_defconfig
+@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_XILINX_FPGAUTIL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
+index 92e0d41736..c21058be74 100644
+--- a/configs/zynqmp_zcu104_defconfig
++++ b/configs/zynqmp_zcu104_defconfig
+@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu104-revC"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_XILINX_FPGAUTIL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index 51287fdffb..5e13c39a1a 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_PACKAGE_XILINX_FPGAUTIL=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ # BR2_TARGET_ROOTFS_TAR is not set
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
