@@ -1,52 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10221C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:57:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 539EDC3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:57:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC0CB81448;
-	Mon, 19 May 2025 10:57:00 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QbPykr5sinfS; Mon, 19 May 2025 10:57:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F348B812E8
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F348B812E8;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5A6FC70AAA;
 	Mon, 19 May 2025 10:56:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LIwo5fOjXsbx; Mon, 19 May 2025 10:56:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72D6270AB1
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72D6270AB1;
+	Mon, 19 May 2025 10:56:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A726D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:15 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 32774E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 53FC4410C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3328D410B8
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JXoV8yayCHRU for <buildroot@buildroot.org>;
+ id NKavagd8sMg5 for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC292413C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06A48410C0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC292413C7
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 06A48410C0
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D82EC8348A; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+ id 04F648348A; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 5 May 2025 23:18:24 +0200
+Date: Mon, 5 May 2025 23:52:15 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 299f803cad1cec354529224a721c598b3d2fb3fb
-X-Git-Newrev: 93cd246dc751c3a9677bf1fa506101207b90a2d9
+X-Git-Oldrev: b18f95c1557e64e11f66ceedaff9d44059b86d70
+X-Git-Newrev: a31dc4c21a2309e142daf662355b14a5f18be284
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103958.D82EC8348A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ruby: update to 3.4.3
+Message-Id: <20250519103959.04F648348A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/traceroute: bump to
+ version 2.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,44 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93cd246dc751c3a9677bf1fa506101207b90a2d9
+commit: https://git.buildroot.net/buildroot/commit/?id=a31dc4c21a2309e142daf662355b14a5f18be284
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-See here for a changelog:
-https://github.com/ruby/ruby/releases/tag/v3_4_3
+For change log since 2.1.3, see:
+https://sourceforge.net/projects/traceroute/files/traceroute/traceroute%202.1.4/
+https://sourceforge.net/projects/traceroute/files/traceroute/traceroute%202.1.5/
+https://sourceforge.net/projects/traceroute/files/traceroute/traceroute%202.1.6/
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+[Julien: add links to change logs]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/traceroute/traceroute.hash | 2 +-
+ package/traceroute/traceroute.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index 81c9f9c9db..ec17b092a4 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
+diff --git a/package/traceroute/traceroute.hash b/package/traceroute/traceroute.hash
+index cf2eb127a2..5619338848 100644
+--- a/package/traceroute/traceroute.hash
++++ b/package/traceroute/traceroute.hash
 @@ -1,5 +1,5 @@
--# https://www.ruby-lang.org/en/news/2025/02/14/ruby-3-4-2-released/
--sha512  cb8b5023bce316393716548c5f0a44c7d0240724ff79b995517641266af30bedc6f402c1c8fa27368ea607e2aa6d36bbb201e00c6e9dd2a80d837431d32343b5  ruby-3.4.2.tar.xz
-+# https://www.ruby-lang.org/en/news/2025/04/14/ruby-3-4-3-released/
-+sha512  b30aad675cdcc1bdfe9e5fffe9d1925db3b3ac854a5e34180c368bc6e66f73e29ba5d802fea249353b7d799c01384c58bdd763fd1b679303158baa7824b9c08e  ruby-3.4.3.tar.xz
+ # Locally computed:
+-sha256  05ebc7aba28a9100f9bbae54ceecbf75c82ccf46bdfce8b5d64806459a7e0412  traceroute-2.1.3.tar.gz
++sha256  9ccef9cdb9d7a98ff7fbf93f79ebd0e48881664b525c4b232a0fcec7dcb9db5e  traceroute-2.1.6.tar.gz
  
- # License files, Locally calculated
- sha256  a2021e52d5d6adf7e3f45aab9d2b860ce03cdf6153776853e11d5668193eecfd  LEGAL
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 891fd78d4b..b06a728799 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/traceroute/traceroute.mk b/package/traceroute/traceroute.mk
+index 133f8d3c3e..bd246e5f9e 100644
+--- a/package/traceroute/traceroute.mk
++++ b/package/traceroute/traceroute.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- RUBY_VERSION_MAJOR = 3.4
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).2
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).3
- RUBY_VERSION_EXT = 3.4.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+-TRACEROUTE_VERSION = 2.1.3
++TRACEROUTE_VERSION = 2.1.6
+ TRACEROUTE_SITE = http://downloads.sourceforge.net/traceroute/traceroute/traceroute-$(TRACEROUTE_VERSION)
+ 
+ TRACEROUTE_LICENSE = GPL-2.0+, LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
