@@ -1,78 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6E83C3ABBC
-	for <buildroot@archiver.kernel.org>; Tue,  6 May 2025 20:08:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06D09C3ABBE
+	for <buildroot@archiver.kernel.org>; Tue,  6 May 2025 20:12:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5FB82406EA;
-	Tue,  6 May 2025 20:08:02 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YR0gXq07A0QI; Tue,  6 May 2025 20:08:01 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 88184406C8
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 88184406C8;
-	Tue,  6 May 2025 20:08:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id C802A1D72
- for <buildroot@buildroot.org>; Tue,  6 May 2025 20:07:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B851760C19
- for <buildroot@buildroot.org>; Tue,  6 May 2025 20:07:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9CBF760640;
+	Tue,  6 May 2025 20:12:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HoDf5u55uqlx for <buildroot@buildroot.org>;
- Tue,  6 May 2025 20:07:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C071260C21
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C071260C21
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C071260C21
- for <buildroot@buildroot.org>; Tue,  6 May 2025 20:07:58 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id CA817B0059C;
- Tue,  6 May 2025 22:07:53 +0200 (CEST)
-Received: from lfbn-mon-1-146-106.w86-210.abo.wanadoo.fr
- ([86.210.113.106:36176])
- via lfbn-mon-1-146-106.w86-210.abo.wanadoo.fr ([86.210.113.106])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 06 May 2025 22:07:53 +0200
-MIME-Version: 1.0
-Date: Tue, 06 May 2025 22:07:53 +0200
+ id O-KrbHdYx-Gr; Tue,  6 May 2025 20:12:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFC2D60C19
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFC2D60C19;
+	Tue,  6 May 2025 20:12:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B8E121A3
+ for <buildroot@buildroot.org>; Tue,  6 May 2025 20:12:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id AB04640218
+ for <buildroot@buildroot.org>; Tue,  6 May 2025 20:12:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6xVaGFMZaLVy for <buildroot@buildroot.org>;
+ Tue,  6 May 2025 20:12:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D8684012A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D8684012A
+ for <buildroot@buildroot.org>; Tue,  6 May 2025 20:12:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EDA9A86258; Tue,  6 May 2025 20:12:56 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Thomas Perale <thomas.perale@mind.be>
-Cc: buildroot@buildroot.org, =?UTF-8?Q?Adrien_Gallou=C3=ABt?=
- <adrien@gallouet.fr>
-In-Reply-To: <20250430204137.1071918-1-thomas.perale@mind.be>
-References: <20250430204137.1071918-1-thomas.perale@mind.be>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <57fbf9d93689865793ef1d11a7688652@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1746562076;
- bh=NdKc+GXEiCcnlVOiFXlbzD07SMJZMU7Jt/0LcLQc4QI=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=ktcKneELs4aHbhevpOAS7/CBcKEIu1yu3XYQE3CTwCyaYKV8zL35Q8t1/HGutx4Jq
- mHai7xfWVCQqMn6XtKDxRwJyVpc3+QnQAO/1F5DeebhTNScYWMrShVZLhIbHDVRtZb
- nGcE4tTIEIkU5AajyiO5Vc/Zee1ra37Jp3WwD7g4SXHJR9XUFtHS+fH/QiVkZ/cXo5
- gqeqltmsjRW6Y6sEk2CB/6/pey3/L0/BuqD9QzMQNYzeVX4xLIBcwnqsKwXCrlfQXC
- 2BUrBf35Y8gE57Rloz6G40W43i8PFT8QZ9JWmc1aMue7dJOjtSZvVS4m2+IZXeN3/4
- bzKc5ZVyAhwxA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ktcKneEL
-Subject: Re: [Buildroot] [PATCH 1/1] package/bird: fix build failure with bfd
+To: buildroot@buildroot.org
+Date: Tue, 6 May 2025 22:08:58 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 80cfdcb86ba455ed286bea1f557ff351ac6ce263
+X-Git-Newrev: e19ac5ed7c66e82d8853ac9c7ef23c4a6101f842
+X-Patchwork-Hint: ignore
+Message-Id: <20250506201256.EDA9A86258@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ufs-utils: bump to version 6.13.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,46 +58,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 30/04/2025 22:41, Thomas Perale via buildroot wrote:
-> The 'bird' package with only the `BR2_PACKAGE_BIRD_BFD=y` protocol
-> enabled fails to build with the following error
-> 
-> ```
-> bison  -Dparse.lac=full -Dparse.error=verbose -dv -pcf_ -b 
-> obj/conf/cf-parse obj/conf/cf-parse.y
-> proto/bfd/config.Y:204.27-33: error: symbol 'ADDRESS' is used, but is 
-> not defined as a token and has no rules
->   204 |  | bfd_show_sessions_args ADDRESS net_or_ipa { 
-> net_copy(&($$->address...
->       |                           ^~~~~~~
-> ```
-> 
-> The `ADDRESS` token is defined only when certain protocols (e.g. OSPF,
-> RIP, RPKI, or BGP) are enabled. As a result, builds including any of
-> these protocols do not encounter the issue.
-> 
-> This patch backports upstream commits that define the `ADDRESS` token
-> for the BFD protocol.
-> 
-> Fixes: 
-> https://autobuild.buildroot.org/results/68c/68c5dd84585a7018ad57ea3e7134748c08858ef7/
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+commit: https://git.buildroot.net/buildroot/commit/?id=e19ac5ed7c66e82d8853ac9c7ef23c4a6101f842
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master. Thanks.
+Release notes:
+https://github.com/SanDisk-Open-Source/ufs-utils/releases/tag/v6.13.11
 
-For info, I added commands to reproduce the issue in the commit log. 
-See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/80cfdcb86ba455ed286bea1f557ff351ac6ce263
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/ufs-utils/ufs-utils.hash | 2 +-
+ package/ufs-utils/ufs-utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Best regards,
-
-Julien.
+diff --git a/package/ufs-utils/ufs-utils.hash b/package/ufs-utils/ufs-utils.hash
+index c6ef91a025..f825bf5af7 100644
+--- a/package/ufs-utils/ufs-utils.hash
++++ b/package/ufs-utils/ufs-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  66259581b13e33edeccb08edd2389627121adf9b425ba4545f6a84d7292ef4fa  ufs-utils-4.13.5.tar.gz
++sha256  e79c879a80936c497fd41a61b6da5e34fb848625453e3ca9e0f6e2398f3609bf  ufs-utils-6.13.11.tar.gz
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/ufs-utils/ufs-utils.mk b/package/ufs-utils/ufs-utils.mk
+index 504f87f375..60fb2f56ea 100644
+--- a/package/ufs-utils/ufs-utils.mk
++++ b/package/ufs-utils/ufs-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UFS_UTILS_VERSION = 4.13.5
++UFS_UTILS_VERSION = 6.13.11
+ UFS_UTILS_SITE = $(call github,SanDisk-Open-Source,ufs-utils,v$(UFS_UTILS_VERSION))
+ UFS_UTILS_LICENSE = GPL-2.0
+ UFS_UTILS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
