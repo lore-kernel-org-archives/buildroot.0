@@ -1,77 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D220C3ABBC
-	for <buildroot@archiver.kernel.org>; Tue,  6 May 2025 20:39:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92D57C3ABBE
+	for <buildroot@archiver.kernel.org>; Tue,  6 May 2025 20:42:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 104F981DF2;
-	Tue,  6 May 2025 20:39:41 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jf3vmdL7bfk4; Tue,  6 May 2025 20:39:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3557B81ABA
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3557B81ABA;
-	Tue,  6 May 2025 20:39:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 91A081D72
- for <buildroot@buildroot.org>; Tue,  6 May 2025 20:39:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 76E9160BDC
- for <buildroot@buildroot.org>; Tue,  6 May 2025 20:39:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2476960E18;
+	Tue,  6 May 2025 20:42:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qGjKXkoIwdZ4 for <buildroot@buildroot.org>;
- Tue,  6 May 2025 20:39:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9385660AD9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9385660AD9
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9385660AD9
- for <buildroot@buildroot.org>; Tue,  6 May 2025 20:39:37 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 94996780A50;
- Tue,  6 May 2025 22:39:32 +0200 (CEST)
-Received: from lfbn-mon-1-146-106.w86-210.abo.wanadoo.fr
- ([86.210.113.106:49470])
- via lfbn-mon-1-146-106.w86-210.abo.wanadoo.fr ([86.210.113.106])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Tue, 06 May 2025 22:39:32 +0200
-MIME-Version: 1.0
-Date: Tue, 06 May 2025 22:39:32 +0200
+ id s5qf8DBrBXTa; Tue,  6 May 2025 20:42:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4782660BDC
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4782660BDC;
+	Tue,  6 May 2025 20:42:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4D4C21D72
+ for <buildroot@buildroot.org>; Tue,  6 May 2025 20:42:48 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 31C7A40028
+ for <buildroot@buildroot.org>; Tue,  6 May 2025 20:42:48 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Co6evHCw0DJD for <buildroot@buildroot.org>;
+ Tue,  6 May 2025 20:42:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8090D40A3A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8090D40A3A
+ for <buildroot@buildroot.org>; Tue,  6 May 2025 20:42:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6A98286432; Tue,  6 May 2025 20:42:47 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Kadambini Nema <kadambini.nema@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250501090919.74916-1-kadambini.nema@gmail.com>
-References: <20250501090919.74916-1-kadambini.nema@gmail.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <0f2705a3bfb6c9862c8118aff726ad7b@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1746563973;
- bh=3Df2NbWdb4gxxsV/TuR05nL7H2THm2LJ9r2eLQC6ldA=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=WiPIJrE69+306uyE3gLpntuD5XGIlMgQOLwjeEvn8NGVZPg63V4eNtBlJ3KDb0JZo
- Cs2B2olf6f3nmHYKYiueWP6Qm+lSOl4zOBCuW3SgDY9DpBoyDEqJdJfH8RSCWTTv+r
- B2lu8Qb5Iqrks1e8hzrdC8iK4rG0ZVu3g0P0E+SvsHIkHJ3D9cyYRM5T04tm3zoj2F
- aSY/3DDZRZ7Sch27j8efTNpKavFp6S70hC9lZvh2ETMLbGf3zYqx//2xhmiKzheGiE
- jtoSiQi/YzIRzW+0Ij76uuWpQ4NU+HRJH9rHBVb3yb7w05uIG3AzdRvBAx1iDYjAdE
- bNgHCLhcvt5lw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=WiPIJrE6
-Subject: Re: [Buildroot] [PATCH 1/1] package/libcurl: bump version to 8.13.0
+To: buildroot@buildroot.org
+Date: Tue, 6 May 2025 22:40:32 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c8ba9da529e69e1d594c6babb10ce67f8273e7ce
+X-Git-Newrev: 683681261b19a0ea541e55ae7d5497ccf05e40a9
+X-Patchwork-Hint: ignore
+Message-Id: <20250506204247.6A98286432@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/imx28evk: enable
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -83,18 +59,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 01/05/2025 11:09, Kadambini Nema wrote:
-> Changelog:
-> https://curl.se/ch/8.13.0.html
-> 
-> Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=683681261b19a0ea541e55ae7d5497ccf05e40a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+This commit adds BR2_DOWNLOAD_FORCE_CHECK_HASHES=y in the defconfig
+and adds custom hash files. The exception entry in .checkpackageignore
+is also removed.
+
+Cc: Fabio Estevam <festevam@gmail.com>
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .checkpackageignore                                               | 1 -
+ board/freescale/imx28evk/patches/linux-headers/linux-headers.hash | 1 +
+ board/freescale/imx28evk/patches/linux/linux.hash                 | 2 ++
+ board/freescale/imx28evk/patches/uboot/uboot.hash                 | 2 ++
+ configs/imx28evk_defconfig                                        | 2 ++
+ 5 files changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 7bfc457c90..038e3d6dc6 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -139,7 +139,6 @@ configs/engicam_imx6qdl_icore_qt5_defconfig lib_defconfig.ForceCheckHash
+ configs/engicam_imx6qdl_icore_rqs_defconfig lib_defconfig.ForceCheckHash
+ configs/engicam_imx6ul_geam_defconfig lib_defconfig.ForceCheckHash
+ configs/engicam_imx6ul_isiot_defconfig lib_defconfig.ForceCheckHash
+-configs/imx28evk_defconfig lib_defconfig.ForceCheckHash
+ configs/freescale_p1025twr_defconfig lib_defconfig.ForceCheckHash
+ configs/freescale_t1040d4rdb_defconfig lib_defconfig.ForceCheckHash
+ configs/freescale_t2080_qds_rdb_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/freescale/imx28evk/patches/linux-headers/linux-headers.hash b/board/freescale/imx28evk/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/freescale/imx28evk/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/freescale/imx28evk/patches/linux/linux.hash b/board/freescale/imx28evk/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..8aeb3785b4
+--- /dev/null
++++ b/board/freescale/imx28evk/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  af54b449f4fb93b8e8daa346144a7309e8e95174bd962c4b5917cf56120456d9  linux-6.6.26.tar.xz
+diff --git a/board/freescale/imx28evk/patches/uboot/uboot.hash b/board/freescale/imx28evk/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..97a2b4eaf9
+--- /dev/null
++++ b/board/freescale/imx28evk/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
+diff --git a/configs/imx28evk_defconfig b/configs/imx28evk_defconfig
+index 8c428e3fec..d34f413440 100644
+--- a/configs/imx28evk_defconfig
++++ b/configs/imx28evk_defconfig
+@@ -1,5 +1,7 @@
+ BR2_arm=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_GLOBAL_PATCH_DIR="board/freescale/imx28evk/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/mxs/post-image.sh"
+ BR2_LINUX_KERNEL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
