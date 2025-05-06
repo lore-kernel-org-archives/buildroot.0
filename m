@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F459C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 994DEC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DAE1883ECB;
-	Mon, 19 May 2025 10:47:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6DB76613E3;
+	Mon, 19 May 2025 10:47:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Omx5YxWyP6HM; Mon, 19 May 2025 10:47:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cyYjRZqxd-qs; Mon, 19 May 2025 10:47:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5AEE83ED0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 96D94613B4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A5AEE83ED0;
-	Mon, 19 May 2025 10:47:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 131DBE4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 96D94613B4;
+	Mon, 19 May 2025 10:47:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C924BD4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 974A041247
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EF4DE417EA
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JcLkafBo1WIW for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AOA_os7uPrM5 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF34F40E30
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C6164101D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF34F40E30
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5C6164101D
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A8E7983A2E; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ id 5A941873D4; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 7 Apr 2025 19:42:30 +0200
+Date: Tue, 6 May 2025 22:47:56 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 53eae986a5c15afd0ade74875ce96a1b70e7c53b
-X-Git-Newrev: 7dda4b57518ef554a48fd90c4df060dfd85441fe
+X-Git-Oldrev: 683681261b19a0ea541e55ae7d5497ccf05e40a9
+X-Git-Newrev: 64e8683f14c4392485de15e7b34642abce6ff88a
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103947.A8E7983A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/uclibc: update to
- 1.0.52
+Message-Id: <20250519103959.5A941873D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rtl8189es: bump to
+ version 2025-02-24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,232 +60,45 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4910624629898336640=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4910624629898336640==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=7dda4b57518ef554a48fd90c4df060dfd85441fe
+commit: https://git.buildroot.net/buildroot/commit/?id=64e8683f14c4392485de15e7b34642abce6ff88a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-See here for release notes:
-https://mailman.openadk.org/mailman3/hyperkitty/list/devel@uclibc-ng.org/thread/AGJRU33MT2GMXFNOUDXHISFQIVRYRYXO/
+With this version we can build with Linux 6.14.
 
-Drop patches 0001/0002 which are upstream.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...lib.h-only-expose-reallocarray-prototype-.patch | 64 ---------------
- .../0002-m68k-fix-alignment-in-NPTL-code.patch     | 92 ----------------------
- package/uclibc/uclibc.hash                         |  4 +-
- package/uclibc/uclibc.mk                           |  2 +-
- 4 files changed, 3 insertions(+), 159 deletions(-)
+ package/rtl8189es/rtl8189es.hash | 2 +-
+ package/rtl8189es/rtl8189es.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/uclibc/0001-include-stdlib.h-only-expose-reallocarray-prototype-.patch b/package/uclibc/0001-include-stdlib.h-only-expose-reallocarray-prototype-.patch
-deleted file mode 100644
-index 867e3645cc..0000000000
---- a/package/uclibc/0001-include-stdlib.h-only-expose-reallocarray-prototype-.patch
-+++ /dev/null
-@@ -1,64 +0,0 @@
--From bbb1a4f197624b0040e3228505eb2a725a8846f8 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Thu, 3 Apr 2025 22:56:49 +0200
--Subject: [PATCH] include/stdlib.h: only expose reallocarray() prototype when
-- implementation is available
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--The reallocarray() primitive is only provided by the malloc-standard
--implementation: neither malloc nor malloc-simple provide it. This
--causes issues when building for example util-linux on noMMU platforms
--as:
--
--- noMMU platforms can't use malloc-standard, so either malloc or
--  malloc-simple are used, which means reallocarray() is not
--  implemented
--
--- util-linux detects the absence of reallocarray(), and provides its
--  own implementation, but the prototype clashes with the prototype in
--  uClibc's <stdlib.h>
--
--The combination of which causes the following build failure:
--
--In file included from lib/color-names.c:7:
--./include/c.h:586:21: error: static declaration of ‘reallocarray’ follows non-static declaration
--  586 | static inline void *reallocarray(void *ptr, size_t nmemb, size_t size)
--      |                     ^~~~~~~~~~~~
--In file included from ./include/c.h:16:
--/home/thomas/projets/buildroot/output/host/arm-buildroot-uclinux-uclibcgnueabi/sysroot/usr/include/stdlib.h:898:14: note: previous declaration of ‘reallocarray’ with type ‘void *(void *, size_t,  size_t)’ {aka ‘void *(void *, unsigned int,  unsigned int)’}
--  898 | extern void *reallocarray (void *__ptr, size_t __m, size_t __n);
--      |              ^~~~~~~~~~~~
--make[3]: *** [Makefile:12354: lib/libtcolors_la-color-names.lo] Error 1
--
--To fix this, let's not expose the prototype of reallocarray() if we
--don't provide the implementation for it.
--
--Upstream: https://mailman.openadk.org/mailman3/hyperkitty/list/devel@uclibc-ng.org/thread/BX4ENNZYO23YQJQF5XITW7TETSJHEFK5/
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- include/stdlib.h | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/include/stdlib.h b/include/stdlib.h
--index d4e0b75e7..448c5e336 100644
----- a/include/stdlib.h
--+++ b/include/stdlib.h
--@@ -986,9 +986,13 @@ extern int getpt (void);
-- extern int getloadavg (double __loadavg[], int __nelem)
--      __THROW __nonnull ((1));
-- 
--+/* reallocarray() only provided by the malloc-standard implementation */
--+#if defined(__MALLOC_STANDARD__)
-- extern void *reallocarray (void *__ptr, size_t __m, size_t __n);
-- #endif
-- 
--+#endif
--+
-- #ifdef _LIBC
-- extern int __drand48_iterate (unsigned short int xsubi[3], struct drand48_data *buffer) attribute_hidden;
-- 
---- 
--2.48.1
--
-diff --git a/package/uclibc/0002-m68k-fix-alignment-in-NPTL-code.patch b/package/uclibc/0002-m68k-fix-alignment-in-NPTL-code.patch
-deleted file mode 100644
-index fbd9934376..0000000000
---- a/package/uclibc/0002-m68k-fix-alignment-in-NPTL-code.patch
-+++ /dev/null
-@@ -1,92 +0,0 @@
--From 278ac6b3098315cddec8f71f27bd8de22e53ca6c Mon Sep 17 00:00:00 2001
--From: Thorsten Glaser <tg@debian.org>
--Date: Wed, 12 Mar 2025 22:11:51 +0100
--Subject: [PATCH] m68k: fix alignment in NPTL code
--
--Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/278ac6b3098315cddec8f71f27bd8de22e53ca6c
--Signed-off-by: Thorsten Glaser <tg@debian.org>
--Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-----
-- .../unix/sysv/linux/m68k/bits/pthreadtypes.h   | 18 +++++++++---------
-- 1 file changed, 9 insertions(+), 9 deletions(-)
--
--diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/m68k/bits/pthreadtypes.h b/libpthread/nptl/sysdeps/unix/sysv/linux/m68k/bits/pthreadtypes.h
--index 2a90a0b90..d2f22caee 100644
----- a/libpthread/nptl/sysdeps/unix/sysv/linux/m68k/bits/pthreadtypes.h
--+++ b/libpthread/nptl/sysdeps/unix/sysv/linux/m68k/bits/pthreadtypes.h
--@@ -39,7 +39,7 @@ typedef unsigned long int pthread_t;
-- typedef union
-- {
--   char __size[__SIZEOF_PTHREAD_ATTR_T];
---  long int __align;
--+  long int __align __attribute__((__aligned__(4)));
-- } pthread_attr_t;
-- 
-- 
--@@ -69,13 +69,13 @@ typedef union
--     };
--   } __data;
--   char __size[__SIZEOF_PTHREAD_MUTEX_T];
---  long int __align;
--+  long int __align __attribute__((__aligned__(4)));
-- } pthread_mutex_t;
-- 
-- typedef union
-- {
--   char __size[__SIZEOF_PTHREAD_MUTEXATTR_T];
---  long int __align;
--+  long int __align __attribute__((__aligned__(4)));
-- } pthread_mutexattr_t;
-- 
-- 
--@@ -95,13 +95,13 @@ typedef union
--     unsigned int __broadcast_seq;
--   } __data;
--   char __size[__SIZEOF_PTHREAD_COND_T];
---  __extension__ long long int __align;
--+  __extension__ long long int __align __attribute__((__aligned__(8)));
-- } pthread_cond_t;
-- 
-- typedef union
-- {
--   char __size[__SIZEOF_PTHREAD_CONDATTR_T];
---  long int __align;
--+  long int __align __attribute__((__aligned__(4)));
-- } pthread_condattr_t;
-- 
-- 
--@@ -144,13 +144,13 @@ typedef union
--     int __writer;
--   } __data;
--   char __size[__SIZEOF_PTHREAD_RWLOCK_T];
---  long int __align;
--+  long int __align __attribute__((__aligned__(4)));
-- } pthread_rwlock_t;
-- 
-- typedef union
-- {
--   char __size[__SIZEOF_PTHREAD_RWLOCKATTR_T];
---  long int __align;
--+  long int __align __attribute__((__aligned__(4)));
-- } pthread_rwlockattr_t;
-- #endif
-- 
--@@ -165,13 +165,13 @@ typedef volatile int pthread_spinlock_t;
-- typedef union
-- {
--   char __size[__SIZEOF_PTHREAD_BARRIER_T];
---  long int __align;
--+  long int __align __attribute__((__aligned__(4)));
-- } pthread_barrier_t;
-- 
-- typedef union
-- {
--   char __size[__SIZEOF_PTHREAD_BARRIERATTR_T];
---  int __align;
--+  int __align __attribute__((__aligned__(4)));
-- } pthread_barrierattr_t;
-- #endif
-- 
---- 
--2.39.5
--
-diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
-index 398a1c04c4..35a4b4b962 100644
---- a/package/uclibc/uclibc.hash
-+++ b/package/uclibc/uclibc.hash
-@@ -1,4 +1,4 @@
--# From https://downloads.uclibc-ng.org/releases/1.0.51/uClibc-ng-1.0.51.tar.xz.sha256
--sha256  3484c8c7a0503c08f7e5fa7473c987414050726f31e8593d02d984f512d1a0cb  uClibc-ng-1.0.51.tar.xz
-+# From https://downloads.uclibc-ng.org/releases/1.0.52/uClibc-ng-1.0.52.tar.xz.sha256
-+sha256  881da473784f95cc8290bb0780c0afc810ca28d575e33d5afd5e7153b29aa136  uClibc-ng-1.0.52.tar.xz
+diff --git a/package/rtl8189es/rtl8189es.hash b/package/rtl8189es/rtl8189es.hash
+index 4b176b56a5..28dedca8d3 100644
+--- a/package/rtl8189es/rtl8189es.hash
++++ b/package/rtl8189es/rtl8189es.hash
+@@ -1,2 +1,2 @@
  # Locally calculated
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index 12b597f03b..eb36de8e95 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
+-sha256  12bbf8e8c67722f6d350727aea3e9aeadfa9234e64756f3342fd3aac417a88f4  rtl8189es-6b4cfb5c37f10c099d330ece54436706161c2f2e.tar.gz
++sha256  85aa06192594d8e5885eaec72e3792c7816f714d682897ff0cbd0ba48a134dcc  rtl8189es-fcf2a5746e6fe11d9d71337ee5dac6cf43423a97.tar.gz
+diff --git a/package/rtl8189es/rtl8189es.mk b/package/rtl8189es/rtl8189es.mk
+index cbbfebe675..49a6ddfd1a 100644
+--- a/package/rtl8189es/rtl8189es.mk
++++ b/package/rtl8189es/rtl8189es.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--UCLIBC_VERSION = 1.0.51
-+UCLIBC_VERSION = 1.0.52
- UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
- UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
- UCLIBC_LICENSE = LGPL-2.1+
-
---===============4910624629898336640==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-RTL8189ES_VERSION = 6b4cfb5c37f10c099d330ece54436706161c2f2e
++RTL8189ES_VERSION = fcf2a5746e6fe11d9d71337ee5dac6cf43423a97
+ RTL8189ES_SITE = $(call github,jwrdegoede,rtl8189ES_linux,$(RTL8189ES_VERSION))
+ RTL8189ES_LICENSE = GPL-2.0
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4910624629898336640==--
