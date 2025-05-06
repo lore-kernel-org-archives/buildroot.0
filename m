@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D70ABC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:46:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CB75C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:46:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A6948616BB;
-	Mon, 19 May 2025 10:46:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E49D7820FF;
+	Mon, 19 May 2025 10:46:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DzU9PX_l_wwV; Mon, 19 May 2025 10:46:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8bMup_DkwjG2; Mon, 19 May 2025 10:46:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64987616C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E90FB820BE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64987616C1;
-	Mon, 19 May 2025 10:46:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 03AC7E4
+	by smtp1.osuosl.org (Postfix) with ESMTP id E90FB820BE;
+	Mon, 19 May 2025 10:46:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 37B92E4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 37A4841239
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1FCA1411A0
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pfKOlyIuhOp8 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:53 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Hh5aBbwuS9q0 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:39:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4B3840C80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30DCB41155
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A4B3840C80
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 30DCB41155
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9F29E83B63; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ id 2C5FB873D4; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 6 Apr 2025 22:10:41 +0200
+Date: Tue, 6 May 2025 22:03:28 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 01895663d37a821ec8d94b52f4d4384b967787e1
-X-Git-Newrev: 53eae986a5c15afd0ade74875ce96a1b70e7c53b
+X-Git-Oldrev: b769d4dbb88a878a1ab5a261a9618c404c6a7e29
+X-Git-Newrev: 80cfdcb86ba455ed286bea1f557ff351ac6ce263
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103947.9F29E83B63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/uclibc: fix NPTL
- alignment on m68k
+Message-Id: <20250519103959.2C5FB873D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/bird: fix build
+ failure with bfd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,146 +60,91 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2719334790332631558=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2719334790332631558==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=53eae986a5c15afd0ade74875ce96a1b70e7c53b
+commit: https://git.buildroot.net/buildroot/commit/?id=80cfdcb86ba455ed286bea1f557ff351ac6ce263
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Tested on QEMU using the qemu_m68k_q800_defconfig configuration, with a
-switch of  the toolchain to uclibc-ng and enabling rsyslog.
+The 'bird' package with only the `BR2_PACKAGE_BIRD_BFD=y` protocol
+enabled fails to build with the following error
 
-This patch addresses an issue where rsyslog’s pthread_cond_wait was
-busy-looping due to futex_time64 repeatedly returning EINVAL. The
-correction in NPTL alignment resolves the 100% CPU usage problem.
+```
+bison  -Dparse.lac=full -Dparse.error=verbose -dv -pcf_ -b obj/conf/cf-parse obj/conf/cf-parse.y
+proto/bfd/config.Y:204.27-33: error: symbol 'ADDRESS' is used, but is not defined as a token and has no rules
+  204 |  | bfd_show_sessions_args ADDRESS net_or_ipa { net_copy(&($$->address...
+      |                           ^~~~~~~
+```
 
-This patch is fixed upstream [1] so apply it until it is tagged.
+The `ADDRESS` token is defined only when certain protocols (e.g. OSPF,
+RIP, RPKI, or BGP) are enabled. As a result, builds including any of
+these protocols do not encounter the issue.
 
-[1]: 278ac6b30 ("m68k: fix alignment in NPTL code")
+The issue can be reproduced with the commands:
 
-Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-[Julien:
- - rename patch to 0002
- - add "Upstream:" tag in patch to fix check-package error
- - add "Signed-off-by:" in patch
-]
+    cat >.config <<EOF
+    BR2_aarch64=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    BR2_PACKAGE_BIRD=y
+    BR2_PACKAGE_BIRD_BFD=y
+    # BR2_PACKAGE_BIRD_BGP is not set
+    EOF
+    make olddefconfig
+    make bird
+
+This patch backports upstream commits that define the `ADDRESS` token
+for the BFD protocol.
+
+Fixes:
+https://autobuild.buildroot.org/results/68c5dd84585a7018ad57ea3e7134748c08858ef7/
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+[Julien: add commands to reproduce the issue]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../0002-m68k-fix-alignment-in-NPTL-code.patch     | 92 ++++++++++++++++++++++
- 1 file changed, 92 insertions(+)
+ ...0002-BFD-Fix-missing-keyword-declarations.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/package/uclibc/0002-m68k-fix-alignment-in-NPTL-code.patch b/package/uclibc/0002-m68k-fix-alignment-in-NPTL-code.patch
+diff --git a/package/bird/0002-BFD-Fix-missing-keyword-declarations.patch b/package/bird/0002-BFD-Fix-missing-keyword-declarations.patch
 new file mode 100644
-index 0000000000..fbd9934376
+index 0000000000..29ec8abf7b
 --- /dev/null
-+++ b/package/uclibc/0002-m68k-fix-alignment-in-NPTL-code.patch
-@@ -0,0 +1,92 @@
-+From 278ac6b3098315cddec8f71f27bd8de22e53ca6c Mon Sep 17 00:00:00 2001
-+From: Thorsten Glaser <tg@debian.org>
-+Date: Wed, 12 Mar 2025 22:11:51 +0100
-+Subject: [PATCH] m68k: fix alignment in NPTL code
++++ b/package/bird/0002-BFD-Fix-missing-keyword-declarations.patch
+@@ -0,0 +1,31 @@
++From e5b582868c5fa7e185a12023784adc8df7b8c7a2 Mon Sep 17 00:00:00 2001
++From: Ondrej Zajicek <santiago@crfreenet.org>
++Date: Thu, 9 Jan 2025 00:30:37 +0100
++Subject: [PATCH] BFD: Fix missing keyword declarations
 +
-+Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/278ac6b3098315cddec8f71f27bd8de22e53ca6c
-+Signed-off-by: Thorsten Glaser <tg@debian.org>
-+Signed-off-by: Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
++Some keywords were missing for BFD-only build.
++
++Upstream: https://gitlab.nic.cz/labs/bird/-/commit/c386369645e584facaad88ec292f2fe0bc70d974
++[tperale: backport v2.15.1]
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ .../unix/sysv/linux/m68k/bits/pthreadtypes.h   | 18 +++++++++---------
-+ 1 file changed, 9 insertions(+), 9 deletions(-)
++ proto/bfd/config.Y | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/libpthread/nptl/sysdeps/unix/sysv/linux/m68k/bits/pthreadtypes.h b/libpthread/nptl/sysdeps/unix/sysv/linux/m68k/bits/pthreadtypes.h
-+index 2a90a0b90..d2f22caee 100644
-+--- a/libpthread/nptl/sysdeps/unix/sysv/linux/m68k/bits/pthreadtypes.h
-++++ b/libpthread/nptl/sysdeps/unix/sysv/linux/m68k/bits/pthreadtypes.h
-+@@ -39,7 +39,7 @@ typedef unsigned long int pthread_t;
-+ typedef union
-+ {
-+   char __size[__SIZEOF_PTHREAD_ATTR_T];
-+-  long int __align;
-++  long int __align __attribute__((__aligned__(4)));
-+ } pthread_attr_t;
++diff --git a/proto/bfd/config.Y b/proto/bfd/config.Y
++index 1a7474b0..70b09ad8 100644
++--- a/proto/bfd/config.Y
+++++ b/proto/bfd/config.Y
++@@ -21,8 +21,8 @@ extern struct bfd_config *bfd_cf;
 + 
++ CF_DECLS
 + 
-+@@ -69,13 +69,13 @@ typedef union
-+     };
-+   } __data;
-+   char __size[__SIZEOF_PTHREAD_MUTEX_T];
-+-  long int __align;
-++  long int __align __attribute__((__aligned__(4)));
-+ } pthread_mutex_t;
-+ 
-+ typedef union
-+ {
-+   char __size[__SIZEOF_PTHREAD_MUTEXATTR_T];
-+-  long int __align;
-++  long int __align __attribute__((__aligned__(4)));
-+ } pthread_mutexattr_t;
-+ 
-+ 
-+@@ -95,13 +95,13 @@ typedef union
-+     unsigned int __broadcast_seq;
-+   } __data;
-+   char __size[__SIZEOF_PTHREAD_COND_T];
-+-  __extension__ long long int __align;
-++  __extension__ long long int __align __attribute__((__aligned__(8)));
-+ } pthread_cond_t;
-+ 
-+ typedef union
-+ {
-+   char __size[__SIZEOF_PTHREAD_CONDATTR_T];
-+-  long int __align;
-++  long int __align __attribute__((__aligned__(4)));
-+ } pthread_condattr_t;
-+ 
-+ 
-+@@ -144,13 +144,13 @@ typedef union
-+     int __writer;
-+   } __data;
-+   char __size[__SIZEOF_PTHREAD_RWLOCK_T];
-+-  long int __align;
-++  long int __align __attribute__((__aligned__(4)));
-+ } pthread_rwlock_t;
-+ 
-+ typedef union
-+ {
-+   char __size[__SIZEOF_PTHREAD_RWLOCKATTR_T];
-+-  long int __align;
-++  long int __align __attribute__((__aligned__(4)));
-+ } pthread_rwlockattr_t;
-+ #endif
-+ 
-+@@ -165,13 +165,13 @@ typedef volatile int pthread_spinlock_t;
-+ typedef union
-+ {
-+   char __size[__SIZEOF_PTHREAD_BARRIER_T];
-+-  long int __align;
-++  long int __align __attribute__((__aligned__(4)));
-+ } pthread_barrier_t;
-+ 
-+ typedef union
-+ {
-+   char __size[__SIZEOF_PTHREAD_BARRIERATTR_T];
-+-  int __align;
-++  int __align __attribute__((__aligned__(4)));
-+ } pthread_barrierattr_t;
-+ #endif
++-CF_KEYWORDS(BFD, MIN, IDLE, RX, TX, INTERVAL, MULTIPLIER, PASSIVE,
++-	INTERFACE, MULTIHOP, NEIGHBOR, DEV, LOCAL, AUTHENTICATION,
+++CF_KEYWORDS(BFD, MIN, IDLE, RX, TX, INTERVAL, MULTIPLIER, PASSIVE, ADDRESS,
+++	INTERFACE, MULTIHOP, NEIGHBOR, DEV, ALL, LOCAL, AUTHENTICATION,
++ 	NONE, SIMPLE, METICULOUS, KEYED, MD5, SHA1, IPV4, IPV6, DIRECT,
++ 	STRICT, BIND)
 + 
 +-- 
-+2.39.5
-+
-
---===============2719334790332631558==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++2.49.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2719334790332631558==--
