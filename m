@@ -1,52 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 814CBC3ABBC
-	for <buildroot@archiver.kernel.org>; Tue,  6 May 2025 20:39:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D220C3ABBC
+	for <buildroot@archiver.kernel.org>; Tue,  6 May 2025 20:39:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BA4460E1D;
-	Tue,  6 May 2025 20:39:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 104F981DF2;
+	Tue,  6 May 2025 20:39:41 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Jf3vmdL7bfk4; Tue,  6 May 2025 20:39:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3557B81ABA
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3557B81ABA;
+	Tue,  6 May 2025 20:39:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 91A081D72
+ for <buildroot@buildroot.org>; Tue,  6 May 2025 20:39:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 76E9160BDC
+ for <buildroot@buildroot.org>; Tue,  6 May 2025 20:39:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B4ywLMod-P4i; Tue,  6 May 2025 20:39:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAF8560C08
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAF8560C08;
-	Tue,  6 May 2025 20:39:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A0BCEDF
- for <buildroot@buildroot.org>; Tue,  6 May 2025 20:39:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 007074092B
- for <buildroot@buildroot.org>; Tue,  6 May 2025 20:39:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TkDkDDOAFWoe for <buildroot@buildroot.org>;
- Tue,  6 May 2025 20:39:07 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACCD34043D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id ACCD34043D
- for <buildroot@buildroot.org>; Tue,  6 May 2025 20:39:07 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 998FE863F8; Tue,  6 May 2025 20:39:07 +0000 (UTC)
+ id qGjKXkoIwdZ4 for <buildroot@buildroot.org>;
+ Tue,  6 May 2025 20:39:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9385660AD9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9385660AD9
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9385660AD9
+ for <buildroot@buildroot.org>; Tue,  6 May 2025 20:39:37 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 94996780A50;
+ Tue,  6 May 2025 22:39:32 +0200 (CEST)
+Received: from lfbn-mon-1-146-106.w86-210.abo.wanadoo.fr
+ ([86.210.113.106:49470])
+ via lfbn-mon-1-146-106.w86-210.abo.wanadoo.fr ([86.210.113.106])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 06 May 2025 22:39:32 +0200
+MIME-Version: 1.0
+Date: Tue, 06 May 2025 22:39:32 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 6 May 2025 22:27:40 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 84b8a080517a8da70c314510d2e74f0da92ad441
-X-Git-Newrev: c8ba9da529e69e1d594c6babb10ce67f8273e7ce
-X-Patchwork-Hint: ignore
-Message-Id: <20250506203907.998FE863F8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libcurl: bump version to 8.13.0
+To: Kadambini Nema <kadambini.nema@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250501090919.74916-1-kadambini.nema@gmail.com>
+References: <20250501090919.74916-1-kadambini.nema@gmail.com>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <0f2705a3bfb6c9862c8118aff726ad7b@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1746563973;
+ bh=3Df2NbWdb4gxxsV/TuR05nL7H2THm2LJ9r2eLQC6ldA=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=WiPIJrE69+306uyE3gLpntuD5XGIlMgQOLwjeEvn8NGVZPg63V4eNtBlJ3KDb0JZo
+ Cs2B2olf6f3nmHYKYiueWP6Qm+lSOl4zOBCuW3SgDY9DpBoyDEqJdJfH8RSCWTTv+r
+ B2lu8Qb5Iqrks1e8hzrdC8iK4rG0ZVu3g0P0E+SvsHIkHJ3D9cyYRM5T04tm3zoj2F
+ aSY/3DDZRZ7Sch27j8efTNpKavFp6S70hC9lZvh2ETMLbGf3zYqx//2xhmiKzheGiE
+ jtoSiQi/YzIRzW+0Ij76uuWpQ4NU+HRJH9rHBVb3yb7w05uIG3AzdRvBAx1iDYjAdE
+ bNgHCLhcvt5lw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=WiPIJrE6
+Subject: Re: [Buildroot] [PATCH 1/1] package/libcurl: bump version to 8.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,50 +83,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c8ba9da529e69e1d594c6babb10ce67f8273e7ce
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 01/05/2025 11:09, Kadambini Nema wrote:
+> Changelog:
+> https://curl.se/ch/8.13.0.html
+> 
+> Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 
-Changelog:
-https://curl.se/ch/8.13.0.html
-
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 4a26a1774d..388ddc1418 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-8.12.1.tar.xz.asc
-+# https://curl.se/download/curl-8.13.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  0341f1ed97a26c811abaebd37d62b833956792b7607ea3f15d001613c76de202  curl-8.12.1.tar.xz
-+sha256  4a093979a3c2d02de2fbc00549a32771007f2e78032c6faa5ecd2f7a9e152025  curl-8.13.0.tar.xz
- sha256  e18f1989333b70044b2adfb7dc2f905d0119dbdcac3bc9f4bc9d540e3a29de5b  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 2066ba0388..5f04fc381f 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 8.12.1
-+LIBCURL_VERSION = 8.13.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
