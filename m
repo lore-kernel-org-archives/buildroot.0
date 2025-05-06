@@ -1,53 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7305FC3ABBC
-	for <buildroot@archiver.kernel.org>; Tue,  6 May 2025 17:35:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CAB1C3ABBE
+	for <buildroot@archiver.kernel.org>; Tue,  6 May 2025 17:36:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1911440919;
-	Tue,  6 May 2025 17:35:59 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T-aT-lQoGEh5; Tue,  6 May 2025 17:35:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3373740913
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3373740913;
-	Tue,  6 May 2025 17:35:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E4C8912E
- for <buildroot@buildroot.org>; Tue,  6 May 2025 17:35:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CA92C60C0A
- for <buildroot@buildroot.org>; Tue,  6 May 2025 17:35:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E99D60DDF;
+	Tue,  6 May 2025 17:36:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E0vc25GkXUWQ for <buildroot@buildroot.org>;
- Tue,  6 May 2025 17:35:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1ABA860BDC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1ABA860BDC
- for <buildroot@buildroot.org>; Tue,  6 May 2025 17:35:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 152FF862FA; Tue,  6 May 2025 17:35:56 +0000 (UTC)
+ id YH1dAcmrtwoQ; Tue,  6 May 2025 17:36:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C42A60DC6
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4C42A60DC6;
+	Tue,  6 May 2025 17:36:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 38419EDF
+ for <buildroot@buildroot.org>; Tue,  6 May 2025 17:36:34 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 347874090A
+ for <buildroot@buildroot.org>; Tue,  6 May 2025 17:36:34 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Md61whzOftLP for <buildroot@buildroot.org>;
+ Tue,  6 May 2025 17:36:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3833140901
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3833140901
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3833140901
+ for <buildroot@buildroot.org>; Tue,  6 May 2025 17:36:32 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 6440A780969;
+ Tue,  6 May 2025 19:36:26 +0200 (CEST)
+Received: from lfbn-mon-1-146-106.w86-210.abo.wanadoo.fr
+ ([86.210.113.106:47334])
+ via lfbn-mon-1-146-106.w86-210.abo.wanadoo.fr ([86.210.113.106])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 06 May 2025 19:36:26 +0200
+MIME-Version: 1.0
+Date: Tue, 06 May 2025 19:36:26 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 6 May 2025 18:07:48 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9d3c4130d799f1523d071df624124120b58016cd
-X-Git-Newrev: b769d4dbb88a878a1ab5a261a9618c404c6a7e29
-X-Patchwork-Hint: ignore
-Message-Id: <20250506173556.152FF862FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rockchip-rkbin: bump to latest git
- commit
+To: Florian Larysch <fl@n621.de>
+Cc: buildroot@buildroot.org, Kilian Zinnecker <kilian.zinnecker@mail.de>,
+ Sergey Matyukevich <geomatsi@gmail.com>
+In-Reply-To: <20250501232946.25084-1-fl@n621.de>
+References: <20250501232946.25084-1-fl@n621.de>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <39b3ca1130fbb6818ec06e0aeeea5056@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1746552989;
+ bh=HUszLIVgvBe3P/jn7odQ+YWWn/zIh9Cw0gDb7GPf6PY=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=VDb3qXa4yK7W1KemtGmw3wLsFDyOOh+JzmRfkYkUgB+3y0zeRP5ik60n4sQncG2pp
+ FLIrVUyoXXWxt2OJv+ePlxS5WGDAnxva12dnRr2Vz0oKqBVuC/a82pomFD1W45fxiS
+ o6bahsn94BdDP+aBmuf0vA6YCjEzztQmj+sbdkPGWt9X+WZLOeKqfFJquPE2ZcJucq
+ sSSXfNmKBNjJNbK9g1IiJ20xwc4B2MBaH2ylpbq1MbVrCxsBFDiF1jNh6RPqTiDeM1
+ ikcdzfH8Rl8RrkGXk9U3IVKSJ2FnDVw/St0s/8mP8mUZ6yosnTncRXNnIwJOmQxuMS
+ 72sHFphcLqDXg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=VDb3qXa4
+Subject: Re: [Buildroot] [PATCH 1/1] package/rockchip-rkbin: bump to latest
+ git commit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,98 +85,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b769d4dbb88a878a1ab5a261a9618c404c6a7e29
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 02/05/2025 01:29, Florian Larysch wrote:
+> This version incorporates stability fixes and support for newer chip
+> generations.
+> 
+> The license hash change is only cosmetic, see the corresponding
+> commit[1] in the upstream repo.
+> 
+> Fix up defconfigs as needed since older TPL blob versions have gotten
+> removed.
+> 
+> [1] 
+> https://github.com/rockchip-linux/rkbin/commit/385bf9f1700cc4b7ab8af1ec96da02f4837c525a
+> 
+> Signed-off-by: Florian Larysch <fl@n621.de>
 
-This version incorporates stability fixes and support for newer chip
-generations.
-
-The license hash change is only cosmetic, see the corresponding
-commit[1] in the upstream repo.
-
-Fix up defconfigs as needed since older TPL blob versions have gotten
-removed.
-
-[1] https://github.com/rockchip-linux/rkbin/commit/385bf9f1700cc4b7ab8af1ec96da02f4837c525a
-
-Signed-off-by: Florian Larysch <fl@n621.de>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- configs/friendlyarm_nanopi_r3s_defconfig   | 2 +-
- configs/orangepi_5_plus_defconfig          | 2 +-
- configs/rock5b_defconfig                   | 2 +-
- package/rockchip-rkbin/rockchip-rkbin.hash | 4 ++--
- package/rockchip-rkbin/rockchip-rkbin.mk   | 2 +-
- 5 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/configs/friendlyarm_nanopi_r3s_defconfig b/configs/friendlyarm_nanopi_r3s_defconfig
-index d0a2478637..39e21c74fd 100644
---- a/configs/friendlyarm_nanopi_r3s_defconfig
-+++ b/configs/friendlyarm_nanopi_r3s_defconfig
-@@ -21,7 +21,7 @@ BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_PACKAGE_LINUX_FIRMWARE=y
- BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
- BR2_PACKAGE_ROCKCHIP_RKBIN=y
--BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME="bin/rk35/rk3566_ddr_1056MHz_v1.18.bin"
-+BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME="bin/rk35/rk3566_ddr_1056MHz_v1.23.bin"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
-diff --git a/configs/orangepi_5_plus_defconfig b/configs/orangepi_5_plus_defconfig
-index f283cbff7e..53a633f639 100644
---- a/configs/orangepi_5_plus_defconfig
-+++ b/configs/orangepi_5_plus_defconfig
-@@ -26,7 +26,7 @@ BR2_PACKAGE_LINUX_FIRMWARE=y
- BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
- BR2_PACKAGE_LINUX_FIRMWARE_ARM_MALI_CSF=y
- BR2_PACKAGE_ROCKCHIP_RKBIN=y
--BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME="bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.12.bin"
-+BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME="bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.18.bin"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
-diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
-index 7d718df15d..bef12adaa4 100644
---- a/configs/rock5b_defconfig
-+++ b/configs/rock5b_defconfig
-@@ -27,7 +27,7 @@ BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
- BR2_PACKAGE_ROCKCHIP_RKBIN=y
--BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME="bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.12.bin"
-+BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME="bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2400MHz_v1.18.bin"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.12"
-diff --git a/package/rockchip-rkbin/rockchip-rkbin.hash b/package/rockchip-rkbin/rockchip-rkbin.hash
-index 3e25ffac0a..83aa37b714 100644
---- a/package/rockchip-rkbin/rockchip-rkbin.hash
-+++ b/package/rockchip-rkbin/rockchip-rkbin.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  7bb548b8c4dcd0f7d6b75c13e20d48eaac77f6218ad74e8a34c7f2097e793205  rockchip-rkbin-b4558da0860ca48bf1a571dd33ccba580b9abe23-git4.tar.gz
--sha256  1f2e25ae65f3af774e6f141f84253d6a05d489fb0b88b311220d70471c023c9c  LICENSE
-+sha256  4a70cdc877600b75c0a885a8ebe1aa68f0800a0010aa580c105cbd9386140fa7  rockchip-rkbin-f43a462e7a1429a9d407ae52b4745033034a6cf9-git4.tar.gz
-+sha256  d2765124a2c24d71aba3cbc6cdd6975a5a297821264eb6c26378a4c16cd16e92  LICENSE
-diff --git a/package/rockchip-rkbin/rockchip-rkbin.mk b/package/rockchip-rkbin/rockchip-rkbin.mk
-index 49271084eb..7d1459128e 100644
---- a/package/rockchip-rkbin/rockchip-rkbin.mk
-+++ b/package/rockchip-rkbin/rockchip-rkbin.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ROCKCHIP_RKBIN_VERSION = b4558da0860ca48bf1a571dd33ccba580b9abe23
-+ROCKCHIP_RKBIN_VERSION = f43a462e7a1429a9d407ae52b4745033034a6cf9
- ROCKCHIP_RKBIN_SITE = https://github.com/rockchip-linux/rkbin.git
- ROCKCHIP_RKBIN_SITE_METHOD = git
- ROCKCHIP_RKBIN_LICENSE = PROPRIETARY
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
