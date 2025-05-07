@@ -1,76 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 231EBC3ABC0
-	for <buildroot@archiver.kernel.org>; Wed,  7 May 2025 20:23:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 177CEC3ABC0
+	for <buildroot@archiver.kernel.org>; Wed,  7 May 2025 20:27:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D787B612CD;
-	Wed,  7 May 2025 20:23:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8FB440BD5;
+	Wed,  7 May 2025 20:27:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JLemGftz719L; Wed,  7 May 2025 20:23:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XpCwnDZS2DTL; Wed,  7 May 2025 20:27:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 21100612E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 028D540BC1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 21100612E8;
-	Wed,  7 May 2025 20:23:32 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E1DB6151
- for <buildroot@buildroot.org>; Wed,  7 May 2025 20:23:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 028D540BC1;
+	Wed,  7 May 2025 20:27:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 368E6151
+ for <buildroot@buildroot.org>; Wed,  7 May 2025 20:27:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C7C54612E8
- for <buildroot@buildroot.org>; Wed,  7 May 2025 20:23:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2859182768
+ for <buildroot@buildroot.org>; Wed,  7 May 2025 20:27:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UgNCZ4mxFZT4 for <buildroot@buildroot.org>;
- Wed,  7 May 2025 20:23:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D9E46612CD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D9E46612CD
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D9E46612CD
- for <buildroot@buildroot.org>; Wed,  7 May 2025 20:23:29 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 29173780389;
- Wed,  7 May 2025 22:23:24 +0200 (CEST)
-Received: from lfbn-mon-1-146-106.w86-210.abo.wanadoo.fr
- ([86.210.113.106:39222])
- via lfbn-mon-1-146-106.w86-210.abo.wanadoo.fr ([86.210.113.106])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 07 May 2025 22:23:24 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kfJHUEZYB16Y for <buildroot@buildroot.org>;
+ Wed,  7 May 2025 20:27:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2393C821F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2393C821F8
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2393C821F8
+ for <buildroot@buildroot.org>; Wed,  7 May 2025 20:27:08 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 996B04316C
+ for <buildroot@buildroot.org>; Wed,  7 May 2025 20:27:05 +0000 (UTC)
+Date: Wed, 7 May 2025 22:27:04 +0200
+To: buildroot@buildroot.org
+Message-ID: <20250507222704.12cee5d5@windsurf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Date: Wed, 07 May 2025 22:23:24 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Charlie Jenkins <charlie@rivosinc.com>
-In-Reply-To: <20250424-fix_gmp_c23-v3-1-e3e984bd4254@rivosinc.com>
-References: <20250424-fix_gmp_c23-v3-1-e3e984bd4254@rivosinc.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <fa9fcbd29adc8179f90f3b2eaaf118e5@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1746649407;
- bh=zI7KZF9hG5xiJ91ErSOlpiE/NHgRZc4P4PLLxv7eC10=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=gg7Juh/ADTrCWi3JZ0GPgPQVHDAysePxyW1mLv+Xb6P6RotQU3tME44yRQi+mK8QS
- bR46CCv0uulab2CBOfEN5UHe9grwdZ6/1ZAmBimSnIgUfK0R/BU4z09UkzaBsnCmi6
- GY+6yXSepkRJOWM0Tg+qQ3NHbEEbhDkzOzEPPjUNriq84EChtqO4ORupDtFmf2DkOa
- /lyXQF4tfrZPOOFnRBRTBxZI3imn3yuS6XZtjQLpmgFwezL6p7edBgi3OVJXbwjR15
- 6ALKs4xE7zhb12aXl4fJFHr+qcVPCWCxNvpzMGiSgU8Rbz+48/nqi6trSLNiqWSL34
- +/ytjmL/+7ZyQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=gg7Juh/A
-Subject: Re: [Buildroot] [PATCH v3] package/gmp: Fix for c23
+X-GND-State: clean
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeejkeduucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhepfffhvffukfhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnheptdduudekfeelieekudetfeeiueefgeevieefkefhteeugeegieegvdefkeelgeeunecuffhomhgrihhnpegvmhgsvgguuggvugdqrhgvtghiphgvshdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgduleemledvtdgsmeegjedttdemrgdvfheimegukegukeemhegtvggtmegshegvgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudelmeelvddtsgemgeejtddtmegrvdhfieemugekugekmeehtggvtgemsgehvgegpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrgh
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1746649625;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=1/6eRTrHVIM6FGmiBuXXw/TuevZGtB100fsklyq4abw=;
+ b=SandNCN9UXIJE+4CQjmXfVLODuYs9QINSV/DNBXQUkY8wf7XTRN65Py0qwbG0fk6BoxSkS
+ bcTWeJchLuAxST62BE3TwBVSPSwgJXkzCn4tfdzfwSpQH6lEAwRsqatUkBN3lwW4vF1V+4
+ OaZpXQNYOWQ3FSWm79pMBz94lc0NrmkgmZfjq/GcGn+lWxLIXQ23tsn/n0X1NyMVtgaxKC
+ G6h2v5AXgtWjsrj4NWytGrfr5qWELgroH6X7PW0PMxZMKd3dzcBGakmtnROOkzqe4qQuD+
+ TzUmg73Fz5LJmPLM0jTL/5h8Ias0un/l6hHU9oGZ9efDJGKlZL57yyG5rx9qaA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=SandNCN9
+Subject: [Buildroot] Buildroot at Embedded Recipes + hackathon on May
+ 16/17/18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,33 +81,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Charlie,
+Hello!
 
-On 25/04/2025 00:49, Charlie Jenkins wrote:
-> GMP will not build for a C compiler configured for c23 because its
-> autoconf scripts use deprecated function prototypes. Include an 
-> upstream
-> patch that fixes this issue.
-> 
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+Several of the Buildroot maintainers/core-developers will be at the
+Embedded Recipes in Nice on May 14/15:
 
-I'm sorry I missed your patch. I wrote an apply a similar one at:
-https://gitlab.com/buildroot.org/buildroot/-/commit/31569bcc1b0762636d704baad0b35fc37aedb386
-I'll mark it as "superseded".
+  https://embedded-recipes.org/2025/
 
-On my side, my main motivation was to quickly fix host-gmp with gcc,
-which was at that time generating a lot of build failures. I also
-applied the fix for the target package.
+I'm aware of at least Arnout Vandecappelle, Peter Korsgaard, Julien
+Olivain and myself joining.
+
+Is there any other Buildroot community member attending Embedded
+Recipes? If that's the case, then let's meet during the event!
+
+Also, Arnout, Peter, Julien and myself will be having a private
+hackathon in Nice right after Embedded Recipes, on May 16/17/18. Due to
+the logistics in place, we cannot make this an open hackathon. However,
+you can join the hackathon virtually through IRC. Over those 3 days, we
+expect to make progress on reviewing and merging patches, so if you're
+interested in pushing a topic forward, don't hesitate to participate by
+being around on some of those days.
 
 Best regards,
 
-Julien.
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
