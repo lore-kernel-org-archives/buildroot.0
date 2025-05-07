@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43780C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:57:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B338FC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:57:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 497AC70B3F;
-	Mon, 19 May 2025 10:57:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A27084198;
+	Mon, 19 May 2025 10:57:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1WPS6XBKjH0J; Mon, 19 May 2025 10:57:33 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S9disIx1tJf9; Mon, 19 May 2025 10:57:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37C5770B36
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F206841AF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 37C5770B36;
-	Mon, 19 May 2025 10:57:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F206841AF;
+	Mon, 19 May 2025 10:57:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 689EED4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:32 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 24250D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F1DC540E62
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 486BC41455
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sd4BXz5tFw6c for <buildroot@buildroot.org>;
+ id B9PeTUw-uAmR for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0634410C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C834040DC5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C0634410C3
+ by smtp4.osuosl.org (Postfix) with ESMTP id C834040DC5
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BCD178348A; Mon, 19 May 2025 10:39:59 +0000 (UTC)
+ id C5963872E7; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 7 May 2025 22:03:18 +0200
+Date: Wed, 7 May 2025 22:25:26 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e3cae9e1ca4765da825c9ee94760e12f5c6c142a
-X-Git-Newrev: 835b5659ea576290458aa17d2119b2ec13ebf0a0
+X-Git-Oldrev: 835b5659ea576290458aa17d2119b2ec13ebf0a0
+X-Git-Newrev: dd2d62a36e091ad745fbacbef810709b2f597396
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103959.BCD178348A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sqlite: add patch to
- fix CVE-2025-29087
+Message-Id: <20250519103959.C5963872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/qemu: bump to version
+ 10.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,96 +65,171 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=835b5659ea576290458aa17d2119b2ec13ebf0a0
+commit: https://git.buildroot.net/buildroot/commit/?id=dd2d62a36e091ad745fbacbef810709b2f597396
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This patch was commited upstream, and released as part of sqlite 3.49.1
+Changes log:
+https://wiki.qemu.org/ChangeLog/10.0
 
-However, the configuration system changed between sqlite 3.48 and 3.49
-from autotools to autosetup, and this has proven challenging to support
-in Buildroot (see `git log package/sqlite`), hence why we are still on
-sqlite 3.48.
+Remove upstream patches:
 
-Therefore, until the package build infrastructure correctly supports
-building sqlite 3.49, let's simply import the upstream patch to address
-the CVE.
+- 0002-stubs-only-build-stubs-for-QAPI-events-when-needed.patch
+  https://gitlab.com/qemu-project/qemu/-/commit/8113dbbcdaee05f319a7e48272416d918cb2b04a
+- 0003-sched_attr-Do-not-define-for-glibc-2.41.patch
+  https://gitlab.com/qemu-project/qemu/-/commit/27a8d899c7a100fd5aa040a8b993bb257687c393
 
-Note: the upstream patch is on the orignal sqlite sources. Buildroot is
-using the sqlite "amalgamation" source archive, which basically
-concatenate all the source files in a single "sqlite3.c" file. So the
-patch was reformated to apply correctly on the sqlite release archive.
+Note:
+  32-bit host support is now deprecated for all platforms and will be
+  removed in a future QEMU release.
+  https://gitlab.com/qemu-project/qemu/-/commit/6d701c9bac1d3571e9ad511e01b27df7237f0b13
 
-Fixes:
-https://www.cve.org/CVERecord?id=CVE-2025-29087
+Qemu defconfigs were runtime tested on Gitlab-CI:
+https://gitlab.com/kubu93/buildroot/-/pipelines/1805672685
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-[Julien:
- - reformat patch to be applicable on amalgamated sqlite sources
- - add comment in commit log about patch format
- - add "Fixes:" in commit log
-]
+qemu_s390x_defconfig, qemu_arm_vexpress_tz_defconfig,
+qemu_aarch64_ebbr_defconfig were tested locally.
+
+Runtime tests using host-qemu were locally tested:
+TestXvisor, TestFwts, TestEdk2, TestGrubAArch64EFI.
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...ast-to-avoid-32-bit-integer-overflow-in-t.patch | 36 ++++++++++++++++++++++
- package/sqlite/sqlite.mk                           |  3 ++
- 2 files changed, 39 insertions(+)
+ ...y-build-stubs-for-QAPI-events-when-needed.patch | 45 --------------------
+ ...3-sched_attr-Do-not-define-for-glibc-2.41.patch | 49 ----------------------
+ package/qemu/qemu.hash                             |  2 +-
+ package/qemu/qemu.mk                               |  2 +-
+ 4 files changed, 2 insertions(+), 96 deletions(-)
 
-diff --git a/package/sqlite/0002-Add-a-typecast-to-avoid-32-bit-integer-overflow-in-t.patch b/package/sqlite/0002-Add-a-typecast-to-avoid-32-bit-integer-overflow-in-t.patch
-new file mode 100644
-index 0000000000..cb8b39b1be
---- /dev/null
-+++ b/package/sqlite/0002-Add-a-typecast-to-avoid-32-bit-integer-overflow-in-t.patch
-@@ -0,0 +1,36 @@
-+From 1cbb088f4be95e7a02627f64de60653ef2b13ab5 Mon Sep 17 00:00:00 2001
-+From: drh <>
-+Date: Sun, 16 Feb 2025 10:57:25 +0000
-+Subject: [PATCH] Add a typecast to avoid 32-bit integer overflow in the
-+ concat_ws() function with an enormous separator values and many arguments.
-+
-+Fixes the following CVE:
-+  - CVE-2025-29087: In SQLite 3.44.0 through 3.49.0 before 3.49.1,
-+                    the concat_ws() SQL function can cause memory to be
-+                    written beyond the end of a malloc-allocated buffer.
-+
-+For more info see https://nvd.nist.gov/vuln/detail/CVE-2025-29087
-+
-+Upstream: https://sqlite.org/src/info/498e3f1cf57f164f
-+
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ sqlite3.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/sqlite3.c b/sqlite3.c
-+index 80433f6..8a43734 100644
-+--- a/sqlite3.c
-++++ b/sqlite3.c
-+@@ -130954,7 +130954,7 @@ static void concatFuncCore(
-+   for(i=0; i<argc; i++){
-+     n += sqlite3_value_bytes(argv[i]);
-+   }
-+-  n += (argc-1)*nSep;
-++  n += (argc-1)*(i64)nSep;
-+   z = sqlite3_malloc64(n+1);
-+   if( z==0 ){
-+     sqlite3_result_error_nomem(context);
-+-- 
-+2.49.0
-+
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 218b3f0a1d..037b89918a 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -13,6 +13,9 @@ SQLITE_LICENSE_FILES = tea/license.terms
- SQLITE_CPE_ID_VENDOR = sqlite
- SQLITE_INSTALL_STAGING = YES
+diff --git a/package/qemu/0002-stubs-only-build-stubs-for-QAPI-events-when-needed.patch b/package/qemu/0002-stubs-only-build-stubs-for-QAPI-events-when-needed.patch
+deleted file mode 100644
+index e31eb11909..0000000000
+--- a/package/qemu/0002-stubs-only-build-stubs-for-QAPI-events-when-needed.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From ffd5e7cbc0cf2d1c0984bb453cc9e125c7259436 Mon Sep 17 00:00:00 2001
+-From: Romain Naour <romain.naour@smile.fr>
+-Date: Tue, 7 Jan 2025 21:52:51 +0100
+-Subject: [PATCH] stubs: only build stubs for QAPI events when needed
+-
+-Since commit "stubs: avoid duplicate symbols in libqemuutil.a" [1],
+-Qemu doesn't build with:
+-
+-  ./configure --enable-user --disable-system --enable-tools
+-
+-  /usr/bin/ld: libhwcore.a.p/hw_core_qdev.c.o: in function 'device_finalize':
+-  [...]output/build/host-qemu-9.2.0/build/../hw/core/qdev.c:689:(.text+0x75c): undefined reference to 'qapi_event_send_device_deleted'
+-  collect2: error: ld returned 1 exit status
+-
+-Indeed, with have_system = false and have_tools = true, Qemu needs the
+-stubs for QAPI events added by stub_ss.add(files('qdev.c')) to provide
+-qapi_event_send_device_deleted().
+-
+-Fixes: 388b849fb6c33882b481123568995a749a54f648.
+-
+-[1] https://gitlab.com/qemu-project/qemu/-/commit/388b849fb6c33882b481123568995a749a54f648
+-
+-Upstream: https://gitlab.com/qemu-project/qemu/-/issues/2766
+-
+-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+----
+- stubs/meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/stubs/meson.build b/stubs/meson.build
+-index e91614a874..838a8ca3e3 100644
+---- a/stubs/meson.build
+-+++ b/stubs/meson.build
+-@@ -58,7 +58,7 @@ if have_user
+- 
+-   # Stubs for QAPI events.  Those can always be included in the build, but
+-   # they are not built at all for --disable-system --disable-tools builds.
+--  if not (have_system or have_tools)
+-+  if not have_system and have_tools
+-     stub_ss.add(files('qdev.c'))
+-   endif
+- endif
+--- 
+-2.47.1
+-
+diff --git a/package/qemu/0003-sched_attr-Do-not-define-for-glibc-2.41.patch b/package/qemu/0003-sched_attr-Do-not-define-for-glibc-2.41.patch
+deleted file mode 100644
+index 11edc27c2f..0000000000
+--- a/package/qemu/0003-sched_attr-Do-not-define-for-glibc-2.41.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From 66b1926d72ef51d4d59d0f97061f26a75651e265 Mon Sep 17 00:00:00 2001
+-From: Khem Raj <raj.khem@gmail.com>
+-Date: Fri, 11 Oct 2024 12:31:40 -0700
+-Subject: [PATCH] sched_attr: Do not define for glibc >= 2.41
+-
+-glibc 2.41+ has added [1] definitions for sched_setattr and sched_getattr functions
+-and struct sched_attr. Therefore, it needs to be checked for here as well before
+-defining sched_attr
+-
+-Define sched_attr conditionally on SCHED_ATTR_SIZE_VER0
+-
+-Fixes builds with glibc/trunk
+-
+-[1] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=21571ca0d70302909cf72707b2a7736cf12190a0;hp=298bc488fdc047da37482f4003023cb9adef78f8
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Cc: Laurent Vivier <laurent@vivier.eu>
+-Cc: Paolo Bonzini <pbonzini@redhat.com>
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-Upstream: https://patchwork.kernel.org/project/qemu-devel/patch/20241011193140.1047648-1-raj.khem@gmail.com/
+----
+- linux-user/syscall.c | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/linux-user/syscall.c b/linux-user/syscall.c
+-index 1ce4c79784..a407d4a023 100644
+---- a/linux-user/syscall.c
+-+++ b/linux-user/syscall.c
+-@@ -358,7 +358,8 @@ _syscall3(int, sys_sched_getaffinity, pid_t, pid, unsigned int, len,
+- #define __NR_sys_sched_setaffinity __NR_sched_setaffinity
+- _syscall3(int, sys_sched_setaffinity, pid_t, pid, unsigned int, len,
+-           unsigned long *, user_mask_ptr);
+--/* sched_attr is not defined in glibc */
+-+/* sched_attr is not defined in glibc < 2.41 */
+-+#ifndef SCHED_ATTR_SIZE_VER0
+- struct sched_attr {
+-     uint32_t size;
+-     uint32_t sched_policy;
+-@@ -371,6 +372,7 @@ struct sched_attr {
+-     uint32_t sched_util_min;
+-     uint32_t sched_util_max;
+- };
+-+#endif
+- #define __NR_sys_sched_getattr __NR_sched_getattr
+- _syscall4(int, sys_sched_getattr, pid_t, pid, struct sched_attr *, attr,
+-           unsigned int, size, unsigned int, flags);
+--- 
+-2.34.1
+-
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index 9be69ffbbc..a8b7d688e8 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,4 +1,4 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256  f859f0bc65e1f533d040bbe8c92bcfecee5af2c921a6687c652fb44d089bd894  qemu-9.2.0.tar.xz
++sha256  22c075601fdcf8c7b2671a839ebdcef1d4f2973eb6735254fd2e1bd0f30b3896  qemu-10.0.0.tar.xz
+ sha256  6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 3a2f69ea3c..fdc8591e54 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -6,7 +6,7 @@
  
-+# 0002-Add-a-typecast-to-avoid-32-bit-integer-overflow-in-t.patch
-+SQLITE_IGNORE_CVES = CVE-2025-29087
-+
- ifeq ($(BR2_PACKAGE_SQLITE_STAT4),y)
- SQLITE_CFLAGS += -DSQLITE_ENABLE_STAT4
- endif
+ # When updating the version, check whether the list of supported targets
+ # needs to be updated.
+-QEMU_VERSION = 9.2.0
++QEMU_VERSION = 10.0.0
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+ QEMU_SITE = https://download.qemu.org
+ QEMU_SELINUX_MODULES = qemu virt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
