@@ -1,53 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30A4AC3ABD8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA10FC2D0CD
 	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:58:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0E4370BA9;
-	Mon, 19 May 2025 10:58:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A160845DF;
+	Mon, 19 May 2025 10:58:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VSuSjC6sbc8m; Mon, 19 May 2025 10:58:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gRjPqTCOMFqp; Mon, 19 May 2025 10:58:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5389570B9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1AB6845DB
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5389570B9F;
-	Mon, 19 May 2025 10:58:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F1AB6845DB;
+	Mon, 19 May 2025 10:58:02 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1BB85D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:46 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7DB38D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 43CD540D8C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 80138410B0
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pmomKEYl9p1D for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:22 +0000 (UTC)
+ id 365JG1eQEblx for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D81240E2E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9EA994145A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5D81240E2E
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9EA994145A
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 54204872E7; Mon, 19 May 2025 10:40:00 +0000 (UTC)
+ id 9691C872E7; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 May 2025 15:20:22 +0200
+Date: Wed, 7 May 2025 18:30:02 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d5826736d5aa63eb818a5d20338b7b698f66dad7
-X-Git-Newrev: a028f0a51de0ed04915bd38e6dbc28a4d08a8089
+X-Git-Oldrev: b8134a1195f5111d80cfa67104fca847f0881e63
+X-Git-Newrev: da69e45341226510359f0563dd459c6e0b8f2e63
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104000.54204872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/psplash: add support
- for fullscreen config option
+Message-Id: <20250519103959.9691C872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/redis: bump to v8.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,61 +64,117 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a028f0a51de0ed04915bd38e6dbc28a4d08a8089
+commit: https://git.buildroot.net/buildroot/commit/?id=da69e45341226510359f0563dd459c6e0b8f2e63
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add support for a psplash configure option:
-  --enable-img-fullscreen, via BR2_PACKAGE_PSPLASH_FULL_SCREEN
+Since 8.0.0, Redis now uses the fastfloat library as a bundled
+dependency, and this library is written in C++ (even though the
+rest of Redis is in plain C).
 
-The Buildroot option will default to 'n' to be compatible with
-the previous behaviour, as it was disabled by default in psplash.
+Therefore, we now require a toolchain with C++ support.
 
-Note: the --enable-img-fullscreen configure option has been supported
-in psplash since upstream commit:
-https://git.yoctoproject.org/psplash/commit/?id=773a3977d255e8f59a741ad6ce37c4d40f1feaa1
+From https://github.com/redis/redis/blob/8.0.0/00-RELEASENOTES:
 
-Signed-off-by: Olivier Benjamin <olivier.benjamin@bootlin.com>
-[Julien: add note in commit log about upstream support]
+=======================================================
+8.0 GA (v8.0.0)    Released Fri 2 May 2025 12:00:00 IST
+=======================================================
+
+This is the General Availability release of Redis Open Source 8.0.
+
+Redis 8.0 deprecates previous Redis and Redis Stack versions.
+
+Stand alone RediSearch, RedisJSON, RedisTimeSeries, and RedisBloom are no longer needed as they are now part of Redis.
+
+- Name change: Redis Community Edition is now Redis Open Source
+- License change: licensed under your choice of
+  - (a) the Redis Source Available License 2.0 (RSALv2); or
+  - (b) the Server Side Public License v1 (SSPLv1); or
+  - (c) the GNU Affero General Public License (AGPLv3)
+- Redis Query engine and 8 new data structures are now an integral part of Redis 8
+  - (1) Redis Query Engine, which now supports both horizontal and vertical scaling for search, query and vector workloads
+  - (2) JSON - a queryable JSON document
+  - (3) Time series
+  - (4-8) Five probabilistic data structures: Bloom filter, Cuckoo filter, Count-min sketch, Top-k, and t-digest
+  - (9) Vector set [beta] - a data structure designed for Vector Similarity Search, inspired by Sorted set
+  - These nine components are included in all binary distributions
+
+  - See instructions in the README.md file on how to build from source with all these components
+  - New configuration file: redis-full.conf - loads Redis with all these components,
+    and contains new configuration parameters for Redis Query engine and the new data structures
+  - New ACL categories: @search, @json, @timeseries, @bloom, @cuckoo, @cms, @topk, @tdigest
+  - Commands are also included in the existing ACL categories (@read, @write, etc.)
+
+- More than 30 performance and resource utilization improvements
+- A new I/O threading implementation which enables throughput increase on multi-core environments
+  (set with `io-threads` configuration parameter)
+- An improved replication mechanism which is more performant and robust
+- New hash commands - `HGETDEL`, `HGETEX`, `HSETEX`
+
+For more details, see the release notes of 8.0-M01, 8.0-M02, 8.0-M03,8.0-M04, and 8.0-RC1
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/psplash/Config.in  | 6 ++++++
- package/psplash/psplash.mk | 6 ++++++
- 2 files changed, 12 insertions(+)
+ package/redis/Config.in  | 5 +++--
+ package/redis/redis.hash | 4 ++--
+ package/redis/redis.mk   | 8 +++++---
+ 3 files changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/package/psplash/Config.in b/package/psplash/Config.in
-index 61162fa583..ca39cd0ee3 100644
---- a/package/psplash/Config.in
-+++ b/package/psplash/Config.in
-@@ -47,6 +47,12 @@ config BR2_PACKAGE_PSPLASH_STARTUP_MSG
+diff --git a/package/redis/Config.in b/package/redis/Config.in
+index a2239b4a54..ed11ce8c2e 100644
+--- a/package/redis/Config.in
++++ b/package/redis/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_REDIS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # _Atomic keyword
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_setname_np()
++	depends on BR2_INSTALL_LIBSTDCPP # fastfloat bundled dep is in C++
  	help
- 	  Enable text banner output on startup.
+ 	  Redis is an open source (BSD licensed), in-memory data
+ 	  structure store, used as a database, cache and message
+@@ -15,8 +16,8 @@ config BR2_PACKAGE_REDIS
  
-+config BR2_PACKAGE_PSPLASH_FULL_SCREEN
-+	bool "use fullscreen mode"
-+	default n
-+	help
-+	  Enable displaying the psplash image in fullscreen mode.
-+
- endif
+ 	  http://www.redis.io
  
- comment "psplash needs a toolchain w/ wchar"
-diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
-index 62268e778b..bb249e7de8 100644
---- a/package/psplash/psplash.mk
-+++ b/package/psplash/psplash.mk
-@@ -31,6 +31,12 @@ else
- PSPLASH_CONF_OPTS += --disable-startup-msg
- endif
+-comment "redis needs a toolchain w/ gcc>=4.9, dynamic library, nptl"
++comment "redis needs a toolchain w/ gcc>=4.9, dynamic library, nptl, C++"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index e01fc6a601..13845bd7a2 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/redis/redis-hashes/blob/master/README
+-sha256  72c081e3b8cfae7144273d26d76736f08319000af46c01515cad5d29765cead5  redis-7.2.7.tar.gz
++sha256  cf395665ba5fcecc4ef7aed1d8ab19c268619d98595827565c82344160171262  redis-8.0.0.tar.gz
  
-+ifeq ($(BR2_PACKAGE_PSPLASH_FULL_SCREEN),y)
-+PSPLASH_CONF_OPTS += --enable-img-fullscreen
-+else
-+PSPLASH_CONF_OPTS += --disable-img-fullscreen
-+endif
-+
- PSPLASH_IMAGE = $(call qstrip,$(BR2_PACKAGE_PSPLASH_IMAGE))
+ # Locally calculated
+-sha256  97f0a15b7bbae580d2609dad2e11f1956ae167be296ab60f4691ab9c30ee9828  COPYING
++sha256  a797fcaa899397001f7fb0097583db96bcc74e9b0606c95435d8a293d84cdb76  LICENSE.txt
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index 7eb30abc4c..7ef4401123 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,10 +4,12 @@
+ #
+ ################################################################################
  
- ifneq ($(PSPLASH_IMAGE),)
+-REDIS_VERSION = 7.2.7
++REDIS_VERSION = 8.0.0
+ REDIS_SITE = http://download.redis.io/releases
+-REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+-REDIS_LICENSE_FILES = COPYING
++REDIS_LICENSE = \
++	AGPL-3.0 or SSPL-1.0 or RSAL-2.0 (core); \
++	MIT and BSD family licenses (Bundled components)
++REDIS_LICENSE_FILES = LICENSE.txt
+ REDIS_CPE_ID_VENDOR = redislabs
+ REDIS_SELINUX_MODULES = redis
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
