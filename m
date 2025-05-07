@@ -4,72 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F554C3ABC0
-	for <buildroot@archiver.kernel.org>; Wed,  7 May 2025 21:19:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0C01C3ABBF
+	for <buildroot@archiver.kernel.org>; Wed,  7 May 2025 21:21:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 10E626134B;
-	Wed,  7 May 2025 21:19:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5701961386;
+	Wed,  7 May 2025 21:21:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xqmrd1C9MOWV; Wed,  7 May 2025 21:19:10 +0000 (UTC)
+ id GnKMhqViRKDh; Wed,  7 May 2025 21:21:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2A3CF612E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1459361325
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A3CF612E8;
-	Wed,  7 May 2025 21:19:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 55C5815A
- for <buildroot@buildroot.org>; Wed,  7 May 2025 21:19:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1459361325;
+	Wed,  7 May 2025 21:21:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 743C515A
+ for <buildroot@buildroot.org>; Wed,  7 May 2025 21:21:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4731B83DBE
- for <buildroot@buildroot.org>; Wed,  7 May 2025 21:19:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 65B1383DD2
+ for <buildroot@buildroot.org>; Wed,  7 May 2025 21:21:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8W2I1OMgaCFj for <buildroot@buildroot.org>;
- Wed,  7 May 2025 21:19:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F272383DC5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F272383DC5
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F272383DC5
- for <buildroot@buildroot.org>; Wed,  7 May 2025 21:19:06 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 02DF143A0C;
- Wed,  7 May 2025 21:19:02 +0000 (UTC)
-Date: Wed, 7 May 2025 23:19:02 +0200
+ id xTkdcAGIcEzi for <buildroot@buildroot.org>;
+ Wed,  7 May 2025 21:21:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5AD5783DD1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AD5783DD1
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5AD5783DD1
+ for <buildroot@buildroot.org>; Wed,  7 May 2025 21:21:17 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id
+ ffacd0b85a97d-39c266c1389so222757f8f.1
+ for <buildroot@buildroot.org>; Wed, 07 May 2025 14:21:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1746652875; x=1747257675;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=WxyJAb0QAdp0dCP2ucqRt+1LUnv1QBQtyvrEwbIbv1k=;
+ b=v/Yz0IzHv2M/VQL9y5QmUw6232JaEuuQUqO4MGB5ScecESdouIQMU2b5WTvrUDCdaR
+ 0WMAT7kdtTptlqOgc6srfRfHQSWUW3B5fUB334cUBArhqOgI/QK0vw3b33jhq+NfcpzC
+ 2D7GTN2qee1XMOU3un4cEdb9IQKQWBUunuvvQdqFLjtAU/CzKhIepr5VmiyfVNmxzqP/
+ gN1ltPPlM4eTGCIo9gR0a643arJr83BZEbC0E/yHyCK8TJ3LVrwwV6dr3OHqTqpcbM3L
+ 4nZlZN2yisMp0UvPQHYXIBzO7gPk2dukw5Uh+FJAXrsANkSPGXXHIBkMtbwjvcoaQme0
+ iw3A==
+X-Gm-Message-State: AOJu0YyXrsUVEur/Dyla5DP3tpROJrkjwZmTZvqDS50XAxAebpycdobx
+ sGfVMWT8FsVTSJWiJ0/f8ELB7cxjc7ei2kqgm34rRCecONIRi5Oe2Z4L5Eg3DABCkvrI6WJQB1g
+ Q
+X-Gm-Gg: ASbGncslyR+ASlmBTjoQCNJnpZyVH/wvA/SzsssOFdD1rBB/r9Z//26Xz5e4YLjM19D
+ kh5Z/oL1LZ0+lpUrwxDtXJfYh4o6OSL2FFPtwmegNSInljxZRC4IntY04fo14wz47aUgAngi6+d
+ bk2JC7y/N/23X3CzkWhLT5gKTleqq/Wl+S+KrqMmJU6SkOPuKpU/7ZlU/zt2fFqB+C/AFHvAUFg
+ Fa0A1d+cZmRbiYpHqWP47nQWW2eMbZvoVmXHqllfsAv7t2QoK6nJNSc3i34SBUCRymsOOTMXNs7
+ tnstCuJgAEEh0OjRiChXkLos9SC0YQz4VyRDTK8gwgKGiMHUgE0oM/95kqsu3Od1bF52WYP1NnT
+ Ob6AUhsQLMweDo21NzGvytl9uLIdzt1CXt4ytMV4=
+X-Google-Smtp-Source: AGHT+IGy6hKXZ5P10GwBVoFuUS+5OMNdaumFWYhJowwad1JeU6CpZQjxi1wM5CMYkaGrV7lOx6edoA==
+X-Received: by 2002:a05:6000:2512:b0:3a0:8495:cb75 with SMTP id
+ ffacd0b85a97d-3a0ba0998c1mr409717f8f.9.1746652875407; 
+ Wed, 07 May 2025 14:21:15 -0700 (PDT)
+Received: from P-NTS-Evian.home
+ (2a01cb05949d580083fd25921c9c7a4f.ipv6.abo.wanadoo.fr.
+ [2a01:cb05:949d:5800:83fd:2592:1c9c:7a4f])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-442cd3b7e7fsm13109785e9.39.2025.05.07.14.21.15
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 07 May 2025 14:21:15 -0700 (PDT)
 To: buildroot@buildroot.org
-Message-ID: <20250507231902.14cbc9aa@windsurf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Cc: Romain Naour <romain.naour@smile.fr>
+Date: Wed,  7 May 2025 23:21:11 +0200
+Message-ID: <20250507212111.748688-3-romain.naour@smile.fr>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250507212111.748688-1-romain.naour@smile.fr>
+References: <20250507212111.748688-1-romain.naour@smile.fr>
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvkeejledvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepffduudeflefhuddtleekgeeiudetheethfekvdfhvdefudelieektdegleegvdejnecuffhomhgrihhnpeguvggsihgrnhdrohhrghdpghhnuhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgduleemledvtdgsmeegjedttdemrgdvfheimegukegukeemhegtvggtmegshegvgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudelmeelvddtsgemgeejtddtmegrvdhfieemugekugekmeehtggvtgemsgehvgegpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeipdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopegrrhhnohhuthesrhhnohhuthdrs
- ggvpdhrtghpthhtohepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdprhgtphhtthhopehjuhdrohesfhhrvggvrdhfrhdprhgtphhtthhopehrohhmrghinhdrnhgrohhurhesshhmihhlvgdrfhhrpdhrtghpthhtohepthhhohhmrghsrdhpvghrrghlvgesmhhinhgurdgsvg
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1746652743;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding;
- bh=a3jAsh3+Lft9s1ZRDtW8Qx6G4JKChFLBmchjgAbmntc=;
- b=NwJ+SuC2ftMfDQP8ovYtvdrdSCTYteZelYFb7n7ZHV9jERrdYZVClCC+ziTuk+4dX51ZvU
- GrkWacwGuspzpdbUvYrfdu4EA78lmxShFwbNVjH9PIXAckfvgyQf0got0zaPqApfJUQIzG
- +u3+BBgl0pgM1NbJEjLSjUK6qQ+WE6ecoEqH7HxlXxmHKGDydk7i/WN/yV8avA6Vx7ceD3
- kNmHbqddYsx8opspyNPkmeLHhwy5Q9ekCgr8lOZUuA0AEDx/DSJYLjmqEH1QRS6D1Pk1sU
- 8AxAAylt//GSHYXdKIOU+5PpW38YSDWDRJTq2Z1XO/7c3c0mScJBm64ughlHRg==
+ d=smile.fr; s=google; t=1746652875; x=1747257675; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=WxyJAb0QAdp0dCP2ucqRt+1LUnv1QBQtyvrEwbIbv1k=;
+ b=BoRF7jYB601cjZBDt5KgmVajhSNRU8FuZ0bD9qtf1dL61wnqLohBYn84awc/HgjhnB
+ PejJB7ju5DUqVDAK+y9a+f+hwcQ0V+TmLkG2iYU1LoF0EDXhwRULNYZ2yQDOkCw22G4k
+ 2FedmQzGZ0Km87k/H3mMQTBNaIVKOyFcYEwzI=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ header.from=smile.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=NwJ+SuC2
-Subject: [Buildroot] Grub security situation
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=BoRF7jYB
+Subject: [Buildroot] [PATCH 3/3] configs/qemu_ppc*: backport a patch for GCC
+ 15.x compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,60 +110,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Perale <thomas.perale@mind.be>, Julien Olivain <ju.o@free.fr>,
- Romain Naour <romain.naour@smile.fr>
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+powerpc kernel maintainer merged a patch [1] for GCC 15.x compatibility
+that will likely be merged upstream soon.
 
-The latest pkg-stats scan reported to me a number of grub2 security
-issues:
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=5a821e2d69e26b51b7f3740b6b0c3462b8cacaff
 
-                         grub2 | CVE-2024-45778   | https://security-tracker.debian.org/tracker/CVE-2024-45778  
-                         grub2 | CVE-2024-45782   | https://security-tracker.debian.org/tracker/CVE-2024-45782  
-                         grub2 | CVE-2024-45779   | https://security-tracker.debian.org/tracker/CVE-2024-45779  
-                         grub2 | CVE-2024-45780   | https://security-tracker.debian.org/tracker/CVE-2024-45780  
-                         grub2 | CVE-2025-0678    | https://security-tracker.debian.org/tracker/CVE-2025-0678   
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ ...2-powerpc-boot-Fix-build-with-gcc-15.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 board/qemu/patches/linux/0002-powerpc-boot-Fix-build-with-gcc-15.patch
 
-Looking at that in some details, there are in fact a LOT more CVEs:
-
-  https://lists.gnu.org/archive/html/grub-devel/2025-02/msg00024.html
-
-Many of them are not reported by pkg-stats because NVD has not
-annotated those CVEs (meh).
-
-Now when it becomes a bit tricky is that those CVEs are fixed by 73
-patches. All of them have been applied upstream, but they are
-apparently not trivial to backport on grub 2.12.
-
-See Arch people complaining here:
-
-  https://lists.gnu.org/archive/html/grub-devel/2025-02/msg00124.html
-  https://lists.gnu.org/archive/html/grub-devel/2025-02/msg00098.html
-
-There are currently 284 commits in grub's master on top of the 2.12
-version we're using. Backporting the 73 patches fixing the security
-issues seems complicated, and having all 284 commits as patches in
-Buildroot also seems not very practical.
-
-So the only solution that I can see right now is to used grub's master
-branch (of course with a fixed commit). Of course, for 2025.02, this
-means we would bump grub to a newer version that not only has security
-fixes, but also a whole bunch of other random changes. But that's how
-grub is maintained, and I'm not sure what we can do about it.
-
-Opinions? Thoughts? Suggestions?
-
-Thomas
+diff --git a/board/qemu/patches/linux/0002-powerpc-boot-Fix-build-with-gcc-15.patch b/board/qemu/patches/linux/0002-powerpc-boot-Fix-build-with-gcc-15.patch
+new file mode 100644
+index 0000000000..78a4034a32
+--- /dev/null
++++ b/board/qemu/patches/linux/0002-powerpc-boot-Fix-build-with-gcc-15.patch
+@@ -0,0 +1,38 @@
++From 2d04c5b3c5728cd5e5202176e8796ffc0085c24a Mon Sep 17 00:00:00 2001
++From: Michal Suchanek <msuchanek@suse.de>
++Date: Mon, 31 Mar 2025 12:57:19 +0200
++Subject: [PATCH] powerpc/boot: Fix build with gcc 15
++
++Similar to x86 the ppc boot code does not build with GCC 15.
++
++Copy the fix from
++commit ee2ab467bddf ("x86/boot: Use '-std=gnu11' to fix build with GCC 15")
++
++Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?h=next-test&id=5a821e2d69e26b51b7f3740b6b0c3462b8cacaff
++
++Signed-off-by: Michal Suchanek <msuchanek@suse.de>
++Tested-by: Amit Machhiwal <amachhiw@linux.ibm.com>
++Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
++Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
++Link: https://patch.msgid.link/20250331105722.19709-1-msuchanek@suse.de
++[Romain: backport to 6.12.27]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ arch/powerpc/boot/Makefile | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/arch/powerpc/boot/Makefile b/arch/powerpc/boot/Makefile
++index fa8518067d38..60a495771c05 100644
++--- a/arch/powerpc/boot/Makefile
+++++ b/arch/powerpc/boot/Makefile
++@@ -70,6 +70,7 @@ BOOTCPPFLAGS	:= -nostdinc $(LINUXINCLUDE)
++ BOOTCPPFLAGS	+= -isystem $(shell $(BOOTCC) -print-file-name=include)
++ 
++ BOOTCFLAGS	:= $(BOOTTARGETFLAGS) \
+++		   -std=gnu11 \
++ 		   -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
++ 		   -fno-strict-aliasing -O2 \
++ 		   -msoft-float -mno-altivec -mno-vsx \
++-- 
++2.49.0
++
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.49.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
