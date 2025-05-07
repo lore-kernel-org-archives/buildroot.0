@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 381DFC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:57:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43780C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:57:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B90370B27;
-	Mon, 19 May 2025 10:57:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 497AC70B3F;
+	Mon, 19 May 2025 10:57:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4260bEJFf_pL; Mon, 19 May 2025 10:57:29 +0000 (UTC)
+ id 1WPS6XBKjH0J; Mon, 19 May 2025 10:57:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C862670B2B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37C5770B36
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C862670B2B;
-	Mon, 19 May 2025 10:57:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37C5770B36;
+	Mon, 19 May 2025 10:57:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 56A2DD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:30 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 689EED4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BBF8F41270
+ by smtp4.osuosl.org (Postfix) with ESMTP id F1DC540E62
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Fod3hPbAuHzs for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:19 +0000 (UTC)
+ id sd4BXz5tFw6c for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D33AA413BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C0634410C3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D33AA413BE
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C0634410C3
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CE0B782A2E; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+ id BCD178348A; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 5 May 2025 22:23:01 +0200
+Date: Wed, 7 May 2025 22:03:18 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a36d5fd2f8283b849d7b0837cefdb2c2ed1dff51
-X-Git-Newrev: 299f803cad1cec354529224a721c598b3d2fb3fb
+X-Git-Oldrev: e3cae9e1ca4765da825c9ee94760e12f5c6c142a
+X-Git-Newrev: 835b5659ea576290458aa17d2119b2ec13ebf0a0
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103958.CE0B782A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/xilinx: add
- xilinx-fpgautil to xilinx defconfigs
+Message-Id: <20250519103959.BCD178348A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sqlite: add patch to
+ fix CVE-2025-29087
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,189 +65,96 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=299f803cad1cec354529224a721c598b3d2fb3fb
+commit: https://git.buildroot.net/buildroot/commit/?id=835b5659ea576290458aa17d2119b2ec13ebf0a0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This adds the xilinx-fpgautil application to all Xilinx zynq, zynqmp and
-versal defconfigs.
+This patch was commited upstream, and released as part of sqlite 3.49.1
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-[Luca: build-tested only]
-Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+However, the configuration system changed between sqlite 3.48 and 3.49
+from autotools to autosetup, and this has proven challenging to support
+in Buildroot (see `git log package/sqlite`), hence why we are still on
+sqlite 3.48.
+
+Therefore, until the package build infrastructure correctly supports
+building sqlite 3.49, let's simply import the upstream patch to address
+the CVE.
+
+Note: the upstream patch is on the orignal sqlite sources. Buildroot is
+using the sqlite "amalgamation" source archive, which basically
+concatenate all the source files in a single "sqlite3.c" file. So the
+patch was reformated to apply correctly on the sqlite release archive.
+
+Fixes:
+https://www.cve.org/CVERecord?id=CVE-2025-29087
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+[Julien:
+ - reformat patch to be applicable on amalgamated sqlite sources
+ - add comment in commit log about patch format
+ - add "Fixes:" in commit log
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/versal_vck190_defconfig     | 1 +
- configs/versal_vek280_defconfig     | 1 +
- configs/versal_vpk180_defconfig     | 1 +
- configs/zynq_microzed_defconfig     | 1 +
- configs/zynq_zc702_defconfig        | 1 +
- configs/zynq_zc706_defconfig        | 1 +
- configs/zynq_zed_defconfig          | 1 +
- configs/zynqmp_kria_kd240_defconfig | 1 +
- configs/zynqmp_kria_kr260_defconfig | 1 +
- configs/zynqmp_kria_kv260_defconfig | 1 +
- configs/zynqmp_zcu102_defconfig     | 1 +
- configs/zynqmp_zcu104_defconfig     | 1 +
- configs/zynqmp_zcu106_defconfig     | 1 +
- 13 files changed, 13 insertions(+)
+ ...ast-to-avoid-32-bit-integer-overflow-in-t.patch | 36 ++++++++++++++++++++++
+ package/sqlite/sqlite.mk                           |  3 ++
+ 2 files changed, 39 insertions(+)
 
-diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
-index 2f40c210a8..368133e916 100644
---- a/configs/versal_vck190_defconfig
-+++ b/configs/versal_vck190_defconfig
-@@ -15,6 +15,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vck190-rev1.1"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
-index af8bed884f..1d83e55499 100644
---- a/configs/versal_vek280_defconfig
-+++ b/configs/versal_vek280_defconfig
-@@ -15,6 +15,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vek280-revB"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/versal_vpk180_defconfig b/configs/versal_vpk180_defconfig
-index afa606ec8c..7729c655c3 100644
---- a/configs/versal_vpk180_defconfig
-+++ b/configs/versal_vpk180_defconfig
-@@ -15,6 +15,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vpk180-revA"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
-index b9b2da3849..f9be297b99 100644
---- a/configs/zynq_microzed_defconfig
-+++ b/configs/zynq_microzed_defconfig
-@@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynq-microzed"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
-diff --git a/configs/zynq_zc702_defconfig b/configs/zynq_zc702_defconfig
-index ab42abe655..4c6361a9b7 100644
---- a/configs/zynq_zc702_defconfig
-+++ b/configs/zynq_zc702_defconfig
-@@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynq-zc702"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
-diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
-index d7ce9cf11a..bc853f522d 100644
---- a/configs/zynq_zc706_defconfig
-+++ b/configs/zynq_zc706_defconfig
-@@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynq-zc706"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
-diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
-index c9e8e7ea2c..d0fbaf2ea5 100644
---- a/configs/zynq_zed_defconfig
-+++ b/configs/zynq_zed_defconfig
-@@ -16,6 +16,7 @@ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynq-zed"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
-diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
-index 261b73d6cf..4ba4be861f 100644
---- a/configs/zynqmp_kria_kd240_defconfig
-+++ b/configs/zynqmp_kria_kd240_defconfig
-@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k24-revA-sck-kd-g-revA"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
-index 2cf2b98aa5..fdd868bbb5 100644
---- a/configs/zynqmp_kria_kr260_defconfig
-+++ b/configs/zynqmp_kria_kr260_defconfig
-@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kr-g-revB"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
-index ef6a23f2a2..ff03f87b54 100644
---- a/configs/zynqmp_kria_kv260_defconfig
-+++ b/configs/zynqmp_kria_kv260_defconfig
-@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kv-g-revB"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
-index 762a54d968..856c1d896d 100644
---- a/configs/zynqmp_zcu102_defconfig
-+++ b/configs/zynqmp_zcu102_defconfig
-@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
-index 92e0d41736..c21058be74 100644
---- a/configs/zynqmp_zcu104_defconfig
-+++ b/configs/zynqmp_zcu104_defconfig
-@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu104-revC"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
-diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
-index 51287fdffb..5e13c39a1a 100644
---- a/configs/zynqmp_zcu106_defconfig
-+++ b/configs/zynqmp_zcu106_defconfig
-@@ -14,6 +14,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_XILINX_FPGAUTIL=y
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- # BR2_TARGET_ROOTFS_TAR is not set
+diff --git a/package/sqlite/0002-Add-a-typecast-to-avoid-32-bit-integer-overflow-in-t.patch b/package/sqlite/0002-Add-a-typecast-to-avoid-32-bit-integer-overflow-in-t.patch
+new file mode 100644
+index 0000000000..cb8b39b1be
+--- /dev/null
++++ b/package/sqlite/0002-Add-a-typecast-to-avoid-32-bit-integer-overflow-in-t.patch
+@@ -0,0 +1,36 @@
++From 1cbb088f4be95e7a02627f64de60653ef2b13ab5 Mon Sep 17 00:00:00 2001
++From: drh <>
++Date: Sun, 16 Feb 2025 10:57:25 +0000
++Subject: [PATCH] Add a typecast to avoid 32-bit integer overflow in the
++ concat_ws() function with an enormous separator values and many arguments.
++
++Fixes the following CVE:
++  - CVE-2025-29087: In SQLite 3.44.0 through 3.49.0 before 3.49.1,
++                    the concat_ws() SQL function can cause memory to be
++                    written beyond the end of a malloc-allocated buffer.
++
++For more info see https://nvd.nist.gov/vuln/detail/CVE-2025-29087
++
++Upstream: https://sqlite.org/src/info/498e3f1cf57f164f
++
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ sqlite3.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/sqlite3.c b/sqlite3.c
++index 80433f6..8a43734 100644
++--- a/sqlite3.c
+++++ b/sqlite3.c
++@@ -130954,7 +130954,7 @@ static void concatFuncCore(
++   for(i=0; i<argc; i++){
++     n += sqlite3_value_bytes(argv[i]);
++   }
++-  n += (argc-1)*nSep;
+++  n += (argc-1)*(i64)nSep;
++   z = sqlite3_malloc64(n+1);
++   if( z==0 ){
++     sqlite3_result_error_nomem(context);
++-- 
++2.49.0
++
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 218b3f0a1d..037b89918a 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -13,6 +13,9 @@ SQLITE_LICENSE_FILES = tea/license.terms
+ SQLITE_CPE_ID_VENDOR = sqlite
+ SQLITE_INSTALL_STAGING = YES
+ 
++# 0002-Add-a-typecast-to-avoid-32-bit-integer-overflow-in-t.patch
++SQLITE_IGNORE_CVES = CVE-2025-29087
++
+ ifeq ($(BR2_PACKAGE_SQLITE_STAT4),y)
+ SQLITE_CFLAGS += -DSQLITE_ENABLE_STAT4
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
