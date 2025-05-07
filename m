@@ -4,74 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5381BC3ABBF
-	for <buildroot@archiver.kernel.org>; Wed,  7 May 2025 17:38:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFAABC3ABBF
+	for <buildroot@archiver.kernel.org>; Wed,  7 May 2025 18:31:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FF7C611CB;
-	Wed,  7 May 2025 17:38:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BEE186128D;
+	Wed,  7 May 2025 18:31:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PKfAU6uANqnm; Wed,  7 May 2025 17:38:44 +0000 (UTC)
+ id l8b6ia-1QcnV; Wed,  7 May 2025 18:31:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54268611E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD40F6122A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54268611E3;
-	Wed,  7 May 2025 17:38:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 92A3715A
- for <buildroot@buildroot.org>; Wed,  7 May 2025 17:38:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD40F6122A;
+	Wed,  7 May 2025 18:31:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E0BA4439
+ for <buildroot@buildroot.org>; Wed,  7 May 2025 18:31:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 77E71611CB
- for <buildroot@buildroot.org>; Wed,  7 May 2025 17:38:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D20F36122A
+ for <buildroot@buildroot.org>; Wed,  7 May 2025 18:31:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JSftT7a1LlIC for <buildroot@buildroot.org>;
- Wed,  7 May 2025 17:38:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9F7CB6082D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F7CB6082D
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9F7CB6082D
- for <buildroot@buildroot.org>; Wed,  7 May 2025 17:38:41 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 5C9E219F5B2;
- Wed,  7 May 2025 19:38:37 +0200 (CEST)
-Received: from lfbn-mon-1-146-106.w86-210.abo.wanadoo.fr
- ([86.210.113.106:51980])
- via lfbn-mon-1-146-106.w86-210.abo.wanadoo.fr ([86.210.113.106])
- by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Wed, 07 May 2025 19:38:37 +0200
+ id rprdRGp3j_OD for <buildroot@buildroot.org>;
+ Wed,  7 May 2025 18:31:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.175.196.64;
+ helo=euk33.eukhosting.net; envelope-from=buildroot@cairnwater.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AFBDC6121C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFBDC6121C
+Received: from euk33.eukhosting.net (euk33.eukhosting.net [213.175.196.64])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AFBDC6121C
+ for <buildroot@buildroot.org>; Wed,  7 May 2025 18:31:33 +0000 (UTC)
+Received: from [::1] (port=51920 helo=euk33.eukhosting.net)
+ by euk33.eukhosting.net with esmtpa (Exim 4.98.1)
+ (envelope-from <buildroot@cairnwater.com>)
+ id 1uCjYI-0000000EHRc-2xjy; Wed, 07 May 2025 19:31:30 +0100
 MIME-Version: 1.0
-Date: Wed, 07 May 2025 19:38:37 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Florian Larysch <fl@n621.de>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20250507170752.24643-1-fl@n621.de>
-References: <20250507170752.24643-1-fl@n621.de>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <086ee14ef3323844cfdc78cd5ef01b6c@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1746639518;
- bh=nqxWRRUKn7U0EDjco5sIaqQNntsEQIiBjUWmeDZxYeY=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=KVTgi5w1e16BoUwpx+f9jlw06sZNT6tGTVxrQGM5eHxiBw0sU3sZ3LkVgzPCo7X5r
- hB2zsQZbemte+Px6e6uXhqGpN4KdXtYUr3pm/tslx62yIBChXg4rjXN9sGTfyHWxaU
- wiXn92/Sb2R4d8St6RUdZZj/ZPOUZa+4xtiEagAsw/PZqkJyM3m41vtwIqzrjeVq8E
- CeU3WQJnnj71FNDHpd2eMT6AURop8dlNz/dDFUmBISLcxBeCmw/QBi8OfIXjZIyt5Q
- dwlfDhgiU+hYtJiTfz+v0Nyx2t/oWU7DtdhISIfdpm2eyvVzcqZnTv+C/BXF6rRpfG
- eUlrLEEbaYbDQ==
+Date: Wed, 07 May 2025 19:31:30 +0100
+From: buildroot@cairnwater.com
+To: Fiona Klute <fiona.klute@gmx.de>
+Cc: Buildroot <buildroot@buildroot.org>
+In-Reply-To: <b1d889ab-e5ce-4ff5-aaef-210e10c2c1cf@gmx.de>
+References: <ddbed9a95b8f787377152092229828fd@cairnwater.com>
+ <b1d889ab-e5ce-4ff5-aaef-210e10c2c1cf@gmx.de>
+User-Agent: Roundcube Webmail/1.6.9
+Message-ID: <ce099431e6ef3f34d075533934004d29@cairnwater.com>
+X-Sender: buildroot@cairnwater.com
+X-AntiAbuse: This header was added to track abuse,
+ please include it with any abuse report
+X-AntiAbuse: Primary Hostname - euk33.eukhosting.net
+X-AntiAbuse: Original Domain - buildroot.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - cairnwater.com
+X-Get-Message-Sender-Via: euk33.eukhosting.net: authenticated_id:
+ buildroot@cairnwater.com
+X-Authenticated-Sender: euk33.eukhosting.net: buildroot@cairnwater.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; 
+ d=cairnwater.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+ Message-ID:References:In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender
+ :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+ Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+ List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+ bh=BjQQb27aro5mgva2CNtvyX3JytU8txeNF7PafPEA+FQ=; b=GQ80qohBdPrPDiZQPhRDZyRt9o
+ Ti0Ugka2ZHELIbp427oRIHNqmsNO2/SwzeKILaiyjZpMcodwefoGz3Zp3fCfeOio2IHWZdyqnuXKK
+ djvN6UdD1sEkgju1z9K2xsA/Ki21FZ7k826jlvxEsIX1agXXQB399so0q0YFMstiw0N8uVBcoF+LD
+ BdlNbmmr4c1Yfs7XWpJ0b6nM4NcuRh5Dncrx0woaOY4pWEtiaZp8TqPqssnP1Tl210jxLApWXEhkQ
+ BELSLp37UBcElrUZyLwfFp1ygacW+P8m/34PQo5LQyFBfIYTGvG9RPaov1dsZ80VgOaJmcU+i3rqE
+ sg7OP0zA==;
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
+ dmarc=none (p=none dis=none)
+ header.from=cairnwater.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=KVTgi5w1
-Subject: Re: [Buildroot] [PATCH 1/1] package/cpio: fix build with GCC 15
+ dkim=pass (2048-bit key) header.d=cairnwater.com header.i=@cairnwater.com
+ header.a=rsa-sha256 header.s=default header.b=GQ80qohB
+Subject: Re: [Buildroot] Adding Device Tree Overlays for MIPI-CSI2 Camera
+ and libcamera to a buildroot Build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,35 +101,71 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Florian,
+Hi Fiona,
 
-On 07/05/2025 19:07, Florian Larysch wrote:
-> On systems running GCC 15, host-cpio will fail to build with errors 
-> like
-> 
->   copyout.c:646:12: error: too many arguments to function 'xstat'; 
-> expected 0, have 2
-> 
-> and
-> 
->   main.c:407:13: error: assignment to 'int (*)(void)' from incompatible 
-> pointer type 'int (*)(const char * restrict,  struct stat * restrict)' 
-> [-Wincompatible-pointer-types]
-> 
-> This was reported[1] and fixed upstream, but there is no new release
-> yet. Import the upstream patch for now.
-> 
-> [1] https://lists.gnu.org/archive/html/bug-cpio/2025-05/msg00000.html
-> 
-> Signed-off-by: Florian Larysch <fl@n621.de>
+Thank you very much! That's a big help to know to use 
+BR2_LINUX_KERNEL_CUSTOM_DTS_DIR for that.
 
-I applied this patch to master, thanks.
-I also made few minor changes. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/e3cae9e1ca4765da825c9ee94760e12f5c6c142a
+What directory structure is needed for the overlays? Just the DTO files 
+in a directory or something more complicated?
 
-Best regards,
+> From there you'll need to adjust the boot process for your board to 
+> actually apply the overlay. If you want to send a patch, the 
+> BR2_LINUX_KERNEL_CUSTOM_DTS_DIR should be inside the board directory.
 
-Julien.
+Thank you very much. I don't know how to do that. What's the best way to 
+get the boot process to apply the overlay? I'd heard that it can be done 
+by the kernel or by U-Boot but I'm doing this for the first time so I'm 
+not sure what I'm doing.
+
+Will
+
+
+On 2025-05-07 17:41, Fiona Klute via buildroot wrote:
+> Hi Will!
+> 
+> Am 07.05.25 um 17:41 schrieb buildroot@cairnwater.com:
+>> Does anyone have any advice on how to add DTOs needed by libcamera to 
+>> a buildroot build?
+>> 
+>> We'd like to add Kieran's DTOs
+>> 
+>> https://git.uk.ideasonboard.com/camera/dt-overlays/src/branch/main/arch/ 
+>> arm64/boot/dts/freescale
+>> 
+>> to the buildroot default configuration for Debix Model A SBC
+>> 
+>> https://github.com/buildroot/buildroot/blob/master/configs/ 
+>> polyhex_debix_model_a_defconfig
+>> 
+>> Ideally we'd also like to add the overlays for the Sony IMX 708 Image 
+>> Sensor used in the RPi V3 camera but these aren't mainline:
+>> 
+>> https://github.com/raspberrypi/linux/blob/rpi-6.12.y/arch/arm/boot/dts/ 
+>> overlays/imx708-overlay.dts
+>> https://github.com/raspberrypi/linux/blob/rpi-6.12.y/arch/arm/boot/dts/ 
+>> overlays/imx708.dtsi
+> 
+> You can use BR2_LINUX_KERNEL_CUSTOM_DTS_DIR for that: Just place the 
+> DTSOs in the configured directory (with appropriate structure), and 
+> Buildroot will build them automatically. DTBOs will be in 
+> ${OUTPUT_DIR}/images. From there you'll need to adjust the boot process 
+> for your board to actually apply the overlay. If you want to send a 
+> patch, the BR2_LINUX_KERNEL_CUSTOM_DTS_DIR should be inside the board 
+> directory.
+> 
+> With RPi overlays you'll probably have to adjust the overlays a bit so 
+> referenced names fit, etc. You're using a different board, and I've 
+> seen cases where DTS for RPi boards from mainline and RPi kernels use 
+> different names. But that doesn't change the build process. :-)
+> 
+> Best regards,
+> Fiona
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
