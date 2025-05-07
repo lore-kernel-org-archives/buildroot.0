@@ -1,68 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E589C3ABBF
-	for <buildroot@archiver.kernel.org>; Wed,  7 May 2025 18:53:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 684EBC3ABBF
+	for <buildroot@archiver.kernel.org>; Wed,  7 May 2025 18:59:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5FA8610F9;
-	Wed,  7 May 2025 18:53:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 167A983CDC;
+	Wed,  7 May 2025 18:59:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EslVhcDSOtY5; Wed,  7 May 2025 18:53:17 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q-157d2YsqiQ; Wed,  7 May 2025 18:59:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0639961196
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 475ED83CD0
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0639961196;
-	Wed,  7 May 2025 18:53:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C2584439
- for <buildroot@buildroot.org>; Wed,  7 May 2025 18:53:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 475ED83CD0;
+	Wed,  7 May 2025 18:59:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D167F15A
+ for <buildroot@buildroot.org>; Wed,  7 May 2025 18:59:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A895040B96
- for <buildroot@buildroot.org>; Wed,  7 May 2025 18:53:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CDC70419B4
+ for <buildroot@buildroot.org>; Wed,  7 May 2025 18:59:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7yXZWNNRcN2C for <buildroot@buildroot.org>;
- Wed,  7 May 2025 18:53:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pBVO6JDMgd_i for <buildroot@buildroot.org>;
+ Wed,  7 May 2025 18:59:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.243.2.102;
  helo=nyx.n621.de; envelope-from=fl@n621.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E5E4340B64
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5E4340B64
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2C7F940C2F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C7F940C2F
 Received: from nyx.n621.de (v4gw.hekate.n621.de [136.243.2.102])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E5E4340B64
- for <buildroot@buildroot.org>; Wed,  7 May 2025 18:53:14 +0000 (UTC)
-Received: from charybdis.office.fixme.cloud (localhost [127.0.0.1])
- by nyx.n621.de (Postfix) with ESMTP id 7A5E8E002BB;
- Wed,  7 May 2025 20:53:12 +0200 (CEST)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2C7F940C2F
+ for <buildroot@buildroot.org>; Wed,  7 May 2025 18:59:32 +0000 (UTC)
+Received: by nyx.n621.de (Postfix, from userid 1000)
+ id B9160E002ED; Wed,  7 May 2025 20:59:30 +0200 (CEST)
+Date: Wed, 7 May 2025 20:59:30 +0200
 From: Florian Larysch <fl@n621.de>
 To: buildroot@buildroot.org
-Cc: Florian Larysch <fl@n621.de>
-Date: Wed,  7 May 2025 20:53:07 +0200
-Message-ID: <20250507185311.7581-1-fl@n621.de>
-X-Mailer: git-send-email 2.49.0
+Message-ID: <20250507185930.6cosxy42ale5wqw2@n621.de>
+References: <20250507185311.7581-1-fl@n621.de>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20250507185311.7581-1-fl@n621.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=n621.de; s=dkim; t=1746643992;
+ d=n621.de; s=dkim; t=1746644370;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=FDMlV0WSzwEPsIRKjtBsyBUHrCS+28mF6JGw8L+3MmE=;
- b=kYMA86pL5DeCp6Rb5bWnSeAGOZtnkCNNondJMSuCXkUt8kXz12waB7ayMSEsuAM7LbZuRl
- t0DHuv9hai431f9A1BTNWMD9nKFE5P7JOxyklN7GsUOd/7PxSODQoiUiP9UVZHuYZ/Vsyj
- JoUxA63Fem5r0u0ukF0FN9aiPlbmUL4=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ to:to:cc:mime-version:mime-version:content-type:content-type:
+ in-reply-to:in-reply-to:references:references;
+ bh=XuuY+BmG1vBLu+UixSp8d/o4Q0DyzaOTm5G2h1b1qeI=;
+ b=owgYOcUwGXE0rFQnBPNzbBRXEGxHbnKRcs8o6/X9/JUY0C2sTlzkz8/Tvygz7Mz4bbH5ju
+ L7AS8JxR/NMe0b9ar4AfSvUpwS4baPF8dgNfaLijcOvaPqfzxR741iordfRnfMmE7qoCin
+ 6kuOi3aHXiwF3p5LMncujD1yPshjXRc=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=n621.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=n621.de header.i=@n621.de header.a=rsa-sha256
- header.s=dkim header.b=kYMA86pL
-Subject: [Buildroot] [PATCH 1/1] package/bash: fix build with host GCC 15
+ header.s=dkim header.b=owgYOcUw
+Subject: Re: [Buildroot] [PATCH 1/1] package/bash: fix build with host GCC 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,38 +79,13 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-bash uses K&R function declarations which have been removed in C23.
+Note that this is also going to cause issues for the target build once
+toolchains start picking up GCC 15, but since this also requires
+touching the toolchain infrastructure to make Buildroot aware of GCC 15
+and I'm not too familiar with that I wanted to keep the patch for the
+acute issue separate.
 
-Since part of the build process (like the mkbuiltins helper) is written
-in C, building bash now fails on hosts with GCC 15 (which defaults to
-C23).
-
-Since properly fixing this on the source code level is a larger
-endeavor, just set the C standard to an old enough version for now.
-
-Signed-off-by: Florian Larysch <fl@n621.de>
----
- package/bash/bash.mk | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index 81f698f166..84f581da79 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -26,6 +26,10 @@ BASH_CONF_ENV += \
- 	bash_cv_func_sigsetjmp=present \
- 	bash_cv_printf_a_format=yes
- 
-+ifeq ($(BR2_HOST_GCC_AT_LEAST_15),y)
-+BASH_CONF_ENV += CFLAGS_FOR_BUILD="$(HOST_CFLAGS) -std=gnu17"
-+endif
-+
- # The static build needs some trickery
- ifeq ($(BR2_STATIC_LIBS),y)
- BASH_CONF_OPTS += --enable-static-link
--- 
-2.49.0
-
+Florian
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
