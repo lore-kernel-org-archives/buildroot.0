@@ -1,101 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8247BC3ABCD
-	for <buildroot@archiver.kernel.org>; Thu,  8 May 2025 04:29:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 109EEC3ABC0
+	for <buildroot@archiver.kernel.org>; Thu,  8 May 2025 06:27:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1EE2640E57;
-	Thu,  8 May 2025 04:29:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GdF0JJxkloNH; Thu,  8 May 2025 04:29:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53A5041197
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53A5041197;
-	Thu,  8 May 2025 04:29:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2A71B439
- for <buildroot@buildroot.org>; Thu,  8 May 2025 04:29:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1B9B381F0E
- for <buildroot@buildroot.org>; Thu,  8 May 2025 04:29:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 889E780E31;
+	Thu,  8 May 2025 06:27:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gZK4xdV0m4zP for <buildroot@buildroot.org>;
- Thu,  8 May 2025 04:29:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::531; helo=mail-pg1-x531.google.com;
- envelope-from=kadambini.nema@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5974981FD4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5974981FD4
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com
- [IPv6:2607:f8b0:4864:20::531])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5974981FD4
- for <buildroot@buildroot.org>; Thu,  8 May 2025 04:29:21 +0000 (UTC)
-Received: by mail-pg1-x531.google.com with SMTP id
- 41be03b00d2f7-af579e46b5dso299767a12.3
- for <buildroot@buildroot.org>; Wed, 07 May 2025 21:29:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1746678560; x=1747283360;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=oziGvWa949YnWFDbaVTZ7aT5YVq3hyl1GbnUfdLXk9s=;
- b=Lo+yo3cqIA4rs8lv7uDQjHZRLH0jGkCOwsL9L4Mbk81QwOYIi2Nih3dQHA4Dmp1ACS
- zMYIvspS+Bf8CCFS9iTxL1/otHzCa9jlxJlqKjaQ62cSN13n/joBqnBsQvR/sE46jJK0
- OicrMy8eFDsKXOeK7Npv5zBHy9ZlApFBRrxAJdb1Ufizy+gIZyd+FTWfsJGmYy0+LRuK
- uu/PM7kYgmnLga7LsKdyZHe8FHjyfrIP5VVAkz4roWgHky3g++WVjfnmE0NFoF8gFYnL
- gKqvp9Ags+1zBq/6EV6HYl5PMTfQUz/5nNMHs/TqgGqfATZWOHcVYYbw3nKklBpS9d9w
- Cr2g==
-X-Gm-Message-State: AOJu0YyliWHqWntCqrxISVu8nK1HG70WHiXdV29SoOSwjTof3/hvS1c7
- jtHn+9b4BCm0gKXUrhE+sEVI2OpcvynIsZb5k5jElQmkstvD+oy3AH3KgSEL
-X-Gm-Gg: ASbGncsjYhGt0ArOrIT4Qe+7NU/qCiOPNrSt6GpmxnG4MAGR+lRJd6yqI111R+kOgSS
- qzrNBpIyPfFCojaHrN1xZlEqhpCpdep1DfjxzPfzOCRPNPqn33uFHsB429yPkB++3aJVqElY98H
- CUO8u7LgFC5ubLXtN9+MxIKujqsvX9BkVbWdXCHY9yVWjsxVApDgLP9F26VGRp8HCmWuPM4GjII
- 2fdx00G7oA6ampnwTPiLxjqA4taQtw0wY9psPzEOQicdWRmd2kMWqFNJ6Ri0Rf0n7rA+NLAoSt0
- UV0UOP0rSlmN4u4N8Kc4YM35Li/oc8TuDaDTDCAN4Tp9Vbhv4GUdSLGc1Pd28p+qRE2ZFeE/pXf
- olTfe4QrEY3IrAUTG0cZiIfWD3go=
-X-Google-Smtp-Source: AGHT+IHPie93FqAkB71tNL/Cb4iGAbJ2skICa5Dvw3hRT2+8VVr3aMoKNlpnagpJVrkRUtmHsxiYsw==
-X-Received: by 2002:a17:90b:3b41:b0:2ee:e317:69ab with SMTP id
- 98e67ed59e1d1-30b18c3a51dmr2804628a91.0.1746678560071; 
- Wed, 07 May 2025 21:29:20 -0700 (PDT)
-Received: from localhost.localdomain (ip72-203-121-181.oc.oc.cox.net.
- [72.203.121.181]) by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-30ad39d65f8sm1155142a91.0.2025.05.07.21.29.19
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 07 May 2025 21:29:19 -0700 (PDT)
-From: Kadambini Nema <kadambini.nema@gmail.com>
-To: buildroot@buildroot.org
-Cc: Kadambini Nema <kadambini.nema@gmail.com>
-Date: Wed,  7 May 2025 21:29:11 -0700
-Message-Id: <20250508042911.29426-1-kadambini.nema@gmail.com>
-X-Mailer: git-send-email 2.25.1
+ id RekkokKdsq6U; Thu,  8 May 2025 06:27:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD68580DB7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD68580DB7;
+	Thu,  8 May 2025 06:27:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 91B111A9
+ for <buildroot@buildroot.org>; Thu,  8 May 2025 06:27:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 77BE160E90
+ for <buildroot@buildroot.org>; Thu,  8 May 2025 06:27:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qvRiGa57ClMX for <buildroot@buildroot.org>;
+ Thu,  8 May 2025 06:27:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
+ helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7168C60E50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7168C60E50
+Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7168C60E50
+ for <buildroot@buildroot.org>; Thu,  8 May 2025 06:27:07 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id C85ED1C0FB2; Thu,  8 May 2025 08:27:03 +0200 (CEST)
+Message-ID: <b32a049c-0bd0-40e4-971e-c5dc7cdab5ca@rnout.be>
+Date: Thu, 8 May 2025 08:27:02 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+References: <20250507231902.14cbc9aa@windsurf>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20250507231902.14cbc9aa@windsurf>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1746678560; x=1747283360; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=oziGvWa949YnWFDbaVTZ7aT5YVq3hyl1GbnUfdLXk9s=;
- b=KPLH6bDG4lVPLKHNm1Nx0EMgThast6lRlooN2nKY6dzDjtFRWPd9EIIJK/8CE1ai/b
- 8XuhQBOq5ImU1ycUSSUI3peSXFM9gfWNxKyantKuQwOp7ZqyxXPIwm/sqUBioYEynj9s
- AuNoGJfQ5RhQ/5TMm1PeHDSV/tAIicL8J7LnMvvutIrRe3S01d5zh9GM+pRgqCom6RDE
- UKYasNORf3JRbjR6Szjz29KCoIBd+ZANg4uP8DL4bfh66KMtYcFaPA74/Hzuanbadj1q
- b8GthQveVvWR8hMVKidjgzuhydX7/9iXtv86HACVbbC6yoFvWgvjcYjH+cu2ykZp6naQ
- YOSw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=rnout.be; s=dkim; 
+ t=1746685624; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ content-transfer-encoding:in-reply-to:references;
+ bh=srIcbKSVap9BHAi6QclagLZYyLpGuK3/zKD3eU+Ul64=;
+ b=SXWp0M1Zny/8F4XZJ5yIpVP12d+6rSzY8o2OTuGaPlpk55Iks90LRBxuE4LYx7j56rbyCD
+ kXBFqYnlWDfYDTATIUK+p67AT6okmLrtyNK9y4+bldbUHSZWVb4ktQw9JsynvHgilb72Bh
+ fgU25Md9TOBWF+gR1u7x8ZF9HCgXVjjrD7JSnVjm6bXq40RYff2nKbIXP8DGxWXIVnfFVX
+ rYaHonOGtl91hgX3ym2P8DgWn8wf/41pHSePCE3TFaJcHnnLURk+aHYi6DH5zAPgCgSL5P
+ TOgQyM8iSNZ7cZiIyfJC5XwFtj1AAEADn4KODzFgKv2FC0/QSs7Q6vTfBS0WBQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=KPLH6bDG
-Subject: [Buildroot] [PATCH 1/1] package/hwdata: bump version to 0.395
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=SXWp0M1Z
+Subject: Re: [Buildroot] Grub security situation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,48 +76,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+Cc: Julien Olivain <ju.o@free.fr>, Romain Naour <romain.naour@smile.fr>,
+ Thomas Perale <thomas.perale@mind.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://github.com/vcrhonek/hwdata/releases/tag/v0.395
 
-Changelog:
-https://github.com/vcrhonek/hwdata/compare/v0.394...v0.395
 
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
----
- package/hwdata/hwdata.hash | 2 +-
- package/hwdata/hwdata.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 07/05/2025 23:19, Thomas Petazzoni wrote:
+> Hello,
+> 
+> The latest pkg-stats scan reported to me a number of grub2 security
+> issues:
+> 
+>                           grub2 | CVE-2024-45778   | https://security-tracker.debian.org/tracker/CVE-2024-45778
+>                           grub2 | CVE-2024-45782   | https://security-tracker.debian.org/tracker/CVE-2024-45782
+>                           grub2 | CVE-2024-45779   | https://security-tracker.debian.org/tracker/CVE-2024-45779
+>                           grub2 | CVE-2024-45780   | https://security-tracker.debian.org/tracker/CVE-2024-45780
+>                           grub2 | CVE-2025-0678    | https://security-tracker.debian.org/tracker/CVE-2025-0678
+> 
+> Looking at that in some details, there are in fact a LOT more CVEs:
+> 
+>    https://lists.gnu.org/archive/html/grub-devel/2025-02/msg00024.html
+> 
+> Many of them are not reported by pkg-stats because NVD has not
+> annotated those CVEs (meh).
+> 
+> Now when it becomes a bit tricky is that those CVEs are fixed by 73
+> patches. All of them have been applied upstream, but they are
+> apparently not trivial to backport on grub 2.12.
+> 
+> See Arch people complaining here:
+> 
+>    https://lists.gnu.org/archive/html/grub-devel/2025-02/msg00124.html
+>    https://lists.gnu.org/archive/html/grub-devel/2025-02/msg00098.html
+> 
+> There are currently 284 commits in grub's master on top of the 2.12
+> version we're using. Backporting the 73 patches fixing the security
+> issues seems complicated,
 
-diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
-index eb4ecc191d..8eb0597a98 100644
---- a/package/hwdata/hwdata.hash
-+++ b/package/hwdata/hwdata.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  b7c3fd7214a3b7c49d2661db127a712dc11cffd1799f793947aa1cb20aaf3298  hwdata-0.394.tar.gz
-+sha256  1166f733c57afa82cfdad56e62ef044835fbc8c99ef65f033e6a5802716b5c66  hwdata-0.395.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
-diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
-index f47df2ebb8..4de227b650 100644
---- a/package/hwdata/hwdata.mk
-+++ b/package/hwdata/hwdata.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HWDATA_VERSION = 0.394
-+HWDATA_VERSION = 0.395
- HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
- HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
- HWDATA_LICENSE_FILES = COPYING LICENSE
--- 
-2.25.1
+  Debian trixie also has 2.12, and there are 71 patches there [1]. So perhaps 
+tracking Debian is an option? I think we used to do that for grub before:
+
+GRUB_SOURCE = grub_$(GRUB_VERSION).orig.tar.gz
+GRUB_PATCH = grub_$(GRUB_VERSION)-68.diff.gz
+GRUB_SITE = 
+http://snapshot.debian.org/archive/debian/20141023T043132Z/pool/main/g/grub
+
+
+  Regards,
+  Arnout
+
+[1] 
+https://salsa.debian.org/grub-team/grub/-/tree/master/debian/patches/cve-2025-jan?ref_type=heads
+
+
+
+> and having all 284 commits as patches in
+> Buildroot also seems not very practical.
+> 
+> So the only solution that I can see right now is to used grub's master
+> branch (of course with a fixed commit). Of course, for 2025.02, this
+> means we would bump grub to a newer version that not only has security
+> fixes, but also a whole bunch of other random changes. But that's how
+> grub is maintained, and I'm not sure what we can do about it.
+> 
+> Opinions? Thoughts? Suggestions?
+> 
+> Thomas
 
 _______________________________________________
 buildroot mailing list
