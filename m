@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 372F8C3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:57:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32A9EC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:57:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54C6170A33;
-	Mon, 19 May 2025 10:57:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE38970B4D;
+	Mon, 19 May 2025 10:57:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sy3xWw69ljla; Mon, 19 May 2025 10:57:35 +0000 (UTC)
+ id uQ7axrmOqjnQ; Mon, 19 May 2025 10:57:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C25C70B44
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1689A70B47
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C25C70B44;
-	Mon, 19 May 2025 10:57:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1689A70B47;
+	Mon, 19 May 2025 10:57:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4AE3AE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:33 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E3F3E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1F04F40E24
+ by smtp4.osuosl.org (Postfix) with ESMTP id 526A341456
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pXhMcB4SxLUI for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:20 +0000 (UTC)
+ id a3BJfhhMivFk for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38C8A4144C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2D8F41461
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 38C8A4144C
+ by smtp4.osuosl.org (Postfix) with ESMTP id F2D8F41461
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3588D872E7; Mon, 19 May 2025 10:39:59 +0000 (UTC)
+ id ECC39873D4; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 6 May 2025 22:08:58 +0200
+Date: Thu, 8 May 2025 17:42:31 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 80cfdcb86ba455ed286bea1f557ff351ac6ce263
-X-Git-Newrev: e19ac5ed7c66e82d8853ac9c7ef23c4a6101f842
+X-Git-Oldrev: 30cf5a07546602e6e88d1501ac1ec182b693fcbb
+X-Git-Newrev: 6d09b25d08fe72e9781578fb512d5aa391b08c3f
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103959.3588D872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ufs-utils: bump to
- version 6.13.11
+Message-Id: <20250519103959.ECC39873D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/bash: fix build with
+ host GCC 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,41 +65,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e19ac5ed7c66e82d8853ac9c7ef23c4a6101f842
+commit: https://git.buildroot.net/buildroot/commit/?id=6d09b25d08fe72e9781578fb512d5aa391b08c3f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://github.com/SanDisk-Open-Source/ufs-utils/releases/tag/v6.13.11
+bash uses K&R function declarations which have been removed in C23.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Since part of the build process (like the mkbuiltins helper) is written
+in C, building bash now fails on hosts with GCC 15 (which defaults to
+C23).
+
+Since properly fixing this on the source code level is a larger
+endeavor, just set the C standard to an old enough version for now.
+
+Signed-off-by: Florian Larysch <fl@n621.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/ufs-utils/ufs-utils.hash | 2 +-
- package/ufs-utils/ufs-utils.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/bash/bash.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/ufs-utils/ufs-utils.hash b/package/ufs-utils/ufs-utils.hash
-index c6ef91a025..f825bf5af7 100644
---- a/package/ufs-utils/ufs-utils.hash
-+++ b/package/ufs-utils/ufs-utils.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  66259581b13e33edeccb08edd2389627121adf9b425ba4545f6a84d7292ef4fa  ufs-utils-4.13.5.tar.gz
-+sha256  e79c879a80936c497fd41a61b6da5e34fb848625453e3ca9e0f6e2398f3609bf  ufs-utils-6.13.11.tar.gz
- sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
-diff --git a/package/ufs-utils/ufs-utils.mk b/package/ufs-utils/ufs-utils.mk
-index 504f87f375..60fb2f56ea 100644
---- a/package/ufs-utils/ufs-utils.mk
-+++ b/package/ufs-utils/ufs-utils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/bash/bash.mk b/package/bash/bash.mk
+index 81f698f166..84f581da79 100644
+--- a/package/bash/bash.mk
++++ b/package/bash/bash.mk
+@@ -26,6 +26,10 @@ BASH_CONF_ENV += \
+ 	bash_cv_func_sigsetjmp=present \
+ 	bash_cv_printf_a_format=yes
  
--UFS_UTILS_VERSION = 4.13.5
-+UFS_UTILS_VERSION = 6.13.11
- UFS_UTILS_SITE = $(call github,SanDisk-Open-Source,ufs-utils,v$(UFS_UTILS_VERSION))
- UFS_UTILS_LICENSE = GPL-2.0
- UFS_UTILS_LICENSE_FILES = COPYING
++ifeq ($(BR2_HOST_GCC_AT_LEAST_15),y)
++BASH_CONF_ENV += CFLAGS_FOR_BUILD="$(HOST_CFLAGS) -std=gnu17"
++endif
++
+ # The static build needs some trickery
+ ifeq ($(BR2_STATIC_LIBS),y)
+ BASH_CONF_OPTS += --enable-static-link
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
