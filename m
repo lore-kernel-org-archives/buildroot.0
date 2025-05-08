@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A8D1C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:58:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FD18C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:58:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D92E161735;
-	Mon, 19 May 2025 10:58:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6295B6174B;
+	Mon, 19 May 2025 10:58:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6f_iEO5FDMju; Mon, 19 May 2025 10:58:11 +0000 (UTC)
+ id puqBN7AalhCX; Mon, 19 May 2025 10:58:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE63170A7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 222A470BD1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE63170A7D;
-	Mon, 19 May 2025 10:58:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 222A470BD1;
+	Mon, 19 May 2025 10:58:13 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 36ACAE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:52 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4DF9FD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC11A410DB
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF1C341461
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YQ1IFmgUPTvp for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:23 +0000 (UTC)
+ id 6GQcyJGSuxjT for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5EA241488
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C37440DA4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A5EA241488
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C37440DA4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9C956872E7; Mon, 19 May 2025 10:40:00 +0000 (UTC)
+ id 1AC7D872E7; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 May 2025 22:27:32 +0200
+Date: Thu, 8 May 2025 19:13:41 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8cdeeb536cae5fa4fb0271b5b8fb5571ff468c0a
-X-Git-Newrev: c2598f90ebee681e577247844a4aa31888307660
+X-Git-Oldrev: e40bf89e40109f5469cf51abfce52e7c4f690965
+X-Git-Newrev: 56c834400eefb25ed2ea9b49aaf8fd89efa5f617
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104000.9C956872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/harfbuzz: bump to
- version 11.2.0
+Message-Id: <20250519104000.1AC7D872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gdb: add patches for
+ GCC 15.x compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,41 +65,194 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2598f90ebee681e577247844a4aa31888307660
+commit: https://git.buildroot.net/buildroot/commit/?id=56c834400eefb25ed2ea9b49aaf8fd89efa5f617
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release Notes:
-https://github.com/harfbuzz/harfbuzz/releases/tag/11.2.0
+This commit backports an upstream patch fixing the bundled readline
+library so that it builds with GCC 15.x.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/harfbuzz/harfbuzz.hash | 2 +-
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...eadline-tcap.h-Update-definitions-for-C23.patch | 52 ++++++++++++++++++++++
+ ...eadline-tcap.h-Update-definitions-for-C23.patch | 52 ++++++++++++++++++++++
+ ...eadline-tcap.h-Update-definitions-for-C23.patch | 52 ++++++++++++++++++++++
+ 3 files changed, 156 insertions(+)
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index ea899b91c4..0e641cba07 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  477f0d48c34dc32093b45304178eb9733361ca1832b5159879c99e6d40227969  harfbuzz-11.1.0.tar.xz
-+sha256  50f7d0a208367e606dbf6eecc5cfbecc01a47be6ee837ae7aff2787e24b09b45  harfbuzz-11.2.0.tar.xz
- sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 6bd01d6e44..8af0fa6f18 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--HARFBUZZ_VERSION = 11.1.0
-+HARFBUZZ_VERSION = 11.2.0
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+diff --git a/package/gdb/14.2/0010-readline-tcap.h-Update-definitions-for-C23.patch b/package/gdb/14.2/0010-readline-tcap.h-Update-definitions-for-C23.patch
+new file mode 100644
+index 0000000000..50100d8bfc
+--- /dev/null
++++ b/package/gdb/14.2/0010-readline-tcap.h-Update-definitions-for-C23.patch
+@@ -0,0 +1,52 @@
++From 0f81e47dff4bddc6ba9c45402821f857251f2b0f Mon Sep 17 00:00:00 2001
++From: Chris Packham <judge.packham@gmail.com>
++Date: Wed, 30 Apr 2025 16:49:44 +1200
++Subject: [PATCH] readline/tcap.h: Update definitions for C23
++
++C23 changes how function definitions like int `int tputs ()` are
++interpreted. In older standards this meant that the function arguments
++are unknown. In C23 this is interpreted as `int tputs (void)` so now
++when we compile with GCC15 (which defaults to -std=gnu23) we get an
++error such as
++
++  readline/display.c:2839:17: error: too many arguments to function 'tputs'; expected 0, have 3
++
++Add the function arguments for tgetent(), tgetflag(), tgetnum(),
++tgetstr(), tputs() and tgoto().
++
++Signed-off-by: Chris Packham <judge.packham@gmail.com>
++Approved-By: Tom Tromey <tom@tromey.com>
++Upstream: 5c87b330e910f8be1443c881fd16a70e685f1f2f
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ readline/readline/tcap.h | 12 ++++++------
++ 1 file changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/readline/readline/tcap.h b/readline/readline/tcap.h
++index 859e6eed5aa..9e2ed124e49 100644
++--- a/readline/readline/tcap.h
+++++ b/readline/readline/tcap.h
++@@ -46,14 +46,14 @@ extern char *UP, *BC;
++ 
++ extern short ospeed;
++ 
++-extern int tgetent ();
++-extern int tgetflag ();
++-extern int tgetnum ();
++-extern char *tgetstr ();
+++extern int tgetent (char *bp, const char *name);
+++extern int tgetflag (char *id);
+++extern int tgetnum (char *id);
+++extern char *tgetstr (char *id, char **area);
++ 
++-extern int tputs ();
+++extern int tputs (const char *str, int affcnt, int (*putc)(int));
++ 
++-extern char *tgoto ();
+++extern char *tgoto (const char *cap, int col, int row);
++ 
++ #endif /* HAVE_TERMCAP_H */
++ 
++-- 
++2.49.0
++
+diff --git a/package/gdb/15.2/0010-readline-tcap.h-Update-definitions-for-C23.patch b/package/gdb/15.2/0010-readline-tcap.h-Update-definitions-for-C23.patch
+new file mode 100644
+index 0000000000..64f741fe75
+--- /dev/null
++++ b/package/gdb/15.2/0010-readline-tcap.h-Update-definitions-for-C23.patch
+@@ -0,0 +1,52 @@
++From 130750cf9607fc1c4bcbead820a27bee6ee60f04 Mon Sep 17 00:00:00 2001
++From: Chris Packham <judge.packham@gmail.com>
++Date: Wed, 30 Apr 2025 16:49:44 +1200
++Subject: [PATCH] readline/tcap.h: Update definitions for C23
++
++C23 changes how function definitions like int `int tputs ()` are
++interpreted. In older standards this meant that the function arguments
++are unknown. In C23 this is interpreted as `int tputs (void)` so now
++when we compile with GCC15 (which defaults to -std=gnu23) we get an
++error such as
++
++  readline/display.c:2839:17: error: too many arguments to function 'tputs'; expected 0, have 3
++
++Add the function arguments for tgetent(), tgetflag(), tgetnum(),
++tgetstr(), tputs() and tgoto().
++
++Signed-off-by: Chris Packham <judge.packham@gmail.com>
++Approved-By: Tom Tromey <tom@tromey.com>
++Upstream: 5c87b330e910f8be1443c881fd16a70e685f1f2f
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ readline/readline/tcap.h | 12 ++++++------
++ 1 file changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/readline/readline/tcap.h b/readline/readline/tcap.h
++index 859e6eed5aa..9e2ed124e49 100644
++--- a/readline/readline/tcap.h
+++++ b/readline/readline/tcap.h
++@@ -46,14 +46,14 @@ extern char *UP, *BC;
++ 
++ extern short ospeed;
++ 
++-extern int tgetent ();
++-extern int tgetflag ();
++-extern int tgetnum ();
++-extern char *tgetstr ();
+++extern int tgetent (char *bp, const char *name);
+++extern int tgetflag (char *id);
+++extern int tgetnum (char *id);
+++extern char *tgetstr (char *id, char **area);
++ 
++-extern int tputs ();
+++extern int tputs (const char *str, int affcnt, int (*putc)(int));
++ 
++-extern char *tgoto ();
+++extern char *tgoto (const char *cap, int col, int row);
++ 
++ #endif /* HAVE_TERMCAP_H */
++ 
++-- 
++2.49.0
++
+diff --git a/package/gdb/16.3/0010-readline-tcap.h-Update-definitions-for-C23.patch b/package/gdb/16.3/0010-readline-tcap.h-Update-definitions-for-C23.patch
+new file mode 100644
+index 0000000000..c9a34e9a89
+--- /dev/null
++++ b/package/gdb/16.3/0010-readline-tcap.h-Update-definitions-for-C23.patch
+@@ -0,0 +1,52 @@
++From f37d1bbe334c751b9bd77fa3a9d9accd93614677 Mon Sep 17 00:00:00 2001
++From: Chris Packham <judge.packham@gmail.com>
++Date: Wed, 30 Apr 2025 16:49:44 +1200
++Subject: [PATCH] readline/tcap.h: Update definitions for C23
++
++C23 changes how function definitions like int `int tputs ()` are
++interpreted. In older standards this meant that the function arguments
++are unknown. In C23 this is interpreted as `int tputs (void)` so now
++when we compile with GCC15 (which defaults to -std=gnu23) we get an
++error such as
++
++  readline/display.c:2839:17: error: too many arguments to function 'tputs'; expected 0, have 3
++
++Add the function arguments for tgetent(), tgetflag(), tgetnum(),
++tgetstr(), tputs() and tgoto().
++
++Signed-off-by: Chris Packham <judge.packham@gmail.com>
++Approved-By: Tom Tromey <tom@tromey.com>
++Upstream: 5c87b330e910f8be1443c881fd16a70e685f1f2f
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ readline/readline/tcap.h | 12 ++++++------
++ 1 file changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/readline/readline/tcap.h b/readline/readline/tcap.h
++index 859e6eed5aa..9e2ed124e49 100644
++--- a/readline/readline/tcap.h
+++++ b/readline/readline/tcap.h
++@@ -46,14 +46,14 @@ extern char *UP, *BC;
++ 
++ extern short ospeed;
++ 
++-extern int tgetent ();
++-extern int tgetflag ();
++-extern int tgetnum ();
++-extern char *tgetstr ();
+++extern int tgetent (char *bp, const char *name);
+++extern int tgetflag (char *id);
+++extern int tgetnum (char *id);
+++extern char *tgetstr (char *id, char **area);
++ 
++-extern int tputs ();
+++extern int tputs (const char *str, int affcnt, int (*putc)(int));
++ 
++-extern char *tgoto ();
+++extern char *tgoto (const char *cap, int col, int row);
++ 
++ #endif /* HAVE_TERMCAP_H */
++ 
++-- 
++2.49.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
