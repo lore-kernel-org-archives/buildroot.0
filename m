@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32A9EC2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:57:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FD94C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:57:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE38970B4D;
-	Mon, 19 May 2025 10:57:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFCE070B5B;
+	Mon, 19 May 2025 10:57:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uQ7axrmOqjnQ; Mon, 19 May 2025 10:57:39 +0000 (UTC)
+ id UoMOS4M8qA97; Mon, 19 May 2025 10:57:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1689A70B47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AF6970B5D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1689A70B47;
-	Mon, 19 May 2025 10:57:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0AF6970B5D;
+	Mon, 19 May 2025 10:57:41 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1E3F3E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:35 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 811C3D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 526A341456
+ by smtp4.osuosl.org (Postfix) with ESMTP id 641EE40DC5
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a3BJfhhMivFk for <buildroot@buildroot.org>;
+ id OuNfApPRkuSs for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2D8F41461
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC71F41460
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F2D8F41461
+ by smtp4.osuosl.org (Postfix) with ESMTP id EC71F41460
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ECC39873D4; Mon, 19 May 2025 10:39:59 +0000 (UTC)
+ id E2232872E7; Mon, 19 May 2025 10:39:59 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 8 May 2025 17:42:31 +0200
+Date: Thu, 8 May 2025 17:25:27 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 30cf5a07546602e6e88d1501ac1ec182b693fcbb
-X-Git-Newrev: 6d09b25d08fe72e9781578fb512d5aa391b08c3f
+X-Git-Oldrev: 97c7311c64468532c71699e18e724d8488d3aa3c
+X-Git-Newrev: 30cf5a07546602e6e88d1501ac1ec182b693fcbb
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103959.ECC39873D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/bash: fix build with
- host GCC 15
+Message-Id: <20250519103959.E2232872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/qemu_ppc*: backport a
+ patch for GCC 15.x compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,39 +65,64 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d09b25d08fe72e9781578fb512d5aa391b08c3f
+commit: https://git.buildroot.net/buildroot/commit/?id=30cf5a07546602e6e88d1501ac1ec182b693fcbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-bash uses K&R function declarations which have been removed in C23.
+powerpc kernel maintainer merged a patch [1] for GCC 15.x compatibility
+that will likely be merged upstream soon.
 
-Since part of the build process (like the mkbuiltins helper) is written
-in C, building bash now fails on hosts with GCC 15 (which defaults to
-C23).
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=5a821e2d69e26b51b7f3740b6b0c3462b8cacaff
 
-Since properly fixing this on the source code level is a larger
-endeavor, just set the C standard to an old enough version for now.
-
-Signed-off-by: Florian Larysch <fl@n621.de>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/bash/bash.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../0002-powerpc-boot-Fix-build-with-gcc-15.patch  | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/package/bash/bash.mk b/package/bash/bash.mk
-index 81f698f166..84f581da79 100644
---- a/package/bash/bash.mk
-+++ b/package/bash/bash.mk
-@@ -26,6 +26,10 @@ BASH_CONF_ENV += \
- 	bash_cv_func_sigsetjmp=present \
- 	bash_cv_printf_a_format=yes
- 
-+ifeq ($(BR2_HOST_GCC_AT_LEAST_15),y)
-+BASH_CONF_ENV += CFLAGS_FOR_BUILD="$(HOST_CFLAGS) -std=gnu17"
-+endif
+diff --git a/board/qemu/patches/linux/0002-powerpc-boot-Fix-build-with-gcc-15.patch b/board/qemu/patches/linux/0002-powerpc-boot-Fix-build-with-gcc-15.patch
+new file mode 100644
+index 0000000000..78a4034a32
+--- /dev/null
++++ b/board/qemu/patches/linux/0002-powerpc-boot-Fix-build-with-gcc-15.patch
+@@ -0,0 +1,38 @@
++From 2d04c5b3c5728cd5e5202176e8796ffc0085c24a Mon Sep 17 00:00:00 2001
++From: Michal Suchanek <msuchanek@suse.de>
++Date: Mon, 31 Mar 2025 12:57:19 +0200
++Subject: [PATCH] powerpc/boot: Fix build with gcc 15
 +
- # The static build needs some trickery
- ifeq ($(BR2_STATIC_LIBS),y)
- BASH_CONF_OPTS += --enable-static-link
++Similar to x86 the ppc boot code does not build with GCC 15.
++
++Copy the fix from
++commit ee2ab467bddf ("x86/boot: Use '-std=gnu11' to fix build with GCC 15")
++
++Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?h=next-test&id=5a821e2d69e26b51b7f3740b6b0c3462b8cacaff
++
++Signed-off-by: Michal Suchanek <msuchanek@suse.de>
++Tested-by: Amit Machhiwal <amachhiw@linux.ibm.com>
++Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
++Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
++Link: https://patch.msgid.link/20250331105722.19709-1-msuchanek@suse.de
++[Romain: backport to 6.12.27]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ arch/powerpc/boot/Makefile | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/arch/powerpc/boot/Makefile b/arch/powerpc/boot/Makefile
++index fa8518067d38..60a495771c05 100644
++--- a/arch/powerpc/boot/Makefile
+++++ b/arch/powerpc/boot/Makefile
++@@ -70,6 +70,7 @@ BOOTCPPFLAGS	:= -nostdinc $(LINUXINCLUDE)
++ BOOTCPPFLAGS	+= -isystem $(shell $(BOOTCC) -print-file-name=include)
++ 
++ BOOTCFLAGS	:= $(BOOTTARGETFLAGS) \
+++		   -std=gnu11 \
++ 		   -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
++ 		   -fno-strict-aliasing -O2 \
++ 		   -msoft-float -mno-altivec -mno-vsx \
++-- 
++2.49.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
