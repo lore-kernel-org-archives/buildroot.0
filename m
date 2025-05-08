@@ -4,83 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5C22C3ABC0
-	for <buildroot@archiver.kernel.org>; Thu,  8 May 2025 16:02:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66857C3ABC0
+	for <buildroot@archiver.kernel.org>; Thu,  8 May 2025 17:07:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32C34408D2;
-	Thu,  8 May 2025 16:02:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B87F40720;
+	Thu,  8 May 2025 17:07:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xZEFyJmCPANm; Thu,  8 May 2025 16:01:59 +0000 (UTC)
+ id joc3lhNiu5iY; Thu,  8 May 2025 17:07:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56F1A40925
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 531EA40C93
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56F1A40925;
-	Thu,  8 May 2025 16:01:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E6B5C439
- for <buildroot@buildroot.org>; Thu,  8 May 2025 16:01:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 531EA40C93;
+	Thu,  8 May 2025 17:07:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 53C2415A
+ for <buildroot@buildroot.org>; Thu,  8 May 2025 17:07:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C9CA1608CE
- for <buildroot@buildroot.org>; Thu,  8 May 2025 16:01:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4562E81147
+ for <buildroot@buildroot.org>; Thu,  8 May 2025 17:07:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IZDK7HWLvzz5 for <buildroot@buildroot.org>;
- Thu,  8 May 2025 16:01:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.175.196.64;
- helo=euk33.eukhosting.net; envelope-from=buildroot@cairnwater.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id twPPJkUZYo-O for <buildroot@buildroot.org>;
+ Thu,  8 May 2025 17:07:21 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E5F08608AA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E5F08608AA
-Received: from euk33.eukhosting.net (euk33.eukhosting.net [213.175.196.64])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E5F08608AA
- for <buildroot@buildroot.org>; Thu,  8 May 2025 16:01:55 +0000 (UTC)
-Received: from [::1] (port=41322 helo=euk33.eukhosting.net)
- by euk33.eukhosting.net with esmtpa (Exim 4.98.1)
- (envelope-from <buildroot@cairnwater.com>) id 1uD3h2-0000000Gcsz-0qPo
- for buildroot@buildroot.org; Thu, 08 May 2025 17:01:52 +0100
-MIME-Version: 1.0
-Date: Thu, 08 May 2025 17:01:51 +0100
-From: buildroot@cairnwater.com
-To: Buildroot <buildroot@buildroot.org>
-User-Agent: Roundcube Webmail/1.6.9
-Message-ID: <ddcd553b270f9e9a628ad8470be48c48@cairnwater.com>
-X-Sender: buildroot@cairnwater.com
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - euk33.eukhosting.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - cairnwater.com
-X-Get-Message-Sender-Via: euk33.eukhosting.net: authenticated_id:
- buildroot@cairnwater.com
-X-Authenticated-Sender: euk33.eukhosting.net: buildroot@cairnwater.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; 
- d=cairnwater.com; s=default; h=Content-Transfer-Encoding:Content-Type:
- Message-ID:Subject:To:From:Date:MIME-Version:Sender:Reply-To:Cc:Content-ID:
- Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
- :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
- List-Subscribe:List-Post:List-Owner:List-Archive;
- bh=PEHVPBQZvJEUt43qRbTR5DrUjwz5VAlSuKU736geLIA=; b=JOmFzUM2PVE4qYSuA7X09Oa/OP
- SnWtfTWKhgSDhCksACOBl20FAxPmvK3VZNUV5Gv8DiFjWhr/MNHiJ444eBJukZtCIt0Sp6YwCsC+V
- e+rsngtvkpx5gsoBClbgOGkB+jyb9bvlBRSQ46z+OjDVfsyL2FXK3/hC3syApSy0bN2+/XW5kdSHd
- ryfOHODV+dxdXXtOMzjiSYJnnH/2c0GLrzxyNY6u1TGS0D6806fdFinEnb52QSmlhYyC523NsrWLn
- FDwg6xnpzW0DSwcoKtJaCWjrtc8tDhQftRxlJPvQR3IUPN3cPfatLNaeO/EBHxpxVJVs/P+FVyyiy
- qbJbxekg==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=cairnwater.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=cairnwater.com header.i=@cairnwater.com
- header.a=rsa-sha256 header.s=default header.b=JOmFzUM2
-Subject: [Buildroot] buildroot Dockerfile $TARGETPLATFORM Attribute
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 595758115F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 595758115F
+ for <buildroot@buildroot.org>; Thu,  8 May 2025 17:07:21 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 48E23811F8; Thu,  8 May 2025 17:07:21 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Thu, 8 May 2025 17:25:23 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5dacd8e056d30aaa8d8abf12b2566a6d64aedddd
+X-Git-Newrev: 97c7311c64468532c71699e18e724d8488d3aa3c
+X-Patchwork-Hint: ignore
+Message-Id: <20250508170721.48E23811F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_mips*: backport a patch for
+ GCC 15.x compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,72 +59,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=97c7311c64468532c71699e18e724d8488d3aa3c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I'm working on a new fully open source wildlife camera system and to 
-keep everything as open and well documented as possible I'm planning to 
-use the buildroot Dockerfile for the build environment.
+Mips kernel maintainer merged a patch [1] for GCC 15.x compatibility
+that will likely be merged upstream soon.
 
-https://gitlab.com/buildroot.org/buildroot/-/blob/master/support/docker/Dockerfile
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=0f4ae7c6ecb89bfda026d210dcf8216fb67d2333
 
-When building the Docker container is it OK for me not to specify the 
-TARGETPLATFORM attribute - for example:
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...d-flag-specified-in-KBUILD_CFLAGS-to-vdso.patch | 52 ++++++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
-sudo docker build -t buildroot-demo-01
-
-I'm building for the NXP i.MX 8 M Plus SoC on the Debix Model A board - 
-the NXP i.MX 8 M Plus has 2 or 4 Arm Cortex-A53 64 bit cores so I was 
-guessing that it would be an arm64 platform not an arm64 platform?
-
-The TARGETPLATFORM attribute only seems to be used in two if statements 
-which run if it's set to "linux/amd64":
-
-# Install 32bit variant on x86_64 image.
-RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-     dpkg --add-architecture i386; \
-fi
-
-# The container has no package lists, so need to update first
-RUN apt-get -o APT::Retries=3 update -y
-
-RUN if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-     apt-get -o APT::Retries=3 install -y --no-install-recommends \
-         g++-multilib \
-         libc6:i386; \
-fi
-
-The commands I'm using at the moment are:
-
-sudo git clone https://git.buildroot.net/buildroot
-
-cd /buildroot/support/docker
-
-sudo docker build -t buildroot-demo-01
-
-sudo docker run --name buildroot-build-machine02 -it buildroot-demo-01 
-bash
-
-git clone https://gitlab.com/buildroot.org/buildroot.git
-
-cd buildroot
-
-git pull
-
-make polyhex_debix_model_a_defconfig
-
-# This can be used to customise
-#make menuconfig
-
-make
-
-Thank you very much for your help!
-
-Will
+diff --git a/board/qemu/patches/linux/0001-mips-Add-std-flag-specified-in-KBUILD_CFLAGS-to-vdso.patch b/board/qemu/patches/linux/0001-mips-Add-std-flag-specified-in-KBUILD_CFLAGS-to-vdso.patch
+new file mode 100644
+index 0000000000..630fcf6315
+--- /dev/null
++++ b/board/qemu/patches/linux/0001-mips-Add-std-flag-specified-in-KBUILD_CFLAGS-to-vdso.patch
+@@ -0,0 +1,52 @@
++From c94606e06b54bc7b909fb342aa8dae732b50f5cd Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Sat, 29 Mar 2025 08:39:03 -0700
++Subject: [PATCH] mips: Add -std= flag specified in KBUILD_CFLAGS to vdso
++ CFLAGS
++
++GCC 15 changed the default C standard dialect from gnu17 to gnu23,
++which should not have impacted the kernel because it explicitly requests
++the gnu11 standard in the main Makefile. However, mips/vdso code uses
++its own CFLAGS without a '-std=' value, which break with this dialect
++change because of the kernel's own definitions of bool, false, and true
++conflicting with the C23 reserved keywords.
++
++  include/linux/stddef.h:11:9: error: cannot use keyword 'false' as enumeration constant
++     11 |         false   = 0,
++        |         ^~~~~
++  include/linux/stddef.h:11:9: note: 'false' is a keyword with '-std=c23' onwards
++  include/linux/types.h:35:33: error: 'bool' cannot be defined via 'typedef'
++     35 | typedef _Bool                   bool;
++        |                                 ^~~~
++  include/linux/types.h:35:33: note: 'bool' is a keyword with '-std=c23' onwards
++
++Add -std as specified in KBUILD_CFLAGS to the decompressor and purgatory
++CFLAGS to eliminate these errors and make the C standard version of these
++areas match the rest of the kernel.
++
++Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=0f4ae7c6ecb89bfda026d210dcf8216fb67d2333
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Cc: stable@vger.kernel.org
++Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
++[Romain: backport to 6.12.27]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ arch/mips/vdso/Makefile | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
++index b289b2c1b294..c729bd687804 100644
++--- a/arch/mips/vdso/Makefile
+++++ b/arch/mips/vdso/Makefile
++@@ -27,6 +27,7 @@ endif
++ # offsets.
++ cflags-vdso := $(ccflags-vdso) \
++ 	$(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
+++	$(filter -std=%,$(KBUILD_CFLAGS)) \
++ 	-O3 -g -fPIC -fno-strict-aliasing -fno-common -fno-builtin -G 0 \
++ 	-mrelax-pic-calls $(call cc-option, -mexplicit-relocs) \
++ 	-fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
++-- 
++2.49.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
