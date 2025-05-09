@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08E6BC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:58:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 367F9C3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:58:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9798F845FD;
-	Mon, 19 May 2025 10:58:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 103D16067C;
+	Mon, 19 May 2025 10:58:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W1YuLVXKATeF; Mon, 19 May 2025 10:58:16 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DGSq-Diwlezo; Mon, 19 May 2025 10:58:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8594A845F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4675E6173E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8594A845F6;
-	Mon, 19 May 2025 10:58:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4675E6173E;
+	Mon, 19 May 2025 10:58:18 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D501D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:54 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 17509E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0079D41466
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0910E41482
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3MEhs0lHBVrn for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:23 +0000 (UTC)
+ id N-AUaO9EVkro for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B53D64148E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 458984146F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B53D64148E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 458984146F
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AF23182A2E; Mon, 19 May 2025 10:40:00 +0000 (UTC)
+ id 4223E82A2E; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 10 May 2025 19:05:50 +0200
+Date: Fri, 9 May 2025 14:58:45 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: af674f3ecf44d45f92c35af8508077aa138e13f8
-X-Git-Newrev: 1799cfebfd5ea1312cce74b3807d4aad044bce67
+X-Git-Oldrev: 1df9852cc447eb0c76508519eb62881baef6a6ea
+X-Git-Newrev: b5b88330a7c412b98ea55a4af2765d5bd8e4992e
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104000.AF23182A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/netsnmp: bump to
- version 5.9.4
+Message-Id: <20250519104000.4223E82A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libnss: bump version
+ to 3.111
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,162 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1799cfebfd5ea1312cce74b3807d4aad044bce67
+commit: https://git.buildroot.net/buildroot/commit/?id=b5b88330a7c412b98ea55a4af2765d5bd8e4992e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changes 5.9.3 to 5.9.4, from:
-https://github.com/net-snmp/net-snmp/blob/v5.9.4/CHANGES
+For release note, see:
+https://hg-edge.mozilla.org/projects/nss/file/tip/doc/rst/releases/nss_3_111.rst
 
-    IMPORTANT: SNMP over TLS and/or DTLS are not functioning properly
-    in this release with various versions of OpenSSL and will be fixed
-    in a future release.
-
-    libsnmp:
-      - Remove the SNMP_SWIPE_MEM() macro Remove this macro since it is not
-        used in the Net-SNMP code base.
-      - DISPLAY-HINT fixes
-      - Miscellanious improvements to the transports
-      - Handle multiple oldEngineID configuration lines
-      - fixes for DNS names longer than 63 characters
-
-    agent:
-      - Added a ignoremount configuration option for the HOST-MIB
-      - disallow SETs with a NULL varbind
-      - fix the --enable-minimalist build
-
-    apps:
-      - snmpset: allow SET with NULL varbind for testing
-      - snmptrapd: improved MySQL logging code
-
-    general:
-      - configure: Remove -Wno-deprecated as it is no longer needed
-      - miscellanious ther bug fixes, build fixes and cleanups
-
-We can drop patch 0001-snmp_agent-disallow-SET-with-NULL-varbind.patch
-because it's upstream as of commit
-4589352dac3ae111c7621298cf231742209efd9b, which is part of the 5.9.4
-release.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Julien: add link to changelog]
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...-6.7-compatibility-parsing-proc-net-snmp.patch} |  0
- ...snmp_agent-disallow-SET-with-NULL-varbind.patch | 72 ----------------------
- package/netsnmp/netsnmp.hash                       |  6 +-
- package/netsnmp/netsnmp.mk                         |  2 +-
- 4 files changed, 4 insertions(+), 76 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/netsnmp/0002-Add-Linux-6.7-compatibility-parsing-proc-net-snmp.patch b/package/netsnmp/0001-Add-Linux-6.7-compatibility-parsing-proc-net-snmp.patch
-similarity index 100%
-rename from package/netsnmp/0002-Add-Linux-6.7-compatibility-parsing-proc-net-snmp.patch
-rename to package/netsnmp/0001-Add-Linux-6.7-compatibility-parsing-proc-net-snmp.patch
-diff --git a/package/netsnmp/0001-snmp_agent-disallow-SET-with-NULL-varbind.patch b/package/netsnmp/0001-snmp_agent-disallow-SET-with-NULL-varbind.patch
-deleted file mode 100644
-index 3a6321d7a7..0000000000
---- a/package/netsnmp/0001-snmp_agent-disallow-SET-with-NULL-varbind.patch
-+++ /dev/null
-@@ -1,72 +0,0 @@
--From b07627fa67c686b07d1eab123cf3e4887a2a93aa Mon Sep 17 00:00:00 2001
--From: Bill Fenner <fenner@gmail.com>
--Date: Fri, 25 Nov 2022 08:41:24 -0800
--Subject: [PATCH] snmp_agent: disallow SET with NULL varbind
--
--Upstream: https://github.com/net-snmp/net-snmp/commit/4589352dac3ae111c7621298cf231742209efd9b
--
--[Thomas: this commit was merged as part of
--https://github.com/net-snmp/net-snmp/pull/490/commits, which fixes
--https://github.com/net-snmp/net-snmp/issues/474 (CVE-2022-44792) and
--https://github.com/net-snmp/net-snmp/issues/475 (CVE-2022-44793). The
--other two commits merged as part of this pull request are related to
--adding a non-regression test for this, which is not relevant for the
--security fix itself.]
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- agent/snmp_agent.c | 32 ++++++++++++++++++++++++++++++++
-- 1 file changed, 32 insertions(+)
--
--diff --git a/agent/snmp_agent.c b/agent/snmp_agent.c
--index 867d0c166f..3f678fe2df 100644
----- a/agent/snmp_agent.c
--+++ b/agent/snmp_agent.c
--@@ -3719,12 +3719,44 @@ netsnmp_handle_request(netsnmp_agent_session *asp, int status)
--     return 1;
-- }
-- 
--+static int
--+check_set_pdu_for_null_varbind(netsnmp_agent_session *asp)
--+{
--+    int i;
--+    netsnmp_variable_list *v = NULL;
--+
--+    for (i = 1, v = asp->pdu->variables; v != NULL; i++, v = v->next_variable) {
--+	if (v->type == ASN_NULL) {
--+	    /*
--+	     * Protect SET implementations that do not protect themselves
--+	     * against wrong type.
--+	     */
--+	    DEBUGMSGTL(("snmp_agent", "disallowing SET with NULL var for varbind %d\n", i));
--+	    asp->index = i;
--+	    return SNMP_ERR_WRONGTYPE;
--+	}
--+    }
--+    return SNMP_ERR_NOERROR;
--+}
--+
-- int
-- handle_pdu(netsnmp_agent_session *asp)
-- {
--     int             status, inclusives = 0;
--     netsnmp_variable_list *v = NULL;
-- 
--+#ifndef NETSNMP_NO_WRITE_SUPPORT
--+    /*
--+     * Check for ASN_NULL in SET request
--+     */
--+    if (asp->pdu->command == SNMP_MSG_SET) {
--+	status = check_set_pdu_for_null_varbind(asp);
--+	if (status != SNMP_ERR_NOERROR) {
--+	    return status;
--+	}
--+    }
--+#endif /* NETSNMP_NO_WRITE_SUPPORT */
--+
--     /*
--      * for illegal requests, mark all nodes as ASN_NULL 
--      */
---- 
--2.41.0
--
-diff --git a/package/netsnmp/netsnmp.hash b/package/netsnmp/netsnmp.hash
-index e1e9d10898..7898941271 100644
---- a/package/netsnmp/netsnmp.hash
-+++ b/package/netsnmp/netsnmp.hash
-@@ -1,7 +1,7 @@
- # Locally calculated after checking pgp signature at
--# https://sourceforge.net/projects/net-snmp/files/net-snmp/5.9.3/net-snmp-5.9.3.tar.gz.asc
--# using key D0F8F495DA6160C44EFFBF10F07B9D2DACB19FD6
--sha256  2097f29b7e1bf3f1300b4bae52fa2308d0bb8d5d3998dbe02f9462a413a2ef0a  net-snmp-5.9.3.tar.gz
-+# https://sourceforge.net/projects/net-snmp/files/net-snmp/5.9.4/net-snmp-5.9.4.tar.gz.asc
-+# using key 6E6718AEF1EB5C65C32D1B2A356BC0B552D53CAB
-+sha256  8b4de01391e74e3c7014beb43961a2d6d6fa03acc34280b9585f4930745b0544  net-snmp-5.9.4.tar.gz
- 
- # Hash for license file
- sha256  ed869ea395a1f125819a56676385ab0557a21507764bf56f2943302011381e59  COPYING
-diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-index 6575ff1afa..499e1d9477 100644
---- a/package/netsnmp/netsnmp.mk
-+++ b/package/netsnmp/netsnmp.mk
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 9b9252e77f..03e91e4212 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_110_RTM/src/SHA256SUMS
+-sha256  9cd610c40422a07771b9b45166be2d052ea2f00b605a7928129e1f2071b3ae27  nss-3.110.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_111_RTM/src/SHA256SUMS
++sha256  5a4d5a44e91ef03cdc0c4897cf616e3c92f4e590ea835d3e0ccad8b005bd73c6  nss-3.111.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 541edf185f..e2cab84abc 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NETSNMP_VERSION = 5.9.3
-+NETSNMP_VERSION = 5.9.4
- NETSNMP_SITE = https://downloads.sourceforge.net/project/net-snmp/net-snmp/$(NETSNMP_VERSION)
- NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
- NETSNMP_LICENSE = Various BSD-like
+-LIBNSS_VERSION = 3.110
++LIBNSS_VERSION = 3.111
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
