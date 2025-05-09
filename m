@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66FECC3DA6D
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82201C3ABD8
 	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:58:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 367CD845E9;
-	Mon, 19 May 2025 10:58:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69FCB61741;
+	Mon, 19 May 2025 10:58:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ht375jtRRdla; Mon, 19 May 2025 10:58:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TdrthPgFG3B4; Mon, 19 May 2025 10:58:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C29A845CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F240D70BB2
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5C29A845CF;
-	Mon, 19 May 2025 10:58:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F240D70BB2;
+	Mon, 19 May 2025 10:58:06 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2E23AD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:51 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2DAEB193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B365340C40
+ by smtp4.osuosl.org (Postfix) with ESMTP id A80ED4145A
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zI9qWapohi2S for <buildroot@buildroot.org>;
+ id pdJF4IuBFzUY for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28849410DB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C85940C40
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 28849410DB
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8C85940C40
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2495E82A2E; Mon, 19 May 2025 10:40:00 +0000 (UTC)
+ id 88CAF82A2E; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 8 May 2025 21:31:18 +0200
+Date: Fri, 9 May 2025 19:01:27 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 56c834400eefb25ed2ea9b49aaf8fd89efa5f617
-X-Git-Newrev: dc0691f038e4cefa1cef064d160dfe1421aa278f
+X-Git-Oldrev: 02de34989560b40a963fa13dddfb4714470fec25
+X-Git-Newrev: 7c65b4484e1ed414496488cf8eb4fe967b10c087
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104000.2495E82A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gdb: add patch to fix
- GCC 15.x build issue with ARC-specific gdb
+Message-Id: <20250519104000.88CAF82A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-pyproj: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,76 +65,134 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dc0691f038e4cefa1cef064d160dfe1421aa278f
+commit: https://git.buildroot.net/buildroot/commit/?id=7c65b4484e1ed414496488cf8eb4fe967b10c087
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit adds the same patch that was already added to GDB 14.x,
-15.x and 16.x to fix a GCC 15.x build issue.
+Provides cartographic projections in Python
+https://pyproj4.github.io/pyproj/stable/
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Daniel Crowe <daniel.crowe@maxmine.com.au>
+[Julien:
+ - reword commit title
+ - add test files in DEVELOPERS entries
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...eadline-tcap.h-Update-definitions-for-C23.patch | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ DEVELOPERS                                           |  3 +++
+ package/Config.in                                    |  1 +
+ package/python-pyproj/Config.in                      |  9 +++++++++
+ package/python-pyproj/python-pyproj.hash             |  5 +++++
+ package/python-pyproj/python-pyproj.mk               | 20 ++++++++++++++++++++
+ .../testing/tests/package/sample_python_pyproj.py    |  5 +++++
+ support/testing/tests/package/test_python_pyproj.py  | 11 +++++++++++
+ 7 files changed, 54 insertions(+)
 
-diff --git a/package/gdb/arc-2023.09-release/0001-readline-tcap.h-Update-definitions-for-C23.patch b/package/gdb/arc-2023.09-release/0001-readline-tcap.h-Update-definitions-for-C23.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 36bf42da32..7f01b46c70 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -729,6 +729,9 @@ F:	package/python-aniso8601/
+ F:	package/python-cachelib/
+ F:	package/python-flask-caching/
+ F:	package/python-flask-restx/
++F:	package/python-pyproj/
++F:	support/testing/tests/package/sample_python_pyproj.py
++F:	support/testing/tests/package/test_python_pyproj.py
+ 
+ N:	Daniel J. Leach <dleach@belcan.com>
+ F:	package/dacapo/
+diff --git a/package/Config.in b/package/Config.in
+index 9e4b0ea167..a9074ac405 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1332,6 +1332,7 @@ menu "External python modules"
+ 	source "package/python-pyphen/Config.in"
+ 	source "package/python-pypika-tortoise/Config.in"
+ 	source "package/python-pypng/Config.in"
++	source "package/python-pyproj/Config.in"
+ 	source "package/python-pyqrcode/Config.in"
+ 	source "package/python-pyqt5/Config.in"
+ 	source "package/python-pyqt5-sip/Config.in"
+diff --git a/package/python-pyproj/Config.in b/package/python-pyproj/Config.in
 new file mode 100644
-index 0000000000..33c0ee95fc
+index 0000000000..ee829d71c5
 --- /dev/null
-+++ b/package/gdb/arc-2023.09-release/0001-readline-tcap.h-Update-definitions-for-C23.patch
-@@ -0,0 +1,52 @@
-+From 93f772832b96e0c48223c452324e9736d7de051e Mon Sep 17 00:00:00 2001
-+From: Chris Packham <judge.packham@gmail.com>
-+Date: Wed, 30 Apr 2025 16:49:44 +1200
-+Subject: [PATCH] readline/tcap.h: Update definitions for C23
++++ b/package/python-pyproj/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_PYPROJ
++	bool "python-pyproj"
++	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
++	select BR2_PACKAGE_PROJ # runtime
++	help
++	  Python interface to PROJ (cartographic projections and
++	  coordinate transformations library).
 +
-+C23 changes how function definitions like int `int tputs ()` are
-+interpreted. In older standards this meant that the function arguments
-+are unknown. In C23 this is interpreted as `int tputs (void)` so now
-+when we compile with GCC15 (which defaults to -std=gnu23) we get an
-+error such as
++	  https://github.com/pyproj4/pyproj
+diff --git a/package/python-pyproj/python-pyproj.hash b/package/python-pyproj/python-pyproj.hash
+new file mode 100644
+index 0000000000..6d9d4d2a20
+--- /dev/null
++++ b/package/python-pyproj/python-pyproj.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/pyproj/json
++md5  ad62b11249d8e62879778190a3e3ef8c  pyproj-3.7.1.tar.gz
++sha256  60d72facd7b6b79853f19744779abcd3f804c4e0d4fa8815469db20c9f640a47  pyproj-3.7.1.tar.gz
++# Locally computed sha256 checksums
++sha256  a652687151814d4c4715445912fcb49e7e58f5b248d47a1a88b859a8815e0822  LICENSE
+diff --git a/package/python-pyproj/python-pyproj.mk b/package/python-pyproj/python-pyproj.mk
+new file mode 100644
+index 0000000000..e2e0fada5b
+--- /dev/null
++++ b/package/python-pyproj/python-pyproj.mk
+@@ -0,0 +1,20 @@
++################################################################################
++#
++# python-pyproj
++#
++################################################################################
 +
-+  readline/display.c:2839:17: error: too many arguments to function 'tputs'; expected 0, have 3
++PYTHON_PYPROJ_VERSION = 3.7.1
++PYTHON_PYPROJ_SOURCE = pyproj-$(PYTHON_PYPROJ_VERSION).tar.gz
++PYTHON_PYPROJ_SITE = https://files.pythonhosted.org/packages/67/10/a8480ea27ea4bbe896c168808854d00f2a9b49f95c0319ddcbba693c8a90
++PYTHON_PYPROJ_SETUP_TYPE = setuptools
++PYTHON_PYPROJ_LICENSE = MIT
++PYTHON_PYPROJ_LICENSE_FILES = LICENSE
++PYTHON_PYPROJ_DEPENDENCIES = host-python-cython proj
++PYTHON_PYPROJ_ENV = \
++	PROJ_DIR=$(HOST_DIR)/bin/ \
++	PROJ_INCDIR=$(HOST_DIR)/include/ \
++	PROJ_LIBDIR=$(TARGET_DIR)/usr/lib/ \
++	PROJ_VERSION=$(PROJ_VERSION)
 +
-+Add the function arguments for tgetent(), tgetflag(), tgetnum(),
-+tgetstr(), tputs() and tgoto().
++$(eval $(python-package))
+diff --git a/support/testing/tests/package/sample_python_pyproj.py b/support/testing/tests/package/sample_python_pyproj.py
+new file mode 100644
+index 0000000000..f814f8d2df
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_pyproj.py
+@@ -0,0 +1,5 @@
++from pyproj import CRS
 +
-+Signed-off-by: Chris Packham <judge.packham@gmail.com>
-+Approved-By: Tom Tromey <tom@tromey.com>
-+Upstream: 5c87b330e910f8be1443c881fd16a70e685f1f2f
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ readline/readline/tcap.h | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
++# WGS 84 - World Geodetic System 1984, used in GPS
++crs_4326 = CRS.from_epsg(4326)
++assert crs_4326.name == "WGS 84"
+diff --git a/support/testing/tests/package/test_python_pyproj.py b/support/testing/tests/package/test_python_pyproj.py
+new file mode 100644
+index 0000000000..2044d517c2
+--- /dev/null
++++ b/support/testing/tests/package/test_python_pyproj.py
+@@ -0,0 +1,11 @@
++from tests.package.test_python import TestPythonPackageBase
 +
-+diff --git a/readline/readline/tcap.h b/readline/readline/tcap.h
-+index 859e6eed5aa..9e2ed124e49 100644
-+--- a/readline/readline/tcap.h
-++++ b/readline/readline/tcap.h
-+@@ -46,14 +46,14 @@ extern char *UP, *BC;
-+ 
-+ extern short ospeed;
-+ 
-+-extern int tgetent ();
-+-extern int tgetflag ();
-+-extern int tgetnum ();
-+-extern char *tgetstr ();
-++extern int tgetent (char *bp, const char *name);
-++extern int tgetflag (char *id);
-++extern int tgetnum (char *id);
-++extern char *tgetstr (char *id, char **area);
-+ 
-+-extern int tputs ();
-++extern int tputs (const char *str, int affcnt, int (*putc)(int));
-+ 
-+-extern char *tgoto ();
-++extern char *tgoto (const char *cap, int col, int row);
-+ 
-+ #endif /* HAVE_TERMCAP_H */
-+ 
-+-- 
-+2.49.0
 +
++class TestPythonPy3Pyproj(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_PYPROJ=y
++        """
++    sample_scripts = ["tests/package/sample_python_pyproj.py"]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
