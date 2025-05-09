@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BE76C3ABBC
-	for <buildroot@archiver.kernel.org>; Fri,  9 May 2025 17:08:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76899C3ABCC
+	for <buildroot@archiver.kernel.org>; Fri,  9 May 2025 17:08:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 858CC607CC;
-	Fri,  9 May 2025 17:08:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 17D1040CC2;
+	Fri,  9 May 2025 17:08:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s3UgSw2s1f-i; Fri,  9 May 2025 17:08:17 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wgf0JqbF5AhE; Fri,  9 May 2025 17:08:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DEBE6080A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C14741505
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9DEBE6080A;
-	Fri,  9 May 2025 17:08:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 843561A9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C14741505;
+	Fri,  9 May 2025 17:08:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8894971C
  for <buildroot@buildroot.org>; Fri,  9 May 2025 17:08:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6A5426078F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D64740BDE
  for <buildroot@buildroot.org>; Fri,  9 May 2025 17:08:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GSfPdo08SAuR for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6k7VJFpTJTXF for <buildroot@buildroot.org>;
  Fri,  9 May 2025 17:08:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C17E6074C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FC7540166
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7C17E6074C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8FC7540166
  for <buildroot@buildroot.org>; Fri,  9 May 2025 17:08:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7575E866CA; Fri,  9 May 2025 17:08:15 +0000 (UTC)
+ id 80499866CB; Fri,  9 May 2025 17:08:15 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 May 2025 18:38:35 +0200
+Date: Fri, 9 May 2025 19:01:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 380dc9332f13c1279338d0aedd96a9aa22389ccf
-X-Git-Newrev: 02de34989560b40a963fa13dddfb4714470fec25
+X-Git-Oldrev: 02de34989560b40a963fa13dddfb4714470fec25
+X-Git-Newrev: 7c65b4484e1ed414496488cf8eb4fe967b10c087
 X-Patchwork-Hint: ignore
-Message-Id: <20250509170815.7575E866CA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-flask-restx: new package
+Message-Id: <20250509170815.80499866CB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pyproj: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,96 +64,134 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02de34989560b40a963fa13dddfb4714470fec25
+commit: https://git.buildroot.net/buildroot/commit/?id=7c65b4484e1ed414496488cf8eb4fe967b10c087
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Support REST APIs with Flask applications
-https://flask-restx.readthedocs.io/en/latest/
+Provides cartographic projections in Python
+https://pyproj4.github.io/pyproj/stable/
 
 Signed-off-by: Daniel Crowe <daniel.crowe@maxmine.com.au>
-[Julien: reword commit title]
+[Julien:
+ - reword commit title
+ - add test files in DEVELOPERS entries
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- package/python-flask-restx/Config.in               | 12 ++++++++++++
- package/python-flask-restx/python-flask-restx.hash |  5 +++++
- package/python-flask-restx/python-flask-restx.mk   | 14 ++++++++++++++
- 5 files changed, 33 insertions(+)
+ DEVELOPERS                                           |  3 +++
+ package/Config.in                                    |  1 +
+ package/python-pyproj/Config.in                      |  9 +++++++++
+ package/python-pyproj/python-pyproj.hash             |  5 +++++
+ package/python-pyproj/python-pyproj.mk               | 20 ++++++++++++++++++++
+ .../testing/tests/package/sample_python_pyproj.py    |  5 +++++
+ support/testing/tests/package/test_python_pyproj.py  | 11 +++++++++++
+ 7 files changed, 54 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index d314be7946..36bf42da32 100644
+index 36bf42da32..7f01b46c70 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -728,6 +728,7 @@ N:	Daniel Crowe <daniel.crowe@maxmine.com.au>
- F:	package/python-aniso8601/
+@@ -729,6 +729,9 @@ F:	package/python-aniso8601/
  F:	package/python-cachelib/
  F:	package/python-flask-caching/
-+F:	package/python-flask-restx/
+ F:	package/python-flask-restx/
++F:	package/python-pyproj/
++F:	support/testing/tests/package/sample_python_pyproj.py
++F:	support/testing/tests/package/test_python_pyproj.py
  
  N:	Daniel J. Leach <dleach@belcan.com>
  F:	package/dacapo/
 diff --git a/package/Config.in b/package/Config.in
-index 59ac4ad070..9e4b0ea167 100644
+index 9e4b0ea167..a9074ac405 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1128,6 +1128,7 @@ menu "External python modules"
- 	source "package/python-flask-expects-json/Config.in"
- 	source "package/python-flask-jsonrpc/Config.in"
- 	source "package/python-flask-login/Config.in"
-+	source "package/python-flask-restx/Config.in"
- 	source "package/python-flask-smorest/Config.in"
- 	source "package/python-flask-sqlalchemy/Config.in"
- 	source "package/python-flask-wtf/Config.in"
-diff --git a/package/python-flask-restx/Config.in b/package/python-flask-restx/Config.in
+@@ -1332,6 +1332,7 @@ menu "External python modules"
+ 	source "package/python-pyphen/Config.in"
+ 	source "package/python-pypika-tortoise/Config.in"
+ 	source "package/python-pypng/Config.in"
++	source "package/python-pyproj/Config.in"
+ 	source "package/python-pyqrcode/Config.in"
+ 	source "package/python-pyqt5/Config.in"
+ 	source "package/python-pyqt5-sip/Config.in"
+diff --git a/package/python-pyproj/Config.in b/package/python-pyproj/Config.in
 new file mode 100644
-index 0000000000..4906869a38
+index 0000000000..ee829d71c5
 --- /dev/null
-+++ b/package/python-flask-restx/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_PYTHON_FLASK_RESTX
-+	bool "python-flask-restx"
-+	select BR2_PACKAGE_PYTHON_ANISO8601 # runtime
-+	select BR2_PACKAGE_PYTHON_FLASK # runtime
-+	select BR2_PACKAGE_PYTHON_JSONSCHEMA # runtime
-+	select BR2_PACKAGE_PYTHON_PYTZ # runtime
-+	select BR2_PACKAGE_PYTHON_WERKZEUG # runtime
++++ b/package/python-pyproj/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_PYPROJ
++	bool "python-pyproj"
++	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
++	select BR2_PACKAGE_PROJ # runtime
 +	help
-+	  Fully featured framework for fast, easy and documented API
-+	  development with Flask.
++	  Python interface to PROJ (cartographic projections and
++	  coordinate transformations library).
 +
-+	  https://github.com/python-restx/flask-restx
-diff --git a/package/python-flask-restx/python-flask-restx.hash b/package/python-flask-restx/python-flask-restx.hash
++	  https://github.com/pyproj4/pyproj
+diff --git a/package/python-pyproj/python-pyproj.hash b/package/python-pyproj/python-pyproj.hash
 new file mode 100644
-index 0000000000..f90601cdc1
+index 0000000000..6d9d4d2a20
 --- /dev/null
-+++ b/package/python-flask-restx/python-flask-restx.hash
++++ b/package/python-pyproj/python-pyproj.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/flask-restx/json
-+md5  262984a0c902db0b6f4afb86a69ea40e  flask-restx-1.3.0.tar.gz
-+sha256  4f3d3fa7b6191fcc715b18c201a12cd875176f92ba4acc61626ccfd571ee1728  flask-restx-1.3.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/pyproj/json
++md5  ad62b11249d8e62879778190a3e3ef8c  pyproj-3.7.1.tar.gz
++sha256  60d72facd7b6b79853f19744779abcd3f804c4e0d4fa8815469db20c9f640a47  pyproj-3.7.1.tar.gz
 +# Locally computed sha256 checksums
-+sha256  d736fc20d979831ab5c380973d01542de97857d975b60a4cf03efbd9e4e38997  LICENSE
-diff --git a/package/python-flask-restx/python-flask-restx.mk b/package/python-flask-restx/python-flask-restx.mk
++sha256  a652687151814d4c4715445912fcb49e7e58f5b248d47a1a88b859a8815e0822  LICENSE
+diff --git a/package/python-pyproj/python-pyproj.mk b/package/python-pyproj/python-pyproj.mk
 new file mode 100644
-index 0000000000..23596f23d4
+index 0000000000..e2e0fada5b
 --- /dev/null
-+++ b/package/python-flask-restx/python-flask-restx.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-pyproj/python-pyproj.mk
+@@ -0,0 +1,20 @@
 +################################################################################
 +#
-+# python-flask-restx
++# python-pyproj
 +#
 +################################################################################
 +
-+PYTHON_FLASK_RESTX_VERSION = 1.3.0
-+PYTHON_FLASK_RESTX_SOURCE = flask-restx-$(PYTHON_FLASK_RESTX_VERSION).tar.gz
-+PYTHON_FLASK_RESTX_SITE = https://files.pythonhosted.org/packages/45/4c/2e7d84e2b406b47cf3bf730f521efe474977b404ee170d8ea68dc37e6733
-+PYTHON_FLASK_RESTX_SETUP_TYPE = setuptools
-+PYTHON_FLASK_RESTX_LICENSE = BSD-3-Clause
-+PYTHON_FLASK_RESTX_LICENSE_FILES = LICENSE
++PYTHON_PYPROJ_VERSION = 3.7.1
++PYTHON_PYPROJ_SOURCE = pyproj-$(PYTHON_PYPROJ_VERSION).tar.gz
++PYTHON_PYPROJ_SITE = https://files.pythonhosted.org/packages/67/10/a8480ea27ea4bbe896c168808854d00f2a9b49f95c0319ddcbba693c8a90
++PYTHON_PYPROJ_SETUP_TYPE = setuptools
++PYTHON_PYPROJ_LICENSE = MIT
++PYTHON_PYPROJ_LICENSE_FILES = LICENSE
++PYTHON_PYPROJ_DEPENDENCIES = host-python-cython proj
++PYTHON_PYPROJ_ENV = \
++	PROJ_DIR=$(HOST_DIR)/bin/ \
++	PROJ_INCDIR=$(HOST_DIR)/include/ \
++	PROJ_LIBDIR=$(TARGET_DIR)/usr/lib/ \
++	PROJ_VERSION=$(PROJ_VERSION)
 +
 +$(eval $(python-package))
+diff --git a/support/testing/tests/package/sample_python_pyproj.py b/support/testing/tests/package/sample_python_pyproj.py
+new file mode 100644
+index 0000000000..f814f8d2df
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_pyproj.py
+@@ -0,0 +1,5 @@
++from pyproj import CRS
++
++# WGS 84 - World Geodetic System 1984, used in GPS
++crs_4326 = CRS.from_epsg(4326)
++assert crs_4326.name == "WGS 84"
+diff --git a/support/testing/tests/package/test_python_pyproj.py b/support/testing/tests/package/test_python_pyproj.py
+new file mode 100644
+index 0000000000..2044d517c2
+--- /dev/null
++++ b/support/testing/tests/package/test_python_pyproj.py
+@@ -0,0 +1,11 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3Pyproj(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_PYPROJ=y
++        """
++    sample_scripts = ["tests/package/sample_python_pyproj.py"]
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
