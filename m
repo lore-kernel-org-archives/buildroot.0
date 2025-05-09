@@ -4,49 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76899C3ABCC
-	for <buildroot@archiver.kernel.org>; Fri,  9 May 2025 17:08:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36444C3ABC3
+	for <buildroot@archiver.kernel.org>; Fri,  9 May 2025 17:09:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 17D1040CC2;
-	Fri,  9 May 2025 17:08:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E01314097E;
+	Fri,  9 May 2025 17:09:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wgf0JqbF5AhE; Fri,  9 May 2025 17:08:19 +0000 (UTC)
+ id etf2F7lni5aU; Fri,  9 May 2025 17:09:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C14741505
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1936B40C44
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C14741505;
-	Fri,  9 May 2025 17:08:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8894971C
- for <buildroot@buildroot.org>; Fri,  9 May 2025 17:08:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1936B40C44;
+	Fri,  9 May 2025 17:09:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0774C1A9
+ for <buildroot@buildroot.org>; Fri,  9 May 2025 17:09:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D64740BDE
- for <buildroot@buildroot.org>; Fri,  9 May 2025 17:08:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id ED0B340BED
+ for <buildroot@buildroot.org>; Fri,  9 May 2025 17:09:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6k7VJFpTJTXF for <buildroot@buildroot.org>;
- Fri,  9 May 2025 17:08:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FC7540166
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8FC7540166
- for <buildroot@buildroot.org>; Fri,  9 May 2025 17:08:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 80499866CB; Fri,  9 May 2025 17:08:15 +0000 (UTC)
+ id Z70hdDePvFZf for <buildroot@buildroot.org>;
+ Fri,  9 May 2025 17:09:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2412640166
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2412640166
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2412640166
+ for <buildroot@buildroot.org>; Fri,  9 May 2025 17:09:04 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 3261713F8B5;
+ Fri,  9 May 2025 19:08:58 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Fri, 09 May 2025 19:08:58 +0200
+MIME-Version: 1.0
+Date: Fri, 09 May 2025 19:08:58 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 9 May 2025 19:01:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 02de34989560b40a963fa13dddfb4714470fec25
-X-Git-Newrev: 7c65b4484e1ed414496488cf8eb4fe967b10c087
-X-Patchwork-Hint: ignore
-Message-Id: <20250509170815.80499866CB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyproj: new package
+To: Daniel Crowe <daniel.crowe@maxmine.com.au>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20250509011530.202963-1-daniel.crowe@maxmine.com.au>
+References: <20250509011530.202963-1-daniel.crowe@maxmine.com.au>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <57d368b473a8af9e919415a7697f67d7@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1746810541;
+ bh=xpDcN6JT7KnQQdE//TeQfgQHZ518t1JaiMnUwkLqnRA=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=GoprAN5pqzZre9ZveF8g+qoAr3aY110uOcdr1pUFc+fwjZ5WhwjDZU46UELA3XUAy
+ g+GWNVM3+hrL4j1RqCA4ngh2V8Rqe8htez24bh6/JczqXThrGE2806sdSxbX0j/epx
+ +K81rv1QpUtwHzySJRRnVcQt6uQPHnOkU2R0EMrG30GlNAWQZtHrSC0+hHVGCEeS0A
+ iteCFmEa4sqpLAEiQCIY0KJLInsYrpqyYusM8iESIy5zGjV5zCChxCcy64e5U/JzBI
+ g/W6RiReeXWj+7V/V22l1qXu0aRIUZgE6INrc7e1NkCkmYoNmiLWfQiI/MRYXvhohQ
+ r+0Up5vhsjwlQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=GoprAN5p
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-flask-restx: add version
+ 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,140 +83,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c65b4484e1ed414496488cf8eb4fe967b10c087
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 09/05/2025 03:15, Daniel Crowe wrote:
+> Support REST APIs with Flask applications
+> https://flask-restx.readthedocs.io/en/latest/
+> 
+> Signed-off-by: Daniel Crowe <daniel.crowe@maxmine.com.au>
 
-Provides cartographic projections in Python
-https://pyproj4.github.io/pyproj/stable/
-
-Signed-off-by: Daniel Crowe <daniel.crowe@maxmine.com.au>
-[Julien:
- - reword commit title
- - add test files in DEVELOPERS entries
-]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                           |  3 +++
- package/Config.in                                    |  1 +
- package/python-pyproj/Config.in                      |  9 +++++++++
- package/python-pyproj/python-pyproj.hash             |  5 +++++
- package/python-pyproj/python-pyproj.mk               | 20 ++++++++++++++++++++
- .../testing/tests/package/sample_python_pyproj.py    |  5 +++++
- support/testing/tests/package/test_python_pyproj.py  | 11 +++++++++++
- 7 files changed, 54 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 36bf42da32..7f01b46c70 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -729,6 +729,9 @@ F:	package/python-aniso8601/
- F:	package/python-cachelib/
- F:	package/python-flask-caching/
- F:	package/python-flask-restx/
-+F:	package/python-pyproj/
-+F:	support/testing/tests/package/sample_python_pyproj.py
-+F:	support/testing/tests/package/test_python_pyproj.py
- 
- N:	Daniel J. Leach <dleach@belcan.com>
- F:	package/dacapo/
-diff --git a/package/Config.in b/package/Config.in
-index 9e4b0ea167..a9074ac405 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1332,6 +1332,7 @@ menu "External python modules"
- 	source "package/python-pyphen/Config.in"
- 	source "package/python-pypika-tortoise/Config.in"
- 	source "package/python-pypng/Config.in"
-+	source "package/python-pyproj/Config.in"
- 	source "package/python-pyqrcode/Config.in"
- 	source "package/python-pyqt5/Config.in"
- 	source "package/python-pyqt5-sip/Config.in"
-diff --git a/package/python-pyproj/Config.in b/package/python-pyproj/Config.in
-new file mode 100644
-index 0000000000..ee829d71c5
---- /dev/null
-+++ b/package/python-pyproj/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_PYPROJ
-+	bool "python-pyproj"
-+	select BR2_PACKAGE_PYTHON_CERTIFI # runtime
-+	select BR2_PACKAGE_PROJ # runtime
-+	help
-+	  Python interface to PROJ (cartographic projections and
-+	  coordinate transformations library).
-+
-+	  https://github.com/pyproj4/pyproj
-diff --git a/package/python-pyproj/python-pyproj.hash b/package/python-pyproj/python-pyproj.hash
-new file mode 100644
-index 0000000000..6d9d4d2a20
---- /dev/null
-+++ b/package/python-pyproj/python-pyproj.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/pyproj/json
-+md5  ad62b11249d8e62879778190a3e3ef8c  pyproj-3.7.1.tar.gz
-+sha256  60d72facd7b6b79853f19744779abcd3f804c4e0d4fa8815469db20c9f640a47  pyproj-3.7.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  a652687151814d4c4715445912fcb49e7e58f5b248d47a1a88b859a8815e0822  LICENSE
-diff --git a/package/python-pyproj/python-pyproj.mk b/package/python-pyproj/python-pyproj.mk
-new file mode 100644
-index 0000000000..e2e0fada5b
---- /dev/null
-+++ b/package/python-pyproj/python-pyproj.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# python-pyproj
-+#
-+################################################################################
-+
-+PYTHON_PYPROJ_VERSION = 3.7.1
-+PYTHON_PYPROJ_SOURCE = pyproj-$(PYTHON_PYPROJ_VERSION).tar.gz
-+PYTHON_PYPROJ_SITE = https://files.pythonhosted.org/packages/67/10/a8480ea27ea4bbe896c168808854d00f2a9b49f95c0319ddcbba693c8a90
-+PYTHON_PYPROJ_SETUP_TYPE = setuptools
-+PYTHON_PYPROJ_LICENSE = MIT
-+PYTHON_PYPROJ_LICENSE_FILES = LICENSE
-+PYTHON_PYPROJ_DEPENDENCIES = host-python-cython proj
-+PYTHON_PYPROJ_ENV = \
-+	PROJ_DIR=$(HOST_DIR)/bin/ \
-+	PROJ_INCDIR=$(HOST_DIR)/include/ \
-+	PROJ_LIBDIR=$(TARGET_DIR)/usr/lib/ \
-+	PROJ_VERSION=$(PROJ_VERSION)
-+
-+$(eval $(python-package))
-diff --git a/support/testing/tests/package/sample_python_pyproj.py b/support/testing/tests/package/sample_python_pyproj.py
-new file mode 100644
-index 0000000000..f814f8d2df
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_pyproj.py
-@@ -0,0 +1,5 @@
-+from pyproj import CRS
-+
-+# WGS 84 - World Geodetic System 1984, used in GPS
-+crs_4326 = CRS.from_epsg(4326)
-+assert crs_4326.name == "WGS 84"
-diff --git a/support/testing/tests/package/test_python_pyproj.py b/support/testing/tests/package/test_python_pyproj.py
-new file mode 100644
-index 0000000000..2044d517c2
---- /dev/null
-+++ b/support/testing/tests/package/test_python_pyproj.py
-@@ -0,0 +1,11 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3Pyproj(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_PYPROJ=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_pyproj.py"]
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
