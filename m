@@ -1,75 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 52967C3ABC3
-	for <buildroot@archiver.kernel.org>; Fri,  9 May 2025 13:06:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C654C3ABC3
+	for <buildroot@archiver.kernel.org>; Fri,  9 May 2025 13:13:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 13334410A2;
-	Fri,  9 May 2025 13:06:11 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gn8OtEv-yU8N; Fri,  9 May 2025 13:06:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 53289410EF
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53289410EF;
-	Fri,  9 May 2025 13:06:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 30BDE1A9
- for <buildroot@buildroot.org>; Fri,  9 May 2025 13:06:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 15D5783BA0
- for <buildroot@buildroot.org>; Fri,  9 May 2025 13:06:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 081F982123;
+	Fri,  9 May 2025 13:13:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id onljBlF7Rwhx for <buildroot@buildroot.org>;
- Fri,  9 May 2025 13:06:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CA0A883BAB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CA0A883BAB
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CA0A883BAB
- for <buildroot@buildroot.org>; Fri,  9 May 2025 13:06:04 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id C3D2D5FFB4;
- Fri,  9 May 2025 15:05:59 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 09 May 2025 15:05:59 +0200
-MIME-Version: 1.0
-Date: Fri, 09 May 2025 15:05:59 +0200
+ id EIWjEyPp0Jwz; Fri,  9 May 2025 13:13:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37EC882125
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 37EC882125;
+	Fri,  9 May 2025 13:13:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9D80615A
+ for <buildroot@buildroot.org>; Fri,  9 May 2025 13:13:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 838B940B62
+ for <buildroot@buildroot.org>; Fri,  9 May 2025 13:13:40 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VcbO_qeSMMpy for <buildroot@buildroot.org>;
+ Fri,  9 May 2025 13:13:39 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B97F040C68
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B97F040C68
+ for <buildroot@buildroot.org>; Fri,  9 May 2025 13:13:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A5C698669B; Fri,  9 May 2025 13:13:39 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: buildroot@buildroot.org, Joseph Kogut <joseph.kogut@gmail.com>
-In-Reply-To: <20250507184444.1936957-1-giulio.benetti@benettiengineering.com>
-References: <20250507184444.1936957-1-giulio.benetti@benettiengineering.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <470b7c00b60450e34dc78746d5142b10@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1746795962;
- bh=XphmmQ6HVFnzru2hVI33e+nIx52nqPAeyxaURwoMDJ4=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=o9XuYkmRQ9sK8Ij2RIvyO2pCwRt3hgO2j2t9hh7nRBEXdWMoJAmBtNJmCg7mZT7pJ
- gmEUfloU4UHr9H36JRygkufnEMsOmu9g9a91gW0dp/9SJ8VGh19QqMTwRzvDH2vAur
- UtcOtrApvbbyKlLfN5pYM+eqAfwukpJGx+hmmNFoJfDds7iHI4aeCoQ4FCmQCZZX97
- YHsq/i/y1w/d1EDadEpiOZ8rKSSqrolCySGQXEy4j6mjXjVTEtVcJkUYfvqZop0Kra
- VRIW0Ks11Y5/DT0TMeenBxtMdVs6hmj3brhwCWoEYFOxQnIm/9aps+l6zO70qvvRER
- j/qgdzMEswqMg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=o9XuYkmR
-Subject: Re: [Buildroot] [PATCH] package/libnss: bump version to 3.111
+To: buildroot@buildroot.org
+Date: Fri, 9 May 2025 15:09:47 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b5b88330a7c412b98ea55a4af2765d5bd8e4992e
+X-Git-Newrev: d5826736d5aa63eb818a5d20338b7b698f66dad7
+X-Patchwork-Hint: ignore
+Message-Id: <20250509131339.A5C698669B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/swupdate: bump to version 2025.05
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -81,18 +58,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 07/05/2025 20:44, Giulio Benetti wrote:
-> For release note, see:
-> https://hg-edge.mozilla.org/projects/nss/file/tip/doc/rst/releases/nss_3_111.rst
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=d5826736d5aa63eb818a5d20338b7b698f66dad7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+For release note, see:
+https://github.com/sbabic/swupdate/releases/tag/2025.05
+
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/swupdate/swupdate.hash | 2 +-
+ package/swupdate/swupdate.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
+index 00e7d0b623..bc911d1820 100644
+--- a/package/swupdate/swupdate.hash
++++ b/package/swupdate/swupdate.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  8470e9e0540d0e3299d8dd57b4a230f3b640dd4491e8ba705755d6bc75569832  swupdate-2024.12.1.tar.gz
++sha256  678b47fd2419727c4d0abf5c9f3bc0dc4b67e95951132bd1c8f5603e88947779  swupdate-2025.05.tar.gz
+ sha256  4cf04ed34ff0ebbf5c71345b56e6af5093fc17206364cca0ebbae92ef3940683  LICENSES/BSD-1-Clause.txt
+ sha256  e27a3e87706b3aa5ff2e50eaafe2e6ed5397fbf2d7679eaf444a6d000518a3a6  LICENSES/BSD-3-Clause.txt
+ sha256  0558101984550fa84d1d13c2af11d116c20079d2be58711e8d99cadce7009192  LICENSES/CC0-1.0.txt
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 647a6f071b..05329d13b8 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SWUPDATE_VERSION = 2024.12.1
++SWUPDATE_VERSION = 2025.05
+ SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+ SWUPDATE_LICENSE = GPL-2.0, GPL-2.0+, LGPL-2.1+, MIT, ISC, BSD-1-Clause, BSD-3-Clause, CC0-1.0, CC-BY-SA-4.0, OFL-1.1
+ SWUPDATE_LICENSE_FILES = LICENSES/BSD-1-Clause.txt \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
