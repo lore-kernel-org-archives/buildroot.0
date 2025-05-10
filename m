@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03D06C3ABDD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:58:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D284C2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:59:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F65C70C4B;
-	Mon, 19 May 2025 10:58:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4CF6570C6B;
+	Mon, 19 May 2025 10:58:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YpRNj9dLZP79; Mon, 19 May 2025 10:58:54 +0000 (UTC)
+ id W6YDI3U80kGi; Mon, 19 May 2025 10:58:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8834D70C56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3307A70C6C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8834D70C56;
-	Mon, 19 May 2025 10:58:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3307A70C6C;
+	Mon, 19 May 2025 10:58:57 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1DC9FD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:46:14 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 3358CD4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:46:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 16FBA40E3B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 494DA414E4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M4nvbJZ9Oa58 for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:25 +0000 (UTC)
+ id MqvkRa12qpW0 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DA189414E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E697B4149D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA189414E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E697B4149D
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8A0E8348A; Mon, 19 May 2025 10:40:01 +0000 (UTC)
+ id E2E138348A; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 12 May 2025 22:10:26 +0200
+Date: Sat, 10 May 2025 21:56:26 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 598dfb7c1a10acad39d6d6aa943f3524f8dfbd3b
-X-Git-Newrev: c38ee456cbf13bd381f2194ae523a088a07b474b
+X-Git-Oldrev: 176c61266e6cce1e7039d67c5d848fde534312f1
+X-Git-Newrev: 9aec878a0dde3615d8f1ae18a7c13b387e26e52d
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104001.D8A0E8348A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-jc: bump to
- 1.25.5
+Message-Id: <20250519104000.E2E138348A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] {toolchain,
+ linux-headers}: add support for 6.14 headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +65,117 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c38ee456cbf13bd381f2194ae523a088a07b474b
+commit: https://git.buildroot.net/buildroot/commit/?id=9aec878a0dde3615d8f1ae18a7c13b387e26e52d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+And add (and default to) 6.14 to linux-headers.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-jc/python-jc.hash | 4 ++--
- package/python-jc/python-jc.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ linux/linux.hash                                            |  1 +
+ package/linux-headers/Config.in.host                        | 13 +++++++++++--
+ toolchain/Config.in                                         |  5 +++++
+ .../toolchain-external-custom/Config.in.options             |  6 +++++-
+ 4 files changed, 22 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-jc/python-jc.hash b/package/python-jc/python-jc.hash
-index d8ee918ac7..6e80024639 100644
---- a/package/python-jc/python-jc.hash
-+++ b/package/python-jc/python-jc.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jc/json
--md5  77e798f2c3fbe89c0dbf7b31dc35fc69  jc-1.25.4.tar.gz
--sha256  a32eaf029c56b582dadae48895f20784d0f84f2fa28a8e2b32f377a8bffa8b39  jc-1.25.4.tar.gz
-+md5  40bc4d9fa71e3809c236954a1bd2354f  jc-1.25.5.tar.gz
-+sha256  f8ac0e4bc427b0ee8a3bdb07a254cc9df6b6036cd440f6c425e2e519cdbda78a  jc-1.25.5.tar.gz
- # Locally computed sha256 checksums
- sha256  6493f2db400f4166ca0956cf192a41aa092bd1396ff463e7fdaf51f257c10497  LICENSE.md
-diff --git a/package/python-jc/python-jc.mk b/package/python-jc/python-jc.mk
-index 9a3754a0fa..16bdc05895 100644
---- a/package/python-jc/python-jc.mk
-+++ b/package/python-jc/python-jc.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 68bc458c71..4dc1504be6 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,4 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  21817f1998e2230f81f7e4f605fa6fdcb040e14fa27d99c27ddb16ce749797a9  linux-6.14.6.tar.xz
+ sha256  611fbb669cf5539da48137a9c052becd499f3f862afaf21ab84cea3966221242  linux-6.13.12.tar.xz
+ sha256  e8a099182562aecff781de72ce769461e706d97af42d740dff20eb450dd5771e  linux-6.12.28.tar.xz
+ sha256  ff856748671629c1fefef219099e0b4b81131c2d325e768cb0806e204157014e  linux-6.6.90.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 6fd591eb69..f788f9ca44 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -3,7 +3,7 @@ comment "Kernel Header Options"
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_6_13
++	default BR2_KERNEL_HEADERS_6_14
+ 	help
+ 	  Select the kernel version to get headers from.
  
--PYTHON_JC_VERSION = 1.25.4
-+PYTHON_JC_VERSION = 1.25.5
- PYTHON_JC_SOURCE = jc-$(PYTHON_JC_VERSION).tar.gz
--PYTHON_JC_SITE = https://files.pythonhosted.org/packages/5b/82/146ef4c94297ef87c6a732c92dd57761bea2c2179e1b8ca8a6b9b8dd6ff7
-+PYTHON_JC_SITE = https://files.pythonhosted.org/packages/1b/da/f6ec6a79f8dea70671f41d7162cfefdfe97e9c5b6c2227c1737183c05cd6
- PYTHON_JC_SETUP_TYPE = setuptools
- PYTHON_JC_LICENSE = MIT, BSD-3-Clause (bundled pbPlist)
- PYTHON_JC_LICENSE_FILES = LICENSE.md
+@@ -51,6 +51,10 @@ config BR2_KERNEL_HEADERS_6_12
+ config BR2_KERNEL_HEADERS_6_13
+ 	bool "Linux 6.13.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_13
++
++config BR2_KERNEL_HEADERS_6_14
++	bool "Linux 6.14.x kernel headers"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_14
+ 	select BR2_KERNEL_HEADERS_LATEST
+ 
+ config BR2_KERNEL_HEADERS_VERSION
+@@ -129,8 +133,12 @@ choice
+ 	  If your kernel headers are more recent than the latest version
+ 	  in the choice, then select the latest version.
+ 
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_14
++	bool "6.14.x or later"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_14
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_13
+-	bool "6.13.x or later"
++	bool "6.13.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_13
+ 
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12
+@@ -443,6 +451,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "6.6.90"	if BR2_KERNEL_HEADERS_6_6
+ 	default "6.12.28"	if BR2_KERNEL_HEADERS_6_12
+ 	default "6.13.12"	if BR2_KERNEL_HEADERS_6_13
++	default "6.14.6"	if BR2_KERNEL_HEADERS_6_14
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 2290d13ad0..89eaa7b618 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -649,6 +649,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_13
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
++
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_14
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_13
+ 	select BR2_TOOLCHAIN_HEADERS_LATEST
+ 
+ # This should be selected by the latest version, above, to indicate that
+@@ -662,6 +666,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "6.14" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_14
+ 	default "6.13" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_13
+ 	default "6.12" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
+ 	default "6.11" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_11
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index e1ecf06e4a..94ea3b82de 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -166,8 +166,12 @@ choice
+ 	  If your toolchain uses headers newer than the latest version
+ 	  in the choice, then select the latest version.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_14
++	bool "6.14.x or later"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_14
++
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_13
+-	bool "6.13.x or later"
++	bool "6.13.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_13
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_6_12
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
