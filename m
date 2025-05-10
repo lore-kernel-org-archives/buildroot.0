@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FD18C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:58:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08E6BC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:58:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6295B6174B;
-	Mon, 19 May 2025 10:58:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9798F845FD;
+	Mon, 19 May 2025 10:58:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id puqBN7AalhCX; Mon, 19 May 2025 10:58:13 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W1YuLVXKATeF; Mon, 19 May 2025 10:58:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 222A470BD1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8594A845F6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 222A470BD1;
-	Mon, 19 May 2025 10:58:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8594A845F6;
+	Mon, 19 May 2025 10:58:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4DF9FD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:53 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D501D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:45:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EF1C341461
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:23 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0079D41466
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6GQcyJGSuxjT for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:21 +0000 (UTC)
+ id 3MEhs0lHBVrn for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C37440DA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B53D64148E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1C37440DA4
+ by smtp4.osuosl.org (Postfix) with ESMTP id B53D64148E
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1AC7D872E7; Mon, 19 May 2025 10:40:00 +0000 (UTC)
+ id AF23182A2E; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 8 May 2025 19:13:41 +0200
+Date: Sat, 10 May 2025 19:05:50 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e40bf89e40109f5469cf51abfce52e7c4f690965
-X-Git-Newrev: 56c834400eefb25ed2ea9b49aaf8fd89efa5f617
+X-Git-Oldrev: af674f3ecf44d45f92c35af8508077aa138e13f8
+X-Git-Newrev: 1799cfebfd5ea1312cce74b3807d4aad044bce67
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104000.1AC7D872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/gdb: add patches for
- GCC 15.x compatibility
+Message-Id: <20250519104000.AF23182A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/netsnmp: bump to
+ version 5.9.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,194 +65,162 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56c834400eefb25ed2ea9b49aaf8fd89efa5f617
+commit: https://git.buildroot.net/buildroot/commit/?id=1799cfebfd5ea1312cce74b3807d4aad044bce67
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This commit backports an upstream patch fixing the bundled readline
-library so that it builds with GCC 15.x.
+Changes 5.9.3 to 5.9.4, from:
+https://github.com/net-snmp/net-snmp/blob/v5.9.4/CHANGES
+
+    IMPORTANT: SNMP over TLS and/or DTLS are not functioning properly
+    in this release with various versions of OpenSSL and will be fixed
+    in a future release.
+
+    libsnmp:
+      - Remove the SNMP_SWIPE_MEM() macro Remove this macro since it is not
+        used in the Net-SNMP code base.
+      - DISPLAY-HINT fixes
+      - Miscellanious improvements to the transports
+      - Handle multiple oldEngineID configuration lines
+      - fixes for DNS names longer than 63 characters
+
+    agent:
+      - Added a ignoremount configuration option for the HOST-MIB
+      - disallow SETs with a NULL varbind
+      - fix the --enable-minimalist build
+
+    apps:
+      - snmpset: allow SET with NULL varbind for testing
+      - snmptrapd: improved MySQL logging code
+
+    general:
+      - configure: Remove -Wno-deprecated as it is no longer needed
+      - miscellanious ther bug fixes, build fixes and cleanups
+
+We can drop patch 0001-snmp_agent-disallow-SET-with-NULL-varbind.patch
+because it's upstream as of commit
+4589352dac3ae111c7621298cf231742209efd9b, which is part of the 5.9.4
+release.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Julien: add link to changelog]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...eadline-tcap.h-Update-definitions-for-C23.patch | 52 ++++++++++++++++++++++
- ...eadline-tcap.h-Update-definitions-for-C23.patch | 52 ++++++++++++++++++++++
- ...eadline-tcap.h-Update-definitions-for-C23.patch | 52 ++++++++++++++++++++++
- 3 files changed, 156 insertions(+)
+ ...-6.7-compatibility-parsing-proc-net-snmp.patch} |  0
+ ...snmp_agent-disallow-SET-with-NULL-varbind.patch | 72 ----------------------
+ package/netsnmp/netsnmp.hash                       |  6 +-
+ package/netsnmp/netsnmp.mk                         |  2 +-
+ 4 files changed, 4 insertions(+), 76 deletions(-)
 
-diff --git a/package/gdb/14.2/0010-readline-tcap.h-Update-definitions-for-C23.patch b/package/gdb/14.2/0010-readline-tcap.h-Update-definitions-for-C23.patch
-new file mode 100644
-index 0000000000..50100d8bfc
---- /dev/null
-+++ b/package/gdb/14.2/0010-readline-tcap.h-Update-definitions-for-C23.patch
-@@ -0,0 +1,52 @@
-+From 0f81e47dff4bddc6ba9c45402821f857251f2b0f Mon Sep 17 00:00:00 2001
-+From: Chris Packham <judge.packham@gmail.com>
-+Date: Wed, 30 Apr 2025 16:49:44 +1200
-+Subject: [PATCH] readline/tcap.h: Update definitions for C23
-+
-+C23 changes how function definitions like int `int tputs ()` are
-+interpreted. In older standards this meant that the function arguments
-+are unknown. In C23 this is interpreted as `int tputs (void)` so now
-+when we compile with GCC15 (which defaults to -std=gnu23) we get an
-+error such as
-+
-+  readline/display.c:2839:17: error: too many arguments to function 'tputs'; expected 0, have 3
-+
-+Add the function arguments for tgetent(), tgetflag(), tgetnum(),
-+tgetstr(), tputs() and tgoto().
-+
-+Signed-off-by: Chris Packham <judge.packham@gmail.com>
-+Approved-By: Tom Tromey <tom@tromey.com>
-+Upstream: 5c87b330e910f8be1443c881fd16a70e685f1f2f
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ readline/readline/tcap.h | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/readline/readline/tcap.h b/readline/readline/tcap.h
-+index 859e6eed5aa..9e2ed124e49 100644
-+--- a/readline/readline/tcap.h
-++++ b/readline/readline/tcap.h
-+@@ -46,14 +46,14 @@ extern char *UP, *BC;
-+ 
-+ extern short ospeed;
-+ 
-+-extern int tgetent ();
-+-extern int tgetflag ();
-+-extern int tgetnum ();
-+-extern char *tgetstr ();
-++extern int tgetent (char *bp, const char *name);
-++extern int tgetflag (char *id);
-++extern int tgetnum (char *id);
-++extern char *tgetstr (char *id, char **area);
-+ 
-+-extern int tputs ();
-++extern int tputs (const char *str, int affcnt, int (*putc)(int));
-+ 
-+-extern char *tgoto ();
-++extern char *tgoto (const char *cap, int col, int row);
-+ 
-+ #endif /* HAVE_TERMCAP_H */
-+ 
-+-- 
-+2.49.0
-+
-diff --git a/package/gdb/15.2/0010-readline-tcap.h-Update-definitions-for-C23.patch b/package/gdb/15.2/0010-readline-tcap.h-Update-definitions-for-C23.patch
-new file mode 100644
-index 0000000000..64f741fe75
---- /dev/null
-+++ b/package/gdb/15.2/0010-readline-tcap.h-Update-definitions-for-C23.patch
-@@ -0,0 +1,52 @@
-+From 130750cf9607fc1c4bcbead820a27bee6ee60f04 Mon Sep 17 00:00:00 2001
-+From: Chris Packham <judge.packham@gmail.com>
-+Date: Wed, 30 Apr 2025 16:49:44 +1200
-+Subject: [PATCH] readline/tcap.h: Update definitions for C23
-+
-+C23 changes how function definitions like int `int tputs ()` are
-+interpreted. In older standards this meant that the function arguments
-+are unknown. In C23 this is interpreted as `int tputs (void)` so now
-+when we compile with GCC15 (which defaults to -std=gnu23) we get an
-+error such as
-+
-+  readline/display.c:2839:17: error: too many arguments to function 'tputs'; expected 0, have 3
-+
-+Add the function arguments for tgetent(), tgetflag(), tgetnum(),
-+tgetstr(), tputs() and tgoto().
-+
-+Signed-off-by: Chris Packham <judge.packham@gmail.com>
-+Approved-By: Tom Tromey <tom@tromey.com>
-+Upstream: 5c87b330e910f8be1443c881fd16a70e685f1f2f
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ readline/readline/tcap.h | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/readline/readline/tcap.h b/readline/readline/tcap.h
-+index 859e6eed5aa..9e2ed124e49 100644
-+--- a/readline/readline/tcap.h
-++++ b/readline/readline/tcap.h
-+@@ -46,14 +46,14 @@ extern char *UP, *BC;
-+ 
-+ extern short ospeed;
-+ 
-+-extern int tgetent ();
-+-extern int tgetflag ();
-+-extern int tgetnum ();
-+-extern char *tgetstr ();
-++extern int tgetent (char *bp, const char *name);
-++extern int tgetflag (char *id);
-++extern int tgetnum (char *id);
-++extern char *tgetstr (char *id, char **area);
-+ 
-+-extern int tputs ();
-++extern int tputs (const char *str, int affcnt, int (*putc)(int));
-+ 
-+-extern char *tgoto ();
-++extern char *tgoto (const char *cap, int col, int row);
-+ 
-+ #endif /* HAVE_TERMCAP_H */
-+ 
-+-- 
-+2.49.0
-+
-diff --git a/package/gdb/16.3/0010-readline-tcap.h-Update-definitions-for-C23.patch b/package/gdb/16.3/0010-readline-tcap.h-Update-definitions-for-C23.patch
-new file mode 100644
-index 0000000000..c9a34e9a89
---- /dev/null
-+++ b/package/gdb/16.3/0010-readline-tcap.h-Update-definitions-for-C23.patch
-@@ -0,0 +1,52 @@
-+From f37d1bbe334c751b9bd77fa3a9d9accd93614677 Mon Sep 17 00:00:00 2001
-+From: Chris Packham <judge.packham@gmail.com>
-+Date: Wed, 30 Apr 2025 16:49:44 +1200
-+Subject: [PATCH] readline/tcap.h: Update definitions for C23
-+
-+C23 changes how function definitions like int `int tputs ()` are
-+interpreted. In older standards this meant that the function arguments
-+are unknown. In C23 this is interpreted as `int tputs (void)` so now
-+when we compile with GCC15 (which defaults to -std=gnu23) we get an
-+error such as
-+
-+  readline/display.c:2839:17: error: too many arguments to function 'tputs'; expected 0, have 3
-+
-+Add the function arguments for tgetent(), tgetflag(), tgetnum(),
-+tgetstr(), tputs() and tgoto().
-+
-+Signed-off-by: Chris Packham <judge.packham@gmail.com>
-+Approved-By: Tom Tromey <tom@tromey.com>
-+Upstream: 5c87b330e910f8be1443c881fd16a70e685f1f2f
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ readline/readline/tcap.h | 12 ++++++------
-+ 1 file changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/readline/readline/tcap.h b/readline/readline/tcap.h
-+index 859e6eed5aa..9e2ed124e49 100644
-+--- a/readline/readline/tcap.h
-++++ b/readline/readline/tcap.h
-+@@ -46,14 +46,14 @@ extern char *UP, *BC;
-+ 
-+ extern short ospeed;
-+ 
-+-extern int tgetent ();
-+-extern int tgetflag ();
-+-extern int tgetnum ();
-+-extern char *tgetstr ();
-++extern int tgetent (char *bp, const char *name);
-++extern int tgetflag (char *id);
-++extern int tgetnum (char *id);
-++extern char *tgetstr (char *id, char **area);
-+ 
-+-extern int tputs ();
-++extern int tputs (const char *str, int affcnt, int (*putc)(int));
-+ 
-+-extern char *tgoto ();
-++extern char *tgoto (const char *cap, int col, int row);
-+ 
-+ #endif /* HAVE_TERMCAP_H */
-+ 
-+-- 
-+2.49.0
-+
+diff --git a/package/netsnmp/0002-Add-Linux-6.7-compatibility-parsing-proc-net-snmp.patch b/package/netsnmp/0001-Add-Linux-6.7-compatibility-parsing-proc-net-snmp.patch
+similarity index 100%
+rename from package/netsnmp/0002-Add-Linux-6.7-compatibility-parsing-proc-net-snmp.patch
+rename to package/netsnmp/0001-Add-Linux-6.7-compatibility-parsing-proc-net-snmp.patch
+diff --git a/package/netsnmp/0001-snmp_agent-disallow-SET-with-NULL-varbind.patch b/package/netsnmp/0001-snmp_agent-disallow-SET-with-NULL-varbind.patch
+deleted file mode 100644
+index 3a6321d7a7..0000000000
+--- a/package/netsnmp/0001-snmp_agent-disallow-SET-with-NULL-varbind.patch
++++ /dev/null
+@@ -1,72 +0,0 @@
+-From b07627fa67c686b07d1eab123cf3e4887a2a93aa Mon Sep 17 00:00:00 2001
+-From: Bill Fenner <fenner@gmail.com>
+-Date: Fri, 25 Nov 2022 08:41:24 -0800
+-Subject: [PATCH] snmp_agent: disallow SET with NULL varbind
+-
+-Upstream: https://github.com/net-snmp/net-snmp/commit/4589352dac3ae111c7621298cf231742209efd9b
+-
+-[Thomas: this commit was merged as part of
+-https://github.com/net-snmp/net-snmp/pull/490/commits, which fixes
+-https://github.com/net-snmp/net-snmp/issues/474 (CVE-2022-44792) and
+-https://github.com/net-snmp/net-snmp/issues/475 (CVE-2022-44793). The
+-other two commits merged as part of this pull request are related to
+-adding a non-regression test for this, which is not relevant for the
+-security fix itself.]
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- agent/snmp_agent.c | 32 ++++++++++++++++++++++++++++++++
+- 1 file changed, 32 insertions(+)
+-
+-diff --git a/agent/snmp_agent.c b/agent/snmp_agent.c
+-index 867d0c166f..3f678fe2df 100644
+---- a/agent/snmp_agent.c
+-+++ b/agent/snmp_agent.c
+-@@ -3719,12 +3719,44 @@ netsnmp_handle_request(netsnmp_agent_session *asp, int status)
+-     return 1;
+- }
+- 
+-+static int
+-+check_set_pdu_for_null_varbind(netsnmp_agent_session *asp)
+-+{
+-+    int i;
+-+    netsnmp_variable_list *v = NULL;
+-+
+-+    for (i = 1, v = asp->pdu->variables; v != NULL; i++, v = v->next_variable) {
+-+	if (v->type == ASN_NULL) {
+-+	    /*
+-+	     * Protect SET implementations that do not protect themselves
+-+	     * against wrong type.
+-+	     */
+-+	    DEBUGMSGTL(("snmp_agent", "disallowing SET with NULL var for varbind %d\n", i));
+-+	    asp->index = i;
+-+	    return SNMP_ERR_WRONGTYPE;
+-+	}
+-+    }
+-+    return SNMP_ERR_NOERROR;
+-+}
+-+
+- int
+- handle_pdu(netsnmp_agent_session *asp)
+- {
+-     int             status, inclusives = 0;
+-     netsnmp_variable_list *v = NULL;
+- 
+-+#ifndef NETSNMP_NO_WRITE_SUPPORT
+-+    /*
+-+     * Check for ASN_NULL in SET request
+-+     */
+-+    if (asp->pdu->command == SNMP_MSG_SET) {
+-+	status = check_set_pdu_for_null_varbind(asp);
+-+	if (status != SNMP_ERR_NOERROR) {
+-+	    return status;
+-+	}
+-+    }
+-+#endif /* NETSNMP_NO_WRITE_SUPPORT */
+-+
+-     /*
+-      * for illegal requests, mark all nodes as ASN_NULL 
+-      */
+--- 
+-2.41.0
+-
+diff --git a/package/netsnmp/netsnmp.hash b/package/netsnmp/netsnmp.hash
+index e1e9d10898..7898941271 100644
+--- a/package/netsnmp/netsnmp.hash
++++ b/package/netsnmp/netsnmp.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking pgp signature at
+-# https://sourceforge.net/projects/net-snmp/files/net-snmp/5.9.3/net-snmp-5.9.3.tar.gz.asc
+-# using key D0F8F495DA6160C44EFFBF10F07B9D2DACB19FD6
+-sha256  2097f29b7e1bf3f1300b4bae52fa2308d0bb8d5d3998dbe02f9462a413a2ef0a  net-snmp-5.9.3.tar.gz
++# https://sourceforge.net/projects/net-snmp/files/net-snmp/5.9.4/net-snmp-5.9.4.tar.gz.asc
++# using key 6E6718AEF1EB5C65C32D1B2A356BC0B552D53CAB
++sha256  8b4de01391e74e3c7014beb43961a2d6d6fa03acc34280b9585f4930745b0544  net-snmp-5.9.4.tar.gz
+ 
+ # Hash for license file
+ sha256  ed869ea395a1f125819a56676385ab0557a21507764bf56f2943302011381e59  COPYING
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 6575ff1afa..499e1d9477 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NETSNMP_VERSION = 5.9.3
++NETSNMP_VERSION = 5.9.4
+ NETSNMP_SITE = https://downloads.sourceforge.net/project/net-snmp/net-snmp/$(NETSNMP_VERSION)
+ NETSNMP_SOURCE = net-snmp-$(NETSNMP_VERSION).tar.gz
+ NETSNMP_LICENSE = Various BSD-like
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
