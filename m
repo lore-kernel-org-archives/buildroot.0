@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1E549C3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEE0EC2D0CD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:47:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E20A8616E4;
-	Mon, 19 May 2025 10:47:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 81D9983F15;
+	Mon, 19 May 2025 10:47:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HMaKkBhbOe8D; Mon, 19 May 2025 10:47:31 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9zueq2LOs9v4; Mon, 19 May 2025 10:47:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC86461744
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F74D83F0B
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC86461744;
-	Mon, 19 May 2025 10:47:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0EFC0E4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F74D83F0B;
+	Mon, 19 May 2025 10:47:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5421BE4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 182FC4125B
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9FE1E4187A
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N9QHrkdySgiB for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:54 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yMJigbmi1nPO for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2C6940DB7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A76F54180E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F2C6940DB7
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A76F54180E
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E95C383B63; Mon, 19 May 2025 10:39:47 +0000 (UTC)
+ id A562B873D4; Mon, 19 May 2025 10:40:00 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 7 Apr 2025 20:14:08 +0200
+Date: Sat, 10 May 2025 18:59:12 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fb0e3ad9ef74246804e46f3e68cbf2ddc59fab8f
-X-Git-Newrev: 0b9123cd641c0d9f0d673a3b637aefd877640536
+X-Git-Oldrev: c2598f90ebee681e577247844a4aa31888307660
+X-Git-Newrev: af674f3ecf44d45f92c35af8508077aa138e13f8
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103947.E95C383B63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/gstreamer1/gst1-rtsp-server: bump version to 1.24.11
+Message-Id: <20250519104000.A562B873D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/netsnmp: backport
+ patch fixing runtime with Linux >= 6.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,45 +65,156 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b9123cd641c0d9f0d673a3b637aefd877640536
+commit: https://git.buildroot.net/buildroot/commit/?id=af674f3ecf44d45f92c35af8508077aa138e13f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-No functional change, but bump for consistency. For details, see the
-release notes:
+This issue has been reported in
+https://gitlab.com/buildroot.org/buildroot/-/issues/110, where netsnmp
+would not work on Linux >= 6.7 systems due to an issue in parsing
+/proc/net/snmp. We simply backport a fix that's upstream, but not yet
+in any stable release.
 
-    https://gstreamer.freedesktop.org/releases/1.24/
+Fixes:
 
-Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+  https://gitlab.com/buildroot.org/buildroot/-/issues/110
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash | 4 ++--
- package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...x-6.7-compatibility-parsing-proc-net-snmp.patch | 125 +++++++++++++++++++++
+ 1 file changed, 125 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-index 98b211f7a2..cabd77b058 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.hash
-@@ -1,4 +1,4 @@
--# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.22.12.tar.xz.sha256sum
--sha256  bf6c7871e7cf3528e4ec87ddc2f2949691cd269f98e536482ae744c1405cf451  gst-rtsp-server-1.22.12.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-rtsp-server/gst-rtsp-server-1.24.11.tar.xz.sha256sum
-+sha256  d147ff75bc445235fe0a4a4714c26d6b7bf9a485a1ae3a722bd530ab28f98bd3  gst-rtsp-server-1.24.11.tar.xz
- sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
- sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING.LIB
-diff --git a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-index a8c382e115..6a1cca016e 100644
---- a/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-+++ b/package/gstreamer1/gst1-rtsp-server/gst1-rtsp-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_RTSP_SERVER_VERSION = 1.22.12
-+GST1_RTSP_SERVER_VERSION = 1.24.11
- GST1_RTSP_SERVER_SOURCE = gst-rtsp-server-$(GST1_RTSP_SERVER_VERSION).tar.xz
- GST1_RTSP_SERVER_SITE = http://gstreamer.freedesktop.org/src/gst-rtsp-server
- GST1_RTSP_SERVER_LICENSE = LGPL-2.1+
+diff --git a/package/netsnmp/0002-Add-Linux-6.7-compatibility-parsing-proc-net-snmp.patch b/package/netsnmp/0002-Add-Linux-6.7-compatibility-parsing-proc-net-snmp.patch
+new file mode 100644
+index 0000000000..0c15543c0f
+--- /dev/null
++++ b/package/netsnmp/0002-Add-Linux-6.7-compatibility-parsing-proc-net-snmp.patch
+@@ -0,0 +1,125 @@
++From 8350fd9e9c8bd97f587809265516f61aa7fe8aa0 Mon Sep 17 00:00:00 2001
++From: Philippe Troin <phil+github-commits@fifi.org>
++Date: Sat, 3 Feb 2024 10:30:30 -0800
++Subject: [PATCH] Add Linux 6.7 compatibility parsing /proc/net/snmp
++
++Linux 6.7 adds a new OutTransmits field to Ip in /proc/net/snmp.
++This breaks the hard-coded assumptions about the Ip line length.
++Add compatibility to parse Linux 6.7 Ip header while keep support
++for previous versions.
++
++Upstream: https://github.com/net-snmp/net-snmp/commit/49d60ba57f4b462df7dc5fd5b38b4425dab0982c
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ .../ip-mib/data_access/systemstats_linux.c    | 46 +++++++++++++++----
++ 1 file changed, 37 insertions(+), 9 deletions(-)
++
++diff --git a/agent/mibgroup/ip-mib/data_access/systemstats_linux.c b/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
++index a0fbdd9ffa..8eb40742b4 100644
++--- a/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
+++++ b/agent/mibgroup/ip-mib/data_access/systemstats_linux.c
++@@ -36,7 +36,7 @@ netsnmp_access_systemstats_arch_init(void)
++ }
++ 
++ /*
++-  /proc/net/snmp
+++  /proc/net/snmp - Linux 6.6 and lower
++ 
++   Ip: Forwarding DefaultTTL InReceives InHdrErrors InAddrErrors ForwDatagrams InUnknownProtos InDiscards InDelivers OutRequests OutDiscards OutNoRoutes ReasmTimeout ReasmReqds ReasmOKs ReasmFails FragOKs FragFails FragCreates
++   Ip: 2 64 7083534 0 0 0 0 0 6860233 6548963 0 0 1 286623 63322 1 259920 0 0
++@@ -49,6 +49,26 @@ netsnmp_access_systemstats_arch_init(void)
++   
++   Udp: InDatagrams NoPorts InErrors OutDatagrams
++   Udp: 1491094 122 0 1466178
+++*
+++  /proc/net/snmp - Linux 6.7 and higher
+++
+++  Ip: Forwarding DefaultTTL InReceives InHdrErrors InAddrErrors ForwDatagrams InUnknownProtos InDiscards InDelivers OutRequests OutDiscards OutNoRoutes ReasmTimeout ReasmReqds ReasmOKs ReasmFails FragOKs FragFails FragCreates OutTransmits
+++  Ip: 1 64 50859058 496 0 37470604 0 0 20472980 7515791 1756 0 0 7264 3632 0 3548 0 7096 44961424
+++
+++  Icmp: InMsgs InErrors InCsumErrors InDestUnreachs InTimeExcds InParmProbs InSrcQuenchs InRedirects InEchos InEchoReps InTimestamps InTimestampReps InAddrMasks InAddrMaskReps OutMsgs OutErrors OutRateLimitGlobal OutRateLimitHost OutDestUnreachs OutTimeExcds OutParmProbs OutSrcQuenchs OutRedirects OutEchos OutEchoReps OutTimestamps OutTimestampReps OutAddrMasks OutAddrMaskReps
+++  Icmp: 114447 2655 0 17589 0 0 0 0 66905 29953 0 0 0 0 143956 0 0 572 16610 484 0 0 0 59957 66905 0 0 0 0
+++
+++  IcmpMsg: InType0 InType3 InType8 OutType0 OutType3 OutType8 OutType11
+++  IcmpMsg: 29953 17589 66905 66905 16610 59957 484
+++
+++  Tcp: RtoAlgorithm RtoMin RtoMax MaxConn ActiveOpens PassiveOpens AttemptFails EstabResets CurrEstab InSegs OutSegs RetransSegs InErrs OutRsts InCsumErrors
+++  Tcp: 1 200 120000 -1 17744 13525 307 3783 6 18093137 9277788 3499 8 7442 0
+++
+++  Udp: InDatagrams NoPorts InErrors OutDatagrams RcvbufErrors SndbufErrors InCsumErrors IgnoredMulti MemErrors
+++  Udp: 2257832 1422 0 2252835 0 0 0 84 0
+++
+++  UdpLite: InDatagrams NoPorts InErrors OutDatagrams RcvbufErrors SndbufErrors InCsumErrors IgnoredMulti MemErrors
+++  UdpLite: 0 0 0 0 0 0 0 0 0
++ */
++ 
++ 
++@@ -101,10 +121,10 @@ _systemstats_v4(netsnmp_container* container, u_int load_flags)
++     FILE           *devin;
++     char            line[1024];
++     netsnmp_systemstats_entry *entry = NULL;
++-    int             scan_count;
+++    int             scan_count, expected_scan_count;
++     char           *stats, *start = line;
++     int             len;
++-    unsigned long long scan_vals[19];
+++    unsigned long long scan_vals[20];
++ 
++     DEBUGMSGTL(("access:systemstats:container:arch", "load v4 (flags %x)\n",
++                 load_flags));
++@@ -126,10 +146,17 @@ _systemstats_v4(netsnmp_container* container, u_int load_flags)
++      */
++     NETSNMP_IGNORE_RESULT(fgets(line, sizeof(line), devin));
++     len = strlen(line);
++-    if (224 != len) {
+++    switch (len) {
+++    case 224:
+++	expected_scan_count = 19;
+++	break;
+++    case 237:
+++	expected_scan_count = 20;
+++	break;
+++    default:
++         fclose(devin);
++         snmp_log(LOG_ERR, "systemstats_linux: unexpected header length in /proc/net/snmp."
++-                 " %d != 224\n", len);
+++                 " %d not in { 224, 237 } \n", len);
++         return -4;
++     }
++ 
++@@ -178,20 +205,20 @@ _systemstats_v4(netsnmp_container* container, u_int load_flags)
++         memset(scan_vals, 0x0, sizeof(scan_vals));
++         scan_count = sscanf(stats,
++                             "%llu %llu %llu %llu %llu %llu %llu %llu %llu %llu"
++-                            "%llu %llu %llu %llu %llu %llu %llu %llu %llu",
+++                            "%llu %llu %llu %llu %llu %llu %llu %llu %llu %llu",
++                             &scan_vals[0],&scan_vals[1],&scan_vals[2],
++                             &scan_vals[3],&scan_vals[4],&scan_vals[5],
++                             &scan_vals[6],&scan_vals[7],&scan_vals[8],
++                             &scan_vals[9],&scan_vals[10],&scan_vals[11],
++                             &scan_vals[12],&scan_vals[13],&scan_vals[14],
++                             &scan_vals[15],&scan_vals[16],&scan_vals[17],
++-                            &scan_vals[18]);
+++                            &scan_vals[18],&scan_vals[19]);
++         DEBUGMSGTL(("access:systemstats", "  read %d values\n", scan_count));
++ 
++-        if(scan_count != 19) {
+++        if(scan_count != expected_scan_count) {
++             snmp_log(LOG_ERR,
++                      "error scanning systemstats data (expected %d, got %d)\n",
++-                     19, scan_count);
+++                     expected_scan_count, scan_count);
++             netsnmp_access_systemstats_entry_free(entry);
++             return -4;
++         }
++@@ -223,6 +250,7 @@ _systemstats_v4(netsnmp_container* container, u_int load_flags)
++         entry->stats.HCOutFragFails.high = scan_vals[17] >> 32;
++         entry->stats.HCOutFragCreates.low = scan_vals[18] & 0xffffffff;
++         entry->stats.HCOutFragCreates.high = scan_vals[18] >> 32;
+++        /* entry->stats. = scan_vals[19]; / * OutTransmits */
++ 
++         entry->stats.columnAvail[IPSYSTEMSTATSTABLE_HCINRECEIVES] = 1;
++         entry->stats.columnAvail[IPSYSTEMSTATSTABLE_INHDRERRORS] = 1;
++-- 
++2.49.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
