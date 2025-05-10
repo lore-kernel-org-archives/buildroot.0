@@ -4,73 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92E90C3ABC9
-	for <buildroot@archiver.kernel.org>; Sat, 10 May 2025 17:13:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C95CC3ABC9
+	for <buildroot@archiver.kernel.org>; Sat, 10 May 2025 17:16:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4BF95607FF;
-	Sat, 10 May 2025 17:13:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E2B1A60897;
+	Sat, 10 May 2025 17:16:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1-4QSTaPNYcR; Sat, 10 May 2025 17:13:24 +0000 (UTC)
+ id psRqbLQH3SYi; Sat, 10 May 2025 17:16:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74F59608A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 003196082E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74F59608A5;
-	Sat, 10 May 2025 17:13:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 645B4E2
- for <buildroot@buildroot.org>; Sat, 10 May 2025 17:13:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 003196082E;
+	Sat, 10 May 2025 17:16:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1D5BFE2
+ for <buildroot@buildroot.org>; Sat, 10 May 2025 17:16:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4AD4B40119
- for <buildroot@buildroot.org>; Sat, 10 May 2025 17:13:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 02FD860657
+ for <buildroot@buildroot.org>; Sat, 10 May 2025 17:16:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cpP0lL688AsO for <buildroot@buildroot.org>;
- Sat, 10 May 2025 17:13:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
- helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 73EA4400D1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 73EA4400D1
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 73EA4400D1
- for <buildroot@buildroot.org>; Sat, 10 May 2025 17:13:22 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPA id 2DF34780368;
- Sat, 10 May 2025 19:13:18 +0200 (CEST)
-Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
- via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Sat, 10 May 2025 19:13:18 +0200
-MIME-Version: 1.0
-Date: Sat, 10 May 2025 19:13:18 +0200
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bdf6dTHeAlUG for <buildroot@buildroot.org>;
+ Sat, 10 May 2025 17:16:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BC7F6079F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2BC7F6079F
+ for <buildroot@buildroot.org>; Sat, 10 May 2025 17:16:50 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 143A586581; Sat, 10 May 2025 17:16:50 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, Yair Ben Avraham <yairba@protonmail.com>
-In-Reply-To: <20250509220542.379160-1-thomas.petazzoni@bootlin.com>
-References: <20250509220542.379160-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <812213e1e432d31255f06510fd409a0a@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1746897200;
- bh=wO/QZ15ypB1h9YN6VaGAv0lslVB9JmV/bPY0mI4yhFw=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=SlUWBlxQ1cJQOR55hGHLLKYndwZtSiD45oAQOwhB+3m3kvTaXv1KXSa3pKc+zpBPe
- Z22VAbjLAEA2YNjlGWMfzD5NcgtlYmKuDz2CyxmKWjOC4MEiweH5VyYC7dmW+QN1Z+
- PeBbjOdr7C0I/A9vmHbKBxXKPetlReyblNpcoAR9DDKvN6J21OWFjD+zhtdVZktaKA
- wZ1eD8nrC0MKhvLProiH4q8hbnHryb2cMbHGuIWHHI2OudTLjBASdE0cs5gqlmAhrK
- ejmS9nm0iUZsjcNxyY6Ut83opzSidzqPYuj86JejM0qMUQygNyXqVw115An9wacy6I
- BX2uGGuGGTQow==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=SlUWBlxQ
-Subject: Re: [Buildroot] [PATCH] package/tpm2-pkcs11: bump to version 1.9.1
+To: buildroot@buildroot.org
+Date: Sat, 10 May 2025 19:14:28 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 07eb63935aa566864cae08daeef83bb9bd113a47
+X-Git-Newrev: 4745bad303d64c31f5422839c7d494ea2d20e2d9
+X-Patchwork-Hint: ignore
+Message-Id: <20250510171650.143A586581@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libtirpc: backport upstream fixes
+ for GCC 15.x issues
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -82,27 +59,171 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 10/05/2025 00:05, Thomas Petazzoni via buildroot wrote:
-> 1.9.0..1.9.1 changes described at:
-> 
->   https://github.com/tpm2-software/tpm2-pkcs11/releases/tag/1.9.1
-> 
-> Update suggested by https://gitlab.com/magerkraut at
-> https://gitlab.com/buildroot.org/buildroot/-/issues/109 as "There is a
-> issue with the database LOCK file".
-> 
-> Fixes:
-> 
->   https://gitlab.com/buildroot.org/buildroot/-/issues/109
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=4745bad303d64c31f5422839c7d494ea2d20e2d9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applied to master, thanks.
+This commit backports two upstream commits that address GCC 15.x build
+issues.
+
+Fixes:
+
+  https://autobuild.buildroot.org/results/abca98bc69ac51af3652ab2d0d187d1461f83515/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ ...declarations-to-allow-compile-with-gcc-15.patch | 67 ++++++++++++++++++++++
+ ...al-and-key_call-declarations-to-allow-com.patch | 63 ++++++++++++++++++++
+ 2 files changed, 130 insertions(+)
+
+diff --git a/package/libtirpc/0001-Update-declarations-to-allow-compile-with-gcc-15.patch b/package/libtirpc/0001-Update-declarations-to-allow-compile-with-gcc-15.patch
+new file mode 100644
+index 0000000000..f94be6f39a
+--- /dev/null
++++ b/package/libtirpc/0001-Update-declarations-to-allow-compile-with-gcc-15.patch
+@@ -0,0 +1,67 @@
++From 45c1eade8fa7ca62c53e80450b315ccae6db55ea Mon Sep 17 00:00:00 2001
++From: Rudi Heitbaum <rudi@heitbaum.com>
++Date: Thu, 12 Dec 2024 04:16:02 -0500
++Subject: [PATCH] Update declarations to allow compile with gcc-15
++
++This patch fixes some of the compile errors with gcc 15-20241117.
++
++In addition the follow declarations need to be fixed:
++  sed -n 75,77p libtirpc-1.3.6/src/key_call.c
++  cryptkeyres *(*__key_encryptsession_pk_LOCAL)() = 0;
++  cryptkeyres *(*__key_decryptsession_pk_LOCAL)() = 0;
++  des_block *(*__key_gendes_LOCAL)() = 0;
++
++Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
++Signed-off-by: Steve Dickson <steved@redhat.com>
++Upstream: d473f1e1f6ba80bfaee4daa058da159305167323
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/auth_none.c     | 2 +-
++ src/getpublickey.c  | 2 +-
++ src/svc_auth_none.c | 4 ++--
++ 3 files changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/src/auth_none.c b/src/auth_none.c
++index 0b0bbd1..aca6e71 100644
++--- a/src/auth_none.c
+++++ b/src/auth_none.c
++@@ -62,7 +62,7 @@ static bool_t authnone_validate (AUTH *, struct opaque_auth *);
++ static bool_t authnone_refresh (AUTH *, void *);
++ static void authnone_destroy (AUTH *);
++ 
++-extern bool_t xdr_opaque_auth();
+++extern bool_t xdr_opaque_auth(XDR *, struct opaque_auth *);
++ 
++ static struct auth_ops *authnone_ops();
++ 
++diff --git a/src/getpublickey.c b/src/getpublickey.c
++index be37a24..4e96c7c 100644
++--- a/src/getpublickey.c
+++++ b/src/getpublickey.c
++@@ -52,7 +52,7 @@
++ /*
++  * Hack to let ypserv/rpc.nisd use AUTH_DES.
++  */
++-int (*__getpublickey_LOCAL)() = 0;
+++int (*__getpublickey_LOCAL)(const char *, char *) = 0;
++ 
++ /*
++  * Get somebody's public key
++diff --git a/src/svc_auth_none.c b/src/svc_auth_none.c
++index 887e809..5ca98e9 100644
++--- a/src/svc_auth_none.c
+++++ b/src/svc_auth_none.c
++@@ -37,8 +37,8 @@
++ 
++ #include <rpc/rpc.h>
++ 
++-static bool_t	svcauth_none_destroy();
++-static bool_t   svcauth_none_wrap();
+++static bool_t	svcauth_none_destroy(SVCAUTH *);
+++static bool_t   svcauth_none_wrap(SVCAUTH *, XDR *, bool_t (*)(XDR *, ...), char *);
++ 
++ struct svc_auth_ops svc_auth_none_ops = {
++ 	svcauth_none_wrap,
++-- 
++2.49.0
++
+diff --git a/package/libtirpc/0002-update-signal-and-key_call-declarations-to-allow-com.patch b/package/libtirpc/0002-update-signal-and-key_call-declarations-to-allow-com.patch
+new file mode 100644
+index 0000000000..7bd8098bbd
+--- /dev/null
++++ b/package/libtirpc/0002-update-signal-and-key_call-declarations-to-allow-com.patch
+@@ -0,0 +1,63 @@
++From 09d506d24abb9ce506d7a4a4201deff017018779 Mon Sep 17 00:00:00 2001
++From: Rudi Heitbaum <rudi@heitbaum.com>
++Date: Thu, 2 Jan 2025 08:46:24 -0500
++Subject: [PATCH] update signal and key_call declarations to allow compile with
++ gcc-15
++
++Follow up patch addressing the following declarations:
++  sed -n 75,77p libtirpc-1.3.6/src/key_call.c
++  cryptkeyres *(*__key_encryptsession_pk_LOCAL)() = 0;
++  cryptkeyres *(*__key_decryptsession_pk_LOCAL)() = 0;
++  des_block *(*__key_gendes_LOCAL)() = 0;
++
++Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
++Signed-off-by: Steve Dickson <steved@redhat.com>
++Upstream: 240ee6c774729c9c24812aa8912f1fcf8996b162
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/auth_time.c | 4 ++--
++ src/key_call.c  | 6 +++---
++ 2 files changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/src/auth_time.c b/src/auth_time.c
++index 936dd76..c21b1df 100644
++--- a/src/auth_time.c
+++++ b/src/auth_time.c
++@@ -248,7 +248,7 @@ __rpc_get_time_offset(td, srv, thost, uaddr, netid)
++ 	char			ut[64], ipuaddr[64];
++ 	endpoint		teps[32];
++ 	nis_server		tsrv;
++-	void			(*oldsig)() = NULL; /* old alarm handler */
+++	void			(*oldsig)(int) = NULL; /* old alarm handler */
++ 	struct sockaddr_in	sin;
++ 	int			s = RPC_ANYSOCK;
++ 	socklen_t len;
++@@ -417,7 +417,7 @@ __rpc_get_time_offset(td, srv, thost, uaddr, netid)
++ 		} else {
++ 			int res;
++ 
++-			oldsig = (void (*)())signal(SIGALRM, alarm_hndler);
+++			oldsig = (void (*)(int))signal(SIGALRM, alarm_hndler);
++ 			saw_alarm = 0; /* global tracking the alarm */
++ 			alarm(20); /* only wait 20 seconds */
++ 			res = connect(s, (struct sockaddr *)&sin, sizeof(sin));
++diff --git a/src/key_call.c b/src/key_call.c
++index 9f4b1d2..43f990e 100644
++--- a/src/key_call.c
+++++ b/src/key_call.c
++@@ -72,9 +72,9 @@
++  * implementations of these functions, and to call those in key_call().
++  */
++ 
++-cryptkeyres *(*__key_encryptsession_pk_LOCAL)() = 0;
++-cryptkeyres *(*__key_decryptsession_pk_LOCAL)() = 0;
++-des_block *(*__key_gendes_LOCAL)() = 0;
+++cryptkeyres *(*__key_encryptsession_pk_LOCAL)(uid_t, char *) = 0;
+++cryptkeyres *(*__key_decryptsession_pk_LOCAL)(uid_t, char *) = 0;
+++des_block *(*__key_gendes_LOCAL)(uid_t, char *) = 0;
++ 
++ static int key_call( u_long, xdrproc_t, void *, xdrproc_t, void *);
++ 
++-- 
++2.49.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
