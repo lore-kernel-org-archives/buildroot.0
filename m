@@ -4,73 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8FE8C3ABC3
-	for <buildroot@archiver.kernel.org>; Sun, 11 May 2025 16:14:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B19EC3ABC3
+	for <buildroot@archiver.kernel.org>; Sun, 11 May 2025 16:14:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8725E408AA;
-	Sun, 11 May 2025 16:14:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1BDCC408E0;
+	Sun, 11 May 2025 16:14:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hi_S6gSNtCXD; Sun, 11 May 2025 16:14:21 +0000 (UTC)
+ id z0bj9ov8PTF0; Sun, 11 May 2025 16:14:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBAEE408C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49F5C408EC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BBAEE408C9;
-	Sun, 11 May 2025 16:14:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9AF62154
- for <buildroot@buildroot.org>; Sun, 11 May 2025 16:14:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 49F5C408EC;
+	Sun, 11 May 2025 16:14:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 23A06154
+ for <buildroot@buildroot.org>; Sun, 11 May 2025 16:14:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8CA47608FD
- for <buildroot@buildroot.org>; Sun, 11 May 2025 16:14:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09B7540374
+ for <buildroot@buildroot.org>; Sun, 11 May 2025 16:14:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g2nnGsyUcDxB for <buildroot@buildroot.org>;
- Sun, 11 May 2025 16:14:20 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VzVUjCbwnPyQ for <buildroot@buildroot.org>;
+ Sun, 11 May 2025 16:14:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DE665608ED
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE665608ED
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1A0D74010C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A0D74010C
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DE665608ED
- for <buildroot@buildroot.org>; Sun, 11 May 2025 16:14:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1A0D74010C
+ for <buildroot@buildroot.org>; Sun, 11 May 2025 16:14:32 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p54a1b54c.dip0.t-ipconnect.de [84.161.181.76])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 6C535A4C0EE2
- for <buildroot@buildroot.org>; Sun, 11 May 2025 18:13:40 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:59004)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 879D8A4C055D
+ for <buildroot@buildroot.org>; Sun, 11 May 2025 18:14:00 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:34132)
  by fli4l.lan.fli4l with esmtp (Exim 4.98.2)
- (envelope-from <bernd@kuhls.net>) id 1uE9J5-000000003qn-2oaL
- for buildroot@buildroot.org; Sun, 11 May 2025 16:13:40 +0000
+ (envelope-from <bernd@kuhls.net>) id 1uE9JP-000000003ud-3F4T
+ for buildroot@buildroot.org; Sun, 11 May 2025 16:14:00 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 11 May 2025 18:13:39 +0200
-Message-Id: <20250511161339.3195042-4-bernd@kuhls.net>
+Date: Sun, 11 May 2025 18:14:00 +0200
+Message-Id: <20250511161400.3195076-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250511161339.3195042-1-bernd@kuhls.net>
-References: <20250511161339.3195042-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202412041019; t=1746980020;
- bh=aT7Pu75pzaIm98S3ATh4yVYhXpCOYkRMQWrLW1CdcXw=;
- h=From:To:Subject:Date:In-Reply-To:References:From;
- b=Ny2HWsPFfoaSo7ju0SYSRcXJLWUiKfJ75HV5+CRDXozBsx2e5EljOhYlSFGa0ZuV5
- Z/oM9VTRFK3LtbKdhalUN5MRHiLz72LN3L4hCZPZsHmNsZdWEyRBGPjA6Qd5afwYN1
- 0eiT0kOL+s7nx2Matuo6as2XdLBcfCfdqeD+beBgbcMa5/Do3OGIJIdHgIIBU7L9JM
- Sz5QWS90dWabd7Yw3iMKUq+AZPmCW2Tq0RbdzntbJmr/dbHiAfMd3yGSXrB/OYw3iZ
- DiKRhvIERIc5nbPZnILeq8rPfuluxzEPJ2hIgz2kVN4X7rteRgsWQObj2DuAm2PGix
- 10Zhui3/PX3NQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ s=kas202412041019; t=1746980040;
+ bh=Aci38QYJA1JqeM23drYkE7w0tPZ+AuoYmBBvXBVh83s=;
+ h=From:To:Subject:Date:From;
+ b=aa8jXgjJw85NRyHcHQaKP9q9LQUWS+8gSMOOkJBkc7Wk4ya4F58iFjyFLQWv9HlRm
+ AzTA/1omOxYJK+32WcL79BrzVZpygytsgn2OYaeiF+cW3ZL58dADeYgCutxAGXihjr
+ sjSM7rL0k57hiC+DledmJI0E/HxXwK3WnBDuKdUWqGRF1VIdLIu34wEsKfGkwa9/wI
+ hce3mu3Jw08JRPmPKvFb8mU7kThhW0HFjCtOBgwket6is9sDlKM2mtgUis3fu18Prs
+ rbsFomaCOKex0lT23GPzXP+k2wtvdaiakJUmaM/w1wAtaIgJMc1LphnckfAQOH29xa
+ j631bSZWoM5+w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202412041019 header.b=Ny2HWsPF
-Subject: [Buildroot] [PATCH 4/4] package/intel-vpl-gpu-rt: bump version to
- 25.2.1
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202412041019 header.b=aa8jXgjJ
+Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 8.3.21
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,34 +85,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Changelog: https://www.php.net/ChangeLog-8.php#8.3.21
+
+Release notes:
+https://news-web.php.net/php.announce/457
+https://news-web.php.net/php.announce/458
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash | 2 +-
- package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk   | 2 +-
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-index f49c4730cc..4deaffc25d 100644
---- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-+++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  2ee59a47c281f402cd77118eed1ec7cef703d25432e9a71b4be6b91e8c304d72  intel-vpl-gpu-rt-25.1.4.tar.gz
-+sha256  bf45c03023e03a1f792a22b3ca16c6e39b4eb8a5cf8b4490aa58869da171b7c2  intel-vpl-gpu-rt-25.2.1.tar.gz
- sha256  c31c3cc5fd66d1250dbca1c3d9011a9f874537442ac71c8de80f2f0fed13f297  LICENSE
-diff --git a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-index 42ead61dc2..4ae68c69ff 100644
---- a/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
-+++ b/package/intel-vpl-gpu-rt/intel-vpl-gpu-rt.mk
+diff --git a/package/php/php.hash b/package/php/php.hash
+index ba9c5bb468..8e3be2dbe1 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  976e4077dd25bec96b5dfe8938052d243bbd838f95368a204896eff12756545f  php-8.3.19.tar.xz
++sha256  4dfb329f209a552c3716394fc123bb62e80a468b55ce27fc8cb0fd5f30b9dcd6  php-8.3.21.tar.xz
+ 
+ # License file
+ sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 374fdb2c69..ad42e57d72 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--INTEL_VPL_GPU_RT_VERSION = 25.1.4
-+INTEL_VPL_GPU_RT_VERSION = 25.2.1
- INTEL_VPL_GPU_RT_SITE = $(call github,intel,vpl-gpu-rt,intel-onevpl-$(INTEL_VPL_GPU_RT_VERSION))
- INTEL_VPL_GPU_RT_LICENSE = MIT
- INTEL_VPL_GPU_RT_LICENSE_FILES = LICENSE
+-PHP_VERSION = 8.3.19
++PHP_VERSION = 8.3.21
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
 2.39.5
 
