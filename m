@@ -4,50 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54C0FC3ABC3
-	for <buildroot@archiver.kernel.org>; Sun, 11 May 2025 09:35:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BF89C3ABC5
+	for <buildroot@archiver.kernel.org>; Sun, 11 May 2025 09:36:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DAF8F40831;
-	Sun, 11 May 2025 09:35:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D69B040C49;
+	Sun, 11 May 2025 09:36:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qQFn7JdywoWS; Sun, 11 May 2025 09:35:54 +0000 (UTC)
+ id rAuPenfYHOY7; Sun, 11 May 2025 09:36:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11FD84070A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 22CEC40719
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11FD84070A;
-	Sun, 11 May 2025 09:35:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D3868150
- for <buildroot@buildroot.org>; Sun, 11 May 2025 09:35:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 22CEC40719;
+	Sun, 11 May 2025 09:36:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C1B28154
+ for <buildroot@buildroot.org>; Sun, 11 May 2025 09:36:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6B9760B8C
- for <buildroot@buildroot.org>; Sun, 11 May 2025 09:35:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1A4540719
+ for <buildroot@buildroot.org>; Sun, 11 May 2025 09:36:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5aCKsTJHHwSo for <buildroot@buildroot.org>;
- Sun, 11 May 2025 09:35:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB8EA60656
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB8EA60656
- for <buildroot@buildroot.org>; Sun, 11 May 2025 09:35:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D484C86533; Sun, 11 May 2025 09:35:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NKZNhkNACjxU for <buildroot@buildroot.org>;
+ Sun, 11 May 2025 09:36:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1FFE7406F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FFE7406F3
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1FFE7406F3
+ for <buildroot@buildroot.org>; Sun, 11 May 2025 09:36:38 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 8BAC119F72F;
+ Sun, 11 May 2025 11:36:34 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 11 May 2025 11:36:33 +0200
+MIME-Version: 1.0
+Date: Sun, 11 May 2025 11:36:33 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 11 May 2025 11:33:02 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 595dd3ae885ba9d3688676ca542111b2b227f191
-X-Git-Newrev: beefa78b4998c66b41f0d7b62bf693297970e45d
-X-Patchwork-Hint: ignore
-Message-Id: <20250511093551.D484C86533@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mawk: bump version to
- 1.3.4-20250131
+To: Ismael Luceno <ismael@iodev.co.uk>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250511025920.8527-2-ismael@iodev.co.uk>
+References: <20250511025920.8527-2-ismael@iodev.co.uk>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <2e6346ae588cbef0b2d8c67b000fe010@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1746956195;
+ bh=Yrt8aDzhIpO3djeX7uM4XrOpgJQ7YqvYWuCrLGPCwzU=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=FieZ4FoXoFL/ftnR1VCOwdAh11Otr76Mwa2BnOoL7uRiZeUAMjF88A5cTUWvgzl1Q
+ 1DZdAksRl/w/rzfcCfjUgfPvJBm1xPnYILITJon6HblAC9ru+/8NH7wBqIgDXAW9hJ
+ ohNl9cnOMr7qc5VbjZMkcU7jT43d4R7dfjwbw0k993PBPXwhavOc8yBdC61F1+YEFF
+ YbiW5R6oBHlA7tjKCVi6EBdPV5YljL16+DobcnJdnr640LkdpRmHD/Bb4FtLMWaV35
+ Q9hGfjNycnmI7qZbcqICdX9o6cAFyPSW8NrWk+R+y0IPti04voZVy9BSSZNOcp4g4x
+ pv7df7vManvfQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=FieZ4FoX
+Subject: Re: [Buildroot] [PATCH] package/mawk: bump version to 1.3.4-20250131
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,47 +81,21 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=beefa78b4998c66b41f0d7b62bf693297970e45d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 11/05/2025 04:59, Ismael Luceno wrote:
+> Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
 
-For change log, see:
-https://invisible-mirror.net/mawk/CHANGES.html#index-t20250131
+Applied to master, thanks.
 
-Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
-[Julien: add link to change log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/mawk/mawk.hash | 2 +-
- package/mawk/mawk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+For info, I added a link to the change log, in the commit log.
 
-diff --git a/package/mawk/mawk.hash b/package/mawk/mawk.hash
-index 3dc2359c82..7f81c93a3a 100644
---- a/package/mawk/mawk.hash
-+++ b/package/mawk/mawk.hash
-@@ -1,2 +1,2 @@
--sha256  a39967927dfa1b0116efc45b944a0f5b5b4c34f8e842a4b223dcdd7b367399e0  mawk-1.3.4-20240905.tgz
-+sha256  51bcb82d577b141d896d9d9c3077d7aaa209490132e9f2b9573ba8511b3835be  mawk-1.3.4-20250131.tgz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/mawk/mawk.mk b/package/mawk/mawk.mk
-index 1a5e80ae8e..f9f0623904 100644
---- a/package/mawk/mawk.mk
-+++ b/package/mawk/mawk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MAWK_VERSION = 1.3.4-20240905
-+MAWK_VERSION = 1.3.4-20250131
- MAWK_SITE = https://invisible-mirror.net/archives/mawk
- MAWK_SOURCE = mawk-$(MAWK_VERSION).tgz
- MAWK_LICENSE = GPL-2.0
+Best regards,
+
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
