@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CDB6C3ABC3
-	for <buildroot@archiver.kernel.org>; Sun, 11 May 2025 10:41:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7D2EC3ABC3
+	for <buildroot@archiver.kernel.org>; Sun, 11 May 2025 10:41:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 071BF82C84;
-	Sun, 11 May 2025 10:41:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DDF982BA7;
+	Sun, 11 May 2025 10:41:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7ag4zubPasy1; Sun, 11 May 2025 10:41:05 +0000 (UTC)
+ id H5XeuMaDwjoP; Sun, 11 May 2025 10:41:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2505D82C3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF55B82D07
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2505D82C3E;
-	Sun, 11 May 2025 10:41:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF55B82D07;
+	Sun, 11 May 2025 10:41:16 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6F46E154
- for <buildroot@buildroot.org>; Sun, 11 May 2025 10:41:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 2FE5D17D
+ for <buildroot@buildroot.org>; Sun, 11 May 2025 10:41:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 521A760B75
- for <buildroot@buildroot.org>; Sun, 11 May 2025 10:41:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2C7E760B75
+ for <buildroot@buildroot.org>; Sun, 11 May 2025 10:41:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 680RwxSasZa2 for <buildroot@buildroot.org>;
- Sun, 11 May 2025 10:40:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FE3760B60
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2FE3760B60
- for <buildroot@buildroot.org>; Sun, 11 May 2025 10:40:59 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 283DE86741; Sun, 11 May 2025 10:40:59 +0000 (UTC)
+ id fyQB9rlde3dN for <buildroot@buildroot.org>;
+ Sun, 11 May 2025 10:41:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 89B4060BCB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89B4060BCB
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 89B4060BCB
+ for <buildroot@buildroot.org>; Sun, 11 May 2025 10:41:14 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPA id 23B9A13F8B3;
+ Sun, 11 May 2025 12:41:10 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 11 May 2025 12:41:10 +0200
+MIME-Version: 1.0
+Date: Sun, 11 May 2025 12:41:10 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 11 May 2025 12:09:23 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: beefa78b4998c66b41f0d7b62bf693297970e45d
-X-Git-Newrev: 8fbfa622ee4ce9505c924b57cdad17d723c79c54
-X-Patchwork-Hint: ignore
-Message-Id: <20250511104059.283DE86741@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250510221233.2416832-1-bernd@kuhls.net>
+References: <20250510221233.2416832-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <63361741de326bb2ee61e99f895653e8@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1746960072;
+ bh=TXtliX7A2m2RQVKDoYDxvx5kf7EXWXspJcYoHCAONac=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=XtZ610ON6y3RxHSepinNV1GYmJZfEFwFJNjm4IMk7W3QSS+xS4CJFfO+Qm6kkgkiq
+ rTx7YEY0ZF6oZnXDxj4tJXv88A5307U5k6U/rTjj1dhY6n3qZhURxC2N6Qk+H4KzqA
+ NJ/TSmrU+oTIpQv14UbBsJnjAZuhB/qKT4EH+55sajUSCL8bk6bc6zCnZvsaZlbVqQ
+ Lrd32gTgVpXtxfvCBKBdtsoyR15qxzuNa0jLM65Au2JnFIOk5gTVRUfXtGIqetXf22
+ sVCJVIzlYgKMIgwWC5Qb+8/kHDIT7OHaq+LWSaCyBhw6N0kuRA3HIjldxcwbYa5i41
+ 6qFcS/kBBWX5A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=XtZ610ON
+Subject: Re: [Buildroot] [PATCH 1/2] package/kodi-inputstream-adaptive: bump
  version to 21.5.13-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,46 +82,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fbfa622ee4ce9505c924b57cdad17d723c79c54
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 11/05/2025 00:12, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 92814e8da2..98e3416f03 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  1db831ebb0acbda2576e684f8af089c524025c6a410eefb7a015cbbb505aa04d  kodi-inputstream-adaptive-21.5.9-Omega.tar.gz
-+sha256  2cde7954b0a73d353edc2af14306e4e42e6bf9e7f26100a54b937cb80c1309a8  kodi-inputstream-adaptive-21.5.13-Omega.tar.gz
- sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
- sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
- sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index ed33c7bdf6..4cdb7fe2af 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.9-Omega
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.13-Omega
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
- 	BSD-2-Clause-Views \
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
