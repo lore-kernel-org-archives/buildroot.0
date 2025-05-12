@@ -1,53 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16986C3ABCB
-	for <buildroot@archiver.kernel.org>; Mon, 12 May 2025 19:59:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62985C3ABC3
+	for <buildroot@archiver.kernel.org>; Mon, 12 May 2025 19:59:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 958D840B27;
-	Mon, 12 May 2025 19:59:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CeNH-gaL96M4; Mon, 12 May 2025 19:59:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DE194094D
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9DE194094D;
-	Mon, 12 May 2025 19:59:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id CCDC6154
- for <buildroot@buildroot.org>; Mon, 12 May 2025 19:59:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BE87160E4D
- for <buildroot@buildroot.org>; Mon, 12 May 2025 19:59:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 17C6260E48;
+	Mon, 12 May 2025 19:59:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b1gx64DjtVdV for <buildroot@buildroot.org>;
- Mon, 12 May 2025 19:59:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0B1C60E48
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F0B1C60E48
- for <buildroot@buildroot.org>; Mon, 12 May 2025 19:59:21 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE6998679A; Mon, 12 May 2025 19:59:21 +0000 (UTC)
+ id gKuJQpBX0VKv; Mon, 12 May 2025 19:59:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5051D60E4D
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5051D60E4D;
+	Mon, 12 May 2025 19:59:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 521EC153
+ for <buildroot@buildroot.org>; Mon, 12 May 2025 19:59:53 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37B094094D
+ for <buildroot@buildroot.org>; Mon, 12 May 2025 19:59:53 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sIW53OweF4yu for <buildroot@buildroot.org>;
+ Mon, 12 May 2025 19:59:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A3B4340B27
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3B4340B27
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A3B4340B27
+ for <buildroot@buildroot.org>; Mon, 12 May 2025 19:59:52 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id A85125FFAF;
+ Mon, 12 May 2025 21:59:48 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Mon, 12 May 2025 21:59:48 +0200
+MIME-Version: 1.0
+Date: Mon, 12 May 2025 21:59:48 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Mon, 12 May 2025 21:55:07 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: df685627a202342de2dd69c6ba00f56b30f1ee71
-X-Git-Newrev: 5d8d39fc4c4891adee2587ff1dd6627bacbbe75c
-X-Patchwork-Hint: ignore
-Message-Id: <20250512195921.DE6998679A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-aniso8601: bump version to
- 10.0.1
+To: Daniel Crowe <daniel.crowe@maxmine.com.au>
+Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>
+In-Reply-To: <20250512042329.2976727-1-daniel.crowe@maxmine.com.au>
+References: <20250512042329.2976727-1-daniel.crowe@maxmine.com.au>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <7930b8a97444a7a53833dd76a023bce6@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1747079990;
+ bh=f9So4CjzaVXPijNUEcnQqtlYqPixhZsqzvk+7qVvIis=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=qxJTOwM0FDYAB4EaMVOPHhOOstAz24y9Fc0e1bmUnPEmanXIP7fhSVE6FAeWFDGNH
+ fY6sVZjAtgwN4qGH/gw82yKSLadfOxccZyuLGWqqJl5L9psFBZfDqgasuGb8mv5xPR
+ 1Hh04sQueyNR7kj5endlLiB40ObmXrI6RraE3ROSZdpoMLoct/YPEiaZ1mGerRq0Vz
+ 9sxis0SzckPxbiHpsquxe2dFwjU25xoTX/f9pimi6ykmy7cxBCB9EpllZe07CLkjbo
+ iHcuN8ACzJJ8Yf4fzHmceAjxXOYavANGrsENsK/8scAvOSQTFMG97Bnxcd9v7/cpG9
+ JeF0iLY+K7Xag==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=qxJTOwM0
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-aniso8601: bump version
+ to 10.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,65 +82,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d8d39fc4c4891adee2587ff1dd6627bacbbe75c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 12/05/2025 06:23, Daniel Crowe wrote:
+> Signed-off-by: Daniel Crowe <daniel.crowe@maxmine.com.au>
 
-For change log, see:
-https://codeberg.org/nielsenb-jf/aniso8601/src/tag/v10.0.1/CHANGELOG.rst#aniso8601-10.0.1
-
-Signed-off-by: Daniel Crowe <daniel.crowe@maxmine.com.au>
-[Julien: add link to change log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/python-aniso8601/Config.in             | 2 +-
- package/python-aniso8601/python-aniso8601.hash | 4 ++--
- package/python-aniso8601/python-aniso8601.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/python-aniso8601/Config.in b/package/python-aniso8601/Config.in
-index cea76eeff5..234c36d0a3 100644
---- a/package/python-aniso8601/Config.in
-+++ b/package/python-aniso8601/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_PYTHON_ANISO8601
- 	help
- 	  A library for parsing ISO 8601 strings.
- 
--	  https://bitbucket.org/nielsenb/aniso8601
-+	  https://codeberg.org/nielsenb-jf/aniso8601
-diff --git a/package/python-aniso8601/python-aniso8601.hash b/package/python-aniso8601/python-aniso8601.hash
-index c0e8f95f3b..9a33f9f9d4 100644
---- a/package/python-aniso8601/python-aniso8601.hash
-+++ b/package/python-aniso8601/python-aniso8601.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/aniso8601/json
--md5  29acca96d02d182b7ff09f02047b84a8  aniso8601-10.0.0.tar.gz
--sha256  ff1d0fc2346688c62c0151547136ac30e322896ed8af316ef7602c47da9426cf  aniso8601-10.0.0.tar.gz
-+md5  ea9bb2b816aa448078d91aea3ce43d55  aniso8601-10.0.1.tar.gz
-+sha256  25488f8663dd1528ae1f54f94ac1ea51ae25b4d531539b8bc707fed184d16845  aniso8601-10.0.1.tar.gz
- # Locally computed sha256 checksums
- sha256  c3cca0b9a74fd29668bd99b5dcf0274d53be904de6778916dc852708f407b0f0  LICENSE
-diff --git a/package/python-aniso8601/python-aniso8601.mk b/package/python-aniso8601/python-aniso8601.mk
-index 1bb6628953..ed0230a0c3 100644
---- a/package/python-aniso8601/python-aniso8601.mk
-+++ b/package/python-aniso8601/python-aniso8601.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_ANISO8601_VERSION = 10.0.0
-+PYTHON_ANISO8601_VERSION = 10.0.1
- PYTHON_ANISO8601_SOURCE = aniso8601-$(PYTHON_ANISO8601_VERSION).tar.gz
--PYTHON_ANISO8601_SITE = https://files.pythonhosted.org/packages/f3/3f/dc8a28fa6dc72c13d8c158b01f8975f240e9e72c336cc1ae00f424e2d7ce
-+PYTHON_ANISO8601_SITE = https://files.pythonhosted.org/packages/8b/8d/52179c4e3f1978d3d9a285f98c706642522750ef343e9738286130423730
- PYTHON_ANISO8601_SETUP_TYPE = setuptools
- PYTHON_ANISO8601_LICENSE = BSD-3-Clause
- PYTHON_ANISO8601_LICENSE_FILES = LICENSE
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
