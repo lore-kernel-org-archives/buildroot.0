@@ -1,69 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FFFDC3ABCD
-	for <buildroot@archiver.kernel.org>; Mon, 12 May 2025 12:03:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6420FC3ABCD
+	for <buildroot@archiver.kernel.org>; Mon, 12 May 2025 12:07:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26F3460E70;
-	Mon, 12 May 2025 12:03:44 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9NT0nIRPk1N5; Mon, 12 May 2025 12:03:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C14F60E37
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C14F60E37;
-	Mon, 12 May 2025 12:03:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8DECA154
- for <buildroot@buildroot.org>; Mon, 12 May 2025 12:03:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 73C5181567
- for <buildroot@buildroot.org>; Mon, 12 May 2025 12:03:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 015E680F7D;
+	Mon, 12 May 2025 12:07:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id teGmRPxKgzh1 for <buildroot@buildroot.org>;
- Mon, 12 May 2025 12:03:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.243.2.102;
- helo=nyx.n621.de; envelope-from=fl@n621.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 03F4780D80
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03F4780D80
-Received: from nyx.n621.de (v4gw.hekate.n621.de [136.243.2.102])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 03F4780D80
- for <buildroot@buildroot.org>; Mon, 12 May 2025 12:03:39 +0000 (UTC)
-Received: from charybdis.office.fixme.cloud (localhost [127.0.0.1])
- by nyx.n621.de (Postfix) with ESMTP id CF68FE00243;
- Mon, 12 May 2025 14:03:35 +0200 (CEST)
-From: Florian Larysch <fl@n621.de>
-To: buildroot@buildroot.org
-Cc: Grzegorz Blach <grzegorz@blach.pl>,
-	Florian Larysch <fl@n621.de>
-Date: Mon, 12 May 2025 14:02:23 +0200
-Message-ID: <20250512120307.10341-2-fl@n621.de>
-X-Mailer: git-send-email 2.49.0
+ id Z43nMGnDiTZd; Mon, 12 May 2025 12:07:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F11D581A5F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id F11D581A5F;
+	Mon, 12 May 2025 12:07:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9EDC017D
+ for <buildroot@buildroot.org>; Mon, 12 May 2025 12:07:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8FAE481765
+ for <buildroot@buildroot.org>; Mon, 12 May 2025 12:07:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IbqsZt3fAqTX for <buildroot@buildroot.org>;
+ Mon, 12 May 2025 12:07:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9245C81756
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9245C81756
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9245C81756
+ for <buildroot@buildroot.org>; Mon, 12 May 2025 12:07:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E87A943900;
+ Mon, 12 May 2025 12:07:32 +0000 (UTC)
+Date: Mon, 12 May 2025 14:07:32 +0200
+To: Olivier Benjamin <olivier.benjamin@bootlin.com>
+Cc: buildroot@buildroot.org, Phil Eichinger <phil.eichinger@gmail.com>
+Message-ID: <20250512140732.6f179e4a@windsurf>
+In-Reply-To: <20250507114042.96291-1-olivier.benjamin@bootlin.com>
+References: <20250507114042.96291-1-olivier.benjamin@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeftdduvddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepveekudevheduveetieejhffffeeujeetteejuddthfeigeejueejvefhtdfgfedunecuffhomhgrihhnpehgihhtlhgrsgdrtghomhdpsghuihhlughrohhothdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepledtrdekledrudeifedruddvjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeeltddrkeelrdduieefrdduvdejpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefpdhrtghpthhtohepohhlihhvihgvrhdrsggvnhhjrghmihhnsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehphhhilhdrvghitghhihhnghgvrhesghhmrghilhdrt
+ ghomh
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=n621.de; s=dkim; t=1747051415;
+ d=bootlin.com; s=gm1; t=1747051653;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=fGC3xHAdTZ0uJd6nkttlvlNbgwdK3Qng3QJhPv7Zm5Y=;
- b=abzCm3rlzCTb1o5QLquuf8ngoEDJrWMTBGyge03NEmo3TEGLv3HkIcg87grQkt64QZtYI1
- DSqyLpnTqc75elif6OPda5xYMT3kmgOEaBalMUoTMNQD7AZIiEtjAUdBEX7J3+qqFR4V35
- Urpgvg6t0FdlhzrwoaQ+aNH+3htXpZ4=
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=+Y58/aVY+7PSlEc+NYr4lnL9njtB/fZkBqx3ixo63kk=;
+ b=Icw4sEDgeAnrqjlc9T0YeM8eW/yfR8HH3NBHh20XrFhfIov6umo339zg6beCaAMUChTiOF
+ +2bXIA37d3Y6IHM5gF0X6IwRZ7zzAMSeQcpBkfp28UluzNGaqSd2//MaflYuMbaVQ9g6M3
+ F7CqhuPPyWFQXRquDL+huX+11UOh9XITVWvVbXB1ROrmcUiG9hJ4gOIlFSdz7ziU2YXMXu
+ K0jH2WrGjyB9cX3y9Ao6Ci0omUJ4AR8sMbEL0NZUqaSwRTMuGl95rNIngvryCMfAavvZ8w
+ SOYoLv7xvDxZHvSTHBqHvEi94mmTek565tfFTXog92V/P8yUKtOUJyqHeG5XWw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=n621.de
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=n621.de header.i=@n621.de header.a=rsa-sha256
- header.s=dkim header.b=abzCm3rl
-Subject: [Buildroot] [PATCH 1/1] package/f2fs-tools: fix GCC 15 build
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Icw4sEDg
+Subject: Re: [Buildroot] [PATCH 1/1] package/psplash: add support for
+ fullscreen config option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -75,73 +86,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-f2fs-tools had its own "bool" typedef which now conflicts with the C23
-keyword, causing build failures on GCC 15.
+Hello,
 
-Import a patch from upstream that fixes this.
+On Wed,  7 May 2025 13:40:41 +0200
+Olivier Benjamin <olivier.benjamin@bootlin.com> wrote:
 
-Fixes: https://autobuild.buildroot.org/results/d17641582d1beaec9dcca4dc48a68d713cecfdc8 (and others)
-Signed-off-by: Florian Larysch <fl@n621.de>
----
- ...-tools-use-stdbool.h-instead-of-bool.patch | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 package/f2fs-tools/0002-f2fs-tools-use-stdbool.h-instead-of-bool.patch
+> diff --git a/package/psplash/Config.in b/package/psplash/Config.in
+> index 61162fa583..ca39cd0ee3 100644
+> --- a/package/psplash/Config.in
+> +++ b/package/psplash/Config.in
+> @@ -47,6 +47,12 @@ config BR2_PACKAGE_PSPLASH_STARTUP_MSG
+>  	help
+>  	  Enable text banner output on startup.
+>  
+> +config BR2_PACKAGE_PSPLASH_FULL_SCREEN
+> +	bool "use fullscreen mode"
+> +	default n
 
-diff --git a/package/f2fs-tools/0002-f2fs-tools-use-stdbool.h-instead-of-bool.patch b/package/f2fs-tools/0002-f2fs-tools-use-stdbool.h-instead-of-bool.patch
-new file mode 100644
-index 0000000000..90dfdc209a
---- /dev/null
-+++ b/package/f2fs-tools/0002-f2fs-tools-use-stdbool.h-instead-of-bool.patch
-@@ -0,0 +1,41 @@
-+From ec0f9d07792298f89e71cee1e692ad60bf6b8d5c Mon Sep 17 00:00:00 2001
-+From: Jaegeuk Kim <jaegeuk@kernel.org>
-+Date: Thu, 24 Oct 2024 20:33:38 +0000
-+Subject: [PATCH] f2fs-tools: use stdbool.h instead of bool
-+
-+The existing bool definition is broken for c23, where bool is now a keyword.
-+
-+Signed-off-by: Elliott Hughes <enh@google.com>
-+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-+Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=6617d15a660becc23825007ab3fc2d270b5b250f
-+[Florian: rebased to 1.16.0]
-+Signed-off-by: Florian Larysch <fl@n621.de>
-+---
-+ include/f2fs_fs.h | 4 +---
-+ 1 file changed, 1 insertion(+), 3 deletions(-)
-+
-+diff --git a/include/f2fs_fs.h b/include/f2fs_fs.h
-+index f890634..a968380 100644
-+--- a/include/f2fs_fs.h
-++++ b/include/f2fs_fs.h
-+@@ -26,6 +26,7 @@
-+ #include <stddef.h>
-+ #include <string.h>
-+ #include <time.h>
-++#include <stdbool.h>
-+ 
-+ #ifdef HAVE_CONFIG_H
-+ #include <config.h>
-+@@ -103,9 +104,6 @@ typedef uint16_t	u16;
-+ typedef uint8_t		u8;
-+ typedef u32		block_t;
-+ typedef u32		nid_t;
-+-#ifndef bool
-+-typedef u8		bool;
-+-#endif
-+ typedef unsigned long	pgoff_t;
-+ typedef unsigned short	umode_t;
-+ 
-+-- 
-+2.49.0
-+
+"default n" is useless, as it's... the default.
+
+> diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
+> index 62268e778b..bb249e7de8 100644
+> --- a/package/psplash/psplash.mk
+> +++ b/package/psplash/psplash.mk
+> @@ -31,6 +31,12 @@ else
+>  PSPLASH_CONF_OPTS += --disable-startup-msg
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_PSPLASH_FULL_SCREEN),y)
+> +PSPLASH_CONF_OPTS += --enable-img-fullscreen
+> +else
+> +PSPLASH_CONF_OPTS += --disable-img-fullscreen
+> +endif
+
+The explicit --enable-<foo> is apparently causing problems, due to bugs
+in the upstream configure.ac:
+
+  https://gitlab.com/buildroot.org/buildroot/-/issues/112
+
+Could you have a look?
+
+Thanks!
+
+Thomas
 -- 
-2.49.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
