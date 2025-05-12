@@ -1,71 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5267BC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 12 May 2025 21:13:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CD98C3ABCB
+	for <buildroot@archiver.kernel.org>; Mon, 12 May 2025 21:13:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14F6E81F09;
-	Mon, 12 May 2025 21:13:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C1A240C14;
+	Mon, 12 May 2025 21:13:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id atnkZKw9Lm8V; Mon, 12 May 2025 21:13:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L6k4jQNDeL8g; Mon, 12 May 2025 21:13:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8ED9181F10
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75B9F40BC4
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8ED9181F10;
-	Mon, 12 May 2025 21:13:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 75B9F40BC4;
+	Mon, 12 May 2025 21:13:57 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 036D9154
- for <buildroot@buildroot.org>; Mon, 12 May 2025 21:13:52 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C12E150
+ for <buildroot@buildroot.org>; Mon, 12 May 2025 21:13:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E93F1410AF
- for <buildroot@buildroot.org>; Mon, 12 May 2025 21:13:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D7DE840271
+ for <buildroot@buildroot.org>; Mon, 12 May 2025 21:13:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p1ogg5GxCTW5 for <buildroot@buildroot.org>;
- Mon, 12 May 2025 21:13:51 +0000 (UTC)
+ id 4oVCQn7MKBey for <buildroot@buildroot.org>;
+ Mon, 12 May 2025 21:13:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
  helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0302040271
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0302040271
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D86874108C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D86874108C
 Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0302040271
- for <buildroot@buildroot.org>; Mon, 12 May 2025 21:13:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D86874108C
+ for <buildroot@buildroot.org>; Mon, 12 May 2025 21:13:51 +0000 (UTC)
 Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id B5CEE2C84448;
- Mon, 12 May 2025 23:13:48 +0200 (CEST)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id C704C2C845B6;
+ Mon, 12 May 2025 23:13:49 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Mon, 12 May 2025 23:13:35 +0200
-Message-ID: <20250512211344.721883-4-buildroot@bubu1.eu>
+Date: Mon, 12 May 2025 23:13:36 +0200
+Message-ID: <20250512211344.721883-5-buildroot@bubu1.eu>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250512211344.721883-1-buildroot@bubu1.eu>
 References: <20250512211344.721883-1-buildroot@bubu1.eu>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=bubu1.eu; s=bubu; 
- t=1747084428; bh=/bkAQGe1ZpRIQX15zYlMRy7TsAul8VWb7GjHs3GwJOM=;
+ t=1747084429; bh=gI4NXgYH+hAuhWGG30ku/58ekH/wfnocJsDZXh0pBYs=;
  h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=AEemUZxUnn1bnEc/RESkD+SMGRz41iO/MyMH8ouCdXBOlyqtWIk/Dfmqr4pCQkzeK
- yBsZWn25VQv39LUPXTjClJo+VWlLpZsOE1oeMFl5xcdzkU/cwvFSCDYg+klFMA9ioL
- uXDwDF5YxWYG3+uLrhsmObwWPaiiVnIWzu0HPl8W94OeGfaK4Mm7hAhx+CEs7fnwKj
- CaKG7XPQZI0kW/Xa3b/tPC13uKEiAU4y+h6BaUXwHHbX+hp6p4hfb0QORWqxLLkgoz
- oVjwy/ePrAwfTpu/HXTa8wZGV3DIzrtBwyIkEKSyXBAnz/91dLAZkQlbBi18xOLK0E
- hWHQv4UKVhZjA==
+ b=FPe/LPANsWnq0b5snx1kJqqc99oaMZyrVRyaOW/3CPU93O8W28wHvVc3cbz3J24Tj
+ iIfeaefRVXQmAUqeaBaQPSjcCmIlwa500rlMRLHFGnWgZZcXiZ0gewKh6ZnAniLTRR
+ cBAjFYL7xdYbfzpHiP92/OMKci6aSmT487Jv2g096lWAEimeu+KCAXwiOd75pviuJ4
+ AeqCZh8Ce6n952zGM5ut7fKmx/8pz2VxLbkjt64MpdxPDLVIbds+6DfzhoK8/4IVvB
+ Ibxl0iGFtiPkCUWfAsDu0vO6rl9qG1W6MpNbzKi0sa8ZFR6WOMw1cWq1QDK7KzItiz
+ zzYvMRKulh3Ew==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bubu1.eu
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=AEemUZxU
-Subject: [Buildroot] [PATCH 4/7] package/python-python-core: bump to 2.34.1
+ header.a=rsa-sha256 header.s=bubu header.b=FPe/LPAN
+Subject: [Buildroot] [PATCH 5/7] package/python-pydantic: bump 2.11.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,51 +87,54 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- package/python-pydantic-core/Config.in                 | 3 ++-
- package/python-pydantic-core/python-pydantic-core.hash | 2 +-
- package/python-pydantic-core/python-pydantic-core.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/python-pydantic/Config.in            | 4 ++--
+ package/python-pydantic/python-pydantic.hash | 4 ++--
+ package/python-pydantic/python-pydantic.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pydantic-core/Config.in b/package/python-pydantic-core/Config.in
-index 3eeb1844a2..3f985ae4da 100644
---- a/package/python-pydantic-core/Config.in
-+++ b/package/python-pydantic-core/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_PYDANTIC_CORE
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+diff --git a/package/python-pydantic/Config.in b/package/python-pydantic/Config.in
+index e9cd2e6780..eebfb3a1f7 100644
+--- a/package/python-pydantic/Config.in
++++ b/package/python-pydantic/Config.in
+@@ -4,8 +4,8 @@ config BR2_PACKAGE_PYTHON_PYDANTIC
+ 	select BR2_PACKAGE_PYTHON_ANNOTATED_TYPES # runtime
+ 	select BR2_PACKAGE_PYTHON_PYDANTIC_CORE # runtime
  	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
++	select BR2_PACKAGE_PYTHON_TYPING_INSPECTION # runtime
  	help
--	  Core validation logic for pydantic written in rust.
-+	  Core functionality for Pydantic validation and
-+	  serialization.
+-	  Data validation and settings management using python 3.6
+-	  type hinting.
++	  Data validation using Python type hints.
  
- 	  https://github.com/pydantic/pydantic-core
-diff --git a/package/python-pydantic-core/python-pydantic-core.hash b/package/python-pydantic-core/python-pydantic-core.hash
-index d310e8ae02..e2b5d7ba60 100644
---- a/package/python-pydantic-core/python-pydantic-core.hash
-+++ b/package/python-pydantic-core/python-pydantic-core.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  94ebefcb84127e3a950129dc2485e046ece91d3a7f0959c6de124eca5573389d  python-pydantic-core-2.29.0-cargo2.tar.gz
-+sha256  ef136a7b538eea0cd9b8177a1136a035b62ab1b789ead2f285d811478cb28cdd  python-pydantic-core-2.34.1-cargo2.tar.gz
+ 	  https://github.com/pydantic/pydantic
+diff --git a/package/python-pydantic/python-pydantic.hash b/package/python-pydantic/python-pydantic.hash
+index 72470e1f19..d639fc0da7 100644
+--- a/package/python-pydantic/python-pydantic.hash
++++ b/package/python-pydantic/python-pydantic.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pydantic/json
+-md5  46b0048f4ad780b0e8a15f602b56c5a1  pydantic-2.10.6.tar.gz
+-sha256  ca5daa827cce33de7a42be142548b0096bf05a7e7b365aebfa5f8eeec7128236  pydantic-2.10.6.tar.gz
++md5  13bdd5856e805abdce75516cdb98935f  pydantic-2.11.4.tar.gz
++sha256  32738d19d63a226a52eed76645a98ee07c1f410ee41d93b4afbfa85ed8111c2d  pydantic-2.11.4.tar.gz
  # Locally computed sha256 checksums
- sha256  2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a  LICENSE
-diff --git a/package/python-pydantic-core/python-pydantic-core.mk b/package/python-pydantic-core/python-pydantic-core.mk
-index c27967689d..48fd4960af 100644
---- a/package/python-pydantic-core/python-pydantic-core.mk
-+++ b/package/python-pydantic-core/python-pydantic-core.mk
-@@ -4,10 +4,10 @@
+ sha256  a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3  LICENSE
+diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
+index b5808e0201..f82cdd3c16 100644
+--- a/package/python-pydantic/python-pydantic.mk
++++ b/package/python-pydantic/python-pydantic.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYDANTIC_CORE_VERSION = 2.29.0
-+PYTHON_PYDANTIC_CORE_VERSION = 2.34.1
- PYTHON_PYDANTIC_CORE_SOURCE_PYPI = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
--PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/79/f6/904edea98c98c09b8d618d619749af19a50ea5a71b9199ee2131a5a03dfb
- PYTHON_PYDANTIC_CORE_SITE = $(PYTHON_PYDANTIC_CORE_SITE_PYPI)/$(PYTHON_PYDANTIC_CORE_SOURCE_PYPI)?buildroot-path=filename
-+PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/42/fa/5f682f3db14e14f7b5b7f5008ac24594b93943d1da4facbacff5876624cf
- PYTHON_PYDANTIC_CORE_SETUP_TYPE = maturin
- PYTHON_PYDANTIC_CORE_LICENSE = MIT
- PYTHON_PYDANTIC_CORE_LICENSE_FILES = LICENSE
+-PYTHON_PYDANTIC_VERSION = 2.10.6
++PYTHON_PYDANTIC_VERSION = 2.11.4
+ PYTHON_PYDANTIC_SOURCE = pydantic-$(PYTHON_PYDANTIC_VERSION).tar.gz
+-PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/b7/ae/d5220c5c52b158b1de7ca89fc5edb72f304a70a4c540c84c8844bf4008de
++PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/77/ab/5250d56ad03884ab5efd07f734203943c8a8ab40d551e208af81d0257bf2
+ PYTHON_PYDANTIC_SETUP_TYPE = hatch
+ PYTHON_PYDANTIC_LICENSE = MIT
+ PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
 -- 
 2.43.0
 
