@@ -1,70 +1,83 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20161C3ABCD
-	for <buildroot@archiver.kernel.org>; Mon, 12 May 2025 12:50:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AC84C3ABC3
+	for <buildroot@archiver.kernel.org>; Mon, 12 May 2025 13:18:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D10B96069C;
-	Mon, 12 May 2025 12:50:08 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jvUfh1zlOXPT; Mon, 12 May 2025 12:50:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 127AF60711
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 127AF60711;
-	Mon, 12 May 2025 12:50:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9DFA6154
- for <buildroot@buildroot.org>; Mon, 12 May 2025 12:50:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 836C340750
- for <buildroot@buildroot.org>; Mon, 12 May 2025 12:50:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C22BB4099F;
+	Mon, 12 May 2025 13:18:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O0e2lhd9khpK for <buildroot@buildroot.org>;
- Mon, 12 May 2025 12:50:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4864340744
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4864340744
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4864340744
- for <buildroot@buildroot.org>; Mon, 12 May 2025 12:50:04 +0000 (UTC)
-Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id AB5DB2C84435;
- Mon, 12 May 2025 14:50:01 +0200 (CEST)
-To: buildroot@buildroot.org
-Date: Mon, 12 May 2025 14:49:59 +0200
-Message-ID: <20250512125000.1099442-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.43.0
+ id rCHa5KT2prd0; Mon, 12 May 2025 13:18:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1C6740979
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1C6740979;
+	Mon, 12 May 2025 13:18:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C139150
+ for <buildroot@buildroot.org>; Mon, 12 May 2025 13:18:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3D5A840983
+ for <buildroot@buildroot.org>; Mon, 12 May 2025 13:18:21 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fzuSGaXsszSc for <buildroot@buildroot.org>;
+ Mon, 12 May 2025 13:18:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.249;
+ helo=mslow3.mail.gandi.net; envelope-from=olivier.benjamin@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E99964094D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E99964094D
+Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E99964094D
+ for <buildroot@buildroot.org>; Mon, 12 May 2025 13:18:19 +0000 (UTC)
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by mslow3.mail.gandi.net (Postfix) with ESMTP id 61390582C99
+ for <buildroot@buildroot.org>; Mon, 12 May 2025 13:04:43 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 40D9543A04
+ for <buildroot@buildroot.org>; Mon, 12 May 2025 13:04:34 +0000 (UTC)
+Message-ID: <44494289-1f05-4e61-a43a-1a22840415ba@bootlin.com>
+Date: Mon, 12 May 2025 15:04:33 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1747054201; bh=7jB3E3cdLHZUNrrLAPV0wy9JB93IxnmTkInm9Qle9lg=;
- h=From:To:Cc:Subject:Date;
- b=aSsy8md0qS3EXmoxIemSkqSkZaM7YqPNQiysGhj7xGbIST6Z7rkpmqCw56s6ZkRkl
- ZWM3dX9M096eoBQ3bPV/3gtbi8UCqBKfjuswCxCOVDLHmKu/878G7QxDaYYEMGh2dE
- 44ZpczrBVdKBs0vSp/PGoolt/56VhX5VZUmqrFkgLEvkHQ6UrtbR0asFVcF6GNS8tM
- bOcdS0uNhqTripF8M/ahj95zyB4qBoLt7t29OonkfRvTS84g/DKCd5SiZnWXP6I9rH
- ZhIZD3G82zT9jLfLOZwubNrgQEtLAxCAfEGQUNmlW7VxrCxSroVMlpk3Ym35ukxKXo
- e+0nv3Vd2M7eQ==
+User-Agent: Mozilla Thunderbird
+To: buildroot@buildroot.org
+References: <20250507114042.96291-1-olivier.benjamin@bootlin.com>
+ <20250512140732.6f179e4a@windsurf>
+Content-Language: en-US
+In-Reply-To: <20250512140732.6f179e4a@windsurf>
+X-GND-State: clean
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeftddufeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhepkfffgggfuffvfhfhjggtgfesthejredttddvjeenucfhrhhomhepqfhlihhvihgvrhcuuegvnhhjrghmihhnuceoohhlihhvihgvrhdrsggvnhhjrghmihhnsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpefhjeetfeeutdeijefhhfehkedtffehgeeiiedvtdelhfetieegvddvheeguddtfeenucffohhmrghinhepghhithhlrggsrdgtohhmpdgsuhhilhgurhhoohhtrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemvgefgeemvggtfeekmedvgegvtdemfhehtggvmehffeegvdemieehkeejmehfieehieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgefgeemvggtfeekmedvgegvtdemfhehtggvmehffeegvdemieehkeejmehfieehiedphhgvlhhopeglkffrggeimedvrgdtudemvgefgeemvggtfeekmedvgegvtdemfhehtggvmehffeegvdemieehkeejmehfieehiegnpdhmrghilhhfrhhomhepohhlihhvihgvrhdrsggvnhhjrghmihhnsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrg
+ h
+X-GND-Sasl: olivier.benjamin@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1747055074;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=99xTGyZ/nAlNKP6RzIMyD77UswXRjFVDuYU7h7W66sU=;
+ b=SBq8gFdI1NXBJsQbKA9ZVv9s6WD0zgVIqzO985tG7zSIkoqmXbAgbhYPFpacUl9JMxQI7p
+ JnfPPq5pdrf8NXtChjEnUg56pGXxCBzfjGfOKTueI/BMEgRPgwTi+GdQDOmsU8hl+Bq+Ku
+ eQ6AN+PmzoS0sjAMzVbq3iuEaIYvTbfG92wgvHFImGK82TYkQ3PJuYXYNTWU0TBM6qygBo
+ ke5gPXTXUCnnAVUQPbFHehs4dPI8aX6QF8qQ8wzoev6IICJ3omw2o+eN1ADXL1DfuSIB1R
+ UPzfcEsRuaIC8GUVzUXJgmEVigiwJ/386jdns/oe6O1RvPyHA98IUNU1A/i6Cw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=aSsy8md0
-Subject: [Buildroot] [PATCH] package/python-jc: bump to 1.25.5
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=SBq8gFdI
+Subject: Re: [Buildroot] [PATCH 1/1] package/psplash: add support for
+ fullscreen config option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -76,50 +89,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Marcus Hoffmann <bubu@bubu1.eu>
-Content-Type: text/plain; charset="us-ascii"
+From: Olivier Benjamin via buildroot <buildroot@buildroot.org>
+Reply-To: Olivier Benjamin <olivier.benjamin@bootlin.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
----
- package/python-jc/python-jc.hash | 4 ++--
- package/python-jc/python-jc.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-jc/python-jc.hash b/package/python-jc/python-jc.hash
-index d8ee918ac7..6e80024639 100644
---- a/package/python-jc/python-jc.hash
-+++ b/package/python-jc/python-jc.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jc/json
--md5  77e798f2c3fbe89c0dbf7b31dc35fc69  jc-1.25.4.tar.gz
--sha256  a32eaf029c56b582dadae48895f20784d0f84f2fa28a8e2b32f377a8bffa8b39  jc-1.25.4.tar.gz
-+md5  40bc4d9fa71e3809c236954a1bd2354f  jc-1.25.5.tar.gz
-+sha256  f8ac0e4bc427b0ee8a3bdb07a254cc9df6b6036cd440f6c425e2e519cdbda78a  jc-1.25.5.tar.gz
- # Locally computed sha256 checksums
- sha256  6493f2db400f4166ca0956cf192a41aa092bd1396ff463e7fdaf51f257c10497  LICENSE.md
-diff --git a/package/python-jc/python-jc.mk b/package/python-jc/python-jc.mk
-index 9a3754a0fa..16bdc05895 100644
---- a/package/python-jc/python-jc.mk
-+++ b/package/python-jc/python-jc.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_JC_VERSION = 1.25.4
-+PYTHON_JC_VERSION = 1.25.5
- PYTHON_JC_SOURCE = jc-$(PYTHON_JC_VERSION).tar.gz
--PYTHON_JC_SITE = https://files.pythonhosted.org/packages/5b/82/146ef4c94297ef87c6a732c92dd57761bea2c2179e1b8ca8a6b9b8dd6ff7
-+PYTHON_JC_SITE = https://files.pythonhosted.org/packages/1b/da/f6ec6a79f8dea70671f41d7162cfefdfe97e9c5b6c2227c1737183c05cd6
- PYTHON_JC_SETUP_TYPE = setuptools
- PYTHON_JC_LICENSE = MIT, BSD-3-Clause (bundled pbPlist)
- PYTHON_JC_LICENSE_FILES = LICENSE.md
+
+On 5/12/25 14:07, Thomas Petazzoni via buildroot wrote:
+> Hello,
+> 
+> On Wed,  7 May 2025 13:40:41 +0200
+> Olivier Benjamin <olivier.benjamin@bootlin.com> wrote:
+> 
+>> diff --git a/package/psplash/Config.in b/package/psplash/Config.in
+>> index 61162fa583..ca39cd0ee3 100644
+>> --- a/package/psplash/Config.in
+>> +++ b/package/psplash/Config.in
+>> @@ -47,6 +47,12 @@ config BR2_PACKAGE_PSPLASH_STARTUP_MSG
+>>   	help
+>>   	  Enable text banner output on startup.
+>>   
+>> +config BR2_PACKAGE_PSPLASH_FULL_SCREEN
+>> +	bool "use fullscreen mode"
+>> +	default n
+> 
+> "default n" is useless, as it's... the default.
+> 
+Very fair, I'll drop this
+>> diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
+>> index 62268e778b..bb249e7de8 100644
+>> --- a/package/psplash/psplash.mk
+>> +++ b/package/psplash/psplash.mk
+>> @@ -31,6 +31,12 @@ else
+>>   PSPLASH_CONF_OPTS += --disable-startup-msg
+>>   endif
+>>   
+>> +ifeq ($(BR2_PACKAGE_PSPLASH_FULL_SCREEN),y)
+>> +PSPLASH_CONF_OPTS += --enable-img-fullscreen
+>> +else
+>> +PSPLASH_CONF_OPTS += --disable-img-fullscreen
+>> +endif
+> 
+> The explicit --enable-<foo> is apparently causing problems, due to bugs
+> in the upstream configure.ac:
+> 
+>    https://gitlab.com/buildroot.org/buildroot/-/issues/112
+> 
+> Could you have a look?
+> 
+Ah, that is odd.. I'll check it out, thanks for the review!
+> Thanks!
+> 
+> Thomas
+
 -- 
-2.43.0
+Olivier Benjamin, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 _______________________________________________
 buildroot mailing list
