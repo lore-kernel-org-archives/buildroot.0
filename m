@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1F60C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:58:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FCFFC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:58:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B2E384664;
-	Mon, 19 May 2025 10:58:53 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Gqtmecnbp1KK; Mon, 19 May 2025 10:58:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A705684665
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A705684665;
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8CA4470C5E;
 	Mon, 19 May 2025 10:58:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YWBhZtToBdyS; Mon, 19 May 2025 10:58:50 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3D3FE70C4F
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D3FE70C4F;
+	Mon, 19 May 2025 10:58:50 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 16049193
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:46:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4D292D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:46:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F2CF1414D6
+ by smtp4.osuosl.org (Postfix) with ESMTP id C024A410FF
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ba9ptkktEGLE for <buildroot@buildroot.org>;
+ id kjdS2i3V5All for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E46D8414E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0EE3414D6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E46D8414E8
+ by smtp4.osuosl.org (Postfix) with ESMTP id D0EE3414D6
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E2C25872E7; Mon, 19 May 2025 10:40:01 +0000 (UTC)
+ id CEAD582A2E; Mon, 19 May 2025 10:40:01 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 12 May 2025 22:10:43 +0200
+Date: Mon, 12 May 2025 22:04:47 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c38ee456cbf13bd381f2194ae523a088a07b474b
-X-Git-Newrev: 96ae6c41e7ac57692842ffbac1e81beb35b66d52
+X-Git-Oldrev: 501018ad6156fad90fd98c63d9de1630cd526acf
+X-Git-Newrev: 598dfb7c1a10acad39d6d6aa943f3524f8dfbd3b
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104001.E2C25872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-click: bump to
- 8.2.0
+Message-Id: <20250519104001.CEAD582A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/f2fs-tools: fix GCC 15
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,60 +65,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96ae6c41e7ac57692842ffbac1e81beb35b66d52
+commit: https://git.buildroot.net/buildroot/commit/?id=598dfb7c1a10acad39d6d6aa943f3524f8dfbd3b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Update package help text to reflect upstream project description.
+f2fs-tools had its own "bool" typedef which now conflicts with the C23
+keyword, causing build failures on GCC 15.
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Import a patch from upstream that fixes this.
+
+Fixes: https://autobuild.buildroot.org/results/d17641582d1beaec9dcca4dc48a68d713cecfdc8 (and others)
+Signed-off-by: Florian Larysch <fl@n621.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-click/Config.in         | 3 +--
- package/python-click/python-click.hash | 4 ++--
- package/python-click/python-click.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ ...-f2fs-tools-use-stdbool.h-instead-of-bool.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/package/python-click/Config.in b/package/python-click/Config.in
-index c026998677..0fd43d5fb1 100644
---- a/package/python-click/Config.in
-+++ b/package/python-click/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_PYTHON_CLICK
- 	bool "python-click"
- 	help
--	  A simple wrapper around optparse for powerful command line
--	  utilities.
-+	  Python composable command line interface toolkit.
- 
- 	  https://pypi.python.org/pypi/click
-diff --git a/package/python-click/python-click.hash b/package/python-click/python-click.hash
-index 3511954a5d..c1076cc858 100644
---- a/package/python-click/python-click.hash
-+++ b/package/python-click/python-click.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/click/json
--md5  b52ee8e6c33d88a2b4626e6a6002245d  click-8.1.8.tar.gz
--sha256  ed53c9d8990d83c2a27deae68e4ee337473f6330c040a31d4225c9574d16096a  click-8.1.8.tar.gz
-+md5  b9d7fc7a25f30674c85da6f460628a17  click-8.2.0.tar.gz
-+sha256  f5452aeddd9988eefa20f90f05ab66f17fce1ee2a36907fd30b05bbb5953814d  click-8.2.0.tar.gz
- # Locally computed sha256 checksums
- sha256  9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d  LICENSE.txt
-diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
-index 8597c65cec..e457b03b8b 100644
---- a/package/python-click/python-click.mk
-+++ b/package/python-click/python-click.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CLICK_VERSION = 8.1.8
-+PYTHON_CLICK_VERSION = 8.2.0
- PYTHON_CLICK_SOURCE = click-$(PYTHON_CLICK_VERSION).tar.gz
--PYTHON_CLICK_SITE = https://files.pythonhosted.org/packages/b9/2e/0090cbf739cee7d23781ad4b89a9894a41538e4fcf4c31dcdd705b78eb8b
-+PYTHON_CLICK_SITE = https://files.pythonhosted.org/packages/cd/0f/62ca20172d4f87d93cf89665fbaedcd560ac48b465bd1d92bfc7ea6b0a41
- PYTHON_CLICK_SETUP_TYPE = flit
- PYTHON_CLICK_LICENSE = BSD-3-Clause
- PYTHON_CLICK_LICENSE_FILES = LICENSE.txt
+diff --git a/package/f2fs-tools/0002-f2fs-tools-use-stdbool.h-instead-of-bool.patch b/package/f2fs-tools/0002-f2fs-tools-use-stdbool.h-instead-of-bool.patch
+new file mode 100644
+index 0000000000..90dfdc209a
+--- /dev/null
++++ b/package/f2fs-tools/0002-f2fs-tools-use-stdbool.h-instead-of-bool.patch
+@@ -0,0 +1,41 @@
++From ec0f9d07792298f89e71cee1e692ad60bf6b8d5c Mon Sep 17 00:00:00 2001
++From: Jaegeuk Kim <jaegeuk@kernel.org>
++Date: Thu, 24 Oct 2024 20:33:38 +0000
++Subject: [PATCH] f2fs-tools: use stdbool.h instead of bool
++
++The existing bool definition is broken for c23, where bool is now a keyword.
++
++Signed-off-by: Elliott Hughes <enh@google.com>
++Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
++Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/commit/?id=6617d15a660becc23825007ab3fc2d270b5b250f
++[Florian: rebased to 1.16.0]
++Signed-off-by: Florian Larysch <fl@n621.de>
++---
++ include/f2fs_fs.h | 4 +---
++ 1 file changed, 1 insertion(+), 3 deletions(-)
++
++diff --git a/include/f2fs_fs.h b/include/f2fs_fs.h
++index f890634..a968380 100644
++--- a/include/f2fs_fs.h
+++++ b/include/f2fs_fs.h
++@@ -26,6 +26,7 @@
++ #include <stddef.h>
++ #include <string.h>
++ #include <time.h>
+++#include <stdbool.h>
++ 
++ #ifdef HAVE_CONFIG_H
++ #include <config.h>
++@@ -103,9 +104,6 @@ typedef uint16_t	u16;
++ typedef uint8_t		u8;
++ typedef u32		block_t;
++ typedef u32		nid_t;
++-#ifndef bool
++-typedef u8		bool;
++-#endif
++ typedef unsigned long	pgoff_t;
++ typedef unsigned short	umode_t;
++ 
++-- 
++2.49.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
