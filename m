@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DDC3C3ABCB
-	for <buildroot@archiver.kernel.org>; Mon, 12 May 2025 15:27:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1168BC3ABD7
+	for <buildroot@archiver.kernel.org>; Mon, 12 May 2025 15:27:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 154EE810ED;
-	Mon, 12 May 2025 15:27:35 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jUaLxuZLc20N; Mon, 12 May 2025 15:27:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E3A880F10
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E3A880F10;
-	Mon, 12 May 2025 15:27:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9925317D
- for <buildroot@buildroot.org>; Mon, 12 May 2025 15:27:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7C936406A5
- for <buildroot@buildroot.org>; Mon, 12 May 2025 15:27:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D02874069F;
+	Mon, 12 May 2025 15:27:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HyOrSzTtYcva for <buildroot@buildroot.org>;
+ id 78uIX-0vahiF; Mon, 12 May 2025 15:27:36 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F085C4064C
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id F085C4064C;
+	Mon, 12 May 2025 15:27:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id AF83417D
+ for <buildroot@buildroot.org>; Mon, 12 May 2025 15:27:33 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 957F160AC0
+ for <buildroot@buildroot.org>; Mon, 12 May 2025 15:27:33 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aW4oNrYXsuMr for <buildroot@buildroot.org>;
  Mon, 12 May 2025 15:27:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C118840647
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFCFD60AD6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C118840647
+ by smtp3.osuosl.org (Postfix) with ESMTP id CFCFD60AD6
  for <buildroot@buildroot.org>; Mon, 12 May 2025 15:27:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AE01786783; Mon, 12 May 2025 15:27:32 +0000 (UTC)
+ id BDC7C86784; Mon, 12 May 2025 15:27:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 12 May 2025 17:22:51 +0200
+Date: Mon, 12 May 2025 17:26:43 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a1c716876035ba1424ad51791a075bb8a59a8b13
-X-Git-Newrev: 7f5732a9a020df2cd4e5448a73f165a3b2154cf9
+X-Git-Oldrev: 7f5732a9a020df2cd4e5448a73f165a3b2154cf9
+X-Git-Newrev: a2e074d023a9182f0dd532d99cbf06e95e0baac4
 X-Patchwork-Hint: ignore
-Message-Id: <20250512152732.AE01786783@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php: bump version to 8.3.21
+Message-Id: <20250512152732.BDC7C86784@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flac: bump to version 1.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,46 +64,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f5732a9a020df2cd4e5448a73f165a3b2154cf9
+commit: https://git.buildroot.net/buildroot/commit/?id=a2e074d023a9182f0dd532d99cbf06e95e0baac4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://www.php.net/ChangeLog-8.php#8.3.21
+For change log, see:
+https://github.com/xiph/flac/releases/tag/1.5.0
 
-Release notes:
-https://news-web.php.net/php.announce/457
-https://news-web.php.net/php.announce/458
+The license file COPYING.Xiph hash is updated, after a year update in:
+https://github.com/xiph/flac/commit/6974998fd499d65d23e8d42a9c12b6ca04d2e10b
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/flac/flac.hash | 4 ++--
+ package/flac/flac.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index ba9c5bb468..8e3be2dbe1 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  976e4077dd25bec96b5dfe8938052d243bbd838f95368a204896eff12756545f  php-8.3.19.tar.xz
-+sha256  4dfb329f209a552c3716394fc123bb62e80a468b55ce27fc8cb0fd5f30b9dcd6  php-8.3.21.tar.xz
- 
- # License file
- sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 374fdb2c69..ad42e57d72 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+diff --git a/package/flac/flac.hash b/package/flac/flac.hash
+index 0013a7485a..9ac2d4799e 100644
+--- a/package/flac/flac.hash
++++ b/package/flac/flac.hash
+@@ -1,6 +1,6 @@
+ # From https://ftp.osuosl.org/pub/xiph/releases/flac/SHA256SUMS.txt
+-sha256  6c58e69cd22348f441b861092b825e591d0b822e106de6eb0ee4d05d27205b70  flac-1.4.3.tar.xz
++sha256  f2c1c76592a82ffff8413ba3c4a1299b6c7ab06c734dee03fd88630485c2b920  flac-1.5.0.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LGPL
+-sha256  12600ea1a7affcbf469bd0d8b2cd725e4167114a2ee834b88f5d2857bfd7ddbf  COPYING.Xiph
++sha256  7866ee98760fc1f0156b4fe6bf530257e02be487ab3fd94e2b63799dd32d6b2c  COPYING.Xiph
+diff --git a/package/flac/flac.mk b/package/flac/flac.mk
+index 6bac9ef8a7..e3c3da5375 100644
+--- a/package/flac/flac.mk
++++ b/package/flac/flac.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 8.3.19
-+PHP_VERSION = 8.3.21
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-FLAC_VERSION = 1.4.3
++FLAC_VERSION = 1.5.0
+ FLAC_SITE = https://ftp.osuosl.org/pub/xiph/releases/flac
+ FLAC_SOURCE = flac-$(FLAC_VERSION).tar.xz
+ FLAC_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
