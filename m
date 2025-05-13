@@ -1,104 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F37D7C3ABC3
-	for <buildroot@archiver.kernel.org>; Tue, 13 May 2025 11:58:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 879FDC3ABC3
+	for <buildroot@archiver.kernel.org>; Tue, 13 May 2025 12:06:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3DB9C8200C;
-	Tue, 13 May 2025 11:58:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E6F540E43;
+	Tue, 13 May 2025 12:06:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QviW0Gs9YX8i; Tue, 13 May 2025 11:58:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mGaEAWsgvkZW; Tue, 13 May 2025 12:06:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2448782026
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62D6140E3A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2448782026;
-	Tue, 13 May 2025 11:58:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 49D8F153
- for <buildroot@buildroot.org>; Tue, 13 May 2025 11:58:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 62D6140E3A;
+	Tue, 13 May 2025 12:06:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15E6F150
+ for <buildroot@buildroot.org>; Tue, 13 May 2025 12:06:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2F66B60E02
- for <buildroot@buildroot.org>; Tue, 13 May 2025 11:58:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0701F40FC5
+ for <buildroot@buildroot.org>; Tue, 13 May 2025 12:06:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3go8cY0DzbZZ for <buildroot@buildroot.org>;
- Tue, 13 May 2025 11:58:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YRKSVW-jeIG4 for <buildroot@buildroot.org>;
+ Tue, 13 May 2025 12:06:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::633; helo=mail-ej1-x633.google.com;
+ client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
  envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D0AB46067D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D0AB46067D
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D0AB46067D
- for <buildroot@buildroot.org>; Tue, 13 May 2025 11:58:49 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id
- a640c23a62f3a-ad23e8fcc38so64451666b.2
- for <buildroot@buildroot.org>; Tue, 13 May 2025 04:58:49 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0661740970
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0661740970
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0661740970
+ for <buildroot@buildroot.org>; Tue, 13 May 2025 12:06:08 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-5fbf1026309so752527a12.0
+ for <buildroot@buildroot.org>; Tue, 13 May 2025 05:06:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747137527; x=1747742327;
+ d=1e100.net; s=20230601; t=1747137967; x=1747742767;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=uOJSdxiFGp4FBb8+AKEJEs86ZkLaRf65/Rf/nvNtL3Y=;
- b=n8rIr7qUCZ6c+r9HzEhshu4XAWCpV2kp2yKDvCHbPcBJqjHOFrQfFL8+Zq2SIV+w3B
- 3g/e2bWLChrPTH6g4a9AXb1YBqrVm/D0fSBXr5/Lg39ZxPIBJOhEEhkdylfCtOCIorEH
- wPjJUUsAnGdGSp/fkFSEztnBB2HZUH2r8IUWEwqm9m9+FaxOZ+uzZ1pkcj7tN+ijW8qg
- jJvwp7ZxhWbaitEFXGkmDiYXN2uKKMhN/Pt+aKkmVg/Uz2+iEcQaLwPSbPujm2xW7MmQ
- NhOldFMfk/iau/I9lN5AC/VGGQeP/ovK/RfahgrdUp6CN5TsWKrPpUIyJof/PCPWgojY
- GHJQ==
-X-Gm-Message-State: AOJu0YxgoI5GQegpv1gwMTK5zCKbp39g4PCBdSoR9U5LrhuPL7scPkTH
- vC9lAviewkkwiCtPtPTs7VDcxQhaN+pmPHS2u50XMGEErnWh7XJMLhsbN845pFeKSwh3IIMJhmK
- rGn4=
-X-Gm-Gg: ASbGncvNLIC41cHB1h9vDBRbnyUOKnEZAdzvifz6v5nqbe2wTN5+nQNdXbQpfmZ58XT
- OHES0gmKFfp5YRPBPR29thCQfXYKNHeML+m7lr4Z37tFBNtAqZ8z/m0jnUJZ1agOqV579ocyUTP
- gixRzQJwDluz+yEfn2Dr0BDIO7A9xAPq9IhiZWvIdED3LR4SO8OI+q2eKGPtar05opfBZGZ3LxE
- AB15Ad8lOFgKtgTrSORNoTnJ6MGXf8ZDS7BbBXy5fNVO/25Vs9IAtirIo+V4f6E6nT4i0Y5XcMa
- aYhxPrmho9z8FYcIrBzMHr4G+eUg7PfyjikDGj9nG1/HQvio0meF5RDErgMdp4MRPYyu+v8r0dV
- liQD6F3x78T1innHfJaLV+6353PJdgqHuc+fzkJNUduk30PFRXHJssx5RuAQPTjf7jkbTZHqCW2
- UHFF1Y+jFBWMvwLi8=
-X-Google-Smtp-Source: AGHT+IE85LPJ9mACl7Z6rtDQQZzSW4tN3umvIoDdrMR47zoItVFWjatfgNu2jK3bRDW7lhZBdmEaQg==
-X-Received: by 2002:a17:906:9907:b0:ad2:1bd1:4fb8 with SMTP id
- a640c23a62f3a-ad21bd153b3mr510563666b.15.1747137527274; 
- Tue, 13 May 2025 04:58:47 -0700 (PDT)
+ bh=JolZfolD/DyUdBXNo61o0Kdsffn8vTL8/oVbk65XuOw=;
+ b=VbXB9vtDsCrvqYJtmkmkQE6szCWV+G9ROY63zBTF1s1RfHn8azUaHAb9tQVBqnv96U
+ qUzwwzFySpkb5FqHUKWIOf9JkbVwGif8nW3qsJ0iljLpQ0Sm4lIJIs9j8kyQqm6rLgh9
+ NljyL9EU7c8Iy/FtfuWw7l9BzWVRDXrwPX6Y2GbHba/LdYNWJdFfAm60PbGSZHiBp9ZM
+ HgvdqM7xwMtaPkkS3Bw5eS0lmsD6STMAr7+Wys1n3MxwEgg/U8eT9zvE3LWb5K9Fqjla
+ Gh3U9K3DBx+yXdJCvU+AjHk6pgLhZKQa5QKYAdT/kSWW8AXbFUmZo3WFXqpgEUnOsSma
+ DvcQ==
+X-Gm-Message-State: AOJu0Yw4VXbATJpcnA9XMfGYTI9BCNFbT1Q5lA0oYs3ftcaP22R/6GpB
+ kDVLI8P+gXX0Xe4IP0REzx7oV/JCi6m1o7vMitSsIGz0+h1Ip15d3vCoxK96DBqMaUxWuOpjp3Y
+ RbtY=
+X-Gm-Gg: ASbGncupTSYFQ8Olig1nWDw2R30uoSTjibhshiYtlfAG8eo85RXUOMWFUnXIWVBaUNa
+ F7K+3ybAUPrNTefA16e5Q4ZDHyBk/3y1Ag52mH4eyzBzHJvloUKFNsNSaTVo9D3J0OfKRCKNq2/
+ 20+UIW3hi2ja1WV+k0aVmePAudKpGxifhihlJvLJRLCYN0JeLGMdNDrB22xqPpOurnihlsicUSK
+ zQujNBoS3p0tkV+GPQFVNqxLJwx/DLyDu3XlRjskSea2czU1WvyPH80zwhzLpw3lVtMYkZuP+aD
+ E6vGixBzNwkeEVlS9ZXXy3Gu0vGM1WCB9M2TgL5ZE79yEwGGo//wOobrTwiXMIvtU21jQ3B/2wG
+ uFzROpNprgy5x0hGuLuCluqc7sidcjj0rgj03Scl8rM8v1txLCtr+tNclHe+ydyVLcuqB+FuTGe
+ rNBFKF2pgGyllPSSg=
+X-Google-Smtp-Source: AGHT+IGVP6RQXVIrqQSFeH0oehhNdS6qy8tlEchzb/44QOvp5c897xkqPVFMAssZeyAqBKRBw+q2aw==
+X-Received: by 2002:a17:907:7636:b0:ad2:2671:2e95 with SMTP id
+ a640c23a62f3a-ad226713184mr431452366b.8.1747137966588; 
+ Tue, 13 May 2025 05:06:06 -0700 (PDT)
 Received: from fedora.arnhem.chello.nl
  (2001-1c00-8182-4700-cf31-04f3-d898-af42.cable.dynamic.v6.ziggo.nl.
  [2001:1c00:8182:4700:cf31:4f3:d898:af42])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-ad223d5c4aasm694150666b.22.2025.05.13.04.58.46
+ a640c23a62f3a-ad219376451sm770038366b.77.2025.05.13.05.06.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 13 May 2025 04:58:46 -0700 (PDT)
+ Tue, 13 May 2025 05:06:06 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Cc: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>,
- Adam Duskett <adam.duskett@amarulasolutions.com>
-Date: Tue, 13 May 2025 13:58:44 +0200
-Message-ID: <20250513115844.135963-1-adam.duskett@amarulasolutions.com>
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Tue, 13 May 2025 14:06:04 +0200
+Message-ID: <20250513120604.146496-1-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1747137527; x=1747742327;
+ d=amarulasolutions.com; s=google; t=1747137967; x=1747742767;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=uOJSdxiFGp4FBb8+AKEJEs86ZkLaRf65/Rf/nvNtL3Y=;
- b=SY9K6Ab+/r8DeDxqMDVdFeO8Z4ZldZlby2GOolGyxXI4Ys+6Tpsxv+0Co9uH8rQx1O
- ay24vehq9QhJqANYil2uaLkBT3GyJ11+zD+tbZkudCVap9XGPRzC/pQN/bOhl0LCN87g
- 5pZ4yBRJducrMtD0LdlRPZ0PPJM0LGZddfcLA=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=JolZfolD/DyUdBXNo61o0Kdsffn8vTL8/oVbk65XuOw=;
+ b=DNGF0v0Zt7jM6gEtsEoVoqxpvh11Hl8WobN6zif3GSi0KOEFtEWslWXisqKhHnefm7
+ ae0HjjogXXfYUYk1my5zm1WZmVNOH61Mi3Ply8c3Yfv/pnsKECvXI96EBeVdNOTvLkY3
+ n07/WTAjSYbSiB7jPPZ6V2OjGW8PR5/A1F+Hg=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=SY9K6Ab+
-Subject: [Buildroot] [PATCH 1/1] package/openrc: bump to version 0.62.2
+ header.a=rsa-sha256 header.s=google header.b=DNGF0v0Z
+Subject: [Buildroot] [PATCH 2/2] package/sysvinit: bump to version 3.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,139 +114,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove 0005-runlevels-do-not-add-agetty.tty-1-6-if-MKSYSVINIT-ye.patch as the
-meson build now automatically creates the symlinks for tty1 - tty6.
+The biggest change for 3.14 is the maximum inittab entry size has increased
+from 127 charachters to 253 characters long AND it logs a warning when a line
+longer than this is found AND it refuses to run a line longer than 253
+characters. It doesn't truncate too-long lines anymore, it just drops them.
 
-All tests pass.
-
+Changelog: https://github.com/slicer69/sysvinit/releases/tag/3.14
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- ...so-create-run-lock-subsys-directory.patch} |  2 ++
- ...-add-agetty.tty-1-6-if-MKSYSVINIT-ye.patch | 35 -------------------
- ...06-allow-setting-rc_libexecdir-path.patch} |  9 +++--
- package/openrc/openrc.hash                    |  2 +-
- package/openrc/openrc.mk                      |  2 +-
- 5 files changed, 10 insertions(+), 40 deletions(-)
- rename package/openrc/{0006-Also-create-run-lock-subsys-directory.patch => 0005-Also-create-run-lock-subsys-directory.patch} (91%)
- delete mode 100644 package/openrc/0005-runlevels-do-not-add-agetty.tty-1-6-if-MKSYSVINIT-ye.patch
- rename package/openrc/{0007-allow-setting-rc_libexecdir-path.patch => 0006-allow-setting-rc_libexecdir-path.patch} (83%)
+ package/sysvinit/sysvinit.hash | 2 +-
+ package/sysvinit/sysvinit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openrc/0006-Also-create-run-lock-subsys-directory.patch b/package/openrc/0005-Also-create-run-lock-subsys-directory.patch
-similarity index 91%
-rename from package/openrc/0006-Also-create-run-lock-subsys-directory.patch
-rename to package/openrc/0005-Also-create-run-lock-subsys-directory.patch
-index ad78a4b8f7..14b4185cd4 100644
---- a/package/openrc/0006-Also-create-run-lock-subsys-directory.patch
-+++ b/package/openrc/0005-Also-create-run-lock-subsys-directory.patch
-@@ -7,6 +7,8 @@ Buildroot service scripts regularly use this directory, so
- create it in the most appropriate spot.
+diff --git a/package/sysvinit/sysvinit.hash b/package/sysvinit/sysvinit.hash
+index e806ad3786..8de1efed40 100644
+--- a/package/sysvinit/sysvinit.hash
++++ b/package/sysvinit/sysvinit.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  cbaeabddc35a6511b87c87452ee5e87c678a26329c7d7d17fb69a2b42a314d86  sysvinit-3.13.tar.xz
++sha256  c90874b8c054a35991fb8c4d30c443ed1e9b1815ff6165c7b483f558be4e4b53  sysvinit-3.14.tar.xz
  
- Signed-off-by: Norbert Lange <nolange79@gmail.com>
-+[Adam: update for 0.62.2]
-+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
- ---
-  sh/init.sh.Linux.in | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-diff --git a/package/openrc/0005-runlevels-do-not-add-agetty.tty-1-6-if-MKSYSVINIT-ye.patch b/package/openrc/0005-runlevels-do-not-add-agetty.tty-1-6-if-MKSYSVINIT-ye.patch
-deleted file mode 100644
-index 42f77ffdea..0000000000
---- a/package/openrc/0005-runlevels-do-not-add-agetty.tty-1-6-if-MKSYSVINIT-ye.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 014dc43447fa553e875984ac4a528e5916cc9e06 Mon Sep 17 00:00:00 2001
--From: Carlos Santos <unixmania@gmail.com>
--Date: Sat, 29 Feb 2020 22:41:30 -0300
--Subject: [PATCH] runlevels: do not add agetty.tty[1-6] if MKSYSVINIT=yes
--
--Buildroot starts a single getty, according to the system configuration.
--Also tty[1-6] may not exist (e.g. embedded devices with serial consoles
--only).
--
--Signed-off-by: Carlos Santos <unixmania@gmail.com>
--[Adam: update for 0.50]
--Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-----
-- tools/meson_runlevels.sh | 6 ------
-- 1 file changed, 6 deletions(-)
--
--diff --git a/tools/meson_runlevels.sh b/tools/meson_runlevels.sh
--index 1473d4e..eee256b 100755
----- a/tools/meson_runlevels.sh
--+++ b/tools/meson_runlevels.sh
--@@ -91,11 +91,5 @@ if ! test -d "${DESTDIR}${shutdowndir}"; then
-- 		ln -snf "${init_d_dir}/$x" "${DESTDIR}${shutdowndir}/$x"
-- 	done
-- fi
---if test "${sysvinit}" = yes && test "${os}" = Linux; then \
---	for x in tty1 tty2 tty3 tty4 tty5 tty6; do
---		ln -snf "${init_d_dir}/agetty" "${DESTDIR}/${init_d_dir}/agetty.$x"
---		ln -snf "${init_d_dir}/agetty.$x" "${DESTDIR}/${defaultdir}/agetty.$x"
---	done;
---fi
-- 
-- ln -snf "${rc_libexecdir}"/sh/functions.sh "${DESTDIR}/${init_d_dir}"
---- 
--2.18.2
--
-diff --git a/package/openrc/0007-allow-setting-rc_libexecdir-path.patch b/package/openrc/0006-allow-setting-rc_libexecdir-path.patch
-similarity index 83%
-rename from package/openrc/0007-allow-setting-rc_libexecdir-path.patch
-rename to package/openrc/0006-allow-setting-rc_libexecdir-path.patch
-index 5787c26dde..8ca97d8713 100644
---- a/package/openrc/0007-allow-setting-rc_libexecdir-path.patch
-+++ b/package/openrc/0006-allow-setting-rc_libexecdir-path.patch
-@@ -9,7 +9,7 @@ Subject: [PATCH] allow setting rc_libexecdir path
- Upstream: https://github.com/OpenRC/openrc/pull/443
- 
- Signed-off-by: artoo <artoo@artixlinux.org>
--[Adam: update for 0.56]
-+[Adam: update for 0.62.2]
- Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
- ---
-  meson.build       | 2 +-
-@@ -30,15 +30,18 @@ index 5b3f8fa..40d4be1 100644
-  rc_sbindir = rc_libexecdir / 'sbin'
-  rc_shdir = rc_libexecdir / 'sh'
- diff --git a/meson_options.txt b/meson_options.txt
--index 2c74152..d2f67e4 100644
-+index 8cefbbb..9d58de0 100644
- --- a/meson_options.txt
- +++ b/meson_options.txt
--@@ -26,3 +26,5 @@ option('sysvinit', type : 'boolean', value : false,
-+@@ -28,6 +28,8 @@ option('sysvinit', type : 'boolean', value : false,
-    description : 'enable SysVinit compatibility (linux only)')
-  option('zsh-completions', type : 'boolean',
-    description : 'install zsh completions')
- +option('librcdir', type : 'string', value : 'rc',
- +  description : 'default location of rc libexec dir')
-+ option('agetty', type: 'array',
-+   value: ['tty1', 'tty2', 'tty3', 'tty4', 'tty5', 'tty6'],
-+   description : 'agetty symlinks to install when sysvinit is also specified')
- -- 
- 2.41.0
- 
-diff --git a/package/openrc/openrc.hash b/package/openrc/openrc.hash
-index 85e869f82a..6f74c315e1 100644
---- a/package/openrc/openrc.hash
-+++ b/package/openrc/openrc.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  a06b530290057637eab17fc943cbf79c0335eb734ba71ece38b9f3acd8a341d4  openrc-0.56.tar.gz
-+sha256  bddb0fe1c0cc5074439255d17ae92eeb989322f02eac0536f4924b9d96cd73a0  openrc-0.62.2.tar.gz
- sha256  6ac2bf77510808fbec7dc86cbfbca98dfc4c6b47dc99e4ca77b5370e097d8e70  LICENSE
-diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-index 67846ce0ea..dd8069bd21 100644
---- a/package/openrc/openrc.mk
-+++ b/package/openrc/openrc.mk
+ # Hash for license files:
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/sysvinit/sysvinit.mk b/package/sysvinit/sysvinit.mk
+index e0eabc933c..7e73432ea2 100644
+--- a/package/sysvinit/sysvinit.mk
++++ b/package/sysvinit/sysvinit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENRC_VERSION = 0.56
-+OPENRC_VERSION = 0.62.2
- OPENRC_SITE = $(call github,OpenRC,openrc,$(OPENRC_VERSION))
- OPENRC_LICENSE = BSD-2-Clause
- OPENRC_LICENSE_FILES = LICENSE
+-SYSVINIT_VERSION = 3.13
++SYSVINIT_VERSION = 3.14
+ SYSVINIT_SOURCE = sysvinit-$(SYSVINIT_VERSION).tar.xz
+ SYSVINIT_SITE = https://github.com/slicer69/sysvinit/releases/download/$(SYSVINIT_VERSION)
+ SYSVINIT_LICENSE = GPL-2.0+
 -- 
 2.49.0
 
