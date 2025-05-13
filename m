@@ -4,64 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01696C3ABC9
-	for <buildroot@archiver.kernel.org>; Tue, 13 May 2025 09:44:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35B60C3ABC3
+	for <buildroot@archiver.kernel.org>; Tue, 13 May 2025 09:45:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B81481309;
-	Tue, 13 May 2025 09:44:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0737A812F5;
+	Tue, 13 May 2025 09:45:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S30t635y4vHU; Tue, 13 May 2025 09:44:28 +0000 (UTC)
+ id OZ-O5RZ_ghwQ; Tue, 13 May 2025 09:45:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C7E2B812F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FB6F812F8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7E2B812F5;
-	Tue, 13 May 2025 09:44:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9E53412A
- for <buildroot@buildroot.org>; Tue, 13 May 2025 09:44:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FB6F812F8;
+	Tue, 13 May 2025 09:45:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 79EAE12A
+ for <buildroot@buildroot.org>; Tue, 13 May 2025 09:45:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 83BE380FB1
- for <buildroot@buildroot.org>; Tue, 13 May 2025 09:44:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5F54160813
+ for <buildroot@buildroot.org>; Tue, 13 May 2025 09:45:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v2--_3a3t68a for <buildroot@buildroot.org>;
- Tue, 13 May 2025 09:44:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sygyG0_Wz0Am for <buildroot@buildroot.org>;
+ Tue, 13 May 2025 09:45:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6D1EC80E21
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D1EC80E21
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6D1EC80E21
- for <buildroot@buildroot.org>; Tue, 13 May 2025 09:44:25 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 57AED43165;
- Tue, 13 May 2025 09:44:21 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1uEmBQ-002iqn-1L;
- Tue, 13 May 2025 11:44:20 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A88BA6087F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A88BA6087F
+ for <buildroot@buildroot.org>; Tue, 13 May 2025 09:45:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A389686810; Tue, 13 May 2025 09:45:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Baruch Siach via buildroot <buildroot@buildroot.org>
-References: <20250509041939.11656-1-kadambini.nema@gmail.com>
- <87a57mxuqa.fsf@tarshish>
-Date: Tue, 13 May 2025 11:44:20 +0200
-In-Reply-To: <87a57mxuqa.fsf@tarshish> (Baruch Siach via buildroot's message
- of "Fri, 09 May 2025 07:40:13 +0300")
-Message-ID: <874ixovo97.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeftdefkedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepfeegjeffkeehtdetudfggfekvdduvedvvdegvdefjedtudevleduhfdutedvueffnecuffhomhgrihhnpeguvggsihgrnhdrohhrghdpghhithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrghenucfkphepudejkedrudduledruddrudefjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedujeekrdduudelrddurddufeejpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepfedprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepkhgruggrmhgsihhnihdrnhgvmhgrsehgmhgrihhlrdgtohhmpdhrtghpthhtohepsggrrhhutghhsehtkhhoshdrtghordhilh
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/dropbear: security bump to
- version 2025.88
+To: buildroot@buildroot.org
+Date: Tue, 13 May 2025 11:39:24 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 05fb4526f909aac533ed943977d4eeabd0b9b4ac
+X-Git-Newrev: 915a351e2fadb334b5b1eb0e5387b7a5264168a9
+X-Patchwork-Hint: ignore
+Message-Id: <20250513094537.A389686810@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dropbear: security bump to version
+ 2025.88
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -73,36 +59,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kadambini Nema <kadambini.nema@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Baruch" == Baruch Siach via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=915a351e2fadb334b5b1eb0e5387b7a5264168a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi Kadambini Nema,
- > On Thu, May 08 2025, Kadambini Nema wrote:
- >> Fixes CVE-2025-47203.
- >> https://security-tracker.debian.org/tracker/CVE-2025-47203
- >> 
- >> Release notes:
- >> https://github.com/mkj/dropbear/releases/tag/DROPBEAR_2025.88
- >> https://github.com/mkj/dropbear/releases/tag/DROPBEAR_2025.87
+Fixes CVE-2025-47203.
+https://security-tracker.debian.org/tracker/CVE-2025-47203
 
- > The 2025.87 release removed SHA-1 from the default build. See my comment
- > on Bernd's suggested 2025.87 bump patch:
+Release notes:
+https://github.com/mkj/dropbear/releases/tag/DROPBEAR_2025.88
 
- >   https://lore.kernel.org/all/874j02d3h7.fsf@tarshish/
- >   https://lore.kernel.org/all/20250309083216.824179-1-bernd@kuhls.net/
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dropbear/dropbear.hash | 2 +-
+ package/dropbear/dropbear.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks. I committed Berns 2025.87 bump with that and then this commit on
-top.
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dropbear/dropbear.hash b/package/dropbear/dropbear.hash
+index 777910da15..b18aca3aab 100644
+--- a/package/dropbear/dropbear.hash
++++ b/package/dropbear/dropbear.hash
+@@ -1,5 +1,5 @@
+ # From https://matt.ucc.asn.au/dropbear/releases/SHA256SUM.asc
+-sha256  738b7f358547f0c64c3e1a56bbc5ef98d34d9ec6adf9ccdf01dc0bf2caa2bc8d  dropbear-2025.87.tar.bz2
++sha256  783f50ea27b17c16da89578fafdb6decfa44bb8f6590e5698a4e4d3672dc53d4  dropbear-2025.88.tar.bz2
+ 
+ # License file, locally computed
+ sha256  a99ce657d790b761c132ee7e0de18edb437ae6361e536d991c6a12f36e770445  LICENSE
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index b0f5dc7afe..d57d6b6e37 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DROPBEAR_VERSION = 2025.87
++DROPBEAR_VERSION = 2025.88
+ DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
+ DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+ DROPBEAR_LICENSE = MIT, BSD-2-Clause, Public domain
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
