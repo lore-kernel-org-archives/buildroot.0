@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93995C3ABC3
-	for <buildroot@archiver.kernel.org>; Tue, 13 May 2025 11:48:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 381B4C3ABC3
+	for <buildroot@archiver.kernel.org>; Tue, 13 May 2025 11:48:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 34E1F81334;
-	Tue, 13 May 2025 11:48:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2E82E81E51;
+	Tue, 13 May 2025 11:48:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TajbuKHtpj3w; Tue, 13 May 2025 11:48:18 +0000 (UTC)
+ id B81bfX-G8e6A; Tue, 13 May 2025 11:48:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52F3A8119A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0333381E8A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 52F3A8119A;
-	Tue, 13 May 2025 11:48:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0333381E8A;
+	Tue, 13 May 2025 11:48:21 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id DFBC9153
- for <buildroot@buildroot.org>; Tue, 13 May 2025 11:48:16 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0466C153
+ for <buildroot@buildroot.org>; Tue, 13 May 2025 11:48:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D07CA40E2E
- for <buildroot@buildroot.org>; Tue, 13 May 2025 11:48:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 00C3B40E3B
+ for <buildroot@buildroot.org>; Tue, 13 May 2025 11:48:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H04_cynNJput for <buildroot@buildroot.org>;
- Tue, 13 May 2025 11:48:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.123;
+ id nZwYmVxT4nZJ for <buildroot@buildroot.org>;
+ Tue, 13 May 2025 11:48:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.124;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AE29B40DD6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE29B40DD6
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.123])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AE29B40DD6
- for <buildroot@buildroot.org>; Tue, 13 May 2025 11:48:15 +0000 (UTC)
-X-CSE-ConnectionGUID: 5HjiBWrrTC6SONBbBMxqoA==
-X-CSE-MsgGUID: ssWt4LAfS6a/UkP05X5CYw==
-Received: from unknown (HELO opfedv1rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 855FE40DD6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 855FE40DD6
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.124])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 855FE40DD6
+ for <buildroot@buildroot.org>; Tue, 13 May 2025 11:48:18 +0000 (UTC)
+X-CSE-ConnectionGUID: hOpot0erSRCnCz0dxm0ZPA==
+X-CSE-MsgGUID: AY6BTWPTS0qQIM/J+LMJCg==
+Received: from unknown (HELO opfedv1rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 13 May 2025 13:48:13 +0200
+ 13 May 2025 13:48:15 +0200
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0c.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 May 2025 13:48:12 +0200
+ ([x.x.x.x]) by opfedv1rlp0d.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 May 2025 13:48:15 +0200
 Received: from yd-6wlzhs3 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup
  [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Tue, 13 May 2025 13:48:11 +0200
+ Tue, 13 May 2025 13:48:14 +0200
 Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Tue, 13 May 2025 13:48:11 +0200
-X-CSE-ConnectionGUID: RZ3gYu8zQ4ypGjyxS/QjQg==
-X-CSE-MsgGUID: gml2dW2GTG2gDjXo+KKxvQ==
-X-IronPort-AV: E=Sophos;i="6.15,285,1739833200"; d="scan'208";a="289572304"
+ Tue, 13 May 2025 13:48:13 +0200
+X-CSE-ConnectionGUID: 1Htg5CBASZaNFjfdvu+njA==
+X-CSE-MsgGUID: /48zblNgTcusb9mIfuLf8Q==
+X-IronPort-AV: E=Sophos;i="6.15,285,1739833200"; d="scan'208";a="289803476"
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-CC: Christian Stewart <christian@aperture.us>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, "Yann E . MORIN" <yann.morin@orange.com>
+CC: <yann.morin@orange.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Tue, 13 May 2025 13:48:11 +0200
-Message-ID: <cover.1747136889.git.yann.morin@orange.com>
+Message-ID: <484cd2c9e1c954a3c84dbb8d9d253f93ccc890ce.1747136889.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1747136889.git.yann.morin@orange.com>
+References: <cover.1747136889.git.yann.morin@orange.com>
 MIME-Version: 1.0
-X-Patchwork-Hint: ignore
-X-Originating-IP: [10.115.26.52]
-X-ClientProxiedBy: OPE16NORMBX304.corporate.adroot.infra.ftgroup
- (10.115.26.13) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-Originating-IP: [10.115.26.50]
+X-ClientProxiedBy: OPE16NORMBX106.corporate.adroot.infra.ftgroup (10.115.27.3)
+ To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1747136896; x=1778672896;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=c5H0xFqJKqHaE3wsEfWuis1cEumuDnlkGN/vcWAz/HM=;
- b=YdkNptyIHuEEq6qJZHv8A9GKw9Tuut6jAW37D7hvqO+EeFjcgmUtL7Y9
- s/533fcIdgIM9jCh0CfZotfONWcFasUiXDZERlVFxwqckv2tQcPk8FJLT
- XCAeYhYG4ClMqJrcDF0gRcEunuipbWx15Zqyoqo6fhm1+Ifw99JS+l206
- lifT4/ysFev7LRzw/F5nfU7bc2Sc68SM/Q0sB4c1yymDz+I/44i/7FUGd
- MaqETavgOr0TlrzqgwS1/1b4oEBmtGEXzaxyf7ya4sDLysdDISgxnxLMn
- 7p0pI8QWMHoOiJTKXmZsuMgLZwnn6BEZlJK/9gAAqL79XuYfb5Ss0i65+
- A==;
+ t=1747136899; x=1778672899;
+ h=from:to:cc:subject:date:message-id:in-reply-to:
+ references:mime-version:content-transfer-encoding;
+ bh=MEWu+WC8FQ1VFbNsqngubvgAErPulYn86l+O2dA2+x8=;
+ b=h19ROyvNJiXd4BrU9iUkFpLW2TWU9bQcn0vpGDz7Xytv9HuA/Uex1dca
+ jnNQiObb5zSd5QGZpS94PvgTRYj5HJKyUI/F4rjRfDHYb9LIyL7Akkraj
+ zQXXH6j3hgdlVWMi6fUZredDKvhWOyS9kh1qDS7ZCwjYD5SJPPVo6oIpa
+ 9CJTtUc/U3VGX2WN4FAE2mcO48yffMgg2MAxn0j2DhW8HpxbB37gFzQmC
+ hW3U4HT3r0kTxTIV/qzxzoa6P4Jms4nH8po3bosmYOe0HGmIbY9+VgOcF
+ 0R/CFa2lpGPHdZ1Q0BJQvx2cJz67XmDTtupgZQfJs2biTm0pGhzU6AHqa
+ g==;
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=YdkNptyI
-Subject: [Buildroot] [PATCH 0/3] package/distribution-registry: new package
+ dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
+ header.a=rsa-sha256 header.s=orange002 header.b=h19ROyvN
+Subject: [Buildroot] [PATCH 1/3] package/containers-image-config: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,83 +106,163 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Hello All!
+The container/image repository is the standards regpository that drives
+the image management in container tools, like podman or skopeo. Besides
+a Go library, it also prodvides the template configuration files used
+by those tools; those files can also serve as default ones.
 
-This small series introduces distribution-registry, the reference
-implementation to host and distibute container images.
+Install those files instead of the canned ones we cary in podman, and
+change podman to use this new package too.
 
-The series is three-fold:
+The registry file needs a fixup, as it by default does not allow
+searching unqualified images (i.e. those that do not contain a registry
+name) in a default registry, for security reasons. However, the Docker
+Hub is traditionally a registry that can be accessed without being
+specified, so we make that possible.
 
- 1. introduce the common containers-image-config package, that provides
-    default, sane, official configuration files shared by multiple tools
-    from the containers ecosystem;
+As was noted in ebbaac08e3f4 (package/podman: new package), "[p]roviding
+actual files is going to be use-case dependent, and interested parties
+will have to provide their own config files, e.g. in a rootfs overlay."
 
- 2. use those files for podman, instead of the custom, canned ones, and
-    extend the skopeo runtime test to exercise using those files as
-    well;
-
- 3. introduce distribution-registry itself, with a runtime test.
-
-
-Regards,
-Yann E. MORIN.
-
-
-The following changes since commit a7ea1e658de6d8f951ef8c4e81724c131306db6b
-
-  board/bsh/imx6ulz-bsh-smm-m2: flash U-Boot (2025-05-12 23:00:50 +0200)
-
-
-are available as patches in this mail series,
-
-for you to apply patches up to 8d15f6761c6d86fb4b04c3209970e1a6cc803d78
-
-  package/distribution-registry: new package (2025-05-13 13:42:39 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (3):
-      package/containers-image-config: new package
-      package/skopeo: use containers-image-config files
-      package/distribution-registry: new package
-
- package/Config.in                                  |  2 +
- package/containers-image-config/Config.in          |  8 ++
- .../containers-image-config.hash                   |  3 +
- .../containers-image-config.mk                     | 25 ++++++
- package/distribution-registry/Config.in            | 17 +++++
- package/distribution-registry/config.yml           | 13 ++++
- .../distribution-registry.hash                     |  3 +
- .../distribution-registry/distribution-registry.mk | 51 +++++++++++++
- .../distribution-registry.service                  | 10 +++
- package/podman/Config.in                           |  1 +
- package/podman/podman.mk                           | 10 ---
- package/podman/policy.json                         |  7 --
- package/podman/registries.conf                     |  1 -
- package/skopeo/Config.in                           |  1 +
- .../tests/package/test_distribution_registry.py    | 88 ++++++++++++++++++++++
- support/testing/tests/package/test_skopeo.py       | 20 +++++
- 16 files changed, 242 insertions(+), 18 deletions(-)
+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/Config.in                             |  1 +
+ package/containers-image-config/Config.in     |  8 ++++++
+ .../containers-image-config.hash              |  3 +++
+ .../containers-image-config.mk                | 25 +++++++++++++++++++
+ package/podman/Config.in                      |  1 +
+ package/podman/podman.mk                      | 10 --------
+ package/podman/policy.json                    |  7 ------
+ package/podman/registries.conf                |  1 -
+ 8 files changed, 38 insertions(+), 18 deletions(-)
  create mode 100644 package/containers-image-config/Config.in
  create mode 100644 package/containers-image-config/containers-image-config.hash
  create mode 100644 package/containers-image-config/containers-image-config.mk
- create mode 100644 package/distribution-registry/Config.in
- create mode 100644 package/distribution-registry/config.yml
- create mode 100644 package/distribution-registry/distribution-registry.hash
- create mode 100644 package/distribution-registry/distribution-registry.mk
- create mode 100644 package/distribution-registry/distribution-registry.service
  delete mode 100644 package/podman/policy.json
  delete mode 100644 package/podman/registries.conf
- create mode 100644 support/testing/tests/package/test_distribution_registry.py
 
+diff --git a/package/Config.in b/package/Config.in
+index a9074ac405..c8022a91ec 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2835,6 +2835,7 @@ menu "System tools"
+ 	source "package/circus/Config.in"
+ 	source "package/conmon/Config.in"
+ 	source "package/containerd/Config.in"
++	source "package/containers-image-config/Config.in"
+ 	source "package/coreutils/Config.in"
+ 	source "package/cpulimit/Config.in"
+ 	source "package/cpuload/Config.in"
+diff --git a/package/containers-image-config/Config.in b/package/containers-image-config/Config.in
+new file mode 100644
+index 0000000000..d40712e56d
+--- /dev/null
++++ b/package/containers-image-config/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_CONTAINERS_IMAGE_CONFIG
++	bool "containers-image-config"
++	help
++	  Install default, minimalist configuration files used by the
++	  various tools dealing with containers images, like podman,
++	  skopeo...
++
++	  https://github.com/containers/image
+diff --git a/package/containers-image-config/containers-image-config.hash b/package/containers-image-config/containers-image-config.hash
+new file mode 100644
+index 0000000000..0159b0fc62
+--- /dev/null
++++ b/package/containers-image-config/containers-image-config.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256  afdbb1487571d4cc8974e11c72bc4e05043fb490cfc0581783789f414c64f87b  containers-image-config-v5.35.0-git4.tar.gz
++sha256  716a8b80635c394681e652823e1e42e411ad2d254e1f202403422d74f4b0b106  LICENSE
+diff --git a/package/containers-image-config/containers-image-config.mk b/package/containers-image-config/containers-image-config.mk
+new file mode 100644
+index 0000000000..2f03f8e8fb
+--- /dev/null
++++ b/package/containers-image-config/containers-image-config.mk
+@@ -0,0 +1,25 @@
++################################################################################
++#
++# containers-image-config
++#
++################################################################################
++
++CONTAINERS_IMAGE_CONFIG_VERSION = v5.35.0
++CONTAINERS_IMAGE_CONFIG_SITE = https://github.com/containers/image
++CONTAINERS_IMAGE_CONFIG_SITE_METHOD = git
++
++CONTAINERS_IMAGE_CONFIG_LICENSE = Apache-2.0
++CONTAINERS_IMAGE_CONFIG_LICENSE_FILES = LICENSE
++
++define CONTAINERS_IMAGE_CONFIG_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0644 \
++		$(@D)/default-policy.json \
++		$(TARGET_DIR)/etc/containers/policy.json
++	$(INSTALL) -D -m 0644 \
++		$(@D)/registries.conf \
++		$(TARGET_DIR)/etc/containers/registries.conf
++	$(SED) '/^# unqualified-search-registries = .*/s//unqualified-search-registries = ["docker.io"]/' \
++		$(TARGET_DIR)/etc/containers/registries.conf
++endef
++
++$(eval $(generic-package))
+diff --git a/package/podman/Config.in b/package/podman/Config.in
+index 4378d9918d..35d291a7e8 100644
+--- a/package/podman/Config.in
++++ b/package/podman/Config.in
+@@ -12,6 +12,7 @@ config BR2_PACKAGE_PODMAN
+ 	select BR2_PACKAGE_CA_CERTIFICATES  # runtime
+ 	select BR2_PACKAGE_CGROUPFS_V2_MOUNT if !BR2_PACKAGE_CGROUPFS_MOUNT && !BR2_INIT_SYSTEMD  # runtime
+ 	select BR2_PACKAGE_CONMON  # runtime
++	select BR2_PACKAGE_CONTAINERS_IMAGE_CONFIG  # runtime
+ 	select BR2_PACKAGE_LIBGPGME
+ 	select BR2_PACKAGE_LIBSECCOMP
+ 	select BR2_PACKAGE_NETAVARK  # runtime
+diff --git a/package/podman/podman.mk b/package/podman/podman.mk
+index 7ca9b9ddcb..27d9a84712 100644
+--- a/package/podman/podman.mk
++++ b/package/podman/podman.mk
+@@ -99,16 +99,6 @@ define PODMAN_LINUX_CONFIG_FIXUPS
+ 	$(PODMAN_LINUX_CONFIG_FIXUPS_BTRFS)
+ endef
+ 
+-define PODMAN_CONFIG
+-	$(Q)$(INSTALL) -D -m 0644 \
+-		$(PODMAN_PKGDIR)/policy.json \
+-		$(TARGET_DIR)/etc/containers/policy.json
+-	$(Q)$(INSTALL) -D -m 0644 \
+-		$(PODMAN_PKGDIR)/registries.conf \
+-		$(TARGET_DIR)/etc/containers/registries.conf
+-endef
+-PODMAN_POST_INSTALL_TARGET_HOOKS += PODMAN_CONFIG
+-
+ define PODMAN_HELPERS
+ 	$(Q)mkdir -p $(TARGET_DIR)/usr/libexec/podman
+ 	$(Q)ln -sf ../../bin/aardvark-dns $(TARGET_DIR)/usr/libexec/podman/aardvark-dns
+diff --git a/package/podman/policy.json b/package/podman/policy.json
+deleted file mode 100644
+index 9333053f93..0000000000
+--- a/package/podman/policy.json
++++ /dev/null
+@@ -1,7 +0,0 @@
+-{
+-  "default": [
+-    {
+-      "type": "insecureAcceptAnything"
+-    }
+-  ]
+-}
+diff --git a/package/podman/registries.conf b/package/podman/registries.conf
+deleted file mode 100644
+index d44d892da3..0000000000
+--- a/package/podman/registries.conf
++++ /dev/null
+@@ -1 +0,0 @@
+-unqualified-search-registries = ["docker.io"]
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
+2.34.1
 
 ____________________________________________________________________________________________________________
 Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
