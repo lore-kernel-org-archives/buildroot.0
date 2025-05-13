@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 232A7C3ABC9
-	for <buildroot@archiver.kernel.org>; Tue, 13 May 2025 19:35:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E456AC3ABC9
+	for <buildroot@archiver.kernel.org>; Tue, 13 May 2025 19:35:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA5F260672;
-	Tue, 13 May 2025 19:35:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 936D360B96;
+	Tue, 13 May 2025 19:35:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jDx5-cInn0r3; Tue, 13 May 2025 19:35:11 +0000 (UTC)
+ id ckdzhunQpLw9; Tue, 13 May 2025 19:35:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1992360B91
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF44660E0D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1992360B91;
-	Tue, 13 May 2025 19:35:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id EE228150
- for <buildroot@buildroot.org>; Tue, 13 May 2025 19:35:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF44660E0D;
+	Tue, 13 May 2025 19:35:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C266B153
+ for <buildroot@buildroot.org>; Tue, 13 May 2025 19:35:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DF46840F61
- for <buildroot@buildroot.org>; Tue, 13 May 2025 19:35:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A83B260672
+ for <buildroot@buildroot.org>; Tue, 13 May 2025 19:35:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iENTtwJUumuk for <buildroot@buildroot.org>;
- Tue, 13 May 2025 19:35:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22ED340193
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 22ED340193
- for <buildroot@buildroot.org>; Tue, 13 May 2025 19:35:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1233C8682C; Tue, 13 May 2025 19:35:09 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WGp1jp_CQ6GT for <buildroot@buildroot.org>;
+ Tue, 13 May 2025 19:35:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ECC1D60B91
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECC1D60B91
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ECC1D60B91
+ for <buildroot@buildroot.org>; Tue, 13 May 2025 19:35:33 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id 4F170780368;
+ Tue, 13 May 2025 21:35:31 +0200 (CEST)
+Received: from 2a01:e0a:485:b220:656e:cf44:475c:a8d2
+ via 2a01:e0a:485:b220:656e:cf44:475c:a8d2 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Tue, 13 May 2025 21:35:31 +0200
+MIME-Version: 1.0
+Date: Tue, 13 May 2025 21:35:31 +0200
 From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 13 May 2025 21:29:28 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c1d422edde19d07d6406705b1a4b059125dba689
-X-Git-Newrev: 467aa8cd56a4b6e8cef0ec39ac8dff9928a40973
-X-Patchwork-Hint: ignore
-Message-Id: <20250513193509.1233C8682C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/netcat-openbsd: bump version to
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20250512214811.452878-1-bernd@kuhls.net>
+References: <20250512214811.452878-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.10
+Message-ID: <7b50b5c4b1bb5d6fe72c2930270db432@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1747164932;
+ bh=Uo7ReyoXvMW3AURBFnfMSRt24a6LBTTxFYVHVR6TxcA=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=AQKiNBidJkV/pdV7kOOUIGMHWMWWufXhiDPFkWbDeFngoMBRRJqYM7cQHlwH7WJzO
+ NDIf+LiF9AFMjP8QpI7ddClyAtC2WvdhO9iZlmk0rmjGHN4V9fWAe8//jphKD+7cyM
+ Q/Xqtk7ht+R4ccdXm1/z2cO3sgXYUJAknsTtlos6rCGbh/2F261jhgvu5eHJxT7gNn
+ zEr3f3Nwc+LSgRcgKBSr3cfzqcfk4GGoE7rX1+R2H+KXM/qDGv/QhamKkwofFG+PUw
+ am0Ln7AORNYYV+XPXz2l+WkeS3t9TMSRYQfyVtosntuiYBF+y2yV7gT1NFQux7f+Qn
+ uQYpbf2msvkIQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=AQKiNBid
+Subject: Re: [Buildroot] [PATCH] package/netcat-openbsd: bump version to
  1.229
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -59,55 +83,15 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=467aa8cd56a4b6e8cef0ec39ac8dff9928a40973
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On 12/05/2025 23:48, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/netcat-openbsd/netcat-openbsd.hash | 8 ++++----
- package/netcat-openbsd/netcat-openbsd.mk   | 6 +++---
- 2 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/package/netcat-openbsd/netcat-openbsd.hash b/package/netcat-openbsd/netcat-openbsd.hash
-index e55dea53e7..267e02f844 100644
---- a/package/netcat-openbsd/netcat-openbsd.hash
-+++ b/package/netcat-openbsd/netcat-openbsd.hash
-@@ -1,6 +1,6 @@
--# From http://snapshot.debian.org/archive/debian/20211206T030211Z/pool/main/n/netcat-openbsd/netcat-openbsd_1.218-3.dsc
--sha256  a28a5d39abaf481747b1e78b4b50e96d0cdab0ffef289cba156dc11941c64857  netcat-openbsd_1.218.orig.tar.gz
--sha256  19229ebc825d12cd805843228c498cc881dcef127a9d680fcfbd8cb2da966161  netcat-openbsd_1.218-3.debian.tar.xz
-+# From https://snapshot.debian.org/archive/debian/20250429T083749Z/pool/main/n/netcat-openbsd/netcat-openbsd_1.229-1.dsc
-+sha256  493e3973ffca7fedf0435e498bf18ebc934b1c3aa76db2b29cf80f98d9175a86  netcat-openbsd_1.229.orig.tar.gz
-+sha256  c3bff4330a2fe1fbe384861eacbf4f6ad2c59912aa772efad07462644ed9d936  netcat-openbsd_1.229-1.debian.tar.xz
- 
- # Hash for license file
--sha256  acfd1d822ee2e8e0b196c7a369383d0cb9bc131b56c3c95976a32498728fe1e3  netcat.c
-+sha256  fe62c02c86f4cad7c5c031a1a5601fd2e37e7f2773def39bede8652fe51716bb  netcat.c
-diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
-index 311f8aa819..a5ea4727af 100644
---- a/package/netcat-openbsd/netcat-openbsd.mk
-+++ b/package/netcat-openbsd/netcat-openbsd.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--NETCAT_OPENBSD_VERSION = 1.218
-+NETCAT_OPENBSD_VERSION = 1.229
- NETCAT_OPENBSD_SOURCE = netcat-openbsd_$(NETCAT_OPENBSD_VERSION).orig.tar.gz
--NETCAT_OPENBSD_PATCH = netcat-openbsd_$(NETCAT_OPENBSD_VERSION)-3.debian.tar.xz
--NETCAT_OPENBSD_SITE = http://snapshot.debian.org/archive/debian/20211206T030211Z/pool/main/n/netcat-openbsd
-+NETCAT_OPENBSD_PATCH = netcat-openbsd_$(NETCAT_OPENBSD_VERSION)-1.debian.tar.xz
-+NETCAT_OPENBSD_SITE = https://snapshot.debian.org/archive/debian/20250429T083749Z/pool/main/n/netcat-openbsd
- NETCAT_OPENBSD_LICENSE = BSD-3-Clause
- NETCAT_OPENBSD_LICENSE_FILES = netcat.c
- NETCAT_OPENBSD_DEPENDENCIES = host-pkgconf libbsd
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
