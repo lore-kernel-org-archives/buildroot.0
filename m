@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D23FFC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:59:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 363ACC3ABDD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:59:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6AC4846CA;
-	Mon, 19 May 2025 10:59:29 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A-hI6ufsfWKi; Mon, 19 May 2025 10:59:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2CAA846CB
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E2CAA846CB;
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF03D61726;
 	Mon, 19 May 2025 10:59:28 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Se0mZJzcOrAO; Mon, 19 May 2025 10:59:27 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C92270CE7
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C92270CE7;
+	Mon, 19 May 2025 10:59:26 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 34C21D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:46:33 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id F22D4193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A87EF4151A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 93888410D5
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o__FJJHWm6fR for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:25 +0000 (UTC)
+ id cXfoUABCY2s1 for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 019B9414ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6A754167A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 019B9414ED
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A6A754167A
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ECE9A82A2E; Mon, 19 May 2025 10:40:01 +0000 (UTC)
+ id A4AA0873D4; Mon, 19 May 2025 10:40:02 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 12 May 2025 22:31:41 +0200
+Date: Tue, 13 May 2025 23:01:10 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 96ae6c41e7ac57692842ffbac1e81beb35b66d52
-X-Git-Newrev: ce9a64b5d15a484762cbd40007650784998b100b
+X-Git-Oldrev: b3388c25562fe441085bed2a658cd1d09f30b74f
+X-Git-Newrev: 8701d138ed47b9c667cb31e72a16894468003b9d
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104001.ECE9A82A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/connman: bump to
- version 1.44
+Message-Id: <20250519104002.A4AA0873D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-uvicorn: bump
+ to version 0.34.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,60 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce9a64b5d15a484762cbd40007650784998b100b
+commit: https://git.buildroot.net/buildroot/commit/?id=8701d138ed47b9c667cb31e72a16894468003b9d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-
-- ver 1.44:
-  * Fix issue with handling oFono context integration.
-  * Fix issue with handling web context for online detection.
-  * Fix issue with handling flags used when deleting routes.
-  * Fix issue with handling PAC proxy integration.
-
-- ver 1.43:
-  * Fix issue with device creation when using LTE.
-  * Fix issue with regulatory domain when powering up.
-  * Fix issue with resolving ISO3166 code from timezone data.
-  * Fix issue with handling DNS proxy zero termination of buffers.
-  * Fix issue with handling DHCP packet length in L3 mode.
-  * Fix issue with handling DHCP upper length checks.
-  * Fix issue with handling IPv6 and URL parsing.
-  * Fix issue with handling online check updates.
-  * Fix issue with handling proxy method and WISPr.
-  * Fix issue with handling default gateway setup.
-  * Add support for low-priority default routes.
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/connman/connman.hash | 2 +-
- package/connman/connman.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-uvicorn/python-uvicorn.hash | 4 ++--
+ package/python-uvicorn/python-uvicorn.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index ea87f1ea17..38af1847ae 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
--sha256  a3e6bae46fc081ef2e9dae3caa4f7649de892c3de622c20283ac0ca81423c2aa  connman-1.42.tar.xz
-+sha256  2be2b00321632b775f9eff713acd04ef21e31fbf388f6ebf45512ff4289574ff  connman-1.44.tar.xz
- # Locally computed
- sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index 142a6583ad..2c5be8252c 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-uvicorn/python-uvicorn.hash b/package/python-uvicorn/python-uvicorn.hash
+index bbaf98dfff..7040ffa37c 100644
+--- a/package/python-uvicorn/python-uvicorn.hash
++++ b/package/python-uvicorn/python-uvicorn.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/uvicorn/json
+-md5  9944ee2becd37cb1c1e804a96c34a9e0  uvicorn-0.34.0.tar.gz
+-sha256  404051050cd7e905de2c9a7e61790943440b3416f49cb409f965d9dcd0fa73e9  uvicorn-0.34.0.tar.gz
++md5  4a741214532ec25c04dbb1e926e085f9  uvicorn-0.34.2.tar.gz
++sha256  0e929828f6186353a80b58ea719861d2629d766293b6d19baf086ba31d4f3328  uvicorn-0.34.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  efe1acf3e62fb99c288b0ec73e5a773b7268ef4320fe757ea994214e4b63c371  LICENSE.md
+diff --git a/package/python-uvicorn/python-uvicorn.mk b/package/python-uvicorn/python-uvicorn.mk
+index fbb3937af1..944f683bab 100644
+--- a/package/python-uvicorn/python-uvicorn.mk
++++ b/package/python-uvicorn/python-uvicorn.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--CONNMAN_VERSION = 1.42
-+CONNMAN_VERSION = 1.44
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus
+-PYTHON_UVICORN_VERSION = 0.34.0
++PYTHON_UVICORN_VERSION = 0.34.2
+ PYTHON_UVICORN_SOURCE = uvicorn-$(PYTHON_UVICORN_VERSION).tar.gz
+-PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/4b/4d/938bd85e5bf2edeec766267a5015ad969730bb91e31b44021dfe8b22df6c
++PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/a6/ae/9bbb19b9e1c450cf9ecaef06463e40234d98d95bf572fab11b4f19ae5ded
+ PYTHON_UVICORN_SETUP_TYPE = hatch
+ PYTHON_UVICORN_LICENSE = BSD-3-Clause
+ PYTHON_UVICORN_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
