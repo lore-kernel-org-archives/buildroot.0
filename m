@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2776CC3DA6D
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:48:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 460BCC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:48:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E12E784006;
-	Mon, 19 May 2025 10:48:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C8C676F5EE;
+	Mon, 19 May 2025 10:48:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NYJaJj0_oQzq; Mon, 19 May 2025 10:48:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4gopv1TEKmfS; Mon, 19 May 2025 10:48:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15BB284001
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9DC3F6F5E6
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 15BB284001;
-	Mon, 19 May 2025 10:48:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 09794E4
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9DC3F6F5E6;
+	Mon, 19 May 2025 10:48:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 37A92E4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A6B0B4128F
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 44EC7417F5
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LG6JhVGzXQJo for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T0-KCfHkrbLz for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE92040DC0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75AC14180E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AE92040DC0
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 75AC14180E
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A9BDF8725C; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+ id 739968348A; Mon, 19 May 2025 10:40:02 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 10 Apr 2025 21:39:53 +0200
+Date: Tue, 13 May 2025 22:01:50 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4df4d1d31240aa4d1c49dcbcb9694ce32eb626ba
-X-Git-Newrev: e863acaa1aa64e52ae313cc51a46eb910c92c0bf
+X-Git-Oldrev: 467aa8cd56a4b6e8cef0ec39ac8dff9928a40973
+X-Git-Newrev: 4dfe97dde426c8419ad137e4ee6e92b1857af066
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103948.A9BDF8725C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/engicam_px30_core:
- bump Linux to 6.12.22 and U-Boot to 2025.04
+Message-Id: <20250519104002.739968348A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libsndfile: Add
+ upstream commits to fix build with gcc-15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,58 +65,188 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e863acaa1aa64e52ae313cc51a46eb910c92c0bf
+commit: https://git.buildroot.net/buildroot/commit/?id=4dfe97dde426c8419ad137e4ee6e92b1857af066
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The patch bumps the Linux kernel to version 6.12.22 and U-Boot to
-version 2025.04.
-
-Signed-off-by: Meena Murthy <meena.murthy@amarulasolutions.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/engicam/px30core/patches/linux/linux.hash | 2 +-
- board/engicam/px30core/patches/uboot/uboot.hash | 2 +-
- configs/engicam_px30_core_defconfig             | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ ...5-ALAC-Include-config.h-to-avoid-warnings.patch | 95 ++++++++++++++++++++++
+ ...bool.h-instead-of-redefining-bool-true-an.patch | 65 +++++++++++++++
+ 2 files changed, 160 insertions(+)
 
-diff --git a/board/engicam/px30core/patches/linux/linux.hash b/board/engicam/px30core/patches/linux/linux.hash
-index 2fb158b70c..b8704508bc 100644
---- a/board/engicam/px30core/patches/linux/linux.hash
-+++ b/board/engicam/px30core/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  d73bf057bec04434b169d1b61641936f7d0c97ceb923a281f32e35dd4dcc6531  linux-6.12.19.tar.xz
-+sha256  ab48800ab49985a78d2318ae8ac5f28fd3e123ea17357ef21498105a53337336  linux-6.12.22.tar.xz
-diff --git a/board/engicam/px30core/patches/uboot/uboot.hash b/board/engicam/px30core/patches/uboot/uboot.hash
-index bc999536af..80ea21b7cb 100644
---- a/board/engicam/px30core/patches/uboot/uboot.hash
-+++ b/board/engicam/px30core/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
-+sha256  439d3bef296effd54130be6a731c5b118be7fddd7fcc663ccbc5fb18294d8718  u-boot-2025.04.tar.bz2
-diff --git a/configs/engicam_px30_core_defconfig b/configs/engicam_px30_core_defconfig
-index feaa8b3302..be5c56e19f 100644
---- a/configs/engicam_px30_core_defconfig
-+++ b/configs/engicam_px30_core_defconfig
-@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS="-c board/engicam/px30core/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.19"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.22"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/px30-engicam-px30-core-ctouch2-of10"
-@@ -28,7 +28,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_ARM32_TOOLCHAIN=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2025.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="px30-core-ctouch2-of10-px30"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+diff --git a/package/libsndfile/0015-ALAC-Include-config.h-to-avoid-warnings.patch b/package/libsndfile/0015-ALAC-Include-config.h-to-avoid-warnings.patch
+new file mode 100644
+index 0000000000..27181493b7
+--- /dev/null
++++ b/package/libsndfile/0015-ALAC-Include-config.h-to-avoid-warnings.patch
+@@ -0,0 +1,95 @@
++From 2c6ffea6ac8bb1b89e1f778bdad8bf8b0342d32f Mon Sep 17 00:00:00 2001
++From: Marcel Telka <marcel@telka.sk>
++Date: Wed, 20 Sep 2023 14:54:42 +0200
++Subject: [PATCH] ALAC: Include config.h to avoid warnings
++
++Upstream: https://github.com/libsndfile/libsndfile/commit/2c6ffea6ac8bb1b89e1f778bdad8bf8b0342d32f
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/ALAC/ag_dec.c       | 2 ++
++ src/ALAC/ag_enc.c       | 2 ++
++ src/ALAC/alac_decoder.c | 2 ++
++ src/ALAC/alac_encoder.c | 2 ++
++ src/ALAC/matrix_dec.c   | 2 ++
++ src/ALAC/matrix_enc.c   | 2 ++
++ 6 files changed, 12 insertions(+)
++
++diff --git a/src/ALAC/ag_dec.c b/src/ALAC/ag_dec.c
++index 37671d240..68707f825 100644
++--- a/src/ALAC/ag_dec.c
+++++ b/src/ALAC/ag_dec.c
++@@ -26,6 +26,8 @@
++ 	Copyright:	(c) 2001-2011 Apple, Inc.
++ */
++ 
+++#include "config.h"
+++
++ #include <math.h>
++ #include <stdio.h>
++ #include <stdlib.h>
++diff --git a/src/ALAC/ag_enc.c b/src/ALAC/ag_enc.c
++index 4737b96e3..a56db7b18 100644
++--- a/src/ALAC/ag_enc.c
+++++ b/src/ALAC/ag_enc.c
++@@ -27,6 +27,8 @@
++ 	Copyright:	(c) 2001-2011 Apple, Inc.
++ */
++ 
+++#include "config.h"
+++
++ #include "aglib.h"
++ #include "ALACBitUtilities.h"
++ #include "EndianPortable.h"
++diff --git a/src/ALAC/alac_decoder.c b/src/ALAC/alac_decoder.c
++index 46d333060..978919a70 100644
++--- a/src/ALAC/alac_decoder.c
+++++ b/src/ALAC/alac_decoder.c
++@@ -23,6 +23,8 @@
++ 	File:		ALACDecoder.cpp
++ */
++ 
+++#include "config.h"
+++
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <stddef.h>
++diff --git a/src/ALAC/alac_encoder.c b/src/ALAC/alac_encoder.c
++index 599399afe..29012f3f4 100644
++--- a/src/ALAC/alac_encoder.c
+++++ b/src/ALAC/alac_encoder.c
++@@ -28,6 +28,8 @@
++ #define DebugMsg			printf
++ 
++ // headers
+++#include "config.h"
+++
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <string.h>
++diff --git a/src/ALAC/matrix_dec.c b/src/ALAC/matrix_dec.c
++index 6d0b40153..bc1f028a9 100644
++--- a/src/ALAC/matrix_dec.c
+++++ b/src/ALAC/matrix_dec.c
++@@ -27,6 +27,8 @@
++ 	Copyright:	(c) 2004-2011 Apple, Inc.
++ */
++ 
+++#include "config.h"
+++
++ #include "matrixlib.h"
++ #include "ALACAudioTypes.h"
++ #include "shift.h"
++diff --git a/src/ALAC/matrix_enc.c b/src/ALAC/matrix_enc.c
++index b50f83b78..dcd9cab11 100644
++--- a/src/ALAC/matrix_enc.c
+++++ b/src/ALAC/matrix_enc.c
++@@ -27,6 +27,8 @@
++ 	Copyright:	(c) 2004-2011 Apple, Inc.
++ */
++ 
+++#include "config.h"
+++
++ #include "matrixlib.h"
++ #include "ALACAudioTypes.h"
++ 
+diff --git a/package/libsndfile/0016-Include-stdbool.h-instead-of-redefining-bool-true-an.patch b/package/libsndfile/0016-Include-stdbool.h-instead-of-redefining-bool-true-an.patch
+new file mode 100644
+index 0000000000..adfd85787d
+--- /dev/null
++++ b/package/libsndfile/0016-Include-stdbool.h-instead-of-redefining-bool-true-an.patch
+@@ -0,0 +1,65 @@
++From 2251737b3b175925684ec0d37029ff4cb521d302 Mon Sep 17 00:00:00 2001
++From: Fabian Greffrath <fabian@greffrath.com>
++Date: Tue, 17 Dec 2024 10:38:47 +0100
++Subject: [PATCH] Include <stdbool.h> instead of redefining `bool`, `true` and
++ `false` keywords
++
++Fixes #1049
++
++Upstream: https://github.com/libsndfile/libsndfile/commit/2251737b3b175925684ec0d37029ff4cb521d302.patch
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ src/ALAC/alac_decoder.c | 6 +-----
++ src/ALAC/alac_encoder.c | 7 +------
++ 2 files changed, 2 insertions(+), 11 deletions(-)
++
++diff --git a/src/ALAC/alac_decoder.c b/src/ALAC/alac_decoder.c
++index 978919a70..417645316 100644
++--- a/src/ALAC/alac_decoder.c
+++++ b/src/ALAC/alac_decoder.c
++@@ -28,6 +28,7 @@
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <stddef.h>
+++#include <stdbool.h>
++ #include <string.h>
++ 
++ #include "alac_codec.h"
++@@ -40,11 +41,6 @@
++ #include "ALACBitUtilities.h"
++ #include "EndianPortable.h"
++ 
++-typedef enum
++-{	false = 0,
++-	true = 1
++-} bool ;
++-
++ // constants/data
++ const uint32_t kMaxBitDepth = 32 ;			// max allowed bit depth is 32
++ 
++diff --git a/src/ALAC/alac_encoder.c b/src/ALAC/alac_encoder.c
++index 29012f3f4..c9395b1d5 100644
++--- a/src/ALAC/alac_encoder.c
+++++ b/src/ALAC/alac_encoder.c
++@@ -32,6 +32,7 @@
++ 
++ #include <stdio.h>
++ #include <stdlib.h>
+++#include <stdbool.h>
++ #include <string.h>
++ 
++ #include "sfendian.h"
++@@ -46,12 +47,6 @@
++ #include "ALACAudioTypes.h"
++ #include "EndianPortable.h"
++ 
++-typedef enum
++-{
++-	false = 0,
++-	true = 1
++-} bool ;
++-
++ static void	GetConfig (ALAC_ENCODER *p, ALACSpecificConfig * config) ;
++ 
++ static int32_t	EncodeStereo (ALAC_ENCODER *p, struct BitBuffer * bitstream, const int32_t * input, uint32_t stride, uint32_t channelIndex, uint32_t numSamples) ;
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
