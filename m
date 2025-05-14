@@ -4,98 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70D0EC3ABD8
-	for <buildroot@archiver.kernel.org>; Wed, 14 May 2025 21:04:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C256C3ABD8
+	for <buildroot@archiver.kernel.org>; Wed, 14 May 2025 22:08:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 054A7811B4;
-	Wed, 14 May 2025 21:04:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F1381830DE;
+	Wed, 14 May 2025 22:08:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OUCqQA3-72xZ; Wed, 14 May 2025 21:04:45 +0000 (UTC)
+ id 11QKmoT5S4aI; Wed, 14 May 2025 22:08:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EE99810EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1CEEE8308D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2EE99810EC;
-	Wed, 14 May 2025 21:04:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8DC26153
- for <buildroot@buildroot.org>; Wed, 14 May 2025 21:04:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1CEEE8308D;
+	Wed, 14 May 2025 22:08:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8547F13D
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 22:08:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7F0EE810EC
- for <buildroot@buildroot.org>; Wed, 14 May 2025 21:04:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 81B344013D
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 22:08:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U0-3zhO8X2lf for <buildroot@buildroot.org>;
- Wed, 14 May 2025 21:04:42 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sTj7REpxBKwG for <buildroot@buildroot.org>;
+ Wed, 14 May 2025 22:07:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6C626810E5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C626810E5
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6C626810E5
- for <buildroot@buildroot.org>; Wed, 14 May 2025 21:04:41 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-43cfa7e7f54so1994915e9.1
- for <buildroot@buildroot.org>; Wed, 14 May 2025 14:04:41 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::12b; helo=mail-lf1-x12b.google.com;
+ envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 75D96400C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75D96400C4
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
+ [IPv6:2a00:1450:4864:20::12b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 75D96400C4
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 22:07:59 +0000 (UTC)
+Received: by mail-lf1-x12b.google.com with SMTP id
+ 2adb3069b0e04-549b116321aso240642e87.3
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 15:07:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747256680; x=1747861480;
+ d=1e100.net; s=20230601; t=1747260477; x=1747865277;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=zzpTWbQ2goZFfEx3MNrApVCB5uuyIjYOc/XYEVYxaFU=;
- b=iePdp4x3905+TuVR2l+lVGAnmHlJ3gMPXij9mfr5u5efZAapYZ+ACAQBw9s5cGNqg/
- Sn7Xc+pBjAu86E+rdb0l887ScREhm0nFXwbGeXAQljyJ043GDsuosiMcXwOYX8P2nIPN
- bSPGYie22dkHHKRz/3aGqaEHAA6GhUCWVPSsEFzJYXGtwR6BMpuclZsnI/qcAZor70/z
- KBSkSPiXOZW0xVAk5Pe7xQFIfnCJb9NASOGxm8F3TyegoYrMlvTY6N8Nxnf7Zscp6QvX
- 0cm3xGAxFAXUt/msinpkdb66x5xzDUay5dXLMYK5rOHDSxHTpBjCxHSpY0j0KqLM0S5i
- hv9g==
-X-Gm-Message-State: AOJu0YxKKdNMZM0g67wp3g1/WdQkW73NM31o2ZkqWpvubRcdOxuwS0yf
- uLFfdryO5DDtRIhGsMLBFImPxx90jmv+/r9/6aseMON46HAkJ+3gh90eC6NBcqy8HNlTfphaO9R
- z/cBorHs=
-X-Gm-Gg: ASbGnct4TNI8C6c5c3t93FrCuukdvNPHnMtj/4XBxXKFDWxg1Vzl6dyiWKPsG7GjK2v
- IW3Snqgg0KGnSEWxZ5Za1kyiDo3XPmCGFyXyZpAU3vATR6sw4g1XQoNSpcYhp3iDSYkpnZyMM2A
- kmQKqVB+Obh1u76wzBYyoDW1HZJsyl0W9pUQerJOZtwM6U6B0Mq+OuxVryDZhWd9O+O637SLi4g
- KltTDAbSJLR3GqOaUgAXIpmlNC/6KDFfLFiZKHrdqykDzc6TQqbBw6WOFlB/4uLIfeiwR+KqfXB
- 6DUkOxlr0y4ifw0D3Lklz2QZHHOJf426XM+JfrdkGI5cEfR5iUuUCyRR4nQ7y1g94w==
-X-Google-Smtp-Source: AGHT+IERSsCNl9+qOkOViMYx6510OesHsIDzV+D8YpyaFG/ADNRbwE/mTCX6gxEdF7fAjEgnezM3wQ==
-X-Received: by 2002:a05:600c:3507:b0:43c:f509:2bbf with SMTP id
- 5b1f17b1804b1-442f8524653mr10235535e9.15.1747256679831; 
- Wed, 14 May 2025 14:04:39 -0700 (PDT)
-Received: from localhost.localdomain ([79.132.233.61])
+ bh=PxTPveECWOAZ9T0SflBfp2KR6EMTpzh0/RJqVL2XmNU=;
+ b=srUgvNCvhqzewM6vzEYi3Kxz5UbF9KZX8zVB7g/a2YNlHL5wg2PX3VTBboSu2Y2JIw
+ 9tI3hfhmZ8NkrPwKwaaTHt1/kfVz93WudAZNPGfnkfA4Y7TSt5r/Msq1uY00y0Mid6Da
+ oULoNfJPAXWDCd6yoA8tMBxLVCmfcklQVxQFk4auVxmGuu0YRkZRXfkf/4Q3AgAgbm5j
+ C6r2PBvJLDMDzC57JW8DRNBCYg2iWrQZX3jfr2RqLXWn5DgrljKlt68D9vCE2CJzIcYc
+ yBsYQxdQ9QDui0dUsB8q7F2MDgYZ6Y+xFMag1/tIU6JySQ5oGt/EM7VIXVuk8VJgybpw
+ ACQg==
+X-Gm-Message-State: AOJu0YwWZsW/vY/fFibbMB541xxg0EponzEZLB4H4Np3uV9jd/iSl/zS
+ h7RGqPdprGAIrsruVz7/bJRI127hAJTOKnFCWY0ZCP1CankvlCRBFF4fPg==
+X-Gm-Gg: ASbGnctNAv4l5tZIR/EUKBD4N9uTHZIdtoH1e64yqzCj0voYttWLabifaY4M1eqVQQe
+ t81M56PLV42WCaA/m0xiPaDZ3GEnPuSXV+JFwJLHCLjsqf7ncal2kOUOl3X6j5EbDeXiV7uQD4u
+ fefmrVrlM++qd6hnF+hEEmSQ71h/D+qam820sjokyLFzdrg0mxkUsgdq2V39641Qc9QynI60mrI
+ p/U0IwjJZgEXVcKZajafPBTCQfWrBENsCUVFexKFcrcnDsTXZjskxJUyCsvB/kSqMGRl/8MTZxd
+ vz4TT9sSobeKmrmCTQU5Azk80lwfMA3Amy4P4P3eYvqU0waJzjeVlKCUvKl5Ts6+dPstaTI6xOf
+ 3lRVtcQ==
+X-Google-Smtp-Source: AGHT+IH8UZe3AqOR8gMl2oOO4gaafPwZlQSvCC89q8I9rYU2ByEenz/bElX5Gi9dxdhx9FiYrGDfYQ==
+X-Received: by 2002:a05:6512:a92:b0:54e:819a:8345 with SMTP id
+ 2adb3069b0e04-550dd13ab21mr74483e87.42.1747260476954; 
+ Wed, 14 May 2025 15:07:56 -0700 (PDT)
+Received: from precision7530-arch-roy.lan ([79.161.254.180])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-442f3368fc5sm46152325e9.5.2025.05.14.14.04.39
+ 2adb3069b0e04-54fc64b6eeesm2381172e87.124.2025.05.14.15.07.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 14 May 2025 14:04:39 -0700 (PDT)
+ Wed, 14 May 2025 15:07:55 -0700 (PDT)
+From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Thomas Perale <thomas.perale@mind.be>
-Date: Wed, 14 May 2025 23:04:30 +0200
-Message-ID: <20250514210430.1064027-1-thomas.perale@mind.be>
+Cc: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Date: Thu, 15 May 2025 00:07:35 +0200
+Message-ID: <20250514220736.1380151-1-roykollensvendsen@gmail.com>
 X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1747256680; x=1747861480; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1747260477; x=1747865277; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=zzpTWbQ2goZFfEx3MNrApVCB5uuyIjYOc/XYEVYxaFU=;
- b=OTWpu5isA4uzq2z6oN3xyNioc0mOFtke4hMinDwjocyjG6jY0VtUtlSRUDXiInXl3v
- /RrURiCnUVmhvy5Prhp+AUZv1+qXRrXrmcx9HS4cOnmv7RXfoHx+lB7v/GReev4X8TGU
- pijG5UmIPMZEDQAXl8YZ+LC6uTef7NgmNelr0YTwyBiskDK4EinbRNpRr4Gm80eh55S9
- P0k/fi+DNcEtk8JkBSHN9V6XEoBXAa/prkfKuepmscdH+mTYmIqhNTT1ZwTZNNjzDwB6
- kNw/pZMluJYZ2HgXMu6hyYJgau3DGxNmFANsEmlmRtpQ+SYKB5fZZnIBvbpccsKPg+cC
- 7OpA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=OTWpu5is
-Subject: [Buildroot] [PATCH 1/1] package/libraw: security bump to version
- 0.21.4
+ bh=PxTPveECWOAZ9T0SflBfp2KR6EMTpzh0/RJqVL2XmNU=;
+ b=afT1SzsYYSnxdQfYJ0khSqaFOH1DyLHO2f6F333yecTQNL1re+Qj6oPGyA0rXu/Uk2
+ 9an9l3cpehOhsGWIyUHQqlZMuVQw+uaNPWWPK/TvBcpQEB9V2xu7TTKEGJRF8UhEFnl/
+ /4EWsu8YKEoUHW9YFg5/KuazldaezHx2VEchg5hdjY89krks3RSCLlzWHl+alu8lfo5p
+ XClGk93jhKS3tOdfYbiL5F0N8kBX0pgsmZhBRR8c+TsdbLporvL//BpVwJbt8UQr/z/K
+ MVhnRTLru3yuRICwK3mNRmFSRrN6wPSbA8NVsMhlAi3aF5GT4dEFDXgJ/x0QULG++lsP
+ APXg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=afT1SzsY
+Subject: [Buildroot] [PATCH 1/1] package/mariadb: bump version to 10.11.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,78 +106,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following seucrity issues:
+Fixes:
+Bumping the version to 10.11.11 fixes builds with gcc-15:
+"MDEV-35607 Compile error with gcc-15 (signal returns)" (1d6f857534eeadd1b6aaa37d8e27c081421d2ffa)
 
-- CVE-2025-43961: metadata/tiff.cpp has an out-of-bounds read in the
-    Fujifilm 0xf00c tag parser.
+Remove "0002-MDEV-34206-compile-failure-fmt-use-incompatible-with.patch", since the problem was fixed
+upstream in 4375245d5d9f01cabb6e3fd6c637535e724eae38.
 
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-43961
-  - https://github.com/LibRaw/LibRaw/commit/66fe663e02a4dd610b4e832f5d9af326709336c2
-
-- CVE-2025-43962: phase_one_correct in decoders/load_mfbacks.cpp has
-    out-of-bounds reads for tag 0x412 processing
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-43962
-  - https://github.com/LibRaw/LibRaw/commit/66fe663e02a4dd610b4e832f5d9af326709336c2
-
-- CVE-2025-43963: phase_one_correct in decoders/load_mfbacks.cpp allows
-    out-of-buffer access
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-43963
-  - https://github.com/LibRaw/LibRaw/commit/be26e7639ecf8beb55f124ce780e99842de2e964
-
-- CVE-2025-43964: tag 0x412 processing in phase_one_correct in
-    decoders/load_mfbacks.cpp does not enforce minimum w0 and w1 values.
-
-For more information, see:
-  - https://nvd.nist.gov/vuln/detail/CVE-2025-43964
-  - https://github.com/LibRaw/LibRaw/commit/a50dc3f1127d2e37a9b39f57ad9bb2ebb60f18c0
-
-For more details on the version bump, see the release notes:
-  - https://github.com/LibRaw/LibRaw/releases/tag/0.21.4
-  - https://github.com/LibRaw/LibRaw/releases/tag/0.21.3
-  - https://github.com/LibRaw/LibRaw/compare/0.21.2...0.21.4
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 ---
- package/libraw/libraw.hash | 2 +-
- package/libraw/libraw.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...le-failure-fmt-use-incompatible-with.patch | 35 -------------------
+ package/mariadb/mariadb.hash                  |  4 +--
+ package/mariadb/mariadb.mk                    |  2 +-
+ 3 files changed, 3 insertions(+), 38 deletions(-)
+ delete mode 100644 package/mariadb/0002-MDEV-34206-compile-failure-fmt-use-incompatible-with.patch
 
-diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
-index 838c598d78..36d9d31948 100644
---- a/package/libraw/libraw.hash
-+++ b/package/libraw/libraw.hash
+diff --git a/package/mariadb/0002-MDEV-34206-compile-failure-fmt-use-incompatible-with.patch b/package/mariadb/0002-MDEV-34206-compile-failure-fmt-use-incompatible-with.patch
+deleted file mode 100644
+index b6c8807f44..0000000000
+--- a/package/mariadb/0002-MDEV-34206-compile-failure-fmt-use-incompatible-with.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 69935c10b95fc7f7a2e1c3ed02831958e1a9b6a4 Mon Sep 17 00:00:00 2001
+-From: Daniel Black <daniel@mariadb.org>
+-Date: Wed, 22 May 2024 17:43:17 +1000
+-Subject: [PATCH] MDEV-34206 compile failure: fmt use incompatible with
+- libfmt-10.2.[2]+
+-
+-Upstream libfmt commit https://github.com/fmtlib/fmt/commit/d70729215fba1d54862e407b626abf86ddf409bf
+-now requires the format function to be const.
+-
+-Adjust the function prototype so it is const and can compile.a
+-
+-Signed-off-by: Daniel Black <daniel@mariadb.org>
+-[Julien: add SoB line with the original patch author name]
+-Upstream: https://github.com/MariaDB/server/commit/4375245d5d9f01cabb6e3fd6c637535e724eae38
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- sql/item_strfunc.cc | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/sql/item_strfunc.cc b/sql/item_strfunc.cc
+-index 4bbf36ec1cf..2ad8a9b3ce5 100644
+---- a/sql/item_strfunc.cc
+-+++ b/sql/item_strfunc.cc
+-@@ -1392,7 +1392,7 @@ bool Item_func_sformat::fix_length_and_dec(THD *thd)
+- namespace fmt {
+-   template <> struct formatter<String>: formatter<string_view> {
+-     template <typename FormatContext>
+--    auto format(String c, FormatContext& ctx) -> decltype(ctx.out()) {
+-+    auto format(String c, FormatContext& ctx) const -> decltype(ctx.out()) {
+-       string_view name = { c.ptr(), c.length() };
+-       return formatter<string_view>::format(name, ctx);
+-     };
+--- 
+-2.46.0
+-
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index fd73cca4f3..4d0a793096 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
 @@ -1,5 +1,5 @@
- # Locally calculated
--sha256  fe7288013206854baf6e4417d0fb63ba4ed7227bf36fff021992671c2dd34b03  LibRaw-0.21.2.tar.gz
-+sha256  6be43f19397e43214ff56aab056bf3ff4925ca14012ce5a1538a172406a09e63  LibRaw-0.21.4.tar.gz
- sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  LICENSE.LGPL
- sha256  0e3098d2d54a12434715f6679ea408d57da5e8d613c385c58ecc6fe5d30cc81f  LICENSE.CDDL
- sha256  7d6650cef6cf892abe95e55a6bda1e1c42f221fd411b807deb2fc0b805b868d4  README.md
-diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-index 211b67f935..e320b2d835 100644
---- a/package/libraw/libraw.mk
-+++ b/package/libraw/libraw.mk
+-# From https://downloads.mariadb.org/mariadb/10.11.6
+-sha512  3d77f7be4a26d5a36af56150a5f8ed5e21adeed9bc8ea1bd694e47a25a571bd73468eada7c96e0dfe5a6c81bef625abf71a56d228cf43a738e555e3c0d824a6a  mariadb-10.11.6.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.11.11
++sha512  d9c154207a9f435ce08d5fbfe31814a739e577c656ef9996cf7e60c2cad8b4c07e2de8d94b6191fefa2b5cbde56437b586f85f144d3b4fcec8533449ed8411ac  mariadb-10.11.11.tar.gz
+ 
+ # Hash for license files
+ sha256  2b278a3a2f20696113a7c57c4f3e6a5cdb9a25f2a827e72e0c089a2f805ff91a  README.md
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 1dcf6568da..8156af8ee6 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBRAW_VERSION = 0.21.2
-+LIBRAW_VERSION = 0.21.4
- LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
- LIBRAW_SITE = http://www.libraw.org/data
- LIBRAW_INSTALL_STAGING = YES
+-MARIADB_VERSION = 10.11.6
++MARIADB_VERSION = 10.11.11
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
 -- 
 2.49.0
 
