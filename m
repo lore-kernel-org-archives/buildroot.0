@@ -4,68 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50C06C3ABDA
-	for <buildroot@archiver.kernel.org>; Wed, 14 May 2025 09:46:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EED3DC3ABD9
+	for <buildroot@archiver.kernel.org>; Wed, 14 May 2025 10:05:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D64518376E;
-	Wed, 14 May 2025 09:46:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B12483673;
+	Wed, 14 May 2025 10:05:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ss1m-VYxDajH; Wed, 14 May 2025 09:46:34 +0000 (UTC)
+ id sHPuguWIVAtg; Wed, 14 May 2025 10:05:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAD2183827
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E4398225C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AAD2183827;
-	Wed, 14 May 2025 09:46:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3DF5D12A
- for <buildroot@buildroot.org>; Wed, 14 May 2025 09:46:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E4398225C;
+	Wed, 14 May 2025 10:05:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B0B9C150
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 10:05:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 84B178124A
- for <buildroot@buildroot.org>; Wed, 14 May 2025 09:46:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A0D0141486
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 10:05:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N4G1Vq_8Wyu1 for <buildroot@buildroot.org>;
- Wed, 14 May 2025 09:46:26 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NID8CshK5b3o for <buildroot@buildroot.org>;
+ Wed, 14 May 2025 10:05:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
  helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8C07381116
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C07381116
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6056641481
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6056641481
 Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8C07381116
- for <buildroot@buildroot.org>; Wed, 14 May 2025 09:46:26 +0000 (UTC)
-Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6056641481
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 10:05:04 +0000 (UTC)
+Received: from [192.168.178.42] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
  key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 4C3012C845D2;
- Wed, 14 May 2025 11:46:24 +0200 (CEST)
-To: buildroot@buildroot.org
-Date: Wed, 14 May 2025 11:46:17 +0200
-Message-ID: <20250514094620.59162-4-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250514094620.59162-1-buildroot@bubu1.eu>
-References: <20250514094620.59162-1-buildroot@bubu1.eu>
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id DB24A2C845C5
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 12:05:01 +0200 (CEST)
+Message-ID: <a2e7a714-726b-4555-ba71-979d743b0680@bubu1.eu>
+Date: Wed, 14 May 2025 12:05:01 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: buildroot@buildroot.org
+References: <20250514090744.3586626-1-adam.duskett@amarulasolutions.com>
+Content-Language: en-US
+In-Reply-To: <20250514090744.3586626-1-adam.duskett@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=bubu1.eu; s=bubu; 
- t=1747215984; bh=IuFxAH4k+3VOd5Ge42OcbVrszJlRl5DzLlDwQSvxP44=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=X6yo+ZwbV5QTDUwpDPbp0i9iMed/K5Tvy/u4b/Vn4zCUyYMo5NiB8E1LdAeqEbWDf
- TstzV2HJ0dJpZWjjDUOVTTapBoA7hF6JunvT1KNYKRophFX3efLP4V166Guo6dCe1H
- LHDq6k2wZTi8Z52HyLs9dsGSEiPPXgo+7QsxymUbZgLJ75lu5vDsn30MUAkILhg806
- 7mWT3tw1JTBArWnFuVkCahpsDX1r0dWnN6pS/limPEjVmPS9KxBHKOY/2oYxibZliy
- FRJF5vhjxy045NPH9i3eAWyesjssZ36ydaTRijI9ql+nblUT0vdIV8snc+FVhpcT2M
- Zydmz1Q06QLmw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ t=1747217101; bh=VF2nUBPT51wgGstl4OQ7Jq4C8JXB0NA6TCeJiBYqU2Q=;
+ h=Date:Subject:To:References:From:In-Reply-To;
+ b=UlbCSnjyK6gj4qevuz41aTyN4LekQ2a22GUkgDuhNliYRCIHIN1fkyUig8NeNzCzm
+ PuVIuwU+NYVOZ8UjMiILOTyzOYOAOmhOaJJ01B+vACRhb4ENAIes9rbb5S9u6EyfnU
+ RrldslcILbdMHnkUWpknhFaTiHP2fvqlKDCTrw4fMFND4fmRNUKT56y9z02789KlLx
+ Fu5azSAUCF+nbMLq6CfJp2dHq/9FziGd5tuBrXG2Cedq9NgEEZLGMYhUyzsU3vEt/3
+ +axIJhUEPiI5eGgRpiGfinjbhhfpX4AJgBt53+sTfwzGQhPO8oBPOcw/xkNO+U1Jy9
+ /Pm0nxZtUOqog==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=X6yo+Zwb
-Subject: [Buildroot] [PATCH 2/2] package/python-django: bump to 5.2.1
+ header.a=rsa-sha256 header.s=bubu header.b=UlbCSnjy
+Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: bump to version 257.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -79,52 +80,167 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
 Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Oli Vogt <oli.vogt.pub01@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Django 5.2 release notes: https://docs.djangoproject.com/en/5.2/releases/5.2/
+On 14.05.25 11:07, Adam Duskett wrote:
+> Noteable changes:
+>    - Add -Dipe=false and -Dsysupdated=disabled as defaults to CONF_OPTS and
+>      HOST_CONF_OPTS. If another user has a use for either, they can submit a
+>      patch at a later date.
+> 
+>    - systemd-networkd now requires kernel >= 5.4 due to the inclusion of the
+>      sockios.h header, which uses the SIOCGSTAMP_OLD macro. This macro was first
+>      introduced in kernel 5.2, but the official README recommends 5.4 as a
+>      baseline, so stick with that. Due to this change:
+>        - systemd-networkd now depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+>        - default y only if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+>        - Add a section in migrating.adoc about the new requirement
+> 
+>    - The sha256sum of README.md changed due to the addition of some CentOS CI
+>      lines.
+> 
+>    - Add the new license file LICENSES/alg-sha1-public-domain.txt.
+> 
+> Tested with `./utils/test-pkg -p systemd -a`
+> 40 builds, 28 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+> 
+> Tested with `./support/testing/run-tests tests.init.test_systemd`
+> All tests passed
+> 
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
----
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Reviewed-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 57b9e9fb0e..836307f6b8 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  da93c81fcaf2e0b4dab3cf44e7564c7c  django-5.1.9.tar.gz
--sha256  565881bdd0eb67da36442e9ac788bda90275386b549070d70aee86327781a4fc  django-5.1.9.tar.gz
-+md5  317174c6e0593c40e58ec1bd428b1091  django-5.2.1.tar.gz
-+sha256  57fe1f1b59462caed092c80b3dd324fd92161b620d59a9ba9181c34746c97284  django-5.2.1.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index fd8a4eb9e8..62c8a00313 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--PYTHON_DJANGO_VERSION = 5.1.9
-+PYTHON_DJANGO_VERSION = 5.2.1
- PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/10/08/2e6f05494b3fc0a3c53736846034f882b82ee6351791a7815bbb45715d79
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/ac/10/0d546258772b8f31398e67c85e52c66ebc2b13a647193c3eef8ee433f1a8
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
--- 
-2.43.0
+> ---
+>   docs/manual/migrating.adoc   |  7 +++++++
+>   package/systemd/Config.in    | 12 +++++++++---
+>   package/systemd/systemd.hash |  5 +++--
+>   package/systemd/systemd.mk   |  8 ++++++--
+>   4 files changed, 25 insertions(+), 7 deletions(-)
+> 
+> diff --git a/docs/manual/migrating.adoc b/docs/manual/migrating.adoc
+> index 1b55bc6173..4cc88d19ae 100644
+> --- a/docs/manual/migrating.adoc
+> +++ b/docs/manual/migrating.adoc
+> @@ -209,3 +209,10 @@ or with a startup script.
+>   Note that systems using systemd are not impacted: systemd always ensures
+>   that `/run` is writable. Systems further using systemd-resolved already
+>   had a `/etc/resolv.conf` that pointed into `/run` anyway.
+> +
+> +[[migrating-systemd]]
+> +=== Migrating to 2025.08
+> +
+> +In 2025.08, starting with systemd version 257, systemd-networkd requires kernel
+> +5.4 or later. If you are still using a kernel older than 5.4, please update
+> +your kernel or use an alternative network manager.
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index 851b91aeba..320d416203 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -52,9 +52,11 @@ menuconfig BR2_PACKAGE_SYSTEMD
+>   	  an elaborate transactional dependency-based service control
+>   	  logic.  It can work as a drop-in replacement for sysvinit.
+>   
+> -	  Kernel versions below 4.15 ("recommended baseline") have
+> +	  Kernel versions below 5.4 ("recommended baseline") have
+>   	  significant gaps in functionality and are not recommended
+> -	  for use with this version of systemd.
+> +	  for use with this version of systemd. (e.g. lack race-free
+> +	  process tracking by pidfd, systemd-networkd, and new mount
+> +	  API support).
+>   
+>   	  Systemd requires a Linux kernel >= 3.15 with the following
+>   	  options enabled:
+> @@ -354,7 +356,8 @@ config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
+>   
+>   config BR2_PACKAGE_SYSTEMD_NETWORKD
+>   	bool "enable network manager"
+> -	default y
+> +	default y if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+>   	help
+>   	  systemd-networkd is a system service that manages networks.
+>   	  It detects and configures network devices as they appear, as
+> @@ -365,6 +368,9 @@ config BR2_PACKAGE_SYSTEMD_NETWORKD
+>   
+>   	  https://www.freedesktop.org/software/systemd/man/systemd-networkd.html
+>   
+> +comment "systemd-networkd needs a toolchain with kernel headers >= 5.4"
+> +	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+> +
+>   config BR2_PACKAGE_SYSTEMD_OOMD
+>   	bool "enable out-of-memory killer"
+>   	help
+> diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+> index 976d88c1f5..ca7ff360b5 100644
+> --- a/package/systemd/systemd.hash
+> +++ b/package/systemd/systemd.hash
+> @@ -1,7 +1,8 @@
+>   # sha256 locally computed
+> -sha256  896d76ff65c88f5fd9e42f90d152b0579049158a163431dd77cdc57748b1d7b0  systemd-256.7.tar.gz
+> +sha256  4d65f9482608cf9f7823df42a6d7796f0e0dfcfb94301df75effff86d40da33e  systemd-257.5.tar.gz
+>   sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+>   sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
+> +sha256  c9e7bf5b7c243c719b8b43c36158effb9b54c5e80abc9d82e4b2d4b2a4aa64ad  LICENSES/alg-sha1-public-domain.txt
+>   sha256  e5a8645ad94aab24e312dd0c6be2aa54236eb9374480b1b14ea5c61598874fd5  LICENSES/BSD-2-Clause.txt
+>   sha256  83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  LICENSES/BSD-3-Clause.txt
+>   sha256  a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499  LICENSES/CC0-1.0.txt
+> @@ -12,4 +13,4 @@ sha256  8a6fc0879cecc0b96bf4c08159b9d733bf0f15fcf32879aec98c4ffd05424554  LICENS
+>   sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
+>   sha256  2a98749f6bec00dfaed86fa9c1edea871aaae4f11ee4d100b671aaf4ce353a73  LICENSES/murmurhash2-public-domain.txt
+>   sha256  1a7adaa2c86cedfd6c7f5c0c7c72fd6d3e02cd0c9593f21fdb53c89bb2b130ec  LICENSES/OFL-1.1.txt
+> -sha256  3df2dfbb09215ab1aecdd3c91d7fbe02fee4a0e75ef8967a25d1a6fe3b8abc06  LICENSES/README.md
+> +sha256  8f3141489df84100440efa9911603e83757ff97f26f737e1d7fa2b25207a7905  LICENSES/README.md
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 337d52b1f2..a6a2f5a818 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -19,7 +19,7 @@
+>   # - Diff sysusers.d with the previous version
+>   # - Diff factory/etc/nsswitch.conf with the previous version
+>   #   (details are often sprinkled around in README and manpages)
+> -SYSTEMD_VERSION = 256.7
+> +SYSTEMD_VERSION = 257.5
+>   SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+>   SYSTEMD_LICENSE = \
+>   	LGPL-2.1+, \
+> @@ -35,6 +35,7 @@ SYSTEMD_LICENSE = \
+>   SYSTEMD_LICENSE_FILES = \
+>   	LICENSE.GPL2 \
+>   	LICENSE.LGPL2.1 \
+> +	LICENSES/alg-sha1-public-domain.txt \
+>   	LICENSES/BSD-2-Clause.txt \
+>   	LICENSES/BSD-3-Clause.txt \
+>   	LICENSES/CC0-1.0.txt \
+> @@ -73,6 +74,7 @@ SYSTEMD_CONF_OPTS += \
+>   	-Dfirst-boot-full-preset=false \
+>   	-Didn=true \
+>   	-Dima=false \
+> +	-Dipe=false \
+>   	-Dkexec-path=/usr/sbin/kexec \
+>   	-Dkmod-path=/usr/bin/kmod \
+>   	-Dldconfig=false \
+> @@ -99,6 +101,7 @@ SYSTEMD_CONF_OPTS += \
+>   	-Dfuzz-tests=false \
+>   	-Dinstall-tests=false \
+>   	-Dlog-message-verification=disabled \
+> +	-Dsysupdated=disabled \
+>   	-Dtmpfiles=true \
+>   	-Dukify=disabled \
+>   	-Dbpf-framework=disabled \
+> @@ -1011,7 +1014,8 @@ HOST_SYSTEMD_CONF_OPTS = \
+>   	-Dopenssl=disabled \
+>   	-Dp11kit=disabled \
+>   	-Dlibfido2=disabled \
+> -	-Dpcre2=disabled
+> +	-Dpcre2=disabled \
+> +	-Dsysupdated=disabled
+>   
+>   HOST_SYSTEMD_DEPENDENCIES = \
+>   	$(BR2_COREUTILS_HOST_DEPENDENCY) \
 
 _______________________________________________
 buildroot mailing list
