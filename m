@@ -4,102 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35A2DC3DA4A
-	for <buildroot@archiver.kernel.org>; Wed, 14 May 2025 16:58:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42E8AC3ABDD
+	for <buildroot@archiver.kernel.org>; Wed, 14 May 2025 17:36:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E79CE839BC;
-	Wed, 14 May 2025 16:58:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D8E3283807;
+	Wed, 14 May 2025 17:36:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NQGS6_uUGtx9; Wed, 14 May 2025 16:58:56 +0000 (UTC)
+ id q2eKjKH54JIR; Wed, 14 May 2025 17:36:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0439A83A4D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C19C583770
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0439A83A4D;
-	Wed, 14 May 2025 16:58:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 61942153
- for <buildroot@buildroot.org>; Wed, 14 May 2025 16:58:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C19C583770;
+	Wed, 14 May 2025 17:36:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5E137150
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 17:36:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 420638382D
- for <buildroot@buildroot.org>; Wed, 14 May 2025 16:58:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 436BD607D7
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 17:36:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sAiXRDhmLLhr for <buildroot@buildroot.org>;
- Wed, 14 May 2025 16:58:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
- envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F2B368372B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F2B368372B
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F2B368372B
- for <buildroot@buildroot.org>; Wed, 14 May 2025 16:58:35 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-43cfe574976so340225e9.1
- for <buildroot@buildroot.org>; Wed, 14 May 2025 09:58:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747241914; x=1747846714;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to;
- bh=NkuxZDlyTQ7RM1DOn2eJRMb8+vSYq0idr+jucTNRR/w=;
- b=tIUuL0ntfmeBOnWby03kcDSF8DZkNeessTugdq3SiF3JPTm+W9+vFpoKoUQ8SgPrB0
- 3rCq3pVtWjUVLR4+zo1ubS9ERCCNZGMz5qlnw+dmvKLFL0Sq619LCAU1HBJk0FzkuXJ6
- iTN/pz06gI043C2dJtTrdndyOEYVvML5I+hZSyrZiXcUZLpHuRmsrx462JaPmQsvJT2m
- OL9+Vey8bJEy1BhDPHWzS7uKDK3k3o63Pyu5eJgXNPXZPIJf1UiSNd3TX4wiBbyoI1Gy
- LHL0HqEk3KlHbGjOBv1J905+KukqTd2jBhWtX0vsgd7/1wPK33D3pIzpRyhGyVV/HUGV
- Uyhg==
-X-Gm-Message-State: AOJu0Yz22cGmEUAO3phigFy+Wo5srnWto9jr2hu9hnPFoVUgQKn1NHm0
- 658v7CYLBi8Cuy1HO5rUWF95xdZPlIdrgjyLEPKf7ZYc0dRDwoTUoDvEIg==
-X-Gm-Gg: ASbGncuYmy+1EZysm+R6lzQ9gNZ3p/Hd16ohocX0hED/w0yx3Rhbm5X0Sp38h+5LLup
- K5kvMp3RKekbhRiNYvukLqt3GvorDxgzMKepsLD2q4/RNgIPQI0xPlZXfNzd75r67zj2a9CHX9m
- E5TvAnOP9w3a4wHdgtVMRA4OlO9seybRSICAWPV5vRroOipa7A1GeBc+KxB94MOh9tXOWhV8ueU
- rZtUKlIHdFVMEIiAyphdydWt8NqE2eDyZ6u0Hgyv65nXSoklIl8F4/0jg88tiuGzZBKixGrQ6zO
- KmnTB3cnbddooi+jL+A7c9OUG9PtF9v8y9Vl11zlADeFAoz1FlWVtinPiSGblQ==
-X-Google-Smtp-Source: AGHT+IFqfkoBN2RrsyRaPYjWRxgCAZwEiWs5TnkOLaILDeRrfKkh4fDT5GLTWZjb3YQxDOhbEoJwVQ==
-X-Received: by 2002:a05:600c:83c3:b0:43b:cc42:c54f with SMTP id
- 5b1f17b1804b1-442f20e8974mr42810425e9.14.1747241913761; 
- Wed, 14 May 2025 09:58:33 -0700 (PDT)
-Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-442f3951494sm39815585e9.22.2025.05.14.09.58.33
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 14 May 2025 09:58:33 -0700 (PDT)
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 May 2025 18:58:25 +0200
-Message-ID: <f56740db9990aed5e07a44ee450795e2a0110abf.1747241900.git.yann.morin.1998@free.fr>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <cover.1747241900.git.yann.morin.1998@free.fr>
-References: <cover.1747241900.git.yann.morin.1998@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h4CIF6S_08wd for <buildroot@buildroot.org>;
+ Wed, 14 May 2025 17:36:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.175.196.64;
+ helo=euk33.eukhosting.net; envelope-from=buildroot@cairnwater.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 60696607CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60696607CC
+Received: from euk33.eukhosting.net (euk33.eukhosting.net [213.175.196.64])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 60696607CC
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 17:36:25 +0000 (UTC)
+Received: from [::1] (port=58200 helo=euk33.eukhosting.net)
+ by euk33.eukhosting.net with esmtpa (Exim 4.98.1)
+ (envelope-from <buildroot@cairnwater.com>)
+ id 1uFG1m-0000000EpHh-1aud; Wed, 14 May 2025 18:36:22 +0100
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1747241914; x=1747846714; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
- :message-id:reply-to;
- bh=NkuxZDlyTQ7RM1DOn2eJRMb8+vSYq0idr+jucTNRR/w=;
- b=EoKnCY26RMI4wmyWE9COP2q8sQVPqJJa1FU8jF2ztETbyyKdCb1sqG7fu0VqRlQQ0g
- pEBKpOEzpsM0LTuPL842RjAY/ffAyTu5lHD/ounyd3yJJDyNNkkKrnIqyyIEOw7D2ZO1
- FbVjOwYOallLIcTBZ6NdIc8s4Wpm23kZi9NIBdRpk8ZjJ6NrRWRKNk7hcvCj/KNao5Ox
- Y6BHYnBbJ4BJknLF94nA6CjM/LIGEfSxFEGIaAs7Qxht6EWjC/KSAPvNHQi1WErkSt5Y
- Ip7O0KWUAPD+dTyTNbfqkZiA59IOLOmM5VCgCnwfCsZv6NMBXPUDwnGPbqsysrxFhsck
- jihQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=EoKnCY26
-Subject: [Buildroot] [PATCH 13/13] toolchain/external: support merged-bin
+Date: Wed, 14 May 2025 18:36:21 +0100
+From: buildroot@cairnwater.com
+To: Fiona Klute <fiona.klute@gmx.de>
+Cc: Buildroot <buildroot@buildroot.org>
+In-Reply-To: <e147c44847cdb3c965cbf99e41751d26@cairnwater.com>
+References: <ddbed9a95b8f787377152092229828fd@cairnwater.com>
+ <b1d889ab-e5ce-4ff5-aaef-210e10c2c1cf@gmx.de>
+ <ce099431e6ef3f34d075533934004d29@cairnwater.com>
+ <94c4f329-b903-49df-a1c2-8e91185469cc@gmx.de>
+ <e147c44847cdb3c965cbf99e41751d26@cairnwater.com>
+User-Agent: Roundcube Webmail/1.6.9
+Message-ID: <06288a46ae8ca333eb295497dece6254@cairnwater.com>
+X-Sender: buildroot@cairnwater.com
+X-AntiAbuse: This header was added to track abuse,
+ please include it with any abuse report
+X-AntiAbuse: Primary Hostname - euk33.eukhosting.net
+X-AntiAbuse: Original Domain - buildroot.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - cairnwater.com
+X-Get-Message-Sender-Via: euk33.eukhosting.net: authenticated_id:
+ buildroot@cairnwater.com
+X-Authenticated-Sender: euk33.eukhosting.net: buildroot@cairnwater.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; 
+ d=cairnwater.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+ Message-ID:References:In-Reply-To:Subject:Cc:To:From:Date:MIME-Version:Sender
+ :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+ Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+ List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+ bh=TaS7j4zSWYmEcPw0VTT38pePPZhV8iTP9j1aTBUpNlE=; b=Uzsprlm/QTvjNW7/aEuhJpcD3X
+ jYD4kaC9yxCP7l8A1zew158dPjAFQxwbkSWuwul1wC1c/Iv4xUjoQw/1B3rk0TcXrB2fnCI2rlb3d
+ uv+RU2h58LupBegPA2hl/LSPfISdkZwyPV0GDAePoy6bPOQeghL5lmDkai+uARgdqq4Rn5Kbpz/7b
+ HMkrJuENMmMJ7TLRxGAlHu5/hMWyUEQhFOmFD+u6CHfz1lnd0mzVbyefr+Bp9bj+q/VEcTtuV2J0p
+ 1rJ3xovUCOZ8ofCpDrVHjcBaa1ZDsqVpUfJyeNT3CjcRFG/RVweI8K/Zx7j0eLHnCPaLs6WCQXXRp
+ jpRfoPOw==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=cairnwater.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=cairnwater.com header.i=@cairnwater.com
+ header.a=rsa-sha256 header.s=default header.b=Uzsprlm/
+Subject: Re: [Buildroot] Adding Device Tree Overlays for MIPI-CSI2 Camera
+ and libcamera to a buildroot Build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,115 +100,159 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When an external toolchain does not have a merged-bin, we can end up
-with a situation where the toolchain installs an staging/usr/sbin/
-directory, overriding the sbin symlink with an actual directory. When
-not using PPD, this does not cause any harm.
+Hi Fiona,
 
-However, with PPD, the build fails when preparing the staging (the
-host/) for packages when the skeleton is eventually rsynced, e.g.:
+Thank you very much!
 
-    $ cat defconfig
-    BR2_aarch64=y
-    BR2_TOOLCHAIN_EXTERNAL=y
-    BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-    BR2_PER_PACKAGE_DIRECTORIES=y
-    BR2_INIT_NONE=y
-    BR2_ROOTFS_MERGED_USR=y
-    BR2_ROOTFS_MERGED_SBIN=y
-    # BR2_PACKAGE_BUSYBOX is not set
-    BR2_PACKAGE_ZLIB=y
-    # BR2_TARGET_ROOTFS_TAR is not set
+> It's expected to match the structure of the per-arch dts directory in 
+> the kernel source, with vendor directories. The 
+> polyhex_debix_model_a_defconfig uses the freescale/imx8mp-debix-model-a 
+> DTS, so inside your BR2_LINUX_KERNEL_CUSTOM_DTS_DIR you'll probably 
+> need something like freescale/my-camera.dtso (whatever you want to call 
+> your DTSOs, the DTBOs will match the source names).
 
-    $ make zlib
-    [...]
-    >>> zlib  Configuring
-    mkdir -p [...]/per-package/zlib/host
-    rsync -a --hard-links --link-dest=[...]/per-package/host-skeleton/host/ [...]/per-package/host-skeleton/host/ [...]/per-package/zlib/host
-    rsync -a --hard-links --link-dest=[...]/per-package/libzlib/host/ [...]/per-package/libzlib/host/ [...]/per-package/zlib/host
-    rsync -a --hard-links --link-dest=[...]/per-package/skeleton/host/ [...]/per-package/skeleton/host/ [...]/per-package/zlib/host
-    could not make way for new symlink: aarch64-buildroot-linux-gnu/sysroot/usr/sbin
-    cannot delete non-empty directory: aarch64-buildroot-linux-gnu/sysroot/usr/sbin
-    rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1338) [sender=3.3.0]
-    make[1]: *** [package/pkg-generic.mk:256: [...]/build/zlib/.stamp_configured] Error 23
-    make: *** [Makefile:23: _all] Error 2
+How do I work out where the BR2_LINUX_KERNEL_CUSTOM_DTS_DIR is?
 
-The root cause is that, in the skeleton, we end up with
-[staging]/usr/sbin as a synlink to bin, but when the external toolchain
-gets installed, the symlinbk is replaced by a directory. Later, when we
-aggregate the PPD before configuring a package, it often happens that a
-dependant package be rsynced before the toolchain and the skeleton, as
-seen above, in which case the sbin directory from the toolchain, by way
-of the dependency to a package, is already present when rsync wants to
-create a symlink as rsynced from the skeleton.
+I had a look in the defconfig here:
 
-In the example above, this plays in this order:
+https://github.com/buildroot/buildroot/blob/master/configs/polyhex_debix_model_a_defconfig
 
- 1. skeleton gets installed, provides a symlink
- 2. toolchain-external-bootlin rsyncs from skeleton, gets a symlink
- 3. toolchain-external-bootlin gets installed, replaces symlink with a
-    directory
- 4. libzlib rsyncs from skeleton, gets a ymlink, then rsyncs from
-    toolchain-e-b, gets a directory
- 5. zlib rsyncs from libzlib first (because alphabetical ordering), gets
-    a directory, then rsyncs from skeleton, which rsyncs from a symlink,
-    but the dstination is a non-empty directory, so rsync fails.
+It seems to specify other parameters related to BR2_LINUX_KERNEL but not 
+the BR2_LINUX_KERNEL_CUSTOM_DTS_DIR so I got a bit lost trying to work 
+out where the BR2_LINUX_KERNEL_CUSTOM_DTS_DIR is and whether it's a 
+directory that already exists or a new directory that I should create 
+myself?
 
-It is perfectly legit that an external toolchain does not use a
-merged-bin setup, so we must accept that as input. We do so by treating
-the /usr/sbin entry specially, like we already do for a few others, of
-which /sbin itself for example.
+Is BR2_LINUX_KERNEL_CUSTOM_DTS_DIR something that's not already in the 
+defconfig and that I'd have to add to the defconfig?
 
-Note that the merged-usr setup has no issue, because we already handle
-the lib dirctories speically too.
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.14"
+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+BR2_LINUX_KERNEL_DTS_SUPPORT=y
+BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mp-debix-model-a"
+BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
+BR2_LINUX_KERNEL_INSTALL_TARGET=y
+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- toolchain/helpers.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+> On some boards (like RPi) the firmware can also do it (only useful if 
+> U-Boot & kernel then use that FDT), last time I
+> checked mainline Linux cannot, but some patched kernels can.
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index f3fdaaec07..21c710d0fb 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -96,6 +96,10 @@ copy_toolchain_lib_root = \
- # Note that the 'locale' directories are not copied. They are huge
- # (400+MB) in CodeSourcery toolchains, and they are not really useful.
- #
-+# usr/sbin may be a directory in the source toolchain, but a symlink
-+# in the destination sysroot, when we are using a merged-bin. Account
-+# for that.
-+#
- # $1: main sysroot directory of the toolchain
- # $2: arch specific sysroot directory of the toolchain
- # $3: arch specific subdirectory in the sysroot
-@@ -109,13 +113,13 @@ copy_toolchain_sysroot = \
- 	ARCH_SUBDIR="$(strip $3)"; \
- 	ARCH_LIB_DIR="$(strip $4)" ; \
- 	SUPPORT_LIB_DIR="$(strip $5)" ; \
--	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR}; do \
-+	for i in etc $${ARCH_LIB_DIR} sbin usr usr/$${ARCH_LIB_DIR} usr/sbin; do \
- 		if [ ! -d $${ARCH_SYSROOT_DIR}/$$i ] ; then \
- 			continue ; \
- 		fi ; \
- 		if [ "$$i" = "usr" ]; then \
- 			rsync -au --chmod=u=rwX,go=rX --exclude 'locale/' \
--				--include '/libexec*/' --exclude '/lib*/' \
-+				--include '/libexec*/' --exclude '/lib*/' --exclude '/sbin' \
- 				$${ARCH_SYSROOT_DIR}/$$i/ $(STAGING_DIR)/$$i/ ; \
- 		else \
- 			rsync -au --chmod=u=rwX,go=rX --exclude 'locale/' \
--- 
-2.47.0
+Yes - that's my understanding as well - my knowledge of this is very 
+limited but I think maybe RPi can do this and maybe NXP's i.MX Linux can 
+do this but I'm not sure whether mainline Linux can do it at the moment.
 
+> There are a number of options with U-Boot, which one to pick
+> depends on how you configure the boot (at a glance the defconfig seems 
+> to use extlinux.conf):
+
+I'd probably want to stick as close as I can to what's there at the 
+moment.
+
+> Either way you may have to enable overlay support in the U-Boot build 
+> config (if it isn't by default).
+
+I looked in
+
+https://github.com/buildroot/buildroot/blob/master/configs/polyhex_debix_model_a_defconfig
+
+but couldn't work out how to enable overlay support. Is that usually an 
+existing line in the defconfig that should be amended or a new line that 
+should be added?
+
+Thank you very much for all your help!
+
+Will
+
+On 2025-05-08 08:46, buildroot@cairnwater.com wrote:
+> Hi Fiona,
+> 
+> Thank you very much - that's an enormous help - I'd have got very 
+> confused trying to work that out.
+> 
+> I'll study what you said and the links in detail and take more time to 
+> think about it.
+> 
+> Thank you very much again!
+> 
+> Will
+> 
+> On 2025-05-07 21:06, Fiona Klute wrote:
+>> Am 07.05.25 um 20:31 schrieb buildroot@cairnwater.com:
+>>> Hi Fiona,
+>>> 
+>>> Thank you very much! That's a big help to know to use 
+>>> BR2_LINUX_KERNEL_CUSTOM_DTS_DIR for that.
+>>> 
+>>> What directory structure is needed for the overlays? Just the DTO 
+>>> files in a directory or something more complicated?
+>> 
+>> It's expected to match the structure of the per-arch dts directory in 
+>> the kernel source, with vendor directories. The 
+>> polyhex_debix_model_a_defconfig uses the 
+>> freescale/imx8mp-debix-model-a DTS, so inside your 
+>> BR2_LINUX_KERNEL_CUSTOM_DTS_DIR you'll probably need something like 
+>> freescale/my-camera.dtso (whatever you want to call your DTSOs, the 
+>> DTBOs will match the source names).
+>> 
+>>>> From there you'll need to adjust the boot process for your board to 
+>>>> actually apply the overlay. If you want to send a patch, the 
+>>>> BR2_LINUX_KERNEL_CUSTOM_DTS_DIR should be inside the board 
+>>>> directory.
+>>> 
+>>> Thank you very much. I don't know how to do that. What's the best way 
+>>> to get the boot process to apply the overlay? I'd heard that it can 
+>>> be done by the kernel or by U-Boot but I'm doing this for the first 
+>>> time so I'm not sure what I'm doing.
+>> 
+>> I'm not familiar with the board, but usually U-Boot will be the right 
+>> place. On some boards (like RPi) the firmware can also do it (only 
+>> useful if U-Boot & kernel then use that FDT), last time I checked 
+>> mainline Linux cannot, but some patched kernels can. There are a 
+>> number of options with U-Boot, which one to pick depends on how you 
+>> configure the boot (at a glance the defconfig seems to use 
+>> extlinux.conf):
+>> 
+>> * If you use extlinux.conf, use the "devicetree-overlay" option.
+>> * If you use a boot script, load the overlay and apply it before 
+>> starting the kernel.
+>> * If you use a FIT image, add the overlay to it and the relevant boot 
+>> config defined in it.
+>> 
+>> See also:
+>> https://docs.u-boot.org/en/latest/develop/distro.html (for 
+>> extlinux.conf)
+>> https://docs.u-boot.org/en/latest/usage/fdt_overlays.html (for the 
+>> latter 2 options)
+>> 
+>> Either way you may have to enable overlay support in the U-Boot build 
+>> config (if it isn't by default).
+>> 
+>> On the Buildroot side you need to make sure that the DTBOs and 
+>> adjusted config get included in the image where U-Boot expects them 
+>> (depending on the boot setup you use), if you need to make adjustments 
+>> there it'll probably be in a post-build or post-image script, or in 
+>> the genimage config.
+>> 
+>> The defconfig seems to put everything into the root partition image, 
+>> so it might just work, as long as you use the right path in the U-Boot 
+>> config. Maybe just set BR2_LINUX_KERNEL_CUSTOM_DTS_DIR, build, and see 
+>> if you end up with a DTBO somewhere in your /boot dir. If yes, 
+>> adjusting the U-Boot config to use it should be enough. ;-)
+>> 
+>> Best regards,
+>> Fiona
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
