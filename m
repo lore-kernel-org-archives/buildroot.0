@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3F83EC3ABD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:22:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B656C3ABDD
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:22:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE8704092E;
-	Fri, 16 May 2025 11:22:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0EB0C4183C;
+	Fri, 16 May 2025 11:22:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KskEQfqudEEh; Fri, 16 May 2025 11:22:13 +0000 (UTC)
+ id Lgih_ugStK2L; Fri, 16 May 2025 11:22:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 918F64199F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB8DB41A08
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 918F64199F;
-	Fri, 16 May 2025 11:22:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7EA2613D
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB8DB41A08;
+	Fri, 16 May 2025 11:22:15 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1547F13D
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 531D240B27
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8ADAD61254
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2IV8aJzkMPh6 for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 230YAEQ_CoRV for <buildroot@buildroot.org>;
  Fri, 16 May 2025 11:21:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D87D40ADB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFB3D6103E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D87D40ADB
+ by smtp3.osuosl.org (Postfix) with ESMTP id AFB3D6103E
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2E3D086A10; Fri, 16 May 2025 11:21:54 +0000 (UTC)
+ id ACE8286A00; Fri, 16 May 2025 11:21:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 14 May 2025 20:58:49 +0200
+Date: Wed, 14 May 2025 21:03:39 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f5297b9685e9a30819e79e097566836399b0be7c
-X-Git-Newrev: f9df4870a2d83f1899addc1f6e019ecff42a5469
+X-Git-Oldrev: 591a7634d6b26e199a5a51fb972d556e20c70194
+X-Git-Newrev: 561dd7fa079c074cd0a84576f06193cb2b7c46eb
 X-Patchwork-Hint: ignore
-Message-Id: <20250516112154.2E3D086A10@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/mpv: switch to
- meson from waf
+Message-Id: <20250516112154.ACE8286A00@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/hwdata: bump
+ version to 0.394
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -61,348 +61,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6984294498903717690=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6984294498903717690==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=f9df4870a2d83f1899addc1f6e019ecff42a5469
+commit: https://git.buildroot.net/buildroot/commit/?id=561dd7fa079c074cd0a84576f06193cb2b7c46eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Since commit fd562315, which updated waf to v2.1.1, Buildroot has
-encountered issues building mpv, likely due to an outdated version of
-the waf build system.
+Release notes:
+https://github.com/vcrhonek/hwdata/releases/tag/v0.394
 
-Starting with mpv v0.35, meson was introduced as an alternative to waf,
-and in mpv v0.37, waf was completely removed.
+Changelog:
+https://github.com/vcrhonek/hwdata/compare/v0.392...v0.394
 
-This commit updates the mpv makefile to use meson, resolving the build
-issues and simplifying future updates to newer versions of mpv.
-
-All options previously used for Waf have been translated to the new
-build system by replacing `--disable-feature` with `-Dfeature=disabled`
-(and similarly for enabling features). Some features have special
-handling:
-
-- The `/usr` prefix is automatically passed to meson packages by
-  default.
-- The Android feature "has been removed since meson can detect if a
-  machine is Android"[1].
-- The `libmpv` parameter has been enabled in the makefile as `libmpv`
-  must be built by default with mpv.
-- Meson packages automatically set whether the library should be built
-  statically using the `default_library` meson parameter.
-- Meson automatically detects the presence of `libatomic` and passes the
-  correct argument to the linker. However, it is possible to set the
-  `stdatomic` meson parameter to specify whether `libatomic` must or
-  must not be used.
-
-Fixes:
-    https://autobuild.buildroot.org/results/68d42441fc0da34e1bf2a4247726f5f4ec3b8e77/
-
-[1]: https://github.com/mpv-player/mpv/blob/140ec21c89d671d392877a7f3b91d67e7d7b9239/DOCS/build-system-differences.md?plain=1#L48
-
-Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-Tested-by: J. Neuschäfer <j.ne@posteo.net>
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 8f69974c20fbc7dc642be62a0ef3fb2941f5bb35)
+(cherry picked from commit b18f95c1557e64e11f66ceedaff9d44059b86d70)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/mpv/mpv.mk | 127 +++++++++++++++++++++++++----------------------------
- 1 file changed, 60 insertions(+), 67 deletions(-)
+ package/hwdata/hwdata.hash | 2 +-
+ package/hwdata/hwdata.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
-index cf37091186..8832b68ece 100644
---- a/package/mpv/mpv.mk
-+++ b/package/mpv/mpv.mk
-@@ -14,197 +14,188 @@ MPV_LICENSE_FILES = LICENSE.GPL
- MPV_CPE_ID_VENDOR = mpv
- MPV_INSTALL_STAGING = YES
+diff --git a/package/hwdata/hwdata.hash b/package/hwdata/hwdata.hash
+index 9c8d37323d..eb4ecc191d 100644
+--- a/package/hwdata/hwdata.hash
++++ b/package/hwdata/hwdata.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  1f472d8f2ec824d4efe6a75480767c4ce240fa5d91b6428d9f8775035da3ba1f  hwdata-0.392.tar.gz
++sha256  b7c3fd7214a3b7c49d2661db127a712dc11cffd1799f793947aa1cb20aaf3298  hwdata-0.394.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  21d0406f93e884a050426ebc21931839a45d56bfcbcbfdda7686d583f36f107f  LICENSE
+diff --git a/package/hwdata/hwdata.mk b/package/hwdata/hwdata.mk
+index eb9166dc72..f47df2ebb8 100644
+--- a/package/hwdata/hwdata.mk
++++ b/package/hwdata/hwdata.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--MPV_NEEDS_EXTERNAL_WAF = YES
--
- # Some of these options need testing and/or tweaks
- MPV_CONF_OPTS = \
--	--prefix=/usr \
--	--disable-android \
--	--disable-caca \
--	--disable-cocoa \
--	--disable-coreaudio \
--	--disable-cuda-hwaccel \
--	--disable-opensles \
--	--disable-rubberband \
--	--disable-uchardet \
--	--disable-vapoursynth
-+	-Dcaca=disabled \
-+	-Dcocoa=disabled \
-+	-Dcoreaudio=disabled \
-+	-Dcuda-hwaccel=disabled \
-+	-Dlibmpv=true \
-+	-Dopensles=disabled \
-+	-Drubberband=disabled \
-+	-Duchardet=disabled \
-+	-Dvapoursynth=disabled
- 
- ifeq ($(BR2_REPRODUCIBLE),y)
--MPV_CONF_OPTS += --disable-build-date
--endif
--
--ifeq ($(BR2_STATIC_LIBS),y)
--MPV_CONF_OPTS += --disable-libmpv-shared --enable-libmpv-static
--else
--MPV_CONF_OPTS += --enable-libmpv-shared --disable-libmpv-static
-+MPV_CONF_OPTS += -Dbuild-date=false
- endif
- 
- ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
--MPV_CONF_OPTS += --enable-alsa
-+MPV_CONF_OPTS += -Dalsa=enabled
- MPV_DEPENDENCIES += alsa-lib
- else
--MPV_CONF_OPTS += --disable-alsa
-+MPV_CONF_OPTS += -Dalsa=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_MESA3D_GBM),y)
--MPV_CONF_OPTS += --enable-gbm
-+MPV_CONF_OPTS += -Dgbm=enabled
- MPV_DEPENDENCIES += mesa3d
- ifeq ($(BR2_PACKAGE_LIBDRM),y)
--MPV_CONF_OPTS += --enable-egl-drm
-+MPV_CONF_OPTS += -Degl-drm=enabled
- else
--MPV_CONF_OPTS += --disable-egl-drm
-+MPV_CONF_OPTS += -Degl-drm=disabled
- endif
- else
--MPV_CONF_OPTS += --disable-gbm --disable-egl-drm
-+MPV_CONF_OPTS += -Dgbm=disabled -Degl-drm=disabled
- endif
- 
- # jack support
- # It also requires 64-bit sync intrinsics
- ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_8)$(BR2_PACKAGE_JACK2),yy)
--MPV_CONF_OPTS += --enable-jack
-+MPV_CONF_OPTS += -Djack=enabled
- MPV_DEPENDENCIES += jack2
- else
--MPV_CONF_OPTS += --disable-jack
-+MPV_CONF_OPTS += -Djack=disabled
- endif
- 
- # jpeg support
- ifeq ($(BR2_PACKAGE_JPEG),y)
--MPV_CONF_OPTS += --enable-jpeg
-+MPV_CONF_OPTS += -Djpeg=enabled
- MPV_DEPENDENCIES += jpeg
- else
--MPV_CONF_OPTS += --disable-jpeg
-+MPV_CONF_OPTS += -Djpeg=disabled
- endif
- 
- # lcms2 support
- ifeq ($(BR2_PACKAGE_LCMS2),y)
--MPV_CONF_OPTS += --enable-lcms2
-+MPV_CONF_OPTS += -Dlcms2=enabled
- MPV_DEPENDENCIES += lcms2
- else
--MPV_CONF_OPTS += --disable-lcms2
-+MPV_CONF_OPTS += -Dlcms2=disabled
- endif
- 
- # libarchive support
- ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
--MPV_CONF_OPTS += --enable-libarchive
-+MPV_CONF_OPTS += -Dlibarchive=enabled
- MPV_DEPENDENCIES += libarchive
- else
--MPV_CONF_OPTS += --disable-libarchive
-+MPV_CONF_OPTS += -Dlibarchive=disabled
- endif
- 
- # bluray support
- ifeq ($(BR2_PACKAGE_LIBBLURAY),y)
--MPV_CONF_OPTS += --enable-libbluray
-+MPV_CONF_OPTS += -Dlibbluray=enabled
- MPV_DEPENDENCIES += libbluray
- else
--MPV_CONF_OPTS += --disable-libbluray
-+MPV_CONF_OPTS += -Dlibbluray=disabled
- endif
- 
- # libcdio-paranoia
- ifeq ($(BR2_PACKAGE_LIBCDIO_PARANOIA),y)
--MPV_CONF_OPTS += --enable-cdda
-+MPV_CONF_OPTS += -Dcdda=enabled
- MPV_DEPENDENCIES += libcdio-paranoia
- else
--MPV_CONF_OPTS += --disable-cdda
-+MPV_CONF_OPTS += -Dcdda=disabled
- endif
- 
- # libdvdnav
- ifeq ($(BR2_PACKAGE_LIBDVDNAV),y)
--MPV_CONF_OPTS += --enable-dvdnav
-+MPV_CONF_OPTS += -Ddvdnav=enabled
- MPV_DEPENDENCIES += libdvdnav
- else
--MPV_CONF_OPTS += --disable-dvdnav
-+MPV_CONF_OPTS += -Ddvdnav=disabled
- endif
- 
- # libdrm
- ifeq ($(BR2_PACKAGE_LIBDRM),y)
--MPV_CONF_OPTS += --enable-drm
-+MPV_CONF_OPTS += -Ddrm=enabled
- MPV_DEPENDENCIES += libdrm
- else
--MPV_CONF_OPTS += --disable-drm
-+MPV_CONF_OPTS += -Ddrm=disabled
- endif
- 
- # libvdpau
- ifeq ($(BR2_PACKAGE_LIBVDPAU),y)
--MPV_CONF_OPTS += --enable-vdpau
-+MPV_CONF_OPTS += -Dvdpau=enabled
- MPV_DEPENDENCIES += libvdpau
- else
--MPV_CONF_OPTS += --disable-vdpau
-+MPV_CONF_OPTS += -Dvdpau=disabled
- endif
- 
- # LUA support, only for lua51/lua52/luajit
- # This enables the controller (OSD) together with libass
- ifeq ($(BR2_PACKAGE_LUA_5_1)$(BR2_PACKAGE_LUAJIT),y)
--MPV_CONF_OPTS += --enable-lua
-+MPV_CONF_OPTS += -Dlua=enabled
- MPV_DEPENDENCIES += luainterpreter
- else
--MPV_CONF_OPTS += --disable-lua
-+MPV_CONF_OPTS += -Dlua=disabled
- endif
- 
- # OpenGL support
- ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
--MPV_CONF_OPTS += --enable-gl
-+MPV_CONF_OPTS += -Dgl=enabled
- MPV_DEPENDENCIES += libgl
- else ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
--MPV_CONF_OPTS += --enable-gl
-+MPV_CONF_OPTS += -Dgl=enabled
- MPV_DEPENDENCIES += libgles
- else ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
--MPV_CONF_OPTS += --enable-gl
-+MPV_CONF_OPTS += -Dgl=enabled
- MPV_DEPENDENCIES += libegl
- else
--MPV_CONF_OPTS += --disable-gl
-+MPV_CONF_OPTS += -Dgl=disabled
- endif
- 
- # pulseaudio support
- ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
--MPV_CONF_OPTS += --enable-pulse
-+MPV_CONF_OPTS += -Dpulse=enabled
- MPV_DEPENDENCIES += pulseaudio
- else
--MPV_CONF_OPTS += --disable-pulse
-+MPV_CONF_OPTS += -Dpulse=disabled
- endif
- 
- # SDL support
- # Sdl2 requires 64-bit sync intrinsics
- ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_8)$(BR2_PACKAGE_SDL2),yy)
--MPV_CONF_OPTS += --enable-sdl2
-+MPV_CONF_OPTS += -Dsdl2=enabled
- MPV_DEPENDENCIES += sdl2
- else
--MPV_CONF_OPTS += --disable-sdl2
-+MPV_CONF_OPTS += -Dsdl2=disabled
- endif
- 
- # Raspberry Pi support
- ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
--MPV_CONF_OPTS += --enable-rpi --enable-gl
-+MPV_CONF_OPTS += -Drpi=enabled -Dgl=enabled
- MPV_DEPENDENCIES += rpi-userland
- else
--MPV_CONF_OPTS += --disable-rpi
-+MPV_CONF_OPTS += -Drpi=disabled
- endif
- 
- # va-api support
- ifeq ($(BR2_PACKAGE_LIBVA)$(BR2_PACKAGE_MPV_SUPPORTS_VAAPI),yy)
--MPV_CONF_OPTS += --enable-vaapi
-+MPV_CONF_OPTS += -Dvaapi=enabled
- MPV_DEPENDENCIES += libva
- ifeq ($(BR2_PACKAGE_LIBDRM)$(BR2_PACKAGE_MESA3D_OPENGL_EGL),yy)
--MPV_CONF_OPTS += --enable-vaapi-drm
-+MPV_CONF_OPTS += -Dvaapi-drm=enabled
- else
--MPV_CONF_OPTS += --disable-vaapi-drm
-+MPV_CONF_OPTS += -Dvaapi-drm=disabled
- endif
- else
--MPV_CONF_OPTS += --disable-vaapi --disable-vaapi-drm
-+MPV_CONF_OPTS += -Dvaapi=disabled -Dvaapi-drm=disabled
- endif
- 
- # wayland support
- ifeq ($(BR2_PACKAGE_WAYLAND),y)
--MPV_CONF_OPTS += --enable-wayland
-+MPV_CONF_OPTS += -Dwayland=enabled
- MPV_DEPENDENCIES += libxkbcommon wayland wayland-protocols
- else
--MPV_CONF_OPTS += --disable-wayland
-+MPV_CONF_OPTS += -Dwayland=disabled
- endif
- 
- # Base X11 support. Config.in ensures that if BR2_PACKAGE_XORG7 is
- # enabled, xlib_libX11, xlib_libXext, xlib_libXinerama,
- # xlib_libXrandr, xlib_libXScrnSaver.
- ifeq ($(BR2_PACKAGE_XORG7),y)
--MPV_CONF_OPTS += --enable-x11
-+MPV_CONF_OPTS += -Dx11=enabled
- MPV_DEPENDENCIES += \
- 	xlib_libX11 \
- 	xlib_libXext \
-@@ -214,17 +205,19 @@ MPV_DEPENDENCIES += \
- 	xlib_libXScrnSaver
- # XVideo
- ifeq ($(BR2_PACKAGE_XLIB_LIBXV),y)
--MPV_CONF_OPTS += --enable-xv
-+MPV_CONF_OPTS += -Dxv=enabled
- MPV_DEPENDENCIES += xlib_libXv
- else
--MPV_CONF_OPTS += --disable-xv
-+MPV_CONF_OPTS += -Dxv=disabled
- endif
- else
--MPV_CONF_OPTS += --disable-x11
-+MPV_CONF_OPTS += -Dx11=disabled
- endif
- 
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--MPV_CONF_ENV += LDFLAGS="$(TARGET_LDFLAGS) -latomic"
-+MPV_CONF_OPTS += -Dstdatomic=enabled
-+else
-+MPV_CONF_OPTS += -Dstdatomic=disabled
- endif
- 
--$(eval $(waf-package))
-+$(eval $(meson-package))
-
---===============6984294498903717690==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-HWDATA_VERSION = 0.392
++HWDATA_VERSION = 0.394
+ HWDATA_SITE = $(call github,vcrhonek,hwdata,v$(HWDATA_VERSION))
+ HWDATA_LICENSE = GPL-2.0+, BSD-3-Clause, XFree86 1.0
+ HWDATA_LICENSE_FILES = COPYING LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6984294498903717690==--
