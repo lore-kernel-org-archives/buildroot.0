@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13A32C3ABD8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA153C3ABC9
 	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:24:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5175424FD;
-	Fri, 16 May 2025 11:23:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D214612DE;
+	Fri, 16 May 2025 11:24:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AouCEH8bEQ9p; Fri, 16 May 2025 11:23:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8b2bR-rHA7z3; Fri, 16 May 2025 11:24:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8083B424EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA79861354
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8083B424EC;
-	Fri, 16 May 2025 11:23:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA79861354;
+	Fri, 16 May 2025 11:23:59 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B685E13D
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:28 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 45BB1185
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3FF3183C93
+ by smtp1.osuosl.org (Postfix) with ESMTP id 64B0C83CA3
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bx9cON5ofgjE for <buildroot@buildroot.org>;
- Fri, 16 May 2025 11:21:56 +0000 (UTC)
+ id xGefQnyVqSXo for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 11:21:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFD0881393
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 461D8811EE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BFD0881393
+ by smtp1.osuosl.org (Postfix) with ESMTP id 461D8811EE
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BD5DD86A17; Fri, 16 May 2025 11:21:54 +0000 (UTC)
+ id 360C386A17; Fri, 16 May 2025 11:21:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 14 May 2025 21:03:43 +0200
+Date: Wed, 14 May 2025 20:58:51 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: be132ec5ba7afccf17d49309870759c3fb6d1011
-X-Git-Newrev: 0716a6f838489a2be5feed009449d58c1979b8bf
+X-Git-Oldrev: f9df4870a2d83f1899addc1f6e019ecff42a5469
+X-Git-Newrev: ea608f3cb4cbf6eb28eb3b1002a03a0eb956437b
 X-Patchwork-Hint: ignore
-Message-Id: <20250516112154.BD5DD86A17@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] DEVELOPERS: remove
- Alexander Mukhin from tinyproxy and zfs
+Message-Id: <20250516112154.360C386A17@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/armadillo: bump
+ to version 14.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,32 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0716a6f838489a2be5feed009449d58c1979b8bf
+commit: https://git.buildroot.net/buildroot/commit/?id=ea608f3cb4cbf6eb28eb3b1002a03a0eb956437b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
+Release notes:
+https://arma.sourceforge.net/docs.html#changelog
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 9d3c4130d799f1523d071df624124120b58016cd)
+(cherry picked from commit 609ea9789f1b714c182424a3f18aa402c9766e80)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- DEVELOPERS | 4 ----
- 1 file changed, 4 deletions(-)
+ package/armadillo/armadillo.hash | 2 +-
+ package/armadillo/armadillo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 82c07be0ba..2be1520e45 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -131,10 +131,6 @@ F:	package/openpgm/
- N:	Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
- F:	package/libest/
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index 3161d2df87..61ed4d8528 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  26ce272bfdc8246c278e6f8cfa53777a1efb14ef196e88082fee05da1a463491  armadillo-14.4.1.tar.xz
++sha256  6dfddcfbd91e70679d7c11e94a5963a7efda002fec351e6f4875ac8e245c5117  armadillo-14.4.2.tar.xz
+ # License files, locally calculated
+ sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index c41e60625e..3ebec29cf3 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--N:	Alexander Mukhin <alexander.i.mukhin@gmail.com>
--F:	package/tinyproxy/
--F:	package/zfs/
--
- N:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
- F:	package/mini-snmpd/
- 
+-ARMADILLO_VERSION = 14.4.1
++ARMADILLO_VERSION = 14.4.2
+ ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
+ ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+ ARMADILLO_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
