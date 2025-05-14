@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35381C3ABDD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:59:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6AE1FC3ABD8
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:59:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FB5870BED;
-	Mon, 19 May 2025 10:59:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3C08583F50;
+	Mon, 19 May 2025 10:59:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lloBpHIH97Es; Mon, 19 May 2025 10:59:40 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d8NH5VcV2KsC; Mon, 19 May 2025 10:59:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48B2F70D0F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 62AA5846EE
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48B2F70D0F;
-	Mon, 19 May 2025 10:59:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 62AA5846EE;
+	Mon, 19 May 2025 10:59:44 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 48843D4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:46:37 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 78CCE193
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:46:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 317DD40D81
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7F9944157B
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XLhX231cChWG for <buildroot@buildroot.org>;
+ id xXsKvxesTifX for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B84D40DA7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5E6740D61
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B84D40DA7
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C5E6740D61
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0504C82A2E; Mon, 19 May 2025 10:40:03 +0000 (UTC)
+ id C3210872E7; Mon, 19 May 2025 10:40:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 10:15:22 +0200
+Date: Wed, 14 May 2025 14:57:57 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 8bfdd3305e8db9ebe37b183b318e8f66478f8cae
-X-Git-Newrev: 889d47baef3ecf14c741b478d4846cb38d1ce221
+X-Git-Oldrev: 38494a0a613d77169fb3178be287315ebc1b8ade
+X-Git-Newrev: 09299c5b0cf4841e20ee8f8196a4122890e6530f
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104003.0504C82A2E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/freescale_p1025twr:
- bump linux kernel to 6.12.27
+Message-Id: <20250519104002.C3210872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-django:
+ security bump to 5.1.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,49 +65,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=889d47baef3ecf14c741b478d4846cb38d1ce221
+commit: https://git.buildroot.net/buildroot/commit/?id=09299c5b0cf4841e20ee8f8196a4122890e6530f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since commit [1] "package/binutils: make 2.43 the default version",
-the freescale_p1025twr_defconfig fails to build the Linux
-kernel, with the error:
+Fixes CVE-2025-32873 [1].
+Django also updates setuptools[2], so we can remove the --skip-dependency-check
+flag and need to update the package archive capitalization accordingly.
 
-    arch/powerpc/boot/util.S: Assembler messages:
-    arch/powerpc/boot/util.S:49: Error: junk at end of line, first unrecognized character is `0'
-    arch/powerpc/boot/util.S:54: Error: syntax error; found `b', expected `,'
-    arch/powerpc/boot/util.S:54: Error: junk at end of line: `b'
+[1] https://www.djangoproject.com/weblog/2025/may/07/security-releases/
+[2] https://github.com/django/django/commit/bbf376bbc8cdfca817b54e7df99539633d10b06e
 
-This commit fixes the issue by updating the Linux kernel to the latest
-LTS version.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/9967089759
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/360fd01de20eb42aa0e6b5e9f7b37eaa104c6fc9
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/freescale_p1025twr_defconfig | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 7 +++----
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/configs/freescale_p1025twr_defconfig b/configs/freescale_p1025twr_defconfig
-index 72374ae7a1..568f2060b1 100644
---- a/configs/freescale_p1025twr_defconfig
-+++ b/configs/freescale_p1025twr_defconfig
-@@ -1,10 +1,10 @@
- BR2_powerpc=y
- BR2_powerpc_8548=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.7"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.27"
- BR2_LINUX_KERNEL_DEFCONFIG="mpc85xx_smp"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="fsl/p1025twr"
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 1e197004d0..57b9e9fb0e 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  80247a8b48cdac55e5ad3fb682ab71a3  Django-5.1.8.tar.gz
+-sha256  42e92a1dd2810072bcc40a39a212b693f94406d0ba0749e68eb642f31dc770b4  Django-5.1.8.tar.gz
++md5  da93c81fcaf2e0b4dab3cf44e7564c7c  django-5.1.9.tar.gz
++sha256  565881bdd0eb67da36442e9ac788bda90275386b549070d70aee86327781a4fc  django-5.1.9.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index b64d8e4cd1..fd8a4eb9e8 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,15 +4,14 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 5.1.8
+-PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
++PYTHON_DJANGO_VERSION = 5.1.9
++PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/00/40/45adc1b93435d1b418654a734b68351bb6ce0a0e5e37b2f0e9aeb1a2e233
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/10/08/2e6f05494b3fc0a3c53736846034f882b82ee6351791a7815bbb45715d79
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+ PYTHON_DJANGO_CPE_ID_PRODUCT = django
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
+-PYTHON_DJANGO_BUILD_OPTS = --skip-dependency-check
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
