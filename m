@@ -4,101 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91692C3ABD8
-	for <buildroot@archiver.kernel.org>; Wed, 14 May 2025 18:48:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D701C3ABDA
+	for <buildroot@archiver.kernel.org>; Wed, 14 May 2025 19:05:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 07C7281815;
-	Wed, 14 May 2025 18:48:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA8AF80E3F;
+	Wed, 14 May 2025 19:05:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N8SPjjE9S1Uf; Wed, 14 May 2025 18:48:29 +0000 (UTC)
+ id 8_nbiptiGD6W; Wed, 14 May 2025 19:05:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15204818B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B160780E4F
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 15204818B5;
-	Wed, 14 May 2025 18:48:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B160780E4F;
+	Wed, 14 May 2025 19:05:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 66DBB153
- for <buildroot@buildroot.org>; Wed, 14 May 2025 18:48:28 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 9195912A
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 19:05:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5771F41497
- for <buildroot@buildroot.org>; Wed, 14 May 2025 18:48:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7645740C08
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 19:05:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rEgUqMNGh4ee for <buildroot@buildroot.org>;
- Wed, 14 May 2025 18:48:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::136; helo=mail-il1-x136.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 737624057C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 737624057C
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
- [IPv6:2607:f8b0:4864:20::136])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 737624057C
- for <buildroot@buildroot.org>; Wed, 14 May 2025 18:48:27 +0000 (UTC)
-Received: by mail-il1-x136.google.com with SMTP id
- e9e14a558f8ab-3da73df6b6bso350125ab.3
- for <buildroot@buildroot.org>; Wed, 14 May 2025 11:48:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747248506; x=1747853306;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=sHyCXQr7p5Fi7Gr9IIhM7mPytRWRFetnM111NZ4FHWg=;
- b=uOpsoxCfgafalnSTULAqCyqaNAHwgSksx4mw+un1FPXxXrUl3/wZdKwN3oTpHvdByz
- byorF4CK8seAhASzRyuZGeMEwwjoVtwPKoyO9lf2S00TcpEPVHvPi6b3mPfnY+CyWGlb
- E106Qu/mn42bfBTYO/mu8BpJSLKpsZI7umrkS/pEK73UYSEPTfEhASAyB/fWzQxymL2H
- 8hQ0Kln+CredqzOYia8BoXSFfGOSDXt/Vp8C+RwYFGvlxqOfKnpTa1lyedvWydSnJNh0
- +U1/I74k//OppuZnjkhoPgwOEVVYQ3IrbkK3UoH9cAMgeVCo9TuBFT3bN0gjuzYpfSg8
- Mm3A==
-X-Gm-Message-State: AOJu0Yw9E9PxohRVOt05Ml0zCtwV/8U6GiZeatPD6hT1mwW90ctLq79L
- PStQbuYLtIZK1BZwCFR1MZst2bD4eJReO9HXGY0pJ0xLi3Bu97AyOWY9gnIz
-X-Gm-Gg: ASbGncsSeq/XHtpJS4DfngAw5YUaob/EttMR+bug3vifzh6/2uBKLFZVa/YhfA++NSJ
- kzGBv8g2gek1AoO/9IlO7EgAVKTvJ7zjFJjOhDC5tdnC2kAuAG4pnfFxb+tGvwOsXwoATyaRENo
- JDU2s1xUN5iQ8p+m3MTnT0g3Cl2EQLV/0519vt/aQaPX2UuoyOapyTXvN3GDhHTWdAVz4k3q3Kp
- 88fxHNo7Croy/2lLpKnubF1x+cZYzEy/5usWwR5W6e9ydZnsOKDo4526Hr8pTx89GWs68wxIESd
- 2iv+mH2UWyx2oEgBvOJmzZwZ7UIUxX83SfAOvtQwUEMeV14VpyFOXuOzGrcQZ1mJtV/3A5cRp0O
- aV7vW8WM43Urlcg9ZkLmwrQQvjmQpjg==
-X-Google-Smtp-Source: AGHT+IHo4zIjctuUwJBlTVcNVRabD5DDjeWaVsR19cdNYFkCtt1m6rIZVqhSvC9gvZ4ml3gkb/pFkA==
-X-Received: by 2002:a05:6e02:1487:b0:3db:6dc8:96bc with SMTP id
- e9e14a558f8ab-3db6f7ed63emr43403765ab.14.1747248506197; 
- Wed, 14 May 2025 11:48:26 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-120-130.hlrn.qwest.net.
- [71.218.120.130]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4fa2253bbcdsm2730647173.74.2025.05.14.11.48.25
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 14 May 2025 11:48:25 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Cc: Daniel Lang <dalang@gmx.at>, Joseph Kogut <joseph.kogut@gmail.com>,
- Romain Naour <romain.naour@gmail.com>,
- Valentin Korenblit <valentinkorenblit@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>
-Date: Wed, 14 May 2025 12:48:24 -0600
-Message-Id: <20250514184824.678318-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ id 634FsC71i2Bc for <buildroot@buildroot.org>;
+ Wed, 14 May 2025 19:05:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
+ helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 752924051B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 752924051B
+Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
+ [147.173.1.68])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 752924051B
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 19:05:33 +0000 (UTC)
+Received: from [IPV6:2a01:e0a:12:eba0:fb68:8aaf:2acd:47b6] (unknown
+ [IPv6:2a01:e0a:12:eba0:fb68:8aaf:2acd:47b6])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id D459AC07B6;
+ Wed, 14 May 2025 20:59:05 +0200 (CEST)
+Message-ID: <122ba5b5-9769-42b3-8bee-7bd535eda97d@grenoble.cnrs.fr>
+Date: Wed, 14 May 2025 20:59:05 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: buildroot@cairnwater.com, Fiona Klute <fiona.klute@gmx.de>
+Cc: Buildroot <buildroot@buildroot.org>
+References: <ddbed9a95b8f787377152092229828fd@cairnwater.com>
+ <b1d889ab-e5ce-4ff5-aaef-210e10c2c1cf@gmx.de>
+ <ce099431e6ef3f34d075533934004d29@cairnwater.com>
+ <94c4f329-b903-49df-a1c2-8e91185469cc@gmx.de>
+ <e147c44847cdb3c965cbf99e41751d26@cairnwater.com>
+ <06288a46ae8ca333eb295497dece6254@cairnwater.com>
+Content-Language: en-US, fr
+In-Reply-To: <06288a46ae8ca333eb295497dece6254@cairnwater.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1747248506; x=1747853306; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=sHyCXQr7p5Fi7Gr9IIhM7mPytRWRFetnM111NZ4FHWg=;
- b=E+9eJjZtAYppTdja9MKayB6B1rahCwSux6TdzLSRvrUfOJaatwDqIytkxuF88zwdnu
- supwXVO/UQ4QOY6ywJbS8EW9vIKY1XDRElwW508YSmIf7Org7u0WfoMIZv9O1rMdWytk
- LE25gIXGeBMuA7H1yQ0uAQGSEGlLS7DBV7B4fydOYfqhefyoUtVZIwQ61XJRx0CfoPE/
- 5lxCf+baEifiOzxgNstQDlagZLLG8QB+44D8JxlZifX3O0PbU9Xe8hHD1V1yOuVZTkEX
- 2eFnC+a2fRO8+c4ZWsPHbYKxo/igBxgWdUIElnY/Rt2hzqK93RmVM483szR9p/V8LOua
- mofQ==
+ d=grenoble.cnrs.fr; 
+ s=202106-grenoble.cnrs.fr; t=1747249146;
+ bh=9qIah/iWJijJupHHHdV+fR743thnLHi7RiUyD4SrYXg=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+ b=qKcGDAIE8Sm426IXTboSFR+OP+OT/PiCcRLHi3ot+RAhGtZA2DIX1eYIO71JvCJ8o
+ TU5j9tWZBFuAgGDtRNUZqJmvKjHTfUFj40n8tdx5s4i2bVgs6jzLx4nLcqqvsrN66f
+ 1pp4yY1/RR8AM0Db31lf/4BcyGoIkmyMx8v39v2L3BdPbSVnsDojcsVfS0vGnEHwCa
+ b1DlVrNfXHQ1ix9FDbe2EzZT3I+lG6kTo3vQ2qcrdTKDSlxTpMjP7WtK4Odr4o3n23
+ npNt5HAg0Hjh3Q/QqvqME6GGI3H77KXzTIMFS11dLu96S17ntv4X0FYJNyMAnV5tdX
+ EYVaz4eUvQQKg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=reject dis=none)
+ header.from=grenoble.cnrs.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=E+9eJjZt
-Subject: [Buildroot] [PATCH 1/1] package/llvm-project: bump to version 15.0.7
+ unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
+ header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=qKcGDAIE
+Subject: Re: [Buildroot] Adding Device Tree Overlays for MIPI-CSI2 Camera
+ and libcamera to a buildroot Build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,100 +90,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Edgar Bonet via buildroot <buildroot@buildroot.org>
+Reply-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/llvm-project/clang/clang.hash                   | 2 +-
- package/llvm-project/compiler-rt/compiler-rt.hash       | 2 +-
- package/llvm-project/libclc/libclc.hash                 | 2 +-
- package/llvm-project/lld/lld.hash                       | 2 +-
- package/llvm-project/llvm-cmake/llvm-cmake.hash         | 2 +-
- package/llvm-project/llvm-libunwind/llvm-libunwind.hash | 2 +-
- package/llvm-project/llvm-project.mk                    | 2 +-
- package/llvm-project/llvm/llvm.hash                     | 2 +-
- 8 files changed, 8 insertions(+), 8 deletions(-)
+Hello!
 
-diff --git a/package/llvm-project/clang/clang.hash b/package/llvm-project/clang/clang.hash
-index 52c755cfb3..33b50af6bf 100644
---- a/package/llvm-project/clang/clang.hash
-+++ b/package/llvm-project/clang/clang.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  96036052694e703d159c995bda203b59d1ff185c6879189b9eba837726e1738c  clang-15.0.3.src.tar.xz
-+sha256  a6b673ef15377fb46062d164e8ddc4d05c348ff8968f015f7f4af03f51000067  clang-15.0.7.src.tar.xz
- sha256  ebcd9bbf783a73d05c53ba4d586b8d5813dcdf3bbec50265860ccc885e606f47  LICENSE.TXT
-diff --git a/package/llvm-project/compiler-rt/compiler-rt.hash b/package/llvm-project/compiler-rt/compiler-rt.hash
-index fe4e98164b..f84a8a33a7 100644
---- a/package/llvm-project/compiler-rt/compiler-rt.hash
-+++ b/package/llvm-project/compiler-rt/compiler-rt.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  db958eee92d1571d8b7f76c1be8513817f1a888dcf6ced88aca871acfb0eeddd  compiler-rt-15.0.3.src.tar.xz
-+sha256  353832c66cce60931ea0413b3c071faad59eefa70d02c97daa8978b15e4b25b7  compiler-rt-15.0.7.src.tar.xz
- sha256  1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d  LICENSE.TXT
-diff --git a/package/llvm-project/libclc/libclc.hash b/package/llvm-project/libclc/libclc.hash
-index 7140884f6c..5ee088a379 100644
---- a/package/llvm-project/libclc/libclc.hash
-+++ b/package/llvm-project/libclc/libclc.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  07e8a2b31e07a8cc8a976a6bfd87797d2543d5a9530f449755bf5119acbdbe8e  libclc-15.0.3.src.tar.xz
-+sha256  35731fea7be224f21acf5bf3cd9f0ed058bf4ada5eceaf7f10ee96e139bd3389  libclc-15.0.7.src.tar.xz
- sha256  3c536c052db9afd997809e38785c9f2a9e54e2892330fa7c5b438e18a7413479  LICENSE.TXT
-diff --git a/package/llvm-project/lld/lld.hash b/package/llvm-project/lld/lld.hash
-index 2d2598dbeb..b30e38f02b 100644
---- a/package/llvm-project/lld/lld.hash
-+++ b/package/llvm-project/lld/lld.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  cd5d0894a74b957ce78d62212c1df0b3876a7297593aaece6b0512285e3b8732  lld-15.0.3.src.tar.xz
-+sha256  dba5c70c3fe88b3a38b9180df82fbc9d1dfd55d68f41fddd6a90f9e17f8e5df9  lld-15.0.7.src.tar.xz
- sha256  f7891568956e34643eb6a0db1462db30820d40d7266e2a78063f2fe233ece5a0  LICENSE.TXT
-diff --git a/package/llvm-project/llvm-cmake/llvm-cmake.hash b/package/llvm-project/llvm-cmake/llvm-cmake.hash
-index 862c5d92e8..756404cdd9 100644
---- a/package/llvm-project/llvm-cmake/llvm-cmake.hash
-+++ b/package/llvm-project/llvm-cmake/llvm-cmake.hash
-@@ -1,2 +1,2 @@
- # locally calculated
--sha256  21cf3f52c53dc8b8972122ae35a5c18de09c7df693b48b5cd8553c3e3fed090d  cmake-15.0.3.src.tar.xz
-+sha256  8986f29b634fdaa9862eedda78513969fe9788301c9f2d938f4c10a3e7a3e7ea  cmake-15.0.7.src.tar.xz
-diff --git a/package/llvm-project/llvm-libunwind/llvm-libunwind.hash b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
-index 86775f5dba..58a3230301 100644
---- a/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
-+++ b/package/llvm-project/llvm-libunwind/llvm-libunwind.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  0ab6e07bf05359e242e9ea80e4089b819914867fa997a715e324e584bcfdf114  libunwind-15.0.3.src.tar.xz
-+sha256  406d199ae3a16add84017f40458a5e7c31f9412937fcb518715af0a0eeafbc0c  libunwind-15.0.7.src.tar.xz
- sha256  b5efebcaca80879234098e52d1725e6d9eb8fb96a19fce625d39184b705f7b6d  LICENSE.TXT
-diff --git a/package/llvm-project/llvm-project.mk b/package/llvm-project/llvm-project.mk
-index 5859ff7cfc..6f075793a5 100644
---- a/package/llvm-project/llvm-project.mk
-+++ b/package/llvm-project/llvm-project.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LLVM_PROJECT_VERSION_MAJOR = 15
--LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).0.3
-+LLVM_PROJECT_VERSION = $(LLVM_PROJECT_VERSION_MAJOR).0.7
- LLVM_PROJECT_SITE = https://github.com/llvm/llvm-project/releases/download/llvmorg-$(LLVM_PROJECT_VERSION)
- 
- include $(sort $(wildcard package/llvm-project/*/*.mk))
-diff --git a/package/llvm-project/llvm/llvm.hash b/package/llvm-project/llvm/llvm.hash
-index df9aa88411..4325da6f6b 100644
---- a/package/llvm-project/llvm/llvm.hash
-+++ b/package/llvm-project/llvm/llvm.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256  c39aec729662416dcbf0bfe53a9786b34e7d93d02908a0779a2f6d83ad0a4a27  llvm-15.0.3.src.tar.xz
-+sha256  4ad8b2cc8003c86d0078d15d987d84e3a739f24aae9033865c027abae93ee7a4  llvm-15.0.7.src.tar.xz
- sha256  8d85c1057d742e597985c7d4e6320b015a9139385cff4cbae06ffc0ebe89afee  LICENSE.TXT
--- 
-2.34.1
+On 2025-05-14, Will wrote:
+> How do I work out where the BR2_LINUX_KERNEL_CUSTOM_DTS_DIR is?
+
+You may create a directory named "dts" inside
+board/<vendor>/<board_name> (or maybe board/<board_name>), put your
+device tree files there, inside a vendor subdirectory if that is how the
+DTS files are laid out in the kernel, then point
+BR2_LINUX_KERNEL_CUSTOM_DTS_DIR to that "dts" directory. See for example
+
+    configs/acmesystems_acqua_a5_256mb_defconfig
+
+Regards,
+
+Edgar.
+
+> I had a look in the defconfig here:
+> 
+> https://github.com/buildroot/buildroot/blob/master/configs/polyhex_debix_model_a_defconfig
+> 
+> It seems to specify other parameters related to BR2_LINUX_KERNEL but not the BR2_LINUX_KERNEL_CUSTOM_DTS_DIR so I got a bit lost trying to work out where the BR2_LINUX_KERNEL_CUSTOM_DTS_DIR is and whether it's a directory that already exists or a new directory that I should create myself?
+> 
+> Is BR2_LINUX_KERNEL_CUSTOM_DTS_DIR something that's not already in the defconfig and that I'd have to add to the defconfig?
+> 
+> BR2_LINUX_KERNEL=y
+> BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.14"
+> BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mp-debix-model-a"
+> BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME=y
+> BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> 
+>> On some boards (like RPi) the firmware can also do it (only useful if U-Boot & kernel then use that FDT), last time I
+>> checked mainline Linux cannot, but some patched kernels can.
+> 
+> Yes - that's my understanding as well - my knowledge of this is very limited but I think maybe RPi can do this and maybe NXP's i.MX Linux can do this but I'm not sure whether mainline Linux can do it at the moment.
+> 
+>> There are a number of options with U-Boot, which one to pick
+>> depends on how you configure the boot (at a glance the defconfig seems to use extlinux.conf):
+> 
+> I'd probably want to stick as close as I can to what's there at the moment.
+> 
+>> Either way you may have to enable overlay support in the U-Boot build config (if it isn't by default).
+> 
+> I looked in
+> 
+> https://github.com/buildroot/buildroot/blob/master/configs/polyhex_debix_model_a_defconfig
+> 
+> but couldn't work out how to enable overlay support. Is that usually an existing line in the defconfig that should be amended or a new line that should be added?
+> 
+> Thank you very much for all your help!
+> 
+> Will
+> 
+> On 2025-05-08 08:46, buildroot@cairnwater.com wrote:
+>> Hi Fiona,
+>>
+>> Thank you very much - that's an enormous help - I'd have got very confused trying to work that out.
+>>
+>> I'll study what you said and the links in detail and take more time to think about it.
+>>
+>> Thank you very much again!
+>>
+>> Will
+>>
+>> On 2025-05-07 21:06, Fiona Klute wrote:
+>>> Am 07.05.25 um 20:31 schrieb buildroot@cairnwater.com:
+>>>> Hi Fiona,
+>>>>
+>>>> Thank you very much! That's a big help to know to use BR2_LINUX_KERNEL_CUSTOM_DTS_DIR for that.
+>>>>
+>>>> What directory structure is needed for the overlays? Just the DTO files in a directory or something more complicated?
+>>>
+>>> It's expected to match the structure of the per-arch dts directory in the kernel source, with vendor directories. The polyhex_debix_model_a_defconfig uses the freescale/imx8mp-debix-model-a DTS, so inside your BR2_LINUX_KERNEL_CUSTOM_DTS_DIR you'll probably need something like freescale/my-camera.dtso (whatever you want to call your DTSOs, the DTBOs will match the source names).
+>>>
+>>>>> From there you'll need to adjust the boot process for your board to actually apply the overlay. If you want to send a patch, the BR2_LINUX_KERNEL_CUSTOM_DTS_DIR should be inside the board directory.
+>>>>
+>>>> Thank you very much. I don't know how to do that. What's the best way to get the boot process to apply the overlay? I'd heard that it can be done by the kernel or by U-Boot but I'm doing this for the first time so I'm not sure what I'm doing.
+>>>
+>>> I'm not familiar with the board, but usually U-Boot will be the right place. On some boards (like RPi) the firmware can also do it (only useful if U-Boot & kernel then use that FDT), last time I checked mainline Linux cannot, but some patched kernels can. There are a number of options with U-Boot, which one to pick depends on how you configure the boot (at a glance the defconfig seems to use extlinux.conf):
+>>>
+>>> * If you use extlinux.conf, use the "devicetree-overlay" option.
+>>> * If you use a boot script, load the overlay and apply it before starting the kernel.
+>>> * If you use a FIT image, add the overlay to it and the relevant boot config defined in it.
+>>>
+>>> See also:
+>>> https://docs.u-boot.org/en/latest/develop/distro.html (for extlinux.conf)
+>>> https://docs.u-boot.org/en/latest/usage/fdt_overlays.html (for the latter 2 options)
+>>>
+>>> Either way you may have to enable overlay support in the U-Boot build config (if it isn't by default).
+>>>
+>>> On the Buildroot side you need to make sure that the DTBOs and adjusted config get included in the image where U-Boot expects them (depending on the boot setup you use), if you need to make adjustments there it'll probably be in a post-build or post-image script, or in the genimage config.
+>>>
+>>> The defconfig seems to put everything into the root partition image, so it might just work, as long as you use the right path in the U-Boot config. Maybe just set BR2_LINUX_KERNEL_CUSTOM_DTS_DIR, build, and see if you end up with a DTBO somewhere in your /boot dir. If yes, adjusting the U-Boot config to use it should be enough. ;-)
+>>>
+>>> Best regards,
+>>> Fiona
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot@buildroot.org
+>> https://lists.buildroot.org/mailman/listinfo/buildroot
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 _______________________________________________
 buildroot mailing list
