@@ -1,101 +1,104 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 168DDC3ABC5
-	for <buildroot@archiver.kernel.org>; Wed, 14 May 2025 06:57:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CBC9C3ABD9
+	for <buildroot@archiver.kernel.org>; Wed, 14 May 2025 09:07:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 77E4D61013;
-	Wed, 14 May 2025 06:57:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA92E82095;
+	Wed, 14 May 2025 09:07:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1DwK_VMeei4G; Wed, 14 May 2025 06:57:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Iki2-BLxNNem; Wed, 14 May 2025 09:07:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3831F61029
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD1BC8308D
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3831F61029;
-	Wed, 14 May 2025 06:57:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 37D6A150
- for <buildroot@buildroot.org>; Wed, 14 May 2025 06:57:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BD1BC8308D;
+	Wed, 14 May 2025 09:07:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5E9A012A
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 09:07:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 288BD40650
- for <buildroot@buildroot.org>; Wed, 14 May 2025 06:57:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 44C3A82077
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 09:07:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X_CFOQ4skDUV for <buildroot@buildroot.org>;
- Wed, 14 May 2025 06:57:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LKXuinm-LySw for <buildroot@buildroot.org>;
+ Wed, 14 May 2025 09:07:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62a; helo=mail-ej1-x62a.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9391B40636
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9391B40636
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com
- [IPv6:2a00:1450:4864:20::62a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9391B40636
- for <buildroot@buildroot.org>; Wed, 14 May 2025 06:57:11 +0000 (UTC)
-Received: by mail-ej1-x62a.google.com with SMTP id
- a640c23a62f3a-ad2216ef31cso821712266b.1
- for <buildroot@buildroot.org>; Tue, 13 May 2025 23:57:11 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
+ envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 194A8836C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 194A8836C3
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 194A8836C3
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 09:07:49 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-5fc003315dcso1271958a12.3
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 02:07:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747205828; x=1747810628;
+ d=1e100.net; s=20230601; t=1747213668; x=1747818468;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=1TlVn1ngq6jY6QuO+VLXvO7i3/WN85R12H4OIjX74M4=;
- b=KjdBw5Gin2/zkmhXZ/Jldweo4Fy+edvZBWWsOScwGhwrz2eVg1V0TL6hnl6uX6cpQx
- 0JBCpCuoZ3VQSlKdK0ln7cbz3x63OXla5+ZBper0NznanbajYeXll5DaPL3NZmBWrcbg
- QHQhxAQh9n0T90UVBWcpqbb3IHEE4GGqYMieh8vh2AxqqCWn2PQRwymja1+bgAFQ0O4J
- oM7s7hlt50UU+jfETK0nCwf2Cw+cg2IdpglMNZ5T/JyqSOU2sN+acml0Vq5agncfkp2o
- FcSxBEa8ZKfkqdjRGKtJm32FQHipH7x9yWJ399HcjLRrxqh03E2Tv8spAM+PobW0Oza3
- XwZg==
-X-Gm-Message-State: AOJu0YyVYgztVZ8ZVl0FzPbmgcCfZ3zrw6CgT0vOBiP2D+F2RitGLZXy
- bW6ttaTsc1ZmBhW9Kso9zVpWPCiKkehkqm9h+b9M8arXGkuYRO8ak0iTuQ==
-X-Gm-Gg: ASbGnctibhmkeyR0eX0CMR/d0c2pdYhCPOhKAl/zQQhiSg/JO+EirgmN1INQ67eNOn7
- 1PqHxA9K1Myy8JEumRzE5F0qXThgQo3UBM4n8qBFDH+r1BfHdZddMsoZSPSSqBmyjjqwqxyxTIR
- MyR6l0KIeIVv8WPTQ8W3p5/nV1d65uVMppQEOokpRikXcVooLaUI8w0FQOmRyN3H/r4d1Qf95m1
- nihtQ8DhpNkBRyDh0pDIm+ey6DQjDR71jx2sT86gapVd+haDRDug+OQSuVJ21nVBqH0YqpJ3lRo
- xEotPjl2hCOOLGj38D37wXfiEJNSN5AWoImP1rwdlU3Q6KXdLVEoHz03IBYd9ujUB0KVAE8exQp
- JrBncmZyBJxOoUG9OM/DJjcrokHw+lwUbMI8140iPlFY=
-X-Google-Smtp-Source: AGHT+IGnCVAX8eaUu6Eiq75PQRHuwcBUqvibCjxd5eLvwDzzhrYfCv1PBVcvXGdelI8dcm0xxDtnLw==
-X-Received: by 2002:a17:907:7289:b0:ac3:bf36:80e2 with SMTP id
- a640c23a62f3a-ad4f712a115mr221603166b.20.1747205827759; 
- Tue, 13 May 2025 23:57:07 -0700 (PDT)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-ad2285be37dsm793105966b.13.2025.05.13.23.57.06
+ bh=ipwVAZgSrui/nlxjK20wrWfDW68uvmDKyUfFwtVWwRI=;
+ b=YrN92SbFwpHgPSS7GRg8p3FfvPsRvRwbAzFTJH90KHD3DzfRlpGki8rVpUfvKi0R1e
+ e4dNYkodx9saOZ9XyO7uxcxWcDF1rO+ui34etryAihKRbzqpn50KWnKpEw/s6F/mih+6
+ NdmXgF1/K2muBV9nJkxXB4a6JWTF0OMGi1EmC1Cc673/XZBW1BCzC9h/pWDbnWoSt16O
+ Ost6ggZEfzJs7RjbHc+ZvNgpiyF3DpJriSTmxItrjH7v2LiEGloAspatMNERikv2hLGF
+ b25sXn0cF9oF0BuSI7e6AIIJkf/LS6w1ZO0Iv8+uauqNyZl4q+r0pMBtwYc8OIVaNxYr
+ 8tnA==
+X-Gm-Message-State: AOJu0YzZmVXgfxlegmc9TDX5a3Nb/0ttB2cPb/5UxhRWISWHGslzHpZX
+ cd7AyvRfvjQVcSkJcOcTqI0+WU0r5rQfLXMvQspAusvUsUb/3ymDuQUytIa1H57BfkWRu5ZP5lR
+ h
+X-Gm-Gg: ASbGncsJ5cVMTJDThcVHHz3YkAA93L3KmGGhZNJFvFLRnpC1lBMw6H/SNRf1hVeCqQG
+ 7Cnl5qr/RFfAOkK/gZgg9BfLCUKVwAhiWPGGlIlNZV1HkY1fVzc7DLaEMBoisvoqGMgo1RuJz30
+ 8N3Zc8PDERhHxM1CpUOEjOv9q7Zti/uE8pNdpgiE5besnWCA2q7Ce5bUabrRKM16etGhAI8xPIf
+ llTDgsDJHmSysstb+yKW95L5KqYBlr6EPDRm/ciKVoNapiV6B18k3Mw1+u9/FDvk9qpR2PNunK/
+ 8u8Os5xDkOF1+HPocz6t3ipnyXZ0yY+JU7syV7eK435vAlcw87oysk9NaNOn3B7gPv/gPDP73CT
+ 6noS6iQ7UPNP831m3X/EaeUdU9T3Cl1iiY9a27tsZEGYiGIT0WOG8uYjfl2OTKijBFx4bG7wTfA
+ EmB/aoKjf/8vKgPjsFGeL+
+X-Google-Smtp-Source: AGHT+IGh8YbL48QfXcJAtKb/zFPCpyhc3d85RmFVdNY85TKISf59V9kO284D5XrysoIVxjMpCETj/Q==
+X-Received: by 2002:a05:6402:1eca:b0:5ee:497:5221 with SMTP id
+ 4fb4d7f45d1cf-5ff988f5683mr673162a12.11.1747213667454; 
+ Wed, 14 May 2025 02:07:47 -0700 (PDT)
+Received: from fedora.amarulasolutions.com
+ (2001-1c00-8182-4700-cf31-04f3-d898-af42.cable.dynamic.v6.ziggo.nl.
+ [2001:1c00:8182:4700:cf31:4f3:d898:af42])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-5fe86b239d1sm3998693a12.35.2025.05.14.02.07.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 13 May 2025 23:57:06 -0700 (PDT)
-From: yegorslists@googlemail.com
+ Wed, 14 May 2025 02:07:46 -0700 (PDT)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 May 2025 08:57:00 +0200
-Message-Id: <20250514065700.453431-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>,
+ Adam Duskett <adam.duskett@amarulasolutions.com>
+Date: Wed, 14 May 2025 11:07:44 +0200
+Message-ID: <20250514090744.3586626-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.49.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20230601; t=1747205828; x=1747810628; darn=buildroot.org; 
+ d=amarulasolutions.com; s=google; t=1747213668; x=1747818468;
+ darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=1TlVn1ngq6jY6QuO+VLXvO7i3/WN85R12H4OIjX74M4=;
- b=ESPunfqeA45PWt9cG2DEu4j0PpWFBtUsYhiYueIT2xuD6DUhTvULwMlhdAXECdZ8cE
- FV+gPCl/gZ8BQi6ppIGHM9ehQ7iO7xM8mEaOtPqEBS4f7ekLlmb+CO/BiVlX9PG4rk+f
- CdEmAnw/W3jQRxoyK4JDoPeXgyY0FEyPnfIlrtUXeWnQfa8zsK9eFvgpkZ5+vM363MhC
- Bg3gXv85hVBPSWdacSueQbMZzV+YXclj989ZKitVUOTupW1orFDyfwnW0IKBKBKEBABc
- 8vQJJ0Q9R8Bg9tdrNfXc/Bgl79gQVr+8mqA6CmWm5pe/6Bn/U2w+axTug096cXH+UeAg
- yiuw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=googlemail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ESPunfqe
-Subject: [Buildroot] [PATCH] package/libftdi1: bump to version
- 22b4667a8c3bc483494ba735ba4ae4d5cb8a0f03
+ bh=ipwVAZgSrui/nlxjK20wrWfDW68uvmDKyUfFwtVWwRI=;
+ b=e+NLokpvARGCqP59BwMzPAt2/Nv9hAB0vAdnF+He7cLWIRlIE0f8UwFAVe+5dP+aGQ
+ rHZWslyfZugn9UGEl7ZLhYHj4KKQp0Vflpd2rsobhTidXpDLSRTh75b3R2MobgpNv4C3
+ ngDVIdP5Ugkgmf2s+zDtx9R4krFGnbcsl6Vjs=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=e+NLokpv
+Subject: [Buildroot] [PATCH 1/1] package/systemd: bump to version 257.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,326 +110,165 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Daniel Sangue <daniel.sangue@sangue.ch>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+Noteable changes:
+  - Add -Dipe=false and -Dsysupdated=disabled as defaults to CONF_OPTS and
+    HOST_CONF_OPTS. If another user has a use for either, they can submit a
+    patch at a later date.
 
-As the project doesn't have frequent releases, switch to git to avoid
-the piling of patches.
+  - systemd-networkd now requires kernel >= 5.4 due to the inclusion of the
+    sockios.h header, which uses the SIOCGSTAMP_OLD macro. This macro was first
+    introduced in kernel 5.2, but the official README recommends 5.4 as a
+    baseline, so stick with that. Due to this change:
+      - systemd-networkd now depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+      - default y only if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+      - Add a section in migrating.adoc about the new requirement
 
-The latest git version bumps the minimum CMake version and adds SWIG 4.3
-compatibility.
+  - The sha256sum of README.md changed due to the addition of some CentOS CI
+    lines.
 
-Fixes:
-https://autobuild.buildroot.org/results/188811e73dd52eed3c66d7efb590165e4340fc30/
+  - Add the new license file LICENSES/alg-sha1-public-domain.txt.
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Tested with `./utils/test-pkg -p systemd -a`
+40 builds, 28 skipped, 0 build failed, 0 legal-info failed, 0 show-info failed
+
+Tested with `./support/testing/run-tests tests.init.test_systemd`
+All tests passed
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- .checkpackageignore                           |  3 -
- ...andard-CMake-flag-to-drive-the-share.patch | 93 -------------------
- ...sts.txt-fix-paths-when-FTDIPP-is-set.patch | 46 ---------
- ...ix-static-build-with-libusb-and-lato.patch | 47 ----------
- ...004-move-from-distutils-to-sysconfig.patch | 33 -------
- package/libftdi1/libftdi1.hash                |  5 +-
- package/libftdi1/libftdi1.mk                  |  5 +-
- 7 files changed, 4 insertions(+), 228 deletions(-)
- delete mode 100644 package/libftdi1/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
- delete mode 100644 package/libftdi1/0002-CMakeLists.txt-fix-paths-when-FTDIPP-is-set.patch
- delete mode 100644 package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch
- delete mode 100644 package/libftdi1/0004-move-from-distutils-to-sysconfig.patch
+ docs/manual/migrating.adoc   |  7 +++++++
+ package/systemd/Config.in    | 12 +++++++++---
+ package/systemd/systemd.hash |  5 +++--
+ package/systemd/systemd.mk   |  8 ++++++--
+ 4 files changed, 25 insertions(+), 7 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index cc6e1c2fd5..a710766fee 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -637,9 +637,6 @@ package/libfreeimage/0003-fix-big-endian-os.patch lib_patch.Upstream
- package/libfreeimage/0004-fixed-C-11-warnings.patch lib_patch.Upstream
- package/libftdi/0001-pkgconfig_libusb.patch lib_patch.Sob lib_patch.Upstream
- package/libftdi/0002-libftdi.pc-requires-libusb-fix-static-build.patch lib_patch.Sob lib_patch.Upstream
--package/libftdi1/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch lib_patch.Upstream
--package/libftdi1/0002-CMakeLists.txt-fix-paths-when-FTDIPP-is-set.patch lib_patch.Upstream
--package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch lib_patch.Upstream
- package/libfuse/0001-fix-aarch64-build.patch lib_patch.Upstream
- package/libfuse/0002-util-ulockmgr_server-c-conditionally-define-closefrom-fix-glibc-2-34.patch lib_patch.Upstream
- package/libgcrypt/0001-configure.ac-add-an-option-to-disable-tests.patch lib_patch.Upstream
-diff --git a/package/libftdi1/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch b/package/libftdi1/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
-deleted file mode 100644
-index 8c45b8811c..0000000000
---- a/package/libftdi1/0001-cmake-use-the-standard-CMake-flag-to-drive-the-share.patch
-+++ /dev/null
-@@ -1,93 +0,0 @@
--From 7e57ff280b55b45e74329b9988279e8831d32eab Mon Sep 17 00:00:00 2001
--From: Samuel Martin <s.martin49@gmail.com>
--Date: Sun, 25 Jan 2015 09:45:04 +0100
--Subject: [PATCH] cmake: use the standard CMake flag to drive the shared
-- object build
--
--Remove the STATICLIBS CMake option (and the code handling it) and let
--the standard CMake flags drive the shared object build.
--
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
--[Fabrice: update for 1.5]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- CMakeOptions.txt      |  1 -
-- ftdipp/CMakeLists.txt | 14 +-------------
-- src/CMakeLists.txt    | 13 +------------
-- 3 files changed, 2 insertions(+), 26 deletions(-)
--
--diff --git a/CMakeOptions.txt b/CMakeOptions.txt
--index 07b5887..b780ffd 100644
----- a/CMakeOptions.txt
--+++ b/CMakeOptions.txt
--@@ -1,4 +1,3 @@
---option ( STATICLIBS "Build static libraries" ON )
-- option ( BUILD_TESTS "Build unit tests with Boost Unit Test framework" OFF )
-- option ( DOCUMENTATION "Generate API documentation with Doxygen" OFF )
-- option ( EXAMPLES "Build example programs" ON )
--diff --git a/ftdipp/CMakeLists.txt b/ftdipp/CMakeLists.txt
--index fac5bcc..a06edf1 100644
----- a/ftdipp/CMakeLists.txt
--+++ b/ftdipp/CMakeLists.txt
--@@ -12,7 +12,7 @@ include_directories(BEFORE ${CMAKE_CURRENT_BINARY_DIR}
-- include_directories(${Boost_INCLUDE_DIRS})
-- 
-- # Shared library
---add_library(ftdipp1 SHARED ${cpp_sources})
--+add_library(ftdipp1 ${cpp_sources})
-- 
-- math(EXPR VERSION_FIXUP "${MAJOR_VERSION} + 1")    # Compatibility with previous releases
-- set_target_properties(ftdipp1 PROPERTIES VERSION ${VERSION_FIXUP}.${MINOR_VERSION}.0 SOVERSION 3)
--@@ -29,18 +29,6 @@ install ( TARGETS ftdipp1
-- 					ARCHIVE DESTINATION lib${LIB_SUFFIX}
-- 				)
-- 
---# Static library
---if ( STATICLIBS )
---	add_library(ftdipp1-static STATIC ${cpp_sources})
---	set_target_properties(ftdipp1-static PROPERTIES OUTPUT_NAME "ftdipp1")
---	set_target_properties(ftdipp1-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
---
---	install ( TARGETS ftdipp1-static
---						ARCHIVE DESTINATION lib${LIB_SUFFIX}
---						COMPONENT staticlibs
---					)
---endif ()
---
-- install ( FILES ${cpp_headers}
-- 					DESTINATION include/${PROJECT_NAME}
-- 					COMPONENT headers
--diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
--index 17b3617..ae4fc61 100644
----- a/src/CMakeLists.txt
--+++ b/src/CMakeLists.txt
--@@ -21,7 +21,7 @@ configure_file(ftdi_version_i.h.in "${CMAKE_CURRENT_BINARY_DIR}/ftdi_version_i.h
-- set(c_sources     ${CMAKE_CURRENT_SOURCE_DIR}/ftdi.c ${CMAKE_CURRENT_SOURCE_DIR}/ftdi_stream.c CACHE INTERNAL "List of c sources" )
-- set(c_headers     ${CMAKE_CURRENT_SOURCE_DIR}/ftdi.h CACHE INTERNAL "List of c headers" )
-- 
---add_library(ftdi1 SHARED ${c_sources})
--+add_library(ftdi1 ${c_sources})
-- 
-- math(EXPR VERSION_FIXUP "${MAJOR_VERSION} + 1")    # Compatibility with previous releases
-- set_target_properties(ftdi1 PROPERTIES VERSION ${VERSION_FIXUP}.${MINOR_VERSION}.0 SOVERSION 2)
--@@ -38,17 +38,6 @@ install ( TARGETS ftdi1
--           ARCHIVE DESTINATION lib${LIB_SUFFIX}
--         )
-- 
---if ( STATICLIBS )
---  add_library(ftdi1-static STATIC ${c_sources})
---  target_link_libraries(ftdi1-static ${LIBUSB_LIBRARIES})
---  set_target_properties(ftdi1-static PROPERTIES OUTPUT_NAME "ftdi1")
---  set_target_properties(ftdi1-static PROPERTIES CLEAN_DIRECT_OUTPUT 1)
---  install ( TARGETS ftdi1-static
---            ARCHIVE DESTINATION lib${LIB_SUFFIX}
---            COMPONENT staticlibs
---          )
---endif ()
---
-- install ( FILES ${c_headers}
--           DESTINATION include/${PROJECT_NAME}
--           COMPONENT headers
---- 
--2.27.0
--
-diff --git a/package/libftdi1/0002-CMakeLists.txt-fix-paths-when-FTDIPP-is-set.patch b/package/libftdi1/0002-CMakeLists.txt-fix-paths-when-FTDIPP-is-set.patch
-deleted file mode 100644
-index 14c248bb99..0000000000
---- a/package/libftdi1/0002-CMakeLists.txt-fix-paths-when-FTDIPP-is-set.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 3e68fd7da98a755403cf5719c3d7a3c2f4dcbb58 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 17 Jul 2020 21:04:45 +0200
--Subject: [PATCH] CMakeLists.txt: fix paths when FTDIPP is set
--
--Use the same project name (i.e. libftdi1 and not libftdipp1) when FTDIPP
--is enabled as suggested by Aurelien Jarno in
--http://developer.intra2net.com/mailarchive/html/libftdi/2020/msg00044.html
--
--Without this change, the libftdi1.pc config file defines the include
--path as /usr/local/include/libftdipp1 while the ftdi.h file is actually
--installed in /usr/local/include/libftdi1
--
--This is an issue for example for libsigrok which will fail on:
--
--In file included from src/hardware/asix-sigma/protocol.c:27:
--src/hardware/asix-sigma/protocol.h:28:10: fatal error: ftdi.h: No such file or directory
--   28 | #include <ftdi.h>
--      |          ^~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/1427f44e36752c337791597fab47a1889552a2fe
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--http://developer.intra2net.com/mailarchive/html/libftdi/2020/msg00045.html]
-----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 5aecafc..3b0b87c 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -136,7 +136,7 @@ endif ()
-- 
-- add_subdirectory(src)
-- if ( FTDIPP )
---  project(libftdipp1 C CXX)
--+  project(libftdi1 C CXX)
--   add_subdirectory(ftdipp)
-- endif ()
-- if ( PYTHON_BINDINGS )
---- 
--2.27.0
--
-diff --git a/package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch b/package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch
-deleted file mode 100644
-index c818c58d68..0000000000
---- a/package/libftdi1/0003-CMakeLists.txt-fix-static-build-with-libusb-and-lato.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From b5b8fab6063ad90bb5ef05a72708ecde1796bc81 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 13 May 2022 18:11:50 +0200
--Subject: [PATCH] CMakeLists.txt: fix static build with libusb and -latomic
--
--Use pkg-config to retrieve libusb dependencies such as -latomic and
--avoid the following static build failure:
--
--/nvmedata/autobuild/instance-29/output-1/per-package/libftdi1/host/bin/../lib/gcc/sparc-buildroot-linux-uclibc/10.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: /nvmedata/autobuild/instance-29/output-1/per-package/libftdi1/host/sparc-buildroot-linux-uclibc/sysroot/lib/libusb-1.0.a(core.o): in function `libusb_unref_device':
--/nvmedata/autobuild/instance-29/output-1/build/libusb-1.0.25/libusb/core.c:1186: undefined reference to `__atomic_fetch_add_4'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/1ca7cd85ae60ad4797a6d8a83b2fb51d7eab96d9
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--http://developer.intra2net.com/git/?p=libftdi;a=commit;h=b5b8fab6063ad90bb5ef05a72708ecde1796bc81]
-----
-- CMakeLists.txt |   12 ++++++++++--
-- 1 files changed, 10 insertions(+), 2 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 58f664a..d20aa94 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -25,8 +25,16 @@ if(${CMAKE_BUILD_TYPE} STREQUAL Debug)
-- endif(${CMAKE_BUILD_TYPE} STREQUAL Debug)
-- 
-- # find libusb
---find_package ( USB1 REQUIRED )
---include_directories ( ${LIBUSB_INCLUDE_DIR} )
--+find_package( PkgConfig )
--+if (PkgConfig_FOUND)
--+  pkg_check_modules( LIBUSB libusb-1.0 )
--+  if (LIBUSB_FOUND)
--+    include_directories ( ${LIBUSB_INCLUDE_DIRS} )
--+  else()
--+    find_package ( USB1 REQUIRED )
--+    include_directories ( ${LIBUSB_INCLUDE_DIR} )
--+  endif()
--+endif()
-- 
-- # Find Boost
-- if (FTDIPP OR BUILD_TESTS)
---- 
--1.7.1
--
-diff --git a/package/libftdi1/0004-move-from-distutils-to-sysconfig.patch b/package/libftdi1/0004-move-from-distutils-to-sysconfig.patch
-deleted file mode 100644
-index 7b38993ada..0000000000
---- a/package/libftdi1/0004-move-from-distutils-to-sysconfig.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From abd19b721f7e9b4d514ed319ece173ebc7b1ea72 Mon Sep 17 00:00:00 2001
--From: =?utf8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
--Date: Mon, 19 Dec 2022 17:40:43 +0100
--Subject: [PATCH] python: move from distutils to sysconfig
--
--The distutils module was deprecated in Python 3.10, and will be removed
--in 3.12 [1], thus switch to the sysconfig module instead.
--
--[1] https://peps.python.org/pep-0632/
--
--Upstream: http://developer.intra2net.com/git/?p=libftdi;a=commit;h=abd19b721f7e9b4d514ed319ece173ebc7b1ea72
--Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
--Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-----
-- python/CMakeLists.txt |    2 +-
-- 1 files changed, 1 insertions(+), 1 deletions(-)
--
--diff --git a/python/CMakeLists.txt b/python/CMakeLists.txt
--index 5e406ff..9358419 100644
----- a/python/CMakeLists.txt
--+++ b/python/CMakeLists.txt
--@@ -42,7 +42,7 @@ endif ()
-- 
-- set_target_properties ( ${SWIG_MODULE_ftdi1_REAL_NAME} PROPERTIES NO_SONAME ON )
-- 
---execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print( sysconfig.get_python_lib( plat_specific=True, prefix='${CMAKE_INSTALL_PREFIX}' ) )"
--+execute_process ( COMMAND ${PYTHON_EXECUTABLE} -c "import sysconfig; print( sysconfig.get_path( 'platlib', vars={'platbase': '${CMAKE_INSTALL_PREFIX}'} ) )"
--                   OUTPUT_VARIABLE _ABS_PYTHON_MODULE_PATH
--                   OUTPUT_STRIP_TRAILING_WHITESPACE )
-- 
---- 
--1.7.1
--
-diff --git a/package/libftdi1/libftdi1.hash b/package/libftdi1/libftdi1.hash
-index 6b825e8d88..abff9ad86f 100644
---- a/package/libftdi1/libftdi1.hash
-+++ b/package/libftdi1/libftdi1.hash
-@@ -1,6 +1,5 @@
--# Locally computed after checking the signature
--# https://www.intra2net.com/en/developer/libftdi/download/libftdi1-1.5.tar.bz2.sig
--sha256  7c7091e9c86196148bd41177b4590dccb1510bfe6cea5bf7407ff194482eb049  libftdi1-1.5.tar.bz2
-+# Locally computed
-+sha256  e0005e05417cc80ddfeec3314ee9d3cf1a352cdfe079a507ba6c20bca31575b5  libftdi1-22b4667a8c3bc483494ba735ba4ae4d5cb8a0f03-git4.tar.gz
+diff --git a/docs/manual/migrating.adoc b/docs/manual/migrating.adoc
+index 1b55bc6173..4cc88d19ae 100644
+--- a/docs/manual/migrating.adoc
++++ b/docs/manual/migrating.adoc
+@@ -209,3 +209,10 @@ or with a startup script.
+ Note that systems using systemd are not impacted: systemd always ensures
+ that `/run` is writable. Systems further using systemd-resolved already
+ had a `/etc/resolv.conf` that pointed into `/run` anyway.
++
++[[migrating-systemd]]
++=== Migrating to 2025.08
++
++In 2025.08, starting with systemd version 257, systemd-networkd requires kernel
++5.4 or later. If you are still using a kernel older than 5.4, please update
++your kernel or use an alternative network manager.
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 851b91aeba..320d416203 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -52,9 +52,11 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	  an elaborate transactional dependency-based service control
+ 	  logic.  It can work as a drop-in replacement for sysvinit.
  
- # Hash for license files:
- sha256  524f46428bf72bb8c6acfeca4909551fd2e0bdbb5305406d38382f4056095c56  LICENSE
-diff --git a/package/libftdi1/libftdi1.mk b/package/libftdi1/libftdi1.mk
-index 66798addc4..e0ef2badf6 100644
---- a/package/libftdi1/libftdi1.mk
-+++ b/package/libftdi1/libftdi1.mk
-@@ -4,9 +4,8 @@
- #
- ################################################################################
+-	  Kernel versions below 4.15 ("recommended baseline") have
++	  Kernel versions below 5.4 ("recommended baseline") have
+ 	  significant gaps in functionality and are not recommended
+-	  for use with this version of systemd.
++	  for use with this version of systemd. (e.g. lack race-free
++	  process tracking by pidfd, systemd-networkd, and new mount
++	  API support).
  
--LIBFTDI1_VERSION = 1.5
--LIBFTDI1_SOURCE = libftdi1-$(LIBFTDI1_VERSION).tar.bz2
--LIBFTDI1_SITE = http://www.intra2net.com/en/developer/libftdi/download
-+LIBFTDI1_VERSION = 22b4667a8c3bc483494ba735ba4ae4d5cb8a0f03
-+LIBFTDI1_SITE = git://developer.intra2net.com/libftdi
- LIBFTDI1_INSTALL_STAGING = YES
- LIBFTDI1_DEPENDENCIES = host-pkgconf libusb
- LIBFTDI1_LICENSE = LGPL-2.1 (libftdi1), MIT (libftdi1)
+ 	  Systemd requires a Linux kernel >= 3.15 with the following
+ 	  options enabled:
+@@ -354,7 +356,8 @@ config BR2_PACKAGE_SYSTEMD_MYHOSTNAME
+ 
+ config BR2_PACKAGE_SYSTEMD_NETWORKD
+ 	bool "enable network manager"
+-	default y
++	default y if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
+ 	help
+ 	  systemd-networkd is a system service that manages networks.
+ 	  It detects and configures network devices as they appear, as
+@@ -365,6 +368,9 @@ config BR2_PACKAGE_SYSTEMD_NETWORKD
+ 
+ 	  https://www.freedesktop.org/software/systemd/man/systemd-networkd.html
+ 
++comment "systemd-networkd needs a toolchain with kernel headers >= 5.4"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4
++
+ config BR2_PACKAGE_SYSTEMD_OOMD
+ 	bool "enable out-of-memory killer"
+ 	help
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 976d88c1f5..ca7ff360b5 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,7 +1,8 @@
+ # sha256 locally computed
+-sha256  896d76ff65c88f5fd9e42f90d152b0579049158a163431dd77cdc57748b1d7b0  systemd-256.7.tar.gz
++sha256  4d65f9482608cf9f7823df42a6d7796f0e0dfcfb94301df75effff86d40da33e  systemd-257.5.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE.GPL2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENSE.LGPL2.1
++sha256  c9e7bf5b7c243c719b8b43c36158effb9b54c5e80abc9d82e4b2d4b2a4aa64ad  LICENSES/alg-sha1-public-domain.txt
+ sha256  e5a8645ad94aab24e312dd0c6be2aa54236eb9374480b1b14ea5c61598874fd5  LICENSES/BSD-2-Clause.txt
+ sha256  83bb6bd9ccd2cf5230cb1807ed16258289768dc4d9cb80069a814e04415a1275  LICENSES/BSD-3-Clause.txt
+ sha256  a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499  LICENSES/CC0-1.0.txt
+@@ -12,4 +13,4 @@ sha256  8a6fc0879cecc0b96bf4c08159b9d733bf0f15fcf32879aec98c4ffd05424554  LICENS
+ sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
+ sha256  2a98749f6bec00dfaed86fa9c1edea871aaae4f11ee4d100b671aaf4ce353a73  LICENSES/murmurhash2-public-domain.txt
+ sha256  1a7adaa2c86cedfd6c7f5c0c7c72fd6d3e02cd0c9593f21fdb53c89bb2b130ec  LICENSES/OFL-1.1.txt
+-sha256  3df2dfbb09215ab1aecdd3c91d7fbe02fee4a0e75ef8967a25d1a6fe3b8abc06  LICENSES/README.md
++sha256  8f3141489df84100440efa9911603e83757ff97f26f737e1d7fa2b25207a7905  LICENSES/README.md
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 337d52b1f2..a6a2f5a818 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -19,7 +19,7 @@
+ # - Diff sysusers.d with the previous version
+ # - Diff factory/etc/nsswitch.conf with the previous version
+ #   (details are often sprinkled around in README and manpages)
+-SYSTEMD_VERSION = 256.7
++SYSTEMD_VERSION = 257.5
+ SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = \
+ 	LGPL-2.1+, \
+@@ -35,6 +35,7 @@ SYSTEMD_LICENSE = \
+ SYSTEMD_LICENSE_FILES = \
+ 	LICENSE.GPL2 \
+ 	LICENSE.LGPL2.1 \
++	LICENSES/alg-sha1-public-domain.txt \
+ 	LICENSES/BSD-2-Clause.txt \
+ 	LICENSES/BSD-3-Clause.txt \
+ 	LICENSES/CC0-1.0.txt \
+@@ -73,6 +74,7 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dfirst-boot-full-preset=false \
+ 	-Didn=true \
+ 	-Dima=false \
++	-Dipe=false \
+ 	-Dkexec-path=/usr/sbin/kexec \
+ 	-Dkmod-path=/usr/bin/kmod \
+ 	-Dldconfig=false \
+@@ -99,6 +101,7 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dfuzz-tests=false \
+ 	-Dinstall-tests=false \
+ 	-Dlog-message-verification=disabled \
++	-Dsysupdated=disabled \
+ 	-Dtmpfiles=true \
+ 	-Dukify=disabled \
+ 	-Dbpf-framework=disabled \
+@@ -1011,7 +1014,8 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dopenssl=disabled \
+ 	-Dp11kit=disabled \
+ 	-Dlibfido2=disabled \
+-	-Dpcre2=disabled
++	-Dpcre2=disabled \
++	-Dsysupdated=disabled
+ 
+ HOST_SYSTEMD_DEPENDENCIES = \
+ 	$(BR2_COREUTILS_HOST_DEPENDENCY) \
 -- 
-2.34.1
+2.49.0
 
 _______________________________________________
 buildroot mailing list
