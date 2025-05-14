@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CDBAC3ABDD
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:22:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA99AC3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:22:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3B7C141E6C;
-	Fri, 16 May 2025 11:22:43 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HeAO0vC7OlML; Fri, 16 May 2025 11:22:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 614C941E68
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 614C941E68;
-	Fri, 16 May 2025 11:22:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 08561185
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F2A36120C
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 797796129E;
+	Fri, 16 May 2025 11:22:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Plre3BvPV3hF for <buildroot@buildroot.org>;
+ id I0eqExC39f0V; Fri, 16 May 2025 11:22:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A43B061330
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id A43B061330;
+	Fri, 16 May 2025 11:22:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1C03C1AB
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:02 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AD89681301
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:56 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UHomM5cjH6W4 for <buildroot@buildroot.org>;
  Fri, 16 May 2025 11:21:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7400D61242
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B236C8133C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7400D61242
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B236C8133C
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 71D68869EB; Fri, 16 May 2025 11:21:55 +0000 (UTC)
+ id A4DDA86A0C; Fri, 16 May 2025 11:21:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 May 2025 17:06:27 +0200
+Date: Wed, 14 May 2025 21:03:37 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 196043d0e8b485da4e725798bb2e113ef28e48cf
-X-Git-Newrev: 4cf750826ff31bcddcdece037500c4d1e5cc3490
+X-Git-Oldrev: 1c040b187dc0f981adca48db5fe9c205c8c59b5b
+X-Git-Newrev: 591a7634d6b26e199a5a51fb972d556e20c70194
 X-Patchwork-Hint: ignore
-Message-Id: <20250516112155.71D68869EB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/m4: fix build
- failure with host-gcc 15
+Message-Id: <20250516112154.A4DDA86A0C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/mtools: bump
+ version to 4.0.48
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,86 +66,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4cf750826ff31bcddcdece037500c4d1e5cc3490
+commit: https://git.buildroot.net/buildroot/commit/?id=591a7634d6b26e199a5a51fb972d556e20c70194
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-When compiling host-m4 1.4.19 with a host gcc 15 (which is the version
-included in Fedora 42, released on 2025-04-15), compilation fails with
-error:
+Release notes:
+https://lists.gnu.org/archive/html/info-mtools/2025-02/msg00019.html
 
-    In file included from gl_avltree_oset.h:21,
-                     from gl_avltree_oset.c:21:
-    gl_oset.h:275:1: warning: 'nodiscard' attribute ignored [-Wattributes]
-      275 | GL_OSET_INLINE _GL_ATTRIBUTE_NODISCARD int
-          | ^~~~~~~~~~~~~~
-    gl_oset.h:275:40: error: expected identifier or '(' before 'int'
-      275 | GL_OSET_INLINE _GL_ATTRIBUTE_NODISCARD int
-          |                                        ^~~
+Changelog:
+https://svn.savannah.gnu.org/viewvc/mtools/tags/4.0.48/NEWS?view=markup
 
-This error is due to the gnulib copy included in m4 1.4.19, which does
-not detect properly the default C language standard of gcc 15 which
-has been changed from "gnu17" to "gnu23". See [1]. Note that m4 1.4.19
-is the latest version available at the time of this commit, and was
-released in May 2021. The issue is tracked upstream in [2].
-
-Upcoming m4 release is expected to fix this issue, by updating its
-gnulib copy. See [3], which states: "Update to comply with newer C
-standards, and inherit portability improvements from gnulib".
-
-Until this new m4 version is released, this commit fixes the issue by
-forcing the C langage standard to "-std=gnu17" (the previous gcc
-default) when host-gcc 15 is detected.
-
-Note that the "-std=gnu17" option was introduced in gcc 8. See [4].
-This is the reason why this patch adds this option only when the
-problematic gcc 15 version is detected.
-
-See also the discussions around this patch at [5].
-
-Fixes:
-https://autobuild.buildroot.org/results/1c33ef0a710cfae13e496485787b351c8f951217/
-(and many, many others)
-
-[1] https://gcc.gnu.org/gcc-15/changes.html#c
-[2] https://savannah.gnu.org/support/?111150
-[3] https://git.savannah.gnu.org/cgit/m4.git/commit/?h=branch-1.4&id=a22c9802dd7e724eaefb21dc21d84ac2d3a49c89
-[4] https://gcc.gnu.org/gcc-8/changes.html#c
-[5] https://lore.kernel.org/buildroot/CAPWx8vsoJUt8YMJG1aUqFRK1=yizNbgjVjGL1Q1+9ygjJGnZLA@mail.gmail.com/
-
-Signed-off-by: Joseph Zikusooka (ZIK) <zik@jambula.net>
-Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-[Julien:
- - change mail url to lore.kernel.org for stable link
- - reword, reflow and add extra info in the commit log
- - force -std=gnu17 only when host gcc-15 is detected
- - add a comment in .mk to remove the workaround at next bump
-]
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 7a07a9d155b8f601d68f07ee0ed1dc8d48907644)
+(cherry picked from commit ee595c95ae954aecf8e07cb53267b1678d054dbd)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/m4/m4.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ package/mtools/mtools.hash | 2 +-
+ package/mtools/mtools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/m4/m4.mk b/package/m4/m4.mk
-index 39ad898b10..f5e1e27ad8 100644
---- a/package/m4/m4.mk
-+++ b/package/m4/m4.mk
-@@ -10,4 +10,14 @@ M4_SITE = $(BR2_GNU_MIRROR)/m4
- M4_LICENSE = GPL-3.0+
- M4_LICENSE_FILES = COPYING
+diff --git a/package/mtools/mtools.hash b/package/mtools/mtools.hash
+index bce1951224..44f0803b0f 100644
+--- a/package/mtools/mtools.hash
++++ b/package/mtools/mtools.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  2709cd2f42d65500829b056cb0630edd515d7060b4865bad31277f0da9f9e9d5  mtools-4.0.47.tar.lz
++sha256  7d57f14a2482dc4658e4b386180793ef50f0de89ee3a9a28f0a371630baac7c4  mtools-4.0.48.tar.lz
  
-+# gcc-15 defaults to -std=gnu23 which is incorrectly detected and
-+# generates build failures in the gnulib copy included in
-+# m4-1.4.19. We workaround this by forcing the previous gcc default
-+# standard, which is -std=gnu17 only when host gcc is >= 15. This
-+# workaround can be removed when m4 will be updated to a version
-+# including a fix for gcc-15.
-+ifeq ($(BR2_HOST_GCC_AT_LEAST_15),y)
-+HOST_M4_CONF_ENV = CFLAGS="$(HOST_CFLAGS) -std=gnu17"
-+endif
-+
- $(eval $(host-autotools-package))
+ # Locally calculated
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
+index 45b4b8d49b..8c7a348fea 100644
+--- a/package/mtools/mtools.mk
++++ b/package/mtools/mtools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MTOOLS_VERSION = 4.0.47
++MTOOLS_VERSION = 4.0.48
+ MTOOLS_SOURCE = mtools-$(MTOOLS_VERSION).tar.lz
+ MTOOLS_SITE = $(BR2_GNU_MIRROR)/mtools
+ MTOOLS_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
