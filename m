@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5525C3ABD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:23:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBDD1C3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:23:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ABFA341C09;
-	Fri, 16 May 2025 11:23:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9DDA61310;
+	Fri, 16 May 2025 11:23:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W8bmLpe7XoCx; Fri, 16 May 2025 11:23:21 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h0WyBtYVAJ6b; Fri, 16 May 2025 11:23:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A64B142436
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D234E61393
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A64B142436;
-	Fri, 16 May 2025 11:23:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 61E2913D
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D234E61393;
+	Fri, 16 May 2025 11:23:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0CAA413D
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A885181168
+ by smtp3.osuosl.org (Postfix) with ESMTP id 240BF61254
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WEqgqKwBcnzz for <buildroot@buildroot.org>;
- Fri, 16 May 2025 11:21:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 476t0yCd9ho9 for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 11:21:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E978182147
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60D4160B6D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E978182147
+ by smtp3.osuosl.org (Postfix) with ESMTP id 60D4160B6D
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E71FE82929; Fri, 16 May 2025 11:21:54 +0000 (UTC)
+ id 5DC047FDC5; Fri, 16 May 2025 11:21:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 14 May 2025 21:05:45 +0200
+Date: Wed, 14 May 2025 20:59:01 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: c70f032092b847910bf706a6460b2c7744dce0ee
-X-Git-Newrev: 7109348aaf313f1a3425484e336df48846923077
+X-Git-Oldrev: 4df388d2406f66d6028e0cdb5fcfecc0f4ab0f75
+X-Git-Newrev: b9c2c3caa893e81f8789945caed79815c293d1df
 X-Patchwork-Hint: ignore
-Message-Id: <20250516112154.E71FE82929@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/jo: bump version
- to 1.9
+Message-Id: <20250516112154.5DC047FDC5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/wireshark:
+ security bump to v4.2.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,45 +66,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7109348aaf313f1a3425484e336df48846923077
+commit: https://git.buildroot.net/buildroot/commit/?id=b9c2c3caa893e81f8789945caed79815c293d1df
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Mainly bugfixes (1.8 was deleted):
+This fixes the following CVE:
 
-https://github.com/jpmens/jo/releases/tag/1.9
-https://github.com/jpmens/jo/releases/tag/1.7
+- CVE-2025-1492: The Bundle Protocol and CBOR dissectors could crash
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+    It may be possible to make Wireshark crash by injecting a malformed
+    packet onto the wire or by convincing someone to read a malformed
+    packet trace file.
+
+See https://www.wireshark.org/security/wnpa-sec-2025-01
+
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit b8134a1195f5111d80cfa67104fca847f0881e63)
+(cherry picked from commit 032b2688909a1621aa8ae1397ee0c785423b6455)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/jo/jo.hash | 2 +-
- package/jo/jo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/wireshark/wireshark.hash | 6 +++---
+ package/wireshark/wireshark.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/jo/jo.hash b/package/jo/jo.hash
-index efad8228a7..82cb212a83 100644
---- a/package/jo/jo.hash
-+++ b/package/jo/jo.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  eb15592f1ba6d5a77468a1438a20e3d21c3d63bb7d045fb3544f223340fcd1a1  jo-1.6.tar.gz
-+sha256  0195cd6f2a41103c21544e99cd9517b0bce2d2dc8cde31a34867977f8a19c79f  jo-1.9.tar.gz
- sha256  41d8b23dc6e76731f4920b9ce42d0d4a248d243a510319e2441d174a115f35cf  COPYING
-diff --git a/package/jo/jo.mk b/package/jo/jo.mk
-index dd5dd03ddb..911d3e5f3d 100644
---- a/package/jo/jo.mk
-+++ b/package/jo/jo.mk
+diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
+index 642bc5866d..8b3245551a 100644
+--- a/package/wireshark/wireshark.hash
++++ b/package/wireshark/wireshark.hash
+@@ -1,6 +1,6 @@
+-# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.2.9.txt
+-sha1  d1abbe110451dab9e57c9ee1fe0892e0d6a7d515  wireshark-4.2.9.tar.xz
+-sha256  62c2b6652d7f9a50668867bd57b21609c9a9b6950f26e7f30a24b2de0e72ded3  wireshark-4.2.9.tar.xz
++# From https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.2.11.txt
++sha1  f4e908e73ab90982e7f712e0a9b5f4cce85ca058  wireshark-4.2.11.tar.xz
++sha256  dd80f30e9853105dacb5357e5832d960437160bbb4b147e8f1a7ead168afaa18  wireshark-4.2.11.tar.xz
+ 
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
+index bade68f258..72415448c4 100644
+--- a/package/wireshark/wireshark.mk
++++ b/package/wireshark/wireshark.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--JO_VERSION = 1.6
-+JO_VERSION = 1.9
- JO_SITE = https://github.com/jpmens/jo/releases/download/$(JO_VERSION)
- JO_LICENSE = MIT (json.[ch]), GPL-2.0+ (rest)
- JO_LICENSE_FILES = COPYING
+-WIRESHARK_VERSION = 4.2.9
++WIRESHARK_VERSION = 4.2.11
+ WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
+ WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
+ WIRESHARK_LICENSE = wireshark license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
