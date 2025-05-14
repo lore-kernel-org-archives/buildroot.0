@@ -1,100 +1,103 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3990C3ABD8
-	for <buildroot@archiver.kernel.org>; Wed, 14 May 2025 16:58:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 606A8C3DA4A
+	for <buildroot@archiver.kernel.org>; Wed, 14 May 2025 16:58:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 571F58374F;
-	Wed, 14 May 2025 16:58:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EDE0D414B6;
+	Wed, 14 May 2025 16:58:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PQpy_Epj4cJV; Wed, 14 May 2025 16:58:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h79MW8S6nPE5; Wed, 14 May 2025 16:58:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6673683530
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F7CB41486
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6673683530;
-	Wed, 14 May 2025 16:58:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E69912A
- for <buildroot@buildroot.org>; Wed, 14 May 2025 16:58:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F7CB41486;
+	Wed, 14 May 2025 16:58:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 43FA8153
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 16:58:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E83D9819CC
- for <buildroot@buildroot.org>; Wed, 14 May 2025 16:58:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3591940B29
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 16:58:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vyF7ozPlkD71 for <buildroot@buildroot.org>;
- Wed, 14 May 2025 16:58:29 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JevgNpDvW8nK for <buildroot@buildroot.org>;
+ Wed, 14 May 2025 16:58:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
  envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A749483530
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A749483530
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A749483530
- for <buildroot@buildroot.org>; Wed, 14 May 2025 16:58:28 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-43cf257158fso295495e9.2
- for <buildroot@buildroot.org>; Wed, 14 May 2025 09:58:28 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7B17940288
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B17940288
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7B17940288
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 16:58:30 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-3a1d8c09674so2438f8f.1
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 09:58:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747241907; x=1747846707;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=IuZebnWlwFjSD+TYdXO3OvghP+2vSUrgGZC0Gx6iS4k=;
- b=MpA+5mn+4xaPizWVLBZn6q3ZDrU5ULKiTVgc+ABImfgNS/yr8bkUWFbzOtB/Ie/5Pe
- z5z9yUKJ7CJ/Ebe2HF2SopN3LvRQG95KzHcWleTyKdntJd6QB9f8bBWYP9pIUT0jahZc
- E1/nKqkUzftRUbrp0BcPOnytqgI0Iax8oYWbaWzUrZm3lEzQoywuR58i1ILXaBTGd/KR
- /TeWrjT9AJt9IhHy6DgGXa3WbAY0D/e0JC4ZC9tanHDhZDn8+2NRTH6mXUNBGsxcWywt
- lVG4Cey00cfS18nUK3J2i3i7BKO/QfbzXoBnit6wTS6zZsFyAbqpOrExRG+TlbCXUMv3
- AJGA==
-X-Gm-Message-State: AOJu0Yx27vr47FY2bQs3tETxNZu0W4oZn79BnOgNiF8zA9RLTOgqP/eS
- LONKy2ONplVzgkJOn0QXMLTVFY4f1Yz2eokWUYrfsHF/cxHGqACmwy91Rw==
-X-Gm-Gg: ASbGnctVpBwKmaKlyo8n74z44LKM8f5VVQnmlJv5sl3Uih3tpP42RjbJAxf8ZTYsx9s
- fNqaP/8doZ6ssGkTEJXzGPyOB0GQyJ064rXA7qOk8zHg4sO8F+AkvwYdq6Jz4r3w4urdM+BbRWI
- YXVK+5SvA1BN+KufGEDNQYCO/3Qh7DnJ2cB8+FZPJTOvAA/cyg0/vyb11D5TbZTeZQkeC+603ZO
- dQIv0gzKs7RPnxTQaeVcOGsQpV93BrS+h0pE97u/gwF/YkkmqLWJSbb+xaHiAxoDj6XvAPhulY0
- VsGB/q8uGS+XAMJZIQMkJ9TNlioC9qlQjjAaFs7eZubDQ+jWOeMxj58REj+khbz3xHFHMXBa
-X-Google-Smtp-Source: AGHT+IEeHdx8+ueNwwPm841TNtWInVsdl7wu5cawJN32pbHJUOZdw+hF7pIACaZTk8so4fTNIWuNCA==
-X-Received: by 2002:a05:600c:a50:b0:43d:abd:ad0e with SMTP id
- 5b1f17b1804b1-442f210753bmr44350955e9.18.1747241906513; 
- Wed, 14 May 2025 09:58:26 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1747241908; x=1747846708;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=Aad9Ehb+NvM24EiCZebntcBCguNNQFa1o2pU5fZw9MA=;
+ b=uaLgYn2hV0Y4wHLepyhEoxQDKOEVjG4hTfnVdtcOOo46lLkV6mVN/DRnHg3hwfA0yn
+ oDHEqNleE9EUy/t/hbXYRmMdM0whvw1BhBScBHMFAoYdn6NArOSFlq4mvtQds2W9WrbJ
+ CLKekK+ckys040IE9XYcY5Wo4Mga7Srq8g6ah0DszM7p/hqnJDPfWjNzIQwV+GZF4QCn
+ Qo8s5ME++yqvZrwEQbfK4zaM+HsRcIN5qbUz8+krYRytnGnztfy+8+nARAhp6rpWaopr
+ Ia2TOsKKpJgzRxCXWTI4M304wwtmyT/4Jy2O9rzuvgcCHwa+pTaMZFeCdyonieCo4mOJ
+ qF+Q==
+X-Gm-Message-State: AOJu0YyweVn36J2sHHjqWo6mLPqIA5Je9HGtY04aSgOpuc+5s/GOzaVk
+ 28tf/xRAyEWAISx7WG1z1LLTmWgHJiFey/DeobmxPa6YgllE5nO4LqyZ2Q==
+X-Gm-Gg: ASbGncua09n0XxcmvqhrL62lQc31YUGFc91RUlJCvjHg/Z/r6fhHO12ogqRZx1v1PaD
+ 5ZRx62zLr5CeJY9lu3rtxnNGJgvXhYvicV7QP8Ib4Jc/YHg3B3Bd5NWFM2Hg8bQkImLIOnlRZTt
+ DOWAubmlpSDCWWS78cZQoEBhPpoM0jWYENU2TYc20PZw83MHnpcB3dco2xhA/l3cOff/0S/RXzn
+ qViKv/pgUECZlfkj+AJrNIhf1PSxsaKFiwLAk76HrZis7Jwf701Kr83+WFR/nC8Dmi/0ZjI6x2l
+ 0MqoQ0UuK/1Fw5e3ryNYqrQesoG1CW6jtgIB4Iagt35FkpJ+l6LIz1/0Tdab8w==
+X-Google-Smtp-Source: AGHT+IEKs1rxeiaN0x1Hbw0rDeH4ru9Ea3SOKQ4jrd6zYK4tbt0Vmmlfa19JsVhZhAHOm8XIegpR+g==
+X-Received: by 2002:a5d:5f8a:0:b0:391:952:c728 with SMTP id
+ ffacd0b85a97d-3a349694210mr3541459f8f.4.1747241908335; 
+ Wed, 14 May 2025 09:58:28 -0700 (PDT)
 Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-442f3369a7asm38826285e9.4.2025.05.14.09.58.25
+ 5b1f17b1804b1-442f3951494sm39815585e9.22.2025.05.14.09.58.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 14 May 2025 09:58:26 -0700 (PDT)
+ Wed, 14 May 2025 09:58:28 -0700 (PDT)
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 14 May 2025 18:58:22 +0200
-Message-ID: <cover.1747241900.git.yann.morin.1998@free.fr>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Date: Wed, 14 May 2025 18:58:13 +0200
+Message-ID: <223330b5594d5cf2be499bb693578d369fd890d1.1747241900.git.yann.morin.1998@free.fr>
 X-Mailer: git-send-email 2.47.0
+In-Reply-To: <cover.1747241900.git.yann.morin.1998@free.fr>
+References: <cover.1747241900.git.yann.morin.1998@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1747241907; x=1747846707; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
- bh=IuZebnWlwFjSD+TYdXO3OvghP+2vSUrgGZC0Gx6iS4k=;
- b=VkZwKJ+YSmqEJ+XTziHwMNIl65NuDqFDaS5zziOGxl8jZDZeB/Rr5kAE0VTJ5n/KZ5
- nDCnTB1Ic2gl4oD72P4OjvkqwdKR+x/5sGR+mU936JDQl/erq+C0CKBdeuVfDH3AuM1u
- T5exAK7k8XsySugSki2xTdTBn8Bx7ai1bNGljaE9k0wfiqR/poZSLCL57ltmKoGqcfLo
- LOBw9XExfJzgXb6L1mb5hwgkNizcE2+7sP0o9MV/GmaVrXVUBZdOQ+G/MZa4ntX9ikbg
- rFGMJmpmDcBV/YkBlvNoTk84OttoTKiXFvNzs7F6mFT4H3rgCT/G1gXqOwUTzdTykg41
- c9jg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1747241908; x=1747846708; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Aad9Ehb+NvM24EiCZebntcBCguNNQFa1o2pU5fZw9MA=;
+ b=UhZTGd020Tz1C/gD6eifXAlkX57PF03Fu5voxJAh78/GW6P8si+Pv3dBN3ULdWqeWM
+ kzqodmwFcgNmhRqATPN8J6uuW+dVh81xEGcYl9ALM++zJxKS8bwqx9ZJq/Z6SrRyi5H3
+ xovR7k86rXZWEuDCpzicKkNUIsdPyf8VWGJmEfKWmlQl+aB60POt/UOUe87kmGqCfvYs
+ wRgd1j0rIT8ny2pDca8cPEHYb3T8uaImaiFBM9fGfw5BGBRwWk9K44SfLQypi0jzgWZA
+ Aauwargg7ZH/38/8H+JYFa1O70UP6E6LVs9qGCtlEmo6OqTkuS7GcJBxwuNPiwNuxniW
+ 1Mwg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=VkZwKJ+Y
-Subject: [Buildroot] [PATCH 00/13] system: add support for merged-bin
- (branch yem/merged-bin)
+ header.s=20230601 header.b=UhZTGd02
+Subject: [Buildroot] [PATCH 01/13] system: reword merged-usr prompt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -106,91 +109,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Sen Hastings <sen@hastings.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Norbert Lange <nolange79@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello All!
+The current pro;pt is overly verbose, and departs from the usual
+terminology used to refer to merged /usr, which, 10 years later [0],
+makes it a little bit difficult to find or understand.
 
-This series introduces support for so-called merged-bin, where /usr/sbin
-is merged with /sur/bin, as an extra step after merged-usr, now
-requested, and later required in a relatively close future, by systemd.
+Furthermore, we're going to add another similar prompt for merged
+/usr/sbin, and there's no way we want to introduce as similarly
+convoluted prompt then.
 
-The series is organised in 4 main steps::
+Reword the prompt for the merged /usr option to the explicit "merged
+/usr" everyone expects and understands.
 
- 1. patches 1-3 are cleanups in the Kconfig menu, related to the
-    merged-usr prompt, to the defaults for PATH, and to the rationale
-    for selecting merged-usr with systemd; those can be applied without
-    considering the rest of the series;
+[0] see commit c5bd8af65e50 (system: add options for /bin /sbin and
+/lib to be symlinks into /usr)
 
- 2. then patches 4-6 prepare support/scripts/check-merged-usr.sh to
-    check for more than merged-usr: a good cleanup, and better check the
-    merged state; those patch can also be applied without considering
-    the rest of the series;
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ system/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- 3. with patches 7-9, support for merged-bin is added, and made mandatory
-    for systemd;
+diff --git a/system/Config.in b/system/Config.in
+index 8ff6c7213e..f747fdbc56 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -336,7 +336,7 @@ config BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
+ 	  Support extended attributes handling in device tables
+ 
+ config BR2_ROOTFS_MERGED_USR
+-	bool "Use symlinks to /usr for /bin, /sbin and /lib"
++	bool "Merged /usr"
+ 	help
+ 	  If you say 'n' here, then /bin, /sbin and /lib and their
+ 	  counterparts in /usr will be separate directories. This
+-- 
+2.47.0
 
- 4. finally, patches 10-13 introduce workarounds for a few packages to
-    properly support merged-bin. For ease of review, those are separate
-    patches, but that means the series _may_ break if the merged-bin
-    support is applied but not the per-package workarounds.
-
-Although the series was tested with a large set of packages and a large
-set of toolchains, and although it is a critical change, it is still
-pretty well confined to just a few spots.
-
-Regards,
-Yann E. MORIN.
-
-
-----------------------------------------------------------------
-Yann E. MORIN (13):
-      system: reword merged-usr prompt
-      system: drop superfluous negative condition for default PATH
-      package/systemd: select merged-usr from package, not init
-      support/scripts: comonalise checking merged status
-      support/scripts: fix and restrict conditions to accept merged dirs
-      support/scripts: rename check-merged-usr.sh
-      support/scripts; teach check-merged what to check
-      system: add support for merged /usr/sbin (aka merged-bin)
-      package/systemd: require merged-bin
-      package/coreutils: no need for chroot workaround with merged-bin
-      package/kmod: adjust paths for merged-bin
-      package/util-linux: adjust paths for merged-bin
-      toolchain/external: support merged-bin
-
- Makefile                                   | 11 ++---
- package/coreutils/coreutils.mk             |  2 +
- package/kmod/kmod.mk                       | 12 +++++-
- package/skeleton-custom/skeleton-custom.mk | 10 +++--
- package/systemd/Config.in                  |  2 +
- package/util-linux/util-linux.mk           |  8 +++-
- support/scripts/check-merged               | 65 ++++++++++++++++++++++++++++++
- support/scripts/check-merged-usr.sh        | 39 ------------------
- system/Config.in                           | 20 +++++----
- system/skeleton/usr/sbin/.empty            |  0
- system/system.mk                           | 11 +++++
- toolchain/helpers.mk                       |  8 +++-
- 12 files changed, 128 insertions(+), 60 deletions(-)
- create mode 100755 support/scripts/check-merged
- delete mode 100755 support/scripts/check-merged-usr.sh
- delete mode 100644 system/skeleton/usr/sbin/.empty
-
---
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
