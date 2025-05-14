@@ -1,109 +1,109 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE865C3ABD9
-	for <buildroot@archiver.kernel.org>; Wed, 14 May 2025 13:43:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A178C3ABD8
+	for <buildroot@archiver.kernel.org>; Wed, 14 May 2025 13:43:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 47C76836A7;
-	Wed, 14 May 2025 13:43:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id osEWAMyw7qjN; Wed, 14 May 2025 13:43:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2992C835F2
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2992C835F2;
-	Wed, 14 May 2025 13:43:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0582B150
- for <buildroot@buildroot.org>; Wed, 14 May 2025 13:43:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EAA4C40B49
- for <buildroot@buildroot.org>; Wed, 14 May 2025 13:43:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D9A8D414D2;
+	Wed, 14 May 2025 13:43:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aj2mwA0tF6cX for <buildroot@buildroot.org>;
- Wed, 14 May 2025 13:43:21 +0000 (UTC)
+ id SsIuCbXRVt56; Wed, 14 May 2025 13:43:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D1B1740B7E
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1B1740B7E;
+	Wed, 14 May 2025 13:43:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CC1FC153
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 13:43:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BDE0E404EC
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 13:43:23 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XgcoLdVM_xua for <buildroot@buildroot.org>;
+ Wed, 14 May 2025 13:43:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62c; helo=mail-ej1-x62c.google.com;
+ client-ip=2a00:1450:4864:20::534; helo=mail-ed1-x534.google.com;
  envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E1B994062E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1B994062E
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E1B994062E
- for <buildroot@buildroot.org>; Wed, 14 May 2025 13:43:20 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id
- a640c23a62f3a-ad23e8fcc38so90217366b.2
- for <buildroot@buildroot.org>; Wed, 14 May 2025 06:43:20 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8734540E1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8734540E1F
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8734540E1F
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 13:43:22 +0000 (UTC)
+Received: by mail-ed1-x534.google.com with SMTP id
+ 4fb4d7f45d1cf-5fca00812dbso1233765a12.1
+ for <buildroot@buildroot.org>; Wed, 14 May 2025 06:43:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747230198; x=1747834998;
+ d=1e100.net; s=20230601; t=1747230200; x=1747835000;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=3kC0G6Af+V9Z5DJq9mVy/YfAMt9IFeF1IZ5e0huVpVY=;
- b=HwdFO0zQTxD8Kq62C42wg/arKYj4Z6CawUtR8Hu2T/nXwfGVdDyQRspquV1j0pdv3H
- i9Q87yVH21o2qTozHLw9dr1AS5iteBy5KVT5zFkoNzMrn6DntacN081c+ZKnWEoyhYFB
- YybJsJW1By+Z47cG9o/NxWKgXPK4QqMpQbgNuuVvRIDI0KeYsDrlJyvUzShUGl0hcv5i
- HC6UCi28KadGuwpBcLxhY09QSCJNVFiF/mSSaH5dWIJSB48/OsXHIjiak+yi61My+rHu
- ZdSNqetS+FCt6qrkuuKjVA1OVsndS2OiqYU7/SEYjfagUYEKI1N28wgixD034ud1KrTF
- Jazg==
-X-Gm-Message-State: AOJu0YyuSz0l+HSprey9dirU3NQ46CnyXVMlVMibcOM93z2xJAe/Ld/q
- wc5a+KZwxZtZTyftrph6kLOIi4xCFT3hKIii6+TK5sS8GTr9ddwtKqLn24eaUcxXTlzi8yNeIdY
- W
-X-Gm-Gg: ASbGncskNvgo3tJxB1mad+brandddjec5doH7a5t+c0LX/UXE/qKW/B6doFwbs1Ofbq
- h6/UPQxbSzMJZ9J5AAnzbAgvV/jkWbisikmV9fyiaSzznZehrAvH2qnsO2rkqWZQHoZAOWGp0tT
- QH3yvyZJlYXSYxhEqAOsowAA4P7s2bVAE6PANpmmid1USfkrOu8jNmPgkjcclja1qr3lnhXu1Iy
- 3UAdeS4IYz33iL2sHxhz6kLJUCrd+CgHSLkcSamNduPmQ9I2HEP4XkpncOtyAqDp8fwkg9zyi9m
- Ugo1OBc58PDd5TEsJEdW/R7pzYqB1fg4tkLbp+i/HYVf/Jj4eUE34o12Bp+YjHWVV2WX9sjqBwo
- DecvULK9C44EupHTUiSsZ87czZl4lv61+7C2pthCTp/5gudlBWWDs8+GlfyAA2x3xmt38rnapqd
- jmTRMbVyuO1WRj0BaGDlMr
-X-Google-Smtp-Source: AGHT+IEGYQiN/KcaRSq1/BqkW8Aob4rnLleovNLWeUrrXEE4g6IYeJI9w5RurdJ9IQi/TWP+ZN1TWA==
-X-Received: by 2002:a17:907:b11:b0:ad2:3c44:2a47 with SMTP id
- a640c23a62f3a-ad4f71294f7mr112597966b.5.1747230198183; 
- Wed, 14 May 2025 06:43:18 -0700 (PDT)
+ bh=5zOn58ksHRPRkGP6JBD7wTW1f4AXWG6eJA4foaEnEtQ=;
+ b=tCHHKi1wTp5R4o7ACJ/ZI1LtNBJvPxINkFDZYpNS28KtMvOCwbP5l/tQdEnQl79c3G
+ f/W3CCKLQ0lm2WN4FEtdVVIGLvd9vZpe78S0VOq6Tuzq6vcvxuMyMKyYtNi3gffmdI+O
+ PSbb8E2P8jOr3CZ3CGG35o0DjKsl752f+iWLgXLkMgT2cp168NYpL0pJIK3+t1b1KTkU
+ xO0uVGEeOW6uddmlF1nnbVxToBBMia3Lll1MrMWq1vFM+EDJKaM+AN3Ee99aGOlo887j
+ U9EoLzqJJ/B/vB1KAxop/lJD9/+rSnxAuiDC5w0rUS2e+jaNwE3o5SC92ekVE9Osc5fu
+ WemA==
+X-Gm-Message-State: AOJu0YzR9q/zDDQmw6ZRA/v8XCOxIbkWh0Mw85/4OSJeztcODVJ9qZcO
+ hSa7K4kLZy56I4Uh6tTuNGjLcpUFN3nfGvOH7AoYflf8zmYmysZFSW+bkUrIR8vmLmwTQoPZIUO
+ b
+X-Gm-Gg: ASbGnct26Xxh6+/mbAWq0T9IDJtdlfT887JUAE27/U8Sp4lNpAhks/f5/Sjv1i9luZg
+ GQsmqtB6MkuvKmt1gb/kwSXdwKYyXMLINKXMh0blUoYE/Q9G4FRU4/cgBXCeBzBuDjhea0VeTXY
+ kXucf5Jg9xWit/NvXcOSeVQtFYccHwjDWwj5PFsBEz/PzzsSmpLnJY8zCgboS9IARaDTo7QIA90
+ qDwQ46Lv0Z/1d3dztt+fxHzPiEu3P+3k6i195O3w7Ay0fhBC64pJ/1Po/9EXoRwD2t1NbH6GImZ
+ WprkRbWtGBgDvy3S/R44vwXTDZOAUOZdnEyJ0LeK+ZZ2S+FTKT0Uo6Wil0dKXM7qbg/bMK7FR+w
+ 5ECVVxQWPqAMS/DvqwQB+kp7lbagRtYXg1n/uS6kG5kDRER29ttB3rZ0AIe5u6tZL49iQtNwMbu
+ PKjSRCaQ2DjEVdcDpd15tf
+X-Google-Smtp-Source: AGHT+IH+6krIFO3nMKHw9yGUn7j2y/GuxGLbHbffWAOVtNG0fdrCGVS/Vv7a+QZnuiFYbWEwLbbDDw==
+X-Received: by 2002:a05:6402:524c:b0:5e0:a4ae:d486 with SMTP id
+ 4fb4d7f45d1cf-5ff988d7d6dmr1059172a12.7.1747230199600; 
+ Wed, 14 May 2025 06:43:19 -0700 (PDT)
 Received: from fedora.amarulasolutions.com
  (2001-1c00-8182-4700-cf31-04f3-d898-af42.cable.dynamic.v6.ziggo.nl.
  [2001:1c00:8182:4700:cf31:4f3:d898:af42])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-ad2197bd3a6sm934783866b.131.2025.05.14.06.43.16
+ a640c23a62f3a-ad2197bd3a6sm934783866b.131.2025.05.14.06.43.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 14 May 2025 06:43:17 -0700 (PDT)
+ Wed, 14 May 2025 06:43:18 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
 Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
  Eric Le Bihan <eric.le.bihan.dev@free.fr>,
  Raphael Pavlidis <raphael.pavlidis@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 14 May 2025 15:43:09 +0200
-Message-ID: <20250514134314.2405052-2-adam.duskett@amarulasolutions.com>
+Date: Wed, 14 May 2025 15:43:10 +0200
+Message-ID: <20250514134314.2405052-3-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250514134314.2405052-1-adam.duskett@amarulasolutions.com>
 References: <20250514134314.2405052-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1747230198; x=1747834998;
+ d=amarulasolutions.com; s=google; t=1747230200; x=1747835000;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=3kC0G6Af+V9Z5DJq9mVy/YfAMt9IFeF1IZ5e0huVpVY=;
- b=OZVHQ2G+I+dTXaIWWLl7kiPjP6A3YQR5dGRLahKcdYydt7G8frXczwscC+mx9wjRKJ
- onNs3ged7g0A3f7cQFUAiiYbyx6ZLCoa70K+/U9E8aHl8Ms2T64tRoJtgDJIQMkShYZW
- fWZ9BwSOhIaUUWAye5YkJBN8CdSI6WNMpwtH8=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=5zOn58ksHRPRkGP6JBD7wTW1f4AXWG6eJA4foaEnEtQ=;
+ b=C4raNwdNhCvWWYTEk2GUgoKlFhEWfgLOAv9kM56TETeNhkLdnzL4kfq5Qzbz8zIw2S
+ mJd7HamQ3KeciXUQGWmD+WKwb7kbyGG3AqLdhQG2VONf1zcYOLFI1xfC935ylTLSzI74
+ FuE2dCexzFuKiSFVsiWqO66KLheH7ENIvMTnw=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=OZVHQ2G+
-Subject: [Buildroot] [PATCH 1/6] package/wmenu: new package
+ header.a=rsa-sha256 header.s=google header.b=C4raNwdN
+Subject: [Buildroot] [PATCH 2/6] package/dmenu-wayland: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,143 +120,184 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-wmenu is an efficient dynamic menu for Sway and wlroots based Wayland
-compositors. It provides a Wayland-native dmenu replacement which
-maintains the look and feel of dmenu.
-
-Furthermore, as of commit b4401557, sway uses wmenu instead of dmenu-wayland
-with the following commit message:
-
-"""
-Switch default config to wmenu-run
-This removes the last dependency bit on dmenu. No need for
-"swaymsg exec" anymore: wmenu-run handles the xdg-activation
-shenanigans.
-"""
-
-As such, change sway/Config.in to select wmenu instead of dmenu-wayland when
-a user selects swaybar.
+The package has been abandoned for several years. The only package that
+previously relied on dmenu-wayland was the swaybar option for the sway package,
+and that option now relies on wmenu.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- DEVELOPERS               |  1 +
- package/Config.in        |  1 +
- package/sway/Config.in   |  2 +-
- package/wmenu/Config.in  | 29 +++++++++++++++++++++++++++++
- package/wmenu/wmenu.hash |  3 +++
- package/wmenu/wmenu.mk   | 20 ++++++++++++++++++++
- 6 files changed, 55 insertions(+), 1 deletion(-)
- create mode 100644 package/wmenu/Config.in
- create mode 100644 package/wmenu/wmenu.hash
- create mode 100644 package/wmenu/wmenu.mk
+ Config.in.legacy                              |  9 ++++++
+ DEVELOPERS                                    |  1 -
+ package/Config.in                             |  1 -
+ .../0001-support-cross-compilation.patch      | 32 -------------------
+ package/dmenu-wayland/Config.in               | 27 ----------------
+ package/dmenu-wayland/dmenu-wayland.hash      |  3 --
+ package/dmenu-wayland/dmenu-wayland.mk        | 29 -----------------
+ 7 files changed, 9 insertions(+), 93 deletions(-)
+ delete mode 100644 package/dmenu-wayland/0001-support-cross-compilation.patch
+ delete mode 100644 package/dmenu-wayland/Config.in
+ delete mode 100644 package/dmenu-wayland/dmenu-wayland.hash
+ delete mode 100644 package/dmenu-wayland/dmenu-wayland.mk
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 02dc3eab73..ca445f4f09 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -143,6 +143,15 @@ comment "----------------------------------------------------"
+ endif
+ 
+ ###############################################################################
++comment "Legacy options removed in 2025.08"
++
++config BR2_PACKAGE_DMENU_WAYLAND
++	bool "dmenu-wayland has been removed"
++	help
++	  The package has been abandoned for several years.
++	  The only package that previously relied on dmenu-wayland
++	  was sway, and that now relies on wmenu. Please select
++	  wmenu instead.
+ 
+ comment "Legacy options removed in 2025.05"
+ 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index c4d14aa875..b92b384253 100644
+index b92b384253..a15cff2ea7 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -44,6 +44,7 @@ F:	package/flutter-sdk-bin/
- F:	package/ivi-homescreen/
- F:	package/libutempter/
- F:	package/tllist/
-+F:	package/wmenu/
- F:	support/testing/tests/package/test_flutter.py
+@@ -28,7 +28,6 @@
  
- N:	Adam Heinrich <adam@adamh.cz>
+ N:	Adam Duskett <adam.duskett@amarulasolutions.com>
+ F:	package/depot-tools/
+-F:	package/dmenu-wayland/
+ F:	package/fcft/
+ F:	package/foot/
+ F:	package/flutter-engine/
 diff --git a/package/Config.in b/package/Config.in
-index a9074ac405..31856384c9 100644
+index 31856384c9..a7dd6f7dcd 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -338,6 +338,7 @@ comment "Graphic applications"
- 	source "package/swaybg/Config.in"
- 	source "package/tesseract-ocr/Config.in"
- 	source "package/tinifier/Config.in"
-+	source "package/wmenu/Config.in"
- 
- comment "Graphic libraries"
- 	source "package/cegui/Config.in"
-diff --git a/package/sway/Config.in b/package/sway/Config.in
-index d78f792c48..1f4b497af3 100644
---- a/package/sway/Config.in
-+++ b/package/sway/Config.in
-@@ -33,7 +33,7 @@ config BR2_PACKAGE_SWAY_SWAYBAR
- 	bool "swaybar"
- 	select BR2_PACKAGE_DEJAVU
- 	select BR2_PACKAGE_JQ if BR2_PACKAGE_BASH_COMPLETION # Runtime
--	select BR2_PACKAGE_DMENU_WAYLAND # Runtime
-+	select BR2_PACKAGE_WMENU # Runtime
- 	help
- 	  Enable support for swaybar
- 
-diff --git a/package/wmenu/Config.in b/package/wmenu/Config.in
-new file mode 100644
-index 0000000000..ce9e70f9f8
---- /dev/null
-+++ b/package/wmenu/Config.in
-@@ -0,0 +1,29 @@
-+config BR2_PACKAGE_WMENU
-+	bool "wmenu"
-+	depends on BR2_USE_MMU # pango
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, pango, wayland
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango
-+	depends on !BR2_STATIC_LIBS # wayland
-+	depends on BR2_INSTALL_LIBSTDCPP # pango
-+	depends on BR2_USE_WCHAR # libglib2, pango
-+	select BR2_PACKAGE_CAIRO
-+	select BR2_PACKAGE_CAIRO_PNG
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+	select BR2_PACKAGE_PANGO
-+	select BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
-+	help
-+	  wmenu is an efficient dynamic menu for Sway and wlroots based
-+	  Wayland compositors. It provides a Wayland-native dmenu
-+	  replacement which maintains the look and feel of dmenu.
-+
-+	  https://codeberg.org/adnano/wmenu
-+
-+comment "wmenu needs a toolchain w/ wchar, threads, C++, dynamic library, gcc >= 4.9"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || BR2_STATIC_LIBS || \
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-diff --git a/package/wmenu/wmenu.hash b/package/wmenu/wmenu.hash
-new file mode 100644
-index 0000000000..c4941001f4
---- /dev/null
-+++ b/package/wmenu/wmenu.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  4e6aea3f8975fec720f6eb87aad620d5297a8a5a137615e4cf047e95d2b9d308  0.2.0.tar.gz
-+sha256  500f0a221b2f3667676f6a084fb4e92ba4f74d09f45bc492e55aec4dd296bff2  LICENSE
-diff --git a/package/wmenu/wmenu.mk b/package/wmenu/wmenu.mk
-new file mode 100644
-index 0000000000..7454dba8b9
---- /dev/null
-+++ b/package/wmenu/wmenu.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# wmenu
-+#
-+################################################################################
-+
-+WMENU_VERSION = 0.2.0
-+WMENU_SOURCE = $(WMENU_VERSION).tar.gz
-+WMENU_SITE = https://codeberg.org/adnano/wmenu/archive
-+WMENU_LICENSE = MIT
-+WMENU_LICENSE_FILES = LICENSE
-+WMENU_DEPENDENCIES = \
-+	cairo \
-+	pango \
-+	wayland \
-+	libxkbcommon \
-+	wayland \
-+	wayland-protocols
-+
-+$(eval $(meson-package))
+@@ -313,7 +313,6 @@ menu "Graphic libraries and applications (graphic/text)"
+ comment "Graphic applications"
+ 	source "package/cage/Config.in"
+ 	source "package/cog/Config.in"
+-	source "package/dmenu-wayland/Config.in"
+ 	source "package/flutter-packages/Config.in"
+ 	source "package/flutter-pi/Config.in"
+ 	source "package/foot/Config.in"
+diff --git a/package/dmenu-wayland/0001-support-cross-compilation.patch b/package/dmenu-wayland/0001-support-cross-compilation.patch
+deleted file mode 100644
+index 3d99330cba..0000000000
+--- a/package/dmenu-wayland/0001-support-cross-compilation.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From cd72cade6250a3ec46dd402b25a0bd55bbb97a88 Mon Sep 17 00:00:00 2001
+-From: Rick van Schijndel <rol3517@gmail.com>
+-Date: Wed, 20 Dec 2023 16:44:12 -0700
+-Subject: [PATCH] support cross-compilation
+-
+-Marking wayland-scanner as native dependency fixes the path check for
+-wayland-scanner.
+-
+-Upstream: https://github.com/nyyManni/dmenu-wayland/pull/23
+-
+-Signed-off-by: Rick van Schijndel <rol3517@gmail.com>
+-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+----
+- meson.build | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/meson.build b/meson.build
+-index 3ae6f69..8d401ff 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -26,7 +26,7 @@ pangocairo          = dependency('pangocairo')
+- rt                  = cc.find_library('rt')
+- wayland_client      = dependency('wayland-client')
+- wayland_protos      = dependency('wayland-protocols')
+--wayland_scanner_dep = dependency('wayland-scanner')
+-+wayland_scanner_dep = dependency('wayland-scanner', native: true)
+- wayland_scanner     = find_program(
+-   wayland_scanner_dep.get_pkgconfig_variable('wayland_scanner')
+- )
+--- 
+-2.43.0
+-
+diff --git a/package/dmenu-wayland/Config.in b/package/dmenu-wayland/Config.in
+deleted file mode 100644
+index 8a4d0918dc..0000000000
+--- a/package/dmenu-wayland/Config.in
++++ /dev/null
+@@ -1,27 +0,0 @@
+-config BR2_PACKAGE_DMENU_WAYLAND
+-	bool "dmenu-wayland"
+-	depends on BR2_USE_MMU # pango
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, pango, wayland
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango
+-	depends on !BR2_STATIC_LIBS # wayland
+-	depends on BR2_INSTALL_LIBSTDCPP # pango
+-	depends on BR2_USE_WCHAR # libglib2, pango
+-	select BR2_PACKAGE_CAIRO
+-	select BR2_PACKAGE_CAIRO_PNG
+-	select BR2_PACKAGE_LIBGLIB2
+-	select BR2_PACKAGE_LIBXKBCOMMON
+-	select BR2_PACKAGE_PANGO
+-	select BR2_PACKAGE_WAYLAND
+-	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+-	help
+-	  dmenu-wl is an efficient dynamic menu for wayland (wlroots).
+-
+-	  https://github.com/nyyManni/dmenu-wayland
+-
+-comment "dmenu-wayland needs a toolchain w/ wchar, threads, C++, dynamic library, gcc >= 4.9"
+-	depends on BR2_USE_MMU
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || BR2_STATIC_LIBS || \
+-		!BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+diff --git a/package/dmenu-wayland/dmenu-wayland.hash b/package/dmenu-wayland/dmenu-wayland.hash
+deleted file mode 100644
+index 1248c4ad66..0000000000
+--- a/package/dmenu-wayland/dmenu-wayland.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed
+-sha256  56340e198a2c58468c6109f3bb07ab8a074487e67b0758b29c9d4fdce7c4d594  dmenu-wayland-a380201dff5bfac2dace553d7eaedb6cea6855f9.tar.gz
+-sha256  8d26bccf8a21c5e29dc756beef534403c935766c815bbb6e7eab0598632b9827  LICENSE
+diff --git a/package/dmenu-wayland/dmenu-wayland.mk b/package/dmenu-wayland/dmenu-wayland.mk
+deleted file mode 100644
+index fec984194c..0000000000
+--- a/package/dmenu-wayland/dmenu-wayland.mk
++++ /dev/null
+@@ -1,29 +0,0 @@
+-################################################################################
+-#
+-# dmenu-wayland
+-#
+-################################################################################
+-
+-DMENU_WAYLAND_VERSION = a380201dff5bfac2dace553d7eaedb6cea6855f9
+-DMENU_WAYLAND_SITE = $(call github,nyyManni,dmenu-wayland,$(DMENU_WAYLAND_VERSION))
+-DMENU_WAYLAND_LICENSE = MIT
+-DMENU_WAYLAND_LICENSE_FILES = LICENSE
+-DMENU_WAYLAND_CFLAGS = $(TARGET_CFLAGS) -std=gnu99
+-
+-# host-wayland is for wayland-scanner
+-DMENU_WAYLAND_DEPENDENCIES = \
+-	host-wayland \
+-	cairo \
+-	libglib2 \
+-	libxkbcommon \
+-	pango \
+-	wayland \
+-	wayland-protocols
+-
+-# By default, sway calls dmenu not dmenu-wl
+-define DMENU_WAYLAND_SYMLINK_DMENU_WL
+-	ln -sf dmenu-wl $(TARGET_DIR)/usr/bin/dmenu
+-endef
+-DMENU_WAYLAND_POST_INSTALL_TARGET_HOOKS += DMENU_WAYLAND_SYMLINK_DMENU_WL
+-
+-$(eval $(meson-package))
 -- 
 2.49.0
 
