@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67ABEC3ABD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:23:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B71FC3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:23:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 28E6A423CB;
-	Fri, 16 May 2025 11:23:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4A52423DD;
+	Fri, 16 May 2025 11:23:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZVAETGxPXs3N; Fri, 16 May 2025 11:23:01 +0000 (UTC)
+ id RRepIaKjXp16; Fri, 16 May 2025 11:23:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1203B41A3F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB49C423C8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1203B41A3F;
-	Fri, 16 May 2025 11:23:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BB49C423C8;
+	Fri, 16 May 2025 11:23:02 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D8B0185
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:05 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1CB741AB
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A8B5161242
+ by smtp3.osuosl.org (Postfix) with ESMTP id CAEFF60AB1
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vr13z9ttoCJN for <buildroot@buildroot.org>;
- Fri, 16 May 2025 11:21:55 +0000 (UTC)
+ id s_sh9xDGIS0Q for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 11:21:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B07A60AB1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77B3F60838
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1B07A60AB1
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 77B3F60838
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 189A1869EB; Fri, 16 May 2025 11:21:55 +0000 (UTC)
+ id 756947FDC5; Fri, 16 May 2025 11:21:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 May 2025 17:05:41 +0200
+Date: Wed, 14 May 2025 20:59:07 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 664d66bee5bf1b89a92ecd3507e5157db3cc6d7d
-X-Git-Newrev: d8d201c95b3546c4f0820b9944919f593b7977a4
+X-Git-Oldrev: 13dfeece138a3a24b84fa495d2a6cb62e32be160
+X-Git-Newrev: c54ef55dfc4ab09ab06530a7991876d6b2582513
 X-Patchwork-Hint: ignore
-Message-Id: <20250516112155.189A1869EB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/gdb: bump 16.x
- series to 16.3
+Message-Id: <20250516112154.756947FDC5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/hiredis: bump to
+ version 1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,133 +66,110 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d8d201c95b3546c4f0820b9944919f593b7977a4
+commit: https://git.buildroot.net/buildroot/commit/?id=c54ef55dfc4ab09ab06530a7991876d6b2582513
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Changes:
+For change log, see:
+https://github.com/redis/hiredis/releases/tag/v1.3.0
 
- Set GDB version number to 16.3.
- gstack: [downstream regression] Output file names and line numbers
- Fix build failure for gdbserver's raw_compare self test
- Fix gdbserver crashes on SVE/SME-enabled systems
- gdb: allow selecting default fg/bg colors in tui mode
- gdb: Fix assertion failure when inline frame #0 is duplicated
- [gdb/tdep] Rewrite i386_canonicalize_syscall
- [gdb/record] Fix out-of-bounds write in aarch64_record_asimd_load_store
- gdb/dwarf: save DWARF version in dwarf2_loclist_baton, remove it from dwarf2_per_cu
- Fix segfault if target_fileio_read_alloc fails
- gdb/tui: use wrefresh if output is not surpressed
- [gdb/corefiles] Fix segfault in core_target_open
- Bump GDB's version number to 16.2.90.DATE-git.
+Note this version raises the minimum cmake version from 3.0.0 to 3.7.0.
+This change fixes build with a host-cmake 4.0.0 (which has removed
+compatibility with cmake < 3.5). Such a failure happens on Arch Linux
+which is now providing cmake 4.0.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fixes:
+https://autobuild.buildroot.org/results/662fc308807866f9e25655541f6a8ef9ff32e55a/
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[Julien: add details in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit b79316096489f09e62c3f1675936f8afe8cdd3b6)
+(cherry picked from commit 11c7d00a59bd263d1234086d8b769a4be397bde8)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore                                    | 18 +++++++++---------
- ...ace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch |  0
- ...ce-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch |  0
- .../gdb/{16.2 => 16.3}/0003-use-asm-sgidefs.h.patch    |  0
- .../0004-gdbserver-fix-build-for-m68k.patch            |  0
- ...0005-nat-fork-inferior-include-linux-ptrace.h.patch |  0
- ...0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch |  0
- .../{16.2 => 16.3}/0007-fix-musl-build-on-riscv.patch  |  0
- .../0008-gdbserver-Makefile.in-fix-NLS-build.patch     |  0
- .../0009-gdb-Fix-native-build-on-xtensa.patch          |  0
- package/gdb/Config.in.host                             |  2 +-
- package/gdb/gdb.hash                                   |  2 +-
- 12 files changed, 11 insertions(+), 11 deletions(-)
+ ...add-option-to-not-install-NuGet-packaging.patch | 51 ----------------------
+ package/hiredis/hiredis.hash                       |  2 +-
+ package/hiredis/hiredis.mk                         |  2 +-
+ 3 files changed, 2 insertions(+), 53 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 48de3f075f..da9096a8da 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -504,15 +504,15 @@ package/gdb/15.1/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch lib_patch.U
- package/gdb/15.1/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
- package/gdb/15.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
- package/gdb/15.1/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
--package/gdb/16.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch lib_patch.Upstream
--package/gdb/16.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch lib_patch.Upstream
--package/gdb/16.2/0003-use-asm-sgidefs.h.patch lib_patch.Upstream
--package/gdb/16.2/0004-gdbserver-fix-build-for-m68k.patch lib_patch.Upstream
--package/gdb/16.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch lib_patch.Upstream
--package/gdb/16.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch lib_patch.Upstream
--package/gdb/16.2/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
--package/gdb/16.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
--package/gdb/16.2/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
-+package/gdb/16.3/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch lib_patch.Upstream
-+package/gdb/16.3/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch lib_patch.Upstream
-+package/gdb/16.3/0003-use-asm-sgidefs.h.patch lib_patch.Upstream
-+package/gdb/16.3/0004-gdbserver-fix-build-for-m68k.patch lib_patch.Upstream
-+package/gdb/16.3/0005-nat-fork-inferior-include-linux-ptrace.h.patch lib_patch.Upstream
-+package/gdb/16.3/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch lib_patch.Upstream
-+package/gdb/16.3/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
-+package/gdb/16.3/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
-+package/gdb/16.3/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
- package/genpart/0001-fix-return-code.patch lib_patch.Upstream
- package/gensio/0001-Fix-missing-EVP_PKEY_ED25519-build-error-on-libressl.patch lib_patch.Upstream
- package/gerbera/S99gerbera lib_sysv.Indent
-diff --git a/package/gdb/16.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch b/package/gdb/16.3/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-similarity index 100%
-rename from package/gdb/16.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-rename to package/gdb/16.3/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-diff --git a/package/gdb/16.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch b/package/gdb/16.3/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-similarity index 100%
-rename from package/gdb/16.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-rename to package/gdb/16.3/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-diff --git a/package/gdb/16.2/0003-use-asm-sgidefs.h.patch b/package/gdb/16.3/0003-use-asm-sgidefs.h.patch
-similarity index 100%
-rename from package/gdb/16.2/0003-use-asm-sgidefs.h.patch
-rename to package/gdb/16.3/0003-use-asm-sgidefs.h.patch
-diff --git a/package/gdb/16.2/0004-gdbserver-fix-build-for-m68k.patch b/package/gdb/16.3/0004-gdbserver-fix-build-for-m68k.patch
-similarity index 100%
-rename from package/gdb/16.2/0004-gdbserver-fix-build-for-m68k.patch
-rename to package/gdb/16.3/0004-gdbserver-fix-build-for-m68k.patch
-diff --git a/package/gdb/16.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch b/package/gdb/16.3/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-similarity index 100%
-rename from package/gdb/16.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-rename to package/gdb/16.3/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-diff --git a/package/gdb/16.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch b/package/gdb/16.3/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
-similarity index 100%
-rename from package/gdb/16.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
-rename to package/gdb/16.3/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
-diff --git a/package/gdb/16.2/0007-fix-musl-build-on-riscv.patch b/package/gdb/16.3/0007-fix-musl-build-on-riscv.patch
-similarity index 100%
-rename from package/gdb/16.2/0007-fix-musl-build-on-riscv.patch
-rename to package/gdb/16.3/0007-fix-musl-build-on-riscv.patch
-diff --git a/package/gdb/16.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch b/package/gdb/16.3/0008-gdbserver-Makefile.in-fix-NLS-build.patch
-similarity index 100%
-rename from package/gdb/16.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch
-rename to package/gdb/16.3/0008-gdbserver-Makefile.in-fix-NLS-build.patch
-diff --git a/package/gdb/16.2/0009-gdb-Fix-native-build-on-xtensa.patch b/package/gdb/16.3/0009-gdb-Fix-native-build-on-xtensa.patch
-similarity index 100%
-rename from package/gdb/16.2/0009-gdb-Fix-native-build-on-xtensa.patch
-rename to package/gdb/16.3/0009-gdb-Fix-native-build-on-xtensa.patch
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 42e3928a19..40fe4cf6d2 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -71,5 +71,5 @@ config BR2_GDB_VERSION
- 	default "arc-2023.09-release" if BR2_arc
- 	default "14.2"     if BR2_GDB_VERSION_14 || (!BR2_PACKAGE_HOST_GDB && !BR2_TOOLCHAIN_GCC_AT_LEAST_9)
- 	default "15.1"	   if BR2_GDB_VERSION_15 || (!BR2_PACKAGE_HOST_GDB && BR2_TOOLCHAIN_GCC_AT_LEAST_9)
--	default "16.2"	   if BR2_GDB_VERSION_16
-+	default "16.3"	   if BR2_GDB_VERSION_16
- 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index 0336e4a7a4..3e2d5a9655 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -1,7 +1,7 @@
- # From https://gcc.gnu.org/pub/gdb/releases/sha512.sum
- sha512  7e07941f1fe661288cc571b4964012ceabc1760624fce20320db2f470c01439b2386f859b5288da13204b758e2e3b22a74c68c012178db93b9529b06f1e22ede  gdb-14.2.tar.xz
- sha512  0217434073023a8b8316088bf3ee95d53a1b6a7897f6269095429016a8900f9a05e130c390d8d5d5550cc515c16519de1071d8eef96aa58e38056c7e37da1d8b  gdb-15.1.tar.xz
--sha512  f04a6335dbdee371edb7e3213294fcbb878ac39adedb73f7e17e621f54350488f5f5bea9bc742639239c122d590bed158771a74fc3aaeaa7fa0ae304232576a3  gdb-16.2.tar.xz
-+sha512  fffd6689c3405466a179670b04720dc825e4f210a761f63dd2b33027432f8cd5d1c059c431a5ec9e165eedd1901220b5329d73c522f9a444788888c731b29e9c  gdb-16.3.tar.xz
+diff --git a/package/hiredis/0001-CMakeList-add-option-to-not-install-NuGet-packaging.patch b/package/hiredis/0001-CMakeList-add-option-to-not-install-NuGet-packaging.patch
+deleted file mode 100644
+index dbe8bc0ae6..0000000000
+--- a/package/hiredis/0001-CMakeList-add-option-to-not-install-NuGet-packaging.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From ff7a064490e0aacf718a5263b25b2ddaad0d245e Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Sat, 20 Jan 2024 13:53:39 +0100
+-Subject: [PATCH] CMakeList: add option to not install NuGet packaging
+-
+-The NuGet hiredis.target packaging description file is of no use on
+-systems that are not using NuGet, like Linux systems, and the spurious
+-presence of that file is not "clean".
+-
+-Add a cmake option to allow users to disable installation of that file.
+-As some people may have relied on that file to be installed, continue to
+-install it by default.
+-
+-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+-Upstream: https://github.com/redis/hiredis/commit/ff7a064490e0aacf718a5263b25b2ddaad0d245e
+----
+- CMakeLists.txt | 11 ++++++++---
+- 1 file changed, 8 insertions(+), 3 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index b7d6ee8..0fcf29b 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -6,6 +6,9 @@ OPTION(DISABLE_TESTS "If tests should be compiled or not" OFF)
+- OPTION(ENABLE_SSL_TESTS "Should we test SSL connections" OFF)
+- OPTION(ENABLE_EXAMPLES "Enable building hiredis examples" OFF)
+- OPTION(ENABLE_ASYNC_TESTS "Should we run all asynchronous API tests" OFF)
+-+# Historically, the NuGet file was always install; default
+-+# to ON for those who rely on that historical behaviour.
+-+OPTION(ENABLE_NUGET "Install NuGET packaging details" ON)
+-
+- MACRO(getVersionBit name)
+-   SET(VERSION_REGEX "^#define ${name} (.+)$")
+-@@ -105,9 +108,11 @@ if (MSVC AND BUILD_SHARED_LIBS)
+-         CONFIGURATIONS Debug RelWithDebInfo)
+- endif()
+-
+--# For NuGet packages
+--INSTALL(FILES hiredis.targets
+--    DESTINATION build/native)
+-+if (ENABLE_NUGET)
+-+    # For NuGet packages
+-+    INSTALL(FILES hiredis.targets
+-+        DESTINATION build/native)
+-+endif()
+-
+- INSTALL(FILES hiredis.h read.h sds.h async.h alloc.h sockcompat.h
+-     DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/hiredis)
+---
+-2.43.0
+-
+diff --git a/package/hiredis/hiredis.hash b/package/hiredis/hiredis.hash
+index 16ee442d93..b9b4fe556e 100644
+--- a/package/hiredis/hiredis.hash
++++ b/package/hiredis/hiredis.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  82ad632d31ee05da13b537c124f819eb88e18851d9cb0c30ae0552084811588c  hiredis-1.2.0.tar.gz
++sha256  25cee4500f359cf5cad3b51ed62059aadfc0939b05150c1f19c7e2829123631c  hiredis-1.3.0.tar.gz
+ sha256  dca05ce8fc87a8261783b4aed0deef8becc9350b6aa770bc714d0c1833b896eb  COPYING
+diff --git a/package/hiredis/hiredis.mk b/package/hiredis/hiredis.mk
+index 86f35bd4cd..f7acb2f131 100644
+--- a/package/hiredis/hiredis.mk
++++ b/package/hiredis/hiredis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Locally calculated (fetched from Github)
- sha512  3518b47d5c11d1fb478ee152bde1719363f9391db73f3b9f5491217c17742bef8ebca6a51a40302dfaa9476c5a32a8b8f70a4bf64289422dea5f750ae53ab88d  gdb-arc-2023.09-release.tar.gz
+-HIREDIS_VERSION_MAJOR = 1.2
++HIREDIS_VERSION_MAJOR = 1.3
+ HIREDIS_VERSION = $(HIREDIS_VERSION_MAJOR).0
+ HIREDIS_SITE = $(call github,redis,hiredis,v$(HIREDIS_VERSION))
+ HIREDIS_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
