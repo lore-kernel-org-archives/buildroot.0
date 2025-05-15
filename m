@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 222AEC3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:22:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CDBAC3ABDD
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:22:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E279C41992;
-	Fri, 16 May 2025 11:22:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B7C141E6C;
+	Fri, 16 May 2025 11:22:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KJh5eFMHjOkY; Fri, 16 May 2025 11:22:40 +0000 (UTC)
+ id HeAO0vC7OlML; Fri, 16 May 2025 11:22:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 162C941DB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 614C941E68
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 162C941DB0;
-	Fri, 16 May 2025 11:22:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 24F8C1C7
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 614C941E68;
+	Fri, 16 May 2025 11:22:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 08561185
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 932F38128D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3F2A36120C
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id saqQcCt7jnNu for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Plre3BvPV3hF for <buildroot@buildroot.org>;
  Fri, 16 May 2025 11:21:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9665081301
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7400D61242
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9665081301
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7400D61242
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 940C181063; Fri, 16 May 2025 11:21:54 +0000 (UTC)
+ id 71D68869EB; Fri, 16 May 2025 11:21:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 14 May 2025 21:03:33 +0200
+Date: Thu, 15 May 2025 17:06:27 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 5ca8d709073459225b48140238ac740eeecb5d3f
-X-Git-Newrev: 41f8b8daa30604c96ea904d932d54ea868bcc804
+X-Git-Oldrev: 196043d0e8b485da4e725798bb2e113ef28e48cf
+X-Git-Newrev: 4cf750826ff31bcddcdece037500c4d1e5cc3490
 X-Patchwork-Hint: ignore
-Message-Id: <20250516112154.940C181063@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/sunxi-mali-utgard-driver: bump to version 2025-05-02
+Message-Id: <20250516112155.71D68869EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/m4: fix build
+ failure with host-gcc 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,42 +66,86 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41f8b8daa30604c96ea904d932d54ea868bcc804
+commit: https://git.buildroot.net/buildroot/commit/?id=4cf750826ff31bcddcdece037500c4d1e5cc3490
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-It builds up to Linux 6.13
+When compiling host-m4 1.4.19 with a host gcc 15 (which is the version
+included in Fedora 42, released on 2025-04-15), compilation fails with
+error:
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+    In file included from gl_avltree_oset.h:21,
+                     from gl_avltree_oset.c:21:
+    gl_oset.h:275:1: warning: 'nodiscard' attribute ignored [-Wattributes]
+      275 | GL_OSET_INLINE _GL_ATTRIBUTE_NODISCARD int
+          | ^~~~~~~~~~~~~~
+    gl_oset.h:275:40: error: expected identifier or '(' before 'int'
+      275 | GL_OSET_INLINE _GL_ATTRIBUTE_NODISCARD int
+          |                                        ^~~
+
+This error is due to the gnulib copy included in m4 1.4.19, which does
+not detect properly the default C language standard of gcc 15 which
+has been changed from "gnu17" to "gnu23". See [1]. Note that m4 1.4.19
+is the latest version available at the time of this commit, and was
+released in May 2021. The issue is tracked upstream in [2].
+
+Upcoming m4 release is expected to fix this issue, by updating its
+gnulib copy. See [3], which states: "Update to comply with newer C
+standards, and inherit portability improvements from gnulib".
+
+Until this new m4 version is released, this commit fixes the issue by
+forcing the C langage standard to "-std=gnu17" (the previous gcc
+default) when host-gcc 15 is detected.
+
+Note that the "-std=gnu17" option was introduced in gcc 8. See [4].
+This is the reason why this patch adds this option only when the
+problematic gcc 15 version is detected.
+
+See also the discussions around this patch at [5].
+
+Fixes:
+https://autobuild.buildroot.org/results/1c33ef0a710cfae13e496485787b351c8f951217/
+(and many, many others)
+
+[1] https://gcc.gnu.org/gcc-15/changes.html#c
+[2] https://savannah.gnu.org/support/?111150
+[3] https://git.savannah.gnu.org/cgit/m4.git/commit/?h=branch-1.4&id=a22c9802dd7e724eaefb21dc21d84ac2d3a49c89
+[4] https://gcc.gnu.org/gcc-8/changes.html#c
+[5] https://lore.kernel.org/buildroot/CAPWx8vsoJUt8YMJG1aUqFRK1=yizNbgjVjGL1Q1+9ygjJGnZLA@mail.gmail.com/
+
+Signed-off-by: Joseph Zikusooka (ZIK) <zik@jambula.net>
+Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+[Julien:
+ - change mail url to lore.kernel.org for stable link
+ - reword, reflow and add extra info in the commit log
+ - force -std=gnu17 only when host gcc-15 is detected
+ - add a comment in .mk to remove the workaround at next bump
+]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 50c7542326aed41fc558fc7b4969ea747861f7bb)
+(cherry picked from commit 7a07a9d155b8f601d68f07ee0ed1dc8d48907644)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash | 2 +-
- package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/m4/m4.mk | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash
-index 5f3e001325..b8f96ae1b3 100644
---- a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash
-+++ b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  151a56eb6a47efee19369a1c08b7aec506e48f983683a3cd05c5494cedf0fb69  sunxi-mali-utgard-driver-ad7e98bc1e81c7ac9c897f854c1a429d33e45d58.tar.gz
-+sha256  ce73be1fb5f5d24f0e66516623db0b51c45adb30d845bfa8cb78aed9b6d8913f  sunxi-mali-utgard-driver-9926236a20904ecfca68f3365657c11f92695546.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
-index ba7c50718d..9c68285256 100644
---- a/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
-+++ b/package/sunxi-mali-utgard-driver/sunxi-mali-utgard-driver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/m4/m4.mk b/package/m4/m4.mk
+index 39ad898b10..f5e1e27ad8 100644
+--- a/package/m4/m4.mk
++++ b/package/m4/m4.mk
+@@ -10,4 +10,14 @@ M4_SITE = $(BR2_GNU_MIRROR)/m4
+ M4_LICENSE = GPL-3.0+
+ M4_LICENSE_FILES = COPYING
  
--SUNXI_MALI_UTGARD_DRIVER_VERSION = ad7e98bc1e81c7ac9c897f854c1a429d33e45d58
-+SUNXI_MALI_UTGARD_DRIVER_VERSION = 9926236a20904ecfca68f3365657c11f92695546
- SUNXI_MALI_UTGARD_DRIVER_SITE = $(call github,giuliobenetti,sunxi-mali,$(SUNXI_MALI_UTGARD_DRIVER_VERSION))
- SUNXI_MALI_UTGARD_DRIVER_DEPENDENCIES = linux
- SUNXI_MALI_UTGARD_DRIVER_LICENSE = GPL-2.0
++# gcc-15 defaults to -std=gnu23 which is incorrectly detected and
++# generates build failures in the gnulib copy included in
++# m4-1.4.19. We workaround this by forcing the previous gcc default
++# standard, which is -std=gnu17 only when host gcc is >= 15. This
++# workaround can be removed when m4 will be updated to a version
++# including a fix for gcc-15.
++ifeq ($(BR2_HOST_GCC_AT_LEAST_15),y)
++HOST_M4_CONF_ENV = CFLAGS="$(HOST_CFLAGS) -std=gnu17"
++endif
++
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
