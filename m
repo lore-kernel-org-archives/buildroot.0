@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16D9CC3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:22:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3D28C3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:22:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C734D612FE;
-	Fri, 16 May 2025 11:22:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7039B41A5B;
+	Fri, 16 May 2025 11:22:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FHNeFcOsRVb3; Fri, 16 May 2025 11:22:24 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zZcXSVl7OlXd; Fri, 16 May 2025 11:22:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E907F612F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97EF441C0E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E907F612F6;
-	Fri, 16 May 2025 11:22:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 764FE1AB
+	by smtp4.osuosl.org (Postfix) with ESMTP id 97EF441C0E;
+	Fri, 16 May 2025 11:22:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C6E7713D
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C08BB61267
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC4154227E
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FK1r7f0UeTvj for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y9J2fiwZsyBm for <buildroot@buildroot.org>;
  Fri, 16 May 2025 11:21:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F18CF6112D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45A6F40B08
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F18CF6112D
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 45A6F40B08
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EEAC9869EB; Fri, 16 May 2025 11:21:54 +0000 (UTC)
+ id 4397886A17; Fri, 16 May 2025 11:21:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 May 2025 17:03:44 +0200
+Date: Thu, 15 May 2025 17:06:02 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 7109348aaf313f1a3425484e336df48846923077
-X-Git-Newrev: b80e9d6299bb9f8983389b2434a46aeef19be555
+X-Git-Oldrev: 212e493ea0650d1a0834bc04f6b530057c9c2dc6
+X-Git-Newrev: 0161ac7af37c34c2e47e2c91b953509b2b7f03ef
 X-Patchwork-Hint: ignore
-Message-Id: <20250516112154.EEAC9869EB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- configs/friendlyarm_nanopi_r3s: fix host linux headers custom version
+Message-Id: <20250516112155.4397886A17@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/tpm2-pkcs11: bump
+ to version 1.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,53 +66,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b80e9d6299bb9f8983389b2434a46aeef19be555
+commit: https://git.buildroot.net/buildroot/commit/?id=0161ac7af37c34c2e47e2c91b953509b2b7f03ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Since its introduction in commit [1], the
-friendlyarm_nanopi_r3s_defconfig is failing to build with error:
+1.9.0..1.9.1 changes described at:
 
-    Incorrect selection of kernel headers: expected 6.12.x, got 6.13.x
+  https://github.com/tpm2-software/tpm2-pkcs11/releases/tag/1.9.1
 
-The error happens because the defconfig has:
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
-and
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.13.4"
-
-This commit fixes the issue by setting instead:
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.28"
+Update suggested by https://gitlab.com/magerkraut at
+https://gitlab.com/buildroot.org/buildroot/-/issues/109 as "There is a
+issue with the database LOCK file".
 
 Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/9887216429
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/41734e00c0cc36f4df2f492e72b535a0716d4048
+  https://gitlab.com/buildroot.org/buildroot/-/issues/109
 
-Cc: Sergey Kuzminov <kuzminov.sergey81@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 74c4dd41502384a797829ae16167c28f50a24e3e)
-[Thomas:
-  Since this has been introduced in LTS branch I set the kernel
-  version to 6.12.x present in LTS instead of changing the linux header
-  version.
-]
+(cherry picked from commit 07eb63935aa566864cae08daeef83bb9bd113a47)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- configs/friendlyarm_nanopi_r3s_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/tpm2-pkcs11/tpm2-pkcs11.hash | 2 +-
+ package/tpm2-pkcs11/tpm2-pkcs11.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/configs/friendlyarm_nanopi_r3s_defconfig b/configs/friendlyarm_nanopi_r3s_defconfig
-index d0a2478637..e470f0586a 100644
---- a/configs/friendlyarm_nanopi_r3s_defconfig
-+++ b/configs/friendlyarm_nanopi_r3s_defconfig
-@@ -11,7 +11,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c $(BINARIES_DIR)/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.13.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.28"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/friendlyarm/nanopi-r3s/kernel.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+diff --git a/package/tpm2-pkcs11/tpm2-pkcs11.hash b/package/tpm2-pkcs11/tpm2-pkcs11.hash
+index 797955a69b..5f5abfbbe8 100644
+--- a/package/tpm2-pkcs11/tpm2-pkcs11.hash
++++ b/package/tpm2-pkcs11/tpm2-pkcs11.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  35bf06c30cfa76fc0eba2c5f503cf7dd0d34a66afb2d292fee896b90362f633b  tpm2-pkcs11-1.9.0.tar.gz
++sha256  ce24aa5ec2471545576e892b6f64fd873a424371bbf9be4ca3a0e689ea11c9b7  tpm2-pkcs11-1.9.1.tar.gz
+ sha256  793aa007f793458434d7cc60b1c827053a399308658b32fcaa6023802adc22e1  LICENSE
+diff --git a/package/tpm2-pkcs11/tpm2-pkcs11.mk b/package/tpm2-pkcs11/tpm2-pkcs11.mk
+index c6218d772e..b26f53de27 100644
+--- a/package/tpm2-pkcs11/tpm2-pkcs11.mk
++++ b/package/tpm2-pkcs11/tpm2-pkcs11.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TPM2_PKCS11_VERSION = 1.9.0
++TPM2_PKCS11_VERSION = 1.9.1
+ TPM2_PKCS11_SITE = https://github.com/tpm2-software/tpm2-pkcs11/releases/download/$(TPM2_PKCS11_VERSION)
+ TPM2_PKCS11_LICENSE = BSD-2-Clause
+ TPM2_PKCS11_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
