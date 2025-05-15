@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2237BC3ABDD
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:23:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 234D7C3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:23:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D37E44245C;
-	Fri, 16 May 2025 11:23:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EBC9A424CB;
+	Fri, 16 May 2025 11:23:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BtqKA1Nh6vOq; Fri, 16 May 2025 11:23:50 +0000 (UTC)
+ id r64phkYhpaeA; Fri, 16 May 2025 11:23:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC4DE41A47
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA080424CC
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC4DE41A47;
-	Fri, 16 May 2025 11:23:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA080424CC;
+	Fri, 16 May 2025 11:23:51 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B8AE2185
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:22 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0D422185
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 16C7083ABC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 42F8E811FF
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WZ-Ofp8fg9Ek for <buildroot@buildroot.org>;
- Fri, 16 May 2025 11:21:57 +0000 (UTC)
+ id k393YCMt-ian for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 11:21:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2443F811B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B512F83ACC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2443F811B1
+ by smtp1.osuosl.org (Postfix) with ESMTP id B512F83ACC
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 21A2D86A00; Fri, 16 May 2025 11:21:55 +0000 (UTC)
+ id B2E80869EB; Fri, 16 May 2025 11:21:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 May 2025 17:05:45 +0200
+Date: Thu, 15 May 2025 17:08:24 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: d8d201c95b3546c4f0820b9944919f593b7977a4
-X-Git-Newrev: 0bcad418007d341972817357888c7d1245f0677d
+X-Git-Oldrev: 4776614f2fccce12a24a422477e734e06eb85204
+X-Git-Newrev: 5e8adee60c3cff384944db53097fc8a8178acadc
 X-Patchwork-Hint: ignore
-Message-Id: <20250516112155.21A2D86A00@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/gdb: bump 15.x
- series to 15.2
+Message-Id: <20250516112155.B2E80869EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/berkeleydb: fix
+ build with gcc-15.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,132 +66,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0bcad418007d341972817357888c7d1245f0677d
+commit: https://git.buildroot.net/buildroot/commit/?id=5e8adee60c3cff384944db53097fc8a8178acadc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Changes:
+Inspired by
+https://src.fedoraproject.org/rpms/libdb/c/c250c61cc3d56c5cff7ba59308f46245a32bdc69
 
- Set GDB version number to 15.2.
- [gdb/python] Make sure python sys.exit makes gdb exit
- [gdb/symtab] Revert "Change handling of DW_TAG_enumeration_type in DWARF scanner"
- [gdb/testsuite] Add regression test for PR32158
- [gdb/testsuite] Add gdb.dwarf2/enum-type-c++.exp, regression test for PR31900.
- gdb-15-branch: Clear the X86_XSTATE_MPX bit in XCRO for x32
- Recognize -2 as a tombstone value in .debug_line
- [gdb] Handle ^C during disassembly
- Mark unavailable bytes of limited-length arrays when allocating contents
- gdb/solib-frv: move lm_info object to solib
- Fix loading a saved recording
- Bump GDB's version number to 15.1.90.DATE-git.
+"GCC 15 defaults to C23.  The last release of this package was over a
+ decade ago, and it is no longer maintained, therefore it should not be
+ expected to compile to the latest standards."
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit e40bf89e40109f5469cf51abfce52e7c4f690965)
+(cherry picked from commit c1d422edde19d07d6406705b1a4b059125dba689)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- .checkpackageignore                                    | 18 +++++++++---------
- ...ace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch |  0
- ...ce-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch |  0
- .../gdb/{15.1 => 15.2}/0003-use-asm-sgidefs.h.patch    |  0
- .../0004-gdbserver-fix-build-for-m68k.patch            |  0
- ...0005-nat-fork-inferior-include-linux-ptrace.h.patch |  0
- ...0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch |  0
- .../{15.1 => 15.2}/0007-fix-musl-build-on-riscv.patch  |  0
- .../0008-gdbserver-Makefile.in-fix-NLS-build.patch     |  0
- .../0009-gdb-Fix-native-build-on-xtensa.patch          |  0
- package/gdb/Config.in.host                             |  2 +-
- package/gdb/gdb.hash                                   |  2 +-
- 12 files changed, 11 insertions(+), 11 deletions(-)
+ package/berkeleydb/berkeleydb.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index da9096a8da..2758b62f8b 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -495,15 +495,15 @@ package/gdb/14.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch lib_patch.U
- package/gdb/14.2/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
- package/gdb/14.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
- package/gdb/14.2/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
--package/gdb/15.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch lib_patch.Upstream
--package/gdb/15.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch lib_patch.Upstream
--package/gdb/15.1/0003-use-asm-sgidefs.h.patch lib_patch.Upstream
--package/gdb/15.1/0004-gdbserver-fix-build-for-m68k.patch lib_patch.Upstream
--package/gdb/15.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch lib_patch.Upstream
--package/gdb/15.1/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch lib_patch.Upstream
--package/gdb/15.1/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
--package/gdb/15.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
--package/gdb/15.1/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
-+package/gdb/15.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch lib_patch.Upstream
-+package/gdb/15.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch lib_patch.Upstream
-+package/gdb/15.2/0003-use-asm-sgidefs.h.patch lib_patch.Upstream
-+package/gdb/15.2/0004-gdbserver-fix-build-for-m68k.patch lib_patch.Upstream
-+package/gdb/15.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch lib_patch.Upstream
-+package/gdb/15.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch lib_patch.Upstream
-+package/gdb/15.2/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
-+package/gdb/15.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
-+package/gdb/15.2/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
- package/gdb/16.3/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch lib_patch.Upstream
- package/gdb/16.3/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch lib_patch.Upstream
- package/gdb/16.3/0003-use-asm-sgidefs.h.patch lib_patch.Upstream
-diff --git a/package/gdb/15.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch b/package/gdb/15.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-similarity index 100%
-rename from package/gdb/15.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-rename to package/gdb/15.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-diff --git a/package/gdb/15.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch b/package/gdb/15.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-similarity index 100%
-rename from package/gdb/15.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-rename to package/gdb/15.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-diff --git a/package/gdb/15.1/0003-use-asm-sgidefs.h.patch b/package/gdb/15.2/0003-use-asm-sgidefs.h.patch
-similarity index 100%
-rename from package/gdb/15.1/0003-use-asm-sgidefs.h.patch
-rename to package/gdb/15.2/0003-use-asm-sgidefs.h.patch
-diff --git a/package/gdb/15.1/0004-gdbserver-fix-build-for-m68k.patch b/package/gdb/15.2/0004-gdbserver-fix-build-for-m68k.patch
-similarity index 100%
-rename from package/gdb/15.1/0004-gdbserver-fix-build-for-m68k.patch
-rename to package/gdb/15.2/0004-gdbserver-fix-build-for-m68k.patch
-diff --git a/package/gdb/15.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch b/package/gdb/15.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-similarity index 100%
-rename from package/gdb/15.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-rename to package/gdb/15.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-diff --git a/package/gdb/15.1/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch b/package/gdb/15.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
-similarity index 100%
-rename from package/gdb/15.1/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
-rename to package/gdb/15.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
-diff --git a/package/gdb/15.1/0007-fix-musl-build-on-riscv.patch b/package/gdb/15.2/0007-fix-musl-build-on-riscv.patch
-similarity index 100%
-rename from package/gdb/15.1/0007-fix-musl-build-on-riscv.patch
-rename to package/gdb/15.2/0007-fix-musl-build-on-riscv.patch
-diff --git a/package/gdb/15.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch b/package/gdb/15.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch
-similarity index 100%
-rename from package/gdb/15.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch
-rename to package/gdb/15.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch
-diff --git a/package/gdb/15.1/0009-gdb-Fix-native-build-on-xtensa.patch b/package/gdb/15.2/0009-gdb-Fix-native-build-on-xtensa.patch
-similarity index 100%
-rename from package/gdb/15.1/0009-gdb-Fix-native-build-on-xtensa.patch
-rename to package/gdb/15.2/0009-gdb-Fix-native-build-on-xtensa.patch
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 40fe4cf6d2..54247ad642 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -70,6 +70,6 @@ config BR2_GDB_VERSION
- 	string
- 	default "arc-2023.09-release" if BR2_arc
- 	default "14.2"     if BR2_GDB_VERSION_14 || (!BR2_PACKAGE_HOST_GDB && !BR2_TOOLCHAIN_GCC_AT_LEAST_9)
--	default "15.1"	   if BR2_GDB_VERSION_15 || (!BR2_PACKAGE_HOST_GDB && BR2_TOOLCHAIN_GCC_AT_LEAST_9)
-+	default "15.2"	   if BR2_GDB_VERSION_15 || (!BR2_PACKAGE_HOST_GDB && BR2_TOOLCHAIN_GCC_AT_LEAST_9)
- 	default "16.3"	   if BR2_GDB_VERSION_16
- 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index 3e2d5a9655..8bef9cd374 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -1,6 +1,6 @@
- # From https://gcc.gnu.org/pub/gdb/releases/sha512.sum
- sha512  7e07941f1fe661288cc571b4964012ceabc1760624fce20320db2f470c01439b2386f859b5288da13204b758e2e3b22a74c68c012178db93b9529b06f1e22ede  gdb-14.2.tar.xz
--sha512  0217434073023a8b8316088bf3ee95d53a1b6a7897f6269095429016a8900f9a05e130c390d8d5d5550cc515c16519de1071d8eef96aa58e38056c7e37da1d8b  gdb-15.1.tar.xz
-+sha512  624007deceb5b15ba89c0725883d1a699fa46714ef30887f3d0165e17c5d65d634671740a135aa69e437d916218abb08cfa2a38ed309ff19d48f51da56b2a8ba  gdb-15.2.tar.xz
- sha512  fffd6689c3405466a179670b04720dc825e4f210a761f63dd2b33027432f8cd5d1c059c431a5ec9e165eedd1901220b5329d73c522f9a444788888c731b29e9c  gdb-16.3.tar.xz
- 
- # Locally calculated (fetched from Github)
+diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
+index 1c121370db..b2d4b689f3 100644
+--- a/package/berkeleydb/berkeleydb.mk
++++ b/package/berkeleydb/berkeleydb.mk
+@@ -26,6 +26,7 @@ BERKELEYDB_BINARIES = db_archive db_checkpoint db_deadlock db_dump \
+ define BERKELEYDB_CONFIGURE_CMDS
+ 	(cd $(@D)/build_unix; rm -rf config.cache; \
+ 		$(TARGET_CONFIGURE_OPTS) \
++		CFLAGS="$(TARGET_CFLAGS) -std=gnu99" \
+ 		$(TARGET_CONFIGURE_ARGS) \
+ 		../dist/configure $(QUIET) \
+ 		--target=$(GNU_TARGET_NAME) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
