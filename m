@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CD34C3ABDD
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:23:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EC4BC3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:23:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4364C424B6;
-	Fri, 16 May 2025 11:23:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03F1861356;
+	Fri, 16 May 2025 11:23:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8QmaHA0le_ff; Fri, 16 May 2025 11:23:46 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gsTGufs1rT0N; Fri, 16 May 2025 11:23:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49457424B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F7EE613D3
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 49457424B1;
-	Fri, 16 May 2025 11:23:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F7EE613D3;
+	Fri, 16 May 2025 11:23:48 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 767E813D
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:20 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 86697185
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CB3CF839BC
+ by smtp1.osuosl.org (Postfix) with ESMTP id EBBA783A8B
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ueeo7V_rZXUs for <buildroot@buildroot.org>;
- Fri, 16 May 2025 11:21:57 +0000 (UTC)
+ id oYRr_ZRnMGAN for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 11:21:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C62083ABC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5B9083C99
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C62083ABC
+ by smtp1.osuosl.org (Postfix) with ESMTP id C5B9083C99
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 87CF486A00; Fri, 16 May 2025 11:21:55 +0000 (UTC)
+ id C21E882929; Fri, 16 May 2025 11:21:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 May 2025 17:06:37 +0200
+Date: Thu, 15 May 2025 17:08:34 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 869469e9534fa6715ed0d8bf3764f0df882f05c8
-X-Git-Newrev: c120eb5df08361bc473dc823aa8612168214f403
+X-Git-Oldrev: 06c6c49fe82732d88aef1a4809806428cdcb1ac0
+X-Git-Newrev: dae673fb63eaeebb348c6e7a80db501e9b9f4211
 X-Patchwork-Hint: ignore
-Message-Id: <20250516112155.87CF486A00@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] configs/qemu_mips*:
- backport a patch for GCC 15.x compatibility
+Message-Id: <20250516112155.C21E882929@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-django:
+ security bump to 5.1.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,80 +66,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c120eb5df08361bc473dc823aa8612168214f403
+commit: https://git.buildroot.net/buildroot/commit/?id=dae673fb63eaeebb348c6e7a80db501e9b9f4211
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Mips kernel maintainer merged a patch [1] for GCC 15.x compatibility
-that will likely be merged upstream soon.
+Fixes CVE-2025-32873 [1].
+Django also updates setuptools[2], so we can remove the --skip-dependency-check
+flag and need to update the package archive capitalization accordingly.
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=0f4ae7c6ecb89bfda026d210dcf8216fb67d2333
+[1] https://www.djangoproject.com/weblog/2025/may/07/security-releases/
+[2] https://github.com/django/django/commit/bbf376bbc8cdfca817b54e7df99539633d10b06e
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 97c7311c64468532c71699e18e724d8488d3aa3c)
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 09299c5b0cf4841e20ee8f8196a4122890e6530f)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...d-flag-specified-in-KBUILD_CFLAGS-to-vdso.patch | 52 ++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 7 +++----
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/board/qemu/patches/linux/0001-mips-Add-std-flag-specified-in-KBUILD_CFLAGS-to-vdso.patch b/board/qemu/patches/linux/0001-mips-Add-std-flag-specified-in-KBUILD_CFLAGS-to-vdso.patch
-new file mode 100644
-index 0000000000..630fcf6315
---- /dev/null
-+++ b/board/qemu/patches/linux/0001-mips-Add-std-flag-specified-in-KBUILD_CFLAGS-to-vdso.patch
-@@ -0,0 +1,52 @@
-+From c94606e06b54bc7b909fb342aa8dae732b50f5cd Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Sat, 29 Mar 2025 08:39:03 -0700
-+Subject: [PATCH] mips: Add -std= flag specified in KBUILD_CFLAGS to vdso
-+ CFLAGS
-+
-+GCC 15 changed the default C standard dialect from gnu17 to gnu23,
-+which should not have impacted the kernel because it explicitly requests
-+the gnu11 standard in the main Makefile. However, mips/vdso code uses
-+its own CFLAGS without a '-std=' value, which break with this dialect
-+change because of the kernel's own definitions of bool, false, and true
-+conflicting with the C23 reserved keywords.
-+
-+  include/linux/stddef.h:11:9: error: cannot use keyword 'false' as enumeration constant
-+     11 |         false   = 0,
-+        |         ^~~~~
-+  include/linux/stddef.h:11:9: note: 'false' is a keyword with '-std=c23' onwards
-+  include/linux/types.h:35:33: error: 'bool' cannot be defined via 'typedef'
-+     35 | typedef _Bool                   bool;
-+        |                                 ^~~~
-+  include/linux/types.h:35:33: note: 'bool' is a keyword with '-std=c23' onwards
-+
-+Add -std as specified in KBUILD_CFLAGS to the decompressor and purgatory
-+CFLAGS to eliminate these errors and make the C standard version of these
-+areas match the rest of the kernel.
-+
-+Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=0f4ae7c6ecb89bfda026d210dcf8216fb67d2333
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+Cc: stable@vger.kernel.org
-+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-+[Romain: backport to 6.12.27]
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+---
-+ arch/mips/vdso/Makefile | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-+index b289b2c1b294..c729bd687804 100644
-+--- a/arch/mips/vdso/Makefile
-++++ b/arch/mips/vdso/Makefile
-+@@ -27,6 +27,7 @@ endif
-+ # offsets.
-+ cflags-vdso := $(ccflags-vdso) \
-+ 	$(filter -W%,$(filter-out -Wa$(comma)%,$(KBUILD_CFLAGS))) \
-++	$(filter -std=%,$(KBUILD_CFLAGS)) \
-+ 	-O3 -g -fPIC -fno-strict-aliasing -fno-common -fno-builtin -G 0 \
-+ 	-mrelax-pic-calls $(call cc-option, -mexplicit-relocs) \
-+ 	-fno-stack-protector -fno-jump-tables -DDISABLE_BRANCH_PROFILING \
-+-- 
-+2.49.0
-+
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 1e197004d0..57b9e9fb0e 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  80247a8b48cdac55e5ad3fb682ab71a3  Django-5.1.8.tar.gz
+-sha256  42e92a1dd2810072bcc40a39a212b693f94406d0ba0749e68eb642f31dc770b4  Django-5.1.8.tar.gz
++md5  da93c81fcaf2e0b4dab3cf44e7564c7c  django-5.1.9.tar.gz
++sha256  565881bdd0eb67da36442e9ac788bda90275386b549070d70aee86327781a4fc  django-5.1.9.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index b64d8e4cd1..fd8a4eb9e8 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,15 +4,14 @@
+ #
+ ################################################################################
+ 
+-PYTHON_DJANGO_VERSION = 5.1.8
+-PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
++PYTHON_DJANGO_VERSION = 5.1.9
++PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/00/40/45adc1b93435d1b418654a734b68351bb6ce0a0e5e37b2f0e9aeb1a2e233
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/10/08/2e6f05494b3fc0a3c53736846034f882b82ee6351791a7815bbb45715d79
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+ PYTHON_DJANGO_CPE_ID_PRODUCT = django
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
+-PYTHON_DJANGO_BUILD_OPTS = --skip-dependency-check
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
