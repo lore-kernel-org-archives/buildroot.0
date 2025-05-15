@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34A9BC3ABD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:23:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A659C3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:23:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EABE9419AB;
-	Fri, 16 May 2025 11:23:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF7E842407;
+	Fri, 16 May 2025 11:23:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pkgKr4gb-a2V; Fri, 16 May 2025 11:23:13 +0000 (UTC)
+ id KFS0gMtuJnAu; Fri, 16 May 2025 11:23:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20C0542406
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE1444240A
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 20C0542406;
-	Fri, 16 May 2025 11:23:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9781013D
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CE1444240A;
+	Fri, 16 May 2025 11:23:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1426813D
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0738783CB5
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 99BA96112D
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LECO9omTSU00 for <buildroot@buildroot.org>;
- Fri, 16 May 2025 11:21:56 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kzaQtEa8ZLV9 for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 11:21:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D7C9581517
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91C316103E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D7C9581517
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 91C316103E
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D55ED86A00; Fri, 16 May 2025 11:21:54 +0000 (UTC)
+ id 8E6DE869EB; Fri, 16 May 2025 11:21:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 14 May 2025 21:05:41 +0200
+Date: Thu, 15 May 2025 17:06:42 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 9da761ed3d702f2be394474a7896796ba5a370d5
-X-Git-Newrev: 83acde521fccf1f5e108aeed1b3111ba01f38b1b
+X-Git-Oldrev: c120eb5df08361bc473dc823aa8612168214f403
+X-Git-Newrev: 8c31fb8d11f765b957098461716bfe440f0dda7f
 X-Patchwork-Hint: ignore
-Message-Id: <20250516112154.D55ED86A00@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/zic: bump version
- to 2025b
+Message-Id: <20250516112155.8E6DE869EB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] configs/qemu_ppc*:
+ backport a patch for GCC 15.x compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,45 +66,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83acde521fccf1f5e108aeed1b3111ba01f38b1b
+commit: https://git.buildroot.net/buildroot/commit/?id=8c31fb8d11f765b957098461716bfe440f0dda7f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Release notes:
-https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/6JVHNHLB6I2WAYTQ75L6KEPEQHFXAJK3/
+powerpc kernel maintainer merged a patch [1] for GCC 15.x compatibility
+that will likely be merged upstream soon.
 
-Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=5a821e2d69e26b51b7f3740b6b0c3462b8cacaff
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 36c969cc4c2e2311617a8bc277dc33b05f65cec8)
+(cherry picked from commit 30cf5a07546602e6e88d1501ac1ec182b693fcbb)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/zic/zic.hash | 4 ++--
- package/zic/zic.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0002-powerpc-boot-Fix-build-with-gcc-15.patch  | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
-diff --git a/package/zic/zic.hash b/package/zic/zic.hash
-index 9e89aad23a..b9daccb381 100644
---- a/package/zic/zic.hash
-+++ b/package/zic/zic.hash
-@@ -1,4 +1,4 @@
--# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/MWII7R3HMCEDNUCIYQKSSTYYR7UWK4OQ/
--sha512  308f6a3d6ebfa18446f8296e5c799e18dccecd79ace3ba004d3f233892c7428faae152b217b22d229c59dd4e0faafee797d8b3583b58fa982b81f7cc7347f502  tzcode2025a.tar.gz
-+# https://lists.iana.org/hyperkitty/list/tz-announce@iana.org/thread/6JVHNHLB6I2WAYTQ75L6KEPEQHFXAJK3/
-+sha512  19826b12968c10fc4db7e4b07ba782bfb8590eeebaec6f719d74b92a2e642ab817bd72bceff0015ce52a838edfdb00753b3cd87dd84b35abf2606e5bee445f76  tzcode2025b.tar.gz
- # Locally computed:
- sha256  0613408568889f5739e5ae252b722a2659c02002839ad970a63dc5e9174b27cf  LICENSE
-diff --git a/package/zic/zic.mk b/package/zic/zic.mk
-index 71454d4fe0..1abeb2d70e 100644
---- a/package/zic/zic.mk
-+++ b/package/zic/zic.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZIC_VERSION = 2025a
-+ZIC_VERSION = 2025b
- ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
- ZIC_SITE = https://www.iana.org/time-zones/repository/releases
- ZIC_STRIP_COMPONENTS = 0
+diff --git a/board/qemu/patches/linux/0002-powerpc-boot-Fix-build-with-gcc-15.patch b/board/qemu/patches/linux/0002-powerpc-boot-Fix-build-with-gcc-15.patch
+new file mode 100644
+index 0000000000..78a4034a32
+--- /dev/null
++++ b/board/qemu/patches/linux/0002-powerpc-boot-Fix-build-with-gcc-15.patch
+@@ -0,0 +1,38 @@
++From 2d04c5b3c5728cd5e5202176e8796ffc0085c24a Mon Sep 17 00:00:00 2001
++From: Michal Suchanek <msuchanek@suse.de>
++Date: Mon, 31 Mar 2025 12:57:19 +0200
++Subject: [PATCH] powerpc/boot: Fix build with gcc 15
++
++Similar to x86 the ppc boot code does not build with GCC 15.
++
++Copy the fix from
++commit ee2ab467bddf ("x86/boot: Use '-std=gnu11' to fix build with GCC 15")
++
++Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?h=next-test&id=5a821e2d69e26b51b7f3740b6b0c3462b8cacaff
++
++Signed-off-by: Michal Suchanek <msuchanek@suse.de>
++Tested-by: Amit Machhiwal <amachhiw@linux.ibm.com>
++Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
++Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
++Link: https://patch.msgid.link/20250331105722.19709-1-msuchanek@suse.de
++[Romain: backport to 6.12.27]
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++---
++ arch/powerpc/boot/Makefile | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/arch/powerpc/boot/Makefile b/arch/powerpc/boot/Makefile
++index fa8518067d38..60a495771c05 100644
++--- a/arch/powerpc/boot/Makefile
+++++ b/arch/powerpc/boot/Makefile
++@@ -70,6 +70,7 @@ BOOTCPPFLAGS	:= -nostdinc $(LINUXINCLUDE)
++ BOOTCPPFLAGS	+= -isystem $(shell $(BOOTCC) -print-file-name=include)
++ 
++ BOOTCFLAGS	:= $(BOOTTARGETFLAGS) \
+++		   -std=gnu11 \
++ 		   -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
++ 		   -fno-strict-aliasing -O2 \
++ 		   -msoft-float -mno-altivec -mno-vsx \
++-- 
++2.49.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
