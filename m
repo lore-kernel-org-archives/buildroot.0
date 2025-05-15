@@ -1,73 +1,101 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC189C3ABDD
-	for <buildroot@archiver.kernel.org>; Thu, 15 May 2025 20:37:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46D35C2D0CD
+	for <buildroot@archiver.kernel.org>; Thu, 15 May 2025 21:18:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B06341702;
-	Thu, 15 May 2025 20:37:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A68D883A54;
+	Thu, 15 May 2025 21:18:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yn6s1HftuTnH; Thu, 15 May 2025 20:37:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UwM3_RcdIljV; Thu, 15 May 2025 21:18:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A78B416FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D222983A58
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A78B416FF;
-	Thu, 15 May 2025 20:37:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 821BE185
- for <buildroot@buildroot.org>; Thu, 15 May 2025 20:37:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D222983A58;
+	Thu, 15 May 2025 21:18:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B716C153
+ for <buildroot@buildroot.org>; Thu, 15 May 2025 21:18:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 66939606E8
- for <buildroot@buildroot.org>; Thu, 15 May 2025 20:37:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9D1E283A58
+ for <buildroot@buildroot.org>; Thu, 15 May 2025 21:18:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HEl-H2sudtns for <buildroot@buildroot.org>;
- Thu, 15 May 2025 20:37:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.146;
- helo=smtpcmd13146.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0994B60846
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0994B60846
-Received: from smtpcmd13146.aruba.it (smtpcmd13146.aruba.it [62.149.156.146])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0994B60846
- for <buildroot@buildroot.org>; Thu, 15 May 2025 20:37:42 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba SMTP with ESMTPSA
- id FfKlufWpf6z5ZFfKluQt4o; Thu, 15 May 2025 22:37:40 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O8oJoi0f8E9K for <buildroot@buildroot.org>;
+ Thu, 15 May 2025 21:18:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=yann.morin.1998@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AB82583A54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB82583A54
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AB82583A54
+ for <buildroot@buildroot.org>; Thu, 15 May 2025 21:18:12 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-43d04dc73b7so14632865e9.3
+ for <buildroot@buildroot.org>; Thu, 15 May 2025 14:18:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1747343890; x=1747948690;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=HTw88GJi02uOe8WL1RXwX4umv/l6v0HNS7BhxQvqtYM=;
+ b=X3CcdA0W8qYlE1VxK2999/OuqzRsIiD1/IS0UCuHNdIR4KoUuvQ4WMBeVB+iJwPIeG
+ ycajx10iRz3prAlhzDwQJxBZ9DArSR4j2Ec/HeYXf3eOn5+vZJxDQp093A/W1fbK+LX6
+ 1yOoRbclOb2TCUXaA1mdKQSIMkaaMTQa7Ys6KM4QGOU0jj7q6IBIRMw8L392XsKlxqYh
+ PgdtMOBnYbcTBwn1OKe6zEehcWFN/H8M10miwP4wirs7Lhk3hioPIjaluG2piC9CKEBd
+ /oQa1YkQqz4oLsleHYqvPbW+0Qixb/OTv/FbnCh8RBuX/GZ8BM6sIFiAufoZMT3Id9lu
+ JwGA==
+X-Gm-Message-State: AOJu0YwBD5CNGjZa003hU8ZUYcF/p4obq+o/ezEOvMFTQ1wnWt8i3N4X
+ /Atrp+ALGr2t2gV8n9xWBqW7DNJ2rq6RnMeco2q2zyuoNJpsX1YtkayIc98Esg==
+X-Gm-Gg: ASbGncvT1iJIYAHSYc9HnuWNBAhbBC175dRP3a+SF3lS0aCmiYV5K/aJX5NoJAkasNx
+ RzcFCPsObbakY7k/X+thWqo8c14jXWeWJ+2VWOdBn9AHuNZH45G7CczjJGSH6g7fC3RD7h4qHTa
+ i0jK2D3AIewccd9kWI1NsZqFHCbfVhztaFZVEjniijTBExIC4mM3fyLZkpwx811v65TCRNWzYHH
+ N2USb8EpBjZNtl9LC8IJXvQUZFT8gjcKBZ2ZOh557SIjPZZy96kQkKzwLKnHCw+OjsPs5t8dQ3+
+ UqUgaId8ZUfcd2hAyAzJttuuXHsGUP+ublJn2NFtkVHXPZODsOw2nHZsACavHIs=
+X-Google-Smtp-Source: AGHT+IEe/kwcw9a7yjgF0Jiu5Vm5X7OTSvl0USO++MjDqAnTye+NqEOpZInME45dLD3v3ZaDECyEag==
+X-Received: by 2002:a05:600c:34d4:b0:442:f12f:bd9f with SMTP id
+ 5b1f17b1804b1-442fd671f28mr8829685e9.27.1747343890273; 
+ Thu, 15 May 2025 14:18:10 -0700 (PDT)
+Received: from landeda.home ([2a01:cb19:93aa:5000:c0e7:5e2f:eef4:db82])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-442f33691fdsm85712435e9.5.2025.05.15.14.18.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 15 May 2025 14:18:09 -0700 (PDT)
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>
-Date: Thu, 15 May 2025 22:37:39 +0200
-Message-Id: <20250515203739.1238211-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.39.5
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Date: Thu, 15 May 2025 23:18:06 +0200
+Message-ID: <20250515211806.1464239-1-yann.morin.1998@free.fr>
+X-Mailer: git-send-email 2.47.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfJi57DD38j2w4CZTYQf25xwArr8UWMUEAotSBEEx147GYMb2KQP+TBktNGe6bRQMvztvXJqyf/FcN2UCTQXACtMGpgkx6JL+JhIE2XkkO3FnZJb+jIaH
- /0EkGd+01kkrDHGTtX1GotMUwf3JFziC/eAxnA/7lSmW5kEi7rgAtu3Aax9qs5zCNzGcf88N9L6QvCnn4shbLzf/iog6gAN8EksdiYl159S7G7o72i0JsB3o
- b2TH1M5DeqTqTZtXUctHV0czaYukNHGhzdX23R/2+oHaJ8VOIb87zQliI19STAi2jIrW175+dmmVEDTGDrUvAA==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1747341460; bh=kLIQjT+352y5oxHU9GezCAQRPAr4yHvHVaLEK/+O+fo=;
- h=From:To:Subject:Date:MIME-Version;
- b=dB/LCYweqtN/yxnSLz82Adf/XhhuLkbuwRbRtG4TN7l9xnHXqSJjASkFfxMy3eTL/
- FRf0w6bARpd4H8Zn2z3tHreI02BfWzRNmd1RyKjv/ebQ+ggeMEjbMoeM3CUtsPD5OT
- fHyjqrJDVSrWwm7LQmK215XT/99NQMtDGvWgXojhfiDc79fJyG1PhgenegpzaRTsaI
- jKFop3sE3ouOm491UA/zwX5uNY+FIOx2CHOiW1pSWyiC+MPB+vy6l6ARKSzfzT6/at
- 2PIDOC/6MGmDaAplDTGDbfKfz/V6OweYDa02iHuk5zgiAG3qTMWhDSwGFriigzm7nt
- qxPcEempN2UqA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=temperror header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=dB/LCYwe
-Subject: [Buildroot] [PATCH] Fix building with Linux 6.14
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1747343890; x=1747948690; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=HTw88GJi02uOe8WL1RXwX4umv/l6v0HNS7BhxQvqtYM=;
+ b=mSKuuM/3UmjnCN/Wiqkaq6gFst0Pm9/3sLmMlKuZ0aM4p6v3jHTB4/6sFXqOQ+MavM
+ 2af8aCQYaTSSJRXjXPgNu+dVw1eVthEg8D4+JUIwYfK+z9JgZ2RiS3h9zTCL5mI0t6pM
+ yJsA5DqqfJMdOtnxiap2RskwVbOTRLSynsJkJPRwbW/4Gtw7RgM/fTN7yxPXdhA0A4GS
+ 4RYbzO2C7QT+CJLo7W9TSQU4i5x15y8aagoTSSTAQHaJz43UiS+H7d6GgyTpmwBGLtmD
+ uj1D5jD2aMvfiUvyR8330PhGGPPQBHOBrV/4GjUl4weQBPPZYPRhNqpdlkctwQg7QyO7
+ ymZA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=mSKuuM/3
+Subject: [Buildroot] [PATCH] Makefile: allow defconfig to be in a
+ sub-directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -84,58 +112,50 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add local patch pending upstream to fix build failure with Linux 6.14.
+Currently, the defconfigs must all live in the top-level configs/
+directory. While this might be considered sensible for the bundled
+defconfigs, it can be tedious to manage in a br2-external tree, where
+things could get better sorted and managed in sub-directories.
 
-Fixes:
-https://autobuild.buildroot.org/results/065b9afc1c6f9f5561547b12171269adc8c12275
+A few examples:
+  - for a given board, a first defconfig is the full system, and a
+    second is the rescue system;
+  - for a given board, two defconfigs implement an A/B feature set;
+  - a set of configurations targetting various famillies of systems each
+    running on different hardware, sorted per familly.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Extend the Makefile to look for and report defconfigs in sub-directories
+of the top-level configs/.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../0002-Fix-build-with-Linux-6.14.patch      | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/rtl8188eu/0002-Fix-build-with-Linux-6.14.patch
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rtl8188eu/0002-Fix-build-with-Linux-6.14.patch b/package/rtl8188eu/0002-Fix-build-with-Linux-6.14.patch
-new file mode 100644
-index 0000000000..a05a760d22
---- /dev/null
-+++ b/package/rtl8188eu/0002-Fix-build-with-Linux-6.14.patch
-@@ -0,0 +1,33 @@
-+From 0363681349f683050bc9a265db8310e8c4eb6534 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Thu, 15 May 2025 22:32:48 +0200
-+Subject: [PATCH] Fix build with Linux 6.14
-+
-+Commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7a53af85d3bbdbe06cd47b81a6d99a04dc0a3963
-+adds argument "unsigned int link_id" to get_tx_power(), so let's add it to
-+cfg80211_rtw_get_txpower() according to Linux version.
-+
-+Upstream: https://github.com/lwfinger/rtl8188eu/pull/464
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ ioctl_cfg80211.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/ioctl_cfg80211.c b/ioctl_cfg80211.c
-+index 270cfce..04434fa 100644
-+--- a/ioctl_cfg80211.c
-++++ b/ioctl_cfg80211.c
-+@@ -3240,6 +3240,9 @@ static int cfg80211_rtw_set_txpower(struct wiphy *wiphy,
-+ static int cfg80211_rtw_get_txpower(struct wiphy *wiphy,
-+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
-+ 	struct wireless_dev *wdev,
-++#endif
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 14, 0))
-++	unsigned int link_id,
-+ #endif
-+ 	int *dbm)
-+ {
-+-- 
-+2.39.5
-+
+diff --git a/Makefile b/Makefile
+index 411e1de515..c0a41cabd5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1218,7 +1218,7 @@ help:
+ # $(2): br2-external name, empty for bundled
+ define list-defconfigs
+ 	@first=true; \
+-	for defconfig in $(1)/configs/*_defconfig; do \
++	for defconfig in $$(find $(1)/configs -name '*_defconfig' |sort); do \
+ 		[ -f "$${defconfig}" ] || continue; \
+ 		if $${first}; then \
+ 			if [ "$(2)" ]; then \
+@@ -1228,7 +1228,7 @@ define list-defconfigs
+ 			fi; \
+ 			first=false; \
+ 		fi; \
+-		defconfig="$${defconfig##*/}"; \
++		defconfig="$${defconfig#$(1)/configs/}"; \
+ 		printf "  %-35s - Build for %s\n" "$${defconfig}" "$${defconfig%_defconfig}"; \
+ 	done; \
+ 	$${first} || printf "\n"
 -- 
-2.39.5
+2.47.0
 
 _______________________________________________
 buildroot mailing list
