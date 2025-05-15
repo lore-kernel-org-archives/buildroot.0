@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EC4BC3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:23:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2237BC3ABDD
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:23:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03F1861356;
-	Fri, 16 May 2025 11:23:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D37E44245C;
+	Fri, 16 May 2025 11:23:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gsTGufs1rT0N; Fri, 16 May 2025 11:23:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BtqKA1Nh6vOq; Fri, 16 May 2025 11:23:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0F7EE613D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC4DE41A47
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0F7EE613D3;
-	Fri, 16 May 2025 11:23:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DC4DE41A47;
+	Fri, 16 May 2025 11:23:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 86697185
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:21 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B8AE2185
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EBBA783A8B
- for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 16C7083ABC
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 11:22:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oYRr_ZRnMGAN for <buildroot@buildroot.org>;
- Fri, 16 May 2025 11:21:59 +0000 (UTC)
+ id WZ-Ofp8fg9Ek for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 11:21:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C5B9083C99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2443F811B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C5B9083C99
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2443F811B1
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:21:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C21E882929; Fri, 16 May 2025 11:21:55 +0000 (UTC)
+ id 21A2D86A00; Fri, 16 May 2025 11:21:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 May 2025 17:08:34 +0200
+Date: Thu, 15 May 2025 17:05:45 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 06c6c49fe82732d88aef1a4809806428cdcb1ac0
-X-Git-Newrev: dae673fb63eaeebb348c6e7a80db501e9b9f4211
+X-Git-Oldrev: d8d201c95b3546c4f0820b9944919f593b7977a4
+X-Git-Newrev: 0bcad418007d341972817357888c7d1245f0677d
 X-Patchwork-Hint: ignore
-Message-Id: <20250516112155.C21E882929@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-django:
- security bump to 5.1.9
+Message-Id: <20250516112155.21A2D86A00@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/gdb: bump 15.x
+ series to 15.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -66,60 +66,132 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dae673fb63eaeebb348c6e7a80db501e9b9f4211
+commit: https://git.buildroot.net/buildroot/commit/?id=0bcad418007d341972817357888c7d1245f0677d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2025.02.x
 
-Fixes CVE-2025-32873 [1].
-Django also updates setuptools[2], so we can remove the --skip-dependency-check
-flag and need to update the package archive capitalization accordingly.
+Changes:
 
-[1] https://www.djangoproject.com/weblog/2025/may/07/security-releases/
-[2] https://github.com/django/django/commit/bbf376bbc8cdfca817b54e7df99539633d10b06e
+ Set GDB version number to 15.2.
+ [gdb/python] Make sure python sys.exit makes gdb exit
+ [gdb/symtab] Revert "Change handling of DW_TAG_enumeration_type in DWARF scanner"
+ [gdb/testsuite] Add regression test for PR32158
+ [gdb/testsuite] Add gdb.dwarf2/enum-type-c++.exp, regression test for PR31900.
+ gdb-15-branch: Clear the X86_XSTATE_MPX bit in XCRO for x32
+ Recognize -2 as a tombstone value in .debug_line
+ [gdb] Handle ^C during disassembly
+ Mark unavailable bytes of limited-length arrays when allocating contents
+ gdb/solib-frv: move lm_info object to solib
+ Fix loading a saved recording
+ Bump GDB's version number to 15.1.90.DATE-git.
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 09299c5b0cf4841e20ee8f8196a4122890e6530f)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit e40bf89e40109f5469cf51abfce52e7c4f690965)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 7 +++----
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ .checkpackageignore                                    | 18 +++++++++---------
+ ...ace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch |  0
+ ...ce-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch |  0
+ .../gdb/{15.1 => 15.2}/0003-use-asm-sgidefs.h.patch    |  0
+ .../0004-gdbserver-fix-build-for-m68k.patch            |  0
+ ...0005-nat-fork-inferior-include-linux-ptrace.h.patch |  0
+ ...0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch |  0
+ .../{15.1 => 15.2}/0007-fix-musl-build-on-riscv.patch  |  0
+ .../0008-gdbserver-Makefile.in-fix-NLS-build.patch     |  0
+ .../0009-gdb-Fix-native-build-on-xtensa.patch          |  0
+ package/gdb/Config.in.host                             |  2 +-
+ package/gdb/gdb.hash                                   |  2 +-
+ 12 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 1e197004d0..57b9e9fb0e 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  80247a8b48cdac55e5ad3fb682ab71a3  Django-5.1.8.tar.gz
--sha256  42e92a1dd2810072bcc40a39a212b693f94406d0ba0749e68eb642f31dc770b4  Django-5.1.8.tar.gz
-+md5  da93c81fcaf2e0b4dab3cf44e7564c7c  django-5.1.9.tar.gz
-+sha256  565881bdd0eb67da36442e9ac788bda90275386b549070d70aee86327781a4fc  django-5.1.9.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index b64d8e4cd1..fd8a4eb9e8 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,15 +4,14 @@
- #
- ################################################################################
+diff --git a/.checkpackageignore b/.checkpackageignore
+index da9096a8da..2758b62f8b 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -495,15 +495,15 @@ package/gdb/14.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch lib_patch.U
+ package/gdb/14.2/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
+ package/gdb/14.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
+ package/gdb/14.2/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
+-package/gdb/15.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch lib_patch.Upstream
+-package/gdb/15.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch lib_patch.Upstream
+-package/gdb/15.1/0003-use-asm-sgidefs.h.patch lib_patch.Upstream
+-package/gdb/15.1/0004-gdbserver-fix-build-for-m68k.patch lib_patch.Upstream
+-package/gdb/15.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch lib_patch.Upstream
+-package/gdb/15.1/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch lib_patch.Upstream
+-package/gdb/15.1/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
+-package/gdb/15.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
+-package/gdb/15.1/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
++package/gdb/15.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch lib_patch.Upstream
++package/gdb/15.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch lib_patch.Upstream
++package/gdb/15.2/0003-use-asm-sgidefs.h.patch lib_patch.Upstream
++package/gdb/15.2/0004-gdbserver-fix-build-for-m68k.patch lib_patch.Upstream
++package/gdb/15.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch lib_patch.Upstream
++package/gdb/15.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch lib_patch.Upstream
++package/gdb/15.2/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
++package/gdb/15.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
++package/gdb/15.2/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
+ package/gdb/16.3/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch lib_patch.Upstream
+ package/gdb/16.3/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch lib_patch.Upstream
+ package/gdb/16.3/0003-use-asm-sgidefs.h.patch lib_patch.Upstream
+diff --git a/package/gdb/15.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch b/package/gdb/15.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+similarity index 100%
+rename from package/gdb/15.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+rename to package/gdb/15.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
+diff --git a/package/gdb/15.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch b/package/gdb/15.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+similarity index 100%
+rename from package/gdb/15.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+rename to package/gdb/15.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
+diff --git a/package/gdb/15.1/0003-use-asm-sgidefs.h.patch b/package/gdb/15.2/0003-use-asm-sgidefs.h.patch
+similarity index 100%
+rename from package/gdb/15.1/0003-use-asm-sgidefs.h.patch
+rename to package/gdb/15.2/0003-use-asm-sgidefs.h.patch
+diff --git a/package/gdb/15.1/0004-gdbserver-fix-build-for-m68k.patch b/package/gdb/15.2/0004-gdbserver-fix-build-for-m68k.patch
+similarity index 100%
+rename from package/gdb/15.1/0004-gdbserver-fix-build-for-m68k.patch
+rename to package/gdb/15.2/0004-gdbserver-fix-build-for-m68k.patch
+diff --git a/package/gdb/15.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch b/package/gdb/15.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch
+similarity index 100%
+rename from package/gdb/15.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch
+rename to package/gdb/15.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch
+diff --git a/package/gdb/15.1/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch b/package/gdb/15.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
+similarity index 100%
+rename from package/gdb/15.1/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
+rename to package/gdb/15.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
+diff --git a/package/gdb/15.1/0007-fix-musl-build-on-riscv.patch b/package/gdb/15.2/0007-fix-musl-build-on-riscv.patch
+similarity index 100%
+rename from package/gdb/15.1/0007-fix-musl-build-on-riscv.patch
+rename to package/gdb/15.2/0007-fix-musl-build-on-riscv.patch
+diff --git a/package/gdb/15.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch b/package/gdb/15.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch
+similarity index 100%
+rename from package/gdb/15.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch
+rename to package/gdb/15.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch
+diff --git a/package/gdb/15.1/0009-gdb-Fix-native-build-on-xtensa.patch b/package/gdb/15.2/0009-gdb-Fix-native-build-on-xtensa.patch
+similarity index 100%
+rename from package/gdb/15.1/0009-gdb-Fix-native-build-on-xtensa.patch
+rename to package/gdb/15.2/0009-gdb-Fix-native-build-on-xtensa.patch
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 40fe4cf6d2..54247ad642 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -70,6 +70,6 @@ config BR2_GDB_VERSION
+ 	string
+ 	default "arc-2023.09-release" if BR2_arc
+ 	default "14.2"     if BR2_GDB_VERSION_14 || (!BR2_PACKAGE_HOST_GDB && !BR2_TOOLCHAIN_GCC_AT_LEAST_9)
+-	default "15.1"	   if BR2_GDB_VERSION_15 || (!BR2_PACKAGE_HOST_GDB && BR2_TOOLCHAIN_GCC_AT_LEAST_9)
++	default "15.2"	   if BR2_GDB_VERSION_15 || (!BR2_PACKAGE_HOST_GDB && BR2_TOOLCHAIN_GCC_AT_LEAST_9)
+ 	default "16.3"	   if BR2_GDB_VERSION_16
+ 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index 3e2d5a9655..8bef9cd374 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -1,6 +1,6 @@
+ # From https://gcc.gnu.org/pub/gdb/releases/sha512.sum
+ sha512  7e07941f1fe661288cc571b4964012ceabc1760624fce20320db2f470c01439b2386f859b5288da13204b758e2e3b22a74c68c012178db93b9529b06f1e22ede  gdb-14.2.tar.xz
+-sha512  0217434073023a8b8316088bf3ee95d53a1b6a7897f6269095429016a8900f9a05e130c390d8d5d5550cc515c16519de1071d8eef96aa58e38056c7e37da1d8b  gdb-15.1.tar.xz
++sha512  624007deceb5b15ba89c0725883d1a699fa46714ef30887f3d0165e17c5d65d634671740a135aa69e437d916218abb08cfa2a38ed309ff19d48f51da56b2a8ba  gdb-15.2.tar.xz
+ sha512  fffd6689c3405466a179670b04720dc825e4f210a761f63dd2b33027432f8cd5d1c059c431a5ec9e165eedd1901220b5329d73c522f9a444788888c731b29e9c  gdb-16.3.tar.xz
  
--PYTHON_DJANGO_VERSION = 5.1.8
--PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
-+PYTHON_DJANGO_VERSION = 5.1.9
-+PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/00/40/45adc1b93435d1b418654a734b68351bb6ce0a0e5e37b2f0e9aeb1a2e233
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/10/08/2e6f05494b3fc0a3c53736846034f882b82ee6351791a7815bbb45715d79
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
- PYTHON_DJANGO_CPE_ID_PRODUCT = django
- PYTHON_DJANGO_SETUP_TYPE = setuptools
--PYTHON_DJANGO_BUILD_OPTS = --skip-dependency-check
- 
- $(eval $(python-package))
+ # Locally calculated (fetched from Github)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
