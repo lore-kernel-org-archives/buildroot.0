@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D403C2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:00:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41A47C3ABDD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:00:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8476B70DC0;
-	Mon, 19 May 2025 11:00:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A60070DCE;
+	Mon, 19 May 2025 11:00:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bm75vRdZAE-V; Mon, 19 May 2025 11:00:24 +0000 (UTC)
+ id n8lz_yeURyew; Mon, 19 May 2025 11:00:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1DD0C70DBD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86D7670DC1
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1DD0C70DBD;
-	Mon, 19 May 2025 11:00:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 86D7670DC1;
+	Mon, 19 May 2025 11:00:25 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 15DCCE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 26FD9E4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C02B940E5E
+ by smtp4.osuosl.org (Postfix) with ESMTP id D3C1B41117
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id apwrGOXKu04t for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:30 +0000 (UTC)
+ id XOaHdV4V5cMD for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FA5241173
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68DDC4177A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0FA5241173
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 68DDC4177A
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C062872E7; Mon, 19 May 2025 10:40:04 +0000 (UTC)
+ id 61EE6872E7; Mon, 19 May 2025 10:40:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 13:53:18 +0200
+Date: Fri, 16 May 2025 12:36:50 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9a1aaec3f3db99bd8fda26cbaf476f4c20dd6740
-X-Git-Newrev: 0c230eef9075a37248488ecf0a877012115f7b58
+X-Git-Oldrev: a127b7e999586a83bd59655635caa621ce8d256f
+X-Git-Newrev: a32a1e9a840403ee8e0cab0e4f50f83b4b0536c1
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104004.0C062872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mtd: update to 2.3.0
+Message-Id: <20250519104003.61EE6872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/rauc: enable JSON
+ output in host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -64,85 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0c230eef9075a37248488ecf0a877012115f7b58
+commit: https://git.buildroot.net/buildroot/commit/?id=a32a1e9a840403ee8e0cab0e4f50f83b4b0536c1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog: https://git.infradead.org/?p=mtd-utils.git;a=blob;f=CHANGELOG.md
+JSON output is useful for building integrations, e.g. reading bundle
+information into other tools.
 
-The TestMtd build fails with the following error
+Host-json-glib is very small / fast to build compared to the other
+dependencies, so enable it unconditionally.
 
-  checking pkg-config is at least version 0.9.0... ./configure: line
-  5375: .../output/TestMtd/host/bin/pkg-config: No such file or
-  directory
-
-So we promote host-pkgconf to be a required dependency for the build.
-
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+[Peter: unconditionally enable JSON support]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mtd/mtd.hash | 4 ++--
- package/mtd/mtd.mk   | 9 +++++----
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/rauc/rauc.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
-index 0eb90a5118..84b9e83bff 100644
---- a/package/mtd/mtd.hash
-+++ b/package/mtd/mtd.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://infraroot.at/pub/mtd/mtd-utils-2.2.1.tar.bz2.asc
--sha256  f7ae20b2eb79ee83441468f0b99d897024cd96ff853eea59106fb1952065c803  mtd-utils-2.2.1.tar.bz2
-+# https://infraroot.at/pub/mtd/mtd-utils-2.3.0.tar.bz2.asc
-+sha256  2db102908b232406ccb20719c0f43b61196aef4534493419fbf98a273c598c10  mtd-utils-2.3.0.tar.bz2
- sha256  dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 77050e7e40..4ff43a1dce 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MTD_VERSION = 2.2.1
-+MTD_VERSION = 2.3.0
- MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
- MTD_SITE = https://infraroot.at/pub/mtd
- MTD_LICENSE = GPL-2.0
-@@ -12,6 +12,7 @@ MTD_LICENSE_FILES = COPYING
- MTD_CPE_ID_VENDOR = mtd-utils_project
- MTD_CPE_ID_PRODUCT = mtd-utils
- MTD_INSTALL_STAGING = YES
-+MTD_DEPENDENCIES = host-pkgconf
- 
- MTD_LDFLAGS = $(TARGET_LDFLAGS)
- 
-@@ -28,7 +29,7 @@ MTD_CONF_OPTS += --without-lzo
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 6bed5ec129..d20b0121df 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -61,6 +61,7 @@ RAUC_CONF_OPTS += -Dstreaming=false
  endif
  
- ifeq ($(BR2_PACKAGE_ZLIB),y)
--MTD_DEPENDENCIES += host-pkgconf zlib
-+MTD_DEPENDENCIES += zlib
- MTD_CONF_OPTS += --with-zlib
- else
- MTD_CONF_OPTS += --without-zlib
-@@ -43,7 +44,7 @@ MTD_CONF_OPTS += --without-jffs
- endif
+ HOST_RAUC_DEPENDENCIES = \
++	host-json-glib \
+ 	host-pkgconf \
+ 	host-openssl \
+ 	host-libglib2 \
+@@ -68,9 +69,9 @@ HOST_RAUC_DEPENDENCIES = \
+ 	$(if $(BR2_PACKAGE_HOST_LIBP11),host-libp11)
  
- ifeq ($(BR2_PACKAGE_MTD_UBIFS_UTILS),y)
--MTD_DEPENDENCIES += util-linux host-pkgconf
-+MTD_DEPENDENCIES += util-linux
- MTD_CONF_OPTS += --with-ubifs
- # crypto needs linux/hash_info.h
- ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_12)$(BR2_PACKAGE_OPENSSL),yy)
-@@ -83,7 +84,7 @@ else
- MTD_CONF_OPTS += --without-xattr
- endif
+ HOST_RAUC_CONF_OPTS += \
++	-Djson=enabled \
+ 	-Dnetwork=false \
+ 	-Dstreaming=false \
+-	-Djson=disabled \
+ 	-Dservice=false \
+ 	-Dtests=false
  
--HOST_MTD_DEPENDENCIES = host-acl host-zlib host-lzo host-util-linux host-zstd
-+HOST_MTD_DEPENDENCIES = host-pkgconf host-acl host-zlib host-lzo host-util-linux host-zstd
- HOST_MTD_CONF_OPTS = \
- 	--with-jffs \
- 	--with-ubifs \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
