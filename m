@@ -4,59 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35D7BC3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 17:23:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA82AC3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 17:45:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D6E3260A69;
-	Fri, 16 May 2025 17:23:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E9B4607F8;
+	Fri, 16 May 2025 17:45:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KcYPSAP6Cts8; Fri, 16 May 2025 17:23:10 +0000 (UTC)
+ id 3ddVfXO8cKyW; Fri, 16 May 2025 17:45:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1812B606BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B3C76121C
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1812B606BE;
-	Fri, 16 May 2025 17:23:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 54CDD1AB
- for <buildroot@buildroot.org>; Fri, 16 May 2025 17:23:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B3C76121C;
+	Fri, 16 May 2025 17:45:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8580F185
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 17:45:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4638E400D8
- for <buildroot@buildroot.org>; Fri, 16 May 2025 17:23:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 735A8406BC
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 17:45:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cKySn4mmMfoC for <buildroot@buildroot.org>;
- Fri, 16 May 2025 17:23:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DICv2peZdJoX for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 17:45:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DBFA0400AF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBFA0400AF
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DBFA0400AF
- for <buildroot@buildroot.org>; Fri, 16 May 2025 17:23:06 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E7C45442B0;
- Fri, 16 May 2025 17:23:02 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1uFyly-00BIV5-1l;
- Fri, 16 May 2025 19:23:02 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D2031405C7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id D2031405C7
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 17:45:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C049A86CDE; Fri, 16 May 2025 17:45:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 19:22:58 +0200
-Message-Id: <20250516172258.2692710-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.5
-MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudeffeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheprfgvthgvrhcumfhorhhsghgrrghrugcuoehpvghtvghrsehkohhrshhgrggrrhgurdgtohhmqeenucggtffrrghtthgvrhhnpeejvddufeduhfeltdekvdffheffueehiedtudettdeghfehhffgfffgteeuhfdujeenucffohhmrghinhepsghuihhlughrohhothdrnhgvthenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggsheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvkhhosehkohhrshhgrggrrhgurdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehpvghtvghrsehkohhrshhgrggrrhgurdgtohhm
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] fs/erofs: unbreak custom compression handling
+Date: Fri, 16 May 2025 19:45:35 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3481a9643fc7223e400ed877f08ade34d44e6b78
+X-Git-Newrev: 5009fd2436300383a50b3d23b80cdccd20c9d262
+X-Patchwork-Hint: ignore
+Message-Id: <20250516174552.C049A86CDE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Makefile: include defconfigs in
+ sub-directories in list-defconfigs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -68,46 +58,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-https://autobuild.buildroot.net/results/0f856def945b9a863f45f7a58553b62f6875720b/
+commit: https://git.buildroot.net/buildroot/commit/?id=5009fd2436300383a50b3d23b80cdccd20c9d262
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit a02e43741719 ("fs/erofs: add custom compression option with optional
-compress-hints file") added logic for custom compression, but in fact it did
-not work.
+Currently, list-defconfigs only lists the defconfigs that live
+ live in the top-level configs/ directory. For the in-tree defconfigs
+this is indeed the case, but it is possible to manage the configs in a
+br2-external tree with sub-directories.
 
-BR2_TARGET_ROOTFS_EROFS_COMPRESSION_{ALGORITHMS,HINTS} are kconfig string
-variables, so we need to use qstrip rather than strip.
+A few examples:
+  - for a given board, a first defconfig is the full system, and a
+    second is the rescue system;
+  - for a given board, two defconfigs implement an A/B feature set;
+  - a set of configurations targetting various famillies of systems each
+    running on different hardware, sorted per familly.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Extend list-defconfigs to look for and report defconfigs in
+sub-directories of the top-level configs/.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- fs/erofs/erofs.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/erofs/erofs.mk b/fs/erofs/erofs.mk
-index 6543a364f1..881ecea053 100644
---- a/fs/erofs/erofs.mk
-+++ b/fs/erofs/erofs.mk
-@@ -11,9 +11,9 @@ ROOTFS_EROFS_ARGS += -zlz4hc,$(BR2_TARGET_ROOTFS_EROFS_LZ4HC_LEVEL)
- else ifeq ($(BR2_TARGET_ROOTFS_EROFS_LZMA),y)
- ROOTFS_EROFS_ARGS += -zlzma,$(BR2_TARGET_ROOTFS_EROFS_LZMA_LEVEL)
- else ifeq ($(BR2_TARGET_ROOTFS_EROFS_CUSTOM_COMPRESSION),y)
--ROOTFS_EROFS_ARGS += -z$(strip $(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_ALGORITHMS))
--ifneq ($(strip $(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_HINTS)),)
--ROOTFS_EROFS_ARGS += --compress-hints $(strip $(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_HINTS))
-+ROOTFS_EROFS_ARGS += -z$(call qstrip,$(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_ALGORITHMS))
-+ifneq ($(call qstrip,$(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_HINTS)),)
-+ROOTFS_EROFS_ARGS += --compress-hints $(call qstrip,$(BR2_TARGET_ROOTFS_EROFS_COMPRESSION_HINTS))
- endif
- endif
- 
--- 
-2.39.5
-
+diff --git a/Makefile b/Makefile
+index 411e1de515..c0a41cabd5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1218,7 +1218,7 @@ help:
+ # $(2): br2-external name, empty for bundled
+ define list-defconfigs
+ 	@first=true; \
+-	for defconfig in $(1)/configs/*_defconfig; do \
++	for defconfig in $$(find $(1)/configs -name '*_defconfig' |sort); do \
+ 		[ -f "$${defconfig}" ] || continue; \
+ 		if $${first}; then \
+ 			if [ "$(2)" ]; then \
+@@ -1228,7 +1228,7 @@ define list-defconfigs
+ 			fi; \
+ 			first=false; \
+ 		fi; \
+-		defconfig="$${defconfig##*/}"; \
++		defconfig="$${defconfig#$(1)/configs/}"; \
+ 		printf "  %-35s - Build for %s\n" "$${defconfig}" "$${defconfig%_defconfig}"; \
+ 	done; \
+ 	$${first} || printf "\n"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
