@@ -4,76 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14709C3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 09:07:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC84CC3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 09:19:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C94DE60891;
-	Fri, 16 May 2025 09:07:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3692961299;
+	Fri, 16 May 2025 09:19:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cli3eAvC8E1p; Fri, 16 May 2025 09:07:48 +0000 (UTC)
+ id KAui3RGnBvDk; Fri, 16 May 2025 09:19:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E88FF60B51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4440860B6E
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E88FF60B51;
-	Fri, 16 May 2025 09:07:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id ECF8C185
- for <buildroot@buildroot.org>; Fri, 16 May 2025 09:07:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4440860B6E;
+	Fri, 16 May 2025 09:19:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id CFDD61AB
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 09:19:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DE0CD838B3
- for <buildroot@buildroot.org>; Fri, 16 May 2025 09:07:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C140560B51
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 09:19:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S_ei97E1XFMW for <buildroot@buildroot.org>;
- Fri, 16 May 2025 09:07:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E9443834B6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9443834B6
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E9443834B6
- for <buildroot@buildroot.org>; Fri, 16 May 2025 09:07:44 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPA id 9A093B005AB;
- Fri, 16 May 2025 11:07:40 +0200 (CEST)
-Received: from 2a02-842a-45ac-9401-0517-4590-b867-5f74.rev.sfr.net
- (2a02:842a:45ac:9401:517:4590:b867:5f74)
- via 2a02-842a-45ac-9401-0517-4590-b867-5f74.rev.sfr.net
- (2a02:842a:45ac:9401:517:4590:b867:5f74) by webmail.free.fr
- with HTTP (HTTP/1.0 POST); Fri, 16 May 2025 11:07:40 +0200
-MIME-Version: 1.0
-Date: Fri, 16 May 2025 11:07:40 +0200
-From: Julien Olivain <ju.o@free.fr>
-To: Kadambini Nema <kadambini.nema@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r3h-xd9zQhao for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 09:19:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9022860B4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9022860B4F
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9022860B4F
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 09:19:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8BA264329A;
+ Fri, 16 May 2025 09:19:41 +0000 (UTC)
+Date: Fri, 16 May 2025 11:19:40 +0200
+To: Cherniaev Andrei <dungeonlords789@naver.com>
 Cc: buildroot@buildroot.org
-In-Reply-To: <20250501092633.84651-1-kadambini.nema@gmail.com>
-References: <20250501092633.84651-1-kadambini.nema@gmail.com>
-User-Agent: Webmail Free/1.6.10
-Message-ID: <22c17ca2e0b81ef284c71ea84a60d89d@free.fr>
-X-Sender: ju.o@free.fr
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1747386461;
- bh=9VLSnUF54y264iZ9C8P9zmhlh7g3nFhyjAsXfrg6J5c=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
- b=jOM3EkWGT/5MrzsGHDSgz7eE1KYR4x/uSQSMlx+X+hHbxjn9ap9tIYhRs8iZiowzf
- ZlMJz1hkKN0Pwfsn5JmNvX5Q547KbB4hFYj8mvE38M232+VH5fdyGFgTvB8iPWWJsx
- njh/OpSnIeAxUi74CzaCitUcaN7zKud8xJxonQlJcNw2ZnN4L/7wK2zWgAo72oI8nu
- DFm5YEyUMwmUYINhtnjvKxYmAX2y98anYY8dFzQsC8YM0Z9/8mi0B3f5URvvRMflye
- qWWJQkc4+uuBbx030DjV0WxxOTOWorD0MWRdSHMTfVvyESs9e6ec9rOG/DG8JXRFgP
- t8XXJ/6KOQesw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Message-ID: <20250516111940.55844cfd@windsurf>
+In-Reply-To: <20250515144241.3082079-1-dungeonlords789@naver.com>
+References: <20250515144241.3082079-1-dungeonlords789@naver.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefuddvfeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeltdegvdejheegtefgueffgfelhfekvdefudevieeileetleeitdefgfeugffghfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtohepughunhhgvghonhhlohhrughsjeekleesnhgrvhgvrhdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhg
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1747387181;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=2OotBGxS3lp8X6astqwSuQrYUWnCXJf9D5L+lJIGhTM=;
+ b=Y8BNf/phMv83k61CInRZ9yZHujF+hndoXOEgm+X3kKTu0fv3bnfm3+rI0TblTN+YcKRobi
+ LC/WH/4mfV4AR8c2mwPkYMIb2j0wm4KrTirQ6gwYJ/kcQXvOvO1JmmWywEwUU4IB4F3QQ2
+ eXxg7JPcXef06vGDz+mtDWiQUm3EGCYSoelcDPOJdSy6FSehrilSg/SjhriIfk0WxQ+qqI
+ TmHojyhHNyBWKgB7DFeO7ZZdnCUycvN49ij1+T1CL43x2S6XQQTiKS8EeE7c91vDacRFZG
+ Rw+T+9jGqy8Wa4AQRERGalLwU3wk4NXcGTMuFoeKj6GljSUqg5kt8E5/3Ivr1Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=jOM3EkWG
-Subject: Re: [Buildroot] [PATCH 1/1] package/xz: security bump to version
- 5.8.1
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Y8BNf/ph
+Subject: Re: [Buildroot] [PATCH] boot/grub2/readme.txt: fix script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -85,34 +84,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 01/05/2025 11:26, Kadambini Nema wrote:
-> This fixes the following CVE:
-> CVE-2025-31115: Threaded .xz decoder frees memory too early
-> 
-> Update hash of the COPYING file. (Notes about old releases was removed)
-> 
-> Release notes:
-> https://github.com/tukaani-project/xz/releases/tag/v5.8.1
-> https://github.com/tukaani-project/xz/releases/tag/v5.8.0
-> 
-> Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+Hello,
 
-Hi Kadambini,
+On Thu, 15 May 2025 23:42:40 +0900
+Cherniaev Andrei <dungeonlords789@naver.com> wrote:
 
-I applied this patch to master, thanks.
+> Fix regression of commit 552ba600eef0884bb7bf7f09a67cd66747d1efa8 Without `--show` loop_dev variable will be empty so script never works... Sorry, it was my mistake...
 
-For information, I removed the "security" mention, because we applied
-backported patches first. See:
-https://gitlab.com/buildroot.org/buildroot/-/commit/aaa50b0e617eb0b288efd00c384a305e90289690
+Thanks for your patch!
 
-Best regards,
+However, it lacks your Signed-off-by line, so we cannot merge it. Also,
+could you wrap your commit message, and avoid "personal comments" like
+"Sorry it was my mistake" ? Could you send a v2 with those issues fixed?
 
-Julien.
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
