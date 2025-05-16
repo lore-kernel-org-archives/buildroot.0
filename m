@@ -1,52 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FBA7C3ABD8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70924C3DA6D
 	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:00:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE3CA70DFF;
-	Mon, 19 May 2025 11:00:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0067F8478D;
+	Mon, 19 May 2025 11:00:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iqPcyr7r0Jhs; Mon, 19 May 2025 11:00:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zm_SOkikp7Xt; Mon, 19 May 2025 11:00:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6FEA670DFA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 249B684785
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6FEA670DFA;
-	Mon, 19 May 2025 11:00:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 249B684785;
+	Mon, 19 May 2025 11:00:40 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2303EE4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 80F21D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AFBB0417AB
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD863417D5
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lRcd1NcRJzWP for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:40:31 +0000 (UTC)
+ id L7TbmO8zt5RU for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 807AF419E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E5957417E6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 807AF419E4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E5957417E6
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7934C872E7; Mon, 19 May 2025 10:40:04 +0000 (UTC)
+ id E148882A2E; Mon, 19 May 2025 10:40:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 16:19:45 +0200
+Date: Fri, 16 May 2025 13:26:32 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c912dc1d27279d5fc6e4187d6c05bda7de7af040
-X-Git-Newrev: 0468aae90a0124b79febf8705d9779e7a8a2ce4c
+X-Git-Oldrev: 072f3bc8c61bd68ed75eb4419f938f718c79ac3f
+X-Git-Newrev: b80278613e4aa23ab4f016a5ec65cfcd5201e4ec
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104004.7934C872E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-anyio: bump to
- 4.9.0
+Message-Id: <20250519104003.E148882A2E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/pkg-download: switch
+ from cargo2 to cargo3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,68 +58,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8332804150280567765=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0468aae90a0124b79febf8705d9779e7a8a2ce4c
+--===============8332804150280567765==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=b80278613e4aa23ab4f016a5ec65cfcd5201e4ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes: https://github.com/agronholm/anyio/releases/tag/4.9.0
+Starting from rust 1.84.0 (cargo 1.84.0), published crates now always
+include a Cargo.lock file. Originally it was only included for packages
+that have executables or examples for use with cargo install. see [1]
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+This behaviour change alters the contents of the .tar.gz archives,
+which causes SHA256 hash mistmatches when trying to build Rust packages.
+
+Example build failure with bat-0.24.0:
+
+ERROR: while checking hashes from package/bat/bat.hash
+ERROR: bat-0.24.0-cargo2.tar.gz has wrong sha256 hash:
+ERROR: expected: 45fcdd6076dc1b45698a7b6c0f4d1f5d9ae676f3ca3b155402ad24680d5b4df6
+ERROR: got     : 28b302b1aa325221796d4ebb25bacab19a8927ef32f4d56a965b32a7b1c102fc
+
+After using the ne hash to download the new archive tar.gz, we have the
+difference between the old archive and the new one using diffoscope:
+│ │ --rw-r--r--   0        0        0     1529 2023-10-11 17:14:12.000000 bat-0.24.0/VENDOR/bincode/.cargo-checksum.json
+│ │ +-rw-r--r--   0        0        0     1609 2023-10-11 17:14:12.000000 bat-0.24.0/VENDOR/bincode/.cargo-checksum.json
+│ │ +-rw-r--r--   0        0        0     1766 2023-10-11 17:14:12.000000 bat-0.24.0/VENDOR/bincode/Cargo.lock
+│ │  -rw-r--r--   0        0        0     1388 2023-10-11 17:14:12.000000 bat-0.24.0/VENDOR/bincode/Cargo.toml
+
+We can see that Cargo.lock has been added.
+
+To avoid hash mismatch issues and to clearly mark archives generated
+with the new Cargo behavior, we migrate the naming from 'cargo2.tar.gz'
+to 'cargo3.tar.gz'.
+
+We did not find any alternative to disable this new cargo-publish
+behavior, so this change is necessary to allow updating the hashes of
+Cargo-fetched packages.
+
+[1] https://github.com/rust-lang/cargo/pull/14815
+https://doc.rust-lang.org/nightly/cargo/CHANGELOG.html
+
+Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-anyio/Config.in         | 1 -
- package/python-anyio/python-anyio.hash | 4 ++--
- package/python-anyio/python-anyio.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/pkg-download.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-anyio/Config.in b/package/python-anyio/Config.in
-index 353c7e4629..d843f37af0 100644
---- a/package/python-anyio/Config.in
-+++ b/package/python-anyio/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_PYTHON_ANYIO
- 	bool "python-anyio"
- 	select BR2_PACKAGE_PYTHON_IDNA # runtime
- 	select BR2_PACKAGE_PYTHON_SNIFFIO # runtime
--	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
- 	help
- 	  High level compatibility layer for multiple asynchronous
- 	  event loop implementations.
-diff --git a/package/python-anyio/python-anyio.hash b/package/python-anyio/python-anyio.hash
-index 4ff6955ae5..e1fdf474c2 100644
---- a/package/python-anyio/python-anyio.hash
-+++ b/package/python-anyio/python-anyio.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/anyio/json
--md5  ad00874069a6685b2e3e84c5a2e045cb  anyio-4.8.0.tar.gz
--sha256  1d9fe889df5212298c0c0723fa20479d1b94883a2df44bd3897aa91083316f7a  anyio-4.8.0.tar.gz
-+md5  d0e4db5f5e4041d1bc9664042b454218  anyio-4.9.0.tar.gz
-+sha256  673c0c244e15788651a4ff38710fea9675823028a6f08a5eda409e0c9840a028  anyio-4.9.0.tar.gz
- # Locally computed sha256 checksums
- sha256  5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  LICENSE
-diff --git a/package/python-anyio/python-anyio.mk b/package/python-anyio/python-anyio.mk
-index 4f38e12794..3be3f2b78f 100644
---- a/package/python-anyio/python-anyio.mk
-+++ b/package/python-anyio/python-anyio.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index cf5959ea95..bbb3501643 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -12,7 +12,7 @@
+ BR_FMT_VERSION_git = -git4
+ BR_FMT_VERSION_svn = -svn5
+ BR_FMT_VERSION_go = -go2
+-BR_FMT_VERSION_cargo = -cargo2
++BR_FMT_VERSION_cargo = -cargo3
  
--PYTHON_ANYIO_VERSION = 4.8.0
-+PYTHON_ANYIO_VERSION = 4.9.0
- PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
--PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/a3/73/199a98fc2dae33535d6b8e8e6ec01f8c1d76c9adb096c6b7d64823038cde
-+PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/95/7d/4c1bd541d4dffa1b52bd83fb8527089e097a106fc90b467a7313b105f840
- PYTHON_ANYIO_SETUP_TYPE = setuptools
- PYTHON_ANYIO_LICENSE = MIT
- PYTHON_ANYIO_LICENSE_FILES = LICENSE
+ DL_WRAPPER = support/download/dl-wrapper
+ 
+
+--===============8332804150280567765==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8332804150280567765==--
