@@ -4,79 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B950FC3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 21:05:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F246AC3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 21:14:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2175F60ACF;
-	Fri, 16 May 2025 21:05:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6E1161352;
+	Fri, 16 May 2025 21:14:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RkIltJRbMObL; Fri, 16 May 2025 21:05:08 +0000 (UTC)
+ id pNL9D2nYf4na; Fri, 16 May 2025 21:14:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E2E2E613A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2113A61327
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E2E2E613A5;
-	Fri, 16 May 2025 21:05:07 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7A6581142
- for <buildroot@buildroot.org>; Fri, 16 May 2025 21:05:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2113A61327;
+	Fri, 16 May 2025 21:14:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 786241DE
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 21:14:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6B43B405A2
- for <buildroot@buildroot.org>; Fri, 16 May 2025 21:05:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5E3BB40563
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 21:14:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TPu7pPWIwyS8 for <buildroot@buildroot.org>;
- Fri, 16 May 2025 21:05:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9AC75404F3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9AC75404F3
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9AC75404F3
- for <buildroot@buildroot.org>; Fri, 16 May 2025 21:05:00 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 5EADF43995;
- Fri, 16 May 2025 21:04:58 +0000 (UTC)
-To: Buildroot List <buildroot@buildroot.org>
-Cc: Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Bernd Kuhls <bernd@kuhls.net>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
-Date: Fri, 16 May 2025 23:04:50 +0200
-Message-ID: <20250516210452.342275-5-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250516210452.342275-1-thomas.petazzoni@bootlin.com>
-References: <20250516210452.342275-1-thomas.petazzoni@bootlin.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uEswqyApb5O3 for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 21:14:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
+ helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5015B40541
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5015B40541
+Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5015B40541
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 21:14:32 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id A22CB1C110E; Fri, 16 May 2025 23:14:29 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: stefan.nickl@gmail.com,
+	Arnout Vandecappelle <arnout@rnout.be>
+Date: Fri, 16 May 2025 23:14:29 +0200
+Message-ID: <20250516211429.763211-1-arnout@rnout.be>
 MIME-Version: 1.0
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudefjeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepvfhhohhmrghsucfrvghtrgiiiihonhhiuceothhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeiteehuddtuedtgedvteegfeelkefgfeeluddtveejvdetkeefgefgteeileevieenucffohhmrghinhepvddqvdejqdhgvgduiehffhdtiegruggsrdhonhgvpdgsuhhilhgurhhoohhtrdhnvghtpdhsohhurhgtvgifrghrvgdrohhrghdpvhhiuggvohhlrghnrdhorhhgpdhmlhhpughsphgprghrmhhvhehtvgdrshgspdhffhhmphgvghdrohhrghenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefpdhhvghlohepfihinhgushhurhhfrddrpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhns
- ggprhgtphhtthhopeehpdhrtghpthhtohepsghuihhlughrohhothessghuihhlughrohhothdrohhrghdprhgtphhtthhopehrohihkhholhhlvghnshhvvghnughsvghnsehgmhgrihhlrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepsggvrhhnugeskhhuhhhlshdrnhgvthdprhgtphhtthhopehmrghhhigrrhdrkhhoshhhkhhouhgvihesghhmrghilhdrtghomh
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1747429498;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=EqfZeBOxnuERVY+nNwu4IvugXZDXSg90wy3HTSErl5Q=;
- b=NrRnzUPfI5rQe5ytSR0uPotYiwhq8VbJ53FlfmFprPV6tnwZ5OekUgbAj6718l1x5KSHb+
- +1d0iUsaffmK9ORonVfiiByKthtr3On4KUcr3zBZbXvEwGWNbWqzCJmduNpc3k4UbsNG3n
- Nn21RcDZtC4vuzL3bdPuP2F3P45Ttlocj8HJSicD3fKk+OEY3/oT/5oPrPc5uGL37HE/hs
- EoHwnYZjsZu8sC+8f4RDK7zSkEqiQeuwniC9POqU4xXSDYXBm2WXETu2xc6ky3LmgXoUW1
- VO2lfh+bx/mqfVkyy5nbkEEJRJDXhRegUNlSARevrHJ58giZyZb6yEfFdCnBwg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=rnout.be; s=dkim; 
+ t=1747430070; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=bCB3cEykszKwiWse1/NPZQv3NUgCqNoGI8gakDxYAQk=;
+ b=fnVr9l1NDLjyZndRMPSA3vE05Zqn4UyLbL8k0eZmTEas89EkngAJODX2CZPkK6nh2ZG5US
+ B9cnjEkejnVFAPK0tM/BE51IGPjWjL8S8a5rE9pApe5WtFDjbZpW8DwPUbVNbyPDJFBCOM
+ a8GjsHcoCmPkU2OFZNwXK6n8i2nAq+EcoOx3FdhJXlOUS9/zkt04Q0g3WeJ/lxlTa20H7Y
+ 3phtVHicS8dVufgMFuhLn64Pyv6NuHalhRBMhiCcgeGy9AyrCa+RVu95wDbqPLZ2dHyDOG
+ E5rCm80d1S5755zvKqA+KHe043Ms4so6pdMs1HU4oxupzXGy3JhgukeLM5mg/Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=rnout.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=NrRnzUPf
-Subject: [Buildroot] [PATCH 4/4] package/ffmpeg: bump to latest commit in
- 6.1.x branch
+ unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=fnVr9l1N
+Subject: [Buildroot] [PATCH] docs/manual/adding-packages-tips.adoc: add
+ section about private repositories
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -88,116 +74,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VmVyc2lvbiA2LjEuMiBvZiBmZm1wZWcgZmFpbHMgdG8gYnVpbGQgd2l0aCBHQ0MgMTQueCBkdWUg
-dG8gdGhlIFY0TDIKaW9jdGwgY29kZToKCmxpYmF2ZGV2aWNlL3Y0bDIuYzoxMzc6MTc6IGVycm9y
-OiBhc3NpZ25tZW50IHRvIOKAmGludCAoKikoaW50LCAgbG9uZyB1bnNpZ25lZCBpbnQsIC4uLini
-gJkgZnJvbSBpbmNvbXBhdGlibGUgcG9pbnRlciB0eXBlIOKAmGludCAoKikoaW50LCAgaW50LCAu
-Li4p4oCZIFstVwppbmNvbXBhdGlibGUtcG9pbnRlci10eXBlc10KICAxMzcgfCAgICAgcy0+aW9j
-dGxfZiAgPSBwcmVmaXggIyMgaW9jdGw7ICAgICAgXAogICAgICB8ICAgICAgICAgICAgICAgICBe
-CmxpYmF2ZGV2aWNlL3Y0bDIuYzoxNTE6OTogbm90ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3JvIOKA
-mFNFVF9XUkFQUEVSU+KAmQogIDE1MSB8ICAgICAgICAgU0VUX1dSQVBQRVJTKCk7CiAgICAgIHwg
-ICAgICAgICBefn5+fn5+fn5+fn4KClRoaXMgaGFzIGJlZW4gZml4ZWQgdXBzdHJlYW0gaW4gdGhl
-IHJlbGVhc2UvNi4xIGJyYW5jaCwgd2hpY2ggaGFzIDI3CmZpeGVzIG9uIHRvcCBvZiA2LjEuMi4g
-VGhlIGNvbW1pdHMgbmVjZXNzYXJ5IHRvIGZpeCBvdXIgaXNzdWUgYXJlOgoKZjcxMDc2YzAwOWY4
-NDkxN2U3YTBmMmYxZWNlODZiNzE4ZGUyZDhkMyBjb25maWd1cmU6IGltcHJvdmUgY2hlY2sgZm9y
-IFBPU0lYIGlvY3RsCjYwNTkzZDZjMDZjOWI2MTAzNTliZDZhZjI2YTI2OGZlZmYxMjkzZWIgY29u
-ZmlndXJlOiByZXN0b3JlIGF1dG9kZXRlY3Rpb24gb2YgdjRsMiBhbmQgZmJkZXYKCkhvd2V2ZXIs
-IHNpbmNlIGFsbCBvdGhlciBjb21taXRzIGFyZSBmaXhlcywgd2UgYmVsaWV2ZSBidW1waW5nIHRv
-IHRoZQpsYXRlc3QgY29tbWl0IGluIHRoZSByZWxlYXNlLzYuMSBicmFuY2ggaXMgYSBiZXR0ZXIg
-aWRlYS4KClRoaXMgYWxsb3dzIHRvIGRyb3AKMDAwOC1saWJhdmNvZGVjLWFybS1tbHBkc3BfYXJt
-djV0ZS1maXgtbGFiZWwtZm9ybWF0LXRvLXdvLnBhdGNoLCB3aGljaAppcyB1cHN0cmVhbSBhcyBv
-ZjoKCjRjNjg4ODQ1YTUwZjdkY2UzYWY5YWZlYmU2MGYwZjdhNDkzYzRmMDcgbGliYXZjb2RlYy9h
-cm0vbWxwZHNwX2FybXY1dGU6IGZpeCBsYWJlbCBmb3JtYXQgdG8gd29yayB3aXRoIGJpbnV0aWxz
-IDIuNDMKCk5vdGUgdGhhdCB3ZSBzZXQgRkZNUEVHX0NQRV9JRF9WRVJTSU9OIHRvIGdldCBwcm9w
-ZXIgQ1ZFIG1hdGNoaW5nIGV2ZW4Kd2l0aCBGRk1QRUdfVkVSU0lPTiBiZWluZyBzZXQgdG8gbjYu
-MS4yLTI3LWdlMTZmZjA2YWRiLiBPbmUgd2hvIGhhdmUKaWRlYWxseSBzZXQgRkZNUEVHX1ZFUlNJ
-T04gdG8gbiQoRkZNUEVHX0NQRV9JRF9WRVJTSU9OKS1nZTE2ZmYwNmFkYiwKYnV0IHRoYXQgbWFr
-ZXMgY2hlY2stcGFja2FnZSB1bmhhcHB5IHdpdGg6CgpXQVJOSU5HOiBwYWNrYWdlL2ZmbXBlZy9m
-Zm1wZWcubWs6NzogZXhwZWN0aW5nIHBhY2thZ2UgdmVyc2lvbiB0byBiZSBzZXQgYmVmb3JlIENQ
-RV9JRF9WRVJTSU9OCgpGaXhlczoKCiAgaHR0cHM6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9y
-ZXN1bHRzL2ZlMTU3NDQ0M2FjZDUwY2E3ZTU3NmJiNGJlYjI0NDY3YmUxNzEzZTMvCgpTaWduZWQt
-b2ZmLWJ5OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgot
-LS0KIC4uLmxwZHNwX2FybXY1dGUtZml4LWxhYmVsLWZvcm1hdC10by13by5wYXRjaCB8IDYzIC0t
-LS0tLS0tLS0tLS0tLS0tLS0KIHBhY2thZ2UvZmZtcGVnL2ZmbXBlZy5oYXNoICAgICAgICAgICAg
-ICAgICAgICB8ICAyICstCiBwYWNrYWdlL2ZmbXBlZy9mZm1wZWcubWsgICAgICAgICAgICAgICAg
-ICAgICAgfCAgOCArKy0KIDMgZmlsZXMgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspLCA2NyBkZWxl
-dGlvbnMoLSkKIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2ZmbXBlZy8wMDA4LWxpYmF2Y29k
-ZWMtYXJtLW1scGRzcF9hcm12NXRlLWZpeC1sYWJlbC1mb3JtYXQtdG8td28ucGF0Y2gKCmRpZmYg
-LS1naXQgYS9wYWNrYWdlL2ZmbXBlZy8wMDA4LWxpYmF2Y29kZWMtYXJtLW1scGRzcF9hcm12NXRl
-LWZpeC1sYWJlbC1mb3JtYXQtdG8td28ucGF0Y2ggYi9wYWNrYWdlL2ZmbXBlZy8wMDA4LWxpYmF2
-Y29kZWMtYXJtLW1scGRzcF9hcm12NXRlLWZpeC1sYWJlbC1mb3JtYXQtdG8td28ucGF0Y2gKZGVs
-ZXRlZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IDE3OGZmYmMzM2IuLjAwMDAwMDAwMDAKLS0tIGEv
-cGFja2FnZS9mZm1wZWcvMDAwOC1saWJhdmNvZGVjLWFybS1tbHBkc3BfYXJtdjV0ZS1maXgtbGFi
-ZWwtZm9ybWF0LXRvLXdvLnBhdGNoCisrKyAvZGV2L251bGwKQEAgLTEsNjMgKzAsMCBAQAotRnJv
-bSA0YzY4ODg0NWE1MGY3ZGNlM2FmOWFmZWJlNjBmMGY3YTQ5M2M0ZjA3IE1vbiBTZXAgMTcgMDA6
-MDA6MDAgMjAwMQotRnJvbTogUm9zcyBCdXJ0b24gPHJvc3MuYnVydG9uQGFybS5jb20+Ci1EYXRl
-OiBGcmksIDkgQXVnIDIwMjQgMTE6MzI6MDAgKzAxMDAKLVN1YmplY3Q6IFtQQVRDSF0gbGliYXZj
-b2RlYy9hcm0vbWxwZHNwX2FybXY1dGU6IGZpeCBsYWJlbCBmb3JtYXQgdG8gd29yayB3aXRoCi0g
-YmludXRpbHMgMi40MwotTUlNRS1WZXJzaW9uOiAxLjAKLUNvbnRlbnQtVHlwZTogdGV4dC9wbGFp
-bjsgY2hhcnNldD11dGY4Ci1Db250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0Ci0KLWJpbnV0
-aWxzIDIuNDMgaGFzIHN0cmljdGVyIHZhbGlkYXRpb24gZm9yIGxhYmVsc1sxXSBhbmQgcmVzdWx0
-cyBpbiBlcnJvcnMKLXdoZW4gYnVpbGRpbmcgZmZtcGVnIGZvciBhcm12NToKLQotc3JjL2xpYmF2
-Y29kZWMvYXJtL21scGRzcF9hcm12NXRlLlM6MjMyOiBFcnJvcjoganVuayBhdCBlbmQgb2YgbGlu
-ZSwgZmlyc3QgdW5yZWNvZ25pemVkIGNoYXJhY3RlciBpcyBgMCcKLQotUmVtb3ZlIHRoZSBsZWFk
-aW5nIHplcm8gaW4gdGhlICIwMSIgbGFiZWwgdG8gcmVzb2x2ZSB0aGlzIGVycm9yLgotCi1bMV0g
-aHR0cHM6Ly9zb3VyY2V3YXJlLm9yZy9naXQvP3A9YmludXRpbHMtZ2RiLmdpdDthPWNvbW1pdDto
-PTIyNjc0OWQ1YTZmZjBkNWM2MDdkNjQyOGQ2YzgxZTFlN2U3YTk5NGIKLQotU2lnbmVkLW9mZi1i
-eTogUm9zcyBCdXJ0b24gPHJvc3MuYnVydG9uQGFybS5jb20+Ci1TaWduZWQtb2ZmLWJ5OiBNYXJ0
-aW4gU3RvcnNqw4PCtiA8bWFydGluQG1hcnRpbi5zdD4KLShjaGVycnkgcGlja2VkIGZyb20gY29t
-bWl0IDY1NGJkNDc3MTZjNGYzNjcxOWZiMGYzZjdmZDgzODZkNWVkMGI5MTYpCi0KLVVwc3RyZWFt
-OiBodHRwOi8vZ2l0LnZpZGVvbGFuLm9yZy8/cD1mZm1wZWcuZ2l0O2E9Y29tbWl0O2g9NGM2ODg4
-NDVhNTBmN2RjZTNhZjlhZmViZTYwZjBmN2E0OTNjNGYwNwotCi1TaWduZWQtb2ZmLWJ5OiBCZXJu
-ZCBLdWhscyA8YmVybmRAa3VobHMubmV0PgotLS0tCi0gbGliYXZjb2RlYy9hcm0vbWxwZHNwX2Fy
-bXY1dGUuUyB8IDYgKysrLS0tCi0gMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBk
-ZWxldGlvbnMoLSkKLQotZGlmZiAtLWdpdCBhL2xpYmF2Y29kZWMvYXJtL21scGRzcF9hcm12NXRl
-LlMgYi9saWJhdmNvZGVjL2FybS9tbHBkc3BfYXJtdjV0ZS5TCi1pbmRleCA0ZjlhYTQ4NWZkLi5k
-MzE1Njg2MTFjIDEwMDY0NAotLS0tIGEvbGliYXZjb2RlYy9hcm0vbWxwZHNwX2FybXY1dGUuUwot
-KysrIGIvbGliYXZjb2RlYy9hcm0vbWxwZHNwX2FybXY1dGUuUwotQEAgLTIyOSw3ICsyMjksNyBA
-QCBBIC5lbmRpZgotICAgLmVuZGlmCi0gCi0gICAgICAgICAvLyBCZWdpbiBsb29wCi0tMDE6Ci0r
-MToKLSAgIC5pZiBUT1RBTF9UQVBTID09IDAKLSAgICAgICAgIC8vIFRoaW5ncyBzaW1wbGlmeSBh
-IGxvdCBpbiB0aGlzIGNhc2UKLSAgICAgICAgIC8vIEluIGZhY3QgdGhpcyBjb3VsZCBiZSBwaXBl
-bGluZWQgZnVydGhlciBpZiBpdCdzIHdvcnRoIGl0Li4uCi1AQCAtMjQxLDcgKzI0MSw3IEBAIEEg
-LmVuZGlmCi0gICAgICAgICBzdHIgICAgIFNUMCwgW1BTVCwgIy00XSEKLSAgICAgICAgIHN0ciAg
-ICAgU1QwLCBbUFNULCAjNCAqIChNQVhfQkxPQ0tTSVpFICsgTUFYX0ZJUl9PUkRFUildCi0gICAg
-ICAgICBzdHIgICAgIFNUMCwgW1BTQU1QXSwgIzQgKiBNQVhfQ0hBTk5FTFMKLS0gICAgICAgIGJu
-ZSAgICAgMDFiCi0rICAgICAgICBibmUgICAgIDFiCi0gICAuZWxzZQotICAgICAuaWYgXGZpcl90
-YXBzICYgMQotICAgICAgIC5zZXQgTE9BRF9SRUcsIDEKLUBAIC0zMzMsNyArMzMzLDcgQEAgVCAg
-ICAgICBvcnIgICAgIEFDMCwgQUMwLCBBQzEKLSAgICAgICAgIHN0ciAgICAgU1QzLCBbUFNULCAj
-LTRdIQotICAgICAgICAgc3RyICAgICBTVDIsIFtQU1QsICM0ICogKE1BWF9CTE9DS1NJWkUgKyBN
-QVhfRklSX09SREVSKV0KLSAgICAgICAgIHN0ciAgICAgU1QzLCBbUFNBTVBdLCAjNCAqIE1BWF9D
-SEFOTkVMUwotLSAgICAgICAgYm5lICAgICAwMWIKLSsgICAgICAgIGJuZSAgICAgMWIKLSAgIC5l
-bmRpZgotICAgICAgICAgYiAgICAgICA5OWYKLSAKLS0tIAotMi4zMC4yCi0KZGlmZiAtLWdpdCBh
-L3BhY2thZ2UvZmZtcGVnL2ZmbXBlZy5oYXNoIGIvcGFja2FnZS9mZm1wZWcvZmZtcGVnLmhhc2gK
-aW5kZXggNjMwYmQ3MGM1Ni4uNTA0OThhNmJhOSAxMDA2NDQKLS0tIGEvcGFja2FnZS9mZm1wZWcv
-ZmZtcGVnLmhhc2gKKysrIGIvcGFja2FnZS9mZm1wZWcvZmZtcGVnLmhhc2gKQEAgLTEsNSArMSw1
-IEBACiAjIExvY2FsbHkgY2FsY3VsYXRlZAotc2hhMjU2ICAzYjYyNDY0OTcyNWVjZGM1NjVjOTAz
-Y2E2NjQzZDQxZjMzYmQ0OTIzOTkyMmU0NWM5YjE0NDJjNjNkY2E0ZTM4ICBmZm1wZWctNi4xLjIu
-dGFyLnh6CitzaGEyNTYgIGYwYjJiMDdjNzAxNGI3YWE4YzQ2ODkwOTViODNhNDlhODVkNDE4ODcw
-NDlmYzUzMDI1NDNhZWMwYmVmN2QwNjYgIGZmbXBlZy1uNi4xLjItMjctZ2UxNmZmMDZhZGItZ2l0
-NC50YXIuZ3oKIHNoYTI1NiAgODE3N2Y5NzUxMzIxMzUyNmRmMmNmNjE4NGQ4ZmY5ODZjNjc1YWZi
-NTE0ZDRlNjhhNDA0MDEwNTIxYjg4MDY0MyAgQ09QWUlORy5HUEx2Mgogc2hhMjU2ICBiNjM0YWI1
-NjQwZTI1ODU2M2M1MzZlNjU4Y2FkODcwODA1NTNkZjZmMzRmNjIyNjlhMjFkNTU0ODQ0ZTU4YmZl
-ICBDT1BZSU5HLkxHUEx2Mi4xCiBzaGEyNTYgIGNiNDhiZjA5YTExZjVmYjU3NmNkZGIwNDMxYzhm
-NWVkMGE2MDE1N2E5ZWM5NDJhZGZmYzEzOTA3Y2JlMDgzZjIgIExJQ0VOU0UubWQKZGlmZiAtLWdp
-dCBhL3BhY2thZ2UvZmZtcGVnL2ZmbXBlZy5tayBiL3BhY2thZ2UvZmZtcGVnL2ZmbXBlZy5tawpp
-bmRleCA3OTkyMDFjODIwLi41YzAwYmEyZGZmIDEwMDY0NAotLS0gYS9wYWNrYWdlL2ZmbXBlZy9m
-Zm1wZWcubWsKKysrIGIvcGFja2FnZS9mZm1wZWcvZmZtcGVnLm1rCkBAIC00LDEwICs0LDEyIEBA
-CiAjCiAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwogCi1GRk1QRUdfVkVSU0lPTiA9IDYuMS4yCi1G
-Rk1QRUdfU09VUkNFID0gZmZtcGVnLSQoRkZNUEVHX1ZFUlNJT04pLnRhci54egotRkZNUEVHX1NJ
-VEUgPSBodHRwczovL2ZmbXBlZy5vcmcvcmVsZWFzZXMKKyMgVXBkYXRlIEZGTVBFR19DUEVfSURf
-VkVSU0lPTiBpZiBuZWVkZWQKK0ZGTVBFR19WRVJTSU9OID0gbjYuMS4yLTI3LWdlMTZmZjA2YWRi
-CitGRk1QRUdfU0lURSA9IGh0dHBzOi8vZ2l0LmZmbXBlZy5vcmcvZmZtcGVnLmdpdAorRkZNUEVH
-X1NJVEVfTUVUSE9EID0gZ2l0CiBGRk1QRUdfSU5TVEFMTF9TVEFHSU5HID0gWUVTCitGRk1QRUdf
-Q1BFX0lEX1ZFUlNJT04gPSA2LjEuMgogCiBGRk1QRUdfTElDRU5TRSA9IExHUEwtMi4xKywgbGli
-anBlZyBsaWNlbnNlCiBGRk1QRUdfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UubWQgQ09QWUlORy5M
-R1BMdjIuMQotLSAKMi40OS4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
-Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Buildroot packaging pretty much assumes that the sources it downloads
+are publicly available. In general, however, Buildroot is also used to
+download sources from private repositories. Nowadays, that mostly means
+from a github or gitlab instance.
+
+Although git-over-ssh can be used for that, this poses a problem for CI,
+because the CI runners integrated with github and gitlab only have
+access to the repository itself, not to other private repositories. And
+creating ssh keypairs for CI runners is tricky.
+
+Therefore, document how standard tools can be used to make private
+repositories available both to developers and to CI. There are quite a
+few alternative approaches possible, but they're more complicated or
+less generically applicable.
+
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+---
+ docs/manual/adding-packages-tips.adoc | 75 +++++++++++++++++++++++++++
+ 1 file changed, 75 insertions(+)
+
+diff --git a/docs/manual/adding-packages-tips.adoc b/docs/manual/adding-packages-tips.adoc
+index 85400c0f31f..91888898a84 100644
+--- a/docs/manual/adding-packages-tips.adoc
++++ b/docs/manual/adding-packages-tips.adoc
+@@ -253,3 +253,78 @@ FOO_SOURCE = foo-$(FOO_VERSION).tar.bz2
+ If there is a specific tarball uploaded by the upstream developers in
+ +https://gitlab.com/<project>/releases/+, do not use this macro, but
+ rather use directly the link to the tarball.
++
++[[accessing-private-repos]]
++==== Accessing a private repository for a package
++
++If you want to create a package in a br2-external tree and its source
++is in a private repository (e.g. on gitlab, github, bitbucket, ...),
++you have to write it in a way that it is buildable both by developers
++and in CI. This poses a challenge, because you need to authenticate in
++order to access it.
++
++There are several ways you can approach this. The following two are the
++most practical ones.
++
++===== Using ssh and +insteadOf+
++
++Configure your private packages to use ssh.
++
++----
++FOO_SITE = git@githosting.com:/<group>/<package>.git
++----
++
++Developers already have an ssh key installed so they can access it
++this way. The only limitation is that if they build in docker, they
++have to make sure the ssh key is accessible from within the container.
++Either mount the ssh directory into the countainer by passing the
++options +-v ~/.ssh:<homedir>/.ssh+, or load the private key into
++ssh-agent and pass +--mount type=bind,source=$SSH_AUTH_SOCK,target=/ssh-agent
++--env SSH_AUTH_SOCK=/ssh-agent+
++
++CI builders typically will not have an ssh key that allows
++access to other repositories. For those, you'll need to generate an
++access token. Then you configure git to replace the ssh access with https
++access. As a preparation step in CI, run the following command.
++
++----
++git config --global url."https://<token>:x-oauth-basic@githosting.com/".insteadOf "https://githosting.com/"
++----
++
++The way to use a token for basic authentication differs between different
++git hosting providers, and sometimes between different types of tokens.
++Consult your provider's documentation to find out how to access git over
++https with a token.
++
++===== Use https and +.netrc+
++
++If, for any reason, developers don't have an ssh key already, then it may
++be simpler to use https authentication. For this, every developer will
++have to generate a token that has (read) access to all relevant repositories.
++Some git hosting providers have a command-line utility that can generate
++such a token, otherwise you'll need to generate it in the web interface. The
++token has a limited lifetime so you'll need to regularly refresh it.
++
++To make sure the token is used in the Buildroot build, add it to +~/.netrc+
++
++----
++machine githosting.com
++    login <username>
++    password <token>
++----
++
++The +<username>+ and +<password>+ to use are again different for different
++git hosting providers.
++
++In CI, generate the +.netrc+ file as a preparation step.
++
++Configure your private packages to use https.
++
++----
++FOO_SITE = https://githosting.com/<group>/<package>.git
++----
++
++Both wget (https) and git will use +.netrc+ to get login information. This
++approach is potentially somewhat less secure because +.netrc+ cannot be
++password-protected. The advantage is that users and CI use the exact same
++way of providing credentials.
+-- 
+2.49.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
