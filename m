@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DA59C54754
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 14:21:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B013C3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 14:21:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B747A40788;
-	Fri, 16 May 2025 14:21:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2C42D417D8;
+	Fri, 16 May 2025 14:21:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sKrg8mynegbs; Fri, 16 May 2025 14:21:36 +0000 (UTC)
+ id JXmxttEhGnE6; Fri, 16 May 2025 14:21:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE7B541786
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8E0E417B7
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE7B541786;
-	Fri, 16 May 2025 14:21:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D3147185
+	by smtp4.osuosl.org (Postfix) with ESMTP id B8E0E417B7;
+	Fri, 16 May 2025 14:21:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D3BE91C7
  for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C3BAF406F2
+ by smtp2.osuosl.org (Postfix) with ESMTP id C48584057B
  for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jr3GUFHoIf9U for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QSDYgN7J8D6K for <buildroot@buildroot.org>;
  Fri, 16 May 2025 14:21:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16CC54071E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07FEA4044F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 16CC54071E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 07FEA4044F
  for <buildroot@buildroot.org>; Fri, 16 May 2025 14:21:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 12A6386BDE; Fri, 16 May 2025 14:21:30 +0000 (UTC)
+ id ED23C86BD6; Fri, 16 May 2025 14:21:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 16:19:50 +0200
+Date: Fri, 16 May 2025 16:19:47 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cde5e50b73a0b0bd07ebfcc0a93fc1b20d2bbd4a
-X-Git-Newrev: 1126be8fdfe741faf48bd300c243439d46d9d71c
+X-Git-Oldrev: 9b6e7bf7ee2fb03fae040853a3c12a8e1b46a532
+X-Git-Newrev: e42de820cd598d6ed7045fd4f06aa1429a359e05
 X-Patchwork-Hint: ignore
-Message-Id: <20250516142130.12A6386BDE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-dotenv: bump to 1.1.0
+Message-Id: <20250516142129.ED23C86BD6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pydantic-core: bump to
+ 2.34.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,44 +66,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1126be8fdfe741faf48bd300c243439d46d9d71c
+commit: https://git.buildroot.net/buildroot/commit/?id=e42de820cd598d6ed7045fd4f06aa1429a359e05
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+[Arnout: update hash for cargo3]
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/python-dotenv/python-dotenv.hash | 4 ++--
- package/python-dotenv/python-dotenv.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/python-pydantic-core/Config.in                 | 3 ++-
+ package/python-pydantic-core/python-pydantic-core.hash | 2 +-
+ package/python-pydantic-core/python-pydantic-core.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dotenv/python-dotenv.hash b/package/python-dotenv/python-dotenv.hash
-index 710922fba3..c591dcf9b9 100644
---- a/package/python-dotenv/python-dotenv.hash
-+++ b/package/python-dotenv/python-dotenv.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/python-dotenv/json
--md5  68abb78e05460ce558ca255de550e1ea  python-dotenv-1.0.1.tar.gz
--sha256  e324ee90a023d808f1959c46bcbc04446a10ced277783dc6ee09987c37ec10ca  python-dotenv-1.0.1.tar.gz
-+md5  9bdf50416b1c59832d2f77ad6afdf0d8  python_dotenv-1.1.0.tar.gz
-+sha256  41f90bc6f5f177fb41f53e87666db362025010eb28f60a01c9143bfa33a2b2d5  python_dotenv-1.1.0.tar.gz
+diff --git a/package/python-pydantic-core/Config.in b/package/python-pydantic-core/Config.in
+index 3eeb1844a2..3f985ae4da 100644
+--- a/package/python-pydantic-core/Config.in
++++ b/package/python-pydantic-core/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_PYTHON_PYDANTIC_CORE
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+ 	help
+-	  Core validation logic for pydantic written in rust.
++	  Core functionality for Pydantic validation and
++	  serialization.
+ 
+ 	  https://github.com/pydantic/pydantic-core
+diff --git a/package/python-pydantic-core/python-pydantic-core.hash b/package/python-pydantic-core/python-pydantic-core.hash
+index aca95d2c13..11b00dc05d 100644
+--- a/package/python-pydantic-core/python-pydantic-core.hash
++++ b/package/python-pydantic-core/python-pydantic-core.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after vendoring
+-sha256  b3e332ffb9193d9fb08bdd8690ceb1ed787d03e1e7c4a00b069715bb3def1424  python-pydantic-core-2.29.0-cargo3.tar.gz
++sha256  475e20938b8dd93465a4e9fe9e030dfa51dcf1961d1cb02e3e50889489defd67  python-pydantic-core-2.34.1-cargo3.tar.gz
  # Locally computed sha256 checksums
- sha256  80619b7049f08c81683ad0e01f08f257a840652dd71ee83146d36658c7d2c2b9  LICENSE
-diff --git a/package/python-dotenv/python-dotenv.mk b/package/python-dotenv/python-dotenv.mk
-index 324eea239e..c565a3e681 100644
---- a/package/python-dotenv/python-dotenv.mk
-+++ b/package/python-dotenv/python-dotenv.mk
-@@ -4,8 +4,9 @@
+ sha256  2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a  LICENSE
+diff --git a/package/python-pydantic-core/python-pydantic-core.mk b/package/python-pydantic-core/python-pydantic-core.mk
+index c27967689d..48fd4960af 100644
+--- a/package/python-pydantic-core/python-pydantic-core.mk
++++ b/package/python-pydantic-core/python-pydantic-core.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_DOTENV_VERSION = 1.0.1
--PYTHON_DOTENV_SITE = https://files.pythonhosted.org/packages/bc/57/e84d88dfe0aec03b7a2d4327012c1627ab5f03652216c63d49846d7a6c58
-+PYTHON_DOTENV_VERSION = 1.1.0
-+PYTHON_DOTENV_SOURCE = python_dotenv-$(PYTHON_DOTENV_VERSION).tar.gz
-+PYTHON_DOTENV_SITE = https://files.pythonhosted.org/packages/88/2c/7bb1416c5620485aa793f2de31d3df393d3686aa8a8506d11e10e13c5baf
- PYTHON_DOTENV_SETUP_TYPE = setuptools
- PYTHON_DOTENV_LICENSE = BSD-3-Clause
- PYTHON_DOTENV_LICENSE_FILES = LICENSE
+-PYTHON_PYDANTIC_CORE_VERSION = 2.29.0
++PYTHON_PYDANTIC_CORE_VERSION = 2.34.1
+ PYTHON_PYDANTIC_CORE_SOURCE_PYPI = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
+-PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/79/f6/904edea98c98c09b8d618d619749af19a50ea5a71b9199ee2131a5a03dfb
+ PYTHON_PYDANTIC_CORE_SITE = $(PYTHON_PYDANTIC_CORE_SITE_PYPI)/$(PYTHON_PYDANTIC_CORE_SOURCE_PYPI)?buildroot-path=filename
++PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/42/fa/5f682f3db14e14f7b5b7f5008ac24594b93943d1da4facbacff5876624cf
+ PYTHON_PYDANTIC_CORE_SETUP_TYPE = maturin
+ PYTHON_PYDANTIC_CORE_LICENSE = MIT
+ PYTHON_PYDANTIC_CORE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
