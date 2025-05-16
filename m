@@ -4,50 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2387C3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 09:23:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BF97C3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 09:25:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74AC261298;
-	Fri, 16 May 2025 09:23:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAED461299;
+	Fri, 16 May 2025 09:25:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r7NTnR4F_oMy; Fri, 16 May 2025 09:23:30 +0000 (UTC)
+ id 7Vdh0RyJ4q1s; Fri, 16 May 2025 09:25:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 89D5C60B6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A4CCC61263
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 89D5C60B6E;
-	Fri, 16 May 2025 09:23:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A4CCC61263;
+	Fri, 16 May 2025 09:25:46 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0C8601AB
- for <buildroot@buildroot.org>; Fri, 16 May 2025 09:23:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 207A41AB
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 09:25:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E552240C3A
- for <buildroot@buildroot.org>; Fri, 16 May 2025 09:23:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0595640760
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 09:25:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WOBI3lomwrM2 for <buildroot@buildroot.org>;
- Fri, 16 May 2025 09:23:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id QdlB8zHpDKDA for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 09:25:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25C1240C1D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25C1240C1D
- for <buildroot@buildroot.org>; Fri, 16 May 2025 09:23:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 12B9B868F7; Fri, 16 May 2025 09:23:28 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 11:19:36 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aaa50b0e617eb0b288efd00c384a305e90289690
-X-Git-Newrev: 211e822d433806893c1395b55c1d891343a07aa0
-X-Patchwork-Hint: ignore
-Message-Id: <20250516092328.12B9B868F7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openssh: apply security patch for
- CVE-2025-32728 (sshd)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D3B0840C1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D3B0840C1D
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D3B0840C1D
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 09:25:43 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 224F74316C;
+ Fri, 16 May 2025 09:25:39 +0000 (UTC)
+Date: Fri, 16 May 2025 11:25:39 +0200
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Cc: buildroot@buildroot.org
+Message-ID: <20250516112539.7f808c68@windsurf>
+In-Reply-To: <20250429101607.864604-2-adam.duskett@amarulasolutions.com>
+References: <20250429101607.864604-1-adam.duskett@amarulasolutions.com>
+ <20250429101607.864604-2-adam.duskett@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefuddvfeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefvhhhomhgrshcurfgvthgriiiiohhnihcuoehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepjedvjedvgfffveetieffudegieevleeigfffteefhefhtefhueelfeekjefgfedvnecuffhomhgrihhnpehgihhthhhusgdrtghomhdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemugefudgvmedvfeehmegthegvvdemvggukeefpdhhvghlohepfihinhgushhurhhfpdhmrghilhhfrhhomhepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvpdhrtghpthhtoheprggurghmrdguuhhskhgvthhtsegrmhgrrhhulhgrshholhhuthhiohhnshdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsu
+ hhilhgurhhoohhtrdhorhhg
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1747387540;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=90y6mhghaRqsB0ECMDCAKbCFu+Rfaqu8xiTBLBDsfrk=;
+ b=AJYbkd2XFBrrZKTw62mFRv7vNRMRY0ZMzdVbRfpewr8rg5P/QMnD+EbzoiXQNJglKcxnFC
+ L5gQNwhIb80BQHjMOdm1g/WDhbJaJ1DhEE+lDv4jL+LQyQPlFuAZnI3/PdvAhxgZyeb+be
+ wgVkoQ1jYGMonovFRWpcbx42uOW3rB/KSZw7MuQYWfHFSuAAF1TL9EVy/oC9kQ1AsNBZXg
+ hzZ59Wia/DKXYPq9YjZuHjQ2rb36cH2mWqQCU4bqdzktLqa1geMJUrA9WiDHKZe8ZWXmnj
+ 0LIDl5/BYSiVjlFxIEt1QHnHXxQLK6zzoyT1V26arseoyHrsBO+3vwRn4Kd8og==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=AJYbkd2X
+Subject: Re: [Buildroot] [PATCH v2 2/3] package/mender-update-modules: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -59,95 +87,131 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=211e822d433806893c1395b55c1d891343a07aa0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Adam,
 
-Fixes:
-https://www.cve.org/CVERecord?id=CVE-2025-32728
+On Tue, 29 Apr 2025 12:16:06 +0200
+Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-[Julien: add link to CVE in commit log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...x-logic-error-in-disableforwarding-option.patch | 49 ++++++++++++++++++++++
- package/openssh/openssh.mk                         |  3 ++
- 2 files changed, 52 insertions(+)
+> Contains community supported Update Modules. An Update Module is an extension
+> to the Mender client for supporting a new type of software update, such as a
+> package manager, container, bootloader or even updates of nearby
+> microcontrollers. An Update Module can be tailored to a specific device or
+> environment (e.g. update a proprietary bootloader), or be more
+> general-purpose (e.g. install a set of .rpm packages.).
+> 
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 
-diff --git a/package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch b/package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch
-new file mode 100644
-index 0000000000..2c64ec1910
---- /dev/null
-+++ b/package/openssh/0001-fix-logic-error-in-disableforwarding-option.patch
-@@ -0,0 +1,49 @@
-+From fc86875e6acb36401dfc1dfb6b628a9d1460f367 Mon Sep 17 00:00:00 2001
-+From: "djm@openbsd.org" <djm@openbsd.org>
-+Date: Wed, 9 Apr 2025 07:00:03 +0000
-+Subject: [PATCH] upstream: Fix logic error in DisableForwarding option.
-+
-+This option was documented as disabling X11 and agent forwarding but it failed to do so.
-+Spotted by Tim Rice.
-+
-+OpenBSD-Commit-ID: fffc89195968f7eedd2fc57f0b1f1ef3193f5ed1
-+
-+Upstream: https://github.com/openssh/openssh-portable/commit/fc86875e6acb36401dfc1dfb6b628a9d1460f367
-+
-+Fixes the following CVE:
-+  - CVE-2025-32728: In sshd in OpenSSH before 10.0, the DisableForwarding
-+                    directive does not adhere to the documentation stating
-+                    that it disables X11 and agent forwarding.
-+
-+[Titouan: 
-+ - Remove diff on OpenBSD comment at the top of the file that does not apply
-+   cleanly on openssh 9.9
-+]
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ session.c | 7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/session.c b/session.c
-+index 52a4a3446e6..6444c77f31c 100644
-+--- a/session.c
-++++ b/session.c
-+@@ -2171,7 +2171,8 @@ session_auth_agent_req(struct ssh *ssh, Session *s)
-+ 	if ((r = sshpkt_get_end(ssh)) != 0)
-+ 		sshpkt_fatal(ssh, r, "%s: parse packet", __func__);
-+ 	if (!auth_opts->permit_agent_forwarding_flag ||
-+-	    !options.allow_agent_forwarding) {
-++	    !options.allow_agent_forwarding ||
-++	    options.disable_forwarding) {
-+ 		debug_f("agent forwarding disabled");
-+ 		return 0;
-+ 	}
-+@@ -2566,7 +2567,7 @@ session_setup_x11fwd(struct ssh *ssh, Session *s)
-+ 		ssh_packet_send_debug(ssh, "X11 forwarding disabled by key options.");
-+ 		return 0;
-+ 	}
-+-	if (!options.x11_forwarding) {
-++	if (!options.x11_forwarding || options.disable_forwarding) {
-+ 		debug("X11 forwarding disabled in server configuration file.");
-+ 		return 0;
-+ 	}
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index 115290ce13..b5e4645b50 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
-@@ -13,6 +13,9 @@ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
- 
-+# 0001-fix-logic-error-in-disableforwarding-option.patch
-+OPENSSH_IGNORE_CVES += CVE-2025-32728
-+
- OPENSSH_CONF_ENV = \
- 	LD="$(TARGET_CC)" \
- 	LDFLAGS="$(TARGET_CFLAGS)" \
+Thanks for this patch! I think it looks good overall, and I was almost
+going to apply it, but I have a few questions/concerns, see below.
+
+
+> diff --git a/package/mender-update-modules/Config.in b/package/mender-update-modules/Config.in
+> new file mode 100644
+> index 0000000000..b789a0a00c
+> --- /dev/null
+> +++ b/package/mender-update-modules/Config.in
+> @@ -0,0 +1,190 @@
+> +config BR2_PACKAGE_MENDER_UPDATE_MODULES
+> +	bool "mender-update-modules"
+> +	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
+> +	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # boost-log
+> +	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-log
+> +	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-log
+> +	depends on BR2_USE_MMU # libglib2
+> +	depends on BR2_USE_WCHAR # libglib2
+
+I am confused about those dependencies due to libglib2 and boost-log.
+Where do they come from? You don't select libglib2 or boost, and
+neither BR2_PACKAGE_MENDER nor BR2_PACKAGE_HOST_MENDER_ARTIFACT use
+libglib/boost as far as I can see. Could you clarify?
+
+> +	select BR2_PACKAGE_HOST_MENDER_ARTIFACT
+> +	select BR2_PACKAGE_MENDER
+
+I think it would make more sense for this to be a:
+
+	depends on BR2_PACKAGE_MENDER
+
+indeed, this mender-update-modules is really an extension of Mender.
+Surely if you want to use those extensions, you know that you want to
+use Mender and therefore that you have to enable the Mender package
+first.
+
+> +config BR2_PACKAGE_MENDER_UPDATE_MODULES_DFU
+> +	bool "DFU"
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+> +	select BR2_PACKAGE_DFU_UTIL
+> +	help
+> +	  The DFU Update Module is able to update peripheral devices
+> +	  connected to the device running Mender.
+> +	  Example use-cases:
+> +	    - Deploy firmware updates to peripheral devices using the
+> +	      USB Device Firmware Update (DFU) protocol
+> +
+> +	  https://github.com/mendersoftware/mender-update-modules/tree/master/dfu
+
+Config.in comment for the gcc version dependency? I agree a bit
+pedantic, but oh well, let's have it for completeness.
+
+
+> +ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_REBOOT),y)
+> +MENDER_UPDATE_MODULES_MODULES += reboot
+> +define MENDER_UPDATE_MODULES_INSTALL_MENDER_REBOOT_GEN
+> +	$(INSTALL) -D -m 0755 $(@D)/reboot/reboot-gen \
+> +		$(HOST_DIR)/bin/reboot-artifact-gen
+> +endef
+
+Too bad this one doesn't follow the pattern of
+$(@D)/$(f)/module-artifact-gen like the other ones. But OK, fine that's
+not your fault :-)
+
+> +MENDER_UPDATE_MODULES_POST_INSTALL_TARGET_HOOKS += MENDER_UPDATE_MODULES_INSTALL_MENDER_REBOOT_GEN
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_ROOTFS_VERSION_CHECK),y)
+> +MENDER_UPDATE_MODULES_DEPENDENCIES += python3
+> +MENDER_UPDATE_MODULES_MODULES += rootfs-version-check
+> +define MENDER_UPDATE_MODULES_INSTALL_MENDER_COMPARE_VERSIONS
+> +	$(INSTALL) -D -m 0755 $(@D)/rootfs-version-check/mender-compare-versions \
+> +		$(TARGET_DIR)/usr/bin/mender-compare-versions
+> +endef
+> +MENDER_UPDATE_MODULES_POST_INSTALL_TARGET_HOOKS += MENDER_UPDATE_MODULES_INSTALL_MENDER_COMPARE_VERSIONS
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU),y)
+> +MENDER_UPDATE_MODULES_MODULES += swu
+> +endif
+> +
+> +define MENDER_UPDATE_MODULES_INSTALL_TARGET_CMDS
+> +	$(foreach f,$(MENDER_UPDATE_MODULES_MODULES), \
+> +	$(INSTALL) -D -m 0775 $(@D)/$(f)/module/$(f) \
+> +		$(TARGET_DIR)/usr/share/mender/modules/v3/$(f); \
+> +	if [ -d $(@D)/$(f)/module-artifact-gen ]; then \
+> +		$(INSTALL) -D -m 0775 $(@D)/$(f)/module-artifact-gen/$(f)-artifact-gen \
+> +			$(HOST_DIR)/bin/$(f)-artifact-gen; \
+> +	fi; \
+
+Could you indent this by one more level inside the foreach loop?
+
+So overall really it's the libglib/boost question that prevented me
+from applying. Everything else is minor stuff, or stuff I could have
+tweaked when applying.
+
+Thanks a lot!
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
