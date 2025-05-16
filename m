@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FB4CC3ABD8
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AE1AC2D0CD
 	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:49:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 334AF60F77;
-	Mon, 19 May 2025 10:49:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1CB59821B1;
+	Mon, 19 May 2025 10:49:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i1ArPGph4ooq; Mon, 19 May 2025 10:49:07 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QAOEAUItYYmY; Mon, 19 May 2025 10:49:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 19AB36FA35
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D1ED840AF
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19AB36FA35;
-	Mon, 19 May 2025 10:49:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E209D4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D1ED840AF;
+	Mon, 19 May 2025 10:49:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 178F4193
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2C86B412C4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6C33541932
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WMMlE_lQrI3z for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KeL8IJvhUi4x for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA7B4410AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9929D41829
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA7B4410AE
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9929D41829
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E850183B63; Mon, 19 May 2025 10:39:48 +0000 (UTC)
+ id 911D1873D4; Mon, 19 May 2025 10:40:03 +0000 (UTC)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 12 Apr 2025 13:41:30 +0200
+Date: Fri, 16 May 2025 12:49:35 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a6a2cbae532617ec71bd67fcaf4f6bd6cc3bcf6a
-X-Git-Newrev: b74d876a9e064cc510e34952e3aad585e231468b
+X-Git-Oldrev: 20246264e5ef8a20a1cc0f2b223854ff8517f225
+X-Git-Newrev: 9d0e9e07a8d4a5a51594f5f0db89d22ba2a5972e
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103948.E850183B63@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/azure-iot-sdk-c: bump
- to version LTS_03_2025
+Message-Id: <20250519104003.911D1873D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ package/freescale-imx/firmware-ele-imx: bump to version 2.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -60,49 +60,66 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6451098262453043453=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b74d876a9e064cc510e34952e3aad585e231468b
+--===============6451098262453043453==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=9d0e9e07a8d4a5a51594f5f0db89d22ba2a5972e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes:
-https://github.com/Azure/azure-iot-sdk-c/releases/tag/LTS_03_2025
+This version is aligned with NXP Linux BSP version "lf-6.12.3-1.0.0".
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+License hashes changed because the LA_OPT_NXP_Software_License changed
+from "v57 July 2024" to "v58 November 2024".
+
+Signed-off-by: Sébastien Szymanski <sebastien.szymanski@armadeus.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/azure-iot-sdk-c/azure-iot-sdk-c.hash | 2 +-
- package/azure-iot-sdk-c/azure-iot-sdk-c.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash | 6 +++---
+ package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.hash b/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
-index cc6b6589ad..d1170f7e4c 100644
---- a/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.hash
+diff --git a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
+index 6182dc57be..55e1864e31 100644
+--- a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
++++ b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
 @@ -1,5 +1,5 @@
- # Locally computed:
--sha256  3dbb005bfadc6162906d4ba3c8599b4ec39025d474fc5337546f7447584041bc  azure-iot-sdk-c-LTS_08_2024-git4.tar.gz
-+sha256  28d4d79239fb278932cc1cb7118733e2c923a1ac95e91d541a1259e9c8a5beb9  azure-iot-sdk-c-LTS_03_2025-git4.tar.gz
- 
- # Hash for license files:
- sha256  be2e9913fad9ff33607287c728f392579e2a6cc83e51b203ef6274c41db02ee7  LICENSE
-diff --git a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-index 909b3d6b83..ecbd49b4ba 100644
---- a/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-+++ b/package/azure-iot-sdk-c/azure-iot-sdk-c.mk
-@@ -4,7 +4,7 @@
+ # Locally calculated
+-sha256  8791109824767346237e53ac2c712824e54608e2092859161e6bb3e5385a7595  firmware-ele-imx-1.3.0-17945fc.bin
+-sha256  601fa790c5b4d03579bd182fb4d65a6f329a32faf49db22f98e4608221e861f7  COPYING
+-sha256  c3d9a7b2a5a7db5da690e9c1081b98b665802c3efbbba7fb237339395a92f607  EULA
++sha256  a2f16e43e8aff9cf018d0962b70313940f77079b314331ab3980c4c5f44249cb  firmware-ele-imx-2.0.1-0a66c34.bin
++sha256  3f4a12c82a84bd1c3578c9c986d6371a61d3399525e76288ecbbae01daf0ae26  COPYING
++sha256  38f1408d6e935c564efd9119c313269e643c1a85cab1d930c3c5bd70bc261769  EULA
+ sha256  8721a617a5d4c7f366aaf857ebda21eb4c9fc9175dc92b70f627c611d403ec8e  SCR.txt
+diff --git a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
+index 4225805d50..8f25f4b5b5 100644
+--- a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
++++ b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--AZURE_IOT_SDK_C_VERSION = LTS_08_2024
-+AZURE_IOT_SDK_C_VERSION = LTS_03_2025
- AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
- AZURE_IOT_SDK_C_SITE_METHOD = git
- AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
+-FIRMWARE_ELE_IMX_VERSION = 1.3.0
+-FIRMWARE_ELE_IMX_REVISION = 17945fc
++FIRMWARE_ELE_IMX_VERSION = 2.0.1
++FIRMWARE_ELE_IMX_REVISION = 0a66c34
+ FIRMWARE_ELE_IMX_SITE = $(FREESCALE_IMX_SITE)
+ FIRMWARE_ELE_IMX_SOURCE = firmware-ele-imx-$(FIRMWARE_ELE_IMX_VERSION)-$(FIRMWARE_ELE_IMX_REVISION).bin
+ 
+
+--===============6451098262453043453==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6451098262453043453==--
