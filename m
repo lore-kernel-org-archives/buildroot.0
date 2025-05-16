@@ -4,49 +4,106 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBC3DC3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 16:50:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECF09C3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 16:51:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B124F6129D;
-	Fri, 16 May 2025 16:50:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6DA8561254;
+	Fri, 16 May 2025 16:51:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cKMkMbHm-aAb; Fri, 16 May 2025 16:50:12 +0000 (UTC)
+ id n59rb5wGHoLl; Fri, 16 May 2025 16:51:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AF3860B49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77B2E60B49
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9AF3860B49;
-	Fri, 16 May 2025 16:50:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 61CDA13D
- for <buildroot@buildroot.org>; Fri, 16 May 2025 16:50:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77B2E60B49;
+	Fri, 16 May 2025 16:51:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5E7E213D
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 16:51:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 47EFC400CE
- for <buildroot@buildroot.org>; Fri, 16 May 2025 16:50:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4339760B49
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 16:51:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D44lVzeR3VsW for <buildroot@buildroot.org>;
- Fri, 16 May 2025 16:50:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69E7A4003A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 69E7A4003A
- for <buildroot@buildroot.org>; Fri, 16 May 2025 16:50:10 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5924786CBB; Fri, 16 May 2025 16:50:10 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 18:49:54 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 432aef053e6471ec8570b31aecbd8377bb666053
-X-Git-Newrev: 3481a9643fc7223e400ed877f08ade34d44e6b78
-X-Patchwork-Hint: ignore
-Message-Id: <20250516165010.5924786CBB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mbedtls: bump to version 3.6.3.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oJx3_Od35pqK for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 16:51:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D52E060799
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D52E060799
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D52E060799
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 16:51:19 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-3a1b8e8b2b2so1545207f8f.2
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 09:51:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1747414277; x=1748019077;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=x8UN3bojnyHqZKRmtVtoXurxA0ZcuaHzlTEo4aMSn3g=;
+ b=v6moI2DPBD3kScA6YatwhuTBkRnrT1EQj0zeUwJKucL/XdK4y1Bql+e2CUsixYNOqr
+ k7EwM4Ke5dl5VEdyxxOJLqxNkZdGSPBAR80VI/LTOvJOuV1Ppl4RiNpv282HkAlmWLrc
+ +DT1NLaQFFbQWdPjC658EWYZn7VVmz2yX/pOIDcpLTtZ0sjpvO0JY4h6Q/Uop1X/oRVq
+ NEN3WyJUzZ/UwK3logcLD53QLoV99REi5w+U7GocWPwA44E9DjHm8uSiTxPj2u2+09vq
+ jpoo/KWD4IErhVvo+nZm+G2guyx49r8ISK05P+PUZgqkBeBKNmAmD2KCZcSY9bdSGlrG
+ bPZQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCW3PxzBt2U2ax7e4cjk7Lw8iGclPTs5G29sVPydz7F0xIaDPo+JMErmyUnZ6BYs+ZajPSS4m6F4Tdo=@buildroot.org
+X-Gm-Message-State: AOJu0Yxr6igfhRQbF25R9p3byVxn4a7vQFn05sbq+GDk1iAeZrzFTION
+ Pk/nLcQR/o62q2V43Tevi/HWoi+ZdpaVhRhAn/5rQ4hFmmUM00uK7GTe3PTpLPiJGog=
+X-Gm-Gg: ASbGnct28POkCSPTSqwut/4gJvepYsXCNyTWKNeSD/W7CGQeaKyY83bu/6ftnuWtFcz
+ GsTiTcUBfp18HZ3YX4cxfXb73buVRpbzLMlogML7eNGjv03iKdJso3NPMfqG0NV7Cx5jniXKk8S
+ ER5nHud6/wnu929b/OsE7vqf72dRMELFl88Gy+HW3+ELwmp2pP761k8PKOq7RTgJSafCG0J3hF4
+ XYOnmY7l3MMOG0icnShYJf7sNwRQcHMfmXgWe+QoqorKS9o9Zp/a2Mtpdf0KkwQbzCTDJVb7RMk
+ 6N7ixRo7CflJhKemHU9hqcPfl4j9Kuu6aItr75Fxp0ufAtapGni63w+7YFi914XX8I5GzdOSXAA
+ +A2COor4DHWhLsph5ifK1ncetfRqrbaAeXXE=
+X-Google-Smtp-Source: AGHT+IEit0InOLJsrHPPVye0JdG+vZ4+M3YBpYEKqaLhvGOPj8mROw4wwhdhz+hrgE2CwzGLOuRAnA==
+X-Received: by 2002:a5d:5f8d:0:b0:3a1:f67f:1bc with SMTP id
+ ffacd0b85a97d-3a35c7e747cmr4460918f8f.0.1747414277415; 
+ Fri, 16 May 2025 09:51:17 -0700 (PDT)
+Received: from ?IPV6:2a02:a03f:639d:e501:5db7:a3a4:443e:4828?
+ ([2a02:a03f:639d:e501:5db7:a3a4:443e:4828])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3a3631c728esm1766237f8f.60.2025.05.16.09.51.16
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 16 May 2025 09:51:17 -0700 (PDT)
+Message-ID: <ce2cee78-926a-4af2-910c-6314b4de64a9@mind.be>
+Date: Fri, 16 May 2025 18:51:16 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
+Cc: Thomas Perale <thomas.perale@mind.be>
+References: <20250505160327.3422096-1-fiona.klute@gmx.de>
+ <20250505160327.3422096-2-fiona.klute@gmx.de>
+Content-Language: en-US
+In-Reply-To: <20250505160327.3422096-2-fiona.klute@gmx.de>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1747414277; x=1748019077; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=x8UN3bojnyHqZKRmtVtoXurxA0ZcuaHzlTEo4aMSn3g=;
+ b=PpZ7WFr+Go1e9AiywflwBjAiExnmUQDFOt6A2P3ODVQJk296fUM0lZCJD9VDG61xk3
+ vGhGCO3aEbENdjqWHoVCW5zFdQvGUnuP8pl3AllBa7boTvKWnwD3VnRop02N2LLtlXYa
+ drAEFatLuA4ZdH9XIYYa8UCBiCkHFBEotLTzR0g13H9kHBqYYoVxJKDilUHrMGEEi8Ik
+ FUqkx/jbyQwcc994veqSDOWBya0BckLEag1YF5Qn694bV5RGnXliVz6iYPNcuRt90F3N
+ f6aNNHOdrqCQGJ2CoX4TaYt2QBvj0Z36DNCE0WXgD7albONclSmEv+lBNpIYN+bQSYcB
+ 5zCg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=PpZ7WFr+
+Subject: Re: [Buildroot] [PATCH 1/3] utils/generate-cyclonedx: support
+ including external tree information
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,187 +115,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3481a9643fc7223e400ed877f08ade34d44e6b78
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-As specified in the 2.28.10 release notes:
-https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-2.28.10
-
-Mbed TLS 2.28.10 is the last release of the 2.28 LTS and won't receive bug
-fixes or security fixes anymore.  Users are advised to upgrade to a
-maintained version.
-
-So move to 3.6.x, which is the new LTS version:
-
-Mbed TLS 3.6 is a long-term support (LTS) branch.  It will be supported with
-bug-fixes and security fixes until at least March 2027.
-
-Drop BR2_PACKAGE_MBEDTLS_COMPRESSION and all related references
-as native zlib support has been entirely removed from mbedtls.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Peter: add note about 2.28.x / 3.6.x, add Config.in.legacy]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in.legacy                         |  7 +++++++
- package/mbedtls/Config.in                | 12 ------------
- package/mbedtls/mbedtls.hash             |  4 ++--
- package/mbedtls/mbedtls.mk               | 28 ++++++++--------------------
- package/shairport-sync/shairport-sync.mk |  3 ---
- package/uacme/uacme.mk                   |  3 ---
- 6 files changed, 17 insertions(+), 40 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 02dc3eab73..c455e23524 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2025.05"
- 
-+config BR2_PACKAGE_MBEDTLS_COMPRESSION
-+	bool "mbedtls compression support removed"
-+	select BR2_LEGACY
-+	help
-+	  MbedTLS has dropped support for TLS record-level
-+	  compression.
-+
- config BR2_KERNEL_HEADERS_6_13
- 	bool "kernel headers version 6.13.x are no longer supported"
- 	select BR2_LEGACY
-diff --git a/package/mbedtls/Config.in b/package/mbedtls/Config.in
-index abbe3356d8..21e746d842 100644
---- a/package/mbedtls/Config.in
-+++ b/package/mbedtls/Config.in
-@@ -17,18 +17,6 @@ config BR2_PACKAGE_MBEDTLS_PROGRAMS
- 	  This option enables the installation and the build of
- 	  mbed TLS companion programs.
- 
--config BR2_PACKAGE_MBEDTLS_COMPRESSION
--	bool "enable compression support"
--	select BR2_PACKAGE_ZLIB
--	help
--	  Enable support for compression of the content data before it
--	  enters the secure channel as described in RFC 3749.
--
--	  Warning: TLS compression may make you vulnerable to the
--	  CRIME attack. You should not enable it unless you know for
--	  sure CRIME and similar attacks are not applicable to your
--	  particular situation.
--
- config BR2_PACKAGE_MBEDTLS_DTLS_SRTP
- 	bool "enable DTLS-SRTP support"
- 	help
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index 6fc68ddac6..cc15958e3a 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/ARMmbed/mbedtls/releases/tag/v2.28.10:
--sha256  19e5b81fdac0fe22009b9e2bdcd52d7dcafbf62bc67fc59cf0a76b5b5540d149  mbedtls-2.28.10.tar.bz2
-+# From https://github.com/Mbed-TLS/mbedtls/releases/tag/v3.6.3.1:
-+sha256  243ed496d5f88a5b3791021be2800aac821b9a4cc16e7134aa413c58b4c20e0c  mbedtls-3.6.3.1.tar.bz2
- # Locally calculated
- sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index fd6682fbfd..563683e739 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--MBEDTLS_VERSION = 2.28.10
--MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(MBEDTLS_VERSION)
-+MBEDTLS_VERSION = 3.6.3.1
-+MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/v$(MBEDTLS_VERSION)
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION).tar.bz2
- MBEDTLS_CONF_OPTS = \
- 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -std=c99" \
-@@ -22,9 +22,9 @@ MBEDTLS_CPE_ID_PRODUCT = mbed_tls
- ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- define MBEDTLS_ENABLE_THREADING
- 	$(SED) "s://#define MBEDTLS_THREADING_C:#define MBEDTLS_THREADING_C:" \
--		$(@D)/include/mbedtls/config.h
-+		$(@D)/include/mbedtls/mbedtls_config.h
- 	$(SED) "s://#define MBEDTLS_THREADING_PTHREAD:#define MBEDTLS_THREADING_PTHREAD:" \
--		$(@D)/include/mbedtls/config.h
-+		$(@D)/include/mbedtls/mbedtls_config.h
- endef
- MBEDTLS_PRE_CONFIGURE_HOOKS += MBEDTLS_ENABLE_THREADING
- ifeq ($(BR2_STATIC_LIBS),y)
-@@ -43,25 +43,13 @@ MBEDTLS_CONF_OPTS += \
- 	-DUSE_SHARED_MBEDTLS_LIBRARY=ON -DUSE_STATIC_MBEDTLS_LIBRARY=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_MBEDTLS_COMPRESSION),y)
--MBEDTLS_CONF_OPTS += -DENABLE_ZLIB_SUPPORT=ON
--MBEDTLS_DEPENDENCIES += zlib
--define MBEDTLS_ENABLE_ZLIB
--	$(SED) "s://#define MBEDTLS_ZLIB_SUPPORT:#define MBEDTLS_ZLIB_SUPPORT:" \
--		$(@D)/include/mbedtls/config.h
--endef
--MBEDTLS_PRE_CONFIGURE_HOOKS += MBEDTLS_ENABLE_ZLIB
--else
--MBEDTLS_CONF_OPTS += -DENABLE_ZLIB_SUPPORT=OFF
--endif
--
- define MBEDTLS_DISABLE_ASM
- 	$(SED) '/^#define MBEDTLS_AESNI_C/d' \
--		$(@D)/include/mbedtls/config.h
-+		$(@D)/include/mbedtls/mbedtls_config.h
- 	$(SED) '/^#define MBEDTLS_HAVE_ASM/d' \
--		$(@D)/include/mbedtls/config.h
-+		$(@D)/include/mbedtls/mbedtls_config.h
- 	$(SED) '/^#define MBEDTLS_PADLOCK_C/d' \
--		$(@D)/include/mbedtls/config.h
-+		$(@D)/include/mbedtls/mbedtls_config.h
- endef
- 
- # ARM in thumb mode breaks debugging with asm optimizations
-@@ -76,7 +64,7 @@ endif
- ifeq ($(BR2_PACKAGE_MBEDTLS_DTLS_SRTP),y)
- define MBEDTLS_ENABLE_DTLS_SRTP
- 	$(SED) "s://#define MBEDTLS_SSL_DTLS_SRTP:#define MBEDTLS_SSL_DTLS_SRTP:" \
--		$(@D)/include/mbedtls/config.h
-+		$(@D)/include/mbedtls/mbedtls_config.h
- endef
- MBEDTLS_PRE_CONFIGURE_HOOKS += MBEDTLS_ENABLE_DTLS_SRTP
- endif
-diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
-index 4430014ec9..5d01ab042e 100644
---- a/package/shairport-sync/shairport-sync.mk
-+++ b/package/shairport-sync/shairport-sync.mk
-@@ -44,9 +44,6 @@ else
- SHAIRPORT_SYNC_DEPENDENCIES += mbedtls
- SHAIRPORT_SYNC_CONF_OPTS += --with-ssl=mbedtls
- SHAIRPORT_SYNC_CONF_LIBS += -lmbedx509 -lmbedcrypto
--ifeq ($(BR2_PACKAGE_MBEDTLS_COMPRESSION),y)
--SHAIRPORT_SYNC_CONF_LIBS += -lz
--endif
- endif
- 
- ifeq ($(BR2_PACKAGE_SHAIRPORT_SYNC_CONVOLUTION),y)
-diff --git a/package/uacme/uacme.mk b/package/uacme/uacme.mk
-index ec538cec12..9a2c972604 100644
---- a/package/uacme/uacme.mk
-+++ b/package/uacme/uacme.mk
-@@ -22,9 +22,6 @@ ifeq ($(BR2_PACKAGE_GNUTLS),y)
- UACME_CONF_OPTS += --with-gnutls
- UACME_DEPENDENCIES += gnutls
- else ifeq ($(BR2_PACKAGE_MBEDTLS),y)
--ifeq ($(BR2_PACKAGE_MBEDTLS_COMPRESSION),y)
--    UACME_LIBS += -lz
--endif
- UACME_CONF_OPTS += --with-mbedtls
- UACME_DEPENDENCIES += mbedtls
- else ifeq ($(BR2_PACKAGE_OPENSSL),y)
+On 5/05/25 18:03, Fiona Klute via buildroot wrote:
+> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+>
+> External tree information may be important for interpreting SBOM
+> information, especially if the SBOM lists packages (components) that
+> do not exist in the listed version of Buildroot itself.
+>
+> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Tested-by: Titouan Christophe <titouan.christophe@mind.be>
+> ---
+>   utils/generate-cyclonedx | 57 ++++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 57 insertions(+)
+>
+> diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+> index 46f68ac63d..cbb7ef630e 100755
+> --- a/utils/generate-cyclonedx
+> +++ b/utils/generate-cyclonedx
+> @@ -10,6 +10,7 @@
+>   
+>   import argparse
+>   import bz2
+> +from dataclasses import dataclass
+>   import gzip
+>   import json
+>   import os
+> @@ -50,6 +51,49 @@ except json.JSONDecodeError:
+>       print(f"Failed to load the SPDX licenses file: {SPDX_SCHEMA_PATH}", file=sys.stderr)
+>   
+>   
+> +@dataclass
+> +class ExternalTree:
+> +    name: str
+> +    path: Path
+> +    version: str
+> +    description: str
+> +
+> +    @classmethod
+> +    def parse_vars(cls, variables: dict[str, dict[str, str]]) -> list['ExternalTree']:
+> +        """Load external trees from JSON data as generated by `make
+> +        show-vars VARS="BR2_EXTERNAL%"`.
+> +
+> +        Args:
+> +            variables: dict created by loading the JSON data
+> +
+> +        Returns:
+> +            list of parsed ExternalTree objects
+> +        """
+> +        return [
+> +            cls(
+> +                ext,
+> +                Path(variables[f"BR2_EXTERNAL_{ext}_PATH"]["expanded"]),
+> +                variables[f"BR2_EXTERNAL_{ext}_VERSION"]["expanded"],
+> +                variables[f"BR2_EXTERNAL_{ext}_DESC"]["expanded"],
+> +            )
+> +            for ext in variables["BR2_EXTERNAL_NAMES"]["expanded"].split()
+> +        ]
+> +
+> +    @property
+> +    def bom_ref(self) -> str:
+> +        return f"buildroot-external:{self.name}"
+> +
+> +    def as_component(self) -> dict[str, str]:
+> +        """Format self as a component dict ready to be included in
+> +        CycloneDX JSON output."""
+> +        return {
+> +            "bom-ref": self.bom_ref,
+> +            "name": self.name,
+> +            "type": "firmware",
+> +            "version": self.version,
+> +        }
+> +
+> +
+>   def split_top_level_comma(subj):
+>       """Split a string at comma's, but do not split at comma's in between parentheses.
+>   
+> @@ -277,6 +321,10 @@ def main():
+>                           default=(None if sys.stdin.isatty() else sys.stdin))
+>       parser.add_argument("-o", "--out-file", nargs="?", type=argparse.FileType("w"),
+>                           default=sys.stdout)
+> +    parser.add_argument("-e", "--external-trees", nargs="?", type=argparse.FileType("r"),
+> +                        default=None,
+Nitpick: default=None is not needed here 
+(https://docs.python.org/3/library/argparse.html#default)
+> +                        help="Load external trees to list in SBOM from this JSON file, "
+> +                        "can be created by running: make show-vars VARS=\"BR2_EXTERNAL%\"")
+>       parser.add_argument("--virtual", default=False, action='store_true',
+>                           help="This option includes virtual packages to the CycloneDX output")
+>   
+> @@ -293,6 +341,11 @@ def main():
+>       filtered_show_info_dict = {k: v for k, v in show_info_dict.items()
+>                                  if ("rootfs" not in v["type"]) and (args.virtual or v["virtual"] is False)}
+>   
+> +    if args.external_trees is not None:
+> +        external_trees = ExternalTree.parse_vars(json.load(args.external_trees))
+> +    else:
+> +        external_trees = []
+> +
+>       cyclonedx_dict = {
+>           "bomFormat": "CycloneDX",
+>           "$schema": f"http://cyclonedx.org/schema/bom-{CYCLONEDX_VERSION}.schema.json",
+> @@ -312,6 +365,10 @@ def main():
+>                   "name": "buildroot",
+>                   "type": "firmware",
+>                   "version": f"{BR2_VERSION_FULL}",
+> +                **(
+> +                    {"components": [ext.as_component() for ext in external_trees]}
+> +                    if external_trees else {}
+> +                )
+>               },
+>           },
+>       }
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
