@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F51CC3ABD8
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:48:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74B2CC3DA6D
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 10:48:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1D3EC6F797;
-	Mon, 19 May 2025 10:48:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3378084073;
+	Mon, 19 May 2025 10:48:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cth83CdEIJlb; Mon, 19 May 2025 10:48:50 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id us-10nsuNrHi; Mon, 19 May 2025 10:48:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2DCC76F773
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36AD183E20
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2DCC76F773;
-	Mon, 19 May 2025 10:48:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F638E4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 36AD183E20;
+	Mon, 19 May 2025 10:48:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 25DCCE4
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:41:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B0975412A8
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4DB1841910
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9CZ9wab5saCo for <buildroot@buildroot.org>;
- Mon, 19 May 2025 10:39:56 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id z2MfAnDUuyDK for <buildroot@buildroot.org>;
+ Mon, 19 May 2025 10:40:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3054F410B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 556C84187D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3054F410B1
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:39:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 556C84187D
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2B15B81E90; Mon, 19 May 2025 10:39:49 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 537EA873D4; Mon, 19 May 2025 10:40:04 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 12 Apr 2025 14:09:47 +0200
+Date: Fri, 16 May 2025 15:45:33 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 11315d478782ef89a621518acaad9c2c39ad3b81
-X-Git-Newrev: 726150b0e666bd6ce052bb631ac6034c6a2dd13e
+X-Git-Oldrev: 22cd2e0bc4545d46d92936e5bb5c98f1e22d58f8
+X-Git-Newrev: 9868ca6ec98afa28a94aea50cc940db7df860396
 X-Patchwork-Hint: ignore
-Message-Id: <20250519103949.2B15B81E90@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/optee-test: fix
- license hash
+Message-Id: <20250519104004.537EA873D4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libopenssl: bump
+ version to 3.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,48 +65,94 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=726150b0e666bd6ce052bb631ac6034c6a2dd13e
+commit: https://git.buildroot.net/buildroot/commit/?id=9868ca6ec98afa28a94aea50cc940db7df860396
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Commit [1] updated optee-test version but forgot to update
-the license hash which was changed upstream in [2] to include
-copies of the GPL-2.0 and BSD-2-Clause license files. While at
-it, this commit also include those two new files in the license
-hash file.
+Release notes:
+https://github.com/openssl/openssl/releases/tag/openssl-3.5.0
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/8c2b2314df768a0add1fe45a9ad7dbcf2192d26f
-[2] https://github.com/OP-TEE/optee_test/commit/a748f5fcd9ec8a574dc86a5aa56d05bc6ac174e7
+Changelog:
+https://github.com/openssl/openssl/blob/master/CHANGES.md#openssl-35
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Rebased patches for the new version.
+
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/optee-test/optee-test.hash | 4 +++-
- package/optee-test/optee-test.mk   | 2 +-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ .../0002-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch | 4 ++--
+ package/libopenssl/0003-Revert-Fix-static-builds.patch              | 6 +++---
+ package/libopenssl/libopenssl.hash                                  | 4 ++--
+ package/libopenssl/libopenssl.mk                                    | 2 +-
+ 4 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/optee-test/optee-test.hash b/package/optee-test/optee-test.hash
-index ba2cbaaa15..3192c72b93 100644
---- a/package/optee-test/optee-test.hash
-+++ b/package/optee-test/optee-test.hash
-@@ -1,3 +1,5 @@
- # Locally computed
- sha256  cda3a4280a919cc6cd3cd3060e8c176cd42b968a9008305a6881e1fd433a6f1e  optee-test-4.5.0.tar.gz
--sha256  6e6810981f0ddab9e0d44399d0700a15d9f760a3c2843cc866659c2074139ae7  LICENSE.md
-+sha256  2b36458cd0292200e406a608efe7dfda17aae39646a86b730a2776b61d0fa410  LICENSE-BSD
-+sha256  a094472b51f57d0403953d087e410793519cb6f3a7cea2be34eb44e09a426a73  LICENSE-GPL
-+sha256  a562ab14c307d0e02b7bf6f1bdb0d1cf789409e6375a500e15dc7a0503e5c2c3  LICENSE.md
-diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
-index c250639d06..23874b51b9 100644
---- a/package/optee-test/optee-test.mk
-+++ b/package/optee-test/optee-test.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/libopenssl/0002-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch b/package/libopenssl/0002-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
+index 629d9c26ce..2634d69f35 100644
+--- a/package/libopenssl/0002-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
++++ b/package/libopenssl/0002-Configure-use-ELFv2-ABI-on-some-ppc64-big-endian-sys.patch
+@@ -18,10 +18,10 @@ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+  1 file changed, 4 insertions(+)
  
- OPTEE_TEST_VERSION = $(call qstrip,$(BR2_PACKAGE_OPTEE_TEST_VERSION))
- OPTEE_TEST_LICENSE = GPL-2.0, BSD-2-Clause,
--OPTEE_TEST_LICENSE_FILES = LICENSE.md
-+OPTEE_TEST_LICENSE_FILES = LICENSE-BSD LICENSE-GPL LICENSE.md
+ diff --git a/Configure b/Configure
+-index 5a699836f3..f9152b1702 100755
++index 15054f9..ac3206e 100755
+ --- a/Configure
+ +++ b/Configure
+-@@ -1549,6 +1549,10 @@ unless ($disabled{asm}) {
++@@ -1685,6 +1685,10 @@ unless ($disabled{asm}) {
+      }
+  }
+  
+diff --git a/package/libopenssl/0003-Revert-Fix-static-builds.patch b/package/libopenssl/0003-Revert-Fix-static-builds.patch
+index b4b78c97fc..e800b782ad 100644
+--- a/package/libopenssl/0003-Revert-Fix-static-builds.patch
++++ b/package/libopenssl/0003-Revert-Fix-static-builds.patch
+@@ -15,10 +15,10 @@ Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+  1 file changed, 4 insertions(+), 4 deletions(-)
  
- ifeq ($(BR2_PACKAGE_OPTEE_TEST_CUSTOM_TARBALL),y)
- OPTEE_TEST_TARBALL = $(call qstrip,$(BR2_PACKAGE_OPTEE_TEST_CUSTOM_TARBALL_LOCATION))
+ diff --git a/Configure b/Configure
+-index 2a5e58805c3b..0e8c1ce5cc74 100755
++index ac3206e..764ef89 100755
+ --- a/Configure
+ +++ b/Configure
+-@@ -1466,10 +1466,6 @@ if ($config{prefix} && !$config{CROSS_COMPILE}) {
++@@ -1509,10 +1509,6 @@ if ($config{prefix} && !$config{CROSS_COMPILE}) {
+          unless file_name_is_absolute($config{prefix});
+  }
+  
+@@ -29,7 +29,7 @@ index 2a5e58805c3b..0e8c1ce5cc74 100755
+  # Allow overriding the build file name
+  $config{build_file} = env('BUILDFILE') || $target{build_file} || "Makefile";
+  
+-@@ -1764,6 +1760,10 @@ if ($strict_warnings)
++@@ -1807,6 +1803,10 @@ if ($strict_warnings)
+                  }
+          }
+  
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 5924c5d46a..9f8b23005a 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/openssl/openssl/releases/download/openssl-3.4.1/openssl-3.4.1.tar.gz.sha256
+-sha256  002a2d6b30b58bf4bea46c43bdd96365aaf8daa6c428782aa4feee06da197df3  openssl-3.4.1.tar.gz
++# From https://github.com/openssl/openssl/releases/download/openssl-3.5.0/openssl-3.5.0.tar.gz.sha256
++sha256  344d0a79f1a9b08029b0744e2cc401a43f9c90acd1044d09a530b4885a8e9fc0  openssl-3.5.0.tar.gz
+ 
+ # License files
+ sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index c1c5b818d7..5e785e1bf0 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBOPENSSL_VERSION = 3.4.1
++LIBOPENSSL_VERSION = 3.5.0
+ LIBOPENSSL_SITE = https://github.com/openssl/openssl/releases/download/openssl-$(LIBOPENSSL_VERSION)
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
