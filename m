@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49E53C3ABD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:41:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45C93C3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 11:41:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0BBAE40645;
-	Fri, 16 May 2025 11:41:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A37C40905;
+	Fri, 16 May 2025 11:41:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hTUq05FamXwP; Fri, 16 May 2025 11:41:53 +0000 (UTC)
+ id uDNNrkB2Zobg; Fri, 16 May 2025 11:41:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3363F406CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07F2E40784
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3363F406CB;
-	Fri, 16 May 2025 11:41:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5F7BE13D
+	by smtp4.osuosl.org (Postfix) with ESMTP id 07F2E40784;
+	Fri, 16 May 2025 11:41:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6EBDF1AB
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:41:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 44083608FA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5EF114061A
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:41:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wEssiBT7JNpj for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m9X5IM6ZntG6 for <buildroot@buildroot.org>;
  Fri, 16 May 2025 11:41:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7ACCE60889
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0E34405D3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7ACCE60889
+ by smtp4.osuosl.org (Postfix) with ESMTP id A0E34405D3
  for <buildroot@buildroot.org>; Fri, 16 May 2025 11:41:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 74CDB813E6; Fri, 16 May 2025 11:41:49 +0000 (UTC)
+ id 9D28E86A39; Fri, 16 May 2025 11:41:49 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 13:26:32 +0200
+Date: Fri, 16 May 2025 13:40:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 072f3bc8c61bd68ed75eb4419f938f718c79ac3f
-X-Git-Newrev: b80278613e4aa23ab4f016a5ec65cfcd5201e4ec
+X-Git-Oldrev: 3615b2cd04727c38733c48d0d611736c3b24f8ed
+X-Git-Newrev: 9a1aaec3f3db99bd8fda26cbaf476f4c20dd6740
 X-Patchwork-Hint: ignore
-Message-Id: <20250516114149.74CDB813E6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-download: switch from cargo2
- to cargo3
+Message-Id: <20250516114149.9D28E86A39@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/screen: security bump to version
+ 5.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,82 +59,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4340999351649291464=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4340999351649291464==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=b80278613e4aa23ab4f016a5ec65cfcd5201e4ec
+commit: https://git.buildroot.net/buildroot/commit/?id=9a1aaec3f3db99bd8fda26cbaf476f4c20dd6740
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Starting from rust 1.84.0 (cargo 1.84.0), published crates now always
-include a Cargo.lock file. Originally it was only included for packages
-that have executables or examples for use with cargo install. see [1]
+Fixes the following security issues:
 
-This behaviour change alters the contents of the .tar.gz archives,
-which causes SHA256 hash mistmatches when trying to build Rust packages.
+CVE-2025-46805: do NOT send signals with root privileges
+CVE-2025-46804: avoid file existence test information leaks
+CVE-2025-46803: apply safe PTY default mode of 0620
+CVE-2025-46802: prevent temporary 0666 mode on PTYs in attacher
+CVE-2025-23395: reintroduce lf_secreopen() for logfile
 
-Example build failure with bat-0.24.0:
+https://lists.gnu.org/archive/html/info-gnu/2025-05/msg00002.html
 
-ERROR: while checking hashes from package/bat/bat.hash
-ERROR: bat-0.24.0-cargo2.tar.gz has wrong sha256 hash:
-ERROR: expected: 45fcdd6076dc1b45698a7b6c0f4d1f5d9ae676f3ca3b155402ad24680d5b4df6
-ERROR: got     : 28b302b1aa325221796d4ebb25bacab19a8927ef32f4d56a965b32a7b1c102fc
+For more details, see:
+https://security.opensuse.org/2025/05/12/screen-security-issues.html
 
-After using the ne hash to download the new archive tar.gz, we have the
-difference between the old archive and the new one using diffoscope:
-│ │ --rw-r--r--   0        0        0     1529 2023-10-11 17:14:12.000000 bat-0.24.0/VENDOR/bincode/.cargo-checksum.json
-│ │ +-rw-r--r--   0        0        0     1609 2023-10-11 17:14:12.000000 bat-0.24.0/VENDOR/bincode/.cargo-checksum.json
-│ │ +-rw-r--r--   0        0        0     1766 2023-10-11 17:14:12.000000 bat-0.24.0/VENDOR/bincode/Cargo.lock
-│ │  -rw-r--r--   0        0        0     1388 2023-10-11 17:14:12.000000 bat-0.24.0/VENDOR/bincode/Cargo.toml
-
-We can see that Cargo.lock has been added.
-
-To avoid hash mismatch issues and to clearly mark archives generated
-with the new Cargo behavior, we migrate the naming from 'cargo2.tar.gz'
-to 'cargo3.tar.gz'.
-
-We did not find any alternative to disable this new cargo-publish
-behavior, so this change is necessary to allow updating the hashes of
-Cargo-fetched packages.
-
-[1] https://github.com/rust-lang/cargo/pull/14815
-https://doc.rust-lang.org/nightly/cargo/CHANGELOG.html
-
-Signed-off-by: El Mehdi YOUNES <elmehdi.younes@smile.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/pkg-download.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/screen/screen.hash | 4 ++--
+ package/screen/screen.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index cf5959ea95..bbb3501643 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -12,7 +12,7 @@
- BR_FMT_VERSION_git = -git4
- BR_FMT_VERSION_svn = -svn5
- BR_FMT_VERSION_go = -go2
--BR_FMT_VERSION_cargo = -cargo2
-+BR_FMT_VERSION_cargo = -cargo3
+diff --git a/package/screen/screen.hash b/package/screen/screen.hash
+index 208a9cb36d..61bacd88ff 100644
+--- a/package/screen/screen.hash
++++ b/package/screen/screen.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/screen/screen-5.0.0.tar.gz.sig
+-sha256  f04a39d00a0e5c7c86a55338808903082ad5df4d73df1a2fd3425976aed94971  screen-5.0.0.tar.gz
++# https://ftp.gnu.org/gnu/screen/screen-5.0.1.tar.gz.sig
++sha256  2dae36f4db379ffcd14b691596ba6ec18ac3a9e22bc47ac239789ab58409869d  screen-5.0.1.tar.gz
+ # Locally calculated
+ sha256  e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b  COPYING
+diff --git a/package/screen/screen.mk b/package/screen/screen.mk
+index 9a64780a9a..74453faff8 100644
+--- a/package/screen/screen.mk
++++ b/package/screen/screen.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- DL_WRAPPER = support/download/dl-wrapper
- 
-
---===============4340999351649291464==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-SCREEN_VERSION = 5.0.0
++SCREEN_VERSION = 5.0.1
+ SCREEN_SITE = $(BR2_GNU_MIRROR)/screen
+ SCREEN_LICENSE = GPL-3.0+
+ SCREEN_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4340999351649291464==--
