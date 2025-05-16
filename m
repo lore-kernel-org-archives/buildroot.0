@@ -1,101 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3542C3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 08:32:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E43A0C3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 08:42:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 799FA40D76;
-	Fri, 16 May 2025 08:32:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7DA5461253;
+	Fri, 16 May 2025 08:42:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e0ECSj2j4Zm8; Fri, 16 May 2025 08:32:40 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2pAHuBWC-H2H; Fri, 16 May 2025 08:42:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9599040D69
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A53161033
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9599040D69;
-	Fri, 16 May 2025 08:32:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B8B44185
- for <buildroot@buildroot.org>; Fri, 16 May 2025 08:32:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A53161033;
+	Fri, 16 May 2025 08:42:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BE092185
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 08:42:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E78C831DA
- for <buildroot@buildroot.org>; Fri, 16 May 2025 08:32:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF7744095F
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 08:42:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vUHG4lNQovOR for <buildroot@buildroot.org>;
- Fri, 16 May 2025 08:32:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.167.52;
- helo=mail-lf1-f52.google.com; envelope-from=thomas.devoogdt@gmail.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A50S4uKS3bea for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 08:42:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 72E5F8333E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72E5F8333E
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com
- [209.85.167.52])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 72E5F8333E
- for <buildroot@buildroot.org>; Fri, 16 May 2025 08:32:37 +0000 (UTC)
-Received: by mail-lf1-f52.google.com with SMTP id
- 2adb3069b0e04-549b159c84cso2123487e87.3
- for <buildroot@buildroot.org>; Fri, 16 May 2025 01:32:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1747384355; x=1747989155;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=iKvjtVXz9eGeKwrejUewyq3hnkksmYBHOsO3C1Tl+Ok=;
- b=to/kaN9Knz1NLHQnSberBnR5bEZGKOrc+1p4Yy2eCmdOjRByqAKuIfkSU8BCxy7qSn
- oe06vVqyajGboGoQNxdf7jGq17xvBybmFvPJ23PlUTJGiPPX6INwM/xdjtvpQCPCKjsD
- 7mEuP5Nn4L4qkCDJWqD15SikdLwWVsomxpDks4OMvZJW4ndnuRPqiIPe0zBAvjOCH0ur
- p1N6091VOJ++W9HHm33nNa95gIfgw+fi2goXDRAZNpe0QRMYU0lkqb09LI4cES54f50k
- lIU7iaCyQVl/wKAZwxRe+9F8uHByHUWpH6eWq1Tjs1TtuOShbe3SQoD6BOq7TSde1rNu
- JMLQ==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUML1KqaWRoENiTavaYEcEZR+n7iWk+3JiaL5XqjFmrJwp72B19MeK3pfdp7S33nMdZkw7AH5LS2pI=@buildroot.org
-X-Gm-Message-State: AOJu0YxWwhB22MxefWUjv0VRttYk7quduT91+BcjHxTn4hG7l2SbH011
- W6oKlZ8EKPEw/kAkLL7deabGsu9ekVyjVXXVyLbhGIHfT7meE7m/hXrK1HeZ2+7Y
-X-Gm-Gg: ASbGncvtboxLvhsIQQjTD5Y+hE2uNd3hEv5tRWJ1i1XXjtaxJweOKF+NPcrsAC7gYQc
- /HR0nnGXCwBheLdGa+Jt4rMOMmq4r8C/n5WnO9Ntg+g0DWM/LdNBpTJgZmTcP5WiagebOHjU/kF
- dBk735llR5Z8gACWqgaeZF/PN2KxCRv/BV3QFRWYHl66PRlwrGK2ZTx5WAeng/wjtmbEbOUrJBd
- wP3igu7eHxLpG7g7HW1HnRfSzD/Csv/jYerzS1ZK5eHMBw0mioHX9IzWlkaC6C5MbFvP/Y4SrUX
- SlNhDAtxi8Zwhm1YqZFnC3TmEGtorBgRMpl0MZTJsMKdJX3R7Trlb+Ff/sEiBiJdMRtrEjpdB8O
- 3A33liDy0bn+niJhR
-X-Google-Smtp-Source: AGHT+IFFaYnaJvDli2ofgUL3rOgV0Bg17hp/9W4IANDv1dLt0BPD0DMMWnLhEH3PwwUbMQCyjm8oKA==
-X-Received: by 2002:a05:6512:2601:b0:54d:663b:bdaa with SMTP id
- 2adb3069b0e04-550e9906da4mr373074e87.47.1747384354463; 
- Fri, 16 May 2025 01:32:34 -0700 (PDT)
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com.
- [209.85.208.175]) by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-550e8be810dsm264395e87.157.2025.05.16.01.32.34
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Fri, 16 May 2025 01:32:34 -0700 (PDT)
-Received: by mail-lj1-f175.google.com with SMTP id
- 38308e7fff4ca-30bf7d0c15eso16665171fa.0
- for <buildroot@buildroot.org>; Fri, 16 May 2025 01:32:34 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AJvYcCWeIjd1osxYP/67CHwkxXR0gp+nf3zxBFoHit4ghJ9zGDp3hXfRzwkoYeVZ+Uz7nwipwM4Tl2xECUo=@buildroot.org
-X-Received: by 2002:a2e:ae13:0:b0:30b:bf4e:f6fa with SMTP id
- 38308e7fff4ca-328096cee4amr4550371fa.17.1747384354085; Fri, 16 May 2025
- 01:32:34 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 966A740926
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 966A740926
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 966A740926
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 08:42:21 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B3D1F4315A;
+ Fri, 16 May 2025 08:42:15 +0000 (UTC)
+Date: Fri, 16 May 2025 10:42:13 +0200
+To: Neal Frager <neal.frager@amd.com>
+Message-ID: <20250516104213.0ed78643@booty>
+In-Reply-To: <20250409064711.3024937-1-neal.frager@amd.com>
+References: <20250409064711.3024937-1-neal.frager@amd.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20250516072047.3667158-1-thomas@devoogdt.com>
- <87o6vtc7fy.fsf@dell.be.48ers.dk>
-In-Reply-To: <87o6vtc7fy.fsf@dell.be.48ers.dk>
-From: Thomas Devoogdt <thomas@devoogdt.com>
-Date: Fri, 16 May 2025 10:32:21 +0200
-X-Gmail-Original-Message-ID: <CACXRmJg8nU272ZGuOsNOZcEWgV3sSrxoPwHJVTuraYAamQ1acQ@mail.gmail.com>
-X-Gm-Features: AX0GCFu6aY5eSSYqHGd-Watq9IcOZmPnKQr2VLUrPv6mD2CJABtzhPGi1NOptPk
-Message-ID: <CACXRmJg8nU272ZGuOsNOZcEWgV3sSrxoPwHJVTuraYAamQ1acQ@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: Re: [Buildroot] [PATCH v1] package/fluent-bit: bump to 4.0.2
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefuddvfedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeertdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeelffefgfehhfdtvdefueefieevkefggfelkeeiudetkeektedvhedukefgvddvnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddtpdhrtghpthhtohepnhgvrghlrdhfrhgrghgvrhesrghmugdrtghomhdprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtoheprghrnhhouhhtsehmihhnugdrsggvpdhrtghpt
+ hhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdprhgtphhtthhopehmihgthhgrlhdrshhimhgvkhesrghmugdrtghomhdprhgtphhtthhopehjuhdrohesfhhrvggvrdhfrhdprhgtphhtthhopegsrhgrnhguohhnrdhmrghivghrsegtohhllhhinhhsrdgtohhm
+X-GND-Sasl: luca.ceresoli@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1747384936;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=bS1t6STIP/Aj8X0xXoYW4zCj9iIx/bnA8mtpSCH18A4=;
+ b=XlXCWR1zJkq0guJauDVpTTuA8/oJRaOLPyK5wrfc0qeSWi+yt/43sBD5F3KEdXRecW5qqp
+ O716v6RjRgocbhp0HyuiKXvdaAeJ9BYLbYQS+wdvqicu6m9aeHcI+2JIGWZFwv2bTLy1OX
+ /rowsFUjW5meR497+VZ5NzJHdUhecIq+LFb4WzqKWyYVfU2APa3yYz/ATszXs9YzRsNCRH
+ jMrAriDy3b6vjM2cZH7W2UBOxXqZGv/ElUTlZQyebRsTqyC9Vsp/BzKavYhIaqj5hwKXW9
+ q7+cq/KRX4CcMxP4PcgCvTvhzpoaWYo6VFPHQSG0XlNxCKG1bvLStQvmOvS4kA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=XlXCWR1z
+Subject: Re: [Buildroot] [PATCH v5 1/3] boot/xilinx-embeddedsw: rename
+ toolchain vendor to buildroot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,59 +85,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
+Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Cc: ibai.erkiaga-elorza@amd.com, arnout@mind.be, brandon.maier@collins.com,
+ ju.o@free.fr, thomas.petazzoni@bootlin.com, buildroot@buildroot.org,
+ romain.naour@smile.fr, michal.simek@amd.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Peter,
+Hello Neal,
 
+On Wed, 9 Apr 2025 07:47:09 +0100
+Neal Frager <neal.frager@amd.com> wrote:
 
-Thanks for applying the patch.
+> This patch renames the bare-metal toolchain vendor used by the
+> xilinx-embeddedsw package from Xilinx to Buildroot to be consistent with all
+> other toolchains built by Buildroot.
+> 
+> To build the Microblaze applications available with the xilinx-embeddedsw
+> package, the following config is now needed:
+> 
+> BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-buildroot-elf"
+> 
+> This change keeps backwards compatibility for users already using the
+> following architecture tuple:
+> 
+> BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf"
+> 
+> Either vendor name is now valid, but the documentation will describe using
+> the Buildroot vendor name.
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+> V1->V2:
+> - xilinx-embeddedsw is now backwards compatible with either vendor name
+> V2->V3:
+> - split patch into series
+> V3->V4:
+> - rebase patch
+> V4->V5:
+> - add deprecation warning for microblazeel-xilinx-elf tuple
+> ---
+>  boot/xilinx-embeddedsw/Config.in            |  3 ++-
+>  boot/xilinx-embeddedsw/xilinx-embeddedsw.mk | 30 ++++++++++++++-------
+>  2 files changed, 23 insertions(+), 10 deletions(-)
+> 
+> diff --git a/boot/xilinx-embeddedsw/Config.in b/boot/xilinx-embeddedsw/Config.in
+> index a27253d594..31b12baaf2 100644
+> --- a/boot/xilinx-embeddedsw/Config.in
+> +++ b/boot/xilinx-embeddedsw/Config.in
+> @@ -1,4 +1,5 @@
+> -comment "xilinx-embeddedsw needs a bare metal toolchain for tuple microblazeel-xilinx-elf"
+> +comment "xilinx-embeddedsw needs a bare metal toolchain for tuple microblazeel-buildroot-elf"
+> +	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH != "microblazeel-buildroot-elf"
+>  	depends on BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH != "microblazeel-xilinx-elf"
+>  
+>  menuconfig BR2_TARGET_XILINX_EMBEDDEDSW
+> diff --git a/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk b/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk
+> index 7d4fcf8b8f..6e37dc48bd 100644
+> --- a/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk
+> +++ b/boot/xilinx-embeddedsw/xilinx-embeddedsw.mk
+> @@ -12,6 +12,18 @@ XILINX_EMBEDDEDSW_INSTALL_TARGET = NO
+>  XILINX_EMBEDDEDSW_INSTALL_IMAGES = YES
+>  XILINX_EMBEDDEDSW_DEPENDENCIES = toolchain-bare-metal-buildroot
+>  
+> +ifneq ("$(wildcard $(HOST_DIR)/bin/microblazeel-xilinx-elf-gcc)","")
+> +$(warning BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH="microblazeel-xilinx-elf" \
+> +	will soon be deprecated!)
+> +$(warning Please migrate to new bare-metal toolchain config below)
 
-I should have mentioned it a bit more clearly, but
-https://patchwork.ozlabs.org/project/buildroot/patch/20250516070520.3454317-1-thomas@devoogdt.com/
-is needed to fix compilation on toolchains without C++ support. What
-do you think about that patch?
+A warning is not very visible, so it won't be very effective. You
+should really use the same logic that Config.in.legacy uses: error out,
+and clearly state how to migrate, practically. E.g. (untested):
 
+$(error microblazeel-xilinx-elf in BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH is not supported anymore!)
+$(error Replace microblazeel-xilinx-elf with microblazeel-buildroot-elf in BR2_TOOLCHAIN_BARE_METAL_BUILDROOT_ARCH)
 
-Kind regards,
+Moreover, an existing and working defconfig with
+microblazeel-xilinx-elf hard fails later on with this patch:
 
-Thomas Devoogdt
+  >>> xilinx-embeddedsw xilinx_v2024.2 Building
+  ...
+  make[4]: <...>/output/host/bin/microblazeel-buildroot-elf-gcc: No such file or directory
 
+Steps to reproduce, from a clean Buildroot git clone:
 
-Op vr 16 mei 2025 om 09:59 schreef Peter Korsgaard <peter@korsgaard.com>:
->
-> >>>>> "Thomas" == Thomas Devoogdt <thomas@devoogdt.com> writes:
->
->  > News:
->  > - https://fluentbit.io/announcements/v4.0.1/
->  > - https://fluentbit.io/announcements/v4.0.2/
->
->  > Other remarks:
->  > - Drop the FLB_UNICODE_ENCODER option, as it is no longer needed. [1]
->
->  > - Added support for FLB_OUT_PGSQL.
->
->  > - Compile against the buildroot provided zstd package. [2]
->
->  > - Dropped some patches as they are obsolete. (We use the buildroot packages for them.)
->  >    - 0003-lib-nghttp2-CMakeLists.txt-do-not-require-a-CXX-comp.patch
->  >    - 0004-lib-luajit-cmake-CMakeLists.txt-do-not-require-a-CXX.patch
->  >    - 0006-lib-zstd-only-enable-CXX-support-if-tests-are-requir.patch
->
->  > - Synced the other patches with their upstream equivalent.
->
->  > [1] https://github.com/fluent/fluent-bit/commit/92de130cead75f66bd565496947263168d2d5c37
->  > [2] https://github.com/fluent/fluent-bit/commit/5f409f55ec667b525716be4afd54b5485c9d55c1
->
->  > Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
->
-> Committed, thanks.
->
-> --
-> Bye, Peter Korsgaard
->
+  git checkout a4249a20243bb620d095a36e78d3722aa29f8da7 # current master
+  # Apply patch 1 (not 2 and 3)
+  make zynqmp_kria_kv260_defconfig
+  make xilinx-embeddedsw
+
+The patch looks good otherwise.
+
+Luca
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
