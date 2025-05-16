@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45C63C3ABD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 14:42:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EED5C3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 14:44:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 12EE181345;
-	Fri, 16 May 2025 14:42:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09B8F82BD6;
+	Fri, 16 May 2025 14:44:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yYnljM7iY6ui; Fri, 16 May 2025 14:42:36 +0000 (UTC)
+ id medR9_TvsUJ5; Fri, 16 May 2025 14:44:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FD4C81323
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE5C683342
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FD4C81323;
-	Fri, 16 May 2025 14:42:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 498BD185
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:42:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE5C683342;
+	Fri, 16 May 2025 14:44:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E77941AB
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:44:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E9EFA40C0A
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:42:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA08C608B0
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:44:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rY1VH2Doh5No for <buildroot@buildroot.org>;
- Fri, 16 May 2025 14:42:34 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PoLuExkpMfV0 for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 14:44:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D22F40B01
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 103FB6130C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D22F40B01
- for <buildroot@buildroot.org>; Fri, 16 May 2025 14:42:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 103FB6130C
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 14:44:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EF66F86C1B; Fri, 16 May 2025 14:42:33 +0000 (UTC)
+ id F39FC86C2A; Fri, 16 May 2025 14:44:06 +0000 (UTC)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 16:42:22 +0200
+Date: Fri, 16 May 2025 16:43:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8a25ff3f893e1d45171dce0a240e5fb5d61bac8a
-X-Git-Newrev: f11b9db0b5f150d73e10a0c25989e2ec6300588e
+X-Git-Oldrev: f11b9db0b5f150d73e10a0c25989e2ec6300588e
+X-Git-Newrev: 70d5bac305792c9c008eb11dfdc793778a5f6ba3
 X-Patchwork-Hint: ignore
-Message-Id: <20250516144233.EF66F86C1B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/asterisk: bump to 22.3.0
+Message-Id: <20250516144406.F39FC86C2A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tbtools: bump to version 0.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -57,161 +58,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f11b9db0b5f150d73e10a0c25989e2ec6300588e
+commit: https://git.buildroot.net/buildroot/commit/?id=70d5bac305792c9c008eb11dfdc793778a5f6ba3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For a changelog see here:
-https://downloads.asterisk.org/pub/telephony/asterisk/ChangeLog-22.3.0.md
+Update to the latest release of tbtools. For change log, see:
+https://github.com/intel/tbtools/compare/v0.5.0...v0.6.0
 
-Changes made by the package maintainer:
-- add systemd service file
-- run asterisk as non-root user asterisk
-- build pjsip as bundled source code, but download it like
-  sound files
-- remove unused configure options
-- chan_alsa was removed upstream in commit
-  de3ce178ab0282445cf25161b49f3737ac2d20ff
-
-See here for the reason behind using the bundled pjsip:
-https://github.com/asterisk/asterisk/issues/671
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+[Julien: update .hash file to use -cargo3 format]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/asterisk/asterisk.hash    |  4 +++-
- package/asterisk/asterisk.mk      | 31 ++++++++++++++++++-------------
- package/asterisk/asterisk.service | 23 +++++++++++++++++++++++
- 3 files changed, 44 insertions(+), 14 deletions(-)
+ package/tbtools/tbtools.hash | 2 +-
+ package/tbtools/tbtools.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 8c8ebddc47..7b28624921 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,6 +1,8 @@
- # Locally computed
--sha256  94647b3f887f7dc91df51a4f88dfc3a07cc279bef86b8d05aa72f0c49d187571  asterisk-20.11.1.tar.gz
-+sha256  4cc403c8885d4aed3956dfb75d315d3e5bcc129eb9cd47c156d3b12ecceed1ba  asterisk-22.3.0.tar.gz
- 
-+# Locally computed
-+sha256  58bb83cec4d431f48d006e455d821668450f8cf6b6c95f090def47062fa3a60c  pjproject-2.15.1.tar.bz2
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
- sha1  721c512feaea102700d5bdce952fdc0bb29dc640  asterisk-core-sounds-en-gsm-1.6.1.tar.gz
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index ec67632ef4..6d682f161d 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,15 +4,20 @@
+diff --git a/package/tbtools/tbtools.hash b/package/tbtools/tbtools.hash
+index 108b83a51c..746e5f4b4c 100644
+--- a/package/tbtools/tbtools.hash
++++ b/package/tbtools/tbtools.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  1643ea1b29f816658c454851fa06e73c3183296b7b66f143b95fc4c18cef3442  tbtools-0.5.0-cargo3.tar.gz
++sha256  984a6875806bd46107c401c3044cd88265d44ba3f01ed932b3a4ea4dbe268c72  tbtools-0.6.0-cargo3.tar.gz
+ sha256  9b16a3add311d607af8d9b348a842a37840d0f47dfcc6cf2a7756ee02c24ed69  LICENSE
+diff --git a/package/tbtools/tbtools.mk b/package/tbtools/tbtools.mk
+index 1200e1c669..3031b86144 100644
+--- a/package/tbtools/tbtools.mk
++++ b/package/tbtools/tbtools.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ASTERISK_VERSION = 20.11.1
-+ASTERISK_VERSION = 22.3.0
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
- 
-+# compilation with the external pjsip produces a non-working asterisk, which
-+# segfaults. The reason behind this is unclear.
-+# https://github.com/asterisk/asterisk/issues/671
-+ASTERISK_PJSIP_URL = https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.15.1/
- ASTERISK_SOUNDS_BASE_URL = http://downloads.asterisk.org/pub/telephony/sounds/releases
- ASTERISK_EXTRA_DOWNLOADS = \
- 	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-core-sounds-en-gsm-1.6.1.tar.gz \
--	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz
-+	$(ASTERISK_SOUNDS_BASE_URL)/asterisk-moh-opsound-wav-2.03.tar.gz \
-+	$(ASTERISK_PJSIP_URL)/pjproject-2.15.1.tar.bz2
- 
- ASTERISK_LICENSE = GPL-2.0, BSD-3-Clause (SHA1, resample), BSD-4-Clause (db1-ast)
- ASTERISK_LICENSE_FILES = \
-@@ -76,7 +81,6 @@ ASTERISK_CONF_OPTS = \
- 	--without-neon29 \
- 	--without-newt \
- 	--without-openr2 \
--	--without-osptk \
- 	--without-postgres \
- 	--without-popt \
- 	--without-resample \
-@@ -94,10 +98,9 @@ ASTERISK_CONF_OPTS = \
- 	--with-libjwt="$(STAGING_DIR)/usr" \
- 	--with-libxml2 \
- 	--with-libedit="$(STAGING_DIR)/usr" \
--	--without-pjproject-bundled \
--	--with-pjproject="$(STAGING_DIR)/usr" \
-+	--with-pjproject-bundled \
- 	--with-sqlite3="$(STAGING_DIR)/usr" \
--	--with-sounds-cache=$(ASTERISK_DL_DIR)
-+	--with-download-cache=$(ASTERISK_DL_DIR)
- 
- # avcodec are from ffmpeg. There is virtually zero chance this could
- # even work; asterisk is looking for ffmpeg/avcodec.h which has not
-@@ -135,13 +138,6 @@ else
- ASTERISK_CONF_OPTS += --without-gsm
- endif
- 
--ifeq ($(BR2_PACKAGE_ALSA_LIB),y)
--ASTERISK_DEPENDENCIES += alsa-lib
--ASTERISK_CONF_OPTS += --with-asound
--else
--ASTERISK_CONF_OPTS += --without-asound
--endif
--
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS),y)
- ASTERISK_DEPENDENCIES += bluez5_utils
- ASTERISK_CONF_OPTS += --with-bluetooth
-@@ -299,6 +295,15 @@ ASTERISK_INSTALL_TARGET_OPTS = \
- 	LDCONFIG=true \
- 	install samples
- 
-+define ASTERISK_USERS
-+	asterisk -1 asterisk -1 * /usr/lib/asterisk - - asterisk user
-+endef
-+
-+define ASTERISK_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/asterisk/asterisk.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/asterisk.service
-+endef
-+
- $(eval $(autotools-package))
- 
- #-------------------------------------------------------------------------------
-diff --git a/package/asterisk/asterisk.service b/package/asterisk/asterisk.service
-new file mode 100644
-index 0000000000..802789defb
---- /dev/null
-+++ b/package/asterisk/asterisk.service
-@@ -0,0 +1,23 @@
-+# based on included asterisk.service, but changed
-+# Type to simple, comments removed
-+[Unit]
-+Description=Asterisk PBX and telephony daemon.
-+After=network.target
-+
-+[Service]
-+Type=simple
-+Environment=HOME=/usr/lib/asterisk
-+WorkingDirectory=/usr/lib/asterisk
-+User=asterisk
-+Group=asterisk
-+ExecStart=/usr/sbin/asterisk -mqf -C /etc/asterisk/asterisk.conf
-+ExecReload=/usr/sbin/asterisk -rx 'core reload'
-+RuntimeDirectory=asterisk
-+LimitCORE=infinity
-+Restart=always
-+RestartSec=4
-+StandardOutput=null
-+PrivateTmp=true
-+
-+[Install]
-+WantedBy=multi-user.target
+-TBTOOLS_VERSION = 0.5.0
++TBTOOLS_VERSION = 0.6.0
+ TBTOOLS_SITE = $(call github,intel,tbtools,v$(TBTOOLS_VERSION))
+ TBTOOLS_LICENSE = MIT
+ TBTOOLS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
