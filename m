@@ -1,53 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F1ADC2D0CD
-	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:01:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DF8AC3ABDD
+	for <buildroot@archiver.kernel.org>; Mon, 19 May 2025 11:01:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 167E770D17;
-	Mon, 19 May 2025 11:01:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E8E068445C;
+	Mon, 19 May 2025 11:01:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G26FxO8_HiIr; Mon, 19 May 2025 11:01:24 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7G9GPbGzxr2n; Mon, 19 May 2025 11:01:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FDE770E9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F132584808
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2FDE770E9F;
-	Mon, 19 May 2025 11:01:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F132584808;
+	Mon, 19 May 2025 11:01:27 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3EA5AD4
- for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C3E14D4
+ for <buildroot@buildroot.org>; Mon, 19 May 2025 10:47:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6AD21411C1
+ by smtp4.osuosl.org (Postfix) with ESMTP id A4F8D41A3E
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9NbZhdDRqEOs for <buildroot@buildroot.org>;
+ id DPVSuvqv5CZd for <buildroot@buildroot.org>;
  Mon, 19 May 2025 10:40:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 522E841A3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6611D41A41
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 522E841A3C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6611D41A41
  for <buildroot@buildroot.org>; Mon, 19 May 2025 10:40:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 509C28348A; Mon, 19 May 2025 10:40:05 +0000 (UTC)
-From: Julien Olivain <ju.o@free.fr>
+ id 6472B872E7; Mon, 19 May 2025 10:40:05 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 17:15:08 +0200
+Date: Fri, 16 May 2025 18:00:58 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d0841c007b4fbfaa4d9070d5936ad6924d61a105
-X-Git-Newrev: b0a703a974503b59881630a6b36ee8f5a1d37248
+X-Git-Oldrev: 4662553088b81dbf35fa43aaeef098ac2c7f41f9
+X-Git-Newrev: 82575b3e52b5ada683a3305a275ed38cdda3a912
 X-Patchwork-Hint: ignore
-Message-Id: <20250519104005.509C28348A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rtl8188eu: fix
- building with Linux 6.14
+Message-Id: <20250519104005.6472B872E7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sdl2: allow wayland
+ support to be enabled without X11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -65,60 +65,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0a703a974503b59881630a6b36ee8f5a1d37248
+commit: https://git.buildroot.net/buildroot/commit/?id=82575b3e52b5ada683a3305a275ed38cdda3a912
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Add local patch pending upstream to fix build failure with Linux 6.14.
+Commit 4662553088 ("package/sdl2: add wayland support") added an option to
+enable wayland support but accidentally put the .mk logic inside the
+BR2_PACKAGE_SDL2_X11, so it would only trigger if the X11 driver was
+enabled.
 
-Fixes:
-https://autobuild.buildroot.org/results/065b9afc1c6f9f5561547b12171269adc8c12275
+Fix that by moving it outside the conditional.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../rtl8188eu/0002-Fix-build-with-Linux-6.14.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ package/sdl2/sdl2.mk | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/rtl8188eu/0002-Fix-build-with-Linux-6.14.patch b/package/rtl8188eu/0002-Fix-build-with-Linux-6.14.patch
-new file mode 100644
-index 0000000000..a05a760d22
---- /dev/null
-+++ b/package/rtl8188eu/0002-Fix-build-with-Linux-6.14.patch
-@@ -0,0 +1,33 @@
-+From 0363681349f683050bc9a265db8310e8c4eb6534 Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Thu, 15 May 2025 22:32:48 +0200
-+Subject: [PATCH] Fix build with Linux 6.14
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 9b4a19571c..5ed7c6c612 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -104,13 +104,6 @@ else
+ SDL2_CONF_OPTS += --disable-video-x11-xcursor
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SDL2_WAYLAND),y)
+-SDL2_DEPENDENCIES += libegl libxkbcommon wayland wayland-protocols
+-SDL2_CONF_OPTS += --enable-video-wayland
+-else
+-SDL2_CONF_OPTS += --disable-video-wayland
+-endif
+-
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
+ SDL2_DEPENDENCIES += xlib_libXi
+ SDL2_CONF_OPTS += --enable-video-x11-xinput
+@@ -136,6 +129,13 @@ else
+ SDL2_CONF_OPTS += --disable-video-x11 --without-x
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SDL2_WAYLAND),y)
++SDL2_DEPENDENCIES += libegl libxkbcommon wayland wayland-protocols
++SDL2_CONF_OPTS += --enable-video-wayland
++else
++SDL2_CONF_OPTS += --disable-video-wayland
++endif
 +
-+Commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7a53af85d3bbdbe06cd47b81a6d99a04dc0a3963
-+adds argument "unsigned int link_id" to get_tx_power(), so let's add it to
-+cfg80211_rtw_get_txpower() according to Linux version.
-+
-+Upstream: https://github.com/lwfinger/rtl8188eu/pull/464
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ ioctl_cfg80211.c | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/ioctl_cfg80211.c b/ioctl_cfg80211.c
-+index 270cfce..04434fa 100644
-+--- a/ioctl_cfg80211.c
-++++ b/ioctl_cfg80211.c
-+@@ -3240,6 +3240,9 @@ static int cfg80211_rtw_set_txpower(struct wiphy *wiphy,
-+ static int cfg80211_rtw_get_txpower(struct wiphy *wiphy,
-+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 8, 0))
-+ 	struct wireless_dev *wdev,
-++#endif
-++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(6, 14, 0))
-++	unsigned int link_id,
-+ #endif
-+ 	int *dbm)
-+ {
-+-- 
-+2.39.5
-+
+ ifeq ($(BR2_PACKAGE_SDL2_OPENGL),y)
+ SDL2_CONF_OPTS += --enable-video-opengl
+ SDL2_DEPENDENCIES += libgl
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
