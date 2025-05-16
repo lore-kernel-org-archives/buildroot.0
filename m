@@ -4,49 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4025C3ABD8
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 19:52:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00579C3ABC9
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 19:53:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FF99408DF;
-	Fri, 16 May 2025 19:52:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A6D2340DA2;
+	Fri, 16 May 2025 19:53:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g4b0docMdo9F; Fri, 16 May 2025 19:52:05 +0000 (UTC)
+ id EFf3US8kQ4iF; Fri, 16 May 2025 19:53:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CE194083F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0F8940DA8
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6CE194083F;
-	Fri, 16 May 2025 19:52:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 10EE11137
- for <buildroot@buildroot.org>; Fri, 16 May 2025 19:52:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0F8940DA8;
+	Fri, 16 May 2025 19:53:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id F13E81142
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 19:53:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1E7348102D
- for <buildroot@buildroot.org>; Fri, 16 May 2025 19:52:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E256240DA2
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 19:53:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xGDZupXdYWEM for <buildroot@buildroot.org>;
- Fri, 16 May 2025 19:52:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zVOmU8Yc0ran for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 19:53:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A5BD8107F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2A5BD8107F
- for <buildroot@buildroot.org>; Fri, 16 May 2025 19:52:02 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14DB986CFA; Fri, 16 May 2025 19:52:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8549740D7E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8549740D7E
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8549740D7E
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 19:53:12 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AB2C2439EF;
+ Fri, 16 May 2025 19:53:07 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1uG17D-00BOys-0c;
+ Fri, 16 May 2025 21:53:07 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 16 May 2025 21:50:33 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4e954bf4bf2bdf9b4d7309c512dce3de38a674e4
-X-Git-Newrev: 4bf58850eabad4ed393e170b06d7c55f9de9f702
-X-Patchwork-Hint: ignore
-Message-Id: <20250516195202.14DB986CFA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/catch2: bump version to 3.8.1
+To: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+References: <20250516112453.794405-2-buildroot@heine.tech>
+Date: Fri, 16 May 2025 21:53:07 +0200
+In-Reply-To: <20250516112453.794405-2-buildroot@heine.tech> (Michael Nosthoff
+ via buildroot's message of "Fri, 16 May 2025 13:24:39 +0200")
+Message-ID: <87a57c49jw.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdefudefieegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufhfffgjkfgfgggtsehttddttddtredtnecuhfhrohhmpefrvghtvghrucfmohhrshhgrggrrhguuceophgvthgvrheskhhorhhsghgrrghrugdrtghomheqnecuggftrfgrthhtvghrnhepkeegffdtieevkeejheevteeludetveeffedutedvkeefjeehiedtvdfhkeffueetnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucfkphepvdgrtddvmeekgedvrgemgeehrggtmeelgedtudemjeeiugekmeefvghffhemfhgvsgefmeegsggsheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeegvdgrmeeghegrtgemleegtddumeejiegukeemfegvfhhfmehfvggsfeemgegssgehpdhhvghlohepuggvlhhlrdgsvgdrgeekvghrshdrughkpdhmrghilhhfrhhomhepphgvthgvrheskhhorhhsghgrrghrugdrtghomhdpnhgspghrtghpthhtohepvddprhgtphhtthhopegsuhhilhgurhhoohhtsegsuhhilhgurhhoohhtrdhorhhgpdhrtghpthhtohepsghuihhlughrohhotheshhgvihhnvgdrthgvtghh
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/catch2: v3.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -58,49 +71,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4bf58850eabad4ed393e170b06d7c55f9de9f702
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Michael" == Michael Nosthoff via buildroot <buildroot@buildroot.org> writes:
 
-- Fixed bug where catch_discover_tests fails when no TEST_CASEs are present
+ > - Fixed bug where catch_discover_tests fails when no TEST_CASEs are present
+ > release notes: https://github.com/catchorg/Catch2/releases/tag/v3.8.1
 
-release notes: https://github.com/catchorg/Catch2/releases/tag/v3.8.1
+ > Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-[Peter: reword commit message]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/catch2/catch2.hash | 2 +-
- package/catch2/catch2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+NIT: Summary should be 'package/catch2: bump version to 3.8.1'.
+Committed with that fixed, thanks.
 
-diff --git a/package/catch2/catch2.hash b/package/catch2/catch2.hash
-index 3b203285bf..30ff1f43b3 100644
---- a/package/catch2/catch2.hash
-+++ b/package/catch2/catch2.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  1ab2de20460d4641553addfdfe6acd4109d871d5531f8f519a52ea4926303087  catch2-3.8.0.tar.gz
-+sha256  18b3f70ac80fccc340d8c6ff0f339b2ae64944782f8d2fca2bd705cf47cadb79  catch2-3.8.1.tar.gz
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE.txt
-diff --git a/package/catch2/catch2.mk b/package/catch2/catch2.mk
-index 5d46fb3ffd..00d6e5bfdc 100644
---- a/package/catch2/catch2.mk
-+++ b/package/catch2/catch2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CATCH2_VERSION = 3.8.0
-+CATCH2_VERSION = 3.8.1
- CATCH2_SITE = $(call github,catchorg,Catch2,v$(CATCH2_VERSION))
- CATCH2_INSTALL_STAGING = YES
- CATCH2_INSTALL_TARGET = NO
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
