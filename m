@@ -1,72 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AAF11C3ABC9
-	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 17:59:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E69ACC3ABD8
+	for <buildroot@archiver.kernel.org>; Fri, 16 May 2025 17:59:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 83B2E61347;
-	Fri, 16 May 2025 17:59:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A10BF41779;
+	Fri, 16 May 2025 17:59:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YWxxu13M6sg0; Fri, 16 May 2025 17:59:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y2ZUuqxHtmyM; Fri, 16 May 2025 17:59:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DAE460C14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCB5D41754
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6DAE460C14;
-	Fri, 16 May 2025 17:59:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3802613D
- for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CCB5D41754;
+	Fri, 16 May 2025 17:59:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 320DE185
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1DF8783CAD
- for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 23A1383C42
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id po_MlwAlVf2B for <buildroot@buildroot.org>;
- Fri, 16 May 2025 17:59:31 +0000 (UTC)
+ id 2E-0gQ6tb1yC for <buildroot@buildroot.org>;
+ Fri, 16 May 2025 17:59:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.11;
  helo=mail1.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 19BE383CA8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19BE383CA8
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 336A083CA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 336A083CA8
 Received: from mail1.nubo.coop (mail1.nubo.coop [79.99.201.11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 19BE383CA8
- for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 336A083CA8
+ for <buildroot@buildroot.org>; Fri, 16 May 2025 17:59:32 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id EBC201C1104; Fri, 16 May 2025 19:59:28 +0200 (CEST)
-Message-ID: <063b5965-3c7b-4b2d-947d-ebea0986f8cd@rnout.be>
-Date: Fri, 16 May 2025 13:21:41 +0200
+ with ESMTPSA id 1075A1C0E0E; Fri, 16 May 2025 19:59:29 +0200 (CEST)
+Message-ID: <af35f5fb-e99f-4233-a556-7b4aac3766a1@rnout.be>
+Date: Fri, 16 May 2025 15:47:19 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20250514210430.1064027-1-thomas.perale@mind.be>
+To: Baruch Siach <baruch@tkos.co.il>,
+ Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Cc: Lance Fredrickson <lancethepants@gmail.com>, Bernd Kuhls <bernd@kuhls.net>
+References: <20250415141711.1940219-1-lancethepants@gmail.com>
+ <1e53f695-653e-4506-82fe-3ed97d468b46@rnout.be> <87ecwowyx9.fsf@tarshish>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20250514210430.1064027-1-thomas.perale@mind.be>
+In-Reply-To: <87ecwowyx9.fsf@tarshish>
 X-Last-TLS-Session-Version: TLSv1.3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=rnout.be; s=dkim; 
- t=1747418369; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+ t=1747418370; h=from:subject:date:message-id:to:cc:mime-version:content-type:
  content-transfer-encoding:in-reply-to:references;
- bh=wekrYbHVFzY1rwfsnGZqS8E0TQeYiYGSWc9RgDDTTCw=;
- b=kCilR3IQe9+b7vk6I6wxTUr0eMXNP3KkJef5TWvY73PMOBVLpuwJnJ0pQAArn2i38Gr6gz
- CAhzcUWNxZ6OB5yGMfvYti13J0bPwc7k8dfLiH1k4ooqFYR6k6u5CkFUJ1MNV4Bafsg0bn
- 8GfhctPLJc8rNXlElJ7BE/9iZ3Y9xTO0yYKoLPULfw7Ne+65yqM7E+qIJTGU7yBxEXWBIR
- E8155XsOX520P7VGV5SzJ3WPLRM3sC86fCStTCySWXf/6Dhl+xb+zqH+nxmMFa1PclyPsF
- K6OHWNGxOgGFbH0SvZY3tKoBJPOB8vuF9W3L8z0vF4lvjtPbzpKN5CL8xDpdpQ==
+ bh=cRs7jYeTYgrhpkFBFBnuDjAnEOWo2zc10QhBbr93esg=;
+ b=N3YG1DG/GpViyM0u2oT08h5ncyiTL6eEstqvt8tiHtcT5c0emzhPE+VSmUCZPpG/ypa9jL
+ zq+3D78WnQUP8Gkmgav5vOjoFVn+SDp81YafR4jH/koUj0CbvkoXHipHXT6KJAM1n8VQDt
+ RZQy7MbTWHCmjMjf4p4GYZTspPXQiZsM3dYR5erQBjlZAj/29y+6jqXay7ohft5XmKPtOZ
+ RinemlAWItuCwMlumsfhnWoWvwD92SfgDlk2aiF0RvFEpmGFnCRbHPGBxqyn4j1N/1gSdM
+ 7az8IzeLlBQJKOt8pyiXGrIbHfa8rn8JvywhYSwSPvNIVdijyO+bQguihBPy+Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=rnout.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=kCilR3IQ
-Subject: Re: [Buildroot] [PATCH 1/1] package/libraw: security bump to
- version 0.21.4
+ dkim=pass (2048-bit key) header.d=rnout.be header.i=@rnout.be
+ header.a=rsa-sha256 header.s=dkim header.b=N3YG1DG/
+Subject: Re: [Buildroot] [PATCH] package/dnsmasq: bump version to 2.91
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -87,79 +87,29 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 
-On 14/05/2025 23:04, Thomas Perale via buildroot wrote:
-> Fixes the following seucrity issues:
+On 16/05/2025 13:57, Baruch Siach wrote:
+> Hi Arnout,
 > 
-> - CVE-2025-43961: metadata/tiff.cpp has an out-of-bounds read in the
->      Fujifilm 0xf00c tag parser.
+> On Fri, May 16 2025, Arnout Vandecappelle via buildroot wrote:
+>> On 15/04/2025 16:17, Lance Fredrickson wrote:
+>>> From: Lance Fredrickson <lancethepants@gmail.com>
+>>> Changelog: https://thekelleys.org.uk/dnsmasq/CHANGELOG
+>>> Release notes:
+>>> https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2025q1/018079.html
+>>> Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
+>>
+>>   Applied to 2025.02.x, thanks.
 > 
-> For more information, see:
->    - https://nvd.nist.gov/vuln/detail/CVE-2025-43961
->    - https://github.com/LibRaw/LibRaw/commit/66fe663e02a4dd610b4e832f5d9af326709336c2
-> 
-> - CVE-2025-43962: phase_one_correct in decoders/load_mfbacks.cpp has
->      out-of-bounds reads for tag 0x412 processing
-> 
-> For more information, see:
->    - https://nvd.nist.gov/vuln/detail/CVE-2025-43962
->    - https://github.com/LibRaw/LibRaw/commit/66fe663e02a4dd610b4e832f5d9af326709336c2
-> 
-> - CVE-2025-43963: phase_one_correct in decoders/load_mfbacks.cpp allows
->      out-of-buffer access
-> 
-> For more information, see:
->    - https://nvd.nist.gov/vuln/detail/CVE-2025-43963
->    - https://github.com/LibRaw/LibRaw/commit/be26e7639ecf8beb55f124ce780e99842de2e964
-> 
-> - CVE-2025-43964: tag 0x412 processing in phase_one_correct in
->      decoders/load_mfbacks.cpp does not enforce minimum w0 and w1 values.
-> 
-> For more information, see:
->    - https://nvd.nist.gov/vuln/detail/CVE-2025-43964
->    - https://github.com/LibRaw/LibRaw/commit/a50dc3f1127d2e37a9b39f57ad9bb2ebb60f18c0
-> 
-> For more details on the version bump, see the release notes:
->    - https://github.com/LibRaw/LibRaw/releases/tag/0.21.4
->    - https://github.com/LibRaw/LibRaw/releases/tag/0.21.3
->    - https://github.com/LibRaw/LibRaw/compare/0.21.2...0.21.4
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> For some reason, this and all your other commits to stable branches are
+> signed off by Thomas Perale. Is that intended?
 
-  Applied to 2025.02.x, thanks.
+  Yes, Thomas is the actual committer but he doesn't have push access to the git 
+repo. So for the time being I'm doing the push, and therefore also sending the 
+mails (because it's often a few days later by the time I do the push, and it 
+would be weird to receive the mails if it's not upstream yet.)
 
   Regards,
   Arnout
-
-> ---
->   package/libraw/libraw.hash | 2 +-
->   package/libraw/libraw.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libraw/libraw.hash b/package/libraw/libraw.hash
-> index 838c598d78..36d9d31948 100644
-> --- a/package/libraw/libraw.hash
-> +++ b/package/libraw/libraw.hash
-> @@ -1,5 +1,5 @@
->   # Locally calculated
-> -sha256  fe7288013206854baf6e4417d0fb63ba4ed7227bf36fff021992671c2dd34b03  LibRaw-0.21.2.tar.gz
-> +sha256  6be43f19397e43214ff56aab056bf3ff4925ca14012ce5a1538a172406a09e63  LibRaw-0.21.4.tar.gz
->   sha256  eea173a556abac0370461e57e12aab266894ea6be3874c2be05fd87871f75449  LICENSE.LGPL
->   sha256  0e3098d2d54a12434715f6679ea408d57da5e8d613c385c58ecc6fe5d30cc81f  LICENSE.CDDL
->   sha256  7d6650cef6cf892abe95e55a6bda1e1c42f221fd411b807deb2fc0b805b868d4  README.md
-> diff --git a/package/libraw/libraw.mk b/package/libraw/libraw.mk
-> index 211b67f935..e320b2d835 100644
-> --- a/package/libraw/libraw.mk
-> +++ b/package/libraw/libraw.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -LIBRAW_VERSION = 0.21.2
-> +LIBRAW_VERSION = 0.21.4
->   LIBRAW_SOURCE = LibRaw-$(LIBRAW_VERSION).tar.gz
->   LIBRAW_SITE = http://www.libraw.org/data
->   LIBRAW_INSTALL_STAGING = YES
-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
